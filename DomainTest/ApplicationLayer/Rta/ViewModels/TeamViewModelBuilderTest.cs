@@ -89,47 +89,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			result.Id.Should().Be(teamId);
 			result.NumberOfAgents.Should().Be(1);
 		}
-
-		[Test]
-		public void ShouldGetNumberOfAgentsForSkill()
-		{
-			var siteId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-			var skillId = Guid.NewGuid();
-			var wrongPerson = Guid.NewGuid();
-			var wrongSkill = Guid.NewGuid();
-			Database
-				.WithSite(siteId)
-				.WithTeam(teamId, "Team Red")
-				.WithAgent()
-				.WithSkill(skillId)
-				.WithAgent(wrongPerson)
-				.WithSkill(wrongSkill);
 		
-
-			var result = Target.ForSkills(siteId, new[] { skillId }).Single();
-
-			result.Name.Should().Be("Team Red");
-			result.Id.Should().Be(teamId);
-			result.NumberOfAgents.Should().Be(1);
-		}
-
-		[Test]
-		public void ShouldNotReturnEmptyTeam()
-		{
-			var siteId = Guid.NewGuid();
-			var teamId1 = Guid.NewGuid();
-			var teamId2 = Guid.NewGuid();
-			var skillId = Guid.NewGuid();
-			Database
-				.WithSite(siteId)
-				.WithTeam(teamId1)
-				.WithAgent()
-				.WithSkill(skillId)
-				.WithTeam(teamId2);
-
-			Target.ForSkills(siteId, new[] { skillId }).Single()
-				.Id.Should().Be(teamId1);
-		}
 	}
 }

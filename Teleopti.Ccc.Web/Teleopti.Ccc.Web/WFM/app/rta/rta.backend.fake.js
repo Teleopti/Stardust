@@ -518,16 +518,7 @@
                 var filteredSites = sitesOrTeamsForSkillOrSkillArea(siteAdherencesForSkill, 'SkillId', params.skillIds, sites);
                 return [200, filteredSites];
             });
-
-        fake(/\.\.\/api\/Teams\/ForSkills(.*)/,
-            function(params) {
-                var teamsBySite = teams.filter(function(t) {
-                    return params.siteId.indexOf(t.SiteId) > -1;
-                });
-                var filteredSites = sitesOrTeamsForSkillOrSkillArea(teamAdherencesForSkill, 'SkillId', params.skillIds, teamsBySite);
-                return [200, filteredSites];
-            });
-
+		
         fake(/\.\.\/api\/Sites\/InAlarmCountForSkills(.*)/,
             function(params) {
                 var adherenceBySiteId = {};

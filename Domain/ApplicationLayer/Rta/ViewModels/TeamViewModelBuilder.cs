@@ -36,24 +36,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				};
 			});
 		}
-
-		public IEnumerable<TeamViewModel> ForSkills(Guid siteId, Guid[] skillIds)
-		{
-			var teams = teamsForSite(siteId).ToArray();
-			var numberOfAgents = _numberOfAgentsInTeamReader.ForSkills(teams.Select(x => x.Id.Value), skillIds);
-			return
-				from num in numberOfAgents
-				from team in teams
-				where num.Key == team.Id.Value
-				select new TeamViewModel
-				{
-					Id = team.Id.GetValueOrDefault(),
-					Name = team.Description.Name,
-					NumberOfAgents = num.Value,
-					SiteId = siteId
-
-				};
-		}
 		
 		private IEnumerable<ITeam> teamsForSite(Guid siteId)
 		{

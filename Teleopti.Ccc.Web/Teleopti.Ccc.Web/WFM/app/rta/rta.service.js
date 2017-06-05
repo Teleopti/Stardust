@@ -31,7 +31,6 @@
             getSites: getSites,
             getSitesForSkills: getSitesForSkills,
             getAdherenceForTeamsBySkills: getAdherenceForTeamsBySkills,
-            getTeamsForSiteAndSkills: getTeamsForSiteAndSkills,
             getSkillName: getSkillName,
             getSkillArea: getSkillArea,
             getPhoneStates: getPhoneStates,
@@ -231,18 +230,6 @@
             }).$promise;
         };
 		
-        function getTeamsForSiteAndSkills(data) {
-            return $resource('../api/Teams/ForSkills', {}, {
-                query: {
-                    method: 'GET',
-                    isArray: true
-                }
-            }).query({
-                skillIds: data.skillIds,
-                siteId: data.siteIds
-            }).$promise;
-        };
-
         function getSkillName(data) {
             return $resource('../api/Skills/NameFor', {}, {
                 query: {

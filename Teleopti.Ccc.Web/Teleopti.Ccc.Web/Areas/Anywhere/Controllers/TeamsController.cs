@@ -26,13 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			return Ok(_teamViewModelBuilder.Build(siteId));
 		}
-
-		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Teams/ForSkills")]
-		public virtual IHttpActionResult ForSkills([FromUri]Guid siteId, [FromUri]Guid[] skillIds)
-		{
-			return Ok(_teamViewModelBuilder.ForSkills(siteId, skillIds));
-		}
-
+		
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Teams/GetOutOfAdherenceForTeamsOnSite")]
 		public virtual IHttpActionResult GetOutOfAdherenceForTeamsOnSite(Guid siteId)
 		{
