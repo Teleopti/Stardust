@@ -25,11 +25,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 	{
 		public OptimizationExecuter Target;
 		public Func<ISchedulerStateHolder> StateHolder;
-		
+
 		[Test]
 		public void ShouldSolveIntraIntervalIssue()
 		{
-			var date = DateOnly.Today;
+			var date = new DateOnly(2017, 05, 05);
 			var scenario = new Scenario("_");
 			var activity = new Activity().WithId();
 			var skill = new Skill().DefaultResolution(30).For(activity).WithId().IsOpen();
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 			var ass1 = new PersonAssignment(agent1, scenario, date).WithLayer(activity, new TimePeriod(8, 15, 16, 15)).ShiftCategory(shiftCategory);
 			var ass2 = new PersonAssignment(agent2, scenario, date).WithLayer(activity, new TimePeriod(8, 15, 16, 30)).ShiftCategory(shiftCategory);
 			var stateHolder = StateHolder.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent1, agent2 }, new[] { ass1, ass2 }, skillDay);
-			var optimizationPreferences = new OptimizationPreferences {General = {OptimizationStepIntraInterval = true, ScheduleTag = new ScheduleTag()}};
+			var optimizationPreferences = new OptimizationPreferences { General = { OptimizationStepIntraInterval = true, ScheduleTag = new ScheduleTag() } };
 
-			Target.Execute(new NoSchedulingProgress(), stateHolder, new []{agent1}, date.ToDateOnlyPeriod(), optimizationPreferences, null);
+			Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent1 }, date.ToDateOnlyPeriod(), optimizationPreferences, null);
 
 			stateHolder.Schedules[agent1].ScheduledDay(date).PersonAssignment().Period.StartDateTime.TimeOfDay
 				.Should().Be.EqualTo(TimeSpan.FromHours(8));
