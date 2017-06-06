@@ -40,7 +40,7 @@ datepicker.show = function (e) {
 
     else if (this.element.children('input').is(':disabled')) { return; }
 
-    if(this.picker.isOpened){
+    if (!this.isInput && this.picker.isOpened){
         this.picker.hide();
         return;
     }
