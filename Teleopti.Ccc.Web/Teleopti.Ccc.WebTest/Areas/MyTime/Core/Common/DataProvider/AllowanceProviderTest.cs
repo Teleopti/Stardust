@@ -611,12 +611,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var budgetDay0 = createBudgetDayWithAllowance(budgetGroup, DateOnly.Today.AddDays(-1), allowance0.TotalHours);
 			budgetDays.Add(budgetDay0);
 
-			// Both 2 open periods with BudgetGroup validator covered today, will apply the second one
+			// Both 2 open periods with BudgetGroup validator covered today, will apply the second one since its OrderIndex is bigger
 			var allowance1 = TimeSpan.FromHours(40);
 			var budgetDay1 = createBudgetDayWithAllowance(budgetGroup, DateOnly.Today, allowance1.TotalHours);
 			budgetDays.Add(budgetDay1);
 
-			// The second open period with BudgetGroupHeadCountValidator covered yesterday, will apply this open period
+			// The second open period with BudgetGroupHeadCountValidator covered tomorrow, will apply this open period
 			var allowance2 = TimeSpan.FromHours(50);
 			var budgetDay2 = createBudgetDayWithAllowance(budgetGroup, DateOnly.Today.AddDays(1), allowance2.TotalHours);
 			budgetDays.Add(budgetDay2);
