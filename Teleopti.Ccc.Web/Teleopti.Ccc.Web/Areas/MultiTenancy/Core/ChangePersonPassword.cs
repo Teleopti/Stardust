@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
@@ -36,6 +37,14 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 
 		public void Modify(Guid personId, string oldPassword, string newPassword)
 		{
+			if (newPassword.IsNullOrEmpty())
+			{
+				throw new HttpException(400, "The new password is required.");
+			}
+			
+			if (oldPassword?.Equals(newPassword) ?? false)
+				throw new HttpException(400, "No difference between old and new password.");
+
 			var personInfo = _findPersonInfo.GetById(personId);
 			if (personInfo == null)
 				throw new HttpException(403, "Invalid user name or password.");
@@ -44,10 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 			
 			if (hashFunction == null || !personInfo.ApplicationLogonInfo.IsValidPassword(_now, _passwordPolicy, oldPassword, hashFunction))
 				throw new HttpException(403, "Invalid user name or password.");
-			
-			if(oldPassword.Equals(newPassword))
-				throw new HttpException(400, "No difference between old and new password.");
-			
+
 			try
 			{
 				personInfo.SetApplicationLogonCredentials(_checkPasswordStrength, personInfo.ApplicationLogonInfo.LogonName, newPassword, _currentHashFunction);
