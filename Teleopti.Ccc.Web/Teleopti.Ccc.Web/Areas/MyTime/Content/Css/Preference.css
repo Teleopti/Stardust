@@ -167,6 +167,7 @@
 		width: inherit;
 	}
 	.phone-navbar .phone-navbar-top .form-control {
+		font-size: 13px;
 		float: inherit;
 	}
 	.phone-navbar .phone-navbar-bottom .navbar-nav{
