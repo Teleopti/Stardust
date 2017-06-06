@@ -98,9 +98,23 @@ ORDER BY DB_NAME([database_id]) OPTION (RECOMPILE);
 -- Are there multiple data files?
 
 --------
---Check for non existing trans log backups for full db's! (Never OR Not since last FULL)
+--Show all database with last FULL vs. LOG Backup
 --------
-SELECT D.[name] AS [database_name], D.[recovery_model_desc] , BS1.[last_log_backup_date] 
+SELECT
+	D.[name] AS [database_name],
+	D.[recovery_model_desc],
+	BS2.last_data_backup_date 'last full backup',
+	BS1.last_log_backup_date 'last log backup',
+	CASE 
+	WHEN (CASE WHEN cast(BS2.last_data_backup_date as nvarchar(20)) IS NULL THEN 1 ELSE 0 END)
+		* (CASE WHEN D.recovery_model_desc='FULL' THEN 1 ELSE 0 END)
+		= 1 THEN 'WARNING! - FULL Backup missing'
+	WHEN (CASE WHEN cast(BS1.last_log_backup_date as nvarchar(20)) IS NULL THEN 1 ELSE 0 END)
+		* (CASE WHEN D.recovery_model_desc='FULL' THEN 1 ELSE 0 END)
+		= 1 THEN 'WARNING! - LOG Backup missing'
+	ELSE ''
+	END AS 'backup issue'
+
 FROM 
 sys.databases D LEFT JOIN  
 ( 
@@ -120,10 +134,9 @@ LEFT JOIN
    GROUP BY BS.[database_name]  
 ) BS2  
 ON D.[name] = BS2.[database_name] 
-WHERE 
-D.[recovery_model_desc] <> 'SIMPLE' 
-AND BS1.[last_log_backup_date] IS NULL OR BS1.[last_log_backup_date] < BS2.[last_data_backup_date] 
-ORDER BY D.[name]; 
+WHERE D.[name] NOT IN ('model','tempdb')
+ORDER BY D.[name];
+
 
 
 ----------
