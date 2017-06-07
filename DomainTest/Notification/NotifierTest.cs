@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 
 		[Test]
-		public void ShouldNotNotifyWhenNoLicense()
+		public async Task ShouldNotNotifyWhenNoLicense()
 		{
 			setCurrentDataSource();
 
@@ -45,14 +45,14 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
 			person.Email = "aa@teleopti.com";
 
-			Target.Notify(messages, person);
+			await Target.Notify(messages, person);
 
 			Sender.SentNotifications.Count.Should().Be.EqualTo(0);
 		}
 
 
 		[Test]
-		public void ShouldNotifyAndSetCustomerName()
+		public async Task ShouldNotifyAndSetCustomerName()
 		{
 			setValidLicense();
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
@@ -62,14 +62,14 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var person = PersonFactory.CreatePersonWithGuid("a", "a");
 			person.Email = "aa@teleopti.com";
 
-			Target.Notify(messages, person);
+			await Target.Notify(messages, person);
 
 			Sender.SentNotifications.Should().Not.Be.Empty();
 			messages.CustomerName.Should().Be.EqualTo("test");
 		}
 
 		[Test]
-		public void ShouldSendNotification()
+		public async Task ShouldSendNotification()
 		{
 			setValidLicense();
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
@@ -86,13 +86,13 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				PersonName = person.Name.ToString()
 			};
 
-			Target.Notify(messages, person);
+			await Target.Notify(messages, person);
 
 			Sender.SentNotifications.First().Should().Be.EqualTo(new Tuple<INotificationMessage, NotificationHeader>(messages, notificationHeader));
 		}
 
 		[Test]
-		public void ShouldSendAppNotification()
+		public async Task ShouldSendAppNotification()
 		{
 			setValidLicense();
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
@@ -115,14 +115,14 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				PersonName = person.Name.ToString()
 			};
 
-			Target.Notify(messages, person);
+			await Target.Notify(messages, person);
 
 			Server.Requests.Count.Should().Be.EqualTo(1);
 			Sender.SentNotifications.First().Should().Be.EqualTo(new Tuple<INotificationMessage, NotificationHeader>(messages, notificationHeader));
 		}
 
 		[Test]
-		public void ShouldSendNotificationForPersons()
+		public async Task ShouldSendNotificationForPersons()
 		{
 			setValidLicense();
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				PersonName = person2.Name.ToString()
 			};
 
-			Target.Notify(messages, person1, person2);
+			await Target.Notify(messages, person1, person2);
 
 			Sender.SentNotifications.First().Should().Be.EqualTo(new Tuple<INotificationMessage, NotificationHeader>(messages, notificationHeader1));
 			Sender.SentNotifications.Last().Should().Be.EqualTo(new Tuple<INotificationMessage, NotificationHeader>(messages, notificationHeader2));

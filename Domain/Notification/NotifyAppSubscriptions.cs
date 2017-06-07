@@ -65,12 +65,13 @@ namespace Teleopti.Ccc.Domain.Notification
 					dynamic requestBody = new ExpandoObject();
 					requestBody.registration_ids = setting.TokenList;
 					requestBody.notification = notification;
-					if (messages.Data != null)
+					if (messages.Data == null)
 					{
-						messages.Data.title = notification.title;
-						messages.Data.body = notification.body;
-						requestBody.data = (object)messages.Data;
+						messages.Data = new ExpandoObject();
 					}
+					messages.Data.title = notification.title;
+					messages.Data.body = notification.body;
+					requestBody.data = (object)messages.Data;
 					var responseMessage = await _httpServer.Post("https://fcm.googleapis.com/fcm/send",
 						(object)requestBody,
 						s => new NameValueCollection { { "Authorization", key } });
