@@ -1708,7 +1708,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\ShiftEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AdherencePercentageViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\StateInputModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\SiteInAlarmModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateEventPublisher.cs" />
     <Compile Include="ApplicationLayer\Rta\ExternalUserStateWebModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherencePercentageReadModelPersister.cs" />

@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				    BusinessUnitId = @group.First().BusinessUnitId.Value,
 				    SiteId = @group.First().SiteId.Value,
 				    TeamId = @group.Key.Value,
-				    Count = @group.Count(s => s.IsRuleAlarm && s.AlarmStartTime <= _now.UtcDateTime())
+				    InAlarmCount = @group.Count(s => s.IsRuleAlarm && s.AlarmStartTime <= _now.UtcDateTime())
 			    })
 			    .ToArray();
 	    }

@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						int result;
 						var agents = numberOfAgents.TryGetValue(t.Id.Value, out result) ? result : 0;
 						var ooa = adherence[t.Id.GetValueOrDefault()]
-							.Select(a => a.Count)
+							.Select(a => a.InAlarmCount)
 							.SingleOrDefault();
 						return new TeamOutOfAdherence
 						{

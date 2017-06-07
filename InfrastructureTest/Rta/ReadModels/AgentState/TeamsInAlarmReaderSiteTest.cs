@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class TeamInAlarmReaderTest
+	public class TeamsInAlarmReaderSiteTest
 	{
 		public IAgentStateReadModelPersister Persister;
 		public ITeamsInAlarmReader Target;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 
 			var result = Target.Read(siteId).Single();
 			result.TeamId.Should().Be(teamId);
-			result.Count.Should().Be(1);
+			result.InAlarmCount.Should().Be(1);
 		}
 
 		[Test]
@@ -72,7 +72,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				AlarmStartTime = "2016-08-18 08:06".Utc()
 			});
 
-			Target.Read(siteId).Single().Count.Should().Be(1);
+			Target.Read(siteId).Single().InAlarmCount.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldIncludeTeamsWithNoAgentsInAlarm()
+		{
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			{
+				PersonId = Guid.NewGuid(),
+				SiteId = siteId,
+				TeamId = teamId
+			});
+
+			Target.Read(siteId).Single().InAlarmCount.Should().Be(0);
 		}
 
 		[Test]
@@ -98,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			});
 			Persister.UpsertDeleted(personId, "2016-08-18 08:05".Utc());
 
-			Target.Read(siteId).Single().Count.Should().Be(1);
+			Target.Read(siteId).Single().InAlarmCount.Should().Be(1);
 		}
 	}
 }

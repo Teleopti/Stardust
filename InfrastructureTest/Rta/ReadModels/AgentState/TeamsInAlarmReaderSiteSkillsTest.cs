@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
 	[DatabaseTest]
 	[TestFixture]
-	public class TeamInAlarmForSkillTest
+	public class TeamsInAlarmReaderSiteSkillsTest
 	{
 		public MutableNow Now;
 		public Database Database;
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var result = WithUnitOfWork.Get(() => Target.Read(siteId, new[] { currentSkillId })).Single();
 			
 			result.TeamId.Should().Be(teamId);
-			result.Count.Should().Be(1);
+			result.InAlarmCount.Should().Be(1);
 		}
 
 		[Test]
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId }))
-				.Single().Count.Should().Be(1);
+				.Single().InAlarmCount.Should().Be(1);
 		}
 
 		[Test]
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId }))
-				.Single().Count.Should().Be(1);
+				.Single().InAlarmCount.Should().Be(1);
 		}
 
 		[Test]
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId, emailSkillId }))
-				.Single().Count.Should().Be(1);
+				.Single().InAlarmCount.Should().Be(1);
 		}
 
 		[Test]
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			WithUnitOfWork.Do(() => StatePersister.UpsertDeleted(ashleyId, "2016-10-17 08:30".Utc()));
 
 			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId }))
-				.Single().Count.Should().Be(1);
+				.Single().InAlarmCount.Should().Be(1);
 		}
 
 	}

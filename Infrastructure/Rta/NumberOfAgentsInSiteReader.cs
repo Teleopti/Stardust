@@ -6,8 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -44,9 +42,9 @@ group by Site")
 			var initializedSites =
 				from siteId in siteIds
 				where !models.Select(x => x.SiteId).Contains(siteId)
-				select new siteViewModel { SiteId = siteId, NumberOfAgents = 0 };
+				select new siteViewModel { SiteId = siteId, AgentsCount = 0 };
 
-			return initializedSites.Concat(models).ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
+			return initializedSites.Concat(models).ToDictionary(x => x.SiteId, y => y.AgentsCount);
 		}
 
 		public IDictionary<Guid, int> Read(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
@@ -77,13 +75,13 @@ GROUP BY pp.Site
 					.List()
 					.Cast<siteViewModel>();
 
-			return models.ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
+			return models.ToDictionary(x => x.SiteId, y => y.AgentsCount);
 		}
 		
 		private class siteViewModel
 		{
 			public Guid SiteId { get; set; }
-			public int NumberOfAgents { get; set; }
+			public int AgentsCount { get; set; }
 		}
 	}
 }

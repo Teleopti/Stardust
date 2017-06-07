@@ -50,9 +50,9 @@ group by Team
 			var initializedSites =
 				from teamId in teams
 				where !models.Select(x => x.TeamId).Contains(teamId)
-				select new teamViewModel { TeamId = teamId, NumberOfAgents = 0 };
+				select new teamViewModel { TeamId = teamId, AgentsCount = 0 };
 
-			return initializedSites.Concat(models).ToDictionary(x => x.TeamId, y => y.NumberOfAgents);
+			return initializedSites.Concat(models).ToDictionary(x => x.TeamId, y => y.AgentsCount);
 		}
 
 		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
@@ -81,13 +81,13 @@ GROUP BY pp.Team
 				.List()
 				.Cast<teamViewModel>();
 
-			return models.ToDictionary(x => x.TeamId, y => y.NumberOfAgents);
+			return models.ToDictionary(x => x.TeamId, y => y.AgentsCount);
 		}
 
 		private class teamViewModel
 		{
 			public Guid TeamId { get; set; }
-			public int NumberOfAgents { get; set; }
+			public int AgentsCount { get; set; }
 		}
 	}
 }

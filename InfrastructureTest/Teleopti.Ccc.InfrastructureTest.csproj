@@ -289,6 +289,8 @@
     <Compile Include="Repositories\RequestStrategySettingsReaderTest.cs" />
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Repositories\SmartPersonPropertyQuerierTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSitesTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSitesSkillsTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStateForUpsert.cs" />
     <Compile Include="Rta\ReadModels\AgentState\AgentStateReadModelPersisterExtensions.cs" />
     <Compile Include="Rta\ReadModels\AgentState\Reader\ForExcludingStateGroups.cs" />
@@ -326,8 +328,8 @@
     <Compile Include="Rta\ReadModels\AgentState\UnorderedEventsTest.cs" />
     <Compile Include="Rta\Service\QueueueueueeTest.cs" />
     <Compile Include="Rta\Service\ScheduleCacheTest.cs" />
-    <Compile Include="Rta\ReadModels\AgentState\TeamInAlarmForSkillTest.cs" />
-    <Compile Include="Rta\ReadModels\AgentState\TeamInAlarmReaderTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSiteSkillsTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSiteTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="Rta\Service\SnapshotTest.cs" />
     <Compile Include="Rta\Service\Persisters\StateQueueTest.cs" />

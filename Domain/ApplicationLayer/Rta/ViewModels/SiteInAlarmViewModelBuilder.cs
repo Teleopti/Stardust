@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly ITeamsInAlarmReader _teamsInAlarmReader;
 		private readonly ISiteRepository _siteRepository;
 		private readonly ICurrentAuthorization _authorization;
-		private readonly IUserUiCulture _uiCulture;
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
 
 		public SiteInAlarmViewModelBuilder(
@@ -24,7 +23,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			ISiteRepository siteRepository,
 			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
 			ICurrentAuthorization authorization,
-			IUserUiCulture uiCulture,
 			INow now
 			)
 		{
@@ -32,7 +30,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_siteRepository = siteRepository;
 			_numberOfAgentsInSiteReader = numberOfAgentsInSiteReader;
 			_authorization = authorization;
-			_uiCulture = uiCulture;
 			_now = now;
 		}
 
@@ -55,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						new
 						{
 							SiteId = site.Key,
-							Count = site.Sum(x => x.Count)
+							Count = site.Sum(x => x.InAlarmCount)
 						})
 					.ToLookup(x => x.SiteId, x => x.Count);
 
