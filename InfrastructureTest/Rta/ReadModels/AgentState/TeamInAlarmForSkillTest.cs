@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		public WithUnitOfWork WithUnitOfWork;
 		public IGroupingReadOnlyRepository Groupings;
 		public IAgentStateReadModelPersister StatePersister;
-		public ITeamInAlarmReader Target;
+		public ITeamsInAlarmReader Target;
 
 		[Test]
 		public void ShouldLoad()

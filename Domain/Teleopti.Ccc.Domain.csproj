@@ -236,6 +236,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\IStateQueueWriter.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NoLoggedOutStateGroupsException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateQueueTenants.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilder.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkillsOld.cs" />
     <Compile Include="Cascading\PrimarySkillOverstaffOld.cs" />
     <Compile Include="Cascading\ShovelResourcesStateOld.cs" />
@@ -1189,13 +1190,12 @@
     <Compile Include="ApplicationLayer\Request\AnalyticsRequestUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStatesViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModelBuilder.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForSiteViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteInAlarmViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForTeamsViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\INumberOfAgentsInTeamReader.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteOutOfAdherence.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteInAlarmViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteViewModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\TeamOutOfAdherence.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\TeamViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\TeamViewModelBuilder.cs" />
@@ -1700,8 +1700,7 @@
     <Compile Include="UnitOfWork\IReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\INotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IRtaEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ISiteInAlarmReader.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ITeamInAlarmReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ITeamsInAlarmReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Rta.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateProcessor.cs" />

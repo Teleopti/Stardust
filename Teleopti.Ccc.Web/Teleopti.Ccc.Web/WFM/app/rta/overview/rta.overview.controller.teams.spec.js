@@ -165,24 +165,7 @@ describe('RtaOverviewController', function () {
 
 		expect($state.go).not.toHaveBeenCalledWith('rta');
 	});
-
-	it('should convert teams out of adherence and number of agents to percent', function () {
-		stateParams.siteIds = "londonGuid";
-		//$fakeBackend.withTeamAdherence({
-		//		OutOfAdherence: 5
-		//	})
-		//	.withTeam({
-		//		NumberOfAgents: 10
-		//	});
-
-		vm = $controllerBuilder.createController().vm;
-
-		var result = vm.getAdherencePercent(5, 10);
-
-		expect(result).toEqual(50);
-	});
-
-
+	
 	it('should not call notify service', function () {
 		stateParams.siteIds = "6a21c802-7a34-4917-8dfd-9b5e015ab461";
 		spyOn(NoticeService, 'info');

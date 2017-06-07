@@ -215,6 +215,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelBatchTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftMeetingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\StateQueue\QueueTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForPermittedSiteViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\AgentStateNameTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ExcludePhoneStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\InAlarmTest.cs" />
@@ -270,7 +271,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelOutOfAdherencesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EmptyExistingStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftAbsenceTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForSiteViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteInAlarmViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForTeamsOnSiteViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\BuildTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\UserTimeZoneTest.cs" />
@@ -281,7 +282,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelSnapshotTests.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\TeamViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterTest.cs" />

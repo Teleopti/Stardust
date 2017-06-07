@@ -336,8 +336,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeRtaRuleRepository _rules;
 		private readonly FakeExternalLogOnRepository _externalLogOns;
 		private readonly FakeDataSources _dataSources;
-		private readonly FakeSiteInAlarmReader _siteInAlarmReader;
-		private readonly FakeTeamInAlarmReader _teamInAlarmReader;
 		private readonly FakeMeetingRepository _meetings;
 		private readonly FakeAgentStateReadModelPersister _agentStates;
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
@@ -392,8 +390,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeRtaRuleRepository rules,
 			FakeExternalLogOnRepository externalLogOns,
 			FakeDataSources dataSources,
-			FakeSiteInAlarmReader siteInAlarmReader,
-			FakeTeamInAlarmReader teamInAlarmReader,
+			FakeTeamsInAlarmReader teamsInAlarmReader,
 			FakeMeetingRepository meetings,
 			FakeAgentStateReadModelPersister agentStates,
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId
@@ -423,8 +420,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_stateGroups = stateGroups;
 			_externalLogOns = externalLogOns;
 			_dataSources = dataSources;
-			_siteInAlarmReader = siteInAlarmReader;
-			_teamInAlarmReader = teamInAlarmReader;
 			_mappings = mappings;
 			_rules = rules;
 			_meetings = meetings;

@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				_currentUnitOfWork.Session().CreateSQLQuery(@"
 SELECT
 	Team as 'TeamId',
-	count(Parent) as 'NumberOfAgents'
+	count(Parent) as 'AgentsCount'
 FROM dbo.v_PersonPeriodTeamSiteBu WITH(NOEXPAND)
 WHERE :now BETWEEN StartDate AND EndDate 
 and Team in (:teams)
@@ -61,7 +61,7 @@ group by Team
 				.CreateSQLQuery(@"
 SELECT
 	pp.Team as 'TeamId',
-	count(DISTINCT pp.Parent) as 'NumberOfAgents'
+	count(DISTINCT pp.Parent) as 'AgentsCount'
 FROM dbo.v_PersonPeriodTeamSiteBu pp WITH(NOEXPAND)
 
 INNER JOIN ReadModel.GroupingReadOnly AS g

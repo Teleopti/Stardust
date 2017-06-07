@@ -326,8 +326,6 @@
     <Compile Include="Rta\ReadModels\AgentState\UnorderedEventsTest.cs" />
     <Compile Include="Rta\Service\QueueueueueeTest.cs" />
     <Compile Include="Rta\Service\ScheduleCacheTest.cs" />
-    <Compile Include="Rta\ReadModels\AgentState\SiteInAlarmForSkillTest.cs" />
-    <Compile Include="Rta\ReadModels\AgentState\SiteInAlarmReaderTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamInAlarmForSkillTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamInAlarmReaderTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />

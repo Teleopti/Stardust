@@ -9,16 +9,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	public class AgentsInAlarmForTeamsViewModelBuilder
 	{
 		private readonly ITeamRepository _teamRepository;
-		private readonly ITeamInAlarmReader _teamInAlarmReader;
+		private readonly ITeamsInAlarmReader _teamsInAlarmReader;
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
 
 		public AgentsInAlarmForTeamsViewModelBuilder(
 			ITeamRepository teamRepository, 
-			ITeamInAlarmReader teamInAlarmReader, 
+			ITeamsInAlarmReader teamsInAlarmReader, 
 			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader)
 		{
 			_teamRepository = teamRepository;
-			_teamInAlarmReader = teamInAlarmReader;
+			_teamsInAlarmReader = teamsInAlarmReader;
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 		}
 
@@ -31,9 +31,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			var teams = _teamRepository.FindTeamsForSite(siteId);
 
-			var adherence = skillIds == null ?
-				_teamInAlarmReader.Read(siteId).ToLookup(a => a.TeamId) :
-				_teamInAlarmReader.Read(siteId, skillIds).ToLookup(a => a.TeamId)
+			var adherence = skillIds == null ? 
+				_teamsInAlarmReader.Read(siteId).ToLookup(a => a.TeamId) : 
+				_teamsInAlarmReader.Read(siteId, skillIds).ToLookup(a => a.TeamId)
 				;
 
 			var numberOfAgents = skillIds == null ?

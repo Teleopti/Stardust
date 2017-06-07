@@ -34,7 +34,7 @@
 		<div class="con-row demo-outline">
 			<div class="con-flex">
 				<div class="wfm-grid">
-					<div class="grid-card site" ng-if="site.NumberOfAgents > 0" ng-repeat="site in vm.sites">
+					<div class="grid-card site" ng-if="site.AgentsCount > 0" ng-repeat="site in vm.sites">
 						<a ui-sref="{{vm.getStateForTeams()}}" class="rta-card-link">
 							<div class="list-content" ng-class="site.Color" tabindex="-1">
 								<div class="wfm-checkbox">
@@ -42,14 +42,14 @@
 										<input type="checkbox" value="value" ng-checked="vm.selectedSites.indexOf(site.Id) > -1" ng-click="vm.toggleSelection(site.Id)" ng-model="selected" tabindex="-1"/>
 											<span class="wfm-checkbox-toggle"></span>
 												<b>
-													<span class="wfm-checkbox-label org-name-container" ng-attr-data-max="{{site.NumberOfAgents}}" ng-attr-data-value="{{site.OutOfAdherence}}" style="width:80px">
+													<span class="wfm-checkbox-label org-name-container" ng-attr-data-max="{{site.AgentsCount}}" ng-attr-data-value="{{site.InAlarmCount}}" style="width:80px">
 															{{site.Name}}
 													</span>
 													</b>
 									</label>
 									</br>
 											<span class="full-padding">{{'InAlarm'|translate}}:
-												<b>{{site.OutOfAdherence}}</b>
+												<b>{{site.InAlarmCount}}</b>
 											</span>
 										</div>
 							</div>

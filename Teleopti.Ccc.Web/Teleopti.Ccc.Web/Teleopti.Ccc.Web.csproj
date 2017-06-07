@@ -430,6 +430,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AgentStateController.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\OrganizationController.cs" />
     <Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />
     <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />

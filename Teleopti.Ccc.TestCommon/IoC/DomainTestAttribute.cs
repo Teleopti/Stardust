@@ -109,8 +109,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<FakeNumberOfAgentsInSiteReader>().For<INumberOfAgentsInSiteReader>();
 			system.UseTestDouble<FakeNumberOfAgentsInTeamReader>().For<INumberOfAgentsInTeamReader>();
 			system.UseTestDouble<FakeAllLicenseActivatorProvider>().For<ILicenseActivatorProvider>();
-			system.UseTestDouble<FakeSiteInAlarmReader>().For<ISiteInAlarmReader>();
-			system.UseTestDouble<FakeTeamInAlarmReader>().For<ITeamInAlarmReader>();
+			system.UseTestDouble<FakeTeamsInAlarmReader>().For<ITeamsInAlarmReader>();
 			//
 
 			system.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();

@@ -271,7 +271,7 @@
     <Compile Include="FakeRepositories\Rta\FakeNumberOfAgentsInTeamReader.cs" />
     <Compile Include="FakeData\FakeRequestFactory.cs" />
     <Compile Include="FakeRepositories\Rta\FakeHistoricalChangeReadModelPersister.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeTeamInAlarmReader.cs" />
+    <Compile Include="FakeRepositories\Rta\FakeTeamsInAlarmReader.cs" />
     <Compile Include="FakeSchedulingSourceScope.cs" />
     <Compile Include="FakeTransactionHook.cs" />
     <Compile Include="FakeUserUiCulture.cs" />
@@ -390,7 +390,6 @@
     <Compile Include="FakeShiftTradeLightValidator.cs" />
     <Compile Include="FakeSignalR.cs" />
     <Compile Include="FakeSignalRClient.cs" />
-    <Compile Include="FakeRepositories\Rta\FakeSiteInAlarmReader.cs" />
     <Compile Include="FakeTimeZoneGuard.cs" />
     <Compile Include="FakeUserCulture.cs" />
     <Compile Include="FakeUserTimeZone.cs" />

@@ -467,8 +467,7 @@
     <Compile Include="Rta\MappingReadModelReader.cs" />
     <Compile Include="Rta\KeyValueStorePersister.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelPersister.cs" />
-    <Compile Include="Rta\Persisters\SiteInAlarmReader.cs" />
-    <Compile Include="Rta\Persisters\TeamInAlarmReader.cs" />
+    <Compile Include="Rta\Persisters\TeamsInAlarmReader.cs" />
     <Compile Include="Rta\SelectionInfos.cs" />
     <Compile Include="Rta\StateQueue.cs" />
     <Compile Include="Rta\StateQueueUtilities.cs" />

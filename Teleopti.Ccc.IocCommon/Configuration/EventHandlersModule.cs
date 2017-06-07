@@ -131,11 +131,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IAdherencePercentageReadModelReader>()
 				.SingleInstance();
 
-			builder.RegisterType<SiteInAlarmReader>()
-					.As<ISiteInAlarmReader>()
-					.SingleInstance();
-			builder.RegisterType<TeamInAlarmReader>()
-				.As<ITeamInAlarmReader>()
+			//builder.RegisterType<SiteInAlarmReader>()
+			//		.As<ISiteInAlarmReader>()
+			//		.SingleInstance();
+			builder.RegisterType<TeamsInAlarmReader>()
+				.As<ITeamsInAlarmReader>()
 				.SingleInstance();
 
 			builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 	public class TeamInAlarmReaderTest
 	{
 		public IAgentStateReadModelPersister Persister;
-		public ITeamInAlarmReader Target;
+		public ITeamsInAlarmReader Target;
 		public MutableNow Now;
 
 		[Test]

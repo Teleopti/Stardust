@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Now.Is("2016-10-17 08:10");
 			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			Database
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId,
+					BusinessUnitId = businessUnitId,
 					SiteId = siteId,
 					TeamId = teamId,
 					IsRuleAlarm = true,
@@ -62,6 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var skill = Guid.NewGuid();
 			var wrongSkill = Guid.NewGuid();
 			var wrongTeam = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			Database
@@ -72,6 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId,
+					BusinessUnitId = businessUnitId,
 					SiteId = siteId,
 					TeamId = teamId,
 					IsRuleAlarm = true,
@@ -84,6 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = wrongPersonId,
+					BusinessUnitId = businessUnitId,
 					SiteId = siteId,
 					TeamId = wrongTeam,
 					IsRuleAlarm = true,
@@ -112,6 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithTeam(teamId)
 				.WithAgentState(new AgentStateReadModel
 				{
+					BusinessUnitId = Database.CurrentBusinessUnitId(),
 					PersonId = personId,
 					SiteId = siteId,
 					TeamId = teamId,
@@ -133,6 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var personId = Guid.NewGuid();
 			var skill1 = Guid.NewGuid();
 			var skill2 = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			Database
@@ -141,6 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId,
+					BusinessUnitId = businessUnitId,
 					SiteId = siteId,
 					TeamId = teamId,
 					IsRuleAlarm = true,

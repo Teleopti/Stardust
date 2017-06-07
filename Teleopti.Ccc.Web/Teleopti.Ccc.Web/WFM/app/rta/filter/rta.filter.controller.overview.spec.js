@@ -70,12 +70,12 @@ describe('RtaFilterController', function () {
 			})
 			.withSiteAdherence({
 				Id: "parisGuid",
-				OutOfAdherence: 5,
+				InAlarmCount: 5,
 				SkillId: "emailGuid"
 			})
 			.withSiteAdherence({
 				Id: "parisGuid",
-				OutOfAdherence: 3,
+				InAlarmCount: 3,
 				SkillId: "phoneGuid"
 			})
 			.withSkillAreas([{
@@ -110,12 +110,12 @@ describe('RtaFilterController', function () {
 			})
 			.withSiteAdherence({
 				Id: "parisGuid",
-				OutOfAdherence: 5,
+				InAlarmCount: 5,
 				SkillId: "emailGuid"
 			})
 			.withSiteAdherence({
 				Id: "parisGuid",
-				OutOfAdherence: 3,
+				InAlarmCount: 3,
 				SkillId: "phoneGuid"
 			})
 			.withSkillAreas([{
@@ -150,7 +150,7 @@ describe('RtaFilterController', function () {
 			})
 			.withSiteAdherence({
 				Id: "londonGuid",
-				OutOfAdherence: 3,
+				InAlarmCount: 3,
 				SkillId: "phoneGuid"
 			})
 			.withSkill({
@@ -172,7 +172,7 @@ describe('RtaFilterController', function () {
 			})
 			.withSiteAdherence({
 				Id: "londonGuid",
-				OutOfAdherence: 3,
+				InAlarmCount: 3,
 				SkillId: "phoneGuid"
 			})
 			.withSkillAreas([{

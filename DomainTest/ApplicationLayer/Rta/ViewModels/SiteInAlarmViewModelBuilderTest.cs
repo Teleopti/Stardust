@@ -14,14 +14,15 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[DomainTest]
 	[TestFixture]
-	public class AgentsInAlarmForSiteViewModelBuilderTest : ISetup
+	public class SiteInAlarmViewModelBuilderTest : ISetup
 	{
-		public AgentsInAlarmForSiteViewModelBuilder Target;
+		public SiteInAlarmViewModelBuilder Target;
 		public FakeDatabase Database;
 		public FakeSiteRepository Sites;
 		public FakeNumberOfAgentsInSiteReader AgentsInSite;
@@ -32,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			system.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
 		}
-
 
 		[Test]
 		public void ShouldBuild()
@@ -46,7 +46,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId,
+					BusinessUnitId = Guid.NewGuid(),
 					SiteId = siteId,
+					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
 					AlarmStartTime = "2017-03-30 08:29".Utc(),
 				})
@@ -56,8 +58,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			viewModel.Id.Should().Be(siteId);
 			viewModel.Name.Should().Be("London");
-			viewModel.NumberOfAgents.Should().Be(1);
-			viewModel.OutOfAdherence.Should().Be(1);
+			viewModel.AgentsCount.Should().Be(1);
+			viewModel.InAlarmCount.Should().Be(1);
 			viewModel.Color.Should().Be("danger");
 		}
 		[Test]
@@ -66,25 +68,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			Now.Is("2017-03-30 08:30");
 			var personId = Guid.NewGuid();
 			var skill = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
 			var  siteId = Guid.NewGuid();
 			Database
 				.WithSite(siteId, "London")
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId,
+					BusinessUnitId = businessUnitId,
 					SiteId = siteId,
+					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
 					AlarmStartTime = "2017-03-30 08:29".Utc(),
 				})
 				.WithAgent(personId)
 				.WithSkill(skill);
 
-			var viewModel = Target.ForSkills(new[] { skill }).Single();
+			var viewModel = Target.Build(new[] { skill }).Single();
 
 			viewModel.Id.Should().Be(siteId);
 			viewModel.Name.Should().Be("London");
-			viewModel.NumberOfAgents.Should().Be(1);
-			viewModel.OutOfAdherence.Should().Be(1);
+			viewModel.AgentsCount.Should().Be(1);
+			viewModel.InAlarmCount.Should().Be(1);
 			viewModel.Color.Should().Be("danger");
 
 		}
@@ -93,6 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		public void ShouldBuildForMultipleSitesForSkill()
 		{
 			Now.Is("2016-06-21 08:30");
+			var businessUnitId = Guid.NewGuid();
 			var siteId1 = Guid.NewGuid();
 			var siteId2 = Guid.NewGuid();
 			var skill = Guid.NewGuid();
@@ -106,7 +112,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId,
+					BusinessUnitId = businessUnitId,
 					SiteId = siteId1,
+					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-06-21 08:29".Utc(),
 				})
@@ -116,7 +124,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId2,
+					BusinessUnitId = businessUnitId,
 					SiteId = siteId2,
+					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-06-21 08:29".Utc(),
 				})
@@ -125,39 +135,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId3,
+					BusinessUnitId = businessUnitId,
 					SiteId = siteId2,
+					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-06-21 08:29".Utc(),
 				})
 				.WithAgent(personId3)
 				.WithSkill(skill);
 
-			var result = Target.ForSkills(new[] { skill });
+			var result = Target.Build(new[] { skill });
 
-			result.Single(x => x.Id == siteId1).OutOfAdherence.Should().Be(1);
-			result.Single(x => x.Id == siteId2).OutOfAdherence.Should().Be(2);
+			result.Single(x => x.Id == siteId1).InAlarmCount.Should().Be(1);
+			result.Single(x => x.Id == siteId2).InAlarmCount.Should().Be(2);
 		}
 
 		[Test]
 		public void ShouldBuildForSkillWihNoAgentsInAlarm()
 		{
-			var skill = Guid.NewGuid();
-			var site = Guid.NewGuid();
 
+			var skill = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var site = Guid.NewGuid();
+			var personId = Guid.NewGuid();
 			Database
 				.WithSite(site)
 				.WithAgentState(new AgentStateReadModel
 				{
-					PersonId = Guid.NewGuid(),
+					PersonId = personId,
+					BusinessUnitId = businessUnitId,
+					TeamId = Guid.NewGuid(),
 					SiteId = site,
 				})
-				.WithAgent()
+				.WithAgent(personId)
 				.WithSkill(skill);
 
-			var viewModel = Target.ForSkills(new[] { skill }).Single();
+			var viewModel = Target.Build(new[] { skill }).Single();
 
 			viewModel.Id.Should().Be(site);
-			viewModel.OutOfAdherence.Should().Be(0);
+			viewModel.InAlarmCount.Should().Be(0);
 		}
 
 		[Test]
@@ -165,7 +181,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Now.Is("2016-06-21 08:30");
 			var personId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
 			var skill1 = Guid.NewGuid();
 			var skill2 = Guid.NewGuid();
 
@@ -174,7 +192,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId,
+					BusinessUnitId = businessUnitId,
 					SiteId = siteId,
+					TeamId = teamId,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-06-21 08:29".Utc(),
 				})
@@ -182,56 +202,138 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithSkill(skill1)
 				.WithSkill(skill2);
 
-			var viewModel = Target.ForSkills(new[] { skill1, skill2 }).Single();
+			var viewModel = Target.Build(new[] { skill1, skill2 }).Single();
 
 			viewModel.Id.Should().Be(siteId);
-			viewModel.OutOfAdherence.Should().Be(1);
+			viewModel.InAlarmCount.Should().Be(1);
 		}
 
 		[Test]
 		public void ShouldBuildForMultipleSitesForSkillOrderSitesName()
 		{
-			var site1 = new Site("B").WithId();
-			var site2 = new Site("C").WithId();
-			var site3 = new Site("A").WithId();
+
+			Now.Is("2016-06-21 08:30");
+			var businessUnitId = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var siteId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+			var personId3 = Guid.NewGuid();
+			var siteId3 = Guid.NewGuid();
 			var skill = Guid.NewGuid();
 
-			Sites.Has(site1);
-			Sites.Has(site2);
-			Sites.Has(site3);
 
-			var result = Target.ForSkills(new[] { skill });
+			Database
+				.WithSite(siteId1, "B")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId1,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId1,
+					TeamId = Guid.NewGuid(),
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+				})
+				.WithAgent(personId1)
+				.WithSkill(skill)
+				.WithSite(siteId2, "C")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId2,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId2,
+					TeamId = Guid.NewGuid(),
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+				})
+				.WithAgent(personId2)
+				.WithSkill(skill)
+				.WithSite(siteId3, "A")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId3,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId3,
+					TeamId = Guid.NewGuid(),
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+				})
+				.WithAgent(personId3)
+				.WithSkill(skill);
+
+			var result = Target.Build(new[] { skill });
 			result.Select(x => x.Id)
 				.Should().Have.SameSequenceAs(new[]
-			{
-				site3.Id.GetValueOrDefault(),
-					site1.Id.GetValueOrDefault(),
-					site2.Id.GetValueOrDefault()
-			});
+				{
+					siteId3,
+					siteId1,
+					siteId2
+				});
 		}
 
 		[Test]
 		public void ShouldBuildForMultipleSitesForSkillOrderSitesNameAccordingToSwedishName()
 		{
-			var site1 = new Site("Å").WithId();
-			var site2 = new Site("Ä").WithId();
-			var site3 = new Site("A").WithId();
+
+
+			Now.Is("2016-06-21 08:30");
+			var businessUnitId = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var siteId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+			var personId3 = Guid.NewGuid();
+			var siteId3 = Guid.NewGuid();
 			var skill = Guid.NewGuid();
 
-			Sites.Has(site2);
-			Sites.Has(site1);
-			Sites.Has(site3);
 
-			UiCulture.IsSwedish();
+			Database
+				.WithSite(siteId1, "Å")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId1,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId1,
+					TeamId = Guid.NewGuid(),
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+				})
+				.WithAgent(personId1)
+				.WithSkill(skill)
+				.WithSite(siteId2, "Ä")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId2,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId2,
+					TeamId = Guid.NewGuid(),
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+				})
+				.WithAgent(personId2)
+				.WithSkill(skill)
+				.WithSite(siteId3, "A")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId3,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId3,
+					TeamId = Guid.NewGuid(),
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+				})
+				.WithAgent(personId3)
+				.WithSkill(skill);
 
-			var result = Target.ForSkills(new[] { skill });
+			var result = Target.Build(new[] { skill });
 			result.Select(x => x.Id)
 				.Should().Have.SameSequenceAs(new[]
-			{
-				site3.Id.GetValueOrDefault(),
-					site1.Id.GetValueOrDefault(),
-					site2.Id.GetValueOrDefault()
-			});
+				{
+					siteId3,
+					siteId1,
+					siteId2
+				});
+
 		}
 	}
 }

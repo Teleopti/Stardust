@@ -41,8 +41,8 @@ describe('RtaOverviewController', function () {
 		$fakeBackend.withSiteAdherence({
 			Id: "londonGuid",
 			Name: "London",
-			NumberOfAgents: 11,
-			OutOfAdherence: 5,
+			AgentsCount: 11,
+			InAlarmCount: 5,
 			Color: "warning"
 		});
 
@@ -50,16 +50,16 @@ describe('RtaOverviewController', function () {
 
 		expect(vm.sites[0].Id).toEqual("londonGuid");
 		expect(vm.sites[0].Name).toEqual("London");
-		expect(vm.sites[0].NumberOfAgents).toEqual(11);
-		expect(vm.sites[0].OutOfAdherence).toEqual(5);
+		expect(vm.sites[0].AgentsCount).toEqual(11);
+		expect(vm.sites[0].InAlarmCount).toEqual(5);
 		expect(vm.sites[0].Color).toEqual("warning");
 	});
 
 	it('should update adherence', function () {
 		$fakeBackend.withSiteAdherence({
 			Id: "londonGuid",
-			NumberOfAgents: 11,
-			OutOfAdherence: 5,
+			AgentsCount: 11,
+			InAlarmCount: 5,
 			Color: "warning"
 		});
 
@@ -69,14 +69,14 @@ describe('RtaOverviewController', function () {
 			$fakeBackend.clearSiteAdherences()
 				.withSiteAdherence({
 					Id: "londonGuid",
-					NumberOfAgents: 11,
-					OutOfAdherence: 2,
+					AgentsCount: 11,
+					InAlarmCount: 2,
 					Color: "good"
 				});
 		})
 			.wait(5000);
 
-		expect(vm.sites[0].OutOfAdherence).toEqual(2);
+		expect(vm.sites[0].InAlarmCount).toEqual(2);
 		expect(vm.sites[0].Color).toEqual("good");
 	});
 
@@ -135,24 +135,7 @@ describe('RtaOverviewController', function () {
 			siteIds: ["parisGuid"]
 		});
 	});
-
-	it('should convert sites out of adherence and number of agents to percent', function () {
-		//$fakeBackend.withSite({
-		//		Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-		//		NumberOfAgents: 11
-		//	})
-		//	.withSiteAdherence({
-		//		Id: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-		//		OutOfAdherence: 1
-		//	});
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		var result = vm.getAdherencePercent(1, 11);
-
-		expect(result).toEqual(9);
-	});
-
+	
 	it('should call notify service', function () {
 		spyOn(NoticeService, 'info');
 

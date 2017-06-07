@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				.WithAgent();
 			var siteId = Database.CurrentSiteId();
 
-			var result = WithUnitOfWork.Get(() => Target.FetchNumberOfAgents(new[] {siteId}));
+			var result = WithUnitOfWork.Get(() => Target.Read(new[] {siteId}));
 
 			result[siteId].Should().Be(2);
 		}
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				.WithSite();
 			var siteId = Database.CurrentSiteId();
 
-			var result = WithUnitOfWork.Get(() => Target.FetchNumberOfAgents(new[] { siteId }));
+			var result = WithUnitOfWork.Get(() => Target.Read(new[] { siteId }));
 
 			result[siteId].Should().Be(0);
 		}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				.WithTerminatedAgent("2016-10-16");
 			var siteId = Database.CurrentSiteId();
 
-			var result = WithUnitOfWork.Get(() => Target.FetchNumberOfAgents(new[] { siteId }));
+			var result = WithUnitOfWork.Get(() => Target.Read(new[] { siteId }));
 
 			result[siteId].Should().Be(1);
 		}
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				;
 			var siteId = Database.CurrentSiteId();
 
-			var result = WithUnitOfWork.Get(() => Target.FetchNumberOfAgents(new[] { siteId }));
+			var result = WithUnitOfWork.Get(() => Target.Read(new[] { siteId }));
 
 			result[siteId].Should().Be(1);
 		}
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				.WithPersonPeriod("2017-02-22");
 			var siteId = Database.CurrentSiteId();
 
-			WithUnitOfWork.Get(() => Target.FetchNumberOfAgents(new[] { siteId }))
+			WithUnitOfWork.Get(() => Target.Read(new[] { siteId }))
 				[siteId].Should().Be(1);
 		}
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var siteId = Database.CurrentSiteId();
 			var skillId = Database.SkillIdFor("phone");
 
-			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { siteId }, new[] { skillId }));
+			var result = WithUnitOfWork.Get(() => Target.Read(new[] { siteId }, new[] { skillId }));
 
 			result[siteId].Should().Be(1);
 		}
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		[Test]
 		public void ShouldNotReturnSiteWithoutAgents()
 		{
-			WithUnitOfWork.Get(() => Target.ForSkills(new[] {Guid.NewGuid()}, new[] {Guid.NewGuid()}))
+			WithUnitOfWork.Get(() => Target.Read(new[] {Guid.NewGuid()}, new[] {Guid.NewGuid()}))
 				.Should().Be.Empty();
 		}
 		
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var phoneId = Database.SkillIdFor("phone");
 			var emailId = Database.SkillIdFor("email");
 
-			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { siteId }, new[] { phoneId, emailId }));
+			var result = WithUnitOfWork.Get(() => Target.Read(new[] { siteId }, new[] { phoneId, emailId }));
 
 			result[siteId].Should().Be(1);
 		}
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var siteId = Database.CurrentSiteId();
 			var emailId = Database.SkillIdFor("email");
 
-			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { siteId }, new[] { emailId }));
+			var result = WithUnitOfWork.Get(() => Target.Read(new[] { siteId }, new[] { emailId }));
 
 			result.Should().Be.Empty();
 		}
@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var siteId = Database.CurrentSiteId();
 			var emailId = Database.SkillIdFor("email");
 
-			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { siteId }, new[] { emailId }));
+			var result = WithUnitOfWork.Get(() => Target.Read(new[] { siteId }, new[] { emailId }));
 
 			result[siteId].Should().Be(1);
 		}
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var siteId = Database.CurrentSiteId();
 			var phoneId = Database.SkillIdFor("phone");
 
-			var result = WithUnitOfWork.Get(() => Target.ForSkills(new[] { siteId }, new[] { phoneId }));
+			var result = WithUnitOfWork.Get(() => Target.Read(new[] { siteId }, new[] { phoneId }));
 
 			result[siteId].Should().Be(1);
 		}
@@ -206,7 +206,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var siteId = Database.CurrentSiteId();
 			var phoneId = Database.SkillIdFor("phone");
 
-			WithUnitOfWork.Get(() => Target.ForSkills(new[] {siteId}, new[] {phoneId}))
+			WithUnitOfWork.Get(() => Target.Read(new[] {siteId}, new[] {phoneId}))
 				[siteId].Should().Be(1);
 		}
 

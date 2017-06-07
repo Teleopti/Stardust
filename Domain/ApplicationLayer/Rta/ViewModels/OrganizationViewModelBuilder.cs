@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -9,7 +10,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
-	public class SiteViewModelBuilder
+	public class OrganizationViewModelBuilder
 	{
 		private readonly INow _now;
 		private readonly ISiteRepository _siteRepository;
@@ -17,14 +18,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
 		private readonly ICurrentAuthorization _authorization;
 		private readonly IUserUiCulture _uiCulture;
+		private readonly ITeamsInAlarmReader _teamsInAlarmReader;
 
-		public SiteViewModelBuilder(
+		public OrganizationViewModelBuilder(
 			INow now,
 			ISiteRepository siteRepository,
 			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
 			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,
 			ICurrentAuthorization authorization,
-			IUserUiCulture uiCulture)
+			IUserUiCulture uiCulture, ITeamsInAlarmReader teamsInAlarmReader)
 		{
 			_now = now;
 			_siteRepository = siteRepository;
@@ -32,53 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 			_authorization = authorization;
 			_uiCulture = uiCulture;
-		}
-
-		public IEnumerable<SiteViewModel> Build()
-		{
-			var sites = allPermittedSites();
-			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites.Select(x => x.Id.Value)) : new Dictionary<Guid, int>();
-			return sites.Select(site =>
-			{
-				int tempNumberOfAgents;
-				var agents = numberOfAgents.TryGetValue(site.Id.Value, out tempNumberOfAgents) ? tempNumberOfAgents : 0;
-				return new SiteViewModel
-				{
-					Id = site.Id.Value,
-					Name = site.Description.Name,
-					NumberOfAgents = agents,
-					OpenHours = openHours(site)
-				};
-			}).ToList();
-		}
-
-		private static IEnumerable<SiteOpenHourViewModel> openHours(ISite site)
-		{
-			return site.OpenHourCollection.Select(
-				openHour =>
-					new SiteOpenHourViewModel()
-					{
-						WeekDay = openHour.WeekDay,
-						StartTime = openHour.TimePeriod.StartTime,
-						EndTime = openHour.TimePeriod.EndTime,
-						IsClosed = openHour.IsClosed
-					}).ToList();
-		}
-		
-		public IEnumerable<SiteViewModel> ForSkills(Guid[] skillIds)
-		{
-			var sites = allPermittedSites();
-			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.ForSkills(sites.Select(x => x.Id.Value), skillIds) : new Dictionary<Guid, int>();
-			return
-				from num in numberOfAgents
-				from site in sites
-				where num.Key == site.Id.Value
-				select new SiteViewModel
-				{
-					Id = site.Id.Value,
-					Name = site.Description.Name,
-					NumberOfAgents = num.Value
-				};
+			_teamsInAlarmReader = teamsInAlarmReader;
 		}
 
 		private IOrderedEnumerable<ISite> allPermittedSites()
@@ -91,31 +47,34 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				.OrderBy(x => x.Description.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
 		}
 
-		public IEnumerable<OrganizationSiteViewModel> ForOrganization()
+		public IEnumerable<OrganizationSiteViewModel> Build()
 		{
-			var sites = allPermittedSites();
-			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.FetchNumberOfAgents(sites.Select((s) => s.Id.Value)) : new Dictionary<Guid, int>();
-			var org = from num in numberOfAgents
+			var sites = allPermittedSites();			
+			var org = 
 					  from site in sites
-					  where num.Key == site.Id.Value && num.Value > 0 && site.TeamCollection.Count > 0
-				select new OrganizationSiteViewModel
-				{
-					Id = site.Id.Value,
-					Name = site.Description.Name,
-					Teams = site.TeamCollection.Select(
-						team => new OrganizationTeamViewModel
-						{
-							Id = team.Id.Value,
-							Name = team.Description.Name
-						}).ToArray()
-				};
+					  where site.TeamCollection.Count > 0
+					  select new OrganizationSiteViewModel
+					  {
+						  Id = site.Id.Value,
+						  Name = site.Description.Name,
+						  Teams = site.TeamCollection
+						  .Select(
+							  team => new OrganizationTeamViewModel
+							  {
+								  Id = team.Id.Value,
+								  Name = team.Description.Name
+							  })
+							  .OrderBy(t => t.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false))
+							  .ToArray()
+					  };
 			return org.ToArray();
 		}
 
-		public IEnumerable<OrganizationSiteViewModel> ForOrganizationWithSkills(Guid[] skillIds)
+		public IEnumerable<OrganizationSiteViewModel> BuildForSkills(Guid[] skillIds)
 		{
 			var sites = allPermittedSites();
-			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.ForSkills(sites.Select(x => x.Id.Value), skillIds) : new Dictionary<Guid, int>();
+			// Dont need to check number of agents for site?
+			var numberOfAgents = sites.Any() ? _numberOfAgentsInSiteReader.Read(sites.Select(x => x.Id.Value), skillIds) : new Dictionary<Guid, int>();
 			var org = from num in numberOfAgents
 					  from site in sites
 					  let teamIdsBySkill = site.TeamCollection.Any() ? _numberOfAgentsInTeamReader.ForSkills(site.TeamCollection.Select(t => t.Id.Value), skillIds) : new Dictionary<Guid, int>() 

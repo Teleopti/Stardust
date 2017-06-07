@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 		}
 
-		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> siteIds)
+		public IDictionary<Guid, int> Read(IEnumerable<Guid> siteIds)
 		{
 			var models =
 				_currentUnitOfWork.Session().CreateSQLQuery(@"
 SELECT
 	Site as 'SiteId',
-	count(Parent) as 'NumberOfAgents'
+	count(Parent) as 'AgentsCount'
 FROM dbo.v_PersonPeriodTeamSiteBu WITH(NOEXPAND)
 WHERE :now BETWEEN StartDate AND EndDate 
 AND Site in (:sites)
@@ -49,14 +49,14 @@ group by Site")
 			return initializedSites.Concat(models).ToDictionary(x => x.SiteId, y => y.NumberOfAgents);
 		}
 
-		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
+		public IDictionary<Guid, int> Read(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
 		{
 			var models =
 				_currentUnitOfWork.Session()
 					.CreateSQLQuery(@"
 SELECT
 	pp.Site as 'SiteId',
-	count(DISTINCT pp.Parent) as 'NumberOfAgents'
+	count(DISTINCT pp.Parent) as 'AgentsCount'
 FROM dbo.v_PersonPeriodTeamSiteBu pp WITH(NOEXPAND)
 
 INNER JOIN ReadModel.GroupingReadOnly AS g

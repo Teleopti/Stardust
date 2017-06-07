@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentStatesViewModelBuilder>().SingleInstance();
 			builder.RegisterType<PhoneStateViewModelBuilder>().SingleInstance();
 			builder.RegisterType<SkillViewModelBuilder>().SingleInstance();
-			builder.RegisterType<AgentsInAlarmForSiteViewModelBuilder>().SingleInstance();
+			builder.RegisterType<SiteInAlarmViewModelBuilder>().SingleInstance();
 			builder.RegisterType<AgentsInAlarmForTeamsViewModelBuilder>().SingleInstance();
 
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance().As<IAdherencePercentageViewModelBuilder>();
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ProperAlarm>().SingleInstance();
 
-			builder.RegisterType<SiteViewModelBuilder>().SingleInstance();
+			builder.RegisterType<OrganizationViewModelBuilder>().SingleInstance();
 			builder.RegisterType<TeamViewModelBuilder>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInSiteReader>().As<INumberOfAgentsInSiteReader>().SingleInstance();
 			builder.RegisterType<NumberOfAgentsInTeamReader>().As<INumberOfAgentsInTeamReader>().SingleInstance();
