@@ -374,6 +374,7 @@
     <Compile Include="ResourcePlanner\Validation\PersonSchedulePeriodValidatorTest.cs" />
     <Compile Include="ResourcePlanner\Validation\PersonShiftBagValidatorTest.cs" />
     <Compile Include="ResourcePlanner\Validation\PersonSkillValidatorTest.cs" />
+    <Compile Include="SchedulingScenarios\BusinessRules\MinWeeklyRestRuleTest.cs" />
     <Compile Include="SchedulingScenarios\CancelSchedulingCallback.cs" />
     <Compile Include="SchedulingScenarios\ContractWithMaximumTolerance.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationAgentGroupTest.cs" />
