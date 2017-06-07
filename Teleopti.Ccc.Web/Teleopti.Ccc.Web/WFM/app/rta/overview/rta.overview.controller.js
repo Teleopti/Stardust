@@ -250,14 +250,6 @@
 				cancelPolling();
 			});
 
-			if (vm.siteIds === null) {
-				var message = $translate.instant('WFMReleaseNotification')
-					.replace('{0}', 'RTA')
-					.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx'>")
-					.replace('{2}', '</a>')
-					.replace('{3}', "<a href='../Anywhere#realtimeadherencesites'>RTA</a>");
-				NoticeService.info(message, null, true);
-			}
 		}
 		));
 	};
