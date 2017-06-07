@@ -198,11 +198,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.PayrollIntegration))
 				allSupportedPages.Add(new MultiplicatorControlView());
 
-			if (!_toggleManager.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444))
-				allSupportedPages.Add(new SmsSettingsControl());
-			else if (_toggleManager.IsEnabled(Toggles.MobileApps_EnableMobileNotifications_44476))
-				allSupportedPages.Add(new NotificationSettingsControl(_toggleManager));
+			var hasSmsLinkLicense = DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name).EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
 
+			if (hasSmsLinkLicense)
+			{
+				if (!_toggleManager.IsEnabled(Toggles.Settings_AlertViaEmailFromSMSLink_30444))
+					allSupportedPages.Add(new SmsSettingsControl());
+				else
+					allSupportedPages.Add(new NotificationSettingsControl(_toggleManager));
+			}
+			else if (_toggleManager.IsEnabled(Toggles.MobileApps_EnableMobileNotifications_44476))
+			{
+				allSupportedPages.Add(new NotificationSettingsControl(_toggleManager));
+			}
 
 			if (_toggleManager.IsEnabled (Toggles.Wfm_Requests_Check_Max_Seats_39937))
 			{
