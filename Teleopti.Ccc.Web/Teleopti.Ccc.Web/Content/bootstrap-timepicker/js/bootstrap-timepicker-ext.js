@@ -71,12 +71,14 @@ timepicker.showWidget = function() {
 	}
 
 	var self = this;
-	$(document).on('mousedown.timepicker, touchend.timepicker', function(e) {
-		// Clicked outside the timepicker, hide it
-		if ($(e.target).closest('.bootstrap-timepicker-widget').length === 0  && $(e.target).closest('.bootstrap-timepicker .input-group-btn').length === 0 && $(e.target).closest('.bootstrap-timepicker .input-group-addon').length === 0) {
-			self.hideWidget();
-		}
-	});
+	setTimeout(function(){
+		$(document).on('mousedown.timepicker, touchend.timepicker', function(e) {
+			// Clicked outside the timepicker, hide it
+			if ($(e.target).closest('.bootstrap-timepicker-widget').length === 0  && $(e.target).closest('.bootstrap-timepicker .input-group-btn').length === 0 && $(e.target).closest('.bootstrap-timepicker .input-group-addon').length === 0) {
+				self.hideWidget();
+			}
+		});
+	}, 0);
 
 	this.$element.trigger({
 		'type': 'show.timepicker',
