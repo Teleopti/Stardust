@@ -25,8 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var numberOfAgents = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teams.Select(x => x.Id.Value));
 			return teams.Select(team =>
 			{
-				int result;
-				var agents = numberOfAgents.TryGetValue(team.Id.Value, out result) ? result : 0;
+				var agents = numberOfAgents.TryGetValue(team.Id.Value, out var result) ? result : 0;
 				return new TeamViewModel
 				{
 					Id = team.Id.GetValueOrDefault(),
