@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.BusinessRules
 			};
 			var stateHolder = StateHolder.Fill(scenario, new DateOnlyPeriod(2017, 1, 1, 2018, 1, 1), new[] {agent}, asses, Enumerable.Empty<ISkillDay>());
 
-			var schedule2change = stateHolder.Schedules[agent].ScheduledDay(date.AddDays(3));
-			schedule2change.PersonAssignment(true).AddActivity(activity, new TimePeriod(23, 24 + 7));
-			stateHolder.Schedules.Modify(schedule2change, NewBusinessRuleCollection.All(stateHolder.SchedulingResultState), true); //dubbelchecka true - i scheduler?
+			var scheduleToChange = stateHolder.Schedules[agent].ScheduledDay(date.AddDays(3));
+			scheduleToChange.PersonAssignment(true).AddActivity(activity, new TimePeriod(23, 24 + 7));
+			stateHolder.Schedules.Modify(scheduleToChange, NewBusinessRuleCollection.All(stateHolder.SchedulingResultState), true);
 
 			stateHolder.Schedules[agent].ScheduledDay(date.AddDays(3)).BusinessRuleResponseCollection
 				.Where(x => x.TypeOfRule == typeof(MinWeeklyRestRule))
