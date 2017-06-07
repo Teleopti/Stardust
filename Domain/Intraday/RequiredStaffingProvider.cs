@@ -67,13 +67,15 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		private void assignActualWorkloadToClonedSkillDay(ISkillDay clonedSkillDay, IList<SkillIntervalStatistics> skillDayStats)
 		{
+			clonedSkillDay.Lock();
 			foreach (var workloadDay in clonedSkillDay.WorkloadDayCollection)
 			{
 				foreach (var taskPeriod in workloadDay.TaskPeriodList)
 				{
+					var timeZone = _timeZone.TimeZone();
 					var statInterval = skillDayStats
-						.FirstOrDefault(x => TimeZoneHelper.ConvertToUtc(x.StartTime, _timeZone.TimeZone()) == taskPeriod.Period.StartDateTime &&
-																		  x.WorkloadId == workloadDay.Workload.Id.Value);
+						.FirstOrDefault(x => TimeZoneHelper.ConvertToUtc(x.StartTime, timeZone) == taskPeriod.Period.StartDateTime &&
+											 x.WorkloadId == workloadDay.Workload.Id.Value);
 
                     taskPeriod.CampaignTasks = new Percent(0);
                     taskPeriod.CampaignTaskTime = new Percent(0);
@@ -90,16 +92,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 					taskPeriod.AverageAfterTaskTime = TimeSpan.Zero;
 				}
 			}
+			clonedSkillDay.Release();
 		}
 
 		private void reset(ISkillDay clonedSkillDay, ISkillDay skillday)
 		{
+			clonedSkillDay.Lock();
 			foreach (var workloadDay in clonedSkillDay.WorkloadDayCollection)
 			{
+				var innerWorkloadDay = skillday.WorkloadDayCollection.FirstOrDefault(x => x.Workload.Id.Value == workloadDay.Workload.Id.Value);
 				foreach (var taskPeriod in workloadDay.TaskPeriodList)
 				{
-					//var statInterval = skillday.WorkloadDayCollection.First().TaskPeriodList.Where(x => x.Period.StartDateTime == taskPeriod.Period.StartDateTime);
-					var statInterval = skillday.WorkloadDayCollection.FirstOrDefault(x => x.Workload.Id.Value == workloadDay.Workload.Id.Value)
+					var statInterval = innerWorkloadDay
 						.TaskPeriodList.First(x => x.Period.StartDateTime == taskPeriod.Period.StartDateTime);
 
 					taskPeriod.SetTasks(statInterval.Tasks);
@@ -107,6 +111,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					taskPeriod.AverageAfterTaskTime = statInterval.Task.AverageAfterTaskTime;
 				}
 			}
+			clonedSkillDay.Release();
 		}
 
 		private IList<StaffingIntervalModel> GetRequiredStaffing(TimeSpan resolution, IList<SkillIntervalStatistics> skillDayStats, 
@@ -115,15 +120,16 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var actualStaffingIntervals = new List<StaffingIntervalModel>();
 			var staffing = skillDay.SkillStaffPeriodViewCollection(resolution, false);
 			var skillIntervals = skillDayStats.GroupBy(x => x.StartTime);
+			var timeZone = _timeZone.TimeZone();
 			foreach (var interval in skillIntervals)
 			{
-				var staffingInterval = staffing
-					.FirstOrDefault(x => x.Period.StartDateTime == TimeZoneHelper.ConvertToUtc(interval.Key, _timeZone.TimeZone()));
+				var utcTime = TimeZoneHelper.ConvertToUtc(interval.Key, timeZone);
+				var staffingInterval = staffing.FirstOrDefault(x => x.Period.StartDateTime == utcTime);
 
 				if(staffingInterval == null)
 					continue;
 
-				actualStaffingIntervals.Add(new StaffingIntervalModel()
+				actualStaffingIntervals.Add(new StaffingIntervalModel
 				{
 					SkillId = skillDay.Skill.Id.Value,
 					StartTime = interval.Key,
@@ -144,8 +150,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var rangeEndUtc = skillDayStatsRange
 				.FirstOrDefault(x => x.SkillId == skill.Id.Value && x.SkillDayDate == skillDayDate)?
 				.RangePeriod.EndDateTime;
-			var rangeStartLocal = TimeZoneHelper.ConvertFromUtc(rangeStartUtc.Value, _timeZone.TimeZone());
-			var rangeEndLocal = TimeZoneHelper.ConvertFromUtc(rangeEndUtc.Value, _timeZone.TimeZone());
+			var timeZone = _timeZone.TimeZone();
+			var rangeStartLocal = TimeZoneHelper.ConvertFromUtc(rangeStartUtc.Value, timeZone);
+			var rangeEndLocal = TimeZoneHelper.ConvertFromUtc(rangeEndUtc.Value, timeZone);
 
 			var retList = actualStatsPerInterval
 				.Where(x => x.StartTime >= rangeStartLocal && x.StartTime < rangeEndLocal)
@@ -168,7 +175,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 					foreach (var statInterval in item)
 					{
-						mergedStats.Add(new SkillIntervalStatistics()
+						mergedStats.Add(new SkillIntervalStatistics
 						{
 							Calls = averageCalls * intervalsInResolution,
 							AverageHandleTime = averageAht,
