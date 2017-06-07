@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			viewModel.Id.Should().Be(teamId);
 			viewModel.Name.Should().Be("Team");
-			viewModel.NumberOfAgents.Should().Be(1);
+			viewModel.AgentsCount.Should().Be(1);
 			viewModel.SiteId.Should().Be(siteId);
-			viewModel.OutOfAdherence.Should().Be(1);
+			viewModel.InAlarmCount.Should().Be(1);
 			viewModel.Color.Should().Be("danger");
 		}
 
@@ -99,9 +99,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			viewModel.Id.Should().Be(teamId);
 			viewModel.Name.Should().Be("Team");
-			viewModel.NumberOfAgents.Should().Be(1);
+			viewModel.AgentsCount.Should().Be(1);
 			viewModel.SiteId.Should().Be(siteId);
-			viewModel.OutOfAdherence.Should().Be(1);
+			viewModel.InAlarmCount.Should().Be(1);
 			viewModel.Color.Should().Be("danger");
 		}
 
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var viewModel = Target.Build(siteId, new[] { skill }).Single();
 
 			viewModel.Id.Should().Be(teamId);
-			viewModel.OutOfAdherence.Should().Be(0);
+			viewModel.InAlarmCount.Should().Be(0);
 		}
 
 
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var viewModel = Target.Build(siteId, new[] { skill1, skill2 }).Single();
 
 			viewModel.Id.Should().Be(teamId);
-			viewModel.OutOfAdherence.Should().Be(1);
+			viewModel.InAlarmCount.Should().Be(1);
 		}
 	}
 }

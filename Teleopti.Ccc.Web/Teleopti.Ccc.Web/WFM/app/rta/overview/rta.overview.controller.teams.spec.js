@@ -41,16 +41,16 @@ describe('RtaOverviewController', function () {
 		$fakeBackend.withTeamAdherence({
 			SiteId: "londonGuid",
 			Name: "Green",
-			NumberOfAgents: 11,
-			OutOfAdherence: 5,
+			AgentsCount: 11,
+			InAlarmCount: 5,
 			Color: "warning"
 		});
 
 		vm = $controllerBuilder.createController().vm;
 
 		expect(vm.teams[0].Name).toEqual("Green");
-		expect(vm.teams[0].NumberOfAgents).toEqual(11);
-		expect(vm.teams[0].OutOfAdherence).toEqual(5);
+		expect(vm.teams[0].AgentsCount).toEqual(11);
+		expect(vm.teams[0].InAlarmCount).toEqual(5);
 		expect(vm.teams[0].Color).toEqual("warning");
 	});
 
@@ -58,8 +58,8 @@ describe('RtaOverviewController', function () {
 		stateParams.siteIds = "londonGuid";
 		$fakeBackend.withTeamAdherence({
 			SiteId: "londonGuid",
-			NumberOfAgents: 11,
-			OutOfAdherence: 5,
+			AgentsCount: 11,
+			InAlarmCount: 5,
 			Color: "warning"
 		});
 
@@ -70,14 +70,14 @@ describe('RtaOverviewController', function () {
 				.withTeamAdherence({
 					SiteId: "londonGuid",
 					Name: "Green",
-					NumberOfAgents: 11,
-					OutOfAdherence: 2,
+					AgentsCount: 11,
+					InAlarmCount: 2,
 					Color: "good"
 				});
 		})
 			.wait(5000);
 
-		expect(vm.teams[0].OutOfAdherence).toEqual(2);
+		expect(vm.teams[0].InAlarmCount).toEqual(2);
 		expect(vm.teams[0].Color).toEqual("good");
 	});
 

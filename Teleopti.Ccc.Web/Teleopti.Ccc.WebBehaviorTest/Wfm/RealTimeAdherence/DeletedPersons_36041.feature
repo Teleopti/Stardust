@@ -19,6 +19,15 @@ Background:
 	| Activity   | Phone            |
 	| Start time | 2016-01-14 08:00 |
 	| End time   | 2016-01-14 17:00 |
+	And Ashley Andeen has a person period with
+	 | Field      | Value      |
+	 | Team       | Red        |
+	 | Start Date | 2016-01-01 |
+	And Ashley Andeen has a shift with
+	| Field      | Value            |
+	| Activity   | Phone            |
+	| Start time | 2016-01-14 08:00 |
+	| End time   | 2016-01-14 17:00 |
 	And there is a rule with 
 	| Field       | Value |
 	| Adherence   | Out   |
@@ -30,6 +39,7 @@ Scenario: Exclude deleted agents
 	Given the time is '2016-01-14 09:00:00'
 	When I view Real time adherence for teams on site 'Paris'
 	And 'Pierre Baldi' sets his phone state to 'Pause'
-	Then I should see team 'Red' with 1 employees out of adherence
+	And 'Ashley Andeen' sets his phone state to 'Pause'
+	Then I should see team 'Red' with 2 employees out of adherence
 	When 'Pierre Baldi' is deleted
-	Then I should see team 'Red' with 0 employees out of adherence
+	Then I should see team 'Red' with 1 employees out of adherence

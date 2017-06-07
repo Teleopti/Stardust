@@ -44,16 +44,16 @@ describe('RtaOverviewController', function () {
 		$fakeBackend.withTeamAdherence({
 			SiteId: "parisGuid",
 			Id: "parisTeamGreenGuid",
-			NumberOfAgents: 10,
-			OutOfAdherence: 5,
+			AgentsCount: 10,
+			InAlarmCount: 5,
 			SkillId: "phoneGuid",
 			Color: "warning"
 		})
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamRedGuid",
-				NumberOfAgents: 8,
-				OutOfAdherence: 2,
+				AgentsCount: 8,
+				InAlarmCount: 2,
 				SkillId: "emailGuid",
 				Color: "good"
 			});
@@ -62,7 +62,7 @@ describe('RtaOverviewController', function () {
 
 		expect(vm.teams.length).toEqual(1);
 		expect(vm.teams[0].Id).toEqual("parisTeamRedGuid");
-		expect(vm.teams[0].OutOfAdherence).toEqual(2);
+		expect(vm.teams[0].InAlarmCount).toEqual(2);
 		expect(vm.teams[0].Color).toEqual("good");
 	});
 
@@ -73,8 +73,8 @@ describe('RtaOverviewController', function () {
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
-				NumberOfAgents: 10,
-				OutOfAdherence: 5,
+				AgentsCount: 10,
+				InAlarmCount: 5,
 				SkillId: "phoneGuid",
 				Color: "danger"
 			});
@@ -87,15 +87,15 @@ describe('RtaOverviewController', function () {
 				.withTeamAdherence({
 					SiteId: "parisGuid",
 					Id: "parisTeamGreenGuid",
-					NumberOfAgents: 10,
-					OutOfAdherence: 2,
+					AgentsCount: 10,
+					InAlarmCount: 2,
 					SkillId: "phoneGuid",
 					Color: "good"
 				})
 		})
 			.wait(5000);
 
-		expect(vm.teams[0].OutOfAdherence).toEqual(2);
+		expect(vm.teams[0].InAlarmCount).toEqual(2);
 		expect(vm.teams[0].Color).toEqual("good");
 	});
 
@@ -106,16 +106,16 @@ describe('RtaOverviewController', function () {
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
-				NumberOfAgents: 10,
-				OutOfAdherence: 7,
+				AgentsCount: 10,
+				InAlarmCount: 7,
 				SkillId: "phoneGuid",
 				Color: "warning"
 			})
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamRedGuid",
-				NumberOfAgents: 11,
-				OutOfAdherence: 7,
+				AgentsCount: 11,
+				InAlarmCount: 7,
 				SkillId: "emailGuid",
 				Color: "danger"
 			})
@@ -133,8 +133,8 @@ describe('RtaOverviewController', function () {
 		expect(vm.teams.length).toEqual(2);
 		expect(vm.teams[0].Id).toEqual("parisTeamGreenGuid");
 		expect(vm.teams[1].Id).toEqual("parisTeamRedGuid");
-		expect(vm.teams[0].OutOfAdherence).toEqual(7);
-		expect(vm.teams[1].OutOfAdherence).toEqual(7);
+		expect(vm.teams[0].InAlarmCount).toEqual(7);
+		expect(vm.teams[1].InAlarmCount).toEqual(7);
 		expect(vm.teams[0].Color).toEqual("warning");
 		expect(vm.teams[1].Color).toEqual("danger");
 	});
@@ -146,16 +146,16 @@ describe('RtaOverviewController', function () {
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
-				NumberOfAgents: 10,
-				OutOfAdherence: 5,
+				AgentsCount: 10,
+				InAlarmCount: 5,
 				SkillId: "phoneGuid",
 				Color: "danger"
 			})
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
-				NumberOfAgents: 10,
-				OutOfAdherence: 2,
+				AgentsCount: 10,
+				InAlarmCount: 2,
 				SkillId: "emailGuid",
 				Color: "good"
 			})
@@ -175,15 +175,15 @@ describe('RtaOverviewController', function () {
 				.withTeamAdherence({
 					SiteId: "parisGuid",
 					Id: "parisTeamGreenGuid",
-					NumberOfAgents: 10,
-					OutOfAdherence: 3,
+					AgentsCount: 10,
+					InAlarmCount: 3,
 					SkillId: "phoneGuid",
 					Color: "good"
 				})
 		})
 			.wait(5000);
 
-		expect(vm.teams[0].OutOfAdherence).toEqual(3);
+		expect(vm.teams[0].InAlarmCount).toEqual(3);
 		expect(vm.teams[0].Color).toEqual("good");
 	});
 });

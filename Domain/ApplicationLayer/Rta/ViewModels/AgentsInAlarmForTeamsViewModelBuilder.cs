@@ -2,24 +2,34 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class AgentsInAlarmForTeamsViewModelBuilder
 	{
+		private readonly INow _now;
 		private readonly ITeamRepository _teamRepository;
 		private readonly ITeamsInAlarmReader _teamsInAlarmReader;
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
+		private readonly ICurrentAuthorization _authorization;
+
 
 		public AgentsInAlarmForTeamsViewModelBuilder(
 			ITeamRepository teamRepository, 
 			ITeamsInAlarmReader teamsInAlarmReader, 
-			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader)
+			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,
+			ICurrentAuthorization authorization, INow now)
 		{
 			_teamRepository = teamRepository;
 			_teamsInAlarmReader = teamsInAlarmReader;
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
+			_authorization = authorization;
+			_now = now;
 		}
 
 		public IEnumerable<TeamOutOfAdherence> Build(Guid siteId)
@@ -27,47 +37,57 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			return Build(siteId, null);
 		}
 
-		public IEnumerable<TeamOutOfAdherence> Build(Guid siteId, IEnumerable<Guid> skillIds)
+
+
+
+
+
+		public IEnumerable<TeamOutOfAdherence> Build(Guid siteId,IEnumerable<Guid> skillIds)
 		{
-			var teams = _teamRepository.FindTeamsForSite(siteId);
-
-			var adherence = skillIds == null ? 
-				_teamsInAlarmReader.Read(siteId).ToLookup(a => a.TeamId) : 
-				_teamsInAlarmReader.Read(siteId, skillIds).ToLookup(a => a.TeamId)
+			var teamsInAlarm = skillIds == null ?
+					_teamsInAlarmReader.Read() :
+					_teamsInAlarmReader.Read(skillIds)
 				;
 
-			var numberOfAgents = skillIds == null ?
-				_numberOfAgentsInTeamReader.FetchNumberOfAgents(teams.Select(x => x.Id.Value)) : 
-				_numberOfAgentsInTeamReader.ForSkills(teams.Select(x => x.Id.Value), skillIds)
-				;
-			
-			return teams
-				.Where(t =>
-				{
-					int result;
-					var agents = numberOfAgents.TryGetValue(t.Id.Value, out result) ? result : 0;
-					return agents > 0;
-				})
+			teamsInAlarm =
+				teamsInAlarm
+					.Where(x =>
+						_authorization.Current()
+							.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.LocalDateOnly(),
+								new TeamAutorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId, TeamId = x.TeamId}))
+					.ToArray();
+
+
+			var teams = _teamRepository.LoadAll();
+			var namePerTeamId = teams.ToLookup(x => x.Id.Value, x => x.Description.Name);
+
+			ILookup<Guid, int> numberOfAgentsPerTeam;
+			var teamIds = teamsInAlarm.Select(x => x.TeamId);
+			if (skillIds != null)
+				numberOfAgentsPerTeam = _numberOfAgentsInTeamReader.ForSkills(teamIds, skillIds).ToLookup(x => x.Key, x => x.Value);
+			else
+				numberOfAgentsPerTeam = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teamIds).ToLookup(x => x.Key, x => x.Value);
+
+			var result = teamsInAlarm
 				.Select(t =>
 					{
-						int result;
-						var agents = numberOfAgents.TryGetValue(t.Id.Value, out result) ? result : 0;
-						var ooa = adherence[t.Id.GetValueOrDefault()]
-							.Select(a => a.InAlarmCount)
-							.SingleOrDefault();
+						var agentCount = numberOfAgentsPerTeam[t.TeamId].FirstOrDefault();
 						return new TeamOutOfAdherence
 						{
-							Id = t.Id.GetValueOrDefault(),
-							Name = t.Description.Name,
-							NumberOfAgents = agents,
+							Id = t.TeamId,
+							Name = namePerTeamId[t.TeamId].FirstOrDefault(),
 							SiteId = siteId,
-							OutOfAdherence = ooa,
-							Color = getColor(ooa,agents)
+							AgentsCount = agentCount,
+							InAlarmCount = t.InAlarmCount,
+							Color = getColor(t.InAlarmCount, agentCount)
 						};
 					}
-				)
-				.ToArray();
+				);
+
+			return result.OrderBy(x => x.Name).ToArray();
 		}
+
+
 		private string getColor(int outOfAdherence, int numberOfAgents)
 		{
 			if (numberOfAgents == 0)
