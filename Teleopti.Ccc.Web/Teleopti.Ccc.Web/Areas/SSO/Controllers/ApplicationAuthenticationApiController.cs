@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 				}
 				_logLogonAttempt.SaveAuthenticateResult(model.UserName, null, false);
 				
-				ModelState.AddModelError("Error", result.Message);
-				return BadRequest(ModelState);
+				return Ok(new PasswordWarningViewModel {Failed = true, Message = result.Message});
 			}
 
 			_formsAuthentication.SetAuthCookie(model.UserName + TokenIdentityProvider.ApplicationIdentifier, model.RememberMe, model.IsLogonFromBrowser);

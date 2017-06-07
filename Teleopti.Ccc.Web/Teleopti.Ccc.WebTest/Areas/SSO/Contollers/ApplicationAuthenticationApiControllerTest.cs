@@ -57,9 +57,10 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var authenticationModel = new ApplicationAuthenticationModel();
 			authenticator.Stub(x => x.AuthenticateApplicationUser(authenticationModel.UserName, authenticationModel.Password)).Return(authResult);
 
-			var result = (InvalidModelStateResult)target.CheckPassword(authenticationModel);
+			var result = target.CheckPassword(authenticationModel).Result<PasswordWarningViewModel>();
 
-			result.ModelState.Values.Single().Errors.Single().ErrorMessage.Should().Be.EqualTo(message);
+			result.Failed.Should().Be.True();
+			result.Message.Should().Be.EqualTo(message);
 		}
 
 		[Test]
@@ -75,6 +76,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var result = target.CheckPassword(authenticationModel).Result<PasswordWarningViewModel>();
 			result.AlreadyExpired.Should().Be.True();
 			result.WillExpireSoon.Should().Be.False();
+			result.Failed.Should().Be.False();
+			result.Message.Should().Be.NullOrEmpty();
 		}
 
 		[Test]
@@ -91,6 +94,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			var result = target.CheckPassword(authenticationModel).Result<PasswordWarningViewModel>();
 			result.WillExpireSoon.Should().Be.True();
 			result.AlreadyExpired.Should().Be.False();
+			result.Failed.Should().Be.False();
+			result.Message.Should().Be.NullOrEmpty();
 		}
 
 		[Test]
@@ -105,6 +110,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 
 			var result = target.CheckPassword(authenticationModel).Result<PasswordWarningViewModel>();
 			result.AlreadyExpired.Should().Be.True();
+			result.Failed.Should().Be.False();
+			result.Message.Should().Be.NullOrEmpty();
 		}
 
 		[Test]
@@ -118,6 +125,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 
 			var result = target.CheckPassword(authenticationModel).Result<PasswordWarningViewModel>();
 			result.WillExpireSoon.Should().Be.False();
+			result.Failed.Should().Be.False();
+			result.Message.Should().Be.NullOrEmpty();
 		}
 
 		[Test]

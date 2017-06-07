@@ -28,6 +28,11 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 			cache: false,
 			data: authenticationModel,
 			success: function (responseData, textStatus, jqXHR) {
+				if (responseData.Failed) {
+					options.errormessage(responseData.Message);
+					return;
+				}
+
 				if (responseData.WillExpireSoon) {
 					gotoChangePassword();
 					return;
@@ -87,12 +92,6 @@ Teleopti.SSO.Authentication.AuthenticationState = function (data) {
 		authenticationModel = options.data;
 
 		var error = function (jqXHR, textStatus, errorThrown) {
-			if (jqXHR.status === 400) {
-				var response = $.parseJSON(jqXHR.responseText);
-				options.errormessage(response.ModelState.Error[0]);
-				return;
-			}
-
 			options.errormessage("An error has occurred, please try again.");
 			if (console && console.error)
 				console.error("Method Failed: " + jqXHR.responseText + textStatus + errorThrown);
