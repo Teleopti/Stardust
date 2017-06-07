@@ -122,6 +122,7 @@ INNER JOIN
 	mart.dim_group_page g
 ON 
 	s.group_name COLLATE Latin1_General_CS_AS = g.group_name COLLATE Latin1_General_CS_AS
+	AND s.group_page_code = g.group_page_code
 	AND s.group_is_custom = g.group_is_custom 
 WHERE
 	s.group_is_custom = 0
