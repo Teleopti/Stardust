@@ -101,8 +101,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			//overwriting domain registration for IClearScheduleEvents, to keep behavior before 47447480a839. Don't really know why this is needed...
 			builder.RegisterType<ClearScheduleEvents>().As<IClearScheduleEvents>().SingleInstance();
-
-			builder.RegisterModule(new RuleSetModule(_configuration, false));
 			builder.RegisterModule(new AuthenticationCachedModule(_configuration));
 
 			builder.RegisterModule(new RtaAreaModule(_configuration));

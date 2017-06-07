@@ -22,17 +22,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 {
 	public class NodeHandlersModule : Module
 	{
-		private readonly IocConfiguration _configuration;
-
-		public NodeHandlersModule(IocConfiguration configuration)
-		{
-			_configuration = configuration;
-		}
-
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterModule(new RuleSetModule(_configuration, true));
-
 			builder.RegisterType<StardustHealthCheckHandler>().As<IHandle<StardustHealthCheckEvent>>().SingleInstance();
 			builder.RegisterType<ImportForecastFromFileHandler>().As<IHandle<ImportForecastsFileToSkillEvent>>().SingleInstance();
 			builder.RegisterType<ApproveRequestsWithValidatorsEventStardustHandler>().As<IHandle<ApproveRequestsWithValidatorsEvent>>().SingleInstance();

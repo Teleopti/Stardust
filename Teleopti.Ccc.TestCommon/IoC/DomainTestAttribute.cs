@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected override void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			//TODO: move this to common
-			system.AddModule(new RuleSetModule(configuration, true));
 			system.AddModule(new OutboundScheduledResourcesProviderModule());
 			//
 

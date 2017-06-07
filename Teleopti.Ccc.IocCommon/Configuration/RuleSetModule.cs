@@ -7,24 +7,20 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	public class RuleSetModule : Module
+	internal class RuleSetModule : Module
 	{
-		private readonly bool _perLifetimeScope;
 		private readonly IIocConfiguration _configuration;
 
-		public RuleSetModule(IIocConfiguration configuration, bool perLifetimeScope) 
+		public RuleSetModule(IIocConfiguration configuration)
 		{
-			_perLifetimeScope = perLifetimeScope;
-			if (configuration == null)
-				throw new ArgumentException("MbCacheModule required", nameof(configuration));
-			_configuration = configuration;
+			_configuration = configuration ?? throw new ArgumentException("MbCacheModule required", nameof(configuration));
 		}
 
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<CreateWorkShiftsFromTemplate>().As<ICreateWorkShiftsFromTemplate>().SingleInstance();
 			builder.RegisterType<ShiftCreatorService>().As<IShiftCreatorService>().SingleInstance();
-			if (_perLifetimeScope)
+			if (_configuration.Args().CacheRulesetPerLifeTimeScope)
 			{
 				builder.CacheByInterfaceProxy<RuleSetProjectionService, IRuleSetProjectionService>()
 					.InstancePerLifetimeScope()
@@ -59,8 +55,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.CacheMethod(m => m.CalculateMinMax(null, null))
 				.PerInstance()
 				, "WSWT");
-
-
 		}
 	}
 }

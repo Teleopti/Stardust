@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -19,8 +18,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration))
-				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
+			configuration.Args().CacheRulesetPerLifeTimeScope = perLifeTimeScope;
+			containerBuilder.RegisterModule(new CommonModule(configuration));
 			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())
 			{
@@ -38,8 +37,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration))
-				.RegisterModule(new RuleSetModule(configuration, true));
+			containerBuilder.RegisterModule(new CommonModule(configuration));
 			var wsRs = createRuleset(true);
 			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())
@@ -64,8 +62,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration))
-				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
+			configuration.Args().CacheRulesetPerLifeTimeScope = perLifeTimeScope;
+			containerBuilder.RegisterModule(new CommonModule(configuration));
 
 			using (var container = containerBuilder.Build())
 			{
@@ -79,8 +77,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration))
-				.RegisterModule(new RuleSetModule(configuration, true));
+			containerBuilder.RegisterModule(new CommonModule(configuration));
 			var wsRs = createRuleset(true);
 			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())
@@ -102,8 +99,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration))
-				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
+			configuration.Args().CacheRulesetPerLifeTimeScope = perLifeTimeScope;
+			containerBuilder.RegisterModule(new CommonModule(configuration));
 			using (var container = containerBuilder.Build())
 			{
 				var wsRs = createRuleset(true);
@@ -120,8 +117,8 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			var configuration = new IocConfiguration(new IocArgs(new ConfigReader()), null);
-			containerBuilder.RegisterModule(new CommonModule(configuration))
-				.RegisterModule(new RuleSetModule(configuration, perLifeTimeScope));
+			configuration.Args().CacheRulesetPerLifeTimeScope = perLifeTimeScope;
+			containerBuilder.RegisterModule(new CommonModule(configuration));
 			var wsRs = createRuleset(false);
 			var callback = new WorkShiftAddStopperCallback();
 			using (var container = containerBuilder.Build())

@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.IocCommon
 
 		protected override void Load(ContainerBuilder builder)
 		{
+			builder.RegisterModule(new RuleSetModule(_configuration));
 			builder.RegisterModule(new MbCacheModule(_configuration));
 			builder.RegisterModule<DateAndTimeModule>();
 			builder.RegisterModule<ServiceLocatorModule>();
