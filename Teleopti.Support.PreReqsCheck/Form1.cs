@@ -36,7 +36,9 @@ namespace CheckPreRequisites
 			if (comboBoxServerSetup.SelectedItem.ToString().Contains("DB"))
 			{
 				_hardwareCheck.RunHardWareChecks((int) numericUpDownAgents.Value, CheckType.Db);
-				_databaseCheck.RunDbChecks(comboBoxSQLInstance.SelectedItem.ToString().Trim());
+				var dbInstance = comboBoxSQLInstance.SelectedItem.ToString().Trim();
+				if(!dbInstance.Equals("NoInstanceDetected"))
+					_databaseCheck.RunDbChecks(dbInstance);
 			}
 		}
 
@@ -121,7 +123,7 @@ namespace CheckPreRequisites
 		private void SQLInstanceEnum()
 		{
 			comboBoxSQLInstance.Items.Clear();
-
+			
 			var rk = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Microsoft SQL Server");
 			if (rk != null)
 			{
@@ -139,9 +141,17 @@ namespace CheckPreRequisites
 						}
 					}
 				}
+				else
+				{
+					comboBoxSQLInstance.Items.Add("NoInstanceDetected");
+					btnCheck2008.Enabled = false;
+				}
 			}
 			else
+			{
 				comboBoxSQLInstance.Items.Add("NoInstanceDetected");
+				btnCheck2008.Enabled = false;
+			}
 		}
 
 		//If shared web+Db server then get a higher number of agents
@@ -246,6 +256,7 @@ namespace CheckPreRequisites
 
 		private void comboBoxServerSetup_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			btnCheck2008.Enabled = true;
 			if (comboBoxServerSetup.SelectedItem.ToString().Contains("DB"))
 			{
 				groupBoxSQLInstance.Show();
