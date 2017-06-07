@@ -67,8 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 					var sumWorkTimeString = DateHelper.HourMinutesString(sumWorkTime);
 					var maxTimePerWeekString = DateHelper.HourMinutesString(maxTimePerWeekMinutes);
-					var message = string.Format(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture, maxWeekWorkTimeErrorMessage,
-						sumWorkTimeString, maxTimePerWeekString);
+					var message = string.Format(maxWeekWorkTimeErrorMessage, sumWorkTimeString, maxTimePerWeekString);
 					foreach (var dateOnly in personWeek.Week.DayCollection())
 					{
 						var response = createResponse(person, dateOnly, message,
