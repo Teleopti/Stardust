@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.BusinessRules
 		[Ignore("To be fixed 44576")]
 		public void ShouldBreakWeeklyRestWhenLateShiftBeforeTwoConsecutiveDaysOf()
 		{
-			var date = new DateOnly(2017, 6, 5);
+			var dateFirstDayOfWeek = new DateOnly(2017, 6, 5);
 			var unimportant = TimeSpan.FromHours(5);
 			var contract = new Contract("_")
 			{
@@ -34,22 +34,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.BusinessRules
 			var activity = new Activity {InWorkTime = true};
 			var asses = new[]
 			{
-				new PersonAssignment(agent, scenario, date.AddDays(-1)).WithLayer(activity, new TimePeriod(17, 25)),
-				new PersonAssignment(agent, scenario, date.AddDays(0)).WithLayer(activity, new TimePeriod(8,16)),
-				new PersonAssignment(agent, scenario, date.AddDays(1)).WithLayer(activity, new TimePeriod(8,16)),
-				new PersonAssignment(agent, scenario, date.AddDays(2)).WithLayer(activity, new TimePeriod(8,16)),
-				new PersonAssignment(agent, scenario, date.AddDays(4)).WithDayOff(),
-				new PersonAssignment(agent, scenario, date.AddDays(5)).WithDayOff(),
-				new PersonAssignment(agent, scenario, date.AddDays(6)).WithLayer(activity, new TimePeriod(6,14)),
-				new PersonAssignment(agent, scenario, date.AddDays(7)).WithLayer(activity, new TimePeriod(0,8))
+				new PersonAssignment(agent, scenario, dateFirstDayOfWeek.AddDays(-1)).WithLayer(activity, new TimePeriod(17, 25)),
+				new PersonAssignment(agent, scenario, dateFirstDayOfWeek.AddDays(0)).WithLayer(activity, new TimePeriod(8,16)),
+				new PersonAssignment(agent, scenario, dateFirstDayOfWeek.AddDays(1)).WithLayer(activity, new TimePeriod(8,16)),
+				new PersonAssignment(agent, scenario, dateFirstDayOfWeek.AddDays(2)).WithLayer(activity, new TimePeriod(8,16)),
+				new PersonAssignment(agent, scenario, dateFirstDayOfWeek.AddDays(4)).WithDayOff(),
+				new PersonAssignment(agent, scenario, dateFirstDayOfWeek.AddDays(5)).WithDayOff(),
+				new PersonAssignment(agent, scenario, dateFirstDayOfWeek.AddDays(6)).WithLayer(activity, new TimePeriod(6,14)),
+				new PersonAssignment(agent, scenario, dateFirstDayOfWeek.AddDays(7)).WithLayer(activity, new TimePeriod(0,8))
 			};
-			var stateHolder = StateHolder.Fill(scenario, new DateOnlyPeriod(2017, 1, 1, 2018, 1, 1), new[] {agent}, asses, Enumerable.Empty<ISkillDay>());
+			var stateHolder = StateHolder.Fill(scenario, new DateOnlyPeriod(2017, 6, 1, 2018, 7, 1), new[] {agent}, asses, Enumerable.Empty<ISkillDay>());
 
-			var scheduleToChange = stateHolder.Schedules[agent].ScheduledDay(date.AddDays(3));
+			var scheduleToChange = stateHolder.Schedules[agent].ScheduledDay(dateFirstDayOfWeek.AddDays(3));
 			scheduleToChange.PersonAssignment(true).AddActivity(activity, new TimePeriod(23, 24 + 7));
 			stateHolder.Schedules.Modify(scheduleToChange, NewBusinessRuleCollection.All(stateHolder.SchedulingResultState), true);
 
-			stateHolder.Schedules[agent].ScheduledDay(date.AddDays(3)).BusinessRuleResponseCollection
+			stateHolder.Schedules[agent].ScheduledDay(dateFirstDayOfWeek.AddDays(3)).BusinessRuleResponseCollection
 				.Where(x => x.TypeOfRule == typeof(MinWeeklyRestRule))
 				.Should().Not.Be.Empty();
 		}
