@@ -20,19 +20,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 	public partial class NavigationView : BaseUserControl, INavigationView
 	{
 		private readonly IEventAggregator _eventAggregator;
-		private TreeViewAdv _defaultTreeView;
 		private ShiftCreatorViewType _currentView = ShiftCreatorViewType.RuleSet;
 
-		public ShiftCreatorViewType CurrentView
-		{
-			get { return _currentView; }
-		}
+		public ShiftCreatorViewType CurrentView => _currentView;
 
-		public TreeViewAdv DefaultTreeView
-		{
-			get { return _defaultTreeView; }
-			set { _defaultTreeView = value; }
-		}
+		public TreeViewAdv DefaultTreeView { get; set; }
 
 		private string ContextMenuText
 		{
@@ -50,7 +42,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 		{
 			_eventAggregator = eventAggregator;
 			if(presenter == null)
-				throw new ArgumentNullException("presenter");
+				throw new ArgumentNullException(nameof(presenter));
 
 			InitializeComponent();
 			SetTexts();
@@ -59,10 +51,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 			createDefaultContextMenuStrips();
 			createRuleSetNodes(ExplorerPresenter.Model.RuleSetCollection);
 			
-			_defaultTreeView.Name = "treeViewRuleSet";
-			ExplorerView.AddControlHelpContext(_defaultTreeView);
+			DefaultTreeView.Name = "treeViewRuleSet";
+			ExplorerView.AddControlHelpContext(DefaultTreeView);
 
-			presenter.GeneralPresenter.GeneralTemplatePresenter.OnlyForRestrictionsChanged += generalTemplatePresenterOnlyForRestrictionsChanged;
+			ExplorerPresenter.GeneralPresenter.GeneralTemplatePresenter.OnlyForRestrictionsChanged += generalTemplatePresenterOnlyForRestrictionsChanged;
 		}
 
 		void generalTemplatePresenterOnlyForRestrictionsChanged(object sender, EventArgs e)
@@ -72,7 +64,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 
 		private void createTreeView()
 		{
-			_defaultTreeView = new TreeViewAdv
+			DefaultTreeView = new TreeViewAdv
 			{
 				Style = TreeStyle.Metro,
 				Dock = DockStyle.Fill,
@@ -83,14 +75,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 				HideSelection = false,
 				InactiveSelectedNodeBackground = new BrushInfo(Color.PaleTurquoise)
 			};
-			tabPageWorkShiftRule.Controls.Add(_defaultTreeView);
+			tabPageWorkShiftRule.Controls.Add(DefaultTreeView);
 			tabPageWorkShiftRule.Focus();
 			
-			_defaultTreeView.NodeEditorValidating += treeViewNodeEditorValidating;
-			_defaultTreeView.NodeEditorValidated += treeViewNodeEditorValidated;
-			_defaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
-			_defaultTreeView.KeyUp += treeViewKeyUp;
-			_defaultTreeView.MouseDown += treeViewMouseDown;
+			DefaultTreeView.NodeEditorValidating += treeViewNodeEditorValidating;
+			DefaultTreeView.NodeEditorValidated += treeViewNodeEditorValidated;
+			DefaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
+			DefaultTreeView.KeyUp += treeViewKeyUp;
+			DefaultTreeView.MouseDown += treeViewMouseDown;
 		}
 
 		void treeViewNodeEditorValidating(object sender, TreeNodeAdvCancelableEditEventArgs e)
@@ -101,11 +93,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 
 		private void treeViewNodeEditorValidated(object sender, TreeNodeAdvEditEventArgs e)
 		{
-			if (_defaultTreeView.SelectedNode != null)
+			if (DefaultTreeView.SelectedNode != null)
 			{
-				if (_defaultTreeView.SelectedNodes.Count == 1)
+				if (DefaultTreeView.SelectedNodes.Count == 1)
 				{
-					TreeNodeAdv currentNode = _defaultTreeView.SelectedNodes[0];
+					TreeNodeAdv currentNode = DefaultTreeView.SelectedNodes[0];
 					try
 					{
 						var description = new Description(currentNode.Text);
@@ -124,12 +116,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 					catch (ArgumentOutOfRangeException)
 					{
 						showMessagebox(UserTexts.Resources.TheNameIsTooLong, UserTexts.Resources.TextTooLong);
-						_defaultTreeView.BeginEdit();
+						DefaultTreeView.BeginEdit();
 						return;
 					}
 				}
 			}
-			_defaultTreeView.EndEdit();
+			DefaultTreeView.EndEdit();
 		}
 
 		void treeViewMouseDown(object sender, MouseEventArgs e)
@@ -153,9 +145,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 
 		private void createRuleSetNodes(IEnumerable<IWorkShiftRuleSet> ruleSets)                          
 		{
-			_defaultTreeView.Nodes.Clear();
-			_defaultTreeView.SelectedNodes.Clear();
-			_defaultTreeView.BeginUpdate();
+			DefaultTreeView.Nodes.Clear();
+			DefaultTreeView.SelectedNodes.Clear();
+			DefaultTreeView.BeginUpdate();
 			foreach (IWorkShiftRuleSet ruleSet in ruleSets)
 			{
 				TreeNodeAdv ruleSetNode = createNode(ruleSet.Description.ToString(), ruleSet);
@@ -173,24 +165,24 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 					TreeNodeAdv bagNode = createNode(bag.Description.ToString(), bag);
 					ruleSetNode.Nodes.Add(bagNode);
 				}
-				_defaultTreeView.Nodes.Add(ruleSetNode);
+				DefaultTreeView.Nodes.Add(ruleSetNode);
 				if (ExplorerPresenter.Model.FilteredRuleSetCollection != null &&
 					ExplorerPresenter.Model.FilteredRuleSetCollection.Contains(ruleSet))
-					if (!_defaultTreeView.SelectedNodes.Contains(ruleSetNode))
-						_defaultTreeView.SelectedNodes.Add(ruleSetNode);
+					if (!DefaultTreeView.SelectedNodes.Contains(ruleSetNode))
+						DefaultTreeView.SelectedNodes.Add(ruleSetNode);
 			}
 
-			_defaultTreeView.EndUpdate();
+			DefaultTreeView.EndUpdate();
 
-			if (_defaultTreeView.SelectedNodes.Count > 0)
-				_defaultTreeView.Focus();
+			if (DefaultTreeView.SelectedNodes.Count > 0)
+				DefaultTreeView.Focus();
 		}
 
 		private void createRuleSetBagNodes(IEnumerable<IRuleSetBag> ruleSetBags)
 		{
-			_defaultTreeView.Nodes.Clear();
-			_defaultTreeView.SelectedNodes.Clear();
-			_defaultTreeView.BeginUpdate();
+			DefaultTreeView.Nodes.Clear();
+			DefaultTreeView.SelectedNodes.Clear();
+			DefaultTreeView.BeginUpdate();
 			foreach (IRuleSetBag ruleSetBag in ruleSetBags)
 			{
 				TreeNodeAdv ruleSetNode = createNode(ruleSetBag.Description.ToString(), ruleSetBag);
@@ -209,18 +201,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 					TreeNodeAdv bagNode = createNode(ruleSet.Description.ToString(), ruleSet);
 					ruleSetNode.Nodes.Add(bagNode);
 				}
-				_defaultTreeView.Nodes.Add(ruleSetNode);
+				DefaultTreeView.Nodes.Add(ruleSetNode);
 				if (ExplorerPresenter.Model.FilteredRuleSetBagCollection != null &&
 					ExplorerPresenter.Model.FilteredRuleSetBagCollection.Contains(ruleSetBag))
-					if (!_defaultTreeView.SelectedNodes.Contains(ruleSetNode))
-						_defaultTreeView.SelectedNodes.Add(ruleSetNode);
+					if (!DefaultTreeView.SelectedNodes.Contains(ruleSetNode))
+						DefaultTreeView.SelectedNodes.Add(ruleSetNode);
 			}
 
-			_defaultTreeView.EndUpdate();
+			DefaultTreeView.EndUpdate();
 
-			if (_defaultTreeView.SelectedNodes.Count > 0)
+			if (DefaultTreeView.SelectedNodes.Count > 0)
 			{
-				_defaultTreeView.Focus();
+				DefaultTreeView.Focus();
 				ForceRefresh();
 			}
 
@@ -228,7 +220,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 
 		public void UpdateTreeIcons()
 		{
-			foreach (TreeNodeAdv node in _defaultTreeView.Root.Nodes)
+			foreach (TreeNodeAdv node in DefaultTreeView.Root.Nodes)
 			{
 				if (_currentView == ShiftCreatorViewType.RuleSetBag)
 				{
@@ -267,26 +259,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 			TabPageAdv from = tabPageRuleSetBag, to = tabPageWorkShiftRule;
 			_currentView = ShiftCreatorViewType.RuleSet;
 
-			_defaultTreeView.Name = "treeViewRuleSet";
+			DefaultTreeView.Name = "treeViewRuleSet";
 			if (tabControlShiftCreator.SelectedIndex == 1)
 			{
 				_currentView = ShiftCreatorViewType.RuleSetBag;           
 				from = tabPageWorkShiftRule;
 				to = tabPageRuleSetBag;
-				_defaultTreeView.Name = "treeViewBag";
+				DefaultTreeView.Name = "treeViewBag";
 			}
-			if (from.Contains(_defaultTreeView))
+			if (from.Contains(DefaultTreeView))
 			{
 				try
 				{
-					from.Controls.Remove(_defaultTreeView);
+					from.Controls.Remove(DefaultTreeView);
 				}
 				catch (ArgumentNullException )
 				{}
 			}
-			to.Controls.Add(_defaultTreeView);
+			to.Controls.Add(DefaultTreeView);
 
-			_defaultTreeView.AfterSelect -= defaultTreeViewAfterSelect;
+			DefaultTreeView.AfterSelect -= defaultTreeViewAfterSelect;
 			if (_currentView == ShiftCreatorViewType.RuleSet)
 			{
 				createRuleSetNodes(ExplorerPresenter.Model.RuleSetCollection);
@@ -295,15 +287,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 			{
 				createRuleSetBagNodes(ExplorerPresenter.Model.RuleSetBagCollection);
 			}
-			_defaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
+			DefaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
 
-			ExplorerView.AddControlHelpContext(_defaultTreeView);
+			ExplorerView.AddControlHelpContext(DefaultTreeView);
 			ExplorerPresenter.Model.SetSelectedView(_currentView);
 
-			if (_defaultTreeView.SelectedNodes != null && _defaultTreeView.SelectedNodes.Count > 0)
-				_defaultTreeView.ContextMenuStrip.Items[3].Enabled = true;
+			if (DefaultTreeView.SelectedNodes != null && DefaultTreeView.SelectedNodes.Count > 0)
+				DefaultTreeView.ContextMenuStrip.Items[3].Enabled = true;
 			else
-				_defaultTreeView.ContextMenuStrip.Items[3].Enabled = false;
+				DefaultTreeView.ContextMenuStrip.Items[3].Enabled = false;
 			OnShowModifyCollection(this, EventArgs.Empty);
 
 		}
@@ -329,7 +321,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 			contextMenu.Items.Add(item);
 			contextMenu.Items[3].Enabled = false;
 
-			_defaultTreeView.ContextMenuStrip = contextMenu;
+			DefaultTreeView.ContextMenuStrip = contextMenu;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -379,7 +371,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 			loadSelectedRuleSets();
 			Refresh(this, EventArgs.Empty);
 			ExplorerPresenter.Model.SetSelectedView(_currentView);
-			_defaultTreeView.ContextMenuStrip.Items[3].Enabled = true;
+			DefaultTreeView.ContextMenuStrip.Items[3].Enabled = true;
 			OnShowModifyCollection(this, EventArgs.Empty);
 			Cursor = Cursors.Default;
 		}
@@ -439,13 +431,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 						name = ruleSetBag.Description.ToString();
 						tagObject = ruleSetBag;
 					}
-					_defaultTreeView.BeginEdit();
+					DefaultTreeView.BeginEdit();
 
 					TreeNodeAdv node = createNode(name, tagObject);
-					_defaultTreeView.Nodes.Add(node);
-					_defaultTreeView.SelectedNode = node;
+					DefaultTreeView.Nodes.Add(node);
+					DefaultTreeView.SelectedNode = node;
 
-					_defaultTreeView.EndEdit();
+					DefaultTreeView.EndEdit();
 					Rename();
 				}
 				catch (ArgumentOutOfRangeException ex)
@@ -456,7 +448,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 
 		private void endAndSaveCurrentEditing()
 		{
-			_defaultTreeView.EndEdit();
+			DefaultTreeView.EndEdit();
 		}
 
 		public override void Delete()
@@ -470,10 +462,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 
 		private void deleteSelectedWorkShiftsAndBags()
 		{
-			int selectedNodeIndex = (_defaultTreeView.SelectedNodes.Count - 1);
+			int selectedNodeIndex = (DefaultTreeView.SelectedNodes.Count - 1);
 			for (int i = selectedNodeIndex; i >= 0; i--)
 			{
-				TreeNodeAdv selectedNode = _defaultTreeView.SelectedNodes[i];
+				TreeNodeAdv selectedNode = DefaultTreeView.SelectedNodes[i];
 				var ruleSetToDelete = selectedNode.TagObject as IWorkShiftRuleSet;
 
 				if (ruleSetToDelete != null)
@@ -486,7 +478,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 			}
 			for (int i = selectedNodeIndex; i >= 0; i--)
 			{
-				TreeNodeAdv selectedNode = _defaultTreeView.SelectedNodes[i];
+				TreeNodeAdv selectedNode = DefaultTreeView.SelectedNodes[i];
 				var bagToDelete = selectedNode.TagObject as IRuleSetBag;
 				if (bagToDelete != null)
 				{
@@ -496,8 +488,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 			}
 			for (int i = selectedNodeIndex; i >= 0; i--)
 			{
-				TreeNodeAdv selectedNode = _defaultTreeView.SelectedNodes[i];
-				_defaultTreeView.SelectedNodes.Remove(selectedNode);
+				TreeNodeAdv selectedNode = DefaultTreeView.SelectedNodes[i];
+				DefaultTreeView.SelectedNodes.Remove(selectedNode);
 			}
 		}
 
@@ -507,12 +499,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 		/// </summary>
 		public override void RefreshView()
 		{
-			_defaultTreeView.AfterSelect -= defaultTreeViewAfterSelect;
+			DefaultTreeView.AfterSelect -= defaultTreeViewAfterSelect;
 			if (_currentView == ShiftCreatorViewType.RuleSet)
 				createRuleSetNodes(ExplorerPresenter.Model.RuleSetCollection);
 			else
 				createRuleSetBagNodes(ExplorerPresenter.Model.RuleSetBagCollection);
-			_defaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
+			DefaultTreeView.AfterSelect += defaultTreeViewAfterSelect;
 		}
 
 		/// <summary>
@@ -520,8 +512,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 		/// </summary>
 		public override void Rename()
 		{
-			if (_defaultTreeView.SelectedNodes.Count == 1)
-				_defaultTreeView.BeginEdit(_defaultTreeView.SelectedNodes[0]);
+			if (DefaultTreeView.SelectedNodes.Count == 1)
+				DefaultTreeView.BeginEdit(DefaultTreeView.SelectedNodes[0]);
 		}
 
 		public override void Cut()
@@ -532,7 +524,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 
 		public override void Copy()
 		{
-			ClipboardHandler.Instance.CopySelection(_defaultTreeView);
+			ClipboardHandler.Instance.CopySelection(DefaultTreeView);
 		}
 
 		public override void Paste()
@@ -579,15 +571,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 				}
 				if (newNode != null)
 				{
-					_defaultTreeView.Nodes.Add(newNode);
-					_defaultTreeView.Refresh();
+					DefaultTreeView.Nodes.Add(newNode);
+					DefaultTreeView.Refresh();
 				}
 			}
 		}
 
 		public void ForceRefresh()
 		{
-			defaultTreeViewAfterSelect(_defaultTreeView, EventArgs.Empty);
+			defaultTreeViewAfterSelect(DefaultTreeView, EventArgs.Empty);
 		}
 
 		private void loadSelectedRuleSets()
@@ -596,10 +588,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 			var selectedRuleSetBags = new List<IRuleSetBag>();
 			ExplorerPresenter.Model.SetFilteredRuleSetCollection(new ReadOnlyCollection<IWorkShiftRuleSet>(selectedRuleSets));
 
-			int selectedNodeCount = _defaultTreeView.SelectedNodes.Count;
+			int selectedNodeCount = DefaultTreeView.SelectedNodes.Count;
 			for (int i = 0; i <= (selectedNodeCount - 1); i++)
 			{
-				TreeNodeAdv currentNode = _defaultTreeView.SelectedNodes[i];
+				TreeNodeAdv currentNode = DefaultTreeView.SelectedNodes[i];
 				if (currentNode.TagObject is IWorkShiftRuleSet)
 				{
 					if (currentNode.IsSelected)
@@ -656,7 +648,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 				status.Visible = false;
 				ExplorerPresenter.View.SetViewEnabled(true);
 				ExplorerView.Activate();
-				_defaultTreeView.Select();
+				DefaultTreeView.Select();
 				callback.RuleSetToComplex -= callbackRuleSetToComplex;
 			}
 			

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 			base.OnLoad(e);
 			if (DesignMode) return;
 			
-			Presenter.Model.SetRightToLeft((base.RightToLeft == RightToLeft.Yes));
+			Presenter.Model.SetRightToLeft(RightToLeft == RightToLeft.Yes);
 			Presenter.Model.SetSelectedView(ShiftCreatorViewType.RuleSet);
 
 			_navigationView = new NavigationView(Presenter, _eventAggregator);
@@ -152,27 +152,64 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 
 		    if (_editControl!=null)
 		    {
-		        _editControl.NewClicked -= (editControlNewClicked);
-		        _editControl.NewSpecialClicked -= (editControlNewSpecialClicked);
-		        _editControl.DeleteClicked -= (editControlDeleteClicked);
+		        _editControl.NewClicked -= editControlNewClicked;
+		        _editControl.NewSpecialClicked -= editControlNewSpecialClicked;
+		        _editControl.DeleteClicked -= editControlDeleteClicked;
 		        _editControl.NewSpecialItems.Clear();
 		        _editControl.Dispose();
 		        _editControl = null;
 		    }
 		    KeyDown -= workShiftsExplorerKeyDown;
 			KeyPress -= workShiftsExplorerKeyPress;
-		    if (_mainWindow != null)
-		    {
-		        _mainWindow.Activate();
-		    }
+			ribbonControlAdv1.BeforeContextMenuOpen -= ribbonControlBeforeContextMenuOpen;
+
+			if (_clipboardControl != null)
+			{
+				_clipboardControl.CopyClicked -= clipboardControlCopyClicked;
+				_clipboardControl.PasteClicked -= clipboardControlPasteClicked;
+				_clipboardControl = null;
+			}
+
+			backStageButton1.Click -= backStageButton1Click;
+			backStageButton2.Click -= backStageButton2Click;
+			backStageButton3.Click -= backStageButton3Click;
+			backStageButton4.Click -= backStageButton4Click;
+			backStageButton4.VisibleChanged -= backStageButton4VisibleChanged;
+			toolStripButtonSave.Click -= toolStripButtonSaveClick;
+			toolStripButtonRefresh.Click -= toolStripButtonRefreshClick;
+			toolStripButtonAddRuleSet.Click -= toolStripAssignRuleSetClick;
+			toolStripButtonRename.Click -= toolStripButtonRenameClick;
+			toolStripButtonGeneral.Click -= toolStripButtonTemplateViewClick;
+			toolStripButtonCombined.Click -= toolStripButtonCombinedClick;
+			toolStripButtonLimitations.Click -= toolStripButtonLimiterViewClick;
+			toolStripButtonDateExclusion.Click -= toolStripButtonDateExclusionClick;
+			toolStripButtonWeekdayExclusion.Click -= toolStripButtonWeekdayExclusionClick;
+
+			if (_generalView != null)
+			{
+				_generalView.Dispose();
+				_generalView = null;
+			}
+			if (_navigationView != null)
+			{
+				_navigationView.Dispose();
+				_navigationView = null;
+			}
+			if (_visualizeView != null)
+			{
+				_visualizeView.Dispose();
+				_visualizeView = null;
+			}
+
+			backStageView1.Dispose();
+			backStage1.Dispose();
+
+			_mainWindow?.Activate();
 		}
 
 		private void splitContainerAdvHorizontalPanel1Resize(object sender, EventArgs e)
 		{
-		    if (_visualizeView != null)
-		    {
-		        _visualizeView.RefreshView();
-		    }
+			_visualizeView?.RefreshView();
 		}
 
 		private void instantiateEditControl()
@@ -256,8 +293,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
 			var clipboardhost = new ToolStripControlHost(_clipboardControl);
 			tsClipboard.Items.Add(clipboardhost);
 
-			_clipboardControl.CopyClicked += (clipboardControlCopyClicked);
-			_clipboardControl.PasteClicked += (clipboardControlPasteClicked);
+			_clipboardControl.CopyClicked += clipboardControlCopyClicked;
+			_clipboardControl.PasteClicked += clipboardControlPasteClicked;
 			_clipboardControl.ToolStripSplitButtonCut.Enabled = false;
 			_clipboardControl.ToolStripSplitButtonCut.Visible = false;
 			_clipboardControl.SetButtonState(ClipboardAction.Paste, false);

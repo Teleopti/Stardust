@@ -14,9 +14,21 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+	            ExplorerPresenter.GeneralPresenter.GeneralTemplatePresenter.OnlyForRestrictionsChanged -= generalTemplatePresenterOnlyForRestrictionsChanged;
+				tabControlShiftCreator.SelectedIndexChanged -= tabControlShiftCreatorSelectedIndexChanged;
+
+				if (DefaultTreeView != null)
+	            {
+					DefaultTreeView.NodeEditorValidating -= treeViewNodeEditorValidating;
+		            DefaultTreeView.NodeEditorValidated -= treeViewNodeEditorValidated;
+		            DefaultTreeView.AfterSelect -= defaultTreeViewAfterSelect;
+		            DefaultTreeView.KeyUp -= treeViewKeyUp;
+		            DefaultTreeView.MouseDown -= treeViewMouseDown;
+				}
+				if (components != null)
+					components.Dispose();
             }
             base.Dispose(disposing);
         }

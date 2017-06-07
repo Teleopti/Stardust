@@ -1493,7 +1493,30 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
                 _panelConstructor.Dispose();
                 _panelConstructor = null;
             }
-            _toggleManager = null;
+
+	        backStageButton1.Click -= backStageButton1Click;
+	        backStageButton2.Click -= backStageButton2Click;
+	        backStageButton3.Click -= backStageButton3Click;
+	        backStageButton4.Click -= backStageButton4Click;
+	        toolStripButtonMainSave.Click -= toolStripButtonMainSaveClick;
+	        toolStripButtonFilterPeople.Click -= toolStripButtonFilterPeopleClick;
+	        toolStripButtonGeneral.Click -= toolStripButtonGeneralClick;
+	        toolStripButtonPeoplePeriods.Click -= toolStripButtonPeoplePeriodsClick;
+	        toolStripButtonSchedulePeriods.Click -= toolStripButtonSchedulePeriodsClick;
+	        toolStripButtonPersonRotation.Click -= toolStripButtonPersonRotationClick;
+	        toolStripButtonPersonAccounts.Click -= toolStripButtonPersonAccountsClick;
+	        toolStripButtonPersonAvailability.Click -= toolStripButtonPersonAvailabilityClick;
+	        toolStripButtonFind.Click -= toolStripButtonFindClick;
+	        toolStripMenuItemSortAsc.Click -= toolStripMenuItemSortAscClick;
+	        toolStripMenuItemSortDesc.Click -= toolStripMenuItemSortDescClick;
+	        toolStripButtonClosePreviousPeriod.Click -=toolStripButtonClosePreviousPeriodClick;
+	        toolStripButtonContract.Click -= toolStripButtonContractClick;
+	        toolStripButtonContractSchedule.Click -= toolStripButtonContractScheduleClick;
+	        toolStripButtonPartTimePercentage.Click -= toolStripButtonPartTimePercentageClick;
+
+	        toolStripComboBoxExTrackerDescription.SelectedIndexChanged -= toolStripComboBoxExTrackerDescriptionSelectedIndexChanged;
+
+			_toggleManager = null;
             _clipboardControl = null;
             _container = null;
             _mainWindow = null;
@@ -1502,7 +1525,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
             _panelConstructor = null;
             tabControlPeopleAdmin.SelectedIndexChanged -= tabControlPeopleAdminSelectedIndexChanged;
             tabControlPeopleAdmin.TabPages.Clear();
-            _tabControlPeopleAdmin = null;
+	        if (_tabControlPeopleAdmin != null)
+	        {
+				_tabControlPeopleAdmin.Dispose();
+		        _tabControlPeopleAdmin = null;
+	        }
             _editControl = null;
             if (shiftCategoryLimitationView != null)
             {
