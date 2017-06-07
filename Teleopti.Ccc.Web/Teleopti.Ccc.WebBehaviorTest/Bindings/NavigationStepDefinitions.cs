@@ -835,5 +835,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToWfmListAgentGroups();
 		}
 
+		[When(@"I view planning periods for agent group '(.*)'")]
+		public void WhenIViewPlanningPeriodsForAgentGroup(string agentGroupName)
+		{
+			TestControllerMethods.Logon();
+			var agentGroupConfigurable = DataMaker.Data().UserDatasOfType<AgentGroupConfigurable>().First();
+			Navigation.GoToPlanningPeriodListForAgentGroup(agentGroupConfigurable.AgentGroup.Id.Value);
+		}
 	}
 }

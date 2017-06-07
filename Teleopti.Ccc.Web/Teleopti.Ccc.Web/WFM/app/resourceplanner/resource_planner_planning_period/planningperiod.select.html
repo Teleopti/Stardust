@@ -8,7 +8,7 @@
 </div>
 <div class="con-row">
 	<div class="con-flex">
-		<button ng-if="!vm.isNonePp()" class="wfm-btn wfm-btn-default" ng-click="vm.startNextPlanningPeriod()">{{'CreateNextPp' | translate}}</button>
+		<button ng-if="!vm.isNonePp()" class="wfm-btn wfm-btn-default create-next-planning-period" ng-click="vm.startNextPlanningPeriod()">{{'CreateNextPp' | translate}}</button>
 		<div class="line-right pp-color-label" ng-if="!vm.isNonePp()">
 			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>{{'SchedulingSucceeded' | translate}}</span>
 			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>{{'SchedulingFailed' | translate}}</span>
@@ -62,14 +62,14 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> 
 </div>
 <div class="con-row"  ng-if="vm.isNonePp()">
 	<div class="con-flex">
 		<div class="line-center">
 			<i class="mdi mdi-information-outline huge-icon line-center"></i>
 			<h2>{{'YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion' | translate}}</h2>
-			<button class="wfm-btn wfm-btn-primary" ng-click="vm.openCreatePpModal = true;">{{'CreatePlanningPeriod' | translate}}</button>
+			<button class="wfm-btn wfm-btn-primary create-planning-period" ng-click="vm.openCreatePpModal = true;">{{'CreatePlanningPeriod' | translate}}</button>
 		</div>
 	</div>
 </div>
@@ -141,7 +141,7 @@
 								<button ng-click="vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default" translate>
 									Cancel
 								</button>
-								<button ng-class="{'wfm-btn-invis-primary':vm.selectedIsChanged, 'wfm-btn-invis-disabled': !vm.selectedIsChanged}" ng-click="vm.createFirstPp()" class="wfm-btn" translate>
+								<button ng-class="{'wfm-btn-invis-primary':vm.selectedIsChanged, 'wfm-btn-invis-disabled': !vm.selectedIsChanged}" ng-click="vm.createFirstPp()" class="wfm-btn apply-planning-period" translate>
 									Apply
 								</button>
 							</aside>

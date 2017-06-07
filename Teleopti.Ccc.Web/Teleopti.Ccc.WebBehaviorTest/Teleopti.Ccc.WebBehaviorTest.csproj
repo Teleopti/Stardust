@@ -1028,6 +1028,7 @@
       <DependentUpon>ManageSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Wfm\ResourcePlanner\ManageScheduleStepDefinition.cs" />
+    <Compile Include="Wfm\ResourcePlanner\PlanningPeriodStepDefinitions.cs" />
     <Compile Include="Wfm\Seat Management\SeatMap.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

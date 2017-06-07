@@ -627,5 +627,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/resourceplanner/v2");
 		}
+		public static void GoToPlanningPeriodListForAgentGroup(Guid agentGroupId)
+		{
+			GoToPage($"wfm/#/resourceplanner/agentgroup/{agentGroupId}/selectplanningperiod");
+		}
 	}
 }

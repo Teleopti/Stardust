@@ -3,84 +3,51 @@ Feature: Planning Period
 	As a resource planner
 	I want to work on planning periods
 
-Scenario: show the next planning period
-	Given the time is '2014-04-10'
+Scenario: The first planning period suggestion should be the next upcoming schedule period
+	Given the time is '2016-06-07'
 	And I am swedish
 	And I have a role with
 		| Field                                 | Value             |
 		| Name                                  | Resource Planner  |
 		| Access to resource planner            | True              |
-	When I view Resource planner
-	Then I should see planning period from '2014-05-01'to '2014-05-31'
+	And there is a site named 'Site 1'
+	And there is a team named 'Team 1' on 'Site 1'
+	And Ashley Andeen has a person period with
+		| Field      | Value      |
+		| Team       | Team 1     |
+		| Start Date | 2016-06-05 |
+	And Ashley Andeen has a schedule period with
+		| Field      | Value      |
+		| Start date | 2016-06-05 |
+		| Type       | Week       |
+		| Length     | 1          |
+	And there is an agent group with
+		| Field            | Value        |
+		| Agent group name | AgentGroup 1 |
+		| Team             | Team 1       |
+	When I view planning periods for agent group 'AgentGroup 1'
+	And I click create planning period
+	And I click apply planning period
+	Then I should see a planning period between '2016-06-12' and '2016-06-18'
 
-@OnlyRunIfDisabled('Wfm_ResourcePlanner_SchedulingOnStardust_42874')
-Scenario: schedule the next planning period
-	Given the time is '2014-04-10'
-	And there is a dayoff named 'Day off'
-	And I have a role with
-		| Field									| Value            |
-        | Name									| Resource Planner |
-		| Access to resource planner			| True             | 
-	When I view Resource planner
-	And I open planning period
-	And  I click schedule
-	Then Planning period should have been scheduled
-
-@Ignore
-Scenario: Publish the schedules for next planning period
-	Given the time is '2014-04-10'
-	And I have a role with
-		| Field									| Value            |
-        | Name									| Resource Planner |
-		| Access to resource planner			| True             | 
-	When I view Resource planner
-	And I open planning period
-	And  I click schedule
-	And I click publish
-	Then I should see the planning period as published in the summary
-
-@OnlyRunIfEnabled('Wfm_ChangePlanningPeriod_33043')
-Scenario: Update the next planning period
-	Given the time is '2014-04-10' 
-	And I am swedish
-	And I have a role with
-		| Field									| Value            |
-        | Name									| Resource Planner |
-		| Access to resource planner			| True             | 
-	And there are shift categories
-	| Name  |
-	| Day   |
-	And there is an activity with
-	| Field | Value |
-	| Name  | Phone |
-	| Color | Green |
-	And I have a workflow control set with
-	| Field                      | Value              |
-	| Name                       | Published schedule |
-	| Schedule published to date | 2014-03-30         |
-	And I have a schedule period with 
-	| Field      | Value      |
-	| Start date | 2014-04-06 |
-	| Type       | Week       |
-	| Length     | 1          |
-	And I have a person period with 
-	| Field      | Value      |
-	| Start date | 2014-04-06 |
-	And GroupingReadModel is updated
-	When I view Resource planner
-	And I open planning period
-	And I click next planning period
-	And I update planning period to two week 
-	Then I should see updated period label from '2014-04-13'to '2014-04-26'
-
-Scenario: Create the next planning period
-	Given the time is '2014-04-10'
+	Scenario: Creating next planning period should generate a period with the same type as the previous one 
+	Given the time is '2016-06-07'
 	And I am swedish
 	And I have a role with
 		| Field                                 | Value             |
 		| Name                                  | Resource Planner  |
 		| Access to resource planner            | True              |
-	When I view Resource planner
-	And I create new planning period
-	And I view Resource planner
-	Then I should see planning period from '2014-06-01'to '2014-06-30'
+	And there is a site named 'Site 1'
+	And there is a team named 'Team 1' on 'Site 1'
+	And there is an agent group with
+		| Field            | Value        |
+		| Agent group name | AgentGroup 1 |
+		| Team             | Team 1       |
+	And there is a planning period with
+		| Field            | Value        |
+		| Date             | 2016-06-01   |
+		| Agent group name | AgentGroup 1 |
+	When I view planning periods for agent group 'AgentGroup 1'
+	And I click create next planning period
+	Then I should see a planning period between '2016-07-01' and '2016-07-31'
+
