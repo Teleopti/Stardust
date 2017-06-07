@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent },
 				new[]
 				{
-					new PersonAssignment(agent, scenario, date.AddDays(1)).IsDayOff(),
-					new PersonAssignment(agent, scenario, date.AddDays(3)).IsDayOff()
+					new PersonAssignment(agent, scenario, date.AddDays(1)).WithDayOff(),
+					new PersonAssignment(agent, scenario, date.AddDays(3)).WithDayOff()
 				},
 				skillDays
 			);

@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.BusinessRules
 				new PersonAssignment(agent, scenario, date.AddDays(0)).WithLayer(activity, new TimePeriod(8,16)),
 				new PersonAssignment(agent, scenario, date.AddDays(1)).WithLayer(activity, new TimePeriod(8,16)),
 				new PersonAssignment(agent, scenario, date.AddDays(2)).WithLayer(activity, new TimePeriod(8,16)),
-				new PersonAssignment(agent, scenario, date.AddDays(4)).IsDayOff(), //rename
-				new PersonAssignment(agent, scenario, date.AddDays(5)).IsDayOff(),
+				new PersonAssignment(agent, scenario, date.AddDays(4)).WithDayOff(),
+				new PersonAssignment(agent, scenario, date.AddDays(5)).WithDayOff(),
 				new PersonAssignment(agent, scenario, date.AddDays(6)).WithLayer(activity, new TimePeriod(6,14)),
 				new PersonAssignment(agent, scenario, date.AddDays(7)).WithLayer(activity, new TimePeriod(0,8))
 			};

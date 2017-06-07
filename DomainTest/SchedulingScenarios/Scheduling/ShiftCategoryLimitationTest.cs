@@ -52,10 +52,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period,  new[] { agent1, agent2 }, 
 					new []
 					{
-						new PersonAssignment(agent1, scenario, date).IsDayOff(),
-						new PersonAssignment(agent2, scenario, date).IsDayOff(),
-						new PersonAssignment(agent1, scenario, date.AddDays(2)).IsDayOff(),
-						new PersonAssignment(agent2, scenario, date.AddDays(2)).IsDayOff()
+						new PersonAssignment(agent1, scenario, date).WithDayOff(),
+						new PersonAssignment(agent2, scenario, date).WithDayOff(),
+						new PersonAssignment(agent1, scenario, date.AddDays(2)).WithDayOff(),
+						new PersonAssignment(agent2, scenario, date.AddDays(2)).WithDayOff()
 					},
 					skillDays
 			);
@@ -106,10 +106,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent1, agent2 },
 					new[]
 					{
-						new PersonAssignment(agent1, scenario, date).IsDayOff(),
-						new PersonAssignment(agent2, scenario, date).IsDayOff(),
-						new PersonAssignment(agent1, scenario, date.AddDays(3)).IsDayOff(),
-						new PersonAssignment(agent2, scenario, date.AddDays(3)).IsDayOff()
+						new PersonAssignment(agent1, scenario, date).WithDayOff(),
+						new PersonAssignment(agent2, scenario, date).WithDayOff(),
+						new PersonAssignment(agent1, scenario, date.AddDays(3)).WithDayOff(),
+						new PersonAssignment(agent2, scenario, date.AddDays(3)).WithDayOff()
 					},
 					skillDays
 			);
@@ -152,11 +152,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			agentNotInSelection.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 0 });
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { selectedAgent, agentNotInSelection}, new[]
 			{
-				new PersonAssignment(selectedAgent, scenario, date).IsDayOff(),
+				new PersonAssignment(selectedAgent, scenario, date).WithDayOff(),
 				new PersonAssignment(selectedAgent, scenario, date.AddDays(1)).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14)),
-				new PersonAssignment(selectedAgent, scenario, date.AddDays(2)).IsDayOff(),
-				new PersonAssignment(selectedAgent, scenario, date).IsDayOff(),
-				new PersonAssignment(selectedAgent, scenario, date.AddDays(2)).IsDayOff()
+				new PersonAssignment(selectedAgent, scenario, date.AddDays(2)).WithDayOff(),
+				new PersonAssignment(selectedAgent, scenario, date).WithDayOff(),
+				new PersonAssignment(selectedAgent, scenario, date.AddDays(2)).WithDayOff()
 			}, skillDay);
 			var schedulingOptions = new SchedulingOptions
 			{ 

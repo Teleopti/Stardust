@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon
 			return assignment;
 		}
 
-		public static IPersonAssignment IsDayOff(this IPersonAssignment assignment)
+		public static IPersonAssignment WithDayOff(this IPersonAssignment assignment)
 		{
 			assignment.SetDayOff(new DayOffTemplate());
 			return assignment;
