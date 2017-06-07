@@ -80,7 +80,14 @@
                 {
                             id: '@id',
                             dayOffset: '@dayOffset'
-				}
+				},
+                {
+                    query: {
+                        method: 'GET',
+                        params: {},
+                        isArray: false
+                    }
+                }
             );
 
             this.getSkillAreaMonitorStatisticsByDayOffset = $resource(
@@ -88,6 +95,13 @@
                 {
                     id: '@id',
                     dayOffset: '@dayOffset'
+                },
+                {
+                    query: {
+                        method: 'GET',
+                        params: {},
+                        isArray: false
+                    }
                 }
             );
 
@@ -120,6 +134,13 @@
                 {
                     id: '@id',
                     dayOffset: '@dayOffset'
+                },
+                {
+                    query: {
+                        method: 'GET',
+                        params: {},
+                        isArray: false
+                    }
                 }
             );
 
@@ -128,6 +149,13 @@
                 {
                     id: '@id',
                     dayOffset: '@dayOffset'
+                },
+                {
+                    query: {
+                        method: 'GET',
+                        params: {},
+                        isArray: false
+                    }
                 }
             );
 
@@ -160,6 +188,13 @@
                 {
                     id: '@id',
                     dayOffset: '@dayOffset'
+                },
+                {
+                    query: {
+                        method: 'GET',
+                        params: {},
+                        isArray: false
+                    }
                 }
             );
 
@@ -168,6 +203,13 @@
                 {
                     id: '@id',
                     dayOffset: '@dayOffset'
+                },
+                {
+                    query: {
+                        method: 'GET',
+                        params: {},
+                        isArray: false
+                    }
                 }
             );
 

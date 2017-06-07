@@ -148,8 +148,8 @@
 
             service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
                 performanceData.waitingForData = true;
-                intradayService.getSkillMonitorPerformance
-                    .get({
+                intradayService.getSkillMonitorPerformanceByDayOffset
+                    .query({
                         id: selectedItem.Id,
                         dayOffset: dayOffset
                     })
@@ -194,7 +194,7 @@
                 }
                 mixedArea = selectedItem.Skills.find(findEmail);
 
-                intradayService.getSkillAreaMonitorPerformance
+                intradayService.getSkillAreaMonitorPerformanceByDayOffset
                     .query({
                         id: selectedItem.Id,
                         dayOffset: dayOffset

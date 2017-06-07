@@ -144,9 +144,9 @@
 
             service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
                 staffingData.waitingForData = true;
-                intradayService.getSkillStaffingData
+                intradayService.getSkillStaffingDataByDayOffset
                     .query({
-                        skillId: selectedItem.Id,
+                        id: selectedItem.Id,
                         dayOffset: dayOffset
                     })
                     .$promise.then(
@@ -166,9 +166,9 @@
 
             service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
                 staffingData.waitingForData = true;
-                intradayService.getSkillAreaStaffingData
+                intradayService.getSkillAreaStaffingDataByDayOffset
                     .query({
-                        skillAreaId: selectedItem.Id,
+                        id: selectedItem.Id,
                         dayOffset: dayOffset
                     })
                     .$promise.then(

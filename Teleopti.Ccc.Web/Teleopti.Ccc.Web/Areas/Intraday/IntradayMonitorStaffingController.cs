@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		//	//return Ok(_staffingViewModelCreator.Load(new[] { SkillId }));
 		//}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing/{id}/{dayOffset}")]
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing/{skillAreaId}/{dayOffset}")]
 		public virtual IHttpActionResult MonitorSkillAreaStaffingByDayOffset(Guid skillAreaId, int dayOffset)
 		{
 			var skillArea = _skillAreaRepository.Get(skillAreaId);
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok(_staffingViewModelCreator.Load(skillIdList, dayOffset));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing/{id}/{dayOffset}")]
+		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing/{skillId}/{dayOffset}")]
 		public virtual IHttpActionResult MonitorSkillStaffingByDayOffset(Guid skillId, int dayOffset)
 		{
 			return Ok(_staffingViewModelCreator.Load(new[] { skillId }, dayOffset));
