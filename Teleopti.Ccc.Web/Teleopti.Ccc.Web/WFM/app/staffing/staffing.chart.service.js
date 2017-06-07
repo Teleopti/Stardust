@@ -148,7 +148,7 @@
                 if (value < 0) {
                     staffing.under.push(Math.abs(value.toFixed(1)));
                     staffing.over.push(0);
-                } else if(value>0) {
+                } else if(value>=0){
                     staffing.over.push(value.toFixed(1));
                     staffing.under.push(0);
                 }
