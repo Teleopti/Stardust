@@ -163,5 +163,91 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			viewModel.Id.Should().Be(teamId);
 			viewModel.InAlarmCount.Should().Be(1);
 		}
+
+		[Test]
+		public void ShouldBuildForSelectedSite()
+		{
+			Now.Is("2016-10-17 08:10");
+			var personId = Guid.NewGuid();
+			var personOnWrongSite = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var wrongSiteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var wrongTeam = Guid.NewGuid();
+			Database
+				.WithSite(siteId)
+				.WithTeam(teamId, "Team")
+				.WithAgent(personId)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId,
+					TeamId = teamId,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-10-17 08:00".Utc(),
+				})
+				.WithSite(wrongSiteId)
+				.WithTeam(wrongTeam)
+				.WithAgent(personId)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personOnWrongSite,
+					BusinessUnitId = businessUnitId,
+					SiteId = wrongSiteId,
+					TeamId = wrongTeam,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-10-17 08:00".Utc(),
+				})
+				;
+
+			Target.Build(siteId).Single().Id.Should().Be(teamId);
+		}
+
+
+		[Test]
+		public void ShouldBuildForSelectedSiteWithSkill()
+		{
+			Now.Is("2016-10-17 08:10");
+			var personId = Guid.NewGuid();
+			var personOnWrongSite = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var wrongSiteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var wrongTeam = Guid.NewGuid();
+			var skill = Guid.NewGuid();
+			Database
+				.WithSite(siteId)
+				.WithTeam(teamId, "Team")
+				.WithAgent(personId)
+				.WithSkill(skill)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId,
+					TeamId = teamId,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-10-17 08:00".Utc(),
+				})
+				.WithSite(wrongSiteId)
+				.WithTeam(wrongTeam)
+				.WithAgent(personId)
+				.WithSkill(skill)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personOnWrongSite,
+					BusinessUnitId = businessUnitId,
+					SiteId = wrongSiteId,
+					TeamId = wrongTeam,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-10-17 08:00".Utc(),
+				})
+				;
+
+			Target.Build(siteId).Single().Id.Should().Be(teamId);
+		}
 	}
 }

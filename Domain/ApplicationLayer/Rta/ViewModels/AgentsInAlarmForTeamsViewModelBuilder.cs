@@ -36,17 +36,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		{
 			return Build(siteId, null);
 		}
-
-
-
-
-
-
+		
 		public IEnumerable<TeamOutOfAdherence> Build(Guid siteId,IEnumerable<Guid> skillIds)
 		{
 			var teamsInAlarm = skillIds == null ?
-					_teamsInAlarmReader.Read() :
-					_teamsInAlarmReader.Read(skillIds)
+					_teamsInAlarmReader.Read(siteId) :
+					_teamsInAlarmReader.Read(siteId, skillIds)
 				;
 
 			teamsInAlarm =
