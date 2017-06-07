@@ -35,7 +35,7 @@
             var intervalStart;
             var max;
 
-            service.setTrafficData = function(result) {
+            service.setTrafficData = function(result, isToday) {
                 clearData();
                 trafficData.forecastedCallsObj.series = result.DataSeries.ForecastedCalls;
                 trafficData.actualCallsObj.series = result.DataSeries.CalculatedCalls;
@@ -92,7 +92,11 @@
                 }
 
                 trafficData.hasMonitorData = result.IncomingTrafficHasData;
-                getCurrent();
+
+                trafficData.currentInterval = [];
+                if (isToday) {
+                    getCurrent();
+                }
                 service.loadTrafficChart(trafficData);
                 return trafficData;
             };
@@ -115,7 +119,6 @@
                 } else {
                     max = trafficData.actualCallsObj.max;
                 }
-                trafficData.currentInterval = [];
 
                 for (var i = 0; i < trafficData.timeSeries.length; i++) {
                     if (trafficData.timeSeries[i] === intervalStart) {
@@ -136,7 +139,7 @@
                     .$promise.then(
                         function(result) {
                             trafficData.waitingForData = false;
-                            service.setTrafficData(result);
+                            service.setTrafficData(result, true);
                         },
                         function(error) {
                             trafficData.hasMonitorData = false;
@@ -154,7 +157,7 @@
                     .$promise.then(
                         function(result) {
                             trafficData.waitingForData = false;
-                            service.setTrafficData(result);
+                            service.setTrafficData(result, dayOffset === 0);
                         },
                         function(error) {
                             trafficData.hasMonitorData = false;
@@ -171,7 +174,7 @@
                     .$promise.then(
                         function(result) {
                             trafficData.waitingForData = false;
-                            service.setTrafficData(result);
+                            service.setTrafficData(result, true);
                         },
                         function(error) {
                             trafficData.hasMonitorData = false;
@@ -189,7 +192,7 @@
                     .$promise.then(
                         function(result) {
                             trafficData.waitingForData = false;
-                            service.setTrafficData(result);
+                            service.setTrafficData(result, dayOffset === 0);
                         },
                         function(error) {
                             trafficData.hasMonitorData = false;

@@ -44,9 +44,6 @@
             return timeData;
           }
 
-          service.getLatestTimeByDate = function(selectedItem, utcDate){
-          }
-
           return service;
         }
       ]);

@@ -35,7 +35,7 @@
             var hiddenArray = [];
             var intervalStart;
 			var mixedArea = null;
-			service.setPerformanceData = function (result, showEsl, showEmailSkill) {
+			service.setPerformanceData = function (result, showEsl, showEmailSkill, isToday) {
                 clearData();
 
                 performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
@@ -95,7 +95,11 @@
                 }
 
                 performanceData.hasMonitorData = result.PerformanceHasData;
-                getCurrent();
+                performanceData.currentInterval = [];
+
+                if (isToday) {
+                    getCurrent();
+                }
                 service.loadPerformanceChart(performanceData);
                 return performanceData;
             };
@@ -105,7 +109,6 @@
             };
 
             var getCurrent = function() {
-                performanceData.currentInterval = [];
                 for (var i = 0; i < performanceData.timeSeries.length; i++) {
                     if (performanceData.timeSeries[i] === intervalStart) {
                         performanceData.currentInterval[i] = performanceData.averageSpeedOfAnswerObj.max;
@@ -138,7 +141,7 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl);
+                            service.setPerformanceData(result, toggles.showEsl, true);
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;
@@ -156,7 +159,7 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl);
+                            service.setPerformanceData(result, toggles.showEsl, dayOffset === 0);
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;
@@ -178,7 +181,7 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl);
+                            service.setPerformanceData(result, toggles.showEsl, true);
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;
@@ -202,7 +205,7 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl);
+                            service.setPerformanceData(result, toggles.showEsl, dayOffset === 0);
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;

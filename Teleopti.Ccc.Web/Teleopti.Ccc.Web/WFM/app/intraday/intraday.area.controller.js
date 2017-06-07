@@ -336,17 +336,21 @@
             if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
                 if ($scope.selectedItem.Skills) {
                     services[activeTab].pollSkillAreaDataByDayOffset($scope.selectedItem, $scope.toggles, dayOffset);
-                    var timeData = intradayLatestTimeService.getLatestTimeByDate($scope.selectedItem, dayOffset);
+                    if (dayOffset === 0) {
+                        var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
+                    }
                 } else {
                     services[activeTab].pollSkillDataByDayOffset($scope.selectedItem, $scope.toggles, dayOffset);
-                    var timeData = intradayLatestTimeService.getLatestTimeByDate($scope.selectedItem, dayOffset);
+                    if (dayOffset === 0) {
+                        var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
+                    }
                 }
                 $scope.viewObj = services[activeTab].getData();
                 $scope.latestActualInterval = timeData;
                 $scope.hasMonitorData = $scope.viewObj.hasMonitorData;
             } else {
                 $timeout(function() {
-                    pollActiveTabDataByDayOffset($scope.activeTab, $scope.chosenOffset.value);
+                    pollActiveTabDataByDayOffset($scope.activeTab, dayOffset);
                 }, 1000);
             }
         }
