@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.BusinessRules
 				new PersonAssignment(agent, scenario, dateFirstDayOfWeek.AddDays(6)).WithLayer(activity, new TimePeriod(6,14)),
 				new PersonAssignment(agent, scenario, dateFirstDayOfWeek.AddDays(7)).WithLayer(activity, new TimePeriod(0,8))
 			};
-			var stateHolder = StateHolder.Fill(scenario, new DateOnlyPeriod(2017, 6, 1, 2018, 7, 1), new[] {agent}, asses, Enumerable.Empty<ISkillDay>());
+			var stateHolder = StateHolder.Fill(scenario, new DateOnlyPeriod(2017, 6, 1, 2017, 7, 1), new[] {agent}, asses, Enumerable.Empty<ISkillDay>());
 
 			var scheduleToChange = stateHolder.Schedules[agent].ScheduledDay(dateFirstDayOfWeek.AddDays(3));
 			scheduleToChange.PersonAssignment(true).AddActivity(activity, new TimePeriod(23, 24 + 7));
