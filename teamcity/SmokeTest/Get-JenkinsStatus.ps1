@@ -21,13 +21,13 @@ else
 	
 }
 
-$Check_webstatus = invoke-webrequest $JenkinsURL
+$Check_webstatus = invoke-webrequest $JenkinsURL -UseBasicParsing
 $Job_status = ConvertFrom-Json $Check_webstatus
 
 # Check if deploy is still running
 do {($job_status.building)  
 
-$Check_webstatus = invoke-webrequest $JenkinsURL
+$Check_webstatus = invoke-webrequest $JenkinsURL -UseBasicParsing
 $Job_status = ConvertFrom-Json $Check_webstatus
 
 "Waiting for Jenkins deploy to complete..."
@@ -36,7 +36,7 @@ Start-Sleep -Seconds 15
 } while ($Job_status.building -eq "True")
 
 #Check if deploy was successful
-$Check_webstatus = invoke-webrequest $JenkinsURL
+$Check_webstatus = invoke-webrequest $JenkinsURL -UseBasicParsing
 $Job_status = ConvertFrom-Json $Check_webstatus
 
 if ($Job_status.result -eq "SUCCESS") { Write-Host "Jenkins deploy successfully completed!" }
