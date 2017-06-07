@@ -16,7 +16,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_timeZone = timeZone;
 		}
 
-		public IList<StaffingIntervalModel> Load(IList<SkillIntervalStatistics> actualStatistics, IList<ISkill> skills, ICollection<ISkillDay> skillDays, IList<StaffingIntervalModel> forecastedStaffingIntervals, TimeSpan resolution, IList<SkillDayStatsRange> skillDayStatsRange, Dictionary<Guid, int> workloadBacklog)
+		public IList<StaffingIntervalModel> Load(IList<SkillIntervalStatistics> actualStatistics, 
+			IList<ISkill> skills, 
+			ICollection<ISkillDay> skillDays, 
+			IList<StaffingIntervalModel> forecastedStaffingIntervals,
+			TimeSpan resolution, IList<SkillDayStatsRange> skillDayStatsRange,
+			Dictionary<Guid, int> workloadBacklog)
 		{
 
 			var actualStaffingIntervals = new List<StaffingIntervalModel>();
@@ -35,8 +40,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 					var skillDayStats = GetSkillDayStatistics(skillDayStatsRange, skill, skillDay.Original.CurrentDate, actualStatsPerSkillInterval, resolution);
 
 
-					if (!skillDayStats.Any())
-						continue;
+					//if (!skillDayStats.Any())
+					//	continue;
 					mapWorkloadIds(skillDay.Clone, skillDay.Original);
 					assignActualWorkloadToClonedSkillDay(skillDay.Clone, skillDayStats, workloadBacklog);
 					actualStaffingIntervals.AddRange(GetRequiredStaffing(resolution, skillDayStats, skillDay.Clone));

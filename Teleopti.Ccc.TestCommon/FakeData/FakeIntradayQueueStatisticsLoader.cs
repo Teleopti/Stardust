@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 				.ToList();
 		}
 
-		public int LoadActualEmailBacklogForWorkload(Guid workloadId, TimeZoneInfo timeZone, DateTimePeriod closedPeriod)
+		public int LoadActualEmailBacklogForWorkload(Guid workloadId, DateTimePeriod closedPeriod)
 		{
 			if (_workloadBacklogDictionary.ContainsKey(workloadId))
 				return _workloadBacklogDictionary[workloadId];

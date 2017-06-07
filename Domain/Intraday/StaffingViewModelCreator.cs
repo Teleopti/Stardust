@@ -92,7 +92,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			
 			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval);
 
-			var workloadBacklog = _emailBacklogProvider.Load(skillDays, statisticsPerWorkloadInterval, userDateOnly, minutesPerInterval, forecastedCallsModel.SkillDayStatsRange);
+			var workloadBacklog = _emailBacklogProvider.GetStatisticsBacklogByWorkload(skillDays, statisticsPerWorkloadInterval, userDateOnly, minutesPerInterval, forecastedCallsModel.SkillDayStatsRange);
+			var forecastedBacklog = _emailBacklogProvider.GetForecastedBacklogBySkill(skillDays, skills, userDateOnly);
 
 			var updatedForecastedSeries = _reforecastedStaffingProvider.DataSeries(
 				forecastedStaffing,
@@ -100,7 +101,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 				forecastedCallsModel.CallsPerSkill,
 				latestStatsTime,
 				minutesPerInterval,
-				timeSeries
+				timeSeries,
+				workloadBacklog
 			);
 			var requiredStaffingPerSkill = _requiredStaffingProvider.Load(statisticsPerWorkloadInterval, 
 				skills, 
@@ -108,7 +110,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 				forecastedStaffing, 
 				TimeSpan.FromMinutes(minutesPerInterval),
 				forecastedCallsModel.SkillDayStatsRange,
-				workloadBacklog);
+				workloadBacklog
+			);
 
 			var dataSeries = new StaffingDataSeries
 			{

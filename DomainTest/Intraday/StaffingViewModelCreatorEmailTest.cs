@@ -172,42 +172,72 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		[Test]
 		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
-		public void ShouldUseEmailsBacklogFromYesterdayForRequiredAgents()
+		public void ShouldUseStatisticsBacklogForRequiredAndReforecastedAgents()
 		{
 			var userNow = new DateTime(2016, 8, 26, 4, 15, 0, DateTimeKind.Utc);
 			var latestStatsTime = new DateTime(2016, 8, 26, 4, 0, 0, DateTimeKind.Utc);
-			var openHours = new TimePeriod(1, 0, 23, 0);
+			var openHours = new TimePeriod(1, 0, 5, 0);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skillEmail = StaffingViewModelCreatorTestHelper.CreateEmailSkill(_skillResolution, "skill", openHours);
 			SkillRepository.Has(skillEmail);
 
-			var skillDayYesterday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(-1), openHours, false, _slaTwoHours, false);
-			var skillDayToday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow, openHours, false, _slaTwoHours, false);
+			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow, openHours, false, _slaTwoHours, false);
 			var skillDayCalculator = new SkillDayCalculator(skillEmail,
-				new List<ISkillDay>() { skillDayToday, skillDayYesterday },
+				new List<ISkillDay>() { skillDay },
 				new DateOnlyPeriod(new DateOnly(userNow), new DateOnly(userNow)));
-			skillDayToday.SkillDayCalculator = skillDayCalculator;
-			skillDayYesterday.SkillDayCalculator = skillDayCalculator;
-			SkillDayRepository.Has(skillDayToday, skillDayYesterday);
+			skillDay.SkillDayCalculator = skillDayCalculator;
+			SkillDayRepository.Has(skillDay);
 
-			var skillStats = StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDayToday, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
+			var skillStats = StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
-			IntradayQueueStatisticsLoader.HasBacklog(skillDayToday.WorkloadDayCollection.First().Workload.Id.Value, 300);
+			
 			var vm1 = Target.Load(new[] { skillEmail.Id.Value });
 
-			var forecastedAgentsStart = skillDayToday.SkillStaffPeriodCollection.First().FStaff;
-			var forecastedAgentsSecondInterval = skillDayToday.SkillStaffPeriodCollection[1].FStaff;
-			var forecastedAgentsThirdInterval = skillDayToday.SkillStaffPeriodCollection[2].FStaff;
+			IntradayQueueStatisticsLoader.HasBacklog(skillDay.WorkloadDayCollection.First().Workload.Id.Value, 300);
 
-			vm1.DataSeries.Should().Not.Be.EqualTo(null);
-			vm1.StaffingHasData.Should().Be.EqualTo(true);
-			vm1.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(88);
-			vm1.DataSeries.ActualStaffing.First().Should().Be.GreaterThan(forecastedAgentsStart);
-			vm1.DataSeries.ActualStaffing[4].Should().Be.GreaterThan(forecastedAgentsSecondInterval);
-			vm1.DataSeries.ActualStaffing[8].Should().Be.EqualTo(forecastedAgentsThirdInterval);
-			vm1.DataSeries.ActualStaffing[12].Should().Be.EqualTo(null);
+			var vm2 = Target.Load(new[] { skillEmail.Id.Value });
+
+			vm2.DataSeries.Should().Not.Be.EqualTo(null);
+			vm2.StaffingHasData.Should().Be.EqualTo(true);
+			vm2.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(16);
+			vm2.DataSeries.ActualStaffing.First().Should().Be.GreaterThan(vm1.DataSeries.ActualStaffing.First());
+			vm2.DataSeries.ActualStaffing[4].Should().Be.GreaterThan(vm1.DataSeries.ActualStaffing[4]);
+			vm2.DataSeries.ActualStaffing[8].Should().Be.EqualTo(vm1.DataSeries.ActualStaffing[8]);
+			vm2.DataSeries.ActualStaffing[12].Should().Be.EqualTo(null);
+			vm2.DataSeries.UpdatedForecastedStaffing[13].Should().Be.GreaterThan(vm1.DataSeries.UpdatedForecastedStaffing[13]);
+		}
+
+		[Test]
+		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
+		public void ShouldUseForecastedBacklogForReforecastedAgents()
+		{
+			var userNow = new DateTime(2016, 8, 26, 4, 15, 0, DateTimeKind.Utc);
+			var latestStatsTime = new DateTime(2016, 8, 26, 4, 0, 0, DateTimeKind.Utc);
+			var openHours = new TimePeriod(1, 0, 5, 0);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skillEmail = StaffingViewModelCreatorTestHelper.CreateEmailSkill(_skillResolution, "skill", openHours);
+			SkillRepository.Has(skillEmail);
+
+			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow, openHours, false, _slaTwoHours, false);
+			skillDay.WorkloadDayCollection.First().TaskPeriodList.First().SetTasks(100);
+			var skillDayCalculator = new SkillDayCalculator(skillEmail,
+				new List<ISkillDay>() { skillDay },
+				new DateOnlyPeriod(new DateOnly(userNow), new DateOnly(userNow)));
+			skillDay.SkillDayCalculator = skillDayCalculator;
+			SkillDayRepository.Has(skillDay);
+
+			var skillStats = StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
+
+			var vm = Target.Load(new[] { skillEmail.Id.Value });
+
+			vm.DataSeries.Should().Not.Be.EqualTo(null);
+			vm.StaffingHasData.Should().Be.EqualTo(true);
+			vm.DataSeries.UpdatedForecastedStaffing[13].Should().Be.LessThan(vm.DataSeries.ForecastedStaffing[13]);
 		}
 
 		[Test]

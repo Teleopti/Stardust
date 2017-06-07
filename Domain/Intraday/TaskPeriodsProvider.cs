@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var workloadDay in skillDay.WorkloadDayCollection)
 			{
-				taskPeriods.AddRange(taskPeriodsUpUntilNow(workloadDay.TaskPeriodList, minutesPerInterval, skillDay.Skill.DefaultResolution, latestStatisticsTimeUtc, usersNowStartOfDayUtc));
+				taskPeriods.AddRange(taskPeriodsUpUntilNow(workloadDay.OpenTaskPeriodList, minutesPerInterval, skillDay.Skill.DefaultResolution, latestStatisticsTimeUtc, usersNowStartOfDayUtc));
 			}
 
 			return taskPeriods;
