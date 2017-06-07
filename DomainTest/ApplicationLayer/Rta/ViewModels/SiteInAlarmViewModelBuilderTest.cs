@@ -209,6 +209,49 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		}
 
 		[Test]
+		public void ShouldCountAgentsForSkill()
+		{
+			Now.Is("2016-06-21 08:30");
+			var personWithSkill = Guid.NewGuid();
+			var personWithoutSkill = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var skill1 = Guid.NewGuid();
+			var skill2 = Guid.NewGuid();
+
+			Database
+				.WithSite(siteId)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personWithSkill,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId,
+					TeamId = teamId,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+				})
+				.WithAgent(personWithSkill)
+				.WithSkill(skill1)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personWithoutSkill,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId,
+					TeamId = teamId,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2016-06-21 08:29".Utc(),
+				})
+				.WithAgent(personWithoutSkill)
+				.WithSkill(skill2);
+
+			var viewModel = Target.Build(new[] { skill1 }).Single();
+
+			viewModel.Id.Should().Be(siteId);
+			viewModel.AgentsCount.Should().Be(1);
+		}
+
+		[Test]
 		public void ShouldBuildForMultipleSitesForSkillOrderSitesName()
 		{
 

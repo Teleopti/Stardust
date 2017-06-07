@@ -69,10 +69,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					.Select(x => x.SiteId)
 					.ToArray();
 
-			var namePerSiteId = sites
-				.ToLookup(x => x.Id.Value, x => x.Description.Name);
+			var namePerSiteId = sites.ToLookup(x => x.Id.Value, x => x.Description.Name);
 
-			var numberOfAgentsPerSite = _numberOfAgentsInSiteReader.Read(siteIds).ToLookup(x => x.Key, x => x.Value);
+			ILookup<Guid, int> numberOfAgentsPerSite;
+			if (skillIds != null)
+				numberOfAgentsPerSite = _numberOfAgentsInSiteReader.Read(siteIds, skillIds).ToLookup(x => x.Key, x => x.Value);
+			else
+				numberOfAgentsPerSite = _numberOfAgentsInSiteReader.Read(siteIds).ToLookup(x => x.Key, x => x.Value);
 
 			var result = siteIds
 				.Select(s =>
