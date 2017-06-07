@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -32,6 +33,33 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			_toggleManager = toggleManager;
 			InitializeComponent();
+			if (!DefinedLicenseDataFactory.GetLicenseActivator(UnitOfWorkFactory.Current.Name)
+				.EnabledLicenseOptionPaths.Contains(DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
+			{
+				//tableLayoutPanelSubHeader1.Hide();
+				//tableLayoutPanelSubHeader2.Hide();
+				//tableLayoutPanelSubHeader3.Hide();
+				//labelSubHeader2.Hide();
+				//radioButtonAdvEmail.Hide();
+				//radioButtonAdvSMS.Hide();
+				//autoLabel1.Hide();
+				//autoLabel5.Hide();
+				//comboBoxOptionalColumns.Hide();
+				//textBoxEmailFrom.Hide();
+				tableLayoutPanelSubHeader1.Visible = false;
+				tableLayoutPanelSubHeader2.Visible = false;
+				tableLayoutPanelSubHeader3.Visible = false;
+				labelSubHeader2.Visible = false;
+				tableLayoutPanel1.Visible = false;
+				radioButtonAdvEmail.Visible = false;
+				radioButtonAdvSMS.Visible = false;
+				autoLabel1.Visible = false;
+				autoLabel5.Visible = false;
+				comboBoxOptionalColumns.Visible = false;
+				textBoxEmailFrom.Visible = false;
+				tableLayoutPanel1.Visible = false;
+				tableLayoutPanel3.Visible = false;
+			}
 			if (!_toggleManager.IsEnabled(Toggles.MobileApps_EnableMobileNotifications_44476))
 			{
 				tableLayoutSubHeaderMobileNotification.Hide();
