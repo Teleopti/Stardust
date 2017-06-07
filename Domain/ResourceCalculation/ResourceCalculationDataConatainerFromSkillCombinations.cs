@@ -121,7 +121,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			//_skills.TryAdd(skills.MergedKey(), skills.Skills);
 
 			var resources = _dictionary.GetOrAdd(Tuple.Create(new GuidCombinationKey(skills.Key), resourceLayer.Period), new PeriodResource());
-				
+
+			var relevantSkillCombinations = _skillCombinationResources.Where(s =>
+				s.Period().StartDateTime.Equals(resourceLayer.Period.StartDateTime) &&
+				s.SkillCombination.NonSequenceEquals(skills.Skills.Select(skill => skill.Id.GetValueOrDefault())));
+
+			if (relevantSkillCombinations.Any())
+				relevantSkillCombinations.First().Resource += resourceLayer.Resource;
+			else
+			{
+				_skillCombinationResources.Add(new SkillCombinationResource
+				{
+					StartDateTime = resourceLayer.Period.StartDateTime,
+					EndDateTime =  resourceLayer.Period.EndDateTime,
+					Resource =  resourceLayer.Resource,
+					SkillCombination = skills.Skills.Select(s => s.Id.GetValueOrDefault())
+				});
+			}
 			//if (resourceLayer.RequiresSeat)
 			//{
 			//	_activityRequiresSeat.TryAdd(resourceLayer.PayloadId, true);

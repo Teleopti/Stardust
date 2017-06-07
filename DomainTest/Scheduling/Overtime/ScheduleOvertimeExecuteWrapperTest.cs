@@ -106,7 +106,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			affectedPersons.Should().Not.Be.Empty();
 		}
 
-
 		[Test]
 		public void ShouldScheduleOvertimeOnOnlyOneAgentWhenMoreAreAvailable()
 		{
@@ -118,13 +117,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 					StartDateTime = new DateTime(2017, 06, 1, 15, 0, 0).Utc(),
 					EndDateTime = new DateTime(2017, 06, 01, 16, 0, 0).Utc(),
 					Resource = 2,
-					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
-				},
-				new SkillCombinationResource
-				{
-					StartDateTime = new DateTime(2017, 06, 1, 16, 0, 0).Utc(),
-					EndDateTime = new DateTime(2017, 06, 01, 17, 0, 0).Utc(),
-					Resource = 0,
 					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
 				}
 			});
