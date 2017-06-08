@@ -230,11 +230,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>License.feature</DependentUpon>
     </Compile>
-    <Compile Include="Messages\NotifyAgents.feature.cs">
-      <DependentUpon>NotifyAgents.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="MyTime\AgentBadge.feature.cs">
       <DependentUpon>AgentBadge.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -925,11 +920,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Wfm\RealTimeAdherence\Nighshift.feature.cs">
-      <DependentUpon>Nighshift.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Wfm\RealTimeAdherence\Percentage.feature.cs">
       <DependentUpon>Percentage.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1153,10 +1143,6 @@
     <None Include="HealthCheck\HealthCheck.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>HealthCheck.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Messages\NotifyAgents.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>NotifyAgents.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\AgentBadge.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -1462,10 +1448,6 @@
     <None Include="Wfm\RealTimeAdherence\NeutralPolicy.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>NeutralPolicy.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\RealTimeAdherence\Nighshift.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Nighshift.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\Percentage.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
