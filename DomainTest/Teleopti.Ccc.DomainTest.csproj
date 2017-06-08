@@ -284,7 +284,6 @@
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\TeamViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdaterTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotificationTest.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleDayReadModelHandlerTest.cs" />
