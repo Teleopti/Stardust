@@ -57,10 +57,7 @@ namespace Teleopti.Ccc.Domain.Notification
 
 		public bool HasLoadedConfig { get; private set; }
 
-		public IXPathNavigable XmlDocument
-		{
-			get { return _configXml; }
-		}
+		public IXPathNavigable XmlDocument => _configXml;
 
 		public Uri Url
 		{
@@ -68,8 +65,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return null;
-				if (_configXml.GetElementsByTagName("url").Count > 0)
-					return new Uri(_configXml.GetElementsByTagName("url")[0].InnerText);
+				var url = _configXml.GetElementsByTagName("url");
+				if (url.Count > 0)
+					return new Uri(url[0].InnerText);
 				return null;
 			}
 		}
@@ -80,8 +78,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				if (_configXml.GetElementsByTagName("user").Count > 0)
-					return _configXml.GetElementsByTagName("user")[0].InnerText;
+				var user = _configXml.GetElementsByTagName("user");
+				if (user.Count > 0)
+					return user[0].InnerText;
 				return "";
 			}
 		}
@@ -92,8 +91,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				if (_configXml.GetElementsByTagName("password").Count > 0)
-					return _configXml.GetElementsByTagName("password")[0].InnerText;
+				var password = _configXml.GetElementsByTagName("password");
+				if (password.Count > 0)
+					return password[0].InnerText;
 				return "";
 			}
 		}
@@ -104,8 +104,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				if (_configXml.GetElementsByTagName("from").Count > 0)
-					return _configXml.GetElementsByTagName("from")[0].InnerText;
+				var from = _configXml.GetElementsByTagName("from");
+				if (from.Count > 0)
+					return from[0].InnerText;
 				return "";
 			}
 		}
@@ -116,8 +117,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				if (_configXml.GetElementsByTagName("class").Count > 0)
-					return _configXml.GetElementsByTagName("class")[0].InnerText;
+				var clazz = _configXml.GetElementsByTagName("class");
+				if (clazz.Count > 0)
+					return clazz[0].InnerText;
 				return "";
 			}
 		}
@@ -128,8 +130,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				if (_configXml.GetElementsByTagName("assembly").Count > 0)
-					return _configXml.GetElementsByTagName("assembly")[0].InnerText;
+				var assembly = _configXml.GetElementsByTagName("assembly");
+				if (assembly.Count > 0)
+					return assembly[0].InnerText;
 				return "";
 			}
 		}
@@ -140,8 +143,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				if (_configXml.GetElementsByTagName("api_id").Count > 0)
-					return _configXml.GetElementsByTagName("api_id")[0].InnerText;
+				var apiId = _configXml.GetElementsByTagName("api_id");
+				if (apiId.Count > 0)
+					return apiId[0].InnerText;
 				return "";
 			}
 		}
@@ -152,8 +156,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				if (_configXml.GetElementsByTagName("data").Count > 0)
-					return _configXml.GetElementsByTagName("data")[0].InnerText;
+				var data = _configXml.GetElementsByTagName("data");
+				if (data.Count > 0)
+					return data[0].InnerText;
 				return "";
 			}
 		}
@@ -164,8 +169,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				if (_configXml.GetElementsByTagName("FindSuccessOrError").Count > 0)
-					return _configXml.GetElementsByTagName("FindSuccessOrError")[0].InnerText;
+				var findSuccessOrError = _configXml.GetElementsByTagName("FindSuccessOrError");
+				if (findSuccessOrError.Count > 0)
+					return findSuccessOrError[0].InnerText;
 				return "";
 			}
 		}
@@ -176,8 +182,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				if (_configXml.GetElementsByTagName("ErrorCode").Count > 0)
-					return _configXml.GetElementsByTagName("ErrorCode")[0].InnerText;
+				var errorCode = _configXml.GetElementsByTagName("ErrorCode");
+				if (errorCode.Count > 0)
+					return errorCode[0].InnerText;
 				return "";
 			}
 		}
@@ -188,8 +195,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				if (_configXml.GetElementsByTagName("SuccessCode").Count > 0)
-					return _configXml.GetElementsByTagName("SuccessCode")[0].InnerText;
+				var successCode = _configXml.GetElementsByTagName("SuccessCode");
+				if (successCode.Count > 0)
+					return successCode[0].InnerText;
 				return "";
 			}
 		}
@@ -200,8 +208,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return true;
-				if (_configXml.GetElementsByTagName("SkipSearch").Count > 0)
-					return Convert.ToBoolean(_configXml.GetElementsByTagName("SkipSearch")[0].InnerText);
+				var skipSearch = _configXml.GetElementsByTagName("SkipSearch");
+				if (skipSearch.Count > 0)
+					return Convert.ToBoolean(skipSearch[0].InnerText);
 				return false;
 			}
 		}
@@ -212,8 +221,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				return _configXml.GetElementsByTagName("SmtpHost").Count > 0 
-					? _configXml.GetElementsByTagName("SmtpHost")[0].InnerText 
+				var smtpHost = _configXml.GetElementsByTagName("SmtpHost");
+				return smtpHost.Count > 0 
+					? smtpHost[0].InnerText 
 					: "";
 			}
 		}
@@ -223,10 +233,11 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return -1;
-				if (_configXml.GetElementsByTagName("SmtpPort").Count > 0)
+				var smtpPort = _configXml.GetElementsByTagName("SmtpPort");
+				if (smtpPort.Count > 0)
 				{
 					int port;
-					if (int.TryParse(_configXml.GetElementsByTagName("SmtpPort")[0].InnerText, out port))
+					if (int.TryParse(smtpPort[0].InnerText, out port))
 						return port;
 				}
 				return -1;
@@ -238,8 +249,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return true;
-				if (_configXml.GetElementsByTagName("SmtpUseSsl").Count > 0)
-					return Convert.ToBoolean(_configXml.GetElementsByTagName("SmtpUseSsl")[0].InnerText);
+				var smtpUseSssl = _configXml.GetElementsByTagName("SmtpUseSsl");
+				if (smtpUseSssl.Count > 0)
+					return Convert.ToBoolean(smtpUseSssl[0].InnerText);
 				return false;
 			}
 		}
@@ -249,8 +261,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				return _configXml.GetElementsByTagName("SmtpUser").Count > 0
-					? _configXml.GetElementsByTagName("SmtpUser")[0].InnerText
+				var smtpUser = _configXml.GetElementsByTagName("SmtpUser");
+				return smtpUser.Count > 0
+					? smtpUser[0].InnerText
 					: "";
 			}
 		}
@@ -260,8 +273,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return "";
-				return _configXml.GetElementsByTagName("SmtpPassword").Count > 0
-					? _configXml.GetElementsByTagName("SmtpPassword")[0].InnerText
+				var smtpPassword = _configXml.GetElementsByTagName("SmtpPassword");
+				return smtpPassword.Count > 0
+					? smtpPassword[0].InnerText
 					: "";
 			}
 		}
@@ -272,8 +286,9 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				if (!HasLoadedConfig)
 					return true;
-				if (_configXml.GetElementsByTagName("SmtpUseRelay").Count > 0)
-					return Convert.ToBoolean(_configXml.GetElementsByTagName("SmtpUseRelay")[0].InnerText);
+				var smtpUseRelay = _configXml.GetElementsByTagName("SmtpUseRelay");
+				if (smtpUseRelay.Count > 0)
+					return Convert.ToBoolean(smtpUseRelay[0].InnerText);
 				return false;
 			}
 		}
