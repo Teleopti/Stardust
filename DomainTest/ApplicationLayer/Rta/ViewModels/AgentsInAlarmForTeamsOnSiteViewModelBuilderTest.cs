@@ -211,18 +211,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Now.Is("2016-10-17 08:10");
 			var personId = Guid.NewGuid();
-			var personOnWrongSite = Guid.NewGuid();
+			var wrongPersonId = Guid.NewGuid();
 			var businessUnitId = Guid.NewGuid();
 			var siteId = Guid.NewGuid();
 			var wrongSiteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
-			var wrongTeam = Guid.NewGuid();
-			var skill = Guid.NewGuid();
+			var wrongTeamId = Guid.NewGuid();
+			var skillId = Guid.NewGuid();
+			var wrongSkillId = Guid.NewGuid(); ;
 			Database
 				.WithSite(siteId)
 				.WithTeam(teamId, "Team")
 				.WithAgent(personId)
-				.WithSkill(skill)
+				.WithSkill(skillId)
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId,
@@ -232,22 +233,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc(),
 				})
-				.WithSite(wrongSiteId)
-				.WithTeam(wrongTeam)
-				.WithAgent(personId)
-				.WithSkill(skill)
+				.WithSite(siteId)
+				.WithTeam(wrongTeamId)
+				.WithAgent(wrongPersonId)
+				.WithSkill(wrongSkillId)
 				.WithAgentState(new AgentStateReadModel
 				{
-					PersonId = personOnWrongSite,
+					PersonId = wrongPersonId,
 					BusinessUnitId = businessUnitId,
-					SiteId = wrongSiteId,
-					TeamId = wrongTeam,
+					SiteId = siteId,
+					TeamId = wrongTeamId,
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc(),
 				})
 				;
 
-			Target.Build(siteId).Single().Id.Should().Be(teamId);
+			Target.Build(siteId,new []{skillId}).Single().Id.Should().Be(teamId);
 		}
 	}
 }
