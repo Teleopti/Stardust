@@ -1195,7 +1195,6 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\INumberOfAgentsInSiteReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\INumberOfAgentsInTeamReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteInAlarmViewModel.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\TeamOutOfAdherence.cs" />
     <Compile Include="ApplicationLayer\ShiftCategory\AnalyticsShiftCategoryUpdater.cs" />
     <Compile Include="ApplicationLayer\Commands\AddPersonalActivityCommand.cs" />
