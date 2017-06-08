@@ -1472,6 +1472,7 @@
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
     <Content Include="WFM\app\intraday\intraday-config-new.html" />
+    <Content Include="WFM\app\outbound\outbound.directive.campaign-commands-pane.spec.js" />
     <Content Include="WFM\app\people\html\import-job-list.tpl.html" />
     <Content Include="WFM\app\people\html\new-import-job.tpl.html" />
     <Content Include="WFM\app\people\html\wfm-import-agents.tpl.html" />

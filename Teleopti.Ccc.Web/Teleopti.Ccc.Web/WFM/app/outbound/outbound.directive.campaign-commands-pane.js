@@ -3,10 +3,9 @@
 	'use strict';
 
 	angular.module('wfm.outbound')
-		.directive('campaignCommandsPane', campaignCommandsPane);
+		.directive('campaignCommandsPane', campaignCommandsPaneDirective);
 
-	function campaignCommandsPane() {
-
+	function campaignCommandsPaneDirective() {
 		return {
 			restrict: 'E',
 			templateUrl: 'app/outbound/html/campaign-commands-pane.tpl.html',
@@ -17,183 +16,231 @@
 				isLoading: '=',
 				callbacks: '='
 			},
-			controller: ['$scope', '$state', 'outboundService', 'outboundChartService', 'outboundNotificationService', 'Toggle', campaignCommandsPaneCtrl],
-			link: postlink
+			controller: campaignCommandsPaneCtrl,
+			controllerAs: 'vm',
+			bindToController: true,
 		};
-
-		function campaignCommandsPaneCtrl($scope, $state, outboundService, outboundChartService, outboundNotificationService, toggleService) {
-			$scope.manualPlanSwitch = false;
-			$scope.manualBacklogSwitch = false;
-			$scope.isPlanClickedSave = false;
-			$scope.isBacklogClickedSave = false;
-			$scope.isPlanClickedReset = false;
-			$scope.isBacklogClickedReset = false;
-			$scope.manualPlanInput = null;
-			$scope.manualBacklogInput = null;
-
-			$scope.addManualPlan = addManualPlan;
-			$scope.removeManualPlan = removeManualPlan;
-			$scope.addManualBacklog = addManualBacklog;
-			$scope.removeManualBacklog = removeManualBacklog;
-			$scope.replan = replan;
-			$scope.validManualProductionPlan = validManualProductionPlan;
-			$scope.isPlanTryingDoAction = isPlanTryingDoAction;
-			$scope.isBacklogTryingDoAction = isBacklogTryingDoAction;
-			$scope.validManualBacklog = validManualBacklog;
-			$scope.showDateSelectionHint = showDateSelectionHint;
-
-			$scope.gotoEditCampaign = function () {
-				if ($scope.campaign)
-					$state.go('outbound.edit', { Id: $scope.campaign.Id });
-			};
-
-			$scope.toggleManualPlan = function() {
-				$scope.manualPlanSwitch = !$scope.manualPlanSwitch;
-				$scope.manualBacklogSwitch = false;
-				resetActionFlag();
-			}
-
-			$scope.toggleManualBacklog = function() {
-				$scope.manualBacklogSwitch = !$scope.manualBacklogSwitch;
-				$scope.manualPlanSwitch = false;
-				resetActionFlag();
-			}
-
-			function unclosedDays() {
-				return $scope.selectedDates.filter(function (d) {
-					return $scope.selectedDatesClosed.indexOf(d) < 0;
-				});
-			}
-
-			function callbackDone() {
-				$scope.isLoading = true;
-				resetActionFlag();
-			}
-
-			function resetActionFlag() {
-				$scope.isPlanClickedSave = false;
-				$scope.isBacklogClickedSave = false;
-				$scope.isPlanClickedReset = false;
-				$scope.isBacklogClickedReset = false;
-			}
-
-			function addManualPlan() {
-				$scope.isPlanClickedSave = true;
-				if (showDateSelectionHint()) {
-					 return;
-				}
-
-				$scope.isLoading = true;
-				outboundChartService.updateManualPlan({
-					campaignId: $scope.campaign.Id,
-					selectedDates: unclosedDays(),
-					manualPlanInput: $scope.manualPlanInput
-				}, function (response) {
-					if (angular.isDefined($scope.callbacks.addManualPlan)) {
-						$scope.callbacks.addManualPlan(response, callbackDone);
-					} else {
-						callbackDone();
-					}
-				});
-			}
-
-			function removeManualPlan() {
-				$scope.isPlanClickedReset = true;
-				if ($scope.selectedDates.length == 0) return;
-
-					$scope.isLoading = true;
-					outboundChartService.removeManualPlan({
-						campaignId: $scope.campaign.Id,
-						selectedDates: $scope.selectedDates
-					}, function(response) {
-						if (angular.isDefined($scope.callbacks.removeManualPlan)) {
-							$scope.callbacks.removeManualPlan(response, callbackDone);
-						} else {
-							callbackDone();
-						}
-					});
-
-			}
-
-			function addManualBacklog() {
-				$scope.isBacklogClickedSave = true;
-				if (showDateSelectionHint()) {
-					return;
-				}
-
-				$scope.isLoading = true;
-				outboundChartService.updateBacklog({
-					campaignId: $scope.campaign.Id,
-					selectedDates: $scope.selectedDates,
-					manualBacklogInput: $scope.manualBacklogInput
-				}, function (response) {
-					if (angular.isDefined($scope.callbacks.addManualBacklog)) {
-						$scope.callbacks.addManualBacklog(response, callbackDone);
-					} else {
-						callbackDone();
-					}
-				});
-			}
-
-			function removeManualBacklog() {
-				$scope.isBacklogClickedReset = true;
-				if ($scope.selectedDates.length == 0) return;
-
-					$scope.isLoading = true;
-					outboundChartService.removeActualBacklog({
-						campaignId: $scope.campaign.Id,
-						selectedDates: $scope.selectedDates
-					}, function(response) {
-						if (angular.isDefined($scope.callbacks.removeManualBacklog)) {
-							$scope.callbacks.removeManualBacklog(response, callbackDone);
-						} else {
-							callbackDone();
-						}
-					});
-			}
-
-			function replan() {
-				$scope.isLoading = true;
-				var selectedDates = toggleService.Wfm_Outbound_ReplanAfterScheduled_43752 ? $scope.selectedDates : [];
-				
-				outboundChartService.replan({
-					campaignId: $scope.campaign.Id,
-					selectedDates: selectedDates
-				}, function (response) {
-					if (angular.isDefined($scope.callbacks.replan)) {
-						$scope.callbacks.replan(response, callbackDone);
-					} else {
-						callbackDone();
-					}
-				});
-			}
-
-			function validManualProductionPlan() {
-				if ($scope.manualPlanInput == null) return false;
-				else return $scope.manualPlanInput >= 0;
-			}
-
-			function isPlanTryingDoAction() {
-				return $scope.isPlanClickedSave || $scope.isPlanClickedReset;
-			}
-
-			function isBacklogTryingDoAction() {
-				return $scope.isBacklogClickedSave || $scope.isBacklogClickedReset;
-			}
-
-			function validManualBacklog() {
-				if ($scope.manualBacklogInput == null) return false;
-				else return $scope.manualBacklogInput >= 0;
-			}
-
-			function showDateSelectionHint() {
-				if ($scope.selectedDates && $scope.selectedDates.length > 0) return false;
-				return true;
-			}
-		}
-
-		function postlink(scope, elem, attrs) {
-		}
 	}
 
+	campaignCommandsPaneCtrl.$inject = ['$scope','$state', 'outboundChartService', 'outboundNotificationService', 'Toggle'];
+
+	function campaignCommandsPaneCtrl($scope, $state, outboundChartService, outboundNotificationService, toggleService) {
+		var vm = this;
+
+		vm.manualPlanSwitch = false;
+		vm.manualBacklogSwitch = false;
+		vm.isPlanClickedSave = false;
+		vm.isBacklogClickedSave = false;
+		vm.isPlanClickedReset = false;
+		vm.isBacklogClickedReset = false;
+		vm.manualPlanInput = null;
+		vm.manualBacklogInput = null;
+		vm.ignoredDates = [];
+
+		vm.addManualPlan = addManualPlan;
+		vm.removeManualPlan = removeManualPlan;
+		vm.addManualBacklog = addManualBacklog;
+		vm.removeManualBacklog = removeManualBacklog;
+		vm.replan = replan;
+		vm.validManualProductionPlan = validManualProductionPlan;
+		vm.isPlanTryingDoAction = isPlanTryingDoAction;
+		vm.isBacklogTryingDoAction = isBacklogTryingDoAction;
+		vm.validManualBacklog = validManualBacklog;
+		vm.showDateSelectionHint = showDateSelectionHint;
+
+		vm.showIgnoreSchedule = function() {
+			return toggleService.Wfm_Outbound_ReplanAfterScheduled_43752;
+		};
+
+		vm.enableIgnoreSchedule = function() {
+			if (!vm.campaign.IsScheduled || vm.selectedDates.length === 0)
+				return false;
+
+			var graphData = vm.campaign.graphData;
+			return vm.selectedDates.some(function (selectedDate) {
+				var index = graphData.dates.indexOf(selectedDate);
+				return graphData.schedules[index] != 0;
+			});
+		};
+
+		vm.ignoreSchedule = function() {
+			vm.ignoredDates = angular.copy(vm.selectedDates);
+
+			vm.callbacks.ignoreSchedules(vm.ignoredDates);
+		};
+
+		vm.gotoEditCampaign = function () {
+			if (vm.campaign)
+				$state.go('outbound.edit', { Id: vm.campaign.Id });
+		};
+
+		vm.toggleManualPlan = function() {
+			vm.manualPlanSwitch = !vm.manualPlanSwitch;
+			vm.manualBacklogSwitch = false;
+			resetActionFlag();
+		};
+
+		vm.toggleManualBacklog = function() {
+			vm.manualBacklogSwitch = !vm.manualBacklogSwitch;
+			vm.manualPlanSwitch = false;
+			resetActionFlag();
+		};
+
+		function unclosedDays() {
+			return vm.selectedDates.filter(function (d) {
+				return vm.selectedDatesClosed.indexOf(d) < 0;
+			});
+		}
+
+		function callbackDone() {
+			vm.isLoading = true;
+			resetActionFlag();
+		}
+
+		function resetActionFlag() {
+			vm.isPlanClickedSave = false;
+			vm.isBacklogClickedSave = false;
+			vm.isPlanClickedReset = false;
+			vm.isBacklogClickedReset = false;
+		}
+
+		function addManualPlan() {
+			vm.isPlanClickedSave = true;
+			if (showDateSelectionHint()) {
+				 return;
+			}
+
+			vm.isLoading = true;
+			outboundChartService.updateManualPlan({
+				campaignId: vm.campaign.Id,
+				selectedDates: unclosedDays(),
+				manualPlanInput: vm.manualPlanInput
+			}, function (response) {
+				if (angular.isDefined(vm.callbacks.addManualPlan)) {
+					vm.callbacks.addManualPlan(response, callbackDone);
+				} else {
+					callbackDone();
+				}
+			});
+		}
+
+		function removeManualPlan() {
+			vm.isPlanClickedReset = true;
+			if (vm.selectedDates.length == 0) return;
+
+				vm.isLoading = true;
+				outboundChartService.removeManualPlan({
+					campaignId: vm.campaign.Id,
+					selectedDates: vm.selectedDates
+				}, function(response) {
+					if (angular.isDefined(vm.callbacks.removeManualPlan)) {
+						vm.callbacks.removeManualPlan(response, callbackDone);
+					} else {
+						callbackDone();
+					}
+				});
+
+		}
+
+		function addManualBacklog() {
+			vm.isBacklogClickedSave = true;
+			if (showDateSelectionHint()) {
+				return;
+			}
+
+			vm.isLoading = true;
+			outboundChartService.updateBacklog({
+				campaignId: vm.campaign.Id,
+				selectedDates: vm.selectedDates,
+				manualBacklogInput: vm.manualBacklogInput
+			}, function (response) {
+				if (angular.isDefined(vm.callbacks.addManualBacklog)) {
+					vm.callbacks.addManualBacklog(response, callbackDone);
+				} else {
+					callbackDone();
+				}
+			});
+		}
+
+		function removeManualBacklog() {
+			vm.isBacklogClickedReset = true;
+			if (vm.selectedDates.length == 0) return;
+
+				vm.isLoading = true;
+				outboundChartService.removeActualBacklog({
+					campaignId: vm.campaign.Id,
+					selectedDates: vm.selectedDates
+				}, function(response) {
+					if (angular.isDefined(vm.callbacks.removeManualBacklog)) {
+						vm.callbacks.removeManualBacklog(response, callbackDone);
+					} else {
+						callbackDone();
+					}
+				});
+		}
+
+		function replan() {
+			vm.selectedDates.sort(function(c, n){
+				return moment(c) - moment(n);
+			});
+
+			if(!toggleService.Wfm_Outbound_ReplanAfterScheduled_43752){
+				vm.ignoredDates = [];
+				triggerReplanAction();
+			} else if(vm.selectedDates.length == 0){
+				vm.ignoredDates = [];
+				triggerReplanAction();
+			} else {
+				vm.ignoredDates = angular.copy(vm.selectedDates);
+				triggerReplanAction();
+			}
+		}
+
+		function triggerReplanAction(){
+			vm.isLoading = true;
+			outboundChartService.replan({
+				campaignId: vm.campaign.Id,
+				selectedDates: vm.ignoredDates
+			}, function (response) {
+				if (angular.isDefined(vm.callbacks.replan)) {
+					vm.callbacks.replan(response, callbackDone);
+				} else {
+					callbackDone();
+				}
+			});
+		}
+
+		function getDatesForReplanning(start, end){
+			var dates = [],
+				datesLength = moment(end).diff(moment(start), 'days');
+			for(var i = 0; i <= datesLength; i++){
+				dates.push(moment(start).add(i, 'days').format('YYYY-MM-DD'));
+			}
+			return dates;
+		}
+
+
+		function validManualProductionPlan() {
+			if (vm.manualPlanInput == null) return false;
+			else return vm.manualPlanInput >= 0;
+		}
+
+		function isPlanTryingDoAction() {
+			return vm.isPlanClickedSave || vm.isPlanClickedReset;
+		}
+
+		function isBacklogTryingDoAction() {
+			return vm.isBacklogClickedSave || vm.isBacklogClickedReset;
+		}
+
+		function validManualBacklog() {
+			if (vm.manualBacklogInput == null) return false;
+			else return vm.manualBacklogInput >= 0;
+		}
+
+		function showDateSelectionHint() {
+			if (vm.selectedDates && vm.selectedDates.length > 0) return false;
+			return true;
+		}
+	}
 })();

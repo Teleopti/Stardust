@@ -1,76 +1,80 @@
 ﻿<div class="campaign-cammands clearfix text-right">
-	<div class="manual-input-container" ng-show="manualPlanSwitch">
+	<div class="manual-input-container" ng-show="vm.manualPlanSwitch">
 		<div class="error-msg-container  alert-warning notice-spacer gantt-alert-message"
-			  ng-show="showDateSelectionHint()&&isPlanTryingDoAction()">
+			  ng-show="vm.showDateSelectionHint() && vm.isPlanTryingDoAction()">
 			<i class='mdi mdi-alert'></i>
 			<span translate>SelectDateInChart</span>
 		</div>
-		<label for="ManualPlanInput" translate>ManualPlan</label><span> ({{ selectedDates.length }})</span>
+		<label for="ManualPlanInput" translate>ManualPlan</label><span> ({{ vm.selectedDates.length }})</span>
 		<input id="ManualPlanInput"
 			   type="text"
-			   ng-model="manualPlanInput"
+			   ng-model="vm.manualPlanInput"
 			   numeric-value  min="0" float-number />
-		<div class="manual-input-btns" ng-init="showFirstAlertMessage=false">
+		<div class="manual-input-btns" ng-init="vm.showFirstAlertMessage=false">
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary btn-save-plan"
-					ng-click="addManualPlan()"
-					ng-disabled="!validManualProductionPlan()"
-					ng-class="{'wfm-btn-invis-disabled': !validManualProductionPlan()}"
+					ng-click="vm.addManualPlan()"
+					ng-disabled="!vm.validManualProductionPlan()"
+					ng-class="{'wfm-btn-invis-disabled': !vm.validManualProductionPlan()}"
 					translate>
 				Save
 			</button>
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary"
-					ng-click="removeManualPlan()"
+					ng-click="vm.removeManualPlan()"
 					translate>
 				Reset
 			</button>
 		</div>
 	</div>
-	<div class="manual-input-container" ng-show="manualBacklogSwitch">
+	<div class="manual-input-container" ng-show="vm.manualBacklogSwitch">
 		<div class="error-msg-container  alert-warning notice-spacer gantt-alert-message"
-			  ng-show="showDateSelectionHint()&&isBacklogTryingDoAction()">
+			  ng-show="vm.showDateSelectionHint() && vm.isBacklogTryingDoAction()">
 			<i class='mdi mdi-alert'></i>
 			<span translate>SelectDateInChart</span>
 		</div>
-		<label for="ActualBacklogInput" translate>AddBacklog</label><span> ({{ selectedDates.length }})</span>
+		<label for="ActualBacklogInput" translate>AddBacklog</label><span> ({{ vm.selectedDates.length }})</span>
 		<input id="ActualBacklogInput"
 			   type="text"
-			   ng-model="manualBacklogInput"
+			   ng-model="vm.manualBacklogInput"
 			   numeric-value min="0" float-number />
-		<div class="manual-input-btns" ng-init="showSecondAlertMessage=false">
+		<div class="manual-input-btns" ng-init="vm.showSecondAlertMessage = false">
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary btn-save-backlog"
-					ng-click="addManualBacklog()"
-					ng-disabled="!validManualBacklog()"
-					ng-class="{'wfm-btn-invis-disabled': !validManualBacklog()}"
+					ng-click="vm.addManualBacklog()"
+					ng-disabled="!vm.validManualBacklog()"
+					ng-class="{'wfm-btn-invis-disabled': !vm.validManualBacklog()}"
 					translate>
 				Save
 			</button>
 			<button class="wfm-btn btn-sm wfm-btn-invis-primary"
-					ng-click="removeManualBacklog()"
+					ng-click="vm.removeManualBacklog()"
 					translate>
 				Reset
 			</button>
 		</div>
 	</div>
-	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-toggle-manual-plan"
-			ng-click="toggleManualPlan()">
-		<span translate ng-show="!manualPlanSwitch">ManualPlan</span>
-		<span translate ng-show="manualPlanSwitch">Cancel</span>
+	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-ignore-schedules"
+			ng-if="vm.showIgnoreSchedule()"
+			ng-disabled="!vm.enableIgnoreSchedule()"
+			ng-click="vm.ignoreSchedule()">
+		<span translate>IgnoreSchedule</span>
 	</button>
-	<button class="wfm-btn wfm-btn-invis-primary inline-block"
-			ng-click="toggleManualBacklog()">
-		<span translate ng-show="!manualBacklogSwitch">AddBacklog</span>
-		<span translate ng-show="manualBacklogSwitch">Cancel</span>
+	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-toggle-manual-plan"
+			ng-click="vm.toggleManualPlan()">
+		<span translate ng-show="!vm.manualPlanSwitch">ManualPlan</span>
+		<span translate ng-show="vm.manualPlanSwitch">Cancel</span>
+	</button>
+	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-toggle-manual-backlog"
+			ng-click="vm.toggleManualBacklog()">
+		<span translate ng-show="!vm.manualBacklogSwitch">AddBacklog</span>
+		<span translate ng-show="vm.manualBacklogSwitch">Cancel</span>
 	</button>
 	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-replan"
-			ng-click="replan()"
+			ng-click="vm.replan()"
 			translate>
 		Replan
 	</button>
 	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-goto-edit-campaign"
-			ng-click="gotoEditCampaign()"
+			ng-click="vm.gotoEditCampaign()"
 			translate>
 		Edit
 	</button>
 </div>
-
-

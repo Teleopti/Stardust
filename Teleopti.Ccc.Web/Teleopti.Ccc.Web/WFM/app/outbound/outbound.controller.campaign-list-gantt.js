@@ -162,7 +162,7 @@
 			}
 		});
 
-		function readIndex(c) {			
+		function readIndex(c) {
 			var i = 0;
 			for (i; i < $scope.ganttData.length; i++) {
 				if ($scope.ganttData[i].id == c.id)
@@ -191,17 +191,17 @@
 					collapse: function collapseExpansion(ev, index) {
 						c.expanded = false;
 						$scope.ganttData.splice(index, 1);
-					}					
+					}
 				};
 				newDataRow.callbacks = {
+					ignoreSchedules: getIgnoreScheduleCallback(campaign),
 					addManualPlan: getCommandCallback(campaign, newDataRow, $scope),
 					removeManualPlan: getCommandCallback(campaign, newDataRow, $scope),
 					addManualBacklog: getCommandCallback(campaign, newDataRow, $scope),
 					removeManualBacklog: getCommandCallback(campaign, newDataRow, $scope),
 					replan: getCommandCallback(campaign, newDataRow, $scope)
-
 				}
-							
+
 				var index = readIndex(c);
 				if (index >= 0)
 					$scope.ganttData.splice(index + 1, 0, newDataRow);
@@ -212,20 +212,33 @@
 			}
 		};
 
-		function getCommandCallback(campaign, dataRow, scope) {			
-			return function (resp, done) {
-				dataRow.isRefreshingData = true;
-				getGraphData(campaign, function () {
-					scope.$broadcast('campaign.chart.refresh', campaign);
-					$scope.$broadcast('campaign.chart.clear.selection', campaign);
-					dataRow.isRefreshingData = false;
-					outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
-					if (done) done();
-				});							
-			}			
+		function getIgnoreScheduleCallback(campaign) {
+			return function(ignoredDates) {
+				ignoredDates.forEach(function(ignoredDate) {
+					var index = campaign.graphData.dates.indexOf(ignoredDate);
+					campaign.graphData.schedules[index] = 0;
+					campaign.graphData.unscheduledPlans[index] = campaign.graphData.rawPlans[index] - campaign.graphData.overStaff[index];
+				});
+				$scope.$broadcast('campaign.chart.clear.selection', campaign);
+				$scope.$broadcast('campaign.chart.refresh', campaign);
+			};
 		}
 
-		function getGraphData(campaign, done) {		
+		function getCommandCallback(campaign, dataRow, scope) {
+			return function(resp, done) {
+				dataRow.isRefreshingData = true;
+				getGraphData(campaign,
+					function() {
+						scope.$broadcast('campaign.chart.refresh', campaign);
+						$scope.$broadcast('campaign.chart.clear.selection', campaign);
+						dataRow.isRefreshingData = false;
+						outboundNotificationService.notifyCampaignUpdateSuccess(campaign);
+						if (done) done();
+					});
+			};
+		}
+
+		function getGraphData(campaign, done) {
 			outboundService.getCampaignStatus(campaign.Id, function (campaignStatus) {
 				angular.extend(campaign, campaignStatus);
 				outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays, backlog) {
@@ -235,7 +248,7 @@
 					campaign.translations = translations;
 					campaign.closedDays = closedDays;
 					updateSingleCampaignGanttDisplay(campaignStatus);
-					if (done) done();					
+					if (done) done();
 				});
 			});
 		}

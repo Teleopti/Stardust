@@ -136,6 +136,7 @@
 		    var returnData = {
 			    dates: null,
 			    rawBacklogs: null,
+			    rawPlans: null,
 			    unscheduledPlans: null,
 			    schedules: null,
 			    progress: null,
@@ -144,6 +145,7 @@
 
 		    returnData.dates = moment(data.Dates).format("YYYY-MM-DD");
 		    returnData.rawBacklogs = data.BacklogPersonHours;
+		    returnData.rawPlans = data.PlannedPersonHours;
 		    returnData.unscheduledPlans = data.PlannedPersonHours;
 		    returnData.schedules = data.ScheduledPersonHours;
 		    returnData.progress = data.BacklogPersonHours;
@@ -162,7 +164,8 @@
 	    function getDataLabels() {
             return {               
                 dates: 'x',
-                rawBacklogs: self.dictionary['Backlog'],
+				rawBacklogs: self.dictionary['Backlog'],
+				rawPlans: self.dictionary['x'],
                 unscheduledPlans: self.dictionary['Planned'], 
                 schedules: self.dictionary['Scheduled'],
                 progress: self.dictionary['Progress'],
@@ -183,6 +186,7 @@
             var extrapolatedGraphData = {
                 dates: beforeStartDate,
                 rawBacklogs: 0,
+                rawPlans: 0,
                 unscheduledPlans: 0,
                 schedules: 0,
                 progress: graphDataSeq[0].rawBacklogs + graphDataSeq[0].unscheduledPlans + graphDataSeq[0].schedules,
