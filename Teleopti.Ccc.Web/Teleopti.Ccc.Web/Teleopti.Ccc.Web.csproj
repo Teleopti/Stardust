@@ -459,8 +459,7 @@
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\ReportItemsProvider.cs" />
     <Compile Include="Areas\Anywhere\Core\IReportItemsProvider.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\SitesController.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\TeamsController.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\OverviewController.cs" />
     <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\IGroupScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PublishedScheduleSpecification.cs" />

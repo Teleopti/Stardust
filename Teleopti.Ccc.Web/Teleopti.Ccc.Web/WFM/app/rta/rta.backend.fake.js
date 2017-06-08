@@ -505,7 +505,7 @@
 				return [200, result];
             });
 		
-        fake(/\.\.\/api\/Sites\/InAlarmCountForSkills(.*)/,
+		fake(/\.\.\/api\/Overview\/SiteCards(.*)/,
             function(params) {
                 var result = siteAdherences;
                 if (params.skillIds)
@@ -514,13 +514,8 @@
                     });
 				return [200, result];
             });
-
-        fake(/\.\.\/api\/Sites\/GetOutOfAdherenceForAllSites(.*)/,
-            function(params) {
-                return [200, siteAdherences];
-            });
 		
-		fake(/\.\.\/api\/Teams\/CardsFor(.*)/,
+		fake(/\.\.\/api\/Overview\/TeamCards(.*)/,
             function(params) {
                 var result = teamAdherences;
                 if (params.skillIds)

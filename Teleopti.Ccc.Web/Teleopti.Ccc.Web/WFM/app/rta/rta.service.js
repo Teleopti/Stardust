@@ -166,7 +166,7 @@
         };
 		
 		function getTeamCardsFor(data) {
-		    return $resource('../api/Teams/CardsFor', {}, {
+			return $resource('../api/Overview/TeamCards', {}, {
 			    query: {
 				    method: 'GET',
 				    isArray: true
@@ -178,7 +178,7 @@
 	    };
 
         function getAdherenceForAllSites(data) {
-            return $resource('../api/Sites/GetOutOfAdherenceForAllSites', {}, {
+			return $resource('../api/Overview/SiteCards', {}, {
                 query: {
                     method: 'GET',
                     isArray: true
@@ -187,7 +187,7 @@
         };
 
         function getAdherenceForSitesBySkills(data) {
-            return $resource('../api/Sites/InAlarmCountForSkills', {}, {
+			return $resource('../api/Overview/SiteCards', {}, {
                 query: {
                     method: 'GET',
                     isArray: true

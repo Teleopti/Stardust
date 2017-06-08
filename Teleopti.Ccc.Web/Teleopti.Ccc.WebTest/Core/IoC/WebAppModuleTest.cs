@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveSitesController()
 		{
-			requestContainer.Resolve<SitesController>()
+			requestContainer.Resolve<OverviewController>()
 				.Should().Not.Be.Null();
 		}
 

@@ -23,7 +23,7 @@ define([
 	var load = function (callback, businessUnitId) {
 		ajax.ajax({
 			headers: { 'X-Business-Unit-Filter': businessUnitId },
-			url: "api/Sites/GetOutOfAdherenceForAllSites",
+			url: "api/Overview/SiteCards",
 			success: function (data) {
 				for (var i = 0; i < data.length; i++) {
 					callback(mapAsNotification(data[i]));
