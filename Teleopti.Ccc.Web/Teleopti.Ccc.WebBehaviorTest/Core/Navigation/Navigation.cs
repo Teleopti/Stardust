@@ -70,21 +70,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			}
 
 			_nested = true;
+			try
+			{
+				BuildCurrentInterceptors(url, interceptors);
 
-			BuildCurrentInterceptors(url, interceptors);
+				_currentInterceptors.ForEach(i => i.Before(args));
 
-			_currentInterceptors.ForEach(i => i.Before(args));
+				Browser.Interactions.DumpUrl(s => Log.Info("Am at: " + s));
+				Log.Info("Browsing to: " + args.Uri);
 
-			Browser.Interactions.DumpUrl(s => Log.Info("Am at: " + s));
-			Log.Info("Browsing to: " + args.Uri);
+				Browser.Interactions.GoTo(args.Uri.ToString());
 
-			Browser.Interactions.GoTo(args.Uri.ToString());
+				_currentInterceptors.Reverse().ForEach(i => i.After(args));
 
-			_currentInterceptors.Reverse().ForEach(i => i.After(args));
-
-			Browser.Interactions.DumpUrl(s => Log.Info("Ended up in: " + s));
-			
-			_nested = false;
+				Browser.Interactions.DumpUrl(s => Log.Info("Ended up in: " + s));
+			}
+			finally
+			{
+				_nested = false;
+			}
 		}
 
 		public static void GotoAsm()
