@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			#endregion
 
-			IList<IPerson> persons = new List<IPerson> { _dummyAgent };
+			IList<IPerson> persons = new List<IPerson> { _dummyAgent, _dummyAgent2 };
 			ICollection<IPersonAssignment> retList = _rep.Find(persons, searchPeriod, _dummyScenario, ScheduleSource.WebScheduling);
 			Assert.IsTrue(retList.Contains(agAssValid));
 			Assert.AreEqual(1, retList.Count);

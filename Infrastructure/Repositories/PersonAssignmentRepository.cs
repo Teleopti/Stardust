@@ -129,8 +129,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				var personArray = personList.ToArray();
 				var crit = personAssignmentCriteriaLoader(period, scenario);
 				crit.Add(Restrictions.InG("ass.Person", personArray));
-				retList.AddRange(crit.List<IPersonAssignment>());
 				crit.Add(Restrictions.Eq(nameof(IPersonAssignment.Source), source));
+				retList.AddRange(crit.List<IPersonAssignment>());
 			}
 
 			return retList;
