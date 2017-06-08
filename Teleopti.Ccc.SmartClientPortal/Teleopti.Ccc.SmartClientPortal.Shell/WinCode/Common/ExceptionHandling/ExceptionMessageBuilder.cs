@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling
 
 		private static void appendAssemblyInfo(StringBuilder builder)
 		{
+			builder.AppendLine($"AppDomain.CurrentDomain.BaseDirectory: {AppDomain.CurrentDomain.BaseDirectory}");
 			foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
 			{
 				builder.AppendLine(assembly.ToString());
