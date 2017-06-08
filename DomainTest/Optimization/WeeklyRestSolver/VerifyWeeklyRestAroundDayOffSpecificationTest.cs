@@ -60,10 +60,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             using (_mock.Record())
             {
                 Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(-1))).Return(_previousScheduleDay);
-                Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(1))).Return(_nextScheduleDay);
-                Expect.Call(_previousScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Times(1);
-                Expect.Call(_nextScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Times(1);
-            }
+				Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(1))).Return(_nextScheduleDay);
+	            Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(-2))).Return(_previousScheduleDay);
+				Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(2))).Return(_nextScheduleDay);
+				Expect.Call(_previousScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Times(2);
+                Expect.Call(_nextScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Times(2);     
+			}
             using (_mock.Playback())
             {
                 Assert.IsFalse(_target.IsSatisfy(_dayOffList, _currentSchedules));
@@ -96,9 +98,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
             {
                 Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(-1))).Return(_previousScheduleDay);
                 Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(1))).Return(_nextScheduleDay);
-                Expect.Call(_previousScheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-                Expect.Call(_nextScheduleDay.SignificantPart()).Return(SchedulePartView.None);
-            }
+	            Expect.Call(_currentSchedules.ScheduledDay(_dayOffList.First().AddDays(2))).Return(_nextScheduleDay);
+				Expect.Call(_previousScheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
+	            Expect.Call(_nextScheduleDay.SignificantPart()).Return(SchedulePartView.None).Repeat.Twice();
+			}
             using (_mock.Playback())
             {
                 Assert.IsFalse(_target.IsSatisfy(_dayOffList, _currentSchedules));

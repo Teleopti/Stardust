@@ -17,21 +17,47 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
             {
                 var previousScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(-1)).SignificantPart();
                 var nextScheduleDay = currentSchedules.ScheduledDay(dayOffDate.AddDays(1)).SignificantPart();
-                if (isMissingShiftOnNeighbouringDays(previousScheduleDay, nextScheduleDay) ||
-                    isNeighbouringDaysOff(previousScheduleDay, nextScheduleDay))
+                if (isMissingShiftOnNeighbouringDays(previousScheduleDay, nextScheduleDay, currentSchedules, dayOffDate) ||
+                    isNeighbouringDaysOff(previousScheduleDay, nextScheduleDay, currentSchedules, dayOffDate))
                     return false;
             }
             return true;
         }
 
-        private bool isMissingShiftOnNeighbouringDays(SchedulePartView previousScheduleDay, SchedulePartView nextScheduleDay)
+        private bool isMissingShiftOnNeighbouringDays(SchedulePartView previousScheduleDay, SchedulePartView nextScheduleDay, IScheduleRange currentSchedules, DateOnly dayOffDate)
         {
-	        return previousScheduleDay == SchedulePartView.None || nextScheduleDay == SchedulePartView.None;
+	        var isMissingBefore = false;
+	        var isMissingAfter = false;
+
+	        if (previousScheduleDay == SchedulePartView.None)
+	        {
+		        isMissingBefore = currentSchedules.ScheduledDay(dayOffDate.AddDays(-2)).SignificantPart() == SchedulePartView.None;
+	        }
+
+	        if (nextScheduleDay == SchedulePartView.None)
+	        {
+		        isMissingAfter = currentSchedules.ScheduledDay(dayOffDate.AddDays(2)).SignificantPart() == SchedulePartView.None;
+			}
+
+	        return isMissingBefore || isMissingAfter;
         }
 
-	    private bool isNeighbouringDaysOff(SchedulePartView previousScheduleDay, SchedulePartView nextScheduleDay)
+	    private bool isNeighbouringDaysOff(SchedulePartView previousScheduleDay, SchedulePartView nextScheduleDay, IScheduleRange currentSchedules, DateOnly dayOffDate)
 	    {
-		    return previousScheduleDay == SchedulePartView.DayOff || nextScheduleDay == SchedulePartView.DayOff;
+		    var isDayOffBefore = false;
+		    var isDayOffAfter = false;
+
+		    if (previousScheduleDay == SchedulePartView.DayOff)
+		    {
+			    isDayOffBefore = currentSchedules.ScheduledDay(dayOffDate.AddDays(-2)).SignificantPart() == SchedulePartView.DayOff;
+		    }
+
+		    if (nextScheduleDay == SchedulePartView.DayOff)
+		    {
+			    isDayOffAfter = currentSchedules.ScheduledDay(dayOffDate.AddDays(2)).SignificantPart() == SchedulePartView.DayOff;
+		    }
+
+		    return isDayOffBefore || isDayOffAfter;
 	    }
     }
 }
