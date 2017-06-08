@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Aop;
-using Teleopti.Ccc.Infrastructure.Hangfire;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Rta.Persisters;
 
@@ -70,8 +69,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AgentStatesViewModelBuilder>().SingleInstance();
 			builder.RegisterType<PhoneStateViewModelBuilder>().SingleInstance();
 			builder.RegisterType<SkillViewModelBuilder>().SingleInstance();
-			builder.RegisterType<SiteInAlarmViewModelBuilder>().SingleInstance();
-			builder.RegisterType<AgentsInAlarmForTeamsViewModelBuilder>().SingleInstance();
+			builder.RegisterType<SiteCardViewModelBuilder>().SingleInstance();
+			builder.RegisterType<TeamCardViewModelBuilder>().SingleInstance();
 
 			builder.RegisterType<AdherencePercentageViewModelBuilder>().SingleInstance().As<IAdherencePercentageViewModelBuilder>();
 			builder.RegisterType<HistoricalAdherenceViewModelBuilder>().SingleInstance();

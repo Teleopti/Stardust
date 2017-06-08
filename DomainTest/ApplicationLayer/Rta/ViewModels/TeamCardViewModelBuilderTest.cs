@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[DomainTest]
 	[TestFixture]
-	public class AgentsInAlarmForTeamsOnSiteViewModelBuilderTest
+	public class TeamCardViewModelBuilderTest
 	{
 		public FakeDatabase Database;
-		public AgentsInAlarmForTeamsViewModelBuilder Target;
+		public TeamCardViewModelBuilder Target;
 		public FakeNumberOfAgentsInTeamReader AgentsInTeam;
 		public FakeSiteRepository Sites;
 		public MutableNow Now;

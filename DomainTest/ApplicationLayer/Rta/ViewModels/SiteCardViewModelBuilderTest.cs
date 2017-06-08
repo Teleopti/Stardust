@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 {
 	[DomainTest]
 	[TestFixture]
-	public class SiteInAlarmViewModelBuilderTest : ISetup
+	public class SiteCardViewModelBuilderTest : ISetup
 	{
-		public SiteInAlarmViewModelBuilder Target;
+		public SiteCardViewModelBuilder Target;
 		public FakeDatabase Database;
 		public FakeSiteRepository Sites;
 		public FakeNumberOfAgentsInSiteReader AgentsInSite;

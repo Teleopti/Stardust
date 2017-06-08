@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
-	public class SiteInAlarmViewModelBuilder
+	public class SiteCardViewModelBuilder
 	{
 		private readonly INow _now;
 		private readonly ITeamsInAlarmReader _teamsInAlarmReader;
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly ICurrentAuthorization _authorization;
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
 
-		public SiteInAlarmViewModelBuilder(
+		public SiteCardViewModelBuilder(
 			ITeamsInAlarmReader teamsInAlarmReader,
 			ISiteRepository siteRepository,
 			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
@@ -33,12 +33,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_now = now;
 		}
 
-		public IEnumerable<SiteInAlarmViewModel> Build()
+		public IEnumerable<SiteCardViewModel> Build()
 		{
 			return Build(null);
 		}
 
-		public IEnumerable<SiteInAlarmViewModel> Build(IEnumerable<Guid> skillIds)
+		public IEnumerable<SiteCardViewModel> Build(IEnumerable<Guid> skillIds)
 		{
 			var teamsInAlarm = skillIds == null ? 
 				_teamsInAlarmReader.Read() : 
@@ -71,18 +71,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 			var namePerSiteId = sites.ToLookup(x => x.Id.Value, x => x.Description.Name);
 
-			ILookup<Guid, int> numberOfAgentsPerSite;
-			if (skillIds != null)
-				numberOfAgentsPerSite = _numberOfAgentsInSiteReader.Read(siteIds, skillIds).ToLookup(x => x.Key, x => x.Value);
-			else
-				numberOfAgentsPerSite = _numberOfAgentsInSiteReader.Read(siteIds).ToLookup(x => x.Key, x => x.Value);
+			var numberOfAgentsPerSite = skillIds != null ? 
+				_numberOfAgentsInSiteReader.Read(siteIds, skillIds).ToLookup(x => x.Key, x => x.Value) : 
+				_numberOfAgentsInSiteReader.Read(siteIds).ToLookup(x => x.Key, x => x.Value);
 
 			var result = siteIds
 				.Select(s =>
 				{
 					var agentCount = numberOfAgentsPerSite[s].FirstOrDefault();
 					var inAlarmCount = sitesInAlarm[s].FirstOrDefault();
-					return new SiteInAlarmViewModel
+					return new SiteCardViewModel
 					{
 						Id = s,
 						Name = namePerSiteId[s].FirstOrDefault(),

@@ -215,7 +215,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelBatchTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftMeetingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\StateQueue\QueueTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForPermittedSiteViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModelBuilderPermittedTeamTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\AgentStateNameTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ExcludePhoneStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\InAlarmTest.cs" />
@@ -271,8 +271,8 @@
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelOutOfAdherencesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\EmptyExistingStateTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftAbsenceTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteInAlarmViewModelBuilderTest.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\AgentsInAlarmForTeamsOnSiteViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModelBuilderTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\TeamCardViewModelBuilderTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\BuildTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\UserTimeZoneTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\PhoneStateViewModelBuilderTest.cs" />

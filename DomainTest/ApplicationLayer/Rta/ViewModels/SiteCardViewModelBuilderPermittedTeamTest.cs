@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 	[DomainTest]
 	[TestFixture]
 	[RealPermissions]
-	public class AgentsInAlarmForPermittedSiteViewModelBuilderTest //: ISetup
+	public class SiteCardViewModelBuilderPermittedTeamTest //: ISetup
 	{
-		public SiteInAlarmViewModelBuilder Target;
+		public SiteCardViewModelBuilder Target;
 		public FakeDatabase Database;
 		public FakePersonRepository Persons;
 		public ILogOnOff LogOnOff;

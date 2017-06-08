@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 	{
 		public OrganizationViewModelBuilder Target;
 		public FakeDatabase Database;
-		public SiteInAlarmViewModelBuilder Target2;
 		public FakeUserUiCulture UiCulture;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
@@ -139,26 +138,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var excludedSite = Guid.NewGuid();
 			var team1 = Guid.NewGuid();
 			var team2 = Guid.NewGuid();
-			var person1 = Guid.NewGuid();
-			var person2 = Guid.NewGuid();
 			Database
 				.WithSite(london, "London")
 				.WithTeam(team1, "Team1")
-				//.WithAgent(person1)
-				//.WithAgentState(new AgentStateReadModel
-				//{
-				//	PersonId = person1,
-				//	SiteId = london,
-				//	TeamId = team1
-				//})
 				.WithTeam(team2, "Team2")
-				//.WithAgent(person2)
-				//.WithAgentState(new AgentStateReadModel
-				//{
-				//	PersonId = person2,
-				//	SiteId = london,
-				//	TeamId = team2
-				//})
 				.WithSite(excludedSite);
 
 			var org = Target.Build().Single();
@@ -168,37 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			org.Teams.Select(t => t.Id).Should().Have.SameValuesAs(team1, team2);
 			org.Teams.Select(t => t.Name).Should().Have.SameValuesAs("Team1", "Team2");
 		}
-
-		//[Test]
-		//public void ShouldBuildForOrganizationExcludeSiteIfNoAgent()
-		//{
-		//	var london = Guid.NewGuid();
-		//	var excludedSite = Guid.NewGuid();
-		//	var team1 = Guid.NewGuid();
-		//	var team2 = Guid.NewGuid();
-		//	var personId = Guid.NewGuid();
-
-		//	Database
-		//		.WithSite(london, "London")
-		//		.WithTeam(team1, "Team1")
-		//		.WithAgent(personId)
-		//		.WithAgentState(new AgentStateReadModel
-		//		{
-		//			PersonId = personId,
-		//			SiteId = london,
-		//			TeamId = team1
-		//		})
-		//		.WithSite(excludedSite, "excludedSite")
-		//		.WithTeam(team2, "Team2");
-			
-		//	var org = Target.Build().Single();
-
-		//	org.Id.Should().Be(london);
-		//	org.Name.Should().Be("London");
-		//	org.Teams.Select(t => t.Id).Should().Have.SameValuesAs(team1);
-		//	org.Teams.Select(t => t.Name).Should().Have.SameValuesAs("Team1");
-		//}
-
+		
 		[Test]
 		public void ShouldBuildForOrganizationWithSkills()
 		{

@@ -10,7 +10,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
-	public class AgentsInAlarmForTeamsViewModelBuilder
+	public class TeamCardViewModelBuilder
 	{
 		private readonly INow _now;
 		private readonly ITeamRepository _teamRepository;
@@ -18,8 +18,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
 		private readonly ICurrentAuthorization _authorization;
 
-
-		public AgentsInAlarmForTeamsViewModelBuilder(
+		public TeamCardViewModelBuilder(
 			ITeamRepository teamRepository, 
 			ITeamsInAlarmReader teamsInAlarmReader, 
 			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,
@@ -32,12 +31,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_now = now;
 		}
 
-		public IEnumerable<TeamOutOfAdherence> Build(Guid siteId)
+		public IEnumerable<TeamCardViewModel> Build(Guid siteId)
 		{
 			return Build(siteId, null);
 		}
 		
-		public IEnumerable<TeamOutOfAdherence> Build(Guid siteId,IEnumerable<Guid> skillIds)
+		public IEnumerable<TeamCardViewModel> Build(Guid siteId,IEnumerable<Guid> skillIds)
 		{
 			var teamsInAlarm = skillIds == null ?
 					_teamsInAlarmReader.Read(siteId) :
@@ -56,18 +55,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			var teams = _teamRepository.LoadAll();
 			var namePerTeamId = teams.ToLookup(x => x.Id.Value, x => x.Description.Name);
 
-			ILookup<Guid, int> numberOfAgentsPerTeam;
 			var teamIds = teamsInAlarm.Select(x => x.TeamId);
-			if (skillIds != null)
-				numberOfAgentsPerTeam = _numberOfAgentsInTeamReader.ForSkills(teamIds, skillIds).ToLookup(x => x.Key, x => x.Value);
-			else
-				numberOfAgentsPerTeam = _numberOfAgentsInTeamReader.FetchNumberOfAgents(teamIds).ToLookup(x => x.Key, x => x.Value);
+			var numberOfAgentsPerTeam = skillIds != null ? 
+				_numberOfAgentsInTeamReader.ForSkills(teamIds, skillIds).ToLookup(x => x.Key, x => x.Value) : 
+				_numberOfAgentsInTeamReader.FetchNumberOfAgents(teamIds).ToLookup(x => x.Key, x => x.Value);
 
 			var result = teamsInAlarm
 				.Select(t =>
 					{
 						var agentCount = numberOfAgentsPerTeam[t.TeamId].FirstOrDefault();
-						return new TeamOutOfAdherence
+						return new TeamCardViewModel
 						{
 							Id = t.TeamId,
 							Name = namePerTeamId[t.TeamId].FirstOrDefault(),
@@ -81,7 +78,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 			return result.OrderBy(x => x.Name).ToArray();
 		}
-
 
 		private string getColor(int outOfAdherence, int numberOfAgents)
 		{

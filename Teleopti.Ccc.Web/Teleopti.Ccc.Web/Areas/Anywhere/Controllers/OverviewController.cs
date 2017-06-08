@@ -12,21 +12,21 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class OverviewController : ApiController
 	{
-		private readonly SiteInAlarmViewModelBuilder _viewModelBuilder;
-		private readonly AgentsInAlarmForTeamsViewModelBuilder _teamViewModelBuilder;
+		private readonly SiteCardViewModelBuilder _sites;
+		private readonly TeamCardViewModelBuilder _teams;
 
-		public OverviewController(SiteInAlarmViewModelBuilder viewModelBuilder, AgentsInAlarmForTeamsViewModelBuilder teamViewModelBuilder)
+		public OverviewController(SiteCardViewModelBuilder sites, TeamCardViewModelBuilder _teams)
 		{
-			_viewModelBuilder = viewModelBuilder;
-			_teamViewModelBuilder = teamViewModelBuilder;
+			_sites = sites;
+			this._teams = _teams;
 		}
 
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Overview/SiteCards")]
 		public virtual IHttpActionResult SiteCards([FromUri]Guid[] skillIds = null)
 		{
 			return Ok(skillIds.EmptyIfNull().Any() ?
-					_viewModelBuilder.Build(skillIds) :
-					_viewModelBuilder.Build())
+					_sites.Build(skillIds) :
+					_sites.Build())
 				;
 		}
 		
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public virtual IHttpActionResult TeamCards([FromUri]Guid siteId, [FromUri]Guid[] skillIds = null)
 		{
 			return Ok(skillIds.EmptyIfNull().Any() ?
-					_teamViewModelBuilder.Build(siteId, skillIds) :
-					_teamViewModelBuilder.Build(siteId))
+					_teams.Build(siteId, skillIds) :
+					_teams.Build(siteId))
 				;
 		}
 	}
