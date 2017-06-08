@@ -30,7 +30,6 @@
             getSites: getSites,
             getSitesForSkills: getSitesForSkills,
 			getTeamCardsFor: getTeamCardsFor,
-            getSkillName: getSkillName,
             getSkillArea: getSkillArea,
             getPhoneStates: getPhoneStates,
             forToday: forToday,
@@ -215,16 +214,6 @@
                 }
             }).query({
                 skillIds: skillIds
-            }).$promise;
-        };
-
-        function getSkillName(data) {
-            return $resource('../api/Skills/NameFor', {}, {
-                query: {
-                    method: 'GET'
-                }
-            }).query({
-                skillId: data
             }).$promise;
         };
 
