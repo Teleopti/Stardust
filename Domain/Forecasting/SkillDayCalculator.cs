@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
 	    public DateOnlyPeriod VisiblePeriod
         {
-            get { return _visiblePeriod; }
-            set { _visiblePeriod = value; }
-        }
+            get => _visiblePeriod;
+		    set => _visiblePeriod = value;
+	    }
 
         public IEnumerable<ISkillDay> VisibleSkillDays
         {
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             var result = new List<ITemplateTaskPeriod>();
 
-            if (_skill.SkillType.ForecastSource == ForecastSource.InboundTelephony ||_skill.SkillType.ForecastSource==ForecastSource.Retail)
+            if (skillShouldBeCalculatedWithinDay())
             {
                 var unsortedOpenTaskPeriods = new List<ITemplateTaskPeriod>();
                 foreach (var workloadDay in skillDay.WorkloadDayCollection)
@@ -127,7 +127,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
             return SkillDayStaffHelper.CombineList(result);
         }
 
-        public ISkillDay FindNextOpenDay(IWorkload workload, DateOnly dateTime)
+	    private bool skillShouldBeCalculatedWithinDay()
+	    {
+		    return _skill.SkillType.ForecastSource == ForecastSource.InboundTelephony ||_skill.SkillType.ForecastSource==ForecastSource.Retail || _skill.SkillType.ForecastSource == ForecastSource.Chat;
+	    }
+
+	    public ISkillDay FindNextOpenDay(IWorkload workload, DateOnly dateTime)
         {
             SortedList<DateOnly,IWorkloadDay> foundList;
             if (!_workloadDaysCache.TryGetValue(workload,out foundList))
