@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					var openHourStartLocal = TimeZoneHelper.ConvertFromUtc(workloadDay.OpenTaskPeriodList.First().Period.StartDateTime, _timeZone.TimeZone());
 					var firstOpenInterval = skillDayStats
 						.FirstOrDefault(x => x.StartTime == openHourStartLocal && x.WorkloadId == workloadDay.Workload.Id.Value);
-					if(firstOpenInterval != null)
+					if(firstOpenInterval != null && workloadBacklog.ContainsKey(workloadDay.Workload.Id.Value))
 						firstOpenInterval.Calls = workloadBacklog[workloadDay.Workload.Id.Value] + firstOpenInterval.Calls;
 				}
 				else

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -93,7 +94,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval);
 
 			var workloadBacklog = _emailBacklogProvider.GetStatisticsBacklogByWorkload(skillDays, statisticsPerWorkloadInterval, userDateOnly, minutesPerInterval, forecastedCallsModel.SkillDayStatsRange);
-			var forecastedBacklog = _emailBacklogProvider.GetForecastedBacklogBySkill(skillDays, skills, userDateOnly);
 
 			var updatedForecastedSeries = _reforecastedStaffingProvider.DataSeries(
 				forecastedStaffing,
@@ -101,8 +101,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				forecastedCallsModel.CallsPerSkill,
 				latestStatsTime,
 				minutesPerInterval,
-				timeSeries,
-				workloadBacklog
+				timeSeries
 			);
 			var requiredStaffingPerSkill = _requiredStaffingProvider.Load(statisticsPerWorkloadInterval, 
 				skills, 

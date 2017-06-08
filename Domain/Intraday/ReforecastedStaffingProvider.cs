@@ -22,8 +22,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			Dictionary<Guid, List<SkillIntervalStatistics>> forecastedCallsPerSkillDictionary,
 			DateTime? latestStatsTime,
 			int minutesPerInterval,
-			DateTime[] timeSeries,
-			Dictionary<Guid, int> workloadBacklog)
+			DateTime[] timeSeries)
 		{
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
 			if (!latestStatsTime.HasValue)
@@ -39,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var skillId in forecastedCallsPerSkillDictionary.Keys)
 			{
-				var averageDeviation = calculateMovingAverage(actualCallsPerSkillList, forecastedCallsPerSkillDictionary, skillId, workloadBacklog);
+				var averageDeviation = calculateMovingAverage(actualCallsPerSkillList, forecastedCallsPerSkillDictionary, skillId);
 
 				var reforecastedStaffing = forecastedStaffingList
 					.Where(x => x.SkillId == skillId && x.StartTime >= usersNow)
@@ -94,8 +93,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		private static double calculateMovingAverage(IList<SkillIntervalStatistics> actualCallsPerSkillList, 
 			Dictionary<Guid, List<SkillIntervalStatistics>> forecastedCallsPerSkillDictionary, 
-			Guid skillId, 
-			Dictionary<Guid, int> workloadBacklog)
+			Guid skillId)
 		{
 			List<SkillIntervalStatistics> actualStats = actualCallsPerSkillList.Where(x => x.SkillId == skillId).ToList();
 			List<double> listDeviationFactorPerInterval = new List<double>();
@@ -105,13 +103,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			if (!actualStats.Any())
 				return averageDeviation;
 
-			var workloadsInSkill = actualStats.Select(x => x.WorkloadId)
-				.Distinct()
-				.ToArray();
-			var statisticsBacklog = workloadBacklog
-				.Where(x => workloadsInSkill.Contains(x.Key))
-				.Sum(b => b.Value);
-
 			foreach (var forecastedIntervalCalls in forecastedCallsPerSkillDictionary[skillId])
 			{
 				var actualIntervalCalls = actualStats.Where(x => x.StartTime == forecastedIntervalCalls.StartTime);
@@ -119,8 +110,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					continue;
 				if (Math.Abs(forecastedIntervalCalls.Calls) < 0.1)
 					continue;
-				listDeviationFactorPerInterval.Add((actualIntervalCalls.Sum(x => x.Calls) + statisticsBacklog)/forecastedIntervalCalls.Calls);
-				statisticsBacklog = 0;
+				listDeviationFactorPerInterval.Add(actualIntervalCalls.Sum(x => x.Calls)/forecastedIntervalCalls.Calls);
 			}
 			
 			if (listDeviationFactorPerInterval.Any())

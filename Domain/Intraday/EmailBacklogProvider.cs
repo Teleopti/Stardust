@@ -54,8 +54,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 					continue;
 
 				var reversedSkillDayList = skillDayList.OrderByDescending(x => x.CurrentDate);
-				DateTime skillClosedStart = DateTime.MinValue;
-				DateTime skillClosedEnd = DateTime.MinValue;
 
 				foreach (var skillDay in reversedSkillDayList)
 				{
@@ -77,30 +75,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 							workloadClosedHoursDictionary[workloadDay.Workload.Id.Value] =
 								new ClosedPeriodWorkload(workloadDay.OpenTaskPeriodList.Last().Period.EndDateTime, todayStartOpeningHour, true);
 						}
-						
-						if (skillClosedEnd < workloadClosedHoursDictionary[workloadDay.Workload.Id.Value].Period.EndDateTime)
-						{
-							skillClosedEnd = workloadClosedHoursDictionary[workloadDay.Workload.Id.Value].Period.EndDateTime;
-						}
-						if (workloadClosedHoursDictionary[workloadDay.Workload.Id.Value].Period.StartDateTime < skillClosedStart)
-						{
-							skillClosedStart = workloadClosedHoursDictionary[workloadDay.Workload.Id.Value].Period.StartDateTime;
-						}
-
 					}
 				}
 
 			}
 
 			return workloadClosedHoursDictionary;
-		}
-
-		public Dictionary<Guid, int> GetForecastedBacklogBySkill(ICollection<ISkillDay> skillDays, IList<ISkill> skills, DateOnly userDateOnly)
-		{
-			var forecastedBacklog = new Dictionary<Guid, int>();
-
-
-			return forecastedBacklog;
 		}
 	}
 }

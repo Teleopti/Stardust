@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				var dbCommand = new DatabaseCommand(CommandType.StoredProcedure, "mart.web_intraday_simulator_delete_stats", _connectionString);
 				var parameterList = new[]
 				{
-					 new SqlParameter("today", dateToDelete.Date),
+					 new SqlParameter("date", dateToDelete.Date),
 					 new SqlParameter("@time_zone_code", timeZoneCode)
 				};
 				dbCommand.ExecuteNonQuery(parameterList);
