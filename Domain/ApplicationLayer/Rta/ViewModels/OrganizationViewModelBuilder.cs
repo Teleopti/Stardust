@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
 		private readonly ICurrentAuthorization _authorization;
 		private readonly IUserUiCulture _uiCulture;
-		private readonly ITeamsInAlarmReader _teamsInAlarmReader;
 
 		public OrganizationViewModelBuilder(
 			INow now,
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
 			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,
 			ICurrentAuthorization authorization,
-			IUserUiCulture uiCulture, ITeamsInAlarmReader teamsInAlarmReader)
+			IUserUiCulture uiCulture)
 		{
 			_now = now;
 			_siteRepository = siteRepository;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 			_authorization = authorization;
 			_uiCulture = uiCulture;
-			_teamsInAlarmReader = teamsInAlarmReader;
 		}
 
 		private IOrderedEnumerable<ISite> allPermittedSites()
