@@ -402,14 +402,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoSeatPlan(date);
 		}
-
-		[When(@"I view Real time adherence overview")]
-		public void WhenIViewRealTimeAdherenceOverview()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereRealTimeAdherenceOverview(true);
-		}
-
+		
 		[When(@"I view Wfm")]
 		public void WhenIViewWfm()
 		{
@@ -423,14 +416,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GotoRealTimeAdherenceSites();
 		}
-
-		[When(@"I try to view Real time adherence overview")]
-		public void WhenITryToViewRealTimeAdherenceOverview()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereRealTimeAdherenceOverview(false);
-		}
-
+		
 		[When(@"I view Real time adherence for skill '(.*)' for sites")]
 		public void WhenIViewRealTimeAdherenceForSkillForSites(string skill)
 		{
@@ -459,21 +445,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoRealTimeAdherenceForSkillAreaForTeamsOnSite(IdForSkillArea(skillarea), idForSite(site));
 		}
 
-
-		[When(@"I try to view real time adherence for team '(.*)'")]
-		public void WhenITryToViewRealTimeAdherenceForTeam(string team)
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereRealTimeAdherenceTeamOverviewNoWait(buIdForTeam(team),IdForTeam(team));
-		}
-
-		[When(@"I view Real time adherence for site '(.*)'")]
-		public void WhenIViewRealTimeAdherenceForSite(string site)
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereRealTimeAdherenceOverview(buIdForSite(site), idForSite(site));
-		}
-
+		
 		[When(@"I view Real time adherence for teams on site '(.*)'")]
 		public void WhenIViewRealTimeAdherenceForTeamsOnSite(string site)
 		{
@@ -536,15 +508,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GoToRtaTool();
 		}
-
-		[When(@"I view manage adherence view for agent '(.*)'")]
-		public void WhenIViewManageAdherenceViewForAgent(string name)
-		{
-			TestControllerMethods.Logon();
-			var personId = DataMaker.Person(name).Person.Id.Value;
-			Navigation.GotoAnywhereRealTimeManageAdherenceOverview(DefaultBusinessUnit.BusinessUnit.Id.GetValueOrDefault(), personId);
-		}
-
+		
 		[When(@"I view agent details view for agent '(.*)'")]
 		public void WhenIViewAgentDetailsViewForAgent(string name)
 		{
@@ -682,14 +646,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GoToMyReport(date);
 		}
-
-		[When(@"I view real time adherence for team '(.*)'")]
-		public void WhenIViewRealTimeAdherenceForTeam(string team)
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(buIdForTeam(team), IdForTeam(team));
-		}
-
+		
 		[Given(@"I am viewing real time adherence for agents on team '(.*)'")]
 		[When(@"I view real time adherence for agents on team '(.*)'")]
 		public void WhenIViewRealTimeAdherenceForAgentsOnTeam(string team)
@@ -720,14 +677,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoRealTimeAdherenceAllAgentsWithSkill(IdForSkill(skill));
 		}
 		
-		[When(@"I view real time adherence view for team '(.*)'")]
-		public void WhenIViewRealTimeAdherenceViewForTeam(string team)
-		{
-			DataMaker.Data().ApplyAfterSetup(new GroupingReadOnlyUpdate());
-			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereRealTimeAdherenceTeamOverview(buIdForTeam(team),IdForTeam(team));
-		}
-
 		[When(@"I view people")]
 		public void WhenIViewPeople()
 		{

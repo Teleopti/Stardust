@@ -12,27 +12,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(Navigation));
 
-		private static readonly Dictionary<Predicate<string>, INavigationInterceptor> _interceptors = new Dictionary<Predicate<string>, INavigationInterceptor>();
+		private static readonly Dictionary<Predicate<string>, INavigationInterceptor> interceptors = new Dictionary<Predicate<string>, INavigationInterceptor>();
 		private static IEnumerable<INavigationInterceptor> _currentInterceptors = new INavigationInterceptor[] { };
 
 		static Navigation()
 		{
-			_interceptors.Add(u => !u.Contains("Test/"), new EndSetupPhase());
-			_interceptors.Add(u => true, new ApplicationStartupTimeout());
-			_interceptors.Add(u => u == "", new BustCache());
-			_interceptors.Add(u => u == "MyTime#Requests/Index", new BustCache());
+			interceptors.Add(u => !u.Contains("Test/"), new EndSetupPhase());
+			interceptors.Add(u => true, new ApplicationStartupTimeout());
+			interceptors.Add(u => u == "", new BustCache());
+			interceptors.Add(u => u == "MyTime#Requests/Index", new BustCache());
 
-			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherenceagents"), new FakeClientTimeUsingSinonProvenWay());
-			_interceptors.Add(u => u.Contains("/Anywhere#teamschedule"), new FakeClientTimeUsingSinonProvenWay());
-			_interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new FakeClientTimeUsingSinonProvenWay());
-			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new FakeClientTimeUsingSinonProvenWay());
-			_interceptors.Add(u => u.Contains("/MyTime/Asm"), new FakeTimeUsingMyTimeMethod());
-			_interceptors.Add(u => u.Contains("/MyTime#Schedule/Week"), new FakeTimeUsingMyTimeMethod());
-			_interceptors.Add(u => u.Contains("/wfm/#/rta/agents"), new FakeClientTimeUsingSinonProvenWay());
+			interceptors.Add(u => u.Contains("/Anywhere#teamschedule"), new FakeClientTimeUsingSinonProvenWay());
+			interceptors.Add(u => u.Contains("/Anywhere#personschedule"), new FakeClientTimeUsingSinonProvenWay());
+			interceptors.Add(u => u.Contains("/MyTime/Asm"), new FakeTimeUsingMyTimeMethod());
+			interceptors.Add(u => u.Contains("/MyTime#Schedule/Week"), new FakeTimeUsingMyTimeMethod());
+			interceptors.Add(u => u.Contains("/wfm/#/rta/agents"), new FakeClientTimeUsingSinonProvenWay());
 
-			_interceptors.Add(u => u.Contains("/Anywhere#realtimeadherence"), new WaitUntilHangfireQueueIsProcessed());
-			_interceptors.Add(u => u.Contains("/Anywhere#manageadherence"), new WaitUntilHangfireQueueIsProcessed());
-			_interceptors.Add(u => u.Contains("/wfm/#/rta"), new WaitUntilHangfireQueueIsProcessed());
+			interceptors.Add(u => u.Contains("/wfm/#/rta"), new WaitUntilHangfireQueueIsProcessed());
 		}
 
 		public static void ReapplyFakeTime()
@@ -41,25 +37,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			fakeClientTimeMethods.ForEach(i => i.Apply());
 		}
 
-		private static void BuildCurrentInterceptors(Uri url, IEnumerable<INavigationInterceptor> passed)
+		private static void buildCurrentInterceptors(Uri url, IEnumerable<INavigationInterceptor> passed)
 		{
-			var matched = from i in _interceptors where i.Key(url.ToString()) select i.Value;
+			var matched = from i in interceptors where i.Key(url.ToString()) select i.Value;
 			_currentInterceptors = matched.Concat(passed).ToList();
 		}
 
 		public static void GoToPage(string pageUrl, params INavigationInterceptor[] interceptors)
 		{
-			InnerGoto(new Uri(TestSiteConfigurationSetup.URL, pageUrl), interceptors);
+			innerGoto(new Uri(TestSiteConfigurationSetup.URL, pageUrl), interceptors);
 		}
 
 		public static void GotoRaw(string url, params INavigationInterceptor[] interceptors)
 		{
-			InnerGoto(new Uri(url), interceptors);
+			innerGoto(new Uri(url), interceptors);
 		}
 
 		private static bool _nested;
 
-		private static void InnerGoto(Uri url, params INavigationInterceptor[] interceptors)
+		private static void innerGoto(Uri url, params INavigationInterceptor[] interceptors)
 		{
 			var args = new GotoArgs { Uri = url };
 
@@ -72,7 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 			_nested = true;
 			try
 			{
-				BuildCurrentInterceptors(url, interceptors);
+				buildCurrentInterceptors(url, interceptors);
 
 				_currentInterceptors.ForEach(i => i.Before(args));
 
@@ -307,15 +303,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 					date.Day.ToString("00"),
 					minutes));
 		}
-
-		public static void GotoAnywhereRealTimeAdherenceOverview(bool waitUntilSubscriptionIsCompleted)
-		{
-			if (waitUntilSubscriptionIsCompleted)
-				GoToPage("Anywhere#realtimeadherencesites", new WaitUntilSubscriptionIsCompleted());
-			else
-				GoToPage("Anywhere#realtimeadherencesites");
-		}
-
+		
 		public static void GotoResourcePlanner()
 		{
 			GoToPage("wfm/#/resourceplanner/planningperiods");
@@ -347,30 +335,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 				GoToPage("wfm/#/seatPlan", new WaitUntilLoaded());
 			}
 		}
-
-		public static void GotoAnywhereRealTimeAdherenceOverview(Guid buId, Guid siteId)
-		{
-			GoToPage(string.Format("Anywhere#realtimeadherenceteams/{0}/{1}", buId, siteId),
-				 new WaitUntilSubscriptionIsCompleted());
-		}
-
-		public static void GotoAnywhereRealTimeManageAdherenceOverview(Guid buId, Guid personId)
-		{
-			GoToPage(string.Format("Anywhere#manageadherence/{0}/{1}", buId, personId));
-		}
-
-		public static void GotoAnywhereRealTimeAdherenceTeamOverview(Guid buId, Guid idForTeam)
-		{
-			GoToPage(string.Format("Anywhere#realtimeadherenceagents/{0}/{1}", buId, idForTeam),
-				 new WaitUntilSubscriptionIsCompleted());
-		}
-
-		public static void GotoAnywhereRealTimeAdherenceTeamOverviewNoWait(Guid buId, Guid idForTeam)
-		{
-			GoToPage(
-				string.Format("Anywhere#realtimeadherenceagents/{0}/{1}", buId, idForTeam));
-		}
-
+		
 		public static void GoToMyReport()
 		{
 			GoToPage("MyTime#MyReport/Index");
