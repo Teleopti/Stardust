@@ -133,7 +133,7 @@ Scenario: Show the user a red indication at head count staffing check when the a
 	When I view my week schedule for date '2023-05-28'
 	Then I should see an 'red' indication for chance of absence request on '2023-05-28'
 	
-Scenario: Show the user a yellow indication at mixed staffing check when the head count is half way to full allowance 
+Scenario: Show the user no indication at mixed staffing check when last open period is not validate with budget group
 	Given the time is '2023-05-25 20:00'
 	And there is a budgetday
 	| Field						| Value					|
@@ -155,4 +155,4 @@ Scenario: Show the user a yellow indication at mixed staffing check when the hea
 	| Hours			| 1						|
 	| Absence		| holiday				|
 	When I view my week schedule for date '2023-05-28'
-	Then I should see an 'yellow' indication for chance of absence request on '2023-05-28'
+	Then I should see no indication for chance of absence request on '2023-05-28'

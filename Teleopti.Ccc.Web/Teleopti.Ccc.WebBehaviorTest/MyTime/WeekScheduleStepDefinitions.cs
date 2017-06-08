@@ -17,16 +17,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
-			Browser.Interactions.Click(string.Format(".weekview-day[data-mytime-date='{0}'] .glyphicon-comment", date.ToString("yyyy-MM-dd")));
+			Browser.Interactions.Click($".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .glyphicon-comment");
 		}
 
 		[Then(@"I should not see any shifts on date '(.*)'")]
 		public void ThenIShouldNotSeeAnyShiftsOnDate(DateTime date)
 		{
 			Browser.Interactions.AssertNotExists(".weekview-timeline",
-												 string.Format(
-													 ".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer",
-													 date.ToString("yyyy-MM-dd")));
+				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .weekview-day-schedule-layer");
 		}
 
 		[Then(@"I should see my week schedule for date '(.*)'")]
@@ -46,10 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheTheShiftEndingAtOnDate(string time, DateTime date)
 		{
 			var endTimeScript =
-				string.Format(
-					".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-time:contains('{1}')",
-					date.ToString("yyyy-MM-dd"), 
-					time);
+				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .weekview-day-schedule-layer:last .weekview-day-schedule-layer-time:contains('{time}')";
 			Browser.Interactions.AssertExistsUsingJQuery(endTimeScript);
 		}
 
@@ -62,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the public note on date '(.*)'")]
 		public void ThenIShouldSeeThePublicNoteOnDate(DateTime date)
 		{
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .glyphicon-exclamation-sign", date.ToString("yyyy-MM-dd")));
+			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .glyphicon-exclamation-sign");
 		}
 		
 		[When(@"I open the weekschedule date-picker")]
@@ -102,14 +97,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			const string layerHeigth3 = "383px";
 			var dateFixed = date.ToString("yyyy-MM-dd");
 
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='top: {1}']", dateFixed, layerTop1));
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='height: {1}']", dateFixed, layerHeigth1));
+			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{dateFixed}'] .weekview-day-schedule-layer[style*='top: {layerTop1}']");
+			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{dateFixed}'] .weekview-day-schedule-layer[style*='height: {layerHeigth1}']");
 
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='top: {1}']", dateFixed, layerTop2));
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='height: {1}']", dateFixed, layerHeigth2));
+			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{dateFixed}'] .weekview-day-schedule-layer[style*='top: {layerTop2}']");
+			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{dateFixed}'] .weekview-day-schedule-layer[style*='height: {layerHeigth2}']");
 
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='top: {1}']", dateFixed, layerTop3));
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='height: {1}']", dateFixed, layerHeigth3));
+			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{dateFixed}'] .weekview-day-schedule-layer[style*='top: {layerTop3}']");
+			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{dateFixed}'] .weekview-day-schedule-layer[style*='height: {layerHeigth3}']");
 		}
 
 		[Then(@"I should see overtime availability bar with")]
@@ -117,14 +112,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		{
 			var overtimeAvailability = table.CreateInstance<OvertimeAvailabilityTooltipAndBar>();
 			var layerTop =
-				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .overtime-availability-bar\").position().top",
-							  overtimeAvailability.Date.ToString("yyyy-MM-dd"));
+				$"return $(\".weekview-day[data-mytime-date='{overtimeAvailability.Date:yyyy-MM-dd}'] .overtime-availability-bar\").position().top";
 			var layerHeight =
-				string.Format("return $(\".weekview-day[data-mytime-date='{0}'] .overtime-availability-bar\").height()",
-							  overtimeAvailability.Date.ToString("yyyy-MM-dd"));
+				$"return $(\".weekview-day[data-mytime-date='{overtimeAvailability.Date:yyyy-MM-dd}'] .overtime-availability-bar\").height()";
 			var layerWidth =
-				string.Format(".weekview-day[data-mytime-date='{0}'] .overtime-availability-bar[style*='width: 20%']",
-								overtimeAvailability.Date.ToString("yyyy-MM-dd"));
+				$".weekview-day[data-mytime-date='{overtimeAvailability.Date:yyyy-MM-dd}'] .overtime-availability-bar[style*='width: 20%']";
 			if (overtimeAvailability.Date.Day == 20)
 			{
 				Browser.Interactions.AssertJavascriptResultContains(layerTop,"111");
@@ -146,8 +138,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see activities on date '(.*)'")]
 		public void ThenIShouldSeeActivitiesOnDate(DateTime date)
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(
-				string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer",date.ToString("yyyy-MM-dd")));
+			Browser.Interactions.AssertExistsUsingJQuery($".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .weekview-day-schedule-layer");
 		}
 
 		[Then(@"I should see request page")]
@@ -178,9 +169,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should not see a shift on date '(.*)'")]
 		public void ThenIShouldNotSeeAShiftOnDate(DateTime date)
 		{
-			Browser.Interactions.AssertNotExists(string.Format(".weekview-day[data-mytime-date='{0}']", date.ToString("yyyy-MM-dd")),
-												 string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer",
-															   date.ToString("yyyy-MM-dd")));
+			Browser.Interactions.AssertNotExists($".weekview-day[data-mytime-date='{date:yyyy-MM-dd}']",
+				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .weekview-day-schedule-layer");
 		}
 		
 		[When(@"My schedule between '(.*)' to '(.*)' reloads")]
@@ -198,7 +188,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		[Then(@"I should see the day summary text for date '(.*)' in '(.*)'")]
 		public void ThenIShouldSeeTheDaySummaryTextForDateIn(DateTime date, string color)
 		{
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-summary[style*='color: {1}']", date.ToString("yyyy-MM-dd"), color));
+			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .weekview-day-summary[style*='color: {color}']");
 		}
 
 
@@ -206,36 +196,37 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void ThenIShouldSeeTheDayHeaderTextForDate(DateTime date, string text)
 		{
 			Browser.Interactions.AssertAnyContains(
-				$".weekview-day[data-mytime-date='{date.ToString ("yyyy-MM-dd")}'] .weekview-day-header", text);
+				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .weekview-day-header", text);
 		}
 
 
 		[Then(@"I should see the text for date '(.*)' in '(.*)'")]
 		public void ThenIShouldSeeTheTextForDateIn(DateTime date, string color)
 		{
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}'] .weekview-day-schedule-layer[style*='color: {1}']", date.ToString("yyyy-MM-dd"), color));
+			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .weekview-day-schedule-layer[style*='color: {color}']");
 		}
 
 		[Then(@"I should see an '(.*)' indication for chance of absence request on '(.*)'")]
 		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
 		{
 			Browser.Interactions.AssertNotExists(
-				string.Format(".weekview-day[data-mytime-date='{0}'] .small-circle[style*='{1}']", date.ToString("yyyy-MM-dd"), color), 
-				string.Format(".weekview-day[data-mytime-date='{0}'] .holiday-agents[style*='none']", date.ToString("yyyy-MM-dd")));
+				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .small-circle[style*='{color}']",
+				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .holiday-agents[style*='none']");
 		}
 
 		[Then(@"I should see an hint '(.*)' for chance of absence request on '(.*)'")]
 		public void ThenIShouldSeeAnHintForChanceOfAbsenceRequestOn(string text, DateTime date)
 		{
-			Browser.Interactions.AssertKnockoutContextContains(string.Format(".weekview-day[data-mytime-date={0}]", date.ToString("yyyy-MM-dd")), "holidayChanceText()", text);
+			Browser.Interactions.AssertKnockoutContextContains($".weekview-day[data-mytime-date={date:yyyy-MM-dd}]",
+				"holidayChanceText()", text);
 		}
 
-		[Then(@"I should see an empty indication for chance of absence request on '(.*)'")]
+		[Then(@"I should see no indication for chance of absence request on '(.*)'")]
 		public void ThenIShouldSeeAnEmptyIndicationForChanceOfAbsenceRequestOn(DateTime date)
 		{
-			Browser.Interactions.AssertNotExists(
-				string.Format(".weekview-day[data-mytime-date='{0}'] .small-circle:not([style])", date.ToString("yyyy-MM-dd")),
-				string.Format(".weekview-day[data-mytime-date='{0}'] .holiday-agents[style*='none']", date.ToString("yyyy-MM-dd")));
+			Browser.Interactions.AssertNotExistsUsingJQuery(
+				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .small-circle:not([style])",
+				$".weekview-day[data-mytime-date='{date:yyyy-MM-dd}'] .holiday-agents[style*='none'] :visible");
 		}
 
 
@@ -265,12 +256,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			Browser.Interactions.AssertNotVisibleUsingJQuery($"#probabilityDropdownMenu .dropdown-menu a:contains('{probability}')");
 		}
 
-
 		private void AssertAbsenceIndicators(int visibleIndicatorCount)
 		{
 			Browser.Interactions.AssertJavascriptResultContains("return $('.holiday-agents:visible').length",
-																visibleIndicatorCount.ToString(
-																	CultureInfo.InvariantCulture));
+				visibleIndicatorCount.ToString(CultureInfo.InvariantCulture));
 		}
 
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
@@ -278,15 +267,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 			var firstDayOfWeek = DateHelper.GetFirstDateInWeek(anyDayOfWeek, DataMaker.Data().MyCulture).ToString("yyyy-MM-dd");
 			var lastDayOfWeek = DateHelper.GetLastDateInWeek(anyDayOfWeek, DataMaker.Data().MyCulture).ToString("yyyy-MM-dd");
 
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}']", firstDayOfWeek));
-			Browser.Interactions.AssertExists(string.Format(".weekview-day[data-mytime-date='{0}']", lastDayOfWeek));
+			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{firstDayOfWeek}']");
+			Browser.Interactions.AssertExists($".weekview-day[data-mytime-date='{lastDayOfWeek}']");
 		}
 
 		private void AssertDayContainsGivenNumberOfLayers(DateTime date, int layerCount)
 		{
-			var script = string.Format("return $('.weekview-day[data-mytime-date=\"{0}\"] .weekview-day-schedule-layer').length", date.ToString("yyyy-MM-dd"));
+			var script = $"return $('.weekview-day[data-mytime-date=\"{date:yyyy-MM-dd}\"] .weekview-day-schedule-layer').length";
 			Browser.Interactions.AssertJavascriptResultContains(script, layerCount.ToString(CultureInfo.InvariantCulture));
 		}
-
 	}
 }

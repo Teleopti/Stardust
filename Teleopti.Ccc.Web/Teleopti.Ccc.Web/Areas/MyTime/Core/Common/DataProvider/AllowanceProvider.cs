@@ -29,107 +29,81 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var validOpenPeriods = person.WorkflowControlSet?.AbsenceRequestOpenPeriods?
-				.Where(isValidateStaffingWithBudgetGroup).ToList();
-			if (validOpenPeriods == null || !validOpenPeriods.Any())
-			{
-				return createEmptyAllowanceDayCollection(period, false);
-			}
-
 			var userTimezone = person.PermissionInformation.DefaultTimeZone();
 			var userToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), userTimezone));
-			validOpenPeriods = validOpenPeriods.Where(p => isValidOpenPeriod(p, userToday))
-				.OrderBy(p => p.OrderIndex).ToList();
 
-			if (!validOpenPeriods.Any())
+			var openPeriods = person.WorkflowControlSet?.AbsenceRequestOpenPeriods?.ToList();
+			if (openPeriods == null || !openPeriods.Any(p => p.OpenForRequestsPeriod.Contains(userToday)))
 			{
-				return createEmptyAllowanceDayCollection(period, true);
+				return period.DayCollection().Select(date => new AllowanceDay
+				{
+					Date = date,
+					Time = TimeSpan.Zero,
+					Heads = TimeSpan.Zero,
+					AllowanceHeads = .0,
+					Availability = false,
+					UseHeadCount = false,
+					ValidateBudgetGroup = false
+				});
 			}
 
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 			var budgetDays = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period)
 				.SelectMany(x => _budgetDayRepository.Find(defaultScenario, x.Item2, x.Item1)).ToList();
 
-			return budgetDays.Any()
-				? createAllowanceDays(period, userToday, validOpenPeriods, budgetDays)
-				: createEmptyAllowanceDayCollection(period, true);
-		}
-
-		private static bool isValidateStaffingWithBudgetGroup(IAbsenceRequestOpenPeriod period)
-		{
-			return period.StaffingThresholdValidator is BudgetGroupAllowanceValidator ||
-					period.StaffingThresholdValidator is BudgetGroupHeadCountValidator;
-		}
-
-		private static bool isValidOpenPeriod(IAbsenceRequestOpenPeriod period, DateOnly userToday)
-		{
-			var isAutoDeny = period.AbsenceRequestProcess is DenyAbsenceRequest;
-			return !isAutoDeny && period.OpenForRequestsPeriod.Contains(userToday);
-		}
-
-		private static IEnumerable<AllowanceDay> createEmptyAllowanceDayCollection(DateOnlyPeriod period, bool availability)
-		{
-			return period.DayCollection().Select(date => new AllowanceDay
-			{
-				Date = date,
-				Time = TimeSpan.Zero,
-				Heads = TimeSpan.Zero,
-				AllowanceHeads = .0,
-				Availability = availability,
-				UseHeadCount = false,
-				ValidateBudgetGroup = false
-			});
+			return createAllowanceDays(period, userToday, openPeriods, budgetDays);
 		}
 
 		private static IEnumerable<IAllowanceDay> createAllowanceDays(DateOnlyPeriod period, DateOnly userToday,
 			IEnumerable<IAbsenceRequestOpenPeriod> validOpenPeriods, IReadOnlyCollection<IBudgetDay> budgetDays)
 		{
-			var allowanceList = from d in period.DayCollection()
-				select new
-				{
-					Date = d,
-					Time = TimeSpan.Zero,
-					Heads = TimeSpan.Zero,
-					AllowanceHeads = .0,
-					UseHeadCount = false,
-					ValidateBudgetGroup = false
-				};
-
-			foreach (var openPeriod in validOpenPeriods)
+			var result = new List<IAllowanceDay>();
+			var sortedOpenPeriods = validOpenPeriods.OrderByDescending(p => p.OrderIndex).ToList();
+			foreach (var date in period.DayCollection())
 			{
-				var periodForToday = openPeriod.GetPeriod(userToday);
-				var useHeadCount = openPeriod.StaffingThresholdValidator is BudgetGroupHeadCountValidator;
-				var validBudgetDays = budgetDays.Where(bd => periodForToday.Contains(bd.Day));
-				var allowanceFromBudgetDays =
-					from budgetDay in validBudgetDays
-					let shrinkedAllowance = budgetDay.ShrinkedAllowance
-					let fullTimeInHours = budgetDay.FulltimeEquivalentHours
-					select new
+				var openPeriodsForThisDay = sortedOpenPeriods.FirstOrDefault(p => p.GetPeriod(userToday).Contains(date));
+				var openPeriodIsValid = openPeriodsForThisDay != null && isValidOpenPeriod(openPeriodsForThisDay);
+				var budgetDayForThisDay = budgetDays?.FirstOrDefault(bd => bd.Day == date);
+
+				if (!openPeriodIsValid || budgetDayForThisDay == null)
+				{
+					result.Add(new AllowanceDay
 					{
-						Date = budgetDay.Day,
-						Time = TimeSpan.FromHours(Math.Max(shrinkedAllowance * fullTimeInHours, 0)),
-						Heads = TimeSpan.FromHours(Math.Max(fullTimeInHours, 0)),
-						AllowanceHeads = shrinkedAllowance,
-						UseHeadCount = useHeadCount,
-						ValidateBudgetGroup = true
-					};
-				allowanceList = allowanceList.Concat(allowanceFromBudgetDays);
+						Date = date,
+						Time = TimeSpan.Zero,
+						Heads = TimeSpan.Zero,
+						Availability = openPeriodIsValid,
+						AllowanceHeads = .0,
+						UseHeadCount = false,
+						ValidateBudgetGroup = false
+					});
+					continue;
+				}
+
+				var useHeadCount = openPeriodsForThisDay.StaffingThresholdValidator is BudgetGroupHeadCountValidator;
+				var shrinkedAllowance = budgetDayForThisDay.ShrinkedAllowance;
+				var fullTimeInHours = budgetDayForThisDay.FulltimeEquivalentHours;
+				result.Add(new AllowanceDay
+				{
+					Date = date,
+					Time = TimeSpan.FromHours(Math.Max(shrinkedAllowance * fullTimeInHours, 0)),
+					Heads = TimeSpan.FromHours(Math.Max(fullTimeInHours, 0)),
+					Availability = true,
+					AllowanceHeads = shrinkedAllowance,
+					UseHeadCount = useHeadCount,
+					ValidateBudgetGroup = true
+				});
 			}
 
-			return from rawAllowance in allowanceList
-				group rawAllowance by rawAllowance.Date
-				into g
-				orderby g.Key
-				select new AllowanceDay
-				{
-					Date = g.Key,
-					Time = g.Last(o => o.Date == g.Key).Time,
-					Heads = g.Last().Heads,
-					AllowanceHeads = g.Last(o => o.Date == g.Key).AllowanceHeads,
-					Availability = true,
-					UseHeadCount = g.Last(o => o.Date == g.Key).UseHeadCount,
-					ValidateBudgetGroup = g.Any(o => o.ValidateBudgetGroup)
-				};
+			return result;
+		}
+
+		private static bool isValidOpenPeriod(IAbsenceRequestOpenPeriod openPeriod)
+		{
+			var validateStaffingWithBudgetGroup = openPeriod.StaffingThresholdValidator is BudgetGroupAllowanceValidator ||
+												  openPeriod.StaffingThresholdValidator is BudgetGroupHeadCountValidator;
+			var isAutoDeny = openPeriod.AbsenceRequestProcess is DenyAbsenceRequest;
+			return validateStaffingWithBudgetGroup && !isAutoDeny;
 		}
 	}
 }

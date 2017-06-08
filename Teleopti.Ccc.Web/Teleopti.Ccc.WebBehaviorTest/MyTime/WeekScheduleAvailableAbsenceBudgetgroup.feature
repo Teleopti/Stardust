@@ -162,7 +162,7 @@ Scenario: Show the user an empty indication when there is no budgetgroup for tha
 	And I have the workflow control set 'Open absence period'
 	When I view my week schedule for date '2023-04-05'
 	Then I should see an 'green' indication for chance of absence request on '2023-04-03'
-	And I should see an empty indication for chance of absence request on '2023-04-04'
+	And I should see no indication for chance of absence request on '2023-04-04'
 
 Scenario: Show the user an empty indication when today is outside open absence periods
 	Given the time is '2023-05-02 20:00'
@@ -183,7 +183,7 @@ Scenario: Show the user an empty indication when today is outside open absence p
 	And I have the role 'Full access to mytime'
 	And I have the workflow control set 'Closed absence period'
 	When I view my week schedule for date '2023-04-28'
-	Then I should see an empty indication for chance of absence request on '2023-04-28'
+	Then I should see no indication for chance of absence request on '2023-04-28'
 
 Scenario: Show the user an empty indication when absence day is outside absence preference periods
 	Given the time is '2023-05-15 20:00'
@@ -204,7 +204,7 @@ Scenario: Show the user an empty indication when absence day is outside absence 
 	And I have the role 'Full access to mytime'
 	And I have the workflow control set 'Closed preference period'
 	When I view my week schedule for date '2023-05-28'
-	Then I should see an empty indication for chance of absence request on '2023-05-28'
+	Then I should see no indication for chance of absence request on '2023-05-28'
 
 Scenario: Do not show the user any indication when there is no staffing check for that day
 	Given the time is '2023-05-25 20:00'
@@ -319,7 +319,7 @@ Scenario: Show the user an empty indication when absence requests are auto denie
 	And I have the role 'Full access to mytime'
 	And I have the workflow control set 'Auto deny'
 	When I view my week schedule for date '2023-05-28'
-	Then I should see an empty indication for chance of absence request on '2023-05-28'
+	Then I should see no indication for chance of absence request on '2023-05-28'
 
 Scenario: Show the user a red indication when left absence is less than one fulltime equivalent
 	Given there is a budgetday

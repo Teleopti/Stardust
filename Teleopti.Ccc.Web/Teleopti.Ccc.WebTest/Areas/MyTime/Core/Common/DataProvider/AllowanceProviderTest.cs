@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenNoBudgetDays_ShouldSetAllowanceToZeroOnEverydayInThePeriod()
+		public void WhenNoBudgetDays_ShouldSetAllowanceToZeroOnEverydayInThePeriod()
 		{
 			addWorkFlowControlSetWithOpenAbsencePeriod(_alwaysOpenPeriod, _alwaysOpenPeriod);
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenBudgetDayExistWithinThePeriod_ShouldSetTheAllowanceInMinutesForThatDate()
+		public void WhenBudgetDayExistWithinThePeriod_ShouldSetTheAllowanceInMinutesForThatDate()
 		{
 			addWorkFlowControlSetWithOpenAbsencePeriod(_alwaysOpenPeriod, _alwaysOpenPeriod);
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenTodayIsOutsideOpenPeriod_ShouldSetTheAllowanceToZero()
+		public void WhenTodayIsOutsideOpenPeriod_ShouldSetTheAllowanceToZero()
 		{
 			var closedPeriod = new DateOnlyPeriod(new DateOnly(2000, 1, 1), new DateOnly(2005, 1, 1));
 			addWorkFlowControlSetWithOpenAbsencePeriod(closedPeriod, _alwaysOpenPeriod);
@@ -123,18 +123,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var result = target.GetAllowanceForPeriod(period).ToList();
 
 			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
-			verifyAllAvailability(result, true);
+			verifyAllAvailability(result, false);
 			allShouldBeEmptyAllowanceDay(result);
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenAbsenceDayIsOutsidePreferencePeriod_ShouldSetTheAllowanceToZero()
+		public void WhenAbsenceDayIsOutsidePreferencePeriod_ShouldSetTheAllowanceToZero()
 		{
 			var startDate = new DateOnly(2001, 1, 1);
 			var endDate = new DateOnly(2001, 1, 10);
 
-			addWorkFlowControlSetWithOpenAbsencePeriod(_alwaysOpenPeriod,
-				new DateOnlyPeriod(new DateOnly(1999, 5, 5), new DateOnly(1999, 7, 5)));
+			var openPeriod = new DateOnlyPeriod(new DateOnly(1999, 5, 5), new DateOnly(1999, 7, 5));
+			addWorkFlowControlSetWithOpenAbsencePeriod(_alwaysOpenPeriod, openPeriod);
 
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
@@ -158,12 +158,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var result = target.GetAllowanceForPeriod(period).ToList();
 
 			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
-			verifyAllAvailability(result, true);
+			verifyAllAvailability(result, false);
 			allShouldBeEmptyAllowanceDay(result);
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenThereAreMultiplePersonPeriodWithDifferentBudgetGroupssWithinThatPeriod_ShouldUseAllBudgetGroupsToFindTheBudgetDays()
+		public void
+			WhenThereAreMultiplePersonPeriodWithDifferentBudgetGroupssWithinThatPeriod_ShouldUseAllBudgetGroupsToFindTheBudgetDays()
 		{
 			addWorkFlowControlSetWithOpenAbsencePeriod(_alwaysOpenPeriod, _alwaysOpenPeriod);
 			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
@@ -226,7 +227,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WithoutOpenAbsenceRequestPeriods_ShouldSetAllowanceToZeroOnEverydayInThePeriod()
+		public void WithoutOpenAbsenceRequestPeriods_ShouldSetAllowanceToZeroOnEverydayInThePeriod()
 		{
 			_user.WorkflowControlSet = new WorkflowControlSet("workflow controlset without open absenceperiod");
 			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
@@ -242,7 +243,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenNoWorkFlowControlSet_ShouldSetAllowanceToZeroOnEverydayInThePeriod()
+		public void WhenNoWorkFlowControlSet_ShouldSetAllowanceToZeroOnEverydayInThePeriod()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
 			var budgetDayRepo = MockRepository.GenerateMock<IBudgetDayRepository>();
@@ -257,7 +258,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenThereAreDayWithNegativeValues_ShouldSetAllowanceToZero()
+		public void WhenThereAreDayWithNegativeValues_ShouldSetAllowanceToZero()
 		{
 			addWorkFlowControlSetWithOpenAbsencePeriod(_alwaysOpenPeriod, _alwaysOpenPeriod);
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
@@ -290,7 +291,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenTodayExistWithinThePeriod_ShouldSetTheAllowanceInMinutesForThatDate()
+		public void WhenTodayExistWithinThePeriod_ShouldSetTheAllowanceInMinutesForThatDate()
 		{
 			addWorkFlowControlSetWithOpenAbsencePeriod(_alwaysOpenPeriod, _alwaysOpenPeriod);
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
@@ -335,22 +336,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenAutoDeny_ShouldSetAllowanceToZero()
+		public void WhenAutoDeny_ShouldSetAllowanceToZero()
 		{
 			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
 			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
 				OpenForRequestsPeriod = _alwaysOpenPeriod,
-				Period = _alwaysOpenPeriod
+				Period = _alwaysOpenPeriod,
+				StaffingThresholdValidator = new BudgetGroupAllowanceValidator(),
+				AbsenceRequestProcess = new DenyAbsenceRequest()
 			});
 
-			var openPeriod = workflowControlSet.AbsenceRequestOpenPeriods.First();
-			openPeriod.StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
-			openPeriod.AbsenceRequestProcess = new DenyAbsenceRequest();
-
 			_user.WorkflowControlSet = workflowControlSet;
-
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
@@ -373,23 +371,21 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var result = target.GetAllowanceForPeriod(period).ToList();
 
 			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
-			verifyAllAvailability(result, true);
+			verifyAllAvailability(result, false);
 			allShouldBeEmptyAllowanceDay(result);
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenBudgetgroupStaffingCheck_ShouldSetAvailabilityToTrue()
+		public void WhenBudgetgroupStaffingCheck_ShouldSetAvailabilityToTrue()
 		{
 			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
 			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
 				OpenForRequestsPeriod = _alwaysOpenPeriod,
-				Period = _alwaysOpenPeriod
+				Period = _alwaysOpenPeriod,
+				StaffingThresholdValidator = new BudgetGroupAllowanceValidator()
 			});
-
-			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator =
-				new BudgetGroupAllowanceValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 
@@ -425,18 +421,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenIntradayStaffingCheck_ShouldSetAvailabilityToFalse()
+		public void WhenIntradayStaffingCheck_ShouldSetAvailabilityToFalse()
 		{
 			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
 			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
 				OpenForRequestsPeriod = _alwaysOpenPeriod,
-				Period = _alwaysOpenPeriod
+				Period = _alwaysOpenPeriod,
+				StaffingThresholdValidator = new StaffingThresholdValidator()
 			});
-
-			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator
-				= new StaffingThresholdValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 
@@ -467,7 +461,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenBudgetgroupStaffingCheckNextToIntradayStaffingCheck_ShouldSetAvailabilityToTrue()
+		public void WhenBudgetgroupStaffingCheckNextToIntradayStaffingCheck_ShouldSetAvailabilityToTrue()
 		{
 			createValidAndInvalidAbsenceForAvailability();
 
@@ -503,18 +497,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenHeadCountStaffingCheck_ShouldSetAvailabilityToTrue()
+		public void WhenHeadCountStaffingCheck_ShouldSetAvailabilityToTrue()
 		{
 			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
 			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
 				OpenForRequestsPeriod = _alwaysOpenPeriod,
-				Period = _alwaysOpenPeriod
+				Period = _alwaysOpenPeriod,
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator()
 			});
-
-			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator =
-				new BudgetGroupHeadCountValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 
@@ -550,18 +542,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenNoStaffingCheck_ShouldSetAvailabilityToFalse()
+		public void WhenNoStaffingCheck_ShouldSetAvailabilityToFalse()
 		{
 			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
 			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
 				OpenForRequestsPeriod = _alwaysOpenPeriod,
-				Period = _alwaysOpenPeriod
+				Period = _alwaysOpenPeriod,
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator()
 			});
-
-			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator
-				= new AbsenceRequestNoneValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 
@@ -592,12 +582,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenMultipleOpenPeriodsApplied_ShouldCheckStaffingWithLatestValidOpenPeriodForTheDay()
+		public void WhenMultipleOpenPeriodsApplied_ShouldCheckStaffingBasedOnLatestOpenPeriodForTheDay()
 		{
 			createMultipleOpenPeriods();
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
-			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-7), DateOnly.Today.AddDays(7));
+			var period = new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(10));
 			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
 
 			var budgetGroup = new BudgetGroup();
@@ -605,20 +595,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var budgetDays = new List<IBudgetDay>();
 
-			// Yesterday was covered by the first open period with BudgetGroupHeadCountValidator only, will apply with it
-			var allowance0 = TimeSpan.FromHours(30);
-			var budgetDay0 = createBudgetDayWithAllowance(budgetGroup, DateOnly.Today.AddDays(-1), allowance0.TotalHours);
+			// 6 days ago will apply the open period with BudgetGroupHeadCountValidator BUT auto denied, no traffic light should displayed
+			var allowance0 = TimeSpan.FromHours(20);
+			var budgetDay0 = createBudgetDayWithAllowance(budgetGroup, DateOnly.Today.AddDays(-6), allowance0.TotalHours);
 			budgetDays.Add(budgetDay0);
 
-			// Both 2 open periods with BudgetGroup validator covered today, will apply the second one since its OrderIndex is bigger
-			var allowance1 = TimeSpan.FromHours(40);
-			var budgetDay1 = createBudgetDayWithAllowance(budgetGroup, DateOnly.Today, allowance1.TotalHours);
+			// Yesterday will apply open period with BudgetGroupHeadCountValidator, should display traffic light
+			var allowance1 = TimeSpan.FromHours(30);
+			var budgetDay1 = createBudgetDayWithAllowance(budgetGroup, DateOnly.Today.AddDays(-1), allowance1.TotalHours);
 			budgetDays.Add(budgetDay1);
 
-			// Tomorrow was covered by the second open period with BudgetGroupAllowanceValidator only, will apply with it
-			var allowance2 = TimeSpan.FromHours(50);
-			var budgetDay2 = createBudgetDayWithAllowance(budgetGroup, DateOnly.Today.AddDays(1), allowance2.TotalHours);
+			// Both 2 open periods with BudgetGroup validator covered today, will apply the second one since its OrderIndex is bigger
+			var allowance2 = TimeSpan.FromHours(40);
+			var budgetDay2 = createBudgetDayWithAllowance(budgetGroup, DateOnly.Today, allowance2.TotalHours);
 			budgetDays.Add(budgetDay2);
+
+			// Tomorrow will apply open period with BudgetGroupAllowanceValidator, should display traffic light
+			var allowance3 = TimeSpan.FromHours(50);
+			var budgetDay3 = createBudgetDayWithAllowance(budgetGroup, DateOnly.Today.AddDays(1), allowance3.TotalHours);
+			budgetDays.Add(budgetDay3);
 
 			_user.AddPersonPeriod(personPeriod1);
 			budgetDayRepository.Stub(x => x.Find(_scenario, budgetGroup, period)).Return(budgetDays);
@@ -628,30 +623,35 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var result = target.GetAllowanceForPeriod(period).ToList();
 
 			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
-			verifyAllAvailability(result, true);
 			foreach (var allowanceDay in result)
 			{
+				// These days are covered by open period with budget group validators and not auto denied, so should show traffic light
+				var expectedAvailability = allowanceDay.Date >= DateOnly.Today.AddDays(-7) &&
+										   allowanceDay.Date <= DateOnly.Today.AddDays(7) &&
+										   allowanceDay.Date != DateOnly.Today.AddDays(-6);
+				Assert.AreEqual(expectedAvailability, allowanceDay.Availability);
+
 				if (allowanceDay.Date == DateOnly.Today.AddDays(-1))
 				{
-					Assert.AreEqual(allowance0, allowanceDay.Time);
-					Assert.AreEqual(TimeSpan.FromHours(budgetDay0.FulltimeEquivalentHours), allowanceDay.Heads);
-					Assert.AreEqual(allowance0.TotalHours, allowanceDay.AllowanceHeads);
+					Assert.AreEqual(allowance1, allowanceDay.Time);
+					Assert.AreEqual(TimeSpan.FromHours(budgetDay1.FulltimeEquivalentHours), allowanceDay.Heads);
+					Assert.AreEqual(allowance1.TotalHours, allowanceDay.AllowanceHeads);
 					Assert.AreEqual(true, allowanceDay.UseHeadCount);
 					Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
 				}
 				else if (allowanceDay.Date == DateOnly.Today)
 				{
-					Assert.AreEqual(allowance1, allowanceDay.Time);
-					Assert.AreEqual(TimeSpan.FromHours(budgetDay1.FulltimeEquivalentHours), allowanceDay.Heads);
-					Assert.AreEqual(allowance1.TotalHours, allowanceDay.AllowanceHeads);
+					Assert.AreEqual(allowance2, allowanceDay.Time);
+					Assert.AreEqual(TimeSpan.FromHours(budgetDay2.FulltimeEquivalentHours), allowanceDay.Heads);
+					Assert.AreEqual(allowance2.TotalHours, allowanceDay.AllowanceHeads);
 					Assert.AreEqual(false, allowanceDay.UseHeadCount);
 					Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
 				}
 				else if (allowanceDay.Date == DateOnly.Today.AddDays(1))
 				{
-					Assert.AreEqual(allowance2, allowanceDay.Time);
-					Assert.AreEqual(TimeSpan.FromHours(budgetDay2.FulltimeEquivalentHours), allowanceDay.Heads);
-					Assert.AreEqual(allowance2.TotalHours, allowanceDay.AllowanceHeads);
+					Assert.AreEqual(allowance3, allowanceDay.Time);
+					Assert.AreEqual(TimeSpan.FromHours(budgetDay3.FulltimeEquivalentHours), allowanceDay.Heads);
+					Assert.AreEqual(allowance3.TotalHours, allowanceDay.AllowanceHeads);
 					Assert.AreEqual(false, allowanceDay.UseHeadCount);
 					Assert.AreEqual(true, allowanceDay.ValidateBudgetGroup);
 				}
@@ -681,11 +681,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			{
 				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
 				OpenForRequestsPeriod = openForRequests,
-				Period = preferencePeriod
+				Period = preferencePeriod,
+				StaffingThresholdValidator = new BudgetGroupAllowanceValidator()
 			});
-
-			workflowControlSet.AbsenceRequestOpenPeriods.First().StaffingThresholdValidator =
-				new BudgetGroupAllowanceValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 		}
@@ -719,18 +717,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			{
 				Absence = AbsenceFactory.CreateAbsence("IntradayAbsence"),
 				OpenForRequestsPeriod = _alwaysOpenPeriod,
-				Period = new DateOnlyPeriod(DateOnly.Today.AddDays(-7), DateOnly.Today)
+				Period = new DateOnlyPeriod(DateOnly.Today.AddDays(-7), DateOnly.Today),
+				StaffingThresholdValidator = new StaffingThresholdValidator()
 			});
 			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = AbsenceFactory.CreateAbsence("BudgetgroupAbsence"),
 				OpenForRequestsPeriod = _alwaysOpenPeriod,
-				Period = new DateOnlyPeriod(DateOnly.Today.AddDays(1), DateOnly.Today.AddDays(7))
+				Period = new DateOnlyPeriod(DateOnly.Today.AddDays(1), DateOnly.Today.AddDays(7)),
+				StaffingThresholdValidator = new BudgetGroupAllowanceValidator()
 			});
-
-			var openPeriods = workflowControlSet.AbsenceRequestOpenPeriods;
-			openPeriods[0].StaffingThresholdValidator = new StaffingThresholdValidator();
-			openPeriods[1].StaffingThresholdValidator = new BudgetGroupAllowanceValidator();
 
 			_user.WorkflowControlSet = workflowControlSet;
 		}
@@ -759,6 +755,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				OpenForRequestsPeriod = _alwaysOpenPeriod,
 				Period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(7)),
 				StaffingThresholdValidator = new BudgetGroupAllowanceValidator()
+			});
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = AbsenceFactory.CreateAbsence("HeadCountAbsence-AutoDeny"),
+				OpenForRequestsPeriod = _alwaysOpenPeriod,
+				Period = new DateOnlyPeriod(DateOnly.Today.AddDays(-6), DateOnly.Today.AddDays(-6)),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				AbsenceRequestProcess = new DenyAbsenceRequest()
 			});
 
 			_user.WorkflowControlSet = workflowControlSet;
