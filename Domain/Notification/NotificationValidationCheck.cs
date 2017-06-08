@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Notification
 			_notifier = notifier;
 		}
 
-		public void InitiateNotify(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
+		public async void InitiateNotify(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
 		{
 			var changeNotificationMessage =
 				_significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Notification
 			{
 				logger.Info(
 					$"Found significant change on {date.ToShortDateString(CultureInfo.InvariantCulture)} for {person.Name}");
-				_notifier.Notify(changeNotificationMessage, person);
+				await _notifier.Notify(changeNotificationMessage, person);
 			}
 			else
 			{

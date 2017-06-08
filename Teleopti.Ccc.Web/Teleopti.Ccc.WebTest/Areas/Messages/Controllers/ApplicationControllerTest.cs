@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using NUnit.Framework;
@@ -67,24 +68,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 		}
 
 		[Test]
-		public void ShouldSendMessage()
+		public async Task ShouldSendMessage()
 		{
 			var person1 = PersonFactory.CreatePersonWithGuid("a", "a");
 			var person2 = PersonFactory.CreatePersonWithGuid("b", "b");
 			var persons = new[] { person1, person2 };
 			_personRepository.Stub(x => x.FindPeople(new[] { person1.Id.Value, person2.Id.Value })).IgnoreArguments()
 				.Return(persons);
+			_notifier.Stub(x => x.Notify(null, persons)).IgnoreArguments().Return(Task.FromResult(true));
 
 			const string subject = "test";
 			const string testBody = "test body";
-			target.SendMessage(new[] {person1.Id.Value, person2.Id.Value}, subject, testBody);
+			await target.SendMessage(new[] {person1.Id.Value, person2.Id.Value}, subject, testBody);
 
 			_notifier.AssertWasCalled(
 				x => x.Notify(Arg<INotificationMessage>.Matches(s => s.Subject == subject && s.Messages.First() == testBody), Arg<IPerson[]>.Is.Equal(persons)));
 		}
 
 		[Test]
-		public void ShouldSendMessageAndIncludeCustomerName()
+		public async Task ShouldSendMessageAndIncludeCustomerName()
 		{
 			string customerName = "SomeTestLicenseCustomerName";
 			var person1 = PersonFactory.CreatePersonWithGuid("a", "a");
@@ -92,12 +94,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 			var persons = new[] { person1, person2 };
 			_personRepository.Stub(x => x.FindPeople(new[] { person1.Id.Value, person2.Id.Value })).IgnoreArguments()
 				.Return(persons);
+			_notifier.Stub(x => x.Notify(null, persons)).IgnoreArguments().Return(Task.FromResult(true));
 
 			_licenseCustomerNameProvider.Stub(x => x.GetLicenseCustomerName()).Return(customerName);
 
 			const string subject = "test";
 			const string testBody = "test body";
-			target.SendMessage(new[] { person1.Id.Value, person2.Id.Value }, subject, testBody);
+			await target.SendMessage(new[] { person1.Id.Value, person2.Id.Value }, subject, testBody);
 
 			_notifier.AssertWasCalled(
 				x => x.Notify(Arg<INotificationMessage>.Matches(s => s.Subject == subject && s.Messages.First() == testBody && s.CustomerName == customerName), Arg<IPerson[]>.Is.Equal(persons)));
@@ -142,6 +145,5 @@ namespace Teleopti.Ccc.WebTest.Areas.Messages.Controllers
 			result.ContentType.Should().Be("text/javascript");
 			result.Content.Should().Not.Be.Null();
 		}
-
 	}
 }

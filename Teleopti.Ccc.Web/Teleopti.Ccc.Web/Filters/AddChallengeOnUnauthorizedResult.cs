@@ -16,9 +16,9 @@ namespace Teleopti.Ccc.Web.Filters
 			InnerResult = innerResult;
 		}
 
-		public AuthenticationHeaderValue Challenge { get; private set; }
+		public AuthenticationHeaderValue Challenge { get; }
 
-		public IHttpActionResult InnerResult { get; private set; }
+		public IHttpActionResult InnerResult { get; }
 
 		public async Task<HttpResponseMessage> ExecuteAsync(CancellationToken cancellationToken)
 		{
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Filters
 			if (response.StatusCode == HttpStatusCode.Unauthorized)
 			{
 				// Only add one challenge per authentication scheme.
-				if (!response.Headers.WwwAuthenticate.Any((h) => h.Scheme == Challenge.Scheme))
+				if (response.Headers.WwwAuthenticate.All(h => h.Scheme != Challenge.Scheme))
 				{
 					response.Headers.WwwAuthenticate.Add(Challenge);
 				}

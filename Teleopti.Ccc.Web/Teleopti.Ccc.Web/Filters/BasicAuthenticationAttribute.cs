@@ -144,9 +144,6 @@ namespace Teleopti.Ccc.Web.Filters
 			context.ChallengeWith("Basic", parameter);
 		}
 
-		public virtual bool AllowMultiple
-		{
-			get { return false; }
-		}
+		public virtual bool AllowMultiple => false;
 	}
 }

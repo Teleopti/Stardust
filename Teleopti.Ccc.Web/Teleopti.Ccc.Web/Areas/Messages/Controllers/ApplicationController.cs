@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Newtonsoft.Json;
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 	    [UnitOfWork]
 	    [HttpPost]
 		[License(DefinedLicenseOptionPaths.TeleoptiCccSmsLink)]
-		public virtual JsonResult SendMessage(Guid[] receivers, string subject, string body)
+		public virtual async Task<JsonResult> SendMessage(Guid[] receivers, string subject, string body)
 	    {
 			var persons = _personRepository.FindPeople(receivers).ToArray();
 			INotificationMessage msg = new NotificationMessage
@@ -71,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Messages.Controllers
 				CustomerName = _licenseCustomerNameProvider.GetLicenseCustomerName()
 			};
 		    msg.Messages.Add(body);
-			_notifier.Notify(msg, persons);
+			await _notifier.Notify(msg, persons);
 		    return Json("");
 	    }
 
