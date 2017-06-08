@@ -106,46 +106,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ModifyAbsence.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\RealTimeAdherence\AgentsMultiTeams.feature.cs">
-      <DependentUpon>AgentsMultiTeams.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\RealTimeAdherence\Agents.feature.cs">
-      <DependentUpon>Agents.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\RealTimeAdherence\MultiBusinessUnits.feature.cs">
-      <DependentUpon>MultiBusinessUnits.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\RealTimeAdherence\ChangeSchedule.feature.cs">
-      <DependentUpon>ChangeSchedule.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\RealTimeAdherence\Nighshift.feature.cs">
-      <DependentUpon>Nighshift.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\RealTimeAdherence\NeutralPolicy.feature.cs">
-      <DependentUpon>NeutralPolicy.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\RealTimeAdherence\TimeZone.feature.cs">
-      <DependentUpon>TimeZone.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\RealTimeAdherence\Percentage.feature.cs">
-      <DependentUpon>Percentage.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Anywhere\ScheduleChangePermissionControl.feature.cs">
       <DependentUpon>ScheduleChangePermissionControl.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -170,11 +130,6 @@
       <DependentUpon>BusterTests.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\RealTimeAdherence\Overview.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Overview.feature</DependentUpon>
     </Compile>
     <Compile Include="Anywhere\ViewScheduleActivityDetails.feature.cs">
       <DependentUpon>ViewScheduleActivityDetails.feature</DependentUpon>
@@ -1123,38 +1078,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ModifyAbsence.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\RealTimeAdherence\AgentsMultiTeams.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentsMultiTeams.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\RealTimeAdherence\Agents.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Agents.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\RealTimeAdherence\MultiBusinessUnits.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MultiBusinessUnits.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\RealTimeAdherence\ChangeSchedule.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ChangeSchedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\RealTimeAdherence\Nighshift.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Nighshift.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\RealTimeAdherence\NeutralPolicy.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>NeutralPolicy.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\RealTimeAdherence\TimeZone.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>TimeZone.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\RealTimeAdherence\Percentage.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Percentage.feature.cs</LastGenOutput>
-    </None>
     <None Include="Anywhere\ScheduleChangePermissionControl.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ScheduleChangePermissionControl.feature.cs</LastGenOutput>
@@ -1174,10 +1097,6 @@
     <None Include="Anywhere\BusterTests.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>BusterTests.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\RealTimeAdherence\Overview.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Overview.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\ViewScheduleActivityDetails.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
