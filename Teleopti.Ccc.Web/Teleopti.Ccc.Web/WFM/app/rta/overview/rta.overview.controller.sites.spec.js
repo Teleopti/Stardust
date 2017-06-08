@@ -136,11 +136,4 @@ describe('RtaOverviewController', function () {
 		});
 	});
 	
-	it('should call notify service', function () {
-		spyOn(NoticeService, 'info');
-
-		$controllerBuilder.createController();
-
-		expect(NoticeService.info).toHaveBeenCalled();
-	});
 });
