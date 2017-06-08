@@ -28,6 +28,11 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 		public IBacklogTask GetIncomingTaskFromCampaign(IOutboundCampaign campaign)
 		{
+			return GetIncomingTaskFromCampaign(campaign, new List<DateOnly>());
+		}
+
+		public IBacklogTask GetIncomingTaskFromCampaign(IOutboundCampaign campaign, IList<DateOnly> skipScheduleOnDates)
+		{
 			var incomingTask = _outboundProductionPlanFactory.CreateAndMakeInitialPlan(campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone), campaign.CampaignTasks(), campaign.AverageTaskHandlingTime(), campaign.WorkingHours);
 			var dates = incomingTask.SpanningPeriod.DayCollection();
 			var schedules = _outboundScheduledResourcesCacher.GetScheduledTime(campaign);
@@ -42,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			if (forecasts == null)
 			{
 				forecasts = dates.ToDictionary(d => d, d => _outboundScheduledResourcesProvider.GetForecastedTimeOnDate(d, campaign.Skill))
-					.Where(kvp => kvp.Value > TimeSpan.Zero ).ToDictionary(d => d.Key, d => d.Value);
+					.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value);
 				_outboundScheduledResourcesCacher.SetForecastedTime(campaign, schedules);
 			}
 
@@ -60,12 +65,13 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				}
 				incomingTask.SetRealPlannedTimeOnDate(dateOnly, incomingTask.GetTimeOnDate(dateOnly));
 				incomingTask.SetRealScheduledTimeOnDate(dateOnly, TimeSpan.Zero);
-		
-				if (schedules.ContainsKey(dateOnly) )
+
+				if (schedules.ContainsKey(dateOnly) && !skipScheduleOnDates.Contains(dateOnly))
 				{
 					incomingTask.SetRealScheduledTimeOnDate(dateOnly, schedules[dateOnly]);
 					if (schedules[dateOnly] > TimeSpan.Zero) incomingTask.SetTimeOnDate(dateOnly, schedules[dateOnly], PlannedTimeTypeEnum.Scheduled);
-				} else if ( forecasts.ContainsKey(dateOnly)  && !manualTime.HasValue)
+				}
+				else if (forecasts.ContainsKey(dateOnly) && !manualTime.HasValue)
 				{
 					if (forecasts[dateOnly] > TimeSpan.Zero) incomingTask.SetTimeOnDate(dateOnly, forecasts[dateOnly], PlannedTimeTypeEnum.Calculated);
 					incomingTask.SetRealPlannedTimeOnDate(dateOnly, forecasts[dateOnly]);
@@ -75,14 +81,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				if (actualBacklog.HasValue)
 				{
 					incomingTask.SetActualBacklogOnDate(dateOnly, actualBacklog.Value);
-				}								
+				}
 			}
 			return incomingTask;
-		}
-
-		public IBacklogTask GetIncomingTaskFromCampaign(IOutboundCampaign campaign, IList<DateOnly> skipScheduleOnDates)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

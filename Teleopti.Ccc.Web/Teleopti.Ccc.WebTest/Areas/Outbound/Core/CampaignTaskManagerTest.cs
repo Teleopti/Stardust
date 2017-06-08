@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				.Return(TimeSpan.Zero);
 
 			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
-			var result = target.GetIncomingTaskFromCampaign(_campaign);
+			var result = target.GetIncomingTaskFromCampaign(_campaign, new List<DateOnly>());
 
 			result.GetRealPlannedTimeOnDate(date).Should().Be.EqualTo(new TimeSpan(4, 4, 0, 0));
 		}
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				.Return(expectedTime);
 
 			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
-			var result = target.GetIncomingTaskFromCampaign(_campaign);
+			var result = target.GetIncomingTaskFromCampaign(_campaign, new List<DateOnly>());
 
 			result.GetRealPlannedTimeOnDate(date).Should().Be.EqualTo(expectedTime);
 		}
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				.Return(forecastedTime);
 
 			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
-			var result = target.GetIncomingTaskFromCampaign(_campaign);
+			var result = target.GetIncomingTaskFromCampaign(_campaign, new List<DateOnly>());
 
 			result.GetTimeOnDate(date).Should().Be.EqualTo(expectedTime);
 			result.GetRealPlannedTimeOnDate(date).Should().Be.EqualTo(expectedTime);
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				.Return(forecastedTime);
 
 			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
-			var result = target.GetIncomingTaskFromCampaign(_campaign);
+			var result = target.GetIncomingTaskFromCampaign(_campaign, new List<DateOnly>());
 
 			result.GetTimeOnDate(date).Should().Be.EqualTo(expectedTime);
 			result.GetRealScheduledTimeOnDate(date).Should().Be.EqualTo(expectedTime);
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				.Return(expectedTime);
 
 			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
-			var result = target.GetIncomingTaskFromCampaign(_campaign);
+			var result = target.GetIncomingTaskFromCampaign(_campaign, new List<DateOnly>());
 
 			result.GetTimeOnDate(date).Should().Be.EqualTo(expectedTime);
 		}
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				.Return(TimeSpan.Zero);
 
 			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
-			var result = target.GetIncomingTaskFromCampaign(_campaign);
+			var result = target.GetIncomingTaskFromCampaign(_campaign, new List<DateOnly>());
 
 			result.GetManualPlannedInfoOnDate(date).Should().Be.True();
 		}
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				.Return(TimeSpan.Zero);
 
 			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
-			var result = target.GetIncomingTaskFromCampaign(_campaign);
+			var result = target.GetIncomingTaskFromCampaign(_campaign, new List<DateOnly>());
 
 			result.GetManualPlannedInfoOnDate(date).Should().Be.False();
 		}
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			});
 
 			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
-			var result = target.GetIncomingTaskFromCampaign(_campaign);
+			var result = target.GetIncomingTaskFromCampaign(_campaign, new List<DateOnly>());
 
 			result.GetRealScheduledTimeOnDate(date).Should().Be.EqualTo(new TimeSpan(10, 0, 0));
 		}
@@ -195,9 +195,31 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			});
 
 			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
-			var result = target.GetIncomingTaskFromCampaign(_campaign);
+			var result = target.GetIncomingTaskFromCampaign(_campaign, new List<DateOnly>());
 
 			result.GetRealPlannedTimeOnDate(date).Should().Be.EqualTo(new TimeSpan(10, 0, 0));
+		}
+
+		[Test]
+		public void ShouldHideScheduledForSkippedDates()
+		{
+			var date = new DateOnly(2015, 8, 18);
+			var manualTime = new TimeSpan(1, 0, 0);
+			var forecastedTime = new TimeSpan(2, 0, 0);
+			var scheduledTime = new TimeSpan(3, 0, 0);
+			_campaign.Stub(x => x.GetManualProductionPlan(date)).Return(manualTime);
+			_outboundScheduledResourcesProvider.Stub(x => x.GetScheduledTimeOnDate(date, _campaign.Skill))
+				.IgnoreArguments()
+				.Return(scheduledTime);
+			_outboundScheduledResourcesProvider.Stub(x => x.GetForecastedTimeOnDate(date, _campaign.Skill))
+				.IgnoreArguments()
+				.Return(forecastedTime);
+
+			var target = new CampaignTaskManager(_outboundProductionPlanFactory, _outboundScheduledResourcesProvider, _outboundScheduledResourcesCacher);
+			var result = target.GetIncomingTaskFromCampaign(_campaign, new List<DateOnly> {date});
+
+			result.GetTimeOnDate(date).Should().Be.EqualTo(manualTime);
+			result.GetRealScheduledTimeOnDate(date).Should().Be.EqualTo(TimeSpan.Zero);
 		}
 	}
 }
