@@ -10,7 +10,11 @@
   function ForecastCtrl(forecastingService, $interval) {
     var vm = this;
     vm.forecastModal = false;
+    vm.selectedDayCount = [];
     vm.forecastModalObj = {};
+    vm.currentWorkload = {
+      Days: []
+    };
     vm.selectedScenario = {};
     vm.forecastPeriod = {
       startDate:  moment().utc().add(1, 'months').startOf('month').toDate(),
@@ -22,11 +26,10 @@
       Skills: [],
       Scenarios: []
     };
-
     vm.init = init;
-    vm.getForecastResult = getForecastResult;
     vm.forecastingModal = forecastingModal;
-    vm.generateForecast = generateForecast;
+    vm.getWorkloadForecastData = getWorkloadForecastData;
+    vm.pointClick = pointClick;
 
     vm.init();
 
@@ -73,53 +76,54 @@
       });
     }
 
-    function generateForecast() {
-      if (!vm.forecastModalObj) {
-        //forecast all
+    function getWorkloadForecastData(workloadId) {
+      vm.skillMaster.isForecastRunning = true;
+      var wl = {
+        ForecastStart: vm.forecastPeriod.startDate,
+        ForecastEnd: vm.forecastPeriod.endDate,
+        WorkloadId: workloadId,
+        ScenarioId: vm.selectedScenario.Id
+      };
+      forecastingService.result(
+        wl,
+        function(data, status, headers, config) {
+          if (data.Days.length === 0) {
+            console.log('no data');
+            return;
+          }
+          vm.currentWorkload.Days = data.Days;
+
+          vm.skillMaster.isForecastRunning = false;
+          forecastingModal();
+        },
+        function(data, status, headers, config) {
+          vm.skillMaster.isForecastRunning = false;
+          console.log(status);
+        }
+      )
+    }
+
+    function pointClick(days) {
+      vm.selectedDayCount = days;
+    }
+
+    function forecastingModal(workload) {
+      if (vm.skillMaster.isForecastRunning) {
         return;
       }
-      else{
-        vm.skillMaster.isForecastRunning = true;
-
-        forecastingService.result(JSON.stringify(
-          {
-            ForecastStart: vm.forecastPeriod.startDate,
-            ForecastEnd: vm.forecastPeriod.endDate,
-            WorkloadId: vm.forecastModalObj.Id,
-            ScenarioId: vm.selectedScenario.Id
-          }), function(data) {
-            // console.log('response', data);
-          });
-
-        }
-        forecastingModal(null, true);
+      vm.forecastModalObj = {};
+      if (workload) {
+        vm.forecastModalObj = workload;
+        vm.forecastModal = true;
       }
-
-      function getForecastResult(skill) {
-        //open
-      };
-
-      function forecastingModal(workload, cancel) {
-        vm.forecastModalObj = {};
-        if (vm.skillMaster.isForecastRunning) {
-          return;
-        }
-
-        if (cancel === true) {
-          vm.forecastPeriod = {
-            startDate:  moment().utc().add(1, 'months').startOf('month').toDate(),
-            endDate: moment().utc().add(2, 'months').startOf('month').toDate()
-          };
-          vm.forecastModal = false;
-        }
-
-        else if (workload) {
-          vm.forecastModalObj = workload;
-          vm.forecastModal = true;
-        }else{
-          // forecast all
-        }
+      else {
+        vm.forecastPeriod = {
+          startDate:  moment().utc().add(1, 'months').startOf('month').toDate(),
+          endDate: moment().utc().add(2, 'months').startOf('month').toDate()
+        };
+        vm.forecastModal = false;
       }
-
     }
-  })();
+
+  }
+})();

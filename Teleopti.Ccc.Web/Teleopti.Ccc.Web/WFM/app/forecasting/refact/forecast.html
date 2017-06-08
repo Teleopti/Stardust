@@ -26,7 +26,7 @@
     <wfm-card-list >
       <wfm-card ng-repeat="skill in vm.skillMaster.Skills">
         <card-header tabindex="-1" >
-          <div tabindex="0" ng-click="vm.getForecastResult(skill)">
+          <div tabindex="0" ng-click="vm.getWorkloadForecastData(skill.Workload.Id)">
             <span><i class="mdi" ng-class="item.title"></i></span>
             <b>{{skill.Workload.Name}}</b>
             <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
@@ -51,9 +51,8 @@
             </div>
             <div class="con-row">
               <div class="con-flex">
-                <div ng-show="vm.skillMaster.IsForecastRunning">
-                  Chart
-                </div>
+                {{vm.selectedDayCount.length}} item(s) selected
+                  <forecast-chart chart-id="skill.ChartId" days="vm.currentWorkload.Days" on-click="vm.pointClick"> </forecast-chart>
               </div>
             </div>
             <div class="con-footer">
@@ -75,8 +74,8 @@
     </div>
     <div class="modal-actions">
       <aside>
-        <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal(null,true)" >Cancel</button>
-        <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.generateForecast()">Apply</button>
+        <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal()" >Cancel</button>
+        <button class="wfm-btn wfm-btn-invis-primary" ng-click="">Apply</button>
       </aside>
     </div>
   </div>
