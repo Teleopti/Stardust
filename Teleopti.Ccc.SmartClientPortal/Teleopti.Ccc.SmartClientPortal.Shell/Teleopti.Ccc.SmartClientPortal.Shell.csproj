@@ -287,19 +287,7 @@
     </Compile>
     <Compile Include="ApplicationStartup.cs" />
     <Compile Include="Common\Constants\UIExtensionSiteNames.cs" />
-    <Compile Include="Common\Library\Services\ActionCatalogException.cs" />
-    <Compile Include="Common\Library\Services\ActionCatalogService.cs" />
-    <Compile Include="Common\Library\Services\DependentModuleLoaderService.cs" />
-    <Compile Include="Common\Library\Services\IDependentModuleInfo.cs" />
-    <Compile Include="Common\Library\Services\WorkspaceLocatorService.cs" />
     <Compile Include="Common\Library\SmartClientApplication.cs" />
-    <Compile Include="Common\Library\Services\EmptyDependentModuleEnumerator.cs" />
-    <Compile Include="Common\Services\EntityTranslatorException.cs" />
-    <Compile Include="Common\Services\IActionCatalogService.cs" />
-    <Compile Include="Common\Services\IActionCondition.cs" />
-    <Compile Include="Common\Services\IEntityTranslator.cs" />
-    <Compile Include="Common\Services\IEntityTranslatorService.cs" />
-    <Compile Include="Common\Services\IWorkspaceLocatorService.cs" />
     <Compile Include="ConfigurationSections\AppSettingOverride.cs" />
     <Compile Include="ConfigurationSections\Installation.cs" />
     <Compile Include="ConfigurationSections\InstallationCollection.cs" />

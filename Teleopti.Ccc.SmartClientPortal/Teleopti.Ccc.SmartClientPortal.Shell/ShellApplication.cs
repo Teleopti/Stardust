@@ -137,8 +137,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			try
 			{
 				var toggleFiller = container.ResolveOptional<IToggleFiller>();
-				if (toggleFiller != null)
-					toggleFiller.FillAllToggles();
+				toggleFiller?.FillAllToggles();
 			}
 			catch (Exception ex)
 			{

@@ -104,10 +104,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling
 			text.AppendLine();
 			try
 			{
-
 				foreach (var entry in toggles.AllActiveToggles())
 				{
-					text.AppendLine(string.Format("{0} = {1} ", entry.Key, entry.Value));
+					text.AppendLine($"{entry.Key} = {entry.Value} ");
 				}
 			}
 			catch (Exception)

@@ -1,15 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.ConfigurationSections
 {
 	public class ServerInstallations : ConfigurationSection
 	{
 		[ConfigurationProperty("installations")]
-		public InstallationCollection Installations
-		{
-			get { return (InstallationCollection) this["installations"]; }
-		}
+		public InstallationCollection Installations => (InstallationCollection) this["installations"];
 
 		public static IDictionary<string, IDictionary<string, string>> FetchServerInstallations()
 		{
@@ -21,12 +19,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.ConfigurationSections
 
 			foreach (var serverInstallation in installations)
 			{
-				var appsettings = new Dictionary<string, string>();
-				foreach (var appSetting in serverInstallation.Overrides)
-				{
-					appsettings[appSetting.Key] = appSetting.Value;
-				}
-				appsettingOverrides[serverInstallation.Name] = appsettings;
+				appsettingOverrides[serverInstallation.Name] = serverInstallation.Overrides.ToDictionary(k => k.Key, v => v.Value);
 			}
 			return appsettingOverrides;
 		}
