@@ -76,14 +76,14 @@ namespace Teleopti.Ccc.Domain.Security.Principal
     		       _availableBusinessUnits.Contains(authorization.BusinessUnitId);
     	}
 
-		public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeamAutorization authorization)
+		public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeamAuthorization authorization)
 		{
 			return _availableTeams.Contains(authorization.TeamId) ||
 				   _availableSites.Contains(authorization.SiteId) ||
 				   _availableBusinessUnits.Contains(authorization.BusinessUnitId);
 		}
 
-	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAutorization authorization)
+	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAuthorization authorization)
 	    {
 			return _availableSites.Contains(authorization.SiteId) ||
 				   _availableBusinessUnits.Contains(authorization.BusinessUnitId);

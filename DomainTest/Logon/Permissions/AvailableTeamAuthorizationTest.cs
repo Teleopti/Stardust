@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Logon.Permissions
 			LogOnOff.LogOn("tenant", me, Database.CurrentBusinessUnitId());
 
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(),
-					new TeamAutorization
+					new TeamAuthorization
 					{
 						BusinessUnitId = myTeam.Site.BusinessUnit.Id.Value,
 						SiteId = myTeam.Site.Id.Value,
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.Logon.Permissions
 					})
 				.Should().Be.True();
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(),
-					new TeamAutorization
+					new TeamAuthorization
 					{
 						BusinessUnitId = otherTeam.Site.BusinessUnit.Id.Value,
 						SiteId = otherTeam.Site.Id.Value,

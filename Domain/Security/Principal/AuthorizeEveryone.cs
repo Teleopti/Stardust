@@ -30,12 +30,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
     		return true;
     	}
 
-	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeamAutorization authorization)
+	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeamAuthorization authorization)
 	    {
 		    return true;
 	    }
 
-	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAutorization authorization)
+	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAuthorization authorization)
 	    {
 			return true;
 		}

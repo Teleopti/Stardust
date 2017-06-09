@@ -44,12 +44,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			return true;
 		}
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAutorization authorization)
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAuthorization authorization)
 		{
 			return true;
 		}
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAutorization authorization)
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAuthorization authorization)
 		{
 			return true;
 		}
@@ -130,12 +130,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 			return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, authorization));
 		}
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAutorization authorization)
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAuthorization authorization)
 		{
 			return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, authorization));
 		}
 
-		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAutorization authorization)
+		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAuthorization authorization)
 		{
 			return checkPermitted(functionPath, a => a.Check(_teleoptiPrincipal.Current().Organisation, dateOnly, authorization));
 		}

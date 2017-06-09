@@ -46,14 +46,14 @@ namespace Teleopti.Ccc.DomainTest.Logon.Permissions
 
 
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(),
-					new SiteAutorization
+					new SiteAuthorization
 					{
 						BusinessUnitId = mySite.BusinessUnit.Id.Value,
 						SiteId = mySite.Id.Value
 					})
 				.Should().Be.True();
 			Authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "2017-03-07".Date(),
-					new SiteAutorization
+					new SiteAuthorization
 					{
 						BusinessUnitId = otherSite.BusinessUnit.Id.Value,
 						SiteId = otherSite.Id.Value

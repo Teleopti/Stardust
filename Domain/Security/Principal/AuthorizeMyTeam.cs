@@ -42,12 +42,12 @@ namespace Teleopti.Ccc.Domain.Security.Principal
     		return queryingPerson.BelongsToTeam(authorization.TeamId.GetValueOrDefault(), dateOnly);
     	}
 
-	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeamAutorization authorization)
+	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeamAuthorization authorization)
 	    {
 			return queryingPerson.BelongsToTeam(authorization.TeamId, dateOnly);
 		}
 
-	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAutorization authorization)
+	    public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISiteAuthorization authorization)
 	    {
 			return queryingPerson.BelongsToSite(authorization.SiteId, dateOnly);
 		}

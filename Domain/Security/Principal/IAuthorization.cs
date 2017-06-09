@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team);
 		bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site);
 		bool IsPermitted(string functionPath, DateOnly dateOnly, IPersonAuthorization authorization);
-		bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAutorization authorization);
-		bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAutorization authorization);
+		bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAuthorization authorization);
+		bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAuthorization authorization);
 
 		IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person);
 
@@ -38,27 +38,27 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 		public Guid BusinessUnitId { get; set; }
 	}
 
-	public interface ITeamAutorization
+	public interface ITeamAuthorization
 	{
 		Guid TeamId { get; set; }
 		Guid SiteId { get; set; }
 		Guid BusinessUnitId { get; set; }
 	}
 
-	public class TeamAutorization : ITeamAutorization
+	public class TeamAuthorization : ITeamAuthorization
 	{
 		public Guid TeamId { get; set; }
 		public Guid SiteId { get; set; }
 		public Guid BusinessUnitId { get; set; }
 	}
 
-	public interface ISiteAutorization
+	public interface ISiteAuthorization
 	{
 		Guid SiteId { get; set; }
 		Guid BusinessUnitId { get; set; }
 	}
 
-	public class SiteAutorization : ISiteAutorization
+	public class SiteAuthorization : ISiteAuthorization
 	{
 		public Guid SiteId { get; set; }
 		public Guid BusinessUnitId { get; set; }
