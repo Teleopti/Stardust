@@ -13,23 +13,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class AgentsController : ApiController
 	{
-		private readonly AgentViewModelBuilder _agentViewModelBuilder;
 		private readonly AgentStatesViewModelBuilder _agentStatesBuilder;
 
-		public AgentsController(
-			AgentViewModelBuilder agentViewModelBuilder,
-			AgentStatesViewModelBuilder agentStatesBuilder)
+		public AgentsController(AgentStatesViewModelBuilder agentStatesBuilder)
 		{
-			_agentViewModelBuilder = agentViewModelBuilder;
 			_agentStatesBuilder = agentStatesBuilder;
 		}
 		
-		[UnitOfWork, HttpGet, Route("api/Agents/For")]
-		public virtual IHttpActionResult For([FromUri]AgentStateFilter filter)
-		{
-			return Ok(_agentViewModelBuilder.For(filter));
-		}
-
 		[UnitOfWork, HttpGet, Route("api/Agents/StatesFor")]
 		public virtual IHttpActionResult StatesFor([FromUri] AgentStateFilter filter)
 		{
@@ -37,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/Agents/InAlarmFor")]
-		public virtual IHttpActionResult InAlarmFor([FromUri]AgentStateFilter filter)
+		public virtual IHttpActionResult InAlarmFor([FromUri] AgentStateFilter filter)
 		{
 			// REMOVE ME PLOX
 			filter.InAlarm = true;
