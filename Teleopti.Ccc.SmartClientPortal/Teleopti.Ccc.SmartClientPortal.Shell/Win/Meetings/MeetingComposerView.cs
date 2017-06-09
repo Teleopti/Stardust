@@ -195,6 +195,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 				if (meetingRecurrenceView.ShowDialog(this) != DialogResult.OK) return;
 				_meetingComposerPresenter.RecurrentMeetingUpdated();
 			}
+
+			_currentView.Presenter.UpdateView();
 		}
 
 		public void ShowAddressBook(AddressBookViewModel addressBookViewModel, DateOnly startDate)

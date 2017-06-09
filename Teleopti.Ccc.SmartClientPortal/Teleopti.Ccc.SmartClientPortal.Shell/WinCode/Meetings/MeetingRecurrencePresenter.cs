@@ -145,7 +145,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                     if (timeSpan.Value >= TimeSpan.Zero)
                     {
                         SetStartTime(timeSpan.Value);
-                        _view.NotifyMeetingTimeChanged();
                     }
                     else
                         _view.SetStartTime(GetStartTime);

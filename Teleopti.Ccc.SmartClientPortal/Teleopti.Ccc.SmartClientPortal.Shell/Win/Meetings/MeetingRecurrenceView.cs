@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings
 
 		public void NotifyMeetingTimeChanged()
 		{
-			_composer.NotifyMeetingTimeChanged(this);
+			
 		}
 
 		private void notifyMeetingDatesChanged()

@@ -240,7 +240,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			using (_mocks.Record())
 			{
 				Expect.Call(()=>_view.SetStartTime(TimeSpan.FromHours(7)));
-				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 			}
 
 			using (_mocks.Playback())
@@ -297,7 +296,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _view.SetStartTime(TimeSpan.FromHours(7)));
-				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 			}
 
 			using (_mocks.Playback())
@@ -354,7 +352,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			using (_mocks.Record())
 			{
 				Expect.Call(() => _view.SetStartTime(TimeSpan.FromHours(7)));
-				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 			}
 
 			using (_mocks.Playback())
