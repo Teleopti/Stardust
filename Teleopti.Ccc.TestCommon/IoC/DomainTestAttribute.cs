@@ -268,11 +268,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// because DomainTest project has OneTimeSetUp that sets FullPermissions globally... 
 			// ... we need to scope real/fake/full for this test
 			if (realPermissions())
-				AuthorizationScope.OnThisThreadUse((PrincipalAuthorization) Authorization);
+				_authorizationScope = AuthorizationScope.OnThisThreadUse((PrincipalAuthorization) Authorization);
 			else if (fakePermissions())
-				AuthorizationScope.OnThisThreadUse((FakePermissions) Authorization);
+				_authorizationScope = AuthorizationScope.OnThisThreadUse((FakePermissions) Authorization);
 			else
-				AuthorizationScope.OnThisThreadUse((FullPermission) Authorization);
+				_authorizationScope = AuthorizationScope.OnThisThreadUse((FullPermission) Authorization);
 		}
 
 		private bool fullPermissions()
