@@ -5,41 +5,39 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class TeamsInAlarmReaderSitesTest
+	public class TeamsInAlarmReaderBusinessUnitTest
 	{
 		public IAgentStateReadModelPersister Persister;
 		public ITeamsInAlarmReader Target;
 		public MutableNow Now;
+		public Database Database;
 
 		[Test]
-		public void ShouldRead()
+		public void ShouldFilterOnCurrentBusinessUnit()
 		{
-			var businessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value;
-			var siteId = Guid.NewGuid();
-			var teamId = Guid.NewGuid();
-			Now.Is("2016-08-18 08:05".Utc());
+			var site = Guid.NewGuid();
 			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
+				BusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value,
 				PersonId = Guid.NewGuid(),
-				BusinessUnitId = businessUnitId,
-				SiteId = siteId,
-				TeamId = teamId,
-				AlarmStartTime = "2016-08-18 08:00".Utc()
+				SiteId = site
+			});
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			{
+				BusinessUnitId = Guid.NewGuid(),
+				PersonId = Guid.NewGuid(),
+				SiteId = Guid.NewGuid(),
 			});
 
-			var result = Target.Read().Single();
-
-			result.BusinessUnitId.Should().Be(businessUnitId);
-			result.SiteId.Should().Be(siteId);
-			result.TeamId.Should().Be(teamId);
-			result.InAlarmCount.Should().Be(1);
+			Target.Read().Single()
+				.SiteId.Should().Be(site);
 		}
 		
 	}

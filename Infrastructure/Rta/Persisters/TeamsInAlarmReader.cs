@@ -15,12 +15,14 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
+		private readonly ICurrentBusinessUnit _businessUnit;
 
-		public TeamsInAlarmReader(ICurrentUnitOfWork unitOfWork, INow now, HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId)
+		public TeamsInAlarmReader(ICurrentUnitOfWork unitOfWork, INow now, HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId, ICurrentBusinessUnit businessUnit)
 		{
 			_unitOfWork = unitOfWork;
 			_now = now;
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
+			_businessUnit = businessUnit;
 		}
 
 		public IEnumerable<TeamInAlarmModel> Read()
@@ -78,7 +80,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					{(querySkills ? skillWhere : "")}
 					{(querySite ? siteWhere : "")}
 
-					a.IsDeleted = 0
+					a.IsDeleted = 0 AND
+
+					a.BusinessUnitId = :businessUnitId
 
 					GROUP BY 
 						a.BusinessUnitId,
@@ -88,6 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 
 			query
 				.SetParameter("now", _now.UtcDateTime())
+				.SetParameter("businessUnitId", _businessUnit.Current().Id.Value)
 				;
 
 			if (querySite)
