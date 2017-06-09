@@ -13,6 +13,12 @@ namespace Teleopti.Ccc.TestCommon
 			return assignment;
 		}
 
+		public static IPersonAssignment WithLayer(this IPersonAssignment assignment, IActivity activity, DateTimePeriod dateTimePeriod)
+		{
+			assignment.AddActivity(activity, dateTimePeriod);
+			return assignment;
+		}
+
 		public static IPersonAssignment WithOvertimeLayer(this IPersonAssignment assignment, IActivity activity, TimePeriod period)
 		{
 			var assDate = assignment.Date.Date;
