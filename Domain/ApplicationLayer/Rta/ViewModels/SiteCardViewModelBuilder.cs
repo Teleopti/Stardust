@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -45,49 +46,42 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				_teamsInAlarmReader.Read(skillIds)
 				;
 
+			var auth = _authorization.Current();
+
 			var sitesInAlarm =
 				teamsInAlarm
+					.Where(x =>
+						auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.ServerDate_DontUse(), new SiteAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId }) ||
+						auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.ServerDate_DontUse(), new TeamAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId, TeamId = x.TeamId })
+					)
 					.GroupBy(x => x.SiteId)
 					.Select(site =>
 						new
 						{
 							SiteId = site.Key,
-							Count = site.Sum(x => x.InAlarmCount)
+							InAlarmCount = site.Sum(x => x.InAlarmCount)
 						})
-					.ToLookup(x => x.SiteId, x => x.Count);
-
-			var sites = _siteRepository.LoadAll();
-
-			var siteIds =
-				teamsInAlarm
-					.Select(x => new { x.BusinessUnitId, x.SiteId })
-					.Distinct()
-					.Where(x =>
-						_authorization.Current()
-							.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.ServerDate_DontUse(),
-								new SiteAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId })
-						)
-					.Select(x => x.SiteId)
 					.ToArray();
 
-			var namePerSiteId = sites.ToLookup(x => x.Id.Value, x => x.Description.Name);
+			var namePerSiteId = _siteRepository.LoadAll()
+				.ToLookup(x => x.Id.Value, x => x.Description.Name);
 
+			var siteIds = sitesInAlarm.Select(x => x.SiteId).ToArray();
 			var numberOfAgentsPerSite = skillIds != null ? 
 				_numberOfAgentsInSiteReader.Read(siteIds, skillIds).ToLookup(x => x.Key, x => x.Value) : 
 				_numberOfAgentsInSiteReader.Read(siteIds).ToLookup(x => x.Key, x => x.Value);
 
-			var result = siteIds
+			var result = sitesInAlarm
 				.Select(s =>
 				{
-					var agentCount = numberOfAgentsPerSite[s].FirstOrDefault();
-					var inAlarmCount = sitesInAlarm[s].FirstOrDefault();
+					var agentCount = numberOfAgentsPerSite[s.SiteId].FirstOrDefault();
 					return new SiteCardViewModel
 					{
-						Id = s,
-						Name = namePerSiteId[s].FirstOrDefault(),
+						Id = s.SiteId,
+						Name = namePerSiteId[s.SiteId].FirstOrDefault(),
 						AgentsCount = agentCount,
-						InAlarmCount = inAlarmCount,
-						Color = getColor(inAlarmCount, agentCount)
+						InAlarmCount = s.InAlarmCount,
+						Color = getColor(s.InAlarmCount, agentCount)
 					};
 				}
 				);

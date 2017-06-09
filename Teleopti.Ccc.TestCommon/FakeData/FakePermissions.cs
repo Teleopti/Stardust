@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakePermissions: IAuthorization, ICurrentAuthorization
 	{
 		private readonly IList<string> _permittedAnyData = new List<string>(); 
-		private readonly IList<Tuple<string, ISiteAuthorization>> _permittedSites = new List<Tuple<string, ISiteAuthorization>>(); 
+		private readonly IList<Tuple<string, Guid>> _permittedSites = new List<Tuple<string, Guid>>(); 
+		private readonly IList<Tuple<string, Guid>> _permittedTeams = new List<Tuple<string, Guid>>(); 
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
 		{
@@ -22,12 +23,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
 		{
-			return _permittedAnyData.Contains(functionPath);
+			return IsPermitted(functionPath, dateOnly, new TeamAuthorization {BusinessUnitId = team.Site.BusinessUnit.Id.Value, SiteId = team.Site.Id.Value, TeamId = team.Id.Value});
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
 		{
-			return _permittedAnyData.Contains(functionPath);
+			return IsPermitted(functionPath, dateOnly, new SiteAuthorization {BusinessUnitId = site.BusinessUnit.Id.Value, SiteId = site.Id.Value});
 		}
 
 		public bool IsPermitted(string functionPath)
@@ -42,14 +43,18 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAuthorization authorization)
 		{
-			return _permittedAnyData.Contains(functionPath);
+			if (_permittedAnyData.Contains(functionPath))
+				return true;
+			if (_permittedTeams.Any(x => x.Item1 == functionPath && x.Item2 == authorization.TeamId))
+				return true;
+			return false;
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAuthorization authorization)
 		{
 			if (_permittedAnyData.Contains(functionPath))
 				return true;
-			if (_permittedSites.Any(x => x.Item1 == functionPath && x.Item2.BusinessUnitId == authorization.BusinessUnitId && x.Item2.SiteId == authorization.SiteId))
+			if (_permittedSites.Any(x => x.Item1 == functionPath && x.Item2 == authorization.SiteId))
 				return true;
 			return false;
 		}
@@ -78,9 +83,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_permittedAnyData.Add(functionPath);
 		}
 
-		public void HasPermission(string functionPath, ISiteAuthorization authorization)
+		public void HasPermissionForSite(string functionPath, Guid siteId)
 		{
-			_permittedSites.Add(new Tuple<string, ISiteAuthorization>(functionPath, authorization));
+			_permittedSites.Add(new Tuple<string, Guid>(functionPath, siteId));
+		}
+
+		public void HasPermissionForTeam(string functionPath, Guid teamId)
+		{
+			_permittedTeams.Add(new Tuple<string, Guid>(functionPath, teamId));
 		}
 
 		public IAuthorization Current()

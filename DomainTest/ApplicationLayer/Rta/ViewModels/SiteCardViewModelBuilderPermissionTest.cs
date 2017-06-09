@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					TeamId = team2
 				})
 				;
-			Permissions.HasPermission(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, new SiteAuthorization {BusinessUnitId = Database.CurrentBusinessUnitId(), SiteId = site1});
+			Permissions.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, site1);
 
 			var result = Target.Build();
 
@@ -60,31 +59,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.Should().Have.SameValuesAs(site1);
 		}
 
-		//[Test, Ignore("WIP")]
-		//public void ShouldBuildForPermittedSiteOnlyForTeamLevel()
-		//{
-		//	var meId = Guid.NewGuid();
-		//	var siteId = Guid.NewGuid();
-	
-		//	Database
-		//		.WithTenant("tenant")
-		//		.WithSite(siteId)
+		[Test]
+		public void ShouldIncludeSiteWithPermittedTeam()
+		{
+			var site = Guid.NewGuid();
+			var team = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			Database
+				.WithSite(site)
+				.WithTeam(team)
+				.WithAgent(person)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = person,
+					BusinessUnitId = Database.CurrentBusinessUnitId(),
+					SiteId = site,
+					TeamId = team
+				})
+				;
+			Permissions.HasPermissionForTeam(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, team);
 
-		//		.WithTeam("my team")
-		//		.WithAgent(meId, "me")
-		//		.WithRole(AvailableDataRangeOption.MyTeam, DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)
-		//		;
-		//	var me = Persons.Load(meId);
-			
-		//	LogOnOff.LogOn("tenant", me, Database.CurrentBusinessUnitId());
+			var result = Target.Build();
 
+			result.Select(x => x.Id)
+				.Should().Have.SameValuesAs(site);
+		}
 
-		//	var viewModel = Target.Build().Single();
-
-		//	viewModel.Id.Should().Be(siteId);
-
-
-		//}
 
 	}
 }
