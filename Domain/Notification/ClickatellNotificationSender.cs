@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -136,7 +137,7 @@ namespace Teleopti.Ccc.Domain.Notification
 
 		private static bool containsUnicode(string s)
 		{
-			return s.Any(t => char.GetUnicodeCategory(t) == UnicodeCategory.OtherLetter);
+			return s.Any(c => c > 255);
 		}
 	}
 }
