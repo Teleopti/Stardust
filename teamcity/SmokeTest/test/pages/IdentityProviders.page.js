@@ -4,9 +4,10 @@ var IdentityProvidersPage = Object.create(Page, {
 	title: { get: function () { return 'Teleopti Authentication Bridge'; } },
 	
     azureadProvider: { get: function () { return browser.element('.azuread'); } },
-    IdentityServerProvider: { get: function () { return browser.element('.identityserver'); } },
+    adfs3: { get: function () { return browser.element('.adfs3'); } },
     googleProvider: { get: function () { return browser.element('.google'); } },
 	teleoptiProvider: { get: function () { return browser.element('.teleopti'); } },
+    oktaspProvider: { get: function () { return browser.element('.awfos'); } },
 	
 	
 });
