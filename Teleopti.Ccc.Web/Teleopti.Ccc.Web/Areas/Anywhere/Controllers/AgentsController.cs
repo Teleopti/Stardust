@@ -13,29 +13,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class AgentsController : ApiController
 	{
-		private readonly IPersonRepository _personRepository;
-		private readonly ICommonAgentNameProvider _commonAgentNameProvider;
 		private readonly AgentViewModelBuilder _agentViewModelBuilder;
 		private readonly AgentStatesViewModelBuilder _agentStatesBuilder;
 
 		public AgentsController(
-			IPersonRepository personRepository, 
-			ICommonAgentNameProvider commonAgentNameProvider,
 			AgentViewModelBuilder agentViewModelBuilder,
 			AgentStatesViewModelBuilder agentStatesBuilder)
 		{
-			_personRepository = personRepository;
-			_commonAgentNameProvider = commonAgentNameProvider;
 			_agentViewModelBuilder = agentViewModelBuilder;
 			_agentStatesBuilder = agentStatesBuilder;
 		}
-
-		[UnitOfWork, HttpGet, Route("api/Agents/PersonDetails")]
-		public virtual IHttpActionResult PersonDetails(Guid personId)
-		{
-			return Ok(new PersonDetailModel(_commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(_personRepository.Get(personId))));
-		}
-
+		
 		[UnitOfWork, HttpGet, Route("api/Agents/For")]
 		public virtual IHttpActionResult For([FromUri]AgentStateFilter filter)
 		{
@@ -67,14 +55,5 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 	{
 		public Guid[] Ids { get; set; }
 	}
-
-	public class PersonDetailModel
-	{
-		public PersonDetailModel(string name)
-		{
-			Name = name;
-		}
-
-		public string Name { get; private set; }
-	}
+	
 }

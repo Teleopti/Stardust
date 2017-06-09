@@ -132,8 +132,6 @@
 				viewModel.permissionSendMessage(data.IsSmsLinkAvailable);
 				viewModel.notifyViaSMSEnabled(viewModel.permissionSendMessage());
 			});
-
-			viewModel.agentAdherenceDetailsEnabled(resources.RTA_AdherenceDetails_34267);
 		},
 		dispose: function (options) {
 			unsubscriber.unsubscribeAdherence();

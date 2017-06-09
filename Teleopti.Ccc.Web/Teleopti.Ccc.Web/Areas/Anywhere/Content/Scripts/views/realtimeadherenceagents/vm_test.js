@@ -750,23 +750,6 @@
                     vm.fillAgentsStates([{ PersonId: "guid1" }]);
 
                     assert.equals(vm.Agents()[0].HistoricalAdherence(), '21%');
-                },
-
-                "should generate historical adherence url": function () {
-                    var vm = viewModel();
-
-                    vm.SetViewOptions({
-                        buid: 'buId'
-                    });
-                    vm.fillAgents([
-                        {
-                            PersonId: "personId",
-                            TeamId: "teamId"
-                        }
-                    ]);
-
-                    var expectedUrl = "#manageadherence/buid/personId";
-                    assert.match(vm.Agents()[0].AdherenceDetailsUrl, expectedUrl);
                 }
             }
         });

@@ -39,7 +39,6 @@
 			that.groupId = ko.observable();
 			that.BusinessUnitId = "";
 			that.rootURI = ko.observable();
-			that.agentAdherenceDetailsEnabled = ko.observable(false);
 			that.notifyViaSMSEnabled = ko.observable(false);
 			that.AgentAdherence = ko.observable();
 

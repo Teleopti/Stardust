@@ -76,8 +76,6 @@
                 }
                 that.Alarm(data.Alarm);
                 that.refreshColor(data.Color);
-
-                that.AdherenceDetailsUrl = navigation.UrlForAdherenceDetails(that.BusinessUnitId, that.PersonId);
 	        };
 
 	        that.updateAlarmTime = function() {

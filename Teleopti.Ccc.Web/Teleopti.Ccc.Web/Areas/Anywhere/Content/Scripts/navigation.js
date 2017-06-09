@@ -56,9 +56,6 @@ define([
 		UrlForChangingSchedule : function(buid,teamId,personId) {
 		    return baseLocation() + "#teamschedule/" + buid + "/" + teamId + "/" + personId;
 		},
-		UrlForAdherenceDetails : function(buid,personId) {
-			return baseLocation() + "#manageadherence/" + buid + "/" + personId;
-		},
 		UrlForRealTimeAdherence: function (buid) {
 			return baseLocation() + "#realtimeadherencesites/" + buid ;
 		},

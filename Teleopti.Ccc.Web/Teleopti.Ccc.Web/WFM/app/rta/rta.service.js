@@ -33,7 +33,6 @@
             getSkillArea: getSkillArea,
             getPhoneStates: getPhoneStates,
             forToday: forToday,
-            getPersonDetails: getPersonDetails,
             getAgentHistoricalData: getAgentHistoricalData
         }
 
@@ -247,18 +246,7 @@
                 personId: data.personId
             }).$promise;
         };
-
-        function getPersonDetails(data) {
-            return $resource('../api/Agents/PersonDetails', {}, {
-                query: {
-                    method: 'GET',
-                    isArray: false
-                }
-            }).query({
-                personId: data.personId
-            }).$promise;
-        };
-
+		
         function getAgentHistoricalData(id) {
             return $resource('../api/HistoricalAdherence/For', {}, {
                 query: {
