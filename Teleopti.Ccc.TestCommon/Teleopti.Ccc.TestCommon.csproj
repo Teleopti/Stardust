@@ -183,7 +183,7 @@
     <Compile Include="FakeData\FakePushMessageDialogueRepository.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />
     <Compile Include="FakeData\FakeScheduleRangePersister.cs" />
-    <Compile Include="FakeData\ConfigurablePermissions.cs" />
+    <Compile Include="FakeData\FakePermissions.cs" />
     <Compile Include="FakeData\FakeIntradayQueueStatisticsLoader.cs" />
     <Compile Include="FakeData\FakeSkillCombinationResourceRepository.cs" />
     <Compile Include="FakeData\OrganizationFactory.cs" />
@@ -360,6 +360,7 @@
     <Compile Include="FakeRepositories\FakeLicenseRepository.cs" />
     <Compile Include="FakeData\FakeCurrentAnalyticsUnitOfWorkFactory.cs" />
     <Compile Include="FakeRepositories\FakeStateQueue.cs" />
+    <Compile Include="IoC\FakePermissionsAttribute.cs" />
     <Compile Include="IoC\InfrastructureTestAttribute.cs" />
     <Compile Include="IoC\IntegrationIoCTest.cs" />
     <Compile Include="IoC\IoCTestService.cs" />

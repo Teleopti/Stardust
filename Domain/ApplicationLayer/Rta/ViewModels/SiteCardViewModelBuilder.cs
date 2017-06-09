@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					.Where(x =>
 						_authorization.Current()
 							.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.LocalDateOnly(),
-								new SiteAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId }))
+								new SiteAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId })
+						)
 					.Select(x => x.SiteId)
 					.ToArray();
 

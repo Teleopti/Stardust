@@ -221,6 +221,14 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.AddService<FakeSchedulingSourceScope>();
 
 			fakePrincipal(system);
+
+			if (fullPermissions())
+				system.UseTestDouble<FullPermission>().For<IAuthorization>();
+			//if (realPermissions())
+			//	system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
+			if (fakePermissions())
+				system.UseTestDouble<FakePermissions>().For<IAuthorization>();
+
 		}
 
 		private void fakePrincipal(ISystem system)
@@ -245,13 +253,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		}
 
 
+		
 
-		private bool realPermissions()
-		{
-			return QueryAllAttributes<RealPermissionsAttribute>().Any();
-		}
 
 		public IAuthorizationScope AuthorizationScope;
+		public IAuthorization Authorization;
 		public ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
 		private IDisposable _authorizationScope;
 
@@ -260,9 +266,28 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			base.BeforeTest();
 
 			// because DomainTest project has OneTimeSetUp that sets FullPermissions globally... 
-			_authorizationScope = realPermissions()
-				? AuthorizationScope.OnThisThreadUse(new PrincipalAuthorization(CurrentTeleoptiPrincipal))
-				: AuthorizationScope.OnThisThreadUse(new FullPermission());
+			// ... we need to scope real/fake/full for this test
+			if (realPermissions())
+				AuthorizationScope.OnThisThreadUse((PrincipalAuthorization) Authorization);
+			else if (fakePermissions())
+				AuthorizationScope.OnThisThreadUse((FakePermissions) Authorization);
+			else
+				AuthorizationScope.OnThisThreadUse((FullPermission) Authorization);
+		}
+
+		private bool fullPermissions()
+		{
+			return !realPermissions() && !fakePermissions();
+		}
+
+		private bool realPermissions()
+		{
+			return QueryAllAttributes<RealPermissionsAttribute>().Any();
+		}
+
+		private bool fakePermissions()
+		{
+			return QueryAllAttributes<FakePermissionsAttribute>().Any();
 		}
 
 		protected override void AfterTest()

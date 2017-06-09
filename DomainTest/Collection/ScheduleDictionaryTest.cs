@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		[Test]
 		public void CanNotModifyExistingDataThroughDefaultPermissionCheckerWhenNoPermisson()
 		{
-			var authorizer = new ConfigurablePermissions();
+			var authorizer = new FakePermissions();
 			
 			using (CurrentAuthorization.ThreadlyUse(authorizer))
 			{

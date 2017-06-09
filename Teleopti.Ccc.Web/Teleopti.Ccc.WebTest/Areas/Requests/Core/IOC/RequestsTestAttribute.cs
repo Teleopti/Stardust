@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			var personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerConfigurable();
 			system.UseTestDouble(personRequestCheckAuthorization).For<IPersonRequestCheckAuthorization>();
-			system.UseTestDouble(new ConfigurablePermissions()).For<IAuthorization>();
+			system.UseTestDouble(new FakePermissions()).For<IAuthorization>();
 			system.UseTestDouble(new FakeCommonAgentNameProvider()).For<ICommonAgentNameProvider>();
 
 			system.UseTestDouble(new FakeLoggedOnUser()).For<ILoggedOnUser>();

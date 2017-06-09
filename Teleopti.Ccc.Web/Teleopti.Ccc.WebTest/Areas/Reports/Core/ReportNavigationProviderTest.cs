@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 	{
 		private FakeReportProvider _reportProvider;
 		private IReportUrl _reportUrl;
-		private ConfigurablePermissions _authorizor;
+		private FakePermissions _authorizor;
 		private IReportNavigationProvider target;
 		private ReportNavigationModel _reportNavigationModel;
 		private MockRepository _mocks;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 		{
 			_reportUrl = new FakeReportUrl();
 			_reportProvider = new FakeReportProvider();
-			_authorizor = new ConfigurablePermissions();
+			_authorizor = new FakePermissions();
 			_reportNavigationModel = new ReportNavigationModel();
 			_mocks = new MockRepository();
 

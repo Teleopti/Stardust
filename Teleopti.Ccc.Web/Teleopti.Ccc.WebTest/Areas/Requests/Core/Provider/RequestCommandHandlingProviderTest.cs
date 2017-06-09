@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 		public IQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public IRequestApprovalServiceFactory RequestApprovalServiceFactory;
 		public Global.FakePermissionProvider PermissionProvider;
-		public ConfigurablePermissions Authorization;
+		public FakePermissions Authorization;
 		public IPersonRequestCheckAuthorization PersonRequestCheckAuthorization;
 		public ICommonAgentNameProvider CommonAgentNameProvider;
 		public ILoggedOnUser LoggedOnUser;
