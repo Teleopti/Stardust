@@ -625,7 +625,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			result.Count.Should().Be.EqualTo(period.DayCollection().Count);
 			foreach (var allowanceDay in result)
 			{
-				// These days are covered by open period with budget group validators and not auto denied, so should show traffic light
+				// These days are covered by valid open period with budget group validators and not auto denied, so should show traffic light
 				var expectedAvailability = allowanceDay.Date >= DateOnly.Today.AddDays(-7) &&
 										   allowanceDay.Date <= DateOnly.Today.AddDays(7) &&
 										   allowanceDay.Date != DateOnly.Today.AddDays(-6);
@@ -761,6 +761,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Absence = AbsenceFactory.CreateAbsence("HeadCountAbsence-AutoDeny"),
 				OpenForRequestsPeriod = _alwaysOpenPeriod,
 				Period = new DateOnlyPeriod(DateOnly.Today.AddDays(-6), DateOnly.Today.AddDays(-6)),
+				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
+				AbsenceRequestProcess = new DenyAbsenceRequest()
+			});
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = AbsenceFactory.CreateAbsence("HeadCountAbsence-Expired"),
+				OpenForRequestsPeriod = new DateOnlyPeriod(DateOnly.Today.AddDays(-10), DateOnly.Today.AddDays(-1)),
+				Period = new DateOnlyPeriod(DateOnly.Today.AddDays(6), DateOnly.Today.AddDays(6)),
 				StaffingThresholdValidator = new BudgetGroupHeadCountValidator(),
 				AbsenceRequestProcess = new DenyAbsenceRequest()
 			});

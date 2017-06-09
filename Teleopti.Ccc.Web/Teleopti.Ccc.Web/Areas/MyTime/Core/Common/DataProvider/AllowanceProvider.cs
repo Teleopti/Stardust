@@ -32,8 +32,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var userTimezone = person.PermissionInformation.DefaultTimeZone();
 			var userToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), userTimezone));
 
-			var openPeriods = person.WorkflowControlSet?.AbsenceRequestOpenPeriods?.ToList();
-			if (openPeriods == null || !openPeriods.Any(p => p.OpenForRequestsPeriod.Contains(userToday)))
+			var periodsOpenedForToday = person.WorkflowControlSet?.AbsenceRequestOpenPeriods?
+				.Where(p => p.OpenForRequestsPeriod.Contains(userToday)).ToList();
+			if (periodsOpenedForToday == null || !periodsOpenedForToday.Any())
 			{
 				return period.DayCollection().Select(date => new AllowanceDay
 				{
@@ -51,14 +52,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var budgetDays = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period)
 				.SelectMany(x => _budgetDayRepository.Find(defaultScenario, x.Item2, x.Item1)).ToList();
 
-			return createAllowanceDays(period, userToday, openPeriods, budgetDays);
+			return createAllowanceDays(period, userToday, periodsOpenedForToday, budgetDays);
 		}
 
 		private static IEnumerable<IAllowanceDay> createAllowanceDays(DateOnlyPeriod period, DateOnly userToday,
-			IEnumerable<IAbsenceRequestOpenPeriod> validOpenPeriods, IReadOnlyCollection<IBudgetDay> budgetDays)
+			IEnumerable<IAbsenceRequestOpenPeriod> openPeriods, IReadOnlyCollection<IBudgetDay> budgetDays)
 		{
 			var result = new List<IAllowanceDay>();
-			var sortedOpenPeriods = validOpenPeriods.OrderByDescending(p => p.OrderIndex).ToList();
+			var sortedOpenPeriods = openPeriods.OrderByDescending(p => p.OrderIndex).ToList();
 			foreach (var date in period.DayCollection())
 			{
 				var openPeriodsForThisDay = sortedOpenPeriods.FirstOrDefault(p => p.GetPeriod(userToday).Contains(date));
