@@ -151,6 +151,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 		{
 			Cursor = Cursors.WaitCursor;
 			ParentForm.ControlBox = false;//is there really a risk of a nullrefexception?
+			dateSelectionFromToHistorical.Enabled = false;
 			buttonAdvCancelLoad.Visible = true;
 			backgroundWorkerValidationPeriod.RunWorkerAsync(reloadStatistics);
 		}
@@ -165,6 +166,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 			ParentForm.ControlBox = false;
 
 			_owner.Presenter.InitializeCompareHistoricPeriod(new DateOnlyPeriod(dateSelectionFromToHistorical.WorkPeriodStart, dateSelectionFromToHistorical.WorkPeriodEnd));
+			dateSelectionFromToHistorical.Enabled = false;
 			buttonAdvCancelLoad.Visible = true;
 			backgroundWorkerStatistics.RunWorkerAsync();
 		}
@@ -190,6 +192,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 		private void enableWindow()
 		{
 			ParentForm.ControlBox = true;
+			dateSelectionFromToHistorical.Enabled = true;
 			buttonAdvCancelLoad.Visible = false;
 			Cursor = Cursors.Default;
 		}
@@ -339,13 +342,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 			splitContainerAdv2.Panel2Collapsed = !splitContainerAdv2.Panel2Collapsed;
 		}
 
-		public override bool HasHelp
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool HasHelp => false;
 
 		protected override void SetCommonTexts()
 		{
@@ -389,10 +386,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.WFControls
 
 			if (_owner != null)
 			{
-				if (_owner.Presenter.Model.ValidatedVolumeDays != null)
-				{
-					_owner.Presenter.Model.ValidatedVolumeDays.Clear();
-				}
+				_owner.Presenter.Model.ValidatedVolumeDays?.Clear();
 				_owner = null;
 			}
 		}

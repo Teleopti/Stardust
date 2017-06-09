@@ -42,11 +42,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 
 		public bool HideNoneButtons
 		{
-			get
-			{
-				return !dateTimePickerAdvWorkEndPeriod.NoneButtonVisible &&
-						 !dateTimePickerAdvWorkAStartDate.NoneButtonVisible;
-			}
+			get => !dateTimePickerAdvWorkEndPeriod.NoneButtonVisible &&
+				   !dateTimePickerAdvWorkAStartDate.NoneButtonVisible;
 			set
 			{
 				dateTimePickerAdvWorkAStartDate.NoneButtonVisible = !value;
@@ -55,15 +52,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 		}
 
 		[Browsable(false)]
-		public bool IsWorkPeriodValid
-		{
-			get { return (WorkPeriodStart <= WorkPeriodEnd); }
-		}
+		public bool IsWorkPeriodValid => WorkPeriodStart <= WorkPeriodEnd;
 
 		[Browsable(false)]
 		public DateOnly WorkPeriodStart
 		{
-			get { return new DateOnly(dateTimePickerAdvWorkAStartDate.Value.Date); }
+			get => new DateOnly(dateTimePickerAdvWorkAStartDate.Value.Date);
 			set
 			{
 				dateTimePickerAdvWorkAStartDate.Value = value.Date;
@@ -74,35 +68,35 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 		[Browsable(false)]
 		public DateOnly WorkPeriodEnd
 		{
-			get { return new DateOnly(dateTimePickerAdvWorkEndPeriod.Value.Date); }
-			set { dateTimePickerAdvWorkEndPeriod.Value = value.Date; }
+			get => new DateOnly(dateTimePickerAdvWorkEndPeriod.Value.Date);
+			set => dateTimePickerAdvWorkEndPeriod.Value = value.Date;
 		}
 
 		[Browsable(true), Category("Teleopti Texts"), Localizable(true)]
 		public string LabelDateSelectionText
 		{
-			get { return labelTargetPeriod.Text; }
-			set { labelTargetPeriod.Text = value; }
+			get => labelTargetPeriod.Text;
+			set => labelTargetPeriod.Text = value;
 		}
 
 		[Browsable(true), Category("Teleopti Texts"), Localizable(true)]
 		public string LabelDateSelectionToText
 		{
-			get { return labelTargetPeriodTo.Text; }
-			set { labelTargetPeriodTo.Text = value; }
+			get => labelTargetPeriodTo.Text;
+			set => labelTargetPeriodTo.Text = value;
 		}
 
 		[Browsable(true), Category("Teleopti Texts"), Localizable(true)]
 		public string ButtonApplyText
 		{
-			get { return btnApplyChangedPeriod.Text; }
-			set { btnApplyChangedPeriod.Text = value; }
+			get => btnApplyChangedPeriod.Text;
+			set => btnApplyChangedPeriod.Text = value;
 		}
 
 		[Browsable(true), Category("Teleopti Texts"), Localizable(true)]
 		public string NullString
 		{
-			get { return dateTimePickerAdvWorkAStartDate.NullString; }
+			get => dateTimePickerAdvWorkAStartDate.NullString;
 			set
 			{
 				dateTimePickerAdvWorkAStartDate.NullString = value;
@@ -113,7 +107,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 		[Browsable(true), Category("Teleopti Texts"), Localizable(true)]
 		public string TodayButtonText
 		{
-			get { return dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.Text; }
+			get => dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.Text;
 			set
 			{
 				dateTimePickerAdvWorkAStartDate.Calendar.TodayButton.Text = value;
@@ -124,7 +118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 		[Browsable(true), Category("Teleopti Texts"), Localizable(true)]
 		public string NoneButtonText
 		{
-			get { return dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.Text; }
+			get => dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.Text;
 			set
 			{
 				dateTimePickerAdvWorkAStartDate.Calendar.NoneButton.Text = value;
@@ -132,13 +126,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 			}
 		}
 
-		public override bool HasHelp
-		{
-			get
-			{
-				return false;
-			}
-		}
+		public override bool HasHelp => false;
 
 		private void btnApplyChangedPeriodClick(object sender, EventArgs e)
 		{
@@ -149,18 +137,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 		{
 			var args = new DateRangeChangedEventArgs(
 						new ReadOnlyCollection<DateOnlyPeriod>(GetSelectedDates()));
-			var dateRangeChangedHandler = DateRangeChanged;
-			if (dateRangeChangedHandler != null)
-			{
-
-				dateRangeChangedHandler.Invoke(this, args);
-			}
-
-			var buttonClickedHandler = ButtonClickedNoValidation;
-			if (buttonClickedHandler != null)
-			{
-				buttonClickedHandler.Invoke(this, args);
-			}
+			DateRangeChanged?.Invoke(this, args);
+			ButtonClickedNoValidation?.Invoke(this, args);
 		}
 
 		public void ShowWarning()
@@ -189,8 +167,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 
 		private void invokeValueChanged(EventArgs e)
 		{
-			EventHandler valueChangedHandler = ValueChanged;
-			if (valueChangedHandler != null) valueChangedHandler(this, e);
+			ValueChanged?.Invoke(this, e);
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -204,14 +181,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 		[Browsable(true), DefaultValue(true), Category("Teleopti Behavior")]
 		public bool ShowApplyButton
 		{
-			get
-			{
-				return btnApplyChangedPeriod.Visible;
-			}
-			set
-			{
-				btnApplyChangedPeriod.Visible = value;
-			}
+			get => btnApplyChangedPeriod.Visible;
+			set => btnApplyChangedPeriod.Visible = value;
 		}
 
 		[Browsable(false)]
@@ -223,8 +194,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.DateSelection
 				selectedDates.Add(new DateOnlyPeriod(WorkPeriodStart, WorkPeriodEnd));
 				return selectedDates;
 			}
-
-			//ShowWarning();
+			
 			return selectedDates;
 		}
 
