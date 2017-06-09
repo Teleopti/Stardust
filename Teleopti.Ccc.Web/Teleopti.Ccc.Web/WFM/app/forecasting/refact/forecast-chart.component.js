@@ -6,7 +6,8 @@ angular.module('wfm.forecasting')
 	bindings: {
 		chartId: '=',
 		days: '=',
-		onClick: '='
+		onClick: '=',
+		refresh: '='
 	}
 });
 
@@ -14,7 +15,7 @@ function ForecastChartCtrl($translate, $filter) {
 	var ctrl = this;
 
 	ctrl.selectedDays = [];
-	ctrl.generateForecastChart = generateForecastChart;
+	ctrl.refresh = generateForecastChart;
 
 	function checkSelection(arr, item) {
 		var i = arr.length;
@@ -26,7 +27,17 @@ function ForecastChartCtrl($translate, $filter) {
 		return false;
 	}
 
+		generateForecastChart();
+
 	function generateForecastChart() {
+		if (!ctrl.chartId || ctrl.days.length === 0 ) {
+			console.log('Could not generate forcast chart');
+			return;
+		}
+
+		ctrl.selectedDays = [];
+		ctrl.onClick(ctrl.selectedDays);
+
 		var preparedData = {
 			dateSeries: ['date'],
 			vacwSeries: ['vacw'],
@@ -80,21 +91,40 @@ function ForecastChartCtrl($translate, $filter) {
 					vacw: '#F488C8'
 				},
 				hide: ['vc', 'vtt', 'vacw'],
-				onclick: function (chartPoint) {
-					if (!checkSelection(ctrl.selectedDays, chartPoint.index)) {
-						ctrl.selectedDays.push(chartPoint.index);
-					} else{
-						var index = ctrl.selectedDays.indexOf(chartPoint.index)
-						if (index > -1) {
-							ctrl.selectedDays.splice(index, 1);
+				selection: {
+					enabled: true,
+					draggable: true,
+					grouped: true
+				},
+				onselected: function(){
+					var selection = chart.selected();
+					for (var i = 0; i < selection.length; i++) {
+						if (!checkSelection(ctrl.selectedDays, selection[i].index)) {
+							ctrl.selectedDays.push(selection[i].index);
+						} else{
+							var index = ctrl.selectedDays.indexOf(selection[i].index)
+							if (index > -1) {
+								ctrl.selectedDays.splice(index, 1);
+							}
 						}
 					}
 					ctrl.onClick(ctrl.selectedDays);
-					console.log('component', ctrl.selectedDays);
+				}
+			},//end of data
+			point: {
+				focus: {
+					expand: {
+						enabled: false
+					}
 				}
 			},
-			zoom: {
-				enabled: true
+			subchart: {
+				show: true
+			},
+			tooltip: {
+				format: {
+					value: d3.format('.1f')
+				}
 			},
 			axis: {
 				y2: {
@@ -112,21 +142,6 @@ function ForecastChartCtrl($translate, $filter) {
 						},
 						multiline: false
 					}
-				}
-			},
-			selection: {
-				enabled: true,
-				grouped: true,
-				draggable: true,
-				isselectable: function (chartPoint) {
-					if (chartPoint.id === 'vtt' || chartPoint.id === 'vacw' || chartPoint.id === 'vcampaign' || chartPoint.id === 'voverride' || chartPoint.id === 'vcombo')
-					return false;
-					return true;
-				}
-			},
-			tooltip: {
-				format: {
-					value: d3.format('.1f')
 				}
 			}
 		});

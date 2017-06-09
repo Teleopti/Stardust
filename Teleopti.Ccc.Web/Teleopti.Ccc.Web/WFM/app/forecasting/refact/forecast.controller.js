@@ -30,6 +30,7 @@
     vm.forecastingModal = forecastingModal;
     vm.getWorkloadForecastData = getWorkloadForecastData;
     vm.pointClick = pointClick;
+    vm.loadChart = loadChart;
 
     vm.init();
 
@@ -91,20 +92,25 @@
             console.log('no data');
             return;
           }
-          vm.currentWorkload.Days = data.Days;
+          else{
+            vm.currentWorkload.Days = data.Days;
+          }
 
           vm.skillMaster.isForecastRunning = false;
           forecastingModal();
         },
         function(data, status, headers, config) {
           vm.skillMaster.isForecastRunning = false;
-          console.log(status);
         }
       )
     }
 
     function pointClick(days) {
       vm.selectedDayCount = days;
+    }
+
+    function loadChart() {
+      //Used as a placeholder for refresh component
     }
 
     function forecastingModal(workload) {

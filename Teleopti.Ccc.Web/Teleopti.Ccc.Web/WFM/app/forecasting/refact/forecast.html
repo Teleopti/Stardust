@@ -25,7 +25,7 @@
   <div class="con-flex">
     <wfm-card-list >
       <wfm-card ng-repeat="skill in vm.skillMaster.Skills">
-        <card-header tabindex="-1" >
+        <card-header tabindex="-1">
           <div tabindex="0" ng-click="vm.getWorkloadForecastData(skill.Workload.Id)">
             <span><i class="mdi" ng-class="item.title"></i></span>
             <b>{{skill.Workload.Name}}</b>
@@ -33,10 +33,10 @@
           </div>
         </card-header>
         <card-body class="panel">
-          <div ng-if="vm.skillMaster.IsForecastRunning">
+          <div ng-if="vm.skillMaster.IsForecastRunning || vm.currentWorkload.Days.length<1">
             <md-progress-linear md-mode="indeterminate"></md-progress-linear>
           </div>
-          <div ng-if="!vm.skillMaster.IsForecastRunning">
+          <div ng-if="!vm.skillMaster.IsForecastRunning && vm.currentWorkload.Days.length>0">
             <div class="con-row">
               <div class="con-flex x3">
                 {{'ForecastWorkloadIntro' | translate}}
@@ -51,8 +51,12 @@
             </div>
             <div class="con-row">
               <div class="con-flex">
-                {{vm.selectedDayCount.length}} item(s) selected
-                  <forecast-chart chart-id="skill.ChartId" days="vm.currentWorkload.Days" on-click="vm.pointClick"> </forecast-chart>
+                {{vm.selectedDayCount.length}} day(s) selected
+                <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart()">
+                  <i class="mdi mdi-sync" ></i>
+                  <md-tooltip>Refresh chart</md-tooltip>
+                </div>
+                  <forecast-chart chart-id="skill.ChartId" days="vm.currentWorkload.Days" refresh="vm.loadChart" on-click="vm.pointClick"> </forecast-chart>
               </div>
             </div>
             <div class="con-footer">
