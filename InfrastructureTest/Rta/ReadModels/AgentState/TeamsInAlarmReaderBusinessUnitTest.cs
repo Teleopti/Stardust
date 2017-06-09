@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 	[UnitOfWorkTest]
 	public class TeamsInAlarmReaderBusinessUnitTest
 	{
+		public ICurrentBusinessUnit BusinessUnit;
 		public IAgentStateReadModelPersister Persister;
 		public ITeamsInAlarmReader Target;
 		public MutableNow Now;
@@ -25,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var site = Guid.NewGuid();
 			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
-				BusinessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value,
+				BusinessUnitId = BusinessUnit.Current().Id.Value,
 				PersonId = Guid.NewGuid(),
 				SiteId = site
 			});

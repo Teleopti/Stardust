@@ -1,5 +1,5 @@
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
-using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			instance.UpsertAssociation(new AssociationInfo
 			{
 				PersonId = model.PersonId,
-				BusinessUnitId = model.BusinessUnitId ?? BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value,
+				BusinessUnitId = model.BusinessUnitId ?? ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value,
 				SiteId = model.SiteId,
 				SiteName = model.SiteName,
 				TeamId = model.TeamId.GetValueOrDefault(),
