@@ -1,11 +1,8 @@
-<div class="con-row full-padding" layout="row" layout-align="center center">
-    <div class="con-flex" ng-repeat="item in $ctrl.dayOffsets">
-        <div class="wfm-radio">
-            <label>
-                <input type="radio" name="chooseDayOffset-{{$parent.$id}}" ng-checked="{{$ctrl.selOffset.value == item.value}}" ng-click="$ctrl.dateChange(item.value)"  value={{item.value}} />
-                <span class="wfm-radio-toggle"></span>
-                <span class="wfm-radio-label">{{item.text}}</span>
-            </label>
-        </div>
-    </div>
+<div class="con-row full-padding day-offset-picker" layout="row" layout-align="center center">
+	<div class="con-flex line-center animate work-day" ng-repeat="item in $ctrl.dayOffsets">
+		<button tabindex="0" class="wfm-fab mini" style="width:34px" ng-click="$ctrl.dateChange(item.value)" ng-class="{'mini-active': $ctrl.selOffset.value == item.value}">
+			<span style="text-transform:uppercase;">{{item.value}}</span>
+			<md-tooltip>{{item.text}}</md-tooltip>
+		</button>
+	</div>
 </div>

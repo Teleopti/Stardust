@@ -16,8 +16,7 @@
         'intradayPerformanceService',
         'intradayMonitorStaffingService',
         'intradayLatestTimeService',
-        'Toggle',
-        'moment'
+        'Toggle'
     ];
 
     function intradayController(
@@ -396,7 +395,7 @@
         });
 
         $scope.getLocalDate = function(offset) {
-            var ret = moment().add(offset, 'days').format('YYYY-MM-DD');
+            var ret = moment().add(offset, 'days').format('dddd, LL');
             return ret;
         };
 
