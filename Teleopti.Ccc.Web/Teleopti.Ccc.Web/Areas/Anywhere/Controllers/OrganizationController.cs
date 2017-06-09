@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			_organizationViewModelBuilder = organizationViewModelBuilder;
 		}
-
+		
 		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Sites/Organization")]
 		public virtual IHttpActionResult GetOrganization()
 		{
@@ -24,9 +24,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("api/Sites/OrganizationForSkills")]
-		public virtual IHttpActionResult GetOrganizationForSkills([FromUri] Guid[] skillIds)
+		public virtual IHttpActionResult GetOrganizationForSkills([FromUri]Guid[] skillIds)
 		{
 			return Ok(_organizationViewModelBuilder.BuildForSkills(skillIds));
 		}
+		
 	}
 }
