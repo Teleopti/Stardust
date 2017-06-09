@@ -16,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class SkillCombinationResourceRepository : ISkillCombinationResourceRepository
+	public class SkillCombinationResourceRepositoryOld : ISkillCombinationResourceRepository
 	{
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly object skillCombinationLock = new object();
 		private readonly IStardustJobFeedback _stardustJobFeedback;
 
-		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWork currentUnitOfWork,
+		public SkillCombinationResourceRepositoryOld(INow now, ICurrentUnitOfWork currentUnitOfWork,
 												  ICurrentBusinessUnit currentBusinessUnit, IStardustJobFeedback stardustJobFeedback)
 		{
 			_now = now;
@@ -116,7 +116,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    public virtual void PersistSkillCombinationResource(DateTime dataLoaded,
 	        IEnumerable<SkillCombinationResource> skillCombinationResources)
 	    {
-		    if (!skillCombinationResources.Any()) return;
 			_retryPolicy.ExecuteAction(() =>
 			{
 				tryPersistSkillCombinationResource(dataLoaded,  skillCombinationResources);
@@ -144,7 +143,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					dt.Columns.Add("BusinessUnit", typeof(Guid));
 					var insertedOn = _now.UtcDateTime();
 
-					var minStartDateTime = skillCombinationResources.Min(x => x.StartDateTime);
+
 					using (var transaction = connection.BeginTransaction())
 					{
 						var skillCombinations = loadSkillCombination(connection, transaction);
@@ -177,22 +176,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						using (var deleteCommand = new SqlCommand(@"DELETE d FROM ReadModel.SkillCombinationResourceDelta d
 							INNER JOIN ReadModel.SkillCombination c ON d.SkillCombinationId = c.Id 
 							INNER JOIN dbo.Skill s ON c.SkillId = s.Id
-							WHERE d.InsertedOn < @dataLoaded and s.businessunit = @buid 
-								and (StartDateTime >= @minNewResourceStartDateTime OR StartDateTime <= @8DaysAgo)", connection, transaction))
+							WHERE d.InsertedOn < @dataLoaded and s.businessunit = @buid", connection, transaction))
 						{
 							deleteCommand.Parameters.AddWithValue("@buid", bu);
 							deleteCommand.Parameters.AddWithValue("@dataLoaded", dataLoaded);
-							deleteCommand.Parameters.AddWithValue("@minNewResourceStartDateTime", minStartDateTime);
-							deleteCommand.Parameters.AddWithValue("@8DaysAgo", dataLoaded.AddDays(-8));
 							deleteCommand.ExecuteNonQuery();
 						}
 
 						using (var deleteCommand = new SqlCommand(@"DELETE FROM [ReadModel].[SkillCombinationResource] 
-						WHERE businessunit = @buid AND (StartDateTime >= @minNewResourceStartDateTime OR StartDateTime <= @8DaysAgo)", connection, transaction))
+						WHERE businessunit = @buid", connection, transaction))
 						{
 							deleteCommand.Parameters.AddWithValue("@buid", bu);
-							deleteCommand.Parameters.AddWithValue("@minNewResourceStartDateTime", minStartDateTime);
-							deleteCommand.Parameters.AddWithValue("@8DaysAgo", dataLoaded.AddDays(-8));
 							deleteCommand.ExecuteNonQuery();
 						}
 
@@ -328,21 +322,6 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 
 			return latest;
 		}		
-	}
-
-	public class RawSkillCombinationResource
-	{
-		public Guid SkillCombinationId { get; set; }
-		public DateTime StartDateTime { get; set; }
-		public DateTime EndDateTime { get; set; }
-		public double Resource { get; set; }
-		public Guid SkillId { get; set; }
-	}
-
-
-	public class SkillCombinationResourceWithCombinationId : SkillCombinationResource
-	{
-		public Guid SkillCombinationId { get; set; }
 	}
 
 }

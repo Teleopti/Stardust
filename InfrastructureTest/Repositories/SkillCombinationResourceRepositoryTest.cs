@@ -4,10 +4,12 @@ using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -60,6 +62,122 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 0, 2016, 12, 20, 1));
 			loadedCombinationResources.Single().Resource.Should().Be.EqualTo(1d);
+		}
+
+		[Test]
+		public void ShouldPersistSkillCombinationResourceButKeep8DaysHistoricalData()
+		{
+			var skillId = Guid.NewGuid();
+			Now.Is("2017-06-01 08:00");
+			var combinationResourcesOld = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resource = 1,
+					SkillCombination = new[] { skillId }
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resource = 1,
+					SkillCombination = new[] { skillId }
+				}
+			};
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+
+			Now.Is("2017-06-09 08:00");
+			var combinationResources = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 09, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 09, 0, 15, 0),
+					Resource = 1,
+					SkillCombination = new[] { skillId }
+				}
+			};
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
+
+			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12));
+			loadedCombinationResources.Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldKeep8DaysHistoricalDataForDeltas()
+		{
+			var skillId = Guid.NewGuid();
+			Now.Is("2017-06-01 08:00");
+			var combinationResourcesOld = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resource = 1,
+					SkillCombination = new[] { skillId }
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resource = 1,
+					SkillCombination = new[] { skillId }
+				}
+			};
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+
+			Target.PersistChanges(new[]
+			{
+				new SkillCombinationResource
+				{
+					SkillCombination = new[] {skillId},
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resource = 1
+				},
+				new SkillCombinationResource
+				{
+					SkillCombination = new[] {skillId},
+					StartDateTime = new DateTime(2017, 06, 02, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 02, 0, 15, 0),
+					Resource = 1
+				}
+			});
+
+			CurrentUnitOfWork.Current().PersistAll();
+
+			Now.Is("2017-06-09 08:00");
+			var combinationResources = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 09, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 09, 0, 15, 0),
+					Resource = 1,
+					SkillCombination = new[] { skillId }
+				}
+			};
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResources);
+
+			Target.PersistChanges(new[]
+			{
+				new SkillCombinationResource
+				{
+					SkillCombination = new[] {skillId},
+					StartDateTime = new DateTime(2017, 06, 09, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 09, 0, 15, 0),
+					Resource = 1
+				}
+			});
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var loadedCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12)).ToList();
+			loadedCombinationResources.Count.Should().Be.EqualTo(2);
+			loadedCombinationResources.First().Resource.Should().Be.EqualTo(2);
+			loadedCombinationResources.Second().Resource.Should().Be.EqualTo(2);
 		}
 
 		[Test]

@@ -60,7 +60,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayQueueStatisticsLoader>().As<IIntradayQueueStatisticsLoader>().SingleInstance();
 			builder.RegisterType<SplitSkillStaffInterval>().As<SplitSkillStaffInterval>().SingleInstance();
 			builder.RegisterType<JobStartTimeRepository>().As<IJobStartTimeRepository>().SingleInstance();
-			builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceRepository>().SingleInstance();
+
+			if (_configuration.Toggle(Toggles.Staffing_ReadModel_Keep8DaysHistoricalData_44652))
+				builder.RegisterType<SkillCombinationResourceRepository>().As<ISkillCombinationResourceRepository>().SingleInstance();
+			else
+				builder.RegisterType<SkillCombinationResourceRepositoryOld>().As<ISkillCombinationResourceRepository>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx))
 				builder.RegisterType<SkillStaffingIntervalProvider>().As<ISkillStaffingIntervalProvider>().SingleInstance();
