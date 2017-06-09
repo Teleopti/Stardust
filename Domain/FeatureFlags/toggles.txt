@@ -242,7 +242,7 @@ Staffing_ReadModel_Update14Days_43840 = true # don't enable without StaffingActi
 Staffing_ReadModel_BetterAccuracy_43447 = RC
 Staffing_ReadModel_BetterAccuracy_Step2_44271 = RC
 Staffing_ReadModel_BetterAccuracy_Step3_44331 = DEV
-Staffing_ReadModel_Keep8DaysHistoricalData_44652 = DEV # don't enable without Staffing_ReadModel_Update14Days_43840
+Staffing_ReadModel_Keep8DaysHistoricalData_44652 = RC # don't enable without Staffing_ReadModel_Update14Days_43840
 
 QRCodeForMobileApps_42695 = true
 ConfigQRCodeURLForMobileApps_43224 = true
