@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				;
 
-			Target.Build(new AgentStateFilter {SiteIds = new []{siteId1}, InAlarm = true})
+			Target.For(new AgentStateFilter {SiteIds = new []{siteId1}, InAlarm = true})
 				.States.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				;
 
-			Target.Build(new AgentStateFilter { TeamIds = new[] { teamId1 }, InAlarm = true})
+			Target.For(new AgentStateFilter { TeamIds = new[] { teamId1 }, InAlarm = true})
 				.States.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				.WithPersonSkill(personId3, Guid.NewGuid())
 				;
-			Target.Build(new AgentStateFilter { SkillIds = new[] { skillId1 }, InAlarm = true})
+			Target.For(new AgentStateFilter { SkillIds = new[] { skillId1 }, InAlarm = true})
 				.States.Select(x => x.PersonId)
 				.Should().Have.SameValuesAs(personId1);
 		}
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(personId2, Guid.NewGuid())
 				;
 
-			Target.Build(new AgentStateFilter {SiteIds = new[] {siteId}, SkillIds = new[] {skillId}, InAlarm = true})
+			Target.For(new AgentStateFilter {SiteIds = new[] {siteId}, SkillIds = new[] {skillId}, InAlarm = true})
 				.States.Single()
 				.PersonId.Should().Be(personId1);
 		}
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(personId2, Guid.NewGuid())
 				;
 
-			Target.Build(new AgentStateFilter { TeamIds = new[] { teamId }, SkillIds = new[] { skillId }, InAlarm = true})
+			Target.For(new AgentStateFilter { TeamIds = new[] { teamId }, SkillIds = new[] { skillId }, InAlarm = true})
 				.States.Single()
 				.PersonId.Should().Be(personId1);
 		}

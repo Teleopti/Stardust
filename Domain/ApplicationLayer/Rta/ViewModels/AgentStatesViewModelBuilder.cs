@@ -91,11 +91,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_nameDisplaySetting = nameDisplaySetting;
 		}
 		
-		public AgentStatesViewModel Build(AgentStateFilter filter)
+		public AgentStatesViewModel For(AgentStateFilter filter)
 		{
 			return build(_reader.ReadFor(filter));
 		}
 
+		public AgentStatesViewModel InAlarmExcludingPhoneStatesFor(AgentStateFilter filter, IEnumerable<Guid?> excludedPhoneStates)
+		{
+			filter.ExcludedStates = excludedPhoneStates;
+			return build(_reader.ReadInAlarmExcludingStatesFor(filter));
+		}
+		
 		public AgentStatesViewModel ForSites(Guid[] siteIds)
 		{
 			return build(_legacyReader.ReadForSites(siteIds));

@@ -52,11 +52,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				.WithPersonSkill(personId, skillId);
 
-			assert(Target.Build(p).States);
+			assert(Target.For(p).States);
 			p.InAlarm = true;
-			assert(Target.Build(p).States);
-			p.ExcludedStates = new Guid?[] {Guid.NewGuid()};
-			assert(Target.Build(p).States);
+			assert(Target.For(p).States);
+			assert(Target.InAlarmExcludingPhoneStatesFor(p, new Guid?[] {Guid.NewGuid()}).States);
 		}
 
 		private static void assert(IEnumerable<AgentStateViewModel> result)
