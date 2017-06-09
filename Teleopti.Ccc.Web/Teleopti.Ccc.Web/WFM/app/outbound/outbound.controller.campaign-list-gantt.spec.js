@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('OutboundSummaryCtrl', function () {
+describe('OutboundSummaryCtrl', function() {
 	var $q,
 		$rootScope,
 		$controller,
@@ -10,7 +10,7 @@ describe('OutboundSummaryCtrl', function () {
 		toggleSvc,
 		miscService;
 
-	beforeEach(function () {
+	beforeEach(function() {
 		module('wfm.outbound');
 
 		outboundService = new fakeOutboundService();
@@ -19,7 +19,7 @@ describe('OutboundSummaryCtrl', function () {
 
 		toggleSvc = {
 			togglesLoaded: {
-				then: function (cb) {
+				then: function(cb) {
 					cb();
 				}
 			}
@@ -27,37 +27,37 @@ describe('OutboundSummaryCtrl', function () {
 
 		miscService = new fakeMiscService();
 
-		module(function ($provide) {
-			$provide.service('miscService', function () {
+		module(function($provide) {
+			$provide.service('miscService', function() {
 				return miscService;
 			});
 
-			$provide.service('outboundService', function () {
+			$provide.service('outboundService', function() {
 				return outboundService;
 			});
 
-			$provide.service('outboundChartService', function () {
+			$provide.service('outboundChartService', function() {
 				return outboundChartService;
 			});
 
-			$provide.service('$state', function () {
+			$provide.service('$state', function() {
 				return stateService;
 			});
 
-			$provide.service('Toggle', function () {
+			$provide.service('Toggle', function() {
 				return toggleSvc;
 			});
 		});
 	});
 
-	beforeEach(inject(function (_$q_, _$rootScope_, _$controller_, _$timeout_) {
+	beforeEach(inject(function(_$q_, _$rootScope_, _$controller_, _$timeout_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$controller = _$controller_;
 		$timeout = _$timeout_;
 	}));
 
-	it('should draw gantt chart at the beginning', function () {
+	it('should draw gantt chart at the beginning', function() {
 		var test = setUpTarget();
 
 		outboundService.setGanttVisualization({
@@ -75,7 +75,7 @@ describe('OutboundSummaryCtrl', function () {
 		expect(test.scope.ganttData[0].id).toEqual(1);
 	});
 
-	it('should update all campaign statistics in gantt chart', function () {
+	it('should update all campaign statistics in gantt chart', function() {
 		var test = setUpTarget();
 
 		outboundService.setGanttVisualization({
@@ -134,7 +134,7 @@ describe('OutboundSummaryCtrl', function () {
 		expect(test.scope.ganttData[1].tasks[0].color).toEqual('#ffc36b');
 	});
 
-	it('should extend the row when click and collapse when click again', function () {
+	it('should extend the row when click and collapse when click again', function() {
 		var test = setUpTarget();
 		var campaign = {
 			Id: 1,
@@ -168,7 +168,7 @@ describe('OutboundSummaryCtrl', function () {
 		expect(test.scope.ganttData.length).toEqual(1);
 	});
 
-	it('should draw c3 chart when click the gantt chart', function () {
+	it('should draw c3 chart when click the gantt chart', function() {
 		var test = setUpTarget();
 		var campaign = {
 			Id: 1,
@@ -210,7 +210,7 @@ describe('OutboundSummaryCtrl', function () {
 		expect(test.scope.ganttData[1].campaign.graphData).toBeDefined();
 	});
 
-	it('should get threshold value at the beginning', function () {
+	it('should get threshold value at the beginning', function() {
 		var test = setUpTarget();
 		outboundService.setThreshold({
 			Value: 0.6,
@@ -220,44 +220,54 @@ describe('OutboundSummaryCtrl', function () {
 		expect(test.scope.settings.threshold).toEqual(60);
 	});
 
-	it('should reset schedule data after calling getIgnoreScheduleCallback  ', function () {
+	it('should reset schedule data after calling getIgnoreScheduleCallback  ', function() {
 		var test = setUpTarget();
 		initDataForIgnore(test);
-		test.scope.campaignClicked(null, { id: test.campaign.Id });
+		test.scope.campaignClicked(null, {
+			id: test.campaign.Id
+		});
 		test.campaign.selectedDates = ['2017-06-07', '2017-06-08'];
 
 		var expectedDataRow = test.scope.ganttData[1];
 		expectedDataRow.callbacks.ignoreSchedules(test.campaign.selectedDates);
 
 		var expectedScheduleValues = [];
-		test.campaign.selectedDates.forEach(function (d) {
+		test.campaign.selectedDates.forEach(function(d) {
 			expectedScheduleValues.push(expectedDataRow.campaign.graphData.schedules[test.campaign.graphData.dates.indexOf(d)]);
 		});
 
-		expect(expectedScheduleValues.every(function (s) { return s === 0; })).toEqual(true);
+		expect(expectedScheduleValues.every(function(s) {
+			return s === 0;
+		})).toEqual(true);
 	});
 
-	it('should show plan data after calling getIgnoreScheduleCallback', function () {
+	it('should show plan data after calling getIgnoreScheduleCallback', function() {
 		var test = setUpTarget();
 		initDataForIgnore(test);
-		test.scope.campaignClicked(null, { id: test.campaign.Id });
+		test.scope.campaignClicked(null, {
+			id: test.campaign.Id
+		});
 		test.campaign.selectedDates = ['2017-06-07', '2017-06-08'];
 
 		var expectedDataRow = test.scope.ganttData[1];
 		expectedDataRow.callbacks.ignoreSchedules(test.campaign.selectedDates);
 
 		var expectedPlanData = [];
-		test.campaign.selectedDates.forEach(function (d) {
+		test.campaign.selectedDates.forEach(function(d) {
 			expectedPlanData.push(expectedDataRow.campaign.graphData.unscheduledPlans[test.campaign.graphData.dates.indexOf(d)]);
 		});
 
-		expect(expectedPlanData.every(function (s) { return s === 10; })).toEqual(true);
+		expect(expectedPlanData.every(function(s) {
+			return s === 10;
+		})).toEqual(true);
 	});
 
-	it('should calculate and show plan data correctly when has overstaff data after hide schedule', function () {
+	it('should calculate and show plan data correctly when has overstaff data after hide schedule', function() {
 		var test = setUpTarget();
 		initDataForIgnore(test);
-		test.scope.campaignClicked(null, { id: test.campaign.Id });
+		test.scope.campaignClicked(null, {
+			id: test.campaign.Id
+		});
 		test.campaign.selectedDates = ['2017-06-11'];
 		var index = test.campaign.graphData.dates.indexOf(test.campaign.selectedDates[0]);
 		test.campaign.graphData.rawPlans[index] = 10;
@@ -269,10 +279,12 @@ describe('OutboundSummaryCtrl', function () {
 		expect(test.campaign.graphData.unscheduledPlans[index]).toEqual(0);
 	});
 
-	it('should restore schedule data after show schedule', function () {
+	it('should restore schedule data after show schedule', function() {
 		var test = setUpTarget();
 		initDataForIgnore(test);
-		test.scope.campaignClicked(null, { id: test.campaign.Id });
+		test.scope.campaignClicked(null, {
+			id: test.campaign.Id
+		});
 		test.campaign.selectedDates = ['2017-06-11'];
 		var expectedDataRow = test.scope.ganttData[1];
 		var index = test.campaign.graphData.dates.indexOf(test.campaign.selectedDates[0]);
@@ -337,12 +349,12 @@ describe('OutboundSummaryCtrl', function () {
 	}
 
 	function fakeMiscService() {
-		this.getAllWeekendsInPeriod = function () { };
-		this.getDateFromServer = function (date) {
+		this.getAllWeekendsInPeriod = function() {};
+		this.getDateFromServer = function(date) {
 			var dateToBefixed = new Date(date);
 			return dateToBefixed;
 		};
-		this.sendDateToServer = function () { };
+		this.sendDateToServer = function() {};
 	}
 
 	function fakeOutboundService() {
@@ -358,83 +370,83 @@ describe('OutboundSummaryCtrl', function () {
 				PeriodEnd: new Date()
 			};
 
-		this.checkPermission = function () {
+		this.checkPermission = function() {
 			return {
-				then: function (cb) {
+				then: function(cb) {
 					//todo: need prepare init !
 					// cb();
 				}
 			}
 		};
 
-		this.loadCampaignSchedules = function (period, cb) {
+		this.loadCampaignSchedules = function(period, cb) {
 			if (cb) cb();
 		};
 
-		this.setGanttPeriod = function (period) {
+		this.setGanttPeriod = function(period) {
 			visualizationPeriod = period;
 		};
 
-		this.getGanttPeriod = function () {
+		this.getGanttPeriod = function() {
 			return visualizationPeriod;
 		};
 
-		this.setGanttVisualization = function (ganttV) {
+		this.setGanttVisualization = function(ganttV) {
 			ganttVisualization.push(ganttV);
 		};
 
-		this.getCampaigns = function (ganttPeriod, cb) {
+		this.getCampaigns = function(ganttPeriod, cb) {
 			cb(ganttVisualization);
 		};
 
-		this.setThreshold = function (threshold) {
+		this.setThreshold = function(threshold) {
 			thresholdObj = threshold;
 		};
 
-		this.getThreshold = function (cb) {
+		this.getThreshold = function(cb) {
 			cb(thresholdObj);
 		};
 
-		this.setCampaignStatus = function (campaignD) {
+		this.setCampaignStatus = function(campaignD) {
 			campaignDetail = campaignD;
 		};
 
-		this.getCampaignStatus = function (id, cb) {
+		this.getCampaignStatus = function(id, cb) {
 			cb(campaignDetail);
 		};
 
-		this.setCampaignsStatus = function (listCampaigns) {
+		this.setCampaignsStatus = function(listCampaigns) {
 			listCampaign.push(listCampaigns);
 		};
 
-		this.updateCampaignsStatus = function (cb) {
+		this.updateCampaignsStatus = function(cb) {
 			cb(listCampaign);
 		};
 
-		this.loadWithinPeriod = function () { };
+		this.loadWithinPeriod = function() {};
 
-		this.getDefaultPeriod = function () {
+		this.getDefaultPeriod = function() {
 			return ['', ''];
 		};
 
-		this.setPhaseStatistics = function (d) {
+		this.setPhaseStatistics = function(d) {
 			PhaseStatistics = d;
 		};
 
-		this.getCampaign = function (campaignId, successCb, errorCb) { };
+		this.getCampaign = function(campaignId, successCb, errorCb) {};
 
-		this.addCampaign = function (campaign, successCb, errorCb) {
+		this.addCampaign = function(campaign, successCb, errorCb) {
 			campaigns.push(campaign);
 			successCb(campaign);
 		};
 
-		this.calculateCampaignPersonHour = function (campaign) {
+		this.calculateCampaignPersonHour = function(campaign) {
 			return campaign.calculatedPersonHour;
 		};
 
-		this.load = function () { };
+		this.load = function() {};
 
-		this.prepareCampaignSummary = function (summary) {
+		this.prepareCampaignSummary = function(summary) {
 			campaignSummaries.push(summary);
 		};
 	}
@@ -442,39 +454,39 @@ describe('OutboundSummaryCtrl', function () {
 	function fakeOutboundChartService() {
 		var campaignViss = {};
 
-		this.setCampaignVisualization = function (id, vis) {
+		this.setCampaignVisualization = function(id, vis) {
 			campaignViss[id] = vis;
 		};
 
-		this.getCampaignVisualization = function (id, success) {
+		this.getCampaignVisualization = function(id, success) {
 			success(campaignViss[id]);
 		};
 
-		this.makeGraph = function () {
+		this.makeGraph = function() {
 			return {
 				graph: 'c3'
 			}
 		};
 
-		this.updateBacklog = function (campaign, cb) {
+		this.updateBacklog = function(campaign, cb) {
 			if (angular.isDefined(campaignViss[campaign.campaignId])) {
 				cb(campaignViss[campaign.campaignId]);
 			}
 		};
 
-		this.updateManualPlan = function (campaign, cb) {
+		this.updateManualPlan = function(campaign, cb) {
 			if (angular.isDefined(campaignViss[campaign.campaignId])) {
 				cb(campaignViss[campaign.campaignId]);
 			}
 		};
 
-		this.removeManualPlan = function (campaign, cb) {
+		this.removeManualPlan = function(campaign, cb) {
 			if (angular.isDefined(campaignViss[campaign.campaignId])) {
 				cb(campaignViss[campaign.campaignId]);
 			}
 		};
 
-		this.removeActualBacklog = function (campaign, cb) {
+		this.removeActualBacklog = function(campaign, cb) {
 			if (angular.isDefined(campaignViss[campaign.campaignId])) {
 				cb(campaignViss[campaign.campaignId]);
 			}

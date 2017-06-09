@@ -80,7 +80,7 @@ describe('Outbound campaign commands pane tests ', function() {
 		expect(target.container[0].querySelectorAll('.btn-ignore-schedules').length).toEqual(1);
 	});
 
-	it('should not show ignore schedule button when there are no schedules in campaign', function () {
+	it('should not show ignore schedule button when there are no schedules in campaign', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
 		target.vm.campaign.IsScheduled = false;
 		for (var i = 1; i < target.vm.campaign.graphData.schedules.length; i++) {
@@ -104,7 +104,7 @@ describe('Outbound campaign commands pane tests ', function() {
 		expect(target.container[0].querySelectorAll('.btn-ignore-schedules:disabled').length).toEqual(1);
 	});
 
-	it('should disable ignore shedule button when selected dates have no schedule', function () {
+	it('should disable ignore shedule button when selected dates have no schedule', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
 		target.vm.selectedDates = ['2017-06-09'];
 		var index = target.vm.campaign.graphData.dates.indexOf(target.vm.selectedDates[0]);
@@ -113,7 +113,7 @@ describe('Outbound campaign commands pane tests ', function() {
 		expect(target.container[0].querySelectorAll('.btn-ignore-schedules:disabled').length).toEqual(1);
 	});
 
-	it('should enable ignore shedule button when any selected dates has schedule', function () {
+	it('should enable ignore shedule button when any selected dates has schedule', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
 		target.vm.selectedDates = ['2017-06-08', '2017-06-09'];
 		var graphData = target.vm.campaign.graphData;
@@ -160,7 +160,7 @@ describe('Outbound campaign commands pane tests ', function() {
 		expect(target.vm.ignoreScheduleSwitch).toEqual(true);
 	});
 
-	it('should show schedule data after clicking "show all schedule" button', function () {
+	it('should show schedule data after clicking "show all schedule" button', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
 		target.scope.$apply();
 		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
@@ -168,7 +168,7 @@ describe('Outbound campaign commands pane tests ', function() {
 		expect(showAllSchedulesCallbackCalledCount).toEqual(1);
 	});
 
-	it('should filter out selected dates without schedule', function () {
+	it('should filter out selected dates without schedule', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
 		target.vm.selectedDates = ['2017-06-08', '2017-06-09'];
 		var graphData = target.vm.campaign.graphData;
@@ -180,7 +180,7 @@ describe('Outbound campaign commands pane tests ', function() {
 		expect(target.vm.ignoredDates.length).toEqual(1);
 		expect(target.vm.ignoredDates[0]).toEqual(target.vm.selectedDates[0]);
 	});
-	
+
 	function setUpTarget() {
 		var html = '<campaign-commands-pane campaign="campaign" selected-dates="campaign.selectedDates" selected-dates-closed="campaign.selectedDatesClosed" is-loading="isRefreshingData" callbacks="callbacks"></campaign-commands-pane>';
 
@@ -209,7 +209,7 @@ describe('Outbound campaign commands pane tests ', function() {
 				ignoreSchedulesCallbackCalledCount++;
 				callback && callback();
 			},
-			showAllSchedules: function (ignoredDates, callback) {
+			showAllSchedules: function(ignoredDates, callback) {
 				showAllSchedulesCallbackCalledCount++;
 				callback && callback();
 			}
