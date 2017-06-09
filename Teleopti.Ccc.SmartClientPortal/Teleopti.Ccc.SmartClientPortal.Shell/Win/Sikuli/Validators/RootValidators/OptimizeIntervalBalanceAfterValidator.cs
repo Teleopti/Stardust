@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli.Validators.RootValidat
 	internal class OptimizeIntervalBalanceAfterValidator : RootValidator
 	{
 		private const double _limit = 0.8d;
-		private const int _maxRuleBreaks = 8;
+		private const int _maxRuleBreaks = 10;
 		private TimeSpan _durationLimit = TimeSpan.FromMinutes(1).Add(TimeSpan.FromSeconds(07));
 		private DurationValidator _durationValidator;
 
