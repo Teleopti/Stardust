@@ -131,6 +131,15 @@ describe('Outbound campaign commands pane tests ', function() {
 		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
 		expect(ignoreSchedulesCallbackCalledCount).toEqual(1);
 	});
+
+	it('should reset states for other buttons', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.scope.$apply();
+		angular.element(target.container[0].querySelectorAll('.btn-toggle-manual-plan')).triggerHandler('click');
+		expect(target.vm.manualPlanSwitch).toEqual(true);
+		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
+		expect(target.vm.manualPlanSwitch).toEqual(false);
+	});
 	
 	function setUpTarget() {
 		var html = '<campaign-commands-pane campaign="campaign" selected-dates="campaign.selectedDates" selected-dates-closed="campaign.selectedDatesClosed" is-loading="isRefreshingData" callbacks="callbacks"></campaign-commands-pane>'
@@ -156,8 +165,9 @@ describe('Outbound campaign commands pane tests ', function() {
 		};
 		scope.isRefreshingData = false;
 		scope.callbacks = {
-			ignoreSchedules: function(ignoredDates) {
+			ignoreSchedules: function(ignoredDates, callback) {
 				ignoreSchedulesCallbackCalledCount++;
+				callback && callback();
 			}
 		};
 

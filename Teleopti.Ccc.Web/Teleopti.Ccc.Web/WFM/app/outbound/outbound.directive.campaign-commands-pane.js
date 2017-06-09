@@ -63,10 +63,12 @@
 			});
 		};
 
-		vm.ignoreSchedule = function() {
+		vm.ignoreSchedule = function () {
+			vm.manualBacklogSwitch = false;
+			vm.manualPlanSwitch = false;
 			vm.ignoredDates = angular.copy(vm.selectedDates);
 
-			vm.callbacks.ignoreSchedules(vm.ignoredDates);
+			vm.callbacks.ignoreSchedules(vm.ignoredDates, callbackDone);
 		};
 
 		vm.gotoEditCampaign = function () {

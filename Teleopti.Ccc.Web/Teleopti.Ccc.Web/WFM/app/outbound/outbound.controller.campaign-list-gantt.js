@@ -213,7 +213,7 @@
 		};
 
 		function getIgnoreScheduleCallback(campaign) {
-			return function(ignoredDates) {
+			return function(ignoredDates, callback) {
 				ignoredDates.forEach(function(ignoredDate) {
 					var index = campaign.graphData.dates.indexOf(ignoredDate);
 					campaign.graphData.schedules[index] = 0;
@@ -221,6 +221,7 @@
 				});
 				$scope.$broadcast('campaign.chart.clear.selection', campaign);
 				$scope.$broadcast('campaign.chart.refresh', campaign);
+				callback && callback();
 			};
 		}
 
