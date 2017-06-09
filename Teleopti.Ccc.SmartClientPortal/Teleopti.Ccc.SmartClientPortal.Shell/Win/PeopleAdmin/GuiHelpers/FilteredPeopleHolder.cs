@@ -1100,8 +1100,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			_applicationRoleCollection.Clear();
 
 			var r = new ApplicationRoleRepository(GetUnitOfWork);
-			_applicationRoleCollection.AddRange(r.LoadAllApplicationRolesSortedByName());
-
+			_applicationRoleCollection.AddRange(r.LoadAllApplicationRolesSortedByName().OrderBy(x => x.DescriptionText));
 			_rolesViewAdapterCollection.AddRange(_applicationRoleCollection.ConvertAll((EntityConverter.ConvertToOther<IApplicationRole, RolesModel>)));
 		}
 
