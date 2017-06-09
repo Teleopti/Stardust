@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void BeforeCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			foreach (var personAssignment in modifiedRoots.Select(x => x.Root).OfType<IPersonAssignment>())
+			var modifiedPersonAssignments = modifiedRoots.Select(x => x.Root).OfType<IPersonAssignment>();
+			foreach (var personAssignment in modifiedPersonAssignments.Where(pa => pa.Source != _currentSchedulingSource.Current()))
 			{
 				personAssignment.Source = _currentSchedulingSource.Current();
 			}

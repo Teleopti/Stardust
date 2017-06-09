@@ -51,6 +51,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			get { return modifiedRoots; }
 		}
 
+		public IEnumerable<IAggregateRoot> RootsWithModifiedChildren
+		{
+			get { return rootsWithModifiedChildren; }
+		}
+
 		public override int[] FindDirty(object entity, object id, object[] currentState, object[] previousState,
 												  string[] propertyNames, IType[] types)
 		{

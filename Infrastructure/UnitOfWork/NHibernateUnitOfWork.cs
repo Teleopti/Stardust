@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			try
 			{
+				_currentPreCommitHooks.Current().ForEach(x => x.BeforeCommit(Interceptor.Value.ModifiedRoots));
 				Interceptor.Value.Iteration = InterceptorIteration.Normal;
 				Session.Flush();
 				Interceptor.Value.Iteration = InterceptorIteration.UpdateRoots;
@@ -144,7 +145,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			IEnumerable<IRootChangeInfo> modifiedRoots;
 			try
 			{
-				_currentPreCommitHooks.Current().ForEach(x => x.BeforeCommit(Interceptor.Value.ModifiedRoots.ToList()));
 				Flush();
 				modifiedRoots = Interceptor.Value.ModifiedRoots.ToList();
 				transactionCommit();

@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public interface IPreCommitHook
 	{
-		void BeforeCommit(IEnumerable<IRootChangeInfo> modifiedRoots);
+		void BeforeCommit(IEnumerable<IRootChangeInfo> modifiedRoots); 
 	}
 }

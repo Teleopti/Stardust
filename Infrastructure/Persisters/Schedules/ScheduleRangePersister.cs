@@ -1,12 +1,8 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using Teleopti.Ccc.Domain;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
@@ -47,14 +43,6 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			}
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				foreach (var differenceCollectionItem in diff)
-				{
-					var currentItem = differenceCollectionItem.CurrentItem as IPersonAssignment;
-					if (currentItem != null)
-					{
-						currentItem.Source = null;
-					}
-				}
 				var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange).ToArray();
 				if (conflicts.IsEmpty())
 				{
