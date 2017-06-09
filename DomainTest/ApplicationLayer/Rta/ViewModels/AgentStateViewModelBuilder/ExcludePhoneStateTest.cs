@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -11,6 +12,15 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateViewModelBuilder
 {
+	public static class Ex
+	{
+		public static AgentStatesViewModel Build(this AgentStatesViewModelBuilder instance, AgentStateFilter filter, IEnumerable<Guid?> excludedPhoneStates)
+		{
+			filter.ExcludedStates = excludedPhoneStates;
+			return instance.Build(filter);
+		}
+	}
+
 	[DomainTest]
 	[TestFixture]
 	public class ExcludePhoneStateTest
@@ -45,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					AlarmStartTime = "2016-11-07 08:00".Utc()
 				});
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {SiteIds = new[] {site}}, new Guid?[] { loggedOut})
+			Target.Build(new AgentStateFilter {SiteIds = new[] {site}, ExcludedStates = new Guid?[] { loggedOut } })
 				.States.Single()
 				.PersonId.Should().Be(person1);
 		}
@@ -76,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					AlarmStartTime = "2016-11-07 08:00".Utc()
 				});
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {TeamIds = new[] {team}}, new Guid?[] {loggedOut})
+			Target.Build(new AgentStateFilter {TeamIds = new[] {team}}, new Guid?[] {loggedOut})
 				.States.Single()
 				.PersonId.Should().Be(person1);
 		}
@@ -107,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				.WithPersonSkill(person2, phone);
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter { SkillIds = new[] { phone } }, new Guid?[] { loggedOut })
+			Target.Build(new AgentStateFilter { SkillIds = new[] { phone } }, new Guid?[] { loggedOut })
 				.States.Single()
 				.PersonId.Should().Be(person1);
 		}
@@ -162,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(siteFiltered, skill)
 				;
 
-			Target.InAlarmExcludingPhoneStatesFor(
+			Target.Build(
 				new AgentStateFilter
 				{
 					SiteIds = new[] { site },
@@ -222,7 +232,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(teamFiltered, skillId)
 				;
 
-			Target.InAlarmExcludingPhoneStatesFor(
+			Target.Build(
 				new AgentStateFilter
 				{
 					TeamIds = new[] { team },
@@ -264,19 +274,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(person2, skillId)
 				;
 			
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {SiteIds = new[] {site}},
+			Target.Build(new AgentStateFilter {SiteIds = new[] {site}},
 				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {TeamIds = new[] {team}},
+			Target.Build(new AgentStateFilter {TeamIds = new[] {team}},
 				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {SkillIds = new[] {skillId}},
+			Target.Build(new AgentStateFilter {SkillIds = new[] {skillId}},
 				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {SiteIds = new[] {site}, SkillIds = new[] {skillId}},
+			Target.Build(new AgentStateFilter {SiteIds = new[] {site}, SkillIds = new[] {skillId}},
 				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {TeamIds = new[] {team}, SkillIds = new[] {skillId}},
+			Target.Build(new AgentStateFilter {TeamIds = new[] {team}, SkillIds = new[] {skillId}},
 				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
 		}
 

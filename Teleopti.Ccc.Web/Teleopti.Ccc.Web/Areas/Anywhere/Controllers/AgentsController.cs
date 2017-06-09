@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/Agents/StatesFor")]
 		public virtual IHttpActionResult StatesFor([FromUri] AgentStateFilter filter)
 		{
-			return Ok(_agentStatesBuilder.For(filter));
+			return Ok(_agentStatesBuilder.Build(filter));
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/Agents/InAlarmFor")]
@@ -31,13 +31,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			// REMOVE ME PLOX
 			filter.InAlarm = true;
-			return Ok(_agentStatesBuilder.For(filter));
+			return Ok(_agentStatesBuilder.Build(filter));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/InAlarmExcludingPhoneStatesFor")]
 		public virtual IHttpActionResult InAlarmExcludingPhoneStatesFor([FromUri] AgentStateFilter filter, [FromUri] IEnumerable<Guid?> excludedStateIds)
 		{
-			return Ok(_agentStatesBuilder.InAlarmExcludingPhoneStatesFor(filter, excludedStateIds));
+			filter.ExcludedStates = excludedStateIds;
+			return Ok(_agentStatesBuilder.Build(filter));
 		}
 	}
 
