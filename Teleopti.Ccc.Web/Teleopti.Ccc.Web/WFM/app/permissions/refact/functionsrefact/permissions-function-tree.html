@@ -25,7 +25,7 @@
 					<i ng-hide="function.ChildFunctions.length===0 " class="mdi mdi-chevron-right perm-expander"></i>
 				</div>
 				<div class="tree-handle-wrapper">
-					<div ui-tree-handle ng-class="{selected: $ctrl.shouldFunctionBeSelected(function)}" ng-click="$ctrl.checkParent(function)">
+					<div ui-tree-handle ng-class="{selected: $ctrl.shouldFunctionBeSelected(function), 'non-pointer text-muted': function.IsDisabled}" ng-click="$ctrl.checkParent(function)">
 						{{function.LocalizedFunctionDescription}}
 					</div>
 				</div>
