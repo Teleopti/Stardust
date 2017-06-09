@@ -41,9 +41,4 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 	}
 
-	public class Query
-	{
-		public Guid[] Ids { get; set; }
-	}
-	
 }

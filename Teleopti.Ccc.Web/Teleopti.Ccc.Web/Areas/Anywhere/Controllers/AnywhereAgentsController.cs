@@ -65,5 +65,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			return Ok(_agentViewModelBuilder.For(new AgentStateFilter {SiteIds = siteIds}).ToArray());
 		}
+
+		public class Query
+		{
+			public Guid[] Ids { get; set; }
+		}
 	}
 }

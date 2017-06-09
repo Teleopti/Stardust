@@ -1,3 +1,4 @@
+using System;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
@@ -21,5 +22,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			return Ok(_build.For(query.Ids));
 		}
+
+		public class Query
+		{
+			public Guid[] Ids { get; set; }
+		}
 	}
+
+
 }
