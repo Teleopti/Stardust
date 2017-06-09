@@ -1,4 +1,4 @@
-﻿//main menu
+//main menu
 .main-menu{
 	.main-menu-ctrls{
 		position: fixed;
@@ -60,7 +60,7 @@
 .main-menu-slide.ng-hide-remove {
 	transform: translate(-100%);
 	transform-origin: left;
-  transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+	transition: all 0.3s cubic-bezier(.25,.8,.25,1);
 }
 // hidden state
 .main-menu-slide.ng-hide-remove.ng-hide-remove-active,
@@ -70,18 +70,20 @@
 
 
 /*nav-context-menu*/
-.businessunit-menu:focus{
-	box-shadow: none!important;
+.bu-align{
+	position: fixed;
+	top: 8px;
+	z-index: 1000;
+	left: 150px;
+	color: white;
+}
+
+.businessunit-menu > .context-menu-bottom{
+	color: $text-color-standard!important;
 }
 
 .businessunit-menu-icon{
 	vertical-align: middle!important;
-	color:$text-color-standard;
-}
-
-.show-businessunit-menu{
-	opacity: 1!important;
-	visibility: visible!important;
 }
 
 // mobile media query
@@ -135,9 +137,9 @@
 	.nav-context-menu .arrow-up{
 		border-bottom: 15px solid $white;
 	}
-    .context-menu:focus [class*="context-menu-"]{
-        visibility: visible !important;
-    }
+	.context-menu:focus [class*="context-menu-"]{
+		visibility: visible !important;
+	}
 }
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {

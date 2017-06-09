@@ -33,28 +33,27 @@
 						{{'MainScreen' | translate}}
 					</md-tooltip>
 				</b>
-				-
-				<label ng-controller="BusinessUnitsController as businessunit" class="inline-flex">
-					<div tabindex="0" class="context-menu businessunit-menu" id="business-unit-select" ng-click="businessunit.toggleBuMenu();" ng-blur="businessunit.toggleBuMenu();">
-						<span>
-							<span ng-if="vm.detectMobile();">{{businessunit.data.selectedBu.Name}} <i class="mdi mdi-menu-down"></i></span>
-							<span ng-if="!vm.detectMobile();"><i class="mdi mdi-vector-square"></i></span>
-
-							<md-tooltip>
-								{{'BusinessUnit'|translate}}
-							</md-tooltip>
-						</span>
-						<span class="context-menu-bottom" ng-class="{'show-businessunit-menu':businessunit.buMenu}">
-							<ul class="wfm-list">
-								<li ng-repeat="bu in businessunit.data.businessUnits" ng-click="businessunit.changeBusinessUnit(bu)">
-									<i class="mdi mdi-vector-square businessunit-menu-icon"></i>
-									{{bu.Name}}
-								</li>
-							</ul>
-						</span>
-					</div>
-			</label>
 		</h2>
+		<div ng-controller="BusinessUnitsController as businessunit" ng-cloak class="bu-align">
+			<div tabindex="0" class="businessunit-menu" id="business-unit-select">
+				<span class="pointer" tabindex="0" ng-click="businessunit.toggleBuMenu();">
+					<span ng-if="vm.detectMobile();">{{businessunit.data.selectedBu.Name}} <i class="mdi mdi-menu-down"></i></span>
+					<span ng-if="!vm.detectMobile();"><i class="mdi mdi-vector-square"></i></span>
+
+					<md-tooltip>
+						{{'BusinessUnit'|translate}}
+					</md-tooltip>
+				</span>
+				<span class="context-menu-bottom" ng-if="businessunit.buMenu">
+					<ul class="wfm-list material-depth-2">
+						<li ng-repeat="bu in businessunit.data.businessUnits" ng-cloak ng-click="businessunit.changeBusinessUnit(bu)">
+							<i class="mdi mdi-vector-square businessunit-menu-icon"></i>
+							{{bu.Name}}
+						</li>
+					</ul>
+				</span>
+			</div>
+	</div>
 		<div ng-show="vm.mainMenuState" class="main-menu-slide main-menu-link-wrapper material-depth-1">
 			<mainmenu data="a" open="vm.mainMenuState" ng-click="vm.toggleMobileMenu();" ng-repeat="a in vm.areas"></mainmenu>
 		</div>
