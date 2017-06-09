@@ -172,7 +172,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			result[siteId].Should().Be(1);
 		}
 
-
 		[Test]
 		public void ShouldNotLoadTerminatedAgentForSkill()
 		{
@@ -190,7 +189,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 
 			result[siteId].Should().Be(1);
 		}
-
 
 		[Test]
 		public void ShouldGetForSkillWithCorrectDate()
@@ -210,5 +208,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				[siteId].Should().Be(1);
 		}
 
+		[Test]
+		public void ShouldReturnEmptyForNoSites()
+		{
+			WithUnitOfWork.Get(() => Target.Read(new Guid[] { }))
+				.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldReturnEmptyForNoSitesAndSkills()
+		{
+			WithUnitOfWork.Get(() => Target.Read(new Guid[] { }, new Guid[] {Guid.NewGuid()}))
+				.Should().Be.Empty();
+		}
 	}
 }

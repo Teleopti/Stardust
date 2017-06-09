@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -24,6 +25,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 		public IDictionary<Guid, int> Read(IEnumerable<Guid> siteIds)
 		{
+			if (siteIds.IsEmpty())
+				return new Dictionary<Guid, int>();
 			var models =
 				_currentUnitOfWork.Session().CreateSQLQuery(@"
 SELECT
@@ -49,6 +52,8 @@ group by Site")
 
 		public IDictionary<Guid, int> Read(IEnumerable<Guid> siteIds, IEnumerable<Guid> skillIds)
 		{
+			if (siteIds.IsEmpty())
+				return new Dictionary<Guid, int>();
 			var models =
 				_currentUnitOfWork.Session()
 					.CreateSQLQuery(@"

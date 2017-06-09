@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using NHibernate.Mapping;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -27,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 		}
 
-		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> teams)
+		public IDictionary<Guid, int> Read(IEnumerable<Guid> teams)
 		{
 			if (teams.IsEmpty()) return new Dictionary<Guid, int>();
 
@@ -55,8 +51,9 @@ group by Team
 			return initializedSites.Concat(models).ToDictionary(x => x.TeamId, y => y.AgentsCount);
 		}
 
-		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
+		public IDictionary<Guid, int> Read(IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
+			if (teamIds.IsEmpty()) return new Dictionary<Guid, int>();
 			var models = _currentUnitOfWork.Session()
 				.CreateSQLQuery(@"
 SELECT

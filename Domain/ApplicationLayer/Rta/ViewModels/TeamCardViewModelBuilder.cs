@@ -57,8 +57,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 			var teamIds = teamsInAlarm.Select(x => x.TeamId);
 			var numberOfAgentsPerTeam = skillIds != null ? 
-				_numberOfAgentsInTeamReader.ForSkills(teamIds, skillIds).ToLookup(x => x.Key, x => x.Value) : 
-				_numberOfAgentsInTeamReader.FetchNumberOfAgents(teamIds).ToLookup(x => x.Key, x => x.Value);
+				_numberOfAgentsInTeamReader.Read(teamIds, skillIds).ToLookup(x => x.Key, x => x.Value) : 
+				_numberOfAgentsInTeamReader.Read(teamIds).ToLookup(x => x.Key, x => x.Value);
 
 			var result = teamsInAlarm
 				.Select(t =>

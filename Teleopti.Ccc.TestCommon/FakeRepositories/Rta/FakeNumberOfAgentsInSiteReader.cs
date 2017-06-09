@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			IPersonRepository persons, 
 			INow now, 
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId, 
-			IGroupingReadOnlyRepository groupings, FakeAgentStateReadModelPersister agentStates)
+			IGroupingReadOnlyRepository groupings, 
+			FakeAgentStateReadModelPersister agentStates)
 		{
 			_persons = persons;
 			_now = now;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_groupings = groupings;
 			_agentStates = agentStates;
 		}
+
 		public IDictionary<Guid, int> Read(IEnumerable<Guid> siteIds)
 		{
 			return 

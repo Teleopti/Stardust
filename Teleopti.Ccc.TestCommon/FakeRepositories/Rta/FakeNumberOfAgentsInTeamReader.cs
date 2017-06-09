@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_groupings = groupings;
 		}
 
-		public IDictionary<Guid, int> FetchNumberOfAgents(IEnumerable<Guid> teams)
+		public IDictionary<Guid, int> Read(IEnumerable<Guid> teams)
 		{
 			return
 				(from person in _persons.LoadAll()
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				.ToDictionary(g => g.Key, g => g.Count());
 		}
 
-		public IDictionary<Guid, int> ForSkills(IEnumerable<Guid> teams, IEnumerable<Guid> skillIds)
+		public IDictionary<Guid, int> Read(IEnumerable<Guid> teams, IEnumerable<Guid> skillIds)
 		{
 			return
 				(from person in _persons.LoadAll()
