@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings
                                        TimeZone = timeZoneInfo,
                                        StartDate = startDate
                                    };
-            CreateMeetingDefaultTime(meeting,now.LocalDateTime().TimeOfDay);
+            CreateMeetingDefaultTime(meeting,now.ServerDateTime_DontUse().TimeOfDay);
             return new MeetingViewModel(meeting,commonNameDescriptionSetting);
         }
 

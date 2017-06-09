@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldMapCurrentDate()
 		{
 			var result = Target.FetchMonthData(null);
-			var localDateOnly = Now.LocalDateOnly();
+			var localDateOnly = Now.ServerDate_DontUse();
 			result.CurrentDate.Should().Be.EqualTo(localDateOnly.Date);
 			result.FixedDate.Should().Be.EqualTo(localDateOnly.ToFixedClientDateOnlyFormat());
 		}

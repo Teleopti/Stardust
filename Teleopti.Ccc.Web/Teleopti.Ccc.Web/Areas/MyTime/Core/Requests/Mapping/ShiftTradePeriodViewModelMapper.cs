@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			var calendar = CultureInfo.CurrentCulture.Calendar;
-			vm.NowYear = calendar.GetYear(now.LocalDateTime());
-			vm.NowMonth = calendar.GetMonth(now.LocalDateTime());
-			vm.NowDay = calendar.GetDayOfMonth(now.LocalDateTime());
+			vm.NowYear = calendar.GetYear(now.ServerDateTime_DontUse());
+			vm.NowMonth = calendar.GetMonth(now.ServerDateTime_DontUse());
+			vm.NowDay = calendar.GetDayOfMonth(now.ServerDateTime_DontUse());
 
 			return vm;
 		}

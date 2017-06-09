@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
 
         public IEnumerable<PersonScheduleDayReadModel> GetScheduleDays(CalendarLinkId calendarLinkId, IUnitOfWork uow, DateTime? schedulePublishedToDate)
         {
-            var endDate = _now.LocalDateOnly().AddDays(sharingEndDay);
+            var endDate = _now.ServerDate_DontUse().AddDays(sharingEndDay);
             if (schedulePublishedToDate.HasValue)
             {
                 var publishedToDate = new DateOnly(schedulePublishedToDate.Value);
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.ShareCalendar
                     endDate = publishedToDate;
             }
             var personScheduleDayReadModelFinder = _repositoryFactory.CreatePersonScheduleDayReadModelFinder(uow);
-            var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.LocalDateOnly().AddDays(sharingStartDay),
+            var scheduleDays = personScheduleDayReadModelFinder.ForPerson(_now.ServerDate_DontUse().AddDays(sharingStartDay),
                 endDate,
                 calendarLinkId.PersonId);
             return scheduleDays;

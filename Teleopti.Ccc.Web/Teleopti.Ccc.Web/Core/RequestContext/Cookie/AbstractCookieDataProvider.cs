@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 		{
 			var cookie = getCookie();
 			var ticket = decryptCookie(cookie);
-			ticket = makeTicket(ticket.Name, ticket.UserData, _now.LocalDateTime().AddHours(-1));
+			ticket = makeTicket(ticket.Name, ticket.UserData, _now.ServerDateTime_DontUse().AddHours(-1));
 			cookie.HttpOnly = true;
 			cookie.Value = encryptTicket(ticket);
 			setCookie(cookie);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		public void RemoveCookie()
 		{
-			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName) { Expires = _now.LocalDateTime().AddYears(-2), HttpOnly = true };
+			var cookie = new HttpCookie(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName) { Expires = _now.ServerDateTime_DontUse().AddYears(-2), HttpOnly = true };
 			setCookie(cookie);
 			RemoveAuthBridgeCookie();
 		}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 				Path = _sessionSpecificCookieDataProviderSettings.AuthenticationCookiePath
 			};
 			if (isPersistent && isLogonFromBrowser)
-				cookie.Expires = _now.LocalDateTime().Add(TimeSpan.FromDays(5000));
+				cookie.Expires = _now.ServerDateTime_DontUse().Add(TimeSpan.FromDays(5000));
 
 			if (!string.IsNullOrEmpty(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieDomain))
 			{
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 			var ticket = new FormsAuthenticationTicket(
 				1,
 				userName,
-				_now.LocalDateTime(),
+				_now.ServerDateTime_DontUse(),
 				expiration,
 				false,
 				userData,
@@ -157,8 +157,8 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Cookie
 
 		private bool timeToRenewTicket(FormsAuthenticationTicket ticket)
 		{
-			var ticketAge = _now.LocalDateTime() - ticket.IssueDate;
-			var expiresIn = ticket.Expiration - _now.LocalDateTime();
+			var ticketAge = _now.ServerDateTime_DontUse() - ticket.IssueDate;
+			var expiresIn = ticket.Expiration - _now.ServerDateTime_DontUse();
 			var renew = ticketAge > expiresIn;
 			return renew;
 		}

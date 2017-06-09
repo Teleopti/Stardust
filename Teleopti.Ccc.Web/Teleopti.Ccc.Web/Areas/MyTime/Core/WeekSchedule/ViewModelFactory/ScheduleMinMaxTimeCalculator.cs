@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			if (_toggles.IsEnabled(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880))
 			{
 				var weekPeriod = DateHelper.GetWeekPeriod(scheduleDomainData.Date, CultureInfo.CurrentCulture);
-				if (weekPeriod.StartDate > _now.LocalDateOnly().AddDays(ScheduleStaffingPossibilityConsts.MaxAvailableDays))
+				if (weekPeriod.StartDate > _now.ServerDate_DontUse().AddDays(ScheduleStaffingPossibilityConsts.MaxAvailableDays))
 				{
 					return null;
 				}
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			}
 			else
 			{
-				siteOpenHourPeriod = _siteOpenHourProvider.GetSiteOpenHourPeriod(_now.LocalDateOnly());
+				siteOpenHourPeriod = _siteOpenHourProvider.GetSiteOpenHourPeriod(_now.ServerDate_DontUse());
 			}
 			return siteOpenHourPeriod;
 		}

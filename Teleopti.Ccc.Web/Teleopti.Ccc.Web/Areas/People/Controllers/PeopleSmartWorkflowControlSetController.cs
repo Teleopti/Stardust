@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Controllers
 				workflowControlSets = _workflowControlSetRepository.LoadAll();
 			}
 
-			var localDateOnly = _now.LocalDateOnly();
+			var localDateOnly = _now.ServerDate_DontUse();
 			model.WorkflowControlSets =
 				workflowControlSets
 					.Select(w => new WorkflowControlSetModel { Id = w.Id.GetValueOrDefault(), Name = w.Name, IsDeleted = ((IDeleteTag)w).IsDeleted })

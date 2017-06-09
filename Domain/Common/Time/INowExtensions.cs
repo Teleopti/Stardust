@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Common.Time
 		/// </summary>
 		/// <param name="now"></param>
 		/// <returns>a probably incorrect value for your use</returns>
-		public static DateTime LocalDateTime(this INow now)
+		public static DateTime ServerDateTime_DontUse(this INow now)
 		{
 			return now.UtcDateTime().ToLocalTime();
 		}
@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Domain.Common.Time
 		/// </summary>
 		/// <param name="now"></param>
 		/// <returns>a probably incorrect value for your use</returns>
-		public static DateOnly LocalDateOnly(this INow now)
+		public static DateOnly ServerDate_DontUse(this INow now)
 		{
-			return new DateOnly(now.LocalDateTime());
+			return new DateOnly(now.ServerDateTime_DontUse());
 		}
 	}
 }

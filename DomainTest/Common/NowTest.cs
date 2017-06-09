@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void ShouldBeCurrentTime()
 		{
 			var nu = DateTime.Now;
-			target.LocalDateTime().Should().Be.GreaterThan(nu.AddSeconds(-1));
-			target.LocalDateTime().Should().Be.LessThan(nu.AddSeconds(1));
+			target.ServerDateTime_DontUse().Should().Be.GreaterThan(nu.AddSeconds(-1));
+			target.ServerDateTime_DontUse().Should().Be.LessThan(nu.AddSeconds(1));
 		}
 
 		[Test]
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		[Test]
 		public void ShouldReturnCurrentDateAsDateOnly()
 		{
-			target.LocalDateOnly().Date.Should().Be.EqualTo(DateTime.Now.Date);
+			target.ServerDate_DontUse().Date.Should().Be.EqualTo(DateTime.Now.Date);
 		}
 	}
 }

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Badge
 		private void calculateBadges(Guid businessUnitId, string timeZoneInfoId)
 		{
 			const int badgeCalculationDelayDays = -2;
-			var today = _now.LocalDateTime();
+			var today = _now.ServerDateTime_DontUse();
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneInfoId);
 			var todayForGivenTimeZone = TimeZoneInfo.ConvertTime(today, TimeZoneInfo.Local, timeZone);
 			var calculationDateForGivenTimeZone = todayForGivenTimeZone.AddDays(badgeCalculationDelayDays).Date;

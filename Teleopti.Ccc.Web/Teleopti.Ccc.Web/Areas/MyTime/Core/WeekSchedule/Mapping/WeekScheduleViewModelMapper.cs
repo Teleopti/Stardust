@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			var timeZone = currentUser.PermissionInformation.DefaultTimeZone();
 
 			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(
-				timeZone, _now.LocalDateTime().Year);
+				timeZone, _now.ServerDateTime_DontUse().Year);
 			var daylightModel = daylightSavingAdjustment != null
 				? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment)
 				: null;
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			var timeZone = currentUser.PermissionInformation.DefaultTimeZone();
 
 			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(
-				timeZone, _now.LocalDateTime().Year);
+				timeZone, _now.ServerDateTime_DontUse().Year);
 			var daylightModel = daylightSavingAdjustment != null
 				? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment)
 				: null;
@@ -127,9 +127,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				return false;
 			}
 			var weekPeriod = DateHelper.GetWeekPeriod(showForDate, CultureInfo.CurrentCulture);
-			if (weekPeriod.StartDate < _now.LocalDateOnly() && _now.LocalDateOnly() < weekPeriod.EndDate)
+			if (weekPeriod.StartDate < _now.ServerDate_DontUse() && _now.ServerDate_DontUse() < weekPeriod.EndDate)
 			{
-				weekPeriod = new DateOnlyPeriod(_now.LocalDateOnly(), weekPeriod.EndDate);
+				weekPeriod = new DateOnlyPeriod(_now.ServerDate_DontUse(), weekPeriod.EndDate);
 			}
 
 			var days = weekPeriod.DayCollection();
@@ -137,9 +137,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			foreach (var day in days)
 			{
 				var isChecking =
-					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.LocalDateOnly(),
+					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.ServerDate_DontUse(),
 						day) ||
-					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.LocalDateOnly(), day);
+					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.ServerDate_DontUse(), day);
 				if (isChecking)
 					return true;
 			}
@@ -153,12 +153,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			{
 				return false;
 			}
-			if (showForDate < _now.LocalDateOnly())
+			if (showForDate < _now.ServerDate_DontUse())
 			{
 				return false;
 			}
-			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.LocalDateOnly(), showForDate) ||
-					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.LocalDateOnly(), showForDate);
+			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.ServerDate_DontUse(), showForDate) ||
+					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.ServerDate_DontUse(), showForDate);
 		}
 
 		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData, bool loadOpenHourPeriod = false)

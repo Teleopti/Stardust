@@ -419,7 +419,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private IAbsenceRequestOpenPeriod getMergedOpenPeriods(IAbsenceRequest absenceRequest, DateOnlyPeriod dateOnlyPeriod)
 		{
 			var extractor = GetExtractorForAbsence(absenceRequest.Absence);
-			extractor.ViewpointDate = ServiceLocatorForEntity.Now.LocalDateOnly();
+			extractor.ViewpointDate = ServiceLocatorForEntity.Now.ServerDate_DontUse();
 
 			var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod,
 				absenceRequest.Person.PermissionInformation.Culture(), absenceRequest.Person.PermissionInformation.UICulture());

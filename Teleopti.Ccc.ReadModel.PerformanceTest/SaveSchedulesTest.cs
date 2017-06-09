@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.ReadModel.PerformanceTest
 				WithUnitOfWork.Do(() =>
 			{
 				var scenario = Scenarios.LoadDefaultScenario();
-				var localDateOnly = Now.LocalDateOnly();
+				var localDateOnly = Now.ServerDate_DontUse();
 				var persons = Persons.LoadAll()
 					.Where(p => p.Period(localDateOnly) != null) // UserThatCreatesTestData has no period
 					.ToList();

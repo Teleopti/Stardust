@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			}
 
 			if (!date.HasValue)
-				date = _now.LocalDateOnly();
+				date = _now.ServerDate_DontUse();
 
 			if (!id.HasValue)
 			{
@@ -84,9 +84,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(
 				new
 				{
-					NowYear = calendar.GetYear(_now.LocalDateTime()),
-					NowMonth = calendar.GetMonth(_now.LocalDateTime()),
-					NowDay = calendar.GetDayOfMonth(_now.LocalDateTime()),
+					NowYear = calendar.GetYear(_now.ServerDateTime_DontUse()),
+					NowMonth = calendar.GetMonth(_now.ServerDateTime_DontUse()),
+					NowDay = calendar.GetDayOfMonth(_now.ServerDateTime_DontUse()),
 					DateTimeFormat = _loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern
 				},
 				JsonRequestBehavior.AllowGet);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult DefaultTeam(DateOnly? date)
 		{
 			if (!date.HasValue)
-				date = _now.LocalDateOnly();
+				date = _now.ServerDate_DontUse();
 			var defaultTeam = _defaultTeamProvider.DefaultTeam(date.Value);
 
 			if (defaultTeam?.Id != null)

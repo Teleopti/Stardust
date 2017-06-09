@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.LayoutBase
 			var offset = _userTimeZone.TimeZone().BaseUtcOffset;
 			var calendar = new GregorianCalendar();
 
-			var dayLightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(_userTimeZone.TimeZone(),calendar.GetYear(_now.LocalDateTime()));
+			var dayLightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(_userTimeZone.TimeZone(),calendar.GetYear(_now.ServerDateTime_DontUse()));
 
 			var returnValue = new LayoutBaseViewModel
 			{

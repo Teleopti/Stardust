@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				GamificationSetting = newSetting
 			};
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var calculationDateOnly = new DateOnly(calculationDate);
 
 			var persons = new List<IPerson> {new Person()};
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				GamificationSetting = newSetting
 			};
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var calculationDateOnly = new DateOnly(calculationDate);
 
 			var persons = new List<IPerson> { new Person() };
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			var team = TeamFactory.CreateSimpleTeam("team");
 			team.SetId(Guid.NewGuid());
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var calculationDateOnly = new DateOnly(calculationDate);
 
 			var persons = new List<IPerson> {new Person()};
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 				GamificationSetting = deletedSetting
 			};
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var calculationDateOnly = new DateOnly(calculationDate);
 
 			var persons = new List<IPerson> {new Person()};
@@ -342,7 +342,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
 				.Return(new List<TeamGamificationSetting>());
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,
@@ -382,7 +382,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			teamSettingsRepository.Stub(x => x.FindAllTeamGamificationSettingsSortedByTeam())
 				.Return(new[] { teamGamificationSetting });
 
-			var calculationDate = TimeZoneInfo.ConvertTime(now.LocalDateTime().AddDays(-1), TimeZoneInfo.Local, timezone);
+			var calculationDate = TimeZoneInfo.ConvertTime(now.ServerDateTime_DontUse().AddDays(-1), TimeZoneInfo.Local, timezone);
 			var message = new CalculateBadgeMessage
 			{
 				TimeZoneCode = timezone.Id,

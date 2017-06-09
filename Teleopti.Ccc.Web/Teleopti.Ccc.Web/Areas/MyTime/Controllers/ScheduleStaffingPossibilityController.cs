@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None,
 			bool returnOneWeekData = true)
 		{
-			var showForDate = date ?? _now.LocalDateOnly();
+			var showForDate = date ?? _now.ServerDate_DontUse();
 			return
 				_staffingPossibilityViewModelFactory.CreatePeriodStaffingPossibilityViewModels(
 					date.GetValueOrDefault(showForDate), staffingPossiblityType, returnOneWeekData);

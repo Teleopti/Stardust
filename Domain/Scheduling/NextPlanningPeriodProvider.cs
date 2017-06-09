@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var foundPlanningPeriods = agentGroup != null ? _planningPeriodRepository.LoadForAgentGroup(agentGroup) : _planningPeriodRepository.LoadAll();
 			var result =
-				foundPlanningPeriods.Where(x => x.Range.StartDate > _now.LocalDateOnly())
+				foundPlanningPeriods.Where(x => x.Range.StartDate > _now.ServerDate_DontUse())
 					.OrderBy(y => y.Range.StartDate)
 					.FirstOrDefault();
 			if (planningPeriodNotFound(result))
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var foundPlanningPeriods = _planningPeriodRepository.LoadAll();
 			var current =
-				foundPlanningPeriods.Where(x => x.Range.StartDate > _now.LocalDateOnly())
+				foundPlanningPeriods.Where(x => x.Range.StartDate > _now.ServerDate_DontUse())
 					.OrderBy(y => y.Range.StartDate)
 					.FirstOrDefault();
 			var next = foundPlanningPeriods.Where(x => x.Range.StartDate >= current.Range.EndDate.AddDays(1))

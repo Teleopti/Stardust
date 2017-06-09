@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		{
 			if (obj.PersonFrom.WorkflowControlSet == null || obj.PersonTo.WorkflowControlSet == null)
 				return false;
-			var currentDate = _now.LocalDateOnly();
+			var currentDate = _now.ServerDate_DontUse();
 			var openPeriodFrom =
 				 new DateOnlyPeriod(
 					  currentDate.AddDays(obj.PersonFrom.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum),

@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 						? getAllowanceIndexWithHeadCount(allowanceForDay, absenceHeadsForDay)
 						: getAllowanceIndex(allowanceMinutesForDay, absenceTimeForDay, fulltimeEquivalentForDay);
 
-					if (dateOnly < _now.LocalDateOnly())
+					if (dateOnly < _now.ServerDate_DontUse())
 					{
 						probabilityIndex = 0;
 					}

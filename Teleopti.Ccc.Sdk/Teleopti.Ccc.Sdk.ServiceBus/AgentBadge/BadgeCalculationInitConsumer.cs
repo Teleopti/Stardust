@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.AgentBadge
 
 		private void resendMessage(BadgeCalculationInitMessage message)
 		{
-			var today = _now.LocalDateOnly();
+			var today = _now.ServerDate_DontUse();
 			var tomorrow = new DateTime(today.AddDays(1).Date.Ticks, DateTimeKind.Local);
 			delaySend(message, tomorrow.AddHours(5));
 		}

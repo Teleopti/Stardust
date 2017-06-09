@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(13));
 			updateStaffingLevel(period);
-			var dateOnlyPeriod = new DateOnlyPeriod(Now.LocalDateOnly(), Now.LocalDateOnly().AddDays(13));
+			var dateOnlyPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse(), Now.ServerDate_DontUse().AddDays(13));
 			var personIds = loadPersonIds();
 			//var personIds = new[] { new Guid("0b4390a8-2128-4550-8d03-a14100f34ea1") };
 			WithUnitOfWork.Do(() =>

@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			target.StoreInCookie(sessionSpecificData, false, false);
 			FormsAuthentication.Decrypt(
 				_cookieCollection[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName].Value).Expiration.Subtract(
-					now.LocalDateTime())
+					now.ServerDateTime_DontUse())
 				.Should()
 				.Be.EqualTo(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpan);
 		}
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			target.StoreInCookie(sessionSpecificData, true, false);
 			FormsAuthentication.Decrypt(
 				_cookieCollection[_sessionSpecificCookieDataProviderSettings.AuthenticationCookieName].Value).Expiration.Subtract(
-					now.LocalDateTime())
+					now.ServerDateTime_DontUse())
 				.Should()
 				.Be.EqualTo(_sessionSpecificCookieDataProviderSettings.AuthenticationCookieExpirationTimeSpanLong);
 		}

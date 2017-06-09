@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 		{
 			if (s.Person.WorkflowControlSet == null) return false;
 			var insideSchedulePeriod = s.Period.Contains(s.Date);
-			var insideInputPeriod = s.Person.WorkflowControlSet.StudentAvailabilityInputPeriod.Contains(_now.LocalDateOnly());
+			var insideInputPeriod = s.Person.WorkflowControlSet.StudentAvailabilityInputPeriod.Contains(_now.ServerDate_DontUse());
 			var insideStudentAvailabilityPeriod = s.Person.WorkflowControlSet.StudentAvailabilityPeriod.Contains(s.Date);
 			return insideSchedulePeriod && insideInputPeriod && insideStudentAvailabilityPeriod;
 		}

@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return session(_currentUnitOfWork.Current()).CreateSQLQuery(query)
 				.SetGuid("businessUnitId", _businessUnit.Current().Id.GetValueOrDefault())
-				.SetDateOnly("currentDate", _now.LocalDateOnly())
+				.SetDateOnly("currentDate", _now.ServerDate_DontUse())
 				.SetReadOnly(true)
 				.SetResultTransformer(Transformers.AliasToBean<SmartPersonPropertySuggestion>())
 				.List<SmartPersonPropertySuggestion>();

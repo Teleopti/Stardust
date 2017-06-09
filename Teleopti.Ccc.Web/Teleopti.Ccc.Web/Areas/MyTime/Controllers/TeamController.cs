@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult TeamsAndOrGroupings(DateOnly? date)
 		{
 			if (!date.HasValue)
-				date = _now.LocalDateOnly();
+				date = _now.ServerDate_DontUse();
 			return Json(
 				_teamViewModelFactory.CreateTeamOrGroupOptionsViewModel(date.Value),
 				JsonRequestBehavior.AllowGet);
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult TeamsForShiftTrade(DateOnly? date)
 		{
 			if (!date.HasValue)
-				date = _now.LocalDateOnly();
+				date = _now.ServerDate_DontUse();
 			return
 				Json(
 					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb),
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPost]
 		public virtual JsonResult TeamsUnderSiteForShiftTrade(string siteIds, DateOnly? date)
 		{
-			if (!date.HasValue) date = _now.LocalDateOnly();
+			if (!date.HasValue) date = _now.ServerDate_DontUse();
 
 			var ids = siteIds.Split(',');
 			if (ids[0] == "") return Json(new List<Guid>());
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult TeamsForShiftTradeBoard(DateOnly? date)
 		{
 			if (!date.HasValue)
-				date = _now.LocalDateOnly();
+				date = _now.ServerDate_DontUse();
 			return
 				Json(
 					_teamViewModelFactory.CreateTeamOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork]
 		public virtual JsonResult SitesForShiftTrade(DateOnly? date)
 		{
-			if (!date.HasValue) date = _now.LocalDateOnly();
+			if (!date.HasValue) date = _now.ServerDate_DontUse();
 			return Json( _siteViewModelFactory.CreateSiteOptionsViewModel(date.Value, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb), JsonRequestBehavior.AllowGet);
 		}
 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public virtual JsonResult TeamsAndGroupsWithAllTeam(DateOnly? date)
 		{
 			if (!date.HasValue)
-				date = _now.LocalDateOnly();
+				date = _now.ServerDate_DontUse();
 			return Json(
 				new
 				{

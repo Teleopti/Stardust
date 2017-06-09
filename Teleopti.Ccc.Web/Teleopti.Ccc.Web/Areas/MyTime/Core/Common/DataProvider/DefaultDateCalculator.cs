@@ -19,20 +19,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public DateOnly Calculate(IWorkflowControlSet workflowControlSet, Func<IWorkflowControlSet, DateOnlyPeriod> periodInWorkflowControlSet, IList<IPersonPeriod> personPeriods)
 		{
 			if (workflowControlSet == null)
-				return _now.LocalDateOnly();
+				return _now.ServerDate_DontUse();
 			if (!personPeriods.Any())
-				return _now.LocalDateOnly();
+				return _now.ServerDate_DontUse();
 			var workflowControlSetPeriod = periodInWorkflowControlSet.Invoke(workflowControlSet);
 			var minPersonPeriodStart = personPeriods.Min(p => p.StartDate);
 
-			if (workflowControlSetPeriod.Contains(minPersonPeriodStart) && _now.LocalDateOnly() < workflowControlSetPeriod.EndDate)
+			if (workflowControlSetPeriod.Contains(minPersonPeriodStart) && _now.ServerDate_DontUse() < workflowControlSetPeriod.EndDate)
 			{
-				var personPeriod = personPeriods.FirstOrDefault(pp => _now.LocalDateOnly() < pp.StartDate );
-				return personPeriod == null ? _now.LocalDateOnly() : personPeriod.StartDate;
+				var personPeriod = personPeriods.FirstOrDefault(pp => _now.ServerDate_DontUse() < pp.StartDate );
+				return personPeriod == null ? _now.ServerDate_DontUse() : personPeriod.StartDate;
 			}
 
-			return workflowControlSetPeriod.StartDate < _now.LocalDateOnly() || workflowControlSetPeriod.EndDate<minPersonPeriodStart ?
-							 _now.LocalDateOnly() :
+			return workflowControlSetPeriod.StartDate < _now.ServerDate_DontUse() || workflowControlSetPeriod.EndDate<minPersonPeriodStart ?
+							 _now.ServerDate_DontUse() :
 							 workflowControlSetPeriod.StartDate;
 		}
 	}

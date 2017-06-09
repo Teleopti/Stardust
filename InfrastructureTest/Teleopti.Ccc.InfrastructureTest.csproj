@@ -291,6 +291,7 @@
     <Compile Include="Repositories\SmartPersonPropertyQuerierTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSitesTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSitesSkillsTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderBusinessUnitTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStateForUpsert.cs" />
     <Compile Include="Rta\ReadModels\AgentState\AgentStateReadModelPersisterExtensions.cs" />
     <Compile Include="Rta\ReadModels\AgentState\Reader\ForExcludingStateGroups.cs" />

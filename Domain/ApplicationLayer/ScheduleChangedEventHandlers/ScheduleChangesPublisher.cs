@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			var scheduleChangeListeners = settings.Subscriptions();
 			if (scheduleChangeListeners.Length == 0) return;
 
-			var currentDate = _now.LocalDateOnly();
+			var currentDate = _now.ServerDate_DontUse();
 			foreach (var scheduleChangeSubscription in scheduleChangeListeners)
 			{
 				var validRange = new DateOnlyPeriod(currentDate.AddDays(scheduleChangeSubscription.RelativeDateRange.Minimum),

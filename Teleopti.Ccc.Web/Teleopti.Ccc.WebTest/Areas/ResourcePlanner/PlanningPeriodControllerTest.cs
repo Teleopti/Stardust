@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var result =
 				(OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)
 					Target.GetPlanningPeriodSuggestion(planningPeriodId);
-			result.Content.Where(x => x.StartDate < Now.LocalDateTime()).ToList().Should().Be.Empty();
+			result.Content.Where(x => x.StartDate < Now.ServerDateTime_DontUse()).ToList().Should().Be.Empty();
 		}
 
 		[Test]
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var result =
 				(OkNegotiatedContentResult<IEnumerable<SuggestedPlanningPeriodRangeModel>>)
 					Target.GetPlanningPeriodSuggestionsForAgentGroup(agentGroup.Id.GetValueOrDefault());
-			result.Content.Where(x => x.StartDate < Now.LocalDateTime()).ToList().Should().Be.Empty();
+			result.Content.Where(x => x.StartDate < Now.ServerDateTime_DontUse()).ToList().Should().Be.Empty();
 		}
 
 		[Test]

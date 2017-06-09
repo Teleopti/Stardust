@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<AgentViewModel> ForTeam(Guid teamId)
 		{
 			var team = _teamRepository.Get(teamId);
-			var today = _now.LocalDateOnly();
+			var today = _now.ServerDate_DontUse();
 			var isPermitted =
 				_permissionProvider.Current()
 					.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, today, team);
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private IEnumerable<AgentViewModel> forSites(IEnumerable<Guid> siteIds)
 		{
-			var today = _now.LocalDateOnly();
+			var today = _now.ServerDate_DontUse();
 			var lookup = _siteRepository.LoadAll().ToLookup(s => s.Id.GetValueOrDefault());
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			return
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private IEnumerable<AgentViewModel> forTeams(IEnumerable<Guid> teamIds)
 		{
-			var today = _now.LocalDateOnly();
+			var today = _now.ServerDate_DontUse();
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
 			return
 				(
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private IEnumerable<AgentViewModel> forSkill(IEnumerable<Guid> skills)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
-			var today = _now.LocalDateOnly();
+			var today = _now.ServerDate_DontUse();
 			return
 				(
 					from skill in skills
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private IEnumerable<AgentViewModel> forSkillAndSite(IEnumerable<Guid> sites, IEnumerable<Guid> skills)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
-			var today = _now.LocalDateOnly();
+			var today = _now.ServerDate_DontUse();
 			return
 				(
 					from skill in skills
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		private IEnumerable<AgentViewModel> forSkillAndTeam(IEnumerable<Guid> teams, IEnumerable<Guid> skills)
 		{
-			var today = _now.LocalDateOnly();
+			var today = _now.ServerDate_DontUse();
 			var currentTeams = _teamRepository.FindTeams(teams).ToLookup(t => t.Id.GetValueOrDefault(), v => v.Description.Name);
 			var allSites = _siteRepository.LoadAll().ToLookup(t => t.Id.GetValueOrDefault(), v => v.Description.Name);
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private IEnumerable<AgentViewModel> forSkillSiteTeam(IEnumerable<Guid> sites, IEnumerable<Guid> teams, IEnumerable<Guid> skills)
 		{
 			var commonAgentNameSettings = _commonAgentNameProvider.CommonAgentNameSettings;
-			var today = _now.LocalDateOnly();
+			var today = _now.ServerDate_DontUse();
 			IEnumerable<ITeam> relevantTeams = _teamRepository.FindTeams(teams);
 			foreach (var site in sites)
 			{

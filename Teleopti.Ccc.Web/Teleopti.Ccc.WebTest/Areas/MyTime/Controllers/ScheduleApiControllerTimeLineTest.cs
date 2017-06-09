@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 17, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),7,0,18,0);
 		}
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,18,15);
 		}
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 0, 45, 23, 59);
 		}
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,23,59);
 		}
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),7,45,17,15);
 		}
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 17, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),7,0,18,0);
 		}
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			   new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Absence);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Absence);
 
 			AssertTimeLine(result.TimeLine.ToList(),9,0,10,0);
 		}
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),9,0,10,0);
 		}
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
 
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,18,15);
 		}
@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 18, 45, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
 
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,0,19,0);
 		}
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,18,15);
 		}
@@ -332,7 +332,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),0,0,23,59);
 		}
@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			addAssignment(null, new activityDto { Period = period1, Activity = skill1.Activity },
 				new activityDto { Period = period2, Activity = skill2.Activity });
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,45,19,15);
 		}
@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),9,0,10,0);
 		}
@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),9,0,10,0);
 		}
@@ -392,7 +392,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 20, 0, 0, DateTimeKind.Utc));
 			addAssignment(period, skill.Activity);
 
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 7, 45, 20, 15);
 		}
@@ -411,7 +411,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				addAssignment(period, skill.Activity);
 			}
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,0,15,15);
 		}
@@ -424,7 +424,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				new DateTime(2014, 12, 18, 9, 45, 0, DateTimeKind.Utc));
 			addAssignment(period);
 
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),7,45,17,15);
 		}
@@ -444,7 +444,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				addAssignment(period);
 			}
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(),6,0,17,15);
 		}
@@ -480,7 +480,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				addAssignment(new DateOnly(day), new activityDto { Period = period, Activity = skill.Activity });
 			}
 
-			var result = Target.FetchWeekData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchWeekData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 17, 15);
 		}
@@ -508,10 +508,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldAdjustTimeLineBySkillOpenHoursOnlyWithDayOff()
 		{
 			addSkill();
-			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(User.CurrentUser(), Scenario.Current(), Now.LocalDateOnly(), DayOffFactory.CreateDayOff(new Description("Dayoff")));
+			var dayOffAssignment = PersonAssignmentFactory.CreateAssignmentWithDayOff(User.CurrentUser(), Scenario.Current(), Now.ServerDate_DontUse(), DayOffFactory.CreateDayOff(new Description("Dayoff")));
 			ScheduleData.Add(dayOffAssignment);
 
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 6, 45, 18, 15);
 		}
@@ -524,9 +524,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			addAssignment(new DateOnly(2014, 12, 17), new activityDto { Activity = new Activity(), Period = period });
 
 			IOvertimeAvailability overtimeAvailability =
-				new OvertimeAvailability(User.CurrentUser(), Now.LocalDateOnly().AddDays(-1), TimeSpan.FromHours(11), TimeSpan.FromHours(12));
+				new OvertimeAvailability(User.CurrentUser(), Now.ServerDate_DontUse().AddDays(-1), TimeSpan.FromHours(11), TimeSpan.FromHours(12));
 			ScheduleData.Add(overtimeAvailability);
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 15, 0);
 		}
@@ -539,9 +539,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			addAssignment(new DateOnly(2014, 12, 17), new activityDto { Activity = new Activity(), Period = period });
 
 			IOvertimeAvailability overtimeAvailability =
-				new OvertimeAvailability(User.CurrentUser(), Now.LocalDateOnly().AddDays(-1), TimeSpan.FromHours(23), TimeSpan.FromDays(1));
+				new OvertimeAvailability(User.CurrentUser(), Now.ServerDate_DontUse().AddDays(-1), TimeSpan.FromHours(23), TimeSpan.FromDays(1));
 			ScheduleData.Add(overtimeAvailability);
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			AssertTimeLine(result.TimeLine.ToList(), 8, 0, 15, 0);
 		}
@@ -554,10 +554,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			addAssignment(new DateOnly(2014, 12, 17), new activityDto { Activity = new Activity(), Period = period });
 
 			IOvertimeAvailability overtimeAvailability =
-				new OvertimeAvailability(User.CurrentUser(), Now.LocalDateOnly().AddDays(-1), TimeSpan.FromHours(23),
+				new OvertimeAvailability(User.CurrentUser(), Now.ServerDate_DontUse().AddDays(-1), TimeSpan.FromHours(23),
 					TimeSpan.FromDays(1).Add(TimeSpan.FromMinutes(30)));
 			ScheduleData.Add(overtimeAvailability);
-			var result = Target.FetchDayData(Now.LocalDateOnly(), StaffingPossiblityType.Overtime);
+			var result = Target.FetchDayData(Now.ServerDate_DontUse(), StaffingPossiblityType.Overtime);
 
 			var timelines = result.TimeLine.ToList();
 			AssertTimeLine(timelines, 0, 0, 1, 0);
@@ -640,7 +640,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 		private void addAssignment(DateOnly? belongsToDate = null, params activityDto[] activityDtos)
 		{
-			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), belongsToDate ?? Now.LocalDateOnly());
+			var assignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), belongsToDate ?? Now.ServerDate_DontUse());
 			foreach (var activityDto in activityDtos)
 			{
 				assignment.AddActivity(activityDto.Activity, activityDto.Period);
