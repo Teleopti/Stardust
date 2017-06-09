@@ -222,29 +222,7 @@ describe('OutboundSummaryCtrl', function () {
 
 	it('should reset schedule data after calling getIgnoreScheduleCallback  ', function () {
 		var test = setUpTarget();
-		test.target.init();
-		test.scope.ganttData = [
-			{
-				id: test.campaign.Id,
-				tasks: test.tasks
-			}];
-		test.scope.isRefreshingGantt = false;
-
-		outboundService.setCampaignStatus({
-			CampaignSummary: test.campaign.CampaignSummary,
-			IsScheduled: true,
-			WarningInfo: []
-		});
-		outboundService.setGanttVisualization({
-			Id: test.campaign.Id,
-			StartDate: {
-				Date: test.campaign.CampaignSummary.StartDate
-			},
-			EndDate: {
-				Date: test.campaign.CampaignSummary.EndDate
-			}
-		});
-		outboundChartService.setCampaignVisualization(test.campaign.Id, test.campaign.graphData);
+		initDataForIgnore(test);
 		test.scope.campaignClicked(null, { id: test.campaign.Id });
 		test.campaign.selectedDates = ['2017-06-07', '2017-06-08'];
 
@@ -261,29 +239,7 @@ describe('OutboundSummaryCtrl', function () {
 
 	it('should show plan data after calling getIgnoreScheduleCallback', function () {
 		var test = setUpTarget();
-		test.target.init();
-		test.scope.ganttData = [
-			{
-				id: test.campaign.Id,
-				tasks: test.tasks
-			}];
-		test.scope.isRefreshingGantt = false;
-
-		outboundService.setCampaignStatus({
-			CampaignSummary: test.campaign.CampaignSummary,
-			IsScheduled: true,
-			WarningInfo: []
-		});
-		outboundService.setGanttVisualization({
-			Id: test.campaign.Id,
-			StartDate: {
-				Date: test.campaign.CampaignSummary.StartDate
-			},
-			EndDate: {
-				Date: test.campaign.CampaignSummary.EndDate
-			}
-		});
-		outboundChartService.setCampaignVisualization(test.campaign.Id, test.campaign.graphData);
+		initDataForIgnore(test);
 		test.scope.campaignClicked(null, { id: test.campaign.Id });
 		test.campaign.selectedDates = ['2017-06-07', '2017-06-08'];
 
@@ -300,29 +256,7 @@ describe('OutboundSummaryCtrl', function () {
 
 	it('should calculate and show plan data correctly when has overstaff data after hide schedule', function () {
 		var test = setUpTarget();
-		test.target.init();
-		test.scope.ganttData = [
-			{
-				id: test.campaign.Id,
-				tasks: test.tasks
-			}];
-		test.scope.isRefreshingGantt = false;
-
-		outboundService.setCampaignStatus({
-			CampaignSummary: test.campaign.CampaignSummary,
-			IsScheduled: true,
-			WarningInfo: []
-		});
-		outboundService.setGanttVisualization({
-			Id: test.campaign.Id,
-			StartDate: {
-				Date: test.campaign.CampaignSummary.StartDate
-			},
-			EndDate: {
-				Date: test.campaign.CampaignSummary.EndDate
-			}
-		});
-		outboundChartService.setCampaignVisualization(test.campaign.Id, test.campaign.graphData);
+		initDataForIgnore(test);
 		test.scope.campaignClicked(null, { id: test.campaign.Id });
 		test.campaign.selectedDates = ['2017-06-11'];
 		var index = test.campaign.graphData.dates.indexOf(test.campaign.selectedDates[0]);
@@ -332,6 +266,23 @@ describe('OutboundSummaryCtrl', function () {
 		var expectedDataRow = test.scope.ganttData[1];
 		expectedDataRow.callbacks.ignoreSchedules(test.campaign.selectedDates);
 
+		expect(test.campaign.graphData.unscheduledPlans[index]).toEqual(0);
+	});
+
+	it('should restore schedule data after show schedule', function () {
+		var test = setUpTarget();
+		initDataForIgnore(test);
+		test.scope.campaignClicked(null, { id: test.campaign.Id });
+		test.campaign.selectedDates = ['2017-06-11'];
+		var expectedDataRow = test.scope.ganttData[1];
+		var index = test.campaign.graphData.dates.indexOf(test.campaign.selectedDates[0]);
+
+		expectedDataRow.callbacks.ignoreSchedules(test.campaign.selectedDates);
+		expect(test.campaign.graphData.unscheduledPlans[index]).toEqual(10);
+		expect(test.campaign.graphData.schedules[index]).toEqual(0);
+
+		expectedDataRow.callbacks.showAllSchedules(test.campaign.selectedDates);
+		expect(test.campaign.graphData.schedules[index]).toEqual(20);
 		expect(test.campaign.graphData.unscheduledPlans[index]).toEqual(0);
 	});
 
@@ -359,6 +310,7 @@ describe('OutboundSummaryCtrl', function () {
 				dates: ['x', '2017-06-07', '2017-06-08', '2017-06-09', '2017-06-10', '2017-06-11'],
 				rawBacklogs: ['Backlog', 80, 60, 40, 20, 0],
 				schedules: ['Scheduled', 20, 20, 20, 20, 20],
+				rawSchedules: ['Scheduled', 20, 20, 20, 20, 20],
 				rawPlans: ['x', 10, 10, 10, 10, 10],
 				unscheduledPlans: ['Planned', 0, 0, 0, 0, 0],
 				overStaff: ['Overstaffing', 0, 0, 0, 0, 0]
@@ -527,5 +479,31 @@ describe('OutboundSummaryCtrl', function () {
 				cb(campaignViss[campaign.campaignId]);
 			}
 		};
+	}
+
+	function initDataForIgnore(test) {
+		test.target.init();
+		test.scope.ganttData = [
+			{
+				id: test.campaign.Id,
+				tasks: test.tasks
+			}];
+		test.scope.isRefreshingGantt = false;
+
+		outboundService.setCampaignStatus({
+			CampaignSummary: test.campaign.CampaignSummary,
+			IsScheduled: true,
+			WarningInfo: []
+		});
+		outboundService.setGanttVisualization({
+			Id: test.campaign.Id,
+			StartDate: {
+				Date: test.campaign.CampaignSummary.StartDate
+			},
+			EndDate: {
+				Date: test.campaign.CampaignSummary.EndDate
+			}
+		});
+		outboundChartService.setCampaignVisualization(test.campaign.Id, test.campaign.graphData);
 	}
 });

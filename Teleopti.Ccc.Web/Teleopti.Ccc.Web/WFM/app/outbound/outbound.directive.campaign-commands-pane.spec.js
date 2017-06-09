@@ -7,7 +7,8 @@ describe('Outbound campaign commands pane tests ', function() {
 		toggleSvc,
 		target;
 
-	var ignoreSchedulesCallbackCalledCount = 0;
+	var ignoreSchedulesCallbackCalledCount = 0,
+		showAllSchedulesCallbackCalledCount = 0;
 
 	beforeEach(function() {
 		module('wfm.templates');
@@ -38,7 +39,7 @@ describe('Outbound campaign commands pane tests ', function() {
 		$compile = _$compile_;
 		$httpBackend = _$httpBackend_;
 		target = setUpTarget();
-		ignoreSchedulesCallbackCalledCount = 0;
+		ignoreSchedulesCallbackCalledCount = showAllSchedulesCallbackCalledCount = 0;
 
 		$httpBackend.whenPOST('../api/Outbound/Campaign/Replan').respond(function(method, url, data) {
 			return [200, {}];
@@ -77,6 +78,17 @@ describe('Outbound campaign commands pane tests ', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
 		target.scope.$apply();
 		expect(target.container[0].querySelectorAll('.btn-ignore-schedules').length).toEqual(1);
+	});
+
+	it('should not show ignore schedule button when there are no schedules in campaign', function () {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.vm.campaign.IsScheduled = false;
+		for (var i = 1; i < target.vm.campaign.graphData.schedules.length; i++) {
+			target.vm.campaign.graphData.schedules[i] = 0;
+		}
+		target.scope.$apply();
+		expect(target.container[0].querySelectorAll('.btn-ignore-schedules').length).toEqual(0);
+		expect(target.container[0].querySelectorAll('.btn-show-all-schedules').length).toEqual(0);
 	});
 
 	it('should not show ignore schedule button when toggle off', function() {
@@ -140,9 +152,37 @@ describe('Outbound campaign commands pane tests ', function() {
 		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
 		expect(target.vm.manualPlanSwitch).toEqual(false);
 	});
+
+	it('should display "show all schedule" after click ignore button', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.scope.$apply();
+		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
+		expect(target.vm.ignoreScheduleSwitch).toEqual(true);
+	});
+
+	it('should show schedule data after clicking "show all schedule" button', function () {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.scope.$apply();
+		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
+		angular.element(target.container[0].querySelectorAll('.btn-show-all-schedules')).triggerHandler('click');
+		expect(showAllSchedulesCallbackCalledCount).toEqual(1);
+	});
+
+	it('should filter out selected dates without schedule', function () {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.vm.selectedDates = ['2017-06-08', '2017-06-09'];
+		var graphData = target.vm.campaign.graphData;
+
+		graphData.schedules[graphData.dates.indexOf(target.vm.selectedDates[0])] = 20;
+		graphData.schedules[graphData.dates.indexOf(target.vm.selectedDates[1])] = 0;
+		target.scope.$apply();
+		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
+		expect(target.vm.ignoredDates.length).toEqual(1);
+		expect(target.vm.ignoredDates[0]).toEqual(target.vm.selectedDates[0]);
+	});
 	
 	function setUpTarget() {
-		var html = '<campaign-commands-pane campaign="campaign" selected-dates="campaign.selectedDates" selected-dates-closed="campaign.selectedDatesClosed" is-loading="isRefreshingData" callbacks="callbacks"></campaign-commands-pane>'
+		var html = '<campaign-commands-pane campaign="campaign" selected-dates="campaign.selectedDates" selected-dates-closed="campaign.selectedDatesClosed" is-loading="isRefreshingData" callbacks="callbacks"></campaign-commands-pane>';
 
 		var scope = $rootScope.$new();
 		scope.campaign = {
@@ -167,6 +207,10 @@ describe('Outbound campaign commands pane tests ', function() {
 		scope.callbacks = {
 			ignoreSchedules: function(ignoredDates, callback) {
 				ignoreSchedulesCallbackCalledCount++;
+				callback && callback();
+			},
+			showAllSchedules: function (ignoredDates, callback) {
+				showAllSchedulesCallbackCalledCount++;
 				callback && callback();
 			}
 		};

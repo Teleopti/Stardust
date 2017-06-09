@@ -16122,4 +16122,12 @@ Do you want to participate?</value>
   <data name="MobileNotificationSettings" xml:space="preserve">
     <value>Mobile App Notification Settings</value>
   </data>
+  <data name="IgnoreSchedules" xml:space="preserve">
+    <value>Ignore schedules</value>
+    <comment>use in WFM outbound, button name</comment>
+  </data>
+  <data name="ShowAllSchedules" xml:space="preserve">
+    <value>Show all schedules</value>
+    <comment>use in WFM outbound, button name </comment>
+  </data>
 </root>

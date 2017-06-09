@@ -13548,6 +13548,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ignore schedules.
+        /// </summary>
+        public static string IgnoreSchedules {
+            get {
+                return ResourceManager.GetString("IgnoreSchedules", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid input.
         /// </summary>
         public static string IllegalInput {
@@ -29800,6 +29809,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShowAll {
             get {
                 return ResourceManager.GetString("ShowAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show all schedules.
+        /// </summary>
+        public static string ShowAllSchedules {
+            get {
+                return ResourceManager.GetString("ShowAllSchedules", resourceCulture);
             }
         }
         

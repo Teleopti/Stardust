@@ -194,7 +194,8 @@
 					}
 				};
 				newDataRow.callbacks = {
-					ignoreSchedules: getIgnoreScheduleCallback(campaign),
+					ignoreSchedules: getIgnoreSchedulesCallback(campaign),
+					showAllSchedules: getShowAllSchedulesCallback(campaign),
 					addManualPlan: getCommandCallback(campaign, newDataRow, $scope),
 					removeManualPlan: getCommandCallback(campaign, newDataRow, $scope),
 					addManualBacklog: getCommandCallback(campaign, newDataRow, $scope),
@@ -212,12 +213,25 @@
 			}
 		};
 
-		function getIgnoreScheduleCallback(campaign) {
+		function getIgnoreSchedulesCallback(campaign) {
 			return function(ignoredDates, callback) {
 				ignoredDates.forEach(function(ignoredDate) {
 					var index = campaign.graphData.dates.indexOf(ignoredDate);
 					campaign.graphData.schedules[index] = 0;
 					campaign.graphData.unscheduledPlans[index] = campaign.graphData.rawPlans[index] - campaign.graphData.overStaff[index];
+				});
+				$scope.$broadcast('campaign.chart.clear.selection', campaign);
+				$scope.$broadcast('campaign.chart.refresh', campaign);
+				callback && callback();
+			};
+		}
+
+		function getShowAllSchedulesCallback(campaign) {
+			return function (ignoredDates, callback) {
+				ignoredDates.forEach(function (ignoredDate) {
+					var index = campaign.graphData.dates.indexOf(ignoredDate);
+					campaign.graphData.schedules[index] = campaign.graphData.rawSchedules[index] - campaign.graphData.overStaff[index];
+					campaign.graphData.unscheduledPlans[index] = 0;
 				});
 				$scope.$broadcast('campaign.chart.clear.selection', campaign);
 				$scope.$broadcast('campaign.chart.refresh', campaign);

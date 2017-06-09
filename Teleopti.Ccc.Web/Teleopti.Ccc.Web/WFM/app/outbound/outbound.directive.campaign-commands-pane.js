@@ -27,6 +27,7 @@
 	function campaignCommandsPaneCtrl($scope, $state, outboundChartService, outboundNotificationService, toggleService) {
 		var vm = this;
 
+		vm.ignoreScheduleSwitch = false;
 		vm.manualPlanSwitch = false;
 		vm.manualBacklogSwitch = false;
 		vm.isPlanClickedSave = false;
@@ -48,11 +49,13 @@
 		vm.validManualBacklog = validManualBacklog;
 		vm.showDateSelectionHint = showDateSelectionHint;
 
-		vm.showIgnoreSchedule = function() {
-			return toggleService.Wfm_Outbound_ReplanAfterScheduled_43752;
+		vm.isToggleScheduleDatesEnabled = function () {
+			return vm.campaign.IsScheduled && toggleService.Wfm_Outbound_ReplanAfterScheduled_43752;
 		};
 
-		vm.enableIgnoreSchedule = function() {
+		vm.enableIgnoreSchedule = function () {
+			if (vm.ignoredDates.length > 0) return true;
+
 			if (!vm.campaign.IsScheduled || vm.selectedDates.length === 0)
 				return false;
 
@@ -64,11 +67,30 @@
 		};
 
 		vm.ignoreSchedule = function () {
+			vm.ignoreScheduleSwitch = true;
 			vm.manualBacklogSwitch = false;
 			vm.manualPlanSwitch = false;
-			vm.ignoredDates = angular.copy(vm.selectedDates);
+			vm.ignoredDates = getIgnoredDates();
+			vm.callbacks.ignoreSchedules(vm.ignoredDates, resetActionFlag);
+		};
 
-			vm.callbacks.ignoreSchedules(vm.ignoredDates, callbackDone);
+		function getIgnoredDates() {
+			var graphData = vm.campaign.graphData;
+			return vm.selectedDates.filter(function(date) {
+				var index = graphData.dates.indexOf(date);
+				return graphData.schedules[index] > 0;
+			});
+		}
+
+		vm.showAllSchedules = function () {
+			vm.ignoreScheduleSwitch = false;
+			vm.manualBacklogSwitch = false;
+			vm.manualPlanSwitch = false;
+			vm.callbacks.showAllSchedules(vm.ignoredDates,
+				function() {
+					vm.ignoredDates = [];
+					resetActionFlag();
+				});
 		};
 
 		vm.gotoEditCampaign = function () {
@@ -79,12 +101,14 @@
 		vm.toggleManualPlan = function() {
 			vm.manualPlanSwitch = !vm.manualPlanSwitch;
 			vm.manualBacklogSwitch = false;
+			vm.ignoreScheduleSwitch = false;
 			resetActionFlag();
 		};
 
 		vm.toggleManualBacklog = function() {
 			vm.manualBacklogSwitch = !vm.manualBacklogSwitch;
 			vm.manualPlanSwitch = false;
+			vm.ignoreScheduleSwitch = false;
 			resetActionFlag();
 		};
 
