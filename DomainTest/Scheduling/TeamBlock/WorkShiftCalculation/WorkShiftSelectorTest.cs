@@ -1,184 +1,81 @@
-//using System;
-//using System.Collections.Generic;
-//using NUnit.Framework;
-//using Rhino.Mocks;
-//using Teleopti.Ccc.Domain.Scheduling;
-//using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
-//using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
-//using Teleopti.Ccc.Secrets.WorkShiftCalculator;
-//using Teleopti.Interfaces.Domain;
+using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
-//namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
-//{
-//	[TestFixture]
-//	public class WorkShiftSelectorTest
-//	{
-//		private MockRepository _mocks;
-//		private IWorkShiftSelector _target;
-//		private IWorkShiftValueCalculator _workShiftValueCalculator;
-//		private IList<ShiftProjectionCache> _shiftProjectionCaches;
-//		private ShiftProjectionCache _shiftProjectionCache1;
-//		private ShiftProjectionCache _shiftProjectionCache2;
-//		private IDictionary<DateTime, ISkillIntervalData> _skillIntervalDatas;
-//		private IActivity _activity;
-//		private IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> _skillIntervalDataForActivity;
-//		private IVisualLayerCollection _visualLayerCollection;
-//		private IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
-//		private PeriodValueCalculationParameters _periodValueCalculationParameters;
+namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
+{
+	[DomainTest]
+	public class WorkShiftSelectorTest
+	{
+		public IWorkShiftSelector Target;
+		public IGroupPersonSkillAggregator GroupPersonSkillAggregator;
+		public IPersonalShiftMeetingTimeChecker PersonalShiftMeetingTimeChecker;
+		public IGroupPersonBuilderWrapper GroupPersonBuilderWrapper;
+		public MatrixListFactory MatrixListFactory;
+		public IGroupPersonBuilderForOptimizationFactory GroupPersonBuilderForOptimizationFactory;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
-//		[SetUp]
-//		public void Setup()
-//		{
-//			_mocks = new MockRepository();
-//			_workShiftValueCalculator = _mocks.StrictMock<IWorkShiftValueCalculator>();
-//			 _equalWorkShiftValueDecider = _mocks.StrictMock<IEqualWorkShiftValueDecider>();
-//				_target = new WorkShiftSelector(_workShiftValueCalculator, _equalWorkShiftValueDecider);
-//			_shiftProjectionCache1 = _mocks.StrictMock<ShiftProjectionCache>();
-//			_shiftProjectionCache2 = _mocks.StrictMock<ShiftProjectionCache>();
-//			_shiftProjectionCaches = new List<ShiftProjectionCache> {_shiftProjectionCache1};
-//			_skillIntervalDatas = new Dictionary<DateTime, ISkillIntervalData>();
-//			_activity = new Activity("hej");
-//			_skillIntervalDataForActivity = new Dictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>>();
-//			_skillIntervalDataForActivity.Add(_activity, _skillIntervalDatas);
-//			_visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
-//			_periodValueCalculationParameters = new PeriodValueCalculationParameters(WorkShiftLengthHintOption.AverageWorkTime,
-//													 false, false, MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak,false,new Dictionary<DateTime, bool>(),false);
-//		}
+		[Test]
+		public void ShouldSelectShiftWithHighestValue()
+		{
+			var date = new DateOnly(2017, 6, 9);
+			var scenario = new Scenario("_");
+			var skill = SkillFactory.CreateSkill("skill", new SkillTypePhone(new Description(),ForecastSource.InboundTelephony ), 60);
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, date, TimeSpan.FromHours(1),
+				new Tuple<int, TimeSpan>(9, TimeSpan.FromMinutes(90)));
+			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+			{
+				skillStaffPeriod.SetCalculatedResource65(0.5);
+			}
+			var workShift1 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(8), TimeSpan.FromHours(9), skill.Activity);
+			var workShift2 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(9), TimeSpan.FromHours(10), skill.Activity); //should win
+			var workShift3 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(10), TimeSpan.FromHours(11), skill.Activity);
+			var cache1 = new ShiftProjectionCache(workShift1, PersonalShiftMeetingTimeChecker);
+			cache1.SetDate(new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
+			var cache2 = new ShiftProjectionCache(workShift2, PersonalShiftMeetingTimeChecker);
+			cache2.SetDate(new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
+			var cache3 = new ShiftProjectionCache(workShift3, PersonalShiftMeetingTimeChecker);
+			cache3.SetDate(new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone));
+			var caches = new List<ShiftProjectionCache> {cache1, cache2, cache3};
+			
+			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+			BusinessUnitRepository.Add(businessUnit);
+			var sameSite = SiteFactory.CreateSiteWithOneTeam("team");
+			businessUnit.AddSite(sameSite);
+			var sameTeam = businessUnit.SiteCollection[0].TeamCollection[0];
+			var agent1 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(date, sameTeam).WithId();
+			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneGuard.Instance.TimeZone);
+			((IPersonPeriodModifySkills) agent1.Period(date)).AddPersonSkill(new PersonSkill(skill, new Percent(1)));
+			var selectedPeriod = new DateOnlyPeriod(date, date.AddDays(2));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneGuard.Instance.TimeZone).Period(), new[] { agent1 }).VisiblePeriod);
+			var allPersonMatrixList = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, new[] { agent1 }, selectedPeriod);
+			GroupPersonBuilderForOptimizationFactory.Create(new[] { agent1 }, scheduleDictionary, new GroupPageLight("_", GroupPageType.SingleAgent));
 
+			var teamInfoFactory = new TeamInfoFactory(GroupPersonBuilderWrapper);
+			var teamInfo = teamInfoFactory.CreateTeamInfo(new[] { agent1 }, agent1, selectedPeriod, allPersonMatrixList);
+			var teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(new DateOnlyPeriod(date, date)));
 
-//		[Test]
-//		public void ShouldCalculateAndReturn()
-//		{
+			var result = Target.SelectShiftProjectionCache(GroupPersonSkillAggregator, date, caches,
+				new List<ISkillDay> {skillDay}, teamBlockInfo, new SchedulingOptions(), TimeZoneGuard.Instance.TimeZone, true,
+				agent1);
 
-//			using (_mocks.Record())
-//			{
-//				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-				
-//				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-//																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc )).Return(7);
-//			}
-
-//			ShiftProjectionCache result;
-
-//			using (_mocks.Playback())
-//			{
-//				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _periodValueCalculationParameters, TimeZoneInfo.Utc);
-//			}
-
-//			Assert.IsNotNull(result);
-//		}
-
-//		[Test]
-//		public void ShouldCallEqualWorkShiftValueDeciderIfTwoShiftsHasTheSameValue()
-//		{
-//			_shiftProjectionCaches = new List<ShiftProjectionCache> { _shiftProjectionCache2, _shiftProjectionCache2 };
-
-//			using (_mocks.Record())
-//			{
-//				Expect.Call(_shiftProjectionCache2.MainShiftProjection).Return(_visualLayerCollection);
-//				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-//																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
-
-//				Expect.Call(_shiftProjectionCache2.MainShiftProjection).Return(_visualLayerCollection);
-//				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-//																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
-
-//				Expect.Call(_equalWorkShiftValueDecider.Decide(_shiftProjectionCache2, _shiftProjectionCache2))
-//						.Return(_shiftProjectionCache2);
-//			}
-
-//			ShiftProjectionCache result;
-
-//			using (_mocks.Playback())
-//			{
-//				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _periodValueCalculationParameters, TimeZoneInfo.Utc);
-//			}
-
-//			Assert.AreSame(_shiftProjectionCache2, result);
-//		}
-
-//		[Test]
-//		public void ShouldReturnCacheWithHighestValue()
-//		{
-//			_shiftProjectionCaches = new List<ShiftProjectionCache> { _shiftProjectionCache1, _shiftProjectionCache2, _shiftProjectionCache1 };
-
-//			using (_mocks.Record())
-//			{
-//				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-//				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-//																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
-
-//				Expect.Call(_shiftProjectionCache2.MainShiftProjection).Return(_visualLayerCollection);
-//				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-//																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(8);
-
-//				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-//				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-//																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
-//			}
-
-//			ShiftProjectionCache result;
-
-//			using (_mocks.Playback())
-//			{
-//				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _periodValueCalculationParameters, TimeZoneInfo.Utc);
-//			}
-
-//			Assert.AreSame(_shiftProjectionCache2, result);
-//		}
-
-//		[Test]
-//		public void ShouldCheckAllActivities()
-//		{
-//			IActivity otherActivity = new Activity("other");
-//			_skillIntervalDataForActivity.Add(otherActivity, _skillIntervalDatas);
-
-//			using (_mocks.Record())
-//			{
-//				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-//				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-//																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(2);
-
-//				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-//				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, otherActivity,
-//																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(3);
-//			}
-
-//			ShiftProjectionCache result;
-
-//			using (_mocks.Playback())
-//			{
-//				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _periodValueCalculationParameters, TimeZoneInfo.Utc);
-//			}
-
-//			Assert.IsNotNull(result);
-//		}
-
-//		[Test]
-//		public void ShouldReturnNullIfNoShiftValueOnAnySkill()
-//		{
-//			IActivity otherActivity = new Activity("other");
-//			_skillIntervalDataForActivity.Add(otherActivity, _skillIntervalDatas);
-
-//			using (_mocks.Record())
-//			{
-//				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-//				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
-//																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(7);
-
-//				Expect.Call(_shiftProjectionCache1.MainShiftProjection).Return(_visualLayerCollection);
-//				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, otherActivity,
-//																		  _skillIntervalDataForActivity[_activity], _periodValueCalculationParameters, TimeZoneInfo.Utc)).Return(null);
-//			}
-
-//			ShiftProjectionCache result;
-
-//			using (_mocks.Playback())
-//			{
-//				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity,_periodValueCalculationParameters, TimeZoneInfo.Utc);
-//			}
-
-//			Assert.IsNull(result);
-//		}
-//	}
-//}
+			result.WorkShiftStartTime.Hours.Should().Be.EqualTo(9);
+		}
+	}
+}

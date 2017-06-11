@@ -171,6 +171,7 @@
 		ResourcePlanner_TeamSameDayOff_44265,
 		ResourcePlanner_MergeTeamblockClassicScheduling_44289,
 		ResourcePlanner_RemoveBackToLegalStateGui_44333,
+		ResourcePlanner_CalculateShiftValuesInParallel_44681,
 
 		Wfm_DisplayOnlineHelp_39402,
 

@@ -489,8 +489,14 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public virtual void RecalculateStaff()
         {
-            if (!_initialized) initialize();
-            recalculateStaff();
+            if (!_initialized)
+            {
+	            initialize();
+            }
+            else
+            {
+				recalculateStaff();
+			}   
         }
 
         private void recalculateStaff()
