@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using System.Threading.Tasks;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.SkillInterval;
@@ -39,48 +41,62 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			_activityIntervalDataCreator = activityIntervalDataCreator;
 		}
 
+		private class taskResult
+		{
+			public ShiftProjectionCache Cache { get; set; }
+			public double Value { get; set; }
+		}
 
 		public ShiftProjectionCache SelectShiftProjectionCache(IGroupPersonSkillAggregator groupPersonSkillAggregator, DateOnly datePointer, IList<ShiftProjectionCache> shifts, IEnumerable<ISkillDay> allSkillDays,
 			 ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person)
 		{
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(groupPersonSkillAggregator, teamBlockInfo, datePointer, allSkillDays, forRoleModel);
-				var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,schedulingOptions.UseMaximumPersons);
+			var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,schedulingOptions.UseMaximumPersons);
 
-			double? bestShiftValue = null;
 			ShiftProjectionCache bestShift = null;
 
-			var shiftsWithValue =
-				shifts
-					.Select(s => new { s, value = valueForShift(activityInternalData, s, parameters, timeZoneInfo) })
-					.Where(s => s.value.HasValue);
-
-			if (schedulingOptions.SkipNegativeShiftValues)
+			var tasks = new List<Task<taskResult>>();
+			foreach (var shiftProjectionCaches in shifts.Batch(200))  //maybe dynamic batch size
 			{
-				shiftsWithValue = shiftsWithValue.Where(x => x.value > 0);
+				var task =
+					Task.Run(
+						() =>
+							calculateBatch(shiftProjectionCaches, activityInternalData, parameters, timeZoneInfo,
+								schedulingOptions.SkipNegativeShiftValues));
+
+				tasks.Add(task);
 			}
 
+			try
+			{
+				// ReSharper disable once CoVariantArrayConversion
+				Task.WaitAll(tasks.ToArray());
+			}
+			catch (AggregateException)
+			{
+			}
+			
+			var shiftsWithValue = new List<taskResult>();
+			foreach (var task in tasks)
+			{
+				shiftsWithValue.Add(task.Result);
+			}
+
+			double bestShiftValue = double.MinValue;
 			foreach (var item in shiftsWithValue)
 			{
-				if (!bestShiftValue.HasValue)
-				{
-					bestShiftValue = item.value.Value;
-					bestShift = item.s;
-				}
-				else
-				{
-					if (item.value.Value == bestShiftValue)
+				if (item.Value == bestShiftValue)
 					{
-						bestShiftValue = item.value.Value;
-						bestShift = _equalWorkShiftValueDecider.Decide(bestShift, item.s);
+						bestShiftValue = item.Value;
+						bestShift = _equalWorkShiftValueDecider.Decide(bestShift, item.Cache);
 					}
 
-					if (item.value.Value > bestShiftValue)
+					if (item.Value > bestShiftValue)
 					{
-						bestShiftValue = item.value.Value;
-						bestShift = item.s;
+						bestShiftValue = item.Value;
+						bestShift = item.Cache;
 					}
 				}
-			}
 
 			return bestShift;
 		}
@@ -100,6 +116,34 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			
 			sortedList.Sort(comparer);
 			return sortedList;
+		}
+
+		private taskResult calculateBatch(IEnumerable<ShiftProjectionCache> shiftProjectionCaches,
+			IDictionary<IActivity, IDictionary<DateTime, ISkillIntervalData>> skillIntervalDataLocalDictionary,
+			PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo, bool skipNegative)
+		{
+			double bestShiftValue = double.MinValue;
+			ShiftProjectionCache bestShift = null;
+			foreach (var cache in shiftProjectionCaches)
+			{
+				var value = valueForShift(skillIntervalDataLocalDictionary, cache, parameters, timeZoneInfo);
+				if (value.HasValue && (!skipNegative || value.Value > 0))
+				{
+					if (value.Value == bestShiftValue)
+					{
+						bestShiftValue = value.Value;
+						bestShift = _equalWorkShiftValueDecider.Decide(bestShift, cache);
+					}
+
+					if (value.Value > bestShiftValue)
+					{
+						bestShiftValue = value.Value;
+						bestShift = cache;
+					}
+				}
+			}
+
+			return new taskResult { Cache = bestShift, Value = bestShiftValue };
 		}
 
 		private double? valueForActivity(IActivity activity, IDictionary<DateTime, ISkillIntervalData> skillIntervalDataDic, ShiftProjectionCache shiftProjectionCache, PeriodValueCalculationParameters parameters, TimeZoneInfo timeZoneInfo)
