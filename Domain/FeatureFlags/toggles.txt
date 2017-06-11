@@ -182,7 +182,7 @@ ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don'
 ResourcePlanner_TeamSameDayOff_44265 = true
 ResourcePlanner_MergeTeamblockClassicScheduling_44289 = RC
 ResourcePlanner_RemoveBackToLegalStateGui_44333 = RC
-ResourcePlanner_CalculateShiftValuesInParallel_44681 = DEV
+ResourcePlanner_CalculateShiftValuesInParallel_44681 = RC
 
 Wfm_DisplayOnlineHelp_39402 = RC
 
