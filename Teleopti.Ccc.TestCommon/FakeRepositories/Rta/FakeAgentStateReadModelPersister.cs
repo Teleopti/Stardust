@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 
 
-		public IEnumerable<AgentStateReadModel> ReadFor(AgentStateFilter filter)
+		public IEnumerable<AgentStateReadModel> Read(AgentStateFilter filter)
 		{
 			if (filter.ExcludedStates.EmptyIfNull().Any())
 				return readInAlarmExcludingStatesFor(filter.SiteIds, filter.TeamIds, filter.SkillIds, filter.ExcludedStates);

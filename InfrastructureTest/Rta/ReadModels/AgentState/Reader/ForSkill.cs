@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = personId});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(
+			WithUnitOfWork.Get(() => Target.Read(
 					new AgentStateFilter
 					{
 						SkillIds = currentSkillId.AsArray()
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter {SkillIds = new[] {skill1, skill2}}))
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter {SkillIds = new[] {skill1, skill2}}))
 				.Count().Should().Be(2);
 		}
 
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter {SkillIds = new[] {skill1, skill2}}))
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter {SkillIds = new[] {skill1, skill2}}))
 				.Count().Should().Be(1);
 		}
 
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = agent2});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter {SkillIds = currentSkillId.AsArray()}))
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter {SkillIds = currentSkillId.AsArray()}))
 				.Single().PersonId.Should().Be(agent1);
 		}
 
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = personId});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter {SkillIds = email.AsArray()}))
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter {SkillIds = email.AsArray()}))
 				.Should().Be.Empty();
 		}
 
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest {PersonId = personId});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter {SkillIds = phoneId.AsArray()}))
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter {SkillIds = phoneId.AsArray()}))
 				.Should().Be.Empty();
 		}
 
@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter()
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter()
 				{
 					SkillIds = currentSkillId.AsArray(),
 					InAlarm = true
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter()
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter()
 				{
 					SkillIds = skill.AsArray(),
 					InAlarm = true
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.ReadFor(
+			WithUnitOfWork.Get(() => Target.Read(
 					new AgentStateFilter()
 					{
 						SkillIds = new[] {skill1, skill2},
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter()
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter()
 				{
 					SkillIds = new[] {skill1, skill2},
 					InAlarm = true
@@ -316,7 +316,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter()
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter()
 				{
 					SkillIds = currentSkillId.AsArray(),
 					InAlarm = true
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			var agents = WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter()
+			var agents = WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter()
 			{
 				SkillIds = currentSkillId.AsArray(),
 				InAlarm = true
@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 
 			var outOfAdherence =
-				WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter {SkillIds = currentSkillId.AsArray()}))
+				WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter {SkillIds = currentSkillId.AsArray()}))
 					.Single().OutOfAdherences.Single();
 
 			outOfAdherence.StartTime.Should().Be("2016-06-16 08:00".Utc());

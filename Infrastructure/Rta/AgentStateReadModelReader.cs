@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			_now = now;
 		}
 
-		public IEnumerable<AgentStateReadModel> ReadFor(AgentStateFilter filter)
+		public IEnumerable<AgentStateReadModel> Read(AgentStateFilter filter)
 		{
 			var queryBuilder =
 				new AgentStateReadModelQueryBuilder(_now)

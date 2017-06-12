@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 
 			WithUnitOfWork.Get(() =>
-					Target.ReadFor(new AgentStateFilter
+					Target.Read(new AgentStateFilter
 					{
 						SiteIds = siteId.AsArray(),
 						TeamIds = teamId.AsArray()
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			});
 
 			WithUnitOfWork.Get(() =>
-				Target.ReadFor(new AgentStateFilter
+				Target.Read(new AgentStateFilter
 					{
 						SiteIds = siteId.AsArray(),
 						TeamIds = teamId.AsArray()
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter
 				{
 					SiteIds = siteId.AsArray(),
 					TeamIds = teamId.AsArray()
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter
 				{
 					SiteIds = siteId.AsArray(),
 					TeamIds = teamId.AsArray(),
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter()
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
 					TeamIds = teamId.AsArray(),
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadFor(new AgentStateFilter()
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
 					TeamIds = teamId.AsArray(),

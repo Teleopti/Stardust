@@ -86,11 +86,11 @@ INSERT INTO [ReadModel].[AgentState]
 					new AgentStateFilter {SiteIds = new[] {siteId}, TeamIds = new[] {teamId}, SkillIds = new[] {skillId}},
 				}.ForEach(p =>
 				{
-					assert(Target.ReadFor(p));
+					assert(Target.Read(p));
 					p.InAlarm = true;
-					assert(Target.ReadFor(p));
+					assert(Target.Read(p));
 					p.ExcludedStates = new Guid?[]{ Guid.NewGuid() };
-					assert(Target.ReadFor(p));
+					assert(Target.Read(p));
 				});
 			});
 		}

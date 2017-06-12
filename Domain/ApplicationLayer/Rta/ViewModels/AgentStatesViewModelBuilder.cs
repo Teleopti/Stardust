@@ -90,23 +90,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		
 		public AgentStatesViewModel For(AgentStateFilter filter)
 		{
-			return build(_reader.ReadFor(filter));
+			return build(_reader.Read(filter));
 		}
 
 		public AgentStatesViewModel InAlarmExcludingPhoneStatesFor(AgentStateFilter filter, IEnumerable<Guid?> excludedPhoneStates)
 		{
 			filter.ExcludedStates = excludedPhoneStates;
-			return build(_reader.ReadFor(filter));
+			return build(_reader.Read(filter));
 		}
 		
 		public AgentStatesViewModel ForSites(Guid[] siteIds)
 		{
-			return build(_reader.ReadFor(new AgentStateFilter {SiteIds = siteIds}));
+			return build(_reader.Read(new AgentStateFilter {SiteIds = siteIds}));
 		}
 
 		public AgentStatesViewModel ForTeams(Guid[] teamIds)
 		{
-			return build(_reader.ReadFor(new AgentStateFilter { TeamIds = teamIds }));
+			return build(_reader.Read(new AgentStateFilter { TeamIds = teamIds }));
 		}
 
 		private AgentStatesViewModel build(IEnumerable<AgentStateReadModel> states)
