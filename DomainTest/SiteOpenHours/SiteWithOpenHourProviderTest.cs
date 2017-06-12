@@ -51,6 +51,30 @@ namespace Teleopti.Ccc.DomainTest.SiteOpenHours
 
 			prepareData();
 		}
+
+		[Test]
+		public void ShouldBuildSiteWithOpenHours()
+		{
+			var result = target.GetSitesWithOpenHour().ToArray();
+			var londonSite = result[0];
+			londonSite.Id.Should().Be(siteLondon.Id);
+			londonSite.Name.Should().Be(londonSiteName);
+
+			var openHours = londonSite.OpenHours.ToArray();
+			openHours.Length.Should().Be(londonOpenHours.Count);
+			isSame(openHours[0], londonOpenHours[0]);
+			isSame(openHours[1], londonOpenHours[1]);
+
+			var parisSite = result[1];
+			parisSite.Id.Should().Be(siteParis.Id);
+			parisSite.Name.Should().Be(parisSiteName);
+
+			openHours = parisSite.OpenHours.ToArray();
+			openHours.Length.Should().Be(parisOpenHours.Count);
+			isSame(openHours[0], parisOpenHours[0]);
+			isSame(openHours[1], parisOpenHours[1]);
+		}
+
 		private void prepareData()
 		{
 			londonSiteId = Guid.NewGuid();
@@ -74,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.SiteOpenHours
 
 			siteOpenHour = createSiteOpenHour(siteParis, DayOfWeek.Tuesday, TimeSpan.FromHours(13), TimeSpan.FromHours(18));
 			parisOpenHours.Add(siteOpenHour);
-			
+
 			_siteRepository.Add(siteParis);
 		}
 
@@ -90,29 +114,6 @@ namespace Teleopti.Ccc.DomainTest.SiteOpenHours
 			site.AddOpenHour(siteOpenHour);
 
 			return siteOpenHour;
-		}
-
-		[Test]
-		public void ShouldBuildSiteWithOpenHours()
-		{
-			var result = target.GetSitesWithOpenHour().ToArray();
-			var londonSite = result[0];
-			londonSite.Id.Should().Be(siteLondon.Id);
-			londonSite.Name.Should().Be(londonSiteName);
-
-			var openHours = londonSite.OpenHours.ToArray();
-			openHours.Length.Should().Be(londonOpenHours.Count);
-			isSame(openHours[0], londonOpenHours[0]);
-			isSame(openHours[1], londonOpenHours[1]);
-
-			var parisSite = result[1];
-			parisSite.Id.Should().Be(siteParis.Id);
-			parisSite.Name.Should().Be(parisSiteName);
-
-			openHours = parisSite.OpenHours.ToArray();
-			openHours.Length.Should().Be(parisOpenHours.Count);
-			isSame(openHours[0], parisOpenHours[0]);
-			isSame(openHours[1], parisOpenHours[1]);
 		}
 
 		private void isSame(SiteOpenHourViewModel openHourVm, ISiteOpenHour openHour)
