@@ -61,7 +61,7 @@
 		getDayOffRules();
 
 		function getDayOffRules() {
-			return dayOffRuleService.getDayOffRulesByAgentGroupId({ agentGroupId: $stateParams.groupId }).$promise.then(function (data) {
+			return dayOffRuleService.getDayOffRulesByAgentGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 				vm.dayOffRules = data.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
 				return vm.dayOffRules;
 			});

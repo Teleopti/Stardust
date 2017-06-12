@@ -8,7 +8,7 @@
             var LastScheduleStatus = {};
             var LastIntradayStatus = {};
             var planningPeriods = [];
-            
+
             var paramsOf = function (url) {
                 var result = {};
                 var queryString = url.split("?")[1];
@@ -41,7 +41,7 @@
                 planningPeriods = [];
             };
 
-            fakeGet('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/planningperiods',
+            fakeGet('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/planningperiods',
                 function () {
                     return [200, planningPeriods];
                 });
@@ -55,7 +55,7 @@
                 function () {
                     return [200, LastScheduleStatus];
                 });
-            
+
             fakeGet('../api/resourceplanner/planningperiod/a557210b-99cc-4128-8ae0-138d812974b6/intradaystatus',
                 function () {
                     return [200, LastIntradayStatus];

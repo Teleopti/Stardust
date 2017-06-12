@@ -9,7 +9,7 @@
 
 	function factory($resource) {
 
-		var getPlanningPeriodSuggestions = $resource('../api/resourceplanner/planningperiod/suggestions/:agentGroupId');
+		var getPlanningPeriodSuggestions = $resource('../api/resourceplanner/planningperiod/suggestions/:planningGroupId');
 		var planningPeriodBaseUrl = '../api/resourceplanner/planningperiod/:id';
 		var planningPeriod = $resource(planningPeriodBaseUrl, { id: "@id" },
 			{
@@ -24,14 +24,14 @@
 
 			});
 
-		var agentGroupBaseUrl = '../api/resourceplanner/agentgroup/:agentGroupId';
-		var agentGroup = $resource(agentGroupBaseUrl, { agentGroupId: "@agentGroupId" },
+		var agentGroupBaseUrl = '../api/resourceplanner/planninggroup/:planningGroupId';
+		var agentGroup = $resource(agentGroupBaseUrl, { planningGroupId: "@planningGroupId" },
 			{
-				nextPlanningPeriod: { method: 'POST', params: { agentGroupId: "@agentGroupId" }, url: agentGroupBaseUrl + '/nextplanningperiod' },
-				getPlanningPeriods: { method: 'GET', params: { agentGroupId: "@agentGroupId" }, isArray: true, url: agentGroupBaseUrl + '/planningperiods' },
-				deleteLastPlanningPeriod: { method: 'DELETE', params: { agentGroupId: "@agentGroupId" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' },
-				changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { agentGroupId: "@agentGroupId", startDate: "@startDate", endDate: "@endDate" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' },
-				firstPlanningPeriod: { method: 'POST', params: { agentGroupId: "@agentGroupId", startDate: "@startDate", endDate: "@endDate" }, url: agentGroupBaseUrl + '/firstplanningperiod' }
+				nextPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId" }, url: agentGroupBaseUrl + '/nextplanningperiod' },
+				getPlanningPeriods: { method: 'GET', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: agentGroupBaseUrl + '/planningperiods' },
+				deleteLastPlanningPeriod: { method: 'DELETE', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' },
+				changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", endDate: "@endDate" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' },
+				firstPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", endDate: "@endDate" }, url: agentGroupBaseUrl + '/firstplanningperiod' }
 			});
 
 		var service = {

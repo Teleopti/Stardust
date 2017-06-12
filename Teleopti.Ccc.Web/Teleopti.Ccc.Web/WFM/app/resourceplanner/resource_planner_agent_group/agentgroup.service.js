@@ -9,8 +9,8 @@
 
 	function factory($resource) {
 
-		var agentGroup = $resource('../api/resourceplanner/agentgroup/:id', { id: "@id" });
-		var filterResult = $resource('../api/filtersagentgroup', {searchString: '@searchString', maxHits: 100});
+		var agentGroup = $resource('../api/resourceplanner/planninggroup/:id', { id: "@id" });
+		var filterResult = $resource('../api/filtersplanninggroup', {searchString: '@searchString', maxHits: 100});
 
 		var service = {
 			getAgentGroups: agentGroup.query,

@@ -19,26 +19,26 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_fetchAgentGroupModel = fetchAgentGroupModel;
 		}
 
-		[UnitOfWork, HttpPost, Route("api/resourceplanner/agentgroup")]
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/planninggroup")]
 		public virtual IHttpActionResult Create(AgentGroupModel model)
 		{
 			_agentGroupModelPersister.Persist(model);
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/agentgroup")]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planninggroup")]
 		public virtual IHttpActionResult List()
 		{
 			return Ok(_fetchAgentGroupModel.FetchAll());
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/agentgroup/{id}")]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planninggroup/{id}")]
 		public virtual IHttpActionResult Get(Guid id)
 		{
 			return Ok(_fetchAgentGroupModel.Fetch(id));
 		}
 
-		[UnitOfWork, HttpDelete, Route("api/resourceplanner/agentgroup/{id}")]
+		[UnitOfWork, HttpDelete, Route("api/resourceplanner/planninggroup/{id}")]
 		public virtual IHttpActionResult DeleteAgentGroup(Guid id)
 		{
 			_agentGroupModelPersister.Delete(id);

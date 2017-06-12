@@ -57,7 +57,7 @@ describe('planningPeriodSelectController', function () {
         spyOn(planningPeriodServiceNew, 'deleteLastPlanningPeriod').and.callThrough();
         spyOn(planningPeriodServiceNew, 'changeEndDateForLastPlanningPeriod').and.callThrough();
 
-        $httpBackend.whenPUT('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-09-30&startDate=2018-09-01').respond(function (method, url, data, headers) {
+        $httpBackend.whenPUT('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-09-30&startDate=2018-09-01').respond(function (method, url, data, headers) {
             return [200, [{
                 AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 StartDate: "2018-09-01T00:00:00",
@@ -69,7 +69,7 @@ describe('planningPeriodSelectController', function () {
             }]]
         });
 
-        $httpBackend.whenPUT('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-07-30').respond(function (method, url, data, headers) {
+        $httpBackend.whenPUT('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-07-30').respond(function (method, url, data, headers) {
             return [200, [{
                 AgentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 StartDate: "2018-09-01T00:00:00",
@@ -81,11 +81,11 @@ describe('planningPeriodSelectController', function () {
             }]]
         });
 
-        $httpBackend.whenPOST('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/nextplanningperiod').respond(function (method, url, data, headers) {
+        $httpBackend.whenPOST('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/nextplanningperiod').respond(function (method, url, data, headers) {
             return [200, true];
         });
 
-        $httpBackend.whenDELETE('../api/resourceplanner/agentgroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod').respond(function (method, url, data, headers) {
+        $httpBackend.whenDELETE('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod').respond(function (method, url, data, headers) {
             return [200, []];
         });
 
@@ -105,14 +105,14 @@ describe('planningPeriodSelectController', function () {
         vm.startNextPlanningPeriod();
         $httpBackend.flush();
 
-        expect(planningPeriodServiceNew.nextPlanningPeriod).toHaveBeenCalledWith({ agentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' });
+        expect(planningPeriodServiceNew.nextPlanningPeriod).toHaveBeenCalledWith({ planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' });
     });
 
     it('should delete last planning period', function () {
         vm.deleteLastPp();
         $httpBackend.flush();
 
-        expect(planningPeriodServiceNew.deleteLastPlanningPeriod).toHaveBeenCalledWith({ agentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' });
+        expect(planningPeriodServiceNew.deleteLastPlanningPeriod).toHaveBeenCalledWith({ planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' });
     });
 
     it('should modify date for last planning period and only planning period', function () {
@@ -132,7 +132,7 @@ describe('planningPeriodSelectController', function () {
 
         expect(vm.planningPeriods.length).toEqual(1);
         expect(planningPeriodServiceNew.changeEndDateForLastPlanningPeriod).toHaveBeenCalledWith({
-            agentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             startDate: '2018-09-01',
             endDate: '2018-09-30'
         });
@@ -148,7 +148,7 @@ describe('planningPeriodSelectController', function () {
         $httpBackend.flush();
 
         expect(planningPeriodServiceNew.changeEndDateForLastPlanningPeriod).toHaveBeenCalledWith({
-            agentGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            planningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             startDate: null,
             endDate: '2018-07-30'
         });

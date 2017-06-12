@@ -9,7 +9,7 @@
 
 	function factory($resource) {
 		var dayOffRule = $resource('../api/resourceplanner/dayoffrules/:id', { id: '@id' });
-		var agentGroupDo = $resource('../api/resourceplanner/agentgroup/:agentGroupId/dayoffrules', { agentGroupId: '@agentGroupId' });
+		var agentGroupDo = $resource('../api/resourceplanner/planninggroup/:planningGroupId/dayoffrules', { planningGroupId: '@planningGroupId' });
 		var filterResult = $resource('../api/filters', { searchString: '@searchString', maxHits: 100 });
 
 		var service = {
