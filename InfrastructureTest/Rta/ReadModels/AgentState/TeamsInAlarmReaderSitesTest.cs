@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
@@ -16,12 +17,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 	{
 		public IAgentStateReadModelPersister Persister;
 		public ITeamsInAlarmReader Target;
+		public ICurrentBusinessUnit CurrentBusinessUnit;
 		public MutableNow Now;
 
 		[Test]
 		public void ShouldRead()
 		{
-			var businessUnitId = BusinessUnitFactory.BusinessUnitUsedInTest.Id.Value;
+			var businessUnitId = CurrentBusinessUnit.Current().Id.Value;
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 			Now.Is("2016-08-18 08:05".Utc());
