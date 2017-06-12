@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	public class TeamInAlarmModel
+	public class TeamCardModel
 	{
 		public Guid BusinessUnitId { get; set; }
 		public Guid SiteId { get; set; }

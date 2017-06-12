@@ -14,18 +14,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	{
 		private readonly INow _now;
 		private readonly ITeamRepository _teamRepository;
-		private readonly ITeamsInAlarmReader _teamsInAlarmReader;
+		private readonly ITeamCardReader _teamCardReader;
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
 		private readonly ICurrentAuthorization _authorization;
 
 		public TeamCardViewModelBuilder(
 			ITeamRepository teamRepository, 
-			ITeamsInAlarmReader teamsInAlarmReader, 
+			ITeamCardReader teamCardReader, 
 			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,
 			ICurrentAuthorization authorization, INow now)
 		{
 			_teamRepository = teamRepository;
-			_teamsInAlarmReader = teamsInAlarmReader;
+			_teamCardReader = teamCardReader;
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 			_authorization = authorization;
 			_now = now;
@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public IEnumerable<TeamCardViewModel> Build(Guid siteId,IEnumerable<Guid> skillIds)
 		{
 			var teamsInAlarm = skillIds == null ?
-					_teamsInAlarmReader.Read(siteId) :
-					_teamsInAlarmReader.Read(siteId, skillIds)
+					_teamCardReader.Read(siteId) :
+					_teamCardReader.Read(siteId, skillIds)
 				;
 
 			teamsInAlarm =

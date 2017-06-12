@@ -10,14 +10,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
-    public class FakeTeamsInAlarmReader : ITeamsInAlarmReader
+    public class FakeTeamCardReader : ITeamCardReader
     {
 	    private readonly INow _now;
 	    private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 	    private readonly IGroupingReadOnlyRepository _groupings;
 	    private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 		
-	    public FakeTeamsInAlarmReader(INow now, 
+	    public FakeTeamCardReader(INow now, 
 			FakeAgentStateReadModelPersister agentStateReadModels, 
 			IGroupingReadOnlyRepository groupings,
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId)
@@ -28,23 +28,23 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		    _hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
 	    }
 
-		public IEnumerable<TeamInAlarmModel> Read()
+		public IEnumerable<TeamCardModel> Read()
 		{
 			return read(x => true);
 		}
 
-		public IEnumerable<TeamInAlarmModel> Read(IEnumerable<Guid> skillIds)
+		public IEnumerable<TeamCardModel> Read(IEnumerable<Guid> skillIds)
 	    {
 		    var agentsWithSkills = this.agentsWithSkills(skillIds);
 		    return read(x => agentsWithSkills.Contains(x.PersonId));
 	    }
 
-		public IEnumerable<TeamInAlarmModel> Read(Guid siteId)
+		public IEnumerable<TeamCardModel> Read(Guid siteId)
 		{
 			return read(x => x.SiteId == siteId);
 		}
 
-	    public IEnumerable<TeamInAlarmModel> Read(Guid siteId, IEnumerable<Guid> skillIds)
+	    public IEnumerable<TeamCardModel> Read(Guid siteId, IEnumerable<Guid> skillIds)
 	    {
 		    var agentsWithSkills = this.agentsWithSkills(skillIds);
 		    return read(x => x.SiteId == siteId && agentsWithSkills.Contains(x.PersonId));
@@ -60,13 +60,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			    .ToArray();
 	    }
 
-	    private IEnumerable<TeamInAlarmModel> read(Predicate<AgentStateReadModel> these)
+	    private IEnumerable<TeamCardModel> read(Predicate<AgentStateReadModel> these)
 	    {
 		    return _agentStateReadModels
 			    .Models
 			    .Where(x => these(x))
 			    .GroupBy(x => x.TeamId)
-			    .Select(group => new TeamInAlarmModel
+			    .Select(group => new TeamCardModel
 			    {
 				    BusinessUnitId = @group.First().BusinessUnitId.Value,
 				    SiteId = @group.First().SiteId.Value,

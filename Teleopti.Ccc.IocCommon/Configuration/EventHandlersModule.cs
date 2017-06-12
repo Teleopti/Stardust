@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Autofac;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
@@ -131,11 +130,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IAdherencePercentageReadModelReader>()
 				.SingleInstance();
 
-			//builder.RegisterType<SiteInAlarmReader>()
-			//		.As<ISiteInAlarmReader>()
-			//		.SingleInstance();
-			builder.RegisterType<TeamsInAlarmReader>()
-				.As<ITeamsInAlarmReader>()
+			builder.RegisterType<TeamCardReader>()
+				.As<ITeamCardReader>()
 				.SingleInstance();
 
 			builder.RegisterType<IntervalLengthFetcher>().As<IIntervalLengthFetcher>().SingleInstance();

@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
 	[DatabaseTest]
 	[TestFixture]
-	public class TeamsInAlarmReaderSiteSkillsTest
+	public class TeamCardReaderSiteSkillsTest
 	{
 		public MutableNow Now;
 		public Database Database;
 		public WithUnitOfWork WithUnitOfWork;
 		public IGroupingReadOnlyRepository Groupings;
 		public IAgentStateReadModelPersister StatePersister;
-		public ITeamsInAlarmReader Target;
+		public ITeamCardReader Target;
 
 		[Test]
 		public void ShouldLoad()

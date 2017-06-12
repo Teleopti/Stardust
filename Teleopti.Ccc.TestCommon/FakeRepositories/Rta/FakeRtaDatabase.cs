@@ -135,8 +135,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeDataSources dataSources,
 			FakeAgentStatePersister agentStates,
 			FakeAgentStateReadModelPersister agentStateReadModels,
-			//FakeSiteInAlarmReader siteInAlarmReader,
-			FakeTeamsInAlarmReader teamsInAlarmReader,
+			FakeTeamCardReader teamCardReader,
 			FakeMeetingRepository meetings,
 			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId
 			) : base(
@@ -166,8 +165,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				rules,
 				externalLogOns, 
 				dataSources,
-				//siteInAlarmReader, 
-				teamsInAlarmReader,
+				teamCardReader,
 				meetings,
 				agentStateReadModels,
 				hardcodedSkillGroupingPageId)

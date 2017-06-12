@@ -10,14 +10,14 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 {
-	public class TeamsInAlarmReader : ITeamsInAlarmReader
+	public class TeamCardReader : ITeamCardReader
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 		private readonly ICurrentBusinessUnit _businessUnit;
 
-		public TeamsInAlarmReader(ICurrentUnitOfWork unitOfWork, INow now, HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId, ICurrentBusinessUnit businessUnit)
+		public TeamCardReader(ICurrentUnitOfWork unitOfWork, INow now, HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId, ICurrentBusinessUnit businessUnit)
 		{
 			_unitOfWork = unitOfWork;
 			_now = now;
@@ -25,27 +25,27 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			_businessUnit = businessUnit;
 		}
 
-		public IEnumerable<TeamInAlarmModel> Read()
+		public IEnumerable<TeamCardModel> Read()
 		{
 			return read(null, null);
 		}
 
-		public IEnumerable<TeamInAlarmModel> Read(IEnumerable<Guid> skillIds)
+		public IEnumerable<TeamCardModel> Read(IEnumerable<Guid> skillIds)
 		{
 			return read(null, skillIds);
 		}
 
-		public IEnumerable<TeamInAlarmModel> Read(Guid siteId)
+		public IEnumerable<TeamCardModel> Read(Guid siteId)
 		{
 			return read(siteId, null);
 		}
 
-		public IEnumerable<TeamInAlarmModel> Read(Guid siteId, IEnumerable<Guid> skillIds)
+		public IEnumerable<TeamCardModel> Read(Guid siteId, IEnumerable<Guid> skillIds)
 		{
 			return read(siteId, skillIds);
 		}
 
-		private IEnumerable<TeamInAlarmModel> read(Guid? siteId, IEnumerable<Guid> skillIds)
+		private IEnumerable<TeamCardModel> read(Guid? siteId, IEnumerable<Guid> skillIds)
 		{
 			var querySite = siteId.HasValue;
 			var querySkills = skillIds.EmptyIfNull().Any();
@@ -106,9 +106,9 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					;
 
 			return query
-				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamInAlarmModel)))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamCardModel)))
 				.List()
-				.Cast<TeamInAlarmModel>();
+				.Cast<TeamCardModel>();
 		}
 	}
 }

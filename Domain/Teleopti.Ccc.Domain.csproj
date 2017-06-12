@@ -1698,7 +1698,7 @@
     <Compile Include="UnitOfWork\IReadModelTransactionSyncronization.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\INotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IRtaEventPublisher.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ITeamsInAlarmReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\ITeamCardReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\NotificationCreator.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Rta.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateProcessor.cs" />
@@ -1711,7 +1711,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IAdherencePercentageReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\Context.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateMapper.cs" />
-    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamInAlarmModel.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\TeamCardModel.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventShiftExtension.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDate.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsFactScheduleDayCount.cs" />

@@ -290,9 +290,9 @@
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Repositories\SmartPersonPropertyQuerierTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\Reader\Order.cs" />
-    <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSitesTest.cs" />
-    <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSitesSkillsTest.cs" />
-    <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderBusinessUnitTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesSkillsTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderBusinessUnitTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStateForUpsert.cs" />
     <Compile Include="Rta\ReadModels\AgentState\AgentStateReadModelPersisterExtensions.cs" />
     <Compile Include="Rta\ReadModels\AgentState\Reader\ForExcludingStateGroups.cs" />
@@ -330,8 +330,8 @@
     <Compile Include="Rta\ReadModels\AgentState\UnorderedEventsTest.cs" />
     <Compile Include="Rta\Service\QueueueueueeTest.cs" />
     <Compile Include="Rta\Service\ScheduleCacheTest.cs" />
-    <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSiteSkillsTest.cs" />
-    <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSiteTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSiteSkillsTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSiteTest.cs" />
     <Compile Include="Rta\PublishRtaEventsToHangfireTest.cs" />
     <Compile Include="Rta\Service\SnapshotTest.cs" />
     <Compile Include="Rta\Service\Persisters\StateQueueTest.cs" />

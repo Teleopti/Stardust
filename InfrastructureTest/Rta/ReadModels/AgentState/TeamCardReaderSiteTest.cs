@@ -11,10 +11,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class TeamsInAlarmReaderSiteTest
+	public class TeamCardReaderSiteTest
 	{
 		public IAgentStateReadModelPersister Persister;
-		public ITeamsInAlarmReader Target;
+		public ITeamCardReader Target;
 		public MutableNow Now;
 
 		[Test]
