@@ -20,17 +20,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	public class IntradayOptimizationFromWebTest
 	{
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeAgentGroupRepository AgentGroupRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 		public IntradayOptimizationFromWeb Target;
 		public FakeJobResultRepository JobResultRepository;
 		public FakePersonRepository PersonRepository;
 
 		[Test]
-		public void ShouldNotSaveJobResultForEmptyAgentGroup()
+		public void ShouldNotSaveJobResultForEmptyPlanningGroup()
 		{
 			var team = new Team { Site = new Site("site") };
-			var agentGroup = new AgentGroup("Europe").AddFilter(new TeamFilter(team));
-			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, 1, agentGroup);
+			var planningGroup = new PlanningGroup("Europe").AddFilter(new TeamFilter(team));
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, 1, planningGroup);
 
 			Target.Execute(planningPeriod.Id.GetValueOrDefault(), true);
 
@@ -41,10 +41,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public void ShouldSaveJobResult()
 		{
 			var team = new Team { Site = new Site("site") };
-			var agentGroup = new AgentGroup("Europe").AddFilter(new TeamFilter(team));
+			var planningGroup = new PlanningGroup("Europe").AddFilter(new TeamFilter(team));
 			PersonRepository.Add(PersonFactory.CreatePersonWithPersonPeriodFromTeam(DateOnly.Today, team));
 
-			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, 1, agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnly.Today, 1, planningGroup);
 
 			Target.Execute(planningPeriod.Id.GetValueOrDefault(), true);
 

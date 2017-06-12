@@ -4,9 +4,9 @@ using Teleopti.Ccc.Domain.Optimization;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class AgentGroupRepository :  Repository<IAgentGroup>, IAgentGroupRepository
+	public class PlanningGroupRepository :  Repository<IPlanningGroup>, IPlanningGroupRepository
 	{
-		public AgentGroupRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public PlanningGroupRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
 	}

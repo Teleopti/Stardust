@@ -8,40 +8,40 @@ using Teleopti.Ccc.Web.Filters;
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebSchedules)]
-	public class AgentGroupController : ApiController 
+	public class PlanningGroupController : ApiController 
 	{
-		private readonly IAgentGroupModelPersister _agentGroupModelPersister;
-		private readonly IFetchAgentGroupModel _fetchAgentGroupModel;
+		private readonly IPlanningGroupModelPersister _planningGroupModelPersister;
+		private readonly IFetchPlanningGroupModel _fetchPlanningGroupModel;
 
-		public AgentGroupController(IAgentGroupModelPersister agentGroupModelPersister, IFetchAgentGroupModel fetchAgentGroupModel)
+		public PlanningGroupController(IPlanningGroupModelPersister planningGroupModelPersister, IFetchPlanningGroupModel fetchPlanningGroupModel)
 		{
-			_agentGroupModelPersister = agentGroupModelPersister;
-			_fetchAgentGroupModel = fetchAgentGroupModel;
+			_planningGroupModelPersister = planningGroupModelPersister;
+			_fetchPlanningGroupModel = fetchPlanningGroupModel;
 		}
 
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/planninggroup")]
-		public virtual IHttpActionResult Create(AgentGroupModel model)
+		public virtual IHttpActionResult Create(PlanningGroupModel model)
 		{
-			_agentGroupModelPersister.Persist(model);
+			_planningGroupModelPersister.Persist(model);
 			return Ok();
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planninggroup")]
 		public virtual IHttpActionResult List()
 		{
-			return Ok(_fetchAgentGroupModel.FetchAll());
+			return Ok(_fetchPlanningGroupModel.FetchAll());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planninggroup/{id}")]
 		public virtual IHttpActionResult Get(Guid id)
 		{
-			return Ok(_fetchAgentGroupModel.Fetch(id));
+			return Ok(_fetchPlanningGroupModel.Fetch(id));
 		}
 
 		[UnitOfWork, HttpDelete, Route("api/resourceplanner/planninggroup/{id}")]
-		public virtual IHttpActionResult DeleteAgentGroup(Guid id)
+		public virtual IHttpActionResult DeletePlanningGroup(Guid id)
 		{
-			_agentGroupModelPersister.Delete(id);
+			_planningGroupModelPersister.Delete(id);
 			return Ok();
 		}
 	}

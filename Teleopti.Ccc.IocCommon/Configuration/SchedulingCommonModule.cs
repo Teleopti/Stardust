@@ -424,7 +424,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<OptimizationResult>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<IntradayDecisionMaker>().SingleInstance();
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
-			builder.RegisterType<AgentGroupStaffLoader>().As<IAgentGroupStaffLoader>().SingleInstance();
+			builder.RegisterType<PlanningGroupStaffLoader>().As<IPlanningGroupStaffLoader>().SingleInstance();
 			builder.RegisterType<PeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
 			{
@@ -435,12 +435,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().AsSelf().As<IOptimizationPreferencesProvider>().SingleInstance();
 			}
 			builder.RegisterType<FetchDayOffRulesModel>().As<IFetchDayOffRulesModel>().SingleInstance();
-			builder.RegisterType<FetchAgentGroupModel>().As<IFetchAgentGroupModel>().SingleInstance();
+			builder.RegisterType<FetchPlanningGroupModel>().As<IFetchPlanningGroupModel>().SingleInstance();
 			builder.RegisterType<DayOffRulesMapper>().SingleInstance();
-			builder.RegisterType<AgentGroupMapper>().SingleInstance();
+			builder.RegisterType<PlanningGroupMapper>().SingleInstance();
 			builder.RegisterType<FilterMapper>().SingleInstance();
 			builder.RegisterType<DayOffRulesModelPersister>().As<IDayOffRulesModelPersister>().SingleInstance();
-			builder.RegisterType<AgentGroupModelPersister>().As<IAgentGroupModelPersister>().SingleInstance();
+			builder.RegisterType<PlanningGroupModelPersister>().As<IPlanningGroupModelPersister>().SingleInstance();
 			builder.RegisterType<DayOffOptimizationPreferenceProviderUsingFiltersFactory>().AsSelf().SingleInstance();
 			builder.RegisterType<FindFilter>().SingleInstance();
 			builder.RegisterType<ViolatedSchedulePeriodBusinessRule>().SingleInstance();

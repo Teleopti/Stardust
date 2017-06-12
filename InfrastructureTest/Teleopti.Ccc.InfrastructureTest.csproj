@@ -247,7 +247,7 @@
     <Compile Include="Persisters\Schedules\MessageSenderInvokationTest.cs" />
     <Compile Include="Persisters\Schedules\NoUnitOfWorkModifyNoConflictTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangeReassociateTest.cs" />
-    <Compile Include="Repositories\AgentGroupRepositoryTest.cs" />
+    <Compile Include="Repositories\PlanningGroupRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsAbsenceRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBridgeTimeZoneRepositoryTest.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBusinessUnitRepositoryTest.cs" />

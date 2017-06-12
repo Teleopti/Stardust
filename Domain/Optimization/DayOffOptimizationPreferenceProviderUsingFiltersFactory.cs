@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IDayOffOptimizationPreferenceProvider Create()
 		{
-			return new DayOffOptimizationPreferenceProviderUsingFilters(_dayOffRulesRepository.LoadAllWithoutAgentGroup());
+			return new DayOffOptimizationPreferenceProviderUsingFilters(_dayOffRulesRepository.LoadAllWithoutPlanningGroup());
 		}
 
-		public IDayOffOptimizationPreferenceProvider Create(IAgentGroup agentGroup)
+		public IDayOffOptimizationPreferenceProvider Create(IPlanningGroup planningGroup)
 		{
-			return new DayOffOptimizationPreferenceProviderUsingFilters(_dayOffRulesRepository.LoadAllByAgentGroup(agentGroup));
+			return new DayOffOptimizationPreferenceProviderUsingFilters(_dayOffRulesRepository.LoadAllByPlanningGroup(planningGroup));
 		}
 	}
 }

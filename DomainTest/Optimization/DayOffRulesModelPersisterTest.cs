@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakeContractRepository ContractRepository;
 		public FakeSiteRepository SiteRepository;
 		public FakeTeamRepository TeamRepository;
-		public FakeAgentGroupRepository AgentGroupRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 		public IDayOffRulesModelPersister Target;
 
 		[Test]
@@ -101,10 +101,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldInsertForAgentGroup()
+		public void ShouldInsertForPlanningGroup()
 		{
-			var agentGroup = new AgentGroup().WithId(Guid.NewGuid());
-			AgentGroupRepository.Add(agentGroup);
+			var planningGroup = new PlanningGroup().WithId(Guid.NewGuid());
+			PlanningGroupRepository.Add(planningGroup);
 
 			var model = new DayOffRulesModel
 			{
@@ -114,12 +114,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MaxConsecutiveDayOffs = 4,
 				MinConsecutiveWorkdays = 5,
 				MaxConsecutiveWorkdays = 6,
-				AgentGroupId = agentGroup.Id
+				PlanningGroupId = planningGroup.Id
 			};
 
 			Target.Persist(model);
 
-			var inDb = DayOffRulesRepository.LoadAllByAgentGroup(agentGroup).Single();
+			var inDb = DayOffRulesRepository.LoadAllByPlanningGroup(planningGroup).Single();
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
@@ -150,10 +150,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldInsertDefaultForAgentGroup()
+		public void ShouldInsertDefaultForPlanningGroup()
 		{
-			var agentGroup = new AgentGroup().WithId(Guid.NewGuid());
-			AgentGroupRepository.Add(agentGroup);
+			var planningGroup = new PlanningGroup().WithId(Guid.NewGuid());
+			PlanningGroupRepository.Add(planningGroup);
 
 			var model = new DayOffRulesModel
 			{
@@ -164,12 +164,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MinConsecutiveWorkdays = 3,
 				MaxConsecutiveWorkdays = 3,
 				Default = true,
-				AgentGroupId = agentGroup.Id
+				PlanningGroupId = planningGroup.Id
 			};
 
 			Target.Persist(model);
 
-			var inDb = DayOffRulesRepository.LoadAllByAgentGroup(agentGroup).Single();
+			var inDb = DayOffRulesRepository.LoadAllByPlanningGroup(planningGroup).Single();
 			inDb.DayOffsPerWeek.Should().Be.EqualTo(new MinMax<int>(model.MinDayOffsPerWeek, model.MaxDayOffsPerWeek));
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));

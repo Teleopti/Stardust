@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure
 	{
 		IPlanningPeriodSuggestions Suggestions(INow now);
 		IPlanningPeriodSuggestions Suggestions(INow now, ICollection<Guid> personIds);
-		IEnumerable<IPlanningPeriod> LoadForAgentGroup(IAgentGroup agentGroup);
+		IEnumerable<IPlanningPeriod> LoadForPlanningGroup(IPlanningGroup planningGroup);
 	}
 }

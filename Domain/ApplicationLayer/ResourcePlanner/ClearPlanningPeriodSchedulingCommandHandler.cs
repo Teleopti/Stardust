@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			var planningPeriod = _planningPeriodRepository.Get(command.PlanningPeriodId);
 			if (planningPeriod == null) throw new Exception("PlanningPeriod not found");
-			if (planningPeriod.AgentGroup == null) throw new Exception("AgentGroup not found");
+			if (planningPeriod.PlanningGroup == null) throw new Exception("PlanningGroup not found");
 
 			var scenario = _scenarioRepository.LoadDefaultScenario();
-			var people = _personRepository.FindPeopleInAgentGroup(planningPeriod.AgentGroup, planningPeriod.Range);
+			var people = _personRepository.FindPeopleInPlanningGroup(planningPeriod.PlanningGroup, planningPeriod.Range);
 			foreach (var batch in people.Batch(200))
 			{
 				foreach (var personAssignment in _personAssignmentRepository.Find(batch, planningPeriod.Range, scenario, ScheduleSource.WebScheduling))

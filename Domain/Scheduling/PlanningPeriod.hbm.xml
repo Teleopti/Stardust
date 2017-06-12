@@ -25,7 +25,7 @@
 
 		<property name="_state" column="State" access="field" not-null="true"/>
 
-		<many-to-one name="AgentGroup" class="Teleopti.Ccc.Domain.Optimization.AgentGroup" access="nosetter.camelcase-underscore" foreign-key="FK_PlanningPeriod_AgentGroup"/>
+		<many-to-one name="PlanningGroup" class="Teleopti.Ccc.Domain.Optimization.PlanningGroup" access="nosetter.camelcase-underscore" foreign-key="FK_PlanningPeriod_PlanningGroup"/>
 
 		<set name="JobResults" table="PlanningPeriodJobResult">
 			<key column="PlanningPeriod" foreign-key="FK_PlanningPeriodJobResult_PlanningPeriod" />

@@ -16,16 +16,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly FullScheduling _fullScheduling;
-		private readonly IAgentGroupStaffLoader _agentGroupStaffLoader;
+		private readonly IPlanningGroupStaffLoader _planningGroupStaffLoader;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IEventPopulatingPublisher _eventPopulatingPublisher;
 
-		public SchedulePlanningPeriodCommandHandler(IPlanningPeriodRepository planningPeriodRepository, FullScheduling fullScheduling, IAgentGroupStaffLoader agentGroupStaffLoader, ILoggedOnUser loggedOnUser, IJobResultRepository jobResultRepository, IEventPopulatingPublisher eventPopulatingPublisher)
+		public SchedulePlanningPeriodCommandHandler(IPlanningPeriodRepository planningPeriodRepository, FullScheduling fullScheduling, IPlanningGroupStaffLoader planningGroupStaffLoader, ILoggedOnUser loggedOnUser, IJobResultRepository jobResultRepository, IEventPopulatingPublisher eventPopulatingPublisher)
 		{
 			_planningPeriodRepository = planningPeriodRepository;
 			_fullScheduling = fullScheduling;
-			_agentGroupStaffLoader = agentGroupStaffLoader;
+			_planningGroupStaffLoader = planningGroupStaffLoader;
 			_loggedOnUser = loggedOnUser;
 			_jobResultRepository = jobResultRepository;
 			_eventPopulatingPublisher = eventPopulatingPublisher;
@@ -64,12 +64,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			if (planningPeriod.AgentGroup != null)
+			if (planningPeriod.PlanningGroup != null)
 			{
 				return new SchedulingInformation(period,
-					_agentGroupStaffLoader.LoadPersonIds(period, planningPeriod.AgentGroup));
+					_planningGroupStaffLoader.LoadPersonIds(period, planningPeriod.PlanningGroup));
 			}
-			var people = _agentGroupStaffLoader.Load(period, null);
+			var people = _planningGroupStaffLoader.Load(period, null);
 			return new SchedulingInformation(period, people.AllPeople.Select(x => x.Id.Value).ToList());
 		}
 

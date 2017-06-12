@@ -8,18 +8,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IDayOffRulesRepository _dayOffRulesRepository;
 		private readonly DayOffRulesMapper _dayOffRulesMapper;
-		private readonly IAgentGroupRepository _agentGroupRepository;
+		private readonly IPlanningGroupRepository _planningGroupRepository;
 
-		public FetchDayOffRulesModel(IDayOffRulesRepository dayOffRulesRepository, DayOffRulesMapper dayOffRulesMapper, IAgentGroupRepository agentGroupRepository)
+		public FetchDayOffRulesModel(IDayOffRulesRepository dayOffRulesRepository, DayOffRulesMapper dayOffRulesMapper, IPlanningGroupRepository planningGroupRepository)
 		{
 			_dayOffRulesRepository = dayOffRulesRepository;
 			_dayOffRulesMapper = dayOffRulesMapper;
-			_agentGroupRepository = agentGroupRepository;
+			_planningGroupRepository = planningGroupRepository;
 		}
 
-		public IEnumerable<DayOffRulesModel> FetchAllWithoutAgentGroup()
+		public IEnumerable<DayOffRulesModel> FetchAllWithoutPlanningGroup()
 		{
-			var all = _dayOffRulesRepository.LoadAllWithoutAgentGroup();
+			var all = _dayOffRulesRepository.LoadAllWithoutPlanningGroup();
 
 			if (!all.Any(x => x.Default))
 				all.Add(DayOffRules.CreateDefault());
@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return _dayOffRulesMapper.ToModel(dayOffRules);
 		}
 
-		public IEnumerable<DayOffRulesModel> FetchAllForAgentGroup(Guid agentGroupId)
+		public IEnumerable<DayOffRulesModel> FetchAllForPlanningGroup(Guid planningGroupId)
 		{
-			var agentGroup = _agentGroupRepository.Get(agentGroupId);
-			var all = _dayOffRulesRepository.LoadAllByAgentGroup(agentGroup);
+			var planningGroup = _planningGroupRepository.Get(planningGroupId);
+			var all = _dayOffRulesRepository.LoadAllByPlanningGroup(planningGroup);
 
 			var result = all.Select(dayOffRules => _dayOffRulesMapper.ToModel(dayOffRules)).ToList();
 			return result;

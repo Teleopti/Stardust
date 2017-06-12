@@ -5,16 +5,16 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class AgentGroup : NonversionedAggregateRootWithBusinessUnit, IAgentGroup, IDeleteTag
+	public class PlanningGroup : NonversionedAggregateRootWithBusinessUnit, IPlanningGroup, IDeleteTag
 	{
 		private readonly ISet<IFilter> _filters = new HashSet<IFilter>();
 		private bool _isDeleted;
 
-		public AgentGroup():this(string.Empty)
+		public PlanningGroup():this(string.Empty)
 		{
 		}
 
-		public AgentGroup(string name)
+		public PlanningGroup(string name)
 		{
 			Name = name;
 		}
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_filters.Clear();
 		}
 
-		public virtual IAgentGroup AddFilter(IFilter filter)
+		public virtual IPlanningGroup AddFilter(IFilter filter)
 		{
 			_filters.Add(filter);
 			return this;

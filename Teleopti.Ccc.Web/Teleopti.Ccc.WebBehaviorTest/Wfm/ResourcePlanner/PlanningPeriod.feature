@@ -21,11 +21,11 @@ Scenario: The first planning period suggestion should be the next upcoming sched
 		| Start date | 2016-06-05 |
 		| Type       | Week       |
 		| Length     | 1          |
-	And there is an agent group with
-		| Field            | Value        |
-		| Agent group name | AgentGroup 1 |
-		| Team             | Team 1       |
-	When I view planning periods for agent group 'AgentGroup 1'
+	And there is an planning group with
+		| Field               | Value           |
+		| Planning group name | PlanningGroup 1 |
+		| Team                | Team 1          |
+	When I view planning periods for planning group 'PlanningGroup 1'
 	And I click create planning period
 	And I click apply planning period
 	Then I should see a planning period between '2016-06-12' and '2016-06-18'
@@ -39,15 +39,15 @@ Scenario: The first planning period suggestion should be the next upcoming sched
 		| Access to resource planner            | True              |
 	And there is a site named 'Site 1'
 	And there is a team named 'Team 1' on 'Site 1'
-	And there is an agent group with
-		| Field            | Value        |
-		| Agent group name | AgentGroup 1 |
-		| Team             | Team 1       |
+	And there is an planning group with
+		| Field               | Value           |
+		| Planning group name | PlanningGroup 1 |
+		| Team                | Team 1          |
 	And there is a planning period with
-		| Field            | Value        |
-		| Date             | 2016-06-01   |
-		| Agent group name | AgentGroup 1 |
-	When I view planning periods for agent group 'AgentGroup 1'
+		| Field               | Value           |
+		| Date                | 2016-06-01      |
+		| Planning group name | PlanningGroup 1 |
+	When I view planning periods for planning group 'PlanningGroup 1'
 	And I click create next planning period
 	Then I should see a planning period between '2016-07-01' and '2016-07-31'
 

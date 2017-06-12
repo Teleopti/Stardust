@@ -35,10 +35,10 @@
 		<property name="Default" column="DefaultSettings" access="property"/>
     <property name="Name" access="property"/>
 
-		<many-to-one name="AgentGroup"
-					 class="Teleopti.Ccc.Domain.Optimization.AgentGroup"
+		<many-to-one name="PlanningGroup"
+					 class="Teleopti.Ccc.Domain.Optimization.PlanningGroup"
 						access="nosetter.camelcase-underscore"
-					 foreign-key="FK_DayOffRules_AgentGroup"/>
+					 foreign-key="FK_DayOffRules_PlanningGroup"/>
 		
 		<set name="Filters" table="DayOffRulesFilters" cascade="all-delete-orphan">
 			<key column="DayOffRules" />
@@ -56,6 +56,6 @@
 	</class>
 
 	<query name="loadGlobalDefault">
-		select dor from DayOffRules dor where defaultsettings=1 and agentGroup is null
+		select dor from DayOffRules dor where defaultsettings=1 and planningGroup is null
 	</query>
 </hibernate-mapping>

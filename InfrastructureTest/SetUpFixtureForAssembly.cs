@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			persistLoggedOnPerson();
 			persistBusinessUnit();
 			deleteAllAggregates();
-			dataHash = 4574;
+			dataHash = 4575;
 
 			DataSourceHelper.BackupApplicationDatabase(dataHash);
 			DataSourceHelper.BackupAnalyticsDatabase(dataHash);

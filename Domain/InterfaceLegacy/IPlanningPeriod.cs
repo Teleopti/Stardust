@@ -8,9 +8,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy
 	{
 		DateOnlyPeriod Range { get; }
 		void ChangeRange(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, bool updateTypeAndNumber = false);
-		IPlanningPeriod NextPlanningPeriod(IAgentGroup agentGroup);
+		IPlanningPeriod NextPlanningPeriod(IPlanningGroup planningGroup);
 		PlanningPeriodState State { get; }
-		IAgentGroup AgentGroup { get; }
+		IPlanningGroup PlanningGroup { get; }
 		ISet<IJobResult> JobResults { get; }
 		void Scheduled();
 		void Publish(params IPerson[] people);

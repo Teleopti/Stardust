@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class DayOffRules : NonversionedAggregateRootWithBusinessUnit
 	{
 		private readonly ISet<IFilter> _filters = new HashSet<IFilter>();
-		private readonly IAgentGroup _agentGroup;
+		private readonly IPlanningGroup _planningGroup;
 		public virtual MinMax<int> DayOffsPerWeek { get; set; }
 		public virtual MinMax<int> ConsecutiveWorkdays { get; set; }
 		public virtual MinMax<int> ConsecutiveDayOffs { get; set; }
@@ -21,14 +21,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Name = string.Empty;
 		}
 
-		public DayOffRules(IAgentGroup agentGroup):this()
+		public DayOffRules(IPlanningGroup planningGroup):this()
 		{
-			_agentGroup = agentGroup;
+			_planningGroup = planningGroup;
 		}
 
-		public static DayOffRules CreateDefault(IAgentGroup agentGroup=null)
+		public static DayOffRules CreateDefault(IPlanningGroup planningGroup=null)
 		{
-			return new DayOffRules(agentGroup)
+			return new DayOffRules(planningGroup)
 			{
 				DayOffsPerWeek = new MinMax<int>(1, 3),
 				ConsecutiveDayOffs = new MinMax<int>(1, 3),
@@ -38,9 +38,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			};
 		}
 
-		public virtual IAgentGroup AgentGroup
+		public virtual IPlanningGroup PlanningGroup
 		{
-			get { return _agentGroup; }
+			get { return _planningGroup; }
 		}
 
 		public virtual IEnumerable<IFilter> Filters

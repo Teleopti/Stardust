@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(DayOffRules root)
 		{
-			if (root.Default && root.AgentGroup == null)
+			if (root.Default && root.PlanningGroup == null)
 			{
 				var currDefault = Default();
 				if (currDefault != null)
@@ -59,19 +59,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_workRuleSettings.Add(defaultSettings);
 		}
 
-		public IList<DayOffRules> LoadAllByAgentGroup(IAgentGroup agentGroup)
+		public IList<DayOffRules> LoadAllByPlanningGroup(IPlanningGroup planningGroup)
 		{
-			return _workRuleSettings.Where(x => x.AgentGroup == agentGroup).ToList();
+			return _workRuleSettings.Where(x => x.PlanningGroup == planningGroup).ToList();
 		}
 
-		public IList<DayOffRules> LoadAllWithoutAgentGroup()
+		public IList<DayOffRules> LoadAllWithoutPlanningGroup()
 		{
-			return _workRuleSettings.Where(x => x.AgentGroup == null).ToList();
+			return _workRuleSettings.Where(x => x.PlanningGroup == null).ToList();
 		}
 
-		public void RemoveForAgentGroup(IAgentGroup agentGroup)
+		public void RemoveForPlanningGroup(IPlanningGroup planningGroup)
 		{
-			_workRuleSettings.RemoveAll(dayOffRule => dayOffRule.AgentGroup == agentGroup);
+			_workRuleSettings.RemoveAll(dayOffRule => dayOffRule.PlanningGroup == planningGroup);
 		}
 	}
 }

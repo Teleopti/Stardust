@@ -18,23 +18,23 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[DomainTest]
-	public class AgentGroupModelPersisterTest
+	public class PlanningGroupModelPersisterTest
 	{
-		public FakeAgentGroupRepository AgentGroupRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 		public FakeSiteRepository SiteRepository;
 		public FakeTeamRepository TeamRepository;
 		public FakeContractRepository ContractRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeDayOffRulesRepository DayOffRulesRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public IAgentGroupModelPersister Target;
+		public IPlanningGroupModelPersister Target;
 
 		[Test]
 		public void ShouldInsertContractFilter()
 		{
 			var contract = new Contract("_").WithId();
 			ContractRepository.Add(contract);
-			var model = new AgentGroupModel();
+			var model = new PlanningGroupModel();
 			model.Filters.Add(
 				new FilterModel
 				{
@@ -45,11 +45,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = AgentGroupRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.LoadAll().Single();
 			var contractFilter = (ContractFilter)inDb.Filters.Single();
 			contractFilter.Contract.Should().Be.EqualTo(contract);
 
-			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			var dayOffRules = DayOffRulesRepository.LoadAllByPlanningGroup(inDb);
 			dayOffRules.Should().Not.Be.Empty();
 		}
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var site = new Site("_").WithId();
 			SiteRepository.Add(site);
 
-			var model = new AgentGroupModel();
+			var model = new PlanningGroupModel();
 			model.Filters.Add(
 				new FilterModel
 				{
@@ -70,11 +70,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = AgentGroupRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.LoadAll().Single();
 			var siteFilter = (SiteFilter)inDb.Filters.Single();
 			siteFilter.Site.Should().Be.EqualTo(site);
 
-			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			var dayOffRules = DayOffRulesRepository.LoadAllByPlanningGroup(inDb);
 			dayOffRules.Should().Not.Be.Empty();
 		}
 
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var team = new Team().WithId();
 			TeamRepository.Add(team);
 
-			var model = new AgentGroupModel();
+			var model = new PlanningGroupModel();
 			model.Filters.Add(
 				new FilterModel
 				{
@@ -95,11 +95,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = AgentGroupRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.LoadAll().Single();
 			var teamFilter = (TeamFilter)inDb.Filters.Single();
 			teamFilter.Team.Should().Be.EqualTo(team);
 
-			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			var dayOffRules = DayOffRulesRepository.LoadAllByPlanningGroup(inDb);
 			dayOffRules.Should().Not.Be.Empty();
 		}
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var skill = new Skill("_").WithId();
 			SkillRepository.Add(skill);
-			var model = new AgentGroupModel();
+			var model = new PlanningGroupModel();
 			model.Filters.Add(
 				new FilterModel
 				{
@@ -119,11 +119,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var inDb = AgentGroupRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.LoadAll().Single();
 			var skillFilter = (SkillFilter)inDb.Filters.Single();
 			skillFilter.Skill.Should().Be.EqualTo(skill);
 
-			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			var dayOffRules = DayOffRulesRepository.LoadAllByPlanningGroup(inDb);
 			dayOffRules.Should().Not.Be.Empty();
 		}
 
@@ -133,16 +133,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var team = new Team().WithId();
 			TeamRepository.Add(team);
 
-			var model = new AgentGroupModel();
+			var model = new PlanningGroupModel();
 			model.Filters.Add(new FilterModel { Id = team.Id.Value, FilterType = "team" });
 			model.Filters.Add(new FilterModel { Id = team.Id.Value, FilterType = "team" });
 
 			Target.Persist(model);
 
-			var inDb = AgentGroupRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.LoadAll().Single();
 			inDb.Filters.Count().Should().Be.EqualTo(1);
 
-			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			var dayOffRules = DayOffRulesRepository.LoadAllByPlanningGroup(inDb);
 			dayOffRules.Should().Not.Be.Empty();
 		}
 
@@ -152,16 +152,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var contract = new Contract("_").WithId();
 			ContractRepository.Add(contract);
 
-			var model = new AgentGroupModel();
+			var model = new PlanningGroupModel();
 			model.Filters.Add(new FilterModel { Id = contract.Id.Value, FilterType = "contract" });
 			model.Filters.Add(new FilterModel { Id = contract.Id.Value, FilterType = "contract" });
 
 			Target.Persist(model);
 
-			var inDb = AgentGroupRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.LoadAll().Single();
 			inDb.Filters.Count().Should().Be.EqualTo(1);
 
-			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			var dayOffRules = DayOffRulesRepository.LoadAllByPlanningGroup(inDb);
 			dayOffRules.Should().Not.Be.Empty();
 		}
 
@@ -171,16 +171,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var site = new Site("_").WithId();
 			SiteRepository.Add(site);
 
-			var model = new AgentGroupModel();
+			var model = new PlanningGroupModel();
 			model.Filters.Add(new FilterModel { Id = site.Id.Value, FilterType = "site" });
 			model.Filters.Add(new FilterModel { Id = site.Id.Value, FilterType = "site" });
 
 			Target.Persist(model);
 
-			var inDb = AgentGroupRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.LoadAll().Single();
 			inDb.Filters.Count().Should().Be.EqualTo(1);
 
-			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			var dayOffRules = DayOffRulesRepository.LoadAllByPlanningGroup(inDb);
 			dayOffRules.Should().Not.Be.Empty();
 		}
 
@@ -191,23 +191,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var skill = new Skill("_").WithId();
 			SkillRepository.Add(skill);
 
-			var model = new AgentGroupModel();
+			var model = new PlanningGroupModel();
 			model.Filters.Add(new FilterModel { Id = skill.Id.Value, FilterType = "skill" });
 			model.Filters.Add(new FilterModel { Id = skill.Id.Value, FilterType = "skill" });
 
 			Target.Persist(model);
 
-			var inDb = AgentGroupRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.LoadAll().Single();
 			inDb.Filters.Count().Should().Be.EqualTo(1);
 
-			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			var dayOffRules = DayOffRulesRepository.LoadAllByPlanningGroup(inDb);
 			dayOffRules.Should().Not.Be.Empty();
 		}
 
 		[Test]
 		public void ShouldThrowIfUnknownFilter()
 		{
-			var model = new AgentGroupModel();
+			var model = new PlanningGroupModel();
 			model.Filters.Add(
 				new FilterModel
 				{
@@ -223,16 +223,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldClearOldFiltersWhenUpdate()
 		{
 			var contract = new Contract("_").WithId();
-			var existing = new AgentGroup()
+			var existing = new PlanningGroup()
 				.WithId()
 				.AddFilter(new ContractFilter(contract));
 			var team = new Team().WithId();
 
-			AgentGroupRepository.Add(existing);
+			PlanningGroupRepository.Add(existing);
 			ContractRepository.Add(contract);
 			TeamRepository.Add(team);
 
-			var model = new AgentGroupModel
+			var model = new PlanningGroupModel
 			{
 				Id = existing.Id.Value,
 				Filters = new List<FilterModel> { new FilterModel { FilterType = FilterModel.TeamFilterType, Name = team.Description.Name, Id = team.Id.Value } }
@@ -240,36 +240,36 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Target.Persist(model);
 
-			var onlyFilterInDb = (TeamFilter)AgentGroupRepository.LoadAll().Single().Filters.Single();
+			var onlyFilterInDb = (TeamFilter)PlanningGroupRepository.LoadAll().Single().Filters.Single();
 			onlyFilterInDb.Team.Id.Value.Should().Be.EqualTo(team.Id.Value);
 		}
 
 		[Test]
 		public void ShouldInsertName()
 		{
-			var model = new AgentGroupModel();
+			var model = new PlanningGroupModel();
 			var expectedName = RandomName.Make();
 			model.Name = expectedName;
 
 			Target.Persist(model);
-			var inDb = AgentGroupRepository.LoadAll().Single();
+			var inDb = PlanningGroupRepository.LoadAll().Single();
 			inDb.Name.Should().Be.EqualTo(expectedName);
 		}
 
 		[Test]
-		public void ShouldRemoveAgentGroupAndRemoveDayOffRules()
+		public void ShouldRemovePlanningGroupAndRemoveDayOffRules()
 		{
-			var existing = new AgentGroup()
+			var existing = new PlanningGroup()
 				.WithId();
-			AgentGroupRepository.Add(existing);
+			PlanningGroupRepository.Add(existing);
 
 			Target.Delete(existing.Id.GetValueOrDefault());
 
-			var inDb = AgentGroupRepository.Get(existing.Id.GetValueOrDefault());
+			var inDb = PlanningGroupRepository.Get(existing.Id.GetValueOrDefault());
 			inDb.Should().Not.Be.Null();
 			((IDeleteTag)inDb).IsDeleted.Should().Be.True();
 
-			var dayOffRules = DayOffRulesRepository.LoadAllByAgentGroup(inDb);
+			var dayOffRules = DayOffRulesRepository.LoadAllByPlanningGroup(inDb);
 			dayOffRules.Should().Be.Empty();
 		}
 	}

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private  int _number;
 		private PlanningPeriodState _state;
 		private readonly ISet<IJobResult> _jobResults;
-		private readonly IAgentGroup _agentGroup;
+		private readonly IPlanningGroup _planningGroup;
 
 		protected PlanningPeriod()
 		{
@@ -27,19 +27,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_jobResults = new HashSet<IJobResult>();
 		}
 
-		protected PlanningPeriod(IAgentGroup agentGroup):this()
+		protected PlanningPeriod(IPlanningGroup planningGroup):this()
 		{
-			_agentGroup = agentGroup;
+			_planningGroup = planningGroup;
 		}
 
-		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions, IAgentGroup agentGroup) : this()
+		public PlanningPeriod(IPlanningPeriodSuggestions planningPeriodSuggestions, IPlanningGroup planningGroup) : this()
 		{
 			var suggestedPlanningPeriod = planningPeriodSuggestions.Default();
 
 			_periodType = suggestedPlanningPeriod.PeriodType;
 			_number = suggestedPlanningPeriod.Number;
 			_range = suggestedPlanningPeriod.Range;
-			_agentGroup = agentGroup;
+			_planningGroup = planningGroup;
 		}
 
 
@@ -47,18 +47,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 		}
 
-		public PlanningPeriod(DateOnlyPeriod range, IAgentGroup agentGroup=null) : this()
+		public PlanningPeriod(DateOnlyPeriod range, IPlanningGroup planningGroup=null) : this()
 		{
 			_range = range;
 			updateChangeFromDayType(_range);
-			_agentGroup = agentGroup;
+			_planningGroup = planningGroup;
 		}
 
 		public virtual DateOnlyPeriod Range => _range;
 
 		public virtual PlanningPeriodState State => _state;
 
-		public virtual IAgentGroup AgentGroup => _agentGroup;
+		public virtual IPlanningGroup PlanningGroup => _planningGroup;
 
 		public virtual ISet<IJobResult> JobResults => _jobResults;
 
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_state = PlanningPeriodState.Published;
 		}
 
-		public virtual IPlanningPeriod NextPlanningPeriod(IAgentGroup agentGroup)
+		public virtual IPlanningPeriod NextPlanningPeriod(IPlanningGroup planningGroup)
 		{
 			var nextPlanningPeriodStartDate = _range.EndDate.AddDays(1);
 			var range = calculator.PeriodForType(nextPlanningPeriodStartDate, new SchedulePeriodForRangeCalculation
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				PeriodType = _periodType,
 				StartDate = nextPlanningPeriodStartDate
 			});
-			return new PlanningPeriod(agentGroup) { _range = range, _number = _number, _periodType = _periodType };
+			return new PlanningPeriod(planningGroup) { _range = range, _number = _number, _periodType = _periodType };
 		}
 
 		public virtual IJobResult GetLastSchedulingJob()

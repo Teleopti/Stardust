@@ -56,10 +56,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return new PlanningPeriodSuggestions(now, top10.ToList());
 		}
 
-		public IEnumerable<IPlanningPeriod> LoadForAgentGroup(IAgentGroup agentGroup)
+		public IEnumerable<IPlanningPeriod> LoadForPlanningGroup(IPlanningGroup planningGroup)
 		{
 			return Session.CreateCriteria(typeof(PlanningPeriod))
-				.Add(Restrictions.Eq("AgentGroup", agentGroup))
+				.Add(Restrictions.Eq("PlanningGroup", planningGroup))
 				.List<IPlanningPeriod>();
 		}
 	}

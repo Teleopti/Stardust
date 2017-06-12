@@ -47,9 +47,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				PlanningPeriodId = planningPeriodId,
 				RunAsynchronously = runAsynchronously
 			};
-			if (planningPeriod.AgentGroup != null)
+			if (planningPeriod.PlanningGroup != null)
 			{
-				var people = _personRepository.FindPeopleInAgentGroup(planningPeriod.AgentGroup, planningPeriod.Range);
+				var people = _personRepository.FindPeopleInPlanningGroup(planningPeriod.PlanningGroup, planningPeriod.Range);
 				if (!people.Any()) return null;
 				intradayOptimizationCommand.AgentsToOptimize = people;
 			}

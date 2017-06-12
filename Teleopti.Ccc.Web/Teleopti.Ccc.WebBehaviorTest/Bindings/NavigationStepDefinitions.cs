@@ -770,26 +770,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GoToWfmImportSchedule();
 		}
 
-		[When(@"I am viewing create agent group page")]
-		public void WhenIAmViewingCreateAgentGroupPage()
+		[When(@"I am viewing create planning group page")]
+		public void WhenIAmViewingCreatePlanningGroupPage()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GoToWfmCreateAgentGroup();
+			Navigation.GoToWfmCreatePlanningGroup();
 		}
 
-		[When(@"I am viewing agent group list page")]
-		public void WhenIAmViewingAgentGroupListPage()
+		[When(@"I am viewing planning group list page")]
+		public void WhenIAmViewingPlanningGroupListPage()
 		{
 			TestControllerMethods.Logon();
-			Navigation.GoToWfmListAgentGroups();
+			Navigation.GoToWfmListPlanningGroups();
 		}
 
-		[When(@"I view planning periods for agent group '(.*)'")]
-		public void WhenIViewPlanningPeriodsForAgentGroup(string agentGroupName)
+		[When(@"I view planning periods for planning group '(.*)'")]
+		public void WhenIViewPlanningPeriodsForPlanningGroup(string planningGroupName)
 		{
 			TestControllerMethods.Logon();
-			var agentGroupConfigurable = DataMaker.Data().UserDatasOfType<AgentGroupConfigurable>().First();
-			Navigation.GoToPlanningPeriodListForAgentGroup(agentGroupConfigurable.AgentGroup.Id.Value);
+			var planningGroupConfigurable = DataMaker.Data().UserDatasOfType<PlanningGroupConfigurable>().First();
+			Navigation.GoToPlanningPeriodListForPlanningGroup(planningGroupConfigurable.PlanningGroup.Id.GetValueOrDefault());
 		}
 	}
 }

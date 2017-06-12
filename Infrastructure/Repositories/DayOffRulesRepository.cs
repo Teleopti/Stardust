@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public override void Add(DayOffRules root)
 		{
-			if (root.Default && !root.Id.HasValue && root.AgentGroup == null)
+			if (root.Default && !root.Id.HasValue && root.PlanningGroup == null)
 			{
 				lock (addLocker)
 				{
@@ -45,15 +45,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return Session.GetNamedQuery("loadGlobalDefault").UniqueResult<DayOffRules>();
 		}
 
-		public IList<DayOffRules> LoadAllByAgentGroup(IAgentGroup agentGroup)
+		public IList<DayOffRules> LoadAllByPlanningGroup(IPlanningGroup planningGroup)
 		{
 			return Session.CreateCriteria(typeof(DayOffRules), "dayOffRules")
-				.Add(Restrictions.Eq("dayOffRules.AgentGroup", agentGroup))
+				.Add(Restrictions.Eq("dayOffRules.PlanningGroup", planningGroup))
 				 .SetResultTransformer(Transformers.DistinctRootEntity)
 				 .List<DayOffRules>();
 		}
 
-		public IList<DayOffRules> LoadAllWithoutAgentGroup()
+		public IList<DayOffRules> LoadAllWithoutPlanningGroup()
 		{
 			if (Default() == null)
 				lock (addLocker)
@@ -62,14 +62,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Session.Flush();
 				}
 			return Session.CreateCriteria(typeof(DayOffRules), "dayOffRules")
-				.Add(Restrictions.IsNull("dayOffRules.AgentGroup"))
+				.Add(Restrictions.IsNull("dayOffRules.PlanningGroup"))
 				 .SetResultTransformer(Transformers.DistinctRootEntity)
 				 .List<DayOffRules>();
 		}
 
-		public void RemoveForAgentGroup(IAgentGroup agentGroup)
+		public void RemoveForPlanningGroup(IPlanningGroup planningGroup)
 		{
-			var dayOffRules = LoadAllByAgentGroup(agentGroup);
+			var dayOffRules = LoadAllByPlanningGroup(planningGroup);
 			foreach (var dayOffRule in dayOffRules)
 				base.Remove(dayOffRule);
 		}

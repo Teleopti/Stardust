@@ -124,12 +124,12 @@
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider.cs" />
     <Compile Include="AbsenceWaitlisting\ArrangeRequestsByProcessOrder.cs" />
     <Compile Include="AbsenceWaitlisting\QueuedAbsenceRequest.cs" />
-    <Compile Include="AgentInfo\AgentGroupStaffLoader.cs" />
+    <Compile Include="AgentInfo\PlanningGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\CalculatedPossibilityModel.cs" />
     <Compile Include="AgentInfo\EnumerablePersonExtensions.cs" />
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriods.cs" />
     <Compile Include="AgentInfo\FixedStaffLoader.cs" />
-    <Compile Include="AgentInfo\IAgentGroupStaffLoader.cs" />
+    <Compile Include="AgentInfo\IPlanningGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
     <Compile Include="AgentInfo\ScheduleStaffingPossibilityConsts.cs" />
     <Compile Include="AgentInfo\SkillStaffingData.cs" />
@@ -1019,7 +1019,7 @@
     <Compile Include="InterfaceLegacy\Domain\WorkTimeDirective.cs" />
     <Compile Include="InterfaceLegacy\Domain\WorkTimeLimitation.cs" />
     <Compile Include="InterfaceLegacy\Domain\WorkTimeSource.cs" />
-    <Compile Include="InterfaceLegacy\IAgentGroup.cs" />
+    <Compile Include="InterfaceLegacy\IPlanningGroup.cs" />
     <Compile Include="InterfaceLegacy\IDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="InterfaceLegacy\IFilter.cs" />
     <Compile Include="InterfaceLegacy\IJsonDeserializer.cs" />
@@ -1102,7 +1102,7 @@
     <Compile Include="Cascading\TrackShoveling\TrackShoveling.cs" />
     <Compile Include="Cascading\TrackShoveling\TrackShovelingOneSkill.cs" />
     <Compile Include="Optimization\CorrectAlteredBetween.cs" />
-    <Compile Include="Optimization\IAgentGroupModelPersister.cs" />
+    <Compile Include="Optimization\IPlanningGroupModelPersister.cs" />
     <Compile Include="Cascading\TrackShoveling\RemovedResource.cs" />
     <Compile Include="Common\ClearPersonRelatedInformation.cs" />
     <Compile Include="Common\FavoriteSearch.cs" />
@@ -1363,13 +1363,13 @@
     <Compile Include="Optimization\OptimizationLimitsForAgentFactory.cs" />
     <Compile Include="Optimization\OptimizerActivitiesPreferencesFactory.cs" />
     <Compile Include="Optimization\IIntradayOptimizeOneday.cs" />
-    <Compile Include="Optimization\AgentGroup.cs" />
-    <Compile Include="Optimization\AgentGroupMapper.cs" />
-    <Compile Include="Optimization\AgentGroupModel.cs" />
-    <Compile Include="Optimization\AgentGroupModelPersister.cs" />
-    <Compile Include="Optimization\FetchAgentGroupModel.cs" />
-    <Compile Include="Optimization\IAgentGroupRepository.cs" />
-    <Compile Include="Optimization\IFetchAgentGroupModel.cs" />
+    <Compile Include="Optimization\PlanningGroup.cs" />
+    <Compile Include="Optimization\PlanningGroupMapper.cs" />
+    <Compile Include="Optimization\PlanningGroupModel.cs" />
+    <Compile Include="Optimization\PlanningGroupModelPersister.cs" />
+    <Compile Include="Optimization\FetchPlanningGroupModel.cs" />
+    <Compile Include="Optimization\IPlanningGroupRepository.cs" />
+    <Compile Include="Optimization\IFetchPlanningGroupModel.cs" />
     <Compile Include="Optimization\SetMainShiftOptimizeActivitySpecificationForTeamBlock.cs" />
     <Compile Include="Optimization\TeamBlock\RemoveScheduleDayProsBasedOnShiftCategoryLimitation.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRetryRemoveShiftCategoryBackToLegalService.cs" />
@@ -3928,7 +3928,7 @@
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />
-    <EmbeddedResource Include="Optimization\AgentGroup.hbm.xml">
+    <EmbeddedResource Include="Optimization\PlanningGroup.hbm.xml">
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Intraday\SkillInIntraday.hbm.xml" />

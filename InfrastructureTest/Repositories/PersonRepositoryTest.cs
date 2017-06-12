@@ -1791,8 +1791,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(testList[0].OptionalColumnValueCollection.Count, Is.EqualTo(1));
 		}
 
-		[Test, TestCaseSource(nameof(agentGroupFilterTestCases))]
-		public void ShouldBeAbleToGetPeopleBasedOnAgentGroupFilter(AgentGroupTestCase testCase)
+		[Test, TestCaseSource(nameof(planningGroupFilterTestCases))]
+		public void ShouldBeAbleToGetPeopleBasedOnPlanningGroupFilter(PlanningGroupTestCase testCase)
 		{
 			var businessUnit = BusinessUnitFactory.CreateSimpleBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(businessUnit);
@@ -1871,7 +1871,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 			PersistAndRemoveFromUnitOfWork(per4);
 
-			var testData = new AgentGroupFilterTestData
+			var testData = new PlanningGroupFilterTestData
 			{
 				Person1 = per1,
 				Person2 = per2,
@@ -1886,14 +1886,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				SkillA = skillA,
 				SkillB = skillB
 			};
-			var agentGroup = testCase.CreateAgentGroup(new AgentGroup("Group"), testData);
-			PersistAndRemoveFromUnitOfWork(agentGroup);
-			var loadedAgentGroup = new AgentGroupRepository(new ThisUnitOfWork(UnitOfWork)).Get(agentGroup.Id.Value);
+			var planningGroup = testCase.CreatePlanningGroup(new PlanningGroup("Group"), testData);
+			PersistAndRemoveFromUnitOfWork(planningGroup);
+			var loadedPlanningGroup = new PlanningGroupRepository(new ThisUnitOfWork(UnitOfWork)).Get(planningGroup.Id.Value);
 
 			//load
 			var dateOnlyPeriod = new DateOnlyPeriod(2017, 1, 1, 2017, 1, 6);
-			var testList = target.FindPeopleInAgentGroup(loadedAgentGroup, dateOnlyPeriod);
-			var testCount = target.CountPeopleInAgentGroup(loadedAgentGroup, dateOnlyPeriod);
+			var testList = target.FindPeopleInPlanningGroup(loadedPlanningGroup, dateOnlyPeriod);
+			var testCount = target.CountPeopleInPlanningGroup(loadedPlanningGroup, dateOnlyPeriod);
 
 			//verify
 			var expectedPeople = testCase.ExpectedPeople(testData);
@@ -1906,16 +1906,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 		}
 
-		public class AgentGroupTestCase
+		public class PlanningGroupTestCase
 		{
 			private readonly string _name;
 
-			public AgentGroupTestCase(string name)
+			public PlanningGroupTestCase(string name)
 			{
 				_name = name;
 			}
-			public Func<IAgentGroup, AgentGroupFilterTestData, IAgentGroup> CreateAgentGroup { get; set; }
-			public Func<AgentGroupFilterTestData, IList<IPerson>> ExpectedPeople { get; set; }
+			public Func<IPlanningGroup, PlanningGroupFilterTestData, IPlanningGroup> CreatePlanningGroup { get; set; }
+			public Func<PlanningGroupFilterTestData, IList<IPerson>> ExpectedPeople { get; set; }
 
 			public override string ToString()
 			{
@@ -1923,7 +1923,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			}
 		}
 
-		public class AgentGroupFilterTestData
+		public class PlanningGroupFilterTestData
 		{
 			public ITeam TeamA { get; set; }
 			public ITeam TeamB { get; set; }
@@ -1939,47 +1939,47 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			public ISkill SkillB { get; set; }
 		}
 
-		private static readonly AgentGroupTestCase[] agentGroupFilterTestCases =
+		private static readonly PlanningGroupTestCase[] planningGroupFilterTestCases =
 		{
-			new AgentGroupTestCase("Team and Site filters should return people from both team and site")
+			new PlanningGroupTestCase("Team and Site filters should return people from both team and site")
 			{
-				CreateAgentGroup = (group, data) => group
+				CreatePlanningGroup = (group, data) => group
 					.AddFilter(new TeamFilter(data.TeamB))
 					.AddFilter(new SiteFilter(data.SiteA)),
 				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person2, data.Person3, data.Person4}
 			},
-			new AgentGroupTestCase("Team filter should return people from team.")
+			new PlanningGroupTestCase("Team filter should return people from team.")
 			{
-				CreateAgentGroup = (group, data) => group.AddFilter(new TeamFilter(data.TeamB)),
+				CreatePlanningGroup = (group, data) => group.AddFilter(new TeamFilter(data.TeamB)),
 				ExpectedPeople = data => new List<IPerson> {data.Person2, data.Person4}
 			},
-			new AgentGroupTestCase("Site filter should return people from site.")
+			new PlanningGroupTestCase("Site filter should return people from site.")
 			{
-				CreateAgentGroup = (group, data) => group.AddFilter(new SiteFilter(data.SiteA)),
+				CreatePlanningGroup = (group, data) => group.AddFilter(new SiteFilter(data.SiteA)),
 				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person3}
 			},
-			new AgentGroupTestCase("Contract filter should return people with contract.")
+			new PlanningGroupTestCase("Contract filter should return people with contract.")
 			{
-				CreateAgentGroup = (group, data) => group.AddFilter(new ContractFilter(data.ContractA)),
+				CreatePlanningGroup = (group, data) => group.AddFilter(new ContractFilter(data.ContractA)),
 				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person2}
 			},
-			new AgentGroupTestCase("Team and Contract filters should return people from team with contract.")
+			new PlanningGroupTestCase("Team and Contract filters should return people from team with contract.")
 			{
-				CreateAgentGroup = (group, data) => group
+				CreatePlanningGroup = (group, data) => group
 					.AddFilter(new ContractFilter(data.ContractA))
 					.AddFilter(new TeamFilter(data.TeamB)),
 				ExpectedPeople = data => new List<IPerson> {data.Person2}
 			},
-			new AgentGroupTestCase("Skill filters should return people from skills.")
+			new PlanningGroupTestCase("Skill filters should return people from skills.")
 			{
-				CreateAgentGroup = (group, data) => group
+				CreatePlanningGroup = (group, data) => group
 					.AddFilter(new SkillFilter(data.SkillA))
 					.AddFilter(new SkillFilter(data.SkillB)),
 				ExpectedPeople = data => new List<IPerson> {data.Person1, data.Person2, data.Person3}
 			},
-			new AgentGroupTestCase("Skill, Team and Contract filters should return people with all three.")
+			new PlanningGroupTestCase("Skill, Team and Contract filters should return people with all three.")
 			{
-				CreateAgentGroup = (group, data) => group
+				CreatePlanningGroup = (group, data) => group
 					.AddFilter(new SkillFilter(data.SkillA))
 					.AddFilter(new TeamFilter(data.TeamA))
 					.AddFilter(new ContractFilter(data.ContractA)),

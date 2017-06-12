@@ -4,7 +4,7 @@
                    namespace="Teleopti.Ccc.Domain.Optimization"
                    default-access="field.camelcase-underscore">
 
-	<class name="AgentGroup">
+	<class name="PlanningGroup">
 		<id name="Id"
             type="guid"
 		  			access="nosetter.camelcase-underscore"
@@ -23,8 +23,8 @@
     <property name="Name" access="property"/>
 
 
-    <set name="Filters" table="AgentGroupFilters" cascade="all-delete-orphan">
-      <key column="AgentGroup" />
+    <set name="Filters" table="PlanningGroupFilters" cascade="all-delete-orphan">
+      <key column="PlanningGroup" />
       <many-to-any id-type="Guid" meta-type="System.String">
         <meta-value value="Contract" class="Teleopti.Ccc.Domain.Optimization.Filters.ContractFilter" />
         <meta-value value="Team" class="Teleopti.Ccc.Domain.Optimization.Filters.TeamFilter" />

@@ -148,7 +148,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderTest.cs" />
-    <Compile Include="AgentInfo\AgentGroupStaffLoaderTest.cs" />
+    <Compile Include="AgentInfo\PlanningGroupStaffLoaderTest.cs" />
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriodsTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorWithSkillDaysTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
@@ -356,7 +356,7 @@
     <Compile Include="Logon\Permissions\AvailableTeamAuthorizationTest.cs" />
     <Compile Include="Logon\Permissions\AvailableTeamTest.cs" />
     <Compile Include="Logon\Permissions\AvailablePersonAuthorizationTest.cs" />
-    <Compile Include="Optimization\FetchAgentGroupModelTest.cs" />
+    <Compile Include="Optimization\FetchPlanningGroupModelTest.cs" />
     <Compile Include="Optimization\WebIntradayOptimizationStardustHandlerTest.cs" />
     <Compile Include="Reports\ReportNavigationModelTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest.cs" />
@@ -374,7 +374,7 @@
     <Compile Include="SchedulingScenarios\BusinessRules\MinWeeklyRestRuleTest.cs" />
     <Compile Include="SchedulingScenarios\CancelSchedulingCallback.cs" />
     <Compile Include="SchedulingScenarios\ContractWithMaximumTolerance.cs" />
-    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationAgentGroupTest.cs" />
+    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationPlanningGroupTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationFakeDecisionMakerTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationNoPeriodValueCalculatorTest.cs" />
@@ -382,11 +382,11 @@
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationResultTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationSameBitArrayTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationAgentGroupTest.cs" />
+    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationPlanningGroupTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandHandlerIncreaseIslandsAsyncTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationJobFromWebTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationReduceUnnecessaryCallsTest.cs" />
-    <Compile Include="Optimization\AgentGroupModelPersisterTest.cs" />
+    <Compile Include="Optimization\PlanningGroupModelPersisterTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationClassicTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationStandardDeviationTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayTest.cs" />

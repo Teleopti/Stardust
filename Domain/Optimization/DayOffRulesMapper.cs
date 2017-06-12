@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				Default = dayOffRules.Default,
 				Name = dayOffRules.Name,
 				Filters = filterModels,
-				AgentGroupId = dayOffRules.AgentGroup?.Id
+				PlanningGroupId = dayOffRules.PlanningGroup?.Id
 			};
 		}
 	}

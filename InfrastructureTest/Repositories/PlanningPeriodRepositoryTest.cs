@@ -60,16 +60,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldGetPlanningPeriodsForAgentGroup()
+		public void ShouldGetPlanningPeriodsForPlanningGroup()
 		{
 			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
-			var agentGroup = new AgentGroup("test agent group");
-			PersistAndRemoveFromUnitOfWork(agentGroup);
-			PersistAndRemoveFromUnitOfWork(new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()), agentGroup));
+			var planningGroup = new PlanningGroup("test planning group");
+			PersistAndRemoveFromUnitOfWork(planningGroup);
+			PersistAndRemoveFromUnitOfWork(new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()), planningGroup));
 
-			var planningPeriods = repository.LoadForAgentGroup(agentGroup);
+			var planningPeriods = repository.LoadForPlanningGroup(planningGroup);
 
-			planningPeriods.SingleOrDefault().AgentGroup.Name.Should().Be.EqualTo(agentGroup.Name);
+			planningPeriods.SingleOrDefault().PlanningGroup.Name.Should().Be.EqualTo(planningGroup.Name);
 		}
 
 		[Test]

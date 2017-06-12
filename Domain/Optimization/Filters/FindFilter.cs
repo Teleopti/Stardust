@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Optimization.Filters
 				.Select(skill => new FindFilterResult(skill));
 		}
 
-		public IEnumerable<FindFilterResult> SearchForAgentGroup(string searchString, int maxHits)
+		public IEnumerable<FindFilterResult> SearchForPlanningGroup(string searchString, int maxHits)
 		{
 			var results = new List<FindFilterResult>();
 			if (searchString.IsEmpty())

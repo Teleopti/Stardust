@@ -253,13 +253,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				p => !p.IsAgent(date) && p.TerminalDate.GetValueOrDefault(DateOnly.MaxValue) >= date).ToArray();
 		}
 
-		public IList<IPerson> FindPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
+		public IList<IPerson> FindPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			var people = _storage.LoadAll<IPerson>().ToList();
 			var result = new List<IPerson>();
 			foreach (var person in people)
 			{
-				if(agentGroup.Filters.Any(x => x.IsValidFor(person, period.StartDate)))
+				if(planningGroup.Filters.Any(x => x.IsValidFor(person, period.StartDate)))
 					result.Add(person);
 			}
 			return result;
@@ -270,14 +270,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_storage.Remove(person);
 		}
 
-		public int CountPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
+		public int CountPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
 		{
-			return FindPeopleInAgentGroup(agentGroup, period).Count;
+			return FindPeopleInPlanningGroup(planningGroup, period).Count;
 		}
 
-		public IList<Guid> FindPeopleIdsInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
+		public IList<Guid> FindPeopleIdsInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
 		{
-			return FindPeopleInAgentGroup(agentGroup, period).Select(x => x.Id.GetValueOrDefault()).ToList();
+			return FindPeopleInPlanningGroup(planningGroup, period).Select(x => x.Id.GetValueOrDefault()).ToList();
 		}
 
 		public void ReversedOrder()

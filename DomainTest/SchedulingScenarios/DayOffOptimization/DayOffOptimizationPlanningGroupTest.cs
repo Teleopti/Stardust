@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[DomainTest]
 	[TestFixture(true)]
 	[TestFixture(false)]
-	public class DayOffOptimizationAgentGroupTest : DayOffOptimizationScenario
+	public class DayOffOptimizationPlanningGroupTest : DayOffOptimizationScenario
 	{
 		public IScheduleOptimization Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -31,15 +31,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
-		public void ShouldNotMoveDayOffForAgentNotPartOfAgentGroup()
+		public void ShouldNotMoveDayOffForAgentNotPartOfPlanningGroup()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
 			var activity = ActivityRepository.Has("_");
 			var skill = SkillRepository.Has("skill", activity);
 			var validTeam = new Team();
-			var agentGroup = new AgentGroup("_");
-			agentGroup.AddFilter(new TeamFilter(validTeam));
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, agentGroup);
+			var planningGroup = new PlanningGroup("_");
+			planningGroup.AddFilter(new TeamFilter(validTeam));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, planningGroup);
 			var scenario = ScenarioRepository.Has("some name");
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1).NumberOfDaysOf(1);
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.DayOff().Should().Not.Be.Null();
 		}
 
-		public DayOffOptimizationAgentGroupTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
+		public DayOffOptimizationPlanningGroupTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
 		{
 		}
 	}

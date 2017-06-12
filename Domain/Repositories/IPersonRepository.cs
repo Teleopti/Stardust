@@ -34,11 +34,11 @@ namespace Teleopti.Ccc.Domain.Repositories
 		ICollection<IPerson> FindPeopleInOrganizationQuiteLight(DateOnlyPeriod period);
 
 		IList<IPerson> FindUsers(DateOnly date);
-		IList<IPerson> FindPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period);
+		IList<IPerson> FindPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);
 
 		void HardRemove(IPerson person);
 
-		int CountPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period);
-		IList<Guid> FindPeopleIdsInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period);
+		int CountPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);
+		IList<Guid> FindPeopleIdsInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period);
 	}
 }

@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Has(start, numberOfWeeks, null);
 		}
 
-		public IPlanningPeriod Has(DateOnly start, int number, SchedulePeriodType type, IAgentGroup agentGroup)
+		public IPlanningPeriod Has(DateOnly start, int number, SchedulePeriodType type, IPlanningGroup planningGroup)
 		{
 			DateTime now;
 			switch (type)
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 						Number = number,
 						PeriodType = type
 					}
-				}), agentGroup);
+				}), planningGroup);
 			planningPeriod.SetId(Guid.NewGuid());
 			_planningPeriods.Add(planningPeriod);
 			return planningPeriod;
@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			
 		}
 
-		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks, IAgentGroup agentGroup)
+		public IPlanningPeriod Has(DateOnly start, int numberOfWeeks, IPlanningGroup planningGroup)
 		{
-			return Has(start, numberOfWeeks, SchedulePeriodType.Week, agentGroup);
+			return Has(start, numberOfWeeks, SchedulePeriodType.Week, planningGroup);
 		}
 
 		public void Remove(IPlanningPeriod entity)
@@ -109,9 +109,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _planningPeriodSuggestions;
 		}
 
-		public IEnumerable<IPlanningPeriod> LoadForAgentGroup(IAgentGroup agentGroup)
+		public IEnumerable<IPlanningPeriod> LoadForPlanningGroup(IPlanningGroup planningGroup)
 		{
-			return _planningPeriods.Where(x => x.AgentGroup?.Id == agentGroup.Id).ToList();
+			return _planningPeriods.Where(x => x.PlanningGroup?.Id == planningGroup.Id).ToList();
 		}
 
 		public void CustomData(PlanningPeriod planningPeriod, PlanningPeriodSuggestions planningPeriodSuggestions)

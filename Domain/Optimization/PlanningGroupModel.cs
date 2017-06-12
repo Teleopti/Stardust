@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class AgentGroupModel
+	public class PlanningGroupModel
 	{
-		public AgentGroupModel()
+		public PlanningGroupModel()
 		{
 			Filters = new List<FilterModel>();
 		}

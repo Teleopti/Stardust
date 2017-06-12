@@ -91,9 +91,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider;
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			var agentGroup = planningPeriod.AgentGroup;
+			var planningGroup = planningPeriod.PlanningGroup;
 			IEnumerable<IPerson> agents;
-			if (agentGroup == null)
+			if (planningGroup == null)
 			{
 				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create();
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, null, period);
@@ -101,8 +101,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			else
 			{
-				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create(agentGroup);
-				var people = _personRepository.FindPeopleInAgentGroup(agentGroup, period);
+				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create(planningGroup);
+				var people = _personRepository.FindPeopleInPlanningGroup(planningGroup, period);
 				var skills = new HashSet<Guid>(people
 					.SelectMany(person => person.PersonPeriods(period))
 					.SelectMany(pp => pp.PersonSkillCollection)

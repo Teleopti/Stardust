@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 	{
 		public ClearPlanningPeriodSchedulingCommandHandler Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeAgentGroupRepository AgentGroupRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
@@ -50,9 +50,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var skill = SkillRepository.Has("skill", activity);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team,
 				new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
-			var agentGroup = new AgentGroup("_").WithId().AddFilter(new TeamFilter(team));
-			AgentGroupRepository.Has(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
+			var planningGroup = new PlanningGroup("_").WithId().AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, planningGroup);
 
 			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 
@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var skill = SkillRepository.Has("skill", activity);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team,
 				new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
-			var agentGroup = new AgentGroup("_").WithId().AddFilter(new TeamFilter(team));
-			AgentGroupRepository.Has(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
+			var planningGroup = new PlanningGroup("_").WithId().AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, planningGroup);
 
 			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, endDateOutsidePlanningPeriod, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		}
 
 		[Test]
-		public void ShouldNotClearAssignmentForPersonOutsideAgentGroup()
+		public void ShouldNotClearAssignmentForPersonOutsidePlanningGroup()
 		{
 			var startDate = new DateOnly(2017, 05, 01);
 			var endDate = new DateOnly(2017, 05, 07);
@@ -110,9 +110,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var skill = SkillRepository.Has("skill", activity);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team().WithId(),
 				new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
-			var agentGroup = new AgentGroup("_").WithId().AddFilter(new TeamFilter(team));
-			AgentGroupRepository.Has(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
+			var planningGroup = new PlanningGroup("_").WithId().AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, planningGroup);
 
 			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 
@@ -140,9 +140,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var skill = SkillRepository.Has("skill", activity);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team,
 				new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
-			var agentGroup = new AgentGroup("_").WithId().AddFilter(new TeamFilter(team));
-			AgentGroupRepository.Has(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
+			var planningGroup = new PlanningGroup("_").WithId().AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, planningGroup);
 
 			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 			PersonAbsenceRepository.Has(new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(new DateTime(2017, 05, 01, 8, 0, 0, DateTimeKind.Utc), new DateTime(2017, 05, 01, 16, 0, 0, DateTimeKind.Utc)))));
@@ -174,9 +174,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var skill = SkillRepository.Has("skill", activity);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team,
 				new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
-			var agentGroup = new AgentGroup("_").WithId().AddFilter(new TeamFilter(team));
-			AgentGroupRepository.Has(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
+			var planningGroup = new PlanningGroup("_").WithId().AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, planningGroup);
 
 			var assignment = new PersonAssignment(agent, scenario, startDate);
 			assignment.AddActivity(activity, new TimePeriod(9, 16));
@@ -213,9 +213,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var skill = SkillRepository.Has("skill", activity);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team,
 				new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
-			var agentGroup = new AgentGroup("_").WithId().AddFilter(new TeamFilter(team));
-			AgentGroupRepository.Has(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
+			var planningGroup = new PlanningGroup("_").WithId().AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, planningGroup);
 
 			var assignment = new PersonAssignment(agent, scenario, startDate);
 			assignment.SetDayOff(dayOffTemplate);
@@ -250,9 +250,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 			var skill = SkillRepository.Has("skill", activity);
 			var agent = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), team,
 				new SchedulePeriod(startDate, SchedulePeriodType.Week, 1), ruleSet, skill);
-			var agentGroup = new AgentGroup("_").WithId().AddFilter(new TeamFilter(team));
-			AgentGroupRepository.Has(agentGroup);
-			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, agentGroup);
+			var planningGroup = new PlanningGroup("_").WithId().AddFilter(new TeamFilter(team));
+			PlanningGroupRepository.Has(planningGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(startDate, 1, SchedulePeriodType.Week, planningGroup);
 
 			AssignmentRepository.Has(agent, scenario, activity, shiftCategory, startDate, new TimePeriod(8, 16), ScheduleSource.WebScheduling);
 			MeetingRepository.Has(new Meeting(agent, new []{new MeetingPerson(agent, false) }, "_", "_", "_", activity, scenario)

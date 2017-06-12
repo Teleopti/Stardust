@@ -679,17 +679,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						 .List<IPerson>();
 		}
 
-		public IList<IPerson> FindPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
+		public IList<IPerson> FindPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
 		{
-			return FindPeople(FindPeopleIdsInAgentGroup(agentGroup, period)).ToList();
+			return FindPeople(FindPeopleIdsInPlanningGroup(planningGroup, period)).ToList();
 		}
 
-		public int CountPeopleInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
+		public int CountPeopleInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
 		{
-			return FindPeopleIdsInAgentGroup(agentGroup, period).Count;
+			return FindPeopleIdsInPlanningGroup(planningGroup, period).Count;
 		}
 
-		public IList<Guid> FindPeopleIdsInAgentGroup(IAgentGroup agentGroup, DateOnlyPeriod period)
+		public IList<Guid> FindPeopleIdsInPlanningGroup(IPlanningGroup planningGroup, DateOnlyPeriod period)
 		{
 			var criteria = Session.CreateCriteria(typeof(Person), "per")
 				.SetFetchMode("PersonPeriodCollection", FetchMode.Join)
@@ -699,7 +699,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Restrictions.Ge("TerminalDate", period.StartDate)
 				));
 			var filterCriteria = Restrictions.Conjunction();
-			foreach (var group in agentGroup.Filters.GroupBy(x => x.FilterType))
+			foreach (var group in planningGroup.Filters.GroupBy(x => x.FilterType))
 			{
 				var groupings = Restrictions.Disjunction();
 				foreach (var filter in group)

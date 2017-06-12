@@ -108,14 +108,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 
 
 		[Test]
-		public void ShouldGiveEmptyResultForAgentGroup()
+		public void ShouldGiveEmptyResultForPlanningGroup()
 		{
-			Target.SearchForAgentGroup(RandomName.Make(), 10)
+			Target.SearchForPlanningGroup(RandomName.Make(), 10)
 				.Should().Be.Empty();
 		}
 
 		[Test]
-		public void ShouldFindContractForAgentGroup()
+		public void ShouldFindContractForPlanningGroup()
 		{
 			var searchString = RandomName.Make();
 			var expectedGuid = Guid.NewGuid();
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var contract = new Contract(RandomName.Make() + searchString + RandomName.Make()).WithId(expectedGuid);
 			ContractRepository.Add(contract);
 
-			var result = Target.SearchForAgentGroup(searchString, 10).Single();
+			var result = Target.SearchForPlanningGroup(searchString, 10).Single();
 
 			result.Name.Should().Contain(searchString);
 			result.Id.Should().Be.EqualTo(expectedGuid);
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 		}
 
 		[Test]
-		public void ShouldFindTeamForAgentGroup()
+		public void ShouldFindTeamForPlanningGroup()
 		{
 			var searchString = RandomName.Make();
 			var expectedGuid = Guid.NewGuid();
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			team.Site = new Site(RandomName.Make());
 			TeamRepository.Add(team);
 
-			var result = Target.SearchForAgentGroup(searchString, 10).Single();
+			var result = Target.SearchForPlanningGroup(searchString, 10).Single();
 
 			result.Name.Should().Contain(searchString);
 			result.Id.Should().Be.EqualTo(expectedGuid);
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 		}
 
 		[Test]
-		public void ShouldFindSiteForAgentGroup()
+		public void ShouldFindSiteForPlanningGroup()
 		{
 			var searchString = RandomName.Make();
 			var expectedGuid = Guid.NewGuid();
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var site = new Site(RandomName.Make() + searchString + RandomName.Make()).WithId(expectedGuid);
 			SiteRepository.Add(site);
 
-			var result = Target.SearchForAgentGroup(searchString, 10).Single();
+			var result = Target.SearchForPlanningGroup(searchString, 10).Single();
 
 			result.Name.Should().Contain(searchString);
 			result.Id.Should().Be.EqualTo(expectedGuid);
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 		}
 
 		[Test]
-		public void ShouldFindSkillForAgentGroup()
+		public void ShouldFindSkillForPlanningGroup()
 		{
 			var searchString = RandomName.Make();
 			var expectedGuid = Guid.NewGuid();
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			var skill = new Skill(RandomName.Make()+ searchString + RandomName.Make()).WithId(expectedGuid);
 			SkillRepository.Add(skill);
 
-			var result = Target.SearchForAgentGroup(searchString, 10).Single();
+			var result = Target.SearchForPlanningGroup(searchString, 10).Single();
 
 			result.Name.Should().Contain(searchString);
 			result.Id.Should().Be.EqualTo(expectedGuid);
@@ -180,17 +180,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 		}
 
 		[Test]
-		public void EmptySearchStringShouldGiveNoResultForAgentGroup()
+		public void EmptySearchStringShouldGiveNoResultForPlanningGroup()
 		{
 			var site = new Site(RandomName.Make()).WithId();
 			SiteRepository.Add(site);
 
-			Target.SearchForAgentGroup(string.Empty, 10)
+			Target.SearchForPlanningGroup(string.Empty, 10)
 				.Should().Be.Empty();
 		}
 
 		[Test]
-		public void ShouldOnlyFetchMaxHitsForAgentGroup()
+		public void ShouldOnlyFetchMaxHitsForPlanningGroup()
 		{
 			const int maxHits = 3;
 			var name = RandomName.Make();
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.Filter
 			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
 			ContractRepository.Add(new Contract(name + RandomName.Make()).WithId());
 
-			Target.SearchForAgentGroup(name, maxHits).Count()
+			Target.SearchForPlanningGroup(name, maxHits).Count()
 				.Should().Be.EqualTo(maxHits);
 		}
 	}

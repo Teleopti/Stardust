@@ -30,10 +30,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeAgentGroupRepository AgentGroupRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[Test]
-		public void ShouldIncludeAgentsInOtherAgentGroupsWhenCalculatingStaffing()
+		public void ShouldIncludeAgentsInOtherPlanningGroupsWhenCalculatingStaffing()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon
 			var activity = ActivityRepository.Has("_");
@@ -49,9 +49,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agent = PersonRepository.Has(filterContract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
 			var agentOutSideGroup = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill, irrelevantSkill);
 
-			var agentGroup = new AgentGroup("_").AddFilter(new ContractFilter(filterContract));
-			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, SchedulePeriodType.Day, agentGroup);
-			AgentGroupRepository.Has(agentGroup);
+			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1, SchedulePeriodType.Day, planningGroup);
+			PlanningGroupRepository.Has(planningGroup);
 
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2));
 			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay), new TimePeriod(8, 0, 16, 0));

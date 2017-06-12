@@ -20,6 +20,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool Default { get; set; }
 		public IList<FilterModel> Filters { get; set; }
 		public string Name { get; set; }
-		public Guid? AgentGroupId { get; set; }
+		public Guid? PlanningGroupId { get; set; }
 	}
 }

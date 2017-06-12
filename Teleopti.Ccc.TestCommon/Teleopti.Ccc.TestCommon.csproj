@@ -194,7 +194,7 @@
     <Compile Include="FakeHttpServer.cs" />
     <Compile Include="FakeLicenseActivator.cs" />
     <Compile Include="FakeLicenseActivatorProvider.cs" />
-    <Compile Include="FakeRepositories\FakeAgentGroupRepository.cs" />
+    <Compile Include="FakeRepositories\FakePlanningGroupRepository.cs" />
     <Compile Include="FakeRepositories\FakeCryptoKeyInfoRepository.cs" />
     <Compile Include="FakeRepositories\FakeAgentBadgeTransactionRepository.cs" />
     <Compile Include="FakeRepositories\FakeAggregateRootInitializer.cs" />
@@ -448,7 +448,7 @@
     <Compile Include="FakeRepositories\FakeJobStartTimeRepository.cs" />
     <Compile Include="TestData\GlobalPrincipalState.cs" />
     <Compile Include="TestData\MeetingConfigurable.cs" />
-    <Compile Include="TestData\Setups\Configurable\AgentGroupConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\PlanningGroupConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ForecastConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ApplicationFunctionConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonConfigurable.cs" />

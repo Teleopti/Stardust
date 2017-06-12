@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_now = now;
 		}
 		
-		public IPlanningPeriod Current(IAgentGroup agentGroup)
+		public IPlanningPeriod Current(IPlanningGroup planningGroup)
 		{
-			var foundPlanningPeriods = agentGroup != null ? _planningPeriodRepository.LoadForAgentGroup(agentGroup) : _planningPeriodRepository.LoadAll();
+			var foundPlanningPeriods = planningGroup != null ? _planningPeriodRepository.LoadForPlanningGroup(planningGroup) : _planningPeriodRepository.LoadAll();
 			var result =
 				foundPlanningPeriods.Where(x => x.Range.StartDate > _now.ServerDate_DontUse())
 					.OrderBy(y => y.Range.StartDate)
@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (planningPeriodNotFound(result))
 			{
 				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now);
-				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion, agentGroup);
+				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion, planningGroup);
 				_planningPeriodRepository.Add(planningPeriod);
 				return planningPeriod;
 			}
 			return result;
 		}
 
-		public IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, IAgentGroup agentGroup)
+		public IPlanningPeriod Next(SchedulePeriodForRangeCalculation schedulePeriodForRangeCalculation, IPlanningGroup planningGroup)
 		{
 			var foundPlanningPeriods = _planningPeriodRepository.LoadAll();
 			var current =
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				//refactor
 				var planningPeriodSuggestion = _planningPeriodRepository.Suggestions(_now);
-				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion, agentGroup);
+				var planningPeriod = new PlanningPeriod(planningPeriodSuggestion, planningGroup);
 				planningPeriod.ChangeRange(schedulePeriodForRangeCalculation);
 				_planningPeriodRepository.Add(planningPeriod);
 				return planningPeriod;

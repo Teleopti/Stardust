@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.TestData.Core;
@@ -14,12 +13,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 {
 	public class PlanningPeriodConfigurable : IDataSetup
 	{
-
 		public PlanningPeriod Period;
 		
 		public DateTime Date { get; set; }
 
-		public string AgentGroupName { get; set; }
+		public string PlanningGroupName { get; set; }
 		
 		public void Apply (ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -32,19 +30,16 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				Number = 1,
 				Priority = 1
 			};
-			IAgentGroup agentGroup = null;
-			if (AgentGroupName != null)
-				agentGroup = new AgentGroupRepository(currentUnitOfWork).LoadAll().FirstOrDefault(a => a.Name == AgentGroupName);
+			IPlanningGroup planningGroup = null;
+			if (PlanningGroupName != null)
+				planningGroup = new PlanningGroupRepository(currentUnitOfWork).LoadAll().FirstOrDefault(a => a.Name == PlanningGroupName);
 			
 			var planningPeriodSuggestions = new PlanningPeriodSuggestions (new MutableNow (Date),new[] {period});
 			
-			Period = new PlanningPeriod (planningPeriodSuggestions, agentGroup);
+			Period = new PlanningPeriod (planningPeriodSuggestions, planningGroup);
 			
 
 			new PlanningPeriodRepository(currentUnitOfWork).Add(Period);
 		}
-
-
-
 	}
 }

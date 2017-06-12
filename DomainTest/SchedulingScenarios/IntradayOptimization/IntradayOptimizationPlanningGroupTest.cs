@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationAgentGroupTest
+	public class IntradayOptimizationPlanningGroupTest
 	{
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
@@ -32,16 +32,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public IntradayOptimizationFromWeb Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeAgentGroupRepository AgentGroupRepository;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[Test]
-		public void ShouldIntradayOptimizeForAgentGroup()
+		public void ShouldIntradayOptimizeForPlanningGroup()
 		{
 			var team = new Team { Site = new Site("site") };
-			var agentGroup = new AgentGroup("Europe")
+			var planningGroup = new PlanningGroup("Europe")
 				.AddFilter(new TeamFilter(team));
 
-			AgentGroupRepository.Add(agentGroup);
+			PlanningGroupRepository.Add(planningGroup);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
 
 			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), team, schedulePeriod, ruleSet, skill);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1, agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1, planningGroup);
 			SkillDayRepository.Has(new List<ISkillDay>
 			{
 				skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.GetValueOrDefault(), false);
 
 			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly).Period
@@ -70,10 +70,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test]
-		public void ShouldNotIntradayOptimizeForAgentNotInAgentGroup()
+		public void ShouldNotIntradayOptimizeForAgentNotInPlanningGroup()
 		{
-			var agentGroup = new AgentGroup("Europe");
-			AgentGroupRepository.Add(agentGroup);
+			var planningGroup = new PlanningGroup("Europe");
+			PlanningGroupRepository.Add(planningGroup);
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill = SkillRepository.Has("skill", phoneActivity);
 			var dateOnly = new DateOnly(2015, 10, 12);
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(17, 15, 17, 15, 15), shiftCategory));
 			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
-			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1, agentGroup);
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1, planningGroup);
 			SkillDayRepository.Has(new List<ISkillDay>
 			{
 				skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)))
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
 
-			Target.Execute(planningPeriod.Id.Value, false);
+			Target.Execute(planningPeriod.Id.GetValueOrDefault(), false);
 
 			var dateTime = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly).Period

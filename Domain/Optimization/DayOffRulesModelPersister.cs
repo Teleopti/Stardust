@@ -9,26 +9,26 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IDayOffRulesRepository _dayOffRulesRepository;
 		private readonly FilterMapper _filterMapper;
-		private readonly IAgentGroupRepository _agentGroupRepository;
+		private readonly IPlanningGroupRepository _planningGroupRepository;
 
-		public DayOffRulesModelPersister(IDayOffRulesRepository dayOffRulesRepository, FilterMapper filterMapper, IAgentGroupRepository agentGroupRepository)
+		public DayOffRulesModelPersister(IDayOffRulesRepository dayOffRulesRepository, FilterMapper filterMapper, IPlanningGroupRepository planningGroupRepository)
 		{
 			_dayOffRulesRepository = dayOffRulesRepository;
 			_filterMapper = filterMapper;
-			_agentGroupRepository = agentGroupRepository;
+			_planningGroupRepository = planningGroupRepository;
 		}
 
 		public void Persist(DayOffRulesModel model)
 		{
-			IAgentGroup agentGroup = null;
-			if (model.AgentGroupId.HasValue)
-				agentGroup = _agentGroupRepository.Get(model.AgentGroupId.Value);
+			IPlanningGroup planningGroup = null;
+			if (model.PlanningGroupId.HasValue)
+				planningGroup = _planningGroupRepository.Get(model.PlanningGroupId.Value);
 
 			if (model.Id == Guid.Empty)
 			{
 				var dayOffRules = model.Default ?
-					DayOffRules.CreateDefault(agentGroup) :
-					new DayOffRules(agentGroup);
+					DayOffRules.CreateDefault(planningGroup) :
+					new DayOffRules(planningGroup);
 				setProperies(dayOffRules, model);
 				_dayOffRulesRepository.Add(dayOffRules);
 			}

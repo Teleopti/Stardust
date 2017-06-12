@@ -9,12 +9,12 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 {
 	[Binding]
-	public class AgentGroupStepDefinition
+	public class PlanningGroupStepDefinition
 	{
-		[When(@"I input agent group name '(.*)'")]
-		public void WhenIInputAgentGroupName(string agentGroupName)
+		[When(@"I input planning group name '(.*)'")]
+		public void WhenIInputPlanningGroupName(string planningGroupName)
 		{
-			Browser.Interactions.FillWith("input#agentGroupName", agentGroupName);
+			Browser.Interactions.FillWith("input#agentGroupName", planningGroupName);
 		}
 
 		[When(@"I select the team")]
@@ -35,29 +35,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			}
 		}
 
-		[When(@"I save agent group")]
-		public void WhenISaveAgentGroup()
+		[When(@"I save planning group")]
+		public void WhenISavePlanningGroup()
 		{
 			Browser.Interactions.Click(".save-agent-group");
 		}
 
-		[Then(@"I should see '(.*)' in the agent group list")]
-		public void ThenIShouldSeeInTheAgentGroupList(string agentGroupName)
+		[Then(@"I should see '(.*)' in the planning group list")]
+		public void ThenIShouldSeeInThePlanningGroupList(string planningGroupName)
 		{
-			Browser.Interactions.AssertAnyContains(".agent-group-name", agentGroupName);
+			Browser.Interactions.AssertAnyContains(".agent-group-name", planningGroupName);
 		}
 
-		[Given(@"there is an agent group with")]
-		public void GivenThereIsAnAgentGroupNamedWith(Table table)
+		[Given(@"there is an planning group with")]
+		public void GivenThereIsAnPlanningGroupNamedWith(Table table)
 		{
-			var agentGroup = table.CreateInstance<AgentGroupConfigurable>();
-			DataMaker.Data().Apply(agentGroup);
+			var planningGroupConfigurable = table.CreateInstance<PlanningGroupConfigurable>();
+			DataMaker.Data().Apply(planningGroupConfigurable);
 		}
 
-		[When(@"I click more actions for agent group '(.*)'")]
-		public void WhenIClickMoreActionsForAgentGroup(string agentGroupName)
+		[When(@"I click more actions for planning group '(.*)'")]
+		public void WhenIClickMoreActionsForPlanningGroup(string planningGroupName)
 		{
-			Browser.Interactions.AssertAnyContains(".agent-group-name", agentGroupName);
+			Browser.Interactions.AssertAnyContains(".agent-group-name", planningGroupName);
 			// TODO: We should find the actual agent group, this only works with one agent group also this is HORRIBLE
 			Browser.Interactions.Javascript(@"
 				var el = document.querySelector('.ag-menu > div'); 
@@ -68,14 +68,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			");
 		}
 
-		[When(@"I click edit agent group")]
-		public void WhenIClickEditAgentGroup()
+		[When(@"I click edit planning group")]
+		public void WhenIClickEditPlanningGroup()
 		{
 			Browser.Interactions.Click(".edit-agent-group");
 		}
 
-		[When(@"I click delete agent group")]
-		public void WhenIClickDeleteAgentGroup()
+		[When(@"I click delete planning group")]
+		public void WhenIClickDeletePlanningGroup()
 		{
 			Browser.Interactions.Click(".delete-agent-group");
 		}
@@ -86,8 +86,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.ResourcePlanner
 			Browser.Interactions.Click(".confirm-delete-agent-group");
 		}
 
-		[Then(@"I should not see '(.*)' in the agent group list")]
-		public void ThenIShouldNotSeeInTheAgentGroupList(string agentGroupName)
+		[Then(@"I should not see '(.*)' in the planning group list")]
+		public void ThenIShouldNotSeeInThePlanningGroupList(string agentGroupName)
 		{
 			Browser.Interactions.AssertNoContains(".wfm-grid", ".agent-group-name", agentGroupName);
 		}

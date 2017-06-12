@@ -398,7 +398,7 @@
     <Compile Include="Persisters\Outbound\OutboundSkillPersister.cs" />
     <Compile Include="Persisters\Schedules\SchedulePersistResult.cs" />
     <Compile Include="Persisters\WorkflowControlSetPublishDatePersister.cs" />
-    <Compile Include="Repositories\AgentGroupRepository.cs" />
+    <Compile Include="Repositories\PlanningGroupRepository.cs" />
     <Compile Include="Repositories\AggregateRootInitilizer.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsAbsenceRepository.cs" />
     <Compile Include="Repositories\Analytics\AnalyticsBridgeGroupPagePersonRepository.cs" />

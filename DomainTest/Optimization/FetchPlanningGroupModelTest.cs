@@ -16,16 +16,16 @@ using Teleopti.Ccc.TestCommon.TestData;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[DomainTest]
-	public class FetchAgentGroupModelTest
+	public class FetchPlanningGroupModelTest
 	{
-		public IFetchAgentGroupModel Target;
-		public FakeAgentGroupRepository AgentGroupRepository;
+		public IFetchPlanningGroupModel Target;
+		public FakePlanningGroupRepository PlanningGroupRepository;
 
 		[Test]
-		public void ShouldIncludePersistedAgentGroupWhenLoadingAll()
+		public void ShouldIncludePersistedPlanningGroupWhenLoadingAll()
 		{
-			var presentInDb = new AgentGroup(RandomName.Make()).WithId();
-			AgentGroupRepository.Add(presentInDb);
+			var presentInDb = new PlanningGroup(RandomName.Make()).WithId();
+			PlanningGroupRepository.Add(presentInDb);
 
 			var loaded = Target.FetchAll().Single();
 
@@ -39,16 +39,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var filterName = RandomName.Make();
 			var contract = new Contract(filterName).WithId();
-			var agentGroup = new AgentGroup()
+			var planningGroup = new PlanningGroup()
 				.WithId()
 				.AddFilter(new ContractFilter(contract));
-			AgentGroupRepository.Add(agentGroup);
+			PlanningGroupRepository.Add(planningGroup);
 
-			var loaded = Target.FetchAll().Single(x => x.Id.Equals(agentGroup.Id.Value));
+			var loaded = Target.FetchAll().Single(x => x.Id.Equals(planningGroup.Id.GetValueOrDefault()));
 
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.ContractFilterType);
-			filter.Id.Should().Be.EqualTo(contract.Id.Value);
+			filter.Id.Should().Be.EqualTo(contract.Id.GetValueOrDefault());
 			filter.Name.Should().Be.EqualTo(filterName);
 		}
 
@@ -57,16 +57,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var team = new Team().WithId().WithDescription(new Description(RandomName.Make()));
 			team.Site = new Site(RandomName.Make());
-			var agentGroup = new AgentGroup()
+			var planningGroup = new PlanningGroup()
 				.WithId()
 				.AddFilter(new TeamFilter(team));
-			AgentGroupRepository.Add(agentGroup);
+			PlanningGroupRepository.Add(planningGroup);
 
-			var loaded = Target.FetchAll().Single(x => x.Id.Equals(agentGroup.Id.Value));
+			var loaded = Target.FetchAll().Single(x => x.Id.Equals(planningGroup.Id.GetValueOrDefault()));
 
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.TeamFilterType);
-			filter.Id.Should().Be.EqualTo(team.Id.Value);
+			filter.Id.Should().Be.EqualTo(team.Id.GetValueOrDefault());
 			filter.Name.Should().Be.EqualTo(team.SiteAndTeam);
 		}
 
@@ -75,14 +75,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var filterName = RandomName.Make();
 			var site = new Site(filterName).WithId();
-			var agentGroup = new AgentGroup().WithId().AddFilter(new SiteFilter(site));
-			AgentGroupRepository.Add(agentGroup);
+			var planningGroup = new PlanningGroup().WithId().AddFilter(new SiteFilter(site));
+			PlanningGroupRepository.Add(planningGroup);
 
-			var loaded = Target.FetchAll().Single(x => x.Id.Equals(agentGroup.Id.Value));
+			var loaded = Target.FetchAll().Single(x => x.Id.Equals(planningGroup.Id.GetValueOrDefault()));
 
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.SiteFilterType);
-			filter.Id.Should().Be.EqualTo(site.Id.Value);
+			filter.Id.Should().Be.EqualTo(site.Id.GetValueOrDefault());
 			filter.Name.Should().Be.EqualTo(filterName);
 		}
 
@@ -91,29 +91,29 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var filterName = RandomName.Make();
 			var skill = new Skill(filterName).WithId();
-			var agentGroup = new AgentGroup()
+			var planningGroup = new PlanningGroup()
 				.WithId()
 				.AddFilter(new SkillFilter(skill));
-			AgentGroupRepository.Add(agentGroup);
+			PlanningGroupRepository.Add(planningGroup);
 
-			var loaded = Target.FetchAll().Single(x => x.Id.Equals(agentGroup.Id.Value));
+			var loaded = Target.FetchAll().Single(x => x.Id.Equals(planningGroup.Id.GetValueOrDefault()));
 
 			var filter = loaded.Filters.Single();
 			filter.FilterType.Should().Be.EqualTo(FilterModel.SkillFilterType);
-			filter.Id.Should().Be.EqualTo(skill.Id.Value);
+			filter.Id.Should().Be.EqualTo(skill.Id.GetValueOrDefault());
 			filter.Name.Should().Be.EqualTo(filterName);
 		}
 
 
 		[Test]
-		public void ShouldFetchAgentGroup()
+		public void ShouldFetchPlanningGroup()
 		{
-			var curr = new AgentGroup(RandomName.Make()).WithId();
-			AgentGroupRepository.Add(curr);
+			var planningGroup = new PlanningGroup(RandomName.Make()).WithId();
+			PlanningGroupRepository.Add(planningGroup);
 
-			var agentGroupModel = Target.Fetch(curr.Id.Value);
-			agentGroupModel.Id.Should().Be.EqualTo(curr.Id);
-			agentGroupModel.Name.Should().Be.EqualTo(curr.Name);
+			var planningGroupModel = Target.Fetch(planningGroup.Id.GetValueOrDefault());
+			planningGroupModel.Id.Should().Be.EqualTo(planningGroup.Id);
+			planningGroupModel.Name.Should().Be.EqualTo(planningGroup.Name);
 		}
 
 		[Test]

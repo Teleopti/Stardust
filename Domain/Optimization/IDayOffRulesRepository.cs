@@ -6,8 +6,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IDayOffRulesRepository : IRepository<DayOffRules>
 	{
-		IList<DayOffRules> LoadAllByAgentGroup(IAgentGroup agentGroup);
-		IList<DayOffRules> LoadAllWithoutAgentGroup();
-		void RemoveForAgentGroup(IAgentGroup agentGroup);
+		IList<DayOffRules> LoadAllByPlanningGroup(IPlanningGroup planningGroup);
+		IList<DayOffRules> LoadAllWithoutPlanningGroup();
+		void RemoveForPlanningGroup(IPlanningGroup planningGroup);
 	}
 }

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			var model = new List<DayOffRulesModel>();
 			var fetchModel = MockRepository.GenerateMock<IFetchDayOffRulesModel>();
-			fetchModel.Expect(x => x.FetchAllWithoutAgentGroup()).Return(model);
+			fetchModel.Expect(x => x.FetchAllWithoutPlanningGroup()).Return(model);
 			var target = new DayOffRulesController(fetchModel, null);
 			target.FetchAll().Result<IEnumerable<DayOffRulesModel>>()
 				.Should().Be.SameInstanceAs(model);
