@@ -62,14 +62,21 @@ describe('Outbound campaign commands pane tests ', function() {
 		expect(target.container[0].querySelectorAll('.btn-goto-edit-campaign').length).toEqual(1);
 	});
 
-	it('should get correct ignored dates for replanning when toggle Wfm_Outbound_ReplanAfterScheduled_43752 is on', function() {
+	it('should pass correct ignored dates for replanning when toggle Wfm_Outbound_ReplanAfterScheduled_43752 is on', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.vm.ignoreSchedules();
 		target.vm.replan();
 		expect(target.vm.ignoredDates.length).toEqual(2);
 	});
 
-	it('should get correct ignored dates for replanning when toggle Wfm_Outbound_ReplanAfterScheduled_43752 is off', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = false;
+	it('should pass empty ignoredDates when there is no shcedule in campaign for replanning', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		for(var i = 0; i < target.vm.campaign.graphData.schedules.length; i++){
+			if(!isNaN(target.vm.campaign.graphData.schedules[i]))
+				target.vm.campaign.graphData.schedules[i] = 0;
+		}
+
+		target.vm.ignoreSchedules();
 		target.vm.replan();
 		expect(target.vm.ignoredDates.length).toEqual(0);
 	});

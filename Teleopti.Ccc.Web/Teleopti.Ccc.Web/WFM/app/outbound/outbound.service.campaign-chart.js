@@ -36,7 +36,7 @@
 		this.replan = function(input, successCb, errorCb) {
 			var postData = {
 				CampaignId: input.campaignId,
-				SkipDates: input.selectedDates
+				SkipDates: input.ignoredDates
 			};
 
 			$http.post(redoCampaignProductionPlanUrl, postData).success(function() {

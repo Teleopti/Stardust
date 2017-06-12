@@ -66,7 +66,7 @@
 			});
 		};
 
-		vm.ignoreSchedule = function () {
+		vm.ignoreSchedules = function () {
 			vm.ignoreScheduleSwitch = true;
 			vm.manualBacklogSwitch = false;
 			vm.manualPlanSwitch = false;
@@ -205,28 +205,11 @@
 				});
 		}
 
-		function replan() {
-			vm.selectedDates.sort(function(c, n){
-				return moment(c) - moment(n);
-			});
-
-			if(!toggleService.Wfm_Outbound_ReplanAfterScheduled_43752){
-				vm.ignoredDates = [];
-				triggerReplanAction();
-			} else if(vm.selectedDates.length == 0){
-				vm.ignoredDates = [];
-				triggerReplanAction();
-			} else {
-				vm.ignoredDates = angular.copy(vm.selectedDates);
-				triggerReplanAction();
-			}
-		}
-
-		function triggerReplanAction(){
+		function replan(){
 			vm.isLoading = true;
 			outboundChartService.replan({
 				campaignId: vm.campaign.Id,
-				selectedDates: vm.ignoredDates
+				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.replan)) {
 					vm.callbacks.replan(response, callbackDone);
@@ -235,16 +218,6 @@
 				}
 			});
 		}
-
-		function getDatesForReplanning(start, end){
-			var dates = [],
-				datesLength = moment(end).diff(moment(start), 'days');
-			for(var i = 0; i <= datesLength; i++){
-				dates.push(moment(start).add(i, 'days').format('YYYY-MM-DD'));
-			}
-			return dates;
-		}
-
 
 		function validManualProductionPlan() {
 			if (vm.manualPlanInput == null) return false;
