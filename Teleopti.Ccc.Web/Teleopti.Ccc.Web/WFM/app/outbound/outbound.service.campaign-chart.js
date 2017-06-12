@@ -100,18 +100,16 @@
 		}
 
 		function updateBacklog(input, successCb, errorCb) {
-			var postData = {
+			$http.post(updateCampaignBacklogUrl, {
 				CampaignId: input.campaignId,
-
 				ActualBacklog: input.selectedDates.map(function(d) {
 					return {
 						Date: d,
 						Time: input.manualBacklogInput
 					};
-				})
-			};
-
-			$http.post(updateCampaignBacklogUrl, postData).
+				}),
+				SkipDates: input.ignoredDates
+			}).
 			success(function(campaignData) {
 				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
 			}).
@@ -121,12 +119,11 @@
 		}
 
 		function removeActualBacklog(input, successCb, errorCb) {
-			var postData = {
+			$http.post(removeCampaignBacklogUrl, {
 				CampaignId: input.campaignId,
-				Dates: input.selectedDates
-			};
-
-			$http.post(removeCampaignBacklogUrl, postData).
+				Dates: input.selectedDates,
+				SkipDates: input.ignoredDates
+			}).
 			success(function(campaignData) {
 				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
 			}).

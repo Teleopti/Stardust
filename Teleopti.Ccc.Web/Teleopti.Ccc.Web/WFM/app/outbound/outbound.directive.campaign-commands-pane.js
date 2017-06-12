@@ -179,7 +179,8 @@
 			outboundChartService.updateBacklog({
 				campaignId: vm.campaign.Id,
 				selectedDates: vm.selectedDates,
-				manualBacklogInput: vm.manualBacklogInput
+				manualBacklogInput: vm.manualBacklogInput,
+				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.addManualBacklog)) {
 					vm.callbacks.addManualBacklog(response, callbackDone);
@@ -196,7 +197,8 @@
 				vm.isLoading = true;
 				outboundChartService.removeActualBacklog({
 					campaignId: vm.campaign.Id,
-					selectedDates: vm.selectedDates
+					selectedDates: vm.selectedDates,
+					ignoredDates: vm.ignoredDates
 				}, function(response) {
 					if (angular.isDefined(vm.callbacks.removeManualBacklog)) {
 						vm.callbacks.removeManualBacklog(response, callbackDone);

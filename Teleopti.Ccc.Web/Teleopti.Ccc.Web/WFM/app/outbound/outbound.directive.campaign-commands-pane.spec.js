@@ -62,45 +62,6 @@ describe('Outbound campaign commands pane tests ', function() {
 		expect(target.container[0].querySelectorAll('.btn-goto-edit-campaign').length).toEqual(1);
 	});
 
-	it('should pass correct ignored dates for replanning when toggle Wfm_Outbound_ReplanAfterScheduled_43752 is on', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
-		target.vm.ignoreSchedules();
-		target.vm.replan();
-		expect(target.vm.ignoredDates.length).toEqual(2);
-	});
-
-	it('should pass empty ignoredDates when there is no shcedule in campaign for replanning', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
-		for(var i = 0; i < target.vm.campaign.graphData.schedules.length; i++){
-			if(!isNaN(target.vm.campaign.graphData.schedules[i]))
-				target.vm.campaign.graphData.schedules[i] = 0;
-		}
-
-		target.vm.ignoreSchedules();
-		target.vm.replan();
-		expect(target.vm.ignoredDates.length).toEqual(0);
-	});
-
-	it('should pass ignored dates for adding manual plan', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
-		target.vm.toggleManualPlan();
-
-		expect(target.vm.manualPlanSwitch).toEqual(true);
-		target.vm.ignoreSchedules();
-		target.vm.addManualPlan();
-		expect(target.vm.ignoredDates.length).toEqual(2);
-	});
-
-	it('should pass ignored dates for removing manual plan', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
-		target.vm.toggleManualPlan();
-
-		expect(target.vm.manualPlanSwitch).toEqual(true);
-		target.vm.ignoreSchedules();
-		target.vm.removeManualPlan();
-		expect(target.vm.ignoredDates.length).toEqual(2);
-	});
-
 	it('should show ignore schedule button when there are schedules in campaign', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
 		target.scope.$apply();
@@ -206,6 +167,85 @@ describe('Outbound campaign commands pane tests ', function() {
 		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
 		expect(target.vm.ignoredDates.length).toEqual(1);
 		expect(target.vm.ignoredDates[0]).toEqual(target.vm.selectedDates[0]);
+	});
+
+	it('should pass ignored dates for replanning', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.vm.ignoreSchedules();
+
+		var expectedIgnoredDates = target.vm.campaign.selectedDates;
+		target.vm.replan();
+		expect(target.vm.ignoredDates.length).toEqual(2);
+		expect(target.vm.ignoredDates[0]).toEqual(expectedIgnoredDates[0]);
+		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
+	});
+
+	it('should pass empty ignoredDates when there is no shcedule in campaign for replanning', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		for(var i = 0; i < target.vm.campaign.graphData.schedules.length; i++){
+			if(!isNaN(target.vm.campaign.graphData.schedules[i]))
+				target.vm.campaign.graphData.schedules[i] = 0;
+		}
+
+		target.vm.ignoreSchedules();
+		target.vm.replan();
+		expect(target.vm.ignoredDates.length).toEqual(0);
+	});
+
+	it('should pass ignored dates for adding manual plan', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.vm.toggleManualPlan();
+
+		expect(target.vm.manualPlanSwitch).toEqual(true);
+		target.vm.ignoreSchedules();
+
+		var expectedIgnoredDates = target.vm.campaign.selectedDates;
+		target.vm.addManualPlan();
+		expect(target.vm.ignoredDates.length).toEqual(2);
+		expect(target.vm.ignoredDates[0]).toEqual(expectedIgnoredDates[0]);
+		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
+	});
+
+	it('should pass ignored dates for removing manual plan', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.vm.toggleManualPlan();
+
+		expect(target.vm.manualPlanSwitch).toEqual(true);
+		target.vm.ignoreSchedules();
+
+		var expectedIgnoredDates = target.vm.campaign.selectedDates;
+		target.vm.removeManualPlan();
+		expect(target.vm.ignoredDates.length).toEqual(2);
+		expect(target.vm.ignoredDates[0]).toEqual(expectedIgnoredDates[0]);
+		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
+	});
+
+	it('should pass ignored dates for adding manual backlog', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.vm.toggleManualPlan();
+
+		expect(target.vm.manualPlanSwitch).toEqual(true);
+		target.vm.ignoreSchedules();
+
+		var expectedIgnoredDates = target.vm.campaign.selectedDates;
+		target.vm.addManualBacklog();
+		expect(target.vm.ignoredDates.length).toEqual(2);
+		expect(target.vm.ignoredDates[0]).toEqual(expectedIgnoredDates[0]);
+		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
+	});
+
+	it('should pass ignored dates for removing manual backlog', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.vm.toggleManualPlan();
+
+		expect(target.vm.manualPlanSwitch).toEqual(true);
+		target.vm.ignoreSchedules();
+
+		var expectedIgnoredDates = target.vm.campaign.selectedDates;
+		target.vm.removeManualBacklog();
+		expect(target.vm.ignoredDates.length).toEqual(2);
+		expect(target.vm.ignoredDates[0]).toEqual(expectedIgnoredDates[0]);
+		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
 	});
 
 	function setUpTarget() {
