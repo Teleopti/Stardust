@@ -83,6 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public Guid CampaignId;
 		public IEnumerable<ManualViewModel> ManualProductionPlan;
+		public IEnumerable<DateOnly> SkipDates;
 	}
 
 	public class ActualBacklogForm

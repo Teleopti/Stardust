@@ -729,6 +729,35 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		}
 
 		[Test]
+		public void ShouldPassThroughSkipedDatesForManualPlan()
+		{
+			var campaignId = new Guid();
+			var date = new DateOnly(2015, 8, 21);
+			var campaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 8, 21, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 28, 23, 59, 59, DateTimeKind.Utc)) };
+			var skill = SkillFactory.CreateSkill("mySkill");
+			skill.TimeZone = TimeZoneInfo.Utc;
+			campaign.Skill = skill;
+			var skipDates = new List<DateOnly>() {date};
+			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
+
+			var manualPlanForm = new ManualPlanForm(){
+				CampaignId = campaignId,
+				ManualProductionPlan = new List<ManualViewModel>()
+				{
+					new ManualViewModel(){Date = date, Time = 8}
+				},
+				SkipDates = skipDates
+			};
+
+			var createOrUpdateSkillDays = MockRepository.GenerateMock<ICreateOrUpdateSkillDays>();
+			var taskManager = MockRepository.GenerateMock<IOutboundCampaignTaskManager>();
+			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, createOrUpdateSkillDays, _productionReplanHelper, null, taskManager, null, _outboundScheduledResourcesCacher);
+			_target.PersistManualProductionPlan(manualPlanForm);
+
+			taskManager.AssertWasCalled((x=>x.GetIncomingTaskFromCampaign(campaign, skipDates)));
+		}
+
+		[Test]
 		public void ShouldRemoveManualPlan()
 		{
 			var campaignId = new Guid();
