@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			assert(Target.For(p).States);
 			p.InAlarm = true;
 			assert(Target.For(p).States);
-			assert(Target.InAlarmExcludingPhoneStatesFor(p, new Guid?[] {Guid.NewGuid()}).States);
+			p.ExcludedStates = new Guid?[] {Guid.NewGuid()};
+			assert(Target.For(p).States);
 		}
 
 		private static void assert(IEnumerable<AgentStateViewModel> result)

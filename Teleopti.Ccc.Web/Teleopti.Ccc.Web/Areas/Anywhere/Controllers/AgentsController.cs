@@ -37,7 +37,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/Agents/InAlarmExcludingPhoneStatesFor")]
 		public virtual IHttpActionResult InAlarmExcludingPhoneStatesFor([FromUri] AgentStateFilter filter, [FromUri] IEnumerable<Guid?> excludedStateIds)
 		{
-			return Ok(_agentStatesBuilder.InAlarmExcludingPhoneStatesFor(filter, excludedStateIds));
+			// REMOV ME TOO
+			filter.ExcludedStates = excludedStateIds;
+			filter.InAlarm = true;
+			return Ok(_agentStatesBuilder.For(filter));
 		}
 	}
 

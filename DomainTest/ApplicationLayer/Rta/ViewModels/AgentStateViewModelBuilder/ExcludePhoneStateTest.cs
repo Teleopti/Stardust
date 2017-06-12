@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 		public AgentStatesViewModelBuilder Target;
 		public FakeAgentStateReadModelPersister Database;
 		public MutableNow Now;
-		
+
 		[Test]
 		public void ShouldGetForSite()
 		{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					AlarmStartTime = "2016-11-07 08:00".Utc()
 				});
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {SiteIds = new[] {site}}, new Guid?[] { loggedOut})
+			Target.For(new AgentStateFilter { SiteIds = new[] { site }, ExcludedStates = new Guid?[] { loggedOut } })
 				.States.Single()
 				.PersonId.Should().Be(person1);
 		}
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					AlarmStartTime = "2016-11-07 08:00".Utc()
 				});
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {TeamIds = new[] {team}}, new Guid?[] {loggedOut})
+			Target.For(new AgentStateFilter { TeamIds = new[] { team }, ExcludedStates = new Guid?[] { loggedOut } })
 				.States.Single()
 				.PersonId.Should().Be(person1);
 		}
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				.WithPersonSkill(person2, phone);
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter { SkillIds = new[] { phone } }, new Guid?[] { loggedOut })
+			Target.For(new AgentStateFilter { SkillIds = new[] { phone }, ExcludedStates = new Guid?[] { loggedOut } })
 				.States.Single()
 				.PersonId.Should().Be(person1);
 		}
@@ -162,12 +162,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(siteFiltered, skill)
 				;
 
-			Target.InAlarmExcludingPhoneStatesFor(
-				new AgentStateFilter
-				{
-					SiteIds = new[] { site },
-					SkillIds = new[] { skill }
-				}, new Guid?[] { loggedOut })
+			Target.For(
+					new AgentStateFilter
+					{
+						SiteIds = new[] { site },
+						SkillIds = new[] { skill },
+						ExcludedStates = new Guid?[] { loggedOut }
+					})
 				.States.Single()
 				.PersonId.Should().Be(expected);
 		}
@@ -222,12 +223,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(teamFiltered, skillId)
 				;
 
-			Target.InAlarmExcludingPhoneStatesFor(
+			Target.For(
 				new AgentStateFilter
 				{
 					TeamIds = new[] { team },
-					SkillIds = new[] { skillId }
-				}, new Guid?[] { loggedOut })
+					SkillIds = new[] { skillId },
+					ExcludedStates = new Guid?[] { loggedOut }
+				})
 				.States.Single()
 				.PersonId.Should().Be(expected);
 		}
@@ -263,21 +265,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				})
 				.WithPersonSkill(person2, skillId)
 				;
-			
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {SiteIds = new[] {site}},
-				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {TeamIds = new[] {team}},
-				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
+			Target.For(new AgentStateFilter { SiteIds = new[] { site }, ExcludedStates = new Guid?[] { null } })
+				.States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] { person1, person2 });
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {SkillIds = new[] {skillId}},
-				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
+			Target.For(new AgentStateFilter { TeamIds = new[] { team }, ExcludedStates = new Guid?[] { null } })
+				.States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] { person1, person2 });
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {SiteIds = new[] {site}, SkillIds = new[] {skillId}},
-				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
+			Target.For(new AgentStateFilter { SkillIds = new[] { skillId }, ExcludedStates = new Guid?[] { null } })
+				.States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] { person1, person2 });
 
-			Target.InAlarmExcludingPhoneStatesFor(new AgentStateFilter {TeamIds = new[] {team}, SkillIds = new[] {skillId}},
-				new Guid?[] {null}).States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] {person1, person2});
+			Target.For(new AgentStateFilter { SiteIds = new[] { site }, SkillIds = new[] { skillId }, ExcludedStates = new Guid?[] { null } })
+				.States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] { person1, person2 });
+
+			Target.For(new AgentStateFilter { TeamIds = new[] { team }, SkillIds = new[] { skillId }, ExcludedStates = new Guid?[] { null } })
+				.States.Select(x => x.PersonId).Should().Have.SameSequenceAs(new[] { person1, person2 });
 		}
 
 	}
