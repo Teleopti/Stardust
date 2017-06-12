@@ -41,16 +41,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.ToArray();
 		}
 
-		public IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds)
-		{
-			return _unitOfWork.Current().Session()
-				.CreateSQLQuery("SELECT * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE TeamId IN (:teamIds)")
-				.SetParameterList("teamIds", teamIds)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
-				.SetReadOnly(true)
-				.List<AgentStateReadModel>();
-		}
-		
 		private class internalModel : AgentStateReadModel
 		{
 			public new string Shift

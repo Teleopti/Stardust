@@ -219,17 +219,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private IEnumerable<AgentStateReadModel> readFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			if (siteIds != null && teamIds != null && skillIds != null)
-				return queryWithSkill(readForSites(siteIds).Concat(ReadForTeams(teamIds)).Distinct(), skillIds).ToArray();
+				return queryWithSkill(readForSites(siteIds).Concat(readForTeams(teamIds)).Distinct(), skillIds).ToArray();
 			if (siteIds != null && teamIds != null)
-				return readForSites(siteIds).Concat(ReadForTeams(teamIds)).Distinct().ToArray();
+				return readForSites(siteIds).Concat(readForTeams(teamIds)).Distinct().ToArray();
 			if (siteIds != null && skillIds != null)
 				return queryWithSkill(readForSites(siteIds), skillIds).ToArray();
 			if (siteIds != null)
 				return readForSites(siteIds).ToArray();
 			if (teamIds != null && skillIds != null)
-				return queryWithSkill(ReadForTeams(teamIds), skillIds).ToArray();
+				return queryWithSkill(readForTeams(teamIds), skillIds).ToArray();
 			if (teamIds != null)
-				return ReadForTeams(teamIds).ToArray();
+				return readForTeams(teamIds).ToArray();
 			return queryWithSkill(_data.Values, skillIds).ToArray();
 		}
 
@@ -238,6 +238,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				from siteId in siteIds
 				where siteId == model.SiteId
 				select model).ToArray();
+
+		public IEnumerable<AgentStateReadModel> readForTeams(IEnumerable<Guid> teamIds)
+			=> (from model in _data.Values
+				from team in teamIds
+				where team == model.TeamId
+				select model).ToArray();
+
 
 		private IEnumerable<AgentStateReadModel> queryWithSkill(IEnumerable<AgentStateReadModel> models, IEnumerable<Guid> skillIds)
 			=> from model in models
@@ -271,12 +278,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 
 
-
-		public IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds)
-			=> (from model in _data.Values
-				from team in teamIds
-				where team == model.TeamId
-				select model).ToArray();
 
 
 		private IEnumerable<AgentStateReadModel> queryInAlarm(IEnumerable<AgentStateReadModel> models)
