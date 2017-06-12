@@ -20,8 +20,9 @@
 			};
 
 			var hiddenArray = [];
+			var mixedArea;
 
-			service.setStaffingData = function (result, showOptimalStaffing, showScheduledStaffing) {
+			service.setStaffingData = function (result, showOptimalStaffing, showScheduledStaffing, showEmailSkill) {
 				clearData();
 
 				staffingData.timeSeries = [];
@@ -29,11 +30,12 @@
 				staffingData.forecastedStaffing.updatedSeries = [];
 				staffingData.actualStaffingSeries = [];
 				staffingData.scheduledStaffing = [];
-
+				
 				if (result.DataSeries == null)
 					return staffingData;
 				staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
-				staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
+				if (!showEmailSkill || !mixedArea)
+					staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
 
 				if (showOptimalStaffing)
 					staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
@@ -67,7 +69,7 @@
 				return staffingData;
 			};
 
-			service.getData = function () {
+				service.getData = function () {
 				return staffingData;
 			}
 
@@ -81,28 +83,38 @@
 
 			service.pollSkillData = function (selectedItem, toggles) {
 				staffingData.waitingForData = true;
+				if (selectedItem.SkillType === 'SkillTypeEmail') {
+					mixedArea = true;
+				} else {
+					mixedArea = false;
+				}
 				intradayService.getSkillStaffingData.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
 						staffingData.waitingForData = false;
-						return service.setStaffingData(result, toggles.showOptimalStaffing, toggles.showScheduledStaffing);
+						return service.setStaffingData(result, toggles.showOptimalStaffing, toggles.showScheduledStaffing, toggles.showEmailSkill);
 					},
 					function (error) {
 						staffingData.hasMonitorData = false;
 					});
 			};
-
+				
 			service.pollSkillAreaData = function (selectedItem, toggles) {
 				staffingData.waitingForData = true;
+				mixedArea = selectedItem.Skills.find(findEmail);
+				function findEmail(area) {
+					return area.SkillType === 'SkillTypeEmail';
+				}
+
 				intradayService.getSkillAreaStaffingData.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
 						staffingData.waitingForData = false;
-						return service.setStaffingData(result, toggles.showOptimalStaffing, toggles.showScheduledStaffing);
+						return service.setStaffingData(result, toggles.showOptimalStaffing, toggles.showScheduledStaffing, toggles.showEmailSkill);
 					},
 					function (error) {
 						staffingData.hasMonitorData = false;

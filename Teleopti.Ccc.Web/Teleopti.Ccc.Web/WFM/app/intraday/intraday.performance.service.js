@@ -32,7 +32,7 @@
 			var hiddenArray = [];
 			var intervalStart;
 			var mixedArea;
-			service.setPerformanceData = function (result, showEsl) {
+			service.setPerformanceData = function (result, showEsl, showEmailSkill) {
 				clearData();
 
 				performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
@@ -63,7 +63,7 @@
 				if (showEsl)
 					performanceData.summary.summaryEstimatedServiceLevel = $filter('number')(result.Summary.EstimatedServiceLevel, 1);
 
-				if (mixedArea){
+				if (showEmailSkill && mixedArea){
 					performanceData.abandonedRateObj.series = [];
 					performanceData.hasEmailSkill= true;
 				}else{
@@ -110,34 +110,38 @@
 
 			service.pollSkillData = function (selectedItem, toggles) {
 				performanceData.waitingForData = true;
+				if (selectedItem.SkillType === 'SkillTypeEmail') {
+					mixedArea = true;
+				} else {
+					mixedArea = false;
+				}
+				
 				intradayService.getSkillMonitorPerformance.query(
 					{
 						id: selectedItem.Id
 					})
 					.$promise.then(function (result) {
 						performanceData.waitingForData = false;
-						service.setPerformanceData(result, toggles.showEsl);
+						service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill);
 					},
 					function (error) {
 						performanceData.hasMonitorData = false;
 					});
 				};
-
+				
 				service.pollSkillAreaData = function (selectedItem, toggles) {
 					performanceData.waitingForData = true;
-
-					function findEmail(area) {
-					    return area.SkillType === 'SkillTypeEmail';
-					}
 					mixedArea = selectedItem.Skills.find(findEmail);
-
+					function findEmail(area) {
+						return area.SkillType === 'SkillTypeEmail';
+					}
 					intradayService.getSkillAreaMonitorPerformance.query(
 						{
 							id: selectedItem.Id
 						})
 						.$promise.then(function (result) {
 							performanceData.waitingForData = false;
-							service.setPerformanceData(result, toggles.showEsl);
+							service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill);
 						},
 						function (error) {
 							performanceData.hasMonitorData = false;

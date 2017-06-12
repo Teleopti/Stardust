@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -36,6 +37,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		const int minutesPerInterval = 15;
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
 		private StaffingCalculatorServiceFacade _staffingCalculatorService;
+
+		private readonly ServiceAgreement _slaTwoHours =
+			new ServiceAgreement(new ServiceLevel(new Percent(1), 7200), new Percent(0), new Percent(1));
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -67,6 +71,38 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
 			Math.Round(result.DataSeries.EstimatedServiceLevels.First().Value, 5).Should().Be.EqualTo(Math.Round(esl * 100, 5));
+		}
+
+		[Test]
+		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
+		public void ShouldReturnEslFromStartOfOpenHour()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTime = new DateTime(2016, 8, 26, 7, 0, 0, DateTimeKind.Utc);
+
+
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skill = StaffingViewModelCreatorTestHelper.CreateEmailSkill(15, "skill", new TimePeriod(8, 0, 9, 0));
+
+			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, _slaTwoHours, false);
+
+			var scheduledStaffingList = createScheduledStaffing(skillDay);
+
+			createStatistics(latestStatsTime, latestStatsTime.AddMinutes(5*minutesPerInterval), latestStatsTime.AddMinutes(5 * minutesPerInterval));
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Add(skillDay);
+			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value });
+
+			var esl = calculateEsl(scheduledStaffingList, skillDay, skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks, 0);
+
+			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(5);
+			result.DataSeries.EstimatedServiceLevels.First().Should().Be.EqualTo(null);
+			result.DataSeries.EstimatedServiceLevels[3].Should().Be.EqualTo(null);
+			Math.Round(result.DataSeries.EstimatedServiceLevels.Last().Value, 5).Should().Be.EqualTo(Math.Round(esl * 100, 5));
 		}
 
 		[Test]

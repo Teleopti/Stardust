@@ -17,17 +17,16 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_now = now;
 		}
 		
-		public IList<StaffingIntervalModel> StaffingPerSkill(IList<ISkill> skills, ICollection<ISkillDay> skillDays, int minutesPerInterval, DateOnly? dateOnly, bool useShrinkage)
+		public IList<StaffingIntervalModel> StaffingPerSkill(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, int minutesPerInterval, DateOnly? dateOnly, bool useShrinkage)
 		{
 			var startTimeLocal = dateOnly?.Date ?? TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).Date;
 			var endTimeLocal = startTimeLocal.AddDays(1);
 
 			var staffingIntervals = new List<StaffingIntervalModel>();
 			var resolution = TimeSpan.FromMinutes(minutesPerInterval);
-			var daysToLookup = skillDays.ToLookup(s => s.Skill);
-			foreach (var skill in skills)
+			foreach (var skill in skillDays.Keys)
 			{
-				staffingIntervals.AddRange(daysToLookup[skill].SelectMany(x => getStaffingIntervalModels(x, resolution, useShrinkage)));
+				staffingIntervals.AddRange(skillDays[skill].SelectMany(x => getStaffingIntervalModels(x, resolution, useShrinkage)));
 			}
 
 			return staffingIntervals

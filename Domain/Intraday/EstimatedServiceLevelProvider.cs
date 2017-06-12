@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return Math.Abs(sumOfForecastedCalls) > 0.01 ? sumOfAnsweredCallsWithinSL /sumOfForecastedCalls*100 ?? 0:0;
 		}
 
-		public IList<EslInterval> CalculateEslIntervals(IList<ISkill> skills, 
-			ICollection<ISkillDay> skillDays, 
+		public IList<EslInterval> CalculateEslIntervals(
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
 			IntradayIncomingViewModel queueStatistics,
 			int minutesPerInterval)
 		{
@@ -44,13 +44,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 				return eslIntervals;
 			var serviceCalculatorService = new StaffingCalculatorServiceFacade();
 
-			var forecastedCalls = _forecastedCallsProvider.Load(skills, skillDays, queueStatistics.LatestActualIntervalStart, minutesPerInterval);
-			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skills, skillDays, minutesPerInterval, null, false)
+			var forecastedCalls = _forecastedCallsProvider.Load(skillDays, queueStatistics.LatestActualIntervalStart, minutesPerInterval);
+			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skillDays, minutesPerInterval, null, false)
 				.Where(x => x.StartTime <= queueStatistics.LatestActualIntervalStart)
 				.ToList();
-			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(skills, minutesPerInterval);
+			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(skillDays.Keys.ToList(), minutesPerInterval);
 
-			foreach (var skill in skills)
+			foreach (var skill in skillDays.Keys)
 			{
 				var skillForecastedStaffing = forecastedStaffing
 					.Where(s => s.SkillId == skill.Id.Value).ToList();
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.ToList();
 		}
 
-		private EslInterval calculateEslInterval(ICollection<ISkillDay> skillDays, 
+		private EslInterval calculateEslInterval(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
 			int minutesPerInterval, 
 			StaffingIntervalModel interval,
 			ISkill skill, 
@@ -83,8 +83,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			StaffingCalculatorServiceFacade serviceCalculatorService)
 		{
 			var intervalStartTimeUtc = TimeZoneHelper.ConvertToUtc(interval.StartTime, _timeZone.TimeZone());
-			var skillDaysForSkill = skillDays
-				.Where(x => x.Skill.Id.Value == skill.Id.Value);
+			var skillDaysForSkill = skillDays[skill];
 
 			var serviceAgreement = getServiceAgreement(skillDaysForSkill, intervalStartTimeUtc);
 			if (serviceAgreement == new ServiceAgreement())
@@ -127,11 +126,23 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return skillData?.ServiceAgreement ?? new ServiceAgreement();
 		}
 
-		public double?[] DataSeries(IList<EslInterval> eslIntervals, IntradayIncomingViewModel queueIncoming)
+		public double?[] DataSeries(IList<EslInterval> eslIntervals, IntradayIncomingViewModel queueIncoming, int minutesPerInterval)
 		{
 			var dataSeries = eslIntervals
 				.Select(x => (double?) x.Esl * 100)
 				.ToList();
+		
+			if (eslIntervals.Any())
+			{
+				var index = 0;
+				var nullBeforeCount = (eslIntervals.Min(x => x.StartTime) - queueIncoming.DataSeries.Time.First()).TotalMinutes / minutesPerInterval;
+				while (index < nullBeforeCount)
+				{
+					dataSeries.Insert(index, null);
+					index = index + 1;
+				}
+			}
+			
 			var nullCount = queueIncoming.DataSeries.Time.Length - dataSeries.Count;
 			dataSeries.AddRange(Enumerable.Repeat<double?>(null,nullCount));
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public IList<StaffingIntervalModel> Load(IList<SkillIntervalStatistics> actualStatistics, 
 			IList<ISkill> skills, 
-			ICollection<ISkillDay> skillDays, 
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
 			IList<StaffingIntervalModel> forecastedStaffingIntervals,
 			TimeSpan resolution, IList<SkillDayStatsRange> skillDayStatsRange,
 			Dictionary<Guid, int> workloadBacklog)
@@ -26,8 +27,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var actualStaffingIntervals = new List<StaffingIntervalModel>();
 
-			var skillDaysBySkill = skillDays.Select(s => new { Original = s, Clone = s.NoneEntityClone() })
+			var skillDaysBySkill = skillDays
+				.SelectMany(x => x.Value)
+				.Select(s => new { Original = s, Clone = s.NoneEntityClone() })
 				.ToLookup(s => s.Original.Skill.Id.Value);
+
 			var actualStatisticsBySkill = actualStatistics.ToLookup(s => s.SkillId);
 			foreach (var skill in skills)
 			{
@@ -39,9 +43,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					var skillDayStats = GetSkillDayStatistics(skillDayStatsRange, skill, skillDay.Original.CurrentDate, actualStatsPerSkillInterval, resolution);
 
-
-					//if (!skillDayStats.Any())
-					//	continue;
 					mapWorkloadIds(skillDay.Clone, skillDay.Original);
 					assignActualWorkloadToClonedSkillDay(skillDay.Clone, skillDayStats, workloadBacklog);
 					actualStaffingIntervals.AddRange(GetRequiredStaffing(resolution, skillDayStats, skillDay.Clone));

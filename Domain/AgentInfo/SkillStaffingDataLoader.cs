@@ -45,7 +45,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var useShrinkage = isShrinkageValidatorEnabled();
 			var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), personSkills.Select(s => s.Skill),
 				_scenarioRepository.Current()).ToList();
-
 			var skillStaffingDatas = createSkillStaffingDatas(period, personSkills.Select(s => s.Skill).ToList(), resolution, useShrinkage, skillDays);
 
 			skillStaffingList.AddRange(skillStaffingDatas);
@@ -68,7 +67,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 								_scheduledStaffingProvider.StaffingPerSkill(skills, resolution, day, useShrinkage)
 									.ToLookup(x => new {x.StartDateTime, x.Id}),
 								Forecasted =
-								_forecastedStaffingProvider.StaffingPerSkill(skills, skillDays.Where(s => s.CurrentDate >= day.AddDays(-1) && s.CurrentDate <= day.AddDays(1)).ToArray(),
+								_forecastedStaffingProvider.StaffingPerSkill(
+									skillDays
+										.Where(s => s.CurrentDate >= day.AddDays(-1) && s.CurrentDate <= day.AddDays(1))
+										.ToLookup(x => x.Skill)
+										.ToDictionary(y => y.Key, y => y.AsEnumerable()),
 									resolution, day,
 									useShrinkage).ToLookup(x => new {x.StartTime, x.SkillId})
 							});

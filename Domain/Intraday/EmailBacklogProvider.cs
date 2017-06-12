@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		}
 
 		public Dictionary<Guid, int> GetStatisticsBacklogByWorkload(
-			ICollection<ISkillDay> skillDays, 
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
 			IList<SkillIntervalStatistics> actualVolumePerWorkloadInterval, 
 			DateOnly userDateOnly, 
 			int minutesPerInterval, 
@@ -42,18 +42,17 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return workloadBacklogDictionary;
 		}
 
-		private static Dictionary<Guid, ClosedPeriodWorkload> GetWorkloadsClosedPeriod(ICollection<ISkillDay> skillDays, DateOnly userDateOnly)
+		private static Dictionary<Guid, ClosedPeriodWorkload> GetWorkloadsClosedPeriod(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnly userDateOnly)
 		{
-			var skillDaysBySkill = skillDays
-				.Where(y => y.CurrentDate <= userDateOnly)
-				.ToLookup(x => x.Skill);
 			var workloadClosedHoursDictionary = new Dictionary<Guid, ClosedPeriodWorkload>();
-			foreach (var skillDayList in skillDaysBySkill)
+			foreach (var skillDayList in skillDays)
 			{
 				if (skillDayList.Key.SkillType.Description.Name != "SkillTypeEmail")
 					continue;
 
-				var reversedSkillDayList = skillDayList.OrderByDescending(x => x.CurrentDate);
+				var reversedSkillDayList = skillDayList.Value
+					.Where(y => y.CurrentDate <= userDateOnly)
+					.OrderByDescending(x => x.CurrentDate);
 
 				foreach (var skillDay in reversedSkillDayList)
 				{
