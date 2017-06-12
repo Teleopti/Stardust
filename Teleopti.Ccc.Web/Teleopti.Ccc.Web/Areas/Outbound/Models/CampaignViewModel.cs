@@ -96,6 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public Guid CampaignId;
 		public IEnumerable<DateOnly> Dates;
+		public IEnumerable<DateOnly> SkipDates;
 	}
 
 	public class PlanWithScheduleForm

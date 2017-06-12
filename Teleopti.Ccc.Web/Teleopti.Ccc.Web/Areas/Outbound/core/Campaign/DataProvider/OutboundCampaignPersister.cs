@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 				campaign.ClearProductionPlan(date);
 			}
 
-			_productionReplanHelper.Replan(campaign);
+			_productionReplanHelper.Replan(campaign, manualPlan.SkipDates.ToArray());
 		}
 
 		public void ManualReplanCampaign(PlanWithScheduleForm planForm)

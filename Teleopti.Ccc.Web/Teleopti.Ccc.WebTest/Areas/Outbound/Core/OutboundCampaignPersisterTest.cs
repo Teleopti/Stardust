@@ -764,15 +764,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			var date = new DateOnly(2015, 8, 21);
 			var campaign = new Domain.Outbound.Campaign() { SpanningPeriod = new DateTimePeriod(new DateTime(2015, 8, 21, 0, 0, 0, DateTimeKind.Utc), new DateTime(2015, 8, 21, 23, 59, 59, DateTimeKind.Utc)) };
 			campaign.SetManualProductionPlan(date, TimeSpan.FromHours(1));
+			var skipedDates = new List<DateOnly> {date};
 
-			var removeManualForm = new RemoveManualPlanForm() { CampaignId = campaignId, Dates = new List<DateOnly>() { date } };
+			var removeManualForm = new RemoveManualPlanForm() { CampaignId = campaignId, Dates = new List<DateOnly>() { date }, SkipDates = skipedDates};
 			_outboundCampaignRepository.Stub(x => x.Get(campaignId)).Return(campaign);
 
 			_target = new OutboundCampaignPersister(_outboundCampaignRepository, null, null, null, null, null, null, _productionReplanHelper, null, null, null, _outboundScheduledResourcesCacher);
 			_target.RemoveManualProductionPlan(removeManualForm);
 
 			(campaign.GetManualProductionPlan(date)==null).Should().Be.True();
-			_productionReplanHelper.AssertWasCalled(x=>x.Replan(campaign));
+			_productionReplanHelper.AssertWasCalled(x=>x.Replan(campaign, skipedDates.ToArray()));
 		}
 
 		[Test]
