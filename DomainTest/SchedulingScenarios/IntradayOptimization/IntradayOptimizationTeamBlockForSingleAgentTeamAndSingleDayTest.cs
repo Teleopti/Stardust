@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var workShiftRuleSet =new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 7, 0, 15), new TimePeriodWithSegment(15, 0, 15, 0, 15), shiftCategoryAm));
 			var agent = new Person().WithPersonPeriod(workShiftRuleSet, skill).WithId().InTimeZone(TimeZoneInfo.Utc).WithSchedulePeriodOneDay(date);
 			var ass = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCategory);
-			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 0, ServiceAgreement.DefaultValues(),
-				new Tuple<TimePeriod, double>(new TimePeriod(15, 16), 1));
+			var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, date, 0, new Tuple<TimePeriod, double>(new TimePeriod(15, 16), 1));
 			var stateHolder = SchedulerStateHolderOrg.Fill(scenario, date, new [] {agent}, new[] {ass}, skillDay);
 			var optimizationPreferences = new OptimizationPreferences
 			{

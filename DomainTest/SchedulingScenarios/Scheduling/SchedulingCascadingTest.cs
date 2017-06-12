@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
 			};
 			Enumerable.Range(0,100).ForEach(i => PersonRepository.Has(contract, new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skillA, skillB));
-			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, date, 1), skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, ServiceAgreement.DefaultValues(), new Tuple<TimePeriod, double>(lateInterval, 1000)));
+			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, date, 1), skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)));
 			if(resourceCalculationHasBeenMade)
 				ResourceCalculation.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
 

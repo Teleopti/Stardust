@@ -67,8 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 						new Tuple<TimePeriod, double>(openHours, demand)).WithId();
 			else
 				skillDay =
-					skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3, ServiceAgreement.DefaultValues(),
-						new Tuple<TimePeriod, double>(openHours, demand)).WithId();
+					skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3, new Tuple<TimePeriod, double>(openHours, demand)).WithId();
 
 			var index = 0;
 

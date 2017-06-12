@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			SkillDayRepository.Has(new List<ISkillDay>
 							 {
-								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly, 1, ServiceAgreement.DefaultValues(), new Tuple<TimePeriod, double>(new TimePeriod(17, 0, 17, 15), 2)),
-								skillB.CreateSkillDayWithDemandOnInterval(scenario,dateOnly, 1, ServiceAgreement.DefaultValues(), new Tuple<TimePeriod, double>(new TimePeriod(8, 0, 8, 15), 10))
+								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly, 1, new Tuple<TimePeriod, double>(new TimePeriod(17, 0, 17, 15), 2)),
+								skillB.CreateSkillDayWithDemandOnInterval(scenario,dateOnly, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 0, 8, 15), 10))
 							 });
 
 			PersonAssignmentRepository.Has(agentA, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));
@@ -85,8 +85,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			SkillDayRepository.Has(new List<ISkillDay>
 							 {
-								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,1, ServiceAgreement.DefaultValues(), new Tuple<TimePeriod, double>(new TimePeriod(7, 45, 8, 0), 2)),
-								skillB.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,0, ServiceAgreement.DefaultValues(), new Tuple<TimePeriod, double>(new TimePeriod(17, 0, 17, 15), 100)) //this huge demand should not be considered
+								skillA.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,1, new Tuple<TimePeriod, double>(new TimePeriod(7, 45, 8, 0), 2)),
+								skillB.CreateSkillDayWithDemandOnInterval(scenario,dateOnly,0, new Tuple<TimePeriod, double>(new TimePeriod(17, 0, 17, 15), 100)) //this huge demand should not be considered
 							 });
 
 			PersonAssignmentRepository.Has(agentA, scenario, activity, shiftCategory, dateOnly, new TimePeriod(8, 0, 17, 0));

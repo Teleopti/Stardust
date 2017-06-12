@@ -84,6 +84,12 @@ namespace Teleopti.Ccc.TestCommon
 		}
 
 		public static ISkillDay CreateSkillDayWithDemandOnInterval(this ISkill skill, IScenario scenario, DateOnly dateOnly,
+			double defaultDemand, params Tuple<TimePeriod, double>[] intervalDemands)
+		{
+			return skill.CreateSkillDayWithDemandOnInterval(scenario, dateOnly, defaultDemand, ServiceAgreement.DefaultValues(), intervalDemands);
+		}
+
+		public static ISkillDay CreateSkillDayWithDemandOnInterval(this ISkill skill, IScenario scenario, DateOnly dateOnly,
 			double defaultDemand, ServiceAgreement serviceAgreement, params Tuple<TimePeriod, double>[] intervalDemands)
 		{
 			var skillDataPeriods = new List<ISkillDataPeriod>();
