@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 				using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 				using (PerformanceOutput.ForOperation("Read and collect agent states"))
 				{
-					_agentStateReadModelReader.Read(_rtaStateHolder.FilteredPersons)
+					_agentStateReadModelReader.Read(_rtaStateHolder.FilteredPersons.Select(x => x.Id.Value))
 						.ForEach(a => _rtaStateHolder.SetActualAgentState(a));
 				}
 			}

@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -20,14 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		public AgentStateReadModelLegacyReader(ICurrentUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
-		}
-
-		public IEnumerable<AgentStateReadModel> Read(IEnumerable<IPerson> persons)
-		{
-			return Read(
-				persons
-					.Select(person => person.Id.GetValueOrDefault())
-					.ToList());
 		}
 
 		public IEnumerable<AgentStateReadModel> Read(IEnumerable<Guid> personIds)

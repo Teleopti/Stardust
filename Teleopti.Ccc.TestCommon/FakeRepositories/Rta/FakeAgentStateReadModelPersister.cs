@@ -296,7 +296,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				where excludedStateGroup != model.StateGroupId
 				select model;
 
-		public IEnumerable<AgentStateReadModel> Read(IEnumerable<IPerson> persons) => null;
 		public IEnumerable<AgentStateReadModel> Read(IEnumerable<Guid> personIds) => null;
 	}
 }
