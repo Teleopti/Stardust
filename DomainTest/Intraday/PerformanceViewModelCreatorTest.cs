@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
 	[TestWithStaticDependenciesAvoidUse]
+	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	public class PerformanceViewModelCreatorTest : ISetup
 	{
 		public PerformanceViewModelCreator Target;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillDayRepository SkillDayRepository;
-		public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
+		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		const int minutesPerInterval = 15;
 		public FakeIntradayMonitorDataLoader IntradayMonitorDataLoader;
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDay);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue,scheduledStaffingList);
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDay);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
@@ -123,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillRepository.Has(skillClosedOnWeekends);
 			SkillDayRepository.Add(skillDayFriday);
 			SkillDayRepository.Add(skillDaySaturday);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
 			var result = Target.Load(new Guid[] { skillClosedOnWeekends.Id.Value });
 
@@ -151,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scheduledStaffingList = createScheduledStaffing(skillDay);
 			createStatistics(latestStatsTime.AddMinutes(-minutesPerInterval), userNow, latestStatsTime);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
@@ -173,37 +174,37 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill2 = createSkill(minutesPerInterval, "skill", new TimePeriod(7, 45, 8, 30), false);
 			var skillDay2 = createSkillDay(skill2, Now.UtcDateTime(), new TimePeriod(7, 45, 8, 30), false);
 
-			var scheduledStaffingList = new List<SkillStaffingInterval>
+			var scheduledStaffingList = new List<SkillCombinationResource>
 			{
-				new SkillStaffingInterval {
-					SkillId = skill1.Id.Value,
+				new SkillCombinationResource {
+					SkillCombination = new [] {skill1.Id.Value},
 					StartDateTime = userNow,
 					EndDateTime = userNow.AddMinutes(minutesPerInterval),
-					StaffingLevel = 19
+					Resource = 19
 				},
-				new SkillStaffingInterval {
-					SkillId = skill1.Id.Value,
+				new SkillCombinationResource {
+					SkillCombination =  new [] {skill1.Id.Value},
 					StartDateTime = userNow.AddMinutes(minutesPerInterval),
 					EndDateTime = userNow.AddMinutes(2*minutesPerInterval),
-					StaffingLevel = 18
+					Resource = 18
 				},
-				new SkillStaffingInterval {
-					SkillId = skill2.Id.Value,
+				new SkillCombinationResource {
+					SkillCombination =  new [] {skill2.Id.Value},
 					StartDateTime = userNow.AddMinutes(-minutesPerInterval),
 					EndDateTime = userNow,
-					StaffingLevel = 20
+					Resource = 20
 				},
-				new SkillStaffingInterval {
-					SkillId = skill2.Id.Value,
+				new SkillCombinationResource {
+					SkillCombination =  new [] {skill2.Id.Value},
 					StartDateTime = userNow,
 					EndDateTime = userNow.AddMinutes(minutesPerInterval),
-					StaffingLevel = 21
+					Resource = 21
 				}
 			};
 
 			SkillRepository.Has(skill1, skill2);
 			SkillDayRepository.Has(skillDay1, skillDay2);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
 			createStatistics(userNow.AddMinutes(-minutesPerInterval), userNow.AddMinutes(minutesPerInterval), latestStatsTime);
 
@@ -213,7 +214,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var forecastedCallsSkill2 = skillDay2.WorkloadDayCollection.First().TaskPeriodList[1].Tasks;
 
 			var eslSkill1First = _staffingCalculatorService.ServiceLevelAchievedOcc(
-				scheduledStaffingList[0].StaffingLevel,
+				scheduledStaffingList[0].Resource,
 				skillDay1.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Seconds,
 				forecastedCallsSkill1,
 				skillDay1.WorkloadDayCollection.First().TaskPeriodList[0].TotalAverageTaskTime.TotalSeconds +
@@ -223,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				skillDay1.SkillStaffPeriodCollection[0].FStaff,
 				1);
 			var eslSkill2Second = _staffingCalculatorService.ServiceLevelAchievedOcc(
-				scheduledStaffingList[3].StaffingLevel,
+				scheduledStaffingList[3].Resource,
 				skillDay2.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Seconds,
 				forecastedCallsSkill2,
 				skillDay2.WorkloadDayCollection.First().TaskPeriodList[1].TotalAverageTaskTime.TotalSeconds +
@@ -311,7 +312,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDay);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
@@ -397,7 +398,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDay);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
@@ -484,15 +485,17 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skill2 = createSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 15), false);
 			var skillDay1 = createSkillDay(skill1, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 15), false);
 			var skillDay2 = createSkillDay(skill2, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 15), false);
+			var scheduledStaffingList = new List<SkillCombinationResource>();
 			var scheduledStaffingList1 = createScheduledStaffing(skillDay1);
 			var scheduledStaffingList2 = createScheduledStaffing(skillDay2);
+			scheduledStaffingList.AddRange(scheduledStaffingList1);
+			scheduledStaffingList.AddRange(scheduledStaffingList2);
 
 			SkillRepository.Has(skill1);
 			SkillRepository.Has(skill2);
 			SkillDayRepository.Add(skillDay1);
 			SkillDayRepository.Add(skillDay2);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList1, DateTime.MinValue);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList2, DateTime.MinValue);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 			createStatistics(latestStatsTime, latestStatsTime.AddMinutes(minutesPerInterval), latestStatsTime);
 
 			var result = Target.Load(new Guid[] { skill1.Id.Value, skill2.Id.Value });
@@ -558,7 +561,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDay);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
 			var result = Target.Load(new Guid[] { skill.Id.Value });
 
@@ -588,7 +591,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDay);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
 			var result = Target.Load(new Guid[] { skill.Id.Value }, testDate);
 
@@ -620,17 +623,17 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDay);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
 			var result = Target.Load(new Guid[] { skill.Id.Value }, testDate.AddDays(+1));
 
 			result.LatestActualIntervalStart.Should().Not.Have.Value();
 		}
 
-		private double calculateEsl(IList<SkillStaffingInterval> scheduledStaffingList, ISkillDay skillDay, double forecastedCallsSkill, int intervalPosition)
+		private double calculateEsl(IList<SkillCombinationResource> scheduledStaffingList, ISkillDay skillDay, double forecastedCallsSkill, int intervalPosition)
 		{
 			return _staffingCalculatorService.ServiceLevelAchievedOcc(
-				scheduledStaffingList[intervalPosition].StaffingLevel,
+				scheduledStaffingList[intervalPosition].Resource,
 				skillDay.SkillDataPeriodCollection.First().ServiceAgreement.ServiceLevel.Seconds,
 				forecastedCallsSkill,
 				skillDay.WorkloadDayCollection.First().TaskPeriodList[intervalPosition].TotalAverageTaskTime.TotalSeconds +
@@ -641,9 +644,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				1);
 		}
 
-		private IList<SkillStaffingInterval> createScheduledStaffing(ISkillDay skillDay)
+		private IList<SkillCombinationResource> createScheduledStaffing(ISkillDay skillDay)
 		{
-			var scheduledStats = new List<SkillStaffingInterval>();
+			var scheduledStats = new List<SkillCombinationResource>();
 			var shiftStartTime = skillDay.SkillStaffPeriodCollection.First().Period.StartDateTime;
 			var shiftEndTime = skillDay.SkillStaffPeriodCollection.Last().Period.EndDateTime;
 
@@ -653,12 +656,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 						 intervalTime < shiftEndTime;
 						 intervalTime = intervalTime.AddMinutes(minutesPerInterval))
 			{
-				scheduledStats.Add(new SkillStaffingInterval
+				scheduledStats.Add(new SkillCombinationResource
 				{
-					SkillId = skillDay.Skill.Id.Value,
-					StartDateTime = TimeZoneHelper.ConvertFromUtc(intervalTime, TimeZone.TimeZone()),
-					EndDateTime = TimeZoneHelper.ConvertFromUtc(intervalTime, TimeZone.TimeZone()).AddMinutes(minutesPerInterval),
-					StaffingLevel = 18 * random.Next(100, 110) / 100d
+					SkillCombination = new [] {skillDay.Skill.Id.GetValueOrDefault()},
+					StartDateTime = intervalTime,
+					EndDateTime = intervalTime.AddMinutes(minutesPerInterval),
+					Resource = 18 * random.Next(100, 110) / 100d
 				});
 			}
 			return scheduledStats;
@@ -736,9 +739,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			SkillDayRepository.Add(skillDayToday);
 			SkillDayRepository.Add(skillDayTomorrow);
 
-			ScheduleForecastSkillReadModelRepository.Persist(createScheduledStaffing(skillDayYesterday), DateTime.MinValue);
-			ScheduleForecastSkillReadModelRepository.Persist(createScheduledStaffing(skillDayToday), DateTime.MinValue);
-			ScheduleForecastSkillReadModelRepository.Persist(createScheduledStaffing(skillDayTomorrow), DateTime.MinValue);
+			var scheduledStaffingList = new List<SkillCombinationResource>();
+			scheduledStaffingList.AddRange(createScheduledStaffing(skillDayYesterday));
+			scheduledStaffingList.AddRange(createScheduledStaffing(skillDayToday));
+			scheduledStaffingList.AddRange(createScheduledStaffing(skillDayTomorrow));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 		}
 
 		private Scenario fakeScenarioAndIntervalLength()

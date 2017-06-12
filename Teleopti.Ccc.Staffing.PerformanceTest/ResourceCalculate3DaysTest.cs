@@ -20,7 +20,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
-	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
 	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	public class ResourceCalculate3DaysTest : PerformanceTestWithOneTimeSetup
 	{
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public IDataSourceScope DataSource;
 		public AsSystem AsSystem;
 		public IConfigReader ConfigReader;
-		public ISkillStaffingIntervalProvider SkillStaffingIntervalProvider;
+		public SkillStaffingIntervalProvider SkillStaffingIntervalProvider;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public IStaffingViewModelCreator StaffingViewModelCreator;
 		public ISkillRepository SkillRepository;

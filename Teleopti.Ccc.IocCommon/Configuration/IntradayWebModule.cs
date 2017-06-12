@@ -67,12 +67,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<SkillCombinationResourceRepositoryOld>().As<ISkillCombinationResourceRepository>().SingleInstance();
 			        
 			builder.RegisterType<EmailBacklogProvider>().SingleInstance();
+			builder.RegisterType<SkillStaffingIntervalProvider>().SingleInstance();
 
-
-			if (_configuration.Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx))
-				builder.RegisterType<SkillStaffingIntervalProvider>().As<ISkillStaffingIntervalProvider>().SingleInstance();
-			else
-				builder.RegisterType<SkillStaffingIntervalProviderOldReadModel>().As<ISkillStaffingIntervalProvider>().SingleInstance();
 		}
 	}
 

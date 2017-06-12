@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 	{
 		private readonly IPersonForOvertimeProvider _personProviderForOvertime;
 		private readonly IPersonRepository _personRepository;
-		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
+		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly ISkillRepository _skillRepository;
 
 		public CalculateOvertimeSuggestionProvider(IPersonForOvertimeProvider personProviderForOvertime,
-			IPersonRepository personRepository, ISkillStaffingIntervalProvider skillStaffingIntervalProvider, 
+			IPersonRepository personRepository, SkillStaffingIntervalProvider skillStaffingIntervalProvider, 
 			ISkillCombinationResourceRepository skillCombinationResourceRepository, ISkillRepository skillRepository)
 		{
 			_personProviderForOvertime = personProviderForOvertime;

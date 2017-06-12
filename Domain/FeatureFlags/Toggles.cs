@@ -228,7 +228,6 @@
 
 		WfmStaffing_AllowActions_42524,
 		Reporting_Optional_Columns_42066,
-		Staffing_ReadModel_UseSkillCombination_xx,
 		Staffing_ReadModel_Update14Days_43840,
 		Staffing_ReadModel_Keep8DaysHistoricalData_44652,
 		StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388,

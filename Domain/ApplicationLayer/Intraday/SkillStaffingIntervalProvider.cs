@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 {
-	public class SkillStaffingIntervalProvider : ISkillStaffingIntervalProvider
+	public class SkillStaffingIntervalProvider
 	{
 		private readonly SplitSkillStaffInterval _splitSkillStaffInterval;
 		private readonly ISkillRepository _skillRepository;
@@ -80,40 +80,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		}
 
 	
-	}
-
-
-
-	public class SkillStaffingIntervalProviderOldReadModel : ISkillStaffingIntervalProvider
-	{
-		private readonly IScheduleForecastSkillReadModelRepository _scheduleForecastSkillReadModelRepository;
-		private readonly SplitSkillStaffInterval _splitSkillStaffInterval;
-
-		public SkillStaffingIntervalProviderOldReadModel(IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository, SplitSkillStaffInterval splitSkillStaffInterval)
-		{
-			_scheduleForecastSkillReadModelRepository = scheduleForecastSkillReadModelRepository;
-			_splitSkillStaffInterval = splitSkillStaffInterval;
-		}
-
-		public IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution, bool useShrinkage)
-		{
-			var skillIntervals = _scheduleForecastSkillReadModelRepository.ReadMergedStaffingAndChanges(skillIdList, period);
-			var splittedIntervals = _splitSkillStaffInterval.Split(skillIntervals.ToList(), resolution, useShrinkage);
-			return splittedIntervals
-				.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime)
-				.ToList();
-		}
-
-		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources, bool useShrinkage)
-		{
-			throw new NotImplementedException();
-		}
-	}
-
-	public interface ISkillStaffingIntervalProvider
-	{
-		IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution, bool useShrinkage);
-		List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources, bool useShinkage);
 	}
 
 

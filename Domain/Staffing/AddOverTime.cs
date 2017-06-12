@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -28,22 +27,20 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
-		private readonly ScheduleOvertime _scheduleOvertime;
 		private readonly IPersonForOvertimeProvider _personForOvertimeProvider;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
-		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 		private readonly ScheduleOvertimeExecuteWrapper _scheduleOvertimeExecuteWrapper;
 
 
 		public AddOverTime(ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 						   INow now, IUserTimeZone userTimeZone, CalculateOvertimeSuggestionProvider calculateOvertimeSuggestionProvider, 
 						   IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ICommandDispatcher commandDispatcher, 
-						   ISkillCombinationResourceRepository skillCombinationResourceRepository, ScheduleOvertime scheduleOvertime, 
+						   ISkillCombinationResourceRepository skillCombinationResourceRepository, 
 						   IPersonForOvertimeProvider personForOvertimeProvider, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, 
-						   IPersonRepository personRepository, ISkillRepository skillRepository, ISkillStaffingIntervalProvider skillStaffingIntervalProvider, 
+						   IPersonRepository personRepository, ISkillRepository skillRepository, 
 						   ScheduleOvertimeExecuteWrapper scheduleOvertimeExecuteWrapper)
 		{
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -53,13 +50,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
-			_scheduleOvertime = scheduleOvertime;
 			_personForOvertimeProvider = personForOvertimeProvider;
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
-			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
 			_scheduleOvertimeExecuteWrapper = scheduleOvertimeExecuteWrapper;
 		}
 
@@ -80,8 +75,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var multiplicationDefinition = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().FirstOrDefault();
 
 			var scheduleDays = persons.Select(person => scheduleDictionary[person].ScheduledDay(userDateOnly)).ToList();
-
-			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
 
 			var skills = allSkills.Where(x => overTimeSuggestionModel.SkillIds.Contains(x.Id.GetValueOrDefault())).ToList();
 
@@ -166,10 +159,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		}
 
-		private static IDisposable getContext(IEnumerable<SkillCombinationResource> combinationResources, List<ISkill> skills, bool useAllSkills)
-		{
-			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(combinationResources.ToList(), skills, useAllSkills)));
-		}
 
 		public void Apply(IList<OverTimeModel> overTimeModels )
 		{

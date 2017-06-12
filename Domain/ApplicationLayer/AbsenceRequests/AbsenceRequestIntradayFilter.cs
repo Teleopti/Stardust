@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly INow _now;
-		private readonly IIntradayRequestProcessor _intradayRequestProcessor;
+		private readonly IntradayRequestProcessor _intradayRequestProcessor;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 
-		public AbsenceRequestIntradayFilter(IIntradayRequestProcessor intradayRequestProcessor,
+		public AbsenceRequestIntradayFilter(IntradayRequestProcessor intradayRequestProcessor,
 											IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, INow now,
 											IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
 		{

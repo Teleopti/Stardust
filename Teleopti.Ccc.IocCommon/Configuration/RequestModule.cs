@@ -73,11 +73,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				<IBusinessRuleConfigProvider, BusinessRuleConfigProvider, BusinessRuleConfigProvider25635ToggleOff>(builder,
 						Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635);
 
-			
-			registerType
-				<IIntradayRequestProcessor, IntradayRequestProcessor, IntradayRequestProcessorOld>(builder,
-						Toggles.Staffing_ReadModel_UseSkillCombination_xx);
-
 			registerType
 				<ISmartDeltaDoer, SmartDeltaDoerEmpty, SmartDeltaDoer>(builder,
 																	   Toggles.Staffing_ReadModel_BetterAccuracy_Step2_44271);
@@ -87,7 +82,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftTradeApproveService>().As<IShiftTradeApproveService>().SingleInstance();
 
 			builder.RegisterType<RequestStrategySettingsReader>().As<IRequestStrategySettingsReader>().SingleInstance();
-
+			builder.RegisterType<IntradayRequestProcessor>().SingleInstance();
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

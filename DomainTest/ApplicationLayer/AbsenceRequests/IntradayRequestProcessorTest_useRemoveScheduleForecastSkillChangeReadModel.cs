@@ -25,8 +25,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	[TestFixture]
-	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx)]
 	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	public class IntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModel : ISetup
 	{
@@ -45,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
-			system.UseTestDouble<IntradayRequestProcessor>().For<IIntradayRequestProcessor>();
 		}
 
 		[Test]

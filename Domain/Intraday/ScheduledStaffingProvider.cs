@@ -12,17 +12,17 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
+		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 
-		public ScheduledStaffingProvider(INow now, 
-			IUserTimeZone timeZone, 
-			ISkillStaffingIntervalProvider skillStaffingIntervalProvider)
+		public ScheduledStaffingProvider(INow now,
+										 IUserTimeZone timeZone,
+										 SkillStaffingIntervalProvider skillStaffingIntervalProvider)
 		{
 			_now = now;
 			_timeZone = timeZone;
 			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
 		}
-		
+
 		public IList<SkillStaffingIntervalLightModel> StaffingPerSkill(IList<ISkill> skills, int minutesPerInterval, DateOnly? dateOnly = null, bool useShrinkage = false)
 		{
 			var skillIdArray = skills.Select(x => x.Id.Value).ToArray();

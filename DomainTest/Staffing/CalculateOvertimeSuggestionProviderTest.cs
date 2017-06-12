@@ -19,8 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Staffing
 {
 	[DomainTest]
-	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx), 
-		Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
+	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	public class CalculateOvertimeSuggestionProviderTest : ISetup
 	{
 		public CalculateOvertimeSuggestionProvider Target;

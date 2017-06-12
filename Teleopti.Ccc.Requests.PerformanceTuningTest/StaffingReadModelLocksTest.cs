@@ -25,7 +25,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 {
-	[Toggle(Toggles.Staffing_ReadModel_UseSkillCombination_xx), Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388),
+	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388),
 	 Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_43447), Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step2_44271)]
 	[RequestPerformanceTuningTest]
 	public class StaffingReadModelLocksTest : PerformanceTestWithOneTimeSetup

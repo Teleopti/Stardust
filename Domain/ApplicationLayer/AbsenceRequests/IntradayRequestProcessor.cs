@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	public class IntradayRequestProcessor : IIntradayRequestProcessor
+	public class IntradayRequestProcessor
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayRequestProcessor));
 		private readonly ICommandDispatcher _commandDispatcher;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ISkillRepository _skillRepository;
 		private readonly SkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
-		private readonly ISkillStaffingIntervalProvider _skillStaffingIntervalProvider;
+		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 		private readonly IActivityRepository _activityRepository;
 		private readonly ISmartDeltaDoer _smartDeltaDoer;
 
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 												 ISkillCombinationResourceRepository skillCombinationResourceRepository,
 												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 												 ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, 
-												 IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ISkillStaffingIntervalProvider skillStaffingIntervalProvider, 
+												 IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, SkillStaffingIntervalProvider skillStaffingIntervalProvider, 
 												 ISmartDeltaDoer smartDeltaDoer, IActivityRepository activityRepository)
 		{
 			_commandDispatcher = commandDispatcher;

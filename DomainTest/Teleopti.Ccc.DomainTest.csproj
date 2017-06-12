@@ -170,7 +170,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\ApproveRequestsWithValidatorsEventHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ArrangeRequestsBySortOrderTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsWithDifferentVersionTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorOldTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModel.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandlerTest.cs" />
@@ -238,7 +237,6 @@
     <Compile Include="Common\PublishPersonPeriodChangedEventTest.cs" />
     <Compile Include="Common\PublishPersonTerminatedChangeEventTest.cs" />
     <Compile Include="Intraday\SkillStaffingIntervalProviderTest.cs" />
-    <Compile Include="Intraday\SkillStaffingIntervalProviderOldReadModelTest.cs" />
     <Compile Include="Intraday\SplitSkillStaffIntervalTest.cs" />
     <Compile Include="ApplicationLayer\ApproveBatchRequestsCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\BackoutScheduleChangeCommandHandlerTest.cs" />
@@ -349,7 +347,6 @@
     <Compile Include="Forecasting\SkillPriorityProviderTest.cs" />
     <Compile Include="Intraday\StaffingViewModelCreatorEmailTest.cs" />
     <Compile Include="Intraday\StaffingViewModelCreatorTestHelper.cs" />
-    <Compile Include="Intraday\StaffingViewModelCreatorTest_useSkillCombinationsTolleOn.cs" />
     <Compile Include="Intraday\StaffingViewModelCreatorTest.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProviderTest.cs" />
     <Compile Include="DomainTestWithStaticDependenciesAvoidUseAttribute.cs" />

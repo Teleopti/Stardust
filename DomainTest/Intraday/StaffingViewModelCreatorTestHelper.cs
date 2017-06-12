@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -46,9 +47,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		public static ISkill CreateEmailSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
+			var activity = new Activity("activity_" + skillName).WithId();
 			var skill =
 				new Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypeEmail(new Description("SkillTypeEmail"), ForecastSource.Email))
 				{
+					Activity = activity,
 					TimeZone = TimeZoneInfo.Utc
 				}.WithId();
 			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours).WithId();
