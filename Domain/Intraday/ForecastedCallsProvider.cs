@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var endTime = new DateTime();
 			foreach (var workloadDay in skillDay.WorkloadDayCollection)
 			{
-				var workloadId = workloadDay.Workload.Id.Value;
 				var start = workloadDay.OpenTaskPeriodList.Min(x => x.Period.StartDateTime);
 				var end = workloadDay.OpenTaskPeriodList.Max(x => x.Period.EndDateTime);
 				if (startTime != null || startTime > start)
