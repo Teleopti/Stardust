@@ -318,7 +318,6 @@ describe('Outbound campaign commands pane tests ', function() {
 		scope.isRefreshingData = false;
 		scope.callbacks = {
 			ignoreSchedules: function(ignoredDates, callback) {
-				console.log('callback');
 				ignoreSchedulesCallbackCalledCount++;
 				callback && callback();
 			},
