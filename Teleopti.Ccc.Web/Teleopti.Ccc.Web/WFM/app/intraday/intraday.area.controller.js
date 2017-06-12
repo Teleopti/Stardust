@@ -35,6 +35,7 @@
         intradayLatestTimeService,
         toggleSvc
     ) {
+		var vm = this;
         var autocompleteSkill;
         var autocompleteSkillArea;
         var timeoutPromise;

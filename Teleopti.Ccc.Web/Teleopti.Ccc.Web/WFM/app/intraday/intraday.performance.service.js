@@ -5,7 +5,9 @@
         'intradayService',
         '$translate',
         function($filter, intradayService, $translate) {
-            var service = {};
+            var service = {
+                performanceChart: {}
+            };
 
             var performanceData = {
                 averageSpeedOfAnswerObj: {
@@ -99,6 +101,9 @@
 
                 if (isToday) {
                     getCurrent();
+                }
+                if (service.performanceChart.data().length <= 0) {
+                    service.initPerformanceChart();
                 }
                 service.loadPerformanceChart(performanceData);
                 return performanceData;
@@ -214,18 +219,24 @@
             };
 
             service.loadPerformanceChart = function(performanceData) {
-                var performanceChart = c3.generate({
+                service.performanceChart.load({
+                    columns: [
+                        performanceData.timeSeries,
+                        performanceData.averageSpeedOfAnswerObj.series,
+                        performanceData.abandonedRateObj.series,
+                        performanceData.serviceLevelObj.series,
+                        performanceData.estimatedServiceLevelObj.series,
+                        performanceData.currentInterval
+                    ]
+                });
+            };
+
+            service.initPerformanceChart = function(performanceData) {
+                service.performanceChart = c3.generate({
                     bindto: '#performanceChart',
                     data: {
                         x: 'x',
-                        columns: [
-                            performanceData.timeSeries,
-                            performanceData.averageSpeedOfAnswerObj.series,
-                            performanceData.abandonedRateObj.series,
-                            performanceData.serviceLevelObj.series,
-                            performanceData.estimatedServiceLevelObj.series,
-                            performanceData.currentInterval
-                        ],
+                        columns: [],
                         hide: hiddenArray,
                         type: 'line',
                         types: {
@@ -296,9 +307,15 @@
                                 service.loadPerformanceChart(performanceData);
                             }
                         }
+                    },
+                    transition: {
+                        duration: 500
                     }
                 });
             };
+
+            service.initPerformanceChart(performanceData);
+            service.loadPerformanceChart(performanceData);
 
             return service;
         }

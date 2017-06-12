@@ -5,7 +5,9 @@
         'intradayService',
         '$translate',
         function($filter, intradayService, $translate) {
-            var service = {};
+            var service = {
+                trafficChart: {}
+            };
 
             var trafficData = {
                 forecastedCallsObj: {
@@ -97,7 +99,11 @@
                 if (isToday) {
                     getCurrent();
                 }
+                if (service.trafficChart.data().length <= 0) {
+                    service.initTrafficChart();
+                }
                 service.loadTrafficChart(trafficData);
+
                 return trafficData;
             };
 
@@ -201,18 +207,25 @@
             };
 
             service.loadTrafficChart = function(trafficData) {
-                var performanceChart = c3.generate({
+                console.log('trafficData', trafficData);
+                service.trafficChart.load({
+                    columns: [
+                        trafficData.timeSeries,
+                        trafficData.forecastedCallsObj.series,
+                        trafficData.actualCallsObj.series,
+                        trafficData.forecastedAverageHandleTimeObj.series,
+                        trafficData.actualAverageHandleTimeObj.series,
+                        trafficData.currentInterval
+                    ]
+                });
+            };
+
+            service.initTrafficChart = function(trafficData) {
+                service.trafficChart = c3.generate({
                     bindto: '#trafficChart',
                     data: {
                         x: 'x',
-                        columns: [
-                            trafficData.timeSeries,
-                            trafficData.forecastedCallsObj.series,
-                            trafficData.actualCallsObj.series,
-                            trafficData.forecastedAverageHandleTimeObj.series,
-                            trafficData.actualAverageHandleTimeObj.series,
-                            trafficData.currentInterval
-                        ],
+                        columns: [],
                         hide: hiddenArray,
                         types: {
                             Current: 'bar'
@@ -281,9 +294,15 @@
                                 service.loadTrafficChart(trafficData);
                             }
                         }
+                    },
+                    transition: {
+                        duration: 500
                     }
                 });
             };
+
+            service.initTrafficChart(trafficData);
+            service.loadTrafficChart(trafficData);
 
             return service;
         }

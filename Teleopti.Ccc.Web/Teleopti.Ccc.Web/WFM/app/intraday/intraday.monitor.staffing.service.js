@@ -5,7 +5,9 @@
         'intradayService',
         '$translate',
         function($filter, intradayService, $translate) {
-            var service = {};
+            var service = {
+                staffingChart: {}
+            };
 
             var staffingData = {
                 forecastedStaffing: {
@@ -70,6 +72,10 @@
                 staffingData.forecastedStaffing.updatedSeries.splice(0, 0, 'Updated_forecasted_staffing');
                 staffingData.actualStaffingSeries.splice(0, 0, 'Actual_staffing');
                 staffingData.scheduledStaffing.splice(0, 0, 'Scheduled_staffing');
+
+                if (service.staffingChart.data().length <= 0) {
+                    service.initStaffingChart();
+                }
 
                 service.loadStaffingChart(staffingData);
                 return staffingData;
@@ -187,17 +193,23 @@
             };
 
             service.loadStaffingChart = function(staffingData) {
-                var staffingChart = c3.generate({
+                service.staffingChart.load({
+                    columns: [
+                        staffingData.timeSeries,
+                        staffingData.forecastedStaffing.series,
+                        staffingData.forecastedStaffing.updatedSeries,
+                        staffingData.actualStaffingSeries,
+                        staffingData.scheduledStaffing
+                    ]
+                });
+            };
+
+            service.initStaffingChart = function(staffingData) {
+                service.staffingChart = c3.generate({
                     bindto: '#staffingChart',
                     data: {
                         x: 'x',
-                        columns: [
-                            staffingData.timeSeries,
-                            staffingData.forecastedStaffing.series,
-                            staffingData.forecastedStaffing.updatedSeries,
-                            staffingData.actualStaffingSeries,
-                            staffingData.scheduledStaffing
-                        ],
+                        columns: [],
                         type: 'line',
                         hide: hiddenArray,
                         names: {
@@ -256,9 +268,15 @@
                                 service.loadStaffingChart(staffingData);
                             }
                         }
-                    }
+                    },
+					transition: {
+						duration: 500
+					}
                 });
             };
+
+			service.initStaffingChart(staffingData);
+			service.loadStaffingChart(staffingData);
 
             return service;
         }
