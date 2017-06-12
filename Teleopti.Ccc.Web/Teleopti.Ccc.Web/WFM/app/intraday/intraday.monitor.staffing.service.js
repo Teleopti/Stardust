@@ -192,19 +192,20 @@
                     );
             };
 
-            service.loadStaffingChart = function(staffingData) {
+            service.loadStaffingChart = function(sData) {
+				if(!sData) return;
                 service.staffingChart.load({
                     columns: [
-                        staffingData.timeSeries,
-                        staffingData.forecastedStaffing.series,
-                        staffingData.forecastedStaffing.updatedSeries,
-                        staffingData.actualStaffingSeries,
-                        staffingData.scheduledStaffing
+                        sData.timeSeries,
+                        sData.forecastedStaffing.series,
+                        sData.forecastedStaffing.updatedSeries,
+                        sData.actualStaffingSeries,
+                        sData.scheduledStaffing
                     ]
                 });
             };
 
-            service.initStaffingChart = function(staffingData) {
+            service.initStaffingChart = function() {
                 service.staffingChart = c3.generate({
                     bindto: '#staffingChart',
                     data: {
@@ -265,18 +266,19 @@
                                 } else {
                                     hiddenArray.push(id);
                                 }
+                                service.initStaffingChart();
                                 service.loadStaffingChart(staffingData);
                             }
                         }
                     },
-					transition: {
-						duration: 500
-					}
+                    transition: {
+                        duration: 500
+                    }
                 });
             };
 
-			service.initStaffingChart(staffingData);
-			service.loadStaffingChart(staffingData);
+            service.initStaffingChart();
+            service.loadStaffingChart(staffingData);
 
             return service;
         }

@@ -218,20 +218,21 @@
                     );
             };
 
-            service.loadPerformanceChart = function(performanceData) {
+            service.loadPerformanceChart = function(pData) {
+				if(!pData) return;
                 service.performanceChart.load({
                     columns: [
-                        performanceData.timeSeries,
-                        performanceData.averageSpeedOfAnswerObj.series,
-                        performanceData.abandonedRateObj.series,
-                        performanceData.serviceLevelObj.series,
-                        performanceData.estimatedServiceLevelObj.series,
-                        performanceData.currentInterval
+                        pData.timeSeries,
+                        pData.averageSpeedOfAnswerObj.series,
+                        pData.abandonedRateObj.series,
+                        pData.serviceLevelObj.series,
+                        pData.estimatedServiceLevelObj.series,
+                        pData.currentInterval
                     ]
                 });
             };
 
-            service.initPerformanceChart = function(performanceData) {
+            service.initPerformanceChart = function() {
                 service.performanceChart = c3.generate({
                     bindto: '#performanceChart',
                     data: {
@@ -304,6 +305,7 @@
                                 } else {
                                     hiddenArray.push(id);
                                 }
+                                service.initPerformanceChart();
                                 service.loadPerformanceChart(performanceData);
                             }
                         }
@@ -315,7 +317,7 @@
             };
 
             service.initPerformanceChart(performanceData);
-            service.loadPerformanceChart(performanceData);
+            service.loadPerformanceChart();
 
             return service;
         }

@@ -206,20 +206,21 @@
                     );
             };
 
-            service.loadTrafficChart = function(trafficData) {
+            service.loadTrafficChart = function(tData) {
+                if (!tData) return;
                 service.trafficChart.load({
                     columns: [
-                        trafficData.timeSeries,
-                        trafficData.forecastedCallsObj.series,
-                        trafficData.actualCallsObj.series,
-                        trafficData.forecastedAverageHandleTimeObj.series,
-                        trafficData.actualAverageHandleTimeObj.series,
-                        trafficData.currentInterval
+                        tData.timeSeries,
+                        tData.forecastedCallsObj.series,
+                        tData.actualCallsObj.series,
+                        tData.forecastedAverageHandleTimeObj.series,
+                        tData.actualAverageHandleTimeObj.series,
+                        tData.currentInterval
                     ]
                 });
             };
 
-            service.initTrafficChart = function(trafficData) {
+            service.initTrafficChart = function() {
                 service.trafficChart = c3.generate({
                     bindto: '#trafficChart',
                     data: {
@@ -290,6 +291,7 @@
                                 } else {
                                     hiddenArray.push(id);
                                 }
+                                service.initTrafficChart();
                                 service.loadTrafficChart(trafficData);
                             }
                         }
@@ -300,7 +302,7 @@
                 });
             };
 
-            service.initTrafficChart(trafficData);
+            service.initTrafficChart();
             service.loadTrafficChart(trafficData);
 
             return service;
