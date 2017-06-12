@@ -289,6 +289,7 @@
     <Compile Include="Repositories\RequestStrategySettingsReaderTest.cs" />
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Repositories\SmartPersonPropertyQuerierTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\Reader\Order.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSitesTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderSitesSkillsTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamsInAlarmReaderBusinessUnitTest.cs" />

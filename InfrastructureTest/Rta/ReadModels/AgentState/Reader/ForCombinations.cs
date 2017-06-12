@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IAgentStateReadModelReader Target;
-
 		
 		[Test]
 		public void ShouldExcludeDeletedAgentsForSiteAndTeam()
@@ -194,9 +193,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				.Should().Have.SameValuesAs(expectedForSite, expectedForTeam);
 		}
 
-
 		[Test]
-		public void ShouldInAlarmLoadForSiteAndTeam()
+		public void ShouldLoadInAlarmForSiteAndTeam()
 		{
 			Now.Is("2016-11-24 08:10");
 			var personId1 = Guid.NewGuid();
