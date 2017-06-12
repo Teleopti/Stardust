@@ -9,8 +9,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -49,6 +47,16 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.SetReadOnly(true)
 				.List<AgentStateReadModel>();
 
+		}
+		public IEnumerable<AgentStateReadModel> Read(IEnumerable<Guid> personIds)
+		{
+			return personIds.Batch(400).SelectMany(personIdBatch => _unitOfWork.Current().Session()
+					.CreateSQLQuery("SELECT * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE PersonId IN(:persons)")
+					.SetParameterList("persons", personIdBatch)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
+					.SetReadOnly(true)
+					.List<AgentStateReadModel>())
+				.ToArray();
 		}
 
 

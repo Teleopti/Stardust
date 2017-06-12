@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 		private readonly Queue<MessageForRetryCommand> _messageForRetryQueue = new Queue<MessageForRetryCommand>();
 		private readonly IPoller _poller;
 		private readonly IPersonAccountPersister _personAccountPersister;
-		private readonly IAgentStateReadModelLegacyReader _agentStateReadModelReader;
+		private readonly IAgentStateReadModelReader _agentStateReadModelReader;
 
 		public IntradayPresenter(IIntradayView view,
 			ISchedulingResultLoader schedulingResultLoader,
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Intraday
 			LoadStatisticsAndActualHeadsCommand loadStatisticsAndActualHeadsCommand,
 			IPoller poller,
 			IPersonAccountPersister personAccountPersister,
-			IAgentStateReadModelLegacyReader agentStateReadModelReader)
+			IAgentStateReadModelReader agentStateReadModelReader)
 		{
 			_eventAggregator = eventAggregator;
 			_scheduleDictionarySaver = scheduleDictionarySaver;

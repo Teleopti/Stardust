@@ -68,7 +68,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly IUserTimeZone _timeZone;
 		private readonly IUserCulture _culture;
 		private readonly ProperAlarm _appliedAlarm;
-		private readonly IAgentStateReadModelLegacyReader _legacyReader;
 		private readonly IAgentStateReadModelReader _reader;
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
 
@@ -77,7 +76,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			IUserTimeZone timeZone,
 			IUserCulture culture,
 			ProperAlarm appliedAlarm,
-			IAgentStateReadModelLegacyReader legacyReader,
 			IAgentStateReadModelReader reader,
 			ICommonAgentNameProvider nameDisplaySetting
 			)
@@ -86,7 +84,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_timeZone = timeZone;
 			_culture = culture;
 			_appliedAlarm = appliedAlarm;
-			_legacyReader = legacyReader;
 			_reader = reader;
 			_nameDisplaySetting = nameDisplaySetting;
 		}

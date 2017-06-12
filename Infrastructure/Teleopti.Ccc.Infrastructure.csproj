@@ -502,7 +502,6 @@
     <Compile Include="Rta\DataSourceReader.cs" />
     <Compile Include="Rta\AgentStateReadModelPersister.cs" />
     <Compile Include="Foundation\IConnectionStrings.cs" />
-    <Compile Include="Rta\AgentStateReadModelLegacyReader.cs" />
     <Compile Include="Rta\SqlDataReaderExtensions.cs" />
     <Compile Include="ServiceLocatorForEntity.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerMailBox.cs" />

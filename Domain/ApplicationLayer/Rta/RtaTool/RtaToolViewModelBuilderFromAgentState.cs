@@ -7,13 +7,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
 {
 	public class RtaToolViewModelBuilderFromAgentState : IRtaToolViewModelBuilder
 	{
-		private readonly IAgentStateReadModelLegacyReader _agentStates;
+		private readonly IAgentStateReadModelReader _agentStates;
 		private readonly IExternalLogonReader _externalLogons;
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
 		private readonly IDataSourceReader _dataSources;
 
 		public RtaToolViewModelBuilderFromAgentState(
-			IAgentStateReadModelLegacyReader agentStates, 
+			IAgentStateReadModelReader agentStates, 
 			IExternalLogonReader externalLogons,
 			ICommonAgentNameProvider nameDisplaySetting,
 			IDataSourceReader dataSources)

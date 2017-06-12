@@ -6,12 +6,10 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
 	public class FakeAgentStateReadModelPersister :
-		IAgentStateReadModelLegacyReader,
 		IAgentStateReadModelPersister,
 		IAgentStateReadModelReader
 	{
