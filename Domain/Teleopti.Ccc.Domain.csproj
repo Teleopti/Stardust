@@ -237,6 +237,9 @@
     <Compile Include="ApplicationLayer\Rta\Service\NoLoggedOutStateGroupsException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\StateQueueTenants.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\SiteOpenHours\ISiteWithOpenHourProvider.cs" />
+    <Compile Include="ApplicationLayer\SiteOpenHours\SiteOpenHourViewModels.cs" />
+    <Compile Include="ApplicationLayer\SiteOpenHours\SiteWithOpenHourProvider.cs" />
     <Compile Include="Cascading\AddResourcesToSubSkillsOld.cs" />
     <Compile Include="Cascading\PrimarySkillOverstaffOld.cs" />
     <Compile Include="Cascading\ShovelResourcesStateOld.cs" />

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -9,22 +8,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours
 {
-	public class SiteViewModel
-	{
-		public Guid Id { get; set; }
-		public string Name { get; set; }
-		public int NumberOfAgents { get; set; }
-		public IEnumerable<SiteOpenHourViewModel> OpenHours { get; set; }
-	}
-
-	public class SiteOpenHourViewModel
-	{
-		public DayOfWeek WeekDay;
-		public TimeSpan StartTime;
-		public TimeSpan EndTime;
-		public bool IsClosed;
-	}
-
 	public class SiteOpenHoursPersister : ISiteOpenHoursPersister
 	{
 		private readonly ISiteRepository _siteRepository;
@@ -106,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours
 			var openHourView = site.OpenHours.FirstOrDefault(o => o.WeekDay == dayOfWeek && !o.IsClosed);
 			if (openHourView != null)
 			{
-				return new SiteOpenHour()
+				return new SiteOpenHour
 				{
 					TimePeriod = new TimePeriod(openHourView.StartTime, openHourView.EndTime),
 					WeekDay = dayOfWeek,
@@ -114,7 +97,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours
 				};
 			}
 
-			return new SiteOpenHour()
+			return new SiteOpenHour
 			{
 				TimePeriod = new TimePeriod(),
 				WeekDay = dayOfWeek,

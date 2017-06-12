@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.Options.IoC
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<SiteOpenHoursPersister>().As<ISiteOpenHoursPersister>().InstancePerLifetimeScope();
+			builder.RegisterType<SiteWithOpenHourProvider>().As<ISiteWithOpenHourProvider>().InstancePerLifetimeScope();
 		}
 	}
 }

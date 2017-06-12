@@ -14,7 +14,7 @@
 		var processWaitlistRequests = '../api/Requests/runWaitlist';
 		var approveWithValidatorsUrl = '../api/Requests/approveWithValidators';
 		var replyRequestsUrl = '../api/Requests/replyRequests';
-		var getSitesUrl = '../api/sites/Organization';
+		var getSitesUrl = '../api/Requests/SitesWithOpenHour';
 		var maintainOpenHoursUrl = '../api/Sites/MaintainOpenHours';
 		var getLastCaluclatedDateUrl = '../GetLastCaluclatedDateTime';
 		var resourceCalculateUrl = '../TriggerResourceCalculate';
