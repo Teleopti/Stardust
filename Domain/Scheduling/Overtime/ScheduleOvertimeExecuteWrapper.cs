@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 		}
 
-		public HashSet<IPerson> Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress schedulingProgress, IList<IScheduleDay> scheduleDays,
+		public SomethingModel Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress schedulingProgress, IList<IScheduleDay> scheduleDays,
 							DateTimePeriod requestedDateTimePeriod, IList<ISkill> skills)
 		{
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(requestedDateTimePeriod).ToList();
@@ -43,7 +43,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 																								 s => (IResourceCalculationPeriod) s)));
 				var resCalcData = new ResourceCalculationData(skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
 
-				return _scheduleOvertimeWithoutStateHolder.Execute(overtimePreferences, schedulingProgress, scheduleDays, requestedDateTimePeriod, resCalcData, () => getContext(combinationResources, skills, true));
+				var affectedPersons = _scheduleOvertimeWithoutStateHolder.Execute(overtimePreferences, schedulingProgress, scheduleDays, requestedDateTimePeriod, resCalcData, () => getContext(combinationResources, skills, true));
+				var xx = resCalcData.SkillResourceCalculationPeriodDictionary.Items().Where(x => skills.Contains(x.Key));
+				var resourceCalculationPeriods = new List<SkillStaffingInterval>();
+				foreach (var keyValuePair in xx)
+				{
+					var intervals = keyValuePair.Value.OnlyValues().Cast<SkillStaffingInterval>(); 
+					resourceCalculationPeriods.AddRange(intervals);
+				}
+				return new SomethingModel(resourceCalculationPeriods, affectedPersons);
 			}
 		}
 
@@ -51,6 +59,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		private static IDisposable getContext(List<SkillCombinationResource> combinationResources, IList<ISkill> skills, bool useAllSkills)
 		{
 			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(combinationResources, skills, useAllSkills)));
+		}
+
+		public class SomethingModel
+		{
+			public List<SkillStaffingInterval> ResourceCalculationPeriods { get; }
+			public HashSet<IPerson> AffectedPersons { get; }
+
+			public SomethingModel(List<SkillStaffingInterval> resourceCalculationPeriods, HashSet<IPerson> persons)
+			{
+				ResourceCalculationPeriods = resourceCalculationPeriods;
+				AffectedPersons = persons;
+			}
 		}
 	}
 }
