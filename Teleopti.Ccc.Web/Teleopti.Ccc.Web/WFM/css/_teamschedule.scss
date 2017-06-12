@@ -1009,7 +1009,7 @@ teamschedule-command-container {
     }
 }
 
-.multiline-tooltip .md-content {
+.multiline-tooltip {
     height: auto;
 
     @media(max-width:1200px) {
@@ -1034,7 +1034,7 @@ md-tooltip.layer-summary {
     text-align: center;
 }
 
-.multiline-tooltip.max-width-600 .md-content {
+.multiline-tooltip.max-width-600 {
     span {
         display: inline-block;
         line-height: 25px;
