@@ -38,20 +38,20 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStates")]
 		public virtual IHttpActionResult GetStates(Guid teamId)
 		{
-			return Ok(_agentStatesBuilder.ForTeams(new[] { teamId }).States);
+			return Ok(_agentStatesBuilder.For(new AgentStateFilter {TeamIds = new[] {teamId}}).States);
 		}
 		#endregion
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForSites")]
 		public virtual IHttpActionResult GetStatesForSites([FromUri] Query query)
 		{
-			return Ok(_agentStatesBuilder.ForSites(query.Ids));
+			return Ok(_agentStatesBuilder.For(new AgentStateFilter{SiteIds = query.Ids}));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Agents/GetStatesForTeams")]
 		public virtual IHttpActionResult GetStatesForTeams([FromUri] Query query)
 		{
-			return Ok(_agentStatesBuilder.ForTeams(query.Ids));
+			return Ok(_agentStatesBuilder.For(new AgentStateFilter { TeamIds = query.Ids }));
 		}
 		
 		[UnitOfWork, HttpGet, Route("api/Agents/ForTeams")]

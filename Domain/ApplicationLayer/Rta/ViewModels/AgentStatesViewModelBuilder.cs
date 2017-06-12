@@ -91,25 +91,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		
 		public AgentStatesViewModel For(AgentStateFilter filter)
 		{
-			return build(_reader.Read(filter));
-		}
-		
-		public AgentStatesViewModel ForSites(Guid[] siteIds)
-		{
-			return build(_reader.Read(new AgentStateFilter {SiteIds = siteIds}));
-		}
-
-		public AgentStatesViewModel ForTeams(Guid[] teamIds)
-		{
-			return build(_reader.Read(new AgentStateFilter { TeamIds = teamIds }));
-		}
-
-		private AgentStatesViewModel build(IEnumerable<AgentStateReadModel> states)
-		{
 			return new AgentStatesViewModel
 			{
 				Time = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()),
-				States = buildStates(states)
+				States = buildStates(_reader.Read(filter))
 			};
 		}
 
