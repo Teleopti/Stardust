@@ -27,7 +27,8 @@
 	function campaignCommandsPaneCtrl($scope, $state, outboundChartService, outboundNotificationService, toggleService) {
 		var vm = this;
 
-		vm.ignoreScheduleSwitch = false;
+		vm.ignoreScheduleSwitched = false;
+		vm.hasSchedulesIgnored = false;
 		vm.manualPlanSwitch = false;
 		vm.manualBacklogSwitch = false;
 		vm.isPlanClickedSave = false;
@@ -66,12 +67,17 @@
 			});
 		};
 
+		vm.showIgnoreSchedulesButton = function(){
+			return vm.ignoredDates.length == 0 && !vm.ignoreScheduleSwitched;
+		};
+
 		vm.ignoreSchedules = function () {
-			vm.ignoreScheduleSwitch = true;
+			vm.ignoreScheduleSwitched = true;
 			vm.manualBacklogSwitch = false;
 			vm.manualPlanSwitch = false;
 			vm.ignoredDates = getIgnoredDates();
 			vm.callbacks.ignoreSchedules(vm.ignoredDates, resetActionFlag);
+			vm.hasSchedulesIgnored = true;
 		};
 
 		function getIgnoredDates() {
@@ -83,13 +89,14 @@
 		}
 
 		vm.showAllSchedules = function () {
-			vm.ignoreScheduleSwitch = false;
+			vm.ignoreScheduleSwitched = false;
 			vm.manualBacklogSwitch = false;
 			vm.manualPlanSwitch = false;
 			vm.callbacks.showAllSchedules(vm.ignoredDates,
 				function() {
 					vm.ignoredDates = [];
 					resetActionFlag();
+					vm.hasSchedulesIgnored = false;
 				});
 		};
 
@@ -101,14 +108,14 @@
 		vm.toggleManualPlan = function() {
 			vm.manualPlanSwitch = !vm.manualPlanSwitch;
 			vm.manualBacklogSwitch = false;
-			vm.ignoreScheduleSwitch = false;
+			vm.ignoreScheduleSwitched = false;
 			resetActionFlag();
 		};
 
 		vm.toggleManualBacklog = function() {
 			vm.manualBacklogSwitch = !vm.manualBacklogSwitch;
 			vm.manualPlanSwitch = false;
-			vm.ignoreScheduleSwitch = false;
+			vm.ignoreScheduleSwitched = false;
 			resetActionFlag();
 		};
 
@@ -144,7 +151,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.addManualPlan)) {
-					vm.callbacks.addManualPlan(response, callbackDone);
+					vm.callbacks.addManualPlan(response, callbackDone, vm.ignoredDates, vm.hasSchedulesIgnored);
 				} else {
 					callbackDone();
 				}
@@ -162,7 +169,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function(response) {
 				if (angular.isDefined(vm.callbacks.removeManualPlan)) {
-					vm.callbacks.removeManualPlan(response, callbackDone);
+					vm.callbacks.removeManualPlan(response, callbackDone, vm.ignoredDates, vm.hasSchedulesIgnored);
 				} else {
 					callbackDone();
 				}
@@ -183,7 +190,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.addManualBacklog)) {
-					vm.callbacks.addManualBacklog(response, callbackDone);
+					vm.callbacks.addManualBacklog(response, callbackDone, vm.ignoredDates, vm.hasSchedulesIgnored);
 				} else {
 					callbackDone();
 				}
@@ -201,7 +208,7 @@
 					ignoredDates: vm.ignoredDates
 				}, function(response) {
 					if (angular.isDefined(vm.callbacks.removeManualBacklog)) {
-						vm.callbacks.removeManualBacklog(response, callbackDone);
+						vm.callbacks.removeManualBacklog(response, callbackDone, vm.ignoredDates, vm.hasSchedulesIgnored);
 					} else {
 						callbackDone();
 					}
@@ -215,7 +222,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.replan)) {
-					vm.callbacks.replan(response, callbackDone);
+					vm.callbacks.replan(response, callbackDone, vm.ignoredDates, vm.hasSchedulesIgnored);
 				} else {
 					callbackDone();
 				}

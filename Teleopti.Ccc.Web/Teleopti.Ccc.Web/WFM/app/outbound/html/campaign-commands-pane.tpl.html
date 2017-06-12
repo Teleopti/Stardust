@@ -52,13 +52,13 @@
 		</div>
 	</div>
 	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-ignore-schedules"
-			ng-if="vm.isToggleScheduleDatesEnabled() && !vm.ignoreScheduleSwitch"
+			ng-if="vm.isToggleScheduleDatesEnabled() && vm.showIgnoreSchedulesButton()"
 			ng-disabled="!vm.enableIgnoreSchedule()"
 			ng-click="vm.ignoreSchedules()">
 		<span translate>IgnoreSchedules</span>
 	</button>
 	<button class="wfm-btn wfm-btn-invis-primary inline-block btn-show-all-schedules"
-			ng-if="vm.isToggleScheduleDatesEnabled() && vm.ignoreScheduleSwitch"
+			ng-if="vm.isToggleScheduleDatesEnabled() && !vm.showIgnoreSchedulesButton()"
 			ng-click="vm.showAllSchedules()">
 		<span translate>ShowAllSchedules</span>
 	</button>

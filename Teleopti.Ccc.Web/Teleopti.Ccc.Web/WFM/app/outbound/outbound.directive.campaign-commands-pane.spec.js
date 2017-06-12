@@ -41,7 +41,19 @@ describe('Outbound campaign commands pane tests ', function() {
 		target = setUpTarget();
 		ignoreSchedulesCallbackCalledCount = showAllSchedulesCallbackCalledCount = 0;
 
+		$httpBackend.whenPOST('../api/Outbound/Campaign/ManualPlan').respond(function(method, url, data) {
+			return [200, {}];
+		});
+		$httpBackend.whenPOST('../api/Outbound/Campaign/ManualPlan/Remove').respond(function(method, url, data) {
+			return [200, {}];
+		});
 		$httpBackend.whenPOST('../api/Outbound/Campaign/Replan').respond(function(method, url, data) {
+			return [200, {}];
+		});
+		$httpBackend.whenPOST('../api/Outbound/Campaign/ActualBacklog').respond(function(method, url, data) {
+			return [200, {}];
+		});
+		$httpBackend.whenPOST('../api/Outbound/Campaign/ActualBacklog/Remove').respond(function(method, url, data) {
 			return [200, {}];
 		});
 	}));
@@ -145,15 +157,16 @@ describe('Outbound campaign commands pane tests ', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
 		target.scope.$apply();
 		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
-		expect(target.vm.ignoreScheduleSwitch).toEqual(true);
+		expect(target.vm.ignoreScheduleSwitched).toEqual(true);
 	});
 
-	it('should show schedule data after clicking "show all schedule" button', function() {
+	it('should show schedule data and emmpty ignoreDates after clicking "show all schedule" button', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
 		target.scope.$apply();
 		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
 		angular.element(target.container[0].querySelectorAll('.btn-show-all-schedules')).triggerHandler('click');
 		expect(showAllSchedulesCallbackCalledCount).toEqual(1);
+		expect(target.vm.ignoredDates.length).toEqual(0);
 	});
 
 	it('should filter out selected dates without schedule', function() {
@@ -164,6 +177,7 @@ describe('Outbound campaign commands pane tests ', function() {
 		graphData.schedules[graphData.dates.indexOf(target.vm.selectedDates[0])] = 20;
 		graphData.schedules[graphData.dates.indexOf(target.vm.selectedDates[1])] = 0;
 		target.scope.$apply();
+
 		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
 		expect(target.vm.ignoredDates.length).toEqual(1);
 		expect(target.vm.ignoredDates[0]).toEqual(target.vm.selectedDates[0]);
@@ -175,6 +189,8 @@ describe('Outbound campaign commands pane tests ', function() {
 
 		var expectedIgnoredDates = target.vm.campaign.selectedDates;
 		target.vm.replan();
+		target.scope.$apply();
+
 		expect(target.vm.ignoredDates.length).toEqual(2);
 		expect(target.vm.ignoredDates[0]).toEqual(expectedIgnoredDates[0]);
 		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
@@ -189,6 +205,8 @@ describe('Outbound campaign commands pane tests ', function() {
 
 		target.vm.ignoreSchedules();
 		target.vm.replan();
+		target.scope.$apply();
+
 		expect(target.vm.ignoredDates.length).toEqual(0);
 	});
 
@@ -201,6 +219,8 @@ describe('Outbound campaign commands pane tests ', function() {
 
 		var expectedIgnoredDates = target.vm.campaign.selectedDates;
 		target.vm.addManualPlan();
+		target.scope.$apply();
+
 		expect(target.vm.ignoredDates.length).toEqual(2);
 		expect(target.vm.ignoredDates[0]).toEqual(expectedIgnoredDates[0]);
 		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
@@ -215,6 +235,8 @@ describe('Outbound campaign commands pane tests ', function() {
 
 		var expectedIgnoredDates = target.vm.campaign.selectedDates;
 		target.vm.removeManualPlan();
+		target.scope.$apply();
+
 		expect(target.vm.ignoredDates.length).toEqual(2);
 		expect(target.vm.ignoredDates[0]).toEqual(expectedIgnoredDates[0]);
 		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
@@ -222,19 +244,37 @@ describe('Outbound campaign commands pane tests ', function() {
 
 	it('should pass ignored dates for adding manual backlog', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
-		target.vm.toggleManualPlan();
+		target.vm.toggleManualBacklog();
 
-		expect(target.vm.manualPlanSwitch).toEqual(true);
+		expect(target.vm.manualBacklogSwitch).toEqual(true);
 		target.vm.ignoreSchedules();
 
 		var expectedIgnoredDates = target.vm.campaign.selectedDates;
 		target.vm.addManualBacklog();
+		target.scope.$apply();
+
 		expect(target.vm.ignoredDates.length).toEqual(2);
 		expect(target.vm.ignoredDates[0]).toEqual(expectedIgnoredDates[0]);
 		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
 	});
 
 	it('should pass ignored dates for removing manual backlog', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.vm.toggleManualBacklog();
+
+		expect(target.vm.manualBacklogSwitch).toEqual(true);
+		target.vm.ignoreSchedules();
+
+		var expectedIgnoredDates = target.vm.campaign.selectedDates;
+		target.vm.removeManualBacklog();
+		target.scope.$apply();
+
+		expect(target.vm.ignoredDates.length).toEqual(2);
+		expect(target.vm.ignoredDates[0]).toEqual(expectedIgnoredDates[0]);
+		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
+	});
+
+	it('should keep enabling "show all schedules" and ignoredDates after command actions finished', function(){
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
 		target.vm.toggleManualPlan();
 
@@ -243,10 +283,15 @@ describe('Outbound campaign commands pane tests ', function() {
 
 		var expectedIgnoredDates = target.vm.campaign.selectedDates;
 		target.vm.removeManualBacklog();
+		target.scope.$apply();
 		expect(target.vm.ignoredDates.length).toEqual(2);
 		expect(target.vm.ignoredDates[0]).toEqual(expectedIgnoredDates[0]);
 		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
+
+		expect(!target.vm.showIgnoreSchedulesButton()).toEqual(true);
+		expect(target.vm.hasSchedulesIgnored).toEqual(true);
 	});
+
 
 	function setUpTarget() {
 		var html = '<campaign-commands-pane campaign="campaign" selected-dates="campaign.selectedDates" selected-dates-closed="campaign.selectedDatesClosed" is-loading="isRefreshingData" callbacks="callbacks"></campaign-commands-pane>';
@@ -273,6 +318,7 @@ describe('Outbound campaign commands pane tests ', function() {
 		scope.isRefreshingData = false;
 		scope.callbacks = {
 			ignoreSchedules: function(ignoredDates, callback) {
+				console.log('callback');
 				ignoreSchedulesCallbackCalledCount++;
 				callback && callback();
 			},

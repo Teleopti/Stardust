@@ -183,7 +183,6 @@
 			if (c.expanded) {
 				c.expanded = false;
 				$scope.ganttData.splice(readIndex(c) + 1, 1);
-
 			} else {
 				c.expanded = true;
 				var campaign = {
@@ -209,7 +208,7 @@
 					addManualBacklog: getCommandCallback(campaign, newDataRow, $scope),
 					removeManualBacklog: getCommandCallback(campaign, newDataRow, $scope),
 					replan: getCommandCallback(campaign, newDataRow, $scope)
-				}
+				};
 
 				var index = readIndex(c);
 				if (index >= 0)
@@ -224,39 +223,52 @@
 		function getIgnoreSchedulesCallback(campaign) {
 			return function (ignoredDates, callback) {
 				campaign.ignoredDates = [];
-				ignoredDates.forEach(function (ignoredDate) {
-					var index = campaign.graphData.dates.indexOf(ignoredDate);
-					campaign.graphData.schedules[index] = 0;
-					campaign.graphData.unscheduledPlans[index] = campaign.graphData.rawPlans[index] - campaign.graphData.overStaff[index];
-					campaign.ignoredDates[index - 2] = 1;
-				});
-
+				ignoreSchedulesOnDates(ignoredDates, campaign);
 				$scope.$broadcast('campaign.chart.clear.selection', campaign);
 				$scope.$broadcast('campaign.chart.refresh', campaign);
 				callback && callback();
 			};
 		}
 
-		function getShowAllSchedulesCallback(campaign) {
-			return function (ignoredDates, callback) {
-				ignoredDates.forEach(function (ignoredDate) {
-					var index = campaign.graphData.dates.indexOf(ignoredDate);
-					campaign.graphData.schedules[index] = campaign.graphData.rawSchedules[index] - campaign.graphData.overStaff[index];
-					campaign.graphData.unscheduledPlans[index] = 0;
+		function ignoreSchedulesOnDates(ignoredDates, campaign){
+			ignoredDates.forEach(function (ignoredDate) {
+				var index = campaign.graphData.dates.indexOf(ignoredDate);
+				campaign.graphData.schedules[index] = 0;
+				campaign.graphData.unscheduledPlans[index] = campaign.graphData.rawPlans[index] - campaign.graphData.overStaff[index];
+				if(index >= 2)
+					campaign.ignoredDates[index - 2] = 1;
+			});
+		}
 
+		function showAllSchedules(ignoredDates, campaign){
+			ignoredDates.forEach(function(ignoredDate) {
+				var index = campaign.graphData.dates.indexOf(ignoredDate);
+				campaign.graphData.schedules[index] = campaign.graphData.rawSchedules[index] - campaign.graphData.overStaff[index];
+				campaign.graphData.unscheduledPlans[index] = 0;
+
+			});
+			campaign.ignoredDates = [];
+		}
+
+		function getShowAllSchedulesCallback(campaign) {
+			return function(ignoredDates, callback) {
+				getGraphData(campaign, function(){
+					showAllSchedules(ignoredDates, campaign);
+					$scope.$broadcast('campaign.chart.clear.selection', campaign);
+					$scope.$broadcast('campaign.chart.refresh', campaign);
+					callback && callback();
 				});
-				campaign.ignoredDates = [];
-				$scope.$broadcast('campaign.chart.clear.selection', campaign);
-				$scope.$broadcast('campaign.chart.refresh', campaign);
-				callback && callback();
 			};
 		}
 
 		function getCommandCallback(campaign, dataRow, scope) {
-			return function (resp, done) {
+			return function(resp, done, ignoredDates, hasSchedulesIgnored) {
 				dataRow.isRefreshingData = true;
 				getGraphData(campaign,
 					function () {
+						if(hasSchedulesIgnored){
+							ignoreSchedulesOnDates(ignoredDates, campaign);
+						}
 						scope.$broadcast('campaign.chart.refresh', campaign);
 						$scope.$broadcast('campaign.chart.clear.selection', campaign);
 						dataRow.isRefreshingData = false;
