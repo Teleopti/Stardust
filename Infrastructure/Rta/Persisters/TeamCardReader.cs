@@ -69,6 +69,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					SELECT
 						MAX(a.BusinessUnitId) as BusinessUnitId,
 						MAX(a.SiteId) as SiteId, 
+						MAX(a.SiteName) as SiteName,
+						MAX(a.TeamName) as TeamName,
 						a.TeamId, 
 						COUNT(DISTINCT CASE WHEN a.AlarmStartTime <= :now THEN a.PersonId END) as InAlarmCount
 					FROM 
