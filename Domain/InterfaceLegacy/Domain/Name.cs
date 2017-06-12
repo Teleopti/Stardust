@@ -1,6 +1,4 @@
 
-using System.Globalization;
-
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>

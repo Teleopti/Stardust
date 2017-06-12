@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Domain.FeatureFlags;
-
-namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Defines selectable types of skill types

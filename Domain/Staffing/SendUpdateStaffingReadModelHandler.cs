@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
+﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;

@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Helper

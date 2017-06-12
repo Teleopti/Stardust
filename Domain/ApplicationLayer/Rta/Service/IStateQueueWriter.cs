@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
+﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public interface IStateQueueWriter
 	{
