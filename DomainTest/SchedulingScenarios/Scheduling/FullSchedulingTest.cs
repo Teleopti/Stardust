@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -134,6 +133,42 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario)
 				.Count.Should().Be.EqualTo(7);
+		}
+
+		[Test]
+		[Ignore("44700")]
+		public void ShouldUseMultisiteSkills()
+		{
+			/* Robin - how should the multisiteskill API be used?
+			 * (letters below)
+			 * A = Should multisiteskill have explicitly set color, interval length and or skilltype? If so, remove it from ChildSkill?
+			 * B = Should childskill have explicitly set color, interval length and or skilltype? If so, remove it from MultisiteSkill? 
+			 * C = Should multisiteskill have activity explicitly set? If so, remove it from childskill?
+			 * D = Should childskill have activity explicitly set? If so, remove it from multisiteskill?
+			 * E = Agents know childskills and not multisiteskills - right? If so, don't allow multisiteskills as person skills?
+			 * F = Forecasts are created for multisiteskills and not child skills - right? If so, don't allow forecasts based on childskills?
+			 * G = Are workloads belonging to multisiteskills and not child skills? If so, don't allow workloads on childskills?
+			 */
+
+			DayOffTemplateRepository.Add(new DayOffTemplate());
+			var firstDay = new DateOnly(2016, 05, 30);
+			var activity = ActivityRepository.Has("_");
+			var multisiteSkill = new MultisiteSkill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)).WithId(); // A
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(multisiteSkill); //G
+			multisiteSkill.Activity = activity; //C
+			SkillRepository.Has(multisiteSkill);
+			var childSkill =  new ChildSkill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)).WithId(); //B
+			childSkill.Activity = activity; //D
+			multisiteSkill.AddChildSkill(childSkill);
+			var scenario = ScenarioRepository.Has("some name");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			PersonRepository.Has(new ContractWithMaximumTolerance(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, childSkill); //E
+			SkillDayRepository.Has(multisiteSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1)); //F
+
+			Target.DoScheduling(DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1));
+
+			AssignmentRepository.LoadAll().Count(x => x.MainActivities().Any())
+				.Should().Be.GreaterThanOrEqualTo(5);
 		}
 
 		public FullSchedulingTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
