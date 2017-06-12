@@ -1510,6 +1510,7 @@
     </Content>
     <Content Include="Areas\MyTime\Views\Schedule\MobileDayPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\permissions.backend.fake.js" />
     <Content Include="WFM\app\permissions\refact\functionsrefact\permissions-function-tree.html" />
@@ -1526,14 +1527,6 @@
     <Content Include="WFM\app\resourceplanner\manageschedule.html" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.service.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.controller.spec.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroup.createform.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroup.createform.controller.spec.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroup.createform.html" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroup.detail.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroup.detail.html" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroup.service.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroups.controller.js" />
-    <Content Include="WFM\app\resourceplanner\resource_planner_agent_group\agentgroups.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.createform.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.createform.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.createform.html" />
@@ -1541,6 +1534,14 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.overview.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.overview.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_day_off_rule\dayoffrule.service.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.spec.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.html" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.detail.controller.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.detail.html" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.service.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroups.controller.js" />
+    <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroups.html" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.overview.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.overview.controller.spec.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_period\planningperiod.overview.html" />

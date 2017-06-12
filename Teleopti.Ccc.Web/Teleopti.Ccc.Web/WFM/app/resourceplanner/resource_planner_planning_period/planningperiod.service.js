@@ -24,26 +24,26 @@
 
 			});
 
-		var agentGroupBaseUrl = '../api/resourceplanner/planninggroup/:planningGroupId';
-		var agentGroup = $resource(agentGroupBaseUrl, { planningGroupId: "@planningGroupId" },
+		var planningGroupBaseUrl = '../api/resourceplanner/planninggroup/:planningGroupId';
+		var planningGroup = $resource(planningGroupBaseUrl, { planningGroupId: "@planningGroupId" },
 			{
-				nextPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId" }, url: agentGroupBaseUrl + '/nextplanningperiod' },
-				getPlanningPeriods: { method: 'GET', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: agentGroupBaseUrl + '/planningperiods' },
-				deleteLastPlanningPeriod: { method: 'DELETE', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' },
-				changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", endDate: "@endDate" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' },
-				firstPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", endDate: "@endDate" }, url: agentGroupBaseUrl + '/firstplanningperiod' }
+				nextPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId" }, url: planningGroupBaseUrl + '/nextplanningperiod' },
+				getPlanningPeriods: { method: 'GET', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: planningGroupBaseUrl + '/planningperiods' },
+				deleteLastPlanningPeriod: { method: 'DELETE', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: planningGroupBaseUrl + '/lastperiod' },
+				changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", endDate: "@endDate" }, isArray: true, url: planningGroupBaseUrl + '/lastperiod' },
+				firstPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId", startDate: "@startDate", endDate: "@endDate" }, url: planningGroupBaseUrl + '/firstplanningperiod' }
 			});
 
 		var service = {
 			// PlanningPeriod.Select
-			getAgentGroupById: agentGroup.get,
-			getPlanningPeriodsForAgentGroup: agentGroup.getPlanningPeriods,
-			nextPlanningPeriod: agentGroup.nextPlanningPeriod,
-			deleteLastPlanningPeriod: agentGroup.deleteLastPlanningPeriod,
-			changeEndDateForLastPlanningPeriod: agentGroup.changeEndDateForLastPlanningPeriod,
+			getAgentGroupById: planningGroup.get,
+			getPlanningPeriodsForAgentGroup: planningGroup.getPlanningPeriods,
+			nextPlanningPeriod: planningGroup.nextPlanningPeriod,
+			deleteLastPlanningPeriod: planningGroup.deleteLastPlanningPeriod,
+			changeEndDateForLastPlanningPeriod: planningGroup.changeEndDateForLastPlanningPeriod,
 			getPlanningPeriod: planningPeriod.get,
 			getPlanningPeriodSuggestions: getPlanningPeriodSuggestions.query,
-			firstPlanningPeriod: agentGroup.firstPlanningPeriod,
+			firstPlanningPeriod: planningGroup.firstPlanningPeriod,
 			// PlanningPeriod.Overview
 			getValidation: planningPeriod.getValidation,
 			lastJobResult: planningPeriod.lastJobResult,

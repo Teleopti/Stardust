@@ -3,14 +3,14 @@
 
 	angular
 		.module('wfm.resourceplanner')
-		.controller('agentGroupFormController', Controller);
+		.controller('planningGroupFormController', Controller);
 
-	Controller.$inject = ['$state', '$timeout', '$stateParams', 'agentGroupService', 'NoticeService', '$translate', 'debounceService', 'localeLanguageSortingService'];
+	Controller.$inject = ['$state', '$timeout', '$stateParams', 'planningGroupService', 'NoticeService', '$translate', 'debounceService', 'localeLanguageSortingService'];
 
-	function Controller($state, $timeout, $stateParams, agentGroupService, NoticeService, $translate, debounceService, localeLanguageSortingService) {
+	function Controller($state, $timeout, $stateParams, planningGroupService, NoticeService, $translate, debounceService, localeLanguageSortingService) {
 		var vm = this;
 
-		var agentGroupId = $stateParams.groupId ? $stateParams.groupId : null;
+		var planningGroupId = $stateParams.groupId ? $stateParams.groupId : null;
 		vm.searchString = '';
 		vm.selectedResults = [];
 		vm.filterResults = [];
@@ -30,9 +30,9 @@
 		getAgentGroupById();
 
 		function getAgentGroupById() {
-			if (agentGroupId == null)
+			if (planningGroupId == null)
 				return;
-			var getAgentGroup = agentGroupService.getAgentGroupById({ id: agentGroupId });
+			var getAgentGroup = planningGroupService.getAgentGroupById({ id: planningGroupId });
 			return getAgentGroup.$promise.then(function (data) {
 				vm.editAgentGroup = data;
 				vm.deleteAgentGroupText = $translate.instant("AreYouSureYouWantToDeleteTheAgentGroup").replace("{0}", vm.editAgentGroup.Name);
@@ -45,7 +45,7 @@
 		function inputFilterData() {
 			if (vm.searchString == '')
 				return [];
-			var filters = agentGroupService.getFilterData({ searchString: vm.searchString });
+			var filters = planningGroupService.getFilterData({ searchString: vm.searchString });
 			filters.$promise.then(function (data) {
 				removeSelectedFiltersInList(data, vm.selectedResults);
 				return vm.filterResults = data;
@@ -116,7 +116,7 @@
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 				return;
 			}
-			agentGroupService.saveAgentGroup({
+			planningGroupService.saveAgentGroup({
 				Id: vm.editAgentGroup.Id,
 				Name: vm.name,
 				Filters: vm.selectedResults
@@ -133,7 +133,7 @@
 
 		function removeAgentGroup(id) {
 			if (!id) return;
-			agentGroupService.removeAgentGroup({ id: id }).$promise.then(function () {
+			planningGroupService.removeAgentGroup({ id: id }).$promise.then(function () {
 				vm.editAgentGroup = {};
 				$state.go('resourceplanner.newoverview');
 			});

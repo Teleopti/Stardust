@@ -4,9 +4,9 @@ describe('dayoffRuleOverviewController', function () {
         $controller,
         $injector,
         dayOffRuleService,
-        agentGroupService,
+        planningGroupService,
         stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' },
-        agentGroupInfo = {
+        planningGroupInfo = {
             Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             Name: "Agent Group Test",
             Filters: []
@@ -50,11 +50,11 @@ describe('dayoffRuleOverviewController', function () {
         module('localeLanguageSortingService');
     });
 
-    beforeEach(inject(function (_$httpBackend_, _$controller_, _dayOffRuleService_, _agentGroupService_) {
+    beforeEach(inject(function (_$httpBackend_, _$controller_, _dayOffRuleService_, _planningGroupService_) {
         $httpBackend = _$httpBackend_;
         $controller = _$controller_;
         dayOffRuleService = _dayOffRuleService_;
-        agentGroupService = _agentGroupService_;
+        planningGroupService = _planningGroupService_;
 
         $httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
 			return [200, true];
@@ -70,11 +70,11 @@ describe('dayoffRuleOverviewController', function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('should get day off rules by agent group id before controller is loaded', function () {
+    it('should get day off rules by planning group id before controller is loaded', function () {
         spyOn(dayOffRuleService, 'getDayOffRulesByAgentGroupId').and.callThrough();
         var vm = $controller('dayoffRuleOverviewController', {
             $stateParams: stateparams,
-            agentGroupInfo: agentGroupInfo,
+            planningGroupInfo: planningGroupInfo,
             dayOffRulesInfo: dayOffRulesInfo
         });
         $httpBackend.flush();
@@ -86,7 +86,7 @@ describe('dayoffRuleOverviewController', function () {
         spyOn(dayOffRuleService, 'removeDayOffRule').and.callThrough();
          var vm = $controller('dayoffRuleOverviewController', {
             $stateParams: stateparams,
-            agentGroupInfo: agentGroupInfo,
+            planningGroupInfo: planningGroupInfo,
             dayOffRulesInfo: dayOffRulesInfo
         });
 

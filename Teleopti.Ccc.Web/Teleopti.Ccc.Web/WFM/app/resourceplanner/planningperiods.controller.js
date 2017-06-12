@@ -23,9 +23,9 @@
 				};
 
 				function getDayOffRules() {
-					var agentGroupId = $scope.planningPeriod.AgentGroupId;
-					if (agentGroupId != undefined) {
-						dayOffRuleService.getDayOffRulesByAgentGroupId({ agentGroupId: agentGroupId }).$promise.then(handleGetDayOffRulesSuccess, handleGetDayOffRulesFail);
+					var planningGroupId = $scope.planningPeriod.AgentGroupId;
+					if (planningGroupId != undefined) {
+						dayOffRuleService.getDayOffRulesByAgentGroupId({ planningGroupId: planningGroupId }).$promise.then(handleGetDayOffRulesSuccess, handleGetDayOffRulesFail);
 					} else {
 						dayOffRuleService.getDayOffRules().$promise.then(handleGetDayOffRulesSuccess, handleGetDayOffRulesFail);
 					}

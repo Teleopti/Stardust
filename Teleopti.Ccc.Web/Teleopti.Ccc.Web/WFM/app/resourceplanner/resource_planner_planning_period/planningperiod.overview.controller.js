@@ -5,15 +5,15 @@
     .module('wfm.resourceplanner')
     .controller('planningPeriodOverviewController', Controller);
 
-  Controller.$inject = ['$stateParams', 'planningPeriodServiceNew', 'NoticeService', '$translate', '$interval', '$scope', '$timeout', 'selectedPp', 'agentGroupInfo'];
+  Controller.$inject = ['$stateParams', 'planningPeriodServiceNew', 'NoticeService', '$translate', '$interval', '$scope', '$timeout', 'selectedPp', 'planningGroupInfo'];
 
-  function Controller($stateParams, planningPeriodServiceNew, NoticeService, $translate, $interval, $scope, $timeout, selectedPp, agentGroupInfo) {
+  function Controller($stateParams, planningPeriodServiceNew, NoticeService, $translate, $interval, $scope, $timeout, selectedPp, planningGroupInfo) {
     var vm = this;
     var selectedPpId = $stateParams.ppId ? $stateParams.ppId : null;
     var checkProgressRef;
     var keepAliveRef;
     var preMessage = '';
-    vm.agentGroup = agentGroupInfo ? agentGroupInfo : null;
+    vm.planningGroup = planningGroupInfo ? planningGroupInfo : null;
     vm.selectedPp = selectedPp ? selectedPp : {};
     vm.totalAgents = selectedPp ? selectedPp.TotalAgents : 0;
     vm.scheduledAgents = 0;

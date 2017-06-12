@@ -1,6 +1,6 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> {{'ScheduleAgentGroup' | translate}} - {{vm.agentGroup.Name}}</h1>
+		<h1><i class="mdi mdi-calendar"></i> {{'ScheduleAgentGroup' | translate}} - {{vm.planningGroup.Name}}</h1>
 		<div class="pp-sub-title">
 			<span>{{'SelectedPlanningPeriod' | translate}}: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
 			<span ng-if="vm.isDisable() && !vm.clearRunning" ng-bind="vm.status" class="pp-status"></span>
@@ -35,7 +35,7 @@
 									{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}
 								</span>
 								<span class="pp-agentnumber" ng-hide="vm.dayNodes">
-									{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsHaveScheduled'|translate}} 
+									{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsHaveScheduled'|translate}}
 								</span>
 								<div class="legends" ng-show="vm.dayNodes">
 									<span>
@@ -100,7 +100,7 @@
 					<md-tab-label translate>DayOffRules</md-tab-label>
 					<md-tab-body class="md-padding">
 						<div class="con-row">
-							<div dayoff-rules is-disable="vm.isDisableDo" agent-group="vm.agentGroup"></div>
+							<div dayoff-rules is-disable="vm.isDisableDo" planning-group="vm.planningGroup"></div>
 						</div>
 					</md-tab-body>
 				</md-tab>
@@ -109,7 +109,7 @@
 					<md-tab-body class="md-padding">
 						<div class="con-row">
 							<div class="con-flex">
-								<div agentgroup-Detail agent-group="vm.agentGroup"></div>
+								<div planninggroup-Detail planning-group="vm.planningGroup"></div>
 							</div>
 						</div>
 					</md-tab-body>

@@ -54,28 +54,28 @@
 			}
 		}).state('resourceplanner.newoverview', {   //from here is new
 			url: '/v2',
-			templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroups.html',
-			controller: 'agentGroupsController as vm',
+			templateUrl: 'app/resourceplanner/resource_planner_planning_group/planninggroups.html',
+			controller: 'planningGroupsController as vm',
 			resolve: {
-				agentGroups: ['agentGroupService', '$stateParams', function (agentGroupService, $stateParams) {
-					return agentGroupService.getAgentGroups().$promise.then(function (data) {
+				planningGroups: ['planningGroupService', '$stateParams', function (planningGroupService, $stateParams) {
+					return planningGroupService.getAgentGroups().$promise.then(function (data) {
 						return data;
 					});
 				}]
 			}
-		}).state('resourceplanner.createagentgroup', {
-			url: '/createagentgroup',
-			templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroup.createform.html',
-			controller: 'agentGroupFormController as vm'
-		}).state('resourceplanner.editagentgroup', {
-			url: '/agentgroup/:groupId/edit',
-			templateUrl: 'app/resourceplanner/resource_planner_agent_group/agentgroup.createform.html',
-			controller: 'agentGroupFormController as vm',
+		}).state('resourceplanner.createplanninggroup', {
+			url: '/createplanninggroup',
+			templateUrl: 'app/resourceplanner/resource_planner_planning_group/planninggroup.createform.html',
+			controller: 'planningGroupFormController as vm'
+		}).state('resourceplanner.editplanninggroup', {
+			url: '/planninggroup/:groupId/edit',
+			templateUrl: 'app/resourceplanner/resource_planner_planning_group/planninggroup.createform.html',
+			controller: 'planningGroupFormController as vm',
 			params: {
 				groupId: ''
 			}
 		}).state('resourceplanner.selectplanningperiod', {
-			url: '/agentgroup/:groupId/selectplanningperiod',
+			url: '/planninggroup/:groupId/selectplanningperiod',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.select.html',
 			controller: 'planningPeriodSelectController as vm',
 			params: {
@@ -87,14 +87,14 @@
 						return data;
 					});
 				}],
-				agentGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
+				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
 					return planningPeriodServiceNew.getAgentGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
 				}]
 			}
 		}).state('resourceplanner.planningperiodoverview', {
-			url: '/agentgroup/:groupId/detail/:ppId',
+			url: '/planninggroup/:groupId/detail/:ppId',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_period/planningperiod.overview.html',
 			controller: 'planningPeriodOverviewController as vm',
 			params: {
@@ -107,7 +107,7 @@
 						return data;
 					});
 				}],
-				agentGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
+				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
 					return planningPeriodServiceNew.getAgentGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
@@ -117,11 +117,11 @@
 			params: {
 				groupId: ''
 			},
-			url: '/agentgroup/:groupId/dayoffrules/overview',
+			url: '/planninggroup/:groupId/dayoffrules/overview',
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.overview.html',
 			controller: 'dayoffRuleOverviewController as vm',
 			resolve: {
-				agentGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
+				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
 					return planningPeriodServiceNew.getAgentGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
@@ -138,7 +138,7 @@
 				isDefault: undefined,
 				groupId: ''
 			},
-			url: '/agentgroup/:groupId/dayoffrules/:filterId',
+			url: '/planninggroup/:groupId/dayoffrules/:filterId',
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.createform.html',
 			controller: 'dayoffRuleCreateController as vm'
 		});

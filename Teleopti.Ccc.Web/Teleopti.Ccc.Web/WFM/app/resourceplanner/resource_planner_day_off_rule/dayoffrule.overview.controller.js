@@ -7,15 +7,15 @@
 		.controller('dayoffRuleDirectiveOverviewController', directiveController)
 		.directive('dayoffRules', dayoffRulesDirective);
 
-	overviewController.$inject = ['$state', '$stateParams', '$translate', 'dayOffRuleService', 'agentGroupInfo', 'dayOffRulesInfo', 'localeLanguageSortingService'];
+	overviewController.$inject = ['$state', '$stateParams', '$translate', 'dayOffRuleService', 'planningGroupInfo', 'dayOffRulesInfo', 'localeLanguageSortingService'];
 
-	function overviewController($state, $stateParams, $translate, dayOffRuleService, agentGroupInfo, dayOffRulesInfo, localeLanguageSortingService) {
+	function overviewController($state, $stateParams, $translate, dayOffRuleService, planningGroupInfo, dayOffRulesInfo, localeLanguageSortingService) {
 		var vm = this;
 
 		vm.dayOffRules = dayOffRulesInfo.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
 		vm.textDeleteDoRule = '';
-		vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", agentGroupInfo.Name);
-		vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", agentGroupInfo.Name);
+		vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", planningGroupInfo.Name);
+		vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", planningGroupInfo.Name);
 		vm.getDoRuleInfo = getDoRuleInfo;
 		vm.deleteDoRule = deleteDoRule;
 		vm.goEditDoRule = goEditDoRule;
@@ -54,8 +54,8 @@
 		var vm = this;
 
 		vm.dayOffRules = [];
-		vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", vm.agentGroup.Name);
-		vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", vm.agentGroup.Name);
+		vm.textManageDoRule = $translate.instant("ManageDayOffForAgentGroup").replace("{0}", vm.planningGroup.Name);
+		vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", vm.planningGroup.Name);
 		vm.goDoRulesSetting = goDoRulesSetting;
 
 		getDayOffRules();
@@ -79,7 +79,7 @@
 			restrict: 'EA',
 			scope: {
 				isDisable: '=',
-				agentGroup: '='
+				planningGroup: '='
 			},
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.overview.html',
 			controller: 'dayoffRuleDirectiveOverviewController as vm',

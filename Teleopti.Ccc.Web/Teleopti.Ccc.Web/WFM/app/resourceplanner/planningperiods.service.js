@@ -23,15 +23,15 @@
 			clear: { method: 'DELETE', params: { id: "@id" }, url: planningPeriodBaseUrl + '/schedule' }
 		});
 
-		var getPlanningPeriodSuggestions = $resource('../api/resourceplanner/planningperiod/suggestions/:agentGroupId');
+		var getPlanningPeriodSuggestions = $resource('../api/resourceplanner/planningperiod/suggestions/:planningGroupId');
 
-		var agentGroupBaseUrl = '../api/resourceplanner/agentgroup/:agentGroupId';
-		var agentGroup = $resource(agentGroupBaseUrl, { agentGroupId: "@agentGroupId" },
+		var planningGroupBaseUrl = '../api/resourceplanner/planninggroup/:planningGroupId';
+		var planningGroup = $resource(planningGroupBaseUrl, { planningGroupId: "@planningGroupId" },
 		{
-			nextPlanningPeriod: { method: 'POST', params: { agentGroupId: "@agentGroupId" }, url: agentGroupBaseUrl + '/nextplanningperiod' },
-			getPlanningPeriods: { method: 'GET', params: { agentGroupId: "@agentGroupId" }, isArray: true, url: agentGroupBaseUrl + '/planningperiods' },
-			deleteLastPlanningPeriod: { method: 'DELETE', params: { agentGroupId: "@agentGroupId" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' },
-			changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { agentGroupId: "@agentGroupId", startDate:"@startDate", endDate:"@endDate" }, isArray: true, url: agentGroupBaseUrl + '/lastperiod' }
+			nextPlanningPeriod: { method: 'POST', params: { planningGroupId: "@planningGroupId" }, url: planningGroupBaseUrl + '/nextplanningperiod' },
+			getPlanningPeriods: { method: 'GET', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: planningGroupBaseUrl + '/planningperiods' },
+			deleteLastPlanningPeriod: { method: 'DELETE', params: { planningGroupId: "@planningGroupId" }, isArray: true, url: planningGroupBaseUrl + '/lastperiod' },
+			changeEndDateForLastPlanningPeriod: { method: 'PUT', params: { planningGroupId: "@planningGroupId", startDate:"@startDate", endDate:"@endDate" }, isArray: true, url: planningGroupBaseUrl + '/lastperiod' }
 		});
 
 		var deprecatedPlanningperiod = $resource('../api/resourceplanner/nextplanningperiod', {}, {
@@ -40,11 +40,11 @@
 
 		var service = {
 			// PlanningPeriod + AgentGroup
-			getAgentGroupById: agentGroup.get,
-			getPlanningPeriodsForAgentGroup: agentGroup.getPlanningPeriods,
-			nextPlanningPeriod: agentGroup.nextPlanningPeriod,
-			deleteLastPlanningPeriod: agentGroup.deleteLastPlanningPeriod,
-			changeEndDateForLastPlanningPeriod: agentGroup.changeEndDateForLastPlanningPeriod,
+			getAgentGroupById: planningGroup.get,
+			getPlanningPeriodsForAgentGroup: planningGroup.getPlanningPeriods,
+			nextPlanningPeriod: planningGroup.nextPlanningPeriod,
+			deleteLastPlanningPeriod: planningGroup.deleteLastPlanningPeriod,
+			changeEndDateForLastPlanningPeriod: planningGroup.changeEndDateForLastPlanningPeriod,
 			// PlanningPeriods
 			getPlanningPeriod: planningPeriod.get,
 			getPlanningPeriods: planningPeriod.query,
@@ -64,7 +64,7 @@
 			keepAlive: function() {
 				return $http({ url: '../api/resourceplanner/keepalive', method: 'POST' });
 			},
-			// TODO: deprecate once we always use agent group
+			// TODO: deprecate once we always use planning group
 			nextPlanningPeriodDeprecated: deprecatedPlanningperiod.update
 		};
 

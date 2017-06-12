@@ -7,7 +7,7 @@ describe('planningPeriodSelectController', function () {
         planningPeriodServiceNew,
         vm,
         stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' },
-        agentGroupInfo = {
+        planningGroupInfo = {
             Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             Name: "Agent Group Test",
             Filters: []
@@ -89,7 +89,7 @@ describe('planningPeriodSelectController', function () {
             return [200, []];
         });
 
-        vm = $controller('planningPeriodSelectController', { $stateParams: stateparams, agentGroupInfo: agentGroupInfo, planningPeriods: planningPeriods });
+        vm = $controller('planningPeriodSelectController', { $stateParams: stateparams, planningGroupInfo: planningGroupInfo, planningPeriods: planningPeriods });
     }));
 
     afterEach(function () {
@@ -97,7 +97,7 @@ describe('planningPeriodSelectController', function () {
         $httpBackend.verifyNoOutstandingRequest();
     });
 
-    it('should get planning periods by agent group id before controller is loaded', function () {
+    it('should get planning periods by planning group id before controller is loaded', function () {
         expect(vm.planningPeriods.length).toEqual(2);
     });
 
@@ -118,7 +118,7 @@ describe('planningPeriodSelectController', function () {
     it('should modify date for last planning period and only planning period', function () {
         vm = $controller('planningPeriodSelectController', {
             $stateParams: stateparams,
-            agentGroupInfo: agentGroupInfo,
+            planningGroupInfo: planningGroupInfo,
             planningPeriods: planningPeriodOnlyFirst
         });
         vm.getLastPp(vm.planningPeriods[0]);

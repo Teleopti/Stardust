@@ -5,12 +5,12 @@
         .module('wfm.resourceplanner')
         .controller('planningPeriodSelectController', Controller);
 
-    Controller.$inject = ['$state', '$stateParams', '$translate', 'planningPeriodServiceNew', 'agentGroupInfo', 'planningPeriods'];
+    Controller.$inject = ['$state', '$stateParams', '$translate', 'planningPeriodServiceNew', 'planningGroupInfo', 'planningPeriods'];
 
-    function Controller($state, $stateParams, $translate, planningPeriodServiceNew, agentGroupInfo, planningPeriods) {
+    function Controller($state, $stateParams, $translate, planningPeriodServiceNew, planningGroupInfo, planningPeriods) {
         var vm = this;
         var planningGroupId = $stateParams.groupId ? $stateParams.groupId : null;
-        vm.agentGroup = agentGroupInfo;
+        vm.planningGroup = planningGroupInfo;
         vm.planningPeriods = planningPeriods;
         vm.suggestions = [];
         vm.originLastPp = undefined;

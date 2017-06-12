@@ -3,32 +3,32 @@
 
   angular
     .module('wfm.resourceplanner')
-    .controller('agentGroupsController', Controller);
+    .controller('planningGroupsController', Controller);
 
-  Controller.$inject = ['$state', 'agentGroupService','agentGroups','localeLanguageSortingService'];
+  Controller.$inject = ['$state', 'planningGroupService','planningGroups','localeLanguageSortingService'];
 
-  function Controller($state, agentGroupService, agentGroups,localeLanguageSortingService) {
+  function Controller($state, planningGroupService, planningGroups,localeLanguageSortingService) {
     var vm = this;
 
     vm.goForm = goForm;
     vm.goAgentGroup = goAgentGroup;
     vm.goEditAgentGroup = goEditAgentGroup;
     vm.goDayOffRule = goDayOffRule;
-    vm.agentGroups = agentGroups.sort(localeLanguageSortingService.localeSort('+Name'));
+    vm.planningGroups = planningGroups.sort(localeLanguageSortingService.localeSort('+Name'));
     vm.hasAg = hasAg;
 
     function hasAg() {
-      if (vm.agentGroups.length > 0)
+      if (vm.planningGroups.length > 0)
         return true;
     }
 
     function goForm() {
-      $state.go('resourceplanner.createagentgroup');
+      $state.go('resourceplanner.createplanninggroup');
     }
 
     function goEditAgentGroup(groupId) {
       if (groupId) {
-        $state.go('resourceplanner.editagentgroup', { groupId: groupId });
+        $state.go('resourceplanner.editplanninggroup', { groupId: groupId });
       }
     }
 

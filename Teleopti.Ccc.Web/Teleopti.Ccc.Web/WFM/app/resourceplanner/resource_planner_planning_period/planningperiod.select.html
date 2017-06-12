@@ -1,6 +1,6 @@
 <div class="view-header with-fab with-desc">
 	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> {{'ScheduleAgentGroup' | translate}} - {{vm.agentGroup.Name}}</h1>
+		<h1><i class="mdi mdi-calendar"></i> {{'ScheduleAgentGroup' | translate}} - {{vm.planningGroup.Name}}</h1>
 		<div class="pp-sub-title">
 			<span ng-hide="vm.selectedPp">{{'SelectPpWorkWith' | translate}} </span>
 		</div>
@@ -10,6 +10,7 @@
 	<div class="con-flex">
 		<button ng-if="!vm.isNonePp()" class="wfm-btn wfm-btn-default create-next-planning-period" ng-click="vm.startNextPlanningPeriod()">{{'CreateNextPp' | translate}}</button>
 		<div class="line-right pp-color-label" ng-if="!vm.isNonePp()">
+				<div class="con-flex x3">
 			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>{{'SchedulingSucceeded' | translate}}</span>
 			<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>{{'SchedulingFailed' | translate}}</span>
 		</div>
@@ -50,7 +51,7 @@
 											<div class="modal-actions">
 												<aside>
 													<button ng-click="vm.confirmDeletePpModal=false" class="wfm-btn wfm-btn-invis-default" translate>Cancel</button>
-													<button ng-click="vm.deleteLastPp(vm.agentGroup.Id);" class="wfm-btn wfm-btn-invis-primary" translate>Delete</button>
+									<button ng-click="vm.deleteLastPp(vm.agentGroup.Id);" class="wfm-btn wfm-btn-invis-primary" translate>Delete</button>
 												</aside>
 											</div>
 										</div>

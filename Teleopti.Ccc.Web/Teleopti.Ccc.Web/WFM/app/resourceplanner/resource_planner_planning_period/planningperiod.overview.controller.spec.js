@@ -11,7 +11,7 @@ describe('planningPeriodOverviewController', function () {
         scope,
         vm,
         stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e', ppId: 'a557210b-99cc-4128-8ae0-138d812974b6' },
-        agentGroupInfo = {
+        planningGroupInfo = {
             Id: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             Name: "Agent Group Test",
             Filters: []
@@ -69,7 +69,7 @@ describe('planningPeriodOverviewController', function () {
         });
 
         scope = $rootScope.$new();
-        vm = $controller('planningPeriodOverviewController as ctrl', { $scope: scope, $stateParams: stateparams, selectedPp: selectedPp, agentGroupInfo: agentGroupInfo });
+        vm = $controller('planningPeriodOverviewController as ctrl', { $scope: scope, $stateParams: stateparams, selectedPp: selectedPp, planningGroupInfo: planningGroupInfo });
         scope.$destroy();
     }));
 
