@@ -54,9 +54,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons,schedulingOptions.UseMaximumPersons);
 
 			ShiftProjectionCache bestShift = null;
+			if (!shifts.Any())
+				return null;
+
+			var shiftsPerLogicalProcessors = shifts.Count / Environment.ProcessorCount;
+			var batchSize = Math.Max(shiftsPerLogicalProcessors, 200);
 
 			var tasks = new List<Task<taskResult>>();
-			foreach (var shiftProjectionCaches in shifts.Batch(200))  //maybe dynamic batch size
+			foreach (var shiftProjectionCaches in shifts.Batch(batchSize))
 			{
 				var task =
 					Task.Run(
@@ -72,8 +77,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 				// ReSharper disable once CoVariantArrayConversion
 				Task.WaitAll(tasks.ToArray());
 			}
-			catch (AggregateException)
+			catch (AggregateException ae)
 			{
+				throw ae.Flatten();
 			}
 			
 			var shiftsWithValue = new List<taskResult>();
