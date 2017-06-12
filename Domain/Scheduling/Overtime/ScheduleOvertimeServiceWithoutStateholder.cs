@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	{
 		bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
 			IResourceCalculateDelayerWithoutStateholder resourceCalculateDelayer, DateOnly dateOnly,
-			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc);
+			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc, DateTimePeriod specifiedPeriod);
 	}
 
 	public class ScheduleOvertimeServiceWithoutStateholder : IScheduleOvertimeServiceWithoutStateholder
@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		public ScheduleOvertimeServiceWithoutStateholder(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			IGridlockManager gridlockManager,
 			ITimeZoneGuard timeZoneGuard,
-			PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider, ICalculateBestOvertime calculateBestOvertime)
+			PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider, 
+			ICalculateBestOvertime calculateBestOvertime)
 		{
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_gridlockManager = gridlockManager;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		public bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
 			IResourceCalculateDelayerWithoutStateholder resourceCalculateDelayer, DateOnly dateOnly,
-			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc)
+			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc, DateTimePeriod requestedPeriod)
 		{
 			var person = scheduleDay.Person;
 			var timeZoneInfo = _timeZoneGuard.CurrentTimeZone();
@@ -54,12 +55,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			var overtimeDuration = new MinMax<TimeSpan>(overtimePreferences.SelectedTimePeriod.StartTime,
 				overtimePreferences.SelectedTimePeriod.EndTime);
-			var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime,
-				overtimePreferences.SelectedSpecificTimePeriod.EndTime);
+			//var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime,
+			//	overtimePreferences.SelectedSpecificTimePeriod.EndTime);
+
 			var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly)).ToList();
 			var minResolution = OvertimeLengthDecider.GetMinimumResolution(skills, overtimeDuration,scheduleDay);
 			var overtimeSkillIntervalDataAggregatedList = getAggregatedOvertimeSkillIntervals(resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items());
-			var overtimeLayerLengthPeriodsUtc = _calculateBestOvertime.GetBestOvertimeInUtc(overtimeDuration, overtimeSpecifiedPeriod, scheduleDay,minResolution
+			var overtimeLayerLengthPeriodsUtc = _calculateBestOvertime.GetBestOvertimeInUtc(overtimeDuration, requestedPeriod, scheduleDay,minResolution
 												   , overtimePreferences.AvailableAgentsOnly, overtimeSkillIntervalDataAggregatedList);
 
 			var oldRmsValue = calculatePeriodValue(dateOnly, person, timeZoneInfo, resourceCalculationData, skills);

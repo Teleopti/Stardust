@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		IEnumerable<DateTimePeriod> GetBestOvertime(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod, IScheduleDay scheduleDay, int minimumResolution,
 			bool onlyAvailableAgents, IList<IOvertimeSkillIntervalData> skillIntervalDataList);
 
-		IEnumerable<DateTimePeriod> GetBestOvertimeInUtc(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod, IScheduleDay scheduleDay, int minimumResolution,
+		IEnumerable<DateTimePeriod> GetBestOvertimeInUtc(MinMax<TimeSpan> overtimeDuration, DateTimePeriod specifiedPeriod, IScheduleDay scheduleDay, int minimumResolution,
 			bool onlyAvailableAgents, IList<IOvertimeSkillIntervalData> skillIntervalDataList);
 	}
 
@@ -31,19 +31,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_overtimePeriodValueMapper = overtimePeriodValueMapper;
 		}
 
-		public IEnumerable<DateTimePeriod> GetBestOvertimeInUtc(MinMax<TimeSpan> overtimeDuration, MinMax<TimeSpan> overtimeSpecifiedPeriod, IScheduleDay scheduleDay, int minimumResolution, bool onlyAvailableAgents, IList<IOvertimeSkillIntervalData> skillIntervalDataList)
+		public IEnumerable<DateTimePeriod> GetBestOvertimeInUtc(MinMax<TimeSpan> overtimeDuration, DateTimePeriod specifiedPeriod, IScheduleDay scheduleDay, int minimumResolution, bool onlyAvailableAgents, IList<IOvertimeSkillIntervalData> skillIntervalDataList)
 		{
 			var overtimePeriodValueMappedData = _overtimePeriodValueMapper.Map(skillIntervalDataList);
-			//var scheduleDayPeriodStart = TimeZoneInfo.ConvertTimeFromUtc(scheduleDay.Period.StartDateTime, scheduleDay.TimeZone);
-			//var start = scheduleDayPeriodStart.Add(overtimeSpecifiedPeriod.Minimum).Utc();
-			//var end = scheduleDayPeriodStart.Add(overtimeSpecifiedPeriod.Maximum).Utc();
-			//var specifiedPeriod = new DateTimePeriod(start, end);
 			var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
 			var personAssignment = scheduleDay.PersonAssignment();
-			if(personAssignment==null) return new List<DateTimePeriod>();
-			var start = personAssignment.Period.StartDateTime.Date.Add(overtimeSpecifiedPeriod.Minimum).Utc();
-			var end = personAssignment.Period.EndDateTime.Date.Add(overtimeSpecifiedPeriod.Maximum).Utc();
-			var specifiedPeriod = new DateTimePeriod(start,end);
+			if (personAssignment == null) return new List<DateTimePeriod>();
 			var result = _overtimeDateTimePeriodExtractor.Extract(minimumResolution, overtimeDuration, visualLayerCollection, specifiedPeriod, skillIntervalDataList);
 			var possibleOvertimePeriods = _overtimeRelativeDifferenceCalculator.Calculate(result, overtimePeriodValueMappedData, onlyAvailableAgents, scheduleDay);
 			var sortedPeriodValues = possibleOvertimePeriods.Where(possibleOvertimePeriod => possibleOvertimePeriod.Value < 0).OrderBy(x => x.Value);

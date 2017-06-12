@@ -51,13 +51,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 					if (cancel || checkIfCancelPressed(backgroundWorker)) return affectedPersons;
 
 					var scheduleDay = selectedSchedules.FirstOrDefault(x => x.Person == person && x.DateOnlyAsPeriod.DateOnly == dateOnly);
-					//var dateOnly2 = new DateOnly(scheduleDay.Period.StartDateTime);
-					//var scheduleDay = selectedSchedules.FirstOrDefault(x => x.Person == person && x.Period.Contains(dateOnly.Date));
 					if (scheduleDay == null) continue;
-					//var scheduleDay = resourceCalculationData.Schedules[person].ScheduledDay(dateOnly);
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
 				
-					var res = _scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter, resourceCalculationData, contextFunc);  
+					var res = _scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter, resourceCalculationData, contextFunc, requestedDateTimePeriod);  
 					if (res)
 						affectedPersons.Add(person);
 					var progressResult = onDayScheduled(backgroundWorker, new SchedulingServiceSuccessfulEventArgs(scheduleDay, () => cancel = true));

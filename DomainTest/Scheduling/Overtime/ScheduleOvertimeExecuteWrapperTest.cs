@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		public FakeSkillRepository SkillRepository;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public MutableNow Now;
+		public FakeUserTimeZone UserTimeZone;
 
 		private IScenario scenario;
 		private IActivity activity;
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			system.UseTestDouble<ScheduleOvertimeServiceWithoutStateholder>().For<IScheduleOvertimeServiceWithoutStateholder>();
 			system.UseTestDouble<ScheduleOvertimeWithoutStateHolder>().For<ScheduleOvertimeWithoutStateHolder>();
 			system.UseTestDouble<GridlockManager>().For<IGridlockManager>();
+			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 		}
 
 		private void setup()
@@ -95,10 +97,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
 				SkillActivity = activity
 			};
-
+			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 16, 2017, 06, 1, 17);
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] {agent}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent});
-			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(dateOnly)}, dateTimePeriod, new[] {skill});
+			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(dateOnly)}, requestedPeriod, new[] {skill});
 			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 16, 2017, 06, 01, 17));
 			overtimeActivities.Count().Should().Be.EqualTo(1);
 			affectedPersons.Should().Not.Be.Empty();
@@ -139,10 +141,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SkillActivity = activity
 			};
 
+			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 16, 2017, 06, 1, 17);
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] {agent, agent2}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent, agent2});
 			var scheduleDays = scheduleDictionary.SchedulesForDay(dateOnly).ToList();
-			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, dateTimePeriod, new[] {skill});
+			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] {skill});
 			var overtimeActivities = scheduleDictionary.SchedulesForDay(dateOnly).ToList()
 				.Select(x => x.PersonAssignment().OvertimeActivities())
 				.SelectMany(i => i).Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 16, 2017, 06, 01, 17));
@@ -193,10 +196,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SkillActivity = activity
 			};
 
+			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 16, 2017, 06, 1, 19);
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent, agent2 }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent, agent2 });
 			var scheduleDays = scheduleDictionary.SchedulesForDay(dateOnly).ToList();
-			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, dateTimePeriod, new[] { skill });
+			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] { skill });
 			var overtimeActivities = scheduleDictionary.SchedulesForDay(dateOnly).ToList()
 				.Select(x => x.PersonAssignment().OvertimeActivities())
 				.SelectMany(i => i).Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 16, 2017, 06, 01, 19));
@@ -266,10 +270,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SkillActivity = activity
 			};
 
+			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 16, 2017, 06, 1, 20);
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent, agent2 }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent, agent2 });
 			var scheduleDays = scheduleDictionary.SchedulesForDay(dateOnly).ToList();
-			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, dateTimePeriod, new[] { skill });
+			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] { skill });
 			var overtimeActivities = scheduleDictionary.SchedulesForDay(dateOnly).ToList()
 				.Select(x => x.PersonAssignment().OvertimeActivities())
 				.SelectMany(i => i).Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 16, 2017, 06, 01, 20));
@@ -328,12 +333,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SkillActivity = activity
 			};
 
+			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 6, 2017, 06, 1, 10);
 			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] {agent, agent2}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent, agent2});
 
 			var dateOnlyPeriod = new DateOnlyPeriod(may31DateOnly, june1DateOnly);
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(dateOnlyPeriod, agent, agent2).ToList();
-			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, dateTimePeriod, new[] {skill});
+			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] {skill});
 			var overtimeActivities = scheduleDictionary.SchedulesForPeriod(dateOnlyPeriod, agent, agent2).ToList()
 				.Select(x => x.PersonAssignment()?.OvertimeActivities())
 				.Where(y => y != null)
@@ -377,11 +383,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SkillActivity = activity
 			};
 
+			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 1, 2017, 06, 1, 7);
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] {agent}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent});
 			var period = new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly.AddDays(1));
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, agent).ToList();
-			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, dateTimePeriod, new[] {skill});
+			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] {skill});
 			var overtimeActivities = scheduleDictionary.SchedulesForPeriod(period, agent).ToList()
 				.Select(x => x.PersonAssignment()?.OvertimeActivities())
 				.Where(y => y != null)
@@ -432,11 +439,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SkillActivity = activity
 			};
 
+			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 1, 2017, 06, 1, 5);
 			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent, agent2 }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent, agent2 });
 			var period = new DateOnlyPeriod(may31DateOnly, june1DateOnly);
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, agent, agent2).ToList();
-			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, dateTimePeriod, new[] { skill });
+			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] { skill });
 			var overtimeActivities = scheduleDictionary.SchedulesForPeriod(period, agent, agent2).ToList()
 				.Select(x => x.PersonAssignment()?.OvertimeActivities())
 				.Where(y => y != null)
@@ -447,410 +455,164 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		}
 
 
+		[Test]
+		public void ShouldScheduleOvertimeOnAgentOnPeriodOverUtcMidnight()
+		{
+			setup();
+			UserTimeZone.Is(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time"));
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 1, 23, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 2, 00, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
 
-		//[Test]
-		//public void ShouldHandleCasesWhereSkillsTimeZoneIsFarAway()
-		//{
-		//	TimeZoneGuard.SetTimeZone(TimeZoneInfo.Utc);
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_");
-		//	var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time")).WithId().IsOpen();
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDays = new List<ISkillDay>
-		//	{
-		//		skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(-1), 10),
-		//		skill.CreateSkillDayWithDemand(scenario, dateOnly, 10),
-		//		skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(1), 10)
-		//	};
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(1, 2));
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDays);
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(0, 0, 30, 0),
-		//		SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
-		//		SkillActivity = activity
-		//	};
+			var june1DateOnly = new DateOnly(2017, 06, 1);
+			var june2DateOnly = new DateOnly(2017, 06, 2);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june1DateOnly, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june2DateOnly, 1));
+			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(23, 24));
+			PersonAssignmentRepository.Has(ass);
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(15, 0, 22, 0),  
+				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
+				SkillActivity = activity
+			};
 
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 21, 2017, 06, 2, 4);
+			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent });
+			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill });
+			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(june1DateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 2, 0, 2017, 06, 2, 4));
+			overtimeActivities.Count().Should().Be.EqualTo(1);
+			affectedPersons.Should().Not.Be.Empty();
+		}
 
-		//	stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
-		//}
+		[Test]
+		public void ShouldScheduleOvertimeOnAgentOverMidnight()
+		{
+			setup();
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 1, 22, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 1, 23, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
 
-		//[Test]
-		//public void ShouldPlaceOvertimeWhenViewerAndAgentTimeZonesAreFarAway([Values("W. Europe Standard Time", "Mountain Standard Time")] string viewersTimeZone)
-		//{
-		//	TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(viewersTimeZone));
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_");
-		//	var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")).WithId().IsOpen();
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agentUserTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time");
-		//	var agent = new Person().WithId().InTimeZone(agentUserTimeZone).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDays = new List<ISkillDay>
-		//	{
-		//		skill.CreateSkillDayWithDemand(scenario, dateOnly.AddDays(-1), TimeSpan.FromMinutes(60)),
-		//		skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(15))
-		//	};
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly);
-		//	ass.AddActivity(activity, new DateTimePeriod(2015, 10, 11, 23, 2015, 10, 12, 8));
-		//	ass.SetShiftCategory(shiftCategory);
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDays);
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(0, 0, 30, 0),
-		//		SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
-		//		SkillActivity = activity
-		//	};
+			var june1DateOnly = new DateOnly(2017, 06, 1);
+			var june2DateOnly = new DateOnly(2017, 06, 2);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june1DateOnly, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june2DateOnly, 1));
+			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(22, 23));
+			PersonAssignmentRepository.Has(ass);
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
+				SkillActivity = activity
+			};
 
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 22, 2017, 06, 2, 4);
+			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent });
+			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill });
+			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(june1DateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 1, 23, 2017, 06, 2, 3));
+			overtimeActivities.Count().Should().Be.EqualTo(1);
+			affectedPersons.Should().Not.Be.Empty();
+		}
 
-		//	stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
-		//}
+		[Test]
+		public void ShouldScheduleOvertimeOnAgentInDenverOverUtcMidnight()
+		{
+			setup();
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 1, 22, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 1, 23, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
 
-		//[Test]
-		//public void ShouldScheduleNextAvailablePeriodIfCurrentCouldNotBeScheduled()
-		//{
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_") { InWorkTime = true };
-		//	var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(10, 18));
-		//	var assNextDay = new PersonAssignment(agent, scenario, dateOnly.AddDays(1)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(6, 14));
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass, assNextDay }, skillDay);
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(18, 0, 20, 0),
-		//		SelectedTimePeriod = new TimePeriod(1, 0, 1, 15),
-		//		SkillActivity = activity
-		//	};
+			var june1DateOnly = new DateOnly(2017, 06, 1);
+			var june2DateOnly = new DateOnly(2017, 06, 2);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time")).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june1DateOnly, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june2DateOnly, 1));
+			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(16, 17));
+			PersonAssignmentRepository.Has(ass);
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
+				SkillActivity = activity
+			};
 
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 22, 2017, 06, 2, 4);
+			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent });
+			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill });
+			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(june1DateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 1, 23, 2017, 06, 2, 3));
+			overtimeActivities.Count().Should().Be.EqualTo(1);
+			affectedPersons.Should().Not.Be.Empty();
+		}
 
-		//	stateHolder.Schedules[agent].ScheduledDay(dateOnly)
-		//		.PersonAssignment(true)
-		//		.OvertimeActivities()
-		//		.Should()
-		//		.Not.Be.Empty();
-		//}
 
-		//[Test]
-		//public void ShouldConsiderAllPeriodsWhenAvailableAgentsOnly()
-		//{
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_") { InWorkTime = true };
-		//	var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(10, 18));
-		//	var overtimeAvailability = new OvertimeAvailability(agent, dateOnly, new TimeSpan(18, 0, 0), new TimeSpan(20, 0, 0));
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
-		//	var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
-		//	scheduleDay.Add(overtimeAvailability);
-		//	scheduleDay.ModifyDictionary();
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(0, 0, 20, 0),
-		//		SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
-		//		SkillActivity = activity,
-		//		AvailableAgentsOnly = true
-		//	};
+		[Test]
+		public void ShouldScheduleOvertimeOnAgentInDenverOverDenverMidnight()
+		{
+			setup();
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 2, 4, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 2, 5, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
 
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+			var june1DateOnly = new DateOnly(2017, 06, 1);
+			var june2DateOnly = new DateOnly(2017, 06, 2);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time")).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june1DateOnly, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june2DateOnly, 1));
+			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(22, 23));
+			PersonAssignmentRepository.Has(ass);
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
+				SkillActivity = activity
+			};
 
-		//	stateHolder.Schedules[agent].ScheduledDay(dateOnly)
-		//		.PersonAssignment(true)
-		//		.OvertimeActivities()
-		//		.Should()
-		//		.Not.Be.Empty();
-		//}
-
-		//[Test]
-		//public void ShouldConsiderOvertimePreferenceMinimumOvertimeLengthBug41951()
-		//{
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_") { InWorkTime = true };
-		//	var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(10, 18));
-		//	var overtimeAvailability = new OvertimeAvailability(agent, dateOnly, new TimeSpan(18, 0, 0), new TimeSpan(18, 30, 0));
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
-		//	var scheduleDay = stateHolder.Schedules[agent].ScheduledDay(dateOnly);
-		//	scheduleDay.Add(overtimeAvailability);
-		//	scheduleDay.ModifyDictionary();
-		//	//agent applied for 30 minutes, minimum length is 60 minutes
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(0, 0, 20, 0),
-		//		SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
-		//		SkillActivity = activity,
-		//		AvailableAgentsOnly = true
-		//	};
-
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
-
-		//	stateHolder.Schedules[agent].ScheduledDay(dateOnly)
-		//		.PersonAssignment(true)
-		//		.OvertimeActivities()
-		//		.Should().Be.Empty();
-		//}
-
-		//[Test]
-		//public void ShouldScheduleNextAvailablePeriodIfCurrentIsNotBetter()
-		//{
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_") { InWorkTime = true };
-		//	var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDay = skill.CreateSkillDayWithDemandOnInterval(scenario, dateOnly, 0.1, ServiceAgreement.DefaultValues(), new Tuple<TimePeriod, double>(new TimePeriod(9, 45, 10, 0), 1));
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(10, 18));
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(0, 0, 10, 0),
-		//		SelectedTimePeriod = new TimePeriod(0, 30, 0, 45),
-		//		SkillActivity = activity
-		//	};
-
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
-
-		//	stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
-		//}
-
-		//[Test]
-		//public void ShouldAddOvertimeOnPartOfSkillInterval()
-		//{
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_");
-		//	var skill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(16, 0, 17, 0),
-		//		SelectedTimePeriod = new TimePeriod(0, 30, 0, 30),
-		//		SkillActivity = activity
-		//	};
-
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
-
-		//	stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
-		//}
-
-		//[Test]
-		//public void ShouldAddOvertimeOnShiftNotEndingOnFullHour()
-		//{
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_");
-		//	var skill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 0, 16, 5));
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(16, 0, 20, 0),
-		//		SelectedTimePeriod = new TimePeriod(0, 60, 0, 60),
-		//		SkillActivity = activity
-		//	};
-
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
-
-		//	stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
-		//}
-
-		//[Test]
-		//public void ShouldAddOvertimeOnShiftNotStartingOnFullHour()
-		//{
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_");
-		//	var skill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 5, 16, 0));
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(6, 0, 8, 5),
-		//		SelectedTimePeriod = new TimePeriod(0, 60, 0, 60),
-		//		SkillActivity = activity
-		//	};
-
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
-
-		//	stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
-		//}
-
-		//[Test]
-		//public void ShouldUseMinimumResolutionThatFitsMinDuration()
-		//{
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_");
-		//	var skill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 0, 16, 45));
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(16, 0, 20, 0),
-		//		SelectedTimePeriod = new TimePeriod(0, 60, 0, 60),
-		//		SkillActivity = activity
-		//	};
-
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
-
-		//	stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
-		//}
-
-		//[Test]
-		//public void ShouldAdjustToMappedDataEnd()
-		//{
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_");
-		//	var skill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpenBetween(7, 17);
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDay1 = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-		//	var skillDay2 = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 0, 16, 8));
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, new[] { skillDay1, skillDay2 });
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(16, 0, 20, 0),
-		//		SelectedTimePeriod = new TimePeriod(0, 45, 0, 60),
-		//		SkillActivity = activity
-		//	};
-
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
-
-		//	var openHours = skillDay1.OpenHours().First();
-		//	var overtimePeriod = stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().First().Period.TimePeriod(TimeZoneInfo.Utc);
-		//	openHours.EndTime.Should().Be.EqualTo(overtimePeriod.EndTime);
-		//}
-
-		//[Test]
-		//public void ShouldAdjustToMappedDataStart()
-		//{
-		//	var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
-		//	var activity = new Activity("_");
-		//	var skill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpenBetween(8, 17);
-		//	var dateOnly = new DateOnly(2015, 10, 12);
-		//	var scenario = new Scenario("_");
-		//	var worktimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
-		//	var contract = new Contract("contract") { WorkTimeDirective = worktimeDirective, PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9) };
-		//	contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
-		//	var shiftCategory = new ShiftCategory("_").WithId();
-		//	var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-		//	var skillDay1 = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-		//	var skillDay2 = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-		//	var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 58, 16, 0));
-		//	var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, new[] { skillDay1, skillDay2 });
-		//	var overtimePreference = new OvertimePreferences
-		//	{
-		//		OvertimeType = definitionSet,
-		//		ScheduleTag = new ScheduleTag(),
-		//		SelectedSpecificTimePeriod = new TimePeriod(6, 0, 10, 0),
-		//		SelectedTimePeriod = new TimePeriod(0, 45, 0, 60),
-		//		SkillActivity = activity
-		//	};
-
-		//	Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
-
-		//	var openHours = skillDay1.OpenHours().First();
-		//	var overtimePeriod = stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().First().Period.TimePeriod(TimeZoneInfo.Utc);
-		//	openHours.StartTime.Should().Be.EqualTo(overtimePeriod.StartTime);
-		//}
-
+			var requestedPeriod = new DateTimePeriod(2017, 06, 2, 4, 2017, 06, 2, 9);
+			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent });
+			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill });
+			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(june1DateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 2, 5, 2017, 06, 2, 9));
+			overtimeActivities.Count().Should().Be.EqualTo(1);
+			affectedPersons.Should().Not.Be.Empty();
+		}
 
 	}
 }
