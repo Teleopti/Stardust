@@ -94,42 +94,16 @@
                         return params.skillIds.indexOf(a.SkillId) >= 0
                     });
                 })();
+                if (params.inAlarm == 'true')
+                    ret = agentStatesInAlarm(ret);
+                if (params.excludedStateIds)
+                    ret = ret.filter(function(s) {
+                        return params.excludedStateIds.indexOf(s.StateId) === -1;
+                    });
+
                 return [200, {
                     Time: serverTime,
                     States: ret
-                }];
-            });
-
-        fake(/\.\.\/api\/AgentStates\/InAlarmFor\?(.*)/,
-            function(params) {
-                var ret = (function() {
-                    if (params.siteIds != null && params.skillIds != null)
-                        return agentStates.filter(function(a) {
-                            return params.skillIds.indexOf(a.SkillId) >= 0
-                        }).filter(function(a) {
-                            return params.siteIds.indexOf(a.SiteId) >= 0
-                        });
-                    if (params.siteIds != null)
-                        return agentStates.filter(function(a) {
-                            return params.siteIds.indexOf(a.SiteId) >= 0
-                        });
-                    if (params.teamIds != null && params.skillIds != null)
-                        return agentStates.filter(function(a) {
-                            return params.skillIds.indexOf(a.SkillId) >= 0
-                        }).filter(function(a) {
-                            return params.teamIds.indexOf(a.TeamId) >= 0
-                        });
-                    if (params.teamIds != null)
-                        return agentStates.filter(function(a) {
-                            return params.teamIds.indexOf(a.TeamId) >= 0
-                        });
-                    return agentStates.filter(function(a) {
-                        return params.skillIds.indexOf(a.SkillId) >= 0
-                    });
-                })();
-                return [200, {
-                    Time: serverTime,
-                    States: agentStatesInAlarm(ret)
                 }];
             });
 
@@ -140,42 +114,7 @@
                 return s2.TimeInAlarm - s1.TimeInAlarm;
             });
         }
-
-        fake(/\.\.\/api\/AgentStates\/InAlarmExcludingPhoneStatesFor\?(.*)/,
-            function(params) {
-                var ret = (function() {
-                    if (params.siteIds != null && params.skillIds != null)
-                        return agentStates.filter(function(a) {
-                            return params.skillIds.indexOf(a.SkillId) >= 0
-                        }).filter(function(a) {
-                            return params.siteIds.indexOf(a.SiteId) >= 0
-                        });
-                    if (params.siteIds != null)
-                        return agentStates.filter(function(a) {
-                            return params.siteIds.indexOf(a.SiteId) >= 0
-                        });
-                    if (params.teamIds != null && params.skillIds != null)
-                        return agentStates.filter(function(a) {
-                            return params.skillIds.indexOf(a.SkillId) >= 0
-                        }).filter(function(a) {
-                            return params.teamIds.indexOf(a.TeamId) >= 0
-                        });
-                    if (params.teamIds != null)
-                        return agentStates.filter(function(a) {
-                            return params.teamIds.indexOf(a.TeamId) >= 0
-                        });
-                    return agentStates.filter(function(a) {
-                        return params.skillIds.indexOf(a.SkillId) >= 0
-                    });
-                })();
-                return [200, {
-                    Time: serverTime,
-                    States: agentStatesInAlarm(ret).filter(function(s) {
-                        return params.excludedStateIds.indexOf(s.StateId) === -1;
-                    })
-                }];
-            });
-
+        
         fake(/\.\.\/api\/SkillArea\/For(.*)/,
             function(params) {
                 var result = skillAreas

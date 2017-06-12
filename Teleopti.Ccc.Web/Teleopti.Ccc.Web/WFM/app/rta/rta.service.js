@@ -15,8 +15,6 @@
             getOrganization: getOrganization,
             getOrganizationForSkills: getOrganizationForSkills,
             agentStatesFor: agentStatesFor,
-            agentStatesInAlarmFor: agentStatesInAlarmFor,
-            agentStatesInAlarmExcludingPhoneStatesFor: agentStatesInAlarmExcludingPhoneStatesFor,
             getAdherenceForAllSites: getAdherenceForAllSites,
             getAdherenceForSitesBySkills: getAdherenceForSitesBySkills,
 			getTeamCardsFor: getTeamCardsFor,
@@ -66,23 +64,6 @@
         function agentStatesFor(data) {
             return $resource('../api/AgentStates/For', {}, { query: { method: 'GET' } }).query(data).$promise;
         };
-
-        function agentStatesInAlarmFor(data) {
-            return $resource('../api/AgentStates/InAlarmFor', {}, {
-                query: {
-                    method: 'GET'
-                }
-            }).query(data).$promise;
-        };
-
-        function agentStatesInAlarmExcludingPhoneStatesFor(data) {
-            return $resource('../api/AgentStates/InAlarmExcludingPhoneStatesFor', {}, {
-                    query: {
-                        method: 'GET'
-                    }
-                }).query(data)
-                .$promise;
-        }
 		
 		function getTeamCardsFor(data) {
 			return $resource('../api/Overview/TeamCards', {}, {

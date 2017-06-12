@@ -191,10 +191,10 @@
 				rtaService.getSkillArea(skillAreaId)
 					.then(getSkillIdsFromSkillArea)
 					.then(function () {
-						serviceCall(deferred);
+						deferred.resolve(rtaService.agentStatesFor);
 					});
 			} else {
-				serviceCall(deferred);
+				deferred.resolve(rtaService.agentStatesFor);
 			}
 			return deferred.promise;
 		};
@@ -206,21 +206,13 @@
 			}
 		}
 
-		function serviceCall(deferred) {
-			if (excludedStateIds().length > 0)
-				deferred.resolve(rtaService.agentStatesInAlarmExcludingPhoneStatesFor);
-			else if (vm.showInAlarm)
-				deferred.resolve(rtaService.agentStatesInAlarmFor);
-			else
-				deferred.resolve(rtaService.agentStatesFor);
-		}
-
 		function getAgentStatesByParams(fn) {
 			return fn({
 				siteIds: siteIds,
 				teamIds: teamIds,
 				skillIds: skillIds,
 				skillAreaId: skillAreaId,
+				inAlarm: vm.showInAlarm,
 				excludedStateIds: excludedStateIds().map(function (s) { return s === nullStateId ? null : s; })
 			})
 		}

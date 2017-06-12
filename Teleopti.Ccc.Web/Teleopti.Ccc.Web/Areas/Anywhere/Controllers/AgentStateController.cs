@@ -19,26 +19,27 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[UnitOfWork, HttpGet, Route("api/AgentStates/For")]
-		public virtual IHttpActionResult For([FromUri]AgentStateFilter filter)
+		public virtual IHttpActionResult For([FromUri]AgentStateViewFilter filter)
 		{
-			return Ok(_builder.For(filter));
+			return Ok(_builder.For(
+				new AgentStateFilter
+				{
+					SiteIds = filter.SiteIds,
+					TeamIds = filter.TeamIds,
+					SkillIds = filter.SkillIds,
+					InAlarm = filter.InAlarm,
+					ExcludedStates = filter.ExcludedStateIds
+				}));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/AgentStates/InAlarmFor")]
-		public virtual IHttpActionResult InAlarmFor([FromUri]AgentStateFilter filter)
+		public class AgentStateViewFilter
 		{
-			// REMOVE ME PLOX
-			filter.InAlarm = true;
-			return Ok(_builder.For(filter));
-		}
+			public IEnumerable<Guid> SiteIds { get; set; }// include
+			public IEnumerable<Guid> TeamIds { get; set; }// include
 
-		[UnitOfWork, HttpGet, Route("api/AgentStates/InAlarmExcludingPhoneStatesFor")]
-		public virtual IHttpActionResult InAlarmExcludingPhoneStatesFor([FromUri] AgentStateFilter filter, [FromUri] IEnumerable<Guid?> excludedStateIds)
-		{
-			// REMOV ME TOO
-			filter.ExcludedStates = excludedStateIds;
-			filter.InAlarm = true;
-			return Ok(_builder.For(filter));
+			public IEnumerable<Guid> SkillIds { get; set; } // filter
+			public IEnumerable<Guid?> ExcludedStateIds { get; set; } // filter
+			public bool InAlarm { get; set; } // filter
 		}
 	}
 }
