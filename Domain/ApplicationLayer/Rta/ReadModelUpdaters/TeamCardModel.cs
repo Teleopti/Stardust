@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		public Guid TeamId { get; set; }
 		public String TeamName { get; set; }
 		public int InAlarmCount { get; set; }
+		public int AgentsCount { get; set; }
 	}
 }

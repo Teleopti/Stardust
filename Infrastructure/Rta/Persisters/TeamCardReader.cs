@@ -108,10 +108,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 					;
 
-			return query
+			var teamCardModels = query
 				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamCardModel)))
 				.List()
 				.Cast<TeamCardModel>();
+			return teamCardModels.ForEach(x => x.AgentsCount = 1);
 		}
 	}
 }

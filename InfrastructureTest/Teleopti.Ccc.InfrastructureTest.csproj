@@ -290,6 +290,7 @@
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Repositories\SmartPersonPropertyQuerierTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\Reader\Order.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderAgentsCountTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderNameTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesSkillsTest.cs" />
