@@ -251,6 +251,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	    public bool SkipNegativeShiftValues { get; set; }
 	    public bool IsOptimization { get; set; }
 
+	    public bool IsClassic()
+	    {
+		    return !UseTeam && !UseBlock;
+	    }
+
 	    public object Clone()
         {
             return MemberwiseClone();
