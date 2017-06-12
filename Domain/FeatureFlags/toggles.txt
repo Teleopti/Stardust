@@ -47,7 +47,7 @@ RTA_FasterAgentsView_42039 = true
 RTA_MonitorAgentsInPermittedOrganizationOnly_40660 = false
 RTA_EventPackagesOptimization_43924 = true
 RTA_AsyncOptimization_43924 = true
-RTA_SolidProofWhenManagingAgentAdherence_39351 = RC
+RTA_SolidProofWhenManagingAgentAdherence_39351 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 WfmPermission_RelaseRefactor_43587 = true
@@ -167,7 +167,7 @@ MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 = RC
 MyTimeWeb_PreferenceForJalaliCalendar_42965 = true
 MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = true
 MyTimeWeb_DayScheduleForStartPage_43446 = true
-MyTimeWeb_DayScheduleForStartPage_Command_44209 = RC
+MyTimeWeb_DayScheduleForStartPage_Command_44209 = true
 MyTimeWeb_ViewWFMAppGuide_43848 = true
 
 Scheduler_IntradayOptimization_36617 = true
@@ -181,7 +181,7 @@ ResourcePlanner_MasterActivityBaseLayer_44134 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_TeamSameDayOff_44265 = true
 ResourcePlanner_MergeTeamblockClassicScheduling_44289 = RC
-ResourcePlanner_RemoveBackToLegalStateGui_44333 = RC
+ResourcePlanner_RemoveBackToLegalStateGui_44333 = true
 ResourcePlanner_CalculateShiftValuesInParallel_44681 = DEV
 
 Wfm_DisplayOnlineHelp_39402 = RC
@@ -240,7 +240,7 @@ Staffing_ReadModel_UseSkillCombination_xx = true
 WfmStaffing_AllowActions_42524 = RC #Enables the entire Staffing page!
 StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388 = true # don't enable without Staffing_ReadModel_UseSkillCombination_xx
 Staffing_ReadModel_Update14Days_43840 = true # don't enable without StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388
-Staffing_ReadModel_BetterAccuracy_43447 = RC
+Staffing_ReadModel_BetterAccuracy_43447 = true
 Staffing_ReadModel_BetterAccuracy_Step2_44271 = RC
 Staffing_ReadModel_BetterAccuracy_Step3_44331 = DEV
 Staffing_ReadModel_Keep8DaysHistoricalData_44652 = RC # don't enable without Staffing_ReadModel_Update14Days_43840
