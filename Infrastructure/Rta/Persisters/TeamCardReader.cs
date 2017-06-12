@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.Session()
 				.CreateSQLQuery($@"
 					SELECT
-						MAX(a.BusinessUnitId) as BusinessUnitId,
-						MAX(a.SiteId) as SiteId, 
+						MAX(CAST(a.BusinessUnitId AS BINARY(16))) as BusinessUnitId,
+						MAX(CAST(a.SiteId AS BINARY(16))) as SiteId, 
 						MAX(a.SiteName) as SiteName,
 						MAX(a.TeamName) as TeamName,
 						a.TeamId, 
