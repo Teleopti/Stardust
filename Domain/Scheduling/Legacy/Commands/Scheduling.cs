@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly TeamBlockScheduleSelected _teamBlockScheduleSelected;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
+		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
 
 		public Scheduling(Func<ISchedulerStateHolder> schedulerStateHolder,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceCalculation resourceCalculation,
 			IUserTimeZone userTimeZone,
 			TeamBlockScheduleSelected teamBlockScheduleSelected,
-			TeamInfoFactoryFactory teamInfoFactoryFactory)
+			TeamInfoFactoryFactory teamInfoFactoryFactory,
+			INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_userTimeZone = userTimeZone;
 			_teamBlockScheduleSelected = teamBlockScheduleSelected;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
+			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
 		}
 
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
@@ -75,6 +78,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockScheduleSelected.ScheduleSelected(schedulingCallback, matrixes, selectedPeriod,
 				selectedAgents, rollbackService, resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState, schedulingOptions, teamInfoFactory);
+
+			if (!schedulingOptions.UseTeam && !schedulingOptions.UseBlock)
+			{
+				var nightRestWhiteSpotSolverService = _nightRestWhiteSpotSolverServiceFactory.Create(schedulingOptions.ConsiderShortBreaks);
+
+				foreach (var scheduleMatrixPro in matrixes)
+				{
+					nightRestWhiteSpotSolverService.Resolve(scheduleMatrixPro, schedulingOptions, rollbackService);
+				}
+			}
 
 			//TODO: get rid of _backgroundWorker here...
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents, rollbackService, resourceCalculateDelayer,

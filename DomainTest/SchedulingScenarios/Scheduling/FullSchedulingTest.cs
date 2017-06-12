@@ -102,7 +102,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("44622 - to be fixed")]
 		public void ShouldResolveNightlyRest()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
@@ -130,9 +129,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				skill.CreateSkillDayWithDemandOnInterval(scenario, firstDay.AddDays(5), 1, new Tuple<TimePeriod, double>(earlyInterval, 1000)), 
 				skill.CreateSkillDayWithDemandOnInterval(scenario, firstDay.AddDays(6), 1, new Tuple<TimePeriod, double>(earlyInterval, 1000)));
 			StateHolder.SchedulingResultState.UseValidation = true;
+
 			Target.DoScheduling(period);
 
-			AssignmentRepository.Find(new[] { agent }, period, scenario).Count.Should().Be.EqualTo(7);
+			AssignmentRepository.Find(new[] { agent }, period, scenario)
+				.Count.Should().Be.EqualTo(7);
 		}
 
 		public FullSchedulingTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
