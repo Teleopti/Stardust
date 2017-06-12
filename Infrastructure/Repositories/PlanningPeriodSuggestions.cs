@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (_uniqueSchedulePeriods.Any() )
 			{
 				var aggregatedSchedulePeriod = _uniqueSchedulePeriods.First();
-				var currentPeriod = _schedulePeriodRangeCalculator.PeriodForType(now,
+				var requestedDate = aggregatedSchedulePeriod.DateFrom > now.Date ? new DateOnly(aggregatedSchedulePeriod.DateFrom) : now;
+				var currentPeriod = _schedulePeriodRangeCalculator.PeriodForType(requestedDate,
 					rangeCalculation(aggregatedSchedulePeriod));
 
 				return new SuggestedPlanningPeriod

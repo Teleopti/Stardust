@@ -152,6 +152,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
+		public void ShouldReturnSuggestionsForAgentsWithFirstSchedulePeriodStartingLaterThanToday()
+		{
+			var addedPeople = SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]
+			{
+				() => new SchedulePeriod(new DateOnly(2017,06,12), SchedulePeriodType.Week, 1),
+			});
+			var repository = new PlanningPeriodRepository(CurrUnitOfWork);
+			var planningPeriodSuggestions = repository.Suggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<Guid> { addedPeople.First().Id.GetValueOrDefault() });
+
+			var suggestedPeriod = planningPeriodSuggestions.Default();
+			suggestedPeriod.Number.Should().Be.EqualTo(1);
+			suggestedPeriod.PeriodType.Should().Be.EqualTo(SchedulePeriodType.Week);
+		}
+
+		[Test]
 		public void ShouldReturnSuggestionsOnlyForSpecificPeople()
 		{
 			var addedPeople = SetupPersonsInOrganizationWithContract(new Func<SchedulePeriod>[]

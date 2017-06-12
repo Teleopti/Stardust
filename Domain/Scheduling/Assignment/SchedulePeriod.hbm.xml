@@ -115,7 +115,7 @@ FROM scheduleperiod pp
 INNER JOIN Person person ON person.Id = pp.Parent
 INNER JOIN readmodel.GroupingReadOnly p ON p.PersonId = pp.Parent and p.StartDate <= :date and p.EndDate >= :date
 WHERE p.BusinessUnitId = :businessUnit AND pp.DateFrom <= isnull(p.LeavingDate,'20591231 00:00') AND person.Id in (:personIds)) AS x
-WHERE x.EndDate >= :date and x.DateFrom <= :date
+WHERE x.EndDate >= :date
 GROUP BY PeriodType,Number,DateFrom,Culture
 ORDER BY [Priority] DESC
 		]]>
