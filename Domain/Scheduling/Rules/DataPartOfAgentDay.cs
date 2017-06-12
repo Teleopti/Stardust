@@ -33,16 +33,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				//don't want dep to person here...
 				var agentTimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
 
-				var assigntmentStartInAgentTZ = TimeZoneHelper.ConvertFromUtc(assignment.Period.StartDateTime, agentTimeZone).Date;
-
+				var assignmentDayInAgentTimeZone = TimeZoneHelper.ConvertFromUtc(assignment.Period.StartDateTime, agentTimeZone).Date;
 				var scheduleDayInAgentTimezone = TimeZoneHelper.ConvertFromUtc(scheduleDay.Period.StartDateTime, agentTimeZone).Date;
-				//if (!dateOnlyAsDatePeriod.Contains(assignmentPeriod.StartDateTime))
-				if (assigntmentStartInAgentTZ != scheduleDayInAgentTimezone)
-				{
-					var friendlyName = Resources.NotAllowedMoveOfAssignmentToOtherDate;
-					ret.Add(new BusinessRuleResponse(typeof(DataPartOfAgentDay), Resources.NotAllowedMoveOfAssignmentToOtherDate, true, true, assignmentPeriod,
-					 scheduleDay.Person, dateOnlyPeriod, friendlyName));
-				}
+				if (assignmentDayInAgentTimeZone == scheduleDayInAgentTimezone) continue;
+
+				var friendlyName = Resources.NotAllowedMoveOfAssignmentToOtherDate;
+				ret.Add(new BusinessRuleResponse(typeof(DataPartOfAgentDay), Resources.NotAllowedMoveOfAssignmentToOtherDate, true, true, assignmentPeriod,
+												 scheduleDay.Person, dateOnlyPeriod, friendlyName));
 			}
 			return ret;
 		}
