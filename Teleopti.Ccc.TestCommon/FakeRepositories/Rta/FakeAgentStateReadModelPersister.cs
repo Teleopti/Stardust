@@ -190,85 +190,65 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<AgentStateReadModel> Read(AgentStateFilter filter)
 		{
+			var result = Enumerable.Empty<AgentStateReadModel>();
+
+			if (filter.TeamIds == null && filter.SiteIds == null)
+				result = _data.Values;
+			if (filter.SiteIds != null)
+				result = result.Concat(includeSites(filter.SiteIds));
+			if (filter.TeamIds != null)
+				result = result.Concat(includeTeams(filter.TeamIds));
+			result = result.Distinct();
+
 			if (filter.ExcludedStates.EmptyIfNull().Any())
-				return readInAlarmExcludingStatesFor(filter.SiteIds, filter.TeamIds, filter.SkillIds, filter.ExcludedStates);
+				result = filterStateGroups(result, filter.ExcludedStates);
+			if (filter.SkillIds.EmptyIfNull().Any())
+				result = filterSkills(result, filter.SkillIds);
+
 			if (filter.InAlarm)
-				return readInAlarmFor(filter.SiteIds, filter.TeamIds, filter.SkillIds);
-			return readFor(filter.SiteIds, filter.TeamIds, filter.SkillIds);
+				result = filterInAlarm(result)
+					.OrderBy(x => x.AlarmStartTime);
+
+			return result.ToArray();
 		}
 		
-		private IEnumerable<AgentStateReadModel> readInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
-		{
-			if (siteIds != null && teamIds != null && skillIds != null)
-				return queryInAlarm(readFor(siteIds, teamIds, skillIds)).ToArray();
-			if (siteIds != null && teamIds != null)
-				return queryInAlarm(readFor(siteIds, teamIds, null)).ToArray();
-			if (siteIds != null && skillIds != null)
-				return queryInAlarm(readFor(siteIds, null, skillIds)).ToArray();
-			if (siteIds != null)
-				return queryInAlarm(readFor(siteIds, null, null)).ToArray();
-			if (teamIds != null && skillIds != null)
-				return queryInAlarm(readFor(null, teamIds, skillIds)).ToArray();
-			if (teamIds != null)
-				return queryInAlarm(readFor(null, teamIds, null)).ToArray();
-			return queryInAlarm(readFor(null, null, skillIds)).ToArray();
-		}
-
-		private IEnumerable<AgentStateReadModel> readFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
-		{
-			if (siteIds != null && teamIds != null && skillIds != null)
-				return queryWithSkill(readForSites(siteIds).Concat(readForTeams(teamIds)).Distinct(), skillIds).ToArray();
-			if (siteIds != null && teamIds != null)
-				return readForSites(siteIds).Concat(readForTeams(teamIds)).Distinct().ToArray();
-			if (siteIds != null && skillIds != null)
-				return queryWithSkill(readForSites(siteIds), skillIds).ToArray();
-			if (siteIds != null)
-				return readForSites(siteIds).ToArray();
-			if (teamIds != null && skillIds != null)
-				return queryWithSkill(readForTeams(teamIds), skillIds).ToArray();
-			if (teamIds != null)
-				return readForTeams(teamIds).ToArray();
-			return queryWithSkill(_data.Values, skillIds).ToArray();
-		}
-
-		private IEnumerable<AgentStateReadModel> readForSites(IEnumerable<Guid> siteIds)
-			=> (from model in _data.Values
+		private IEnumerable<AgentStateReadModel> includeSites(IEnumerable<Guid> siteIds)
+			=> from model in _data.Values
 				from siteId in siteIds
 				where siteId == model.SiteId
-				select model).ToArray();
-
-		public IEnumerable<AgentStateReadModel> readForTeams(IEnumerable<Guid> teamIds)
-			=> (from model in _data.Values
-				from team in teamIds
-				where team == model.TeamId
-				select model).ToArray();
-
-
-		private IEnumerable<AgentStateReadModel> queryWithSkill(IEnumerable<AgentStateReadModel> models, IEnumerable<Guid> skillIds)
-			=> from model in models
-				from personSkill in _personSkills
-				from skill in skillIds
-				where
-				model.PersonId == personSkill.PersonId &&
-				personSkill.SkillId == skill
 				select model;
 
-		private IEnumerable<AgentStateReadModel> readInAlarmExcludingStatesFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds, IEnumerable<Guid?> excludedStates)
-		{
-			if (siteIds != null && teamIds != null && skillIds != null)
-				return queryExcludingStateGroups(readInAlarmFor(siteIds, teamIds, skillIds), excludedStates).ToArray();
-			if (siteIds != null && teamIds != null)
-				return queryExcludingStateGroups(readInAlarmFor(siteIds, teamIds, null), excludedStates).ToArray();
-			if (siteIds != null && skillIds != null)
-				return queryExcludingStateGroups(readInAlarmFor(siteIds, null, skillIds), excludedStates).ToArray();
-			if (siteIds != null)
-				return queryExcludingStateGroups(readInAlarmFor(siteIds, null, null), excludedStates).ToArray();
-			if (teamIds != null && skillIds != null)
-				return queryExcludingStateGroups(readInAlarmFor(null, teamIds, skillIds), excludedStates).ToArray();
-			if (teamIds != null)
-				return queryExcludingStateGroups(readInAlarmFor(null, teamIds, null), excludedStates).ToArray();
-			return queryExcludingStateGroups(readInAlarmFor(null, null, skillIds), excludedStates).ToArray();
-		}
+		private IEnumerable<AgentStateReadModel> includeTeams(IEnumerable<Guid> teamIds)
+			=> from model in _data.Values
+				from team in teamIds
+				where team == model.TeamId
+				select model;
+
+		private IEnumerable<AgentStateReadModel> filterInAlarm(IEnumerable<AgentStateReadModel> models)
+			=> from model in models
+				where model.AlarmStartTime <= _now.UtcDateTime()
+				select model;
+
+		private IEnumerable<AgentStateReadModel> filterSkills(IEnumerable<AgentStateReadModel> models, IEnumerable<Guid> skillIds)
+			=> from model in models
+
+				let personSkillIds = from s in _personSkills where s.PersonId == model.PersonId select s.SkillId
+				let skillsMatch = (from s1 in skillIds from s2 in personSkillIds where s1 == s2 select 1).Any()
+				where skillsMatch
+
+//from personSkill in _personSkills
+//from skill in skillIds
+//where
+//model.PersonId == personSkill.PersonId &&
+//personSkill.SkillId == skill
+
+				select model;
+
+		private IEnumerable<AgentStateReadModel> filterStateGroups(IEnumerable<AgentStateReadModel> models, IEnumerable<Guid?> excludedStateGroupIds)
+			=> from model in models
+				where !excludedStateGroupIds.Contains(model.StateGroupId)
+				select model;
+
 
 
 
@@ -278,21 +258,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 
 
-		private IEnumerable<AgentStateReadModel> queryInAlarm(IEnumerable<AgentStateReadModel> models)
-			=> from model in models
-				where model.AlarmStartTime <= _now.UtcDateTime()
-				orderby model.AlarmStartTime
-				select model;
 
-		private static IEnumerable<AgentStateReadModel>
-			queryExcludingStateGroups(
-			IEnumerable<AgentStateReadModel> models,
-			IEnumerable<Guid?> excludedStateGroupIds)
-			=>
-				from model in models
-				from excludedStateGroup in excludedStateGroupIds
-				where excludedStateGroup != model.StateGroupId
-				select model;
 
 		public IEnumerable<AgentStateReadModel> Read(IEnumerable<Guid> personIds) => null;
 	}

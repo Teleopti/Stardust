@@ -55,11 +55,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 	public class AgentStateFilter
 	{
-		public IEnumerable<Guid> SiteIds { get; set; }
-		public IEnumerable<Guid> TeamIds { get; set; }
-		public IEnumerable<Guid> SkillIds { get; set; }
-		public IEnumerable<Guid?> ExcludedStates { get; set; }
-		public bool InAlarm { get; set; }
+		public IEnumerable<Guid> SiteIds { get; set; }// include
+		public IEnumerable<Guid> TeamIds { get; set; }// include
+
+		public IEnumerable<Guid> SkillIds { get; set; } // filter
+		public IEnumerable<Guid?> ExcludedStates { get; set; } // filter
+		public bool InAlarm { get; set; } // filter
 	}
 
 	public class AgentStatesViewModelBuilder
