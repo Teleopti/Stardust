@@ -67,8 +67,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.Session()
 				.CreateSQLQuery($@"
 					SELECT
-						a.BusinessUnitId,
-						a.SiteId, 
+						MAX(a.BusinessUnitId) as BusinessUnitId,
+						MAX(a.SiteId) as SiteId, 
 						a.TeamId, 
 						COUNT(DISTINCT CASE WHEN a.AlarmStartTime <= :now THEN a.PersonId END) as InAlarmCount
 					FROM 
@@ -85,8 +85,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					a.BusinessUnitId = :businessUnitId
 
 					GROUP BY 
-						a.BusinessUnitId,
-						a.SiteId, 
 						a.TeamId
 					");
 
