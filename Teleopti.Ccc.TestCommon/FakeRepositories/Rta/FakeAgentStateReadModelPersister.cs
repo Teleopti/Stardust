@@ -235,13 +235,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				let personSkillIds = from s in _personSkills where s.PersonId == model.PersonId select s.SkillId
 				let skillsMatch = (from s1 in skillIds from s2 in personSkillIds where s1 == s2 select 1).Any()
 				where skillsMatch
-
-//from personSkill in _personSkills
-//from skill in skillIds
-//where
-//model.PersonId == personSkill.PersonId &&
-//personSkill.SkillId == skill
-
 				select model;
 
 		private IEnumerable<AgentStateReadModel> filterStateGroups(IEnumerable<AgentStateReadModel> models, IEnumerable<Guid?> excludedStateGroupIds)
