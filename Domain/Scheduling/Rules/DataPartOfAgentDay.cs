@@ -31,13 +31,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 				var dateOnly = assignment.Date;
 				var dateOnlyPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
 				//don't want dep to person here...
-				var dateOnlyAsDatePeriod = dateOnlyPeriod.ToDateTimePeriod(scheduleDay.Person.PermissionInformation.DefaultTimeZone());
+				var agentTimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
 
-				if (!dateOnlyAsDatePeriod.Contains(assignmentPeriod.StartDateTime))
+				var assigntmentStartInAgentTZ = TimeZoneHelper.ConvertFromUtc(assignment.Period.StartDateTime, agentTimeZone).Date;
+
+				var scheduleDayInAgentTimezone = TimeZoneHelper.ConvertFromUtc(scheduleDay.Period.StartDateTime, agentTimeZone).Date;
+				//if (!dateOnlyAsDatePeriod.Contains(assignmentPeriod.StartDateTime))
+				if (assigntmentStartInAgentTZ != scheduleDayInAgentTimezone)
 				{
 					var friendlyName = Resources.NotAllowedMoveOfAssignmentToOtherDate;
 					ret.Add(new BusinessRuleResponse(typeof(DataPartOfAgentDay), Resources.NotAllowedMoveOfAssignmentToOtherDate, true, true, assignmentPeriod,
-						scheduleDay.Person, dateOnlyPeriod, friendlyName));
+					 scheduleDay.Person, dateOnlyPeriod, friendlyName));
 				}
 			}
 			return ret;

@@ -56,12 +56,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				overtimePreferences.SelectedTimePeriod.EndTime);
 			var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime,
 				overtimePreferences.SelectedSpecificTimePeriod.EndTime);
-			//var overtimeLayerLengthPeriodsUtc = _overtimeLengthDecider.Decide(overtimePreferences, person, dateOnly, scheduleDay,
-			//	overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
 			var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly)).ToList();
 			var minResolution = OvertimeLengthDecider.GetMinimumResolution(skills, overtimeDuration,scheduleDay);
 			var overtimeSkillIntervalDataAggregatedList = getAggregatedOvertimeSkillIntervals(resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items());
-			var overtimeLayerLengthPeriodsUtc = _calculateBestOvertime.GetBestOvertime(overtimeDuration, overtimeSpecifiedPeriod, scheduleDay,minResolution
+			var overtimeLayerLengthPeriodsUtc = _calculateBestOvertime.GetBestOvertimeInUtc(overtimeDuration, overtimeSpecifiedPeriod, scheduleDay,minResolution
 												   , overtimePreferences.AvailableAgentsOnly, overtimeSkillIntervalDataAggregatedList);
 
 			var oldRmsValue = calculatePeriodValue(dateOnly, person, timeZoneInfo, resourceCalculationData, skills);
@@ -69,17 +67,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			foreach (var dateTimePeriod in overtimeLayerLengthPeriodsUtc)
 			{
-				var periodStartMyViewPoint = dateTimePeriod.StartDateTimeLocal(timeZoneInfo);
-				var periodEndMyViewPoint = dateTimePeriod.EndDateTimeLocal(timeZoneInfo);
-				var overtimeSpecifiedPeriodStartDateTime = dateOnly.Date.Add(overtimeSpecifiedPeriod.Minimum);
-				var overtimeSpecifiedPeriodEndDateTime = dateOnly.Date.Add(overtimeSpecifiedPeriod.Maximum);
-
-				if (periodStartMyViewPoint < overtimeSpecifiedPeriodStartDateTime ||
-					 periodStartMyViewPoint >= overtimeSpecifiedPeriodEndDateTime ||
-					 periodEndMyViewPoint > overtimeSpecifiedPeriodEndDateTime ||
-					 periodEndMyViewPoint <= overtimeSpecifiedPeriodStartDateTime)
-					continue;
-
 				scheduleDay = scheduleDay.ReFetch();
 				scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, dateTimePeriod, overtimePreferences.OvertimeType);
 				_schedulePartModifyAndRollbackService.ClearModificationCollection();

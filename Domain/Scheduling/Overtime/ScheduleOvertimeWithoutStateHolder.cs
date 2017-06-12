@@ -45,11 +45,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			foreach (var dateOnly in selectedDates)
 			{
 				var persons = selectedPersons.Randomize();
+				
 				foreach (var person in persons)
 				{
 					if (cancel || checkIfCancelPressed(backgroundWorker)) return affectedPersons;
 
 					var scheduleDay = selectedSchedules.FirstOrDefault(x => x.Person == person && x.DateOnlyAsPeriod.DateOnly == dateOnly);
+					//var dateOnly2 = new DateOnly(scheduleDay.Period.StartDateTime);
+					//var scheduleDay = selectedSchedules.FirstOrDefault(x => x.Person == person && x.Period.Contains(dateOnly.Date));
 					if (scheduleDay == null) continue;
 					//var scheduleDay = resourceCalculationData.Schedules[person].ScheduledDay(dateOnly);
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);

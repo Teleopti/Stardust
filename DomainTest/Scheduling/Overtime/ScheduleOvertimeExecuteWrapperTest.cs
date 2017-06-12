@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			affectedPersons.Count.Should().Be.EqualTo(1);
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldScheduleOvertimeOnDifferentTimezones()
 		{
 			setup();
@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			// Mountain Standard Time -7H
 			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time")).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, timePeriodInUtc);
+			var ass2 = new PersonAssignment(agent2, scenario, new DateOnly(2017,05,31)).ShiftCategory(shiftCategory).WithLayer(activity, timePeriodInUtc);
 			PersonAssignmentRepository.Has(ass2);
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnly, 2));
@@ -329,11 +329,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent, agent2 }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent, agent2 });
-			var scheduleDays = scheduleDictionary.SchedulesForDay(dateOnly).ToList();
+			var period = new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly.AddDays(1));
+			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, agent, agent2).ToList();
 			var affectedPersons = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, dateTimePeriod, new[] { skill });
-			var overtimeActivities = scheduleDictionary.SchedulesForDay(dateOnly).ToList()
-				.Select(x => x.PersonAssignment().OvertimeActivities())
-				.SelectMany(i => i).Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 6, 2017, 06, 01, 10));
+			var overtimeActivities = scheduleDictionary.SchedulesForPeriod(period, agent, agent2).ToList()
+				.Select(x => x.PersonAssignment()?.OvertimeActivities())
+				.Where(y=>y!=null)
+				.SelectMany(i => i ).Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 6, 2017, 06, 01, 10));
 
 			overtimeActivities.Count().Should().Be.EqualTo(2);
 			affectedPersons.Count.Should().Be.EqualTo(2);
