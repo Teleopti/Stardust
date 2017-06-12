@@ -50,7 +50,6 @@ Background: Access permitted site/teams only
 	And 'AgentYellow' sets her phone state to 'LoggedOut'
 	And 'AgentPink' sets her phone state to 'LoggedOut'
 	
-@OnlyRunIfEnabled('RTA_MonitorAgentsInPermittedOrganizationOnly_40660')
 Scenario: As a Team leader - See how many agents that are in alarm for my site
 	Given I have a role with
 	 | Field                                  | Value       |
@@ -61,7 +60,6 @@ Scenario: As a Team leader - See how many agents that are in alarm for my site
 	Then I should see site 'SiteGreen'
 	And I should not see site 'SitePink'
 	
-@OnlyRunIfEnabled('RTA_MonitorAgentsInPermittedOrganizationOnly_40660')
 Scenario: As a Team leader - Only see permitted team
 	Given I have a role with
 	 | Field                                  | Value       |
@@ -72,7 +70,6 @@ Scenario: As a Team leader - Only see permitted team
 	Then I should see team 'TeamBlue'
 	And I should not see team 'TeamYellow'
 	
-@OnlyRunIfEnabled('RTA_MonitorAgentsInPermittedOrganizationOnly_40660')
 Scenario: As a Site manager - Only see permitted site
 	Given I have a role with
 	 | Field                                  | Value       |

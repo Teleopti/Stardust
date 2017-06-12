@@ -44,7 +44,6 @@ MyTimeWeb_ShowSeatBookingMonthView_39068 = true
 RTA_SeeAllOutOfAdherencesToday_39146 = true
 RTA_SpreadTransactionLocksStrategy_41823 = true
 RTA_FasterAgentsView_42039 = true
-RTA_MonitorAgentsInPermittedOrganizationOnly_40660 = false
 RTA_EventPackagesOptimization_43924 = true
 RTA_AsyncOptimization_43924 = true
 RTA_SolidProofWhenManagingAgentAdherence_39351 = true
