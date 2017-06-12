@@ -252,9 +252,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillB2Day.SkillStaffPeriodCollection.Last().CalculatedResource
 				.Should().Be.EqualTo(numberOfB2Agents);
 		}
-
-		public CascadingResourceCalculationOverstaffedSkillGroupsTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
-		{
-		}
 	}
 }

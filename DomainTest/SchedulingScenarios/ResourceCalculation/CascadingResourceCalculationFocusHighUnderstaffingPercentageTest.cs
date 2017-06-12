@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	//specific tests to ensure skills with high understaffing percentage are reduced quickly
 	[DomainTest]
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_EvenRelativeDiff_44091)]
 	public class CascadingResourceCalculationFocusHighUnderstaffingPercentageTest
 	{
 		public IResourceCalculation Target;

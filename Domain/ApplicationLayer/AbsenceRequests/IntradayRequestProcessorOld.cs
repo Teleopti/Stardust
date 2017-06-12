@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayRequestProcessorOld));
 		private readonly IActivityRepository _activityRepository;
-		private readonly IAddResourcesToSubSkills _addResourcesToSubSkills;
+		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IPersonSkillProvider _personSkillProvider;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public IntradayRequestProcessorOld(ICommandDispatcher commandDispatcher,
 										   ISkillCombinationResourceRepository skillCombinationResourceRepository, IPersonSkillProvider personSkillProvider,
 										   IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, IScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
-										   ISkillRepository skillRepository, IActivityRepository activityRepository, IAddResourcesToSubSkills addResourcesToSubSkills,
+										   ISkillRepository skillRepository, IActivityRepository activityRepository, AddResourcesToSubSkills addResourcesToSubSkills,
 										   ReducePrimarySkillResources reducePrimarySkillResources, PrimarySkillOverstaff primarySkillOverstaff,
 										   SkillGroupPerActivityProvider skillGroupPerActivityProvider, IAbsenceRequestValidatorProvider absenceRequestValidatorProvider,
 										   SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator)

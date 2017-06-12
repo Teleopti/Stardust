@@ -45,7 +45,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 			const int intervalPerDay = 96;
 
-			_target = new ScheduleForecastSkillResourceCalculation(new ShovelResources(new ReducePrimarySkillResources(), new AddResourcesToSubSkillsOld(), new SkillGroupPerActivityProvider(), new PrimarySkillOverstaff(), new TimeZoneGuard()),
+			_target = new ScheduleForecastSkillResourceCalculation(new ShovelResources(new ReducePrimarySkillResources(), new AddResourcesToSubSkills(), new SkillGroupPerActivityProvider(), new PrimarySkillOverstaff(), new TimeZoneGuard()),
 				_skillDaysDictionary, 
 				_schedulingResultService,
 				new SkillStaffPeriodHolder(_skillDaysDictionary),  

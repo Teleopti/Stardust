@@ -51,9 +51,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			stateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade()
 				.Should().Be.True();
 		}
-
-		public GuessResourceCalculationHasBeenMadeTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
-		{
-		}
 	}
 }

@@ -47,9 +47,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 				partOfAssignmentInContext.Should().Be.EqualTo(expected);
 			}
 		}
-
-		public ResourceCalculationContextPeriodTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
-		{
-		}
 	}
 }

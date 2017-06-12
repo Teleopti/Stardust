@@ -123,9 +123,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 
 			stateHolder.DaysToRecalculate.Should().Have.SameValuesAs(date);
 		}
-
-		public ResourceCalculateCorrectDaysTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
-		{
-		}
 	}
 }

@@ -11,13 +11,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class ShovelResources
 	{
 		private readonly ReducePrimarySkillResources _reducePrimarySkillResources;
-		private readonly IAddResourcesToSubSkills _addResourcesToSubSkills;
+		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
 		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
 		private readonly PrimarySkillOverstaff _primarySkillOverstaff;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public ShovelResources(ReducePrimarySkillResources reducePrimarySkillResources,
-			IAddResourcesToSubSkills addResourcesToSubSkills,
+			AddResourcesToSubSkills addResourcesToSubSkills,
 			SkillGroupPerActivityProvider skillGroupPerActivityProvider,
 			PrimarySkillOverstaff primarySkillOverstaff,
 			ITimeZoneGuard timeZoneGuard)

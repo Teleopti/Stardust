@@ -8,8 +8,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class ShovelResourcesState
 	{
 		private readonly ResourceDistributionForSkillGroupsWithSameIndex _resourceDistribution;
-		[RemoveMeWithToggle("Make private when done", Toggles.ResourcePlanner_EvenRelativeDiff_44091)]
-		protected readonly IDictionary<CascadingSkillGroup, double> _resourcesMovedOnSkillGroup;
+		private readonly IDictionary<CascadingSkillGroup, double> _resourcesMovedOnSkillGroup;
 		private bool _continueShovelingBasedOnSubSkills;
 
 
@@ -31,8 +30,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public double RemainingOverstaffing { get; private set; }
 		public double TotalOverstaffingAtStart { get; }
 
-		[RemoveMeWithToggle("Remove virtual when done", Toggles.ResourcePlanner_EvenRelativeDiff_44091)]
-		public virtual bool ContinueShovel(CascadingSkillGroup skillGroup)
+		public bool ContinueShovel(CascadingSkillGroup skillGroup)
 		{
 			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out double resourcesMovedOnSkillGroup))
 			{

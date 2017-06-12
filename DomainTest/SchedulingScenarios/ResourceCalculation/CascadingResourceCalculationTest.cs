@@ -252,9 +252,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			nonCascadingSkillDay.SkillStaffPeriodCollection.Last().AbsoluteDifference
 				.Should().Be.EqualTo(0);
 		}
-
-		public CascadingResourceCalculationTest(bool resourcePlannerEvenRelativeDiff44091) : base(resourcePlannerEvenRelativeDiff44091)
-		{
-		}
 	}
 }

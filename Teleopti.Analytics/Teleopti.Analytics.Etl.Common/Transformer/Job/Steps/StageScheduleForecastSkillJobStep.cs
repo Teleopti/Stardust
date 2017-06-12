@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Cascading;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -46,16 +45,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 																										   scheduleDictionary,
 																										   skillDaysDictionary))
 				{
-					var addresourcesToSubSkill = JobParameters.ToggleManager.IsEnabled(Toggles.ResourcePlanner_EvenRelativeDiff_44091)
-						? (IAddResourcesToSubSkills) new AddResourcesToSubSkills()
-						: new AddResourcesToSubSkillsOld();
-					var primarySkillOverstaff = JobParameters.ToggleManager.IsEnabled(Toggles.ResourcePlanner_EvenRelativeDiff_44091)
-						? new PrimarySkillOverstaff()
-						: new PrimarySkillOverstaffOld();
 					ISchedulingResultService schedulingResultService =
 						new SchedulingResultService(schedulingResultStateHolder, skills, new CascadingPersonSkillProvider());
 					IScheduleForecastSkillResourceCalculation scheduleForecastSkillResourceCalculation =
-						new ScheduleForecastSkillResourceCalculation(new ShovelResources(new ReducePrimarySkillResources(), addresourcesToSubSkill, new SkillGroupPerActivityProvider(), primarySkillOverstaff, new TimeZoneGuard()), 
+						new ScheduleForecastSkillResourceCalculation(new ShovelResources(new ReducePrimarySkillResources(), new AddResourcesToSubSkills(), new SkillGroupPerActivityProvider(), new PrimarySkillOverstaff(), new TimeZoneGuard()), 
 																	skillDaysDictionary, schedulingResultService,
 																	schedulingResultStateHolder.SkillStaffPeriodHolder,
 																	schedulingResultStateHolder.Schedules,
