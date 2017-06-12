@@ -1578,9 +1578,6 @@
     <Content Include="WFM\app\rta\agents\rta.agents.filters.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.filters.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.grid.service.js" />
-    <Content Include="WFM\app\rta\details\rta-agent-details.html" />
-    <Content Include="WFM\app\rta\details\rta.agentdetails.controller.js" />
-    <Content Include="WFM\app\rta\details\rta.agentdetails.controller.spec.js" />
     <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.spec.js" />
