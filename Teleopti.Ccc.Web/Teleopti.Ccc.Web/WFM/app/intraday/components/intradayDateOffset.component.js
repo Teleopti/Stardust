@@ -9,7 +9,8 @@
         for (var i = -7; i < 2; i++) {
             ctrl.dayOffsets.push({
                 text: getText(i),
-                value: i
+                value: i,
+				display: getDisplay(i)
             });
         }
 
@@ -28,6 +29,11 @@
         ctrl.dateChange = function(val) {
             ctrl.onDateChange({value: val});
         };
+
+		function getDisplay(value) {
+			if(value <= 0) return value + '';
+			else return '+' + value;
+		}
 
         function getText(offset) {
             return moment().add(offset, 'days').format('dddd, LL');

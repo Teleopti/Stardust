@@ -207,7 +207,6 @@
             };
 
             service.loadTrafficChart = function(trafficData) {
-                console.log('trafficData', trafficData);
                 service.trafficChart.load({
                     columns: [
                         trafficData.timeSeries,

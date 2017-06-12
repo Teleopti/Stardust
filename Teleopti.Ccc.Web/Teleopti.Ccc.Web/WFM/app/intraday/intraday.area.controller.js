@@ -35,7 +35,7 @@
         intradayLatestTimeService,
         toggleSvc
     ) {
-		var vm = this;
+        var vm = this;
         var autocompleteSkill;
         var autocompleteSkillArea;
         var timeoutPromise;
@@ -127,9 +127,9 @@
         $scope.selectedSkillChange = function(item) {
             if (item) {
                 if (item.DoDisplayData) {
+                    $scope.chosenOffset.value = 0;
                     $scope.skillSelected(item);
                     pollActiveTabData($scope.activeTab);
-
                     if (prevSkill) {
                         if (!(prevSkill === autocompleteSkill.selectedSkill)) {
                             clearPrev();
@@ -150,6 +150,7 @@
 
         $scope.selectedSkillAreaChange = function(item) {
             if (item) {
+                $scope.chosenOffset.value = 0;
                 $scope.skillAreaSelected(item);
 
                 pollData($scope.activeTab);
@@ -264,7 +265,8 @@
         }
 
         $scope.querySearch = function(query, myArray) {
-            var results = query ? myArray.filter(createFilterFor(query)) : myArray, deferred;
+            var results = query ? myArray.filter(createFilterFor(query)) : myArray,
+                deferred;
             return results;
         };
 
