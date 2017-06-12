@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
@@ -31,17 +32,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 					.WithSelection(filter.SiteIds, filter.TeamIds, filter.SkillIds);
 			if (filter.InAlarm)
 				queryBuilder.InAlarm();
-			return load(queryBuilder);
-		}
-		
-		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(AgentStateFilter filter)
-		{
-
-			var queryBuilder =
-				new AgentStateReadModelQueryBuilder(_now)
-					.WithSelection(filter.SiteIds, filter.TeamIds, filter.SkillIds)
-					.InAlarm()
-					.Exclude(filter.ExcludedStates);
+			if (filter.ExcludedStates.EmptyIfNull().Any())
+				queryBuilder.Exclude(filter.ExcludedStates);
 			return load(queryBuilder);
 		}
 		

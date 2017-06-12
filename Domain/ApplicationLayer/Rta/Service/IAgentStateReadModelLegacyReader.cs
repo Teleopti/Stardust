@@ -8,8 +8,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public interface IAgentStateReadModelReader
 	{
 		IEnumerable<AgentStateReadModel> ReadFor(AgentStateFilter filter);
-		IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(AgentStateFilter filter);
-		
 	}
 
 	public interface IAgentStateReadModelLegacyReader

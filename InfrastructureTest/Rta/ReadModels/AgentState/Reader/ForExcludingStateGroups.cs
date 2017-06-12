@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+			WithUnitOfWork.Get(() => Target.ReadFor(
 				new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+			WithUnitOfWork.Get(() => Target.ReadFor(
 				new AgentStateFilter()
 				{
 					TeamIds = teamId.AsArray(),
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+			WithUnitOfWork.Get(() => Target.ReadFor(
 				new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+			WithUnitOfWork.Get(() => Target.ReadFor(
 				new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+			WithUnitOfWork.Get(() => Target.ReadFor(
 					new AgentStateFilter()
 					{
 						SkillIds = phoneId.AsArray(),
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+			WithUnitOfWork.Get(() => Target.ReadFor(
 				new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+			WithUnitOfWork.Get(() => Target.ReadFor(
 				new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				});
 			});
 
-			WithUnitOfWork.Get(() => Target.ReadInAlarmExcludingStatesFor(
+			WithUnitOfWork.Get(() => Target.ReadFor(
 				new AgentStateFilter()
 				{
 					SiteIds = siteId.AsArray(),

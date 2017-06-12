@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public AgentStatesViewModel InAlarmExcludingPhoneStatesFor(AgentStateFilter filter, IEnumerable<Guid?> excludedPhoneStates)
 		{
 			filter.ExcludedStates = excludedPhoneStates;
-			return build(_reader.ReadInAlarmExcludingStatesFor(filter));
+			return build(_reader.ReadFor(filter));
 		}
 		
 		public AgentStatesViewModel ForSites(Guid[] siteIds)

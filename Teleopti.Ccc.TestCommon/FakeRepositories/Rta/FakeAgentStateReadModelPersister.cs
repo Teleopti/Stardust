@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -191,14 +192,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 		public IEnumerable<AgentStateReadModel> ReadFor(AgentStateFilter filter)
 		{
+			if (filter.ExcludedStates.EmptyIfNull().Any())
+				return readInAlarmExcludingStatesFor(filter.SiteIds, filter.TeamIds, filter.SkillIds, filter.ExcludedStates);
 			if (filter.InAlarm)
 				return readInAlarmFor(filter.SiteIds, filter.TeamIds, filter.SkillIds);
 			return readFor(filter.SiteIds, filter.TeamIds, filter.SkillIds);
-		}
-
-		public IEnumerable<AgentStateReadModel> ReadInAlarmExcludingStatesFor(AgentStateFilter filter)
-		{
-			return readInAlarmExcludingStatesFor(filter.SiteIds, filter.TeamIds, filter.SkillIds, filter.ExcludedStates);
 		}
 		
 		private IEnumerable<AgentStateReadModel> readInAlarmFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
