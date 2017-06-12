@@ -58,6 +58,7 @@
 		Wfm_ChangePlanningPeriod_33043,
 		WfmPermission_ReplaceOldPermission_34671,
 		WfmIntraday_MonitorActualvsForecasted_35176,
+		Wfm_HideUnusedTeamsAndSites_42690,
 
 		WfmTeamSchedule_SetAgentsPerPage_36230,
 		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
