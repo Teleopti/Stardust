@@ -25,7 +25,8 @@
 			'ManualPlan',
 			'ClosedDay',
 			'Overstaffing',
-			'AddBacklog'
+			'AddBacklog',
+			'IgnoredScheduleHint'
 		];
 		var self = this;
 

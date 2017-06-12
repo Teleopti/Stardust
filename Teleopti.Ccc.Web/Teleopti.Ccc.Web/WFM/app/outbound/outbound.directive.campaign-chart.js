@@ -36,7 +36,8 @@
 			$scope.extraInfos = [
 				"M: " + $scope.dictionary['ManualPlan'],
 				"C: " + $scope.dictionary['ClosedDay'],
-				"B: " + $scope.dictionary['AddBacklog']
+				"B: " + $scope.dictionary['AddBacklog'],
+				"I: " + $scope.dictionary['IgnoredScheduleHint']
 			];
 
 			$scope.clearSelectedDates = function() {
@@ -73,6 +74,10 @@
 
 			function determineManualBacklogDay(idx) {
 				return $scope.campaign.isManualBacklog[idx - 1];
+			}
+
+			function isScheduleIgnored(idx) {
+				return $scope.campaign.ignoredDates && $scope.campaign.ignoredDates[idx - 1];
 			}
 
 			function init() {
@@ -144,7 +149,7 @@
 					if (key == 'dates') result['dates'] = 'x';
 					else
 						result[key] = $scope.campaign.graphData[key][0];
-				}				
+		}				
 				return result;
 			}
 
@@ -191,12 +196,22 @@
 					}
 				};
 				dataOption.labels.format[$scope.dictionary['Overstaffing']] = function(v, id, i) {
-					if ((!determineOpenDay(i)) && determineManualBacklogDay(i)) return 'C,B';
-					else if (!determineOpenDay(i)) return 'C';
+					if ((!determineOpenDay(i))) {
+						if (determineManualBacklogDay(i))
+							return 'C,B';
+						return 'C';
+					}
 
-					if (determineManualPlanDay(i) && !determineScheduledDay(i) && determineManualBacklogDay(i)) return 'M,B';
-					else if (determineManualPlanDay(i) && !determineScheduledDay(i)) return 'M';
-					else if (determineManualBacklogDay(i)) return "B";
+					var hints = [];
+					if (determineManualPlanDay(i) && !determineScheduledDay(i))
+						hints.push('M');
+					if (determineManualBacklogDay(i))
+						hints.push('B');
+					if (isScheduleIgnored(i)) {
+						hints.push('I');
+					}
+
+					return hints.join(',');
 				};
 				dataOption.types[$scope.dictionary['Progress']] = 'line';
 					dataOption.selection = {

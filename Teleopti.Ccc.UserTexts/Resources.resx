@@ -16130,4 +16130,8 @@ Do you want to participate?</value>
     <value>Show all schedules</value>
     <comment>use in WFM outbound, button name </comment>
   </data>
+  <data name="IgnoredScheduleHint" xml:space="preserve">
+    <value>Ignored Schedule</value>
+    <comment>hint for outbound campaign ignored schedule</comment>
+  </data>
 </root>

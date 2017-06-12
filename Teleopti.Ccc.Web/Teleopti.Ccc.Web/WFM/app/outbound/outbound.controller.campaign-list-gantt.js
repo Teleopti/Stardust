@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 
 	'use strict';
 
@@ -27,15 +27,15 @@
 			minMode: 'month'
 		};
 
-		outboundService.checkPermission($scope).then(function() {
+		outboundService.checkPermission($scope).then(function () {
 			toggleSvc.togglesLoaded.then(init);
 		});
 
-		$scope.viewOneMonthBefore = function() {
+		$scope.viewOneMonthBefore = function () {
 			$scope.settings.periodStart = moment($scope.settings.periodStart).add(-1, 'month').toDate();
 		};
 
-		$scope.viewOneMonthAfter = function() {
+		$scope.viewOneMonthAfter = function () {
 			$scope.settings.periodStart = moment($scope.settings.periodStart).add(1, 'month').toDate();
 		};
 
@@ -48,8 +48,8 @@
 			$scope.isRefreshingGantt = true;
 			$scope.ganttOptions = setGanttOptions();
 			$scope.timespans = getGanttShadedTimespans();
-			$q.all([loadScheduleDataPromise(), renderGanttChartPromise(), getThresholdPromise()]).then(function() {
-				updateCampaignStatus(function() {
+			$q.all([loadScheduleDataPromise(), renderGanttChartPromise(), getThresholdPromise()]).then(function () {
+				updateCampaignStatus(function () {
 					addThresholdChangeWatch();
 					addPeriodStartChangeWatch();
 					$scope.isRefreshingGantt = false;
@@ -63,8 +63,8 @@
 			$scope.ganttOptions = setGanttOptions();
 			$scope.timespans = getGanttShadedTimespans();
 
-			renderGanttChartPromise().then(function() {
-				updateCampaignStatus(function() {
+			renderGanttChartPromise().then(function () {
+				updateCampaignStatus(function () {
 					$scope.isRefreshingGantt = false;
 				});
 			});
@@ -74,7 +74,7 @@
 			$scope.isRefreshingGantt = true;
 			var ganttPeriod = outboundService.getGanttPeriod($scope.settings.periodStart);
 			var deferred = $q.defer();
-			outboundService.updateCampaignSchedule(ganttPeriod, function() {
+			outboundService.updateCampaignSchedule(ganttPeriod, function () {
 				deferred.resolve();
 			});
 			return deferred.promise;
@@ -82,17 +82,17 @@
 
 
 		function addThresholdChangeWatch() {
-			$scope.$watch(function() {
+			$scope.$watch(function () {
 				return $scope.settings.threshold;
-			}, function(newValue, oldValue) {
+			}, function (newValue, oldValue) {
 				if (newValue !== oldValue) {
 					var thresholdObj = {
 						Value: newValue / 100,
 						Type: 1
 					};
-					outboundService.updateThreshold(thresholdObj, function() {
-						updateCampaignStatus(function() {
-							$scope.ganttData.forEach(function(dataRow) {
+					outboundService.updateThreshold(thresholdObj, function () {
+						updateCampaignStatus(function () {
+							$scope.ganttData.forEach(function (dataRow) {
 								if (dataRow.expansion) {
 									$scope.$broadcast('campaign.chart.refresh', dataRow.campaign);
 								}
@@ -104,9 +104,9 @@
 		}
 
 		function addPeriodStartChangeWatch() {
-			$scope.$watch(function() {
+			$scope.$watch(function () {
 				return $scope.settings.periodStart.getFullYear() + $scope.settings.periodStart.getMonth();
-			}, function() {
+			}, function () {
 				$scope.$storage.visualizationPeriodStart = $scope.settings.periodStart;
 
 				$q.all([loadExtraScheduleDataPromise(), renderGanttChartPromise()]).then(refreshGantt);
@@ -117,7 +117,7 @@
 
 		function getThresholdPromise() {
 			var deferred = $q.defer();
-			outboundService.getThreshold(function(data) {
+			outboundService.getThreshold(function (data) {
 				$scope.settings.threshold = data.Value ? Math.round(data.Value * 100) : 0;
 				deferred.resolve();
 			});
@@ -149,7 +149,7 @@
 
 		$scope.headerFormats = {
 			month: 'MMMM',
-			week: function(column) {
+			week: function (column) {
 				return '<div class="week-days-header">' +
 					'<div class="week-start-day">' + (miscService.isLastDayOfMonth(column.date) && isLastDayOfGanttPeriod(column.date) ? '' : column.date.format('D')) + '</div>' +
 					'<div></div>' +
@@ -162,7 +162,7 @@
 			'model.name': ''
 		}
 
-		outboundTranslationService.translatePromise('Name').then(function(v) {
+		outboundTranslationService.translatePromise('Name').then(function (v) {
 			$scope.tableHeaders = {
 				'model.name': v
 			}
@@ -177,7 +177,7 @@
 			return -1;
 		}
 
-		$scope.campaignClicked = function(ev, c) {
+		$scope.campaignClicked = function (ev, c) {
 			if ($scope.isRefreshingGantt) return;
 			if (c.expansion) return;
 			if (c.expanded) {
@@ -214,7 +214,7 @@
 				var index = readIndex(c);
 				if (index >= 0)
 					$scope.ganttData.splice(index + 1, 0, newDataRow);
-				getGraphData(campaign, function() {
+				getGraphData(campaign, function () {
 					newDataRow.isLoadingData = false;
 					newDataRow.campaign = campaign;
 				});
@@ -222,12 +222,15 @@
 		};
 
 		function getIgnoreSchedulesCallback(campaign) {
-			return function(ignoredDates, callback) {
-				ignoredDates.forEach(function(ignoredDate) {
+			return function (ignoredDates, callback) {
+				campaign.ignoredDates = [];
+				ignoredDates.forEach(function (ignoredDate) {
 					var index = campaign.graphData.dates.indexOf(ignoredDate);
 					campaign.graphData.schedules[index] = 0;
 					campaign.graphData.unscheduledPlans[index] = campaign.graphData.rawPlans[index] - campaign.graphData.overStaff[index];
+					campaign.ignoredDates[index - 2] = 1;
 				});
+
 				$scope.$broadcast('campaign.chart.clear.selection', campaign);
 				$scope.$broadcast('campaign.chart.refresh', campaign);
 				callback && callback();
@@ -235,12 +238,14 @@
 		}
 
 		function getShowAllSchedulesCallback(campaign) {
-			return function(ignoredDates, callback) {
-				ignoredDates.forEach(function(ignoredDate) {
+			return function (ignoredDates, callback) {
+				ignoredDates.forEach(function (ignoredDate) {
 					var index = campaign.graphData.dates.indexOf(ignoredDate);
 					campaign.graphData.schedules[index] = campaign.graphData.rawSchedules[index] - campaign.graphData.overStaff[index];
 					campaign.graphData.unscheduledPlans[index] = 0;
+
 				});
+				campaign.ignoredDates = [];
 				$scope.$broadcast('campaign.chart.clear.selection', campaign);
 				$scope.$broadcast('campaign.chart.refresh', campaign);
 				callback && callback();
@@ -248,10 +253,10 @@
 		}
 
 		function getCommandCallback(campaign, dataRow, scope) {
-			return function(resp, done) {
+			return function (resp, done) {
 				dataRow.isRefreshingData = true;
 				getGraphData(campaign,
-					function() {
+					function () {
 						scope.$broadcast('campaign.chart.refresh', campaign);
 						$scope.$broadcast('campaign.chart.clear.selection', campaign);
 						dataRow.isRefreshingData = false;
@@ -262,9 +267,9 @@
 		}
 
 		function getGraphData(campaign, done) {
-			outboundService.getCampaignStatus(campaign.Id, function(campaignStatus) {
+			outboundService.getCampaignStatus(campaign.Id, function (campaignStatus) {
 				angular.extend(campaign, campaignStatus);
-				outboundChartService.getCampaignVisualization(campaign.Id, function(data, translations, manualPlan, closedDays, backlog) {
+				outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays, backlog) {
 					campaign.graphData = data;
 					campaign.rawManualPlan = manualPlan;
 					campaign.isManualBacklog = backlog;
@@ -288,7 +293,7 @@
 				}
 			];
 
-			angular.forEach(weekends, function(we) {
+			angular.forEach(weekends, function (we) {
 				var weekend = {
 					WeekendStart: moment(we.WeekendStart),
 					WeekendEnd: moment(we.WeekendEnd)
@@ -319,7 +324,7 @@
 			var deferred = $q.defer();
 			outboundService.getCampaigns(ganttPeriod, function success(data) {
 				var ganttArr = [];
-				if (data) data.forEach(function(ele, ind) {
+				if (data) data.forEach(function (ele, ind) {
 
 					var startDate = miscService.getDateFromServer(ele.StartDate);
 					var endDate = miscService.getDateFromServer(ele.EndDate);
@@ -352,7 +357,7 @@
 		function updateGanttRowFromCampaignStatus(row, campaignStatus) {
 			row.campaignNameClass = null;
 			row.tasks[0].color = campaignStatus.IsScheduled ? '#C2E085' : '#ffc36b';
-			campaignStatus.WarningInfo.forEach(function(warning) {
+			campaignStatus.WarningInfo.forEach(function (warning) {
 				if (warning.TypeOfRule == 'CampaignUnderSLA') {
 					row.campaignNameClass = 'campaign-late';
 				}
@@ -368,13 +373,13 @@
 		}
 
 		function updateAllCampaignGanttDisplay(campaignStatusList) {
-			campaignStatusList.forEach(function(campaignStatus) {
+			campaignStatusList.forEach(function (campaignStatus) {
 				updateSingleCampaignGanttDisplay(campaignStatus);
 			});
 		}
 
 		function updateSingleCampaignGanttDisplay(campaignStatus) {
-			$scope.ganttData.forEach(function(dataRow, indx) {
+			$scope.ganttData.forEach(function (dataRow, indx) {
 				if (campaignStatus.CampaignSummary.Id == dataRow.id) {
 					return updateGanttRowFromCampaignStatus(dataRow, campaignStatus);
 				}

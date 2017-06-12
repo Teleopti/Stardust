@@ -13548,6 +13548,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ignored Schedule.
+        /// </summary>
+        public static string IgnoredScheduleHint {
+            get {
+                return ResourceManager.GetString("IgnoredScheduleHint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ignore schedules.
         /// </summary>
         public static string IgnoreSchedules {

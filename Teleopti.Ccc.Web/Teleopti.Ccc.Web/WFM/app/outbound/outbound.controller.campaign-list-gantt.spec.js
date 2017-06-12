@@ -262,6 +262,22 @@ describe('OutboundSummaryCtrl', function() {
 		})).toEqual(true);
 	});
 
+	it('should set ignored dates after calling getIgnoreScheduleCallback', function () {
+		var test = setUpTarget();
+		initDataForIgnore(test);
+		test.scope.campaignClicked(null, {
+			id: test.campaign.Id
+		});
+		test.campaign.selectedDates = ['2017-06-08', '2017-06-09'];
+		
+		var expectedDataRow = test.scope.ganttData[1];
+		expectedDataRow.callbacks.ignoreSchedules(test.campaign.selectedDates);
+		 
+		expect(expectedDataRow.campaign.ignoredDates[0]).toEqual(1);
+		expect(expectedDataRow.campaign.ignoredDates[1]).toEqual(1);
+		expect(expectedDataRow.campaign.ignoredDates[3]).toEqual(undefined);
+	});
+
 	it('should calculate and show plan data correctly when has overstaff data after hide schedule', function() {
 		var test = setUpTarget();
 		initDataForIgnore(test);
@@ -296,6 +312,22 @@ describe('OutboundSummaryCtrl', function() {
 		expectedDataRow.callbacks.showAllSchedules(test.campaign.selectedDates);
 		expect(test.campaign.graphData.schedules[index]).toEqual(20);
 		expect(test.campaign.graphData.unscheduledPlans[index]).toEqual(0);
+	});
+
+	it('should remove ignored dates after show schedule', function () {
+		var test = setUpTarget();
+		initDataForIgnore(test);
+		test.scope.campaignClicked(null, {
+			id: test.campaign.Id
+		});
+		test.campaign.selectedDates = ['2017-06-11'];
+		var expectedDataRow = test.scope.ganttData[1];
+		
+		expectedDataRow.callbacks.ignoreSchedules(test.campaign.selectedDates);
+		expect(expectedDataRow.campaign.ignoredDates[3]).toEqual(1);
+
+		expectedDataRow.callbacks.showAllSchedules(test.campaign.selectedDates);
+		expect(expectedDataRow.campaign.ignoredDates[3]).toEqual(undefined);
 	});
 
 	function setUpTarget() {
