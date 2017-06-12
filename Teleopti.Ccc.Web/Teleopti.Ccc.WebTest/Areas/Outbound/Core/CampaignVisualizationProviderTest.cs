@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -16,6 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		private IOutboundCampaignRepository _campaignRepository;
 		private IOutboundCampaignTaskManager _taskManager;
 		private IOutboundCampaign _campaign;
+		private IList<DateOnly> _skippedDates;
 
 		[SetUp]
 		public void Setup()
@@ -24,6 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			_campaign.Skill = SkillFactory.CreateSkill("mySkill", SkillTypeFactory.CreateSkillType(), 15, TimeZoneInfo.Utc, TimeSpan.Zero);
 			_campaignRepository = MockRepository.GenerateMock<IOutboundCampaignRepository>();
 			_taskManager = MockRepository.GenerateMock<IOutboundCampaignTaskManager>();
+			_skippedDates = new List<DateOnly>();
 		}
 
 		[Test]
@@ -55,10 +59,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(dateOnly)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(dateOnly)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetBacklogOnDate(dateOnly)).Return(TimeSpan.FromHours(1));
-			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign)).Return(incomingTask);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign, _skippedDates)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
-			var result = target.ProvideVisualization(id);
+			var result = target.ProvideVisualization(id, _skippedDates.ToArray());
 
 			result.Dates.Count.Should().Be.EqualTo(1);
 			result.Dates[0].Should().Be.EqualTo(dateOnly);
@@ -77,10 +81,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(dateOnly)).Return(hour);
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(dateOnly)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetBacklogOnDate(dateOnly)).Return(TimeSpan.FromHours(1));
-			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign)).Return(incomingTask);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign, _skippedDates)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
-			var result = target.ProvideVisualization(id);
+			var result = target.ProvideVisualization(id, _skippedDates.ToArray());
 
 			result.PlannedPersonHours.Count.Should().Be.EqualTo(1);
 			result.PlannedPersonHours[0].Should().Be.EqualTo(hour.Hours);
@@ -99,10 +103,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(dateOnly)).Return(hour);
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(dateOnly)).Return(TimeSpan.FromHours(1));
 			incomingTask.Stub(x => x.GetBacklogOnDate(dateOnly)).Return(hour);
-			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign)).Return(incomingTask);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign, _skippedDates)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
-			var result = target.ProvideVisualization(id);
+			var result = target.ProvideVisualization(id, _skippedDates.ToArray());
 
 			result.BacklogPersonHours.Count.Should().Be.EqualTo(1);
 			result.BacklogPersonHours[0].Should().Be.EqualTo(hour.Hours);
@@ -126,10 +130,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(endDate)).Return(TimeSpan.FromHours(0));
 			incomingTask.Stub(x => x.GetBacklogOnDate(endDate)).Return(TimeSpan.FromHours(0));
 
-			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign)).Return(incomingTask);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign, _skippedDates)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
-			var result = target.ProvideVisualization(id);
+			var result = target.ProvideVisualization(id, _skippedDates.ToArray());
 
 			result.OverstaffPersonHours.Count.Should().Be.EqualTo(2);
 			result.OverstaffPersonHours[0].Should().Be.EqualTo(0);
@@ -150,10 +154,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(dateOnly)).Return(hour);
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(dateOnly)).Return(hour);
 			incomingTask.Stub(x => x.GetBacklogOnDate(dateOnly)).Return(hour);
-			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign)).Return(incomingTask);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign, _skippedDates)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
-			var result = target.ProvideVisualization(id);
+			var result = target.ProvideVisualization(id, _skippedDates.ToArray());
 
 			result.ScheduledPersonHours.Count.Should().Be.EqualTo(1);
 			result.ScheduledPersonHours[0].Should().Be.EqualTo(hour.Hours);
@@ -173,10 +177,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(dateOnly)).Return(hour);
 			incomingTask.Stub(x => x.GetBacklogOnDate(dateOnly)).Return(hour);
 			incomingTask.Stub(x => x.GetManualPlannedInfoOnDate(dateOnly)).Return(true);
-			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign)).Return(incomingTask);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign, _skippedDates)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
-			var result = target.ProvideVisualization(id);
+			var result = target.ProvideVisualization(id, _skippedDates.ToArray());
 
 			result.IsManualPlanned.Count.Should().Be.EqualTo(1);
 			result.IsManualPlanned[0].Should().Be.True();
@@ -196,10 +200,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(dateOnly)).Return(hour);
 			incomingTask.Stub(x => x.GetBacklogOnDate(dateOnly)).Return(hour);
 			incomingTask.Stub(x => x.PlannedTimeTypeOnDate(dateOnly)).Return(PlannedTimeTypeEnum.Closed);
-			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign)).Return(incomingTask);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign, _skippedDates)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
-			var result = target.ProvideVisualization(id);
+			var result = target.ProvideVisualization(id, _skippedDates.ToArray());
 
 			result.IsCloseDays.Count.Should().Be.EqualTo(1);
 			result.IsCloseDays[0].Should().Be.True();
@@ -219,10 +223,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(dateOnly)).Return(hour);
 			incomingTask.Stub(x => x.GetBacklogOnDate(dateOnly)).Return(hour);
 			incomingTask.Stub(x => x.PlannedTimeTypeOnDate(dateOnly)).Return(PlannedTimeTypeEnum.Scheduled);
-			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign)).Return(incomingTask);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign, _skippedDates)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
-			var result = target.ProvideVisualization(id);
+			var result = target.ProvideVisualization(id, _skippedDates.ToArray());
 
 			result.IsCloseDays.Count.Should().Be.EqualTo(1);
 			result.IsCloseDays[0].Should().Be.False();
@@ -243,10 +247,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetBacklogOnDate(dateOnly)).Return(hour);
 			incomingTask.Stub(x => x.PlannedTimeTypeOnDate(dateOnly)).Return(PlannedTimeTypeEnum.Scheduled);
 			incomingTask.Stub(x => x.GetActualBacklogOnDate(dateOnly)).Return(hour);
-			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign)).Return(incomingTask);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign, _skippedDates)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
-			var result = target.ProvideVisualization(id);
+			var result = target.ProvideVisualization(id, _skippedDates.ToArray());
 
 			result.IsActualBacklog.Count.Should().Be.EqualTo(1);
 			result.IsActualBacklog[0].Should().Be.True();
@@ -266,10 +270,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(dateOnly)).IgnoreArguments().Return(hour);
 			incomingTask.Stub(x => x.GetBacklogOnDate(dateOnly)).IgnoreArguments().Return(hour);
 			incomingTask.Stub(x => x.GetManualPlannedInfoOnDate(dateOnly)).IgnoreArguments().Return(false);
-			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign)).Return(incomingTask);
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign, _skippedDates)).Return(incomingTask);
 
 			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
-			var result = target.ProvideVisualization(id);
+			var result = target.ProvideVisualization(id, _skippedDates.ToArray());
 
 			result.Dates.Count.Should().Be.EqualTo(result.PlannedPersonHours.Count);
 			result.PlannedPersonHours.Count.Should().Be.EqualTo(result.BacklogPersonHours.Count);

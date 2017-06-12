@@ -51,23 +51,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		}
 
 		[Test]
-		[Ignore(
-			"To be consistent with verification of other fileds to rely on Front-end verification. Server-side verification is TO-DO "
-			)]
-		public void ShouldNotCreateCampaignWhenGivenNameIsTooLong()
-		{
-			var campaignForm = new CampaignForm() {Name = "myCampaign".PadRight(256, 'a')};
-
-			var target = new OutboundController(_outboundCampaignPersister, null, null, null, null, null, null)
-			{
-				Request = new HttpRequestMessage()
-			};
-			var result = target.CreateCampaign(campaignForm);
-
-			result.Should().Be.OfType<BadRequestErrorMessageResult>();
-		}
-
-		[Test]
 		public void ShouldGetAllOutboundActivities()
 		{
 			var outboundActivityProvider = MockRepository.GenerateMock<IActivityProvider>();
@@ -153,10 +136,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		public void ShouldGetCampaignVisualizationWhenManuPlan()
 		{
 			var expectedVisualizationVM = new CampaignVisualizationViewModel();
+			var skipDates = new List<DateOnly>();
 			var id = new Guid();
 			var visualizationProvider = MockRepository.GenerateMock<ICampaignVisualizationProvider>();
-			visualizationProvider.Stub(x => x.ProvideVisualization(id)).Return(expectedVisualizationVM);
-			var manualPlanVM = new ManualPlanForm() {CampaignId = id};
+			visualizationProvider.Stub(x => x.ProvideVisualization(id, skipDates.ToArray())).Return(expectedVisualizationVM);
+			var manualPlanVM = new ManualPlanForm() {CampaignId = id, SkipDates = skipDates};
 			var campaignPersister = MockRepository.GenerateMock<IOutboundCampaignPersister>();
 
 			var target = new OutboundController(campaignPersister, null, null, null, visualizationProvider, null, null);
@@ -170,10 +154,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		public void ShouldGetCampaignVisualizationWhenRemoveManuPlan()
 		{
 			var expectedVisualizationVM = new CampaignVisualizationViewModel();
+			var skipDates = new List<DateOnly>();
 			var id = new Guid();
 			var visualizationProvider = MockRepository.GenerateMock<ICampaignVisualizationProvider>();
-			visualizationProvider.Stub(x => x.ProvideVisualization(id)).Return(expectedVisualizationVM);
-			var removeManualPlanVM = new RemoveManualPlanForm() {CampaignId = id};
+			visualizationProvider.Stub(x => x.ProvideVisualization(id, skipDates.ToArray())).Return(expectedVisualizationVM);
+			var removeManualPlanVM = new RemoveManualPlanForm() {CampaignId = id, SkipDates = skipDates};
 			var campaignPersister = MockRepository.GenerateMock<IOutboundCampaignPersister>();
 
 			var target = new OutboundController(campaignPersister, null, null, null, visualizationProvider, null, null);

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_campaignTaskManager = campaignTaskManager;
 		}
 
-		public CampaignVisualizationViewModel ProvideVisualization(Guid id)
+		public CampaignVisualizationViewModel ProvideVisualization(Guid id, params DateOnly[] skipDates)
 		{
 			var visualizationVM =  new CampaignVisualizationViewModel()
 			{
@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			IOutboundCampaign campaign = _campaignRepository.Get(id);
 			if (campaign == null) return visualizationVM;
 
-			var incomingTask = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
+			var incomingTask = skipDates != null?  _campaignTaskManager.GetIncomingTaskFromCampaign(campaign, skipDates)
+												: _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
 			TimeSpan? backlogPreviousDay = null;
 
 			foreach (var date in campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone).DayCollection())

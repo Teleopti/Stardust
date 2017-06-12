@@ -122,28 +122,28 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		public virtual CampaignVisualizationViewModel AddActualBacklog([FromBody] ActualBacklogForm actualBacklog)
 		{
 			_outboundCampaignPersister.PersistActualBacklog(actualBacklog);
-			return _campaignVisualizationProvider.ProvideVisualization(actualBacklog.CampaignId);
+			return _campaignVisualizationProvider.ProvideVisualization(actualBacklog.CampaignId, actualBacklog.SkipDates.ToArray());
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign/ActualBacklog/Remove"), UnitOfWork]
 		public virtual CampaignVisualizationViewModel RemoveActualBacklog([FromBody] RemoveActualBacklogForm actualBacklog)
 		{
 			_outboundCampaignPersister.RemoveActualBacklog(actualBacklog);
-			return _campaignVisualizationProvider.ProvideVisualization(actualBacklog.CampaignId);
+			return _campaignVisualizationProvider.ProvideVisualization(actualBacklog.CampaignId, actualBacklog.SkipDates.ToArray());
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign/ManualPlan"), UnitOfWork]
 		public virtual CampaignVisualizationViewModel ManualPlan([FromBody] ManualPlanForm manualPlan)
 		{
 			_outboundCampaignPersister.PersistManualProductionPlan(manualPlan);
-			return _campaignVisualizationProvider.ProvideVisualization(manualPlan.CampaignId);
+			return _campaignVisualizationProvider.ProvideVisualization(manualPlan.CampaignId, manualPlan.SkipDates.ToArray());
 		}		
 		
 		[HttpPost, Route("api/Outbound/Campaign/ManualPlan/Remove"), UnitOfWork]
 		public virtual CampaignVisualizationViewModel RemoveManualPlan([FromBody] RemoveManualPlanForm manualPlan)
 		{
 			_outboundCampaignPersister.RemoveManualProductionPlan(manualPlan);
-			return _campaignVisualizationProvider.ProvideVisualization(manualPlan.CampaignId);
+			return _campaignVisualizationProvider.ProvideVisualization(manualPlan.CampaignId, manualPlan.SkipDates.ToArray());
 		}	
 		
 		[HttpPost, Route("api/Outbound/Campaign/Status"), UnitOfWork]

@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public Guid CampaignId;
 		public IEnumerable<ManualViewModel> ActualBacklog;
+		public IEnumerable<DateOnly> SkipDates;
 	}
 
 	public class RemoveManualPlanForm
@@ -109,6 +110,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	{
 		public Guid CampaignId;
 		public IEnumerable<DateOnly> Dates;
+		public IEnumerable<DateOnly> SkipDates;
 	}
 
 	public class GanttPeriod
