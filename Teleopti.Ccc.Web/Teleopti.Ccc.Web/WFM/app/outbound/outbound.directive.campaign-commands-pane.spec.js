@@ -1,5 +1,5 @@
 ﻿'use strict';
-fdescribe('Outbound campaign commands pane tests ', function() {
+xdescribe('Outbound campaign commands pane tests ', function() {
 	var $rootScope,
 		$compile,
 		$httpBackend,
