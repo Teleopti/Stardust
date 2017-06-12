@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					BusinessUnitId = businessUnitId,
 					SiteId = siteId,
 					TeamId = teamId,
+					TeamName = "Team",
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc(),
 				})
@@ -78,6 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					BusinessUnitId = businessUnitId,
 					SiteId = siteId,
 					TeamId = teamId,
+					TeamName = "Team",
 					IsRuleAlarm = true,
 					AlarmStartTime = "2016-10-17 08:00".Utc(),
 				})

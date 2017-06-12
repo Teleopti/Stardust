@@ -70,8 +70,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			    {
 				    BusinessUnitId = @group.First().BusinessUnitId.Value,
 				    SiteId = @group.First().SiteId.Value,
-				    TeamId = @group.Key.Value,
-				    InAlarmCount = @group.Count(s => s.IsRuleAlarm && s.AlarmStartTime <= _now.UtcDateTime())
+				    SiteName = @group.First().SiteName,
+					TeamId = @group.Key.Value,
+					TeamName = @group.First().TeamName,
+					InAlarmCount = @group.Count(s => s.IsRuleAlarm && s.AlarmStartTime <= _now.UtcDateTime())
 			    })
 			    .ToArray();
 	    }

@@ -13,18 +13,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	public class TeamCardViewModelBuilder
 	{
 		private readonly INow _now;
-		private readonly ITeamRepository _teamRepository;
 		private readonly ITeamCardReader _teamCardReader;
 		private readonly INumberOfAgentsInTeamReader _numberOfAgentsInTeamReader;
 		private readonly ICurrentAuthorization _authorization;
 
 		public TeamCardViewModelBuilder(
-			ITeamRepository teamRepository, 
 			ITeamCardReader teamCardReader, 
 			INumberOfAgentsInTeamReader numberOfAgentsInTeamReader,
 			ICurrentAuthorization authorization, INow now)
 		{
-			_teamRepository = teamRepository;
 			_teamCardReader = teamCardReader;
 			_numberOfAgentsInTeamReader = numberOfAgentsInTeamReader;
 			_authorization = authorization;
@@ -52,9 +49,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					.ToArray();
 
 
-			var teams = _teamRepository.LoadAll();
-			var namePerTeamId = teams.ToLookup(x => x.Id.Value, x => x.Description.Name);
-
 			var teamIds = teamsInAlarm.Select(x => x.TeamId);
 			var numberOfAgentsPerTeam = skillIds != null ? 
 				_numberOfAgentsInTeamReader.Read(teamIds, skillIds).ToLookup(x => x.Key, x => x.Value) : 
@@ -67,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						return new TeamCardViewModel
 						{
 							Id = t.TeamId,
-							Name = namePerTeamId[t.TeamId].FirstOrDefault(),
+							Name = t.TeamName,
 							SiteId = siteId,
 							AgentsCount = agentCount,
 							InAlarmCount = t.InAlarmCount,

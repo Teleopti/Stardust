@@ -14,20 +14,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	{
 		private readonly INow _now;
 		private readonly ITeamCardReader _teamCardReader;
-		private readonly ISiteRepository _siteRepository;
 		private readonly ICurrentAuthorization _authorization;
 		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
 
 		public SiteCardViewModelBuilder(
 			ITeamCardReader teamCardReader,
-			ISiteRepository siteRepository,
 			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
 			ICurrentAuthorization authorization,
 			INow now
 			)
 		{
 			_teamCardReader = teamCardReader;
-			_siteRepository = siteRepository;
 			_numberOfAgentsInSiteReader = numberOfAgentsInSiteReader;
 			_authorization = authorization;
 			_now = now;
@@ -58,14 +55,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						new
 						{
 							SiteId = site.Key,
-							InAlarmCount = site.Sum(x => x.InAlarmCount)
+							InAlarmCount = site.Sum(x => x.InAlarmCount),
+							SiteName = site.FirstOrDefault()?.SiteName
+
 						})
 					.ToArray();
 
-			var namePerSiteId = _siteRepository.LoadAll()
-				.ToLookup(x => x.Id.Value, x => x.Description.Name);
-
 			var siteIds = sitesInAlarm.Select(x => x.SiteId).ToArray();
+				
 			var numberOfAgentsPerSite = skillIds != null ? 
 				_numberOfAgentsInSiteReader.Read(siteIds, skillIds).ToLookup(x => x.Key, x => x.Value) : 
 				_numberOfAgentsInSiteReader.Read(siteIds).ToLookup(x => x.Key, x => x.Value);
@@ -77,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					return new SiteCardViewModel
 					{
 						Id = s.SiteId,
-						Name = namePerSiteId[s.SiteId].FirstOrDefault(),
+						Name = s.SiteName,
 						AgentsCount = agentCount,
 						InAlarmCount = s.InAlarmCount,
 						Color = getColor(s.InAlarmCount, agentCount)
