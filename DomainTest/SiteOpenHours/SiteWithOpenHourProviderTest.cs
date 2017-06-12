@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SiteOpenHours
 		private const string parisSiteName = "Paris";
 
 		private ISiteRepository _siteRepository;
+		private FakePermissions _fakeAuthorization;
 
 		private Guid londonSiteId;
 		private ISite siteLondon;
@@ -41,21 +43,26 @@ namespace Teleopti.Ccc.DomainTest.SiteOpenHours
 			var mutableNow = new MutableNow();
 			mutableNow.Is("2017-06-12 10:00");
 
-			var fakePermission = new FullPermission();
+			_fakeAuthorization = new FakePermissions();
 
 			var person = PersonFactory.CreatePersonWithId();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			var loggedOnUser = new FakeLoggedOnUser(person);
 
-			target = new SiteWithOpenHourProvider(mutableNow, _siteRepository, fakePermission, loggedOnUser);
+			target = new SiteWithOpenHourProvider(mutableNow, _siteRepository, _fakeAuthorization, loggedOnUser);
 
 			prepareData();
 		}
 
 		[Test]
-		public void ShouldBuildSiteWithOpenHours()
+		public void ShouldGetSitesWithOpenHours()
 		{
+			_fakeAuthorization.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, londonSiteId);
+			_fakeAuthorization.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, parisSiteId);
+
 			var result = target.GetSitesWithOpenHour().ToArray();
+			Assert.AreEqual(result.Length, 2);
+
 			var londonSite = result[0];
 			londonSite.Id.Should().Be(siteLondon.Id);
 			londonSite.Name.Should().Be(londonSiteName);
@@ -75,10 +82,29 @@ namespace Teleopti.Ccc.DomainTest.SiteOpenHours
 			isSame(openHours[1], parisOpenHours[1]);
 		}
 
+		[Test]
+		public void ShouldGetSitesWithPermissionOnly()
+		{
+			_fakeAuthorization.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, londonSiteId);
+
+			var result = target.GetSitesWithOpenHour().ToArray();
+			Assert.AreEqual(result.Length, 1);
+
+			var londonSite = result[0];
+			londonSite.Id.Should().Be(siteLondon.Id);
+			londonSite.Name.Should().Be(londonSiteName);
+
+			var openHours = londonSite.OpenHours.ToArray();
+			openHours.Length.Should().Be(londonOpenHours.Count);
+			isSame(openHours[0], londonOpenHours[0]);
+			isSame(openHours[1], londonOpenHours[1]);
+		}
+
 		private void prepareData()
 		{
 			londonSiteId = Guid.NewGuid();
 			siteLondon = SiteFactory.CreateSiteWithId(londonSiteId, londonSiteName);
+
 			londonOpenHours = new List<ISiteOpenHour>();
 
 			var siteOpenHour = createSiteOpenHour(siteLondon, DayOfWeek.Friday, TimeSpan.FromHours(10), TimeSpan.FromHours(17));
@@ -91,6 +117,7 @@ namespace Teleopti.Ccc.DomainTest.SiteOpenHours
 
 			parisSiteId = Guid.NewGuid();
 			siteParis = SiteFactory.CreateSiteWithId(parisSiteId, parisSiteName);
+
 			parisOpenHours = new List<ISiteOpenHour>();
 
 			siteOpenHour = createSiteOpenHour(siteParis, DayOfWeek.Monday, TimeSpan.FromHours(8), TimeSpan.FromHours(12));
@@ -102,7 +129,8 @@ namespace Teleopti.Ccc.DomainTest.SiteOpenHours
 			_siteRepository.Add(siteParis);
 		}
 
-		private ISiteOpenHour createSiteOpenHour(ISite site, DayOfWeek dayOfWeek, TimeSpan start, TimeSpan end, bool isClosed = false)
+		private ISiteOpenHour createSiteOpenHour(ISite site, DayOfWeek dayOfWeek, TimeSpan start, TimeSpan end,
+			bool isClosed = false)
 		{
 			var siteOpenHour = new SiteOpenHour
 			{

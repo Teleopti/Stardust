@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class FakePermissions: IAuthorization, ICurrentAuthorization
 	{
-		private readonly IList<string> _permittedAnyData = new List<string>(); 
-		private readonly IList<Tuple<string, Guid>> _permittedSites = new List<Tuple<string, Guid>>(); 
-		private readonly IList<Tuple<string, Guid>> _permittedTeams = new List<Tuple<string, Guid>>(); 
+		private readonly IList<string> _permittedAnyData = new List<string>();
+		private readonly IList<Tuple<string, Guid>> _permittedSites = new List<Tuple<string, Guid>>();
+		private readonly IList<Tuple<string, Guid>> _permittedTeams = new List<Tuple<string, Guid>>();
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, IPerson person)
 		{
@@ -23,12 +23,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeam team)
 		{
-			return IsPermitted(functionPath, dateOnly, new TeamAuthorization {BusinessUnitId = team.Site.BusinessUnit.Id.Value, SiteId = team.Site.Id.Value, TeamId = team.Id.Value});
+			return IsPermitted(functionPath, dateOnly, new TeamAuthorization
+			{
+				BusinessUnitId = (team.Site?.BusinessUnit?.Id).GetValueOrDefault(),
+				SiteId = (team.Site?.Id).GetValueOrDefault(),
+				TeamId = team.Id.Value
+			});
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site)
 		{
-			return IsPermitted(functionPath, dateOnly, new SiteAuthorization {BusinessUnitId = site.BusinessUnit.Id.Value, SiteId = site.Id.Value});
+			return IsPermitted(functionPath, dateOnly, new SiteAuthorization
+			{
+				BusinessUnitId = (site.BusinessUnit?.Id).GetValueOrDefault(),
+				SiteId = site.Id.Value
+			});
 		}
 
 		public bool IsPermitted(string functionPath)
@@ -43,20 +52,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ITeamAuthorization authorization)
 		{
-			if (_permittedAnyData.Contains(functionPath))
-				return true;
-			if (_permittedTeams.Any(x => x.Item1 == functionPath && x.Item2 == authorization.TeamId))
-				return true;
-			return false;
+			return _permittedAnyData.Contains(functionPath) ||
+				   _permittedTeams.Any(x => x.Item1 == functionPath && x.Item2 == authorization.TeamId);
 		}
 
 		public bool IsPermitted(string functionPath, DateOnly dateOnly, ISiteAuthorization authorization)
 		{
-			if (_permittedAnyData.Contains(functionPath))
-				return true;
-			if (_permittedSites.Any(x => x.Item1 == functionPath && x.Item2 == authorization.SiteId))
-				return true;
-			return false;
+			return _permittedAnyData.Contains(functionPath) ||
+				   _permittedSites.Any(x => x.Item1 == functionPath && x.Item2 == authorization.SiteId);
 		}
 
 		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
@@ -98,5 +101,4 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return this;
 		}
 	}
-
 }
