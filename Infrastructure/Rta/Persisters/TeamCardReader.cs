@@ -67,12 +67,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.Session()
 				.CreateSQLQuery($@"
 					SELECT
-						MAX(CAST(a.BusinessUnitId AS BINARY(16))) as BusinessUnitId,
-						MAX(CAST(a.SiteId AS BINARY(16))) as SiteId, 
+						a.BusinessUnitId,
+						a.SiteId, 
 						MAX(a.SiteName) as SiteName,
 						MAX(a.TeamName) as TeamName,
 						a.TeamId, 
 						COUNT(DISTINCT CASE WHEN a.AlarmStartTime <= :now THEN a.PersonId END) as InAlarmCount
+						
 					FROM 
 						ReadModel.AgentState AS a WITH(NOLOCK)
 					
@@ -87,6 +88,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					a.BusinessUnitId = :businessUnitId
 
 					GROUP BY 
+						a.BusinessUnitId,
+						a.SiteId, 
 						a.TeamId
 					");
 
