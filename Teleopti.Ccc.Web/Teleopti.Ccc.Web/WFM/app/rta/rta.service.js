@@ -17,17 +17,8 @@
             agentStatesFor: agentStatesFor,
             agentStatesInAlarmFor: agentStatesInAlarmFor,
             agentStatesInAlarmExcludingPhoneStatesFor: agentStatesInAlarmExcludingPhoneStatesFor,
-            statesFor: statesFor,
-            inAlarmFor: inAlarmFor,
-            inAlarmExcludingPhoneStatesFor: inAlarmExcludingPhoneStatesFor,
-            getAlarmStatesForSitesAndSkillsExcludingStates: getAlarmStatesForSitesAndSkillsExcludingStates,
-            getAlarmStatesForTeamsAndSkillsExcludingStates: getAlarmStatesForTeamsAndSkillsExcludingStates,
-            getAlarmStatesForSkillsExcludingStates: getAlarmStatesForSkillsExcludingStates,
-            getAlarmStatesForTeamsExcludingStates: getAlarmStatesForTeamsExcludingStates,
             getAdherenceForAllSites: getAdherenceForAllSites,
             getAdherenceForSitesBySkills: getAdherenceForSitesBySkills,
-            getSites: getSites,
-            getSitesForSkills: getSitesForSkills,
 			getTeamCardsFor: getTeamCardsFor,
             getSkillArea: getSkillArea,
             getPhoneStates: getPhoneStates,
@@ -93,67 +84,6 @@
                 .$promise;
         }
 		
-        function statesFor(data) {
-            return $resource('../api/Agents/StatesFor', {}, {
-                query: {
-                    method: 'GET'
-                }
-            }).query(data).$promise;
-        };
-
-        function inAlarmFor(data) {
-            return $resource('../api/Agents/InAlarmFor', {}, {
-                query: {
-                    method: 'GET'
-                }
-            }).query(data).$promise;
-        };
-
-        function inAlarmExcludingPhoneStatesFor(data) {
-            return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
-                    query: {
-                        method: 'GET'
-                    }
-                }).query(data)
-                .$promise;
-        };
-
-        function getAlarmStatesForSitesAndSkillsExcludingStates(data) {
-            return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
-                    query: {
-                        method: 'GET'
-                    }
-                }).query(data)
-                .$promise;
-        };
-
-        function getAlarmStatesForTeamsAndSkillsExcludingStates(data) {
-            return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
-                    query: {
-                        method: 'GET'
-                    }
-                }).query(data)
-                .$promise;
-        };
-
-        function getAlarmStatesForSkillsExcludingStates(data) {
-            return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
-                    query: {
-                        method: 'GET'
-                    }
-                }).query(data)
-                .$promise;
-        };
-
-        function getAlarmStatesForTeamsExcludingStates(data) {
-            return $resource('../api/Agents/InAlarmExcludingPhoneStatesFor', {}, {
-                    query: {
-                        method: 'GET'
-                    }
-                }).query(data)
-                .$promise;
-        };
-		
 		function getTeamCardsFor(data) {
 			return $resource('../api/Overview/TeamCards', {}, {
 			    query: {
@@ -183,26 +113,6 @@
                 }
             }).query({
                 skillIds: data
-            }).$promise;
-        };
-
-        function getSites(data) {
-            return $resource('../api/Sites', {}, {
-                query: {
-                    method: 'GET',
-                    isArray: true
-                }
-            }).query().$promise;
-        };
-
-        function getSitesForSkills(skillIds) {
-            return $resource('../api/Sites/ForSkills', {}, {
-                query: {
-                    method: 'GET',
-                    isArray: true
-                }
-            }).query({
-                skillIds: skillIds
             }).$promise;
         };
 

@@ -66,13 +66,14 @@ describe('RtaFilterController', function () {
 
 	it('should filter on skill name', function () {
 		$fakeBackend
-			.withSkills([{
+			.withSkill({
 				Name: "Channel Sales",
 				Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753"
-			}, {
+			})
+			.withSkill({
 				Name: "Email",
 				Id: "BC50FC19-C211-4E7A-8A1A-9F0801134E37"
-			}]);
+			});
 
 		vm = $controllerBuilder.createController().vm;
 
@@ -84,13 +85,14 @@ describe('RtaFilterController', function () {
 
 	it('should filter on lowercased skill name', function () {
 		$fakeBackend
-			.withSkills([{
+			.withSkill({
 				Name: "Channel Sales",
 				Id: "f08d75b3-fdb4-484a-ae4c-9f0800e2f753"
-			}, {
+			})
+			.withSkill({
 				Name: "Email",
 				Id: "BC50FC19-C211-4E7A-8A1A-9F0801134E37"
-			}]);
+			});
 
 		vm = $controllerBuilder.createController().vm;
 		var result = vm.querySearch("EmAiL", vm.skills);

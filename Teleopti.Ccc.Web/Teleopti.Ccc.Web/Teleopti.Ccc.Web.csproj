@@ -441,7 +441,6 @@
     <Compile Include="Areas\Anywhere\Controllers\SkillsController.cs" />
     <Compile Include="Areas\Anywhere\Core\GroupScheduleProjectionViewModel.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AnywhereReportsController.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\AgentsController.cs" />
     <Compile Include="Areas\Forecasting\Core\CampaignPersister.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastMisc.cs" />
     <Compile Include="Areas\Forecasting\Core\ICampaignPersister.cs" />
@@ -1604,8 +1603,6 @@
     <Content Include="WFM\app\rta\rta.html" />
     <Content Include="WFM\app\rta\rta.names.format.service.spec.js" />
     <Content Include="WFM\app\rta\rta.names.format.service.js" />
-    <Content Include="WFM\app\rta\rta.organization.service.js" />
-    <Content Include="WFM\app\rta\rta.organization.service.spec.js" />
     <Content Include="WFM\app\rta\rta.resource.factory.js" />
     <Content Include="WFM\app\rta\rta.route.service.js" />
     <Content Include="WFM\app\rta\rta.route.service.spec.js" />

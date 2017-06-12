@@ -39,7 +39,7 @@ describe('RtaHistoricalController', function() {
     it('should get agent', function() {
         var id = Math.random() * 1000 + 1
         stateParams.personId = id;
-        $fakeBackend.withAgent({
+        $fakeBackend.withAgentState({
             PersonId: id,
             AgentName: 'Mikkey Dee',
             Schedules: [],
@@ -54,7 +54,7 @@ describe('RtaHistoricalController', function() {
 
     it('should display schedule', function() {
         stateParams.personId = '1';
-        $fakeBackend.withAgent({
+        $fakeBackend.withAgentState({
             PersonId: '1',
             AgentName: 'Mikkey Dee',
             Schedules: [{
@@ -76,7 +76,7 @@ describe('RtaHistoricalController', function() {
 
     it('should display schedule', function() {
         stateParams.personId = '1';
-        $fakeBackend.withAgent({
+        $fakeBackend.withAgentState({
             PersonId: '1',
             AgentName: 'Mikkey Dee',
             Schedules: [{
@@ -101,7 +101,7 @@ describe('RtaHistoricalController', function() {
 
     it('should display schedule', function() {
         stateParams.personId = '1';
-        $fakeBackend.withAgent({
+        $fakeBackend.withAgentState({
             PersonId: '1',
             AgentName: 'Mikkey Dee',
             Schedules: [{
@@ -126,7 +126,7 @@ describe('RtaHistoricalController', function() {
 
     it('should display out of adherence', function() {
         stateParams.personId = '1';
-        $fakeBackend.withAgent({
+        $fakeBackend.withAgentState({
             PersonId: '1',
             AgentName: 'Mikkey Dee',
             Schedules: [{
@@ -149,7 +149,7 @@ describe('RtaHistoricalController', function() {
 
     it('should display out of adherence', function() {
         stateParams.personId = '1';
-        $fakeBackend.withAgent({
+        $fakeBackend.withAgentState({
             PersonId: '1',
             AgentName: 'Mikkey Dee',
             Schedules: [{
@@ -175,7 +175,7 @@ describe('RtaHistoricalController', function() {
 
 	it('should display out of adherence start date when started a long time ago', function() {
 		stateParams.personId = '1';
-		$fakeBackend.withAgent({
+		$fakeBackend.withAgentState({
 			PersonId: '1',
 			AgentName: 'Mikkey Dee',
 			Schedules: [{
@@ -195,7 +195,7 @@ describe('RtaHistoricalController', function() {
     it('should display full timeline', function() {
         stateParams.personId = '1';
         $fakeBackend
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 AgentName: 'Mikkey Dee',
                 Schedules: [{
@@ -222,7 +222,7 @@ describe('RtaHistoricalController', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 AgentName: 'Mikkey Dee',
                 Schedules: [{
@@ -249,7 +249,7 @@ describe('RtaHistoricalController', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 Schedules: [],
                 OutOfAdherences: []
@@ -264,7 +264,7 @@ describe('RtaHistoricalController', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 Schedules: [],
                 OutOfAdherences: [],
@@ -283,7 +283,7 @@ describe('RtaHistoricalController', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 Schedules: [],
                 OutOfAdherences: [],
@@ -309,7 +309,7 @@ describe('RtaHistoricalController', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 Schedules: [{
                     Name: 'phone',
@@ -419,7 +419,7 @@ describe('RtaHistoricalController', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 Schedules: [{
                     Name: 'phone',
@@ -457,7 +457,7 @@ describe('RtaHistoricalController', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 Schedules: [{
                     Name: 'phone',
@@ -495,7 +495,7 @@ describe('RtaHistoricalController', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 Schedules: [{
                     StartTime: '2016-10-10T08:00:00',
@@ -515,7 +515,7 @@ describe('RtaHistoricalController', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 Schedules: [{
                     StartTime: '2016-10-10T08:00:00',
@@ -539,7 +539,7 @@ describe('RtaHistoricalController', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 Schedules: [{
                         StartTime: '2016-10-10T08:00:00',
@@ -576,7 +576,7 @@ describe('RtaHistoricalController', function() {
         stateParams.personId = '1';
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1',
                 Schedules: [{
                     StartTime: '2016-10-10T08:00:00',
@@ -600,7 +600,7 @@ describe('RtaHistoricalController', function() {
 
         $fakeBackend
             .withTime('2016-10-10T15:00:00')
-            .withAgent({
+            .withAgentState({
                 PersonId: '1'
             })
             .withTimeline({

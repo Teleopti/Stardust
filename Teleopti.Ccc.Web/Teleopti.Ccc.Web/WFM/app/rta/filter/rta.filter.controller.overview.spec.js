@@ -65,9 +65,6 @@ describe('RtaFilterController', function () {
 	it('should not allow simoultaneous selection when new skill area', function () {
 		stateParams.skillIds = "phoneGuid";
 		$fakeBackend
-			.withSite({
-				Id: "parisGuid",
-			})
 			.withSiteAdherence({
 				Id: "parisGuid",
 				InAlarmCount: 5,
@@ -105,9 +102,6 @@ describe('RtaFilterController', function () {
 	it('should not allow simoultaneous selection when new skill', function () {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
 		$fakeBackend
-			.withSite({
-				Id: "parisGuid",
-			})
 			.withSiteAdherence({
 				Id: "parisGuid",
 				InAlarmCount: 5,
@@ -145,9 +139,6 @@ describe('RtaFilterController', function () {
 	it('should have preselected skill in field for sites', function () {
 		stateParams.skillIds = "phoneGuid";
 		$fakeBackend
-			.withSite({
-				Id: "londonGuid"
-			})
 			.withSiteAdherence({
 				Id: "londonGuid",
 				InAlarmCount: 3,
@@ -167,9 +158,6 @@ describe('RtaFilterController', function () {
 	it('should have preselected skill area in field for sites', function () {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
 		$fakeBackend
-			.withSite({
-				Id: "londonGuid"
-			})
 			.withSiteAdherence({
 				Id: "londonGuid",
 				InAlarmCount: 3,
@@ -194,10 +182,6 @@ describe('RtaFilterController', function () {
 	it('should go to teams for selected skill', function () {
 		stateParams.siteIds = "parisGuid";
 		$fakeBackend
-			.withTeam({
-				Id: "parisTeamGreenGuid",
-				SiteId: "parisGuid"
-			})
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
@@ -225,14 +209,6 @@ describe('RtaFilterController', function () {
 	it('should go to teams for selected skill area', function () {
 		stateParams.siteIds = "parisGuid";
 		$fakeBackend
-			.withTeam({
-				Id: "parisTeamGreenGuid",
-				SiteId: "parisGuid"
-			})
-			.withTeam({
-				Id: "parisTeamRedGuid",
-				SiteId: "parisGuid"
-			})
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
@@ -277,10 +253,6 @@ describe('RtaFilterController', function () {
 		stateParams.skillIds = "phoneGuid";
 		stateParams.siteIds = "parisGuid";
 		$fakeBackend
-			.withTeam({
-				Id: "parisTeamGreenGuid",
-				SiteId: "parisGuid"
-			})
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",
@@ -302,10 +274,6 @@ describe('RtaFilterController', function () {
 		stateParams.skillAreaId = "emailAndPhoneGuid";
 		stateParams.siteIds = ["parisGuid"];
 		$fakeBackend
-			.withTeam({
-				Id: "parisTeamGreenGuid",
-				SiteId: "parisGuid"
-			})
 			.withTeamAdherence({
 				SiteId: "parisGuid",
 				Id: "parisTeamGreenGuid",

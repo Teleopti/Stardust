@@ -120,10 +120,7 @@ describe('RtaOverviewController', function () {
 		stateParams.siteIds = "londonGuid";
 		$fakeBackend.withTeamAdherence({
 			Id: "redGuid"
-		})
-			.withTeam({
-				Id: "greenGuid"
-			});
+		});
 		spyOn($state, 'go');
 
 		var c = $controllerBuilder.createController();
