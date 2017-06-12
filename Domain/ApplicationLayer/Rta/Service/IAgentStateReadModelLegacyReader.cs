@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
     {
         IEnumerable<AgentStateReadModel> Read(IEnumerable<IPerson> persons);
         IEnumerable<AgentStateReadModel> Read(IEnumerable<Guid> personIds);
-		IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds);
-		IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds);
+	    IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds);
 	}
 }

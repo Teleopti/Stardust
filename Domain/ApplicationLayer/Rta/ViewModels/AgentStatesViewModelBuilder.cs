@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		
 		public AgentStatesViewModel ForSites(Guid[] siteIds)
 		{
-			return build(_legacyReader.ReadForSites(siteIds));
+			return build(_reader.ReadFor(new AgentStateFilter {SiteIds = siteIds}));
 		}
 
 		public AgentStatesViewModel ForTeams(Guid[] teamIds)

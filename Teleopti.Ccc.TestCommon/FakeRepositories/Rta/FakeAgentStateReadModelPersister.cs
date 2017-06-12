@@ -219,19 +219,25 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 		private IEnumerable<AgentStateReadModel> readFor(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			if (siteIds != null && teamIds != null && skillIds != null)
-				return queryWithSkill(ReadForSites(siteIds).Concat(ReadForTeams(teamIds)).Distinct(), skillIds).ToArray();
+				return queryWithSkill(readForSites(siteIds).Concat(ReadForTeams(teamIds)).Distinct(), skillIds).ToArray();
 			if (siteIds != null && teamIds != null)
-				return ReadForSites(siteIds).Concat(ReadForTeams(teamIds)).Distinct().ToArray();
+				return readForSites(siteIds).Concat(ReadForTeams(teamIds)).Distinct().ToArray();
 			if (siteIds != null && skillIds != null)
-				return queryWithSkill(ReadForSites(siteIds), skillIds).ToArray();
+				return queryWithSkill(readForSites(siteIds), skillIds).ToArray();
 			if (siteIds != null)
-				return ReadForSites(siteIds).ToArray();
+				return readForSites(siteIds).ToArray();
 			if (teamIds != null && skillIds != null)
 				return queryWithSkill(ReadForTeams(teamIds), skillIds).ToArray();
 			if (teamIds != null)
 				return ReadForTeams(teamIds).ToArray();
 			return queryWithSkill(_data.Values, skillIds).ToArray();
 		}
+
+		private IEnumerable<AgentStateReadModel> readForSites(IEnumerable<Guid> siteIds)
+			=> (from model in _data.Values
+				from siteId in siteIds
+				where siteId == model.SiteId
+				select model).ToArray();
 
 		private IEnumerable<AgentStateReadModel> queryWithSkill(IEnumerable<AgentStateReadModel> models, IEnumerable<Guid> skillIds)
 			=> from model in models
@@ -265,11 +271,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 
 
 
-		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)
-			=> (from model in _data.Values
-				from siteId in siteIds
-				where siteId == model.SiteId
-				select model).ToArray();
 
 		public IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds)
 			=> (from model in _data.Values

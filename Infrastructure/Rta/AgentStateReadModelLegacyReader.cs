@@ -40,16 +40,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 				.List<AgentStateReadModel>())
 				.ToArray();
 		}
-		
-		public IEnumerable<AgentStateReadModel> ReadForSites(IEnumerable<Guid> siteIds)
-		{
-			return _unitOfWork.Current().Session()
-				.CreateSQLQuery("SELECT * FROM [ReadModel].AgentState WITH (NOLOCK) WHERE SiteId IN (:siteIds)")
-				.SetParameterList("siteIds", siteIds)
-				.SetResultTransformer(Transformers.AliasToBean(typeof(internalModel)))
-				.SetReadOnly(true)
-				.List<AgentStateReadModel>();
-		}
 
 		public IEnumerable<AgentStateReadModel> ReadForTeams(IEnumerable<Guid> teamIds)
 		{
