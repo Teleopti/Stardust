@@ -4,8 +4,7 @@
 	angular.module('outboundServiceModule')
 		.service('outboundChartService', ['$filter', '$http', 'outboundTranslationService', outboundChartService]);
 
-	function outboundChartService($filter, $http, tl) {
-
+	function outboundChartService($filter, $http, outboundTranslationSvc) {
 		var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';
 		var updateCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan';
 		var removeCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan/Remove';
@@ -30,10 +29,19 @@
 		];
 		var self = this;
 
-		this.updateManualPlan = updateManualPlan;
-		this.updateBacklog = updateBacklog;
+		self.updateManualPlan = updateManualPlan;
+		self.removeManualPlan = removeManualPlan;
+		self.replan = replan;
+		self.updateBacklog = updateBacklog;
+		self.removeActualBacklog = removeActualBacklog;
+		self.getCampaignVisualization = outboundTranslationSvc.applyTranslation(translationKeys, getCampaignVisualization, self);
+		self.buildGraphDataSeqs = buildGraphDataSeqs;
 
-		this.replan = function(input, successCb, errorCb) {
+		self.zip = zip;
+		self.coreGetCampaignVisualization = getCampaignVisualization;
+		self.coreMapGraphData = mapGraphData;
+
+		function replan(input, successCb, errorCb) {
 			var postData = {
 				CampaignId: input.campaignId,
 				SkipDates: input.ignoredDates
@@ -41,51 +49,6 @@
 
 			$http.post(redoCampaignProductionPlanUrl, postData).success(function() {
 				if (successCb != null) successCb();
-			}).error(function(e) {
-				if (errorCb != null) errorCb(e);
-			});
-		}
-
-		this.removeManualPlan = function(input, successCb, errorCb) {
-			var postData = {
-				CampaignId: input.campaignId,
-				Dates: input.selectedDates
-			};
-
-			$http.post(removeCampaignProductionPlanUrl, postData).
-			success(function(campaignData) {
-				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
-			}).
-			error(function(e) {
-				if (errorCb != null) errorCb(e);
-			});
-		}
-
-		this.removeActualBacklog = function(input, successCb, errorCb) {
-			var postData = {
-				CampaignId: input.campaignId,
-				Dates: input.selectedDates
-			};
-
-			$http.post(removeCampaignBacklogUrl, postData).
-			success(function(campaignData) {
-				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
-			}).
-			error(function(e) {
-				if (errorCb != null) errorCb(e);
-			});
-		}
-
-		this.getCampaignVisualization = tl.applyTranslation(translationKeys, getCampaignVisualization, self);
-		this.buildGraphDataSeqs = buildGraphDataSeqs;
-
-		this.zip = zip;
-		this.coreGetCampaignVisualization = getCampaignVisualization;
-		this.coreMapGraphData = mapGraphData;
-
-		function getCampaignVisualization(campaignId, successCb, errorCb) {
-			$http.get(getCampaignVisualizationUrl + campaignId).success(function(campaignData) {
-				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), self.dictionary, campaignData.IsManualPlanned, campaignData.IsCloseDays, campaignData.IsActualBacklog);
 			}).error(function(e) {
 				if (errorCb != null) errorCb(e);
 			});
@@ -99,7 +62,8 @@
 						Date: d,
 						Time: input.manualPlanInput
 					}
-				})
+				}),
+				SkipDates: input.ignoredDates
 			};
 
 			$http.post(updateCampaignProductionPlanUrl, postData).
@@ -107,6 +71,30 @@
 				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
 			}).
 			error(function(e) {
+				if (errorCb != null) errorCb(e);
+			});
+		}
+
+		function removeManualPlan(input, successCb, errorCb) {
+			var postData = {
+				CampaignId: input.campaignId,
+				Dates: input.selectedDates,
+				SkipDates: input.ignoredDates
+			};
+
+			$http.post(removeCampaignProductionPlanUrl, postData).
+			success(function(campaignData) {
+				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
+			}).
+			error(function(e) {
+				if (errorCb != null) errorCb(e);
+			});
+		}
+
+		function getCampaignVisualization(campaignId, successCb, errorCb) {
+			$http.get(getCampaignVisualizationUrl + campaignId).success(function(campaignData) {
+				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), self.dictionary, campaignData.IsManualPlanned, campaignData.IsCloseDays, campaignData.IsActualBacklog);
+			}).error(function(e) {
 				if (errorCb != null) errorCb(e);
 			});
 		}
@@ -126,6 +114,21 @@
 			$http.post(updateCampaignBacklogUrl, postData).
 			success(function(campaignData) {
 				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
+			}).
+			error(function(e) {
+				if (errorCb != null) errorCb(e);
+			});
+		}
+
+		function removeActualBacklog(input, successCb, errorCb) {
+			var postData = {
+				CampaignId: input.campaignId,
+				Dates: input.selectedDates
+			};
+
+			$http.post(removeCampaignBacklogUrl, postData).
+			success(function(campaignData) {
+				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
 			}).
 			error(function(e) {
 				if (errorCb != null) errorCb(e);
@@ -177,7 +180,6 @@
 		}
 
 		function buildGraphDataSeqs(data) {
-
 			var graphDataSeq = zip(data).map(function(d) {
 				return mapGraphData(d);
 			});
@@ -208,7 +210,6 @@
 
 			return result;
 		}
-
 
 		function zip(data) {
 			var names = [],
@@ -252,8 +253,5 @@
 				return returnData;
 			}
 		}
-
 	}
-
-
 })();

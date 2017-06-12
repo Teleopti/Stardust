@@ -140,7 +140,8 @@
 			outboundChartService.updateManualPlan({
 				campaignId: vm.campaign.Id,
 				selectedDates: unclosedDays(),
-				manualPlanInput: vm.manualPlanInput
+				manualPlanInput: vm.manualPlanInput,
+				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.addManualPlan)) {
 					vm.callbacks.addManualPlan(response, callbackDone);
@@ -154,18 +155,18 @@
 			vm.isPlanClickedReset = true;
 			if (vm.selectedDates.length == 0) return;
 
-				vm.isLoading = true;
-				outboundChartService.removeManualPlan({
-					campaignId: vm.campaign.Id,
-					selectedDates: vm.selectedDates
-				}, function(response) {
-					if (angular.isDefined(vm.callbacks.removeManualPlan)) {
-						vm.callbacks.removeManualPlan(response, callbackDone);
-					} else {
-						callbackDone();
-					}
-				});
-
+			vm.isLoading = true;
+			outboundChartService.removeManualPlan({
+				campaignId: vm.campaign.Id,
+				selectedDates: vm.selectedDates,
+				ignoredDates: vm.ignoredDates
+			}, function(response) {
+				if (angular.isDefined(vm.callbacks.removeManualPlan)) {
+					vm.callbacks.removeManualPlan(response, callbackDone);
+				} else {
+					callbackDone();
+				}
+			});
 		}
 
 		function addManualBacklog() {

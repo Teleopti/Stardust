@@ -81,6 +81,26 @@ describe('Outbound campaign commands pane tests ', function() {
 		expect(target.vm.ignoredDates.length).toEqual(0);
 	});
 
+	it('should pass ignored dates for adding manual plan', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.vm.toggleManualPlan();
+
+		expect(target.vm.manualPlanSwitch).toEqual(true);
+		target.vm.ignoreSchedules();
+		target.vm.addManualPlan();
+		expect(target.vm.ignoredDates.length).toEqual(2);
+	});
+
+	it('should pass ignored dates for removing manual plan', function() {
+		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		target.vm.toggleManualPlan();
+
+		expect(target.vm.manualPlanSwitch).toEqual(true);
+		target.vm.ignoreSchedules();
+		target.vm.removeManualPlan();
+		expect(target.vm.ignoredDates.length).toEqual(2);
+	});
+
 	it('should show ignore schedule button when there are schedules in campaign', function() {
 		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
 		target.scope.$apply();
