@@ -37,7 +37,7 @@
             var hiddenArray = [];
             var intervalStart;
 			var mixedArea = null;
-			service.setPerformanceData = function (result, showEsl, showEmailSkill, isToday) {
+            service.setPerformanceData = function(result, showEsl, showEmailSkill, isToday) {
                 clearData();
 
                 performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
@@ -75,9 +75,10 @@
 
                 if (showEsl)
                     performanceData.summary.summaryEstimatedServiceLevel = $filter('number')(
-				if (showEsl)
-					performanceData.summary.summaryEstimatedServiceLevel = $filter('number')(result.Summary.EstimatedServiceLevel, 1);
-				if (showEmailSkill && mixedArea){
+                        result.Summary.EstimatedServiceLevel,
+                        1
+                    );
+                if (showEmailSkill && mixedArea) {
                     performanceData.abandonedRateObj.series = [];
                     performanceData.hasEmailSkill = true;
                 } else {
@@ -135,12 +136,13 @@
 
             service.pollSkillData = function(selectedItem, toggles) {
                 performanceData.waitingForData = true;
+                if (selectedItem.SkillType === 'SkillTypeEmail') {
+                    mixedArea = selectedItem;
+                } else {
+                    mixedArea = false;
+                }
                 intradayService.getSkillMonitorPerformance
                     .query({
-				} else {
-					mixedArea = false;
-				}
-
                         id: selectedItem.Id
                     })
                     .$promise.then(
@@ -164,7 +166,7 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl, dayOffset === 0);
+                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, dayOffset === 0);
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;
@@ -176,7 +178,7 @@
                 performanceData.waitingForData = true;
 
                 function findEmail(area) {
-						return area.SkillType === 'SkillTypeEmail';
+                    return area.SkillType === 'SkillTypeEmail';
                 }
                 mixedArea = selectedItem.Skills.find(findEmail);
                 intradayService.getSkillAreaMonitorPerformance
@@ -186,7 +188,7 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl, true);
+                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, true);
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;
@@ -219,7 +221,7 @@
             };
 
             service.loadPerformanceChart = function(pData) {
-				if(!pData) return;
+                if (!pData) return;
                 service.performanceChart.load({
                     columns: [
                         pData.timeSeries,
