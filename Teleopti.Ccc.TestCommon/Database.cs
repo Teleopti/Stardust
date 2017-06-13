@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithSite()
 		{
-			site(_site);
+			site(null);
 			return this;
 		}
 
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.TestCommon
 		[UnitOfWork]
 		public virtual Database WithTeam()
 		{
-			team(_team);
+			team(null);
 			return this;
 		}
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -25,15 +26,29 @@ namespace Teleopti.Ccc.TestCommon.IoC
 	{
 	}
 
+	[AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
+	public class ExtendScopeAttribute : Attribute
+	{
+		public Type Handler { get; }
+
+		public ExtendScopeAttribute(Type handler)
+		{
+			Handler = handler;
+		}
+	}
+
 	[Toggle(Domain.FeatureFlags.Toggles.No_UnitOfWork_Nesting_42175)]
 	public class InfrastructureTestAttribute : IoCTestAttribute
 	{
 		public ITransactionHooksScope TransactionHooksScope;
 		public IEnumerable<ITransactionHook> TransactionHooks;
-		private IDisposable _transactionHookScope;
 		public FakeMessageSender MessageSender;
 		public FakeTransactionHook TransactionHook;
 		public IDataSourceForTenant DataSourceForTenant;
+		public FakeEventPublisher Publisher;
+
+		private IDisposable _transactionHookScope;
+		private List<Type> _scopeExtenders = new List<Type>();
 
 		protected override FakeConfigReader Config()
 		{
@@ -43,7 +58,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			config.FakeConnectionString("Hangfire", InfraTestConfigReader.AnalyticsConnectionString);
 			return config;
 		}
-
 
 		//
 		// Should fake:
@@ -77,6 +91,14 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			// stardust
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
+			
+			// extend scope by including handlers
+			var scopeExtenders = QueryAllAttributes<ExtendScopeAttribute>();
+			_scopeExtenders.AddRange(scopeExtenders.Select(x => x.Handler));
+			if (scopeExtenders.Any())
+				system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
+			else
+				system.AddService<FakeEventPublisher>();
 
 			system.AddService<Database>();
 			system.AddService<DatabaseLegacy>();
@@ -92,7 +114,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
-			
+
+			// extend scope by including handlers
+			_scopeExtenders.ForEach(x => Publisher.AddHandler(x));
+
 			DataSourceForTenant.MakeSureDataSourceCreated(
 				DataSourceHelper.TestTenantName,
 				InfraTestConfigReader.ConnectionString,

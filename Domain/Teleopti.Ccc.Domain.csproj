@@ -229,6 +229,8 @@
     <Compile Include="ApplicationLayer\IPersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IOrganizationReader.cs" />
+    <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\OrganizationModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceMaintainer.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateQueueReader.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IStateQueueWriter.cs" />
