@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Domain.Cascading
 		[RemoveMeWithToggle("make private, remove params shovelResourceData and interval", Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156)]
 		protected virtual IDictionary<CascadingSkillGroup, double> init(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
-			var tootiRemainingResources = skillGroupsWithSameIndex.Sum(x => x.RemainingResources);
+			var tottiRemainingResources = skillGroupsWithSameIndex.Sum(x => x.RemainingResources);
 			var ret = new Dictionary<CascadingSkillGroup, double>();
 			foreach (var skillGroup in skillGroupsWithSameIndex)
 			{
-				ret[skillGroup] = skillGroup.RemainingResources / tootiRemainingResources; //do we still need to check for double.IsNaN(myFactor) here? no?
+				ret[skillGroup] = skillGroup.RemainingResources / tottiRemainingResources; //do we still need to check for double.IsNaN(myFactor) here? no?
 			}
 			return ret;
 		}
