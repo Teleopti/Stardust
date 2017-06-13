@@ -27,17 +27,24 @@ namespace Teleopti.Ccc.Domain.Cascading
 						{
 							if (!shovelResourcesState.IsAnyPrimarySkillOpen)
 							{
-								var remainingResourcesToShovel = shovelResourcesState.RemainingOverstaffing;
-								foreach (var skillToMoveTo in subSkillsWithSameIndex)
-								{
-									var dataForIntervalTo = shovelResourceData.GetDataForInterval(skillToMoveTo, interval);
-									var resourceToMove = remainingResourcesToShovel / subSkillsWithSameIndex.Count();
-									doActualShoveling(shovelResourcesState, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, dataForIntervalTo, resourceToMove, skillToMoveTo);
-								}
+								shovelResourcesFromClosedPrimarySkill(shovelResourcesState, shovelResourceData, skillGroupsWithSameIndex, interval, shovelingCallback, subSkillsWithSameIndex, skillGroup);
 							}
 						}
 					}
 				}
+			}
+		}
+
+		private static void shovelResourcesFromClosedPrimarySkill(ShovelResourcesState shovelResourcesState,
+			IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval,
+			IShovelingCallback shovelingCallback, SubSkillsWithSameIndex subSkillsWithSameIndex, CascadingSkillGroup skillGroup)
+		{
+			var remainingResourcesToShovel = shovelResourcesState.RemainingOverstaffing;
+			foreach (var skillToMoveTo in subSkillsWithSameIndex)
+			{
+				var dataForIntervalTo = shovelResourceData.GetDataForInterval(skillToMoveTo, interval);
+				var resourceToMove = remainingResourcesToShovel / subSkillsWithSameIndex.Count();
+				doActualShoveling(shovelResourcesState, skillGroup, interval, skillGroupsWithSameIndex, shovelingCallback, dataForIntervalTo, resourceToMove, skillToMoveTo);
 			}
 		}
 
