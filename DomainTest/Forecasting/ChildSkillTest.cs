@@ -56,20 +56,5 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsNotNull(target);
             Assert.IsInstanceOf<Skill>(target);
         }
-
-        /// <summary>
-        /// Verifies the set parent skill works.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-21
-        /// </remarks>
-        [Test]
-        public void VerifySetParentSkillWorks()
-        {
-            target.SetParentSkill(_multiSiteSkill);
-
-            Assert.AreEqual(_multiSiteSkill, target.ParentSkill);
-        }
     }
 }

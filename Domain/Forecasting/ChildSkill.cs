@@ -1,4 +1,3 @@
-
 using System;
 using System.Drawing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -7,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 {
     public class ChildSkill : Skill, IChildSkill
     {
-        private IMultisiteSkill _parentSkill;
+        private readonly IMultisiteSkill _parentSkill;
 
         /// <summary>
         /// For NHibernate
@@ -21,26 +20,27 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    {
 		    _parentSkill = parentSkill;
 			_parentSkill.AddChildSkill(this);
-
-		    Activity = _parentSkill.Activity;
-		    TimeZone = _parentSkill.TimeZone;
-		    MidnightBreakOffset = _parentSkill.MidnightBreakOffset;
+	    }
+		
+	    public override IActivity Activity
+	    {
+		    get { return _parentSkill.Activity; }
+		    set { }
 	    }
 
-		/// <summary>
-		/// Sets the parent skill.
-		/// </summary>
-		/// <param name="parentSkill">The parent skill.</param>
-		/// <remarks>
-		/// Created by: robink
-		/// Created date: 2008-04-21
-		/// </remarks>
-		public virtual void SetParentSkill(IMultisiteSkill parentSkill)
-        {
-            _parentSkill = parentSkill;
-        }
+	    public override TimeSpan MidnightBreakOffset
+	    {
+		    get { return _parentSkill.MidnightBreakOffset; }
+		    set {}
+	    }
 
-        /// <summary>
+	    public override TimeZoneInfo TimeZone
+	    {
+		    get { return _parentSkill.TimeZone; }
+			set { }
+	    }
+
+	    /// <summary>
         /// Gets the parent skill.
         /// </summary>
         /// <value>The parent skill.</value>
