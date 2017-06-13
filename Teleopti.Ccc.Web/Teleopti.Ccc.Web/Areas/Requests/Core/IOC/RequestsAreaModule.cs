@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.IOC
 {
