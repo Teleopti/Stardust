@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			WithUnitOfWork.Get(() =>
 			{
-				_target = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork.Current());
+				_target = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork);
 				return _target.GetUserDefinedTabs();
 			});
 	
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			WithUnitOfWork.Get(() =>
 			{
-				_target = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork.Current());
+				_target = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork);
 				var date = new DateOnly(2012, 1, 27);
 				return _target.GetOrganization(new DateOnlyPeriod(date, date), true);
 			});
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 
 			CurrentBU.OnThisThreadUse(bu);
-			var result = WithUnitOfWork.Get(() => new PersonSelectorReadOnlyRepository(CurrentUnitOfWork.Current())
+			var result = WithUnitOfWork.Get(() => new PersonSelectorReadOnlyRepository(CurrentUnitOfWork)
 					.GetOrganizationForWeb(new DateOnlyPeriod(new DateOnly(2011, 1, 1), new DateOnly(2011, 1, 1)))
 					.Single());
 			result.TeamId.Value.Should().Equals(team.Id);
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var result = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork.Current())
+				var result = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork)
 					.GetOrganizationForWeb(new DateOnlyPeriod(new DateOnly(2010, 1, 1), new DateOnly(2010, 1, 1)))
 					.Single();
 				result.TeamId.Value.Should().Equals(team1.Id);
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_target = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork.Current());
+				_target = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork);
 				var date = new DateOnly(2012, 1, 27);
 				_target.GetBuiltIn(new DateOnlyPeriod(date, date), PersonSelectorField.Contract, Guid.Empty);
 			}
@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_target = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork.Current());
+				_target = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork);
 				_target.GetUserDefinedTab(new DateOnly(2012, 1, 27), Guid.NewGuid());
 			}
 		}
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				_target = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork.Current());
+				_target = new PersonSelectorReadOnlyRepository(CurrentUnitOfWork);
 				_target.GetOptionalColumnTabs();
 			}
 		}
