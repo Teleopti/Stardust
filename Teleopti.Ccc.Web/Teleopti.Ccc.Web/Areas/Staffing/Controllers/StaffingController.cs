@@ -19,24 +19,16 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		public virtual IHttpActionResult ShowAddOvertime([FromBody]OverTimeSuggestionModel model)
 		{
 			if (model == null || model.SkillIds.IsEmpty()) return BadRequest();
-
 			var result =_addOverTime.GetSuggestion(model);
-			
 			return Ok(result);
 		}
 
 		[UnitOfWork, HttpPost, Route("api/staffing/overtime")]
 		public virtual IHttpActionResult AddOvertime([FromBody]IList<OverTimeModel> models)
 		{
-
 			if (models == null || models.IsEmpty()) return BadRequest();
-
 			_addOverTime.Apply(models);
-
 			return Ok();
 		}
-
-		//Remove stardust leftovers
-
 	}
 }

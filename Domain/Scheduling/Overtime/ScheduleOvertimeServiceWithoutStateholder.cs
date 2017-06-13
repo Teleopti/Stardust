@@ -55,8 +55,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			var overtimeDuration = new MinMax<TimeSpan>(overtimePreferences.SelectedTimePeriod.StartTime,
 				overtimePreferences.SelectedTimePeriod.EndTime);
-			//var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime,
-			//	overtimePreferences.SelectedSpecificTimePeriod.EndTime);
 
 			var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly)).ToList();
 			if (!skills.Any())

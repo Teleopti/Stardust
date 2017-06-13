@@ -59,15 +59,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var allSkills = _skillRepository.LoadAll().ToList();
 			var skills = allSkills.Where(x => overTimeSuggestionModel.SkillIds.Contains(x.Id.GetValueOrDefault())).ToList();
 			var minResolution = skills.Min(x => x.DefaultResolution);
-			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Min(), _userTimeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max().AddMinutes(minResolution), _userTimeZone.TimeZone()));
-			var userDateOnly = new DateOnly(overTimeSuggestionModel.TimeSerie.Min());
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Min(), _userTimeZone.TimeZone()),
+				  TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max().AddMinutes(minResolution),_userTimeZone.TimeZone()));
 
+			var userDateOnly = new DateOnly(overTimeSuggestionModel.TimeSerie.Min());
 			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, period.StartDateTime, period.EndDateTime);
 			var persons = _personRepository.FindPeople(personsModels.Select(x => x.PersonId));
 			
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(period), _currentScenario.Current(), new PersonProvider(persons), new ScheduleDictionaryLoadOptions(false, false), persons);
-			var multiplicationDefinition = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().FirstOrDefault();
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(period), _currentScenario.Current(), new PersonProvider(persons), 
+							new ScheduleDictionaryLoadOptions(false, false), persons);
 
+			var multiplicationDefinition = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().FirstOrDefault();
 			var scheduleDays = persons.Select(person => scheduleDictionary[person].ScheduledDay(userDateOnly)).ToList();
 			
 			if (!skills.Any())
@@ -85,31 +87,32 @@ namespace Teleopti.Ccc.Domain.Staffing
 			};
 			
 			var wrapperModels = _scheduleOvertimeExecuteWrapper.Execute(overtimePreferences, new SchedulingProgress(), scheduleDays, period, allSkills,skills);
+			return extractDataSeries(overTimeSuggestionModel, wrapperModels);
+		}
 
+		private OverTimeSuggestionResultModel extractDataSeries(OverTimeSuggestionModel overTimeSuggestionModel,
+			ScheduleOvertimeExecuteWrapper.OvertimeWrapperModel wrapperModels)
+		{
 			var returnModel = new OverTimeSuggestionResultModel() {StaffingHasData = true, DataSeries = new StaffingDataSeries()};
-
-			returnModel.DataSeries.ScheduledStaffing =_scheduledStaffingToDataSeries.DataSeries(
-					wrapperModels.ResourceCalculationPeriods.Select(x => new SkillStaffingIntervalLightModel()
-					{
-						StartDateTime = x.StartDateTime,
-						EndDateTime = x.EndDateTime,
-						StaffingLevel = x.StaffingLevel
-					}).ToList(),overTimeSuggestionModel.TimeSerie);
+			returnModel.DataSeries.ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(
+				wrapperModels.ResourceCalculationPeriods.Select(x => new SkillStaffingIntervalLightModel()
+				{
+					StartDateTime = x.StartDateTime,
+					EndDateTime = x.EndDateTime,
+					StaffingLevel = x.StaffingLevel
+				}).ToList(), overTimeSuggestionModel.TimeSerie);
 
 			returnModel.DataSeries.ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(
-					wrapperModels.ResourceCalculationPeriods.Select(x => new StaffingIntervalModel()
-					{
-						StartTime = x.StartDateTime,
-						SkillId = x.SkillId,
-						Agents = x.FStaff
-						
-					}).ToList(), overTimeSuggestionModel.TimeSerie);
-			
+				wrapperModels.ResourceCalculationPeriods.Select(x => new StaffingIntervalModel()
+				{
+					StartTime = x.StartDateTime,
+					SkillId = x.SkillId,
+					Agents = x.FStaff
+				}).ToList(), overTimeSuggestionModel.TimeSerie);
+
 			returnModel.DataSeries.Time = overTimeSuggestionModel.TimeSerie;
 			calculateRelativeDifference(returnModel.DataSeries);
 			returnModel.OverTimeModels = wrapperModels.Models;
-
-
 			return returnModel;
 		}
 
