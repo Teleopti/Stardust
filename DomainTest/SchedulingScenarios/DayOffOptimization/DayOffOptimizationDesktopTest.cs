@@ -424,7 +424,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		}
 
 		[Test]
-		[Ignore("44671 - to be fixed")]
 		public void ShouldNotMoveDayOffWhenBreakingKeepRotation()
 		{
 			var firstDay = new DateOnly(2015, 10, 12); //mon

@@ -139,7 +139,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 						schedulingResultStateHolder,
 						currentPeriodValue,
 						previousPeriodValue,
-						movedDaysOff);
+						movedDaysOff,
+						dayOffOptimizationPreferenceProvider);
 
 					if (success)
 					{
@@ -181,7 +182,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			Lazy<double> currentPeriodValue, double previousPeriodValue,
-			MovedDaysOff movedDaysOff)
+			MovedDaysOff movedDaysOff,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			if (optimizationPreferences.Extra.UseTeams && optimizationPreferences.Extra.UseTeamSameDaysOff)
 			{
@@ -212,6 +214,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 
 			if (!_teamBlockOptimizationLimits.ValidateMinWorkTimePerWeek(teamInfo))
+			{
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
+				return true;
+			}
+
+			if (!_teamBlockOptimizationLimits.Validate(teamInfo, optimizationPreferences, dayOffOptimizationPreferenceProvider))
 			{
 				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
 				teamInfo.LockDays(movedDaysOff.AddedDaysOff);
