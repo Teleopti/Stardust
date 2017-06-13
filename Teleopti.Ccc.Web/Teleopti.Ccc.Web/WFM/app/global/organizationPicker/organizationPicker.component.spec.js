@@ -85,8 +85,8 @@
 	}
 
 	it('should populate hierachy list correctly', function () {
-		$rootScope.datasource = fakeDatasource;
-		var picker = setupPicker('datasource="datasource()"');
+		$rootScope.sitesAndTeams = fakeDatasource().Children;
+		var picker = setupPicker('sites-and-teams="sitesAndTeams"');
 		var target;
 
 		try {
@@ -104,8 +104,8 @@
 
 	it('should have a default function for generating the selected text', function () {
 		var target;
-		$rootScope.datasource = fakeDatasource;
-		var picker = setupPicker('datasource="datasource()"');
+		$rootScope.sitesAndTeams = fakeDatasource().Children;
+		var picker = setupPicker('sites-and-teams="sitesAndTeams"');
 
 		target = picker[0].querySelector('.selected-text');
 		expect(target.innerHTML).toBe('SelectOrganization');
@@ -120,10 +120,10 @@
 	it('should trigger on-close when the picker is closed', function() {
 		var changed = false;
 		$rootScope.onClose = function() { changed = true; };
-		$rootScope.datasource = fakeDatasource;
+		$rootScope.sitesAndTeams = fakeDatasource().Children;
 		$rootScope.selectedTeamIds = [];
 
-		var picker = setupPicker('datasource="datasource()" on-close="onClose()" selected-team-ids="selectedTeamIds"');
+		var picker = setupPicker('sites-and-teams="sitesAndTeams" on-close="onClose()" selected-team-ids="selectedTeamIds"');
 		expect(changed).toBe(false);
 
 		openPicker(picker);
@@ -135,8 +135,8 @@
 
 	it('should synchronise selected team IDs', function() {
 		$rootScope.teamIds = [];
-		$rootScope.fakeDatasource = fakeDatasource;
-		var picker = setupPicker('selected-team-ids="teamIds" datasource="fakeDatasource()"');
+		$rootScope.sitesAndTeams = fakeDatasource().Children;
+		var picker = setupPicker('selected-team-ids="teamIds" sites-and-teams="sitesAndTeams"');
 
 		picker.find('md-select-value').triggerHandler('click');
 		$material.flushInterimElement();
@@ -148,8 +148,8 @@
 
 	it('should support the single mode', function() {
 		$rootScope.teamIds = [];
-		$rootScope.datasource = fakeDatasource;
-		var p = setupPicker('single selected-team-ids="teamIds" datasource="datasource()"');
+		$rootScope.sitesAndTeams = fakeDatasource().Children;
+		var p = setupPicker('single selected-team-ids="teamIds" sites-and-teams="sitesAndTeams"');
 
 		openPicker(p);
 		toggleSite(0);

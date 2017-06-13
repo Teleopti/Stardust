@@ -200,6 +200,12 @@ describe("teamschedule controller tests", function() {
 			}
 		};
 
+		teamScheduleService.hierarchy = function () {
+			return $q(function (resolve) {
+				resolve({ Children: [] });
+			});
+		};
+
 		teamScheduleService.searchSchedules = function (input) {
 			var today = "2015-10-26";
 			var scheduleData = {

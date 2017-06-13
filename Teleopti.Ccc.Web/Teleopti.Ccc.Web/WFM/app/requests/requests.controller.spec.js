@@ -3,7 +3,8 @@ describe('RequestsControllerTests', function () {
 	var $rootScope,
 		$controller,
 		requestCommandParamsHolder,
-		$q;
+		$q,
+		requestsDataService;
 
 	var absenceRequestTabIndex = 0;
 	var shiftTradeRequestTabIndex = 1;
@@ -12,6 +13,7 @@ describe('RequestsControllerTests', function () {
 		module('wfm.requests');
 
 		requestCommandParamsHolder = new fakeRequestCommandParamsHolder();
+		requestsDataService = new FakeRequestsDataService();
 
 		module(function ($provide) {
 			$provide.service('Toggle', function() {
@@ -29,7 +31,8 @@ describe('RequestsControllerTests', function () {
 			});
 			$provide.service('requestCommandParamsHolder', function () {
 				return requestCommandParamsHolder;
-			});			
+			});
+			$provide.service('requestsDataService', function () { return requestsDataService; });
 		});
 	});
 
@@ -59,6 +62,14 @@ describe('RequestsControllerTests', function () {
 		};
 		this.resetSelectedRequestIds =function(){
 			requestIds = [];
+		};
+	}
+
+	function FakeRequestsDataService() {
+		this.hierarchy = function () {
+			return $q(function (resolve) {
+				resolve({ Children: [] });
+			});
 		};
 	}
 

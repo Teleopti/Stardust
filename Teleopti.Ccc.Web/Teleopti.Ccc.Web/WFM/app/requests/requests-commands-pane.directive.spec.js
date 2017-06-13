@@ -527,8 +527,9 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 					Enabled: true
 				}
 			];
-		}		
+		}
 		this.getBudgetGroupsPromise = function () { return []; }
+		this.hierarchy = function () { return $q(function (resolve) { resolve({ Children: [] }) }); };
 	}
 
 	function FakeSingalRService() {
