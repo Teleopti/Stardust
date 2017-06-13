@@ -4,12 +4,12 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Collection;
 using NHibernate.Type;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 {
@@ -22,12 +22,14 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		private const string updatedOnPropertyName = "UPDATEDON";
 		private readonly ICollection<IRootChangeInfo> modifiedRoots = new HashSet<IRootChangeInfo>();
 		private readonly ICollection<IAggregateRoot> rootsWithModifiedChildren = new HashSet<IAggregateRoot>();
+		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
 
 		private readonly VersionStateRollbackInterceptor _entityStateRollbackInterceptor = new VersionStateRollbackInterceptor();
 
-		public AggregateRootInterceptor(IUpdatedBy updatedBy)
+		public AggregateRootInterceptor(IUpdatedBy updatedBy, ICurrentPreCommitHooks currentPreCommitHooks)
 		{
 			_updatedBy = updatedBy;
+			_currentPreCommitHooks = currentPreCommitHooks;
 			Iteration = InterceptorIteration.Normal;
 		}
 
@@ -49,11 +51,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public IEnumerable<IRootChangeInfo> ModifiedRoots
 		{
 			get { return modifiedRoots; }
-		}
-
-		public IEnumerable<IAggregateRoot> RootsWithModifiedChildren
-		{
-			get { return rootsWithModifiedChildren; }
 		}
 
 		public override int[] FindDirty(object entity, object id, object[] currentState, object[] previousState,
@@ -123,6 +120,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			var root = ent as IAggregateRoot;
 			if (root != null)
 			{
+				_currentPreCommitHooks.Current().ForEach(cph => cph.BeforeCommit(root, propertyNames, currentState));
 				setUpdatedInfo(root, currentState, propertyNames);
 				return true;
 			}
@@ -152,8 +150,12 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			}
 
 			var root = entity as IAggregateRoot;
-			if (root != null) 
+			if (root != null)
+			{
+				_currentPreCommitHooks.Current().ForEach(cph => cph.BeforeCommit(root, propertyNames, state));
 				modifiedRoots.Add(new RootChangeInfo(root, DomainUpdateType.Insert));
+			}
+				
 			if (setUpdatedProperties(entity, propertyNames, state))
 			{
 				ret = true;

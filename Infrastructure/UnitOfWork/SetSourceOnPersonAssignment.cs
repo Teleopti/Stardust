@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -14,13 +15,28 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_currentSchedulingSource = currentSchedulingSource;
 		}
 
-		public void BeforeCommit(IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void BeforeCommit(object root, IEnumerable<string> propertyNames, object[] currentState)
 		{
-			var modifiedPersonAssignments = modifiedRoots.Select(x => x.Root).OfType<IPersonAssignment>();
-			foreach (var personAssignment in modifiedPersonAssignments.Where(pa => pa.Source != _currentSchedulingSource.Current()))
+			var personAssignment = root as IPersonAssignment;
+			if (personAssignment != null)
 			{
+				var propertyIndex = getPropertyIndex(propertyNames);
+				currentState[propertyIndex[nameof(IPersonAssignment.Source)]] = _currentSchedulingSource.Current();
 				personAssignment.Source = _currentSchedulingSource.Current();
 			}
+		}
+
+		private static IDictionary<string, int> getPropertyIndex(IEnumerable<string> properties)
+		{
+			var listOfProperties = properties.ToList();
+
+			IDictionary<string, int> result = new Dictionary<string, int>();
+
+			int index =
+				listOfProperties.FindIndex(p => nameof(IPersonAssignment.Source).Equals(p, StringComparison.InvariantCultureIgnoreCase));
+			if (index >= 0) result.Add(nameof(IPersonAssignment.Source), index);
+
+			return result;
 		}
 	}
 }

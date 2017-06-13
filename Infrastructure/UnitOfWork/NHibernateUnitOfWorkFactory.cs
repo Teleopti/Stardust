@@ -4,10 +4,7 @@ using NHibernate.Engine;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -114,7 +111,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			ServiceLocatorForLegacy.NestedUnitOfWorkStrategy.Strategize(_context);
 
-			var session = _factory.OpenSession(new AggregateRootInterceptor(ServiceLocatorForLegacy.UpdatedBy));
+			var session = _factory.OpenSession(new AggregateRootInterceptor(ServiceLocatorForLegacy.UpdatedBy, _currentPreCommitHooks));
 
 			businessUnitFilter.Enable(session, businessUnitId());
 			QueryFilter.Deleted.Enable(session, null);
@@ -124,8 +121,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_context,
 				session,
 				isolationLevel,
-				_transactionHooks,
-				_currentPreCommitHooks);
+				_transactionHooks);
 
 			return CurrentUnitOfWork();
 		}

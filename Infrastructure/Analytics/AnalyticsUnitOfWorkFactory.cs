@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Analytics
 		{
 			new AnalyticsUnitOfWork(
 				_context,
-				_factory.OpenSession(new AggregateRootInterceptor(ServiceLocatorForLegacy.UpdatedBy)),
+				_factory.OpenSession(new AggregateRootInterceptor(ServiceLocatorForLegacy.UpdatedBy, new NoPreCommitHooks())),
 				_transactionHooks
 				);
 

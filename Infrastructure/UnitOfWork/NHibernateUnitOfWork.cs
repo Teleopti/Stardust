@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ISession _session;
 		private readonly TransactionIsolationLevel _isolationLevel;
 		private readonly ICurrentTransactionHooks _transactionHooks;
-		private readonly ICurrentPreCommitHooks _currentPreCommitHooks;
 		private readonly NHibernateFilterManager _filterManager;
 		protected readonly Lazy<AggregateRootInterceptor> Interceptor;
 		private ITransaction _transaction;
@@ -41,8 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			ApplicationUnitOfWorkContext context, 
 			ISession session, 
 			TransactionIsolationLevel isolationLevel, 
-			ICurrentTransactionHooks transactionHooks, 
-			ICurrentPreCommitHooks currentPreCommitHooks)
+			ICurrentTransactionHooks transactionHooks)
 		{
 			InParameter.NotNull(nameof(session), session);
 			_context = context;
@@ -50,7 +48,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_session = session;
 			_session.FlushMode = FlushMode.Never;
 			_isolationLevel = isolationLevel;
-			_currentPreCommitHooks = currentPreCommitHooks;
 			_transactionHooks = transactionHooks ?? new NoTransactionHooks();
 			_filterManager = new NHibernateFilterManager(session);
 			Interceptor = new Lazy<AggregateRootInterceptor>(() => (AggregateRootInterceptor) _session.GetSessionImplementation().Interceptor);
@@ -98,7 +95,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			try
 			{
-				_currentPreCommitHooks.Current().ForEach(x => x.BeforeCommit(Interceptor.Value.ModifiedRoots));
 				Interceptor.Value.Iteration = InterceptorIteration.Normal;
 				Session.Flush();
 				Interceptor.Value.Iteration = InterceptorIteration.UpdateRoots;
