@@ -13,6 +13,8 @@
 		vm.translations.From = $translate.instant('DateFrom');
 		vm.translations.To = $translate.instant('DateTo');
 		vm.pageSizeOptions = [20, 50, 100, 200];
+		vm.sitesAndTeams = [];
+
 		vm.paging = {
 			pageSize: 20,
 			pageNumber: 1,
@@ -49,11 +51,17 @@
 			loggedonUsersTeamId.resolve(null);
 		}
 
-		vm.sitesAndTeamsAsync = function () {
+		vm.getSitesAndTeamsAsync = function () {
 			vm._sitesAndTeamsPromise = vm._sitesAndTeamsPromise || $q(function (resolve, reject) {
-				var date = moment().format('YYYY-MM-DD');
-				requestsDataService.hierarchy(date).then(function (data) {
+				var params = {};
+				if (toggleService.Wfm_HideUnusedTeamsAndSites_42690) {
+					params = vm.period;
+				} else {
+					params.date = moment().format('YYYY-MM-DD');
+				}
+				requestsDataService.hierarchy(params).then(function (data) {
 					resolve(data);
+					vm.sitesAndTeams = data.Children;
 					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 				});
 			});
@@ -157,6 +165,7 @@
 			};
 			vm.absencePeriod = defaultDateRange;
 			vm.shiftTradePeriod = defaultDateRange;
+			vm.period = defaultDateRange;
 			periodForAbsenceRequest = defaultDateRange;
 			periodForShiftTradeRequest = defaultDateRange;
 
@@ -167,11 +176,12 @@
 			vm.disableInteraction = false;
 			vm.onProcessWaitlistFinished = onProcessWaitlistFinished;
 			vm.onApproveBasedOnBusinessRulesFinished = onApproveBasedOnBusinessRulesFinished;
-
+			vm.getSitesAndTeamsAsync();
 			setReleaseNotification();
+
 		}
 
-		function setReleaseNotification(){
+		function setReleaseNotification() {
 			if (toggleService.Wfm_Requests_PrepareForRelease_38771) {
 				var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
 					.replace('{0}', $translate.instant('Requests'))
@@ -271,7 +281,7 @@
 			vm.period = isShiftTradeViewActive() ? vm.shiftTradePeriod : vm.absencePeriod;
 		});
 
-		$scope.$watch(function() {
+		$scope.$watch(function () {
 			return vm.period;
 		}, function (newValue) {
 			$scope.$evalAsync(function () {

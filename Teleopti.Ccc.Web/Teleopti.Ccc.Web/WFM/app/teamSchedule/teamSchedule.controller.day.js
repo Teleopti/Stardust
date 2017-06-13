@@ -28,7 +28,7 @@
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.availableTimezones = [];
 		vm.availableGroups = [];
-
+		vm.sitesAndTeams = undefined;
 		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
 
@@ -401,18 +401,19 @@
 			loggedonUsersTeamId.resolve(null);
 		}
 
-		vm.sitesAndTeamsAsync = function () {
+		vm.getSitesAndTeamsAsync = function () {
 			vm._sitesAndTeamsPromise = vm._sitesAndTeamsPromise || $q(function (resolve, reject) {
 				var date = moment(vm.scheduleDate).format('YYYY-MM-DD');
 				teamScheduleSvc.hierarchy(date)
 					.then(function (data) {
 						resolve(data);
+						vm.sitesAndTeams = data.Children;
 						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 					});
 			});
 			return vm._sitesAndTeamsPromise;
 		};
-
+		vm.getSitesAndTeamsAsync();
 		$q.all(asyncData).then(function init(data) {
 			if (data.pageSetting.Agents > 0) {
 				vm.paginationOptions.pageSize = data.pageSetting.Agents;

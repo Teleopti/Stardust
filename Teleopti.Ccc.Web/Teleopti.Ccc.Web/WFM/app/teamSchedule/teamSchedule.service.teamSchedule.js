@@ -2,13 +2,19 @@
 	"use strict";
 
 	angular.module("wfm.teamSchedule").service("TeamSchedule", [
-		"$resource", "$q", '$http', TeamScheduleService]);
+		"$resource", "$q", '$http', 'Toggle', TeamScheduleService]);
 
-	function TeamScheduleService($resource, $q, $http) {
+	function TeamScheduleService($resource, $q, $http, toggles) {
 
 		var service = this;	
 		var searchDayViewScheduleUrl = '../api/TeamSchedule/SearchSchedules';
-		var hierarchyUrl = '../api/TeamScheduleData/FetchPermittedTeamHierachy';
+		var hierarchyUrl;
+
+		if (toggles.Wfm_HideUnusedTeamsAndSites_42690) {
+			hierarchyUrl = '../api/TeamScheduleData/GetOrganizationWithPeriod';
+		} else {
+			hierarchyUrl = '../api/TeamScheduleData/FetchPermittedTeamHierachy';
+		}
 
 		service.searchSchedules = searchSchedule;
 

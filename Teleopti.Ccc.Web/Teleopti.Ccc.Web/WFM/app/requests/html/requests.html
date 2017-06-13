@@ -15,7 +15,7 @@
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
 			<organization-picker ng-if="vm.businessHierarchyToggleEnabled"
-				datasource="vm.sitesAndTeamsAsync()"
+				sites-and-teams="vm.sitesAndTeams"
 				on-open="vm.agentSearchOptions.focusingSearch = false"
 				on-close="vm.changeSelectedTeams()"
 				selected-team-ids="vm.selectedTeamIds"

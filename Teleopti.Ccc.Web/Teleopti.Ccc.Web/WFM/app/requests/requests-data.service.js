@@ -20,7 +20,13 @@
 		var resourceCalculateUrl = '../TriggerResourceCalculate';
 		var getBudgetGroupsUrl = "../api/RequestAllowance/budgetGroups";
 		var getBudgetAllowanceUrl = "../api/RequestAllowance/allowances";
-		var hierarchyUrl = '../api/Requests/FetchPermittedTeamHierachy';
+		var hierarchyUrl;
+
+		if (toggleSvc.Wfm_HideUnusedTeamsAndSites_42690) {
+			hierarchyUrl = '../api/Requests/GetOrganizationWithPeriod';
+		} else {
+			hierarchyUrl = '../api/Requests/FetchPermittedTeamHierachy';
+		}
 
 		this.getAllRequestsPromise_old = function (filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
@@ -144,12 +150,12 @@
 			];
 		};
 
-		this.hierarchy = function (dateStr) {
-			if (!dateStr) {
+		this.hierarchy = function (params) {
+			if (!params) {
 				return;
 			}
 			return $q(function (resolve, reject) {
-				$http.get(hierarchyUrl, {params: {date: dateStr}})
+				$http.get(hierarchyUrl, {params: params})
 					.then(function (response) {
 						resolve(response.data);
 					}, function (response) {

@@ -16,7 +16,7 @@
 			bindings: {
 				onOpen: '&?',
 				onClose: '&?',
-				datasource: '&',
+				sitesAndTeams: '<',
 				selectedText: '&?',
 				selectedTeamIds: '<?',
 			}
@@ -37,19 +37,25 @@
 
 		ctrl.longestName = ''
 
+		ctrl.$onChanges = function (changesObj) {
+			if (!!changesObj.sitesAndTeams && changesObj.sitesAndTeams.currentValue !== changesObj.sitesAndTeams.previousValue) {
+				if (!angular.isArray(changesObj.sitesAndTeams.currentValue))
+					return
+				searchCache = {}
+				populateGroupListAndNamemapAndFindLongestName(changesObj.sitesAndTeams.currentValue)
+				ctrl.orgsInView = ctrl.searchForOrgsByName('')
+			}
+		}
+
 		ctrl.$onInit = function () {
 			var menuPosition = $mdPanel.newPanelPosition().relativeTo($element).addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW)
 
 			if (!ctrl.selectedText)
 				ctrl.selectedText = ctrl.defaultSelectedTextFn
 
-			var afterViewDataIsReady = $q.when(ctrl.datasource()).then(function (data) {
-				populateGroupListAndNamemapAndFindLongestName(data.Children)
-				if (!angular.isArray(ctrl.selectedTeamIds)) {
-					ctrl.selectedTeamIds = []
-				}
-				ctrl.orgsInView = ctrl.searchForOrgsByName('')
-			})
+			if (!angular.isArray(ctrl.selectedTeamIds)) {
+				ctrl.selectedTeamIds = []
+			}
 
 			ctrl.menuRef = $mdPanel.create({
 				contentElement: $element.find('orgpicker-menu'),
@@ -66,9 +72,7 @@
 					}
 
 					// upon opening the menu, synchronise selected teams:
-					afterViewDataIsReady.then(function () {
-						ctrl.updateSelectedTeamsInView()
-					})
+					ctrl.updateSelectedTeamsInView()
 
 					if (ctrl.onOpen)
 						ctrl.onOpen()
