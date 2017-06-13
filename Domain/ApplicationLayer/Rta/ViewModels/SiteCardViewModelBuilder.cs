@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 
@@ -15,17 +14,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly INow _now;
 		private readonly ITeamCardReader _teamCardReader;
 		private readonly ICurrentAuthorization _authorization;
-		private readonly INumberOfAgentsInSiteReader _numberOfAgentsInSiteReader;
 
 		public SiteCardViewModelBuilder(
 			ITeamCardReader teamCardReader,
-			INumberOfAgentsInSiteReader numberOfAgentsInSiteReader,
 			ICurrentAuthorization authorization,
 			INow now
 			)
 		{
 			_teamCardReader = teamCardReader;
-			_numberOfAgentsInSiteReader = numberOfAgentsInSiteReader;
 			_authorization = authorization;
 			_now = now;
 		}
