@@ -69,7 +69,16 @@
 
 			$http.post(updateCampaignProductionPlanUrl, postData).
 			success(function(campaignData) {
-				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
+				if (successCb != null) {
+					var data = {
+						graphData: self.buildGraphDataSeqs(campaignData),
+						rawManualPlan: campaignData.IsManualPlanned,
+						manualBacklog: campaignData.IsActualBacklog,
+						closedDays: campaignData.IsCloseDays,
+						translations: self.dictionary
+					};
+					successCb(data);
+				}
 			}).
 			error(function(e) {
 				if (errorCb != null) errorCb(e);
@@ -93,7 +102,7 @@
 		}
 
 		function getCampaignVisualization(campaignId, successCb, errorCb) {
-			$http.get(getCampaignVisualizationUrl + campaignId).success(function(campaignData) {
+			$http.get(getCampaignVisualizationUrl + campaignId).success(function (campaignData) {
 				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), self.dictionary, campaignData.IsManualPlanned, campaignData.IsCloseDays, campaignData.IsActualBacklog);
 			}).error(function(e) {
 				if (errorCb != null) errorCb(e);

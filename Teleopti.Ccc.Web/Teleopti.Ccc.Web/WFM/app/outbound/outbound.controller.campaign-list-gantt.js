@@ -264,7 +264,13 @@
 		function getCommandCallback(campaign, dataRow, scope) {
 			return function(resp, done, ignoredDates, hasSchedulesIgnored) {
 				dataRow.isRefreshingData = true;
-				getGraphData(campaign,
+				campaign.graphData = resp.graphData;
+				campaign.rawManualPlan = resp.rawManualPlan;
+				campaign.isManualBacklog = resp.manualBacklog;
+				campaign.closedDays = resp.closedDays;
+				campaign.translations = resp.translations;
+
+				updateCampaign(campaign,
 					function () {
 						if(hasSchedulesIgnored){
 							ignoreSchedulesOnDates(ignoredDates, campaign);
@@ -276,6 +282,14 @@
 						if (done) done();
 					});
 			};
+		}
+
+		function updateCampaign(campaign, done) {
+			outboundService.getCampaignStatus(campaign.Id, function (campaignStatus) {
+				angular.extend(campaign, campaignStatus);
+				updateSingleCampaignGanttDisplay(campaignStatus);
+				if (done) done();
+			});
 		}
 
 		function getGraphData(campaign, done) {

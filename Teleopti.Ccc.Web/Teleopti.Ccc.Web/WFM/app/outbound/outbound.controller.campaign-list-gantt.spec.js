@@ -343,23 +343,23 @@ describe('OutboundSummaryCtrl', function() {
 		var hasSchedulesIgnored = true;
 
 		test.campaign.graphData.schedules[index] = 20;
-		expectedDataRow.callbacks.addManualPlan(null, null, ignoredDates, hasSchedulesIgnored);
+		expectedDataRow.callbacks.addManualPlan(test.campaign, null, ignoredDates, hasSchedulesIgnored);
 		expect(test.campaign.graphData.schedules[index]).toEqual(0);
 
 		test.campaign.graphData.schedules[index] = 20;
-		expectedDataRow.callbacks.removeManualPlan(null, null, ignoredDates, hasSchedulesIgnored);
+		expectedDataRow.callbacks.removeManualPlan(test.campaign, null, ignoredDates, hasSchedulesIgnored);
 		expect(test.campaign.graphData.schedules[index]).toEqual(0);
 
 		test.campaign.graphData.schedules[index] = 20;
-		expectedDataRow.callbacks.addManualBacklog(null, null, ignoredDates, hasSchedulesIgnored);
+		expectedDataRow.callbacks.addManualBacklog(test.campaign, null, ignoredDates, hasSchedulesIgnored);
 		expect(test.campaign.graphData.schedules[index]).toEqual(0);
 
 		test.campaign.graphData.schedules[index] = 20;
-		expectedDataRow.callbacks.removeManualBacklog(null, null, ignoredDates, hasSchedulesIgnored);
+		expectedDataRow.callbacks.removeManualBacklog(test.campaign, null, ignoredDates, hasSchedulesIgnored);
 		expect(test.campaign.graphData.schedules[index]).toEqual(0);
 
 		test.campaign.graphData.schedules[index] = 20;
-		expectedDataRow.callbacks.replan(null, null, ignoredDates, hasSchedulesIgnored);
+		expectedDataRow.callbacks.replan(test.campaign, null, ignoredDates, hasSchedulesIgnored);
 		expect(test.campaign.graphData.schedules[index]).toEqual(0);
 	});
 
