@@ -14,7 +14,7 @@
 			</div>
 		</div>
 		<div class="fab-wrapper">
-			<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'hidden-visibility': vm.selectedItemIds.length < 1, 'grow-out': vm.selectedItemIds.length > 0}"
+			<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'invisible': vm.selectedItemIds.length < 1, 'grow-out': vm.selectedItemIds.length > 0}"
 			 ng-click="vm.openSelectedItems()">
 				<i class="mdi mdi-arrow-right"></i>
 				<md-tooltip>{{'Open'|translate}}</md-tooltip>
