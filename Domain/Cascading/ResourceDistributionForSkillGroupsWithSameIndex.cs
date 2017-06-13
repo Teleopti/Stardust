@@ -21,12 +21,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		protected virtual IDictionary<CascadingSkillGroup, double> init(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
 			var tottiRemainingResources = skillGroupsWithSameIndex.Sum(x => x.RemainingResources);
-			var ret = new Dictionary<CascadingSkillGroup, double>();
-			foreach (var skillGroup in skillGroupsWithSameIndex)
-			{
-				ret[skillGroup] = skillGroup.RemainingResources / tottiRemainingResources; //do we still need to check for double.IsNaN(myFactor) here? no?
-			}
-			return ret;
+			return skillGroupsWithSameIndex.ToDictionary(skillGroup => skillGroup, skillGroup => skillGroup.RemainingResources / tottiRemainingResources);
 		}
 
 		public double For(CascadingSkillGroup skillGroup)
