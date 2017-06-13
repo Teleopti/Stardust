@@ -214,6 +214,7 @@
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelBatchTest.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\UpdateAgentStateReadModelShiftMeetingTest.cs" />
     <Compile Include="ApplicationLayer\Rta\StateQueue\QueueTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\OrganizationViewModelBuilderPermissionTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModelBuilderPermissionTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\AgentStateNameTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentStateViewModelBuilder\ExcludePhoneStateTest.cs" />
