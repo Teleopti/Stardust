@@ -12,17 +12,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class PersonSelectorReadOnlyRepository : IPersonSelectorReadOnlyRepository
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public PersonSelectorReadOnlyRepository(IUnitOfWorkFactory unitOfWorkFactory)
+		public PersonSelectorReadOnlyRepository(ICurrentUnitOfWork unitOfWork)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_unitOfWork = unitOfWork;
 		}
 
 		public IList<IPersonSelectorOrganization> GetOrganization(DateOnlyPeriod dateOnlyPeriod, bool loadUsers)
 		{
 			int cultureId = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
-			return _unitOfWorkFactory.Session().CreateSQLQuery(
+			return _unitOfWork.Session().CreateSQLQuery(
 					  "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate,@enddate=:enddate, @bu=:bu, @users=:users, @culture=:culture, @optionalColumnId=:optionalColumnId")
 					  .SetString("type", "Organization")
 				.SetDateOnly("ondate", dateOnlyPeriod.StartDate)
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IPersonSelectorOrganization> GetOrganizationForWeb(DateOnlyPeriod dateOnlyPeriod)
 		{
 			
-			return _unitOfWorkFactory.Session().CreateSQLQuery(
+			return _unitOfWork.Session().CreateSQLQuery(
 					"exec ReadModel.LoadOrganizationForSelector_Web @ondate=:ondate,@enddate=:enddate, @bu=:bu")
 				.SetDateOnly("ondate", dateOnlyPeriod.StartDate)
 				.SetDateOnly("enddate", dateOnlyPeriod.EndDate)
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IPersonSelectorBuiltIn> GetBuiltIn(DateOnlyPeriod dateOnlyPeriod, PersonSelectorField loadType, Guid optionalColumnId)
 		{
 			int cultureId = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
-			return _unitOfWorkFactory.Session().CreateSQLQuery(
+			return _unitOfWork.Session().CreateSQLQuery(
 					  "exec ReadModel.LoadOrganizationForSelector @type=:type,  @ondate=:ondate,@enddate=:enddate, @bu=:bu, @users=:users, @culture=:culture, @optionalColumnId=:optionalColumnId")
 					  .SetString("type", loadType.ToString())
 				.SetDateOnly("ondate", dateOnlyPeriod.StartDate)
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList<IPersonSelectorUserDefined> GetUserDefinedTab(DateOnly onDate, Guid value)
 		{
 			int cultureId = TeleoptiPrincipal.CurrentPrincipal.Regional.UICulture.LCID;
-			return _unitOfWorkFactory.Session().CreateSQLQuery(
+			return _unitOfWork.Session().CreateSQLQuery(
 					  "exec ReadModel.LoadUserDefinedTab @tabid=:tabid, @bu=:bu,  @ondate=:ondate, @culture=:culture")
 					  .SetGuid("tabid", value)
 				.SetGuid("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IUserDefinedTabLight> GetUserDefinedTabs()
 		{
-			return _unitOfWorkFactory.Session().CreateSQLQuery(
+			return _unitOfWork.Session().CreateSQLQuery(
 					  "SELECT Id, Name FROM GroupPage WHERE IsDeleted = 0 AND BusinessUnit = :bu")
 				.SetGuid("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 					  .SetResultTransformer(Transformers.AliasToBean(typeof(UserDefinedTabLight)))
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IUserDefinedTabLight> GetOptionalColumnTabs()
 		{
-			return _unitOfWorkFactory.Session().CreateSQLQuery(
+			return _unitOfWork.Session().CreateSQLQuery(
 						 "SELECT Id, Name FROM OptionalColumn WHERE AvailableAsGroupPage = 1 AND BusinessUnit = :bu")
 				.SetGuid("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 						 .SetResultTransformer(Transformers.AliasToBean(typeof(UserDefinedTabLight)))

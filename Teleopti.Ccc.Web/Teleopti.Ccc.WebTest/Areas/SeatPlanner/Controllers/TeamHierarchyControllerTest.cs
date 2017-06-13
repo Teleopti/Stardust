@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 		private IBusinessUnitRepository businessUnitRepository;
 		private ICurrentBusinessUnit currentBusinessUnit;
 		private FakeLoggedOnUser loggedOnUser;
+		public IPersonSelectorReadOnlyRepository PersonSelectorReadOnlyRepository;
 
 		[SetUp]
 		public void Setup()
@@ -51,7 +52,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 
 			siteRepository.Stub(x => x.LoadAll()).Return(new List<ISite>() { site });
 
-			ITeamsProvider teamsProvider = new TeamsProvider(siteRepository, currentBusinessUnit, new Global.FakePermissionProvider(), loggedOnUser,new PersonSelectorReadOnlyRepository(new FakeUnitOfWorkFactory()));
+			ITeamsProvider teamsProvider = new TeamsProvider(siteRepository, currentBusinessUnit, new Global.FakePermissionProvider(), loggedOnUser,
+				PersonSelectorReadOnlyRepository);
 			target = new TeamHierarchyController(teamsProvider);
 
 			var result = target.Get() as dynamic;
