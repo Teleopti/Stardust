@@ -379,6 +379,7 @@
     <Compile Include="DbManagerLog4Net.cs" />
     <Compile Include="LegacyFakeEventPublisher.cs" />
     <Compile Include="MessageBrokerCompositeDummy.cs" />
+    <Compile Include="MultisiteDayExtensions.cs" />
     <Compile Include="ObjectCopyExtension.cs" />
     <Compile Include="FakeRepositories\Rta\FakeAdherencePercentageReadModelPersister.cs" />
     <Compile Include="FakeRepositories\Rta\FakeRtaRuleRepository.cs" />

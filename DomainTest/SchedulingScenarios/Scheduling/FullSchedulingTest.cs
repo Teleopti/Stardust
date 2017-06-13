@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeAgentDayScheduleTagRepository AgentDayScheduleTagRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
+		public FakeMultisiteDayRepository MultisiteDayRepository;
 		public ISchedulerStateHolder StateHolder;
 
 
@@ -136,18 +137,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("44700")]
 		public void ShouldUseMultisiteSkills()
 		{
 			/* Robin - how should the multisiteskill API be used?
 			 * (letters below)
-			 * A = Should multisiteskill have explicitly set color, interval length and or skilltype? If so, remove it from ChildSkill?
-			 * B = Should childskill have explicitly set color, interval length and or skilltype? If so, remove it from MultisiteSkill? 
-			 * C = Should multisiteskill have activity explicitly set? If so, remove it from childskill?
-			 * D = Should childskill have activity explicitly set? If so, remove it from multisiteskill?
-			 * E = Agents know childskills and not multisiteskills - right? If so, don't allow multisiteskills as person skills?
-			 * F = Forecasts are created for multisiteskills and not child skills - right? If so, don't allow forecasts based on childskills?
-			 * G = Are workloads belonging to multisiteskills and not child skills? If so, don't allow workloads on childskills?
+			 * A = Should multisiteskill have explicitly set color, interval length and or skilltype? If so, remove it from ChildSkill? - True
+			 * B = Should childskill have explicitly set color, interval length and or skilltype? If so, remove it from MultisiteSkill? - False
+			 * C = Should multisiteskill have activity explicitly set? If so, remove it from childskill? - True
+			 * D = Should childskill have activity explicitly set? If so, remove it from multisiteskill? - False
+			 * E = Agents know childskills and not multisiteskills - right? If so, don't allow multisiteskills as person skills? - True
+			 * F = Forecasts are created for multisiteskills and not child skills - right? If so, don't allow forecasts based on childskills? <- A bit more complicated
+			 * G = Are workloads belonging to multisiteskills and not child skills? If so, don't allow workloads on childskills? - True
 			 */
 
 			DayOffTemplateRepository.Add(new DayOffTemplate());
@@ -158,13 +158,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			multisiteSkill.Activity = activity; //C
 			SkillRepository.Has(multisiteSkill);
 			var childSkill =  new ChildSkill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)).WithId(); //B
+			childSkill.SetParentSkill(multisiteSkill);
 			childSkill.Activity = activity; //D
 			multisiteSkill.AddChildSkill(childSkill);
 			var scenario = ScenarioRepository.Has("some name");
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
 			PersonRepository.Has(new ContractWithMaximumTolerance(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, childSkill); //E
 			SkillDayRepository.Has(multisiteSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1)); //F
-
+			SkillDayRepository.Has(childSkill.CreateChildSkillDays(scenario, firstDay, 7));
+			MultisiteDayRepository.Has(multisiteSkill.CreateMultisiteDays(scenario,firstDay,7));
+			
 			Target.DoScheduling(DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1));
 
 			AssignmentRepository.LoadAll().Count(x => x.MainActivities().Any())

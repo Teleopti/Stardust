@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			FillAgents(schedulerStateHolderTo, agentsInIsland, period);
 			removeUnwantedAgents(schedulerStateHolderTo, agentsInIsland);
 			var skills = skillsToUse(schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period, onlyUseSkills);
+			skills = includeParentMultisiteSkills(skills);
 			FillSkillDays(schedulerStateHolderTo, scenario, skills, period);
 			removeUnwantedSkillsAndSkillDays(schedulerStateHolderTo, skills);
 			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
@@ -34,6 +35,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.AllPermittedPersons, period);
 			setLocks(schedulerStateHolderTo, gridLockManager, locks);
 			schedulerStateHolderTo.ResetFilteredPersons();
+		}
+
+		private IEnumerable<ISkill> includeParentMultisiteSkills(IEnumerable<ISkill> skills)
+		{
+			var childSkills = skills.OfType<IChildSkill>();
+			var multisiteSkills = childSkills.Select(c => c.ParentSkill).Distinct();
+			return skills.Concat(multisiteSkills);
 		}
 
 		private static void setLocks(ISchedulerStateHolder schedulerStateHolderTo, IGridlockManager gridlockManager, IEnumerable<LockInfo> locks)

@@ -70,6 +70,24 @@ namespace Teleopti.Ccc.TestCommon
 			return setupSkillDay(skill, scenario, dateOnly, skillDataPeriods);
 		}
 
+		public static ISkillDay[] CreateChildSkillDays(this IChildSkill skill, IScenario scenario, DateOnly dateOnly, ushort numberOfSkillDays)
+		{
+			var skillDays = Enumerable.Range(0, numberOfSkillDays).Select(d =>
+			{
+				var date = dateOnly.AddDays(d);
+				var dateOnlyPeriod = date.ToDateOnlyPeriod();
+				var skillDataPeriod = new SkillDataPeriod(ServiceAgreement.DefaultValues(), new SkillPersonData(),
+						dateOnlyPeriod.ToDateTimePeriod(skill.TimeZone));
+
+				var skillDataPeriods = new[] { skillDataPeriod };
+				var skillDay = new SkillDay(date, skill, scenario, Enumerable.Empty<IWorkloadDay>(), skillDataPeriods).WithId();
+				skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new List<ISkillDay> { skillDay }, dateOnly.ToDateOnlyPeriod());
+				return skillDay;
+			});
+			var calculator = new SkillDayCalculator(skill,skillDays,dateOnly.ToDateOnlyPeriod());
+			return calculator.SkillDays.ToArray();
+		}
+
 		private static ISkillDay setupSkillDay(ISkill skill, IScenario scenario, DateOnly dateOnly, IEnumerable<ISkillDataPeriod> skillDataPeriods)
 		{
 			var workloadDays = new List<IWorkloadDay>();
