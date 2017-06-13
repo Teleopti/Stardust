@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
@@ -420,6 +421,56 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 					.Period.ElapsedTime()
 					.Should()
 					.Be.EqualTo(TimeSpan.FromHours(8));
+		}
+
+		[Test]
+		[Ignore("44671 - to be fixed")]
+		public void ShouldNotMoveDayOffWhenBreakingKeepRotation()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = new Activity("_");
+			var skill = new Skill().For(activity).IsOpen();
+			var scenario = new Scenario("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var dayOffTemplate = new DayOffTemplate();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var team = new Team { Site = new Site("_") };
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill).WithSchedulePeriodOneWeek(firstDay);
+			agent.SchedulePeriod(firstDay).SetDaysOff(1);
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				5,
+				1,
+				5,
+				5,
+				5,
+				25,
+				5);
+			
+			var asses = Enumerable.Range(0, 7).Select(i => new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
+			asses[5].SetDayOff(dayOffTemplate); //saturday
+			var stateHolder = SchedulerStateHolder.Fill(scenario, period, new[] { agent }, asses, skillDays);
+			var scheduleRange = (ScheduleRange) stateHolder.Schedules[agent];
+			for (var i = 0; i < 7; i++)
+			{
+				var rotationRestriction = new RotationRestriction();
+
+				if (i == 5)
+					rotationRestriction.DayOffTemplate = dayOffTemplate;	
+				else
+					rotationRestriction.ShiftCategory = shiftCategory;
+
+				scheduleRange.Add(new ScheduleDataRestriction(agent, rotationRestriction, firstDay.AddDays(i)));
+			}
+			var optPrefs = new OptimizationPreferences
+			{
+				General = {ScheduleTag = new ScheduleTag(), UseRotations = true, RotationsValue = 0.9}
+			};
+
+			Target.Execute(period, new[] { agent }, new NoSchedulingProgress(), optPrefs, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
+
+			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(5)).HasDayOff()
+				.Should().Be.True();//saturday
 		}
 	}
 }
