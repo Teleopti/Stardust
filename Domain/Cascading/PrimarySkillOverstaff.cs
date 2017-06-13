@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -44,8 +45,27 @@ namespace Teleopti.Ccc.Domain.Cascading
 				dic.Add(skillGroupsWithSameIndex.First().PrimarySkills.First(), resources);
 			}
 
+			return CreateState(shovelResourceData, skillGroupsWithSameIndex, interval, dic, primarySkillsExistsButTheyAreAllClosed);
+		}
+
+		[RemoveMeWithToggle("just copy method impl above", Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156)]
+		protected virtual ShovelResourcesState CreateState(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex,
+			DateTimePeriod interval, Dictionary<ISkill, double> dic, bool primarySkillsExistsButTheyAreAllClosed)
+		{
 			return new ShovelResourcesState(dic,
-				new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval),
+					new ResourceDistributionForSkillGroupsWithSameIndex(shovelResourceData, skillGroupsWithSameIndex, interval),
+					!primarySkillsExistsButTheyAreAllClosed);
+		}
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156)]
+	public class PrimarySkillOverstaffOLD : PrimarySkillOverstaff
+	{
+		protected override ShovelResourcesState CreateState(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex,
+			DateTimePeriod interval, Dictionary<ISkill, double> dic, bool primarySkillsExistsButTheyAreAllClosed)
+		{
+			return new ShovelResourcesState(dic,
+				new ResourceDistributionForSkillGroupsWithSameIndexOLD(shovelResourceData, skillGroupsWithSameIndex, interval),
 				!primarySkillsExistsButTheyAreAllClosed);
 		}
 	}
