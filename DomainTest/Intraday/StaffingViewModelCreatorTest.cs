@@ -46,17 +46,13 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ShouldUseSpecifiecDateTimePeriod()
-		{
-			TimeZone.IsSweden();
-
-		[Test]
 		public void ShouldUseSpecifiedDayOffset()
 		{
 			TimeZone.IsSweden();
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 
-			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false, 0);
+			var act = ActivityRepository.Has("act");
+			var skill = SkillSetupHelper.CreateSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false, act);
 			SkillRepository.Has(skill);
 
 			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime().AddDays(1), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues());
@@ -73,6 +69,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ForecastedStaffing.Last().Should().Be.GreaterThan(0d);
 			vm.StaffingHasData.Should().Be.EqualTo(true);
 		}
+
+		[Test]
+		public void ShouldUseSpecifiecDateTimePeriod()
+		{
+			TimeZone.IsSweden();
+
 
 			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));

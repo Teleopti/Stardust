@@ -650,7 +650,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDay);
-			ScheduleForecastSkillReadModelRepository.Persist(scheduledStaffingList, DateTime.MinValue);
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
 
 			var result = Target.Load(new Guid[] { skill.Id.Value }, 1);
 
@@ -660,6 +661,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		}
 
+		private double calculateEsl(IList<SkillCombinationResource> scheduledStaffingList, ISkillDay skillDay, double forecastedCallsSkill, int intervalPosition)
 		{
 			return _staffingCalculatorService.ServiceLevelAchievedOcc(
 				scheduledStaffingList[intervalPosition].Resource,
