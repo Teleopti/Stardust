@@ -213,5 +213,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillDay.SkillStaffPeriodCollection.First().CalculatedResource
 				.Should().Be.EqualTo(1);
 		}
+
+		public ResourceCalculationResultTest(bool resourcePlannerRespectSkillGroupShoveling44156) : base(resourcePlannerRespectSkillGroupShoveling44156)
+		{
+		}
 	}
 }

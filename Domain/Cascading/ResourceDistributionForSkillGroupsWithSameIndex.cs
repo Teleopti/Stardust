@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			var ret = new Dictionary<CascadingSkillGroup, double>();
 			foreach (var skillGroup in skillGroupsWithSameIndex)
 			{
-				ret[skillGroup] = skillGroup.RemainingResources / tootiRemainingResources;
+				ret[skillGroup] = skillGroup.RemainingResources / tootiRemainingResources; //do we still need to check for double.IsNaN(myFactor) here? no?
 			}
 			return ret;
 			*/

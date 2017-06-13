@@ -278,5 +278,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			skillB2Day.SkillStaffPeriodCollection.Last().CalculatedResource
 				.Should().Be.EqualTo(numberOfB2Agents);
 		}
+
+		public CascadingResourceCalculationClosedSkillsTest(bool resourcePlannerRespectSkillGroupShoveling44156) : base(resourcePlannerRespectSkillGroupShoveling44156)
+		{
+		}
 	}
 }

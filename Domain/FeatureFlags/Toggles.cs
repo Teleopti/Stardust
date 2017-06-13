@@ -171,6 +171,7 @@
 		ResourcePlanner_MergeTeamblockClassicScheduling_44289,
 		ResourcePlanner_RemoveBackToLegalStateGui_44333,
 		ResourcePlanner_CalculateShiftValuesInParallel_44681,
+		ResourcePlanner_RespectSkillGroupShoveling_44156,
 
 		Wfm_DisplayOnlineHelp_39402,
 

@@ -36,5 +36,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			ResourceCalculationContext.InContext
 				.Should().Be.False();
 		}
+
+		public CascadingResourceCalculationContextTest(bool resourcePlannerRespectSkillGroupShoveling44156) : base(resourcePlannerRespectSkillGroupShoveling44156)
+		{
+		}
 	}
 }
