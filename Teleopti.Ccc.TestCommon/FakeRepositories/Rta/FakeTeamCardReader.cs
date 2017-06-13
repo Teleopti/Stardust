@@ -73,7 +73,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				    SiteName = @group.First().SiteName,
 					TeamId = @group.Key.Value,
 					TeamName = @group.First().TeamName,
-					InAlarmCount = @group.Count(s => s.IsRuleAlarm && s.AlarmStartTime <= _now.UtcDateTime())
+					InAlarmCount = @group.Count(s => s.IsRuleAlarm && s.AlarmStartTime <= _now.UtcDateTime()),
+					AgentsCount = @group.Count()
 			    })
 			    .ToArray();
 	    }

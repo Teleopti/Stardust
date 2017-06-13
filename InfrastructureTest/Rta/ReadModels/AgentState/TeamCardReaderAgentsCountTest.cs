@@ -35,6 +35,30 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			Target.Read().Single()
 				.AgentsCount.Should().Be(1);
 		}
-		
+
+		[Test]
+		public void ShouldReadAgentsCountForTwoAgents()
+		{
+			var team = Guid.NewGuid();
+			var businessUnitId = BusinessUnit.Current().Id.Value;
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			{
+				BusinessUnitId = businessUnitId,
+				PersonId = Guid.NewGuid(),
+				TeamId = team,
+				TeamName = "team"
+			});
+			Persister.PersistWithAssociation(new AgentStateReadModelForTest
+			{
+				BusinessUnitId = businessUnitId,
+				PersonId = Guid.NewGuid(),
+				TeamId = team,
+				TeamName = "team"
+			});
+
+			Target.Read().Single()
+				.AgentsCount.Should().Be(2);
+		}
+
 	}
 }

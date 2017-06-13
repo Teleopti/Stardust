@@ -56,31 +56,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						{
 							SiteId = site.Key,
 							InAlarmCount = site.Sum(x => x.InAlarmCount),
-							SiteName = site.FirstOrDefault()?.SiteName
+							SiteName = site.FirstOrDefault()?.SiteName,
+							AgentsCount = site.FirstOrDefault().AgentsCount
 
 						})
 					.ToArray();
 
-			var siteIds = sitesInAlarm.Select(x => x.SiteId).ToArray();
-				
-			var numberOfAgentsPerSite = skillIds != null ? 
-				_numberOfAgentsInSiteReader.Read(siteIds, skillIds).ToLookup(x => x.Key, x => x.Value) : 
-				_numberOfAgentsInSiteReader.Read(siteIds).ToLookup(x => x.Key, x => x.Value);
-
 			var result = sitesInAlarm
-				.Select(s =>
+				.Select(s => new SiteCardViewModel
 				{
-					var agentCount = numberOfAgentsPerSite[s.SiteId].FirstOrDefault();
-					return new SiteCardViewModel
-					{
-						Id = s.SiteId,
-						Name = s.SiteName,
-						AgentsCount = agentCount,
-						InAlarmCount = s.InAlarmCount,
-						Color = getColor(s.InAlarmCount, agentCount)
-					};
-				}
-				);
+					Id = s.SiteId,
+					Name = s.SiteName,
+					AgentsCount = s.AgentsCount,
+					InAlarmCount = s.InAlarmCount,
+					Color = getColor(s.InAlarmCount, s.AgentsCount)
+				});
 
 			return result.OrderBy(x => x.Name).ToArray();
 		}

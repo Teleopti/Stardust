@@ -72,7 +72,8 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 						MAX(a.SiteName) as SiteName,
 						MAX(a.TeamName) as TeamName,
 						a.TeamId, 
-						COUNT(DISTINCT CASE WHEN a.AlarmStartTime <= :now THEN a.PersonId END) as InAlarmCount
+						COUNT(DISTINCT CASE WHEN a.AlarmStartTime <= :now THEN a.PersonId END) as InAlarmCount,
+						COUNT(1) as AgentsCount
 						
 					FROM 
 						ReadModel.AgentState AS a WITH(NOLOCK)
@@ -107,12 +108,11 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 					.SetParameterList("skillIds", skillIds)
 					.SetParameter("skillGroupingPageId", _hardcodedSkillGroupingPageId.Get())
 					;
-
-			var teamCardModels = query
+			
+			return query
 				.SetResultTransformer(Transformers.AliasToBean(typeof(TeamCardModel)))
 				.List()
 				.Cast<TeamCardModel>();
-			return teamCardModels.ForEach(x => x.AgentsCount = 1);
 		}
 	}
 }

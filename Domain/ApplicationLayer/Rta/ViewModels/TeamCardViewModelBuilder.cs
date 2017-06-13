@@ -47,28 +47,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 							.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.ServerDate_DontUse(),
 								new TeamAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId, TeamId = x.TeamId}))
 					.ToArray();
-
-
-			var teamIds = teamsInAlarm.Select(x => x.TeamId);
-			var numberOfAgentsPerTeam = skillIds != null ? 
-				_numberOfAgentsInTeamReader.Read(teamIds, skillIds).ToLookup(x => x.Key, x => x.Value) : 
-				_numberOfAgentsInTeamReader.Read(teamIds).ToLookup(x => x.Key, x => x.Value);
-
+			
 			var result = teamsInAlarm
-				.Select(t =>
-					{
-						var agentCount = numberOfAgentsPerTeam[t.TeamId].FirstOrDefault();
-						return new TeamCardViewModel
-						{
-							Id = t.TeamId,
-							Name = t.TeamName,
-							SiteId = siteId,
-							AgentsCount = agentCount,
-							InAlarmCount = t.InAlarmCount,
-							Color = getColor(t.InAlarmCount, agentCount)
-						};
-					}
-				);
+				.Select(t => new TeamCardViewModel
+				{
+					Id = t.TeamId,
+					Name = t.TeamName,
+					SiteId = siteId,
+					AgentsCount = t.AgentsCount,
+					InAlarmCount = t.InAlarmCount,
+					Color = getColor(t.InAlarmCount, t.AgentsCount)
+				});
 
 			return result.OrderBy(x => x.Name).ToArray();
 		}
