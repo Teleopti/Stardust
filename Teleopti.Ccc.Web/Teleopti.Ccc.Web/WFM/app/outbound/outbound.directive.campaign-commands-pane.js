@@ -28,7 +28,6 @@
 		var vm = this;
 
 		vm.ignoreScheduleSwitched = false;
-		vm.hasSchedulesIgnored = false;
 		vm.manualPlanSwitch = false;
 		vm.manualBacklogSwitch = false;
 		vm.isPlanClickedSave = false;
@@ -77,7 +76,6 @@
 			vm.manualPlanSwitch = false;
 			vm.ignoredDates = getIgnoredDates();
 			vm.callbacks.ignoreSchedules(vm.ignoredDates, resetActionFlag);
-			vm.hasSchedulesIgnored = true;
 		};
 
 		function getIgnoredDates() {
@@ -96,7 +94,6 @@
 				function() {
 					vm.ignoredDates = [];
 					resetActionFlag();
-					vm.hasSchedulesIgnored = false;
 				});
 		};
 
@@ -151,7 +148,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.addManualPlan)) {
-					vm.callbacks.addManualPlan(response, callbackDone, vm.ignoredDates, vm.hasSchedulesIgnored);
+					vm.callbacks.addManualPlan(response, callbackDone);
 				} else {
 					callbackDone();
 				}
@@ -169,7 +166,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function(response) {
 				if (angular.isDefined(vm.callbacks.removeManualPlan)) {
-					vm.callbacks.removeManualPlan(response, callbackDone, vm.ignoredDates, vm.hasSchedulesIgnored);
+					vm.callbacks.removeManualPlan(response, callbackDone);
 				} else {
 					callbackDone();
 				}
@@ -190,7 +187,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.addManualBacklog)) {
-					vm.callbacks.addManualBacklog(response, callbackDone, vm.ignoredDates, vm.hasSchedulesIgnored);
+					vm.callbacks.addManualBacklog(response, callbackDone);
 				} else {
 					callbackDone();
 				}
@@ -208,7 +205,7 @@
 					ignoredDates: vm.ignoredDates
 				}, function(response) {
 					if (angular.isDefined(vm.callbacks.removeManualBacklog)) {
-						vm.callbacks.removeManualBacklog(response, callbackDone, vm.ignoredDates, vm.hasSchedulesIgnored);
+						vm.callbacks.removeManualBacklog(response, callbackDone);
 					} else {
 						callbackDone();
 					}
@@ -222,7 +219,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.replan)) {
-					vm.callbacks.replan(response, callbackDone, vm.ignoredDates, vm.hasSchedulesIgnored);
+					vm.callbacks.replan(response, callbackDone);
 				} else {
 					callbackDone();
 				}

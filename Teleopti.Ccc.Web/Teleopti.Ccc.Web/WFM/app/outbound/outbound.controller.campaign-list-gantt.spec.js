@@ -333,39 +333,6 @@ describe('OutboundSummaryCtrl', function() {
 		expect(expectedDataRow.campaign.ignoredDates[3]).toEqual(undefined);
 	});
 
-	it('should keep ignoring schedules after command callbacks', function() {
-		var test = setUpTarget();
-		initDataForIgnore(test);
-		test.scope.campaignClicked(null, {
-			id: test.campaign.Id
-		});
-		test.campaign.selectedDates = ['2017-06-07'];
-		var expectedDataRow = test.scope.ganttData[1];
-		var index = test.campaign.graphData.dates.indexOf(test.campaign.selectedDates[0]);
-		var ignoredDates = test.campaign.selectedDates;
-		var hasSchedulesIgnored = true;
-
-		test.campaign.graphData.schedules[index] = 20;
-		expectedDataRow.callbacks.addManualPlan(test.campaign, null, ignoredDates, hasSchedulesIgnored);
-		expect(test.campaign.graphData.schedules[index]).toEqual(0);
-
-		test.campaign.graphData.schedules[index] = 20;
-		expectedDataRow.callbacks.removeManualPlan(test.campaign, null, ignoredDates, hasSchedulesIgnored);
-		expect(test.campaign.graphData.schedules[index]).toEqual(0);
-
-		test.campaign.graphData.schedules[index] = 20;
-		expectedDataRow.callbacks.addManualBacklog(test.campaign, null, ignoredDates, hasSchedulesIgnored);
-		expect(test.campaign.graphData.schedules[index]).toEqual(0);
-
-		test.campaign.graphData.schedules[index] = 20;
-		expectedDataRow.callbacks.removeManualBacklog(test.campaign, null, ignoredDates, hasSchedulesIgnored);
-		expect(test.campaign.graphData.schedules[index]).toEqual(0);
-
-		test.campaign.graphData.schedules[index] = 20;
-		expectedDataRow.callbacks.replan(test.campaign, null, ignoredDates, hasSchedulesIgnored);
-		expect(test.campaign.graphData.schedules[index]).toEqual(0);
-	});
-
 	it('should not call get campaigns more than once', function () {
 		var test = setUpTarget();
 		test.target.init();

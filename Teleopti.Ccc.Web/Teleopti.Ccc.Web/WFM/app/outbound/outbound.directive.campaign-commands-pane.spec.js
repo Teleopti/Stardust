@@ -289,7 +289,6 @@ describe('Outbound campaign commands pane tests ', function() {
 		expect(target.vm.ignoredDates[1]).toEqual(expectedIgnoredDates[1]);
 
 		expect(!target.vm.showIgnoreSchedulesButton()).toEqual(true);
-		expect(target.vm.hasSchedulesIgnored).toEqual(true);
 	});
 
 

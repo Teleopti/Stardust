@@ -264,7 +264,7 @@
 		}
 
 		function getCommandCallback(campaign, dataRow, scope) {
-			return function(resp, done, ignoredDates, hasSchedulesIgnored) {
+			return function(resp, done) {
 				dataRow.isRefreshingData = true;
 				campaign.graphData = resp.graphData;
 				campaign.rawManualPlan = resp.rawManualPlan;
@@ -274,9 +274,6 @@
 
 				updateCampaign(campaign,
 					function () {
-						if(hasSchedulesIgnored){
-							ignoreSchedulesOnDates(ignoredDates, campaign);
-						}
 						scope.$broadcast('campaign.chart.refresh', campaign);
 						$scope.$broadcast('campaign.chart.clear.selection', campaign);
 						dataRow.isRefreshingData = false;
