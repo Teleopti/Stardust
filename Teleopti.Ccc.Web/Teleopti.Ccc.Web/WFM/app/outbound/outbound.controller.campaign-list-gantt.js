@@ -106,10 +106,12 @@
 		function addPeriodStartChangeWatch() {
 			$scope.$watch(function () {
 				return $scope.settings.periodStart.getFullYear() + $scope.settings.periodStart.getMonth();
-			}, function () {
+			}, function (newValue, oldValue) {
+				if (newValue === oldValue)
+					return;
 				$scope.$storage.visualizationPeriodStart = $scope.settings.periodStart;
 
-				$q.all([loadExtraScheduleDataPromise(), renderGanttChartPromise()]).then(refreshGantt);
+				$q.all([loadExtraScheduleDataPromise()]).then(refreshGantt);
 
 			});
 		}

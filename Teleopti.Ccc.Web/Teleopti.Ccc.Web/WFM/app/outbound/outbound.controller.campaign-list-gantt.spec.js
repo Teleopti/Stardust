@@ -8,10 +8,13 @@ describe('OutboundSummaryCtrl', function() {
 		outboundChartService,
 		stateService,
 		toggleSvc,
-		miscService;
+		miscService,
+		getCampaignsCount;
 
 	beforeEach(function() {
 		module('wfm.outbound');
+
+		getCampaignsCount = 0;
 
 		outboundService = new fakeOutboundService();
 
@@ -363,6 +366,24 @@ describe('OutboundSummaryCtrl', function() {
 		expect(test.campaign.graphData.schedules[index]).toEqual(0);
 	});
 
+	it('should not call get campaigns more than once', function () {
+		var test = setUpTarget();
+		test.target.init();
+		test.scope.$apply();
+		expect(getCampaignsCount).toEqual(1);
+	});
+
+	it('should not call get campaigns more than once when changing date', function () {
+		var test = setUpTarget();
+		test.target.init();
+		test.scope.$apply();
+		getCampaignsCount = 0;
+		test.scope.settings.periodStart.setDate(test.scope.settings.periodStart.getDate() + 32);
+		test.scope.$apply();
+
+		expect(getCampaignsCount).toEqual(1);
+	});
+
 	function setUpTarget() {
 		var scope = $rootScope.$new();
 
@@ -460,7 +481,8 @@ describe('OutboundSummaryCtrl', function() {
 			ganttVisualization.push(ganttV);
 		};
 
-		this.getCampaigns = function(ganttPeriod, cb) {
+		this.getCampaigns = function (ganttPeriod, cb) {
+			getCampaignsCount++;
 			cb(ganttVisualization);
 		};
 
@@ -484,9 +506,13 @@ describe('OutboundSummaryCtrl', function() {
 			listCampaign.push(listCampaigns);
 		};
 
-		this.updateCampaignsStatus = function(cb) {
+		this.updateCampaignsStatus = function (ganttPeriod,cb) {
 			cb(listCampaign);
 		};
+
+		this.updateCampaignSchedule = function(ganttPeriod, cb) {
+			cb();
+		}
 
 		this.loadWithinPeriod = function() {};
 
