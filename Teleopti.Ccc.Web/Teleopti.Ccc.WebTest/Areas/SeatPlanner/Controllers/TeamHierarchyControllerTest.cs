@@ -14,7 +14,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Controllers;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 {
@@ -26,13 +25,11 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 		private IBusinessUnitRepository businessUnitRepository;
 		private ICurrentBusinessUnit currentBusinessUnit;
 		private FakeLoggedOnUser loggedOnUser;
-		public IPersonSelectorReadOnlyRepository PersonSelectorReadOnlyRepository;
 
 		[SetUp]
 		public void Setup()
 		{
 			siteRepository = MockRepository.GenerateMock<ISiteRepository>();
-
 			var bu1 = BusinessUnitFactory.BusinessUnitUsedInTest;
 			businessUnitRepository = MockRepository.GenerateMock<IBusinessUnitRepository>();
 			currentBusinessUnit = MockRepository.GenerateMock<ICurrentBusinessUnit>();
@@ -53,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 			siteRepository.Stub(x => x.LoadAll()).Return(new List<ISite>() { site });
 
 			ITeamsProvider teamsProvider = new TeamsProvider(siteRepository, currentBusinessUnit, new Global.FakePermissionProvider(), loggedOnUser,
-				PersonSelectorReadOnlyRepository);
+				new PersonSelectorReadOnlyRepository(new FakeCurrentUnitOfWorkFactory().Current().CurrentUnitOfWork()));
 			target = new TeamHierarchyController(teamsProvider);
 
 			var result = target.Get() as dynamic;

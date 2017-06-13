@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -14,6 +15,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 
+		public PersonSelectorReadOnlyRepository(IUnitOfWork unitOfWork)
+		{
+			_unitOfWork = new ThisUnitOfWork(unitOfWork);
+		}
 		public PersonSelectorReadOnlyRepository(ICurrentUnitOfWork unitOfWork)
 		{
 			_unitOfWork = unitOfWork;
@@ -38,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IPersonSelectorOrganization> GetOrganizationForWeb(DateOnlyPeriod dateOnlyPeriod)
 		{
-			
+
 			return _unitOfWork.Session().CreateSQLQuery(
 					"exec ReadModel.LoadOrganizationForSelector_Web @ondate=:ondate,@enddate=:enddate, @bu=:bu")
 				.SetDateOnly("ondate", dateOnlyPeriod.StartDate)
