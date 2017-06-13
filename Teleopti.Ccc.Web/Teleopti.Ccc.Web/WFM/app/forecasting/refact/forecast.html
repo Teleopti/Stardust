@@ -23,7 +23,7 @@
 
 <div class="con-row">
   <div class="con-flex">
-    <wfm-card-list >
+    <wfm-card-list>
       <wfm-card ng-repeat="skill in vm.skillMaster.Skills">
         <card-header tabindex="-1">
           <div tabindex="0" ng-click="vm.getWorkloadForecastData(skill.Workload.Id)">
@@ -52,7 +52,7 @@
             <div class="con-row">
               <div class="con-flex">
                 {{vm.selectedDayCount.length}} day(s) selected
-                <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart()">
+                <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart(skill.ChartId)">
                   <i class="mdi mdi-sync" ></i>
                   <md-tooltip>Refresh chart</md-tooltip>
                 </div>
@@ -72,14 +72,14 @@
 <modal-dialog show='vm.forecastModal' ng-cloak>
   <div ng-if="vm.forecastModalObj">
     <h1 class="modal-title">{{'ForecastDo' | translate}} <b>{{vm.forecastModalObj.Name}}</b></h1>
-    <div class="modal-inner-content">
-      <label>{{'ForecastPeriod' | translate}}: </label><br/>
+    <div class="modal-inner-content" style="text-align:center;">
+      <!-- <label>{{'ForecastPeriod' | translate}}: </label><br/> -->
       <date-range-picker ng-model="vm.forecastPeriod"></date-range-picker>
     </div>
     <div class="modal-actions">
       <aside>
         <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal()" >Cancel</button>
-        <button class="wfm-btn wfm-btn-invis-primary" ng-click="">Apply</button>
+        <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.forecastWorkload()">Apply</button>
       </aside>
     </div>
   </div>

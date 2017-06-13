@@ -26,11 +26,14 @@
       Skills: [],
       Scenarios: []
     };
+
+
     vm.init = init;
     vm.forecastingModal = forecastingModal;
     vm.getWorkloadForecastData = getWorkloadForecastData;
     vm.pointClick = pointClick;
     vm.loadChart = loadChart;
+    vm.forecastWorkload = forecastWorkload;
 
     vm.init();
 
@@ -77,6 +80,10 @@
       });
     }
 
+    function loadChart(chartId) {
+      //Used as a placeholder for refresh component
+    }
+
     function getWorkloadForecastData(workloadId) {
       vm.skillMaster.isForecastRunning = true;
       var wl = {
@@ -93,6 +100,7 @@
             return;
           }
           else{
+            console.log(data);
             vm.currentWorkload.Days = data.Days;
           }
 
@@ -105,13 +113,30 @@
       )
     }
 
+    function forecastWorkload (blockToken) {
+      // vm.skillMaster.IsForecastRunning = true;
+      forecastingService.forecast(JSON.stringify(
+      {
+        ForecastStart: vm.forecastPeriod.startDate,
+        ForecastEnd: vm.forecastPeriod.endDate,
+        Workloads: [vm.forecastModalObj.Id],
+        ScenarioId: vm.selectedScenario.Id,
+        BlockToken: blockToken,
+        IsLastWorkload: true
+      }), function(data, status, headers, config) {
+        // console.log(data);
+
+        blockToken = data.BlockToken;
+        getWorkloadForecastData(vm.forecastModalObj.Id);
+      }, function(data, status, headers, config) {
+
+      });
+    }
+
     function pointClick(days) {
       vm.selectedDayCount = days;
     }
 
-    function loadChart() {
-      //Used as a placeholder for refresh component
-    }
 
     function forecastingModal(workload) {
       if (vm.skillMaster.isForecastRunning) {

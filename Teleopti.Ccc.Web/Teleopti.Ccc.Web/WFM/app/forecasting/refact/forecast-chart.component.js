@@ -27,17 +27,18 @@ function ForecastChartCtrl($translate, $filter) {
 		return false;
 	}
 
-		generateForecastChart();
+	function generateForecastChart(chartId) {
+		console.log('gen');
 
-	function generateForecastChart() {
-		if (!ctrl.chartId || ctrl.days.length === 0 ) {
+		if (!chartId || ctrl.days.length === 0 ) {
 			console.log('Could not generate forcast chart');
 			return;
 		}
 
 		ctrl.selectedDays = [];
+		var preparedData = {};
 		ctrl.onClick(ctrl.selectedDays);
-
+		
 		var preparedData = {
 			dateSeries: ['date'],
 			vacwSeries: ['vacw'],
@@ -59,7 +60,7 @@ function ForecastChartCtrl($translate, $filter) {
 		}
 
 		var chart = c3.generate({
-			bindto: '#' + ctrl.chartId,
+			bindto: '#' + chartId,
 			data: {
 				x: 'date',
 				columns: [
