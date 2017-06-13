@@ -10,17 +10,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 {
-    public class FakeTeamCardReader : ITeamCardReader
+	public class FakeTeamCardReader : ITeamCardReader
     {
 	    private readonly INow _now;
 	    private readonly FakeAgentStateReadModelPersister _agentStateReadModels;
 	    private readonly IGroupingReadOnlyRepository _groupings;
 	    private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
 		
-	    public FakeTeamCardReader(INow now, 
+	    public FakeTeamCardReader(
+			INow now, 
 			FakeAgentStateReadModelPersister agentStateReadModels, 
 			IGroupingReadOnlyRepository groupings,
-			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId)
+			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId
+			)
 	    {
 		    _now = now;
 		    _agentStateReadModels = agentStateReadModels;

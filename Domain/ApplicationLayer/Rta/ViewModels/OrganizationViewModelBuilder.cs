@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 
@@ -14,62 +13,82 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	{
 		private readonly INow _now;
 		private readonly ICurrentAuthorization _authorization;
-		private readonly ITeamCardReader _teamCardReader;
+		private readonly IOrganizationReader _organizationReader;
 
 		public OrganizationViewModelBuilder(
 			INow now,
 			ICurrentAuthorization authorization,
-			ITeamCardReader teamCardReader)
+			IOrganizationReader organizationReader)
 		{
 			_now = now;
 			_authorization = authorization;
-			_teamCardReader = teamCardReader;
+			_organizationReader = organizationReader;
 		}
 
 		public IEnumerable<OrganizationSiteViewModel> Build()
 		{
-
 			return BuildForSkills(null);
-			
 		}
 
 		public IEnumerable<OrganizationSiteViewModel> BuildForSkills(Guid[] skillIds)
 		{
-			var teams = skillIds == null ?
-					_teamCardReader.Read() :
-					_teamCardReader.Read(skillIds)
+			var sites = skillIds == null ?
+					_organizationReader.Read() :
+					_organizationReader.Read(skillIds)
 				;
 
 			var auth = _authorization.Current();
-
 			var rtaOverview = DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview;
-			return
-				teams
-					.Where(x =>
-						auth.IsPermitted(rtaOverview, _now.ServerDate_DontUse(),
-							new SiteAuthorization {BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId}) ||
-						auth.IsPermitted(rtaOverview, _now.ServerDate_DontUse(),
-							new TeamAuthorization {BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId, TeamId = x.TeamId})
-					)
-					.GroupBy(x => x.SiteId)
-					.Select(site =>
-						new OrganizationSiteViewModel
-						{
-							Id = site.Key,
-							Name = site.FirstOrDefault()?.SiteName,
-							Teams = site
-								.Where(t =>
-									auth.IsPermitted(rtaOverview, _now.ServerDate_DontUse(),
-										new TeamAuthorization {BusinessUnitId = t.BusinessUnitId, SiteId = t.SiteId, TeamId = t.TeamId}))
-								.Select(
-									team => new OrganizationTeamViewModel
-									{
-										Id = team.TeamId,
-										Name = team.TeamName
-									}).ToArray()
 
-						})
-						.ToArray();
+			return (
+				from s in sites
+				let teams = (from t in s.Teams
+					where auth.IsPermitted(rtaOverview, _now.ServerDate_DontUse(),
+						new TeamAuthorization {BusinessUnitId = s.BusinessUnitId, SiteId = s.SiteId, TeamId = t.TeamId})
+					select t).ToArray()
+				where auth.IsPermitted(rtaOverview, _now.ServerDate_DontUse(),
+						  new SiteAuthorization {BusinessUnitId = s.BusinessUnitId, SiteId = s.SiteId}) ||
+					  teams.Any()
+				select new OrganizationSiteViewModel
+				{
+					Id = s.SiteId,
+					Name = s.SiteName,
+					Teams = from t in teams
+						select new OrganizationTeamViewModel
+						{
+							Id = t.TeamId,
+							Name = t.TeamName
+						}
+				}
+			).ToArray();
+
+			//return
+			//	teams
+			//		.Where(x =>
+			//			auth.IsPermitted(rtaOverview, _now.ServerDate_DontUse(),
+			//				new SiteAuthorization {BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId}) ||
+			//			auth.IsPermitted(rtaOverview, _now.ServerDate_DontUse(),
+			//				new TeamAuthorization {BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId, TeamId = x.TeamId})
+			//		)
+			//		.GroupBy(x => x.SiteId)
+			//		.Select(site =>
+			//			new OrganizationSiteViewModel
+			//			{
+			//				Id = site.Key,
+			//				Name = site.FirstOrDefault()?.SiteName,
+			//				Teams = site
+			//					.Where(t =>
+			//						auth.IsPermitted(rtaOverview, _now.ServerDate_DontUse(),
+			//							new TeamAuthorization {BusinessUnitId = t.BusinessUnitId, SiteId = t.SiteId, TeamId = t.TeamId}))
+			//					.Select(
+			//						team => new OrganizationTeamViewModel
+			//						{
+			//							Id = team.TeamId,
+			//							Name = team.TeamName
+			//						}).ToArray()
+
+			//			})
+			//			.ToArray();
 		}
 	}
 

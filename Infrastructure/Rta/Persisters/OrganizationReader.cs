@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 			_now = now;
 		}
 
-		public IEnumerable<OrganizationModel> Read()
+		public IEnumerable<OrganizationSiteModel> Read()
 		{
 			return Read(null);
 		}
 
-		public IEnumerable<OrganizationModel> Read(IEnumerable<Guid> skillIds)
+		public IEnumerable<OrganizationSiteModel> Read(IEnumerable<Guid> skillIds)
 		{
 			var querySkills = skillIds.EmptyIfNull().Any();
 
@@ -53,6 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.Session()
 				.CreateSQLQuery($@"
 					SELECT
+						a.BusinessUnitId,
 						a.SiteId as SiteId, 
 						MAX(a.SiteName) as SiteName,
 						a.TeamId,
@@ -89,19 +90,21 @@ namespace Teleopti.Ccc.Infrastructure.Rta.Persisters
 				.Cast<internalModel>();
 
 			return result
-				.GroupBy(x => new { x.SiteId, x.SiteName })
-				.Select(x => new OrganizationModel
+				.GroupBy(x => new { x.BusinessUnitId, x.SiteId, x.SiteName })
+				.Select(x => new OrganizationSiteModel
 				{
-					Id = x.Key.SiteId,
-					Name = x.Key.SiteName,
+					BusinessUnitId = x.Key.BusinessUnitId,
+					SiteId = x.Key.SiteId,
+					SiteName = x.Key.SiteName,
 					Teams = x.Select(t =>
-						new OrganizationTeamModel { Id = t.TeamId, Name = t.TeamName })
+						new OrganizationTeamModel { TeamId = t.TeamId, TeamName = t.TeamName })
 				})
 				.ToArray();
 		}
 
 		private class internalModel
 		{
+			public Guid BusinessUnitId { get; set; }
 			public Guid SiteId { get; set; }
 			public string SiteName { get; set; }
 			public Guid TeamId { get; set; }

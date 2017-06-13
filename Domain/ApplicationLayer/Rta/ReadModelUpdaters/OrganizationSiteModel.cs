@@ -3,17 +3,18 @@ using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
-	public class OrganizationModel
+	public class OrganizationSiteModel
 	{
-		public Guid Id { get; set; }
-		public string Name { get; set; }
+		public Guid BusinessUnitId { get; set; }
+		public Guid SiteId { get; set; }
+		public string SiteName { get; set; }
 		public IEnumerable<OrganizationTeamModel> Teams;
 	}
 
 	public class OrganizationTeamModel
 	{
-		public Guid Id { get; set; }
-		public string Name { get; set; }
+		public Guid TeamId { get; set; }
+		public string TeamName { get; set; }
 	}
 
 }

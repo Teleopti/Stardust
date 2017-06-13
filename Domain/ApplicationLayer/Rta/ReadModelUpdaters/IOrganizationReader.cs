@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 {
 	public interface IOrganizationReader
 	{
-		IEnumerable<OrganizationModel> Read();
-		IEnumerable<OrganizationModel> Read(IEnumerable<Guid> skillIds);
+		IEnumerable<OrganizationSiteModel> Read();
+		IEnumerable<OrganizationSiteModel> Read(IEnumerable<Guid> skillIds);
 	}
 }

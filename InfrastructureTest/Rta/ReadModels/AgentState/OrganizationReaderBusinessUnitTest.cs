@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
 	[TestFixture]
 	[UnitOfWorkTest]
-	public class TeamCardReaderBusinessUnitTest
+	public class OrganizationReaderBusinessUnitTest
 	{
 		public ICurrentBusinessUnit BusinessUnit;
 		public IAgentStateReadModelPersister Persister;
-		public ITeamCardReader Target;
+		public IOrganizationReader Target;
 		public MutableNow Now;
 		public Database Database;
 
@@ -24,9 +24,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		public void ShouldFilterOnCurrentBusinessUnit()
 		{
 			var site = Guid.NewGuid();
+			var businessUnit = BusinessUnit.Current().Id.Value;
 			Persister.PersistWithAssociation(new AgentStateReadModelForTest
 			{
-				BusinessUnitId = BusinessUnit.Current().Id.Value,
+				BusinessUnitId = businessUnit,
 				PersonId = Guid.NewGuid(),
 				SiteId = site
 			});
@@ -37,8 +38,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				SiteId = Guid.NewGuid(),
 			});
 
-			Target.Read().Single()
-				.SiteId.Should().Be(site);
+			var result = Target.Read().Single();
+
+			result.SiteId.Should().Be(site);
+			result.BusinessUnitId.Should().Be(businessUnit);
 		}
 		
 	}

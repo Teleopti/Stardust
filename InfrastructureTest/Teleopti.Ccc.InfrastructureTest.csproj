@@ -289,9 +289,11 @@
     <Compile Include="Repositories\RequestStrategySettingsReaderTest.cs" />
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Repositories\SmartPersonPropertyQuerierTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\OrganizationReaderSkillsTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\Reader\Order.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderAgentsCountTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\OrganizationReaderTest.cs" />
+    <Compile Include="Rta\ReadModels\AgentState\OrganizationReaderBusinessUnitTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderNameTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesSkillsTest.cs" />
