@@ -47,13 +47,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.ServerDate_DontUse(), new TeamAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId, TeamId = x.TeamId })
 					)
 					.GroupBy(x => x.SiteId)
-					.Select(site =>
+					.Select(siteGroup =>
 						new
 						{
-							SiteId = site.Key,
-							InAlarmCount = site.Sum(x => x.InAlarmCount),
-							SiteName = site.FirstOrDefault()?.SiteName,
-							AgentsCount = site.FirstOrDefault().AgentsCount
+							SiteId = siteGroup.Key,
+							InAlarmCount = siteGroup.Sum(x => x.InAlarmCount),
+							SiteName = siteGroup.FirstOrDefault()?.SiteName,
+							AgentsCount = siteGroup.Sum(x => x.AgentsCount)
 
 						})
 					.ToArray();

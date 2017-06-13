@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			    .GroupBy(x => x.TeamId)
 			    .Select(group => new TeamCardModel
 			    {
-				    BusinessUnitId = @group.First().BusinessUnitId.Value,
+				    BusinessUnitId = @group.First().BusinessUnitId.GetValueOrDefault(),
 				    SiteId = @group.First().SiteId.Value,
 				    SiteName = @group.First().SiteName,
 					TeamId = @group.Key.Value,

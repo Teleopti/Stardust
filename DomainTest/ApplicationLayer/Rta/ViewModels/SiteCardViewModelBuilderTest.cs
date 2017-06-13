@@ -254,7 +254,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldBuildForMultipleSitesForSkillOrderSitesName()
 		{
-
 			Now.Is("2016-06-21 08:30");
 			var businessUnitId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
@@ -264,7 +263,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var personId3 = Guid.NewGuid();
 			var siteId3 = Guid.NewGuid();
 			var skill = Guid.NewGuid();
-
 
 			Database
 				.WithSite(siteId1, "B")
@@ -320,8 +318,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		[Test]
 		public void ShouldBuildForMultipleSitesForSkillOrderSitesNameAccordingToSwedishName()
 		{
-
-
 			Now.Is("2016-06-21 08:30");
 			var businessUnitId = Guid.NewGuid();
 			var personId1 = Guid.NewGuid();
@@ -331,7 +327,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			var personId3 = Guid.NewGuid();
 			var siteId3 = Guid.NewGuid();
 			var skill = Guid.NewGuid();
-
 
 			Database
 				.WithSite(siteId1, "Å")
@@ -383,6 +378,39 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					siteId2
 				});
 
+		}
+
+		[Test]
+		public void ShouldCountAgentsInSite()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var team1 = Guid.NewGuid();
+			var team2 = Guid.NewGuid();
+
+			Database
+				.WithSite(siteId, "London")
+				.WithTeam(team1)
+				.WithAgent(personId1)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId1,
+					SiteId = siteId,
+					TeamId = team1,
+				})
+				.WithTeam(team2)
+				.WithAgent(personId2)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId2,
+					SiteId = siteId,
+					TeamId = team2,
+				});
+
+			var viewModel = Target.Build().Single();
+
+			viewModel.AgentsCount.Should().Be(2);
 		}
 	}
 }
