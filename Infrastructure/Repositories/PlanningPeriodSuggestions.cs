@@ -67,31 +67,39 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					PeriodType = uniqueSchedulePeriod.PeriodType,
 					StartDate = new DateOnly(uniqueSchedulePeriod.DateFrom)
 				};
-				var periodContainingStartDate = _schedulePeriodRangeCalculator.PeriodForType(startDate, rangeForPeriod);
 
-				var firstSinglePeriod = new Tuple<int, SuggestedPlanningPeriod>(uniqueSchedulePeriod.Priority, new SuggestedPlanningPeriod
+				DateOnlyPeriod firstSingleRange;
+				if (uniqueSchedulePeriod.DateFrom > startDate.Date)
+				{
+					firstSingleRange = _schedulePeriodRangeCalculator.PeriodForType(new DateOnly(uniqueSchedulePeriod.DateFrom), rangeForPeriod);
+				}
+				else
+				{
+					var periodContainingStartDate = _schedulePeriodRangeCalculator.PeriodForType(startDate, rangeForPeriod);
+					firstSingleRange = _schedulePeriodRangeCalculator.PeriodForType(periodContainingStartDate.EndDate.AddDays(1), rangeForPeriod);
+				}
+
+				var secondSingleRange = _schedulePeriodRangeCalculator.PeriodForType(firstSingleRange.EndDate.AddDays(1), rangeForPeriod);
+				var firstDoubleRange = new DateOnlyPeriod(firstSingleRange.StartDate, secondSingleRange.EndDate);
+
+				innerResult.Add(new Tuple<int, SuggestedPlanningPeriod>(uniqueSchedulePeriod.Priority, new SuggestedPlanningPeriod
 				{
 					PeriodType = uniqueSchedulePeriod.PeriodType,
 					Number = uniqueSchedulePeriod.Number,
-					Range = _schedulePeriodRangeCalculator.PeriodForType(periodContainingStartDate.EndDate.AddDays(1), rangeForPeriod)
-				});				
-				var secondSinglePeriod = new Tuple<int, SuggestedPlanningPeriod>(uniqueSchedulePeriod.Priority, new SuggestedPlanningPeriod
+					Range = firstSingleRange
+				}));
+				innerResult.Add(new Tuple<int, SuggestedPlanningPeriod>(uniqueSchedulePeriod.Priority, new SuggestedPlanningPeriod
 				{
 					PeriodType = uniqueSchedulePeriod.PeriodType,
 					Number = uniqueSchedulePeriod.Number,
-					Range = _schedulePeriodRangeCalculator.PeriodForType(firstSinglePeriod.Item2.Range.EndDate.AddDays(1), rangeForPeriod)
-				});
-
-				var doublePeriod = new Tuple<int, SuggestedPlanningPeriod>(uniqueSchedulePeriod.Priority, new SuggestedPlanningPeriod
+					Range = secondSingleRange
+				}));
+				innerResult.Add(new Tuple<int, SuggestedPlanningPeriod>(uniqueSchedulePeriod.Priority, new SuggestedPlanningPeriod
 				{
 					PeriodType = uniqueSchedulePeriod.PeriodType,
 					Number = uniqueSchedulePeriod.Number * 2,
-					Range = new DateOnlyPeriod(firstSinglePeriod.Item2.Range.StartDate, secondSinglePeriod.Item2.Range.EndDate)
-				});
-
-				innerResult.Add(firstSinglePeriod);
-				innerResult.Add(secondSinglePeriod);
-				innerResult.Add(doublePeriod);
+					Range = firstDoubleRange
+				}));
 				return innerResult;
 			});
 			result.AddRange(resultingRanges);
