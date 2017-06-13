@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public FakeMessageSender MessageSender;
 		public FakeTransactionHook TransactionHook;
 		public IDataSourceForTenant DataSourceForTenant;
-		public FakeEventPublisher Publisher;
+		public IEventPublisher Publisher;
 
 		private IDisposable _transactionHookScope;
 		private List<Type> _scopeExtenders = new List<Type>();
@@ -97,8 +97,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			_scopeExtenders.AddRange(scopeExtenders.Select(x => x.Handler));
 			if (scopeExtenders.Any())
 				system.UseTestDouble<FakeEventPublisher>().For<IEventPublisher>();
-			else
-				system.AddService<FakeEventPublisher>();
 
 			system.AddService<Database>();
 			system.AddService<DatabaseLegacy>();
@@ -116,7 +114,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			base.BeforeTest();
 
 			// extend scope by including handlers
-			_scopeExtenders.ForEach(x => Publisher.AddHandler(x));
+			_scopeExtenders.ForEach(x => (Publisher as FakeEventPublisher).AddHandler(x));
 
 			DataSourceForTenant.MakeSureDataSourceCreated(
 				DataSourceHelper.TestTenantName,
