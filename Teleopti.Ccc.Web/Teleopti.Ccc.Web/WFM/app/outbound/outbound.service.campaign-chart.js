@@ -42,14 +42,24 @@
 		self.coreGetCampaignVisualization = getCampaignVisualization;
 		self.coreMapGraphData = mapGraphData;
 
+		function getCampaignData(campaignData) {
+			return {
+				graphData: self.buildGraphDataSeqs(campaignData),
+				rawManualPlan: campaignData.IsManualPlanned,
+				manualBacklog: campaignData.IsActualBacklog,
+				closedDays: campaignData.IsCloseDays,
+				translations: self.dictionary
+			}
+		}
+
 		function replan(input, successCb, errorCb) {
 			var postData = {
 				CampaignId: input.campaignId,
 				SkipDates: input.ignoredDates
 			};
 
-			$http.post(redoCampaignProductionPlanUrl, postData).success(function() {
-				if (successCb != null) successCb();
+			$http.post(redoCampaignProductionPlanUrl, postData).success(function(campaignData) {
+				if (successCb != null) successCb(getCampaignData(campaignData));
 			}).error(function(e) {
 				if (errorCb != null) errorCb(e);
 			});
@@ -69,16 +79,7 @@
 
 			$http.post(updateCampaignProductionPlanUrl, postData).
 			success(function(campaignData) {
-				if (successCb != null) {
-					var data = {
-						graphData: self.buildGraphDataSeqs(campaignData),
-						rawManualPlan: campaignData.IsManualPlanned,
-						manualBacklog: campaignData.IsActualBacklog,
-						closedDays: campaignData.IsCloseDays,
-						translations: self.dictionary
-					};
-					successCb(data);
-				}
+				if (successCb != null) successCb(getCampaignData(campaignData));
 			}).
 			error(function(e) {
 				if (errorCb != null) errorCb(e);
@@ -94,7 +95,7 @@
 
 			$http.post(removeCampaignProductionPlanUrl, postData).
 			success(function(campaignData) {
-				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
+				if (successCb != null) successCb(getCampaignData(campaignData));
 			}).
 			error(function(e) {
 				if (errorCb != null) errorCb(e);
@@ -121,7 +122,7 @@
 				SkipDates: input.ignoredDates
 			}).
 			success(function(campaignData) {
-				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData));
+				if (successCb != null) successCb(getCampaignData(campaignData));
 			}).
 			error(function(e) {
 				if (errorCb != null) errorCb(e);
@@ -135,7 +136,7 @@
 				SkipDates: input.ignoredDates
 			}).
 			success(function(campaignData) {
-				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), campaignData.IsManualPlanned);
+				if (successCb != null) successCb(getCampaignData(campaignData));
 			}).
 			error(function(e) {
 				if (errorCb != null) errorCb(e);
