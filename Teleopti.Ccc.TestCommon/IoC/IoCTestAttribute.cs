@@ -192,6 +192,10 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			public void For<T1, T2, T3, T4, T5>()
 			{
 			}
+
+			public void For(Type type)
+			{
+			}
 		}
 	}
 

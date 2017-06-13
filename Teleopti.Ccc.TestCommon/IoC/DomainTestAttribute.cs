@@ -127,7 +127,11 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			// Repositories
 			system.AddService<FakeDatabase>();
 			system.AddService<FakeStorage>();
-			if (!QueryAllAttributes<ThrowIfRespositoriesAreUsedAttribute>().Any())
+			if (QueryAllAttributes<ThrowIfRepositoriesAreUsedAttribute>().Any())
+			{
+				SetupThrowingTestDoublesForRepositories.Execute(system);
+			}
+			else
 			{
 				system.UseTestDouble<FakeMultisiteDayRepository>().For<IMultisiteDayRepository>();
 				system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
@@ -185,7 +189,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
 				system.UseTestDouble<FakeIntradayQueueStatisticsLoader>().For<IIntradayQueueStatisticsLoader>();
 				system.UseTestDouble<FakeScheduleForecastSkillReadModelRepository>().For<IScheduleForecastSkillReadModelRepository>();
-				system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
 				system.UseTestDouble<FakeNoteRepository>().For<INoteRepository>();
 				system.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
 				system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();
@@ -193,7 +196,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
 				system.UseTestDouble<FakeJobResultRepository>().For<IJobResultRepository>();
 				system.UseTestDouble<FakeJobStartTimeRepository>().For<IJobStartTimeRepository>();
-
 				system.UseTestDouble<FakeAnalyticsAbsenceRepository>().For<IAnalyticsAbsenceRepository>();
 				system.UseTestDouble<FakeAnalyticsActivityRepository>().For<IAnalyticsActivityRepository>();
 				system.UseTestDouble<FakeAnalyticsBridgeGroupPagePersonRepository>().For<IAnalyticsBridgeGroupPagePersonRepository>();
@@ -219,18 +221,15 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeAnalyticsTimeZoneRepository>().For<IAnalyticsTimeZoneRepository>();
 				system.UseTestDouble<FakeAnalyticsWorkloadRepository>().For<IAnalyticsWorkloadRepository>();
 			}
-
+			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();
 			system.AddService<FakeSchedulingSourceScope>();
 
 			fakePrincipal(system);
 
 			if (fullPermissions())
 				system.UseTestDouble<FullPermission>().For<IAuthorization>();
-			//if (realPermissions())
-			//	system.UseTestDouble<PrincipalAuthorization>().For<IAuthorization>();
 			if (fakePermissions())
 				system.UseTestDouble<FakePermissions>().For<IAuthorization>();
-
 		}
 
 		private void fakePrincipal(ISystem system)
@@ -253,10 +252,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			system.UseTestDouble(context).For<IThreadPrincipalContext>();
 		}
-
-
-		
-
 
 		public IAuthorizationScope AuthorizationScope;
 		public IAuthorization Authorization;

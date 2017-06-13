@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourcePlanner.Validation
 {
 	[DomainTest]
-	[ThrowIfRespositoriesAreUsed]
+	[ThrowIfRepositoriesAreUsed]
 	public class DesktopSchedulingValidatorTest
 	{
 		public SchedulingValidator Target;
