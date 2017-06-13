@@ -132,10 +132,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchPermittedTeamHierachy")]
 		public virtual BusinessUnitWithSitesViewModel FetchPermittedTeamHierachy(DateTime date)
 		{
-			
-			return _teamProvider.GetPermittedTeamHierachy(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			return  _teamProvider.GetPermittedTeamHierachy(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 		}
 
+		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/GetOrganizationWithPeriod")]
+		public virtual BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateTime date)
+		{
+			return _teamProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)),
+				DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+		}
 	}
 
 	public class CheckPersonAccountFormData

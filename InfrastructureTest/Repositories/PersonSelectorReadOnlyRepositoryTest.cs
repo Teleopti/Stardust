@@ -1,18 +1,43 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.TestCommon.TestData;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("BucketB")]
 	[DatabaseTest]
-	public class PersonSelectorReadOnlyRepositoryTest
+	public class PersonSelectorReadOnlyRepositoryTest: ISetup
 	{
 		private PersonSelectorReadOnlyRepository _target;
+		public WithUnitOfWork WithUnitOfWork;
+		public ISiteRepository SitesRepository;
+		public ITeamRepository TeamsRepository;
+		public IPersonRepository PersonsRepository;
+		public IContractRepository ContractsRepository;
+		public IContractScheduleRepository ContractSchedulesRepository;
+		public IPartTimePercentageRepository PartTimePercentagesRepository;
+		public CurrentBusinessUnit CurrentBU;
+		public IBusinessUnitRepository BusinessUnitRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+		}
 
 		[Test]
 		public void ShouldLoadGroupPages()
@@ -31,8 +56,142 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
 				var date = new DateOnly(2012, 1, 27);
-				_target.GetOrganization(new DateOnlyPeriod(date,date), true );
+				_target.GetOrganization(new DateOnlyPeriod(date, date), true);
 			}
+		}
+
+		[Test]
+		public void ShouldGetTeamsAndSitesExcludingUnusedUnderCurrentBu()
+		{
+			var bu = BusinessUnitFactory.CreateSimpleBusinessUnit("bu");
+			WithUnitOfWork.Do(() =>
+			{
+				BusinessUnitRepository.Add(bu);
+			});
+			CurrentBU.OnThisThreadUse(bu);
+
+			ISite site = SiteFactory.CreateSimpleSite("d");
+			ITeam team = TeamFactory.CreateSimpleTeam("Team");
+			bu.AddSite(site);
+			team.Site = site;
+			team.SetDescription(new Description("sdf"));
+			WithUnitOfWork.Do(() =>
+			{
+				SitesRepository.Add(site);
+				TeamsRepository.Add(team);
+			});
+			IPerson per = PersonFactory.CreatePerson("Ashley", "Ardeen");
+			per.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+
+			WithUnitOfWork.Do(() =>
+			{
+				PersonsRepository.Add(per);
+			});
+
+			var bu1 = BusinessUnitFactory.CreateSimpleBusinessUnit("bu1");
+			WithUnitOfWork.Do(() =>
+			{
+				BusinessUnitRepository.Add(bu1);
+			});
+			CurrentBU.OnThisThreadUse(bu1);
+
+			ISite site1 = SiteFactory.CreateSimpleSite("d");
+			ITeam team1 = TeamFactory.CreateSimpleTeam("Team");
+			team1.Site = site1;
+			team1.SetDescription(new Description("sdf"));
+			bu1.AddSite(site1);
+			WithUnitOfWork.Do(() =>
+			{
+				SitesRepository.Add(site1);
+				TeamsRepository.Add(team1);
+			});
+			IPerson per1 = PersonFactory.CreatePerson("Ashley", "Ardeen");
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2010, 1, 1), createPersonContract(), team1));
+			WithUnitOfWork.Do(() =>
+			{
+				PersonsRepository.Add(per1);
+			});
+
+			CurrentBU.OnThisThreadUse(bu);
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var result = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current)
+					.GetOrganizationForWeb(new DateOnlyPeriod(new DateOnly(2011, 1, 1), new DateOnly(2011, 1, 1)))
+					.Single();
+				result.TeamId.Value.Should().Equals(team.Id);
+			}
+		}
+
+		[Test]
+		public void ShouldGetTeamsAndSitesExcludingUnused()
+		{
+			
+			ISite site = SiteFactory.CreateSimpleSite("d");
+			ITeam team = TeamFactory.CreateSimpleTeam("Team");
+			team.Site = site;
+			team.SetDescription(new Description("sdf"));
+			WithUnitOfWork.Do(() =>
+			{
+				SitesRepository.Add(site);
+				TeamsRepository.Add(team);
+			});
+
+			IPerson per = PersonFactory.CreatePerson("Ashley", "Ardeen");
+
+			per.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(), team));
+
+			WithUnitOfWork.Do(() =>
+			{
+				PersonsRepository.Add(per);
+			});
+
+			ISite site1 = SiteFactory.CreateSimpleSite("d");
+			ITeam team1 = TeamFactory.CreateSimpleTeam("Team");
+			team1.Site = site1;
+			team1.SetDescription(new Description("sdf"));
+			WithUnitOfWork.Do(() =>
+			{
+				SitesRepository.Add(site1);
+				TeamsRepository.Add(team1);
+			});
+
+			IPerson per1 = PersonFactory.CreatePerson("Ashley", "Ardeen");
+
+			per1.AddPersonPeriod(new PersonPeriod(new DateOnly(2010, 1, 1), createPersonContract(), team1));
+
+			WithUnitOfWork.Do(() =>
+			{
+				PersonsRepository.Add(per1);
+			});
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var result = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current)
+					.GetOrganizationForWeb(new DateOnlyPeriod(new DateOnly(2010, 1, 1), new DateOnly(2010, 1, 1)))
+					.Single();
+				result.TeamId.Value.Should().Equals(team1.Id);
+			}
+
+			
+		}
+
+		private IPersonContract createPersonContract(IBusinessUnit otherBusinessUnit = null)
+		{
+			var pContract = PersonContractFactory.CreatePersonContract();
+			if (otherBusinessUnit != null)
+			{
+				pContract.Contract.SetBusinessUnit(otherBusinessUnit);
+				pContract.ContractSchedule.SetBusinessUnit(otherBusinessUnit);
+				pContract.PartTimePercentage.SetBusinessUnit(otherBusinessUnit);
+			}
+			WithUnitOfWork.Do(() =>
+			{
+				ContractsRepository.Add(pContract.Contract);
+				ContractSchedulesRepository.Add(pContract.ContractSchedule);
+				PartTimePercentagesRepository.Add(pContract.PartTimePercentage);
+			});
+
+			return pContract;
 		}
 
 		[Test]
@@ -42,7 +201,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				_target = new PersonSelectorReadOnlyRepository(UnitOfWorkFactory.Current);
 				var date = new DateOnly(2012, 1, 27);
-				_target.GetBuiltIn(new DateOnlyPeriod(date,date), PersonSelectorField.Contract, Guid.Empty);
+				_target.GetBuiltIn(new DateOnlyPeriod(date, date), PersonSelectorField.Contract, Guid.Empty);
 			}
 		}
 
@@ -65,5 +224,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				_target.GetOptionalColumnTabs();
 			}
 		}
+
+		
 	}
 }

@@ -47,8 +47,8 @@ BEGIN
 
 	INSERT INTO #TempDeletedTeam
 	SELECT  Team.Id from Team with(nolock)
-	INNER JOIN Site with(nolock) ON Site.id = Team.Site 
-	where (Team.IsDeleted = 1 or Site.IsDeleted = 1) and Site.BusinessUnit =@bu
+	INNER JOIN Site with(nolock) ON Site.id = Team.Site and Site.BusinessUnit =@bu
+	where (Team.IsDeleted = 1 or Site.IsDeleted = 1) 
 
 
 	
@@ -56,7 +56,6 @@ BEGIN
 	SELECT Id from Person with(nolock) where  Person.IsDeleted = 1
 	or ISNULL(TerminalDate, '2100-01-01') < @ondate 
 
-	
 	INSERT INTO #TempPersonPeriodWithEndDate 
 		SELECT pp.Parent, Team
 		FROM PersonPeriod pp with(nolock)
@@ -78,15 +77,12 @@ BEGIN
 		INSERT #result
 		SELECT sub.id, Team.Site, team.Name, Site.Name
 		from #TempTeamWithPerson sub
-		left join Team with(nolock) on sub.id = Team.Id
-		left join Site with(nolock) on Team.Site = Site.Id
+		inner join Team with(nolock) on sub.id = Team.Id
+		inner join Site with(nolock) on Team.Site = Site.Id and Site.BusinessUnit =@bu
 		
 		SELECT @dynamicSQL = 'SELECT * FROM #result'
-			
 		EXEC sp_executesql @dynamicSQL 
 			
-		RETURN
-	END
-	GO
-
-
+	RETURN
+END
+GO

@@ -1,8 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Microsoft.Ajax.Utilities;
+using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
@@ -14,16 +19,19 @@ namespace Teleopti.Ccc.Web.Core
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
 
 		public TeamsProvider(ISiteRepository siteRepository,
 			ICurrentBusinessUnit currentBusinessUnit,
 			IPermissionProvider permissionProvider,
-			ILoggedOnUser loggedOnUser)
+			ILoggedOnUser loggedOnUser,
+			IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository)
 		{
 			_siteRepository = siteRepository;
 			_currentBusinessUnit = currentBusinessUnit;
 			_permissionProvider = permissionProvider;
 			_loggedOnUser = loggedOnUser;
+			_personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
 		}
 
 		public IEnumerable<TeamViewModel> Get(string siteId)
@@ -70,7 +78,7 @@ namespace Teleopti.Ccc.Web.Core
 			};
 
 		}
-
+		
 		public BusinessUnitWithSitesViewModel GetPermittedTeamHierachy(DateOnly date, string permission)
 		{
 			var currentBusinessUnit = _currentBusinessUnit.Current();
@@ -114,6 +122,55 @@ namespace Teleopti.Ccc.Web.Core
 				Id = currentBusinessUnit.Id ?? Guid.Empty,
 				Name = currentBusinessUnit.Name,
 				Children = siteViewModels,
+				LogonUserTeamId = hasPermissonForLogonTeam ? logonUserTeamId : null
+			};
+		}
+
+		public BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateOnlyPeriod dateOnlyPeriod, string functionPath)
+		{
+			var currentBusinessUnit = _currentBusinessUnit.Current();
+			var compare = StringComparer.Create(_loggedOnUser.CurrentUser().PermissionInformation.UICulture(), false);
+
+			var items = _personSelectorReadOnlyRepository.GetOrganizationForWeb(dateOnlyPeriod);
+			var currentUser = _loggedOnUser.CurrentUser();
+			var myTeam = currentUser.MyTeam(dateOnlyPeriod.StartDate);
+			var logonUserTeamId = myTeam != null && myTeam.Site.BusinessUnit == currentBusinessUnit ? myTeam.Id : null;
+			var hasPermissonForLogonTeam = _permissionProvider.HasPersonPermission(functionPath, dateOnlyPeriod.StartDate, currentUser);
+			Func<Guid, Team> getTeam = (teamId) =>
+			{
+				var team = new Team();
+				team.SetId(teamId);
+				return team;
+			};
+
+			var sites = items
+				.GroupBy(item => item.SiteId)
+				.Select(site => new SiteViewModelWithTeams
+				{
+					Id = site.Key?.ToString(),
+					Name = site.First().Site,
+					Children = site
+						.DistinctBy(s => s.TeamId)
+						.Where(c => c.TeamId.HasValue 
+						&& (logonUserTeamId != null && logonUserTeamId == c.TeamId && hasPermissonForLogonTeam)
+						|| _permissionProvider.HasTeamPermission(functionPath, dateOnlyPeriod.StartDate, getTeam(c.TeamId.Value)))
+						.Select(t => new TeamViewModel
+						{
+							Id = t.TeamId.ToString(),
+							Name = t.Team
+						})
+						.OrderBy(t => t.Name, compare)
+						.ToList()
+				})
+				.Where(site => site.Children != null && site.Children.Any())
+				.OrderBy(s => s.Name, compare)
+				.ToList();
+
+			return new BusinessUnitWithSitesViewModel
+			{
+				Id = currentBusinessUnit.Id ?? Guid.Empty,
+				Name = currentBusinessUnit.Name,
+				Children = sites,
 				LogonUserTeamId = hasPermissonForLogonTeam ? logonUserTeamId : null
 			};
 		}

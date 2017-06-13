@@ -99,5 +99,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 
 			return _teamsProvider.GetPermittedTeamHierachy(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.WebRequests);
 		}
+
+		[UnitOfWork, HttpGet, Route("api/Requests/GetOrganizationWithPeriod")]
+		public virtual BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateTime startDate,DateTime endDate)
+		{
+			return _teamsProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
+				DefinedRaptorApplicationFunctionPaths.WebRequests);
+
+		}
 	}
 }

@@ -10,5 +10,6 @@ namespace Teleopti.Ccc.Web.Core
 		IEnumerable<TeamViewModel> Get (string siteId);
 		BusinessUnitWithSitesViewModel GetTeamHierarchy();
 		BusinessUnitWithSitesViewModel GetPermittedTeamHierachy(DateOnly date, string permission);
+		BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateOnlyPeriod dateOnlyPeriod, string functionPath);
 	}
 }
