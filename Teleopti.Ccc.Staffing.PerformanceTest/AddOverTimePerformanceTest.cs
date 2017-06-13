@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			WithUnitOfWork.Do(uow =>
 			{
-				var resultModels = AddOverTime.GetSuggestionOld(new OverTimeSuggestionModel
+				var resultModels = AddOverTime.GetSuggestion(new OverTimeSuggestionModel
 				{
 					SkillIds = skillIds.ToList(),
 					TimeSerie = timeSerie

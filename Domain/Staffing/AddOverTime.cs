@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
@@ -20,13 +19,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class AddOverTime : IAddOverTime
 	{
-		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
-		private readonly INow _now;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly CalculateOvertimeSuggestionProvider _calculateOvertimeSuggestionProvider;
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly ICommandDispatcher _commandDispatcher;
-		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 		private readonly IPersonForOvertimeProvider _personForOvertimeProvider;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly ICurrentScenario _currentScenario;
@@ -35,21 +30,15 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ScheduleOvertimeExecuteWrapper _scheduleOvertimeExecuteWrapper;
 
 
-		public AddOverTime(ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
-						   INow now, IUserTimeZone userTimeZone, CalculateOvertimeSuggestionProvider calculateOvertimeSuggestionProvider, 
+		public AddOverTime( IUserTimeZone userTimeZone, 
 						   IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ICommandDispatcher commandDispatcher, 
-						   ISkillCombinationResourceRepository skillCombinationResourceRepository, 
 						   IPersonForOvertimeProvider personForOvertimeProvider, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, 
 						   IPersonRepository personRepository, ISkillRepository skillRepository, 
 						   ScheduleOvertimeExecuteWrapper scheduleOvertimeExecuteWrapper)
 		{
-			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
-			_now = now;
 			_userTimeZone = userTimeZone;
-			_calculateOvertimeSuggestionProvider = calculateOvertimeSuggestionProvider;
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 			_commandDispatcher = commandDispatcher;
-			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_personForOvertimeProvider = personForOvertimeProvider;
 			_scheduleStorage = scheduleStorage;
 			_currentScenario = currentScenario;
@@ -126,28 +115,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 		}
 
-		public OverTimeSuggestionResultModel GetSuggestionOld(OverTimeSuggestionModel overTimeSuggestionModel)
-		{
-			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _userTimeZone.TimeZone());
-			var usersTomorrow = new DateOnly(usersNow.AddHours(24));
-			var userstomorrowUtc = TimeZoneHelper.ConvertToUtc(usersTomorrow.Date, _userTimeZone.TimeZone());
-
-			var overTimeStaffingSuggestion = _calculateOvertimeSuggestionProvider.GetOvertimeSuggestions(overTimeSuggestionModel.SkillIds, _now.UtcDateTime(), userstomorrowUtc);
-			var overTimescheduledStaffingPerSkill = overTimeStaffingSuggestion.SkillStaffingIntervals.Select(x => new SkillStaffingIntervalLightModel
-			{
-				Id = x.SkillId,
-				StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, _userTimeZone.TimeZone()),
-				EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, _userTimeZone.TimeZone()),
-				StaffingLevel = x.StaffingLevel
-			}).ToList();
-			return new OverTimeSuggestionResultModel
-			{
-				OverTimeModels = overTimeStaffingSuggestion.OverTimeModels
-			};
-
-		}
-
-
 		public void Apply(IList<OverTimeModel> overTimeModels )
 		{
 			var multiplicationDefinition = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().FirstOrDefault();
@@ -171,38 +138,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 	public interface IAddOverTime
 	{
-		OverTimeSuggestionResultModel GetSuggestionOld(OverTimeSuggestionModel overTimeSuggestionModel);
 		OverTimeSuggestionResultModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel);
 		void Apply(IList<OverTimeModel> overTimeModels);
 	}
 
-	public class OverTimeStaffingSuggestionModel
-	{
-		public IList<SkillStaffingInterval> SkillStaffingIntervals { get; set; }
-		public IList<OverTimeModel> OverTimeModels { get; set; }
-	}
-
-
-	public class OverTimeSuggestionResultModel
-	{
-		public StaffingDataSeries DataSeries { get; set; }
-
-		public bool StaffingHasData { get; set; }
-		public IList<OverTimeModel> OverTimeModels { get; set; }
-	}
-
-	public class OverTimeSuggestionModel
-	{
-		public IList<Guid> SkillIds { get; set; }
-		public DateTime[] TimeSerie { get; set; }
-	}
-
-	public class OverTimeModel
-	{
-		public Guid ActivityId { get; set; }
-		public Guid PersonId { get; set; }
-		public DateTime StartDateTime { get; set; }
-		public DateTime EndDateTime { get; set; }
-	}
+	
 
 }

@@ -312,6 +312,7 @@
     <Compile Include="Staffing\CompareProjection.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayResourceCalculationForAbsenceHandler.cs" />
     <Compile Include="Staffing\IStaffingSettingsReader.cs" />
+    <Compile Include="Staffing\OvertimeModels.cs" />
     <Compile Include="Staffing\ScheduleDayDifferenceSaver.cs" />
     <Compile Include="Staffing\SendUpdateStaffingReadModelHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IRunRequestWaitlistEventMessage.cs" />
@@ -1548,7 +1549,6 @@
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolder.cs" />
     <Compile Include="Scheduling\Overtime\ScheduleOvertimeWithoutStateHolder.cs" />
     <Compile Include="Staffing\AddOverTime.cs" />
-    <Compile Include="Staffing\CalculateOvertimeSuggestionProvider.cs" />
     <Compile Include="Staffing\IPersonForOvertimeProvider.cs" />
     <Compile Include="SystemSetting\GlobalSetting\DataProtectionResponse.cs" />
     <Compile Include="SystemSetting\GlobalSetting\NotificationDurationTime.cs" />

@@ -7,10 +7,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 {
 	public class ScheduledStaffingToDataSeries
 	{
-		public ScheduledStaffingToDataSeries()
-		{
-		}
-
 		public double?[] DataSeries(IList<SkillStaffingIntervalLightModel> scheduledStaffing, DateTime[] timeSeries)
 		{
 			if (!scheduledStaffing.Any())
