@@ -96,8 +96,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public IEnumerable<TimeZoneInfo> LoadAllTimeZones()
         {
             IList<string> skillTimeZoneId = Session.CreateCriteria(typeof (Skill))
-                .Add(Restrictions.IsNotNull("TimeZone"))
-                .SetProjection(Projections.GroupProperty("TimeZone"))
+                .Add(Restrictions.IsNotNull("TimeZoneId"))
+                .SetProjection(Projections.GroupProperty("TimeZoneId"))
                 .List<string>();
 
             IList<string> personTimeZoneId = Session.CreateCriteria(typeof(Person))
