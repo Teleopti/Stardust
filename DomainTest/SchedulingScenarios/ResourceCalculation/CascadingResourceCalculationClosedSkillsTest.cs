@@ -244,9 +244,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		[Ignore("#44156")]
 		public void ShouldConsiderSkillGroupsAlsoWhenPrimarySkillIsClosed([Values(0, 100)] int demandOnSubskill1, [Values(0, 100)] int demandOnSubskill2)
 		{
+			if (!_resourcePlannerRespectSkillGroupShoveling44156)
+				Assert.Ignore("Only green when toggle 44156 is turned on");
 			const int numberOfB1Agents = 3;
 			const int numberOfB2Agents = 5;
 			
