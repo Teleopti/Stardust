@@ -43,6 +43,14 @@
 			if (!ctrl.selectedText)
 				ctrl.selectedText = ctrl.defaultSelectedTextFn
 
+			var afterViewDataIsReady = $q.when(ctrl.datasource()).then(function (data) {
+				populateGroupListAndNamemapAndFindLongestName(data.Children)
+				if (!angular.isArray(ctrl.selectedTeamIds)) {
+					ctrl.selectedTeamIds = []
+				}
+				ctrl.orgsInView = ctrl.searchForOrgsByName('')
+			})
+
 			ctrl.menuRef = $mdPanel.create({
 				contentElement: $element.find('orgpicker-menu'),
 				clickOutsideToClose: true,
@@ -58,20 +66,14 @@
 					}
 
 					// upon opening the menu, synchronise selected teams:
-					ctrl.updateSelectedTeamsInView();
+					afterViewDataIsReady.then(function () {
+						ctrl.updateSelectedTeamsInView()
+					})
 
 					if (ctrl.onOpen)
 						ctrl.onOpen()
 				},
 				onRemoving: (ctrl.onClose ? function () { ctrl.onClose() } : angular.noop),
-			})
-
-			$q.when(ctrl.datasource()).then(function (data) {
-				populateGroupListAndNamemapAndFindLongestName(data.Children)
-				if (!angular.isArray(ctrl.selectedTeamIds)) {
-					ctrl.selectedTeamIds = []
-				}
-				ctrl.orgsInView = ctrl.searchForOrgsByName('')
 			})
 		}
 
