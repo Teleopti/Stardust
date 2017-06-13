@@ -61,28 +61,26 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		public OverTimeSuggestionResultModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel)
 		{
-			var result = new List<OverTimeModel>();
 			//midnight shift ??
-			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Min(), _userTimeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max(), _userTimeZone.TimeZone()));
+			var allSkills = _skillRepository.LoadAll().ToList();
+			var skills = allSkills.Where(x => overTimeSuggestionModel.SkillIds.Contains(x.Id.GetValueOrDefault())).ToList();
+			var minResolution = skills.Min(x => x.DefaultResolution);
+			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Min(), _userTimeZone.TimeZone()), TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max().AddMinutes(minResolution), _userTimeZone.TimeZone()));
 			var userDateOnly = new DateOnly(overTimeSuggestionModel.TimeSerie.Min());
 
 			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, period.StartDateTime, period.EndDateTime);
 			var persons = _personRepository.FindPeople(personsModels.Select(x => x.PersonId));
 			
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(period), _currentScenario.Current(), new PersonProvider(persons), new ScheduleDictionaryLoadOptions(false, false), persons);
-
-			var allSkills = _skillRepository.LoadAll().ToList();
 			var multiplicationDefinition = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().FirstOrDefault();
 
 			var scheduleDays = persons.Select(person => scheduleDictionary[person].ScheduledDay(userDateOnly)).ToList();
-
-			var skills = allSkills.Where(x => overTimeSuggestionModel.SkillIds.Contains(x.Id.GetValueOrDefault())).ToList();
-
+			
 			if (!skills.Any())
 				return new OverTimeSuggestionResultModel
 				{
-					SuggestedStaffingWithOverTime = null,
-					OverTimeModels = result
+					StaffingHasData = false,
+					DataSeries = null
 				};
 
 			var activity = skills.FirstOrDefault().Activity;
@@ -94,47 +92,38 @@ namespace Teleopti.Ccc.Domain.Staffing
 				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5))
 			};
 			
-			var model = _scheduleOvertimeExecuteWrapper.Execute(overtimePreferences, new SchedulingProgress(), scheduleDays, period, allSkills);
+			var wrapperModels = _scheduleOvertimeExecuteWrapper.Execute(overtimePreferences, new SchedulingProgress(), scheduleDays, period, allSkills);
 
+			var returnModel = new OverTimeSuggestionResultModel() {StaffingHasData = true, DataSeries = new StaffingDataSeries()};
 			
+			returnModel.DataSeries.ForecastedStaffing = wrapperModels.ResourceCalculationPeriods.Where(y=>   overTimeSuggestionModel.SkillIds.Contains(y.SkillId) ). Select(x => (double?) x.FStaff).ToArray();
+			returnModel.DataSeries.ScheduledStaffing = wrapperModels.ResourceCalculationPeriods.Where(y =>  overTimeSuggestionModel.SkillIds.Contains(y.SkillId)).Select(x => (double?) x.StaffingLevel).ToArray();
+			returnModel.DataSeries.Time = overTimeSuggestionModel.TimeSerie;
+			calculateRelativeDifference(returnModel.DataSeries);
+			returnModel.OverTimeModels = wrapperModels.Models;
 
-			//var deltas = new List<SkillCombinationResource>();
-			//foreach (var person in affectedPersons)
-			//{
-			//	var personDeltas = _scheduleDayDifferenceSaver.GetDifferences(scheduleDictionary[person]).ToList();
-			//	result.Add(new OverTimeModel
-			//	{
-			//		PersonId = person.Id.GetValueOrDefault(),
-			//		ActivityId = activity.Id.GetValueOrDefault(),
-			//		Deltas = personDeltas,
-			//		EndDateTime = personDeltas.Max(x => x.EndDateTime),
-			//		StartDateTime = personDeltas.Min(x => x.StartDateTime)
-			//	});
-			//	deltas.AddRange(personDeltas);
-			//}
 
-			//foreach (var resource in combinationResources)
-			//{
-			//	var delta = deltas.Where(x => x.SkillCombination.SequenceEqual(resource.SkillCombination) && x.StartDateTime == resource.StartDateTime).Sum(x => x.Resource);
-			//	resource.Resource += delta;
-			//}
+			return returnModel;
+		}
 
-			//var staffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, combinationResources, false).Where(x => x.SkillId == overTimeSuggestionModel.SkillIds.FirstOrDefault());
-			var overTimescheduledStaffingPerSkill = model.ResourceCalculationPeriods.Where(s => s.SkillId == skills.FirstOrDefault().Id.GetValueOrDefault()).Select(x => new SkillStaffingIntervalLightModel
+		private void calculateRelativeDifference(StaffingDataSeries dataSeries)
+		{
+			dataSeries.RelativeDifference = new double?[dataSeries.ForecastedStaffing.Length];
+			for (var index = 0; index < dataSeries.ForecastedStaffing.Length; index++)
 			{
-				Id = x.SkillId,
-				StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, _userTimeZone.TimeZone()),
-				EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, _userTimeZone.TimeZone()),
-				StaffingLevel = x.StaffingLevel
-			}).ToList();
+				if (dataSeries.ForecastedStaffing[index].HasValue)
+				{
+					if (dataSeries.ScheduledStaffing.Length == 0)
+					{
+						dataSeries.RelativeDifference[index] = -dataSeries.ForecastedStaffing[index];
+						continue;
+					}
 
-			return new OverTimeSuggestionResultModel
-			{
-				SuggestedStaffingWithOverTime = _scheduledStaffingToDataSeries.DataSeries(overTimescheduledStaffingPerSkill, overTimeSuggestionModel.TimeSerie),
-				OverTimeModels = result
-			};
+					if (dataSeries.ScheduledStaffing[index].HasValue)
+						dataSeries.RelativeDifference[index] = dataSeries.ScheduledStaffing[index] - dataSeries.ForecastedStaffing[index];
+				}
 
-			//return result;
+			}
 		}
 
 		public OverTimeSuggestionResultModel GetSuggestionOld(OverTimeSuggestionModel overTimeSuggestionModel)
@@ -153,7 +142,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}).ToList();
 			return new OverTimeSuggestionResultModel
 			{
-				SuggestedStaffingWithOverTime = _scheduledStaffingToDataSeries.DataSeries(overTimescheduledStaffingPerSkill, overTimeSuggestionModel.TimeSerie),
 				OverTimeModels = overTimeStaffingSuggestion.OverTimeModels
 			};
 
@@ -175,8 +163,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 											   Period = new DateTimePeriod(overTimeModel.StartDateTime.Utc(), overTimeModel.EndDateTime.Utc()),
 											   PersonId = overTimeModel.PersonId
 										   });
-
-				//_skillCombinationResourceRepository.PersistChanges(overTimeModel.Deltas);
+				
 			}
 		}
 		
@@ -198,7 +185,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 	public class OverTimeSuggestionResultModel
 	{
-		public double?[] SuggestedStaffingWithOverTime { get; set; }
+		public StaffingDataSeries DataSeries { get; set; }
+
+		public bool StaffingHasData { get; set; }
 		public IList<OverTimeModel> OverTimeModels { get; set; }
 	}
 
@@ -214,7 +203,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public Guid PersonId { get; set; }
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
-		public IList<SkillCombinationResource> Deltas { get; set; }
 	}
 
 }

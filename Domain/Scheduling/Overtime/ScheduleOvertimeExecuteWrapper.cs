@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 		}
 
-		public SomethingModel Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress schedulingProgress, IList<IScheduleDay> scheduleDays,
+		public OvertimeWrapperModel Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress schedulingProgress, IList<IScheduleDay> scheduleDays,
 							DateTimePeriod requestedDateTimePeriod, IList<ISkill> skills)
 		{
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(requestedDateTimePeriod).ToList();
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 																								 s => (IResourceCalculationPeriod) s)));
 				var resCalcData = new ResourceCalculationData(skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
 
-				var affectedPersons = _scheduleOvertimeWithoutStateHolder.Execute(overtimePreferences, schedulingProgress, scheduleDays, requestedDateTimePeriod, resCalcData, () => getContext(combinationResources, skills, true));
+				var overtimeModels = _scheduleOvertimeWithoutStateHolder.Execute(overtimePreferences, schedulingProgress, scheduleDays, requestedDateTimePeriod, resCalcData, () => getContext(combinationResources, skills, true));
 				var xx = resCalcData.SkillResourceCalculationPeriodDictionary.Items().Where(x => skills.Contains(x.Key));
 				var resourceCalculationPeriods = new List<SkillStaffingInterval>();
 				foreach (var keyValuePair in xx)
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 					var intervals = keyValuePair.Value.OnlyValues().Cast<SkillStaffingInterval>(); 
 					resourceCalculationPeriods.AddRange(intervals);
 				}
-				return new SomethingModel(resourceCalculationPeriods, affectedPersons);
+				return new OvertimeWrapperModel(resourceCalculationPeriods, overtimeModels);
 			}
 		}
 
@@ -61,15 +62,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(combinationResources, skills, useAllSkills)));
 		}
 
-		public class SomethingModel
+		public class OvertimeWrapperModel
 		{
 			public List<SkillStaffingInterval> ResourceCalculationPeriods { get; }
-			public HashSet<IPerson> AffectedPersons { get; }
+			public IList<OverTimeModel> Models { get; }
 
-			public SomethingModel(List<SkillStaffingInterval> resourceCalculationPeriods, HashSet<IPerson> persons)
+			public OvertimeWrapperModel(List<SkillStaffingInterval> resourceCalculationPeriods, IList<OverTimeModel> models)
 			{
 				ResourceCalculationPeriods = resourceCalculationPeriods;
-				AffectedPersons = persons;
+				Models = models;
 			}
 		}
 	}

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public interface IScheduleOvertimeServiceWithoutStateholder
 	{
-		bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
+		DateTimePeriod? SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
 			IResourceCalculateDelayerWithoutStateholder resourceCalculateDelayer, DateOnly dateOnly,
 			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc, DateTimePeriod specifiedPeriod);
 	}
@@ -42,16 +42,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_calculateBestOvertime = calculateBestOvertime;
 		}
 
-		public bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
+		public DateTimePeriod? SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
 			IResourceCalculateDelayerWithoutStateholder resourceCalculateDelayer, DateOnly dateOnly,
 			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc, DateTimePeriod requestedPeriod)
 		{
 			var person = scheduleDay.Person;
 			var timeZoneInfo = _timeZoneGuard.CurrentTimeZone();
 			if (_gridlockManager.Gridlocks(person, dateOnly) != null)
-				return false;
+				return null;
 			if (!hasMultiplicatorDefinitionSetOfOvertimeType(person, dateOnly))
-				return false;
+				return null;
 
 			var overtimeDuration = new MinMax<TimeSpan>(overtimePreferences.SelectedTimePeriod.StartTime,
 				overtimePreferences.SelectedTimePeriod.EndTime);
@@ -80,14 +80,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 				var newRmsValue = calculatePeriodValue(dateOnly, person, timeZoneInfo, resourceCalculationData, skills);
 				if (newRmsValue <= oldRmsValue)
-					return true;
+					return dateTimePeriod;
 
 				_schedulePartModifyAndRollbackService.RollbackMinimumChecks();
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, resourceCalculationData, contextFunc);
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, resourceCalculationData, contextFunc);
 			}
 
-			return false;
+			return null;
 		}
 
 		private IList<IOvertimeSkillIntervalData> getAggregatedOvertimeSkillIntervals(IEnumerable<KeyValuePair<ISkill, IResourceCalculationPeriodDictionary>> dics)

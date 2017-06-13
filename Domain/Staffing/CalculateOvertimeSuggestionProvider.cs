@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 										   PersonId = person.Id.GetValueOrDefault(),
 										   StartDateTime = shiftStart,
 										   EndDateTime = shiftEnd,
-										   Deltas = deltas
+										   //Deltas = deltas
 									   });
 
 					intervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(period, resources, false);  // do we need to consider shrinkage??

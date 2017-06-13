@@ -223,14 +223,38 @@
 			} else {
 				skillIds = [currentSkills.Id];
 			}
-			vm.hasRequestedSuggestion = true;
+            vm.hasRequestedSuggestion = true;
+		    
 			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: vm.timeSerie });
 			query.$promise.then(function (response) {
-				staffingData.suggestedStaffing = response.SuggestedStaffingWithOverTime;
-				vm.overTimeModels = response.OverTimeModels;
-				staffingData.suggestedStaffing.unshift("Suggested Staffing");
-				generateChartForView();
-				vm.hasSuggestionData = true;
+				
+                staffingData.time = [];
+                staffingData.scheduledStaffing = [];
+                staffingData.forcastedStaffing = [];
+                staffingData.suggestedStaffing = [];
+                staffingData.relativeDifference = [];
+                if (staffingPrecheck(response.DataSeries)) 
+                {
+                    vm.hasSuggestionData = true;
+                    vm.overTimeModels = response.OverTimeModels;
+                    vm.staffingDataAvailable = true;
+                    console.log(response.OverTimeModels);
+                    staffingData.scheduledStaffing = roundDataToOneDecimal(response.DataSeries.ScheduledStaffing);
+                    staffingData.forcastedStaffing = roundDataToOneDecimal(response.DataSeries.ForecastedStaffing);
+                    staffingData.relativeDifference = response.DataSeries.RelativeDifference;
+                    staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
+                    staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
+                    vm.timeSerie = response.DataSeries.Time;
+                    angular.forEach(response.DataSeries.Time,
+                        function (value, key) {
+                            staffingData.time.push($filter('date')(value, 'shortTime'));
+                        },
+                        staffingData.time);
+                    staffingData.time.unshift('x');
+                    generateChartForView(staffingData);
+                } else {
+                    vm.staffingDataAvailable = false;
+                }
 			});
 
 		};
@@ -240,7 +264,7 @@
 			NoticeService.success('ResourceCalculation Triggered', 5000, true);
 		};
 
-		function generateChartForView(data) {
+        function generateChartForView(data) {
 			c3.generate(chartService.config(data));
 		}
 	}

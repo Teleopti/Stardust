@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_resourceCalculation = resourceCalculation;
 		}
 
-		public HashSet<IPerson> Execute(IOvertimePreferences overtimePreferences,
+		public IList<OverTimeModel> Execute(IOvertimePreferences overtimePreferences,
 										ISchedulingProgress backgroundWorker,
 										IList<IScheduleDay> selectedSchedules,
 										DateTimePeriod requestedDateTimePeriod,
@@ -41,27 +42,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
 			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			var cancel = false;
-			var affectedPersons = new HashSet<IPerson>();
+			var overtimeModels = new List<OverTimeModel>();
 			foreach (var dateOnly in selectedDates)
 			{
 				var persons = selectedPersons.Randomize();
 				
 				foreach (var person in persons)
 				{
-					if (cancel || checkIfCancelPressed(backgroundWorker)) return affectedPersons;
+					if (cancel || checkIfCancelPressed(backgroundWorker)) return overtimeModels;
 
 					var scheduleDay = selectedSchedules.FirstOrDefault(x => x.Person == person && x.DateOnlyAsPeriod.DateOnly == dateOnly);
 					if (scheduleDay == null) continue;
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
 				
 					var res = _scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter, resourceCalculationData, contextFunc, requestedDateTimePeriod);  
-					if (res)
-						affectedPersons.Add(person);
+					if (res.HasValue)
+						overtimeModels.Add(new OverTimeModel()
+						{
+							PersonId = person.Id.GetValueOrDefault(),
+							ActivityId = overtimePreferences.SkillActivity.Id.GetValueOrDefault(),
+							StartDateTime = res.Value.StartDateTime,
+							EndDateTime = res.Value.EndDateTime
+						});
 					var progressResult = onDayScheduled(backgroundWorker, new SchedulingServiceSuccessfulEventArgs(scheduleDay, () => cancel = true));
-					if (progressResult.ShouldCancel) return affectedPersons;
+					if (progressResult.ShouldCancel) return overtimeModels;
 				}
 			}
-			return affectedPersons;
+			return overtimeModels;
 		}
 
 		private static CancelSignal onDayScheduled(ISchedulingProgress backgroundWorker, SchedulingServiceBaseEventArgs args)

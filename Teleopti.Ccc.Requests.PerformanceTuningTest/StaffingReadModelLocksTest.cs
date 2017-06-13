@@ -222,17 +222,17 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 								StartDateTime = periods[intervalIndex],
 								EndDateTime = periods[intervalIndex].AddMinutes(15),
 								ActivityId = ActivityRepository.LoadAll().First().Id.Value,
-								PersonId = request.Person.Id.Value,
-								Deltas = new List<SkillCombinationResource>()
-								{
-									new SkillCombinationResource()
-									{
-										StartDateTime = periods[intervalIndex],
-										EndDateTime = periods[intervalIndex].AddMinutes(15),
-										Resource = 1,
-										SkillCombination = new List<Guid>() {Guid.NewGuid(), Guid.NewGuid()}
-									}
-								}
+								PersonId = request.Person.Id.Value
+								//Deltas = new List<SkillCombinationResource>()
+								//{
+								//	new SkillCombinationResource()
+								//	{
+								//		StartDateTime = periods[intervalIndex],
+								//		EndDateTime = periods[intervalIndex].AddMinutes(15),
+								//		Resource = 1,
+								//		SkillCombination = new List<Guid>() {Guid.NewGuid(), Guid.NewGuid()}
+								//	}
+								//}
 
 							};
 							
