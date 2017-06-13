@@ -26,17 +26,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [SetUp]
         public void Setup()
         {
-            ISkillType skillType = SkillTypeFactory.CreateSkillType();
+            var skillType = SkillTypeFactory.CreateSkillType();
             _multisiteSkill = SkillFactory.CreateMultisiteSkill("parent", skillType, 15);
-            IChildSkill childSkill1 = SkillFactory.CreateChildSkill("child1", _multisiteSkill);
-            IChildSkill childSkill2 = SkillFactory.CreateChildSkill("child2", _multisiteSkill);
-            _multisiteSkill.SetChildSkills(
-                new List<IChildSkill>
-                    {
-                        childSkill1,
-                        childSkill2
-                    });
-
+            var childSkill1 = SkillFactory.CreateChildSkill("child1", _multisiteSkill);
+            var childSkill2 = SkillFactory.CreateChildSkill("child2", _multisiteSkill);
+            
             _dt = new DateOnly(2008, 7, 16);
             _multisiteSkillDays = new List<ISkillDay>
                                       {

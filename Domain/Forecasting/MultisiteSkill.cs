@@ -47,21 +47,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 _templateMultisiteWeekCollection.Add((int)dayOfWeek, multisiteDayTemplate);
             }
         }
-
-        /// <summary>
-        /// Sets the child skills.
-        /// </summary>
-        /// <param name="childSkills">The child skills.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-18
-        /// </remarks>
-        public virtual void SetChildSkills(IList<IChildSkill> childSkills)
-        {
-            _childSkills = new HashSet<IChildSkill>(childSkills);
-            _childSkills.ForEach(s => s.SetParentSkill(this));
-        }
-
+		
         /// <summary>
         /// Gets the child skills.
         /// </summary>
@@ -70,12 +56,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-04-18
         /// </remarks>
-        public virtual ReadOnlyCollection<IChildSkill> ChildSkills
-        {
-            get { return new ReadOnlyCollection<IChildSkill>(_childSkills.ToArray()); }
-        }
+        public virtual ReadOnlyCollection<IChildSkill> ChildSkills => new ReadOnlyCollection<IChildSkill>(_childSkills.ToArray());
 
-        /// <summary>
+	    /// <summary>
         /// Sets the template at.
         /// First 7 slots are the standard WeekDays
         /// </summary>

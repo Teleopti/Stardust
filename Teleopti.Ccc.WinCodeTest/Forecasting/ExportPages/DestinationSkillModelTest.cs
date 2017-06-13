@@ -3,10 +3,9 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
 {
@@ -20,11 +19,9 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
         {
             const string childName = "child";
             const string multisiteName = "MultisiteSkill";
-			IChildSkill childSkill = new ChildSkill(childName, "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
-            childSkill.SetId(Guid.NewGuid());
-            IMultisiteSkill multisiteSkill = SkillFactory.CreateMultisiteSkill(multisiteName);
-            childSkill.SetParentSkill(multisiteSkill);
-			ISkill selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
+	        var multisiteSkill = SkillFactory.CreateMultisiteSkill(multisiteName);
+			var childSkill = new ChildSkill(childName, "desc", Color.Beige, multisiteSkill).WithId();
+            var selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
             selected.SetId(Guid.NewGuid());
             var childSkillMappingModel = new ChildSkillMappingModel(Guid.NewGuid(),
                                                                     selected.Id.GetValueOrDefault(),
@@ -43,11 +40,9 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
             const string childName = "child";
             const string multisiteName = "MultisiteSkill";
             var guid = Guid.NewGuid();
-            IChildSkill childSkill = new ChildSkill(childName, "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
-            childSkill.SetId(guid);
-            IMultisiteSkill multisiteSkill = SkillFactory.CreateMultisiteSkill(multisiteName);
-            childSkill.SetParentSkill(multisiteSkill);
-			ISkill selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
+			var multisiteSkill = SkillFactory.CreateMultisiteSkill(multisiteName);
+            var childSkill = new ChildSkill(childName, "desc", Color.Beige, multisiteSkill).WithId(guid);
+            var selected = new Skill("source", "desc", Color.Beige, 15, SkillTypeFactory.CreateSkillType());
             selected.SetId(Guid.NewGuid());
             var childSkillMappingModel = new ChildSkillMappingModel(guid,
                                                                     selected.Id.GetValueOrDefault(),

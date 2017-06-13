@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyChildSkillMustBelongToMultisiteSkill()
         {
             var skillDaysChild1 = new List<ISkillDay>();
-            IChildSkill childSkill = new ChildSkill("test", "test", Color.Red, 15, skill.SkillType);
+            IChildSkill childSkill = new ChildSkill("test", "test", Color.Red, new MultisiteSkill("B","",Color.Blue,15,SkillTypeFactory.CreateSkillType()));
 
 			Assert.Throws<ArgumentException>(() => target.SetChildSkillDays(childSkill, skillDaysChild1));
         }
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCannotHaveChildSkillFromOtherMultisiteSkill()
         {
-            IChildSkill childSkill = new ChildSkill("test", "test", Color.Red, 15, skill.SkillType);
+            IChildSkill childSkill = new ChildSkill("test", "test", Color.Red, new MultisiteSkill("B","",Color.Blue,15,SkillTypeFactory.CreateSkillType()));
 			Assert.Throws<ArgumentException>(() => target.GetPercentageForInterval(childSkill, new DateTimePeriod()));
         }
 

@@ -138,12 +138,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         /// </remarks>
         public static IChildSkill CreateChildSkill(string skillName,IMultisiteSkill parentSkill)
         {
-            ChildSkill skill = new ChildSkill(skillName,skillName,parentSkill.DisplayColor, parentSkill.DefaultResolution, parentSkill.SkillType);
-            skill.Activity = parentSkill.Activity;
-            skill.TimeZone = parentSkill.TimeZone;
-            skill.SetParentSkill(parentSkill);
-
-            return skill;
+            return new ChildSkill(skillName,skillName,parentSkill.DisplayColor, parentSkill);
         }
 
 		public static ISkill CreateSiteSkill(string skillName)

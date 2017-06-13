@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -112,12 +113,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Guid valid = Guid.NewGuid();
 			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new[] { valid }, new Guid[0]);
 
-            IChildSkill validSkill = new ChildSkill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
-            validSkill.SetId(valid);
-
-            IMultisiteSkill parent = new MultisiteSkill("multi", "multi", Color.DimGray, 13, new SkillTypeEmail(new Description("d"), ForecastSource.Time));
-            parent.AddChildSkill(validSkill);
-
+			var parent = new MultisiteSkill("multi", "multi", Color.DimGray, 13, new SkillTypeEmail(new Description("d"), ForecastSource.Time));
+            var validSkill = new ChildSkill("sdf", "sdf", Color.Empty, parent).WithId(valid);
+            
             IList<ISkill> list2Filter = new List<ISkill> { validSkill, parent };
 			int removed = target.FilterSkills(list2Filter.ToArray(), s => list2Filter.Remove(s), list2Filter.Add);
             Assert.AreEqual(0, removed);
@@ -130,12 +128,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Guid valid = Guid.NewGuid();
 			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new[] { valid }, new Guid[0]);
 			
-            IChildSkill validSkill = new ChildSkill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
-            validSkill.SetId(valid);
-
-            IMultisiteSkill parent = new MultisiteSkill("multi", "multi", Color.DimGray, 13, new SkillTypeEmail(new Description("d"), ForecastSource.Time));
-            parent.AddChildSkill(validSkill);
-
+	        var parent = new MultisiteSkill("multi", "multi", Color.DimGray, 13, new SkillTypeEmail(new Description("d"), ForecastSource.Time));
+			var validSkill = new ChildSkill("sdf", "sdf", Color.Empty, parent).WithId(valid);
+            
             IList<ISkill> list2Filter = new List<ISkill> { validSkill };
 			int removed = target.FilterSkills(list2Filter.ToArray(), s => list2Filter.Remove(s), list2Filter.Add);
             Assert.AreEqual(-1, removed);
@@ -148,16 +143,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Guid valid1 = Guid.NewGuid();
 			Guid valid2 = Guid.NewGuid();
 
-			IChildSkill validSkill1 = new ChildSkill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
-			validSkill1.SetId(valid1);
+			var parent = new MultisiteSkill("multi", "multi", Color.DimGray, 13, new SkillTypeEmail(new Description("d"), ForecastSource.Time));
 
-			IChildSkill validSkill2 = new ChildSkill("sdf", "sdf", Color.Empty, 23, new SkillTypeEmail(new Description("sdf"), ForecastSource.Time));
-			validSkill2.SetId(valid1);
-
-			IMultisiteSkill parent = new MultisiteSkill("multi", "multi", Color.DimGray, 13, new SkillTypeEmail(new Description("d"), ForecastSource.Time));
-			parent.AddChildSkill(validSkill1);
-			parent.AddChildSkill(validSkill2);
-
+			var validSkill1 = new ChildSkill("sdf", "sdf", Color.Empty, parent).WithId(valid1);
+			var validSkill2 = new ChildSkill("sdf", "sdf", Color.Empty, parent).WithId(valid2);
+			
 			IList<ISkill> list2Filter = new List<ISkill> { validSkill1, validSkill2 };
 			var target = new LoaderDeciderResult(new DateTimePeriod(1950, 1, 12, 1950, 1, 13), new Guid[0], new[] { valid1, valid2 }, new Guid[0]);
 			int removed = target.FilterSkills(list2Filter.ToArray(), s => list2Filter.Remove(s), list2Filter.Add);

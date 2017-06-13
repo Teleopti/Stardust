@@ -88,16 +88,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.SkillPages
 							UserTexts.Resources.SubSkill, 
 							UserTexts.Resources.SubSkill,
 							_skill.DisplayColor,
-							_skill.DefaultResolution,
-							_skill.SkillType)
-								{
-									MidnightBreakOffset = _skill.MidnightBreakOffset
-								};
+							_skill);
 
 			SkillWizardPages.SetSkillDefaultSettings(childSkill);
-			childSkill.TimeZone = _skill.TimeZone;
-			childSkill.Activity = _skill.Activity;
-			childSkill.SetParentSkill(_skill);
 			DialogResult result;
 			using (var swp = new SkillWizardPages(childSkill,new RepositoryFactory(),UnitOfWorkFactory.Current))
 			{

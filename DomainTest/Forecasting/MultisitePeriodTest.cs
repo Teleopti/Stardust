@@ -34,8 +34,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date.Add(TimeSpan.FromHours(0)), DateTimeKind.Utc),
                 DateTime.SpecifyKind(SkillDayTemplate.BaseDate.Date.Add(TimeSpan.FromDays(1)), DateTimeKind.Utc));
             ISkillType skillType = SkillTypeFactory.CreateSkillType();
-            _childSkill1 = new ChildSkill("Child1", "Child1", Color.Red, 15, skillType);
-            _childSkill2 = new ChildSkill("Child2", "Child2", Color.Red, 15, skillType);
+			var skill = new MultisiteSkill("M","",Color.Red,15,skillType);
+            _childSkill1 = new ChildSkill("Child1", "Child1", Color.Red, skill);
+            _childSkill2 = new ChildSkill("Child2", "Child2", Color.Red, skill);
 
             _distribution = new Dictionary<IChildSkill, Percent>();
             _distribution[_childSkill1] = new Percent(0.6);
@@ -87,7 +88,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCanSetPercentageWithInvalidChildSkill()
         {
-            ChildSkill temporaryChildSkill = new ChildSkill("3", "3", Color.Red, 15, SkillTypeFactory.CreateSkillType());
+	        var temporaryChildSkill = new ChildSkill("3", "3", Color.Red,
+		        new MultisiteSkill("M", "", Color.Red, 15, SkillTypeFactory.CreateSkillType()));
             target.SetPercentage(_childSkill1, new Percent(0.65));
             target.SetPercentage(
                 temporaryChildSkill, 

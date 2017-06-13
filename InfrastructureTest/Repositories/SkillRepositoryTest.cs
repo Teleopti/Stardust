@@ -11,10 +11,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -253,8 +251,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IChildSkill child1 = SkillFactory.CreateChildSkill("testc1", skill1);
             
             IList<ISkill> children = new List<ISkill> { child1 };
-
-            skill1.SetChildSkills(children.OfType<IChildSkill>().ToList());
             PersistAndRemoveFromUnitOfWork(children);
             
             IQueueSource q = new QueueSource("vågar inte skriva sånt", "peter", 1);
@@ -305,8 +301,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IChildSkill child2 = SkillFactory.CreateChildSkill("testc2", skill1);
 
             IList<ISkill> children = new List<ISkill> { child1, child2 };
-
-            skill1.SetChildSkills(children.OfType<IChildSkill>().ToList());
             PersistAndRemoveFromUnitOfWork(children);
 
             SkillRepository rep = new SkillRepository(UnitOfWork);
@@ -470,8 +464,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var child1 = SkillFactory.CreateChildSkill("child skill 1", skill1);
 
             IList<ISkill> children = new List<ISkill> { child1 };
-
-            skill1.SetChildSkills(children.OfType<IChildSkill>().ToList());
             PersistAndRemoveFromUnitOfWork(children);
 
             IQueueSource q = new QueueSource("Queue 1", "Phone Queue 1", 1);

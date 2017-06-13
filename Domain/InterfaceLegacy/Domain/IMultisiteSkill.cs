@@ -9,16 +9,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     public interface IMultisiteSkill : ISkill
     {
         /// <summary>
-        /// Sets the child skills.
-        /// </summary>
-        /// <param name="childSkills">The child skills.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-18
-        /// </remarks>
-        void SetChildSkills(IList<IChildSkill> childSkills);
-
-        /// <summary>
         /// Gets the child skills.
         /// </summary>
         /// <value>The child skills.</value>

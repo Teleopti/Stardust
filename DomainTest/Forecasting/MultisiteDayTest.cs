@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                 new TemplateMultisitePeriod(timePeriod2,
                                             new Dictionary<IChildSkill, Percent>()));
 
-            IChildSkill childSkill = new ChildSkill("hej", "kom och hjälp", Color.Black, 15, _skill.SkillType); 
+            IChildSkill childSkill = new ChildSkill("hej", "kom och hjälp", Color.Black, _skill); 
             
             multisiteDayTemplate.TemplateMultisitePeriodCollection[0].SetPercentage(childSkill, new Percent(0.1));
             int templateVersionNumberAfterChange = multisiteDayTemplate.VersionNumber;

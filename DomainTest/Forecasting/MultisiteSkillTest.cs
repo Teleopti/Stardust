@@ -20,18 +20,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
     public class MultisiteSkillTest
     {
         private IMultisiteSkill target;
-        private IList<IChildSkill> _childSkills;
         private IChildSkill _childSkill1;
         private IChildSkill _childSkill2;
         private ISkillType _skillTypePhone;
         private string _name = "Skill - Name";
         private string _description = "Skill - Description";
-        private Color _displayColor = Color.FromArgb(234);
+        private readonly Color _displayColor = Color.FromArgb(234);
         private DateOnly _dateTime;
-
-        /// <summary>
-        /// Setup
-        /// </summary>
+		
         [SetUp]
         public void Setup()
         {
@@ -39,11 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             target = new MultisiteSkill(_name, _description, _displayColor, 15, _skillTypePhone);
             _childSkill1 = SkillFactory.CreateChildSkill("Child1", target);
             _childSkill2 = SkillFactory.CreateChildSkill("Child2", target);
-            _childSkills = new List<IChildSkill>
-                {
-                    _childSkill1,
-                    _childSkill2
-                };
         }
 
         /// <summary>
@@ -72,24 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.IsNotNull(target);
             Assert.IsInstanceOf<Skill>(target);
         }
-
-        /// <summary>
-        /// Verifies the set child skills works.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-18
-        /// </remarks>
-        [Test]
-        public void VerifySetChildSkillsWorks()
-        {
-            target.SetChildSkills(_childSkills);
-
-            Assert.AreEqual(2, target.ChildSkills.Count);
-            Assert.AreEqual(_childSkill1, target.ChildSkills[0]);
-            Assert.AreEqual(_childSkill2, target.ChildSkills[1]);
-        }
-
+		
         /// <summary>
         /// Determines whether this instance [can get template weekdays].
         /// </summary>
@@ -341,7 +315,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCanRemoveChildSkill()
         {
-            target.SetChildSkills(_childSkills);
             Assert.AreEqual(2, target.ChildSkills.Count);
             target.RemoveChildSkill(_childSkill1);
             Assert.IsTrue(((IDeleteTag)_childSkill1).IsDeleted);
@@ -359,7 +332,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCannotRemoveIfChildSkillNotIsMember()
         {
-            Assert.AreEqual(0, target.ChildSkills.Count);
+	        target.RemoveChildSkill(_childSkill1);
+	        target.RemoveChildSkill(_childSkill2);
+			Assert.AreEqual(0, target.ChildSkills.Count);
             target.RemoveChildSkill(_childSkill1);
             Assert.AreEqual(0, target.ChildSkills.Count);
         }
@@ -390,7 +365,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             template.TemplateMultisitePeriodCollection[0].SetPercentage(_childSkill2, new Percent(0.6));
 
             Assert.IsTrue(template.TemplateMultisitePeriodCollection[0].IsValid);
-            target.SetChildSkills(_childSkills);
             Assert.AreEqual(2, target.ChildSkills.Count);
 			Assert.Throws<ArgumentException>(() => target.RemoveChildSkill(_childSkill1));
         }
@@ -405,6 +379,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifyCanAddChildSkill()
         {
+			target.RemoveChildSkill(target.ChildSkills[0]);
+			target.RemoveChildSkill(target.ChildSkills[0]);
             Assert.AreEqual(0, target.ChildSkills.Count);
             target.AddChildSkill(_childSkill1);
             Assert.AreEqual(1, target.ChildSkills.Count);

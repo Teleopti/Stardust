@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void Setup()
         {
             _dt = new DateOnly(2007, 1, 1);
-            _skill = new Skill("skill1", "skill1", Color.FromArgb(255), 15, SkillTypeFactory.CreateSkillType());
+            _skill = new Skill("skill1", "skill1", Color.FromArgb(255), 15, SkillTypeFactory.CreateSkillType()).WithId();
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _skillDataPeriods = new List<ISkillDataPeriod>();
 
@@ -43,9 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                     new SkillPersonData(),
                     new DateTimePeriod(DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(4)),
                                        DateTime.SpecifyKind(_dt.Date, DateTimeKind.Utc).Add(TimeSpan.FromHours(19)))));
-
-            _skill.SetId(Guid.NewGuid());
-
+			
             _skillDay = new SkillDay(_dt, _skill, _scenario, WorkloadDayFactory.GetWorkloadDaysForTest(_dt.Date, _skill), _skillDataPeriods);
             _skillDay.SetupSkillDay();
             _calculator = new SkillDayCalculator(_skill, new List<ISkillDay> { _skillDay }, new DateOnlyPeriod(_dt,_dt.AddDays(1)));
@@ -1283,7 +1281,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyNoSkillDayCalculatorGivesNoResultForChildSkill()
         {
 	        _skillDay = new SkillDay(_skillDay.CurrentDate,
-		        new ChildSkill("test", "test", Color.Red, 15, _skill.SkillType),
+		        new ChildSkill("test", "test", Color.Red, new MultisiteSkill("M","", Color.Red,15, _skill.SkillType)),
 		        _scenario, new List<IWorkloadDay>(), new List<ISkillDataPeriod>()) {SkillDayCalculator = null};
 	        Assert.AreEqual(0, _skillDay.SkillTaskPeriodCollection().Count);
         }
@@ -1331,7 +1329,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         [Test]
         public void VerifySkillStaffPeriodsAreNotReplacedWhenUsingChildSkill()
         {
-            _skill = new ChildSkill("test", "test", Color.Red, 15, _skill.SkillType);
+            _skill = new ChildSkill("test", "test", Color.Red, new MultisiteSkill("M", "", Color.Red, 15, _skill.SkillType));
             _skillDay = new SkillDay(_skillDay.CurrentDate, _skill, _scenario, new List<IWorkloadDay>(), _skillDataPeriods);
             _calculator = new SkillDayCalculator(_skill, new List<ISkillDay> { _skillDay }, new DateOnlyPeriod());
             var newSkillStaffPeriods = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod>

@@ -1190,17 +1190,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms
 								Resources.LessThanSkillNameGreaterThan,
 								string.Format(CultureInfo.CurrentUICulture,
 									Resources.SkillCreatedDotParameter0, DateTime.Now),
-								skill.DisplayColor,
-								skill.DefaultResolution,
-								skill.SkillType)
-							{
-								MidnightBreakOffset = skill.MidnightBreakOffset
-							};
+								skill.DisplayColor,skill);
 
 							SkillWizardPages.SetSkillDefaultSettings(childSkill);
-							childSkill.TimeZone = skill.TimeZone;
-							childSkill.Activity = skill.Activity;
-							childSkill.SetParentSkill(skill);
 							using (var swp = new SkillWizardPages(childSkill, _repositoryFactory, _unitOfWorkFactory))
 							{
 								swp.Initialize(PropertyPagesHelper.GetSkillPages(false, swp, true), new LazyLoadingManagerWrapper());

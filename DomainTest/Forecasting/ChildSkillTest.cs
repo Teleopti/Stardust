@@ -26,18 +26,18 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void Setup()
         {
             _skillTypePhone = SkillTypeFactory.CreateSkillType();
-            target = new ChildSkill(_name, _description, _displayColor, 15, _skillTypePhone);
             _multiSiteSkill = new MultisiteSkill("Parent", "Parent", _displayColor, 15, _skillTypePhone);
+			target = new ChildSkill(_name, _description, _displayColor, _multiSiteSkill);
         }
 
-        /// <summary>
-        /// Verifies the empty constructor.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-21
-        /// </remarks>
-        [Test]
+		/// <summary>
+		/// Verifies the empty constructor.
+		/// </summary>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-04-21
+		/// </remarks>
+		[Test]
         public void VerifyEmptyConstructor()
         {
             Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType()));
