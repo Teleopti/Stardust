@@ -2198,11 +2198,8 @@
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModel.cs" />
     <Compile Include="Forecasting\Export\IExportForecastDataToFileSerializer.cs" />
     <Compile Include="Forecasting\Export\IJobResultFeedback.cs" />
-    <Compile Include="Forecasting\Export\IMultisiteSkillForExport.cs" />
     <Compile Include="Forecasting\Export\IOpenAndSplitSkillCommand.cs" />
     <Compile Include="Forecasting\Export\ISaveForecastToSkill.cs" />
-    <Compile Include="Forecasting\Export\ISkillExportCombination.cs" />
-    <Compile Include="Forecasting\Export\ISkillExportSelection.cs" />
     <Compile Include="Forecasting\Export\MultisiteForecastToSkillAnalyzer.cs" />
     <Compile Include="Forecasting\Export\MultisiteSkillForExport.cs" />
     <Compile Include="Common\JobResult.cs" />

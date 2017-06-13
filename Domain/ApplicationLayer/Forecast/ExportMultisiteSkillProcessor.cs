@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 
 		private SkillExportSelection prepareSettingsFromMessage(ExportMultisiteSkillToSkill message)
 		{
-			var selections = new List<IMultisiteSkillForExport>();
+			var selections = new List<MultisiteSkillForExport>();
 
 			var export = new MultisiteSkillForExport
 			             	{

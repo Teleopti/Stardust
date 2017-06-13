@@ -3,21 +3,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
-    public class SkillExportSelection : ISkillExportSelection
+    public class SkillExportSelection
     {
-        private readonly IEnumerable<IMultisiteSkillForExport> _multisiteSkillForExports;
+        private readonly IEnumerable<MultisiteSkillForExport> _multisiteSkillForExports;
 
-        public SkillExportSelection(IEnumerable<IMultisiteSkillForExport> multisiteSkillForExports)
+        public SkillExportSelection(IEnumerable<MultisiteSkillForExport> multisiteSkillForExports)
         {
             _multisiteSkillForExports = multisiteSkillForExports;
         }
 
-        public IEnumerable<IMultisiteSkillForExport> MultisiteSkillsForExport
-        {
-            get { return _multisiteSkillForExports; }
-        }
+        public IEnumerable<MultisiteSkillForExport> MultisiteSkillsForExport => _multisiteSkillForExports;
 
-        public DateOnlyPeriod Period { get; set; }
+	    public DateOnlyPeriod Period { get; set; }
 
         public int Incremental { get; set; }
     }

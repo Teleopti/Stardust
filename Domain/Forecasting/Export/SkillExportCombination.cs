@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Forecasting.Export
 {
-    public class SkillExportCombination : ISkillExportCombination
+    public class SkillExportCombination
     {
         public IChildSkill SourceSkill { get; set; }
 

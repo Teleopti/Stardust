@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "subskill")]
-		public void Execute(ISkillExportSelection skillSelection)
+		public void Execute(SkillExportSelection skillSelection)
 		{
             foreach (var multisiteSkillForExport in skillSelection.MultisiteSkillsForExport)
             {
@@ -92,6 +92,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export
 
     public interface IMultisiteForecastToSkillCommand
     {
-        void Execute(ISkillExportSelection skillSelection);
+        void Execute(SkillExportSelection skillSelection);
     }
 }
