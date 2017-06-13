@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		}
 
 		public OvertimeWrapperModel Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress schedulingProgress, IList<IScheduleDay> scheduleDays,
-							DateTimePeriod requestedDateTimePeriod, IList<ISkill> skills)
+							DateTimePeriod requestedDateTimePeriod, IList<ISkill> skills, IList<ISkill> skillsToAddOvertime )
 		{
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(requestedDateTimePeriod).ToList();
 			using (getContext(combinationResources, skills, false))
@@ -43,15 +43,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 										  new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod,
 																								 s => (IResourceCalculationPeriod) s)));
 				var resCalcData = new ResourceCalculationData(skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
-
-				var overtimeModels = _scheduleOvertimeWithoutStateHolder.Execute(overtimePreferences, schedulingProgress, scheduleDays, requestedDateTimePeriod, resCalcData, () => getContext(combinationResources, skills, true));
-				var xx = resCalcData.SkillResourceCalculationPeriodDictionary.Items().Where(x => skills.Contains(x.Key));
 				var resourceCalculationPeriods = new List<SkillStaffingInterval>();
-				foreach (var keyValuePair in xx)
+				var overtimeModels = new List<OverTimeModel>();
+				foreach (var skill in skillsToAddOvertime)
 				{
-					var intervals = keyValuePair.Value.OnlyValues().Cast<SkillStaffingInterval>(); 
-					resourceCalculationPeriods.AddRange(intervals);
+					overtimePreferences.SkillActivity = skill.Activity;
+					overtimeModels.AddRange(_scheduleOvertimeWithoutStateHolder.Execute(overtimePreferences, schedulingProgress, scheduleDays,
+						requestedDateTimePeriod, resCalcData, () => getContext(combinationResources, skills, true)));
+					var xx = resCalcData.SkillResourceCalculationPeriodDictionary.Items().Where(x =>  x.Key==skill );
+					
+					foreach (var keyValuePair in xx)
+					{
+						var intervals = keyValuePair.Value.OnlyValues().Cast<SkillStaffingInterval>();
+						resourceCalculationPeriods.AddRange(intervals);
+					}
 				}
+				
 				return new OvertimeWrapperModel(resourceCalculationPeriods, overtimeModels);
 			}
 		}

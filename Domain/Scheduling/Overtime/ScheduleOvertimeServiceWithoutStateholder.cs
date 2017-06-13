@@ -59,6 +59,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			//	overtimePreferences.SelectedSpecificTimePeriod.EndTime);
 
 			var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly)).ToList();
+			if (!skills.Any())
+				return null;
 			var minResolution = OvertimeLengthDecider.GetMinimumResolution(skills, overtimeDuration,scheduleDay);
 			var overtimeSkillIntervalDataAggregatedList = getAggregatedOvertimeSkillIntervals(resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items());
 			var overtimeLayerLengthPeriodsUtc = _calculateBestOvertime.GetBestOvertimeInUtc(overtimeDuration, requestedPeriod, scheduleDay,minResolution

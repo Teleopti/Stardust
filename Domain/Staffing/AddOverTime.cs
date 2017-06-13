@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
@@ -28,13 +29,15 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ScheduleOvertimeExecuteWrapper _scheduleOvertimeExecuteWrapper;
+		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
+		private readonly ForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
 
 
 		public AddOverTime( IUserTimeZone userTimeZone, 
 						   IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ICommandDispatcher commandDispatcher, 
 						   IPersonForOvertimeProvider personForOvertimeProvider, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, 
 						   IPersonRepository personRepository, ISkillRepository skillRepository, 
-						   ScheduleOvertimeExecuteWrapper scheduleOvertimeExecuteWrapper)
+						   ScheduleOvertimeExecuteWrapper scheduleOvertimeExecuteWrapper, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries, ForecastedStaffingToDataSeries forecastedStaffingToDataSeries)
 		{
 			_userTimeZone = userTimeZone;
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
@@ -45,6 +48,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
 			_scheduleOvertimeExecuteWrapper = scheduleOvertimeExecuteWrapper;
+			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
+			_forecastedStaffingToDataSeries = forecastedStaffingToDataSeries;
 		}
 
 
@@ -72,21 +77,34 @@ namespace Teleopti.Ccc.Domain.Staffing
 					DataSeries = null
 				};
 
-			var activity = skills.FirstOrDefault().Activity;
 			var overtimePreferences = new OvertimePreferences
 			{
-				SkillActivity = activity,
 				ScheduleTag = new NullScheduleTag(),
 				OvertimeType = multiplicationDefinition,
 				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5))
 			};
 			
-			var wrapperModels = _scheduleOvertimeExecuteWrapper.Execute(overtimePreferences, new SchedulingProgress(), scheduleDays, period, allSkills);
+			var wrapperModels = _scheduleOvertimeExecuteWrapper.Execute(overtimePreferences, new SchedulingProgress(), scheduleDays, period, allSkills,skills);
 
 			var returnModel = new OverTimeSuggestionResultModel() {StaffingHasData = true, DataSeries = new StaffingDataSeries()};
+
+			returnModel.DataSeries.ScheduledStaffing =_scheduledStaffingToDataSeries.DataSeries(
+					wrapperModels.ResourceCalculationPeriods.Select(x => new SkillStaffingIntervalLightModel()
+					{
+						StartDateTime = x.StartDateTime,
+						EndDateTime = x.EndDateTime,
+						StaffingLevel = x.StaffingLevel
+					}).ToList(),overTimeSuggestionModel.TimeSerie);
+
+			returnModel.DataSeries.ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(
+					wrapperModels.ResourceCalculationPeriods.Select(x => new StaffingIntervalModel()
+					{
+						StartTime = x.StartDateTime,
+						SkillId = x.SkillId,
+						Agents = x.FStaff
+						
+					}).ToList(), overTimeSuggestionModel.TimeSerie);
 			
-			returnModel.DataSeries.ForecastedStaffing = wrapperModels.ResourceCalculationPeriods.Where(y=>   overTimeSuggestionModel.SkillIds.Contains(y.SkillId) ). Select(x => (double?) x.FStaff).ToArray();
-			returnModel.DataSeries.ScheduledStaffing = wrapperModels.ResourceCalculationPeriods.Where(y =>  overTimeSuggestionModel.SkillIds.Contains(y.SkillId)).Select(x => (double?) x.StaffingLevel).ToArray();
 			returnModel.DataSeries.Time = overTimeSuggestionModel.TimeSerie;
 			calculateRelativeDifference(returnModel.DataSeries);
 			returnModel.OverTimeModels = wrapperModels.Models;
