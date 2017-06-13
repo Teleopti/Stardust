@@ -192,9 +192,8 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 			if (isUpdateForecasted)
 			{
-				IBacklogTask incomingTask;
-				incomingTask = manualPlan.SkipDates != null ? _campaignTaskManager.GetIncomingTaskFromCampaign(campaign, manualPlan.SkipDates.ToList()) 
-					: _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
+				var incomingTask = manualPlan.SkipDates != null ? _campaignTaskManager.GetIncomingTaskFromCampaign(campaign, manualPlan.SkipDates.ToList()) 
+																: _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
 
 				var forecasts = _createOrUpdateSkillDays.UpdateSkillDays(campaign.Skill, incomingTask);				
 				_outboundScheduledResourcesCacher.SetForecastedTime(campaign, forecasts);

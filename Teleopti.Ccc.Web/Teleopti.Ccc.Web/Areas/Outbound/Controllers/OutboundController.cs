@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		public virtual CampaignVisualizationViewModel CampaignProductionReplan(PlanWithScheduleForm planForm)
 		{
 			_outboundCampaignPersister.ManualReplanCampaign(planForm);
-			return _campaignVisualizationProvider.ProvideVisualization(planForm.CampaignId);
+			return _campaignVisualizationProvider.ProvideVisualization(planForm.CampaignId, planForm.SkipDates.ToArray());
 		}
 
 		[HttpPut, Route("api/Outbound/Campaign/ThresholdsSetting"), UnitOfWork]
