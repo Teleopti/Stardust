@@ -180,18 +180,22 @@ namespace Teleopti.Ccc.Domain.Forecasting
             set { _midnightBreakOffset = value; }
         }
 
+		protected internal virtual string TimeZoneId { get => _timeZone;
+			set => _timeZone = value;
+		}
+
         public virtual TimeZoneInfo TimeZone
         {
             get
             {
-                if (String.IsNullOrEmpty(_timeZone))
+                if (String.IsNullOrEmpty(TimeZoneId))
                 {
                     _cachedTimeZone = TimeZoneInfo.Utc;
-                    _timeZone = _cachedTimeZone.Id;
+	                TimeZoneId = _cachedTimeZone.Id;
                 }
                 if (_cachedTimeZone == null)
                 {
-                    _cachedTimeZone = TimeZoneInfo.FindSystemTimeZoneById(_timeZone);
+                    _cachedTimeZone = TimeZoneInfo.FindSystemTimeZoneById(TimeZoneId);
                 }
 
                 return _cachedTimeZone;

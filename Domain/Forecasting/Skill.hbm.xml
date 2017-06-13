@@ -41,15 +41,16 @@
 				 not-null="true" foreign-key="FK_Skill_SkillType"/>
 		<many-to-one class="Teleopti.Ccc.Domain.Scheduling.Activity"
 				 name="Activity" 
-				 not-null="true" foreign-key="FK_Skill_Activity"/>
+				 not-null="true" foreign-key="FK_Skill_Activity" access="property"/>
 
-		<property name="TimeZone"
+		<property name="TimeZoneId"
+				  column="TimeZone"
 				  type="string"
 				  length="50"
-				  not-null="true" />
+			  not-null="true" access="property" />
 	
 	<property name="MidnightBreakOffset"
-				  not-null="true" />
+				  not-null="true" access="property" />
 		
 		<property name="CascadingIndex" access="property"/>
 	

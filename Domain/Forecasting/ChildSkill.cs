@@ -34,10 +34,10 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		    set {}
 	    }
 
-	    public override TimeZoneInfo TimeZone
+	    protected internal override string TimeZoneId
 	    {
-		    get { return _parentSkill.TimeZone; }
-			set { }
+		    get { return _parentSkill.TimeZone.Id; }
+		    set { }
 	    }
 
 	    /// <summary>
