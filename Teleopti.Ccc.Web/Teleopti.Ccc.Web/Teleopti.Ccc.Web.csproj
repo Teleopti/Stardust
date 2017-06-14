@@ -1705,9 +1705,7 @@
     <Content Include="WFM\app\reports\leaderboard.agentBadge.factory.js" />
     <Content Include="WFM\app\reports\leaderboard.agentBadge.factory.spec.js" />
     <Content Include="WFM\app\reports\leaderboard.service.js" />
-    <Content Include="WFM\app\reports\html\reports.html" />
     <Content Include="WFM\app\reports\leaderboard.controller.js" />
-    <Content Include="WFM\app\reports\reports.controller.js" />
     <Content Include="WFM\app\reports\reports.routes.js" />
     <Content Include="WFM\app\reports\reports.service.js" />
     <Content Include="WFM\app\reports\_modules.js" />
