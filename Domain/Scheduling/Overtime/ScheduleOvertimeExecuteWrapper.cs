@@ -27,12 +27,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		}
 
 		public OvertimeWrapperModel Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress schedulingProgress, IList<IScheduleDay> scheduleDays,
-							DateTimePeriod requestedDateTimePeriod, IList<ISkill> skills, IList<ISkill> skillsToAddOvertime )
+											DateTimePeriod requestedDateTimePeriod, IList<ISkill> skills, IList<ISkill> skillsToAddOvertime, DateTimePeriod fullDayPeriod)
 		{
-			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(requestedDateTimePeriod).ToList();
+			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(fullDayPeriod).ToList();
 			using (getContext(combinationResources, skills, false))
 			{
-				var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills, requestedDateTimePeriod, false).ToList(); //shrinkage = false
+				var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills, fullDayPeriod, false).ToList(); //shrinkage = false
 				skillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
 
 				var relevantSkillStaffPeriods =
@@ -49,16 +49,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				{
 					overtimePreferences.SkillActivity = skill.Activity;
 					overtimeModels.AddRange(_scheduleOvertimeWithoutStateHolder.Execute(overtimePreferences, schedulingProgress, scheduleDays,
-						requestedDateTimePeriod, resCalcData, () => getContext(combinationResources, skills, true)));
-					var xx = resCalcData.SkillResourceCalculationPeriodDictionary.Items().Where(x =>  x.Key==skill );
-					
+																						requestedDateTimePeriod, resCalcData, () => getContext(combinationResources, skills, true)));
+					var xx = resCalcData.SkillResourceCalculationPeriodDictionary.Items().Where(x => x.Key == skill);
+
 					foreach (var keyValuePair in xx)
 					{
 						var intervals = keyValuePair.Value.OnlyValues().Cast<SkillStaffingInterval>();
 						resourceCalculationPeriods.AddRange(intervals);
 					}
 				}
-				
+
 				return new OvertimeWrapperModel(resourceCalculationPeriods, overtimeModels);
 			}
 		}

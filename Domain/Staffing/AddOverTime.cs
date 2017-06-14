@@ -62,8 +62,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 				return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
 
 			var startTime = TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Min(), _userTimeZone.TimeZone());
+			var endTime = TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max().AddMinutes(minResolution), _userTimeZone.TimeZone());
+			var fullPeriod = new DateTimePeriod(startTime, endTime);
+			
 			if (startTime < _now.UtcDateTime().AddMinutes(15)) startTime = _now.UtcDateTime().AddMinutes(15);
-			var period = new DateTimePeriod(startTime, TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max().AddMinutes(minResolution), _userTimeZone.TimeZone()));
+			var period = new DateTimePeriod(startTime, endTime);
 
 			var userDateOnly = new DateOnly(overTimeSuggestionModel.TimeSerie.Min());
 			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, period.StartDateTime, period.EndDateTime);
@@ -85,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5))
 			};
 			
-			return _scheduleOvertimeExecuteWrapper.Execute(overtimePreferences, new SchedulingProgress(), scheduleDays, period, allSkills,skills);
+			return _scheduleOvertimeExecuteWrapper.Execute(overtimePreferences, new SchedulingProgress(), scheduleDays, period, allSkills,skills, fullPeriod);
 		}
 
 		public void Apply(IList<OverTimeModel> overTimeModels )

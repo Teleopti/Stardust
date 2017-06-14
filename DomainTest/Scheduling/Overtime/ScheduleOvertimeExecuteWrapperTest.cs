@@ -97,9 +97,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SkillActivity = activity
 			};
 			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 16, 2017, 06, 1, 17);
+			var fullPeriod = requestedPeriod;
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] {agent}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent});
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(dateOnly)}, requestedPeriod, new[] {skill}, new[] { skill });
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(dateOnly)}, requestedPeriod, new[] {skill}, new[] { skill }, fullPeriod);
 			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 16, 2017, 06, 01, 17));
 			overtimeActivities.Count().Should().Be.EqualTo(1);
 			result.Models.Should().Not.Be.Empty();
@@ -141,10 +142,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 
 			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 16, 2017, 06, 1, 17);
+			var fullPeriod = requestedPeriod;
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] {agent, agent2}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent, agent2});
 			var scheduleDays = scheduleDictionary.SchedulesForDay(dateOnly).ToList();
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] {skill}, new[] { skill });
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] {skill}, new[] { skill }, fullPeriod);
 			var overtimeActivities = scheduleDictionary.SchedulesForDay(dateOnly).ToList()
 				.Select(x => x.PersonAssignment().OvertimeActivities())
 				.SelectMany(i => i).Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 16, 2017, 06, 01, 17));
@@ -196,10 +198,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 
 			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 16, 2017, 06, 1, 19);
+			var fullPeriod = requestedPeriod;
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent, agent2 }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent, agent2 });
 			var scheduleDays = scheduleDictionary.SchedulesForDay(dateOnly).ToList();
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] { skill }, new[] { skill });
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] { skill }, new[] { skill }, fullPeriod);
 			var overtimeActivities = scheduleDictionary.SchedulesForDay(dateOnly).ToList()
 				.Select(x => x.PersonAssignment().OvertimeActivities())
 				.SelectMany(i => i).Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 16, 2017, 06, 01, 19));
@@ -270,10 +273,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 
 			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 16, 2017, 06, 1, 20);
+			var fullPeriod = requestedPeriod;
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent, agent2 }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent, agent2 });
 			var scheduleDays = scheduleDictionary.SchedulesForDay(dateOnly).ToList();
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] { skill }, new[] { skill });
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] { skill }, new[] { skill }, fullPeriod);
 			var overtimeActivities = scheduleDictionary.SchedulesForDay(dateOnly).ToList()
 				.Select(x => x.PersonAssignment().OvertimeActivities())
 				.SelectMany(i => i).Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 16, 2017, 06, 01, 20));
@@ -333,12 +337,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 
 			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 6, 2017, 06, 1, 10);
+			var fullPeriod = requestedPeriod;
 			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] {agent, agent2}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent, agent2});
 
 			var dateOnlyPeriod = new DateOnlyPeriod(may31DateOnly, june1DateOnly);
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(dateOnlyPeriod, agent, agent2).ToList();
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] {skill}, new[] { skill });
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] {skill}, new[] { skill }, fullPeriod);
 			var overtimeActivities = scheduleDictionary.SchedulesForPeriod(dateOnlyPeriod, agent, agent2).ToList()
 				.Select(x => x.PersonAssignment()?.OvertimeActivities())
 				.Where(y => y != null)
@@ -383,11 +388,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 
 			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 1, 2017, 06, 1, 7);
+			var fullPeriod = requestedPeriod;
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] {agent}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent});
 			var period = new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly.AddDays(1));
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, agent).ToList();
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] {skill}, new[] { skill });
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] {skill}, new[] { skill }, fullPeriod);
 			var overtimeActivities = scheduleDictionary.SchedulesForPeriod(period, agent).ToList()
 				.Select(x => x.PersonAssignment()?.OvertimeActivities())
 				.Where(y => y != null)
@@ -439,11 +445,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 
 			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 1, 2017, 06, 1, 5);
+			var fullPeriod = requestedPeriod;
 			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent, agent2 }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent, agent2 });
 			var period = new DateOnlyPeriod(may31DateOnly, june1DateOnly);
 			var scheduleDays = scheduleDictionary.SchedulesForPeriod(period, agent, agent2).ToList();
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] { skill }, new[] { skill });
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDays, requestedPeriod, new[] { skill }, new[] { skill }, fullPeriod);
 			var overtimeActivities = scheduleDictionary.SchedulesForPeriod(period, agent, agent2).ToList()
 				.Select(x => x.PersonAssignment()?.OvertimeActivities())
 				.Where(y => y != null)
@@ -487,9 +494,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 
 			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 21, 2017, 06, 2, 4);
+			var fullPeriod = requestedPeriod;
 			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent });
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill },new[] { skill });
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill },new[] { skill }, fullPeriod);
 			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(june1DateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 2, 0, 2017, 06, 2, 4));
 			overtimeActivities.Count().Should().Be.EqualTo(1);
 			result.Models.Should().Not.Be.Empty();
@@ -526,9 +534,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 
 			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 22, 2017, 06, 2, 4);
+			var fullPeriod = requestedPeriod;
 			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent });
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill }, new[] { skill });
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill }, new[] { skill }, fullPeriod);
 			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(june1DateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 1, 23, 2017, 06, 2, 3));
 			overtimeActivities.Count().Should().Be.EqualTo(1);
 			result.Models.Should().Not.Be.Empty();
@@ -565,9 +574,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 
 			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 22, 2017, 06, 2, 4);
+			var fullPeriod = requestedPeriod;
 			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent });
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill }, new[] { skill });
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill }, new[] { skill }, fullPeriod);
 			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(june1DateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 1, 23, 2017, 06, 2, 3));
 			overtimeActivities.Count().Should().Be.EqualTo(1);
 			result.Models.Should().Not.Be.Empty();
@@ -605,9 +615,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 
 			var requestedPeriod = new DateTimePeriod(2017, 06, 2, 4, 2017, 06, 2, 9);
+			var fullPeriod = requestedPeriod;
 			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent });
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill }, new[] { skill });
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { scheduleDictionary[agent].ScheduledDay(june1DateOnly) }, requestedPeriod, new[] { skill }, new[] { skill }, fullPeriod);
 			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(june1DateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 2, 5, 2017, 06, 2, 9));
 			overtimeActivities.Count().Should().Be.EqualTo(1);
 			result.Models.Should().Not.Be.Empty();
@@ -615,7 +626,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 
 		[Test]
-		public void ShouldNotScheduleOvertimeInThePast()
+		public void ShouldNotScheduleOvertimeInThePastButReturnModelsForPast()
 		{
 			setup();
 			Now.Is("2017-06-01 12:45");
@@ -643,12 +654,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SkillActivity = activity
 			};
 			var requestedPeriod = new DateTimePeriod(2017, 06, 01, 13, 2017, 06, 01, 16);
+			var fullPeriod = new DateTimePeriod(2017, 06, 01, 0, 2017, 06, 01, 16); 
 			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
 			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] {agent}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent});
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] {scheduleDictionary[agent].ScheduledDay(dateOnly)}, requestedPeriod, new[] {skill}, new[] {skill});
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] {scheduleDictionary[agent].ScheduledDay(dateOnly)}, requestedPeriod, new[] {skill}, new[] {skill}, fullPeriod);
 			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 13, 2017, 06, 01, 15));
 			overtimeActivities.Count().Should().Be.EqualTo(1);
 			result.Models.Should().Not.Be.Empty();
+			result.ResourceCalculationPeriods.Count.Should().Be.EqualTo(16);
 		}
 
 	}
