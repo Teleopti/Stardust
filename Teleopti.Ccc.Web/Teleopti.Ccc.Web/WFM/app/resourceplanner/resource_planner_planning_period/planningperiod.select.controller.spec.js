@@ -43,6 +43,7 @@ describe('planningPeriodSelectController', function () {
 
     beforeEach(function () {
         module('wfm.resourceplanner');
+        module('localeLanguageSortingService');
     });
 
     beforeEach(inject(function (_$httpBackend_, _$controller_, _fakeResourcePlanningBackend_, _planningPeriodServiceNew_) {
@@ -68,6 +69,10 @@ describe('planningPeriodSelectController', function () {
                 ValidationResult: null
             }]]
         });
+
+        $httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
+			return [200, true];
+		});
 
         $httpBackend.whenPUT('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e/lastperiod?endDate=2018-07-30').respond(function (method, url, data, headers) {
             return [200, [{
@@ -98,6 +103,7 @@ describe('planningPeriodSelectController', function () {
     });
 
     it('should get planning periods by planning group id before controller is loaded', function () {
+        $httpBackend.flush();
         expect(vm.planningPeriods.length).toEqual(2);
     });
 

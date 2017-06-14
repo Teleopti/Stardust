@@ -43,7 +43,8 @@
 					<i class="mdi mdi-pencil"></i>
 					<md-tooltip>{{'ChangePlanningDuration' | translate}}</md-tooltip>
 				</div>
-				<div tabindex=0 class="context-menu card-context icon-botton-second inline-flex" ng-if="$first && vm.planningPeriods.length > 1" ng-click="vm.getPpInfo(p);$event.stopPropagation();">
+				<div tabindex=0 class="context-menu card-context icon-botton-second inline-flex" ng-if="$first && vm.planningPeriods.length > 1"
+				 ng-click="vm.getPpInfo(p);$event.stopPropagation();">
 					<i class="mdi mdi-delete"></i>
 					<md-tooltip>{{'DeletePlanningPeriod' | translate}}</md-tooltip>
 				</div>
@@ -82,37 +83,35 @@
 </div>
 <div class="con-row">
 	<div class="con-flex pp-modal">
-		<div ng-cloak class="modal-box">
-			<div ng-cloak ng-show="vm.modifyLastPpModal">
-				<div class="modalbg">
-					<div class="dialog material-depth-1">
-						<div class="modal-inner-content">
-							<h3>{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate
-								| amDateFormat:"L"}}</h3>
-							<div class="con-row">
-								<label ng-if="!vm.dateIsChanged && vm.planningPeriods.length > 1">
+		<div ng-cloak class="modal-box" ng-show="vm.modifyLastPpModal">
+			<div class="modalbg">
+				<div class="dialog material-depth-1">
+					<div class="modal-inner-content">
+						<h3>{{'ChangePlanningPeriodDurationColon' | translate}} {{vm.originLastPp.startDate | amDateFormat:"L"}} - {{vm.originLastPp.endDate
+							| amDateFormat:"L"}}</h3>
+						<div class="con-row">
+							<label ng-if="!vm.dateIsChanged && vm.planningPeriods.length > 1">
 									<i class="mdi mdi-information-outline"></i> {{'ModifyEndDateForThisPlanningPeriodDot' | translate}}</label>
-								<label ng-if="!vm.dateIsChanged && vm.planningPeriods.length == 1"><i class="mdi mdi-information-outline"></i> {{'ModifyStartAndEndDateForThisPlanningPeriodDot' | translate}}</label>
-								<label ng-if="vm.dateIsChanged" class="text-warning">
+							<label ng-if="!vm.dateIsChanged && vm.planningPeriods.length == 1"><i class="mdi mdi-information-outline"></i> {{'ModifyStartAndEndDateForThisPlanningPeriodDot' | translate}}</label>
+							<label ng-if="vm.dateIsChanged" class="text-warning">
 								    <i class="mdi mdi-alert"></i>
 									{{vm.textForChangeThisPpMeg}}
 								</label>
-							</div>
-							<div class="con-row">
-								<date-range-picker class="pp-datepicker" ng-model="vm.lastPp" ng-change="vm.isDateChanged()"></date-range-picker>
-							</div>
 						</div>
-						<div class="modal-actions">
-							<aside>
-								<button ng-click="vm.modifyLastPpModal=false" class="wfm-btn wfm-btn-invis-default" translate>
+						<div class="con-row">
+							<date-range-picker class="pp-datepicker" ng-model="vm.lastPp" ng-change="vm.isDateChanged()"></date-range-picker>
+						</div>
+					</div>
+					<div class="modal-actions">
+						<aside>
+							<button ng-click="vm.modifyLastPpModal=false" class="wfm-btn wfm-btn-invis-default" translate>
 									Cancel
 								</button>
-								<button ng-class="{'wfm-btn-invis-primary':vm.dateIsChanged, 'wfm-btn-invis-disabled': !vm.dateIsChanged}" ng-click="vm.changeDateForLastPp(vm.lastPp);"
-								 class="wfm-btn save-planning-period" translate>
+							<button ng-class="{'wfm-btn-invis-primary':vm.dateIsChanged, 'wfm-btn-invis-disabled': !vm.dateIsChanged}" ng-click="vm.changeDateForLastPp(vm.lastPp);"
+							 class="wfm-btn save-planning-period" translate>
 									Apply
 								</button>
-							</aside>
-						</div>
+						</aside>
 					</div>
 				</div>
 			</div>
@@ -121,41 +120,39 @@
 </div>
 <div class="con-row">
 	<div class="con-flex pp-modal">
-		<div ng-cloak class="modal-box">
-			<div ng-cloak ng-show="vm.openCreatePpModal">
-				<div class="modalbg">
-					<div class="dialog material-depth-1">
-						<div class="modal-inner-content">
-							<h3>{{'CreateFirstPlanningPeriod' | translate}}</h3>
-							<div class="con-row">
-								<div class="con-flex">
-									<div class="wfm-chip-wrap" ng-repeat="s in vm.suggestions | limitTo: 10">
-										<span class="wfm-chip" ng-click="vm.selectSuggestion(s)">
+		<div ng-cloak class="modal-box" ng-show="vm.openCreatePpModal">
+			<div class="modalbg">
+				<div class="dialog material-depth-1">
+					<div class="modal-inner-content">
+						<h3>{{'CreateFirstPlanningPeriod' | translate}}</h3>
+						<div class="con-row">
+							<div class="con-flex">
+								<div class="wfm-chip-wrap" ng-repeat="s in vm.suggestions | limitTo: 10">
+									<span class="wfm-chip" ng-click="vm.selectSuggestion(s)">
 										<span class="chip-handle">{{s.Number}}{{s.PeriodType}}</span>
-										<span class="chip-text">{{s.StartDate | amDateFormat:"L"}} - {{s.EndDate | amDateFormat:"L"}}</span>
-										</span>
-									</div>
+									<span class="chip-text">{{s.StartDate | amDateFormat:"L"}} - {{s.EndDate | amDateFormat:"L"}}</span>
+									</span>
 								</div>
 							</div>
-							<div class="con-row">
-								<label ng-show="!vm.selectedIsChanged"><i class="mdi mdi-information-outline"></i>{{'SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot' | translate}}</label>
-								<label ng-show="vm.selectedIsChanged" class="text-warning"><i class="mdi mdi-alert"></i>{{vm.textForCreatePpMeg}}</label>
-							</div>
-							<div class="con-row">
-								<date-range-picker class="pp-datepicker" ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()"></date-range-picker>
-							</div>
 						</div>
-						<div class="modal-actions">
-							<aside>
-								<button ng-click="vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default" translate>
+						<div class="con-row">
+							<label ng-show="!vm.selectedIsChanged"><i class="mdi mdi-information-outline"></i>{{'SelectASuggestedPeriodToWorkWithOrPickStartAndEndDateDirectlyDot' | translate}}</label>
+							<label ng-show="vm.selectedIsChanged" class="text-warning"><i class="mdi mdi-alert"></i>{{vm.textForCreatePpMeg}}</label>
+						</div>
+						<div class="con-row">
+							<date-range-picker class="pp-datepicker" ng-model="vm.selectedSuggestion" ng-change="vm.isSelectedChanged()"></date-range-picker>
+						</div>
+					</div>
+					<div class="modal-actions">
+						<aside>
+							<button ng-click="vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default" translate>
 									Cancel
 								</button>
-								<button ng-class="{'wfm-btn-invis-primary':vm.selectedIsChanged, 'wfm-btn-invis-disabled': !vm.selectedIsChanged}" ng-click="vm.createFirstPp()"
-								 class="wfm-btn apply-planning-period" translate>
+							<button ng-class="{'wfm-btn-invis-primary':vm.selectedIsChanged, 'wfm-btn-invis-disabled': !vm.selectedIsChanged}" ng-click="vm.createFirstPp()"
+							 class="wfm-btn apply-planning-period" translate>
 									Apply
 								</button>
-							</aside>
-						</div>
+						</aside>
 					</div>
 				</div>
 			</div>

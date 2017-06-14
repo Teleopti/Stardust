@@ -10,8 +10,7 @@
     function Controller($state, $stateParams, $translate, planningPeriodServiceNew, planningGroupInfo, planningPeriods, localeLanguageSortingService) {
         var vm = this;
         var planningGroupId = $stateParams.groupId ? $stateParams.groupId : null;
-        vm.planningGroup = planningGroupInfo;
-        // vm.planningPeriods = planningPeriods.sort(localeLanguageSortingService.localeSort('-EndDate'));
+        vm.planningPeriods = planningPeriods.sort(localeLanguageSortingService.localeSort('-EndDate'));
         vm.planningPeriods = planningPeriods;
         vm.suggestions = [];
         vm.originLastPp = undefined;
