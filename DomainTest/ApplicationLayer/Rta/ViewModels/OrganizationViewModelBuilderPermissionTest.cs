@@ -123,6 +123,67 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.Should().Have.SameValuesAs(team);
 		}
 
+		[Test]
+		public void ShouldHaveFullPermissionForSite()
+		{
+			var site = Guid.NewGuid();
+			var team = Guid.NewGuid();
+			var wrongTeam = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			var wrongPerson = Guid.NewGuid();
+			Database
+				.WithSite(site)
+				.WithTeam(team)
+				.WithAgent(person)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = person,
+					BusinessUnitId = Database.CurrentBusinessUnitId(),
+					SiteId = site,
+					TeamId = team
+				});
+			Permissions.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, site);
+
+			var result = Target.Build().Single();
+
+			result.FullPermission.Should().Be(true);
+		}
+		[Test]
+		public void ShouldNotHaveFullPermissionForPermittedTeam()
+		{
+			var site = Guid.NewGuid();
+			var team = Guid.NewGuid();
+			var wrongTeam = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			var wrongPerson = Guid.NewGuid();
+			Database
+				.WithSite(site)
+				.WithTeam(team)
+				.WithAgent(person)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = person,
+					BusinessUnitId = Database.CurrentBusinessUnitId(),
+					SiteId = site,
+					TeamId = team
+				})
+				.WithTeam(wrongTeam)
+				.WithAgent(wrongPerson)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = wrongPerson,
+					BusinessUnitId = Database.CurrentBusinessUnitId(),
+					SiteId = site,
+					TeamId = wrongTeam
+				})
+				;
+			Permissions.HasPermissionForTeam(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, team);
+
+			var result = Target.Build().Single();
+
+			result.FullPermission.Should().Be(false);
+		}
+
 
 	}
 }

@@ -42,17 +42,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 			return (
 				from s in sites
+				let isPermittedSite = auth.IsPermitted(rtaOverview, _userNow.Date(),
+						  new SiteAuthorization { BusinessUnitId = s.BusinessUnitId, SiteId = s.SiteId })
 				let teams = (from t in s.Teams
 					where auth.IsPermitted(rtaOverview, _userNow.Date(),
 						new TeamAuthorization {BusinessUnitId = s.BusinessUnitId, SiteId = s.SiteId, TeamId = t.TeamId})
 					select t).ToArray()
-				where auth.IsPermitted(rtaOverview, _userNow.Date(),
-						  new SiteAuthorization {BusinessUnitId = s.BusinessUnitId, SiteId = s.SiteId}) ||
-					  teams.Any()
+				where isPermittedSite || teams.Any()
 				select new OrganizationSiteViewModel
 				{
 					Id = s.SiteId,
 					Name = s.SiteName,
+					FullPermission = isPermittedSite,
 					Teams = from t in teams
 						select new OrganizationTeamViewModel
 						{
@@ -67,7 +68,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	public class OrganizationSiteViewModel
 	{
 		public Guid Id { get; set; }
+		public bool FullPermission { get; set; }
 		public string Name { get; set; }
+	
+
 		public IEnumerable<OrganizationTeamViewModel> Teams;
 	}
 
