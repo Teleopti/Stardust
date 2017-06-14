@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
     public interface IAnalyzePersonAccordingToAvailability
     {
-		DateTimePeriod? AdustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly, TimeZoneInfo timeZoneInfo,  DateTimePeriod overtimeLayerLengthPeriod);
+		DateTimePeriod? AdjustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly, TimeZoneInfo timeZoneInfo,  DateTimePeriod overtimeLayerLengthPeriod);
     }
 
     public class AnalyzePersonAccordingToAvailability : IAnalyzePersonAccordingToAvailability
@@ -18,16 +18,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _adjustOvertimeLengthBasedOnAvailability = adjustOvertimeLengthBasedOnAvailability;
         }
 
-	    public DateTimePeriod? AdustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly,
+	    public DateTimePeriod? AdjustOvertimeAvailability(IScheduleDay scheduleDay, DateOnly dateOnly,
 		    TimeZoneInfo timeZoneInfo, DateTimePeriod overtimeLayerLengthPeriod)
 	    {
 
-		    var ovrtimeCollectionForPerson = scheduleDay.OvertimeAvailablityCollection();
-		    if (ovrtimeCollectionForPerson.Count == 0) return null;
+		    var overtimeAvailablityCollection = scheduleDay.OvertimeAvailablityCollection();
+		    if (overtimeAvailablityCollection.Count == 0) return null;
 		    var overtimePeriod =
 			    TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-				    dateOnly.Date.Add(ovrtimeCollectionForPerson[0].StartTime.GetValueOrDefault()),
-				    dateOnly.Date.Add(ovrtimeCollectionForPerson[0].EndTime.GetValueOrDefault()), timeZoneInfo);
+				    dateOnly.Date.Add(overtimeAvailablityCollection[0].StartTime.GetValueOrDefault()),
+				    dateOnly.Date.Add(overtimeAvailablityCollection[0].EndTime.GetValueOrDefault()), timeZoneInfo);
 
 
 

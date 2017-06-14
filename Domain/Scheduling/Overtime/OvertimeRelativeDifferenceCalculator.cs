@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				if (onlyOvertimeAvaialbility)
 				{
 					var timeZoneInfo = scheduleDay.Person.PermissionInformation.DefaultTimeZone();
-					var adjustedPeriod = _analyzePersonAccordingToAvailability.AdustOvertimeAvailability(scheduleDay, scheduleDay.DateOnlyAsPeriod.DateOnly, timeZoneInfo, period);
+					var adjustedPeriod = _analyzePersonAccordingToAvailability.AdjustOvertimeAvailability(scheduleDay, scheduleDay.DateOnlyAsPeriod.DateOnly, timeZoneInfo, period);
 					if (adjustedPeriod.HasValue)
 					{
 						calculateAndAddToPossiblePeriods(possibleOvertimePeriods, overtimePeriodValueMappedData, adjustedPeriod.Value);

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			}
 			using (_mock.Playback())
 			{
-				Assert.IsNull(_target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriod));
+				Assert.IsNull(_target.AdjustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriod));
 			}
 
 		}
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			}
 			using (_mock.Playback())
 			{
-				Assert.IsNull(_target.AdustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriod));
+				Assert.IsNull(_target.AdjustOvertimeAvailability(_scheduleDay, _today, TimeZoneInfo.Utc, overtimePeriod));
 			}
 
 		}

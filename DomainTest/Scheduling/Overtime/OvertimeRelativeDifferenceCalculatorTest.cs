@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			{
 				Expect.Call(_scheduleDay.Person).Return(person).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
-				Expect.Call(_analyzePersonAccordingToAvailability.AdustOvertimeAvailability(_scheduleDay, dateOnly, person.PermissionInformation.DefaultTimeZone(), dateTimePeriod)).Return(dateTimePeriod).IgnoreArguments().Repeat.AtLeastOnce();	
+				Expect.Call(_analyzePersonAccordingToAvailability.AdjustOvertimeAvailability(_scheduleDay, dateOnly, person.PermissionInformation.DefaultTimeZone(), dateTimePeriod)).Return(dateTimePeriod).IgnoreArguments().Repeat.AtLeastOnce();	
 			}
 
 			using (_mock.Playback())
