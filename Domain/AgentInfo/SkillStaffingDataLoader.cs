@@ -45,62 +45,70 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var useShrinkage = isShrinkageValidatorEnabled();
 			var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), personSkills.Select(s => s.Skill),
 				_scenarioRepository.Current()).ToList();
-			var skillStaffingDatas = createSkillStaffingDatas(period, personSkills.Select(s => s.Skill).ToList(), resolution, useShrinkage, skillDays);
+			var skillStaffingDatas = createSkillStaffingDatas(period, personSkills.Select(s => s.Skill).ToList(), resolution,
+				useShrinkage, skillDays);
 
 			skillStaffingList.AddRange(skillStaffingDatas);
-
 			return skillStaffingList;
 		}
 
-		private IList<SkillStaffingData> createSkillStaffingDatas(DateOnlyPeriod period, IList<ISkill> skills, int resolution,
-			bool useShrinkage,
-			IList<ISkillDay> skillDays)
+		private IEnumerable<SkillStaffingData> createSkillStaffingDatas(DateOnlyPeriod period, IList<ISkill> skills,
+			int resolution, bool useShrinkage, IList<ISkillDay> skillDays)
 		{
-			var dayStaffingDatas =
-				period.DayCollection()
-					.Select(
-						day =>
-							new
-							{
-								Date = day,
-								Scheduled =
-								_scheduledStaffingProvider.StaffingPerSkill(skills, resolution, day, useShrinkage)
-									.ToLookup(x => new {x.StartDateTime, x.Id}),
-								Forecasted =
-								_forecastedStaffingProvider.StaffingPerSkill(
-									skillDays
-										.Where(s => s.CurrentDate >= day.AddDays(-1) && s.CurrentDate <= day.AddDays(1))
-										.ToLookup(x => x.Skill)
-										.ToDictionary(y => y.Key, y => y.AsEnumerable()),
-									resolution, day,
-									useShrinkage).ToLookup(x => new {x.StartTime, x.SkillId})
-							});
+			var dayStaffingDatas = period.DayCollection().Select(day => new
+			{
+				Date = day,
+				Scheduled = getScheduledStaffing(skills, resolution, useShrinkage, day)
+					.ToLookup(x => new {StartTime = x.StartDateTime, SkillId = x.Id}),
+				Forecasted = getForecastedStaffing(resolution, useShrinkage, skillDays, day)
+					.ToLookup(x => new {x.StartTime, x.SkillId})
+			});
 
 			var skillStaffingDatas = from dayStaffingData in dayStaffingDatas
-				let date = dayStaffingData.Date
-				let times =
-				dayStaffingData.Scheduled.Select(t => t.Key.StartDateTime)
-					.Union(dayStaffingData.Forecasted.Select(t => t.Key.StartTime))
-					.Distinct()
-					.OrderBy(t => t)
-					.ToArray()
-				from time in times
+				let scheduledGroupStartTimes = dayStaffingData.Scheduled.Select(t => t.Key.StartTime)
+				let forecastedGroupStartTimes = dayStaffingData.Forecasted.Select(t => t.Key.StartTime)
+				let distinctedStartTimes = scheduledGroupStartTimes.Union(forecastedGroupStartTimes).Distinct().OrderBy(t => t)
+				from startTime in distinctedStartTimes
 				from skill in skills
-				let scheduleds = dayStaffingData.Scheduled[new {StartDateTime = time, Id = skill.Id.GetValueOrDefault()}]
-				let forecasteds = dayStaffingData.Forecasted[new {StartTime = time, SkillId = skill.Id.GetValueOrDefault()}]
+				let skillTimePair = new {StartTime = startTime, SkillId = skill.Id.GetValueOrDefault()}
+				let scheduledStaffing = calculateScheduledStaffing(dayStaffingData.Scheduled[skillTimePair].ToList())
+				let forecastedStaffing = calculateForecastedStaffing(dayStaffingData.Forecasted[skillTimePair].ToList())
 				select new SkillStaffingData
 				{
 					Resolution = resolution,
-					Date = date,
+					Date = dayStaffingData.Date,
 					Skill = skill,
-					Time = time,
-					ScheduledStaffing = scheduleds.Any()
-						? scheduleds.Sum(scheduled => scheduled.StartDateTime == new DateTime() ? null : (double?) scheduled.StaffingLevel)
-						: null,
-					ForecastedStaffing = forecasteds.Any() ? forecasteds.Sum(forecasted => forecasted?.Agents) : null
+					Time = startTime,
+					ScheduledStaffing = scheduledStaffing,
+					ForecastedStaffing = forecastedStaffing
 				};
 
-			return skillStaffingDatas.ToList();
+			return skillStaffingDatas;
+		}
+
+		private static double? calculateForecastedStaffing(IList<StaffingIntervalModel> forecasteds)
+		{
+			return forecasteds.Any() ? forecasteds.Sum(forecasted => forecasted?.Agents) : null;
+		}
+
+		private static double? calculateScheduledStaffing(IList<SkillStaffingIntervalLightModel> scheduleds)
+		{
+			if (!scheduleds.Any()) return null;
+			return scheduleds.Sum(s => s.StartDateTime != new DateTime() ? (double?) s.StaffingLevel : null);
+		}
+
+		private IEnumerable<SkillStaffingIntervalLightModel> getScheduledStaffing(IList<ISkill> skills, int resolution,
+			bool useShrinkage, DateOnly day)
+		{
+			return _scheduledStaffingProvider.StaffingPerSkill(skills, resolution, day, useShrinkage);
+		}
+
+		private IEnumerable<StaffingIntervalModel> getForecastedStaffing(int resolution, bool useShrinkage,
+			IEnumerable<ISkillDay> skillDays, DateOnly day)
+		{
+			var skillDayDict = skillDays.Where(s => s.CurrentDate >= day.AddDays(-1) && s.CurrentDate <= day.AddDays(1))
+				.ToLookup(x => x.Skill).ToDictionary(y => y.Key, y => y.AsEnumerable());
+			return _forecastedStaffingProvider.StaffingPerSkill(skillDayDict, resolution, day, useShrinkage);
 		}
 
 		private IEnumerable<IPersonSkill> getSupportedPersonSkills(DateOnlyPeriod period)
