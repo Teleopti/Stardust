@@ -61,34 +61,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						}
 				}
 			).ToArray();
-
-			//return
-			//	teams
-			//		.Where(x =>
-			//			auth.IsPermitted(rtaOverview, _now.ServerDate_DontUse(),
-			//				new SiteAuthorization {BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId}) ||
-			//			auth.IsPermitted(rtaOverview, _now.ServerDate_DontUse(),
-			//				new TeamAuthorization {BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId, TeamId = x.TeamId})
-			//		)
-			//		.GroupBy(x => x.SiteId)
-			//		.Select(site =>
-			//			new OrganizationSiteViewModel
-			//			{
-			//				Id = site.Key,
-			//				Name = site.FirstOrDefault()?.SiteName,
-			//				Teams = site
-			//					.Where(t =>
-			//						auth.IsPermitted(rtaOverview, _now.ServerDate_DontUse(),
-			//							new TeamAuthorization {BusinessUnitId = t.BusinessUnitId, SiteId = t.SiteId, TeamId = t.TeamId}))
-			//					.Select(
-			//						team => new OrganizationTeamViewModel
-			//						{
-			//							Id = team.TeamId,
-			//							Name = team.TeamName
-			//						}).ToArray()
-
-			//			})
-			//			.ToArray();
 		}
 	}
 
