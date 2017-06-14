@@ -123,14 +123,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow.AddMinutes(-minutesPerInterval), TimeZone.TimeZone()));
 			var scheduledSeries = vm.DataSeries.ScheduledStaffing;
 			var forecastedSeries = vm.DataSeries.ForecastedStaffing;
-			var relativeDiffSeries = vm.DataSeries.RelativeDifference;
+			var relativeDiffSeries = vm.DataSeries.AbsoluteDifference;
 			scheduledSeries.First().Should().Be.EqualTo(10);
 			scheduledSeries.Second().Should().Be.EqualTo(2);
 			forecastedSeries.First().Should().Be.EqualTo(3);
 			forecastedSeries.Second().Should().Be.EqualTo(3);
 			relativeDiffSeries.First().Should().Be.EqualTo(7);
 			relativeDiffSeries.Second().Should().Be.EqualTo(-1);
-			vm.DataSeries.RelativeDifference.Length.Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Length);
+			vm.DataSeries.AbsoluteDifference.Length.Should().Be.EqualTo(vm.DataSeries.ForecastedStaffing.Length);
 
 		}
 
