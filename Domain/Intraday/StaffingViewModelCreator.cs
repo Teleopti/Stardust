@@ -135,19 +135,19 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		private static void calculateRelativeDifference(StaffingDataSeries dataSeries)
 		{
-			dataSeries.RelativeDifference = new double?[dataSeries.ForecastedStaffing.Length];
+			dataSeries.AbsoluteDifference = new double?[dataSeries.ForecastedStaffing.Length];
 			for (var index = 0; index < dataSeries.ForecastedStaffing.Length; index++)
 			{
 				if (dataSeries.ForecastedStaffing[index].HasValue)
 				{
 					if ( dataSeries.ScheduledStaffing.Length == 0)
 					{
-						dataSeries.RelativeDifference[index] = -dataSeries.ForecastedStaffing[index];
+						dataSeries.AbsoluteDifference[index] = -dataSeries.ForecastedStaffing[index];
 						continue;
 					}
 
 					if (dataSeries.ScheduledStaffing[index].HasValue)
-						dataSeries.RelativeDifference[index] = dataSeries.ScheduledStaffing[index] - dataSeries.ForecastedStaffing[index];
+						dataSeries.AbsoluteDifference[index] = dataSeries.ScheduledStaffing[index] - dataSeries.ForecastedStaffing[index];
 				}
 				
 			}

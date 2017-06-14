@@ -69,16 +69,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(combinationResources, skills, useAllSkills)));
 		}
 
-		public class OvertimeWrapperModel
-		{
-			public List<SkillStaffingInterval> ResourceCalculationPeriods { get; }
-			public IList<OverTimeModel> Models { get; }
+		
+	}
 
-			public OvertimeWrapperModel(List<SkillStaffingInterval> resourceCalculationPeriods, IList<OverTimeModel> models)
-			{
-				ResourceCalculationPeriods = resourceCalculationPeriods;
-				Models = models;
-			}
+	public class OvertimeWrapperModel
+	{
+		public List<SkillStaffingInterval> ResourceCalculationPeriods { get; }
+		public IList<OverTimeModel> Models { get; }
+
+		public OvertimeWrapperModel(List<SkillStaffingInterval> resourceCalculationPeriods, IList<OverTimeModel> models)
+		{
+			ResourceCalculationPeriods = resourceCalculationPeriods;
+			Models = models;
 		}
 	}
 }

@@ -142,8 +142,8 @@
             staffing.over.unshift('Overstaffing');
             staffing.under.unshift('Understaffing');
 
-            for (var index = 0; index <= staffingData.relativeDifference.length; index++) {
-                var value = staffingData.relativeDifference[index];
+            for (var index = 0; index <= staffingData.absoluteDifference.length; index++) {
+                var value = staffingData.absoluteDifference[index];
                 value = parseFloat(value);
                 if (value < 0) {
                     staffing.under.push(Math.abs(value.toFixed(1)));

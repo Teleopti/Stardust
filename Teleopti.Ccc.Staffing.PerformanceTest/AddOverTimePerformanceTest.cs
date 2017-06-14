@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 					SkillIds = skillIds.ToList(),
 					TimeSerie = timeSerie
 				});
-				AddOverTime.Apply(resultModels.OverTimeModels);
+				AddOverTime.Apply(resultModels.Models);
 			});
 
 		}

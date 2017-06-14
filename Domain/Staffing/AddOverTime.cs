@@ -29,15 +29,14 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ScheduleOvertimeExecuteWrapper _scheduleOvertimeExecuteWrapper;
-		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
-		private readonly ForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
+		
 
 
 		public AddOverTime( IUserTimeZone userTimeZone, 
 						   IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ICommandDispatcher commandDispatcher, 
 						   IPersonForOvertimeProvider personForOvertimeProvider, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, 
 						   IPersonRepository personRepository, ISkillRepository skillRepository, 
-						   ScheduleOvertimeExecuteWrapper scheduleOvertimeExecuteWrapper, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries, ForecastedStaffingToDataSeries forecastedStaffingToDataSeries)
+						   ScheduleOvertimeExecuteWrapper scheduleOvertimeExecuteWrapper)
 		{
 			_userTimeZone = userTimeZone;
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
@@ -48,17 +47,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
 			_scheduleOvertimeExecuteWrapper = scheduleOvertimeExecuteWrapper;
-			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
-			_forecastedStaffingToDataSeries = forecastedStaffingToDataSeries;
 		}
 
 
-		public OverTimeSuggestionResultModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel)
+		public OvertimeWrapperModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel)
 		{
 			//midnight shift ??
 			var allSkills = _skillRepository.LoadAll().ToList();
 			var skills = allSkills.Where(x => overTimeSuggestionModel.SkillIds.Contains(x.Id.GetValueOrDefault())).ToList();
 			var minResolution = skills.Min(x => x.DefaultResolution);
+			if (!overTimeSuggestionModel.TimeSerie.Any())
+				return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Min(), _userTimeZone.TimeZone()),
 				  TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max().AddMinutes(minResolution),_userTimeZone.TimeZone()));
 
@@ -73,11 +72,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var scheduleDays = persons.Select(person => scheduleDictionary[person].ScheduledDay(userDateOnly)).ToList();
 			
 			if (!skills.Any())
-				return new OverTimeSuggestionResultModel
-				{
-					StaffingHasData = false,
-					DataSeries = null
-				};
+				return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
 
 			var overtimePreferences = new OvertimePreferences
 			{
@@ -86,54 +81,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5))
 			};
 			
-			var wrapperModels = _scheduleOvertimeExecuteWrapper.Execute(overtimePreferences, new SchedulingProgress(), scheduleDays, period, allSkills,skills);
-			return extractDataSeries(overTimeSuggestionModel, wrapperModels);
-		}
-
-		private OverTimeSuggestionResultModel extractDataSeries(OverTimeSuggestionModel overTimeSuggestionModel,
-			ScheduleOvertimeExecuteWrapper.OvertimeWrapperModel wrapperModels)
-		{
-			var returnModel = new OverTimeSuggestionResultModel() {StaffingHasData = true, DataSeries = new StaffingDataSeries()};
-			returnModel.DataSeries.ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(
-				wrapperModels.ResourceCalculationPeriods.Select(x => new SkillStaffingIntervalLightModel()
-				{
-					StartDateTime = x.StartDateTime,
-					EndDateTime = x.EndDateTime,
-					StaffingLevel = x.StaffingLevel
-				}).ToList(), overTimeSuggestionModel.TimeSerie);
-
-			returnModel.DataSeries.ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(
-				wrapperModels.ResourceCalculationPeriods.Select(x => new StaffingIntervalModel()
-				{
-					StartTime = x.StartDateTime,
-					SkillId = x.SkillId,
-					Agents = x.FStaff
-				}).ToList(), overTimeSuggestionModel.TimeSerie);
-
-			returnModel.DataSeries.Time = overTimeSuggestionModel.TimeSerie;
-			calculateRelativeDifference(returnModel.DataSeries);
-			returnModel.OverTimeModels = wrapperModels.Models;
-			return returnModel;
-		}
-
-		private void calculateRelativeDifference(StaffingDataSeries dataSeries)
-		{
-			dataSeries.RelativeDifference = new double?[dataSeries.ForecastedStaffing.Length];
-			for (var index = 0; index < dataSeries.ForecastedStaffing.Length; index++)
-			{
-				if (dataSeries.ForecastedStaffing[index].HasValue)
-				{
-					if (dataSeries.ScheduledStaffing.Length == 0)
-					{
-						dataSeries.RelativeDifference[index] = -dataSeries.ForecastedStaffing[index];
-						continue;
-					}
-
-					if (dataSeries.ScheduledStaffing[index].HasValue)
-						dataSeries.RelativeDifference[index] = dataSeries.ScheduledStaffing[index] - dataSeries.ForecastedStaffing[index];
-				}
-
-			}
+			return _scheduleOvertimeExecuteWrapper.Execute(overtimePreferences, new SchedulingProgress(), scheduleDays, period, allSkills,skills);
 		}
 
 		public void Apply(IList<OverTimeModel> overTimeModels )
@@ -159,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 	public interface IAddOverTime
 	{
-		OverTimeSuggestionResultModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel);
+		OvertimeWrapperModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel);
 		void Apply(IList<OverTimeModel> overTimeModels);
 	}
 

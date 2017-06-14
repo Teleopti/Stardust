@@ -94,11 +94,11 @@
 				staffingData.scheduledStaffing = [];
 				staffingData.forcastedStaffing = [];
 				staffingData.suggestedStaffing = [];
-				staffingData.relativeDifference = [];
+                staffingData.absoluteDifference = [];
 				if (staffingPrecheck(result.DataSeries)) {
 					staffingData.scheduledStaffing = roundDataToOneDecimal(result.DataSeries.ScheduledStaffing);
 					staffingData.forcastedStaffing = roundDataToOneDecimal(result.DataSeries.ForecastedStaffing);
-					staffingData.relativeDifference = result.DataSeries.RelativeDifference;
+                    staffingData.absoluteDifference = result.DataSeries.AbsoluteDifference;
 					staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
 					staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
 					vm.timeSerie = result.DataSeries.Time;
@@ -232,7 +232,7 @@
                 staffingData.scheduledStaffing = [];
                 staffingData.forcastedStaffing = [];
                 staffingData.suggestedStaffing = [];
-                staffingData.relativeDifference = [];
+                staffingData.absoluteDifference = [];
                 if (staffingPrecheck(response.DataSeries)) 
                 {
                     vm.hasSuggestionData = true;
@@ -241,7 +241,7 @@
                     console.log(response.OverTimeModels);
                     staffingData.scheduledStaffing = roundDataToOneDecimal(response.DataSeries.ScheduledStaffing);
                     staffingData.forcastedStaffing = roundDataToOneDecimal(response.DataSeries.ForecastedStaffing);
-                    staffingData.relativeDifference = response.DataSeries.RelativeDifference;
+                    staffingData.absoluteDifference = response.DataSeries.AbsoluteDifference;
                     staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
                     staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
                     vm.timeSerie = response.DataSeries.Time;
