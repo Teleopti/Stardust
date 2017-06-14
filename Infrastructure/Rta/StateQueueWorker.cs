@@ -72,13 +72,13 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 						.Where(x => x.GetType() != typeof(AggregateException))
 						.All(x => x.GetType() == typeof(InvalidUserCodeException));
 				if (onlyInvalidUserCode)
-				{
 					Log.Info("Batch contained invalid user code.", e);
-				}
 				else
-				{
-					throw;
-				}
+					Log.Error("Unhandled exception occurred processing states from queue", e);
+			}
+			catch (Exception e)
+			{
+				Log.Error("Unhandled exception occurred processing states from queue", e);
 			}
 			return true;
 		}
