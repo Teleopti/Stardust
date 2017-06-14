@@ -967,7 +967,6 @@
     <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftWorkerTest.cs" />
     <Compile Include="Scheduling\BackToLegalShift\LegalShiftDeciderTest.cs" />
     <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailabilityTest.cs" />
-    <Compile Include="Scheduling\Overtime\AnalyzePersonAccordingToAvailabilityTest.cs" />
     <Compile Include="Scheduling\Overtime\CalculateBestOvertimeBeforeOrAfterTest.cs" />
     <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeDateTimePeriodExtractorTest.cs" />

@@ -95,16 +95,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		{
 			var dateTimePeriodBefore = new DateTimePeriod(_periodBefore1.StartDateTime, _periodBefore6.EndDateTime);
 			var overtimePeriodHolders = new List<DateTimePeriod> { dateTimePeriodBefore };
-			var dateOnly = new DateOnly(_shiftEndingTime);
-			var person = PersonFactory.CreatePerson("logon", "password");
-			IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(dateOnly, person.PermissionInformation.DefaultTimeZone());
 			var dateTimePeriod = new DateTimePeriod(_shiftEndingTime, _shiftEndingTime.AddMinutes(45));
 
 			using (_mock.Record())
 			{
-				Expect.Call(_scheduleDay.Person).Return(person).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
-				Expect.Call(_analyzePersonAccordingToAvailability.AdjustOvertimeAvailability(_scheduleDay, dateOnly, person.PermissionInformation.DefaultTimeZone(), dateTimePeriod)).Return(dateTimePeriod).IgnoreArguments().Repeat.AtLeastOnce();	
+				Expect.Call(_analyzePersonAccordingToAvailability.AdjustOvertimeAvailability(_scheduleDay, dateTimePeriod)).Return(dateTimePeriod).IgnoreArguments().Repeat.AtLeastOnce();	
 			}
 
 			using (_mock.Playback())
