@@ -388,8 +388,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerDayOffFairnessOptimizationService(builder);
 			registerMoveTimeOptimizationClasses(builder);
 
-			builder.RegisterType<AnalyzePersonAccordingToAvailability>().As<IAnalyzePersonAccordingToAvailability>().InstancePerLifetimeScope();
-			builder.RegisterType<AdjustOvertimeLengthBasedOnAvailability>().InstancePerLifetimeScope();
+			builder.RegisterType<AnalyzePersonAccordingToAvailability>().As<IAnalyzePersonAccordingToAvailability>().SingleInstance();
+			builder.RegisterType<AdjustOvertimeLengthBasedOnAvailability>().SingleInstance();
 			builder.RegisterType<OvertimeSkillIntervalDataAggregator>().As<IOvertimeSkillIntervalDataAggregator>().InstancePerLifetimeScope();
 			builder.RegisterType<OvertimePeriodValueMapper>().InstancePerLifetimeScope();
 			builder.RegisterType<MergeOvertimeSkillIntervalData>().As<IMergeOvertimeSkillIntervalData>().InstancePerLifetimeScope();
