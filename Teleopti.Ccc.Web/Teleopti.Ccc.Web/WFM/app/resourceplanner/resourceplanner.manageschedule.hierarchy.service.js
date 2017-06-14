@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular.module('wfm.resourceplanner').service('HierarchyService', [
-		'$q', '$filter', '$resource', function ($q, $filter, $resource) {
+		'$q', '$resource', function ($q, $resource) {
 			var dataFlat = [];
 			
 			var flatData = function (dataTab, parentNode) {

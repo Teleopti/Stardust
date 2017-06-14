@@ -1,9 +1,19 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.resourceplanner').controller('HierarchyController', [
-		'$scope', '$filter', 'HierarchyService',
-			function ($scope, $filter, HierarchyService) {
+	angular
+		.module('wfm.resourceplanner')
+		.filter('nameFilter', [
+			function () {
+				return function (nodes, name) {
+					if (!name) return nodes;
+					return filterNodes(nodes, name, 'nameFilter');
+				};
+			}
+		])
+		.controller('HierarchyController', [
+		'$scope', 'HierarchyService',
+			function ($scope, HierarchyService) {
 				$scope.organization = {};
 
 				var formatNode = function (dataNode) {
