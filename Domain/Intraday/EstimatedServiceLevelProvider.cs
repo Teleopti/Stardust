@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			foreach (var skill in skillDays.Keys)
 			{
+				if(skill is IChildSkill)
+					continue;
 				var skillForecastedStaffing = forecastedStaffing
 					.Where(s => s.SkillId == skill.Id.Value).ToList();
 				foreach (var interval in skillForecastedStaffing)
