@@ -87,7 +87,7 @@
 								<button class="wfm-btn wfm-btn-invis-default">Fetch all agents</button>
 
 								<tbody>
-									<tr ng-repeat="agent in vm.agents | filter:filterAgents" ng-click="agent.selectAgent()" style="cursor: pointer;">
+									<tr ng-repeat="agent in vm.agents | filter:filterAgents | limitTo: vm.agentsShown" ng-click="agent.selectAgent()" style="cursor: pointer;">
 										<td ng-class="{'selected-row':agent.isSelected}">{{agent.Name}}</td>
 										<td ng-class="{'selected-row':agent.isSelected}">{{agent.DataSource}} _ {{agent.UserCode}} </td>
 										<td ng-click="$event.stopPropagation();">
@@ -98,6 +98,7 @@
 									</tr>
 								</tbody>
 							</table>
+							<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="vm.loadMore()" ng-disabled="vm.noMoreLoading">{{vm.loadingText}}</button>
 						</div>
 					</div>
 				</div>

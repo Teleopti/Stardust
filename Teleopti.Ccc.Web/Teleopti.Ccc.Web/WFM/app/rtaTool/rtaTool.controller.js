@@ -21,6 +21,7 @@
 		vm.authKey = "!#¤atAbgT%";
 		vm.agents = [];
 		vm.stateCodes = [];
+		vm.agentsShown = 100;
 
 		var sendingBatchWithRandomStatesTrigger = null;
 
@@ -46,6 +47,7 @@
 						};
 						return agent;
 					});
+					showMoreAgents();
 				});
 		})();
 
@@ -159,5 +161,14 @@
 			}
 		}
 
+		vm.loadMore = function() {
+			vm.agentsShown += 100;
+			showMoreAgents();
+		}
+
+		function showMoreAgents() {
+			vm.noMoreLoading = vm.agentsShown >= vm.agents.length;
+			vm.loadingText = vm.noMoreLoading ? "No more agents to load" : "Load more";
+		}
 	};
 })();
