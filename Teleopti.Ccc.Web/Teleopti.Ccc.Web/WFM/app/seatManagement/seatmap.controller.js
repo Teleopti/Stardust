@@ -5,9 +5,9 @@
 	angular.module('wfm.seatMap')
 		.controller('SeatMapCanvasCtrl', seatMapCanvasDirectiveController);
 
-	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'PermissionsService', 'NoticeService', '$timeout'];
+	seatMapCanvasDirectiveController.$inject = ['$scope', '$document', '$window', 'seatMapCanvasUtilsService', 'seatMapCanvasEditService', 'PermissionsServiceRefact', 'NoticeService', '$timeout'];
 
-	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, editor, permissionsService, NoticeService, $timeout) {
+	function seatMapCanvasDirectiveController($scope, $document, $window, canvasUtils, editor, PermissionsServiceRefact, NoticeService, $timeout) {
 
 		var vm = this;
 		vm.isLoading = true;
@@ -95,7 +95,7 @@
 		};
 
 		vm.getRoles = function () {
-			permissionsService.roles.get().$promise.then(function (rolesData) {
+			PermissionsServiceRefact.roles.query().$promise.then(function (rolesData) {
 				vm.roles = rolesData;
 			});
 		};
