@@ -61,6 +61,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 		public IEnumerable<CampaignWorkingHour> WorkingHours { get; set; }
 	}
 
+	public class VisualizationForm
+	{
+		public Guid CampaignId;
+		public IEnumerable<DateOnly> SkipDates;
+	}
+
 	public class CampaignVisualizationViewModel
 	{
 		public IList<DateOnly> Dates;

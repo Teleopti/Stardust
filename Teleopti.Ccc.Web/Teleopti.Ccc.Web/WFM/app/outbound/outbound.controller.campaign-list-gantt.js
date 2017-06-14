@@ -215,7 +215,7 @@
 				var index = readIndex(c);
 				if (index >= 0)
 					$scope.ganttData.splice(index + 1, 0, newDataRow);
-				getGraphData(campaign, function () {
+				getGraphData(campaign, [], function () {
 					newDataRow.isLoadingData = false;
 					newDataRow.campaign = campaign;
 				});
@@ -225,37 +225,27 @@
 		function getIgnoreSchedulesCallback(campaign) {
 			return function (ignoredDates, callback) {
 				campaign.ignoredDates = [];
-				ignoreSchedulesOnDates(ignoredDates, campaign);
-				$scope.$broadcast('campaign.chart.clear.selection', campaign);
-				$scope.$broadcast('campaign.chart.refresh', campaign);
-				callback && callback();
+				setHintLableForIgnoredDates(ignoredDates, campaign);
+				getGraphData(campaign, ignoredDates, function (){
+					$scope.$broadcast('campaign.chart.clear.selection', campaign);
+					$scope.$broadcast('campaign.chart.refresh', campaign);
+					callback && callback();
+				});
 			};
-		}
+		};
 
-		function ignoreSchedulesOnDates(ignoredDates, campaign){
+		function setHintLableForIgnoredDates(ignoredDates, campaign){
 			ignoredDates.forEach(function (ignoredDate) {
 				var index = campaign.graphData.dates.indexOf(ignoredDate);
-				campaign.graphData.schedules[index] = 0;
-				campaign.graphData.unscheduledPlans[index] = campaign.graphData.rawPlans[index] - campaign.graphData.overStaff[index];
 				if(index >= 2)
 					campaign.ignoredDates[index - 2] = 1;
 			});
 		}
 
-		function showAllSchedules(ignoredDates, campaign){
-			ignoredDates.forEach(function(ignoredDate) {
-				var index = campaign.graphData.dates.indexOf(ignoredDate);
-				campaign.graphData.schedules[index] = campaign.graphData.rawSchedules[index] - campaign.graphData.overStaff[index];
-				campaign.graphData.unscheduledPlans[index] = 0;
-
-			});
-			campaign.ignoredDates = [];
-		}
-
 		function getShowAllSchedulesCallback(campaign) {
 			return function(ignoredDates, callback) {
-				getGraphData(campaign, function(){
-					showAllSchedules(ignoredDates, campaign);
+				getGraphData(campaign, [], function () {
+					campaign.ignoredDates = [];
 					$scope.$broadcast('campaign.chart.clear.selection', campaign);
 					$scope.$broadcast('campaign.chart.refresh', campaign);
 					callback && callback();
@@ -291,15 +281,15 @@
 			});
 		}
 
-		function getGraphData(campaign, done) {
+		function getGraphData(campaign, ignoredDates, done) {
 			outboundService.getCampaignStatus(campaign.Id, function (campaignStatus) {
 				angular.extend(campaign, campaignStatus);
-				outboundChartService.getCampaignVisualization(campaign.Id, function (data, translations, manualPlan, closedDays, backlog) {
-					campaign.graphData = data;
-					campaign.rawManualPlan = manualPlan;
-					campaign.isManualBacklog = backlog;
-					campaign.translations = translations;
-					campaign.closedDays = closedDays;
+				outboundChartService.getCampaignVisualization({ CampaignId: campaign.Id, SkipDates: ignoredDates }, function (data) {
+					campaign.graphData = data.graphData;
+					campaign.rawManualPlan = data.rawManualPlan;
+					campaign.isManualBacklog = data.manualBacklog;
+					campaign.translations = data.translations;
+					campaign.closedDays = data.closedDays;
 					updateSingleCampaignGanttDisplay(campaignStatus);
 					if (done) done();
 				});

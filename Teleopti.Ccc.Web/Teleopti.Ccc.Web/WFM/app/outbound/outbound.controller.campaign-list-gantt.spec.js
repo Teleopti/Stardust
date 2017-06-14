@@ -156,6 +156,8 @@ describe('OutboundSummaryCtrl', function() {
 			},
 			WarningInfo: []
 		});
+		outboundChartService.setCampaignVisualization(campaign.Id,
+			{ graphData: {}, rawManualPlan: [], manualBacklog: [], translations: null, closedDays: [] });
 
 
 		expect(test.scope.ganttData).not.toBeDefined();
@@ -195,7 +197,8 @@ describe('OutboundSummaryCtrl', function() {
 			},
 			WarningInfo: []
 		});
-		outboundChartService.setCampaignVisualization(1, campaignVisualization);
+		outboundChartService.setCampaignVisualization(campaign.Id,
+			{ graphData: campaignVisualization, rawManualPlan: [], manualBacklog: [], translations: null, closedDays: [] });
 		outboundService.setCampaignsStatus({
 			CampaignSummary: {
 				Id: 1
@@ -221,48 +224,6 @@ describe('OutboundSummaryCtrl', function() {
 		});
 		test.target.init();
 		expect(test.scope.settings.threshold).toEqual(60);
-	});
-
-	it('should reset schedule data after calling getIgnoreScheduleCallback  ', function() {
-		var test = setUpTarget();
-		initDataForIgnore(test);
-		test.scope.campaignClicked(null, {
-			id: test.campaign.Id
-		});
-		test.campaign.selectedDates = ['2017-06-07', '2017-06-08'];
-
-		var expectedDataRow = test.scope.ganttData[1];
-		expectedDataRow.callbacks.ignoreSchedules(test.campaign.selectedDates);
-
-		var expectedScheduleValues = [];
-		test.campaign.selectedDates.forEach(function(d) {
-			expectedScheduleValues.push(expectedDataRow.campaign.graphData.schedules[test.campaign.graphData.dates.indexOf(d)]);
-		});
-
-		expect(expectedScheduleValues.every(function(s) {
-			return s === 0;
-		})).toEqual(true);
-	});
-
-	it('should show plan data after calling getIgnoreScheduleCallback', function() {
-		var test = setUpTarget();
-		initDataForIgnore(test);
-		test.scope.campaignClicked(null, {
-			id: test.campaign.Id
-		});
-		test.campaign.selectedDates = ['2017-06-07', '2017-06-08'];
-
-		var expectedDataRow = test.scope.ganttData[1];
-		expectedDataRow.callbacks.ignoreSchedules(test.campaign.selectedDates);
-
-		var expectedPlanData = [];
-		test.campaign.selectedDates.forEach(function(d) {
-			expectedPlanData.push(expectedDataRow.campaign.graphData.unscheduledPlans[test.campaign.graphData.dates.indexOf(d)]);
-		});
-
-		expect(expectedPlanData.every(function(s) {
-			return s === 10;
-		})).toEqual(true);
 	});
 
 	it('should set ignored dates after calling getIgnoreScheduleCallback', function () {
@@ -295,25 +256,6 @@ describe('OutboundSummaryCtrl', function() {
 		var expectedDataRow = test.scope.ganttData[1];
 		expectedDataRow.callbacks.ignoreSchedules(test.campaign.selectedDates);
 
-		expect(test.campaign.graphData.unscheduledPlans[index]).toEqual(0);
-	});
-
-	it('should restore schedule data after show schedule', function() {
-		var test = setUpTarget();
-		initDataForIgnore(test);
-		test.scope.campaignClicked(null, {
-			id: test.campaign.Id
-		});
-		test.campaign.selectedDates = ['2017-06-11'];
-		var expectedDataRow = test.scope.ganttData[1];
-		var index = test.campaign.graphData.dates.indexOf(test.campaign.selectedDates[0]);
-
-		expectedDataRow.callbacks.ignoreSchedules(test.campaign.selectedDates);
-		expect(test.campaign.graphData.unscheduledPlans[index]).toEqual(10);
-		expect(test.campaign.graphData.schedules[index]).toEqual(0);
-
-		expectedDataRow.callbacks.showAllSchedules(test.campaign.selectedDates);
-		expect(test.campaign.graphData.schedules[index]).toEqual(20);
 		expect(test.campaign.graphData.unscheduledPlans[index]).toEqual(0);
 	});
 
@@ -380,6 +322,9 @@ describe('OutboundSummaryCtrl', function() {
 				unscheduledPlans: ['Planned', 0, 0, 0, 0, 0],
 				overStaff: ['Overstaffing', 0, 0, 0, 0, 0]
 			},
+			rawManualPlan: [0, 0, 0, 0, 0],
+			manualBacklog: [0, 0, 0, 0, 0],
+			closedDays: [0, 0, 0, 0, 0],
 			selectedDates: [],
 			selectedDatesClosed: []
 		};
@@ -512,12 +457,12 @@ describe('OutboundSummaryCtrl', function() {
 	function fakeOutboundChartService() {
 		var campaignViss = {};
 
-		this.setCampaignVisualization = function(id, vis) {
+		this.setCampaignVisualization = function (id, vis) {
 			campaignViss[id] = vis;
 		};
 
-		this.getCampaignVisualization = function(id, success) {
-			success(campaignViss[id]);
+		this.getCampaignVisualization = function (input, success) {
+			success(campaignViss[input.CampaignId]);
 		};
 
 		this.makeGraph = function() {
@@ -574,6 +519,13 @@ describe('OutboundSummaryCtrl', function() {
 				Date: test.campaign.CampaignSummary.EndDate
 			}
 		});
-		outboundChartService.setCampaignVisualization(test.campaign.Id, test.campaign.graphData);
+		outboundChartService.setCampaignVisualization(test.campaign.Id,
+		{
+			graphData: test.campaign.graphData,
+			rawManualPlan: test.campaign.rawManualPlan,
+			manualBacklog: test.campaign.manualBacklog,
+			closedDays: test.campaign.closedDays,
+			translations: null
+		});
 	}
 });

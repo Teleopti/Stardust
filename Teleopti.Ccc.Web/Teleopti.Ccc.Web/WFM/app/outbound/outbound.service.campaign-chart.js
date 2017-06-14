@@ -5,7 +5,7 @@
 		.service('outboundChartService', ['$filter', '$http', 'outboundTranslationService', outboundChartService]);
 
 	function outboundChartService($filter, $http, outboundTranslationSvc) {
-		var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization/';
+		var getCampaignVisualizationUrl = '../api/Outbound/Campaign/Visualization';
 		var updateCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan';
 		var removeCampaignProductionPlanUrl = '../api/Outbound/Campaign/ManualPlan/Remove';
 		var redoCampaignProductionPlanUrl = '../api/Outbound/Campaign/Replan';
@@ -102,9 +102,9 @@
 			});
 		}
 
-		function getCampaignVisualization(campaignId, successCb, errorCb) {
-			$http.get(getCampaignVisualizationUrl + campaignId).success(function (campaignData) {
-				if (successCb != null) successCb(self.buildGraphDataSeqs(campaignData), self.dictionary, campaignData.IsManualPlanned, campaignData.IsCloseDays, campaignData.IsActualBacklog);
+		function getCampaignVisualization(input, successCb, errorCb) {
+			$http.post(getCampaignVisualizationUrl, input).success(function (campaignData) {
+				if (successCb != null) successCb(getCampaignData(campaignData));
 			}).error(function(e) {
 				if (errorCb != null) errorCb(e);
 			});
