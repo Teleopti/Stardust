@@ -397,23 +397,24 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 				p.StaffingThresholdValidator != null && p.StaffingThresholdValidator.GetType() == expectedValidatorType);
 		}
 
-		public virtual bool IsAbsenceRequestValidatorEnabled<T>(DateOnly today, DateOnly date)
-			where T : IAbsenceRequestValidator
+		public virtual bool IsAbsenceRequestCheckStaffingByIntraday(DateOnly today, DateOnly date)
+		{
+			var validOpenPeriods = AbsenceRequestOpenPeriods.Where(openPeriod => isValidOpenPeriod(openPeriod, today, date))
+				.OrderByDescending(p => p.OrderIndex).ToList();
+			if (!validOpenPeriods.Any()) return false;
+
+			var validator = validOpenPeriods[0].StaffingThresholdValidator;
+			return validator != null && (validator is StaffingThresholdWithShrinkageValidator ||
+										 validator is StaffingThresholdValidator);
+		}
+
+		private static bool isValidOpenPeriod(IAbsenceRequestOpenPeriod openPeriod, DateOnly today, DateOnly date)
 		{
 			var period = date.ToDateOnlyPeriod();
-			var expectedValidatorType = typeof(T);
-			var validOpenPeriods = AbsenceRequestOpenPeriods.Where(
-				p => p.OpenForRequestsPeriod.Intersection(period).HasValue && p.GetPeriod(today).Intersection(period).HasValue
-					 && p.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest)
-					 && p.StaffingThresholdValidator.GetType() != typeof(AbsenceRequestNoneValidator)).OrderByDescending(p => p.OrderIndex).ToList();
-
-			if (!validOpenPeriods.Any())
-				return false;
-
-			var highestPriorityOpenPeriod = validOpenPeriods[0];
-
-			return highestPriorityOpenPeriod.StaffingThresholdValidator != null
-					&& highestPriorityOpenPeriod.StaffingThresholdValidator.GetType() == expectedValidatorType;
+			return openPeriod.OpenForRequestsPeriod.Contains(today)
+				   && openPeriod.GetPeriod(today).Intersection(period).HasValue
+				   && openPeriod.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest)
+				   && openPeriod.StaffingThresholdValidator.GetType() != typeof(AbsenceRequestNoneValidator);
 		}
 
 		private IAbsenceRequestOpenPeriod getMergedOpenPeriods(IAbsenceRequest absenceRequest, DateOnlyPeriod dateOnlyPeriod)

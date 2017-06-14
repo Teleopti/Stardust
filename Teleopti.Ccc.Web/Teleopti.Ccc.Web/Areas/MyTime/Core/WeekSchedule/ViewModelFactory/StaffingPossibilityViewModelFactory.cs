@@ -24,18 +24,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			StaffingPossiblityType staffingPossiblityType, bool returnOneWeekData)
 		{
 			var period = _staffingDataAvailablePeriodProvider.GetPeriod(startDate, returnOneWeekData);
-			if (!period.HasValue) return new PeriodStaffingPossibilityViewModel[] { };
-			switch (staffingPossiblityType)
+
+			if (period.HasValue && staffingPossiblityType == StaffingPossiblityType.Absence)
 			{
-				case StaffingPossiblityType.Absence:
-					return
-						createPeriodStaffingPossibilityViewModels(
-							_scheduleStaffingPossibilityCalculator.CalculateIntradayAbsenceIntervalPossibilities(period.Value));
-				case StaffingPossiblityType.Overtime:
-					return
-						createPeriodStaffingPossibilityViewModels(
-							_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period.Value));
+				var possibilityModels =
+					_scheduleStaffingPossibilityCalculator.CalculateIntradayAbsenceIntervalPossibilities(period.Value);
+				return createPeriodStaffingPossibilityViewModels(possibilityModels);
 			}
+
+			if (period.HasValue && staffingPossiblityType == StaffingPossiblityType.Overtime)
+			{
+				var possibilityModels =
+					_scheduleStaffingPossibilityCalculator.CalculateIntradayOvertimeIntervalPossibilities(period.Value);
+				return createPeriodStaffingPossibilityViewModels(possibilityModels);
+			}
+
 			return new PeriodStaffingPossibilityViewModel[] { };
 		}
 
@@ -45,14 +48,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory
 			var periodStaffingPossibilityViewModels = new List<PeriodStaffingPossibilityViewModel>();
 			foreach (var calculatedPossibilityModel in calculatedPossibilityModels)
 			{
-				periodStaffingPossibilityViewModels.AddRange(calculatedPossibilityModel.IntervalPossibilies
-					.Select(p => new PeriodStaffingPossibilityViewModel
+				var possibilities = calculatedPossibilityModel.IntervalPossibilies.Select(
+					p => new PeriodStaffingPossibilityViewModel
 					{
 						Date = calculatedPossibilityModel.Date.ToFixedClientDateOnlyFormat(),
 						StartTime = p.Key,
 						EndTime = p.Key.AddMinutes(calculatedPossibilityModel.Resolution),
 						Possibility = p.Value
-					}).OrderBy(x => x.StartTime));
+					}).OrderBy(x => x.StartTime);
+				periodStaffingPossibilityViewModels.AddRange(possibilities);
 			}
 			return periodStaffingPossibilityViewModels;
 		}

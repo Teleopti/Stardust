@@ -432,5 +432,47 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			});
 			Assert.IsFalse(_target.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(TimeZoneInfo.Utc));
 		}
+
+		[Test]
+		public void ShouldReturnTrueWhenAbsenceValidatorSetToStaffingThresholdValidator()
+		{
+			var checkingByIntraday = checkingByIntradayWithSpecificValidator(new StaffingThresholdValidator());
+			Assert.IsTrue(checkingByIntraday);
+
+			checkingByIntraday = checkingByIntradayWithSpecificValidator(new StaffingThresholdWithShrinkageValidator());
+			Assert.IsTrue(checkingByIntraday);
+		}
+
+		[Test]
+		public void ShouldReturnFalseWhenSetToOtherValidator()
+		{
+			var checkingByIntraday = checkingByIntradayWithSpecificValidator(new AbsenceRequestDenyValidator());
+			Assert.IsFalse(checkingByIntraday);
+
+			checkingByIntraday = checkingByIntradayWithSpecificValidator(new AbsenceRequestNoneValidator());
+			Assert.IsFalse(checkingByIntraday);
+		}
+
+		private bool checkingByIntradayWithSpecificValidator(IAbsenceRequestValidator absenceRequestValidator)
+		{
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, TimeZoneInfo.Utc));
+			var period = new DateOnlyPeriod(today.AddDays(-1), today.AddDays(1));
+			_target.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				OpenForRequestsPeriod = period,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				Period = period,
+				StaffingThresholdValidator = new BudgetGroupAllowanceValidator()
+			});
+			_target.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				OpenForRequestsPeriod = period,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				Period = period,
+				StaffingThresholdValidator = absenceRequestValidator
+			});
+			var checkingByIntraday = _target.IsAbsenceRequestCheckStaffingByIntraday(today, today.AddDays(1));
+			return checkingByIntraday;
+		}
 	}
 }

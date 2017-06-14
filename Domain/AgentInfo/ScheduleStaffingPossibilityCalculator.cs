@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
@@ -58,8 +57,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				return false;
 			}
 
-			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.ServerDate_DontUse(), date) ||
-					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.ServerDate_DontUse(), date);
+			return workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), date);
 		}
 
 		private IScheduleDictionary loadScheduleDictionary(DateOnlyPeriod period)

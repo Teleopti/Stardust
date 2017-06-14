@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
@@ -134,17 +133,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 
 			var days = weekPeriod.DayCollection();
 
-			foreach (var day in days)
-			{
-				var isChecking =
-					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.ServerDate_DontUse(),
-						day) ||
-					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.ServerDate_DontUse(), day);
-				if (isChecking)
-					return true;
-			}
-
-			return false;
+			return days.Any(day => workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), day));
 		}
 
 		private bool isCheckStaffingByIntradayForDay(IWorkflowControlSet workflowControlSet, DateOnly showForDate)
@@ -153,12 +142,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			{
 				return false;
 			}
-			if (showForDate < _now.ServerDate_DontUse())
-			{
-				return false;
-			}
-			return workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(_now.ServerDate_DontUse(), showForDate) ||
-					workflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdValidator>(_now.ServerDate_DontUse(), showForDate);
+			return showForDate >= _now.ServerDate_DontUse() &&
+				   workflowControlSet.IsAbsenceRequestCheckStaffingByIntraday(_now.ServerDate_DontUse(), showForDate);
 		}
 
 		private IEnumerable<DayViewModel> days(WeekScheduleDomainData scheduleDomainData, bool loadOpenHourPeriod = false)
