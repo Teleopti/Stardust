@@ -25,31 +25,25 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			return scenario;
 		}
 
-		public static IEnumerable<SkillStaffingInterval> CreateScheduledStaffing(ISkill skill, DateTime scheduledStartTime, DateTime scheduledEndTime, int minutesPerInterval)
-		{
-			var scheduledStaffing = new List<SkillStaffingInterval>();
-			var random = new Random();
-
-			for (DateTime intervalTime = scheduledStartTime;
-				intervalTime < scheduledEndTime;
-				intervalTime = intervalTime.AddMinutes(minutesPerInterval))
-			{
-				scheduledStaffing.Add(new SkillStaffingInterval
-				{
-					SkillId = skill.Id.Value,
-					StartDateTime = intervalTime,
-					EndDateTime = intervalTime.AddMinutes(minutesPerInterval),
-					StaffingLevel = random.Next(2, 10)
-				});
-			}
-			return scheduledStaffing;
-		}
-
 		public static ISkill CreateEmailSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
 			var activity = new Activity("activity_" + skillName).WithId();
 			var skill =
 				new Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypeEmail(new Description("SkillTypeEmail"), ForecastSource.Email))
+				{
+					Activity = activity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours).WithId();
+
+			return skill;
+		}
+
+		public static ISkill CreateBackOfficeSkill(int intervalLength, string skillName, TimePeriod openHours)
+		{
+			var activity = new Activity("activity_" + skillName).WithId();
+			var skill =
+				new Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypeEmail(new Description("SkillTypeBackoffice"), ForecastSource.Email))
 				{
 					Activity = activity,
 					TimeZone = TimeZoneInfo.Utc

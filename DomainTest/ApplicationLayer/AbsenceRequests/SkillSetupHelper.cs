@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -26,8 +27,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return scenario;
 		}
 
-		public static ISkill CreateSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, IActivity activity)
+		public static ISkill CreateSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, IActivity activity = null)
 		{
+			if(activity == null)
+				activity = new Activity("activity_" + skillName).WithId();
 			var skill =
 				new Domain.Forecasting.Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony))
 				{
@@ -44,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public static ISkill CreateEmailSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
 			var skill =
-				new Domain.Forecasting.Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypeEmail(new Description("SkillTypeEmail"), ForecastSource.InboundTelephony))
+				new Domain.Forecasting.Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypeEmail(new Description("SkillTypeEmail"), ForecastSource.Email))
 				{
 					TimeZone = TimeZoneInfo.Utc
 				}.WithId();
@@ -164,27 +167,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return actualStaffingSkill1;
 		}
 
-		public static IEnumerable<SkillStaffingInterval> PopulateStaffingReadModels(ISkill skill, DateTime scheduledStartTime,
+		public static void PopulateStaffingReadModels(ISkill skill, DateTime scheduledStartTime,
 			DateTime scheduledEndTime, double staffing,
-			FakeScheduleForecastSkillReadModelRepository scheduleForecastSkillReadModelRepository,
 			FakeSkillCombinationResourceRepository skillCombinationResourceRepository)
 		{
-			var skillStaffingIntervals = new List<SkillStaffingInterval>();
 			var skillCombinationResources = new List<SkillCombinationResource>();
 
-			for (DateTime intervalTime = scheduledStartTime;
+			for (var intervalTime = scheduledStartTime;
 				intervalTime < scheduledEndTime;
 				intervalTime = intervalTime.AddMinutes(minutesPerInterval))
 			{
-
-				skillStaffingIntervals.Add(new SkillStaffingInterval
-				{
-					SkillId = skill.Id.GetValueOrDefault(),
-					StartDateTime = intervalTime,
-					EndDateTime = intervalTime.AddMinutes(minutesPerInterval),
-					Forecast = 1,
-					ForecastWithShrinkage = 2
-				});
 				skillCombinationResources.Add(new SkillCombinationResource
 				{
 					StartDateTime = intervalTime,
@@ -193,9 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 					SkillCombination = new[] { skill.Id.GetValueOrDefault() }
 				});
 			}
-			scheduleForecastSkillReadModelRepository.Persist(skillStaffingIntervals, DateTime.UtcNow);
 			skillCombinationResourceRepository.AddSkillCombinationResource(DateTime.UtcNow, skillCombinationResources);
-			return skillStaffingIntervals;
 		}
 	}
 }
