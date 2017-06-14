@@ -152,8 +152,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			fromToTimePickerSpecifiedPeriod.StartTime.TimeIntervalInDropDown = _resolution;
 			fromToTimePickerSpecifiedPeriod.EndTime.TimeIntervalInDropDown = _resolution;
 
-			var start = TimeSpan.Zero;
-			var end = start.Add(TimeSpan.FromDays(1)).Add(TimeSpan.FromHours(6));
+			var start = _overtimePreferences.SelectedSpecificTimePeriod.StartTime;
+			var end = _overtimePreferences.SelectedSpecificTimePeriod.EndTime;
 
 			fromToTimePickerSpecifiedPeriod.StartTime.CreateAndBindList(start, end);
 			fromToTimePickerSpecifiedPeriod.EndTime.CreateAndBindList(start, end);
