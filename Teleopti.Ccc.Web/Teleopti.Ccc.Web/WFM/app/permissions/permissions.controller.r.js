@@ -3,7 +3,7 @@
 
 	angular
 		.module('wfm.permissions')
-		.controller('PermissionsRefactController', PermissionsCtrl);
+		.controller('PermissionsController', PermissionsCtrl);
 
 	PermissionsCtrl.$inject = ['$filter', '$location', 'PermissionsServiceRefact', 'permissionsDataService', 'localeLanguageSortingService'];
 
@@ -480,7 +480,7 @@
 				if (data.BusinessUnit && data.BusinessUnit.ChildNodes) {
 					data.BusinessUnit.ChildNodes = localeLanguageSortingService.loopSort(data.BusinessUnit.ChildNodes, 'ChildNodes', '+Name');
 				}
-				vm.organizationSelection = data; 
+				vm.organizationSelection = data;
 				orgDataHandler(vm.organizationSelection);
 			});
 		}

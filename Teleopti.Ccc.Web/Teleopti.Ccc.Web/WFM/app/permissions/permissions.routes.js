@@ -8,8 +8,8 @@
     $stateProvider
     .state('permissions', {
       url: '/permissions?open',
-      templateUrl: 'app/permissions/refact/permissions-refact.html',
-      controller: 'PermissionsRefactController as vm'
+      templateUrl: 'app/permissions/permissions.html',
+      controller: 'PermissionsController as vm'
     })
   }
 })();

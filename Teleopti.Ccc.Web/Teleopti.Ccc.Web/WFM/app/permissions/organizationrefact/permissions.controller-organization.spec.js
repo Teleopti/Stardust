@@ -21,7 +21,7 @@ describe('component: permissionsList', function() {
 		permissionsDataService = _permissionsDataService_;
 
 		fakeBackend.clear();
-		vm = $controller('PermissionsRefactController');
+		vm = $controller('PermissionsController');
 
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 
@@ -79,7 +79,7 @@ describe('component: permissionsList', function() {
 				AvailableFunctions: []
 			})
 			.withOrganizationSelection(BusinessUnit, DynamicOptions);
-		
+
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsList', null, {
 			org: vm.organizationSelection,

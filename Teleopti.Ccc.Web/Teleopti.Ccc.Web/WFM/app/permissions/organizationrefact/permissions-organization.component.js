@@ -1,7 +1,7 @@
 function PermissionsListController(permissionsDataService, NoticeService, $translate) {
 	var ctrl = this;
 	ctrl.toggleNode = toggleNode;
-	
+
 	function toggleNode(node) {
 
 		if (angular.isUndefined(ctrl.selectedRole) || !ctrl.selectedRole.Id ){
@@ -99,7 +99,7 @@ function PermissionsListController(permissionsDataService, NoticeService, $trans
 }
 
 angular.module('wfm.permissions').component('permissionsList', {
-	templateUrl: 'app/permissions/refact/organizationrefact/permissions-organization-list.html',
+	templateUrl: 'app/permissions/organizationrefact/permissions-organization-list.html',
 	controller: PermissionsListController,
 	bindings: {
 		originalOrg: '=',

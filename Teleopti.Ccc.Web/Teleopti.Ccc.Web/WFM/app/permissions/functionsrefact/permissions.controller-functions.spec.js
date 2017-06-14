@@ -22,7 +22,7 @@ describe('component: permissionsTree', function() {
 		permissionsDataService = _permissionsDataService_;
 
 		fakeBackend.clear();
-		vm = $controller('PermissionsRefactController');
+		vm = $controller('PermissionsController');
 
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 

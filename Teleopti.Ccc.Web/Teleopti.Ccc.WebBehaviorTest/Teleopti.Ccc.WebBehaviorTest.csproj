@@ -783,11 +783,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShowBasicInformation.feature</DependentUpon>
     </Compile>
-    <Compile Include="Wfm\Permissions.feature.cs">
-      <DependentUpon>Permissions.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Wfm\Permissions\PermissionsNew.feature.cs">
       <DependentUpon>PermissionsNew.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1340,10 +1335,6 @@
     <None Include="Wfm\People\ShowBasicInformation.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ShowBasicInformation.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Wfm\Permissions.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Permissions.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\Permissions\PermissionsNew.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
