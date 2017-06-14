@@ -3,10 +3,12 @@ using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 {
@@ -15,12 +17,14 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly IAddOverTime _addOverTime;
 		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
 		private readonly ForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
+		private readonly IUserTimeZone _timeZone;
 
-		public StaffingController(IAddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries, ForecastedStaffingToDataSeries forecastedStaffingToDataSeries)
+		public StaffingController(IAddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries, ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
 			_forecastedStaffingToDataSeries = forecastedStaffingToDataSeries;
+			_timeZone = timeZone;
 		}
 
 		[UnitOfWork, HttpPost, Route("api/staffing/overtime/suggestion")]
@@ -44,24 +48,31 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 
 		private OverTimeSuggestionResultModel extractDataSeries(OverTimeSuggestionModel overTimeSuggestionModel,OvertimeWrapperModel wrapperModels)
 		{
+			var sourceTimeZone = _timeZone.TimeZone();
 			var returnModel = new OverTimeSuggestionResultModel() { StaffingHasData = true, DataSeries = new StaffingDataSeries() };
 			returnModel.DataSeries.ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(
 				wrapperModels.ResourceCalculationPeriods.Select(x => new SkillStaffingIntervalLightModel()
 				{
-					StartDateTime = x.StartDateTime,
-					EndDateTime = x.EndDateTime,
+					StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, sourceTimeZone),
+					EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, sourceTimeZone),
 					StaffingLevel = x.StaffingLevel
 				}).ToList(), overTimeSuggestionModel.TimeSerie);
 
 			returnModel.DataSeries.ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(
 				wrapperModels.ResourceCalculationPeriods.Select(x => new StaffingIntervalModel()
 				{
-					StartTime = x.StartDateTime,
+					StartTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, sourceTimeZone),
 					SkillId = x.SkillId,
 					Agents = x.FStaff
 				}).ToList(), overTimeSuggestionModel.TimeSerie);
 
 			returnModel.DataSeries.Time = overTimeSuggestionModel.TimeSerie;
+			var modelInUtc = wrapperModels.ResourceCalculationPeriods;
+			modelInUtc.ForEach(x =>
+			{
+				x.StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, sourceTimeZone);
+				x.EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, sourceTimeZone);
+			});
 			calculateRelativeDifference(returnModel.DataSeries);
 			returnModel.OverTimeModels = wrapperModels.Models;
 			return returnModel;
