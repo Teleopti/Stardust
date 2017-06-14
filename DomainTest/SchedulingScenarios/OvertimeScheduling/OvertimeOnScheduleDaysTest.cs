@@ -455,5 +455,71 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			var overtimePeriod = stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().First().Period.TimePeriod(TimeZoneInfo.Utc);
 			openHours.StartTime.Should().Be.EqualTo(overtimePeriod.StartTime);
 		}
+
+		[Test]
+		[Ignore("44311 to be fixed - or maybe not. Don't know if default values 0->1:6h is wrong? Force end user to extend it?")]
+		public void ShouldHaveDefaultPeriodsSet()
+		{
+			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			var activity = new Activity("_");
+			var skill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var date = new DateOnly(2015, 10, 12);
+			var scenario = new Scenario("_");
+			var contract = new ContractWithMaximumTolerance();
+			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(date);
+			var skillDay = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 10, 10);
+			var ass = new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(23, 0, 24 + 7, 0));
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { ass }, skillDay);
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = definitionSet,
+				ScheduleTag = new ScheduleTag(),
+				/* should work without these - remove when test is green, Also fix in form - no default values there!
+				SelectedSpecificTimePeriod = new TimePeriod(24, 0, 30, 0),
+				SelectedTimePeriod = new TimePeriod(0, 0, 1, 0),
+				*/
+				SkillActivity = activity
+			};
+
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(date) });
+
+			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().OvertimeActivities().Single().Period.StartDateTime.Date
+				.Should().Be.EqualTo(date.Date.AddDays(1));
+		}
+
+		[Test]
+		[Ignore("44311 to be fixed")]
+		public void ShouldHandleOvertimeAvailableForNextDay()
+		{
+			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			var activity = new Activity("_");
+			var skill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var dateOnly = new DateOnly(2015, 10, 12);
+			var scenario = new Scenario("_");
+			var contract = new ContractWithMaximumTolerance();
+			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
+			var skillDay = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, dateOnly, 10, 10);
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(23, 0, 24 + 7, 0));
+			var otAvailability = new OvertimeAvailability(agent, dateOnly.AddDays(1), TimeSpan.FromHours(7), TimeSpan.FromHours(8));
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, dateOnly.ToDateOnlyPeriod(), new[] { agent }, new IScheduleData[] { ass, otAvailability }, skillDay);
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = definitionSet,
+				ScheduleTag = new ScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(23, 0, 40, 0),
+				SelectedTimePeriod = new TimePeriod(0, 0, 1, 0),
+				SkillActivity = activity,
+				AvailableAgentsOnly = true
+			};
+
+			Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] { stateHolder.Schedules[agent].ScheduledDay(dateOnly) });
+
+			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Single().Period.StartDateTime.Date
+				.Should().Be.EqualTo(dateOnly.Date.AddDays(1));
+		}
 	}
 }
