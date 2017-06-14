@@ -23,9 +23,9 @@
 				};
 
 				function getDayOffRules() {
-					var planningGroupId = $scope.planningPeriod.PlanGroupId;
+					var planningGroupId = $scope.planningPeriod.PlanningGroupId;
 					if (planningGroupId != undefined) {
-						dayOffRuleService.getDayOffRulesByPlanGroupId({ planningGroupId: planningGroupId }).$promise.then(handleGetDayOffRulesSuccess, handleGetDayOffRulesFail);
+						dayOffRuleService.getDayOffRulesByPlanningGroupId({ planningGroupId: planningGroupId }).$promise.then(handleGetDayOffRulesSuccess, handleGetDayOffRulesFail);
 					} else {
 						dayOffRuleService.getDayOffRules().$promise.then(handleGetDayOffRulesSuccess, handleGetDayOffRulesFail);
 					}
@@ -208,13 +208,13 @@
 						filterId: filter.Id,
 						periodId: $stateParams.id,
 						isDefault: filter.Default,
-						groupId: $scope.planningPeriod.PlanGroupId
+						groupId: $scope.planningPeriod.PlanningGroupId
 					});
 				};
 				$scope.createRuleset = function () {
 					$state.go('resourceplanner.filter', {
 						periodId: $stateParams.id,
-						groupId: $scope.planningPeriod.PlanGroupId
+						groupId: $scope.planningPeriod.PlanningGroupId
 					});
 				};
 				$scope.destoryRuleset = function (node) {

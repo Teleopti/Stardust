@@ -17,7 +17,7 @@ describe('planningPeriodOverviewController', function () {
             Filters: []
         },
         selectedPp = {
-            PlanGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
+            PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
             StartDate: "2018-06-18T00:00:00",
             EndDate: "2018-07-15T00:00:00",
             HasNextPlanningPeriod: true,

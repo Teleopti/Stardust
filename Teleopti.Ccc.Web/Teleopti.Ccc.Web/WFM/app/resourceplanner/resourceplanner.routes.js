@@ -58,7 +58,7 @@
 			controller: 'planningGroupsController as vm',
 			resolve: {
 				planningGroups: ['planningGroupService', '$stateParams', function (planningGroupService, $stateParams) {
-					return planningGroupService.getPlanGroups().$promise.then(function (data) {
+					return planningGroupService.getPlanningGroups().$promise.then(function (data) {
 						return data;
 					});
 				}]
@@ -83,12 +83,12 @@
 			},
 			resolve: {
 				planningPeriods: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
-					return planningPeriodServiceNew.getPlanningPeriodsForPlanGroup({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
+					return planningPeriodServiceNew.getPlanningPeriodsForPlanningGroup({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
 				}],
 				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
-					return planningPeriodServiceNew.getPlanGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
+					return planningPeriodServiceNew.getPlanningGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
 				}]
@@ -108,7 +108,7 @@
 					});
 				}],
 				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
-					return planningPeriodServiceNew.getPlanGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
+					return planningPeriodServiceNew.getPlanningGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
 				}]
@@ -122,12 +122,12 @@
 			controller: 'dayoffRuleOverviewController as vm',
 			resolve: {
 				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
-					return planningPeriodServiceNew.getPlanGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
+					return planningPeriodServiceNew.getPlanningGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
 				}],
 				dayOffRulesInfo: ['dayOffRuleService', '$stateParams', function (dayOffRuleService, $stateParams) {
-					return dayOffRuleService.getDayOffRulesByPlanGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
+					return dayOffRuleService.getDayOffRulesByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
 				}]

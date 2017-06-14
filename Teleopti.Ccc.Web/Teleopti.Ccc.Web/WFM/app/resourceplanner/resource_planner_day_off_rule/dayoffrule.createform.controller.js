@@ -212,7 +212,7 @@
                 Name: vm.name,
                 Default: vm.default,
                 Filters: vm.selectedResults,
-                PlanGroupId: $stateParams.groupId
+                PlanningGroupId: $stateParams.groupId
             }).$promise.then(function () {
                 returnFromCreate();
             });

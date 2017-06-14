@@ -507,10 +507,6 @@ md-tooltip .md-content {
 	color: $gray087 ;
 }
 
-.list-header-content {
-	padding: 10px;
-}
-
 .list-header-content-flow {
 	position: absolute;
 	bottom: 10px;
@@ -518,9 +514,9 @@ md-tooltip .md-content {
 }
 
 .outline-botton {
-	border: 1px #0099ff solid;
+	border: 1px $blue-500  solid;
 	background-color: transparent;
-	color: #0099ff;
+	color: $blue-500;
 }
 
 .wfm-toolbar {
@@ -530,6 +526,14 @@ md-tooltip .md-content {
 .wfm-filter-container {
 	padding:10px 0px;
 	margin:5px;
+}
+
+.icon-botton-primary {
+	color:$blue-500; 
+}
+
+.icon-botton-second {
+	color:$gray054;
 }
 
 

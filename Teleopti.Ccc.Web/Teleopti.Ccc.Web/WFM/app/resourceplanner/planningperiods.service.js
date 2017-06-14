@@ -39,9 +39,9 @@
 		});
 
 		var service = {
-			// PlanningPeriod + PlanGroup
-			getPlanGroupById: planningGroup.get,
-			getPlanningPeriodsForPlanGroup: planningGroup.getPlanningPeriods,
+			// PlanningPeriod + PlanningGroup
+			getPlanningGroupById: planningGroup.get,
+			getPlanningPeriodsForPlanningGroup: planningGroup.getPlanningPeriods,
 			nextPlanningPeriod: planningGroup.nextPlanningPeriod,
 			deleteLastPlanningPeriod: planningGroup.deleteLastPlanningPeriod,
 			changeEndDateForLastPlanningPeriod: planningGroup.changeEndDateForLastPlanningPeriod,

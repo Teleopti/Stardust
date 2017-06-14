@@ -13,11 +13,11 @@
 		var filterResult = $resource('../api/filtersplanninggroup', {searchString: '@searchString', maxHits: 100});
 
 		var service = {
-			getPlanGroups: planningGroup.query,
-			savePlanGroup: planningGroup.save,
-			getPlanGroupById: planningGroup.get,
+			getPlanningGroups: planningGroup.query,
+			savePlanningGroup: planningGroup.save,
+			getPlanningGroupById: planningGroup.get,
 			getFilterData: filterResult.query,
-			removePlanGroup: planningGroup.remove
+			removePlanningGroup: planningGroup.remove
 		};
 
 		return service;

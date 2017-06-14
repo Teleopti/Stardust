@@ -14,7 +14,7 @@
 
 		vm.dayOffRules = dayOffRulesInfo.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
 		vm.textDeleteDoRule = '';
-		vm.textManageDoRule = $translate.instant("ManageDayOffForPlanGroup").replace("{0}", planningGroupInfo.Name);
+		vm.textManageDoRule = $translate.instant("ManageDayOffForPlanningGroup").replace("{0}", planningGroupInfo.Name);
 		vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", planningGroupInfo.Name);
 		vm.getDoRuleInfo = getDoRuleInfo;
 		vm.deleteDoRule = deleteDoRule;
@@ -54,14 +54,14 @@
 		var vm = this;
 
 		vm.dayOffRules = [];
-		vm.textManageDoRule = $translate.instant("ManageDayOffForPlanGroup").replace("{0}", vm.planningGroup.Name);
+		vm.textManageDoRule = $translate.instant("ManageDayOffForPlanningGroup").replace("{0}", vm.planningGroup.Name);
 		vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", vm.planningGroup.Name);
 		vm.goDoRulesSetting = goDoRulesSetting;
 
 		getDayOffRules();
 
 		function getDayOffRules() {
-			return dayOffRuleService.getDayOffRulesByPlanGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
+			return dayOffRuleService.getDayOffRulesByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 				vm.dayOffRules = data.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
 				return vm.dayOffRules;
 			});

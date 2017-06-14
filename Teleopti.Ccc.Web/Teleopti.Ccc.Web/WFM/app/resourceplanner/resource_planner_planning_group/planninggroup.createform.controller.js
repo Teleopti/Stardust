@@ -16,8 +16,8 @@
 		vm.filterResults = [];
 		vm.name = '';
 		vm.cancel = cancel;
-		vm.editPlanGroup = {};
-		vm.deletePlanGroupText = '';
+		vm.editPlanningGroup = {};
+		vm.deletePlanningGroupText = '';
 		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
 		vm.selectResultItem = selectResultItem;
 		vm.isValidFilters = isValidFilters;
@@ -25,20 +25,20 @@
 		vm.isValid = isValid;
 		vm.removeSelectedFilter = removeSelectedFilter;
 		vm.persist = persist;
-		vm.removePlanGroup = removePlanGroup;
+		vm.removePlanningGroup = removePlanningGroup;
 
-		getPlanGroupById();
+		getPlanningGroupById();
 
-		function getPlanGroupById() {
+		function getPlanningGroupById() {
 			if (planningGroupId == null)
 				return;
-			var getPlanGroup = planningGroupService.getPlanGroupById({ id: planningGroupId });
-			return getPlanGroup.$promise.then(function (data) {
-				vm.editPlanGroup = data;
-				vm.deletePlanGroupText = $translate.instant("AreYouSureYouWantToDeleteThePlanGroup").replace("{0}", vm.editPlanGroup.Name);
+			var getPlanningGroup = planningGroupService.getPlanningGroupById({ id: planningGroupId });
+			return getPlanningGroup.$promise.then(function (data) {
+				vm.editPlanningGroup = data;
+				vm.deletePlanningGroupText = $translate.instant("AreYouSureYouWantToDeleteThePlanningGroup").replace("{0}", vm.editPlanningGroup.Name);
 				vm.name = data.Name;
 				vm.selectedResults = data.Filters.sort(localeLanguageSortingService.localeSort('+FilterType','+Name'));
-				return vm.editPlanGroup;
+				return vm.editPlanningGroup;
 			});
 		}
 
@@ -116,25 +116,25 @@
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 				return;
 			}
-			planningGroupService.savePlanGroup({
-				Id: vm.editPlanGroup.Id,
+			planningGroupService.savePlanningGroup({
+				Id: vm.editPlanningGroup.Id,
 				Name: vm.name,
 				Filters: vm.selectedResults
 			}).$promise.then(function () {
-				vm.editPlanGroup = {};
+				vm.editPlanningGroup = {};
 				$state.go('resourceplanner.newoverview');
 			});
 		}
 
 		function cancel() {
 			$state.go('resourceplanner.newoverview');
-			vm.editPlanGroup = {};
+			vm.editPlanningGroup = {};
 		}
 
-		function removePlanGroup(id) {
+		function removePlanningGroup(id) {
 			if (!id) return;
-			planningGroupService.removePlanGroup({ id: id }).$promise.then(function () {
-				vm.editPlanGroup = {};
+			planningGroupService.removePlanningGroup({ id: id }).$promise.then(function () {
+				vm.editPlanningGroup = {};
 				$state.go('resourceplanner.newoverview');
 			});
 		}
