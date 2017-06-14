@@ -27,15 +27,15 @@ describe('Outbound Chart Service Test', function() {
         
         target.buildGraphDataSeqs = function (v) { return v; };
 
-        $httpBackend.whenGET('../api/Outbound/Campaign/Visualization/1')
+        $httpBackend.whenPOST('../api/Outbound/Campaign/Visualization')
             .respond(200, JSON.stringify({
                 Dates: '2015-07-31'
             }));
 
         var resultData;
 
-        target.coreGetCampaignVisualization('1', function (data) {
-            resultData = data;
+        target.coreGetCampaignVisualization({ CampaignId: '1', SkipDates:[] }, function (data) {
+            resultData = data.graphData;
         });
 
         $httpBackend.flush();

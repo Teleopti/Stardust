@@ -242,23 +242,6 @@ describe('OutboundSummaryCtrl', function() {
 		expect(expectedDataRow.campaign.ignoredDates[3]).toEqual(undefined);
 	});
 
-	it('should calculate and show plan data correctly when has overstaff data after hide schedule', function() {
-		var test = setUpTarget();
-		initDataForIgnore(test);
-		test.scope.campaignClicked(null, {
-			id: test.campaign.Id
-		});
-		test.campaign.selectedDates = ['2017-06-11'];
-		var index = test.campaign.graphData.dates.indexOf(test.campaign.selectedDates[0]);
-		test.campaign.graphData.rawPlans[index] = 10;
-		test.campaign.graphData.overStaff[index] = 10;
-
-		var expectedDataRow = test.scope.ganttData[1];
-		expectedDataRow.callbacks.ignoreSchedules(test.campaign.selectedDates);
-
-		expect(test.campaign.graphData.unscheduledPlans[index]).toEqual(0);
-	});
-
 	it('should remove ignored dates after show schedule', function () {
 		var test = setUpTarget();
 		initDataForIgnore(test);
@@ -317,8 +300,6 @@ describe('OutboundSummaryCtrl', function() {
 				dates: ['x', '2017-06-07', '2017-06-08', '2017-06-09', '2017-06-10', '2017-06-11'],
 				rawBacklogs: ['Backlog', 80, 60, 40, 20, 0],
 				schedules: ['Scheduled', 20, 20, 20, 20, 20],
-				rawSchedules: ['Scheduled', 20, 20, 20, 20, 20],
-				rawPlans: ['x', 10, 10, 10, 10, 10],
 				unscheduledPlans: ['Planned', 0, 0, 0, 0, 0],
 				overStaff: ['Overstaffing', 0, 0, 0, 0, 0]
 			},
