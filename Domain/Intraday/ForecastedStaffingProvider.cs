@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var resolution = TimeSpan.FromMinutes(minutesPerInterval);
 			foreach (var skill in skillDays.Keys)
 			{
+				if(skill is IChildSkill)
+					continue;
 				staffingIntervals.AddRange(skillDays[skill].SelectMany(x => getStaffingIntervalModels(x, resolution, useShrinkage)));
 			}
 
