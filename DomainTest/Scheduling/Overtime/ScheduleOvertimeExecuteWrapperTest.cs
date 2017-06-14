@@ -613,5 +613,43 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			result.Models.Should().Not.Be.Empty();
 		}
 
+
+		[Test]
+		public void ShouldNotScheduleOvertimeInThePast()
+		{
+			setup();
+			Now.Is("2017-06-01 12:45");
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 1, 15, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 01, 16, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
+
+			var dateOnly = new DateOnly(2017, 06, 1);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnly, 1));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(15, 16));
+			PersonAssignmentRepository.Has(ass);
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
+				SkillActivity = activity
+			};
+			var requestedPeriod = new DateTimePeriod(2017, 06, 01, 13, 2017, 06, 01, 16);
+			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
+			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] {agent}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent});
+			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), new[] {scheduleDictionary[agent].ScheduledDay(dateOnly)}, requestedPeriod, new[] {skill}, new[] {skill});
+			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 13, 2017, 06, 01, 15));
+			overtimeActivities.Count().Should().Be.EqualTo(1);
+			result.Models.Should().Not.Be.Empty();
+		}
+
 	}
 }

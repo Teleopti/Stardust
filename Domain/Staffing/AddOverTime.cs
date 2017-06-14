@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ScheduleOvertimeExecuteWrapper _scheduleOvertimeExecuteWrapper;
+		private readonly INow _now;
 		
 
 
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 						   IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ICommandDispatcher commandDispatcher, 
 						   IPersonForOvertimeProvider personForOvertimeProvider, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, 
 						   IPersonRepository personRepository, ISkillRepository skillRepository, 
-						   ScheduleOvertimeExecuteWrapper scheduleOvertimeExecuteWrapper)
+						   ScheduleOvertimeExecuteWrapper scheduleOvertimeExecuteWrapper, INow now)
 		{
 			_userTimeZone = userTimeZone;
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_personRepository = personRepository;
 			_skillRepository = skillRepository;
 			_scheduleOvertimeExecuteWrapper = scheduleOvertimeExecuteWrapper;
+			_now = now;
 		}
 
 
@@ -58,8 +60,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var minResolution = skills.Min(x => x.DefaultResolution);
 			if (!overTimeSuggestionModel.TimeSerie.Any())
 				return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
-			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Min(), _userTimeZone.TimeZone()),
-				  TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max().AddMinutes(minResolution),_userTimeZone.TimeZone()));
+
+			var startTime = TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Min(), _userTimeZone.TimeZone());
+			if (startTime < _now.UtcDateTime().AddMinutes(15)) startTime = _now.UtcDateTime().AddMinutes(15);
+			var period = new DateTimePeriod(startTime, TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max().AddMinutes(minResolution), _userTimeZone.TimeZone()));
 
 			var userDateOnly = new DateOnly(overTimeSuggestionModel.TimeSerie.Min());
 			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, period.StartDateTime, period.EndDateTime);
