@@ -1,52 +1,4 @@
 ﻿.wfm-reports {
-	.report-list{
-		a, a:active, a:hover, a:visited{
-			text-decoration: none;
-			color: $text-color-standard;
-			outline: none!important;
-		}
-	}
-	// max-width: 100em;
-
-	// .report-filter {
-	// 	padding: 1em;
-	// }
-	// .report-filter input {
-	// 	width: 316px;
-	// }
-	// .report-list {
-	// 	display: flex;
-	// 	flex-wrap: wrap;
-
-	// 	.report-item {
-	// 		// IE 10:display: -ms-flexbox;
-	// 		-ms-flex-negative: 1;
-	// 		-ms-flex-preferred-size: 30%;
-	// 		display: flex;
-	// 		flex-shrink: 1;
-	// 		flex-basis: 30%;
-
-	// 		.wfm-card {
-	// 			min-height: 0;
-	// 			margin: 8px;
-	// 			padding: 16px;
-	// 			width: 100%;
-
-	// 			h3 {
-	// 				font-weight: normal;
-	// 				margin: 4px 0 4px 0 !important;
-	// 			}
-	// 		}
-	// 	}
-	// }
-	// wfm-multiple-search-input {
-	// 	.advanced-input {
-	// 		width: 316px;
-	// 	}
-	// 	.expand-advanced-input {
-	// 		max-width: 100%;
-	// 	}
-	// }
 	.people-search-input {
 		display: inline-block;
 		padding-top: 10px;
@@ -106,12 +58,3 @@
 		}
 	}
 }
-// CSS hack for IE10, IE11 and edge
-// @media screen and (-ms-high-contrast:active), (-ms-high-contrast:none), (-ms-accelerator:true) {
-// 	.wfm-reports {
-// 		.people-search-input {
-// 			vertical-align: middle;
-// 			padding-bottom: 18px;
-// 		}
-// 	}
-// }
