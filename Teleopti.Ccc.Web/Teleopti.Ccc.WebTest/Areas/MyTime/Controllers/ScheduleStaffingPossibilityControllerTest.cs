@@ -390,6 +390,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			result.Count.Should().Be.EqualTo(8);
 		}
 
+		[Test]
+		public void ShouldSubstractCurrentUsersScheduleWhenCalculatingProbability()
+		{
+			setupSiteOpenHour();
+			setupTestDataForOneSkill(new double?[] {1, 1}, new double?[] {1, 1});
+			setupWorkFlowControlSet();
+
+			var possibilities =
+				Target.GetIntradayAbsencePossibility(null, StaffingPossiblityType.Absence)
+					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
 		private void setupWorkFlowControlSet()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
