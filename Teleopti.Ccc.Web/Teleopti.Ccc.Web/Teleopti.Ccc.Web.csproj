@@ -1482,6 +1482,8 @@
     <Content Include="WFM\app\people\people.component.wfmImportAgents.js" />
     <Content Include="WFM\app\people\people.filter.filesize.js" />
     <Content Include="WFM\app\people\people.service.importAgents.js" />
+    <Content Include="WFM\app\permissions\permissions.backend.fake.js" />
+    <Content Include="WFM\app\permissions\refact\permissions.controller.spec.js" />
     <Content Include="WFM\app\permissions\refact\permissions.data.service.js" />
     <Content Include="WFM\app\permissions\refact\permissions.data.service.spec.js" />
     <Content Include="WFM\app\permissions\refact\permissions.filter.r.js" />
@@ -1512,7 +1514,6 @@
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
-    <Content Include="WFM\app\permissions\permissions.backend.fake.js" />
     <Content Include="WFM\app\permissions\refact\functionsrefact\permissions-function-tree.html" />
     <Content Include="WFM\app\permissions\refact\functionsrefact\permissions-tree.html" />
     <Content Include="WFM\app\permissions\refact\functionsrefact\permissions.controller-functions.spec.js" />
@@ -1729,13 +1730,6 @@
     <Content Include="WFM\app\outbound\outbound.service.spec.js" />
     <Content Include="WFM\app\people\people.cart.controller.spec.js" />
     <Content Include="WFM\app\people\people.start.controller.spec.js" />
-    <Content Include="WFM\app\permissions\permissions.controller.spec.js" />
-    <Content Include="WFM\app\permissions\permissions.filter.spec.js" />
-    <Content Include="WFM\app\permissions\data\permissions.roledata.service.spec.js" />
-    <Content Include="WFM\app\permissions\data\permissions.roledatacontroller.spec.js" />
-    <Content Include="WFM\app\permissions\functions\permissions.rolefunctions.controller.spec.js" />
-    <Content Include="WFM\app\permissions\functions\permissions.rolefunctions.service.spec.js" />
-    <Content Include="WFM\app\permissions\roles\roles.service.spec.js" />
     <Content Include="WFM\app\requests\requests-overview.directive.spec.js" />
     <Content Include="WFM\app\requests\html\requests-overview.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-table-container.tpl.html" />
@@ -2000,14 +1994,6 @@
     <Content Include="WFM\app\outbound\_modules.js" />
     <Content Include="WFM\app\people\html\importPeople.html" />
     <Content Include="WFM\app\people\_modules.js" />
-    <Content Include="WFM\app\permissions\data\permissions.data.html" />
-    <Content Include="WFM\app\permissions\permissions.filters.js" />
-    <Content Include="WFM\app\permissions\functions\permissions.functions.html" />
-    <Content Include="WFM\app\permissions\data\permissions.roledata.controller.js" />
-    <Content Include="WFM\app\permissions\data\permissions.roledata.service.js" />
-    <Content Include="WFM\app\permissions\functions\permissions.rolefunctions.controller.js" />
-    <Content Include="WFM\app\permissions\functions\permissions.rolefunctions.service.js" />
-    <Content Include="WFM\app\permissions\roles\roles.service.js" />
     <Content Include="WFM\app\permissions\_modules.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.controller.js" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.html" />
@@ -2046,8 +2032,6 @@
     <Content Include="WFM\app\seatManagement\seatmap.controller.js" />
     <Content Include="WFM\app\people\people.start.controller.js" />
     <Content Include="WFM\app\people\people.service.js" />
-    <Content Include="WFM\app\permissions\permissions.controller.js" />
-    <Content Include="WFM\app\permissions\permissions.service.js" />
     <Content Include="WFM\app\search\search.controller.js" />
     <Content Include="WFM\app\search\search.service.js" />
     <Content Include="WFM\app\seatManagement\html\seatmap.html" />
@@ -2356,7 +2340,6 @@
     <Content Include="WFM\app\forecasting\html\forecasting-overview.html" />
     <Content Include="WFM\html\main.html" />
     <Content Include="WFM\html\nav.html" />
-    <Content Include="WFM\app\permissions\permissions.html" />
     <Content Include="WFM\app\app.js" />
     <Content Include="WFM\vendor\fabricjs\fabric.js" />
     <Content Include="WFM\vendor\fabricjs\fabric.min.js" />

@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfEnabled('WfmPermission_RelaseRefactor_43587')
 Feature: Permissions
 	As a resource planner
 	I want to work on permissions
