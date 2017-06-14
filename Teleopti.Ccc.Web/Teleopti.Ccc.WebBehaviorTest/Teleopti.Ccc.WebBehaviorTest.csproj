@@ -90,9 +90,8 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
-    <Reference Include="TechTalk.SpecFlow, Version=2.1.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SpecFlow.2.1.0\lib\net45\TechTalk.SpecFlow.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="TechTalk.SpecFlow, Version=2.2.0.0, Culture=neutral, PublicKeyToken=0778194805d6db41, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SpecFlow.2.2.0-preview20170523\lib\net45\TechTalk.SpecFlow.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -1697,7 +1696,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\Teleopti.Ccc.WebbehaviorTest.config" "$(ProjectDir)App.config"
-"$(SolutionDir)packages\SpecFlow.2.1.0\tools\specflow.exe" generateall "$(ProjectDir)Teleopti.Ccc.WebBehaviorTest.csproj"
+"$(SolutionDir)packages\SpecFlow.2.2.0-preview20170523\tools\specflow.exe" generateall "$(ProjectDir)Teleopti.Ccc.WebBehaviorTest.csproj"
 </PreBuildEvent>
   </PropertyGroup>
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
