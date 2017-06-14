@@ -42,7 +42,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		selectionViewModel.displayDate(Teleopti.MyTimeWeb.Common.FormatDatePeriod(
 				moment($('#Preference-body').data('period-start-date')),
 				moment($('#Preference-body').data('period-end-date'))));
-
 		selectionViewModel.nextPeriodDate(moment(periodData.PeriodNavigation.NextPeriod));
 		selectionViewModel.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
 		selectionViewModel.setCurrentDate(moment(periodData.Date));
@@ -428,6 +427,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	function _initViewModels(loader, callback) {
 		var date = portal ? portal.CurrentFixedDate() : null;
+		weekViewModels = {};
 		if (date == null) {
 			var periodData = $('#Preference-body').data('mytime-periodselection');
 			if (periodData) {
@@ -471,12 +471,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		function _assignPreferenceFeedbackDataToDateCell(preferenceDataByPeriod) {
 			var dayViewModels = {},
 				dayViewModelsInPeriod = {};
+			
 
 			$(".header-week-day").each(function(i, f) {
 				var s = $(f).data('date');
 				$(f).text(moment(s).format('dddd'));
 			});
-
 			$('li[data-mytime-week]').each(function(index, element) {
 				weekViewModels[index] = new Teleopti.MyTimeWeb.Preference.WeekViewModel(ajax);
 				ko.applyBindings(weekViewModels[index], element);
@@ -552,7 +552,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 								} else {
 									if ($('li[data-mytime-week]').length > 0) {
 										$.each(weekViewModels,
-											function(index, week) {
+											function (index, week) {
 												week.LoadWeeklyWorkTimeSettings();
 											});
 									}
