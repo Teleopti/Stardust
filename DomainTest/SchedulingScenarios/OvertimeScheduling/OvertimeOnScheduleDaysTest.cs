@@ -457,7 +457,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		}
 
 		[Test]
-		[Ignore("44311 to be fixed - or maybe not. Don't know if default values 0->1:6h is wrong? Force end user to extend it?")]
 		public void ShouldHaveDefaultPeriodsSet()
 		{
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
@@ -477,10 +476,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 			{
 				OvertimeType = definitionSet,
 				ScheduleTag = new ScheduleTag(),
-				/* should work without these - these are the default values
-				SelectedSpecificTimePeriod = new TimePeriod(23, 0, 40, 0),
-				SelectedTimePeriod = new TimePeriod(0, 0, 1, 0),
-				*/
 				SkillActivity = activity,
 				AvailableAgentsOnly = true
 			};

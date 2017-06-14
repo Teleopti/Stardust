@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
         public IActivity SkillActivity { get; set; }
         public IMultiplicatorDefinitionSet OvertimeType { get; set; }
         public TimePeriod SelectedTimePeriod { get; set; }=new TimePeriod(1, 1);
-		public TimePeriod SelectedSpecificTimePeriod { get; set; } = new TimePeriod(0, 30);
+		public TimePeriod SelectedSpecificTimePeriod { get; set; } = new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1).Add(TimeSpan.FromHours(10)));
 		public bool AllowBreakMaxWorkPerWeek { get; set; }
         public bool AllowBreakNightlyRest { get; set; }
         public bool AllowBreakWeeklyRest { get; set; }
