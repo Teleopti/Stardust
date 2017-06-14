@@ -24,8 +24,7 @@
 	<gantt-scrollable>
 		<gantt-body>
 			<gantt-body-background>
-				<gantt-row-background ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id">					
-				</gantt-row-background>
+				<gantt-row-background ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id"></gantt-row-background>
 			</gantt-body-background>
 			<gantt-body-foreground>
 				<div class="gantt-current-date-line" ng-show="currentDate === 'line' && gantt.currentDateManager.position >= 0 && gantt.currentDateManager.position <= gantt.width" ng-style="{'left': gantt.currentDateManager.position + 'px' }"></div>
@@ -38,21 +37,21 @@
 			<div ng-if="gantt.columnsManager.visibleColumns == 0" style="background-color: #808080"></div>
 			<gantt-body-rows>
 				<gantt-timespan ng-repeat="timespan in gantt.timespansManager.timespans track by timespan.model.id" ></gantt-timespan>
-				<gantt-row ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id">				
+				<gantt-row ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id">
 					<gantt-task ng-if="!row.model.expansion" ng-repeat="task in row.visibleTasks track by task.model.id">
 					</gantt-task>
 					<div class="gantt-row-expansion" ng-if="row.model.expansion">
 						<div class="loading" ng-show="row.model.isLoadingData || row.model.isRefreshingData">
-							<md-progress-circular md-mode="indeterminate" style="z-index: 100;"></md-progress-circular>
+							<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 						</div>
-						<div class="clearfix text-center" style="height: 40px;">
+						<div class="clearfix line-center" style="height: 40px;">
 							<p class="campaign-message overstaffed-color" ng-if="row.model.campaign.WarningInfo[0].TypeOfRule=='CampaignOverstaff'"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>CampaignOverstaff</span></p>
 							<p class="campaign-message" ng-if="row.model.campaign.WarningInfo[0].TypeOfRule=='CampaignUnderSLA'"><span class="campaign-warning-icon campaign-warning-icon-messagefix">!</span><span translate>CampaignUnderSLA</span></p>
 						</div>
 						<div class="campaign-chart-wrapper relative" ng-if="!row.model.isLoadingData">
 							<campaign-chart campaign="row.model.campaign" dictionary="row.model.campaign.translations" exclude-closed="row.model.campaign.manualPlanswitch"></campaign-chart>
 							<campaign-commands-pane campaign="row.model.campaign" selected-dates="row.model.campaign.selectedDates" selected-dates-closed="row.model.campaign.selectedDatesClosed" is-loading="row.model.isRefreshingData" callbacks="row.model.callbacks"></campaign-commands-pane>
-						</div>						
+						</div>
 					</div>
 				</gantt-row>
 			</gantt-body-rows>
@@ -184,18 +183,17 @@
 				<div gantt-vertical-scroll-receiver>
 					<div class="gantt-row gantt-row-height "
 						 ng-class-odd="'gantt-row-odd'"
-						 ng-class-even="'gantt-row-even'"						
+						 ng-class-even="'gantt-row-even'"
 						 ng-repeat="row in gantt.rowsManager.visibleRows track by row.model.id"
 						 ng-style="{'height': row.model.height}">
-												
-						<div gantt-row-label class="gantt-row-label gantt-row-background"							
+						<div gantt-row-label class="gantt-row-label gantt-row-background"
 							 ng-style="{'background-color': row.model.color}"
 							 ng-class="{'gnatt-row-expanded' : row.model.expanded}"
 							 ng-if="!row.model.expansion"
 							 >
 						</div>
 						<div class="gantt-row-background gantt-row-expansion" ng-if="row.model.expansion">
-							<!--<md-button ng-click="row.model.collapse($event, $index)" aria-label="Back"><i class="mdi mdi-rewind mdi-rotate-90"></i></md-button>-->
+							<!--<md-button ng-click="row.model.collapse($event, $index)" aria-label="Back"><i class="mdi mdi-rewind"></i></md-button>-->
 						</div>
 					</div>
 				</div>
@@ -204,20 +202,20 @@
 	</script>
 
 	<!-- Tooltips template -->
-    <script type="text/ng-template" id="plugins/tooltips/tooltip.tmpl.html">
+	<script type="text/ng-template" id="plugins/tooltips/tooltip.tmpl.html">
 		<div ng-cloak
-			 class="gantt-task-info z-index-2000"
+			 class="gantt-task-info"
 			 ng-show="displayed"
 			 ng-class="isRightAligned ? 'gantt-task-infoArrowR' : 'gantt-task-infoArrow'"
 			 ng-style="{top: taskRect.top + 'px', marginTop: -elementHeight - 8 + 'px'}">
 			<div><strong>{{ task.model.campaignName }}</strong></div>
-			<div class="gantt-task-info-content">				
-				{{ task.model.from | sameDay | date:'shortDate' }} - {{ task.model.to | decreaseOneDay| date:'shortDate'  }}		
+			<div class="gantt-task-info-content">
+				{{ task.model.from | sameDay | date:'shortDate' }} - {{ task.model.to | decreaseOneDay| date:'shortDate'  }}
 			</div>
 		</div>
 	</script>
 	<!-- sideContentTable template -->
-<script type="text/ng-template" id="plugins/table/sideContentTable.tmpl.html">
+	<script type="text/ng-template" id="plugins/table/sideContentTable.tmpl.html">
 		<div class="gantt-side-content-table">
 			<div class="gantt-table-column {{getClass()}}" ng-repeat="column in pluginScope.columns" ng-controller="TableColumnController">
 				<div style="height:60px;">

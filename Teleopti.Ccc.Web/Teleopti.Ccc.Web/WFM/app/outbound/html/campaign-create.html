@@ -7,7 +7,7 @@
 	</div>
 </div>
 
-<div class="panel material-depth-1 test-campaign-create">
+<div class="panel material-depth-1 campaign-create">
 	<button class="wfm-btn wfm-btn-invis-default back-to-overview" ng-click="backToList()" ng-disabled="isCreating">
 		<i class="mdi mdi-reply"></i>
 		<md-tooltip md-direction="right">{{'BackToList' | translate}}</md-tooltip>
@@ -35,8 +35,8 @@
 							<activity-picker ng-model="campaign.Activity" name="Activity" sync-name="{{campaign.Name}}" class="custom-input"></activity-picker>
 						</div>
 						<h2 translate>Workload</h2>
-						<div class="row">
-							<div class="row-6">
+						<div class="con-row">
+							<div class="con-flex split-3-1">
 								<div class="form-input-wrap">
 									<label for="callList">
 										<span translate>CallListLength</span>:
@@ -82,7 +82,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="row-6">
+							<div class="con-flex split-3-1">
 								<div class="form-input-wrap">
 									<label for="cAHT">
 										<span translate>ConnectAHT</span>:
@@ -144,8 +144,7 @@
 			</div>
 		</div>
 		<div class="con-footer">
-			<button type="submit" class="wfm-btn wfm-btn-invis-primary test-campaign-create-submit" ng-click="addCampaign()" ng-class="{'wfm-btn-invis-disabled': !isInputValid(), 'wfm-btn-invis-primary':isInputValid()}" ng-disabled="isCreating"><span translate>Save</span></button>
+			<button type="submit" class="wfm-btn wfm-btn-invis-primary campaign-create-submit" ng-click="addCampaign()" ng-class="{'wfm-btn-invis-disabled': !isInputValid(), 'wfm-btn-invis-primary':isInputValid()}" ng-disabled="isCreating"><span translate>Save</span></button>
 		</div>
-
 	</form>
 </div>

@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[Given(@"I set the starting month for viewing period to '(.*)'")]
 		public void WhenISetTheStartingMonthForViewingPeriodTo(DateTime startingMonth)
 		{
-			Browser.Interactions.SetScopeValues(".test-outbound-summary", new Dictionary<string, string>
+			Browser.Interactions.SetScopeValues(".outbound-summary", new Dictionary<string, string>
 			{
 				{"settings.periodStart" , string.Format("new Date('{0}')", startingMonth.ToShortDateString())} 
 			});
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I click at campaign name tag '(.*)'")]
 		public void WhenIClickAtCampaignNameTag(string campaignName)
 		{
-			Browser.Interactions.AssertScopeValue(".test-outbound-summary", "isRefreshingGantt", false);
+			Browser.Interactions.AssertScopeValue(".outbound-summary", "isRefreshingGantt", false);
 			Browser.Interactions.ClickVisibleOnly(".campaign-visualization-toggle");
 		}
 	
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 		[When(@"I see the new campaign form")]
 		public void ThenIShouldSeeTheNewCampaignForm()
 		{
-			Browser.Interactions.AssertExists(".test-campaign-create");
+			Browser.Interactions.AssertExists(".campaign-create");
 		}
 
 		[When(@"I submit the campaign form with the campaign detail")]
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 			var instance = new OutboundCampaignConfigurable();
 			table.FillInstance(instance);
 
-			Browser.Interactions.SetScopeValues(".test-campaign-create", new Dictionary<string, string>
+			Browser.Interactions.SetScopeValues(".campaign-create", new Dictionary<string, string>
 			{
 				{ "campaign.Name" , string.Format("\"{0}\"", instance.Name)},
  				{ "campaign.Activity", string.Format("\"{0}\"", instance.Name) },
@@ -102,8 +102,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Outbound
 				{ "preventAutomaticRedirect", "true"}
 			});
 
-			Browser.Interactions.AssertScopeValue(".test-campaign-create", "isInputValid()", true);
-			Browser.Interactions.ClickVisibleOnly(".test-campaign-create-submit");						
+			Browser.Interactions.AssertScopeValue(".campaign-create", "isInputValid()", true);
+			Browser.Interactions.ClickVisibleOnly(".campaign-create-submit");						
 		}
 
 		[When(@"after the creation I will redirect to the campaign list page")]
