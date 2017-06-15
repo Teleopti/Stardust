@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
 
-		public IList<SkillStaffingData> Load(DateOnlyPeriod period)
+		public IList<SkillStaffingData> Load(DateOnlyPeriod period, Func<DateOnly, bool> dayFilter = null)
 		{
 			var personSkills = getSupportedPersonSkills(period).ToArray();
 
@@ -46,16 +46,22 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), personSkills.Select(s => s.Skill),
 				_scenarioRepository.Current()).ToList();
 			var skillStaffingDatas = createSkillStaffingDatas(period, personSkills.Select(s => s.Skill).ToList(), resolution,
-				useShrinkage, skillDays);
+				useShrinkage, skillDays, dayFilter);
 
 			skillStaffingList.AddRange(skillStaffingDatas);
 			return skillStaffingList;
 		}
 
 		private IEnumerable<SkillStaffingData> createSkillStaffingDatas(DateOnlyPeriod period, IList<ISkill> skills,
-			int resolution, bool useShrinkage, IList<ISkillDay> skillDays)
+			int resolution, bool useShrinkage, IList<ISkillDay> skillDays, Func<DateOnly, bool> dayFilter)
 		{
-			var dayStaffingDatas = period.DayCollection().Select(day => new
+			var days = period.DayCollection().ToList();
+			if (dayFilter != null)
+			{
+				days = days.Where(dayFilter).ToList();
+			}
+
+			var dayStaffingDatas = days.Select(day => new
 			{
 				Date = day,
 				Scheduled = getScheduledStaffing(skills, resolution, useShrinkage, day)
@@ -137,6 +143,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 	public interface ISkillStaffingDataLoader
 	{
-		IList<SkillStaffingData> Load(DateOnlyPeriod period);
+		IList<SkillStaffingData> Load(DateOnlyPeriod period, Func<DateOnly, bool> dateFilter = null);
 	}
 }

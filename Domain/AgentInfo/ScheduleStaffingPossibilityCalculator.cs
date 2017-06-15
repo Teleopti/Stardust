@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -33,11 +33,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public IList<CalculatedPossibilityModel> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
 		{
 			var scheduleDictionary = loadScheduleDictionary(period);
-			var skillStaffingDatas = _skillStaffingDataLoader.Load(period);
-			var filteredSkillStaffingDatas = skillStaffingDatas.Where(a => isCheckingIntradayStaffing(a.Date)).ToList();
+			var skillStaffingDatas = _skillStaffingDataLoader.Load(period, isCheckingIntradayStaffing);
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => new IntervalHasUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
-			return calculatePossibilities(filteredSkillStaffingDatas, isSatisfied, scheduleDictionary, true);
+			return calculatePossibilities(skillStaffingDatas, isSatisfied, scheduleDictionary, true);
 		}
 
 		public IList<CalculatedPossibilityModel> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period)
