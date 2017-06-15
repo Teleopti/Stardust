@@ -19,8 +19,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Preference.Analytics
 {
-	[TestFixture]
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class AnalyticsPreferenceUpdaterTests : ISetup
 	{
 		public AnalyticsPreferenceUpdater Target;
