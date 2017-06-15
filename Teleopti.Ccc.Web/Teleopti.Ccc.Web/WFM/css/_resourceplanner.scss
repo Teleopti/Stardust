@@ -90,7 +90,7 @@
     text-align: center;
     height: auto;
     width: auto;
-		position: relative;
+	position: relative;
     cursor: pointer;
     margin: 1px;
     height: 10px;
@@ -491,6 +491,10 @@ md-tooltip .md-content {
 	z-index: 3;
 }
 
+.pp-label {
+	color: $gray087;
+}
+
 //demo design
 .wfm-grid .list-content {
 	padding: 0;
@@ -501,6 +505,7 @@ md-tooltip .md-content {
 	padding: 5px 10px;
 	background-color: rgba(0, 0, 0, 0.04);
 	height: 100px;
+	position: relative;
 }
 
 .list-header h1 {
@@ -535,6 +540,12 @@ md-tooltip .md-content {
 .icon-botton-second {
 	color:$gray054;
 	transition: all 0s linear!important;
+}
+
+.plan-group-pp-days{
+	position: absolute;
+    bottom: 0;
+    left: 10px;
 }
 
 

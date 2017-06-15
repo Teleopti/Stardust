@@ -22,8 +22,8 @@
 				</div>
 				<div class="con-flex x3">
 					<button class="wfm-btn wfm-btn-invis-default create-next-planning-period" ng-click="vm.startNextPlanningPeriod()"><i class="mdi mdi-plus"></i>{{'CreateNextPp' | translate}}</button>
-					<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i>{{'SchedulingSucceeded' | translate}}</span>
-					<span><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i>{{'SchedulingFailed' | translate}}</span>
+					<span class="pp-label"><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i> {{'SchedulingSucceeded' | translate}}</span>
+					<span class="pp-label"><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i> {{'SchedulingFailed' | translate}}</span>
 					<button class="wfm-btn wfm-btn-invis-disabled" ng-click=""><i class="mdi mdi-information-outline"></i> Help</button>
 				</div>
 			</div>
@@ -36,18 +36,19 @@
 			<div class="list-header" ng-class="{'pp-scheduled':p.State == 'Scheduled', 'pp-scheduled-failed':p.State == 'ScheduleFailed'|| p.State == 'IntradayOptimizationFailed'}">
 				<!--<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-calendar-check"></i>
 				<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="mdi mdi-calendar-remove"></i>-->
-				<h1>{{p.StartDate | amDateFormat:"L"}} - {{p.EndDate | amDateFormat:"L"}}</h1>
+				<h1>{{p.StartDate | amDateFormat:"LL"}} - {{p.EndDate | amDateFormat:"LL"}}</h1>
+				<div class="subtext plan-group-pp-days">{{p.Number}} {{p.Type | translate}}</div>
 			</div>
 			<div class="list-header-content">
-				<div tabindex=0 class="context-menu card-context icon-botton-second inline-flex" ng-if="$first" ng-click="vm.getLastPp(p);$event.stopPropagation();">
+				<div tabindex=0 class="context-menu card-context icon-botton-second" ng-if="$first" ng-click="vm.getLastPp(p);$event.stopPropagation();">
 					<i class="mdi mdi-pencil"></i>
 					<md-tooltip>{{'ChangePlanningDuration' | translate}}</md-tooltip>
 				</div>
-				<div tabindex=0 class="context-menu card-context icon-botton-second inline-flex" ng-if="$first && vm.planningPeriods.length > 1"
-				 ng-click="vm.getPpInfo(p);$event.stopPropagation();">
+				<div tabindex=0 class="context-menu card-context icon-botton-second" ng-if="$first && vm.planningPeriods.length > 1" ng-click="vm.getPpInfo(p);$event.stopPropagation();">
 					<i class="mdi mdi-delete"></i>
 					<md-tooltip>{{'DeletePlanningPeriod' | translate}}</md-tooltip>
 				</div>
+				<!--<div tabindex=0 class="context-menu card-context">{{p.TotalDays}} {{'days' | translate}}</div>-->
 				<button class="wfm-btn wfm-btn-invis-primary pull-right">{{'Schedule' | translate}}</button>
 			</div>
 		</div>
@@ -127,7 +128,7 @@
 								<div class="wfm-chip-wrap" ng-repeat="s in vm.suggestions | limitTo: 10">
 									<span class="wfm-chip" ng-click="vm.selectSuggestion(s)">
 										<span class="chip-handle">{{s.Number}}{{s.PeriodType}}</span>
-									<span class="chip-text">{{s.StartDate | amDateFormat:"L"}} - {{s.EndDate | amDateFormat:"L"}}</span>
+									<span class="chip-text">{{s.StartDate | amDateFormat:"LL"}} - {{s.EndDate | amDateFormat:"LL"}}</span>
 									</span>
 								</div>
 							</div>
@@ -142,7 +143,7 @@
 					</div>
 					<div class="modal-actions">
 						<aside>
-							<button ng-click="vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default" translate>Cancel</button>
+							<button ng-click="vm.resetSelectedSuggestion()" class="wfm-btn wfm-btn-invis-default " translate>Cancel</button>
 							<button ng-class="{'wfm-btn-invis-primary':vm.selectedIsChanged, 'wfm-btn-invis-disabled': !vm.selectedIsChanged}" ng-disabled="!vm.selectedIsChanged"
 							 ng-click="vm.createFirstPp()" class="wfm-btn apply-planning-period" translate>
 									Apply

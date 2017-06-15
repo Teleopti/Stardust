@@ -38,21 +38,28 @@
         vm.isNonePp = isNonePp;
 
         getSuggestionsForFirstPp();
+        getTotalDaysForEachPp();
+
+        function getTotalDaysForEachPp() {
+            vm.planningPeriods.forEach(function(p) {
+                p.TotalDays = moment(p.EndDate).diff(p.StartDate, 'days');
+            });
+        }
 
         function youAreGoingToChangeThisPlanningPeriodMessage() {
             if (!vm.originLastPp.startDate && !vm.lastPp.startDate)
                 return;
             return vm.textForChangeThisPpMeg = $translate.instant("YouAreGoingToChangeThisPlanningPeriodFrom")
-                .replace("{0}", moment(vm.lastPp.startDate).format('L'))
-                .replace("{1}", moment(vm.lastPp.endDate).format('L'));
+                .replace("{0}", moment(vm.lastPp.startDate).format('LL'))
+                .replace("{1}", moment(vm.lastPp.endDate).format('LL'));
         }
 
         function youAreGoingToCreateAPlanningPeriodMessage() {
             if (!vm.selectedSuggestion.startDate)
                 return;
             return vm.textForCreatePpMeg = $translate.instant("YouAreGoingToCreateAPlanningPeriodFrom")
-                .replace("{0}", moment(vm.selectedSuggestion.startDate).format('L'))
-                .replace("{1}", moment(vm.selectedSuggestion.endDate).format('L'));
+                .replace("{0}", moment(vm.selectedSuggestion.startDate).format('LL'))
+                .replace("{1}", moment(vm.selectedSuggestion.endDate).format('LL'));
         }
 
         function isNonePp() {
@@ -149,11 +156,12 @@
         function changeDateForPp(pp) {
             if (planningGroupId == null)
                 return;
+            vm.planningPeriods = [];
             var startDate = moment(pp.startDate).format('YYYY-MM-DD');
             var newEndDate = moment(pp.endDate).format('YYYY-MM-DD');
             var changeEndDateForLastPlanningPeriod = planningPeriodServiceNew.changeEndDateForLastPlanningPeriod({ planningGroupId: planningGroupId, startDate: startDate, endDate: newEndDate });
             return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
-                vm.planningPeriods = data;
+                vm.planningPeriods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
                 vm.dateIsChanged = undefined;
                 return vm.planningPeriods;
             });
@@ -162,10 +170,11 @@
         function changeEndDateForLastPp(pp) {
             if (planningGroupId == null)
                 return;
+            vm.planningPeriods = [];
             var newEndDate = moment(pp.endDate).format('YYYY-MM-DD');
             var changeEndDateForLastPlanningPeriod = planningPeriodServiceNew.changeEndDateForLastPlanningPeriod({ planningGroupId: planningGroupId, startDate: null, endDate: newEndDate });
             return changeEndDateForLastPlanningPeriod.$promise.then(function (data) {
-                vm.planningPeriods = data;
+                vm.planningPeriods = data.sort(localeLanguageSortingService.localeSort('-EndDate'));
                 vm.dateIsChanged = undefined;
                 return vm.planningPeriods;
             });
