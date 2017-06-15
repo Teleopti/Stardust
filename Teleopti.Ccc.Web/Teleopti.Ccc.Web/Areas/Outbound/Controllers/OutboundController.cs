@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Controllers
 		[HttpPost, Route("api/Outbound/Campaign/Status"), UnitOfWork]
 		public virtual CampaignStatusViewModel GetCampaignStatus([FromBody]SummaryForm form)
 		{
-			return _campaignListProvider.GetCampaignStatus(form.CampaignId);
+			return _campaignListProvider.GetCampaignStatus(form.CampaignId, form.SkipDates);
 		}
 
 		[HttpPost, Route("api/Outbound/Campaign/Replan"), UnitOfWork]

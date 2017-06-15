@@ -79,8 +79,8 @@
 				});
 		}
 
-		this.getCampaignStatus = function (id, successCb, errorCb) {
-			$http.post(getCampaignStatusUrl, { CampaignId: id }).
+		this.getCampaignStatus = function (id, ignoredDates, successCb, errorCb) {
+			$http.post(getCampaignStatusUrl, { CampaignId: id, SkipDates: ignoredDates}).
 				success(function(data) {
 					if (successCb != null)
 						successCb(data);

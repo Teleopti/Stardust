@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void UnderSLACampaignShouldBeWarned()
 		{
 			var campaign = new Domain.Outbound.Campaign();
+			var skipDates = new List<DateOnly>();
 
 			var incomingTask = new IncomingTask(
 				new DateOnlyPeriod(new DateOnly(2015, 5, 1), new DateOnly(2015, 5, 3)),
@@ -35,14 +37,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 1), new TimeSpan(200, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 2), new TimeSpan(100, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 3), new TimeSpan(200, 0, 0), PlannedTimeTypeEnum.Calculated);
-			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
+			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign, skipDates)).Return(incomingTask);
 
 			target = new CampaignWarningProvider(
 				new FakeCampaignWarningConfigurationProvider(),
 				new CampaignUnderServiceLevelRule(campaignTaskManager),
 				new CampaignOverstaffRule(campaignTaskManager));
 
-			var response = target.CheckCampaign(campaign);
+			var response = target.CheckCampaign(campaign, skipDates);
 			response.ToList().Count().Should().Be.EqualTo(1);
 
 		}
@@ -51,6 +53,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void OverstaffCampaignShouldBeWarned()
 		{
 			var campaign = new Domain.Outbound.Campaign();
+			var skipDates = new List<DateOnly>();
 
 			var incomingTask = new IncomingTask(
 				new DateOnlyPeriod(new DateOnly(2015, 5, 1), new DateOnly(2015, 5, 3)),
@@ -63,14 +66,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 1), new TimeSpan(800, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 2), new TimeSpan(100, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 3), new TimeSpan(100, 0, 0), PlannedTimeTypeEnum.Calculated);
-			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
+			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign, skipDates)).Return(incomingTask);
 
 			target = new CampaignWarningProvider(
 							new FakeCampaignWarningConfigurationProvider(),
 							new CampaignUnderServiceLevelRule(campaignTaskManager),
 							new CampaignOverstaffRule(campaignTaskManager));
 
-			var response = target.CheckCampaign(campaign);
+			var response = target.CheckCampaign(campaign, skipDates);
 			response.ToList().Count().Should().Be.EqualTo(1);
 
 		}
@@ -79,6 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void OverstaffCampaignsShouldBeWarnedWithValueGreaterThanRelativeThreshold()
 		{
 			var campaign = new Domain.Outbound.Campaign();
+			var skipDates = new List<DateOnly>();
 
 			var incomingTask = new IncomingTask(
 				new DateOnlyPeriod(new DateOnly(2015, 5, 1), new DateOnly(2015, 5, 3)),
@@ -91,7 +95,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 1), new TimeSpan(1200, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 2), new TimeSpan(100, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 3), new TimeSpan(100, 0, 0), PlannedTimeTypeEnum.Calculated);
-			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
+			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign, skipDates)).Return(incomingTask);
 
 			var configurationProvider = new FakeCampaignWarningConfigurationProvider
 			{
@@ -105,7 +109,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				new CampaignOverstaffRule(campaignTaskManager));
 
 
-			var response = target.CheckCampaign(campaign);
+			var response = target.CheckCampaign(campaign, skipDates);
 			response.ToList().Count().Should().Be.EqualTo(1);
 
 		}
@@ -114,6 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void OverstaffCampaignsShouldNotBeWarnedWithValueSmallerThanRelativeThreshold()
 		{
 			var campaign = new Domain.Outbound.Campaign();
+			var skipDates = new List<DateOnly>();
 
 			var incomingTask = new IncomingTask(
 				new DateOnlyPeriod(new DateOnly(2015, 5, 1), new DateOnly(2015, 5, 3)),
@@ -126,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 1), new TimeSpan(1000, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 2), new TimeSpan(100, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 3), new TimeSpan(90, 0, 0), PlannedTimeTypeEnum.Calculated);
-			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
+			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign, skipDates)).Return(incomingTask);
 
 			var configurationProvider = new FakeCampaignWarningConfigurationProvider
 			{
@@ -139,7 +144,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				new CampaignOverstaffRule(campaignTaskManager));
 
 
-			var response = target.CheckCampaign(campaign);
+			var response = target.CheckCampaign(campaign, skipDates);
 			response.ToList().Count().Should().Be.EqualTo(0);
 
 		}
@@ -148,6 +153,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void OverstaffCampaignsShouldBeWarnedWithValueGreaterThanAbsoluteThreshold()
 		{
 			var campaign = new Domain.Outbound.Campaign();
+			var skipDates = new List<DateOnly>();
 
 			var incomingTask = new IncomingTask(
 				new DateOnlyPeriod(new DateOnly(2015, 5, 1), new DateOnly(2015, 5, 3)),
@@ -160,7 +166,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 1), new TimeSpan(1000, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 2), new TimeSpan(1, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 3), new TimeSpan(1, 0, 0), PlannedTimeTypeEnum.Calculated);
-			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
+			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign, skipDates)).Return(incomingTask);
 
 			var configurationProvider = new FakeCampaignWarningConfigurationProvider
 			{
@@ -172,7 +178,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				new CampaignUnderServiceLevelRule(campaignTaskManager),
 				new CampaignOverstaffRule(campaignTaskManager));
 			
-			var response = target.CheckCampaign(campaign);
+			var response = target.CheckCampaign(campaign, skipDates);
 			response.ToList().Count().Should().Be.EqualTo(1);
 
 		}
@@ -181,6 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void OverstaffCampaignsShouldNotBeWarnedWithValueSmallerThanAbsoluteThreshold()
 		{
 			var campaign = new Domain.Outbound.Campaign();
+			var skipDates = new List<DateOnly>();
 
 			var incomingTask = new IncomingTask(
 				new DateOnlyPeriod(new DateOnly(2015, 5, 1), new DateOnly(2015, 5, 3)),
@@ -193,7 +200,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 1), new TimeSpan(1000, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 2), new TimeSpan(1, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 3), new TimeSpan(1, 0, 0), PlannedTimeTypeEnum.Calculated);
-			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
+			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign, skipDates)).Return(incomingTask);
 
 			var configurationProvider = new FakeCampaignWarningConfigurationProvider
 			{
@@ -205,7 +212,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				new CampaignUnderServiceLevelRule(campaignTaskManager),
 				new CampaignOverstaffRule(campaignTaskManager));
 			
-			var response = target.CheckCampaign(campaign);
+			var response = target.CheckCampaign(campaign, skipDates);
 			response.ToList().Count().Should().Be.EqualTo(0);
 
 		}
@@ -214,6 +221,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 		public void OverstaffBeforeActualBacklogShouldBeIgnored()
 		{
 			var campaign = new Domain.Outbound.Campaign();
+			var skipDates = new List<DateOnly>();
 
 			var incomingTask = new IncomingTask(
 				new DateOnlyPeriod(new DateOnly(2015, 5, 1), new DateOnly(2015, 5, 3)),
@@ -228,7 +236,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			incomingTask.SetTimeOnDate(new DateOnly(2015, 5, 3), new TimeSpan(1, 0, 0), PlannedTimeTypeEnum.Calculated);
 			incomingTask.SetActualBacklogOnDate(new DateOnly(2015, 5, 2), new TimeSpan(500));
 
-			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign)).Return(incomingTask);
+			campaignTaskManager.Stub(x => x.GetIncomingTaskFromCampaign(campaign, skipDates)).Return(incomingTask);
 
 			var configurationProvider = new FakeCampaignWarningConfigurationProvider
 			{
@@ -240,7 +248,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 				new CampaignUnderServiceLevelRule(campaignTaskManager),
 				new CampaignOverstaffRule(campaignTaskManager));
 
-			var response = target.CheckCampaign(campaign);
+			var response = target.CheckCampaign(campaign, skipDates);
 			response.ToList().Count().Should().Be.EqualTo(0);
 
 		}

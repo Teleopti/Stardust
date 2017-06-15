@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.Models
 	public class SummaryForm
 	{
 		public Guid CampaignId;
+		public IEnumerable<DateOnly> SkipDates;
 	}
 
 	public class CampaignSummaryViewModel

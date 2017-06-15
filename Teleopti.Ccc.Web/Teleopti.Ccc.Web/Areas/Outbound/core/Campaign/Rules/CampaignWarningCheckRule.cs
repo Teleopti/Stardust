@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules
 		}
 
 		public abstract string GetWarningName();
-		public abstract IEnumerable<CampaignWarning> Validate(IOutboundCampaign campaign);
+		public abstract IEnumerable<CampaignWarning> Validate(IOutboundCampaign campaign, IEnumerable<DateOnly> skipDates);
 
 		public void Configure(CampaignWarningConfiguration configuration)
 		{

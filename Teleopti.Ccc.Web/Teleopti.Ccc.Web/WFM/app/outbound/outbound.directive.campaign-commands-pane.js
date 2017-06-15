@@ -148,7 +148,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.addManualPlan)) {
-					vm.callbacks.addManualPlan(response, callbackDone);
+					vm.callbacks.addManualPlan(response, vm.ignoredDates, callbackDone);
 				} else {
 					callbackDone();
 				}
@@ -166,7 +166,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function(response) {
 				if (angular.isDefined(vm.callbacks.removeManualPlan)) {
-					vm.callbacks.removeManualPlan(response, callbackDone);
+					vm.callbacks.removeManualPlan(response, vm.ignoredDates, callbackDone);
 				} else {
 					callbackDone();
 				}
@@ -187,7 +187,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.addManualBacklog)) {
-					vm.callbacks.addManualBacklog(response, callbackDone);
+					vm.callbacks.addManualBacklog(response, vm.ignoredDates, callbackDone);
 				} else {
 					callbackDone();
 				}
@@ -205,7 +205,7 @@
 					ignoredDates: vm.ignoredDates
 				}, function(response) {
 					if (angular.isDefined(vm.callbacks.removeManualBacklog)) {
-						vm.callbacks.removeManualBacklog(response, callbackDone);
+						vm.callbacks.removeManualBacklog(response, vm.ignoredDates, callbackDone);
 					} else {
 						callbackDone();
 					}
@@ -219,7 +219,7 @@
 				ignoredDates: vm.ignoredDates
 			}, function (response) {
 				if (angular.isDefined(vm.callbacks.replan)) {
-					vm.callbacks.replan(response, callbackDone);
+					vm.callbacks.replan(response, vm.ignoredDates, callbackDone);
 				} else {
 					callbackDone();
 				}

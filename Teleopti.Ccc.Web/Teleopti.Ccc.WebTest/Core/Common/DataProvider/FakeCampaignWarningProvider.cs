@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		Dictionary<string, List<CampaignWarning>> ruleCheckResult = new Dictionary<string, List<CampaignWarning>>(); 
 
 
-        public IEnumerable<CampaignWarning> CheckCampaign(IOutboundCampaign campaign)
+        public IEnumerable<CampaignWarning> CheckCampaign(IOutboundCampaign campaign, IEnumerable<DateOnly> skipDates)
         {
             if (ruleCheckResult.ContainsKey(campaign.Name))
                 return ruleCheckResult[campaign.Name];

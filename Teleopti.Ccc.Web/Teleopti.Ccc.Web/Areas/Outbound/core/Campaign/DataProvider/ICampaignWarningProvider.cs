@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 {
 	public interface ICampaignWarningProvider
 	{
-		IEnumerable<CampaignWarning> CheckCampaign(IOutboundCampaign campaign);
+		IEnumerable<CampaignWarning> CheckCampaign(IOutboundCampaign campaign, IEnumerable<DateOnly> skipDates);
 	}
 }

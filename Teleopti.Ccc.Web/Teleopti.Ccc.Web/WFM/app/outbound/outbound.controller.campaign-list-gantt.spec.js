@@ -391,7 +391,7 @@ describe('OutboundSummaryCtrl', function() {
 			campaignDetail = campaignD;
 		};
 
-		this.getCampaignStatus = function(id, cb) {
+		this.getCampaignStatus = function(id, ignoredDates, cb) {
 			cb(campaignDetail);
 		};
 

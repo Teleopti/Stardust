@@ -254,7 +254,7 @@
 		}
 
 		function getCommandCallback(campaign, dataRow, scope) {
-			return function(resp, done) {
+			return function(resp, ignoredDates, done) {
 				dataRow.isRefreshingData = true;
 				campaign.graphData = resp.graphData;
 				campaign.rawManualPlan = resp.rawManualPlan;
@@ -262,7 +262,7 @@
 				campaign.closedDays = resp.closedDays;
 				campaign.translations = resp.translations;
 
-				updateCampaign(campaign,
+				updateCampaign(campaign, ignoredDates,
 					function () {
 						scope.$broadcast('campaign.chart.refresh', campaign);
 						$scope.$broadcast('campaign.chart.clear.selection', campaign);
@@ -273,8 +273,8 @@
 			};
 		}
 
-		function updateCampaign(campaign, done) {
-			outboundService.getCampaignStatus(campaign.Id, function (campaignStatus) {
+		function updateCampaign(campaign, ignoredDates, done) {
+			outboundService.getCampaignStatus(campaign.Id, ignoredDates, function (campaignStatus) {
 				angular.extend(campaign, campaignStatus);
 				updateSingleCampaignGanttDisplay(campaignStatus);
 				if (done) done();
@@ -282,7 +282,7 @@
 		}
 
 		function getGraphData(campaign, ignoredDates, done) {
-			outboundService.getCampaignStatus(campaign.Id, function (campaignStatus) {
+			outboundService.getCampaignStatus(campaign.Id, ignoredDates, function (campaignStatus) {
 				angular.extend(campaign, campaignStatus);
 				outboundChartService.getCampaignVisualization({ CampaignId: campaign.Id, SkipDates: ignoredDates }, function (data) {
 					campaign.graphData = data.graphData;

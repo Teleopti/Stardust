@@ -70,15 +70,15 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 		{
 			var campaigns = _outboundCampaignRepository.GetCampaigns(new DateOnlyPeriod(period.StartDate, period.EndDate));
 
-			return campaigns.Select(campaign => GetCampaignStatus(campaign.Id.GetValueOrDefault())).ToList();
+			return campaigns.Select(campaign => GetCampaignStatus(campaign.Id.GetValueOrDefault(), new List<DateOnly>())).ToList();
 		}
 
-		public CampaignStatusViewModel GetCampaignStatus(Guid id)
+		public CampaignStatusViewModel GetCampaignStatus(Guid id, IEnumerable<DateOnly> skipDates)
 		{
 			var campaign = _outboundCampaignRepository.Get(id);
 			if (campaign == null) return null;
 
-			var warningViewModel = _campaignWarningProvider.CheckCampaign(campaign).Select(warning => new OutboundWarningViewModel(warning));
+			var warningViewModel = _campaignWarningProvider.CheckCampaign(campaign, skipDates).Select(warning => new OutboundWarningViewModel(warning));
 			var period = campaign.SpanningPeriod.ToDateOnlyPeriod(campaign.Skill.TimeZone);
 
 			var schedules = _outboundScheduledResourcesCacher.GetScheduledTime(campaign);

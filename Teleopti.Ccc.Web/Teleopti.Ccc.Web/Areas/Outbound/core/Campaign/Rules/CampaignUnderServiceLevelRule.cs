@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.Rules
 			return "CampaignUnderSLA";
 		}
 
-		public override IEnumerable<CampaignWarning> Validate(IOutboundCampaign campaign)
+		public override IEnumerable<CampaignWarning> Validate(IOutboundCampaign campaign, IEnumerable<DateOnly> skipDates)
 		{
-			var campaignTasks = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign);
+			var campaignTasks = _campaignTaskManager.GetIncomingTaskFromCampaign(campaign, skipDates.ToList());
 			var response = new List<CampaignWarning>();
 
 			var totalWorkloadMinutes =

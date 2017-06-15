@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			_outboundOverstaffRule = outboundOverstaffRule;		
 		}
 
-		public IEnumerable<CampaignWarning> CheckCampaign(IOutboundCampaign campaign)
+		public IEnumerable<CampaignWarning> CheckCampaign(IOutboundCampaign campaign, IEnumerable<DateOnly> skipDates)
 		{
 			var response = new List<CampaignWarning>();
 
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			{
 				var config = _campaignWarningConfigurationProvider.GetConfiguration(rule.GetType());
 				rule.Configure(config);
-				var result = rule.Validate(campaign).ToList();
+				var result = rule.Validate(campaign, skipDates).ToList();
 				if (result.Count > 0)
 				{
 					response.Add(result.First());
