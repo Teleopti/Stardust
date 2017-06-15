@@ -400,10 +400,6 @@ namespace Stardust.Manager
 						{
 							using (var sqlTransaction = sqlConnection.BeginTransaction())
 							{
-								if (response == null)
-								{
-									_jobRepositoryCommandExecuter.UpdateWorkerNode(false, availableNode.ToString(), sqlConnection, sqlTransaction);
-								}
 								_jobRepositoryCommandExecuter.TagQueueItem(jobQueueItem.JobId, sqlConnection, sqlTransaction);
 								sqlTransaction.Commit();
 							}
