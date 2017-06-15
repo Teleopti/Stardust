@@ -114,18 +114,23 @@
     }
 
     function forecastWorkload (blockToken) {
-      // vm.skillMaster.IsForecastRunning = true;
+      vm.skillMaster.IsForecastRunning = true;
+      var temp = {
+        WorkloadId: vm.forecastModalObj.Id,
+        ForecastMethodId: -1
+      }
+
       forecastingService.forecast(JSON.stringify(
       {
         ForecastStart: vm.forecastPeriod.startDate,
         ForecastEnd: vm.forecastPeriod.endDate,
-        Workloads: [vm.forecastModalObj.Id],
+        Workloads: [temp],
         ScenarioId: vm.selectedScenario.Id,
         BlockToken: blockToken,
         IsLastWorkload: true
       }), function(data, status, headers, config) {
         // console.log(data);
-
+      vm.skillMaster.IsForecastRunning = false;
         blockToken = data.BlockToken;
         getWorkloadForecastData(vm.forecastModalObj.Id);
       }, function(data, status, headers, config) {
