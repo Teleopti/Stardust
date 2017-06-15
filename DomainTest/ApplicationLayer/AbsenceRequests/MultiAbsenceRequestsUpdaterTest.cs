@@ -956,13 +956,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		[Test]
 		public void ShouldNotDenyWhenThereAreTwoBudgetDaysInTheSameDay()
 		{
-			Now.Is(new DateTime(2017,6,5));
+			Now.Is(new DateTime(2017, 6, 5));
 
 			var budgetDay = new DateOnly(2017, 6, 5);
 			var budgetGroup = getBudgetGroup();
 			var scenario = ScenarioRepository.Has("scenarioName");
-			var budgetDayOne = new BudgetDay(budgetGroup, scenario, budgetDay) { FulltimeEquivalentHours = 8d, ShrinkedAllowance =1, AbsenceOverride = 1d,IsClosed = false,UpdatedOn = new DateTime()};
-			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, budgetDay) { FulltimeEquivalentHours = 10d, ShrinkedAllowance = 1, AbsenceOverride = 2d, IsClosed = false, UpdatedOn = new DateTime().AddDays(1) };
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, budgetDay)
+			{
+				FulltimeEquivalentHours = 8d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 1d,
+				IsClosed = false,
+				UpdatedOn = new DateTime()
+			};
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, budgetDay)
+			{
+				FulltimeEquivalentHours = 10d,
+				ShrinkedAllowance = 1,
+				AbsenceOverride = 2d,
+				IsClosed = false,
+				UpdatedOn = new DateTime().AddDays(1)
+			};
 			BudgetGroupRepository.Add(budgetGroup);
 			BudgetDayRepository.Add(budgetDayOne);
 			BudgetDayRepository.Add(budgetDayTwo);
@@ -978,8 +992,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				Absence = absence,
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				StaffingThresholdValidator = new BudgetGroupAllowanceValidator(),
-				Period = new DateOnlyPeriod(2017, 6, 5, 2017, 6, 11),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2017, 6, 5, 2017, 6, 11),
+				Period = new DateOnlyPeriod(2017, 6, 4, 2017, 6, 11),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2017, 6, 4, 2017, 6, 11),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
 			});
 
@@ -989,14 +1003,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var period = new DateTimePeriod(2017, 6, 5, 8, 2017, 6, 5, 17);
 			var activity = ActivityRepository.Has("activity");
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, period, new ShiftCategory("category")));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity,
+				period, new ShiftCategory("category")));
 
 			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, period)).WithId();
 			personRequest.Pending();
 			PersonRequestRepository.Add(personRequest);
 
-			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
-			personRequest.IsApproved.Should().Be.True();
+			Target.UpdateAbsenceRequest(new List<Guid> {personRequest.Id.GetValueOrDefault()});
+			personRequest.IsApproved.Should().Be(true);
 
 		}
 

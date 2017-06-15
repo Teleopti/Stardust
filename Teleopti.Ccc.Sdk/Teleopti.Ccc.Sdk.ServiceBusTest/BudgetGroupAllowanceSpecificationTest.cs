@@ -74,11 +74,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		[Test]
 		public void ShouldBeValidIfEnoughAllowanceLeft()
 		{
-			var budgetDay = _mocks.StrictMock<IBudgetDay>();
 			var usedAbsenceTime = new List<PayloadWorkTime> { new PayloadWorkTime { TotalContractTime = TimeSpan.FromHours(14).Ticks } };
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(_defaultDay);
 
 			var budgetGroup = GetBudgetGroup();
+			var budgetDay = new BudgetDay(budgetGroup, ScenarioFactory.CreateScenarioAggregate(), _defaultDay){ ShrinkedAllowance = 2d, FulltimeEquivalentHours = 8d};
 
 			personPeriod.BudgetGroup = budgetGroup;
 			_person.AddPersonPeriod(personPeriod);
@@ -89,9 +89,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(_absenceRequest.Period).Return(shortPeriod()).Repeat.AtLeastOnce();
 				Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
-				Expect.Call(budgetDay.ShrinkedAllowance).Return(2d);
-				Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(2);
-				Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
 				Expect.Call(_scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().
 					 Return(usedAbsenceTime);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDict);
@@ -112,7 +109,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		[Test]
 		public void ShouldCalculateContractTimeOnlyForRequestedTime()
 		{
-			var budgetDay = _mocks.StrictMock<IBudgetDay>();
 			var usedAbsenceTime = new List<PayloadWorkTime>
 			{
 				new PayloadWorkTime
@@ -123,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(_defaultDay);
 
 			var budgetGroup = GetBudgetGroup();
-
+			var budgetDay = new BudgetDay(budgetGroup, ScenarioFactory.CreateScenarioAggregate(), _defaultDay) { ShrinkedAllowance = 2d, FulltimeEquivalentHours = 8d };
 			personPeriod.BudgetGroup = budgetGroup;
 			_person.AddPersonPeriod(personPeriod);
 			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
@@ -141,9 +137,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 					{
 						budgetDay
 					});
-				Expect.Call(budgetDay.ShrinkedAllowance).Return(2d);
-				Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(2);
-				Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
 				Expect.Call(_scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null))
 					.IgnoreArguments().Return(usedAbsenceTime);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDict);
@@ -171,12 +164,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		[Test]
 		public void ShouldBeInvalidIfNotEnoughAllowanceLeft()
 		{
-			var budgetDay = _mocks.StrictMock<IBudgetDay>();
-
 			var usedAbsenceTime = new List<PayloadWorkTime> { new PayloadWorkTime { TotalContractTime = TimeSpan.FromHours(14).Ticks } };
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(_defaultDay);
 			var budgetGroup = GetBudgetGroup();
-
+			var budgetDay = new BudgetDay(budgetGroup, ScenarioFactory.CreateScenarioAggregate(), _defaultDay) { ShrinkedAllowance = 2d, FulltimeEquivalentHours = 8d };
 			personPeriod.BudgetGroup = budgetGroup;
 			_person.AddPersonPeriod(personPeriod);
 			_person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
@@ -186,9 +177,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
 				Expect.Call(_absenceRequest.Period).Return(longPeriod()).Repeat.AtLeastOnce();
 				Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
-				Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(2);
-				Expect.Call(budgetDay.ShrinkedAllowance).Return(2d);
-				Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
 				Expect.Call(_scheduleProjectionReadOnlyPersister.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().
 					 Return(usedAbsenceTime);
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDict);
