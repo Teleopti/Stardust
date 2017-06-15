@@ -6147,9 +6147,6 @@
   <data name="Optimisation" xml:space="preserve">
     <value>Optimisation</value>
   </data>
-  <data name="OverStaff" xml:space="preserve">
-    <value>Trop de personnel</value>
-  </data>
   <data name="UnderStaff" xml:space="preserve">
     <value>Sous-dimensionnement</value>
   </data>
