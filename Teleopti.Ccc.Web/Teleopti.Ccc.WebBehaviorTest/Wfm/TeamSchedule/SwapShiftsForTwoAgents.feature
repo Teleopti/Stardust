@@ -96,8 +96,8 @@ Scenario: Could not do shift swap when no permission
 	| Start time | 2016-10-10 08:00 |
 	| End time   | 2016-10-10 17:00 |
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green'
 	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I selected agent 'Bill Gates'

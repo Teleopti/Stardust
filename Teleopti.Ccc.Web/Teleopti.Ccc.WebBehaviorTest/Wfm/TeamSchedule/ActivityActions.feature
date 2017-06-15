@@ -58,6 +58,8 @@ Scenario: Should be able to add activity
 	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John Smith'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddActivity' in team schedule
@@ -82,6 +84,8 @@ Scenario: Should see enabled add personal activity button
 	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John Smith'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	Then I should see 'AddPersonalActivity' menu is enabled
@@ -96,6 +100,8 @@ Scenario: Should be able to add personal activity
 	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John Smith'
+	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I open menu in team schedule
 	And I click menu item 'AddPersonalActivity' in team schedule
@@ -138,6 +144,8 @@ Scenario: Should be able to remove single activity
 	| Lunch end time   | 2016-10-10 13:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John Smith'
+	And I click button to search for schedules
 	And I selected activity 'Lunch'
 	And I apply remove activity
 	Then I should see a successful notice
@@ -158,6 +166,8 @@ Scenario: Should be able to remove multiple activities
 	| Third activity end time       | 2016-10-10 15:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John Smith'
+	And I click button to search for schedules
 	And I selected activity 'Training'
 	And I selected activity 'Sales'
 	And I apply remove activity
@@ -175,6 +185,8 @@ Scenario: Should not be able to remove basic activity
 	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John Smith'
+	And I click button to search for schedules
 	And I selected activity 'Phone'
 	And I apply remove activity
 	Then I should see an error notice
@@ -192,7 +204,7 @@ Scenario: Should be able to move activity
     | Lunch end time   | 2016-10-10 13:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
-	And I searched schedule with keyword 'Team green'
+	And I searched schedule with keyword 'John Smith'
 	And I click button to search for schedules
 	And I selected activity 'Lunch'
 	And I move activity to '2016-10-10 14:00' with next day being 'false'
@@ -208,6 +220,8 @@ Scenario: Should be able to move basic activity
     | EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John Smith'
+	And I click button to search for schedules
 	And I selected activity 'Phone'
 	And I move activity to '2016-10-10 10:00' with next day being 'false'
 	Then I should see a successful notice
@@ -222,6 +236,8 @@ Scenario: The default new start time should be one hour later than the original 
 	| EndTime        | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I searched schedule with keyword 'John Smith'
+	And I click button to search for schedules
 	And I selected activity 'Phone'
 	And I open menu in team schedule
 	And I click menu item 'MoveActivity' in team schedule

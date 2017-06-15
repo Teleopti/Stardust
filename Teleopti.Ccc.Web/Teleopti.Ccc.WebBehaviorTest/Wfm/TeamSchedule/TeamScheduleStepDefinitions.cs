@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 				() =>
 				{
 					Browser.Interactions.AssertScopeValue(".team-schedule", "vm.searchEnabled", true);
-					Browser.Interactions.FillWith("input.advanced-input", $"\"{keyword}\"");
+					Browser.Interactions.FillWith("input.advanced-input", $"{keyword}");
 					Browser.Interactions.PressEnter("input.advanced-input");
 				});
 		}
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 				});
 		}
 
-	
+		[When(@"I should see a successful notice")]
 		[Then(@"I should see a successful notice")]
 		public void ThenIShouldSeeASuccessfulNotice()
 		{
