@@ -20897,6 +20897,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Schedules.
+        /// </summary>
+        public static string OpenSchedulePage {
+            get {
+                return ResourceManager.GetString("OpenSchedulePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Schedules.
         /// </summary>
         public static string OpenScheduler {

@@ -16142,4 +16142,8 @@ Do you want to participate?</value>
     <value>Contains mixed skilltypes, certain data series may be unavailable</value>
     <comment>intraday feedback message</comment>
   </data>
+  <data name="OpenSchedulePage" xml:space="preserve">
+    <value>Schedules</value>
+    <comment>Schedules</comment>
+  </data>
 </root>
