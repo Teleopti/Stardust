@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_filterMapper = filterMapper;
 		}
 
-		public PlanningGroupModel ToModel(IPlanningGroup planningGroup)
+		public PlanningGroupModel ToModel(IPlanningGroup planningGroup, int agentCount)
 		{
 			var filterModels = planningGroup.Filters.Select(filter => _filterMapper.ToModel(filter)).ToList();
 
@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				Id = planningGroup.Id ?? Guid.Empty,
 				Name = planningGroup.Name,
-				Filters = filterModels
+				Filters = filterModels,
+				AgentCount = agentCount
 			};
 		}
 	}

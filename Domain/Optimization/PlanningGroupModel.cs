@@ -9,8 +9,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			Filters = new List<FilterModel>();
 		}
+
 		public Guid Id { get; set; }
 		public string Name { get; set; }
 		public IList<FilterModel> Filters { get; set; }
+		public int AgentCount { get; set; }
 	}
 }
