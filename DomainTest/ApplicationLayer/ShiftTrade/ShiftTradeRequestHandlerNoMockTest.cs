@@ -16,6 +16,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 {
+	[TestWithStaticDependenciesAvoidUse]
 	public class ShiftTradeRequestHandlerNoMockTest
 	{
 		private ICurrentScenario _currentScenario;
