@@ -33927,7 +33927,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This skill area contains mixed skilltypes, certain data series are unavailable.
+        ///   Looks up a localized string similar to Contains mixed skilltypes, certain data series may be unavailable.
         /// </summary>
         public static string UnsupportedDataSeriesFound {
             get {

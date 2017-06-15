@@ -16139,7 +16139,7 @@ Do you want to participate?</value>
     <comment>PlansPageCreatePlanningGroup</comment>
   </data>
   <data name="UnsupportedDataSeriesFound" xml:space="preserve">
-    <value>This skill area contains mixed skilltypes, certain data series are unavailable</value>
+    <value>Contains mixed skilltypes, certain data series may be unavailable</value>
     <comment>intraday feedback message</comment>
   </data>
 </root>
