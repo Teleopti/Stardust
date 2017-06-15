@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
@@ -18,19 +21,29 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
 		private readonly ForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
 		private readonly IUserTimeZone _timeZone;
+		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 
-		public StaffingController(IAddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries, ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone)
+		public StaffingController(IAddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries, ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone, IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
 			_forecastedStaffingToDataSeries = forecastedStaffingToDataSeries;
 			_timeZone = timeZone;
+			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 		}
 
 		[UnitOfWork, HttpPost, Route("api/staffing/overtime/suggestion")]
 		public virtual IHttpActionResult ShowAddOvertime([FromBody]OverTimeSuggestionModel model)
 		{
 			if (model == null || model.SkillIds.IsEmpty()) return BadRequest();
+			var multiplicationDefinition = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().FirstOrDefault();
+			model.OvertimePreferences = new OvertimePreferences
+			{
+				ScheduleTag = new NullScheduleTag(),
+				OvertimeType = multiplicationDefinition,
+				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5))
+			};
+
 			var wraperModel =_addOverTime.GetSuggestion(model);
 			var returnModel = extractDataSeries(model, wraperModel);
 			if (!wraperModel.Models.Any())
@@ -44,7 +57,8 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		public virtual IHttpActionResult AddOvertime([FromBody]IList<OverTimeModel> models)
 		{
 			if (models == null || models.IsEmpty()) return BadRequest();
-			_addOverTime.Apply(models);
+			var multiplicationDefinition = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().FirstOrDefault();
+			_addOverTime.Apply(models, multiplicationDefinition.Id.GetValueOrDefault());
 			return Ok();
 		}
 

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Overtime;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
@@ -24,6 +26,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 	{
 		public IList<Guid> SkillIds { get; set; }
 		public DateTime[] TimeSerie { get; set; }
+		public OvertimePreferences OvertimePreferences { get; set; }
+		public DateTimePeriod RequestedPeriod { get; set; }
 	}
 
 	public class OverTimeModel

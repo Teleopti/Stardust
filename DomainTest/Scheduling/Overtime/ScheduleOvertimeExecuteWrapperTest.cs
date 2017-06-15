@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -14,6 +15,8 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Intraday;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -34,10 +37,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
+		public FakePersonRepository PersonRepository;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public MutableNow Now;
 		public FakeUserTimeZone UserTimeZone;
-
+		public AddOverTime Target2;
+		public FakePersonForOvertimeProvider FakePersonForOvertimeProvider;
 		private IScenario scenario;
 		private IActivity activity;
 		private ISkill skill;
@@ -52,6 +57,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			system.UseTestDouble<ScheduleOvertimeWithoutStateHolder>().For<ScheduleOvertimeWithoutStateHolder>();
 			system.UseTestDouble<GridlockManager>().For<IGridlockManager>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
+			system.UseTestDouble<FakePersonForOvertimeProvider>().For<IPersonForOvertimeProvider>();
+			system.UseTestDouble<AddOverTime>().For<IAddOverTime>();
 		}
 
 		private void setup()
@@ -85,6 +92,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			var dateOnly = new DateOnly(2017, 06, 1);
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
+			PersonRepository.Has(agent);
+
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel>{new SuggestedPersonsModel{PersonId = agent.Id.GetValueOrDefault()}});
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnly, 1));
 			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(15, 16));
 			PersonAssignmentRepository.Has(ass);
@@ -96,13 +106,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
 				SkillActivity = activity
 			};
-			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 16, 2017, 06, 1, 17);
-			var fullPeriod = requestedPeriod;
-			var dateTimePeriod = dateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
-			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] {agent}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent});
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDictionary, new []{agent}, dateOnly.ToDateOnlyPeriod(), requestedPeriod, new[] {skill}, new[] { skill }, fullPeriod);
-			var overtimeActivities = scheduleDictionary[agent].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 16, 2017, 06, 01, 17));
-			overtimeActivities.Count().Should().Be.EqualTo(1);
+			
+			var model = new OverTimeSuggestionModel
+			{
+				SkillIds = new[] {skill.Id.GetValueOrDefault()},
+				TimeSerie = new[] {new DateTime(2017, 06, 1, 0, 0, 0), new DateTime(2017, 06, 2, 0, 0, 0)},
+				OvertimePreferences = overtimePreference
+			};
+
+			var result = Target2.GetSuggestion(model);
+			
 			result.Models.Should().Not.Be.Empty();
 		}
 
@@ -137,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				OvertimeType = multiplicatorDefinitionSet,
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(16, 0, 17, 0),
-				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
+				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(1), TimeSpan.FromHours(1)),
 				SkillActivity = activity
 			};
 
@@ -402,6 +415,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		public void ShouldScheduleOvertimeBeforeShiftOnDifferentTimezones()
 		{
 			setup();
+			Now.Is("2017-05-31 08:00");
 			skill.StaffingThresholds = new StaffingThresholds(skill.StaffingThresholds.SeriousUnderstaffing, skill.StaffingThresholds.Understaffing, new Percent(0));
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
@@ -419,6 +433,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			// Singapore Standard Time +8H
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time")).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
+			PersonRepository.Has(agent);
 			var timePeriodInUtc = new DateTimePeriod(2017, 06, 01, 5, 2017, 06, 01, 6);
 
 			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, timePeriodInUtc);
@@ -426,6 +441,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			// Mountain Standard Time -7H
 			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time")).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
+			PersonRepository.Has(agent2);
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() }, new SuggestedPersonsModel { PersonId = agent2.Id.GetValueOrDefault() } });
+
 			var ass2 = new PersonAssignment(agent2, scenario, may31DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, timePeriodInUtc);
 			PersonAssignmentRepository.Has(ass2);
 
@@ -439,18 +457,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SkillActivity = activity
 			};
 
-			var requestedPeriod = new DateTimePeriod(2017, 06, 1, 1, 2017, 06, 1, 5);
-			var fullPeriod = requestedPeriod;
-			var dateTimePeriod = june1DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc);
-			var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(dateTimePeriod), scenario, new PersonProvider(new[] { agent, agent2 }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent, agent2 });
-			var period = new DateOnlyPeriod(may31DateOnly, june1DateOnly);
-			var result = Target.Execute(overtimePreference, new NoSchedulingProgress(), scheduleDictionary, new[] { agent, agent2 }, period, requestedPeriod, new[] { skill }, new[] { skill }, fullPeriod);
-			var overtimeActivities = scheduleDictionary.SchedulesForPeriod(period, agent, agent2).ToList()
-				.Select(x => x.PersonAssignment()?.OvertimeActivities())
-				.Where(y => y != null)
-				.SelectMany(i => i).Where(ot => ot.Period == new DateTimePeriod(2017, 06, 01, 1, 2017, 06, 01, 5));
+			var model = new OverTimeSuggestionModel
+			{
+				SkillIds = new[] { skill.Id.GetValueOrDefault() },
+				TimeSerie = new[] { new DateTime(2017, 06, 1, 0, 0, 0), new DateTime(2017, 06, 2, 0, 0, 0) },
+				OvertimePreferences = overtimePreference
+			};
 
-			overtimeActivities.Count().Should().Be.EqualTo(2);
+			var result = Target2.GetSuggestion(model);
+
 			result.Models.Count.Should().Be.EqualTo(2);
 		}
 

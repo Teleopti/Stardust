@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 	public class AddOverTime : IAddOverTime
 	{
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IPersonForOvertimeProvider _personForOvertimeProvider;
 		private readonly IScheduleStorage _scheduleStorage;
@@ -33,13 +32,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 
 		public AddOverTime( IUserTimeZone userTimeZone, 
-						   IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ICommandDispatcher commandDispatcher, 
+						   ICommandDispatcher commandDispatcher, 
 						   IPersonForOvertimeProvider personForOvertimeProvider, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, 
 						   IPersonRepository personRepository, ISkillRepository skillRepository, 
 						   ScheduleOvertimeExecuteWrapper scheduleOvertimeExecuteWrapper, INow now)
 		{
 			_userTimeZone = userTimeZone;
-			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 			_commandDispatcher = commandDispatcher;
 			_personForOvertimeProvider = personForOvertimeProvider;
 			_scheduleStorage = scheduleStorage;
@@ -60,47 +58,40 @@ namespace Teleopti.Ccc.Domain.Staffing
 			if (!overTimeSuggestionModel.TimeSerie.Any())
 				return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
 
+			var userDateOnly = new DateOnly(overTimeSuggestionModel.TimeSerie.Min());
+			
 			var startTime = TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Min(), _userTimeZone.TimeZone());
 			var endTime = TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max().AddMinutes(minResolution), _userTimeZone.TimeZone());
 			var fullPeriod = new DateTimePeriod(startTime, endTime);
-			
-			if (startTime < _now.UtcDateTime().AddMinutes(15)) startTime = _now.UtcDateTime().AddMinutes(15);
-			var period = new DateTimePeriod(startTime, endTime);
 
-			var userDateOnly = new DateOnly(overTimeSuggestionModel.TimeSerie.Min());
-			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, period.StartDateTime, period.EndDateTime);
+			var overtimestartTime = TimeZoneHelper.ConvertToUtc(userDateOnly.Date.AddTicks(overTimeSuggestionModel.OvertimePreferences.SelectedSpecificTimePeriod.StartTime.Ticks), _userTimeZone.TimeZone());
+			var overtimeEndTime = TimeZoneHelper.ConvertToUtc(userDateOnly.Date.AddTicks(overTimeSuggestionModel.OvertimePreferences.SelectedSpecificTimePeriod.EndTime.Ticks), _userTimeZone.TimeZone());
+
+			if (overtimestartTime < _now.UtcDateTime().AddMinutes(15)) overtimestartTime = _now.UtcDateTime().AddMinutes(15);
+			var overtimePeriod = new DateTimePeriod(overtimestartTime, overtimeEndTime);
+			
+			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, overtimePeriod.StartDateTime, overtimePeriod.EndDateTime);
 			var persons = _personRepository.FindPeople(personsModels.Select(x => x.PersonId));
 			
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(period), _currentScenario.Current(), new PersonProvider(persons), 
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(overtimePeriod), _currentScenario.Current(), new PersonProvider(persons), 
 							new ScheduleDictionaryLoadOptions(false, false), persons);
-
-			var multiplicationDefinition = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().FirstOrDefault();
-		
+			
 			if (!skills.Any())
 				return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
 
-			var overtimePreferences = new OvertimePreferences
-			{
-				ScheduleTag = new NullScheduleTag(),
-				OvertimeType = multiplicationDefinition,
-				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5))
-			};
-			
-			return _scheduleOvertimeExecuteWrapper.Execute(overtimePreferences, new SchedulingProgress(), scheduleDictionary, persons, userDateOnly.ToDateOnlyPeriod(), period, allSkills,skills, fullPeriod);
+			return _scheduleOvertimeExecuteWrapper.Execute(overTimeSuggestionModel.OvertimePreferences, new SchedulingProgress(), scheduleDictionary, persons, new DateOnlyPeriod(userDateOnly.AddDays(-1), userDateOnly.AddDays(1)), overtimePeriod, allSkills,skills, fullPeriod);
 		}
 
-		public void Apply(IList<OverTimeModel> overTimeModels )
+		public void Apply(IList<OverTimeModel> overTimeModels, Guid multiplicationDefinitionId)
 		{
-			var multiplicationDefinition = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().FirstOrDefault();
-			if (multiplicationDefinition == null) return;
-
+			
 			foreach (var overTimeModel in overTimeModels)
 			{
 				_commandDispatcher.Execute(new AddOvertimeActivityCommand
 										   {
 											   ActivityId = overTimeModel.ActivityId,
 											   Date = new DateOnly(overTimeModel.StartDateTime),
-											   MultiplicatorDefinitionSetId = multiplicationDefinition.Id.GetValueOrDefault(),
+											   MultiplicatorDefinitionSetId = multiplicationDefinitionId,
 											   Period = new DateTimePeriod(overTimeModel.StartDateTime.Utc(), overTimeModel.EndDateTime.Utc()),
 											   PersonId = overTimeModel.PersonId
 										   });
@@ -113,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 	public interface IAddOverTime
 	{
 		OvertimeWrapperModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel);
-		void Apply(IList<OverTimeModel> overTimeModels);
+		void Apply(IList<OverTimeModel> overTimeModels, Guid multiplicationDefinitionId);
 	}
 
 	
