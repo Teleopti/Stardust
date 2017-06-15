@@ -161,6 +161,14 @@
 			personSelectionSvc.clearPersonInfo();
 			vm.resetSchedulePage();
 			updateShiftStatusForSelectedPerson();
+			if (vm.toggles.Wfm_HideUnusedTeamsAndSites_42690) {
+				var date = moment(vm.scheduleDate).format('YYYY-MM-DD');
+				teamScheduleSvc.hierarchy(date)
+					.then(function (data) {
+						vm.sitesAndTeams = data.Children;
+						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
+					});
+			}
 		};
 
 		vm.onKeyWordInSearchInputChanged = function () {

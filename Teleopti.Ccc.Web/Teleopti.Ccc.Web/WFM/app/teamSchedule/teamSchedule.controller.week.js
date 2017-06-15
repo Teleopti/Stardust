@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyController', TeamScheduleWeeklyController);
@@ -11,7 +11,7 @@
 			keyword: angular.isDefined($stateParams.keyword) && $stateParams.keyword !== '' ? $stateParams.keyword : '',
 			searchKeywordChanged: false,
 			focusingSearch: false,
-			searchFields : [
+			searchFields: [
 				'FirstName', 'LastName', 'EmploymentNumber', 'Organization', 'Role', 'Contract', 'ContractSchedule', 'ShiftBag',
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 			]
@@ -32,8 +32,8 @@
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 
 		vm.startOfWeek = moment(vm.scheduleDate).startOf('week').toDate();
-	
-		vm.onKeyWordInSearchInputChanged = function() {
+
+		vm.onKeyWordInSearchInputChanged = function () {
 			vm.selectedFavorite = false;
 			vm.resetSchedulePage();
 		};
@@ -57,6 +57,9 @@
 			}
 			vm.weekDays = Util.getWeekdays(vm.startOfWeek);
 			vm.loadSchedules();
+			if(vm.toggles.Wfm_HideUnusedTeamsAndSites_42690){
+				vm.getSitesAndTeamsAsync();
+			}
 		};
 
 		vm.paginationOptions = {
@@ -70,17 +73,17 @@
 			var inputForm = getParamsForLoadingSchedules();
 			weekViewScheduleSvc.getSchedules(inputForm).then(function (data) {
 				vm.groupWeeks = WeekViewCreator.Create(data.PersonWeekSchedules);
-				vm.paginationOptions.totalPages = vm.paginationOptions.pageSize > 0? Math.ceil(data.Total / (vm.paginationOptions.pageSize + 0.01) ) : 0;
+				vm.paginationOptions.totalPages = vm.paginationOptions.pageSize > 0 ? Math.ceil(data.Total / (vm.paginationOptions.pageSize + 0.01)) : 0;
 				vm.isLoading = false;
 				vm.scheduleFullyLoaded = true;
 				vm.searchOptions.focusingSearch = false;
-			}).catch(function() {
+			}).catch(function () {
 				vm.isLoading = false;
 				vm.searchOptions.focusingSearch = false;
 			});
 		};
 
-		vm.onSelectedTeamsChanged = function(teams) {
+		vm.onSelectedTeamsChanged = function (teams) {
 			$stateParams.selectedTeamIds = vm.selectedTeamIds;
 			vm.searchOptions.focusingSearch = true;
 			vm.selectedFavorite = false;
@@ -130,18 +133,18 @@
 			loggedonUsersTeamId.resolve(null);
 		}
 
-		vm.sitesAndTeamsAsync = function () {
-			vm._sitesAndTeamsPromise = vm._sitesAndTeamsPromise || $q(function (resolve, reject) {
-				var date = moment(vm.scheduleDate).format('YYYY-MM-DD');
+		vm.getSitesAndTeamsAsync = function () {
+			return vm._sitesAndTeamsPromise = $q(function (resolve, reject) {
+				var date = moment(vm.startOfWeek).format('YYYY-MM-DD');
 				teamScheduleSvc.hierarchy(date)
 					.then(function (data) {
 						resolve(data);
 						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
+						vm.sitesAndTeams = data.Children;
 					});
-			})
-			return vm._sitesAndTeamsPromise;
+			});
 		};
-
+		vm.getSitesAndTeamsAsync();
 		$q.all(asyncData).then(function (data) {
 			if (data.pageSetting.Agents > 0) {
 				vm.paginationOptions.pageSize = data.pageSetting.Agents;
@@ -164,11 +167,11 @@
 			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
 		});
 
-	
+
 		if (vm.toggles.WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557) {
 			vm.enableClickableCell = true;
 			vm.onCellClick = openSelectedAgentDayInNewWindow;
-		}		
+		}
 
 		function openSelectedAgentDayInNewWindow(personId, scheduleDate) {
 			if (!vm.enableClickableCell) return;
@@ -189,7 +192,7 @@
 		}
 
 		function monitorScheduleChanged() {
-			var options = {DomainType: 'IScheduleChangedInDefaultScenario'};
+			var options = { DomainType: 'IScheduleChangedInDefaultScenario' };
 			signalR.subscribeBatchMessage(options, scheduleChangedEventHandler, 300);
 		}
 

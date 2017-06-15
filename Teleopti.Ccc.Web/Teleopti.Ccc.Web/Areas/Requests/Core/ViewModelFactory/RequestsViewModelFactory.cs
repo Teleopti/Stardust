@@ -14,7 +14,9 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IRequestViewModelMapper _requestViewModelMapper;
 		private readonly IRequestFilterCreator _requestFilterCreator;
 
-		public RequestsViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IRequestFilterCreator requestFilterCreator)
+		public RequestsViewModelFactory(IRequestsProvider requestsProvider,
+			IRequestViewModelMapper requestViewModelMapper,
+			IRequestFilterCreator requestFilterCreator)
 		{
 			_requestsProvider = requestsProvider;
 			_requestViewModelMapper = requestViewModelMapper;

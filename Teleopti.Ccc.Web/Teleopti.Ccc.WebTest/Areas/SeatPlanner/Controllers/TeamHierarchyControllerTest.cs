@@ -56,9 +56,9 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 			var result = target.Get() as dynamic;
 			var businessUnitWithSitesViewModel = result as BusinessUnitWithSitesViewModel;
 			businessUnitWithSitesViewModel.Should().Not.Be.Null();
-			var siteViewModel = businessUnitWithSitesViewModel.Children.SingleOrDefault(x => x.Id == site.Id.ToString());
+			var siteViewModel = businessUnitWithSitesViewModel.Children.SingleOrDefault(x => x.Id == site.Id);
 			siteViewModel.Should().Not.Be.Null();
-			var teamViewModel = siteViewModel.Children.SingleOrDefault(x => x.Id == team.Id.ToString());
+			var teamViewModel = siteViewModel.Children.SingleOrDefault(x => x.Id == team.Id);
 			teamViewModel.Should().Not.Be.Null();
 		}
 

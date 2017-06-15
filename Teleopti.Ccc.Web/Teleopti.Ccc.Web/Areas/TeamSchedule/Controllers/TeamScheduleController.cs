@@ -65,11 +65,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				IsRemoveAbsenceAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveAbsence),
 				IsModifyScheduleAvailable = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifySchedule),
 				HasAddingActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity),
-				HasAddingPersonalActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPersonalActivity),
-				HasAddingOvertimeActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity),
+				HasAddingPersonalActivityPermission =
+					_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddPersonalActivity),
+				HasAddingOvertimeActivityPermission =
+					_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity),
 				HasRemoveActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveActivity),
 				HasMoveActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity),
-				HasMoveInvalidOverlappedActivityPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity),
+				HasMoveInvalidOverlappedActivityPermission =
+					_authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity),
 				HasEditShiftCategoryPermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.EditShiftCategory),
 				HasRemoveOvertimePermission = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveOvertime)
 			};
@@ -85,22 +88,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 
 			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260))
 			{
-				if(input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
+				if (input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
 					return
-					Json(new GroupScheduleViewModel { Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = "" });
+						Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
 			}
 			else
 			{
-				if(string.IsNullOrEmpty(input.Keyword) && myTeam == null)
+				if (string.IsNullOrEmpty(input.Keyword) && myTeam == null)
 					return
-					Json(new GroupScheduleViewModel { Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = "" });
+						Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
 			}
 
-			var criteriaDictionary = _parser.Parse(input.Keyword,currentDate);
+			var criteriaDictionary = _parser.Parse(input.Keyword, currentDate);
 
 			var result =
-				_teamScheduleViewModelFactory.CreateViewModel(input.SelectedTeamIds ?? new Guid[0],criteriaDictionary,currentDate,input.PageSize,input.CurrentPageIndex,input.IsOnlyAbsences);
-			result.Keyword = _parser.Keyword(input.Keyword,currentDate);
+				_teamScheduleViewModelFactory.CreateViewModel(input.SelectedTeamIds ?? new Guid[0], criteriaDictionary, currentDate,
+					input.PageSize, input.CurrentPageIndex, input.IsOnlyAbsences);
+			result.Keyword = _parser.Keyword(input.Keyword, currentDate);
 
 			return Json(result);
 		}
@@ -112,23 +116,34 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 
 
-			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252))
+			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252))
 			{
-				if(input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
+				if (input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
 					return
-					Json(new GroupWeekScheduleViewModel { PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),Total = 0,Keyword = "" });
+						Json(new GroupWeekScheduleViewModel
+						{
+							PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
+							Total = 0,
+							Keyword = ""
+						});
 			}
 			else
 			{
-				if(string.IsNullOrEmpty(input.Keyword) && myTeam == null)
+				if (string.IsNullOrEmpty(input.Keyword) && myTeam == null)
 					return
-					Json(new GroupWeekScheduleViewModel { PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),Total = 0,Keyword = "" });
-			}			
+						Json(new GroupWeekScheduleViewModel
+						{
+							PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
+							Total = 0,
+							Keyword = ""
+						});
+			}
 
 			var criteriaDictionary = _parser.Parse(input.Keyword, currentDate);
 
 			var result =
-				_teamScheduleViewModelFactory.CreateWeekScheduleViewModel(input.SelectedTeamIds, criteriaDictionary,currentDate, input.PageSize, input.CurrentPageIndex);
+				_teamScheduleViewModelFactory.CreateWeekScheduleViewModel(input.SelectedTeamIds, criteriaDictionary, currentDate,
+					input.PageSize, input.CurrentPageIndex);
 			result.Keyword = _parser.Keyword(input.Keyword, currentDate);
 
 			return Json(result);
@@ -138,7 +153,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		[UnitOfWork, HttpPost, Route("api/TeamSchedule/GetSchedules")]
 		public virtual GroupScheduleViewModel GetSchedulesForPeople(GetSchedulesForPeopleFormData form)
 		{
-			return getSchedulesForPeople( form.PersonIds, form.Date);
+			return getSchedulesForPeople(form.PersonIds, form.Date);
 		}
 
 		[HttpPost, UnitOfWork, AddFullDayAbsencePermission, Route("api/TeamSchedule/AddFullDayAbsence")]
@@ -241,6 +256,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			var scheduleDateOnly = new DateOnly(date);
 			return _teamScheduleViewModelFactory.CreateViewModelForPeople(personIds.ToArray(), scheduleDateOnly);
 		}
-				
+
 	}
 }

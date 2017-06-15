@@ -52,31 +52,31 @@
 		}
 
 		vm.getSitesAndTeamsAsync = function () {
-			vm._sitesAndTeamsPromise = vm._sitesAndTeamsPromise || $q(function (resolve, reject) {
-				var params = {};
-				if (toggleService.Wfm_HideUnusedTeamsAndSites_42690) {
-					params = vm.period;
-				} else {
-					params.date = moment().format('YYYY-MM-DD');
-				}
+			var params = {};
+			if (toggleService.Wfm_HideUnusedTeamsAndSites_42690) {
+				params.startDate = moment(vm.period.startDate).format('YYYY-MM-DD');
+				params.endDate = moment(vm.period.endDate).format('YYYY-MM-DD');
+			} else {
+				params.date = moment().format('YYYY-MM-DD');
+			}
+			return vm._sitesAndTeamsPromise = $q(function (resolve, reject) {
 				requestsDataService.hierarchy(params).then(function (data) {
 					resolve(data);
 					vm.sitesAndTeams = data.Children;
 					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 				});
 			});
-			return vm._sitesAndTeamsPromise;
 		};
 
 		$q.all([toggleService.togglesLoaded])
-			.then(FavoriteSearchSvc.hasPermission().then(function(response){
+			.then(FavoriteSearchSvc.hasPermission().then(function (response) {
 				vm.hasFavoriteSearchPermission = response.data;
 			}))
 			.then(loggedonUsersTeamId.promise.then(function (defaultTeam) {
 				if (angular.isString(defaultTeam) && defaultTeam.length > 0)
 					replaceArrayValues([defaultTeam], vm.selectedTeamIds);
-				if(vm.businessHierarchyToggleEnabled && (!vm.saveFavoriteSearchesToggleEnabled || !vm.hasFavoriteSearchPermission)){
-					$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword});
+				if (vm.businessHierarchyToggleEnabled && (!vm.saveFavoriteSearchesToggleEnabled || !vm.hasFavoriteSearchPermission)) {
+					$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 				}
 			}))
 			.then(init);
@@ -99,7 +99,7 @@
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
 
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
-			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds:currentFavorite.TeamIds,agentSearchTerm: vm.agentSearchOptions.keyword});
+			$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: currentFavorite.TeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 			vm.agentSearchOptions.focusingSearch = false;
 		};
 
@@ -110,11 +110,11 @@
 			};
 		};
 
-		vm.onSearchTermChangedCallback = function() {
+		vm.onSearchTermChangedCallback = function () {
 			vm.agentSearchOptions.focusingSearch = false;
 
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
-			$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword});
+			$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 		};
 
 		vm.initFooter = function (count) {
@@ -149,14 +149,15 @@
 			vm.filterToggleEnabled = toggleService.Wfm_Requests_Filtering_37748;
 			vm.filterEnabled = vm.filterToggleEnabled;
 
-			vm.onFavoriteSearchInitDefer.promise.then(function(defaultSearch) {
+			vm.onFavoriteSearchInitDefer.promise.then(function (defaultSearch) {
 				if (defaultSearch) {
 					replaceArrayValues(defaultSearch.TeamIds, vm.selectedTeamIds);
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 				}
-				if(vm.saveFavoriteSearchesToggleEnabled && vm.hasFavoriteSearchPermission){
-					$scope.$broadcast('reload.requests.with.selection',{selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword});
+				if (vm.saveFavoriteSearchesToggleEnabled && vm.hasFavoriteSearchPermission) {
+					$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 				}
+
 			});
 
 			var defaultDateRange = {
@@ -283,7 +284,7 @@
 
 		$scope.$watch(function () {
 			return vm.period;
-		}, function (newValue) {
+		}, function (newValue, oldValue) {
 			$scope.$evalAsync(function () {
 				if (isShiftTradeViewActive()) {
 					vm.shiftTradePeriod = newValue;
@@ -292,6 +293,12 @@
 				}
 				requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 				vm.agentSearchOptions.focusingSearch = false;
+
+				if (newValue && JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+					if (toggleService.Wfm_HideUnusedTeamsAndSites_42690) {
+						vm.getSitesAndTeamsAsync();
+					}
+				}
 			});
 		});
 	}

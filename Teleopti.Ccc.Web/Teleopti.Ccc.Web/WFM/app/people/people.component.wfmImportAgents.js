@@ -1,7 +1,8 @@
 (function (angular) {
 	'use strict';
 
-	function WfmImportAgentsCtrl($translate, importAgentsService, PeopleService, Toggle) {
+	function WfmImportAgentsCtrl($translate, $q, importAgentsService, PeopleService, Toggle) {
+		this._q = $q;
 		this._svc = importAgentsService;
 		this._peopleSvc = PeopleService;
 		this._translate = $translate;
@@ -12,6 +13,7 @@
 		Object.defineProperty(this.fallbacks, 'team', { value: [] });
 
 		this.now = new Date();
+
 	}
 
 	WfmImportAgentsCtrl.prototype.fetchingFieldOptions = true;
@@ -33,6 +35,7 @@
 	WfmImportAgentsCtrl.prototype.$onInit = function () {
 		this.optionsPromise = this._svc.fetchOptions();
 		this.optionsPromise.then(this.onFieldOptionsFetched.bind(this));
+		this.getSitesAndTeams();
 	};
 
 	WfmImportAgentsCtrl.prototype.onFieldOptionsFetched = function (options) {
@@ -59,7 +62,7 @@
 			}.bind(this));
 	};
 
-	WfmImportAgentsCtrl.prototype.handleImportError = function(response) {
+	WfmImportAgentsCtrl.prototype.handleImportError = function (response) {
 		this.done = true;
 		var fileError = response.headers()['message'].match(/^format errors: (.+)$/);
 
@@ -70,7 +73,7 @@
 
 	WfmImportAgentsCtrl.prototype.handleImportResult = function (response) {
 		this.done = true;
-		
+
 		var isXlsx = response.headers()['content-type'] === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
 		var processResult = response.headers()['message'].match(/success count:(\d+), failed count:(\d+), warning count:(\d+)/);
@@ -88,7 +91,7 @@
 				var ext = isXlsx ? '.xlsx' : '.xls';
 				this.saveFile(response, 'invalid_agents' + ext);
 			}
-		}		
+		}
 	};
 
 	WfmImportAgentsCtrl.prototype.getMessage = function (type, count) {
@@ -108,16 +111,23 @@
 		});
 		saveAs(blob, filename);
 	};
+	WfmImportAgentsCtrl.prototype.sitesAndTeams = [];
 
-	WfmImportAgentsCtrl.prototype.sitesAndTeams = function () {
-		return (this._sitesAndTeamsPromise ||
-			(this._sitesAndTeamsPromise = this._svc.fetchHierarchy(moment().format('YYYY-MM-DD'))));
+	WfmImportAgentsCtrl.prototype.getSitesAndTeams = function () {
+		var self = this;
+		return (self._sitesAndTeamsPromise ||
+			(self._sitesAndTeamsPromise = self._q(function (resolve, reject) {
+				self._svc.fetchHierarchy(moment().format('YYYY-MM-DD')).then(function (data) {
+					resolve(data);
+					self.sitesAndTeams = data.Children;
+				});
+			})));
 	};
 
 	angular.module('wfm.people')
 		.component('wfmImportAgents',
 		{
 			templateUrl: 'app/people/html/wfm-import-agents.tpl.html',
-			controller: ['$translate', 'importAgentsService', 'PeopleService', 'Toggle', WfmImportAgentsCtrl]
+			controller: ['$translate', '$q', 'importAgentsService', 'PeopleService', 'Toggle',  WfmImportAgentsCtrl]
 		});
 })(angular);

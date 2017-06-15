@@ -4,6 +4,7 @@
 	angular.module('wfm.requests').service('requestsDataService', ['$q', '$http', '$translate', 'requestsDefinitions', 'Toggle', requestsDataService]);
 
 	function requestsDataService($q, $http, $translate, requestsDefinitions, toggleSvc) {
+		var svc = this;
 		var loadTextAndAbsenceRequestsUrl_old = '../api/Requests/loadTextAndAbsenceRequests';
 		var listRequestsUrl = '../api/Requests/requests';
 		var listShiftTradeRequestsUrl = '../api/Requests/shiftTradeRequests';
@@ -31,9 +32,17 @@
 		this.getAllRequestsPromise_old = function (filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
 		};
-
+		this.lastRequestFilter = null;
 		this.getAllRequestsPromise = function (filter, sortingOrders, paging) {
-			return $http.post(listRequestsUrl, requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging));
+			return $q(function (resolve, reject) {
+				var requestFilter = requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging);
+				if (JSON.stringify(svc.lastRequestFilter) === JSON.stringify(requestFilter)) {
+					resolve();
+					return;
+				}
+				svc.lastRequestFilter = angular.copy(requestFilter);
+				resolve($http.post(listRequestsUrl, requestFilter));
+			});
 		};
 
 		this.getSitesPromise = function () {
@@ -54,12 +63,12 @@
 
 		this.getBudgetAllowancePromise = function (date, budgetGroupId) {
 			return $http.get(getBudgetAllowanceUrl,
-			{
-				params: {
-					date: date,
-					budgetGroupId: budgetGroupId
-				}
-			});
+				{
+					params: {
+						date: date,
+						budgetGroupId: budgetGroupId
+					}
+				});
 		}
 
 		this.replyRequestsPromise = function (selectedRequestIdsAndMessage) {
@@ -155,7 +164,7 @@
 				return;
 			}
 			return $q(function (resolve, reject) {
-				$http.get(hierarchyUrl, {params: params})
+				$http.get(hierarchyUrl, { params: params })
 					.then(function (response) {
 						resolve(response.data);
 					}, function (response) {

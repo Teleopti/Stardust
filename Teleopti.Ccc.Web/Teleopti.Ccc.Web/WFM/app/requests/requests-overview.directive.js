@@ -41,6 +41,11 @@
 
 		function getRequests(requestsFilter, sortingOrders, paging) {
 			vm.requestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
+				if (!requests) {
+					vm.isLoading = false;
+					return;
+				}
+					
 				vm.requests = requests.data.Requests;
 
 				if (vm.requests && vm.requests.length > 0) {
@@ -128,7 +133,6 @@
 				if (!newValue || !validateDateParameters(newValue.startDate, newValue.endDate)) {
 					return;
 				}
-
 				scope.$broadcast('reload.requests.without.selection');
 
 				if (!ctrl.loadRequestWatchersInitialized) {

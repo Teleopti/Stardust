@@ -99,7 +99,7 @@
 			}
 			return formated;
 		}
-
+		
 		this.normalizeRequestsFilter = function (filter, sortingOrders, paging) {
 			var filters = this.formatFilters(filter.filters);
 			var terms = this.formatAgentSearchTerm(filter.agentSearchTerm);
@@ -120,7 +120,7 @@
 				target.Skip = target.Paging.Skip;
 				target.Take = target.Paging.Take;
 			}
-
+			
 			return target;
 		};
 

@@ -75,7 +75,6 @@
 			require: 'ngModel',
 			link: function (scope, element) {
 				var ngModelCtrl = element.controller('ngModel');
-
 				ngModelCtrl.$validators.validFormat = function (modelValue, viewValue) {
 					var value = modelValue || viewValue;
 					return testDateStringFormat(value);
