@@ -235,9 +235,17 @@
                 staffingData.absoluteDifference = [];
                 if (staffingPrecheck(response.DataSeries)) 
                 {
-                    vm.hasSuggestionData = true;
-                    vm.overTimeModels = response.OverTimeModels;
-                    vm.staffingDataAvailable = true;
+					if (response.StaffingHasData) {
+                        m.hasSuggestionData = true;
+                       
+					} else {
+					    console.log('something');
+                        vm.hasSuggestionData = false;
+                        vm.hasRequestedSuggestion = false;
+					}
+                    vm.staffingDataAvailable = true;    
+					vm.overTimeModels = response.OverTimeModels;
+                   
                     console.log(response.OverTimeModels);
                     staffingData.scheduledStaffing = roundDataToOneDecimal(response.DataSeries.ScheduledStaffing);
                     staffingData.forcastedStaffing = roundDataToOneDecimal(response.DataSeries.ForecastedStaffing);

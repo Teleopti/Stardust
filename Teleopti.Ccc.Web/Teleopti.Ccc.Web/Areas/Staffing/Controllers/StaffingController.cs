@@ -32,9 +32,11 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		{
 			if (model == null || model.SkillIds.IsEmpty()) return BadRequest();
 			var wraperModel =_addOverTime.GetSuggestion(model);
-			if(!wraperModel.Models.Any())
-				return Ok(new OverTimeSuggestionResultModel(){StaffingHasData = false,DataSeries = null});
 			var returnModel = extractDataSeries(model, wraperModel);
+			if (!wraperModel.Models.Any())
+			{
+				returnModel.StaffingHasData = false;
+			}
 			return Ok(returnModel);
 		}
 
