@@ -33927,6 +33927,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This skill area contains mixed skilltypes, certain data series are unavailable.
+        /// </summary>
+        public static string UnsupportedDataSeriesFound {
+            get {
+                return ResourceManager.GetString("UnsupportedDataSeriesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Optimization step &quot;Time between days&quot; is not executed when block and same shift are selected..
         /// </summary>
         public static string UnSupportedOptimizationBlockAndTimeBetweendays {

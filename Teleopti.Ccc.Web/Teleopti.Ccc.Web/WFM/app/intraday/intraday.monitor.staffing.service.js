@@ -13,6 +13,7 @@
 				},
 				hasMonitorData: false,
 				waitingForData: false,
+				hasEmailSkill: false,
 				timeSeries: [],
 				actualStaffingSeries: [],
 				currentInterval: [],
@@ -20,7 +21,7 @@
 			};
 
 			var hiddenArray = [];
-			var mixedArea;
+			var mixedArea = null;
 
 			service.setStaffingData = function (result, showOptimalStaffing, showScheduledStaffing, showEmailSkill) {
 				clearData();
@@ -34,8 +35,12 @@
 				if (result.DataSeries == null)
 					return staffingData;
 				staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
-				if (!showEmailSkill || !mixedArea)
+				if (!showEmailSkill || !mixedArea){
 					staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
+				}else{
+					staffingData.hasEmailSkill= true;
+				}
+
 				if (showOptimalStaffing)
 					staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
 

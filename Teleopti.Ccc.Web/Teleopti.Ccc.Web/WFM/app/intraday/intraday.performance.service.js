@@ -24,6 +24,7 @@
 				},
 				summary: {},
 				hasMonitorData: false,
+				hasEmailSkill: false,
 				waitingForData: false,
 				timeSeries: [],
 				currentInterval: []
@@ -31,7 +32,7 @@
 
 			var hiddenArray = [];
 			var intervalStart;
-			var mixedArea;
+			var mixedArea = null;
 			service.setPerformanceData = function (result, showEsl, showEmailSkill) {
 				clearData();
 
