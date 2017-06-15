@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod
 			{
 				Period = new DateOnlyPeriod(Now.ServerDate_DontUse().AddDays(6), Now.ServerDate_DontUse().AddDays(8)),
-				OpenForRequestsPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse().AddDays(6), Now.ServerDate_DontUse().AddDays(8)),
+				OpenForRequestsPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse(), Now.ServerDate_DontUse().AddDays(8)),
 				StaffingThresholdValidator = new StaffingThresholdValidator()
 			};
 			var workFlowControlSet = new WorkflowControlSet();
