@@ -139,30 +139,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldUseMultisiteSkills()
 		{
-			/* Robin - how should the multisiteskill API be used?
-			 * (letters below)
-			 * A = Should multisiteskill have explicitly set color, interval length and or skilltype? If so, remove it from ChildSkill? - True
-			 * B = Should childskill have explicitly set color, interval length and or skilltype? If so, remove it from MultisiteSkill? - False
-			 * C = Should multisiteskill have activity explicitly set? If so, remove it from childskill? - True
-			 * D = Should childskill have activity explicitly set? If so, remove it from multisiteskill? - False
-			 * E = Agents know childskills and not multisiteskills - right? If so, don't allow multisiteskills as person skills? - True
-			 * F = Forecasts are created for multisiteskills and not child skills - right? If so, don't allow forecasts based on childskills? <- A bit more complicated
-			 * G = Are workloads belonging to multisiteskills and not child skills? If so, don't allow workloads on childskills? - True
-			 */
-
 			DayOffTemplateRepository.Add(new DayOffTemplate());
 			var firstDay = new DateOnly(2016, 05, 30);
 			var activity = ActivityRepository.Has("_");
-			var multisiteSkill = new MultisiteSkill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)).WithId(); // A
-			WorkloadFactory.CreateWorkloadWithFullOpenHours(multisiteSkill); //G
-			multisiteSkill.Activity = activity; //C
+			var multisiteSkill = new MultisiteSkill("_", "_", Color.Empty, 15, new SkillTypePhone(new Description("_"), ForecastSource.InboundTelephony)) { Activity = activity }.WithId();
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(multisiteSkill);
 			SkillRepository.Has(multisiteSkill);
-			var childSkill =  new ChildSkill("_", "_", Color.Empty, multisiteSkill).WithId(); //B
+			var childSkill = new ChildSkill("_", "_", Color.Empty, multisiteSkill).WithId();
 			multisiteSkill.AddChildSkill(childSkill);
 			var scenario = ScenarioRepository.Has("some name");
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
-			PersonRepository.Has(new ContractWithMaximumTolerance(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, childSkill); //E
-			SkillDayRepository.Has(multisiteSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1)); //F
+			PersonRepository.Has(new ContractWithMaximumTolerance(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, childSkill);
+			SkillDayRepository.Has(multisiteSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			SkillDayRepository.Has(childSkill.CreateChildSkillDays(scenario, firstDay, 7));
 			MultisiteDayRepository.Has(multisiteSkill.CreateMultisiteDays(scenario,firstDay,7));
 			
