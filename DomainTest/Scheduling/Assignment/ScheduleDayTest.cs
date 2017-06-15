@@ -15,8 +15,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class ScheduleDayTest
 	{
 		private readonly DateTimePeriod rangePeriod = new DateTimePeriod(2000, 1, 1, 2001, 6, 1);
