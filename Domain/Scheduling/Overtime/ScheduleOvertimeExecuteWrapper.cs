@@ -45,18 +45,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				var resCalcData = new ResourceCalculationData(skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
 				var resourceCalculationPeriods = new List<SkillStaffingInterval>();
 				var overtimeModels = new List<OverTimeModel>();
-				foreach (var skill in skillsToAddOvertime)
+				var activites = skillsToAddOvertime.Select(x => x.Activity).Distinct();
+				foreach (var activity in activites)
 				{
-					overtimePreferences.SkillActivity = skill.Activity;
+					overtimePreferences.SkillActivity = activity;
 					overtimeModels.AddRange(_scheduleOvertimeWithoutStateHolder.Execute(overtimePreferences, schedulingProgress, scheduleDictionary, agents, period,
 																						requestedDateTimePeriod, resCalcData, () => getContext(combinationResources, skills, true)));
-					var xx = resCalcData.SkillResourceCalculationPeriodDictionary.Items().Where(x => x.Key == skill);
+					
+				}
 
-					foreach (var keyValuePair in xx)
-					{
-						var intervals = keyValuePair.Value.OnlyValues().Cast<SkillStaffingInterval>();
-						resourceCalculationPeriods.AddRange(intervals);
-					}
+				var xx = resCalcData.SkillResourceCalculationPeriodDictionary.Items().Where(x => skillsToAddOvertime.Contains(x.Key));
+
+				foreach (var keyValuePair in xx)
+				{
+					var intervals = keyValuePair.Value.OnlyValues().Cast<SkillStaffingInterval>();
+					resourceCalculationPeriods.AddRange(intervals);
 				}
 
 				return new OvertimeWrapperModel(resourceCalculationPeriods, overtimeModels);
