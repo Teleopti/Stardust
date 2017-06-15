@@ -13,8 +13,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Skill
 {
-	[TestFixture]
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class AnalyticsSkillUpdaterTest : ISetup
 	{
 		public AnalyticsSkillUpdater Target;

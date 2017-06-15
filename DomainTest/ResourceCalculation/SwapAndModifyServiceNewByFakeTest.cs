@@ -23,8 +23,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
-	[DomainTestWithStaticDependenciesAvoidUse]
-	[TestFixture]
+	[DomainTest]
 	public class SwapAndModifyServiceNewByFakeTest : ISetup
 	{
 		public SwapAndModifyServiceNew Target;

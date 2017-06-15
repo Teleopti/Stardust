@@ -15,8 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.SkillDay
 {
-	[TestFixture]
-	[DomainTestWithStaticDependenciesAvoidUse]
+	[DomainTest]
 	public class AnalyticsForecastWorkloadUpdaterTest : ISetup
 	{
 		public AnalyticsForecastWorkloadUpdater Target;
