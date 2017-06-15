@@ -21,8 +21,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandlers.Analytics
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	[DomainTest]
 	public class AnalyticsPersonPeriodUpdaterTests : ISetup
 	{

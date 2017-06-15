@@ -16,8 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
-    [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class NewDayOffRuleTest
     {
         private NewDayOffRule _target;

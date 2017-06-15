@@ -92,11 +92,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 				return false;
 			if (original.LayerCollection.Count != current.LayerCollection.Count)
 				return false;
-			for (var layerIndex = 0; layerIndex < original.LayerCollection.Count; layerIndex++)
+			var timeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
+			for (int layerIndex = 0; layerIndex < original.LayerCollection.Count; layerIndex++)
 			{
-				var originalLayer = original.LayerCollection[layerIndex];
-				var currentLayer = current.LayerCollection[layerIndex];
-				if (!originalLayer.Period.Equals(currentLayer.Period))
+				ILayer<IActivity> originalLayer = original.LayerCollection[layerIndex];
+				ILayer<IActivity> currentLayer = current.LayerCollection[layerIndex];
+				if (!originalLayer.Period.StartDateTimeLocal(timeZone).TimeOfDay.Equals(currentLayer.Period.StartDateTimeLocal(timeZone).TimeOfDay))
+					return false;
+				if (!originalLayer.Period.EndDateTimeLocal(timeZone).TimeOfDay.Equals(currentLayer.Period.EndDateTimeLocal(timeZone).TimeOfDay))
 					return false;
 				if (!originalLayer.Payload.Equals(currentLayer.Payload))
 					return false;

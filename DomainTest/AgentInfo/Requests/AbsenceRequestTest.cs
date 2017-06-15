@@ -12,15 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
-    /// <summary>
-    /// Tests for the AbsenceRequest class
-    /// </summary>
-    /// <remarks>
-    /// Created by: robink
-    /// Created date: 2008-06-05
-    /// </remarks>
-    [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class AbsenceRequestTest
     {
         private DateTimePeriod _period;

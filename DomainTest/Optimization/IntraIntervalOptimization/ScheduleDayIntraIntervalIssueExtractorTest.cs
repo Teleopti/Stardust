@@ -10,8 +10,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.IntraIntervalOptimization
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class ScheduleDayIntraIntervalIssueExtractorTest
 	{
 		private ScheduleDayIntraIntervalIssueExtractor _target;

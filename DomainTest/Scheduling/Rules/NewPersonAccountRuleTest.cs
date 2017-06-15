@@ -19,8 +19,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
-    [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class NewPersonAccountRuleTest
     {
         private NewPersonAccountRule _target;

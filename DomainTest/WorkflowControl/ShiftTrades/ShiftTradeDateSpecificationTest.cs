@@ -11,8 +11,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class ShiftTradeDateSpecificationTest
 	{
 		private ShiftTradeDateSpecification _target;

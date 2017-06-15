@@ -8,8 +8,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
-    [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class PersonRequestCheckAuthorizationTest
     {
         private IPersonRequestCheckAuthorization target;

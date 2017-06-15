@@ -12,8 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class NightlyRestRuleTest
 	{
 		private IContract _contract;

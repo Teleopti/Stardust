@@ -12,8 +12,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Tracking
 {
-    [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class TrackerCalculatorTest
     {
         private TrackerCalculator _target;

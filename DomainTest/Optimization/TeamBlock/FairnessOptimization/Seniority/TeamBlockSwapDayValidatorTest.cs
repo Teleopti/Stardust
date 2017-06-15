@@ -10,8 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.FairnessOptimization.Seniority
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class TeamBlockSwapDayValidatorTest
 	{
 		private IScheduleDay _scheduleDay1;

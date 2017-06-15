@@ -15,8 +15,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class EffectiveRestrictionTest
     {
         private EffectiveRestriction _target;

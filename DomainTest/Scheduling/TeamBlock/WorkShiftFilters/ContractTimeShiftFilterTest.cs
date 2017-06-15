@@ -12,8 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class ContractTimeShiftFilterTest
 	{
 		private MockRepository _mocks;

@@ -23,7 +23,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
-	[TestWithStaticDependenciesAvoidUse]
 	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	public class PerformanceViewModelCreatorTest : ISetup
 	{

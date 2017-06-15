@@ -11,8 +11,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
-    [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class WriteProtectionInfoTest
     {
         private PersonWriteProtectionInfo _target;

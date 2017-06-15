@@ -27,8 +27,6 @@ using List = Rhino.Mocks.Constraints.List;
 
 namespace Teleopti.Ccc.DomainTest.Collection
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class ScheduleDictionaryNoMockTest
 	{
 		private ScheduleDictionary target;
@@ -141,8 +139,6 @@ namespace Teleopti.Ccc.DomainTest.Collection
 		}
 	}
 
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class ScheduleDictionaryTest
 	{
 		private IContract _contract;

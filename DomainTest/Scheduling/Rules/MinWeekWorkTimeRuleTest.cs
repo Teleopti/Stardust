@@ -10,8 +10,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 {
-    [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class MinWeekWorkTimeRuleTest
     {
         private MockRepository _mocks;

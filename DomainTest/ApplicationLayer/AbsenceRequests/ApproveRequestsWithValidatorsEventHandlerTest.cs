@@ -18,8 +18,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class ApproveRequestsWithValidatorsEventHandlerTest
 	{
 		private IPersonRequestRepository _personRequestRepository;

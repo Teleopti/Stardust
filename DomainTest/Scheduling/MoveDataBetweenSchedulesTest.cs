@@ -17,8 +17,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
-    [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class MoveDataBetweenSchedulesTest
     {
         private IMoveDataBetweenSchedules target;

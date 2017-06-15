@@ -11,8 +11,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Commands
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class AbsenceCommandConverterTest
 	{
 		private FakeWriteSideRepository<IPerson> _personRepository;

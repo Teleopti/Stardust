@@ -14,8 +14,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class PersonFinderServiceTest
 	{
 		private IList<IPerson> persons;

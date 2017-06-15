@@ -14,8 +14,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class MeetingSlotImpactCalculatorTest
 	{
 		private MeetingSlotImpactCalculator _target;

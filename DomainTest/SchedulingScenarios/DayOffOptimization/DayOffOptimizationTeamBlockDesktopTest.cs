@@ -18,7 +18,6 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[TestFixture(true, true)]
 	[TestFixture(false, false)]
 	[TestFixture(true, false)]
-	[DomainTest]
+	[DomainTestWithStaticDependenciesAvoidUse]
 	public class DayOffOptimizationTeamBlockDesktopTest : DayOffOptimizationScenario
 	{
 		private readonly bool _teamSameDayOff;

@@ -16,8 +16,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SeatPlanning
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	internal class SeatPlannerTests
 	{
 		private ICurrentScenario _currentScenario;

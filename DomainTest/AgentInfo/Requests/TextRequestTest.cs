@@ -10,15 +10,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 {
-    /// <summary>
-    /// Test class regarding TextRequest
-    /// </summary>
-    /// <remarks>
-    /// Created by: zoet
-    /// Created date: 2008-10-06
-    /// </remarks>
-    [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class TextRequestTest
     {
         private DateTimePeriod _period;

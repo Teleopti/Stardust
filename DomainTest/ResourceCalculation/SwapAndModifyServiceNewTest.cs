@@ -15,8 +15,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class SwapAndModifyServiceNewTest
 	{
 		private SwapAndModifyServiceNew _swapAndModifyServiceNew;

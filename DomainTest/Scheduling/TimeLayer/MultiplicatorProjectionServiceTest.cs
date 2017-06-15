@@ -14,8 +14,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
 {
-    [TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class MultiplicatorProjectionServiceTest
     {
         private IMultiplicatorProjectionService _target;

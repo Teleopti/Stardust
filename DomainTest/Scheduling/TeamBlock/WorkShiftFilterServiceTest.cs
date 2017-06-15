@@ -31,8 +31,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
 	//TODO! Remove this test when we have more "real" teamblock scheduling tests
-	[TestWithStaticDependenciesAvoidUse]
-	[TestFixture]
 	public class WorkShiftFilterServiceTest
 	{
 		private readonly DateOnly _dateOnly = new DateOnly(2013, 3, 1);
