@@ -65,6 +65,7 @@ Scenario: Should be able to see day view toggle button in week view
 Scenario: Should be able to toggle week view
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I toggle "WEEK" view
 	Then I should see week view schedule table
@@ -73,6 +74,7 @@ Scenario: Should be able to toggle week view
 Scenario: Should be able to navigate to next week in week view
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I toggle "WEEK" view
 	And I navigate to next week in week view

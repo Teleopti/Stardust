@@ -86,6 +86,7 @@ Scenario: Could delete absences for an agent
 		| End time   | 2016-10-10 11:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'John'
 	And I click button to search for schedules
 	Then I should see schedule with absence 'Vacation' for 'John Smith' displayed
@@ -103,6 +104,7 @@ Scenario: Absence deletion should only be enabled when when absence selected
 		| End time   | 2016-10-10 11:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'John'
 	And I click button to search for schedules
 	And I should see schedule with absence 'Vacation' for 'John Smith' displayed
@@ -114,6 +116,7 @@ Scenario: Full day absence should be able to delete
 	And 'Bill Gates' has a full day absence named 'Illness' on '2016-10-10'
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	And I selected agent 'John Smith'
@@ -135,6 +138,7 @@ Scenario: Could delete absences for multiple agents
 		| End time   | 2016-10-10 11:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'green'
 	And I click button to search for schedules
 	Then I should see schedule with absence 'Vacation' for 'John Smith' displayed

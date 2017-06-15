@@ -49,6 +49,7 @@ Given I am american
 Scenario: Should be able to see enable menu
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	And I selected agent 'John Smith'
@@ -59,8 +60,9 @@ Scenario: Should be able to see enable menu
 @OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to undo schedule change
 	When I view wfm team schedules
-	And I searched schedule with keyword 'Team green'
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
+	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	And I selected agent 'John Smith'
 	And I open menu in team schedule

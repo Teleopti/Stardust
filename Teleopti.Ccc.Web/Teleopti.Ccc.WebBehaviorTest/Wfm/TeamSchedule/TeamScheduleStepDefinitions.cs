@@ -38,6 +38,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.TeamSchedule
 			);
 		}
 
+		[When(@"I select a site ""(.*)""")]
+		public void WhenISelectASite(string site)
+		{
+			Browser.Interactions.WaitScopeCondition(".team-schedule", "vm.scheduleFullyLoaded", true,
+				() =>
+				{
+					Browser.Interactions.Click(".orgpicker-wrapper .md-select-value");
+
+					Browser.Interactions.Click(".orgpicker-menu .selection-clear");
+
+					Browser.Interactions.ClickContaining(".repeated-item", $"{site}");
+						
+					Browser.Interactions.Click(".orgpicker-menu .selection-done");
+				}
+			);
+		}
+
+
 		[When(@"I searched schedule with keyword '(.*)'")]
 		public void WhenISearchedScheduleWithKeyword(string keyword)
 		{

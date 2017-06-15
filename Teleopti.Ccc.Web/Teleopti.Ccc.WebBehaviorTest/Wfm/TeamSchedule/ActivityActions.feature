@@ -58,6 +58,7 @@ Scenario: Should be able to add activity
 	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'John Smith'
 	And I click button to search for schedules
 	And I selected agent 'John Smith'
@@ -84,6 +85,7 @@ Scenario: Should see enabled add personal activity button
 	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'John Smith'
 	And I click button to search for schedules
 	And I selected agent 'John Smith'
@@ -100,6 +102,7 @@ Scenario: Should be able to add personal activity
 	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'John Smith'
 	And I click button to search for schedules
 	And I selected agent 'John Smith'
@@ -144,6 +147,7 @@ Scenario: Should be able to remove single activity
 	| Lunch end time   | 2016-10-10 13:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'John Smith'
 	And I click button to search for schedules
 	And I selected activity 'Lunch'
@@ -166,6 +170,7 @@ Scenario: Should be able to remove multiple activities
 	| Third activity end time       | 2016-10-10 15:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'John Smith'
 	And I click button to search for schedules
 	And I selected activity 'Training'
@@ -185,6 +190,7 @@ Scenario: Should not be able to remove basic activity
 	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'John Smith'
 	And I click button to search for schedules
 	And I selected activity 'Phone'
@@ -204,6 +210,7 @@ Scenario: Should be able to move activity
     | Lunch end time   | 2016-10-10 13:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'John Smith'
 	And I click button to search for schedules
 	And I selected activity 'Lunch'
@@ -220,6 +227,7 @@ Scenario: Should be able to move basic activity
     | EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'John Smith'
 	And I click button to search for schedules
 	And I selected activity 'Phone'
@@ -236,6 +244,7 @@ Scenario: The default new start time should be one hour later than the original 
 	| EndTime        | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'John Smith'
 	And I click button to search for schedules
 	And I selected activity 'Phone'

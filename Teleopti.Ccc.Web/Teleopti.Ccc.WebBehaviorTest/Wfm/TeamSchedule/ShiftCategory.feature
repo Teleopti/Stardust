@@ -61,6 +61,7 @@ Scenario: Show shift category
 Scenario: Should be able to change shift category via label
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-09'
+	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	And I click on a shift category label
@@ -72,6 +73,7 @@ Scenario: Should be able to change shift category via label
 Scenario: Should be able to change shift category via command menu
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-09'
+	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	And I selected agent 'John Smith'
