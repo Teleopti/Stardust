@@ -19,7 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 {
 	[DomainTest]
-	public class OvertimeOnNonScheduleDaysCascadingTest
+	public class OvertimeOnNonScheduleDaysCascadingTest : OvertimeSchedulingScenario
 	{
 		public ScheduleOvertime Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -116,6 +116,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 			var overtimeWasPlaced = stateHolder.Schedules[agentAandB].ScheduledDay(dateOnly).PersonAssignment().OvertimeActivities().Any();
 			overtimeWasPlaced.Should().Be.True();
+		}
+
+		public OvertimeOnNonScheduleDaysCascadingTest(bool resourcePlannerOvertimeNightShifts44311) : base(resourcePlannerOvertimeNightShifts44311)
+		{
 		}
 	}
 }

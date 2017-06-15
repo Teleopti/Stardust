@@ -427,6 +427,7 @@
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatNoRandomnessTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTeamTest.cs" />
     <Compile Include="SchedulingScenarios\MaxSeat\MaxSeatOptimizationTest.cs" />
+    <Compile Include="SchedulingScenarios\OvertimeScheduling\OvertimeSchedulingScenario.cs" />
     <Compile Include="SchedulingScenarios\PeriodValueCalculatorProviderThatReturnsCalculatorThatReturnsWrongValue.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculationWithCount.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationClosedSkillsTest.cs" />
@@ -967,14 +968,11 @@
     <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftWorkerTest.cs" />
     <Compile Include="Scheduling\BackToLegalShift\LegalShiftDeciderTest.cs" />
     <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailabilityTest.cs" />
-    <Compile Include="Scheduling\Overtime\CalculateBestOvertimeBeforeOrAfterTest.cs" />
     <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeDateTimePeriodExtractorTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePeriodValueMapperTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimePeriodValueTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffOnPeriodTest.cs" />
-    <Compile Include="Scheduling\Overtime\OvertimeLengthDeciderTest.cs" />
-    <Compile Include="Scheduling\Overtime\OvertimeRelativeDifferenceCalculatorTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataAggregatorTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataDividerTest.cs" />
     <Compile Include="Scheduling\Overtime\OvertimeSkillIntervalDataTest.cs" />

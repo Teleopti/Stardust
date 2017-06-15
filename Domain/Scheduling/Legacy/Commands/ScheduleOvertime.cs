@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class ScheduleOvertime
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IScheduleOvertimeService _scheduleOvertimeService;
+		private readonly ScheduleOvertimeService _scheduleOvertimeService;
 		private readonly ScheduleOvertimeOnNonScheduleDays _scheduleOvertimeOnNonScheduleDays;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IUserTimeZone _userTimeZone;
 
 		public ScheduleOvertime(Func<ISchedulerStateHolder> schedulerStateHolder, 
-																	IScheduleOvertimeService scheduleOvertimeService,
+																	ScheduleOvertimeService scheduleOvertimeService,
 																	ScheduleOvertimeOnNonScheduleDays scheduleOvertimeOnNonScheduleDays,
 																	IResourceCalculation resourceOptimizationHelper,
 																	IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation)
@@ -51,9 +51,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				{
 					if (cancel || checkIfCancelPressed(backgroundWorker)) return;
 
-					var scheduleDay = _schedulerStateHolder().Schedules[person].ScheduledDay(dateOnly);
-					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
-					_scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter);
+					var scheduleRange = _schedulerStateHolder().Schedules[person];
+					var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
+					var scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
+					_scheduleOvertimeService.SchedulePersonOnDay(scheduleRange, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter);
 					_scheduleOvertimeOnNonScheduleDays.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer);
 					var progressResult = onDayScheduled(backgroundWorker,new SchedulingServiceSuccessfulEventArgs(scheduleDay,()=>cancel=true));
 					if (progressResult.ShouldCancel) return;

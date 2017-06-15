@@ -31,7 +31,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		public IList<OverTimeModel> Execute(IOvertimePreferences overtimePreferences,
 										ISchedulingProgress backgroundWorker,
-										IList<IScheduleDay> selectedSchedules,
+										IScheduleDictionary scheduleDictionary,
+										IEnumerable<IPerson> agents,
+										DateOnlyPeriod period,
 										DateTimePeriod requestedDateTimePeriod,
 										ResourceCalculationData resourceCalculationData,
 										Func<IDisposable> contextFunc)
@@ -39,32 +41,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			_resourceCalculation.ResourceCalculate(requestedDateTimePeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc), resourceCalculationData, contextFunc);
 			var resourceCalculateDelayer = new ResourceCalculateDelayerWithoutStateHolder(_resourceOptimizationHelper, 1, _userTimeZone);
-			var selectedDates = selectedSchedules.Select(x => x.DateOnlyAsPeriod.DateOnly).Distinct();
-			var selectedPersons = selectedSchedules.Select(x => x.Person).Distinct().ToList();
 			var cancel = false;
 			var overtimeModels = new List<OverTimeModel>();
-			foreach (var dateOnly in selectedDates)
+			foreach (var dateOnly in period.DayCollection())
 			{
-				var persons = selectedPersons.Randomize();
-				
+				var persons = agents.Randomize();
+
 				foreach (var person in persons)
 				{
 					if (cancel || checkIfCancelPressed(backgroundWorker)) return overtimeModels;
 
-					var scheduleDay = selectedSchedules.FirstOrDefault(x => x.Person == person && x.DateOnlyAsPeriod.DateOnly == dateOnly);
-					if (scheduleDay == null) continue;
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
-				
-					var res = _scheduleOvertimeService.SchedulePersonOnDay(scheduleDay, overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter, resourceCalculationData, contextFunc, requestedDateTimePeriod);  
+
+					var res = _scheduleOvertimeService.SchedulePersonOnDay(scheduleDictionary[person], overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter, resourceCalculationData, contextFunc, requestedDateTimePeriod);
 					if (res.HasValue)
-						overtimeModels.Add(new OverTimeModel()
+						overtimeModels.Add(new OverTimeModel
 						{
 							PersonId = person.Id.GetValueOrDefault(),
 							ActivityId = overtimePreferences.SkillActivity.Id.GetValueOrDefault(),
 							StartDateTime = res.Value.StartDateTime,
 							EndDateTime = res.Value.EndDateTime
 						});
-					var progressResult = onDayScheduled(backgroundWorker, new SchedulingServiceSuccessfulEventArgs(scheduleDay, () => cancel = true));
+					var progressResult = onDayScheduled(backgroundWorker, new SchedulingServiceSuccessfulEventArgs(scheduleDictionary[person].ScheduledDay(dateOnly), () => cancel = true));
 					if (progressResult.ShouldCancel) return overtimeModels;
 				}
 			}

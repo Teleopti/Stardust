@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -29,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 	[TestWithStaticDependenciesAvoidUse]
 	public class ScheduleOvertimeServiceTest
 	{
-		public IScheduleOvertimeService Target;
+		public ScheduleOvertimeService Target;
 		public IResourceCalculation ResourceOptimizationHelper;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
@@ -39,47 +36,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeTimeZoneGuard TimeZoneGuard;
 
-		private ScheduleOvertimeService _target;
-		private MockRepository _mock;
-		private IScheduleDay _scheduleDay;
 		private IOvertimePreferences _overtimePreferences;
-		private IOvertimeLengthDecider _overtimeLengthDecider;
-		private IResourceCalculateDelayer _resourceCalculateDelayer;
-		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private DateOnly _dateOnly;
-		private IScheduleTagSetter _scheduleTagSetter;
-		private ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private IPerson _person;
 		private IPersonPeriod _personPeriod;
 		private ISkill _skill;
-		private DateTimePeriod _dateTimePeriod;
 		private IActivity _activity;
-		private ISkillStaffPeriodHolder _skillStaffPeriodHolder;
 		private IMultiplicatorDefinitionSet _multiplicatorDefinitionSet;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_mock = new MockRepository();
-			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_overtimePreferences = new OvertimePreferences();
-			_overtimeLengthDecider = _mock.StrictMock<IOvertimeLengthDecider>();
-			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
-			_schedulePartModifyAndRollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_dateOnly = new DateOnly(2014, 1, 1);
-			_scheduleTagSetter = _mock.StrictMock<IScheduleTagSetter>();
-			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-			_target = new ScheduleOvertimeService(_overtimeLengthDecider, _schedulePartModifyAndRollbackService, _schedulingResultStateHolder, new GridlockManager(), new FakeTimeZoneGuard(), new PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider(new PersonSkillsUseAllForScheduleDaysOvertimeProvider(), new PersonalSkillsProvider()));
 			_person = PersonFactory.CreatePerson("person");
 			_activity = ActivityFactory.CreateActivity("activity");
 			_skill = SkillFactory.CreateSkill("skill");
 			_skill.Activity = _activity;
 			_personPeriod = PersonPeriodFactory.CreatePersonPeriodWithSkills(_dateOnly, new[] {_skill});
 			_person.AddPersonPeriod(_personPeriod);
-			_dateTimePeriod = new DateTimePeriod(2014, 1, 1, 2014, 1, 2);
 			_overtimePreferences.SkillActivity = _activity;
 			_overtimePreferences.SelectedSpecificTimePeriod = new TimePeriod(TimeSpan.Zero, new TimeSpan(1, 6, 0, 0));
-			_skillStaffPeriodHolder = _mock.StrictMock<ISkillStaffPeriodHolder>();
 			_multiplicatorDefinitionSet = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			_personPeriod.PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(_multiplicatorDefinitionSet);
 		}
@@ -116,87 +93,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState, UserTimeZone.Make());
 			TimeZoneGuard.SetTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
-			Target.SchedulePersonOnDay(stateHolder.Schedules[agent].ScheduledDay(dateOnly), overtimePreference,
+			Target.SchedulePersonOnDay(stateHolder.Schedules[agent], overtimePreference,
 				resourceCalculateDelayer, dateOnly, scheduleTagSetter);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment(true).OvertimeActivities().Should().Not.Be.Empty();
-		}
-
-		[Test]
-		public void ShouldSkipWhenNoSuitablePeriods()
-		{
-			var period = new DateTimePeriod(2014, 1, 1, 8, 2014, 1, 1, 10);
-			var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period, new Task(), new ServiceAgreement());
-			var skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(period, new Task(), new ServiceAgreement());
-			skillStaffPeriod2.SetCalculatedResource65(10);
-			IList<ISkillStaffPeriod> skillStaffPeriods1 = new List<ISkillStaffPeriod> { skillStaffPeriod1 };
-
-			using (_mock.Record())
-			{
-				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_overtimeLengthDecider.Decide(new OvertimePreferences(), _person, _dateOnly, _scheduleDay,
-					new MinMax<TimeSpan>(TimeSpan.Zero, new TimeSpan(1, 6, 0, 0)), new MinMax<TimeSpan>(TimeSpan.Zero, TimeSpan.Zero),
-					false)).IgnoreArguments().Return(new List<DateTimePeriod>());
-				Expect.Call(_schedulingResultStateHolder.SkillStaffPeriodHolder).Return(_skillStaffPeriodHolder).Repeat.AtLeastOnce();
-				Expect.Call(_skillStaffPeriodHolder.SkillStaffPeriodList(_skill, _dateTimePeriod)).Return(skillStaffPeriods1).Repeat.AtLeastOnce().IgnoreArguments();
-			}
-
-			using (_mock.Playback())
-			{
-				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _scheduleTagSetter);
-				Assert.IsFalse(res);
-			}	
-		}
-
-		[Test]
-		public void ShouldSkipWhenNoMultiplicatorDefinitionSetOfTypeOvertime()
-		{
-			_personPeriod.PersonContract.Contract.RemoveMultiplicatorDefinitionSetCollection(_multiplicatorDefinitionSet);
-
-			using (_mock.Record())
-			{
-				Expect.Call(_scheduleDay.Person).Return(_person);
-			}
-
-			using (_mock.Playback())
-			{
-				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _scheduleTagSetter);
-				Assert.IsFalse(res);
-			}
-		}
-
-		[Test]
-		public void ShouldSkipWhenNoPersonPeriod()
-		{
-			_person.RemoveAllPersonPeriods();
-
-			using (_mock.Record())
-			{
-				Expect.Call(_scheduleDay.Person).Return(_person);
-			}
-
-			using (_mock.Playback())
-			{
-				var res = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _scheduleTagSetter);
-				Assert.IsFalse(res);
-			}	
-		}
-
-		[Test]
-		public void ShouldSkipWhenNoPersonContract()
-		{
-			_person.PersonPeriodCollection[0].PersonContract = null;
-
-			using (_mock.Record())
-			{
-				Expect.Call(_scheduleDay.Person).Return(_person);
-			}
-
-			using (_mock.Playback())
-			{
-				var result = _target.SchedulePersonOnDay(_scheduleDay, _overtimePreferences, _resourceCalculateDelayer, _dateOnly, _scheduleTagSetter);
-				Assert.IsFalse(result);
-			}		
 		}
 
 		[Test]
@@ -231,10 +131,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SkillActivity = phoneActivity
 			};
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(ResourceOptimizationHelper, 1, true, stateHolder.SchedulingResultState, UserTimeZone.Make());
-			var rules = NewBusinessRuleCollection.Minimum();
 			var scheduleTagSetter = new ScheduleTagSetter(overtimePreference.ScheduleTag);
 			TimeZoneGuard.SetTimeZone(TimeZoneInfoFactory.DenverTimeZoneInfo());
-			Target.SchedulePersonOnDay(stateHolder.Schedules[agent].ScheduledDay(dateOnly.AddDays(1)), overtimePreference,
+			Target.SchedulePersonOnDay(stateHolder.Schedules[agent], overtimePreference,
 				resourceCalculateDelayer, dateOnly.AddDays(1), scheduleTagSetter);
 
 			stateHolder.Schedules[agent].ScheduledDay(dateOnly.AddDays(1)).PersonAssignment(true).OvertimeActivities().Should().Be.Empty();

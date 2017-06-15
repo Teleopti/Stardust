@@ -3,12 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-    public interface IAnalyzePersonAccordingToAvailability
-    {
-		DateTimePeriod? AdjustOvertimeAvailability(IScheduleDay scheduleDay, DateTimePeriod overtimeLayerLengthPeriod);
-    }
-
-    public class AnalyzePersonAccordingToAvailability : IAnalyzePersonAccordingToAvailability
+    public class AnalyzePersonAccordingToAvailability
     {
         private readonly AdjustOvertimeLengthBasedOnAvailability _adjustOvertimeLengthBasedOnAvailability;
 

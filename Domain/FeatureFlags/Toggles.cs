@@ -172,6 +172,7 @@
 		ResourcePlanner_RemoveBackToLegalStateGui_44333,
 		ResourcePlanner_CalculateShiftValuesInParallel_44681,
 		ResourcePlanner_RespectSkillGroupShoveling_44156,
+		ResourcePlanner_OvertimeNightShifts_44311,
 
 		Wfm_DisplayOnlineHelp_39402,
 

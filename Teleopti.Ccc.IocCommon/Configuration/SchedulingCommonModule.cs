@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();
-			builder.RegisterModule<ScheduleOvertimeModule>();
+			builder.RegisterModule(new ScheduleOvertimeModule(_configuration));
 			builder.RegisterType<DoFullResourceOptimizationOneTime>().InstancePerLifetimeScope();
 			builder.RegisterType<ClassicScheduleCommand>().InstancePerLifetimeScope();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
@@ -388,13 +388,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerDayOffFairnessOptimizationService(builder);
 			registerMoveTimeOptimizationClasses(builder);
 
-			builder.RegisterType<AnalyzePersonAccordingToAvailability>().As<IAnalyzePersonAccordingToAvailability>().SingleInstance();
+			builder.RegisterType<AnalyzePersonAccordingToAvailability>().SingleInstance();
 			builder.RegisterType<AdjustOvertimeLengthBasedOnAvailability>().SingleInstance();
 			builder.RegisterType<OvertimeSkillIntervalDataAggregator>().As<IOvertimeSkillIntervalDataAggregator>().InstancePerLifetimeScope();
 			builder.RegisterType<OvertimePeriodValueMapper>().InstancePerLifetimeScope();
 			builder.RegisterType<MergeOvertimeSkillIntervalData>().As<IMergeOvertimeSkillIntervalData>().InstancePerLifetimeScope();
 
-			builder.RegisterType<OvertimeLengthDecider>().As<IOvertimeLengthDecider>();
+			builder.RegisterType<OvertimeLengthDecider>();
 			builder.RegisterType<OvertimeSkillIntervalData>().As<IOvertimeSkillIntervalData>();
 			builder.RegisterType<OvertimeSkillIntervalDataDivider>().As<IOvertimeSkillIntervalDataDivider>().InstancePerLifetimeScope();
 			builder.RegisterType<OvertimeSkillStaffPeriodToSkillIntervalDataMapper>().As<IOvertimeSkillStaffPeriodToSkillIntervalDataMapper>().InstancePerLifetimeScope();

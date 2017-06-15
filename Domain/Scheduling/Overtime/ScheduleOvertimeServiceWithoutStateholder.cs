@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public interface IScheduleOvertimeServiceWithoutStateholder
 	{
-		DateTimePeriod? SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
+		DateTimePeriod? SchedulePersonOnDay(IScheduleRange scheduleRange, IOvertimePreferences overtimePreferences,
 			IResourceCalculateDelayerWithoutStateholder resourceCalculateDelayer, DateOnly dateOnly,
 			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc, DateTimePeriod specifiedPeriod);
 	}
@@ -27,13 +27,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		private readonly IGridlockManager _gridlockManager;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
-		private readonly ICalculateBestOvertime _calculateBestOvertime;
+		private readonly CalculateBestOvertimeBeforeOrAfter _calculateBestOvertime;
 
 		public ScheduleOvertimeServiceWithoutStateholder(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			IGridlockManager gridlockManager,
 			ITimeZoneGuard timeZoneGuard,
-			PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider, 
-			ICalculateBestOvertime calculateBestOvertime)
+			PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider,
+			CalculateBestOvertimeBeforeOrAfter calculateBestOvertime)
 		{
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_gridlockManager = gridlockManager;
@@ -42,11 +42,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_calculateBestOvertime = calculateBestOvertime;
 		}
 
-		public DateTimePeriod? SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
+		public DateTimePeriod? SchedulePersonOnDay(IScheduleRange scheduleRange, IOvertimePreferences overtimePreferences,
 			IResourceCalculateDelayerWithoutStateholder resourceCalculateDelayer, DateOnly dateOnly,
 			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc, DateTimePeriod requestedPeriod)
 		{
-			var person = scheduleDay.Person;
+			var person = scheduleRange.Person;
 			var timeZoneInfo = _timeZoneGuard.CurrentTimeZone();
 			if (_gridlockManager.Gridlocks(person, dateOnly) != null)
 				return null;
@@ -59,9 +59,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly)).ToList();
 			if (!skills.Any())
 				return null;
-			var minResolution = OvertimeLengthDecider.GetMinimumResolution(skills, overtimeDuration,scheduleDay);
+			var minResolution = OvertimeLengthDecider.GetMinimumResolution(skills, overtimeDuration, scheduleRange.ScheduledDay(dateOnly));
 			var overtimeSkillIntervalDataAggregatedList = getAggregatedOvertimeSkillIntervals(resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items());
-			var overtimeLayerLengthPeriodsUtc = _calculateBestOvertime.GetBestOvertimeInUtc(overtimeDuration, requestedPeriod, scheduleDay,minResolution
+			var overtimeLayerLengthPeriodsUtc = _calculateBestOvertime.GetBestOvertimeInUtc(overtimeDuration, requestedPeriod, scheduleRange, dateOnly, minResolution
 												   , overtimePreferences.AvailableAgentsOnly, overtimeSkillIntervalDataAggregatedList);
 
 			var oldRmsValue = calculatePeriodValue(dateOnly, person, timeZoneInfo, resourceCalculationData, skills);
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			foreach (var dateTimePeriod in overtimeLayerLengthPeriodsUtc)
 			{
-				scheduleDay = scheduleDay.ReFetch();
+				var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
 				scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, dateTimePeriod, overtimePreferences.OvertimeType);
 				_schedulePartModifyAndRollbackService.ClearModificationCollection();
 				if (!_schedulePartModifyAndRollbackService.ModifyStrictlyRollbackWithoutValidation(scheduleDay, scheduleTagSetter, rules))

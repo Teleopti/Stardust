@@ -14,22 +14,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	public interface IScheduleOvertimeService
+	public class ScheduleOvertimeService
 	{
-		bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences,
-			IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, IScheduleTagSetter scheduleTagSetter);
-	}
-
-	public class ScheduleOvertimeService : IScheduleOvertimeService
-	{
-		private readonly IOvertimeLengthDecider _overtimeLengthDecider;
+		private readonly OvertimeLengthDecider _overtimeLengthDecider;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
 
-		public ScheduleOvertimeService(IOvertimeLengthDecider overtimeLengthDecider, 
+		public ScheduleOvertimeService(OvertimeLengthDecider overtimeLengthDecider, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IGridlockManager gridlockManager,
@@ -44,9 +38,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_personSkillsForScheduleDaysOvertimeProvider = personSkillsForScheduleDaysOvertimeProvider;
 		}
 
-		public bool SchedulePersonOnDay(IScheduleDay scheduleDay, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly,  IScheduleTagSetter scheduleTagSetter)
+		public bool SchedulePersonOnDay(IScheduleRange scheduleRange, IOvertimePreferences overtimePreferences, IResourceCalculateDelayer resourceCalculateDelayer, DateOnly dateOnly, IScheduleTagSetter scheduleTagSetter)
 		{
-			var person = scheduleDay.Person;
+			var person = scheduleRange.Person;
 			var timeZoneInfo = _timeZoneGuard.CurrentTimeZone();
 			if (_gridlockManager.Gridlocks(person, dateOnly) != null)
 				return false;
@@ -55,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 			var overtimeDuration = new MinMax<TimeSpan>(overtimePreferences.SelectedTimePeriod.StartTime, overtimePreferences.SelectedTimePeriod.EndTime);
 			var overtimeSpecifiedPeriod = new MinMax<TimeSpan>(overtimePreferences.SelectedSpecificTimePeriod.StartTime, overtimePreferences.SelectedSpecificTimePeriod.EndTime);
-			var overtimeLayerLengthPeriodsUtc = _overtimeLengthDecider.Decide(overtimePreferences, person, dateOnly, scheduleDay, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
+			var overtimeLayerLengthPeriodsUtc = _overtimeLengthDecider.Decide(overtimePreferences, scheduleRange, dateOnly, overtimeDuration, overtimeSpecifiedPeriod, overtimePreferences.AvailableAgentsOnly);
 
 			var oldRmsValue = calculatePeriodValue(overtimePreferences, dateOnly, person, timeZoneInfo);
 			var rules = setupRules(overtimePreferences);
@@ -73,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 						periodEndMyViewPoint <= overtimeSpecifiedPeriodStartDateTime)
 					continue;
 
-				scheduleDay = scheduleDay.ReFetch();
+				var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
 				scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, dateTimePeriod, overtimePreferences.OvertimeType);
 				_schedulePartModifyAndRollbackService.ClearModificationCollection();
 				if (!_schedulePartModifyAndRollbackService.ModifyStrictly(scheduleDay, scheduleTagSetter, rules))

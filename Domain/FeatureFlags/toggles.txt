@@ -182,6 +182,7 @@ ResourcePlanner_MergeTeamblockClassicScheduling_44289 = RC
 ResourcePlanner_RemoveBackToLegalStateGui_44333 = true
 ResourcePlanner_CalculateShiftValuesInParallel_44681 = DEV
 ResourcePlanner_RespectSkillGroupShoveling_44156 = RC
+ResourcePlanner_OvertimeNightShifts_44311 = RC
 
 Wfm_DisplayOnlineHelp_39402 = RC
 

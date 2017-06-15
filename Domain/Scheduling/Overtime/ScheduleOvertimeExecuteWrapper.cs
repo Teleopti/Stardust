@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 		}
 
-		public OvertimeWrapperModel Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress schedulingProgress, IList<IScheduleDay> scheduleDays,
+		public OvertimeWrapperModel Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress schedulingProgress, IScheduleDictionary scheduleDictionary, IEnumerable<IPerson> agents, DateOnlyPeriod period,
 											DateTimePeriod requestedDateTimePeriod, IList<ISkill> skills, IList<ISkill> skillsToAddOvertime, DateTimePeriod fullDayPeriod)
 		{
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(fullDayPeriod).ToList();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				foreach (var skill in skillsToAddOvertime)
 				{
 					overtimePreferences.SkillActivity = skill.Activity;
-					overtimeModels.AddRange(_scheduleOvertimeWithoutStateHolder.Execute(overtimePreferences, schedulingProgress, scheduleDays,
+					overtimeModels.AddRange(_scheduleOvertimeWithoutStateHolder.Execute(overtimePreferences, schedulingProgress, scheduleDictionary, agents, period,
 																						requestedDateTimePeriod, resCalcData, () => getContext(combinationResources, skills, true)));
 					var xx = resCalcData.SkillResourceCalculationPeriodDictionary.Items().Where(x => x.Key == skill);
 

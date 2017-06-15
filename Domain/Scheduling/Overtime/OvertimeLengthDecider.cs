@@ -6,24 +6,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-    public interface IOvertimeLengthDecider
-    {
-		IEnumerable<DateTimePeriod> Decide(IOvertimePreferences overtimePreferences, IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyAvailableAgents);
-    }
-
-    public class OvertimeLengthDecider : IOvertimeLengthDecider
+    public class OvertimeLengthDecider
     {
 	    private readonly IOvertimeSkillStaffPeriodToSkillIntervalDataMapper _overtimeSkillStaffPeriodToSkillIntervalDataMapper;
         private readonly IOvertimeSkillIntervalDataDivider _overtimeSkillIntervalDataDivider;
         private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
-        private readonly ICalculateBestOvertime _calculateBestOvertime;
+        private readonly CalculateBestOvertimeBeforeOrAfter _calculateBestOvertime;
         private readonly IOvertimeSkillIntervalDataAggregator _overtimeSkillIntervalDataAggregator;
 	    private readonly PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
 
 
 	    public OvertimeLengthDecider(IOvertimeSkillStaffPeriodToSkillIntervalDataMapper overtimeSkillStaffPeriodToSkillIntervalDataMapper,
                                      IOvertimeSkillIntervalDataDivider overtimeSkillIntervalDataDivider,
-                                     Func<ISchedulingResultStateHolder> schedulingResultStateHolder, ICalculateBestOvertime calculateBestOvertime, 
+                                     Func<ISchedulingResultStateHolder> schedulingResultStateHolder, CalculateBestOvertimeBeforeOrAfter calculateBestOvertime, 
                                      IOvertimeSkillIntervalDataAggregator overtimeSkillIntervalDataAggregator,
 																		 PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider
 			)
@@ -36,18 +31,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
             _calculateBestOvertime = calculateBestOvertime;
         }
 
-		public IEnumerable<DateTimePeriod> Decide(IOvertimePreferences overtimePreferences, IPerson person, DateOnly dateOnly, IScheduleDay scheduleDay, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyAvailableAgents)
+		public IEnumerable<DateTimePeriod> Decide(IOvertimePreferences overtimePreferences, IScheduleRange scheduleRange, DateOnly dateOnly, MinMax<TimeSpan> duration, MinMax<TimeSpan> specifiedPeriod, bool onlyAvailableAgents)
         {
-            var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly)).ToList();
+            var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, scheduleRange.Person.Period(dateOnly)).ToList();
             if (skills.Count == 0) return Enumerable.Empty<DateTimePeriod>();
-	        var minimumResolution = GetMinimumResolution(skills, duration, scheduleDay);
+	        var scheduleDayTemp = scheduleRange.ScheduledDay(dateOnly);
+			var minimumResolution = GetMinimumResolution(skills, duration, scheduleDayTemp);
 			var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(new List<DateOnly> { dateOnly.AddDays(-1), dateOnly, dateOnly.AddDays(1) });
             if (skillDays == null) return Enumerable.Empty<DateTimePeriod>();  
             var overtimeSkillIntervalDataList = createOvertimeSkillIntervalDataList(skills, skillDays, minimumResolution);
 	        var overtimeSkillIntervalDataAggregatedList = _overtimeSkillIntervalDataAggregator.AggregateOvertimeSkillIntervalData(overtimeSkillIntervalDataList);
 
-			return _calculateBestOvertime.GetBestOvertime(duration, specifiedPeriod, scheduleDay,
-				minimumResolution, onlyAvailableAgents, overtimeSkillIntervalDataAggregatedList);
+			return _calculateBestOvertime.GetBestOvertime(duration, specifiedPeriod, scheduleRange, dateOnly, minimumResolution, onlyAvailableAgents, overtimeSkillIntervalDataAggregatedList);
         }
 
 	    public static int GetMinimumResolution(IList<ISkill> skills, MinMax<TimeSpan> duration, IScheduleDay scheduleDay)
