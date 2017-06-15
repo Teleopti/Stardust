@@ -55,6 +55,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return true;
 		}
 
+	    public bool ModifyStrictlyRollbackWithoutValidation(IScheduleDay schedulePart, IScheduleTagSetter scheduleTagSetter, INewBusinessRuleCollection newBusinessRuleCollection)
+	    {
+		    var partToSave = schedulePart.ReFetch();
+		    var responses = modifyWithNoValidation(schedulePart, ScheduleModifier.Scheduler, scheduleTagSetter, newBusinessRuleCollection);
+		    _rollbackStack.Push(partToSave);
+		    if (!responses.Any()) return true;
+
+		    rollbackLast(NewBusinessRuleCollection.Minimum());
+		    return false;
+	    }
+
 
 		//TEMP check if we could change old one instead
 	    public void RollbackMinimumChecks()

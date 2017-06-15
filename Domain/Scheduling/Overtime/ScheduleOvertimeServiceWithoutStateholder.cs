@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				scheduleDay = scheduleDay.ReFetch();
 				scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, dateTimePeriod, overtimePreferences.OvertimeType);
 				_schedulePartModifyAndRollbackService.ClearModificationCollection();
-				if (!_schedulePartModifyAndRollbackService.ModifyStrictly(scheduleDay, scheduleTagSetter, rules))
+				if (!_schedulePartModifyAndRollbackService.ModifyStrictlyRollbackWithoutValidation(scheduleDay, scheduleTagSetter, rules))
 					continue;
 
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, resourceCalculationData, contextFunc);
