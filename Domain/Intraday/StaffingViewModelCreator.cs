@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly RequiredStaffingProvider _requiredStaffingProvider;
 		private readonly IIntradayQueueStatisticsLoader _intradayQueueStatisticsLoader;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
-		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
 		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			RequiredStaffingProvider requiredStaffingProvider,
 			IIntradayQueueStatisticsLoader intradayQueueStatisticsLoader,
 			IIntervalLengthFetcher intervalLengthFetcher,
-			ISkillDayRepository skillDayRepository,
 			IScenarioRepository scenarioRepository,
 			ScheduledStaffingProvider scheduledStaffingProvider,
 			ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
@@ -56,7 +54,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_requiredStaffingProvider = requiredStaffingProvider;
 			_intradayQueueStatisticsLoader = intradayQueueStatisticsLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;
-			_skillDayRepository = skillDayRepository;
 			_scenarioRepository = scenarioRepository;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;

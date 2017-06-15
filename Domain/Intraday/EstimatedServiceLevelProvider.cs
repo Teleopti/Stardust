@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public double?[] DataSeries(IList<EslInterval> eslIntervals, IntradayIncomingViewModel queueIncoming, int minutesPerInterval)
 		{
 			var dataSeries = eslIntervals
-				.Select(x => (double?) x.Esl * 100)
+				.Select(x => x.Esl * 100)
 				.ToList();
 		
 			if (eslIntervals.Any())

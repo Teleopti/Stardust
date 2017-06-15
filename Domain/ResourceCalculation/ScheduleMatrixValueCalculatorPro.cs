@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        if (!values.Any()) return 0;
 
 	        return iterationOperationOption == IterationOperationOption.DayOffOptimization
-		               ? Domain.Calculation.Variances.StandardDeviation(values)
-		               : Domain.Calculation.Variances.RMS(values);
+		               ? Calculation.Variances.StandardDeviation(values)
+		               : Calculation.Variances.RMS(values);
         }
 
         public bool IsConsiderMaximumIntraIntervalStandardDeviation()

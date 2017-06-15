@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
             {
                 var previousDay = dateOnly.AddDays(-1);
                 //TimeZoneInfo timeZone = TimeZoneGuard.Instance.TimeZone;
-                var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(new DateOnly[] { previousDay });
+                var skillDays = _schedulingResultStateHolder().SkillDaysOnDateOnly(new[] { previousDay });
                 foreach (var skillDay in skillDays)
                 {
                     if (skillDay.Skill != skill) continue;

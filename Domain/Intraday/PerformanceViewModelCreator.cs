@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
-		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IncomingTrafficViewModelCreator _incomingTrafficViewModelCreator;
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 		public PerformanceViewModelCreator(INow now,
 			IUserTimeZone timeZone,
-			ISkillDayRepository skillDayRepository,
 			IScenarioRepository scenarioRepository,
 			IIntervalLengthFetcher intervalLengthFetcher,
 			IncomingTrafficViewModelCreator incomingTrafficViewModelCreator,
@@ -32,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			_now = now;
 			_timeZone = timeZone;
-			_skillDayRepository = skillDayRepository;
 			_scenarioRepository = scenarioRepository;
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_incomingTrafficViewModelCreator = incomingTrafficViewModelCreator;

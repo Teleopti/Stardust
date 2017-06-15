@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
      [Serializable]
     public class TimeSpanSetting : SettingValue
     {
-         private TimeSpan _timeSpanValue = new TimeSpan();
+         private TimeSpan _timeSpanValue;
 
         public TimeSpanSetting(TimeSpan timeSpan)
         {

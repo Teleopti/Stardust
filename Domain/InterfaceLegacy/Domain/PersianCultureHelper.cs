@@ -45,13 +45,13 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		private static void translateCalendarResources(DateTimeFormatInfo info)
 		{
 
-			info.AbbreviatedDayNames = new string[] { "ی", "د", "س", "چ", "پ", "ج", "ش" };
-			info.ShortestDayNames = new string[] { "ی", "د", "س", "چ", "پ", "ج", "ش" };
-			info.DayNames = new string[] { "یکشنبه", "دوشنبه", "ﺳﻪشنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه" };
-			info.AbbreviatedMonthNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
-			info.AbbreviatedMonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
-			info.MonthNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
-			info.MonthGenitiveNames = new string[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
+			info.AbbreviatedDayNames = new[] { "ی", "د", "س", "چ", "پ", "ج", "ش" };
+			info.ShortestDayNames = new[] { "ی", "د", "س", "چ", "پ", "ج", "ش" };
+			info.DayNames = new[] { "یکشنبه", "دوشنبه", "ﺳﻪشنبه", "چهارشنبه", "پنجشنبه", "جمعه", "شنبه" };
+			info.AbbreviatedMonthNames = new[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
+			info.AbbreviatedMonthGenitiveNames = new[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
+			info.MonthNames = new[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
+			info.MonthGenitiveNames = new[] { "فروردین", "ارديبهشت", "خرداد", "تير", "مرداد", "شهریور", "مهر", "آبان", "آذر", "دی", "بهمن", "اسفند", "" };
 			info.FirstDayOfWeek = DayOfWeek.Saturday;
 			info.FullDateTimePattern = "yyyy MMMM dddd, dd HH:mm:ss";
 			info.LongDatePattern = "yyyy MMMM dddd, dd";

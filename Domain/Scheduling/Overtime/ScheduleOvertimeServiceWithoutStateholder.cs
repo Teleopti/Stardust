@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -64,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var overtimeLayerLengthPeriodsUtc = _calculateBestOvertime.GetBestOvertimeInUtc(overtimeDuration, requestedPeriod, scheduleRange, dateOnly, minResolution
 												   , overtimePreferences.AvailableAgentsOnly, overtimeSkillIntervalDataAggregatedList);
 
-			var oldRmsValue = calculatePeriodValue(dateOnly, person, timeZoneInfo, resourceCalculationData, skills);
+			var oldRmsValue = calculatePeriodValue(resourceCalculationData, skills);
 			var rules = setupRules(overtimePreferences);
 
 			foreach (var dateTimePeriod in overtimeLayerLengthPeriodsUtc)
@@ -78,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, resourceCalculationData, contextFunc);
 				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, resourceCalculationData, contextFunc);
 
-				var newRmsValue = calculatePeriodValue(dateOnly, person, timeZoneInfo, resourceCalculationData, skills);
+				var newRmsValue = calculatePeriodValue(resourceCalculationData, skills);
 				if (newRmsValue <= oldRmsValue)
 					return dateTimePeriod;
 
@@ -136,11 +133,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return rules;
 		}
 
-		private double calculatePeriodValue(DateOnly dateOnly, IPerson person, TimeZoneInfo timeZoneInfo, ResourceCalculationData resourceCalculationData, IEnumerable<ISkill> skills)
+		private double calculatePeriodValue(ResourceCalculationData resourceCalculationData, IEnumerable<ISkill> skills)
 		{
 			if (skills.Any())
 			{
-				var aggregatedSkillStaffPeriods = skillStaffPeriods(skills, dateOnly.Date, timeZoneInfo, resourceCalculationData);
+				var aggregatedSkillStaffPeriods = skillStaffPeriods(skills, resourceCalculationData);
 				double? result = SkillDayRootMeanSquare(aggregatedSkillStaffPeriods);
 				if (result.HasValue)
 					return result.Value;
@@ -149,29 +146,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return 0;
 		}
 
-		private IAggregateSkill createAggregateSkill(IOvertimePreferences overtimePreferences, IPerson person, DateOnly dateOnly)
-		{
-			var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly)).ToList();
-
-			if (skills.IsEmpty()) return null;
-
-			var aggregateSkillSkill = new Skill("Agg", "", Color.Pink, 15, skills[0].SkillType);
-			aggregateSkillSkill.ClearAggregateSkill();
-			foreach (ISkill skill in skills)
-			{
-				aggregateSkillSkill.AddAggregateSkill(skill);
-			}
-			aggregateSkillSkill.IsVirtual = true;
-
-			if (aggregateSkillSkill.AggregateSkills.Any())
-			{
-				((ISkill)aggregateSkillSkill).DefaultResolution = aggregateSkillSkill.AggregateSkills.Min(s => s.DefaultResolution);
-			}
-
-			return aggregateSkillSkill;
-		}
-
-		private IEnumerable<IOvertimeSkillPeriodData> skillStaffPeriods(IEnumerable<ISkill> skills, DateTime date, TimeZoneInfo timeZoneInfo, ResourceCalculationData resourceCalculationData)
+		private IEnumerable<IOvertimeSkillPeriodData> skillStaffPeriods(IEnumerable<ISkill> skills, ResourceCalculationData resourceCalculationData)
 		{
 			var intervals = new List<IOvertimeSkillPeriodData>();
 			foreach (KeyValuePair<ISkill, IResourceCalculationPeriodDictionary> pair in resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items())

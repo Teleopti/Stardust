@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 				.Return(unitOfWorkFactory);
 			unitOfWorkFactory.Stub(x => x.Name).Return("for test");
 
-			_target = new NotificationValidationCheck(_significantChangeChecker, _notifier, _currentUnitOfWorkFactory);
+			_target = new NotificationValidationCheck(_significantChangeChecker, _notifier);
 
 			DefinedLicenseDataFactory.SetLicenseActivator(_currentUnitOfWorkFactory.Current().Name, new LicenseActivator("Test", DateTime.Today.AddDays(100), false, 1000, 1000,
 																			  LicenseType.Agent, new Percent(.10), null, null, "8"));

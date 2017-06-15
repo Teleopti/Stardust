@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		{
 			foreach (var skillDay in skillDays)
 			{
-				skillDay.SkillStaffPeriodCollection.ForEach(x => undoRedoContainer.SaveState<ISkillStaff>(x.Payload));
+				skillDay.SkillStaffPeriodCollection.ForEach(x => undoRedoContainer.SaveState(x.Payload));
 			}
 		}
 	}

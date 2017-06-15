@@ -36,7 +36,6 @@ namespace Teleopti.Ccc.Domain.Common
         /// Created date: 2008-05-28
         /// </remarks>
         public StatusChangedEventArgs(string statusText)
-            : base()
         {
             _statusText = statusText;
         }

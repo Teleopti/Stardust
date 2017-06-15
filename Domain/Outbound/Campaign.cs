@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 														 (ConnectAverageHandlingTime + UnproductiveTime);
 			var manualConnectingTime = (target*100*100/(ConnectRate*RightPartyConnectRate) - target/RightPartyConnectRate*100)*
 												UnproductiveTime;
-			var personHours = (double) (rightPartyTotalHandlingTime + wrongPartyTotalHandlingTime + manualConnectingTime)/60/60;
+			var personHours = (rightPartyTotalHandlingTime + wrongPartyTotalHandlingTime + manualConnectingTime)/60/60;
 
 			return TimeSpan.FromHours(personHours/CampaignTasks());
 		}
