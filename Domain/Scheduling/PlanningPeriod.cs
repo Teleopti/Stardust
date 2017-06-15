@@ -55,6 +55,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		public virtual DateOnlyPeriod Range => _range;
+		public virtual int Number => _number;
+		public virtual SchedulePeriodType PeriodType => _periodType;
 
 		public virtual PlanningPeriodState State => _state;
 

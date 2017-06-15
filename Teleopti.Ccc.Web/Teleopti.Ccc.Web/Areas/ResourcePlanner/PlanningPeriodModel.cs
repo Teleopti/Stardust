@@ -11,5 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		public string State { get; set; }
 		public Guid? PlanningGroupId { get; set; }
 		public int TotalAgents { get; set; }
+		public int Number { get; set; }
+		public string Type { get; set; }
 	}
 }
