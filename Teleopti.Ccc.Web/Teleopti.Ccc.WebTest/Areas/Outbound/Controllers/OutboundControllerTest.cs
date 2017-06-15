@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Web.Http.Results;
 using NUnit.Framework;
@@ -122,12 +123,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Controllers
 		public void ShouldGetCampaignVisualization()
 		{
 			var expectedVisualizationVM = new CampaignVisualizationViewModel();
-			var id = new Guid();
+			var visualizationForm = new VisualizationForm(){CampaignId = new Guid(), SkipDates = new List<DateOnly>()};
 			var visualizationProvider = MockRepository.GenerateMock<ICampaignVisualizationProvider>();
-			visualizationProvider.Stub(x => x.ProvideVisualization(id)).Return(expectedVisualizationVM);
+			visualizationProvider.Stub(x => x.ProvideVisualization(visualizationForm.CampaignId, visualizationForm.SkipDates.ToArray())).Return(expectedVisualizationVM);
 
 			var target = new OutboundController(null, null, null, null, visualizationProvider, null, null);
-			var result = target.GetVisualization(id);
+			var result = target.GetVisualization(visualizationForm);
 
 			result.Should().Be.SameInstanceAs(expectedVisualizationVM);
 		}
