@@ -227,7 +227,8 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 							};
 							
 						}
-						AddOverTime.Apply(overTimeModels);
+						//if not ignoring might need a "real" multiId
+						AddOverTime.Apply(overTimeModels, Guid.NewGuid());
 					});
 				}));
 			}
