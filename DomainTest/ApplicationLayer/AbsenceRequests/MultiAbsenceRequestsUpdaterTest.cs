@@ -7,11 +7,13 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -44,10 +46,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public MutableNow Now;
 		public FakePersonAbsenceAccountRepository PersonAbsenceAccountRepository;
+		public FakeBudgetGroupRepository BudgetGroupRepository;
+		public FakeBudgetDayRepository BudgetDayRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
+			system.UseTestDouble<FakeBudgetGroupRepository>().For<IBudgetGroupRepository>();
+			system.UseTestDouble<FakeBudgetDayRepository>().For<IBudgetDayRepository>();
 		}
 
 		[Test]
@@ -945,6 +951,60 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.IsWaitlisted.Should().Be.True();
 			personRequest.DenyReason.Should().Be.EqualTo(Resources.RequestWaitlistedReasonPersonAccount);
+		}
+
+		[Test]
+		public void ShouldNotDenyWhenThereAreTwoBudgetDaysInTheSameDay()
+		{
+			Now.Is(new DateTime(2017,6,5));
+
+			var budgetDay = new DateOnly(2017, 6, 5);
+			var budgetGroup = getBudgetGroup();
+			var scenario = ScenarioRepository.Has("scenarioName");
+			var budgetDayOne = new BudgetDay(budgetGroup, scenario, budgetDay) { FulltimeEquivalentHours = 8d, ShrinkedAllowance =1, AbsenceOverride = 1d,IsClosed = false,UpdatedOn = new DateTime()};
+			var budgetDayTwo = new BudgetDay(budgetGroup, scenario, budgetDay) { FulltimeEquivalentHours = 10d, ShrinkedAllowance = 1, AbsenceOverride = 2d, IsClosed = false, UpdatedOn = new DateTime().AddDays(1) };
+			BudgetGroupRepository.Add(budgetGroup);
+			BudgetDayRepository.Add(budgetDayOne);
+			BudgetDayRepository.Add(budgetDayTwo);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(budgetDay);
+			personPeriod.BudgetGroup = budgetGroup;
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			absence.InContractTime = true;
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new BudgetGroupAllowanceValidator(),
+				Period = new DateOnlyPeriod(2017, 6, 5, 2017, 6, 11),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2017, 6, 5, 2017, 6, 11),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+			});
+
+			var person = PersonFactory.CreatePerson(wfcs).WithId();
+			person.AddPersonPeriod(personPeriod);
+			PersonRepository.Add(person);
+
+			var period = new DateTimePeriod(2017, 6, 5, 8, 2017, 6, 5, 17);
+			var activity = ActivityRepository.Has("activity");
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, period, new ShiftCategory("category")));
+
+			var personRequest = new PersonRequest(person, new AbsenceRequest(absence, period)).WithId();
+			personRequest.Pending();
+			PersonRequestRepository.Add(personRequest);
+
+			Target.UpdateAbsenceRequest(new List<Guid> { personRequest.Id.GetValueOrDefault() });
+			personRequest.IsApproved.Should().Be.True();
+
+		}
+
+		private static IBudgetGroup getBudgetGroup()
+		{
+			var budgetGroup = new BudgetGroup { Name = "BG1" };
+			budgetGroup.SetId(Guid.NewGuid());
+			return budgetGroup;
 		}
 
 		private void createAccount(IPerson person, IAbsence absence, params IAccount[] accountDays)

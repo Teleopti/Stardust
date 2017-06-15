@@ -50,18 +50,22 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 			var defaultScenario = _scenarioRepository.Current();
 			var budgetDays = _budgetDayRepository.Find(defaultScenario, personPeriod.BudgetGroup, requestedPeriod,true);
-
+			
 			if (budgetDays == null)
 			{
 				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNull(language, culture, requestedPeriod);
 			}
 
-			if (budgetDays.Count != requestedPeriod.DayCount())
+			var filteredBudgetDays = budgetDays.GroupBy(a => a.Day)
+				.Select(b => b.OrderByDescending(c => ((BudgetDay)c).UpdatedOn).First())
+				.ToList();
+
+			if (filteredBudgetDays.Count != requestedPeriod.DayCount())
 			{
 				return AbsenceRequestBudgetGroupValidationHelper.BudgetDaysAreNotEqualToRequestedPeriodDays(language, culture, requestedPeriod);
 			}
 
-			var invalidDays = getInvalidDays(absenceRequestAndSchedules.AbsenceRequest, budgetDays, personPeriod, defaultScenario, culture, absenceRequestAndSchedules.SchedulingResultStateHolder);
+			var invalidDays = getInvalidDays(absenceRequestAndSchedules.AbsenceRequest, filteredBudgetDays, personPeriod, defaultScenario, culture, absenceRequestAndSchedules.SchedulingResultStateHolder);
 			if (!string.IsNullOrEmpty(invalidDays))
 			{
 				var underStaffingValidationError = UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingDays", language);
