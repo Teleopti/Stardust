@@ -20,7 +20,7 @@
 				</div>
 				<div class="con-flex x3">
 					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goForm()"><i class="mdi mdi-plus"></i>{{'NewPlanningGroup' | translate}}</button>
-					<button class="wfm-btn wfm-btn-invis-default" ng-click=""><i class="mdi mdi-information-outline"></i>{{'HelpLabel' | translate}}</button>
+					<button class="wfm-btn wfm-btn-invis-disabled" ng-click=""><i class="mdi mdi-information-outline"></i>{{'HelpLabel' | translate}}</button>
 				</div>
 			</div>
 		</div>
@@ -37,11 +37,11 @@
 </div>
 <div class="wfm-grid">
 	<div class="grid-card planingperiod-container" ng-repeat="planningGroup in vm.planningGroups | filter:vm.filterName">
-		<div class="list-content plan-group">
+		<div class="list-content plan-group" ng-click="vm.goPlanningGroup(planningGroup.Id)">
 			<div class="list-header">
 				<h1>{{planningGroup.Name }}</h1>
 			</div>
-			<div class="list-header-content" ng-click="vm.goPlanningGroup(planningGroup.Id)">
+			<div class="list-header-content">
 				<div tabindex=0 class="context-menu card-context icon-botton-second edit-plan-group" ng-click="vm.goEditPlanningGroup(planningGroup.Id);$event.stopPropagation();">
 					<i class="mdi mdi-pencil"></i>
 					<md-tooltip>{{'EditPlanningGroup' | translate}}</md-tooltip>

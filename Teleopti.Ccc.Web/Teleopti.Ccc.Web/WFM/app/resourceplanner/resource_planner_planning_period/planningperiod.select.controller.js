@@ -10,8 +10,8 @@
     function Controller($state, $stateParams, $translate, planningPeriodServiceNew, planningGroupInfo, planningPeriods, localeLanguageSortingService) {
         var vm = this;
         var planningGroupId = $stateParams.groupId ? $stateParams.groupId : null;
+        vm.planningGroup = planningGroupInfo;
         vm.planningPeriods = planningPeriods.sort(localeLanguageSortingService.localeSort('-EndDate'));
-        vm.planningPeriods = planningPeriods;
         vm.suggestions = [];
         vm.originLastPp = undefined;
         vm.lastPp = undefined;
@@ -21,7 +21,6 @@
         vm.confirmDeletePpModal = false;
         vm.dateIsChanged = false;
         vm.selectedIsChanged = false;
-        vm.displayForFirst = true;
         vm.textForDeletePp = '';
         vm.textForChangeThisPpMeg = '';
         vm.textForCreatePpMeg = '';
@@ -67,12 +66,9 @@
         function startNextPlanningPeriod() {
             if (planningGroupId == null)
                 return;
-            vm.displayForFirst = false;
             var nextPlanningPeriod = planningPeriodServiceNew.nextPlanningPeriod({ planningGroupId: planningGroupId });
             return nextPlanningPeriod.$promise.then(function (data) {
-                vm.planningPeriods.push(data);
-                vm.planningPeriods.sort(localeLanguageSortingService.localeSort('-EndDate'));
-                vm.displayForFirst = true;
+                vm.planningPeriods.splice(0, 0, data);
                 return vm.planningPeriods;
             });
         }
