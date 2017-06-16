@@ -68,7 +68,12 @@ describe('ForecastingStartCtrl', function() {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
+
+		$httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
+			return [200, true];
+		});
 	}));
+
 
 	it("forecasting period should default to next month", inject(function($controller) {
 		var scope = $rootScope.$new();
@@ -120,7 +125,7 @@ describe('ForecastingStartCtrl', function() {
 	it('Should display forecast result', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		$controller('ForecastingStartCtrl', { $scope: scope, forecastingService: new mockForecastingService() });
-		
+
 		scope.$digest();
 		scope.workloads[0].Refresh = function (days) {
 			expect(days[0].vc).toBe(332.2292728719883);

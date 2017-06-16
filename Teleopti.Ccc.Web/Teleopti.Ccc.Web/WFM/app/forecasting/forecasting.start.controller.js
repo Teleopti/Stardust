@@ -3,10 +3,10 @@
 
 	angular.module('wfm.forecasting')
 		.controller('ForecastingStartCtrl', [
-			'$scope', '$state', 'forecastingService', '$filter', '$interval', '$stateParams', '$translate', 'toggles',
-			function ($scope, $state, forecastingService, $filter, $interval, $stateParams, $translate, toggles) {
+			'$scope', '$state', 'forecastingService', '$filter', '$interval', '$stateParams', '$translate', 'Toggle',
+			function ($scope, $state, forecastingService, $filter, $interval, $stateParams, $translate, Toggle) {
 				$scope.isForecastRunning = false;
-				$scope.isExportEnabled = toggles.WFM_Export_Forecast_44716;
+				$scope.isExportEnabled = Toggle.WFM_Export_Forecast_44716;
 				$scope.infos = {};
 				function updateRunningStatus() {
 					forecastingService.status.get().$promise.then(function (result) {
