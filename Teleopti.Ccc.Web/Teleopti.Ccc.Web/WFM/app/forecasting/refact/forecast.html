@@ -27,7 +27,6 @@
       <wfm-card ng-repeat="skill in vm.skillMaster.Skills">
         <card-header tabindex="-1">
           <div tabindex="0" ng-click="vm.getWorkloadForecastData(skill.Workload.Id)">
-            <span><i class="mdi" ng-class="item.title"></i></span>
             <b>{{skill.Workload.Name}}</b>
             <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
           </div>

@@ -17,8 +17,8 @@
     };
     vm.selectedScenario = {};
     vm.forecastPeriod = {
-      startDate:  moment().utc().add(1, 'months').startOf('month').toDate(),
-      endDate: moment().utc().add(2, 'months').startOf('month').toDate()
+      startDate: {},
+      endDate: {}
     };
     vm.skillMaster = {
       IsPermittedToModify: false,
@@ -38,6 +38,7 @@
     vm.init();
 
     function init() {
+      resetForecastPeriod();
       isForecastRunning();
       getSkills();
       getScenarios();
@@ -120,46 +121,51 @@
         ForecastMethodId: -1
       }
 
+      vm.forecastModal = false;
       forecastingService.forecast(JSON.stringify(
-      {
-        ForecastStart: vm.forecastPeriod.startDate,
-        ForecastEnd: vm.forecastPeriod.endDate,
-        Workloads: [temp],
-        ScenarioId: vm.selectedScenario.Id,
-        BlockToken: blockToken,
-        IsLastWorkload: true
-      }), function(data, status, headers, config) {
-        // console.log(data);
-      vm.skillMaster.IsForecastRunning = false;
-        blockToken = data.BlockToken;
-        getWorkloadForecastData(vm.forecastModalObj.Id);
-      }, function(data, status, headers, config) {
+        {
+          ForecastStart: vm.forecastPeriod.startDate,
+          ForecastEnd: vm.forecastPeriod.endDate,
+          Workloads: [temp],
+          ScenarioId: vm.selectedScenario.Id,
+          BlockToken: blockToken,
+          IsLastWorkload: true
+        }), function(data, status, headers, config) {
+          // console.log(data);
+          vm.skillMaster.IsForecastRunning = false;
+          blockToken = data.BlockToken;
+          getWorkloadForecastData(vm.forecastModalObj.Id);
+        }, function(data, status, headers, config) {
 
-      });
-    }
-
-    function pointClick(days) {
-      vm.selectedDayCount = days;
-    }
-
-
-    function forecastingModal(workload) {
-      if (vm.skillMaster.isForecastRunning) {
-        return;
+        });
       }
-      vm.forecastModalObj = {};
-      if (workload) {
-        vm.forecastModalObj = workload;
-        vm.forecastModal = true;
+
+      function pointClick(days) {
+        vm.selectedDayCount = days;
       }
-      else {
+
+      function resetForecastPeriod() {
         vm.forecastPeriod = {
           startDate:  moment().utc().add(1, 'months').startOf('month').toDate(),
           endDate: moment().utc().add(2, 'months').startOf('month').toDate()
         };
-        vm.forecastModal = false;
       }
-    }
 
-  }
-})();
+
+      function forecastingModal(workload) {
+        if (vm.skillMaster.isForecastRunning) {
+          return;
+        }
+        resetForecastPeriod();
+        vm.forecastModalObj = {};
+        if (workload) {
+          vm.forecastModalObj = workload;
+          vm.forecastModal = true;
+        }
+        else {
+          vm.forecastModal = false;
+        }
+      }
+
+    }
+  })();
