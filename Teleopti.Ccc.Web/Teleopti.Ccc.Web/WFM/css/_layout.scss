@@ -104,36 +104,6 @@ md-progress-circular{
 	}
 }
 
-// semi list check
-.list-mark{
-	padding:3px;
-	background:$green-100;
-	border-radius:50%;
-	text-align:center;
-	font-size:15px!important;
-}
-.list-check{
-    height: 25px;
-    width: 25px;
-    line-height:25px;
-    display: inline-block;
-    position: absolute;
-    left: 5px;
-    background:$green-100;
-	border-radius:50%;
-	text-align:center;
-}
-.list-check .mdi{
-    vertical-align: middle;
-}
-.list-check .mdi-semicheck{
-    height:10px;
-    width:10px;
-    display:inline-block;
-    background-color:#000;
-    margin-bottom:3px;
-}
-
 //Temp move us to styleguide
 .wfm-form input, .wfm-form select{
 	margin:0!important;
@@ -170,9 +140,5 @@ md-tooltip{
 }
 
 .md-tooltip {
-  height: auto  !important; }
-
-// for try
-.main-menu .main-menu-link-active > .main-menu-link {
-    background:$gray012  !important;
+  height: auto  !important;
 }
