@@ -169,6 +169,9 @@ md-tooltip{
 	margin: 0 auto;
 }
 
+.md-tooltip {
+  height: auto  !important; }
+
 // for try
 .main-menu .main-menu-link-active > .main-menu-link {
     background:$gray012  !important;
