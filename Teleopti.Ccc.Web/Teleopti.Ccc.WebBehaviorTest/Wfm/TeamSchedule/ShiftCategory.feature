@@ -53,6 +53,7 @@ And there is a shift category with
 Scenario: Show shift category
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-09'
+	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	Then I should see a shift category named 'DY'

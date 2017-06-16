@@ -75,6 +75,7 @@ Scenario: Can swap shifts when selected 2 agents' schedule
 	| EndTime          | 2016-10-10 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
+	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	And I selected agent 'John Smith'
