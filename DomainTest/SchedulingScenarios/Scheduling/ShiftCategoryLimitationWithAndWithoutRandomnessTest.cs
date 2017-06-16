@@ -20,17 +20,19 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	[TestFixture(true, true)]
-	[TestFixture(false, true)]
-	[TestFixture(true, false)]
-	[TestFixture(false, false)]
+	[TestFixture(true, true, true)]
+	[TestFixture(false, false, true)]
+	[TestFixture(true, false, true)]
+	[TestFixture(true, true, false)]
+	[TestFixture(false, false, false)]
+	[TestFixture(true, false, false)]
 	public class ShiftCategoryLimitationWithAndWithoutRandomnessTest : SchedulingScenario, ISetup
 	{
 		private readonly bool _fakeRandomness;
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
-		public ShiftCategoryLimitationWithAndWithoutRandomnessTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool fakeRandomness) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
+		public ShiftCategoryLimitationWithAndWithoutRandomnessTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757, bool fakeRandomness) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
 		{
 			_fakeRandomness = fakeRandomness;
 		}

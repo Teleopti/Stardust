@@ -253,6 +253,7 @@
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
     <Compile Include="ResourcePlanner\Validation\IScheduleValidator.cs" />
+    <Compile Include="Scheduling\Legacy\Commands\ScheduleIslandExecutor.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IDateWithDuplicate.cs" />
     <Compile Include="InterfaceLegacy\Messages\InputWithLogOnContext.cs" />

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 	}
 
-	[RemoveMeWithToggle("Rename and keep this one merge with new one", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class ScheduleExecutorOld : IScheduleExecutor
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;

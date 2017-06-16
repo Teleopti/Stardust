@@ -525,7 +525,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			};
 		}
 
-		public ShiftCategoryLimitationTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
+		public ShiftCategoryLimitationTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
 		{
 		}
 	}

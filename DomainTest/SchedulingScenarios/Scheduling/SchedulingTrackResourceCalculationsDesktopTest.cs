@@ -56,13 +56,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.LessThan(20); //the lowest, in theory would be 7
 		}
 
-		public SchedulingTrackResourceCalculationsDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
-		{
-		}
-
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ResourceCalculationWithCount>().For<IResourceCalculation>();
+		}
+
+		public SchedulingTrackResourceCalculationsDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
+		{
 		}
 	}
 }

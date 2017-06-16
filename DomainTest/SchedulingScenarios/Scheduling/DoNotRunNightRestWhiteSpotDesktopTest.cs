@@ -18,10 +18,12 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	[TestFixture(typeof(FakeCancelSchedulingProgress), true)]
-	[TestFixture(typeof(FakeCloseSchedulingProgress), true)]
-	[TestFixture(typeof(FakeCancelSchedulingProgress), false)]
-	[TestFixture(typeof(FakeCloseSchedulingProgress), false)]
+	[TestFixture(typeof(FakeCancelSchedulingProgress), true, true)]
+	[TestFixture(typeof(FakeCancelSchedulingProgress), false, false)]
+	[TestFixture(typeof(FakeCancelSchedulingProgress), true, false)]
+	[TestFixture(typeof(FakeCloseSchedulingProgress), true, true)]
+	[TestFixture(typeof(FakeCloseSchedulingProgress), false, false)]
+	[TestFixture(typeof(FakeCloseSchedulingProgress), true, false)]
 	public class DoNotRunNightRestWhiteSpotDesktopTest : SchedulingScenario, ISetup
 	{
 		private readonly Type _schedulingProgressFake;
@@ -53,7 +55,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(0);
 		}
 
-		public DoNotRunNightRestWhiteSpotDesktopTest(Type schedulingProgressFake, bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
+		public DoNotRunNightRestWhiteSpotDesktopTest(Type schedulingProgressFake, bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) 
+			: base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
 		{
 			_schedulingProgressFake = schedulingProgressFake;
 		}

@@ -127,6 +127,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DoFullResourceOptimizationOneTime>().InstancePerLifetimeScope();
 			builder.RegisterType<ClassicScheduleCommand>().InstancePerLifetimeScope();
 
+		
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
 			{
 				builder.RegisterType<ScheduleExecutor>().As<IScheduleExecutor>().InstancePerLifetimeScope().ApplyAspects();
@@ -157,7 +158,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Toggle(Toggles.ResourcePlanner_SchedulingIslands_44757))
 			{
-				builder.RegisterType<InvalidScheduleToggleCombination>().As<IScheduleExecutor>().SingleInstance();
+				if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
+				{
+					builder.RegisterType<ScheduleIslandExecutor>().As<IScheduleExecutor>().SingleInstance();
+				}
+				else
+				{
+					builder.RegisterType<InvalidScheduleToggleCombination>().As<IScheduleExecutor>().SingleInstance();
+				}
 			}
 
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
