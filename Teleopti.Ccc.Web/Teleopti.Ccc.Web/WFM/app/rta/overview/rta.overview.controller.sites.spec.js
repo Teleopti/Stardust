@@ -93,8 +93,16 @@ describe('RtaOverviewController', function () {
 		$fakeBackend.withSiteAdherence({
 			Id: "londonGuid"
 		})
+			.withOrganization({
+				Id: "londonGuid",
+				FullPermission: true
+			})
 			.withSiteAdherence({
 				Id: "parisGuid"
+			})
+			.withOrganization({
+				Id: "parisGuid",
+				FullPermission: true
 			});
 		spyOn($state, 'go');
 
@@ -117,8 +125,16 @@ describe('RtaOverviewController', function () {
 		$fakeBackend.withSiteAdherence({
 			Id: "londonGuid"
 		})
+			.withOrganization({
+				Id: "londonGuid",
+				FullPermission: true
+			})
 			.withSiteAdherence({
 				Id: "parisGuid"
+			})
+			.withOrganization({
+				Id: "parisGuid",
+				FullPermission: true
 			});
 		spyOn($state, 'go');
 
@@ -135,5 +151,112 @@ describe('RtaOverviewController', function () {
 			siteIds: ["parisGuid"]
 		});
 	});
-	
+
+
+	it('should go to agents for permitted teams in site', function () {
+		$fakeBackend.withSiteAdherence({
+			Id: "londonGuid"
+		})
+			.withOrganization({
+				Id: 'londonGuid',
+				FullPermission: false,
+				Name: 'London',
+				Teams: [{
+					Id: 'teamId',
+					Name: 'Team Preferences'
+				}]
+			});
+		spyOn($state, 'go');
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function () {
+			vm.toggleSelection("londonGuid");
+			vm.openSelectedItems();
+		});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			teamIds: ['teamId']
+		});
+	});
+
+	it('should go to agents for permitted teams in site1  and site2', function () {
+		$fakeBackend.withSiteAdherence({
+			Id: "londonGuid1"
+		}).withSiteAdherence({
+			Id: "londonGuid2"
+		})
+			.withOrganization({
+				Id: 'londonGuid1',
+				FullPermission: false,
+				Name: 'London',
+				Teams: [{
+					Id: 'teamId1',
+					Name: 'Team Preferences'
+				}]
+			})
+			.withOrganization({
+				Id: 'londonGuid2',
+				FullPermission: false,
+				Name: 'London2',
+				Teams: [{
+					Id: 'teamId2',
+					Name: 'Team Preferences2'
+				}]
+			});
+		spyOn($state, 'go');
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function () {
+			vm.toggleSelection("londonGuid1");
+			vm.toggleSelection("londonGuid2");
+			vm.openSelectedItems();
+		});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			teamIds: ['teamId1', 'teamId2']
+		});
+	});
+
+	it('should not go to untoggled site', function () {
+		$fakeBackend.withSiteAdherence({
+			Id: "londonGuid1"
+		}).withSiteAdherence({
+			Id: "londonGuid2"
+		})
+			.withOrganization({
+				Id: 'londonGuid1',
+				FullPermission: false,
+				Name: 'London',
+				Teams: [{
+					Id: 'teamId1',
+					Name: 'Team Preferences'
+				}]
+			})
+			.withOrganization({
+				Id: 'londonGuid2',
+				FullPermission: false,
+				Name: 'London2',
+				Teams: [{
+					Id: 'teamId2',
+					Name: 'Team Preferences2'
+				}]
+			});
+		spyOn($state, 'go');
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function () {
+			vm.toggleSelection("londonGuid1");
+			vm.toggleSelection("londonGuid1");
+			vm.toggleSelection("londonGuid2");
+			vm.openSelectedItems();
+		});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			teamIds: ['teamId2']
+		});
+	});
+
 });

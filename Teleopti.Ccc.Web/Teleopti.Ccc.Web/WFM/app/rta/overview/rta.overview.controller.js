@@ -51,13 +51,15 @@
 		var stateForAgentsByTeamsAndSkill = 'rta.agents({teamIds: team.Id, skillIds: vm.skillId})';
 		var stateForAgentsByTeamsAndSkillArea = 'rta.agents({teamIds: team.Id, skillAreaId: vm.skillAreaId})';
 
+		var organizationData = [];
+
 		var pollingInterval = angular.isDefined($stateParams.pollingInterval) ? $stateParams.pollingInterval : 5000;
 		var pollingLock = true;
 
 		var previousState = "";
 		var currentState = "";
 		/***scoped variables */
-		vm.selectedItemIds = [];
+		vm.selectedItemIds = { siteIds: [], teamIds: [] };
 		vm.displaySkillOrSkillAreaFilter = false;
 		vm.skillAreas = [];
 		vm.skillId = $stateParams.skillIds || null;
@@ -78,6 +80,9 @@
 
 			(function initialize() {
 				pollingLock = false;
+				rtaService.getOrganization().then(function (result) {
+					organizationData = result;
+				});
 				rtaService.getSkillAreas().then(function (skillAreas) {
 					vm.hasPermission = true;
 					vm.skillAreas = skillAreas.SkillAreas;
@@ -94,11 +99,35 @@
 			};
 
 			function getStateForAgents() { return (vm.skillAreaId !== null) ? stateForAgentsByTeamsAndSkillArea : stateForAgentsByTeamsAndSkill; };
-			
+
 			function toggleSelection(itemId) {
-				var index = vm.selectedItemIds.indexOf(itemId);
-				if (index > -1) vm.selectedItemIds.splice(index, 1);
-				else vm.selectedItemIds.push(itemId);
+				if (vm.siteIds != null) {
+					var indexOfTeam = vm.selectedItemIds.teamIds.indexOf(itemId);
+					if (indexOfTeam > -1) vm.selectedItemIds.teamIds.splice(indexOfTeam, 1);
+					else vm.selectedItemIds.teamIds.push(itemId);
+				}
+				else {
+					var indexOfSite = vm.selectedItemIds.siteIds.indexOf(itemId);
+					if (indexOfSite > -1) vm.selectedItemIds.siteIds.splice(indexOfSite, 1);
+					else {
+						organizationData.forEach(function (org) {
+							if (itemId === org.Id && org.FullPermission) {
+								vm.selectedItemIds.siteIds.push(itemId);
+							}
+							else {
+								if(org.Id == itemId)
+									org.Teams.forEach(function (team) {
+										var indexOfTeam = vm.selectedItemIds.teamIds.indexOf(team.Id);
+										if (indexOfTeam > -1) 
+										vm.selectedItemIds.teamIds.splice(indexOfTeam, 1);
+										else
+										vm.selectedItemIds.teamIds.push(team.Id);
+									});
+							}
+						})
+
+					}
+				}
 			}
 
 			function openSelectedItems() {
@@ -106,49 +135,29 @@
 				goToAgents(vm.selectedItemIds);
 			};
 
-				var polling = $interval(function() {
-						if (!pollingLock) return;
-						if (pollingLock)
-							pollingLock = false;
-						if (vm.skillId !== null || vm.skillAreaId !== null) {
-							if (vm.skillAreaId !== null)
-								vm.skillId = skillIdsFromSkillArea(vm.skillAreaId);
-							if (vm.siteIds !== null && angular.isDefined(vm.teams)) {
-								rtaService.getTeamCardsFor({
-										skillIds: vm.skillId,
-										siteIds: vm.siteIds
-									})
-									.then(function(teamAdherences) {
-										currentState = JSON.stringify(teamAdherences);
-										if (previousState != currentState) {
-											vm.teams = teamAdherences;
-											previousState = currentState;
-										}
-										pollingLock = true;
-									});
-							} else if (angular.isDefined(vm.sites)) {
-								rtaService.getAdherenceForSitesBySkills(vm.skillId)
-									.then(function(siteAdherences) {
-										currentState = JSON.stringify(siteAdherences);
-										if (previousState != currentState) {
-											vm.sites = siteAdherences;
-											previousState = currentState;
-										}
-										pollingLock = true;
-									});
-							};
-						} else if (vm.siteIds) {
-							rtaService.getTeamCardsFor({ siteIds: vm.siteIds })
-								.then(function(teamAdherences) {
-									currentState = JSON.stringify(teamAdherences);
-									if (previousState != currentState) {
-										vm.teams = teamAdherences;
-										previousState = currentState;
-									}
-									pollingLock = true;
-								});
-						} else {
-							rtaService.getAdherenceForAllSites().then(function(siteAdherences) {
+			var polling = $interval(function () {
+				if (!pollingLock) return;
+				if (pollingLock)
+					pollingLock = false;
+				if (vm.skillId !== null || vm.skillAreaId !== null) {
+					if (vm.skillAreaId !== null)
+						vm.skillId = skillIdsFromSkillArea(vm.skillAreaId);
+					if (vm.siteIds !== null && angular.isDefined(vm.teams)) {
+						rtaService.getTeamCardsFor({
+							skillIds: vm.skillId,
+							siteIds: vm.siteIds
+						})
+							.then(function (teamAdherences) {
+								currentState = JSON.stringify(teamAdherences);
+								if (previousState != currentState) {
+									vm.teams = teamAdherences;
+									previousState = currentState;
+								}
+								pollingLock = true;
+							});
+					} else if (angular.isDefined(vm.sites)) {
+						rtaService.getAdherenceForSitesBySkills(vm.skillId)
+							.then(function (siteAdherences) {
 								currentState = JSON.stringify(siteAdherences);
 								if (previousState != currentState) {
 									vm.sites = siteAdherences;
@@ -156,17 +165,37 @@
 								}
 								pollingLock = true;
 							});
+					};
+				} else if (vm.siteIds) {
+					rtaService.getTeamCardsFor({ siteIds: vm.siteIds })
+						.then(function (teamAdherences) {
+							currentState = JSON.stringify(teamAdherences);
+							if (previousState != currentState) {
+								vm.teams = teamAdherences;
+								previousState = currentState;
+							}
+							pollingLock = true;
+						});
+				} else {
+					rtaService.getAdherenceForAllSites().then(function (siteAdherences) {
+						currentState = JSON.stringify(siteAdherences);
+						if (previousState != currentState) {
+							vm.sites = siteAdherences;
+							previousState = currentState;
 						}
-					},
-					pollingInterval);
-			
+						pollingLock = true;
+					});
+				}
+			},
+				pollingInterval);
+
 			function cancelPolling() {
 				if (polling != null) {
 					$interval.cancel(polling);
 					pollingLock = true;
 				}
 			}
-			
+
 			function getSitesOrTeams() {
 				if (vm.skillId !== null || vm.skillAreaId !== null) {
 					return vm.siteIds !== null ? getTeamsBySkillsInfo() : getSitesBySkillsInfo();
@@ -179,15 +208,22 @@
 				var stateParamsObject = {};
 				var skillOrSkillAreaKey = vm.skillIds != null ? 'skillIds' : 'skillAreaId';
 				var skillOrSkillAreaValue = vm.skillIds != null ? vm.skillIds : vm.skillAreaId;
-				var sitesOrTeamsKey = vm.sites ? 'siteIds' : 'teamIds';
-				var sitesOrTeamsValue = selectedItemIds;
+				if (selectedItemIds.siteIds.length > 0 && selectedItemIds.teamIds.length > 0) {
+					stateParamsObject['siteIds'] = selectedItemIds.siteIds;
+					stateParamsObject['teamIds'] = selectedItemIds.teamIds;
+				}
+				else if (selectedItemIds.teamIds.length > 0) {
+					stateParamsObject['teamIds'] = selectedItemIds.teamIds;
+				}
+				else if (selectedItemIds.siteIds.length > 0) {
+					stateParamsObject['siteIds'] = selectedItemIds.siteIds;
+				}
 				if (vm.skillIds || vm.skillAreaId) {
 					stateParamsObject[skillOrSkillAreaKey] = skillOrSkillAreaValue;
 				}
-				stateParamsObject[sitesOrTeamsKey] = sitesOrTeamsValue;
 				rtaRouteService.goToAgents(stateParamsObject);
 			};
-			
+
 			function getTeamsBySkillsInfo() {
 				pollingLock = false;
 				vm.skillIds = getSkillIds();
@@ -199,7 +235,7 @@
 					pollingLock = true;
 				});
 			};
-			
+
 			function getSitesBySkillsInfo() {
 				pollingLock = false;
 				vm.skillIds = getSkillIds();
@@ -208,7 +244,7 @@
 					pollingLock = true;
 				});
 			}
-			
+
 			function getTeamsInfo() {
 				pollingLock = false;
 				rtaService.getTeamCardsFor({ siteIds: vm.siteIds }).then(function (teamAdherences) {
@@ -216,7 +252,7 @@
 					pollingLock = true;
 				});
 			};
-			
+
 			function getSitesInfo() {
 				pollingLock = false;
 				rtaService.getAdherenceForAllSites().then(function (siteAdherences) {
