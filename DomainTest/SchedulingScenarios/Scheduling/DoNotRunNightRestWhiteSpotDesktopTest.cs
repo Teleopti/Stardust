@@ -32,9 +32,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldNotRunNightlyRestIfCancelled()
 		{
-			if (ResourcePlannerMergeTeamblockClassicScheduling44289)
-				Assert.Ignore("TODO - Should probably be fixed");
-
 			var schedulingProgress = (ISchedulingProgress)Activator.CreateInstance(_schedulingProgressFake);
 			var schedulingCallback = new CancelSchedulingCallback();
 			var schedulingOptions = new SchedulingOptions

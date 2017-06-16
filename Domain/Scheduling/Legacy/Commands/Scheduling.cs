@@ -79,6 +79,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				selectedAgents, rollbackService, resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState, schedulingOptions, teamInfoFactory);
 
+			if (schedulingCallback.IsCancelled)
+				return;
+
 			if (schedulingOptions.IsClassic())
 			{
 				var nightRestWhiteSpotSolverService = _nightRestWhiteSpotSolverServiceFactory.Create(schedulingOptions.ConsiderShortBreaks);
