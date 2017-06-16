@@ -17,7 +17,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
-	public class TeamBlockPeriodSchedulingTest
+	public class TeamBlockPeriodSchedulingTest : SchedulingScenario
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -213,5 +213,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			});
 		}
 
+		public TeamBlockPeriodSchedulingTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
+		{
+		}
 	}
 }

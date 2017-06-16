@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[Toggle(Toggles.ResourcePlanner_CategorizeShiftSelection_xx)]
 	[DomainTest]
-	public class FullSchedulingWithCategorizedShiftSelectionResultTest
+	public class FullSchedulingWithCategorizedShiftSelectionResultTest : SchedulingScenario
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -180,6 +180,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(1);
 			result.BusinessRulesValidationResults.Should().Be.Empty();
+		}
+
+		public FullSchedulingWithCategorizedShiftSelectionResultTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
+		{
 		}
 	}
 }

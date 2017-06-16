@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 { 
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537)]
-	public class PerformanceTestHackTest
+	public class PerformanceTestHackTest : SchedulingScenario
 	{
 		public FullScheduling Target;
 		public FakePersonRepository PersonRepository;
@@ -61,6 +61,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				schedulesOnDate.Select(x => x.ShiftCategory).Distinct().Count()
 					.Should().Be.EqualTo(1);
 			}
+		}
+
+		public PerformanceTestHackTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
+		{
 		}
 	}
 }

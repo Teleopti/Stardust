@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-	public class SchedulingCallbackTest
+	public class SchedulingCallbackTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -87,6 +87,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var callbackTracker = new CancelSchedulingCallback();
 			Target.Execute(callbackTracker, new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period, new OptimizationPreferences(), new DaysOffPreferences());
 			callbackTracker.NumberOfScheduleAttempts.Should().Be.LessThanOrEqualTo(1);
+		}
+
+		public SchedulingCallbackTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
+		{
 		}
 	}
 }
