@@ -1659,7 +1659,7 @@
     <Compile Include="ApplicationLayer\ResolveEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommand.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationCommandHandler.cs" />
-    <Compile Include="ApplicationLayer\ResourcePlanner\OptimizationWasOrdered.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationWasOrdered.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IMappingReader.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangesPublisher.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangeListener.cs" />

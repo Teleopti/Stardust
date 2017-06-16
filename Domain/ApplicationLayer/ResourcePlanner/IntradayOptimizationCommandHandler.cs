@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 		private IEnumerable<IEvent> CreateOptimizationWasOrderedEvents(IntradayOptimizationCommand command, IEnumerable<Island> islands, IEnumerable<LockInfo> lockInfos)
 		{
-			var events = new List<OptimizationWasOrdered>();
+			var events = new List<IntradayOptimizationWasOrdered>();
 
 			foreach (var island in islands)
 			{
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					var optimizationWasOrdered = createOptimizationWasOrderedEvent(command, lockInfos, agentsInIsland, agentsToOptimize, island);
 					events.Add(new WebIntradayOptimizationStardustEvent
 					{
-						OptimizationWasOrdered = optimizationWasOrdered
+						IntradayOptimizationWasOrdered = optimizationWasOrdered
 					});
 				}
 			}
@@ -88,9 +88,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			return events;
 		}
 
-		private static OptimizationWasOrdered createOptimizationWasOrderedEvent(IntradayOptimizationCommand command, IEnumerable<LockInfo> lockInfos, IEnumerable<IPerson> agentsInIsland, IEnumerable<IPerson> agentsToOptimize, Island island)
+		private static IntradayOptimizationWasOrdered createOptimizationWasOrderedEvent(IntradayOptimizationCommand command, IEnumerable<LockInfo> lockInfos, IEnumerable<IPerson> agentsInIsland, IEnumerable<IPerson> agentsToOptimize, Island island)
 		{
-			return new OptimizationWasOrdered
+			return new IntradayOptimizationWasOrdered
 			{
 				StartDate = command.Period.StartDate,
 				EndDate = command.Period.EndDate,

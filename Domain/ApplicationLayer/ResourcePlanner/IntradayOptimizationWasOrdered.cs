@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
-	public class OptimizationWasOrdered : IEvent, ICommandIdentifier
+	public class IntradayOptimizationWasOrdered : IEvent, ICommandIdentifier
 	{
 		public DateOnly StartDate { get; set; }
 		public DateOnly EndDate { get; set; }

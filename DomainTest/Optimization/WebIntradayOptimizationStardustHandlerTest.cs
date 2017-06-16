@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				TotalEvents = 3,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				LogOnDatasource = "Teleopti WFM",
-				OptimizationWasOrdered = new OptimizationWasOrdered
+				IntradayOptimizationWasOrdered = new IntradayOptimizationWasOrdered
 				{
 					StartDate = startDate,
 					EndDate = endDate
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				TotalEvents = 1,
 				LogOnBusinessUnitId = businessUnit.Id.Value,
 				LogOnDatasource = "Teleopti WFM",
-				OptimizationWasOrdered = new OptimizationWasOrdered
+				IntradayOptimizationWasOrdered = new IntradayOptimizationWasOrdered
 				{
 					StartDate = startDate,
 					EndDate = endDate

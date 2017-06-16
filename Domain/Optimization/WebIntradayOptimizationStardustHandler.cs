@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
-					HandleEvent(@event.OptimizationWasOrdered);
+					HandleEvent(@event.IntradayOptimizationWasOrdered);
 					SaveDetailToJobResult(@event, DetailLevel.Info, "", null);
 				}
 			}

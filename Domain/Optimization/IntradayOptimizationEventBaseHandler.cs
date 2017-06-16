@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[TestLog]
-		protected virtual void HandleEvent(OptimizationWasOrdered @event)
+		protected virtual void HandleEvent(IntradayOptimizationWasOrdered @event)
 		{
 			using (CommandScope.Create(@event))
 			{

@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			return EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count();
+			return EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count();
 		}
 
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			return EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count();
+			return EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count();
 		}
 
 		[Test]
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(2);
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be(2);
 		}
 
 		[Test]
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			var events = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>();
+			var events = EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>();
 
 			events.Count().Should().Be.EqualTo(2);
 			events.Any(x => x.AgentsInIsland.Count() == 8).Should().Be.True();
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(1);
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be(1);
 		}
 
 		[Test]
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(1);
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be(1);
 		}
 
 		[Test]
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(1);
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be(1);
 		}
 
 		[Test]
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be(1);
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be(1);
 		}
 
 		[Test]
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			var events = EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>();
+			var events = EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>();
 			events.Count().Should().Be.EqualTo(2);
 			events.Any(x => x.AgentsInIsland.Count() == 7).Should().Be.True();
 			events.Any(x => x.AgentsInIsland.Count() == 2).Should().Be.True();
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be.EqualTo(2);
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be.EqualTo(2);
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be.EqualTo(2);
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -260,7 +260,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Single().AgentsInIsland.Count().Should().Be.EqualTo(1);
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().AgentsInIsland.Count().Should().Be.EqualTo(1);
 		}
 
 		[Test, Timeout(5000)]
@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count()
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count()
 				.Should().Be.EqualTo(numberOfAgents);
 		}
 
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
-			EventPublisher.PublishedEvents.OfType<OptimizationWasOrdered>().Count().Should().Be.EqualTo(3);
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be.EqualTo(3);
 		}
 	}
 }

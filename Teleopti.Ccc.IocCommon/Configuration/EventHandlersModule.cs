@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				// when will someone think this is an anti-pattern? ;)
 				.Except<IntradayOptimizationEventRunInSyncInFatClientProcessHandler>(ct =>
 				{
-					ct.As<IHandleEvent<OptimizationWasOrdered>>()
+					ct.As<IHandleEvent<IntradayOptimizationWasOrdered>>()
 						.AsSelf()
 						.InstancePerLifetimeScope()
 						.ApplyAspects();

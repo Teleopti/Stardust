@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimizationEventRunInSyncInFatClientProcessHandler: IntradayOptimizationEventBaseHandler, IRunInSyncInFatClientProcess, IHandleEvent<OptimizationWasOrdered>
+	public class IntradayOptimizationEventRunInSyncInFatClientProcessHandler: IntradayOptimizationEventBaseHandler, IRunInSyncInFatClientProcess, IHandleEvent<IntradayOptimizationWasOrdered>
 	{
 		public IntradayOptimizationEventRunInSyncInFatClientProcessHandler(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 		}
 
-		public void Handle(OptimizationWasOrdered @event)
+		public void Handle(IntradayOptimizationWasOrdered @event)
 		{
 			HandleEvent(@event);
 		}

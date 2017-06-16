@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldUseLifetimeScopeForOptimizationWasOrdered()
 		{
-			var eventHandler1 = Resolve.Resolve(typeof(IHandleEvent<OptimizationWasOrdered>));
+			var eventHandler1 = Resolve.Resolve(typeof(IHandleEvent<IntradayOptimizationWasOrdered>));
 			object eventHandler2;
 			using (var scope = Resolve.NewScope())
 			{
-				eventHandler2 = scope.Resolve(typeof(IHandleEvent<OptimizationWasOrdered>));
+				eventHandler2 = scope.Resolve(typeof(IHandleEvent<IntradayOptimizationWasOrdered>));
 			}
 			eventHandler1.Should().Not.Be.SameInstanceAs(eventHandler2);
 		}
@@ -40,11 +40,11 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldUseLifetimeScopeForOptimizationWasOrderedWhenResolvingEnumerable()
 		{
-			var eventHandler1 = (IEnumerable<IHandleEvent<OptimizationWasOrdered>>)Resolve.Resolve(typeof(IEnumerable<IHandleEvent<OptimizationWasOrdered>>));
-			IEnumerable<IHandleEvent<OptimizationWasOrdered>> eventHandler2;
+			var eventHandler1 = (IEnumerable<IHandleEvent<IntradayOptimizationWasOrdered>>)Resolve.Resolve(typeof(IEnumerable<IHandleEvent<IntradayOptimizationWasOrdered>>));
+			IEnumerable<IHandleEvent<IntradayOptimizationWasOrdered>> eventHandler2;
 			using (var scope = Resolve.NewScope())
 			{
-				eventHandler2 = (IEnumerable<IHandleEvent<OptimizationWasOrdered>>) scope.Resolve(typeof(IEnumerable<IHandleEvent<OptimizationWasOrdered>>));
+				eventHandler2 = (IEnumerable<IHandleEvent<IntradayOptimizationWasOrdered>>) scope.Resolve(typeof(IEnumerable<IHandleEvent<IntradayOptimizationWasOrdered>>));
 			}
 			eventHandler1.Should().Not.Have.SameValuesAs(eventHandler2);
 		}
