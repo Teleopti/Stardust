@@ -238,6 +238,7 @@ Landing_Page_Data_Protection_Question_35721 = true
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = RC
 Reporting_Optional_Columns_42066 = true
 
+Staffing_Info_Configuration_44687 = DEV
 WfmStaffing_AllowActions_42524 = RC #Enables the entire Staffing page!
 Staffing_ReadModel_Update14Days_43840 = true
 Staffing_ReadModel_BetterAccuracy_43447 = true

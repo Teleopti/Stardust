@@ -230,6 +230,7 @@
 		Landing_Page_Data_Protection_Question_35721,
 		Wfm_ResourcePlanner_SchedulingOnStardust_42874,
 
+		Staffing_Info_Configuration_44687,
 		WfmStaffing_AllowActions_42524,
 		Reporting_Optional_Columns_42066,
 		Staffing_ReadModel_Update14Days_43840,
