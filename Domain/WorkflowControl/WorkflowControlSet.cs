@@ -414,6 +414,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			return openPeriod.OpenForRequestsPeriod.Contains(today)
 				   && openPeriod.GetPeriod(today).Intersection(period).HasValue
 				   && openPeriod.AbsenceRequestProcess.GetType() != typeof(DenyAbsenceRequest)
+				   // Absence request open periods with "AbsenceRequestNoneValidator" will be ignored
+				   // Refer to bug #43947
 				   && openPeriod.StaffingThresholdValidator.GetType() != typeof(AbsenceRequestNoneValidator);
 		}
 
