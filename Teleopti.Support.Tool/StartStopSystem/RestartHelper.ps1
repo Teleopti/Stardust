@@ -87,6 +87,9 @@ function StopWindowsService
              $arrService.Stop()
              Write-Host "Stopping " $ServiceName " service" 
              $bailOut = 100
+             $sleep = 3
+             $totalWait = $bailOut * $sleep
+
              do
              {
                 $arrService = Get-Service -Name $ServiceName
@@ -95,7 +98,10 @@ function StopWindowsService
                 $bailOut--
                 if ($bailOut -eq 0)
                 {
-                    Throw "Could not stop service $ServiceName, status remains " + $arrService.Status
+                    #kill the process by pid
+                    Write-Host "we have waited $totalWait secs. Force a kill on $ServiceName, pid: $ServicePID"
+                    $ServicePID = (get-wmiobject win32_service | where { $_.name -eq $ServiceName}).processID
+                    Stop-Process $ServicePID -Force
                 }
              } while ($arrService.Status -ne "Stopped")
              Write-Host "`nService $ServiceName successfully stopped"

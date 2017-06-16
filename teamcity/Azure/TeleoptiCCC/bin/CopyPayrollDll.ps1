@@ -1,3 +1,11 @@
+#powershell v2 won't get $PSScriptroot, revert back to old style...
+if (!$PSScriptroot)
+{
+    $PSScriptroot = split-path -parent $MyInvocation.MyCommand.Definition
+}
+
+. "$PSScriptroot\..\Tools\SupportTools\StartStopSystem\RestartHelper.ps1"
+
 ##===========
 ## Functions
 ##===========
@@ -92,14 +100,6 @@ function Roby-Copy
         throw "RoboCopy generated an error!"
     }
     return $RoboExitCode
-}
-
-function ServiceCheckAndStart{
-    param($ServiceName)
-    $arrService = Get-Service -Name $ServiceName
-    if ($arrService.Status -ne "Running"){
-        Start-Service $ServiceName
-     }
 }
 
 function Blobsource-get {
@@ -217,18 +217,14 @@ Try
     }
 
     $newFiles = Sync-NewFilesOnly $DESTINATION $FILEWATCH
-    
 	##one or more files are new, log info to Eventlog and restart serviceBus
 	If ($newFiles -ge 1) {
 		log-info "Stopping service bus..."
-    	Stop-Service -name $TeleoptiServiceBus
+        StopWindowsService -ServiceName $TeleoptiServiceBus
     	write-host "-------------" -ForegroundColor blue
 		log-info "Starting service bus..."
-    	Start-Service -name $TeleoptiServiceBus
+        StartWindowsService -ServiceName $TeleoptiServiceBus
 	}
-    
-    ##safty, if the service is down for some reason, restart it
-    ServiceCheckAndStart $TeleoptiServiceBus;
 }
 Catch [Exception]
 {
