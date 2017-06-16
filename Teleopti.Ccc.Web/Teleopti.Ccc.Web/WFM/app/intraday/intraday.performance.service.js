@@ -101,6 +101,7 @@
 			};
 
 			var clearData = function () {
+				performanceData.hasEmailSkill = false;
 				performanceData.timeSeries = [];
 				performanceData.averageSpeedOfAnswerObj.series = [];
 				performanceData.abandonedRateObj.series = [];

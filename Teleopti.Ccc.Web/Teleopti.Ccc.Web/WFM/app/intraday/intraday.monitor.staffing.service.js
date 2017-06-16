@@ -78,6 +78,7 @@
 			}
 
 			var clearData = function () {
+				staffingData.hasEmailSkill = false;
 				staffingData.timeSeries = [];
 				staffingData.forecastedStaffing.series = [];
 				staffingData.forecastedStaffing.updatedSeries = [];
