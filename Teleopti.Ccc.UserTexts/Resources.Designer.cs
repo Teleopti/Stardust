@@ -7192,6 +7192,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create day off rule.
+        /// </summary>
+        public static string CreateDayOffRule {
+            get {
+                return ResourceManager.GetString("CreateDayOffRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Created By.
         /// </summary>
         public static string CreatedBy {
@@ -9902,6 +9911,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Edit day off rule .
+        /// </summary>
+        public static string EditDayOffRule {
+            get {
+                return ResourceManager.GetString("EditDayOffRule", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit filter.
         /// </summary>
         public static string EditFilter {
@@ -11689,6 +11707,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FilterData {
             get {
                 return ResourceManager.GetString("FilterData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filter day off rules.
+        /// </summary>
+        public static string FilterDayOffRules {
+            get {
+                return ResourceManager.GetString("FilterDayOffRules", resourceCulture);
             }
         }
         
@@ -23381,6 +23408,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PlansPageCreatePlanningGroup {
             get {
                 return ResourceManager.GetString("PlansPageCreatePlanningGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  Edit name and  filters for selected planning group.
+        /// </summary>
+        public static string PlansPageEditPlanningGroup {
+            get {
+                return ResourceManager.GetString("PlansPageEditPlanningGroup", resourceCulture);
             }
         }
         

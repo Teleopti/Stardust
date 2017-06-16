@@ -26,7 +26,7 @@
 		}
 
 		function deleteDoRule(dayOffRule) {
-			if (dayOffRule.Default)
+			if (dayOffRule.Default == true)
 				return;
 			var deleteDayOffRule = dayOffRuleService.removeDayOffRule({ id: dayOffRule.Id });
 			return deleteDayOffRule.$promise.then(function () {
@@ -39,13 +39,15 @@
 			$state.go('resourceplanner.dayoffrule', {
 				filterId: dayOffRule.Id.toString(),
 				groupId: $stateParams.groupId,
-				isDefault: dayOffRule.Default
+				isDefault: dayOffRule.Default,
+				EditDoRule: true
 			});
 		}
 
 		function goCreateDoRule() {
 			$state.go('resourceplanner.dayoffrule', {
-				groupId: $stateParams.groupId
+				groupId: $stateParams.groupId,
+				EditDoRule: false
 			});
 		}
 	}

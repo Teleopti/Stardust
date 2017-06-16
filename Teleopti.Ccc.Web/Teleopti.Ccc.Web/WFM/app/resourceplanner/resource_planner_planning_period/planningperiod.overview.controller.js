@@ -39,6 +39,7 @@
     vm.isDisable = isDisable;
     vm.openModal = openModal;
     vm.valNumber = getTotalValidationErrorsNumber;
+    vm.showTab = showTab;
     vm.textForClearPp = $translate.instant("AreYouSureYouWantToClearPlanningPeriodData")
       .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
       .replace('{1}', moment(vm.selectedPp.EndDate).format('L'));
@@ -50,6 +51,22 @@
 
     checkState();
     loadLastResult();
+
+    function showTab(tabId) {
+      var tabLinks = document.getElementsByClassName('tabLink');
+      for (var i = 0; i < tabLinks.length; i++) {
+        tabLinks[i].classList.remove("active");
+      }
+
+      var tabContents = document.getElementsByClassName('tabContent');
+      for (var i = 0; i < tabContents.length; i++) {
+        tabContents[i].classList.remove("active");
+      }
+
+      var tabContentIdToShow = tabId.replace(/(\d)/g, '-$1');
+      document.getElementById(tabContentIdToShow).classList.add("active");
+      document.getElementById(tabId).classList.add("active");
+    }
 
     function checkState(pp) {
       checkProgress();
@@ -75,11 +92,13 @@
     function clearSchedules() {
       if (selectedPpId !== null) {
         vm.clearRunning = true;
+        vm.status = $translate.instant('ClearScheduleResultAndHistoryData'); 
         planningPeriodServiceNew.clearSchedules({ id: selectedPpId }).$promise.then(function () {
           vm.clearRunning = false;
           vm.isScheduled = false;
           vm.scheduledAgents = 0;
           vm.dayNodes = undefined;
+          vm.status = "";
           NoticeService.success($translate.instant('SuccessClearPlanningPeriodData')
             .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
             .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), 20000, true);

@@ -17,6 +17,7 @@
         vm.searchString = '';
         vm.results = [];
         vm.default = false;
+        vm.isEdit = $stateParams.EditDoRule;
         vm.selectedResults = [];
         vm.filterId = "";
         vm.inputFilterData = debounceService.debounce(inputFilterData, 250);

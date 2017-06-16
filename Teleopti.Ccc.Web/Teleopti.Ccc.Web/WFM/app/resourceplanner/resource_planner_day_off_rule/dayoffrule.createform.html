@@ -1,6 +1,9 @@
 <div class="view-header">
 	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i> <span translate>DayOffRules</span></h1>
+		<h1 ng-if='vm.isEdit'><i class="mdi mdi-calendar"></i> {{'EditDayOffRule' | translate}}</h1>
+		<h1 ng-if='!vm.isEdit'><i class="mdi mdi-calendar"></i> {{'CreateDayOffRule' | translate}}</h1>
+		<p ng-if='vm.isEdit'>Modify information for selected day off rule</p>
+		<p ng-if='!vm.isEdit'>Fill in information to create new day off rule</p>
 	</div>
 </div>
 <div class="con-row">

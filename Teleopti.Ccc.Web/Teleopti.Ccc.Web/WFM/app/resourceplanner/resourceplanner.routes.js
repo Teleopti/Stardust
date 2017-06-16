@@ -136,7 +136,8 @@
 			params: {
 				filterId: '',
 				isDefault: undefined,
-				groupId: ''
+				groupId: '',
+				EditDoRule: ''
 			},
 			url: '/planninggroup/:groupId/dayoffrules/:filterId',
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.createform.html',

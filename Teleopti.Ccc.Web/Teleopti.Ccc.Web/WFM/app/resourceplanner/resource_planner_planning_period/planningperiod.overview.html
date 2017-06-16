@@ -2,120 +2,150 @@
 	<div class="view-title">
 		<h1><i class="mdi mdi-calendar"></i> {{'SchedulePlanningGroup' | translate}} - {{vm.planningGroup.Name}}</h1>
 		<div class="pp-sub-title">
-			<span>{{'SelectedPlanningPeriod' | translate}}: {{vm.selectedPp.StartDate | amDateFormat:"L"}}-{{vm.selectedPp.EndDate | amDateFormat:"L"}}</span>
-			<span ng-if="vm.isDisable() && !vm.clearRunning" ng-bind="vm.status" class="pp-status"></span>
+			<span>{{'SelectedPlanningPeriod' | translate}}: {{vm.selectedPp.StartDate | amDateFormat:"LL"}} - {{vm.selectedPp.EndDate | amDateFormat:"LL"}}</span>
+			<span ng-if="vm.isDisable()" ng-bind="vm.status" class="pp-status"></span>
 		</div>
 	</div>
 </div>
-<div ng-if="vm.isDisable() && !vm.clearRunning" class="pp-progress test-schedule-is-running">
-	<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+<div class="con-row">
+	<div class="con-flex">
+		<div ng-if="vm.isDisable()" class="pp-progress test-schedule-is-running">
+			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+		</div>
+		<div class="wfm-toolbar material-depth-1">
+			<div class="con-row">
+				<div class="con-flex">
+					<div class="wfm-toolbar-group-container">
+						<div tabindex=0 class="context-menu card-context icon-botton-primary" ng-disabled="vm.isDisable()" ng-click="vm.launchSchedule()">
+							<i class="mdi mdi-play"></i>
+							<md-tooltip>{{'ScheduleVerb' | translate}}</md-tooltip>
+						</div>
+						<div tabindex=0 class="context-menu card-context icon-botton-primary" ng-disabled="vm.isDisable() || vm.dayNodes == null"
+						 ng-click="vm.intraOptimize()">
+							<i class="mdi mdi-source-pull"></i>
+							<md-tooltip>{{'IntraOptimize' | translate}}</md-tooltip>
+						</div>
+						<div tabindex=0 class="context-menu card-context icon-botton-second" ng-disabled="vm.isDisable() || vm.dayNodes == null"
+						 ng-click="vm.openModal()">
+							<i class="mdi mdi-delete-forever"></i>
+							<md-tooltip>{{'ClearScheduleResultAndHistoryData' | translate}}</md-tooltip>
+						</div>
+					</div>
+					<div class="wfm-toolbar-group-container">
+						<div tabindex=0 class="context-menu card-context icon-botton-primary" ng-disabled="vm.isDisable()" ng-click="vm.publishSchedule()">
+							<i class="mdi mdi-publish"></i>
+							<md-tooltip>{{'PublishSchedule' | translate}}</md-tooltip>
+						</div>
+					</div>
+					<button class="wfm-btn wfm-btn-invis-default tabLink active" id="tabs1" ng-click="vm.showTab('tabs1')"><i class="mdi mdi-view-dashboard"></i> {{'Overview' | translate}}</button>
+					<button class="wfm-btn wfm-btn-invis-default wfm-badge-wrapper tabLink" id="tabs2" ng-click="vm.showTab('tabs2')">
+						<i class="mdi mdi-clipboard-alert"></i> 
+						{{'Validation' | translate}}
+						<wfm-badge badge-model="vm.valData.totalValNum" status="'notice-error'"></wfm-badge>	
+					</button>
+					<button class="wfm-btn wfm-btn-invis-default tabLink" id="tabs3" ng-click="vm.showTab('tabs3')"><i class="mdi mdi-settings"></i> {{'DayOffRules' | translate}}</button>
+					<button class="wfm-btn wfm-btn-invis-default tabLink" id="tabs4" ng-click="vm.showTab('tabs4')"><i class="mdi mdi-information"></i> Planning Group Details</button>
+					<button class="wfm-btn wfm-btn-invis-disabled" ng-click=""><i class="mdi mdi-information-outline"></i> {{'HelpLabel' | translate}}</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-<div class="panel material-depth-1 pp-fix">
-	<div class="wfm-slide-tabs tabbed-panel">
-		<md-content class="md-padding">
-			<md-tabs md-dynamic-height md-border-bottom>
-				<md-tab label="Overview">
-					<md-content class="md-padding">
-						<div class="con-row">
-							<div class="con-flex">
-								<button class="wfm-btn material-depth-1" ng-click="!vm.isDisable() && vm.launchSchedule()" ng-class="{'wfm-btn-primary-disabled': vm.isDisable(),'wfm-btn-primary':!vm.isDisable()}">{{'ScheduleVerb' | translate }}</button>
-								<button class="wfm-btn material-depth-1" ng-click="!vm.isDisable() && vm.intraOptimize()" ng-class="{'wfm-btn-primary-disabled': vm.isDisable(),'wfm-btn-primary':!vm.isDisable()}">{{'IntraOptimize' | translate }}</button>
-								<button class="wfm-fab material-depth-1 mini pp-clear-parent" ng-click="!vm.isDisable() && vm.openModal()" ng-class="{'mini-schedule': vm.isDisable()}"><i class="mdi mdi-delete-forever"></i>
-									<md-tooltip>{{'ClearScheduleResultAndHistoryData' | translate}}</md-tooltip>
-									<span class="pp-clear-spinner" ng-if="vm.clearRunning">
-										<md-progress-circular md-mode="indeterminate"></md-progress-circular>
-									</span>
-								</button>
-								<button class="pull-right wfm-btn material-depth-1" ng-click="!vm.isDisable() && vm.publishSchedule()" ng-class="{'wfm-btn-primary-disabled': vm.isDisable(), 'wfm-btn-primary':!vm.isDisable()}">{{'PublishSchedule' | translate }}</button>
-							</div>
-						</div>
-						<div class="con-row">
-							<div class="con-flex result-container">
-								<span class="pp-agentnumber" ng-show="vm.dayNodes">
-									{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}
-								</span>
-								<span class="pp-agentnumber" ng-hide="vm.dayNodes">
-									{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsHaveScheduled'|translate}}
-								</span>
-								<div class="legends" ng-show="vm.dayNodes">
-									<span>
-										<div class="legend critUnderstaffed"></div>
-										{{'CriticalUnderstaffingColon' | translate}}
-									</span>
-									<span>
-										<div class="legend understaffed"></div>
-										{{'UnderstaffingColon'|translate}}
-									</span>
-									<span>
-										<div class="legend overstaffed"></div>
-										{{'OverstaffingColon'|translate}}
-									</span>
-									<span>
-										<div class="legend closed"></div>
-										{{'Closed'|translate}}
-									</span>
-								</div>
-								<div class="grid-scroll-wrap" ng-show="vm.dayNodes.length">
-									<table ng-hide="dates.length > 0" class="overview">
-										<col width="20px" />
-										<tr ng-repeat="(index, subnode) in vm.dayNodes | limitTo:1 ">
-											<th class="datehead" ng-repeat="datenode in subnode.SkillDetails">
-												<p class="tabledate">{{datenode.Date | amDateFormat:"DD/MM" }}</p>
-											</th>
-										</tr>
-										<tr ng-repeat="(index, subnode) in vm.dayNodes ">
-											<td class="skillname">{{ subnode.SkillName }}</td>
-											<td class="long" ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend}">
-												<div class="resourceplanner-box" ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3, closed: node.ColorId==4}">
-													<md-tooltip>
-														{{node.Date | amDateFormat:"L"}} - {{subnode.SkillName}}<br/> {{'RelativeDifference' | translate}}: {{node.parseDif}}%
-													</md-tooltip>
-												</div>
-											</td>
-										</tr>
-									</table>
-								</div>
-								<div ng-show="vm.dayNodes.length == 0">
-									<span><i class="mdi mdi-information-outline"></i> {{'NoValidScheduleResult' | translate}}</span><br/>
-								</div>
-								<div ng-show="vm.dayNodes == undefined">
-									<span><i class="mdi mdi-information-outline"></i> {{'NoPreviousScheduleResult' | translate}}</span><br/>
-									<span ng-show="vm.totalAgents == 0"><i class="mdi mdi-information-outline"></i> {{'NoAgentsWithinPlanningGroup' | translate}}</span>
-								</div>
-							</div>
-						</div>
-					</md-content>
-				</md-tab>
-				<md-tab>
-					<md-tab-label>
-						<span class="pp-validation-loading" ng-if="vm.valLoading"><md-progress-circular md-mode="indeterminate"></md-progress-circular></span>
-						<span translate ng-class="{'pp-validation-loading-text':vm.valLoading}">Validation</span>
-						<span class="pp-validation" ng-if="vm.valData.totalValNum > 0" ng-bind="vm.valData.totalValNum"></span>
-					</md-tab-label>
-					<md-tab-body class="md-padding">
-						<div pp-validation val-data="vm.valData" val-loading="vm.valLoading" val-number="vm.valNumber()"></div>
-					</md-tab-body>
-				</md-tab>
-				<md-tab>
-					<md-tab-label translate>DayOffRules</md-tab-label>
-					<md-tab-body class="md-padding">
-						<div class="con-row">
-							<div dayoff-rules is-disable="vm.isDisableDo" planning-group="vm.planningGroup"></div>
-						</div>
-					</md-tab-body>
-				</md-tab>
-				<md-tab>
-					<md-tab-label translate>Info</md-tab-label>
-					<md-tab-body class="md-padding">
-						<div class="con-row">
-							<div class="con-flex">
-								<div planninggroup-Detail planning-group="vm.planningGroup"></div>
-							</div>
-						</div>
-					</md-tab-body>
-				</md-tab>
-			</md-tabs>
-		</md-content>
+<div class="con-row tabContent active" id="tabs-1">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="sub-header">
+				<h2><i class="mdi mdi-view-dashboard"></i> {{'Overview' | translate}}</h2>
+				<div class="subtext">View the relative differences for the skills</div>
+			</div>
+			<div class="con-row">
+				<div class="con-flex result-container">
+					<span class="pp-agentnumber" ng-show="vm.dayNodes">{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}</span>
+					<span class="pp-agentnumber" ng-hide="vm.dayNodes">{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsHaveScheduled'|translate}}</span>
+					<div class="legends" ng-show="vm.dayNodes">
+						<span>
+							<div class="legend critUnderstaffed"></div>
+							{{'CriticalUnderstaffingColon' | translate}}
+						</span>
+						<span>
+							<div class="legend understaffed"></div>
+							{{'UnderstaffingColon'|translate}}
+						</span>
+						<span>
+							<div class="legend overstaffed"></div>
+							{{'OverstaffingColon'|translate}}
+						</span>
+						<span>
+							<div class="legend closed"></div>
+							{{'Closed'|translate}}
+						</span>
+					</div>
+					<div class="grid-scroll-wrap" ng-show="vm.dayNodes.length">
+						<table ng-hide="dates.length > 0" class="overview">
+							<col width="20px" />
+							<tr ng-repeat="(index, subnode) in vm.dayNodes | limitTo:1 ">
+								<th class="datehead" ng-repeat="datenode in subnode.SkillDetails">
+									<p class="tabledate">{{datenode.Date | amDateFormat:"DD/MM" }}</p>
+								</th>
+							</tr>
+							<tr ng-repeat="(index, subnode) in vm.dayNodes ">
+								<td class="skillname">{{ subnode.SkillName }}</td>
+								<td class="long" ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend}">
+									<div class="resourceplanner-box" ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3, closed: node.ColorId==4}">
+										<md-tooltip>
+											{{node.Date | amDateFormat:"L"}} - {{subnode.SkillName}}<br/> {{'RelativeDifference' | translate}}: {{node.parseDif}}%
+										</md-tooltip>
+									</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div ng-show="vm.dayNodes.length == 0">
+						<span><i class="mdi mdi-information-outline"></i> {{'NoValidScheduleResult' | translate}}</span><br/>
+					</div>
+					<div ng-show="vm.dayNodes == undefined">
+						<span><i class="mdi mdi-information-outline"></i> {{'NoPreviousScheduleResult' | translate}}</span><br/>
+						<span ng-show="vm.totalAgents == 0"><i class="mdi mdi-information-outline"></i> {{'NoAgentsWithinPlanningGroup' | translate}}</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="con-row tabContent" id="tabs-2">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="pp-progress" ng-show="vm.valData.totalValNum == 0">
+				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+			</div>
+			<div class="sub-header">
+				<h2><i class="mdi mdi-clipboard-alert"></i> {{'Validation' | translate}}</h2>
+				<div class="subtext">View the validation issues for the planning period</div>
+			</div>
+			<div pp-validation val-data="vm.valData" val-loading="vm.valLoading" val-number="vm.valNumber()"></div>
+		</div>
+	</div>
+</div>
+<div class="con-row tabContent" id="tabs-3">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="sub-header">
+				<h2><i class="mdi mdi-settings"></i> {{'DayOffRules' | translate}}</h2>
+				<div class="subtext">View the day off rules for the planning group</div>
+			</div>
+			<div dayoff-rules is-disable="vm.isDisableDo" planning-group="vm.planningGroup"></div>
+		</div>
+	</div>
+</div>
+<div class="con-row tabContent" id="tabs-4">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="sub-header">
+				<h2><i class="mdi mdi-information"></i> Planning Group Details</h2>
+				<div class="subtext">View the details of the planning group</div>
+			</div>
+			<div planninggroup-Detail planning-group="vm.planningGroup"></div>
+		</div>
 	</div>
 </div>
 <div ng-cloak class="modal-box">

@@ -8,8 +8,11 @@
     </div>
 </div>
 <wfm-card-list multi-select>
-    <wfm-card ng-show="vm.valData.preValidation.length > 0" ng-click="vm.validationFilter = ''">
+    <wfm-card class="pp-validation-card" ng-show="vm.valData.preValidation.length > 0" ng-click="vm.validationFilter = ''">
         <card-header tabindex="-1">
+            <div ng-if="vm.valLoading" class="pp-validation-progress">
+                <md-progress-linear md-mode="indeterminate"></md-progress-linear>
+            </div>
             <div tabindex="0">
                 <span><i class="mdi"></i>
                      {{'PreSchedulingValidationIssues' | translate}}
@@ -56,7 +59,7 @@
             </div>
         </card-body>
     </wfm-card>
-    <wfm-card ng-show="vm.valData.scheduleIssues.length > 0">
+    <wfm-card class="pp-validation-card" ng-show="vm.valData.scheduleIssues.length > 0">
         <card-header tabindex="-1" ng-click="vm.scheduleIssuesFilter = ''">
             <div tabindex="0">
                 <span><i class="mdi"></i>{{'ScheduledIssues' | translate}}</span>

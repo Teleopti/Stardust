@@ -16252,4 +16252,20 @@ Do you want to participate?</value>
     <value>Press Esc to close</value>
     <comment>tooltip for organization picker</comment>
   </data>
+  <data name="CreateDayOffRule" xml:space="preserve">
+    <value>Create day off rule</value>
+    <comment>Create day off rule</comment>
+  </data>
+  <data name="EditDayOffRule" xml:space="preserve">
+    <value>Edit day off rule </value>
+    <comment>Edit day off rule</comment>
+  </data>
+  <data name="FilterDayOffRules" xml:space="preserve">
+    <value>Filter day off rules</value>
+    <comment>Filter day off rules</comment>
+  </data>
+  <data name="PlansPageEditPlanningGroup" xml:space="preserve">
+    <value> Edit name and  filters for selected planning group</value>
+    <comment>Edit name and  filters for selected planning group</comment>
+  </data>
 </root>

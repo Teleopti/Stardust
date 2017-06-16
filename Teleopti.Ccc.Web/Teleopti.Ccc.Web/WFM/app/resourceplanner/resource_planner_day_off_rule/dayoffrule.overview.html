@@ -1,12 +1,29 @@
 <div class="view-header with-fab with-desc" ng-hide="vm.isDisable">
 	<div class="view-title">
-		<h1><i class="mdi mdi-calendar"></i>{{'DayOffRuleSetting' | translate}}</h1>
+		<h1><i class="mdi mdi-calendar"></i> {{'DayOffRuleSetting' | translate}}</h1>
 		<p>{{vm.textManageDoRule}}</p>
 	</div>
 </div>
 <div class="con-row" ng-hide="vm.isDisable">
-	<div class="con-flex">
-		<button type="button" name="button" ng-click="vm.goCreateDoRule()" class="wfm-btn material-depth-1 wfm-btn-primary">{{'NewDayOffRule' | translate}}</button>
+	<div class="con-flex ">
+		<div class="wfm-toolbar material-depth-1">
+			<div class="con-row">
+				<div class="con-flex">
+					<div class="wfm-filter-container">
+						<label for="filter" class="input-icon">
+							<i class="mdi mdi-filter-outline">
+								<input type="text" id="filter" ng-model="vm.filterName.Name" placeholder="{{'FilterDayOffRules' | translate}}">
+								<md-tooltip>{{'FilterDayOffRules' | translate}}</md-tooltip>
+							</i>
+						</label>
+					</div>
+				</div>
+				<div class="con-flex x3">
+					<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goCreateDoRule()"><i class="mdi mdi-plus"></i>{{'NewDayOffRule' | translate}}</button>
+					<button class="wfm-btn wfm-btn-invis-disabled" ng-click=""><i class="mdi mdi-information-outline"></i>{{'HelpLabel' | translate}}</button>
+				</div>
+			</div>
+		</div>
 	</div>
 </div>
 <div class="con-row" ng-if="vm.isDisable">
@@ -14,122 +31,114 @@
 		<button type="button" name="button" ng-click="vm.goDoRulesSetting()" class="wfm-btn material-depth-1 wfm-btn-primary">{{'DayOffRuleSetting' | translate}}</button>
 	</div>
 </div>
-<div class="con-row" ng-if="vm.isDisable">
-	<div class="con-flex">
-		<span><i class="mdi mdi-information-outline"></i>{{'HelpDayOffForPlanningPeriod' | translate}}</span>
-	</div>
-</div>
-<div class="con-row">
-	<div class="con-flex">
-		<div class="card-group">
-			<div class="panel material-depth-1 wfm-card filter-boxes" ng-repeat="dayOffRule in vm.dayOffRules">
-				<div class="sub-header">
-					<h2>{{dayOffRule.Name}}</h2>
-					<div class="head-actions panel-menu " ng-hide="vm.isDisable">
-						<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditDoRule(dayOffRule)">
-							<i class="filter-header mdi mdi-pencil pointer"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
-						</div>
-						<div tabindex=0 class="context-menu card-context" ng-click="confirmModal1 = true; vm.getDoRuleInfo(dayOffRule);" ng-show="!dayOffRule.Default">
-							<i class="filter-header mdi mdi-delete pointer"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
-						</div>
-						<div ng-cloak class="modal-box">
-							<div ng-cloak ng-show="confirmModal1">
-								<div class="modalbg">
-									<div class="dialog-mini material-depth-1">
-										<div class="modal-inner-content">
-											<h3>{{'DeleteDayOffRule' | translate }}</h3>
-											{{vm.textDeleteDoRule}}
-										</div>
-										<div class="modal-actions">
-											<aside>
-												<button ng-click="confirmModal1=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel' | translate }}</button>
-												<button ng-click="confirmModal1=false; vm.deleteDoRule(dayOffRule)" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
-											</aside>
-										</div>
-									</div>
-								</div>
+<div class="card-group">
+	<div class="panel material-depth-1 wfm-card filter-boxes" ng-repeat="dayOffRule in vm.dayOffRules | filter:vm.filterName">
+		<div class="sub-header">
+			<h2>{{dayOffRule.Name}}</h2>
+			<div class="head-actions panel-menu " ng-hide="vm.isDisable">
+				<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditDoRule(dayOffRule)">
+					<i class="filter-header mdi mdi-pencil pointer"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
+				</div>
+				<div tabindex=0 class="context-menu card-context" ng-click="vm.confirmDeleteModal = true; vm.getDoRuleInfo(dayOffRule);"
+				 ng-show="!dayOffRule.Default">
+					<i class="filter-header mdi mdi-delete pointer"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
+				</div>
+			</div>
+			<div ng-cloak class="modal-box">
+				<div ng-cloak ng-show="vm.confirmDeleteModal">
+					<div class="modalbg">
+						<div class="dialog-mini material-depth-1">
+							<div class="modal-inner-content">
+								<h3>{{'DeleteDayOffRule' | translate }}</h3>
+								{{vm.textDeleteDoRule}}
+							</div>
+							<div class="modal-actions">
+								<aside>
+									<button ng-click="vm.confirmDeleteModal = false" class="wfm-btn wfm-btn-invis-default">{{'Cancel' | translate }}</button>
+									<button ng-click="vm.confirmDeleteModal = false; vm.deleteDoRule(dayOffRule)" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
+								</aside>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="con-row">
+			</div>
+		</div>
+		<div class="con-row">
+			<div class="con-flex">
+				<table class="wfm-table wfm-filter-options">
+					<thead>
+						<tr>
+							<th>{{'Settings'|translate}}</th>
+							<th>{{'Min'|translate}}</th>
+							<th>{{'Max'|translate}}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td translate>DaysOffPerWeek</td>
+							<td>{{dayOffRule.MinDayOffsPerWeek}}</td>
+							<td>{{dayOffRule.MaxDayOffsPerWeek}}</td>
+						</tr>
+						<tr>
+							<td translate>ConsecutiveWorkDays</td>
+							<td>{{dayOffRule.MinConsecutiveWorkdays}}</td>
+							<td>{{dayOffRule.MaxConsecutiveWorkdays}}</td>
+						</tr>
+						<tr>
+							<td translate>ConsecutiveDaysOff</td>
+							<td>{{dayOffRule.MinConsecutiveDayOffs}}</td>
+							<td>{{dayOffRule.MaxConsecutiveDayOffs}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="con-row">
+			<div class="con-flex" ng-show="!dayOffRule.Default">
+				<div class="con-row" ng-repeat="filter in dayOffRule.Filters | limitTo:2">
 					<div class="con-flex">
-						<table class="wfm-table wfm-filter-options">
-							<thead>
-								<tr>
-									<th>{{'Settings'|translate}}</th>
-									<th>{{'Min'|translate}}</th>
-									<th>{{'Max'|translate}}</th>
-								</tr>
-							</thead>
-							<tbody>
-								<tr>
-									<td translate>DaysOffPerWeek</td>
-									<td>{{dayOffRule.MinDayOffsPerWeek}}</td>
-									<td>{{dayOffRule.MaxDayOffsPerWeek}}</td>
-								</tr>
-								<tr>
-									<td translate>ConsecutiveWorkDays</td>
-									<td>{{dayOffRule.MinConsecutiveWorkdays}}</td>
-									<td>{{dayOffRule.MaxConsecutiveWorkdays}}</td>
-								</tr>
-								<tr>
-									<td translate>ConsecutiveDaysOff</td>
-									<td>{{dayOffRule.MinConsecutiveDayOffs}}</td>
-									<td>{{dayOffRule.MaxConsecutiveDayOffs}}</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<div class="con-row">
-					<div class="con-flex" ng-show="!dayOffRule.Default">
-						<div class="con-row" ng-repeat="filter in dayOffRule.Filters | limitTo:2">
-							<div class="con-flex">
-								<div class="wfm-filter-selected">
-									<div class="wfm-chip-wrap pp-filter-chip-wrap">
-										<span class="wfm-chip">
+						<div class="wfm-filter-selected">
+							<div class="wfm-chip-wrap pp-filter-chip-wrap">
+								<span class="wfm-chip">
 									<span class="chip-handle">{{filter.FilterType | translate}}</span>
-										<span class="chip-text">{{filter.Name}}</span>
-										</span>
-										<span class="moreExists" ng-show="$index == 1">{{'ThreeDots' | translate}}</span>
-									</div>
-								</div>
+								<span class="chip-text">{{filter.Name}}</span>
+								</span>
+								<span class="moreExists" ng-show="$index == 1">{{'ThreeDots' | translate}}</span>
 							</div>
 						</div>
 					</div>
 				</div>
-				<div class="con-footer" ng-show="dayOffRule.Filters.length>2">
-					<div class="modal-container">
-						<div ng-cloak class="modal-box">
-							<button ng-click="showFilterRules = !showFilterRules;" class="wfm-btn wfm-btn-invis-default">
-								<span>{{'ShowAll' | translate}}</span>
-							</button>
-							<div ng-cloak ng-show="showFilterRules">
-								<div class="modalbg">
-									<div class="dialog">
-										<div class="modal-inner-content">
-											<h1>{{'DayOffRule' | translate}} - {{dayOffRule.Name}}</h1>
-											<span><i class="mdi mdi-information-outline"></i> {{vm.textDoRuleAppliedFilter}} </span>
-											<div class="con-row" ng-repeat="filter in dayOffRule.Filters">
-												<div class="con-flex">
-													<div class="wfm-filter-selected">
-														<div class="wfm-chip-wrap pp-filter-chip-wrap">
-															<span class="wfm-chip">
+			</div>
+		</div>
+		<div class="con-footer" ng-show="dayOffRule.Filters.length>2">
+			<div class="modal-container">
+				<div ng-cloak class="modal-box">
+					<button ng-click="showFilterRules = !showFilterRules;" class="wfm-btn wfm-btn-invis-default">
+						<span>{{'ShowAll' | translate}}</span>
+					</button>
+					<div ng-cloak ng-show="showFilterRules">
+						<div class="modalbg">
+							<div class="dialog">
+								<div class="modal-inner-content">
+									<h1>{{'DayOffRule' | translate}} - {{dayOffRule.Name}}</h1>
+									<span><i class="mdi mdi-information-outline"></i> {{vm.textDoRuleAppliedFilter}} </span>
+									<div class="con-row" ng-repeat="filter in dayOffRule.Filters">
+										<div class="con-flex">
+											<div class="wfm-filter-selected">
+												<div class="wfm-chip-wrap pp-filter-chip-wrap">
+													<span class="wfm-chip">
 																<span class="chip-handle">{{filter.FilterType | translate}}</span>
-															<span class="chip-text">{{filter.Name}}</span>
-															</span>
-														</div>
-													</div>
+													<span class="chip-text">{{filter.Name}}</span>
+													</span>
 												</div>
 											</div>
 										</div>
-										<div class="modal-actions">
-											<aside>
-												<button ng-click="showFilterRules = !showFilterRules" class="wfm-btn wfm-btn-invis-default">{{'Close'|translate}}</button>
-											</aside>
-										</div>
 									</div>
+								</div>
+								<div class="modal-actions">
+									<aside>
+										<button ng-click="showFilterRules = !showFilterRules" class="wfm-btn wfm-btn-invis-default">{{'Close'|translate}}</button>
+									</aside>
 								</div>
 							</div>
 						</div>
