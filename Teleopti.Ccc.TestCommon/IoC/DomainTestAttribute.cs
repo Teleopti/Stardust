@@ -188,7 +188,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeLatestStatisticsIntervalIdLoader>().For<ILatestStatisticsIntervalIdLoader>();
 				system.UseTestDouble<FakeRuleSetBagRepository>().For<IRuleSetBagRepository>();
 				system.UseTestDouble<FakeIntradayQueueStatisticsLoader>().For<IIntradayQueueStatisticsLoader>();
-				system.UseTestDouble<FakeScheduleForecastSkillReadModelRepository>().For<IScheduleForecastSkillReadModelRepository>();
 				system.UseTestDouble<FakeNoteRepository>().For<INoteRepository>();
 				system.UseTestDouble<FakePublicNoteRepository>().For<IPublicNoteRepository>();
 				system.UseTestDouble<FakeWorkloadRepository>().For<IWorkloadRepository>();

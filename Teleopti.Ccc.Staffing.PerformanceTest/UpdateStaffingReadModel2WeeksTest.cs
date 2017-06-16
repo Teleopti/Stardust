@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 	[UpdateReadModelPerformanceTest]
 	public class UpdateStaffingReadModel2WeeksTest : PerformanceTestWithOneTimeSetup
 	{
-		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
+		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IDataSourceScope DataSource;

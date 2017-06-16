@@ -4,21 +4,18 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.UnitOfWork;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[TestFixture]
 	[UpdateReadModelPerformanceTest]
-	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	public class UpdateStaffingReadModelWithOnlySkillCombinationResourcesTest : PerformanceTestWithOneTimeSetup
 	{
-		public IUpdateStaffingLevelReadModel UpdateStaffingLevel;
+		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IDataSourceScope DataSource;

@@ -9,12 +9,12 @@ using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -25,7 +25,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
 	[DomainTest]
-	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	public class IntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModel : ISetup
 	{
 		public IntradayRequestProcessor Target;
@@ -73,11 +72,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
 
 			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
-			
+
 			Target.Process(personRequest, period.StartDateTime);
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
-			var skillCombinations =  SkillCombinationResourceRepository.LoadSkillCombinationResources(period).First();
+			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).First();
 			skillCombinations.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
 			skillCombinations.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
 			skillCombinations.Resource.Should().Be.EqualTo(9);
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
 
 			Target.Process(personRequest, period.StartDateTime);
-			
+
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
 			var denyCommand = CommandDispatcher.LatestCommand as DenyRequestCommand;
 			denyCommand.DenyReason.Should().StartWith(UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingHours", agent.PermissionInformation.UICulture()).Substring(0, 10));
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skillCombinations.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
 			skillCombinations.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
 			skillCombinations.Resource.Should().Be.EqualTo(0);
-			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] { skill.Id.GetValueOrDefault() });
+			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault()});
 		}
 
 		private static void createWfcs(WorkflowControlSet wfcs, IAbsence absence)
@@ -206,15 +205,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-																			   {
-																				   new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 6,
-																					   SkillCombination = new[] {skill.Id.GetValueOrDefault()}
-																				   }
-																			   });
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 6,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
 
 			var skillday = skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5);
 			skillday.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.1));
@@ -258,15 +257,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-																			   {
-																				   new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 4,
-																					   SkillCombination = new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
-																				   }
-																			   });
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 4,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+				}
+			});
 
 			var skillday = skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 1);
 			skillday.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.1));
@@ -315,15 +314,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-																			   {
-																				   new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 10,
-																					   SkillCombination = new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
-																				   }
-																			   });
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 10,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+				}
+			});
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 1));
 
@@ -370,15 +369,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-																			   {
-																				   new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 3,
-																					   SkillCombination = new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
-																				   }
-																			   });
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 3,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+				}
+			});
 
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 1));
@@ -434,7 +433,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skillCombinations.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
 			skillCombinations.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
 			skillCombinations.Resource.Should().Be.EqualTo(9);
-			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] { skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault() });
+			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()});
 		}
 
 		[Test]
@@ -476,7 +475,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skillCombinations.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
 			skillCombinations.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
 			skillCombinations.Resource.Should().Be.EqualTo(5);
-			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] { skill.Id.GetValueOrDefault() });
+			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault()});
 		}
 
 		[Test]
@@ -516,7 +515,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skillCombinations.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
 			skillCombinations.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
 			skillCombinations.Resource.Should().Be.EqualTo(4);
-			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] { skill.Id.GetValueOrDefault() });
+			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault()});
 		}
 
 		[Test]
@@ -559,7 +558,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skillCombinations.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
 			skillCombinations.EndDateTime.Should().Be.EqualTo(period.EndDateTime);
 			skillCombinations.Resource.Should().Be.EqualTo(10);
-			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] { skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault() });
+			CollectionAssert.AreEqual(skillCombinations.SkillCombination, new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()});
 		}
 
 
@@ -592,12 +591,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAssignmentRepository.Has(ass);
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-																			   {
-																				   createSkillCombinationResource(period1,new [] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, 10),
-																				   createSkillCombinationResource(period2,new [] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, 10),
-																				   createSkillCombinationResource(period1,new [] {skill3.Id.GetValueOrDefault(), skill4.Id.GetValueOrDefault()}, 10),
-																				   createSkillCombinationResource(period2,new [] {skill3.Id.GetValueOrDefault(), skill4.Id.GetValueOrDefault()}, 10)
-																			   });
+			{
+				createSkillCombinationResource(period1, new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(period2, new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(period1, new[] {skill3.Id.GetValueOrDefault(), skill4.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(period2, new[] {skill3.Id.GetValueOrDefault(), skill4.Id.GetValueOrDefault()}, 10)
+			});
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period1.StartDateTime), 4));
 			SkillDayRepository.Has(skill2.CreateSkillDayWithDemand(scenario, new DateOnly(period1.StartDateTime), 4));
 			SkillDayRepository.Has(skill3.CreateSkillDayWithDemand(scenario, new DateOnly(period1.StartDateTime), 4));
@@ -612,10 +611,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(period1.StartDateTime, period2.EndDateTime)).ToList();
 			skillCombinations.Count().Should().Be.EqualTo(4);
-			skillCombAsserts(skillCombinations[0], period1, new[] { skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault() }, 9);
-			skillCombAsserts(skillCombinations[1], period2, new[] { skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault() }, 10);
-			skillCombAsserts(skillCombinations[2], period1, new[] { skill3.Id.GetValueOrDefault(), skill4.Id.GetValueOrDefault() }, 10);
-			skillCombAsserts(skillCombinations[3], period2, new[] { skill3.Id.GetValueOrDefault(), skill4.Id.GetValueOrDefault() }, 9);
+			skillCombAsserts(skillCombinations[0], period1, new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, 9);
+			skillCombAsserts(skillCombinations[1], period2, new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, 10);
+			skillCombAsserts(skillCombinations[2], period1, new[] {skill3.Id.GetValueOrDefault(), skill4.Id.GetValueOrDefault()}, 10);
+			skillCombAsserts(skillCombinations[3], period2, new[] {skill3.Id.GetValueOrDefault(), skill4.Id.GetValueOrDefault()}, 9);
 		}
 
 		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
@@ -718,8 +717,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
 			skillCombinations.Count().Should().Be.EqualTo(2);
-			skillCombAsserts(skillCombinations[0], period, new[] { skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault() }, 1);
-			skillCombAsserts(skillCombinations[1], period, new[] { skill2.Id.GetValueOrDefault() }, 0);
+			skillCombAsserts(skillCombinations[0], period, new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, 1);
+			skillCombAsserts(skillCombinations[1], period, new[] {skill2.Id.GetValueOrDefault()}, 0);
 		}
 
 		[Test]
@@ -755,22 +754,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-																			   {
-																				   new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 4,
-																					   SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
-																				   },
-																					new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 1,
-																					   SkillCombination = new[] {skill1.Id.GetValueOrDefault()}
-																				   }
-																			   });
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 4,
+					SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 1,
+					SkillCombination = new[] {skill1.Id.GetValueOrDefault()}
+				}
+			});
 
 			SkillDayRepository.Has(skill1.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 3));
 			SkillDayRepository.Has(skill2.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 3));
@@ -816,22 +815,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-																			   {
-																				   new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 6,
-																					   SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault(), skill3.Id.GetValueOrDefault()}
-																				   },
-																					new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 1,
-																					   SkillCombination = new[] { skill1.Id.GetValueOrDefault(),skill3.Id.GetValueOrDefault()}
-																				   }
-																			   });
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 6,
+					SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault(), skill3.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 1,
+					SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill3.Id.GetValueOrDefault()}
+				}
+			});
 			SkillDayRepository.Has(skill1.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 3));
 			SkillDayRepository.Has(skill2.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 3));
 			SkillDayRepository.Has(skill3.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 3));
@@ -874,22 +873,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-																			   {
-																				   new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 6,
-																					   SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
-																				   },
-																					new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 1,
-																					   SkillCombination = new[] { skill1.Id.GetValueOrDefault(),}
-																				   }
-																			   });
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 6,
+					SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 1,
+					SkillCombination = new[] {skill1.Id.GetValueOrDefault(),}
+				}
+			});
 			SkillDayRepository.Has(skill1.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 3));
 			SkillDayRepository.Has(skill2.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 3));
 
@@ -931,22 +930,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-																			   {
-																				   new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 5,
-																					   SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
-																				   },
-																					new SkillCombinationResource
-																				   {
-																					   StartDateTime = period.StartDateTime,
-																					   EndDateTime = period.EndDateTime,
-																					   Resource = 1,
-																					   SkillCombination = new[] { skill1.Id.GetValueOrDefault(),}
-																				   }
-																			   });
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 5,
+					SkillCombination = new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 1,
+					SkillCombination = new[] {skill1.Id.GetValueOrDefault(),}
+				}
+			});
 
 			SkillDayRepository.Has(skill1.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 3));
 			SkillDayRepository.Has(skill2.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 3));
@@ -986,7 +985,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
 				createSkillCombinationResource(period,
-					new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault(), skill3.Id.GetValueOrDefault()}, 2),
+											   new[] {skill1.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault(), skill3.Id.GetValueOrDefault()}, 2),
 				createSkillCombinationResource(period, new[] {skill2.Id.GetValueOrDefault()}, 1)
 			});
 
@@ -1165,9 +1164,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
 				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)),
-					new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+											   new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
 				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(60)),
-					new[] {emailSkill.Id.GetValueOrDefault()}, 10)
+											   new[] {emailSkill.Id.GetValueOrDefault()}, 10)
 
 			});
 			SkillDayRepository.Has(emailSkill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 6));
@@ -1212,16 +1211,16 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(new DateTimePeriod(emailPerod.StartDateTime, emailPerod.StartDateTime.AddMinutes(15)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(new DateTimePeriod(emailPerod.StartDateTime.AddMinutes(15), emailPerod.StartDateTime.AddMinutes(30)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(new DateTimePeriod(emailPerod.StartDateTime.AddMinutes(30), emailPerod.StartDateTime.AddMinutes(45)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(new DateTimePeriod(emailPerod.StartDateTime.AddMinutes(45), emailPerod.StartDateTime.AddMinutes(60)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(15), period.StartDateTime.AddMinutes(30)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(30), period.StartDateTime.AddMinutes(45)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(45), period.StartDateTime.AddMinutes(60)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(emailPerod,new[] {emailSkill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(period,new[] {emailSkill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(new DateTimePeriod(emailPerod.StartDateTime, emailPerod.StartDateTime.AddMinutes(15)), new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(new DateTimePeriod(emailPerod.StartDateTime.AddMinutes(15), emailPerod.StartDateTime.AddMinutes(30)), new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(new DateTimePeriod(emailPerod.StartDateTime.AddMinutes(30), emailPerod.StartDateTime.AddMinutes(45)), new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(new DateTimePeriod(emailPerod.StartDateTime.AddMinutes(45), emailPerod.StartDateTime.AddMinutes(60)), new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)), new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(15), period.StartDateTime.AddMinutes(30)), new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(30), period.StartDateTime.AddMinutes(45)), new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(45), period.StartDateTime.AddMinutes(60)), new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(emailPerod, new[] {emailSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(period, new[] {emailSkill.Id.GetValueOrDefault()}, 10)
 
 			});
 
@@ -1234,100 +1233,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
-
-
-		//[Test]
-		//public void ShouldDenyRequestIfUnderstaffedOnPhone()
-		//{
-		//	Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
-
-		//	var absence = AbsenceFactory.CreateAbsence("Holiday");
-		//	var scenario = ScenarioRepository.Has("scenario");
-		//	var phoneActivity = ActivityRepository.Has("phone");
-		//	var emailActivity = ActivityRepository.Has("email");
-		//	var phoneSkill = SkillRepository.Has("skillA", phoneActivity).WithId();
-		//	var emailSkill = SkillRepository.Has("skillB", emailActivity).WithId();
-		//	var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-		//	phoneSkill.StaffingThresholds = emailSkill.StaffingThresholds = threshold;
-		//	phoneSkill.DefaultResolution = 15;
-		//	emailSkill.DefaultResolution = 60;
-
-		//	var agent = PersonRepository.Has(emailSkill, phoneSkill);
-		//	var wfcs = new WorkflowControlSet().WithId();
-		//	createWfcs(wfcs, absence);
-		//	agent.WorkflowControlSet = wfcs;
-		//	var emailPerod = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
-		//	var period = new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 10);
-		//	var mainShiftPersonAssing = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, emailActivity, emailPerod, new ShiftCategory("category"));
-		//	mainShiftPersonAssing.AddActivity(phoneActivity, period);
-
-		//	PersonAssignmentRepository.Has(mainShiftPersonAssing);
-
-
-		//	SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-		//	{
-		//		createSkillCombinationResource(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)),
-		//			new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-		//		createSkillCombinationResource(
-		//			new DateTimePeriod(period.StartDateTime.AddMinutes(15), period.StartDateTime.AddMinutes(30)),
-		//			new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-		//		createSkillCombinationResource(
-		//			new DateTimePeriod(period.StartDateTime.AddMinutes(30), period.StartDateTime.AddMinutes(45)),
-		//			new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-		//		createSkillCombinationResource(
-		//			new DateTimePeriod(period.StartDateTime.AddMinutes(45), period.StartDateTime.AddMinutes(60)),
-		//			new[] {phoneSkill.Id.GetValueOrDefault()}, 5),
-		//		createSkillCombinationResource(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(30)),
-		//			new[] {emailSkill.Id.GetValueOrDefault()}, 10)
-
-		//	});
-
-		//	ScheduleForecastSkillReadModelRepository.Persist(new[]
-		//													 {
-		//														 new SkillStaffingInterval
-		//														 {
-		//															 StartDateTime = emailPerod.StartDateTime,
-		//															 EndDateTime = emailPerod.StartDateTime.AddMinutes(60),
-		//															 Forecast = 4,
-		//															 SkillId = emailSkill.Id.GetValueOrDefault()
-		//														 },
-		//														 new SkillStaffingInterval
-		//														 {
-		//															 StartDateTime = period.StartDateTime,
-		//															 EndDateTime = period.StartDateTime.AddMinutes(15),
-		//															 Forecast = 4,
-		//															 SkillId = phoneSkill.Id.GetValueOrDefault()
-		//														 },
-		//														 new SkillStaffingInterval
-		//														 {
-		//															StartDateTime = period.StartDateTime.AddMinutes(15),
-		//															EndDateTime = period.StartDateTime.AddMinutes(30),
-		//															 Forecast = 4,
-		//															 SkillId = phoneSkill.Id.GetValueOrDefault()
-		//														 },
-		//														 new SkillStaffingInterval
-		//														 {
-		//															StartDateTime = period.StartDateTime.AddMinutes(30),
-		//															EndDateTime = period.StartDateTime.AddMinutes(45),
-		//															 Forecast = 4,
-		//															 SkillId = phoneSkill.Id.GetValueOrDefault()
-		//														 },
-		//														 new SkillStaffingInterval
-		//														 {
-		//															StartDateTime = period.StartDateTime.AddMinutes(45),
-		//															EndDateTime = period.StartDateTime.AddMinutes(60),
-		//															 Forecast = 10,
-		//															 SkillId = phoneSkill.Id.GetValueOrDefault()
-		//														 }
-		//													 }, DateTime.Now);
-
-
-		//	var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 10))).WithId();
-
-		//	Target.Process(personRequest, period.StartDateTime);
-
-		//	CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
-		//}
 
 		[Test]
 		public void ShouldRemoveResourceOnScheduledInterval()
@@ -1374,7 +1279,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			var skillCombinationResources =
 				SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9)).ToList();
 			skillCombinationResources.Count().Should().Be.EqualTo(2);
-			skillCombAsserts(skillCombinationResources[0], new DateTimePeriod(emailPerod.StartDateTime, emailPerod.StartDateTime.AddMinutes(60)), new[] { emailSkill.Id.GetValueOrDefault() }, 9.5);
+			skillCombAsserts(skillCombinationResources[0], new DateTimePeriod(emailPerod.StartDateTime, emailPerod.StartDateTime.AddMinutes(60)), new[] {emailSkill.Id.GetValueOrDefault()}, 9.5);
 		}
 
 		[Test]
@@ -1389,7 +1294,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			phoneSkill.DefaultResolution = 30;
 			var workload = WorkloadFactory.CreateWorkload(phoneSkill);
 			WorkloadDay workloadDay1 = new WorkloadDay();
-			workloadDay1.Create(new DateOnly(2008, 7, 1), workload, new List<TimePeriod>() { new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(10, 0, 0)) });
+			workloadDay1.Create(new DateOnly(2008, 7, 1), workload, new List<TimePeriod>() {new TimePeriod(new TimeSpan(9, 0, 0), new TimeSpan(10, 0, 0))});
 
 			phoneSkill.AddWorkload(workload);
 			var agent = PersonRepository.Has(phoneSkill);
@@ -1403,9 +1308,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
-				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(30)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(30), period.StartDateTime.AddMinutes(60)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
-				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(60), period.StartDateTime.AddMinutes(90)),new[] {phoneSkill.Id.GetValueOrDefault()}, 10)
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(30)), new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(30), period.StartDateTime.AddMinutes(60)), new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime.AddMinutes(60), period.StartDateTime.AddMinutes(90)), new[] {phoneSkill.Id.GetValueOrDefault()}, 10)
 
 			});
 
@@ -1418,6 +1323,54 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
 		}
 
+		[Test]
+		public void ShouldGetSkilldaysForCorrectDays()
+		{
+			Now.Is(new DateTime(2017, 5, 1, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillSetupHelper.CreateSkill(60, "skill", new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1)), false, activity);
+			skill.TimeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			SkillRepository.Has(skill);
+
+			var agent = PersonRepository.Has(skill);
+			var wfcs = new WorkflowControlSet().WithId();
+			createWfcs(wfcs, absence);
+			agent.WorkflowControlSet = wfcs;
+			agent.PermissionInformation.SetDefaultTimeZone(skill.TimeZone);
+			var period = new DateTimePeriod(2017, 5, 1, 21, 2017, 5, 2, 9);
+			var requestPeriod = new DateTimePeriod(2017, 5, 1, 21, 2017, 5, 1, 23);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+
+			var periodDayOne = new DateTimePeriod(2017, 5, 1, 21, 2017, 5, 1, 22);
+			var periodDayTwo1 = new DateTimePeriod(2017, 5, 1, 22, 2017, 5, 1, 23);
+			var periodDayTwo2 = new DateTimePeriod(2017, 5, 1, 23, 2017, 5, 2, 0);
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(periodDayOne, new[] {skill.Id.GetValueOrDefault()}, 100),
+				createSkillCombinationResource(periodDayTwo1, new[] {skill.Id.GetValueOrDefault()}, 1),
+				createSkillCombinationResource(periodDayTwo2, new[] {skill.Id.GetValueOrDefault()}, 1),
+			});
+
+
+			var skillday = SkillSetupHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime(), new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1)), false);
+			var skillday2 = SkillSetupHelper.CreateSkillDay(skill, scenario, Now.UtcDateTime().AddDays(1), new TimePeriod(8, 0, 18, 00), false);
+			SkillDayRepository.Has(new[] {skillday, skillday2});
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, requestPeriod)).WithId();
+
+			Target.Process(personRequest, requestPeriod.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
+			var skillCombinations = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).First();
+			skillCombinations.Resource.Should().Be.EqualTo(100);
+
+		}
+
 		private void skillCombAsserts(SkillCombinationResource skillCombinationResource, DateTimePeriod period, Guid[] skillCombinationResources, double resource)
 		{
 			skillCombinationResource.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
@@ -1425,6 +1378,188 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			skillCombinationResource.Resource.Should().Be.EqualTo(resource);
 			CollectionAssert.AreEqual(skillCombinationResource.SkillCombination, skillCombinationResources);
 		}
+
+
+		/* xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx */
+
+		[Test]
+		public void ShouldDenyRequestIfUnderstaffedOnPhone()
+		{
+			Now.Is(new DateTime(2016, 12, 22, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var phoneActivity = ActivityRepository.Has("phone");
+			var emailActivity = ActivityRepository.Has("email");
+			var phoneSkill = SkillRepository.Has("skillA", phoneActivity).WithId();
+			var emailSkill = SkillRepository.Has("skillB", emailActivity).WithId();
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			phoneSkill.StaffingThresholds = emailSkill.StaffingThresholds = threshold;
+			phoneSkill.DefaultResolution = 15;
+			emailSkill.DefaultResolution = 60;
+
+			var agent = PersonRepository.Has(emailSkill, phoneSkill);
+			var wfcs = new WorkflowControlSet().WithId();
+			createWfcs(wfcs, absence);
+			agent.WorkflowControlSet = wfcs;
+			var emailPerod = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
+			var period = new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 10);
+			var mainShiftPersonAssing = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, emailActivity, emailPerod, new ShiftCategory("category"));
+			mainShiftPersonAssing.AddActivity(phoneActivity, period);
+
+			PersonAssignmentRepository.Has(mainShiftPersonAssing);
+
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(15)),
+											   new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(
+					new DateTimePeriod(period.StartDateTime.AddMinutes(15), period.StartDateTime.AddMinutes(30)),
+					new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(
+					new DateTimePeriod(period.StartDateTime.AddMinutes(30), period.StartDateTime.AddMinutes(45)),
+					new[] {phoneSkill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(
+					new DateTimePeriod(period.StartDateTime.AddMinutes(45), period.StartDateTime.AddMinutes(60)),
+					new[] {phoneSkill.Id.GetValueOrDefault()}, 2),
+				createSkillCombinationResource(new DateTimePeriod(period.StartDateTime, period.StartDateTime.AddMinutes(30)),
+											   new[] {emailSkill.Id.GetValueOrDefault()}, 10)
+
+			});
+
+			SkillDayRepository.Has(phoneSkill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 4));
+			SkillDayRepository.Has(emailSkill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 4));
+
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 10))).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
+		}
+
+		[Test]
+		public void ShouldBeDeniedWhenMidnightRequestAndNoShiftTodayAndUnderstaffedTomorrow()
+		{
+			Now.Is(new DateTime(2016, 12, 1, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
+			var agent = PersonRepository.Has(skill);
+			var wfcs = new WorkflowControlSet().WithId();
+			createWfcs(wfcs, absence);
+			agent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(2016, 12, 2, 8, 2016, 12, 2, 9);
+			var requestPeriod = new DateTimePeriod(2016, 12, 1, 23, 2016, 12, 2, 9);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 5,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 10));
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, requestPeriod)).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
+		}
+
+		[Test]
+		public void ShouldBeDeniedWhenMidnightShiftAndUnderStaffedAndRequestIsTomorrow()
+		{
+			Now.Is(new DateTime(2016, 12, 1, 22, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
+			var agent = PersonRepository.Has(skill);
+			var wfcs = new WorkflowControlSet().WithId();
+			createWfcs(wfcs, absence);
+			agent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(2016, 12, 1, 20, 2016, 12, 2, 9);
+			var requestPeriod = new DateTimePeriod(2016, 12, 2, 1, 2016, 12, 2, 2);
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = requestPeriod.StartDateTime,
+					EndDateTime = requestPeriod.EndDateTime,
+					Resource = 5,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
+			
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 10));
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, requestPeriod)).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(DenyRequestCommand));
+		}
+
+
+		[Test]
+		public void ShouldBeApprovedWhenNotScheduledToday()
+		{
+			Now.Is(new DateTime(2016, 12, 1, 8, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
+			var agent = PersonRepository.Has(skill);
+			var wfcs = new WorkflowControlSet().WithId();
+			createWfcs(wfcs, absence);
+			agent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(2016, 12, 1, 9, 2016, 12, 1, 10);
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime,
+					EndDateTime = period.EndDateTime,
+					Resource = 5,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 10));
+
+			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
+
+			Target.Process(personRequest, period.StartDateTime);
+
+			CommandDispatcher.LatestCommand.GetType().Should().Be.EqualTo(typeof(ApproveRequestCommand));
+		}
+
 	}
 }
 

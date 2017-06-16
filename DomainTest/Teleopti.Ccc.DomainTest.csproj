@@ -152,7 +152,6 @@
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriodsTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestFixtureTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestMethodTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorWithSkillDaysTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplateTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentPersisterTest.cs" />
@@ -173,7 +172,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\ArrangeRequestsBySortOrderTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsWithDifferentVersionTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorTest_useRemoveScheduleForecastSkillChangeReadModel.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsUpdaterWithValidatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestPersonAbsenceRemovedEventHandlerTest.cs" />
@@ -183,8 +181,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportHandlerNoMocksTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\NewAbsenceReportHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\CancelAbsenceRequestCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\ResourceAllocatorTest.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\UpdateStaffingLevelReadModelHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddOvertimeActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\GroupPageCollectionChangedHandlers\OptionalColumnCollectionChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentEventHandlerTest.cs" />
@@ -364,7 +360,6 @@
     <Compile Include="Optimization\WebIntradayOptimizationStardustHandlerTest.cs" />
     <Compile Include="Reports\ReportNavigationModelTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest.cs" />
-    <Compile Include="ResourceCalculation\UpdateStaffingReadModelForecastTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderServiceTest.cs" />
     <Compile Include="ResourcePlanner\Validation\MissingForecastValidatorTest.cs" />
     <Compile Include="ResourcePlanner\Validation\DesktopSchedulingValidatorTest.cs" />
@@ -402,7 +397,6 @@
     <Compile Include="SchedulingScenarios\Islands\IslandModelTest.cs" />
     <Compile Include="ReadModelValidator\ReadModelValidatorTest.cs" />
     <Compile Include="ResourceCalculation\FakeSkillStaffPeriodHolder.cs" />
-    <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelTest.cs" />
     <Compile Include="ScheduleStorageRepositoryWrapperTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandHandlerIncreaseIslandsTest.cs" />

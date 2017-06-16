@@ -57,7 +57,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IntradayAbsenceRequestPerformanceTest.cs" />
-    <Compile Include="IntradayReadModelUpdatePerformanceTest.cs" />
     <Compile Include="PerformanceTestWithOneTimeSetup.cs" />
     <Compile Include="PerformanceTuningTest.cs" />
     <Compile Include="RequestPerformanceTestAttribute.cs" />

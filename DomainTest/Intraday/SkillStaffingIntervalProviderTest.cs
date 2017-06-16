@@ -5,11 +5,11 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -20,11 +20,12 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 	public class SkillStaffingIntervalProviderTest : ISetup
 	{
 		public SkillStaffingIntervalProvider Target;
-		public IScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
 		public MutableNow Now;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakeActivityRepository ActivityRepository;
+		public FakeScenarioRepository ScenarioRepository;
+		public FakeSkillDayRepository SkillDayRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -40,6 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			skill.DefaultResolution = 60;
+			var scenario = ScenarioRepository.Has("scenario");
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -54,16 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																				   }
 																			   });
 
-			ScheduleForecastSkillReadModelRepository.Persist(new[]
-															 {
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skill.Id.GetValueOrDefault()
-																 }
-															 }, Now.UtcDateTime());
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
 
 			var staffingIntervals = Target.StaffingForSkills(new[] {skill.Id.GetValueOrDefault()},period, TimeSpan.FromHours(1), false);
 
@@ -80,6 +73,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillA = SkillRepository.Has("skillA", activity).WithId();
 			var skillB = SkillRepository.Has("skillB", activity).WithId();
 			skillA.DefaultResolution = skillB.DefaultResolution = 60;
+			var scenario = ScenarioRepository.Has("scenario");
+
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -93,24 +88,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
 																				   }
 																			   });
-
-			ScheduleForecastSkillReadModelRepository.Persist(new[]
-															 {
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillA.Id.GetValueOrDefault()
-																 },
-																  new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillB.Id.GetValueOrDefault()
-																 }
-															 }, Now.UtcDateTime());
+			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
+			SkillDayRepository.Has(skillB.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
 
 			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 
@@ -128,6 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillA = SkillRepository.Has("skillA", activity).WithId();
 			var skillB = SkillRepository.Has("skillB", activity).WithId();
 			skillA.DefaultResolution = skillB.DefaultResolution = 60;
+			var scenario = ScenarioRepository.Has("scenario");
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -141,24 +121,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																					   SkillCombination = new[] {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
 																				   }
 																			   });
-
-			ScheduleForecastSkillReadModelRepository.Persist(new[]
-															 {
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillA.Id.GetValueOrDefault()
-																 },
-																  new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillB.Id.GetValueOrDefault()
-																 }
-															 }, Now.UtcDateTime());
+			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
+			SkillDayRepository.Has(skillB.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
 
 			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault()}, period, TimeSpan.FromHours(1), false);
 
@@ -176,6 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillA = SkillRepository.Has("skillA", activityA).WithId();
 			var skillB = SkillRepository.Has("skillB", activityB).WithId();
 			skillA.DefaultResolution = skillB.DefaultResolution = 60;
+			var scenario = ScenarioRepository.Has("scenario");
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -197,23 +162,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																				   }
 																			   });
 
-			ScheduleForecastSkillReadModelRepository.Persist(new[]
-															 {
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillA.Id.GetValueOrDefault()
-																 },
-																  new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillB.Id.GetValueOrDefault()
-																 }
-															 }, Now.UtcDateTime());
+			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
+			SkillDayRepository.Has(skillB.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
 
 			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 
@@ -232,6 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillA = SkillRepository.Has("skillA", activity).WithId();
 			var skillB = SkillRepository.Has("skillB", activity).WithId();
 			skillA.DefaultResolution = skillB.DefaultResolution = skillResolution;
+			var scenario = ScenarioRepository.Has("scenario");
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -252,38 +203,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																					  SkillCombination = new[] {skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }
 																				   }
 																			   });
-
-			ScheduleForecastSkillReadModelRepository.Persist(new[]
-															 {
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.StartDateTime.AddMinutes(skillResolution),
-																	 Forecast = 5,
-																	 SkillId = skillA.Id.GetValueOrDefault()
-																 },
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime.AddMinutes(skillResolution),
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillA.Id.GetValueOrDefault()
-																 },
-																  new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.StartDateTime.AddMinutes(skillResolution),
-																	 Forecast = 5,
-																	 SkillId = skillB.Id.GetValueOrDefault()
-																 },
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime.AddMinutes(skillResolution),
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillB.Id.GetValueOrDefault()
-																 }
-															 }, Now.UtcDateTime());
+			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
+			SkillDayRepository.Has(skillB.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
 
 			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromMinutes(skillResolution), false);
 
@@ -305,6 +226,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillB = SkillRepository.Has("skillB", activityB).WithId();
 			skillA.DefaultResolution = 30;
 			skillB.DefaultResolution = 60;
+			var scenario = ScenarioRepository.Has("scenario");
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -332,31 +254,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																					   SkillCombination = new[] {skillB.Id.GetValueOrDefault()}
 																				   }
 																			   });
+			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
+			SkillDayRepository.Has(skillB.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
 
-			ScheduleForecastSkillReadModelRepository.Persist(new[]
-															 {
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.StartDateTime.AddMinutes(30),
-																	 Forecast = 5,
-																	 SkillId = skillA.Id.GetValueOrDefault()
-																 },
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime.AddMinutes(30),
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillA.Id.GetValueOrDefault()
-																 },
-																  new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillB.Id.GetValueOrDefault()
-																 }
-															 }, Now.UtcDateTime());
 
 			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromMinutes(30), false);
 
@@ -379,6 +279,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillB = SkillRepository.Has("skillB", activity).WithId();
 			skillB.SetCascadingIndex(2);
 			skillA.DefaultResolution = skillB.DefaultResolution = 60;
+			var scenario = ScenarioRepository.Has("scenario");
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -393,23 +294,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																				   }
 																			   });
 
-			ScheduleForecastSkillReadModelRepository.Persist(new[]
-															 {
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 7,
-																	 SkillId = skillA.Id.GetValueOrDefault()
-																 },
-																  new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 7,
-																	 SkillId = skillB.Id.GetValueOrDefault()
-																 }
-															 }, Now.UtcDateTime());
+			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 7));
+			SkillDayRepository.Has(skillB.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 7));
 
 			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 
@@ -427,6 +313,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skillA", activity).WithId();
 			skill.DefaultResolution = 60;
+			var scenario = ScenarioRepository.Has("scenario");
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -458,18 +345,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																	  SkillCombination = new[] {skill.Id.GetValueOrDefault()}
 																  }
 															  });
-				
 
-			ScheduleForecastSkillReadModelRepository.Persist(new[]
-															 {
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skill.Id.GetValueOrDefault()
-																 }
-															 }, Now.UtcDateTime());
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
 
 			var staffingIntervals = Target.StaffingForSkills(new[] { skill.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 
@@ -487,6 +364,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var skillA = SkillRepository.Has("skillA", activity).WithId();
 			var skillB = SkillRepository.Has("skillB", activity).WithId();
 			skillA.DefaultResolution = skillB.DefaultResolution = 60;
+			var scenario = ScenarioRepository.Has("scenario");
 
 			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
 
@@ -508,24 +386,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 																				   }
 																			   });
 
-
-			ScheduleForecastSkillReadModelRepository.Persist(new[]
-															 {
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillA.Id.GetValueOrDefault()
-																 },
-																 new SkillStaffingInterval
-																 {
-																	 StartDateTime = period.StartDateTime,
-																	 EndDateTime = period.EndDateTime,
-																	 Forecast = 5,
-																	 SkillId = skillB.Id.GetValueOrDefault()
-																 }
-															 }, Now.UtcDateTime());
+			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
+			SkillDayRepository.Has(skillB.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
 
 			var staffingIntervals = Target.StaffingForSkills(new[] { skillA.Id.GetValueOrDefault(), skillB.Id.GetValueOrDefault() }, period, TimeSpan.FromHours(1), false);
 

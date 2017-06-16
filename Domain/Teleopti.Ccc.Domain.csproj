@@ -226,6 +226,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IApproveRequestsWithValidatorsEventMessage.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidator.cs" />
+    <Compile Include="ApplicationLayer\Intraday\ExtractSkillForecastIntervals.cs" />
     <Compile Include="ApplicationLayer\IPersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandler.cs" />
@@ -326,7 +327,6 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\AbsenceRequestIntradayFilter.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestPersonAbsenceRemovedEventHandler.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\ResourceAllocator.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourceCalculationPeriodDictionary.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\ResourcesExtractor.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillCombinationResourceReadModelValidator.cs" />
@@ -1325,7 +1325,6 @@
     <Compile Include="Intraday\IntradayStaffingViewModel.cs" />
     <Compile Include="Intraday\IntradayIncomingDataSeries.cs" />
     <Compile Include="Intraday\IntradayIncomingSummary.cs" />
-    <Compile Include="Intraday\IScheduleForecastSkillReadModelRepository.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeAndWorkload.cs" />
     <Compile Include="Intraday\LatestStatisticsTimeProvider.cs" />
     <Compile Include="Intraday\LatestStatitsticsTimeModel.cs" />
@@ -1450,7 +1449,6 @@
     <Compile Include="Repositories\ISeniorityWorkDayRanksRepository.cs" />
     <Compile Include="Repositories\ISiteOpenHourRepository.cs" />
     <Compile Include="Repositories\RepositoryExtensions.cs" />
-    <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModel.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonalSkills.cs" />
     <Compile Include="ResourceCalculation\CascadingPersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\CascadingResourceCalculationContextFactory.cs" />

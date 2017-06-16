@@ -233,7 +233,6 @@
 		Reporting_Optional_Columns_42066,
 		Staffing_ReadModel_Update14Days_43840,
 		Staffing_ReadModel_Keep8DaysHistoricalData_44652,
-		StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388,
 		ETL_SpeedUpNightlyDayOff_38213,
 		WFM_ImproveIntradaySkillArea_44246,
 		Wfm_Intraday_SupportSkillTypeWebChat_42591,

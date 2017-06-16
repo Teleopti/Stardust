@@ -42,14 +42,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeSkillCombinationResourceRepository CombinationRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
-		public FakeScheduleForecastSkillReadModelRepository ScheduleForecastSkillReadModelRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
-			system.UseTestDouble<FakeScheduleForecastSkillReadModelRepository>().For<IScheduleForecastSkillReadModelRepository>();
 			system.UseTestDouble(new FakeUserTimeZone(TimeZoneInfo.Utc)).For<IUserTimeZone>();
 			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 		}
@@ -487,24 +485,14 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 							}
 						});
 				}
-
-				var skillStaffingIntervals = new List<SkillStaffingInterval>();
+				
 				var timePeriodTuples = new List<Tuple<TimePeriod, double>>();
 				for (var i = 0; i < forecastedStaffings.Length; i++)
 				{
-					skillStaffingIntervals.Add(new SkillStaffingInterval
-					{
-						StartDateTime = intervals[i],
-						EndDateTime = intervals[i].AddMinutes(15),
-						FStaff = forecastedStaffings[i].Value,
-						SkillId = skill.Id.GetValueOrDefault()
-					});
 					timePeriodTuples.Add(new Tuple<TimePeriod, double>(
 						new TimePeriod(intervals[i].TimeOfDay, intervals[i].TimeOfDay.Add(TimeSpan.FromMinutes(15))),
 						forecastedStaffings[i].Value));
 				}
-
-				ScheduleForecastSkillReadModelRepository.Persist(skillStaffingIntervals, new DateTime());
 				SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(Scenario.Current(), day, 0, timePeriodTuples.ToArray()));
 			});
 		}

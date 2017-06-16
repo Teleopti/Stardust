@@ -277,7 +277,6 @@
     <Compile Include="MultiTenancy\Server\TenantAuthenticationAlwaysAuthenticated.cs" />
     <Compile Include="Repositories\JobStartTimeRepository.cs" />
     <Compile Include="Intraday\PersonProviderForOvertime.cs" />
-    <Compile Include="Repositories\ScheduleForecastSkillReadModelRepository.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepository.cs" />
     <Compile Include="Licensing\ISetLicenseActivator.cs" />
     <Compile Include="Licensing\SetLicenseActivator.cs" />

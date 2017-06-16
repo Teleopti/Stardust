@@ -3,7 +3,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.TestCommon;
@@ -15,10 +14,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 {
 	[DomainTest]
-	[Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388)]
 	public class UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest
 	{
-		public IUpdateStaffingLevelReadModel Target;
+		public UpdateStaffingLevelReadModelOnlySkillCombinationResources Target;
 		public FakeScenarioRepository ScenarioRepository;
 		public FakePersonRepository PersonRepository;
 		public FakeSkillRepository SkillRepository;

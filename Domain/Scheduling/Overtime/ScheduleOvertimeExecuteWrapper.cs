@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	public class ScheduleOvertimeExecuteWrapper
 	{
 		private readonly ScheduleOvertimeWithoutStateHolder _scheduleOvertimeWithoutStateHolder;
-		private readonly IExtractSkillForecastIntervals _extractSkillForecastIntervals;
+		private readonly ExtractSkillForecastIntervals _extractSkillForecastIntervals;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
 
-		public ScheduleOvertimeExecuteWrapper(ScheduleOvertimeWithoutStateHolder scheduleOvertimeWithoutStateHolder, IExtractSkillForecastIntervals extractSkillForecastIntervals, ISkillCombinationResourceRepository skillCombinationResourceRepository)
+		public ScheduleOvertimeExecuteWrapper(ScheduleOvertimeWithoutStateHolder scheduleOvertimeWithoutStateHolder, ExtractSkillForecastIntervals extractSkillForecastIntervals, ISkillCombinationResourceRepository skillCombinationResourceRepository)
 		{
 			_scheduleOvertimeWithoutStateHolder = scheduleOvertimeWithoutStateHolder;
 			_extractSkillForecastIntervals = extractSkillForecastIntervals;

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		public IPersonRepository PersonRepository;
 
 		public IPersonRequestRepository PersonRequestRepository;
-		public UpdateStaffingLevelReadModel UpdateStaffingLevel;
+		public UpdateStaffingLevelReadModelOnlySkillCombinationResources UpdateStaffingLevel;
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		public IAbsenceRepository AbsenceRepository;
 		public ISkillRepository SkillRepository;

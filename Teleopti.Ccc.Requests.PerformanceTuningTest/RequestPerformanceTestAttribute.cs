@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 			system.UseTestDouble<FakeStardustJobFeedback>().For<IStardustJobFeedback>();
 			system.UseTestDouble<NoMessageSender>().For<IMessageSender>();
-			system.UseTestDouble<UpdateStaffingLevelReadModel>().For<UpdateStaffingLevelReadModel>();
 			system.UseTestDouble<MultiAbsenceRequestsHandler>().For<MultiAbsenceRequestsHandler>();
 			system.UseTestDouble<MutableNow>().For<INow>();
 			system.AddService<Database>();

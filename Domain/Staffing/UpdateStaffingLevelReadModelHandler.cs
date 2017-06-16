@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class UpdateStaffingLevelReadModelHandler : IHandleEvent<UpdateStaffingLevelReadModelEvent>, IRunOnStardust
 	{
-		private readonly IUpdateStaffingLevelReadModel _updateStaffingLevelReadModel;
+		private readonly UpdateStaffingLevelReadModelOnlySkillCombinationResources _updateStaffingLevelReadModel;
 		private readonly INow _now;
 		private readonly IJobStartTimeRepository _jobStartTimeRepository;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 
-		public UpdateStaffingLevelReadModelHandler(IUpdateStaffingLevelReadModel updateStaffingLevelReadModel, INow now, IJobStartTimeRepository jobStartTimeRepository, ICurrentBusinessUnit currentBusinessUnit)
+		public UpdateStaffingLevelReadModelHandler(UpdateStaffingLevelReadModelOnlySkillCombinationResources updateStaffingLevelReadModel, INow now, IJobStartTimeRepository jobStartTimeRepository, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_updateStaffingLevelReadModel = updateStaffingLevelReadModel;
 			_now = now;

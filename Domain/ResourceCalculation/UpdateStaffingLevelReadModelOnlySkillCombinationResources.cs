@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class UpdateStaffingLevelReadModelOnlySkillCombinationResources : IUpdateStaffingLevelReadModel
+	public class UpdateStaffingLevelReadModelOnlySkillCombinationResources
 	{
 		private readonly INow _now;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;

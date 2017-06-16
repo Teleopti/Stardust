@@ -247,7 +247,6 @@
     <Compile Include="FakeRepositories\FakeRequestStrategySettingsReader.cs" />
     <Compile Include="FakeRepositories\FakeRuleSetBagRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleDayReadModelRepository.cs" />
-    <Compile Include="FakeRepositories\FakeScheduleForecastSkillReadModelRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleHistoryRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleProjectionReadOnlyActivityProvider.cs" />
     <Compile Include="FakeRepositories\FakeSiteOpenHourRepository.cs" />
@@ -455,7 +454,7 @@
     <Compile Include="TestData\Setups\Configurable\ForecastConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\ApplicationFunctionConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonConfigurable.cs" />
-    <Compile Include="TestData\Setups\Configurable\ScheduleForecastSkillReadModelConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\SkillCombinationResourceReadModelConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\SkillDayConfigurable.cs" />
     <Compile Include="TestData\Setups\Default\DefaultAnalyticsDataCreator.cs" />
     <Compile Include="TestData\Setups\Default\DefaultBusinessUnit.cs" />

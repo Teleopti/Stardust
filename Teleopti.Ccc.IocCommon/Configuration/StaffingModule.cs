@@ -20,14 +20,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
         {
             builder.RegisterType<CompareProjection>().SingleInstance();
 
-            if (_configuration.Toggle(Toggles.StaffingActions_RemoveScheduleForecastSkillChangeReadModel_43388))
-            {
-                builder.RegisterType<UpdateStaffingLevelReadModelOnlySkillCombinationResources>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope();
-            }
-            else
-            {
-                builder.RegisterType<UpdateStaffingLevelReadModel>().As<IUpdateStaffingLevelReadModel>().InstancePerLifetimeScope();
-            }
+
+	        builder.RegisterType<UpdateStaffingLevelReadModelOnlySkillCombinationResources>().InstancePerLifetimeScope();
 
 	        if (_configuration.Toggle(Toggles.Staffing_ReadModel_Keep8DaysHistoricalData_44652))
 	        {

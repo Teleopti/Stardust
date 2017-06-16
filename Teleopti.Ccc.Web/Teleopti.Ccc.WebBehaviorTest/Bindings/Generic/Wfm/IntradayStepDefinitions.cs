@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void GivenThereAreScheduledAgentsForForDate(string skill, string date)
 		{
 			var theDate = date == "today" ? DateTime.Now.Date : DateTime.Parse(date);
-			DataMaker.Data().Apply(new ScheduleForecastSkillReadModelConfigurable(skill, theDate));
+			DataMaker.Data().Apply(new SkillCombinationResourceReadModelConfigurable(skill, theDate));
 		}
 
 		[When(@"I am navigating to intraday staffing view")]
