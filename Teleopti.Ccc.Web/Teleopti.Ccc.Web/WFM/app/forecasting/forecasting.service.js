@@ -54,6 +54,12 @@
 						.success(successCb)
 						.error(errorCb);
 				};
+
+				this.exportForecast = function(data, successCb, errorCb) {
+					$http.post("../api/Forecasting/Export", data)
+						.success(successCb)
+						.error(errorCb);
+				};
 			}
 		]);
 })();

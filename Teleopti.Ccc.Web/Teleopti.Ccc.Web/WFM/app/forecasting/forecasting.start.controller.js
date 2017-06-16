@@ -3,9 +3,10 @@
 
 	angular.module('wfm.forecasting')
 		.controller('ForecastingStartCtrl', [
-			'$scope', '$state', 'forecastingService', '$filter', '$interval', '$stateParams', '$translate',
-			function ($scope, $state, forecastingService, $filter, $interval, $stateParams, $translate) {
+			'$scope', '$state', 'forecastingService', '$filter', '$interval', '$stateParams', '$translate', 'toggles',
+			function ($scope, $state, forecastingService, $filter, $interval, $stateParams, $translate, toggles) {
 				$scope.isForecastRunning = false;
+				$scope.isExportEnabled = toggles.WFM_Export_Forecast_44716;
 				$scope.infos = {};
 				function updateRunningStatus() {
 					forecastingService.status.get().$promise.then(function (result) {
@@ -26,7 +27,7 @@
 						$interval.cancel(stopPolling);
 					}
 				}
-				
+
 				$scope.isCreateSkillEnabled = false;
 
 				var startDate = moment().utc().add(1, 'months').startOf('month').toDate();
@@ -45,6 +46,7 @@
 						angular.forEach(skills, function (skill) {
 							angular.forEach(skill.Workloads, function (workload) {
 								var w = {
+									SkillParentId: skill.Id,
 									Id: workload.Id,
 									Name: workload.Name,
 									ChartId: "chart" + workload.Id,
@@ -510,6 +512,21 @@
 					return $scope.isForecastRunning;
 				};
 
+				$scope.exportToFile = function (period, workload) {
+					forecastingService.exportForecast(JSON.stringify(
+					{
+						ForecastStart: period.startDate,
+						ForecastEnd: period.endDate,
+						ScenarioId: workload.selectedScenario.Id,
+						SkillId: workload.selectedWorkload.SkillParentId
+					}), function(data, status, headers, config) {
+						if (status !== 200) {
+							console.log(data, 'Export failed');
+						}
+					}, function(data, status, headers, config) {}
+				);
+				};
+
 				$scope.nextStepAdvanced = function (workload) {
 					$state.go('forecasting.advanced', { workloadId: workload.Id });
 				};
@@ -520,7 +537,7 @@
 					} else
 						return false;
 				};
-			
+
 				$scope.createSkill = function () {
 					$state.go('forecasting.skillcreate');
 				};
