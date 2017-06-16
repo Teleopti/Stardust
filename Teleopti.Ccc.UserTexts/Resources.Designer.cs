@@ -11819,6 +11819,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter planning periods.
+        /// </summary>
+        public static string FilterPlanningPeriods {
+            get {
+                return ResourceManager.GetString("FilterPlanningPeriods", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter reports.
         /// </summary>
         public static string FilterReports {
@@ -13269,7 +13278,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to An planning group is needed to be able to schedule your agents. Do you want to create an planning group?.
+        ///   Looks up a localized string similar to A planning group is needed to be able to schedule your agents. Do you want to create a planning group?.
         /// </summary>
         public static string HelpCreatePlanningGroup {
             get {

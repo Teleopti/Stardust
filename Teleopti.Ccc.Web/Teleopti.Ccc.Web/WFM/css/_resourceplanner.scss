@@ -293,16 +293,14 @@ background-color: #cacaca;
 }
 
 //for new rescource planning
+
+md-tooltip .md-content {
+	height: auto;
+}
+
+//for planning periods overview
 .pg-chip {
 	pointer-events: none;
-}
-
-.pg-pp {
-	margin: 3px;
-}
-
-.pp-inner-card {
-	padding: 4px;
 }
 
 .pp-fix {
@@ -336,10 +334,6 @@ table.overview {
 
 .resourceplanner-box:hover {
 	outline: 3px rgba(0, 0, 0, 0.54) solid;
-}
-
-md-tooltip .md-content {
-	height: auto;
 }
 
 .grid-scroll-wrap {
@@ -416,11 +410,11 @@ md-tooltip .md-content {
 	color: $orange-400  !important;
 }
 
-.pp-color-label {
-	display: inline-block;
-	margin: 10px 10px 0 0;
-	padding: 5px 10px;
-}
+// .pp-color-label {
+// 	display: inline-block;
+// 	margin: 10px 10px 0 0;
+// 	padding: 5px 10px;
+// }
 
 .pp-status {
 	padding: 6px;

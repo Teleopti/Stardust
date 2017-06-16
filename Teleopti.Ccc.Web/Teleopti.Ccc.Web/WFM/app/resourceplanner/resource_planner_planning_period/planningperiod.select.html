@@ -14,8 +14,8 @@
 					<div class="wfm-filter-container">
 						<label for="filter" class="input-icon">
 							<i class="mdi mdi-filter-outline">
-								<input type="text" id="filter" ng-model="vm.filterTime" placeholder="filter planning periods">
-								<md-tooltip>filter planning periods</md-tooltip>
+								<input type="text" id="filter" ng-model="vm.filterTime" placeholder="{{'FilterPlanningPeriods' | translate}}">
+								<md-tooltip>{{'FilterPlanningPeriods' | translate}} </md-tooltip>
 							</i>
 						</label>
 					</div>
@@ -24,7 +24,7 @@
 					<button class="wfm-btn wfm-btn-invis-default create-next-planning-period" ng-click="vm.startNextPlanningPeriod()"><i class="mdi mdi-plus"></i>{{'CreateNextPp' | translate}}</button>
 					<span class="pp-label"><i class="mdi mdi-checkbox-blank-circle pp-scheduled-label"></i> {{'SchedulingSucceeded' | translate}}</span>
 					<span class="pp-label"><i class="mdi mdi-checkbox-blank-circle pp-scheduled-failed-label"></i> {{'SchedulingFailed' | translate}}</span>
-					<button class="wfm-btn wfm-btn-invis-disabled" ng-click=""><i class="mdi mdi-information-outline"></i> Help</button>
+					<button class="wfm-btn wfm-btn-invis-disabled" ng-click=""><i class="mdi mdi-information-outline"></i> {{'HelpLabel' | translate}}</button>
 				</div>
 			</div>
 		</div>
@@ -48,7 +48,6 @@
 					<i class="mdi mdi-delete"></i>
 					<md-tooltip>{{'DeletePlanningPeriod' | translate}}</md-tooltip>
 				</div>
-				<!--<div tabindex=0 class="context-menu card-context">{{p.TotalDays}} {{'days' | translate}}</div>-->
 				<button class="wfm-btn wfm-btn-invis-primary pull-right">{{'Schedule' | translate}}</button>
 			</div>
 		</div>
