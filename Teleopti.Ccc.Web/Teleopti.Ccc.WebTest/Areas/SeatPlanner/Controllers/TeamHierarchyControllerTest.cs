@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.WebTest.Areas.SeatPlanner.Controllers
 {
 	internal class TeamHierarchyControllerTest
 	{
-
 		private TeamHierarchyController target;
 		private ISiteRepository siteRepository;
 		private IBusinessUnitRepository businessUnitRepository;
