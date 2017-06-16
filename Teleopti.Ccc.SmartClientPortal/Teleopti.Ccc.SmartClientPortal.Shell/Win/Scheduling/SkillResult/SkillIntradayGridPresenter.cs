@@ -259,7 +259,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SkillResult
 
 				if (Skill.SkillType.ForecastSource == ForecastSource.Email ||
 				    Skill.SkillType.ForecastSource == ForecastSource.Backoffice ||
-				    Skill.SkillType.ForecastSource == ForecastSource.Time)
+				    Skill.SkillType.ForecastSource == ForecastSource.Time ||
+					Skill.SkillType.ForecastSource == ForecastSource.OutboundTelephony)
 				{
 
 					gridRow = new SkillStaffPeriodGridRowScheduler(_rowManager, "NumericReadOnlyCell",
