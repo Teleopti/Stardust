@@ -31,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 
 		[Test]
-		[Ignore("To be fixed - 44757")]
 		[Toggle(Toggles.ResourcePlanner_SchedulingIslands_44757)]
 		[ToggleOff(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		public void ClassicAndIslandsShouldThrow()
@@ -45,10 +44,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			PersonRepository.Has(new ContractWithMaximumTolerance(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, firstDay, 1));
 
-			Assert.Throws<InvalidToggleCombinationsException>(() =>
+			var ex = Assert.Throws<InvalidToggleCombinationsException>(() =>
 			{
 				Target.DoScheduling(DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1));
-			}, string.Format(InvalidToggleCombinationsException.ExMessage, Toggles.ResourcePlanner_SchedulingIslands_44757, Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289));
+			});
+			ex.Message
+				.Should().Be.EqualTo(string.Format(InvalidToggleCombinationsException.ExMessage,
+					Toggles.ResourcePlanner_SchedulingIslands_44757, Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289));
 		}
 	}
 }

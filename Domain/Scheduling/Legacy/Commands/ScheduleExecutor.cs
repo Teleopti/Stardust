@@ -23,6 +23,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SchedulingIslands_44757, Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+	public class InvalidScheduleToggleCombination : IScheduleExecutor
+	{
+		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
+			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
+			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		{
+			throw new InvalidToggleCombinationsException(Toggles.ResourcePlanner_SchedulingIslands_44757, Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289);
+		}
+	}
+
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class ScheduleExecutor : ScheduleExecutorOld
 	{

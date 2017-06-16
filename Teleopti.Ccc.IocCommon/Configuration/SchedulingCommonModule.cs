@@ -126,6 +126,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule(new ScheduleOvertimeModule(_configuration));
 			builder.RegisterType<DoFullResourceOptimizationOneTime>().InstancePerLifetimeScope();
 			builder.RegisterType<ClassicScheduleCommand>().InstancePerLifetimeScope();
+
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
 			{
 				builder.RegisterType<ScheduleExecutor>().As<IScheduleExecutor>().InstancePerLifetimeScope().ApplyAspects();
@@ -153,6 +154,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<WorkShiftMinMaxCalculatorOLD>().As<IWorkShiftMinMaxCalculator>().InstancePerDependency();
 				builder.RegisterType<WorkShiftFinderResultHolder>().As<IWorkShiftFinderResultHolder>().InstancePerLifetimeScope();
 			}
+
+			if (_configuration.Toggle(Toggles.ResourcePlanner_SchedulingIslands_44757))
+			{
+				builder.RegisterType<InvalidScheduleToggleCombination>().As<IScheduleExecutor>().SingleInstance();
+			}
+
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationExecuter>().InstancePerLifetimeScope();
 			builder.RegisterType<CorrectAlteredBetween>().SingleInstance();
