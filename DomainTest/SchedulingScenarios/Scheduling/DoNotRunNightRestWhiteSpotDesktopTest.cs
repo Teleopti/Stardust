@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillDays = skill.CreateSkillDayWithDemand(scenario, firstDay, 1);
 			SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new[] { agent }, Enumerable.Empty<IPersonAssignment>(), skillDays);
 
-			Target.Execute(null, schedulingOptions, schedulingProgress, new[]{agent}, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), null, null);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, schedulingProgress, new[]{agent}, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), null, null);
 
 			NightRestWhiteSpotSolverService.NumberOfNightRestWhiteSpotServiceCalls
 				.Should().Be.EqualTo(0);
