@@ -84,7 +84,14 @@ function fnStartRemoteService
         $Computername,
         $Servicename
     )
-        Write-Host "Starting Service: $Servicename on Computer: $Computername"
+        if ($Servicename -eq $ServiceTimeBankScheduleValidator)
+        {
+            Write-Host "Starting Service: $Servicename on Computer: $Computername"
+            $Service = Get-Service -Name $ServiceTimeBankScheduleValidator -ComputerName $Computername
+            $Service.Start("/noinit");Break
+        }
+		
+		Write-Host "Starting Service: $Servicename on Computer: $Computername"
         Get-Service -Name $Servicename -ComputerName $Computername | Start-Service -ErrorAction SilentlyContinue
 }
 
