@@ -174,6 +174,7 @@
 		ResourcePlanner_CalculateShiftValuesInParallel_44681,
 		ResourcePlanner_RespectSkillGroupShoveling_44156,
 		ResourcePlanner_OvertimeNightShifts_44311,
+		ResourcePlanner_SchedulingIslands_44757,
 
 		Wfm_DisplayOnlineHelp_39402,
 

@@ -245,6 +245,7 @@
     <Compile Include="Common\Time\IUserNow.cs" />
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
     <Compile Include="Common\Time\UserNow.cs" />
+    <Compile Include="FeatureFlags\InvalidToggleCombinationsException.cs" />
     <Compile Include="Forecasting\Export\Web\DailyModelForecast.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportModel.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportModelCreator.cs" />
