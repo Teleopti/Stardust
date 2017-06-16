@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 			{
 				forecasts = dates.ToDictionary(d => d, d => _outboundScheduledResourcesProvider.GetForecastedTimeOnDate(d, campaign.Skill))
 					.Where(kvp => kvp.Value > TimeSpan.Zero).ToDictionary(d => d.Key, d => d.Value);
-				_outboundScheduledResourcesCacher.SetForecastedTime(campaign, schedules);
+				_outboundScheduledResourcesCacher.SetForecastedTime(campaign, forecasts);
 			}
 
 			foreach (var dateOnly in incomingTask.SpanningPeriod.DayCollection())
