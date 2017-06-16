@@ -1,4 +1,4 @@
-(function() {
+(function () {
     'use strict';
 
     angular
@@ -15,9 +15,8 @@
             getOrganization: getOrganization,
             getOrganizationForSkills: getOrganizationForSkills,
             agentStatesFor: agentStatesFor,
-            getAdherenceForAllSites: getAdherenceForAllSites,
-            getAdherenceForSitesBySkills: getAdherenceForSitesBySkills,
-			getTeamCardsFor: getTeamCardsFor,
+            getSiteCardsFor: getSiteCardsFor,
+            getTeamCardsFor: getTeamCardsFor,
             getSkillArea: getSkillArea,
             getPhoneStates: getPhoneStates,
             forToday: forToday,
@@ -64,30 +63,21 @@
         function agentStatesFor(data) {
             return $resource('../api/AgentStates/For', {}, { query: { method: 'GET' } }).query(data).$promise;
         };
-		
-		function getTeamCardsFor(data) {
-			return $resource('../api/Overview/TeamCards', {}, {
-			    query: {
-				    method: 'GET',
-				    isArray: true
-			    }
-		    }).query({
-			    skillIds: data.skillIds,
-			    siteId: data.siteIds
-		    }).$promise;
-	    };
 
-        function getAdherenceForAllSites(data) {
-			return $resource('../api/Overview/SiteCards', {}, {
+        function getTeamCardsFor(data) {
+            return $resource('../api/Overview/TeamCards', {}, {
                 query: {
                     method: 'GET',
                     isArray: true
                 }
-            }).query().$promise;
+            }).query({
+                skillIds: data.skillIds,
+                siteId: data.siteIds
+            }).$promise;
         };
 
-        function getAdherenceForSitesBySkills(data) {
-			return $resource('../api/Overview/SiteCards', {}, {
+        function getSiteCardsFor(data) {
+            return $resource('../api/Overview/SiteCards', {}, {
                 query: {
                     method: 'GET',
                     isArray: true
@@ -127,7 +117,7 @@
                 personId: data.personId
             }).$promise;
         };
-		
+
         function getAgentHistoricalData(id) {
             return $resource('../api/HistoricalAdherence/For', {}, {
                 query: {

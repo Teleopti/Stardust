@@ -156,7 +156,7 @@
 								pollingLock = true;
 							});
 					} else if (angular.isDefined(vm.sites)) {
-						rtaService.getAdherenceForSitesBySkills(vm.skillId)
+						rtaService.getSiteCardsFor(vm.skillId)
 							.then(function (siteAdherences) {
 								currentState = JSON.stringify(siteAdherences);
 								if (previousState != currentState) {
@@ -177,7 +177,7 @@
 							pollingLock = true;
 						});
 				} else {
-					rtaService.getAdherenceForAllSites().then(function (siteAdherences) {
+					rtaService.getSiteCardsFor().then(function (siteAdherences) {
 						currentState = JSON.stringify(siteAdherences);
 						if (previousState != currentState) {
 							vm.sites = siteAdherences;
@@ -239,7 +239,7 @@
 			function getSitesBySkillsInfo() {
 				pollingLock = false;
 				vm.skillIds = getSkillIds();
-				return rtaService.getAdherenceForSitesBySkills(vm.skillIds).then(function (sitesBySkill) {
+				return rtaService.getSiteCardsFor(vm.skillIds).then(function (sitesBySkill) {
 					vm.sites = sitesBySkill;
 					pollingLock = true;
 				});
@@ -255,7 +255,7 @@
 
 			function getSitesInfo() {
 				pollingLock = false;
-				rtaService.getAdherenceForAllSites().then(function (siteAdherences) {
+				rtaService.getSiteCardsFor().then(function (siteAdherences) {
 					vm.sites = siteAdherences;
 					pollingLock = true;
 				});
