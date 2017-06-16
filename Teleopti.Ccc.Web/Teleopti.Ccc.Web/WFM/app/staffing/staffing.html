@@ -17,7 +17,7 @@
                             {{'RepViewerNoMoreMatches'|translate}}
                         </md-not-found>
                     </md-autocomplete>
-                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="clearSkillHelper()">
+                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
                 </div>
@@ -36,7 +36,7 @@
                             {{'RepViewerNoMoreMatches'|translate}}
                         </md-not-found>
                     </md-autocomplete>
-                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="clearSkillHelper()">
+                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
                 </div>
