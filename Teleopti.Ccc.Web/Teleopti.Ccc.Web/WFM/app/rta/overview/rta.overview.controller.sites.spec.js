@@ -152,7 +152,6 @@ describe('RtaOverviewController', function () {
 		});
 	});
 
-
 	it('should go to agents for permitted teams in site', function () {
 		$fakeBackend.withSiteAdherence({
 			Id: "londonGuid"

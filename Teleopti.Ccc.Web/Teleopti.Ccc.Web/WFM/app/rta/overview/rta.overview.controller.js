@@ -111,17 +111,13 @@
 					if (indexOfSite > -1) vm.selectedItemIds.siteIds.splice(indexOfSite, 1);
 					else {
 						organizationData.forEach(function (org) {
-							if (itemId === org.Id && org.FullPermission) {
-								vm.selectedItemIds.siteIds.push(itemId);
-							}
+							if (itemId === org.Id && org.FullPermission) vm.selectedItemIds.siteIds.push(itemId);
 							else {
-								if(org.Id == itemId)
+								if (org.Id == itemId)
 									org.Teams.forEach(function (team) {
 										var indexOfTeam = vm.selectedItemIds.teamIds.indexOf(team.Id);
-										if (indexOfTeam > -1) 
-										vm.selectedItemIds.teamIds.splice(indexOfTeam, 1);
-										else
-										vm.selectedItemIds.teamIds.push(team.Id);
+										if (indexOfTeam > -1) vm.selectedItemIds.teamIds.splice(indexOfTeam, 1);
+										else vm.selectedItemIds.teamIds.push(team.Id);
 									});
 							}
 						})
@@ -208,16 +204,12 @@
 				var stateParamsObject = {};
 				var skillOrSkillAreaKey = vm.skillIds != null ? 'skillIds' : 'skillAreaId';
 				var skillOrSkillAreaValue = vm.skillIds != null ? vm.skillIds : vm.skillAreaId;
-				if (selectedItemIds.siteIds.length > 0 && selectedItemIds.teamIds.length > 0) {
-					stateParamsObject['siteIds'] = selectedItemIds.siteIds;
-					stateParamsObject['teamIds'] = selectedItemIds.teamIds;
-				}
-				else if (selectedItemIds.teamIds.length > 0) {
-					stateParamsObject['teamIds'] = selectedItemIds.teamIds;
-				}
-				else if (selectedItemIds.siteIds.length > 0) {
+				if (selectedItemIds.siteIds.length > 0) {
+					if (selectedItemIds.teamIds.length > 0) stateParamsObject['teamIds'] = selectedItemIds.teamIds;
 					stateParamsObject['siteIds'] = selectedItemIds.siteIds;
 				}
+				else if(selectedItemIds.teamIds.length > 0) stateParamsObject['teamIds'] = selectedItemIds.teamIds;
+
 				if (vm.skillIds || vm.skillAreaId) {
 					stateParamsObject[skillOrSkillAreaKey] = skillOrSkillAreaValue;
 				}
