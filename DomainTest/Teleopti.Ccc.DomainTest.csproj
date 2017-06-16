@@ -231,6 +231,7 @@
     <Compile Include="ApplicationLayer\RemoveSelectedPersonAbsenceComandHandlerTest.cs" />
     <Compile Include="Common\PublishPersonNameChangedEventTest.cs" />
     <Compile Include="Common\TimePassingSimulatorTest.cs" />
+    <Compile Include="Forecasting\Export\Web\ForecastExportModelCreatorTest.cs" />
     <Compile Include="GroupPageCreator\OptionalColumnGroupPageTest.cs" />
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />

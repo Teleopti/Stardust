@@ -431,6 +431,8 @@
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\AgentStateController.cs" />
     <Compile Include="Areas\Anywhere\Controllers\OrganizationController.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ExportForecastInput.cs" />
+    <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
     <Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />
     <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
@@ -2707,6 +2709,7 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\Forecasting\Views\ForecastExport\" />
     <Folder Include="Areas\Mart\Views\Shared\" />
     <Folder Include="Areas\MyTime\Core\BadgeLeaderBoardReport\DataProvider\" />
     <Folder Include="Areas\MyTime\Core\Mapping\" />

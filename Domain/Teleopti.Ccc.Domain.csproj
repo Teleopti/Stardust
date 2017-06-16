@@ -244,6 +244,9 @@
     <Compile Include="Common\Time\IUserNow.cs" />
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
     <Compile Include="Common\Time\UserNow.cs" />
+    <Compile Include="Forecasting\Export\Web\DailyModelForecast.cs" />
+    <Compile Include="Forecasting\Export\Web\ForecastExportModel.cs" />
+    <Compile Include="Forecasting\Export\Web\ForecastExportModelCreator.cs" />
     <Compile Include="GroupPageCreator\GroupingsCreatorOptionalColumn.cs" />
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
