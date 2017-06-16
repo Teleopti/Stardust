@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				Assert.Ignore("TODO - Should probably be fixed");
 
 			var schedulingProgress = (ISchedulingProgress)Activator.CreateInstance(_schedulingProgressFake);
+			var schedulingCallback = new CancelSchedulingCallback();
 			var schedulingOptions = new SchedulingOptions
 			{
 				RefreshRate = 1 //to force ISchedulingProgress to be called so our "cancel click" will be triggered
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var skillDays = skill.CreateSkillDayWithDemand(scenario, firstDay, 1);
 			SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new[] { agent }, Enumerable.Empty<IPersonAssignment>(), skillDays);
 
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, schedulingProgress, new[]{agent}, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), null, null);
+			Target.Execute(schedulingCallback, schedulingOptions, schedulingProgress, new[]{agent}, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), null, null);
 
 			NightRestWhiteSpotSolverService.NumberOfNightRestWhiteSpotServiceCalls
 				.Should().Be.EqualTo(0);
