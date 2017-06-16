@@ -60,9 +60,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 			var userDateOnly = new DateOnly(overTimeSuggestionModel.TimeSerie.Min());
 			
-			var startTime = TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Min(), _userTimeZone.TimeZone());
-			var endTime = TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max().AddMinutes(minResolution), _userTimeZone.TimeZone());
-			var fullPeriod = new DateTimePeriod(startTime, endTime);
+			var showStartime = TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Min(), _userTimeZone.TimeZone());
+			var showEndtime = TimeZoneHelper.ConvertToUtc(overTimeSuggestionModel.TimeSerie.Max().AddMinutes(minResolution), _userTimeZone.TimeZone());
+			var showPeriod = new DateTimePeriod(showStartime, showEndtime);
 
 			var overtimestartTime = TimeZoneHelper.ConvertToUtc(userDateOnly.Date.AddTicks(overTimeSuggestionModel.OvertimePreferences.SelectedSpecificTimePeriod.StartTime.Ticks), _userTimeZone.TimeZone());
 			var overtimeEndTime = TimeZoneHelper.ConvertToUtc(userDateOnly.Date.AddTicks(overTimeSuggestionModel.OvertimePreferences.SelectedSpecificTimePeriod.EndTime.Ticks), _userTimeZone.TimeZone());
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			if (!skills.Any())
 				return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
 
-			return _scheduleOvertimeExecuteWrapper.Execute(overTimeSuggestionModel.OvertimePreferences, new SchedulingProgress(), scheduleDictionary, persons, new DateOnlyPeriod(userDateOnly.AddDays(-1), userDateOnly.AddDays(1)), overtimePeriod, allSkills,skills, fullPeriod);
+			return _scheduleOvertimeExecuteWrapper.Execute(overTimeSuggestionModel.OvertimePreferences, new SchedulingProgress(), scheduleDictionary, persons, new DateOnlyPeriod(userDateOnly.AddDays(-1), userDateOnly.AddDays(1)), overtimePeriod, allSkills,skills, showPeriod);
 		}
 
 		public void Apply(IList<OverTimeModel> overTimeModels, Guid multiplicationDefinitionId)

@@ -1594,7 +1594,7 @@
     <Compile Include="Scheduling\ActivityTest.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentTest.cs" />
     <Compile Include="Security\RegExpSpecificationTest.cs" />
-    <Compile Include="Scheduling\Overtime\ScheduleOvertimeExecuteWrapperTest.cs" />
+    <Compile Include="Scheduling\Overtime\AddOvertimeTest.cs" />
     <Compile Include="SiteOpenHours\SiteWithOpenHourProviderTest.cs" />
     <Compile Include="Staffing\CompareProjectionTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
