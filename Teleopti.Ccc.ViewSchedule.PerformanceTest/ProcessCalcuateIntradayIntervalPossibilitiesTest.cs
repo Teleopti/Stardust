@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 {
 	[TestFixture]
 	[RequestPerformanceTuningTest]
+	[Ignore("Takes more than 3 hours to run.. ")]
 	public class ProcessCalcuateIntradayIntervalPossibilities : ISetup
 	{
 		private const string tenantName = "Teleopti WFM";
