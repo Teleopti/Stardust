@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Web.Core
 	public class TeamsProvider : ITeamsProvider
 	{
 		private readonly ISiteRepository _siteRepository;
-		private readonly IBusinessUnit _currentBusinessUnit;
+		private readonly ICurrentBusinessUnit _currentBusinessUnit;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Core
 			IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository)
 		{
 			_siteRepository = siteRepository;
-			_currentBusinessUnit = currentBusinessUnit.Current();
+			_currentBusinessUnit = currentBusinessUnit;
 			_permissionProvider = permissionProvider;
 			_loggedOnUser = loggedOnUser;
 			_personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.Web.Core
 
 			return new BusinessUnitWithSitesViewModel
 			{
-				Id = _currentBusinessUnit.Id ?? Guid.Empty,
-				Name = _currentBusinessUnit.Name,
+				Id = _currentBusinessUnit.Current().Id ?? Guid.Empty,
+				Name = _currentBusinessUnit.Current().Name,
 				Children = siteViewModels
 			};
 
@@ -74,12 +74,12 @@ namespace Teleopti.Ccc.Web.Core
 		{
 			var compare = StringComparer.Create(_loggedOnUser.CurrentUser().PermissionInformation.UICulture(), false);
 			var sites = _siteRepository.LoadAll()
-				.Where(site => site.BusinessUnit.Id == _currentBusinessUnit.Id)
+				.Where(site => site.BusinessUnit.Id.GetValueOrDefault() == _currentBusinessUnit.Current().Id.GetValueOrDefault())
 				.OrderBy(site => site.Description.Name, compare);
 			var siteViewModels = new List<SiteViewModelWithTeams>();
 
 			Guid? logonUserTeamId = getPermittedLogonTeam(date, functionPath);
-			var validTeamIds = hasPremission(date, functionPath, logonUserTeamId,
+			var validTeamIds = hasPermission(date, functionPath, logonUserTeamId,
 				sites.SelectMany(s => s.TeamCollection)
 					.Select(item => item.Id.Value)
 					.Distinct().ToArray());
@@ -110,8 +110,8 @@ namespace Teleopti.Ccc.Web.Core
 
 			return new BusinessUnitWithSitesViewModel
 			{
-				Id = _currentBusinessUnit.Id ?? Guid.Empty,
-				Name = _currentBusinessUnit.Name,
+				Id = _currentBusinessUnit.Current().Id ?? Guid.Empty,
+				Name = _currentBusinessUnit.Current().Name,
 				Children = siteViewModels,
 				LogonUserTeamId = logonUserTeamId
 			};
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Web.Core
 			var compare = StringComparer.Create(_loggedOnUser.CurrentUser().PermissionInformation.UICulture(), false);
 			var items = _personSelectorReadOnlyRepository.GetOrganizationForWeb(dateOnlyPeriod);
 			Guid? logonUserTeamId = getPermittedLogonTeam(dateOnlyPeriod.StartDate, functionPath);
-			var validTeamIds = hasPremission(dateOnlyPeriod.StartDate, functionPath, logonUserTeamId,
+			var validTeamIds = hasPermission(dateOnlyPeriod.StartDate, functionPath, logonUserTeamId,
 					items
 					.Select(item => item.TeamId.Value)
 					.Distinct().ToArray());
@@ -150,14 +150,14 @@ namespace Teleopti.Ccc.Web.Core
 
 			return new BusinessUnitWithSitesViewModel
 			{
-				Id = _currentBusinessUnit.Id ?? Guid.Empty,
-				Name = _currentBusinessUnit.Name,
-				Children = sites ?? new List<SiteViewModelWithTeams>(),
+				Id = _currentBusinessUnit.Current().Id ?? Guid.Empty,
+				Name = _currentBusinessUnit.Current().Name,
+				Children = sites,
 				LogonUserTeamId = logonUserTeamId
 			};
 		}
 
-		private IEnumerable<Guid> hasPremission(DateOnly date, string functionPath, Guid? logonUserTeamId, params Guid[] teamIds)
+		private IEnumerable<Guid> hasPermission(DateOnly date, string functionPath, Guid? logonUserTeamId, params Guid[] teamIds)
 		{
 			foreach (var teamId in teamIds)
 			{
@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Web.Core
 			var currentUser = _loggedOnUser.CurrentUser();
 			var myTeam = currentUser.MyTeam(date);
 			var hasPermissonForLogonTeam = _permissionProvider.HasPersonPermission(functionPath, date, currentUser);
-			if (myTeam?.Id != null && myTeam.Site.BusinessUnit == _currentBusinessUnit && hasPermissonForLogonTeam)
+			if (myTeam?.Id != null && myTeam.Site.BusinessUnit.Id == _currentBusinessUnit.Current()?.Id && hasPermissonForLogonTeam)
 			{
 				return myTeam.Id.Value;
 			}
