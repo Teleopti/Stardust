@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -32,8 +31,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeAgentDayScheduleTagRepository AgentDayScheduleTagRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeMultisiteDayRepository MultisiteDayRepository;
-		public ISchedulerStateHolder StateHolder;
-
 
 		[Test]
 		public void ShouldNotCreateTags()
@@ -128,7 +125,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				skill.CreateSkillDayWithDemandOnInterval(scenario, firstDay.AddDays(4), 1, new Tuple<TimePeriod, double>(earlyInterval, 1000)), 
 				skill.CreateSkillDayWithDemandOnInterval(scenario, firstDay.AddDays(5), 1, new Tuple<TimePeriod, double>(earlyInterval, 1000)), 
 				skill.CreateSkillDayWithDemandOnInterval(scenario, firstDay.AddDays(6), 1, new Tuple<TimePeriod, double>(earlyInterval, 1000)));
-			StateHolder.SchedulingResultState.UseValidation = true;
 
 			Target.DoScheduling(period);
 
