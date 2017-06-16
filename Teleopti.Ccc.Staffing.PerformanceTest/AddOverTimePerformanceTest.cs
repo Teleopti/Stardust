@@ -1,12 +1,18 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Linq;
+using NHibernate.Util;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Overtime;
+using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -28,11 +34,12 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public AsSystem AsSystem;
 		public IAddOverTime AddOverTime;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
-
+		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
 		public IStaffingViewModelCreator StaffingViewModelCreator;
 
 		private DateTime[] timeSerie;
 		private Guid[] skillIds;
+		private IMultiplicatorDefinitionSet oneMulti;
 
 		public override void OneTimeSetUp()
 		{
@@ -50,6 +57,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 
 				var viewModel = StaffingViewModelCreator.Load(skillIds);
 				timeSerie = viewModel.DataSeries.Time;
+				oneMulti = MultiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().First();
 			});
 
 		}
@@ -58,7 +66,14 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public void ProvideSuggestionsAndApply()
 		{
 			Now.Is("2016-08-21 07:00");
-
+			
+			var overtimePref = new OvertimePreferences
+			{
+				OvertimeType = oneMulti,
+				SelectedSpecificTimePeriod = new TimePeriod(8,0,17,0),
+				SelectedTimePeriod = new TimePeriod(1,4),
+				ScheduleTag = new NullScheduleTag(),
+			};
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			WithUnitOfWork.Do(uow =>
@@ -66,9 +81,10 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				var resultModels = AddOverTime.GetSuggestion(new OverTimeSuggestionModel
 				{
 					SkillIds = skillIds.ToList(),
-					TimeSerie = timeSerie
+					TimeSerie = timeSerie,
+					OvertimePreferences = overtimePref
 				});
-				AddOverTime.Apply(resultModels.Models, Guid.NewGuid());
+				AddOverTime.Apply(resultModels.Models, oneMulti.Id.GetValueOrDefault());
 			});
 
 		}
