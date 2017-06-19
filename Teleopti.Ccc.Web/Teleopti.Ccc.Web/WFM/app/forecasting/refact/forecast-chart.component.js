@@ -14,7 +14,7 @@ angular.module('wfm.forecasting')
 function ForecastChartCtrl($translate, $filter) {
 	var ctrl = this;
 
-	ctrl.selectedDays = [];
+	var selection = 0;
 	ctrl.refresh = generateForecastChart;
 
 	function checkSelection(arr, item) {
@@ -35,10 +35,10 @@ function ForecastChartCtrl($translate, $filter) {
 			return;
 		}
 
-		ctrl.selectedDays = [];
+		var selection = 0;
 		var preparedData = {};
 		ctrl.onClick(ctrl.selectedDays);
-		
+
 		var preparedData = {
 			dateSeries: ['date'],
 			vacwSeries: ['vacw'],
@@ -50,7 +50,7 @@ function ForecastChartCtrl($translate, $filter) {
 		}
 
 		for (var i = 0; i < ctrl.days.length; i++) {
-			preparedData.dateSeries.push(moment(ctrl.days[i].date).format('DD/MM/YYYY'));
+			preparedData.dateSeries.push(moment(ctrl.days[i].date).format('L'));
 			preparedData.vacwSeries.push(ctrl.days[i].vacw);
 			preparedData.vcSeries.push(ctrl.days[i].vc);
 			preparedData.vtacwSeries.push(ctrl.days[i].vtacw);
@@ -98,18 +98,14 @@ function ForecastChartCtrl($translate, $filter) {
 					grouped: true
 				},
 				onselected: function(){
-					var selection = chart.selected();
-					for (var i = 0; i < selection.length; i++) {
-						if (!checkSelection(ctrl.selectedDays, selection[i].index)) {
-							ctrl.selectedDays.push(selection[i].index);
-						} else{
-							var index = ctrl.selectedDays.indexOf(selection[i].index)
-							if (index > -1) {
-								ctrl.selectedDays.splice(index, 1);
-							}
-						}
-					}
-					ctrl.onClick(ctrl.selectedDays);
+					selection = chart.selected();
+					console.log(selection.length);
+					ctrl.onClick(selection);
+				},
+				onunselected: function () {
+					selection = chart.selected();
+					console.log(selection.length);
+					ctrl.onClick(selection);
 				}
 			},//end of data
 			point: {

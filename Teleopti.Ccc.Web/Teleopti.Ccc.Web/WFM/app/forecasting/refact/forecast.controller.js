@@ -98,14 +98,14 @@
         function(data, status, headers, config) {
           if (data.Days.length === 0) {
             console.log('no data');
+            vm.skillMaster.isForecastRunning = false;
             return;
           }
           else{
             console.log(data);
             vm.currentWorkload.Days = data.Days;
+            vm.skillMaster.isForecastRunning = false;
           }
-
-          vm.skillMaster.isForecastRunning = false;
           forecastingModal();
         },
         function(data, status, headers, config) {
