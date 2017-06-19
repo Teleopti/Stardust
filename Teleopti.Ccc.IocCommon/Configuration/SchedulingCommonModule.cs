@@ -112,14 +112,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SharedResourceContextOldSchedulingScreenBehaviorWithoutShoveling>().InstancePerLifetimeScope();
 			builder.RegisterType<SharedResourceContextOldSchedulingScreenBehavior>().InstancePerLifetimeScope();
 			builder.RegisterType<SchedulerStateScheduleDayChangedCallback>().As<IScheduleDayChangeCallback>().InstancePerLifetimeScope();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
-			{
-				builder.RegisterType<SchedulingOptionsProviderForTeamPerfTest>().As<ISchedulingOptionsProvider>().InstancePerLifetimeScope();
-			}
-			else
-			{
-				builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
-			}
 			builder.RegisterModule<IntraIntervalOptimizationServiceModule>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 			builder.RegisterModule<BackToLegalShiftModule>();
@@ -490,6 +482,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.ApplyAspects()
 					.SingleInstance();
 				builder.RegisterType<DesktopContext>().SingleInstance();
+				builder.RegisterType<DesktopSchedulingContext>()
+					.As<ISchedulingOptionsProvider>()
+					.AsSelf()
+					.SingleInstance();
 			}
 			else
 			{
@@ -497,10 +493,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				if (_configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
 				{
 					builder.RegisterType<OptimizationPreferencesPerfTestProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
+					builder.RegisterType<SchedulingOptionsProviderForTeamPerfTest>().As<ISchedulingOptionsProvider>().InstancePerLifetimeScope();
 				}
 				else
 				{
 					builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().AsSelf().As<IOptimizationPreferencesProvider>().SingleInstance();
+					builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
 				}
 				builder.RegisterType<PeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
 				builder.RegisterType<IntradayOptimizationCallbackContext>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();
