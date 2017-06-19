@@ -1356,4 +1356,7 @@
   <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
     <value>Flera aktiviteter/frånvarotyper</value>
   </data>
+  <data name="ResPlannedOvertimeH" xml:space="preserve">
+    <value>Planerad övertid (tt:mm)</value>
+  </data>
 </root>

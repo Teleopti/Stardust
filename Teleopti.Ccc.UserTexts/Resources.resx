@@ -16135,11 +16135,11 @@ Do you want to participate?</value>
     <comment>filter planning groups</comment>
   </data>
   <data name="PlansPageCreatePlanningGroup" xml:space="preserve">
-    <value>Fill in name and select valid filters to create planning group</value>
+    <value>Fill in a name and select suitable filters to create a planning group</value>
     <comment>PlansPageCreatePlanningGroup</comment>
   </data>
   <data name="UnsupportedDataSeriesFound" xml:space="preserve">
-    <value>Contains mixed skilltypes, certain data series may be unavailable</value>
+    <value>Contains mixed skill types, certain data series may be unavailable</value>
     <comment>intraday feedback message</comment>
   </data>
   <data name="OpenSchedulePage" xml:space="preserve">

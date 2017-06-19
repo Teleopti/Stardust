@@ -14700,4 +14700,85 @@ Vill du registrera dig?</value>
   <data name="MobileNotificationSettings" xml:space="preserve">
     <value>Notifieringsinställningar för mobilappen</value>
   </data>
+  <data name="DeletedContractAssigned" xml:space="preserve">
+    <value>Kontraktet {0} som kopplats till den här agenten har tagits bort</value>
+  </data>
+  <data name="DeletedContractScheduleAssigned" xml:space="preserve">
+    <value>Kontraktsschemat {0} som kopplats till den här agenten har tagits bort</value>
+  </data>
+  <data name="DeletedPartTimePercentageAssigned" xml:space="preserve">
+    <value>Deltidsprocenten {0} som kopplats till den här agenten har tagits bort</value>
+  </data>
+  <data name="DeletedShiftBagAssigned" xml:space="preserve">
+    <value>Skiftpåsen {0} som kopplats till den här agenten har tagits bort</value>
+  </data>
+  <data name="MissingPersonPeriodForPeriod" xml:space="preserve">
+    <value>Agenten har ingen personperiod för hela eller delar av den valda perioden</value>
+  </data>
+  <data name="MissingSchedulePeriodForPeriod" xml:space="preserve">
+    <value>Agenten har ingen schemaperiod för den valda perioden</value>
+  </data>
+  <data name="MissingShiftBagForPeriod" xml:space="preserve">
+    <value>Agenten har ingen skiftpåse för hela eller delar av den valda perioden</value>
+  </data>
+  <data name="MissingSkillsForPeriod" xml:space="preserve">
+    <value>Agenten har inga kompetenser för hela eller delar av den valda perioden</value>
+  </data>
+  <data name="NoMatchingSchedulePeriod" xml:space="preserve">
+    <value>Schemaperioden matchar inte den valda perioden</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThePlanningGroup" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort planeringsgruppen '{0}' och de tillhörande inställningarna?</value>
+  </data>
+  <data name="CreatePlanningGroup" xml:space="preserve">
+    <value>Skapa planeringsgrupp</value>
+  </data>
+  <data name="DeletePlanningGroup" xml:space="preserve">
+    <value>Ta bort planeringsgrupp</value>
+  </data>
+  <data name="EditPlanningGroup" xml:space="preserve">
+    <value>Ändra planeringsgrupp</value>
+  </data>
+  <data name="HelpCreatePlanningGroup" xml:space="preserve">
+    <value>En planeringsgrupp krävs för att kunna schemalägga agenterna. Vill du skapa en planeringsgrupp?</value>
+  </data>
+  <data name="ManageDayOffForPlanningGroup" xml:space="preserve">
+    <value>Hantera fridagsregler för planeringsgruppen {0}</value>
+  </data>
+  <data name="NoAgentsWithinPlanningGroup" xml:space="preserve">
+    <value>Det finns inga agenter som kan schemaläggas i den här planeringsgruppen</value>
+  </data>
+  <data name="SchedulePlanningGroup" xml:space="preserve">
+    <value>Schemalägg planeringsgrupp</value>
+  </data>
+  <data name="PlansPageSelectPlanningGroup" xml:space="preserve">
+    <value>Välj planeringsgrupp för att schemalägga agenterna</value>
+  </data>
+  <data name="SearchForPlanningGroup" xml:space="preserve">
+    <value>Välj enhet / team / kompetens / kontrakt</value>
+  </data>
+  <data name="SelectPpToSchedulePlanningGroup" xml:space="preserve">
+    <value>Välj planeringsperiod för att schemalägga din planeringsgrupp</value>
+  </data>
+  <data name="ShowAllSchedules" xml:space="preserve">
+    <value>Visa alla scheman</value>
+  </data>
+  <data name="FilterPlanningGroups" xml:space="preserve">
+    <value>Filtrera planeringsgrupper</value>
+  </data>
+  <data name="FilterPlanningPeriods" xml:space="preserve">
+    <value>Filtrera planeringsperioder</value>
+  </data>
+  <data name="IgnoreSchedules" xml:space="preserve">
+    <value>Ignorera scheman</value>
+  </data>
+  <data name="IgnoredScheduleHint" xml:space="preserve">
+    <value>Ignorerat schema</value>
+  </data>
+  <data name="PlansPageCreatePlanningGroup" xml:space="preserve">
+    <value>Fyll i ett namn och välj passande filter för att skapa en planeringsgrupp</value>
+  </data>
+  <data name="UnsupportedDataSeriesFound" xml:space="preserve">
+    <value>Innehåller blandade kompetenstyper, viss data kanske inte kan visas</value>
+  </data>
 </root>
