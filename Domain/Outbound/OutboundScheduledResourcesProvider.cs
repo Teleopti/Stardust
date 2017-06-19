@@ -68,25 +68,10 @@ namespace Teleopti.Ccc.Domain.Outbound
 			var allSkills = _skillRepository.FindAllWithSkillDays(period).ToArray();
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
 			var people = _outboundAssignedStaffProvider.Load(campaigns, period);
-			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);
-	        var campaignSkillsAndRelevantOtherSkills = new List<ISkill>();
-	        foreach (var skill in allSkills)
-	        {
-		        if(skill.SkillType.ForecastSource == ForecastSource.OutboundTelephony)
-					campaignSkillsAndRelevantOtherSkills.Add(skill);
-	        }
-
+			initializePersonSkillProviderBeforeAccessingItFromOtherThreads(period, people.AllPeople);       
 			var deciderResult = _decider.Execute(scenario, dateTimePeriod, people.FixedStaffPeople);
 			deciderResult.FilterPeople(people.AllPeople);
-
-	        foreach (var skill in allSkills)
-	        {
-		        if(!campaignSkillsAndRelevantOtherSkills.Contains(skill))
-					campaignSkillsAndRelevantOtherSkills.Add(skill);
-	        }
-
-			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, campaignSkillsAndRelevantOtherSkills, scenario);
-
+			var forecast = _skillDayLoadHelper.LoadSchedulerSkillDays(period, allSkills, scenario);
 			var schedulerStateHolder = _schedulerStateHolder();
 			var stateHolder = schedulerStateHolder.SchedulingResultState;
 			stateHolder.PersonsInOrganization = people.AllPeople;
