@@ -1594,6 +1594,7 @@
     <Compile Include="Scheduling\Overtime\AddOvertimeTest.cs" />
     <Compile Include="SiteOpenHours\SiteWithOpenHourProviderTest.cs" />
     <Compile Include="Staffing\CompareProjectionTest.cs" />
+    <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
     <Compile Include="TestWithStaticDependenciesAvoidUseAttribute.cs" />
     <Compile Include="OneTimeSetUp.cs" />
