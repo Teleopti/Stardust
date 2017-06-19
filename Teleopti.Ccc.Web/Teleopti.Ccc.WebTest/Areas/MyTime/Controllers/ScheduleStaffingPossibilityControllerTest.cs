@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 	[TestFixture]
 	[Toggle(Toggles.MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880)]
 	[MyTimeWebTest]
-	[Ignore("???")]
 	public class ScheduleStaffingPossibilityControllerTest : ISetup
 	{
 		public ScheduleStaffingPossibilityController Target;
