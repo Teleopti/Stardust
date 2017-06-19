@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 {
 	[TestFixture]
 	[RequestPerformanceTuningTest]
-	[Ignore("Takes more than 3 hours to run.. ")]
 	public class ProcessCalcuateIntradayIntervalPossibilities : ISetup
 	{
 		private const string tenantName = "Teleopti WFM";
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		{
 			var path = AppDomain.CurrentDomain.BaseDirectory + "/../../PersonIds.txt";
 			var content = File.ReadAllText(path);
-			return content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).ToArray();
+			return content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).Take(100).ToArray();
 		}
 
 		private long calcuatePossibilities(Guid[] personIds)
