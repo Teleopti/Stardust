@@ -39,18 +39,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			ProjectionMerger = projectionMerger;
 		}
 
-		public IProjectionMerger ProjectionMerger { get; private set; }
-		public IScheduleDay ScheduleDay { get; private set; }
+		public IProjectionMerger ProjectionMerger { get; }
+		public IScheduleDay ScheduleDay { get; }
 
-		public IActivity FakeActivity
-		{
-			get { return _fakeActivity.Value; }
-		}
+		public IActivity FakeActivity => _fakeActivity.Value;
 
-		public IActivity FakeActivityNotInContractTime
-		{
-			get { return _fakeActivityNotInContractTime.Value; }
-		}
+		public IActivity FakeActivityNotInContractTime => _fakeActivityNotInContractTime.Value;
 
 		public IVisualLayerCollection CreateProjection()
 		{

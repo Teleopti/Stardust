@@ -9,8 +9,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class SkillCombination
 	{
-		private readonly DateOnlyPeriod _period;
-		private readonly DoubleGuidCombinationKey _mergedKey;
+		private DateOnlyPeriod _period;
+		private DoubleGuidCombinationKey _mergedKey;
 		private readonly ConcurrentDictionary<Guid,SkillCombination> _activityCombinations = new ConcurrentDictionary<Guid, SkillCombination>();
 
 		public SkillCombination(ISkill[] skills, DateOnlyPeriod period, SkillEffiencyResource[] skillEfficiencies, ISkill[] originalSkills)

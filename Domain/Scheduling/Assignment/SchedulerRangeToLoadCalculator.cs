@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// </summary>
     public class SchedulerRangeToLoadCalculator : ISchedulerRangeToLoadCalculator
     {
-        private readonly DateTimePeriod _requestedDateTimePeriod;
+        private DateTimePeriod _requestedDateTimePeriod;
         private readonly IDictionary<IPerson, DateTimePeriod> _cachedResult;
        
         /// <summary>
@@ -37,15 +37,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         /// Created by: rogerkr
         /// Created date: 2008-05-20
         /// </remarks>
-        public DateTimePeriod RequestedPeriod
-        {
-            get
-            {
-                return _requestedDateTimePeriod;
-            }
-        }
+        public DateTimePeriod RequestedPeriod => _requestedDateTimePeriod;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the scheduler range to load.
         /// </summary>
         /// <returns></returns>

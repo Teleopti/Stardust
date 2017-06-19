@@ -12,7 +12,7 @@ namespace Teleopti.Interfaces.Domain
     [Serializable]
 	public struct DateTimePeriod : IEquatable<DateTimePeriod>
     {
-        private readonly MinMax<DateTime> period;
+        private MinMax<DateTime> period;
         private const string DATETIME_SEPARATOR = " - ";
 
         /// <summary>

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
     public class SkillStaffPeriodDataInfo : ISkillStaffPeriodDataHolder
     {
-        private readonly DateTimePeriod _period;
+        private DateTimePeriod _period;
 	    private double _originalDemandInMinutes;
 
         public SkillStaffPeriodDataInfo(int originalDemandInMinutes, int assignedResourceInMinutes, DateTimePeriod period, int minimumPersons, int maximumPersons, double absoluteDifferenceScheduledHeadsAndMinMaxHeads, IPeriodDistribution periodDistribution)
@@ -37,10 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public double OriginalDemandInMinutes
         {
-            get
-            {
-                return _originalDemandInMinutes;
-            }
+            get => _originalDemandInMinutes;
 	        set
 	        {
 		        if (value == 0)

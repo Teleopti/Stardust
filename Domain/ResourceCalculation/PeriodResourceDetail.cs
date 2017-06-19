@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			Skill = skill;
 		}
 
-		public Guid Skill { get; private set; }
-		public double Resource { get; private set; }
+		public Guid Skill { get; }
+		public double Resource { get; }
 	}
 }

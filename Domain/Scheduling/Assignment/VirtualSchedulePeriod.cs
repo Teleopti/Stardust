@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private readonly IPartTimePercentage _partTimePercentage;
 		private readonly TimeSpan _averageWorkTimePerDay;
 
-        private readonly DateOnlyPeriod _thePeriodWithTheDateIn;
+        private DateOnlyPeriod _thePeriodWithTheDateIn;
 
         private readonly TimeSpan _minTimeSchedulePeriod = TimeSpan.Zero;
 		private static readonly PeriodIncrementorFactory _periodIncrementorFactory = new PeriodIncrementorFactory();
@@ -78,59 +78,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return currentPeriod;
         }
 
-        public DateOnlyPeriod DateOnlyPeriod
-        {
-            get
-            {
-                return _thePeriodWithTheDateIn;
-            }
-        }
+        public DateOnlyPeriod DateOnlyPeriod => _thePeriodWithTheDateIn;
 
-        public IPerson Person
-        {
-            get { return _person; }
-        }
+	    public IPerson Person => _person;
 
-        public ReadOnlyCollection<IShiftCategoryLimitation> ShiftCategoryLimitationCollection()
+	    public ReadOnlyCollection<IShiftCategoryLimitation> ShiftCategoryLimitationCollection()
         {
             if (_schedulePeriod == null)
                 return new ReadOnlyCollection<IShiftCategoryLimitation>(new List<IShiftCategoryLimitation>());
             return _schedulePeriod.ShiftCategoryLimitationCollection();
         }
 
-        public int MustHavePreference
-        {
-            get { return _schedulePeriod.MustHavePreference; }
-        }
+        public int MustHavePreference => _schedulePeriod.MustHavePreference;
 
-        public TimeSpan MinTimeSchedulePeriod
-        {
-            get { return _minTimeSchedulePeriod; }
-        }
+	    public TimeSpan MinTimeSchedulePeriod => _minTimeSchedulePeriod;
 
-        public IContract Contract
-        {
-            get { return _contract; }
-        }
+	    public IContract Contract => _contract;
 
-        public IContractSchedule ContractSchedule
-        {
-            get { return _contractSchedule; }
-        }
+	    public IContractSchedule ContractSchedule => _contractSchedule;
 
-        public IPartTimePercentage PartTimePercentage
-        {
-            get { return _partTimePercentage; }
-        }
+	    public IPartTimePercentage PartTimePercentage => _partTimePercentage;
 
-        public bool IsValid
-        {
-            get { return _schedulePeriod != null && _contract != null; }
-        }
+	    public bool IsValid => _schedulePeriod != null && _contract != null;
 
-        public SchedulePeriodType PeriodType { get; private set; }
+	    public SchedulePeriodType PeriodType { get; }
 
-        public int Number { get; private set; }
+        public int Number { get; }
 
 		public TimeSpan AverageWorkTimePerDay
 		{
@@ -287,22 +260,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 return false;
             }
 
-            return (casted._person.Equals(_person) && _thePeriodWithTheDateIn == casted._thePeriodWithTheDateIn);
+            return casted._person.Equals(_person) && _thePeriodWithTheDateIn == casted._thePeriodWithTheDateIn;
         }
 
         public override int GetHashCode()
         {
-            return (_person.GetHashCode() ^ _thePeriodWithTheDateIn.GetHashCode());
+            return _person.GetHashCode() ^ _thePeriodWithTheDateIn.GetHashCode();
         }
 
         public bool IsOriginalPeriod()
         {
             var originalPeriod = GetOriginalStartPeriodForType(_schedulePeriod, _person.PermissionInformation.Culture());
             var intersection = DateOnlyPeriod.Intersection(originalPeriod);
-            if (!intersection.HasValue)
-                return false;
 
-            return originalPeriod.DayCount() == intersection.Value.DayCount();
+	        return originalPeriod.DayCount() == intersection?.DayCount();
         }
     }
 }
