@@ -26,40 +26,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.BadgeLeaderBoardReport.ViewModelFac
 		public dynamic CreateLeaderboardOptions(DateOnly date, string functionPath)
 		{
 			var myTeam = _currentLoggedOnUser.CurrentUser().MyTeam(date);
-			var teams = _teamProvider.GetPermittedTeams(date, functionPath).ToList();
+			var teams = _teamProvider.GetPermittedTeams(date, functionPath).ToArray();
 			var isMyTeamPermitted = teams.Contains(myTeam);
-			var sites = teams
-				.Select(t => t.Site)
-				.Distinct()
-				.OrderBy(s => s.Description.Name);
+			var sites = teams.GroupBy(t => t.Site)
+				.OrderBy(s => s.Key.Description.Name);
 
-			var options = new List<dynamic>();
-			options.Add(new
+			var options = new List<dynamic>
 			{
-				id = Guid.Empty,
-				text = UserTexts.Resources.Everyone,
-				type = LeadboardQueryType.Everyone
-			});
+				new
+				{
+					id = Guid.Empty,
+					text = UserTexts.Resources.Everyone,
+					type = LeadboardQueryType.Everyone
+				}
+			};
 			sites.ForEach(s =>
 			{
-				if (_authorization.IsPermitted(functionPath, date, s))
+				if (_authorization.IsPermitted(functionPath, date, s.Key))
 				{
 					options.Add(new
 					{
-						id = s.Id,
-						text = s.Description.Name,
+						id = s.Key.Id,
+						text = s.Key.Description.Name,
 						type = LeadboardQueryType.Site
 					});
 				}
 
-				var teamOptions = from t in teams
-								  where t.Site == s
-								  select new
-								  {
-									  id = t.Id,
-									  text = t.Description.Name,
-									  type = LeadboardQueryType.Team
-								  };
+				var teamOptions = s.Select(t => new
+				{
+					id = t.Id,
+					text = t.Description.Name,
+					type = LeadboardQueryType.Team
+				});
 				options.AddRange(teamOptions);
 			});
 			return new { options, defaultOptionId = isMyTeamPermitted ? myTeam.Id : Guid.Empty };

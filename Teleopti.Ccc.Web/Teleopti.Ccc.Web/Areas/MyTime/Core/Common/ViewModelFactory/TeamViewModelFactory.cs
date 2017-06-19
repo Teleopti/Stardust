@@ -41,20 +41,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 		public IEnumerable<SelectOptionItem> CreateTeamOptionsViewModel(DateOnly date, string applicationFunctionPath)
 		{
 			var teams = _teamProvider.GetPermittedTeams(date, applicationFunctionPath).ToList();
-			var sites = teams
-				.Select(t => t.Site)
-				.Distinct()
-				.OrderBy(s => s.Description.Name);
+			var sites = teams.GroupBy(t => t.Site)
+				.OrderBy(s => s.Key.Description.Name);
 
 			var options = new List<SelectOptionItem>();
 			sites.ForEach(s =>
 			{
-				var teamOptions = from t in teams
-								  where t.Site == s
+				var teamOptions = from t in s
 								  select new SelectOptionItem
 								  {
 									  id = t.Id.ToString(),
-									  text = s.Description.Name + "/" + t.Description.Name
+									  text = s.Key.Description.Name + "/" + t.Description.Name
 								  };
 				options.AddRange(teamOptions);
 			});

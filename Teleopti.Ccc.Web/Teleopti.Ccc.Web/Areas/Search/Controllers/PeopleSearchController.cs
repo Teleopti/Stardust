@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 					var value = columnValue == null ? "" : columnValue.Description;
 					return new KeyValuePair<string, string>(c.Name, value);
 				}),
-				Team = x.MyTeam(currentDate) == null ? "" : x.MyTeam(currentDate).SiteAndTeam
+				Team = x.MyTeam(currentDate)?.SiteAndTeam ?? ""
 			});
 
 			var result = new
