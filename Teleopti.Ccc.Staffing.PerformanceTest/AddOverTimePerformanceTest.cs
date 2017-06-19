@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public IAddOverTime AddOverTime;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
-		public IStaffingViewModelCreator StaffingViewModelCreator;
+		public ScheduledStaffingViewModelCreator StaffingViewModelCreator;
 
 		private DateTime[] timeSerie;
 		private Guid[] skillIds;
