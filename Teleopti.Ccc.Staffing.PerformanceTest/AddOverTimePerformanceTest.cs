@@ -70,8 +70,8 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			var overtimePref = new OvertimePreferences
 			{
 				OvertimeType = oneMulti,
-				SelectedSpecificTimePeriod = new TimePeriod(8,0,17,0),
-				SelectedTimePeriod = new TimePeriod(1,4),
+				SelectedSpecificTimePeriod = new TimePeriod(7,0,15,0),
+				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5))
 				ScheduleTag = new NullScheduleTag(),
 			};
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
