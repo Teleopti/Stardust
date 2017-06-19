@@ -254,6 +254,7 @@
     <Compile Include="FakeRepositories\FakeSkillTypeRepository.cs" />
     <Compile Include="FakeRepositories\FakeSmartPersonPropertyQuerier.cs" />
     <Compile Include="FakeRepositories\FakeStorage.cs" />
+    <Compile Include="FakeRepositories\FakeUserDeviceRepository.cs" />
     <Compile Include="FakeRepositories\FakeWorkShiftRuleSetRepository.cs" />
     <Compile Include="FakeRepositories\FakeWriteSideRepository.cs" />
     <Compile Include="FakeRepositories\PersonAssignmentRepositoryWithRandomLatency.cs" />

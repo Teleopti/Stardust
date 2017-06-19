@@ -253,6 +253,7 @@
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserDevice.cs" />
+    <Compile Include="Notification\UserDeviceService.cs" />
     <Compile Include="Repositories\IUserDeviceRepository.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Validation\IScheduleValidator.cs" />
