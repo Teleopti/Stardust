@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public OptimizeIntradayIslandsDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public CascadingResourceCalculationContextFactory ResourceCalculationContextFactory;
-		//public FullResourceCalculation FullResourceCalculation;
 		public IResourceCalculation ResourceCalculation;
 
 		[Test]
@@ -82,7 +81,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			{
 				var stateHolder = SchedulerStateHolderFrom();
 				ResourceCalculation.ResourceCalculate(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.ToResourceOptimizationData(stateHolder.ConsiderShortBreaks, false));
-				//FullResourceCalculation.Execute();
 
 				Target.Optimize(new[] { agentAB, agentB }, date.ToDateOnlyPeriod(), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
 
@@ -109,11 +107,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var assAB = new PersonAssignment(agentAB, scenario, date).WithLayer(activity, new TimePeriod(8, 17));
 			var assB = new PersonAssignment(agentB, scenario, date).WithLayer(activity, new TimePeriod(8, 17));
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentB }, new[] { assAB, assB }, new[] { skillDayA, skillDayB });
-
 			var stateHolder = SchedulerStateHolderFrom();
 			ResourceCalculation.ResourceCalculate(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.ToResourceOptimizationData(stateHolder.ConsiderShortBreaks, false));
-
-			//FullResourceCalculation.Execute();
 
 			Target.Optimize(new[] { agentAB, agentB }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
 
@@ -141,11 +136,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var assAB = new PersonAssignment(agentAB, scenario, date).WithLayer(activity, new TimePeriod(8, 17));
 			var assAC = new PersonAssignment(agentAC, scenario, date).WithLayer(activity, new TimePeriod(8, 17));
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date), new[] { agentAB, agentAC }, new[] { assAB, assAC }, new[] { skillDayA, skillDayB, skillDayC });
-
 			var stateHolder = SchedulerStateHolderFrom();
 			ResourceCalculation.ResourceCalculate(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.ToResourceOptimizationData(stateHolder.ConsiderShortBreaks, false));
-
-			//FullResourceCalculation.Execute();
 
 			Target.Optimize(new[] { agentAB, agentAC }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
 
@@ -202,7 +194,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(phoneActivity, new TimePeriod(8, 0, 8, 5)).ShiftCategory(new ShiftCategory("_").WithId());
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA });
 			schedulerStateHolderFrom.ConsiderShortBreaks = false;
-
 			//TODO consider to check/set consider short breaks in one place only
 			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
 			optimizationPreferences.Rescheduling.ConsiderShortBreaks = false;
@@ -215,7 +206,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<DesktopOptimizationContext>().For<IFillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization>();
+			system.UseTestDouble<DesktopOptimizationContext>().For<ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization>();
+			system.UseTestDouble<FillSchedulerStateHolderForDesktop>().For<IFillSchedulerStateHolder>();
 		}
 	}
 }

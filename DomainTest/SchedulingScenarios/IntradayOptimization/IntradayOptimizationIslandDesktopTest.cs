@@ -688,7 +688,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<DesktopOptimizationContext>().For<IFillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization>();
+			system.UseTestDouble<DesktopOptimizationContext>().For<ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization>();
+			system.UseTestDouble<FillSchedulerStateHolderForDesktop>().For<IFillSchedulerStateHolder>();
 		}
 	}
 }

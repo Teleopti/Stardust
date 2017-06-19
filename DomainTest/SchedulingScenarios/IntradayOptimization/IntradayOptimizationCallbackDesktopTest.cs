@@ -28,7 +28,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	{
 		public OptimizeIntradayIslandsDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-		public DesktopOptimizationContext DesktopOptimizationContext;
 
 		[Test]
 		public void ShouldDoSuccesfulCallbacks()
@@ -75,7 +74,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<DesktopOptimizationContext>().For<IFillSchedulerStateHolder, ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization, ICurrentIntradayOptimizationCallback>();
+			system.UseTestDouble<DesktopOptimizationContext>().For<ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization, ICurrentIntradayOptimizationCallback>();
+			system.UseTestDouble<FillSchedulerStateHolderForDesktop>().For<IFillSchedulerStateHolder>();
 		}
 	}
 }

@@ -234,8 +234,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 				//////
 
+				//intraday - shouldn't be here!
 				builder.RegisterType<DesktopOptimizationContext>()
-					.As<IFillSchedulerStateHolder>()
 					.As<ISynchronizeIntradayOptimizationResult>()
 					.As<IOptimizationPreferencesProvider>()
 					.As<IPeopleInOrganization>()
@@ -243,6 +243,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					.AsSelf()
 					.ApplyAspects()
 					.SingleInstance();
+				builder.RegisterType<FillSchedulerStateHolderForDesktop>()
+					.As<IFillSchedulerStateHolder>()
+					.ApplyAspects()
+					.SingleInstance();
+				//
 
 				builder.Register(c => new WebConfigReader(() =>
 				{
