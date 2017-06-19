@@ -14,7 +14,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Notification;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -29,11 +31,11 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		public FakeNotificationSender Sender;
 		public Notifier Target;
 		public IGlobalSettingDataRepository GlobalSettingDataRepository;
-		public IPersonalSettingDataRepository PersonalSettingDataRepository;
+		public FakeUserDeviceRepository UserDeviceRepository;
 		public FakeHttpServer Server;
 		public FakeConfigReader ConfigReader;
 		public FakeCurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
-
+		public FakeLoggedOnUser LoggedOnUser;
 
 
 		[Test]
@@ -98,14 +100,18 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
 				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email, IsMobileNotificationEnabled = true });
 
-			var userDevices = new UserDevices();
-			userDevices.AddToken("device-id-token");
-			PersonalSettingDataRepository.PersistSettingValue(UserDevices.Key, userDevices);
+			var person = PersonFactory.CreatePersonWithGuid("a", "a");
+
+			UserDeviceRepository.Add(new UserDevice
+			{
+				Owner = person,
+				Token = "device-id-token"
+			});
 
 			ConfigReader.FakeSetting("FCM", "asdf");
 
 			var messages = new NotificationMessage();
-			var person = PersonFactory.CreatePersonWithGuid("a", "a");
+			
 			person.Email = "aa@teleopti.com";
 			var notificationHeader = new NotificationHeader
 			{
@@ -160,17 +166,19 @@ namespace Teleopti.Ccc.DomainTest.Notification
 		[Test]
 		public async Task ShouldRemoveUserDevicesInvalidTokensAfterFCMResponseResultWithError()
 		{
+			
 			setValidLicense();
 			GlobalSettingDataRepository.PersistSettingValue("SmsSettings",
 				new SmsSettings { EmailFrom = "sender@teleopti.com", NotificationSelection = NotificationType.Email, IsMobileNotificationEnabled = true });
-			var userDevices = new UserDevices();
-			userDevices.AddToken("valid-id-token");
-			userDevices.AddToken("invalid-id-token");
-			PersonalSettingDataRepository.PersistSettingValue(UserDevices.Key, userDevices);
+
+			var person = PersonFactory.CreatePersonWithGuid("a", "a");
+			UserDeviceRepository.Add(new UserDevice{Token= "valid-id-token",Owner = person});
+			UserDeviceRepository.Add(new UserDevice { Token = "invalid-id-token", Owner = person });
+
 			ConfigReader.FakeSetting("FCM", "asdf");
 
 			var messages = new NotificationMessage();
-			var person = PersonFactory.CreatePersonWithGuid("a", "a");
+			
 			person.Email = "aa@teleopti.com";
 
 			var responseMessage = new HttpResponseMessage(HttpStatusCode.OK);
@@ -197,9 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 			if (nofifySuccess)
 			{
-				userDevices =
-					PersonalSettingDataRepository.FindValueByKeyAndOwnerPerson(UserDevices.Key, person, new UserDevices());
-				userDevices.TokenList.Single().Should().Be("valid-id-token");
+				UserDeviceRepository.Find(person).Single().Token.Should().Be("valid-id-token");
 			}
 
 		}
@@ -215,6 +221,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			system.UseTestDouble<FakeGlobalSettingDataRepository>().For<IGlobalSettingDataRepository>();
 			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			system.UseTestDouble<FakeHttpServer>().For<IHttpServer>();
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 
 		private void setValidLicense()

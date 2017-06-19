@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -35,6 +36,19 @@ namespace Teleopti.Ccc.Domain.Notification
 		public IList<string> GetUserTokens()
 		{
 			return _userDeviceRepository.Find(_loggedOnUser.CurrentUser()).Select(d => d.Token).ToList();
+		}
+
+		public IList<string> GetUserTokens(IPerson person)
+		{
+			return _userDeviceRepository.Find(person).Select(d => d.Token).ToList();
+		}
+
+		public void Remove(IList<string> tokens)
+		{
+			foreach (var token in tokens)
+			{
+				_userDeviceRepository.Remove(_userDeviceRepository.FindByToken(token));
+			}
 		}
 	}
 }

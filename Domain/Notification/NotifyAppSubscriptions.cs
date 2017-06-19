@@ -24,15 +24,15 @@ namespace Teleopti.Ccc.Domain.Notification
 	{
 		private static readonly ILog logger = LogManager.GetLogger(typeof(NotifyAppSubscriptions));
 		private readonly IHttpServer _httpServer;
-		private readonly IPersonalSettingDataRepository _personalSettingDataRepository;
+		private readonly UserDeviceService _userDeviceService;
 		private readonly IConfigReader _configReader;
 		private readonly ICurrentDataSource _dataSource;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
-		public NotifyAppSubscriptions(IHttpServer httpServer, IPersonalSettingDataRepository personalSettingDataRepository,
+		public NotifyAppSubscriptions(IHttpServer httpServer, UserDeviceService userDeviceService,
 			IConfigReader configReader, ICurrentDataSource dataSource, ICurrentBusinessUnit currentBusinessUnit)
 		{
 			_httpServer = httpServer;
-			_personalSettingDataRepository = personalSettingDataRepository;
+			_userDeviceService = userDeviceService;
 			_configReader = configReader;
 			_dataSource = dataSource;
 			_currentBusinessUnit = currentBusinessUnit;
@@ -45,14 +45,13 @@ namespace Teleopti.Ccc.Domain.Notification
 			var hasFail = false;
 			foreach (var person in persons)
 			{
-				var setting =
-					_personalSettingDataRepository.FindValueByKeyAndOwnerPerson(UserDevices.Key, person, new UserDevices());
-				if (!setting.TokenList.Any()) continue;
+				var tokens = _userDeviceService.GetUserTokens(person);
+				if (!tokens.Any()) continue;
 
 				if (logger.IsDebugEnabled)
 				{
 					logger.DebugFormat("Trying to send notification for Person {0} using token {1}", person.Id,
-						string.Join(", ", setting.TokenList));
+						string.Join(", ", tokens));
 				}
 
 				try
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Notification
 					var notification = new { title = messages.Subject, body = string.Join(" ", messages.Messages) };
 
 					dynamic requestBody = new ExpandoObject();
-					requestBody.registration_ids = setting.TokenList;
+					requestBody.registration_ids = tokens;
 					requestBody.notification = notification;
 					if (messages.Data == null)
 					{
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Notification
 						(object)requestBody,
 						s => new NameValueCollection { { "Authorization", key } });
 
-					var invalidTokens = await getUserDevicesInvalidTokenAsync(setting.TokenList, responseMessage);
+					var invalidTokens = await getUserDevicesInvalidTokenAsync(tokens, responseMessage);
 					if (invalidTokens.IsNullOrEmpty())
 					{
 						continue;
@@ -84,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Notification
 				}
 				catch (Exception e)
 				{
-					logger.Error($"Send notification faild. person: {person.Name}, token list: {string.Join(", ", setting.TokenList)}", e);
+					logger.Error($"Send notification faild. person: {person.Name}, token list: {string.Join(", ", tokens)}", e);
 					hasFail = true;
 				}
 			}
@@ -124,15 +123,10 @@ namespace Teleopti.Ccc.Domain.Notification
 		}
 
 		[AsSystem, UnitOfWork]
-		protected virtual void PersistUserDevicesSettingValue(InputWithLogOnContext logOnContext, IPerson person, List<string> invalidTokens)
+		protected virtual void PersistUserDevicesSettingValue(InputWithLogOnContext logOnContext, IPerson person,
+			List<string> invalidTokens)
 		{
-
-			var setting =
-				_personalSettingDataRepository.FindValueByKeyAndOwnerPerson(UserDevices.Key, person, new UserDevices());
-
-			setting.RemoveToken(invalidTokens.ToArray());
-
-			_personalSettingDataRepository.PersistSettingValue(UserDevices.Key, setting);
+			_userDeviceService.Remove(invalidTokens);
 		}
 
 	}
