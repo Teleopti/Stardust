@@ -882,6 +882,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				Expect.Call(() => _view.SetAbsenceRequestWaitlisting(false, WaitlistProcessOrder.FirstComeFirstServed));
 				Expect.Call(() => _view.SetAbsenceRequestCancellation(null)).IgnoreArguments();
 				Expect.Call(() => _view.SetAbsenceRequestExpiration(null)).IgnoreArguments();
+				Expect.Call(() => _view.SetAbsenceProbability(false)).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
@@ -1077,6 +1078,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			Expect.Call(() => view.SetAbsenceRequestCancellation(null)).IgnoreArguments();
 			Expect.Call(() => view.SetAbsenceRequestExpiration(null)).IgnoreArguments();
 			Expect.Call(view.EnableAllAuthorized);
+			Expect.Call(() => view.SetAbsenceProbability(false)).IgnoreArguments();
 		}
 	}
 }

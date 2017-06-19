@@ -10217,6 +10217,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable Absence Probability.
+        /// </summary>
+        public static string EnableAbsenceProbability {
+            get {
+                return ResourceManager.GetString("EnableAbsenceProbability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable agent badge.
         /// </summary>
         public static string EnableBadge {

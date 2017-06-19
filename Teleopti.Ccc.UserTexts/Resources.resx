@@ -16158,4 +16158,8 @@ Do you want to participate?</value>
     <value>Current selection contains email skill, certain data series are unavailable.</value>
     <comment>message shown when some chart data series are hidden in intraday</comment>
   </data>
+  <data name="EnableAbsenceProbability" xml:space="preserve">
+    <value>Enable Absence Probability</value>
+    <comment>Enable Absence Probability checkbox title in fat client/Options/WorkflowControlSet/AbsenceRequest/miscellaneous</comment>
+  </data>
 </root>

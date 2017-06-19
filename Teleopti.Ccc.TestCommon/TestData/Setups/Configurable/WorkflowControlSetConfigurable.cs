@@ -39,6 +39,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public bool AbsenceRequestWaitlistEnabled { get; set; }
 		public int? AbsenceRequestExpiredThreshold { get; set; }
 
+		public bool AbsenceProbabilityEnabled { get; set; }
+
 		public WorkflowControlSetConfigurable()
 		{
 			Name = RandomName.Make("Workflow control set");
@@ -88,6 +90,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 				var absence = new AbsenceRepository(currentUnitOfWork).LoadAll().Single(c => c.Description.Name == AvailableAbsence);
 				workflowControlSet.AddAllowedPreferenceAbsence(absence);
 				workflowControlSet.AbsenceRequestWaitlistEnabled = AbsenceRequestWaitlistEnabled;
+				workflowControlSet.AbsenceProbabilityEnabled = AbsenceProbabilityEnabled;
 
 				var absenceRequestOpenPeriodStart = string.IsNullOrEmpty(AbsenceRequestOpenPeriodStart)
 														? new DateOnly(1900, 1, 1)

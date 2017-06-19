@@ -144,6 +144,8 @@
 
         <property name="AbsenceRequestExpiredThreshold" type="int" not-null="false" />
 
+        <property name="AbsenceProbabilityEnabled" type="bool" not-null="true" />
+
         <property name="LockTrading" type="bool" not-null="true" />
 
         <filter name="businessUnitFilter"

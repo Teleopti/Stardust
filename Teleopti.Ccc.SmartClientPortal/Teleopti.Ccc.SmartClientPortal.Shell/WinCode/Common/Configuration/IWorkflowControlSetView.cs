@@ -169,6 +169,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		void SetAbsenceRequestExpiration(IWorkflowControlSetModel selectedModel);
 
+		void SetAbsenceProbability(bool absenceProbabilityEnabled);
+
 		/// <summary>
 		/// Sets the lock trading.
 		/// </summary>

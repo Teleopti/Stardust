@@ -81,6 +81,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				_selectedModel.AbsenceRequestWaitlistingProcessOrder);
 			_view.SetAbsenceRequestCancellation(_selectedModel);
 			_view.SetAbsenceRequestExpiration(_selectedModel);
+			_view.SetAbsenceProbability(_selectedModel.AbsenceProbabilityEnabled);
 		}
 
 		public IWorkflowControlSetModel SelectedModel
@@ -588,6 +589,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		public void SetAbsenceRequestExpiredThreshold(int? absenceRequestExpiredThreshold)
 		{
 			_selectedModel.AbsenceRequestExpiredThreshold = absenceRequestExpiredThreshold;
+		}
+
+		public void SetAbsenceProbability(bool absenceProbabilityEnabled)
+		{
+			_selectedModel.AbsenceProbabilityEnabled = absenceProbabilityEnabled;
 		}
 	}
 }

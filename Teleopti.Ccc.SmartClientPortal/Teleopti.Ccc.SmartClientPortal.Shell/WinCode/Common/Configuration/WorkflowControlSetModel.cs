@@ -56,6 +56,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		WaitlistProcessOrder AbsenceRequestWaitlistingProcessOrder { get; set; }
 		int? AbsenceRequestCancellationThreshold { get; set; }
 		int? AbsenceRequestExpiredThreshold { get; set; }
+
+		bool AbsenceProbabilityEnabled { get; set; }
 	}
 
 	public class WorkflowControlSetModel : IWorkflowControlSetModel
@@ -463,5 +465,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				IsDirty = true;
 			}
 		}
+
+		public bool AbsenceProbabilityEnabled
+		{
+			get { return DomainEntity.AbsenceProbabilityEnabled; }
+			set
+			{
+				if (DomainEntity.AbsenceProbabilityEnabled == value) return;
+				DomainEntity.AbsenceProbabilityEnabled = value;
+				IsDirty = true;
+			}
+		}
+
 	}
 }

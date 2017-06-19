@@ -137,7 +137,22 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(result[0].AllowedPreferenceActivity, Is.EqualTo(activity));
         }
 
-        protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+		[Test]
+		public void VerifyAbsenceProbabilityEnabled()
+		{
+			IWorkflowControlSet org = CreateAggregateWithCorrectBusinessUnit();
+			org.AbsenceProbabilityEnabled = true;
+			PersistAndRemoveFromUnitOfWork(org);
+
+			IWorkflowControlSetRepository repository = new WorkflowControlSetRepository(UnitOfWork);
+			var result = repository.LoadAllSortByName();
+			Assert.That(result.Count, Is.EqualTo(1));
+			Assert.That(result[0].AbsenceProbabilityEnabled, Is.EqualTo(true));
+		}
+
+
+
+		protected override Repository<IWorkflowControlSet> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
             return new WorkflowControlSetRepository(currentUnitOfWork);
         }

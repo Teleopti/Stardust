@@ -277,6 +277,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		int? AbsenceRequestExpiredThreshold { get; set; }
 
+		bool AbsenceProbabilityEnabled { get; set; }
+
 		/// <summary>
 		/// Adds an absence allowed for report.
 		/// </summary>

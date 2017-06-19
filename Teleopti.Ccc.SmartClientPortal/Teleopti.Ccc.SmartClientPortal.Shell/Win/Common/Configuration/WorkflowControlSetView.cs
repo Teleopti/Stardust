@@ -102,6 +102,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				hideAbsenceRequestExpirationOptions();
 			}
+
+			if (!toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687))
+			{
+				hideAbsenceProbabilityCheckBox();
+			}
 		}
 
 		private void hideAbsenceRequestExpirationOptions()
@@ -112,6 +117,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void hideAbsenceRequestWaitlistingOptions()
 		{
 			hideControl(checkBoxEnableAbsenceRequestWaitlisting);
+		}
+
+		private void hideAbsenceProbabilityCheckBox()
+		{
+			hideControl(checkBoxEnableAbsenceProbability);
 		}
 
 		private void hideAbsenceCancellationOptions()
@@ -804,6 +814,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			txtAbsenceRequestExpiredThreshold.Leave += txtAbsenceRequestExpiredThreshold_Leave;
 		}
 
+		public void SetAbsenceProbability(bool absenceProbabilityEnabled)
+		{
+			checkBoxEnableAbsenceProbability.CheckStateChanged -= checkBoxEnableAbsenceProbability_CheckStateChanged;
+			checkBoxEnableAbsenceProbability.Checked = absenceProbabilityEnabled;
+			checkBoxEnableAbsenceProbability.CheckStateChanged += checkBoxEnableAbsenceProbability_CheckStateChanged;
+		}
+
 		public void SetLockTrading(bool lockTrading)
 		{
 			checkBoxAdvLockTrading.CheckStateChanged -= checkBoxAdvLockTrading_CheckStateChanged;
@@ -1209,6 +1226,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void txtAbsenceRequestExpiredThreshold_Leave(object sender, EventArgs e)
 		{
 			_presenter.SetAbsenceRequestExpiredThreshold(txtAbsenceRequestExpiredThreshold.IntegerValue());
+		}
+
+		private void checkBoxEnableAbsenceProbability_CheckStateChanged(object sender, EventArgs e)
+		{
+			_presenter.SetAbsenceProbability(checkBoxEnableAbsenceProbability.Checked);
 		}
 	}
 }
