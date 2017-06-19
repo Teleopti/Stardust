@@ -161,6 +161,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
 				{
 					builder.RegisterType<ScheduleIslandExecutor>().As<IScheduleExecutor>().InstancePerLifetimeScope();
+					builder.RegisterType<SchedulingCommandHandler>().InstancePerLifetimeScope();
 				}
 				else
 				{

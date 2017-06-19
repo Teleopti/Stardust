@@ -255,9 +255,11 @@
     <Compile Include="InterfaceLegacy\Domain\IUserDevice.cs" />
     <Compile Include="Notification\UserDeviceService.cs" />
     <Compile Include="Repositories\IUserDeviceRepository.cs" />
+    <Compile Include="Scheduling\SchedulingCommand.cs" />
+    <Compile Include="Scheduling\SchedulingCommandHandler.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Validation\IScheduleValidator.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\ScheduleIslandExecutor.cs" />
+    <Compile Include="Scheduling\ScheduleIslandExecutor.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IDateWithDuplicate.cs" />
     <Compile Include="InterfaceLegacy\Messages\InputWithLogOnContext.cs" />
