@@ -12,9 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Domain.UndoRedo;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -23,8 +21,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
-	[DomainTest]
-	public class OptimizationBug37126Test : ISetup
+	[DomainTest, UseIocForFatClient]
+	public class OptimizationBug37126Test
 	{
 		public OptimizationExecuter Target;
 		public ISchedulerStateHolder StateHolder;
@@ -148,11 +146,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			skillDay.SkillDayCalculator = new SkillDayCalculator(skill, new[] { skillDay }, new DateOnlyPeriod(2014, 3, 22, 2014, 4, 7));
 			newSkillStaffPeriodValues.BatchCompleted();
 			return skillDay;
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble<DesktopOptimizationContext>().For<IFillSchedulerStateHolder>();
 		}
 	}
 }

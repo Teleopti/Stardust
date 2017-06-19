@@ -7,9 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Ccc.Domain.UndoRedo;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.TestCommon;
@@ -20,8 +18,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Scheduler
 {
-	[DomainTest]
-	public class TryModifyTests : ISetup
+	[DomainTest, UseIocForFatClient]
+	public class TryModifyTests
 	{
 		public ISchedulerStateHolder StateHolder;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
@@ -121,11 +119,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var dayToChange = StateHolder.Schedules[person].ScheduledDay(new DateOnly(2014, 3, 25));
 			dayToChange.PersonAssignment().AddActivity(activity, new DateTimePeriod(2014, 3, 25, 13, 2014, 3, 25, 14));
 			Assert.IsTrue(target.TryModify(new List<IScheduleDay> {dayToChange}));
-		}
-
-		public void Setup(ISystem system, IIocConfiguration configuration)
-		{
-			system.UseTestDouble<DesktopOptimizationContext>().For<IFillSchedulerStateHolder>();
 		}
 	}
 }
