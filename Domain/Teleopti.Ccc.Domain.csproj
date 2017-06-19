@@ -124,6 +124,8 @@
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProvider.cs" />
     <Compile Include="AbsenceWaitlisting\ArrangeRequestsByProcessOrder.cs" />
     <Compile Include="AbsenceWaitlisting\QueuedAbsenceRequest.cs" />
+    <Compile Include="AgentInfo\IPrimaryPersonSkillFilter.cs" />
+    <Compile Include="AgentInfo\ISkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\PlanningGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\CalculatedPossibilityModel.cs" />
     <Compile Include="AgentInfo\EnumerablePersonExtensions.cs" />
@@ -131,6 +133,7 @@
     <Compile Include="AgentInfo\FixedStaffLoader.cs" />
     <Compile Include="AgentInfo\IPlanningGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
+    <Compile Include="AgentInfo\PrimaryPersonSkillFilter.cs" />
     <Compile Include="AgentInfo\ScheduleStaffingPossibilityConsts.cs" />
     <Compile Include="AgentInfo\SkillStaffingData.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />

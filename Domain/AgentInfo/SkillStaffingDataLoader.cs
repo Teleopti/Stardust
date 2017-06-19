@@ -18,34 +18,28 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly ForecastedStaffingProvider _forecastedStaffingProvider;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISkillDayRepository _skillDayRepository;
-		private readonly PersonalSkills _personalSkills = new PersonalSkills();
-		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 
 		public SkillStaffingDataLoader(ILoggedOnUser loggedOnUser, ScheduledStaffingProvider scheduledStaffingProvider,
 			ForecastedStaffingProvider forecastedStaffingProvider,
-			ICurrentScenario scenarioRepository, ISkillDayRepository skillDayRepository,
-			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
+			ICurrentScenario scenarioRepository, ISkillDayRepository skillDayRepository)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 			_forecastedStaffingProvider = forecastedStaffingProvider;
 			_scenarioRepository = scenarioRepository;
 			_skillDayRepository = skillDayRepository;
-			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
 
-		public IList<SkillStaffingData> Load(DateOnlyPeriod period, Func<DateOnly, bool> dayFilter = null)
+		public IList<SkillStaffingData> Load(IList<ISkill> skills, DateOnlyPeriod period, Func<DateOnly, bool> dayFilter = null)
 		{
-			var personSkills = getSupportedPersonSkills(period).ToArray();
-
 			var skillStaffingList = new List<SkillStaffingData>();
-			if (!personSkills.Any()) return skillStaffingList;
+			if (!skills.Any()) return skillStaffingList;
 
-			var resolution = personSkills.Min(s => s.Skill.DefaultResolution);
+			var resolution = skills.Min(s => s.DefaultResolution);
 			var useShrinkage = isShrinkageValidatorEnabled();
-			var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), personSkills.Select(s => s.Skill),
+			var skillDays = _skillDayRepository.FindReadOnlyRange(period.Inflate(1), skills,
 				_scenarioRepository.Current()).ToList();
-			var skillStaffingDatas = createSkillStaffingDatas(period, personSkills.Select(s => s.Skill).ToList(), resolution,
+			var skillStaffingDatas = createSkillStaffingDatas(period, skills, resolution,
 				useShrinkage, skillDays, dayFilter);
 
 			skillStaffingList.AddRange(skillStaffingDatas);
@@ -117,19 +111,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			return _forecastedStaffingProvider.StaffingPerSkill(skillDayDict, resolution, day, useShrinkage);
 		}
 
-		private IEnumerable<IPersonSkill> getSupportedPersonSkills(DateOnlyPeriod period)
-		{
-			var person = _loggedOnUser.CurrentUser();
-			var personPeriod = person.PersonPeriods(period).ToArray();
-			if (!personPeriod.Any())
-				return new IPersonSkill[] { };
-
-			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p))
-				.Where(p => _supportedSkillsInIntradayProvider.CheckSupportedSkill(p.Skill)).ToArray();
-
-			return !personSkills.Any() ? new IPersonSkill[] { } : personSkills.Distinct();
-		}
-
 		private bool isShrinkageValidatorEnabled()
 		{
 			var person = _loggedOnUser.CurrentUser();
@@ -139,10 +120,5 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			return person.WorkflowControlSet.IsAbsenceRequestValidatorEnabled<StaffingThresholdWithShrinkageValidator>(timeZone);
 		}
-	}
-
-	public interface ISkillStaffingDataLoader
-	{
-		IList<SkillStaffingData> Load(DateOnlyPeriod period, Func<DateOnly, bool> dateFilter = null);
 	}
 }

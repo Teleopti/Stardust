@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -19,21 +20,28 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISkillStaffingDataLoader _skillStaffingDataLoader;
 		private readonly INow _now;
+		private readonly PersonalSkills _personalSkills = new PersonalSkills();
+		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
+		private readonly IPrimaryPersonSkillFilter _primaryPersonSkillFilter;
+
 
 		public ScheduleStaffingPossibilityCalculator(ILoggedOnUser loggedOnUser, IScheduleStorage scheduleStorage,
-			ICurrentScenario scenarioRepository, ISkillStaffingDataLoader skillStaffingDataLoader, INow now)
+			ICurrentScenario scenarioRepository, ISkillStaffingDataLoader skillStaffingDataLoader, INow now, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider, IPrimaryPersonSkillFilter primaryPersonSkillFilter)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleStorage = scheduleStorage;
 			_scenarioRepository = scenarioRepository;
 			_skillStaffingDataLoader = skillStaffingDataLoader;
 			_now = now;
+			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
+			_primaryPersonSkillFilter = primaryPersonSkillFilter;
 		}
 
 		public IList<CalculatedPossibilityModel> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
 		{
 			var scheduleDictionary = loadScheduleDictionary(period);
-			var skillStaffingDatas = _skillStaffingDataLoader.Load(period, isCheckingIntradayStaffing);
+			var skills = getSupportedPersonSkills(period).Select(s => s.Skill).ToList();
+			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, isCheckingIntradayStaffing);
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => new IntervalHasUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
 			return calculatePossibilities(skillStaffingDatas, isSatisfied, scheduleDictionary, true);
@@ -42,7 +50,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public IList<CalculatedPossibilityModel> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period)
 		{
 			var scheduleDictionary = loadScheduleDictionary(period);
-			var skillStaffingDatas = _skillStaffingDataLoader.Load(period);
+			var skills = _primaryPersonSkillFilter.Filter(getSupportedPersonSkills(period)).Select(s => s.Skill).ToList();
+			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period);
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => !new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
 			return calculatePossibilities(skillStaffingDatas, isSatisfied, scheduleDictionary);
@@ -188,6 +197,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var isScheduledStaffingDataAvailable = skillStaffingData.ScheduledStaffing.HasValue;
 			var isForecastedStaffingDataAvailable = skillStaffingData.ForecastedStaffing.HasValue;
 			return isScheduledStaffingDataAvailable && isForecastedStaffingDataAvailable;
+		}
+
+		private IEnumerable<IPersonSkill> getSupportedPersonSkills(DateOnlyPeriod period)
+		{
+			var person = _loggedOnUser.CurrentUser();
+			var personPeriod = person.PersonPeriods(period).ToArray();
+			if (!personPeriod.Any())
+				return new IPersonSkill[] { };
+
+			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p))
+				.Where(p => _supportedSkillsInIntradayProvider.CheckSupportedSkill(p.Skill)).ToArray();
+
+			return !personSkills.Any() ? new IPersonSkill[] { } : personSkills.Distinct();
 		}
 
 	}

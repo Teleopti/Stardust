@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
 
-		private TimeSpan[] intervals = { TimeSpan.FromMinutes(495), TimeSpan.FromMinutes(510) };
+		private readonly TimeSpan[] intervals = { TimeSpan.FromMinutes(495), TimeSpan.FromMinutes(510) };
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -396,6 +395,117 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			setupDefaultTestData(new double?[] { 1, 1 }, new double?[] { 1, 1 });
 			setupWorkFlowControlSet();
+
+			var possibilities =
+				getIntradayAbsencePossibility(null, StaffingPossiblityType.Absence)
+					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686)]
+		public void ShouldUsePrimarySkillsWhenCalculatingOvertimeProbability()
+		{
+			var primarySkill = createSkill("primarySkill");
+			primarySkill.SetCascadingIndex(1);
+			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 1, 1 });
+
+			var nonPrimarySkill = createSkill("nonPrimarySkill");
+			setupIntradayStaffingForSkill(nonPrimarySkill, new double?[] { 5, 5 }, new double?[] { 4, 4 });
+
+			var activity = createActivity();
+			createAssignment(User.CurrentUser(), activity);
+			var primaryPersonSkill = createPersonSkill(activity, primarySkill);
+			var nonPrimaryPersonSkill = createPersonSkill(activity, nonPrimarySkill);
+
+			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
+
+			var possibilities =
+				getIntradayAbsencePossibility(null, StaffingPossiblityType.Overtime)
+					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(1, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686)]
+		public void ShouldGetFairOvertimePossibilitiesWhenAllSkillsArePrimarySkillWithOneSkillCriticalUnderStaffing()
+		{
+			var primarySkill = createSkill("primarySkill1");
+			primarySkill.SetCascadingIndex(1);
+			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 0, 0 });
+
+			var primarySkill2 = createSkill("PrimarySkill2");
+			primarySkill2.SetCascadingIndex(1);
+			setupIntradayStaffingForSkill(primarySkill2, new double?[] { 5, 5 }, new double?[] { 4, 4 });
+
+			var activity = createActivity();
+			createAssignment(User.CurrentUser(), activity);
+			var primaryPersonSkill = createPersonSkill(activity, primarySkill);
+			var nonPrimaryPersonSkill = createPersonSkill(activity, primarySkill2);
+
+			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
+
+			var possibilities =
+				getIntradayAbsencePossibility(null, StaffingPossiblityType.Overtime)
+					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+
+		[Test]
+		public void ShouldNotUsePrimarySkillsWhenCalculatingOvertimeProbabilityToggle44686Off()
+		{
+			var primarySkill = createSkill("primarySkill");
+			primarySkill.SetCascadingIndex(1);
+			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 0, 0 });
+
+			var nonPrimarySkill = createSkill("nonPrimarySkill");
+			setupIntradayStaffingForSkill(nonPrimarySkill, new double?[] { 5, 5 }, new double?[] { 4, 4 });
+
+			var activity = createActivity();
+			createAssignment(User.CurrentUser(), activity);
+			var primaryPersonSkill = createPersonSkill(activity, primarySkill);
+			var nonPrimaryPersonSkill = createPersonSkill(activity, nonPrimarySkill);
+
+			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
+
+			var possibilities =
+				getIntradayAbsencePossibility(null, StaffingPossiblityType.Overtime)
+					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686)]
+		public void ShouldNotUsePrimarySkillsWhenCalculatingAbsenceProbability()
+		{
+			setupWorkFlowControlSet();
+
+			var primarySkill = createSkill("primarySkill");
+			primarySkill.SetCascadingIndex(1);
+			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 5.8, 5.8 });
+
+			var nonPrimarySkill = createSkill("nonPrimarySkill");
+			setupIntradayStaffingForSkill(nonPrimarySkill, new double?[] { 5, 5 }, new double?[] { 1, 1 });
+
+			var activity = createActivity();
+			createAssignment(User.CurrentUser(), activity);
+			var primaryPersonSkill = createPersonSkill(activity, primarySkill);
+			var nonPrimaryPersonSkill = createPersonSkill(activity, nonPrimarySkill);
+
+			addPersonSkillsToPersonPeriod(primaryPersonSkill, nonPrimaryPersonSkill);
 
 			var possibilities =
 				getIntradayAbsencePossibility(null, StaffingPossiblityType.Absence)
