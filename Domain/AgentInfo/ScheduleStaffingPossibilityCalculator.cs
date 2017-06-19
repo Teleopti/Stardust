@@ -20,8 +20,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private readonly ISkillStaffingDataLoader _skillStaffingDataLoader;
 		private readonly INow _now;
 
-		const double tolerence = 0.00001;
-
 		public ScheduleStaffingPossibilityCalculator(ILoggedOnUser loggedOnUser, IScheduleStorage scheduleStorage,
 			ICurrentScenario scenarioRepository, ISkillStaffingDataLoader skillStaffingDataLoader, INow now)
 		{
@@ -187,9 +185,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private static bool staffingDataHasValue(SkillStaffingData skillStaffingData)
 		{
-			var isScheduledStaffingDataAvailable = Math.Abs(skillStaffingData.ScheduledStaffing.GetValueOrDefault(0)) > tolerence;
-			var isForecastedStaffingDataAvailable = Math.Abs(skillStaffingData.ForecastedStaffing.GetValueOrDefault(0)) > tolerence;
-
+			var isScheduledStaffingDataAvailable = skillStaffingData.ScheduledStaffing.HasValue;
+			var isForecastedStaffingDataAvailable = skillStaffingData.ForecastedStaffing.HasValue;
 			return isScheduledStaffingDataAvailable && isForecastedStaffingDataAvailable;
 		}
 
