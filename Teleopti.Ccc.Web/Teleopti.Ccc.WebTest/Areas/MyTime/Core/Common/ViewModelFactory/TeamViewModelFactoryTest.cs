@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator(),
 				MockRepository.GenerateMock<IAuthorization>());
 
-			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
+			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<SelectGroup>;
 			result.FirstOrDefault().children.FirstOrDefault().id.Should().Be.EqualTo(teamId.ToString());
 			result.FirstOrDefault().children.FirstOrDefault().text.Should().Be.EqualTo("team");
 			result.FirstOrDefault().text.Should().Be.EqualTo("Business Hierarchy");
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.ViewModelFactory
 			var target = new TeamViewModelFactory(null, permissionProvider, groupingReadOnlyRepository, new UserTextTranslator(),
 				MockRepository.GenerateMock<IAuthorization>());
 
-			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
+			var result = target.CreateTeamOrGroupOptionsViewModel(DateOnly.Today) as IEnumerable<SelectGroup>;
 			result.FirstOrDefault().children.FirstOrDefault().id.Should().Be.EqualTo(teamId.ToString());
 			result.FirstOrDefault().children.FirstOrDefault().text.Should().Be.EqualTo("Contract/full time");
 			result.FirstOrDefault().text.Should().Be.EqualTo("Contract");

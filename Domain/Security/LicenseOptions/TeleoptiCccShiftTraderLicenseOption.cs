@@ -10,16 +10,12 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
     /// </summary>
     public class TeleoptiCccShiftTraderLicenseOption : LicenseOption
     {
-
-        #region Interface
-
-        /// <summary>
+	    /// <summary>
         /// Initializes a new instance of the <see cref="TeleoptiCccShiftTraderLicenseOption"/> class.
         /// </summary>
         public TeleoptiCccShiftTraderLicenseOption()
             : base(DefinedLicenseOptionPaths.TeleoptiCccShiftTrader, DefinedLicenseOptionNames.TeleoptiCccLifestyle)
         {
-            //
         }
 
 	    /// <summary>
@@ -38,7 +34,5 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			    ApplicationFunction.FindByPath(allApplicationFunctions,
 				    DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard));
 	    }
-
-        #endregion
     }
 }

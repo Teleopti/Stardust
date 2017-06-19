@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 {
@@ -54,11 +53,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool IsDivider { get; set; }
 		public Guid Id { get; set; }
 	}
-
-
+	
 	public class DateTimeDefaultValues
 	{
-
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
 		public string FullDayStartTime { get; set; }
@@ -66,72 +63,45 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public int TodayYear { get; set; }
 		public int TodayMonth { get; set; }
 		public int TodayDay { get; set; }
-
-
-
 	}
 
-	public class PreferenceOption : Option, IPreferenceOption
+	public class PreferenceOption : Option
 	{
 		public bool Extended { get; set; }
 	}
 
 	public class PreferenceOptionGroup
 	{
-		public PreferenceOptionGroup(string text, IEnumerable<IPreferenceOption> preferenceOptions)
+		public PreferenceOptionGroup(string text, IEnumerable<PreferenceOption> preferenceOptions)
 		{
 			Text = text;
 			Options = preferenceOptions;
 		}
 
-		public string Text { get; private set; }
-		public IEnumerable<IPreferenceOption> Options { get; private set; }
+		public string Text { get; }
+		public IEnumerable<PreferenceOption> Options { get; }
 	}
-
-	public interface IPreferenceOption : IOption
-	{
-		bool Extended { get; }
-	}
-
-	public class Option : IOption
+	
+	public class Option
 	{
 		public string Value { get; set; }
 		public string Text { get; set; }
 		public string Color { get; set; }
 	}
 
-	public interface IOption
-	{
-		string Value { get; }
-		string Text { get; }
-		string Color { get; }
-	}
-
-	public interface ISelectOption
-	{
-		string text { get; }
-	}
-
-	public interface ISelectGroup : ISelectOption
-	{
-		ISelectOptionItem[] children { get; }
-	}
-
-	public class SelectGroup : ISelectGroup
+	public class SelectBase
 	{
 		public string text { get; set; }
-		public ISelectOptionItem[] children { get; set; }
+	}
+	
+	public class SelectGroup : SelectBase
+	{
+		public SelectOptionItem[] children { get; set; }
 		public Guid PageId { get; set; }
 	}
-
-	public interface ISelectOptionItem : ISelectOption
+	
+	public class SelectOptionItem : SelectBase
 	{
-		string id { get; }
-	}
-
-	public class SelectOptionItem : ISelectOptionItem
-	{
-		public string text { get; set; }
 		public string id { get; set; }
 	}
 

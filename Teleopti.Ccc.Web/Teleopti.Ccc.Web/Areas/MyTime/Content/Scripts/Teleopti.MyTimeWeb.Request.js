@@ -144,13 +144,13 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			requestNavigationViewModel.addPostShiftForTradeRequest(date);
 		},
 		HideFab: function (show) {
-			if (requestNavigationViewModel != null) {
+			if (requestNavigationViewModel !== null) {
 				requestNavigationViewModel.hideFab(show);
 				requestNavigationViewModel.menuIsVisible(show);
 			}
 		},
 		MenuIsOpen: function () {
-			if (requestNavigationViewModel != null) {
+			if (requestNavigationViewModel !== null) {
 				return requestNavigationViewModel.menuIsVisible();
 			}
 		}

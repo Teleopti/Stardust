@@ -32,13 +32,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			_authorization = authorization;
 		}
 
-		public IEnumerable<ISelectOption> CreateTeamOrGroupOptionsViewModel(DateOnly date)
+		public IEnumerable<SelectBase> CreateTeamOrGroupOptionsViewModel(DateOnly date)
 		{
 			return _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages) ?
 					   createGroupPagesOptions(date) : CreateTeamOptionsViewModel(date, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 		}
 
-		public IEnumerable<ISelectOption> CreateTeamOptionsViewModel(DateOnly date, string applicationFunctionPath)
+		public IEnumerable<SelectOptionItem> CreateTeamOptionsViewModel(DateOnly date, string applicationFunctionPath)
 		{
 			var teams = _teamProvider.GetPermittedTeams(date, applicationFunctionPath).ToList();
 			var sites = teams
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 				.Distinct()
 				.OrderBy(s => s.Description.Name);
 
-			var options = new List<ISelectOption>();
+			var options = new List<SelectOptionItem>();
 			sites.ForEach(s =>
 			{
 				var teamOptions = from t in teams
@@ -64,11 +64,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 
 		public IEnumerable<dynamic> CreateLeaderboardOptionsViewModel(DateOnly date, string applicationFunctionPath)
 		{
-			var teams = _teamProvider.GetPermittedTeams(date, applicationFunctionPath).ToList();
-			var sites = teams
-				.Select(t => t.Site)
-				.Distinct()
-				.OrderBy(s => s.Description.Name);
+			var teams = _teamProvider.GetPermittedTeams(date, applicationFunctionPath).ToArray();
+			var sites = teams.GroupBy(t => t.Site)
+				.OrderBy(s => s.Key.Description.Name);
 
 			var options = new List<dynamic>();
 			options.Add( new
@@ -79,18 +77,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			});
 			sites.ForEach(s =>
 			{
-				if (_authorization.IsPermitted(applicationFunctionPath, date, s))
+				if (_authorization.IsPermitted(applicationFunctionPath, date, s.Key))
 				{
 					options.Add(new 
 					{
-						id = s.Id.ToString(),
-						text = s.Description.Name,
+						id = s.Key.Id.ToString(),
+						text = s.Key.Description.Name,
 						type = LeadboardQueryType.Site
 					});
 				}
 				
-				var teamOptions = from t in teams
-								  where t.Site == s
+				var teamOptions = from t in s
 								  select new
 								  {
 									  id = t.Id.ToString(),
@@ -102,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			return options;
 		}
 
-		private IEnumerable<ISelectOption> createGroupPagesOptions(DateOnly date)
+		private IEnumerable<SelectBase> createGroupPagesOptions(DateOnly date)
 		{
 			var pages = _groupingReadOnlyRepository.AvailableGroupPages().ToArray();
 			var groupPages = pages

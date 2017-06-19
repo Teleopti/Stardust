@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void ShouldReturnTeamOptionsAsJsonForShiftTrade()
 		{
-			var teams = new[] { new SelectGroup() };
+			var teams = new[] { new SelectOptionItem() };
 			var viewModelFactory = MockRepository.GenerateMock<ITeamViewModelFactory>();
 			viewModelFactory.Stub(
 				x => x.CreateTeamOptionsViewModel(DateOnly.Today, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var result = target.TeamsForShiftTrade(DateOnly.Today);
 
-			var data = result.Data as IEnumerable<SelectGroup>;
+			var data = result.Data as IEnumerable<SelectOptionItem>;
 			data.Should().Have.SameValuesAs(teams);
 		}
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var target = new TeamController(viewModelFactory, new Now(), null);
 
 			var result = target.TeamsForShiftTradeBoard(DateOnly.Today);
-			var data = result.Data as IEnumerable<ISelectOption>;
+			var data = result.Data as IEnumerable<SelectOptionItem>;
 			var selectOption = data.FirstOrDefault();
 			selectOption.text.Should().Equals("mysite/myteam");
 		}
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var target = new TeamController(null, new Now(), viewModelFactory);
 
 			var result = target.SitesForShiftTrade(DateOnly.Today);
-			var data = result.Data as IEnumerable<ISelectOption>;
+			var data = result.Data as IEnumerable<SelectOptionItem>;
 			var selectOption = data.FirstOrDefault();
 			selectOption.text.Should().Be.EqualTo("mysite");
 		}
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetTeamsUnderGivenSite()
 		{
 			var expectedId = Guid.NewGuid();
-			var expectedResult = new List<ISelectOption> { new SelectOptionItem {id = expectedId.ToString(), text = "myTeam"} };
+			var expectedResult = new List<SelectOptionItem> { new SelectOptionItem {id = expectedId.ToString(), text = "myTeam"} };
 			var viewModelFactory = MockRepository.GenerateMock<ISiteViewModelFactory>();
 			viewModelFactory.Stub(x => x.GetTeams(new List<Guid> { new Guid() }, DateOnly.Today, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).IgnoreArguments().Return(expectedResult);
 

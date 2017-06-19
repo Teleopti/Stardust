@@ -17,11 +17,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			_siteProvider = siteProvider;
 		}
 
-		public IEnumerable<ISelectOption> CreateSiteOptionsViewModel(DateOnly date, string applicationFunctionPath)
+		public IEnumerable<SelectOptionItem> CreateSiteOptionsViewModel(DateOnly date, string applicationFunctionPath)
 		{
 			var sites = _siteProvider.GetShowListSites(date, applicationFunctionPath).ToList();
 
-			var options = new List<ISelectOption>();
+			var options = new List<SelectOptionItem>();
 			sites.ForEach(s =>
 			{
 				var siteOptions = new SelectOptionItem
@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.ViewModelFactory
 			return options;
 		}
 
-		public IEnumerable<ISelectOption> GetTeams(List<Guid> siteIds, DateOnly date, string applicationFunctionPath)
+		public IEnumerable<SelectOptionItem> GetTeams(List<Guid> siteIds, DateOnly date, string applicationFunctionPath)
 		{
-			var options = new List<ISelectOption>();
+			var options = new List<SelectOptionItem>();
 
 			foreach (var siteId in siteIds)
 			{

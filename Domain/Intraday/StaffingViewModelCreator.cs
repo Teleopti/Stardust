@@ -71,7 +71,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var minutesPerInterval = _intervalLengthFetcher.IntervalLength;
 			if (minutesPerInterval <= 0) throw new Exception($"IntervalLength is cannot be {minutesPerInterval}!");
 
-			var userDateOnly = dateOnly ?? new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()));
+			var timeZone = _timeZone.TimeZone();
+			var userDateOnly = dateOnly ?? new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timeZone));
 			
 
 			var scenario = _scenarioRepository.LoadDefaultScenario();
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skillDaysBySkills, minutesPerInterval, dateOnly, useShrinkage);
 
-			var statisticsPerWorkloadInterval = _intradayQueueStatisticsLoader.LoadActualCallPerSkillInterval(skills, _timeZone.TimeZone(), userDateOnly);
+			var statisticsPerWorkloadInterval = _intradayQueueStatisticsLoader.LoadActualCallPerSkillInterval(skills, timeZone, userDateOnly);
 
 			var latestStatsTime = getLastestStatsTime(statisticsPerWorkloadInterval);
 			
