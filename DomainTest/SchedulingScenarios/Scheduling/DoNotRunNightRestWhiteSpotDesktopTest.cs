@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var activity = new Activity().WithId();
 			var skill = new Skill().For(activity).IsOpen().WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
-			var agent = new Person().WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(firstDay);
+			var agent = new Person().WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(firstDay).WithId();
 			var skillDays = skill.CreateSkillDayWithDemand(scenario, firstDay, 1);
 			SchedulerStateHolder.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1), new[] { agent }, Enumerable.Empty<IPersonAssignment>(), skillDays);
 

@@ -162,6 +162,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				{
 					builder.RegisterType<ScheduleIslandExecutor>().As<IScheduleExecutor>().InstancePerLifetimeScope();
 					builder.RegisterType<SchedulingCommandHandler>().InstancePerLifetimeScope();
+					builder.RegisterType<SchedulingEventHandler>().InstancePerLifetimeScope();
 				}
 				else
 				{
