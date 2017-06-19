@@ -51,7 +51,8 @@ var wfm = angular.module('wfm', [
 	'wfm.staffing',
 	'wfm.dataProtection',
 	'wfm.templates',
-	'wfm.workPicker'
+	'wfm.workPicker',
+	'wfm.badge'
 ]);
 
 wfm.config([
