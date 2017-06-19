@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 	public class ForecastExportModel
 	{
 		public ForecastExportHeader Header { get; set; }
+		public List<DailyModelForecast> DailyModelForecast { get; set; }
 	}
 
 	public class ForecastExportHeader
@@ -16,6 +17,5 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 		public Percent ServiceLevelPercent { get; set; }
 		public double ServiceLevelSeconds { get; set; }
 		public Percent ShrinkagePercent { get; set; }
-		public List<DailyModelForecast> DailyModelForecast { get; set; }
 	}
 }

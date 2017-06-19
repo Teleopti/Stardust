@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 {
 
 	[DomainTest]
-	[Ignore("PBI #44291 Not yet done")]
 	public class ForecastExportModelCreatorTest
 	{
 		public ForecastExportModelCreator Target;
@@ -66,20 +65,53 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			var period = new DateOnlyPeriod(new DateOnly(userNow.Date), new DateOnly(userNow.Date).AddDays(1));
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skillDayToday = SkillSetupHelper.CreateSkillDay(skill, scenario, userNow, openHour, false, false);
+			var skillDayTomorow = SkillSetupHelper.CreateSkillDay(skill, scenario, userNow.AddDays(1), openHour, false, false);
 			skillDayToday.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.2));
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDayToday);
+			SkillDayRepository.Add(skillDayTomorow);
 			var model = Target.Load(skill.Id.Value, period);
-			var att = skillDayToday.TotalAverageTaskTime.Seconds;
-			var acw = skillDayToday.TotalAverageAfterTaskTime.Seconds;
-			model.Header.DailyModelForecast.First().ForecastDate.Should().Be.EqualTo(skillDayToday.CurrentDate.Date);
-			model.Header.DailyModelForecast.First().OpenHours.Should().Be.EqualTo(openHour);
-			model.Header.DailyModelForecast.First().Calls.Should().Be.EqualTo(skillDayToday.WorkloadDayCollection.First().Tasks);
-			model.Header.DailyModelForecast.First().AverageTalkTime.Should().Be.EqualTo(att);
-			model.Header.DailyModelForecast.First().AfterCallWork.Should().Be.EqualTo(acw);
-			model.Header.DailyModelForecast.First().AverageHandleTime.Should().Be.EqualTo(att + acw);
-			model.Header.DailyModelForecast.First().ForecastedHours.Should().Be.EqualTo(skillDayToday.SkillStaffPeriodCollection.Sum(x => x.FStaffHours()));
-			model.Header.DailyModelForecast.First().ForecastedHoursShrinkage.Should().Be.EqualTo(skillDayToday.SkillStaffPeriodCollection.Sum(x => x.FStaffHours()));
+			var attToday = skillDayToday.TotalAverageTaskTime.Seconds;
+			var acwToday = skillDayToday.TotalAverageAfterTaskTime.Seconds;
+			var attTomorrow = skillDayToday.TotalAverageTaskTime.Seconds;
+			var acwTomorrow = skillDayToday.TotalAverageAfterTaskTime.Seconds;
+
+			model.Header.ShrinkagePercent.Should().Be.EqualTo(skillDayToday.SkillDataPeriodCollection.First().Shrinkage);
+			model.DailyModelForecast.Count().Should().Be.EqualTo(2);
+			model.DailyModelForecast.First().ForecastDate.Should().Be.EqualTo(skillDayToday.CurrentDate.Date);
+			model.DailyModelForecast.First().OpenHours.Should().Be.EqualTo(openHour);
+			model.DailyModelForecast.First().Calls.Should().Be.EqualTo(skillDayToday.WorkloadDayCollection.First().Tasks);
+			model.DailyModelForecast.First().AverageTalkTime.Should().Be.EqualTo(attToday);
+			model.DailyModelForecast.First().AfterCallWork.Should().Be.EqualTo(acwToday);
+			model.DailyModelForecast.First().AverageHandleTime.Should().Be.EqualTo(attToday + acwToday);
+			model.DailyModelForecast.First().ForecastedHours.Should().Be.EqualTo(skillDayToday.ForecastedDistributedDemand.TotalHours);
+			model.DailyModelForecast.First().ForecastedHoursShrinkage.Should().Be.EqualTo(skillDayToday.ForecastedDistributedDemandWithShrinkage.TotalHours);
+
+			model.DailyModelForecast.Last().ForecastDate.Should().Be.EqualTo(skillDayTomorow.CurrentDate.Date);
+			model.DailyModelForecast.Last().OpenHours.Should().Be.EqualTo(openHour);
+			model.DailyModelForecast.Last().Calls.Should().Be.EqualTo(skillDayTomorow.WorkloadDayCollection.First().Tasks);
+			model.DailyModelForecast.Last().AverageTalkTime.Should().Be.EqualTo(attTomorrow);
+			model.DailyModelForecast.Last().AfterCallWork.Should().Be.EqualTo(acwTomorrow);
+			model.DailyModelForecast.Last().AverageHandleTime.Should().Be.EqualTo(attTomorrow + acwTomorrow);
+			model.DailyModelForecast.Last().ForecastedHours.Should().Be.EqualTo(skillDayTomorow.ForecastedDistributedDemand.TotalHours);
+			model.DailyModelForecast.Last().ForecastedHoursShrinkage.Should().Be.EqualTo(skillDayTomorow.ForecastedDistributedDemandWithShrinkage.TotalHours);
+		}
+
+		[Test]
+		public void ShouldReturnEmptyDailyModelWhenSkillDayIsClosed()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			var period = new DateOnlyPeriod(new DateOnly(userNow.Date), new DateOnly(userNow.Date).AddDays(1));
+			var openHour = new TimePeriod(8, 0, 8, 30);
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skill = createSkill(minutesPerInterval, "skill", openHour, false, 0);
+			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario, userNow, openHour, false, false);
+			skillDay.WorkloadDayCollection.First().Close();
+			SkillDayRepository.Add(skillDay);
+			SkillRepository.Add(skill);
+			var model = Target.Load(skill.Id.Value, period);
+
+			model.DailyModelForecast.Should().Be.Empty();
 		}
 
 		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, int midnigthBreakOffset)

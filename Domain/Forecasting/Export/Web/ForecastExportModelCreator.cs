@@ -26,23 +26,25 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 		public ForecastExportModel Load(Guid skillId, DateOnlyPeriod period)
 		{
 			var scenario = _scenarioRepository.LoadDefaultScenario();
-			var skill = _skillRepository.LoadSkills(new List<Guid>() { skillId }).First();
+			var skill = _skillRepository.Get(skillId);
 			var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(period, new List<ISkill>(){skill}, scenario);
 			if (!skillDaysBySkills[skill].Any())
 				return new ForecastExportModel();
-			var DailyModel = new List<DailyModelForecast>();
+			var dailyModel = new List<DailyModelForecast>();
 			foreach (var skillDay in skillDaysBySkills[skill])
 			{
-				DailyModel.Add(new DailyModelForecast()
+				if (!skillDay.OpenForWork.IsOpen)
+					continue;
+				dailyModel.Add(new DailyModelForecast()
 				{
 					ForecastDate = skillDay.CurrentDate.Date,
 					OpenHours = skillDay.OpenHours().First(),
 					Calls = skillDay.Tasks,
 					AverageTalkTime = skillDay.TotalAverageTaskTime.Seconds,
 					AfterCallWork = skillDay.TotalAverageAfterTaskTime.Seconds,
-					AverageHandleTime = skillDay.TotalAverageTaskTime.Seconds + skillDay.AverageAfterTaskTime.Seconds,
-					ForecastedHours = skillDay.SkillStaffPeriodCollection.Sum(x => x.FStaffHours()),
-					ForecastedHoursShrinkage = skillDay.SkillStaffPeriodCollection.Sum(x => x.FStaffHours())
+					AverageHandleTime = skillDay.TotalAverageTaskTime.Seconds + skillDay.TotalAverageAfterTaskTime.Seconds,
+					ForecastedHours = skillDay.ForecastedDistributedDemand.TotalHours,
+					ForecastedHoursShrinkage = skillDay.ForecastedDistributedDemandWithShrinkage.TotalHours
 				});
 			}
 
@@ -55,9 +57,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 					SkillTimeZoneName = skill.TimeZone.DisplayName,
 					ServiceLevelPercent = skillDaysBySkills[skill].First().SkillDataPeriodCollection.First().ServiceLevelPercent,
 					ServiceLevelSeconds = skillDaysBySkills[skill].First().SkillDataPeriodCollection.First().ServiceLevelSeconds,
-					ShrinkagePercent = skillDaysBySkills[skill].First().SkillDataPeriodCollection.First().Shrinkage,
-					DailyModelForecast = DailyModel
-				}
+					ShrinkagePercent = skillDaysBySkills[skill].First().SkillDataPeriodCollection.First().Shrinkage
+				},
+				DailyModelForecast = dailyModel
 			};
 		}
 	}
