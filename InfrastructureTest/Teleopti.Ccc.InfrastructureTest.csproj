@@ -288,6 +288,7 @@
     <Compile Include="Repositories\RequestStrategySettingsReaderTest.cs" />
     <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
     <Compile Include="Repositories\SmartPersonPropertyQuerierTest.cs" />
+    <Compile Include="Repositories\UserDevicesRepositoryTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\OrganizationReaderSkillsTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\Reader\Order.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderAgentsCountTest.cs" />
