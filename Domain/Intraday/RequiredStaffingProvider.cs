@@ -67,24 +67,26 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private void assignActualWorkloadToClonedSkillDay(ISkillDay clonedSkillDay, IList<SkillIntervalStatistics> skillDayStats, Dictionary<Guid, int> workloadBacklog)
 		{
 			clonedSkillDay.Lock();
+			var timeZone = _timeZone.TimeZone();
+			var skillDayStatsPerWorkload = skillDayStats.ToLookup(w => w.WorkloadId);
 			foreach (var workloadDay in clonedSkillDay.WorkloadDayCollection)
 			{
 				if (workloadDay.OpenTaskPeriodList.Any())
 				{
-					var openHourStartLocal = TimeZoneHelper.ConvertFromUtc(workloadDay.OpenTaskPeriodList.First().Period.StartDateTime, _timeZone.TimeZone());
-					var firstOpenInterval = skillDayStats
-						.FirstOrDefault(x => x.StartTime == openHourStartLocal && x.WorkloadId == workloadDay.Workload.Id.Value);
-					if(firstOpenInterval != null && workloadBacklog.ContainsKey(workloadDay.Workload.Id.Value))
-						firstOpenInterval.Calls = workloadBacklog[workloadDay.Workload.Id.Value] + firstOpenInterval.Calls;
+					var openHourStartLocal = TimeZoneHelper.ConvertFromUtc(workloadDay.OpenTaskPeriodList.First().Period.StartDateTime, timeZone);
+					var firstOpenInterval = skillDayStatsPerWorkload[workloadDay.Workload.Id.Value].FirstOrDefault(x => x.StartTime == openHourStartLocal);
+					int calls = 0;
+					if (firstOpenInterval != null && workloadBacklog.TryGetValue(workloadDay.Workload.Id.Value, out calls))
+					{
+						firstOpenInterval.Calls = calls + firstOpenInterval.Calls;
+					}
 				}
 				else
 					continue;
 				foreach (var taskPeriod in workloadDay.TaskPeriodList)
 				{
-					var timeZone = _timeZone.TimeZone();
-					var statInterval = skillDayStats
-						.FirstOrDefault(x => TimeZoneHelper.ConvertToUtc(x.StartTime, timeZone) == taskPeriod.Period.StartDateTime &&
-											 x.WorkloadId == workloadDay.Workload.Id.Value);
+					var statInterval = skillDayStatsPerWorkload[workloadDay.Workload.Id.Value]
+						.FirstOrDefault(x => TimeZoneHelper.ConvertToUtc(x.StartTime, timeZone) == taskPeriod.Period.StartDateTime);
 
                     taskPeriod.CampaignTasks = new Percent(0);
                     taskPeriod.CampaignTaskTime = new Percent(0);

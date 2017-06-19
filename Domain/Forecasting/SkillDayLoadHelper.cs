@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			periodToLoad = SkillDayCalculator.GetPeriodToLoad(period);
 	        foreach (var skill in skillsToLoad)
 	        {
-	            var skillDays = testSkillDays[skill].OrderBy(s => s.CurrentDate).ToList();
+	            var skillDays = testSkillDays[skill].OrderBy(s => s.CurrentDate).ToArray();
 
 	            var multisiteSkill = skill as IMultisiteSkill;
 	            if (multisiteSkill != null)

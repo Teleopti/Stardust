@@ -19,7 +19,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Intraday
 {
 	[DomainTest]
-	//[Ignore("Under Developement")]
 	public class StaffingViewModelCreatorEmailTest : ISetup
 	{
 		public MutableNow Now;
