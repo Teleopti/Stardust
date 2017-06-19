@@ -7,10 +7,10 @@
 
     staffingService.$inject = ['$resource'];
     function staffingService($resource) {
-        var monitorskillareastaffingByDate = $resource('../api/intraday/monitorskillareastaffing');
-        var monitorskillstaffingByDate = $resource('../api/intraday/monitorskillstaffing');
-        var skills = $resource("../api/intraday/skills");
-        var areas = $resource("../api/intraday/skillarea");
+		var monitorskillareastaffingByDate = $resource('../api/staffing/monitorskillareastaffing');
+		var monitorskillstaffingByDate = $resource('../api/staffing/monitorskillstaffing');
+		var skills = $resource("../api/intraday/skills");
+		var areas = $resource("../api/intraday/skillarea");
         var overtime = $resource('../api/staffing/overtime');
         var suggestion = $resource('../api/staffing/overtime/suggestion');
         var resCalc = $resource('../TriggerResourceCalculate');

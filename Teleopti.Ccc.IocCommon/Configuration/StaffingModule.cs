@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			builder.RegisterType<ScheduleStaffingPossibilityCalculator>().As<IScheduleStaffingPossibilityCalculator>().SingleInstance();
 			builder.RegisterType<SkillStaffingDataLoader>().As<ISkillStaffingDataLoader>().SingleInstance();
+			builder.RegisterType<ScheduledStaffingViewModelCreator>().SingleInstance();
 		}
     }
 }

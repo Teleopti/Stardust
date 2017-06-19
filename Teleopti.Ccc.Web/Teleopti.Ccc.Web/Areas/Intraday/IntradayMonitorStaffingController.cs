@@ -37,21 +37,21 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok(_staffingViewModelCreator.Load(new[] { id }));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing")]
-		public virtual IHttpActionResult MonitorSkillAreaStaffingByDate(Guid SkillAreaId, DateTime DateTime, bool UseShrinkage)
-		{
-			var skillArea = _skillAreaRepository.Get(SkillAreaId);
-			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
-			return Ok(_staffingViewModelCreator.Load(skillIdList, new DateOnly(DateTime), UseShrinkage));
-			//return Ok(_staffingViewModelCreator.Load(skillIdList));
-		}
+		//[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing")]
+		//public virtual IHttpActionResult MonitorSkillAreaStaffingByDate(Guid SkillAreaId, DateTime DateTime, bool UseShrinkage)
+		//{
+		//	var skillArea = _skillAreaRepository.Get(SkillAreaId);
+		//	var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
+		//	return Ok(_staffingViewModelCreator.Load(skillIdList, new DateOnly(DateTime), UseShrinkage));
+		//	//return Ok(_staffingViewModelCreator.Load(skillIdList));
+		//}
 		
-		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing")]
-		public virtual IHttpActionResult MonitorSkillStaffingByDate(Guid SkillId, DateTime DateTime, bool UseShrinkage)
-		{
-			return Ok(_staffingViewModelCreator.Load(new[] {SkillId }, new DateOnly(DateTime), UseShrinkage));
-			//return Ok(_staffingViewModelCreator.Load(new[] { SkillId }));
-		}
+		//[UnitOfWork, HttpGet, Route("api/intraday/monitorskillstaffing")]
+		//public virtual IHttpActionResult MonitorSkillStaffingByDate(Guid SkillId, DateTime DateTime, bool UseShrinkage)
+		//{
+		//	return Ok(_staffingViewModelCreator.Load(new[] {SkillId }, new DateOnly(DateTime), UseShrinkage));
+		//	//return Ok(_staffingViewModelCreator.Load(new[] { SkillId }));
+		//}
 	}
 
 }

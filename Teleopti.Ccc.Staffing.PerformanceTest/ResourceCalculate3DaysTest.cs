@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		public IConfigReader ConfigReader;
 		public SkillStaffingIntervalProvider SkillStaffingIntervalProvider;
 		public ISkillCombinationResourceRepository SkillCombinationResourceRepository;
-		public IStaffingViewModelCreator StaffingViewModelCreator;
+		public ScheduledStaffingViewModelCreator StaffingViewModelCreator;
 		public ISkillRepository SkillRepository;
 
 		private IEnumerable<ISkill> skills;
