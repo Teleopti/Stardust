@@ -259,6 +259,8 @@
     <Compile Include="Repositories\IUserDeviceRepository.cs" />
     <Compile Include="Scheduling\SchedulingCommand.cs" />
     <Compile Include="Scheduling\SchedulingCommandHandler.cs" />
+    <Compile Include="Scheduling\SchedulingEventHandler.cs" />
+    <Compile Include="Scheduling\SchedulingWasOrdered.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Validation\IScheduleValidator.cs" />
     <Compile Include="Scheduling\ScheduleIslandExecutor.cs" />
