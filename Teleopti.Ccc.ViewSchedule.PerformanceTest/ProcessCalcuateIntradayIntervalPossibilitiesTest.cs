@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		public IContractScheduleRepository ContractScheduleRepository;
 		public IDayOffTemplateRepository DayOffTemplateRepository;
 		public IActivityRepository ActivityRepository;
-
-		public IStaffingViewModelCreator StaffingViewModelCreator;
+		
 		public IScheduleStorage ScheduleStorage;
 		public ICurrentScenario CurrentScenario;
 		public IIntervalLengthFetcher IntervalLengthFetcher;
