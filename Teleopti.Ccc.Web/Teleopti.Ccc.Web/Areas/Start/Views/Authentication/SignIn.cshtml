@@ -61,7 +61,7 @@
 				 data-nopermissiontext="@Resources.InsufficientPermissionForWeb">
 			</div>
 
-			<div>
+			<div data-bind="if: ShowSignInAsAnotherUser && HasErrorMessage">
 				<a style="display: inline-block;" class="wfm-btn wfm-btn-primary" href="@signOutUrl">@Resources.SignInAsAnotherUser</a>
 			</div>
 		</div>
