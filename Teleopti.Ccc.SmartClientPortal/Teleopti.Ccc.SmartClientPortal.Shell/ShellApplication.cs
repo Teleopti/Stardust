@@ -204,7 +204,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				{
 					MessageBrokerListeningEnabled = true,
 					ImplementationTypeForCurrentUnitOfWork = typeof(FromFactory),
-					OptimizeScheduleChangedEvents_DontUseFromWeb = true
+					OptimizeScheduleChangedEvents_DontUseFromWeb = true,
+					IsFatClient = true
 				};
 				var configuration = new IocConfiguration(
 							iocArgs,
@@ -233,21 +234,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().Current()).ExternallyOwned().As<IUnitOfWorkFactory>();
 				builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 				//////
-
-				//intraday - shouldn't be here!
-				builder.RegisterType<DesktopOptimizationContext>()
-					.As<ISynchronizeIntradayOptimizationResult>()
-					.As<IOptimizationPreferencesProvider>()
-					.As<IPeopleInOrganization>()
-					.As<ICurrentIntradayOptimizationCallback>()
-					.AsSelf()
-					.ApplyAspects()
-					.SingleInstance();
-				builder.RegisterType<FillSchedulerStateHolderForDesktop>()
-					.As<IFillSchedulerStateHolder>()
-					.ApplyAspects()
-					.SingleInstance();
-				//
 
 				builder.Register(c => new WebConfigReader(() =>
 				{

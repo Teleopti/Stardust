@@ -450,15 +450,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayDecisionMaker>().SingleInstance();
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
 			builder.RegisterType<PlanningGroupStaffLoader>().As<IPlanningGroupStaffLoader>().SingleInstance();
-			builder.RegisterType<PeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
-			{
-				builder.RegisterType<OptimizationPreferencesPerfTestProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().AsSelf().As<IOptimizationPreferencesProvider>().SingleInstance();
-			}
 			builder.RegisterType<FetchDayOffRulesModel>().As<IFetchDayOffRulesModel>().SingleInstance();
 			builder.RegisterType<FetchPlanningGroupModel>().As<IFetchPlanningGroupModel>().SingleInstance();
 			builder.RegisterType<DayOffRulesMapper>().SingleInstance();
@@ -481,11 +472,40 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SchedulePlanningPeriodCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<ClearPlanningPeriodSchedulingCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<IntradayOptimizationFromWeb>().InstancePerLifetimeScope().ApplyAspects();
-
 			builder.RegisterType<OptimizeIntradayIslandsDesktop>().InstancePerLifetimeScope();
-			builder.RegisterType<IntradayOptimizationCallbackContext>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();
-			builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<IFillSchedulerStateHolder>().ApplyAspects().SingleInstance();
-			builder.RegisterType<PersistIntradayOptimizationResult>().As<ISynchronizeIntradayOptimizationResult>().SingleInstance();
+
+
+			if (_configuration.Args().IsFatClient)
+			{
+				builder.RegisterType<DesktopOptimizationContext>()
+					.As<ISynchronizeIntradayOptimizationResult>()
+					.As<IOptimizationPreferencesProvider>()
+					.As<IPeopleInOrganization>()
+					.As<ICurrentIntradayOptimizationCallback>()
+					.AsSelf()
+					.ApplyAspects()
+					.SingleInstance();
+				builder.RegisterType<FillSchedulerStateHolderForDesktop>()
+					.As<IFillSchedulerStateHolder>()
+					.ApplyAspects()
+					.SingleInstance();
+			}
+			else
+			{
+				builder.RegisterType<PersistIntradayOptimizationResult>().As<ISynchronizeIntradayOptimizationResult>().SingleInstance();
+				if (_configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
+				{
+					builder.RegisterType<OptimizationPreferencesPerfTestProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();
+				}
+				else
+				{
+					builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().AsSelf().As<IOptimizationPreferencesProvider>().SingleInstance();
+				}
+				builder.RegisterType<PeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
+				builder.RegisterType<IntradayOptimizationCallbackContext>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();
+				builder.RegisterType<FillSchedulerStateHolderFromDatabase>().As<IFillSchedulerStateHolder>().ApplyAspects().SingleInstance();
+			}
+
 
 			builder.RegisterType<LoaderForResourceCalculation>().InstancePerLifetimeScope();
 			builder.RegisterType<ExtractSkillStaffingDataForResourceCalculation>().InstancePerLifetimeScope();

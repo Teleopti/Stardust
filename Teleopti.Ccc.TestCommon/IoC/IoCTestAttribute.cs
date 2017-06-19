@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using NUnit.Framework.Interfaces;
@@ -105,6 +106,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var toggles = Toggles();
 			(_fixture as IConfigureToggleManager)?.Configure(toggles);
 			var args = new IocArgs(config);
+			if (QueryAllAttributes<UseIocForFatClientAttribute>().Any())
+				args.IsFatClient = true;
 			(_fixture as ISetupConfiguration)?.SetupConfiguration(args);
 			var configuration = new IocConfiguration(args, toggles);
 
