@@ -61,14 +61,6 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 					{
 						command.ExecuteNonQuery();
 					}
-					using (var command = new SqlCommand(@"truncate table readmodel.ScheduleForecastSkill", connection))
-					{
-						command.ExecuteNonQuery();
-					}
-					using (var command = new SqlCommand(@"truncate table readmodel.ScheduleForecastSkillChange", connection))
-					{
-						command.ExecuteNonQuery();
-					}
 				}
 				skills = SkillRepository.LoadAllSkills();
 				UpdateStaffingLevel.Update(period);
