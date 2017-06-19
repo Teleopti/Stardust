@@ -76,6 +76,12 @@ angular
                             return 'app/rta/historical/rta-historical-SeeAllOutOfAdherences_39146.html'
                     },
                     controller: 'RtaHistoricalController as vm',
-                });
+                })
+                .state('refact-rta', {
+                    url: '/refact-rta',
+                    templateUrl: 'app/rta/refact/rta.html',
+                    controller: 'RtaMainController as vm'
+                })
+                ;
         };
     });

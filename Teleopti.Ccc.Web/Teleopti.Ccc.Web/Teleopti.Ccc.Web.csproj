@@ -1595,6 +1595,8 @@
     <Content Include="WFM\app\rta\overview\rta.overview.controller.teams.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.sites.spec.js" />
     <Content Include="WFM\app\rta\overview\rta.selectSkill.SiteAndTeamOnSkillOverview.controller.teams.spec.js" />
+    <Content Include="WFM\app\rta\refact\rta.html" />
+    <Content Include="WFM\app\rta\refact\main.controller.js" />
     <Content Include="WFM\app\rta\rta.adherence.service.js" />
     <Content Include="WFM\app\rta\rta.backend.fake.js" />
     <Content Include="WFM\app\rta\rta.controller.fortest.js" />
