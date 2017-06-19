@@ -235,9 +235,15 @@
 			if(!vm.openPicker) return;
 			shrinkSites();
 			var selection = vm.sites.reduce(function (acc, site) {
-				if (site.isChecked) {
-					acc.siteIds.push(site.Id)
-				} else if (site.isMarked) {
+				if (site.isChecked && site.FullPermission) {
+					acc.siteIds.push(site.Id);
+				} 
+				else if(site.isChecked) {
+					site.Teams.forEach(function(team){
+						acc.teamIds.push(team.Id);
+					})
+				}		
+				else if (site.isMarked) {
 					acc.teamIds = acc.teamIds.concat(
 						site.Teams
 							.filter(function (team) {

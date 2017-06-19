@@ -239,6 +239,7 @@ describe('RtaFilterController', function () {
 	it('should go to agents on site', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
+			FullPermission: true,
 			Teams: [{
 				Id: 'TeamGuid'
 			}]
@@ -264,12 +265,14 @@ describe('RtaFilterController', function () {
 	it('should go to agents on sites', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
+			FullPermission: true,
 			Teams: [{
 				Id: 'TeamLondon'
 			}]
 		})
 			.withOrganization({
 				Id: 'ParisGuid',
+				FullPermission: true,
 				Teams: [{
 					Id: 'TeamParis'
 				}]
@@ -296,6 +299,7 @@ describe('RtaFilterController', function () {
 	it('should go to agents on team', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
+			FullPermission: true,
 			Teams: [{
 				Id: 'LondonTeam1'
 			}, {
@@ -323,6 +327,7 @@ describe('RtaFilterController', function () {
 	it('should go to agents on teams', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
+			FullPermission: true,
 			Teams: [{
 				Id: 'LondonTeam1'
 			}, {
@@ -331,6 +336,7 @@ describe('RtaFilterController', function () {
 		})
 			.withOrganization({
 				Id: 'ParisGuid',
+				FullPermission: true,
 				Teams: [{
 					Id: 'ParisTeam1',
 				}, {
@@ -359,6 +365,7 @@ describe('RtaFilterController', function () {
 	it('should go to agents on site and team', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
+			FullPermission: true,
 			Teams: [{
 				Id: 'LondonTeam1'
 			}, {
@@ -367,6 +374,7 @@ describe('RtaFilterController', function () {
 		})
 			.withOrganization({
 				Id: 'ParisGuid',
+				FullPermission: true,
 				Teams: [{
 					Id: 'ParisTeam1',
 				}, {
@@ -395,6 +403,7 @@ describe('RtaFilterController', function () {
 	it('should go to agents when unselecting team', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
+			FullPermission: true,
 			Teams: [{
 				Id: 'LondonTeam1'
 			}, {
@@ -403,6 +412,7 @@ describe('RtaFilterController', function () {
 		})
 			.withOrganization({
 				Id: 'ParisGuid',
+				FullPermission: true,
 				Teams: [{
 					Id: 'ParisTeam1',
 				}, {
@@ -432,12 +442,14 @@ describe('RtaFilterController', function () {
 	it('should go to agents when unselecting site', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
+			FullPermission: true,
 			Teams: [{
 				Id: 'LondonTeam1'
 			}]
 		})
 			.withOrganization({
 				Id: 'ParisGuid',
+				FullPermission: true,
 				Teams: [{
 					Id: 'ParisTeam1',
 				}]
@@ -512,6 +524,7 @@ describe('RtaFilterController', function () {
 	it('should not redirect when selection has not changed', function () {
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
+			FullPermission: true,
 			Teams: [{
 				Id: 'LondonTeam1'
 			}]
@@ -600,12 +613,14 @@ describe('RtaFilterController', function () {
 		stateParams.siteIds = ['ParisGuid'];
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
+			FullPermission: true,
 			Teams: [{
 				Id: 'LondonTeam1'
 			}]
 		})
 			.withOrganization({
 				Id: 'ParisGuid',
+				FullPermission: true,
 				Teams: [{
 					Id: 'ParisTeam1',
 				}]
@@ -711,12 +726,14 @@ describe('RtaFilterController', function () {
 		stateParams.siteIds = ['ParisGuid'];
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
+			FullPermission: true,
 			Teams: [{
 				Id: 'LondonTeam1'
 			}]
 		})
 			.withOrganization({
 				Id: 'ParisGuid',
+				FullPermission: true,
 				Teams: [{
 					Id: 'ParisTeam1',
 				}, {
@@ -810,6 +827,7 @@ describe('RtaFilterController', function () {
 		$fakeBackend
 			.withOrganization({
 				Id: 'ParisGuid',
+				FullPermission: true,
 				Teams: [{
 					Id: 'ParisTeam1',
 				}, {
@@ -836,11 +854,12 @@ describe('RtaFilterController', function () {
 			});
 	});
 
-	it('should go to agents on team when site was selected', function () {
+	it('should go to agents on team when site was preselected', function () {
 		stateParams.siteIds = ['ParisGuid'];
 		$fakeBackend
 			.withOrganization({
 				Id: 'ParisGuid',
+				FullPermission: true,
 				Teams: [{
 					Id: 'ParisTeam1',
 				}, {
@@ -870,12 +889,14 @@ describe('RtaFilterController', function () {
 		stateParams.teamIds = ['ParisTeam2'];
 		$fakeBackend.withOrganization({
 			Id: 'LondonGuid',
+			FullPermission: true,
 			Teams: [{
 				Id: 'LondonTeam1'
 			}]
 		})
 			.withOrganization({
 				Id: 'ParisGuid',
+				FullPermission: true,
 				Teams: [{
 					Id: 'ParisTeam1',
 				}, {
@@ -1237,5 +1258,98 @@ describe('RtaFilterController', function () {
 			});
 	});
 
+	it('should go to agents on team when partial permission for site', function () {
+		$fakeBackend.withOrganization({
+			Id: 'LondonGuid',
+			FullPermission: false,
+			Teams: [{
+				Id: 'TeamGuid'
+			}]
+		});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function () {
+			vm.openPicker = true;
+			vm.sites[0].toggle();
+			vm.goToAgents();
+		});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			siteIds: [],
+			teamIds: ['TeamGuid']
+		}, {
+				reload: true,
+				notify: true
+			});
+	});
+
+	it('should go to agents on site and team when selecting sites and full permission for site1 and partial permission for site2', function () {
+		$fakeBackend.withOrganization({
+			Id: 'LondonGuid',
+			FullPermission: true,
+			Teams: [{
+				Id: 'TeamLondonGuid'
+			}]
+		})
+			.withOrganization({
+				Id: 'ParisGuid',
+				FullPermission: false,
+				Teams: [{
+					Id: 'TeamParisGuid'
+				}]
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function () {
+			vm.openPicker = true;
+			vm.sites[0].toggle();
+			vm.sites[1].toggle();
+			vm.goToAgents();
+		});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			siteIds: ['LondonGuid'],
+			teamIds: ['TeamParisGuid']
+		}, {
+				reload: true,
+				notify: true
+			});
+	});
+
+	it('should go to agents on site and team when selecting team and sitefull permission for site1 and partial permission for site2', function () {
+		$fakeBackend.withOrganization({
+			Id: 'LondonGuid',
+			FullPermission: true,
+			Teams: [{
+				Id: 'TeamLondonGuid'
+			}]
+		})
+			.withOrganization({
+				Id: 'ParisGuid',
+				FullPermission: false,
+				Teams: [{
+					Id: 'TeamParisGuid'
+				}]
+			});
+
+		var c = $controllerBuilder.createController();
+		vm = c.vm;
+		c.apply(function () {
+			vm.openPicker = true;
+			vm.sites[0].Teams[0].toggle();
+			vm.sites[1].toggle();
+			vm.goToAgents();
+		});
+
+		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+			siteIds: ['LondonGuid'],
+			teamIds: ['TeamParisGuid']
+		}, {
+				reload: true,
+				notify: true
+			});
+	});
 
 });
