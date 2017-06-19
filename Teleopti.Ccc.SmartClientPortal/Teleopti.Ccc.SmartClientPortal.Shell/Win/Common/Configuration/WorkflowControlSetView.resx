@@ -162,7 +162,7 @@
         cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AgAAAAhfbWluaW11bQhfbWF4aW11bQQEI1RlbGVv
         cHRpLkludGVyZmFjZXMuRG9tYWluLkRhdGVPbmx5AgAAACNUZWxlb3B0aS5JbnRlcmZhY2VzLkRvbWFp
         bi5EYXRlT25seQIAAAADAAAABfv///8jVGVsZW9wdGkuSW50ZXJmYWNlcy5Eb21haW4uRGF0ZU9ubHkB
-        AAAAEV9pbnRlcm5hbERhdGVUaW1lAA0CAAAAAMAlpUKh0wgB+v////v///8AAL24xOjTCAs=
+        AAAAEV9pbnRlcm5hbERhdGVUaW1lAA0CAAAAAMC5AiWQ1AgB+v////v///8AAFEWp9fUCAs=
 </value>
   </data>
   <data name="dateSelectionFromToPreferencePeriod.WorkPeriodEnd" mimetype="application/x-microsoft.net.object.binary.base64">
@@ -197,9 +197,9 @@
         f5pDwtMICw==
 </value>
   </data>
-  <metadata name="contextMenuStripOpenPeriodsGrid.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>114, 17</value>
-  </metadata>
+	<metadata name="contextMenuStripOpenPeriodsGrid.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+		<value>114, 17</value>
+	</metadata>
   <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

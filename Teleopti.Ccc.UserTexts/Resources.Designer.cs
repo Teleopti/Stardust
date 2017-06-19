@@ -10802,6 +10802,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ET/OT Requests.
+        /// </summary>
+        public static string ETOTRequests {
+            get {
+                return ResourceManager.GetString("ETOTRequests", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Every.
         /// </summary>
         public static string Every {

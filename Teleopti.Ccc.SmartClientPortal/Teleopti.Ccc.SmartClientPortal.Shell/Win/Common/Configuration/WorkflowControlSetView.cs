@@ -57,6 +57,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			setAbsenceRequestVisibilityOptions(toggleManager);
+			setETOTRequestVisibility();
+		}
+
+		private void setETOTRequestVisibility()
+		{
+			if(!_toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687)) tabPageAdvETOTRequest.Hide();
 		}
 
 		private void setAbsenceRequestVisibilityOptions(IToggleManager toggleManager)
