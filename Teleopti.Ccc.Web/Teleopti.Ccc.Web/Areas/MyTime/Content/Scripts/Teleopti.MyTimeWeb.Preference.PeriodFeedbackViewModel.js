@@ -100,32 +100,29 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	});
 	var possibleNightRestViolationsArray = ko.observableArray();
 
-	function sameNightRestVioloation(obj1, obj2) {
+	function sameNightRestViolation(obj1, obj2) {
 		return obj1.nightRestTimes === obj2.nightRestTimes
 			&& obj1.firstDay === obj2.firstDay
 			&& obj1.secondDay === obj2.secondDay;
-
 	}
 
 	this.PossibleNightRestViolations = function () {
 		possibleNightRestViolationsArray.removeAll();
 		$.each(self.DayViewModels, function (index, day) {
-			
 			if (day.MakeNightRestViolationObjs().length > 0) {
-
 				var newViolations = day.MakeNightRestViolationObjs();
-
-				newViolations.forEach(function(newViolation) {
-					if (possibleNightRestViolationsArray().filter(function (item) { return sameNightRestVioloation(item, newViolation); }).length === 0) {
+				newViolations.forEach(function (newViolation) {
+					var sameNightRestViolations = possibleNightRestViolationsArray().filter(function(item) {
+						return sameNightRestViolation(item, newViolation);
+					});
+					if (sameNightRestViolations.length === 0) {
 						possibleNightRestViolationsArray.push(newViolation);
 					}
 				});
-								
 			}
 		});
 		return possibleNightRestViolationsArray;
 	};
-
 
 	this.PossibleResultContractTimeMinutesUpper = ko.computed(function () {
 		var sum = 0;
@@ -150,7 +147,8 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	});
 
 	this.PreferenceTimeIsOutOfRange = ko.computed(function () {
-		return self.PossibleResultContractTimeMinutesUpper() < self.TargetContractTimeLowerMinutes() || self.TargetContractTimeUpperMinutes() < self.PossibleResultContractTimeMinutesLower();
+		return self.PossibleResultContractTimeMinutesUpper() < self.TargetContractTimeLowerMinutes()
+			|| self.TargetContractTimeUpperMinutes() < self.PossibleResultContractTimeMinutesLower();
 	});
 
 	this.PreferenceDaysOffIsOutOfRange = ko.computed(function () {
@@ -158,15 +156,17 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	});
 
 	this.PreferenceFeedbackClass = ko.computed(function () {
-	    return self.PreferenceDaysOffIsOutOfRange() || self.PreferenceTimeIsOutOfRange() || self.IsWeeklyWorkTimeBroken() ? 'alert-danger' : 'alert-info';
+		return self.PreferenceDaysOffIsOutOfRange() || self.PreferenceTimeIsOutOfRange()
+			|| self.IsWeeklyWorkTimeBroken() || possibleNightRestViolationsArray().length > 0
+			? 'alert-danger' : 'alert-info';
 	}).extend({ throttle: 1 });
 
 	this.WarningCount = ko.computed(function () {
 		var count = 2 + possibleNightRestViolationsArray.length;
-		if ((self.TargetContractTimeLower() == self.TargetContractTimeUpper()) ||
-			(self.TargetContractTimeLower() != self.TargetContractTimeUpper()) &&
-			(self.PossibleResultContractTimeLower() == self.PossibleResultContractTimeUpper()) ||
-			(self.PossibleResultContractTimeLower() != self.PossibleResultContractTimeUpper())) {
+		if ((self.TargetContractTimeLower() === self.TargetContractTimeUpper()) ||
+			(self.TargetContractTimeLower() !== self.TargetContractTimeUpper()) &&
+			(self.PossibleResultContractTimeLower() === self.PossibleResultContractTimeUpper()) ||
+			(self.PossibleResultContractTimeLower() !== self.PossibleResultContractTimeUpper())) {
 			count++;
 		}
 		var isWeeklyWorkTimeEnabled = $('#Preference-period-feedback-view').data('mytime-isweeklyworktimeenabled');
@@ -176,4 +176,3 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 		return count;
 	});
 };
-
