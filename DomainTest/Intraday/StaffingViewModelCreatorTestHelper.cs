@@ -178,5 +178,33 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				AverageHandleTime = totalAverageHandlingTime,
 			};
 		}
+
+		public static MultisiteSkill CreateMultisiteSkillPhone(int intervalLength, string skillName, TimePeriod openHours, IActivity activity)
+		{
+			var skill = new MultisiteSkill(skillName, skillName, Color.Empty, intervalLength, new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony))
+			{
+				TimeZone = TimeZoneInfo.Utc,
+				Activity = activity
+			}.WithId();
+
+			var childSkill1 = new ChildSkill(skillName + 1, skillName + 1, Color.Empty,
+				skill).WithId();
+
+			var childSkill2 = new ChildSkill(skillName + 2, skillName + 2, Color.Empty,
+				skill).WithId();
+
+			childSkill1.Activity = new Activity(skillName  + 1);
+			childSkill2.Activity = new Activity(skillName + 2);
+
+
+			skill.AddChildSkill(childSkill1);
+			skill.AddChildSkill(childSkill2);
+
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours).WithId(Guid.NewGuid());
+			WorkloadFactory.CreateWorkloadWithOpenHours(childSkill1, openHours).WithId(Guid.NewGuid());
+			WorkloadFactory.CreateWorkloadWithOpenHours(childSkill2, openHours).WithId(Guid.NewGuid());
+
+			return skill;
+		}
 	}
 }
