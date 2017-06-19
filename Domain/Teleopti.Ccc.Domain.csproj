@@ -261,7 +261,9 @@
     <Compile Include="Scheduling\SchedulingCommandHandler.cs" />
     <Compile Include="Scheduling\SchedulingEventHandler.cs" />
     <Compile Include="Scheduling\SchedulingWasOrdered.cs" />
+    <Compile Include="Scheduling\WebLegacy\DesktopContext.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolderForDesktop.cs" />
+    <Compile Include="Scheduling\WebLegacy\IDesktopContextData.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Validation\IScheduleValidator.cs" />
     <Compile Include="Scheduling\ScheduleIslandExecutor.cs" />

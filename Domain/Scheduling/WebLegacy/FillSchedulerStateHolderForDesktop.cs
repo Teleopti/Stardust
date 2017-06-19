@@ -14,21 +14,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public class FillSchedulerStateHolderForDesktop : FillSchedulerStateHolder
 	{
-		private readonly DesktopOptimizationContext _desktopOptimizationContext;
+		private readonly DesktopContext _desktopContext;
 
-		public FillSchedulerStateHolderForDesktop(DesktopOptimizationContext desktopOptimizationContext, PersonalSkillsProvider personalSkillsProvider) : base(personalSkillsProvider)
+		public FillSchedulerStateHolderForDesktop(DesktopContext desktopContext, PersonalSkillsProvider personalSkillsProvider) : base(personalSkillsProvider)
 		{
-			_desktopOptimizationContext = desktopOptimizationContext;
+			_desktopContext = desktopContext;
 		}
 
 		protected override IScenario FetchScenario()
 		{
-			return _desktopOptimizationContext.SchedulerStateHolderFrom().Schedules.Scenario;
+			return _desktopContext.CurrentContext().SchedulerStateHolderFrom.Schedules.Scenario;
 		}
 
 		protected override void FillAgents(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentIds, DateOnlyPeriod period)
 		{
-			var stateHolderFrom = _desktopOptimizationContext.SchedulerStateHolderFrom();
+			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
 			schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization = stateHolderFrom.SchedulingResultState.PersonsInOrganization.Where(x => agentIds.Contains(x.Id.Value)).ToList();
 			schedulerStateHolderTo.AllPermittedPersons.Clear();
 			stateHolderFrom.AllPermittedPersons.Where(x => agentIds.Contains(x.Id.Value))
@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void FillSkillDays(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<ISkill> skills, DateOnlyPeriod period)
 		{
-			var stateHolderFrom = _desktopOptimizationContext.SchedulerStateHolderFrom();
+			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
 			schedulerStateHolderTo.SchedulingResultState.SkillDays = new Dictionary<ISkill, IEnumerable<ISkillDay>>(stateHolderFrom.SchedulingResultState.SkillDays);
 			schedulerStateHolderTo.SchedulingResultState.AddSkills(skills.ToArray());
 		}
 
 		protected override void FillSchedules(ISchedulerStateHolder schedulerStateHolderTo, IScenario scenario, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			var stateHolderFrom = _desktopOptimizationContext.SchedulerStateHolderFrom();
+			var stateHolderFrom = _desktopContext.CurrentContext().SchedulerStateHolderFrom;
 			var scheduleDictionary = new ScheduleDictionary(scenario, stateHolderFrom.Schedules.Period, new PersistableScheduleDataPermissionChecker());
 			using (TurnoffPermissionScope.For(scheduleDictionary))
 			{
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
-			schedulerStateHolderTo.RequestedPeriod = _desktopOptimizationContext.SchedulerStateHolderFrom().RequestedPeriod;
+			schedulerStateHolderTo.RequestedPeriod = _desktopContext.CurrentContext().SchedulerStateHolderFrom.RequestedPeriod;
 			schedulerStateHolderTo.ConsiderShortBreaks = false; //TODO check if this is the wanted behaviour in other cases than intraday optimization
 		}
 

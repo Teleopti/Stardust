@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DayOffPlanning;
@@ -15,7 +14,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
 	public class DesktopOptimizationContext : ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization, ICurrentIntradayOptimizationCallback
 	{
-		private class desktopOptimizationContextData
+		private readonly DesktopContext _desktopContext;
+
+		public DesktopOptimizationContext(DesktopContext desktopContext)
+		{
+			_desktopContext = desktopContext;
+		}
+
+		private class desktopOptimizationContextData : IDesktopContextData
 		{
 			public desktopOptimizationContextData(ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
 			{
@@ -28,16 +34,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			public IOptimizationPreferences OptimizationPreferences { get; }
 			public IIntradayOptimizationCallback IntradayOptimizationCallback { get; }
 		}
-		private readonly ConcurrentDictionary<Guid, desktopOptimizationContextData> _contextPerCommand = new ConcurrentDictionary<Guid, desktopOptimizationContextData>();
 
-		public ISchedulerStateHolder SchedulerStateHolderFrom()
+		private desktopOptimizationContextData contextData()
 		{
-			return _contextPerCommand[CommandScope.Current().CommandId].SchedulerStateHolderFrom;
+			return (desktopOptimizationContextData) _desktopContext.CurrentContext();
 		}
 
+		//maybe this code will be shared later...
 		public void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period)
 		{
-			var schedulerScheduleDictionary = SchedulerStateHolderFrom().Schedules;
+			var schedulerScheduleDictionary = contextData().SchedulerStateHolderFrom.Schedules;
 			foreach (var diff in modifiedScheduleDictionary.DifferenceSinceSnapshot())
 			{
 				var modifiedAssignment = diff.CurrentItem as IPersonAssignment;
@@ -54,27 +60,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public IDisposable Set(ICommandIdentifier commandIdentifier, ISchedulerStateHolder schedulerStateHolderFrom, IOptimizationPreferences optimizationPreferences, IIntradayOptimizationCallback intradayOptimizationCallback)
 		{
-			_contextPerCommand[commandIdentifier.CommandId] = new desktopOptimizationContextData(schedulerStateHolderFrom, optimizationPreferences, intradayOptimizationCallback);
-			return new GenericDisposable(() =>
-			{
-				desktopOptimizationContextData foo;
-				_contextPerCommand.TryRemove(commandIdentifier.CommandId, out foo);
-			});
+			return _desktopContext.SetContextFor(commandIdentifier, new desktopOptimizationContextData(schedulerStateHolderFrom, optimizationPreferences, intradayOptimizationCallback));
 		}
 
 		public IOptimizationPreferences Fetch()
 		{
-			return _contextPerCommand[CommandScope.Current().CommandId].OptimizationPreferences;
+			return contextData().OptimizationPreferences;
 		}
 
 		public IEnumerable<IPerson> Agents(DateOnlyPeriod period)
 		{
-			return SchedulerStateHolderFrom().SchedulingResultState.PersonsInOrganization;
+			return contextData().SchedulerStateHolderFrom.SchedulingResultState.PersonsInOrganization;
 		}
 
 		public IIntradayOptimizationCallback Current()
 		{
-			return _contextPerCommand[CommandScope.Current().CommandId].IntradayOptimizationCallback;
+			return contextData().IntradayOptimizationCallback;
 		}
 	}
 }

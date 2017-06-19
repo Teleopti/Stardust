@@ -489,6 +489,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IFillSchedulerStateHolder>()
 					.ApplyAspects()
 					.SingleInstance();
+				builder.RegisterType<DesktopContext>().SingleInstance();
 			}
 			else
 			{
