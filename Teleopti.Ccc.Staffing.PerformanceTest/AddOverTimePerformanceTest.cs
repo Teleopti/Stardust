@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			{
 				OvertimeType = oneMulti,
 				SelectedSpecificTimePeriod = new TimePeriod(7,0,15,0),
-				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5))
+				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5)),
 				ScheduleTag = new NullScheduleTag(),
 			};
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
