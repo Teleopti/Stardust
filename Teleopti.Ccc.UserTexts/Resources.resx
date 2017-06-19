@@ -16154,4 +16154,8 @@ Do you want to participate?</value>
     <value>ET/OT Requests</value>
     <comment>use in fat client, a tab's name in workflow control setting. it means extra time/over time requests</comment>
   </data>
+  <data name="UnavailableSeries" xml:space="preserve">
+    <value>Current selection contains email skill, certain data series are unavailable.</value>
+    <comment>message shown when some chart data series are hidden in intraday</comment>
+  </data>
 </root>

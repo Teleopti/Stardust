@@ -23187,7 +23187,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Fill in name and select valid filters to create planning group.
+        ///   Looks up a localized string similar to Fill in a name and select suitable filters to create a planning group.
         /// </summary>
         public static string PlansPageCreatePlanningGroup {
             get {
@@ -33703,6 +33703,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current selection contains email skill, certain data series are unavailable..
+        /// </summary>
+        public static string UnavailableSeries {
+            get {
+                return ResourceManager.GetString("UnavailableSeries", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Under construction.
         /// </summary>
         public static string UnderConstruction {
@@ -33954,7 +33963,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Contains mixed skilltypes, certain data series may be unavailable.
+        ///   Looks up a localized string similar to Contains mixed skill types, certain data series may be unavailable.
         /// </summary>
         public static string UnsupportedDataSeriesFound {
             get {

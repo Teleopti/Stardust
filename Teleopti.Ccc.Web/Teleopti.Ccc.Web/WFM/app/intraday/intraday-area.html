@@ -144,7 +144,7 @@
 							<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex">
-										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnsupportedDataSeriesFound'|translate}}</p>
+										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
 										<div class="wfm-chart intraday-chart" id="trafficChart"></div>
 									</div>
 								</div>
@@ -200,7 +200,7 @@
 							<md-content class="md-padding" ng-show="viewObj.hasMonitorData">
 								<div class="con-row">
 									<div class="con-flex">
-										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnsupportedDataSeriesFound'|translate}}</p>
+										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
 										<div class="wfm-chart intraday-chart" id="performanceChart"></div>
 									</div>
 								</div>
@@ -258,7 +258,7 @@
 							<md-content class="md-padding" ng-show="viewObj.hasMonitorData && !viewObj.waitingForData">
 								<div class="con-row">
 									<div class="con-flex">
-										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnsupportedDataSeriesFound'|translate}}</p>
+										<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
 										<div class="wfm-chart intraday-chart" id="staffingChart"></div>
 									</div>
 								</div>
