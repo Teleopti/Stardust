@@ -45,10 +45,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 					mapWorkloadIds(skillDay.Clone, skillDay.Original);
 					assignActualWorkloadToClonedSkillDay(skillDay.Clone, skillDayStats, workloadBacklog);
 					actualStaffingIntervals.AddRange(GetRequiredStaffing(resolution, skillDayStats, skillDay.Clone));
-					reset(skillDay.Clone, skillDay.Original);
+				}
+				foreach (var skillDayToReset in skillDaysForSkill)
+				{
+					reset(skillDayToReset.Clone, skillDayToReset.Original);
 				}
 			}
-
 
 			return actualStaffingIntervals;
 		}

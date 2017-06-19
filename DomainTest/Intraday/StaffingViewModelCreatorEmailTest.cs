@@ -116,6 +116,38 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 		[Test]
 		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
+		public void ShouldHandleActualStaffingWithOutForecastedBacklog()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 30, 0, DateTimeKind.Utc);
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skill = StaffingViewModelCreatorTestHelper.CreateEmailSkill(15, "skill", new TimePeriod(8, 0, 9, 0));
+
+			var skillDayToday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 9, 0), false, _slaTwoHours, false);
+			var skillDayYesterday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill, scenario, userNow.AddDays(-1), new TimePeriod(8, 0, 9, 0), false, _slaTwoHours, false);
+			var skillStats =
+				StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDayToday, latestStatsTime,
+					minutesPerInterval, TimeZone.TimeZone());
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Has(skillDayToday, skillDayYesterday);
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
+
+			var vm1 = Target.Load(new[] { skill.Id.Value });
+
+			skillDayYesterday.WorkloadDayCollection.First().TaskPeriodList.Last().Tasks = 100;
+			var vm2 = Target.Load(new[] { skill.Id.Value });
+
+			vm2.DataSeries.ActualStaffing.Length.Should().Be.EqualTo(4);
+			vm2.DataSeries.ActualStaffing.First().Should().Be.EqualTo(vm1.DataSeries.ActualStaffing.First());
+			vm2.DataSeries.ActualStaffing[1].Should().Be.EqualTo(null);
+			vm2.DataSeries.ActualStaffing.Last().Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
 		public void ShouldReturnForecastedStaffingForEmailSkill()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
