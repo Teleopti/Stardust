@@ -199,5 +199,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		/// <param name="insertPeriod">The insert period.</param>
 		/// <param name="studentAvailabilityPeriod">The student availability period.</param>
 		void SetStudentAvailabilityPeriods(DateOnlyPeriod insertPeriod, DateOnlyPeriod studentAvailabilityPeriod);
+
+		void SetOvertimeProbability(bool overtimeProbability);
 	}
 }

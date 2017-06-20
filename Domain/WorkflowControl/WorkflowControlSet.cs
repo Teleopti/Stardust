@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private MinMax<int> _shiftTradeOpenPeriodDaysForward;
 		private IActivity _allowedPreferenceActivity;
 		private int fairnessTypeAsInt = (int)FairnessType.EqualNumberOfShiftCategory;
+		private bool _overtimeProbabilityEnabled;
 
 		public WorkflowControlSet()
 		{
@@ -413,6 +414,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			var validator = validOpenPeriods[0].StaffingThresholdValidator;
 			return validator != null && (validator is StaffingThresholdWithShrinkageValidator ||
 										 validator is StaffingThresholdValidator);
+		}
+
+		public virtual bool OvertimeProbabilityEnabled
+		{
+			get { return _overtimeProbabilityEnabled; }
+			set { _overtimeProbabilityEnabled = value; }
 		}
 
 		private static bool isValidOpenPeriod(IAbsenceRequestOpenPeriod openPeriod, DateOnly today, DateOnly date)

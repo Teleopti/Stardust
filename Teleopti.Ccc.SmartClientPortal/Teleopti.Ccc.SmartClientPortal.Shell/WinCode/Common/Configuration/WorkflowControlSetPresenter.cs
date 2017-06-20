@@ -82,6 +82,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.SetAbsenceRequestCancellation(_selectedModel);
 			_view.SetAbsenceRequestExpiration(_selectedModel);
 			_view.SetAbsenceProbability(_selectedModel.AbsenceProbabilityEnabled);
+			_view.SetOvertimeProbability(_selectedModel.IsOvertimeProbabilityEnabled);
 		}
 
 		public IWorkflowControlSetModel SelectedModel
@@ -595,5 +596,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		{
 			_selectedModel.AbsenceProbabilityEnabled = absenceProbabilityEnabled;
 		}
+		
+		public void SetOvertimeProbability(bool overtimeProbability)
+		{
+			_selectedModel.IsOvertimeProbabilityEnabled = overtimeProbability;
+		}
+
 	}
 }

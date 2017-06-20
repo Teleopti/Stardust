@@ -883,6 +883,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				Expect.Call(() => _view.SetAbsenceRequestCancellation(null)).IgnoreArguments();
 				Expect.Call(() => _view.SetAbsenceRequestExpiration(null)).IgnoreArguments();
 				Expect.Call(() => _view.SetAbsenceProbability(false)).IgnoreArguments();
+				Expect.Call(() => _view.SetOvertimeProbability(false)).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
@@ -999,6 +1000,25 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			_mocks.VerifyAll();
 		}
 
+		[Test]
+		public void ShouldUpdateModelOnOvertimeProbabilityCheckChanged()
+		{
+			IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
+			using (_mocks.Record())
+			{
+				ExpectInitialize(repositoryCollection);
+				ExpectSetSelectedWorkflowControlSetModel();
+			}
+			using (_mocks.Playback())
+			{
+				_target.Initialize();
+				_target.SetSelectedWorkflowControlSetModel(_workflowControlSetModel);
+				_target.SetOvertimeProbability(true);
+				Assert.AreEqual(true, _workflowControlSetModel.IsOvertimeProbabilityEnabled);
+			}
+			_mocks.VerifyAll();
+		}
+
 		public void ExpectInitialize(IList<IWorkflowControlSet> repositoryCollection)
 		{
 			ExpectInitialize(_mocks, _view, _unitOfWorkFactory, _repositoryFactory, repositoryCollection, _categories, _dayOffTemplates, _absenceList,
@@ -1079,6 +1099,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			Expect.Call(() => view.SetAbsenceRequestExpiration(null)).IgnoreArguments();
 			Expect.Call(view.EnableAllAuthorized);
 			Expect.Call(() => view.SetAbsenceProbability(false)).IgnoreArguments();
+			Expect.Call(() => view.SetOvertimeProbability(false)).IgnoreArguments();
 		}
 	}
 }

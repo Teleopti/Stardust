@@ -79,12 +79,43 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         }
 
         [Test]
+		public void ShouldSetOvertimeProbabilityOn()
+		{
+			_mocks.Record();
+			Expect.Call(_domainEntity.OvertimeProbabilityEnabled = true);
+			Expect.Call(_domainEntity.OvertimeProbabilityEnabled).Return(false);
+			_mocks.ReplayAll();
+			_target.IsOvertimeProbabilityEnabled = true;
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldSetOvertimeProbabilityOff()
+		{
+			_mocks.Record();
+			Expect.Call(_domainEntity.OvertimeProbabilityEnabled = false);
+			Expect.Call(_domainEntity.OvertimeProbabilityEnabled).Return(true);
+			_mocks.ReplayAll();
+			_target.IsOvertimeProbabilityEnabled = false;
+			_mocks.VerifyAll();
+		}
+
+		[Test]
         public void CanReadAutoGrantProperty()
         {
             _mocks.Record();
             Expect.Call(_domainEntity.AutoGrantShiftTradeRequest).Return(true);
             _mocks.ReplayAll();
             Assert.IsTrue(_domainEntity.AutoGrantShiftTradeRequest);
+        }
+
+		[Test]
+        public void CanReadOvertimeProbabilityProperty()
+        {
+            _mocks.Record();
+            Expect.Call(_domainEntity.OvertimeProbabilityEnabled).Return(true);
+            _mocks.ReplayAll();
+            Assert.IsTrue(_domainEntity.OvertimeProbabilityEnabled);
         }
     }
 }

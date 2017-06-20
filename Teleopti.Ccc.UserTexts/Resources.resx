@@ -16162,4 +16162,8 @@ Do you want to participate?</value>
     <value>Enable Absence Probability</value>
     <comment>Enable Absence Probability checkbox title in fat client/Options/WorkflowControlSet/AbsenceRequest/miscellaneous</comment>
   </data>
+  <data name="CheckToEnableOvertimeProbability" xml:space="preserve">
+    <value>Check To Enable Overtime Probability</value>
+    <comment>a check box in fat client workflow control ET/OT request tab</comment>
+  </data>
 </root>

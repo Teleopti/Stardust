@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				workflowControlSet.AbsenceRequestExpiredThreshold = 15;
 
             workflowControlSet.AutoGrantShiftTradeRequest = true;
+	        workflowControlSet.OvertimeProbabilityEnabled = false;
             return workflowControlSet;
         }
 
@@ -100,6 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.That(loadedAggregateFromDatabase.AllowedPreferenceAbsences.Count(), Is.EqualTo(1));
             Assert.That(loadedAggregateFromDatabase.AllowedAbsencesForReport.Count(), Is.EqualTo(1));
             Assert.That(loadedAggregateFromDatabase.AutoGrantShiftTradeRequest, Is.True);
+            Assert.That(loadedAggregateFromDatabase.OvertimeProbabilityEnabled, Is.False);
         }
 
         [Test]

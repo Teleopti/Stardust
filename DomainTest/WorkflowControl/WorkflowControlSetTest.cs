@@ -453,6 +453,14 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			Assert.IsFalse(checkingByIntraday);
 		}
 
+		[Test]
+		public void VerifyCanSetOvertimeProbability()
+		{
+			Assert.IsFalse(_target.OvertimeProbabilityEnabled);
+			_target.OvertimeProbabilityEnabled = true;
+			Assert.IsTrue(_target.OvertimeProbabilityEnabled);
+		}
+
 		private bool checkingByIntradayWithSpecificValidator(IAbsenceRequestValidator absenceRequestValidator)
 		{
 			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, TimeZoneInfo.Utc));

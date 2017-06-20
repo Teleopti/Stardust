@@ -828,6 +828,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			checkBoxAdvLockTrading.CheckStateChanged += checkBoxAdvLockTrading_CheckStateChanged;
 		}
 
+		public void SetOvertimeProbability(bool overtimeProbability)
+		{
+			checkBoxAdvOvertimeProbability.CheckStateChanged -= checkBoxAdvOvertimeProbability_CheckStateChanged;
+			checkBoxAdvOvertimeProbability.Checked = overtimeProbability;
+			checkBoxAdvOvertimeProbability.CheckStateChanged += checkBoxAdvOvertimeProbability_CheckStateChanged;
+		}
+
 		public void DisableAllButAdd()
 		{
 			tabControlAdvArea.Enabled = false;
@@ -1232,5 +1239,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			_presenter.SetAbsenceProbability(checkBoxEnableAbsenceProbability.Checked);
 		}
+		
+		private void checkBoxAdvOvertimeProbability_CheckStateChanged(object sender, EventArgs e)
+		{
+			_presenter.SetOvertimeProbability(checkBoxAdvOvertimeProbability.Checked);
+		}
+
 	}
 }

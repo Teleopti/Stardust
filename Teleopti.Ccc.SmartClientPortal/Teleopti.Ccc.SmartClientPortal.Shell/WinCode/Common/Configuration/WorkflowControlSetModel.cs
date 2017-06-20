@@ -58,6 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		int? AbsenceRequestExpiredThreshold { get; set; }
 
 		bool AbsenceProbabilityEnabled { get; set; }
+		bool IsOvertimeProbabilityEnabled { get; set; }
 	}
 
 	public class WorkflowControlSetModel : IWorkflowControlSetModel
@@ -462,6 +463,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				if (DomainEntity.AbsenceRequestExpiredThreshold == value) return;
 				DomainEntity.AbsenceRequestExpiredThreshold = value;
+				IsDirty = true;
+			}
+		}
+
+		public bool IsOvertimeProbabilityEnabled
+		{
+			get { return DomainEntity.OvertimeProbabilityEnabled; }
+			set
+			{
+				if (DomainEntity.OvertimeProbabilityEnabled == value) return;
+				DomainEntity.OvertimeProbabilityEnabled = value;
 				IsDirty = true;
 			}
 		}
