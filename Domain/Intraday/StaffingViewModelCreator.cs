@@ -78,6 +78,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			if (!skills.Any())
 				return new IntradayStaffingViewModel();
+
 			var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(userDateOnly, userDateOnly.AddDays(1)), skills, scenario);
 
 			calculateForecastedAgentsForEmailSkills(dateOnly, useShrinkage, skillDaysBySkills);
@@ -90,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			
 			var forecastedCallsModel = _forecastedCallsProvider.Load(skillDaysBySkills, latestStatsTime, minutesPerInterval);
 
-			var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skillDaysBySkills.Keys.ToList(), minutesPerInterval, dateOnly, useShrinkage);
+			var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skills.Any(x => x is MultisiteSkill) ? skillDaysBySkills.Keys.ToList() : skills, minutesPerInterval, dateOnly, useShrinkage);
 
 			var timeSeries = _timeSeriesProvider.DataSeries(forecastedStaffing, scheduledStaffingPerSkill, minutesPerInterval);
 

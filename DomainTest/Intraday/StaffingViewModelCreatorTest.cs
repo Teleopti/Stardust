@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.DomainTest.ResourceCalculation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -37,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeActivityRepository ActivityRepository;
 		public MutableNow Now;
 		public FakeUserTimeZone TimeZone;
-
 
 		private const int minutesPerInterval = 15;
 
@@ -1269,59 +1269,72 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Toggle(Toggles.WFM_Intraday_SupportMultisiteSkill_43874)]
 		public void ShouldDisplayScheduledStaffigForMultisiteSkill()
 		{
-			/*
-			 TODO:
-			 *Create a multiskill.
-			 *Add staffing data to childskills
-			 *Check return data is valid
-			 */
 			TimeZone.IsSweden();
+
+			var act = ActivityRepository.Has("act");
+			var multiSkill = StaffingViewModelCreatorTestHelper.CreateMultisiteSkillPhone(minutesPerInterval, "skill", new TimePeriod(8, 0, 9, 0), act);
+
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
 			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
-			var act = ActivityRepository.Has("act");
-			var skill1 = StaffingViewModelCreatorTestHelper.CreateMultisiteSkillPhone(15, "skill", new TimePeriod(8, 0, 8, 30), act);
-			var skillChild1 = skill1.ChildSkills.First();
-			var skillChild2 = skill1.ChildSkills.Last();
+	
+			var skillChild1 = multiSkill.ChildSkills.First();
+			var skillChild2 = multiSkill.ChildSkills.Last();
 
-			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skill1, scenario, userNow, new TimePeriod(8, 0, 8, 15), false, ServiceAgreement.DefaultValues());
+			//Add to SkillRepository
+			SkillRepository.Has(multiSkill, skillChild1, skillChild2);
 
-			var skillDayChild1 = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillChild1, scenario, userNow, new TimePeriod(8, 0, 8, 15), false, ServiceAgreement.DefaultValues());
-			var skillDayChild2 = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillChild2, scenario, userNow, new TimePeriod(8, 0, 8, 15), false, ServiceAgreement.DefaultValues());
+			//Create skill days
+			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(multiSkill, scenario, userNow, new TimePeriod(8, 0, 8, 15), false, ServiceAgreement.DefaultValues());
+			var skillDayChild1 = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillChild1, scenario, userNow, new TimePeriod(8, 00, 8, 15), false, ServiceAgreement.DefaultValues());
+			var skillDayChild2 = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillChild2, scenario, userNow, new TimePeriod(8, 00, 8, 15), false, ServiceAgreement.DefaultValues());
 			
+			//Set CalculatedStaffCollection
+			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
+				new DateTimePeriod(userNow, userNow.AddMinutes(minutesPerInterval)),
+				new Task(200, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(140)),
+				ServiceAgreement.DefaultValues());
 
-			SkillRepository.Has(skill1, skillChild1, skillChild2);
+			var newSkillStaffPeriods = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { skillStaffPeriod });
+			skillDayChild1.SetCalculatedStaffCollection(newSkillStaffPeriods);
+			skillDayChild2.SetCalculatedStaffCollection(newSkillStaffPeriods);
+			
+			//Add to SkillDayRepository
 			SkillDayRepository.Has(skillDay, skillDayChild1, skillDayChild2);
-
+			
+			//Create SkillResources 
 			var skillCombinationResources = new List<SkillCombinationResource>();
 
 			skillCombinationResources.Add(new SkillCombinationResource
 			{
 				StartDateTime = userNow,
 				EndDateTime = userNow.AddMinutes(minutesPerInterval),
-				Resource = 6,
-				SkillCombination = new[] { skillChild1.Id.GetValueOrDefault() }
+				Resource = 1,
+				SkillCombination = new[] { multiSkill.Id.GetValueOrDefault() }
 			});
-
 			skillCombinationResources.Add(new SkillCombinationResource
 			{
 				StartDateTime = userNow,
 				EndDateTime = userNow.AddMinutes(minutesPerInterval),
-				Resource = 4,
+				Resource = 2,
+				SkillCombination = new[] { skillChild1.Id.GetValueOrDefault() }
+			});
+			skillCombinationResources.Add(new SkillCombinationResource
+			{
+				StartDateTime = userNow,
+				EndDateTime = userNow.AddMinutes(minutesPerInterval),
+				Resource = 3,
 				SkillCombination = new[] { skillChild2.Id.GetValueOrDefault() }
 			});
 
-			SkillCombinationResourceRepository.AddSkillCombinationResource(userNow, skillCombinationResources);
-		
-			var vm = Target.Load(new[] { skill1.Id.GetValueOrDefault() });
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(userNow, skillCombinationResources);
 
-			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
-			
-			/*vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
-			vm.DataSeries.ScheduledStaffing.Length.Should().Be.EqualTo(4);
-			vm.DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(5.0);
-			vm.DataSeries.ScheduledStaffing.Second().Should().Be.EqualTo(0);*/
+
+			var vm = Target.Load(new[] { multiSkill.Id.GetValueOrDefault() });
+
+			vm.DataSeries.Time.Length.Should().Be.EqualTo(4);
+			vm.DataSeries.ScheduledStaffing.First().Should().Be.EqualTo(6);
 		}
 
 		
