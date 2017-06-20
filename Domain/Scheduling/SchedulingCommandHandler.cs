@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				RunWeeklyRestSolver = schedulingCommand.RunWeeklyRestSolver,
 				CommandId = schedulingCommand.CommandId
 			};
+			//use event publisher here (when we removed params except event here)
 			_schedulingEventHandler.HandleEvent(@event, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 		}
 	}
