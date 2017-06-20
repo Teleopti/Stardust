@@ -1,7 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
 using System.Linq;
-using NHibernate.Util;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
-using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -40,17 +38,16 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		private DateTime[] timeSerie;
 		private Guid[] skillIds;
 		private IMultiplicatorDefinitionSet oneMulti;
+		private DateTime now = new DateTime(2016, 08, 10, 7, 0, 0);
 
 		public override void OneTimeSetUp()
 		{
-			Now.Is("2016-08-21 07:00");
+			Now.Is(now);
 			using (DataSource.OnThisThreadUse("Teleopti WFM"))
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
 			skillIds = new[] {new Guid("0165E0EA-210A-4393-B25A-A15000925656")};
-			var now = Now.UtcDateTime();
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
-			//var period = new DateTimePeriod(now, now.AddHours(24));
 			WithUnitOfWork.Do(() =>
 			{
 				UpdateStaffingLevel.Update(period);
@@ -63,9 +60,9 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		}
 
 		[Test]
-		public void ProvideSuggestionsAndApply()
+		public void ProvideSuggestionsAndApplyOvertime()
 		{
-			Now.Is("2016-08-21 07:00");
+			Now.Is(now);
 			
 			var overtimePref = new OvertimePreferences
 			{
