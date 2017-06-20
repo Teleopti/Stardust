@@ -25,6 +25,7 @@ Given there is a role with
 	| ShiftTradeSlidingPeriodEnd   | 99                 |
 	| AvailableAbsence             | Vacation           |
 	| StaffingCheck                | intraday           |
+	| AbsenceProbabilityEnabled    | True               |
 
 	And I have a schedule period with 
 	| Field      | Value      |
