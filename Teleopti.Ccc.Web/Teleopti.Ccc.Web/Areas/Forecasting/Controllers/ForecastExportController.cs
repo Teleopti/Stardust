@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http;
 using NPOI.HSSF.UserModel;
 using NPOI.SS.UserModel;
@@ -18,18 +15,18 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
 	public class ForecastExportController : ApiController
 	{
-		private readonly ForecastExportDailyModelCreator _forecastExportDailyModelCreator;
+		private readonly ForecastExportModelCreator _forecastExportModelCreator;
 
-		public ForecastExportController(ForecastExportDailyModelCreator forecastExportDailyModelCreator)
+		public ForecastExportController(ForecastExportModelCreator forecastExportModelCreator)
 		{
-			_forecastExportDailyModelCreator = forecastExportDailyModelCreator;
+			_forecastExportModelCreator = forecastExportModelCreator;
 		}
 
 		[HttpGet, Route("api/Forecasting/Export"), UnitOfWork]
 		public virtual HttpResponseMessage Export(ExportForecastInput input)
 		{
 			var response = new HttpResponseMessage();
-			var dailyModels = _forecastExportDailyModelCreator.Load(input.SkillId, new DateOnlyPeriod(new DateOnly(input.ForecastStart.Date), new DateOnly(input.ForecastEnd.Date)));
+			var dailyModels = _forecastExportModelCreator.Load(input.SkillId, new DateOnlyPeriod(new DateOnly(input.ForecastStart.Date), new DateOnly(input.ForecastEnd.Date)));
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			var fileName = DateTime.Now + "Forecast.xlsx";
 			CreateDailyForecastSheet(workbook, dailyModels);
@@ -60,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 		}
 
-		private void fillSheetWithDailyVolumes(ISheet dailySheet, List<ForecastExportDailyModel> dailyailyModelForecast, ICellStyle dateCellType)
+		private void fillSheetWithDailyVolumes(ISheet dailySheet, IList<ForecastExportDailyModel> dailyailyModelForecast, ICellStyle dateCellType)
 		{
 			var rowNumber = 10;
 			foreach (var dailyForecast in dailyailyModelForecast)
@@ -151,9 +148,12 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			cellPeriodEndValue.SetCellValue(dailyModels.Header.Period.EndDate.Date);
 			cellSkillNameValue.SetCellValue(dailyModels.Header.SkillName);
 			cellTimeZoneValue.SetCellValue(dailyModels.Header.SkillTimeZoneName);
-			cellServiceLevelPercentValue.SetCellValue(dailyModels.Header.ServiceLevelPercent.Value);
-			cellServiceLevelSecondsValue.SetCellValue(dailyModels.Header.ServiceLevelSeconds);
-			cellShrinkagePercentValue.SetCellValue(dailyModels.Header.ShrinkagePercent.Value);
+			if (dailyModels.Header.ServiceLevelPercent.HasValue)
+				cellServiceLevelPercentValue.SetCellValue(dailyModels.Header.ServiceLevelPercent.Value.Value);
+			if (dailyModels.Header.ServiceLevelSeconds.HasValue)
+				cellServiceLevelSecondsValue.SetCellValue(dailyModels.Header.ServiceLevelSeconds.Value);
+			if (dailyModels.Header.ShrinkagePercent.HasValue)
+				cellShrinkagePercentValue.SetCellValue(dailyModels.Header.ShrinkagePercent.Value.Value);
 		}
 	}
 }
