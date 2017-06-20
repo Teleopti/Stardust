@@ -14,14 +14,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IScheduleExecutor _scheduleExecutor;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceCalculation _resouceResourceOptimizationHelper;
+		private readonly ScheduleHourlyStaffExecutor _scheduleHourlyStaffExecutor;
 
 		public DesktopScheduling(IScheduleExecutor scheduleExecutor, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
-			IResourceCalculation resouceResourceOptimizationHelper)
+			IResourceCalculation resouceResourceOptimizationHelper,
+			ScheduleHourlyStaffExecutor scheduleHourlyStaffExecutor)
 		{
 			_scheduleExecutor = scheduleExecutor;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resouceResourceOptimizationHelper = resouceResourceOptimizationHelper;
+			_scheduleHourlyStaffExecutor = scheduleHourlyStaffExecutor;
 		}
 
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
@@ -29,8 +32,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IOptimizationPreferences optimizationPreferences,
 			IDaysOffPreferences dayOffsPreferences)
 		{
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod,
-				optimizationPreferences, true, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
+			{
+				_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod,
+					optimizationPreferences, true, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+			}
+			else
+			{
+				_scheduleHourlyStaffExecutor.Execute(schedulingOptions, backgroundWorker, selectedAgents,
+					selectedPeriod, optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+			}
 
 			var resCalcData = _schedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(_schedulerStateHolder().ConsiderShortBreaks, false);
 			_resouceResourceOptimizationHelper.ResourceCalculate(selectedPeriod, resCalcData);

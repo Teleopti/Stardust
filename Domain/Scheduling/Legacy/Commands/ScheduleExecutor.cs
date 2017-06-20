@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (!backgroundWorker.CancellationPending)
 				{
-					ExecuteWeeklyRestSolverCommand(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedAgents.ToArray(),
+					ExecuteWeeklyRestSolverCommand(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedAgents,
 							selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
 				}
 			}

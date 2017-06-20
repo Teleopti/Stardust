@@ -29,6 +29,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Outbound;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -118,7 +119,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule(new ScheduleOvertimeModule(_configuration));
 			builder.RegisterType<DoFullResourceOptimizationOneTime>().InstancePerLifetimeScope();
 			builder.RegisterType<ClassicScheduleCommand>().InstancePerLifetimeScope();
-
+			builder.RegisterType<ExecuteWeeklyRestSolver>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleHourlyStaffExecutor>().InstancePerLifetimeScope();
 		
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
 			{
