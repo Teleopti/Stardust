@@ -121,7 +121,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				}
 				else
 				{
-					//lets remove this one later
 					var selectedScheduleDays = schedulerStateHolder.Schedules.SchedulesForPeriod(selectedPeriod, selectedAgents.ToArray());
 					_requiredScheduleOptimizerHelper.ScheduleSelectedStudents(selectedScheduleDays, backgroundWorker, schedulingOptions);
 				}
@@ -129,22 +128,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				//shiftcategorylimitations
 				if (!backgroundWorker.CancellationPending)
 				{
-					schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
-					if (schedulingOptions.UseShiftCategoryLimitations)
-					{
-						var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedAgents, selectedPeriod);
-						if (!matrixesOfSelectedScheduleDays.Any())
-							return;
-
-						_requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays,
-							backgroundWorker,
-							optimizationPreferences,
-							schedulingOptions,
-							selectedPeriod);
-						
-						ExecuteWeeklyRestSolverCommand(schedulingOptions, optimizationPreferences, selectedAgents.ToArray(),
-							selectedPeriod, matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
-					}
+					ExecuteWeeklyRestSolverCommand(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedAgents.ToArray(),
+							selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
 				}
 			}
 
@@ -167,16 +152,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 
 		[TestLog]
-		protected virtual void ExecuteWeeklyRestSolverCommand(SchedulingOptions schedulingOptions,
+		protected virtual void ExecuteWeeklyRestSolverCommand(bool useShiftCategoryLimitations, SchedulingOptions schedulingOptions,
 															IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons,
-															DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleMatrixPro> matrixesOfSelectedScheduleDays,
+															DateOnlyPeriod selectedPeriod, 
 															ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			var schedulerStateHolder = _schedulerStateHolder();
-			var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
-			_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod,
-											matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
+			schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
+			if (schedulingOptions.UseShiftCategoryLimitations)
+			{
+				var schedulerStateHolder = _schedulerStateHolder();
+				var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedPersons, selectedPeriod);
+				if (!matrixesOfSelectedScheduleDays.Any())
+					return;
+
+				_requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays,
+					backgroundWorker,
+					optimizationPreferences,
+					schedulingOptions,
+					selectedPeriod);
+
+				var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1,schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
+				_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
+			}
 		}	
 	}
 }
