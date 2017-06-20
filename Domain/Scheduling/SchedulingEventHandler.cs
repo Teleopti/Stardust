@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			bool runWeeklyRestSolver)
 		{
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
-			var selectedAgents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.AgentsToOptimize.Contains(x.Id.Value));
+			var selectedAgents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value));
 			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, optimizationPreferences, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
 		}
 	}

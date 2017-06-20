@@ -8,6 +8,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		public DateOnly StartDate { get; set; }
 		public DateOnly EndDate { get; set; }
-		public IEnumerable<Guid> AgentsToOptimize { get; set; }
+		public IEnumerable<Guid> AgentsToSchedule { get; set; }
 	}
 }

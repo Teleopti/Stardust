@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class SchedulingCommand
 	{
-		public IEnumerable<IPerson> Agents { get; set; }
+		public IEnumerable<IPerson> AgentsToSchedule { get; set; }
 		public DateOnlyPeriod Period { get; set; }
 	}
 }

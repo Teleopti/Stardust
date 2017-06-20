@@ -72,8 +72,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[RemoveMeWithToggle("move up this", Toggles.ResourcePlanner_SchedulingIslands_44757)]
 		protected virtual void ExecuteScheduling(DateOnlyPeriod period, ISchedulerStateHolder stateHolder)
 		{
-			_schedulingCommandHandler.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
-				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period,
+			var command = new SchedulingCommand
+			{
+				AgentsToSchedule = stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period),
+				Period = period
+			};
+
+			_schedulingCommandHandler.Execute(command, new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
 				new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 		}
 	}
