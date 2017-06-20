@@ -1378,7 +1378,6 @@
     <Compile Include="Logon\ImpersonateSystemAspect.cs" />
     <Compile Include="Logon\ImpersonateSystemAttribute.cs" />
     <Compile Include="Notification\NotifyAppSubscriptions.cs" />
-    <Compile Include="Notification\UserDevices.cs" />
     <Compile Include="Optimization\Filters\SkillFilter.cs" />
     <Compile Include="Optimization\IntradayOptimizationEventBaseHandler.cs" />
     <Compile Include="Optimization\WebIntradayOptimizationStardustHandler.cs" />
