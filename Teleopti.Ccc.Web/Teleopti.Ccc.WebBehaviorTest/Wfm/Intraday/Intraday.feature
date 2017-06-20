@@ -63,7 +63,7 @@ Scenario: View incoming traffic for one skill for a provided day
 	And there is forecast data for skill 'Skill A' for date '2016-12-20'
 	And I am viewing intraday page
 	And There's no data available
-	When I choose to look at statistics for 'yesterday'
+	When I change date offset to '-1'
 	Then I should see incoming traffic data in the chart
 	And I should see a summary of incoming traffic
 
@@ -72,7 +72,7 @@ Scenario: Switch tab when other day than today is selected
 	And there is queue statistics for the skill 'Skill A' up until '2016-12-22 17:00'
 	And there is forecast data for skill 'Skill A' for date '2016-12-22'
 	And I am viewing intraday page
-	When I choose to look at statistics for 'tomorrow'
+	When I change date offset to '1'
 	And I am navigating to intraday staffing view
 	Then I should see staffing data in the chart
 	And I should see that the date is '2016-12-22'
@@ -85,7 +85,7 @@ Scenario: Switch skill when other day than today is selected
 	And there is forecast data for skill 'Skill B' for date '2016-12-22'
 	And I am viewing intraday page
 	And I select the skill 'Skill A'
-	When I choose to look at statistics for 'tommorow'
+	When I change date offset to '1'
 	And I select the skill 'Skill B'
 	Then I should see incoming traffic data in the chart
 	And I should see that the date is '2016-12-22'

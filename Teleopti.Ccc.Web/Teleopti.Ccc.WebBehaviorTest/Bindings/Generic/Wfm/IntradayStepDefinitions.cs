@@ -70,13 +70,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			DataMaker.Data().Apply(new ForecastConfigurable(skillName, theDate));
 		}
 
-		[Given(@"I should see a summary of incoming traffic")]
-		public void GivenIShouldSeeASummaryOfIncomingTraffic()
-		{
-			ScenarioContext.Current.Pending();
-		}
-
-
 		[Given(@"I select to create a new Skill Area")]
 		public void GivenISelectToCreateANewSkillArea()
 		{
@@ -178,6 +171,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 							, "True");
 		}
 
+		[Given(@"I should see a summary of incoming traffic")]
 		[Then(@"I should see a summary of incoming traffic")]
 		public void ThenIShouldSeeASummaryOfIncomingTraffic()
 		{
@@ -308,10 +302,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		[When(@"I change date offset to '(.*)'")]
-		public void WhenIChangeDateOffsetTo(int p0)
+		public void WhenIChangeDateOffsetTo(int offset)
 		{
-			Browser.Interactions.Javascript($"$('.wfm-radio input[value={p0}]').click()");
-			//< input type = "radio" name = "chooseDayOffset-287" ng - checked= "false" ng - click = "$ctrl.dateChange(item.value)" value = "-6" >
+			Browser.Interactions.Javascript("var scope = angular.element(document.querySelector('date-offset')).scope();" +
+											$"scope.changeChosenOffset('{offset}');");
 		}
 	}
 }

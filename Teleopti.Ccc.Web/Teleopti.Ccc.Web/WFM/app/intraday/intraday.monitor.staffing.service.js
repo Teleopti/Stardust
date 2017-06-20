@@ -17,7 +17,7 @@
                 },
                 hasMonitorData: false,
                 waitingForData: false,
-				hasEmailSkill: false,
+                hasEmailSkill: false,
                 timeSeries: [],
                 actualStaffingSeries: [],
                 currentInterval: [],
@@ -25,9 +25,9 @@
             };
 
             var hiddenArray = [];
-			var mixedArea = null;
+            var mixedArea = null;
 
-            service.setStaffingData = function(result, showOptimalStaffing, showScheduledStaffing) {
+            service.setStaffingData = function(result, showOptimalStaffing, showScheduledStaffing, showEmailSkill) {
                 clearData();
 
                 staffingData.timeSeries = [];
@@ -38,12 +38,11 @@
 
                 if (result.DataSeries == null) return staffingData;
                 staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
-				if (!showEmailSkill || !mixedArea){
-                staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
-				}else{
-					staffingData.hasEmailSkill= true;
-				}
-
+                if (!showEmailSkill || !mixedArea) {
+                    staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
+                } else {
+                    staffingData.hasEmailSkill = true;
+                }
 
                 if (showScheduledStaffing) staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
 
@@ -96,17 +95,22 @@
 
             service.pollSkillData = function(selectedItem, toggles) {
                 staffingData.waitingForData = true;
-				if (selectedItem.SkillType === 'SkillTypeEmail') {
-					mixedArea = selectedItem;
-				} else {
-					mixedArea = false;
-				}
-						return service.setStaffingData(result, toggles.showOptimalStaffing, toggles.showScheduledStaffing, toggles.showEmailSkill);
+                if (selectedItem.SkillType === 'SkillTypeEmail') {
+                    mixedArea = selectedItem;
+                } else {
+                    mixedArea = false;
+                }
+                return service.setStaffingData(
+                    result,
+                    toggles.showOptimalStaffing,
+                    toggles.showScheduledStaffing,
+                    toggles.showEmailSkill
+                );
 
-				function findEmail(area) {
-					return area.SkillType === 'SkillTypeEmail';
-				}
-				mixedArea = selectedItem.Skills.find(findEmail);
+                function findEmail(area) {
+                    return area.SkillType === 'SkillTypeEmail';
+                }
+                mixedArea = selectedItem.Skills.find(findEmail);
 
                 intradayService.getSkillStaffingData
                     .query({
@@ -118,7 +122,8 @@
                             return service.setStaffingData(
                                 result,
                                 toggles.showOptimalStaffing,
-                                toggles.showScheduledStaffing
+                                toggles.showScheduledStaffing,
+								toggles.showEmailSkill
                             );
                         },
                         function(error) {
@@ -193,7 +198,7 @@
             };
 
             service.loadStaffingChart = function(sData) {
-				if(!sData) return;
+                if (!sData) return;
                 service.staffingChart.load({
                     columns: [
                         sData.timeSeries,
