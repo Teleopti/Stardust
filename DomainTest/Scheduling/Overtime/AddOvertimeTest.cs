@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
 			PersonRepository.Has(agent);
 
-			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel>{new SuggestedPersonsModel{PersonId = agent.Id.GetValueOrDefault()}});
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnly, 1));
 			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(15, 16));
 			PersonAssignmentRepository.Has(ass);
@@ -105,16 +105,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
 				SkillActivity = activity
 			};
-			
+
 			var model = new OverTimeSuggestionModel
 			{
-				SkillIds = new[] {skill.Id.GetValueOrDefault()},
-				TimeSerie = new[] {new DateTime(2017, 06, 1, 0, 0, 0), new DateTime(2017, 06, 2, 0, 0, 0)},
+				SkillIds = new[] { skill.Id.GetValueOrDefault() },
+				TimeSerie = new[] { new DateTime(2017, 06, 1, 0, 0, 0), new DateTime(2017, 06, 2, 0, 0, 0) },
 				OvertimePreferences = overtimePreference
 			};
 
 			var result = Target.GetSuggestion(model);
-			
+
 			result.Models.Should().Not.Be.Empty();
 		}
 
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			PersonAssignmentRepository.Has(ass2);
 			PersonRepository.Has(agent2);
 
-			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault()  }, new SuggestedPersonsModel { PersonId = agent2.Id.GetValueOrDefault() } });
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() }, new SuggestedPersonsModel { PersonId = agent2.Id.GetValueOrDefault() } });
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnly, 1));
 			var overtimePreference = new OvertimePreferences
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				TimeSerie = new[] { new DateTime(2017, 06, 1, 0, 0, 0), new DateTime(2017, 06, 2, 0, 0, 0) },
 				OvertimePreferences = overtimePreference
 			};
-			
+
 			var result = Target.GetSuggestion(model);
 
 			result.Models.Count.Should().Be.EqualTo(1);
@@ -393,7 +393,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			PersonAssignmentRepository.Has(ass);
 
 			PersonRepository.Has(agent);
-			
+
 			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnly, 2));
@@ -507,8 +507,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			PersonAssignmentRepository.Has(ass);
 
 			PersonRepository.Has(agent);
-			
-			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() }});
+
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
 
 			var overtimePreference = new OvertimePreferences
 			{
@@ -611,7 +611,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				OvertimeType = multiplicatorDefinitionSet,
 				ScheduleTag = new NullScheduleTag(),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SelectedSpecificTimePeriod = new TimePeriod( 22, 0,  28, 0)
+				SelectedSpecificTimePeriod = new TimePeriod(22, 0, 28, 0)
 			};
 
 			var model = new OverTimeSuggestionModel
@@ -719,10 +719,381 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			};
 
 			var result = Target.GetSuggestion(model);
-			
+
 			result.Models.Should().Not.Be.Empty();
-			// becomes 24 now why do we want 16?
-			//result.ResourceCalculationPeriods.Count.Should().Be.EqualTo(16);
+			result.ResourceCalculationPeriods.Count.Should().Be.EqualTo(24);
+		}
+
+		[Test]
+		public void ShouldNotBreakNightlyRestAfterShift()
+		{
+			setup();
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 1, 19, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 01, 20, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 2, 7, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 2, 8, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
+
+			var dateOnlyJune1 = new DateOnly(2017, 06, 1);
+			var dateOnlyJune2 = new DateOnly(2017, 06, 2);
+
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnlyJune1);
+			PersonRepository.Has(agent);
+
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune1, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune2, 1));
+			var assJune1 = new PersonAssignment(agent, scenario, dateOnlyJune1).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(19, 20));
+			var assJune2 = new PersonAssignment(agent, scenario, dateOnlyJune2).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(07, 08));
+			PersonAssignmentRepository.Has(assJune1);
+			PersonAssignmentRepository.Has(assJune2);
+
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(20, 0, 24, 0),
+				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
+				SkillActivity = activity
+			};
+
+			var model = new OverTimeSuggestionModel
+			{
+				SkillIds = new[] { skill.Id.GetValueOrDefault() },
+				TimeSerie = new[] { new DateTime(2017, 06, 1, 0, 0, 0), new DateTime(2017, 06, 2, 0, 0, 0) },
+				OvertimePreferences = overtimePreference
+			};
+
+			var result = Target.GetSuggestion(model);
+
+			result.Models.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotBreakNightlyRestBeforeShift()
+		{
+			setup();
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 1, 19, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 01, 20, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 2, 7, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 2, 8, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
+
+			var dateOnlyJune1 = new DateOnly(2017, 06, 1);
+			var dateOnlyJune2 = new DateOnly(2017, 06, 2);
+
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnlyJune1);
+			PersonRepository.Has(agent);
+
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune1, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune2, 1));
+			var assJune1 = new PersonAssignment(agent, scenario, dateOnlyJune1).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(19, 20));
+			var assJune2 = new PersonAssignment(agent, scenario, dateOnlyJune2).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(07, 08));
+			PersonAssignmentRepository.Has(assJune1);
+			PersonAssignmentRepository.Has(assJune2);
+
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(3, 0, 7, 0),
+				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
+				SkillActivity = activity
+			};
+
+			var model = new OverTimeSuggestionModel
+			{
+				SkillIds = new[] { skill.Id.GetValueOrDefault() },
+				TimeSerie = new[] { new DateTime(2017, 06, 2, 0, 0, 0), new DateTime(2017, 06, 3, 0, 0, 0) },
+				OvertimePreferences = overtimePreference
+			};
+
+			var result = Target.GetSuggestion(model);
+
+			result.Models.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotBreakWeeklyRestAfterShift()
+		{
+			setup();
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 5, 16, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 5, 17, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
+			
+			var dateOnlyJune5 = new DateOnly(2017, 06, 5);
+			var dateOnlyJune6 = new DateOnly(2017, 06, 6);
+			var dateOnlyJune7 = new DateOnly(2017, 06, 7);
+			var dateOnlyJune8 = new DateOnly(2017, 06, 8);
+			var dateOnlyJune9 = new DateOnly(2017, 06, 9);
+			var dateOnlyJune10 = new DateOnly(2017, 06, 10);
+			var dateOnlyJune11 = new DateOnly(2017, 06, 11);
+
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnlyJune5);
+			PersonRepository.Has(agent);
+
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
+			
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune5, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune6, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune7, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune8, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune9, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune10, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune11, 1));
+
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(16, 17)));
+			//36 hours between
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(5, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune10).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
+
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(17, 0, 21, 0),
+				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
+				SkillActivity = activity
+			};
+
+			var model = new OverTimeSuggestionModel
+			{
+				SkillIds = new[] { skill.Id.GetValueOrDefault() },
+				TimeSerie = new[] { new DateTime(2017, 06, 5, 0, 0, 0), new DateTime(2017, 06, 6, 0, 0, 0) },
+				OvertimePreferences = overtimePreference
+			};
+
+			var result = Target.GetSuggestion(model);
+
+			result.Models.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotBreakWeeklyRestBeforeShift()
+		{
+			setup();
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 11, 8, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 11, 9, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
+
+			var dateOnlyJune5 = new DateOnly(2017, 06, 5);
+			var dateOnlyJune6 = new DateOnly(2017, 06, 6);
+			var dateOnlyJune7 = new DateOnly(2017, 06, 7);
+			var dateOnlyJune8 = new DateOnly(2017, 06, 8);
+			var dateOnlyJune9 = new DateOnly(2017, 06, 9);
+			var dateOnlyJune10 = new DateOnly(2017, 06, 10);
+			var dateOnlyJune11 = new DateOnly(2017, 06, 11);
+
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnlyJune5);
+			PersonRepository.Has(agent);
+
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune5, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune6, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune7, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune8, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune9, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune10, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune11, 1));
+
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune6).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 20)));
+			//36 hours between
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 9)));
+
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(4, 0, 8, 0),
+				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
+				SkillActivity = activity
+			};
+
+			var model = new OverTimeSuggestionModel
+			{
+				SkillIds = new[] { skill.Id.GetValueOrDefault() },
+				TimeSerie = new[] { new DateTime(2017, 06, 11, 0, 0, 0), new DateTime(2017, 06, 12, 0, 0, 0) },
+				OvertimePreferences = overtimePreference
+			};
+
+			var result = Target.GetSuggestion(model);
+
+			result.Models.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotBreakMaxWeeklyWorkTimeBeforeShift()
+		{
+			setup();
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 11, 9, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 11, 10, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
+
+			var dateOnlyJune5 = new DateOnly(2017, 06, 5);
+			var dateOnlyJune6 = new DateOnly(2017, 06, 6);
+			var dateOnlyJune7 = new DateOnly(2017, 06, 7);
+			var dateOnlyJune8 = new DateOnly(2017, 06, 8);
+			var dateOnlyJune9 = new DateOnly(2017, 06, 9);
+			var dateOnlyJune10 = new DateOnly(2017, 06, 10);
+			var dateOnlyJune11 = new DateOnly(2017, 06, 11);
+
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnlyJune5);
+			PersonRepository.Has(agent);
+
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune5, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune6, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune7, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune8, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune9, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune10, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune11, 1));
+
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune6).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(5, 0, 9, 0),
+				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
+				SkillActivity = activity
+			};
+
+			var model = new OverTimeSuggestionModel
+			{
+				SkillIds = new[] { skill.Id.GetValueOrDefault() },
+				TimeSerie = new[] { new DateTime(2017, 06, 11, 0, 0, 0), new DateTime(2017, 06, 12, 0, 0, 0) },
+				OvertimePreferences = overtimePreference
+			};
+
+			var result = Target.GetSuggestion(model);
+
+			result.Models.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldNotBreakMaxWeeklyWorkTimeAfterShift()
+		{
+			setup();
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 5, 16, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 5, 17, 0, 0).Utc(),
+					Resource = 1,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			});
+
+			var dateOnlyJune5 = new DateOnly(2017, 06, 5);
+			var dateOnlyJune6 = new DateOnly(2017, 06, 6);
+			var dateOnlyJune7 = new DateOnly(2017, 06, 7);
+			var dateOnlyJune8 = new DateOnly(2017, 06, 8);
+			var dateOnlyJune9 = new DateOnly(2017, 06, 9);
+			var dateOnlyJune10 = new DateOnly(2017, 06, 10);
+			var dateOnlyJune11 = new DateOnly(2017, 06, 11);
+
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnlyJune5);
+			PersonRepository.Has(agent);
+
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune5, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune6, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune7, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune8, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune9, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune10, 1));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune11, 1));
+
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune10).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(17, 0, 21, 0),
+				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
+				SkillActivity = activity
+			};
+
+			var model = new OverTimeSuggestionModel
+			{
+				SkillIds = new[] { skill.Id.GetValueOrDefault() },
+				TimeSerie = new[] { new DateTime(2017, 06, 5, 0, 0, 0), new DateTime(2017, 06, 6, 0, 0, 0) },
+				OvertimePreferences = overtimePreference
+			};
+
+			var result = Target.GetSuggestion(model);
+
+			result.Models.Should().Be.Empty();
 		}
 
 	}

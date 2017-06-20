@@ -70,10 +70,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 			if (overtimestartTime < _now.UtcDateTime().AddMinutes(15)) overtimestartTime = _now.UtcDateTime().AddMinutes(15);
 			var overtimePeriod = new DateTimePeriod(overtimestartTime, overtimeEndTime);
 			
-			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, overtimePeriod.StartDateTime, overtimePeriod.EndDateTime);
+			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, overtimestartTime, overtimeEndTime);
 			var persons = _personRepository.FindPeople(personsModels.Select(x => x.PersonId));
 			
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(overtimePeriod), _currentScenario.Current(), new PersonProvider(persons), 
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(overtimestartTime.AddDays(-7), overtimeEndTime.AddDays(7))), _currentScenario.Current(), new PersonProvider(persons), 
 							new ScheduleDictionaryLoadOptions(false, false), persons);
 			
 			if (!skills.Any())
