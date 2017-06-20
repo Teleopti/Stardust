@@ -1,6 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -15,6 +14,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public int GetIntSetting(string setting, int defaultValue)
 		{
+			if (setting == "UpdateResourceReadModelIntervalMinutes")
+				return 60;
+
+			 if (setting == "BulkRequestTimeoutMinutes")
+				return 60;
+
 			const string query = @"select value FROM RequestStrategySettings WHERE setting=:setting";
 
 			var queryResult = _currentUnitOfWork.Session().CreateSQLQuery(query)

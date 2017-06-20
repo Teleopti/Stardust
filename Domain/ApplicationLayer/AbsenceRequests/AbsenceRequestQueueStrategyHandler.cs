@@ -49,20 +49,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		public void Handle(TenantMinuteTickEvent @event)
 		{
 			IList<IBusinessUnit> businessUnits;
-			int windowSize;
-			int absenceReqNearFutureTime;
-			int absenceReqFarFutureTime;
+			const int windowSize = 2;
+			int absenceRequestBulkFrequencyMinutes;
 			IDictionary<Guid, int> reqWithVersion = new Dictionary<Guid, int>();
 			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
 				businessUnits = _businessUnitRepository.LoadAll();
 				var person = _personRepository.Get(SystemUser.Id);
 				_updatedByScope.OnThisThreadUse(person);
-
-				windowSize = _requestStrategySettingsReader.GetIntSetting("AbsenceNearFuture", 3);
-				absenceReqNearFutureTime = _requestStrategySettingsReader.GetIntSetting("AbsenceNearFutureTime", 20);
-				absenceReqFarFutureTime = _requestStrategySettingsReader.GetIntSetting("AbsenceFarFutureTime", 60);
-				var bulkRequestTimeoutMinutes = _requestStrategySettingsReader.GetIntSetting("BulkRequestTimeoutMinutes", 90);
+				
+				absenceRequestBulkFrequencyMinutes = _requestStrategySettingsReader.GetIntSetting("AbsenceRequestBulkFrequencyMinutes", 10);
+				var bulkRequestTimeoutMinutes = _requestStrategySettingsReader.GetIntSetting("BulkRequestTimeoutMinutes", 60);
 
 				_queuedAbsenceRequestRepository.CheckAndUpdateSent(bulkRequestTimeoutMinutes);
 				uow.PersistAll();
@@ -75,16 +72,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			        using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			        {
 			            var now = _now.UtcDateTime();
-			            var nearFutureThresholdTime = now.AddMinutes(-absenceReqNearFutureTime);
-			            var farFutureThresholdTime = now.AddMinutes(-absenceReqFarFutureTime);
+			            var thresholdTime = now.AddMinutes(-absenceRequestBulkFrequencyMinutes);
 			            var pastThresholdTime = now;
 
 			            //include yesterday to deal with timezones
 			            var initialPeriod = new DateOnlyPeriod(new DateOnly(now.AddDays(-1)),
 			                new DateOnly(now.AddDays(windowSize)));
-			           var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(nearFutureThresholdTime,
-			                farFutureThresholdTime,
-			                pastThresholdTime, initialPeriod, windowSize);
+				        var listOfAbsenceRequests = _absenceRequestStrategyProcessor.Get(thresholdTime,  //same value for near and far - pbi #44752
+																						 thresholdTime,
+																						 pastThresholdTime, initialPeriod, windowSize);
 
 			            if (!listOfAbsenceRequests.Any()) return;
 
