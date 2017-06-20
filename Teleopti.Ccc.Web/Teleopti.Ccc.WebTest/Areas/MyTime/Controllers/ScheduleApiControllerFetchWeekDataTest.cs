@@ -55,6 +55,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldReturnAbsenceProbabilityEnabledTrueWhenItHasBeenToggledOnInFatClient()
+		{
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AbsenceProbabilityEnabled = true;
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(null);
+			result.AbsenceProbabilityEnabled.Should().Be(true);
+		}
+
+		[Test]
 		public void ShouldShowAbsenceProbabilityOptionWhen14DaysAreWithinAbsencePeriod()
 		{
 			var absenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod

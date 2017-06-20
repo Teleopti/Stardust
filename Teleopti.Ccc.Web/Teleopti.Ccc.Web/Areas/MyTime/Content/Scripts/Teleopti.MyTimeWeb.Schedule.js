@@ -530,7 +530,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.staffingProbabilityEnabled = data.ViewPossibilityPermission && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608");
 		self.staffingProbabilityForMultipleDaysEnabled = self.staffingProbabilityEnabled && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880");
 
-		self.absenceProbabilityEnabled(data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);
+		self.absenceProbabilityEnabled(data.AbsenceProbabilityEnabled && data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);
 
 		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityType === constants.probabilityType.absence) {
 			self.selectedProbabilityType = constants.probabilityType.none;

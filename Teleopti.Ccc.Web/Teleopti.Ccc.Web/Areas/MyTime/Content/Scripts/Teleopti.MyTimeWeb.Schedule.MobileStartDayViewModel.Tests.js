@@ -540,7 +540,33 @@ $(document).ready(function() {
 				Header:{Title: null},
 			},
 			ViewPossibilityPermission: true,
-			CheckStaffingByIntraday: false
+			CheckStaffingByIntraday: false,
+			AbsenceProbabilityEnabled: true
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
+		equal(viewModel.absenceProbabilityEnabled(), false);
+	});
+
+	test("should not show absence probability option item if Absence Probability is toggled off in fat client ", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment.utc().zone(-60).format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null},
+			},
+			ViewPossibilityPermission: true,
+			CheckStaffingByIntraday: true,
+			AbsenceProbabilityEnabled: false,
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
@@ -800,7 +826,8 @@ $(document).ready(function() {
                 HasNotScheduled: false
             },
             ViewPossibilityPermission: true,
-            CheckStaffingByIntraday: true
+            CheckStaffingByIntraday: true,
+            AbsenceProbabilityEnabled: true,
         };
         viewModel.readData(rawData);
 
@@ -827,7 +854,8 @@ $(document).ready(function() {
                 HasNotScheduled: true
             },
             ViewPossibilityPermission: true,
-            CheckStaffingByIntraday: true
+            CheckStaffingByIntraday: true,
+            AbsenceProbabilityEnabled: true,
         };
         viewModel.readData(rawData);
 

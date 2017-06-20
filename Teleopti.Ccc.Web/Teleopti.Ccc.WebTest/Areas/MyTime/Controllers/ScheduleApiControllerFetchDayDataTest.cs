@@ -810,6 +810,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldReturnTrueForAbsenceProbabilityEnabledAfterItHasBeenToggledOnAtFatClient()
+		{
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.AbsenceProbabilityEnabled = true;
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchDayData(Now.ServerDate_DontUse());
+			result.AbsenceProbabilityEnabled.Should().Be(true);
+		}
+
+		[Test]
 		public void ShouldReturnTrueForCheckStaffingByIntradayWhenOnlyIntradayAbsencePeriodIsAvailable()
 		{
 			var intradayAbsenceRequestOpenDatePeriod = new AbsenceRequestOpenDatePeriod

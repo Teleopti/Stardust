@@ -142,6 +142,7 @@ $(document).ready(function() {
 				}
 			],
 			IsCurrentWeek: true,
+			AbsenceProbabilityEnabled: true,
 			CheckStaffingByIntraday: true,
 			ViewPossibilityPermission: true,
 			RequestPermission: {
@@ -273,6 +274,21 @@ $(document).ready(function() {
 		vm.nextWeek();
 		equal(hash.indexOf(moment(basedDate).add('days', 7).format('YYYY/MM/DD')) > 0, true);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
+	test("should show no absence possibility if the feature is toggle off in fat client", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+		};
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.AbsenceProbabilityEnabled = false;
+
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		week.initializeData(fakeScheduleData);
+		week.selectedProbabilityType = constants.probabilityType.absence;
+		week.updateProbabilityData(getFakeProbabilityData());
+
+		equal(week.absenceProbabilityEnabled(), false);
 	});
 
 	test("should show no absence possibility if the feature is disabled", function () {
@@ -898,7 +914,7 @@ $(document).ready(function() {
 					options.success(getFakeProbabilityData());
 				}
 			}
-		}
+		};
 
 		$("body").append("<span data-bind='text: probabilityLabel()' class='probabilityLabel'></span>");
 

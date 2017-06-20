@@ -141,6 +141,7 @@ $(document).ready(function () {
 					}]
 				}
 			],
+			AbsenceProbabilityEnabled: true,
 			CheckStaffingByIntraday: true,
 			ViewPossibilityPermission: true,
 			TimeLine: [{
@@ -233,6 +234,22 @@ $(document).ready(function () {
 		equal(timelines[timelines.length - 1].minutes, 16.75 * 60 + 15); 	//16:45 => 17:00
 	});
 
+	test("should show no absence probability if the feature is toggle off in fat client", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+		};
+
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.AbsenceProbabilityEnabled = false;
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
+		weekViewModel.readData(fakeScheduleData);
+
+		equal(weekViewModel.selectedProbabilityOptionValue(), undefined);
+		equal(weekViewModel.absenceProbabilityEnabled(), false);
+		equal(weekViewModel.dayViewModels()[0].probabilities().length, 0);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
 	test("should show no absence probability if the feature is disabled", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return false;
@@ -244,7 +261,6 @@ $(document).ready(function () {
 
 		equal(weekViewModel.selectedProbabilityOptionValue(), undefined);
 		equal(weekViewModel.dayViewModels()[0].probabilities().length, 0);
-		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
@@ -258,7 +274,6 @@ $(document).ready(function () {
 		weekViewModel.readData(fakeScheduleData);
 
 		equal(weekViewModel.dayViewModels()[0].probabilities().length, 0);
-		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 

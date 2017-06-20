@@ -82,6 +82,7 @@ $(document).ready(function () {
 					}]
 				}
 			],
+			AbsenceProbabilityEnabled: true,
 			CheckStaffingByIntraday: true,
 			ViewPossibilityPermission: true,
 			TimeLine: [{

@@ -216,7 +216,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.staffingProbabilityOnMobileEnabled(data.ViewPossibilityPermission
 			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913"));
 
-		self.absenceProbabilityEnabled(self.staffingProbabilityOnMobileEnabled() && data.CheckStaffingByIntraday);
+		self.absenceProbabilityEnabled(self.staffingProbabilityOnMobileEnabled() && data.CheckStaffingByIntraday && data.AbsenceProbabilityEnabled);
 
 		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityOptionValue() === constants.probabilityType.absence) {
 			self.selectedProbabilityOptionValue(constants.probabilityType.none);

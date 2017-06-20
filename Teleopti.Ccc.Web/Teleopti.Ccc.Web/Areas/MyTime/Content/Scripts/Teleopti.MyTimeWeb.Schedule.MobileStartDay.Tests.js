@@ -858,6 +858,7 @@
 				"AdjustmentOffsetInMinutes": 60.0
 			},
 			"BaseUtcOffsetInMinutes": 60.0,
+			"AbsenceProbabilityEnabled": true,
 			"CheckStaffingByIntraday": false,
 			"Possibilities": [],
 			"SiteOpenHourPeriod": null,

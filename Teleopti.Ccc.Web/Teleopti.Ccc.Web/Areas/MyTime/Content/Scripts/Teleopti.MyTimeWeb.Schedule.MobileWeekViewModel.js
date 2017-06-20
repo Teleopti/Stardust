@@ -257,8 +257,8 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData, bl
 		self.staffingProbabilityForMultipleDaysEnabled(data.ViewPossibilityPermission
 			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880"));
 
-		self.absenceProbabilityEnabled = ko.observable((self.staffingProbabilityOnMobileEnabled() || self.staffingProbabilityForMultipleDaysEnabled()) && data.CheckStaffingByIntraday);
-		
+		self.absenceProbabilityEnabled = ko.observable((self.staffingProbabilityOnMobileEnabled() || self.staffingProbabilityForMultipleDaysEnabled()) && data.CheckStaffingByIntraday && data.AbsenceProbabilityEnabled);
+
 		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityOptionValue() === probabilityType.absence) {
 			self.selectedProbabilityOptionValue(probabilityType.none);
 			self.showingAbsenceProbability(false);
