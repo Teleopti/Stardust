@@ -19,6 +19,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
+	[UseIocForFatClient]
 	public class SchedulingTrackResourceCalculationsDesktopTest : SchedulingScenario, ISetup
 	{
 		public DesktopScheduling Target;

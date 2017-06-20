@@ -18,6 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
+	[UseIocForFatClient]
 	[TestFixture(typeof(FakeCancelSchedulingProgress), true, true)]
 	[TestFixture(typeof(FakeCancelSchedulingProgress), false, false)]
 	[TestFixture(typeof(FakeCancelSchedulingProgress), true, false)]

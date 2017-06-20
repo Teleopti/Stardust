@@ -22,6 +22,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
+	[UseIocForFatClient]
 	public class ShiftCategoryLimitationTest : SchedulingScenario
 	{
 		public DesktopScheduling Target;

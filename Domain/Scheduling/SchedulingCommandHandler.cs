@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				AgentsToSchedule = schedulingCommand.AgentsToSchedule.Select(x => x.Id.Value),
 				StartDate = schedulingCommand.Period.StartDate,
 				EndDate = schedulingCommand.Period.EndDate,
-				RunWeeklyRestSolver = schedulingCommand.RunWeeklyRestSolver
+				RunWeeklyRestSolver = schedulingCommand.RunWeeklyRestSolver,
+				CommandId = schedulingCommand.CommandId
 			};
 			_schedulingEventHandler.HandleEvent(@event, schedulingCallback, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 		}

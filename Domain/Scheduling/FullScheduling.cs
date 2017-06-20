@@ -19,12 +19,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly ISchedulingProgress _schedulingProgress;
-		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 		private readonly FullSchedulingResult _fullSchedulingResult;
 
 		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, IFillSchedulerStateHolder fillSchedulerStateHolder,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, 
-			ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult)
+			FullSchedulingResult fullSchedulingResult)
 		{
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_schedulingCommandHandler = schedulingCommandHandler;
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulerStateHolder = schedulerStateHolder;
 			_persister = persister;
 			_schedulingProgress = schedulingProgress;
-			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_fullSchedulingResult = fullSchedulingResult;
 		}
 
@@ -94,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 
 		public FullSchedulingOLD(IScheduleExecutor scheduleExecutor, IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult) 
-			: base(null, fillSchedulerStateHolder, schedulerStateHolder, persister, schedulingProgress, schedulingOptionsProvider, fullSchedulingResult)
+			: base(null, fillSchedulerStateHolder, schedulerStateHolder, persister, schedulingProgress, fullSchedulingResult)
 		{
 			_scheduleExecutor = scheduleExecutor;
 			_schedulingProgress = schedulingProgress;

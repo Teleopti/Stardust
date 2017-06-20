@@ -18,6 +18,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
+	[UseIocForFatClient]
 	[Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class SchedulingCallbackTest : SchedulingScenario
 	{
