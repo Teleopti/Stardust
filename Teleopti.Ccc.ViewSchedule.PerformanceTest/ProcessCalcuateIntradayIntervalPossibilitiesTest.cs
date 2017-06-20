@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -13,6 +14,7 @@ using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.UnitOfWork;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Requests.PerformanceTuningTest;
 using Teleopti.Ccc.TestCommon;
@@ -78,13 +80,11 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
-				var firstTimeElapsedMilliseconds = calcuatePossibilities(personIds) / personCount;
-				var secondTimeElapsedMilliseconds = calcuatePossibilities(personIds) / personCount;
+				var elapsedMilliseconds = calcuatePossibilitiesByPeriod(personIds, getTodayDateOnlyPeriod(), StaffingPossiblityType.Absence) / personCount;
 
 				Console.WriteLine(
 					$"querying possibilities for {personIds.Length} persons,{Environment.NewLine}" +
-					$"the first time it takes {firstTimeElapsedMilliseconds} milliseconds for one person,{Environment.NewLine}" +
-					$"and the second time it takes {secondTimeElapsedMilliseconds} milliseconds for one person");
+					$"it takes {elapsedMilliseconds} milliseconds for one person,{Environment.NewLine}");
 			});
 		}
 
@@ -97,18 +97,38 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(13));
 			updateStaffingLevel(period);
 			var dateOnlyPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse(), Now.ServerDate_DontUse().AddDays(13));
+			//var personIds = loadPersonIds();
+			var personIds = new[] { new Guid("0b4390a8-2128-4550-8d03-a14100f34ea1") };
+			WithUnitOfWork.Do(() =>
+			{
+				var personCount = personIds.Length;
+				var elapsedMilliseconds = calcuatePossibilitiesByPeriod(personIds, dateOnlyPeriod, StaffingPossiblityType.Absence) / personCount;
+
+				Console.WriteLine(
+					$"querying possibilities for {personIds.Length} persons,{Environment.NewLine}" +
+					$"it takes {elapsedMilliseconds} milliseconds for one person,{Environment.NewLine}");
+			});
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686)]
+		public void ShouldProcessCalculationOfOverTimePossibilitiesByPeriodForMultipleAgents()
+		{
+			initialise();
+			var now = Now.UtcDateTime();
+			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(13));
+			updateStaffingLevel(period);
+			var dateOnlyPeriod = new DateOnlyPeriod(Now.ServerDate_DontUse(), Now.ServerDate_DontUse().AddDays(13));
 			var personIds = loadPersonIds();
 			//var personIds = new[] { new Guid("0b4390a8-2128-4550-8d03-a14100f34ea1") };
 			WithUnitOfWork.Do(() =>
 			{
 				var personCount = personIds.Length;
-				var firstTimeElapsedMilliseconds = calcuatePossibilitiesByPeriod(personIds, dateOnlyPeriod) / personCount;
-				var secondTimeElapsedMilliseconds = calcuatePossibilitiesByPeriod(personIds, dateOnlyPeriod) / personCount;
+				var elapsedMilliseconds = calcuatePossibilitiesByPeriod(personIds, dateOnlyPeriod, StaffingPossiblityType.Overtime) / personCount;
 
 				Console.WriteLine(
 					$"querying possibilities for {personIds.Length} persons,{Environment.NewLine}" +
-					$"the first time it takes {firstTimeElapsedMilliseconds} milliseconds for one person,{Environment.NewLine}" +
-					$"and the second time it takes {secondTimeElapsedMilliseconds} milliseconds for one person");
+					$"it takes {elapsedMilliseconds} milliseconds for one person,{Environment.NewLine}");
 			});
 		}
 
@@ -116,26 +136,7 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 		{
 			var path = AppDomain.CurrentDomain.BaseDirectory + "/../../PersonIds.txt";
 			var content = File.ReadAllText(path);
-			return content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(Guid.Parse).Take(100).ToArray();
-		}
-
-		private long calcuatePossibilities(Guid[] personIds)
-		{
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
-
-			var people = PersonRepository.FindPeople(personIds);
-			foreach (var person in people)
-			{
-				LoggedOnUser.SetFakeLoggedOnUser(person);
-				var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(getTodayDateOnlyPeriod());
-				if (!possibilities.Any())
-				{
-					Console.WriteLine($"{person.Id.GetValueOrDefault()} has data");
-				}
-			}
-			stopwatch.Stop();
-			return stopwatch.ElapsedMilliseconds;
+			return content.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Take(10).Select(Guid.Parse).ToArray();
 		}
 
 		private DateOnlyPeriod getTodayDateOnlyPeriod()
@@ -144,23 +145,29 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			return new DateOnly(usersNow).ToDateOnlyPeriod();
 		}
 
-		private long calcuatePossibilitiesByPeriod(Guid[] personIds, DateOnlyPeriod datePeriod)
+		private long calcuatePossibilitiesByPeriod(Guid[] personIds, DateOnlyPeriod datePeriod, StaffingPossiblityType staffingPossiblityType)
 		{
-			var stopwatch = new Stopwatch();
-			stopwatch.Start();
+			long totalElapsedMilliseconds = 0;
 
 			var people = PersonRepository.FindPeople(personIds);
 			foreach (var person in people)
 			{
 				LoggedOnUser.SetFakeLoggedOnUser(person);
-				var possibilities = Target.CalculateIntradayAbsenceIntervalPossibilities(datePeriod);
+				setAbsenceRequestOpenPeriods(person.WorkflowControlSet);
+				var stopwatch = new Stopwatch();
+				stopwatch.Start();
+				var possibilities = staffingPossiblityType == StaffingPossiblityType.Absence
+					? Target.CalculateIntradayAbsenceIntervalPossibilities(datePeriod)
+					: Target.CalculateIntradayOvertimeIntervalPossibilities(datePeriod);
+				stopwatch.Stop();
+				totalElapsedMilliseconds += stopwatch.ElapsedMilliseconds;
 				if (!possibilities.Any())
 				{
 					Console.WriteLine($"{person.Id.GetValueOrDefault()} no data");
 				}
 			}
-			stopwatch.Stop();
-			return stopwatch.ElapsedMilliseconds;
+
+			return totalElapsedMilliseconds;
 		}
 
 		private void initialise()
@@ -183,6 +190,18 @@ namespace Teleopti.Ccc.ViewSchedule.PerformanceTest
 			using (DataSource.OnThisThreadUse(tenantName))
 			{
 				AsSystem.Logon(tenantName, businessUnitId);
+			}
+		}
+
+		private static void setAbsenceRequestOpenPeriods(IWorkflowControlSet wfcs)
+		{
+			foreach (var period in wfcs.AbsenceRequestOpenPeriods)
+			{
+				period.OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(2016, 3, 1), new DateOnly(2099, 5, 30));
+				period.StaffingThresholdValidator = new StaffingThresholdValidator();
+				period.AbsenceRequestProcess = new GrantAbsenceRequest();
+				var datePeriod = period as AbsenceRequestOpenDatePeriod;
+				if (datePeriod != null) datePeriod.Period = period.OpenForRequestsPeriod;
 			}
 		}
 	}
