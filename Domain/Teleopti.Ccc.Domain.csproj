@@ -259,6 +259,7 @@
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModelCreator.cs" />
     <Compile Include="Notification\UserDeviceService.cs" />
+    <Compile Include="Optimization\WeeklyRestSolver\ExecuteWeeklyRestSolver.cs" />
     <Compile Include="Repositories\IUserDeviceRepository.cs" />
     <Compile Include="Scheduling\SchedulingCommand.cs" />
     <Compile Include="Scheduling\SchedulingCommandHandler.cs" />

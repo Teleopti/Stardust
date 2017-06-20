@@ -6,8 +6,8 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly RuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 
-		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, IScheduling teamBlockScheduling, ClassicScheduleCommand classicScheduleCommand, MatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation,
-			RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak) 
-			: base(schedulerStateHolder, requiredScheduleOptimizerHelper, scheduleDayChangeCallback, teamBlockScheduling, classicScheduleCommand, matrixListFactory, weeklyRestSolverCommand, resourceCalculationContextFactory, userTimeZone, resourceCalculation)
+		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, IScheduling teamBlockScheduling, ClassicScheduleCommand classicScheduleCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IResourceCalculation resourceCalculation,
+			RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, ExecuteWeeklyRestSolver executeWeeklyRestSolver) 
+			: base(schedulerStateHolder, requiredScheduleOptimizerHelper, teamBlockScheduling, classicScheduleCommand, resourceCalculationContextFactory, resourceCalculation, executeWeeklyRestSolver)
 		{
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		}
@@ -60,38 +60,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
-		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		protected readonly IScheduling TeamBlockScheduling;
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		private readonly ClassicScheduleCommand _classicScheduleCommand;
-		private readonly MatrixListFactory _matrixListFactory;
-		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
-		private readonly IUserTimeZone _userTimeZone;
 		private readonly IResourceCalculation _resourceCalculation;
+		private readonly ExecuteWeeklyRestSolver _executeWeeklyRestSolver;
 
 		public ScheduleExecutorOld(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
-			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			IScheduling teamBlockScheduling,
 			ClassicScheduleCommand classicScheduleCommand,
-			MatrixListFactory matrixListFactory,
-			IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			IUserTimeZone userTimeZone,
-			IResourceCalculation resourceCalculation)
+			IResourceCalculation resourceCalculation,
+			ExecuteWeeklyRestSolver executeWeeklyRestSolver)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_requiredScheduleOptimizerHelper = requiredScheduleOptimizerHelper;
-			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			TeamBlockScheduling = teamBlockScheduling;
 			_classicScheduleCommand = classicScheduleCommand;
-			_matrixListFactory = matrixListFactory;
-			_weeklyRestSolverCommand = weeklyRestSolverCommand;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
-			_userTimeZone = userTimeZone;
 			_resourceCalculation = resourceCalculation;
+			_executeWeeklyRestSolver = executeWeeklyRestSolver;
 		}
 
 		[TestLog]
@@ -116,7 +107,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 				{
 					schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
-
 					DoScheduling(schedulingCallback, backgroundWorker, selectedAgents, selectedPeriod, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider, schedulingOptions);
 				}
 				else
@@ -125,7 +115,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_requiredScheduleOptimizerHelper.ScheduleSelectedStudents(selectedScheduleDays, backgroundWorker, schedulingOptions);
 				}
 
-				//shiftcategorylimitations
 				if (!backgroundWorker.CancellationPending)
 				{
 					ExecuteWeeklyRestSolverCommand(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedAgents.ToArray(),
@@ -153,28 +142,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		[TestLog]
 		protected virtual void ExecuteWeeklyRestSolverCommand(bool useShiftCategoryLimitations, SchedulingOptions schedulingOptions,
-															IOptimizationPreferences optimizationPreferences, IList<IPerson> selectedPersons,
+															IOptimizationPreferences optimizationPreferences, IEnumerable<IPerson> selectedPersons,
 															DateOnlyPeriod selectedPeriod, 
 															ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
-			if (schedulingOptions.UseShiftCategoryLimitations)
-			{
-				var schedulerStateHolder = _schedulerStateHolder();
-				var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(schedulerStateHolder.Schedules, selectedPersons, selectedPeriod);
-				if (!matrixesOfSelectedScheduleDays.Any())
-					return;
-
-				_requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays,
-					backgroundWorker,
-					optimizationPreferences,
-					schedulingOptions,
-					selectedPeriod);
-
-				var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1,schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
-				_weeklyRestSolverCommand.Execute(schedulingOptions, optimizationPreferences, selectedPersons, rollbackService, resourceCalculateDelayer, selectedPeriod, matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
-			}
+			_executeWeeklyRestSolver.Execute(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedPersons, selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}	
 	}
 }
