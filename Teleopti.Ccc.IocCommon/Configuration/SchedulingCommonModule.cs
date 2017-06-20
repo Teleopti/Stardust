@@ -150,18 +150,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<WorkShiftFinderResultHolder>().As<IWorkShiftFinderResultHolder>().InstancePerLifetimeScope();
 			}
 
+
+
 			if (_configuration.Toggle(Toggles.ResourcePlanner_SchedulingIslands_44757))
 			{
-				if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
-				{
-					builder.RegisterType<ScheduleIslandExecutor>().As<IScheduleExecutor>().InstancePerLifetimeScope();
-					builder.RegisterType<SchedulingCommandHandler>().InstancePerLifetimeScope();
-					builder.RegisterType<SchedulingEventHandler>().InstancePerLifetimeScope();
-				}
-				else
-				{
-					builder.RegisterType<InvalidScheduleToggleCombination>().As<IScheduleExecutor>().SingleInstance();
-				}
+				builder.RegisterType<SchedulingCommandHandler>().As<ISchedulingCommandHandler>().InstancePerLifetimeScope();
+				// continue with this one
+				//builder.RegisterType<SchedulingEventHandler>().InstancePerLifetimeScope();
+
+			}
+			else
+			{
+				builder.RegisterType<SchedulingCommandHandlerPassThrough>().As<ISchedulingCommandHandler>().InstancePerLifetimeScope();
 			}
 
 			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();

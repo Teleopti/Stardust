@@ -13,21 +13,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class FullScheduling
 	{
+		private readonly ISchedulingCommandHandler _schedulingCommandHandler;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
-		private readonly IScheduleExecutor _scheduleExecutor;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly ISchedulingProgress _schedulingProgress;
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 		private readonly FullSchedulingResult _fullSchedulingResult;
 
-		public FullScheduling(IFillSchedulerStateHolder fillSchedulerStateHolder,
-			IScheduleExecutor scheduleExecutor, Func<ISchedulerStateHolder> schedulerStateHolder,
-			IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, 
+		public FullScheduling(ISchedulingCommandHandler schedulingCommandHandler, IFillSchedulerStateHolder fillSchedulerStateHolder,
+			Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, 
 			ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult)
 		{
+			_schedulingCommandHandler = schedulingCommandHandler;
+			_schedulingCommandHandler = schedulingCommandHandler;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
-			_scheduleExecutor = scheduleExecutor;
 			_schedulerStateHolder = schedulerStateHolder;
 			_persister = persister;
 			_schedulingProgress = schedulingProgress;
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 			if (stateHolder.Schedules.Any())
 			{
-				_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
+				_schedulingCommandHandler.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
 					stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period,
 					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			}

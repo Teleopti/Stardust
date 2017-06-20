@@ -6,8 +6,9 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[TestFixture(true, true)]
-	[TestFixture(false, false)]
 	[TestFixture(true, false)]
+	[TestFixture(false, true)]
+	[TestFixture(false, false)]
 	public abstract class SchedulingScenario : IConfigureToggleManager
 	{
 		protected readonly bool ResourcePlannerMergeTeamblockClassicScheduling44289;

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -6,14 +7,24 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
-
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class SchedulingCommandHandler : ISchedulingCommandHandler
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SchedulingIslands_44757)]
+	public interface ISchedulingCommandHandler
+	{
+		//TODO - should accept SchedulingCommand
+		void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
+			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
+			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SchedulingIslands_44757)]
+	public class SchedulingCommandHandlerPassThrough : ISchedulingCommandHandler
 	{
 		private readonly IScheduleExecutor _scheduleExecutor;
 
-		public SchedulingCommandHandler(IScheduleExecutor scheduleExecutor)
+		public SchedulingCommandHandlerPassThrough(IScheduleExecutor scheduleExecutor)
 		{
 			_scheduleExecutor = scheduleExecutor;
 		}
@@ -27,5 +38,3 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 	}
 }
-
-

@@ -11,17 +11,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class DesktopScheduling
 	{
-		private readonly IScheduleExecutor _scheduleExecutor;
+		private readonly ISchedulingCommandHandler _schedulingCommandHandler;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceCalculation _resouceResourceOptimizationHelper;
 		private readonly ScheduleHourlyStaffExecutor _scheduleHourlyStaffExecutor;
 
-		public DesktopScheduling(IScheduleExecutor scheduleExecutor, 
+		public DesktopScheduling(ISchedulingCommandHandler schedulingCommandHandler, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IResourceCalculation resouceResourceOptimizationHelper,
 			ScheduleHourlyStaffExecutor scheduleHourlyStaffExecutor)
 		{
-			_scheduleExecutor = scheduleExecutor;
+			_schedulingCommandHandler = schedulingCommandHandler;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resouceResourceOptimizationHelper = resouceResourceOptimizationHelper;
 			_scheduleHourlyStaffExecutor = scheduleHourlyStaffExecutor;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 			{
-				_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod,
+				_schedulingCommandHandler.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod,
 					optimizationPreferences, true, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
 			}
 			else

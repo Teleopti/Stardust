@@ -248,7 +248,6 @@
     <Compile Include="Common\Time\IUserNow.cs" />
     <Compile Include="Common\Time\TimePassingSimulator.cs" />
     <Compile Include="Common\Time\UserNow.cs" />
-    <Compile Include="FeatureFlags\InvalidToggleCombinationsException.cs" />
     <Compile Include="Forecasting\Export\Web\DailyModelForecast.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportModel.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportModelCreator.cs" />
@@ -265,6 +264,7 @@
     <Compile Include="Scheduling\Legacy\Commands\ScheduleHourlyStaffExecutor.cs" />
     <Compile Include="Scheduling\SchedulingCommand.cs" />
     <Compile Include="Scheduling\SchedulingCommandHandler.cs" />
+    <Compile Include="Scheduling\SchedulingCommandHandlerPassThrough.cs" />
     <Compile Include="Scheduling\SchedulingEventHandler.cs" />
     <Compile Include="Scheduling\SchedulingWasOrdered.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopContext.cs" />
@@ -273,7 +273,6 @@
     <Compile Include="Scheduling\WebLegacy\IDesktopContextData.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Validation\IScheduleValidator.cs" />
-    <Compile Include="Scheduling\ScheduleIslandExecutor.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\Analytics\IDateWithDuplicate.cs" />
     <Compile Include="InterfaceLegacy\Messages\InputWithLogOnContext.cs" />
