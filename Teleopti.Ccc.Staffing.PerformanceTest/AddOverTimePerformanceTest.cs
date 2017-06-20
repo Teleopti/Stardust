@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 		private DateTime[] timeSerie;
 		private Guid[] skillIds;
 		private IMultiplicatorDefinitionSet oneMulti;
-		private DateTime now = new DateTime(2016, 08, 10, 7, 0, 0);
+		private DateTime now = new DateTime(2016, 08, 10, 7, 0, 0).Utc();
 
 		public override void OneTimeSetUp()
 		{
