@@ -9,6 +9,6 @@ IF EXISTS (SELECT * FROM sys.columns WHERE Name = N'AbsenceProbabilityEnabled' A
 
 ALTER TABLE dbo.[WorkflowControlSet]
 ADD [AbsenceProbabilityEnabled] bit NOT NULL
-DEFAULT 0
+DEFAULT 1
 
 GO
