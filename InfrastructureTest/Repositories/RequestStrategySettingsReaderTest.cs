@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReadIntValue()
 		{
-			var val = Reader.GetIntSetting("AbsenceNearFuture", 8);
-			val.Should().Be.EqualTo(2);
+			var val = Reader.GetIntSetting("AbsenceRequestBulkFrequencyMinutes", 8);
+			val.Should().Be.EqualTo(10);
 		}
 
 		[Test]
