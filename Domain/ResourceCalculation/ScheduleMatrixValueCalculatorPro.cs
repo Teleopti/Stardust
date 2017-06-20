@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             double highestIntraIntervalDeviation = 0;
 
-            if (IsConsiderMaximumIntraIntervalStandardDeviation())
+            if (_optimizerPreferences.Advanced.UseIntraIntervalDeviation)
                 highestIntraIntervalDeviation = SkillStaffPeriodHelper.GetHighestIntraIntervalDeviation(skillStaffPeriods) ?? 0;
 
             bool useMinPersonnel = _optimizerPreferences.Advanced.UseMinimumStaffing;
@@ -86,11 +86,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        return iterationOperationOption == IterationOperationOption.DayOffOptimization
 		               ? Calculation.Variances.StandardDeviation(values)
 		               : Calculation.Variances.RMS(values);
-        }
-
-        public bool IsConsiderMaximumIntraIntervalStandardDeviation()
-        {
-            return _optimizerPreferences.Advanced.UseIntraIntervalDeviation;
         }
 
         public double? DayValue(DateOnly scheduleDay, IterationOperationOption iterationOperationOption)

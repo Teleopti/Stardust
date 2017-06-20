@@ -78,14 +78,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
 
-        [Test]
-        public void VerifyIsConsiderMaximumIntraIntervalStandardDeviation()
-        {
-			Assert.AreEqual(_optimizerPreferences.Advanced.UseIntraIntervalDeviation, 
-                            _target.IsConsiderMaximumIntraIntervalStandardDeviation());
-        }
-
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         private ISchedulingResultStateHolder createStateHolderForTest(MockRepository mockRepository)
         {
