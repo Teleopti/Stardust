@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 {
-	public class ForecastExportIntervalModelCreator
+	public static class ForecastExportIntervalModelCreator
 	{
-		public object Load(Guid skillId, DateOnlyPeriod period)
+		public static IList<ForecastExportIntervalModel> Load(List<ISkillDay> skillId)
 		{
-			throw new NotImplementedException();
+			return new List<ForecastExportIntervalModel>();
 		}
 	}
 }

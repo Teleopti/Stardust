@@ -251,6 +251,7 @@
     <Compile Include="Forecasting\Export\Web\ForecastExportDailyModel.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportHeaderModel.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportHeaderModelCreator.cs" />
+    <Compile Include="Forecasting\Export\Web\ForecastExportIntervalModel.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportIntervalModelCreator.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportModel.cs" />
     <Compile Include="Forecasting\Export\Web\ForecastExportDailyModelCreator.cs" />

@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 				cellDayOpenHourValue.SetCellValue(dailyForecast.OpenHours.ToString());
 				cellForecastCallsValue.SetCellValue(dailyForecast.Calls);
 				cellForecastAttValue.SetCellValue(dailyForecast.AverageTalkTime);
-				cellForecastAcwValue.SetCellValue(dailyForecast.AfterCallWork);
+				cellForecastAcwValue.SetCellValue(dailyForecast.AverageAfterCallWork);
 				cellForecastAhtValue.SetCellValue(dailyForecast.AverageHandleTime);
 				cellForecastHoursValue.SetCellValue(dailyForecast.ForecastedHours);
 				cellForecastHoursWithShrinkageValue.SetCellValue(dailyForecast.ForecastedHoursShrinkage);

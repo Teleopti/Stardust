@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 					OpenHours = skillDay.OpenHours().First(),
 					Calls = skillDay.Tasks,
 					AverageTalkTime = skillDay.TotalAverageTaskTime.Seconds,
-					AfterCallWork = skillDay.TotalAverageAfterTaskTime.Seconds,
+					AverageAfterCallWork = skillDay.TotalAverageAfterTaskTime.Seconds,
 					AverageHandleTime = skillDay.TotalAverageTaskTime.Seconds + skillDay.TotalAverageAfterTaskTime.Seconds,
 					ForecastedHours = skillDay.ForecastedDistributedDemand.TotalHours,
 					ForecastedHoursShrinkage = skillDay.ForecastedDistributedDemandWithShrinkage.TotalHours

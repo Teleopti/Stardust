@@ -26,13 +26,14 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 		{
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var skill = _skillRepository.Get(skillId);
-			var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(period, new List<ISkill>() { skill }, scenario);
+			var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(period, new List<ISkill> { skill }, scenario);
 
 			var skillDays = skillDaysBySkills[skill].ToList();
 			return new ForecastExportModel
 			{
 				Header = ForecastExportHeaderModelCreator.Load(skill, skillDays, period),
-				DailyModelForecast = ForecastExportDailyModelCreator.Load(skillDays)
+				DailyModelForecast = ForecastExportDailyModelCreator.Load(skillDays),
+				IntervalModelForecast = ForecastExportIntervalModelCreator.Load(skillDays)
 			};
 		}
 	}
