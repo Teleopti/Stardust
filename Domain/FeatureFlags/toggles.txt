@@ -247,7 +247,7 @@ Staffing_ReadModel_Keep8DaysHistoricalData_44652 = RC # don't enable without Sta
 
 QRCodeForMobileApps_42695 = true
 ConfigQRCodeURLForMobileApps_43224 = true
-MobileApps_EnableMobileNotifications_44476 = RC
+MobileApps_EnableMobileNotifications_44476 = true
 
 ETL_SpeedUpNightlyDayOff_38213 = true
 WFM_ImproveIntradaySkillArea_44246 = true
