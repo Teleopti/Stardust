@@ -150,17 +150,20 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<WorkShiftFinderResultHolder>().As<IWorkShiftFinderResultHolder>().InstancePerLifetimeScope();
 			}
 
+			//check scopes here when we get further! might be singleinstances everywhere....
 			if (_configuration.Toggle(Toggles.ResourcePlanner_SchedulingIslands_44757))
 			{
-				builder.RegisterType<SchedulingCommandHandler>().As<ISchedulingCommandHandler>().InstancePerLifetimeScope();
+				builder.RegisterType<SchedulingCommandHandler>().InstancePerLifetimeScope();
 				builder.RegisterType<SchedulingEventHandler>().InstancePerLifetimeScope();
+				builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			}
 			else
 			{
-				builder.RegisterType<SchedulingCommandHandlerPassThrough>().As<ISchedulingCommandHandler>().InstancePerLifetimeScope();
+				builder.RegisterType<FullSchedulingOLD>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<DesktopSchedulingOLD>().InstancePerLifetimeScope();
 			}
 
-			builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationExecuter>().InstancePerLifetimeScope();
 			builder.RegisterType<CorrectAlteredBetween>().SingleInstance();
 			builder.RegisterType<BackToLegalStateExecuter>().InstancePerLifetimeScope();
@@ -434,7 +437,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftBackToLegalStateServiceProFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleBlankSpots>().InstancePerLifetimeScope();
 			builder.RegisterType<DaysOffBackToLegalState>().InstancePerLifetimeScope();
-			builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<FullSchedulingResult>().InstancePerLifetimeScope();
 			builder.RegisterType<IntradayOptimization>().InstancePerLifetimeScope();
 			builder.RegisterType<OptimizationResult>().InstancePerLifetimeScope().ApplyAspects();

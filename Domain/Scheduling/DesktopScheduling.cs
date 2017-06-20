@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -11,12 +12,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class DesktopScheduling
 	{
-		private readonly ISchedulingCommandHandler _schedulingCommandHandler;
+		private readonly SchedulingCommandHandler _schedulingCommandHandler;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceCalculation _resouceResourceOptimizationHelper;
 		private readonly ScheduleHourlyStaffExecutor _scheduleHourlyStaffExecutor;
 
-		public DesktopScheduling(ISchedulingCommandHandler schedulingCommandHandler, 
+		public DesktopScheduling(SchedulingCommandHandler schedulingCommandHandler, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IResourceCalculation resouceResourceOptimizationHelper,
 			ScheduleHourlyStaffExecutor scheduleHourlyStaffExecutor)
@@ -34,8 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 			{
-				_schedulingCommandHandler.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod,
-					optimizationPreferences, true, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+				ExecuteScheduling(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, optimizationPreferences, dayOffsPreferences);
 			}
 			else
 			{
@@ -45,6 +45,36 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var resCalcData = _schedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(_schedulerStateHolder().ConsiderShortBreaks, false);
 			_resouceResourceOptimizationHelper.ResourceCalculate(selectedPeriod, resCalcData);
+		}
+
+		[RemoveMeWithToggle("move up this", Toggles.ResourcePlanner_SchedulingIslands_44757)]
+		protected virtual void ExecuteScheduling(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
+			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
+			IOptimizationPreferences optimizationPreferences, IDaysOffPreferences dayOffsPreferences)
+		{
+			_schedulingCommandHandler.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents,
+				selectedPeriod,
+				optimizationPreferences, true, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+		}
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SchedulingIslands_44757)]
+	public class DesktopSchedulingOLD : DesktopScheduling
+	{
+		private readonly IScheduleExecutor _scheduleExecutor;
+
+		public DesktopSchedulingOLD(IScheduleExecutor scheduleExecutor, Func<ISchedulerStateHolder> schedulerStateHolder, IResourceCalculation resouceResourceOptimizationHelper, ScheduleHourlyStaffExecutor scheduleHourlyStaffExecutor) : 
+			base(null, schedulerStateHolder, resouceResourceOptimizationHelper, scheduleHourlyStaffExecutor)
+		{
+			_scheduleExecutor = scheduleExecutor;
+		}
+
+		protected override void ExecuteScheduling(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
+			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
+			IOptimizationPreferences optimizationPreferences, IDaysOffPreferences dayOffsPreferences)
+		{
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents,
+				selectedPeriod, optimizationPreferences, true, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
 		}
 	}
 }

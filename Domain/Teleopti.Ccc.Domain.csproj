@@ -264,7 +264,6 @@
     <Compile Include="Scheduling\Legacy\Commands\ScheduleHourlyStaffExecutor.cs" />
     <Compile Include="Scheduling\SchedulingCommand.cs" />
     <Compile Include="Scheduling\SchedulingCommandHandler.cs" />
-    <Compile Include="Scheduling\SchedulingCommandHandlerPassThrough.cs" />
     <Compile Include="Scheduling\SchedulingEventHandler.cs" />
     <Compile Include="Scheduling\SchedulingWasOrdered.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopContext.cs" />

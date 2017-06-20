@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class FullScheduling
 	{
-		private readonly ISchedulingCommandHandler _schedulingCommandHandler;
+		private readonly SchedulingCommandHandler _schedulingCommandHandler;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
@@ -21,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 		private readonly FullSchedulingResult _fullSchedulingResult;
 
-		public FullScheduling(ISchedulingCommandHandler schedulingCommandHandler, IFillSchedulerStateHolder fillSchedulerStateHolder,
+		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, IFillSchedulerStateHolder fillSchedulerStateHolder,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, 
 			ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult)
 		{
@@ -64,10 +65,41 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 			if (stateHolder.Schedules.Any())
 			{
-				_schedulingCommandHandler.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
-					stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period,
-					new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+				ExecuteScheduling(period, stateHolder);
 			}
+		}
+
+		[RemoveMeWithToggle("move up this", Toggles.ResourcePlanner_SchedulingIslands_44757)]
+		protected virtual void ExecuteScheduling(DateOnlyPeriod period, ISchedulerStateHolder stateHolder)
+		{
+			_schedulingCommandHandler.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
+				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period,
+				new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+		}
+	}
+
+
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SchedulingIslands_44757)]
+	public class FullSchedulingOLD : FullScheduling
+	{
+		private readonly IScheduleExecutor _scheduleExecutor;
+		private readonly ISchedulingProgress _schedulingProgress;
+		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
+
+		public FullSchedulingOLD(IScheduleExecutor scheduleExecutor, IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult) 
+			: base(null, fillSchedulerStateHolder, schedulerStateHolder, persister, schedulingProgress, schedulingOptionsProvider, fullSchedulingResult)
+		{
+			_scheduleExecutor = scheduleExecutor;
+			_schedulingProgress = schedulingProgress;
+			_schedulingOptionsProvider = schedulingOptionsProvider;
+		}
+
+		protected override void ExecuteScheduling(DateOnlyPeriod period, ISchedulerStateHolder stateHolder)
+		{
+			_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
+				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period,
+				new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 		}
 	}
 }
