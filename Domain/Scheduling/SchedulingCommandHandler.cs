@@ -16,16 +16,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		public void Execute(SchedulingCommand schedulingCommand, ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
-			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var @event = new SchedulingWasOrdered
 			{
 				AgentsToSchedule = schedulingCommand.AgentsToSchedule.Select(x => x.Id.Value),
 				StartDate = schedulingCommand.Period.StartDate,
-				EndDate = schedulingCommand.Period.EndDate
+				EndDate = schedulingCommand.Period.EndDate,
+				RunWeeklyRestSolver = schedulingCommand.RunWeeklyRestSolver
 			};
-			_schedulingEventHandler.HandleEvent(@event, schedulingOptions, schedulingCallback, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, runWeeklyRestSolver);
+			_schedulingEventHandler.HandleEvent(@event, schedulingOptions, schedulingCallback, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 		}
 	}
 }

@@ -52,9 +52,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			IOptimizationPreferences optimizationPreferences, IDaysOffPreferences dayOffsPreferences)
 		{
-			var command = new SchedulingCommand {AgentsToSchedule = selectedAgents, Period = selectedPeriod};
+			var command = new SchedulingCommand
+			{
+				AgentsToSchedule = selectedAgents,
+				Period = selectedPeriod,
+				RunWeeklyRestSolver = true
+			};
 			_schedulingCommandHandler.Execute(command, schedulingCallback, schedulingOptions, backgroundWorker, 
-				optimizationPreferences, true, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+				optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
 		}
 	}
 

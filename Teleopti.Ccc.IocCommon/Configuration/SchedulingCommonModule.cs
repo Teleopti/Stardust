@@ -160,8 +160,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
-				builder.RegisterType<FullSchedulingOLD>().InstancePerLifetimeScope().ApplyAspects();
-				builder.RegisterType<DesktopSchedulingOLD>().InstancePerLifetimeScope();
+				builder.RegisterType<FullSchedulingOLD>().As<FullScheduling>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<DesktopSchedulingOLD>().As<DesktopScheduling>().InstancePerLifetimeScope();
 			}
 
 			builder.RegisterType<OptimizationExecuter>().InstancePerLifetimeScope();

@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		public IEnumerable<IPerson> AgentsToSchedule { get; set; }
 		public DateOnlyPeriod Period { get; set; }
+		public bool RunWeeklyRestSolver { get; set; }
 	}
 }

@@ -75,11 +75,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var command = new SchedulingCommand
 			{
 				AgentsToSchedule = stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period),
-				Period = period
+				Period = period,
+				RunWeeklyRestSolver = false
 			};
 
 			_schedulingCommandHandler.Execute(command, new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
-				new OptimizationPreferences(), false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+				new OptimizationPreferences(), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 		}
 	}
 
