@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				Period = selectedPeriod,
 				RunWeeklyRestSolver = true
 			};
-			using (_desktopSchedulingContext.Set(command, _schedulerStateHolder(), schedulingOptions))
+			using (_desktopSchedulingContext.Set(command, _schedulerStateHolder(), schedulingOptions, schedulingCallback))
 			{
-				_schedulingCommandHandler.Execute(command, schedulingCallback, backgroundWorker,
+				_schedulingCommandHandler.Execute(command, backgroundWorker,
 					optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
 			}
 		}

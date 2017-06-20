@@ -260,7 +260,9 @@
     <Compile Include="Notification\UserDeviceService.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ExecuteWeeklyRestSolver.cs" />
     <Compile Include="Repositories\IUserDeviceRepository.cs" />
+    <Compile Include="Scheduling\CurrentSchedulingCallback.cs" />
     <Compile Include="Scheduling\FullSchedulingResult.cs" />
+    <Compile Include="Scheduling\ICurrentSchedulingCallback.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleHourlyStaffExecutor.cs" />
     <Compile Include="Scheduling\SchedulingCommand.cs" />
     <Compile Include="Scheduling\SchedulingCommandHandler.cs" />
@@ -2069,7 +2071,7 @@
     <Compile Include="Optimization\IntradayDatesToSkip.cs" />
     <Compile Include="Optimization\IntradayOptimization.cs" />
     <Compile Include="Optimization\IntradayOptimizationEventRunInProcessHandler.cs" />
-    <Compile Include="Optimization\IntradayOptimizationCallbackContext.cs" />
+    <Compile Include="Optimization\CurrentIntradayOptimizationCallback.cs" />
     <Compile Include="Optimization\IntradayOptimizeOnDayCallBackDoNothing.cs" />
     <Compile Include="Optimization\IntradayOptimizeOneday.cs" />
     <Compile Include="Optimization\IntradayOptimizerContainerConsiderLargeGroups.cs" />

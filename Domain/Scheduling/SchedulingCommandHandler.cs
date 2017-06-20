@@ -15,8 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingEventHandler = schedulingEventHandler;
 		}
 
-		public void Execute(SchedulingCommand schedulingCommand, ISchedulingCallback schedulingCallback,
-			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		public void Execute(SchedulingCommand schedulingCommand, ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var @event = new SchedulingWasOrdered
 			{
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				RunWeeklyRestSolver = schedulingCommand.RunWeeklyRestSolver,
 				CommandId = schedulingCommand.CommandId
 			};
-			_schedulingEventHandler.HandleEvent(@event, schedulingCallback, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
+			_schedulingEventHandler.HandleEvent(@event, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 		}
 	}
 }
