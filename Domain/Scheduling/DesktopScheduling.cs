@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
+using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
@@ -16,16 +17,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IResourceCalculation _resouceResourceOptimizationHelper;
 		private readonly ScheduleHourlyStaffExecutor _scheduleHourlyStaffExecutor;
+		private readonly DesktopSchedulingContext _desktopSchedulingContext;
 
 		public DesktopScheduling(SchedulingCommandHandler schedulingCommandHandler, 
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IResourceCalculation resouceResourceOptimizationHelper,
-			ScheduleHourlyStaffExecutor scheduleHourlyStaffExecutor)
+			ScheduleHourlyStaffExecutor scheduleHourlyStaffExecutor,
+			DesktopSchedulingContext desktopSchedulingContext)
 		{
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resouceResourceOptimizationHelper = resouceResourceOptimizationHelper;
 			_scheduleHourlyStaffExecutor = scheduleHourlyStaffExecutor;
+			_desktopSchedulingContext = desktopSchedulingContext;
 		}
 
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
@@ -58,8 +62,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				Period = selectedPeriod,
 				RunWeeklyRestSolver = true
 			};
-			_schedulingCommandHandler.Execute(command, schedulingCallback, schedulingOptions, backgroundWorker, 
-				optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+			using (_desktopSchedulingContext.Set(command, _schedulerStateHolder(), schedulingOptions))
+			{
+				_schedulingCommandHandler.Execute(command, schedulingCallback, backgroundWorker,
+					optimizationPreferences, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+			}
 		}
 	}
 
@@ -69,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IScheduleExecutor _scheduleExecutor;
 
 		public DesktopSchedulingOLD(IScheduleExecutor scheduleExecutor, Func<ISchedulerStateHolder> schedulerStateHolder, IResourceCalculation resouceResourceOptimizationHelper, ScheduleHourlyStaffExecutor scheduleHourlyStaffExecutor) : 
-			base(null, schedulerStateHolder, resouceResourceOptimizationHelper, scheduleHourlyStaffExecutor)
+			base(null, schedulerStateHolder, resouceResourceOptimizationHelper, scheduleHourlyStaffExecutor, null)
 		{
 			_scheduleExecutor = scheduleExecutor;
 		}

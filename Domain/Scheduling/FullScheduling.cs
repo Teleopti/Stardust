@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				RunWeeklyRestSolver = false
 			};
 
-			_schedulingCommandHandler.Execute(command, new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
+			_schedulingCommandHandler.Execute(command, new NoSchedulingCallback(), _schedulingProgress,
 				new OptimizationPreferences(), new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 		}
 	}

@@ -13,16 +13,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleExecutor _scheduleExecutor;
+		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 
-		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleExecutor scheduleExecutor)
+		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleExecutor scheduleExecutor, ISchedulingOptionsProvider schedulingOptionsProvider)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_scheduleExecutor = scheduleExecutor;
+			_schedulingOptionsProvider = schedulingOptionsProvider;
 		}
 
 		public void HandleEvent(SchedulingWasOrdered @event,
 			//remove these later
-			SchedulingOptions schedulingOptions,
 			ISchedulingCallback schedulingCallback,
 			ISchedulingProgress backgroundWorker,
 			IOptimizationPreferences optimizationPreferences,
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 			var selectedAgents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value));
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, optimizationPreferences, @event.RunWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
+			_scheduleExecutor.Execute(schedulingCallback, _schedulingOptionsProvider.Fetch(), backgroundWorker, selectedAgents, selectedPeriod, optimizationPreferences, @event.RunWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
 		}
 	}
 }

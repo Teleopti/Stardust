@@ -17,25 +17,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		private class desktopSchedulingContextData : IDesktopContextData
 		{
-			public desktopSchedulingContextData(ISchedulerStateHolder schedulerStateHolderFrom, ISchedulingOptionsProvider schedulingOptionsProvider)
+			public desktopSchedulingContextData(ISchedulerStateHolder schedulerStateHolderFrom, SchedulingOptions schedulingOptions)
 			{
 				SchedulerStateHolderFrom = schedulerStateHolderFrom;
-				SchedulingOptionsProvider = schedulingOptionsProvider;
+				SchedulingOptions = schedulingOptions;
 			}
 
 			public ISchedulerStateHolder SchedulerStateHolderFrom { get; }
-			public ISchedulingOptionsProvider SchedulingOptionsProvider { get; }
+			public SchedulingOptions SchedulingOptions { get; }
 		}
 
-		public IDisposable Set(ICommandIdentifier commandIdentifier, ISchedulerStateHolder schedulerStateHolderFrom, ISchedulingOptionsProvider schedulingOptionsProvider)
+		public IDisposable Set(ICommandIdentifier commandIdentifier, ISchedulerStateHolder schedulerStateHolderFrom, SchedulingOptions schedulingOptions)
 		{
-			return _desktopContext.SetContextFor(commandIdentifier, new desktopSchedulingContextData(schedulerStateHolderFrom, schedulingOptionsProvider));
+			return _desktopContext.SetContextFor(commandIdentifier, new desktopSchedulingContextData(schedulerStateHolderFrom, schedulingOptions));
 		}
 
 
 		public SchedulingOptions Fetch()
 		{
-			return ((desktopSchedulingContextData) _desktopContext.CurrentContext()).SchedulingOptionsProvider.Fetch();
+			return ((desktopSchedulingContextData) _desktopContext.CurrentContext()).SchedulingOptions;
 		}
 	}
 }

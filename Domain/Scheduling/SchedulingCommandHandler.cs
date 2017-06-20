@@ -3,7 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.ResourceCalculation;
+
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class SchedulingCommandHandler
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingEventHandler = schedulingEventHandler;
 		}
 
-		public void Execute(SchedulingCommand schedulingCommand, ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
+		public void Execute(SchedulingCommand schedulingCommand, ISchedulingCallback schedulingCallback,
 			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var @event = new SchedulingWasOrdered
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				EndDate = schedulingCommand.Period.EndDate,
 				RunWeeklyRestSolver = schedulingCommand.RunWeeklyRestSolver
 			};
-			_schedulingEventHandler.HandleEvent(@event, schedulingOptions, schedulingCallback, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
+			_schedulingEventHandler.HandleEvent(@event, schedulingCallback, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
 		}
 	}
 }
