@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -11,11 +12,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class SchedulingCommandHandler : ISchedulingCommandHandler
 	{
-		private readonly IScheduleExecutor _scheduleExecutor;
+		private readonly SchedulingEventHandler _schedulingEventHandler;
 
-		public SchedulingCommandHandler(IScheduleExecutor scheduleExecutor)
+		public SchedulingCommandHandler(SchedulingEventHandler schedulingEventHandler)
 		{
-			_scheduleExecutor = scheduleExecutor;
+			_schedulingEventHandler = schedulingEventHandler;
 		}
 
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
@@ -23,9 +24,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, optimizationPreferences, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
+			var @event = new SchedulingWasOrdered
+			{
+				AgentsToOptimize = selectedAgents.Select(x => x.Id.Value),
+				StartDate = selectedPeriod.StartDate,
+				EndDate = selectedPeriod.EndDate
+			};
+			_schedulingEventHandler.HandleEvent(@event, schedulingOptions, schedulingCallback, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider, runWeeklyRestSolver);
 		}
 	}
 }
-
-
