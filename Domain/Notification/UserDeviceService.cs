@@ -23,14 +23,18 @@ namespace Teleopti.Ccc.Domain.Notification
 			var currentDevice = _userDeviceRepository.FindByToken(token);
 			if (currentDevice != null)
 			{
-				_userDeviceRepository.Remove(currentDevice);
+				currentDevice.Owner = _loggedOnUser.CurrentUser();
+			}
+			else
+			{
+				_userDeviceRepository.Add(new UserDevice
+				{
+					Token = token,
+					Owner = _loggedOnUser.CurrentUser()
+				});
 			}
 
-			_userDeviceRepository.Add(new UserDevice
-			{
-				Token = token,
-				Owner = _loggedOnUser.CurrentUser()
-			});
+			
 		}
 
 		public IList<string> GetUserTokens()
