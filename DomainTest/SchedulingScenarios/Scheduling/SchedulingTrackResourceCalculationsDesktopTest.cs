@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ResourceCalculationWithCount>().For<IResourceCalculation>();
+			system.UseTestDouble<SchedulingOptionsProvider>().For<ISchedulingOptionsProvider>();
 		}
 
 		public SchedulingTrackResourceCalculationsDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
