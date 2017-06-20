@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly SchedulingCommandHandler _schedulingCommandHandler;
 
-		public ScheduleIslandExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, IScheduling teamBlockScheduling, ClassicScheduleCommand classicScheduleCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IResourceCalculation resourceCalculation, SchedulingCommandHandler schedulingCommandHandler, ExecuteWeeklyRestSolver executeWeeklyRestSolver) 
-			: base(schedulerStateHolder, requiredScheduleOptimizerHelper, teamBlockScheduling, classicScheduleCommand, resourceCalculationContextFactory, resourceCalculation, executeWeeklyRestSolver)
+		public ScheduleIslandExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IScheduling teamBlockScheduling, ClassicScheduleCommand classicScheduleCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IResourceCalculation resourceCalculation, SchedulingCommandHandler schedulingCommandHandler, ExecuteWeeklyRestSolver executeWeeklyRestSolver) 
+			: base(schedulerStateHolder, teamBlockScheduling, classicScheduleCommand, resourceCalculationContextFactory, resourceCalculation, executeWeeklyRestSolver)
 		{
 			_schedulingCommandHandler = schedulingCommandHandler;
 		}

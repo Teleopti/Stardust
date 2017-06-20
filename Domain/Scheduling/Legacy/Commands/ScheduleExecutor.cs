@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
@@ -35,14 +34,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class ScheduleExecutor : ScheduleExecutorOld
 	{
 		private readonly RuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 
-		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IRequiredScheduleHelper requiredScheduleOptimizerHelper, IScheduling teamBlockScheduling, ClassicScheduleCommand classicScheduleCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IResourceCalculation resourceCalculation,
+		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IScheduling teamBlockScheduling, ClassicScheduleCommand classicScheduleCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IResourceCalculation resourceCalculation,
 			RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, ExecuteWeeklyRestSolver executeWeeklyRestSolver) 
-			: base(schedulerStateHolder, requiredScheduleOptimizerHelper, teamBlockScheduling, classicScheduleCommand, resourceCalculationContextFactory, resourceCalculation, executeWeeklyRestSolver)
+			: base(schedulerStateHolder, teamBlockScheduling, classicScheduleCommand, resourceCalculationContextFactory, resourceCalculation, executeWeeklyRestSolver)
 		{
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		}
@@ -59,7 +57,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class ScheduleExecutorOld : IScheduleExecutor
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
 		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		protected readonly IScheduling TeamBlockScheduling;
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
@@ -69,7 +66,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ExecuteWeeklyRestSolver _executeWeeklyRestSolver;
 
 		public ScheduleExecutorOld(Func<ISchedulerStateHolder> schedulerStateHolder,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
 			IScheduling teamBlockScheduling,
 			ClassicScheduleCommand classicScheduleCommand,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
@@ -77,7 +73,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ExecuteWeeklyRestSolver executeWeeklyRestSolver)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
-			_requiredScheduleOptimizerHelper = requiredScheduleOptimizerHelper;
 			TeamBlockScheduling = teamBlockScheduling;
 			_classicScheduleCommand = classicScheduleCommand;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
@@ -104,16 +99,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			using (_resourceCalculationContextFactory.Create(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.Skills, true, selectedPeriod.Inflate(1)))
 			{
 				_resourceCalculation.ResourceCalculate(selectedPeriod.Inflate(1), new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, schedulerStateHolder.ConsiderShortBreaks, false));
-				if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
-				{
-					schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
-					DoScheduling(schedulingCallback, backgroundWorker, selectedAgents, selectedPeriod, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider, schedulingOptions);
-				}
-				else
-				{
-					var selectedScheduleDays = schedulerStateHolder.Schedules.SchedulesForPeriod(selectedPeriod, selectedAgents.ToArray());
-					_requiredScheduleOptimizerHelper.ScheduleSelectedStudents(selectedScheduleDays, backgroundWorker, schedulingOptions);
-				}
+				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
+				DoScheduling(schedulingCallback, backgroundWorker, selectedAgents, selectedPeriod, runWeeklyRestSolver, dayOffOptimizationPreferenceProvider, schedulingOptions);
 
 				if (!backgroundWorker.CancellationPending)
 				{
