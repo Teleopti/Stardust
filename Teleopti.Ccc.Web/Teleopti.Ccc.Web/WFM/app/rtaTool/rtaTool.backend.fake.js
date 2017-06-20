@@ -2,11 +2,11 @@
 (function () {
   angular
     .module('wfm.rtaTool')
-    .factory('FakeRtaBackend', fakeRtaBackend);
+    .factory('FakeRtaToolBackend', FakeRtaToolBackend);
 
-  fakeRtaBackend.$inject = ['$httpBackend'];
+  FakeRtaToolBackend.$inject = ['$httpBackend'];
 
-  function fakeRtaBackend($httpBackend) {
+  function FakeRtaToolBackend($httpBackend) {
 
     var service = {
       clear: clear,

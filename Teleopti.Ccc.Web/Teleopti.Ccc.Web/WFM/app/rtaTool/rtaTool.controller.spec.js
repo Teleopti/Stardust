@@ -2,19 +2,19 @@
 describe('RtaToolController', function () {
   var
     $httpBackend,
-    $controllerBuilder,
+    $RtaToolControllerBuilder,
     scope,
     fakeBackend,
     vm;
 
   beforeEach(module('wfm.rtaTool'));
 
-  beforeEach(inject(function (_$httpBackend_, _ControllerBuilder_, _FakeRtaBackend_) {
+  beforeEach(inject(function (_$httpBackend_, _RtaToolControllerBuilder_, _FakeRtaToolBackend_) {
     $httpBackend = _$httpBackend_;
-    $controllerBuilder = _ControllerBuilder_;
-    fakeBackend = _FakeRtaBackend_;
+    $RtaToolControllerBuilder = _RtaToolControllerBuilder_;
+    fakeBackend = _FakeRtaToolBackend_;
 
-    scope = $controllerBuilder.setup('RtaToolController');
+    scope = $RtaToolControllerBuilder.setup('RtaToolController');
 
     fakeBackend.clear();
   }));
@@ -26,7 +26,7 @@ describe('RtaToolController', function () {
       DataSource: '1'
     });
 
-    vm = $controllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController().vm;
 
     expect(vm.agents.length).toEqual(1);
   });
@@ -37,7 +37,7 @@ describe('RtaToolController', function () {
       Name: 'Ready'
     });
 
-    vm = $controllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController().vm;
 
     expect(vm.stateCodes.length).toEqual(1);
   });
@@ -54,7 +54,7 @@ describe('RtaToolController', function () {
         Name: 'Ready'
       });
 
-    vm = $controllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController().vm;
 
     expect(vm.agents[0].Name).toEqual('John Smith');
     expect(vm.agents[0].UserCode).toEqual('0019');
@@ -80,7 +80,7 @@ describe('RtaToolController', function () {
         Code: 'Ready',
         Name: 'Ready'
       });
-    vm = $controllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController().vm;
 
     vm.agents[0].sendState(vm.agents[0].StateCodes[0]);
     $httpBackend.flush();
@@ -114,7 +114,7 @@ describe('RtaToolController', function () {
         Code: 'Ready',
         Name: 'Ready'
       });
-    vm = $controllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController().vm;
 
     vm.stateCodes[0].sendBatch();
     $httpBackend.flush();
@@ -155,7 +155,7 @@ describe('RtaToolController', function () {
         Code: 'Ready',
         Name: 'Ready'
       });
-    vm = $controllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController().vm;
     vm.agents[0].selectAgent();
     vm.agents[1].selectAgent();
 
@@ -190,7 +190,7 @@ describe('RtaToolController', function () {
         Code: 'Ready',
         Name: 'Ready'
       });
-    vm = $controllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController().vm;
     vm.agents[0].selectAgent();
     vm.agents[1].selectAgent();
     vm.agents[0].selectAgent();
@@ -215,7 +215,7 @@ describe('RtaToolController', function () {
         UserCode: '2002',
         DataSource: '1'
       });
-    vm = $controllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController().vm;
 
     vm.toggleAgents();
 
@@ -235,7 +235,7 @@ describe('RtaToolController', function () {
         UserCode: '2002',
         DataSource: '1'
       });
-    vm = $controllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController().vm;
 
     vm.toggleAgents();
     vm.toggleAgents();
@@ -256,7 +256,7 @@ describe('RtaToolController', function () {
         UserCode: '2002',
         DataSource: '1'
       });
-    vm = $controllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController().vm;
 
     vm.agents[0].selectAgent();
     vm.toggleAgents();
@@ -281,7 +281,7 @@ describe('RtaToolController', function () {
         Code: 'Ready',
         Name: 'Ready'
       });
-    var scope = $controllerBuilder.createController();
+    var scope = $RtaToolControllerBuilder.createController();
     var vm = scope.vm;
 
     scope

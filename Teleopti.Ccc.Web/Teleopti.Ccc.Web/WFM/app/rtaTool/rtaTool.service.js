@@ -2,7 +2,7 @@
 	'use strict';
 
 	angular
-		.module('wfm.rta')
+		.module('wfm.rtaTool')
 		.factory('rtaToolService', rtaToolService);
 
 	rtaToolService.$inject = ['$resource'];
