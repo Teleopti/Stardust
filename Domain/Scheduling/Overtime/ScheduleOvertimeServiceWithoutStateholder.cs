@@ -44,7 +44,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc, DateTimePeriod requestedPeriod)
 		{
 			var person = scheduleRange.Person;
-			var timeZoneInfo = _timeZoneGuard.CurrentTimeZone();
 			if (_gridlockManager.Gridlocks(person, dateOnly) != null)
 				return null;
 			if (!hasMultiplicatorDefinitionSetOfOvertimeType(person, dateOnly))
