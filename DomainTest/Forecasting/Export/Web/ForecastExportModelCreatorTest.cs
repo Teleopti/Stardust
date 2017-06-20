@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.DomainTest.Intraday;
-using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -22,7 +18,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 {
-
 	[DomainTest]
 	public class ForecastExportModelCreatorTest
 	{
@@ -37,12 +32,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 		[Test]
 		public void ShouldReturnModelHeader()
 		{
-			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
-
+			var theDate = new DateOnly(2016, 8, 26);
 			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30), false, 0);
-			var period = new DateOnlyPeriod(new DateOnly(userNow.Date), new DateOnly(userNow.Date).AddDays(1));
+			var period = new DateOnlyPeriod(theDate, theDate.AddDays(1));
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
-			var skillDayToday = SkillSetupHelper.CreateSkillDay(skill, scenario, userNow, new TimePeriod(8, 0, 8, 30), false);
+			var skillDayToday = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, new TimePeriod(8, 0, 8, 30), false);
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDayToday);
 			var model = Target.Load(skill.Id.Value, period);
@@ -50,22 +44,21 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			model.Header.Period.Should().Be.EqualTo(period);
 			model.Header.SkillName.Should().Be.EqualTo(skill.Name);
 			model.Header.SkillTimeZoneName.Should().Be.EqualTo(skill.TimeZone.DisplayName);
-			model.Header.ServiceLevelPercent.Should().Be.EqualTo(ServiceAgreement.DefaultValues().ServiceLevel.Percent);
-			model.Header.ServiceLevelSeconds.Should().Be.EqualTo(ServiceAgreement.DefaultValues().ServiceLevel.Seconds);
-			model.Header.ShrinkagePercent.Should().Be.EqualTo(skillDayToday.SkillDataPeriodCollection.First().Shrinkage);
+			model.Header.ServiceLevelPercent.Value.Should().Be.EqualTo(ServiceAgreement.DefaultValues().ServiceLevel.Percent);
+			model.Header.ServiceLevelSeconds.Value.Should().Be.EqualTo(ServiceAgreement.DefaultValues().ServiceLevel.Seconds);
+			model.Header.ShrinkagePercent.Value.Should().Be.EqualTo(skillDayToday.SkillDataPeriodCollection.First().Shrinkage);
 		}
 
 		[Test]
 		public void ShouldReturnDailyModel()
 		{
-			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
-
+			var theDate = new DateOnly(2016, 8, 26);
 			var openHour = new TimePeriod(8, 0, 8, 30);
 			var skill = createSkill(minutesPerInterval, "skill", openHour, false, 0);
-			var period = new DateOnlyPeriod(new DateOnly(userNow.Date), new DateOnly(userNow.Date).AddDays(1));
+			var period = new DateOnlyPeriod(theDate, theDate.AddDays(1));
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
-			var skillDayToday = SkillSetupHelper.CreateSkillDay(skill, scenario, userNow, openHour, false, false);
-			var skillDayTomorow = SkillSetupHelper.CreateSkillDay(skill, scenario, userNow.AddDays(1), openHour, false, false);
+			var skillDayToday = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, openHour, false, false);
+			var skillDayTomorow = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date.AddDays(1), openHour, false, false);
 			skillDayToday.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.2));
 			SkillRepository.Has(skill);
 			SkillDayRepository.Add(skillDayToday);
@@ -76,7 +69,6 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			var attTomorrow = skillDayToday.TotalAverageTaskTime.Seconds;
 			var acwTomorrow = skillDayToday.TotalAverageAfterTaskTime.Seconds;
 
-			model.Header.ShrinkagePercent.Should().Be.EqualTo(skillDayToday.SkillDataPeriodCollection.First().Shrinkage);
 			model.DailyModelForecast.Count().Should().Be.EqualTo(2);
 			model.DailyModelForecast.First().ForecastDate.Should().Be.EqualTo(skillDayToday.CurrentDate.Date);
 			model.DailyModelForecast.First().OpenHours.Should().Be.EqualTo(openHour);
@@ -100,18 +92,37 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 		[Test]
 		public void ShouldReturnEmptyDailyModelWhenSkillDayIsClosed()
 		{
-			var userNow = new DateTime(2016, 8, 26, 8, 15, 0, DateTimeKind.Utc);
-			var period = new DateOnlyPeriod(new DateOnly(userNow.Date), new DateOnly(userNow.Date).AddDays(1));
+			var theDate = new DateOnly(2016, 8, 26);
+			var period = new DateOnlyPeriod(theDate, theDate.AddDays(1));
 			var openHour = new TimePeriod(8, 0, 8, 30);
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skill = createSkill(minutesPerInterval, "skill", openHour, false, 0);
-			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario, userNow, openHour, false, false);
+			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, openHour, false, false);
 			skillDay.WorkloadDayCollection.First().Close();
 			SkillDayRepository.Add(skillDay);
 			SkillRepository.Add(skill);
 			var model = Target.Load(skill.Id.Value, period);
 
 			model.DailyModelForecast.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldReturnModelWithOnlyHeaderWhenNoForecast()
+		{
+			var theDate = new DateOnly(2016, 8, 26);
+			var period = new DateOnlyPeriod(theDate, theDate.AddDays(1));
+			var openHour = new TimePeriod(8, 0, 8, 30);
+			StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skill = createSkill(minutesPerInterval, "skill", openHour, false, 0);
+			SkillRepository.Add(skill);
+			var model = Target.Load(skill.Id.Value, period);
+
+			model.DailyModelForecast.Should().Be.Empty();
+			model.Header.SkillName.Should().Be.EqualTo(skill.Name);
+			model.Header.SkillTimeZoneName.Should().Be.EqualTo(skill.TimeZone.DisplayName);
+			model.Header.ServiceLevelPercent.HasValue.Should().Be.False();
+			model.Header.ServiceLevelSeconds.HasValue.Should().Be.False();
+			model.Header.ShrinkagePercent.HasValue.Should().Be.False();
 		}
 
 		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, int midnigthBreakOffset)
@@ -127,11 +138,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 				skill.MidnightBreakOffset = TimeSpan.FromHours(midnigthBreakOffset);
 			}
 
-			IWorkload workload;
-			if (isClosedOnWeekends)
-				workload = WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, openHours);
-			else
-				workload = WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
+			var workload = isClosedOnWeekends 
+				? WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, openHours) 
+				: WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
 			workload.SetId(Guid.NewGuid());
 
 			return skill;

@@ -18,18 +18,18 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 {
 	public class ForecastExportController : ApiController
 	{
-		private readonly ForecastExportModelCreator _forecastExportModelCreator;
+		private readonly ForecastExportDailyModelCreator _forecastExportDailyModelCreator;
 
-		public ForecastExportController(ForecastExportModelCreator forecastExportModelCreator)
+		public ForecastExportController(ForecastExportDailyModelCreator forecastExportDailyModelCreator)
 		{
-			_forecastExportModelCreator = forecastExportModelCreator;
+			_forecastExportDailyModelCreator = forecastExportDailyModelCreator;
 		}
 
 		[HttpGet, Route("api/Forecasting/Export"), UnitOfWork]
 		public virtual HttpResponseMessage Export(ExportForecastInput input)
 		{
 			var response = new HttpResponseMessage();
-			var dailyModels = _forecastExportModelCreator.Load(input.SkillId, new DateOnlyPeriod(new DateOnly(input.ForecastStart.Date), new DateOnly(input.ForecastEnd.Date)));
+			var dailyModels = _forecastExportDailyModelCreator.Load(input.SkillId, new DateOnlyPeriod(new DateOnly(input.ForecastStart.Date), new DateOnly(input.ForecastEnd.Date)));
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			var fileName = DateTime.Now + "Forecast.xlsx";
 			CreateDailyForecastSheet(workbook, dailyModels);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 
 		}
 
-		private void fillSheetWithDailyVolumes(ISheet dailySheet, List<DailyModelForecast> dailyailyModelForecast, ICellStyle dateCellType)
+		private void fillSheetWithDailyVolumes(ISheet dailySheet, List<ForecastExportDailyModel> dailyailyModelForecast, ICellStyle dateCellType)
 		{
 			var rowNumber = 10;
 			foreach (var dailyForecast in dailyailyModelForecast)
