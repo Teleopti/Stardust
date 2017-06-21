@@ -5956,15 +5956,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check To Enable Overtime Probability.
-        /// </summary>
-        public static string CheckToEnableOvertimeProbability {
-            get {
-                return ResourceManager.GetString("CheckToEnableOvertimeProbability", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A child skill seem to have the same name as a parent skill or two or more child skills have the same name, please check properties for the multisite skill, Forecaster will shut down. .
         /// </summary>
         public static string ChildSkillWithSameNameAsParentSkillWarning {
@@ -10258,6 +10249,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string EnableMobileNotifications {
             get {
                 return ResourceManager.GetString("EnableMobileNotifications", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enable Overtime Probability.
+        /// </summary>
+        public static string EnableOvertimeProbability {
+            get {
+                return ResourceManager.GetString("EnableOvertimeProbability", resourceCulture);
             }
         }
         
