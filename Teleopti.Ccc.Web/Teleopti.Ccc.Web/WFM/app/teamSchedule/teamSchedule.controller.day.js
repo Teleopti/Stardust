@@ -401,9 +401,6 @@
 			loggedonUsersTeamId.resolve(null);
 			vm.onFavoriteSearchInitDefer.resolve();
 		}
-		if (!(vm.toggles.SaveFavoriteSearchesEnabled)) {
-			vm.onFavoriteSearchInitDefer.resolve();
-		}
 		if (!vm.toggles.DisplayScheduleOnBusinessHierachyEnabled) {
 			loggedonUsersTeamId.resolve(null);
 		}
