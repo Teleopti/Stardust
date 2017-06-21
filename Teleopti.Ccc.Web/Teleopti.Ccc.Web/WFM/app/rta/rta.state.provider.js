@@ -82,6 +82,14 @@ angular
                     templateUrl: 'app/rta/refact/rta.html',
                     controller: 'RtaMainController as vm'
                 })
+                .state('refact-rta.skill', {
+                    url: '/?skillIds',
+                    params: {
+                        skillIds: {
+                            array: true
+                        }
+                    }
+                })
                 ;
         };
     });
