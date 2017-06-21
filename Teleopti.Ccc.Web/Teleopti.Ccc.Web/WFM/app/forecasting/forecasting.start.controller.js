@@ -100,6 +100,22 @@
 					}
 					$scope.modalForecastingLaunch = true;
 				};
+
+				$scope.displayExportModal = function (workload) {
+					if ($scope.isForecastRunning) {
+						return;
+					}
+					if (workload) {
+						$scope.modalForecastingInfo = {};
+						$scope.modalForecastingInfo.selectedWorkload = workload;
+						$scope.modalForecastingInfo.selectedScenario = workload.Scenario;
+					}
+					else{
+						$scope.exportModal = false;
+					}
+					$scope.exportModal = true;
+				};
+
 				$scope.cancelForecastingModal = function () {
 					$scope.modalForecastingLaunch = false;
 				};
@@ -526,7 +542,9 @@
 							var blob = new Blob([data], {
 								type: headers['content-type']
 							});
-							saveAs(blob, "xyz.xlsx");
+							var d = moment().format('L');
+							saveAs(blob, d + ".xlsx");
+							$scope.exportModal = false;
 					}, function(data, status, headers, config) {}
 				);
 				};

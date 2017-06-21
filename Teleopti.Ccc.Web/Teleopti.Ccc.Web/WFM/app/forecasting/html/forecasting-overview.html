@@ -63,6 +63,12 @@
 				<forecast-result-chart class="wfm-chart" chart-id="workload.ChartId" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays" selected-day-count="workload.selectedDayCount"></forecast-result-chart>
 			</div>
 			<div class="con-footer">
+				<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="displayExportModal(workload)" ng-if="isExportEnabled">
+					{{ 'Export' | translate }}
+					<md-tooltip>
+						{{'ExportToFile'|translate}}
+					</md-tooltip>
+				</button>
 
 				<button class="wfm-btn wfm-btn-invis-default" ng-click="nextStepAdvanced(workload)">
 					{{ 'Statistics' | translate }}
@@ -126,13 +132,33 @@
 	<div class="modal-actions">
 		<aside>
 			<button class="wfm-btn wfm-btn-invis-default" ng-click="cancelForecastingModal()">{{ 'Close' | translate }}</button>
-			<button class="wfm-btn wfm-btn-invis-default" ng-click="exportToFile(query.period, modalForecastingInfo)" ng-if="modalForecastingInfo.forecastForOneWorkload && isExportEnabled">
-				{{ 'Export' | translate }}
-				<md-tooltip>{{'ExportToFile'|translate}}</md-tooltip>
-			</button>
 			<button class="wfm-btn do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-primary': !disableDoForecast(), 'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(query.period)">{{ 'ForecastDo' | translate }}</button>
 		</aside>
 	</div>
+</modal-dialog>
+
+<modal-dialog ng-cloak show="exportModal">
+	<h1 class="modal-title">
+		{{ 'Export' | translate }}
+	</h1>
+	<div class="modal-inner-content">
+<div class="con-row">
+	<div class="con-flex"></div>
+	<div class="con-flex split-3-1 line-center">
+		<label>{{'ForecastPeriod' | translate}}: </label><br/>
+		<date-range-picker ng-model="query.period"></date-range-picker>
+	</div>
+	<div class="con-flex"></div>
+</div>
+</div>
+<div class="modal-actions">
+	<aside>
+		<button class="wfm-btn wfm-btn-invis-default" ng-click="displayExportModal()">{{ 'Close' | translate }}</button>
+		<button class="wfm-btn wfm-btn-invis-default" ng-click="exportToFile(query.period, modalForecastingInfo)">
+			{{ 'Export' | translate }}
+		</button>
+	</aside>
+</div>
 </modal-dialog>
 
 <modal-dialog show='modalModifyLaunch' infos='modalsInfos' ng-cloak>
