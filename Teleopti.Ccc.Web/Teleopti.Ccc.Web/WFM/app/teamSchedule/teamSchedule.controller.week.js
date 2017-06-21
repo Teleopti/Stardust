@@ -126,9 +126,6 @@
 			defaultFavoriteSearch: vm.onFavoriteSearchInitDefer.promise
 		};
 
-		if (!(vm.toggles.WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576)) {
-			vm.onFavoriteSearchInitDefer.resolve();
-		}
 		if (!vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled) {
 			loggedonUsersTeamId.resolve(null);
 		}
