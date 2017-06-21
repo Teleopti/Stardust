@@ -121,8 +121,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
-    <Reference Include="Stardust.Node, Version=1.0.0.783, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Stardust.Node.1.0.0.783\lib\net451\Stardust.Node.dll</HintPath>
+    <Reference Include="Stardust.Node, Version=1.0.0.786, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Stardust.Node.1.0.0.786\lib\net451\Stardust.Node.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -247,6 +247,7 @@
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
+    <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

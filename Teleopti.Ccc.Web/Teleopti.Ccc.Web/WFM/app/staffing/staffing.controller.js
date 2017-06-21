@@ -239,7 +239,6 @@
                         vm.hasSuggestionData = true;
                        
 					} else {
-					    console.log('something');
                         vm.hasSuggestionData = false;
                         vm.hasRequestedSuggestion = false;
 					}
