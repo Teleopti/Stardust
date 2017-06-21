@@ -165,5 +165,56 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 
 			data.Changes.Single().Time.Should().Be("2017-03-14T18:00:00");
 		}
+
+
+
+
+		[Test]
+		public void ShouldNotGetDuplicateByPersonId()
+		{
+			Now.Is("2017-03-07 14:00");
+			var state = Guid.NewGuid();
+			var person = Guid.NewGuid();
+			var name = RandomName.Make();
+			Database.WithAgent(person, name);
+
+			ReadModel.Persist(new HistoricalChangeReadModel
+			{
+				PersonId = person,
+				BelongsToDate = "2017-03-07".Date(),
+				Timestamp = "2017-03-07 14:00".Utc(),
+				StateName = "InCall",
+				StateGroupId = state,
+				ActivityName = "phone",
+				ActivityColor = Color.Crimson.ToArgb(),
+				RuleName = "in",
+				RuleColor = Color.DarkKhaki.ToArgb(),
+				Adherence = HistoricalChangeInternalAdherence.In
+			});
+
+			ReadModel.Persist(new HistoricalChangeReadModel
+			{
+				PersonId = person,
+				BelongsToDate = "2017-03-07".Date(),
+				Timestamp = "2017-03-07 14:00".Utc(),
+				StateName = "InCall",
+				StateGroupId = state,
+				ActivityName = "phone",
+				ActivityColor = Color.Crimson.ToArgb(),
+				RuleName = "in",
+				RuleColor = Color.DarkKhaki.ToArgb(),
+				Adherence = HistoricalChangeInternalAdherence.In
+			});
+
+			var result = Target.Build(person).Changes.Single();
+			result.Time.Should().Be("2017-03-07T14:00:00");
+			result.Activity.Should().Be("phone");
+			result.ActivityColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.Crimson.ToArgb())));
+			result.State.Should().Be("InCall");
+			result.Rule.Should().Be("in");
+			result.RuleColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.DarkKhaki.ToArgb())));
+			result.Adherence.Should().Be(UserTexts.Resources.InAdherence);
+			result.AdherenceColor.Should().Be(ColorTranslator.ToHtml(Color.FromArgb(Color.DarkOliveGreen.ToArgb())));
+		}
 	}
 }

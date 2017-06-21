@@ -102,16 +102,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private IEnumerable<HistoricalChangeViewModel> buildChanges(Guid personId, DateTime startTime, DateTime endTime)
 		{
 			var changes = _changes.Read(personId, startTime, endTime)
+
+				.GroupBy(y => new {y.Timestamp,y.ActivityName, y.ActivityColor, y.StateName, y.RuleColor,y.RuleName, y.Adherence})
 				.Select(x => new HistoricalChangeViewModel
 				{
-					Time = formatForUser(x.Timestamp),
-					Activity = x.ActivityName,
-					ActivityColor = x.ActivityColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.ActivityColor.Value)) : null,
-					State = x.StateName,
-					Rule = x.RuleName,
-					RuleColor = x.RuleColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.RuleColor.Value)) : null,
-					Adherence = nameForAdherence(x.Adherence),
-					AdherenceColor = colorForAdherence(x.Adherence)
+					Time = formatForUser(x.Key.Timestamp),
+					Activity = x.Key.ActivityName,
+					ActivityColor = x.Key.ActivityColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.Key.ActivityColor.Value)) : null,
+					State = x.Key.StateName,
+					Rule = x.Key.RuleName,
+					RuleColor = x.Key.RuleColor.HasValue ? ColorTranslator.ToHtml(Color.FromArgb(x.Key.RuleColor.Value)) : null,
+					Adherence = nameForAdherence(x.Key.Adherence),
+					AdherenceColor = colorForAdherence(x.Key.Adherence)
 				})
 				.ToArray();
 			return changes;
