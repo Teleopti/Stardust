@@ -54,6 +54,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 			//midnight shift ??
 			var allSkills = _skillRepository.LoadAll().ToList();
 			var skills = allSkills.Where(x => overTimeSuggestionModel.SkillIds.Contains(x.Id.GetValueOrDefault())).ToList();
+			if (!skills.Any())
+				return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
+
 			var minResolution = skills.Min(x => x.DefaultResolution);
 			if (!overTimeSuggestionModel.TimeSerie.Any())
 				return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
@@ -72,13 +75,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 			
 			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, overtimestartTime, overtimeEndTime);
 			var persons = _personRepository.FindPeople(personsModels.Select(x => x.PersonId));
-			
-			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(overtimestartTime.AddDays(-7), overtimeEndTime.AddDays(7))), _currentScenario.Current(), new PersonProvider(persons), 
+
+			var weeks = new List<DateTimePeriod>();
+			foreach (var person in persons)
+			{
+				var firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(userDateOnly, person.FirstDayOfWeek);
+				weeks.Add(new DateTimePeriod(firstDateInPeriodLocal.ToDateTimePeriod(_userTimeZone.TimeZone()).StartDateTime, firstDateInPeriodLocal.AddDays(6).ToDateTimePeriod(_userTimeZone.TimeZone()).EndDateTime));
+			}
+
+			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(weeks.Min(x => x.StartDateTime), weeks.Max(x => x.EndDateTime))), _currentScenario.Current(), new PersonProvider(persons), 
 							new ScheduleDictionaryLoadOptions(false, false), persons);
 			
-			if (!skills.Any())
-				return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
-
 			return _scheduleOvertimeExecuteWrapper.Execute(overTimeSuggestionModel.OvertimePreferences, new SchedulingProgress(), scheduleDictionary, persons, new DateOnlyPeriod(userDateOnly.AddDays(-1), userDateOnly.AddDays(1)), overtimePeriod, allSkills,skills, showPeriod);
 		}
 

@@ -331,7 +331,6 @@
     <Compile Include="Scheduling\Overtime\ScheduleOvertimeServiceWithoutStateholder.cs" />
     <Compile Include="Scheduling\NoSchedulingCallback.cs" />
     <Compile Include="Scheduling\PersonRuleSetBagProvider.cs" />
-    <Compile Include="Scheduling\ResourceCalculateDelayerWithoutStateHolder.cs" />
     <Compile Include="Scheduling\Restrictions\AbsencePreferenceScheduling.cs" />
     <Compile Include="Scheduling\SchedulingCallbackInfo.cs" />
     <Compile Include="Scheduling\SchedulingOptionsProviderForTeamPerfTest.cs" />

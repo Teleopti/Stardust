@@ -15,16 +15,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	{
 		private readonly IScheduleOvertimeServiceWithoutStateholder _scheduleOvertimeService;
 		private readonly IResourceCalculation _resourceCalculation;
-		private readonly IResourceCalculation _resourceOptimizationHelper;
-		private readonly IUserTimeZone _userTimeZone;
 
-		public ScheduleOvertimeWithoutStateHolder(IScheduleOvertimeServiceWithoutStateholder scheduleOvertimeService,
-																	IResourceCalculation resourceOptimizationHelper,
-																	IUserTimeZone userTimeZone, IResourceCalculation resourceCalculation)
+		public ScheduleOvertimeWithoutStateHolder(IScheduleOvertimeServiceWithoutStateholder scheduleOvertimeService, IResourceCalculation resourceCalculation)
 		{ 
 			_scheduleOvertimeService = scheduleOvertimeService;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
-			_userTimeZone = userTimeZone;
 			_resourceCalculation = resourceCalculation;
 		}
 
@@ -39,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		{
 
 			_resourceCalculation.ResourceCalculate(requestedDateTimePeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc), resourceCalculationData, contextFunc);
-			var resourceCalculateDelayer = new ResourceCalculateDelayerWithoutStateHolder(_resourceOptimizationHelper, 1, _userTimeZone);
 			var cancel = false;
 			var overtimeModels = new List<OverTimeModel>();
 			foreach (var dateOnly in period.DayCollection())
@@ -52,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 					IScheduleTagSetter scheduleTagSetter = new ScheduleTagSetter(overtimePreferences.ScheduleTag);
 
-					var res = _scheduleOvertimeService.SchedulePersonOnDay(scheduleDictionary[person], overtimePreferences, resourceCalculateDelayer, dateOnly, scheduleTagSetter, resourceCalculationData, contextFunc, requestedDateTimePeriod);
+					var res = _scheduleOvertimeService.SchedulePersonOnDay(scheduleDictionary[person], overtimePreferences, dateOnly, scheduleTagSetter, resourceCalculationData, contextFunc, requestedDateTimePeriod);
 					if (res.HasValue)
 						overtimeModels.Add(new OverTimeModel
 						{

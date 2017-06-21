@@ -13,8 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public interface IScheduleOvertimeServiceWithoutStateholder
 	{
-		DateTimePeriod? SchedulePersonOnDay(IScheduleRange scheduleRange, IOvertimePreferences overtimePreferences,
-			IResourceCalculateDelayerWithoutStateholder resourceCalculateDelayer, DateOnly dateOnly,
+		DateTimePeriod? SchedulePersonOnDay(IScheduleRange scheduleRange, IOvertimePreferences overtimePreferences, DateOnly dateOnly,
 			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc, DateTimePeriod specifiedPeriod);
 	}
 
@@ -22,25 +21,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 	{
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly IGridlockManager _gridlockManager;
-		private readonly ITimeZoneGuard _timeZoneGuard;
 		private readonly PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
 		private readonly CalculateBestOvertimeBeforeOrAfter _calculateBestOvertime;
+		private readonly IResourceCalculation _resourceCalculation;
 
 		public ScheduleOvertimeServiceWithoutStateholder(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			IGridlockManager gridlockManager,
-			ITimeZoneGuard timeZoneGuard,
 			PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider,
-			CalculateBestOvertimeBeforeOrAfter calculateBestOvertime)
+			CalculateBestOvertimeBeforeOrAfter calculateBestOvertime, IResourceCalculation resourceCalculation)
 		{
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_gridlockManager = gridlockManager;
-			_timeZoneGuard = timeZoneGuard;
 			_personSkillsForScheduleDaysOvertimeProvider = personSkillsForScheduleDaysOvertimeProvider;
 			_calculateBestOvertime = calculateBestOvertime;
+			_resourceCalculation = resourceCalculation;
 		}
 
-		public DateTimePeriod? SchedulePersonOnDay(IScheduleRange scheduleRange, IOvertimePreferences overtimePreferences,
-			IResourceCalculateDelayerWithoutStateholder resourceCalculateDelayer, DateOnly dateOnly,
+		public DateTimePeriod? SchedulePersonOnDay(IScheduleRange scheduleRange, IOvertimePreferences overtimePreferences, DateOnly dateOnly,
 			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc, DateTimePeriod requestedPeriod)
 		{
 			var person = scheduleRange.Person;
@@ -70,17 +67,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				_schedulePartModifyAndRollbackService.ClearModificationCollection();
 				if (!_schedulePartModifyAndRollbackService.ModifyStrictlyRollbackWithoutValidation(scheduleDay, scheduleTagSetter, rules))
 					continue;
-
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, resourceCalculationData, contextFunc);
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, resourceCalculationData, contextFunc);
+				
+				_resourceCalculation.ResourceCalculate(dateTimePeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc), resourceCalculationData, contextFunc);
 
 				var newRmsValue = calculatePeriodValue(resourceCalculationData, skills);
 				if (newRmsValue <= oldRmsValue)
 					return dateTimePeriod;
 
 				_schedulePartModifyAndRollbackService.RollbackMinimumChecks();
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, resourceCalculationData, contextFunc);
-				resourceCalculateDelayer.CalculateIfNeeded(dateOnly.AddDays(1), null, resourceCalculationData, contextFunc);
+				_resourceCalculation.ResourceCalculate(dateTimePeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc), resourceCalculationData, contextFunc);
 			}
 
 			return null;
