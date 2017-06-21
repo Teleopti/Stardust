@@ -97,9 +97,8 @@
 	</div>
 
 	<schedule-change-notifier on-notification="vm.onPersonScheduleChanged"
-							  schedule-date="vm.scheduleDate"
-							  last-command-track-id="vm.lastCommandTrackId"
-							  ng-if="vm.toggles.SeeScheduleChangesByOthers"></schedule-change-notifier>
+		schedule-date="vm.scheduleDate"
+		last-command-track-id="vm.lastCommandTrackId"></schedule-change-notifier>
 
 	<div class="teamschedule-footer" ng-class="{'flex-end':!vm.selectAllVisible() && !vm.hasSelectedAllPeople()}">
 		<div class="select-all" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">

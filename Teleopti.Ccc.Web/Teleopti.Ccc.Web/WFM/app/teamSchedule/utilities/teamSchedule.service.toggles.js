@@ -10,7 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-				SeeScheduleChangesByOthers: toggleSvc.WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 				DisplayScheduleOnBusinessHierachyEnabled: toggleSvc.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
 				DisplayWeekScheduleOnBusinessHierachyEnabled: toggleSvc
 					.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,

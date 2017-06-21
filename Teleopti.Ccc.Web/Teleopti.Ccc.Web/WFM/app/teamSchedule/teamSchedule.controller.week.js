@@ -164,7 +164,7 @@
 			}
 
 			vm.resetSchedulePage();
-			vm.toggles.SeeScheduleChangesByOthers && monitorScheduleChanged();
+			monitorScheduleChanged();
 		});
 
 
