@@ -52,7 +52,6 @@ Background:
 Scenario: Should be able to see business rule warnings
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
-	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	And I switch on show warnings toggle
@@ -62,7 +61,6 @@ Scenario: Should be able to see business rule warnings
 Scenario: Should see no warnings if the validation rule type is not set to be viewable
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
-	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	And I switch on show warnings toggle
@@ -74,7 +72,6 @@ Scenario: Should see no warnings if the validation rule type is not set to be vi
 Scenario: Should see the warnings if the validation rule type is set to be viewable
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
-	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	And I switch on show warnings toggle

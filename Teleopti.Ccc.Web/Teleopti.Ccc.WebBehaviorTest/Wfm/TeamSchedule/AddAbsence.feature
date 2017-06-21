@@ -75,7 +75,6 @@ Scenario: Can add intraday absence to agent in another time zone
 	| EndTime          | 2017-04-17 17:00 |
 	When I view wfm team schedules
 	And I set schedule date to '2017-04-17'
-	And I select a site "The site"
 	And I searched schedule with keyword 'Team green'
 	And I click button to search for schedules
 	And I selected agent 'Bill Gates'

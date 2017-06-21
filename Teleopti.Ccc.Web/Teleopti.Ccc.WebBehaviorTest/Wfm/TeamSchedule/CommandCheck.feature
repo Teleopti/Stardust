@@ -65,7 +65,6 @@ Background:
 Scenario: Should show command check after adding activity on top of NOT ALLOW MEETING acitvity
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
-	And I select a site "The site"
 	And I searched schedule with keyword 'John'
 	And I click button to search for schedules
 	And I selected agent 'John Smith'
@@ -86,7 +85,6 @@ Scenario: Should show command check after adding activity on top of NOT ALLOW ME
 Scenario: Should show command check after adding person activity on top of NOT ALLOW MEETING acitvity
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
-	And I select a site "The site"
 	And I searched schedule with keyword 'John'
 	And I click button to search for schedules
 	And I selected agent 'John Smith'
@@ -106,7 +104,6 @@ Scenario: Should show command check after adding person activity on top of NOT A
 Scenario: Should show command check after moving activity on top of NOT ALLOW MEETING acitvity
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
-	And I select a site "The site"
 	And I searched schedule with keyword 'John'
 	And I click button to search for schedules
 	And I selected activity 'Training'

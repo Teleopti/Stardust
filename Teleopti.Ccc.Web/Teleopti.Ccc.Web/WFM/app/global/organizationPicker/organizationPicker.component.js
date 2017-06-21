@@ -44,6 +44,7 @@
 				searchCache = {}
 				populateGroupListAndNamemapAndFindLongestName(changesObj.sitesAndTeams.currentValue)
 				ctrl.orgsInView = ctrl.searchForOrgsByName('')
+				ctrl.updateSelectedTeamsInView()
 			}
 		}
 
@@ -70,9 +71,6 @@
 					if (singleMode && ctrl.selectedTeamIds[0]) {
 						ctrl.topIndex = findTeamIndexInVirtualRepeatContainerById(ctrl.selectedTeamIds[0])
 					}
-
-					// upon opening the menu, synchronise selected teams:
-					ctrl.updateSelectedTeamsInView()
 
 					if (ctrl.onOpen)
 						ctrl.onOpen()
@@ -150,6 +148,8 @@
 			},
 			updateSelectedTeamsInView: {
 				value: function () {
+					if (!angular.isArray(this.selectedTeamIds) || this.selectedTeamIds.length === 0)
+						return
 					for (var i = 0; i < this.orgsInView.length; i++) {
 						var slaveSite = this.orgsInView[i]
 
