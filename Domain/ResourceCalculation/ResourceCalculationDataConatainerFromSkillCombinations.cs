@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 			catch (ArgumentOutOfRangeException ex) //just to get more info if/when #44525 occurs
 			{
-				throw new ArgumentOutOfRangeException($"Resources are negative for agent {person.Id.GetValueOrDefault()} on period {resourceLayer.Period}", ex);
+				throw new ArgumentOutOfRangeException($"Resources are negative for agent {person.Id.GetValueOrDefault()} on period {resourceLayer.Period}. Resource = {resourceLayer.Resource}", ex);
 			}
 		}
 
