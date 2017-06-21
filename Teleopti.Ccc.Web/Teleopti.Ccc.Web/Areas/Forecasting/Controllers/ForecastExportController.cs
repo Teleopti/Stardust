@@ -22,24 +22,19 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			_forecastExportModelCreator = forecastExportModelCreator;
 		}
 
-		[HttpGet, Route("api/Forecasting/Export"), UnitOfWork]
+		[HttpPost, Route("api/Forecasting/Export"), UnitOfWork]
 		public virtual HttpResponseMessage Export(ExportForecastInput input)
 		{
 			var response = new HttpResponseMessage();
 			var dailyModels = _forecastExportModelCreator.Load(input.SkillId, new DateOnlyPeriod(new DateOnly(input.ForecastStart.Date), new DateOnly(input.ForecastEnd.Date)));
 			XSSFWorkbook workbook = new XSSFWorkbook();
-			var fileName = DateTime.Now + "Forecast.xlsx";
 			CreateDailyForecastSheet(workbook, dailyModels);
 
 			using (var exportData = new MemoryStream())
 			{
 				workbook.Write(exportData);
+				response.Content = new ByteArrayContent(exportData.ToArray());
 				response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-				response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-				{
-					FileName = fileName
-				};
-				response.Content = new StreamContent(exportData);
 				return response;
 			}
 		}

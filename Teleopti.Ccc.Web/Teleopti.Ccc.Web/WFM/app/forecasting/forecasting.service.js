@@ -56,7 +56,15 @@
 				};
 
 				this.exportForecast = function(data, successCb, errorCb) {
-					$http.post("../api/Forecasting/Export", data)
+					$http({
+						url: '../api/Forecasting/Export',
+							method: 'POST',
+							data: data,
+							responseType: 'arraybuffer',
+							headers: {
+								'Accept': 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+							}
+						})
 						.success(successCb)
 						.error(errorCb);
 				};

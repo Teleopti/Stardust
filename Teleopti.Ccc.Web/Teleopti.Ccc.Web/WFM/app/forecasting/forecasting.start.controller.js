@@ -523,6 +523,10 @@
 						if (status !== 200) {
 							console.log(data, 'Export failed');
 						}
+							var blob = new Blob([data], {
+								type: headers['content-type']
+							});
+							saveAs(blob, "xyz.xlsx");
 					}, function(data, status, headers, config) {}
 				);
 				};
