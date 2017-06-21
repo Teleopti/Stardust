@@ -50,7 +50,7 @@
 		vm.showDateSelectionHint = showDateSelectionHint;
 
 		vm.isToggleScheduleDatesEnabled = function () {
-			return vm.campaign.IsScheduled && toggleService.Wfm_Outbound_ReplanAfterScheduled_43752;
+			return vm.campaign.IsScheduled && toggleService.Wfm_Outbound_IgnoreScheduleForReplan_43752;
 		};
 
 		vm.enableIgnoreSchedule = function () {

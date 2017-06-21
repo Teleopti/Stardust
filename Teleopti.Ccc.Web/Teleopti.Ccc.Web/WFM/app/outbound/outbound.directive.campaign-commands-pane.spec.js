@@ -75,13 +75,13 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should show ignore schedule button when there are schedules in campaign', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.scope.$apply();
 		expect(target.container[0].querySelectorAll('.btn-ignore-schedules').length).toEqual(1);
 	});
 
 	it('should not show ignore schedule button when there are no schedules in campaign', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.campaign.IsScheduled = false;
 		for (var i = 1; i < target.vm.campaign.graphData.schedules.length; i++) {
 			target.vm.campaign.graphData.schedules[i] = 0;
@@ -92,20 +92,20 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should not show ignore schedule button when toggle off', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = false;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = false;
 		target.scope.$apply();
 		expect(target.container[0].querySelectorAll('.btn-ignore-schedules').length).toEqual(0);
 	});
 
 	it('ignore schedule button should be disabled when no day selected', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.selectedDates = [];
 		target.scope.$apply();
 		expect(target.container[0].querySelectorAll('.btn-ignore-schedules:disabled').length).toEqual(1);
 	});
 
 	it('should disable ignore shedule button when selected dates have no schedule', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.selectedDates = ['2017-06-09'];
 		var index = target.vm.campaign.graphData.dates.indexOf(target.vm.selectedDates[0]);
 		target.vm.campaign.graphData.schedules[index] = 0;
@@ -114,7 +114,7 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should enable ignore shedule button when any selected dates has schedule', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.selectedDates = ['2017-06-08', '2017-06-09'];
 		var graphData = target.vm.campaign.graphData;
 
@@ -125,27 +125,27 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('ignore schedule button should be enabled when any day selected', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.scope.$apply();
 		expect(target.container[0].querySelectorAll('.btn-ignore-schedules:disabled').length).toEqual(0);
 	});
 
 	it('should get ignored schedule days when click ignore schedule button', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.scope.$apply();
 		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
 		expect(target.vm.ignoredDates.length).toEqual(2);
 	});
 
 	it('should show plan data after clicking ignore schedule button', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.scope.$apply();
 		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
 		expect(ignoreSchedulesCallbackCalledCount).toEqual(1);
 	});
 
 	it('should reset states for other buttons', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.scope.$apply();
 		angular.element(target.container[0].querySelectorAll('.btn-toggle-manual-plan')).triggerHandler('click');
 		expect(target.vm.manualPlanSwitch).toEqual(true);
@@ -154,14 +154,14 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should display "show all schedule" after click ignore button', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.scope.$apply();
 		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
 		expect(target.vm.ignoreScheduleSwitched).toEqual(true);
 	});
 
 	it('should show schedule data and emmpty ignoreDates after clicking "show all schedule" button', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.scope.$apply();
 		angular.element(target.container[0].querySelectorAll('.btn-ignore-schedules')).triggerHandler('click');
 		angular.element(target.container[0].querySelectorAll('.btn-show-all-schedules')).triggerHandler('click');
@@ -170,7 +170,7 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should filter out selected dates without schedule', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.selectedDates = ['2017-06-08', '2017-06-09'];
 		var graphData = target.vm.campaign.graphData;
 
@@ -184,7 +184,7 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should pass ignored dates for replanning', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.ignoreSchedules();
 
 		var expectedIgnoredDates = target.vm.campaign.selectedDates;
@@ -197,7 +197,7 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should pass empty ignoredDates when there is no shcedule in campaign for replanning', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		for(var i = 0; i < target.vm.campaign.graphData.schedules.length; i++){
 			if(!isNaN(target.vm.campaign.graphData.schedules[i]))
 				target.vm.campaign.graphData.schedules[i] = 0;
@@ -211,7 +211,7 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should pass ignored dates for adding manual plan', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.toggleManualPlan();
 
 		expect(target.vm.manualPlanSwitch).toEqual(true);
@@ -227,7 +227,7 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should pass ignored dates for removing manual plan', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.toggleManualPlan();
 
 		expect(target.vm.manualPlanSwitch).toEqual(true);
@@ -243,7 +243,7 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should pass ignored dates for adding manual backlog', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.toggleManualBacklog();
 
 		expect(target.vm.manualBacklogSwitch).toEqual(true);
@@ -259,7 +259,7 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should pass ignored dates for removing manual backlog', function() {
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.toggleManualBacklog();
 
 		expect(target.vm.manualBacklogSwitch).toEqual(true);
@@ -275,7 +275,7 @@ describe('Outbound campaign commands pane tests ', function() {
 	});
 
 	it('should keep enabling "show all schedules" and ignoredDates after command actions finished', function(){
-		toggleSvc.Wfm_Outbound_ReplanAfterScheduled_43752 = true;
+		toggleSvc.Wfm_Outbound_IgnoreScheduleForReplan_43752 = true;
 		target.vm.toggleManualPlan();
 
 		expect(target.vm.manualPlanSwitch).toEqual(true);

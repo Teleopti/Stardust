@@ -256,5 +256,5 @@ Wfm_Intraday_SupportSkillTypeEmail_44002 = RC
 WFM_Intraday_Show_For_Other_Days_43504 = DEV
 WFM_Intraday_SupportMultisiteSkill_43874 = RC
 WFM_Forecaster_Refact_44480 = DEV
-Wfm_Outbound_ReplanAfterScheduled_43752 = DEV
+Wfm_Outbound_IgnoreScheduleForReplan_43752 = RC
 WFM_Export_Forecast_44716 = RC
