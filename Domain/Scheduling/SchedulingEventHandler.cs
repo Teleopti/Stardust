@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
-			var selectedAgents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value));
+			var selectedAgents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)).ToArray();
 			using (CommandScope.Create(@event))
 			{
 				_scheduleExecutor.Execute(_currentSchedulingCallback.Current(), _schedulingOptionsProvider.Fetch(), backgroundWorker, selectedAgents,

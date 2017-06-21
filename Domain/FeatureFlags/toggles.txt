@@ -182,7 +182,7 @@ ResourcePlanner_RemoveBackToLegalStateGui_44333 = true
 ResourcePlanner_CalculateShiftValuesInParallel_44681 = DEV
 ResourcePlanner_RespectSkillGroupShoveling_44156 = RC
 ResourcePlanner_OvertimeNightShifts_44311 = RC
-ResourcePlanner_SchedulingIslands_44757 = false # let's see if this makes perf tests happy again
+ResourcePlanner_SchedulingIslands_44757 = DEV # let's see if this makes perf tests happy again
 
 Wfm_DisplayOnlineHelp_39402 = RC
 
