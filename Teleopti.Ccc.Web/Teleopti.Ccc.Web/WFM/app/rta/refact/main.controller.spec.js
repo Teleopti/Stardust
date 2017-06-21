@@ -23,11 +23,10 @@ describe('RtaMainController', function () {
     });
   });
 
-  beforeEach(inject(function (_$httpBackend_, _FakeRtaBackend_, _ControllerBuilder_, _$state_) {
+  beforeEach(inject(function (_$httpBackend_, _FakeRtaBackend_, _ControllerBuilder_) {
     $httpBackend = _$httpBackend_;
     $fakeBackend = _FakeRtaBackend_;
     $controllerBuilder = _ControllerBuilder_;
-    $state = _$state_;
 
     scope = $controllerBuilder.setup('RtaMainController');
 
@@ -158,7 +157,6 @@ describe('RtaMainController', function () {
 
   });
 
-
   describe('RtaOverviewComponent handling', function () {
 
     it('should get site card data', function () {
@@ -177,10 +175,8 @@ describe('RtaMainController', function () {
       expect(vm.siteCards[0].AgentsCount).toEqual(11);
       expect(vm.siteCards[0].InAlarmCount).toEqual(5);
       expect(vm.siteCards[0].Color).toEqual("warning");
-
     });
 
   });
-
 
 });

@@ -10,6 +10,7 @@
 	function RtaMainController(rtaService, $state, $stateParams) {
 		var vm = this;
 		vm.skillIds = $stateParams.skillIds || [];
+		$stateParams.open = ($stateParams.open || "false");
 		vm.skills = [];
 		vm.skillAreas = [];
 		vm.organization = [];
@@ -36,6 +37,10 @@
 		(function fetchDataForOverviewComponent(){
 			rtaService.getSiteCardsFor().then(function(result){
 				vm.siteCards = result;
+				vm.siteCards.forEach(function(site){
+					site.isOpen = $stateParams.open != "false";
+				});
+
 			});
 		})();
 

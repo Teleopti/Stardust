@@ -1,4 +1,9 @@
-﻿<h2>Overview Component</h2>
-<ul ng-repeat="site in $ctrl.siteCards">
-    <li>{{site.Name}}</li>
-</ul>    
+﻿<rta-card ng-repeat="card in $ctrl.siteCards" ng-open="card.isOpen">
+    <rta-card-header >{{card.Name}}</rta-card-header>
+    <rta-card-body>
+        <div class="con-row">
+            <div class="con-flex">
+            </div>
+        </div>
+    </rta-card-body>
+</rta-card>   
