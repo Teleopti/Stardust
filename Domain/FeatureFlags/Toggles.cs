@@ -61,7 +61,6 @@
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 
-		WfmTeamSchedule_SetAgentsPerPage_36230,
 		WfmTeamSchedule_SeeScheduleChangesByOthers_36303,
 		WfmTeamSchedule_SaveFavoriteSearches_42073,
 		WfmTeamSchedule_SaveFavoriteSearchesInWeekView_42576,

@@ -29,7 +29,6 @@
 		vm.availableTimezones = [];
 		vm.availableGroups = [];
 		vm.sitesAndTeams = undefined;
-		vm.toggleForSelectAgentsPerPageEnabled = false;
 		vm.onlyLoadScheduleWithAbsence = false;
 
 		vm.lastCommandTrackId = '';
