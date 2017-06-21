@@ -21,7 +21,7 @@ namespace Stardust.Manager
 		private readonly JobRepositoryCommandExecuter _jobRepositoryCommandExecuter;
 		private readonly object _requeueJobLock = new object();
 		private readonly object _assigningJob = new object();
-		private static readonly ILog managerLogger = LogManager.GetLogger("Stardust.Manager");
+		private static readonly ILog managerLogger = LogManager.GetLogger("Stardust.ManagerLog");
 
 		public JobRepository(ManagerConfiguration managerConfiguration,
 		                     RetryPolicyProvider retryPolicyProvider,

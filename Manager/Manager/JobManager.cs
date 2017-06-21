@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
 using log4net;
-using Stardust.Manager.Extensions;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
 using Stardust.Manager.Timers;
@@ -19,7 +18,7 @@ namespace Stardust.Manager
 		private readonly ManagerConfiguration _managerConfiguration;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
 		private readonly NodeManager _nodeManager;
-		private static readonly ILog managerLogger = LogManager.GetLogger("Stardust.Manager");
+		private static readonly ILog managerLogger = LogManager.GetLogger("Stardust.ManagerLog");
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
