@@ -18,7 +18,7 @@ INSERT INTO #ids SELECT * FROM SplitStringString(@SkillIds)
  from [ReadModel].[PersonScheduleDay] pss
  --INNER JOIN [ReadModel].[ScheduleDay] sd on pss.PersonId = sd.PersonId AND pss.BelongsToDate = sd.BelongsToDate
  LEFT JOIN [ReadModel].[PersonScheduleDay] pss2 on pss.PersonId = pss2.PersonId AND pss.BelongsToDate +1 = pss2.BelongsToDate
- WHERE pss.[End] >= @StartDateTime AND pss.[End] <= @EndDateTime
+ WHERE ((pss.[End] >= @StartDateTime AND pss.[End] < @EndDateTime) OR (pss.[Start] > @StartDateTime AND pss.[Start] <= @EndDateTime))
  AND pss.PersonId in(SELECT pp.parent FROM
 PersonPeriod pp
  INNER JOIN PersonSkill ps ON pp.Id = ps.Parent
