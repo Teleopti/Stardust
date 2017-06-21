@@ -177,7 +177,7 @@
 						<ul id="report-list" class="dropdown-menu">
 							@foreach (var reportNavSection in Model.ReportNavigationItems)
 							{
-								if (reportNavSection.IsDivider)
+								if (reportNavSection.IsDivider && !Request.UserAgent.Contains("app/android") && !Request.UserAgent.Contains("app/ios"))
 								{
 									<li class="divider"></li>
 									continue;
@@ -192,18 +192,18 @@
 										   <span class="badge hide"></span>
 										</a>
 									}
-
-									@if (!reportNavSection.IsWebReport)
+									
+									@if (!reportNavSection.IsWebReport && !Request.UserAgent.Contains("app/android") && !Request.UserAgent.Contains("app/ios"))
 									{
 										<a href="@reportNavSection.Url"
-										   onclick="hideNavMenu();"
-										   target="_blank">@reportNavSection.Title</a>
+											onclick="hideNavMenu();"
+											target="_blank">@reportNavSection.Title</a>
 									}
 								</li>
 							}
 						</ul>
 					</li>
-				}
+					}
 			</ul>
 		</div>
 	</div>
