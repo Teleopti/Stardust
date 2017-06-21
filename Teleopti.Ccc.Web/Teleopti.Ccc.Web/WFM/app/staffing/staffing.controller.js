@@ -236,7 +236,7 @@
                 if (staffingPrecheck(response.DataSeries)) 
                 {
 					if (response.StaffingHasData) {
-                        m.hasSuggestionData = true;
+                        vm.hasSuggestionData = true;
                        
 					} else {
 					    console.log('something');
