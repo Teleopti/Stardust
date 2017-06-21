@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Threading;
-using Autofac.Core.Lifetime;
+using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Helpers;
@@ -23,6 +21,7 @@ namespace Stardust.Manager
 		private readonly JobRepositoryCommandExecuter _jobRepositoryCommandExecuter;
 		private readonly object _requeueJobLock = new object();
 		private readonly object _assigningJob = new object();
+		private readonly ILog _managerLogger = LogManager.GetLogger("Stardust.Manager");
 
 		public JobRepository(ManagerConfiguration managerConfiguration,
 		                     RetryPolicyProvider retryPolicyProvider,
@@ -105,6 +104,7 @@ namespace Stardust.Manager
 		{
 			try
 			{
+				_managerLogger.Info("ssigning jobs to node");
 				List<Uri> allAliveWorkerNodesUri;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
@@ -115,8 +115,10 @@ namespace Stardust.Manager
 				if (!allAliveWorkerNodesUri.Any()) return;
 
 				//sending to the available nodes
+				_managerLogger.Info(allAliveWorkerNodesUri.Count() + " nodes found that are alive");
 				foreach (var nodeUri in allAliveWorkerNodesUri)
 				{
+					_managerLogger.Info("trying to assign the job to node " + nodeUri);
 					AssignJobToWorkerNodeWorker(nodeUri);
 					Thread.Sleep(500);
 				}
@@ -361,6 +363,7 @@ namespace Stardust.Manager
 
 		private void AssignJobToWorkerNodeWorker(Uri availableNode)
 		{
+			_managerLogger.Info("starting the assignment process");
 			lock (_assigningJob)
 			{
 				try
@@ -369,7 +372,7 @@ namespace Stardust.Manager
 					{
 						sqlConnection.OpenWithRetry(_retryPolicy);
 						var jobQueueItem = _jobRepositoryCommandExecuter.AcquireJobQueueItem(sqlConnection);
-
+						_managerLogger.Info("acquired job with id  " + jobQueueItem.JobId + " for node " +  availableNode.ToString() );
 						if (jobQueueItem == null)
 						{
 							sqlConnection.Close();
@@ -378,10 +381,13 @@ namespace Stardust.Manager
 
 						var builderHelper = new NodeUriBuilderHelper(availableNode);
 						var urijob = builderHelper.GetJobTemplateUri();
+						_managerLogger.Info("posting the job to the node");
 						var response = _httpSender.PostAsync(urijob, jobQueueItem).Result;
+						_managerLogger.Info( response.ReasonPhrase +  " response from the node");
 						if (response != null && (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest)))
 						{
 							var sentToWorkerNodeUri = availableNode.ToString();
+							_managerLogger.Info("node is ok fix the db now");
 							using (var sqlTransaction = sqlConnection.BeginTransaction())
 							{
 								_jobRepositoryCommandExecuter.InsertIntoJob(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction);
@@ -394,10 +400,12 @@ namespace Stardust.Manager
 
 							urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
 							//what should happen if this response is not 200? 
+							_managerLogger.Info("asking the node to start the job");
 							_httpSender.PutAsync(urijob, null);
 						}
 						else
 						{
+							_managerLogger.Info(  "response from the node was not ok " + response.ReasonPhrase) ;
 							using (var sqlTransaction = sqlConnection.BeginTransaction())
 							{
 								_jobRepositoryCommandExecuter.TagQueueItem(jobQueueItem.JobId, sqlConnection, sqlTransaction);

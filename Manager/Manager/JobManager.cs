@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
+using log4net;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
@@ -18,6 +19,7 @@ namespace Stardust.Manager
 		private readonly ManagerConfiguration _managerConfiguration;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
 		private readonly NodeManager _nodeManager;
+		private readonly ILog _managerLogger = LogManager.GetLogger("Stardust.Manager");
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
@@ -58,6 +60,7 @@ namespace Stardust.Manager
 
 		public void AssignJobToWorkerNodes()
 		{
+			_managerLogger.Info("´Going to assign job to the nodes in timer");
 			_checkAndAssignJob.Enabled = false;
 			_jobRepository.AssignJobToWorkerNode();
 			_checkAndAssignJob.Enabled = true;
