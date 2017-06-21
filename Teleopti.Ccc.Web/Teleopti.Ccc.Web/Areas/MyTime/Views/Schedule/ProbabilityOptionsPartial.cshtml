@@ -13,9 +13,12 @@
 		<span class="absence-probability-label"></span>
 	</label>
 	<!-- /ko -->
+
+	<!-- ko if: overtimeProbabilityEnabled() -->
 	<label class="radio pointer" data-bind="click:function(d,e){onOptionSelected(overtimeOption());}">
 		<input type="radio" name="probabilityRadios" aria-label="@Resources.ShowOvertimeProbability"  data-bind="value: overtimeOption, checked: checkedProbability" />
 		<span>@Resources.ShowOvertimeProbability</span>
 		<span class="overtime-probability-label"></span>
 	</label>
+	<!-- /ko -->
 </div>

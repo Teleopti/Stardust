@@ -55,6 +55,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
+		public void ShouldReturnOvertimeProbabilityEnabledTrueWhenItHasBeenToggledOnInFatClient()
+		{
+			var workFlowControlSet = new WorkflowControlSet();
+			workFlowControlSet.OvertimeProbabilityEnabled= true;
+			User.CurrentUser().WorkflowControlSet = workFlowControlSet;
+
+			var result = Target.FetchWeekData(null);
+			result.OvertimeProbabilityEnabled.Should().Be(true);
+		}
+
+		[Test]
 		public void ShouldReturnAbsenceProbabilityEnabledTrueWhenItHasBeenToggledOnInFatClient()
 		{
 			var workFlowControlSet = new WorkflowControlSet();

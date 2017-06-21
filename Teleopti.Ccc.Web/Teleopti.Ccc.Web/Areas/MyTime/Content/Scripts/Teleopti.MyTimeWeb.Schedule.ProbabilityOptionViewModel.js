@@ -15,4 +15,8 @@
 	this.absenceProbabilityEnabled = ko.computed(function() {
 		return parent.absenceProbabilityEnabled();
 	});
+
+	this.overtimeProbabilityEnabled = ko.computed(function(){
+		return parent.overtimeProbabilityEnabled();
+	});
 }

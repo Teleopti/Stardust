@@ -26,6 +26,7 @@ Given there is a role with
 	| AvailableAbsence             | Vacation           |
 	| StaffingCheck                | intraday           |
 	| AbsenceProbabilityEnabled    | True               |
+	| OvertimeProbabilityEnabled   | True               |
 
 	And I have a schedule period with 
 	| Field      | Value      |

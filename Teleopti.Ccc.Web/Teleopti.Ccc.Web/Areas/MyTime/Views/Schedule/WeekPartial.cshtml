@@ -71,7 +71,7 @@
                                     @Resources.ShowAbsenceProbability
                                 </a>
                             </li>
-                            <li>
+                            <li data-bind="visible: overtimeProbabilityEnabled()">
                                 <a href="#" data-bind="click: function (data, event) { switchProbabilityType(probabilityTypes.overtime); }">
                                     @Resources.ShowOvertimeProbability
                                 </a>

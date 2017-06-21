@@ -144,6 +144,7 @@ $(document).ready(function() {
 			IsCurrentWeek: true,
 			AbsenceProbabilityEnabled: true,
 			CheckStaffingByIntraday: true,
+			OvertimeProbabilityEnabled: true,
 			ViewPossibilityPermission: true,
 			RequestPermission: {
 				AbsenceReportPermission: true,
@@ -274,6 +275,22 @@ $(document).ready(function() {
 		vm.nextWeek();
 		equal(hash.indexOf(moment(basedDate).add('days', 7).format('YYYY/MM/DD')) > 0, true);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
+	test("should show no overtime possibility if the feature is toggle off in fat client", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+			if (x === "Staffing_Info_Configuration_44687") return true;
+		};
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.OvertimeProbabilityEnabled = false;
+
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		week.initializeData(fakeScheduleData);
+		week.selectedProbabilityType = constants.probabilityType.absence;
+		week.updateProbabilityData(getFakeProbabilityData());
+
+		equal(week.overtimeProbabilityEnabled(), false);
 	});
 
 	test("should show no absence possibility if the feature is toggle off in fat client", function () {

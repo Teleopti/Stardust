@@ -62,6 +62,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.showingAbsenceProbability = ko.observable(initializeProbabilityType === constants.probabilityType.absence);
 	self.showingOvertimeProbability = ko.observable(initializeProbabilityType === constants.probabilityType.overtime);
 	self.absenceProbabilityEnabled = ko.observable(false);
+	self.overtimeProbabilityEnabled = ko.observable(false);
 	self.showProbabilityOptionsToggleIcon = ko.observable(false);
 	self.mergeIdenticalProbabilityIntervals = true;
 	self.hideProbabilityEarlierThanNow = false;
@@ -217,6 +218,12 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			&& Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913"));
 
 		self.absenceProbabilityEnabled(self.staffingProbabilityOnMobileEnabled() && data.CheckStaffingByIntraday && data.AbsenceProbabilityEnabled);
+
+		if(Teleopti.MyTimeWeb.Common.IsToggleEnabled("Staffing_Info_Configuration_44687")){
+			self.overtimeProbabilityEnabled(data.OvertimeProbabilityEnabled);
+		}else{
+			self.overtimeProbabilityEnabled(true);
+		}
 
 		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityOptionValue() === constants.probabilityType.absence) {
 			self.selectedProbabilityOptionValue(constants.probabilityType.none);

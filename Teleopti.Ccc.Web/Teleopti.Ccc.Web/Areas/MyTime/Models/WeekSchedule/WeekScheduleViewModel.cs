@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public double BaseUtcOffsetInMinutes { get; set; }
 		public bool CheckStaffingByIntraday { get; set; }
 		public bool AbsenceProbabilityEnabled { get; set; }
+		public bool OvertimeProbabilityEnabled { get; set; }
 	}
 
 	public class DayScheduleViewModel: BaseScheduleViewModel
