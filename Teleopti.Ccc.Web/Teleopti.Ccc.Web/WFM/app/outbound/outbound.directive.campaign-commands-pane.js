@@ -75,7 +75,8 @@
 			vm.manualBacklogSwitch = false;
 			vm.manualPlanSwitch = false;
 			vm.ignoredDates = getIgnoredDates();
-			vm.callbacks.ignoreSchedules(vm.ignoredDates, resetActionFlag);
+			vm.isLoading = true;
+			vm.callbacks.ignoreSchedules(vm.ignoredDates, callbackDone);
 		};
 
 		function getIgnoredDates() {
@@ -90,10 +91,11 @@
 			vm.ignoreScheduleSwitched = false;
 			vm.manualBacklogSwitch = false;
 			vm.manualPlanSwitch = false;
+			vm.isLoading = true;
 			vm.callbacks.showAllSchedules(vm.ignoredDates,
 				function() {
 					vm.ignoredDates = [];
-					resetActionFlag();
+					callbackDone();
 				});
 		};
 
@@ -123,7 +125,7 @@
 		}
 
 		function callbackDone() {
-			vm.isLoading = true;
+			vm.isLoading = false;
 			resetActionFlag();
 		}
 
