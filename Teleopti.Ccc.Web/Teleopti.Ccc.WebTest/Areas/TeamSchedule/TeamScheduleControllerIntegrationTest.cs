@@ -184,7 +184,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnNullShiftCategoryWhenThereIsFullDayAbsenceOnlyForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020,1,1,0,0,0,0,DateTimeKind.Utc);
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(scheduleDate.AddDays(-1))).WithId();
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(scheduleDate.AddDays(-1)), team).WithId();
+			person.SetName(new Name("Sherlock", "Holmes"));
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			PeopleSearchProvider.Add(person);
 
@@ -201,6 +203,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
 			{
+				SelectedTeamIds = new[] { team.Id.Value },
 				Keyword = "Sherlock",
 				Date = new DateOnly(scheduleDate),
 				PageSize = 20,
@@ -296,7 +299,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceOnlyForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020,1,1,0,0,0,0,DateTimeKind.Utc);
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(scheduleDate.AddDays(-1))).WithId();
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(scheduleDate.AddDays(-1)), team).WithId();
+			person.SetName(new Name("Sherlock", "Holmes"));
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			PeopleSearchProvider.Add(person);
 
@@ -313,6 +318,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
 			{
+				SelectedTeamIds = new[] { team.Id.Value },
 				Keyword = "Sherlock",
 				Date = new DateOnly(scheduleDate),
 				PageSize = 20,
@@ -374,7 +380,8 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceAndDayoffForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020,1,1,0,0,0,0,DateTimeKind.Utc);
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(scheduleDate.AddDays(-1))).WithId();
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(scheduleDate.AddDays(-1)), team).WithId();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			PeopleSearchProvider.Add(person);
 
@@ -391,6 +398,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
 			{
+				SelectedTeamIds = new []{team.Id.Value},
 				Keyword = "Sherlock",
 				Date = new DateOnly(scheduleDate),
 				PageSize = 20,
@@ -413,10 +421,9 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceOnAContractDayOffDayForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020,1,4,0,0,0,0,DateTimeKind.Utc);
-			var person = PersonFactory.CreatePersonWithGuid("Sherlock","Holmes");
-			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
-			personPeriod.PersonContract.ContractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
-			person.AddPersonPeriod(personPeriod);
+			var team = TeamFactory.CreateSimpleTeam().WithId();
+			var person = PersonFactory.CreatePersonWithPersonPeriodFromTeam(new DateOnly(scheduleDate.AddDays(-1)), team).WithId();
+			person.SetName(new Name("Sherlock", "Holmes"));
 			var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(scheduleDate.AddDays(-1)));
 			person.AddSchedulePeriod(schedulePeriod);
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
@@ -434,6 +441,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
 			{
+				SelectedTeamIds = new[] { team.Id.Value },
 				Keyword = "Sherlock",
 				Date = new DateOnly(scheduleDate),
 				PageSize = 20,
@@ -682,7 +690,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		}
 
 		[Test]
-		public void ShouldReturnEmptyScheduleVmWhenThereIsNoSearchTermAndUserHasNoTeamAfterDisablingOrganizaationPicker()
+		public void ShouldReturnEmptyScheduleVmWhenThereIsNoSearchTermAndUserHasNoTeam()
 		{
 			var scheduleDate = new DateTime(2020,1,1,0,0,0,0,DateTimeKind.Utc);
 			var person = PersonFactory.CreatePersonWithGuid("Sherlock","Holmes");
@@ -698,6 +706,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
 			{
+				SelectedTeamIds = new Guid[]{},
 				Keyword = "",
 				Date = new DateOnly(scheduleDate),
 				PageSize = 20,
@@ -859,6 +868,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		public void ShouldReturnSchedulesWithCorrectOrderOnContractDayOffDayForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020,1,4,0,0,0,0,DateTimeKind.Utc);
+			var team = TeamFactory.CreateSimpleTeam().WithId();
 			var person1 = PersonFactory.CreatePersonWithGuid("a1","a1");
 			PeopleSearchProvider.Add(person1);
 			var person2 = PersonFactory.CreatePersonWithGuid("b1","b1");
@@ -868,7 +878,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 			var person4 = PersonFactory.CreatePersonWithGuid("d1","d1");
 			PeopleSearchProvider.Add(person4);
 
-			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(scheduleDate.AddDays(-1)));
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(scheduleDate.AddDays(-1)), team);
 			personPeriod.PersonContract.ContractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
 			person4.AddPersonPeriod(personPeriod);
 			var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(scheduleDate.AddDays(-1)));
@@ -921,6 +931,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			var result = Target.SearchSchedules(new SearchDaySchedulesFormData
 			{
+				SelectedTeamIds = new[] { team.Id.Value },
 				Keyword = "firstName:a1 b1 c1 d1 e1 f1",
 				Date = new DateOnly(scheduleDate),
 				PageSize = 20,
