@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterModule(new ScheduleOvertimeModule(_configuration));
 			builder.RegisterType<DoFullResourceOptimizationOneTime>().InstancePerLifetimeScope();
 			builder.RegisterType<ClassicScheduleCommand>().InstancePerLifetimeScope();
-			builder.RegisterType<ExecuteWeeklyRestSolver>().InstancePerLifetimeScope();
+			builder.RegisterType<RemoveShiftCategoryToBeInLegalState>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleHourlyStaffExecutor>().InstancePerLifetimeScope();
 		
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))

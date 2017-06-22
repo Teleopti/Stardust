@@ -15,17 +15,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
-		private readonly ExecuteWeeklyRestSolver _executeWeeklyRestSolver;
+		private readonly RemoveShiftCategoryToBeInLegalState _removeShiftCategoryToBeInLegalState;
 
 		public ScheduleHourlyStaffExecutor(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			ExecuteWeeklyRestSolver executeWeeklyRestSolver)
+			RemoveShiftCategoryToBeInLegalState removeShiftCategoryToBeInLegalState)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_requiredScheduleOptimizerHelper = requiredScheduleOptimizerHelper;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
-			_executeWeeklyRestSolver = executeWeeklyRestSolver;
+			_removeShiftCategoryToBeInLegalState = removeShiftCategoryToBeInLegalState;
 		}
 
 		public void Execute(SchedulingOptions schedulingOptions,
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (!backgroundWorker.CancellationPending)
 				{
-					_executeWeeklyRestSolver.Execute(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedAgents, selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
+					_removeShiftCategoryToBeInLegalState.Execute(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedAgents, selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
 				}
 			}
 

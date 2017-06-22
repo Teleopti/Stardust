@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
-	public class ExecuteWeeklyRestSolver
+	public class RemoveShiftCategoryToBeInLegalState
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IResourceCalculation _resourceCalculation;
 
-		public ExecuteWeeklyRestSolver(Func<ISchedulerStateHolder> schedulerStateHolder,
+		public RemoveShiftCategoryToBeInLegalState(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			MatrixListFactory matrixListFactory,

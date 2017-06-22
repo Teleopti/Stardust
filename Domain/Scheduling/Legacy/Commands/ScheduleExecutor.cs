@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly RuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 
 		public ScheduleExecutor(Func<ISchedulerStateHolder> schedulerStateHolder, IScheduling teamBlockScheduling, ClassicScheduleCommand classicScheduleCommand, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, IResourceCalculation resourceCalculation,
-			RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, ExecuteWeeklyRestSolver executeWeeklyRestSolver) 
-			: base(schedulerStateHolder, teamBlockScheduling, classicScheduleCommand, resourceCalculationContextFactory, resourceCalculation, executeWeeklyRestSolver)
+			RuleSetBagsOfGroupOfPeopleCanHaveShortBreak ruleSetBagsOfGroupOfPeopleCanHaveShortBreak, RemoveShiftCategoryToBeInLegalState removeShiftCategoryToBeInLegalState) 
+			: base(schedulerStateHolder, teamBlockScheduling, classicScheduleCommand, resourceCalculationContextFactory, resourceCalculation, removeShiftCategoryToBeInLegalState)
 		{
 			_ruleSetBagsOfGroupOfPeopleCanHaveShortBreak = ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;
 		}
@@ -51,21 +51,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ClassicScheduleCommand _classicScheduleCommand;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IResourceCalculation _resourceCalculation;
-		private readonly ExecuteWeeklyRestSolver _executeWeeklyRestSolver;
+		private readonly RemoveShiftCategoryToBeInLegalState _removeShiftCategoryToBeInLegalState;
 
 		public ScheduleExecutorOld(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IScheduling teamBlockScheduling,
 			ClassicScheduleCommand classicScheduleCommand,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			IResourceCalculation resourceCalculation,
-			ExecuteWeeklyRestSolver executeWeeklyRestSolver)
+			RemoveShiftCategoryToBeInLegalState removeShiftCategoryToBeInLegalState)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			TeamBlockScheduling = teamBlockScheduling;
 			_classicScheduleCommand = classicScheduleCommand;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_resourceCalculation = resourceCalculation;
-			_executeWeeklyRestSolver = executeWeeklyRestSolver;
+			_removeShiftCategoryToBeInLegalState = removeShiftCategoryToBeInLegalState;
 		}
 
 		[TestLog]
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 															DateOnlyPeriod selectedPeriod, 
 															ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			_executeWeeklyRestSolver.Execute(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedPersons, selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
+			_removeShiftCategoryToBeInLegalState.Execute(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedPersons, selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}	
 	}
 }
