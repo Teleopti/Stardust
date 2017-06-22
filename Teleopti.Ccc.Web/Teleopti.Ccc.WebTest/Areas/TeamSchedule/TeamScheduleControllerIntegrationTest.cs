@@ -656,7 +656,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 		[Test]
 		public void ShouldReturnEmptyScheduleVmWhenThereIsNoSelectedTeamAfterEnablingOrganizaationPicker()
 		{
-			ToggleManager.Enable(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260);
 			var scheduleDate = new DateTime(2020,1,1,0,0,0,0,DateTimeKind.Utc);
 			var person = PersonFactory.CreatePersonWithGuid("Sherlock","Holmes");
 			PeopleSearchProvider.Add(person);

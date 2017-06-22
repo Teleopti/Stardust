@@ -10,17 +10,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 {
-	public class SearchTermParser : ISearchTermParser
+	public static class SearchTermParser
 	{
-		private readonly ILoggedOnUser _loggonUser;
-		private readonly IToggleManager _toggleManager;
-
-		public SearchTermParser(ILoggedOnUser loggonUser, IToggleManager toggleManager)
-		{
-			_loggonUser = loggonUser;
-			_toggleManager = toggleManager;
-		}
-
 		public static IDictionary<PersonFinderField, string> Parse(string values)
 		{
 			const char keyValueSplitter = ':';
@@ -84,18 +75,9 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			return parsedTerms;
 		}
 
-		public IDictionary<PersonFinderField, string> Parse(string values, DateOnly date)
+		public static string KeywordWithDefault(string values, DateOnly date, ITeam myTeam)
 		{
-			if(!_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260))
-				values = Keyword(values, date);
-			return Parse(values);
-		}
-
-		public string Keyword(string values, DateOnly date)
-		{
-			var myTeam = _loggonUser.CurrentUser().MyTeam(date);
-
-			if (string.IsNullOrEmpty(values) && !_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260))
+			if (string.IsNullOrEmpty(values) && myTeam != null)
 			{
 				var siteTerm = myTeam.Site.Description.Name.Contains(" ")
 					? "\"" + myTeam.Site.Description.Name + "\""
@@ -107,11 +89,5 @@ namespace Teleopti.Ccc.Web.Areas.Search.Controllers
 			}
 			return values;
 		}
-	}
-
-	public interface ISearchTermParser
-	{
-		IDictionary<PersonFinderField, string> Parse(string values, DateOnly date);
-		string Keyword(string values, DateOnly date);
 	}
 }

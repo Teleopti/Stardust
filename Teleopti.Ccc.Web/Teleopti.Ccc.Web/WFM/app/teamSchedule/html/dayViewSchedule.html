@@ -18,7 +18,7 @@
 							 get-search="vm.getSearch()"
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
-			<organization-picker ng-if="vm.toggles.DisplayScheduleOnBusinessHierachyEnabled && vm.searchEnabled"
+			<organization-picker ng-if="vm.searchEnabled"
 				sites-and-teams="vm.sitesAndTeams"
 				class="organization-picker-container inline-block"
 				on-open="vm.searchOptions.focusingSearch = false"

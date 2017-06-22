@@ -375,8 +375,7 @@
 		};
 
 		vm.hideSearchIfNoSelectedTeam = function () {
-			var toggle = vm.toggles.DisplayScheduleOnBusinessHierachyEnabled;
-			if (!toggle || (angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0)) {
+			if (angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0) {
 				return 'visible';
 			}
 			return 'hidden';
@@ -395,9 +394,6 @@
 		if (!vm.searchEnabled) {
 			loggedonUsersTeamId.resolve(null);
 			vm.onFavoriteSearchInitDefer.resolve();
-		}
-		if (!vm.toggles.DisplayScheduleOnBusinessHierachyEnabled) {
-			loggedonUsersTeamId.resolve(null);
 		}
 
 		vm.getSitesAndTeamsAsync = function () {

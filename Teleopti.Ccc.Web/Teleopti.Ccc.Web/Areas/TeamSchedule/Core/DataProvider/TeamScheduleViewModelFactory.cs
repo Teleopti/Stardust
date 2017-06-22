@@ -51,19 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public GroupScheduleViewModel CreateViewModel(Guid[] teamIds,IDictionary<PersonFinderField,string> criteriaDictionary,
 			DateOnly dateInUserTimeZone,int pageSize,int currentPageIndex,bool isOnlyAbsences)
 		{			
-			var businessHierachyToggle = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260);
-
-			List<Guid> targetIds;
-			if(businessHierachyToggle)
-			{
-				targetIds = _searchProvider.FindPersonIds(dateInUserTimeZone, teamIds, criteriaDictionary);
-			}
-			else
-			{
-				var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,dateInUserTimeZone,null);
-				_searchProvider.PopulateSearchCriteriaResult(searchCriteria);
-				targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Distinct().ToList();
-			}
+			var targetIds = _searchProvider.FindPersonIds(dateInUserTimeZone, teamIds, criteriaDictionary);
 			
 			var matchedPersons = _personRepository.FindPeople(targetIds).ToList();			
 

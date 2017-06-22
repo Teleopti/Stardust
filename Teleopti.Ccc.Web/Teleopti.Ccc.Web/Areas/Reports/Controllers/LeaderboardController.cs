@@ -16,13 +16,11 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 	public class LeaderboardController:ApiController
 	{
 		private readonly ILoggedOnUser _loggonUser;
-		private readonly ISearchTermParser _parser;
 		private readonly IAgentBadgeProvider _agentBadgeProvider;
 
-		public LeaderboardController(ILoggedOnUser loggonUser, ISearchTermParser parser, IAgentBadgeProvider agentBadgeProvider)
+		public LeaderboardController(ILoggedOnUser loggonUser, IAgentBadgeProvider agentBadgeProvider)
 		{
 			_loggonUser = loggonUser;
-			_parser = parser;
 			_agentBadgeProvider = agentBadgeProvider;
 		}
 		[UnitOfWork, HttpGet, Route("api/Reports/SearchLeaderboard")]
@@ -49,8 +47,8 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 					AgentBadges = result
 				});
 			}
-			keyword = _parser.Keyword(keyword, currentDate);
-			var criteriaDic = _parser.Parse(keyword, currentDate);
+			keyword = SearchTermParser.KeywordWithDefault(keyword, currentDate, myTeam);
+			var criteriaDic = SearchTermParser.Parse(keyword);
 			result.AddRange(
 				_agentBadgeProvider.GetAgentBadge(criteriaDic, currentDate,period)
 					.OrderByDescending(x => x.Gold)

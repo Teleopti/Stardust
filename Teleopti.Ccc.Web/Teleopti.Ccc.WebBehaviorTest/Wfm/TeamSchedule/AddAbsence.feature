@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfEnabled('WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260')
 Feature: AddAbsence
 	As a team leader
 	I want to add absences to agents in different time zones

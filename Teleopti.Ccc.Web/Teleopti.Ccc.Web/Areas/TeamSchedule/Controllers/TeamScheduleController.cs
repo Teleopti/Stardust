@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
-		private readonly ISearchTermParser _parser;
 		private readonly IToggleManager _toggleManager;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory,
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			IAuthorization authorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
 			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
-			ISearchTermParser parser, IToggleManager toggleManager)
+			IToggleManager toggleManager)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
@@ -50,7 +49,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
-			_parser = parser;
 			_toggleManager = toggleManager;
 		}
 
@@ -86,25 +84,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			var currentDate = input.Date;
 			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 
-			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260))
-			{
-				if (input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
-					return
-						Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
-			}
-			else
-			{
-				if (string.IsNullOrEmpty(input.Keyword) && myTeam == null)
-					return
-						Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
-			}
+			if (input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
+				return
+					Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
 
-			var criteriaDictionary = _parser.Parse(input.Keyword, currentDate);
+			var criteriaDictionary = SearchTermParser.Parse(input.Keyword);
 
 			var result =
 				_teamScheduleViewModelFactory.CreateViewModel(input.SelectedTeamIds ?? new Guid[0], criteriaDictionary, currentDate,
 					input.PageSize, input.CurrentPageIndex, input.IsOnlyAbsences);
-			result.Keyword = _parser.Keyword(input.Keyword, currentDate);
+			result.Keyword = input.Keyword;
 
 			return Json(result);
 		}
@@ -139,12 +128,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 						});
 			}
 
-			var criteriaDictionary = _parser.Parse(input.Keyword, currentDate);
+			var criteriaDictionary = SearchTermParser.Parse(input.Keyword);
 
 			var result =
 				_teamScheduleViewModelFactory.CreateWeekScheduleViewModel(input.SelectedTeamIds, criteriaDictionary, currentDate,
 					input.PageSize, input.CurrentPageIndex);
-			result.Keyword = _parser.Keyword(input.Keyword, currentDate);
+			result.Keyword = input.Keyword;
 
 			return Json(result);
 		}

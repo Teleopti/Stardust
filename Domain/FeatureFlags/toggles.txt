@@ -50,7 +50,6 @@ RTA_SolidProofWhenManagingAgentAdherence_39351 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
-WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260 = true
 WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252 = true
 
 WfmTeamSchedule_AddActivity_37541 = true
