@@ -15,6 +15,9 @@
 		vm.skillAreas = [];
 		vm.organization = [];
 		vm.siteCards = [];
+
+		var pollForTeams; 
+
 		(function fetchDataForFilterComponent() {
 			rtaService.getSkills().then(function (result) {
 				vm.skills = result;
@@ -49,16 +52,19 @@
 
 
 			function fetchTeamData(card) {
-				if (!card.isOpen) return;
+				if (!card.isOpen) {
+					$interval.cancel(pollForTeams);
+					return;
+				}
+				else {
+					rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
+						var match = vm.siteCards.find(function (c) {
+							return c.site.Id === card.site.Id;
+						})
+						match.teams = teams;
+					});
 
-				rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
-					var match = vm.siteCards.find(function (c) {
-						return c.site.Id === card.site.Id;
-					})
-					match.teams = teams;
-				});
-
-				$interval(function () {
+				pollForTeams = $interval(function () {
 					rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
 						var match = vm.siteCards.find(function (c) {
 							return c.site.Id === card.site.Id;
@@ -66,7 +72,8 @@
 						match.teams = teams;
 					});
 				}, 5000)
-
+			
+				}
 			}
 
 			function updateSiteCard(site) {
