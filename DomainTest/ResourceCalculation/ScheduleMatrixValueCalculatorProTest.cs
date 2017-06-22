@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void Setup()
         {
             _mockRepository = new MockRepository();
-            _schedulingOptions = new SchedulingOptions();
+            _schedulingOptions = new SchedulingOptions{UseMinimumStaffing = false, UseMaximumStaffing = false};
             _scheduleDays = new List<DateOnly>();
         }
 
