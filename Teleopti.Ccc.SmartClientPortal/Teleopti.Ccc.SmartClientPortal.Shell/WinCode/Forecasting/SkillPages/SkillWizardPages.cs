@@ -116,7 +116,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.SkillPages
         {
             newSkill.TimeZone = TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone;
 
-            newSkill.Activity = null;
             var culture = TeleoptiPrincipal.CurrentPrincipal.Regional.Culture;
             ServiceAgreement serviceAgreement = ServiceAgreement.DefaultValues();
             DateTime startDateUtc = TimeZoneInfo.ConvertTimeToUtc(SkillDayTemplate.BaseDate.Date, newSkill.TimeZone);
