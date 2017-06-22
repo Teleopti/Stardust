@@ -61,6 +61,56 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)).IsScheduled().Should().Be.True();
 		}
 
+
+		[Test]
+		[Ignore("#44834 - not working even after fix. Probably a bug")]
+		public void ShouldRespectMaximumStaffingWhenBreakingShiftCategoryLimiation()
+		{
+			var date = new DateOnly(2017, 1, 10);
+			var activity = new Activity("_").WithId();
+			var scenario = new Scenario("_");
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDayOne = skill.CreateSkillDayWithDemand(scenario, date, 2); 
+			var skillDayTwo = skill.CreateSkillDayWithDemand(scenario, date.AddDays(1), 10); //higher demand but should be removed anyhow due to maxstaffing
+			var shiftCat = new ShiftCategory("_");
+			var shiftCategoryLimitation = new ShiftCategoryLimitation(shiftCat) { MaxNumberOf = 1 }; //makes it "not legal"
+			var agent = new Person().WithId()
+				.InTimeZone(TimeZoneInfo.Utc)
+				.WithPersonPeriod(skill)
+				.WithSchedulePeriodOneWeek(date);
+			agent.SchedulePeriod(date).AddShiftCategoryLimitation(shiftCategoryLimitation);
+			var agent2 = new Person().WithId()
+				.InTimeZone(TimeZoneInfo.Utc)
+				.WithPersonPeriod(skill)
+				.WithSchedulePeriodOneWeek(date);
+			var assDayOne = new PersonAssignment(agent, scenario, date).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCat);
+			var assDayTwo = new PersonAssignment(agent, scenario, date.AddDays(1)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCat);
+			var ass2DayTwo = new PersonAssignment(agent2, scenario, date.AddDays(1)).WithLayer(activity, new TimePeriod(8, 16)).ShiftCategory(shiftCat);
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(date, date.AddDays(1)), new[] { agent }, new[] { assDayOne, assDayTwo, ass2DayTwo }, new[] { skillDayOne, skillDayTwo });
+			foreach (var skillDataPeriod in skillDayTwo.SkillDataPeriodCollection)
+			{
+				skillDataPeriod.SkillPersonData = new SkillPersonData(0, 1); //max 1 agents
+			}
+			//Use schedulingoptions here
+			var schedulingOptions = new SchedulingOptions { UseMaximumPersons = true };
+			var optPrefs = new OptimizationPreferences {Advanced =
+			{
+				UseMaximumStaffing = true
+			}};
+
+			Target.Execute(new NoSchedulingCallback(),
+				new SchedulingOptions(), 
+				new NoSchedulingProgress(),
+				new[] { agent },
+				new DateOnlyPeriod(date, date.AddDays(1)),
+				optPrefs,
+				new DaysOffPreferences()
+			);
+
+			schedulerStateHolder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.True();
+			schedulerStateHolder.Schedules[agent].ScheduledDay(date.AddDays(1)).IsScheduled().Should().Be.False();
+		}
+
 		public MinMaxStaffingDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
 		{
 		}
