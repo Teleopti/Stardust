@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var selectedAgents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)).ToArray();
 			using (CommandScope.Create(@event))
 			{
-				//TODO: fix this later if needed
-				var doWeNeedToFixThis = new NoSchedulingProgress();
-				_scheduleExecutor.Execute(_currentSchedulingCallback.Current(), _schedulingOptionsProvider.Fetch(), doWeNeedToFixThis, selectedAgents,
+				//TODO: fix this
+				var fixThis = new NoSchedulingProgress();
+				_scheduleExecutor.Execute(_currentSchedulingCallback.Current(), _schedulingOptionsProvider.Fetch(), fixThis, selectedAgents,
 					selectedPeriod, @event.RunWeeklyRestSolver);
 			}
 		}

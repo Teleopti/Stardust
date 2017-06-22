@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	public abstract class SchedulingScenario : IConfigureToggleManager
 	{
 		protected readonly bool ResourcePlannerMergeTeamblockClassicScheduling44289;
-		private readonly bool _resourcePlannerSchedulingIslands44757;
+		protected readonly bool _resourcePlannerSchedulingIslands44757;
 
 		protected SchedulingScenario(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757)
 		{
