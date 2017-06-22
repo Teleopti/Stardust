@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe('rtaOverviewComponent', function () {
+fdescribe('rtaOverviewComponent', function () {
   var $fakeBackend,
     $httpBackend,
     $componentController,
@@ -24,7 +24,7 @@ describe('rtaOverviewComponent', function () {
     });
   });
 
-  beforeEach(inject(function (_$httpBackend_,_$componentController_, _ControllerBuilder_, _FakeRtaBackend_) {
+  beforeEach(inject(function (_$httpBackend_, _$componentController_, _ControllerBuilder_, _FakeRtaBackend_) {
     $httpBackend = _$httpBackend_;
     $componentController = _$componentController_;
     $controllerBuilder = _ControllerBuilder_;
@@ -125,5 +125,103 @@ describe('rtaOverviewComponent', function () {
     expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(5);
     expect(ctrl.siteCards[0].teams[0].Color).toEqual('warning');
   });
+
+  it('should update team adherence when site is open', function () {
+    $fakeBackend
+      .withSiteAdherence({
+        Id: "londonGuid",
+        Name: "London",
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: "warning"
+      })
+      .withTeamAdherence({
+        SiteId: "londonGuid",
+        Name: "Green",
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: "warning"
+      });
+
+    var c = $controllerBuilder.createController();
+    vm = c.vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards
+    });
+    ctrl.siteCards[0].isOpen = true;
+    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+    $httpBackend.flush();
+    c.apply(function () {
+      $fakeBackend.clearTeamAdherences()
+        .withTeamAdherence({
+          SiteId: "londonGuid",
+          Name: "Green",
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: "good"
+        });
+    })
+      .wait(5000);
+
+    expect(vm.siteCards[0].teams[0].InAlarmCount).toEqual(2);
+    expect(vm.siteCards[0].teams[0].Color).toEqual("good");
+  });
+
+  // it('should update adherence', function () {
+  //   $fakeBackend
+  //     .withSiteAdherence({
+  //       Id: "londonGuid",
+  //       Name: "London",
+  //       AgentsCount: 11,
+  //       InAlarmCount: 5,
+  //       Color: "warning"
+  //     })
+  //     .withTeamAdherence({
+  //       SiteId: "londonGuid",
+  //       AgentsCount: 11,
+  //       InAlarmCount: 5,
+  //       Color: "warning"
+  //     });
+
+  //   var c = $controllerBuilder.createController();
+  //   vm = c.vm;
+  //   ctrl = $componentController('rtaOverviewComponent', null, {
+  //     siteCards: vm.siteCards
+  //   });
+  //   ctrl.siteCards[0].isOpen = true;
+  //   ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+  //   $httpBackend.flush();
+  //   c.apply(function () {
+  //     $fakeBackend
+  //       .clearTeamAdherences()
+  //       .withTeamAdherence({
+  //         SiteId: "londonGuid",
+  //         Name: "Green",
+  //         AgentsCount: 11,
+  //         InAlarmCount: 2,
+  //         Color: "good"
+  //       });
+  //   })
+  //     .wait(5000);
+
+  //   ctrl.siteCards[0].isOpen = false;
+  //   ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+
+  //   c.apply(function () {
+  //     $fakeBackend
+  //       .clearTeamAdherences()
+  //       .withTeamAdherence({
+  //         SiteId: "londonGuid",
+  //         Name: "Green",
+  //         AgentsCount: 11,
+  //         InAlarmCount: 10,
+  //         Color: "danger"
+  //       });
+  //   })
+  //     .wait(5000);
+
+  //   expect(vm.teams[0].InAlarmCount).toEqual(2);
+  //   expect(vm.teams[0].Color).toEqual("good");
+  // });
 
 });

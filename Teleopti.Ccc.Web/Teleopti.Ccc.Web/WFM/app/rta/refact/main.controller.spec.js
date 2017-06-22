@@ -1,5 +1,5 @@
 ﻿'use strict';
-describe('RtaMainController', function () {
+fdescribe('RtaMainController', function () {
   var
     $httpBackend,
     $fakeBackend,

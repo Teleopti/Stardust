@@ -52,15 +52,25 @@
 				if (!card.isOpen) return;
 
 				rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
-					var match = vm.siteCards.find(function(c) {
+					var match = vm.siteCards.find(function (c) {
 						return c.site.Id === card.site.Id;
 					})
 					match.teams = teams;
 				});
+
+				$interval(function () {
+					rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
+						var match = vm.siteCards.find(function (c) {
+							return c.site.Id === card.site.Id;
+						})
+						match.teams = teams;
+					});
+				}, 5000)
+
 			}
 
 			function updateSiteCard(site) {
-				var match = vm.siteCards.find(function(card) {
+				var match = vm.siteCards.find(function (card) {
 					return card.site.Id === site.Id;
 				});
 				match.site.Color = site.Color;
