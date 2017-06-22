@@ -5,7 +5,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -20,13 +19,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         private MockRepository _mockRepository;
         private ScheduleMatrixValueCalculatorPro _target;
         private IList<DateOnly> _scheduleDays;
-        private IOptimizationPreferences _optimizerPreferences;
+        private SchedulingOptions _schedulingOptions;
         
         [SetUp]
         public void Setup()
         {
             _mockRepository = new MockRepository();
-            _optimizerPreferences = new OptimizationPreferences();
+            _schedulingOptions = new SchedulingOptions();
             _scheduleDays = new List<DateOnly>();
         }
 
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyConstructor()
         {
             SchedulingResultStateHolder stateHolder = new SchedulingResultStateHolder();
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences.Advanced, stateHolder, new UtcTimeZone());
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _schedulingOptions, stateHolder, new UtcTimeZone());
             Assert.IsNotNull(_target);
             Assert.AreSame(_scheduleDays, _target.ScheduleDays);
             Assert.AreSame(stateHolder, _target.StateHolder);
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyPeriodValue()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences.Advanced, stateHolder, new UtcTimeZone());
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _schedulingOptions, stateHolder, new UtcTimeZone());
 
             Assert.IsNotNull(_target);
 
@@ -57,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyPeriodValue2()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences.Advanced, stateHolder, new UtcTimeZone());
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _schedulingOptions, stateHolder, new UtcTimeZone());
 
 			Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
             stateHolder.Dispose();
@@ -67,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyPeriodValueForDayOffOptimization()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences.Advanced, stateHolder, new UtcTimeZone());
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _schedulingOptions, stateHolder, new UtcTimeZone());
 
             Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.DayOffOptimization), 0.01d);
             stateHolder.Dispose();

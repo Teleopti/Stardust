@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -10,16 +9,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     public class ScheduleMatrixValueCalculatorPro : IScheduleMatrixValueCalculatorPro
     {
         private readonly IEnumerable<DateOnly> _scheduleDays;
-	    private readonly IMinMaxStaffing _minMaxStaffing;
+	    private readonly SchedulingOptions _schedulingOptions;
 	    private readonly ISchedulingResultStateHolder _stateHolder;
 	    private readonly IUserTimeZone _userTimeZone;
 	    private readonly IList<ISkill> _activeSkills;
 
 	    public ScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays,
-		    IMinMaxStaffing minMaxStaffing, ISchedulingResultStateHolder stateHolder, IUserTimeZone userTimeZone)
+		    SchedulingOptions schedulingOptions, ISchedulingResultStateHolder stateHolder, IUserTimeZone userTimeZone)
 	    {
 			_scheduleDays = scheduleDays;
-		    _minMaxStaffing = minMaxStaffing;
+		    _schedulingOptions = schedulingOptions;
 		    _stateHolder = stateHolder;
 		    _userTimeZone = userTimeZone;
 		    _activeSkills = stateHolder.Skills;
@@ -46,8 +45,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 scheduleDay.Date, scheduleDay.Date.AddDays(1), _userTimeZone.TimeZone());
 
             IList<ISkillStaffPeriod> skillStaffPeriods = _stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skillList, dateTimePeriod);
-            bool useMinPersonnel = _minMaxStaffing.UseMinimumStaffing;
-            bool useMaxPersonnel = _minMaxStaffing.UseMaximumStaffing;
+            bool useMinPersonnel = _schedulingOptions.UseMinimumStaffing;
+            bool useMaxPersonnel = _schedulingOptions.UseMaximumStaffing;
 
             IList<double> intradayDifferences =
                 SkillStaffPeriodHelper.SkillStaffPeriodsRelativeDifferenceHours(skillStaffPeriods, useMinPersonnel, useMaxPersonnel);

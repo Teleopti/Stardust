@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual IScheduleMatrixValueCalculatorPro BuildScheduleMatrixValueCalculator
 			(IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
 			IEnumerable<IScheduleMatrixPro> scheduleMatrixList,
-			IMinMaxStaffing minMaxStaffing, 
+			SchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder stateHolder)
 		{
 			IList<DateOnly> days = new List<DateOnly>();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 			}
 			return scheduleMatrixValueCalculatorProFactory.CreateScheduleMatrixValueCalculatorPro
-				(days, minMaxStaffing, stateHolder);
+				(days, schedulingOptions, stateHolder);
 		}
 	}
 }

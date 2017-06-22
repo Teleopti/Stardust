@@ -23,8 +23,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			var removedScheduleDayPros = limitation.Weekly
-				? _shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, schedulingOptions, schedulePartModifyAndRollbackService)
-				: _shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, schedulingOptions, schedulePartModifyAndRollbackService);
+				? _shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, schedulePartModifyAndRollbackService)
+				: _shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, schedulePartModifyAndRollbackService);
 			return removedScheduleDayPros;
 		}
 	}

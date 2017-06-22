@@ -14,11 +14,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    _userTimeZone = userTimeZone;
 	    }
 
-        public IScheduleMatrixValueCalculatorPro CreateScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays, IMinMaxStaffing minMaxStaffing, ISchedulingResultStateHolder stateHolder)
+        public IScheduleMatrixValueCalculatorPro CreateScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays, SchedulingOptions schedulingOptions, ISchedulingResultStateHolder stateHolder)
         {
             return new ScheduleMatrixValueCalculatorPro
                 (scheduleDays,
-                 minMaxStaffing,
+                 schedulingOptions,
                  stateHolder,
 								 _userTimeZone);
         }
