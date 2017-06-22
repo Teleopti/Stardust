@@ -29,15 +29,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public void HandleEvent(SchedulingWasOrdered @event,
 			//remove these later
-			ISchedulingProgress backgroundWorker,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			ISchedulingProgress backgroundWorker)
 		{
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 			var selectedAgents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)).ToArray();
 			using (CommandScope.Create(@event))
 			{
 				_scheduleExecutor.Execute(_currentSchedulingCallback.Current(), _schedulingOptionsProvider.Fetch(), backgroundWorker, selectedAgents,
-					selectedPeriod, @event.RunWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
+					selectedPeriod, @event.RunWeeklyRestSolver);
 			}
 		}
 	}

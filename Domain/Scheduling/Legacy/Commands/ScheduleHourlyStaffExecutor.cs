@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -31,8 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void Execute(SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, 
-			DateOnlyPeriod selectedPeriod,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			DateOnlyPeriod selectedPeriod)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			schedulingOptions.DayOffTemplate = schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate;
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (!backgroundWorker.CancellationPending)
 				{
-					_removeShiftCategoryToBeInLegalState.Execute(useShiftCategoryLimitations, schedulingOptions, selectedAgents, selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
+					_removeShiftCategoryToBeInLegalState.Execute(useShiftCategoryLimitations, schedulingOptions, selectedAgents, selectedPeriod, backgroundWorker);
 				}
 			}
 

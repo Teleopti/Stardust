@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		public void Execute(bool useShiftCategoryLimitations, SchedulingOptions schedulingOptions,
 			IEnumerable<IPerson> selectedPersons,
 			DateOnlyPeriod selectedPeriod,
-			ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			ISchedulingProgress backgroundWorker)
 		{
 			schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
 			if (schedulingOptions.UseShiftCategoryLimitations)
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				var rollbackService = new SchedulePartModifyAndRollbackService(schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback(), new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 				var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1, schedulingOptions.ConsiderShortBreaks, schedulerStateHolder.SchedulingResultState, _userTimeZone);
 				_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons, rollbackService,
-					resourceCalculateDelayer, selectedPeriod, matrixesOfSelectedScheduleDays, backgroundWorker, dayOffOptimizationPreferenceProvider);
+					resourceCalculateDelayer, selectedPeriod, matrixesOfSelectedScheduleDays, backgroundWorker, null);
 			}
 		}
 	}

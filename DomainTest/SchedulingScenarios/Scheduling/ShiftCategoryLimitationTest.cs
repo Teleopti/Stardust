@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 					TeamSameShiftCategory = true
 			};
 
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[]{agent1, agent2}, period, null);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[]{agent1, agent2}, period);
 
 			foreach (var day in new[]{date.AddDays(1), date.AddDays(3), date.AddDays(4), date.AddDays(5), date.AddDays(6)})
 			{
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			};
 
 			var blockPeriod = new DateOnlyPeriod(date, date.AddDays(3));
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent1, agent2 }, blockPeriod, null);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent1, agent2 }, blockPeriod);
 
 			stateholder.Schedules.SchedulesForPeriod(period, agent1, agent2)
 				.Count(x => x.PersonAssignment(true).MainActivities().Any())
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				AllowBreakContractTime = true
 			};
 
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { selectedAgent }, period, null);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { selectedAgent }, period);
 
 			stateholder.Schedules[selectedAgent].ScheduledDay(date.AddDays(1)).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
 			stateholder.Schedules[agentNotInSelection].ScheduledDay(date.AddDays(1)).PersonAssignment(true).ShiftLayers.Count().Should().Be.EqualTo(0);
@@ -199,7 +199,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var assB = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { assA, assB }, new[] { skillDayFirstDay, skillDaySecondDay });
 
-			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), new NoSchedulingProgress(), new[] { agent }, period, null);
+			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), new NoSchedulingProgress(), new[] { agent }, period);
 
 			stateholder.Schedules[agent].ScheduledDay(firstDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryBefore);
 			stateholder.Schedules[agent].ScheduledDay(secondDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var assB = new PersonAssignment(agent, scenario, date.AddDays(1)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(6, 14));
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { assA, assB}, new[] { skillDay});
 
-			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), new NoSchedulingProgress(), new[] { agent }, period, null);
+			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), new NoSchedulingProgress(), new[] { agent }, period);
 
 			stateholder.Schedules[agent].ScheduledDay(date).PersonAssignment(true).ShiftLayers.Should().Be.Empty();
 			stateholder.Schedules[agent].ScheduledDay(date.AddDays(1)).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategory);
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var assB = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new[] { assA, assB }, new[] { skillDayFirstDay, skillDaySecondDay });
 
-			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), new NoSchedulingProgress(), new[] { agent }, period, null);
+			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), new NoSchedulingProgress(), new[] { agent }, period);
 
 			stateholder.Schedules[agent].ScheduledDay(firstDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryBefore);
 			stateholder.Schedules[agent].ScheduledDay(secondDate).PersonAssignment().ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var secondAgentAssB = new PersonAssignment(secondAgent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { firstAgent, secondAgent }, new[] { firstAgentAssA, firstAgentAssB, secondAgentAssA, secondAgentAssB }, new[] { skillDayFirstDay, skillDaySecondDay });
 
-			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), new NoSchedulingProgress(), new[] { firstAgent, secondAgent }, period, null);
+			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), new NoSchedulingProgress(), new[] { firstAgent, secondAgent }, period);
 
 			stateholder.Schedules.SchedulesForDay(firstDate).All(x => x.PersonAssignment().ShiftCategory.Equals(shiftCategoryBefore))
 				.Should().Be.True();
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var assSecondDate = new PersonAssignment(agent, scenario, secondDate).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { assFirstDate, assSecondDate }, new[] { skillDayFirstDay, skillDaySecondDay });
 
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period, null);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
 
 			stateholder.Schedules[agent].ScheduledDay(firstDate).ScheduleTag()
 				.Should().Be.SameInstanceAs(tag);
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var tagSecondDate = new AgentDayScheduleTag(agent, secondDate, scenario, tag);
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { assFirstDate, assSecondDate, tagFirstDate, tagSecondDate }, new[] { skillDayFirstDay, skillDaySecondDay });
 
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period, null);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
 
 			stateholder.Schedules[agent].ScheduledDayCollection(period).All(x => x.ScheduleTag().Equals(tag))
 				.Should().Be.True();
@@ -381,7 +381,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var tagSecondDate = new AgentDayScheduleTag(agent, secondDate, scenario, tag);
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, new IScheduleData[] { assFirstDate, assSecondDate, tagFirstDate, tagSecondDate }, new[] { skillDayFirstDay, skillDaySecondDay });
 
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period, null);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
 
 			stateholder.Schedules[agent].ScheduledDayCollection(period).All(x => x.ScheduleTag().Equals(tag))
 				.Should().Be.True();
@@ -420,8 +420,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				Target.Execute(new NoSchedulingCallback(), 
 					schedulingOptions,
 					new NoSchedulingProgress(),
-					new[] {secondTeamMember}, period,
-					null);
+					new[] {secondTeamMember}, period);
 			});
 		}
 
@@ -450,7 +449,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				BlockSameShiftCategory = true
 			};
 
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period, null);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
 	
 			stateholder.Schedules.SchedulesForDay(date).All(x => x.PersonAssignment().ShiftCategory.Equals(shiftCategoryAfter)).Should().Be.True();
 		}
@@ -484,7 +483,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				AllowBreakContractTime = true
 			};
 
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period, null);
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new[] { agent }, period);
 
 			stateholder.Schedules[agent].ScheduledDayCollection(period).All(x => x.PersonAssignment().ShiftCategory.Equals(shiftCategoryAfter))
 				.Should().Be.True();
@@ -509,7 +508,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SchedulerStateHolderFrom.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { assA }, new[] { skillDayFirstDay });
 			var schedulingProgress = new TrackSchedulingProgress<TeleoptiProgressChangeMessage>();
 
-			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), schedulingProgress, new[] { agent }, date.ToDateOnlyPeriod(), null);
+			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), schedulingProgress, new[] { agent }, date.ToDateOnlyPeriod());
 
 			schedulingProgress.ReportedProgress.Select(x => x.Message)
 				.Should().Contain(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot);

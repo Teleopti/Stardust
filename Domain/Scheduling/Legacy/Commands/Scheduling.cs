@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ResourceCalculateFrequency,
 				schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			//TODO: get rid of _backgroundWorker here...
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents, rollbackService, resourceCalculateDelayer,
-				selectedPeriod, matrixes, backgroundWorker, dayOffOptimizationPreferenceProvider);
+				selectedPeriod, matrixes, backgroundWorker, null);
 		}
 	}
 }

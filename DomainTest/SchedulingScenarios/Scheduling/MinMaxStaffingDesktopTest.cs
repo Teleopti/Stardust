@@ -51,8 +51,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				schedulingOptions,
 				new NoSchedulingProgress(),
 				new []{agent}, 
-				new DateOnlyPeriod(date, date.AddDays(1)),
-				new DaysOffPreferences()
+				new DateOnlyPeriod(date, date.AddDays(1))
 			);
 
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.False();
@@ -100,8 +99,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				new SchedulingOptions(), 
 				new NoSchedulingProgress(),
 				new[] { agent },
-				new DateOnlyPeriod(date, date.AddDays(1)),
-				new DaysOffPreferences()
+				new DateOnlyPeriod(date, date.AddDays(1))
 			);
 
 			schedulerStateHolder.Schedules[agent].ScheduledDay(date).IsScheduled().Should().Be.True();

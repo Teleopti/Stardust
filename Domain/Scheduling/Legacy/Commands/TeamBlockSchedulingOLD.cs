@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -17,8 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public interface IScheduling
 	{
 		void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
+			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
@@ -68,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
 			_workShiftFinderResultHolder().Clear();
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1,
@@ -114,7 +112,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_teamBlockSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents.ToArray(), rollbackService, resourceCalculateDelayer,
-				selectedPeriod, allVisibleMatrixes, _backgroundWorker, dayOffOptimizationPreferenceProvider);
+				selectedPeriod, allVisibleMatrixes, _backgroundWorker, null);
 
 			_workShiftFinderResultHolder()
 				.AddResults(workShiftFinderResultHolder.GetResults(), DateTime.Today);

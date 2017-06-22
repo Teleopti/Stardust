@@ -77,8 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				RunWeeklyRestSolver = false
 			};
 
-			_schedulingCommandHandler.Execute(command, _schedulingProgress,
-				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+			_schedulingCommandHandler.Execute(command, _schedulingProgress);
 		}
 	}
 
@@ -102,8 +101,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		protected override void ExecuteScheduling(DateOnlyPeriod period, ISchedulerStateHolder stateHolder)
 		{
 			_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
-				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period,
-				false, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false);
 		}
 	}
 }

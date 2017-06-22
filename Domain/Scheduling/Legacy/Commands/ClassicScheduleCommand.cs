@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Interfaces.Domain;
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_requiredScheduleOptimizerHelper = requiredScheduleOptimizerHelper;
 		}
 
-		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, bool runWeeklyRestSolver)
+		public void Execute(SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, bool runWeeklyRestSolver)
 		{
 			var matrixesOfSelectedScheduleDays = _matrixListFactory.CreateMatrixListForSelection(_schedulerStateHolder().Schedules, selectedAgents, selectedPeriod);
 			if (!matrixesOfSelectedScheduleDays.Any())
@@ -75,12 +74,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					schedulingOptions);
 
 			if(runWeeklyRestSolver)
-				solveWeeklyRest(schedulingOptions, selectedAgents, _schedulerStateHolder(), selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
+				solveWeeklyRest(schedulingOptions, selectedAgents, _schedulerStateHolder(), selectedPeriod, backgroundWorker);
 		}
 
 
 		private void solveWeeklyRest(SchedulingOptions schedulingOptions, IEnumerable<IPerson> selectedPersons, ISchedulerStateHolder schedulerStateHolder, 
-									DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+									DateOnlyPeriod selectedPeriod, ISchedulingProgress backgroundWorker)
 		{
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper(), 1, schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
 			ISchedulePartModifyAndRollbackService rollbackService =
@@ -88,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 					_scheduleDayChangeCallback(),
 					new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedPersons.ToList(), rollbackService, resourceCalculateDelayer,
-				selectedPeriod, _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod), backgroundWorker, dayOffOptimizationPreferenceProvider);
+				selectedPeriod, _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulerStateHolder.Schedules, schedulerStateHolder.SchedulingResultState.PersonsInOrganization, selectedPeriod), backgroundWorker, null);
 		}
 	}
 }

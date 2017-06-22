@@ -1,8 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -15,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingEventHandler = schedulingEventHandler;
 		}
 
-		public void Execute(SchedulingCommand schedulingCommand, ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		public void Execute(SchedulingCommand schedulingCommand, ISchedulingProgress backgroundWorker)
 		{
 			var @event = new SchedulingWasOrdered
 			{
@@ -26,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				CommandId = schedulingCommand.CommandId
 			};
 			//use event publisher here (when we removed params except event here)
-			_schedulingEventHandler.HandleEvent(@event, backgroundWorker, dayOffOptimizationPreferenceProvider);
+			_schedulingEventHandler.HandleEvent(@event, backgroundWorker);
 		}
 	}
 }

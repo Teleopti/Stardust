@@ -33,16 +33,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
-			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IDaysOffPreferences dayOffsPreferences)
+			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
 			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 			{
-				ExecuteScheduling(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, dayOffsPreferences);
+				ExecuteScheduling(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod);
 			}
 			else
 			{
-				_scheduleHourlyStaffExecutor.Execute(schedulingOptions, backgroundWorker, selectedAgents,
-					selectedPeriod, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+				_scheduleHourlyStaffExecutor.Execute(schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod);
 			}
 
 			var resCalcData = _schedulerStateHolder().SchedulingResultState.ToResourceOptimizationData(_schedulerStateHolder().ConsiderShortBreaks, false);
@@ -51,8 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		[RemoveMeWithToggle("move up this", Toggles.ResourcePlanner_SchedulingIslands_44757)]
 		protected virtual void ExecuteScheduling(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
-			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			IDaysOffPreferences dayOffsPreferences)
+			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
 			var command = new SchedulingCommand
 			{
@@ -62,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			};
 			using (_desktopSchedulingContext.Set(command, _schedulerStateHolder(), schedulingOptions, schedulingCallback))
 			{
-				_schedulingCommandHandler.Execute(command, backgroundWorker, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+				_schedulingCommandHandler.Execute(command, backgroundWorker);
 			}
 		}
 	}
@@ -79,11 +77,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		protected override void ExecuteScheduling(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
-			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			IDaysOffPreferences dayOffsPreferences)
+			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents,
-				selectedPeriod, true, new FixedDayOffOptimizationPreferenceProvider(dayOffsPreferences));
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, true);
 		}
 	}
 }

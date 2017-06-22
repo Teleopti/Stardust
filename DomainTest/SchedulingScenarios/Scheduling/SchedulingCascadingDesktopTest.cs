@@ -60,8 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(), 
 				new SchedulingOptions(),
 				new NoSchedulingProgress(), 
-				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
-				new DaysOffPreferences()
+				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
 				);
 		
 			var allAssignmentsStartTime = schedulerStateHolder.Schedules.Select(keyValuePair => keyValuePair.Value).
@@ -100,8 +99,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(), 
 				options,
 				new NoSchedulingProgress(),
-				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
-				new DaysOffPreferences()
+				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
 				);
 
 			var allAssignmentsStartTime = schedulerStateHolder.Schedules.Select(keyValuePair => keyValuePair.Value).
@@ -133,8 +131,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.Execute(new NoSchedulingCallback(),
 				new SchedulingOptions(),
 				new NoSchedulingProgress(),
-				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
-				new DaysOffPreferences()
+				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod()
 				);
 
 			skillDayA.SkillStaffPeriodCollection.First().AbsoluteDifference
@@ -165,8 +162,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				new SchedulingOptions(),
 				new NoSchedulingProgress(),
 				new[] {agent},
-				period,
-				new DaysOffPreferences()
+				period
 				);
 
 			var asses = stateHolder.Schedules[agent].ScheduledDayCollection(period).Select(x => x.PersonAssignment()).Where(x => x.DayOff()==null);
