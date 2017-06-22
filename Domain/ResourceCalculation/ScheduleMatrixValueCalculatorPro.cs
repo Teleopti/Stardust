@@ -44,14 +44,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
                 scheduleDay.Date, scheduleDay.Date.AddDays(1), _userTimeZone.TimeZone());
 
-            IList<ISkillStaffPeriod> skillStaffPeriods =
-                _stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skillList, dateTimePeriod);
-
-            double highestIntraIntervalDeviation = 0;
-
-            if (_optimizerPreferences.Advanced.UseIntraIntervalDeviation)
-                highestIntraIntervalDeviation = SkillStaffPeriodHelper.GetHighestIntraIntervalDeviation(skillStaffPeriods) ?? 0;
-
+            IList<ISkillStaffPeriod> skillStaffPeriods = _stateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(skillList, dateTimePeriod);
             bool useMinPersonnel = _optimizerPreferences.Advanced.UseMinimumStaffing;
             bool useMaxPersonnel = _optimizerPreferences.Advanced.UseMaximumStaffing;
 
@@ -64,7 +57,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		                                                                                              useMinPersonnel,
 		                                                                                              useMaxPersonnel);
 
-            return SkillStaffPeriodHelper.CalculateRootMeanSquare(intradayDifferences, highestIntraIntervalDeviation);
+            return SkillStaffPeriodHelper.CalculateRootMeanSquare(intradayDifferences, 0);
         }
 
         public double? DayValueForSkillsForDayOffOptimization(DateOnly scheduleDay, IList<ISkill> skillList)

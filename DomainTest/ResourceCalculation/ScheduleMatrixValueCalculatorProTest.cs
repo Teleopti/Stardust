@@ -44,13 +44,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyPeriodValue()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-            _optimizerPreferences.Advanced.UseIntraIntervalDeviation = true;
             _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, new UtcTimeZone());
 
             Assert.IsNotNull(_target);
 
-			Assert.AreEqual(2d, _target.PeriodValue(IterationOperationOption.IntradayOptimization), 0.01d);
-            Assert.AreEqual(2d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
+			Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.IntradayOptimization), 0.01d);
+            Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
             stateHolder.Dispose();
         }
 
@@ -58,10 +57,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyPeriodValue2()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-			_optimizerPreferences.Advanced.UseIntraIntervalDeviation = true;
             _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, new UtcTimeZone());
 
-			Assert.AreEqual(2d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
+			Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
             stateHolder.Dispose();
         }
 
@@ -69,8 +67,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyPeriodValueForDayOffOptimization()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-			_optimizerPreferences.Advanced.UseIntraIntervalDeviation = false;
-
             _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, new UtcTimeZone());
 
             Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.DayOffOptimization), 0.01d);

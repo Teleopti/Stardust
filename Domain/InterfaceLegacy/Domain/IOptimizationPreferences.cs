@@ -425,15 +425,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// Gets or sets the target value.
         /// </summary>
         /// <value>The target value.</value>
-        TargetValueOptions TargetValueCalculation { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether to use intra interval deviation.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use; otherwise, <c>false</c>.
-        /// </value>
-        bool UseIntraIntervalDeviation { get; set; }
+        TargetValueOptions TargetValueCalculation { get; set; }        
 
         /// <summary>
         /// Gets or sets a value indicating whether [use tweaked values].

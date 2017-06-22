@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	public class AdvancedPreferencesPersonalSettings : SettingValue
 	{
 		private TargetValueOptions _targetValueCalculation;
-		private bool _useIntraIntervalDeviation;
 		private bool _useTweakedValues;
 		private bool _useMinimumStaffing;
 		private bool _useMaximumStaffing;
@@ -25,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 		    if (target == null) return;
             target.TargetValueCalculation = _targetValueCalculation;
-			target.UseIntraIntervalDeviation = _useIntraIntervalDeviation;
 			target.UseTweakedValues = _useTweakedValues;
 
 			target.UseMinimumStaffing = _useMinimumStaffing;
@@ -40,7 +38,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 		    if (source == null) return;
             _targetValueCalculation = source.TargetValueCalculation;
-			_useIntraIntervalDeviation = source.UseIntraIntervalDeviation;
 			_useTweakedValues = source.UseTweakedValues;
 
 			_useMinimumStaffing = source.UseMinimumStaffing;

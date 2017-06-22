@@ -44,7 +44,6 @@
 			this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
 			this.radioButtonStandardDeviation = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.checkBoxUseTweakedValues = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
-			this.checkBoxUseIntraIntervalDeviation = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.labelTargetValue = new System.Windows.Forms.Label();
 			this.radioButtonRootMeanSquare = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
 			this.radioButtonTeleopti = new Syncfusion.Windows.Forms.Tools.RadioButtonAdv();
@@ -60,7 +59,6 @@
 			this.tableLayoutPanel6.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonStandardDeviation)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseTweakedValues)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseIntraIntervalDeviation)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonRootMeanSquare)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonTeleopti)).BeginInit();
 			this.SuspendLayout();
@@ -273,8 +271,7 @@
 			this.tableLayoutPanel6.ColumnCount = 1;
 			this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel6.Controls.Add(this.radioButtonStandardDeviation, 0, 1);
-			this.tableLayoutPanel6.Controls.Add(this.checkBoxUseTweakedValues, 0, 5);
-			this.tableLayoutPanel6.Controls.Add(this.checkBoxUseIntraIntervalDeviation, 0, 4);
+			this.tableLayoutPanel6.Controls.Add(this.checkBoxUseTweakedValues, 0, 4);
 			this.tableLayoutPanel6.Controls.Add(this.labelTargetValue, 0, 0);
 			this.tableLayoutPanel6.Controls.Add(this.radioButtonRootMeanSquare, 0, 2);
 			this.tableLayoutPanel6.Controls.Add(this.radioButtonTeleopti, 0, 3);
@@ -282,14 +279,14 @@
 			this.tableLayoutPanel6.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel6.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanel6.Name = "tableLayoutPanel6";
-			this.tableLayoutPanel6.RowCount = 7;
-			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanel6.RowCount = 6;
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
 			this.tableLayoutPanel6.Size = new System.Drawing.Size(420, 198);
 			this.tableLayoutPanel6.TabIndex = 22;
 			// 
@@ -313,7 +310,7 @@
 			this.checkBoxUseTweakedValues.BeforeTouchSize = new System.Drawing.Size(407, 24);
 			this.checkBoxUseTweakedValues.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.checkBoxUseTweakedValues.DrawFocusRectangle = false;
-			this.checkBoxUseTweakedValues.Location = new System.Drawing.Point(10, 153);
+			this.checkBoxUseTweakedValues.Location = new System.Drawing.Point(10, 123);
 			this.checkBoxUseTweakedValues.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
 			this.checkBoxUseTweakedValues.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
 			this.checkBoxUseTweakedValues.Name = "checkBoxUseTweakedValues";
@@ -322,21 +319,6 @@
 			this.checkBoxUseTweakedValues.TabIndex = 11;
 			this.checkBoxUseTweakedValues.Text = "xxUseTweakedValues";
 			this.checkBoxUseTweakedValues.ThemesEnabled = false;
-			// 
-			// checkBoxUseIntraIntervalDeviation
-			// 
-			this.checkBoxUseIntraIntervalDeviation.BeforeTouchSize = new System.Drawing.Size(407, 24);
-			this.checkBoxUseIntraIntervalDeviation.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.checkBoxUseIntraIntervalDeviation.DrawFocusRectangle = false;
-			this.checkBoxUseIntraIntervalDeviation.Location = new System.Drawing.Point(10, 123);
-			this.checkBoxUseIntraIntervalDeviation.Margin = new System.Windows.Forms.Padding(10, 3, 3, 3);
-			this.checkBoxUseIntraIntervalDeviation.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxUseIntraIntervalDeviation.Name = "checkBoxUseIntraIntervalDeviation";
-			this.checkBoxUseIntraIntervalDeviation.Size = new System.Drawing.Size(407, 24);
-			this.checkBoxUseIntraIntervalDeviation.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Metro;
-			this.checkBoxUseIntraIntervalDeviation.TabIndex = 10;
-			this.checkBoxUseIntraIntervalDeviation.Text = "xxUseMaxStddev";
-			this.checkBoxUseIntraIntervalDeviation.ThemesEnabled = false;
 			// 
 			// labelTargetValue
 			// 
@@ -405,7 +387,6 @@
 			this.tableLayoutPanel6.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonStandardDeviation)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseTweakedValues)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.checkBoxUseIntraIntervalDeviation)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonRootMeanSquare)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.radioButtonTeleopti)).EndInit();
 			this.ResumeLayout(false);
@@ -418,7 +399,6 @@
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
 		private System.Windows.Forms.Label labelTargetValue;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxUseTweakedValues;
-		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxUseIntraIntervalDeviation;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel8;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxDoNotBreakMaximumSeats;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxMaximumSeats;

@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		public void MappingShouldGetAndSetSimpleProperties()
 		{
 			_advancedPreferencesSource.TargetValueCalculation = TargetValueOptions.Teleopti;
-			_advancedPreferencesSource.UseIntraIntervalDeviation = !_advancedPreferencesSource.UseIntraIntervalDeviation;
 			_advancedPreferencesSource.UseTweakedValues = !_advancedPreferencesSource.UseTweakedValues;
 			_advancedPreferencesSource.UseMinimumStaffing = !_advancedPreferencesSource.UseMinimumStaffing;
 			_advancedPreferencesSource.UserOptionMaxSeatsFeature = MaxSeatsFeatureOptions.ConsiderMaxSeats;
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_target.MapTo(_advancedPreferencesTarget);
 
 			Assert.AreEqual(_advancedPreferencesSource.TargetValueCalculation, _advancedPreferencesTarget.TargetValueCalculation);
-			Assert.AreEqual(_advancedPreferencesSource.UseIntraIntervalDeviation, _advancedPreferencesTarget.UseIntraIntervalDeviation);
 			Assert.AreEqual(_advancedPreferencesSource.UseTweakedValues, _advancedPreferencesTarget.UseTweakedValues);
 			Assert.AreEqual(MaxSeatsFeatureOptions.ConsiderMaxSeats, _advancedPreferencesSource.UserOptionMaxSeatsFeature);
 			Assert.AreEqual(_advancedPreferencesSource.UseMinimumStaffing, _advancedPreferencesTarget.UseMinimumStaffing);

@@ -50,8 +50,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
             if (radioButtonTeleopti.Checked)
                 Preferences.TargetValueCalculation = TargetValueOptions.Teleopti;
 
-
-            Preferences.UseIntraIntervalDeviation = checkBoxUseIntraIntervalDeviation.Checked;
             Preferences.UseTweakedValues = checkBoxUseTweakedValues.Checked;
 
             Preferences.UseMinimumStaffing = checkBoxMinimumStaffing.Checked;
@@ -81,9 +79,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
                     break;
             }
 
-            checkBoxUseIntraIntervalDeviation.Checked = Preferences.UseIntraIntervalDeviation;
             checkBoxUseTweakedValues.Checked = Preferences.UseTweakedValues;
-
             checkBoxMinimumStaffing.Checked = Preferences.UseMinimumStaffing;
             checkBoxMaximumStaffing.Checked = Preferences.UseMaximumStaffing;
 				if (Preferences.UserOptionMaxSeatsFeature == MaxSeatsFeatureOptions.ConsiderMaxSeatsAndDoNotBreak)
