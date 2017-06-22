@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void hideAbsenceProbabilityCheckBox()
 		{
-			hideControl(checkBoxEnableAbsenceProbability);
+			hideControl(tableLayoutPanelAbsenceProbability);
 		}
 
 		private void hideAbsenceCancellationOptions()
