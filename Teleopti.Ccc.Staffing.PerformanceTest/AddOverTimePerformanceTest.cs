@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 
 			skillIds = new[] {new Guid("0165E0EA-210A-4393-B25A-A15000925656")};
-			var period = new DateTimePeriod(now.AddDays(-1), now.AddDays(1));
+			var period = new DateTimePeriod(now.AddDays(-2), now.AddDays(2));
 			WithUnitOfWork.Do(() =>
 			{
 				UpdateStaffingLevel.Update(period);
