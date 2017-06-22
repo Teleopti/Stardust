@@ -72,6 +72,8 @@
 						ctrl.topIndex = findTeamIndexInVirtualRepeatContainerById(ctrl.selectedTeamIds[0])
 					}
 
+					ctrl.updateSelectedTeamsInView()
+
 					if (ctrl.onOpen)
 						ctrl.onOpen()
 				},
