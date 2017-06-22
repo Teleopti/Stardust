@@ -11,6 +11,8 @@ BEGIN
 	DEFAULT 0
 END
 
+GO
+
 UPDATE WorkflowControlSet SET AbsenceProbabilityEnabled = 0
 
 
