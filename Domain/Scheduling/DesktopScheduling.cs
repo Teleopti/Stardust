@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_resouceResourceOptimizationHelper.ResourceCalculate(selectedPeriod, resCalcData);
 		}
 
-		[RemoveMeWithToggle("move up this", Toggles.ResourcePlanner_SchedulingIslands_44757)]
+		[RemoveMeWithToggle("move up this and remove dead params", Toggles.ResourcePlanner_SchedulingIslands_44757)]
 		protected virtual void ExecuteScheduling(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			};
 			using (_desktopSchedulingContext.Set(command, _schedulerStateHolder(), schedulingOptions, schedulingCallback))
 			{
-				_schedulingCommandHandler.Execute(command, backgroundWorker);
+				_schedulingCommandHandler.Execute(command);
 			}
 		}
 	}

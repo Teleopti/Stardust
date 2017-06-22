@@ -1,5 +1,4 @@
 using System.Linq;
-using Teleopti.Ccc.Domain.Helper;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingEventHandler = schedulingEventHandler;
 		}
 
-		public void Execute(SchedulingCommand schedulingCommand, ISchedulingProgress backgroundWorker)
+		public void Execute(SchedulingCommand schedulingCommand)
 		{
 			var @event = new SchedulingWasOrdered
 			{
@@ -22,8 +21,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				RunWeeklyRestSolver = schedulingCommand.RunWeeklyRestSolver,
 				CommandId = schedulingCommand.CommandId
 			};
-			//use event publisher here (when we removed params except event here)
-			_schedulingEventHandler.HandleEvent(@event, backgroundWorker);
+			//use event publisher here
+			_schedulingEventHandler.HandleEvent(@event);
 		}
 	}
 }

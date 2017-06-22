@@ -1,9 +1,6 @@
 using System;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -27,15 +24,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_currentSchedulingCallback = currentSchedulingCallback;
 		}
 
-		public void HandleEvent(SchedulingWasOrdered @event,
-			//remove these later
-			ISchedulingProgress backgroundWorker)
+		public void HandleEvent(SchedulingWasOrdered @event)
 		{
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 			var selectedAgents = _schedulerStateHolder().AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)).ToArray();
 			using (CommandScope.Create(@event))
 			{
-				_scheduleExecutor.Execute(_currentSchedulingCallback.Current(), _schedulingOptionsProvider.Fetch(), backgroundWorker, selectedAgents,
+				//TODO: fix this later if needed
+				var doWeNeedToFixThis = new NoSchedulingProgress();
+				_scheduleExecutor.Execute(_currentSchedulingCallback.Current(), _schedulingOptionsProvider.Fetch(), doWeNeedToFixThis, selectedAgents,
 					selectedPeriod, @event.RunWeeklyRestSolver);
 			}
 		}
