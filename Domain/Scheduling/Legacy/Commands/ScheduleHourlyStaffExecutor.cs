@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, 
 			DateOnlyPeriod selectedPeriod,
-			IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
@@ -50,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (!backgroundWorker.CancellationPending)
 				{
-					_removeShiftCategoryToBeInLegalState.Execute(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedAgents, selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
+					_removeShiftCategoryToBeInLegalState.Execute(useShiftCategoryLimitations, schedulingOptions, selectedAgents, selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
 				}
 			}
 

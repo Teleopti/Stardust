@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public void HandleEvent(SchedulingWasOrdered @event,
 			//remove these later
 			ISchedulingProgress backgroundWorker,
-			IOptimizationPreferences optimizationPreferences,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			using (CommandScope.Create(@event))
 			{
 				_scheduleExecutor.Execute(_currentSchedulingCallback.Current(), _schedulingOptionsProvider.Fetch(), backgroundWorker, selectedAgents,
-					selectedPeriod, optimizationPreferences, @event.RunWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
+					selectedPeriod, @event.RunWeeklyRestSolver, dayOffOptimizationPreferenceProvider);
 			}
 		}
 	}

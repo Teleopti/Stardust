@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				schedulingOptions,
 				new NoSchedulingProgress(),
 				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
-				new OptimizationPreferences(),
 				new DaysOffPreferences()
 				);
 

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, Enumerable.Empty<IPersonAssignment>(), skillDays);
 
 			var callbackTracker = new TrackSchedulingCallback();
-			Target.Execute(callbackTracker, new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period, new OptimizationPreferences(), new DaysOffPreferences());
+			Target.Execute(callbackTracker, new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period, new DaysOffPreferences());
 			callbackTracker.SuccessfulScheduling().Should().Be.EqualTo(7);
 		}
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, Enumerable.Empty<IPersonAssignment>(), skillDays);
 
 			var callbackTracker = new TrackSchedulingCallback();
-			Target.Execute(callbackTracker, new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period, new OptimizationPreferences(), new DaysOffPreferences());
+			Target.Execute(callbackTracker, new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period, new DaysOffPreferences());
 			callbackTracker.UnSuccessfulScheduling().Should().Be.GreaterThanOrEqualTo(7);
 		}
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, Enumerable.Empty<IPersonAssignment>(), skillDays);
 
 			var callbackTracker = new CancelSchedulingCallback();
-			Target.Execute(callbackTracker, new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period, new OptimizationPreferences(), new DaysOffPreferences());
+			Target.Execute(callbackTracker, new SchedulingOptions(), new NoSchedulingProgress(), new[] { agent }, period, new DaysOffPreferences());
 			callbackTracker.NumberOfScheduleAttempts.Should().Be.LessThanOrEqualTo(1);
 		}
 

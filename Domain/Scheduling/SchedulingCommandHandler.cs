@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingEventHandler = schedulingEventHandler;
 		}
 
-		public void Execute(SchedulingCommand schedulingCommand, ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+		public void Execute(SchedulingCommand schedulingCommand, ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var @event = new SchedulingWasOrdered
 			{
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				CommandId = schedulingCommand.CommandId
 			};
 			//use event publisher here (when we removed params except event here)
-			_schedulingEventHandler.HandleEvent(@event, backgroundWorker, optimizationPreferences, dayOffOptimizationPreferenceProvider);
+			_schedulingEventHandler.HandleEvent(@event, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}
 	}
 }

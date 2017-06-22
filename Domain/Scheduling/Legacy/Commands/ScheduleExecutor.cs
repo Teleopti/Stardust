@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
+			bool runWeeklyRestSolver,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider);
 	}
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			IOptimizationPreferences optimizationPreferences, bool runWeeklyRestSolver,
+			bool runWeeklyRestSolver,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (!backgroundWorker.CancellationPending)
 				{
-					ExecuteWeeklyRestSolverCommand(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedAgents,
+					ExecuteWeeklyRestSolverCommand(useShiftCategoryLimitations, schedulingOptions, selectedAgents,
 							selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
 				}
 			}
@@ -117,11 +117,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		[TestLog]
 		protected virtual void ExecuteWeeklyRestSolverCommand(bool useShiftCategoryLimitations, SchedulingOptions schedulingOptions,
-															IOptimizationPreferences optimizationPreferences, IEnumerable<IPerson> selectedPersons,
+															IEnumerable<IPerson> selectedPersons,
 															DateOnlyPeriod selectedPeriod, 
 															ISchedulingProgress backgroundWorker, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
-			_removeShiftCategoryToBeInLegalState.Execute(useShiftCategoryLimitations, schedulingOptions, optimizationPreferences, selectedPersons, selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
+			_removeShiftCategoryToBeInLegalState.Execute(useShiftCategoryLimitations, schedulingOptions, selectedPersons, selectedPeriod, backgroundWorker, dayOffOptimizationPreferenceProvider);
 		}	
 	}
 }

@@ -52,7 +52,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				new NoSchedulingProgress(),
 				new []{agent}, 
 				new DateOnlyPeriod(date, date.AddDays(1)),
-				new OptimizationPreferences(),
 				new DaysOffPreferences()
 			);
 
@@ -102,7 +101,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				new NoSchedulingProgress(),
 				new[] { agent },
 				new DateOnlyPeriod(date, date.AddDays(1)),
-				optPrefs,
 				new DaysOffPreferences()
 			);
 

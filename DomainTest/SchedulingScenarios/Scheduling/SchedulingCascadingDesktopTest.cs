@@ -61,7 +61,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				new SchedulingOptions(),
 				new NoSchedulingProgress(), 
 				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
-				new OptimizationPreferences(),
 				new DaysOffPreferences()
 				);
 		
@@ -102,7 +101,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				options,
 				new NoSchedulingProgress(),
 				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
-				new OptimizationPreferences(),
 				new DaysOffPreferences()
 				);
 
@@ -136,7 +134,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				new SchedulingOptions(),
 				new NoSchedulingProgress(),
 				schedulerStateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(date.ToDateOnlyPeriod()), date.ToDateOnlyPeriod(),
-				new OptimizationPreferences(),
 				new DaysOffPreferences()
 				);
 
@@ -169,7 +166,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				new NoSchedulingProgress(),
 				new[] {agent},
 				period,
-				new OptimizationPreferences(),
 				new DaysOffPreferences()
 				);
 
