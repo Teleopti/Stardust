@@ -574,6 +574,32 @@ $(document).ready(function() {
 		equal(viewModel.absenceProbabilityEnabled(), false);
 	});
 
+	test("should not consider AbsenceProbabilityEnabled when Staffing_Info_Configuration_44687 is off ", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "Staffing_Info_Configuration_44687") return false;
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment.utc().zone(-60).format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null},
+			},
+			ViewPossibilityPermission: true,
+			CheckStaffingByIntraday: true,
+			AbsenceProbabilityEnabled: false,
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
+		equal(viewModel.absenceProbabilityEnabled(), true);
+	});
+
 	test("should not show overtime probability option item if Overtime Probability is toggled off in fat client ", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
@@ -599,6 +625,33 @@ $(document).ready(function() {
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
 		equal(viewModel.overtimeProbabilityEnabled(), false);
+	});
+
+	test("should not consider OvertimeProbabilityEnabled when Staffing_Info_Configuration_44687 is off ", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "Staffing_Info_Configuration_44687") return false;
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment.utc().zone(-60).format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null},
+			},
+			ViewPossibilityPermission: true,
+			CheckStaffingByIntraday: true,
+			AbsenceProbabilityEnabled: false,
+			OvertimeProbabilityEnabled: false,
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
+		equal(viewModel.overtimeProbabilityEnabled(), true);
 	});
 
 	test("should hide probability after selecting 'Hide probability' ", function () {

@@ -235,23 +235,6 @@ $(document).ready(function () {
 		equal(timelines[timelines.length - 1].minutes, 16.75 * 60 + 15); 	//16:45 => 17:00
 	});
 
-	test("should show no overtime probability option if the feature is toggle off in fat client", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
-			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
-			if (x === "Staffing_Info_Configuration_44687") return true;
-		};
-
-		var fakeScheduleData = getFakeScheduleData();
-		fakeScheduleData.OvertimeProbabilityEnabled = false;
-		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
-		weekViewModel.readData(fakeScheduleData);
-
-		equal(weekViewModel.selectedProbabilityOptionValue(), undefined);
-		equal(weekViewModel.overtimeProbabilityEnabled(), false);
-		equal(weekViewModel.dayViewModels()[0].probabilities().length, 0);
-		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
-	});
-
 	test("should show no absence probability if the feature is toggle off in fat client", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
@@ -266,6 +249,21 @@ $(document).ready(function () {
 		equal(weekViewModel.selectedProbabilityOptionValue(), undefined);
 		equal(weekViewModel.absenceProbabilityEnabled(), false);
 		equal(weekViewModel.dayViewModels()[0].probabilities().length, 0);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
+	test("should not consider value AbsenceProbabilityEnabled when Staffing_Info_Configuration_44687 is off", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "Staffing_Info_Configuration_44687") return false;
+		};
+
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.AbsenceProbabilityEnabled = false;
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
+		weekViewModel.readData(fakeScheduleData);
+
+		equal(weekViewModel.absenceProbabilityEnabled(), true);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
@@ -368,6 +366,39 @@ $(document).ready(function () {
 		equal(weekViewModel.dayViewModels()[0].probabilities().length, 2);
 		equal(weekViewModel.dayViewModels()[0].probabilities()[0].tooltips().indexOf("09:30 - 12:00") > -1, true);
 		equal(weekViewModel.dayViewModels()[0].probabilities()[1].tooltips().indexOf("12:00 - 16:45") > -1, true);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
+	test("should show no overtime probability option if the feature is toggle off in fat client", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "Staffing_Info_Configuration_44687") return true;
+		};
+
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.OvertimeProbabilityEnabled = false;
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
+		weekViewModel.readData(fakeScheduleData);
+
+		equal(weekViewModel.selectedProbabilityOptionValue(), undefined);
+		equal(weekViewModel.overtimeProbabilityEnabled(), false);
+		equal(weekViewModel.dayViewModels()[0].probabilities().length, 0);
+		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
+	});
+
+
+	test("should not consider value OvertimeProbabilityEnabled when Staffing_Info_Configuration_44687 is off", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "Staffing_Info_Configuration_44687") return false;
+		};
+
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.OvertimeProbabilityEnabled = false;
+		var weekViewModel = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(null, null, blockFetchProbabilityAjax);
+		weekViewModel.readData(fakeScheduleData);
+
+		equal(weekViewModel.overtimeProbabilityEnabled(), true);
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 

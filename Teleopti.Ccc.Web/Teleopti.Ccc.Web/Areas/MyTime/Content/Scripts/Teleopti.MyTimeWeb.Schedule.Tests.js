@@ -296,6 +296,21 @@ $(document).ready(function() {
 	test("should show no absence possibility if the feature is toggle off in fat client", function () {
 		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+			if (x === "Staffing_Info_Configuration_44687") return true;
+		};
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.AbsenceProbabilityEnabled = false;
+
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		week.initializeData(fakeScheduleData);
+
+		equal(week.absenceProbabilityEnabled(), false);
+	});
+
+	test("should not consider value AbsenceProbabilityEnabled when Staffing_Info_Configuration_44687 is off", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+			if (x === "Staffing_Info_Configuration_44687") return false;
 		};
 		var fakeScheduleData = getFakeScheduleData();
 		fakeScheduleData.AbsenceProbabilityEnabled = false;
@@ -305,7 +320,7 @@ $(document).ready(function() {
 		week.selectedProbabilityType = constants.probabilityType.absence;
 		week.updateProbabilityData(getFakeProbabilityData());
 
-		equal(week.absenceProbabilityEnabled(), false);
+		equal(week.absenceProbabilityEnabled(), true);
 	});
 
 	test("should show no absence possibility if the feature is disabled", function () {
@@ -321,6 +336,20 @@ $(document).ready(function() {
 		week.days().forEach(function(day){
 			equal(day.probabilities().length, 0);
 		});
+	});
+
+	test("should not consider value OvertimeProbabilityEnabled when Staffing_Info_Configuration_44687 is off", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+			if (x === "Staffing_Info_Configuration_44687") return false;
+		};
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.OvertimeProbabilityEnabled = false;
+
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		week.initializeData(fakeScheduleData);
+
+		equal(week.overtimeProbabilityEnabled(), true);
 	});
 
 	test("should show no overtime possibility if the feature is disabled", function () {
