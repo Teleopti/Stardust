@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 
 		[Test]
-		[Ignore("#44834 - not working even after fix. Probably a bug")]
+		[Ignore("#44883")]
 		public void ShouldRespectMaximumStaffingWhenBreakingShiftCategoryLimiation()
 		{
 			var date = new DateOnly(2017, 1, 10);
