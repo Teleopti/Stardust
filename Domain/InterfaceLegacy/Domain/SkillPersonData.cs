@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿using System;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// SkillPersonData class
@@ -7,26 +9,35 @@
     /// Created by: peterwe
     /// Created date: 2007-11-02
     /// </remarks>
-    public struct SkillPersonData 
+    public struct SkillPersonData : IEquatable<SkillPersonData> 
     {
-        #region Fields
-
-        private int _minimumPersons;
+	    private int _minimumPersons;
         private int _maximumPersons;
 
-        #endregion
+	    /// <summary>
+	    /// Initializes a new instance of the <see cref="SkillPersonData"/> struct.
+	    /// </summary>
+	    /// <param name="minimumPersons">The minimum persons.</param>
+	    /// <param name="maximumPersons">The maximum persons.</param>
+	    /// <remarks>
+	    /// Created by: robink
+	    /// Created date: 2008-03-17
+	    /// </remarks>
+	    public SkillPersonData(int minimumPersons, int maximumPersons)
+	    {
+		    _minimumPersons = minimumPersons;
+		    _maximumPersons = maximumPersons;
+	    }
 
-        #region Properties
-
-        /// <summary>
-        /// Gets or sets the minimum persons.
-        /// </summary>
-        /// <value>The minimum persons.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-17
-        /// </remarks>
-        public int MinimumPersons
+		/// <summary>
+		/// Gets or sets the minimum persons.
+		/// </summary>
+		/// <value>The minimum persons.</value>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-03-17
+		/// </remarks>
+		public int MinimumPersons
         {
             get { return _minimumPersons; }
             set { _minimumPersons = value; }
@@ -46,28 +57,7 @@
             set { _maximumPersons = value; }
         }
 
-        #endregion
-
-        #region Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SkillPersonData"/> struct.
-        /// </summary>
-        /// <param name="minimumPersons">The minimum persons.</param>
-        /// <param name="maximumPersons">The maximum persons.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-17
-        /// </remarks>
-        public SkillPersonData(int minimumPersons, int maximumPersons)
-        {
-            _minimumPersons = minimumPersons;
-            _maximumPersons = maximumPersons;
-        }
-
-        #endregion
-
-        /// <summary>
+	    /// <summary>
         /// Gets a value indicating whether this instance is valid.
         /// </summary>
         /// <value><c>true</c> if this instance is valid; otherwise, <c>false</c>.</value>
@@ -75,19 +65,11 @@
         /// Created by: robink
         /// Created date: 2008-03-17
         /// </remarks>
-        public bool IsValid
-        {
-            get
-            {
-                return ((_minimumPersons <= _maximumPersons || _maximumPersons == 0) &&
-                        _minimumPersons >= 0 &&
-                        _maximumPersons >= 0);
-            }
-        }
+        public bool IsValid => (_minimumPersons <= _maximumPersons || _maximumPersons == 0) &&
+							   _minimumPersons >= 0 &&
+							   _maximumPersons >= 0;
 
-        #region IEquatable<SkillPersonData> Members
-
-        /// <summary>
+	    /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
@@ -118,7 +100,7 @@
         /// </remarks>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is SkillPersonData))
+            if (!(obj is SkillPersonData))
             {
                 return false;
             }
@@ -170,26 +152,5 @@
         {
             return !sk1.Equals(sk2);
         }
-
-        #endregion
-
-        #region ICloneable Members
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        /// A new object that is a copy of this instance.
-        /// </returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-03-17
-        /// </remarks>
-        public object Clone()
-        {
-            return MemberwiseClone();
-        }
-
-        #endregion
     }
 }

@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                     templateSkillDataPeriod.ServiceAgreement.ServiceLevel,
                     templateSkillDataPeriod.ServiceAgreement.MinOccupancy,
                     templateSkillDataPeriod.ServiceAgreement.MaxOccupancy);
-                newSkillDataPeriod.SkillPersonData = (SkillPersonData) templateSkillDataPeriod.SkillPersonData.Clone();
+                newSkillDataPeriod.SkillPersonData = templateSkillDataPeriod.SkillPersonData;
                 newSkillDataPeriod.SetParent(this);
                 newSkillDataPeriod.Shrinkage = templateSkillDataPeriod.Shrinkage;
                 newSkillDataPeriod.Efficiency = templateSkillDataPeriod.Efficiency;
@@ -1504,7 +1504,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 payload.Shrinkage = skillDataPeriod.Shrinkage;
                 payload.Efficiency = skillDataPeriod.Efficiency;
                 payload.ManualAgents = skillDataPeriod.ManualAgents;
-                payload.SkillPersonData = (SkillPersonData) skillDataPeriod.SkillPersonData.Clone();
+	            payload.SkillPersonData = skillDataPeriod.SkillPersonData;
                 payload.IsCalculated = false;
             }
         }

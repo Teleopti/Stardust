@@ -182,8 +182,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				if (value != _skillPersonData.MinimumPersons)
 				{
+					_skillPersonData = new SkillPersonData(value,_skillPersonData.MaximumPersons);
 					OnChangeSkillData();
-					_skillPersonData.MinimumPersons = value;
 				}
 			}
 		}
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			{
 				if (value != _skillPersonData.MaximumPersons)
 				{
-					_skillPersonData.MaximumPersons = value;
+					_skillPersonData = new SkillPersonData(_skillPersonData.MinimumPersons, value);
 					OnChangeSkillData();
 				}
 			}

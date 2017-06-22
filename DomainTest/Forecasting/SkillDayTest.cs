@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 
             foreach (SkillDataPeriod skillDataPeriod in _skillDataPeriods)
             {
-                SkillPersonData skillPersonData = (SkillPersonData)skillDataPeriod.SkillPersonData.Clone();
+                SkillPersonData skillPersonData = skillDataPeriod.SkillPersonData;
 
                 ITemplateSkillDataPeriod period = new TemplateSkillDataPeriod(skillDataPeriod.ServiceAgreement, skillPersonData, timePeriod);//skillDataPeriod.Period);
                 period.Shrinkage = new Percent(0.2);

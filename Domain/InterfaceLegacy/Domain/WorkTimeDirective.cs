@@ -8,66 +8,40 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// </summary>
     public struct WorkTimeDirective : IEquatable<WorkTimeDirective>
     {
-        #region Fields
-
 	    private TimeSpan _minTimePerWeek;
 	    private TimeSpan _maxTimePerWeek;
         private TimeSpan _nightlyRest;
         private TimeSpan _weeklyRest;
-        private const int _limitWeeklyRest = 24 * 7;
-        private const int _limitNightlyRest = 24;
-        private const int _limitMaxTimePerWeek = 24 * 7;
 
-        #endregion
+        private const int limitWeeklyRest = 24 * 7;
+        private const int limitNightlyRest = 24;
+        private const int limitMaxTimePerWeek = 24 * 7;
 
-        #region Static
-
-        /// <summary>
+	    /// <summary>
         /// Gets the default WorkTimeDirective value.
         /// </summary>
         /// <value>The default work time directive.</value>
-        public static WorkTimeDirective DefaultWorkTimeDirective
-        {
-			get { return new WorkTimeDirective(new TimeSpan(0, 0, 0), new TimeSpan(48, 0, 0), new TimeSpan(11, 0, 0), new TimeSpan(36, 0, 0)); }
-        }
+        public static WorkTimeDirective DefaultWorkTimeDirective => new WorkTimeDirective(TimeSpan.Zero, TimeSpan.FromHours(48), TimeSpan.FromHours(11), TimeSpan.FromHours(36));
 
-        #endregion
-
-        #region Properties
-
-        /// <summary>
+	    /// <summary>
         /// Gets the maximal work time per week.
         /// </summary>
-        public TimeSpan MaxTimePerWeek
-        {
-            get { return _maxTimePerWeek; }
-        }
+        public TimeSpan MaxTimePerWeek => _maxTimePerWeek;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the minimum work time per week.
         /// </summary>
-        public TimeSpan MinTimePerWeek
-        {
-            get { return _minTimePerWeek; }
-        }
+        public TimeSpan MinTimePerWeek => _minTimePerWeek;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the minimal nightly rest
         /// </summary>
-        public TimeSpan NightlyRest
-        {
-            get { return _nightlyRest; }
-        }
+        public TimeSpan NightlyRest => _nightlyRest;
 
-        /// <summary>
+	    /// <summary>
         /// Gets the minimal weekly rest
         /// </summary>
-        public TimeSpan WeeklyRest
-        {
-            get { return _weeklyRest; }
-        }
-
-        #endregion
+        public TimeSpan WeeklyRest => _weeklyRest;
 
 	    /// <summary>
 	    /// Creates a struct with values
@@ -78,10 +52,10 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	    /// <param name="weeklyRest">Minimal weekly rest</param>
 	    public WorkTimeDirective(TimeSpan minTimePerWeek, TimeSpan maxTimePerWeek, TimeSpan nightlyRest, TimeSpan weeklyRest)
         {
-            InParameter.CheckTimeLimit("maxTimePerWeek", maxTimePerWeek, _limitMaxTimePerWeek);
-            InParameter.CheckTimeLimit("minTimePerWeek", minTimePerWeek, _limitMaxTimePerWeek);
-            InParameter.CheckTimeLimit("nightlyRest", nightlyRest, _limitNightlyRest);
-            InParameter.CheckTimeLimit("weeklyRest", weeklyRest, _limitWeeklyRest);
+            InParameter.CheckTimeLimit("maxTimePerWeek", maxTimePerWeek, limitMaxTimePerWeek);
+            InParameter.CheckTimeLimit("minTimePerWeek", minTimePerWeek, limitMaxTimePerWeek);
+            InParameter.CheckTimeLimit("nightlyRest", nightlyRest, limitNightlyRest);
+            InParameter.CheckTimeLimit("weeklyRest", weeklyRest, limitWeeklyRest);
 
 	        _minTimePerWeek = minTimePerWeek;
             _maxTimePerWeek = maxTimePerWeek;
@@ -89,9 +63,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
             _weeklyRest = weeklyRest;
         }
 
-        #region IEquatable<WorkTimeDirective> Implementation
-
-        /// <summary>
+	    /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
         /// </summary>
         /// <param name="other">An object to compare with this object.</param>
@@ -115,14 +87,11 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </returns>
         public override bool Equals(object obj)
         {
-            if (obj == null || !(obj is WorkTimeDirective))
+	        if (!(obj is WorkTimeDirective))
             {
                 return false;
             }
-            else
-            {
-                return Equals((WorkTimeDirective)obj);
-            }
+	        return Equals((WorkTimeDirective)obj);
         }
 
         /// <summary>
@@ -157,7 +126,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         {
 			return _minTimePerWeek.GetHashCode() ^ _maxTimePerWeek.GetHashCode() ^ _nightlyRest.GetHashCode() ^ _weeklyRest.GetHashCode();
         }
-
-        #endregion
     }
 }

@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 										 skillStaffPeriod.StaffingCalculatorService);
 				newShortPeriod.SetCalculatedResource65(skillStaffPeriod.Payload.CalculatedResource);
 				newShortPeriod.Payload.Shrinkage = skillStaffPeriod.Payload.Shrinkage;
-				newShortPeriod.Payload.SkillPersonData = (SkillPersonData)skillStaffPeriod.Payload.SkillPersonData.Clone();
+				newShortPeriod.Payload.SkillPersonData = skillStaffPeriod.Payload.SkillPersonData;
 				((SkillStaff)newShortPeriod.Payload).ForecastedIncomingDemand = skillStaffPeriod.Payload.ForecastedIncomingDemand;
 
 				var aggregate = (IAggregateSkillStaffPeriod)newShortPeriod;
