@@ -6020,6 +6020,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose day offset.
+        /// </summary>
+        public static string ChooseDayOffset {
+            get {
+                return ResourceManager.GetString("ChooseDayOffset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose day off to change.
         /// </summary>
         public static string ChooseDaysOffToChange {

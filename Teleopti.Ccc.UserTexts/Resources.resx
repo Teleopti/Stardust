@@ -16196,4 +16196,8 @@ Do you want to participate?</value>
   <data name="NoPermissionMoveAgentOvertime" xml:space="preserve">
     <value>No permission to move overtime for agent {0}</value>
   </data>
+  <data name="ChooseDayOffset" xml:space="preserve">
+    <value>Choose day offset</value>
+    <comment>Used on intraday, used to choose day to view by offset -7 to +1</comment>
+  </data>
 </root>
