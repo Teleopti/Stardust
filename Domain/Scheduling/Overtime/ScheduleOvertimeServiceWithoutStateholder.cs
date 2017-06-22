@@ -19,13 +19,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 	public class ScheduleOvertimeServiceWithoutStateholder : IScheduleOvertimeServiceWithoutStateholder
 	{
-		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
+		private readonly SchedulePartModifyAndRollbackServiceWithoutStateHolder _schedulePartModifyAndRollbackService;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider _personSkillsForScheduleDaysOvertimeProvider;
 		private readonly CalculateBestOvertimeBeforeOrAfter _calculateBestOvertime;
 		private readonly IResourceCalculation _resourceCalculation;
 
-		public ScheduleOvertimeServiceWithoutStateholder(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
+		public ScheduleOvertimeServiceWithoutStateholder(SchedulePartModifyAndRollbackServiceWithoutStateHolder schedulePartModifyAndRollbackService, 
 			IGridlockManager gridlockManager,
 			PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider personSkillsForScheduleDaysOvertimeProvider,
 			CalculateBestOvertimeBeforeOrAfter calculateBestOvertime, IResourceCalculation resourceCalculation)
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 				var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
 				scheduleDay.CreateAndAddOvertime(overtimePreferences.SkillActivity, dateTimePeriod, overtimePreferences.OvertimeType);
 				_schedulePartModifyAndRollbackService.ClearModificationCollection();
-				if (!_schedulePartModifyAndRollbackService.ModifyStrictlyRollbackWithoutValidation(scheduleDay, scheduleTagSetter, rules))
+				if (!_schedulePartModifyAndRollbackService.ModifyStrictly(scheduleDay, scheduleTagSetter, rules))
 					continue;
 				
 				_resourceCalculation.ResourceCalculate(dateTimePeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc), resourceCalculationData, contextFunc);

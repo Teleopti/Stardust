@@ -76,6 +76,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, overtimestartTime, overtimeEndTime);
 			var persons = _personRepository.FindPeople(personsModels.Select(x => x.PersonId));
 
+			if(!persons.Any()) return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
+
 			var weeks = new List<DateTimePeriod>();
 			foreach (var person in persons)
 			{

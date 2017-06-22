@@ -16,23 +16,21 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double Resource
 		{
-			get { return _resource; }
+			get => _resource;
 			set
 			{
-				var roundedValue = Math.Round(value, 5);
-				InParameter.ValueMustBePositive(nameof(Resource), roundedValue);
-				_resource = roundedValue;
+				InParameter.ValueMustBePositive(nameof(Resource), value);
+				_resource = value;
 			}
 		}
 
 		public double Count
 		{
-			get { return _count; }
+			get => _count;
 			set
 			{
-				var roundedValue = Math.Round(value, 5);
-				InParameter.ValueMustBePositive(nameof(Resource), roundedValue);
-				_count = roundedValue;
+				InParameter.ValueMustBePositive(nameof(Resource), value);
+				_count = value;
 			}
 		}
 	}
@@ -42,43 +40,39 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	{
 		private double _resource;
 		private double _count;
-		private readonly SkillEffiencyResource[] _effiencyResources;
-		private readonly DateTimePeriod[] _fractionPeriods;
 
 		public InnerPeriodResourceDetail(double count, double resource, SkillEffiencyResource[] effiencyResources, DateTimePeriod[] fractionPeriods)
 			: this()
 		{
 			Count = count;
 			Resource = resource;
-			_effiencyResources = effiencyResources;
-			_fractionPeriods = fractionPeriods;
+			EffiencyResources = effiencyResources;
+			FractionPeriods = fractionPeriods;
 		}
 
 		public double Resource
 		{
-			get { return _resource; }
+			get => _resource;
 			private set
 			{
-				var roundedValue = Math.Round(value, 5);
-				InParameter.ValueMustBePositive(nameof(Resource), roundedValue);
-				_resource = roundedValue;
+				InParameter.ValueMustBePositive(nameof(Resource), value);
+				_resource = value;
 			}
 		}
 
 		public double Count
 		{
-			get { return _count; }
+			get => _count;
 			private set
 			{
-				var roundedValue = Math.Round(value, 5);
-				InParameter.ValueMustBePositive(nameof(Count), roundedValue);
-				_count = roundedValue;
+				InParameter.ValueMustBePositive(nameof(Count), value);
+				_count = value;
 			}
 		}
 
-		public DateTimePeriod[] FractionPeriods => _fractionPeriods;
+		public DateTimePeriod[] FractionPeriods { get; }
 
-		public SkillEffiencyResource[] EffiencyResources => _effiencyResources;
+		public SkillEffiencyResource[] EffiencyResources { get; }
 	}
 
 	public struct SkillEffiencyResource
