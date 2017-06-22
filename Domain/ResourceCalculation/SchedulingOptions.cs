@@ -10,8 +10,8 @@ using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-    public class SchedulingOptions
-    {
+    public class SchedulingOptions : IMinMaxStaffing
+	{
 		private readonly IList<IShiftCategory> _notAllowedShiftCategories = new List<IShiftCategory>();
 		private readonly IList<ShiftProjectionCache> _notAllowedShiftProjectionCaches = new List<ShiftProjectionCache>(); 
 

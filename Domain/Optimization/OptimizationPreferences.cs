@@ -148,6 +148,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
     }
 
+	public interface IMinMaxStaffing
+	{
+		bool UseMinimumStaffing { get; set; }
+		bool UseMaximumStaffing { get; set; }
+	}
+
 	public class AdvancedPreferences : IAdvancedPreferences
 	{
 

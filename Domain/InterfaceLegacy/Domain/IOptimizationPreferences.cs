@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -419,8 +420,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// <summary>
     /// Advanced user preferences
     /// </summary>
-    public interface IAdvancedPreferences
-    {
+    public interface IAdvancedPreferences : IMinMaxStaffing
+	{
         /// <summary>
         /// Gets or sets the target value.
         /// </summary>
@@ -434,22 +435,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// 	<c>true</c> if use; otherwise, <c>false</c>.
         /// </value>
         bool UseTweakedValues { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [use minimum staffing].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use; otherwise, <c>false</c>.
-        /// </value>
-        bool UseMinimumStaffing { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether [use maximum staffing].
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if use; otherwise, <c>false</c>.
-        /// </value>
-        bool UseMaximumStaffing { get; set; }
 
 		  /// <summary>
 		  /// Gets or sets a value indicating whether [use maximum seats].
