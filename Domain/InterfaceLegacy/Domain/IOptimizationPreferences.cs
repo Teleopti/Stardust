@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// <summary>
     /// Advanced user preferences
     /// </summary>
-    public interface IAdvancedPreferences : IMinMaxStaffing
+    public interface IAdvancedPreferences
 	{
         /// <summary>
         /// Gets or sets the target value.
@@ -457,7 +457,10 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         /// <value>The refresh screen interval.</value>
         int RefreshScreenInterval { get; set; }
-    }
+
+		bool UseMinimumStaffing { get; set; }
+		bool UseMaximumStaffing { get; set; }
+	}
 
     /// <summary>
     /// Target value calculation options
