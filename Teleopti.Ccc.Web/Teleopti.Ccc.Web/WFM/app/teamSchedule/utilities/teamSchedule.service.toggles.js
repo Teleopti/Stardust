@@ -14,7 +14,6 @@
 				DisplayWeekScheduleOnBusinessHierachyEnabled: toggleSvc
 					.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,
 
-				AbsenceReportingEnabled: toggleSvc.WfmTeamSchedule_AbsenceReporting_35995,
 				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
 				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
 				AddOvertimeEnabled: toggleSvc.WfmTeamSchedule_AddOvertime_41696,

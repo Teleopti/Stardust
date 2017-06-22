@@ -75,10 +75,6 @@
 			toggleCurrentSidenav: function() {}
 		};
 
-		toggles.set({
-			AbsenceReportingEnabled: true
-		});
-
 		permissions.set({
 			IsAddFullDayAbsenceAvailable: true,
 			IsAddIntradayAbsenceAvailable: true

@@ -139,8 +139,7 @@
 		};
 
 		vm.canActiveAddAbsence = function () {
-			return vm.toggles.AbsenceReportingEnabled
-				&& (vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable);
+			return vm.permissions.IsAddFullDayAbsenceAvailable || vm.permissions.IsAddIntradayAbsenceAvailable;
 		};
 
 		vm.canActiveAddOvertime = function() {

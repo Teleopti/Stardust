@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			, o => true);
 
 			PermissionProvider.Enable();
-			ToggleManager.Enable(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var areas = Target.GetWfmAreasWithPermissions();
@@ -84,7 +83,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldNotHaveTeamsWhenItNotPermitted()
 		{
 			PermissionProvider.Enable();
-			ToggleManager.Enable(Toggles.WfmTeamSchedule_AbsenceReporting_35995);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 

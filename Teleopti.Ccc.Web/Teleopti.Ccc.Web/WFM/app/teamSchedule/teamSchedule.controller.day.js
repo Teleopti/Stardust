@@ -355,12 +355,7 @@
 
 		vm.validateWarningEnabled = false;
 
-		vm.scheduleTableSelectMode = vm.toggles.AbsenceReportingEnabled
-				|| vm.toggles.AddActivityEnabled
-				|| vm.toggles.RemoveActivityEnabled
-				|| vm.toggles.RemoveAbsenceEnabled
-				|| vm.toggles.SwapShiftEnabled
-				|| vm.toggles.ModifyShiftCategoryEnabled;
+		vm.scheduleTableSelectMode = true;
 
 		vm.searchEnabled = $state.current.name !== 'teams.for';
 

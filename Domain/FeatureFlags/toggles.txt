@@ -53,7 +53,6 @@ WfmPermission_ReplaceOldPermission_34671 = true
 WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260 = true
 WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252 = true
 
-WfmTeamSchedule_AbsenceReporting_35995 = true
 WfmTeamSchedule_AddActivity_37541 = true
 WfmTeamSchedule_AddPersonalActivity_37742 = true
 WfmTeamSchedule_AddOvertime_41696 = true

@@ -312,7 +312,6 @@ describe("teamschedule controller tests", function() {
 
 	function setupMockAllTrueToggleService() {
 		return {
-			WfmTeamSchedule_AbsenceReporting_35995: true,
 			WfmTeamSchedule_SwapShifts_36231: true,
 		};
 	}

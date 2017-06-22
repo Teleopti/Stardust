@@ -64,7 +64,6 @@
 		WfmTeamSchedule_DisplayScheduleOnBusinessHierachy_41260,
 		WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,
 
-		WfmTeamSchedule_AbsenceReporting_35995,
 		WfmTeamSchedule_AddActivity_37541,
 		WfmTeamSchedule_AddPersonalActivity_37742,
 		WfmTeamSchedule_AddOvertime_41696,
