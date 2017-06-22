@@ -1,6 +1,7 @@
 ﻿
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_teamBlockRemoveShiftCategoryOnBestDateService = teamBlockRemoveShiftCategoryOnBestDateService;
 		}
 
-		public IList<IScheduleDayPro> Remove(IShiftCategoryLimitation shiftCategoryLimitation, SchedulingOptions schedulingOptions,  IScheduleMatrixPro scheduleMatrixPro, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		public IList<IScheduleDayPro> Remove(IShiftCategoryLimitation shiftCategoryLimitation, SchedulingOptions schedulingOptions,  IScheduleMatrixPro scheduleMatrixPro, IMinMaxStaffing minMaxStaffing, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			IList<IScheduleDayPro> days = scheduleMatrixPro.FullWeeksPeriodDays;
 			IList<IScheduleDayPro> result = new List<IScheduleDayPro>();
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				while (categoryCounter > shiftCategoryLimitation.MaxNumberOf)
 				{
 					var periodForWeek = new DateOnlyPeriod(days[o].Day, days[o].Day.AddDays(6));
-					var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(shiftCategoryLimitation.ShiftCategory, schedulingOptions, scheduleMatrixPro, periodForWeek, optimizationPreferences, schedulePartModifyAndRollbackService);
+					var thisResult = _teamBlockRemoveShiftCategoryOnBestDateService.Execute(shiftCategoryLimitation.ShiftCategory, schedulingOptions, scheduleMatrixPro, periodForWeek, minMaxStaffing, schedulePartModifyAndRollbackService);
 
 					if (thisResult != null) result.Add(thisResult);
 					else break;

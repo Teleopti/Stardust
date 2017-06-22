@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 				_requiredScheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays,
 					backgroundWorker,
-					optimizationPreferences,
 					schedulingOptions,
 					selectedPeriod);
 

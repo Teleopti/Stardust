@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -8,13 +9,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// </summary>
     public interface IScheduleMatrixValueCalculatorProFactory
     {
-	    /// <summary>
-	    /// Creates the schedule matrix value calculator pro.
-	    /// </summary>
-	    /// <param name="scheduleDays">The schedule days.</param>
-	    /// <param name="optimizerPreferences">The optimizer preferences.</param>
-	    /// <param name="stateHolder">The state holder.</param>
-	    /// <returns></returns>
-	    IScheduleMatrixValueCalculatorPro CreateScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays, IOptimizationPreferences optimizerPreferences, ISchedulingResultStateHolder stateHolder);
+	    IScheduleMatrixValueCalculatorPro CreateScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays, IMinMaxStaffing minMaxStaffing, ISchedulingResultStateHolder stateHolder);
     }
 }

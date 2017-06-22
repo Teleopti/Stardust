@@ -113,8 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			if (optimizationPreferences.General.UseShiftCategoryLimitations)
 			{
-				_requiredScheduleHelper.RemoveShiftCategoryBackToLegalState(matrixList, backgroundWorker, optimizationPreferences,
-					schedulingOptions,
+				_requiredScheduleHelper.RemoveShiftCategoryBackToLegalState(matrixList, backgroundWorker, schedulingOptions,
 					selectedPeriod);
 			}
 		}

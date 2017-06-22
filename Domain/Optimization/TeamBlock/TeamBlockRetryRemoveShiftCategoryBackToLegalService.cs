@@ -60,7 +60,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		public void Execute(SchedulingOptions schedulingOptions, 
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			IEnumerable<IScheduleMatrixPro> scheduleMatrixListPros,
-			IOptimizationPreferences optimizationPreferences,
 			ISchedulingProgress backgroundWorker)
 		{
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1, schedulingOptions.ConsiderShortBreaks, schedulingResultStateHolder, _userTimeZone);
@@ -75,10 +74,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 					var unsuccessfulDays = new HashSet<DateOnly>();
 					executePerShiftCategoryLimitation(schedulingOptions, matrix, schedulingResultStateHolder,
-						rollbackService, resourceCalculateDelayer, scheduleMatrixListPros, shiftNudgeDirective, optimizationPreferences, limitation, unsuccessfulDays);
+						rollbackService, resourceCalculateDelayer, scheduleMatrixListPros, shiftNudgeDirective, limitation, unsuccessfulDays);
 
 					unsuccessfulDays.ForEach(x => matrix.UnlockPeriod(x.ToDateOnlyPeriod()));
-					_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, matrix, optimizationPreferences, limitation, rollbackService);
+					_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, matrix, limitation, rollbackService);
 				}
 			}
 
@@ -88,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				foreach (var limitation in scheduleMatrixPro.SchedulePeriod.ShiftCategoryLimitationCollection())
 				{
-					_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation, rollbackServiceTemp);
+					_removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, limitation, rollbackServiceTemp);
 				}
 			}
 			//
@@ -97,10 +96,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private void executePerShiftCategoryLimitation(SchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro,
 			ISchedulingResultStateHolder schedulingResultStateHolder, ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros,
-			ShiftNudgeDirective shiftNudgeDirective, IOptimizationPreferences optimizationPreferences,
-			IShiftCategoryLimitation limitation, HashSet<DateOnly> lockedDays)
+			ShiftNudgeDirective shiftNudgeDirective, IShiftCategoryLimitation limitation, HashSet<DateOnly> lockedDays)
 		{
-			var removedScheduleDayPros = _removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, optimizationPreferences, limitation, rollbackService);
+			var removedScheduleDayPros = _removeScheduleDayProsBasedOnShiftCategoryLimitation.Execute(schedulingOptions, scheduleMatrixPro, limitation, rollbackService);
 
 			foreach (var removedScheduleDayPro in removedScheduleDayPros)
 			{
@@ -143,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				lockedDays.Add(removedScheduleDayPro.Day);
 
 				executePerShiftCategoryLimitation(schedulingOptions, scheduleMatrixPro, schedulingResultStateHolder, rollbackService,
-					resourceCalculateDelayer, allScheduleMatrixPros, shiftNudgeDirective, optimizationPreferences, limitation, lockedDays);
+					resourceCalculateDelayer, allScheduleMatrixPros, shiftNudgeDirective, limitation, lockedDays);
 			}
 		}
 	}

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyConstructor()
         {
             SchedulingResultStateHolder stateHolder = new SchedulingResultStateHolder();
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, new UtcTimeZone());
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences.Advanced, stateHolder, new UtcTimeZone());
             Assert.IsNotNull(_target);
             Assert.AreSame(_scheduleDays, _target.ScheduleDays);
             Assert.AreSame(stateHolder, _target.StateHolder);
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyPeriodValue()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, new UtcTimeZone());
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences.Advanced, stateHolder, new UtcTimeZone());
 
             Assert.IsNotNull(_target);
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyPeriodValue2()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, new UtcTimeZone());
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences.Advanced, stateHolder, new UtcTimeZone());
 
 			Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.WorkShiftOptimization), 0.01d);
             stateHolder.Dispose();
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         public void VerifyPeriodValueForDayOffOptimization()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences, stateHolder, new UtcTimeZone());
+            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _optimizerPreferences.Advanced, stateHolder, new UtcTimeZone());
 
             Assert.AreEqual(0d, _target.PeriodValue(IterationOperationOption.DayOffOptimization), 0.01d);
             stateHolder.Dispose();

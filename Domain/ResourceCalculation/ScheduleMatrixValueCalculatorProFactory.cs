@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -13,11 +14,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    _userTimeZone = userTimeZone;
 	    }
 
-        public IScheduleMatrixValueCalculatorPro CreateScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays, IOptimizationPreferences optimizerPreferences, ISchedulingResultStateHolder stateHolder)
+        public IScheduleMatrixValueCalculatorPro CreateScheduleMatrixValueCalculatorPro(IEnumerable<DateOnly> scheduleDays, IMinMaxStaffing minMaxStaffing, ISchedulingResultStateHolder stateHolder)
         {
             return new ScheduleMatrixValueCalculatorPro
                 (scheduleDays,
-                 optimizerPreferences,
+                 minMaxStaffing,
                  stateHolder,
 								 _userTimeZone);
         }

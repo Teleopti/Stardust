@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
-		[Ignore("#44834")]
 		public void ShouldRespectMinimumStaffingWhenBreakingShiftCategoryLimiation()
 		{
 			var date = new DateOnly(2017, 1, 10);

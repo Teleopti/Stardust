@@ -9,12 +9,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </summary>
 	public interface ISchedulePeriodListShiftCategoryBackToLegalStateService
 	{
-		/// <summary>
-		/// Executes the back to legal state for a list of <see cref="ISchedulePeriod"/>s.
-		/// </summary>
-		/// <param name="scheduleMatrixList">The schedule matrix list.</param>
-		/// <param name="schedulingOptions">The scheduling options.</param>
-		/// <param name="optimizationPreferences">The optimization preferences.</param>
-		void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixList, SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences);
+		void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixList, SchedulingOptions schedulingOptions);
 	}
 }

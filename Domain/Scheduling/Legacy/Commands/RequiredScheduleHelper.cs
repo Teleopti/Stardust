@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		void RemoveShiftCategoryBackToLegalState(
 			IEnumerable<IScheduleMatrixPro> matrixList,
-			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
+			ISchedulingProgress backgroundWorker,
 			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
 
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		[RemoveMeWithToggle("remove when both toggles are deleted", Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333, Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		public void RemoveShiftCategoryBackToLegalState(
 			IEnumerable<IScheduleMatrixPro> matrixList,
-			ISchedulingProgress backgroundWorker, IOptimizationPreferences optimizationPreferences,
+			ISchedulingProgress backgroundWorker,
 			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
 		{
 			if (matrixList == null)
@@ -97,11 +97,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 				if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 				{
-					_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, _resultStateHolder(), matrixList, optimizationPreferences, backgroundWorker);
+					_teamBlockRemoveShiftCategoryBackToLegalService.Execute(schedulingOptions, _resultStateHolder(), matrixList, backgroundWorker);
 				}
 				else
 				{
-					_shiftCategoryBackToLegalState.Execute(matrixList, schedulingOptions, optimizationPreferences);
+					_shiftCategoryBackToLegalState.Execute(matrixList, schedulingOptions);
 				}
 			}
 		}

@@ -26,13 +26,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 		}
 
-		public void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixList, SchedulingOptions schedulingOptions, IOptimizationPreferences optimizationPreferences)
+		public void Execute(IEnumerable<IScheduleMatrixPro> scheduleMatrixList, SchedulingOptions schedulingOptions)
 		{
 			IScheduleMatrixValueCalculatorPro scheduleMatrixValueCalculator =
 				BuildScheduleMatrixValueCalculator(
 					_scheduleMatrixValueCalculatorProFactory,
 					scheduleMatrixList,
-					optimizationPreferences,
+					schedulingOptions,
 					_stateHolder());
 
 			ISchedulePeriodShiftCategoryBackToLegalStateServiceBuilder schedulePeriodBackToLegalStateServiceBuilder =
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual IScheduleMatrixValueCalculatorPro BuildScheduleMatrixValueCalculator
 			(IScheduleMatrixValueCalculatorProFactory scheduleMatrixValueCalculatorProFactory,
 			IEnumerable<IScheduleMatrixPro> scheduleMatrixList,
-			 IOptimizationPreferences optimizerPreferences,
-			 ISchedulingResultStateHolder stateHolder)
+			IMinMaxStaffing minMaxStaffing, 
+			ISchedulingResultStateHolder stateHolder)
 		{
 			IList<DateOnly> days = new List<DateOnly>();
 			foreach (IScheduleMatrixPro matrix in scheduleMatrixList)
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 			}
 			return scheduleMatrixValueCalculatorProFactory.CreateScheduleMatrixValueCalculatorPro
-				(days, optimizerPreferences, stateHolder);
+				(days, minMaxStaffing, stateHolder);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockRemoveShiftCategoryOnBestDateService
 	{
-		IScheduleDayPro Execute(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
+		IScheduleDayPro Execute(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IMinMaxStaffing minMaxStaffing, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
 		bool IsThisDayCorrectShiftCategory(IScheduleDayPro scheduleDayPro, IShiftCategory shiftCategory);
 	}
 
@@ -39,14 +39,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_resourceCalculation = resourceCalculation;
 		}
 
-		public IScheduleDayPro Execute(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		public IScheduleDayPro Execute(IShiftCategory shiftCategory, SchedulingOptions schedulingOptions, IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod dateOnlyPeriod, IMinMaxStaffing minMaxStaffing, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			
 			IList<IScheduleDayPro> daysToWorkWith = scheduleMatrixPro.UnlockedDays.Where(scheduleDayPro => dateOnlyPeriod.Contains(scheduleDayPro.Day) && IsThisDayCorrectShiftCategory(scheduleDayPro, shiftCategory)).ToList();
 			var min = double.MaxValue;
 			IScheduleDayPro currentDay = null;
 
-			var dayValueCalculator = _scheduleMatrixValueCalculatorProFactory.CreateScheduleMatrixValueCalculatorPro(dateOnlyPeriod.DayCollection(), optimizationPreferences, _schedulingResultStateHolder());
+			var dayValueCalculator = _scheduleMatrixValueCalculatorProFactory.CreateScheduleMatrixValueCalculatorPro(dateOnlyPeriod.DayCollection(), minMaxStaffing, _schedulingResultStateHolder());
 
 			foreach (var scheduleDayPro in daysToWorkWith)
 			{

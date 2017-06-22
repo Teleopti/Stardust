@@ -19,13 +19,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public IEnumerable<IScheduleDayPro> Execute(SchedulingOptions schedulingOptions, 
 			IScheduleMatrixPro scheduleMatrixPro,
-			IOptimizationPreferences optimizationPreferences, 
 			IShiftCategoryLimitation limitation,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			var removedScheduleDayPros = limitation.Weekly
-				? _shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences, schedulePartModifyAndRollbackService)
-				: _shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, optimizationPreferences, schedulePartModifyAndRollbackService);
+				? _shiftCategoryWeekRemover.Remove(limitation, schedulingOptions, scheduleMatrixPro, schedulingOptions, schedulePartModifyAndRollbackService)
+				: _shiftCategoryPeriodRemover.RemoveShiftCategoryOnPeriod(limitation, schedulingOptions, scheduleMatrixPro, schedulingOptions, schedulePartModifyAndRollbackService);
 			return removedScheduleDayPros;
 		}
 	}
