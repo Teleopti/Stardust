@@ -15,12 +15,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// <param name="skillList">The skill list.</param>
         /// <returns></returns>
         double? DayValueForSkills(DateOnly scheduleDay, IList<ISkill> skillList);
-
-        
-        /// <summary>
-        /// Gets the schedule days.
-        /// </summary>
-        IEnumerable<DateOnly> ScheduleDays{get; }
-        
     }
 }

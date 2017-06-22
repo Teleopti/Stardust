@@ -24,16 +24,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		    _activeSkills = stateHolder.Skills;
 		}
 
-        public IEnumerable<DateOnly> ScheduleDays
-        {
-            get { return _scheduleDays; }
-        }
-
-        public ISchedulingResultStateHolder StateHolder
-        {
-            get { return _stateHolder; }
-        }
-
         public double PeriodValue(IterationOperationOption iterationOperationOption)
         {
             return CalculateInitialValue(iterationOperationOption);

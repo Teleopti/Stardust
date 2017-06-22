@@ -30,16 +30,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
         [Test]
-        public void VerifyConstructor()
-        {
-            SchedulingResultStateHolder stateHolder = new SchedulingResultStateHolder();
-            _target = new ScheduleMatrixValueCalculatorPro(_scheduleDays, _schedulingOptions, stateHolder, new UtcTimeZone());
-            Assert.IsNotNull(_target);
-            Assert.AreSame(_scheduleDays, _target.ScheduleDays);
-            Assert.AreSame(stateHolder, _target.StateHolder);
-        }
-
-        [Test]
         public void VerifyPeriodValue()
         {
             ISchedulingResultStateHolder stateHolder = createStateHolderForTest(_mockRepository);
