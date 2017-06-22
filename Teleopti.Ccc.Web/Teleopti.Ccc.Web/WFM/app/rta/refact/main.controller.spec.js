@@ -159,7 +159,28 @@ describe('RtaMainController', function () {
 
   describe('RtaOverviewComponent handling', function () {
 
-    it('should get site card data', function () {
+    it('should build site card view model', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: "londonGuid",
+          Name: "London",
+          AgentsCount: 11,
+          InAlarmCount: 5,
+          Color: "warning"
+        });
+
+      vm = $controllerBuilder.createController().vm;
+
+      expect(vm.siteCards[0].site.Id).toEqual("londonGuid");
+      expect(vm.siteCards[0].site.Name).toEqual("London");
+      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].site.InAlarmCount).toEqual(5);
+      expect(vm.siteCards[0].site.Color).toEqual("warning");
+      expect(vm.siteCards[0].isOpen).toEqual(false);
+      expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
+    });
+
+    it('should update adherence', function () {
       $fakeBackend.withSiteAdherence({
         Id: "londonGuid",
         Name: "London",
@@ -168,13 +189,27 @@ describe('RtaMainController', function () {
         Color: "warning"
       });
 
-      vm = $controllerBuilder.createController().vm;
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+      c.apply(function () {
+        $fakeBackend.clearSiteAdherences()
+          .withSiteAdherence({
+            Id: "londonGuid",
+            Name: "London",
+            AgentsCount: 11,
+            InAlarmCount: 2,
+            Color: "good"
+          });
+      })
+        .wait(5000);
 
-      expect(vm.siteCards[0].Id).toEqual("londonGuid");
-      expect(vm.siteCards[0].Name).toEqual("London");
-      expect(vm.siteCards[0].AgentsCount).toEqual(11);
-      expect(vm.siteCards[0].InAlarmCount).toEqual(5);
-      expect(vm.siteCards[0].Color).toEqual("warning");
+      expect(vm.siteCards[0].site.Id).toEqual("londonGuid");
+      expect(vm.siteCards[0].site.Name).toEqual("London");
+      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
+      expect(vm.siteCards[0].site.Color).toEqual("good");
+      expect(vm.siteCards[0].isOpen).toEqual(false);
+      expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
     });
 
   });

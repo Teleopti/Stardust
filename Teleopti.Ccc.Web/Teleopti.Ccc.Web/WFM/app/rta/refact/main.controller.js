@@ -5,9 +5,9 @@
 		.module('wfm.rta')
 		.controller('RtaMainController', RtaMainController);
 
-	RtaMainController.$inject = ['rtaService', '$state', '$stateParams'];
+	RtaMainController.$inject = ['rtaService', '$state', '$stateParams', '$interval'];
 
-	function RtaMainController(rtaService, $state, $stateParams) {
+	function RtaMainController(rtaService, $state, $stateParams, $interval) {
 		var vm = this;
 		vm.skillIds = $stateParams.skillIds || [];
 		$stateParams.open = ($stateParams.open || "false");
@@ -34,15 +34,51 @@
 			}
 		})();
 
-		(function fetchDataForOverviewComponent(){
-			rtaService.getSiteCardsFor().then(function(result){
-				vm.siteCards = result;
-				vm.siteCards.forEach(function(site){
-					site.isOpen = $stateParams.open != "false";
-				});
-
+		(function fetchDataForOverviewComponent() {
+			rtaService.getSiteCardsFor().then(function (result) {
+				vm.siteCards = buildSiteCards(result);
 			});
+
+			$interval(function () {
+				rtaService.getSiteCardsFor().then(function (result) {
+					result.forEach(function (r) {
+						updateSiteCard(r);
+					})
+				});
+			}, 5000)
+
+
+			function fetchTeamData(card) {
+				if (!card.isOpen) return;
+
+				rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
+					var match = vm.siteCards.find(function(c) {
+						return c.site.Id === card.site.Id;
+					})
+					match.teams = teams;
+				});
+			}
+
+			function updateSiteCard(site) {
+				var match = vm.siteCards.find(function(card) {
+					return card.site.Id === site.Id;
+				});
+				match.site.Color = site.Color;
+				match.site.InAlarmCount = site.InAlarmCount;
+			}
+
+			function buildSiteCards(sites) {
+				return sites.map(function (site) {
+					return {
+						site: site,
+						isOpen: $stateParams.open != "false",
+						fetchTeamData: fetchTeamData
+					}
+				});
+			}
 		})();
+
+
 
 	}
 })();

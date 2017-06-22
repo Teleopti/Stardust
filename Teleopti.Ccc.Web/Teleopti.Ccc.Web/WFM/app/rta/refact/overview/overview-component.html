@@ -1,9 +1,26 @@
-﻿<rta-card ng-repeat="card in $ctrl.siteCards" ng-open="card.isOpen">
-    <rta-card-header >{{card.Name}}</rta-card-header>
+﻿<rta-card ng-repeat="card in $ctrl.siteCards" ng-open="card.isOpen" ng-click="card.fetchTeamData(card)">
+    <rta-card-header>
+        <span><b>{{card.site.Name}}</b></span>
+        <span class="full-padding">{{'InAlarm'|translate}}:
+			<b>{{card.site.InAlarmCount}}</b>
+		</span>
+    </rta-card-header>
     <rta-card-body>
         <div class="con-row">
             <div class="con-flex">
+                <div class="wfm-grid" ng-hide="togg" class="animate-show">
+                    <div class="grid-card-mini" ng-repeat="team in card.teams">
+                        <div class="list-content" style="padding: 1%; background: #bada55;">
+                            <b><span class="wfm-checkbox-label org-name-container" ng-attr-data-max="{{team.AgentsCount}}" ng-attr-data-value="{{team.InAlarmCount}}">
+								{{team.Name}}
+							</span></b>
+                            <span class="full-padding">{{'InAlarm'|translate}}:
+								<b>{{team.InAlarmCount}}</b>
+							</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </rta-card-body>
-</rta-card>   
+</rta-card>

@@ -7,12 +7,13 @@
       templateUrl: 'app/rta/refact/overview/overview-component.html',
       controller: RtaOverviewComponentController,
       bindings: {
-        siteCards: '='
+        siteCards: '=',
       },
     });
 
   RtaOverviewComponentController.inject = [];
   function RtaOverviewComponentController() {
     var ctrl = this;
+    
   }
 })();
