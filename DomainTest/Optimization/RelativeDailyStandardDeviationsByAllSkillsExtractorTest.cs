@@ -74,8 +74,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<double?> ret;
             using (_mocks.Playback())
 			{
-				_schedulingOptions.UseMinimumPersons = false;
-				_schedulingOptions.UseMaximumPersons = false;
+				_schedulingOptions.UseMinimumStaffing = false;
+				_schedulingOptions.UseMaximumStaffing = false;
 				ret = _target.Values();
             }
             Assert.AreEqual(1, ret.Count);
@@ -121,8 +121,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<double?> ret;
             using (_mocks.Playback())
             {
-	            _schedulingOptions.UseMinimumPersons = true;
-				_schedulingOptions.UseMaximumPersons = false;
+	            _schedulingOptions.UseMinimumStaffing = true;
+				_schedulingOptions.UseMaximumStaffing = false;
 				ret = _target.Values();
             }
             Assert.AreEqual(1, ret.Count);
@@ -165,8 +165,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<double?> ret;
             using (_mocks.Playback())
 			{
-				_schedulingOptions.UseMinimumPersons = false;
-				_schedulingOptions.UseMaximumPersons = true;
+				_schedulingOptions.UseMinimumStaffing = false;
+				_schedulingOptions.UseMaximumStaffing = true;
 				ret = _target.Values();
             }
             Assert.AreEqual(1, ret.Count);
@@ -212,8 +212,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<double?> ret;
             using (_mocks.Playback())
 			{
-				_schedulingOptions.UseMinimumPersons = true;
-				_schedulingOptions.UseMaximumPersons = true;
+				_schedulingOptions.UseMinimumStaffing = true;
+				_schedulingOptions.UseMaximumStaffing = true;
 				ret = _target.Values();
             }
             Assert.AreEqual(1, ret.Count);
@@ -260,8 +260,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IList<double?> ret;
             using (_mocks.Playback())
 			{
-				_schedulingOptions.UseMinimumPersons = false;
-				_schedulingOptions.UseMaximumPersons = false;
+				_schedulingOptions.UseMinimumStaffing = false;
+				_schedulingOptions.UseMaximumStaffing = false;
 
 				ret = _target.Values();
             }

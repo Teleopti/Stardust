@@ -28,10 +28,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsTrue(_target.UseRotations);
             Assert.IsTrue(_target.RotationDaysOnly);
 
-            _target.UseMaximumPersons = true;
-            _target.UseMinimumPersons = true;
-            Assert.IsTrue(_target.UseMaximumPersons);
-            Assert.IsTrue(_target.UseMinimumPersons);
+            _target.UseMaximumStaffing = true;
+            _target.UseMinimumStaffing = true;
+            Assert.IsTrue(_target.UseMaximumStaffing);
+            Assert.IsTrue(_target.UseMinimumStaffing);
 
             Assert.AreEqual(0, _target.NotAllowedShiftCategories.Count);
 

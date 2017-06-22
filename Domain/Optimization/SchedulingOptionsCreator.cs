@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.UseTeamSameDaysOff;
 			}
 
-			schedulingOptions.UseMinimumPersons = optimizationPreferences.Advanced.UseMinimumStaffing;
-			schedulingOptions.UseMaximumPersons = optimizationPreferences.Advanced.UseMaximumStaffing;
+			schedulingOptions.UseMinimumStaffing = optimizationPreferences.Advanced.UseMinimumStaffing;
+			schedulingOptions.UseMaximumStaffing = optimizationPreferences.Advanced.UseMaximumStaffing;
 			schedulingOptions.UseAverageShiftLengths = optimizationPreferences.Advanced.UseAverageShiftLengths;
 
 			// extra properties

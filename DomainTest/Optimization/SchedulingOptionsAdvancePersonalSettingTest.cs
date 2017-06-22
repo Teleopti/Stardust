@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		    var options = new SchedulingOptions
 		    {
 			    ShiftCategory = shiftCategory,
-			    UseMinimumPersons = true,
-			    UseMaximumPersons = true,
+			    UseMinimumStaffing = true,
+			    UseMaximumStaffing = true,
 			    UseAverageShiftLengths = true,
 				RefreshRate = 32,
 				ResourceCalculateFrequency = 12
@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		    target.MapTo(targetOptions, new List<IShiftCategory> {shiftCategory});
 
 		    targetOptions.ShiftCategory.Should().Be.EqualTo(shiftCategory);
-		    targetOptions.UseMaximumPersons.Should().Be.True();
-		    targetOptions.UseMinimumPersons.Should().Be.True();
+		    targetOptions.UseMaximumStaffing.Should().Be.True();
+		    targetOptions.UseMinimumStaffing.Should().Be.True();
 		    targetOptions.UseAverageShiftLengths.Should().Be.True();
 		    targetOptions.RefreshRate.Should().Be.EqualTo(32);
 		    targetOptions.ResourceCalculateFrequency.Should().Be.EqualTo(12);

@@ -41,15 +41,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					shiftValue = _workShiftCalculator.CalculateShiftValue(((IWorkShiftCalculatableProjection)shiftProjection).WorkShiftCalculatableLayers,
 						dataHolders,
 						schedulingOptions.WorkShiftLengthHintOption,
-						schedulingOptions.UseMinimumPersons,
-						schedulingOptions.UseMaximumPersons),
+						schedulingOptions.UseMinimumStaffing,
+						schedulingOptions.UseMaximumStaffing),
 					nonBlendValue = shouldCalculateNonBlendValue
 						? _nonBlendWorkShiftCalculator.CalculateShiftValue(person,
 							shiftProjection.MainShiftProjection,
 							nonBlendSkillPeriods,
 							schedulingOptions.WorkShiftLengthHintOption,
-							schedulingOptions.UseMinimumPersons,
-							schedulingOptions.UseMaximumPersons)
+							schedulingOptions.UseMinimumStaffing,
+							schedulingOptions.UseMaximumStaffing)
 						: null
 				};
 				double value = v.shiftValue;

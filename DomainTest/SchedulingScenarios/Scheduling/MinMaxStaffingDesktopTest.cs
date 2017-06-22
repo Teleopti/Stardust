@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				skillDataPeriod.SkillPersonData = new SkillPersonData(1, 0); //at least one agent all daytwo
 			}
-			var schedulingOptions = new SchedulingOptions {UseMinimumPersons = true};
+			var schedulingOptions = new SchedulingOptions {UseMinimumStaffing = true};
 
 			Target.Execute(new NoSchedulingCallback(),
 				schedulingOptions,
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				skillDataPeriod.SkillPersonData = new SkillPersonData(0, 1); //max 1 agents
 			}
 			//Use schedulingoptions here
-			var schedulingOptions = new SchedulingOptions { UseMaximumPersons = true };
+			var schedulingOptions = new SchedulingOptions { UseMaximumStaffing = true };
 			var optPrefs = new OptimizationPreferences {Advanced =
 			{
 				UseMaximumStaffing = true

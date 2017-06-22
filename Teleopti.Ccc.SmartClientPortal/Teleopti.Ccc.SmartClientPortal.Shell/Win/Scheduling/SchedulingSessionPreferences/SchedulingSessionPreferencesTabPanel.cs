@@ -215,8 +215,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			_schedulingOptions.RotationDaysOnly = _localSchedulingOptions.RotationDaysOnly;
 			_schedulingOptions.AvailabilityDaysOnly = _localSchedulingOptions.AvailabilityDaysOnly;
 			_schedulingOptions.PreferencesDaysOnly = _localSchedulingOptions.PreferencesDaysOnly;
-			_schedulingOptions.UseMaximumPersons = _localSchedulingOptions.UseMaximumPersons;
-			_schedulingOptions.UseMinimumPersons = _localSchedulingOptions.UseMinimumPersons;
+			_schedulingOptions.UseMaximumStaffing = _localSchedulingOptions.UseMaximumStaffing;
+			_schedulingOptions.UseMinimumStaffing = _localSchedulingOptions.UseMinimumStaffing;
 			_schedulingOptions.UseAvailability = _localSchedulingOptions.UseAvailability;
 			_schedulingOptions.UseStudentAvailability = _localSchedulingOptions.UseStudentAvailability;
 			_schedulingOptions.UsePreferences = _localSchedulingOptions.UsePreferences;
@@ -255,8 +255,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			_localSchedulingOptions.UseAvailability = checkBoxUseAvailability.Checked;
 			_localSchedulingOptions.AvailabilityDaysOnly = checkBoxOnlyAvailabilityDays.Checked;
 			_localSchedulingOptions.UseStudentAvailability = checkBoxUseStudentAvailability.Checked;
-			_localSchedulingOptions.UseMaximumPersons = checkBoxUseMaximumPersons.Checked;
-			_localSchedulingOptions.UseMinimumPersons = checkBoxUseMinimumPersons.Checked;
+			_localSchedulingOptions.UseMaximumStaffing = checkBoxUseMaximumPersons.Checked;
+			_localSchedulingOptions.UseMinimumStaffing = checkBoxUseMinimumPersons.Checked;
 			_localSchedulingOptions.UsePreferences = checkBoxUsePreferences.Checked;
 			_localSchedulingOptions.PreferencesDaysOnly = checkBoxOnlyPreferenceDays.Checked;
 			_localSchedulingOptions.UsePreferencesMustHaveOnly = checkBoxMustHaves.Checked;
@@ -299,8 +299,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			checkBoxMustHaves.Checked = _localSchedulingOptions.UsePreferencesMustHaveOnly;
 			checkBoxMustHaves.Enabled = _localSchedulingOptions.UsePreferences;
 
-			checkBoxUseMaximumPersons.Checked = _localSchedulingOptions.UseMaximumPersons;
-			checkBoxUseMinimumPersons.Checked = _localSchedulingOptions.UseMinimumPersons;
+			checkBoxUseMaximumPersons.Checked = _localSchedulingOptions.UseMaximumStaffing;
+			checkBoxUseMinimumPersons.Checked = _localSchedulingOptions.UseMinimumStaffing;
 
 			checkBoxUseShiftCategoryRestrictions.Checked = _localSchedulingOptions.UseShiftCategoryLimitations;
 

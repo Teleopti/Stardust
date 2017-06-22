@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Domain.Optimization
        
 		public void MapTo(SchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories)
 		{
-			schedulingOptions.UseMinimumPersons = _useMinStaff;
-			schedulingOptions.UseMaximumPersons = _useMaxStaff;
+			schedulingOptions.UseMinimumStaffing = _useMinStaff;
+			schedulingOptions.UseMaximumStaffing = _useMaxStaff;
 			schedulingOptions.UseAverageShiftLengths = _useAverageShiftLengths;
 			schedulingOptions.RefreshRate = _refreshRate < 1? 10: _refreshRate;
 			schedulingOptions.ResourceCalculateFrequency = _calculationFrequenzy < 1? 1 : _calculationFrequenzy;
@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void MapFrom(SchedulingOptions schedulingOptions)
 		{
-			_useMinStaff = schedulingOptions.UseMinimumPersons;
-			_useMaxStaff = schedulingOptions.UseMaximumPersons;
+			_useMinStaff = schedulingOptions.UseMinimumStaffing;
+			_useMaxStaff = schedulingOptions.UseMaximumStaffing;
 			_useAverageShiftLengths = schedulingOptions.UseAverageShiftLengths;
 			_refreshRate = schedulingOptions.RefreshRate;
 			_calculationFrequenzy = schedulingOptions.ResourceCalculateFrequency;

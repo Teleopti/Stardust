@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(_groupPersonSkillAggregator, teamBlockSingleDayInfo, day, allSkillDays, false);
 
 
-			var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumPersons, schedulingOptions.UseMaximumPersons);
+			var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumStaffing, schedulingOptions.UseMaximumStaffing);
 
 			resultList = _workSelectorForIntraInterval.SelectAllShiftProjectionCaches(shifts, activityInternalData,
 				parameters, TimeZoneGuard.Instance.CurrentTimeZone());

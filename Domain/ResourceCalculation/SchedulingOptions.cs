@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private ISpecification<IEditableShift> _mainShiftOptimizeActivitySpecification;
 
-	    public bool UseMinimumPersons { get; set; }
-        public bool UseMaximumPersons { get; set; }
+	    public bool UseMinimumStaffing { get; set; }
+        public bool UseMaximumStaffing { get; set; }
         public bool OnlyShiftsWhenUnderstaffed { get; set; }
         public ScheduleEmploymentType ScheduleEmploymentType { get; set; }
         public IShiftCategory ShiftCategory { get; set; }

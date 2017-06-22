@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             IList<ISkillStaffPeriod> skillStaffPeriods =
 								_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(allSkills, dateTimePeriod);
            
-            bool useMinPersonnel = _schedulingOptions.UseMinimumPersons;
-            bool useMaxPersonnel = _schedulingOptions.UseMaximumPersons;
+            bool useMinPersonnel = _schedulingOptions.UseMinimumStaffing;
+            bool useMaxPersonnel = _schedulingOptions.UseMaximumStaffing;
 
             return SkillStaffPeriodsRelativeDifferenceHours(skillStaffPeriods, useMinPersonnel, useMaxPersonnel);
         }
