@@ -3,6 +3,7 @@ using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SystemSetting;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -21,15 +22,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IUserDevice> Find(IPerson person)
 		{
-			var result = Session.CreateCriteria(typeof(IUserDevice), "pd")
-				.Add(Restrictions.Eq("Person", person))
+			var result = Session.CreateCriteria(typeof(UserDevice), "pd")
+				.Add(Restrictions.Eq("Owner", person))
 				.List<IUserDevice>();
 			return result;
 		}
 
 		public IUserDevice FindByToken(string token)
 		{
-			return Session.CreateCriteria(typeof(IUserDevice), "pd")
+			return Session.CreateCriteria(typeof(UserDevice), "pd")
 				.Add(Restrictions.Eq("Token", token))
 				.UniqueResult<IUserDevice>();
 

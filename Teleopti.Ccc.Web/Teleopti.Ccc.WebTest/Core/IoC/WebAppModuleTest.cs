@@ -730,5 +730,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			requestContainer.Resolve<LeaderboardController>()
 				.Should().Not.Be.Null();
 		}
+
+		[Test]
+		public void ShouldResolveUserTokenController()
+		{
+			requestContainer.Resolve<UserTokenController>()
+				.Should().Not.Be.Null();
+		}
 	}
 }

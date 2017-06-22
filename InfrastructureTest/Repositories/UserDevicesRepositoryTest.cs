@@ -1,13 +1,9 @@
-using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -59,6 +55,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var target = new UserDeviceRepository(CurrUnitOfWork);
 
 			var userDevice = target.FindByToken("newToken");
+
+			userDevice.Id.Should().Be.EqualTo(persisted.Id);
+		}
+
+		[Test]
+		public void ShouldFindUserDeviceByPerson()
+		{
+			var persisted = new UserDevice
+			{
+				Owner = person,
+				Token = "newToken"
+			};
+			PersistAndRemoveFromUnitOfWork(persisted);
+
+			var target = new UserDeviceRepository(CurrUnitOfWork);
+
+			var userDevice = target.Find(person).Single();
 
 			userDevice.Id.Should().Be.EqualTo(persisted.Id);
 		}

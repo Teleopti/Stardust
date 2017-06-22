@@ -31,9 +31,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			var result = UserDeviceRepository.Find(LogonUser.CurrentUser());
 			result.Single().Token.Should().Be.EqualTo("asdfasdf");
 		}
-
-
-
 		
 		[Test]
 		public void ShouldNotStoreDuplicateUserToken()
@@ -42,6 +39,14 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			Target.StoreUserDevice("asdfasdf");
 			var result = UserDeviceRepository.Find(LogonUser.CurrentUser());
 			result.Single().Token.Should().Be.EqualTo("asdfasdf");
+		}
+		
+		[Test]
+		public void ShouldNotStoreEmptyUserToken()
+		{
+			Target.StoreUserDevice("");
+			var result = UserDeviceRepository.Find(LogonUser.CurrentUser());
+			result.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]

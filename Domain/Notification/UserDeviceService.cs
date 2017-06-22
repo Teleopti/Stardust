@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting;
@@ -20,12 +21,13 @@ namespace Teleopti.Ccc.Domain.Notification
 
 		public void StoreUserDevice(string token)
 		{
+			if(token.IsNullOrEmpty()) return;
 			var currentDevice = _userDeviceRepository.FindByToken(token);
 			if (currentDevice != null)
 			{
 				currentDevice.Owner = _loggedOnUser.CurrentUser();
 			}
-			else
+			else 
 			{
 				_userDeviceRepository.Add(new UserDevice
 				{
