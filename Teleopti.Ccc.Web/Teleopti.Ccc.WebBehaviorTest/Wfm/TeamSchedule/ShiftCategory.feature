@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfEnabled('WfmTeamSchedule_ShowShiftCategory_39796')
 Feature: ShiftCategory
 	In order to find the mismatched shift
 	As a team leader

@@ -10,7 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-				ViewShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ShowShiftCategory_39796,
 				ModifyShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ModifyShiftCategory_39797,
 				ShowContractTimeEnabled: toggleSvc.WfmTeamSchedule_ShowContractTime_38509,
 				EditAndViewInternalNoteEnabled: toggleSvc.WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
