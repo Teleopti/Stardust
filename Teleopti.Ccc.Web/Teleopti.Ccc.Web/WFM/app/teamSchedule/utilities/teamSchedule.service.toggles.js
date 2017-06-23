@@ -10,9 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-				DisplayWeekScheduleOnBusinessHierachyEnabled: toggleSvc
-					.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252,
-
 				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
 				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
 				AddOvertimeEnabled: toggleSvc.WfmTeamSchedule_AddOvertime_41696,

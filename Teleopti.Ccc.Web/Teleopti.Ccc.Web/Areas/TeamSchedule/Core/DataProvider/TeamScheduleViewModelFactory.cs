@@ -143,8 +143,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			IDictionary<PersonFinderField,string> criteriaDictionary,
 			DateOnly startOfWeekInUserTimeZone,int pageSize,int currentPageIndex)
 		{
-			var businessHierachyToggle = _toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayWeekScheduleOnBusinessHierachy_42252);
-
 			var week = new DateOnlyPeriod(startOfWeekInUserTimeZone, startOfWeekInUserTimeZone.AddDays(6));
 
 			var weekDays = week.DayCollection();
@@ -153,19 +151,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			foreach(var d in weekDays)
 			{
-				List<Guid> targetIds;
+				var targetIds = _searchProvider.FindPersonIds(d, teamIds, criteriaDictionary).Where(id => !personIds.Contains(id)).ToList();
 
-				if(businessHierachyToggle)
-				{
-					targetIds = _searchProvider.FindPersonIds(d, teamIds, criteriaDictionary).Where(id => !personIds.Contains(id)).ToList();
-				}
-				else
-				{
-					var searchCriteria = _searchProvider.CreatePersonFinderSearchCriteria(criteriaDictionary,9999,1,d,null);
-					_searchProvider.PopulateSearchCriteriaResult(searchCriteria);
-					targetIds = searchCriteria.DisplayRows.Where(r => r.RowNumber > 0).Select(r => r.PersonId).Where(id => !personIds.Contains(id)).ToList();
-				}
-			
 				if(targetIds.Count == 0) continue;
 				
 				var matchedPersons = _personRepository.FindPeople(targetIds);

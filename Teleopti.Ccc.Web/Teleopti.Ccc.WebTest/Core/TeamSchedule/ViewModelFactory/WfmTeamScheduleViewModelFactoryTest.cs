@@ -551,7 +551,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.All, "e"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm, scheduleDate, 20, 1);
+			var result = Target.CreateWeekScheduleViewModel(new []{Guid.NewGuid()}, searchTerm, scheduleDate, 20, 1);
 
 			result.Total.Should().Be(2);
 

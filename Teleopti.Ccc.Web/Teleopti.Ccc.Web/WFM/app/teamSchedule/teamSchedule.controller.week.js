@@ -91,9 +91,6 @@
 
 		vm.toggles = teamsToggles.all();
 		var loggedonUsersTeamId = $q.defer();
-		if (!vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled) {
-			loggedonUsersTeamId.resolve(null);
-		}
 
 		vm.onFavoriteSearchInitDefer = $q.defer();
 
@@ -125,10 +122,6 @@
 			loggedonUsersTeamId: loggedonUsersTeamId.promise,
 			defaultFavoriteSearch: vm.onFavoriteSearchInitDefer.promise
 		};
-
-		if (!vm.toggles.DisplayWeekScheduleOnBusinessHierachyEnabled) {
-			loggedonUsersTeamId.resolve(null);
-		}
 
 		vm.getSitesAndTeamsAsync = function () {
 			return vm._sitesAndTeamsPromise = $q(function (resolve, reject) {
