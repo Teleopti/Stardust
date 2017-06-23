@@ -26,7 +26,6 @@
 				scope.vm.isAddFullDayAbsenceAvailable = function () {
 					return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
 				};
-				scope.vm.checkPersonalAccountEnabled = containerCtrl.hasToggle('CheckPersonalAccountEnabled');
 				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
 				scope.vm.isAddIntradayAbsenceAvailable = function () {
@@ -203,14 +202,10 @@
 
 			var commandExecutionPromise;
 
-			if (vm.checkPersonalAccountEnabled) {
-				commandExecutionPromise = CommandCheckService.checkPersonalAccounts(requestData)
-					.then(function (data) {
-						return addAbsence(data);
-					});
-			} else {
-				commandExecutionPromise = addAbsence(requestData);
-			}
+			commandExecutionPromise = CommandCheckService.checkPersonalAccounts(requestData)
+				.then(function (data) {
+					return addAbsence(data);
+				});
 
 			if (commandExecutionPromise) {
 				commandExecutionPromise.then(function () { vm.runningCommand = false; });
