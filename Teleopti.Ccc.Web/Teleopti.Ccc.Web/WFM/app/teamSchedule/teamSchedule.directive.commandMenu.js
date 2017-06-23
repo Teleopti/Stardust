@@ -147,7 +147,7 @@
 		};
 
 		vm.canActiveMoveActivity = function () {
-			return vm.toggles.MoveActivityEnabled && vm.permissions.HasMoveActivityPermission;
+			return vm.permissions.HasMoveActivityPermission;
 		};
 
 		vm.canActiveMoveInvalidOverlappedActivity = function () {
@@ -163,7 +163,7 @@
 		};
 
 		vm.canActiveRemoveActivity = function () {
-			return (vm.toggles.RemoveActivityEnabled && vm.permissions.HasRemoveActivityPermission) || (vm.toggles.WfmTeamSchedule_RemoveOvertime_42481 && vm.permissions.HasRemoveOvertimePermission);
+			return vm.permissions.HasRemoveActivityPermission || (vm.toggles.WfmTeamSchedule_RemoveOvertime_42481 && vm.permissions.HasRemoveOvertimePermission);
 		};
 
 		vm.canActiveSwapShifts = function () {

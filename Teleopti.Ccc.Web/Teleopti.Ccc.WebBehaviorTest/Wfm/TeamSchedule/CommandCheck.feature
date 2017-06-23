@@ -98,7 +98,6 @@ Scenario: Should show command check after adding person activity on top of NOT A
 	And I apply add personal activity
 	Then I should be able to see command check
 
-@OnlyRunIfEnabled('WfmTeamSchedule_MoveActivity_37744')
 Scenario: Should show command check after moving activity on top of NOT ALLOW MEETING acitvity
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'

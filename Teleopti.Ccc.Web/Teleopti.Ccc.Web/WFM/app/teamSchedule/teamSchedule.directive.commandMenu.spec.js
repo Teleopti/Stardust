@@ -143,10 +143,6 @@
 			toggleCurrentSidenav: function() {}
 		};
 
-		toggles.set({
-			MoveActivityEnabled: true
-		});
-
 		permissions.set({
 			HasMoveActivityPermission: true
 		});

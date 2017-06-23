@@ -339,7 +339,7 @@
 			if (!this.ShiftLayerIds || this.ShiftLayerIds.length == 0) 
 				return false;
 
-			if (!this.IsOvertime && this.ShiftLayerIds && this.ShiftLayerIds.length > 0 && (toggles.all().RemoveActivityEnabled || toggles.all().MoveActivityEnabled ))
+			if (!this.IsOvertime && this.ShiftLayerIds && this.ShiftLayerIds.length > 0)
 				return true;
 
 			if((this.IsOvertime && this.ShiftLayerIds && this.ShiftLayerIds.length > 0) && toggles.all().WfmTeamSchedule_RemoveOvertime_42481 )
