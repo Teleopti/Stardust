@@ -63,7 +63,6 @@
 
 		WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 
-		WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
 		WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
 		WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088,
 

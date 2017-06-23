@@ -10,8 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-				CheckOverlappingCertainActivitiesEnabled: toggleSvc
-					.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
 				AutoMoveOverwrittenActivityForOperationsEnabled: toggleSvc
 					.WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
 				CheckPersonalAccountEnabled: toggleSvc.WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088,

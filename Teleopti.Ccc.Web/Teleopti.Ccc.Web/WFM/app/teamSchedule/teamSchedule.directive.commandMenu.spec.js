@@ -62,7 +62,6 @@
 			IsAddIntradayAbsenceAvailable: true
 		});
 
-
 		var element = $compile(html)(scope);
 
 		scope.$apply();

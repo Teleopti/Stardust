@@ -27,7 +27,6 @@
 
 				scope.vm.moveToTime = selfCtrl.getDefaultMoveToStartTime();
 				scope.vm.nextDay = moment(selfCtrl.getDefaultMoveToStartTime()).format('YYYY-MM-DD') !== moment(scope.vm.selectedDate()).format('YYYY-MM-DD');
-				scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
 
 				scope.$on('teamSchedule.command.focus.default', function () {
 					var focusTarget = elem[0].querySelector('.focus-default input');
@@ -174,25 +173,20 @@
 
 	    vm.moveActivity = function () {
 		    var requestData = getRequestData();
-	    	var multiActivitiesSelectedAgentsList = vm.selectedAgents.filter(function (x) {
-	    		return (angular.isArray(x.SelectedActivities) && x.SelectedActivities.length > 1);
-	    	});
+		    var multiActivitiesSelectedAgentsList = vm.selectedAgents.filter(function (x) {
+			    return (angular.isArray(x.SelectedActivities) && x.SelectedActivities.length > 1);
+		    });
 
-	    	if (multiActivitiesSelectedAgentsList.length > 0) {
-	    		var errorMessage = $translate.instant('CanNotMoveMultipleActivitiesForSelectedAgents') + ": " + multiActivitiesSelectedAgentsList.map(function(agent){return agent.Name;}).join(", ") + ".";
-	    		teamScheduleNotificationService.notify('error', errorMessage);
-	    		vm.getActionCb(vm.label) && vm.getActionCb(vm.label)(null, null);
-	    		return;
-	    	}
-
-			if (vm.checkCommandActivityLayerOrders){
-				vm.checkingCommand = true;
-				CommandCheckService.checkMoveActivityOverlapping(requestData).then(function(data) {
-					moveActivity(data);
-				});
-			}
-			else
-				moveActivity(requestData);
-		}
+		    if (multiActivitiesSelectedAgentsList.length > 0) {
+			    var errorMessage = $translate.instant('CanNotMoveMultipleActivitiesForSelectedAgents') + ": " + multiActivitiesSelectedAgentsList.map(function (agent) { return agent.Name; }).join(", ") + ".";
+			    teamScheduleNotificationService.notify('error', errorMessage);
+			    vm.getActionCb(vm.label) && vm.getActionCb(vm.label)(null, null);
+			    return;
+		    }
+		    vm.checkingCommand = true;
+		    CommandCheckService.checkMoveActivityOverlapping(requestData).then(function (data) {
+			    moveActivity(data);
+		    });
+	    }
 	}
 })();

@@ -4,6 +4,7 @@
 	var $compile,
 		$rootScope,
 		fakeActivityService,
+		fakeCommandCheckService,
 		$httpBackend,
 		scheduleHelper,
 		fakePersonSelectionService,
@@ -21,6 +22,7 @@
 
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
+		fakeCommandCheckService = new FakeCommandCheckService();
 		scheduleHelper = new FakeScheduleHelper();
 		fakePersonSelectionService = new FakePersonSelectionService();
 		fakeMoveActivityValidator = new FakeMoveActivityValidator();
@@ -28,6 +30,9 @@
 		module(function ($provide) {
 			$provide.service('ActivityService', function () {
 				return fakeActivityService;
+			});
+			$provide.service('CommandCheckService', function () {
+				return fakeCommandCheckService;
 			});
 			$provide.service('ScheduleHelper', function () {
 				return scheduleHelper;
@@ -313,6 +318,41 @@
 		this.getSelectedPersonInfoList = function(){
 			return fakePersonList;
 		}
+	}
+	function FakeCommandCheckService() {
+		var fakeResponse = {
+			data: []
+		};
+		var checkStatus = false,
+			fakeOverlappingList = [];
+
+		this.checkOverlappingCertainActivities = function () {
+			return {
+				then: function (cb) {
+					checkStatus = true;
+					cb(fakeResponse);
+				}
+			}
+		}
+
+		this.getCommandCheckStatus = function () {
+			return checkStatus;
+		}
+
+		this.resetCommandCheckStatus = function () {
+			checkStatus = false;
+		}
+
+		this.getCheckFailedList = function () {
+			return fakeOverlappingList;
+		}
+		this.checkMoveActivityOverlapping = function (requestedData) {
+			return {
+				then: function (cb) {
+					cb(requestedData);
+				}
+			}
+		};
 	}
 
 	function FakeMoveActivityValidator() {

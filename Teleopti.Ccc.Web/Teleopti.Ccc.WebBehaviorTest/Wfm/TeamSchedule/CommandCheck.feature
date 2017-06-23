@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfEnabled('WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938')
 Feature: CommandCheck
 	There should be command check after user have add activity over NOT ALLOW MEETING activities
 

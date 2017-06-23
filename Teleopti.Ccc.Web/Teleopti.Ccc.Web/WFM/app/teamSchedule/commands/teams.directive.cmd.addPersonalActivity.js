@@ -22,7 +22,6 @@
 				scope.vm.currentTimezone = containerCtrl.getCurrentTimezone;
 				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
 				scope.vm.getActionCb = containerCtrl.getActionCb;
-				scope.vm.checkCommandActivityLayerOrders = containerCtrl.hasToggle('CheckOverlappingCertainActivitiesEnabled');
 				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl
 					.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
@@ -178,14 +177,10 @@
 
 		vm.addPersonalActivity = function () {
 			var requestData = getRequestData();
-			if (vm.checkCommandActivityLayerOrders){
-				vm.checkingCommand = true;
-				CommandCheckService.checkAddPersonalActivityOverlapping(requestData).then(function(data) {
-					addPersonalActivity(data);
-				});
-			}
-			else
-				addPersonalActivity(requestData);
+			vm.checkingCommand = true;
+			CommandCheckService.checkAddPersonalActivityOverlapping(requestData).then(function (data) {
+				addPersonalActivity(data);
+			});
 		};
 
 		vm.getDefaultActvityStartTime = function() {

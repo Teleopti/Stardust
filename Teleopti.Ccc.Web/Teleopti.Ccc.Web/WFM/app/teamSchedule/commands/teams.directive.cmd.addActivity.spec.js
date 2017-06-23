@@ -490,6 +490,13 @@
 		this.getCheckFailedList = function() {
 			return fakeOverlappingList;
 		}
+		this.checkAddActivityOverlapping = function(requestedData){
+			return {
+				then: function (cb) {
+					cb(requestedData);
+				}
+			}
+		};
 	}
 
 	function FakePersonSelectionService(){

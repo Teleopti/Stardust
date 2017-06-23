@@ -5,6 +5,7 @@
 		$rootScope,
 		$httpBackend,
 		fakeActivityService,
+		fakeCommandCheckService,
 		utility,
 		fakeScheduleManagementSvc,
 		fakePersonSelectionService,
@@ -21,6 +22,7 @@
 
 	beforeEach(function () {
 		fakeActivityService = new FakeActivityService();
+		fakeCommandCheckService = new FakeCommandCheckService();
 		fakePersonSelectionService = new FakePersonSelectionService();
 		fakeScheduleManagementSvc = new FakeScheduleManagementService();
 		scheduleHelper = new FakeScheduleHelper();
@@ -41,6 +43,9 @@
 			$provide.service('CurrentUserInfo', function () {
 				return mockCurrentUserInfo;
 			});
+			$provide.service('CommandCheckService', function () {
+				return fakeCommandCheckService;
+			});
 		});
 	});
 
@@ -51,6 +56,8 @@
 		utility = _UtilityService_;
 
 		$httpBackend.expectGET('../ToggleHandler/AllToggles').respond(200, 'mock');
+		$httpBackend.expectPOST('../api/TeamScheduleData/CheckOverlapppingCertainActivities')
+			.respond(200, { data: [] });
 	}));
 
 	it('add-personal-activity should render correctly', function () {
@@ -441,6 +448,41 @@
 					"Name": "Social Media"
 				}
 		];
+	}
+	function FakeCommandCheckService() {
+		var fakeResponse = {
+			data: []
+		};
+		var checkStatus = false,
+			fakeOverlappingList = [];
+
+		this.checkOverlappingCertainActivities = function () {
+			return {
+				then: function (cb) {
+					checkStatus = true;
+					cb(fakeResponse);
+				}
+			}
+		}
+
+		this.getCommandCheckStatus = function () {
+			return checkStatus;
+		}
+
+		this.resetCommandCheckStatus = function () {
+			checkStatus = false;
+		}
+
+		this.getCheckFailedList = function () {
+			return fakeOverlappingList;
+		}
+		this.checkAddPersonalActivityOverlapping = function (requestedData) {
+			return {
+				then: function (cb) {
+					cb(requestedData);
+				}
+			}
+		};
 	}
 
 	function FakeActivityService() {
