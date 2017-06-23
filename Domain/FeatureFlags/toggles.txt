@@ -50,7 +50,6 @@ RTA_SolidProofWhenManagingAgentAdherence_39351 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
-WfmTeamSchedule_ShowOverwrittenLayerWarning_40109 = true
 WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279 = true
 WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088 = true
 

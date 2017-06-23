@@ -49,10 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			ruleFlags |= BusinessRuleFlags.NewMaxWeekWorkTimeRule;
 			ruleFlags |= BusinessRuleFlags.MinWeeklyRestRule;
 			ruleFlags |= BusinessRuleFlags.NewDayOffRule;
-			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109))
-			{
-				ruleFlags |= BusinessRuleFlags.NotOverwriteLayerRule;
-			}
+			ruleFlags |= BusinessRuleFlags.NotOverwriteLayerRule;
 
 			return _validationProvider.GetBusinessRuleValidationResults(input, ruleFlags);
 		}
@@ -66,10 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			ruleFlags |= BusinessRuleFlags.NewMaxWeekWorkTimeRule;
 			ruleFlags |= BusinessRuleFlags.MinWeeklyRestRule;
 			ruleFlags |= BusinessRuleFlags.NewDayOffRule;
-			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109))
-			{
-				ruleFlags |= BusinessRuleFlags.NotOverwriteLayerRule;
-			}
+			ruleFlags |= BusinessRuleFlags.NotOverwriteLayerRule;
 
 			return _validationProvider.GetAllValidationRuleTypes(ruleFlags);
 		}
