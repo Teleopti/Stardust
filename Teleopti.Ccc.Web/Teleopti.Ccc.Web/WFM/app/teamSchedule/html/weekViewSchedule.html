@@ -51,7 +51,7 @@
 							<span translate>{{day.name}}</span>
 							<span class="date">{{day.date | date : 'dd'}}</span>
 						</th>
-						<th class="contract-time-header contract-time-column" ng-if="vm.toggles.ShowWeeklyContractTimeEnabled">{{'ContractTime' | translate}}</th>
+						<th class="contract-time-header contract-time-column">{{'ContractTime' | translate}}</th>
 					</tr>
 				</thead>
 
@@ -64,7 +64,7 @@
 								<div>{{day.summeryTimeSpan}}</div>
 							</div>
 						</td>
-						<td class="contract-time contract-time-column" ng-if="vm.toggles.ShowWeeklyContractTimeEnabled">{{person.contractTime}}</td>
+						<td class="contract-time contract-time-column">{{person.contractTime}}</td>
 					</tr>
 				</tbody>
 			</table>

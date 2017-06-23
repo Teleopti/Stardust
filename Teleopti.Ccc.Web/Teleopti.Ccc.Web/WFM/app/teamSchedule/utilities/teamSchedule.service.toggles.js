@@ -10,7 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-				ShowWeeklyContractTimeEnabled: toggleSvc.WfmTeamSchedule_WeeklyContractTime_39871,
 
 				ShowValidationWarnings: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619 ||
 					toggleSvc.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799 ||

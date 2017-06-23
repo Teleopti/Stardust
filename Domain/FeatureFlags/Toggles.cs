@@ -61,7 +61,6 @@
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 
-		WfmTeamSchedule_WeeklyContractTime_39871,
 		WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557,
 
 		WfmTeamSchedule_ShowNightlyRestWarning_39619,
