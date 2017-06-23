@@ -91,6 +91,7 @@ Scenario: Should view schedule for the day before
 		| Shift category | Early             |
 		| Week day       | Saturday          |
 
+@ignore
 @OnlyRunIfEnabled('MyTimeWeb_DayScheduleForStartPage_43446')
 Scenario: Should view today schedule from other day
 	Given I am american
