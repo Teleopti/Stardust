@@ -62,7 +62,6 @@
 		Wfm_HideUnusedTeamsAndSites_42690,
 
 		WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
-		WfmTeamSchedule_FilterValidationWarnings_40110,
 
 		WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
 		WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,

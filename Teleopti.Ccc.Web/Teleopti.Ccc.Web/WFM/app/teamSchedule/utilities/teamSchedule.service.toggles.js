@@ -10,8 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-				FilterValidationWarningsEnabled: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
-
 				CheckOverlappingCertainActivitiesEnabled: toggleSvc
 					.WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938,
 				AutoMoveOverwrittenActivityForOperationsEnabled: toggleSvc

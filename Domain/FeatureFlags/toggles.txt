@@ -50,8 +50,6 @@ RTA_SolidProofWhenManagingAgentAdherence_39351 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
-WfmTeamSchedule_FilterValidationWarnings_40110 = true
-
 WfmTeamSchedule_ShowWarningForOverlappingCertainActivities_39938 = true
 WfmTeamSchedule_ShowOverwrittenLayerWarning_40109 = true
 WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279 = true
