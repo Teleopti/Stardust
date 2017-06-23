@@ -45,11 +45,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			var ruleFlags = BusinessRuleFlags.None;
 			ruleFlags |= BusinessRuleFlags.NewNightlyRestRule;
-			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799))
-			{
-				ruleFlags |= BusinessRuleFlags.MinWeekWorkTimeRule;
-				ruleFlags |= BusinessRuleFlags.NewMaxWeekWorkTimeRule;
-			}
+			ruleFlags |= BusinessRuleFlags.MinWeekWorkTimeRule;
+			ruleFlags |= BusinessRuleFlags.NewMaxWeekWorkTimeRule;
 			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800))
 			{
 				ruleFlags |= BusinessRuleFlags.MinWeeklyRestRule;
@@ -71,11 +68,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			var ruleFlags = BusinessRuleFlags.None;
 			ruleFlags |= BusinessRuleFlags.NewNightlyRestRule;
-			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799))
-			{
-				ruleFlags |= BusinessRuleFlags.MinWeekWorkTimeRule;
-				ruleFlags |= BusinessRuleFlags.NewMaxWeekWorkTimeRule;
-			}
+			ruleFlags |= BusinessRuleFlags.MinWeekWorkTimeRule;
+			ruleFlags |= BusinessRuleFlags.NewMaxWeekWorkTimeRule;
 			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800))
 			{
 				ruleFlags |= BusinessRuleFlags.MinWeeklyRestRule;
