@@ -44,10 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual IList<BusinessRuleValidationResult> FetchRuleValidationResult([FromBody]FetchRuleValidationResultFormData input)
 		{
 			var ruleFlags = BusinessRuleFlags.None;
-			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowNightlyRestWarning_39619))
-			{
-				ruleFlags |= BusinessRuleFlags.NewNightlyRestRule;
-			}
+			ruleFlags |= BusinessRuleFlags.NewNightlyRestRule;
 			if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799))
 			{
 				ruleFlags |= BusinessRuleFlags.MinWeekWorkTimeRule;
@@ -73,10 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual IList<string> FetchAllValidationRules()
 		{
 			var ruleFlags = BusinessRuleFlags.None;
-			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowNightlyRestWarning_39619))
-			{
-				ruleFlags |= BusinessRuleFlags.NewNightlyRestRule;
-			}
+			ruleFlags |= BusinessRuleFlags.NewNightlyRestRule;
 			if(_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799))
 			{
 				ruleFlags |= BusinessRuleFlags.MinWeekWorkTimeRule;

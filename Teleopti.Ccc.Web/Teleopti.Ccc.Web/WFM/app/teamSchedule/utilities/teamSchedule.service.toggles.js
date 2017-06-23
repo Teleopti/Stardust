@@ -10,12 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-
-				ShowValidationWarnings: toggleSvc.WfmTeamSchedule_ShowNightlyRestWarning_39619 ||
-					toggleSvc.WfmTeamSchedule_ShowWeeklyWorktimeWarning_39799 ||
-					toggleSvc.WfmTeamSchedule_ShowWeeklyRestTimeWarning_39800 ||
-					toggleSvc.WfmTeamSchedule_ShowDayOffWarning_39801 ||
-					toggleSvc.WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 				FilterValidationWarningsEnabled: toggleSvc.WfmTeamSchedule_FilterValidationWarnings_40110,
 
 				CheckOverlappingCertainActivitiesEnabled: toggleSvc

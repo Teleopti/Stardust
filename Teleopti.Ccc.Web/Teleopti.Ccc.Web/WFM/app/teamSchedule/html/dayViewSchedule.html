@@ -40,7 +40,7 @@
 
 		<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)" ng-if="vm.toggles.ViewScheduleOnTimezoneEnabled"></timezone-picker>
 
-		<div class="warning-container" ng-if="vm.toggles.ShowValidationWarnings">
+		<div class="warning-container">
 			<div id="show-warnings" class="wfm-switch inline-block">
 				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningEnabled" ng-change="vm.checkValidationWarningForCurrentPage()"/>
 				<label for="validateWarning">
@@ -59,7 +59,7 @@
 				</label>
 			</div>
 
-			<span class="settings-container inline-block cursor-pointer" ng-if="vm.toggles.ShowValidationWarnings && vm.toggles.FilterValidationWarningsEnabled" ng-click="vm.openSettingsPanel()">
+			<span class="settings-container inline-block cursor-pointer" ng-if="vm.toggles.FilterValidationWarningsEnabled" ng-click="vm.openSettingsPanel()">
 				<i class="mdi mdi-settings"></i>
 			</span>
 
