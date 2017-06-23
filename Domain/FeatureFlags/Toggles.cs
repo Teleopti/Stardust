@@ -61,7 +61,6 @@
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 
-		WfmTeamSchedule_AddOvertime_41696,
 		WfmTeamSchedule_MoveActivity_37744,
 		WfmTeamSchedule_MoveInvalidOverlappedActivity_40688,
 		WfmTeamSchedule_MoveEntireShift_41632,
