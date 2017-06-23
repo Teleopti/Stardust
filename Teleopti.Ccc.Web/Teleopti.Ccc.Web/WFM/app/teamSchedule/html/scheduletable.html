@@ -17,7 +17,7 @@
 		</th>
 		<th class="right-border-empty" ng-if="::!vm.toggles.EditAndViewInternalNoteEnabled"></th>
 		<th class="schedule-note-column" ng-if="::vm.toggles.EditAndViewInternalNoteEnabled"></th>
-		<th class="contract-time-header contract-time-column" ng-if="::vm.toggles.ShowContractTimeEnabled">{{'ContractTime' | translate}}</th>
+		<th class="contract-time-header contract-time-column">{{'ContractTime' | translate}}</th>
 	</tr>
 	</thead>
 	<tbody>
@@ -84,7 +84,7 @@
 				{{vm.getScheduleNoteForPerson(personSchedule.PersonId)}}
 			</md-tooltip>
 		</td>
-		<td class="contract-time contract-time-column" ng-if="::vm.toggles.ShowContractTimeEnabled">{{::personSchedule.ContractTime}}</td>
+		<td class="contract-time contract-time-column">{{::personSchedule.ContractTime}}</td>
 	</tr>
 	</tbody>
 </table>

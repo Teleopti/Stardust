@@ -10,7 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-				ShowContractTimeEnabled: toggleSvc.WfmTeamSchedule_ShowContractTime_38509,
 				EditAndViewInternalNoteEnabled: toggleSvc.WfmTeamSchedule_EditAndDisplayInternalNotes_40671,
 
 				WeekViewEnabled: toggleSvc.WfmTeamSchedule_WeekView_39870,
