@@ -163,7 +163,7 @@
 		};
 
 		vm.canActiveRemoveActivity = function () {
-			return vm.permissions.HasRemoveActivityPermission || (vm.toggles.WfmTeamSchedule_RemoveOvertime_42481 && vm.permissions.HasRemoveOvertimePermission);
+			return vm.permissions.HasRemoveActivityPermission || vm.permissions.HasRemoveOvertimePermission;
 		};
 
 		vm.canActiveSwapShifts = function () {

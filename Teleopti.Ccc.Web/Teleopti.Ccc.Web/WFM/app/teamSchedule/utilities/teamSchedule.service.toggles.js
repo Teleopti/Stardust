@@ -10,7 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-				RemoveOvertimeEnabled: toggleSvc.WfmTeamSchedule_RemoveOvertime_42481,
 				UndoScheduleEnabled: toggleSvc.WfmTeamSchedule_RevertToPreviousSchedule_39002,
 
 				ViewShiftCategoryEnabled: toggleSvc.WfmTeamSchedule_ShowShiftCategory_39796,
@@ -38,7 +37,6 @@
 				ManageScheduleForDistantTimezonesEnabled: toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
 
 				MoveToBaseLicenseEnabled: toggleSvc.WfmTeamSchedule_MoveToBaseLicense_41039,
-				WfmTeamSchedule_RemoveOvertime_42481: toggleSvc.WfmTeamSchedule_RemoveOvertime_42481,
 				WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557: toggleSvc.WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557,
 				Wfm_HideUnusedTeamsAndSites_42690: toggleSvc.Wfm_HideUnusedTeamsAndSites_42690
 			};
