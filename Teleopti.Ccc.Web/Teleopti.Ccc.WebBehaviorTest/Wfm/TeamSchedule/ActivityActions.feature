@@ -48,7 +48,6 @@ Background:
 	| Contract schedule    | A contract schedule  |
 	| Part time percentage | Part time percentage |
 
-@OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to add activity
 	Given 'John Smith' has a shift with
 	| Field            | Value            |

@@ -10,7 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-				AddActivityEnabled: toggleSvc.WfmTeamSchedule_AddActivity_37541,
 				AddPersonalActivityEnabled: toggleSvc.WfmTeamSchedule_AddPersonalActivity_37742,
 				AddOvertimeEnabled: toggleSvc.WfmTeamSchedule_AddOvertime_41696,
 				MoveActivityEnabled: toggleSvc.WfmTeamSchedule_MoveActivity_37744,

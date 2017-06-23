@@ -56,7 +56,6 @@ Scenario: Should be able to see enable menu
 	Then I should see 'Undo' menu is enabled
 
 @ignore
-@OnlyRunIfEnabled('WfmTeamSchedule_AddActivity_37541')
 Scenario: Should be able to undo schedule change
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'
