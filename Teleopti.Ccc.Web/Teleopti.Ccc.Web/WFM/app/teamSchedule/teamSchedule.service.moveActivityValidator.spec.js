@@ -61,7 +61,6 @@
 		function FakeTeamsToggles() {
 			this.all = function () {
 				return {
-					RemoveActivityEnabled: true,
 					RemoveOvertimeEnabled: true
 				};
 			};

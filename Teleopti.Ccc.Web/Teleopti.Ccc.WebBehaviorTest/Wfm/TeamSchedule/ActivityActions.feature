@@ -112,7 +112,6 @@ Scenario: Should be able to add personal activity
 	And I apply add personal activity
 	Then I should see a successful notice
 
-@OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
 Scenario: Should see disabled remove activity button when no activity is selected
 	Given 'John Smith' has a shift with
 	| Field            | Value            |
@@ -128,7 +127,6 @@ Scenario: Should see disabled remove activity button when no activity is selecte
 	And I open menu in team schedule
 	Then I should see 'RemoveActivity' menu item is disabled
 
-@OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
 Scenario: Should be able to remove single activity
 	Given 'John Smith' has a shift with
 	| Field            | Value            |
@@ -147,7 +145,6 @@ Scenario: Should be able to remove single activity
 	And I apply remove activity
 	Then I should see a successful notice
 	
-@OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
 Scenario: Should be able to remove multiple activities
 	Given 'John Smith' has a shift with
 	| Field                         | Value            |
@@ -172,7 +169,6 @@ Scenario: Should be able to remove multiple activities
 
 #just keep it as information
 @ignore 
-@OnlyRunIfEnabled('WfmTeamSchedule_RemoveActivity_37743')
 Scenario: Should not be able to remove basic activity
 	Given 'John Smith' has a shift with
 	| Field            | Value            |

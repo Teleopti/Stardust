@@ -209,10 +209,6 @@
 			toggleCurrentSidenav: function() {}
 		};
 
-		toggles.set({
-			RemoveActivityEnabled: true
-		});
-
 		permissions.set({
 			HasRemoveActivityPermission: true
 		});
