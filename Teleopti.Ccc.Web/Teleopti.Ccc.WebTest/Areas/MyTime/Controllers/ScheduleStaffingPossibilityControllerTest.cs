@@ -460,7 +460,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
 		}
 
-
 		[Test]
 		public void ShouldNotUsePrimarySkillsWhenCalculatingOvertimeProbabilityToggle44686Off()
 		{
@@ -509,6 +508,33 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			var possibilities =
 				getIntradayAbsencePossibility(null, StaffingPossiblityType.Absence)
+					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
+		[Test]
+		[Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686)]
+		public void ShouldGetOvertimePossibiliesWhenAgentHasNoCascadingSkillInPrimarySkills()
+		{
+			var primarySkill = createSkill("primarySkill");
+			primarySkill.SetCascadingIndex(1);
+			setupIntradayStaffingForSkill(primarySkill, new double?[] { 5, 5 }, new double?[] { 1, 1 });
+
+			var nonPrimarySkill = createSkill("nonPrimarySkill");
+			nonPrimarySkill.SetCascadingIndex(2);
+			setupIntradayStaffingForSkill(nonPrimarySkill, new double?[] { 5, 5 }, new double?[] { 4, 4 });
+
+			var activity = createActivity();
+			createAssignment(User.CurrentUser(), activity);
+			var nonPrimaryPersonSkill = createPersonSkill(activity, nonPrimarySkill);
+
+			addPersonSkillsToPersonPeriod(nonPrimaryPersonSkill);
+
+			var possibilities =
+				getIntradayAbsencePossibility(null, StaffingPossiblityType.Overtime)
 					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
 					.ToList();
 			Assert.AreEqual(2, possibilities.Count);

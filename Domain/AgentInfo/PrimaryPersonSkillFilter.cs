@@ -6,14 +6,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 {
 	public class PrimaryPersonSkillFilter : IPrimaryPersonSkillFilter
 	{
+		private const int primarySkillCascadingIndex = 1;
+
 		public IList<IPersonSkill> Filter(IEnumerable<IPersonSkill> personSkills)
 		{
-			var cascadingPersonSkills= personSkills.Where(a => a.Skill.IsCascading());
-			if (!cascadingPersonSkills.Any())
+			var primaryPersonSkills =
+				personSkills.Where(a => a.Skill.IsCascading() && a.Skill.CascadingIndex == primarySkillCascadingIndex).ToList();
+			if (!primaryPersonSkills.Any())
 			{
 				return personSkills.ToList();
 			}
-			return cascadingPersonSkills.Where(a => a.Skill.CascadingIndex == 1).ToList();
+			return primaryPersonSkills;
 		}
 	}
 
