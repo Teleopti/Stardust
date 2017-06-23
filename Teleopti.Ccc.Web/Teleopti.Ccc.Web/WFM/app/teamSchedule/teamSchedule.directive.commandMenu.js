@@ -155,7 +155,7 @@
 		};
 
 		vm.canActiveMoveShift = function() {
-			return vm.toggles.MoveEntireShiftEnabled && vm.permissions.HasMoveActivityPermission;
+			return vm.permissions.HasMoveActivityPermission;
 		};
 
 		vm.canActiveRemoveAbsence = function () {
