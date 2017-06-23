@@ -50,7 +50,6 @@ RTA_SolidProofWhenManagingAgentAdherence_39351 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
-WfmTeamSchedule_MakePersonalActivityUnmerged_40252 = true
 WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925 = true
 WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305 = true
 

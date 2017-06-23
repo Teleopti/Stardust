@@ -151,8 +151,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence) layer.Payload).Description)
 						: layer.DisplayDescription();
-					if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252)
-						&& _projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1
+					if (_projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1
 						&& _projectionHelper.GetMatchedPersonalShiftLayers(scheduleDay, layer).Count > 0)
 					{
 						projections.AddRange(_projectionSplitter.SplitMergedPersonalLayers(scheduleDay, layer, userTimeZone));

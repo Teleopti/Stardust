@@ -350,8 +350,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		{
 			IMultiplicatorDefinitionSet def = new MultiplicatorDefinitionSet("foo", MultiplicatorType.Overtime);
 
-			_toggleManager.Enable(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252);
-
 			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
 			var person = PersonFactory.CreatePersonWithGuid("agent", "1");
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario, new DateOnly(date));
@@ -400,7 +398,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var anotherNormalMeetingPeriod = new DateTimePeriod(date.AddHours(9), date.AddHours(10));
 			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
 			var meetingActivity = ActivityFactory.CreateActivity("Meeting", Color.Red);
-			_toggleManager.Enable(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252);
 
 			phoneActivity.InContractTime = true;
 			meetingActivity.InContractTime = true;
@@ -436,7 +433,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var personalMeetingPeriod = new DateTimePeriod(date.AddHours(8).AddMinutes(30), date.AddHours(10));
 			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
 			var meetingActivity = ActivityFactory.CreateActivity("Meeting", Color.Red);
-			_toggleManager.Enable(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252);
 
 			phoneActivity.InContractTime = true;
 			meetingActivity.InContractTime = true;
@@ -482,7 +478,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var personalMeetingPeriod = new DateTimePeriod(date.AddHours(9), date.AddHours(10));
 			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
 			var meetingActivity = ActivityFactory.CreateActivity("Meeting", Color.Red);
-			_toggleManager.Enable(Toggles.WfmTeamSchedule_MakePersonalActivityUnmerged_40252);
 
 			phoneActivity.InContractTime = true;
 			meetingActivity.InContractTime = true;
