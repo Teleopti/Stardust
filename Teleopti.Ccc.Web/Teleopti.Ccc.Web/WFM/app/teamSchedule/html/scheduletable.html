@@ -15,8 +15,8 @@
 		<th id="time-line-container" class="schedule schedule-column">
 			<time-line ng-if="vm.scheduleVm.Schedules.length > 0" times="vm.scheduleVm.TimeLine.HourPoints" schedule-count="vm.scheduleVm.Schedules.length"></time-line>
 		</th>
-		<th class="right-border-empty" ng-if="::!vm.toggles.EditAndViewInternalNoteEnabled"></th>
-		<th class="schedule-note-column" ng-if="::vm.toggles.EditAndViewInternalNoteEnabled"></th>
+		<th class="right-border-empty"></th>
+		<th class="schedule-note-column"></th>
 		<th class="contract-time-header contract-time-column">{{'ContractTime' | translate}}</th>
 	</tr>
 	</thead>
@@ -77,8 +77,8 @@
 				<div ng-if="vm.hasHiddenScheduleAtEnd(personSchedule)" class="end-ellipsis"><i class="mdi mdi-chevron-double-right"></i></div>
 			</div>
 		</td>
-		<td class="right-border-empty" ng-if="::!vm.toggles.EditAndViewInternalNoteEnabled"></td>
-		<td class="schedule-note-column" ng-if="::vm.toggles.EditAndViewInternalNoteEnabled" ng-click="vm.toggles.EditAndViewInternalNoteEnabled && vm.editScheduleNote(personSchedule.PersonId)">
+		<td class="right-border-empty"></td>
+		<td class="schedule-note-column" ng-click="vm.editScheduleNote(personSchedule.PersonId)">
 			<span ng-class="{noComment:!vm.getScheduleNoteForPerson(personSchedule.PersonId)}"><i class="mdi mdi-comment"></i></span>
 			<md-tooltip class="multiline-tooltip max-width-600" md-direction="left" ng-if="vm.getScheduleNoteForPerson(personSchedule.PersonId) && vm.getScheduleNoteForPerson(personSchedule.PersonId).length > 0">
 				{{vm.getScheduleNoteForPerson(personSchedule.PersonId)}}

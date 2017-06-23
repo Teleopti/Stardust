@@ -50,8 +50,6 @@ RTA_SolidProofWhenManagingAgentAdherence_39351 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
-WfmTeamSchedule_EditAndDisplayInternalNotes_40671 = true
-
 WfmTeamSchedule_WeekView_39870 = true
 WfmTeamSchedule_WeeklyContractTime_39871 = true
 WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557 = true
