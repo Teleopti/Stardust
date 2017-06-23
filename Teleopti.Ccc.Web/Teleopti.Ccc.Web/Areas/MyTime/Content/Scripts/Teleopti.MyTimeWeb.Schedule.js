@@ -561,6 +561,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.showProbabilityToggle(self.staffingProbabilityEnabled && self.isCurrentWeek());
 		}
 
+		if (!self.overtimeProbabilityEnabled() && !self.absenceProbabilityEnabled()) {
+			self.showProbabilityToggle(false);
+		}
+
 		self.asmPermission(data.AsmPermission);
 		self.displayDate(Teleopti.MyTimeWeb.Common.FormatDatePeriod(
 			moment(data.CurrentWeekStartDate),
