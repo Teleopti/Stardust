@@ -50,8 +50,6 @@ RTA_SolidProofWhenManagingAgentAdherence_39351 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
-WfmTeamSchedule_RevertToPreviousSchedule_39002 = true
-
 WfmTeamSchedule_ShowShiftCategory_39796 = true
 WfmTeamSchedule_ModifyShiftCategory_39797 = true
 WfmTeamSchedule_ShowContractTime_38509 = true

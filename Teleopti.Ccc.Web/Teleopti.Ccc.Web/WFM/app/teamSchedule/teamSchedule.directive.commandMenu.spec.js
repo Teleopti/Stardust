@@ -50,24 +50,6 @@
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 
-	it('should not view menu without any permitted', function() {
-		var html = '<teamschedule-command-menu></teamschedule-command>';
-		var scope = $rootScope.$new();
-		scope.vm = {
-			toggleCurrentSidenav: function() {}
-		};
-					
-		var element = $compile(html)(scope);
-
-		scope.$apply();
-
-		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
-		var menuList = angular.element(element[0].querySelector('.wfm-list'));
-
-		expect(menu.length).toBe(0);
-		expect(menuList.length).toBe(0);
-	});
-
 	it('should view menu when add absence is permitted', function() {
 		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
@@ -80,7 +62,7 @@
 			IsAddIntradayAbsenceAvailable: true
 		});
 
-		
+
 		var element = $compile(html)(scope);
 
 		scope.$apply();
@@ -98,10 +80,10 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		
+
 		permissions.set({
 			HasAddingActivityPermission: true
-		});		
+		});
 
 		var element = $compile(html)(scope);
 
@@ -124,7 +106,7 @@
 		permissions.set({
 			HasAddingPersonalActivityPermission: true
 		});
-				
+
 		var element = $compile(html)(scope);
 
 		scope.$apply();
@@ -168,7 +150,7 @@
 		permissions.set({
 			IsSwapShiftsAvailable: true
 		});
-		
+
 		var element = $compile(html)(scope);
 
 		scope.$apply();
@@ -190,7 +172,7 @@
 		permissions.set({
 			IsRemoveAbsenceAvailable: true
 		});
-	
+
 		var element = $compile(html)(scope);
 
 		scope.$apply();
@@ -212,7 +194,7 @@
 		permissions.set({
 			HasRemoveActivityPermission: true
 		});
-		
+
 		var element = $compile(html)(scope);
 
 		scope.$apply();
@@ -230,10 +212,6 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-
-		toggles.set({
-			UndoScheduleEnabled: true
-		});		
 
 		var element = $compile(html)(scope);
 		scope.$apply();
@@ -276,7 +254,7 @@
 		permissions.set({
 			HasMoveInvalidOverlappedActivityPermission: true
 		});
-		
+
 		scope.validateWarningEnabled = true;
 
 		personSelectionSvc.hasAgentSelected(true);
@@ -307,7 +285,7 @@
 
 		scope.validateWarningEnabled = true;
 
-		personSelectionSvc.hasAgentSelected(true);		
+		personSelectionSvc.hasAgentSelected(true);
 		personSelectionSvc.fakeSetCheckedPersonIds(overlappedWarningPersonId);
 
 		var element = $compile(html)(scope);
@@ -329,9 +307,9 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-		
 
-		personSelectionSvc.hasAgentSelected(true);		
+
+		personSelectionSvc.hasAgentSelected(true);
 		personSelectionSvc.fakeSetCheckedPersonIds(noneOverlappedWarningPersonId);
 
 		var element = $compile(html)(scope);
@@ -401,7 +379,7 @@
 			return _permissions;
 		}
 	}
-	
+
 	function FakeValidateRulesService(){
 		var warningDict = {
 			"12345" : {
@@ -411,12 +389,12 @@
 					"RuleType": "NotOverwriteLayerRuleName",
 					"Content": "OverwriteLayerWarnings"
 				}]
-			},			
+			},
 			"67890": {
 				"isLoaded": true,
 				"warnings" : [
 				{
-					
+
 				}]
 			},
 		};

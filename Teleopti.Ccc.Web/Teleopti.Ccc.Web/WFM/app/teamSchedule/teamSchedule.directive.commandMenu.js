@@ -125,7 +125,7 @@
 				keys: [[keyCodes.U], [keyCodes.ALT]],
 				action: buildAction("Undo", false),
 				clickable: function () { return vm.canUndoSchedule(); },
-				visible: function () { return vm.canActiveUndoScheduleCmd(); }
+				visible: function () { return true; }
 			}
 		];
 
@@ -172,10 +172,6 @@
 
 		vm.canActiveModifyShiftCategory = function(){
 			return vm.toggles.ModifyShiftCategoryEnabled && vm.permissions.HasEditShiftCategoryPermission;
-		};
-
-		vm.canActiveUndoScheduleCmd = function () {
-			return vm.toggles.UndoScheduleEnabled;
 		};
 
 		vm.canMoveActivity = function () {
@@ -234,17 +230,7 @@
 			vm.permissions = teamsPermissions.all();
 		
 			vm.isMenuVisible = function () {
-				return vm.canActiveAddAbsence()
-					|| vm.canActiveSwapShifts()
-					|| vm.canActiveRemoveAbsence()
-					|| vm.canActiveAddActivity()
-					|| vm.canActiveRemoveActivity()
-					|| vm.canActiveMoveActivity()
-					|| vm.canActiveAddPersonalActivity()
-					|| vm.canActiveModifyShiftCategory()
-					|| vm.canActiveUndoScheduleCmd()
-					|| vm.canActiveMoveInvalidOverlappedActivity()
-				;
+				return true;
 			};
 			registerShortCuts();
 		};
