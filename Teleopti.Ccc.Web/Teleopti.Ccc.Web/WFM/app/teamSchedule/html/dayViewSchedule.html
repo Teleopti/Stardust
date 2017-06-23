@@ -38,7 +38,7 @@
 			<view-changer ng-if="vm.searchEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword" selected-team-ids="vm.selectedTeamIds" selected-favorite="vm.selectedFavorite"></view-changer>
 		</div>
 
-		<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)" ng-if="vm.toggles.ViewScheduleOnTimezoneEnabled"></timezone-picker>
+		<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)"></timezone-picker>
 
 		<div class="warning-container">
 			<div id="show-warnings" class="wfm-switch inline-block">

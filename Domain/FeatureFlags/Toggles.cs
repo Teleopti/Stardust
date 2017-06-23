@@ -61,7 +61,6 @@
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 
-		WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,
 		WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
 
 		WfmTeamSchedule_MoveToBaseLicense_41039,
