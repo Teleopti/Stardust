@@ -28,7 +28,6 @@
 				ManageScheduleForDistantTimezonesEnabled: toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
 
 				MoveToBaseLicenseEnabled: toggleSvc.WfmTeamSchedule_MoveToBaseLicense_41039,
-				WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557: toggleSvc.WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557,
 				Wfm_HideUnusedTeamsAndSites_42690: toggleSvc.Wfm_HideUnusedTeamsAndSites_42690
 			};
 		}

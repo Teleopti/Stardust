@@ -21,6 +21,8 @@
 		vm.scheduleFullyLoaded = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
+		vm.enableClickableCell = true;
+		vm.onCellClick = openSelectedAgentDayInNewWindow;
 
 		Object.defineProperty(this, 'selectedTeamIds', { value: [] });
 
@@ -156,12 +158,6 @@
 			vm.resetSchedulePage();
 			monitorScheduleChanged();
 		});
-
-
-		if (vm.toggles.WfmTeamSchedule_WeekView_OpenDayViewForShiftEditing_40557) {
-			vm.enableClickableCell = true;
-			vm.onCellClick = openSelectedAgentDayInNewWindow;
-		}
 
 		function openSelectedAgentDayInNewWindow(personId, scheduleDate) {
 			if (!vm.enableClickableCell) return;
