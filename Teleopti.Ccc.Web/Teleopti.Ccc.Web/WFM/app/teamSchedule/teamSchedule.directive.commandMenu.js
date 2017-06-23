@@ -167,7 +167,7 @@
 		};
 
 		vm.canActiveSwapShifts = function () {
-			return vm.toggles.SwapShiftEnabled && vm.permissions.IsSwapShiftsAvailable;
+			return vm.permissions.IsSwapShiftsAvailable;
 		};
 
 		vm.canActiveModifyShiftCategory = function(){

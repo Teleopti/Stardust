@@ -311,9 +311,7 @@ describe("teamschedule controller tests", function() {
 	}
 
 	function setupMockAllTrueToggleService() {
-		return {
-			WfmTeamSchedule_SwapShifts_36231: true,
-		};
+		return { };
 	}
 
 	function setupMockCurrentUserInfoService() {

@@ -1,5 +1,4 @@
 ﻿@WFM
-@RunOnlyIfEnabled('WfmTeamSchedule_SwapShifts_36231')
 Feature: SwapShiftsForTwoAgents
 	As a team leader
 	I want to be able to easily swap shifts between two agents

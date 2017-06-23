@@ -10,7 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-				SwapShiftEnabled: toggleSvc.WfmTeamSchedule_SwapShifts_36231,
 				RemoveAbsenceEnabled: toggleSvc.WfmTeamSchedule_RemoveAbsence_36705,
 				RemoveActivityEnabled: toggleSvc.WfmTeamSchedule_RemoveActivity_37743,
 				RemoveOvertimeEnabled: toggleSvc.WfmTeamSchedule_RemoveOvertime_42481,

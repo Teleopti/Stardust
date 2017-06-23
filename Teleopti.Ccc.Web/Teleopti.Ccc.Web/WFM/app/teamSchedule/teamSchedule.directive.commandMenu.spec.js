@@ -165,10 +165,6 @@
 			toggleCurrentSidenav: function() {}
 		};
 
-		toggles.set({
-			SwapShiftEnabled: true
-		});
-
 		permissions.set({
 			IsSwapShiftsAvailable: true
 		});

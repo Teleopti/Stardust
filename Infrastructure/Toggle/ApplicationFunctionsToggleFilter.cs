@@ -17,22 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 
 		public AllFunctions FilteredFunctions()
 		{
-			var functions = _applicationFunctionsProvider.AllFunctions();
-			if (!_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_SwapShifts_36231))
-			{
-				hideWfmTeamScheduleSwapShifts(functions);
-			}
-
-			return functions;
-		}
-
-		private static void hideWfmTeamScheduleSwapShifts(AllFunctions functions)
-		{
-			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.SwapShifts);
-			if (foundFunction != null)
-			{
-				foundFunction.SetHidden();
-			}
+			return _applicationFunctionsProvider.AllFunctions();
 		}
 	}
 }
