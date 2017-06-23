@@ -159,7 +159,7 @@
 		};
 
 		vm.canActiveRemoveAbsence = function () {
-			return vm.toggles.RemoveAbsenceEnabled && vm.permissions.IsRemoveAbsenceAvailable;
+			return vm.permissions.IsRemoveAbsenceAvailable;
 		};
 
 		vm.canActiveRemoveActivity = function () {

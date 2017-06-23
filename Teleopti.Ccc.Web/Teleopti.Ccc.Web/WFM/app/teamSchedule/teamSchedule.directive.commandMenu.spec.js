@@ -187,10 +187,6 @@
 			toggleCurrentSidenav: function() {}
 		};
 
-		toggles.set({
-			RemoveAbsenceEnabled: true
-		});
-
 		permissions.set({
 			IsRemoveAbsenceAvailable: true
 		});

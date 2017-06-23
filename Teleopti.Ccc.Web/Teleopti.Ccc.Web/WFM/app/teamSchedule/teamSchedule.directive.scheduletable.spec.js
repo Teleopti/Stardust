@@ -8,9 +8,7 @@ describe('teamschedule schedule table controller tests', function () {
 		module('wfm.teamSchedule');
 		module(function ($provide) {
 			$provide.service('Toggle', function () {
-				return {
-					WfmTeamSchedule_RemoveAbsence_36705: true
-				};
+				return { };
 			});
 		});
 	});

@@ -333,7 +333,7 @@
 		};
 
 		ProjectionViewModel.prototype.Selectable = function () {
-			if (this.ParentPersonAbsences && this.ParentPersonAbsences.length > 0 && toggles.all().RemoveAbsenceEnabled) 
+			if (this.ParentPersonAbsences && this.ParentPersonAbsences.length > 0) 
 				return true;
 
 			if (!this.ShiftLayerIds || this.ShiftLayerIds.length == 0) 

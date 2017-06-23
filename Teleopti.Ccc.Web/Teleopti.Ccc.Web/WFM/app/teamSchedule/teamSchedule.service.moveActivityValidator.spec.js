@@ -61,7 +61,6 @@
 		function FakeTeamsToggles() {
 			this.all = function () {
 				return {
-					RemoveAbsenceEnabled: true,
 					RemoveActivityEnabled: true,
 					RemoveOvertimeEnabled: true
 				};
