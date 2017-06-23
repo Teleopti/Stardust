@@ -150,7 +150,7 @@
 			},
 			updateSelectedTeamsInView: {
 				value: function () {
-					if (!angular.isArray(this.selectedTeamIds) || this.selectedTeamIds.length === 0)
+					if (!angular.isArray(this.selectedTeamIds) || !angular.isArray(this.orgsInView))
 						return
 					for (var i = 0; i < this.orgsInView.length; i++) {
 						var slaveSite = this.orgsInView[i]
