@@ -171,7 +171,7 @@
 		};
 
 		vm.canActiveModifyShiftCategory = function(){
-			return vm.toggles.ModifyShiftCategoryEnabled && vm.permissions.HasEditShiftCategoryPermission;
+			return vm.permissions.HasEditShiftCategoryPermission;
 		};
 
 		vm.canMoveActivity = function () {
@@ -201,7 +201,7 @@
 		};
 
 		vm.canModifyShiftCategory = function (){
-			return vm.toggles.ModifyShiftCategoryEnabled && vm.permissions.HasEditShiftCategoryPermission && personSelectionSvc.anyAgentChecked();
+			return vm.permissions.HasEditShiftCategoryPermission && personSelectionSvc.anyAgentChecked();
 		};
 
 		vm.canUndoSchedule = function () {

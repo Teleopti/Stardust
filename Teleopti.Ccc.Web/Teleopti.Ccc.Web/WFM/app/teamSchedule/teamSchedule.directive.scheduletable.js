@@ -76,7 +76,7 @@
 		};
 
 		vm.modifyShiftCategoryForAgent = function($event, personSchedule){
-			if (!(vm.toggles.ModifyShiftCategoryEnabled && vm.permissions.HasEditShiftCategoryPermission)) {
+			if (!vm.permissions.HasEditShiftCategoryPermission) {
 				return;
 			}
 
