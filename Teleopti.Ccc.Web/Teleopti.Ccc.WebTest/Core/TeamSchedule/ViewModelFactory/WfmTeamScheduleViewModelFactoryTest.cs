@@ -522,10 +522,13 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldViewAgentOrderByLastNameInWeekView()
 		{
 			var scheduleDate = new DateOnly(2020,1,1);
+			team = TeamFactory.CreateTeamWithId("test");
 			var person = PersonFactory.CreatePerson("Bill","Mamer");
 			var person2 = PersonFactory.CreatePerson("Sherlock","Holmes");
 			person.WithId();
 			person2.WithId();
+			person.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(scheduleDate.AddDays(-1), team));
+			person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(scheduleDate.AddDays(-1), team));
 			PeopleSearchProvider.Add(person);
 			PeopleSearchProvider.Add(person2);
 			PersonRepository.Has(person);
@@ -551,7 +554,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.All, "e"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new []{Guid.NewGuid()}, searchTerm, scheduleDate, 20, 1);
+			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm, scheduleDate, 20, 1);
 
 			result.Total.Should().Be(2);
 
