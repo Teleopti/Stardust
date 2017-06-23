@@ -61,7 +61,6 @@
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 
-		WfmTeamSchedule_ShowDayOffWarning_39801,
 		WfmTeamSchedule_ShowOverwrittenLayerWarning_40109,
 		WfmTeamSchedule_FilterValidationWarnings_40110,
 
