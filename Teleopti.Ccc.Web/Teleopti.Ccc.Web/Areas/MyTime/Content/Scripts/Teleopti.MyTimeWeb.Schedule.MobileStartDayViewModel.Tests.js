@@ -568,6 +568,7 @@ $(document).ready(function() {
 			ViewPossibilityPermission: true,
 			CheckStaffingByIntraday: true,
 			AbsenceProbabilityEnabled: false,
+			OvertimeProbabilityEnabled: true
 		};
 		viewModel.readData(rawData);
 		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
@@ -623,7 +624,7 @@ $(document).ready(function() {
 			OvertimeProbabilityEnabled: false
 		};
 		viewModel.readData(rawData);
-		equal(viewModel.showProbabilityOptionsToggleIcon(), true);
+		equal(viewModel.showProbabilityOptionsToggleIcon(), false);
 		equal(viewModel.overtimeProbabilityEnabled(), false);
 	});
 
@@ -943,5 +944,30 @@ $(document).ready(function() {
         viewModel.readData(rawData);
 
 	    equal(viewModel.showProbabilityOptionsToggleIcon(), false);
+	});
+
+	test("should not show probability option icon when OvertimeProbability and AbsenceProbability are disabled", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "Staffing_Info_Configuration_44687") return true;
+		};
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			OvertimeProbabilityEnabled:false,
+			AbsenceProbabilityEnabled:false,
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header: { Title: null }
+			},
+			ViewPossibilityPermission: true
+		};
+		viewModel.readData(rawData);
+		equal(viewModel.showProbabilityOptionsToggleIcon(), false);
 	});
 });
