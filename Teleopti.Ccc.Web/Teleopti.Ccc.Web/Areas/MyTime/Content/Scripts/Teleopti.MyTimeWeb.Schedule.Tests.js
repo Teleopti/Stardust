@@ -1042,6 +1042,25 @@ $(document).ready(function() {
 		equal(timelineViewModel.minutes, 1440);
 	});
 
+	test("should not show overtime probability toggle when OvertimeProbability is disabled", function () {
+		setupHash();
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
+			if (x === "Staffing_Info_Configuration_44687") return true;
+		};
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.OvertimeProbabilityEnabled = true;
+		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		week.initializeData(fakeScheduleData);
+		week.selectedProbabilityType = constants.probabilityType.none;
+		week.switchProbabilityType(constants.probabilityType.overtime);
+		equal(week.overtimeProbabilityEnabled(), true);
+
+		fakeScheduleData.OvertimeProbabilityEnabled = false;
+		week.initializeData(fakeScheduleData);
+		equal(week.selectedProbabilityType, constants.probabilityType.none);
+	});
+
 	function setupHash() {
 		this.hasher = {
 			initialized: {

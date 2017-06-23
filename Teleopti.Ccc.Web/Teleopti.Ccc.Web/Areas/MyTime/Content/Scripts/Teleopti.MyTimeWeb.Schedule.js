@@ -223,11 +223,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			var selectedProbabilityTypeLabel;
 			switch(self.selectedProbabilityType){
-				case constants.probabilityType.none: selectedProbabilityTypeLabel = self.userTexts.HideStaffingInfo
+				case constants.probabilityType.none:
+					selectedProbabilityTypeLabel = self.userTexts.HideStaffingInfo;
 					break;
-				case constants.probabilityType.absence: selectedProbabilityTypeLabel = self.userTexts.ShowAbsenceProbability
+				case constants.probabilityType.absence:
+					selectedProbabilityTypeLabel = self.userTexts.ShowAbsenceProbability;
 					break;
-				case constants.probabilityType.overtime: selectedProbabilityTypeLabel = self.userTexts.ShowOvertimeProbability
+				case constants.probabilityType.overtime:
+					selectedProbabilityTypeLabel = self.userTexts.ShowOvertimeProbability;
 					break;
 			}
 
@@ -243,7 +246,9 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			self.selectedProbabilityType = probabilityType;
 
-			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + getUrlPartForDate(self.selectedDate()) + getUrlPartForProbability())
+			Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" +
+				getUrlPartForDate(self.selectedDate()) +
+				getUrlPartForProbability());
 
 			if (self.selectedProbabilityType === constants.probabilityType.none) {
 				self.days().forEach(function (d) {
@@ -531,8 +536,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.staffingProbabilityEnabled = data.ViewPossibilityPermission && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608");
 		self.staffingProbabilityForMultipleDaysEnabled = self.staffingProbabilityEnabled && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880");
 
-		self.absenceProbabilityEnabled(data.AbsenceProbabilityEnabled && data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);
-
 		if(Teleopti.MyTimeWeb.Common.IsToggleEnabled("Staffing_Info_Configuration_44687")){
 			self.absenceProbabilityEnabled(data.AbsenceProbabilityEnabled && data.CheckStaffingByIntraday && self.staffingProbabilityEnabled);
 			self.overtimeProbabilityEnabled(data.OvertimeProbabilityEnabled);
@@ -542,6 +545,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		}
 
 		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityType === constants.probabilityType.absence) {
+			self.selectedProbabilityType = constants.probabilityType.none;
+			rebindProbabilityLabel(self);
+		}
+
+		if (!self.overtimeProbabilityEnabled() && self.selectedProbabilityType === constants.probabilityType.overtime) {
 			self.selectedProbabilityType = constants.probabilityType.none;
 			rebindProbabilityLabel(self);
 		}
