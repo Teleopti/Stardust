@@ -80,7 +80,6 @@ Scenario: Should show command check after adding activity on top of NOT ALLOW ME
 	When I apply my new activity
 	Then I should be able to see command check
 
-@OnlyRunIfEnabled('WfmTeamSchedule_AddPersonalActivity_37742')
 Scenario: Should show command check after adding person activity on top of NOT ALLOW MEETING acitvity
 	When I view wfm team schedules
 	And I set schedule date to '2016-10-10'

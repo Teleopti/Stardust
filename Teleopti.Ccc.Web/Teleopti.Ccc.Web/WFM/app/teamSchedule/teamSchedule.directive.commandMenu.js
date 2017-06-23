@@ -135,7 +135,7 @@
 		};
 
 		vm.canActiveAddPersonalActivity = function () {
-			return vm.toggles.AddPersonalActivityEnabled && vm.permissions.HasAddingPersonalActivityPermission;
+			return vm.permissions.HasAddingPersonalActivityPermission;
 		};
 
 		vm.canActiveAddAbsence = function () {

@@ -119,11 +119,7 @@
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
-		};		
-
-		toggles.set({
-			AddPersonalActivityEnabled: true
-		});
+		};
 
 		permissions.set({
 			HasAddingPersonalActivityPermission: true
