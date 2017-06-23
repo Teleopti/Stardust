@@ -131,7 +131,7 @@
 
 
 		vm.canActiveAddActivity = function () {
-			return vm.toggles.AddActivityEnabled && vm.permissions.HasAddingActivityPermission;
+			return vm.permissions.HasAddingActivityPermission;
 		};
 
 		vm.canActiveAddPersonalActivity = function () {

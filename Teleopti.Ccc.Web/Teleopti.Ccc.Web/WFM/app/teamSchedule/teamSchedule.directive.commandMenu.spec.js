@@ -99,11 +99,6 @@
 			toggleCurrentSidenav: function() {}
 		};
 		
-		
-		toggles.set({
-			AddActivityEnabled: true
-		});
-
 		permissions.set({
 			HasAddingActivityPermission: true
 		});		
