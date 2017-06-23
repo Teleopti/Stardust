@@ -10,8 +10,6 @@
 
 		self.all = function getToggles() {
 			return {
-				AutoMoveOverwrittenActivityForOperationsEnabled: toggleSvc
-					.WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
 				CheckPersonalAccountEnabled: toggleSvc.WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088,
 
 				ViewScheduleOnTimezoneEnabled: toggleSvc.WfmTeamSchedule_ShowScheduleBasedOnTimeZone_40925,

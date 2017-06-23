@@ -61,7 +61,6 @@
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 
-		WfmTeamSchedule_AutoMoveOverwrittenActivityForOperations_40279,
 		WfmTeamSchedule_CheckPersonalAccountWhenAddingAbsence_41088,
 
 		WfmTeamSchedule_MakePersonalActivityUnmerged_40252,
