@@ -151,7 +151,7 @@
 		};
 
 		vm.canActiveMoveInvalidOverlappedActivity = function () {
-			return vm.toggles.MoveInvalidOverlappedActivityEnabled && vm.permissions.HasMoveInvalidOverlappedActivityPermission;
+			return vm.permissions.HasMoveInvalidOverlappedActivityPermission;
 		};
 
 		vm.canActiveMoveShift = function() {

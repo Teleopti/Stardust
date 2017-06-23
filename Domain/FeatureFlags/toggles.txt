@@ -50,7 +50,6 @@ RTA_SolidProofWhenManagingAgentAdherence_39351 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
-WfmTeamSchedule_MoveInvalidOverlappedActivity_40688 = true
 WfmTeamSchedule_MoveEntireShift_41632 = true
 WfmTeamSchedule_SwapShifts_36231 = true
 WfmTeamSchedule_RemoveAbsence_36705 = true

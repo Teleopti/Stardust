@@ -256,38 +256,12 @@
 		expect(menuListItem.length).toBe(1);
 	});
 
-	it('should not show menu item when toggle is disabled', function () {
-		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
-		var scope = $rootScope.$new();
-		scope.vm = {
-			toggleCurrentSidenav: function() {}
-		};
-
-		toggles.set({
-			MoveInvalidOverlappedActivityEnabled: false
-		});		
-
-		var element = $compile(html)(scope);
-
-		scope.$apply();
-
-		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
-		var menuListItem = angular.element(element[0].querySelector('.wfm-list #menuItemMoveInvalidOverlappedActivity'));
-
-		expect(menu.length).toBe(0);
-		expect(menuListItem.length).toBe(0);
-	});
-
 	it('should view menu when move invalid overlapped activity is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-
-		toggles.set({
-			MoveInvalidOverlappedActivityEnabled: true
-		});
 
 		permissions.set({
 			HasMoveInvalidOverlappedActivityPermission: true
@@ -310,10 +284,6 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-
-		toggles.set({
-			MoveInvalidOverlappedActivityEnabled: true
-		});
 
 		permissions.set({
 			HasMoveInvalidOverlappedActivityPermission: true
@@ -342,10 +312,6 @@
 		scope.vm = {
 			toggleCurrentSidenav: function() {}
 		};
-
-		toggles.set({
-			MoveInvalidOverlappedActivityEnabled: true
-		});
 
 		permissions.set({
 			HasMoveInvalidOverlappedActivityPermission: true
