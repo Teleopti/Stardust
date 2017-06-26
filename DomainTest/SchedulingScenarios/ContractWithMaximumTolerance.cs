@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 		{
 			Description = new Description("contract with max tolerance");
 			WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1));
+			NegativeDayOffTolerance = 10;
+			PositiveDayOffTolerance = 10;
 		}
 
 		public override TimeSpan NegativePeriodWorkTimeTolerance

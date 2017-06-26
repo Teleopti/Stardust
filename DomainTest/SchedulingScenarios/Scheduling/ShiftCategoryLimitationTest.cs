@@ -134,6 +134,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
+		//TODO: - fel i test?
 		public void ShouldNotTouchTeamMembersNotInSelectionWhenUsingTeamAndBlock()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
