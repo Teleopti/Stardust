@@ -52,8 +52,6 @@ WfmPermission_ReplaceOldPermission_34671 = true
 
 WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305 = true
 
-WfmTeamSchedule_MoveToBaseLicense_41039 = true
-
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
 

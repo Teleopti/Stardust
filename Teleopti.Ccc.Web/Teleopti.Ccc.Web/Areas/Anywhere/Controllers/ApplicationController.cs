@@ -183,9 +183,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 				LanguageCode = CultureInfo.CurrentCulture.IetfLanguageTag,
 				FirstDayOfWeek = (int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek,
-				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t"),
-				
-				WfmTeamSchedule_MoveToBaseLicense_41039 = _toggles.IsEnabled(Toggles.WfmTeamSchedule_MoveToBaseLicense_41039)
+				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t")
 			}, Formatting.Indented);
 
 			template = string.Format(template, userTexts);

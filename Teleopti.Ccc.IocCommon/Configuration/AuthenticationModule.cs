@@ -70,16 +70,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IPasswordPolicy>()
 				.SingleInstance();
 
-
-			if (typeof(LicensedFunctionsProvider).EnabledByToggle(_configuration))
-			{
-				builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<LicensedFunctionsProviderWithoutToggle41309>().As<ILicensedFunctionsProvider>().SingleInstance();
-			}
-
+			builder.RegisterType<LicensedFunctionsProvider>().As<ILicensedFunctionsProvider>().SingleInstance();
 			
 			builder.RegisterType<ApplicationFunctionsProvider>().As<IApplicationFunctionsProvider>().SingleInstance();
 			builder.RegisterType<ApplicationFunctionsToggleFilter>().As<IApplicationFunctionsToggleFilter>().SingleInstance();

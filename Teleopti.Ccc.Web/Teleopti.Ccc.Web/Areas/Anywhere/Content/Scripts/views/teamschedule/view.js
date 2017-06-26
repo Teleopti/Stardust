@@ -91,8 +91,6 @@ define([
 
 			viewModel.SetViewOptions(options);
 
-			viewModel.ShowTryOutTheNewImprovedTeams(!resources.WfmTeamSchedule_MoveToBaseLicense_41039);
-
 			viewModel.TryOutTheNewImprovedTeams(resources.TryOutTheNewImprovedTeams);
 
 			var groupPagesDeferred = $.Deferred();

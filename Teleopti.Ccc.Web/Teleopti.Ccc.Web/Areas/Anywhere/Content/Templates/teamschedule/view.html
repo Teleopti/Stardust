@@ -1,9 +1,6 @@
 <div class="container team-schedule">
 	<div class="row">
 		<div id="existsWhenLoadingFinishes" data-bind="ifnot: Loading"></div>
-		<!-- ko if: ShowTryOutTheNewImprovedTeams -->
-		<a class="col-md-12 btn pull-right" style="background: #bada55; text-align: left; color: #333 !important; text-decoration: none !important; margin-bottom: 10px;" data-bind="{ text: TryOutTheNewImprovedTeams, attr: { href: URLPath}}"></a>
-		<!-- /ko -->
 		<div class="col-xs-12 col-md-4">
             <select id="group-picker" class="col-xs-12" data-bind="disable: Loading, foreach: GroupPages, select2: { value: GroupId } ">
                 <optgroup data-bind="attr: { label: Name }, foreach: Groups" label="Missing">

@@ -9,8 +9,6 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 {
 	public class TeleoptiCccBaseLicenseOption : LicenseOption
 	{
-		private bool _notIncludeWebTeams;
-
 		public TeleoptiCccBaseLicenseOption()
 			: base(DefinedLicenseOptionPaths.TeleoptiCccBase, DefinedLicenseOptionNames.TeleoptiCccBase)
 		{
@@ -115,16 +113,10 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.RemoveOvertime
 			};
 
-			if (! _notIncludeWebTeams) webTeamsFunctionPaths.ForEach(appFunctionPaths.Add);
+			webTeamsFunctionPaths.ForEach(appFunctionPaths.Add);
 
 			var all = allApplicationFunctions.ToList();
 			EnableFunctions(appFunctionPaths.Select(appFunctionPath => ApplicationFunction.FindByPath(all, appFunctionPath)).ToArray());
-		}
-
-		[DisabledBy(Toggles.WfmTeamSchedule_MoveToBaseLicense_41039)]
-		public void SetNotIncludeWebTeams()
-		{
-			_notIncludeWebTeams = true;
 		}
 	}
 }

@@ -38,7 +38,6 @@ define([
 		this.PreSelectedStartMinute = ko.observable(NaN);
 		this.BusinessUnitId = ko.observable();
 		this.TryOutTheNewImprovedTeams = ko.observable();
-		this.ShowTryOutTheNewImprovedTeams = ko.observable();
 
 		this.URLPath = ko.observable(getNewImprovedMyTeamUrl());
 
