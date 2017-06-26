@@ -134,7 +134,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		//TODO: - fel i test?
 		public void ShouldNotTouchTeamMembersNotInSelectionWhenUsingTeamAndBlock()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
@@ -157,8 +156,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				new PersonAssignment(selectedAgent, scenario, date).WithDayOff(),
 				new PersonAssignment(selectedAgent, scenario, date.AddDays(1)).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14)),
 				new PersonAssignment(selectedAgent, scenario, date.AddDays(2)).WithDayOff(),
-				new PersonAssignment(selectedAgent, scenario, date).WithDayOff(),
-				new PersonAssignment(selectedAgent, scenario, date.AddDays(2)).WithDayOff()
+				new PersonAssignment(agentNotInSelection, scenario, date).WithDayOff(),
+				new PersonAssignment(agentNotInSelection, scenario, date.AddDays(2)).WithDayOff()
 			}, skillDay);
 			var schedulingOptions = new SchedulingOptions
 			{ 
