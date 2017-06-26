@@ -10,6 +10,9 @@ describe('rtaOverviewComponent', function () {
     vm;
 
   var stateParams = {};
+  var goodColor = '#C2E085';
+  var warningColor = '#FFC285';
+  var dangerColor = '#EE8F7D';
 
   beforeEach(function () {
     module('wfm.rta');
@@ -53,7 +56,7 @@ describe('rtaOverviewComponent', function () {
     expect(ctrl.siteCards[0].site.Name).toEqual("London");
     expect(ctrl.siteCards[0].site.AgentsCount).toEqual(11);
     expect(ctrl.siteCards[0].site.InAlarmCount).toEqual(5);
-    expect(ctrl.siteCards[0].site.Color).toEqual("warning");
+    expect(ctrl.siteCards[0].site.Color).toEqual(warningColor);
   });
 
   it('should display closed site cards by default', function () {

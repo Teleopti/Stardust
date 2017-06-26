@@ -10,6 +10,9 @@ describe('RtaMainController', function () {
 
   var skills1, skills2;
   var stateParams = {};
+  var goodColor = '#C2E085';
+  var warningColor = '#FFC285';
+  var dangerColor = '#EE8F7D';
 
   beforeEach(module('wfm.rta'));
 
@@ -175,7 +178,7 @@ describe('RtaMainController', function () {
       expect(vm.siteCards[0].site.Name).toEqual("London");
       expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(5);
-      expect(vm.siteCards[0].site.Color).toEqual("warning");
+      expect(vm.siteCards[0].site.Color).toEqual(warningColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
       expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
     });
@@ -207,7 +210,7 @@ describe('RtaMainController', function () {
       expect(vm.siteCards[0].site.Name).toEqual("London");
       expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
-      expect(vm.siteCards[0].site.Color).toEqual("good");
+      expect(vm.siteCards[0].site.Color).toEqual(goodColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
       expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
     });
