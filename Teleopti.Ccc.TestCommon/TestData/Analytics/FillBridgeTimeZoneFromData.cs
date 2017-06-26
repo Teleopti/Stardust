@@ -69,8 +69,11 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 					a.local_interval_id,
 					_datasource.RaptorDefaultDatasourceId)
 				);
-
-			Bulk.Insert(connection, table);
+			try
+			{
+				Bulk.Insert(connection, table);
+			}
+			catch (Exception) { }
 
 			Rows = table.AsEnumerable();
 		}

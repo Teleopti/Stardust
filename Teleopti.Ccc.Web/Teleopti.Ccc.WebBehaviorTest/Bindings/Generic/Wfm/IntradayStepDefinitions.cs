@@ -266,21 +266,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var count = scope.viewObj.forecastedStaffing.updatedSeries.length;" + 
+				"var count = scope.viewObj.forecastedStaffing.updatedSeries.length;" +
 				"var forecastedStaffing = parseFloat(scope.viewObj.forecastedStaffing.updatedSeries[count-1]);" +
 				"return (forecastedStaffing >= 0);"
 				, "True");
-			Browser.Interactions.AssertJavascriptResultContains(
-				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var actualStaffing = parseFloat(scope.viewObj.actualStaffingSeries[1]);" +
-                "return (actualStaffing >= 0);"
-                , "True");
+			//Browser.Interactions.AssertJavascriptResultContains(
+			//	"var scope = angular.element(document.querySelector('.c3')).scope();" +
+			//	"var actualStaffing = parseFloat(scope.viewObj.actualStaffingSeries[1]);" +
+   //             "return (actualStaffing >= 0);"
+   //             , "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
 				"var scheduledStaffing = parseFloat(scope.viewObj.scheduledStaffing[1]);" +
                 "return (scheduledStaffing >= 0) + ' |sopeViewObjScheduledStaffing: ' + scope.viewObj.scheduledStaffing[1] + ' |scheduledStaffing: ' + scheduledStaffing;"
                 , "true");
 		}
+
+		[Then(@"I should see forecasted staffing data in the chart")]
+		public void ThenIShouldSeeForecastedStaffingDataInTheChart()
+		{
+			Browser.Interactions.AssertJavascriptResultContains(
+				"var scope = angular.element(document.querySelector('.c3')).scope();" +
+				"var forecastedStaffing = parseFloat(scope.viewObj.forecastedStaffing.series[1]);" +
+				"return (forecastedStaffing >= 0);"
+				, "True");
+		}
+
 
 		[When(@"I choose to look at statistics for '(.*)'")]
 		public void WhenIChooseToLookAtStatisticsFor(string offset)
@@ -295,6 +306,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			ScenarioContext.Current.Pending();
 		}
 
+		[Then(@"I should see the date")]
+		public void ThenIShouldSeeTheDate()
+		{
+			Browser.Interactions.AssertJavascriptResultContains("return $('#viewingDate').text().length > 0", "True");
+		}
+
+
 		[When(@"I should not see incoming traffic data in the chart")]
 		public void WhenIShouldNotSeeIncomingTrafficDataInTheChart()
 		{
@@ -305,7 +323,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenIChangeDateOffsetTo(int offset)
 		{
 			Browser.Interactions.Javascript("var scope = angular.element(document.querySelector('date-offset')).scope();" +
-											$"scope.changeChosenOffset('{offset}');");
+											$"scope.changeChosenOffset('{offset}');" +
+											"setTimeout(function(){console.log('delay')}, 1000);");
 		}
 	}
 }

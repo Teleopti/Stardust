@@ -43,17 +43,17 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 
 		private IQueueData loadSkillQueue(SqlConnection connection, IDatasourceData datasourceData)
 		{
-			var sql = "select top 1 q.queue_id as QueueId from mart.dim_workload w ";
-			sql += "inner join mart.bridge_queue_workload b on w.workload_id = b.workload_id ";
-			sql += "inner join mart.dim_queue q on b.queue_id = q.queue_id ";
-			sql += "where w.skill_name = '" + _skillName + "'";
+			var sql = "select top 1 q.queue_id as QueueId from mart.dim_workload w " +
+				"inner join mart.bridge_queue_workload b on w.workload_id = b.workload_id " +
+				"inner join mart.dim_queue q on b.queue_id = q.queue_id ";
+			//sql += "where w.skill_name = '" + _skillName + "'";
 
 			using (var command = new SqlCommand(sql, connection))
 			{
 				var queueId = (int)command.ExecuteScalar();
 				var table = dim_queue.CreateTable();
 				table.AddQueue(queueId, -1, "", "", "", "", datasourceData.RaptorDefaultDatasourceId);
-				var queue = new AQueue(datasourceData) {Rows = table.Select()};
+				var queue = new AQueue(datasourceData) { Rows = table.Select() };
 				return queue;
 			}
 		}
