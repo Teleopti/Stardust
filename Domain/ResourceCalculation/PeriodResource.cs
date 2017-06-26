@@ -71,7 +71,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					dateTimePeriods.Remove(fractionPeriod.Value);
 					fractionPeriodResult = dateTimePeriods.ToArray();
 				}
-				return new InnerPeriodResourceDetail(d.Count - heads, d.Resource - resource,
+				var res = d.Resource - resource;
+				if (res < 0 && Math.Round(res, 5) == 0.00000d)
+				{
+					res = 0;
+				}
+				return new InnerPeriodResourceDetail(d.Count - heads, res,
 					subtractEffiencyResources(d.EffiencyResources, skillCombination.SkillEfficiencies), fractionPeriodResult);
 			});
 		}
