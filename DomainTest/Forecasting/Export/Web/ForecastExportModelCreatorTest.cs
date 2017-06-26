@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -196,6 +197,16 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 				skilldDay2TaskPeriods.Last(),
 				0
 			);
+		}
+
+		[Test]
+		public void hej()
+		{
+			object aDate = DateTime.Today;
+			if (aDate is DateTime)
+			{
+				Debug.WriteLine("date");
+			}
 		}
 
 		private void assertIntervalData(

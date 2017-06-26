@@ -433,6 +433,7 @@
     <Compile Include="Areas\Anywhere\Controllers\OrganizationController.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ExportForecastInput.cs" />
     <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
+    <Compile Include="Areas\Forecasting\Core\ForecastExportToExcel.cs" />
     <Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />
     <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
