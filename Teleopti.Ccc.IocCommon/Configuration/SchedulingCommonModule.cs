@@ -663,7 +663,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<TeamMemberTerminationOnBlockSpecification>().As<ITeamMemberTerminationOnBlockSpecification>().SingleInstance();
 			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().As<ISplitSchedulePeriodToWeekPeriod>().SingleInstance();
-			builder.RegisterType<TeamScheduling>().As<ITeamScheduling>().SingleInstance();
+			builder.RegisterType<TeamScheduling>().SingleInstance();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSchedulingService>().InstancePerLifetimeScope();

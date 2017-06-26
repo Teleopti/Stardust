@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		private readonly ISkillStaffPeriodEvaluator _skillStaffPeriodEvaluator;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IIntraIntervalIssueCalculator _intraIntervalIssueCalculator;
-		private readonly ITeamScheduling _teamScheduling;
+		private readonly TeamScheduling _teamScheduling;
 		private readonly IShiftProjectionIntraIntervalBestFitCalculator _shiftProjectionIntraIntervalBestFitCalculator;
 		private readonly ISkillDayIntraIntervalIssueExtractor _skillDayIntraIntervalIssueExtractor;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			ISkillStaffPeriodEvaluator skillStaffPeriodEvaluator,
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 			IIntraIntervalIssueCalculator intraIntervalIssueCalculator,
-			ITeamScheduling  teamScheduling,
+			TeamScheduling teamScheduling,
 			IShiftProjectionIntraIntervalBestFitCalculator shiftProjectionIntraIntervalBestFitCalculator,
 			ISkillDayIntraIntervalIssueExtractor skillDayIntraIntervalIssueExtractor,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,

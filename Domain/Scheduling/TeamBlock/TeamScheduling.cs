@@ -6,16 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-    public interface ITeamScheduling
-    {
-	    bool ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
-		    ShiftProjectionCache shiftProjectionCache,
-		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, INewBusinessRuleCollection businessRules, SchedulingOptions schedulingOptions, 
-				Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
-    }
-
-    public class TeamScheduling : ITeamScheduling
+    public class TeamScheduling
     {
 	    private readonly AssignScheduledLayers _assignScheduledLayers;
 
