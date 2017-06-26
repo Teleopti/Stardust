@@ -226,12 +226,12 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			self.absenceProbabilityEnabled(self.staffingProbabilityOnMobileEnabled() && data.CheckStaffingByIntraday);
 		}
 
-
-
 		if (!self.absenceProbabilityEnabled() && self.selectedProbabilityOptionValue() === constants.probabilityType.absence) {
-			self.selectedProbabilityOptionValue(constants.probabilityType.none);
-			self.showingAbsenceProbability(false);
-			self.showingOvertimeProbability(false);
+			resetProbabilityOption();
+		}
+
+		if (!self.overtimeProbabilityEnabled() && self.selectedProbabilityOptionValue() === constants.probabilityType.overtime) {
+			resetProbabilityOption();
 		}
 
 		if (!self.absenceProbabilityEnabled() && !self.overtimeProbabilityEnabled()) {
@@ -406,4 +406,10 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		setupRequestViewModel(requestViewModel, resetRequestViewModel);
 		fillRequestFormData(requestViewModel);
 	};
+
+	function resetProbabilityOption() {
+		self.selectedProbabilityOptionValue(constants.probabilityType.none);
+		self.showingAbsenceProbability(false);
+		self.showingOvertimeProbability(false);
+	}
 };

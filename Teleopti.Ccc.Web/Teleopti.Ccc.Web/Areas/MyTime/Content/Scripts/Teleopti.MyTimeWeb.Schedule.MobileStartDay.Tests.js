@@ -530,6 +530,20 @@
 		equal(probabilities.length, 0);
 	});
 
+	test("should not show overtime probability option if Overtime Probability is disabled and selectedProbability is overtime", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_ViewIntradayStaffingProbabilityOnMobile_42913") return true;
+			if (x === "Staffing_Info_Configuration_44687") return true;
+			return false;
+		};
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
+		vm.onProbabilityOptionSelectCallback(constants.probabilityType.overtime);
+		startDayData.OvertimeProbabilityEnabled = false;
+		vm.nextDay();
+		equal(vm.selectedProbabilityOptionValue(), 0);
+	});
+
 	function createPropabilities(periods, date) {
 		var values = [];
 		periods.forEach(function(period) {
@@ -859,6 +873,7 @@
 			},
 			"BaseUtcOffsetInMinutes": 60.0,
 			"AbsenceProbabilityEnabled": true,
+			"OvertimeProbabilityEnabled": true,
 			"CheckStaffingByIntraday": false,
 			"Possibilities": [],
 			"SiteOpenHourPeriod": null,
