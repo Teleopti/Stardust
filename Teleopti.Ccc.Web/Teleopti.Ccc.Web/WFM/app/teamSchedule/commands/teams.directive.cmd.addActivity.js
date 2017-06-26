@@ -23,8 +23,6 @@
 				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
 				scope.vm.trackId = containerCtrl.getTrackId();
 				scope.vm.getActionCb = containerCtrl.getActionCb;
-				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl
-					.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
 				scope.vm.timeRange = {
 					startTime: selfCtrl.getDefaultActvityStartTime(),
@@ -71,11 +69,9 @@
 
 		function decidePersonBelongsToDates(agents, targetTimeRange) {
 			return agents.map(function (selectedAgent) {
-				var belongsToDate = vm.manageScheduleForDistantTimezonesEnabled
-					? belongsToDateDecider.decideBelongsToDate(targetTimeRange,
+				var belongsToDate = belongsToDateDecider.decideBelongsToDate(targetTimeRange,
 						belongsToDateDecider.normalizePersonScheduleVm(vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(selectedAgent.PersonId), vm.currentTimezone()),
-						vm.selectedDate())
-					: vm.selectedDate();
+						vm.selectedDate());
 
 				return {
 					Date: belongsToDate,
@@ -96,15 +92,8 @@
 			var belongsToDates = decidePersonBelongsToDates(vm.selectedAgents, getTimeRangeMoment());
 			vm.invalidAgents = [];
 
-			if (vm.manageScheduleForDistantTimezonesEnabled) {
-				for (var i = 0; i < belongsToDates.length; i++) {
-					if (!belongsToDates[i].Date) vm.invalidAgents.push(vm.selectedAgents[i]);
-				}
-			} else {
-				vm.selectedAgents.filter(function (agent) { return !vm.isNewActivityAllowedForAgent(agent, vm.timeRange); })
-					.forEach(function (agent) {
-						vm.invalidAgents.push(agent);
-					});
+			for (var i = 0; i < belongsToDates.length; i++) {
+				if (!belongsToDates[i].Date) vm.invalidAgents.push(vm.selectedAgents[i]);
 			}
 
 			vm.notAllowedNameListString = vm.invalidAgents.map(function (x) { return x.Name; }).join(', ');

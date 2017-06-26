@@ -104,7 +104,7 @@
 		expect(cbInvoked).toBeFalsy();
 	}));
 
-	it("should reload schedule when schedule changed from yesterday when toggle ManageScheduleForDistantTimezonesEnabled is on", inject(function () {
+	it("should reload schedule when schedule changed from yesterday", inject(function () {
 
 		var html =
 			'<schedule-change-notifier schedule-date="scheduleDate" last-command-track-id="commandId" on-notification="cb"></schedule-change-notifier>';
@@ -121,7 +121,6 @@
 
 		$compile(html)(scope);
 
-		teamsToggles.setToggle('ManageScheduleForDistantTimezonesEnabled');
 		scope.$apply();
 
 		mockSignalRBackendServer.notifyClients([
@@ -136,7 +135,7 @@
 	}));
 
 
-	it("should reload schedule when schedule changed from tomorrow when toggle ManageScheduleForDistantTimezonesEnabled is on", inject(function () {
+	it("should reload schedule when schedule changed from tomorrow", inject(function () {
 		var html =
 			'<schedule-change-notifier schedule-date="scheduleDate" last-command-track-id="commandId" on-notification="cb"></schedule-change-notifier>';
 		var scope = $rootScope.$new();
@@ -152,7 +151,6 @@
 
 		$compile(html)(scope);
 
-		teamsToggles.setToggle('ManageScheduleForDistantTimezonesEnabled');
 		scope.$apply();
 
 		mockSignalRBackendServer.notifyClients([

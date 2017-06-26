@@ -37,9 +37,7 @@
 			fakeTeamsPermissions = new FakeTeamsPermissions();
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
-					return {
-						WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305: true
-					};
+					return { };
 				});
 				$provide.service('teamsToggles', function () {
 					return fakeTeamsToggles;

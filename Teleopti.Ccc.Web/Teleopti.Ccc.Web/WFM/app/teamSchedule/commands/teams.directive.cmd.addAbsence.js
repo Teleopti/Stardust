@@ -26,7 +26,6 @@
 				scope.vm.isAddFullDayAbsenceAvailable = function () {
 					return containerCtrl.hasPermission('IsAddFullDayAbsenceAvailable');
 				};
-				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
 				scope.vm.isAddIntradayAbsenceAvailable = function () {
 					return containerCtrl.hasPermission('IsAddIntradayAbsenceAvailable');
@@ -94,14 +93,12 @@
 		};
 
 		vm.updateInvalidAgents = function () {
-			if (vm.manageScheduleForDistantTimezonesEnabled) {
-				if (vm.isFullDayAbsence) {
-					determineIsSameTimezoneForFullDayAbsence();
-				} else {
-					checkIfTimeRangeAllowedForIntradayAbsence();
-				}
-				return;
+			if (vm.isFullDayAbsence) {
+				determineIsSameTimezoneForFullDayAbsence();
+			} else {
+				checkIfTimeRangeAllowedForIntradayAbsence();
 			}
+			return;
 		};
 
 

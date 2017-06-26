@@ -52,10 +52,7 @@
 		};
 
 		vm.canToggleSelection = function (currentProjection, viewDate) {
-			if (!currentProjection.Selectable()) return false;
-
-			var isSameDay = currentProjection.Parent && currentProjection.Parent.Date === moment(viewDate).format('YYYY-MM-DD');
-			return vm.toggles.ManageScheduleForDistantTimezonesEnabled ? true : isSameDay;
+			return currentProjection.Selectable();
 		};
 
 		vm.ToggleProjectionSelection = function (currentProjection, viewDate) {
@@ -162,7 +159,6 @@
 
 			vm.toggles = teamsToggles.all();
 			vm.permissions = teamsPermissions.all();
-			vm.enbleAllProjectionSelection = vm.toggles.ManageScheduleForDistantTimezonesEnabled;
 		};
 
 		vm.init();

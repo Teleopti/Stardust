@@ -93,7 +93,7 @@
 		expect(checkBoxInput.length).toBe(0);
 	});
 
-	it('should not able to add intraday absence when startime is early or equal to endtime', function () {
+	it('should not allow to add intraday absence when startime is early or equal to endtime', function () {
 		fakePermissions.setPermissions({ IsAddIntradayAbsenceAvailable: true, IsAddFullDayAbsenceAvailable: false });
 
 		var result = setUp(new Date('2015-01-01 10:00:00'));
@@ -110,6 +110,7 @@
 				ScheduleStartTime: null,
 				ScheduleEndTime: null
 			}];
+		vm.getCurrentTimezone = function () { return 'Europe/Stockholm'; };
 		fakePersonSelectionService.setFakeCheckedPersonInfoList(vm.selectedAgents);
 		result.commandScope.$apply();
 		var applyButton = result.container[0].querySelectorAll('#applyAbsence');
@@ -180,10 +181,23 @@
 			return new FakeScheduleManagementService();
 		};
 
+		this.findPersonScheduleVmForPersonId = function () {
+			return null;
+		};
+
 		function FakeScheduleManagementService() {
 
 			this.schedules = function () {
 				return null;
+			};
+
+			this.findPersonScheduleVmForPersonId = function () {
+				return {
+					Date: new Date(),
+					Timezone: {
+						IanaId: 'Asia/Shanghai'
+					}
+				};
 			};
 
 		}

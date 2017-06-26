@@ -194,7 +194,6 @@
 
 		result.scope.$apply();
 
-
 		var applyButton = angular.element(result.container[0].querySelector(".add-activity .form-submit"));
 
 		expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
@@ -213,6 +212,11 @@
 			endTime: new Date('2016-06-15T16:00:00Z')
 		};
 
+		var timezone1 = {
+			IanaId: 'Etc/Utc',
+			DisplayName: 'UTC'
+		};
+
 		vm.selectedAgents = [
 			{
 				PersonId: 'agent1',
@@ -223,6 +227,45 @@
 				Name: 'agent2',
 				ScheduleEndTime: '2016-06-15T17:00:00Z'
 			}];
+
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2016-06-15',
+			PersonId: 'agent1',
+			Timezone: timezone1,
+			Shifts: [
+				{
+					Date: '2016-06-15',
+					Projections: [
+						{
+							Start: '2016-06-15 08:00',
+							End: '2016-06-15 17:00',
+							Minutes: 540
+						}],
+					ProjectionTimeRange: {
+						Start: '2016-06-15 08:00',
+						End: '2016-06-15 17:00'
+					}
+				}]
+		});
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent2', {
+			Date: '2016-06-15',
+			PersonId: 'agent2',
+			Timezone: timezone1,
+			Shifts: [
+				{
+					Date: '2016-06-15',
+					Projections: [
+						{
+							Start: '2016-06-15 08:00',
+							End: '2016-06-15 17:00',
+							Minutes: 540
+						}],
+					ProjectionTimeRange: {
+						Start: '2016-06-15 08:00',
+						End: '2016-06-15 17:00'
+					}
+				}]
+		});
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
 
@@ -273,6 +316,50 @@
 			}];
 
 		vm.selectedActivityId = '472e02c8-1a84-4064-9a3b-9b5e015ab3c6';
+
+		var timezone1 = {
+			IanaId: 'Etc/Utc',
+			DisplayName: 'UTC'
+		};
+
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent1', {
+			Date: '2016-06-15',
+			PersonId: 'agent1',
+			Timezone: timezone1,
+			Shifts: [
+				{
+					Date: '2016-06-15',
+					Projections: [
+						{
+							Start: '2016-06-15 08:00',
+							End: '2016-06-15 17:00',
+							Minutes: 540
+						}],
+					ProjectionTimeRange: {
+						Start: '2016-06-15 08:00',
+						End: '2016-06-15 17:00'
+					}
+				}]
+		});
+		vm.containerCtrl.scheduleManagementSvc.setPersonScheduleVm('agent2', {
+			Date: '2016-06-15',
+			PersonId: 'agent2',
+			Timezone: timezone1,
+			Shifts: [
+				{
+					Date: '2016-06-15',
+					Projections: [
+						{
+							Start: '2016-06-15 08:00',
+							End: '2016-06-15 17:00',
+							Minutes: 540
+						}],
+					ProjectionTimeRange: {
+						Start: '2016-06-15 08:00',
+						End: '2016-06-15 17:00'
+					}
+				}]
+		});
 
 		result.scope.$apply();
 

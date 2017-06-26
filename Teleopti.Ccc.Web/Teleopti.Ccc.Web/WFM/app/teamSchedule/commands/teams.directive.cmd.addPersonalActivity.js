@@ -22,8 +22,6 @@
 				scope.vm.currentTimezone = containerCtrl.getCurrentTimezone;
 				scope.vm.convertTime = containerCtrl.convertTimeToCurrentUserTimezone;
 				scope.vm.getActionCb = containerCtrl.getActionCb;
-				scope.vm.manageScheduleForDistantTimezonesEnabled = containerCtrl
-					.hasToggle('ManageScheduleForDistantTimezonesEnabled');
 
 				scope.vm.timeRange = {
 					startTime: selfCtrl.getDefaultActvityStartTime(),
@@ -38,7 +36,7 @@
 							endTime: moment(scope.vm.timeRange.endTime).format("YYYY-MM-DD HH:mm")
 						};
 					},
-					function(newVal) {
+					function (newVal, oldVal) {
 						if (newVal) {
 							scope.vm.updateInvalidAgents();
 						}
@@ -70,12 +68,14 @@
 		});
 
 		function decidePersonBelongsToDates(agents, targetTimeRange) {
-			return agents.map(function (agent) {
-				var belongsToDate = vm.manageScheduleForDistantTimezonesEnabled
-					? belongsToDateDecider.decideBelongsToDate(targetTimeRange,
-						belongsToDateDecider.normalizePersonScheduleVm(vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId), vm.currentTimezone()),
-						vm.selectedDate())
-					: vm.selectedDate();
+			return agents.map(function(agent) {
+				var scheduleVm = vm.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId);
+				var normalizedVm = belongsToDateDecider
+					.normalizePersonScheduleVm(scheduleVm,
+						vm.currentTimezone());
+				var belongsToDate = belongsToDateDecider.decideBelongsToDate(targetTimeRange,
+					normalizedVm,
+					vm.selectedDate());
 
 				return {
 					Date: belongsToDate,
@@ -96,15 +96,8 @@
 			var belongsToDates = decidePersonBelongsToDates(vm.selectedAgents, getTimeRangeMoment());
 			vm.invalidAgents = [];
 
-			if (vm.manageScheduleForDistantTimezonesEnabled) {
-				for (var i = 0; i < belongsToDates.length; i++) {
-					if (!belongsToDates[i].Date) vm.invalidAgents.push(vm.selectedAgents[i]);
-				}
-			} else {
-				vm.selectedAgents.filter(function(agent) { return !vm.isNewActivityAllowedForAgent(agent, vm.timeRange); })
-					.forEach(function(agent) {
-						vm.invalidAgents.push(agent);
-					});
+			for (var i = 0; i < belongsToDates.length; i++) {
+				if (!belongsToDates[i].Date) vm.invalidAgents.push(vm.selectedAgents[i]);
 			}
 
 			vm.notAllowedNameListString = vm.invalidAgents.map(function(x) { return x.Name; }).join(', ');

@@ -55,8 +55,7 @@
 					return convertScheduleToTimezone(schedule, timezone);
 				});
 
-				var useNextDaySchedules = toggleSvc.WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305;
-
+				var useNextDaySchedules = true;
 				svc.groupScheduleVm = groupScheduleFactory.Create(timezoneAdjustedSchedules, scheduleDateMoment, useNextDaySchedules);
 			}
 
