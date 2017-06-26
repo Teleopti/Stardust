@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.DomainTest.ResourceCalculation;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
