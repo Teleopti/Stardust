@@ -5,10 +5,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
 using NPOI.HSSF.UserModel;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Forecasting.Export.Web;
+using Teleopti.Ccc.Web.Areas.Forecasting.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
@@ -26,9 +28,10 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public virtual HttpResponseMessage Export(ExportForecastInput input)
 		{
 			var response = new HttpResponseMessage();
-			var dailyModels = _forecastExportModelCreator.Load(input.WorkloadId, new DateOnlyPeriod(new DateOnly(input.ForecastStart.Date), new DateOnly(input.ForecastEnd.Date)));
+			var exportModel = _forecastExportModelCreator.Load(input.WorkloadId, new DateOnlyPeriod(new DateOnly(input.ForecastStart.Date), new DateOnly(input.ForecastEnd.Date)));
+			
 			XSSFWorkbook workbook = new XSSFWorkbook();
-			CreateDailyForecastSheet(workbook, dailyModels);
+			CreateDailyForecastSheet(workbook, exportModel);
 
 			using (var exportData = new MemoryStream())
 			{
@@ -39,37 +42,35 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			}
 		}
 
-		private void CreateDailyForecastSheet(XSSFWorkbook workbook, ForecastExportModel dailyModels)
+		private void CreateDailyForecastSheet(XSSFWorkbook workbook, ForecastExportModel exportModel)
 		{
 
 			var dailySheet = workbook.CreateSheet("ForecastedDays");
 			var dateCellType = workbook.CreateCellStyle();
 			dateCellType.DataFormat = HSSFDataFormat.GetBuiltinFormat("m/d/yy");
 
-			fillSheetWithMainHeader(dailySheet, dateCellType, dailyModels);
+			fillSheetWithMainHeader(dailySheet, dateCellType, exportModel);
 			fillSheetWithDailyHeader(dailySheet);
-			fillSheetWithDailyVolumes(dailySheet, dailyModels.DailyModelForecast, dateCellType);
+			fillSheetWithDailyVolumes(dailySheet, exportModel.DailyModelForecast, dateCellType);
 
 		}
 
-		private void fillSheetWithDailyVolumes(ISheet dailySheet, IList<ForecastExportDailyModel> dailyailyModelForecast, ICellStyle dateCellType)
+		private void fillSheetWithDailyVolumes(ISheet dailySheet, IList<ForecastExportDailyModel> dayModels, ICellStyle dateCellType)
 		{
 			var rowNumber = 10;
-			foreach (var dailyForecast in dailyailyModelForecast)
+			foreach (var dailyForecast in dayModels)
 			{
 				var rowDailyForecast = dailySheet.CreateRow(rowNumber);
 				var cellForecastDayValue = rowDailyForecast.CreateCell(0);
-				var cellDayOpenHourValue = rowDailyForecast.CreateCell(1);
-				var cellForecastCallsValue = rowDailyForecast.CreateCell(2);
-				var cellForecastAttValue = rowDailyForecast.CreateCell(3);
-				var cellForecastAcwValue = rowDailyForecast.CreateCell(4);
-				var cellForecastAhtValue = rowDailyForecast.CreateCell(5);
-				var cellForecastHoursValue = rowDailyForecast.CreateCell(6);
-				var cellForecastHoursWithShrinkageValue = rowDailyForecast.CreateCell(7);
+				var cellForecastCallsValue = rowDailyForecast.CreateCell(1);
+				var cellForecastAttValue = rowDailyForecast.CreateCell(2);
+				var cellForecastAcwValue = rowDailyForecast.CreateCell(3);
+				var cellForecastAhtValue = rowDailyForecast.CreateCell(4);
+				var cellForecastHoursValue = rowDailyForecast.CreateCell(5);
+				var cellForecastHoursWithShrinkageValue = rowDailyForecast.CreateCell(6);
 
 				cellForecastDayValue.CellStyle = dateCellType;
 				cellForecastDayValue.SetCellValue(dailyForecast.ForecastDate);
-				cellDayOpenHourValue.SetCellValue(dailyForecast.OpenHours.ToString());
 				cellForecastCallsValue.SetCellValue(dailyForecast.Calls);
 				cellForecastAttValue.SetCellValue(dailyForecast.AverageTalkTime);
 				cellForecastAcwValue.SetCellValue(dailyForecast.AverageAfterCallWork);
@@ -84,16 +85,14 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		{
 			var rowDailysHeader = dailySheet.CreateRow(9);
 			var cellDailyDateHeader = rowDailysHeader.CreateCell(0);
-			var cellDailyOpenHourHeader = rowDailysHeader.CreateCell(1);
-			var cellDailyCallsHeader = rowDailysHeader.CreateCell(2);
-			var cellDailyAttHeader = rowDailysHeader.CreateCell(3);
-			var cellDailyAcwHeader = rowDailysHeader.CreateCell(4);
-			var cellDailyAhtHeader = rowDailysHeader.CreateCell(5);
-			var cellDailyHoursHeader = rowDailysHeader.CreateCell(6);
-			var cellDailyHoursShrinkageHeader = rowDailysHeader.CreateCell(7);
+			var cellDailyCallsHeader = rowDailysHeader.CreateCell(1);
+			var cellDailyAttHeader = rowDailysHeader.CreateCell(2);
+			var cellDailyAcwHeader = rowDailysHeader.CreateCell(3);
+			var cellDailyAhtHeader = rowDailysHeader.CreateCell(4);
+			var cellDailyHoursHeader = rowDailysHeader.CreateCell(5);
+			var cellDailyHoursShrinkageHeader = rowDailysHeader.CreateCell(6);
 
 			cellDailyDateHeader.SetCellValue("Date");
-			cellDailyOpenHourHeader.SetCellValue("Opening hours");
 			cellDailyCallsHeader.SetCellValue("Calls");
 			cellDailyAttHeader.SetCellValue("Average talk time(s)");
 			cellDailyAcwHeader.SetCellValue("Average ACW (s)");
@@ -102,9 +101,8 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			cellDailyHoursShrinkageHeader.SetCellValue("Hours with shrinkage");
 		}
 
-		private void fillSheetWithMainHeader(ISheet dailySheet, ICellStyle dateCellType, ForecastExportModel dailyModels)
+		private void fillSheetWithMainHeader(ISheet dailySheet, ICellStyle dateCellType, ForecastExportModel exportModel)
 		{
-			
 			var rowPeriodStart = dailySheet.CreateRow(0);
 			var rowPeriodEnd = dailySheet.CreateRow(1);
 			var rowSkillName = dailySheet.CreateRow(2);
@@ -139,16 +137,16 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 			cellShrinkagePercentHeader.SetCellValue("Shrinkage (%):");
 			cellPeriodStartValue.CellStyle = dateCellType;
 			cellPeriodEndValue.CellStyle = dateCellType;
-			cellPeriodStartValue.SetCellValue(dailyModels.Header.Period.StartDate.Date);
-			cellPeriodEndValue.SetCellValue(dailyModels.Header.Period.EndDate.Date);
-			cellSkillNameValue.SetCellValue(dailyModels.Header.SkillName);
-			cellTimeZoneValue.SetCellValue(dailyModels.Header.SkillTimeZoneName);
-			if (dailyModels.Header.ServiceLevelPercent.HasValue)
-				cellServiceLevelPercentValue.SetCellValue(dailyModels.Header.ServiceLevelPercent.Value.Value);
-			if (dailyModels.Header.ServiceLevelSeconds.HasValue)
-				cellServiceLevelSecondsValue.SetCellValue(dailyModels.Header.ServiceLevelSeconds.Value);
-			if (dailyModels.Header.ShrinkagePercent.HasValue)
-				cellShrinkagePercentValue.SetCellValue(dailyModels.Header.ShrinkagePercent.Value.Value);
+			cellPeriodStartValue.SetCellValue(exportModel.Header.Period.StartDate.Date);
+			cellPeriodEndValue.SetCellValue(exportModel.Header.Period.EndDate.Date);
+			cellSkillNameValue.SetCellValue(exportModel.Header.SkillName);
+			cellTimeZoneValue.SetCellValue(exportModel.Header.SkillTimeZoneName);
+			if (exportModel.Header.ServiceLevelPercent.HasValue)
+				cellServiceLevelPercentValue.SetCellValue(exportModel.Header.ServiceLevelPercent.Value.Value);
+			if (exportModel.Header.ServiceLevelSeconds.HasValue)
+				cellServiceLevelSecondsValue.SetCellValue(exportModel.Header.ServiceLevelSeconds.Value);
+			if (exportModel.Header.ShrinkagePercent.HasValue)
+				cellShrinkagePercentValue.SetCellValue(exportModel.Header.ShrinkagePercent.Value.Value);
 		}
 	}
 }

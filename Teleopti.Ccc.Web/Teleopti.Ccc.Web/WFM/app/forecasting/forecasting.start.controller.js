@@ -535,7 +535,7 @@
 						ForecastEnd: period.endDate,
 						ScenarioId: workload.selectedScenario.Id,
 						SkillId: workload.selectedWorkload.SkillParentId,
-						WorkloadId: workload.Id
+						WorkloadId: workload.selectedWorkload.Id
 					}), function(data, status, headers, config) {
 						if (status !== 200) {
 							console.log(data, 'Export failed');
