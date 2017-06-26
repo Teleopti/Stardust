@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<OvertimeRelativeDifferenceCalculatorOLD>().As<OvertimeRelativeDifferenceCalculator>().SingleInstance();
 			}
 			builder.RegisterType<ScheduleOvertimeWithoutStateHolder>().SingleInstance();
-			builder.RegisterType<AddOverTime>().As<IAddOverTime>();
+			builder.RegisterType<AddOverTime>();
 			builder.RegisterType<PersonForOvertimeProvider>().As<IPersonForOvertimeProvider>().SingleInstance();
 			builder.RegisterType<PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider>().SingleInstance();
 			builder.RegisterType<PrimaryOrAllPersonSkillForNonOvertimeProvider>().SingleInstance();

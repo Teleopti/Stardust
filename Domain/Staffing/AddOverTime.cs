@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
-	public class AddOverTime : IAddOverTime
+	public class AddOverTime
 	{
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ICommandDispatcher _commandDispatcher;
@@ -107,13 +107,5 @@ namespace Teleopti.Ccc.Domain.Staffing
 		}
 		
 	}
-
-	public interface IAddOverTime
-	{
-		OvertimeWrapperModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel);
-		void Apply(IList<OverTimeModel> overTimeModels, Guid multiplicationDefinitionId);
-	}
-
-	
 
 }

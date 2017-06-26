@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public IDayOffTemplateRepository DayOffTemplateRepository;
 		public IActivityRepository ActivityRepository;
 		public IAbsencePersister AbsencePersister;
-		public IAddOverTime AddOverTime;
+		public AddOverTime AddOverTime;
 
 		private IList<IPersonRequest> requests;
 		private DateTime _nowDateTime;

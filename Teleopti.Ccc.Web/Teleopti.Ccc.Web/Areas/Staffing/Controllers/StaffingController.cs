@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 {
 	public class StaffingController : ApiController
 	{
-		private readonly IAddOverTime _addOverTime;
+		private readonly AddOverTime _addOverTime;
 		private readonly ScheduledStaffingToDataSeries _scheduledStaffingToDataSeries;
 		private readonly ForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
 		private readonly IUserTimeZone _timeZone;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ISkillAreaRepository _skillAreaRepository;
 		private readonly ScheduledStaffingViewModelCreator _staffingViewModelCreator;
 
-		public StaffingController(IAddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
+		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillAreaRepository skillAreaRepository,
 								  ScheduledStaffingViewModelCreator staffingViewModelCreator)
