@@ -128,7 +128,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			var agent1 = PersonFactory.CreatePersonWithPersonPeriod(firstDay, new[] { skill }).WithId();
 			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			agent1.AddSchedulePeriod(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1));
+
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			schedulePeriod.SetDaysOff(2);
+
+			agent1.AddSchedulePeriod(schedulePeriod);
 			var personPeriod = agent1.Period(firstDay);
 			personPeriod.Team = team1;
 			personPeriod.RuleSetBag = ruleSetBag;

@@ -437,8 +437,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 					shiftCategory));
 			var contract = new Contract("_")
 			{
-				WorkTimeDirective =
-					new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(42))
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(83), TimeSpan.FromHours(1), TimeSpan.FromHours(42)),
+				PositiveDayOffTolerance = 10,
+				NegativeDayOffTolerance = 10
 			};
 			var skill =
 				new Skill("_", "_", Color.Empty, 60, new SkillTypePhone(new Description(), ForecastSource.InboundTelephony))
