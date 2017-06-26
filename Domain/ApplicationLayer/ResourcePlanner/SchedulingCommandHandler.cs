@@ -1,15 +1,14 @@
 using System.Linq;
-using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	public class SchedulingCommandHandler
 	{
-		private readonly SchedulingEventHandler _schedulingEventHandler;
+		private readonly IEventPublisher _eventPublisher;
 
-		public SchedulingCommandHandler(SchedulingEventHandler schedulingEventHandler)
+		public SchedulingCommandHandler(IEventPublisher eventPublisher)
 		{
-			_schedulingEventHandler = schedulingEventHandler;
+			_eventPublisher = eventPublisher;
 		}
 
 		public void Execute(SchedulingCommand schedulingCommand)
@@ -22,8 +21,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				RunWeeklyRestSolver = schedulingCommand.RunWeeklyRestSolver,
 				CommandId = schedulingCommand.CommandId
 			};
-			//use event publisher here
-			_schedulingEventHandler.HandleEvent(@event);
+			_eventPublisher.Publish(@event);
 		}
 	}
 }

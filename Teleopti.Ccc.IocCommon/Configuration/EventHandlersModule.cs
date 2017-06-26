@@ -112,6 +112,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 						.InstancePerLifetimeScope()
 						.ApplyAspects();
 				})
+				.Except<SchedulingEventHandler>(ct =>
+				{
+					ct.As(typeof(IHandleEvent<SchedulingWasOrdered>))
+						.AsSelf()
+						.InstancePerLifetimeScope()
+						.ApplyAspects();
+				})
 				.ApplyAspects();
 
 
