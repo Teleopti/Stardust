@@ -5,44 +5,93 @@ describe('ForecastCtrl', function () {
   $controller,
   forecastingService,
   $interval,
-  vm;
+  fakeBackend,
+  vm,
+  skill,
+  skill1,
+  scenario;
 
   beforeEach(function() {
     module('wfm.forecasting');
   });
 
-  beforeEach(inject(function(_$httpBackend_, _$controller_, _$interval_, _forecastingService_) {
+  beforeEach(inject(function(_$httpBackend_, _$controller_, _$interval_, _forecastingService_, _fakeForecastingBackend_) {
     $httpBackend = _$httpBackend_;
     $controller = _$controller_;
     $interval = _$interval_;
+    fakeBackend = _fakeForecastingBackend_;
 
     // fakeBackend.clear();
     vm = $controller('ForecastRefactCtrl');
+    skill = {
+      IsPermittedToModifySkill: true,
+      Skills: [
+        {
+          Id: 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753',
+          Workloads: [
+            {
+              Id: "b8a74a6c-3125-4c13-a19a-9f0800e35a1f",
+              Name: "Channel Sales - Marketing",
+              Accuracies: null
+            }
+          ]
+        }
+      ]
+    }
 
-    var skill1 = {
-      Workload:{
+    vm.forecastModalObj = {
+      SkillId:'f08d75b3-fdb4-484a-ae4c-9f0800e2f753',
+      ChartId: 'chartb8a74a6c-3125-4c13-a19a-9f0800e35a1f',
+      Workload:[{
         Id:"b8a74a6c-3125-4c13-a19a-9f0800e35a1f",
         Name:"Channel Sales - Marketing",
         Accuracies:null
-      },
-      ChartId:"chartb8a74a6c-3125-4c13-a19a-9f0800e35a1f"
+      }]
     };
+
+    scenario = {
+      Id:"e21d813c-238c-4c3f-9b49-9b5e015ab432",
+      Name:"Default",
+      DefaultScenario:true
+    }
 
   }));
 
-  it("forecasting period should default to next month", inject(function ($controller) {
-    vm.init();
+
+  it("should get skills, status and scenario", inject(function ($controller) {
+    fakeBackend.withSkill(skill);
+    fakeBackend.withForecastStatus(true);
+    fakeBackend.withScenario(scenario);
+    $httpBackend.flush();
+    expect(vm.skillMaster.Skills.length).toEqual(1);
+    expect(vm.skillMaster.IsPermittedToModify).toEqual(true);
+    expect(vm.skillMaster.IsForecastRunning).toEqual(true);
+    expect(vm.skillMaster.Scenarios.length).toEqual(1);
+  }));
+
+  it("should default forecasting period to next month", inject(function () {
     expect(vm.forecastPeriod.startDate).toEqual(moment().utc().add(1, 'months').startOf('month').toDate());
     expect(vm.forecastPeriod.endDate).toEqual(moment().utc().add(2, 'months').startOf('month').toDate());
   }));
 
-  it("forecasting modal should close if ther is no workload", inject(function ($controller) {
-    vm.init();
+  it("should close forecasting modal if there is no workload", inject(function () {
     vm.forecastModal = true;
     vm.forecastingModal();
+
     expect(vm.forecastModal).toEqual(false);
     expect(vm.forecastPeriod.startDate).toEqual(moment().utc().add(1, 'months').startOf('month').toDate());
     expect(vm.forecastPeriod.endDate).toEqual(moment().utc().add(2, 'months').startOf('month').toDate());
+  }));
+
+  it('should get correct data for export', inject(function () {
+    vm.selectedScenario = scenario;
+    vm.forecastingModal(false, true);
+
+    expect(vm.exportModal).toEqual(true);
+    expect(vm.forecastPeriod.startDate).toEqual(moment().utc().add(1, 'months').startOf('month').toDate());
+    expect(vm.forecastPeriod.endDate).toEqual(moment().utc().add(2, 'months').startOf('month').toDate());
+    expect(vm.forecastModalObj.SkillId).toEqual('f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
+    expect(vm.selectedScenario.Id).toEqual('e21d813c-238c-4c3f-9b49-9b5e015ab432');
   }));
 
 });

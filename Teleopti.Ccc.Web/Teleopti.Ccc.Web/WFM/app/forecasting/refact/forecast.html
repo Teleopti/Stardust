@@ -7,7 +7,7 @@
 <div class="view-header with-fab with-desc">
   <div class="view-title">
     <h1><i class="mdi mdi-chart-line"></i> {{'Forecasts' | translate}}</h1>
-    <p>
+    <p ng-click="vm.skillMaster.Skills= []">
       {{'OverView' | translate}}
     </p>
   </div>
@@ -23,19 +23,24 @@
 
 <div class="con-row">
   <div class="con-flex">
-    <wfm-card-list>
+    <div class="line-center" ng-if="vm.skillMaster.Skills.length < 1">
+      <i class="mdi mdi-information-outline huge-icon line-center"></i>
+      <h2>No skills or workloads found</h2>
+      <button class="wfm-btn wfm-btn-primary">Create a skill</button>
+    </div>
+    <wfm-card-list ng-if="vm.skillMaster.Skills.length > 0">
       <wfm-card ng-repeat="skill in vm.skillMaster.Skills">
         <card-header tabindex="-1">
-          <div tabindex="0" ng-click="vm.getWorkloadForecastData(skill.Workload.Id)">
+          <div tabindex="0" ng-click="vm.getWorkloadForecastData(skill)">
             <b>{{skill.Workload.Name}}</b>
             <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
           </div>
         </card-header>
         <card-body class="panel">
-          <div ng-if="vm.skillMaster.IsForecastRunning || vm.currentWorkload.Days.length<1">
+          <div ng-if="vm.skillMaster.IsForecastRunning">
             <md-progress-linear md-mode="indeterminate"></md-progress-linear>
           </div>
-          <div ng-if="!vm.skillMaster.IsForecastRunning && vm.currentWorkload.Days.length>0">
+          <div ng-if="!vm.skillMaster.IsForecastRunning">
             <div class="con-row">
               <div class="con-flex x3">
                 {{'ForecastWorkloadIntro' | translate}}
@@ -50,16 +55,17 @@
             </div>
             <div class="con-row">
               <div class="con-flex">
-                <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart(skill.ChartId)">
+                <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart(skill.ChartId, vm.currentWorkload.Days)">
                   <i class="mdi mdi-sync" ></i>
                   <md-tooltip>Refresh chart</md-tooltip>
                 </div>
                 <span ng-if="vm.selectedDayCount.length > 0">{{'SelectedDateParenthesisS'|translate}}: {{vm.selectedDayCount.length / 6}}</span>
-                <forecast-chart chart-id="skill.ChartId" days="vm.currentWorkload.Days" refresh="vm.loadChart" on-click="vm.pointClick"> </forecast-chart>
+                <forecast-chart chart-id="skill.ChartId" refresh="vm.loadChart" on-click="vm.pointClick"> </forecast-chart>
               </div>
             </div>
             <div class="con-footer">
-              <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal(skill.Workload)">{{'ForecastDo' | translate}}</button>
+              <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal(false, true)">{{'ExportWorkload' | translate}}</button>
+              <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal(true, false)">{{'ForecastDo' | translate}}</button>
             </div>
           </div>
         </card-body>
@@ -74,7 +80,7 @@
   <div ng-if="vm.forecastModalObj">
     <div class="con-row">
       <div class="con-flex">
-        <p>{{'TemplateTargetWorkload' | translate}}: <b>{{vm.forecastModalObj.Name}}</b></p>
+        <p>{{'TemplateTargetWorkload' | translate}}: <b>{{vm.forecastModalObj.Workload.Name}}</b></p>
         <p class="subtext">{{'Scenario'|translate}}: <b>{{vm.selectedScenario.Name}}</b></p>
       </div>
     </div>
@@ -87,6 +93,26 @@
       <aside>
         <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal()" >{{'Cancel'|translate}}</button>
         <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.forecastWorkload()">{{'Apply'|translate}}</button>
+      </aside>
+    </div>
+  </div>
+</modal-dialog>
+
+<modal-dialog show='vm.exportModal' ng-cloak>
+  <div ng-if="vm.forecastModalObj">
+    <div class="con-row">
+      <div class="con-flex">
+        <b>Export</b>
+      </div>
+    </div>
+    <div class="modal-inner-content" style="text-align:center;">
+      <!-- <label>{{'ForecastPeriod' | translate}}: </label><br/> -->
+      <date-range-picker ng-model="vm.forecastPeriod"></date-range-picker>
+    </div>
+    <div class="modal-actions">
+      <aside>
+        <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal()" >{{'Cancel'|translate}}</button>
+        <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.exportToFile()">{{'Export'|translate}}</button>
       </aside>
     </div>
   </div>

@@ -5,7 +5,6 @@ angular.module('wfm.forecasting')
 	controller: ForecastChartCtrl,
 	bindings: {
 		chartId: '=',
-		days: '=',
 		onClick: '=',
 		refresh: '='
 	}
@@ -13,7 +12,7 @@ angular.module('wfm.forecasting')
 
 function ForecastChartCtrl($translate, $filter) {
 	var ctrl = this;
-
+	var chart;
 	var selection = 0;
 	ctrl.refresh = generateForecastChart;
 
@@ -27,10 +26,9 @@ function ForecastChartCtrl($translate, $filter) {
 		return false;
 	}
 
-	function generateForecastChart(chartId) {
-		console.log('gen');
-
-		if (!chartId || ctrl.days.length === 0 ) {
+	function generateForecastChart(chartId, days) {
+		console.log('Start generate');
+		if (!chartId || days.length === 0 ) {
 			console.log('Could not generate forcast chart');
 			return;
 		}
@@ -49,17 +47,17 @@ function ForecastChartCtrl($translate, $filter) {
 			vtttSeries: ['vttt']
 		}
 
-		for (var i = 0; i < ctrl.days.length; i++) {
-			preparedData.dateSeries.push(moment(ctrl.days[i].date).format('L'));
-			preparedData.vacwSeries.push(ctrl.days[i].vacw);
-			preparedData.vcSeries.push(ctrl.days[i].vc);
-			preparedData.vtacwSeries.push(ctrl.days[i].vtacw);
-			preparedData.vtcSeries.push(ctrl.days[i].vtc);
-			preparedData.vttSeries.push(ctrl.days[i].vtt);
-			preparedData.vtttSeries.push(ctrl.days[i].vttt);
+		for (var i = 0; i < days.length; i++) {
+			preparedData.dateSeries.push(moment(days[i].date).format('L'));
+			preparedData.vacwSeries.push(days[i].vacw);
+			preparedData.vcSeries.push(days[i].vc);
+			preparedData.vtacwSeries.push(days[i].vtacw);
+			preparedData.vtcSeries.push(days[i].vtc);
+			preparedData.vttSeries.push(days[i].vtt);
+			preparedData.vtttSeries.push(days[i].vttt);
 		}
 
-		var chart = c3.generate({
+		chart = c3.generate({
 			bindto: '#' + chartId,
 			data: {
 				x: 'date',
@@ -99,12 +97,10 @@ function ForecastChartCtrl($translate, $filter) {
 				},
 				onselected: function(){
 					selection = chart.selected();
-					console.log(selection.length);
 					ctrl.onClick(selection);
 				},
 				onunselected: function () {
 					selection = chart.selected();
-					console.log(selection.length);
 					ctrl.onClick(selection);
 				}
 			},//end of data

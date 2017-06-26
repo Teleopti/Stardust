@@ -27,22 +27,24 @@
       Scenarios: []
     };
 
-
-    vm.init = init;
     vm.forecastingModal = forecastingModal;
     vm.getWorkloadForecastData = getWorkloadForecastData;
     vm.pointClick = pointClick;
     vm.loadChart = loadChart;
     vm.forecastWorkload = forecastWorkload;
+    vm.exportToFile = exportToFile;
 
-    vm.init();
-
+    vm.getSkills = getSkills;
+    vm.isForecastRunning = isForecastRunning;
+    vm.getScenarios = getScenarios;
+    
     function init() {
       resetForecastPeriod();
-      isForecastRunning();
-      getSkills();
-      getScenarios();
+      vm.isForecastRunning();
+      vm.getSkills();
+      vm.getScenarios();
     }
+    init();
 
     function isForecastRunning() {
       forecastingService.status.get().$promise.then(function(data) {
@@ -63,6 +65,7 @@
           s.Workloads.forEach(function(w){
             var temp = {
               Workload: w,
+              SkillId: s.Id,
               ChartId: "chart" + w.Id
             }
             vm.skillMaster.Skills.push(temp)
@@ -82,31 +85,26 @@
     }
 
     function loadChart(chartId) {
-      //Used as a placeholder for refresh component
+      console.log('FAILED GEN');
+      return;
     }
 
-    function getWorkloadForecastData(workloadId) {
+    function getWorkloadForecastData(skill) {
+      vm.forecastModalObj = skill;
       vm.skillMaster.isForecastRunning = true;
       var wl = {
         ForecastStart: vm.forecastPeriod.startDate,
         ForecastEnd: vm.forecastPeriod.endDate,
-        WorkloadId: workloadId,
+        WorkloadId: skill.Workload.Id,
         ScenarioId: vm.selectedScenario.Id
       };
+
       forecastingService.result(
         wl,
         function(data, status, headers, config) {
-          if (data.Days.length === 0) {
-            console.log('no data');
-            vm.skillMaster.isForecastRunning = false;
-            return;
-          }
-          else{
-            console.log(data);
-            vm.currentWorkload.Days = data.Days;
-            vm.skillMaster.isForecastRunning = false;
-          }
-          forecastingModal();
+          vm.skillMaster.isForecastRunning = false;
+          vm.currentWorkload.Days = data.Days;
+          vm.loadChart('chart'+ data.WorkloadId, data.Days);
         },
         function(data, status, headers, config) {
           vm.skillMaster.isForecastRunning = false;
@@ -117,7 +115,7 @@
     function forecastWorkload (blockToken) {
       vm.skillMaster.IsForecastRunning = true;
       var temp = {
-        WorkloadId: vm.forecastModalObj.Id,
+        WorkloadId: vm.forecastModalObj.Workload.Id,
         ForecastMethodId: -1
       }
 
@@ -134,7 +132,7 @@
           // console.log(data);
           vm.skillMaster.IsForecastRunning = false;
           blockToken = data.BlockToken;
-          getWorkloadForecastData(vm.forecastModalObj.Id);
+          getWorkloadForecastData(vm.forecastModalObj);
         }, function(data, status, headers, config) {
 
         });
@@ -151,18 +149,42 @@
         };
       }
 
+      function exportToFile() {
+        vm.skillMaster.isForecastRunning = true;
+        forecastingService.exportForecast(JSON.stringify(
+          {
+            ForecastStart: vm.forecastPeriod.startDate,
+            ForecastEnd: vm.forecastPeriod.endDate,
+            ScenarioId: vm.selectedScenario.Id,
+            SkillId: vm.forecastModalObj.SkillId
+          }), function(data, status, headers, config) {
+            if (status !== 200) {
+              console.log(data, 'Export failed');
+            }
+            var blob = new Blob([data], {
+              type: headers['content-type']
+            });
+            var d = moment().format('L');
+            saveAs(blob, d + ".xlsx");
+            vm.skillMaster.isForecastRunning = false;
+            vm.exportModal = false;
+          }, function(data, status, headers, config) {
+            vm.skillMaster.isForecastRunning = false;
+          }
+        );
+      };
 
-      function forecastingModal(workload) {
+      function forecastingModal(forecast, exporting) {
         if (vm.skillMaster.isForecastRunning) {
           return;
         }
+
         resetForecastPeriod();
-        vm.forecastModalObj = {};
-        if (workload) {
-          vm.forecastModalObj = workload;
-          vm.forecastModal = true;
-        }
-        else {
+        vm.exportModal = exporting;
+        vm.forecastModal =  forecast;
+
+        if (!forecast && !exporting) {
+          vm.exportModal = false;
           vm.forecastModal = false;
         }
       }
