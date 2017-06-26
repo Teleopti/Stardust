@@ -62,6 +62,7 @@
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 
+		WfmTeamSchedule_MoveOvertimeActivity_44888,
 		WebByPassDefaultPermissionCheck_37984,
 
 		WfmReportPortal_Basic_38825,
