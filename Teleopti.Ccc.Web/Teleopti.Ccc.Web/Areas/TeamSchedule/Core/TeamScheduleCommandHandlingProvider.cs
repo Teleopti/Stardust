@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				var personId = personDate.PersonId;
 				var date = personDate.Date;
-			
+
 				var actionResult = new ActionResult();
 				var person = _personRepository.Get(personId);
 				actionResult.PersonId = personId;
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			};
 
 			var result = new List<ActionResult>();
-			foreach(var personDate in input.PersonDates)
+			foreach (var personDate in input.PersonDates)
 			{
 				var personId = personDate.PersonId;
 				var date = personDate.Date;
@@ -129,14 +129,14 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public IList<ActionResult> AddOvertimeActivity(AddOvertimeActivityForm input)
 		{
-			var permissions = new Dictionary<string,string>
+			var permissions = new Dictionary<string, string>
 			{
 				{  DefinedRaptorApplicationFunctionPaths.AddOvertimeActivity,  Resources.NoPermissionAddOvertimeActivity}
 			};
 
 			var result = new List<ActionResult>();
 
-			foreach(var personDate in input.PersonDates)
+			foreach (var personDate in input.PersonDates)
 			{
 				var personId = personDate.PersonId;
 				var date = personDate.Date;
@@ -147,29 +147,29 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				actionResult.ErrorMessages = new List<string>();
 
 				var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
-				var startDateTimeUtc = TimeZoneHelper.ConvertToUtc(input.StartDateTime,userTimezone);
-				var endDateTimeUtc = TimeZoneHelper.ConvertToUtc(input.EndDateTime,userTimezone);
+				var startDateTimeUtc = TimeZoneHelper.ConvertToUtc(input.StartDateTime, userTimezone);
+				var endDateTimeUtc = TimeZoneHelper.ConvertToUtc(input.EndDateTime, userTimezone);
 
-				if(checkPermissionFn(permissions,date,person,actionResult.ErrorMessages))
+				if (checkPermissionFn(permissions, date, person, actionResult.ErrorMessages))
 				{
 					var command = new AddOvertimeActivityCommand
 					{
 						PersonId = personId,
 						ActivityId = input.ActivityId,
 						Date = date,
-						Period = new DateTimePeriod(startDateTimeUtc,endDateTimeUtc),
+						Period = new DateTimePeriod(startDateTimeUtc, endDateTimeUtc),
 						MultiplicatorDefinitionSetId = input.MultiplicatorDefinitionSetId,
 						TrackedCommandInfo =
 							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 					};
 					_commandDispatcher.Execute(command);
-					if(command.ErrorMessages != null && command.ErrorMessages.Any())
+					if (command.ErrorMessages != null && command.ErrorMessages.Any())
 					{
 						actionResult.ErrorMessages.AddRange(command.ErrorMessages);
 					}
 				}
 
-				if(actionResult.ErrorMessages.Any())
+				if (actionResult.ErrorMessages.Any())
 					result.Add(actionResult);
 			}
 
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				var person = _personRepository.Get(personActivity.PersonId);
 				actionResult.PersonId = personActivity.PersonId;
 				actionResult.ErrorMessages = new List<string>();
-				foreach(var shiftLayerDate in personActivity.ShiftLayers)
+				foreach (var shiftLayerDate in personActivity.ShiftLayers)
 				{
 					if (checkRemoveActivityPermission(shiftLayerDate, person, actionResult.ErrorMessages))
 					{
@@ -224,10 +224,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			return result;
 		}
-		
+
 		public List<ActionResult> RemoveAbsence(RemovePersonAbsenceForm input)
 		{
-			var permissions = new Dictionary<string,string>
+			var permissions = new Dictionary<string, string>
 			{
 				{  DefinedRaptorApplicationFunctionPaths.RemoveAbsence, Resources.NoPermissionRemoveAgentAbsence}
 			};
@@ -235,12 +235,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var result = new List<ActionResult>();
 
 			var people = _personRepository.FindPeople(input.SelectedPersonAbsences.Select(p => p.PersonId)).ToDictionary(p => p.Id.GetValueOrDefault());
-			foreach(var selectedPersonAbsence in input.SelectedPersonAbsences)
+			foreach (var selectedPersonAbsence in input.SelectedPersonAbsences)
 			{
-				var absenceDateGroups = selectedPersonAbsence.AbsenceDates.GroupBy(absenceDate => absenceDate.Date,absenceDate => absenceDate.PersonAbsenceId);
+				var absenceDateGroups = selectedPersonAbsence.AbsenceDates.GroupBy(absenceDate => absenceDate.Date, absenceDate => absenceDate.PersonAbsenceId);
 				var person = people[selectedPersonAbsence.PersonId];
 
-				foreach(var absenceGroup in absenceDateGroups)
+				foreach (var absenceGroup in absenceDateGroups)
 				{
 					var actionResult = new ActionResult();
 					var date = absenceGroup.Key;
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					actionResult.PersonId = selectedPersonAbsence.PersonId;
 					actionResult.ErrorMessages = new List<string>();
 
-					if(checkPermissionFn(permissions,date,person,actionResult.ErrorMessages))
+					if (checkPermissionFn(permissions, date, person, actionResult.ErrorMessages))
 					{
 						var command = new RemoveSelectedPersonAbsenceCommand
 						{
@@ -264,13 +264,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 							_commandDispatcher.Execute(command);
 						}
 
-						if(command.ErrorMessages != null && command.ErrorMessages.Any())
+						if (command.ErrorMessages != null && command.ErrorMessages.Any())
 						{
 							actionResult.ErrorMessages.AddRange(command.ErrorMessages);
 						}
 					}
 
-					if(actionResult.ErrorMessages.Any())
+					if (actionResult.ErrorMessages.Any())
 						result.Add(actionResult);
 				}
 
@@ -327,31 +327,31 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			var personDateGroups = input.PersonDates.GroupBy(personDate => personDate.PersonId, personDate => personDate.Date);
 
-			foreach(var dates in personDateGroups)
+			foreach (var dates in personDateGroups)
 			{
-				var personId = dates.Key;				
+				var personId = dates.Key;
 
 				var actionResult = new ActionResult();
 				var person = _personRepository.Get(personId);
 				actionResult.PersonId = personId;
 				actionResult.ErrorMessages = new List<string>();
-				if(dates.All(date => checkPermissionFn(permissions, date,person,actionResult.ErrorMessages)))
+				if (dates.All(date => checkPermissionFn(permissions, date, person, actionResult.ErrorMessages)))
 				{
 					var command = new BackoutScheduleChangeCommand
 					{
 						PersonId = personId,
 						Dates = dates.ToArray(),
 						TrackedCommandInfo =
-							input.TrackedCommandInfo ?? new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
+							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 					};
 
 					_commandDispatcher.Execute(command);
-					if(command.ErrorMessages != null && command.ErrorMessages.Any())
+					if (command.ErrorMessages != null && command.ErrorMessages.Any())
 					{
 						actionResult.ErrorMessages.AddRange(command.ErrorMessages);
-					}					
+					}
 				}
-				if(actionResult.ErrorMessages.Any())
+				if (actionResult.ErrorMessages.Any())
 					result.Add(actionResult);
 			}
 
@@ -361,23 +361,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public List<ActionResult> MoveActivity(MoveActivityFormData input)
 		{
-			var permission = new Dictionary<string, string>
-			{
-				{DefinedRaptorApplicationFunctionPaths.MoveActivity, Resources.NoPermissionMoveAgentActivity}
-			};
+
 			var userTimezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 			var newStartTimeInUtc = TimeZoneHelper.ConvertToUtc(input.StartTime, userTimezone);
 			var result = new List<ActionResult>();
+
 			foreach (var personActivity in input.PersonActivities)
 			{
 				var person = _personRepository.Get(personActivity.PersonId);
 				var personError = new ActionResult { PersonId = person.Id.GetValueOrDefault(), ErrorMessages = new List<string>() };
-				if (!checkPermissionFn(permission, personActivity.Date, person, personError.ErrorMessages))
+
+				List<string> permissionErrors;
+				if (!_helper.CheckPermission(personActivity.ShiftLayerIds, person, personActivity.Date, out permissionErrors))
 				{
+					personError.ErrorMessages.AddRange(permissionErrors);
 					result.Add(personError);
 					continue;
 				}
-				
 				var layerToMoveTimeMap = _helper.GetCorrectNewStartForLayersForPerson(person, personActivity.Date, personActivity.ShiftLayerIds,
 					newStartTimeInUtc);
 				if (personActivity.ShiftLayerIds.Any(x => !layerToMoveTimeMap.ContainsKey(x)))
@@ -399,7 +399,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 									ShiftLayerId = pl.Key,
 									TrackedCommandInfo =
 										input.TrackedCommandInfo ??
-										new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault()}
+										new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault() }
 								};
 								_commandDispatcher.Execute(command);
 								if (command.ErrorMessages != null && command.ErrorMessages.Any())
@@ -413,8 +413,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				{
 					personError.ErrorMessages.Add(Resources.ShiftLengthExceed36Hours);
 				}
-
-				
 				if (personError.ErrorMessages.Any())
 				{
 					result.Add(personError);
@@ -447,7 +445,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 						Date = input.Date,
 						ShiftCategoryId = input.ShiftCategoryId,
 						TrackedCommandInfo =
-							input.TrackedCommandInfo ?? new TrackedCommandInfo {OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value}
+							input.TrackedCommandInfo ?? new TrackedCommandInfo { OperatedPersonId = _loggedOnUser.CurrentUser().Id.Value }
 					};
 
 					_commandDispatcher.Execute(command);
@@ -466,20 +464,20 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public IList<ActionResult> MoveNonoverwritableLayers(MoveNonoverwritableLayersFormData input)
 		{
-			var permissions = new Dictionary<string,string>
+			var permissions = new Dictionary<string, string>
 			{
 				{ DefinedRaptorApplicationFunctionPaths.MoveInvalidOverlappedActivity, Resources.NoPermissionToMoveInvalidOverlappedActivity }
 			};
 
 			var result = new List<ActionResult>();
 			var people = _personRepository.FindPeople(input.PersonIds);
-			foreach(var person in people)
+			foreach (var person in people)
 			{
 				var actionResult = new ActionResult();
 				actionResult.PersonId = person.Id.GetValueOrDefault();
 				actionResult.ErrorMessages = new List<string>();
 
-				if(checkPermissionFn(permissions,input.Date,person,actionResult.ErrorMessages))
+				if (checkPermissionFn(permissions, input.Date, person, actionResult.ErrorMessages))
 				{
 					var command = new FixNotOverwriteLayerCommand
 					{
@@ -490,13 +488,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 					};
 
 					_commandDispatcher.Execute(command);
-					if(command.ErrorMessages != null && command.ErrorMessages.Any())
+					if (command.ErrorMessages != null && command.ErrorMessages.Any())
 					{
 						actionResult.ErrorMessages.AddRange(command.ErrorMessages);
 					}
 				}
 
-				if(actionResult.ErrorMessages.Any())
+				if (actionResult.ErrorMessages.Any())
 					result.Add(actionResult);
 			}
 
@@ -531,7 +529,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			};
 			_commandDispatcher.Execute(command);
 
-			
+
 			if (command.ErrorMessages != null && command.ErrorMessages.Any())
 				retResult.Add(new ActionResult
 				{
@@ -547,6 +545,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
 				&& agent.PersonWriteProtection.IsWriteProtected(date);
 		}
+
 
 		private bool checkPermissionFn(Dictionary<string, string> permissions, DateOnly date, IPerson agent, IList<string> messages)
 		{
@@ -587,7 +586,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			messages.AddRange(newMessages);
 			return !newMessages.Any();
 		}
-
+		
 	}
 
 	public interface ITeamScheduleCommandHandlingProvider

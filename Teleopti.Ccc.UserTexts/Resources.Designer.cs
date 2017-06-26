@@ -19790,6 +19790,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No permission to move overtime for agent {0}.
+        /// </summary>
+        public static string NoPermissionMoveAgentOvertime {
+            get {
+                return ResourceManager.GetString("NoPermissionMoveAgentOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No permission to remove absence from agents..
         /// </summary>
         public static string NoPermissionRemoveAgentAbsence {

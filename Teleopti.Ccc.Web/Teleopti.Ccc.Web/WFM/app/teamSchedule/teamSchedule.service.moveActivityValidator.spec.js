@@ -1,7 +1,7 @@
 ﻿(function () {
 	'use strict';
 
-	describe('teamschedule move activity validator tests: ', function () {
+	fdescribe('teamschedule move activity validator tests: ', function () {
 		var target, personSelection, scheduleMgmt, fakeTeamsToggles, fakeTeamsPermissions;
 		var defaultUserTimeZone = 'Asia/Hong_Kong';  //UTC+8
 
@@ -37,7 +37,8 @@
 			fakeTeamsPermissions = new FakeTeamsPermissions();
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
-					return { };
+					return {};
+
 				});
 				$provide.service('teamsToggles', function () {
 					return fakeTeamsToggles;
@@ -57,8 +58,12 @@
 		});
 
 		function FakeTeamsToggles() {
+			this._toggles = {};
+			this.set = function (toggles) {
+				this._toggles = toggles;
+			}
 			this.all = function () {
-				return {};
+				return this._toggles;
 			};
 		}
 
@@ -402,7 +407,8 @@
 			expect(result).toEqual(true);
 		});
 
-		it('should return false when overtime is selected', function () {
+		it('should return true when overtime is selected and WfmTeamSchedule_MoveOvertimeActivity_44888 is on', function () {
+			fakeTeamsToggles.set({ WfmTeamSchedule_MoveOvertimeActivity_44888: true });
 			schedule = {
 				"PersonId": "221B-Baker-SomeoneElse",
 				"Name": "SomeoneElse",
@@ -416,8 +422,8 @@
 						"ParentPersonAbsences": null,
 						"Color": "#80FF80",
 						"Description": "Email",
-						"Start": scheduleDate + " 01:00",
-						"Minutes": 480,
+						"Start": scheduleDate + " 06:00",
+						"Minutes": 120,
 						"IsOvertime": true
 					},
 					{
@@ -434,14 +440,55 @@
 			}
 			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
 			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
-			personSchedule.Shifts[0].Projections[1].Selected = true;
-			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[1]);
-			var newStartMoment = moment("2016-05-13 13:00");
+			personSchedule.Shifts[0].Projections[0].Selected = true;
+			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0]);
+			var newStartMoment = moment(scheduleDate + " 07:00");
+
+			var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
+
+			expect(result).toEqual(true);
+		});
+		it('should return false when overtime is selected and WfmTeamSchedule_MoveOvertimeActivity_44888 is off', function () {
+			fakeTeamsToggles.set({ WfmTeamSchedule_MoveOvertimeActivity_44888: false });
+			schedule = {
+				"PersonId": "221B-Baker-SomeoneElse",
+				"Name": "SomeoneElse",
+				"Date": scheduleDate,
+				"Timezone": {
+					IanaId: "Asia/Hong_Kong"
+				},
+				"Projection": [
+					{
+						"ShiftLayerIds": ["layer1"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Email",
+						"Start": scheduleDate + " 06:00",
+						"Minutes": 120,
+						"IsOvertime": true
+					},
+					{
+						"ShiftLayerIds": ["layer2"],
+						"ParentPersonAbsences": null,
+						"Color": "#80FF80",
+						"Description": "Phone",
+						"Start": scheduleDate + " 10:00",
+						"Minutes": 480
+					}
+				],
+				"IsFullDayAbsence": false,
+				"DayOff": null
+			}
+			scheduleMgmt.resetSchedules([schedule], moment(scheduleDate));
+			var personSchedule = scheduleMgmt.groupScheduleVm.Schedules[0];
+			personSchedule.Shifts[0].Projections[0].Selected = true;
+			personSelection.updatePersonProjectionSelection(personSchedule.Shifts[0].Projections[0]);
+			var newStartMoment = moment(scheduleDate + " 07:00");
 
 			var result = target.validateMoveToTime(scheduleMgmt, newStartMoment, "Asia/Hong_Kong");
 
 			expect(result).toEqual(false);
-			expect(target.getInvalidPeopleNameList().indexOf('SomeoneElse') > -1).toEqual(true);
+
 		});
 
 		it('should validate move to time when moving shift to time in current date', function () {

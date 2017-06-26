@@ -1,4 +1,4 @@
-﻿describe("team schedule command menu directive test", function() {
+﻿describe("team schedule command menu directive test", function () {
 	var $compile,
 		$rootScope,
 		$httpBackend,
@@ -13,21 +13,21 @@
 	beforeEach(module('wfm.teamSchedule'));
 
 	var fakeShortCuts = {
-		registerKeySequence: function() {}
+		registerKeySequence: function () { }
 	};
 
-	beforeEach(function() {
+	beforeEach(function () {
 		personSelectionSvc = new FakePersonSelection();
 		validateRulesService = new FakeValidateRulesService();
 		permissions = new FakePermissions();
 		toggles = new FakeToggles();
 
 
-		module(function($provide) {
-			$provide.value('ShortCuts', function() {
+		module(function ($provide) {
+			$provide.value('ShortCuts', function () {
 				return fakeShortCuts;
 			}());
-			$provide.value('keyCodes', function() {});
+			$provide.value('keyCodes', function () { });
 			$provide.service('PersonSelection', function () {
 				return personSelectionSvc;
 			});
@@ -36,13 +36,13 @@
 				return validateRulesService;
 			});
 
-			$provide.service('teamsPermissions', function() { return permissions; });
-			$provide.service('teamsToggles', function() { return toggles; });
+			$provide.service('teamsPermissions', function () { return permissions; });
+			$provide.service('teamsToggles', function () { return toggles; });
 		});
 
 	});
 
-	beforeEach(inject(function(_$rootScope_, _$compile_, _$httpBackend_) {
+	beforeEach(inject(function (_$rootScope_, _$compile_, _$httpBackend_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
@@ -50,11 +50,11 @@
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 	}));
 
-	it('should view menu when add absence is permitted', function() {
+	it('should view menu when add absence is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
 		};
 
 		permissions.set({
@@ -73,11 +73,11 @@
 		expect(menuListItem.length).toBe(1);
 	});
 
-	it('should view menu when add activity is permitted', function() {
+	it('should view menu when add activity is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
 		};
 
 		permissions.set({
@@ -95,11 +95,11 @@
 		expect(menuListItem.length).toBe(1);
 	});
 
-	it('should view menu when add personal activity is permitted', function() {
+	it('should view menu when add personal activity is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
 		};
 
 		permissions.set({
@@ -117,11 +117,11 @@
 		expect(menuListItem.length).toBe(1);
 	});
 
-	it('should view menu when move activity is permitted', function() {
+	it('should view menu when move activity is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
 		};
 
 		permissions.set({
@@ -139,11 +139,36 @@
 		expect(menuListItem.length).toBe(1);
 	});
 
-	it('should view menu when swap shift is permitted', function() {
+	it('should view move activity menu when move overtime is permitted', function () {
+		toggles.set({
+			WfmTeamSchedule_MoveOvertimeActivity_44888: true
+		});
 		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
+		};
+
+		permissions.set({
+			HasMoveOvertimePermission: true
+		});
+
+		var element = $compile(html)(scope);
+
+		scope.$apply();
+
+		var menu = angular.element(element[0].querySelector('#scheduleContextMenuButton'));
+		var menuListItem = angular.element(element[0].querySelector('.wfm-list #menuItemMoveActivity'));
+
+		expect(menu.length).toBe(1);
+		expect(menuListItem.length).toBe(1);
+	});
+
+	it('should view menu when swap shift is permitted', function () {
+		var html = '<teamschedule-command-menu></teamschedule-command>';
+		var scope = $rootScope.$new();
+		scope.vm = {
+			toggleCurrentSidenav: function () { }
 		};
 
 		permissions.set({
@@ -161,11 +186,11 @@
 		expect(menuListItem.length).toBe(1);
 	});
 
-	it('should view menu when remove absence is permitted', function() {
+	it('should view menu when remove absence is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
 		};
 
 		permissions.set({
@@ -183,11 +208,11 @@
 		expect(menuListItem.length).toBe(1);
 	});
 
-	it('should view menu when remove activity is permitted', function() {
+	it('should view menu when remove activity is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
 		};
 
 		permissions.set({
@@ -205,11 +230,11 @@
 		expect(menuListItem.length).toBe(1);
 	});
 
-	it('should view menu when undo schedule is permitted', function() {
+	it('should view menu when undo schedule is permitted', function () {
 		var html = '<teamschedule-command-menu></teamschedule-command>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
 		};
 
 		var element = $compile(html)(scope);
@@ -225,7 +250,7 @@
 		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
 		};
 
 		permissions.set({
@@ -247,7 +272,7 @@
 		var html = '<teamschedule-command-menu validate-warning-enabled="validateWarningEnabled"></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
 		};
 
 		permissions.set({
@@ -275,7 +300,7 @@
 		var html = '<teamschedule-command-menu validate-warning-enabled="validateWarningEnabled""></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
 		};
 
 		permissions.set({
@@ -304,7 +329,7 @@
 		var html = '<teamschedule-command-menu></teamschedule-command-menu>';
 		var scope = $rootScope.$new();
 		scope.vm = {
-			toggleCurrentSidenav: function() {}
+			toggleCurrentSidenav: function () { }
 		};
 
 
@@ -323,13 +348,13 @@
 		expect(menuListItem[0].disabled).toBe(true);
 	});
 
-	function FakePersonSelection(){
+	function FakePersonSelection() {
 		var personIds = [];
 		var hasSelected = false;
-		this.hasAgentSelected = function(value){
+		this.hasAgentSelected = function (value) {
 			hasSelected = value;
 		}
-		this.anyAgentChecked = function(){
+		this.anyAgentChecked = function () {
 			return hasSelected;
 		}
 		this.getTotalSelectedPersonAndProjectionCount = function () {
@@ -351,26 +376,26 @@
 		this.canSwapShifts = function () {
 			return false;
 		};
-		this.fakeSetCheckedPersonIds = function(data){
+		this.fakeSetCheckedPersonIds = function (data) {
 			personIds = data;
 		};
-		this.getCheckedPersonIds = function (){
+		this.getCheckedPersonIds = function () {
 			return personIds;
 		};
 	}
 
 	function FakeToggles() {
 		var _toggles = {};
-		this.set = function(toggles) {
+		this.set = function (toggles) {
 			_toggles = toggles;
 		}
-		this.all = function() {
+		this.all = function () {
 			return _toggles;
 		}
 	}
 
 	function FakePermissions() {
-		var _permissions ={};
+		var _permissions = {};
 		this.set = function (permissions) {
 			_permissions = permissions;
 		}
@@ -379,36 +404,36 @@
 		}
 	}
 
-	function FakeValidateRulesService(){
+	function FakeValidateRulesService() {
 		var warningDict = {
-			"12345" : {
+			"12345": {
 				"isLoaded": true,
-				"warnings" : [
-				{
-					"RuleType": "NotOverwriteLayerRuleName",
-					"Content": "OverwriteLayerWarnings"
-				}]
+				"warnings": [
+					{
+						"RuleType": "NotOverwriteLayerRuleName",
+						"Content": "OverwriteLayerWarnings"
+					}]
 			},
 			"67890": {
 				"isLoaded": true,
-				"warnings" : [
-				{
+				"warnings": [
+					{
 
-				}]
+					}]
 			},
 		};
 
-		this.checkValidationForPerson = function(personId, filteredRuleType){
-			 if (!warningDict[personId]) return [];
-			 var result = warningDict[personId].warnings.filter(function(w) {
-			 	if(filteredRuleType)
-			 		return filteredRuleType == w.RuleType;
-			 	return currentEnabledTypes[w.RuleType];
-			 }).map(function(w) {
-			 	return w.Content;
-			 });
+		this.checkValidationForPerson = function (personId, filteredRuleType) {
+			if (!warningDict[personId]) return [];
+			var result = warningDict[personId].warnings.filter(function (w) {
+				if (filteredRuleType)
+					return filteredRuleType == w.RuleType;
+				return currentEnabledTypes[w.RuleType];
+			}).map(function (w) {
+				return w.Content;
+			});
 
-			 return result;
+			return result;
 		};
 	}
 });

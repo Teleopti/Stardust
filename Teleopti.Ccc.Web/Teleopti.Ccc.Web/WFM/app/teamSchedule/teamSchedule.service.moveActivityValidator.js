@@ -1,9 +1,10 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
-	angular.module("wfm.teamSchedule").service('ActivityValidator', ['$filter', 'PersonSelection', 'belongsToDateDecider', validator]);
+	angular.module("wfm.teamSchedule").service('ActivityValidator', ['$filter', 'PersonSelection', 'belongsToDateDecider', 'teamsToggles', validator]);
 
-	function validator($filter, PersonSelectionSvc, belongsToDateDecider) {
+	function validator($filter, PersonSelectionSvc, belongsToDateDecider, teamsToggles) {
+		var self = this;
 		var MAX_SCHEDULE_LENGTH_IN_MINUTES = 36 * 60; // 36 hours
 		var invalidPeople = [];
 		this.validateMoveToTime = validateMoveToTimeForScheduleInDifferentTimezone;
@@ -28,7 +29,7 @@
 					invalidPeople.push({ PersonId: personId, Name: personSchedule.Name });
 					continue;
 				}
-				var shiftsForBelongsToDate = personSchedule.Shifts.filter(function(shift) {
+				var shiftsForBelongsToDate = personSchedule.Shifts.filter(function (shift) {
 					return shift.Date === belongsToDate;
 				});
 
@@ -44,18 +45,17 @@
 					}
 					durationInMinutes = end.diff(start, 'minutes');
 
-					if(moment($filter('timezone')(timeRange.startTime.format('YYYY-MM-DD HH:mm'), personSchedule.Timezone.IanaId, currentTimezone))
-						.isBefore(belongsToDate,'day'))
-					{
-						invalidPeople.push({PersonId: personId, Name: personSchedule.Name});
+					if (moment($filter('timezone')(timeRange.startTime.format('YYYY-MM-DD HH:mm'), personSchedule.Timezone.IanaId, currentTimezone))
+						.isBefore(belongsToDate, 'day')) {
+						invalidPeople.push({ PersonId: personId, Name: personSchedule.Name });
 						continue;
 					}
-				}else{
-					durationInMinutes = timeRange.endTime.diff(timeRange.startTime,'minute');
+				} else {
+					durationInMinutes = timeRange.endTime.diff(timeRange.startTime, 'minute');
 				}
 
 				if (durationInMinutes > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
-					invalidPeople.push({PersonId: personId, Name: personSchedule.Name});
+					invalidPeople.push({ PersonId: personId, Name: personSchedule.Name });
 				}
 			}
 
@@ -63,13 +63,13 @@
 		}
 
 		function getShiftDate(personSchedule) {
-			var selectedShift = personSchedule.Shifts.filter(function(shift) {
-				var selectedProjections = shift.Projections.filter(function(layer) {
+			var selectedShift = personSchedule.Shifts.filter(function (shift) {
+				var selectedProjections = shift.Projections.filter(function (layer) {
 					return layer.Selected;
 				});
 				return selectedProjections.length > 0;
 			})[0];
-			if(selectedShift) return selectedShift.Date;
+			if (selectedShift) return selectedShift.Date;
 			else return personSchedule.Date;
 		}
 
@@ -96,7 +96,7 @@
 					continue;
 				}
 
-				var shifts = personSchedule.Shifts.filter(function(shift) {
+				var shifts = personSchedule.Shifts.filter(function (shift) {
 					return shift.Date === currentDate;
 				});
 
@@ -115,10 +115,10 @@
 					.diff(moment(shiftForCurrentDay.ProjectionTimeRange.Start), 'minute');
 				var newEndMoment = newStartMoment.clone().add(shiftLength, 'minute');
 
-				var hasConflict = personSchedule.Shifts.concat(personSchedule.ExtraShifts).some(function(shift) {
+				var hasConflict = personSchedule.Shifts.concat(personSchedule.ExtraShifts).some(function (shift) {
 					if (currentDateMoment.isSame(shift.Date, 'day') || !shift.ProjectionTimeRange) return false;
 
-					return (currentDateMoment.isAfter(shift.Date, 'day') &&  newStartMoment.isSameOrBefore(moment(shift.ProjectionTimeRange.End), 'minute')) ||
+					return (currentDateMoment.isAfter(shift.Date, 'day') && newStartMoment.isSameOrBefore(moment(shift.ProjectionTimeRange.End), 'minute')) ||
 						(currentDateMoment.isBefore(shift.Date, 'day') && newEndMoment.isSameOrAfter(moment(shift.ProjectionTimeRange.Start), 'minute'));
 				});
 
@@ -136,11 +136,12 @@
 			for (var i = 0; i < selectedPersonIds.length; i++) {
 				var personId = selectedPersonIds[i];
 				var personSchedule = ScheduleMgmt.findPersonScheduleVmForPersonId(personId);
-				if(hasOvertimeSelected(personSchedule)){
-					invalidPeople.push(personSchedule);
-					continue;
+				if (!teamsToggles.all().WfmTeamSchedule_MoveOvertimeActivity_44888) {
+					if (hasOvertimeSelected(personSchedule)) {
+						invalidPeople.push(personSchedule);
+						continue;
+					}
 				}
-
 				var shiftDate = getShiftDate(personSchedule);
 
 				var newStartInAgentTimezone = $filter('timezone')(newStartMoment.format('YYYY-MM-DD HH:mm'),
@@ -156,8 +157,9 @@
 					currentTimezone);
 				var newShiftEnd = getLatestScheduleEndMoment(shiftDate, personSchedule, newStartMoment);
 				var scheduleLength = newShiftEnd ? newShiftEnd.diff(newShiftStart, 'minutes') : 0;
-				if (moment(newShiftStartInAgentTimezone).format('YYYY-MM-DD') != shiftDate || scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES)
+				if (moment(newShiftStartInAgentTimezone).format('YYYY-MM-DD') != shiftDate || scheduleLength > MAX_SCHEDULE_LENGTH_IN_MINUTES) {
 					invalidPeople.push(personSchedule);
+				}
 			}
 
 			return invalidPeople.length === 0;
@@ -166,8 +168,8 @@
 		function hasOvertimeSelected(personSchedule) {
 			var result = [];
 			if (personSchedule.Shifts && personSchedule.Shifts.length > 0) {
-				personSchedule.Shifts.forEach(function(s) {
-					result = result.concat(s.Projections.filter(function(p) {
+				personSchedule.Shifts.forEach(function (s) {
+					result = result.concat(s.Projections.filter(function (p) {
 						return p.Selected && p.IsOvertime;
 					}));
 				});
@@ -187,7 +189,7 @@
 			});
 			if (shiftsOnCurrentDate.length === 0) return null;
 			if (!shiftsOnCurrentDate[0].Projections || shiftsOnCurrentDate[0].Projections.length === 0) return null;
-			return shiftsOnCurrentDate[0].Projections.filter(function(p) { return !p.Selected; });
+			return shiftsOnCurrentDate[0].Projections.filter(function (p) { return !p.Selected; });
 		}
 
 		function getSelectedProjections(scheduleDate, personSchedule) {
@@ -196,13 +198,13 @@
 			});
 			if (shiftsOnCurrentDate.length === 0) return null;
 			if (!shiftsOnCurrentDate[0].Projections || shiftsOnCurrentDate[0].Projections.length === 0) return null;
-			return shiftsOnCurrentDate[0].Projections.filter(function(p) { return p.Selected; });
+			return shiftsOnCurrentDate[0].Projections.filter(function (p) { return p.Selected; });
 		}
 
 		function findEarliestMoment(moments) {
 			if (!moments || moments.length === 0) return null;
 			var earliestM = null;
-			moments.forEach(function(m) {
+			moments.forEach(function (m) {
 				if (earliestM === null || m.isBefore(earliestM)) earliestM = m;
 			});
 			return earliestM;
@@ -211,7 +213,7 @@
 		function findLatestMoment(moments) {
 			if (!moments || moments.length === 0) return null;
 			var latestM = null;
-			moments.forEach(function(m) {
+			moments.forEach(function (m) {
 				if (latestM === null || m.isAfter(latestM)) latestM = m;
 			});
 			return latestM;
@@ -221,7 +223,7 @@
 			var unselected = getUnselectedProjections(scheduleDate, personSchedule);
 			if (!unselected || unselected.length === 0) return newStartMoment;
 
-			var starts = unselected.map(function(p) { return moment(p.Start); });
+			var starts = unselected.map(function (p) { return moment(p.Start); });
 			starts.push(newStartMoment);
 			return findEarliestMoment(starts);
 		}
@@ -237,7 +239,7 @@
 			var unselected = getUnselectedProjections(scheduleDate, personSchedule);
 			if (!unselected || unselected.length === 0) return newEndMoment;
 
-			var ends =  unselected.map(function(p) {
+			var ends = unselected.map(function (p) {
 
 				return moment(p.Start).clone().add(p.Minutes, 'minutes');
 			});
@@ -249,8 +251,8 @@
 			return invalidPeople;
 		};
 
-		this.getInvalidPeopleNameList = function() {
-			return invalidPeople.map(function(p) { return p.Name });
+		this.getInvalidPeopleNameList = function () {
+			return invalidPeople.map(function (p) { return p.Name });
 		}
 
 	}

@@ -4,6 +4,9 @@ using System.Linq;
 using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
@@ -12,11 +15,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 	{
 		private readonly IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> _personAssignmentRepositoryTypedId;
 		private readonly ICurrentScenario _currentScenario;
+		private readonly IPermissionProvider _permissionProvider;
 
-		public MoveShiftLayerCommandHelper(IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepositoryTypedId, ICurrentScenario currentScenario)
+		public MoveShiftLayerCommandHelper(IWriteSideRepositoryTypedId<IPersonAssignment,
+			PersonAssignmentKey> personAssignmentRepositoryTypedId,
+			ICurrentScenario currentScenario,
+			IPermissionProvider permissionProvider)
 		{
 			_personAssignmentRepositoryTypedId = personAssignmentRepositoryTypedId;
 			_currentScenario = currentScenario;
+			_permissionProvider = permissionProvider;
 		}
 
 		public IDictionary<Guid, DateTime> GetCorrectNewStartForLayersForPerson(IPerson person, DateOnly scheduleDate, IEnumerable<Guid> shiftLayerIds, DateTime newStartTimeUtc)
@@ -90,7 +98,61 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			});
 			return latestEnd.Subtract(earliestStart).Duration() <= new TimeSpan(36, 0, 0);
 		}
+
+		public bool CheckPermission(IList<Guid> layerIds, IPerson person, DateOnly date, out List<string> messages)
+		{
+			messages = new List<string>();
+			if (agentScheduleIsWriteProtected(date, person))
+			{
+				messages.Add(Resources.WriteProtectSchedule);
+				return false;
+			}
+			var currentScenario = _currentScenario.Current();
+			var hasMoveActivityPermission =
+				_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.MoveActivity, date,
+					person);
+			var hasMoveOvertimePermission =
+				_permissionProvider.HasPersonPermission(DefinedRaptorApplicationFunctionPaths.MoveOvertime, date,
+					person);
+
+			var personAssignment = _personAssignmentRepositoryTypedId.LoadAggregate(new PersonAssignmentKey
+			{
+				Date = date,
+				Person = person,
+				Scenario = currentScenario
+			});
+
+			foreach (var layerId in layerIds)
+			{
+				var layer = personAssignment.ShiftLayers.SingleOrDefault(sl => sl.Id == layerId);
+				if (layer == null)
+				{
+					messages.Add(Resources.NoShiftsFound);
+					continue;
+				}
+				var isOvertime = layer is OvertimeShiftLayer;
+				if (isOvertime)
+				{
+					if (!hasMoveOvertimePermission)
+						messages.Add(Resources.NoPermissionMoveAgentOvertime);
+				}
+				else if (!hasMoveActivityPermission)
+				{
+					messages.Add(Resources.NoPermissionMoveAgentActivity);
+				}
+			}
+
+			return !messages.Any();
+		}
+
+		private bool agentScheduleIsWriteProtected(DateOnly date, IPerson agent)
+		{
+			return !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule)
+					&& agent.PersonWriteProtection.IsWriteProtected(date);
+		}
 	}
+
+
 
 	public interface IMoveShiftLayerCommandHelper
 	{
@@ -98,5 +160,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			IEnumerable<Guid> shiftLayerIds, DateTime newStartTimeUtc);
 
 		bool ValidateLayerMoveToTime(IDictionary<Guid, DateTime> layerToMoveTimeMap, IPerson person, DateOnly date);
+		bool CheckPermission(IList<Guid> layerIds, IPerson person, DateOnly date, out List<string> messages);
 	}
 }

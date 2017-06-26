@@ -825,5 +825,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			assignment.PopAllEvents().Count()
 				.Should().Be.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldMoveActivityIfIsOvertimeLayer()
+		{
+			var personassignment = PersonAssignmentFactory.CreateAssignmentWithOvertimePersonalAndMainshiftLayers();
+			var period = personassignment.ShiftLayers.First().Period.MovePeriod(TimeSpan.FromMinutes(1));
+
+			var overtimeLayer = personassignment.ShiftLayers.Skip(1).First();
+			var newStartTime = period.StartDateTime.AddMinutes(30);
+			personassignment.MoveActivityAndKeepOriginalPriority(overtimeLayer, newStartTime, new TrackedCommandInfo { OperatedPersonId = testPerson.Id.GetValueOrDefault() });
+
+			overtimeLayer = personassignment.ShiftLayers.Skip(1).First();
+			overtimeLayer.Period.StartDateTime.Should().Be.EqualTo(newStartTime);
+		}
 	}
 }

@@ -8,11 +8,12 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class PersonAssignment : VersionedAggregateRoot, 
+	public class PersonAssignment : VersionedAggregateRoot,
 									IPersonAssignment,
 									IExportToAnotherScenario
 	{
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected PersonAssignment()
 		{
 		}
-		
+
 		public virtual void Clear(bool muteEvent = false)
 		{
 			ClearMainActivities();
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 				});
 			}
-			
+
 		}
 
 		public virtual DateOnly Date { get; protected set; }
@@ -69,18 +70,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			// Duplicate mergedMainShiftAndPersonalPeriods but exlude PersonalShiftLayer explicitly.
 			DateTimePeriod? mergedPeriod = null;
-			foreach(var shiftLayer in ShiftLayers)
+			foreach (var shiftLayer in ShiftLayers)
 			{
-				if (shiftLayer.GetType() == typeof (PersonalShiftLayer)) continue;
-				mergedPeriod = DateTimePeriod.MaximumPeriod(shiftLayer.Period,mergedPeriod);
+				if (shiftLayer.GetType() == typeof(PersonalShiftLayer)) continue;
+				mergedPeriod = DateTimePeriod.MaximumPeriod(shiftLayer.Period, mergedPeriod);
 			}
-			if(mergedPeriod.HasValue)
+			if (mergedPeriod.HasValue)
 				return mergedPeriod.Value;
 
 			var dayOff = DayOff();
 			return dayOff == null ?
-				new DateOnlyPeriod(Date,Date).ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) :    //don't like to jump to person aggregate here... "stämpla" assignment with a timezone instead.
-				new DateTimePeriod(dayOff.Anchor,dayOff.Anchor.AddTicks(1));
+				new DateOnlyPeriod(Date, Date).ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) :    //don't like to jump to person aggregate here... "stämpla" assignment with a timezone instead.
+				new DateTimePeriod(dayOff.Anchor, dayOff.Anchor.AddTicks(1));
 		}
 
 		private DateTimePeriod mergedMainShiftAndPersonalPeriods()
@@ -96,8 +97,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return mergedPeriod.Value;
 
 			var dayOff = DayOff();
-			return dayOff == null ? 
-				Date.ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) :	//don't like to jump to person aggregate here... "stämpla" assignment with a timezone instead.
+			return dayOff == null ?
+				Date.ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) : //don't like to jump to person aggregate here... "stämpla" assignment with a timezone instead.
 				new DateTimePeriod(dayOff.Anchor, dayOff.Anchor.AddTicks(1));
 		}
 
@@ -158,31 +159,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var removed = _shiftLayers.Remove(layer);
 
-			if ( !muteEvent )
+			if (!muteEvent)
 			{
-				AddEvent ( () =>
-				{
-					var activityRemovedEvent = new PersonAssignmentLayerRemovedEvent
-					{
-						Date = Date.Date,
-						PersonId = Person.Id.Value,						
-						StartDateTime = layer.Period.StartDateTime,
-						EndDateTime = layer.Period.EndDateTime,
-						ScenarioId = Scenario.Id.Value,
-						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
-					};
-					if ( trackedCommandInfo != null )
-					{
-						activityRemovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
-						activityRemovedEvent.CommandId = trackedCommandInfo.TrackId;
-					}
-					return activityRemovedEvent;
-				} );
+				AddEvent(() =>
+			  {
+				  var activityRemovedEvent = new PersonAssignmentLayerRemovedEvent
+				  {
+					  Date = Date.Date,
+					  PersonId = Person.Id.Value,
+					  StartDateTime = layer.Period.StartDateTime,
+					  EndDateTime = layer.Period.EndDateTime,
+					  ScenarioId = Scenario.Id.Value,
+					  LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
+				  };
+				  if (trackedCommandInfo != null)
+				  {
+					  activityRemovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
+					  activityRemovedEvent.CommandId = trackedCommandInfo.TrackId;
+				  }
+				  return activityRemovedEvent;
+			  });
 			}
 
 			return removed;
 		}
-		
+
 		public virtual void ClearPersonalActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
 			PersonalActivities().ToArray().ForEach(l => RemoveActivity(l, muteEvent, trackedCommandInfo));
@@ -190,12 +191,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void ClearMainActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
-			MainActivities().ToArray().ForEach(l => RemoveActivity(l, muteEvent, trackedCommandInfo ) );
+			MainActivities().ToArray().ForEach(l => RemoveActivity(l, muteEvent, trackedCommandInfo));
 		}
 
 		public virtual void ClearOvertimeActivities(bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
-			OvertimeActivities().ToArray().ForEach(l => RemoveActivity(l, muteEvent, trackedCommandInfo ) );
+			OvertimeActivities().ToArray().ForEach(l => RemoveActivity(l, muteEvent, trackedCommandInfo));
 		}
 
 		public virtual void CheckRestrictions()
@@ -282,7 +283,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void AddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
-			
+
 			var layer = new PersonalShiftLayer(activity, period);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
@@ -319,7 +320,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
 
-			if(!muteEvent)
+			if (!muteEvent)
 			{
 				AddEvent(() =>
 				{
@@ -333,7 +334,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						ScenarioId = Scenario.Id.GetValueOrDefault(),
 						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 					};
-					if(trackedCommandInfo != null)
+					if (trackedCommandInfo != null)
 					{
 						activityAddedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
 						activityAddedEvent.CommandId = trackedCommandInfo.TrackId;
@@ -355,7 +356,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void AddActivity(IActivity activity, TimePeriod period)
 		{
-			var periodAsDateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(Date.Date.Add(period.StartTime), 
+			var periodAsDateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(Date.Date.Add(period.StartTime),
 				Date.Date.Add(period.EndTime),
 				Person.PermissionInformation.DefaultTimeZone());
 			AddActivity(activity, periodAsDateTimePeriod);
@@ -466,19 +467,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 		public virtual void InsertOvertimeLayer(IActivity activity, DateTimePeriod period, int index,
-		                                IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
+										IMultiplicatorDefinitionSet multiplicatorDefinitionSet)
 		{
 
 			var layer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
 			layer.SetParent(this);
-			_shiftLayers.Insert(index,layer);
+			_shiftLayers.Insert(index, layer);
 		}
 
 		public virtual void InsertPersonalLayer(IActivity activity, DateTimePeriod period, int index)
 		{
 			var layer = new PersonalShiftLayer(activity, period);
 			layer.SetParent(this);
-			_shiftLayers.Insert(index,layer);
+			_shiftLayers.Insert(index, layer);
 		}
 
 		public virtual void MoveLayerDown(ShiftLayer shiftLayer)
@@ -516,7 +517,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var layer in ShiftLayers.ToArray())
 			{
 				var currentLayerPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(length));
-				if(!layer.Payload.Equals(activity) || !layer.Period.Intersect(currentLayerPeriod))
+				if (!layer.Payload.Equals(activity) || !layer.Period.Intersect(currentLayerPeriod))
 					continue;
 				var originalOrderIndex = ShiftLayers.ToList().IndexOf(layer);
 				RemoveActivity(layer);
@@ -526,24 +527,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				splittedLayerPeriods.ForEach(period => InsertActivity(layer.Payload, period, originalOrderIndex));
 				anyLayerFound = true;
 			}
-			if(!anyLayerFound)
+			if (!anyLayerFound)
 				throw new ArgumentException("No layer(s) found!", nameof(activity));
 
 			//will be fixed later (=Erik)
 			var newPeriod = new DateTimePeriod(newStartTime, newStartTime.Add(length));
 			///////////////////////////////
-			
+
 			addActivityInternal(activity, newPeriod);
 
 			var affectedPeriod = new DateTimePeriod(currentStartTime, currentStartTime.Add(length)).MaximumPeriod(newPeriod);
-			
-			AddEvent(()=>
+
+			AddEvent(() =>
 			{
 				var activityMovedEvent = new ActivityMovedEvent
 				{
 					PersonId = Person.Id.Value,
 					StartDateTime = affectedPeriod.StartDateTime,
-					EndDateTime =affectedPeriod.EndDateTime,
+					EndDateTime = affectedPeriod.EndDateTime,
 					ScenarioId = Scenario.Id.Value,
 					LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 				};
@@ -559,7 +560,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual void MoveAllActivitiesAndKeepOriginalPriority(DateTime newStartTimeInUtc,
 			TrackedCommandInfo trackedCommandInfo, bool muteEvent = false)
 		{
-			var originalStartTimeInUtc = PeriodExcludingPersonalActivity().StartDateTime;			
+			var originalStartTimeInUtc = PeriodExcludingPersonalActivity().StartDateTime;
 			var distanceToMove = newStartTimeInUtc.Subtract(originalStartTimeInUtc);
 
 			var shiftLayers = ShiftLayers.ToList();
@@ -589,7 +590,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				affectedPeriods.Add(shiftLayer.Period.MaximumPeriod(newPeriod));
 			}
 
-			if(!muteEvent)
+			if (!muteEvent)
 			{
 				AddEvent(() =>
 				{
@@ -597,11 +598,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					{
 						PersonId = Person.Id.Value,
 						StartDateTime = affectedPeriods.Min(p => p.StartDateTime),
-						EndDateTime = affectedPeriods.Max(p=> p.EndDateTime),
+						EndDateTime = affectedPeriods.Max(p => p.EndDateTime),
 						ScenarioId = Scenario.Id.Value,
 						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 					};
-					if(trackedCommandInfo != null)
+					if (trackedCommandInfo != null)
 					{
 						activityMovedEvent.InitiatorId = trackedCommandInfo.OperatedPersonId;
 						activityMovedEvent.CommandId = trackedCommandInfo.TrackId;
@@ -623,9 +624,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				InsertActivity(shiftLayer.Payload, newLayerPeriod, originalOrderIndex);
 			}
-			else if ((shiftLayer as PersonalShiftLayer) != null)
+			else if (shiftLayer as PersonalShiftLayer != null)
 			{
 				InsertPersonalLayer(shiftLayer.Payload, newLayerPeriod, originalOrderIndex);
+			}
+			else if (shiftLayer is OvertimeShiftLayer)
+			{
+				var overtimeLayer = (OvertimeShiftLayer) shiftLayer;
+				InsertOvertimeLayer(shiftLayer.Payload, newLayerPeriod, originalOrderIndex,  overtimeLayer.DefinitionSet);
 			}
 
 			var affectedPeriod = shiftLayer.Period.MaximumPeriod(newLayerPeriod);
@@ -649,7 +655,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					return activityMovedEvent;
 				});
 			}
-			
+
 		}
 
 		public virtual DayOff DayOff()
@@ -679,14 +685,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 						ScenarioId = Scenario.Id.Value,
 						LogOnBusinessUnitId = Scenario.BusinessUnit.Id.GetValueOrDefault()
 					};
-					if(trackedCommandInfo != null)
+					if (trackedCommandInfo != null)
 					{
 						@event.InitiatorId = trackedCommandInfo.OperatedPersonId;
 						@event.CommandId = trackedCommandInfo.TrackId;
 					}
 					return @event;
 				});
-			}			
+			}
 		}
 
 		public virtual void SetThisAssignmentsDayOffOn(IPersonAssignment dayOffDestination, bool muteEvent = false, TrackedCommandInfo trackedCommandInfo = null)

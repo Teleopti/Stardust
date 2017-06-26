@@ -339,10 +339,7 @@
 			if (!this.ShiftLayerIds || this.ShiftLayerIds.length == 0) 
 				return false;
 
-			if (!this.IsOvertime && this.ShiftLayerIds && this.ShiftLayerIds.length > 0)
-				return true;
-
-			if(this.IsOvertime && this.ShiftLayerIds && this.ShiftLayerIds.length > 0)
+			if (this.ShiftLayerIds && this.ShiftLayerIds.length > 0)
 				return true;
 
 			return false;

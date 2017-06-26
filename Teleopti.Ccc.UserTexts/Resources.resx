@@ -16189,4 +16189,7 @@ Do you want to participate?</value>
   <data name="MoveOvertime" xml:space="preserve">
     <value>Move Overtime</value>
   </data>
+  <data name="NoPermissionMoveAgentOvertime" xml:space="preserve">
+    <value>No permission to move overtime for agent {0}</value>
+  </data>
 </root>

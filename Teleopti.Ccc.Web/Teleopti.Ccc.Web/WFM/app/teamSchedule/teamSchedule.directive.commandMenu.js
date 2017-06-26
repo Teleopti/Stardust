@@ -147,7 +147,8 @@
 		};
 
 		vm.canActiveMoveActivity = function () {
-			return vm.permissions.HasMoveActivityPermission;
+			return vm.permissions.HasMoveActivityPermission
+				|| (vm.toggles.WfmTeamSchedule_MoveOvertimeActivity_44888 && vm.permissions.HasMoveOvertimePermission);
 		};
 
 		vm.canActiveMoveInvalidOverlappedActivity = function () {

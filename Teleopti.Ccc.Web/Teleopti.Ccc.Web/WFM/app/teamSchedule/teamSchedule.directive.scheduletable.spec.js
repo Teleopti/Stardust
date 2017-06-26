@@ -8,7 +8,7 @@ describe('teamschedule schedule table controller tests', function () {
 		module('wfm.teamSchedule');
 		module(function ($provide) {
 			$provide.service('Toggle', function () {
-				return { };
+				return {};
 			});
 		});
 	});
@@ -74,7 +74,7 @@ describe('teamschedule schedule table controller tests', function () {
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			},
-			Selectable:function() {return true;}
+			Selectable: function () { return true; }
 		};
 		var personAbsence2 = {
 			ParentPersonAbsences: ["PersonAbsenceId-222"],
@@ -85,7 +85,7 @@ describe('teamschedule schedule table controller tests', function () {
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			},
-			Selectable:function() {return true;}
+			Selectable: function () { return true; }
 		};
 		var personAbsence3 = {
 			ParentPersonAbsences: ["PersonAbsenceId-111"],
@@ -96,7 +96,7 @@ describe('teamschedule schedule table controller tests', function () {
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			},
-			Selectable:function() {return true;}
+			Selectable: function () { return true; }
 		}
 		var allProjections = [personAbsence1, personAbsence2, personAbsence3];
 		var shift = {
@@ -106,7 +106,7 @@ describe('teamschedule schedule table controller tests', function () {
 		var schedule = {
 			"PersonId": "1234",
 			"Date": "2016-02-19",
-			"Shifts": [ shift ],
+			"Shifts": [shift],
 			ScheduleStartTime: function () {
 				return "2016-02-19 08:00";
 			},
@@ -116,7 +116,7 @@ describe('teamschedule schedule table controller tests', function () {
 			AbsenceCount: function () {
 				return 3;
 			},
-			AllowSwap: function(){
+			AllowSwap: function () {
 				return true;
 			}
 		};
@@ -165,7 +165,7 @@ describe('teamschedule schedule table controller tests', function () {
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			},
-			Selectable:function() {return true;}
+			Selectable: function () { return true; }
 		};
 		var personActivity2 = {
 			ShiftLayerIds: ['222'],
@@ -176,7 +176,7 @@ describe('teamschedule schedule table controller tests', function () {
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			},
-			Selectable:function() {return true;}
+			Selectable: function () { return true; }
 		};
 		var personActivity3 = {
 			ShiftLayerIds: ['333'],
@@ -187,11 +187,11 @@ describe('teamschedule schedule table controller tests', function () {
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			},
-			Selectable:function() {return true;}
+			Selectable: function () { return true; }
 		};
 		var allProjections = [personActivity1, personActivity2, personActivity3];
 		var shift = {
-			"Date":"2016-02-19",
+			"Date": "2016-02-19",
 			"Projections": allProjections
 		};
 		var schedule = {
@@ -212,7 +212,7 @@ describe('teamschedule schedule table controller tests', function () {
 			AbsenceCount: function () {
 				return 0;
 			},
-			AllowSwap: function(){
+			AllowSwap: function () {
 				return true;
 			}
 		};
@@ -238,7 +238,7 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(personActivity2.Selected).toEqual(true);
 		expect(personActivity3.Selected).toEqual(false);
 
-		controller.ToggleProjectionSelection(personActivity3,  schedule.Date);
+		controller.ToggleProjectionSelection(personActivity3, schedule.Date);
 		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
 		expect(selectedPersonInfoList[0].SelectedActivities.length).toEqual(3);
 		expect(selectedPersonInfoList[0].SelectedAbsences.length).toEqual(0);
@@ -266,7 +266,7 @@ describe('teamschedule schedule table controller tests', function () {
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			},
-			Selectable:function() {return true;}
+			Selectable: function () { return true; }
 		};
 		var personActivity2 = {
 			ShiftLayerIds: ['222'],
@@ -277,7 +277,7 @@ describe('teamschedule schedule table controller tests', function () {
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			},
-			Selectable:function() {return true;}
+			Selectable: function () { return true; }
 		};
 		var personActivity3 = {
 			ShiftLayerIds: ['111'],
@@ -288,7 +288,7 @@ describe('teamschedule schedule table controller tests', function () {
 			ToggleSelection: function () {
 				this.Selected = !this.Selected;
 			},
-			Selectable:function() {return true;}
+			Selectable: function () { return true; }
 		};
 		var allProjections = [personActivity1, personActivity2, personActivity3];
 		var shift = {
@@ -314,7 +314,7 @@ describe('teamschedule schedule table controller tests', function () {
 			AbsenceCount: function () {
 				return 0;
 			},
-			AllowSwap: function(){
+			AllowSwap: function () {
 				return true;
 			}
 		};
@@ -354,7 +354,6 @@ describe('teamschedule schedule table controller tests', function () {
 
 	}));
 
-
 	it("can select all people in current page", inject(function () {
 		var schedules = [
 			createSchedule('1111', '2015-01-01', null, [{ startHour: 8, endHour: 16 }]),
@@ -371,7 +370,7 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(selectedPersonInfoList.length).toEqual(2);
 	}));
 
-	it("scheduleManagementService should contains same records with table", function() {
+	it("scheduleManagementService should contains same records with table", function () {
 		var schedules = [
 			createSchedule('1111', '2015-01-01', null, [{ startHour: 8, endHour: 16 }]),
 			createSchedule('2222', '2015-01-01', null, [{ startHour: 8, endHour: 16 }])
@@ -379,7 +378,7 @@ describe('teamschedule schedule table controller tests', function () {
 
 		scheduleManagement.groupScheduleVm = { Schedules: schedules }
 		controller.init();
-		
+
 		scope.$apply();
 
 		expect(controller.scheduleVm.Schedules.length).toEqual(2);
@@ -403,85 +402,13 @@ describe('teamschedule schedule table controller tests', function () {
 		expect(controller.toggleAllInCurrentPage).toEqual(true);
 	}));
 
-	it("cannot select overtime layer", function () {
-		var personActivity1 = {
-			ShiftLayerIds: ['111'],
-			ParentPersonAbsences: null,
-			Start: "2016-02-19 08:00",
-			Selected: false,
-			ToggleSelection: function () {
-				this.Selected = !this.Selected;
-			},
-			Selectable:function() {return true;}
-		};
-		var overtimeActivity = {
-			ShiftLayerIds: ['222'],
-			ParentPersonAbsences: null,
-			IsOvertime: true,
-			Start: "2016-02-19 15:00",
-			Selected: false,
-			ToggleSelection: function () {
-				this.Selected = !this.Selected;
-			},
-			Selectable:function() {return false;}
-		};
-		var allProjections = [personActivity1, overtimeActivity];
-		var shift = {
-			"Date": "2016-02-19",
-			"Projections": allProjections
-		};
-		
-		var schedule = {
-			"PersonId": "1234",
-			"Date": "2016-02-19",
-			"Shifts": [
-				shift
-			],
-			ScheduleStartTime: function () {
-				return "2016-02-19 08:30";
-			},
-			ScheduleEndTime: function () {
-				return "2016-02-19 16:30";
-			},
-			ActivityCount: function () {
-				return 3;
-			},
-			AbsenceCount: function () {
-				return 0;
-			},
-			AllowSwap: function(){
-				return true;
-			}
-		};
-		setupParent(schedule);
-
-		controller.scheduleVm = { Schedules: [schedule] };
-		controller.selectedPersonProjections = [];
-
-		controller.ToggleProjectionSelection(personActivity1, schedule.Date);
-		var selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
-		expect(selectedPersonInfoList.length).toEqual(1);
-		expect(selectedPersonInfoList[0].PersonId).toEqual(schedule.PersonId);
-		expect(selectedPersonInfoList[0].SelectedActivities.length).toEqual(1);
-		expect(personActivity1.Selected).toEqual(true);
-		expect(overtimeActivity.Selected).toEqual(false);
-
-		controller.ToggleProjectionSelection(overtimeActivity, schedule.Date);
-		selectedPersonInfoList = personSelection.getSelectedPersonInfoList();
-		expect(selectedPersonInfoList.length).toEqual(1);
-		expect(selectedPersonInfoList[0].PersonId).toEqual(schedule.PersonId);
-		expect(selectedPersonInfoList[0].SelectedActivities.length).toEqual(1);
-		expect(personActivity1.Selected).toEqual(true);
-		expect(overtimeActivity.Selected).toEqual(false);
-	});
-
 	function setupParent(schedule) {
 		if (schedule.Shifts) {
-			schedule.Shifts.forEach(function(s) {
+			schedule.Shifts.forEach(function (s) {
 				s.Parent = schedule;
 
 				if (s.Projections) {
-					s.Projections.forEach(function(p) {
+					s.Projections.forEach(function (p) {
 						p.Parent = s;
 					});
 				}
@@ -523,7 +450,7 @@ describe('teamschedule schedule table controller tests', function () {
 					projections.push({
 						Start: dateMomentCopy.add(projectionInfo.startHour, 'hours').format('YYYY-MM-DD HH:mm'),
 						Minutes: moment.duration(projectionInfo.endHour - projectionInfo.startHour, 'hours').asMinutes(),
-						Selectable: function(){return true;}
+						Selectable: function () { return true; }
 					});
 				});
 			}
