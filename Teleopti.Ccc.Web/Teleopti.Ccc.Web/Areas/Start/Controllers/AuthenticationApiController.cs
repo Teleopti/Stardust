@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				return errorMessage(Resources.TeleoptiProductActivationKeyException);
 			}
 
-			return Ok();
+			return Ok(new { });
 		}
 
 		private IHttpActionResult errorMessage(string message)
