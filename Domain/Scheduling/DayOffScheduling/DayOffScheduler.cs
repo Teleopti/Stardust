@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		private readonly Func<ISchedulePartModifyAndRollbackService> _schedulePartModifyAndRollbackService;
 		private readonly IScheduleDayAvailableForDayOffSpecification _scheduleDayAvailableForDayOffSpecification;
 		private readonly IHasContractDayOffDefinition _hasContractDayOffDefinition;
+		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
@@ -31,13 +32,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 			IEffectiveRestrictionCreator effectiveRestrictionCreator, 
 			Func<ISchedulePartModifyAndRollbackService> schedulePartModifyAndRollbackService, 
             IScheduleDayAvailableForDayOffSpecification scheduleDayAvailableForDayOffSpecification,
-			IHasContractDayOffDefinition hasContractDayOffDefinition)
+			IHasContractDayOffDefinition hasContractDayOffDefinition,
+			Func<ISchedulingResultStateHolder> resultStateHolder)
 		{
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 			_effectiveRestrictionCreator = effectiveRestrictionCreator;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_scheduleDayAvailableForDayOffSpecification = scheduleDayAvailableForDayOffSpecification;
 			_hasContractDayOffDefinition = hasContractDayOffDefinition;
+			_resultStateHolder = resultStateHolder;
 		}
 
 		public void DayOffScheduling(IEnumerable<IScheduleMatrixPro> matrixList, ISchedulePartModifyAndRollbackService rollbackService, SchedulingOptions schedulingOptions, IScheduleTagSetter scheduleTagSetter)
@@ -99,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
                 int targetDaysOff;
 
 				IList<IScheduleDay> dayOffDays;
-	            var hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out dayOffDays);
+	            var hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_resultStateHolder().Schedules, schedulePeriod, out targetDaysOff, out dayOffDays);
 
 				if (hasCorrectNumberOfDaysOff && dayOffDays.Count > 0)
                     continue;
@@ -143,7 +146,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 						break;	
 					}
 
-					_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out dayOffDays);
+					_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_resultStateHolder().Schedules, schedulePeriod, out targetDaysOff, out dayOffDays);
 				}	
             }
         }

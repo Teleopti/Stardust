@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -11,10 +12,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 
 	public class MatrixDataWithToFewDaysOff : IMatrixDataWithToFewDaysOff
 	{
+		private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
 		private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 
-		public MatrixDataWithToFewDaysOff(IDayOffsInPeriodCalculator dayOffsInPeriodCalculator)
+		public MatrixDataWithToFewDaysOff(Func<ISchedulingResultStateHolder> resultStateHolder, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator)
 		{
+			_resultStateHolder = resultStateHolder;
 			_dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 		}
 
@@ -26,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 				int targetDaysOff;
 				
 				IList<IScheduleDay> dayOffDays;
-				if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrixData.Matrix.SchedulePeriod, out targetDaysOff, out dayOffDays) && dayOffDays.Count < targetDaysOff)
+				if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_resultStateHolder().Schedules, matrixData.Matrix.SchedulePeriod, out targetDaysOff, out dayOffDays) && dayOffDays.Count < targetDaysOff)
 				{
 					result.Add(matrixData);
 				}

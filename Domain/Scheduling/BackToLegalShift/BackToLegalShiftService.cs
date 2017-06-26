@@ -81,10 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 					continue;
 				}
 
-				int targetDaysOff;
-				IList<IScheduleDay> daysOffNow;
-				var success = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(person.VirtualSchedulePeriod(date),
-					out targetDaysOff, out daysOffNow);
+				var success = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulingResultStateHolder.Schedules, person.VirtualSchedulePeriod(date), out int targetDaysOff, out IList<IScheduleDay> daysOffNow);
 
 				if (!success)
 				{

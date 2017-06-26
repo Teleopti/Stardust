@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_legalShiftDecider.IsLegalShift(_person.Period(new DateOnly()).RuleSetBag, _shiftProjectionCache, _scheduleDay)).Return(false);
 				int x;
 				IList<IScheduleDay> y;
-				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_person.VirtualSchedulePeriod(_dateOnly),
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedules, _person.VirtualSchedulePeriod(_dateOnly),
 					out x, out y)).Return(true).OutRef(1, y);
 				Expect.Call(_backToLegalShiftWorker.ReSchedule(_teamBlock, _schedulingOptions, _shiftProjectionCache,
 					_rollBackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(true);
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_legalShiftDecider.IsLegalShift(_person.Period(_dateOnly).RuleSetBag, _shiftProjectionCache, _scheduleDay)).Return(false);
 				int x;
 				IList<IScheduleDay> y;
-				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_person.VirtualSchedulePeriod(_dateOnly),
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedules, _person.VirtualSchedulePeriod(_dateOnly),
 					out x, out y)).Return(true).OutRef(1, y);
 				Expect.Call(_backToLegalShiftWorker.ReSchedule(_teamBlock, _schedulingOptions, _shiftProjectionCache,
 					_rollBackService, _resourceCalculateDelayer, _schedulingResultStateHolder)).Return(false);
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.BackToLegalShift
 				Expect.Call(_legalShiftDecider.IsLegalShift(_person.Period(_dateOnly).RuleSetBag, _shiftProjectionCache, _scheduleDay)).Return(false);
 				int x;
 				IList<IScheduleDay> y;
-				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_person.VirtualSchedulePeriod(_dateOnly),
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedules, _person.VirtualSchedulePeriod(_dateOnly),
 					out x, out y)).Return(false).OutRef(1, new List<IScheduleDay>());
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_schedules).Repeat.Any();
 				Expect.Call(_schedules[_person]).Return(_scheduleRange);

@@ -1029,7 +1029,6 @@
     <Compile Include="Scheduling\TeamBlock\Specification\SameStartTimeBlockSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\DayOffSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculatorTest.cs" />
     <Compile Include="ResourceCalculation\FurnessEvaluatorTestSet3.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\GroupPagePerDateTest.cs" />
@@ -1059,7 +1058,6 @@
     <Compile Include="Scheduling\DayOffScheduling\DaysOffSchedulingServiceTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataListInSteadyStateTest.cs" />
-    <Compile Include="Scheduling\DayOffScheduling\MatrixDataWithToFewDaysOffTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MatrixDataTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataMapperTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\ScheduleDayDataTest.cs" />
@@ -1211,7 +1209,6 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceTest.cs" />
     <Compile Include="RealTimeAdherence\RtaMapTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorTest.cs" />
-    <Compile Include="ResourceCalculation\FixedStaffSchedulingServiceTest.cs" />
     <Compile Include="ResourceCalculation\SkillStaffPeriodHolderTest.cs" />
     <Compile Include="ResourceCalculation\StudentSchedulingServiceTest.cs" />
     <Compile Include="ResourceCalculation\PeriodDistributionServiceTest.cs" />
@@ -1327,7 +1324,6 @@
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoFactoryTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamDayOffModifierTest.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamDayOffSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactoryTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamMatrixCheckerTest.cs" />

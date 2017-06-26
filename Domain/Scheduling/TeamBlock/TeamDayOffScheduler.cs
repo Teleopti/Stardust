@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				int targetDaysOff;
 				IList<IScheduleDay> currentOffDaysList;
-				_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(matrix.SchedulePeriod, out targetDaysOff, out currentOffDaysList);
+				_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulingResultStateHolder().Schedules, matrix.SchedulePeriod, out targetDaysOff, out currentOffDaysList);
 
 				var schedulePeriod = matrix.SchedulePeriod;
 				if (!schedulePeriod.IsValid)
@@ -234,7 +234,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						break;
 					}
 
-					_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out currentOffDaysList);
+					_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulingResultStateHolder().Schedules, schedulePeriod, out targetDaysOff, out currentOffDaysList);
 				}	
 			}
 

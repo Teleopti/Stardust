@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				IWorkShiftBackToLegalStateServicePro workShiftBackToLegalStateService = _workShiftBackToLegalStateServiceProFactory.Create();
 
-				IDayOffsInPeriodCalculator dayOffsInPeriodCalculator = new DayOffsInPeriodCalculator(()=>schedulerStateHolder.SchedulingResultState);
+				IDayOffsInPeriodCalculator dayOffsInPeriodCalculator = new DayOffsInPeriodCalculator();
 
 				IList<IDayOffTemplate> displayList = schedulerStateHolder.CommonStateHolder.ActiveDayOffs.ToList();
 
@@ -177,7 +177,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					optimizationLimits,
 					schedulingOptionsCreator,
 					_mainShiftOptimizeActivitySpecificationSetter,
-					scheduleMatrixPro);
+					scheduleMatrixPro,
+					schedulerStateHolder.Schedules);
 
 				optimizers.Add(optimizer);
 			}

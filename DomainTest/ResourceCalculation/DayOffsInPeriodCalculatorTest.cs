@@ -21,16 +21,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private DateOnly _date3;
 		private DateOnlyPeriod _dateOnlyPeriod;
 		private IVirtualSchedulePeriod _virtualSchedulePeriod;
-	    private ISchedulingResultStateHolder _stateHolder;
 
 	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-		    _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_dictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-            _target = new DayOffsInPeriodCalculator(()=>_stateHolder);
+            _target = new DayOffsInPeriodCalculator();
 			_range = _mocks.StrictMock<IScheduleRange>();
 			_person = _mocks.StrictMock<IPerson>();
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
@@ -43,14 +41,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnZeroIfNoDayOffs()
 		{
 			Expect.Call(_virtualSchedulePeriod.Person).Return(_person);
-		    Expect.Call(_stateHolder.Schedules).Return(_dictionary);
 			Expect.Call(_dictionary[_person]).Return(_range);
 			Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 			Expect.Call(_range.ScheduledDayCollection(_dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay, _scheduleDay, _scheduleDay });
 
 			Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Times(3);
 			_mocks.ReplayAll();
-			IList<IScheduleDay> ret = _target.CountDayOffsOnPeriod(_virtualSchedulePeriod);
+			IList<IScheduleDay> ret = _target.CountDayOffsOnPeriod(_dictionary, _virtualSchedulePeriod);
 			Assert.That(ret.Count, Is.EqualTo(0));
 			_mocks.VerifyAll();
 		}
@@ -59,7 +56,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnThreeIfThreeDayOffs()
 		{
 			Expect.Call(_virtualSchedulePeriod.Person).Return(_person);
-            Expect.Call(_stateHolder.Schedules).Return(_dictionary);
 			Expect.Call(_dictionary[_person]).Return(_range);
 			Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 			Expect.Call(_range.ScheduledDayCollection(_dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay, _scheduleDay, _scheduleDay });
@@ -67,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Times(3);
 
 			_mocks.ReplayAll();
-			IList<IScheduleDay> ret = _target.CountDayOffsOnPeriod(_virtualSchedulePeriod);
+			IList<IScheduleDay> ret = _target.CountDayOffsOnPeriod(_dictionary, _virtualSchedulePeriod);
 			Assert.That(ret.Count, Is.EqualTo(3));
 			_mocks.VerifyAll();
 		}
@@ -82,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.ReplayAll();
 			int targetDaysOff;
 			IList<IScheduleDay> current;
-			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
+			var ret = _target.HasCorrectNumberOfDaysOff(_dictionary, _virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.True);
 			_mocks.VerifyAll();
 		}
@@ -98,7 +94,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(contract.NegativeDayOffTolerance).Return(1);
 
 			Expect.Call(_virtualSchedulePeriod.Person).Return(_person);
-            Expect.Call(_stateHolder.Schedules).Return(_dictionary);
 			Expect.Call(_dictionary[_person]).Return(_range);
 			Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 
@@ -111,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.ReplayAll();
 			int targetDaysOff;
 			IList<IScheduleDay> current;
-			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
+			var ret = _target.HasCorrectNumberOfDaysOff(_dictionary, _virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.False);
 			Assert.That(targetDaysOff,Is.EqualTo(5));
 			Assert.That(current.Count,Is.EqualTo(3));
@@ -130,7 +125,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(contract.PositiveDayOffTolerance).Return(1);
 
 			Expect.Call(_virtualSchedulePeriod.Person).Return(_person);
-            Expect.Call(_stateHolder.Schedules).Return(_dictionary);
 			Expect.Call(_dictionary[_person]).Return(_range);
 			Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 			Expect.Call(_range.ScheduledDayCollection(_dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay, _scheduleDay, _scheduleDay, _scheduleDay });
@@ -140,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.ReplayAll();
 			int targetDaysOff;
 			IList<IScheduleDay> current;
-			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
+			var ret = _target.HasCorrectNumberOfDaysOff(_dictionary, _virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.False);
 			Assert.That(targetDaysOff, Is.EqualTo(2));
 			Assert.That(current.Count, Is.EqualTo(4));
@@ -159,7 +153,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(contract.PositiveDayOffTolerance).Return(1);
 
 			Expect.Call(_virtualSchedulePeriod.Person).Return(_person);
-            Expect.Call(_stateHolder.Schedules).Return(_dictionary);
 			Expect.Call(_dictionary[_person]).Return(_range);
 			Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 			Expect.Call(_range.ScheduledDayCollection(_dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay, _scheduleDay, _scheduleDay });
@@ -169,7 +162,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_mocks.ReplayAll();
 			int targetDaysOff;
 			IList<IScheduleDay> current;
-			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
+			var ret = _target.HasCorrectNumberOfDaysOff(_dictionary, _virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.True);
 			Assert.That(targetDaysOff, Is.EqualTo(3));
 			Assert.That(current.Count, Is.EqualTo(3));
@@ -192,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                ret = _target.OutsideOrAtMinimumTargetDaysOff(_virtualSchedulePeriod);
+                ret = _target.OutsideOrAtMinimumTargetDaysOff(_dictionary, _virtualSchedulePeriod);
             }
 
             Assert.IsFalse(ret);
@@ -213,7 +206,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(contract.NegativeDayOffTolerance).Return(1);
 
                 Expect.Call(_virtualSchedulePeriod.Person).Return(_person);
-                Expect.Call(_stateHolder.Schedules).Return(_dictionary);
                 Expect.Call(_dictionary[_person]).Return(_range);
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
                 Expect.Call(_range.ScheduledDayCollection(_dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay, _scheduleDay });
@@ -225,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                ret = _target.OutsideOrAtMinimumTargetDaysOff(_virtualSchedulePeriod);
+                ret = _target.OutsideOrAtMinimumTargetDaysOff(_dictionary, _virtualSchedulePeriod);
             }
 
             Assert.IsTrue(ret);
@@ -246,7 +238,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(contract.NegativeDayOffTolerance).Return(1);
 
                 Expect.Call(_virtualSchedulePeriod.Person).Return(_person);
-                Expect.Call(_stateHolder.Schedules).Return(_dictionary);
                 Expect.Call(_dictionary[_person]).Return(_range);
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
                 Expect.Call(_range.ScheduledDayCollection(_dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay});
@@ -258,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                ret = _target.OutsideOrAtMinimumTargetDaysOff(_virtualSchedulePeriod);
+                ret = _target.OutsideOrAtMinimumTargetDaysOff(_dictionary, _virtualSchedulePeriod);
             }
 
             Assert.IsTrue(ret);
@@ -279,7 +270,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(contract.NegativeDayOffTolerance).Return(1);
 
                 Expect.Call(_virtualSchedulePeriod.Person).Return(_person);
-                Expect.Call(_stateHolder.Schedules).Return(_dictionary);
                 Expect.Call(_dictionary[_person]).Return(_range);
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
                 Expect.Call(_range.ScheduledDayCollection(_dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay, _scheduleDay, _scheduleDay });
@@ -291,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                ret = _target.OutsideOrAtMinimumTargetDaysOff(_virtualSchedulePeriod);
+                ret = _target.OutsideOrAtMinimumTargetDaysOff(_dictionary, _virtualSchedulePeriod);
             }
 
             Assert.IsFalse(ret);
@@ -314,7 +304,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                ret = _target.OutsideOrAtMaximumTargetDaysOff(_virtualSchedulePeriod);
+                ret = _target.OutsideOrAtMaximumTargetDaysOff(_dictionary, _virtualSchedulePeriod);
             }
 
             Assert.IsFalse(ret);
@@ -335,7 +325,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(contract.PositiveDayOffTolerance).Return(1);
 
                 Expect.Call(_virtualSchedulePeriod.Person).Return(_person);
-                Expect.Call(_stateHolder.Schedules).Return(_dictionary);
                 Expect.Call(_dictionary[_person]).Return(_range);
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
                 Expect.Call(_range.ScheduledDayCollection(_dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay, _scheduleDay, _scheduleDay, _scheduleDay });
@@ -347,7 +336,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                ret = _target.OutsideOrAtMaximumTargetDaysOff(_virtualSchedulePeriod);
+                ret = _target.OutsideOrAtMaximumTargetDaysOff(_dictionary, _virtualSchedulePeriod);
             }
 
             Assert.IsTrue(ret);
@@ -368,7 +357,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(contract.PositiveDayOffTolerance).Return(1);
 
                 Expect.Call(_virtualSchedulePeriod.Person).Return(_person);
-                Expect.Call(_stateHolder.Schedules).Return(_dictionary);
                 Expect.Call(_dictionary[_person]).Return(_range);
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
                 Expect.Call(_range.ScheduledDayCollection(_dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay, _scheduleDay, _scheduleDay, _scheduleDay, _scheduleDay });
@@ -380,7 +368,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                ret = _target.OutsideOrAtMaximumTargetDaysOff(_virtualSchedulePeriod);
+                ret = _target.OutsideOrAtMaximumTargetDaysOff(_dictionary, _virtualSchedulePeriod);
             }
 
             Assert.IsTrue(ret);
@@ -401,7 +389,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(contract.PositiveDayOffTolerance).Return(1);
 
                 Expect.Call(_virtualSchedulePeriod.Person).Return(_person);
-                Expect.Call(_stateHolder.Schedules).Return(_dictionary);
                 Expect.Call(_dictionary[_person]).Return(_range);
                 Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
                 Expect.Call(_range.ScheduledDayCollection(_dateOnlyPeriod)).Return(new List<IScheduleDay> { _scheduleDay, _scheduleDay, _scheduleDay });
@@ -413,7 +400,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
             using (_mocks.Playback())
             {
-                ret = _target.OutsideOrAtMaximumTargetDaysOff(_virtualSchedulePeriod);
+                ret = _target.OutsideOrAtMaximumTargetDaysOff(_dictionary, _virtualSchedulePeriod);
             }
 
             Assert.IsFalse(ret);

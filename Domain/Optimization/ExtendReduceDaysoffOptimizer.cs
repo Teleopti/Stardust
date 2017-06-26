@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private readonly IScheduleMatrixPro _matrix;
+		private readonly IScheduleDictionary _scheduleDictionary;
 
 		public ExtendReduceDaysOffOptimizer(
 			IPeriodValueCalculator periodValueCalculator,
@@ -58,7 +59,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationLimits optimizationLimits,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
-			IScheduleMatrixPro matrix
+			IScheduleMatrixPro matrix, 
+			IScheduleDictionary scheduleDictionary
 			)
 		{
 			_periodValueCalculator = periodValueCalculator;
@@ -82,6 +84,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
 			_matrix = matrix;
+			_scheduleDictionary = scheduleDictionary;
 		}
 
 		public bool Execute()
@@ -95,7 +98,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var schedulePeriod = _matrix.SchedulePeriod;
 			int targetDaysoff;
 			IList<IScheduleDay> dayOffDays;
-			if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysoff, out dayOffDays))
+			if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_scheduleDictionary, schedulePeriod, out targetDaysoff, out dayOffDays))
 				return false;
 
 			bool success = false;
@@ -108,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 
-			if (daysToBeRescheduled.DayToLengthen.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(schedulePeriod))
+			if (daysToBeRescheduled.DayToLengthen.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMinimumTargetDaysOff(_scheduleDictionary, schedulePeriod))
 			{
 				var dayToLengthen = daysToBeRescheduled.DayToLengthen.Value;
 				var schedulePart = _matrix.GetScheduleDayByKey(dayToLengthen).DaySchedulePart();
@@ -127,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_matrix.LockDay(daysToBeRescheduled.DayToLengthen.Value);
 			}
 
-			if (daysToBeRescheduled.DayToShorten.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(schedulePeriod))
+			if (daysToBeRescheduled.DayToShorten.HasValue && !_dayOffsInPeriodCalculator.OutsideOrAtMaximumTargetDaysOff(_scheduleDictionary, schedulePeriod))
 			{
 				DateOnly dayToShorten = daysToBeRescheduled.DayToShorten.Value;
 				if (addDayOff(dayToShorten, true, schedulingOptions, _rollbackService))

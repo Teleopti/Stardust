@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,18 +9,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class DayOffsInPeriodCalculator : IDayOffsInPeriodCalculator
 	{
-	    private readonly Func<ISchedulingResultStateHolder> _resultStateHolder;
-	    
-		public DayOffsInPeriodCalculator(Func<ISchedulingResultStateHolder> resultStateHolder)
-		{
-		    _resultStateHolder = resultStateHolder;		    
-		}
-
-		public IList<IScheduleDay> CountDayOffsOnPeriod(IVirtualSchedulePeriod virtualSchedulePeriod)
+		public IList<IScheduleDay> CountDayOffsOnPeriod(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod)
 		{
 			IList<IScheduleDay> dayOffDays = new List<IScheduleDay>();
 
-			var range = _resultStateHolder().Schedules[virtualSchedulePeriod.Person];
+			var range = scheduleDictionary[virtualSchedulePeriod.Person];
 			foreach (var scheduleDay in range.ScheduledDayCollection(virtualSchedulePeriod.DateOnlyPeriod))
 			{
 				SchedulePartView significant = scheduleDay.SignificantPart();
@@ -32,7 +24,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return dayOffDays;
 		}
 
-		public bool HasCorrectNumberOfDaysOff(IVirtualSchedulePeriod virtualSchedulePeriod, out int targetDaysOff, out IList<IScheduleDay> dayOffsNow)
+		public bool HasCorrectNumberOfDaysOff(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod, out int targetDaysOff, out IList<IScheduleDay> dayOffsNow)
 		{
 			var contract = virtualSchedulePeriod.Contract;
 			var employmentType = contract.EmploymentType;
@@ -45,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 
 			targetDaysOff = virtualSchedulePeriod.DaysOff();
-			dayOffsNow = CountDayOffsOnPeriod(virtualSchedulePeriod);
+			dayOffsNow = CountDayOffsOnPeriod(scheduleDictionary, virtualSchedulePeriod);
 
 
 			if (dayOffsNow.Count >= targetDaysOff - contract.NegativeDayOffTolerance && dayOffsNow.Count <= targetDaysOff + contract.PositiveDayOffTolerance)
@@ -54,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			return false;
 		}
 
-        public bool OutsideOrAtMinimumTargetDaysOff(IVirtualSchedulePeriod virtualSchedulePeriod)
+        public bool OutsideOrAtMinimumTargetDaysOff(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod)
         {
             var contract = virtualSchedulePeriod.Contract;
             var employmentType = contract.EmploymentType;
@@ -65,12 +57,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
 
             int targetDaysOff = virtualSchedulePeriod.DaysOff();
-            IList<IScheduleDay> dayOffsNow = CountDayOffsOnPeriod(virtualSchedulePeriod);
+            IList<IScheduleDay> dayOffsNow = CountDayOffsOnPeriod(scheduleDictionary, virtualSchedulePeriod);
 
             return (dayOffsNow.Count <= targetDaysOff - contract.NegativeDayOffTolerance);
         }
 
-        public bool OutsideOrAtMaximumTargetDaysOff(IVirtualSchedulePeriod virtualSchedulePeriod)
+        public bool OutsideOrAtMaximumTargetDaysOff(IScheduleDictionary scheduleDictionary, IVirtualSchedulePeriod virtualSchedulePeriod)
         {
             var contract = virtualSchedulePeriod.Contract;
             var employmentType = contract.EmploymentType;
@@ -81,7 +73,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
 
             int targetDaysOff = virtualSchedulePeriod.DaysOff();
-            IList<IScheduleDay> dayOffsNow = CountDayOffsOnPeriod(virtualSchedulePeriod);
+            IList<IScheduleDay> dayOffsNow = CountDayOffsOnPeriod(scheduleDictionary, virtualSchedulePeriod);
 
             return (dayOffsNow.Count >= targetDaysOff + contract.PositiveDayOffTolerance);
         }

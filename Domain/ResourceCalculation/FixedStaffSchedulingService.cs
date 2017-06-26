@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			int targetDaysOff;
 			IList<IScheduleDay> dayOffsNow;
-			var result = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out dayOffsNow);
+			var result = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulingResultStateHolder().Schedules, schedulePeriod, out targetDaysOff, out dayOffsNow);
 
 			if (!result)
 				AddFinderResult(schedulePeriod.Person, dateOnly,
