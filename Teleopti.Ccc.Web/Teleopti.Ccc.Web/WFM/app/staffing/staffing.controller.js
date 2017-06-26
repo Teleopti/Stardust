@@ -19,17 +19,15 @@
 		vm.addOvertime = addOvertime;
 		vm.hasSuggestionData = false;
 		vm.hasRequestedSuggestion = false;
-		vm.draggable = false;
-		vm.triggerResourceCalc = triggerResourceCalc;
 		vm.timeSerie = [];
 		vm.overTimeModels = [];
 		vm.selectedDate = new Date();
 		vm.options = { customClass: getDayClass };
-		vm.events = [];
 		vm.useShrinkage = false;
 		vm.useShrinkageForStaffing = useShrinkageForStaffing;
 		vm.generateChart = generateChart;
 
+		var events = [];
 		var allSkills = [];
 		var allSkillAreas = [];
 		var currentSkills;
@@ -41,15 +39,15 @@
 
 		getSkills();
 		getSkillAreas();
-		setPrepareDays();
+		prepareDays();
 
-		function setPrepareDays() {
+		function prepareDays() {
 			for (var i = 0; i < 14; i++) {
 				var newDate = new Date();
 				newDate.setDate(newDate.getDate() + i);
 				var insertData = angular.copy(sample);
 				insertData.date = newDate;
-				vm.events.push(insertData);
+				events.push(insertData);
 			}
 		}
 
@@ -58,10 +56,10 @@
 				mode = data.mode;
 			if (mode === 'day') {
 				var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
-				for (var i = 0; i < vm.events.length; i++) {
-					var currentDay = new Date(vm.events[i].date).setHours(0, 0, 0, 0);
+				for (var i = 0; i < events.length; i++) {
+					var currentDay = new Date(events[i].date).setHours(0, 0, 0, 0);
 					if (dayToCheck === currentDay) {
-						return vm.events[i].status;
+						return events[i].status;
 					}
 				}
 			}
@@ -114,9 +112,9 @@
 				}
 			});
 		}
+
 		function roundDataToOneDecimal(input) {
 			input = utilService.roundArrayContents(input, 1)
-
 			return input;
 		}
 
@@ -245,7 +243,6 @@
                     vm.staffingDataAvailable = true;    
 					vm.overTimeModels = response.OverTimeModels;
                    
-                    console.log(response.OverTimeModels);
                     staffingData.scheduledStaffing = roundDataToOneDecimal(response.DataSeries.ScheduledStaffing);
                     staffingData.forcastedStaffing = roundDataToOneDecimal(response.DataSeries.ForecastedStaffing);
                     staffingData.absoluteDifference = response.DataSeries.AbsoluteDifference;
@@ -264,11 +261,6 @@
                 }
 			});
 
-		};
-
-		function triggerResourceCalc() {
-			staffingService.triggerResourceCalculate.get();
-			NoticeService.success('ResourceCalculation Triggered', 5000, true);
 		};
 
         function generateChartForView(data) {

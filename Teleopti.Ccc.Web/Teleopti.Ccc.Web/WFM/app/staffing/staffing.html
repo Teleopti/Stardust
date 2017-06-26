@@ -45,7 +45,7 @@
                         <input type="checkbox" id="check2" ng-checked="vm.useShrinkage" ng-click="vm.useShrinkageForStaffing()" />
                         <label for="check2">
                             <span class="wfm-checkbox-toggle"></span>
-                            <span class="wfm-checkbox-label">Use Shrinkage</span>
+                            <span class="wfm-checkbox-label">{{'UseShrinkage'| translate}}</span>
                         </label>
                     </div>
                 </div>
@@ -73,9 +73,9 @@
     </div>
     <div class="con-footer">
         <button class="wfm-btn" ng-class="vm.hasRequestedSuggestion ? 'wfm-btn-invis-disabled' : 'wfm-btn-invis-primary'" ng-disabled="vm.hasRequestedSuggestion"
-            ng-click="vm.suggestOvertime()">Get Suggestions for overtime</button>
+            ng-click="vm.suggestOvertime()">{{'GetSuggestionsForOvertime' | translate}}</button>
         <button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!vm.hasSuggestionData"
-            ng-click="vm.addOvertime()">Apply Suggestion</button>
+            ng-click="vm.addOvertime()">{{'ApplySuggestion' | translate}}</button>
     </div>
 </div>
 </div>

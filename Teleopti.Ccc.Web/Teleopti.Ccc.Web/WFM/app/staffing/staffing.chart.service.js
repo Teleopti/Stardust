@@ -139,8 +139,8 @@
             var staffing = {};
             staffing.over = [];
             staffing.under = [];
-            staffing.over.unshift('Overstaffing');
-            staffing.under.unshift('Understaffing');
+            staffing.over.unshift($translate.instant('Overstaffing'));
+            staffing.under.unshift($translate.instant('Understaffing'));
 
             for (var index = 0; index <= staffingData.absoluteDifference.length; index++) {
                 var value = staffingData.absoluteDifference[index];

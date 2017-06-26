@@ -2926,6 +2926,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply Suggestion.
+        /// </summary>
+        public static string ApplySuggestion {
+            get {
+                return ResourceManager.GetString("ApplySuggestion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply to.
         /// </summary>
         public static string ApplyTo {
@@ -12905,6 +12914,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string GetsShiftListToStartWith {
             get {
                 return ResourceManager.GetString("GetsShiftListToStartWith", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Get suggestions for Overtime.
+        /// </summary>
+        public static string GetSuggestionsForOvertime {
+            get {
+                return ResourceManager.GetString("GetSuggestionsForOvertime", resourceCulture);
             }
         }
         

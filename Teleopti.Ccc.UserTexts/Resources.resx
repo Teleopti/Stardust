@@ -16166,8 +16166,19 @@ Do you want to participate?</value>
     <value>Enable Overtime Probability</value>
     <comment>a check box in fat client workflow control ET/OT request tab</comment>
   </data>
+<<<<<<< dest
   <data name="Plans" xml:space="preserve">
     <value>Plans</value>
     <comment>Plans</comment>
   </data>
+=======
+  <data name="ApplySuggestion" xml:space="preserve">
+    <value>Apply Suggestion</value>
+    <comment>Apply the suggestion of overtime the server has recomended</comment>
+  </data>
+  <data name="GetSuggestionsForOvertime" xml:space="preserve">
+    <value>Get suggestions for Overtime</value>
+    <comment>Get suggestions for overtime to fix your understaffing</comment>
+  </data>
+>>>>>>> source
 </root>
