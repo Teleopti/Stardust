@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	public class SchedulingCommand : ICommandIdentifier
 	{

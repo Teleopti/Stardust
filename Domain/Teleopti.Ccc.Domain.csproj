@@ -270,10 +270,10 @@
     <Compile Include="Scheduling\FullSchedulingResult.cs" />
     <Compile Include="Scheduling\ICurrentSchedulingCallback.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleHourlyStaffExecutor.cs" />
-    <Compile Include="Scheduling\SchedulingCommand.cs" />
-    <Compile Include="Scheduling\SchedulingCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\SchedulingCommand.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\SchedulingCommandHandler.cs" />
     <Compile Include="Scheduling\SchedulingEventHandler.cs" />
-    <Compile Include="Scheduling\SchedulingWasOrdered.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\SchedulingWasOrdered.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopContext.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopSchedulingContext.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolderForDesktop.cs" />

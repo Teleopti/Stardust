@@ -1,6 +1,7 @@
 using System.Linq;
+using Teleopti.Ccc.Domain.Scheduling;
 
-namespace Teleopti.Ccc.Domain.Scheduling
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 {
 	public class SchedulingCommandHandler
 	{
