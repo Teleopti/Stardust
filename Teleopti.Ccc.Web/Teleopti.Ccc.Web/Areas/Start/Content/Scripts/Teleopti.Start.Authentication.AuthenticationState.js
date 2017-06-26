@@ -8,7 +8,6 @@
 
 	var gotoSignInView = Teleopti.Start.Authentication.Navigation.GotoSignIn;
 	var gotoBusinessUnitsView = Teleopti.Start.Authentication.Navigation.GotoBusinessUnits;
-	var toggleNewWeb = false;
 
 	this.AttemptGotoApplicationBySignIn = function (options) {
 		$.extend(options, {
@@ -177,8 +176,6 @@
 
 		$.extend(options, {
 			success: function (logonData, textState, jqXHR) {
-				toggleNewWeb = logonData.WfmTeamSchedule_MakeNewMyTeamDefault_39744;
-				
 				$.extend(options, {
 					success: function(applicationsData, textState, jqXHR) {
 						keepUrlAfterLogon(applicationsData, textState, jqXHR);
@@ -216,11 +213,8 @@
 		if (applicationsData.length > 1) {
 
 			tryToGoToHash(returnHash);
-			if (toggleNewWeb) {
-				tryToGoToWfm();
-			} else {
-				tryToGoToAnyWhere();
-			}
+
+			tryToGoToWfm();
 
 			tryToGoToFirstApplication();
 

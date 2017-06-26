@@ -64,7 +64,6 @@
 		WfmTeamSchedule_ShowShiftsForAgentsInDistantTimeZones_41305,
 
 		WfmTeamSchedule_MoveToBaseLicense_41039,
-		WfmTeamSchedule_MakeNewMyTeamDefault_39744,
 
 		WebByPassDefaultPermissionCheck_37984,
 

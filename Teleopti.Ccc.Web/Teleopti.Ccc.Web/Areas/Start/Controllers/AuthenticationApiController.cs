@@ -72,11 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				return errorMessage(Resources.TeleoptiProductActivationKeyException);
 			}
 
-			return Ok(new
-			{
-				WfmTeamSchedule_MakeNewMyTeamDefault_39744 =
-					_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_MakeNewMyTeamDefault_39744)
-			});
+			return Ok();
 		}
 
 		private IHttpActionResult errorMessage(string message)

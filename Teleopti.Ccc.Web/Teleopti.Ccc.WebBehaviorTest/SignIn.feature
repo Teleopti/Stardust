@@ -77,10 +77,3 @@ Scenario: Sign in without permission
 	And I am viewing the sign in page
 	When I sign in by user name
 	Then I should see a log on error 'InsufficientPermissionForWeb'
-@OnlyRunIfDisabled('WfmTeamSchedule_MakeNewMyTeamDefault_39744')
-Scenario: Sign in with a user with access to everything
-	Given I have the role 'Full access'
-	And I am viewing the sign in page
-	When I sign in by user name
-	Then I should be signed in
-
