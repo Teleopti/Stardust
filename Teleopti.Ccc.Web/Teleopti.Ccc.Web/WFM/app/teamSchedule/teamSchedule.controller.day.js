@@ -7,6 +7,7 @@
 		'$stateParams',
 		'$state',
 		'$mdSidenav',
+		'$mdComponentRegistry',
 		'TeamSchedule',
 		'GroupScheduleFactory',
 		'PersonSelection',
@@ -20,7 +21,7 @@
 		'teamsPermissions',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, teamsPermissions) {
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, teamsPermissions) {
 		var vm = this;
 
 		vm.isLoading = false;
@@ -127,7 +128,7 @@
 		}
 
 		function closeAllCommandSidenav() {
-			$mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
+			$mdComponentRegistry.get(commandContainerId) && $mdSidenav(commandContainerId).isOpen() && $mdSidenav(commandContainerId).close();
 		}
 
 		function closeSettingsSidenav() {
