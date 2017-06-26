@@ -17,19 +17,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
-		private readonly ISchedulingProgress _schedulingProgress;
 		private readonly FullSchedulingResult _fullSchedulingResult;
 
 		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, IFillSchedulerStateHolder fillSchedulerStateHolder,
-			Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, 
-			FullSchedulingResult fullSchedulingResult)
+			Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, FullSchedulingResult fullSchedulingResult)
 		{
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
 			_persister = persister;
-			_schedulingProgress = schedulingProgress;
 			_fullSchedulingResult = fullSchedulingResult;
 		}
 
@@ -90,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 
 		public FullSchedulingOLD(IScheduleExecutor scheduleExecutor, IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult) 
-			: base(null, fillSchedulerStateHolder, schedulerStateHolder, persister, schedulingProgress, fullSchedulingResult)
+			: base(null, fillSchedulerStateHolder, schedulerStateHolder, persister, fullSchedulingResult)
 		{
 			_scheduleExecutor = scheduleExecutor;
 			_schedulingProgress = schedulingProgress;
