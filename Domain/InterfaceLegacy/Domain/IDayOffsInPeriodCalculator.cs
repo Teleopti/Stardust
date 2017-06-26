@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
@@ -8,13 +7,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </summary>
 	public interface IDayOffsInPeriodCalculator
 	{
-		/// <summary>
-		/// Counts the day offs on period.
-		/// </summary>
-		/// <param name="virtualSchedulePeriod">The virtual schedule period.</param>
-		/// <returns></returns>
-		//int CountDayOffsOnPeriod(IVirtualSchedulePeriod virtualSchedulePeriod);
-		IList<IScheduleDay> CountDayOffsOnPeriod(IVirtualSchedulePeriod virtualSchedulePeriod);
 		/// <summary>
 		/// Determines whether [has correct number of days off] [the specified virtual schedule period].
 		/// </summary>
@@ -49,13 +41,5 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="scheduleMatrixPro"></param>
 		/// <returns></returns>
 		IList<IDayOffOnPeriod> WeekPeriodsSortedOnDayOff(IScheduleMatrixPro scheduleMatrixPro);
-
-		/// <summary>
-		/// Counts days off on given period
-		/// </summary>
-		/// <param name="scheduleMatrixPro"></param>
-		/// <param name="period"></param>
-		/// <returns></returns>
-		IDayOffOnPeriod CountDayOffsOnPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnlyPeriod period);
 	}
 }
