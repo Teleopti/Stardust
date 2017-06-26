@@ -143,12 +143,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var shiftCategoryBefore = new ShiftCategory("Before").WithId();
 			var shiftCategoryAfter = new ShiftCategory("After").WithId();
 			var scenario = new Scenario("_");
-			var activity = new Activity("_");
+			var activity = new Activity();
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, date.AddDays(1), 2);
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(14, 0, 14, 0, 15), new TimePeriodWithSegment(22, 0, 22, 0, 15), shiftCategoryAfter));
-			var selectedAgent = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc).WithId();
-			var agentNotInSelection = new Person().WithSchedulePeriodOneWeek(date).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc).WithId();
+			var selectedAgent = new Person().WithSchedulePeriodOneWeek(date, 2).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc).WithId();
+			var agentNotInSelection = new Person().WithSchedulePeriodOneWeek(date, 2).WithPersonPeriod(ruleSet, team, skill).InTimeZone(TimeZoneInfo.Utc).WithId();
 			selectedAgent.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 0 });
 			agentNotInSelection.SchedulePeriod(date).AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryBefore) { MaxNumberOf = 0 });
 			var stateholder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { selectedAgent, agentNotInSelection}, new[]

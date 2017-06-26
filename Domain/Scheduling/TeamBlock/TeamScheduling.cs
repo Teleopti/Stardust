@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -9,17 +10,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public class TeamScheduling
     {
 	    private readonly AssignScheduledLayers _assignScheduledLayers;
+	    private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 
-	    public TeamScheduling(AssignScheduledLayers assignScheduledLayers)
+	    public TeamScheduling(AssignScheduledLayers assignScheduledLayers, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator)
 	    {
 		    _assignScheduledLayers = assignScheduledLayers;
+		    _dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 	    }
 
 	    public bool ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 		    ShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, INewBusinessRuleCollection businessRules, SchedulingOptions schedulingOptions,
-				Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
+			IScheduleDictionary schedules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
 	    {
 		    var tempMatrixList =
 			    teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly)
@@ -29,7 +32,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    return false;
 
 		    var matrix = tempMatrixList.First();
-		    var scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
+
+			if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedules, matrix.SchedulePeriod, out int _, out IList<IScheduleDay> _))
+			{
+				return false;
+			}
+
+			var scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
 		    var scheduleDay = scheduleDayPro.DaySchedulePart();
 		    if (!matrix.UnlockedDays.Contains(scheduleDayPro))
 			    return false;

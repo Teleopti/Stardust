@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 			var shiftProjectionCacheBestFit = bestFit.ShiftProjection;
 
 			var rules = NewBusinessRuleCollection.AllForScheduling(_schedulingResultStateHolder());
-			_teamScheduling.ExecutePerDayPerPerson(person, dateOnly, teamBlock, shiftProjectionCacheBestFit, rollbackService, resourceCalculateDelayer, true, rules, schedulingOptions, null);
+			_teamScheduling.ExecutePerDayPerPerson(person, dateOnly, teamBlock, shiftProjectionCacheBestFit, rollbackService, resourceCalculateDelayer, true, rules, schedulingOptions, schedulingResultStateHolder.Schedules, null);
 
 			daySchedule = totalScheduleRange.ScheduledDay(dateOnly);
 			if (!daySchedule.IsScheduled())

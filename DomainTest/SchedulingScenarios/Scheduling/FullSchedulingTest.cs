@@ -157,7 +157,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("44805")]
 		public void ShouldRespectTargetDayOffs()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
@@ -168,7 +167,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var scenario = ScenarioRepository.Has("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
-			var agent = PersonRepository.Has(new ContractWithMaximumTolerance(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
+			var contractAcceptingEverythingButDayOffBreaking = new ContractWithMaximumTolerance { NegativeDayOffTolerance = 0,  PositiveDayOffTolerance = 0};
+			var agent = PersonRepository.Has(contractAcceptingEverythingButDayOffBreaking, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
 			agent.SchedulePeriod(firstDay).SetDaysOff(2);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			for (var day = 0; day < 3; day++)
