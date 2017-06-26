@@ -4,7 +4,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 {
 	public class ForecastExportIntervalModel
 	{
-		public DateTime ForecastDate { get; set; }
 		public DateTime IntervalStart { get; set; }
 		public double Calls { get; set; }
 		public double AverageTalkTime { get; set; }

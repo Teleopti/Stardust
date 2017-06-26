@@ -8,5 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public DateTime ForecastEnd { get; set; }
 		public Guid ScenarioId { get; set; }
 		public Guid SkillId { get; set; }
+		public Guid WorkloadId { get; set; }
 	}
 }

@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Controllers
 		public virtual HttpResponseMessage Export(ExportForecastInput input)
 		{
 			var response = new HttpResponseMessage();
-			var dailyModels = _forecastExportModelCreator.Load(input.SkillId, new DateOnlyPeriod(new DateOnly(input.ForecastStart.Date), new DateOnly(input.ForecastEnd.Date)));
+			var dailyModels = _forecastExportModelCreator.Load(input.WorkloadId, new DateOnlyPeriod(new DateOnly(input.ForecastStart.Date), new DateOnly(input.ForecastEnd.Date)));
 			XSSFWorkbook workbook = new XSSFWorkbook();
 			CreateDailyForecastSheet(workbook, dailyModels);
 
