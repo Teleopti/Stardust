@@ -59,6 +59,15 @@ namespace ManagerTest
 		}
 
 		[Test]
+		public void ShouldNotSendJobWhenNoJobsInQueue()
+		{
+			NodeRepository.AddWorkerNode(_workerNode);
+			HttpSender.CallToWorkerNodes.Clear();
+			JobRepository.AssignJobToWorkerNode();
+			HttpSender.CallToWorkerNodes.Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldBeAbleToPersistNewJobQueueItem()
 		{
 			var jobQueueItem = new JobQueueItem
