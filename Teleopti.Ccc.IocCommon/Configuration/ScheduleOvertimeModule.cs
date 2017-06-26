@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ScheduleOvertimeService>();
-			builder.RegisterType<ScheduleOvertimeServiceWithoutStateholder>().As<IScheduleOvertimeServiceWithoutStateholder>();
+			builder.RegisterType<ScheduleOvertimeServiceWithoutStateholder>();
 			builder.RegisterType<ScheduleOvertimeWithoutStateHolder>().SingleInstance();
 			builder.RegisterType<CalculateBestOvertimeBeforeOrAfter>();
 			builder.RegisterType<OvertimePeriodValueMapper>().As<IOvertimePeriodValueMapper>();

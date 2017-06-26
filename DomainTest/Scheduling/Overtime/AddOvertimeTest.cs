@@ -51,9 +51,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<ScheduleOvertimeExecuteWrapper>().For<ScheduleOvertimeExecuteWrapper>();
-			system.UseTestDouble<ScheduleOvertimeServiceWithoutStateholder>().For<IScheduleOvertimeServiceWithoutStateholder>();
-			system.UseTestDouble<ScheduleOvertimeWithoutStateHolder>().For<ScheduleOvertimeWithoutStateHolder>();
 			system.UseTestDouble<GridlockManager>().For<IGridlockManager>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 			system.UseTestDouble<FakePersonForOvertimeProvider>().For<IPersonForOvertimeProvider>();

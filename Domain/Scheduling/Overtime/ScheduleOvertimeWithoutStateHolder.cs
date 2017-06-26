@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
 	public class ScheduleOvertimeWithoutStateHolder
 	{
-		private readonly IScheduleOvertimeServiceWithoutStateholder _scheduleOvertimeService;
+		private readonly ScheduleOvertimeServiceWithoutStateholder _scheduleOvertimeService;
 		private readonly IResourceCalculation _resourceCalculation;
 
-		public ScheduleOvertimeWithoutStateHolder(IScheduleOvertimeServiceWithoutStateholder scheduleOvertimeService, IResourceCalculation resourceCalculation)
+		public ScheduleOvertimeWithoutStateHolder(ScheduleOvertimeServiceWithoutStateholder scheduleOvertimeService, IResourceCalculation resourceCalculation)
 		{ 
 			_scheduleOvertimeService = scheduleOvertimeService;
 			_resourceCalculation = resourceCalculation;

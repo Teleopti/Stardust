@@ -11,13 +11,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 {
-	public interface IScheduleOvertimeServiceWithoutStateholder
-	{
-		DateTimePeriod? SchedulePersonOnDay(IScheduleRange scheduleRange, IOvertimePreferences overtimePreferences, DateOnly dateOnly,
-			IScheduleTagSetter scheduleTagSetter, ResourceCalculationData resourceCalculationData, Func<IDisposable> contextFunc, DateTimePeriod specifiedPeriod);
-	}
 
-	public class ScheduleOvertimeServiceWithoutStateholder : IScheduleOvertimeServiceWithoutStateholder
+	public class ScheduleOvertimeServiceWithoutStateholder
 	{
 		private readonly SchedulePartModifyAndRollbackServiceWithoutStateHolder _schedulePartModifyAndRollbackService;
 		private readonly IGridlockManager _gridlockManager;
