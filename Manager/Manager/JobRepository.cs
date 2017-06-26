@@ -104,7 +104,7 @@ namespace Stardust.Manager
 		{
 			try
 			{
-				managerLogger.Info("ssigning jobs to node");
+				managerLogger.Info("Assigning jobs to node");
 				List<Uri> allAliveWorkerNodesUri;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
@@ -372,13 +372,12 @@ namespace Stardust.Manager
 					{
 						sqlConnection.OpenWithRetry(_retryPolicy);
 						var jobQueueItem = _jobRepositoryCommandExecuter.AcquireJobQueueItem(sqlConnection);
-						managerLogger.Info("acquired job with id  " + jobQueueItem.JobId + " for node " +  availableNode.ToString() );
 						if (jobQueueItem == null)
 						{
 							sqlConnection.Close();
 							return;
 						}
-
+						managerLogger.Info("acquired job with id  " + jobQueueItem.JobId + " for node " + availableNode);
 						var builderHelper = new NodeUriBuilderHelper(availableNode);
 						var urijob = builderHelper.GetJobTemplateUri();
 						managerLogger.Info("posting the job to the node");
