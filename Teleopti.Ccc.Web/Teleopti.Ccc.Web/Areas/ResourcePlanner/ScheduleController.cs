@@ -6,7 +6,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebSchedules)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPlans)]
 	public class ScheduleController : ApiController
 	{
 		private readonly SchedulePlanningPeriodCommandHandler _schedulePlanningPeriodCommandHandler;

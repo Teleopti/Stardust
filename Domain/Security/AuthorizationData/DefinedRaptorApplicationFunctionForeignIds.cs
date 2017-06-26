@@ -138,7 +138,7 @@
 		public const string RealTimeAdherenceOverview = "0092";
 		public const string WebForecasts = "0121";
 		public const string WebPermissions = "0122";
-		public const string WebSchedules = "0123";
+		public const string WebPlans = "0123";
 		public const string WebPeople = "0124";
 		public const string WebRequests = "0126";
 		public const string WebModifySkill = "0125";

@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		private static readonly IEnumerable<AreaWithPermissionPath> wfmAreaWithPermissionPaths = new List<AreaWithPermissionPath>
 		{
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebForecasts, () => Resources.Forecasts, "forecasting"),
-			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebSchedules, () => Resources.OpenPlansPage, "resourceplanner", new Link {href = "api/ResourcePlanner/Filter", rel = "filters"}),
+			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPlans, () => Resources.OpenPlansPage, "resourceplanner", new Link {href = "api/ResourcePlanner/Filter", rel = "filters"}),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPermissions, () => Resources.OpenPermissionPage, "permissions"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.Outbound, () => Resources.Outbound, "outbound"),
 			new AreaWithPermissionPath(DefinedRaptorApplicationFunctionPaths.WebPeople, () => Resources.People, "people"),
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 
 		private bool isPathEnabled(string path)
 		{
-			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebSchedules))
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebPlans))
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_ResourcePlanner_32892);
 			}

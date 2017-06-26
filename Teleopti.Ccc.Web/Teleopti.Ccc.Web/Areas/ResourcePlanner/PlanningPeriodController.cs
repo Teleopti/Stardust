@@ -18,7 +18,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebSchedules,
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPlans,
 		DefinedRaptorApplicationFunctionPaths.SeatPlanner)]
 	public class PlanningPeriodController : ApiController
 	{

@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 					select f;
 			if (!AccessToResourcePlanner)
 				applicationFunctions = from f in applicationFunctions
-					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebSchedules
+					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebPlans
 					select f;
 			if (!AccessToPeople)
 				applicationFunctions = from f in applicationFunctions

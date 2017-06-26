@@ -7,7 +7,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebSchedules)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPlans)]
 	public class DayOffRulesController : ApiController
 	{
 		private readonly IFetchDayOffRulesModel _fetchDayOffRulesModel;

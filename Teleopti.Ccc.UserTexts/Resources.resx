@@ -16166,4 +16166,8 @@ Do you want to participate?</value>
     <value>Enable Overtime Probability</value>
     <comment>a check box in fat client workflow control ET/OT request tab</comment>
   </data>
+  <data name="Plans" xml:space="preserve">
+    <value>Plans</value>
+    <comment>Plans</comment>
+  </data>
 </root>

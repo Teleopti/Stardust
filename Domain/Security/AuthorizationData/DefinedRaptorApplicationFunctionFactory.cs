@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, "xxRealTimeAdherenceOverview", DefinedRaptorApplicationFunctionForeignIds.RealTimeAdherenceOverview);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebForecasts, "xxForecasts", DefinedRaptorApplicationFunctionForeignIds.WebForecasts);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPermissions, "xxPermissions", DefinedRaptorApplicationFunctionForeignIds.WebPermissions);
-			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebSchedules, "xxSchedules", DefinedRaptorApplicationFunctionForeignIds.WebSchedules);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPlans, "xxPlans", DefinedRaptorApplicationFunctionForeignIds.WebPlans);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebPeople, "xxPeople", DefinedRaptorApplicationFunctionForeignIds.WebPeople);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebRequests, "xxRequests", DefinedRaptorApplicationFunctionForeignIds.WebRequests);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.WebCancelRequest, "xxCancelRequest", DefinedRaptorApplicationFunctionForeignIds.WebCancelRequest);

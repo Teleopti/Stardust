@@ -23196,6 +23196,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plans.
+        /// </summary>
+        public static string Plans {
+            get {
+                return ResourceManager.GetString("Plans", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Plan Seats.
         /// </summary>
         public static string PlanSeats {
