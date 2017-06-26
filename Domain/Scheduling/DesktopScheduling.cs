@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -36,7 +38,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 			{
-				ExecuteScheduling(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod);
+				var fixedStaffPeople = selectedAgents.FixedStaffPeople(selectedPeriod);
+				ExecuteScheduling(schedulingCallback, schedulingOptions, backgroundWorker, fixedStaffPeople, selectedPeriod);
 			}
 			else
 			{

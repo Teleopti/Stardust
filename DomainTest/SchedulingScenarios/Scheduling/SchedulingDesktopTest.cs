@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 
 		[Test]
-		[Ignore("44819 - to be fixed")]
 		public void ShouldNotScheduleHourlyEmployeesWhenSchedulingFixedStaff()
 		{
 			var firstDay = new DateOnly(2017, 5, 15);

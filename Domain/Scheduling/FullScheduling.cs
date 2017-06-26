@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var command = new SchedulingCommand
 			{
-				AgentsToSchedule = stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period),
+				AgentsToSchedule = stateHolder.SchedulingResultState.PersonsInOrganization,
 				Period = period,
 				RunWeeklyRestSolver = false
 			};
