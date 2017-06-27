@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		protected virtual void SetupAndSchedule(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
 			var stateHolder = _schedulerStateHolder();
-			_fillSchedulerStateHolder.Fill(stateHolder, people, null, null, period);
+			_fillSchedulerStateHolder.Fill(stateHolder, people, null, period);
 			
 			if (stateHolder.Schedules.Any())
 			{

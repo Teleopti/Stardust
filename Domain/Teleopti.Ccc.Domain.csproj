@@ -281,6 +281,7 @@
     <Compile Include="Scheduling\WebLegacy\DesktopSchedulingContext.cs" />
     <Compile Include="Scheduling\WebLegacy\FillSchedulerStateHolderForDesktop.cs" />
     <Compile Include="Scheduling\WebLegacy\IDesktopContextData.cs" />
+    <Compile Include="Scheduling\WebLegacy\LockInfoForStateHolder.cs" />
     <Compile Include="Scheduling\WebLegacy\MoveSchedulesToOriginalStateHolderAfterIsland.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Validation\IScheduleValidator.cs" />

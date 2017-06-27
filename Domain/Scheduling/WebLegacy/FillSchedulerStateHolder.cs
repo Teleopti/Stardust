@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		}
 
 		[TestLog]
-		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, IGridlockManager gridLockManager, IEnumerable<LockInfo> locks, DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills = null)
+		public virtual void Fill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<Guid> agentsInIsland, LockInfoForStateHolder lockInfoForStateHolder, DateOnlyPeriod period, IEnumerable<Guid> onlyUseSkills = null)
 		{
 			PreFill(schedulerStateHolderTo, period);
 			var scenario = FetchScenario();
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			FillSchedules(schedulerStateHolderTo, scenario, schedulerStateHolderTo.SchedulingResultState.PersonsInOrganization, period);
 			removeUnwantedScheduleRanges(schedulerStateHolderTo);
 			PostFill(schedulerStateHolderTo, schedulerStateHolderTo.AllPermittedPersons, period);
-			setLocks(schedulerStateHolderTo, gridLockManager, locks);
+			setLocks(schedulerStateHolderTo, lockInfoForStateHolder);
 			schedulerStateHolderTo.ResetFilteredPersons();
 		}
 
@@ -44,17 +44,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			return skills.Concat(multisiteSkills);
 		}
 
-		private static void setLocks(ISchedulerStateHolder schedulerStateHolderTo, IGridlockManager gridlockManager, IEnumerable<LockInfo> locks)
+		private static void setLocks(ISchedulerStateHolder schedulerStateHolderTo, LockInfoForStateHolder lockInfoForStateHolder)
 		{
-			if (locks == null)
+			if (lockInfoForStateHolder == null)
 				return;
 
-			foreach (var lockInfo in locks)
+			foreach (var lockInfo in lockInfoForStateHolder.Locks)
 			{
 				var agent = schedulerStateHolderTo.AllPermittedPersons.SingleOrDefault(x => x.Id.Value == lockInfo.AgentId);
 				if (agent != null)
 				{
-					gridlockManager.AddLock(agent, lockInfo.Date, LockType.Normal);
+					lockInfoForStateHolder.GridlockManager.AddLock(agent, lockInfo.Date, LockType.Normal);
 				}
 			}
 		}

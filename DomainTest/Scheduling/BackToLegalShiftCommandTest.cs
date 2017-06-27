@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			AssignmentRepository.Has(agent1, scenario, phoneActivity, new ShiftCategory("_"), firstDay.AddDays(2),
 				new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(16)));
 
-			FillSchedulerStateHolder.Fill(SchedulerStateHolder(),null,null,null, period);
+			FillSchedulerStateHolder.Fill(SchedulerStateHolder(),null,null, period);
 			var scheduleDays = new List<IScheduleDay>
 			{
 				SchedulerStateHolder().Schedules[agent1].ScheduledDay(firstDay.AddDays(2))
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var dateTimePeriod = new DateTimePeriod(ass.Period.StartDateTime.AddHours(-1), ass.Period.StartDateTime);
 			ass.AddOvertimeActivity(phoneActivity,dateTimePeriod, definitionSet);
 
-			FillSchedulerStateHolder.Fill(SchedulerStateHolder(), null, null, null, period);
+			FillSchedulerStateHolder.Fill(SchedulerStateHolder(), null, null, period);
 			var scheduleDays = new List<IScheduleDay>
 			{
 				SchedulerStateHolder().Schedules[agent1].ScheduledDay(firstDay.AddDays(2))
@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			ass.AddActivity(otherActivity, dateTimePeriod);
 			ass.AddPersonalActivity(personalActivity,dateTimePeriod);
 
-			FillSchedulerStateHolder.Fill(SchedulerStateHolder(), null, null, null, period);
+			FillSchedulerStateHolder.Fill(SchedulerStateHolder(), null, null, period);
 			var scheduleDay = SchedulerStateHolder().Schedules[agent].ScheduledDay(thirdDay);
 			var scheduleDays = new List<IScheduleDay> { scheduleDay };
 

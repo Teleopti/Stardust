@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 			using (CommandScope.Create(@event))
 			{
-				_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsToSchedule, null, null, selectedPeriod);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsToSchedule, null, selectedPeriod);
 				//TODO: fix this
 				var fixThis = new NoSchedulingProgress();
 				_scheduleExecutor.Execute(_currentSchedulingCallback.Current(), _schedulingOptionsProvider.Fetch(), fixThis, schedulerStateHolder.AllPermittedPersons,
