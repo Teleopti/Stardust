@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
@@ -63,9 +62,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skillDay1 = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, openHour, false);
 			var skillDay2 = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date.AddDays(1), openHour, false);
-
+			
 			skillDay1.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.2));
-			skillDay2.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.2));
+			var day1ForecastedHours = skillDay1.ForecastedDistributedDemand.TotalHours;
+			var day1ForecastedHoursWithShrinkage = skillDay1.ForecastedDistributedDemandWithShrinkage.TotalHours;
+
 			SkillRepository.Has(skill);
 			WorkloadRepository.Add(skill.WorkloadCollection.First());
 			SkillDayRepository.Add(skillDay1);
@@ -83,8 +84,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			dailyModel1.AverageTalkTime.Should().Be.EqualTo(skillDay1.TotalAverageTaskTime.Seconds);
 			dailyModel1.AverageAfterCallWork.Should().Be.EqualTo(skillDay1.TotalAverageAfterTaskTime.Seconds);
 			dailyModel1.AverageHandleTime.Should().Be.EqualTo(dailyModel1.AverageTalkTime + dailyModel1.AverageAfterCallWork);
-			dailyModel1.ForecastedHours.Should().Be.EqualTo(skillDay1.ForecastedDistributedDemand.TotalHours);
-			dailyModel1.ForecastedHoursShrinkage.Should().Be.EqualTo(skillDay1.ForecastedDistributedDemandWithShrinkage.TotalHours);
+			dailyModel1.ForecastedHours.Should().Be.EqualTo(day1ForecastedHours);
+			dailyModel1.ForecastedHoursShrinkage.Should().Be.EqualTo(day1ForecastedHoursWithShrinkage);
 
 			dailyModel2.ForecastDate.Should().Be.EqualTo(skillDay2.CurrentDate.Date);
 			dailyModel2.OpenHours.Should().Be.EqualTo(openHour);
@@ -198,15 +199,32 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 				0
 			);
 		}
-
+		
 		[Test]
-		public void hej()
+		public void ShouldOnlyExportForGivenPeriod()
 		{
-			object aDate = DateTime.Today;
-			if (aDate is DateTime)
-			{
-				Debug.WriteLine("date");
-			}
+			var theDate = new DateOnly(2016, 8, 26);
+			var period = new DateOnlyPeriod(theDate, theDate);
+			var openHour = new TimePeriod(8, 0, 8, 30);
+			var skill = createSkill(minutesPerInterval, "skill", openHour, false, 0);
+			
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skillDay1 = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date.AddDays(-1), openHour, false);
+			var skillDay2 = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, openHour, false);
+			var skillDay3 = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date.AddDays(1), openHour, false);
+
+			SkillRepository.Has(skill);
+			WorkloadRepository.Add(skill.WorkloadCollection.First());
+			SkillDayRepository.Add(skillDay1);
+			SkillDayRepository.Add(skillDay2);
+			SkillDayRepository.Add(skillDay3);
+
+			var model = Target.Load(skill.WorkloadCollection.First().Id.Value, period);
+
+			model.DailyModelForecast.Count.Should().Be.EqualTo(1);
+			model.DailyModelForecast.First().ForecastDate.Should().Be.EqualTo(theDate.Date);
+			model.IntervalModelForecast.Any(x => x.IntervalStart.Date == theDate.Date).Should().Be.True();
+			model.IntervalModelForecast.Any(x => x.IntervalStart.Date != theDate.Date).Should().Be.False();
 		}
 
 		private void assertIntervalData(

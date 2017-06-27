@@ -28,7 +28,9 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 			var workload = _workloadRepository.Get(workloadId);
 			var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(period, new List<ISkill> { workload.Skill }, scenario);
 
-			var skillDays = skillDaysBySkills[workload.Skill].ToList();
+			var skillDays = skillDaysBySkills[workload.Skill]
+				.Where(skillDay => skillDay.CurrentDate >= period.StartDate && skillDay.CurrentDate <= period.EndDate)
+				.ToList();
 			return new ForecastExportModel
 			{
 				Header = ForecastExportHeaderModelCreator.Load(workload.Skill, skillDays, period),

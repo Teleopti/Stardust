@@ -27,19 +27,6 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 			}
 
 			return dailyModel;
-			//return new ForecastExportModel
-			//{
-			//	Header = new ForecastExportHeaderModel
-			//	{
-			//		Period = period,
-			//		SkillName = skill.Name,
-			//		SkillTimeZoneName = skill.TimeZone.DisplayName,
-			//		ServiceLevelPercent = skillDaysBySkills[skill].First().SkillDataPeriodCollection.First().ServiceLevelPercent,
-			//		ServiceLevelSeconds = skillDaysBySkills[skill].First().SkillDataPeriodCollection.First().ServiceLevelSeconds,
-			//		ShrinkagePercent = skillDaysBySkills[skill].First().SkillDataPeriodCollection.First().Shrinkage
-			//	},
-			//	DailyModelForecast = dailyModel
-			//};
 		}
 	}
 }

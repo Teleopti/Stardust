@@ -20,20 +20,43 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			var workbook = new XSSFWorkbook();
 			initializeCellStyles(workbook);
 
-			var dailySheet = workbook.CreateSheet("Daily");
-			sheetHeader(dailySheet, exportModel);
-			dailyDetailHeader(dailySheet);
-			dailyDetails(dailySheet, exportModel.DailyModelForecast);
-
-			var intervalSheet = workbook.CreateSheet("Interval");
-			sheetHeader(intervalSheet, exportModel);
-			intervalDetailHeader(intervalSheet);
-			intervalDetails(intervalSheet, exportModel.IntervalModelForecast);
-
+			createDailySheet(workbook, exportModel);
+			createIntervalSheet(workbook, exportModel);
+			
 			using (var exportData = new MemoryStream())
 			{
 				workbook.Write(exportData);
 				return exportData.ToArray();
+			}
+		}
+		private void createDailySheet(XSSFWorkbook workbook, ForecastExportModel exportModel)
+		{
+			var dailySheet = workbook.CreateSheet("Daily");
+			sheetHeader(dailySheet, exportModel);
+			dailyDetailHeader(dailySheet);
+			dailyDetails(dailySheet, exportModel.DailyModelForecast);
+			autoSizeColumns(dailySheet);
+		}
+
+		private void createIntervalSheet(XSSFWorkbook workbook, ForecastExportModel exportModel)
+		{
+			var intervalSheet = workbook.CreateSheet("Interval");
+			sheetHeader(intervalSheet, exportModel);
+			intervalDetailHeader(intervalSheet);
+			intervalDetails(intervalSheet, exportModel.IntervalModelForecast);
+			autoSizeColumns(intervalSheet);
+		}
+
+		private void autoSizeColumns(ISheet sheet)
+		{
+			var lastRowIndex = sheet.PhysicalNumberOfRows - 1;
+			var lastRow = sheet.GetRow(lastRowIndex);
+			var lastCellIndex = lastRow.PhysicalNumberOfCells - 1;
+			var lastColumnIndex = lastRow.GetCell(lastCellIndex).ColumnIndex;
+
+			for (int columnIndex = 0; columnIndex <= lastColumnIndex; columnIndex++)
+			{
+				sheet.AutoSizeColumn(columnIndex);
 			}
 		}
 
@@ -49,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			_cellStyleTwoDecimals.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.00");
 
 			_cellStyleTime= workbook.CreateCellStyle();
-			_cellStyleTime.DataFormat = HSSFDataFormat.GetBuiltinFormat("hh:mm");
+			_cellStyleTime.DataFormat = HSSFDataFormat.GetBuiltinFormat("h:mm");
 		}
 
 		private void sheetHeader(ISheet dailySheet, ForecastExportModel exportModel)
@@ -76,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			});
 			addRow(dailySheet, new[]
 			{
-				new CellData("Service Level %:"),
+				new CellData("Service Level:"),
 				exportModel.Header.ServiceLevelPercent.HasValue
 					? new CellData(exportModel.Header.ServiceLevelPercent.Value.Value, _cellStylePercentage)
 					: new CellData(string.Empty)
@@ -90,7 +113,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 			});
 			addRow(dailySheet, new[]
 			{
-				new CellData("Shrinkage %:"),
+				new CellData("Shrinkage:"),
 				exportModel.Header.ShrinkagePercent.HasValue
 					? new CellData(exportModel.Header.ShrinkagePercent.Value.Value, _cellStylePercentage)
 					: new CellData(string.Empty)
