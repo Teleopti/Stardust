@@ -5,7 +5,11 @@
 ::=======================
 ::Get path to this batchfile
 SET ROOTDIR=%~dp0
-set msbuild="%PROGRAMFILES(X86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\amd64\MSBuild.exe"
+IF EXIST "%PROGRAMFILES(X86)%\Microsoft Visual Studio\2017\Enterprise"(set msbuild="%PROGRAMFILES(X86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\amd64\MSBuild.exe" 
+) ELSE (
+	set msbuild="%PROGRAMFILES(X86)%\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\amd64\MSBuild.exe"
+)
+
 SET /A CROSSDB=0
 SET /A ISCCC7=0
 SET TRUNK=-T
