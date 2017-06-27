@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			var dateOnly = new DateOnly(2016, 4, 11);
 			var weekPeriod = new DateOnlyPeriod(dateOnly, dateOnly.AddDays(6));
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(weekPeriod.Inflate(1), TimeZoneInfoFactory.StockholmTimeZoneInfo());
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
 
 			var phoneActivity = new Activity("_")
 			{

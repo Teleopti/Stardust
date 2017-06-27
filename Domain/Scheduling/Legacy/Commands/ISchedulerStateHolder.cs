@@ -75,8 +75,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		IEnumerable<DateOnly> DaysToRecalculate { get; }
 
-		DateTimePeriod? LoadedPeriod { get; }
-
 		void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory,
 										 IPersonRequestCheckAuthorization authorization, int numberOfDaysToShowNonPendingRequests);
 

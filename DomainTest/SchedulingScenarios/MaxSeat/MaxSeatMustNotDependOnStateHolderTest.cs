@@ -433,11 +433,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 				get { throw new NotImplementedException(); }
 			}
 
-			public DateTimePeriod? LoadedPeriod
-			{
-				get { throw new NotImplementedException(); }
-			}
-
 			public void LoadPersonRequests(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory,
 				IPersonRequestCheckAuthorization authorization, int numberOfDaysToShowNonPendingRequests)
 			{

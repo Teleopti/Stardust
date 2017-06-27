@@ -2553,11 +2553,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 													  LanguageResourceHelper.Translate("XXLoadedColon") +
 													  " " + _schedulerState.SchedulingResultState.PersonsInOrganization.Count;
 			toolStripStatusLabelNumberOfAgents.Visible = true;
-			if (_schedulerState.LoadedPeriod != null)
-			{
-				var loadedPeriod = _schedulerState.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
-				setHeaderText(_schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate, _schedulerState.RequestedPeriod.DateOnlyPeriod.EndDate, loadedPeriod.StartDate, loadedPeriod.EndDate);
-			}
+
+			var loadedPeriod = _schedulerState.Schedules.Period.LoadedPeriod().ToDateOnlyPeriod(TeleoptiPrincipal.CurrentPrincipal.Regional.TimeZone);
+			setHeaderText(_schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate, _schedulerState.RequestedPeriod.DateOnlyPeriod.EndDate, loadedPeriod.StartDate, loadedPeriod.EndDate);
 
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler) && _loadRequsts)
 			{
@@ -5028,7 +5026,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 					IList<ISkillStaffPeriod> skillStaffPeriods =
 					stateHolder.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
-						stateHolder.SchedulingResultState.Skills, stateHolder.LoadedPeriod.Value);
+						stateHolder.SchedulingResultState.Skills, stateHolder.Schedules.Period.LoadedPeriod());
 
 				foreach (ISkillStaffPeriod period in skillStaffPeriods)
 				{
@@ -6423,7 +6421,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			Cursor = Cursors.WaitCursor;
 			IList<ISkillStaffPeriod> skillStaffPeriods =
 				_schedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
-					_schedulerState.SchedulingResultState.Skills, _schedulerState.LoadedPeriod.Value);
+					_schedulerState.SchedulingResultState.Skills, _schedulerState.Schedules.Period.LoadedPeriod());
 			foreach (ISkillStaffPeriod period in skillStaffPeriods)
 			{
 				period.Payload.UseShrinkage = useShrinkage;

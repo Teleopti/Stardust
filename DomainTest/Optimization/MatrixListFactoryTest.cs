@@ -33,8 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			SchedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 10, 12, 2015, 10, 25), TimeZoneInfo.Utc);
-			var loadedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 9, 1, 2015, 11, 30), TimeZoneInfo.Utc);
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(loadedPeriod.Period());
 			SchedulerStateHolder.FilterPersons(new[] { agent });
 			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
 
@@ -64,8 +62,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			SchedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 10, 12, 2015, 10, 25), TimeZoneInfo.Utc);
-			var loadedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 9, 1, 2015, 11, 30), TimeZoneInfo.Utc);
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(loadedPeriod.Period());
 			SchedulerStateHolder.FilterPersons(new[] { agent });
 			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
 
@@ -89,8 +85,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			SchedulerStateHolder.RequestedPeriod =
 				new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 10, 12, 2015, 10, 25), TimeZoneInfo.Utc);
-			var loadedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2015, 9, 1, 2015, 11, 30), TimeZoneInfo.Utc);
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(loadedPeriod.Period());
 			SchedulerStateHolder.FilterPersons(new[] { agent });
 			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent);
 
@@ -125,9 +119,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			agent2.AddSchedulePeriod(schedulePeriod2);
 
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2016, 1, 4, 2016, 2, 28), TimeZoneInfo.Utc);
-			var loadedPeriod = new DateOnlyPeriodAsDateTimePeriod(new DateOnlyPeriod(2016, 1, 4, 2016, 11, 23), TimeZoneInfo.Utc);
-
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(loadedPeriod.Period());
 			SchedulerStateHolder.FilterPersons(new[] { agent1, agent2 });
 			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent1);
 			SchedulerStateHolder.SchedulingResultState.PersonsInOrganization.Add(agent2);

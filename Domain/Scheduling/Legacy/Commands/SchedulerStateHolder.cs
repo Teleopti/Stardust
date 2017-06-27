@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ISchedulingResultStateHolder _schedulingResultState;
 		private readonly IList<IPerson> _allPermittedPersons;
 		private readonly ICollection<DateOnly> _daysToResourceCalculate = new HashSet<DateOnly>();
-		private DateTimePeriod? _loadedPeriod;
 		private IScenario _requestedScenario;
 		private readonly IList<IPersonRequest> _workingPersonRequests = new List<IPersonRequest>();
 		private ShiftTradeRequestStatusCheckerWithSchedule _shiftTradeRequestStatusChecker;
@@ -112,24 +111,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			}
 		}
 
-		/// <summary>
-		/// Gets the loaded schedule data period.
-		/// </summary>
-		/// <value>The loaded period.</value>
-		/// <remarks>
-		/// Created by: rogerkr
-		/// Created date: 2008-06-23
-		/// </remarks>
-		public DateTimePeriod? LoadedPeriod
-		{
-			get { return _loadedPeriod; }
-		}
-
-		public void SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(DateTimePeriod period)
-		{
-			_loadedPeriod = period;
-		}
-
 		public IDateOnlyPeriodAsDateTimePeriod RequestedPeriod { get; set; }
 
 
@@ -164,8 +145,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			SchedulingResultState.Schedules =
 				findSchedulesForPersons.FindSchedulesForPersons(period, RequestedScenario, personsProvider, scheduleDictionaryLoadOptions, AllPermittedPersons);
-
-			_loadedPeriod = period.LoadedPeriod();
 		}
 		
 		public void LoadSettings(IUnitOfWork unitOfWork, IRepositoryFactory repositoryFactory)

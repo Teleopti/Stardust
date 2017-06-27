@@ -30,7 +30,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var date = new DateOnly(2015, 10, 8);
 			var selectedPeriod = new DateOnlyPeriod(2015, 10, 7, 2015, 10, 9);
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneInfo.Utc);
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
@@ -60,7 +59,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var selectedPeriod = new DateOnlyPeriod(2015, 10, 7, 2015, 10, 9);
 
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneInfo.Utc);
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
@@ -92,7 +90,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var date = new DateOnly(2015, 10, 8);
 			var selectedPeriod = new DateOnlyPeriod(2015, 10, 7, 2015, 10, 9);
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneInfo.Utc);
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 
@@ -126,7 +123,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var selectedPeriod = new DateOnlyPeriod(2015, 10, 7, 2015, 10, 9);
 
 			SchedulerStateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneInfo.Utc);
-			SchedulerStateHolder.SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(SchedulerStateHolder.RequestedPeriod.Period());
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(SchedulerStateHolder.RequestedPeriod.Period(), new[] { agent }).VisiblePeriod);
 			SchedulerStateHolder.SchedulingResultState.Schedules = scheduleDictionary;
 

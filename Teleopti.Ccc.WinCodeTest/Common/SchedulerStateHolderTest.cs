@@ -77,11 +77,6 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.AreEqual(dtp.VisiblePeriod, target.RequestedPeriod.Period());
         }
 
-        [Test]
-        public void VerifyDefaultValueForLoadedPeriod()
-        {
-            Assert.IsNull(target.LoadedPeriod);
-        }
 
         [Test]
         public void ShouldBeAbleToSetTimeZoneInfo()
@@ -109,7 +104,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 target.LoadSchedules(scheduleStorage, personsProvider, scheduleDictionaryLoadOptions, scheduleDictionary.Period);
             }
             Assert.AreSame(scheduleDictionary, target.Schedules);
-            Assert.AreEqual(period.LoadedPeriod(), target.LoadedPeriod);
+            Assert.AreEqual(period.LoadedPeriod(), target.Schedules.Period.LoadedPeriod());
         }
 
         [Test]
