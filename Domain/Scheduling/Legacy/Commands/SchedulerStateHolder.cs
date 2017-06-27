@@ -379,10 +379,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		{
 			return _filteredAgents.Count != _allPermittedPersons.Count;
 		}
-
-		public void SetCommonStateHolder(ICommonStateHolder commonStateHolder)
-		{
-			_commonStateHolder = commonStateHolder;
-		}
 	}
 }
