@@ -232,7 +232,7 @@ describe('rtaOverviewComponent', function () {
 
   //IMPORTANT TEST!! FIX ME!
 
-  // fit('should not update teams adherence when sites are closed', function () {
+  // it('should not update teams adherence when sites are closed', function () {
   //   $fakeBackend
   //     .withSiteAdherence({
   //       Id: "londonGuid",
