@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var overtimeLayerLengthPeriodsUtc = _calculateBestOvertime.GetBestOvertimeInUtc(overtimeDuration, requestedPeriod, scheduleRange, dateOnly, minResolution
 												   , overtimePreferences.AvailableAgentsOnly, overtimeSkillIntervalDataAggregatedList);
 
+			if (!overtimeLayerLengthPeriodsUtc.Any()) return null;
+
 			var oldRmsValue = calculatePeriodValue(resourceCalculationData, skills);
 			var rules = setupRules(overtimePreferences);
 

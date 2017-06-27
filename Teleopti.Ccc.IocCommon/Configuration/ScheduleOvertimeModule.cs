@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<ScheduleOvertimeService>();
-			builder.RegisterType<ScheduleOvertimeServiceWithoutStateholder>();
-			builder.RegisterType<ScheduleOvertimeWithoutStateHolder>();
-			builder.RegisterType<CalculateBestOvertimeBeforeOrAfter>();
+			builder.RegisterType<ScheduleOvertimeServiceWithoutStateholder>().InstancePerLifetimeScope();
+			builder.RegisterType<ScheduleOvertimeWithoutStateHolder>().InstancePerLifetimeScope();
+			builder.RegisterType<CalculateBestOvertimeBeforeOrAfter>().InstancePerLifetimeScope();
 			builder.RegisterType<OvertimePeriodValueMapper>().As<IOvertimePeriodValueMapper>();
 			builder.RegisterType<OvertimeDateTimePeriodExtractor>().As<IOvertimeDateTimePeriodExtractor>();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_OvertimeNightShifts_44311))
@@ -31,13 +31,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<OvertimeRelativeDifferenceCalculatorOLD>().As<OvertimeRelativeDifferenceCalculator>().SingleInstance();
 			}
-			builder.RegisterType<AddOverTime>();
+			builder.RegisterType<AddOverTime>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonForOvertimeProvider>().As<IPersonForOvertimeProvider>().SingleInstance();
 			builder.RegisterType<PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider>().SingleInstance();
 			builder.RegisterType<PrimaryOrAllPersonSkillForNonOvertimeProvider>().SingleInstance();
 			builder.RegisterType<PrimaryGroupPersonSkillAggregator>().SingleInstance();
 			builder.RegisterType<PersonSkillsUseAllForScheduleDaysOvertimeProvider>().SingleInstance();
-			builder.RegisterType<ScheduleOvertimeExecuteWrapper>();
+			builder.RegisterType<ScheduleOvertimeExecuteWrapper>().InstancePerLifetimeScope();
 		}
 	}
 }
