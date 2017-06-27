@@ -19,23 +19,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	[TestFixture(typeof(FakeCancelSchedulingProgress), true, true)]
-	[TestFixture(typeof(FakeCancelSchedulingProgress), false, false)]
-	[TestFixture(typeof(FakeCancelSchedulingProgress), true, false)]
-	[TestFixture(typeof(FakeCloseSchedulingProgress), true, true)]
-	[TestFixture(typeof(FakeCloseSchedulingProgress), false, false)]
-	[TestFixture(typeof(FakeCloseSchedulingProgress), true, false)]
 	public class DoNotRunNightRestWhiteSpotDesktopTest : SchedulingScenario, ISetup
 	{
-		private readonly Type _schedulingProgressFake;
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public CountCallsToNightRestWhiteSpotSolverServiceFactory NightRestWhiteSpotSolverService;
 
 		[Test]
-		public void ShouldNotRunNightlyRestIfCancelled()
+		public void ShouldNotRunNightlyRestIfCancelled([Values(typeof(FakeCancelSchedulingProgress), typeof(FakeCloseSchedulingProgress))] Type shedulingProgressType)
 		{
-			var schedulingProgress = (ISchedulingProgress)Activator.CreateInstance(_schedulingProgressFake);
+			var schedulingProgress = (ISchedulingProgress)Activator.CreateInstance(shedulingProgressType);
 			var schedulingCallback = new CancelSchedulingCallback();
 			var schedulingOptions = new SchedulingOptions
 			{
@@ -56,15 +49,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(0);
 		}
 
-		public DoNotRunNightRestWhiteSpotDesktopTest(Type schedulingProgressFake, bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) 
+		public DoNotRunNightRestWhiteSpotDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) 
 			: base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
 		{
-			_schedulingProgressFake = schedulingProgressFake;
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDoubleForType(_schedulingProgressFake).For<ISchedulingProgress>();
 			system.UseTestDouble<CountCallsToNightRestWhiteSpotSolverServiceFactory>().For<INightRestWhiteSpotSolverServiceFactory>();
 		}
 	}
