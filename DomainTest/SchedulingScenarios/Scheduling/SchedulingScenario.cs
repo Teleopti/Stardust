@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			if(ResourcePlannerMergeTeamblockClassicScheduling44289)
 				toggleManager.Enable(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289);
 			if (_resourcePlannerSchedulingIslands44757)
-				Assert.Ignore("Need to fix a lot of tests first");
-				//toggleManager.Enable(Toggles.ResourcePlanner_SchedulingIslands_44757);
+				toggleManager.Enable(Toggles.ResourcePlanner_SchedulingIslands_44757);
 		}
 	}
 }
