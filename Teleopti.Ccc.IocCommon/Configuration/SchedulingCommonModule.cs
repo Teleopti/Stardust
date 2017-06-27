@@ -471,7 +471,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Args().IsFatClient)
 			{
 				builder.RegisterType<DesktopOptimizationContext>()
-					.As<ISynchronizeSchedulesAfterIsland>()
 					.As<IOptimizationPreferencesProvider>()
 					.As<IPeopleInOrganization>()
 					.As<ICurrentIntradayOptimizationCallback>()
@@ -487,6 +486,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<ISchedulingOptionsProvider>()
 					.As<ICurrentSchedulingCallback>()
 					.AsSelf()
+					.SingleInstance();
+				builder.RegisterType<MoveSchedulesToOriginalStateHolderAfterIsland>()
+					.As<ISynchronizeSchedulesAfterIsland>()
 					.SingleInstance();
 			}
 			else
