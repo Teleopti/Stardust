@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 					campaign.Skill.ChangeName(campaign.Name);
 				}
 
-				if (campaignViewModel.Activity.Id != null && oldCampaign.Skill.Activity.Id != campaignViewModel.Activity.Id)
+				if (campaignViewModel.Activity.Id == null || oldCampaign.Skill.Activity.Id != campaignViewModel.Activity.Id)
 				{
 					campaign.Skill.Activity = getActivity(campaignViewModel.Activity);
 				}
