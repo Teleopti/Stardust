@@ -112,6 +112,9 @@ md-progress-circular{
 md-tooltip{
 	z-index: 1010;
 }
+.md-tooltip {
+  height: auto  !important;
+}
 
 .align-bottom-flex {
 	align-self: flex-end;
@@ -139,6 +142,9 @@ md-tooltip{
 	margin: 0 auto;
 }
 
-.md-tooltip {
-  height: auto  !important;
+.list-dot {
+    float: none!important;
+		width: 25px;
+		text-align: center;
+		box-shadow: 0 0 0 0 transparent!important;
 }
