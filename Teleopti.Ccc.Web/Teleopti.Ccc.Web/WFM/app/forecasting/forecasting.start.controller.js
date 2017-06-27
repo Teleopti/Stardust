@@ -537,14 +537,16 @@
 							SkillId: workload.selectedWorkload.SkillParentId,
 							WorkloadId: workload.selectedWorkload.Id
 						}), function (data, status, headers, config) {
-							if (status !== 200) {
-								console.log(data, 'Export failed');
-							}
 							var blob = new Blob([data], {
 								type: headers['content-type']
 							});
-							var d = moment().format('L');
-							saveAs(blob, d + ".xlsx");
+							var fileName = workload.selectedWorkload.Name +
+								' ' +
+								moment(period.startDate).format('YYYY-MM-DD') +
+								' - ' +
+								moment(period.endDate).format('YYYY-MM-DD') +
+								'.xlsx';
+							saveAs(blob, fileName);
 							$scope.exportModal = false;
 						}, function (data, status, headers, config) { }
 					);

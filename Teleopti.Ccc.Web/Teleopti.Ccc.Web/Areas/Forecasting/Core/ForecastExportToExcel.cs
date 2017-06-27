@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				new CellData("Calls"),
 				new CellData("Average Talk time (s)"),
 				new CellData("Average ACW (s)"),
-				new CellData("Average AHT (s)"),
+				new CellData("AHT (s)"),
 				new CellData("Hours"),
 				new CellData("Hours with shrinkage"),
 			});
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Web.Areas.Forecasting.Core
 				new CellData("Calls"),
 				new CellData("Average Talk time (s)"),
 				new CellData("Average ACW (s)"),
-				new CellData("Average AHT (s)"),
+				new CellData("AHT (s)"),
 				new CellData("Agents"),
 				new CellData("Agents with shrinkage"),
 			});
