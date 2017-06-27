@@ -30,7 +30,9 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 		self.addShiftTradeRequestActive = ko.observable(false);
 		self.addShiftTradeBulletinBoardActive = ko.observable(false);
 		self.addPostShiftForTradeActive = ko.observable(false);
+		self.addOvertimeRequestActive = ko.observable(false);
 		self.menuIsVisible = ko.observable(false);
+		self.addOvertimeRequestEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_OvertimeRequest_44558');
 
 		self.enableMenu = function (blah, e) {
 			self.menuIsVisible(true);
@@ -86,12 +88,21 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
 		};
 
+		self.addOvertimeRequest = function () {
+			self.hideFab(true);
+			self.resetToolbarActiveButtons();
+			self.addOvertimeRequestActive(true);
+			Teleopti.MyTimeWeb.Request.RequestDetail.AddOvertimeRequest();
+			Teleopti.MyTimeWeb.Common.Layout.ActivatePlaceHolder();
+		};
+
 		self.resetToolbarActiveButtons = function () {
 			self.addTextRequestActive(false);
 			self.addAbsenceRequestActive(false);
 			self.addShiftTradeRequestActive(false);
 			self.addShiftTradeBulletinBoardActive(false);
 			self.addPostShiftForTradeActive(false);
+			self.addOvertimeRequestActive(false);
 		};
 	}
 

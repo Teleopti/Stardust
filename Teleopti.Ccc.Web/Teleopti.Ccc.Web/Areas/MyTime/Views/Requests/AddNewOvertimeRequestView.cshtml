@@ -1,0 +1,105 @@
+﻿@using Teleopti.Ccc.UserTexts
+@{
+	Layout = null;
+}
+
+<div class="request-add-container clearfix">
+	<div class="request-add-body">
+	<div class="posting-mask" data-bind="visible: IsPostingData">
+		<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Saving..." />
+	</div>
+	<div class="form-group">
+		<input type="text" class="request-new-subject form-control" placeholder="@Resources.Subject" data-bind="value: Subject" maxlength="80" />
+	</div>
+	<div class="form-group">
+		<textarea class="request-new-message form-control" placeholder="@Resources.Message" data-bind="value: Message, valueUpdate: 'afterkeydown', event:{change:checkMessageLength}" />
+	</div>
+
+		<div class="row form-group">
+			<div class="col-xs-6 col-sm-4 col-md-3">
+				<label>
+					Activity
+				</label>
+				<select class="request-new-absence request-absence input-sm form-control">
+					<option value="Phone">Phone</option>
+					<option value="Chat">Chat</option>
+					<option value="Email">Email</option>
+				</select>
+			</div>
+			
+			<div class="col-xs-6 col-sm-4 col-md-3">
+				<label>
+					Multiplicator definition set
+				</label>
+				<select class="request-new-absence request-absence input-sm form-control">
+					<option value="paid">Overtime paid</option>
+					<option value="time">Overtime time</option>
+				</select>
+			</div>
+		</div>
+
+	<div class="row form-group">
+		<div class="col-xs-6 col-sm-4 col-md-3 p-r-0">
+			<span class="input-group">
+				<![if (!IE)|(gt IE 8)]>
+					<input class="request-new-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
+				<![endif]>
+				<!--[if lte IE 8]>
+					<input class="request-new-datefrom input-sm form-control" readonly="readonly" data-bind="value: DateFrom().format(DateFormat())" type="text" />
+				<![endif]-->
+				<span class="input-group-btn">
+					<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+						<i class="glyphicon glyphicon-calendar"></i>
+					</button>
+				</span>
+			</span>
+		</div>
+		<div class="col-xs-6 col-sm-4 col-md-3">
+			<div class="bootstrap-timepicker">
+				<div class="input-group">
+					<input type="text" class="request-new-timefrom input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }" />
+					<span class="input-group-btn">
+						<button class="btn btn-sm right-align" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }">
+							<i class="glyphicon glyphicon-time"></i>
+						</button>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row form-group">
+		<div class="col-xs-6 col-sm-4 col-md-3 p-r-0">
+			<span class="input-group">
+				<![if (!IE)|(gt IE 8)]>
+					<input class="request-new-dateto input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() } " type="text" />
+				<![endif]>
+				<!--[if lte IE 8]>
+					<input class="request-new-dateto input-sm form-control" readonly="readonly" data-bind="value: DateTo().format(DateFormat())" type="text" />
+				<![endif]-->
+				<span class="input-group-btn">
+					<button class="btn btn-sm" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+						<i class="glyphicon glyphicon-calendar"></i>
+					</button>
+				</span>
+			</span>
+		</div>
+		<div class="col-xs-6 col-sm-4 col-md-3">
+			<div class="bootstrap-timepicker">
+				<div class="input-group">
+					<input type="text" class="request-new-timeto input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }" />
+					<span class="input-group-btn">
+						<button class="btn btn-sm right-align" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }">
+							<i class="glyphicon glyphicon-time"></i>
+						</button>
+					</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="request-new-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />
+	</div>
+	<div class="pull-right">
+		<button class="request-new-cancel btn" data-bind="click: $parent.CancelAddingNewRequest">@Resources.Cancel</button>
+		<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, enable: !IsPostingData()">@Resources.Save</button>
+	</div>
+</div>

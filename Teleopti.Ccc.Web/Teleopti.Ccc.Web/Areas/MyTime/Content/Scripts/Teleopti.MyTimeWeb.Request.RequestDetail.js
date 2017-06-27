@@ -234,6 +234,11 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		defaultDateTimes = object;
 	}
 
+	function _addOvertimeRequest() {
+		var overtimeRequestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel();
+		parentViewModel.requestViewModel(overtimeRequestViewModel);
+	}
+
 	return {
 		Init: function (ajaxobj) {
 			ajax = ajaxobj || new Teleopti.MyTimeWeb.Ajax();
@@ -264,6 +269,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		},
 		PrepareForViewModel: function (object) {
 			_prepareForViewModel(object);
+		},
+		AddOvertimeRequest: function() {
+			_addOvertimeRequest();
 		}
 	};
 })(jQuery);

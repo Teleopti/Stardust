@@ -21753,6 +21753,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overtime Request.
+        /// </summary>
+        public static string OvertimeRequest {
+            get {
+                return ResourceManager.GetString("OvertimeRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overview.
         /// </summary>
         public static string OverView {

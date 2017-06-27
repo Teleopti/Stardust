@@ -1393,6 +1393,7 @@
     <Content Include="Areas\MyTime\Content\Images\download-on-the-app-store.png" />
     <Content Include="Areas\MyTime\Content\Images\google-play-badge.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.js" />
     <Content Include="Areas\MyTime\Views\Static\appdownload.html" />
     <Content Include="Areas\MyTime\Content\Css\CiscoWidget.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileDayView.css" />
@@ -1519,6 +1520,7 @@
     <Content Include="Areas\MyTime\Views\Schedule\MobileDayPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
+    <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions-function-tree.html" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions-tree.html" />
@@ -2553,7 +2555,7 @@
     <Content Include="Areas\MyTime\Views\Requests\TextRequestDetailView.cshtml" />
     <Content Include="Areas\Start\Views\Shared\Error.cshtml" />
     <Content Include="Areas\MyTime\Views\Requests\AbsenceRequestDetailView.cshtml" />
-    <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
+    <Content Include="Areas\MyTime\Views\Requests\AddNewOvertimeRequestView.cshtml" />
     <Content Include="Areas\MyTime\Views\Preference\AddPreferencesPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Availability\AddStudentAvailabilityPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\Schedule\AddOvertimeAvailabilityPartial.cshtml" />
