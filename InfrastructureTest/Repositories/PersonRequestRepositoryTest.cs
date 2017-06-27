@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private Contract _contract;
 		private PartTimePercentage _partTimePercentage;
 		private IContractSchedule _contractSchedule;
+		
 
 		/// <summary>
 		/// Runs every test. Implemented by repository's concrete implementation.
@@ -197,6 +198,21 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return personRequests;
 		}
 
+
+		[Test]
+		public void CanCreateOvertimeRequest()
+		{
+			var period = new DateTimePeriod(2008, 04, 1, 2008, 07, 20);
+			var overtimeRequest = createOvertimeRequest(period);
+			PersistAndRemoveFromUnitOfWork(overtimeRequest);
+			
+			var foundRequests = new PersonRequestRepository(UnitOfWork).Find(_person, period);
+			Assert.AreEqual(1, foundRequests.Count);
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
+			Assert.IsTrue(foundRequests.Contains(overtimeRequest));
+		}
+
+		
 		[Test]
 		public void FindNonExistingShouldReturnNull()
 		{
@@ -1223,9 +1239,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				Period = new DateTimePeriod(now.AddMinutes(-5), now),
 				RequestFilters = new Dictionary<RequestFilterField, string>
-           {
+		   {
 					{ RequestFilterField.Type, $"0 {absence.Id}" }
-           }
+		   }
 			};
 
 			int count;
@@ -2147,5 +2163,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			requests.Count().Should().Be(1);
 			requests.FirstOrDefault().Person.Id.Should().Be(persons[0].Id);
 		}
+
+		private IPersonRequest createOvertimeRequest(DateTimePeriod period)
+		{
+			IPersonRequest request = new PersonRequest(_person);
+			var activity = new Activity("activity");
+			PersistAndRemoveFromUnitOfWork(activity);
+			request.Request = new OvertimeRequest(activity, OvertimeType.ExtraTime, period);
+			request.Pending();
+			return request;
+		}
+
 	}
 }

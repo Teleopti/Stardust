@@ -4193,6 +4193,10 @@ Accounts</value>
     <value>Absence</value>
     <comment>RequestTypeAbsence</comment>
   </data>
+  <data name="RequestTypeOvertime" xml:space="preserve">
+    <value>Overtime</value>
+    <comment>RequestTypeOvertime</comment>
+  </data>
   <data name="Seniority" xml:space="preserve">
     <value>Seniority</value>
     <comment>Seniority</comment>

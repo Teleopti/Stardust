@@ -25617,6 +25617,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overtime.
+        /// </summary>
+        public static string RequestTypeOvertime {
+            get {
+                return ResourceManager.GetString("RequestTypeOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift Trade.
         /// </summary>
         public static string RequestTypeShiftTrade {

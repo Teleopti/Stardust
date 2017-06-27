@@ -5,7 +5,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		TextRequest,
 		AbsenceRequest,
 		ShiftTradeRequest,
-		ShiftExchangeOffer
+		ShiftExchangeOffer,
+		OvertimeRequest
 	}
 
 	public enum RequestStatus
