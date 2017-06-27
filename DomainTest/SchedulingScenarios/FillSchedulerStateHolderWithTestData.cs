@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 			var stateHolder = stateHolderFunc();
 			stateHolder.SetRequestedScenario(scenario);
 			var dateTimePeriod = period.ToDateTimePeriod(timeZone);
-			stateHolder.SchedulingResultState.Schedules = ScheduleDictionaryCreator.WithData(scenario, period, persistableScheduleData);
+			stateHolder.SchedulingResultState.Schedules = ScheduleDictionaryCreator.WithData(scenario, agents, period, persistableScheduleData);
 			foreach (var agent in agents)
 			{
 				stateHolder.AllPermittedPersons.Add(agent);
