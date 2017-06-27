@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[TestFixture(true, false)]
 	[TestFixture(false, true)]
 	[TestFixture(false, false)]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	public abstract class SchedulingScenario : IConfigureToggleManager
 	{
 		protected readonly bool ResourcePlannerMergeTeamblockClassicScheduling44289;
