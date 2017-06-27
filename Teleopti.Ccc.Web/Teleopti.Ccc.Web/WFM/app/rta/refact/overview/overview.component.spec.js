@@ -297,36 +297,4 @@ describe('rtaOverviewComponent', function () {
   //   expect(ctrl.siteCards[1].teams[0].Color).toEqual("good");
   // });
 
-  // it('should go to agents for team', function () {
-  //   $fakeBackend
-  //     .withSiteAdherence({
-  //       Id: "londonGuid",
-  //       Name: "London",
-  //       AgentsCount: 11,
-  //       InAlarmCount: 5,
-  //       Color: "warning"
-  //     })
-  //     .withTeamAdherence({
-  //       SiteId: "londonGuid",
-  //       Id: "Green",
-  //       AgentsCount: 11,
-  //       InAlarmCount: 5,
-  //       Color: "warning"
-  //     });
-
-  //   spyOn($state, 'go');
-
-  //   vm = $controllerBuilder.createController().vm;
-  //   ctrl = $componentController('rtaOverviewComponent', null, {
-  //     siteCards: vm.siteCards
-  //   });
-  //   ctrl.siteCards[0].isOpen = true;
-  //   ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-  //   $httpBackend.flush();
-
-  //   expect($state.go).toHaveBeenCalledWith('rta.agents', {
-  //     teamIds: ['Green']
-  //   });
-  // });
-
 });

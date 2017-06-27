@@ -5,6 +5,7 @@ describe('RtaMainController', function () {
     $fakeBackend,
     $controllerBuilder,
     $state,
+    $interval,
     scope,
     vm;
 
@@ -26,8 +27,9 @@ describe('RtaMainController', function () {
     });
   });
 
-  beforeEach(inject(function (_$httpBackend_, _FakeRtaBackend_, _ControllerBuilder_) {
+  beforeEach(inject(function (_$httpBackend_, _$interval_, _FakeRtaBackend_, _ControllerBuilder_) {
     $httpBackend = _$httpBackend_;
+    $interval = _$interval_;
     $fakeBackend = _FakeRtaBackend_;
     $controllerBuilder = _ControllerBuilder_;
 
@@ -215,6 +217,14 @@ describe('RtaMainController', function () {
       expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
     });
 
+    it('should stop polling when page is about to destroy', function () {
+      $controllerBuilder.createController()
+        .wait(5000);
+
+      scope.$emit('$destroy');
+      $interval.flush(5000);
+      $httpBackend.verifyNoOutstandingRequest();
+    });
   });
 
 });

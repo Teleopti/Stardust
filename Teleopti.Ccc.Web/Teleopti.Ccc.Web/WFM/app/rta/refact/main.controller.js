@@ -5,9 +5,9 @@
 		.module('wfm.rta')
 		.controller('RtaMainController', RtaMainController);
 
-	RtaMainController.$inject = ['rtaService', '$state', '$stateParams', '$interval'];
+	RtaMainController.$inject = ['rtaService', '$state', '$stateParams', '$interval', '$scope'];
 
-	function RtaMainController(rtaService, $state, $stateParams, $interval) {
+	function RtaMainController(rtaService, $state, $stateParams, $interval, $scope) {
 		var vm = this;
 		vm.skillIds = $stateParams.skillIds || [];
 		$stateParams.open = ($stateParams.open || "false");
@@ -37,6 +37,8 @@
 		})();
 
 		(function OverviewComponentHandler() {
+			var sitePolling;
+
 			rtaService.getSiteCardsFor().then(function (result) {
 				vm.siteCards = buildSiteCards(result);
 			});
@@ -52,7 +54,7 @@
 				});
 			}
 
-			$interval(function () {
+			sitePolling = $interval(function () {
 				rtaService.getSiteCardsFor().then(function (result) {
 					result.forEach(function (r) {
 						updateSiteCard(r);
@@ -113,6 +115,15 @@
 					return '#fff';
 				}
 			}
+
+			$scope.$on('$destroy', function () {
+				if (intervals.length)
+					intervals.forEach(function (i) {
+						$interval.cancel(i.interval);
+					});
+
+				$interval.cancel(sitePolling);
+			});
 
 
 		})();
