@@ -58,6 +58,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		protected override void PreFill(ISchedulerStateHolder schedulerStateHolderTo, DateOnlyPeriod period)
 		{
 			schedulerStateHolderTo.SchedulingResultState.AllPersonAccounts = new Dictionary<IPerson, IPersonAccountCollection>();
+			var dayOffTemplate = _desktopContext.CurrentContext().SchedulerStateHolderFrom.CommonStateHolder.ActiveDayOffs.First();
+			schedulerStateHolderTo.CommonStateHolder.SetDayOffTemplate(dayOffTemplate);
 		}
 
 		protected override void PostFill(ISchedulerStateHolder schedulerStateHolderTo, IEnumerable<IPerson> agents, DateOnlyPeriod period)

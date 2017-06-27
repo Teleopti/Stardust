@@ -31,5 +31,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSets { get; }
 	    void LoadCommonStateHolderForResourceCalculationOnly(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork);
 
+	    void SetDayOffTemplate(IDayOffTemplate dayOffTemplate);
     }
 }

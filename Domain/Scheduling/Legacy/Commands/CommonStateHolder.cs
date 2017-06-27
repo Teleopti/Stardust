@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
             contractScheduleRepository.LoadAllAggregate();
         }
 
-	    public void SetDayOffTemplate_UseOnlyFromTest(DayOffTemplate dayOffTemplate)
+	    public void SetDayOffTemplate(IDayOffTemplate dayOffTemplate)
 	    {
 			_dayOffs.Clear();
 		    _dayOffs.Add(dayOffTemplate);

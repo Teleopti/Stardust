@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 
 			stateHolder.RequestedPeriod = new DateOnlyPeriodAsDateTimePeriod(period, timeZone);
 			((SchedulerStateHolder) stateHolder).SetLoadedPeriod_UseOnlyFromTest_ShouldProbablyBePutOnScheduleDictionaryInsteadIfNeededAtAll(dateTimePeriod);
-			((CommonStateHolder)stateHolder.CommonStateHolder).SetDayOffTemplate_UseOnlyFromTest(DayOffFactory.CreateDayOff());
+			stateHolder.CommonStateHolder.SetDayOffTemplate(DayOffFactory.CreateDayOff());
 			return stateHolder;
 		}
 
