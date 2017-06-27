@@ -326,7 +326,7 @@ End personal drop down menu
 	}
 }
 
-.navbar-nav .open .dropdown-menu {
+.navbar-offcanvas .navbar-nav .open .dropdown-menu {
 	top: 100%;
 	left: 0;
 	z-index: 1000;
@@ -345,6 +345,6 @@ End personal drop down menu
 	overflow-y: auto;
 }
 
-.dropdown-menu > li > a {
-	color: #ffffff;
-}
+.navbar-offcanvas .navbar-nav .open .dropdown-menu > li > a {
+		color: #ffffff;
+	}
