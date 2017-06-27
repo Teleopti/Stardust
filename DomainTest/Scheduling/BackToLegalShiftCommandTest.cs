@@ -14,13 +14,15 @@ using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
+namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	//TODO: before adding more tests here remove mess with mix of repos and stateholder
 	[DomainTest]
