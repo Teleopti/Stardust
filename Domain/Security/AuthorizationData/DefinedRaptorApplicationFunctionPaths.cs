@@ -135,6 +135,7 @@
 		public const string EditShiftCategory = "Raptor/Anywhere/Schedules/EditShiftCategory";
 		public const string MoveInvalidOverlappedActivity = "Raptor/Anywhere/Schedules/MoveInvalidOverlappedActivity";
 		public const string RemoveOvertime = "Raptor/Anywhere/Schedules/RemoveOvertime";
+		public const string MoveOvertime = "Raptor/Anywhere/Schedules/MoveOvertime";
 
 		// Angel
 		public const string WebForecasts = "Raptor/Anywhere/WebForecasts";

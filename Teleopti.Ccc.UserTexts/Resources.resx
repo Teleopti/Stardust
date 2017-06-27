@@ -16182,4 +16182,7 @@ Do you want to participate?</value>
     <value>Get suggestions for Overtime</value>
     <comment>Get suggestions for overtime to fix your understaffing</comment>
   </data>
+  <data name="MoveOvertime" xml:space="preserve">
+    <value>Move Overtime</value>
+  </data>
 </root>

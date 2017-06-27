@@ -17798,6 +17798,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Move Overtime.
+        /// </summary>
+        public static string MoveOvertime {
+            get {
+                return ResourceManager.GetString("MoveOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Move period one interval earlier.
         /// </summary>
         public static string MovePeriodOneIntervalEarlier {
