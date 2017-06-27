@@ -207,11 +207,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		    _businessUnit = businessUnit;
 	    }
 
-		public void SetRuleSetBags_UseFromTestOnly(IEnumerable<IRuleSetBag> ruleSetBags)
-		{
-			_ruleSetBagCollection = ruleSetBags.ToArray();
-		}
-
 		public IBusinessUnit BusinessUnit
         {
 	        get

@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat.TestData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
@@ -22,6 +23,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 	{
 		public MaxSeatOptimization Target;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
+		public FakeRuleSetBagRepository RuleSetBagRepository;
+
 
 		[Test]
 		public void ShouldChooseShiftForAllAgentsInTeam()
@@ -76,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var dateOnly = new DateOnly(2016, 10, 25);
 			var scenario = new Scenario("_");
 			var ruleSetBag = new RuleSetBag(new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 60), new TimePeriodWithSegment(17, 0, 17, 0, 60), new ShiftCategory("_").WithId()))) { Description = new Description("_")};
-			GroupScheduleGroupPageDataProvider.SetRuleSetBags_UseFromTestOnly(new[] {ruleSetBag});
+			RuleSetBagRepository.Add(ruleSetBag);
 			var agentScheduledForAnHourData = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team {Site = siteWithNoSeats}, ruleSetBag, scenario, activity, new TimePeriod(8, 0, 9, 0));
 			var agentWithAvailableSeats = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team { Site = siteWithSeats }, ruleSetBag, scenario, activity, new TimePeriod(8, 0, 16, 0));
 			var agentThatNeedsToBeMoved = MaxSeatDataFactory.CreateAgentWithAssignment(dateOnly, new Team { Site = siteWithNoSeats }, ruleSetBag, scenario, activity, new TimePeriod(8, 0, 16, 0));
