@@ -13,6 +13,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 
 namespace Teleopti.Ccc.WebTest.Core
 {
@@ -278,6 +279,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var bu = BusinessUnitFactory.CreateWithId("_");
 			CurrentBusinessUnit.FakeBusinessUnit(bu);
 			var team = TeamFactory.CreateTeamWithId("myteam");
+			TeamRepository.Add(team);
 			var anotherTeam = TeamFactory.CreateTeamWithId("another").WithId();
 			var site = SiteFactory.CreateSimpleSite("mysite").WithId();
 			site.AddTeam(team);
@@ -305,6 +307,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var bu = BusinessUnitFactory.CreateWithId("_");
 			CurrentBusinessUnit.FakeBusinessUnit(bu);
 			var team = TeamFactory.CreateTeamWithId("myteam");
+			TeamRepository.Add(team);
 			var site = SiteFactory.CreateSimpleSite("mysite").WithId();
 
 			var contract = ContractFactory.CreateContract("Contract");
@@ -340,6 +343,7 @@ namespace Teleopti.Ccc.WebTest.Core
 			var bu = BusinessUnitFactory.CreateWithId("_");
 			CurrentBusinessUnit.FakeBusinessUnit(bu);
 			var team = TeamFactory.CreateTeamWithId("myteam");
+			TeamRepository.Add(team);
 			var site = SiteFactory.CreateSimpleSite("mysite").WithId();
 
 			var contract = ContractFactory.CreateContract("Contract");
@@ -381,9 +385,13 @@ namespace Teleopti.Ccc.WebTest.Core
 			var site3 = SiteFactory.CreateSimpleSite("A").WithId();
 
 			var team1 = TeamFactory.CreateTeamWithId("teamD");
+			TeamRepository.Add(team1);
 			var team2 = TeamFactory.CreateTeamWithId("teamÄ");
+			TeamRepository.Add(team2);
 			var team3 = TeamFactory.CreateTeamWithId("teamA");
+			TeamRepository.Add(team3);
 			var team4 = TeamFactory.CreateTeamWithId("teamC");
+			TeamRepository.Add(team4);
 
 			site1.AddTeam(team1);
 			site2.AddTeam(team2);

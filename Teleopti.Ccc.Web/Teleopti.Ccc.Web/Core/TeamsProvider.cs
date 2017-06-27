@@ -17,18 +17,21 @@ namespace Teleopti.Ccc.Web.Core
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
+		private readonly ITeamRepository _teamRepository;
 
 		public TeamsProvider(ISiteRepository siteRepository,
 			ICurrentBusinessUnit currentBusinessUnit,
 			IPermissionProvider permissionProvider,
 			ILoggedOnUser loggedOnUser,
-			IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository)
+			IPersonSelectorReadOnlyRepository personSelectorReadOnlyRepository,
+			ITeamRepository teamRepository)
 		{
 			_siteRepository = siteRepository;
 			_currentBusinessUnit = currentBusinessUnit;
 			_permissionProvider = permissionProvider;
 			_loggedOnUser = loggedOnUser;
 			_personSelectorReadOnlyRepository = personSelectorReadOnlyRepository;
+			_teamRepository = teamRepository;
 		}
 
 		private IEnumerable<TeamViewModel> getTeamsForSite(ISite site)
@@ -159,14 +162,13 @@ namespace Teleopti.Ccc.Web.Core
 
 		private IEnumerable<Guid> hasPermission(DateOnly date, string functionPath, Guid? logonUserTeamId, params Guid[] teamIds)
 		{
-			foreach (var teamId in teamIds)
+			var teams = _teamRepository.FindTeams(teamIds);
+			foreach (var team in teams)
 			{
-				var team = new Team();
-				team.SetId(teamId);
 				if (_permissionProvider.HasTeamPermission(functionPath, date, team)
-					|| (logonUserTeamId.HasValue && teamId == logonUserTeamId.Value))
+					|| (logonUserTeamId.HasValue && team.Id == logonUserTeamId.Value))
 				{
-					yield return teamId;
+					yield return team.Id.Value;
 				}
 			}
 
