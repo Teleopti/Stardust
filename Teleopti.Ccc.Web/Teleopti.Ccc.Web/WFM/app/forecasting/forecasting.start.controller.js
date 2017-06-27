@@ -110,7 +110,7 @@
 						$scope.modalForecastingInfo.selectedWorkload = workload;
 						$scope.modalForecastingInfo.selectedScenario = workload.Scenario;
 					}
-					else{
+					else {
 						$scope.exportModal = false;
 					}
 					$scope.exportModal = true;
@@ -178,7 +178,7 @@
 					$scope.modalModifyInfo.selectedDaysText = buildSelectedDaysText();
 					$scope.modalModifyInfo.selectedDayCount = $scope.modifyDays.length;
 					$scope.modalModifyInfo.selectedDaySpan = selectedDaySpanString();
- 					$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
+					$scope.sumOfCallsForSelectedDaysWithCampaign = calculateCampaignCalls();
 					$scope.infos.overrideTasks = false;
 					$scope.infos.addCampaign = false;
 					$scope.infos.activeTaskInput = false;
@@ -186,7 +186,7 @@
 					$scope.infos.activeAcwInput = false;
 				};
 
-				var buildSelectedDaysText = function() {
+				var buildSelectedDaysText = function () {
 					if ($scope.modifyDays.length == 1) {
 						var singleDate = $filter('date')($scope.modifyDays[0].date, 'shortDate');
 						return $translate.instant('SelectedDayIs').replace('{0}', singleDate);
@@ -225,7 +225,7 @@
 					$scope.modalModifyLaunch = false;
 				};
 
-				$scope.formatSelectedDayCount = function(count) {
+				$scope.formatSelectedDayCount = function (count) {
 					return $scope.formatDayCount(count, true);
 				};
 
@@ -246,24 +246,24 @@
 					var resultEndDate = moment(resultStartDate).add(6, 'months');
 
 					forecastingService.result(JSON.stringify(
-					{
-						ForecastStart: resultStartDate.toDate(),
-						ForecastEnd: resultEndDate.toDate(),
-						WorkloadId: workload.Id,
-						ScenarioId: workload.Scenario.Id
-					}), function(data, status, headers, config) {
+						{
+							ForecastStart: resultStartDate.toDate(),
+							ForecastEnd: resultEndDate.toDate(),
+							WorkloadId: workload.Id,
+							ScenarioId: workload.Scenario.Id
+						}), function (data, status, headers, config) {
 
-						for (var i = 0; i < data.Days.length; i++) {
-							var day = data.Days[i];
-							day.date = new Date(Date.parse(day.date));
-						}
-						if (workload.Refresh)
-							workload.Refresh(data.Days);
-						workload.forecastResultLoaded = true;
-					}, function(data, status, headers, config) {
-						$scope.error = { message: "Failed to get forecast result." };
-						workload.forecastResultLoaded = true;
-					});
+							for (var i = 0; i < data.Days.length; i++) {
+								var day = data.Days[i];
+								day.date = new Date(Date.parse(day.date));
+							}
+							if (workload.Refresh)
+								workload.Refresh(data.Days);
+							workload.forecastResultLoaded = true;
+						}, function (data, status, headers, config) {
+							$scope.error = { message: "Failed to get forecast result." };
+							workload.forecastResultLoaded = true;
+						});
 				};
 
 				$scope.disableModify = function (count) {
@@ -273,7 +273,7 @@
 					return count == 0;
 				};
 
-				$scope.applyCampaign = function() {
+				$scope.applyCampaign = function () {
 					$scope.campaign($scope.modalModifyInfo.campaignPercentage);
 				};
 
@@ -293,31 +293,31 @@
 					workload.IsFailed = false;
 					forecastingService.campaign(
 						JSON.stringify(
-						{
-							Days: $scope.modifyDays,
-							WorkloadId: workload.Id,
-							ScenarioId: workload.Scenario.Id,
-							CampaignTasksPercent: value
-						}), function(data, status, headers, config) {
-							if (data.Success) {
-								workload.IsSuccess = true;
-							} else {
+							{
+								Days: $scope.modifyDays,
+								WorkloadId: workload.Id,
+								ScenarioId: workload.Scenario.Id,
+								CampaignTasksPercent: value
+							}), function (data, status, headers, config) {
+								if (data.Success) {
+									workload.IsSuccess = true;
+								} else {
+									workload.IsFailed = true;
+									workload.Message = data.Message;
+								}
+							}, function (data, status, headers, config) {
 								workload.IsFailed = true;
-								workload.Message = data.Message;
+								if (data)
+									workload.Message = data.Message;
+								else
+									workload.Message = "Failed";
+							}, function () {
+								workload.ShowProgress = false;
+								$scope.isForecastRunning = false;
+								if (workload.forecastResultLoaded) {
+									$scope.getForecastResult(workload);
+								}
 							}
-						}, function(data, status, headers, config) {
-							workload.IsFailed = true;
-							if (data)
-								workload.Message = data.Message;
-							else
-								workload.Message = "Failed";
-						}, function() {
-							workload.ShowProgress = false;
-							$scope.isForecastRunning = false;
-							if (workload.forecastResultLoaded) {
-								$scope.getForecastResult(workload);
-							}
-						}
 					);
 				};
 
@@ -343,20 +343,20 @@
 							ShouldSetOverrideTasks: $scope.modalModifyInfo.shouldSetOverrideTasks,
 							ShouldSetOverrideTalkTime: $scope.modalModifyInfo.shouldSetOverrideTalkTime,
 							ShouldSetOverrideAfterCallWork: $scope.modalModifyInfo.shouldSetOverrideAfterCallWork
-						}), function(data, status, headers, config) {
+						}), function (data, status, headers, config) {
 							if (data.Success) {
 								workload.IsSuccess = true;
 							} else {
 								workload.IsFailed = true;
 								workload.Message = data.Message;
 							}
-						}, function(data, status, headers, config) {
+						}, function (data, status, headers, config) {
 							workload.IsFailed = true;
 							if (data)
 								workload.Message = data.Message;
 							else
 								workload.Message = "Failed";
-						}, function() {
+						}, function () {
 							workload.ShowProgress = false;
 							$scope.isForecastRunning = false;
 							if (workload.forecastResultLoaded) {
@@ -366,7 +366,7 @@
 					);
 				};
 
-				$scope.clearOverride = function() {
+				$scope.clearOverride = function () {
 					if ($scope.disableClearOverride()) {
 						return;
 					}
@@ -385,20 +385,20 @@
 							ShouldSetOverrideTasks: true,
 							ShouldSetOverrideTalkTime: true,
 							ShouldSetOverrideAfterCallWork: true
-						}), function(data, status, headers, config) {
+						}), function (data, status, headers, config) {
 							if (data.Success) {
 								workload.IsSuccess = true;
 							} else {
 								workload.IsFailed = true;
 								workload.Message = data.Message;
 							}
-						}, function(data, status, headers, config) {
+						}, function (data, status, headers, config) {
 							workload.IsFailed = true;
 							if (data)
 								workload.Message = data.Message;
 							else
 								workload.Message = "Failed";
-						}, function() {
+						}, function () {
 							workload.ShowProgress = false;
 							$scope.isForecastRunning = false;
 							if (workload.forecastResultLoaded) {
@@ -415,7 +415,7 @@
 					cancelPoll();
 				});
 
-				var forecastWorkload = function(workload, finallyCallback, blockToken, isLastWorkload) {
+				var forecastWorkload = function (workload, finallyCallback, blockToken, isLastWorkload) {
 					workload.ShowProgress = true;
 					workload.IsSuccess = false;
 					workload.IsFailed = false;
@@ -427,36 +427,36 @@
 					}
 
 					forecastingService.forecast(JSON.stringify(
-					{
-						ForecastStart: $scope.query.period.startDate,
-						ForecastEnd: $scope.query.period.endDate,
-						Workloads: [workloadToSend],
-						ScenarioId: $scope.modalForecastingInfo.selectedScenario.Id,
-						BlockToken: blockToken,
-						IsLastWorkload: isLastWorkload
-					}), function(data, status, headers, config) {
-						if (data.Success) {
-							workload.IsSuccess = true;
-						} else {
+						{
+							ForecastStart: $scope.query.period.startDate,
+							ForecastEnd: $scope.query.period.endDate,
+							Workloads: [workloadToSend],
+							ScenarioId: $scope.modalForecastingInfo.selectedScenario.Id,
+							BlockToken: blockToken,
+							IsLastWorkload: isLastWorkload
+						}), function (data, status, headers, config) {
+							if (data.Success) {
+								workload.IsSuccess = true;
+							} else {
+								workload.IsFailed = true;
+								workload.Message = data.Message;
+							}
+							blockToken = data.BlockToken;
+						}, function (data, status, headers, config) {
 							workload.IsFailed = true;
-							workload.Message = data.Message;
-						}
-						blockToken = data.BlockToken;
-					}, function(data, status, headers, config) {
-						workload.IsFailed = true;
-						if (data)
-							workload.Message = data.Message;
-						else
-							workload.Message = "Failed";
-						blockToken = data.BlockToken;
-					}, function() {
-						workload.ShowProgress = false;
-						workload.Scenario = $scope.modalForecastingInfo.selectedScenario;
-						if (workload.forecastResultLoaded) {
-							$scope.getForecastResult(workload);
-						}
-						finallyCallback(blockToken);
-					});
+							if (data)
+								workload.Message = data.Message;
+							else
+								workload.Message = "Failed";
+							blockToken = data.BlockToken;
+						}, function () {
+							workload.ShowProgress = false;
+							workload.Scenario = $scope.modalForecastingInfo.selectedScenario;
+							if (workload.forecastResultLoaded) {
+								$scope.getForecastResult(workload);
+							}
+							finallyCallback(blockToken);
+						});
 				}
 
 				var forecastAllStartFromIndex = function (index, blockToken) {
@@ -496,32 +496,32 @@
 				};
 
 				$scope.disableApplyOverride = function () {
-				    var buttonArr = [], returnValue = false;
-				    if (!$scope.isForecastRunning) {
-				        if ($scope.modalModifyInfo.shouldSetOverrideTasks) {
-				            if ($scope.modalModifyInfo.overrideTasks != undefined) buttonArr.push(false);
-				            else buttonArr.push(true);
-				        }
-				        if ($scope.modalModifyInfo.shouldSetOverrideTalkTime) {
-				            if ($scope.modalModifyInfo.overrideTalkTime != undefined) buttonArr.push(false);
-				            else buttonArr.push(true);
-				        }
-				        if ($scope.modalModifyInfo.shouldSetOverrideAfterCallWork) {
-				            if ($scope.modalModifyInfo.overrideAcw != undefined) buttonArr.push(false);
-				            else buttonArr.push(true);
-				        }
+					var buttonArr = [], returnValue = false;
+					if (!$scope.isForecastRunning) {
+						if ($scope.modalModifyInfo.shouldSetOverrideTasks) {
+							if ($scope.modalModifyInfo.overrideTasks != undefined) buttonArr.push(false);
+							else buttonArr.push(true);
+						}
+						if ($scope.modalModifyInfo.shouldSetOverrideTalkTime) {
+							if ($scope.modalModifyInfo.overrideTalkTime != undefined) buttonArr.push(false);
+							else buttonArr.push(true);
+						}
+						if ($scope.modalModifyInfo.shouldSetOverrideAfterCallWork) {
+							if ($scope.modalModifyInfo.overrideAcw != undefined) buttonArr.push(false);
+							else buttonArr.push(true);
+						}
 
-				        buttonArr.forEach(function (item) {
-				            if (item) returnValue = true;
-				        });
-				        if (returnValue) return true;
+						buttonArr.forEach(function (item) {
+							if (item) returnValue = true;
+						});
+						if (returnValue) return true;
 
-				        return !$scope.modalModifyInfo.shouldSetOverrideTasks
-                            && !$scope.modalModifyInfo.shouldSetOverrideTalkTime
-                            && !$scope.modalModifyInfo.shouldSetOverrideAfterCallWork;
-				    } else {
-				        return true;
-				    }
+						return !$scope.modalModifyInfo.shouldSetOverrideTasks
+							&& !$scope.modalModifyInfo.shouldSetOverrideTalkTime
+							&& !$scope.modalModifyInfo.shouldSetOverrideAfterCallWork;
+					} else {
+						return true;
+					}
 				};
 
 				$scope.disableClearOverride = function () {
@@ -530,24 +530,24 @@
 
 				$scope.exportToFile = function (period, workload) {
 					forecastingService.exportForecast(JSON.stringify(
-					{
-						ForecastStart: period.startDate,
-						ForecastEnd: period.endDate,
-						ScenarioId: workload.selectedScenario.Id,
-						SkillId: workload.selectedWorkload.SkillParentId,
-						WorkloadId: workload.selectedWorkload.Id
-					}), function(data, status, headers, config) {
-						if (status !== 200) {
-							console.log(data, 'Export failed');
-						}
+						{
+							ForecastStart: period.startDate,
+							ForecastEnd: period.endDate,
+							ScenarioId: workload.selectedScenario.Id,
+							SkillId: workload.selectedWorkload.SkillParentId,
+							WorkloadId: workload.selectedWorkload.Id
+						}), function (data, status, headers, config) {
+							if (status !== 200) {
+								console.log(data, 'Export failed');
+							}
 							var blob = new Blob([data], {
 								type: headers['content-type']
 							});
 							var d = moment().format('L');
 							saveAs(blob, d + ".xlsx");
 							$scope.exportModal = false;
-					}, function(data, status, headers, config) {}
-				);
+						}, function (data, status, headers, config) { }
+					);
 				};
 
 				$scope.nextStepAdvanced = function (workload) {
