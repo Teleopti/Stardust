@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 		public LockInfoForStateHolder(IGridlockManager gridlockManager, IEnumerable<LockInfo> locks)
 		{
 			GridlockManager = gridlockManager;
-			Locks = locks;
+			Locks = locks ?? Enumerable.Empty<LockInfo>();
 		}
 
 		public IGridlockManager GridlockManager { get; }
