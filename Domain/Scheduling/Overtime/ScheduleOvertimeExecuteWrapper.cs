@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		public OvertimeWrapperModel Execute(IOvertimePreferences overtimePreferences, ISchedulingProgress schedulingProgress, IScheduleDictionary scheduleDictionary, IEnumerable<IPerson> agents, DateOnlyPeriod period,
 											DateTimePeriod requestedDateTimePeriod, IList<ISkill> skills, IList<ISkill> skillsToAddOvertime, DateTimePeriod fullDayPeriod)
 		{
-			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(fullDayPeriod).ToList();
+			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(fullDayPeriod.StartDateTime.AddDays(-2), fullDayPeriod.EndDateTime.AddDays(2))).ToList();
 			using (getContext(combinationResources, skills, false))
 			{
 				var skillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(skills, fullDayPeriod, false).ToList(); //shrinkage = false
