@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	[TestFixture(false, true)]
 	[TestFixture(false, false)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
+	[LoggedOnAppDomain]
 	public abstract class SchedulingScenario : IConfigureToggleManager
 	{
 		protected readonly bool ResourcePlannerMergeTeamblockClassicScheduling44289;
