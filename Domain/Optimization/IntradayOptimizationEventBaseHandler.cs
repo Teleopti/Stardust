@@ -15,19 +15,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IntradayOptimization _intradayOptimization;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
-		private readonly ISynchronizeIntradayOptimizationResult _synchronizeIntradayOptimizationResult;
+		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
 		private readonly IGridlockManager _gridlockManager;
 
 		protected IntradayOptimizationEventBaseHandler(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IFillSchedulerStateHolder fillSchedulerStateHolder,
-			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult,
+			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
 			IGridlockManager gridlockManager)
 		{
 			_intradayOptimization = intradayOptimization;
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
-			_synchronizeIntradayOptimizationResult = synchronizeIntradayOptimizationResult;
+			_synchronizeSchedulesAfterIsland = synchronizeSchedulesAfterIsland;
 			_gridlockManager = gridlockManager;
 		}
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 				DoOptimization(period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule);
-				_synchronizeIntradayOptimizationResult.Synchronize(_schedulerStateHolder().Schedules, period);
+				_synchronizeSchedulesAfterIsland.Synchronize(_schedulerStateHolder().Schedules, period);
 			}
 		}
 

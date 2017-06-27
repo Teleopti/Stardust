@@ -4,11 +4,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class PersistIntradayOptimizationResult : ISynchronizeIntradayOptimizationResult
+	public class PersistSchedulesAfterIsland : ISynchronizeSchedulesAfterIsland
 	{
 		private readonly IScheduleDictionaryPersister _scheduleDictionaryPersister;
 
-		public PersistIntradayOptimizationResult(IScheduleDictionaryPersister scheduleDictionaryPersister)
+		public PersistSchedulesAfterIsland(IScheduleDictionaryPersister scheduleDictionaryPersister)
 		{
 			_scheduleDictionaryPersister = scheduleDictionaryPersister;
 		}

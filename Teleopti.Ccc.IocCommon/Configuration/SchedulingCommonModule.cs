@@ -471,7 +471,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Args().IsFatClient)
 			{
 				builder.RegisterType<DesktopOptimizationContext>()
-					.As<ISynchronizeIntradayOptimizationResult>()
+					.As<ISynchronizeSchedulesAfterIsland>()
 					.As<IOptimizationPreferencesProvider>()
 					.As<IPeopleInOrganization>()
 					.As<ICurrentIntradayOptimizationCallback>()
@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			else
 			{
-				builder.RegisterType<PersistIntradayOptimizationResult>().As<ISynchronizeIntradayOptimizationResult>().SingleInstance();
+				builder.RegisterType<PersistSchedulesAfterIsland>().As<ISynchronizeSchedulesAfterIsland>().SingleInstance();
 				if (_configuration.Toggle(Toggles.ResourcePlanner_RunPerfTestAsTeam_43537))
 				{
 					builder.RegisterType<OptimizationPreferencesPerfTestProvider>().As<IOptimizationPreferencesProvider>().SingleInstance();

@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface ISynchronizeIntradayOptimizationResult
+	public interface ISynchronizeSchedulesAfterIsland
 	{
 		void Synchronize(IScheduleDictionary modifiedScheduleDictionary, DateOnlyPeriod period);
 	}

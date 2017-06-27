@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 {
-	public class DesktopOptimizationContext : ISynchronizeIntradayOptimizationResult, IOptimizationPreferencesProvider, IPeopleInOrganization, ICurrentIntradayOptimizationCallback
+	public class DesktopOptimizationContext : ISynchronizeSchedulesAfterIsland, IOptimizationPreferencesProvider, IPeopleInOrganization, ICurrentIntradayOptimizationCallback
 	{
 		private readonly DesktopContext _desktopContext;
 

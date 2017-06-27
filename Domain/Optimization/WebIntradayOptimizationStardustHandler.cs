@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public WebIntradayOptimizationStardustHandler(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
-			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult, IGridlockManager gridlockManager,
+			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager,
 			IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope)
-			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeIntradayOptimizationResult, gridlockManager)
+			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeSchedulesAfterIsland, gridlockManager)
 		{
 			_jobResultRepository = jobResultRepository;
 			_schedulingSourceScope = schedulingSourceScope;

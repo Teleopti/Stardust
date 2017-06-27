@@ -11,8 +11,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public IntradayOptimizationEventRunInSyncInFatClientProcessHandler(IntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
-			ISynchronizeIntradayOptimizationResult synchronizeIntradayOptimizationResult, IGridlockManager gridlockManager)
-			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeIntradayOptimizationResult,gridlockManager)
+			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager)
+			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeSchedulesAfterIsland,gridlockManager)
 		{
 		}
 
