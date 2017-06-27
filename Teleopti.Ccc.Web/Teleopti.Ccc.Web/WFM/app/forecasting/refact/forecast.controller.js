@@ -5,9 +5,9 @@
   .module('wfm.forecasting')
   .controller('ForecastRefactCtrl', ForecastCtrl);
 
-  ForecastCtrl.$inject = ['forecastingService', '$interval'];
+  ForecastCtrl.$inject = ['forecastingService', '$interval', '$state', '$stateParams'];
 
-  function ForecastCtrl(forecastingService, $interval) {
+  function ForecastCtrl(forecastingService, $interval, $state, $stateParams) {
     var vm = this;
     vm.forecastModal = false;
     vm.selectedDayCount = [];
@@ -37,7 +37,8 @@
     vm.getSkills = getSkills;
     vm.isForecastRunning = isForecastRunning;
     vm.getScenarios = getScenarios;
-    
+
+
     function init() {
       resetForecastPeriod();
       vm.isForecastRunning();
@@ -90,6 +91,7 @@
     }
 
     function getWorkloadForecastData(skill) {
+      console.log($state.current)
       vm.forecastModalObj = skill;
       vm.skillMaster.isForecastRunning = true;
       var wl = {

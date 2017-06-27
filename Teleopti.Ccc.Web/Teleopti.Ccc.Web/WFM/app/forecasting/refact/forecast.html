@@ -64,8 +64,25 @@
               </div>
             </div>
             <div class="con-footer">
-              <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal(false, true)">{{'ExportWorkload' | translate}}</button>
-              <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal(true, false)">{{'ForecastDo' | translate}}</button>
+              <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal(false, true)">
+                {{ 'Export' | translate }}
+                <md-tooltip>
+                  {{'ExportToFile'|translate}}
+                </md-tooltip>
+              </button>
+
+              <a ui-sref="modify({workloadId:skill.Workload.Id})" style="text-decoration:none;">
+                <button class="wfm-btn wfm-btn-invis-default" >
+                  {{ 'Modify' | translate }}
+                </button>
+              </a>
+
+              <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal(true, false)">
+                <md-tooltip>
+                  {{ 'GenerateForecastTip' | translate }}
+                </md-tooltip>
+                {{'ForecastDo' | translate}}
+              </button>
             </div>
           </div>
         </card-body>

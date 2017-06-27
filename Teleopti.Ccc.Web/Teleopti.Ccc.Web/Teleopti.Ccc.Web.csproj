@@ -1442,10 +1442,12 @@
     <Content Include="WFM\app\forecasting\refact\forecast-chart.component.js" />
     <Content Include="WFM\app\forecasting\refact\forecast-chart.html" />
     <Content Include="WFM\app\forecasting\refact\forecast-chart.spec.js" />
+    <Content Include="WFM\app\forecasting\refact\forecast-modify.html" />
     <Content Include="WFM\app\forecasting\refact\forecast.backend.fake.js" />
     <Content Include="WFM\app\forecasting\refact\forecast.controller.js" />
     <Content Include="WFM\app\forecasting\refact\forecast.controller.spec.js" />
     <Content Include="WFM\app\forecasting\refact\forecast.html" />
+    <Content Include="WFM\app\forecasting\refact\forecast.modify.controller.js" />
     <Content Include="WFM\app\global\areas\menu-component.html" />
     <Content Include="WFM\app\global\areas\menu.component.js" />
     <Content Include="WFM\app\global\businessunits\businessunits.controller.spec.js" />
