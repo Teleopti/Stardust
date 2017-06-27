@@ -8,16 +8,18 @@
     <rta-card-body>
         <div class="con-row">
             <div class="con-flex">
-                <div class="wfm-grid" ng-hide="togg" class="animate-show">
+                <div class="wfm-grid" class="animate-show">
                     <div class="grid-card-mini" ng-repeat="team in card.teams">
-                        <div class="list-content" style="padding: 1%;" ng-class="team.Color">
-                            <b><span class="wfm-checkbox-label org-name-container" ng-attr-data-max="{{team.AgentsCount}}" ng-attr-data-value="{{team.InAlarmCount}}">
+                        <a ui-sref="rta.agents({teamIds: team.Id})" class="rta-card-link" ng-click="$event.stopPropagation();">
+                            <div class="list-content" style="padding: 1%;" ng-class="team.Color">
+                                <b><span class="wfm-checkbox-label org-name-container" ng-attr-data-max="{{team.AgentsCount}}">
 								{{team.Name}}
 							</span></b>
-                            <span class="full-padding">{{'InAlarm'|translate}}:
+                                <span class="full-padding" ng-attr-data-value="{{team.InAlarmCount}}">{{'InAlarm'|translate}}:
 								<b>{{team.InAlarmCount}}</b>
 							</span>
-                        </div>
+                            </div>
+                        </a>
                     </div>
                 </div>
             </div>

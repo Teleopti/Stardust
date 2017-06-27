@@ -5,6 +5,7 @@ describe('rtaOverviewComponent', function () {
     $httpBackend,
     $componentController,
     $controllerBuilder,
+    $state,
     ctrl,
     scope,
     vm;
@@ -27,11 +28,12 @@ describe('rtaOverviewComponent', function () {
     });
   });
 
-  beforeEach(inject(function (_$httpBackend_, _$componentController_, _ControllerBuilder_, _FakeRtaBackend_) {
+  beforeEach(inject(function (_$httpBackend_, _$componentController_, _$state_, _ControllerBuilder_, _FakeRtaBackend_) {
     $httpBackend = _$httpBackend_;
     $componentController = _$componentController_;
     $controllerBuilder = _ControllerBuilder_;
     $fakeBackend = _FakeRtaBackend_;
+    $state = _$state_;
 
     $fakeBackend.clear();
     scope = $controllerBuilder.setup('RtaMainController');
@@ -223,8 +225,108 @@ describe('rtaOverviewComponent', function () {
     })
       .wait(5000);
 
-    expect(vm.siteCards[0].teams[0].InAlarmCount).toEqual(2);
-    expect(vm.siteCards[0].teams[0].Color).toEqual("good");
+    expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(2);
+    expect(ctrl.siteCards[0].teams[0].Color).toEqual("good");
   });
+
+
+  //IMPORTANT TEST!! FIX ME!
+
+  // fit('should not update teams adherence when sites are closed', function () {
+  //   $fakeBackend
+  //     .withSiteAdherence({
+  //       Id: "londonGuid",
+  //       Name: "London",
+  //       AgentsCount: 11,
+  //       InAlarmCount: 5,
+  //       Color: "warning"
+  //     })
+  //     .withSiteAdherence({
+  //       Id: "parisGuid",
+  //       Name: "Paris",
+  //       AgentsCount: 10,
+  //       InAlarmCount: 4,
+  //       Color: "warning"
+  //     });
+
+  //   var c = $controllerBuilder.createController();
+  //   vm = c.vm;
+  //   ctrl = $componentController('rtaOverviewComponent', null, {
+  //     siteCards: vm.siteCards
+  //   });
+
+  //   ctrl.siteCards[0].isOpen = true;
+  //   ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+  //   $fakeBackend
+  //     .withTeamAdherence({
+  //       SiteId: "londonGuid",
+  //       AgentsCount: 11,
+  //       InAlarmCount: 5,
+  //       Color: "warning"
+  //     });
+  //   $httpBackend.flush(); 
+  //   ctrl.siteCards[1].isOpen = true;
+  //   ctrl.siteCards[1].fetchTeamData(ctrl.siteCards[1]);
+  //   $fakeBackend
+  //     .clearTeamAdherences()
+  //     .withTeamAdherence({
+  //       SiteId: "parisGuid",
+  //       AgentsCount: 10,
+  //       InAlarmCount: 4,
+  //       Color: "warning"
+  //     });
+  //   $httpBackend.flush();
+  //   c.apply(function () {
+  //     $fakeBackend
+  //       .clearTeamAdherences()
+  //       .withTeamAdherence({
+  //         SiteId: "londonGuid",
+  //         Name: "Green",
+  //         AgentsCount: 11,
+  //         InAlarmCount: 10,
+  //         Color: "danger"
+  //       });
+  //   })
+  //     .wait(5000);
+
+  //   console.log(ctrl.siteCards);
+
+  //   expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(2);
+  //   expect(ctrl.siteCards[0].teams[0].Color).toEqual("good");
+  //   expect(ctrl.siteCards[1].teams[0].InAlarmCount).toEqual(0);
+  //   expect(ctrl.siteCards[1].teams[0].Color).toEqual("good");
+  // });
+
+  // it('should go to agents for team', function () {
+  //   $fakeBackend
+  //     .withSiteAdherence({
+  //       Id: "londonGuid",
+  //       Name: "London",
+  //       AgentsCount: 11,
+  //       InAlarmCount: 5,
+  //       Color: "warning"
+  //     })
+  //     .withTeamAdherence({
+  //       SiteId: "londonGuid",
+  //       Id: "Green",
+  //       AgentsCount: 11,
+  //       InAlarmCount: 5,
+  //       Color: "warning"
+  //     });
+
+  //   spyOn($state, 'go');
+
+  //   vm = $controllerBuilder.createController().vm;
+  //   ctrl = $componentController('rtaOverviewComponent', null, {
+  //     siteCards: vm.siteCards
+  //   });
+  //   ctrl.siteCards[0].isOpen = true;
+  //   ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+  //   $httpBackend.flush();
+
+  //   expect($state.go).toHaveBeenCalledWith('rta.agents', {
+  //     teamIds: ['Green']
+  //   });
+  // });
 
 });

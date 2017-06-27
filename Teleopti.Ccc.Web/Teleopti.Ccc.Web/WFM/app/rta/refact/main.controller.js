@@ -16,7 +16,6 @@
 		vm.organization = [];
 		vm.siteCards = [];
 
-		var pollForTeams;
 
 		(function fetchDataForFilterComponent() {
 			rtaService.getSkills().then(function (result) {
@@ -41,18 +40,6 @@
 			rtaService.getSiteCardsFor().then(function (result) {
 				vm.siteCards = buildSiteCards(result);
 			});
-
-			function translateSiteColors(site) {
-				if (site.Color === 'good') {
-					return '#C2E085';
-				} else if (site.Color === 'warning') {
-					return '#FFC285';
-				} else if (site.Color === 'danger') {
-					return '#EE8F7D';
-				} else {
-					return '#fff';
-				}
-			}
 
 			function buildSiteCards(sites) {
 				return sites.map(function (site) {
@@ -81,35 +68,53 @@
 				match.site.InAlarmCount = site.InAlarmCount;
 			}
 
+			var polling;
+			var intervals = [];
+
 			function fetchTeamData(card) {
 				if (!card.isOpen) {
-					$interval.cancel(pollForTeams);
-					return;
-				}
-				else {
-					rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
-						var match = vm.siteCards.find(function (c) {
-							return c.site.Id === card.site.Id;
-						})
-						match.teams = teams;
-					});
-
-					pollForTeams = $interval(function () {
-						rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
-							var match = vm.siteCards.find(function (c) {
-								return c.site.Id === card.site.Id;
-							})
-							match.teams = teams;
+					if (intervals.length > 1) {
+						var match = intervals.find(function (interval) {
+							return interval.siteId === card.site.Id;
 						});
-					}, 5000)
+						var index = intervals.indexOf(match);
+						intervals.splice(index, 1);
+						$interval.cancel(match.interval);
+					} else {
+						$interval.cancel(intervals[0].interval);
+						intervals = [];
+					}
+				} else {
+					fetchTeams(card);
+					polling = $interval(function () {
+						fetchTeams(card);
+					}, 5000);
+					intervals.push({
+						siteId: card.site.Id,
+						interval: polling
+					});
+				}
+			}
 
+			var fetchTeams = function (card) {
+				rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
+					card.teams = teams;
+				});
+			}
+
+			function translateSiteColors(site) {
+				if (site.Color === 'good') {
+					return '#C2E085';
+				} else if (site.Color === 'warning') {
+					return '#FFC285';
+				} else if (site.Color === 'danger') {
+					return '#EE8F7D';
+				} else {
+					return '#fff';
 				}
 			}
 
 
 		})();
-
-
-
 	}
 })();
