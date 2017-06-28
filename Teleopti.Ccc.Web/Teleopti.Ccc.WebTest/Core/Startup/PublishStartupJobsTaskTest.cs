@@ -1,12 +1,8 @@
 ﻿using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -45,7 +41,8 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			_toggleManager.Disable(Toggles.LastHandlers_ToHangfire_41203);
 
-			_target.Execute(null);
+			var task = _target.Execute(null);
+			task.Should().Be.Null();
 
 			_eventPublisher.PublishedEvents.Should().Be.Empty();
 		}
@@ -58,9 +55,11 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			_loadAllTenants.Has(tenantName);
 			_businessUnitRepository.Add(BusinessUnitFactory.CreateWithId("TestBu"));
 
-			_target.Execute(null);
+			var task = _target.Execute(null);
+			task.Should().Not.Be.Null();
+			task.Wait();
 
-			_eventPublisher.PublishedEvents.OfType<InitialLoadScheduleProjectionEvent>().Should().Not.Be.Empty();
+			_eventPublisher.PublishedEvents.OfType<PublishInitializeReadModelEvent>().Should().Not.Be.Empty();
 		}
 	}
 }
