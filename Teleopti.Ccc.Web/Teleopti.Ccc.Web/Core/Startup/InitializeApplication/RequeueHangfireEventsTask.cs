@@ -34,9 +34,12 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenants = _loadAllTenants.Tenants();
-				_eventPublisher.Publish(new RequeueHangfireEvent
+				Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith(task =>
 				{
-					Tenants = tenants.Select(tenant => tenant.Name).ToList()
+					_eventPublisher.Publish(new RequeueHangfireEvent
+					{
+						Tenants = tenants.Select(tenant => tenant.Name).ToList()
+					});
 				});
 			}
 		}

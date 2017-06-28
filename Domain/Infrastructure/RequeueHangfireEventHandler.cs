@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DistributedLock;

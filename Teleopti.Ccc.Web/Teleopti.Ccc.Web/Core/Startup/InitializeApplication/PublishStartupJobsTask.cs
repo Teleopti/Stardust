@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 using Owin;
@@ -32,9 +33,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		[TenantUnitOfWork]
 		public virtual Task Execute(IAppBuilder application)
 		{
-			var messagesOnBoot = true;
-			if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessagesOnBoot"]))
-				bool.TryParse(ConfigurationManager.AppSettings["MessagesOnBoot"], out messagesOnBoot);
+			var messagesOnBoot = parseBool("MessagesOnBoot", true);
 			if (!messagesOnBoot)
 				return null;
 			if (!_toggleManager.IsEnabled(Toggles.LastHandlers_ToHangfire_41203))
@@ -42,27 +41,40 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 			return Task.Run(() => 
 			{
-				var start = parseNumber("InitialLoadScheduleProjectionStartDate", "-31");
-				var end = parseNumber("InitialLoadScheduleProjectionEndDate", "180");
+				var start = parseNumber("InitialLoadScheduleProjectionStartDate", -31);
+				var end = parseNumber("InitialLoadScheduleProjectionEndDate", 180);
 				using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 				{
 					var tenants = _loadAllTenants.Tenants();
-					_eventPublisher.Publish(new PublishInitializeReadModelEvent
+					Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith(task => 
 					{
-						InitialLoadScheduleProjectionStartDate = start,
-						InitialLoadScheduleProjectionEndDate = end,
-						Tenants = tenants.Select(t => t.Name).ToList()
+						_eventPublisher.Publish(new PublishInitializeReadModelEvent
+						{
+							InitialLoadScheduleProjectionStartDate = start,
+							InitialLoadScheduleProjectionEndDate = end,
+							Tenants = tenants.Select(t => t.Name).ToList()
+						});
 					});
 				}
 			});
 		}
 
-		private static int parseNumber(string configString, string defaultValue)
+		private static bool parseBool(string configString, bool defaultValue)
+		{
+			bool result;
+			var value = ConfigurationManager.AppSettings[configString];
+			if (!string.IsNullOrEmpty(value) && bool.TryParse(value, out result))
+				return result;
+			return defaultValue;
+
+		}
+
+		private static int parseNumber(string configString, int defaultValue)
 		{
 			var days = ConfigurationManager.AppSettings[configString];
 			if (string.IsNullOrEmpty(days))
 			{
-				days = defaultValue;
+				return defaultValue;
 			}
 			int number;
 			int.TryParse(days, out number);
