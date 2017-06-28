@@ -288,6 +288,7 @@
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestAllowanceViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningGroupControllerTest.cs" />
     <Compile Include="Core\BlockOtherOriginFilterTests.cs" />
+    <Compile Include="Core\Common\DataProvider\MultiplicatorDefinitionSetProvider.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\DataProvider\FakeLinkProvider.cs" />
     <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestPersonToPermissionValidatorTest.cs" />

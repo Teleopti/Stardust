@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IMultiplicatorDefinitionSet> FindAllOvertimeDefinitions()
 		{
-			throw new NotImplementedException();
+			return storage.Where(s => s.MultiplicatorType == MultiplicatorType.Overtime).ToList();
 		}
 
 		public IList<IMultiplicatorDefinitionSet> FindAllShiftAllowanceDefinitions()

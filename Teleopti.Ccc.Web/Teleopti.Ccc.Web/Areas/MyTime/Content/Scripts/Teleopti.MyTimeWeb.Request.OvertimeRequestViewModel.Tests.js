@@ -31,8 +31,6 @@
 			}
 		};
 
-
-
 	module('Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel',
 		{
 			setup: function () {
@@ -48,7 +46,7 @@
 	function setupAjax() {
 		ajax = {
 			Ajax: function (options) {
-				if (options.url === '../api/MultiplicatorDefinitionSet/Overtime') {
+				if (options.url === '../api/MultiplicatorDefinitionSet/Mine') {
 					options.success(fakeDefinitionSets);
 				}
 				if (options.url === '../api/Request/AddOvertime') {
@@ -122,7 +120,6 @@
 		ko.applyBindings(vm, $('#MessageBox')[0]);
 
 		$('#MessageBox').val(new Array(2001).join('a'));
-
 		$('#MessageBox').change();
 
 		equal(vm.Message().length, 2000);
