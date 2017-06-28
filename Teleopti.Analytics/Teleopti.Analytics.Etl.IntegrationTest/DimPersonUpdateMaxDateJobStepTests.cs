@@ -165,7 +165,7 @@ namespace Teleopti.Analytics.Etl.IntegrationTest
 			var tenantUnitOfWorkManager = TenantUnitOfWorkManager.Create(UnitOfWorkFactory.Current.ConnectionString);
 			var dsFactory = new DataSourcesFactory(new EnversConfiguration(), new NoTransactionHooks(),
 				DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(),
-				new MemoryNhibernateConfigurationCache(), new NoPreCommitHooks());
+				new MemoryNHibernateConfigurationCache(), new NoPreCommitHooks());
 			jobParameters = new JobParameters(
 				dateList, 1, "UTC", 15, "", "False",
 				CultureInfo.CurrentCulture,

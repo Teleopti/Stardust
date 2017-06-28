@@ -6,78 +6,93 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public interface INHibernateConfigurationCache
 	{
-		Configuration GetOrDefault(IDictionary<string, string> settings);
-		void Store(IDictionary<string, string> settings, Configuration configuration);
+		Configuration GetConfiguration(IDictionary<string, string> settings, Configuration defaultValue=null);
+		void StoreConfiguration(IDictionary<string, string> settings, Configuration configuration);
 
-		ISessionFactory GetOrDefault(Configuration configuration);
+		ISessionFactory GetSessionFactory(Configuration configuration, ISessionFactory defaultValue = null);
 		void StoreSessionFactory(Configuration configuration, ISessionFactory sessionFactory);
+		void Clear(IDictionary<string, string> settings);
 	}
 
 	// This class is mainly used to not have to re-create the nhib config between each infra test
-	public class MemoryNhibernateConfigurationCache : INHibernateConfigurationCache
+	public class MemoryNHibernateConfigurationCache : INHibernateConfigurationCache
 	{
 		private static readonly Dictionary<string, Configuration> configurationCache = new Dictionary<string, Configuration>();
 		private static readonly Dictionary<string, ISessionFactory> sessionFactoryCache = new Dictionary<string, ISessionFactory>();
 
-		public Configuration GetOrDefault(IDictionary<string, string> settings)
+		public Configuration GetConfiguration(IDictionary<string, string> settings, Configuration defaultValue = null)
 		{
-			if (settings.ContainsKey(Environment.SessionFactoryName))
-			{
-				var key = settings[Environment.SessionFactoryName];
-				if (configurationCache.ContainsKey(key))
-					return configurationCache[key];
-			}
-			return null;
+			var key = getConfigKey(settings);
+			if (key == null) return defaultValue;
+			return configurationCache.ContainsKey(key) ? configurationCache[key] : defaultValue;
 		}
 
-		public void Store(IDictionary<string, string> settings, Configuration configuration)
+		public void StoreConfiguration(IDictionary<string, string> settings, Configuration configuration)
 		{
-			if (!settings.ContainsKey(Environment.SessionFactoryName))
-				return;
-			var key = settings[Environment.SessionFactoryName];
+			var key = getConfigKey(settings);
+			if (key == null) return;
 			configurationCache[key] = configuration;
 		}
 
-		public ISessionFactory GetOrDefault(Configuration configuration)
+		public ISessionFactory GetSessionFactory(Configuration configuration, ISessionFactory defaultValue = null)
 		{
-			if (configuration.Properties.ContainsKey(Environment.SessionFactoryName))
-			{
-				var key = configuration.Properties[Environment.SessionFactoryName];
-				if (sessionFactoryCache.ContainsKey(key))
-					return sessionFactoryCache[key];
-			}
-			return null;
+			var key = getSessionFactoryKey(configuration);
+			if (key == null) return defaultValue;
+			return sessionFactoryCache.ContainsKey(key) ? sessionFactoryCache[key] : defaultValue;
 		}
 
 		public void StoreSessionFactory(Configuration configuration, ISessionFactory sessionFactory)
 		{
-			if (!configuration.Properties.ContainsKey(Environment.SessionFactoryName))
-				return;
-			var key = configuration.Properties[Environment.SessionFactoryName];
+			var key = getSessionFactoryKey(configuration);
+			if (key == null) return;
 			sessionFactoryCache[key] = sessionFactory;
+		}
+
+		public void Clear(IDictionary<string, string> settings)
+		{
+			var config = GetConfiguration(settings);
+			if (config != null)
+			{
+				var session = GetSessionFactory(config);
+				if (session != null)
+					sessionFactoryCache[getSessionFactoryKey(config)] = null;
+				configurationCache[getConfigKey(settings)] = null;
+			}
+		}
+
+		private static string getConfigKey(IDictionary<string, string> settings)
+		{
+			return settings.ContainsKey(Environment.SessionFactoryName) ? settings[Environment.SessionFactoryName] : null;
+		}
+
+		private static string getSessionFactoryKey(Configuration configuration)
+		{
+			return configuration.Properties.ContainsKey(Environment.SessionFactoryName) ? configuration.Properties[Environment.SessionFactoryName] : null;
 		}
 	}
 
-	public class NoNhibernateConfigurationCache : INHibernateConfigurationCache
+	public class NoNHibernateConfigurationCache : INHibernateConfigurationCache
 	{
-		public Configuration GetOrDefault(IDictionary<string, string> settings)
+		public Configuration GetConfiguration(IDictionary<string, string> settings, Configuration defaultValue = null)
 		{
-			return null;
+			return defaultValue;
 		}
 
-		public void Store(IDictionary<string, string> settings, Configuration configuration)
+		public void StoreConfiguration(IDictionary<string, string> settings, Configuration configuration)
 		{
-			
 		}
 
-		public ISessionFactory GetOrDefault(Configuration configuration)
+		public ISessionFactory GetSessionFactory(Configuration configuration, ISessionFactory defaultValue = null)
 		{
-			return null;
+			return defaultValue;
 		}
 
 		public void StoreSessionFactory(Configuration configuration, ISessionFactory sessionFactory)
 		{
-			
+		}
+
+		public void Clear(IDictionary<string, string> settings)
+		{
 		}
 	}
 }

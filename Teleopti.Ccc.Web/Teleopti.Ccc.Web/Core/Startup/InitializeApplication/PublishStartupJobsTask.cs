@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using Common.Logging;
 using Owin;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -16,10 +18,7 @@ using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.Toggle;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 {
@@ -33,6 +32,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 		private readonly Func<ICurrentUnitOfWork, IBusinessUnitRepository> _businessUnitRepository;
 		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private static readonly ILog logger = LogManager.GetLogger(typeof(PublishStartupJobsTask));
 
 		public PublishStartupJobsTask(IToggleManager toggleManager, IEventPublisher eventPublisher, ILoadAllTenants loadAllTenants, IDataSourceScope dataSourceScope, ITenantUnitOfWork tenantUnitOfWork, Func<ICurrentUnitOfWork, IBusinessUnitRepository> businessUnitRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
@@ -53,14 +53,30 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 				bool.TryParse(ConfigurationManager.AppSettings["MessagesOnBoot"], out messagesOnBoot);
 			if (!messagesOnBoot)
 				return null;
-			if (_toggleManager.IsEnabled(Toggles.LastHandlers_ToHangfire_41203))
+			if (!_toggleManager.IsEnabled(Toggles.LastHandlers_ToHangfire_41203))
+				return null;
+
+			return Task.Delay(TimeSpan.FromSeconds(20)).ContinueWith(task => 
 			{
-				using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+				const int attempts = 3;
+				for (var attempt = 1; attempt <= attempts; attempt++)
 				{
-					_eventPublisher.Publish(createInitialLoadScheduleProjectionEvents().ToArray());
+					try
+					{
+						using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+						{
+							var something = createInitialLoadScheduleProjectionEvents().ToArray();
+							_eventPublisher.Publish(something);
+						}
+						break;
+					}
+					catch (Exception e)
+					{
+						logger.Warn($"An error occurred publishing Initial Load Schedule Projection Events, attempt {attempt} of {attempts}", e);
+						Thread.Sleep(TimeSpan.FromSeconds(10));
+					}
 				}
-			}
-			return null;
+			});
 		}
 
 		private IEnumerable<IEvent> createInitialLoadScheduleProjectionEvents()

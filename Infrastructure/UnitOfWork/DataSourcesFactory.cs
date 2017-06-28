@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Cfg;
@@ -6,12 +7,10 @@ using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.Common.Logging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Analytics;
 using Teleopti.Ccc.Infrastructure.LiteUnitOfWork.ReadModelUnitOfWork;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Web;
-using Teleopti.Interfaces.Domain;
 using Environment = NHibernate.Cfg.Environment;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
@@ -73,15 +72,24 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			var configuration = createApplicationConfiguration(applicationConfiguration);
 			var tenant = configuration.Properties[Environment.SessionFactoryName];
 			var applicationConnectionString = configuration.Properties[Environment.ConnectionString];
-			var sessionFactory = buildSessionFactory(configuration);
-			var appFactory = new NHibernateUnitOfWorkFactory(
-				sessionFactory,
-				_enversConfiguration.AuditSettingProvider,
-				applicationConnectionString,
-				_transactionHooks,
-				_currentPreCommitHooks,
-				tenant
+			NHibernateUnitOfWorkFactory appFactory;
+			try
+			{
+				var sessionFactory = buildSessionFactory(configuration);
+				appFactory = new NHibernateUnitOfWorkFactory(
+					sessionFactory,
+					_enversConfiguration.AuditSettingProvider,
+					applicationConnectionString,
+					_transactionHooks,
+					_currentPreCommitHooks,
+					tenant
 				);
+			}
+			catch (Exception)
+			{
+				_nhibernateConfigurationCache.Clear(applicationConfiguration);
+				throw;
+			}
 
 			AnalyticsUnitOfWorkFactory statFactory = null;
 			if (!string.IsNullOrEmpty(statisticConnectionString))
@@ -109,7 +117,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private ISessionFactory buildSessionFactory(Configuration configuration)
 		{
-			var cachedSessionFactory = _nhibernateConfigurationCache.GetOrDefault(configuration);
+			var cachedSessionFactory = _nhibernateConfigurationCache.GetSessionFactory(configuration);
 			if (cachedSessionFactory != null)
 				return cachedSessionFactory;
 			using (PerformanceOutput.ForOperation($"Building sessionfactory for {configuration.Properties[Environment.SessionFactoryName]}"))
@@ -123,13 +131,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private Configuration createApplicationConfiguration(IDictionary<string, string> settings)
 		{
-			var cachedConfiguration = _nhibernateConfigurationCache.GetOrDefault(settings);
+			var cachedConfiguration = _nhibernateConfigurationCache.GetConfiguration(settings);
 			if (cachedConfiguration != null)
 				return cachedConfiguration;
 			var appCfg = new Configuration()
 				.SetProperties(settings);
 			setDefaultValuesOnApplicationConf(appCfg);
-			_nhibernateConfigurationCache.Store(settings, appCfg);
+			_nhibernateConfigurationCache.StoreConfiguration(settings, appCfg);
 			return appCfg;
 		}
 

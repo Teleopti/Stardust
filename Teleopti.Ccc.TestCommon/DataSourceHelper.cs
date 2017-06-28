@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		private static IDataSource makeDataSource(ICurrentTransactionHooks transactionHooks, string name)
 		{
-			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), transactionHooks, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), new MemoryNhibernateConfigurationCache(), new NoPreCommitHooks());
+			var dataSourceFactory = new DataSourcesFactory(new EnversConfiguration(), transactionHooks, DataSourceConfigurationSetter.ForTest(), new CurrentHttpContext(), new MemoryNHibernateConfigurationCache(), new NoPreCommitHooks());
 			var dataSourceSettings = CreateDataSourceSettings(InfraTestConfigReader.ConnectionString, null, name);
 			return dataSourceFactory.Create(dataSourceSettings, InfraTestConfigReader.AnalyticsConnectionString);
 		}
