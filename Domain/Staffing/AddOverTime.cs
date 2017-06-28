@@ -69,6 +69,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var overtimeEndTime = TimeZoneHelper.ConvertToUtc(userDateOnly.Date.AddTicks(overTimeSuggestionModel.OvertimePreferences.SelectedSpecificTimePeriod.EndTime.Ticks), _userTimeZone.TimeZone());
 
 			if (overtimestartTime < _now.UtcDateTime().AddMinutes(15)) overtimestartTime = _now.UtcDateTime().AddMinutes(15);
+
+			if(overtimestartTime > overtimeEndTime) return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
 			var overtimePeriod = new DateTimePeriod(overtimestartTime, overtimeEndTime);
 			
 			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, overtimestartTime, overtimeEndTime);

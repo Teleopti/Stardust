@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			{
 				ScheduleTag = new NullScheduleTag(),
 				OvertimeType = multiplicationDefinition,
-				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5))
+				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5)),
+				SelectedSpecificTimePeriod = new TimePeriod(TimeSpan.FromHours(model.TimeSerie.Min().Hour), TimeSpan.FromHours(model.TimeSerie.Max().Hour+1))
 			};
 
 			var wraperModel =_addOverTime.GetSuggestion(model);
