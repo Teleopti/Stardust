@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsToSchedule, lockInfoForStateHolderFixThis, selectedPeriod);
 				//TODO: fix this
 				var fixThis = new NoSchedulingProgress();
-				_scheduleExecutor.Execute(_currentSchedulingCallback.Current(), _schedulingOptionsProvider.Fetch(), fixThis, schedulerStateHolder.AllPermittedPersons,
+				_scheduleExecutor.Execute(_currentSchedulingCallback.Current(), _schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate), fixThis, schedulerStateHolder.AllPermittedPersons,
 					selectedPeriod, @event.RunWeeklyRestSolver);
 				_synchronizeSchedulesAfterIsland.Synchronize(schedulerStateHolder.Schedules, selectedPeriod);
 			}

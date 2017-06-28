@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulerStateHolder = schedulerStateHolder;
 		}
 
-		public SchedulingOptions Fetch()
+		public SchedulingOptions Fetch(IDayOffTemplate defaultDayOffTemplate)
 		{
 			return new SchedulingOptions
 			{

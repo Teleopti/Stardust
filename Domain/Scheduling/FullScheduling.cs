@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		protected override void ExecuteScheduling(DateOnlyPeriod period, ISchedulerStateHolder stateHolder)
 		{
-			_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(), _schedulingProgress,
+			_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate), _schedulingProgress,
 				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false);
 		}
 	}

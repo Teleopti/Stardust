@@ -502,7 +502,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				else
 				{
 					builder.RegisterType<OptimizationPreferencesDefaultValueProvider>().AsSelf().As<IOptimizationPreferencesProvider>().SingleInstance();
-					builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().InstancePerLifetimeScope();
+					builder.RegisterType<SchedulingOptionsProvider>().As<ISchedulingOptionsProvider>().AsSelf().SingleInstance();
 				}
 				builder.RegisterType<PeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
 				builder.RegisterType<CurrentIntradayOptimizationCallback>().As<ICurrentIntradayOptimizationCallback>().AsSelf().SingleInstance();

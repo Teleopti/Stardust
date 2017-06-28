@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			}
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1);
 			SchedulerStateHolderFrom.Fill(scenario, period, agents, Enumerable.Empty<IPersonAssignment>(), skillDays);
-			var schedulingOptions = SchedulingOptionsProvider.Fetch();
+			var schedulingOptions = SchedulingOptionsProvider.Fetch(null);
 			schedulingOptions.ResourceCalculateFrequency = 100;
 			SchedulingOptionsProvider.SetFromTest(schedulingOptions);
 
