@@ -113,6 +113,7 @@
 						return;
 					}
 					if (workload) {
+						$scope.exportModal = true;
 						$scope.modalForecastingInfo = {};
 						$scope.modalForecastingInfo.selectedWorkload = workload;
 						$scope.modalForecastingInfo.selectedScenario = workload.Scenario;
@@ -120,7 +121,6 @@
 					else {
 						$scope.exportModal = false;
 					}
-					$scope.exportModal = true;
 				};
 
 				$scope.cancelForecastingModal = function () {
