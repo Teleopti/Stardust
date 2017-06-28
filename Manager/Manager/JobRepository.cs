@@ -21,7 +21,7 @@ namespace Stardust.Manager
 		private readonly JobRepositoryCommandExecuter _jobRepositoryCommandExecuter;
 		private readonly object _requeueJobLock = new object();
 		private readonly object _assigningJob = new object();
-		private static readonly ILog managerLogger = LogManager.GetLogger("Stardust.ManagerLog");
+		private static readonly ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
 
 		public JobRepository(ManagerConfiguration managerConfiguration,
 		                     RetryPolicyProvider retryPolicyProvider,
@@ -104,7 +104,7 @@ namespace Stardust.Manager
 		{
 			try
 			{
-				managerLogger.Info("Assigning jobs to node");
+				ManagerLogger.Info("Assigning jobs to node");
 				List<Uri> allAvailableWorkerNodes;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
@@ -115,11 +115,11 @@ namespace Stardust.Manager
 				if (!allAvailableWorkerNodes.Any()) return;
 
 				//sending to the available nodes
-				managerLogger.Info(allAvailableWorkerNodes.Count + " nodes found that are alive");
+				ManagerLogger.Info(allAvailableWorkerNodes.Count + " nodes found that are alive");
 				var shuffledNodes = allAvailableWorkerNodes.OrderBy(a => Guid.NewGuid()).ToList();
 				foreach (var nodeUri in shuffledNodes)
 				{
-					managerLogger.Info("trying to assign the job to node " + nodeUri);
+					ManagerLogger.Info("trying to assign the job to node " + nodeUri);
 					AssignJobToWorkerNodeWorker(nodeUri);
 					Thread.Sleep(500);
 				}
@@ -364,7 +364,7 @@ namespace Stardust.Manager
 
 		private void AssignJobToWorkerNodeWorker(Uri availableNode)
 		{
-			managerLogger.Info("starting the assignment process");
+			ManagerLogger.Info("starting the assignment process");
 			lock (_assigningJob)
 			{
 				try
@@ -378,16 +378,16 @@ namespace Stardust.Manager
 							sqlConnection.Close();
 							return;
 						}
-						managerLogger.Info("acquired job with id  " + jobQueueItem.JobId + " for node " + availableNode);
+						ManagerLogger.Info("acquired job with id  " + jobQueueItem.JobId + " for node " + availableNode);
 						var builderHelper = new NodeUriBuilderHelper(availableNode);
 						var urijob = builderHelper.GetJobTemplateUri();
-						managerLogger.Info("posting the job to the node");
+						ManagerLogger.Info("posting the job to the node");
 						var response = _httpSender.PostAsync(urijob, jobQueueItem).Result;
-						managerLogger.Info( response.ReasonPhrase +  " response from the node");
+						ManagerLogger.Info( response?.ReasonPhrase +  " response from the node");
 						if (response != null && (response.IsSuccessStatusCode || response.StatusCode.Equals(HttpStatusCode.BadRequest)))
 						{
 							var sentToWorkerNodeUri = availableNode.ToString();
-							managerLogger.Info("node is ok fix the db now");
+							ManagerLogger.Info("node is ok fix the db now");
 							using (var sqlTransaction = sqlConnection.BeginTransaction())
 							{
 								_jobRepositoryCommandExecuter.InsertIntoJob(jobQueueItem, sentToWorkerNodeUri, sqlConnection, sqlTransaction);
@@ -400,12 +400,12 @@ namespace Stardust.Manager
 
 							urijob = builderHelper.GetUpdateJobUri(jobQueueItem.JobId);
 							//what should happen if this response is not 200? 
-							managerLogger.Info("asking the node to start the job");
+							ManagerLogger.Info("asking the node to start the job");
 							_httpSender.PutAsync(urijob, null);
 						}
 						else
 						{
-							managerLogger.Info(  "response from the node was not ok " + response.ReasonPhrase) ;
+							ManagerLogger.Info("response from the node was not ok " + response?.ReasonPhrase);
 							using (var sqlTransaction = sqlConnection.BeginTransaction())
 							{
 								_jobRepositoryCommandExecuter.TagQueueItem(jobQueueItem.JobId, sqlConnection, sqlTransaction);
@@ -416,7 +416,7 @@ namespace Stardust.Manager
 				}
 				catch (Exception exp)
 				{
-					this.Log().Info(string.Format("Failed for node {0}", availableNode));
+					this.Log().Info($"Failed for node {availableNode}");
 					this.Log().ErrorWithLineNumber(exp.Message, exp);
 					throw;
 				}
