@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Core.Data
 {
 	public interface IMultiplicatorDefinitionSetProvider
 	{
-		IList<MultiplicatorDefinitionSetViewModel> GetAll();
+		IList<MultiplicatorDefinitionSetViewModel> GetAllOvertimeDefinitionSets();
 	}
 
 	public class MultiplicatorDefinitionSetViewModel

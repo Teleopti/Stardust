@@ -40,7 +40,7 @@ $(document).ready(function () {
 				if (options.url === '../api/Request/Activities') {
 					options.success(fakeActivities);
 				}
-				if (options.url === '../api/Request/MultiplicatorDefinitionSets') {
+				if (options.url === '../api/MultiplicatorDefinitionSet/Overtime') {
 					options.success(fakeDefinitionSets);
 				}
 			}

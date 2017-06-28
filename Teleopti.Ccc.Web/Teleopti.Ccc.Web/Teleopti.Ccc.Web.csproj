@@ -560,6 +560,7 @@
     <Compile Include="Areas\MyTime\Models\ScheduleStaffingPossibility\StaffingPossibilityViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\UseGuide\WFMAppGuideViewModel.cs" />
     <Compile Include="Areas\Options\IoC\OptionsAreaModule.cs" />
+    <Compile Include="Areas\Options\MultiplicatorDefinitionSetController.cs" />
     <Compile Include="Areas\Options\SiteOpenHourController.cs" />
     <Compile Include="Areas\Requests\Controller\SiteWithOpenHourController.cs" />
     <Compile Include="Areas\People\Controllers\ApplySmartPropertyModel.cs" />

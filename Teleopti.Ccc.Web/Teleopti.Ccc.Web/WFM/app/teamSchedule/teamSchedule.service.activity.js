@@ -14,7 +14,7 @@
 		var moveShiftUrl = '../api/TeamSchedule/MoveShift';
 		var undoScheduleChangeUrl = '../api/TeamScheduleCommand/BackoutScheduleChange';
 		var moveInvalidOverlappedActivityUrl = '../api/TeamScheduleCommand/MoveNonoverwritableLayers';
-		var getAllMultiplicatorDefinitionSetsUrl = '../api/TeamScheduleData/FetchMultiplicationDefinitionSets';
+		var getAllMultiplicatorDefinitionSetsUrl = '../api/MultiplicatorDefinitionSet/Overtime';
 
 		this.fetchAvailableActivities = fetchAvailableActivities;
 		this.fetchAvailableDefinitionSets = fetchAvailableDefinitionSets;

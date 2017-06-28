@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
@@ -20,17 +18,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IActivityProvider _teamScheduleDataProvider;
 		private readonly IScheduleValidationProvider _validationProvider;
 		private readonly IShiftCategoryProvider _shiftCategoryProvider;
-		private readonly IToggleManager _toggleManager;
-		private readonly IMultiplicatorDefinitionSetProvider _multiplicatorDefinitionSetProvider;
 		private readonly ITeamsProvider _teamProvider;
 
-		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider, IScheduleValidationProvider validationProvider, IShiftCategoryProvider shiftCategoryProvider, IToggleManager toggleManager, IMultiplicatorDefinitionSetProvider multiplicatorDefinitionSetProvider, ITeamsProvider teamProvider)
+		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider,
+			IScheduleValidationProvider validationProvider,
+			IShiftCategoryProvider shiftCategoryProvider,
+			ITeamsProvider teamProvider)
 		{
 			_teamScheduleDataProvider = teamScheduleDataProvider;
 			_validationProvider = validationProvider;
 			_shiftCategoryProvider = shiftCategoryProvider;
-			_toggleManager = toggleManager;
-			_multiplicatorDefinitionSetProvider = multiplicatorDefinitionSetProvider;
 			_teamProvider = teamProvider;
 		}
 
@@ -68,13 +65,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return _validationProvider.GetAllValidationRuleTypes(ruleFlags);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchMultiplicationDefinitionSets")]
-		public virtual IList<MultiplicatorDefinitionSetViewModel> FetchMultiplicationDefinitionSets()
-		{
-			return _multiplicatorDefinitionSetProvider.GetAll();
-		}
-
-
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchShiftCategories")]
 		public virtual IList<ShiftCategoryViewModel> FetchShiftCategories()
 		{
@@ -110,7 +100,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		{
 			return _teamProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)),
 				DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
-
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/GetOrganizationWithPeriod")]

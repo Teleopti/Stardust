@@ -37,7 +37,7 @@
 		}
 	});
 	ajax.Ajax({
-		url: "../api/Request/MultiplicatorDefinitionSets",
+		url: "../api/MultiplicatorDefinitionSet/Overtime",
 		success: function (data) {
 			self.MultiplicatorDefinitionSets = data;
 		}

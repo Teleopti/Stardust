@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.Data
 {
@@ -16,9 +13,9 @@ namespace Teleopti.Ccc.Web.Core.Data
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 		}
 
-		public IList<MultiplicatorDefinitionSetViewModel> GetAll()
+		public IList<MultiplicatorDefinitionSetViewModel> GetAllOvertimeDefinitionSets()
 		{
-			var definitionSets = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions();				
+			var definitionSets = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions();
 
 			return definitionSets.Select(s => new MultiplicatorDefinitionSetViewModel
 			{
