@@ -1479,6 +1479,9 @@
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.single.tpl.html" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.tpl.html" />
     <Content Include="WFM\app\global\organizationPicker\_modules.js" />
+    <Content Include="WFM\app\global\skill-picker\skill-picker.html" />
+    <Content Include="WFM\app\global\skill-picker\skill.picker.component.js" />
+    <Content Include="WFM\app\global\skill-picker\skill.picker.component.spec.js" />
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
     <Content Include="WFM\app\intraday\intraday-config-new.html" />

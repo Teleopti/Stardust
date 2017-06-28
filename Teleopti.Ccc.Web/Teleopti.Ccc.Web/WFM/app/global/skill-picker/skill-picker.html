@@ -1,0 +1,44 @@
+﻿<div class="con-row">
+    <div class="con-flex">
+        <md-autocomplete 
+        md-min-length="0"
+        md-selected-item="$ctrl.selectedSkill" 
+        md-selected-item-change="$ctrl.selectSkill(skill)" 
+        md-search-text="skillFilterText.Name" 
+        md-items="skill in $ctrl.skills | filter:skillFilterText"
+        md-item-text="skill.Name"
+        placeholder="{{$ctrl.skills.length ? 'SelectSkill' : 'LoadingSkills' | translate}}">
+            <md-item-template>
+                <span ng-bind="skill.Name"></span>
+            </md-item-template>
+            <md-not-found ng-cloak>
+                {{'RepViewerNoMoreMatches'|translate}}
+            </md-not-found>
+        </md-autocomplete>
+        <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="$ctrl.selectedSkill" ng-click="$ctrl.selectedSkill=null">
+  <md-tooltip>{{'Clear'|translate}}</md-tooltip>
+</i>
+    </div>
+
+    <div class="con-flex">
+        <md-autocomplete 
+        md-min-length="0" 
+        md-selected-item="$ctrl.selectedSkillArea" 
+        md-selected-item-change="$ctrl.selectSkillArea(skillArea)" 
+        md-search-text="skillAreaFilterText.Name" 
+        md-items="skillArea in $ctrl.skillAreas | filter:skillAreaFilterText"
+        md-item-text="skillArea.Name" 
+        placeholder="{{$ctrl.skillAreas.length ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
+            <md-item-template>
+                <span ng-bind="skillArea.Name"></span>
+            </md-item-template>
+            <md-not-found ng-cloak>
+                {{'RepViewerNoMoreMatches'|translate}}
+            </md-not-found>
+        </md-autocomplete>
+        <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="$ctrl.selectedSkillArea" ng-click="$ctrl.selectedSkillArea=null">
+  <md-tooltip>{{'Clear'|translate}}</md-tooltip>
+</i>
+
+    </div>
+</div>
