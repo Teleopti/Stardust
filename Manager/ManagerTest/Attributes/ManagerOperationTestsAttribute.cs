@@ -31,6 +31,7 @@ namespace ManagerTest.Attributes
 			builder.RegisterType<NodeManager>().SingleInstance();
 			builder.RegisterType<JobPurgeTimerFake>().As<JobPurgeTimer>().SingleInstance();
 			builder.RegisterType<NodePurgeTimerFake>().As<NodePurgeTimer>().SingleInstance();
+			builder.RegisterType<TestHelper>().SingleInstance();
 		}
 	}
 }

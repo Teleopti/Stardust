@@ -109,7 +109,7 @@ namespace Stardust.Manager
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					allAliveWorkerNodesUri = _jobRepositoryCommandExecuter.SelectAllAliveWorkerNodes(sqlConnection);
+					allAliveWorkerNodesUri = _jobRepositoryCommandExecuter.SelectAllAvailableWorkerNodes(sqlConnection);
 				}
 
 				if (!allAliveWorkerNodesUri.Any()) return;

@@ -145,23 +145,24 @@ namespace Stardust.Manager.Helpers
 			return listToReturn;
 		}
 
-		public List<Uri> SelectAllAliveWorkerNodes(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
+		public List<Uri> SelectAllAvailableWorkerNodes(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
 		{
 			var allAliveWorkerNodesUri = new List<Uri> ();
+
 			const string selectAllAliveWorkerNodesCommandText = @"SELECT DISTINCT Id, Url, Heartbeat, Alive, Running FROM (SELECT Id, Url, Heartbeat, Alive, CASE WHEN Url IN 
 								(SELECT SentToWorkerNodeUri FROM Stardust.Job WITH(NOLOCK) WHERE Ended IS NULL) THEN CONVERT(bit,1) ELSE CONVERT(bit,0) END AS Running 
-									FROM [Stardust].WorkerNode WITH(NOLOCK)) w order by Running";
+									FROM [Stardust].WorkerNode WITH(NOLOCK)) w WHERE w.Alive = 1 AND w.Running = 0 ";
+
 			using (var selectAllAliveWorkerNodesCommand = new SqlCommand(selectAllAliveWorkerNodesCommandText, sqlConnection, sqlTransaction))
 			{
 				using (var readerAliveWorkerNodes = selectAllAliveWorkerNodesCommand.ExecuteReaderWithRetry(_retryPolicy))
 				{
-					if (readerAliveWorkerNodes.HasRows)
+					if (!readerAliveWorkerNodes.HasRows) return allAliveWorkerNodesUri;
+
+					var ordinalPosForUrl = readerAliveWorkerNodes.GetOrdinal("Url");
+					while (readerAliveWorkerNodes.Read())
 					{
-						var ordinalPosForUrl = readerAliveWorkerNodes.GetOrdinal("Url");
-						while (readerAliveWorkerNodes.Read())
-						{
-							allAliveWorkerNodesUri.Add(new Uri(readerAliveWorkerNodes.GetString(ordinalPosForUrl)));
-						}
+						allAliveWorkerNodesUri.Add(new Uri(readerAliveWorkerNodes.GetString(ordinalPosForUrl)));
 					}
 				}
 			}
@@ -410,20 +411,6 @@ namespace Stardust.Manager.Helpers
 				sqlTransaction.Commit();
 			}
 			return jobQueueItem;
-		}
-
-		public void UpdateWorkerNode(bool alive, string availableNode, SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
-		{
-			const string updateCommandText = @"UPDATE [Stardust].[WorkerNode] 
-											SET Alive = @Alive
-											WHERE Url = @Url";
-
-			using (var command = new SqlCommand(updateCommandText, sqlConnection, sqlTransaction))
-			{
-				command.Parameters.Add("@Alive", SqlDbType.Bit).Value = alive;
-				command.Parameters.Add("@Url", SqlDbType.NVarChar).Value = availableNode;
-				command.ExecuteNonQueryWithRetry(_retryPolicy);
-			}
 		}
 
 		public void TagQueueItem(Guid jobId, SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)

@@ -22,7 +22,9 @@ namespace ManagerTest
 		public IWorkerNodeRepository NodeRepository;
 		public NodeManager NodeManager;
 		public FakeHttpSender HttpSender;
-		
+		public ManagerConfiguration ManagerConfiguration;
+		public TestHelper TestHelper;
+
 		private WorkerNode _workerNode;
 
 		[TestFixtureSetUp]
@@ -55,7 +57,7 @@ namespace ManagerTest
 			HttpSender.CallToWorkerNodes.Clear();
 			ManagerController.CancelJobByJobId(jobQueueItem.JobId);
 
-			HttpSender.CallToWorkerNodes.Count().Should().Be.EqualTo(1);
+			HttpSender.CallToWorkerNodes.Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -225,12 +227,12 @@ namespace ManagerTest
 		{
 			NodeRepository.AddWorkerNode(_workerNode);
 
-			var beforeHeartbeat =  NodeRepository.GetAllWorkerNodes().First(x => x.Url.Equals(_workerNode.Url)).Heartbeat;
+			var beforeHeartbeat = TestHelper.GetAllNodes().First(x => x.Url.Equals(_workerNode.Url)).Heartbeat;
 			Thread.Sleep(TimeSpan.FromSeconds(1));
 
 			NodeManager.WorkerNodeRegisterHeartbeat(_workerNode.Url.ToString());
 
-			var afterHeartbeat = NodeRepository.GetAllWorkerNodes().First(x => x.Url.Equals(_workerNode.Url)).Heartbeat;
+			var afterHeartbeat = TestHelper.GetAllNodes().First(x => x.Url.Equals(_workerNode.Url)).Heartbeat;
 
 			Assert.IsTrue(beforeHeartbeat < afterHeartbeat);
 		}
@@ -239,5 +241,6 @@ namespace ManagerTest
 		{
 			HttpSender.BusyNodesUrl.Add(url.ToString());
 		}
+		
 	}
 }

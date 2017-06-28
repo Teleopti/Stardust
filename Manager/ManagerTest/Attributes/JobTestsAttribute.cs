@@ -18,6 +18,7 @@ namespace ManagerTest.Attributes
 			builder.RegisterInstance(config).SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
 			builder.RegisterType<JobManager>().SingleInstance();
+			builder.RegisterType<TestHelper>().SingleInstance();
 
 			builder.RegisterType<NodeManager>();
 

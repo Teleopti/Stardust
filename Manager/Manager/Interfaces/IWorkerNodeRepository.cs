@@ -6,8 +6,6 @@ namespace Stardust.Manager.Interfaces
 {
 	public interface IWorkerNodeRepository
 	{
-		List<WorkerNode> GetAllWorkerNodes();
-
 		void AddWorkerNode(WorkerNode workerNode);
 
 		void RegisterHeartbeat(string nodeUri, bool updateStatus);

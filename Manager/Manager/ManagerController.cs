@@ -226,14 +226,6 @@ namespace Stardust.Manager
 			return Ok();
 		}
 
-		[HttpGet, Route(ManagerRouteConstants.Nodes)]
-		public IHttpActionResult GetAllWorkerNodes()
-		{
-			var workernodes = _jobManager.GetAllWorkerNodes();
-
-			return Ok(workernodes);
-		}
-
 		private string WhoAmI(HttpRequestMessage request)
 		{
 			if (request == null)

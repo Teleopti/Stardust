@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using ManagerTest.Attributes;
@@ -26,16 +27,12 @@ namespace ManagerTest
 		public IHttpSender HttpSender;
 		public IJobRepository JobRepository;
 		public IWorkerNodeRepository WorkerNodeRepository;
-	    public JobRepositoryCommandExecuter JobRepositoryCommandExecuter;
-	    public ManagerConfiguration ManagerConfiguration;
+		public JobRepositoryCommandExecuter JobRepositoryCommandExecuter;
+		public ManagerConfiguration ManagerConfiguration;
+		public TestHelper TestHelper;
 
-        private WorkerNode _workerNode;
-
-
-		private FakeHttpSender FakeHttpSender
-		{
-			get { return (FakeHttpSender)HttpSender; }
-		}
+		private WorkerNode _workerNode;
+		private FakeHttpSender FakeHttpSender => (FakeHttpSender) HttpSender;
 
 		[TestFixtureSetUp]
 		public void TextFixtureSetUp()
@@ -51,7 +48,7 @@ namespace ManagerTest
 		{
 			NodeManager.AddWorkerNode(_workerNode.Url);
 
-			WorkerNodeRepository.GetAllWorkerNodes()
+			TestHelper.GetAllNodes()
 				.First()
 				.Url.Should()
 				.Be.EqualTo(_workerNode.Url.ToString());
@@ -70,7 +67,7 @@ namespace ManagerTest
 			};
 
 			WorkerNodeRepository.AddWorkerNode(_workerNode);
-			
+
 			JobManager.AddItemToJobQueue(jobQueueItem);
 
 			JobManager.AssignJobToWorkerNodes();
@@ -92,7 +89,7 @@ namespace ManagerTest
 			};
 
 			JobManager.AddItemToJobQueue(jobQueueItem);
-			
+
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
 		}
 
@@ -109,19 +106,19 @@ namespace ManagerTest
 			};
 
 			WorkerNodeRepository.AddWorkerNode(_workerNode);
-		
+
 			JobManager.AddItemToJobQueue(jobQueueItem);
-			
+
 			JobManager.AssignJobToWorkerNodes();
-			
+
 			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Started != null);
-			
+
 			JobManager.CancelJobByJobId(jobQueueItem.JobId);
-			
+
 			job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Result.StartsWith("cancel", StringComparison.InvariantCultureIgnoreCase));
-			
+
 			JobRepository.GetAllJobs().Count.Should().Be(1);
 		}
 
@@ -164,7 +161,7 @@ namespace ManagerTest
 			NodeManager.AddWorkerNode(_workerNode.Url);
 			NodeManager.AddWorkerNode(_workerNode.Url);
 
-			WorkerNodeRepository.GetAllWorkerNodes().Count.Should().Be.EqualTo(1);
+			TestHelper.GetAllNodes().Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -200,11 +197,11 @@ namespace ManagerTest
 			};
 
 			WorkerNodeRepository.AddWorkerNode(_workerNode);
-		
+
 			JobManager.AddItemToJobQueue(jobQueueItem);
-			
+
 			JobManager.AssignJobToWorkerNodes();
-			
+
 			var job = JobManager.GetJobByJobId(jobQueueItem.JobId);
 			job.Satisfy(job1 => job1.Started != null);
 			job.Satisfy(job1 => job1.Ended == null);
@@ -216,10 +213,10 @@ namespace ManagerTest
 		}
 
 		[Test]
-		public void ShouldReturnNodesSortedByAvailability()
+		public void ShouldReturnAvailableNodes()
 		{
 			NodeManager.AddWorkerNode(new Uri("http://localhost:9051/"));
-			NodeManager.AddWorkerNode(new Uri("http://localhost:9052/"));
+
 			var jobQueueItem = new JobQueueItem
 			{
 				JobId = Guid.NewGuid(),
@@ -232,19 +229,16 @@ namespace ManagerTest
 			JobManager.AddItemToJobQueue(jobQueueItem);
 			JobManager.AssignJobToWorkerNodes();
 
-			jobQueueItem.JobId = Guid.NewGuid();
-			JobManager.AddItemToJobQueue(jobQueueItem);
-			JobManager.AssignJobToWorkerNodes();
-
+			TestHelper.AddDeadNode("http://localhost:9052/");
 			NodeManager.AddWorkerNode(new Uri("http://localhost:9053/"));
 
 			using (var sqlConnection = new SqlConnection(ManagerConfiguration.ConnectionString))
 			{
-				var nodes = JobRepositoryCommandExecuter.SelectAllAliveWorkerNodes(sqlConnection);
-				nodes.Count.Should().Be.EqualTo(3);
+				sqlConnection.Open();
+				var nodes = JobRepositoryCommandExecuter.SelectAllAvailableWorkerNodes(sqlConnection);
+				nodes.Count.Should().Be.EqualTo(1);
 				nodes.First().Should().Be.EqualTo("http://localhost:9053/");
 			}
-
 		}
 	}
 }

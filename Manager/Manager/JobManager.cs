@@ -84,12 +84,6 @@ namespace Stardust.Manager
 			}
 		}
 
-		public IList<WorkerNode> GetAllWorkerNodes()
-		{
-			return _workerNodeRepository.GetAllWorkerNodes();
-		}
-
-
 		public JobQueueItem GetJobQueueItemByJobId(Guid jobId)
 		{
 			return _jobRepository.GetJobQueueItemByJobId(jobId);

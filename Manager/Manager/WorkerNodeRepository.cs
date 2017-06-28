@@ -22,69 +22,18 @@ namespace Stardust.Manager
 			_retryPolicy = retryPolicyProvider.GetPolicy();
 		}
 
-		public List<WorkerNode> GetAllWorkerNodes()
-		{
-			var listToReturn = new List<WorkerNode>();
-
-			try
-			{
-				using (var connection = new SqlConnection(_connectionString))
-				{
-					using (var command = connection.CreateCommand())
-					{
-						command.CommandText = "SELECT Id, Url, Heartbeat, Alive " +
-										 "FROM [Stardust].[WorkerNode]";
-
-						connection.OpenWithRetry(_retryPolicy);
-
-						using (var reader = command.ExecuteReaderWithRetry(_retryPolicy))
-						{
-							if (reader.HasRows)
-							{
-								var ordinalPositionForIdField = reader.GetOrdinal("Id");
-								var ordinalPositionForUrlField = reader.GetOrdinal("Url");
-								var ordinalPositionForAliveField = reader.GetOrdinal("Alive");
-								var ordinalPositionForHeartbeatField = reader.GetOrdinal("Heartbeat");
-
-								while (reader.Read())
-								{
-									var workerNode = new WorkerNode
-									{
-										Id = (Guid)reader.GetValue(ordinalPositionForIdField),
-										Url = new Uri((string)reader.GetValue(ordinalPositionForUrlField)),
-										Alive = (bool)reader.GetValue(ordinalPositionForAliveField),
-										Heartbeat = (DateTime)reader.GetValue(ordinalPositionForHeartbeatField)
-									};
-
-									listToReturn.Add(workerNode);
-								}
-							}
-						}
-					}
-				}
-				return listToReturn;
-			}
-			catch (Exception exp)
-			{
-				this.Log().ErrorWithLineNumber(exp.Message, exp);
-				throw;
-			}
-		}
 
 		public void AddWorkerNode(WorkerNode workerNode)
 		{
+			const string selectWorkerNodeCommand = "INSERT INTO [Stardust].[WorkerNode] (Id, Url, Heartbeat, Alive) VALUES(@Id, @Url, @Heartbeat, @Alive)";
 			try
 			{
 				using (var connection = new SqlConnection(_connectionString))
 				{
 					connection.OpenWithRetry(_retryPolicy);
 
-					using (var workerNodeCommand = connection.CreateCommand())
+					using (var workerNodeCommand = new SqlCommand(selectWorkerNodeCommand, connection))
 					{
-						workerNodeCommand.CommandText = "INSERT INTO [Stardust].[WorkerNode] " +
-													"(Id, Url, Heartbeat, Alive) " +
-													"VALUES(@Id, @Url, @Heartbeat, @Alive)";
-
 						workerNodeCommand.Parameters.AddWithValue("@Id", workerNode.Id);
 						workerNodeCommand.Parameters.AddWithValue("@Url", workerNode.Url.ToString());
 						workerNodeCommand.Parameters.AddWithValue("@Heartbeat", workerNode.Heartbeat);
@@ -101,7 +50,7 @@ namespace Stardust.Manager
 					using (var connection = new SqlConnection(_connectionString))
 					{
 						connection.OpenWithRetry(_retryPolicy);
-						var updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Heartbeat = @Heartbeat,
+						const string updateCommandText = @"UPDATE [Stardust].[WorkerNode] SET Heartbeat = @Heartbeat,
 											Alive = @Alive
 											WHERE Url = @Url";
 
@@ -124,13 +73,13 @@ namespace Stardust.Manager
 
 		public List<string> CheckNodesAreAlive(TimeSpan timeSpan)
 		{
-			var selectCommand = @"SELECT Id, 
+			const string selectCommand = @"SELECT Id, 
 										 Url, 
 										 Heartbeat, 
 										 Alive 
-								 FROM [Stardust].[WorkerNode]";
+								 FROM [Stardust].[WorkerNode] WHERE Alive = 1";
 
-			var updateCommandText = @"UPDATE [Stardust].[WorkerNode]
+			const string updateCommandText = @"UPDATE [Stardust].[WorkerNode]
 											SET Alive = @Alive
 										WHERE Url = @Url";
 
@@ -144,7 +93,7 @@ namespace Stardust.Manager
 					var ordinalPosForHeartBeat = 0;
 					var ordinalPosForUrl = 0;
 
-					var allNodes = new List<object[]>();
+					var allAliveNodes = new List<object[]>();
 
 					using (var commandSelectAll = new SqlCommand(selectCommand, connection))
 					{
@@ -159,13 +108,13 @@ namespace Stardust.Manager
 								{
 									var temp = new object[readAllWorkerNodes.FieldCount];
 									readAllWorkerNodes.GetValues(temp);
-									allNodes.Add(temp);
+									allAliveNodes.Add(temp);
 								}
 							}
 						}
 					}
 
-					if (allNodes.Any())
+					if (allAliveNodes.Any())
 					{
 						using (var trans = connection.BeginTransaction())
 						{
@@ -174,19 +123,18 @@ namespace Stardust.Manager
 								commandUpdate.Parameters.Add("@Alive", SqlDbType.Bit);
 								commandUpdate.Parameters.Add("@Url", SqlDbType.NVarChar);
 
-								foreach (var node in allNodes)
+								foreach (var node in allAliveNodes)
 								{
 									var heartBeatDateTime = (DateTime)node[ordinalPosForHeartBeat];
 									var url = node[ordinalPosForUrl];
 									var currentDateTime = DateTime.UtcNow;
 									var dateDiff = (currentDateTime - heartBeatDateTime).TotalSeconds;
-									if (dateDiff > timeSpan.TotalSeconds)
-									{
-										commandUpdate.Parameters["@Alive"].Value = false;
-										commandUpdate.Parameters["@Url"].Value = url;
-										commandUpdate.ExecuteNonQueryWithRetry(_retryPolicy);
-										deadNodes.Add(url.ToString());
-									}
+									if (!(dateDiff > timeSpan.TotalSeconds)) continue;
+
+									commandUpdate.Parameters["@Alive"].Value = false;
+									commandUpdate.Parameters["@Url"].Value = url;
+									commandUpdate.ExecuteNonQueryWithRetry(_retryPolicy);
+									deadNodes.Add(url.ToString());
 								}
 							}
 							trans.Commit();
