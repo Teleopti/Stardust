@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Web;
 using System.Windows.Forms;
 using EO.Base;
 using EO.WebBrowser;
@@ -84,7 +85,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			webView1.RegisterJSExtensionFunction("fatClientWebLogin", WebView_JSFatClientWebLogin);
 			webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
 			logInfo("EO Browser: Loading URL to show the login web view.");
-			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin";
+			var queryString = "";
+			var activationArguments = AppDomain.CurrentDomain.SetupInformation.ActivationArguments;
+			if (activationArguments?.ActivationData != null && activationArguments.ActivationData.Length>0)
+			{
+				queryString = activationArguments.ActivationData[0];
+			}
+			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin?queryString=" + HttpUtility.UrlEncode(queryString);
 			// some defensive coding to prevent bug 39408
 			if (Visible)
 				return true;

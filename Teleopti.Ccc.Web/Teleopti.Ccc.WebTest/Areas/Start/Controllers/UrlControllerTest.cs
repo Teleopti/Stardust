@@ -15,7 +15,6 @@ using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Filters;
 using Teleopti.Ccc.WebTest.Filters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 {
@@ -66,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
             IIdentityLogon identityLogon = new FakeAuthenticator();
-	        var urlController = new UrlController(CurrentHttpContext(url, applicationPath),authenticationModule, identityLogon, signatureCreator);
+	        var urlController = new UrlController(CurrentHttpContext(url, applicationPath),authenticationModule, identityLogon, signatureCreator, new Now());
             var result = urlController.Index();
             Assert.AreEqual(url+applicationPath, ((result as JsonResult).Data as dynamic).Url);
             Assert.AreEqual(signed, ((result as JsonResult).Data as dynamic).Signature);
@@ -98,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		    System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
 					 new TeleoptiIdentity("test", null, null, null, null), person );
 			 IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
-             var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon, signatureCreator);
+             var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon, signatureCreator, new Now());
 		    target.AuthenticationDetails().Should().Be.Equals(personId);
 	    }
 
@@ -114,8 +113,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			 System.Threading.Thread.CurrentPrincipal = new TeleoptiPrincipal(
 					 new TeleoptiIdentity("test", null, null, null, null), person);
 			 IAuthenticationModule authenticationModule = new TeleoptiPrincipalAuthorizeAttributeTest.FakeAuthenticationModule();
-			 var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon, signatureCreator);
-			 var result = ((RedirectResult) target.RedirectToWebLogin());
+			 var target = new UrlController(CurrentHttpContext(url, applicationPath), authenticationModule, identityLogon, signatureCreator, new Now());
+			 var result = ((RedirectResult) target.RedirectToWebLogin(""));
 			 result.Url.Should().Not.Contain("start/Url/RedirectToWebLogin");
 		 }
     }
