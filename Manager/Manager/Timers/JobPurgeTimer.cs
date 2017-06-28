@@ -27,9 +27,9 @@ namespace Stardust.Manager.Timers
 
 		public virtual void Purge()
 		{
+			const string deleteCommandText = "DELETE TOP(@batchsize) FROM [Stardust].[Job] WHERE Created < DATEADD(HOUR, -@hours, GETDATE())";
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				string deleteCommandText = "DELETE TOP(@batchsize) FROM [Stardust].[Job] WHERE Created < DATEADD(HOUR, -@hours, GETDATE())";
 				connection.OpenWithRetry(_retryPolicy);
 				using (var deleteCommand = new SqlCommand(deleteCommandText, connection))
 				{

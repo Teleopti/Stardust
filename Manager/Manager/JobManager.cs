@@ -59,7 +59,7 @@ namespace Stardust.Manager
 
 		public void AssignJobToWorkerNodes()
 		{
-			ManagerLogger.Info("´Going to assign job to the nodes in timer");
+			ManagerLogger.Info("Going to assign job to the nodes in timer");
 			_checkAndAssignJob.Enabled = false;
 			_jobRepository.AssignJobToWorkerNode();
 			_checkAndAssignJob.Enabled = true;

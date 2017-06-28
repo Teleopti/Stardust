@@ -36,10 +36,7 @@ namespace Stardust.Manager
 			
 			_jobManager.AddItemToJobQueue(jobQueueItem);
 
-			var msg = string.Format("{0} : New job received from client ( jobId, jobName ) : ( {1}, {2} )",
-			                        WhoAmI(Request),
-			                        jobQueueItem.JobId,
-			                        jobQueueItem.Name);
+			var msg = $"{WhoAmI(Request)} : New job received from client ( jobId, jobName ) : ( {jobQueueItem.JobId}, {jobQueueItem.Name} )";
 			this.Log().InfoWithLineNumber(msg);
 
 			
