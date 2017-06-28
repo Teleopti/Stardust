@@ -142,23 +142,24 @@
 		{{ 'Export' | translate }}
 	</h1>
 	<div class="modal-inner-content">
-<div class="con-row">
-	<div class="con-flex"></div>
-	<div class="con-flex split-3-1 line-center">
-		<label>{{'ForecastPeriod' | translate}}: </label><br/>
-		<date-range-picker ng-model="query.period"></date-range-picker>
+		<div class="con-row">
+			<div class="con-flex"></div>
+			<div class="con-flex split-3-1 line-center">
+				<label>{{'ForecastPeriod' | translate}}: </label><br/>
+				<date-range-picker ng-model="query.period"></date-range-picker>
+			</div>
+			<div class="con-flex"></div>
+		</div>
 	</div>
-	<div class="con-flex"></div>
-</div>
-</div>
-<div class="modal-actions">
-	<aside>
-		<button class="wfm-btn wfm-btn-invis-default" ng-click="displayExportModal()">{{ 'Close' | translate }}</button>
-		<button class="wfm-btn wfm-btn-invis-default" ng-click="exportToFile(query.period, modalForecastingInfo)">
-			{{ 'Export' | translate }}
-		</button>
-	</aside>
-</div>
+	<div class="modal-actions">
+		<aside>
+			<button class="wfm-btn wfm-btn-invis-default" ng-click="displayExportModal()">{{ 'Close' | translate }}</button>
+			<button ng-disabled="exporting" class="wfm-btn wfm-btn-invis-default" ng-click="exportToFile(query.period, modalForecastingInfo)" >
+				{{ 'Export' | translate }}
+			</button>
+			<md-progress-linear md-mode="indeterminate" ng-cloak ng-if="exporting"></md-progress-linear>
+		</aside>
+	</div>
 </modal-dialog>
 
 <modal-dialog show='modalModifyLaunch' infos='modalsInfos' ng-cloak>

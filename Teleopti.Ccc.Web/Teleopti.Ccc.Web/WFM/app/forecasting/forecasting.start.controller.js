@@ -8,7 +8,7 @@
 				$scope.isForecastRunning = false;
 				$scope.isExportEnabled = Toggle.WFM_Export_Forecast_44716;
 				$scope.infos = {};
-
+				$scope.exporting = false;
 				var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
 				.replace('{0}', $translate.instant('Forecasts'))
 				.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
@@ -536,6 +536,7 @@
 				};
 
 				$scope.exportToFile = function (period, workload) {
+					$scope.exporting = true;
 					forecastingService.exportForecast(JSON.stringify(
 						{
 							ForecastStart: period.startDate,
@@ -554,8 +555,9 @@
 								moment(period.endDate).format('YYYY-MM-DD') +
 								'.xlsx';
 							saveAs(blob, fileName);
+							$scope.exporting = false;
 							$scope.exportModal = false;
-						}, function (data, status, headers, config) { }
+						}, function (data, status, headers, config) {$scope.exporting = false; }
 					);
 				};
 
