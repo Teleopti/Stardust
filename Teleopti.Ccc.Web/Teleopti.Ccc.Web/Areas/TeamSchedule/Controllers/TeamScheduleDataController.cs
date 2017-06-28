@@ -112,6 +112,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 		}
+
+		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/GetOrganizationWithPeriod")]
+		public virtual BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateTime startDate, DateTime endDate)
+		{
+			return _teamProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
+				DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+		}
 	}
 
 	public class CheckPersonAccountFormData

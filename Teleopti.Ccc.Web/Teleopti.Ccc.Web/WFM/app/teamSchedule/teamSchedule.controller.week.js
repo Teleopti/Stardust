@@ -126,9 +126,11 @@
 		};
 
 		vm.getSitesAndTeamsAsync = function () {
-			return vm._sitesAndTeamsPromise = $q(function (resolve, reject) {
-				var date = moment(vm.startOfWeek).format('YYYY-MM-DD');
-				teamScheduleSvc.hierarchy(date)
+			return $q(function (resolve, reject) {
+				var startDate = moment(vm.startOfWeek);
+				var endDate = moment(vm.startOfWeek).add(6, 'days');
+
+				teamScheduleSvc.hierarchyOverPeriod(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'))
 					.then(function (data) {
 						resolve(data);
 						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
@@ -136,7 +138,9 @@
 					});
 			});
 		};
+
 		vm.getSitesAndTeamsAsync();
+
 		$q.all(asyncData).then(function (data) {
 			if (data.pageSetting.Agents > 0) {
 				vm.paginationOptions.pageSize = data.pageSetting.Agents;

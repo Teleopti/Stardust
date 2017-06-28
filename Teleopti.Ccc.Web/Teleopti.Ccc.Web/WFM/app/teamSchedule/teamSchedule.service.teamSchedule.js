@@ -82,17 +82,25 @@
 		};
 
 		service.hierarchy = function (dateStr) {
-			if (!dateStr) {
-				return;
-			}
+			return getOrganizations({ date: dateStr });
+		};
+
+		service.hierarchyOverPeriod = function (startDate, endDate) {
+			return getOrganizations({
+				startDate: startDate,
+				endDate: endDate
+			});
+		};
+
+		function getOrganizations(params) {
 			return $q(function (resolve, reject) {
-				$http.get(hierarchyUrl, {params: {date: dateStr}})
+				$http.get(hierarchyUrl, { params: params })
 					.then(function (response) {
 						resolve(response.data);
 					}, function (response) {
 						reject(response.data);
 					});
 			});
-		};
+		}
 	}
 })();
