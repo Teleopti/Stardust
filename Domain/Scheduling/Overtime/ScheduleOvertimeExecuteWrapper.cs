@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		private static IDisposable getContext(List<SkillCombinationResource> combinationResources, IList<ISkill> skills, bool useAllSkills)
 		{
-			return new ResourceCalculationContext(new ResourceCalculationDataConatainerFromSkillCombinations(combinationResources, skills, useAllSkills));
+			return new ResourceCalculationContext(new Lazy<IResourceCalculationDataContainerWithSingleOperation>(() => new ResourceCalculationDataConatainerFromSkillCombinations(combinationResources, skills, useAllSkills)));
 		}
 
 		
