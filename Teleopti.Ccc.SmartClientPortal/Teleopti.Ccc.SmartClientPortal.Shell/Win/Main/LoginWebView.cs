@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			{
 				if (ApplicationDeployment.CurrentDeployment.ActivationUri != null)
 				{
-					logInfo($"ApplicationDeployment.CurrentDeployment.ActivationUri.Query: {ApplicationDeployment.CurrentDeployment.ActivationUri.Query}");
+					_logger.Info($"ApplicationDeployment.CurrentDeployment.ActivationUri.Query: {ApplicationDeployment.CurrentDeployment.ActivationUri.Query}");
 					queryString = ApplicationDeployment.CurrentDeployment.ActivationUri.Query;
 				}
 			}
@@ -100,9 +100,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			{
 				foreach (var data in activationArguments.ActivationData)
 				{
-					logInfo($"activationArguments: {data}");
+					_logger.Info($"activationArguments: {data}");
 				}
-				//queryString = activationArguments.ActivationData[0];
 			}
 			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin?queryString=" + HttpUtility.UrlEncode(queryString);
 			// some defensive coding to prevent bug 39408
