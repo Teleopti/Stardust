@@ -3,11 +3,18 @@
 
 	angular.module('wfm.forecasting')
 		.controller('ForecastingStartCtrl', [
-			'$scope', '$state', 'forecastingService', '$filter', '$interval', '$stateParams', '$translate', 'Toggle',
-			function ($scope, $state, forecastingService, $filter, $interval, $stateParams, $translate, Toggle) {
+			'$scope', '$state', 'forecastingService', '$filter', '$interval', '$stateParams', '$translate', 'Toggle',  'NoticeService',
+			function ($scope, $state, forecastingService, $filter, $interval, $stateParams, $translate, Toggle, NoticeService) {
 				$scope.isForecastRunning = false;
 				$scope.isExportEnabled = Toggle.WFM_Export_Forecast_44716;
 				$scope.infos = {};
+
+				var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
+				.replace('{0}', $translate.instant('Forecasts'))
+				.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
+				.replace('{2}', '</a>');
+				NoticeService.info(message, null, true);
+
 				function updateRunningStatus() {
 					forecastingService.status.get().$promise.then(function (result) {
 						$scope.isForecastRunning = result.IsRunning;
