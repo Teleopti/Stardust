@@ -50,7 +50,7 @@ RTA_SolidProofWhenManagingAgentAdherence_39351 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
-WfmTeamSchedule_MoveOvertimeActivity_44888 = DEV
+WfmTeamSchedule_MoveOvertimeActivity_44888 = RC
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
 
