@@ -31,13 +31,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonAssignmentRepository AssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
-		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
 		[Test]
 		public void ShouldUseTeamAndSameShiftCategory()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(7));

@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -26,13 +27,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 	{
 		public DesktopScheduling Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
-		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
+		public FakeBusinessUnitRepository BusinessUnitRepository;
 
 		[Test]
 		public void ShouldRespectShiftCategoryLimitationWhenUsingTeamAndBlock()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
 			var date = new DateOnly(2017, 1, 22);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var shiftCat1 = new ShiftCategory("1").WithId();
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldRespectShiftCategoryLimitationWhenUsingTeamAndBlockAndNotPossibleToScheduleFullBlockPeriod()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
 			var date = new DateOnly(2017, 1, 22);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
 			var shiftCat1 = new ShiftCategory("1").WithId();
@@ -136,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldNotTouchTeamMembersNotInSelectionWhenUsingTeamAndBlock()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
 			var date = new DateOnly(2017, 1, 22);
 			var period = new DateOnlyPeriod(date, date.AddDays(2));
 			var shiftCategoryBefore = new ShiftCategory("Before").WithId();
@@ -390,7 +391,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public void ShouldNotCrashOnTeamMemberNotInSelection()
 		{
 			var team = new Team { Site = new Site("_") }.WithDescription(new Description("_"));
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
 			var date = new DateOnly(2017, 1, 22);
 			var period = new DateOnlyPeriod(date, date);
 			var shiftCategory = new ShiftCategory("Before").WithId();

@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakePreferenceDayRepository PreferenceDayRepository;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
-		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
 		[TestCase(true)]
 		[TestCase(false)]
@@ -599,7 +597,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var openSkill = SkillRepository.Has("_", activity);
 			var scenario = ScenarioRepository.Has("_");
 			var team = new Team().WithDescription(new Description("team")).WithId();
-			GroupScheduleGroupPageDataProvider.SetBusinessUnit_UseFromTestOnly(BusinessUnitFactory.CreateBusinessUnitAndAppend(team));
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
 			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), new ShiftCategory("_").WithId()));
 			var otherAgentsSkill = otherAgentKnowsBothOpenAndClosedSkill ? new[] {openSkill, closedSkill} : new[] {openSkill};
