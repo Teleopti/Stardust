@@ -65,6 +65,12 @@
 
 			window.onload = function () {
 
+				document.getElementById("launcher").addEventListener("click", function (e) {
+					e.preventDefault();
+					window.location.href = "/TeleoptiWFM/Client/Teleopti.Ccc.SmartClientPortal.Shell.application?" + window.location.search.substring(1);
+					return false;
+				});
+
 				loadToggle('Wfm_MinimumScaffolding_32659', function (value) {
 					if (value) {
 						document.getElementById("webwfm").style.visibility = "visible";
@@ -99,7 +105,7 @@
 				</a>
 			</div>
 			<div class="col-md-3" style="overflow:hidden;">
-				<a class="block orange"  href="/TeleoptiWFM/Client/Teleopti.Ccc.SmartClientPortal.Shell.application" id="launcher">
+				<a class="block orange" href="javascript:void(0);" id="launcher">
 					<span>Resource Planners</span>
 					<a class="wfm-block-overlay" style="visibility: hidden" id="webwfm" href="/TeleoptiWFM/Web/wfm">
 						<span>Web</span>

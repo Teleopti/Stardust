@@ -38,7 +38,7 @@
 												  MapFileExtensions="true"
 												  MinimumRequiredVersion="$(CCCVersion)"
 												  TargetFrameworkMoniker=".NETFramework,Version=v4.0"
-												  TrustUrlParameters="false"/>			 
+												  TrustUrlParameters="true"/>			 
 	</Target>
 	
 	<Target Name="CopyToOutput" DependsOnTargets="ClearOutput">
