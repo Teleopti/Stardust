@@ -907,7 +907,7 @@ datum</value>
     <comment>Header</comment>
   </data>
   <data name="HideDetails" xml:space="preserve">
-    <value>Göm detaljer</value>
+    <value>Dölj detaljer</value>
     <comment>Hide details</comment>
   </data>
   <data name="HistoricalDepth" xml:space="preserve">
@@ -5844,7 +5844,7 @@ Produktaktiveringsnyckeln heter "{3}" och har dessa tillval aktiverade:
     <comment>Column Only</comment>
   </data>
   <data name="HideOptions" xml:space="preserve">
-    <value>Göm alternativ</value>
+    <value>Dölj alternativ</value>
     <comment>Options &lt;&lt;</comment>
   </data>
   <data name="ShowOptions" xml:space="preserve">
@@ -13033,7 +13033,7 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
     <value>Visa endast frånvaro</value>
   </data>
   <data name="HidePanel" xml:space="preserve">
-    <value>Göm panelen</value>
+    <value>Dölj panelen</value>
   </data>
   <data name="DoubleClickHereToEditText" xml:space="preserve">
     <value>Dubbelklicka här för att ändra texten</value>
@@ -14257,7 +14257,7 @@ Vill du registrera dig?</value>
     <value>Sannolikhet att få övertid:</value>
   </data>
   <data name="ViewQRCodeForConfiguration" xml:space="preserve">
-    <value>Visa QR-kod för konfiguration.</value>
+    <value>Visa guide för WFM-app</value>
   </data>
   <data name="MonitorUpToXAgents" xml:space="preserve">
     <value>Bevaka upp till 50 agenter</value>
@@ -14671,7 +14671,7 @@ Vill du registrera dig?</value>
     <value>Steg 2:</value>
   </data>
   <data name="WFMAppGuideTitle" xml:space="preserve">
-    <value>Guide för Teleopti WFM app</value>
+    <value>Guide för Teleopti WFMs app</value>
   </data>
   <data name="Purged" xml:space="preserve">
     <value>Bortrensad</value>
@@ -14780,5 +14780,26 @@ Vill du registrera dig?</value>
   </data>
   <data name="UnsupportedDataSeriesFound" xml:space="preserve">
     <value>Innehåller blandade kompetenstyper, viss data kanske inte kan visas</value>
+  </data>
+  <data name="UnavailableSeries" xml:space="preserve">
+    <value>Aktuellt urval innehåller en e-postkompetens, vissa dataserier är därför inte tillgängliga.</value>
+  </data>
+  <data name="EnableAbsenceProbability" xml:space="preserve">
+    <value>Aktivera sannolikhet för frånvaro</value>
+  </data>
+  <data name="EnableOvertimeProbability" xml:space="preserve">
+    <value>Aktivera sannolikhet för övertid</value>
+  </data>
+  <data name="ApplySuggestion" xml:space="preserve">
+    <value>Använd förslag</value>
+  </data>
+  <data name="GetSuggestionsForOvertime" xml:space="preserve">
+    <value>Visa förslag för övertid</value>
+  </data>
+  <data name="MoveOvertime" xml:space="preserve">
+    <value>Flytta övertid</value>
+  </data>
+  <data name="NoPermissionMoveAgentOvertime" xml:space="preserve">
+    <value>Rättigheter för att flytta övertid för agent {0} saknas</value>
   </data>
 </root>
