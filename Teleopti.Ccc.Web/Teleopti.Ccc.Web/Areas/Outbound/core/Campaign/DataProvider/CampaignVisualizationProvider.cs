@@ -48,11 +48,12 @@ namespace Teleopti.Ccc.Web.Areas.Outbound.core.Campaign.DataProvider
 
 				visualizationVM.Dates.Add(date);
 
-				if (backlogPreviousDay.HasValue && backlogHours == TimeSpan.Zero && !incomingTask.GetActualBacklogOnDate(date).HasValue)
+				if (backlogHours == TimeSpan.Zero && !incomingTask.GetActualBacklogOnDate(date).HasValue)
 				{
+					var backlog = backlogPreviousDay.HasValue ? backlogPreviousDay.Value : incomingTask.GetBacklogOnDate(date.AddDays(-1));
 					overstaffHours = (scheduledHours > TimeSpan.Zero)
-						? scheduledHours - backlogPreviousDay.Value
-						: plannedHours - backlogPreviousDay.Value;
+						? scheduledHours - backlog
+						: plannedHours - backlog;
 				}
 													
 				visualizationVM.PlannedPersonHours.Add(convertTimespanToDouble(plannedHours));

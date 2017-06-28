@@ -281,5 +281,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Outbound.Core
 			result.ScheduledPersonHours.Count.Should().Be.EqualTo(result.IsManualPlanned.Count);
 			result.IsManualPlanned.Count.Should().Be.EqualTo(result.IsCloseDays.Count);
 		}
+
+		[Test]
+		public void ShouldGetOverstaffForFirstDay()
+		{
+			var id = new Guid();
+			var date = new DateOnly(2015, 7, 24);
+
+			_campaign.SpanningPeriod = new DateTimePeriod(new DateTime(date.Date.Ticks, DateTimeKind.Utc), new DateTime(date.Year, date.Month, date.Day, 23, 59, 59, DateTimeKind.Utc));
+
+			_campaignRepository.Stub(x => x.Get(id)).Return(_campaign);
+			var incomingTask = MockRepository.GenerateMock<IBacklogTask>();
+			incomingTask.Stub(x => x.GetRealPlannedTimeOnDate(date)).Return(TimeSpan.FromHours(20));
+			incomingTask.Stub(x => x.GetRealScheduledTimeOnDate(date)).Return(TimeSpan.FromHours(0));
+			incomingTask.Stub(x => x.GetBacklogOnDate(date)).Return(TimeSpan.FromHours(0));
+			incomingTask.Stub(x => x.GetBacklogOnDate(date.AddDays(-1))).Return(TimeSpan.FromHours(10));
+
+			_taskManager.Stub(x => x.GetIncomingTaskFromCampaign(_campaign, _skippedDates)).Return(incomingTask);
+
+			var target = new CampaignVisualizationProvider(_campaignRepository, _taskManager);
+			var result = target.ProvideVisualization(id, _skippedDates.ToArray());
+
+			result.OverstaffPersonHours[0].Should().Be.EqualTo(10);
+		}
 	}
 }

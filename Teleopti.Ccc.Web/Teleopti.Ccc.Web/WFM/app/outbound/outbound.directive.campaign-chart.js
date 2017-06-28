@@ -231,7 +231,10 @@
 			this._setChartOption_axis = _setChartOption_axis;
 
 			function _calculateYMax() {
-				return (Math.max.apply(Math, $scope.campaign.graphData.rawBacklogs.slice(1)) + Math.max.apply(Math, $scope.campaign.graphData.unscheduledPlans.slice(1))) * 1.1;
+				return (Math.max.apply(Math, $scope.campaign.graphData.rawBacklogs.slice(1))
+					+ Math.max.apply(Math, $scope.campaign.graphData.unscheduledPlans.slice(1))
+					+ Math.max.apply(Math, $scope.campaign.graphData.schedules.slice(1))
+					+ Math.max.apply(Math, $scope.campaign.graphData.overStaff.slice(1))) * 1.1;
 			}
 
 			function _setChartOption_axis() {
