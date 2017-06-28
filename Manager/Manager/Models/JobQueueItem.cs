@@ -62,15 +62,14 @@ namespace Stardust.Manager.Models
 				list.Add(new ValidationResult("Invalid parameter: Serialized", pIncome));
 			}
 
-			if (string.IsNullOrEmpty(CreatedBy))
-			{
-				pIncome = new[]
-				{
-					"CreatedBy"
-				};
+			if (!string.IsNullOrEmpty(CreatedBy)) return list;
 
-				list.Add(new ValidationResult("Invalid parameter: CreatedBy", pIncome));
-			}
+			pIncome = new[]
+			{
+				"CreatedBy"
+			};
+
+			list.Add(new ValidationResult("Invalid parameter: CreatedBy", pIncome));
 
 
 			return list;

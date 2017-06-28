@@ -4,7 +4,9 @@ namespace Stardust.Manager
 {
 	public class ManagerConfiguration
 	{
-		public ManagerConfiguration(string connectionString, string route, int allowedNodeDownTimeSeconds, int checkNewJobIntervalSeconds, int purgeJobsBatchSize, int purgeJobsIntervalHours, int purgeJobsOlderThanHours, int purgeNodesIntervalHours)
+		public ManagerConfiguration(string connectionString, string route, int allowedNodeDownTimeSeconds, 
+			int checkNewJobIntervalSeconds, int purgeJobsBatchSize, int purgeJobsIntervalHours, 
+			int purgeJobsOlderThanHours, int purgeNodesIntervalHours)
 		{
 			ConnectionString = connectionString;
 			Route = route;
@@ -53,13 +55,13 @@ namespace Stardust.Manager
 			}
 		}
 
-		public string ConnectionString { get; private set; }
-		public string Route { get; private set; }
-		public int AllowedNodeDownTimeSeconds { get; private set; }
-		public int CheckNewJobIntervalSeconds { get; private set; }
-		public int PurgeJobsBatchSize { get; private set; }
-		public int PurgeJobsIntervalHours { get; private set; }
-		public int PurgeJobsOlderThanHours { get; private set; }
-		public int PurgeNodesIntervalHours { get; private set; }
+		public string ConnectionString { get; }
+		public string Route { get; }
+		public int AllowedNodeDownTimeSeconds { get; }
+		public int CheckNewJobIntervalSeconds { get; }
+		public int PurgeJobsBatchSize { get; }
+		public int PurgeJobsIntervalHours { get; }
+		public int PurgeJobsOlderThanHours { get; }
+		public int PurgeNodesIntervalHours { get; }
 	}
 }

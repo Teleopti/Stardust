@@ -23,9 +23,9 @@ namespace Stardust.Manager.Timers
 
 		public virtual void Purge()
 		{
+			const string deleteCommandText = "DELETE FROM [Stardust].[WorkerNode] WHERE Alive = 0";
 			using (var connection = new SqlConnection(_connectionString))
 			{
-				string deleteCommandText = "DELETE FROM [Stardust].[WorkerNode] WHERE Alive = 0";
 				connection.OpenWithRetry(_retryPolicy);
 				using (var deleteCommand = new SqlCommand(deleteCommandText, connection))	
 				{

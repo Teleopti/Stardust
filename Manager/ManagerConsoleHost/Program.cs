@@ -137,12 +137,11 @@ namespace ManagerConsoleHost
 		{
 			var exp = e.ExceptionObject as Exception;
 
-			if (exp != null)
-			{
-				Logger.FatalWithLineNumber(exp.Message,exp);
-				//should crash integration tests
-				throw exp;
-			}
+			if (exp == null) return;
+
+			Logger.FatalWithLineNumber(exp.Message,exp);
+			//should crash integration tests
+			throw exp;
 		}
 	}
 }

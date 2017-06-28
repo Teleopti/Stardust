@@ -18,7 +18,7 @@ namespace Stardust.Manager
 		private readonly ManagerConfiguration _managerConfiguration;
 		private readonly IWorkerNodeRepository _workerNodeRepository;
 		private readonly NodeManager _nodeManager;
-		private static readonly ILog managerLogger = LogManager.GetLogger("Stardust.ManagerLog");
+		private static readonly ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
 
 		public JobManager(IJobRepository jobRepository,
 		                  IWorkerNodeRepository workerNodeRepository,
@@ -59,7 +59,7 @@ namespace Stardust.Manager
 
 		public void AssignJobToWorkerNodes()
 		{
-			managerLogger.Info("´Going to assign job to the nodes in timer");
+			ManagerLogger.Info("´Going to assign job to the nodes in timer");
 			_checkAndAssignJob.Enabled = false;
 			_jobRepository.AssignJobToWorkerNode();
 			_checkAndAssignJob.Enabled = true;

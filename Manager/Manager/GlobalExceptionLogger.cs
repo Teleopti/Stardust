@@ -7,8 +7,7 @@ namespace Stardust.Manager
 	{
 		public override void Log(ExceptionLoggerContext context)
 		{
-			this.Log().ErrorWithLineNumber("[Message] \n" + context.Exception.Message + " \n\n [Stacktrace]\n " +
-			                               context.Exception.StackTrace);
+			this.Log().ErrorWithLineNumber($"[Message] \n  {context.Exception.Message} \n\n [Stacktrace]\n  {context.Exception.StackTrace}");
 		}
 	}
 }

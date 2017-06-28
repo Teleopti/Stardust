@@ -226,7 +226,7 @@ namespace Stardust.Manager
 			return Ok();
 		}
 
-		private string WhoAmI(HttpRequestMessage request)
+		private static string WhoAmI(HttpRequestMessage request)
 		{
 			if (request == null)
 			{

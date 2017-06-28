@@ -28,15 +28,14 @@ namespace Stardust.Manager.Models
 				list.Add(new ValidationResult("Invalid job id value.", pIncome));
 			}
 
-			if (string.IsNullOrEmpty(Detail))
-			{
-				pIncome = new[]
-				{
-					"Detail"
-				};
+			if (!string.IsNullOrEmpty(Detail)) return list;
 
-				list.Add(new ValidationResult("Invalid detail value.", pIncome));
-			}
+			pIncome = new[]
+			{
+				"Detail"
+			};
+
+			list.Add(new ValidationResult("Invalid detail value.", pIncome));
 
 			return list;
 		}
