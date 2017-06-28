@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<DefaultScenarioFromRepository>()
 			       .As<ICurrentScenario>()
-			       .InstancePerDependency();
+			       .SingleInstance();
 
 			builder.RegisterType<LoadUserUnauthorized>()
 				.As<ILoadUserUnauthorized>()

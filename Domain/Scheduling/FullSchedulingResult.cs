@@ -1,42 +1,43 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public class FullSchedulingResult
 	{
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly ViolatedSchedulePeriodBusinessRule _violatedSchedulePeriodBusinessRule;
 		private readonly DayOffBusinessRuleValidation _dayOffBusinessRuleValidation;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly IFindSchedulesForPersons _findSchedulesForPersons;
+		private readonly ICurrentScenario _currentScenario;
+		private readonly IUserTimeZone _userTimeZone;
 
-		public FullSchedulingResult(Func<ISchedulerStateHolder> schedulerStateHolder,
-			ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
-			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork)
+		public FullSchedulingResult(ViolatedSchedulePeriodBusinessRule violatedSchedulePeriodBusinessRule,
+			DayOffBusinessRuleValidation dayOffBusinessRuleValidation, ICurrentUnitOfWork currentUnitOfWork,
+			IFindSchedulesForPersons findSchedulesForPersons, ICurrentScenario currentScenario, IUserTimeZone userTimeZone)
 		{
-			_schedulerStateHolder = schedulerStateHolder;
 			_violatedSchedulePeriodBusinessRule = violatedSchedulePeriodBusinessRule;
 			_dayOffBusinessRuleValidation = dayOffBusinessRuleValidation;
 			_currentUnitOfWork = currentUnitOfWork;
+			_findSchedulesForPersons = findSchedulesForPersons;
+			_currentScenario = currentScenario;
+			_userTimeZone = userTimeZone;
 		}
 
-		public SchedulingResultModel Execute(DateOnlyPeriod period)
+		public SchedulingResultModel Execute(DateOnlyPeriod period, IEnumerable<IPerson> fixedStaffPeople)
 		{
-			var stateHolder = _schedulerStateHolder();
-			var fixedStaffPeople = stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period).ToList();
 			//some hack to get rid of lazy load ex
 			var uow = _currentUnitOfWork.Current();
 			uow.Reassociate(fixedStaffPeople);
-			stateHolder.Schedules.ForEach(range => range.Value.Reassociate(uow));
 			//
-			var scheduleOfSelectedPeople = stateHolder.Schedules.Where(x => fixedStaffPeople.Contains(x.Key)).ToList();
+			var personsProvider = new PersonsInOrganizationProvider(fixedStaffPeople) { DoLoadByPerson = true };
+			var scheduleOfSelectedPeople = _findSchedulesForPersons.FindSchedulesForPersons(new ScheduleDateTimePeriod(period.ToDateTimePeriod(_userTimeZone.TimeZone()), fixedStaffPeople), _currentScenario.Current(), personsProvider, new ScheduleDictionaryLoadOptions(false, false, false), fixedStaffPeople);
+
 			var violatedBusinessRules = new List<BusinessRulesValidationResult>();
 
 			var schedulePeriodNotInRange = _violatedSchedulePeriodBusinessRule.GetResult(fixedStaffPeople, period).ToList();

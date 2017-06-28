@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual SchedulingResultModel CreateResult(DateOnlyPeriod period)
 		{
-			return _fullSchedulingResult.Execute(period);
+			return _fullSchedulingResult.Execute(period, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period).ToList());
 		}
 
 		[TestLog]
