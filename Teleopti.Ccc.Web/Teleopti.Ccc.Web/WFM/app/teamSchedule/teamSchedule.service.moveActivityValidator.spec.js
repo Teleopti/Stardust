@@ -1,7 +1,7 @@
 ﻿(function () {
 	'use strict';
 
-	fdescribe('teamschedule move activity validator tests: ', function () {
+	describe('teamschedule move activity validator tests: ', function () {
 		var target, personSelection, scheduleMgmt, fakeTeamsToggles, fakeTeamsPermissions;
 		var defaultUserTimeZone = 'Asia/Hong_Kong';  //UTC+8
 
