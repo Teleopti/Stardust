@@ -492,8 +492,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldReportProgress()
 		{
-			if(_resourcePlannerSchedulingIslands44757)
-				Assert.Ignore("fix this before setting 44757 to RC/true");
 			var date = new DateOnly(2017, 1, 22);
 			var shiftCategoryBefore = new ShiftCategory("Before").WithId();
 			var shiftCategoryAfter = new ShiftCategory("After").WithId();
