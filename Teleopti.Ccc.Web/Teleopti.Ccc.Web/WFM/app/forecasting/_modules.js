@@ -9,7 +9,8 @@
 		'wfm.workinghourspicker',
 		'pascalprecht.translate',
 		'wfm.modal',
-		'wfm.autofocus']);
+		'wfm.autofocus',
+		'wfm.notice']);
 
 
 	forecaster.run([
