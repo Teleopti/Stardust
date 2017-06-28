@@ -260,8 +260,13 @@
     <Compile Include="GroupPageCreator\GroupingsCreatorOptionalColumn.cs" />
     <Compile Include="GroupPageCreator\OptionalColumnGroupPage.cs" />
     <Compile Include="Helper\CellExtensions.cs" />
+    <Compile Include="Infrastructure\Events\PublishInitializeReadModelEvent.cs" />
+    <Compile Include="Infrastructure\Events\RequeueHangfireEvent.cs" />
+    <Compile Include="Infrastructure\PublishInitializeReadModelEventHandler.cs" />
+    <Compile Include="Infrastructure\RequeueHangfireEventHandler.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequest.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserDevice.cs" />
+    <Compile Include="InterfaceLegacy\Infrastructure\IRequeueHangfireRepository.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModelCreator.cs" />
     <Compile Include="Notification\UserDeviceService.cs" />

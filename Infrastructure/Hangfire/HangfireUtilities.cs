@@ -295,10 +295,4 @@ namespace Teleopti.Ccc.Infrastructure.Hangfire
 			return failed.Keys.ToList();
 		}
 	}
-
-	public interface IManageFailedHangfireEvents
-	{
-		void RequeueFailed(string eventName, string handlerName, string tenant);
-		void DeleteFailed(string eventName, string handlerName, string tenant);
-	}
 }

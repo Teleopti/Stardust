@@ -23,11 +23,9 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		private FakeToggleManager _toggleManager;
 		private LegacyFakeEventPublisher _eventPublisher;
 		private FakeTenants _loadAllTenants;
-		private TenantUnitOfWorkFake _tenantUnitOfWorkFake;
-		private IDataSourceScope _dataSourceScope;
 		private FakeBusinessUnitRepository _businessUnitRepository;
 		private PublishStartupJobsTask _target;
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
+		private TenantUnitOfWorkFake _tenantUnitOfWorkFake;
 
 		[SetUp]
 		public void Setup()
@@ -36,12 +34,10 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 			
 			_eventPublisher = new LegacyFakeEventPublisher();
 			_loadAllTenants = new FakeTenants();
-			_tenantUnitOfWorkFake = new TenantUnitOfWorkFake();
-			_dataSourceScope = MockRepository.GenerateMock<IDataSourceScope>();
 			_businessUnitRepository = new FakeBusinessUnitRepository();
-			_unitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
+			_tenantUnitOfWorkFake = new TenantUnitOfWorkFake();
 
-			_target = new PublishStartupJobsTask(_toggleManager, _eventPublisher, _loadAllTenants, _dataSourceScope, _tenantUnitOfWorkFake, uow => _businessUnitRepository, _unitOfWorkFactory);
+			_target = new PublishStartupJobsTask(_toggleManager, _eventPublisher, _loadAllTenants, _tenantUnitOfWorkFake);
 		}
 
 		[Test]
@@ -55,12 +51,11 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		}
 
 		[Test]
-		public void ShouldNotPublishEventWhenToggleIsTrue()
+		public void ShouldPublishEventWhenToggleIsTrue()
 		{
 			var tenantName = "TestTenant";
 			_toggleManager.Enable(Toggles.LastHandlers_ToHangfire_41203);
 			_loadAllTenants.Has(tenantName);
-			_dataSourceScope.Stub(x => x.OnThisThreadUse(tenantName)).Return(new GenericDisposable(() => { }));
 			_businessUnitRepository.Add(BusinessUnitFactory.CreateWithId("TestBu"));
 
 			_target.Execute(null);

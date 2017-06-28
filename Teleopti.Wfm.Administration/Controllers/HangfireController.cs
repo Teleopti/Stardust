@@ -1,5 +1,5 @@
 ﻿using System.Web.Http;
-using Teleopti.Ccc.Infrastructure.Hangfire;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 

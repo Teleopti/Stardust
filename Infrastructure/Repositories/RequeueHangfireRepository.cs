@@ -47,18 +47,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 	}
 
-	public interface IRequeueHangfireRepository
-	{
-		IList<RequeueCommand> GetUnhandledRequeueCommands();
-		void MarkAsCompleted(RequeueCommand command);
-	}
-
-	public class RequeueCommand
-	{
-		public virtual Guid Id { get; set; }
-		public virtual string EventName { get; set; }
-		public virtual string HandlerName { get; set; }
-		public virtual bool Handled { get; set; }
-		public virtual DateTime Timestamp { get; set; }
-	}
+	
 }

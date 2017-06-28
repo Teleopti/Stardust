@@ -5,6 +5,7 @@ using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
