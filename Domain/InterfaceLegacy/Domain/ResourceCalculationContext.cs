@@ -6,15 +6,21 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	{
 		[ThreadStatic]
 		private static Lazy<IResourceCalculationDataContainerWithSingleOperation> _container;
+		private static IResourceCalculationDataContainerWithSingleOperation _containerEager;
 		
 		public ResourceCalculationContext(Lazy<IResourceCalculationDataContainerWithSingleOperation> resources)
 		{
 			_container = resources;
 		}
 
+		public ResourceCalculationContext(IResourceCalculationDataContainerWithSingleOperation resources)
+		{
+			_containerEager = resources;
+		}
+
 		public static IResourceCalculationDataContainerWithSingleOperation Fetch()
 		{
-			return _container.Value;
+			return _containerEager ?? _container.Value;
 		}
 
 		public static bool InContext => _container != null;

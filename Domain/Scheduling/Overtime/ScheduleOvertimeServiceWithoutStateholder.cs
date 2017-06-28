@@ -140,22 +140,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 		private IEnumerable<IOvertimeSkillPeriodData> skillStaffPeriods(IEnumerable<ISkill> skills, ResourceCalculationData resourceCalculationData)
 		{
 			var intervals = new List<IOvertimeSkillPeriodData>();
-			foreach (KeyValuePair<ISkill, IResourceCalculationPeriodDictionary> pair in resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items())
+			foreach (var pair in resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items())
 			{
-				if (skills.Contains(pair.Key))
+				if (!skills.Contains(pair.Key)) continue;
+
+				var things =  pair.Value.Items().Select(x => x.Value);
+				intervals.AddRange(things.Select(thing => new SkillStaffingInterval
 				{
-					var things =  pair.Value.Items().Select(x => x.Value);
-					foreach (var thing in things)
-					{
-						intervals.Add(new SkillStaffingInterval
-						{
-							CalculatedResource = ((SkillStaffingInterval) thing).CalculatedResource,
-							Forecast = ((SkillStaffingInterval) thing).Forecast,
-							StartDateTime = thing.CalculationPeriod.StartDateTime,
-							EndDateTime = thing.CalculationPeriod.EndDateTime
-						});
-					}
-				}
+					CalculatedResource = ((SkillStaffingInterval) thing).CalculatedResource,
+					Forecast = ((SkillStaffingInterval) thing).Forecast,
+					StartDateTime = thing.CalculationPeriod.StartDateTime,
+					EndDateTime = thing.CalculationPeriod.EndDateTime
+				}));
 			}
 			return intervals;
 		}
