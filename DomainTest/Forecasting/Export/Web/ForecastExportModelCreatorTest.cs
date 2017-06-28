@@ -64,8 +64,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			var skillDay2 = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date.AddDays(1), openHour, false);
 			
 			skillDay1.SkillDataPeriodCollection.ForEach(x => x.Shrinkage = new Percent(0.2));
-			var day1ForecastedHours = skillDay1.ForecastedDistributedDemand.TotalHours;
-			var day1ForecastedHoursWithShrinkage = skillDay1.ForecastedDistributedDemandWithShrinkage.TotalHours;
+			var day1ForecastedHours = skillDay1.ForecastedIncomingDemand.TotalHours;
+			var day1ForecastedHoursWithShrinkage = skillDay1.ForecastedIncomingDemandWithShrinkage.TotalHours;
 
 			SkillRepository.Has(skill);
 			WorkloadRepository.Add(skill.WorkloadCollection.First());
@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			dailyModel1.ForecastDate.Should().Be.EqualTo(skillDay1.CurrentDate.Date);
 			dailyModel1.OpenHours.Should().Be.EqualTo(openHour);
 			dailyModel1.Calls.Should().Be.EqualTo(skillDay1.TotalTasks);
-			dailyModel1.AverageTalkTime.Should().Be.EqualTo(skillDay1.TotalAverageTaskTime.Seconds);
-			dailyModel1.AverageAfterCallWork.Should().Be.EqualTo(skillDay1.TotalAverageAfterTaskTime.Seconds);
+			dailyModel1.AverageTalkTime.Should().Be.EqualTo(skillDay1.TotalAverageTaskTime.TotalSeconds);
+			dailyModel1.AverageAfterCallWork.Should().Be.EqualTo(skillDay1.TotalAverageAfterTaskTime.TotalSeconds);
 			dailyModel1.AverageHandleTime.Should().Be.EqualTo(dailyModel1.AverageTalkTime + dailyModel1.AverageAfterCallWork);
 			dailyModel1.ForecastedHours.Should().Be.EqualTo(day1ForecastedHours);
 			dailyModel1.ForecastedHoursShrinkage.Should().Be.EqualTo(day1ForecastedHoursWithShrinkage);
@@ -90,11 +90,11 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			dailyModel2.ForecastDate.Should().Be.EqualTo(skillDay2.CurrentDate.Date);
 			dailyModel2.OpenHours.Should().Be.EqualTo(openHour);
 			dailyModel2.Calls.Should().Be.EqualTo(skillDay2.TotalTasks);
-			dailyModel2.AverageTalkTime.Should().Be.EqualTo(skillDay2.TotalAverageTaskTime.Seconds);
-			dailyModel2.AverageAfterCallWork.Should().Be.EqualTo(skillDay2.TotalAverageAfterTaskTime.Seconds);
+			dailyModel2.AverageTalkTime.Should().Be.EqualTo(skillDay2.TotalAverageTaskTime.TotalSeconds);
+			dailyModel2.AverageAfterCallWork.Should().Be.EqualTo(skillDay2.TotalAverageAfterTaskTime.TotalSeconds);
 			dailyModel2.AverageHandleTime.Should().Be.EqualTo(dailyModel2.AverageTalkTime + dailyModel2.AverageAfterCallWork);
-			dailyModel2.ForecastedHours.Should().Be.EqualTo(skillDay2.ForecastedDistributedDemand.TotalHours);
-			dailyModel2.ForecastedHoursShrinkage.Should().Be.EqualTo(skillDay2.ForecastedDistributedDemandWithShrinkage.TotalHours);
+			dailyModel2.ForecastedHours.Should().Be.EqualTo(skillDay2.ForecastedIncomingDemand.TotalHours);
+			dailyModel2.ForecastedHoursShrinkage.Should().Be.EqualTo(skillDay2.ForecastedIncomingDemandWithShrinkage.TotalHours);
 		}
 
 		[Test]
