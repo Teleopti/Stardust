@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Deployment.Application;
 using System.Web;
 using System.Windows.Forms;
 using EO.Base;
@@ -86,10 +87,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
 			logInfo("EO Browser: Loading URL to show the login web view.");
 			var queryString = "";
+			if (ApplicationDeployment.IsNetworkDeployed)
+			{
+				if (ApplicationDeployment.CurrentDeployment.ActivationUri != null)
+				{
+					logInfo($"ApplicationDeployment.CurrentDeployment.ActivationUri.Query: {ApplicationDeployment.CurrentDeployment.ActivationUri.Query}");
+					queryString = ApplicationDeployment.CurrentDeployment.ActivationUri.Query;
+				}
+			}
 			var activationArguments = AppDomain.CurrentDomain.SetupInformation.ActivationArguments;
 			if (activationArguments?.ActivationData != null && activationArguments.ActivationData.Length>0)
 			{
-				queryString = activationArguments.ActivationData[0];
+				foreach (var data in activationArguments.ActivationData)
+				{
+					logInfo($"activationArguments: {data}");
+				}
+				//queryString = activationArguments.ActivationData[0];
 			}
 			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin?queryString=" + HttpUtility.UrlEncode(queryString);
 			// some defensive coding to prevent bug 39408
