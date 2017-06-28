@@ -105,18 +105,19 @@ namespace Stardust.Manager
 			try
 			{
 				managerLogger.Info("Assigning jobs to node");
-				List<Uri> allAliveWorkerNodesUri;
+				List<Uri> allAvailableWorkerNodes;
 				using (var sqlConnection = new SqlConnection(_connectionString))
 				{
 					sqlConnection.OpenWithRetry(_retryPolicy);
-					allAliveWorkerNodesUri = _jobRepositoryCommandExecuter.SelectAllAvailableWorkerNodes(sqlConnection);
+					allAvailableWorkerNodes = _jobRepositoryCommandExecuter.SelectAllAvailableWorkerNodes(sqlConnection);
 				}
 
-				if (!allAliveWorkerNodesUri.Any()) return;
+				if (!allAvailableWorkerNodes.Any()) return;
 
 				//sending to the available nodes
-				managerLogger.Info(allAliveWorkerNodesUri.Count() + " nodes found that are alive");
-				foreach (var nodeUri in allAliveWorkerNodesUri)
+				managerLogger.Info(allAvailableWorkerNodes.Count + " nodes found that are alive");
+				var shuffledNodes = allAvailableWorkerNodes.OrderBy(a => Guid.NewGuid()).ToList();
+				foreach (var nodeUri in shuffledNodes)
 				{
 					managerLogger.Info("trying to assign the job to node " + nodeUri);
 					AssignJobToWorkerNodeWorker(nodeUri);

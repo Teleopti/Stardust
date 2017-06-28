@@ -232,13 +232,14 @@ namespace ManagerTest
 			TestHelper.AddDeadNode("http://localhost:9052/");
 			NodeManager.AddWorkerNode(new Uri("http://localhost:9053/"));
 
+			List<Uri> nodes;
 			using (var sqlConnection = new SqlConnection(ManagerConfiguration.ConnectionString))
 			{
 				sqlConnection.Open();
-				var nodes = JobRepositoryCommandExecuter.SelectAllAvailableWorkerNodes(sqlConnection);
-				nodes.Count.Should().Be.EqualTo(1);
-				nodes.First().Should().Be.EqualTo("http://localhost:9053/");
+				nodes = JobRepositoryCommandExecuter.SelectAllAvailableWorkerNodes(sqlConnection);
 			}
+			nodes.Count.Should().Be.EqualTo(1);
+			nodes.First().Should().Be.EqualTo("http://localhost:9053/");
 		}
 	}
 }
