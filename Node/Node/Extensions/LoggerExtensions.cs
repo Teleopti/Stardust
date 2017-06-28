@@ -29,13 +29,11 @@ namespace Stardust.Node.Extensions
 		                                       [CallerMemberName] string member = "",
 		                                       [CallerLineNumber] int line = 0)
 		{
-			if (logger.IsErrorEnabled)
-			{
-				ValidateArgument(logger);
+			if (!logger.IsErrorEnabled) return;
+			ValidateArgument(logger);
 
-				logger.Error($"{Path.GetFileName(file)}_{member}({line}): {info}",
-				             exception);
-			}
+			logger.Error($"{Path.GetFileName(file)}_{member}({line}): {info}",
+			             exception);
 		}
 
 		public static void FatalWithLineNumber(this ILog logger,
@@ -45,13 +43,11 @@ namespace Stardust.Node.Extensions
 		                                       [CallerMemberName] string member = "",
 		                                       [CallerLineNumber] int line = 0)
 		{
-			if (logger.IsFatalEnabled)
-			{
-				ValidateArgument(logger);
+			if (!logger.IsFatalEnabled) return;
+			ValidateArgument(logger);
 
-				logger.Fatal($"{Path.GetFileName(file)}_{member}({line}): {info}",
-				             exception);
-			}
+			logger.Fatal($"{Path.GetFileName(file)}_{member}({line}): {info}",
+			             exception);
 		}
 
 		public static void WarningWithLineNumber(this ILog logger,
@@ -60,12 +56,10 @@ namespace Stardust.Node.Extensions
 		                                         [CallerMemberName] string member = "",
 		                                         [CallerLineNumber] int line = 0)
 		{
-			if (logger.IsWarnEnabled)
-			{
-				ValidateArgument(logger);
+			if (!logger.IsWarnEnabled) return;
+			ValidateArgument(logger);
 
-				logger.Warn($"{Path.GetFileName(file)}_{member}({line}): {info}");
-			}
+			logger.Warn($"{Path.GetFileName(file)}_{member}({line}): {info}");
 		}
 
 		public static void DebugWithLineNumber(this ILog logger,
@@ -74,12 +68,10 @@ namespace Stardust.Node.Extensions
 		                                       [CallerMemberName] string member = "",
 		                                       [CallerLineNumber] int line = 0)
 		{
-			if (logger.IsDebugEnabled)
-			{
-				ValidateArgument(logger);
+			if (!logger.IsDebugEnabled) return;
+			ValidateArgument(logger);
 
-				logger.Debug($"{Path.GetFileName(file)}_{member}({line}): {info}");
-			}
+			logger.Debug($"{Path.GetFileName(file)}_{member}({line}): {info}");
 		}
 
 		public static void InfoWithLineNumber(this ILog logger,
@@ -88,12 +80,10 @@ namespace Stardust.Node.Extensions
 		                                      [CallerMemberName] string member = "",
 		                                      [CallerLineNumber] int line = 0)
 		{
-			if (logger.IsInfoEnabled)
-			{
-				ValidateArgument(logger);
+			if (!logger.IsInfoEnabled) return;
+			ValidateArgument(logger);
 
-				logger.Info($"{Path.GetFileName(file)}_{member}({line}): {info}");
-			}
+			logger.Info($"{Path.GetFileName(file)}_{member}({line}): {info}");
 		}
 	}
 }

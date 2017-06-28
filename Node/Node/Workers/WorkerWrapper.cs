@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac.Core;
 using log4net;
 using Newtonsoft.Json;
 using Stardust.Node.Entities;

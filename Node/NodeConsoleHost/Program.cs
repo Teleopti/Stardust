@@ -2,7 +2,6 @@
 using System.Configuration;
 using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Autofac;
@@ -11,7 +10,6 @@ using log4net.Config;
 using NodeTest.JobHandlers;
 using Stardust.Node;
 using Stardust.Node.Extensions;
-using Stardust.Node.Interfaces;
 
 namespace NodeConsoleHost
 {

@@ -21,7 +21,7 @@ namespace Stardust.Node.Workers
 			ComponentContext = componentContext;
 		}
 
-		private ILifetimeScope ComponentContext { get; set; }
+		private ILifetimeScope ComponentContext { get; }
 
 		public void Invoke(object query,
 		                   CancellationTokenSource cancellationTokenSource,

@@ -30,7 +30,7 @@ namespace Stardust.Node.Workers
 
 		public int DetailsCount()
 		{
-			return _jobDetails.Count();
+			return _jobDetails.Count;
 		}
 
 

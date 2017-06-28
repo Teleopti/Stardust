@@ -98,7 +98,7 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
 
-			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			_nodeController = new NodeController(_workerWrapper)
 			{
 				Request = new HttpRequestMessage()
 			};
@@ -123,7 +123,7 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
 
-			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			_nodeController = new NodeController(_workerWrapper)
 			{
 				Request = new HttpRequestMessage()
 			};
@@ -152,7 +152,7 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
 
-			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			_nodeController = new NodeController(_workerWrapper)
 			{
 				Request = new HttpRequestMessage()
 			};
@@ -180,7 +180,7 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
 
-			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			_nodeController = new NodeController(_workerWrapper)
 			{
 				Request = new HttpRequestMessage(),
 				Configuration = new HttpConfiguration()
@@ -206,7 +206,7 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
 
-			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			_nodeController = new NodeController(_workerWrapper)
 			{
 				Request = new HttpRequestMessage(),
 				Configuration = new HttpConfiguration()
@@ -234,7 +234,7 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
 
-			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			_nodeController = new NodeController(_workerWrapper)
 			{
 				Request = new HttpRequestMessage(),
 				Configuration = new HttpConfiguration()
@@ -274,7 +274,7 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
 
-			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			_nodeController = new NodeController(_workerWrapper)
 			{
 				Request = new HttpRequestMessage()
 			};
@@ -301,7 +301,7 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
 
-			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			_nodeController = new NodeController(_workerWrapper)
 			{
 				Request = new HttpRequestMessage(),
 				Configuration = new HttpConfiguration()
@@ -330,7 +330,7 @@ namespace NodeTest
 											   _trySendJobDetailToManagerTimer,
 											   _jobDetailSender);
 
-			_nodeController = new NodeController(_workerWrapper, _nodeConfigurationFake)
+			_nodeController = new NodeController(_workerWrapper)
 			{
 				Request = new HttpRequestMessage()
 			};

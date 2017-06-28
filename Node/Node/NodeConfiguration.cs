@@ -19,12 +19,12 @@ namespace Stardust.Node
 			ValidateParameters();
 		}
 		
-		public Uri BaseAddress { get; private set; }
+		public Uri BaseAddress { get; }
 		public Uri ManagerLocation { get; }
-		public string NodeName { get; private set; }
+		public string NodeName { get; }
 		public Assembly HandlerAssembly { get; }
 		public double PingToManagerSeconds { get; }
-		public double SendDetailsToManagerMilliSeconds { get; private set; }
+		public double SendDetailsToManagerMilliSeconds { get; }
 
 		private void ValidateParameters()
 		{

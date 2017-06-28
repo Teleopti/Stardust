@@ -18,14 +18,10 @@ namespace Stardust.Node
 
 		private readonly IWorkerWrapper _workerWrapper;
 
-		public NodeController(IWorkerWrapper workerWrapper,
-		                      NodeConfiguration nodeConfiguration)
+		public NodeController(IWorkerWrapper workerWrapper)
 		{
 			_workerWrapper = workerWrapper;
-			NodeConfiguration = nodeConfiguration;
 		}
-
-		private NodeConfiguration NodeConfiguration { get; set; }
 
 		[HttpPost, AllowAnonymous, Route(NodeRouteConstants.Job)]
 		public IHttpActionResult PrepareToStartJob(JobQueueItemEntity jobQueueItemEntity)
