@@ -37,9 +37,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IContractSchedule _contractSchedule;
 		
 
-		/// <summary>
-		/// Runs every test. Implemented by repository's concrete implementation.
-		/// </summary>
 		protected override void ConcreteSetup()
 		{
 			_defaultScenario = ScenarioFactory.CreateScenarioAggregate("Default", true);
@@ -64,11 +61,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(_absence);
 		}
 
-		/// <summary>
-		/// Creates an aggregate using the Bu of logged in user.
-		/// Should be a "full detailed" aggregate
-		/// </summary>
-		/// <returns></returns>
 		protected override IPersonRequest CreateAggregateWithCorrectBusinessUnit()
 		{
 			return createAbsenceRequestAndBusinessUnit();
@@ -144,10 +136,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return request;
 		}
 
-		/// <summary>
-		/// Verifies the aggregate graph properties.
-		/// </summary>
-		/// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
 		protected override void VerifyAggregateGraphProperties(IPersonRequest loadedAggregateFromDatabase)
 		{
 			IPersonRequest org = CreateAggregateWithCorrectBusinessUnit();
@@ -199,20 +187,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 
-		[Test]
-		public void CanCreateOvertimeRequest()
-		{
-			var period = new DateTimePeriod(2008, 04, 1, 2008, 07, 20);
-			var overtimeRequest = createOvertimeRequest(period);
-			PersistAndRemoveFromUnitOfWork(overtimeRequest);
-			
-			var foundRequests = new PersonRequestRepository(UnitOfWork).Find(_person, period);
-			Assert.AreEqual(1, foundRequests.Count);
-			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
-			Assert.IsTrue(foundRequests.Contains(overtimeRequest));
-		}
-
-		
 		[Test]
 		public void FindNonExistingShouldReturnNull()
 		{
@@ -2162,16 +2136,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var requests = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter);
 			requests.Count().Should().Be(1);
 			requests.FirstOrDefault().Person.Id.Should().Be(persons[0].Id);
-		}
-
-		private IPersonRequest createOvertimeRequest(DateTimePeriod period)
-		{
-			IPersonRequest request = new PersonRequest(_person);
-			var activity = new Activity("activity");
-			PersistAndRemoveFromUnitOfWork(activity);
-			request.Request = new OvertimeRequest(activity, OvertimeType.ExtraTime, period);
-			request.Pending();
-			return request;
 		}
 
 	}

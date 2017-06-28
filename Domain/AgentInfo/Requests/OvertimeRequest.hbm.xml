@@ -11,8 +11,8 @@
 								 class="Teleopti.Ccc.Domain.Scheduling.Activity"
 								 not-null="true" foreign-key="FK_OvertimeRequest_Activity" />
 
-		<property name="OvertimeType"
-						 type="int"
-						 not-null="true"/>
+		<many-to-one name="MultiplicatorDefinitionSet"
+						 class="Teleopti.Ccc.Domain.Scheduling.TimeLayer.MultiplicatorDefinitionSet"
+						 not-null="true" foreign-key="FK_OvertimeRequest_MultiplicatorDefinitionSet"/>
 	</joined-subclass>
 </hibernate-mapping>

@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	{
 		IActivity Activity { get; }
 
-		OvertimeType OvertimeType { get; }
+		IMultiplicatorDefinitionSet MultiplicatorDefinitionSet { get; }
 	}
 }

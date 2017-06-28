@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 	public class OvertimeRequest : Request, IOvertimeRequest
 	{
 		private readonly IActivity _activity;
-		private readonly OvertimeType _overtimeType;
+		private readonly IMultiplicatorDefinitionSet _multiplicatorDefinitionSet;
 		private string _typeDescription;
 		
 		protected OvertimeRequest()
@@ -19,17 +19,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_typeDescription = Resources.RequestTypeOvertime;
 		}
 
-		public OvertimeRequest(IActivity activity, OvertimeType overtimeType, DateTimePeriod period) : base(period)
+		public OvertimeRequest(IActivity activity, IMultiplicatorDefinitionSet multiplicatorDefinitionSet, DateTimePeriod period) : base(period)
 		{
 			_activity = activity;
-			_overtimeType = overtimeType;
+			_multiplicatorDefinitionSet = multiplicatorDefinitionSet;
 			_typeDescription = Resources.RequestTypeOvertime;
 		}
 
 	 
 		public virtual IActivity Activity => _activity;
 
-		public virtual OvertimeType OvertimeType => _overtimeType;
+		public virtual IMultiplicatorDefinitionSet MultiplicatorDefinitionSet => _multiplicatorDefinitionSet;
 
 		public override void Deny(IPerson denyPerson)
 		{
