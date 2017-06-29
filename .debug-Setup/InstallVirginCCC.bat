@@ -2,7 +2,9 @@
 
 ::Get path to this batchfile
 SET ROOTDIR=%~dp0
-set MSBUILD="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
+
+call "%~dp0CheckMsbuildPath.bat"
+IF %ERRORLEVEL% NEQ 0 GOTO :error
 
 COLOR A
 cls
@@ -39,7 +41,7 @@ IF EXIST DBManager*.log DEL DBManager*.log /Q
 SET INSTANCE=%COMPUTERNAME%
 
 ::Build DbManager
-ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
+ECHO Building "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
 %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% EQU 0 (
 SET DATABASEPATH="%ROOTDIR%\..\Database"

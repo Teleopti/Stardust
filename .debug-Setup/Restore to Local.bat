@@ -2,7 +2,9 @@
 
 ::Get path to this batchfile
 SET ROOTDIR=%~dp0
-set MSBUILD="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
+
+call "%~dp0CheckMsbuildPath.bat"
+IF %ERRORLEVEL% NEQ 0 GOTO :error
 
 COLOR A
 cls
@@ -80,7 +82,7 @@ IF EXIST DBManager*.log DEL DBManager*.log /Q
 ::Build DbManager, include double quotes for IF to work?!
 SET DBMANAGER="%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\%Configuration%\DBManager.exe"
 IF NOT EXIST DBMANAGER (
-	ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
+	ECHO Building "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
 	IF EXIST "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%LogFolder%\build.log"
 	IF %ERRORLEVEL% EQU 0 (
 	SET DATABASEPATH="%ROOTDIR%\..\Database"

@@ -6,8 +6,10 @@ SET masterSettings=%ROOTDIR%\.debug-setup\config\settingsSikuliTest.txt
 SET CCC7DB=%~1
 SET AnalyticsDB=%~2
 SET configuration=%3
-SET MSBUILD="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
 SET logFile=%ROOTDIR%\.debug-setup\SikuliConfig.log
+
+call "%~dp0CheckMsbuildPath.bat"
+IF %ERRORLEVEL% NEQ 0 GOTO :error
 
 SET MySettings=%ROOTDIR%\Teleopti.Support.Tool\bin\%configuration%\settings.txt
 

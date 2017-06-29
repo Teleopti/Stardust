@@ -11,7 +11,9 @@ SET ToggleMode=%~7
 SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 
-set MSBUILD="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
+call "%~dp0CheckMsbuildPath.bat"
+IF %ERRORLEVEL% NEQ 0 GOTO :error
+
 SET MySettings=%ROOTDIR%\..\Teleopti.Support.Tool\bin\%Configuration%\settings.txt
 SET DATASOURCE_NAME=ETLTest
 SET PM_INSTALL=False

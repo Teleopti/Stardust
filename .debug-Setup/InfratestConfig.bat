@@ -8,7 +8,9 @@ SET AnalyticsDB=%~2
 SET ToggleMode=%~3
 set configuration=%~4
 set sqlAuthString=%~5
-set MSBUILD="%ProgramFiles(x86)%\MSBuild\14.0\Bin\MSBuild.exe"
+
+call "%~dp0CheckMsbuildPath.bat"
+IF %ERRORLEVEL% NEQ 0 GOTO :error
 
 if "%configuration%"=="" (
 set configuration=Debug

@@ -5,10 +5,9 @@
 ::=======================
 ::Get path to this batchfile
 SET ROOTDIR=%~dp0
-IF EXIST "%PROGRAMFILES(X86)%\Microsoft Visual Studio\2017\Enterprise"(set msbuild="%PROGRAMFILES(X86)%\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\amd64\MSBuild.exe" 
-) ELSE (
-	set msbuild="%PROGRAMFILES(X86)%\Microsoft Visual Studio\2017\Professional\MSBuild\15.0\Bin\amd64\MSBuild.exe"
-)
+
+call "%~dp0CheckMsbuildPath.bat"
+IF %ERRORLEVEL% NEQ 0 GOTO :error
 
 SET /A CROSSDB=0
 SET /A ISCCC7=0
@@ -66,7 +65,7 @@ GOTO :error
 )
 
 ::Build DbManager
-ECHO msbuild "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
+ECHO Building "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
 %MSBUILD% "%ROOTDIR%\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% EQU 0 (
 SET DATABASEPATH="%ROOTDIR%\..\Database"
