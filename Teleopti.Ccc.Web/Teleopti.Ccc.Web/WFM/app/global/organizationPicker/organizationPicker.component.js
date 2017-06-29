@@ -26,9 +26,9 @@
 		return ('single' in attrs)
 	}
 
-	OrgPickerController.$inject = ['$scope', '$attrs', '$q', '$element', '$mdPanel'];
+	OrgPickerController.$inject = ['$scope', '$translate', '$attrs', '$q', '$element', '$mdPanel'];
 
-	function OrgPickerController($scope, $attrs, $q, $element, $mdPanel) {
+	function OrgPickerController($scope, $translate, $attrs, $q, $element, $mdPanel) {
 		var singleMode = checkIsSingleMode($attrs)
 		var searchText = ''
 		var searchCache = {}
@@ -131,7 +131,7 @@
 						return ctrl.nameMap[id]
 					}).filter(function (name) {
 						return !!name
-					}).join(', ')
+					}).join(', ') || $translate.instant('SelectOrganization')
 				}
 			},
 			clearAll: {

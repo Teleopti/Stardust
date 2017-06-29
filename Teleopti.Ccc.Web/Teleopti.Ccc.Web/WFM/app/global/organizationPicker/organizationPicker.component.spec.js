@@ -114,7 +114,7 @@
 		clickSite(0);
 		expect(target.innerHTML).toBe('team1');
 		clickSite(1);
-		expect(target.innerHTML).toBe('SeveralTeamsSelected');
+		expect(target.innerHTML).toBe('team1, team2, team3');
 	});
 
 	it('should trigger on-close when the picker is closed', function() {
