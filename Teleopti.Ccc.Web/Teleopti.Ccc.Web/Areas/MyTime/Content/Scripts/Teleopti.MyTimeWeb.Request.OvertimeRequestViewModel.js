@@ -30,7 +30,10 @@
 	};
 
 	self.validateDuration = function (data, event) {
-		var duration = $(event.target)[0].value.split(':');
+		var value = $(event.target)[0].value;
+		if (!value) return;
+
+		var duration = value.split(':');
 		duration.length = 2;
 
 		var hourReg = /^(([0-1][0-9])|([2][0-3]))$/gi;
@@ -47,6 +50,9 @@
 	};
 
 	self.AddRequest = function () {
+		if (!_validateRequiredFields()) {
+			return;
+		}
 		var postData = {
 			Subject: self.Subject(),
 			Message: self.Message(),
@@ -96,5 +102,18 @@
 				timeList.push(i + ':00');
 		}
 		return timeList;
+	}
+
+	function _validateRequiredFields() {
+		self.ShowError(false);
+		self.ErrorMessage('');
+
+		var result = true;
+		if (!self.Subject()) {
+			result = false;
+			self.ShowError(true);
+			self.ErrorMessage(messages.MissingSubject);
+		}
+		return result;
 	}
 }

@@ -4401,6 +4401,10 @@ Accounts</value>
     <value>Overtime Request</value>
     <comment>Overtime Request</comment>
   </data>
+  <data name="OvertimeType" xml:space="preserve">
+    <value>Overtime Type</value>
+    <comment>Overtime Type</comment>
+  </data>
   <data name="AverageWorkTimeCannotBeMoreThan24Hours" xml:space="preserve">
     <value>Average work time cannot be more than 24 Hours</value>
     <comment>Contract setting page average work time field shouldnt be containing values more than 24 hours</comment>

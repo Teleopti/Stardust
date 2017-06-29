@@ -18,7 +18,7 @@
 		<div class="row form-group">
 			<div class="col-xs-4 col-sm-4 col-md-4 overtime-request-type">
 				<label>
-					Overtime type
+					@Resources.OvertimeType
 				</label>
 				<select class="input-sm form-control" data-bind="options: MultiplicatorDefinitionSets, optionsText: 'Name', value: MultiplicatorDefinitionSet">
 				</select>
@@ -28,7 +28,7 @@
 		<div class="row form-group">
 			<div class="col-xs-4 col-sm-4 col-md-4 overtime-request-date">
 				<label>
-					OvertimeRequestDate
+					@Resources.Date
 				</label>
 				<span class="input-group">
 					<input class="input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
@@ -41,7 +41,7 @@
 			</div>
 			<div class="col-xs-4 col-sm-4 col-md-4 overtime-request-starttime">
 				<label>
-					OvertimeRequestStartTime
+					@Resources.StartTime
 				</label>
 				<div class="bootstrap-timepicker">
 					<div class="input-group">
@@ -57,7 +57,7 @@
 
 			<div class="col-xs-4 col-sm-4 col-md-4 overtime-request-duration">
 				<label>
-					OvertimeRequestPeriod
+					@Resources.Duration
 				</label>
 				<div class="input-group">
 					<input type="text" class="input-sm form-control" data-bind="value: RequestDuration, event:{change:validateDuration} " maxlength="5">

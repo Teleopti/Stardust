@@ -1,4 +1,7 @@
-﻿$(document).ready(function () {
+﻿var messages = {
+	MissingSubject: "Missing subject"
+};
+$(document).ready(function () {
 	var vm,
 		ajax,
 		sentData,
@@ -84,6 +87,15 @@
 		equal(period.EndTime, '22:00');
 	});
 
+
+	test('should input subject', function () {
+		vm.Subject('');
+
+		vm.AddRequest();
+
+		equal(vm.ErrorMessage(), 'Missing subject');
+	});
+
 	test('should save overtime request', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
@@ -100,6 +112,7 @@
 
 	test('should enable save button after posting data', function () {
 		vm.IsPostingData(true);
+		vm.Subject('subject');
 		vm.AddRequest();
 
 		equal(vm.IsPostingData(), false);
@@ -143,6 +156,20 @@
 		$('#duration').change();
 
 		equal(vm.RequestDuration(), '01:59');
+
+		$('#duration').remove();
+	});
+
+	test('should allow empty request duration', function () {
+		var html = '<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>';
+
+		$('body').append(html);
+		ko.applyBindings(vm, $('#duration')[0]);
+
+		$('#duration').val('');
+		$('#duration').change();
+
+		equal(vm.RequestDuration(), '');
 
 		$('#duration').remove();
 	});
