@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public class OvertimeRequest : Request, IOvertimeRequest
 	{
-		private readonly IActivity _activity;
 		private readonly IMultiplicatorDefinitionSet _multiplicatorDefinitionSet;
 		private string _typeDescription;
 		
@@ -19,15 +18,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_typeDescription = Resources.RequestTypeOvertime;
 		}
 
-		public OvertimeRequest(IActivity activity, IMultiplicatorDefinitionSet multiplicatorDefinitionSet, DateTimePeriod period) : base(period)
+		public OvertimeRequest(IMultiplicatorDefinitionSet multiplicatorDefinitionSet, DateTimePeriod period) : base(period)
 		{
-			_activity = activity;
 			_multiplicatorDefinitionSet = multiplicatorDefinitionSet;
 			_typeDescription = Resources.RequestTypeOvertime;
 		}
-
-	 
-		public virtual IActivity Activity => _activity;
 
 		public virtual IMultiplicatorDefinitionSet MultiplicatorDefinitionSet => _multiplicatorDefinitionSet;
 
@@ -69,6 +64,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public override RequestType RequestType => RequestType.OvertimeRequest;
 
-		public override Description RequestPayloadDescription => _activity.Description;
+		public override Description RequestPayloadDescription => new Description(_multiplicatorDefinitionSet.Name);
 	}
 }

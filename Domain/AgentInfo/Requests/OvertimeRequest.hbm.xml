@@ -6,10 +6,6 @@
 	<joined-subclass name="OvertimeRequest"
 					extends="Request">
 		<key column="Request" foreign-key="FK_OvertimeRequest_Request"/>
-		
-		<many-to-one name="Activity"
-								 class="Teleopti.Ccc.Domain.Scheduling.Activity"
-								 not-null="true" foreign-key="FK_OvertimeRequest_Activity" />
 
 		<many-to-one name="MultiplicatorDefinitionSet"
 						 class="Teleopti.Ccc.Domain.Scheduling.TimeLayer.MultiplicatorDefinitionSet"

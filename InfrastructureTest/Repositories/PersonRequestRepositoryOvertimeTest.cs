@@ -17,16 +17,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	{
 		private IPerson _person;
 		private MultiplicatorDefinitionSet _multiplicator;
-		private Activity _activity;
 
 		protected override void ConcreteSetup()
 		{
 			_person = PersonFactory.CreatePerson("sdfoj");
 			_multiplicator = new MultiplicatorDefinitionSet("overtime paid", MultiplicatorType.Overtime);
-			_activity = new Activity("activity");
 			PersistAndRemoveFromUnitOfWork(_multiplicator);
 			PersistAndRemoveFromUnitOfWork(_person);
-			PersistAndRemoveFromUnitOfWork(_activity);
 		}
 
 		protected override Repository<IPersonRequest> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
@@ -39,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			IPersonRequest request = new PersonRequest(_person);
 
 			var period = new DateTimePeriod(2008, 04, 1, 2008, 07, 20);
-			request.Request = new OvertimeRequest(_activity, _multiplicator, period);
+			request.Request = new OvertimeRequest(_multiplicator, period);
 			request.Pending();
 			return request;
 		}
@@ -52,8 +49,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				((IOvertimeRequest) loadedAggregateFromDatabase.Request).MultiplicatorDefinitionSet);
 			Assert.AreEqual(org.Request.Period,
 				loadedAggregateFromDatabase.Request.Period);
-			Assert.AreEqual(((IOvertimeRequest)org.Request).Activity,
-				((IOvertimeRequest)loadedAggregateFromDatabase.Request).Activity);
 		}
 	}
 }

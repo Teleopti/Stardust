@@ -3,16 +3,6 @@
 		ajax,
 		sentData,
 		addedOvertimeRequest,
-		fakeActivities = [
-			{
-				Id: '90EA529A-EEA0-4E22-80AB-9B5E015AB3C6',
-				Name: 'Phone'
-			},
-			{
-				Id: 'CAD1BFBA-3A35-46BD-8AC2-9B5E015AB3C6',
-				Name: 'Email'
-			}
-		],
 		fakeDefinitionSets = [
 			{
 				Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB',
