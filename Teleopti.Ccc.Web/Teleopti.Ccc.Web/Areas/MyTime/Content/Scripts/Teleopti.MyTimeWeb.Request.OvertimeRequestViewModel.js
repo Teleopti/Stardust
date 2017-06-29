@@ -18,9 +18,9 @@
 	self.ShowError = ko.observable(false);
 	self.ErrorMessage = ko.observable();
 	self.RequestDuration = ko.observable();
-	self.MultiplicatorDefinitionSets = [];
+	self.MultiplicatorDefinitionSets = ko.observableArray();
 	self.MultiplicatorDefinitionSet = ko.observable();
-	self.TimeList = _createTimeList();
+	self.TimeList = [];
 
 	self.checkMessageLength = function (data, event) {
 		var text = $(event.target)[0].value;
@@ -50,7 +50,7 @@
 		var postData = {
 			Subject: self.Subject(),
 			Message: self.Message(),
-			MultiplicatorDefinitionSet: self.MultiplicatorDefinitionSet(),
+			MultiplicatorDefinitionSet: self.MultiplicatorDefinitionSet().Id,
 			Period: {
 				StartDate: self.DateFrom(),
 				StartTime: self.TimeFrom(),
@@ -58,7 +58,6 @@
 				EndTime: self.TimeTo()
 			}
 		};
-
 
 		self.IsPostingData(true);
 
@@ -70,15 +69,23 @@
 				requestListViewModel.AddItemAtTop(data, true);
 			}
 		});
-
 	};
 
-	ajax.Ajax({
-		url: "../api/MultiplicatorDefinitionSet/Mine",
-		success: function (data) {
-			self.MultiplicatorDefinitionSets = data;
-		}
-	});
+	_init();
+
+	function _init() {
+		_loadMultiplicatorDefinitionSets();
+		self.TimeList = _createTimeList();
+	}
+
+	function _loadMultiplicatorDefinitionSets(){
+		ajax.Ajax({
+			url: "../api/MultiplicatorDefinitionSet/Mine",
+			success: function (data) {
+				self.MultiplicatorDefinitionSets(data);
+			}
+		});
+	}
 
 	function _createTimeList() {
 		var timeList = [];
@@ -90,5 +97,4 @@
 		}
 		return timeList;
 	}
-
 }

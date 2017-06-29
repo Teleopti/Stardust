@@ -31,12 +31,14 @@
 	function setup() {
 		setupAjax();
 		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, fakeRequestListViewModel);
+		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
 	}
 
 	function setupAjax() {
 		ajax = {
 			Ajax: function (options) {
 				if (options.url === '../api/MultiplicatorDefinitionSet/Mine') {
+					console.log(fakeDefinitionSets, 'fakeDefinitionSets');
 					options.success(fakeDefinitionSets);
 				}
 				if (options.url === '../api/Request/AddOvertime') {
@@ -52,11 +54,11 @@
 	});
 
 	test('should display overtime types', function () {
-		equal(vm.MultiplicatorDefinitionSets.length, fakeDefinitionSets.length);
+		equal(vm.MultiplicatorDefinitionSets().length, fakeDefinitionSets.length);
 
 		fakeDefinitionSets.forEach(function (set, index) {
-			equal(vm.MultiplicatorDefinitionSets[index].Id, set.Id);
-			equal(vm.MultiplicatorDefinitionSets[index].Name, set.Name);
+			equal(vm.MultiplicatorDefinitionSets()[index].Id, set.Id);
+			equal(vm.MultiplicatorDefinitionSets()[index].Name, set.Name);
 		});
 	});
 
@@ -67,7 +69,7 @@
 		vm.DateTo('2017-06-27');
 		vm.TimeFrom('19:00');
 		vm.TimeTo('22:00');
-		vm.MultiplicatorDefinitionSet('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
 
 		vm.AddRequest();
 
@@ -89,7 +91,7 @@
 		vm.DateTo('2017-06-27');
 		vm.TimeFrom('19:00');
 		vm.TimeTo('22:00');
-		vm.MultiplicatorDefinitionSet('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
 
 		vm.AddRequest();
 
