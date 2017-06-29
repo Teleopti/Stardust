@@ -50,32 +50,47 @@
                     </div>
                 </div>
                 <div class="con-flex datepicker-container" style="margin-top: -10px;">
-                    <team-schedule-datepicker selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.generateChart(vm.selectedSkill,vm.selectedDate)"
+                    <team-schedule-datepicker selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay(vm.selectedDate)"
                         options="vm.options" class="inline-block"></team-schedule-datepicker>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="panel material-depth-1">
+<div class="panel material-depth-1" ng-if="vm.staffingDataAvailable">
+    <md-progress-linear ng-show="vm.hasRequestedSuggestion || vm.hasRequestedOvertime" md-mode="indeterminate"></md-progress-linear>
     <div class="sub-header">
-        <h2>Staffing - {{vm.selectedDate | date:'yyyy-MM-dd'}}</h2>
-    </div>
-    <div class="con-row">
-        <div class="con-flex">
-            <div ng-show="vm.staffingDataAvailable" class="wfm-chart intraday-chart" id="staffingChart"></div>
-            <div ng-hide="vm.staffingDataAvailable" class="con-row error-message">
-                <div class="con-flex">
-                    <h1>fix your stuff, foo</h1>
+        <h2>{{'Staffing' | translate}} - {{vm.selectedDate | date:'yyyy-MM-dd'}}
+            <div class="wfm-chip-wrap" ng-show="vm.hasRequestedSuggestion || vm.hasRequestedOvertime">
+                <div class="wfm-chip-wrap">
+                    <span class="wfm-chip">
+    <span class="chip-handle">
+      <i class="mdi mdi-alert-circle"></i>
+    </span>
+                    <span class="chip-text">{{'Loading' | translate}}</span>
+                    </span>
                 </div>
+        </h2>
+
+        </div>
+        <div class="con-row">
+            <div class="con-flex">
+                <div class="wfm-chart intraday-chart" id="staffingChart"></div>
+
             </div>
         </div>
+        <div class="con-footer">
+            <button class="wfm-btn" ng-class="vm.hasRequestedSuggestion ? 'wfm-btn-invis-disabled' : 'wfm-btn-invis-primary'" ng-disabled="vm.hasRequestedSuggestion"
+                ng-click="vm.suggestOvertime()">{{'GetSuggestionsForOvertime' | translate}}</button>
+            <button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!vm.hasSuggestionData"
+                ng-click="vm.addOvertime()">{{'ApplySuggestion' | translate}}</button>
+        </div>
     </div>
-    <div class="con-footer">
-        <button class="wfm-btn" ng-class="vm.hasRequestedSuggestion ? 'wfm-btn-invis-disabled' : 'wfm-btn-invis-primary'" ng-disabled="vm.hasRequestedSuggestion"
-            ng-click="vm.suggestOvertime()">{{'GetSuggestionsForOvertime' | translate}}</button>
-        <button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!vm.hasSuggestionData"
-            ng-click="vm.addOvertime()">{{'ApplySuggestion' | translate}}</button>
+    <div ng-hide="vm.staffingDataAvailable" class="con-row error-message">
+        <div class="con-flex line-center" >
+            <i class="mdi mdi-information-outline huge-icon line-center"></i>
+            <h1>{{'NoDataAvailable' | translate}}</h1>
+        </div>
     </div>
-</div>
+
 </div>
