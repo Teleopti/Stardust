@@ -5,12 +5,10 @@ using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
@@ -33,14 +31,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IAbsencePersister _absencePersister;
 		private readonly ISettingsPersisterAndProvider<AgentsPerPageSetting> _agentsPerPagePersisterAndProvider;
 		private readonly ISwapMainShiftForTwoPersonsCommandHandler _swapMainShiftForTwoPersonsHandler;
-		private readonly IToggleManager _toggleManager;
 
 		public TeamScheduleController(ITeamScheduleViewModelFactory teamScheduleViewModelFactory,
 			ILoggedOnUser loggonUser,
 			IAuthorization authorization, IAbsencePersister absencePersister,
 			ISettingsPersisterAndProvider<AgentsPerPageSetting> agentsPerPagePersisterAndProvider,
-			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler,
-			IToggleManager toggleManager)
+			ISwapMainShiftForTwoPersonsCommandHandler swapMainShiftForTwoPersonsHandler)
 		{
 			_teamScheduleViewModelFactory = teamScheduleViewModelFactory;
 			_loggonUser = loggonUser;
@@ -49,7 +45,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			_absencePersister = absencePersister;
 			_agentsPerPagePersisterAndProvider = agentsPerPagePersisterAndProvider;
 			_swapMainShiftForTwoPersonsHandler = swapMainShiftForTwoPersonsHandler;
-			_toggleManager = toggleManager;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamSchedule/GetPermissions")]
