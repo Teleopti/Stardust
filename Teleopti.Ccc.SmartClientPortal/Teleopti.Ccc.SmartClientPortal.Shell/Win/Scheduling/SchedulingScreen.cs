@@ -12,7 +12,6 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
-using EO.Internal;
 using log4net;
 using MbCache.Core;
 using Microsoft.Practices.Composite.Events;
