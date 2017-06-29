@@ -5,7 +5,8 @@ describe('skillPickerComponent', function () {
     $componentController,
     ctrl,
     mockedSkills,
-    mockedSkillAreas;
+    mockedSkillAreas,
+    mockedItemToReturn;
 
   beforeEach(function () {
     module('wfm.skillPicker');
@@ -48,57 +49,59 @@ describe('skillPickerComponent', function () {
       }
     ];
 
+    mockedItemToReturn = function (item) { }
+
   }));
 
   it('should clear first input when selecting other input', function () {
     ctrl = $componentController('skillPicker', null, {
       skills: mockedSkills,
-      skillAreas: mockedSkillAreas
+      skillAreas: mockedSkillAreas,
+      itemToReturn: mockedItemToReturn
     });
+    spyOn(ctrl, 'itemToReturn');
 
     ctrl.selectedSkill = ctrl.skills[0];
     ctrl.selectSkill(ctrl.skills[0]);
-
     ctrl.selectedSkillArea = ctrl.skillAreas[0];
     ctrl.selectSkillArea(ctrl.skillAreas[0]);
 
     expect(ctrl.selectedSkill).toEqual(null);
     expect(ctrl.selectedSkillArea).toEqual(ctrl.skillAreas[0]);
-    expect(ctrl.itemToReturn).toEqual(ctrl.skillAreas[0]);
+    expect(ctrl.itemToReturn).toHaveBeenCalledWith(ctrl.skillAreas[0]);
   });
 
   it('should be able to clear skill input', function () {
     ctrl = $componentController('skillPicker', null, {
       skills: mockedSkills,
-      skillAreas: mockedSkillAreas
+      skillAreas: mockedSkillAreas,
+      itemToReturn: mockedItemToReturn
     });
+    spyOn(ctrl, 'itemToReturn');
 
     ctrl.selectedSkill = ctrl.skills[0];
     ctrl.selectSkill(ctrl.skills[0]);
-
     ctrl.selectedSkill = null;
     ctrl.selectSkill(undefined);
 
     expect(ctrl.selectedSkill).toEqual(null);
-    expect(ctrl.itemToReturn).toEqual(undefined);
+    expect(ctrl.itemToReturn).toHaveBeenCalledWith(undefined);
   });
 
   it('should be able to clear skillArea input', function () {
     ctrl = $componentController('skillPicker', null, {
       skills: mockedSkills,
-      skillAreas: mockedSkillAreas
+      skillAreas: mockedSkillAreas,
+      itemToReturn: mockedItemToReturn
     });
+    spyOn(ctrl, 'itemToReturn');
 
-    ctrl.selectedSkill = ctrl.skillAreas[0];
+    ctrl.selectedSkillArea = ctrl.skillAreas[0];
     ctrl.selectSkillArea(ctrl.skillAreas[0]);
-
     ctrl.selectedSkillArea = null;
     ctrl.selectSkillArea(undefined);
 
     expect(ctrl.selectedSkillArea).toEqual(null);
-    expect(ctrl.itemToReturn).toEqual(undefined);
+    expect(ctrl.itemToReturn).toHaveBeenCalledWith(undefined);
   });
-
-
-
 });

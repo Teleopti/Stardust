@@ -46,7 +46,6 @@ describe('RtaMainController', function () {
       }
     ];
 
-
     skills2 = [
       {
         Name: 'Invoice',

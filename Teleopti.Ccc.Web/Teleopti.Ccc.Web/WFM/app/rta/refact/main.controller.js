@@ -16,7 +16,6 @@
 		vm.organization = [];
 		vm.siteCards = [];
 
-
 		(function fetchDataForFilterComponent() {
 			rtaService.getSkills().then(function (result) {
 				vm.skills = result;
@@ -25,15 +24,21 @@
 			rtaService.getSkillAreas().then(function (result) {
 				vm.skillAreas = result.SkillAreas;
 			});
+
 			if (vm.skillIds.length > 0) {
 				rtaService.getOrganizationForSkills({ skillIds: vm.skillIds }).then(function (result) {
 					vm.organization = result;
 				});
+
 			} else {
 				rtaService.getOrganization().then(function (result) {
 					vm.organization = result;
 				});
 			}
+
+			vm.filterOutput = function(selectedItem) {
+			}
+			
 		})();
 
 		(function OverviewComponentHandler() {

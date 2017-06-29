@@ -9,7 +9,7 @@
       bindings: {
         skills: '=',
         skillAreas: '=',
-        output: '='
+        itemToReturn: '='
       },
     });
 
@@ -18,24 +18,21 @@
     var ctrl = this;
 
     ctrl.selectSkill = function (skill) {
-      if(ctrl.selectedSkill === null){
-        ctrl.itemToReturn = undefined;
-        return;
-      }
-      
-      ctrl.selectedSkillArea = null;
-      ctrl.itemToReturn = skill;
+      if (skill !== undefined) {
+        ctrl.selectedSkillArea = null;
+        ctrl.itemToReturn(skill);
+      } else if (ctrl.selectedSkillArea === null && ctrl.selectedSkill === null) {
+          ctrl.itemToReturn(undefined);
+        } 
     }
 
     ctrl.selectSkillArea = function (skillArea) {
-      if(ctrl.selectedSkillArea === null){
-        ctrl.itemToReturn = undefined;
-        return;
+      if (skillArea !== undefined) {
+        ctrl.selectedSkill = null;
+        ctrl.itemToReturn(skillArea);
+      } else if (ctrl.selectedSkill === null && ctrl.selectedSkillArea === null) {
+          ctrl.itemToReturn(undefined);
+        } 
       }
-      
-      ctrl.selectedSkill = null;
-      ctrl.itemToReturn = skillArea;
-    }
-
   }
 })();
