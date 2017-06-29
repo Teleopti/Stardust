@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
@@ -36,24 +37,32 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_gridlockManager = gridlockManager;
 		}
 
-		public void Handle(SchedulingWasOrdered @event)
+		[TestLog]
+		public virtual void Handle(SchedulingWasOrdered @event)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 			using (CommandScope.Create(@event))
 			{
-				_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsToSchedule, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod);
-
-				var schedulingCallback = _currentSchedulingCallback.Current();
-				var converter = schedulingCallback as IConvertSchedulingCallbackToSchedulingProgress;
-				var schedulingProgress = converter == null ? 
-					new NoSchedulingProgress() : 
-					converter.Convert();
-	
-				_scheduleExecutor.Execute(schedulingCallback, _schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate), schedulingProgress, schedulerStateHolder.AllPermittedPersons,
-					selectedPeriod, @event.RunWeeklyRestSolver);
+				DoScheduling(@event, schedulerStateHolder, selectedPeriod);
 				_synchronizeSchedulesAfterIsland.Synchronize(schedulerStateHolder.Schedules, selectedPeriod);
 			}
+		}
+
+		[UnitOfWork]
+		protected virtual void DoScheduling(SchedulingWasOrdered @event, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod)
+		{
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsToSchedule,
+				new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod);
+
+			var schedulingCallback = _currentSchedulingCallback.Current();
+			var converter = schedulingCallback as IConvertSchedulingCallbackToSchedulingProgress;
+			var schedulingProgress = converter == null ? new NoSchedulingProgress() : converter.Convert();
+
+			_scheduleExecutor.Execute(schedulingCallback,
+				_schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate), schedulingProgress,
+				schedulerStateHolder.AllPermittedPersons,
+				selectedPeriod, @event.RunWeeklyRestSolver);
 		}
 	}
 }

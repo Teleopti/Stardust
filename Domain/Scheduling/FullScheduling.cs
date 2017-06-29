@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
 			var stateHolder = _schedulerStateHolder();
-			SetupAndSchedule(period, people);
+			Setup(period, people);
+			ExecuteScheduling(period, stateHolder);
 			_persister.Persist(stateHolder.Schedules);
 			return CreateResult(period);
 		}
@@ -53,15 +54,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		[TestLog]
 		[UnitOfWork]
-		protected virtual void SetupAndSchedule(DateOnlyPeriod period, IEnumerable<Guid> people)
+		protected virtual void Setup(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
 			var stateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(stateHolder, people, null, period);
-			
-			if (stateHolder.Schedules.Any())
-			{
-				ExecuteScheduling(period, stateHolder);
-			}
 		}
 
 		[RemoveMeWithToggle("move up this", Toggles.ResourcePlanner_SchedulingIslands_44757)]
