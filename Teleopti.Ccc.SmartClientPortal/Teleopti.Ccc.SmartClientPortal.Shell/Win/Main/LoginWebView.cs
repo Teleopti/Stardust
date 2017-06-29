@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using System.Deployment.Application;
+using System.IO;
+using System.Linq;
 using System.Web;
 using System.Windows.Forms;
 using EO.Base;
@@ -87,27 +89,31 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			webView1.RegisterJSExtensionFunction("isTeleoptiProvider", WebView_JSIsTeleoptiProvider);
 			logInfo("EO Browser: Loading URL to show the login web view.");
 			var queryString = "";
-			if (ApplicationDeployment.IsNetworkDeployed)
+			var queryStringFileName = @".\QueryString.txt";
+			if (ApplicationDeployment.IsNetworkDeployed && ApplicationDeployment.CurrentDeployment.ActivationUri != null)
 			{
-				if (ApplicationDeployment.CurrentDeployment.ActivationUri != null)
+				_logger.Info($"ApplicationDeployment.CurrentDeployment.ActivationUri.Query: {ApplicationDeployment.CurrentDeployment.ActivationUri.Query}");
+				queryString = ApplicationDeployment.CurrentDeployment.ActivationUri.Query.Replace("?","");
+				File.WriteAllLines(queryStringFileName, new[] { queryString });
+			}
+			else
+			{
+				var current = Path.GetDirectoryName(Application.ExecutablePath);
+				var exists = File.Exists(queryStringFileName);
+				_logger.Info($"current path: {current}, check if file {queryStringFileName}: {exists}");
+				if (exists)
 				{
-					_logger.Info($"ApplicationDeployment.CurrentDeployment.ActivationUri.Query: {ApplicationDeployment.CurrentDeployment.ActivationUri.Query}");
-					queryString = ApplicationDeployment.CurrentDeployment.ActivationUri.Query;
+					var lines = File.ReadAllLines(queryStringFileName);
+					queryString = lines.SingleOrDefault() ?? "";
+					_logger.Info($"queryString read from {queryStringFileName}: {queryString}");
 				}
 			}
-			var activationArguments = AppDomain.CurrentDomain.SetupInformation.ActivationArguments;
-			if (activationArguments?.ActivationData != null && activationArguments.ActivationData.Length>0)
-			{
-				foreach (var data in activationArguments.ActivationData)
-				{
-					_logger.Info($"activationArguments: {data}");
-				}
-			}
+
 			webView1.Url = ServerUrl + "start/Url/RedirectToWebLogin?queryString=" + HttpUtility.UrlEncode(queryString);
 			// some defensive coding to prevent bug 39408
 			if (Visible)
 				return true;
-			DialogResult result = ShowDialog();
+			var result = ShowDialog();
 			return result != DialogResult.Cancel;
 		}
 		
