@@ -13,17 +13,36 @@
 	self.TimeTo = ko.observable();
 	self.DateFormat = ko.observable();
 
-	//self.weekStart = ko.observable(1);
-	//self.ShowMeridian = ko.observable(true);
-	//self.ShowError = ko.observable(false);
-	//self.ErrorMessage = ko.observable();
+	self.weekStart = ko.observable(1);
+	self.ShowMeridian = ko.observable(true);
+	self.ShowError = ko.observable(false);
+	self.ErrorMessage = ko.observable();
+	self.RequestDuration = ko.observable();
 	self.MultiplicatorDefinitionSets = [];
 	self.MultiplicatorDefinitionSet = ko.observable();
+	self.TimeList = _createTimeList();
 
 	self.checkMessageLength = function (data, event) {
 		var text = $(event.target)[0].value;
 		if (text.length > 2000) {
 			self.Message(text.substr(0, 2000));
+		}
+	};
+
+	self.validateDuration = function (data, event) {
+		var duration = $(event.target)[0].value.split(':');
+		duration.length = 2;
+
+		var hourReg = /^(([0-1][0-9])|([2][0-3]))$/gi;
+		if (!hourReg.test(duration[0])) {
+			duration[0] = '00';
+			self.RequestDuration(duration.join(':'));
+		}
+
+		var minuteReg = /^[0-5][0-9]$/gi;
+		if (!minuteReg.test(duration[1])) {
+			duration[1] = '59';
+			self.RequestDuration(duration.join(':'));
 		}
 	};
 
@@ -60,5 +79,16 @@
 			self.MultiplicatorDefinitionSets = data;
 		}
 	});
+
+	function _createTimeList() {
+		var timeList = [];
+		for (var i = 1; i < 24; i++) {
+			if (i < 10)
+				timeList.push('0' + i + ':00');
+			else
+				timeList.push(i + ':00');
+		}
+		return timeList;
+	}
 
 }

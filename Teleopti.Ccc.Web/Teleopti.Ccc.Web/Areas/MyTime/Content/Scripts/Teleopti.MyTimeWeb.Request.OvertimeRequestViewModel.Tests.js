@@ -126,4 +126,51 @@
 
 		$('#MessageBox').remove();
 	});
+
+	test('should not exceed 23 hours for request duration', function () {
+		var html = '<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>';
+
+		$('body').append(html);
+		ko.applyBindings(vm, $('#duration')[0]);
+
+		$('#duration').val('99:00');
+		$('#duration').change();
+
+		equal(vm.RequestDuration(), '00:00');
+
+		$('#duration').remove();
+	});
+
+	test('should not exceed 59 minutes for request duration', function () {
+		var html = '<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>';
+
+		$('body').append(html);
+		ko.applyBindings(vm, $('#duration')[0]);
+
+		$('#duration').val('01:60');
+		$('#duration').change();
+
+		equal(vm.RequestDuration(), '01:59');
+
+		$('#duration').remove();
+	});
+
+	test('should contains only one : in request duration', function () {
+		var html = '<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>';
+
+		$('body').append(html);
+		ko.applyBindings(vm, $('#duration')[0]);
+
+		$('#duration').val('01:60:00');
+		$('#duration').change();
+
+		equal(vm.RequestDuration(), '01:59');
+
+		$('#duration').val('016000');
+		$('#duration').change();
+
+		equal(vm.RequestDuration(), '00:59');
+
+		$('#duration').remove();
+	});
 });
