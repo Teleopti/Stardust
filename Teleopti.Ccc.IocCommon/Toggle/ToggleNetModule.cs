@@ -49,9 +49,7 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 					const string developerMode = "ALL";
 					const string rcMode = "RC";
 
-					var toggleMode = toggleModeArg==null ? 
-						string.Empty : 
-						toggleModeArg.Trim();
+					var toggleMode = toggleModeArg?.Trim() ?? string.Empty;
 
 					var defaultSpecification = toggleMode.Equals(developerMode, StringComparison.OrdinalIgnoreCase)
 						? (IToggleSpecification) new TrueSpecification()

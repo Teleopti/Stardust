@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			var entity = parameter as IEntity;
 			if(entity!=null)
-				return entity.Id.HasValue ? entity.Id.Value.ToString() : null;
+				return entity.Id?.ToString();
 			var restriction = parameter as IWorkTimeMinMaxRestriction;
 			if (restriction != null)
 				return restriction.GetHashCode().ToString(CultureInfo.InvariantCulture); //this one is WRONG! but it has been wrong for a long time...
