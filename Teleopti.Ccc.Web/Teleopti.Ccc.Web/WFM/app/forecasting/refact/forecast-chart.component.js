@@ -6,7 +6,8 @@ angular.module('wfm.forecasting')
 	bindings: {
 		chartId: '=',
 		onClick: '=',
-		refresh: '='
+		refresh: '=',
+		selectable: '='
 	}
 });
 
@@ -91,7 +92,7 @@ function ForecastChartCtrl($translate, $filter) {
 				},
 				hide: ['vc', 'vtt', 'vacw'],
 				selection: {
-					enabled: true,
+					enabled: ctrl.selectable,
 					draggable: true,
 					grouped: true
 				},

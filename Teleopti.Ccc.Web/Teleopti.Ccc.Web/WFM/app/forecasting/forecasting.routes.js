@@ -29,7 +29,12 @@
     .state('modify', {
       url: '/forecast/:workloadId',
       templateUrl: 'app/forecasting/refact/forecast-modify.html',
-      controller: 'ForecastModCtrl as vm'
+      controller: 'ForecastModCtrl as vm',
+      params: {
+        workloadId: undefined,
+        skill: undefined,
+        days: undefined
+      },
     })
     .state('forecasting.start', {
       params: {
