@@ -90,35 +90,21 @@
 				var query = getSkillAreaStaffingByDate(area.Id, vm.selectedDate, vm.useShrinkage);
 			}
 			query.$promise.then(function (result) {
-				staffingData.time = [];
-				staffingData.scheduledStaffing = [];
-				staffingData.forcastedStaffing = [];
-				staffingData.suggestedStaffing = [];
-				staffingData.absoluteDifference = [];
+
 				if (staffingPrecheck(result.DataSeries)) {
-					staffingData.scheduledStaffing = roundDataToOneDecimal(result.DataSeries.ScheduledStaffing);
-					staffingData.forcastedStaffing = roundDataToOneDecimal(result.DataSeries.ForecastedStaffing);
-					staffingData.absoluteDifference = result.DataSeries.AbsoluteDifference;
-					staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
-					staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
+
 					vm.timeSerie = result.DataSeries.Time;
-					angular.forEach(result.DataSeries.Time,
-						function (value, key) {
-							staffingData.time.push($filter('date')(value, 'shortTime'));
-						},
-						staffingData.time);
-					staffingData.time.unshift('x');
-					generateChartForView(staffingData);
+					var staffingData = utilService.prepareStaffingData(result);
+					staffingData.then(function (processedData) {
+						generateChartForView(processedData);
+					})
 				} else {
 					vm.staffingDataAvailable = false;
 				}
 			});
 		}
 
-		function roundDataToOneDecimal(input) {
-			input = utilService.roundArrayContents(input, 1)
-			return input;
-		}
+
 
 		function staffingPrecheck(data) {
 			if (!angular.equals(data, {}) && data != null) {

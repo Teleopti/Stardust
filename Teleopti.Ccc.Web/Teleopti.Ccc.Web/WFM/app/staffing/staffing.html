@@ -57,7 +57,7 @@
         </div>
     </div>
 </div>
-<div class="panel material-depth-1" ng-if="vm.staffingDataAvailable">
+<div class="panel material-depth-1" ng-show="vm.staffingDataAvailable">
     <md-progress-linear ng-show="vm.hasRequestedSuggestion || vm.hasRequestedOvertime" md-mode="indeterminate"></md-progress-linear>
     <div class="sub-header">
         <h2>{{'Staffing' | translate}} - {{vm.selectedDate | date:'yyyy-MM-dd'}}

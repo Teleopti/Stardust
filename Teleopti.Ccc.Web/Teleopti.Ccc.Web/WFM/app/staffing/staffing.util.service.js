@@ -5,10 +5,11 @@
         .module('wfm.staffing')
         .factory('UtilService', utilService);
 
-    utilService.inject = [];
-    function utilService() {
+    utilService.inject = ['$translate', '$filter', '$q'];
+    function utilService($translate, $filter, $q) {
         var service = {
-            roundArrayContents: roundArrayContents
+            prepareStaffingData: prepareStaffingData
+
         };
 
         return service;
@@ -21,6 +22,36 @@
                 roundedInput.push(parseFloat(elm.toFixed(decimals)));
             })
             return roundedInput;
+        }
+
+        function roundDataToOneDecimal(input) {
+            input = roundArrayContents(input, 1)
+            return input;
+        }
+
+        function prepareStaffingData(data) {
+            var deferred = $q.defer();
+            var staffingData = {};
+            staffingData.time = [];
+            staffingData.scheduledStaffing = [];
+            staffingData.forcastedStaffing = [];
+            staffingData.suggestedStaffing = [];
+            staffingData.absoluteDifference = [];
+
+            staffingData.scheduledStaffing = roundDataToOneDecimal(data.DataSeries.ScheduledStaffing);
+            staffingData.forcastedStaffing = roundDataToOneDecimal(data.DataSeries.ForecastedStaffing);
+            staffingData.absoluteDifference = data.DataSeries.AbsoluteDifference;
+            staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
+            staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
+            angular.forEach(data.DataSeries.Time,
+                function (value, key) {
+                    staffingData.time.push($filter('date')(value, 'shortTime'));
+                },
+                staffingData.time);
+            staffingData.time.unshift('x');
+            deferred.resolve(staffingData);
+            
+            return deferred.promise
         }
     }
 })();
