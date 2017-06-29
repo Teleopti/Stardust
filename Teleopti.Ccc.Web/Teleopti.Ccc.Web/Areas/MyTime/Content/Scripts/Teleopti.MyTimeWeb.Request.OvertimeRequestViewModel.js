@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, requestListViewModel) {
+﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function(ajax, requestListViewModel) {
 	var self = this;
 
 	self.Template = "add-overtime-request-template";
@@ -20,14 +20,14 @@
 	self.MultiplicatorDefinitionSet = ko.observable();
 	self.TimeList = [];
 
-	self.checkMessageLength = function (data, event) {
+	self.checkMessageLength = function(data, event) {
 		var text = $(event.target)[0].value;
 		if (text.length > 2000) {
 			self.Message(text.substr(0, 2000));
 		}
 	};
 
-	self.validateDuration = function (data, event) {
+	self.validateDuration = function(data, event) {
 		var value = $(event.target)[0].value;
 		if (!value) return;
 
@@ -47,7 +47,7 @@
 		}
 	};
 
-	self.AddRequest = function () {
+	self.AddRequest = function() {
 		if (!_validateRequiredFields()) {
 			return;
 		}
@@ -60,7 +60,7 @@
 			contentType: 'application/json',
 			dataType: 'json',
 			type: 'POST',
-			success: function (data) {
+			success: function(data) {
 				self.IsPostingData(false);
 				requestListViewModel.AddItemAtTop(data, true);
 			}
@@ -74,10 +74,10 @@
 		self.TimeList = _createTimeList();
 	}
 
-	function _loadMultiplicatorDefinitionSets(){
+	function _loadMultiplicatorDefinitionSets() {
 		ajax.Ajax({
 			url: "../api/MultiplicatorDefinitionSet/Mine",
-			success: function (data) {
+			success: function(data) {
 				self.MultiplicatorDefinitionSets(data);
 			}
 		});
@@ -106,7 +106,7 @@
 		}
 		return result;
 	}
-	
+
 	function _buildPostData() {
 		var startDateMoment = moment(self.StartDate());
 		var endDateMoment = moment(self.StartDate()).startOf('day');
@@ -114,7 +114,8 @@
 			endDateMoment = moment(startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat) + ' ' + self.StartTime());
 		}
 		if (self.RequestDuration()) {
-			endDateMoment.add(self.RequestDuration().split(':')[0], 'hours').add(self.RequestDuration().split(':')[1], 'minutes');
+			endDateMoment.add(self.RequestDuration().split(':')[0], 'hours')
+				.add(self.RequestDuration().split(':')[1], 'minutes');
 		}
 
 		var endDate = startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
@@ -133,4 +134,5 @@
 				EndTime: endDateMoment.format('HH:mm')
 			}
 		};
+	}
 }
