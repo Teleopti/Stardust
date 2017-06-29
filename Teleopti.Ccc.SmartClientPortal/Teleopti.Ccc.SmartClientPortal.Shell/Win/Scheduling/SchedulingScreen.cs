@@ -12,6 +12,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Forms.Integration;
 using Autofac;
+using EO.Internal;
 using log4net;
 using MbCache.Core;
 using Microsoft.Practices.Composite.Events;
@@ -3199,13 +3200,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						}
 					}
 
-					if (e.ProgressPercentage <= 0)
+					//hack - to be fixed
+					if (progress != null && _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_SchedulingIslands_44757))
 					{
-						schedulingProgress(Math.Abs(e.ProgressPercentage));
+						var part = progress.SchedulePart;
+						scheduleStatusBarUpdate(string.Format(CultureInfo.CurrentCulture, "{0} {1}", _schedulerState.CommonAgentName(part.Person), part.DateOnlyAsPeriod.DateOnly.ToShortDateString()));
 					}
 					else
 					{
-						schedulingProgress(null);
+						if (e.ProgressPercentage <= 0)
+						{
+							schedulingProgress(Math.Abs(e.ProgressPercentage));
+						}
+						else
+						{
+							schedulingProgress(null);
+						}
 					}
 				}
 			}
