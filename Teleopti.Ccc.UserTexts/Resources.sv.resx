@@ -11658,7 +11658,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Aktivera agentmedaljer</value>
   </data>
   <data name="YouGotANewBronzeBadgeForAdherence" xml:space="preserve">
-    <value>Du har en ny bronsmedalj! Din schemauppföljning är över {0}% för en dag. </value>
+    <value>Du har en ny bronsmedalj! Din följsamhet är över {0}% för en dag. </value>
   </data>
   <data name="YouGotANewBronzeBadgeForAHT" xml:space="preserve">
     <value>Du har en ny bronsmedalj! Din genomsnittliga behandlingstid är under {0} sekunder för en dag.</value>
@@ -11667,7 +11667,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Du har en ny bronsmedalj! Du har besvarat {0} eller fler samtal på en dag.</value>
   </data>
   <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>Du har en ny guldmedalj! Din schemauppföljning är över {0}% på {1} olika dagar.  </value>
+    <value>Du har en ny guldmedalj! Din följsamhet är över {0}% på {1} olika dagar.  </value>
   </data>
   <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
     <value>Du har en ny guldmedalj! Din genomsnittliga behandlingstid är under {0} sekunder {1} olika dagar. </value>
@@ -11676,7 +11676,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Du har en ny guldmedalj! Du har besvarat {0} eller fler samtal {1} olika dagar.</value>
   </data>
   <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>Du har en ny silvermedalj! Din schemauppföljning är över {0}% på {1} olika dagar.</value>
+    <value>Du har en ny silvermedalj! Din följsamhet är över {0}% på {1} olika dagar.</value>
   </data>
   <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
     <value>Du har en ny silvermedalj! Din genomsnittliga behandlingstid är under {0} sekunder {1} olika dagar.</value>
@@ -14275,7 +14275,7 @@ Vill du registrera dig?</value>
     <value>Kolumn som saknas</value>
   </data>
   <data name="AdherenceFor" xml:space="preserve">
-    <value>Frånvaro för</value>
+    <value>Schemauppföljning för</value>
   </data>
   <data name="AfterShiftEnd" xml:space="preserve">
     <value>Efter skiftslut</value>
