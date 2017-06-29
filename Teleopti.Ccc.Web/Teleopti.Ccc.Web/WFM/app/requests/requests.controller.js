@@ -36,6 +36,8 @@
 		vm.hasFavoriteSearchPermission = false;
 		vm.onFavoriteSearchInitDefer = $q.defer();
 
+		vm.teamNameMap = {};
+
 		if (!vm.saveFavoriteSearchesToggleEnabled) {
 			vm.onFavoriteSearchInitDefer.resolve();
 		}
@@ -51,6 +53,24 @@
 			loggedonUsersTeamId.resolve(null);
 		}
 
+		vm.orgPickerSelectedText = function () {
+			var text = '';
+			switch (vm.selectedTeamIds.length) {
+				case 0:
+					text = $translate.instant('SelectOrganization');
+					break;
+
+				case 1:
+					text = vm.teamNameMap[vm.selectedTeamIds[0]];
+					break;
+
+				default:
+					text = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.selectedTeamIds.length);
+					break;
+			}
+			return text;
+		};
+
 		vm.getSitesAndTeamsAsync = function () {
 			var params = {};
 			if (toggleService.Wfm_HideUnusedTeamsAndSites_42690) {
@@ -64,6 +84,8 @@
 					resolve(data);
 					vm.sitesAndTeams = data.Children;
 					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
+
+					angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
 				});
 			});
 		};
@@ -306,5 +328,15 @@
 	function replaceArrayValues(from, to) {
 		to.splice(0);
 		from.forEach(function (x) { to.push(x); });
+	}
+
+	function extractTeamNames(sites) {
+		var teamNameMap = {};
+		sites.forEach(function (site) {
+			site.Children.forEach(function (team) {
+				teamNameMap[team.Id] = team.Name;
+			});
+		});
+		return teamNameMap;
 	}
 })();
