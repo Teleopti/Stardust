@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Microsoft.Ajax.Utilities;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -82,29 +80,25 @@ namespace Teleopti.Ccc.Web.Core
 			var siteViewModels = new List<SiteViewModelWithTeams>();
 
 			Guid? logonUserTeamId = getPermittedLogonTeam(date, functionPath);
-			var validTeamIds = hasPermission(date, functionPath, logonUserTeamId,
-				sites.SelectMany(s => s.TeamCollection)
-					.Select(item => item.Id.Value)
-					.Distinct().ToArray());
 
 			foreach (var site in sites)
 			{
 				var siteViewModel = new SiteViewModelWithTeams
 				{
-					Id = site.Id.Value,
+					Id = site.Id.GetValueOrDefault(),
 					Name = site.Description.Name,
 					Children = new List<TeamViewModel>()
 				};
-				var teams = site.TeamCollection
-					.OrderBy(team => team.Description.Name, compare)
-					.Where(team => team.IsChoosable
-								&& validTeamIds.Contains(team.Id.Value));
+				var permittedTeams = getPermittedTeams(date, functionPath, logonUserTeamId, site.TeamCollection.ToList()).ToList();
 
-				if (teams.Any())
+				if (permittedTeams.Any())
 				{
-					siteViewModel.Children = teams.Select(team => new TeamViewModel
+					siteViewModel.Children = permittedTeams
+						.Where(t => t.IsChoosable)
+						.OrderBy(t => t.Description.Name, compare)
+						.Select(team => new TeamViewModel
 					{
-						Id = team.Id.Value,
+						Id = team.Id.GetValueOrDefault(),
 						Name = team.Description.Name
 					}).ToList();
 					siteViewModels.Add(siteViewModel);
@@ -123,31 +117,37 @@ namespace Teleopti.Ccc.Web.Core
 		public BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateOnlyPeriod dateOnlyPeriod, string functionPath)
 		{
 			var compare = StringComparer.Create(_loggedOnUser.CurrentUser().PermissionInformation.UICulture(), false);
-			var items = _personSelectorReadOnlyRepository.GetOrganizationForWeb(dateOnlyPeriod);
+			var personSelectorOrganizations = _personSelectorReadOnlyRepository.GetOrganizationForWeb(dateOnlyPeriod);
 			Guid? logonUserTeamId = getPermittedLogonTeam(dateOnlyPeriod.StartDate, functionPath);
-			var validTeamIds = hasPermission(dateOnlyPeriod.StartDate, functionPath, logonUserTeamId,
-					items
-					.Select(item => item.TeamId.Value)
-					.Distinct().ToArray());
 
-			var sites = items
+			var sites = personSelectorOrganizations
 				.GroupBy(item => item.SiteId)
-				.Select(site => new SiteViewModelWithTeams
+				.Select(site =>
 				{
-					Id = site.Key.Value,
-					Name = site.First().Site,
-					Children = site
-						.DistinctBy(s => s.TeamId)
-						.Where(c => validTeamIds.Contains(c.TeamId.Value))
-						.Select(t => new TeamViewModel
+					var teamsInSite = _teamRepository.FindTeams(site.Select(s => s.TeamId.GetValueOrDefault()));
+					var permittedTeams = getPermittedTeams(dateOnlyPeriod.StartDate, functionPath, logonUserTeamId,
+						teamsInSite.ToList())
+						.Where(t => t.IsChoosable)
+						.ToList();
+					if (permittedTeams.Any())
+					{
+						return new SiteViewModelWithTeams
 						{
-							Id = t.TeamId.Value,
-							Name = t.Team
-						})
-						.OrderBy(t => t.Name, compare)
-						.ToList()
+							Id = site.Key.GetValueOrDefault(),
+							Name = site.First().Site,
+							Children = permittedTeams
+							.Select(t => new TeamViewModel
+							{
+								Id = t.Id.GetValueOrDefault(),
+								Name = t.Description.Name
+							})
+							.OrderBy(t => t.Name, compare)
+							.ToList()
+						};
+					}
+					return null;
 				})
-				.Where(site => site.Children != null && site.Children.Any())
+				.Where(site => site!= null)
 				.OrderBy(s => s.Name, compare)
 				.ToList();
 
@@ -159,16 +159,14 @@ namespace Teleopti.Ccc.Web.Core
 				LogonUserTeamId = logonUserTeamId
 			};
 		}
-
-		private IEnumerable<Guid> hasPermission(DateOnly date, string functionPath, Guid? logonUserTeamId, params Guid[] teamIds)
+		private IEnumerable<ITeam> getPermittedTeams(DateOnly date, string functionPath, Guid? logonUserTeamId, IList<ITeam> teams )
 		{
-			var teams = _teamRepository.FindTeams(teamIds);
 			foreach (var team in teams)
 			{
 				if (_permissionProvider.HasTeamPermission(functionPath, date, team)
-					|| (logonUserTeamId.HasValue && team.Id == logonUserTeamId.Value))
+					|| logonUserTeamId.HasValue && team.Id == logonUserTeamId.Value)
 				{
-					yield return team.Id.Value;
+					yield return team;
 				}
 			}
 
@@ -178,8 +176,9 @@ namespace Teleopti.Ccc.Web.Core
 		{
 			var currentUser = _loggedOnUser.CurrentUser();
 			var myTeam = currentUser.MyTeam(date);
-			var hasPermissonForLogonTeam = _permissionProvider.HasPersonPermission(functionPath, date, currentUser);
-			if (myTeam?.Id != null && myTeam.Site.BusinessUnit.Id == _currentBusinessUnit.Current()?.Id && hasPermissonForLogonTeam)
+			if (myTeam?.Id != null 
+				&& myTeam.Site.BusinessUnit.Id == _currentBusinessUnit.Current()?.Id 
+				&& _permissionProvider.HasPersonPermission(functionPath, date, currentUser))
 			{
 				return myTeam.Id.Value;
 			}
