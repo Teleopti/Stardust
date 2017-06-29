@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class SchedulingCallbackForDesktop : ISchedulingCallback
+	public class SchedulingCallbackForDesktop : ISchedulingCallback, IConvertSchedulingCallbackToSchedulingProgress
 	{
 		private readonly ISchedulingProgress _schedulingProgress;
 		private readonly SchedulingOptions _schedulingOptions;
@@ -30,5 +30,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		public bool IsCancelled => _schedulingProgress.CancellationPending;
+
+		public ISchedulingProgress Convert()
+		{
+			return _schedulingProgress;
+		}
 	}
 }

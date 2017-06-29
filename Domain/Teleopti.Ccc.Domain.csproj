@@ -275,6 +275,7 @@
     <Compile Include="ResourceCalculation\SchedulePartModifyAndRollbackServiceWithoutStateHolder.cs" />
     <Compile Include="Scheduling\CurrentSchedulingCallback.cs" />
     <Compile Include="Scheduling\FullSchedulingResult.cs" />
+    <Compile Include="Scheduling\IConvertSchedulingCallbackToSchedulingProgress.cs" />
     <Compile Include="Scheduling\ICurrentSchedulingCallback.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleHourlyStaffExecutor.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulingCommand.cs" />

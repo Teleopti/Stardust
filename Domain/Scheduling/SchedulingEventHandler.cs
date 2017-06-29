@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
@@ -43,9 +42,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				//TODO: fix this
 				LockInfoForStateHolder lockInfoForStateHolderFixThis = null;
 				_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsToSchedule, lockInfoForStateHolderFixThis, selectedPeriod);
-				//TODO: fix this
-				var fixThis = new NoSchedulingProgress();
-				_scheduleExecutor.Execute(_currentSchedulingCallback.Current(), _schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate), fixThis, schedulerStateHolder.AllPermittedPersons,
+
+				var schedulingCallback = _currentSchedulingCallback.Current();
+				var converter = schedulingCallback as IConvertSchedulingCallbackToSchedulingProgress;
+				var schedulingProgress = converter == null ? 
+					new NoSchedulingProgress() : 
+					converter.Convert();
+	
+				_scheduleExecutor.Execute(schedulingCallback, _schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate), schedulingProgress, schedulerStateHolder.AllPermittedPersons,
 					selectedPeriod, @event.RunWeeklyRestSolver);
 				_synchronizeSchedulesAfterIsland.Synchronize(schedulerStateHolder.Schedules, selectedPeriod);
 			}

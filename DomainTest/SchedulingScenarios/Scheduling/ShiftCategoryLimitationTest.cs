@@ -507,8 +507,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var assA = new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategoryBefore).WithLayer(activity, new TimePeriod(6, 14));
 			SchedulerStateHolderFrom.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, new[] { assA }, new[] { skillDayFirstDay });
 			var schedulingProgress = new TrackSchedulingProgress<TeleoptiProgressChangeMessage>();
+			var schedulingCallback = new SchedulingCallbackForDesktop(schedulingProgress, new SchedulingOptions());
 
-			Target.Execute(new NoSchedulingCallback(), createSchedulingOptionsTeamSingleAgent(), schedulingProgress, new[] { agent }, date.ToDateOnlyPeriod());
+			Target.Execute(schedulingCallback, createSchedulingOptionsTeamSingleAgent(), schedulingProgress, new[] { agent }, date.ToDateOnlyPeriod());
 
 			schedulingProgress.ReportedProgress.Select(x => x.Message)
 				.Should().Contain(Resources.TryingToResolveShiftCategoryLimitationsDotDotDot);
