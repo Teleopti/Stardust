@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
@@ -13,5 +14,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public IEnumerable<Guid> AgentsToSchedule { get; set; }
 		public bool RunWeeklyRestSolver { get; set; }
 		public Guid CommandId {get;set;}
+		public IEnumerable<LockInfo> UserLocks { get; set; }
 	}
 }

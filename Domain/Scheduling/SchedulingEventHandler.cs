@@ -17,13 +17,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 		private readonly ICurrentSchedulingCallback _currentSchedulingCallback;
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
+		private readonly IGridlockManager _gridlockManager;
 
 		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						IFillSchedulerStateHolder fillSchedulerStateHolder,
 						IScheduleExecutor scheduleExecutor, 
 						ISchedulingOptionsProvider schedulingOptionsProvider,
 						ICurrentSchedulingCallback currentSchedulingCallback,
-						ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland)
+						ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
+						IGridlockManager gridlockManager)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_currentSchedulingCallback = currentSchedulingCallback;
 			_synchronizeSchedulesAfterIsland = synchronizeSchedulesAfterIsland;
+			_gridlockManager = gridlockManager;
 		}
 
 		public void Handle(SchedulingWasOrdered @event)
@@ -39,9 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
 			using (CommandScope.Create(@event))
 			{
-				//TODO: fix this
-				LockInfoForStateHolder lockInfoForStateHolderFixThis = null;
-				_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsToSchedule, lockInfoForStateHolderFixThis, selectedPeriod);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsToSchedule, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod);
 
 				var schedulingCallback = _currentSchedulingCallback.Current();
 				var converter = schedulingCallback as IConvertSchedulingCallbackToSchedulingProgress;
