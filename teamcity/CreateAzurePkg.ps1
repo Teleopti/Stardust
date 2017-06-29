@@ -25,7 +25,7 @@ properties {
 	
 	$IndexMSBuildFile = "$WorkingDir\StartPage\index.html"
 	$CSPackEXE = "$env:AzureSDK_2_8_Path\bin\cspack.exe"
-	
+	#
 }
 
 Set-ExecutionPolicy bypass -force
