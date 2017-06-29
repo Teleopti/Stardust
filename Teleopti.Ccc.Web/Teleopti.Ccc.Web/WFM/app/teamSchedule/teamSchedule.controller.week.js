@@ -21,6 +21,7 @@
 		vm.scheduleFullyLoaded = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
+		vm.teamNameMap = $stateParams.teamNameMap || {};
 		vm.enableClickableCell = true;
 		vm.onCellClick = openSelectedAgentDayInNewWindow;
 
@@ -119,6 +120,24 @@
 		vm.weekDays = Util.getWeekdays(vm.scheduleDate);
 		vm.paginationOptions.totalPages = 1;
 
+		vm.orgPickerSelectedText = function () {
+			var text = '';
+			switch (vm.selectedTeamIds.length) {
+				case 0:
+					text = $translate.instant('SelectOrganization');
+					break;
+
+				case 1:
+					text = vm.teamNameMap[vm.selectedTeamIds[0]];
+					break;
+
+				default:
+					text = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.selectedTeamIds.length);
+					break;
+			}
+			return text;
+		};
+
 		var asyncData = {
 			pageSetting: teamScheduleSvc.PromiseForGetAgentsPerPageSetting(),
 			loggedonUsersTeamId: loggedonUsersTeamId.promise,
@@ -135,6 +154,8 @@
 						resolve(data);
 						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 						vm.sitesAndTeams = data.Children;
+
+						angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
 					});
 			});
 		};
@@ -188,6 +209,16 @@
 
 		function scheduleChangedEventHandler() {
 			$scope.$evalAsync(vm.loadSchedules);
+		}
+
+		function extractTeamNames(sites) {
+			var teamNameMap = {};
+			sites.forEach(function (site) {
+				site.Children.forEach(function (team) {
+					teamNameMap[team.Id] = team.Name;
+				});
+			});
+			return teamNameMap;
 		}
 
 		vm.searchPlaceholder = $translate.instant('Search');

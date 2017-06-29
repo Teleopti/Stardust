@@ -13,6 +13,7 @@
 				keyword: '=?',
 				selectedDate: '=?',
 				selectedTeamIds: '=?',
+				teamNameMap: '=?',
 				selectedFavorite: '=?'
 			},
 			bindToController: true,
@@ -39,6 +40,7 @@
 			if (angular.isDefined(vc.keyword)) params.keyword = vc.keyword;
 			if (angular.isDefined(vc.selectedDate)) params.selectedDate = vc.selectedDate;
 			if (angular.isDefined(vc.selectedTeamIds)) params.selectedTeamIds = vc.selectedTeamIds;
+			if (angular.isDefined(vc.teamNameMap)) params.teamNameMap = vc.teamNameMap;
 			if (angular.isDefined(vc.selectedFavorite)) params.selectedFavorite = vc.selectedFavorite;
 
 			$state.go(viewState, params);

@@ -23,6 +23,7 @@
 				class="organization-picker-container inline-block"
 				on-open="vm.searchOptions.focusingSearch = false"
 				on-close="vm.onSelectedTeamsChanged()"
+				selected-text="vm.orgPickerSelectedText()"
 				selected-team-ids="vm.selectedTeamIds"></organization-picker>
 
 			<div class="people-search-container inline-block"
@@ -35,7 +36,10 @@
 				<team-schedule-datepicker selected-date="vm.scheduleDate" status="vm.showDatePicker" on-date-change="vm.onScheduleDateChanged()" class="inline-block"></team-schedule-datepicker>
 			</span>
 
-			<view-changer ng-if="vm.searchEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword" selected-team-ids="vm.selectedTeamIds" selected-favorite="vm.selectedFavorite"></view-changer>
+			<view-changer ng-if="vm.searchEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"
+				selected-team-ids="vm.selectedTeamIds"
+				team-name-map="vm.teamNameMap"
+				selected-favorite="vm.selectedFavorite"></view-changer>
 		</div>
 
 		<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)"></timezone-picker>

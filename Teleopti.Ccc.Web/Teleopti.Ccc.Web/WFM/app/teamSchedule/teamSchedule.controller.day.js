@@ -84,6 +84,7 @@
 
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
+		vm.teamNameMap = $stateParams.teamNameMap || {};
 		vm.searchOptions = {
 			keyword: $stateParams.keyword || '',
 			searchKeywordChanged: false,
@@ -382,6 +383,24 @@
 			return 'hidden';
 		};
 
+		vm.orgPickerSelectedText = function () {
+			var text = '';
+			switch (vm.selectedTeamIds.length) {
+				case 0:
+					text = $translate.instant('SelectOrganization');
+					break;
+
+				case 1:
+					text = vm.teamNameMap[vm.selectedTeamIds[0]];
+					break;
+
+				default:
+					text = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.selectedTeamIds.length);
+					break;
+			}
+			return text;
+		};
+
 		vm.boostrap = bootstrapCommon.ready();
 		var loggedonUsersTeamId = $q.defer();
 		vm.onFavoriteSearchInitDefer = $q.defer();
@@ -404,6 +423,9 @@
 					.then(function (data) {
 						resolve(data);
 						vm.sitesAndTeams = data.Children;
+
+						angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
+
 						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 					});
 			});
@@ -441,6 +463,16 @@
 				.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx">')
 				.replace('{2}', '</a>');
 			NoticeService.info(message, null, true);
+		}
+
+		function extractTeamNames(sites) {
+			var teamNameMap = {};
+			sites.forEach(function (site) {
+				site.Children.forEach(function (team) {
+					teamNameMap[team.Id] = team.Name;
+				});
+			});
+			return teamNameMap;
 		}
 
 		vm.searchPlaceholder = $translate.instant('Search');

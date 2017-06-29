@@ -16,6 +16,7 @@
 				selectedDate: undefined,
 				selectedTeamIds: undefined,
 				selectedFavorite: undefined,
+				teamNameMap: undefined,
 				do: false,
 			}
 		}).state('teams.for', {
@@ -33,6 +34,7 @@
 				selectedDate: undefined,
 				selectedTeamIds: undefined,
 				selectedFavorite: undefined,
+				teamNameMap: undefined,
 				do: false,
 			},
 			templateUrl: 'app/teamSchedule/html/weekViewSchedule.html',

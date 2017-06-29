@@ -22,6 +22,7 @@
 				class="organization-picker-container"
 				on-open="vm.searchOptions.focusingSearch = false"
 				on-close="vm.onSelectedTeamsChanged()"
+				selected-text="vm.orgPickerSelectedText()"
 				selected-team-ids="vm.selectedTeamIds"></organization-picker>
 
 			<div class="people-search-container inline-block"
@@ -33,7 +34,10 @@
 				<team-schedule-datepicker selected-date="vm.startOfWeek" status="vm.showDatePicker" on-date-change="vm.onStartOfWeekChanged()" step="7"></team-schedule-datepicker>
 			</span>
 
-			<view-changer selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword" selected-team-ids="vm.selectedTeamIds" selected-favorite="vm.selectedFavorite"></view-changer>
+			<view-changer selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"
+				selected-team-ids="vm.selectedTeamIds"
+				team-name-map="vm.teamNameMap"
+				selected-favorite="vm.selectedFavorite"></view-changer>
 		</div>
 	</div>
 
