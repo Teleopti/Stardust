@@ -7,14 +7,12 @@
 	self.Subject = ko.observable();
 	self.Message = ko.observable();
 
-	self.DateFrom = ko.observable();
-	self.DateTo = ko.observable();
-	self.TimeFrom = ko.observable();
-	self.TimeTo = ko.observable();
+	self.StartDate = ko.observable();
+	self.StartTime = ko.observable();
 	self.DateFormat = ko.observable();
 
 	self.weekStart = ko.observable(1);
-	self.ShowMeridian = ko.observable(true);
+	self.ShowMeridian = $('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true';
 	self.ShowError = ko.observable(false);
 	self.ErrorMessage = ko.observable();
 	self.RequestDuration = ko.observable();
@@ -53,23 +51,15 @@
 		if (!_validateRequiredFields()) {
 			return;
 		}
-		var postData = {
-			Subject: self.Subject(),
-			Message: self.Message(),
-			MultiplicatorDefinitionSet: self.MultiplicatorDefinitionSet().Id,
-			Period: {
-				StartDate: self.DateFrom(),
-				StartTime: self.TimeFrom(),
-				EndDate: self.DateTo(),
-				EndTime: self.TimeTo()
-			}
-		};
 
 		self.IsPostingData(true);
 
 		ajax.Ajax({
-			url: '../api/Request/AddOvertime',
-			data: postData,
+			url: 'Requests/OvertimeRequest',
+			data: _buildPostData(),
+			contentType: 'application/json',
+			dataType: 'json',
+			type: 'POST',
 			success: function (data) {
 				self.IsPostingData(false);
 				requestListViewModel.AddItemAtTop(data, true);
@@ -116,4 +106,31 @@
 		}
 		return result;
 	}
+	
+	function _buildPostData() {
+		var startDateMoment = moment(self.StartDate());
+		var endDateMoment = moment(self.StartDate()).startOf('day');
+		if (self.StartTime()) {
+			endDateMoment = moment(startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat) + ' ' + self.StartTime());
+		}
+		if (self.RequestDuration()) {
+			endDateMoment.add(self.RequestDuration().split(':')[0], 'hours').add(self.RequestDuration().split(':')[1], 'minutes');
+		}
+
+		var endDate = startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+		if (endDateMoment.isAfter(startDateMoment.endOf('day'))) {
+			endDate = endDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+		}
+
+		return {
+			Subject: self.Subject(),
+			Message: self.Message(),
+			MultiplicatorDefinitionSet: self.MultiplicatorDefinitionSet().Id,
+			Period: {
+				StartDate: startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat),
+				StartTime: moment(self.StartDate() + ' ' + self.StartTime()).format('HH:mm'),
+				EndDate: endDate,
+				EndTime: endDateMoment.format('HH:mm')
+			}
+		};
 }

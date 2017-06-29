@@ -44,7 +44,7 @@ $(document).ready(function () {
 					console.log(fakeDefinitionSets, 'fakeDefinitionSets');
 					options.success(fakeDefinitionSets);
 				}
-				if (options.url === '../api/Request/AddOvertime') {
+				if (options.url === 'Requests/OvertimeRequest') {
 					sentData = options.data;
 					options.success(fakeOvertimeRequestResponse);
 				}
@@ -68,10 +68,9 @@ $(document).ready(function () {
 	test('should submit overtime request', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom('2017-06-27');
-		vm.DateTo('2017-06-27');
-		vm.TimeFrom('19:00');
-		vm.TimeTo('22:00');
+		vm.StartDate('2017-06-27');
+		vm.StartTime('19:00');
+		vm.RequestDuration('03:00');
 		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
 
 		vm.AddRequest();
@@ -99,15 +98,61 @@ $(document).ready(function () {
 	test('should save overtime request', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom('2017-06-27');
-		vm.DateTo('2017-06-27');
-		vm.TimeFrom('19:00');
-		vm.TimeTo('22:00');
+		vm.StartDate('2017-06-27');
+		vm.StartTime('19:00');
 		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
 
 		vm.AddRequest();
 
 		equal(JSON.stringify(addedOvertimeRequest), JSON.stringify(fakeOvertimeRequestResponse));
+	});
+
+	test('should post correct EndDate and EndTime with cross day', function () {
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.StartDate('2017-06-27');
+		vm.StartTime('19:00');
+		vm.RequestDuration('06:00');
+		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
+
+		vm.AddRequest();
+
+		equal(sentData.Period.StartDate, '2017-06-27');
+		equal(sentData.Period.StartTime, '19:00');
+		equal(sentData.Period.EndDate, '2017-06-28');
+		equal(sentData.Period.EndTime, '01:00');
+	});
+
+	test('should post correct EndDate and EndTime with intraday', function () {
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.StartDate('2017-06-27');
+		vm.StartTime('19:30');
+		vm.RequestDuration('01:00');
+		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
+
+		vm.AddRequest();
+
+		equal(sentData.Period.StartDate, '2017-06-27');
+		equal(sentData.Period.StartTime, '19:30');
+		equal(sentData.Period.EndDate, '2017-06-27');
+		equal(sentData.Period.EndTime, '20:30');
+	});
+
+	test('should calculate correct EndDate and EndTime with meridian', function () {
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.StartDate('2017-06-27');
+		vm.StartTime('09:30 AM');
+		vm.RequestDuration('01:00');
+		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
+
+		vm.AddRequest();
+
+		equal(sentData.Period.StartDate, '2017-06-27');
+		equal(sentData.Period.StartTime, '09:30');
+		equal(sentData.Period.EndDate, '2017-06-27');
+		equal(sentData.Period.EndTime, '10:30');
 	});
 
 	test('should enable save button after posting data', function () {

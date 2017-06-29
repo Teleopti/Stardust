@@ -31,9 +31,9 @@
 					@Resources.Date
 				</label>
 				<span class="input-group">
-					<input class="input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
+					<input class="input-sm form-control" data-bind="datepicker: StartDate, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
 					<span class="input-group-btn">
-						<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+						<button class="btn btn-sm" data-bind="datepicker: StartDate, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</button>
 					</span>
@@ -45,9 +45,9 @@
 				</label>
 				<div class="bootstrap-timepicker">
 					<div class="input-group">
-						<input type="text" class="input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }" />
+						<input type="text" class="input-sm form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian }" />
 						<span class="input-group-btn">
-							<button class="btn btn-sm right-align" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }">
+							<button class="btn btn-sm right-align" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian }">
 								<i class="glyphicon glyphicon-time"></i>
 							</button>
 						</span>
