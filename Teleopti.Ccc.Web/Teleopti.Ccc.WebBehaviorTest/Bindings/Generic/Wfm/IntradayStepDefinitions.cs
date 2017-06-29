@@ -19,29 +19,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 	[Binding]
 	public class IntradayStepDefinitions
 	{
-		[Given(@"There is a skill to monitor called '(.*)'")]
-		public void GivenThereIsASkillToMonitorCalled(string skill)
+		[Given(@"There is a skill to monitor called '(.*)' with queue id '(.*)' and queue name '(.*)' and activity '(.*)'")]
+		public void GivenThereIsASkillToMonitorCalled(string skill, int queueId, string queueName, string activity)
 		{
-			const string queue = "queue1";
-			var queueId = 9;
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
 
 			DataMaker.Data().Apply(new ActivityConfigurable
 			{
-				Name = "activity1"
+				Name = activity
 			});
 
 			DataMaker.Data().Apply(new SkillConfigurable
 			{
 				Name = skill,
-				Activity = "activity1"
+				Activity = activity
 			});
 			
 			DataMaker.Data().Analytics().Apply(new AQueue(datasourceData) { QueueId = queueId });
 
 			DataMaker.Data().Apply(new QueueSourceConfigurable
 			{
-				Name = queue,
+				Name = queueName,
 				QueueId = queueId
 			});
 
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			{
 				WorkloadName = skill,
 				SkillName = skill,
-				QueueSourceName = queue,
+				QueueSourceName = queueName,
 				Open24Hours = true
 			});
 		}
@@ -82,6 +80,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.FillWith("#skillAreaName", skillAreaName);
 		}
 
+		[Given(@"I pick the skill '(.*)'")]
+		[When(@"I pick the skill '(.*)'")]
+		public void GivenIPickTheSkill(string skillName)
+		{
+			Browser.Interactions.Javascript("var scope = angular.element(document.querySelector('.c3')).scope();" +
+											"var skillet = scope.skills.find(function(e){{return e.Name === \"{skillName}\"}});" +
+											"scope.selectedSkill = skillet;scope.selectedSkillChange(skillet);" +
+											"scope.changeChosenOffset(scope.chosenOffset.value);");
+		}
+
 		[Given(@"I select the skill '(.*)'")]
 		[When(@"I select the skill '(.*)'")]
 		public void GivenISelectTheSkill(string skillName)
@@ -100,7 +108,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.Javascript("document.querySelector(\"#skill-area-input\").focus();");
 			var listId = "#" + Browser.Interactions.Javascript("return $('#skill-area-id input').attr(\"aria-owns\")");
-			Browser.Interactions.Javascript(string.Format("$('{0} li:contains(\"{1}\")').click()", listId, skillArea));
+			Browser.Interactions.Javascript($"$('{listId} li:contains(\"{skillArea}\")').click()");
 		}
 
 		[Then(@"I should no longer be able to monitor '(.*)'")]

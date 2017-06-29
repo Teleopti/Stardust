@@ -13,14 +13,13 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 {
 	public class FillBridgeTimeZoneFromData : IAnalyticsDataSetup, IBridgeTimeZone
 	{
+		private readonly IDatasourceData _datasource;
 		private readonly IDateData _dates;
 		private readonly IIntervalData _intervals;
 		private readonly ITimeZoneData _timeZones;
-		private readonly IDatasourceData _datasource;
 
-		public IEnumerable<DataRow> Rows { get; set; }
-
-		public FillBridgeTimeZoneFromData(IDateData dates, IIntervalData intervals, ITimeZoneData timeZones, IDatasourceData datasource)
+		public FillBridgeTimeZoneFromData(IDateData dates, IIntervalData intervals, ITimeZoneData timeZones,
+			IDatasourceData datasource)
 		{
 			_dates = dates;
 			_intervals = intervals;
@@ -35,28 +34,28 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 			var dim_time_zone = _timeZones.Rows.AsEnumerable();
 
 			var query = from d in dim_date
-			            let date_id = (int) d["date_id"]
-			            from i in dim_interval
-			            let interval_id = (int) i["interval_id"]
-			            from z in dim_time_zone
-			            let time_zone_id = (int) z["time_zone_id"]
-			            let timeZone = TimeZoneInfo.FindSystemTimeZoneById(z["time_zone_code"].ToString())
-			            let date = (DateTime) d["date_date"]
-			            let time = (DateTime) i["interval_start"]
-			            let dateTime = date.Date + time.TimeOfDay
-			            let localDateTime = TimeZoneInfo.ConvertTimeFromUtc(dateTime, timeZone)
-						let local_dates = dim_date.FindDateIdsByDate(localDateTime)
-			            where local_dates.Any()
-			            let local_date_id = local_dates.Single()
-						let local_interval_id = dim_interval.FindIntervalIdByTimeOfDay(localDateTime)
-			            select new
-			                   	{
-			                   		date_id,
-			                   		interval_id,
-			                   		time_zone_id,
-			                   		local_date_id,
-			                   		local_interval_id
-			                   	};
+				let date_id = (int) d["date_id"]
+				from i in dim_interval
+				let interval_id = (int) i["interval_id"]
+				from z in dim_time_zone
+				let time_zone_id = (int) z["time_zone_id"]
+				let timeZone = TimeZoneInfo.FindSystemTimeZoneById(z["time_zone_code"].ToString())
+				let date = (DateTime) d["date_date"]
+				let time = (DateTime) i["interval_start"]
+				let dateTime = date.Date + time.TimeOfDay
+				let localDateTime = TimeZoneInfo.ConvertTimeFromUtc(dateTime, timeZone)
+				let local_dates = dim_date.FindDateIdsByDate(localDateTime)
+				where local_dates.Any()
+				let local_date_id = local_dates.Single()
+				let local_interval_id = dim_interval.FindIntervalIdByTimeOfDay(localDateTime)
+				select new
+				{
+					date_id,
+					interval_id,
+					time_zone_id,
+					local_date_id,
+					local_interval_id
+				};
 
 			var table = bridge_time_zone.CreateTable();
 
@@ -68,16 +67,12 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 					a.local_date_id,
 					a.local_interval_id,
 					_datasource.RaptorDefaultDatasourceId)
-				);
-			try
-			{
-				Bulk.Insert(connection, table);
-			}
-			catch (Exception) { }
+			);
+			Bulk.Insert(connection, table);
 
 			Rows = table.AsEnumerable();
 		}
 
+		public IEnumerable<DataRow> Rows { get; set; }
 	}
-
 }

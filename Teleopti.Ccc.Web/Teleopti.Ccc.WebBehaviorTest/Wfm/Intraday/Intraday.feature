@@ -8,7 +8,8 @@ Background:
     Given I have a role with
     | Field              | Value |
     | Access to Intraday | True  |
-    And There is a skill to monitor called 'Skill A'
+    And There is a skill to monitor called 'Skill A' with queue id '9' and queue name 'queue1' and activity 'activity1'
+    And There is a skill to monitor called 'Skill B' with queue id '7' and queue name 'queue2' and activity 'activity2'
 
 Scenario: Create Skill Area
   Given I am viewing intraday page
@@ -83,9 +84,9 @@ Scenario: Switch skill when other day than today is selected
 	And there is forecast data for skill 'Skill A' for date '2016-12-22'
 	And there is forecast data for skill 'Skill B' for date '2016-12-22'
 	And I am viewing intraday page
-	And I select the skill 'Skill A'
+	And I pick the skill 'Skill A'
 	When I change date offset to '1'
-	And I select the skill 'Skill B'
+	And I pick the skill 'Skill B'
 	Then I should see incoming traffic data in the chart
 	And I should see the date
 

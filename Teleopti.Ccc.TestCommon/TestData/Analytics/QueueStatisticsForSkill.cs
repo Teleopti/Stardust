@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics
 		{
 			var sql = "select top 1 q.queue_id as QueueId from mart.dim_workload w " +
 				"inner join mart.bridge_queue_workload b on w.workload_id = b.workload_id " +
-				"inner join mart.dim_queue q on b.queue_id = q.queue_id ";
-			//sql += "where w.skill_name = '" + _skillName + "'";
+				"inner join mart.dim_queue q on b.queue_id = q.queue_id " +
+				"where w.skill_name = '" + _skillName + "'";
 
 			using (var command = new SqlCommand(sql, connection))
 			{
