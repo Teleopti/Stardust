@@ -139,7 +139,6 @@ ResourcePlanner_RemoveBackToLegalStateGui_44333 = true
 ResourcePlanner_CalculateShiftValuesInParallel_44681 = DEV
 ResourcePlanner_RespectSkillGroupShoveling_44156 = RC
 ResourcePlanner_OvertimeNightShifts_44311 = RC
-ResourcePlanner_SchedulingIslands_44757 = false # shouldn't affect perf tests ATM
 
 Wfm_DisplayOnlineHelp_39402 = RC
 
