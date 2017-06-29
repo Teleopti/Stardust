@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         private static IEnumerable<ISkill> skillsInActivity(IAffectedPersonSkillService affectedPersonSkillService, IActivity activity)
         {
-            return new HashSet<ISkill>(affectedPersonSkillService.AffectedSkills.Where(s => s.Activity.Equals(activity)));
+            return new HashSet<ISkill>(affectedPersonSkillService.AffectedSkills.Where(s => s.Activity.Id == activity.Id));
         }
     }
 }

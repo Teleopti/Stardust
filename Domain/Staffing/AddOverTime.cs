@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IPersonRepository _personRepository;
 		private readonly ISkillRepository _skillRepository;
+		private readonly IActivityRepository _activityRepository;
 		private readonly ScheduleOvertimeExecuteWrapper _scheduleOvertimeExecuteWrapper;
 		private readonly INow _now;
 		
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 						   ICommandDispatcher commandDispatcher, 
 						   IPersonForOvertimeProvider personForOvertimeProvider, IScheduleStorage scheduleStorage, ICurrentScenario currentScenario, 
 						   IPersonRepository personRepository, ISkillRepository skillRepository, 
-						   ScheduleOvertimeExecuteWrapper scheduleOvertimeExecuteWrapper, INow now)
+						   ScheduleOvertimeExecuteWrapper scheduleOvertimeExecuteWrapper, INow now, IActivityRepository activityRepository)
 		{
 			_userTimeZone = userTimeZone;
 			_commandDispatcher = commandDispatcher;
@@ -44,12 +45,14 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_skillRepository = skillRepository;
 			_scheduleOvertimeExecuteWrapper = scheduleOvertimeExecuteWrapper;
 			_now = now;
+			_activityRepository = activityRepository;
 		}
 
 
 		public OvertimeWrapperModel GetSuggestion(OverTimeSuggestionModel overTimeSuggestionModel)
 		{
 			//midnight shift ??
+			_activityRepository.LoadAll();
 			var allSkills = _skillRepository.LoadAll().ToList();
 			var skills = allSkills.Where(x => overTimeSuggestionModel.SkillIds.Contains(x.Id.GetValueOrDefault())).ToList();
 			if (!skills.Any())

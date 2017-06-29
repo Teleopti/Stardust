@@ -236,7 +236,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 								EndDateTime = x.Key.EndDateTime.Utc(),
 								Resource = x.Key.Resource,
 								SkillCombinationId = x.Key.SkillCombinationId,
-								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s)
+								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToList()
 							});
 
 			return mergedResult;
