@@ -279,6 +279,7 @@
     <Compile Include="Scheduling\Legacy\Commands\ScheduleHourlyStaffExecutor.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulingCommand.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulingCommandHandler.cs" />
+    <Compile Include="Scheduling\SchedulingCallbackForDesktop.cs" />
     <Compile Include="Scheduling\SchedulingEventHandler.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulingWasOrdered.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopContext.cs" />
