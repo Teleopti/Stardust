@@ -1092,6 +1092,10 @@ organization-picker {
         .md-select-value {
             width: $DEFAULT-WIDTH;
             border-bottom-color: $NG-MATERIAL-DEFAULT;
+
+            .selected-text {
+                white-space: nowrap;
+            }
         }
 
         .none-selected {

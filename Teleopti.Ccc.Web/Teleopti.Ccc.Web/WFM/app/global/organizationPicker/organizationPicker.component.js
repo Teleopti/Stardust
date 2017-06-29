@@ -26,9 +26,9 @@
 		return ('single' in attrs)
 	}
 
-	OrgPickerController.$inject = ['$scope', '$translate', '$attrs', '$q', '$element', '$mdPanel'];
+	OrgPickerController.$inject = ['$scope', '$attrs', '$q', '$element', '$mdPanel'];
 
-	function OrgPickerController($scope, $translate, $attrs, $q, $element, $mdPanel) {
+	function OrgPickerController($scope, $attrs, $q, $element, $mdPanel) {
 		var singleMode = checkIsSingleMode($attrs)
 		var searchText = ''
 		var searchCache = {}
@@ -126,20 +126,12 @@
 				}
 			},
 			defaultSelectedTextFn: {
-				value: function (numOfTeams) {
-					var text = ''
-					switch (numOfTeams - 1) {
-						case -1:
-							text = $translate.instant('SelectOrganization')
-							break;
-						case 0:
-							text = ctrl.nameMap[ctrl.selectedTeamIds[0]]
-							break;
-						default:
-							text = $translate.instant('SeveralTeamsSelected').replace('{0}', ctrl.selectedTeamIds.length)
-							break;
-					}
-					return text
+				value: function () {
+					return ctrl.selectedTeamIds.map(function (id) {
+						return ctrl.nameMap[id]
+					}).filter(function (name) {
+						return !!name
+					}).join(', ')
 				}
 			},
 			clearAll: {
