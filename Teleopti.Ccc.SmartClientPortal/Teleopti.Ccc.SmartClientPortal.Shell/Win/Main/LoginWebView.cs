@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			}
 			else
 			{
+				_logger.Info($"ApplicationDeployment.IsNetworkDeployed: {ApplicationDeployment.IsNetworkDeployed}");
 				var current = Path.GetDirectoryName(Application.ExecutablePath);
 				var exists = File.Exists(queryStringFileName);
 				_logger.Info($"current path: {current}, check if file {queryStringFileName}: {exists}");
