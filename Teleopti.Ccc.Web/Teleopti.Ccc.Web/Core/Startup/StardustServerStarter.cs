@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public void Start(IAppBuilder app)
 		{
-			logger.Info($"StardustServerStarter.start()");
+			logger.Info("StardustServerStarter.start()");
 			var managerConfiguration = new ManagerConfiguration(
 				_configReader.ConnectionString("ManagerConnectionString"),
 				_configReader.ReadValue("RouteName", "/StardustDashboard"),
-				_configReader.ReadValue("AllowedNodeDownTimeSeconds", 60),
+				_configReader.ReadValue("AllowedNodeDownTimeSeconds", 360), //heartbeat every 120 s
 				_configReader.ReadValue("CheckNewJobIntervalSeconds", 180),
 				_configReader.ReadValue("PurgeJobsBatchSize", 1000),
 				_configReader.ReadValue("PurgeJobsIntervalHours", 1),
