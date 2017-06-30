@@ -1,17 +1,18 @@
-﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function(ajax, requestListViewModel) {
+﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, requestListViewModel, requestDetailParentViewModel, weekStart) {
 	var self = this;
 
 	self.Template = "add-overtime-request-template";
 	self.IsPostingData = ko.observable(false);
+	self.IsEditable = ko.observable(true);
 
 	self.Subject = ko.observable();
 	self.Message = ko.observable();
 
 	self.StartDate = ko.observable();
 	self.StartTime = ko.observable();
-	self.DateFormat = ko.observable();
+	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 
-	self.weekStart = ko.observable(1);
+	self.weekStart = ko.observable(weekStart);
 	self.ShowMeridian = $('div[data-culture-show-meridian]').attr('data-culture-show-meridian') === 'true';
 	self.ShowError = ko.observable(false);
 	self.ErrorMessage = ko.observable();
@@ -62,11 +63,40 @@
 			success: function (data) {
 				self.IsPostingData(false);
 				requestListViewModel.AddItemAtTop(data, true);
+				self.CancelAddRequest();
 			},
 			error: function() {
 				self.IsPostingData(false);
 			}
 		});
+	};
+
+	self.CancelAddRequest = function() {
+		requestDetailParentViewModel.CancelAddingNewRequest();
+	};
+
+	self.Initialize = function (data) {
+		if (data) {
+			self.IsEditable = ko.observable(true);
+
+			self.Subject = ko.observable(data.Subject);
+			self.Message = ko.observable(data.Text);
+
+			self.StartDate = ko.observable(moment(data.DateTimeFrom).format(self.DateFormat()));
+
+			if (self.ShowMeridian) {
+				self.StartTime = ko.observable(moment(data.DateTimeFrom).format("hh:mm A"));
+			} else {
+				self.StartTime = ko.observable(moment(data.DateTimeFrom).format("HH:mm"));
+			}
+
+			var seconds = (moment(data.DateTimeTo) - moment(data.DateTimeFrom)) / 1000;
+			var hours = '0' + moment.duration(seconds, 'seconds').hours();
+			var minutes = '0' + moment.duration(seconds, 'seconds').minutes();
+			
+			self.RequestDuration = ko.observable(hours.substr(-2, 2) + ":" + minutes.substr(-2, 2));
+			self.MultiplicatorDefinitionSet = ko.observable(data.MultiplicatorDefinitionSet);
+		}
 	};
 
 	_init();

@@ -141,9 +141,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			{ name: messages.ALL_REQUESTS, show: "false" }
 		];
 		self.sorters = [
-			{name: messages.BY_STARTDATE, show: "false"},
-			{name: messages.BY_UPDATEDATE, show: "true"}
-		]
+			{ name: messages.BY_STARTDATE, show: "false" },
+			{ name: messages.BY_UPDATEDATE, show: "true" }
+		];
 		self.newFilterToggle = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826');
 		self.ShowRequests = function (data) {
 			ko.utils.arrayForEach(data, function (item) {

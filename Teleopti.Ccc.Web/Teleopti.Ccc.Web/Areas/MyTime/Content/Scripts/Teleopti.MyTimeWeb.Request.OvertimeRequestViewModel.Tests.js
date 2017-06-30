@@ -6,6 +6,7 @@ $(document).ready(function () {
 		ajax,
 		sentData,
 		addedOvertimeRequest,
+		requestFormClosed = false,
 		fakeDefinitionSets = [
 			{
 				Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB',
@@ -14,13 +15,19 @@ $(document).ready(function () {
 			{
 				Id: '9019D62F-0086-44B1-A977-9BB900B8C361',
 				Name: 'Overtime time'
-			}],
+			}
+		],
 		fakeOvertimeRequestResponse = {
 			Id: '7155082E-108B-4F72-A36A-C1430C37CADA'
 		},
 		fakeRequestListViewModel = {
-			AddItemAtTop: function (item) {
+			AddItemAtTop: function(item) {
 				addedOvertimeRequest = item;
+			}
+		},
+		fakeRequestDetailViewModel = {
+			CancelAddingNewRequest: function() {
+				requestFormClosed = true;
 			}
 		};
 
@@ -33,7 +40,8 @@ $(document).ready(function () {
 
 	function setup() {
 		setupAjax();
-		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, fakeRequestListViewModel);
+		requestFormClosed = false;
+		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, fakeRequestListViewModel, fakeRequestDetailViewModel);
 		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
 	}
 
@@ -41,7 +49,6 @@ $(document).ready(function () {
 		ajax = {
 			Ajax: function (options) {
 				if (options.url === '../api/MultiplicatorDefinitionSet/CurrentUser') {
-					console.log(fakeDefinitionSets, 'fakeDefinitionSets');
 					options.success(fakeDefinitionSets);
 				}
 				if (options.url === 'Requests/CreateOvertimeRequest') {
@@ -163,6 +170,16 @@ $(document).ready(function () {
 		equal(vm.IsPostingData(), false);
 	});
 
+	test('should close overtime request form panel after posting data', function () {
+		vm.IsPostingData(true);
+		vm.Subject('subject');
+
+		equal(requestFormClosed, false);
+
+		vm.AddRequest();
+		equal(requestFormClosed, true);
+	});
+
 	test('should limit lenght of message to 2000 chars', function () {
 		var html = '<textarea id="MessageBox" data-bind="value: Message, event:{change:checkMessageLength}" />';
 
@@ -236,5 +253,25 @@ $(document).ready(function () {
 		equal(vm.RequestDuration(), '00:59');
 
 		$('#duration').remove();
+	});
+
+	test('should initialize with data', function () {
+		var data = {
+			Subject: "subject",
+			Text: "text",
+			DateTimeFrom: "2017-06-30T03:45:00.0000000",
+			DateTimeTo: "2017-06-30T06:45:00.0000000",
+			MultiplicatorDefinitionSet: "9019D62F-0086-44B1-A977-9BB900B8C361"
+		};
+
+		vm.DateFormat("YYYY-MM-DD");
+		vm.Initialize(data);
+
+		equal(vm.Subject(), "subject");
+		equal(vm.Message(), "text");
+		equal(vm.StartDate(), "2017-06-30");
+		equal(vm.StartTime(), "03:45");
+		equal(vm.RequestDuration(), "03:00");
+		equal(vm.MultiplicatorDefinitionSet(), "9019D62F-0086-44B1-A977-9BB900B8C361");
 	});
 });

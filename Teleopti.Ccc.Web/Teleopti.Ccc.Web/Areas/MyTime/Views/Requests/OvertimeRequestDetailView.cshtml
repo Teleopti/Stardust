@@ -2,6 +2,49 @@
 @{
 	Layout = null;
 }
+<!-- ko if: WaitlistPosition() > 0 -->
+<div>
+	<label>@Resources.WaitlistPosition</label>&nbsp;<span id="waitlistPosition" data-bind="text:WaitlistPosition"></span>
+</div>
+<!-- /ko -->
+<!--div class="form-group">
+	<label style="padding-top: 10px;">
+		@Resources.OvertimeType
+	</label>
+	<div class="row">
+		<div class="col-xs-6" style="padding-top: 6px;">
+			<select class="request-edit-absence form-control" data-bind="value: AbsenceId, enable: IsEditable">
+				@foreach (var absenceType in Model.AbsenceTypes)
+				{
+					<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+				}
+			</select>
+		</div>
+	</div>
+</!--div>
+<div-- class="row form-group">
+	<div class="col-xs-12">
+		<span class="input-group">
+			<input class="request-edit-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable() && IsDateInputEditable" type="text" />
+			<span class="input-group-btn">
+				<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
+					<i class="glyphicon glyphicon-calendar"></i>
+				</button>
+			</span>
+		</span>
+	</div>
+	<div class="col-xs-12 bootstrap-timepicker">
+		<div class="request-edit-timefrom input-group">
+			<input type="text" class="input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEditable, visible: IsTimeInputVisible" />
+			<span class="input-group-btn">
+				<button class="btn btn-sm" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, visible: IsTimeInputVisible">
+					<i class="glyphicon glyphicon-time"></i>
+				</button>
+			</span>
+		</div>
+	</div>
+</div-->
+
 
 <div class="overtime-add-container clearfix">
 	<div class="overtime-add-body">
@@ -20,8 +63,7 @@
 				<label>
 					@Resources.OvertimeType
 				</label>
-				<select class="input-sm form-control" data-bind="options: MultiplicatorDefinitionSets, optionsText: 'Name', value: MultiplicatorDefinitionSet">
-				</select>
+				@*<select class="input-sm form-control" data-bind="options: MultiplicatorDefinitionSets, optionsText: 'Name', value: MultiplicatorDefinitionSet"></select>*@
 			</div>
 		</div>
 

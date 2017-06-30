@@ -10,7 +10,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstD
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	mywindow = mywindow || window;
 
-	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template", "shiftexchangeoffer-request-detail-template"];
+	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template", "shiftexchangeoffer-request-detail-template", "overtime-request-detail-template"];
 	self.IsFullDay = ko.observable(false);
 	self.IsUpdate = ko.observable(false);
 

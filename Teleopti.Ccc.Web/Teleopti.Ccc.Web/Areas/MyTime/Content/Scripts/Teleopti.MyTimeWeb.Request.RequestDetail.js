@@ -50,6 +50,12 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			return vm;
 		};
 
+		self.createOvertimeRequestViewModel = function(data) {
+			var overtimeRequestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, Teleopti.MyTimeWeb.Request.List, parentViewModel, weekStart);
+			self.requestViewModel(overtimeRequestViewModel);
+			self.requestViewModel().Initialize(data);
+		};
+
 		self.createShiftTradeRequestViewModel = function (id) {
 			var shiftTradeRequestDetailViewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel(ajax);
 			shiftTradeRequestDetailViewModel.loadIsEditMessageEnabled();
@@ -184,10 +190,12 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			parentViewModel.createShiftTradeRequestViewModel(data.Id);
 			parentViewModel.requestViewModel().Initialize(data);
 			parentViewModel.requestViewModel().loadSwapDetails();
-
 		} else if (data.TypeEnum == 3) {
 			parentViewModel.createShiftExchangeOfferViewModel(data);
-		} else {
+		} else if (data.TypeEnum == 4) {
+			console.log(data, 'data overtime');
+			parentViewModel.createOvertimeRequestViewModel(data);
+		}else {
 			var model = parentViewModel.createRequestViewModel();
 			model.IsUpdate(true);
 			model.DateFormat(_datePickerFormat());
@@ -235,7 +243,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _addOvertimeRequest() {
-		var overtimeRequestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, Teleopti.MyTimeWeb.Request.List);
+		var overtimeRequestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, Teleopti.MyTimeWeb.Request.List, parentViewModel);
 		parentViewModel.requestViewModel(overtimeRequestViewModel);
 	}
 
