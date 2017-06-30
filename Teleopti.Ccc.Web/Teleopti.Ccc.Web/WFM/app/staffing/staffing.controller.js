@@ -134,10 +134,10 @@
 		}
 
 		function selectSkillOrArea(skill, area) {
-			clearSuggestions()
+			clearSuggestions();
 			if (!skill) {
 				currentSkills = area;
-				vm.selectedSkillArea = area;
+				vm.selectedArea = area;
 				vm.selectedSkill = null;
 			} else {
 				currentSkills = skill;
@@ -210,7 +210,6 @@
 				vm.hasRequestedOvertime = false;
 				vm.hasRequestedSuggestion = false;
 			});
-
 		};
 
 		function suggestOvertime() {
@@ -244,8 +243,8 @@
 					vm.staffingDataAvailable = true;
 					vm.overTimeModels = response.OverTimeModels;
 
-					staffingData.scheduledStaffing = roundDataToOneDecimal(response.DataSeries.ScheduledStaffing);
-					staffingData.forcastedStaffing = roundDataToOneDecimal(response.DataSeries.ForecastedStaffing);
+					staffingData.scheduledStaffing = utilService.roundDataToOneDecimal(response.DataSeries.ScheduledStaffing);
+					staffingData.forcastedStaffing = utilService.roundDataToOneDecimal(response.DataSeries.ForecastedStaffing);
 					staffingData.absoluteDifference = response.DataSeries.AbsoluteDifference;
 					staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
 					staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));

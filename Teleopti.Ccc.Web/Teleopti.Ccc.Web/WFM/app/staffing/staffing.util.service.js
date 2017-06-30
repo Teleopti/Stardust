@@ -8,7 +8,8 @@
     utilService.inject = ['$translate', '$filter', '$q'];
     function utilService($translate, $filter, $q) {
         var service = {
-            prepareStaffingData: prepareStaffingData
+			prepareStaffingData: prepareStaffingData,
+			roundDataToOneDecimal: roundDataToOneDecimal
 
         };
 
