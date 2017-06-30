@@ -278,6 +278,53 @@ describe('RtaMainController', function () {
       expect(vm.siteCards[0].site.SkillId).toEqual('1');
     });
 
+    it('should get site cards after clearing filter input', function () {
+      stateParams.skillIds = 'channelSalesGuid';
+      $fakeBackend
+        .withSiteAdherence({
+          Id: "parisGuid",
+          SkillId: "channelSalesGuid",
+          Name: "Paris",
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: "good"
+        });
+      vm = $controllerBuilder.createController().vm;
+      $httpBackend.flush();
+
+      vm.filterOutput(undefined);
+         $fakeBackend
+        .clearSiteAdherences()
+        .withSiteAdherence({
+          Id: "parisGuid",
+          Name: "Paris",
+          AgentsCount: 11,
+          InAlarmCount: 5,
+          Color: "good"
+        })
+        .withSiteAdherence({
+          Id: "londonGuid",
+          Name: "London",
+          AgentsCount: 10,
+          InAlarmCount: 8,
+          Color: "danger"
+        });
+
+      $httpBackend.flush();
+
+      expect(vm.siteCards.length).toEqual(2);
+      expect(vm.siteCards[0].site.Id).toEqual('parisGuid');
+      expect(vm.siteCards[0].site.Name).toEqual('Paris');
+      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].site.InAlarmCount).toEqual(5);
+      expect(vm.siteCards[0].site.Color).toEqual(goodColor);
+      expect(vm.siteCards[1].site.Id).toEqual('londonGuid');
+      expect(vm.siteCards[1].site.Name).toEqual('London');
+      expect(vm.siteCards[1].site.AgentsCount).toEqual(10);
+      expect(vm.siteCards[1].site.InAlarmCount).toEqual(8);
+      expect(vm.siteCards[1].site.Color).toEqual(dangerColor);
+    });
+
     it('should go to sites by skill state', function () {
       $fakeBackend
         .withSkill({
@@ -297,7 +344,7 @@ describe('RtaMainController', function () {
       vm.filterOutput(vm.skills[0]);
       $httpBackend.flush();
 
-      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillIds: ['channelSalesGuid'] }, { notify: false });
+      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillIds: ['channelSalesGuid'], skillAreaId: undefined }, { notify: false });
     });
 
     it('should go to sites by skill area state', function () {
@@ -320,7 +367,92 @@ describe('RtaMainController', function () {
       vm.filterOutput(vm.skillAreas[0]);
       $httpBackend.flush();
 
-      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillIds: ['1', '2'] }, { notify: false });
+      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillAreaId: '5', skillIds: undefined }, { notify: false });
+    });
+
+    it('should go to sites with skill when changing selection from skill area to skill', function () {
+      stateParams.skillAreaId = "skillAreaId";
+      $fakeBackend
+        .withSkill({
+          Id: "phoneGuid",
+          Name: "Phone"
+        })
+        .withSiteAdherence({
+          Id: "londonGuid",
+          SkillId: "phoneGuid",
+          Name: "London",
+          AgentsCount: 10,
+          InAlarmCount: 1,
+          Color: "good"
+        });
+
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      vm.filterOutput(vm.skills[0]);
+      $httpBackend.flush();
+
+      expect($state.go).toHaveBeenCalledWith($state.current.name, {
+        skillAreaId: undefined,
+        skillIds: ['phoneGuid']
+      },
+        { notify: false });
+    });
+
+    it('should go to sites with skill area when changing selection from skill to skill area', function () {
+      stateParams.skillIds = ['phoneGuid'];
+      $fakeBackend
+        .withSkillAreas([{
+          Id: "5",
+          Name: "my skill area 1",
+          Skills: skills1
+        }])
+        .withSiteAdherence({
+          Id: "parisGuid",
+          SkillId: "1",
+          Name: "Paris",
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: "good"
+        });
+      vm = $controllerBuilder.createController().vm 
+
+      vm.filterOutput(vm.skillAreas[0]);
+      $httpBackend.flush();
+
+      expect($state.go).toHaveBeenCalledWith($state.current.name, {
+        skillAreaId: "5",
+        skillIds: undefined
+      },
+        { notify: false });
+    });
+
+    it('should clear url when sending in empty input in filter', function () {
+      stateParams.skillIds = ['phoneGuid'];
+      $fakeBackend
+        .withSkillAreas([{
+          Id: "5",
+          Name: "my skill area 1",
+          Skills: skills1
+        }])
+        .withSiteAdherence({
+          Id: "parisGuid",
+          SkillId: "1",
+          Name: "Paris",
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: "good"
+        });
+      vm = $controllerBuilder.createController().vm;
+
+      vm.filterOutput(undefined);
+      $httpBackend.flush();
+
+      expect($state.go).toHaveBeenCalledWith($state.current.name, {
+        skillAreaId: undefined,
+        skillIds: undefined
+      },
+        { notify: false });
     });
 
   });

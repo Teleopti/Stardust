@@ -42,9 +42,13 @@
 		(function OverviewComponentHandler() {
 			var sitePolling;
 
-			rtaService.getSiteCardsFor().then(function (result) {
-				vm.siteCards = buildSiteCards(result);
-			});
+			var getSiteCards = function () {
+				rtaService.getSiteCardsFor().then(function (result) {
+					vm.siteCards = buildSiteCards(result);
+				});
+			}
+
+			getSiteCards();
 
 			function buildSiteCards(sites) {
 				return sites.map(function (site) {
@@ -120,19 +124,23 @@
 			}
 
 			vm.filterOutput = function (selectedItem) {
-				if (selectedItem.hasOwnProperty('Skills')) {
+				if (!angular.isDefined(selectedItem)) {
+					$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
+					getSiteCards();
+				} 
+				else if (selectedItem.hasOwnProperty('Skills')) {
 					var skillIds = [];
 					selectedItem.Skills.forEach(function (skill) {
 						skillIds.push(skill.Id);
 					});
 
-					$state.go($state.current.name, { skillIds: skillIds }, { notify: false });
+					$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
 					rtaService.getSiteCardsFor(skillIds).then(function (result) {
 						vm.siteCards = buildSiteCards(result);
 					});
 				}
 				else {
-					$state.go($state.current.name, { skillIds: [selectedItem.Id] }, { notify: false });
+					$state.go($state.current.name, { skillAreaId: undefined, skillIds: [selectedItem.Id] }, { notify: false });
 					rtaService.getSiteCardsFor([selectedItem.Id]).then(function (result) {
 						vm.siteCards = buildSiteCards(result);
 					});
