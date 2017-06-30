@@ -151,10 +151,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 							? ConfidentialPayloadValues.Description
 							: ((IAbsence) layer.Payload).Description)
 						: layer.DisplayDescription();
+					var matchedPersonalLayers = _projectionHelper.GetMatchedPersonalShiftLayers(scheduleDay, layer);
 					if (_projectionHelper.GetMatchedShiftLayerIds(scheduleDay, layer).Count > 1
-						&& _projectionHelper.GetMatchedPersonalShiftLayers(scheduleDay, layer).Count > 0)
+						&& matchedPersonalLayers.Count > 0)
 					{
-						projections.AddRange(_projectionSplitter.SplitMergedPersonalLayers(scheduleDay, layer, userTimeZone));
+						projections.AddRange(_projectionSplitter.SplitMergedPersonalLayers(scheduleDay, layer, matchedPersonalLayers.ToArray(), userTimeZone));
 					}
 					else
 					{

@@ -451,11 +451,61 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			vm.Projection.Count().Should().Be(3);
 			var visualLayers = vm.Projection.ToArray();
 			visualLayers[0].Description.Should().Be("Meeting");
+			visualLayers[0].ShiftLayerIds.Single().Should().Be(assignment1Person1.ShiftLayers.Single(l => l is MainShiftLayer && l.Payload.Description.Name == "Meeting").Id);
 			visualLayers[0].Start.Should().Be("2015-01-01 08:00");
 			visualLayers[0].End.Should().Be("2015-01-01 08:30");
 			visualLayers[0].Minutes.Should().Be(30);
 
 			visualLayers[1].Description.Should().Be("Meeting");
+			visualLayers[1].ShiftLayerIds.Single().Should().Be(assignment1Person1.ShiftLayers.Single(l => l is PersonalShiftLayer && l.Payload.Description.Name == "Meeting").Id);
+			visualLayers[1].Start.Should().Be("2015-01-01 08:30");
+			visualLayers[1].End.Should().Be("2015-01-01 10:00");
+			visualLayers[1].Minutes.Should().Be(90);
+
+			visualLayers[2].Description.Should().Be("Phone");
+			visualLayers[2].Start.Should().Be("2015-01-01 10:00");
+			visualLayers[2].End.Should().Be("2015-01-01 15:00");
+			visualLayers[2].Minutes.Should().Be(300);
+		}
+
+		[Test]
+		public void ShouldSplitMergedPersonalActivityInProjectionWithSinglePersonalLayerWhenAddingPersonalLayerFirst()
+		{
+			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
+			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario, new DateOnly(date));
+			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
+			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(15));
+			var normalMeetingPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(9));
+			var personalMeetingPeriod = new DateTimePeriod(date.AddHours(8).AddMinutes(30), date.AddHours(10));
+			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+			var meetingActivity = ActivityFactory.CreateActivity("Meeting", Color.Red);
+
+			phoneActivity.InContractTime = true;
+			meetingActivity.InContractTime = true;
+			meetingActivity.InWorkTime = true;
+			phoneActivity.InWorkTime = true;
+
+			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
+			assignment1Person1.AddPersonalActivity(meetingActivity, personalMeetingPeriod);
+			assignment1Person1.AddActivity(meetingActivity, normalMeetingPeriod);
+			
+			assignment1Person1.ShiftLayers.ForEach(l => l.WithId());
+			scheduleDayOnePerson1.Add(assignment1Person1);
+
+			var vm = target.Projection(scheduleDayOnePerson1, true, _commonAgentNameProvider.CommonAgentNameSettings);
+
+			vm.PersonId.Should().Be(person1.Id.ToString());
+			vm.Projection.Count().Should().Be(3);
+			var visualLayers = vm.Projection.ToArray();
+			visualLayers[0].Description.Should().Be("Meeting");
+			visualLayers[0].ShiftLayerIds.Single().Should().Be(assignment1Person1.ShiftLayers.Single(l => l is MainShiftLayer && l.Payload.Description.Name == "Meeting").Id);
+			visualLayers[0].Start.Should().Be("2015-01-01 08:00");
+			visualLayers[0].End.Should().Be("2015-01-01 08:30");
+			visualLayers[0].Minutes.Should().Be(30);
+
+			visualLayers[1].Description.Should().Be("Meeting");
+			visualLayers[1].ShiftLayerIds.Single().Should().Be(assignment1Person1.ShiftLayers.Single(l => l is PersonalShiftLayer && l.Payload.Description.Name == "Meeting").Id);
 			visualLayers[1].Start.Should().Be("2015-01-01 08:30");
 			visualLayers[1].End.Should().Be("2015-01-01 10:00");
 			visualLayers[1].Minutes.Should().Be(90);
