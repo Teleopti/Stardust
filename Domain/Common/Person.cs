@@ -1,8 +1,8 @@
-﻿using System;
+﻿using NodaTime;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using NodaTime;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public class Person : VersionedAggregateRoot, IPerson, IDeleteTag, IAggregateRootWithEvents
+	public class Person : VersionedAggregateRoot, IPerson, IDeleteTag, IAggregateRootWithEvents
     {
         private Name _name;
         private readonly IPermissionInformation _permissionInformation;
@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Common
 		private readonly IList<IOptionalColumnValue> _optionalColumnValueCollection = new List<IOptionalColumnValue>();
 		public static readonly DateOnly DefaultTerminalDate = new DateOnly(2059, 12, 31);
 
+	    private PersonNameChangedEvent _personNameChangedEvent;
 
 	    public Person()
         {
@@ -45,6 +46,8 @@ namespace Teleopti.Ccc.Domain.Common
             _terminalDate = null;
             _personWriteProtection = new PersonWriteProtectionInfo(this);
             _firstDayOfWeek = DayOfWeek.Monday; //1
+			_personNameChangedEvent = null;
+
         }
 
         public virtual ITeam MyTeam(DateOnly theDate)
@@ -280,17 +283,28 @@ namespace Teleopti.Ccc.Domain.Common
             get { return _name; }
         }
 
-	    public virtual void SetName(Name value)
-	    {
-		    if (_name != value)
-			    AddEvent(() => new PersonNameChangedEvent()
-			    {
-				    PersonId = Id.GetValueOrDefault(),
-				    FirstName = value.FirstName,
-				    LastName = value.LastName
-			    });
-		    _name = value;
-	    }
+	    
+		public override IEnumerable<IEvent> PopAllEvents()
+		{
+			if (_personNameChangedEvent != null)
+				AddEvent(() => _personNameChangedEvent);
+			return base.PopAllEvents();
+		}
+
+		public virtual void SetName(Name value)
+		{
+			if (_name == value)
+				_personNameChangedEvent = null;
+			else
+				_personNameChangedEvent = new PersonNameChangedEvent()
+				{
+					PersonId = Id.GetValueOrDefault(),
+					FirstName = value.FirstName,
+					LastName = value.LastName
+				};
+
+			_name = value;
+		}
 
 	    public virtual IPermissionInformation PermissionInformation => _permissionInformation;
 
@@ -826,5 +840,6 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 			return null;
 		}
+
     }
 }

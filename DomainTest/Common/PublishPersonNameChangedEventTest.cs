@@ -50,10 +50,27 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			((Person)person).PopAllEvents();
 			person.SetName(new Name("bill", "gates"));
-
-			((Person)person).PopAllEvents().OfType<PersonNameChangedEvent>().Should().Be.Empty();
+			var x = ((Person) person).PopAllEvents().OfType<PersonNameChangedEvent>();
+			x.Should().Be.Empty();
 		}
-	}
+
+		[Test]
+		public void ShouldPublishOnceForCumulativeChangesWithProperties()
+		{
+			var personId = Guid.NewGuid();
+			var person = PersonFactory.CreatePersonWithId(personId);
+			((Person) person).PopAllEvents();
+			
+			person.SetName(new Name("bill", "rates"));
+			person.SetName(new Name("bill", "gates"));
+			
+
+			var @event = ((Person) person).PopAllEvents().OfType<PersonNameChangedEvent>().Single();
+			@event.PersonId.Should().Be(personId);
+			@event.FirstName.Should().Be("bill");
+			@event.LastName.Should().Be("gates");
+		}
+}
 
 	
 }
