@@ -81,7 +81,8 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				{
 					SkillIds = skillIds.ToList(),
 					TimeSerie = timeSerie,
-					OvertimePreferences = overtimePref
+					OvertimePreferences = overtimePref,
+					NumberOfPersonsToTry = 1000
 				});
 				Console.WriteLine($"{DateTime.Now} GetSuggestion() gave {resultModels.Models.Count} models");
 				AddOverTime.Apply(resultModels.Models, oneMulti.Id.GetValueOrDefault());

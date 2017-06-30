@@ -75,8 +75,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 			if(overtimestartTime > overtimeEndTime) return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());
 			var overtimePeriod = new DateTimePeriod(overtimestartTime, overtimeEndTime);
-			
-			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, overtimestartTime, overtimeEndTime);
+
+			var personsModels = _personForOvertimeProvider.Persons(overTimeSuggestionModel.SkillIds, overtimestartTime,
+				overtimeEndTime, overTimeSuggestionModel.OvertimePreferences.OvertimeType.Id.GetValueOrDefault(),
+				overTimeSuggestionModel.NumberOfPersonsToTry);
+
 			var persons = _personRepository.FindPeople(personsModels.Select(x => x.PersonId));
 
 			if(!persons.Any()) return new OvertimeWrapperModel(new List<SkillStaffingInterval>(), new List<OverTimeModel>());

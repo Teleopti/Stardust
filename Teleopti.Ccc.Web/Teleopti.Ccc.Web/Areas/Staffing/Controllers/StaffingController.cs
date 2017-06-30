@@ -68,6 +68,8 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5)),
 				SelectedSpecificTimePeriod = new TimePeriod(TimeSpan.FromHours(model.TimeSerie.Min().Hour), TimeSpan.FromHours(model.TimeSerie.Max().Hour+1))
 			};
+			//set in GUI?
+			model.NumberOfPersonsToTry = 1000;
 
 			var wraperModel =_addOverTime.GetSuggestion(model);
 			var returnModel = extractDataSeries(model, wraperModel);

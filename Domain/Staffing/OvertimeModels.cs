@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public DateTime[] TimeSerie { get; set; }
 		public OvertimePreferences OvertimePreferences { get; set; }
 		public DateTimePeriod RequestedPeriod { get; set; }
+		public  int NumberOfPersonsToTry { get; set; }
 	}
 
 	public class OverTimeModel

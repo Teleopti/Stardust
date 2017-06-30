@@ -16,14 +16,16 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 			_currentUnitOfWork = unitOfWork;
 		}
 
-		public IList<SuggestedPersonsModel> Persons(IList<Guid> skillIds, DateTime startDateTime, DateTime endDateTime)
+		public IList<SuggestedPersonsModel> Persons(IList<Guid> skillIds, DateTime startDateTime, DateTime endDateTime, Guid multiplikator, int numToReturn)
 		{
 			const string sql = "exec StaffingOvertimeSuggestions @SkillIds =:skillIds, "
-							   + "@StartDateTime=:startDateTime, @EndDateTime=:endDateTime";
+							   + "@StartDateTime=:startDateTime, @EndDateTime=:endDateTime, @multiplikatorDefSet=:compensation, @numToReturn=:numToReturn";
 			var result = _currentUnitOfWork.Session().CreateSQLQuery(sql)
 				.SetString("skillIds", string.Join(",", skillIds))
 				.SetDateTime("startDateTime", startDateTime)
 				.SetDateTime("endDateTime", endDateTime)
+				.SetGuid("compensation", multiplikator)
+				.SetInt32("numToReturn", numToReturn)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(SuggestedPersonsModel)))
 				.List<SuggestedPersonsModel>();
 			return result;
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.Infrastructure.Intraday
 	public class FakePersonForOvertimeProvider : IPersonForOvertimeProvider
 	{
 		private IList<SuggestedPersonsModel> _models;
-		public IList<SuggestedPersonsModel> Persons(IList<Guid> skillIds, DateTime startDateTime, DateTime endDateTime)
+		public IList<SuggestedPersonsModel> Persons(IList<Guid> skillIds, DateTime startDateTime, DateTime endDateTime, Guid multiplikator, int numToReturn)
 		{
 			return _models;
 		}

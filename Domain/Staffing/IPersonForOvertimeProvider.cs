@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public interface IPersonForOvertimeProvider
 	{
-		IList<SuggestedPersonsModel> Persons(IList<Guid> skillIds, DateTime startDateTime, DateTime endDateTime);
+		IList<SuggestedPersonsModel> Persons(IList<Guid> skillIds, DateTime startDateTime, DateTime endDateTime, Guid multiplikator, int numToReturn);
 	}
 
 	public class SuggestedPersonsModel
