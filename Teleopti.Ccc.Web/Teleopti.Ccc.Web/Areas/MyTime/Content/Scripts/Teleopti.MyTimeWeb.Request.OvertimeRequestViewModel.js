@@ -12,7 +12,7 @@
 	self.DateFormat = ko.observable();
 
 	self.weekStart = ko.observable(1);
-	self.ShowMeridian = $('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true';
+	self.ShowMeridian = $('div[data-culture-show-meridian]').attr('data-culture-show-meridian') === 'true';
 	self.ShowError = ko.observable(false);
 	self.ErrorMessage = ko.observable();
 	self.RequestDuration = ko.observable();

@@ -3,7 +3,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
-	public class OvertimeRequestInput
+	public class OvertimeRequestForm
 	{
 		public Guid? Id { get; set; }
 		public string Subject { get; set; }

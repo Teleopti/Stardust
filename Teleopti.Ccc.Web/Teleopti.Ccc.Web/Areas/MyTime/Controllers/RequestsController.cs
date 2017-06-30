@@ -15,7 +15,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
@@ -37,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IToggleManager _toggleManager;
 		private readonly IRequestsShiftTradeScheduleViewModelFactory _shiftTradeScheduleViewModelFactory;
 		private readonly ICancelAbsenceRequestCommandProvider _cancelAbsenceRequestCommandProvider;
+		private readonly IOvertimeRequestPersister _overtimeRequestPersister;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			ITextRequestPersister textRequestPersister,
@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			IToggleManager toggleManager,
 			IRequestsShiftTradeScheduleViewModelFactory shiftTradeScheduleViewModelFactory,
 			IAbsenceRequestDetailViewModelFactory absenceRequestDetailViewModelFactory,
-			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider)
+			ICancelAbsenceRequestCommandProvider cancelAbsenceRequestCommandProvider,
+			IOvertimeRequestPersister overtimeRequestPersister)
 		{
 			AbsenceRequestDetailViewModelFactory = absenceRequestDetailViewModelFactory;
 			_requestsViewModelFactory = requestsViewModelFactory;
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			_toggleManager = toggleManager;
 			_shiftTradeScheduleViewModelFactory = shiftTradeScheduleViewModelFactory;
 			_cancelAbsenceRequestCommandProvider = cancelAbsenceRequestCommandProvider;
+			_overtimeRequestPersister = overtimeRequestPersister;
 		}
 
 		[EnsureInPortal]
@@ -286,9 +288,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork, HttpPost]
-		public virtual RequestCommandHandlingResult CreateOvertimeRequest(OvertimeRequestInput input)
+		public virtual JsonResult CreateOvertimeRequest(OvertimeRequestForm input)
 		{
-			throw new NotImplementedException();
+			return Json(_overtimeRequestPersister.Persist(input), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

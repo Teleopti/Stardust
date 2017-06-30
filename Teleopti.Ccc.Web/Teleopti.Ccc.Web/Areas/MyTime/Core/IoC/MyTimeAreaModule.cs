@@ -130,6 +130,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ShiftExchangeOfferPersister>().As<IShiftExchangeOfferPersister>();
 			builder.RegisterType<ShiftTradeRequestPersister>().As<IShiftTradeRequestPersister>();
 			builder.RegisterType<AbsenceRequestPersister>().As<IAbsenceRequestPersister>();
+			builder.RegisterType<OvertimeRequestPersister>().As<IOvertimeRequestPersister>();
 			builder.RegisterType<ShiftTradeRequestProvider>().As<IShiftTradeRequestProvider>().SingleInstance();
 			builder.RegisterType<RespondToShiftTrade>().As<IRespondToShiftTrade>();
 			builder.RegisterType<WebPersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
@@ -191,12 +192,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PreferenceAndScheduleDayViewModelMapper>().SingleInstance();
 			builder.RegisterType<MonthScheduleViewModelMapper>().SingleInstance();
 			builder.RegisterType<WeekScheduleViewModelMapper>().SingleInstance();
-			builder.RegisterType<ExtendedPreferenceTemplateMapper>()
-				.SingleInstance();
-			builder.RegisterType<TextRequestFormMapper>()
-				.SingleInstance();
-			builder.RegisterType<AbsenceRequestFormMapper>()
-				.SingleInstance();
+			builder.RegisterType<ExtendedPreferenceTemplateMapper>().SingleInstance();
+			builder.RegisterType<TextRequestFormMapper>().SingleInstance();
+			builder.RegisterType<AbsenceRequestFormMapper>().SingleInstance();
+			builder.RegisterType<OvertimeRequestFormMapper>().SingleInstance();
 			builder.RegisterType<PreferenceNightRestChecker>().As<IPreferenceNightRestChecker>().SingleInstance();
 		}
 

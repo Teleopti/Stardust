@@ -513,6 +513,9 @@
     <Compile Include="Areas\MyTime\Controllers\AppGuideController.cs" />
     <Compile Include="Areas\MyTime\Controllers\WidgetController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\ExtendedPreferenceTemplateMapper.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IOvertimeRequestPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\OvertimeRequestPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\OvertimeRequestFormMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Core\ScheduleConst.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\ViewModelFactory\IScheduledSkillOpenHourProvider.cs" />
@@ -603,7 +606,7 @@
     <Compile Include="Areas\Requests\Controller\RequestAllowanceController.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
     <Compile Include="Areas\Requests\Core\FormData\ApproveRequestsWithValidatorInput.cs" />
-    <Compile Include="Areas\MyTime\Models\Requests\OvertimeRequestInput.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\OvertimeRequestForm.cs" />
     <Compile Include="Areas\Requests\Core\FormData\RequestsCommandInput.cs" />
     <Compile Include="Areas\Requests\Core\Provider\RequestCommandHandlingProvider.cs" />
     <Compile Include="Areas\Requests\Core\Provider\IRequestCommandHandlingProvider.cs" />
