@@ -198,7 +198,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnErrorMessageOnInvalidModelFromTextRequest()
 		{
 			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null, null, null, null,
-				null, null, null, null, null);
+				null, null, null, null, null, null);
 			const string message = "Test model validation error";
 			target.ModelState.AddModelError("Test", message);
 
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnErrorMessageOnInvalidModelFromShiftTradeRequest()
 		{
 			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null, null, null, null,
-				null, null, null, null, null);
+				null, null, null, null, null, null);
 			const string message = "Test model validation error";
 			target.ModelState.AddModelError("Test", message);
 
