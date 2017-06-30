@@ -7,11 +7,13 @@
                         md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)"
                         md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
                         <md-item-template>
-                            <i class="mdi mdi-phone" ng-if="skill.DoDisplayData"></i>
-                            <i class="mdi mdi-alert" ng-if="!skill.DoDisplayData"></i>
+							<i ng-class="vm.dynamicIcon(skill)"></i>
                             <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-                            <md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
-                            <md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
+	                        <md-tooltip>
+		                        <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
+		                        <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
+		                        <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+	                        </md-tooltip>
                         </md-item-template>
                         <md-not-found>
                             {{'RepViewerNoMoreMatches'|translate}}
@@ -26,11 +28,9 @@
                         md-selected-item-change="vm.selectedAreaChange(area)" md-items="area in vm.querySearchAreas(searchSkillAreaText)"
                         md-item-text="area.Name" md-min-length="0" placeholder="{{'SelectSkillArea'|translate}}">
                         <md-item-template>
-                            <i class="mdi mdi-phone" ng-if="skill.DoDisplayData"></i>
-                            <i class="mdi mdi-alert" ng-if="!skill.DoDisplayData"></i>
+	                      
                             <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{area.Name}}</span>
-                            <md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
-                            <md-tooltip ng-if="skill.DoDisplayData">{{'SkillTypeInboundTelephony' | translate}}</md-tooltip>
+                           
                         </md-item-template>
                         <md-not-found>
                             {{'RepViewerNoMoreMatches'|translate}}

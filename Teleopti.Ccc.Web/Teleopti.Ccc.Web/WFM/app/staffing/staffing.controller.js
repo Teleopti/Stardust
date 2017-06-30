@@ -28,6 +28,7 @@
 		vm.useShrinkage = false;
 		vm.useShrinkageForStaffing = useShrinkageForStaffing;
 		vm.generateChart = generateChart;
+		vm.dynamicIcon = dynamicIcon;
 
 		var events = [];
 		var allSkills = [];
@@ -184,6 +185,27 @@
 				deferred;
 			return results;
 		};
+
+		function dynamicIcon(skill) {
+			//good use of case switch
+			if (!skill.DoDisplayData) {
+				return 'mdi mdi-alert';
+			}
+			if (skill.IsMultisiteSkill) {
+				return 'mdi mdi-hexagon-multiple';
+			}
+			if (skill.SkillType === 'SkillTypeChat') {
+				return 'mdi mdi-message-text-outline';
+			} else if (skill.SkillType === 'SkillTypeEmail') {
+				return 'mdi mdi-email-outline';
+			} else if (skill.SkillType === 'SkillTypeEmail') {
+				return 'mdi mdi-email-outline';
+			} else if (skill.SkillType === 'SkillTypeInboundTelephony') {
+				return 'mdi mdi-phone';
+			} else if (skill.SkillType === 'SkillTypeRetail') {
+				return 'mdi mdi-credit-card';
+			}
+		}
 
 		function createFilterFor(query) {
 			var lowercaseQuery = angular.lowercase(query);
