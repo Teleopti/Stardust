@@ -3,9 +3,9 @@
 
 	angular.module('wfm.teamSchedule').controller('TeamScheduleWeeklyController', TeamScheduleWeeklyController);
 
-	TeamScheduleWeeklyController.$inject = ['$window', '$stateParams', '$q', '$translate', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'TeamSchedule', 'signalRSVC', '$scope', 'teamsToggles', 'bootstrapCommon'];
+	TeamScheduleWeeklyController.$inject = ['$window', '$stateParams', '$q', '$translate', '$filter', 'PersonScheduleWeekViewCreator', 'UtilityService', 'weekViewScheduleSvc', 'TeamSchedule', 'signalRSVC', '$scope', 'Toggle', 'bootstrapCommon'];
 
-	function TeamScheduleWeeklyController($window, $stateParams, $q, $translate, $filter, WeekViewCreator, Util, weekViewScheduleSvc, teamScheduleSvc, signalR, $scope, teamsToggles, bootstrapCommon) {
+	function TeamScheduleWeeklyController($window, $stateParams, $q, $translate, $filter, WeekViewCreator, Util, weekViewScheduleSvc, teamScheduleSvc, signalR, $scope, toggles, bootstrapCommon) {
 		var vm = this;
 		vm.searchOptions = {
 			keyword: angular.isDefined($stateParams.keyword) && $stateParams.keyword !== '' ? $stateParams.keyword : '',
@@ -60,7 +60,7 @@
 			}
 			vm.weekDays = Util.getWeekdays(vm.startOfWeek);
 			vm.loadSchedules();
-			if(vm.toggles.Wfm_HideUnusedTeamsAndSites_42690){
+			if (toggles.Wfm_HideUnusedTeamsAndSites_42690){
 				vm.getSitesAndTeamsAsync();
 			}
 		};
@@ -92,7 +92,6 @@
 			vm.selectedFavorite = false;
 		};
 
-		vm.toggles = teamsToggles.all();
 		var loggedonUsersTeamId = $q.defer();
 
 		vm.onFavoriteSearchInitDefer = $q.defer();
@@ -149,14 +148,20 @@
 				var startDate = moment(vm.startOfWeek);
 				var endDate = moment(vm.startOfWeek).add(6, 'days');
 
-				teamScheduleSvc.hierarchyOverPeriod(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'))
-					.then(function (data) {
-						resolve(data);
-						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
-						vm.sitesAndTeams = data.Children;
+				var promise;
+				if (toggles.Wfm_HideUnusedTeamsAndSites_42690) {
+					promise = teamScheduleSvc.hierarchyOverPeriod(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
+				} else {
+					promise = teamScheduleSvc.hierarchy(startDate.format('YYYY-MM-DD'));
+				}
 
-						angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
-					});
+				promise.then(function (data) {
+					resolve(data);
+					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
+					vm.sitesAndTeams = data.Children;
+
+					angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
+				});
 			});
 		};
 
