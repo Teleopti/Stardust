@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -85,6 +84,7 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 				DefinedRaptorApplicationFunctionPaths.ViewBadgeLeaderboardUnderReports,
 				DefinedRaptorApplicationFunctionPaths.ViewStaffingInfo,
 				DefinedRaptorApplicationFunctionPaths.ViewQRCodeForConfiguration,
+				DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb,
 
 				DefinedRaptorApplicationFunctionPaths.WebPermissions,
 				DefinedRaptorApplicationFunctionPaths.WebRequests,

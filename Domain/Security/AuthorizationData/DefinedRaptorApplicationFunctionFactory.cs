@@ -131,6 +131,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb, "xxExtendedPreferencesWeb", DefinedRaptorApplicationFunctionForeignIds.ExtendedPreferencesWeb);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger, "xxAgentScheduleMessengerPermission", DefinedRaptorApplicationFunctionForeignIds.AgentScheduleMessenger);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, "xxShiftTradeRequests", DefinedRaptorApplicationFunctionForeignIds.ShiftTradeRequestsWeb);
+			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb, "xxOvertimeRequest", DefinedRaptorApplicationFunctionForeignIds.OvertimeRequestsWeb);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard, "xxShiftTradeBulletinBoard", DefinedRaptorApplicationFunctionForeignIds.ShiftTradeBulletinBoard);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.ShareCalendar, "xxShareCalendar", DefinedRaptorApplicationFunctionForeignIds.ShareCalendar);
 			result.CreateAndAdd(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb, "xxOvertimeAvailabilityWeb", DefinedRaptorApplicationFunctionForeignIds.OvertimeAvailabilityWeb);

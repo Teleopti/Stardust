@@ -120,6 +120,7 @@
 		public const string MyTimeCancelRequest = "0132";
 		public const string ViewStaffingInfo = "0143";
 		public const string ViewQRCodeForConfiguration = "0144";
+		public const string OvertimeRequestsWeb = "0146";
 
 		// Web
 		public const string Anywhere = "0080";

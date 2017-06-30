@@ -17,7 +17,20 @@ namespace Teleopti.Ccc.Infrastructure.Toggle
 
 		public AllFunctions FilteredFunctions()
 		{
-			return _applicationFunctionsProvider.AllFunctions();
+			var functions = _applicationFunctionsProvider.AllFunctions();
+
+			if (!_toggleManager.IsEnabled(Toggles.MyTimeWeb_OvertimeRequest_44558)) hideOvertimeRequest(functions);
+
+			return functions;
+		}
+
+		private static void hideOvertimeRequest(AllFunctions functions)
+		{
+			var foundFunction = functions.FindByForeignId(DefinedRaptorApplicationFunctionForeignIds.OvertimeRequestsWeb);
+			if (foundFunction != null)
+			{
+				foundFunction.SetHidden();
+			}
 		}
 	}
 }
