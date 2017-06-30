@@ -48,8 +48,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
 			var stateHolder = _schedulerStateHolder();
-			Setup(period, people);
-			executeScheduling(period, stateHolder);
+			SetupAndSchedule(period, people);
 			_persister.Persist(stateHolder.Schedules);
 			return CreateResult(period);
 		}
@@ -63,14 +62,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		[TestLog]
 		[UnitOfWork]
-		protected virtual void Setup(DateOnlyPeriod period, IEnumerable<Guid> people)
+		protected virtual void SetupAndSchedule(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
 			var stateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(stateHolder, people, null, period);
-		}
-
-		private void executeScheduling(DateOnlyPeriod period, ISchedulerStateHolder stateHolder)
-		{
 			_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate), _schedulingProgress,
 				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false);
 		}

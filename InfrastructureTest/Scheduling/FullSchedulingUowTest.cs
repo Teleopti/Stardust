@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 	[DatabaseTest]
 	[TestFixture(true)]
 	[TestFixture(false)]
-	[Ignore("To be fixed. Webscheduling don't work currently....")]
 	public class FullSchedulingUowTest : IConfigureToggleManager
 	{
 		private readonly bool _resourcePlannerSchedulingIslands44757;
