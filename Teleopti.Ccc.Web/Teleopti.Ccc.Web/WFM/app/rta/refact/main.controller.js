@@ -5,9 +5,9 @@
 		.module('wfm.rta')
 		.controller('RtaMainController', RtaMainController);
 
-	RtaMainController.$inject = ['rtaService', '$state', '$stateParams', '$interval', '$scope'];
+	RtaMainController.$inject = ['rtaService', '$state', '$stateParams', '$interval', '$scope', '$location'];
 
-	function RtaMainController(rtaService, $state, $stateParams, $interval, $scope) {
+	function RtaMainController(rtaService, $state, $stateParams, $interval, $scope, $location) {
 		var vm = this;
 		vm.skillIds = $stateParams.skillIds || [];
 		$stateParams.open = ($stateParams.open || "false");
@@ -17,6 +17,7 @@
 		vm.siteCards = [];
 
 		(function fetchDataForFilterComponent() {
+
 			rtaService.getSkills().then(function (result) {
 				vm.skills = result;
 			});
@@ -36,9 +37,6 @@
 				});
 			}
 
-			vm.filterOutput = function(selectedItem) {
-			}
-			
 		})();
 
 		(function OverviewComponentHandler() {
@@ -66,6 +64,18 @@
 					})
 				});
 			}, 5000);
+
+			function translateSiteColors(site) {
+				if (site.Color === 'good') {
+					return '#C2E085';
+				} else if (site.Color === 'warning') {
+					return '#FFC285';
+				} else if (site.Color === 'danger') {
+					return '#EE8F7D';
+				} else {
+					return '#fff';
+				}
+			}
 
 			function updateSiteCard(site) {
 				var match = vm.siteCards.find(function (card) {
@@ -109,16 +119,12 @@
 				});
 			}
 
-			function translateSiteColors(site) {
-				if (site.Color === 'good') {
-					return '#C2E085';
-				} else if (site.Color === 'warning') {
-					return '#FFC285';
-				} else if (site.Color === 'danger') {
-					return '#EE8F7D';
-				} else {
-					return '#fff';
-				}
+			vm.filterOutput = function (selectedItem) {
+				$state.go($state.current.name, { skillIds: [selectedItem.Id] }, { notify: false });
+
+				rtaService.getSiteCardsFor([selectedItem.Id]).then(function (result) {
+					vm.siteCards = buildSiteCards(result);
+				});
 			}
 
 			$scope.$on('$destroy', function () {
@@ -129,7 +135,6 @@
 
 				$interval.cancel(sitePolling);
 			});
-
 
 		})();
 	}

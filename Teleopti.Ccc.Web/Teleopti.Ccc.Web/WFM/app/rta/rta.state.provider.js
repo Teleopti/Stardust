@@ -78,18 +78,14 @@ angular
                     controller: 'RtaHistoricalController as vm',
                 })
                 .state('refact-rta', {
-                    url: '/refact-rta?open',
+                    url: '/refact-rta/?skillIds?open',
                     templateUrl: 'app/rta/refact/rta.html',
-                    controller: 'RtaMainController as vm'
-                })
-                .state('refact-rta.skill', {
-                    url: '/?skillIds',
-                    params: {
+                    controller: 'RtaMainController as vm',
+                       params: {
                         skillIds: {
                             array: true
                         }
                     }
-                })
-                ;
+                });
         };
     });

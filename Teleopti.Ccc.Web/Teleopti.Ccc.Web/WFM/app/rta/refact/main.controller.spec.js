@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 describe('RtaMainController', function () {
   var
     $httpBackend,
@@ -27,9 +28,10 @@ describe('RtaMainController', function () {
     });
   });
 
-  beforeEach(inject(function (_$httpBackend_, _$interval_, _FakeRtaBackend_, _ControllerBuilder_) {
+  beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _FakeRtaBackend_, _ControllerBuilder_) {
     $httpBackend = _$httpBackend_;
     $interval = _$interval_;
+    $state = _$state_;
     $fakeBackend = _FakeRtaBackend_;
     $controllerBuilder = _ControllerBuilder_;
 
@@ -55,9 +57,11 @@ describe('RtaMainController', function () {
         Name: 'BTS',
         Id: '4'
       }
-    ]
+    ];
 
     $fakeBackend.clear();
+    spyOn($state, 'go');
+    $state.current.name = 'rta-refact';
   }));
 
   describe('RtaFilterComponent handling', function () {
@@ -157,6 +161,53 @@ describe('RtaMainController', function () {
       expect(vm.organization[0].Name).toEqual('London');
       expect(vm.organization[0].Teams[0].Id).toEqual('3');
       expect(vm.organization[0].Teams[0].Name).toEqual('Team Preferences');
+    });
+
+    it('should get site cards with skill id', function () {
+      $fakeBackend
+        .withSkill({
+          Name: 'Channel Sales',
+          Id: 'channelSalesGuid'
+        })
+        .withSiteAdherence({
+          Id: "parisGuid",
+          SkillId: "channelSalesGuid",
+          Name: "London",
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: "good"
+        })
+      vm = $controllerBuilder.createController().vm;
+
+      vm.filterOutput(vm.skills[0]);
+      $httpBackend.flush();
+
+      expect(vm.siteCards.length).toEqual(1);
+      expect(vm.siteCards[0].site.Id).toEqual('parisGuid');
+      expect(vm.siteCards[0].site.SkillId).toEqual('channelSalesGuid');
+    });
+
+
+    it('should go to sites by skill state', function () {
+      $fakeBackend
+        .withSkill({
+          Name: 'Channel Sales',
+          Id: 'channelSalesGuid'
+        })
+        .withSiteAdherence({
+          Id: "parisGuid",
+          SkillId: "channelSalesGuid",
+          Name: "London",
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: "good"
+        })
+      vm = $controllerBuilder.createController().vm;
+
+      vm.filterOutput(vm.skills[0]);
+      $httpBackend.flush();
+
+      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillIds: ['channelSalesGuid'] }, { notify: false });
     });
 
   });
