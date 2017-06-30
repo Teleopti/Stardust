@@ -53,16 +53,18 @@
 		}
 
 		self.IsPostingData(true);
-
+		
 		ajax.Ajax({
 			url: 'Requests/CreateOvertimeRequest',
 			data: _buildPostData(),
-			contentType: 'application/json',
 			dataType: 'json',
 			type: 'POST',
-			success: function(data) {
+			success: function (data) {
 				self.IsPostingData(false);
 				requestListViewModel.AddItemAtTop(data, true);
+			},
+			error: function() {
+				self.IsPostingData(false);
 			}
 		});
 	};
