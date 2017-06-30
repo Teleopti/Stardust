@@ -85,7 +85,7 @@
             };
 
             var clearData = function() {
-				staffingData.hasEmailSkill = false;
+                staffingData.hasEmailSkill = false;
                 staffingData.timeSeries = [];
                 staffingData.forecastedStaffing.series = [];
                 staffingData.forecastedStaffing.updatedSeries = [];
@@ -100,17 +100,19 @@
                 } else {
                     mixedArea = false;
                 }
-                return service.setStaffingData(
-                    result,
-                    toggles.showOptimalStaffing,
-                    toggles.showScheduledStaffing,
-                    toggles.showEmailSkill
-                );
+                // return service.setStaffingData(
+                // 	{dataSeries:null},
+                //     toggles.showOptimalStaffing,
+                //     toggles.showScheduledStaffing,
+                //     toggles.showEmailSkill
+                // );
 
-                function findEmail(area) {
-                    return area.SkillType === 'SkillTypeEmail';
+                if (selectedItem.Skills) {
+                    function findEmail(area) {
+                        return area.SkillType === 'SkillTypeEmail';
+                    }
+                    mixedArea = selectedItem.Skills.find(findEmail);
                 }
-                mixedArea = selectedItem.Skills.find(findEmail);
 
                 intradayService.getSkillStaffingData
                     .query({
@@ -123,7 +125,7 @@
                                 result,
                                 toggles.showOptimalStaffing,
                                 toggles.showScheduledStaffing,
-								toggles.showEmailSkill
+                                toggles.showEmailSkill
                             );
                         },
                         function(error) {
