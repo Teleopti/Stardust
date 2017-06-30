@@ -120,11 +120,23 @@
 			}
 
 			vm.filterOutput = function (selectedItem) {
-				$state.go($state.current.name, { skillIds: [selectedItem.Id] }, { notify: false });
+				if (selectedItem.hasOwnProperty('Skills')) {
+					var skillIds = [];
+					selectedItem.Skills.forEach(function (skill) {
+						skillIds.push(skill.Id);
+					});
 
-				rtaService.getSiteCardsFor([selectedItem.Id]).then(function (result) {
-					vm.siteCards = buildSiteCards(result);
-				});
+					$state.go($state.current.name, { skillIds: skillIds }, { notify: false });
+					rtaService.getSiteCardsFor(skillIds).then(function (result) {
+						vm.siteCards = buildSiteCards(result);
+					});
+				}
+				else {
+					$state.go($state.current.name, { skillIds: [selectedItem.Id] }, { notify: false });
+					rtaService.getSiteCardsFor([selectedItem.Id]).then(function (result) {
+						vm.siteCards = buildSiteCards(result);
+					});
+				}
 			}
 
 			$scope.$on('$destroy', function () {

@@ -163,53 +163,6 @@ describe('RtaMainController', function () {
       expect(vm.organization[0].Teams[0].Name).toEqual('Team Preferences');
     });
 
-    it('should get site cards with skill id', function () {
-      $fakeBackend
-        .withSkill({
-          Name: 'Channel Sales',
-          Id: 'channelSalesGuid'
-        })
-        .withSiteAdherence({
-          Id: "parisGuid",
-          SkillId: "channelSalesGuid",
-          Name: "London",
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: "good"
-        })
-      vm = $controllerBuilder.createController().vm;
-
-      vm.filterOutput(vm.skills[0]);
-      $httpBackend.flush();
-
-      expect(vm.siteCards.length).toEqual(1);
-      expect(vm.siteCards[0].site.Id).toEqual('parisGuid');
-      expect(vm.siteCards[0].site.SkillId).toEqual('channelSalesGuid');
-    });
-
-
-    it('should go to sites by skill state', function () {
-      $fakeBackend
-        .withSkill({
-          Name: 'Channel Sales',
-          Id: 'channelSalesGuid'
-        })
-        .withSiteAdherence({
-          Id: "parisGuid",
-          SkillId: "channelSalesGuid",
-          Name: "London",
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: "good"
-        })
-      vm = $controllerBuilder.createController().vm;
-
-      vm.filterOutput(vm.skills[0]);
-      $httpBackend.flush();
-
-      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillIds: ['channelSalesGuid'] }, { notify: false });
-    });
-
   });
 
   describe('RtaOverviewComponent handling', function () {
@@ -275,6 +228,101 @@ describe('RtaMainController', function () {
       $interval.flush(5000);
       $httpBackend.verifyNoOutstandingRequest();
     });
+
+    it('should get site cards with skill id', function () {
+      $fakeBackend
+        .withSkill({
+          Name: 'Channel Sales',
+          Id: 'channelSalesGuid'
+        })
+        .withSiteAdherence({
+          Id: "parisGuid",
+          SkillId: "channelSalesGuid",
+          Name: "London",
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: "good"
+        })
+      vm = $controllerBuilder.createController().vm;
+
+      vm.filterOutput(vm.skills[0]);
+      $httpBackend.flush();
+
+      expect(vm.siteCards.length).toEqual(1);
+      expect(vm.siteCards[0].site.Id).toEqual('parisGuid');
+      expect(vm.siteCards[0].site.SkillId).toEqual('channelSalesGuid');
+    });
+
+    it('should get site cards with skill area id', function () {
+      $fakeBackend
+        .withSkillAreas([{
+          Id: "5",
+          Name: "my skill area 1",
+          Skills: skills1
+        }])
+        .withSiteAdherence({
+          Id: "parisGuid",
+          SkillId: "1",
+          Name: "Paris",
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: "good"
+        });
+      vm = $controllerBuilder.createController().vm;
+
+      vm.filterOutput(vm.skillAreas[0]);
+      $httpBackend.flush();
+
+      expect(vm.siteCards.length).toEqual(1);
+      expect(vm.siteCards[0].site.Id).toEqual('parisGuid');
+      expect(vm.siteCards[0].site.SkillId).toEqual('1');
+    });
+
+    it('should go to sites by skill state', function () {
+      $fakeBackend
+        .withSkill({
+          Name: 'Channel Sales',
+          Id: 'channelSalesGuid'
+        })
+        .withSiteAdherence({
+          Id: "parisGuid",
+          SkillId: "channelSalesGuid",
+          Name: "London",
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: "good"
+        })
+      vm = $controllerBuilder.createController().vm;
+
+      vm.filterOutput(vm.skills[0]);
+      $httpBackend.flush();
+
+      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillIds: ['channelSalesGuid'] }, { notify: false });
+    });
+
+    it('should go to sites by skill area state', function () {
+      $fakeBackend
+        .withSkillAreas([{
+          Id: "5",
+          Name: "my skill area 1",
+          Skills: skills1
+        }])
+        .withSiteAdherence({
+          Id: "parisGuid",
+          SkillId: "1",
+          Name: "Paris",
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: "good"
+        });
+      vm = $controllerBuilder.createController().vm;
+
+      vm.filterOutput(vm.skillAreas[0]);
+      $httpBackend.flush();
+
+      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillIds: ['1', '2'] }, { notify: false });
+    });
+
   });
 
 });

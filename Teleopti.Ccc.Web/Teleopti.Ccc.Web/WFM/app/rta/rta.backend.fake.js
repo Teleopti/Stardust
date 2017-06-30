@@ -200,8 +200,8 @@
             function(params) {
                 var result = siteAdherences;
                 if (params.skillIds)
-                    result = siteAdherences.filter(function(ta) {
-                        return params.skillIds.indexOf(ta.SkillId) > -1;
+                    result = siteAdherences.filter(function(sa) {
+                        return params.skillIds.indexOf(sa.SkillId) > -1;
                     });
 				return [200, result];
             });
