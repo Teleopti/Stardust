@@ -345,6 +345,7 @@
     <Compile Include="Rta\ReadModels\Schedules\CurrentScheduleReadModelUpdaterTest.cs" />
     <Compile Include="Rta\Service\UnrecognizedStatesTest2.cs" />
     <Compile Include="Rta\WithUnitOfWorkWithRecurringEvents.cs" />
+    <Compile Include="Scheduling\FullSchedulingUowTest.cs" />
     <Compile Include="Schema\ApplicationDatabaseClusteredIndexTest.cs" />
     <Compile Include="UnitOfWorkTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
