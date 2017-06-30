@@ -76,7 +76,7 @@
 
 	function _loadMultiplicatorDefinitionSets() {
 		ajax.Ajax({
-			url: "../api/MultiplicatorDefinitionSet/Mine",
+			url: "../api/MultiplicatorDefinitionSet/CurrentUser",
 			success: function(data) {
 				self.MultiplicatorDefinitionSets(data);
 			}

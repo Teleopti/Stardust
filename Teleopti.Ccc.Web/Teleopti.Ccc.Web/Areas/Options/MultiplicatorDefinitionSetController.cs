@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Options
 			return _multiplicatorDefinitionSetProvider.GetAllOvertimeDefinitionSets();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/MultiplicatorDefinitionSet/Mine")]
+		[UnitOfWork, HttpGet, Route("api/MultiplicatorDefinitionSet/CurrentUser")]
 		public virtual IList<MultiplicatorDefinitionSetViewModel> FetchMyMultiplicatorDefinitionSets()
 		{
 			var person = _loggedOnUser.CurrentUser();

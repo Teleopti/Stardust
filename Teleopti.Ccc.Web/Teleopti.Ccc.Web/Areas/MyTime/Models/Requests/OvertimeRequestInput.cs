@@ -1,9 +1,9 @@
 using System;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
-using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData {
+namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
+{
 	public class OvertimeRequestInput
 	{
 		public Guid? Id { get; set; }

@@ -603,7 +603,7 @@
     <Compile Include="Areas\Requests\Controller\RequestAllowanceController.cs" />
     <Compile Include="Areas\Requests\Core\FormData\AllRequestsFormData.cs" />
     <Compile Include="Areas\Requests\Core\FormData\ApproveRequestsWithValidatorInput.cs" />
-    <Compile Include="Areas\Requests\Core\FormData\OvertimeRequestInput.cs" />
+    <Compile Include="Areas\MyTime\Models\Requests\OvertimeRequestInput.cs" />
     <Compile Include="Areas\Requests\Core\FormData\RequestsCommandInput.cs" />
     <Compile Include="Areas\Requests\Core\Provider\RequestCommandHandlingProvider.cs" />
     <Compile Include="Areas\Requests\Core\Provider\IRequestCommandHandlingProvider.cs" />

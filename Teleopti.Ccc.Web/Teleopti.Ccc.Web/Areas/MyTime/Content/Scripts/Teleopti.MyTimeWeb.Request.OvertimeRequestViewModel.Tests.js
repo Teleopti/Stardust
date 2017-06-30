@@ -40,11 +40,11 @@ $(document).ready(function () {
 	function setupAjax() {
 		ajax = {
 			Ajax: function (options) {
-				if (options.url === '../api/MultiplicatorDefinitionSet/Mine') {
+				if (options.url === '../api/MultiplicatorDefinitionSet/CurrentUser') {
 					console.log(fakeDefinitionSets, 'fakeDefinitionSets');
 					options.success(fakeDefinitionSets);
 				}
-				if (options.url === 'Requests/OvertimeRequest') {
+				if (options.url === 'Requests/CreateOvertimeRequest') {
 					sentData = options.data;
 					options.success(fakeOvertimeRequestResponse);
 				}
