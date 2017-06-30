@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			_sendProgress = sendProgress;
 			using (_dataSourceScope.OnThisThreadUse(@event.LogOnDatasource))
 			{
-				var theRealOne = _componentContext.Resolve<FullScheduling>();
+				var theRealOne = _componentContext.Resolve<IFullScheduling>();
 				var period = new DateOnlyPeriod(new DateOnly(@event.StartDate), new DateOnly(@event.EndDate));
 				theRealOne.DoScheduling(period);
 				_feedback.FeedbackChanged -= feedbackFeedbackChanged;

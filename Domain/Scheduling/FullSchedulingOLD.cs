@@ -1,31 +1,42 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
-{
-	public class FullScheduling : IFullScheduling
+{ 
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SchedulingIslands_44757)]
+	public interface IFullScheduling
 	{
-		private readonly SchedulingCommandHandler _schedulingCommandHandler;
+		SchedulingResultModel DoScheduling(DateOnlyPeriod period);
+		SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people);
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_SchedulingIslands_44757)]
+	public class FullSchedulingOLD : IFullScheduling
+	{
+		private readonly IScheduleExecutor _scheduleExecutor;
 		private readonly IFillSchedulerStateHolder _fillSchedulerStateHolder;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
+		private readonly ISchedulingProgress _schedulingProgress;
+		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 		private readonly FullSchedulingResult _fullSchedulingResult;
 
-		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, IFillSchedulerStateHolder fillSchedulerStateHolder,
-			Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, FullSchedulingResult fullSchedulingResult)
+		public FullSchedulingOLD(IScheduleExecutor scheduleExecutor, IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult) 
 		{
-			_schedulingCommandHandler = schedulingCommandHandler;
-			_schedulingCommandHandler = schedulingCommandHandler;
+			_scheduleExecutor = scheduleExecutor;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
 			_schedulerStateHolder = schedulerStateHolder;
 			_persister = persister;
+			_schedulingProgress = schedulingProgress;
+			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_fullSchedulingResult = fullSchedulingResult;
 		}
 
@@ -38,12 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var stateHolder = _schedulerStateHolder();
 			Setup(period, people);
-			_schedulingCommandHandler.Execute(new SchedulingCommand
-			{
-				AgentsToSchedule = stateHolder.SchedulingResultState.PersonsInOrganization,
-				Period = period,
-				RunWeeklyRestSolver = false
-			});
+			executeScheduling(period, stateHolder);
 			_persister.Persist(stateHolder.Schedules);
 			return CreateResult(period);
 		}
@@ -61,6 +67,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var stateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(stateHolder, people, null, period);
+		}
+
+		private void executeScheduling(DateOnlyPeriod period, ISchedulerStateHolder stateHolder)
+		{
+			_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate), _schedulingProgress,
+				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false);
 		}
 	}
 }

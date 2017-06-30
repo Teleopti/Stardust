@@ -154,12 +154,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_SchedulingIslands_44757))
 			{
 				builder.RegisterType<SchedulingCommandHandler>().InstancePerLifetimeScope();
-				builder.RegisterType<FullScheduling>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<FullScheduling>().As<IFullScheduling>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			}
 			else
 			{
-				builder.RegisterType<FullSchedulingOLD>().As<FullScheduling>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<FullSchedulingOLD>().As<IFullScheduling>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DesktopSchedulingOLD>().As<DesktopScheduling>().InstancePerLifetimeScope();
 			}
 

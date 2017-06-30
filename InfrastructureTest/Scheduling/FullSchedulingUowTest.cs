@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 	public class FullSchedulingUowTest : IConfigureToggleManager
 	{
 		private readonly bool _resourcePlannerSchedulingIslands44757;
-		public FullScheduling Target;
+		public IFullScheduling Target;
 		public IScenarioRepository ScenarioRepository;
 		public IDayOffTemplateRepository DayOffTemplateRepository;
 		public ICurrentUnitOfWorkFactory UnitOfWorkFactory;

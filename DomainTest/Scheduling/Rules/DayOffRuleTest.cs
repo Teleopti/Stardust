@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IScheduleDictionary _dic;
 	    private IPersistableScheduleDataPermissionChecker _permissionChecker;
 
-		public FullScheduling Target;
+		public IFullScheduling Target;
 		public FakeActivityRepository ActivityRepository;
 	    public FakeSkillRepository SkillRepository;
 	    public FakeScenarioRepository ScenarioRepository;

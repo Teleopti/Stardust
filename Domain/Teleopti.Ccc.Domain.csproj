@@ -274,6 +274,7 @@
     <Compile Include="Repositories\IUserDeviceRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulePartModifyAndRollbackServiceWithoutStateHolder.cs" />
     <Compile Include="Scheduling\CurrentSchedulingCallback.cs" />
+    <Compile Include="Scheduling\FullSchedulingOLD.cs" />
     <Compile Include="Scheduling\FullSchedulingResult.cs" />
     <Compile Include="Scheduling\IConvertSchedulingCallbackToSchedulingProgress.cs" />
     <Compile Include="Scheduling\ICurrentSchedulingCallback.cs" />

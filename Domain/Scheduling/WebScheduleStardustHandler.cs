@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 		private readonly IPlanningGroupStaffLoader _planningGroupStaffLoader;
-		private readonly FullScheduling _fullScheduling;
+		private readonly IFullScheduling _fullScheduling;
 		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
 
-		public WebScheduleStardustHandler(IPlanningPeriodRepository planningPeriodRepository, IPlanningGroupStaffLoader planningGroupStaffLoader, FullScheduling fullScheduling, IEventPopulatingPublisher eventPublisher, IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope)
+		public WebScheduleStardustHandler(IPlanningPeriodRepository planningPeriodRepository, IPlanningGroupStaffLoader planningGroupStaffLoader, IFullScheduling fullScheduling, IEventPopulatingPublisher eventPublisher, IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope)
 		{
 			_planningPeriodRepository = planningPeriodRepository;
 			_planningGroupStaffLoader = planningGroupStaffLoader;
