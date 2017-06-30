@@ -61,6 +61,7 @@
 		WfmPermission_ReplaceOldPermission_34671,
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
+		Wfm_SearchAgentBasedOnCorrectPeriod_44552,
 
 		WfmTeamSchedule_MoveOvertimeActivity_44888,
 		WebByPassDefaultPermissionCheck_37984,
