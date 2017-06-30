@@ -26,8 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			IRequestCommandHandlingProvider commandHandlingProvider,
-			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory,
-			ITeamsProvider teamsProvider)
+			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory, ITeamsProvider teamsProvider)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_commandHandlingProvider = commandHandlingProvider;
@@ -43,13 +42,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		}
 
 		[HttpPost, Route("api/Requests/requests"), UnitOfWork]
-		public virtual RequestListViewModel GetRequests([FromBody] AllRequestsFormData input)
+		public virtual RequestListViewModel GetRequests([FromBody]AllRequestsFormData input)
 		{
 			return _requestsViewModelFactory.CreateRequestListViewModel(input);
 		}
 
 		[HttpPost, Route("api/Requests/shiftTradeRequests"), UnitOfWork]
-		public virtual RequestListViewModel GetShiftTradeRequests([FromBody] AllRequestsFormData input)
+		public virtual RequestListViewModel GetShiftTradeRequests([FromBody]AllRequestsFormData input)
 		{
 			return _shiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 		}
@@ -97,21 +96,16 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		[UnitOfWork, HttpGet, Route("api/Requests/FetchPermittedTeamHierachy")]
 		public virtual BusinessUnitWithSitesViewModel FetchPermittedTeamHierachy(DateTime date)
 		{
-			return _teamsProvider.GetPermittedTeamHierachy(new DateOnly(date),
-				DefinedRaptorApplicationFunctionPaths.WebRequests);
+
+			return _teamsProvider.GetPermittedTeamHierachy(new DateOnly(date), DefinedRaptorApplicationFunctionPaths.WebRequests);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/Requests/GetOrganizationWithPeriod")]
-		public virtual BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateTime startDate, DateTime endDate)
+		public virtual BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateTime startDate,DateTime endDate)
 		{
 			return _teamsProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
 				DefinedRaptorApplicationFunctionPaths.WebRequests);
-		}
 
-		[UnitOfWork, HttpPost, Route("api/Requests/createOvertimeRequest")]
-		public virtual RequestCommandHandlingResult CreateOvertimeRequest(OvertimeRequestInput input)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

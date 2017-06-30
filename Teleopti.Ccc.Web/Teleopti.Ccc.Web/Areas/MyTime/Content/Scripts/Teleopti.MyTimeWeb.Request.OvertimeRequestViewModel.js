@@ -54,11 +54,9 @@
 
 		self.IsPostingData(true);
 
-		var postData = _buildPostData();
-
 		ajax.Ajax({
-			url: '../api/Requests/createOvertimeRequest',
-			data: postData,
+			url: 'Requests/OvertimeRequest',
+			data: _buildPostData(),
 			contentType: 'application/json',
 			dataType: 'json',
 			type: 'POST',
@@ -125,13 +123,15 @@
 			endDate = endDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 		}
 
-		var dateTimeFormat = Teleopti.MyTimeWeb.Common.ServiceDateFormat + ' HH:mm:ss';
 		return {
 			Subject: self.Subject(),
 			Message: self.Message(),
 			MultiplicatorDefinitionSet: self.MultiplicatorDefinitionSet().Id,
-			StartTime: moment(self.StartDate() + ' ' + self.StartTime()).format(dateFormat),
-			EndTime: endDateMoment.format(dateFormat)
+			Period: {
+				StartDate: startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat),
+				StartTime: moment(self.StartDate() + ' ' + self.StartTime()).format('HH:mm'),
+				EndDate: endDate,
+				EndTime: endDateMoment.format('HH:mm')
 			}
 		};
 	}
