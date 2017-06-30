@@ -212,6 +212,10 @@
 
 		if (applicationsData.length > 1) {
 
+            if (isFromMobileApp()) {
+                tryToGoToMyTime();
+            }
+
 			tryToGoToHash(returnHash);
 
 			tryToGoToWfm();
@@ -255,6 +259,27 @@
 			});
 			if (anywhereApplication) {
 				areaToGo = anywhereApplication.Name;
+			}
+        }
+
+		function isFromMobileApp() {
+            var agent = navigator.userAgent;
+			if (agent.indexOf("app/ios") > 0 || agent.indexOf("app/android") > 0) {
+				return true;
+			}
+
+			return false;
+		}
+
+		function tryToGoToMyTime() {
+			if (areaToGo && areaToGo.length > 0) return;
+
+            var mytimeApplication = ko.utils.arrayFirst(applicationsData, function (a) {
+				return a.Name === "MyTime";
+            });
+
+            if (mytimeApplication) {
+                areaToGo = mytimeApplication.Name;
 			}
 		}
 
