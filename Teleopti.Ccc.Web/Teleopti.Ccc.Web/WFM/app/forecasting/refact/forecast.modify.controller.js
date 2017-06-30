@@ -5,21 +5,29 @@
   .module('wfm.forecasting')
   .controller('ForecastModCtrl', ForecastModCtrl);
 
-  ForecastModCtrl.$inject = ['forecastingService', '$stateParams'];
+  ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window'];
 
-  function ForecastModCtrl(forecastingService, $stateParams) {
+  function ForecastModCtrl(forecastingService, $stateParams, $window) {
     var vm = this;
-    console.log($stateParams);
-    vm.selectedWorkload = {
-      Id: $stateParams.workloadId,
-      ChartId: $stateParams.skill.ChartId,
-      SkillId: $stateParams.skill.SkillId,
-      Days: $stateParams.days,
-      Name: $stateParams.skill.Workload.Name
-    }
-
+    var storage = {};
     vm.loadChart = loadChart;
     vm.pointClick = pointClick;
+
+    function manageLocalStorage() {
+      if ($stateParams.days !== undefined && $stateParams.days.length > 0) {
+        $window.localStorage['workload'] = angular.toJson($stateParams);
+      }
+      storage = angular.fromJson($window.localStorage['workload']);
+    };
+    manageLocalStorage();
+
+    vm.selectedWorkload = {
+      Id: storage.workloadId,
+      ChartId: storage.skill.ChartId,
+      SkillId: storage.skill.SkillId,
+      Days: storage.days,
+      Name: storage.skill.Workload.Name
+    }
 
     function loadChart(chartId, days) {
       //placeholder function
@@ -28,7 +36,6 @@
     function pointClick(days) {
       vm.selectedDayCount = days;
     }
-
-    vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
   }
+
 })();
