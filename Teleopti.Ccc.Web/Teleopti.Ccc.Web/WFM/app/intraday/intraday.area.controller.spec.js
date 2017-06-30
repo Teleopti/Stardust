@@ -768,6 +768,7 @@ describe('IntradayAreaCtrl', function () {
 		$httpBackend.flush();
 		expect(scope.chosenOffset.value).toEqual(1);
 		expect(scope.viewObj.forecastedStaffing.series[1]).toEqual(3);
+		jasmine.clock().uninstall();
 
 	});
 });
