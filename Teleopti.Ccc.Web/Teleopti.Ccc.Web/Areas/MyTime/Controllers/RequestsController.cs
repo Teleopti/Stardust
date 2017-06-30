@@ -15,6 +15,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Filters;
@@ -282,6 +283,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		{
 			return Json(AbsenceRequestDetailViewModelFactory.CreateAbsenceRequestDetailViewModel(id),
 				JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWork, HttpPost]
+		public virtual RequestCommandHandlingResult CreateOvertimeRequest(OvertimeRequestInput input)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }
