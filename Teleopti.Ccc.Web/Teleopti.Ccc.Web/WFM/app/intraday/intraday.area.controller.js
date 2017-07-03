@@ -49,7 +49,8 @@
             showScheduledStaffing: [],
             showEsl: [],
             showEmailSkill: [],
-            showOtherDay: []
+            showOtherDay: [],
+			exportToExcel: []
         };
         var message = $translate
             .instant('WFMReleaseNotificationWithoutOldModuleLink')
@@ -68,6 +69,7 @@
             $scope.toggles.showEsl = toggleSvc.Wfm_Intraday_ESL_41827;
             $scope.toggles.showEmailSkill = toggleSvc.Wfm_Intraday_SupportSkillTypeEmail_44002;
 			$scope.toggles.showOtherDay = toggleSvc.WFM_Intraday_Show_For_Other_Days_43504;
+			$scope.toggles.exportToExcel = toggleSvc.WFM_Intraday_Export_To_Excel_44892;
         });
 
         var getAutoCompleteControls = function() {
