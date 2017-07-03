@@ -671,10 +671,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	        return personAbsence;
 		}
 	   
-		public void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet)
+		public void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet, bool muteEvent = false)
 		{
 					var foundPersonAssignment = PersonAssignment(true);
-					foundPersonAssignment.AddOvertimeActivity(activity, period, definitionSet);
+					foundPersonAssignment.AddOvertimeActivity(activity, period, definitionSet,muteEvent);
 		}
 
 		public void MergeOvertime(IScheduleDay source)

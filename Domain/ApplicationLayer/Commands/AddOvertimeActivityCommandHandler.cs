@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				//(new[]{person}, new ScheduleDictionaryLoadOptions(false, false), command.Period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()), scenario);
 			var scheduleRange = dic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
-			scheduleDay.CreateAndAddOvertime(activity,command.Period,multiplicatorDefinitionSet);
+			scheduleDay.CreateAndAddOvertime(activity,command.Period,multiplicatorDefinitionSet,false);
 			dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 			_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange) scheduleRange);
 		}
