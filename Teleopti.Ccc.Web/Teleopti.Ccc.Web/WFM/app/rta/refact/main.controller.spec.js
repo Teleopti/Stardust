@@ -220,6 +220,151 @@ describe('RtaMainController', function () {
       expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
     });
 
+    it('should update adherence for site with skill', function () {
+      $fakeBackend.withSiteAdherence({
+        Id: "londonGuid",
+        SkillId: "phoneId",
+        Name: "London",
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: "warning"
+      });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.skillIds = ['phoneId'];
+        $fakeBackend
+          .clearSiteAdherences()
+          .withSiteAdherence({
+            Id: "londonGuid",
+            SkillId: "phoneId",
+            Name: "London",
+            AgentsCount: 11,
+            InAlarmCount: 2,
+            Color: "good"
+          })
+      })
+        .wait(5000);
+
+      expect(vm.siteCards[0].site.Id).toEqual("londonGuid");
+      expect(vm.siteCards[0].site.Name).toEqual("London");
+      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
+      expect(vm.siteCards[0].site.Color).toEqual(goodColor);
+      expect(vm.siteCards[0].isOpen).toEqual(false);
+      expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
+    });
+
+    it('should update adherence for sites with skills', function () {
+      $fakeBackend
+      .withSiteAdherence({
+        Id: "londonGuid",
+        SkillId: "phoneId",
+        Name: "London",
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: "warning"
+      })
+      .withSiteAdherence({
+        Id: "parisGuid",
+        SkillId: "emailId",
+        Name: "Paris",
+        AgentsCount:8,
+        InAlarmCount: 4,
+        Color: "warning"
+      });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.skillIds = ['phoneId', 'emailId'];
+        $fakeBackend
+          .clearSiteAdherences()
+          .withSiteAdherence({
+            Id: "londonGuid",
+            SkillId: "phoneId",
+            Name: "London",
+            AgentsCount: 11,
+            InAlarmCount: 2,
+            Color: "good"
+          })
+           .withSiteAdherence({
+            Id: "parisGuid",
+            SkillId: "phoneId",
+            Name: "Paris",
+            AgentsCount: 8,
+            InAlarmCount: 3,
+            Color: "good"
+          })
+      })
+        .wait(5000);
+
+      expect(vm.siteCards[0].site.Id).toEqual("londonGuid");
+      expect(vm.siteCards[0].site.Name).toEqual("London");
+      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
+      expect(vm.siteCards[0].site.Color).toEqual(goodColor);
+      expect(vm.siteCards[0].isOpen).toEqual(false);
+      expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
+      expect(vm.siteCards[1].site.Id).toEqual("parisGuid");
+      expect(vm.siteCards[1].site.Name).toEqual("Paris");
+      expect(vm.siteCards[1].site.AgentsCount).toEqual(8);
+      expect(vm.siteCards[1].site.InAlarmCount).toEqual(3);
+      expect(vm.siteCards[1].site.Color).toEqual(goodColor);
+      expect(vm.siteCards[1].isOpen).toEqual(false);
+      expect(typeof vm.siteCards[1].fetchTeamData).toBe("function");
+    });
+
+    it('should update adherence for site when clearing selection', function () {
+      $fakeBackend.withSiteAdherence({
+        Id: "londonGuid",
+        SkillId: "phoneId",
+        Name: "London",
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: "warning"
+      });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.skillIds = ['phoneId'];
+        $fakeBackend
+          .clearSiteAdherences()
+          .withSiteAdherence({
+            Id: "londonGuid",
+            SkillId: "phoneId",
+            Name: "London",
+            AgentsCount: 11,
+            InAlarmCount: 2,
+            Color: "good"
+          })
+      })
+        .wait(5000);
+      c.apply(function () {
+        vm.skillIds = [];
+        $fakeBackend
+          .clearSiteAdherences()
+          .withSiteAdherence({
+            Id: "londonGuid",
+            Name: "London",
+            AgentsCount: 11,
+            InAlarmCount: 9,
+            Color: "danger"
+          })
+      })
+        .wait(5000);
+
+      expect(vm.siteCards[0].site.Id).toEqual("londonGuid");
+      expect(vm.siteCards[0].site.Name).toEqual("London");
+      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].site.InAlarmCount).toEqual(9);
+      expect(vm.siteCards[0].site.Color).toEqual(dangerColor);
+      expect(vm.siteCards[0].isOpen).toEqual(false);
+      expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
+    });
+
     it('should stop polling when page is about to destroy', function () {
       $controllerBuilder.createController()
         .wait(5000);
@@ -293,7 +438,7 @@ describe('RtaMainController', function () {
       $httpBackend.flush();
 
       vm.filterOutput(undefined);
-         $fakeBackend
+      $fakeBackend
         .clearSiteAdherences()
         .withSiteAdherence({
           Id: "parisGuid",
@@ -415,7 +560,7 @@ describe('RtaMainController', function () {
           InAlarmCount: 2,
           Color: "good"
         });
-      vm = $controllerBuilder.createController().vm 
+      vm = $controllerBuilder.createController().vm
 
       vm.filterOutput(vm.skillAreas[0]);
       $httpBackend.flush();

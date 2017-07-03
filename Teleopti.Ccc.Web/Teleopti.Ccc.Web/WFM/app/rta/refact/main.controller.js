@@ -41,11 +41,19 @@
 
 		(function OverviewComponentHandler() {
 			var sitePolling;
+			var sitePollingWithSkills;
 
-			var getSiteCards = function () {
-				rtaService.getSiteCardsFor().then(function (result) {
-					vm.siteCards = buildSiteCards(result);
-				});
+			var getSiteCards = function (ids) {
+				if (angular.isDefined(ids)) {
+					rtaService.getSiteCardsFor(ids).then(function (result) {
+						vm.siteCards = buildSiteCards(result);
+					});
+				}
+				else {
+					rtaService.getSiteCardsFor().then(function (result) {
+						vm.siteCards = buildSiteCards(result);
+					});
+				}
 			}
 
 			getSiteCards();
@@ -60,14 +68,6 @@
 					}
 				});
 			}
-
-			sitePolling = $interval(function () {
-				rtaService.getSiteCardsFor().then(function (result) {
-					result.forEach(function (r) {
-						updateSiteCard(r);
-					})
-				});
-			}, 5000);
 
 			function translateSiteColors(site) {
 				if (site.Color === 'good') {
@@ -125,25 +125,24 @@
 
 			vm.filterOutput = function (selectedItem) {
 				if (!angular.isDefined(selectedItem)) {
+					vm.skillIds = [];
 					$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
 					getSiteCards();
-				} 
+				}
 				else if (selectedItem.hasOwnProperty('Skills')) {
 					var skillIds = [];
 					selectedItem.Skills.forEach(function (skill) {
 						skillIds.push(skill.Id);
 					});
+					vm.skillIds = skillIds;
 
 					$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
-					rtaService.getSiteCardsFor(skillIds).then(function (result) {
-						vm.siteCards = buildSiteCards(result);
-					});
+					getSiteCards(vm.skillIds);
 				}
 				else {
-					$state.go($state.current.name, { skillAreaId: undefined, skillIds: [selectedItem.Id] }, { notify: false });
-					rtaService.getSiteCardsFor([selectedItem.Id]).then(function (result) {
-						vm.siteCards = buildSiteCards(result);
-					});
+					vm.skillIds = [selectedItem.Id];
+					$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
+					getSiteCards(vm.skillIds);
 				}
 			}
 
@@ -154,7 +153,35 @@
 					});
 
 				$interval.cancel(sitePolling);
+				$interval.cancel(sitePollingWithSkills);
 			});
+
+			$scope.$watch(function () { return vm.skillIds; },
+				function (newValue, oldValue) {
+					if (angular.isDefined(sitePollingWithSkills)) {
+						$interval.cancel(sitePollingWithSkills);
+					}
+					if (newValue.length) {
+						sitePollingWithSkills = $interval(function () {
+							rtaService.getSiteCardsFor(vm.skillIds).then(function (result) {
+								result.forEach(function (r) {
+									updateSiteCard(r);
+								})
+							});
+						}, 5000);
+						$interval.cancel(sitePolling);
+					}
+					else {
+						sitePolling = $interval(function () {
+							rtaService.getSiteCardsFor().then(function (result) {
+								result.forEach(function (r) {
+									updateSiteCard(r);
+								})
+							});
+						}, 5000);
+						$interval.cancel(sitePollingWithSkills);
+					}
+				});
 
 		})();
 	}
