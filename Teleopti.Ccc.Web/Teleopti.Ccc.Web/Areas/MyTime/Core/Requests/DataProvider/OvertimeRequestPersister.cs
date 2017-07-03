@@ -1,3 +1,5 @@
+using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -19,8 +21,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 
 		public RequestViewModel Persist(OvertimeRequestForm form)
 		{
-			var personRequest = _mapper.Map(form);
-			_personRequestRepository.Add(personRequest);
+			var isCreatingNew = true;
+			IPersonRequest personRequest = null;
+			if (form.Id.HasValue)
+			{
+				isCreatingNew = false;
+				personRequest = _personRequestRepository.Get(form.Id.Value);
+				if (!(personRequest.Request is IOvertimeRequest))
+				{
+					throw new ApplicationException($"Request with Id {form.Id} is not an overtime request.");
+				}
+			}
+
+			personRequest = _mapper.Map(form, personRequest);
+			if (isCreatingNew)
+			{
+				_personRequestRepository.Add(personRequest);
+			}
 
 			return _requestsMapper.Map(personRequest);
 		}

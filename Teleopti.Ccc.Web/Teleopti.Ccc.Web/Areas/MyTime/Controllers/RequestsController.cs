@@ -288,9 +288,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork, HttpPost]
-		public virtual JsonResult CreateOvertimeRequest(OvertimeRequestForm input)
+		public virtual JsonResult PersistOvertimeRequest(OvertimeRequestForm input)
 		{
-			return Json(_overtimeRequestPersister.Persist(input), JsonRequestBehavior.AllowGet);
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
+			try
+			{
+				return Json(_overtimeRequestPersister.Persist(input));
+			}
+			catch (InvalidOperationException e)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return e.ExceptionToJson(Resources.RequestCannotUpdateDelete);
+			}
 		}
 	}
 }

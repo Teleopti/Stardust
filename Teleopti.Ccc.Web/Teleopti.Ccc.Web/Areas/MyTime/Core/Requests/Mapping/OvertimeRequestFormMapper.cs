@@ -20,21 +20,22 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_userTimeZone = userTimeZone;
 		}
 
-		public IPersonRequest Map(OvertimeRequestForm source)
+		public IPersonRequest Map(OvertimeRequestForm source, IPersonRequest personRequest)
 		{
+			if (personRequest == null)
+			{
+				personRequest = new PersonRequest(_loggedOnUser.CurrentUser());
+			}
+
 			var definitionSet = _multiplicatorDefinitionSetRepository.Get(source.MultiplicatorDefinitionSet);
 			var period = new DateTimePeriodFormMapper(_userTimeZone).Map(source.Period);
 			var overtimeRequest = new OvertimeRequest(definitionSet, period);
+			
+			personRequest.Request = overtimeRequest;
+			personRequest.Subject = source.Subject;
+			personRequest.TrySetMessage(source.Message ?? "");
 
-			var destination = new PersonRequest(_loggedOnUser.CurrentUser())
-			{
-				Subject = source.Subject,
-				Request = overtimeRequest
-			};
-
-			destination.TrySetMessage(source.Message ?? "");
-
-			return destination;
+			return personRequest;
 		}
 	}
 }

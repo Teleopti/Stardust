@@ -51,7 +51,7 @@ $(document).ready(function () {
 				if (options.url === '../api/MultiplicatorDefinitionSet/CurrentUser') {
 					options.success(fakeDefinitionSets);
 				}
-				if (options.url === 'Requests/CreateOvertimeRequest') {
+				if (options.url === 'Requests/PersistOvertimeRequest') {
 					sentData = options.data;
 					options.success(fakeOvertimeRequestResponse);
 				}
