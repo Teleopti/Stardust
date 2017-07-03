@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 	public class OvertimePreferencesModel
 	{
 		public Guid Compensation { get; set; }
-		public int MinTinuteToAdd { get; set; }
-		public int MaxTimeToAdd { get; set; }
+		public int MinTinutesToAdd { get; set; }
+		public int MaxMinutesToAdd { get; set; }
 		public bool AllowBreakMaxWorkPerWeek { get; set; }
 		public bool AllowBreakNightlyRest { get; set; }
 		public bool AllowBreakWeeklyRest { get; set; }
