@@ -280,5 +280,31 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			Assert.IsTrue(requestQueue.Any(requestFromProvider =>
 				requestFromProvider.Request.RequestType == RequestType.TextRequest || requestFromProvider.Request.RequestType == RequestType.ShiftTradeRequest));
 		}
+
+		[Test]
+		public void ShouldReturnOvertimeRequest()
+		{
+			var person = PersonFactory.CreatePerson("John");
+			var filter = new RequestListFilter { HideOldRequest = false, IsSortByUpdateDate = true };
+			var period = new DateTimePeriod(
+				new DateTime(2008, 7, 10, 0, 0, 0, DateTimeKind.Utc),
+				new DateTime(2008, 7, 11, 0, 0, 0, DateTimeKind.Utc));
+
+			IPersonRequest request = new PersonRequest(person);
+			var overtimeRequest =
+				new OvertimeRequest(
+					MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("test", MultiplicatorType.Overtime), period);
+			request.Request = overtimeRequest;
+
+			((FakeLoggedOnUser)LoggedOnUser).SetFakeLoggedOnUser(person);
+			RequestRepository.Add(request);
+
+			var requestQueue = RequestProvider.RetrieveRequestsForLoggedOnUser(new Paging { Skip = 0, Take = 5 }, filter).ToArray();
+
+			requestQueue.Length.Should().Be(1);
+			Assert.IsTrue(requestQueue.Any(requestFromProvider =>
+				requestFromProvider.Request.RequestType == RequestType.OvertimeRequest));
+		}
+
 	}
 }

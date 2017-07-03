@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			var types = new List<RequestType>
 			{
 				RequestType.AbsenceRequest,
-				RequestType.TextRequest
+				RequestType.TextRequest,
+				RequestType.OvertimeRequest
 			};
 
 			var hasPermissionForShiftTrade = _permissionProvider.HasPersonPermission(
