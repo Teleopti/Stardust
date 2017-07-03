@@ -57,6 +57,7 @@ Scenario: View staffing for one skill
 	And I am navigating to intraday staffing view
 	Then I should see staffing data in the chart
 
+@OnlyRunIfEnabled('WFM_Intraday_Show_For_Other_Days_43504')
 Scenario: View incoming traffic for one skill for a provided day
 	Given the time is '2016-12-21 14:00'
 	And there is queue statistics for the skill 'Skill A' up until '2016-12-20 17:00'
@@ -67,6 +68,7 @@ Scenario: View incoming traffic for one skill for a provided day
 	Then I should see incoming traffic data in the chart
 	And I should see a summary of incoming traffic
 
+@OnlyRunIfEnabled('WFM_Intraday_Show_For_Other_Days_43504')
 Scenario: Switch tab when other day than today is selected
 	Given the time is '2016-12-21 14:00'
 	And there is queue statistics for the skill 'Skill A' up until '2016-12-22 17:00'
@@ -77,6 +79,7 @@ Scenario: Switch tab when other day than today is selected
 	Then I should see forecasted staffing data in the chart
 	And I should see the date
 
+@OnlyRunIfEnabled('WFM_Intraday_Show_For_Other_Days_43504')
 Scenario: Switch skill when other day than today is selected
 	Given the time is '2016-12-21 14:00'
 	And there is queue statistics for the skill 'Skill A' up until '2016-12-22 17:00'
@@ -90,6 +93,7 @@ Scenario: Switch skill when other day than today is selected
 	Then I should see incoming traffic data in the chart
 	And I should see the date
 
+@OnlyRunIfEnabled('WFM_Intraday_Show_For_Other_Days_43504')
 Scenario: View incoming traffic for one skill for a provided date
 	Given the time is '2016-12-21 14:00'
 	And there is queue statistics for the skill 'Skill A' up until '2016-12-20 17:00'
