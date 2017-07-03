@@ -57,15 +57,18 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/staffing/overtime/suggestion")]
-		public virtual IHttpActionResult ShowAddOvertime([FromBody]OverTimeSuggestionModel model)
+		public virtual IHttpActionResult ShowAddOvertime([FromBody]GetOvertimeSuggestionModel getModel)
 		{
-			if (model == null || model.SkillIds.IsEmpty()) return BadRequest();
+			if (getModel == null || getModel.SkillIds.IsEmpty()) return BadRequest();
+
+			var model = new OverTimeSuggestionModel{NumberOfPersonsToTry = getModel.NumberOfPersonsToTry, SkillIds = getModel.SkillIds,TimeSerie = getModel.TimeSerie};
+
 			var multiplicationDefinition = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions().FirstOrDefault();
 			model.OvertimePreferences = new OvertimePreferences
 			{
 				ScheduleTag = new NullScheduleTag(),
 				OvertimeType = multiplicationDefinition,
-				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(15), TimeSpan.FromHours(5)),
+				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(getModel.OvertimePreferences.MinTinuteToAdd), TimeSpan.FromHours(getModel.OvertimePreferences.MaxTimeToAdd)),
 				SelectedSpecificTimePeriod = new TimePeriod(TimeSpan.FromHours(model.TimeSerie.Min().Hour), TimeSpan.FromHours(model.TimeSerie.Max().Hour+1))
 			};
 			//set in GUI?
@@ -89,6 +92,18 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			return Ok();
 		}
 
+		[UnitOfWork, HttpGet, Route("api/staffing/GetCompensations")]
+		public virtual IHttpActionResult GetCompensations()
+		{
+			var multiplicationDefinitions = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions();
+			var retList = multiplicationDefinitions.Select(multiplicatorDefinitionSet => new CompensationModel
+			{
+				Id = multiplicatorDefinitionSet.Id.GetValueOrDefault(),
+				Name = multiplicatorDefinitionSet.Name
+			}).ToList();
+
+			return Ok(retList);
+		}
 		private OverTimeSuggestionResultModel extractDataSeries(OverTimeSuggestionModel overTimeSuggestionModel,OvertimeWrapperModel wrapperModels)
 		{
 			var sourceTimeZone = _timeZone.TimeZone();

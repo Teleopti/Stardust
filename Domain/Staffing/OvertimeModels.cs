@@ -27,15 +27,37 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public IList<Guid> SkillIds { get; set; }
 		public DateTime[] TimeSerie { get; set; }
 		public OvertimePreferences OvertimePreferences { get; set; }
-		public DateTimePeriod RequestedPeriod { get; set; }
 		public  int NumberOfPersonsToTry { get; set; }
 	}
 
+	public class GetOvertimeSuggestionModel
+	{
+		public IList<Guid> SkillIds { get; set; }
+		public DateTime[] TimeSerie { get; set; }
+		public OvertimePreferencesModel OvertimePreferences { get; set; }
+		public int NumberOfPersonsToTry { get; set; }
+	}
+
+	public class OvertimePreferencesModel
+	{
+		public Guid Compensation { get; set; }
+		public int MinTinuteToAdd { get; set; }
+		public int MaxTimeToAdd { get; set; }
+		public bool AllowBreakMaxWorkPerWeek { get; set; }
+		public bool AllowBreakNightlyRest { get; set; }
+		public bool AllowBreakWeeklyRest { get; set; }
+	}
 	public class OverTimeModel
 	{
 		public Guid ActivityId { get; set; }
 		public Guid PersonId { get; set; }
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
+	}
+
+	public class CompensationModel
+	{
+		public Guid Id { get; set; }
+		public string Name { get; set; }
 	}
 }
