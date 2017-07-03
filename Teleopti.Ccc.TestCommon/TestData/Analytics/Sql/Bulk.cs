@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Sql
 	{
 		public static void Insert(SqlConnection connection, DataTable table)
 		{
-			using (var bulk = new SqlBulkCopy(connection, SqlBulkCopyOptions.KeepIdentity | SqlBulkCopyOptions.CheckConstraints, null))
+			using (var bulk = new SqlBulkCopy(connection, SqlBulkCopyOptions.KeepIdentity, null))
 			{
 				try
 				{
