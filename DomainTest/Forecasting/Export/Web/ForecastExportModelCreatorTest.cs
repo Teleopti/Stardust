@@ -108,8 +108,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, openHour, false);
 			skillDay.WorkloadDayCollection.First().SetOverrideTasks(200,null);
-			skillDay.WorkloadDayCollection.First().OverrideAverageAfterTaskTime = TimeSpan.FromMinutes(1);
-			skillDay.WorkloadDayCollection.First().OverrideAverageTaskTime = TimeSpan.FromMinutes(1);
+			var overrideTime = TimeSpan.FromSeconds(60);
+			skillDay.WorkloadDayCollection.First().OverrideAverageAfterTaskTime = overrideTime;
+			skillDay.WorkloadDayCollection.First().OverrideAverageTaskTime = overrideTime;
 			SkillRepository.Has(skill);
 			WorkloadRepository.Add(skill.WorkloadCollection.First());
 			SkillDayRepository.Add(skillDay);
@@ -121,9 +122,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 
 			dailyModel.ForecastDate.Should().Be.EqualTo(skillDay.CurrentDate.Date);
 			dailyModel.Calls.Should().Be.EqualTo(200);
-			dailyModel.AverageTalkTime.Should().Be.EqualTo(60d);
-			dailyModel.AverageAfterCallWork.Should().Be.EqualTo(60d);
-			dailyModel.AverageHandleTime.Should().Be.EqualTo(120d);
+			dailyModel.AverageTalkTime.Should().Be.EqualTo(overrideTime.TotalSeconds);
+			dailyModel.AverageAfterCallWork.Should().Be.EqualTo(overrideTime.TotalSeconds);
+			dailyModel.AverageHandleTime.Should().Be.EqualTo(2*overrideTime.TotalSeconds);
 		}
 
 		[Test]
