@@ -7,16 +7,6 @@ $(document).ready(function () {
 		sentData,
 		addedOvertimeRequest,
 		requestFormClosed = false,
-		fakeDefinitionSets = [
-			{
-				Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB',
-				Name: 'Overtime paid'
-			},
-			{
-				Id: '9019D62F-0086-44B1-A977-9BB900B8C361',
-				Name: 'Overtime time'
-			}
-		],
 		fakeOvertimeRequestResponse = {
 			Id: '7155082E-108B-4F72-A36A-C1430C37CADA'
 		},
@@ -42,15 +32,12 @@ $(document).ready(function () {
 		setupAjax();
 		requestFormClosed = false;
 		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, fakeRequestListViewModel, fakeRequestDetailViewModel);
-		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 	}
 
 	function setupAjax() {
 		ajax = {
 			Ajax: function (options) {
-				if (options.url === '../api/MultiplicatorDefinitionSet/CurrentUser') {
-					options.success(fakeDefinitionSets);
-				}
 				if (options.url === 'Requests/PersistOvertimeRequest') {
 					sentData = options.data;
 					options.success(fakeOvertimeRequestResponse);
@@ -63,22 +50,13 @@ $(document).ready(function () {
 		equal(vm.Template,'add-overtime-request-template');
 	});
 
-	test('should display overtime types', function () {
-		equal(vm.MultiplicatorDefinitionSets().length, fakeDefinitionSets.length);
-
-		fakeDefinitionSets.forEach(function (set, index) {
-			equal(vm.MultiplicatorDefinitionSets()[index].Id, set.Id);
-			equal(vm.MultiplicatorDefinitionSets()[index].Name, set.Name);
-		});
-	});
-
 	test('should submit overtime request', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.StartDate('2017-06-27');
 		vm.StartTime('19:00');
 		vm.RequestDuration('03:00');
-		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
 
@@ -107,7 +85,7 @@ $(document).ready(function () {
 		vm.Message('I want to work overtime');
 		vm.StartDate('2017-06-27');
 		vm.StartTime('19:00');
-		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
 
@@ -120,7 +98,7 @@ $(document).ready(function () {
 		vm.StartDate('2017-06-27');
 		vm.StartTime('19:00');
 		vm.RequestDuration('06:00');
-		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
 
@@ -136,7 +114,7 @@ $(document).ready(function () {
 		vm.StartDate('2017-06-27');
 		vm.StartTime('19:30');
 		vm.RequestDuration('01:00');
-		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
 
@@ -152,7 +130,7 @@ $(document).ready(function () {
 		vm.StartDate('2017-06-27');
 		vm.StartTime('09:30 AM');
 		vm.RequestDuration('01:00');
-		vm.MultiplicatorDefinitionSet({ Id: '29F7ECE8-D340-408F-BE40-9BB900B8A4CB', Name: 'time' });
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
 
@@ -263,6 +241,7 @@ $(document).ready(function () {
 			DateTimeTo: "2017-06-30T06:45:00.0000000",
 			MultiplicatorDefinitionSet: "9019D62F-0086-44B1-A977-9BB900B8C361"
 		};
+		var vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, fakeRequestListViewModel, fakeRequestDetailViewModel);
 
 		vm.DateFormat("YYYY-MM-DD");
 		vm.Initialize(data);
@@ -272,6 +251,6 @@ $(document).ready(function () {
 		equal(vm.StartDate(), "2017-06-30");
 		equal(vm.StartTime(), "03:45");
 		equal(vm.RequestDuration(), "03:00");
-		equal(vm.MultiplicatorDefinitionSet(), "9019D62F-0086-44B1-A977-9BB900B8C361");
+		equal(vm.MultiplicatorDefinitionSetId(), "9019D62F-0086-44B1-A977-9BB900B8C361");
 	});
 });

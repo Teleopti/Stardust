@@ -17,9 +17,8 @@
 	self.ShowError = ko.observable(false);
 	self.ErrorMessage = ko.observable();
 	self.RequestDuration = ko.observable();
-	self.MultiplicatorDefinitionSets = ko.observableArray();
-	self.MultiplicatorDefinitionSet = ko.observable();
-	self.TimeList = [];
+	self.MultiplicatorDefinitionSetId = ko.observable();
+	self.TimeList = _createTimeList();
 
 	self.checkMessageLength = function(data, event) {
 		var text = $(event.target)[0].value;
@@ -94,26 +93,10 @@
 			var hours = '0' + moment.duration(seconds, 'seconds').hours();
 			var minutes = '0' + moment.duration(seconds, 'seconds').minutes();
 			
-			self.RequestDuration = ko.observable(hours.substr(-2, 2) + ":" + minutes.substr(-2, 2));
-			self.MultiplicatorDefinitionSet = ko.observable(data.MultiplicatorDefinitionSet);
+			self.RequestDuration(hours.substr(-2, 2) + ":" + minutes.substr(-2, 2));
+			self.MultiplicatorDefinitionSetId(data.MultiplicatorDefinitionSet);
 		}
 	};
-
-	_init();
-
-	function _init() {
-		_loadMultiplicatorDefinitionSets();
-		self.TimeList = _createTimeList();
-	}
-
-	function _loadMultiplicatorDefinitionSets() {
-		ajax.Ajax({
-			url: "../api/MultiplicatorDefinitionSet/CurrentUser",
-			success: function(data) {
-				self.MultiplicatorDefinitionSets(data);
-			}
-		});
-	}
 
 	function _createTimeList() {
 		var timeList = [];
@@ -158,7 +141,7 @@
 		return {
 			Subject: self.Subject(),
 			Message: self.Message(),
-			MultiplicatorDefinitionSet: self.MultiplicatorDefinitionSet().Id,
+			MultiplicatorDefinitionSet: self.MultiplicatorDefinitionSetId(),
 			Period: {
 				StartDate: startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat),
 				StartTime: moment(self.StartDate() + ' ' + self.StartTime()).format('HH:mm'),

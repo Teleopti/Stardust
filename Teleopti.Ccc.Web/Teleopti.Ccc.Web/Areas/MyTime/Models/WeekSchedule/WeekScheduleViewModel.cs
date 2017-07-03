@@ -60,6 +60,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public Guid? Id { get; set; }
 	}
 
+	public class OvertimeTypeViewModel
+	{
+		public string Name { get; set; }
+		public Guid? Id { get; set; }
+	}
+
 	public class TimeLineViewModel
 	{
 		public TimeSpan Time { get; set; }

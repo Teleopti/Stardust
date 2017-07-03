@@ -9,6 +9,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
+using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly RequestsViewModelMapper _mapper;
 		private readonly ShiftTradeSwapDetailViewModelMapper _shiftTradeSwapDetailViewModelMapper;
 		private readonly PersonAccountViewModelMapper _personAccountViewModelMapper;
+		private readonly IMultiplicatorDefinitionSetProvider _multiplicatorDefinitionSetProvider;
 
 		public RequestsViewModelFactory(
 			IPersonRequestProvider personRequestProvider,
@@ -44,7 +46,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			IPersonRequestRepository personRequestRepository,
 			RequestsViewModelMapper mapper,
 			ShiftTradeSwapDetailViewModelMapper shiftTradeSwapDetailViewModelMapper,
-			PersonAccountViewModelMapper personAccountViewModelMapper)
+			PersonAccountViewModelMapper personAccountViewModelMapper,
+			IMultiplicatorDefinitionSetProvider multiplicatorDefinitionSetProvider)
 		{
 			_personRequestProvider = personRequestProvider;
 			_absenceTypesProvider = absenceTypesProvider;
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_mapper = mapper;
 			_shiftTradeSwapDetailViewModelMapper = shiftTradeSwapDetailViewModelMapper;
 			_personAccountViewModelMapper = personAccountViewModelMapper;
+			_multiplicatorDefinitionSetProvider = multiplicatorDefinitionSetProvider;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
@@ -93,7 +97,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 						Name = x.Description.Name
 					}).ToList(),
 				RequestPermission = permission,
-				DatePickerFormat = dateFormat
+				DatePickerFormat = dateFormat,
+				OvertimeTypes = _multiplicatorDefinitionSetProvider.GetDefinitionSetsForCurrentUser().Select(definitionSet => new OvertimeTypeViewModel
+				{
+					Id = definitionSet.Id,
+					Name = definitionSet.Name
+				})
 			};
 		}
 

@@ -20,7 +20,11 @@
 				<label>
 					@Resources.OvertimeType
 				</label>
-				<select class="input-sm form-control" data-bind="options: MultiplicatorDefinitionSets, optionsText: 'Name', value: MultiplicatorDefinitionSet">
+				<select class="input-sm form-control" data-bind="value: MultiplicatorDefinitionSetId">
+					@foreach (var overtimeType in Model.OvertimeTypes)
+					{
+						<option value="@Html.AttributeEncode(overtimeType.Id)">@overtimeType.Name</option>
+					}
 				</select>
 			</div>
 		</div>

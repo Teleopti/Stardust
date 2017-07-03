@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Core.Data;
@@ -40,8 +41,6 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			obTimeSet.SetId(Guid.NewGuid());
 			repository.Add(obTimeSet);
 
-			provider = new MultiplicatorDefinitionSetProvider(repository);
-
 			contract = ContractFactory.CreateContract("Test Contract");
 			contract.AddMultiplicatorDefinitionSetCollection(overtimeSet1);
 			contract.AddMultiplicatorDefinitionSetCollection(obTimeSet);
@@ -49,6 +48,8 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var today = new DateOnly(DateTime.Now);
 			person = PersonFactory.CreatePersonWithPersonPeriod(today.AddDays(-1));
 			person.Period(today).PersonContract = PersonContractFactory.CreatePersonContract(contract);
+
+			provider = new MultiplicatorDefinitionSetProvider(repository, new FakeLoggedOnUser(person), new Now());
 		}
 
 		[Test]
@@ -69,6 +70,20 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		public void ShouldLoadMultiplicatorDefinitionSetsForPerson()
 		{
 			var result = provider.GetDefinitionSets(person, new DateOnly(DateTime.Now));
+
+			Assert.AreEqual(result.Count, 2);
+
+			Assert.AreEqual(overtimeSet1.Id.GetValueOrDefault(), result.First().Id);
+			Assert.AreEqual(overtimeSet1.Name, result.First().Name);
+
+			Assert.AreEqual(obTimeSet.Id.GetValueOrDefault(), result.Second().Id);
+			Assert.AreEqual(obTimeSet.Name, result.Second().Name);
+		}
+
+		[Test]
+		public void ShouldLoadMultiplicatorDefinitionSetsForCurrrentUser()
+		{
+			var result = provider.GetDefinitionSetsForCurrentUser();
 
 			Assert.AreEqual(result.Count, 2);
 

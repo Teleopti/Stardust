@@ -9,10 +9,14 @@ namespace Teleopti.Ccc.Web.Core.Data
 	public class MultiplicatorDefinitionSetProvider : IMultiplicatorDefinitionSetProvider
 	{
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
+		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly INow _now;
 
-		public MultiplicatorDefinitionSetProvider(IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository)
+		public MultiplicatorDefinitionSetProvider(IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ILoggedOnUser loggedOnUser, INow now)
 		{
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
+			_loggedOnUser = loggedOnUser;
+			_now = now;
 		}
 
 		public IList<MultiplicatorDefinitionSetViewModel> GetAllOvertimeDefinitionSets()
@@ -28,6 +32,12 @@ namespace Teleopti.Ccc.Web.Core.Data
 			return multiplicatorDefinitionSets != null
 				? convertToViewModel(multiplicatorDefinitionSets)
 				: new List<MultiplicatorDefinitionSetViewModel>();
+		}
+		public IList<MultiplicatorDefinitionSetViewModel> GetDefinitionSetsForCurrentUser()
+		{
+			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var today = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), timezone));
+			return GetDefinitionSets(_loggedOnUser.CurrentUser(), today);
 		}
 
 		private IList<MultiplicatorDefinitionSetViewModel> convertToViewModel(
