@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), null);
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), getFakeMultiplicatorDefinitionSetProvider(loggedOnUser));
 
 			var result = target.CreatePageViewModel();
 			var expectedFormat = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), null);
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), getFakeMultiplicatorDefinitionSetProvider(loggedOnUser));
 
 			var result = target.CreatePageViewModel();
 
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), null);
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), getFakeMultiplicatorDefinitionSetProvider(loggedOnUser));
 
 			var result = target.CreatePageViewModel();
 
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), null);
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), getFakeMultiplicatorDefinitionSetProvider(loggedOnUser));
 			var result = target.CreatePageViewModel();
 
 			result.RequestPermission.TextRequestPermission.Should().Be.True();
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 				new ShiftTradeSwapDetailViewModelMapper(
 					new ShiftTradeTimeLineHoursViewModelFactory(new CreateHourText(timeZone, threadCulture),
 						timeZone), new ProjectionProvider(), threadCulture, timeZone,
-					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), null);
+					new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository()))), new PersonAccountViewModelMapper(timeZone), getFakeMultiplicatorDefinitionSetProvider(loggedOnUser));
 			var result = target.CreatePageViewModel();
 
 			result.RequestPermission.AbsenceRequestPermission.Should().Be.True();
@@ -615,6 +615,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		private static AbsenceTypesProvider getFakeAbsenceTypesProvider(FakeLoggedOnUser loggedOnUser)
 		{
 			return new AbsenceTypesProvider(new FakeAbsenceRepository(), loggedOnUser);
+		}
+
+		private static MultiplicatorDefinitionSetProvider getFakeMultiplicatorDefinitionSetProvider(FakeLoggedOnUser loggedOnUser)
+		{
+			return new MultiplicatorDefinitionSetProvider(new FakeMultiplicatorDefinitionSetRepository(), loggedOnUser, new Now());
 		}
 	}
 }
