@@ -15,15 +15,18 @@
 		vm.skillAreas = [];
 		vm.organization = [];
 		vm.siteCards = [];
+		vm.options= {skillsLoaded: false, skillAreasLoaded: false};
 
 		(function fetchDataForFilterComponent() {
 
 			rtaService.getSkills().then(function (result) {
 				vm.skills = result;
+				vm.options.skillsLoaded = true;
 			});
 
 			rtaService.getSkillAreas().then(function (result) {
 				vm.skillAreas = result.SkillAreas;
+				vm.options.skillAreasLoaded = true;
 			});
 
 			if (vm.skillIds.length > 0) {

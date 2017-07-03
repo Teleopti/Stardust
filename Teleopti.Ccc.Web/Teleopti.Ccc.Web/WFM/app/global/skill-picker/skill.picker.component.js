@@ -9,6 +9,7 @@
       bindings: {
         skills: '=',
         skillAreas: '=',
+        options: '=',
         itemToReturn: '='
       },
     });
