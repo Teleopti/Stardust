@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -45,9 +46,9 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			currentBusinessUnit = new FakeCurrentBusinessUnit();
 
 			currentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("bu"));
-			
+
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser,currentBusinessUnit, currentScenario);
+				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser, currentBusinessUnit, currentScenario, new FakeToggleManager());
 		}
 
 		[Test]
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 					PersonFinderField.All, "Ashley"
 				}
 			};
-			var result = target.SearchPermittedPeopleSummary(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>(),DefinedRaptorApplicationFunctionPaths.WebPeople);
+			var result = target.SearchPermittedPeopleSummary(searchCriteria, 10, 1, DateOnly.Today, new Dictionary<string, bool>(), DefinedRaptorApplicationFunctionPaths.WebPeople);
 
 			var peopleList = result.People;
 			var optionalColumns = result.OptionalColumns;
@@ -106,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			first.Id.Should().Be.EqualTo(personId);
 			first.Email.Should().Be.EqualTo("ashley.andeen@abc.com");
 			first.MyTeam(DateOnly.Today).Description.Name.Should().Be.EqualTo("TestTeam");
-		}	
+		}
 
 		[Test]
 		public void ShouldSearchForPeopleWithNoPermission()
@@ -170,7 +171,8 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			personRepository.Add(person);
 
 			personAbsenceRepository.Add(createPersonAbsence(person));
-			target = new PeopleSearchProvider(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser,currentBusinessUnit,currentScenario);
+			target = new PeopleSearchProvider(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository,
+				loggedOnUser, currentBusinessUnit, currentScenario, new FakeToggleManager());
 
 			var searchCriteria = new Dictionary<PersonFinderField, string>
 			{
@@ -179,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 				}
 			};
 
-			var permittedPeople = target.SearchPermittedPeople(searchCriteria, new DateOnly(2016,3,1), 
+			var permittedPeople = target.SearchPermittedPeople(searchCriteria, new DateOnly(2016, 3, 1),
 				DefinedRaptorApplicationFunctionPaths.WebPeople);
 			var result = target.SearchPermittedPeopleWithAbsence(permittedPeople, new DateOnly(2016, 3, 1));
 			result.Count().Should().Be.EqualTo(1);
@@ -190,7 +192,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		{
 			personRepository = new FakePersonRepositoryLegacy();
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser,currentBusinessUnit, currentScenario);
+				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser, currentBusinessUnit, currentScenario, new FakeToggleManager());
 
 			var searchCriteria = new Dictionary<PersonFinderField, string>
 			{
@@ -198,7 +200,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 					PersonFinderField.Role, "Agent"
 				}
 			};
-			
+
 			searchRepository.Stub(x => x.Find(null)).Callback(new Func<IPersonFinderSearchCriteria, bool>(c =>
 			{
 				c.TotalRows = 500;
@@ -235,7 +237,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 
 		private IPersonAbsence createPersonAbsence(IPerson person)
 		{
-			return PersonAbsenceFactory.CreatePersonAbsence(person, currentScenario.Current(), new DateTimePeriod(2016,3,1,7,2016,3,1,15));
+			return PersonAbsenceFactory.CreatePersonAbsence(person, currentScenario.Current(), new DateTimePeriod(2016, 3, 1, 7, 2016, 3, 1, 15));
 		}
 	}
 }

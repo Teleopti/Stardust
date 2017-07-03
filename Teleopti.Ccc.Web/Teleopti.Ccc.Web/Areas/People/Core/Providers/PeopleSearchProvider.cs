@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.People.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
@@ -20,13 +22,17 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly ICurrentScenario _currentScenario;
+		private readonly IToggleManager _toggleManager;
 
 		public PeopleSearchProvider(
 			IPersonFinderReadOnlyRepository searchRepository,
 			IPersonRepository personRepository,
 			IPermissionProvider permissionProvider,
 			IOptionalColumnRepository optionalColumnRepository, IPersonAbsenceRepository personAbsenceRepository,
-			ILoggedOnUser loggedOnUser, ICurrentBusinessUnit businessUnitProvider, ICurrentScenario currentScenario)
+			ILoggedOnUser loggedOnUser,
+			ICurrentBusinessUnit businessUnitProvider,
+			ICurrentScenario currentScenario,
+			IToggleManager toggleManager)
 		{
 			_searchRepository = searchRepository;
 			_personRepository = personRepository;
@@ -36,6 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_loggedOnUser = loggedOnUser;
 			_businessUnitProvider = businessUnitProvider;
 			_currentScenario = currentScenario;
+			_toggleManager = toggleManager;
 		}
 
 		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -49,6 +56,10 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 		public List<Guid> FindPersonIds(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
+			if (_toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552))
+			{
+				return _searchRepository.FindPersonIdsInTeamsBasedOnPersonPeriod(date, teamIds, searchCriteria);
+			}
 			return _searchRepository.FindPersonIdsInTeams(date, teamIds, searchCriteria);
 		}
 
@@ -88,15 +99,15 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			return permittedPersonList.Select(x => x.PersonId);
 		}
 
-		public IEnumerable<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people ,DateOnly currentDate,
+		public IEnumerable<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate,
 			string function)
 		{
-			return GetPermittedPersonList(people, currentDate, function).Select(x => x.Id.GetValueOrDefault());			
+			return GetPermittedPersonList(people, currentDate, function).Select(x => x.Id.GetValueOrDefault());
 		}
 
-		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people,DateOnly currentDate,
+		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly currentDate,
 			string function)
-		{		
+		{
 			return
 				people.Where(p =>
 				{
@@ -118,7 +129,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			{
 				CurrentPage = currentPageIndex
 			};
-												
+
 			return search;
 		}
 
@@ -161,6 +172,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				TotalPages = totalPages,
 				OptionalColumns = optionalColumnCollection
 			};
-		}	
+		}
 	}
 }
