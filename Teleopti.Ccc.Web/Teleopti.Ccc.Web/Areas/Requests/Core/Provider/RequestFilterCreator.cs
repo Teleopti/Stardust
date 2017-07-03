@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var dateTimePeriod = new DateOnlyPeriod(input.StartDate, input.EndDate).ToDateTimePeriod(_userTimeZone.TimeZone());
 			var queryDateTimePeriod = dateTimePeriod.ChangeEndTime(TimeSpan.FromSeconds(-1));
 			var businessHierachyToggle = _toggleManager.IsEnabled(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
-
+			var searchAgentBasedOnCorrectPeriodToggle = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552);
 			var filter = new RequestFilter
 			{
 				RequestFilters = input.Filters,
@@ -54,8 +54,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			};
 
 			if (businessHierachyToggle)
-			{				
-				var targetIds = _peopleSearchProvider.FindPersonIds(input.StartDate, input.SelectedTeamIds, input.AgentSearchTerm);
+			{			
+				var targetIds = searchAgentBasedOnCorrectPeriodToggle?
+					_peopleSearchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(input.StartDate,input.EndDate), input.SelectedTeamIds, input.AgentSearchTerm)
+					: _peopleSearchProvider.FindPersonIds(input.StartDate, input.SelectedTeamIds, input.AgentSearchTerm);
 				if (targetIds.Count == 0)
 					filter.Persons = new List<IPerson>();
 				else
