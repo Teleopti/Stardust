@@ -39,7 +39,7 @@ Function Add-InstallGoodies {
     $text = 'choco install baretail -y'
     $text | Add-Content $file
 
-    $text = 'choco install notepadplusplus.install -y'
+    $text = 'choco install notepadplusplus.install --x86 -y'
     $text | Add-Content $file
 }
 
