@@ -312,6 +312,7 @@ Try
 	$fullPathTogglesFileForWeb =  "$directory\..\..\sitesroot\3\bin\FeatureFlags\" + $togglesFile
 	$fullPathTogglesFileForRta =  "$directory\..\..\sitesroot\5\bin\FeatureFlags\" + $togglesFile
 	
+    $customStartupScript = "CustomStartup.ps1"
 
     $DataSourceName = TeleoptiDriveMapProperty-get -name "DataSourceName"
 
@@ -333,6 +334,8 @@ Try
 	CopyReportsFromBlobStorage
 	
 	CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$togglesFile"
+    CopyFileFromBlobStorage -destinationFolder "$directory" -filename "$customStartupScript"
+
 	$tempTogglesFile = "$directory\" + $togglesFile
 	if (Test-Path "$tempTogglesFile") {
 		Remove-Item "$fullPathTogglesFileForWeb"

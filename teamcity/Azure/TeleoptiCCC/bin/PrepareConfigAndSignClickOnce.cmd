@@ -6,4 +6,9 @@ SET DIRECTORY=%DIRECTORY:~0,-1%
 powershell set-executionpolicy unrestricted
 ::execute
 powershell . .\PrepareConfigAndSignClickOnce.ps1 >nul
-exit %ERRORLEVEL%
+set /A customError=%ERRORLEVEL%
+::execute custom powershell script
+if exist "%DIRECTORY%\CustomStartup.ps1" (
+powershell -file "%DIRECTORY%\CustomStartup.ps1" >"%DIRECTORY%\CustomStartup.log"
+)
+exit %customError%
