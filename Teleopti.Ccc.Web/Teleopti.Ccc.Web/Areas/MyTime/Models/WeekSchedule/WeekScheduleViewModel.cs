@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public bool ShiftExchangePermission { get; set; }
 		public bool ShiftTradeBulletinBoardPermission { get; set; }
 		public bool PersonAccountPermission { get; set; }
+		public bool OvertimeRequestPermission { get; set; }
 	}
 
 	public class AbsenceTypeViewModel

@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 						DefinedRaptorApplicationFunctionPaths.AbsenceReport),
 				ShiftTradeBulletinBoardPermission = _permissionProvider.HasApplicationFunctionPermission(
 						DefinedRaptorApplicationFunctionPaths.ShiftTradeBulletinBoard),
+				OvertimeRequestPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb)
 			};
 			var dateFormat = _loggedOnUser.CurrentUser().PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 			return new RequestsViewModel
