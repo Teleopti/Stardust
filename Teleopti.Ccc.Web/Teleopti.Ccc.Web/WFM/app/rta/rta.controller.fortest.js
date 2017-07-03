@@ -24,10 +24,12 @@
 			return scope;
 		};
 
-		function createController() {
+		function createController(skills, skillAreas) {
 
 			var vm = $controller(controllerName, {
-				$scope: scope
+				$scope: scope,
+				skills: skills,
+				skillAreas: skillAreas
 			});
 
 			scope.$digest();

@@ -5,30 +5,32 @@
 		.module('wfm.rta')
 		.controller('RtaMainController', RtaMainController);
 
-	RtaMainController.$inject = ['rtaService', '$state', '$stateParams', '$interval', '$scope', '$location'];
+	RtaMainController.$inject = ['rtaService', 'skills', 'skillAreas','$state', '$stateParams', '$interval', '$scope', '$location'];
 
-	function RtaMainController(rtaService, $state, $stateParams, $interval, $scope, $location) {
+	function RtaMainController(rtaService, skills, skillAreas, $state, $stateParams, $interval, $scope, $location) {
 		var vm = this;
 		vm.skillIds = $stateParams.skillIds || [];
+		vm.skillAreaId = $stateParams.skillAreaId;
 		$stateParams.open = ($stateParams.open || "false");
-		vm.skills = [];
-		vm.skillAreas = [];
+		vm.skills = skills || [];
+		vm.skillAreas = skillAreas || [];
 		vm.organization = [];
 		vm.siteCards = [];
 		vm.options= {skillsLoaded: false, skillAreasLoaded: false};
 
+		if(angular.isDefined(vm.skillAreaId)) {
+			var temp = [];
+			var match = vm.skillAreas.find(function(sa){
+				return sa.Id === vm.skillAreaId;
+			});
+			match.Skills.forEach(function(skill){
+				temp.push(skill.Id);
+			});
+			vm.skillIds = temp;
+		}
+
+
 		(function fetchDataForFilterComponent() {
-
-			rtaService.getSkills().then(function (result) {
-				vm.skills = result;
-				vm.options.skillsLoaded = true;
-			});
-
-			rtaService.getSkillAreas().then(function (result) {
-				vm.skillAreas = result.SkillAreas;
-				vm.options.skillAreasLoaded = true;
-			});
-
 			if (vm.skillIds.length > 0) {
 				rtaService.getOrganizationForSkills({ skillIds: vm.skillIds }).then(function (result) {
 					vm.organization = result;
@@ -39,7 +41,6 @@
 					vm.organization = result;
 				});
 			}
-
 		})();
 
 		(function OverviewComponentHandler() {
@@ -59,8 +60,24 @@
 				}
 			}
 
-			getSiteCards();
+			if(angular.isDefined(vm.skillAreaId)) {
+				var match = vm.skillAreas.find(function(sa){
+					return sa.Id === vm.skillAreaId;
+				});
 
+				var skillIds = [];
+				match.Skills.forEach(function(skill){
+					skillIds.push(skill.Id);
+				});
+				getSiteCards(skillIds);
+			}
+			else if(vm.skillIds.length) {
+				getSiteCards(vm.skillIds);
+			}
+			else {
+				getSiteCards();
+			}
+			
 			function buildSiteCards(sites) {
 				return sites.map(function (site) {
 					site.Color = translateSiteColors(site);

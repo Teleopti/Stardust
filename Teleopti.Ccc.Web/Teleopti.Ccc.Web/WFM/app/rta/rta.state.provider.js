@@ -2,23 +2,23 @@
 
 angular
     .module('wfm.rta')
-    .provider('RtaState', function() {
+    .provider('RtaState', function () {
 
         var toggles = {}
 
-        this.$get = function() {
-            return function(toggleService) {
-                toggleService.togglesLoaded.then(function() {
+        this.$get = function () {
+            return function (toggleService) {
+                toggleService.togglesLoaded.then(function () {
                     toggles = toggleService
                 });
             };
         };
 
-        this.config = function($stateProvider) {
+        this.config = function ($stateProvider) {
             $stateProvider.state('rta', {
-                    url: '/rta',
-                    templateUrl: 'app/rta/rta.html'
-                })
+                url: '/rta',
+                templateUrl: 'app/rta/rta.html'
+            })
                 .state('rta.sites', {
                     url: '/?skillIds&skillAreaId',
                     templateUrl: 'app/rta/overview/rta-sites.html',
@@ -69,7 +69,7 @@ angular
                 })
                 .state('rta.historical', {
                     url: '/agent-historical/:personId?open',
-                    templateUrl: function() {
+                    templateUrl: function () {
                         if (toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)
                             return 'app/rta/historical/rta-historical-RTA_SolidProofWhenManagingAgentAdherence_39351.html'
                         else
@@ -81,9 +81,19 @@ angular
                     url: '/refact-rta/?skillIds?skillAreaId?open',
                     templateUrl: 'app/rta/refact/rta.html',
                     controller: 'RtaMainController as vm',
-                       params: {
+                    params: {
                         skillIds: {
                             array: true
+                        }
+                    },
+                    resolve: {
+                        skills: function (rtaService) {
+                            return rtaService.getSkills();
+                        },
+                        skillAreas: function (rtaService) {
+                            return rtaService.getSkillAreas().then(function (result) {
+                                return result.SkillAreas;
+                            });
                         }
                     }
                 });

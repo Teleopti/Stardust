@@ -41,7 +41,8 @@ describe('rtaOverviewComponent', function () {
   }));
 
   it('should display site card data', function () {
-    $fakeBackend.withSiteAdherence({
+    $fakeBackend
+    .withSiteAdherence({
       Id: "londonGuid",
       Name: "London",
       AgentsCount: 11,
