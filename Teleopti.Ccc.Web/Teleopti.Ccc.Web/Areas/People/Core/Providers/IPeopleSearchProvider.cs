@@ -36,5 +36,8 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search, Guid[] teamIds);
 
 		List<Guid> FindPersonIds(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria);
+
+		List<Guid> FindPersonIdsInPeriod(DateOnlyPeriod period, Guid[] teamIds,
+			IDictionary<PersonFinderField, string> searchCriteria);
 	}
 }

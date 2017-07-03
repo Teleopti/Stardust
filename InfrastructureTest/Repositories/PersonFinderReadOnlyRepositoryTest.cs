@@ -356,8 +356,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPerson] :inputIds")
 				.SetString("inputIds", personToTest.Id.ToString())
 				.ExecuteUpdate();
-
-			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnly(2017, 4, 1), new [] { team.Id.Value },
+			var date = new DateOnly(2017, 4, 1);
+			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnlyPeriod(date,date), new [] { team.Id.Value },
 				new Dictionary<PersonFinderField, string> { { PersonFinderField.Skill, skills[1].Name } });
 
 			personIds.Count.Should().Be(0);
@@ -403,8 +403,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPerson] :inputIds")
 				.SetString("inputIds", personToTest.Id.ToString())
 				.ExecuteUpdate();
+			var date = new DateOnly(2017, 4, 1);
 
-			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnly(2017, 4, 1), new[] { team.Id.Value },
+			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnlyPeriod(date, date), new[] { team.Id.Value },
 				new Dictionary<PersonFinderField, string> { { PersonFinderField.Skill, $"{skills[0].Name},{skills[2].Name}" } });
 
 			personIds.Count.Should().Be(1);
@@ -450,8 +451,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPerson] :inputIds")
 				.SetString("inputIds", personToTest.Id.ToString())
 				.ExecuteUpdate();
+			var date = new DateOnly(2017, 4, 1);
 
-			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnly(2017, 4, 1), new[] { team.Id.Value },
+			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnlyPeriod(date, date), new[] { team.Id.Value },
 				new Dictionary<PersonFinderField, string> { { PersonFinderField.All, $"dummyAgent2;{skills[0].Name}" } });
 
 			personIds.Count.Should().Be(0);
@@ -496,11 +498,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.CreateSQLQuery("exec [ReadModel].[UpdateFindPerson] :inputIds")
 				.SetString("inputIds", personToTest.Id.ToString())
 				.ExecuteUpdate();
+			var date = new DateOnly(2017, 4, 1);
 
-			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnly(2017, 4, 1), new[] { team.Id.Value },
+			var personIds = _target.FindPersonIdsInTeamsBasedOnPersonPeriod(new DateOnlyPeriod(date, date), new[] { team.Id.Value },
 				new Dictionary<PersonFinderField, string> { { PersonFinderField.All, $"dummyAgent1;{skills[0].Name}" } });
 
-			personIds.Count.Should().Be(0);
+			personIds.Count.Should().Be(1);
 		}
 
 		private ISkill[] createAndPersistSkills()

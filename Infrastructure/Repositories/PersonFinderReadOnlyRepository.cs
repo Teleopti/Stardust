@@ -7,15 +7,11 @@ using System.Text.RegularExpressions;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -132,7 +128,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				}
 				else
 				{
-					result.AddRange(findPersonIdsInTeams(date, teamIdsString));
+					result.AddRange(findPersonIdsInTeams(new DateOnlyPeriod(date, date), teamIdsString));
 				}
 			}
 
@@ -140,7 +136,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 
-		public List<Guid> FindPersonIdsInTeamsBasedOnPersonPeriod(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
+		public List<Guid> FindPersonIdsInTeamsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
 			var result = new List<Guid>();
 
@@ -156,9 +152,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{
 					var searchString = createSearchString(searchCriteria);
 					var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
-							"exec [ReadModel].[PersonFinderWithCriteriaAndTeamsSimplifiedBasedOnRecentPeriod] @search_criterias=:search_criterias, @belongs_to_date=:belongs_to_date, @team_ids=:team_ids")
+							"exec [ReadModel].[PersonFinderWithCriteriaAndTeamsSimplifiedBasedOnRecentPeriod] @search_criterias=:search_criterias, @start_date=:start_date, @end_date=:end_date, @team_ids=:team_ids")
 						.SetString("search_criterias", searchString)
-						.SetDateOnly("belongs_to_date", date)
+						.SetDateOnly("start_date", period.StartDate)
+						.SetDateOnly("end_date", period.EndDate)
 						.SetString("team_ids", teamIdsString)
 						.SetReadOnly(true)
 						.List<Guid>();
@@ -167,24 +164,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				}
 				else
 				{
-					result.AddRange(findPersonIdsInTeams(date, teamIdsString));
+					result.AddRange(findPersonIdsInTeams(period, teamIdsString));
 				}
 			}
 
 			return result;
 		}
 
-		private IList<Guid> findPersonIdsInTeams(DateOnly date, string teamIdsString)
+		private IList<Guid> findPersonIdsInTeams(DateOnlyPeriod period, string teamIdsString)
 		{
 			return _currentUnitOfWork.Session()
-					.CreateSQLQuery(
-						"exec [dbo].[PersonInTeams] @belongs_to_date=:belongs_to_date, @team_ids=:team_ids")
-					.SetDateOnly("belongs_to_date", date)
-					.SetString("team_ids", teamIdsString)
-					.SetReadOnly(true)
-					.List<Guid>();
+				.CreateSQLQuery(
+					"exec [dbo].[PersonInTeams] @start_date=:start_date, @end_date=:end_date, @team_ids=:team_ids")
+				.SetDateOnly("start_date", period.StartDate)
+				.SetDateOnly("end_date", period.EndDate)
+				.SetString("team_ids", teamIdsString)
+				.SetReadOnly(true)
+				.List<Guid>();
 
 		}
+
+
 
 		public void FindInTeams(IPersonFinderSearchCriteria personFinderSearchCriteria, Guid[] teamIds)
 		{

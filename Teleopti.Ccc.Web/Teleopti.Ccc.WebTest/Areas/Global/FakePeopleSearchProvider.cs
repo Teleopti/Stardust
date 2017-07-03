@@ -184,6 +184,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return people.Select(p => p.Id.Value).ToList();
 		}
 
+		public List<Guid> FindPersonIdsInPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
+		{
+			throw new NotImplementedException();
+		}
+
 		private PersonFinderDisplayRow toPersonFinderDisplayRow(IPerson p, DateOnly date, int rowNumber)
 		{
 			var team = p.MyTeam(date);

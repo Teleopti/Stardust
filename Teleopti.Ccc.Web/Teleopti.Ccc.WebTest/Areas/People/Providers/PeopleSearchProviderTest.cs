@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -48,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 			currentBusinessUnit.FakeBusinessUnit(BusinessUnitFactory.CreateWithId("bu"));
 
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser, currentBusinessUnit, currentScenario, new FakeToggleManager());
+				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser, currentBusinessUnit, currentScenario);
 		}
 
 		[Test]
@@ -172,7 +171,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 
 			personAbsenceRepository.Add(createPersonAbsence(person));
 			target = new PeopleSearchProvider(searchRepository, personRepository, new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository,
-				loggedOnUser, currentBusinessUnit, currentScenario, new FakeToggleManager());
+				loggedOnUser, currentBusinessUnit, currentScenario);
 
 			var searchCriteria = new Dictionary<PersonFinderField, string>
 			{
@@ -192,7 +191,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People.Providers
 		{
 			personRepository = new FakePersonRepositoryLegacy();
 			target = new PeopleSearchProvider(searchRepository, personRepository,
-				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser, currentBusinessUnit, currentScenario, new FakeToggleManager());
+				new FakePermissionProvider(), optionalColumnRepository, personAbsenceRepository, loggedOnUser, currentBusinessUnit, currentScenario);
 
 			var searchCriteria = new Dictionary<PersonFinderField, string>
 			{

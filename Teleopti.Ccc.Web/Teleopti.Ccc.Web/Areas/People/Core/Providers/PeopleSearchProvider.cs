@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.People.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ICurrentBusinessUnit _businessUnitProvider;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly IToggleManager _toggleManager;
 
 		public PeopleSearchProvider(
 			IPersonFinderReadOnlyRepository searchRepository,
@@ -31,8 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			IOptionalColumnRepository optionalColumnRepository, IPersonAbsenceRepository personAbsenceRepository,
 			ILoggedOnUser loggedOnUser,
 			ICurrentBusinessUnit businessUnitProvider,
-			ICurrentScenario currentScenario,
-			IToggleManager toggleManager)
+			ICurrentScenario currentScenario)
 		{
 			_searchRepository = searchRepository;
 			_personRepository = personRepository;
@@ -42,7 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 			_loggedOnUser = loggedOnUser;
 			_businessUnitProvider = businessUnitProvider;
 			_currentScenario = currentScenario;
-			_toggleManager = toggleManager;
 		}
 
 		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -56,11 +52,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 
 		public List<Guid> FindPersonIds(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
-			if (_toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552))
-			{
-				return _searchRepository.FindPersonIdsInTeamsBasedOnPersonPeriod(date, teamIds, searchCriteria);
-			}
 			return _searchRepository.FindPersonIdsInTeams(date, teamIds, searchCriteria);
+		}
+
+		public List<Guid> FindPersonIdsInPeriod(DateOnlyPeriod period, Guid[] teamIds,
+			IDictionary<PersonFinderField, string> searchCriteria)
+		{
+			return _searchRepository.FindPersonIdsInTeamsBasedOnPersonPeriod(period, teamIds, searchCriteria);
 		}
 
 		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,

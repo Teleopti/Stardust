@@ -15,7 +15,8 @@ GO
 -- =============================================
 CREATE PROCEDURE [ReadModel].[PersonFinderWithCriteriaAndTeamsSimplifiedBasedOnRecentPeriod]
 @search_criterias nvarchar(max),
-@belongs_to_date datetime,
+@start_date datetime,
+@end_date datetime,
 @team_ids nvarchar(max)
 AS
 BEGIN
@@ -26,7 +27,8 @@ IF @team_ids = '' AND @search_criterias = '' RETURN
 SELECT @search_criterias = REPLACE(@search_criterias, '%', '[%]') --make '%' valuable search value
 
 --declare
-DECLARE @belongs_to_date_ISO nvarchar(10)
+DECLARE @start_date_ISO nvarchar(10)
+DECLARE @end_date_ISO nvarchar(10)
 DECLARE @dynamicSQL nvarchar(max)
 DECLARE @cursorString nvarchar(50)
 DECLARE @cursorCount int
@@ -130,16 +132,16 @@ SELECT @criteriaCount = COUNT(SearchType) FROM @SearchCriteria
 
 
 --convert @belongs_to_date to ISO-format string
-SELECT @belongs_to_date_ISO = CONVERT(NVARCHAR(10), @belongs_to_date,120)
-
+SELECT @start_date_ISO = CONVERT(NVARCHAR(10), @start_date,120)
+SELECT @end_date_ISO = CONVERT(NVARCHAR(10), @end_date,120)
 
 INSERT INTO  #IntermediatePersonId
 SELECT p.Id FROM #TeamIds t 
 INNER JOIN dbo.PersonPeriod pp with (nolock)   ON t.tId = pp.Team 
 INNER JOIN dbo.Person p with (nolock) ON pp.Parent = p.Id 
 WHERE p.IsDeleted = 0
-AND ISNULL(p.TerminalDate, '2100-01-01') >=  @belongs_to_date_ISO  
-AND  (pp.StartDate IS NULL OR pp.StartDate <=  @belongs_to_date_ISO  ) AND ( pp.EndDate IS NULL OR pp.EndDate >=  @belongs_to_date_ISO )
+AND ISNULL(p.TerminalDate, '2100-01-01') >=  @start_date_ISO  
+AND  (pp.StartDate IS NULL OR pp.StartDate <=  @start_date_ISO  ) AND ( pp.EndDate IS NULL OR pp.EndDate >=  @end_date_ISO )
 
 IF @criteriaCount = 0 AND @team_ids <> ''
 BEGIN
@@ -212,7 +214,7 @@ BEGIN
 			SELECT @dynamicSQL = @dynamicSQL + ' AND (fp.SearchType = '''' OR fp.SearchType = '''+ @searchType + ''')'
 
 		--filter based on most recent period
-		SELECT @dynamicSQL = @dynamicSQL + 'AND (fp.StartDateTime IS NULL OR fp.StartDateTime <= ''' + @belongs_to_date_ISO + '''  ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >=  ''' + @belongs_to_date_ISO + ''')'
+		SELECT @dynamicSQL = @dynamicSQL + 'AND (fp.StartDateTime IS NULL OR fp.StartDateTime <= ''' + @start_date_ISO + '''  ) AND ( fp.EndDateTime IS NULL OR fp.EndDateTime >=  ''' + @end_date_ISO + ''')'
 		
 		--add INTERSECT between each result set
 		IF @cursorCount <> @criteriaCount --But NOT on last condition, the syntax is different

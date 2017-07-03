@@ -50,8 +50,10 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		public GroupScheduleViewModel CreateViewModel(Guid[] teamIds,IDictionary<PersonFinderField,string> criteriaDictionary,
 			DateOnly dateInUserTimeZone,int pageSize,int currentPageIndex,bool isOnlyAbsences)
-		{			
-			var targetIds = _searchProvider.FindPersonIds(dateInUserTimeZone, teamIds, criteriaDictionary);
+		{
+			var targetIds = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552)
+				? _searchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(dateInUserTimeZone, dateInUserTimeZone), teamIds, criteriaDictionary)
+				: _searchProvider.FindPersonIds(dateInUserTimeZone, teamIds, criteriaDictionary);
 			
 			var matchedPersons = _personRepository.FindPeople(targetIds).ToList();			
 
