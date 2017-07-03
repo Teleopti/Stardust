@@ -342,7 +342,7 @@
 
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 
-		Object.defineProperty(this, 'selectedTeamIds', { value: [] });
+		Object.defineProperty(vm, 'selectedTeamIds', { value: [] });
 
 		if (angular.isArray($stateParams.selectedTeamIds)) {
 			replaceArrayValues($stateParams.selectedTeamIds, vm.selectedTeamIds);
