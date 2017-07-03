@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.Domain.Forecasting.Export.Web
 				{
 					ForecastDate = skillDay.CurrentDate.Date,
 					OpenHours = skillDay.OpenHours().First(),
-					Calls = skillDay.Tasks,
-					AverageTalkTime = skillDay.TotalAverageTaskTime.TotalSeconds,
-					AverageAfterCallWork = skillDay.TotalAverageAfterTaskTime.TotalSeconds,
-					AverageHandleTime = skillDay.TotalAverageTaskTime.TotalSeconds + skillDay.TotalAverageAfterTaskTime.TotalSeconds,
+					Calls = skillDay.WorkloadDayCollection.First().TotalTasks,
+					AverageTalkTime = skillDay.WorkloadDayCollection.First().TotalAverageTaskTime.TotalSeconds,
+					AverageAfterCallWork = skillDay.WorkloadDayCollection.First().TotalAverageAfterTaskTime.TotalSeconds,
+					AverageHandleTime = skillDay.WorkloadDayCollection.First().TotalAverageTaskTime.TotalSeconds + skillDay.WorkloadDayCollection.First().TotalAverageAfterTaskTime.TotalSeconds,
 					ForecastedHours = skillDay.ForecastedIncomingDemand.TotalHours,
 					ForecastedHoursShrinkage = skillDay.ForecastedIncomingDemandWithShrinkage.TotalHours
 				});

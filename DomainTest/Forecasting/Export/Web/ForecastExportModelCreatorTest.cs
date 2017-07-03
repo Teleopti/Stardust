@@ -97,6 +97,35 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export.Web
 			dailyModel2.ForecastedHoursShrinkage.Should().Be.EqualTo(skillDay2.ForecastedIncomingDemandWithShrinkage.TotalHours);
 		}
 
+
+		[Test]
+		public void ShouldReturnDailyModelWithOverrideValues()
+		{
+			var theDate = new DateOnly(2016, 8, 26);
+			var openHour = new TimePeriod(8, 0, 8, 30);
+			var skill = createSkill(minutesPerInterval, "skill", openHour, false, 0);
+			var period = new DateOnlyPeriod(theDate, theDate.AddDays(1));
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skillDay = SkillSetupHelper.CreateSkillDay(skill, scenario, theDate.Date, openHour, false);
+			skillDay.WorkloadDayCollection.First().SetOverrideTasks(200,null);
+			skillDay.WorkloadDayCollection.First().OverrideAverageAfterTaskTime = TimeSpan.FromMinutes(1);
+			skillDay.WorkloadDayCollection.First().OverrideAverageTaskTime = TimeSpan.FromMinutes(1);
+			SkillRepository.Has(skill);
+			WorkloadRepository.Add(skill.WorkloadCollection.First());
+			SkillDayRepository.Add(skillDay);
+
+			var model = Target.Load(skill.WorkloadCollection.First().Id.Value, period);
+
+			model.DailyModelForecast.Count().Should().Be.EqualTo(1);
+			var dailyModel = model.DailyModelForecast.First();
+
+			dailyModel.ForecastDate.Should().Be.EqualTo(skillDay.CurrentDate.Date);
+			dailyModel.Calls.Should().Be.EqualTo(200);
+			dailyModel.AverageTalkTime.Should().Be.EqualTo(60d);
+			dailyModel.AverageAfterCallWork.Should().Be.EqualTo(60d);
+			dailyModel.AverageHandleTime.Should().Be.EqualTo(120d);
+		}
+
 		[Test]
 		public void ShouldReturnModelWithOnlyHeaderWhenSkillDayIsClosed()
 		{
