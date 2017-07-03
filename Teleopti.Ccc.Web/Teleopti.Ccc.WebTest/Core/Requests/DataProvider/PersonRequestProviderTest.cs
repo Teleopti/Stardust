@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 			var requestTypes = new List<RequestType>
 			{
-				RequestType.AbsenceRequest,RequestType.TextRequest
+				RequestType.AbsenceRequest,RequestType.TextRequest,RequestType.OvertimeRequest
 			};
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, null, requestTypes.ToArray())).Return(personRequests);
@@ -128,7 +128,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var requestTypes = new List<RequestType>
 			{
 				RequestType.AbsenceRequest,
-				RequestType.TextRequest
+				RequestType.TextRequest,
+				RequestType.OvertimeRequest
 			};
 
 			var earliestDateLocal = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timezone).AddDays(-10).Date;
@@ -162,7 +163,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 			var requestTypes = new List<RequestType>
 			{
-				RequestType.AbsenceRequest,RequestType.TextRequest
+				RequestType.AbsenceRequest,RequestType.TextRequest, RequestType.OvertimeRequest
 			};
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			repository.Stub(x => x.FindAllRequestsForAgentByType(person, paging, null, requestTypes.ToArray())).Return(personRequests);
@@ -187,7 +188,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			};
 			var requestTypes = new List<RequestType>
 			{
-				RequestType.AbsenceRequest,RequestType.TextRequest
+				RequestType.AbsenceRequest,RequestType.TextRequest,RequestType.OvertimeRequest
 			};
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			repository.Stub(x => x.FindAllRequestsSortByRequestedDate(person, paging, null, requestTypes.ToArray())).Return(personRequests);
