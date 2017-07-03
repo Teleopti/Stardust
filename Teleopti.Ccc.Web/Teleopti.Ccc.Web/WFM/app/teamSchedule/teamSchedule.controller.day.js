@@ -163,12 +163,7 @@
 			vm.resetSchedulePage();
 			updateShiftStatusForSelectedPerson();
 			if (vm.toggles.Wfm_HideUnusedTeamsAndSites_42690) {
-				var date = moment(vm.scheduleDate).format('YYYY-MM-DD');
-				teamScheduleSvc.hierarchy(date)
-					.then(function (data) {
-						vm.sitesAndTeams = data.Children;
-						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
-					});
+				vm.getSitesAndTeamsAsync();
 			}
 		};
 
@@ -417,7 +412,7 @@
 		}
 
 		vm.getSitesAndTeamsAsync = function () {
-			vm._sitesAndTeamsPromise = vm._sitesAndTeamsPromise || $q(function (resolve, reject) {
+			return $q(function (resolve, reject) {
 				var date = moment(vm.scheduleDate).format('YYYY-MM-DD');
 				teamScheduleSvc.hierarchy(date)
 					.then(function (data) {
@@ -429,9 +424,10 @@
 						loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 					});
 			});
-			return vm._sitesAndTeamsPromise;
 		};
+
 		vm.getSitesAndTeamsAsync();
+
 		$q.all(asyncData).then(function init(data) {
 			if (data.pageSetting.Agents > 0) {
 				vm.paginationOptions.pageSize = data.pageSetting.Agents;
