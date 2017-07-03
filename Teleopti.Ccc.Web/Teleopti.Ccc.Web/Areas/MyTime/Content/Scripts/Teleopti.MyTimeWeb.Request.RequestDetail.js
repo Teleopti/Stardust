@@ -193,7 +193,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		} else if (data.TypeEnum == 3) {
 			parentViewModel.createShiftExchangeOfferViewModel(data);
 		} else if (data.TypeEnum == 4) {
-			console.log(data, 'data overtime');
 			parentViewModel.createOvertimeRequestViewModel(data);
 		}else {
 			var model = parentViewModel.createRequestViewModel();

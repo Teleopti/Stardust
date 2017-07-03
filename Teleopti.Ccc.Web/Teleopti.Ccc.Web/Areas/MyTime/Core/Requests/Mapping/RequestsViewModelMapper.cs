@@ -99,7 +99,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				IsDenied = s.IsDenied,
 				IsApproved = s.IsApproved,
 				IsNew = s.IsNew,
-				IsPending = s.IsPending
+				IsPending = s.IsPending,
+				MultiplicatorDefinitionSet = (s.Request as IOvertimeRequest)?.MultiplicatorDefinitionSet.Id.ToString()
 			};
 		}
 

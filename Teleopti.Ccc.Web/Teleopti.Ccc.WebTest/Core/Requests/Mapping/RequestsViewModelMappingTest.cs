@@ -733,6 +733,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Assert.That(shiftTradeRequestModel.To, Is.Null.Or.Empty);
 		}
 
+		[Test]
+		public void ShouldMapMultiplicatorDefinitionSet()
+		{
+			var definitionSet =  MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("test", MultiplicatorType.Overtime).WithId();
+			var overtimeRequest = new OvertimeRequest(definitionSet, new DateTimePeriod());
+			var personRequest = new PersonRequest(PersonFactory.CreatePerson(), overtimeRequest);
+
+			var overtimeRequestModel = target.Map(personRequest);
+
+			Assert.AreEqual(overtimeRequestModel.MultiplicatorDefinitionSet, definitionSet.Id.ToString());
+		}
+
 		private static IPersonRequest createShiftTrade(IPerson from, IPerson to)
 		{
 			var tradeDate = new DateOnly(2010, 1, 1);

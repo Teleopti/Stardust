@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public int DateToDayOfMonth { get; set; }
 		public bool IsReferred { get; set; }
 		public ShiftExchangeOfferRequestViewModel ExchangeOffer { get; set; }
+		public string MultiplicatorDefinitionSet { get; set; }
 	}
 
 	public class ShiftExchangeOfferRequestViewModel
