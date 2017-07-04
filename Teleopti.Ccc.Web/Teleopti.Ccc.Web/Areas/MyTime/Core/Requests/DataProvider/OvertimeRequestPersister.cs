@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -10,13 +11,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly OvertimeRequestFormMapper _mapper;
 		private readonly RequestsViewModelMapper _requestsMapper;
+		private readonly IQueuedOvertimeRequestRepository _queuedOvertimeRequestRepository;
 
 		public OvertimeRequestPersister(IPersonRequestRepository personRequestRepository, OvertimeRequestFormMapper mapper,
-			RequestsViewModelMapper requestsMapper)
+			RequestsViewModelMapper requestsMapper, IQueuedOvertimeRequestRepository queuedOvertimeRequestRepository)
 		{
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;
 			_requestsMapper = requestsMapper;
+			_queuedOvertimeRequestRepository = queuedOvertimeRequestRepository;
 		}
 
 		public RequestViewModel Persist(OvertimeRequestForm form)
@@ -37,9 +40,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 			if (isCreatingNew)
 			{
 				_personRequestRepository.Add(personRequest);
+				queueOvertimeRequest(personRequest);
 			}
 
 			return _requestsMapper.Map(personRequest);
+		}
+
+		private void queueOvertimeRequest(IPersonRequest personRequest)
+		{
+			personRequest.Pending();
+			var queuedOvertimeRequest = new QueuedOvertimeRequest()
+			{
+				PersonRequest = personRequest.Id.GetValueOrDefault(),
+				Created = personRequest.CreatedOn.GetValueOrDefault(),
+				StartDateTime = personRequest.Request.Period.StartDateTime,
+				EndDateTime = personRequest.Request.Period.EndDateTime
+			};
+			_queuedOvertimeRequestRepository.Add(queuedOvertimeRequest);
 		}
 	}
 }
