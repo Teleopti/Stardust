@@ -1488,6 +1488,10 @@
     <Content Include="WFM\app\global\skill-picker\skill.picker.component.spec.js" />
     <Content Include="WFM\app\global\utilities\guidgenerator.service.js" />
     <Content Include="WFM\app\global\utilities\_modules.js" />
+    <Content Include="WFM\app\intraday\components\intradayDateOffset.component.js" />
+    <Content Include="WFM\app\intraday\components\intradayDateOffset.html" />
+    <Content Include="WFM\app\intraday\components\_modules.js" />
+    <Content Include="WFM\app\intraday\images\excel.png" />
     <Content Include="WFM\app\intraday\intraday-config-new.html" />
     <Content Include="WFM\app\outbound\outbound.directive.campaign-chart.spec.js" />
     <Content Include="WFM\app\outbound\outbound.directive.campaign-commands-pane.spec.js" />
