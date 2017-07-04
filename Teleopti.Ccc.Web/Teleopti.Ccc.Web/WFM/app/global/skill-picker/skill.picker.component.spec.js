@@ -6,7 +6,9 @@ describe('skillPickerComponent', function () {
     ctrl,
     mockedSkills,
     mockedSkillAreas,
-    mockedItemToReturn;
+    mockedItemToReturn,
+    preselectedSkill,
+    preselectedSkillArea;
 
   beforeEach(function () {
     module('wfm.skillPicker');
@@ -48,6 +50,9 @@ describe('skillPickerComponent', function () {
         ]
       }
     ];
+
+    preselectedSkill = { skillIds: ['813348e1-7e4b-4252-8346-a39a00b839c7']};
+    preselectedSkillArea = {skillAreaId: '40143e07-7a88-4386-8b45-a7a0008fd682'}
 
     mockedItemToReturn = function (item) { }
 
@@ -103,5 +108,31 @@ describe('skillPickerComponent', function () {
 
     expect(ctrl.selectedSkillArea).toEqual(null);
     expect(ctrl.itemToReturn).toHaveBeenCalledWith(undefined);
+  });
+
+  it('should have preselected skill', function () {
+    ctrl = $componentController('skillPicker', null, {
+      skills: mockedSkills,
+      skillAreas: mockedSkillAreas,
+      itemToReturn: mockedItemToReturn,
+      preselectedItem: preselectedSkill
+    });
+
+    ctrl.$onInit();
+
+    expect(ctrl.selectedSkill).toEqual(mockedSkills[0]);
+  });
+
+  it('should have preselected skill area', function () {
+    ctrl = $componentController('skillPicker', null, {
+      skills: mockedSkills,
+      skillAreas: mockedSkillAreas,
+      itemToReturn: mockedItemToReturn,
+      preselectedItem: preselectedSkillArea
+    });
+
+    ctrl.$onInit();
+
+    expect(ctrl.selectedSkillArea).toEqual(mockedSkillAreas[0]);
   });
 });

@@ -16,6 +16,7 @@
 		vm.skillAreas = skillAreas || [];
 		vm.organization = [];
 		vm.siteCards = [];
+		vm.urlParams = $stateParams;
 
 		(function fetchDataForFilterComponent() {
 			if (vm.skillIds.length > 0) {
