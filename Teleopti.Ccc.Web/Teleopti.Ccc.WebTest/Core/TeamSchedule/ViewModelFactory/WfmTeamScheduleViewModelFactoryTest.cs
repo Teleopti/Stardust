@@ -237,51 +237,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		}
 		
 		[Test]
-		public void ShouldListAgentWhoChangedToMatchingSearchDuringTheWeek()
-		{
-			SetUpPersonAndCulture();
-			var scheduleDate = new DateOnly(2019, 12, 30);
-			
-			PeopleSearchProvider.EnableDateFilter();
-			PeopleSearchProvider.Add(new DateOnly(2020, 1, 5), personInUtc);
-
-			var scenario = ScenarioFactory.CreateScenarioWithId("test",true);
-			CurrentScenario.FakeScenario(scenario);
-
-			personInUtc.TerminatePerson(new DateOnly(2019,12,1),new PersonAccountUpdaterDummy());
-
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
-				scenario,
-				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)), ShiftCategoryFactory.CreateShiftCategory("Day","blue"));
-			var personAbsence = PersonAbsenceFactory.CreatePersonAbsence(personInUtc,scenario,
-				new DateTimePeriod(new DateTime(2020,1,1,8,0,0,DateTimeKind.Utc),
-					new DateTime(2020,1,1,17,0,0,DateTimeKind.Utc)),AbsenceFactory.CreateAbsence("abs"));
-
-			ScheduleStorage.Add(pa);
-			ScheduleStorage.Add(personAbsence);
-
-			var searchTerm = new Dictionary<PersonFinderField,string>
-			{
-				{PersonFinderField.FirstName, "Sherlock"}
-			};
-
-			var result = Target.CreateWeekScheduleViewModel(new []{team.Id.Value}, searchTerm,scheduleDate,20,1);
-
-			result.Total.Should().Be(1);
-			
-			var first = result.PersonWeekSchedules.First();
-
-			first.PersonId.Should().Be(personInUtc.Id.GetValueOrDefault());
-			first.DaySchedules.Count.Should().Be(7);
-			first.DaySchedules[0].Date.Should().Be(new DateOnly(2019,12,30));
-			first.DaySchedules[6].Date.Should().Be(new DateOnly(2020,1,5));
-			first.DaySchedules[2].Date.Should().Be(new DateOnly(2020,1,1));
-			first.DaySchedules[2].Title.Should().Be(null);
-			first.DaySchedules.All(d => d.IsTerminated).Should().Be.True();
-		}
-
-
-		[Test]
 		public void ShouldShowPersonScheduleOnTheTerminationDate()
 		{
 			SetUpPersonAndCulture();

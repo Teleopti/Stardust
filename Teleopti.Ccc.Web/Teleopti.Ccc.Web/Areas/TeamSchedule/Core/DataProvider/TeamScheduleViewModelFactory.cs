@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -32,6 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IToggleManager _toggleManager;
 
+
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider,
 			ITeamScheduleProjectionProvider teamScheduleProjectionProvider, IProjectionProvider projectionProvider,
 			ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
@@ -56,24 +55,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				? _searchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(dateInUserTimeZone, dateInUserTimeZone), teamIds, criteriaDictionary)
 				: _searchProvider.FindPersonIds(dateInUserTimeZone, teamIds, criteriaDictionary);
 
-			var matchedPersons = _personRepository.FindPeople(targetIds).ToList();
-
-			var permittedPersons =
-				_searchProvider.GetPermittedPersonList(matchedPersons, dateInUserTimeZone,
-					DefinedRaptorApplicationFunctionPaths.ViewSchedules).ToArray();
-
-			if (isOnlyAbsences)
+			var permittedPersons = new List<IPerson>();
+			foreach (var batch in targetIds.Batch(500))
 			{
-				permittedPersons = _searchProvider.SearchPermittedPeopleWithAbsence(permittedPersons, dateInUserTimeZone).ToArray();
-			}
-
-			if (permittedPersons.Length > 500)
-			{
-				return new GroupScheduleViewModel
+				var batchPermittedPersons = getPermittedPersons(batch.ToArray(), dateInUserTimeZone);
+				if (isOnlyAbsences)
 				{
-					Schedules = new List<GroupScheduleShiftViewModel>(),
-					Total = permittedPersons.Length,
-				};
+					batchPermittedPersons = _searchProvider.SearchPermittedPeopleWithAbsence(batchPermittedPersons, dateInUserTimeZone).ToList();
+				}
+				permittedPersons.AddRange(batchPermittedPersons);
+				if (permittedPersons.Count > 500)
+				{
+					return new GroupScheduleViewModel
+					{
+						Schedules = new List<GroupScheduleShiftViewModel>(),
+						Total = targetIds.Count
+					};
+				}
 			}
 
 			var peopleCanSeeConfidentialAbsencesFor = _searchProvider.GetPermittedPersonIdList(permittedPersons, dateInUserTimeZone,
@@ -94,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					return personAssignment == null
 						? personAbsences.Any()
 						: personAbsences.Any(a => a.Period.ContainsPart(personAssignment.Period));
-				}).Select(s => s.Person).ToArray();
+				}).Select(s => s.Person).ToList();
 			}
 
 			var personScheduleDaysToSort = permittedPersons.Select(s => new Tuple<IPerson, IScheduleDay>(s, scheduleDayLookup[s].FirstOrDefault())).ToArray();
@@ -137,7 +135,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			return new GroupScheduleViewModel
 			{
 				Schedules = list,
-				Total = permittedPersons.Length
+				Total = permittedPersons.Count
 			};
 		}
 
@@ -149,33 +147,34 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			var week = new DateOnlyPeriod(startOfWeekInUserTimeZone, startOfWeekInUserTimeZone.AddDays(6));
 
 			var weekDays = week.DayCollection();
-			var personIds = new HashSet<Guid>();
 			var people = new List<IPerson>();
+			var targetIds = new List<Guid>();
 
 			if (_toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552))
 			{
-				var targetIds = _searchProvider.FindPersonIdsInPeriod(week, teamIds, criteriaDictionary);
-				var permittedPersons = getPermittedPersons(targetIds, week.StartDate, personIds);
-				people.AddRange(permittedPersons);
+				targetIds = _searchProvider.FindPersonIdsInPeriod(week, teamIds, criteriaDictionary);
 			}
 			else
 			{
 				foreach (var d in weekDays)
 				{
-					var targetIds = _searchProvider.FindPersonIds(d, teamIds, criteriaDictionary).Where(id => !personIds.Contains(id)).ToList();
-					if (targetIds.Count == 0) continue;
-					var permittedPersons = getPermittedPersons(targetIds, d, personIds);
-					people.AddRange(permittedPersons);
+					targetIds.AddRange(_searchProvider.FindPersonIds(d, teamIds, criteriaDictionary));
 				}
+				targetIds = targetIds.Distinct().ToList();
 			}
 
-			if (people.Count > 500)
+			foreach (var batch in targetIds.Batch(500))
 			{
-				return new GroupWeekScheduleViewModel
+				var batchPermittedPersons = getPermittedPersons(batch.ToArray(), week.StartDate);
+				people.AddRange(batchPermittedPersons);
+				if (people.Count > 500)
 				{
-					PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
-					Total = people.Count
-				};
+					return new GroupWeekScheduleViewModel
+					{
+						PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
+						Total = people.Count
+					};
+				}
 			}
 
 			var canSeeUnpublishedSchedules =
@@ -297,14 +296,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
-		private List<IPerson> getPermittedPersons(List<Guid> targetIds, DateOnly date, HashSet<Guid> personIds)
+		private List<IPerson> getPermittedPersons(Guid[] targetIds, DateOnly date)
 		{
 			var matchedPersons = _personRepository.FindPeople(targetIds);
-			var permittedPersons = _searchProvider
+			return _searchProvider
 				.GetPermittedPersonList(matchedPersons, date, DefinedRaptorApplicationFunctionPaths.ViewSchedules)
 				.ToList();
-			permittedPersons.ForEach(p => personIds.Add(p.Id.GetValueOrDefault()));
-			return permittedPersons;
 		}
 
 		public GroupScheduleViewModel CreateViewModelForPeople(Guid[] personIds, DateOnly scheduleDate)
