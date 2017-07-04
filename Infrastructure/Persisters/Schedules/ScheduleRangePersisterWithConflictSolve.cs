@@ -60,6 +60,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 		private IEnumerable<DifferenceCollectionItem<IPersistableScheduleData>> solveConflicts(IUnitOfWork uow, IDifferenceCollection<IPersistableScheduleData> diff, IScheduleRange scheduleRange)
 		{
 			var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange).ToArray();
+			var result = new List<DifferenceCollectionItem<IPersistableScheduleData>>();
 			foreach (var conflict in conflicts)
 			{
 				switch (conflict.ClientVersion.Status)
@@ -93,8 +94,9 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 						}
 						break;
 				}
-				yield return conflict.ClientVersion;
+				result.Add(conflict.ClientVersion);
 			}
+			return result;
 		}
 	}
 }
