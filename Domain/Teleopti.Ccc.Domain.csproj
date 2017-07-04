@@ -134,7 +134,9 @@
     <Compile Include="AgentInfo\IPlanningGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
     <Compile Include="AgentInfo\PrimaryPersonSkillFilter.cs" />
+    <Compile Include="AgentInfo\Requests\IQueuedOvertimeRequest.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequest.cs" />
+    <Compile Include="AgentInfo\Requests\QueuedOvertimeRequest.cs" />
     <Compile Include="AgentInfo\ScheduleStaffingPossibilityConsts.cs" />
     <Compile Include="AgentInfo\SkillStaffingData.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
@@ -271,6 +273,7 @@
     <Compile Include="Intraday\ScheduledStaffingViewModelCreator.cs" />
     <Compile Include="Notification\UserDeviceService.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\RemoveShiftCategoryToBeInLegalState.cs" />
+    <Compile Include="Repositories\IQueuedOvertimeRequestRepository.cs" />
     <Compile Include="Repositories\IUserDeviceRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulePartModifyAndRollbackServiceWithoutStateHolder.cs" />
     <Compile Include="Scheduling\CurrentSchedulingCallback.cs" />
@@ -3969,6 +3972,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\JobResultArtifact.hbm.xml" />
     <EmbeddedResource Include="AgentInfo\Requests\OvertimeRequest.hbm.xml" />
+    <EmbeddedResource Include="AgentInfo\Requests\QueuedOvertimeRequest.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <Content Include="InterfaceLegacy\_DONT_PUT_NEW_TYPES_HERE.txt" />
     <Content Include="Optimization\ClassicLegacy\REMOVE.txt" />
     <EmbeddedResource Include="Optimization\Filters\SkillFilter.hbm.xml" />

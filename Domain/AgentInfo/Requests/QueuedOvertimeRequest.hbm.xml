@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
+                   assembly="Teleopti.Ccc.Domain"
+                   namespace="Teleopti.Ccc.Domain.AgentInfo.Requests">
+
+    <class name="QueuedOvertimeRequest">
+        <id name="Id" type="guid" unsaved-value="null" access="nosetter.camelcase-underscore">
+            <generator class="guid.comb" />
+        </id>
+
+        <many-to-one name="UpdatedBy"
+                     class="Teleopti.Ccc.Domain.Common.Person"
+                     not-null="true"
+                     foreign-key="FK_Site_Person_UpdatedBy" access="field.camelcase-underscore" />
+
+        <property name="UpdatedOn"
+                  type="UtcDateTime"
+                  not-null="true" access="field.camelcase-underscore" />
+
+        <property name="Created"
+                  type="DateTime"
+                  not-null="true" />
+
+        <property name="StartDateTime"
+                  type="DateTime"
+                  not-null="true" />
+
+        <property name="EndDateTime"
+                  type="DateTime"
+                  not-null="true" />
+
+        <property name="Sent"
+                  type="DateTime"
+                  not-null="false" />
+
+        <property name="PersonRequest"
+                  type="guid"
+                  not-null="true" />
+
+        <many-to-one name="BusinessUnit"
+                     class="Teleopti.Ccc.Domain.Common.BusinessUnit"
+                     access="nosetter.camelcase-underscore"
+                     not-null="true" foreign-key="FK_Site_BusinessUnit" />
+
+        <filter name="businessUnitFilter"
+                condition=":businessUnitParameter = BusinessUnit" />
+    </class>
+</hibernate-mapping>
