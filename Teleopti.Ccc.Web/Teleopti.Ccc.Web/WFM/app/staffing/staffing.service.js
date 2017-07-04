@@ -13,6 +13,7 @@
 		var areas = $resource("../api/intraday/skillarea");
         var overtime = $resource('../api/staffing/overtime');
         var suggestion = $resource('../api/staffing/overtime/suggestion');
+        var compensations = $resource('../api/staffing/GetCompensations');
         ////////////////
 
         var service = {
@@ -21,7 +22,8 @@
             getSkills: skills,
             getSkillAreas: areas,
             addOvertime: overtime,
-            getSuggestion: suggestion
+            getSuggestion: suggestion,
+            getCompensations: compensations
         };
 
         return service;

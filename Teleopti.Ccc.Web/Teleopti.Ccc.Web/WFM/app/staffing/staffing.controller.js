@@ -29,6 +29,8 @@
 		vm.useShrinkageForStaffing = useShrinkageForStaffing;
 		vm.generateChart = generateChart;
 		vm.dynamicIcon = dynamicIcon;
+		vm.compensations = [];
+		vm.overtimeSettings = {};
 
 		var events = [];
 		var allSkills = [];
@@ -43,6 +45,7 @@
 		getSkills();
 		getSkillAreas();
 		prepareDays();
+		getCompensations();
 
 		function prepareDays() {
 			for (var i = 0; i < 14; i++) {
@@ -234,6 +237,14 @@
 			});
 		};
 
+		function getCompensations() {
+			var query = staffingService.getCompensations.query();
+			query.$promise.then(function (data) {
+				vm.compensations = data;
+				console.log(vm.compensations);
+			});
+		}
+
 		function suggestOvertime() {
 			var skillIds;
 			if (currentSkills.Skills) {
@@ -245,7 +256,7 @@
 			}
 			vm.hasRequestedSuggestion = true;
 
-			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: vm.timeSerie });
+			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: vm.timeSerie, OvertimePreferences: vm.overtimeSettings });
 			query.$promise.then(function (response) {
 				vm.hasRequestedSuggestion = false;
 

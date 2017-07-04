@@ -7,13 +7,13 @@
                         md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)"
                         md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
                         <md-item-template>
-							<i ng-class="vm.dynamicIcon(skill)"></i>
+                            <i ng-class="vm.dynamicIcon(skill)"></i>
                             <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-	                        <md-tooltip>
-		                        <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
-		                        <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
-		                        <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
-	                        </md-tooltip>
+                            <md-tooltip>
+                                <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
+                                <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
+                                <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+                            </md-tooltip>
                         </md-item-template>
                         <md-not-found>
                             {{'RepViewerNoMoreMatches'|translate}}
@@ -28,9 +28,9 @@
                         md-selected-item-change="vm.selectedAreaChange(area)" md-items="area in vm.querySearchAreas(searchSkillAreaText)"
                         md-item-text="area.Name" md-min-length="0" placeholder="{{'SelectSkillArea'|translate}}">
                         <md-item-template>
-	                      
+
                             <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{area.Name}}</span>
-                           
+
                         </md-item-template>
                         <md-not-found>
                             {{'RepViewerNoMoreMatches'|translate}}
@@ -86,8 +86,37 @@
                 ng-click="vm.addOvertime()">{{'ApplySuggestion' | translate}}</button>
         </div>
     </div>
+    <div class="panel material-depth-1" ng-show="vm.staffingDataAvailable">
+        <div class="sub-header">
+            <h2>Overtime settings</h2>
+        </div>
+        <div class="con-row">
+            <form novalidate name="overtimeForm">
+                <div class="con-flex">
+                    <div ng-repeat="comp in vm.compensations">
+                        <div class="wfm-radio">
+                            <label>
+				<input type="radio" name="radio" value={{comp.Id}} ng-model="vm.overtimeSettings.Compensation">
+				<span class="wfm-radio-toggle"></span>
+				<span class="wfm-radio-label">{{comp.Name}}</span>
+			</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="con-flex">
+                    <label for="To">Minimum Time</label>
+                    <input type="number" name="To" ng-model="vm.overtimeSettings.MinMinutesToAdd">
+                </div>
+                <div class="con-flex">
+                    <label for="From">Maximum Time</label>
+                    <input type="number" name="From" ng-model="vm.overtimeSettings.MaxMinutesToAdd">
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div ng-hide="vm.staffingDataAvailable" class="con-row error-message">
-        <div class="con-flex line-center" >
+        <div class="con-flex line-center">
             <i class="mdi mdi-information-outline huge-icon line-center"></i>
             <h1>{{'NoDataAvailable' | translate}}</h1>
         </div>
