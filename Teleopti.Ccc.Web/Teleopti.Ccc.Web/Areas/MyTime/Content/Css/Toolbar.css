@@ -304,6 +304,9 @@ End personal drop down menu
 		color: #9ccc33;
 		background-color: transparent;
 	}
+	.navbar-offcanvas.offcanvas {
+		overflow: auto !important;
+	}
 }
 
 @media (max-width: 350px) {
@@ -349,6 +352,3 @@ End personal drop down menu
 .navbar-offcanvas.canvas-slid .navbar-nav .open .dropdown-menu > li > a {
 		color: #ffffff;
 	}
-.navbar-offcanvas.offcanvas {
-	overflow:auto !important;
-}
