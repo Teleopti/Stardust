@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling.ScheduleRangePersisterWithC
 			var assignment = scheduleDay.PersistableScheduleDataCollection().FirstOrDefault() as IPersonAssignment;
 			assignment.Should().Not.Be.Null();
 
-			var activity = assignment.MainActivities().First();
+			var activity = assignment.MainActivities().FirstOrDefault();
+			activity.Should().Not.Be.Null();
 			activity.Payload.Should().Be.EqualTo(Activity);
 		}
 	}

@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			{
 				var solved = solveConflicts(uow, diff, scheduleRange);
 				var unsavedWithoutConflicts = new DifferenceCollection<IPersistableScheduleData>();
-				diff.Where(x => !solved.SolvedConflicts.Contains(x)).ForEach(x => unsavedWithoutConflicts.Add(x));
+				diff.Where(x => !solved.Contains(x)).ForEach(x => unsavedWithoutConflicts.Add(x));
 
 				_clearScheduleEvents.Execute(diff);
 				_scheduleDifferenceSaver.SaveChanges(unsavedWithoutConflicts, (IUnvalidatedScheduleRangeUpdate)scheduleRange);
@@ -51,58 +52,48 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				{
 					InitiatorIdentifier = _initiatorIdentifier,
 					PersistConflicts = new List<PersistConflict>(),
-					ModifiedRoots = modifiedRoots.Union(solved.ModifiedRoots)
+					ModifiedRoots = modifiedRoots
 				};
 			}
 		}
 
-		private solvedConflictsResult solveConflicts(IUnitOfWork uow, IDifferenceCollection<IPersistableScheduleData> diff, IScheduleRange scheduleRange)
+		private IEnumerable<DifferenceCollectionItem<IPersistableScheduleData>> solveConflicts(IUnitOfWork uow, IDifferenceCollection<IPersistableScheduleData> diff, IScheduleRange scheduleRange)
 		{
 			var conflicts = _scheduleRangeConflictCollector.GetConflicts(diff, scheduleRange).ToArray();
-			var result = new solvedConflictsResult();
 			foreach (var conflict in conflicts)
 			{
 				switch (conflict.ClientVersion.Status)
 				{
 					case DifferenceStatus.Added:
-						if (conflict.DatabaseVersion != null) // Someone else added, remove and re-add
+						if (conflict.DatabaseVersion != null) // Someone else added, apply our changes to that object
 						{
-							_scheduleStorage.Remove(conflict.DatabaseVersion);
-							result.ModifiedRoots.AddRange(uow.PersistAll(_initiatorIdentifier));
+							(scheduleRange as ScheduleRange)?.SolveConflictBecauseOfExternalInsert(conflict.DatabaseVersion, false);
+							conflict.ClientVersion.CurrentItem.SetId(conflict.DatabaseVersion.Id);
+							uow.Merge(conflict.ClientVersion.CurrentItem);
 						}
-						_scheduleStorage.Add(conflict.ClientVersion.CurrentItem);
 						break;
 					case DifferenceStatus.Modified:
-						if (conflict.DatabaseVersion != null) // Someone else modified, remove and re-add
+						if (conflict.DatabaseVersion != null) // Someone else modified, apply our changes to that object
 						{
-							_scheduleStorage.Remove(conflict.DatabaseVersion);
-							result.ModifiedRoots.AddRange(uow.PersistAll(_initiatorIdentifier));
+							(scheduleRange as ScheduleRange)?.SolveConflictBecauseOfExternalUpdate(conflict.DatabaseVersion, false);
+							uow.Merge(conflict.ClientVersion.CurrentItem);
 						}
-						// Either someone deleted the entry, or we did just above, so re-add
-						conflict.ClientVersion.CurrentItem.SetId(null);
-						_scheduleStorage.Add(conflict.ClientVersion.CurrentItem);
+						else // Someone deleted, we need to add instead of modify
+						{
+							(scheduleRange as ScheduleRange)?.SolveConflictBecauseOfExternalDeletion(conflict.ClientVersion.CurrentItem.Id.Value, false);
+							conflict.ClientVersion.CurrentItem.SetId(null);
+							_scheduleStorage.Add(conflict.ClientVersion.CurrentItem);
+						}
 						break;
 					case DifferenceStatus.Deleted:
 						if (conflict.DatabaseVersion != null) // Someone else modified, remove it
 						{
+							(scheduleRange as ScheduleRange)?.SolveConflictBecauseOfExternalUpdate(conflict.DatabaseVersion, false);
 							_scheduleStorage.Remove(conflict.DatabaseVersion);
 						}
 						break;
 				}
-				result.SolvedConflicts.Add(conflict.ClientVersion);
-			}
-			return result;
-		}
-
-		private class solvedConflictsResult
-		{
-			public List<DifferenceCollectionItem<IPersistableScheduleData>> SolvedConflicts { get; }
-			public List<IRootChangeInfo> ModifiedRoots { get; }
-
-			public solvedConflictsResult()
-			{
-				SolvedConflicts = new List<DifferenceCollectionItem<IPersistableScheduleData>>();
-				ModifiedRoots = new List<IRootChangeInfo>();
+				yield return conflict.ClientVersion;
 			}
 		}
 	}
