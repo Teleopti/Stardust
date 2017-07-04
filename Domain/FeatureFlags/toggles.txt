@@ -216,4 +216,4 @@ WFM_Intraday_SupportMultisiteSkill_43874 = true
 WFM_Intraday_Export_To_Excel_44892 = DEV
 WFM_Forecaster_Refact_44480 = DEV
 Wfm_Outbound_IgnoreScheduleForReplan_43752 = RC
-WFM_Export_Forecast_44716 = RC
+WFM_Export_Forecast_44716 = true
