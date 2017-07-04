@@ -39,7 +39,7 @@ Given there is a role with
 	And I have the role 'Full access to mytime'
 	And I am englishspeaking swede
 	And I have the workflow control set 'Published schedule'
-	And There is a skill to monitor called 'Phone'
+	And There is a skill to monitor called 'Phone' with queue id '9' and queue name 'queue1' and activity 'activity1'
 	And there is queue statistics for the skill 'Phone' up until '19:00'
 	And there is forecast data for skill 'Phone' for date 'today'
 	And there are scheduled agents for 'Phone' for date 'today'
