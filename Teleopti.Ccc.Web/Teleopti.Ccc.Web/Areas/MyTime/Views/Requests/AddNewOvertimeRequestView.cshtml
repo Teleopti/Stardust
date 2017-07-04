@@ -9,10 +9,10 @@
 			<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Saving..." />
 		</div>
 		<div class="form-group">
-			<input type="text" class="request-new-subject form-control" placeholder="@Resources.Subject" data-bind="value: Subject" maxlength="80" />
+			<input type="text" class="request-new-subject form-control" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" maxlength="80" />
 		</div>
 		<div class="form-group">
-			<textarea class="request-new-message form-control" placeholder="@Resources.Message" data-bind="value: Message, valueUpdate: 'afterkeydown', event:{change:checkMessageLength}" />
+			<textarea class="request-new-message form-control" placeholder="@Resources.Message" data-bind="value: Message, valueUpdate: 'afterkeydown', event:{change:checkMessageLength}, enable: IsEditable" />
 		</div>
 
 		<div class="row form-group">
@@ -20,7 +20,7 @@
 				<label>
 					@Resources.OvertimeType
 				</label>
-				<select class="input-sm form-control" data-bind="value: MultiplicatorDefinitionSetId">
+				<select class="input-sm form-control" data-bind="value: MultiplicatorDefinitionSetId, enable: IsEditable">
 					@foreach (var overtimeType in Model.OvertimeTypes)
 					{
 						<option value="@Html.AttributeEncode(overtimeType.Id)">@overtimeType.Name</option>
@@ -35,9 +35,9 @@
 					@Resources.Date
 				</label>
 				<span class="input-group">
-					<input class="input-sm form-control" data-bind="datepicker: StartDate, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }" type="text" />
+					<input class="input-sm form-control" data-bind="datepicker: StartDate, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
 					<span class="input-group-btn">
-						<button class="btn btn-sm" data-bind="datepicker: StartDate, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }">
+						<button class="btn btn-sm" data-bind="datepicker: StartDate, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</button>
 					</span>
@@ -49,9 +49,9 @@
 				</label>
 				<div class="bootstrap-timepicker">
 					<div class="input-group">
-						<input type="text" class="input-sm form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian }" />
+						<input type="text" class="input-sm form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsEditable" />
 						<span class="input-group-btn">
-							<button class="btn btn-sm right-align" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian }">
+							<button class="btn btn-sm right-align" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsEditable">
 								<i class="glyphicon glyphicon-time"></i>
 							</button>
 						</span>
@@ -64,7 +64,7 @@
 					@Resources.Duration
 				</label>
 				<div class="input-group">
-					<input type="text" class="input-sm form-control" data-bind="value: RequestDuration, event:{change:validateDuration} " maxlength="5">
+					<input type="text" class="input-sm form-control" data-bind="value: RequestDuration, event:{change:validateDuration}, enable: IsEditable " maxlength="5">
 					<ul role="menu" class="dropdown-menu">
 						<!-- ko foreach: TimeList-->
 						<li class="ui-menu-item" role="presentation">
@@ -72,7 +72,7 @@
 						</li>
 						<!-- /ko-->
 					</ul>
-					<span class="input-group-addon input-sm dropdown-toggle" tabindex="-1" data-toggle="dropdown">
+					<span class="input-group-addon input-sm dropdown-toggle" data-bind="enable: IsEditable" tabindex="-1" data-toggle="dropdown">
 						<span class="caret"></span>
 					</span>
 				</div>
@@ -82,7 +82,7 @@
 		<div class="request-new-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />
 	</div>
 	<div class="pull-right">
-		<button class="request-new-cancel btn" data-bind="click: CancelAddRequest">@Resources.Cancel</button>
-		<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, enable: !IsPostingData()">@Resources.Save</button>
+		<button class="request-new-cancel btn" data-bind="click: CancelAddRequest, visible: ShowCancelButton">@Resources.Cancel</button>
+		<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, enable: !IsPostingData(),visible: IsEditable()">@Resources.Save</button>
 	</div>
 </div>

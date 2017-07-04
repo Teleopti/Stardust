@@ -1,6 +1,7 @@
 ﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, requestListViewModel, requestDetailParentViewModel, weekStart) {
 	var self = this;
 
+	self.Id = ko.observable();
 	self.Template = "add-overtime-request-template";
 	self.IsPostingData = ko.observable(false);
 	self.IsEditable = ko.observable(true);
@@ -16,6 +17,7 @@
 	self.ShowMeridian = $('div[data-culture-show-meridian]').attr('data-culture-show-meridian') === 'true';
 	self.ShowError = ko.observable(false);
 	self.ErrorMessage = ko.observable();
+	self.ShowCancelButton = ko.observable(true);
 	self.RequestDuration = ko.observable();
 	self.MultiplicatorDefinitionSetId = ko.observable();
 	self.TimeList = _createTimeList();
@@ -76,17 +78,17 @@
 
 	self.Initialize = function (data) {
 		if (data) {
-			self.IsEditable = ko.observable(true);
+			self.Id(data.Id);
 
-			self.Subject = ko.observable(data.Subject);
-			self.Message = ko.observable(data.Text);
+			self.Subject(data.Subject);
+			self.Message(data.Text);
 
-			self.StartDate = ko.observable(moment(data.DateTimeFrom).format(self.DateFormat()));
+			self.StartDate(moment(data.DateTimeFrom).format(self.DateFormat()));
 
 			if (self.ShowMeridian) {
-				self.StartTime = ko.observable(moment(data.DateTimeFrom).format("hh:mm A"));
+				self.StartTime(moment(data.DateTimeFrom).format("hh:mm A"));
 			} else {
-				self.StartTime = ko.observable(moment(data.DateTimeFrom).format("HH:mm"));
+				self.StartTime(moment(data.DateTimeFrom).format("HH:mm"));
 			}
 
 			var seconds = (moment(data.DateTimeTo) - moment(data.DateTimeFrom)) / 1000;
@@ -95,6 +97,7 @@
 			
 			self.RequestDuration(hours.substr(-2, 2) + ":" + minutes.substr(-2, 2));
 			self.MultiplicatorDefinitionSetId(data.MultiplicatorDefinitionSet);
+			self.ShowCancelButton(false);
 		}
 	};
 
@@ -139,6 +142,7 @@
 		}
 
 		return {
+			Id:self.Id(),
 			Subject: self.Subject(),
 			Message: self.Message(),
 			MultiplicatorDefinitionSet: self.MultiplicatorDefinitionSetId(),
