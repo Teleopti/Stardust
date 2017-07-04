@@ -706,16 +706,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		public void ShouldNotConsideredMaxContractTime()
 		{
 			var scenario = new Scenario("_");
-			var activity = new Activity("_");
+			var activity = new Activity("_"){ InWorkTime = true };
 			var dateOnly = DateOnly.Today;
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(7, 0, 8, 0, 60), new TimePeriodWithSegment(15, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
-			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(3), TimeSpan.FromHours(1), TimeSpan.FromHours(16)) };
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(100), TimeSpan.FromHours(1), TimeSpan.FromHours(1)) };
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			contract.AddMultiplicatorDefinitionSetCollection(definitionSet);
 			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
 			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60));
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneDay(dateOnly.AddDays(-10));
-			var overtimePreference = new OvertimePreferences {OvertimeType = definitionSet, ShiftBagToUse = new RuleSetBag(ruleSet), ScheduleTag = new ScheduleTag() };
+			var overtimePreference = new OvertimePreferences {OvertimeType = definitionSet, ShiftBagToUse = new RuleSetBag(ruleSet), ScheduleTag = new ScheduleTag()};
 			var ass = new PersonAssignment(agent, scenario, dateOnly);
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, DateOnlyPeriod.CreateWithNumberOfWeeks(dateOnly, 1), new[] { agent }, new[] { ass }, skillDay);
 
