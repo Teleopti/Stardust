@@ -7,7 +7,7 @@
         md-search-text="skillFilterText.Name" 
         md-items="skill in $ctrl.skills | filter:skillFilterText"
         md-item-text="skill.Name"
-        placeholder="{{$ctrl.options.skillsLoaded ? 'SelectSkill' : 'LoadingSkills' | translate}}">
+        placeholder="{{'SelectSkill' | translate}}">
             <md-item-template>
                 <span ng-bind="skill.Name"></span>
             </md-item-template>
@@ -25,7 +25,7 @@
         md-search-text="skillAreaFilterText.Name" 
         md-items="skillArea in $ctrl.skillAreas | filter:skillAreaFilterText"
         md-item-text="skillArea.Name" 
-        placeholder="{{$ctrl.options.skillAreasLoaded ? 'SelectSkillArea' : 'LoadingSkillAreas' | translate}}">
+        placeholder="{{'SelectSkillArea' | translate}}">
             <md-item-template>
                 <span ng-bind="skillArea.Name"></span>
             </md-item-template>

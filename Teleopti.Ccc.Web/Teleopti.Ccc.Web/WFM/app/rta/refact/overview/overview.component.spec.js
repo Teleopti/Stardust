@@ -1,16 +1,16 @@
 ﻿'use strict';
 
 describe('rtaOverviewComponent', function () {
-  var $fakeBackend,
-    $httpBackend,
+  var $controllerBuilder,
+    $fakeBackend,
     $componentController,
-    $controllerBuilder,
-    $state,
-    ctrl,
+    $httpBackend;
+
+  var ctrl,
     scope,
+    stateParams,
     vm;
 
-  var stateParams = {};
   var goodColor = '#C2E085';
   var warningColor = '#FFC285';
   var dangerColor = '#EE8F7D';
@@ -28,12 +28,11 @@ describe('rtaOverviewComponent', function () {
     });
   });
 
-  beforeEach(inject(function (_$httpBackend_, _$componentController_, _$state_, _ControllerBuilder_, _FakeRtaBackend_) {
-    $httpBackend = _$httpBackend_;
-    $componentController = _$componentController_;
+  beforeEach(inject(function (_ControllerBuilder_, _FakeRtaBackend_, _$componentController_, _$httpBackend_) {
     $controllerBuilder = _ControllerBuilder_;
     $fakeBackend = _FakeRtaBackend_;
-    $state = _$state_;
+    $componentController = _$componentController_;
+    $httpBackend = _$httpBackend_;
 
     $fakeBackend.clear();
     scope = $controllerBuilder.setup('RtaMainController');
@@ -42,21 +41,21 @@ describe('rtaOverviewComponent', function () {
 
   it('should display site card data', function () {
     $fakeBackend
-    .withSiteAdherence({
-      Id: "londonGuid",
-      Name: "London",
-      AgentsCount: 11,
-      InAlarmCount: 5,
-      Color: "warning"
-    });
+      .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      });
 
     vm = $controllerBuilder.createController().vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
 
-    expect(ctrl.siteCards[0].site.Id).toEqual("londonGuid");
-    expect(ctrl.siteCards[0].site.Name).toEqual("London");
+    expect(ctrl.siteCards[0].site.Id).toEqual('londonId');
+    expect(ctrl.siteCards[0].site.Name).toEqual('London');
     expect(ctrl.siteCards[0].site.AgentsCount).toEqual(11);
     expect(ctrl.siteCards[0].site.InAlarmCount).toEqual(5);
     expect(ctrl.siteCards[0].site.Color).toEqual(warningColor);
@@ -65,11 +64,11 @@ describe('rtaOverviewComponent', function () {
   it('should display closed site cards by default', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: "londonGuid",
-        Name: "London",
+        Id: 'londonId',
+        Name: 'London',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       });
 
     var vm = $controllerBuilder.createController().vm;
@@ -81,14 +80,14 @@ describe('rtaOverviewComponent', function () {
   });
 
   it('should display open site cards when open in url', function () {
-    stateParams.open = "true";
+    stateParams.open = 'true';
     $fakeBackend
       .withSiteAdherence({
-        Id: "londonGuid",
-        Name: "London",
+        Id: 'londonId',
+        Name: 'London',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       });
 
     var vm = $controllerBuilder.createController().vm;
@@ -102,18 +101,18 @@ describe('rtaOverviewComponent', function () {
   it('should display team data in site card when clicked', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: "londonGuid",
-        Name: "London",
+        Id: 'londonId',
+        Name: 'London',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       })
       .withTeamAdherence({
-        SiteId: "londonGuid",
-        Name: "Green",
+        SiteId: 'londonId',
+        Name: 'Green',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       });
 
     var vm = $controllerBuilder.createController().vm;
@@ -125,7 +124,7 @@ describe('rtaOverviewComponent', function () {
     ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
     $httpBackend.flush();
 
-    expect(ctrl.siteCards[0].teams[0].SiteId).toEqual('londonGuid');
+    expect(ctrl.siteCards[0].teams[0].SiteId).toEqual('londonId');
     expect(ctrl.siteCards[0].teams[0].Name).toEqual('Green');
     expect(ctrl.siteCards[0].teams[0].AgentsCount).toEqual(11);
     expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(5);
@@ -135,18 +134,18 @@ describe('rtaOverviewComponent', function () {
   it('should update team adherence when site is open', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: "londonGuid",
-        Name: "London",
+        Id: 'londonId',
+        Name: 'London',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       })
       .withTeamAdherence({
-        SiteId: "londonGuid",
-        Name: "Green",
+        SiteId: 'londonId',
+        Name: 'Green',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       });
 
     var c = $controllerBuilder.createController();
@@ -160,33 +159,33 @@ describe('rtaOverviewComponent', function () {
     c.apply(function () {
       $fakeBackend.clearTeamAdherences()
         .withTeamAdherence({
-          SiteId: "londonGuid",
-          Name: "Green",
+          SiteId: 'londonId',
+          Name: 'Green',
           AgentsCount: 11,
           InAlarmCount: 2,
-          Color: "good"
+          Color: 'good'
         });
     })
       .wait(5000);
 
     expect(vm.siteCards[0].teams[0].InAlarmCount).toEqual(2);
-    expect(vm.siteCards[0].teams[0].Color).toEqual("good");
+    expect(vm.siteCards[0].teams[0].Color).toEqual('good');
   });
 
   it('should not update team adherence when site is closed', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: "londonGuid",
-        Name: "London",
+        Id: 'londonId',
+        Name: 'London',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       })
       .withTeamAdherence({
-        SiteId: "londonGuid",
+        SiteId: 'londonId',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       });
 
     var c = $controllerBuilder.createController();
@@ -201,11 +200,11 @@ describe('rtaOverviewComponent', function () {
       $fakeBackend
         .clearTeamAdherences()
         .withTeamAdherence({
-          SiteId: "londonGuid",
-          Name: "Green",
+          SiteId: 'londonId',
+          Name: 'Green',
           AgentsCount: 11,
           InAlarmCount: 2,
-          Color: "good"
+          Color: 'good'
         });
     })
       .wait(5000);
@@ -217,17 +216,17 @@ describe('rtaOverviewComponent', function () {
       $fakeBackend
         .clearTeamAdherences()
         .withTeamAdherence({
-          SiteId: "londonGuid",
-          Name: "Green",
+          SiteId: 'londonId',
+          Name: 'Green',
           AgentsCount: 11,
           InAlarmCount: 10,
-          Color: "danger"
+          Color: 'danger'
         });
     })
       .wait(5000);
 
     expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(2);
-    expect(ctrl.siteCards[0].teams[0].Color).toEqual("good");
+    expect(ctrl.siteCards[0].teams[0].Color).toEqual('good');
   });
 
 

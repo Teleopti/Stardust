@@ -5,9 +5,9 @@
 		.module('wfm.rta')
 		.controller('RtaMainController', RtaMainController);
 
-	RtaMainController.$inject = ['rtaService', 'skills', 'skillAreas','$state', '$stateParams', '$interval', '$scope', '$location'];
+	RtaMainController.$inject = ['rtaService', 'skills', 'skillAreas', '$state', '$stateParams', '$interval', '$scope'];
 
-	function RtaMainController(rtaService, skills, skillAreas, $state, $stateParams, $interval, $scope, $location) {
+	function RtaMainController(rtaService, skills, skillAreas, $state, $stateParams, $interval, $scope) {
 		var vm = this;
 		vm.skillIds = $stateParams.skillIds || [];
 		vm.skillAreaId = $stateParams.skillAreaId;
@@ -16,26 +16,12 @@
 		vm.skillAreas = skillAreas || [];
 		vm.organization = [];
 		vm.siteCards = [];
-		vm.options= {skillsLoaded: false, skillAreasLoaded: false};
-
-		if(angular.isDefined(vm.skillAreaId)) {
-			var temp = [];
-			var match = vm.skillAreas.find(function(sa){
-				return sa.Id === vm.skillAreaId;
-			});
-			match.Skills.forEach(function(skill){
-				temp.push(skill.Id);
-			});
-			vm.skillIds = temp;
-		}
-
 
 		(function fetchDataForFilterComponent() {
 			if (vm.skillIds.length > 0) {
 				rtaService.getOrganizationForSkills({ skillIds: vm.skillIds }).then(function (result) {
 					vm.organization = result;
 				});
-
 			} else {
 				rtaService.getOrganization().then(function (result) {
 					vm.organization = result;
@@ -44,40 +30,32 @@
 		})();
 
 		(function OverviewComponentHandler() {
+			var teamPolling;
 			var sitePolling;
 			var sitePollingWithSkills;
+			var pollingIntervals = [];
 
-			var getSiteCards = function (ids) {
+			if (angular.isDefined(vm.skillAreaId)) {
+				vm.skillIds = getSkillIdsFromSkillAreaId(vm.skillAreaId);
+				getSiteCards(vm.skillIds);
+			} else if (vm.skillIds.length) {
+				getSiteCards(vm.skillIds);
+			} else {
+				getSiteCards();
+			}
+
+			function getSiteCards(ids) {
 				if (angular.isDefined(ids)) {
 					rtaService.getSiteCardsFor(ids).then(function (result) {
 						vm.siteCards = buildSiteCards(result);
 					});
-				}
-				else {
+				} else {
 					rtaService.getSiteCardsFor().then(function (result) {
 						vm.siteCards = buildSiteCards(result);
 					});
 				}
 			}
 
-			if(angular.isDefined(vm.skillAreaId)) {
-				var match = vm.skillAreas.find(function(sa){
-					return sa.Id === vm.skillAreaId;
-				});
-
-				var skillIds = [];
-				match.Skills.forEach(function(skill){
-					skillIds.push(skill.Id);
-				});
-				getSiteCards(skillIds);
-			}
-			else if(vm.skillIds.length) {
-				getSiteCards(vm.skillIds);
-			}
-			else {
-				getSiteCards();
-			}
-			
 			function buildSiteCards(sites) {
 				return sites.map(function (site) {
 					site.Color = translateSiteColors(site);
@@ -87,6 +65,45 @@
 						fetchTeamData: fetchTeamData
 					}
 				});
+			}
+
+			function fetchTeamData(card) {
+				if (!card.isOpen) {
+					var match = pollingIntervals.find(function (interval) {
+						return interval.siteId === card.site.Id;
+					});
+					var index = pollingIntervals.indexOf(match);
+					pollingIntervals.splice(index, 1);
+					$interval.cancel(match.interval);
+				} else {
+					fetchTeams(card);
+					teamPolling = $interval(function () {
+						fetchTeams(card);
+					}, 5000);
+					pollingIntervals.push({
+						siteId: card.site.Id,
+						interval: teamPolling
+					});
+				}
+			}
+
+			function fetchTeams(card) {
+				rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
+					card.teams = teams;
+				});
+			}
+
+			function getSkillIdsFromSkillAreaId(id) {
+				var temp = [];
+				var match = vm.skillAreas.find(function (sa) {
+					return sa.Id === id;
+				});
+
+				match.Skills.forEach(function (skill) {
+					temp.push(skill.Id);
+				});
+
+				return temp;
 			}
 
 			function translateSiteColors(site) {
@@ -100,81 +117,6 @@
 					return '#fff';
 				}
 			}
-
-			function updateSiteCard(site) {
-				var match = vm.siteCards.find(function (card) {
-					return card.site.Id === site.Id;
-				});
-				match.site.Color = translateSiteColors(site);
-				match.site.InAlarmCount = site.InAlarmCount;
-			}
-
-			var polling;
-			var intervals = [];
-
-			function fetchTeamData(card) {
-				if (!card.isOpen) {
-					if (intervals.length > 1) {
-						var match = intervals.find(function (interval) {
-							return interval.siteId === card.site.Id;
-						});
-						var index = intervals.indexOf(match);
-						intervals.splice(index, 1);
-						$interval.cancel(match.interval);
-					} else {
-						$interval.cancel(intervals[0].interval);
-						intervals = [];
-					}
-				} else {
-					fetchTeams(card);
-					polling = $interval(function () {
-						fetchTeams(card);
-					}, 5000);
-					intervals.push({
-						siteId: card.site.Id,
-						interval: polling
-					});
-				}
-			}
-
-			var fetchTeams = function (card) {
-				rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
-					card.teams = teams;
-				});
-			}
-
-			vm.filterOutput = function (selectedItem) {
-				if (!angular.isDefined(selectedItem)) {
-					vm.skillIds = [];
-					$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
-					getSiteCards();
-				}
-				else if (selectedItem.hasOwnProperty('Skills')) {
-					var skillIds = [];
-					selectedItem.Skills.forEach(function (skill) {
-						skillIds.push(skill.Id);
-					});
-					vm.skillIds = skillIds;
-
-					$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
-					getSiteCards(vm.skillIds);
-				}
-				else {
-					vm.skillIds = [selectedItem.Id];
-					$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
-					getSiteCards(vm.skillIds);
-				}
-			}
-
-			$scope.$on('$destroy', function () {
-				if (intervals.length)
-					intervals.forEach(function (i) {
-						$interval.cancel(i.interval);
-					});
-
-				$interval.cancel(sitePolling);
-				$interval.cancel(sitePollingWithSkills);
-			});
 
 			$scope.$watch(function () { return vm.skillIds; },
 				function (newValue, oldValue) {
@@ -190,8 +132,7 @@
 							});
 						}, 5000);
 						$interval.cancel(sitePolling);
-					}
-					else {
+					} else {
 						sitePolling = $interval(function () {
 							rtaService.getSiteCardsFor().then(function (result) {
 								result.forEach(function (r) {
@@ -202,6 +143,46 @@
 						$interval.cancel(sitePollingWithSkills);
 					}
 				});
+
+			function updateSiteCard(site) {
+				var match = vm.siteCards.find(function (card) {
+					return card.site.Id === site.Id;
+				});
+				match.site.Color = translateSiteColors(site);
+				match.site.InAlarmCount = site.InAlarmCount;
+			}
+
+			$scope.$on('$destroy', function () {
+				if (pollingIntervals.length)
+					pollingIntervals.forEach(function (i) {
+						$interval.cancel(i.interval);
+					});
+
+				$interval.cancel(sitePolling);
+				$interval.cancel(sitePollingWithSkills);
+			});
+
+			vm.filterOutput = function (selectedItem) {
+				if (!angular.isDefined(selectedItem)) {
+
+					vm.skillIds = [];
+					$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
+					getSiteCards();
+
+				}	else if (selectedItem.hasOwnProperty('Skills')) {
+
+					$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
+					vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
+					getSiteCards(vm.skillIds);
+
+				}	else {
+
+					vm.skillIds = [selectedItem.Id];
+					$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
+					getSiteCards(vm.skillIds);
+					
+				}
+			}
 
 		})();
 	}

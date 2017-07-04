@@ -2,26 +2,39 @@
 
 describe('RtaMainController', function () {
   var
-    $httpBackend,
-    $fakeBackend,
     $controllerBuilder,
-    $state,
+    $fakeBackend,
+    $httpBackend,
     $interval,
-    $controller,
-    scope,
-    vm,
-    skills,
-    skillAreas,
-    $rootScope;
+    $state;
 
-  var skills1, skills2;
-  var stateParams = {};
+  var
+    stateParams,
+    scope,
+    vm;
+
+  var
+    channelSales,
+    phone,
+    invoice,
+    bts;
+
+  var
+    skills1,
+    skills2,
+    allSkills;
+
+  var
+    skillArea1,
+    skillArea2;
+
+  var skillAreas;
+
   var goodColor = '#C2E085';
   var warningColor = '#FFC285';
   var dangerColor = '#EE8F7D';
 
   beforeEach(module('wfm.rta'));
-
 
   beforeEach(function () {
     module(function ($provide) {
@@ -32,11 +45,10 @@ describe('RtaMainController', function () {
     });
   });
 
-
   beforeEach(function () {
     module(function ($provide) {
       $provide.value('skills', function () {
-        return skills;
+        return allSkills;
       });
     });
   });
@@ -49,57 +61,50 @@ describe('RtaMainController', function () {
     });
   });
 
-  beforeEach(inject(function (_$httpBackend_, _$interval_, _$state_, _FakeRtaBackend_, _ControllerBuilder_) {
+  beforeEach(inject(function (_FakeRtaBackend_, _ControllerBuilder_, _$httpBackend_, _$interval_, _$state_) {
+    $controllerBuilder = _ControllerBuilder_;
+    $fakeBackend = _FakeRtaBackend_;
     $httpBackend = _$httpBackend_;
     $interval = _$interval_;
     $state = _$state_;
-    $fakeBackend = _FakeRtaBackend_;
-    $controllerBuilder = _ControllerBuilder_;
+
     scope = $controllerBuilder.setup('RtaMainController');
 
-    skills = [
-      {
-        Name: 'Channel Sales',
-        Id: '1'
-      },
-      {
-        Name: 'Phone',
-        Id: '2'
-      }
-    ];
+    channelSales = {
+      Name: 'Channel Sales',
+      Id: 'channelSalesId'
+    };
 
-    skills1 = [
-      {
-        Name: 'Channel Sales',
-        Id: '1'
-      },
-      {
-        Name: 'Phone',
-        Id: '2'
-      }
-    ];
+    phone = {
+      Name: 'Phone',
+      Id: 'phoneId'
+    };
 
-    skills2 = [
-      {
-        Name: 'Invoice',
-        Id: '3'
-      },
-      {
-        Name: 'BTS',
-        Id: '4'
-      }
-    ];
+    invoice = {
+      Name: 'Invoice',
+      Id: 'invoiceId'
+    };
 
-    skillAreas = [{
-      Id: "5",
-      Name: "my skill area 1",
+    bts = {
+      Name: 'BTS',
+      Id: 'btsId'
+    };
+
+    skills1 = [channelSales, phone];
+    skills2 = [invoice, bts];
+    allSkills = [channelSales, phone, invoice, bts];
+
+    skillArea1 = {
+      Id: 'skillArea1Id',
+      Name: 'SkillArea1',
       Skills: skills1
-    },
-    {
-      Name: "my skill area 2",
-      Id: "6",
+    };
+    skillArea2 = {
+      Id: 'skillArea2Id',
+      Name: 'SkillArea2',
       Skills: skills2
-    }];
+    };
+    skillAreas = [skillArea1, skillArea2];
 
     $fakeBackend.clear();
     spyOn($state, 'go');
@@ -108,73 +113,77 @@ describe('RtaMainController', function () {
 
   describe('RtaFilterComponent handling', function () {
     it('should get skills', function () {
-      vm = $controllerBuilder.createController(skills).vm;
+      vm = $controllerBuilder.createController(allSkills).vm;
 
       expect(vm.skills[0].Name).toEqual('Channel Sales');
-      expect(vm.skills[0].Id).toEqual('1');
+      expect(vm.skills[0].Id).toEqual('channelSalesId');
       expect(vm.skills[1].Name).toEqual('Phone');
-      expect(vm.skills[1].Id).toEqual('2');
+      expect(vm.skills[1].Id).toEqual('phoneId');
+      expect(vm.skills[2].Name).toEqual('Invoice');
+      expect(vm.skills[2].Id).toEqual('invoiceId');
+      expect(vm.skills[3].Name).toEqual('BTS');
+      expect(vm.skills[3].Id).toEqual('btsId');
     });
 
     it('should get skill areas', function () {
       vm = $controllerBuilder.createController(undefined, skillAreas).vm;
 
       expect(vm.skillAreas.length).toEqual(2);
-      expect(vm.skillAreas[0].Id).toEqual('5');
-      expect(vm.skillAreas[0].Name).toEqual('my skill area 1');
-      expect(vm.skillAreas[0].Skills[0].Id).toEqual('1');
+      expect(vm.skillAreas[0].Id).toEqual('skillArea1Id');
+      expect(vm.skillAreas[0].Name).toEqual('SkillArea1');
+      expect(vm.skillAreas[0].Skills[0].Id).toEqual('channelSalesId');
       expect(vm.skillAreas[0].Skills[0].Name).toEqual('Channel Sales');
-      expect(vm.skillAreas[0].Skills[1].Id).toEqual('2');
+      expect(vm.skillAreas[0].Skills[1].Id).toEqual('phoneId');
       expect(vm.skillAreas[0].Skills[1].Name).toEqual('Phone');
-      expect(vm.skillAreas[1].Id).toEqual('6');
-      expect(vm.skillAreas[1].Name).toEqual('my skill area 2');
-      expect(vm.skillAreas[1].Skills[0].Id).toEqual('3');
+      expect(vm.skillAreas[1].Id).toEqual('skillArea2Id');
+      expect(vm.skillAreas[1].Name).toEqual('SkillArea2');
+      expect(vm.skillAreas[1].Skills[0].Id).toEqual('invoiceId');
       expect(vm.skillAreas[1].Skills[0].Name).toEqual('Invoice');
-      expect(vm.skillAreas[1].Skills[1].Id).toEqual('4');
+      expect(vm.skillAreas[1].Skills[1].Id).toEqual('btsId');
       expect(vm.skillAreas[1].Skills[1].Name).toEqual('BTS');
     });
 
     it('should get organization', function () {
       $fakeBackend.withOrganization({
-        Id: 'LondonGuid',
+        Id: 'londonId',
         Name: 'London',
         Teams: [{
-          Id: '1',
+          Id: 'teamPreferencesId',
           Name: 'Team Preferences'
         }, {
-          Id: '2',
+          Id: 'teamStudentsId',
           Name: 'Team Students'
         }]
       })
 
       vm = $controllerBuilder.createController().vm;
 
-      expect(vm.organization[0].Id).toEqual('LondonGuid');
+      expect(vm.organization[0].Id).toEqual('londonId');
       expect(vm.organization[0].Name).toEqual('London');
-      expect(vm.organization[0].Teams[0].Id).toEqual('1');
+      expect(vm.organization[0].Teams[0].Id).toEqual('teamPreferencesId');
       expect(vm.organization[0].Teams[0].Name).toEqual('Team Preferences');
-      expect(vm.organization[0].Teams[1].Id).toEqual('2');
+      expect(vm.organization[0].Teams[1].Id).toEqual('teamStudentsId');
       expect(vm.organization[0].Teams[1].Name).toEqual('Team Students');
     });
 
     it('should get organization by skill', function () {
-      stateParams.skillIds = ['1'];
+      stateParams.skillIds = ['channelSalesId'];
       $fakeBackend
         .withOrganizationOnSkills({
-          Id: '2',
+          Id: 'londonId',
           Name: 'London',
           Teams: [{
-            Id: '3',
+            Id: 'teamPreferencesId',
             Name: 'Team Preferences'
           }]
-        }, '1');
+        }, 'channelSalesId');
 
-      vm = $controllerBuilder.createController(skills).vm;
+      vm = $controllerBuilder.createController(allSkills).vm;
 
       expect(vm.organization.length).toEqual(1);
-      expect(vm.organization[0].Id).toEqual('2');
+      expect(vm.organization[0].Id).toEqual('londonId');
       expect(vm.organization[0].Name).toEqual('London');
-      expect(vm.organization[0].Teams[0].Id).toEqual('3');
+      expect(vm.organization[0].Teams[0].Id).toEqual('teamPreferencesId');
       expect(vm.organization[0].Teams[0].Name).toEqual('Team Preferences');
     });
 
@@ -185,79 +194,78 @@ describe('RtaMainController', function () {
     it('should build site card view model', function () {
       $fakeBackend
         .withSiteAdherence({
-          Id: "londonGuid",
-          Name: "London",
+          Id: 'londonId',
+          Name: 'London',
           AgentsCount: 11,
           InAlarmCount: 5,
-          Color: "warning"
+          Color: 'warning'
         });
 
       vm = $controllerBuilder.createController().vm;
 
-      expect(vm.siteCards[0].site.Id).toEqual("londonGuid");
-      expect(vm.siteCards[0].site.Name).toEqual("London");
+      expect(vm.siteCards[0].site.Id).toEqual('londonId');
+      expect(vm.siteCards[0].site.Name).toEqual('London');
       expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(5);
       expect(vm.siteCards[0].site.Color).toEqual(warningColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
-      expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
+      expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
     it('should build site card view model when preselected skill', function () {
       stateParams.skillIds = ['phoneId'];
       $fakeBackend
         .withSiteAdherence({
-          Id: "londonGuid",
-          Name: "London",
+          Id: 'londonId',
+          Name: 'London',
           SkillId: 'phoneId',
           AgentsCount: 11,
           InAlarmCount: 5,
-          Color: "warning"
+          Color: 'warning'
         });
 
       vm = $controllerBuilder.createController().vm;
       $httpBackend.flush();
 
-      expect(vm.siteCards[0].site.Id).toEqual("londonGuid");
-      expect(vm.siteCards[0].site.Name).toEqual("London");
+      expect(vm.siteCards[0].site.Id).toEqual('londonId');
+      expect(vm.siteCards[0].site.Name).toEqual('London');
       expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(5);
       expect(vm.siteCards[0].site.Color).toEqual(warningColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
-      expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
+      expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
     it('should build site card view model when preselected skill area', function () {
-      stateParams.skillAreaId = '5';
+      stateParams.skillAreaId = 'skillArea1Id';
       $fakeBackend
         .withSiteAdherence({
-          Id: "londonGuid",
-          SkillId: "1",
-          Name: "London",
+          Id: 'londonId',
+          SkillId: 'channelSalesId',
+          Name: 'London',
           AgentsCount: 11,
           InAlarmCount: 2,
-          Color: "good"
+          Color: 'good'
         });
 
       vm = $controllerBuilder.createController(undefined, skillAreas).vm;
-      $httpBackend.flush();
 
-      expect(vm.siteCards[0].site.Id).toEqual("londonGuid");
-      expect(vm.siteCards[0].site.Name).toEqual("London");
+      expect(vm.siteCards[0].site.Id).toEqual('londonId');
+      expect(vm.siteCards[0].site.Name).toEqual('London');
       expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
       expect(vm.siteCards[0].site.Color).toEqual(goodColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
-      expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
+      expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
     it('should update adherence', function () {
       $fakeBackend.withSiteAdherence({
-        Id: "londonGuid",
-        Name: "London",
+        Id: 'londonId',
+        Name: 'London',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       });
 
       var c = $controllerBuilder.createController();
@@ -265,32 +273,32 @@ describe('RtaMainController', function () {
       c.apply(function () {
         $fakeBackend.clearSiteAdherences()
           .withSiteAdherence({
-            Id: "londonGuid",
-            Name: "London",
+            Id: 'londonId',
+            Name: 'London',
             AgentsCount: 11,
             InAlarmCount: 2,
-            Color: "good"
+            Color: 'good'
           });
       })
         .wait(5000);
 
-      expect(vm.siteCards[0].site.Id).toEqual("londonGuid");
-      expect(vm.siteCards[0].site.Name).toEqual("London");
+      expect(vm.siteCards[0].site.Id).toEqual('londonId');
+      expect(vm.siteCards[0].site.Name).toEqual('London');
       expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
       expect(vm.siteCards[0].site.Color).toEqual(goodColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
-      expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
+      expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
     it('should update adherence for site with skill', function () {
       $fakeBackend.withSiteAdherence({
-        Id: "londonGuid",
-        SkillId: "phoneId",
-        Name: "London",
+        Id: 'londonId',
+        SkillId: 'phoneId',
+        Name: 'London',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -300,12 +308,12 @@ describe('RtaMainController', function () {
         $fakeBackend
           .clearSiteAdherences()
           .withSiteAdherence({
-            Id: "londonGuid",
-            SkillId: "phoneId",
+            Id: 'londonId',
+            SkillId: 'phoneId',
             Name: "London",
             AgentsCount: 11,
             InAlarmCount: 2,
-            Color: "good"
+            Color: 'good'
           })
       })
         .wait(5000);
@@ -317,35 +325,35 @@ describe('RtaMainController', function () {
     it('should update adherence for site with skill area', function () {
       $fakeBackend
         .withSiteAdherence({
-          Id: "londonGuid",
-          SkillId: "1",
-          Name: "London",
+          Id: 'londonId',
+          SkillId: 'channelSalesId',
+          Name: 'London',
           AgentsCount: 11,
           InAlarmCount: 5,
-          Color: "warning"
+          Color: 'warning'
         })
         .withSiteAdherence({
-          Id: "londonGuid",
-          SkillId: "2",
-          Name: "London",
+          Id: 'londonId',
+          SkillId: 'phoneId',
+          Name: 'London',
           AgentsCount: 11,
           InAlarmCount: 4,
-          Color: "warning"
+          Color: 'warning'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
 
       c.apply(function () {
-        vm.skillIds = ['1', '2'];
+        vm.skillIds = ['channelSalesId', 'phoneId'];
         $fakeBackend
           .clearSiteAdherences()
           .withSiteAdherence({
-            Id: "londonGuid",
-            SkillId: "1",
-            Name: "London",
+            Id: 'londonId',
+            SkillId: 'channelSalesId',
+            Name: 'London',
             AgentsCount: 11,
             InAlarmCount: 2,
-            Color: "good"
+            Color: 'good'
           })
       })
         .wait(5000);
@@ -355,14 +363,14 @@ describe('RtaMainController', function () {
     });
 
     it('should update adherence for site with preselected skill', function () {
-      stateParams.skillIds = ['1'];
+      stateParams.skillIds = ['channelSalesId'];
       $fakeBackend.withSiteAdherence({
-        Id: "londonGuid",
-        SkillId: "1",
-        Name: "London",
+        Id: 'londonId',
+        SkillId: 'channelSalesId',
+        Name: 'London',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -371,12 +379,12 @@ describe('RtaMainController', function () {
         $fakeBackend
           .clearSiteAdherences()
           .withSiteAdherence({
-            Id: "londonGuid",
-            SkillId: "1",
-            Name: "London",
+            Id: 'londonId',
+            SkillId: 'channelSalesId',
+            Name: 'London',
             AgentsCount: 11,
             InAlarmCount: 2,
-            Color: "good"
+            Color: 'good'
           })
       })
         .wait(5000);
@@ -386,23 +394,23 @@ describe('RtaMainController', function () {
     });
 
     it('should update adherence for site with preselected skill area', function () {
-      stateParams.skillAreaId = '5';
+      stateParams.skillAreaId = 'skillArea1Id';
       $fakeBackend
         .withSiteAdherence({
-          Id: "londonGuid",
-          SkillId: "1",
-          Name: "London",
+          Id: 'londonId',
+          SkillId: 'channelSalesId',
+          Name: 'London',
           AgentsCount: 11,
           InAlarmCount: 5,
-          Color: "warning"
+          Color: 'warning'
         })
         .withSiteAdherence({
-          Id: "londonGuid",
-          SkillId: "2",
-          Name: "London",
+          Id: 'londonId',
+          SkillId: 'phoneId',
+          Name: 'London',
           AgentsCount: 11,
           InAlarmCount: 4,
-          Color: "warning"
+          Color: 'warning'
         });
       var c = $controllerBuilder.createController(undefined, skillAreas);
       vm = c.vm;
@@ -411,12 +419,12 @@ describe('RtaMainController', function () {
         $fakeBackend
           .clearSiteAdherences()
           .withSiteAdherence({
-            Id: "londonGuid",
-            SkillId: "1",
-            Name: "London",
+            Id: 'londonId',
+            SkillId: 'channelSalesId',
+            Name: 'London',
             AgentsCount: 11,
             InAlarmCount: 2,
-            Color: "good"
+            Color: 'good'
           })
       })
         .wait(5000);
@@ -427,12 +435,12 @@ describe('RtaMainController', function () {
 
     it('should update adherence for site when clearing selection', function () {
       $fakeBackend.withSiteAdherence({
-        Id: "londonGuid",
-        SkillId: "phoneId",
-        Name: "London",
+        Id: 'londonId',
+        SkillId: 'phoneId',
+        Name: 'London',
         AgentsCount: 11,
         InAlarmCount: 5,
-        Color: "warning"
+        Color: 'warning'
       });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -442,12 +450,12 @@ describe('RtaMainController', function () {
         $fakeBackend
           .clearSiteAdherences()
           .withSiteAdherence({
-            Id: "londonGuid",
-            SkillId: "phoneId",
-            Name: "London",
+            Id: 'londonId',
+            SkillId: 'phoneId',
+            Name: 'London',
             AgentsCount: 11,
             InAlarmCount: 2,
-            Color: "good"
+            Color: 'good'
           })
       })
         .wait(5000);
@@ -456,22 +464,22 @@ describe('RtaMainController', function () {
         $fakeBackend
           .clearSiteAdherences()
           .withSiteAdherence({
-            Id: "londonGuid",
-            Name: "London",
+            Id: 'londonId',
+            Name: 'London',
             AgentsCount: 11,
             InAlarmCount: 9,
-            Color: "danger"
+            Color: 'danger'
           })
       })
         .wait(5000);
 
-      expect(vm.siteCards[0].site.Id).toEqual("londonGuid");
-      expect(vm.siteCards[0].site.Name).toEqual("London");
+      expect(vm.siteCards[0].site.Id).toEqual('londonId');
+      expect(vm.siteCards[0].site.Name).toEqual('London');
       expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(9);
       expect(vm.siteCards[0].site.Color).toEqual(dangerColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
-      expect(typeof vm.siteCards[0].fetchTeamData).toBe("function");
+      expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
     it('should stop polling when page is about to destroy', function () {
@@ -486,12 +494,12 @@ describe('RtaMainController', function () {
     it('should get site cards with skill id', function () {
       $fakeBackend
         .withSiteAdherence({
-          Id: "parisGuid",
-          SkillId: "1",
-          Name: "London",
+          Id: 'parisId',
+          SkillId: 'channelSalesId',
+          Name: 'London',
           AgentsCount: 11,
           InAlarmCount: 2,
-          Color: "good"
+          Color: 'good'
         })
       vm = $controllerBuilder.createController().vm;
 
@@ -499,45 +507,40 @@ describe('RtaMainController', function () {
       $httpBackend.flush();
 
       expect(vm.siteCards.length).toEqual(1);
-      expect(vm.siteCards[0].site.Id).toEqual('parisGuid');
-      expect(vm.siteCards[0].site.SkillId).toEqual('1');
+      expect(vm.siteCards[0].site.Id).toEqual('parisId');
+      expect(vm.siteCards[0].site.SkillId).toEqual('channelSalesId');
     });
 
     it('should get site cards with skill area id', function () {
       $fakeBackend
-        .withSkillAreas([{
-          Id: "5",
-          Name: "my skill area 1",
-          Skills: skills1
-        }])
         .withSiteAdherence({
-          Id: "parisGuid",
-          SkillId: "1",
-          Name: "Paris",
+          Id: 'parisId',
+          SkillId: 'channelSalesId',
+          Name: 'Paris',
           AgentsCount: 11,
           InAlarmCount: 2,
-          Color: "good"
+          Color: 'good'
         });
-      vm = $controllerBuilder.createController().vm;
+      vm = $controllerBuilder.createController(undefined, skillAreas).vm;
 
       vm.filterOutput(vm.skillAreas[0]);
       $httpBackend.flush();
 
       expect(vm.siteCards.length).toEqual(1);
-      expect(vm.siteCards[0].site.Id).toEqual('parisGuid');
-      expect(vm.siteCards[0].site.SkillId).toEqual('1');
+      expect(vm.siteCards[0].site.Id).toEqual('parisId');
+      expect(vm.siteCards[0].site.SkillId).toEqual('channelSalesId');
     });
 
     it('should get site cards after clearing filter input', function () {
       stateParams.skillIds = 'channelSalesGuid';
       $fakeBackend
         .withSiteAdherence({
-          Id: "parisGuid",
-          SkillId: "channelSalesGuid",
-          Name: "Paris",
+          Id: 'parisId',
+          SkillId: 'channelSalesId',
+          Name: 'Paris',
           AgentsCount: 11,
           InAlarmCount: 2,
-          Color: "good"
+          Color: 'good'
         });
       vm = $controllerBuilder.createController().vm;
       $httpBackend.flush();
@@ -546,29 +549,29 @@ describe('RtaMainController', function () {
       $fakeBackend
         .clearSiteAdherences()
         .withSiteAdherence({
-          Id: "parisGuid",
-          Name: "Paris",
+          Id: 'parisId',
+          Name: 'Paris',
           AgentsCount: 11,
           InAlarmCount: 5,
-          Color: "good"
+          Color: 'good'
         })
         .withSiteAdherence({
-          Id: "londonGuid",
-          Name: "London",
+          Id: 'londonId',
+          Name: 'London',
           AgentsCount: 10,
           InAlarmCount: 8,
-          Color: "danger"
+          Color: 'danger'
         });
 
       $httpBackend.flush();
 
       expect(vm.siteCards.length).toEqual(2);
-      expect(vm.siteCards[0].site.Id).toEqual('parisGuid');
+      expect(vm.siteCards[0].site.Id).toEqual('parisId');
       expect(vm.siteCards[0].site.Name).toEqual('Paris');
       expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(5);
       expect(vm.siteCards[0].site.Color).toEqual(goodColor);
-      expect(vm.siteCards[1].site.Id).toEqual('londonGuid');
+      expect(vm.siteCards[1].site.Id).toEqual('londonId');
       expect(vm.siteCards[1].site.Name).toEqual('London');
       expect(vm.siteCards[1].site.AgentsCount).toEqual(10);
       expect(vm.siteCards[1].site.InAlarmCount).toEqual(8);
@@ -576,12 +579,12 @@ describe('RtaMainController', function () {
     });
 
     it('should go to sites by skill state', function () {
-      vm = $controllerBuilder.createController(skills).vm;
+      vm = $controllerBuilder.createController(allSkills).vm;
 
       vm.filterOutput(vm.skills[0]);
       $httpBackend.flush();
 
-      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillIds: ['1'], skillAreaId: undefined }, { notify: false });
+      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillIds: ['channelSalesId'], skillAreaId: undefined }, { notify: false });
     });
 
     it('should go to sites by skill area state', function () {
@@ -590,12 +593,12 @@ describe('RtaMainController', function () {
       vm.filterOutput(vm.skillAreas[0]);
       $httpBackend.flush();
 
-      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillAreaId: '5', skillIds: undefined }, { notify: false });
+      expect($state.go).toHaveBeenCalledWith($state.current.name, { skillAreaId: 'skillArea1Id', skillIds: undefined }, { notify: false });
     });
 
     it('should go to sites with skill when changing selection from skill area to skill', function () {
-      stateParams.skillAreaId = "5";
-      var c = $controllerBuilder.createController(skills, skillAreas);
+      stateParams.skillAreaId = 'skillArea1Id';
+      var c = $controllerBuilder.createController(allSkills, skillAreas);
       vm = c.vm;
 
       vm.filterOutput(vm.skills[0]);
@@ -603,27 +606,27 @@ describe('RtaMainController', function () {
 
       expect($state.go).toHaveBeenCalledWith($state.current.name, {
         skillAreaId: undefined,
-        skillIds: ['1']
+        skillIds: ['channelSalesId']
       },
         { notify: false });
     });
 
     it('should go to sites with skill area when changing selection from skill to skill area', function () {
-      stateParams.skillIds = ['1'];
-      vm = $controllerBuilder.createController(skills, skillAreas).vm
+      stateParams.skillIds = ['channelSalesId'];
+      vm = $controllerBuilder.createController(allSkills, skillAreas).vm
 
       vm.filterOutput(vm.skillAreas[0]);
       $httpBackend.flush();
 
       expect($state.go).toHaveBeenCalledWith($state.current.name, {
-        skillAreaId: "5",
+        skillAreaId: 'skillArea1Id',
         skillIds: undefined
       },
         { notify: false });
     });
 
     it('should clear url when sending in empty input in filter', function () {
-      stateParams.skillIds = ['1'];
+      stateParams.skillIds = ['channelSalesId'];
       vm = $controllerBuilder.createController().vm;
 
       vm.filterOutput(undefined);
