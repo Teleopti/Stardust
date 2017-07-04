@@ -59,11 +59,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new AddOvertimeActivityCommand
 			{
-				PersonId = person.Id.Value,
+				PersonId = person.Id.GetValueOrDefault(),
 				Date = new DateOnly(2013, 11, 14),
-				ActivityId = activity.Id.Value,
+				ActivityId = activity.Id.GetValueOrDefault(),
 				Period = new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 12),
-				MultiplicatorDefinitionSetId = mds.Id.Value
+				MultiplicatorDefinitionSetId = mds.Id.GetValueOrDefault()
 			};
 			Target.Handle(command);
 
@@ -93,11 +93,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var command = new AddOvertimeActivityCommand
 			{
-				PersonId = person.Id.Value,
+				PersonId = person.Id.GetValueOrDefault(),
 				Date = new DateOnly(2013, 11, 14),
-				ActivityId = activity.Id.Value,
+				ActivityId = activity.Id.GetValueOrDefault(),
 				Period = new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 12),
-				MultiplicatorDefinitionSetId = mds.Id.Value,
+				MultiplicatorDefinitionSetId = mds.Id.GetValueOrDefault(),
 				TrackedCommandInfo = new TrackedCommandInfo
 				{
 					OperatedPersonId = new Guid(),
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			addOvertimeEvent.PersonId.Should().Be.EqualTo(command.PersonId);
 			addOvertimeEvent.StartDateTime.Should().Be.EqualTo(command.Period.StartDateTime);
 			addOvertimeEvent.EndDateTime.Should().Be.EqualTo(command.Period.EndDateTime);
-			addOvertimeEvent.ScenarioId.Should().Be.EqualTo(scenario.Id.Value);
+			addOvertimeEvent.ScenarioId.Should().Be.EqualTo(scenario.Id.GetValueOrDefault());
 			addOvertimeEvent.InitiatorId.Should().Be.EqualTo(command.TrackedCommandInfo.OperatedPersonId);
 			addOvertimeEvent.CommandId.Should().Be.EqualTo(command.TrackedCommandInfo.TrackId);
 			addOvertimeEvent.LogOnBusinessUnitId.Should().Be(scenario.BusinessUnit.Id.GetValueOrDefault());
