@@ -585,15 +585,19 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 		}
 
 		[Test]
-		public void ShouldSetRecruitmentOnFirstDay()
+		public void ShouldSetRecruitmentOnFirstOpenDay()
 		{
 			foreach (var day in budgetDays)
 				day.Recruitment = 0d;
-
+			budgetDays[0].IsClosed = true;
 			target.Recruitment = 360d;
-			Assert.AreEqual(360d, budgetDays[0].Recruitment);
-			for (var i = 1; i < 30; i++)
+			Assert.AreEqual(360d, budgetDays[1].Recruitment);
+			for (var i = 0; i < 30; i++)
+			{
+				if (i == 1)
+					continue;
 				Assert.AreEqual(0d, budgetDays[i].Recruitment);
+			}
 			Assert.AreEqual(360d, target.Recruitment);
 		}
 

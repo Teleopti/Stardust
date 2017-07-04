@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models
 			set
 			{
 				using (_budgetDayProvider.BatchUpdater())
-					_budgetDays.First().Recruitment = value;
+					_budgetDays.First(day => !day.IsClosed).Recruitment = value;
 				_recruitment = value;
 				TriggerNotifyPropertyChanged(nameof(Recruitment));
 			}
