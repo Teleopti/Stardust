@@ -281,6 +281,7 @@ End personal drop down menu
 	}
 	.menu-top-adjust {
 		margin-top: 50px;
+		-webkit-overflow-scrolling:touch !important;
 	}
 	.submenu .select2-container {
 		margin-left: 14px;
@@ -348,3 +349,6 @@ End personal drop down menu
 .navbar-offcanvas.canvas-slid .navbar-nav .open .dropdown-menu > li > a {
 		color: #ffffff;
 	}
+.navbar-offcanvas.offcanvas {
+	overflow:auto !important;
+}
