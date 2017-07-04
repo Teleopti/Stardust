@@ -82,8 +82,7 @@
 
 			self.Subject(data.Subject);
 			self.Message(data.Text);
-
-			self.StartDate(moment(data.DateTimeFrom).format(self.DateFormat()));
+			self.StartDate(moment(data.DateTimeFrom));
 
 			if (self.ShowMeridian) {
 				self.StartTime(moment(data.DateTimeFrom).format("hh:mm A"));
@@ -141,14 +140,15 @@
 			endDate = endDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 		}
 
+		var startDateString = startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 		return {
-			Id:self.Id(),
+			Id: self.Id(),
 			Subject: self.Subject(),
 			Message: self.Message(),
 			MultiplicatorDefinitionSet: self.MultiplicatorDefinitionSetId(),
 			Period: {
-				StartDate: startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat),
-				StartTime: moment(self.StartDate() + ' ' + self.StartTime()).format('HH:mm'),
+				StartDate: startDateString,
+				StartTime: moment(startDateString + ' ' + self.StartTime()).format('HH:mm'),
 				EndDate: endDate,
 				EndTime: endDateMoment.format('HH:mm')
 			}

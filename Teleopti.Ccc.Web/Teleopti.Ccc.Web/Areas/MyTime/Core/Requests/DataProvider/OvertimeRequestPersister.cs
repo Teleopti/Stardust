@@ -30,9 +30,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 			{
 				isCreatingNew = false;
 				personRequest = _personRequestRepository.Get(form.Id.Value);
+
+				if (personRequest == null)
+				{
+					throw new ApplicationException($"Person request with Id \"{form.Id}\" does not exist.");
+				}
+
 				if (!(personRequest.Request is IOvertimeRequest))
 				{
-					throw new ApplicationException($"Request with Id {form.Id} is not an overtime request.");
+					throw new ApplicationException($"Person request with Id \"{form.Id}\" is not an overtime request.");
 				}
 			}
 

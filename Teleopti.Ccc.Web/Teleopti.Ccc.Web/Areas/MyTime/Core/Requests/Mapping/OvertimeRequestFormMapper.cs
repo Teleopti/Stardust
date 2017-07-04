@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var definitionSet = _multiplicatorDefinitionSetRepository.Get(source.MultiplicatorDefinitionSet);
 			var period = new DateTimePeriodFormMapper(_userTimeZone).Map(source.Period);
 			var overtimeRequest = new OvertimeRequest(definitionSet, period);
-			
+
 			personRequest.Request = overtimeRequest;
 			personRequest.Subject = source.Subject;
 			personRequest.TrySetMessage(source.Message ?? "");
