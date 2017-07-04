@@ -8,8 +8,6 @@ using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Infrastructure.Persisters.Schedules;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		[Test]
 		public void ShouldGetConflictChecker()
 		{
-			containerBuilder.RegisterType<ScheduleRangeConflictCollector>().As<IScheduleRangeConflictCollector>().SingleInstance();
+			//containerBuilder.RegisterType<ScheduleRangeConflictCollector>().As<IScheduleRangeConflictCollector>().SingleInstance();
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IScheduleRangeConflictCollector>()
@@ -56,15 +54,15 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			}
 		}
 
-		[Test]
-		public void ShouldGetNonConflictChecker()
-		{
-			using (var container = containerBuilder.Build())
-			{
-				container.Resolve<IScheduleRangeConflictCollector>()
-								 .Should().Be.OfType<NoScheduleRangeConflictCollector>();
-			}
-		}
+		//[Test]
+		//public void ShouldGetNonConflictChecker()
+		//{
+		//	using (var container = containerBuilder.Build())
+		//	{
+		//		container.Resolve<IScheduleRangeConflictCollector>()
+		//						 .Should().Be.OfType<NoScheduleRangeConflictCollector>();
+		//	}
+		//}
 
 		[Test]
 		public void ShouldGetExplicitSetOwnMessage()

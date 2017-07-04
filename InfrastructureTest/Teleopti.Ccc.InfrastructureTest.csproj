@@ -347,6 +347,14 @@
     <Compile Include="Rta\Service\UnrecognizedStatesTest2.cs" />
     <Compile Include="Rta\WithUnitOfWorkWithRecurringEvents.cs" />
     <Compile Include="Scheduling\FullSchedulingUowTest.cs" />
+    <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldOverwriteExternalDelete.cs" />
+    <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldDeleteExternalModification.cs" />
+    <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldOverwriteExternalModification.cs" />
+    <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldOverwriteExternalInsert.cs" />
+    <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldDeleteNoConflict.cs" />
+    <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldUpdateNoConflict.cs" />
+    <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ShouldSaveNoConflict.cs" />
+    <Compile Include="Scheduling\ScheduleRangePersisterWithConflictSolve\ScheduleDictionaryPersisterWithConflictSolveBase.cs" />
     <Compile Include="Schema\ApplicationDatabaseClusteredIndexTest.cs" />
     <Compile Include="UnitOfWorkTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryHasCurrentUnitOfWorkTest.cs" />
