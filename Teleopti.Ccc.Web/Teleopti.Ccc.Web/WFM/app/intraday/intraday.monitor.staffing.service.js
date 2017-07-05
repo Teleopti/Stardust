@@ -44,8 +44,7 @@
                     staffingData.hasEmailSkill = true;
                 }
 
-				if (showOptimalStaffing)
-					staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
+                if (showOptimalStaffing) staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
 
                 if (showScheduledStaffing) staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
 
@@ -69,17 +68,14 @@
                 } else {
                     staffingData.forecastedStaffing.max = updatedForecastedStaffingMax;
                 }
-				
+
                 staffingData.forecastedStaffing.series.splice(0, 0, 'Forecasted_staffing');
                 staffingData.forecastedStaffing.updatedSeries.splice(0, 0, 'Updated_forecasted_staffing');
                 staffingData.actualStaffingSeries.splice(0, 0, 'Actual_staffing');
                 staffingData.scheduledStaffing.splice(0, 0, 'Scheduled_staffing');
 
-                if (service.staffingChart.data().length <= 0) {
-                    service.initStaffingChart();
-                }
+                service.initStaffingChart();
 
-                service.loadStaffingChart(staffingData);
                 return staffingData;
             };
 
@@ -202,27 +198,18 @@
                     );
             };
 
-            service.loadStaffingChart = function(sData) {
-                if (!sData) return;
-				console.log('sData', sData);
-				//actualStaffingSeries har 1 nu
-                service.staffingChart.load({
-                    columns: [
-                        sData.timeSeries,
-                        sData.forecastedStaffing.series,
-                        sData.forecastedStaffing.updatedSeries,
-                        sData.actualStaffingSeries,
-                        sData.scheduledStaffing
-                    ]
-                });
-            };
-
             service.initStaffingChart = function() {
                 service.staffingChart = c3.generate({
                     bindto: '#staffingChart',
                     data: {
                         x: 'x',
-                        columns: [],
+                        columns: [
+                            staffingData.timeSeries,
+                            staffingData.forecastedStaffing.series,
+                            staffingData.forecastedStaffing.updatedSeries,
+                            staffingData.actualStaffingSeries,
+                            staffingData.scheduledStaffing
+                        ],
                         type: 'line',
                         hide: hiddenArray,
                         names: {
@@ -279,7 +266,6 @@
                                     hiddenArray.push(id);
                                 }
                                 service.initStaffingChart();
-                                service.loadStaffingChart(staffingData);
                             }
                         }
                     },
@@ -290,7 +276,6 @@
             };
 
             service.initStaffingChart();
-            service.loadStaffingChart(staffingData);
 
             return service;
         }

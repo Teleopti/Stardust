@@ -99,10 +99,8 @@
                 if (isToday) {
                     getCurrent();
                 }
-                if (service.trafficChart.data().length <= 0) {
-                    service.initTrafficChart();
-                }
-                service.loadTrafficChart(trafficData);
+
+                service.initTrafficChart();
 
                 return trafficData;
             };
@@ -206,26 +204,19 @@
                     );
             };
 
-            service.loadTrafficChart = function(tData) {
-                if (!tData) return;
-                service.trafficChart.load({
-                    columns: [
-                        tData.timeSeries,
-                        tData.forecastedCallsObj.series,
-                        tData.actualCallsObj.series,
-                        tData.forecastedAverageHandleTimeObj.series,
-                        tData.actualAverageHandleTimeObj.series,
-                        tData.currentInterval
-                    ]
-                });
-            };
-
             service.initTrafficChart = function() {
                 service.trafficChart = c3.generate({
                     bindto: '#trafficChart',
                     data: {
                         x: 'x',
-                        columns: [],
+                        columns: [
+                            trafficData.timeSeries,
+                            trafficData.forecastedCallsObj.series,
+                            trafficData.actualCallsObj.series,
+                            trafficData.forecastedAverageHandleTimeObj.series,
+                            trafficData.actualAverageHandleTimeObj.series,
+                            trafficData.currentInterval
+                        ],
                         hide: hiddenArray,
                         types: {
                             Current: 'bar'
@@ -292,7 +283,6 @@
                                     hiddenArray.push(id);
                                 }
                                 service.initTrafficChart();
-                                service.loadTrafficChart(trafficData);
                             }
                         }
                     },
@@ -303,7 +293,6 @@
             };
 
             service.initTrafficChart();
-            service.loadTrafficChart(trafficData);
 
             return service;
         }

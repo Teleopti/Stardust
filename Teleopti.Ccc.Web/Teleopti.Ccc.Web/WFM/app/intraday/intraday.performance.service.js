@@ -28,7 +28,7 @@
                 },
                 summary: {},
                 hasMonitorData: false,
-				hasEmailSkill: false,
+                hasEmailSkill: false,
                 waitingForData: false,
                 timeSeries: [],
                 currentInterval: []
@@ -36,7 +36,7 @@
 
             var hiddenArray = [];
             var intervalStart;
-			var mixedArea = null;
+            var mixedArea = null;
             service.setPerformanceData = function(result, showEsl, showEmailSkill, isToday) {
                 clearData();
 
@@ -103,10 +103,7 @@
                 if (isToday) {
                     getCurrent();
                 }
-                if (service.performanceChart.data().length <= 0) {
-                    service.initPerformanceChart();
-                }
-                service.loadPerformanceChart(performanceData);
+                service.initPerformanceChart();
                 return performanceData;
             };
 
@@ -126,7 +123,7 @@
             };
 
             var clearData = function() {
-				performanceData.hasEmailSkill = false;
+                performanceData.hasEmailSkill = false;
                 performanceData.timeSeries = [];
                 performanceData.averageSpeedOfAnswerObj.series = [];
                 performanceData.abandonedRateObj.series = [];
@@ -166,7 +163,12 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, dayOffset === 0);
+                            service.setPerformanceData(
+                                result,
+                                toggles.showEsl,
+                                toggles.showEmailSkill,
+                                dayOffset === 0
+                            );
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;
@@ -220,26 +222,19 @@
                     );
             };
 
-            service.loadPerformanceChart = function(pData) {
-                if (!pData) return;
-                service.performanceChart.load({
-                    columns: [
-                        pData.timeSeries,
-                        pData.averageSpeedOfAnswerObj.series,
-                        pData.abandonedRateObj.series,
-                        pData.serviceLevelObj.series,
-                        pData.estimatedServiceLevelObj.series,
-                        pData.currentInterval
-                    ]
-                });
-            };
-
             service.initPerformanceChart = function() {
                 service.performanceChart = c3.generate({
                     bindto: '#performanceChart',
                     data: {
                         x: 'x',
-                        columns: [],
+                        columns: [
+                            performanceData.timeSeries,
+                            performanceData.averageSpeedOfAnswerObj.series,
+                            performanceData.abandonedRateObj.series,
+                            performanceData.serviceLevelObj.series,
+                            performanceData.estimatedServiceLevelObj.series,
+                            performanceData.currentInterval
+                        ],
                         hide: hiddenArray,
                         type: 'line',
                         types: {
@@ -308,7 +303,6 @@
                                     hiddenArray.push(id);
                                 }
                                 service.initPerformanceChart();
-                                service.loadPerformanceChart(performanceData);
                             }
                         }
                     },
@@ -318,8 +312,7 @@
                 });
             };
 
-            service.initPerformanceChart(performanceData);
-            service.loadPerformanceChart();
+            service.initPerformanceChart();
 
             return service;
         }
