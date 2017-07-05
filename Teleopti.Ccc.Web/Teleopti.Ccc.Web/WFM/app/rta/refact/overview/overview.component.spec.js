@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe('rtaOverviewComponent', function () {
+fdescribe('rtaOverviewComponent', function () {
   var $controllerBuilder,
     $fakeBackend,
     $componentController,
@@ -44,6 +44,31 @@ describe('rtaOverviewComponent', function () {
       .withSiteAdherence({
         Id: 'londonId',
         Name: 'London',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      });
+
+    vm = $controllerBuilder.createController().vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards
+    });
+
+    expect(ctrl.siteCards[0].site.Id).toEqual('londonId');
+    expect(ctrl.siteCards[0].site.Name).toEqual('London');
+    expect(ctrl.siteCards[0].site.AgentsCount).toEqual(11);
+    expect(ctrl.siteCards[0].site.InAlarmCount).toEqual(5);
+    expect(ctrl.siteCards[0].site.Color).toEqual(warningColor);
+  });
+
+  //DET VAR NÅGOT ON INIT, får ingen respons..... 
+  fit('should display site card with skill data', function () {
+    stateParams.skillIds = ['channelSalesId'];
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London',
+        SkillId: 'channelSalesId',
         AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
@@ -130,6 +155,42 @@ describe('rtaOverviewComponent', function () {
     expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(5);
     expect(ctrl.siteCards[0].teams[0].Color).toEqual('warning');
   });
+
+  //  fit('should display team data in site card with skill when clicked', function () {
+  //   stateParams.skillIds = ['channelSalesId'];
+  //   $fakeBackend
+  //     .withSiteAdherence({
+  //       Id: 'londonId',
+  //       SkillId: 'channelSalesId',
+  //       Name: 'London',
+  //       AgentsCount: 11,
+  //       InAlarmCount: 5,
+  //       Color: 'warning'
+  //     })
+  //     .withTeamAdherence({
+  //       SiteId: 'londonId',
+  //       SkillId: 'channelSalesId',
+  //       Name: 'Green',
+  //       AgentsCount: 11,
+  //       InAlarmCount: 5,
+  //       Color: 'warning'
+  //     });
+  //   var vm = $controllerBuilder.createController().vm;
+  //   ctrl = $componentController('rtaOverviewComponent', null, {
+  //     siteCards: vm.siteCards
+  //   });
+  //   $httpBackend.flush();
+
+  //   ctrl.siteCards[0].isOpen = true;
+  //   ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+  //   $httpBackend.flush();
+
+  //   expect(ctrl.siteCards[0].teams[0].SiteId).toEqual('londonId');
+  //   expect(ctrl.siteCards[0].teams[0].Name).toEqual('Green');
+  //   expect(ctrl.siteCards[0].teams[0].AgentsCount).toEqual(11);
+  //   expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(5);
+  //   expect(ctrl.siteCards[0].teams[0].Color).toEqual('warning');
+  // });
 
   it('should update team adherence when site is open', function () {
     $fakeBackend

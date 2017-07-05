@@ -89,9 +89,15 @@
 			}
 
 			function fetchTeams(card) {
-				rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
-					card.teams = teams;
-				});
+				if (vm.skillIds.length) {
+					rtaService.getTeamCardsFor({ siteIds: card.site.Id, skillIds: vm.skillIds }).then(function (teams) {
+						card.teams = teams;
+					});
+				} else {
+					rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
+						card.teams = teams;
+					});
+				}
 			}
 
 			function getSkillIdsFromSkillAreaId(id) {
@@ -170,18 +176,18 @@
 					$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
 					getSiteCards();
 
-				}	else if (selectedItem.hasOwnProperty('Skills')) {
+				} else if (selectedItem.hasOwnProperty('Skills')) {
 
 					$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
 					vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
 					getSiteCards(vm.skillIds);
 
-				}	else {
+				} else {
 
 					vm.skillIds = [selectedItem.Id];
 					$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
 					getSiteCards(vm.skillIds);
-					
+
 				}
 			}
 
