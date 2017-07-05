@@ -42,6 +42,7 @@
 				if (!angular.isArray(changesObj.sitesAndTeams.currentValue))
 					return
 				searchCache = {}
+				searchText = ''
 				populateGroupListAndNamemapAndFindLongestName(changesObj.sitesAndTeams.currentValue)
 				ctrl.orgsInView = ctrl.searchForOrgsByName('')
 				ctrl.updateSelectedTeamsInView()
