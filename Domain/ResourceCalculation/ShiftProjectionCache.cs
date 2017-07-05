@@ -40,8 +40,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		
 		public TimeSpan WorkShiftProjectionContractTime => _workShift.Projection.ContractTime();
 
-	    public TimeSpan WorkShiftProjectionWorkTime => _workShift.Projection.WorkTime();
-
 	    public DateTimePeriod WorkShiftProjectionPeriod => _workShift.Projection.Period().Value;
 
 	    public IVisualLayerCollection MainShiftProjection => _mainshiftProjection.Value;
