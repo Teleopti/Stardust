@@ -155,8 +155,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<DoNotNotify>().As<INotificationValidationCheck>().SingleInstance();
 
-			builder.RegisterType<DeviceInfoProvider>().As<IDeviceInfoProvider>().SingleInstance();
-
 			builder.RegisterType<ScheduleProjectionReadOnlyPersister>()
 				.As<IScheduleProjectionReadOnlyPersister>()
 				.SingleInstance();
@@ -193,13 +191,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				return false;
 
 			var runOnHangfire = typeof(IRunOnHangfire).IsAssignableFrom(t);
-#pragma warning disable 618
-			var runOnServiceBus = typeof(IRunOnServiceBus).IsAssignableFrom(t);
-#pragma warning restore 618
 			var runOnStardust = typeof(IRunOnStardust).IsAssignableFrom(t);
 			var runInSync = typeof(IRunInSync).IsAssignableFrom(t);
 			var runInSyncInFatClientProcess = typeof(IRunInSyncInFatClientProcess).IsAssignableFrom(t);
-			if (!(runOnHangfire ^ runOnServiceBus ^ runOnStardust ^ runInSync ^ runInSyncInFatClientProcess))
+			if (!(runOnHangfire ^ runOnStardust ^ runInSync ^ runInSyncInFatClientProcess))
 				throw new Exception($"All event handlers need to implement an IRunOn* interface. {t.Name} does not.");
 
 			return true;

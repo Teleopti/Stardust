@@ -144,8 +144,6 @@ ResourcePlanner_SchedulingIslands_44757 = RC
 
 Wfm_DisplayOnlineHelp_39402 = RC
 
-Wfm_QuickForecastOnHangfire_35845 = true
-
 ETL_SpeedUpPersonPeriodNightly_38097 = true
 ETL_SpeedUpNightlyReloadDatamart_38131 = true
 ETL_SpeedUpFactScheduleNightly_38019 = RC # not to be released until pbi 38304 and 41393 is done 
@@ -171,11 +169,9 @@ HealthCheck_ReinitializeReadModels_39697 = true
 ETL_SpeedUpIntradayBusinessUnit_38932 = true
 ETL_SpeedUpNightlyBusinessUnit_38932 = RC
 ETL_EventbasedDate_39562 = true
-ReadModel_ToHangfire_39147 = true
 NewPasswordHash_40460 = true
 Wfm_Intraday_OptimalStaffing_40921 = true
 Wfm_SkillPriorityRoutingGUI_39885 = RC
-LastHandlers_ToHangfire_41203 = true
 ETL_EventbasedTimeZone_40870 = true
 ETL_RemoveTimeZoneAndDateNightly_40870 = true
 ResourcePlanner_HideSkillPrioSliders_41312 = RC

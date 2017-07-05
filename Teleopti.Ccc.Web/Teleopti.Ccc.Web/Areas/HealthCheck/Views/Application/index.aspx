@@ -89,24 +89,6 @@ var identity = (ITeleoptiIdentity) CurrentTeleoptiPrincipal.Make().Current().Ide
 						</li>
 					</ul>
 					<button class="btn btn-default" data-bind="click: loadAllEtlJobHistory">Load all ETL job history from current week</button>
-					<h3>Check bus</h3>
-					<button id="Start-Check" data-bind="click: checkBus, enable: checkBusEnabled" class="btn btn-primary">Start check</button>
-					<!-- ko with: busResults -->
-					<h3 id="Bus-Results">Bus results</h3>
-					<p><b data-bind="text: MachineName"></b> (<span data-bind="	text: OSFullName + ' ' + OSPlatform + ' ' + OSVersion"></span>)</p>
-					<ul class="list-group">
-						<li class="list-group-item">Delay (ms): <span data-bind="text: MillisecondsDifference"></span></li>
-						<!-- ko foreach: Services -->
-						<li class="list-group-item" data-bind="css: { 'list-group-item-success': Status == 4, 'list-group-item-danger': Status == 1 }">
-							<span data-bind="text: Name"></span>
-							<i class="pull-right glyphicon glyphicon-ok" data-bind="visible: Status == 4"></i>
-						</li>
-						<!-- /ko -->
-						<li class="list-group-item">Physical memory installed: <span data-bind="text: (TotalPhysicalMemory / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
-						<li class="list-group-item">Physical memory consumed by bus: <span data-bind="text: (BusMemoryConsumption / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
-						<li class="list-group-item">Physical memory available: <span data-bind="text: (AvailablePhysicalMemory / (1024.0 * 1024 * 1024)).toFixed(2)"></span> GB</li>
-					</ul>
-					<!-- /ko -->
 					<!-- ko if: HealthCheck_EasyValidateAndFixReadModels_39696 -->
 					<h3>Validate &amp; fix readmodels</h3>
 					<div>

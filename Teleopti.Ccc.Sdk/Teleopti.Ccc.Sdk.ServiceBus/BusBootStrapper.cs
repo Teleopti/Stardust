@@ -1,44 +1,19 @@
 ﻿using System;
 using System.Configuration;
-using Autofac;
 using log4net;
-using Rhino.ServiceBus.MessageModules;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-    public class BusBootStrapper : AutofacBootStrapper
-    {
-		public BusBootStrapper(IContainer container) : base(container)
-		{
-		}
-
-	    protected override void ConfigureBusFacility(Rhino.ServiceBus.Impl.AbstractRhinoServiceBusConfiguration configuration)
-		{
-			base.ConfigureBusFacility(configuration);
-
-			var build = new ContainerBuilder();
-			build.RegisterType<DataSourceForTenantWrapper>().SingleInstance();
-			build.RegisterType<ApplicationLogOnMessageModule>().As<IMessageModule>().Named<IMessageModule>(typeof(ApplicationLogOnMessageModule).FullName);
-			build.Update(Container);
-		}
-
-	    protected override bool IsTypeAcceptableForThisBootStrapper(Type t)
-        {
-        	return true;
-        }		
-    }
-
 	// This is needed for payroll so don't remove this completely when (if) we remove rhino
 	public class DataSourceForTenantWrapper
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(BusBootStrapper));
+		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourceForTenantWrapper));
 		private static Lazy<IDataSourceForTenant> _lazy;
 
 		public DataSourceForTenantWrapper(

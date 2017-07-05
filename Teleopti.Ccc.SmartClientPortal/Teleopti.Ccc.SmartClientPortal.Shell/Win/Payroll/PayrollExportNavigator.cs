@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
@@ -25,7 +24,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Payroll.PayrollExportPages;
 using Teleopti.Ccc.Win.Main;
 

@@ -51,10 +51,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.LayoutBase;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
-using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.ServiceBus;
-using Teleopti.Interfaces.Domain;
 using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
@@ -315,7 +312,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<LinkProvider>().As<ILinkProvider>();
 			builder.RegisterType<SchedulePersonProvider>().As<ISchedulePersonProvider>();
 			builder.RegisterType<ScheduleColorProvider>().As<IScheduleColorProvider>();
-			builder.RegisterType<ServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<AllowanceProvider>().As<IAllowanceProvider>();
 			builder.RegisterType<AbsenceTimeProvider>().As<IAbsenceTimeProvider>();
 			builder.RegisterType<AbsenceTimeProviderCache>().As<IAbsenceTimeProviderCache>().SingleInstance();

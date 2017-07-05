@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	{
 		public IEventPublisher Target;
 		public FakeHangfireEventClient Hangfire;
-		public FakeServiceBusSender Bus;
 
 		[Test]
 		public void ShouldRunAdherencePercentageReadModelUpdaterOnHangfire()
@@ -25,14 +24,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 			Hangfire.HandlerTypes.Where(x => x.Contains(typeof (AdherencePercentageReadModelUpdater).Name))
 				.Should()
 				.Have.Count.EqualTo(1);
-		}
-
-		[Test]
-		public void ShouldNotPublishPersonStateChangeToTheBus()
-		{
-			Target.Publish(new PersonStateChangedEvent());
-
-			Bus.WasEnqueued.Should().Be.False();
 		}
 	}
 }

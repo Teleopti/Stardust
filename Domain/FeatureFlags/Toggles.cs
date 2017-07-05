@@ -135,7 +135,6 @@
 
 		Wfm_DisplayOnlineHelp_39402,
 
-		Wfm_QuickForecastOnHangfire_35845,
 		ETL_SpeedUpFactScheduleNightly_38019,
 		ETL_SpeedUpPersonPeriodNightly_38097,
 		ETL_SpeedUpNightlyReloadDatamart_38131,
@@ -167,11 +166,9 @@
 		MobileApps_EnableMobileNotifications_44476,
 
 		ETL_EventbasedDate_39562,
-		ReadModel_ToHangfire_39147,
 		NewPasswordHash_40460,
 		Wfm_Intraday_OptimalStaffing_40921,
 		Wfm_SkillPriorityRoutingGUI_39885,
-		LastHandlers_ToHangfire_41203,
 		ETL_EventbasedTimeZone_40870,
 		ETL_RemoveTimeZoneAndDateNightly_40870,
 		ETL_EventBasedAgentNameDescription_41432,

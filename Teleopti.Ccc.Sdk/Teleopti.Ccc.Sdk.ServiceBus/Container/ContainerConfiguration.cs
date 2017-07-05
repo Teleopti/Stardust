@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using Autofac;
-using Rhino.ServiceBus.Internal;
-using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Badge;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Domain.Repositories;
@@ -36,7 +34,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 		public void Configure(IContainer sharedContainer)
 		{
 			var build = new ContainerBuilder();
-			build.RegisterGeneric(typeof(InMemorySagaPersister<>)).As(typeof(ISagaPersister<>));
 
 			build.RegisterModule(
 				new CommonModule(
@@ -51,7 +48,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 
 			
 			build.RegisterModule<AuthorizationContainerInstaller>();
-			build.RegisterModule<SerializationContainerInstaller>();
 			build.RegisterModule<ServiceBusCommonModule>();
 			build.RegisterModule<PayrollContainerInstaller>();
 			build.RegisterModule<SchedulingContainerInstaller>();

@@ -12,12 +12,10 @@ using System.Threading.Tasks;
 using Autofac;
 using log4net;
 using log4net.Config;
-using log4net.Repository.Hierarchy;
 using Stardust.Node;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -38,15 +36,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		private readonly IConfigReader _configReader;
 		private readonly Action<int> _requestAdditionalTime;
-
-		[NonSerialized]
-		private ConfigFileDefaultHost _requestBus;
-
-		[NonSerialized]
-		private ConfigFileDefaultHost _generalBus;
-
-		[NonSerialized]
-		private ConfigFileDefaultHost _denormalizeBus;
 
 		private IContainer _sharedContainer;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(ServiceBusRunner));
@@ -77,38 +66,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			new ContainerConfiguration(_sharedContainer, toggleManager).Configure(null);
 			_sharedContainer.Resolve<HangfireClientStarter>().Start();
 
-            var useRhino = true;
 
-			bool.TryParse(ConfigurationManager.AppSettings["UseRhino"], out useRhino);
-
-		    if (useRhino)
+		    try
 		    {
-		        logger.Debug("Using rhino and it services");
-
-		        _generalBus = new ConfigFileDefaultHost("GeneralQueue.config",
-		            new GeneralBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-		        _generalBus.Start();
-
-		        _requestBus = new ConfigFileDefaultHost("RequestQueue.config",
-		            new BusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-		        _requestBus.Start();
-
-		        _denormalizeBus = new ConfigFileDefaultHost("DenormalizeQueue.config",
-		            new DenormalizeBusBootStrapper(makeContainer(toggleManager, _sharedContainer)));
-		        _denormalizeBus.Start();
+		        AppDomain.CurrentDomain.SetThreadPrincipal(new GenericPrincipal(new GenericIdentity("Anonymous"),
+		            new string[] {}));
 		    }
-		    else
+		    catch (PolicyException)
 		    {
-		        try
-		        {
-		            AppDomain.CurrentDomain.SetThreadPrincipal(new GenericPrincipal(new GenericIdentity("Anonymous"),
-		                new string[] {}));
-		        }
-		        catch (PolicyException)
-		        {
-		            //no way of knowing if the the principal is set or not
-		        }
+		        //no way of knowing if the the principal is set or not
 		    }
+		    
 		    AppDomain.MonitoringIsEnabled = true;
 
 			new PayrollDllCopy(new SearchPath()).CopyPayrollDll();
@@ -151,49 +119,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				});
 				Nodes = new List<NodeStarter>();
 			}
-			DisposeBusHosts();
-		}
-
-		public void DisposeBusHosts()
-		{
-			if (_requestBus != null)
-			{
-				try
-				{
-					_requestBus.Dispose();
-				}
-				catch (Exception)
-				{
-					// ignored
-				}
-			}
-			if (_generalBus != null)
-			{
-				try
-				{
-					_generalBus.Dispose();
-				}
-				catch (Exception)
-				{
-					// ignored
-				}
-			}
-			if (_denormalizeBus != null)
-			{
-				try
-				{
-					_denormalizeBus.Dispose();
-				}
-				catch (Exception)
-				{
-					// ignored
-				}
-			}
 		}
 
 		private void nodeStarter()
 		{
-
 			var port = _configReader.ReadValue("port", 14100);
 				var totalNodes = _configReader.ReadValue("NumberOfNodes", Environment.ProcessorCount);
 				for (var portIndex = 1; portIndex <= totalNodes; portIndex++)
@@ -206,9 +135,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					Thread.Sleep(3000);
 					port++;
 				}
-			
-			
-			
 		}
 
 		private void startNode(int port, string nodeName)

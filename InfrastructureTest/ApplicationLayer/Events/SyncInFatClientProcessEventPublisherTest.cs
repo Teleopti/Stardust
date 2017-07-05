@@ -78,9 +78,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			}
 		}
 
-#pragma warning disable 618
-		public class IncorrectTestEventHandler : IHandleEvent<TestEvent>, IRunOnHangfire, IRunOnServiceBus, IRunOnStardust
-#pragma warning restore 618
+		public class IncorrectTestEventHandler : IHandleEvent<TestEvent>, IRunOnHangfire, IRunOnStardust
 		{
 			public void Handle(TestEvent @event)
 			{

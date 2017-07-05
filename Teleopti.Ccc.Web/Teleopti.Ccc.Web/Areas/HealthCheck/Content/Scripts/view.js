@@ -66,9 +66,6 @@ define([
 	vm.initialize({
     	signalR: sigR,
     	messageBroker: $.connection.MessageBrokerHub,
-		checkBus: function() {
-			http.get('api/HealthCheck/CheckBus').done(function () {  });
-		},
 		loadEtlHistory: loadEtlHistory,
 		requestReadModelCheck: requestReadModelCheck,
 		requestReadModelFix: requestReadModelFix,

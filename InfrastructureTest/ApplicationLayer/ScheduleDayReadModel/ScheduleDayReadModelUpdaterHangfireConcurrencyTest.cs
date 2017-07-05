@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -19,7 +18,6 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.ScheduleDayReadModel
 	[PrincipalAndStateTest]
 	[Explicit]
 	[Category("LongRunning")]
-	[Toggle(Toggles.ReadModel_ToHangfire_39147)]
 	public class ScheduleDayReadModelUpdaterHangfireConcurrencyTest : ISetup
 	{
 		public void Setup(ISystem system, IIocConfiguration configuration)

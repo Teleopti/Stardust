@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
@@ -45,28 +44,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 					instance1.Should().Be.SameInstanceAs(instance2);
 				});
 		}
-
-#pragma warning disable 618
-		[Test]
-		[AllTogglesOn]
-		public void ShouldHaveNoHandlersOnBusWithoutLogOnContextTogglesEnabled()
-		{
-			var eventsWithoutLogOnContext = oneOfEachEvent()
-				.Where(e => !(e is ILogOnContext));
-			Resolver.JobsFor<IRunOnServiceBus>(eventsWithoutLogOnContext)
-				.Should().Be.Empty();
-		}
-
-		[Test]
-		[AllTogglesOff]
-		public void ShouldHaveNoHandlersOnBusWithoutLogOnContextTogglesDisabled()
-		{
-			var eventsWithoutLogOnContext = oneOfEachEvent()
-				.Where(e => !(e is ILogOnContext));
-			Resolver.JobsFor<IRunOnServiceBus>(eventsWithoutLogOnContext)
-				.Should().Be.Empty();
-		}
-#pragma warning restore 618
 
 		private static IEnumerable<IEvent> oneOfEachEvent()
 		{

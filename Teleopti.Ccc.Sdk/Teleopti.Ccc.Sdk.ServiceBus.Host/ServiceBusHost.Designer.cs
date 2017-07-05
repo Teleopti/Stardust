@@ -20,7 +20,6 @@
 
                 if (serviceBusRunner!=null)
                 {
-                	serviceBusRunner.DisposeBusHosts();
                 	serviceBusRunner = null;
                 }
             }

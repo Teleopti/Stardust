@@ -177,12 +177,6 @@
     <Reference Include="PresentationFramework">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="Rhino.ServiceBus, Version=3.0.2.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rhino.ServiceBus.3.0.2\lib\4.0\Rhino.ServiceBus.dll</HintPath>
-    </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.16, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
-    </Reference>
     <Reference Include="Syncfusion.Chart.Base, Version=12.1451.0.43, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Chart.Win.12.1.0.45\lib\4.0\Syncfusion.Chart.Base.dll</HintPath>
     </Reference>
@@ -330,7 +324,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="StartupModule.cs" />
-    <Compile Include="WinCode\Autofac\AutofacServiceBus.cs" />
     <Compile Include="WinCode\Budgeting\BudgetDaysUpdater.cs" />
     <Compile Include="WinCode\Budgeting\BudgetGroupMonthFilter.cs" />
     <Compile Include="WinCode\Budgeting\BudgetGroupPropertiesPage.cs" />
@@ -592,9 +585,6 @@
     <Compile Include="WinCode\Common\ScheduleTargetTimeCalculator.cs" />
     <Compile Include="WinCode\Common\SchedulingResultLoader.cs" />
     <Compile Include="WinCode\Common\SearchPersonPresenter.cs" />
-    <Compile Include="WinCode\Common\ServiceBus\DateOnlyPeriodSerializer.cs" />
-    <Compile Include="WinCode\Common\ServiceBus\LargeGuidCollectionSerializer.cs" />
-    <Compile Include="WinCode\Common\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="WinCode\Common\Time\DateTimeViewModel.cs" />
     <Compile Include="WinCode\Common\Time\ITimeZoomItemViewModel.cs" />
     <Compile Include="WinCode\Common\Time\ITimeZoomViewModel.cs" />

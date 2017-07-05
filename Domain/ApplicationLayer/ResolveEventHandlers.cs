@@ -31,10 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		public IEnumerable<IJobInfo> ResolveAllJobs(IEnumerable<IEvent> events)
 		{
 			return 
-#pragma warning disable 618
-				jobsFor<IRunOnServiceBus>(events)
-#pragma warning restore 618
-				.Concat(jobsFor<IRunOnHangfire>(events))
+				jobsFor<IRunOnHangfire>(events)
 				.Concat(jobsFor<IRunOnStardust>(events))
 				.Concat(jobsFor<IRunInSync>(events))
 				.Concat(jobsFor<IRunInSyncInFatClientProcess>(events))

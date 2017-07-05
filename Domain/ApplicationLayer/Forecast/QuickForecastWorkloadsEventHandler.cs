@@ -5,7 +5,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.DayInMonthIndex;
 using Teleopti.Ccc.Domain.Forecasting.Export;
@@ -18,46 +17,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 {
-	[DisabledBy(Toggles.Wfm_QuickForecastOnHangfire_35845)]
-#pragma warning disable 618
-	public class QuickForecastWorkloadsEventHandlerServiceBus : QuickForecastWorkloadsEventHandlerBase, IHandleEvent<QuickForecastWorkloadsEvent>, IRunOnServiceBus
-#pragma warning restore 618
-	{
-		public QuickForecastWorkloadsEventHandlerServiceBus(IWorkloadRepository workloadRepository, IMultisiteDayRepository multisiteDayRepository, IOutlierRepository outlierRepository, ISkillDayRepository skillDayRepository,
-															IScenarioRepository scenarioRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IWorkloadDayHelper workloadDayHelper, IForecastClassesCreator forecastClassesCreator,
-															IStatisticHelper statisticHelper, IValidatedVolumeDayRepository rep, IMessageBrokerComposite messageBroker, IRepository<IMultisiteSkill> skillRepository, IEventPublisher eventPublisher, ICurrentUnitOfWork currentUnitOfWork)
-			: base(workloadRepository, multisiteDayRepository, outlierRepository, skillDayRepository, scenarioRepository,
-				   jobResultRepository, feedback, workloadDayHelper, forecastClassesCreator,
-				   statisticHelper, rep, messageBroker, skillRepository, eventPublisher, currentUnitOfWork)
-		{
-		}
-
-		public void Handle(QuickForecastWorkloadsEvent @event)
-		{
-			base.HandleBase(@event);
-		}
-	}
-
-	[EnabledBy(Toggles.Wfm_QuickForecastOnHangfire_35845)]
-	public class QuickForecastWorkloadsEventHandlerHangfire : QuickForecastWorkloadsEventHandlerBase, IHandleEvent<QuickForecastWorkloadsEvent>, IRunOnHangfire
-	{
-		public QuickForecastWorkloadsEventHandlerHangfire(IWorkloadRepository workloadRepository, IMultisiteDayRepository multisiteDayRepository, IOutlierRepository outlierRepository, ISkillDayRepository skillDayRepository,
-														  IScenarioRepository scenarioRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IWorkloadDayHelper workloadDayHelper, IForecastClassesCreator forecastClassesCreator,
-														  IStatisticHelper statisticHelper, IValidatedVolumeDayRepository rep, IMessageBrokerComposite messageBroker, IRepository<IMultisiteSkill> skillRepository, IEventPublisher eventPublisher, ICurrentUnitOfWork currentUnitOfWork)
-			: base(workloadRepository, multisiteDayRepository, outlierRepository, skillDayRepository, scenarioRepository, jobResultRepository, feedback, workloadDayHelper, forecastClassesCreator,
-				   statisticHelper, rep, messageBroker, skillRepository, eventPublisher, currentUnitOfWork)
-		{
-		}
-
-		[AsSystem]
-		[UnitOfWork]
-		public virtual void Handle(QuickForecastWorkloadsEvent @event)
-		{
-			base.HandleBase(@event);
-		}
-	}
-
-	public class QuickForecastWorkloadsEventHandlerBase
+	public class QuickForecastWorkloadsEventHandlerHangfire : IHandleEvent<QuickForecastWorkloadsEvent>, IRunOnHangfire
 	{
 		private readonly IJobResultFeedback _feedback;
 		private readonly IForecastClassesCreator _forecastClassesCreator;
@@ -75,10 +35,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 		private readonly IEventPublisher _eventPublisher;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public QuickForecastWorkloadsEventHandlerBase(IWorkloadRepository workloadRepository, IMultisiteDayRepository multisiteDayRepository, IOutlierRepository outlierRepository,
-													  ISkillDayRepository skillDayRepository, IScenarioRepository scenarioRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback,
-													  IWorkloadDayHelper workloadDayHelper, IForecastClassesCreator forecastClassesCreator, IStatisticHelper statisticHelper, IValidatedVolumeDayRepository rep,
-													  IMessageBrokerComposite messageBroker, IRepository<IMultisiteSkill> skillRepository, IEventPublisher eventPublisher, ICurrentUnitOfWork currentUnitOfWork)
+		public QuickForecastWorkloadsEventHandlerHangfire(IWorkloadRepository workloadRepository, IMultisiteDayRepository multisiteDayRepository, IOutlierRepository outlierRepository, ISkillDayRepository skillDayRepository,
+														  IScenarioRepository scenarioRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IWorkloadDayHelper workloadDayHelper, IForecastClassesCreator forecastClassesCreator,
+														  IStatisticHelper statisticHelper, IValidatedVolumeDayRepository rep, IMessageBrokerComposite messageBroker, IRepository<IMultisiteSkill> skillRepository, IEventPublisher eventPublisher, ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_workloadRepository = workloadRepository;
 			_multisiteDayRepository = multisiteDayRepository;
@@ -97,7 +56,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
-		public void HandleBase(QuickForecastWorkloadsEvent @event)
+		[AsSystem]
+		[UnitOfWork]
+		public virtual void Handle(QuickForecastWorkloadsEvent @event)
 		{
 			var targetPeriod = new DateOnlyPeriod(new DateOnly(@event.TargetPeriodStart), new DateOnly(@event.TargetPeriodEnd));
 			var staticticPeriod = new DateOnlyPeriod(new DateOnly(@event.StatisticPeriodStart), new DateOnly(@event.StatisticPeriodEnd));
@@ -278,5 +239,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Forecast
 			}
 		}
 	}
-
 }

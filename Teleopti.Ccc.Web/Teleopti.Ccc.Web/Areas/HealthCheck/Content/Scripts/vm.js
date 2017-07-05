@@ -17,7 +17,6 @@ define([
 		self.configuredUrls = ko.observableArray();
 		self.services = ko.observableArray();
 		self.etlJobHistory = ko.observableArray();
-		self.busResults = ko.observable();
 		self.readModelCheckStartDate = ko.observable();
 		self.readModelCheckEndDate = ko.observable();
 		self.readmodelCheckIsRunning = ko.observable(false);
@@ -29,8 +28,6 @@ define([
 		self.readModelCheckAndFixJobPollingResult = ko.observable('anything');
 		self.reinitReadModelsJobPollingResult = ko.observable('anything');
 		self.logObjects = ko.observable();
-		self.checkBusEnabled = ko.observable(true);
-		self.checkBusEnabled = ko.observable(true);
 		self.StardustJobId = ko.observable('');
 		self.StardustSuccess = ko.observable(false);
 		self.HangfireFailCount = ko.observable(0);
@@ -185,13 +182,6 @@ define([
 			return subscription;
 		};
 
-		var checkBusFunc;
-		self.checkBus = function () {
-			self.checkBusEnabled(false);
-			self.busResults(undefined);
-			checkBusFunc();
-		};
-
 		var checkReadModelFunc;
 		self.checkReadModel = function () {
 			var cb = function(id) {
@@ -248,7 +238,6 @@ define([
 			if (options) {
 				self.hub = options.messageBroker;
 				startPromise = options.signalR.start();
-				checkBusFunc = options.checkBus;
 				subscribe({
 					domainType: 'ITeleoptiDiagnosticsInformation', businessUnitId: Teleopti.BusinessUnitId, datasource: Teleopti.DataSource
 				});
@@ -259,13 +248,7 @@ define([
 				toggleIsEnabled = options.toggleIsEnabled;
 				reinitReadModelsFunc = options.requestReinitReadModels;
 			}
-			if (self.hub && self.hub.client) {
-				self.hub.client.onEventMessage = function(notification, route) {
-					self.busResults(JSON.parse(atob(notification.BinaryData)));
 
-					self.checkBusEnabled(true);
-				}
-			}
 			if (loadEtlHistory) {
 				loadEtlHistory(true);
 			}

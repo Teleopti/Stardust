@@ -1330,7 +1330,6 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeForDefaultScenarioFilter.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedInDefaultScenarioNotification.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\MainShiftReplaceNotificationEvent.cs" />
-    <Compile Include="ApplicationLayer\ServiceBusHealthCheckEventHandler.cs" />
     <Compile Include="ApplicationLayer\RequestFactory.cs" />
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\UpdateFindPersonDataHandler.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeRequestHandler.cs" />

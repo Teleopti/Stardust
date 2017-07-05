@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage)]
 	public class HealthCheckApiController : ApiController
 	{
-		private readonly IMessagePopulatingServiceBusSender _populatingPublisher;
 		private readonly IEtlJobStatusRepository _etlJobStatusRepository;
 		private readonly IEtlLogObjectRepository _etlLogObjectRepository;
 		private readonly IStardustSender _stardustSender;
@@ -34,26 +33,15 @@ namespace Teleopti.Ccc.Web.Areas.HealthCheck.Controllers
 		private readonly HangfireUtilities _hangfireUtilities;
 		private readonly IReadModelValidator _readModelValidator;
 
-		public HealthCheckApiController(IMessagePopulatingServiceBusSender populatingPublisher,
-												  IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
+		public HealthCheckApiController(IEtlJobStatusRepository etlJobStatusRepository, IEtlLogObjectRepository etlLogObjectRepository,
 												  IStardustSender stardustSender, IToggleManager toggleManager, HangfireUtilities hangfireUtilities, IReadModelValidator readModelValidator)
 		{
-			_populatingPublisher = populatingPublisher;
 			_etlJobStatusRepository = etlJobStatusRepository;
 			_etlLogObjectRepository = etlLogObjectRepository;
 			_stardustSender = stardustSender;
 			_toggleManager = toggleManager;
 		    _hangfireUtilities = hangfireUtilities;
 			_readModelValidator = readModelValidator;
-		}
-
-		[HttpGet, UnitOfWork, Route("api/HealthCheck/CheckBus")]
-		public virtual IHttpActionResult CheckBus()
-		{
-			var diagnosticEvent = new ServiceBusHealthCheckEvent();
-			_populatingPublisher.Send(diagnosticEvent, false);
-
-			return Ok(new {diagnosticEvent.InitiatorId});
 		}
 
 		[HttpGet, UnitOfWork, Route("api/HealthCheck/LoadEtlJobHistory")]

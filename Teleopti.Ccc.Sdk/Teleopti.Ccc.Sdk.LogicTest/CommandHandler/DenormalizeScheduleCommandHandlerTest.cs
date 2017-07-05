@@ -1,12 +1,8 @@
-﻿using System.ServiceModel;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
-using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
@@ -14,7 +10,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     [TestFixture]
     public class DenormalizeScheduleCommandHandlerTest
     {
-		private IMessagePopulatingServiceBusSender _busSender;
+		private IEventPopulatingPublisher _busSender;
         private MockRepository _mock;
         private DenormalizeScheduleCommandHandler _target;
         private DenormalizeScheduleCommandDto _denormalizeScheduleCommandDto;
@@ -23,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         public void Setup()
         {
             _mock = new MockRepository();
-			_busSender = _mock.StrictMock<IMessagePopulatingServiceBusSender>();
+			_busSender = _mock.StrictMock<IEventPopulatingPublisher>();
             _target = new DenormalizeScheduleCommandHandler(_busSender);
             _denormalizeScheduleCommandDto = new DenormalizeScheduleCommandDto();
         }
@@ -33,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             using (_mock.Record())
             {
-                Expect.Call(() => _busSender.Send(new ScheduleChangedEvent(), true)).IgnoreArguments();
+                Expect.Call(() => _busSender.Publish(new ScheduleChangedEvent())).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -46,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             using (_mock.Record())
             {
-                Expect.Call(() => _busSender.Send(new ScheduleChangedEvent(), true)).IgnoreArguments();
+                Expect.Call(() => _busSender.Publish(new ScheduleChangedEvent())).IgnoreArguments();
             }
             using (_mock.Playback())
             {

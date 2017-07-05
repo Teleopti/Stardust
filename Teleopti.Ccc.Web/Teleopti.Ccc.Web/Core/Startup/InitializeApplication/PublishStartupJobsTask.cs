@@ -4,12 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Owin;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Infrastructure.Events;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
@@ -17,14 +15,12 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	[TaskPriority(1000)]
 	public class PublishStartupJobsTask : IBootstrapperTask
 	{
-		private readonly IToggleManager _toggleManager;
 		private readonly IEventPublisher _eventPublisher;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly ITenantUnitOfWork _tenantUnitOfWork;
 
-		public PublishStartupJobsTask(IToggleManager toggleManager, IEventPublisher eventPublisher, ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork)
+		public PublishStartupJobsTask(IEventPublisher eventPublisher, ILoadAllTenants loadAllTenants, ITenantUnitOfWork tenantUnitOfWork)
 		{
-			_toggleManager = toggleManager;
 			_eventPublisher = eventPublisher;
 			_loadAllTenants = loadAllTenants;
 			_tenantUnitOfWork = tenantUnitOfWork;
@@ -35,8 +31,6 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		{
 			var messagesOnBoot = parseBool("MessagesOnBoot", true);
 			if (!messagesOnBoot)
-				return null;
-			if (!_toggleManager.IsEnabled(Toggles.LastHandlers_ToHangfire_41203))
 				return null;
 
 			return Task.Run(() => 

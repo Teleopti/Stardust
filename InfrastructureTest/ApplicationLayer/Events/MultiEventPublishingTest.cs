@@ -8,7 +8,6 @@ using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 {
@@ -17,15 +16,15 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 	public class MultiEventPublishingTest : ISetup
 	{
 		public FakeHangfireEventClient Hangfire;
-		public FakeServiceBusSender Bus;
+		public FakeStardustSender Stardust;
 		public IEventPublisher Target;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeServiceBusSender>().For<IServiceBusSender>();
+			system.UseTestDouble<FakeStardustSender>().For<IStardustSender>();
 			
 			system.AddService<HangfireEventHandler>();
-			system.AddService<BusEventHandler>();
+			system.AddService<StardustEventHandler>();
 		}
 
 		[Test]
@@ -43,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 
 			Target.Publish(@event);
 
-			Bus.SentMessages.Single().Should().Be.SameInstanceAs(@event);
+			Stardust.SentMessages.Single().Should().Be.SameInstanceAs(@event);
 		}
 
 		[Test]
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Target.Publish(new EventWithBothHandlers());
 
 			Hangfire.WasEnqueued.Should().Be.True();
-			Bus.SentMessages.Should().Have.Count.EqualTo(1);
+			Stardust.SentMessages.Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -61,7 +60,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			Target.Publish(new EventWithoutHandler());
 
 			Hangfire.WasEnqueued.Should().Be.False();
-			Bus.SentMessages.Should().Have.Count.EqualTo(0);
+			Stardust.SentMessages.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
@@ -69,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Target.Publish(new EventWithHangfireHandler());
 
-			Bus.SentMessages.Should().Have.Count.EqualTo(0);
+			Stardust.SentMessages.Should().Have.Count.EqualTo(0);
 		}
 
 		[Test]
@@ -77,8 +76,8 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 		{
 			Target.Publish(new EventWithBothHandlers());
 
-			Hangfire.HandlerTypes.Any(x => x.Contains(typeof (BusEventHandler).Name)).Should().Be.False();
-			Bus.SentMessages.Should().Have.Count.EqualTo(1);
+			Hangfire.HandlerTypes.Any(x => x.Contains(typeof (StardustEventHandler).Name)).Should().Be.False();
+			Stardust.SentMessages.Should().Have.Count.EqualTo(1);
 		}
 
 		public class EventWithHangfireHandler : IEvent
@@ -111,12 +110,10 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer.Events
 			}
 		}
 
-#pragma warning disable 618
-		public class BusEventHandler :
-			IRunOnServiceBus,
+		public class StardustEventHandler :
+			IRunOnStardust,
 			IHandleEvent<EventWithBusHandler>,
 			IHandleEvent<EventWithBothHandlers>
-#pragma warning restore 618
 		{
 			public void Handle(EventWithBusHandler @event)
 			{

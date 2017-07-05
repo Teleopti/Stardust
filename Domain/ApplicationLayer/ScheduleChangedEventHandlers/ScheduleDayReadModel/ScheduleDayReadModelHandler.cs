@@ -8,15 +8,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
-	[EnabledBy(Toggles.ReadModel_ToHangfire_39147)]
 	public class ScheduleDayReadModelHandlerHangfire :
-		ScheduleDayReadModelHandlerBase,
 		IHandleEvent<ProjectionChangedEvent>,
 		IHandleEvent<ProjectionChangedEventForScheduleDay>,
 		IRunOnHangfire
 	{
-		public ScheduleDayReadModelHandlerHangfire(IPersonRepository personRepository, INotificationValidationCheck notificationValidationCheck, IScheduleDayReadModelsCreator scheduleDayReadModelsCreator, IScheduleDayReadModelRepository scheduleDayReadModelRepository) : base(personRepository, notificationValidationCheck, scheduleDayReadModelsCreator, scheduleDayReadModelRepository)
+		private readonly IPersonRepository _personRepository;
+		private readonly INotificationValidationCheck _notificationValidationCheck;
+		private readonly IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
+		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
+
+		public ScheduleDayReadModelHandlerHangfire(IPersonRepository personRepository, INotificationValidationCheck notificationValidationCheck, IScheduleDayReadModelsCreator scheduleDayReadModelsCreator, IScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
+			_personRepository = personRepository;
+			_notificationValidationCheck = notificationValidationCheck;
+			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
+			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 		}
 
 		[ImpersonateSystem]
@@ -31,49 +38,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		public virtual void Handle(ProjectionChangedEventForScheduleDay @event)
 		{
 			CreateReadModel(@event);
-		}
-	}
-
-	[DisabledBy(Toggles.ReadModel_ToHangfire_39147)]
-	public class ScheduleDayReadModelHandlerServiceBus :
-		ScheduleDayReadModelHandlerBase,
-		IHandleEvent<ProjectionChangedEvent>,
-		IHandleEvent<ProjectionChangedEventForScheduleDay>,
-#pragma warning disable 618
-		IRunOnServiceBus
-#pragma warning restore 618
-	{
-		public ScheduleDayReadModelHandlerServiceBus(IPersonRepository personRepository, INotificationValidationCheck notificationValidationCheck, IScheduleDayReadModelsCreator scheduleDayReadModelsCreator, IScheduleDayReadModelRepository scheduleDayReadModelRepository) : base(personRepository, notificationValidationCheck, scheduleDayReadModelsCreator, scheduleDayReadModelRepository)
-		{
-		}
-
-		public void Handle(ProjectionChangedEvent @event)
-		{
-			CreateReadModel(@event);
-		}
-
-		public void Handle(ProjectionChangedEventForScheduleDay @event)
-		{
-			CreateReadModel(@event);
-		}
-	}
-
-	public abstract class ScheduleDayReadModelHandlerBase
-	{
-		private readonly IPersonRepository _personRepository;
-		private readonly INotificationValidationCheck _notificationValidationCheck;
-		private readonly IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
-		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
-
-		protected ScheduleDayReadModelHandlerBase(IPersonRepository personRepository,
-																			 INotificationValidationCheck notificationValidationCheck,
-																			 IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
-																			 IScheduleDayReadModelRepository scheduleDayReadModelRepository)
-		{
-			_personRepository = personRepository;
-			_notificationValidationCheck = notificationValidationCheck;
-			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
-			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 		}
 
 		protected void CreateReadModel(ProjectionChangedEventBase message)

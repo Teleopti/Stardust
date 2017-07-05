@@ -7,7 +7,6 @@ using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Web;
@@ -56,9 +55,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 		{
 			Logger.Info("The Application ended.");
 
-			var busSender = AutofacHostFactory.Container.Resolve<IServiceBusSender>();
-			if (busSender != null)
-				busSender.Dispose();
 			if (AutofacHostFactory.Container != null)
 				AutofacHostFactory.Container.Dispose();
 

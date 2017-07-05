@@ -156,9 +156,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus">
-      <HintPath>..\..\packages\Rhino.ServiceBus.3.0.2\lib\4.0\Rhino.ServiceBus.dll</HintPath>
-    </Reference>
     <Reference Include="SharpTestsEx">
       <HintPath>..\..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
     </Reference>
@@ -540,7 +537,6 @@
     <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializerTest.cs" />
     <Compile Include="Core\Requests\Mapping\AbsenceRequestFormMappingTest.cs" />
     <Compile Include="Core\Requests\Mapping\DateTimePeriodFormMappingTest.cs" />
-    <Compile Include="Core\ServiceBus\ServiceBusSenderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Settings\Mapping\SettingsViewModelMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleDomainDataMappingTest.cs" />
     <Compile Include="Core\TeamSchedule\Mapping\TeamScheduleViewModelMappingTest.cs" />

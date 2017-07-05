@@ -139,14 +139,6 @@
     <Reference Include="policy.2.3.FSharp.Core, Version=2.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus, Version=3.0.2.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.3.0.2\lib\4.0\Rhino.ServiceBus.dll</HintPath>
-    </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.16, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
-    </Reference>
     <Reference Include="Syncfusion.Compression.Base, Version=12.1400.0.43, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Syncfusion.Pdf.12.1.0.44\lib\4.0\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
@@ -200,7 +192,6 @@
     <Compile Include="..\..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="AutofacServiceBus.cs" />
     <Compile Include="GetPayrollResultById.aspx.cs">
       <DependentUpon>GetPayrollResultById.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -215,7 +206,6 @@
     <Compile Include="Ioc\RequestFactoryModule.cs" />
     <Compile Include="SdkState.cs" />
     <Compile Include="Service\AsyncResult.cs" />
-    <Compile Include="Service\AutofacServiceBus.cs" />
     <Compile Include="Service\CreateScheduleDistributionAsyncResult.cs" />
     <Compile Include="Service\Factory\AbsenceTypeFactory.cs" />
     <Compile Include="Service\Factory\AcceptPreviouslyReferredShiftTradeCommand.cs" />
@@ -223,11 +213,9 @@
     <Compile Include="Service\Factory\AnalyticsReportsFactory.cs" />
     <Compile Include="Service\Factory\ContractFactory.cs" />
     <Compile Include="Service\Factory\ContractScheduleFactory.cs" />
-    <Compile Include="Service\Factory\DateOnlyPeriodSerializer.cs" />
     <Compile Include="Service\Factory\DayOffFactory.cs" />
     <Compile Include="Service\Factory\IAuthorizationProvider.cs" />
     <Compile Include="Service\Factory\IPersonRequestFactory.cs" />
-    <Compile Include="Service\Factory\LargeGuidCollectionSerializer.cs" />
     <Compile Include="Service\Factory\LicenseFactory.cs" />
     <Compile Include="Service\Factory\MessageBrokerFactory.cs" />
     <Compile Include="Service\Factory\MultiTenancyAuthenticationFactory.cs" />
@@ -253,7 +241,6 @@
     <Compile Include="Service\Factory\ScheduleReporting\PersonWithScheduleStream.cs" />
     <Compile Include="Service\Factory\ScheduleReporting\ScheduleReportDetail.cs" />
     <Compile Include="Service\Factory\ScheduleReporting\ScheduleToPdfManager.cs" />
-    <Compile Include="Service\Factory\ServiceBusSender.cs" />
     <Compile Include="Service\Factory\ShiftCategoryFactory.cs" />
     <Compile Include="Service\Factory\TeleoptiPayrollExportBuilder.cs" />
     <Compile Include="Service\Factory\TeleoptiPayrollExportFactory.cs" />
@@ -340,10 +327,6 @@
     <None Include="site.config.notinuse">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Teleopti.Ccc.Sdk.ServiceBus.Client.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

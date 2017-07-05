@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Logic;
@@ -24,9 +23,6 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
 		}
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ServiceBusSender>()
-				.As<IServiceBusSender>()
-				.SingleInstance();
 			builder.RegisterType<RepositoryFactory>()
 				.As<IRepositoryFactory>()
 				.SingleInstance();

@@ -1,14 +1,11 @@
 using System.Collections.Generic;
-using System.Configuration;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.ImportForecast;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms.JobHistory;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ServiceBus;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecast.Presenters;
@@ -29,14 +26,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting
             builder.RegisterType<SaveImportForecastFileCommand>().As<ISaveImportForecastFileCommand>();
             builder.RegisterType<ValidateImportForecastFileCommand>().As<IValidateImportForecastFileCommand>();
 
-			if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["FreemiumForecast"]))
-				builder.RegisterType<ServiceBusSender>()
-				 .As<IServiceBusSender>()
-				 .SingleInstance();
-			else
-				builder.RegisterType<NoServiceBusSender>()
-				 .As<IServiceBusSender>()
-				 .SingleInstance();
             builder.RegisterType<ImportForecastView>()
                 .As<IImportForecastView>()
                 .OnActivated(e => e.Instance.Presenter = e.Context.Resolve<ImportForecastPresenter>())

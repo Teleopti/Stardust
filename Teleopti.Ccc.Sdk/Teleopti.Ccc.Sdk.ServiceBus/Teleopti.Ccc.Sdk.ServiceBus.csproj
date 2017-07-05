@@ -113,14 +113,6 @@
     <Reference Include="policy.2.3.FSharp.Core">
       <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus, Version=3.0.2.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.3.0.2\lib\4.0\Rhino.ServiceBus.dll</HintPath>
-    </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.16, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
-    </Reference>
     <Reference Include="Stardust.Node, Version=1.0.0.793, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Stardust.Node.1.0.0.793\lib\net451\Stardust.Node.dll</HintPath>
     </Reference>
@@ -176,10 +168,6 @@
     <Compile Include="..\..\Teleopti.Ccc.Web\Teleopti.Ccc.Web\Areas\Rta\ITeleoptiRtaService.cs">
       <Link>Rta\ITeleoptiRtaService.cs</Link>
     </Compile>
-    <Compile Include="AgentBadge\BadgeCalculationInitConsumer.cs" />
-    <Compile Include="AutofacServiceBus.cs" />
-    <Compile Include="HealthCheck\DeviceInfoProvider.cs" />
-    <Compile Include="InternalServiceBusSender.cs" />
     <Compile Include="NodeHandlers\ApproveRequestsWithValidatorsEventStardustHandler.cs" />
     <Compile Include="NodeHandlers\ExportPayrollHandler.cs" />
     <Compile Include="NodeHandlers\ExportMultisiteSkillsToSkillEventHandler.cs" />
@@ -200,23 +188,11 @@
     <Compile Include="NodeHandlers\WebScheduleHandler.cs" />
     <Compile Include="Payroll\InitializePayrollFormatsToDb.cs" />
     <Compile Include="NotificationModule.cs" />
-    <Compile Include="Payroll\PayrollBusBootStrapper.cs" />
     <Compile Include="Payroll\PayrollContainerInstaller.cs" />
     <Compile Include="Payroll\PayrollDllCopy.cs" />
     <Compile Include="ServiceBusCommonModule.cs" />
-    <Compile Include="ApplicationLayer\EventsConsumer.cs" />
     <Compile Include="AuthorizationContainerInstaller.cs" />
-    <Compile Include="BusStartup.cs" />
-    <Compile Include="ConfigFileDefaultHost.cs" />
     <Compile Include="Container\ContainerConfiguration.cs" />
-    <Compile Include="GeneralBusBootStrapper.cs" />
-    <Compile Include="ServiceBusDelayedMessageSender.cs" />
-    <Compile Include="Legacy\LegacyMessageTransformer.cs" />
-    <Compile Include="DateOnlyPeriodSerializer.cs" />
-    <Compile Include="DenormalizeBusBootStrapper.cs" />
-    <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
-    <Compile Include="InitialLoadOfScheduleProjectionReadModel.cs" />
-    <Compile Include="LargeGuidCollectionSerializer.cs" />
     <Compile Include="Payroll\ChannelCreator.cs" />
     <Compile Include="Payroll\FormatLoader\AssemblyFileLoader.cs" />
     <Compile Include="Payroll\FormatLoader\DomainAssemblyResolver.cs" />
@@ -238,9 +214,7 @@
     <Compile Include="Payroll\PayrollPeopleLoader.cs" />
     <Compile Include="Payroll\PersonBusAssembler.cs" />
     <Compile Include="BusBootStrapper.cs" />
-    <Compile Include="ApplicationLogOnMessageModule.cs" />
     <Compile Include="SchedulingContainerInstaller.cs" />
-    <Compile Include="SerializationContainerInstaller.cs" />
     <Compile Include="ServiceBusRunner.cs" />
   </ItemGroup>
   <ItemGroup>

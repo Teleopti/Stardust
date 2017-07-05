@@ -26,9 +26,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<HangfireEventPublisher>().SingleInstance();
 			builder.RegisterType<SyncInFatClientProcessEventPublisher>().SingleInstance();
 			builder.RegisterType<SyncEventPublisher>().SingleInstance();
-			builder.RegisterType<ServiceBusEventPublisher>().SingleInstance();
 			builder.RegisterType<SyncAllEventPublisher>().SingleInstance();
-			builder.RegisterType<ServiceBusAsSyncEventPublisher>().SingleInstance().ApplyAspects();
 			builder.RegisterType<HangfireAsSyncEventPublisher>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MultiEventPublisherServiceBusAsSync>().SingleInstance();
 			builder.RegisterType<StardustEventPublisher>().SingleInstance();
@@ -50,10 +48,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<CommonEventProcessor>().ApplyAspects().SingleInstance();
 			builder.RegisterType<HangfireEventProcessor>().SingleInstance();
-			builder.RegisterType<ServiceBusEventProcessor>().SingleInstance();
-
-
-
 
 			if (_configuration.Args().BehaviorTestServer)
 			{
@@ -67,8 +61,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.Register(c => c.Resolve<SyncAllEventPublisher>()).As<IEventPublisher>().SingleInstance();
 				builder.RegisterType<IgnoreDelayedMessages>().As<IDelayedMessageSender>().SingleInstance();
 			}
-
-
 		}
 	}
 	

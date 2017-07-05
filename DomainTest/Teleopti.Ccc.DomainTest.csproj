@@ -754,7 +754,6 @@
     <Compile Include="GroupPageCreator\SingleAgentTeamGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\SkillGroupPageTest.cs" />
     <Compile Include="ApplicationLayer\AddFullDayAbsenceCommandHandlerTest.cs" />
-    <Compile Include="ApplicationLayer\DenormalizeScheduleProjectionTest.cs" />
     <Compile Include="MessageBroker\ImplementationDetailTests\SubscriptionTest.cs" />
     <Compile Include="Helper\VisualLayerCollectionExtensionsTest.cs" />
     <Compile Include="Helper\StaffingCalculatorServiceModelTest.cs" />

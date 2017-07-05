@@ -1,13 +1,11 @@
 ﻿using Autofac;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
-using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {
@@ -29,19 +27,9 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(CommonModule.ForTest());
-			builder.RegisterType<FakeServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			var container = builder.Build();
 
 			container.Resolve<IEventPopulatingPublisher>().Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldResolveServiceBusSender()
-		{
-			using (var container = buildContainer())
-			{
-				container.Resolve<IMessagePopulatingServiceBusSender>().Should().Not.Be.Null();
-			}
 		}
 
 		[Test]
@@ -57,9 +45,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(CommonModule.ForTest());
-			builder.RegisterInstance(MockRepository.GenerateMock<IServiceBusSender>()).As<IServiceBusSender>();
 			return builder.Build();
 		}
-
 	}
 }

@@ -372,7 +372,6 @@
     <Compile Include="Repositories\SeatBookingRepositoryTest.cs" />
     <Compile Include="Repositories\SeatPlanRepositoryTest.cs" />
     <Compile Include="Aop\AspectsTest.cs" />
-    <Compile Include="ApplicationLayer\Events\ServiceBusAsSyncEventPublisherTest.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcherTest.cs" />
     <Compile Include="Bugs\Bug11558.cs" />
     <Compile Include="Bugs\Bug22329.cs" />
@@ -627,7 +626,6 @@
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\OptionalColumnChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\ScheduleMessageSenderTest.cs" />
-    <Compile Include="ApplicationLayer\Events\ServiceBusEventPublishingTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\TeamOrSiteChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\TransactionHookInvokationTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspectTest.cs" />

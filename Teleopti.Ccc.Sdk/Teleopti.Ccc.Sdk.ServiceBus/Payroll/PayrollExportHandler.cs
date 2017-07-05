@@ -2,7 +2,6 @@
 using System.Globalization;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader;
-using Teleopti.Interfaces.Infrastructure;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -13,9 +12,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
 {
-#pragma warning disable 618
-	public class PayrollExportHandler : IHandleEvent<RunPayrollExportEvent>, IRunOnServiceBus
-#pragma warning restore 618
+	public class PayrollExportHandler : IHandleEvent<RunPayrollExportEvent>, IRunOnStardust
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IPayrollExportRepository _payrollExportRepository;

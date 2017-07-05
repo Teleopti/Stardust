@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Autofac;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.ServiceBus.MessageModules;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -49,16 +48,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			builder.RegisterType<DataSourceForTenantWrapper>().SingleInstance();
 			builder.RegisterType<fakeTenantUnitOfWork>().As<ITenantUnitOfWork>().SingleInstance();
 			builder.RegisterType<fakeLoadAllTenants>().As<ILoadAllTenants>().SingleInstance();
-			builder.RegisterType<ApplicationLogOnMessageModule>().As<IMessageModule>().Named<IMessageModule>("1");
 
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterInstance(appData);
 			builder.RegisterModule<AuthorizationContainerInstaller>();
-
-			using (var container = builder.Build())
-			{
-				container.Resolve<IMessageModule>().Should().Not.Be.Null();
-			}
 		}
 
 		private class fakeTenantUnitOfWork : ITenantUnitOfWork

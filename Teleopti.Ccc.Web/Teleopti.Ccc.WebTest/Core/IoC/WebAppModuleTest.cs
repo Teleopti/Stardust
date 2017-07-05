@@ -516,13 +516,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			mbCacheFactory.ImplementationTypeFor(typeof (IRuleSetProjectionService))
 				.Should().Be.EqualTo<IRuleSetProjectionService>();
 		}
-		
-		[Test]
-		public void ShouldRegisterServiceBusSender()
-		{
-			requestContainer.Resolve<IServiceBusSender>()
-				.Should().Not.Be.Null();
-		}
 
 		[Test]
 		public void ShouldResolveMakeRegionalFromPerson()

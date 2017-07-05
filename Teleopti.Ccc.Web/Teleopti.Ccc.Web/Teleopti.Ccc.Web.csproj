@@ -320,13 +320,6 @@
     <Reference Include="policy.2.3.FSharp.Core">
       <HintPath>..\..\packages\FSharp.Core.3.0.0.2\lib\net40\policy.2.3.FSharp.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus">
-      <HintPath>..\..\packages\Rhino.ServiceBus.3.0.2\lib\4.0\Rhino.ServiceBus.dll</HintPath>
-    </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.16, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.16\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
-    </Reference>
     <Reference Include="StackExchange.Redis.StrongName, Version=1.1.608.0, Culture=neutral, PublicKeyToken=c219ff1ca8c2ce46, processorArchitecture=MSIL">
       <HintPath>..\..\packages\StackExchange.Redis.StrongName.1.1.608\lib\net46\StackExchange.Redis.StrongName.dll</HintPath>
     </Reference>
@@ -1013,7 +1006,6 @@
     <Compile Include="Core\IdentityProviderProvider.cs" />
     <Compile Include="Core\IIanaTimeZoneProvider.cs" />
     <Compile Include="Core\IIdentityProviderProvider.cs" />
-    <Compile Include="Core\IoC\AutofacServiceBus.cs" />
     <Compile Include="Core\IoC\WebAppModule.cs" />
     <Compile Include="Core\IoC\WebCommonModule.cs" />
     <Compile Include="Core\IResourceVersion.cs" />
@@ -1152,7 +1144,6 @@
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactory.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IBusinessUnitsViewModelFactory.cs" />
     <Compile Include="Areas\Start\Models\Test\TestMessageViewModel.cs" />
-    <Compile Include="Core\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceTypesProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceTypesProvider.cs" />
     <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 	public class QuickForecastWorkloadEventHandlerTest
 	{
 		private ISkillDayRepository _skillDayRep;
-		private QuickForecastWorkloadsEventHandlerBase _target;
+		private QuickForecastWorkloadsEventHandlerHangfire _target;
 		private IOutlierRepository _outlierRep;
 		private IWorkloadRepository _workloadRep;
 		private IScenarioRepository _scenarioRep;
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_eventPublisher = new LegacyFakeEventPublisher();
 			_currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 
-			_target = new QuickForecastWorkloadsEventHandlerBase(_workloadRep, _multisiteDayRep, _outlierRep, _skillDayRep, _scenarioRep, _jobResultRep, _jobResultFeedback,
+			_target = new QuickForecastWorkloadsEventHandlerHangfire(_workloadRep, _multisiteDayRep, _outlierRep, _skillDayRep, _scenarioRep, _jobResultRep, _jobResultFeedback,
 				_workloadDayHelper, _forecastClassesCreator, _statisticHelper, _validatedVolumeDayRepo, _messBroker, _skillRep, _eventPublisher, _currentUnitOfWork);
 
 			_unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(null);
 
-			_target.HandleBase(_mess);
+			_target.Handle(_mess);
 
 			_workloadRep.AssertWasNotCalled(x => x.Get(Guid.Empty), o => o.IgnoreArguments());
 		}
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(null);
 
-			_target.HandleBase(_mess);
+			_target.Handle(_mess);
 
 			_scenarioRep.AssertWasNotCalled(x => x.Get(Guid.Empty), o => o.IgnoreArguments());
 		}
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_forecastClassesCreator.Stub(x => x.CreateWorkloadDayTemplateCalculator(_statisticHelper, _outlierRep)).Return(workloadDayTemplateCalculator);
 			_skillRep.Stub(x => x.Get(Guid.Empty)).Return(null);
 
-			_target.HandleBase(_mess);
+			_target.Handle(_mess);
 
 			workloadDayTemplateCalculator.AssertWasCalled(x => x.LoadWorkloadDayTemplates(new List<DateOnlyPeriod>(), workload),
 														  o => o.IgnoreArguments());
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_forecastClassesCreator.Stub(x => x.CreateWorkloadDayTemplateCalculator(_statisticHelper, _outlierRep)).Return(workloadDayTemplateCalculator);
 			_skillRep.Stub(x => x.Get(Guid.Empty)).Return(SkillFactory.CreateMultisiteSkill("Multi sales"));
 
-			_target.HandleBase(_mess);
+			_target.Handle(_mess);
 
 			workloadDayTemplateCalculator.AssertWasCalled(x => x.LoadWorkloadDayTemplates(new List<DateOnlyPeriod>(), workload),
 														  o => o.IgnoreArguments());
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_forecastClassesCreator.Stub(x => x.CreateWorkloadDayTemplateCalculator(_statisticHelper, _outlierRep)).Return(workloadDayTemplateCalculator);
 			_skillRep.Stub(x => x.Get(Guid.Empty)).Return(null);
 
-			_target.HandleBase(_mess);
+			_target.Handle(_mess);
 
 			workloadDayTemplateCalculator.AssertWasCalled(x => x.LoadWorkloadDayTemplates(new List<DateOnlyPeriod>(), workload),
 														  o => o.IgnoreArguments());
@@ -275,10 +275,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_scenarioRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
 			_statisticHelper.Stub(x => x.LoadStatisticData(_statPeriod, workload)).Return(new List<IWorkloadDayBase>());
 
-			var target = new QuickForecastWorkloadsEventHandlerBase(_workloadRep, _multisiteDayRep, _outlierRep, _skillDayRep, _scenarioRep, _jobResultRep, _jobResultFeedback,
+			var target = new QuickForecastWorkloadsEventHandlerHangfire(_workloadRep, _multisiteDayRep, _outlierRep, _skillDayRep, _scenarioRep, _jobResultRep, _jobResultFeedback,
 				_workloadDayHelper, _forecastClassesCreator, _statisticHelper, null, _messBroker, _skillRep, _eventPublisher, _currentUnitOfWork);
 
-			target.HandleBase(_mess);
+			target.Handle(_mess);
 
 			_statisticHelper.AssertWasNotCalled(
 				x => x.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, new List<IValidatedVolumeDay>()),
@@ -295,7 +295,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Forecast
 			_jobResultRep.Stub(x => x.Get(_jobId)).Return(jobResult);
 			_workloadRep.Stub(x => x.Get(Guid.NewGuid())).IgnoreArguments().Throw(new ArgumentOutOfRangeException());
 
-			_target.HandleBase(_mess);
+			_target.Handle(_mess);
 
 			_jobResultFeedback.AssertWasCalled(x => x.ReportProgress(0, "Error"), o => o.IgnoreArguments());
 		}

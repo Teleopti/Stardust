@@ -394,7 +394,7 @@
     <Compile Include="FakeRepositories\Tenant\FakeTenants.cs" />
     <Compile Include="FakeScheduleDifferenceSaver.cs" />
     <Compile Include="FakeScheduleRange.cs" />
-    <Compile Include="FakeServiceBusSender.cs" />
+    <Compile Include="FakeStardustSender.cs" />
     <Compile Include="FakeShiftTradeLightValidator.cs" />
     <Compile Include="FakeSignalR.cs" />
     <Compile Include="FakeSignalRClient.cs" />

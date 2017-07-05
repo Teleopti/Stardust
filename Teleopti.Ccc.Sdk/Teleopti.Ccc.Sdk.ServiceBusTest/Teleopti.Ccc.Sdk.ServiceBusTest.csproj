@@ -80,10 +80,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus, Version=3.0.2.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.3.0.2\lib\4.0\Rhino.ServiceBus.dll</HintPath>
-    </Reference>
     <Reference Include="SharpTestsEx">
       <HintPath>..\..\packages\SharpTestsEx.1.1.1\lib\SharpTestsEx.dll</HintPath>
     </Reference>
@@ -115,23 +111,18 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AgentBadge\LogObjectDateCheckerTest.cs" />
-    <Compile Include="BootstrapperResolveTest.cs" />
     <Compile Include="ContainerTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeWithRankCalculatorTest.cs" />
     <Compile Include="AgentBadge\AgentBadgeCalculatorTest.cs" />
-    <Compile Include="AgentBadge\BadgeCalculationInitConsumerTest.cs" />
     <Compile Include="AgentBadge\CalculateBadgesTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
     <Compile Include="BudgetGroupHeadCountSpecificationTest.cs" />
     <Compile Include="Container\ContainerConfigurationTest.cs" />
-    <Compile Include="Diagnostics\ServiceBusHealthCheckEventHandlerTest.cs" />
-    <Compile Include="NoNewConsumersTest.cs" />
     <Compile Include="PayrollDllCopyTest.cs" />
     <Compile Include="Payroll\PayrollExportConsumerTest.cs" />
     <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />
     <Compile Include="Payroll\PlugInLoaderTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
-    <Compile Include="ShiftTrade\ShiftTradeContainerInstallerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="log4net.config">
@@ -140,10 +131,6 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="testQueue.config">
-      <SubType>Designer</SubType>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <None Include="App.Config">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
