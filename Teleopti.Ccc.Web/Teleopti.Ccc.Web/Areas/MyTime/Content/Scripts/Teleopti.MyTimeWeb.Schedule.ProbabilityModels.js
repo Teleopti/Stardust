@@ -152,8 +152,8 @@
 		if (dayViewModel.periods == undefined || dayViewModel.periods.length === 0)
 			return false;
 		var period = dayViewModel.periods[0];
-		var startDate = moment(period.StartTime).format(constants.dateOnlyFormat);
-		var endDate = moment(period.EndTime).format(constants.dateOnlyFormat);
+		var startDate = moment(period.StartTime).format(constants.serviceDateTimeFormat.dateOnly);
+		var endDate = moment(period.EndTime).format(constants.serviceDateTimeFormat.dateOnly);
 		return moment(startDate).isBefore(endDate);
 	}
 

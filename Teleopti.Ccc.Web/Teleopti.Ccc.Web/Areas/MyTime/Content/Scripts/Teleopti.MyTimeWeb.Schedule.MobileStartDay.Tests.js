@@ -90,14 +90,14 @@
 
 	test("should go back to current date after clicking 'home' icon", function () {
 		var currentUserDate = moment().zone(-startDayData.BaseUtcOffsetInMinutes);
-		startDayData.Date = currentUserDate.format(constants.dateOnlyFormat);
+		startDayData.Date = currentUserDate.format(constants.serviceDateTimeFormat.dateOnly);
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm(); 
 
 		vm.nextDay();
-		equal(vm.selectedDate().format(constants.dateOnlyFormat), currentUserDate.add('days', 1).format(constants.dateOnlyFormat));
+		equal(vm.selectedDate().format(constants.serviceDateTimeFormat.dateOnly), currentUserDate.add('days', 1).format(constants.serviceDateTimeFormat.dateOnly));
 		vm.today();
-		equal(vm.selectedDate().format(constants.dateOnlyFormat), currentUserDate.subtract('days', 1).format(constants.dateOnlyFormat));
+		equal(vm.selectedDate().format(constants.serviceDateTimeFormat.dateOnly), currentUserDate.subtract('days', 1).format(constants.serviceDateTimeFormat.dateOnly));
 	});
 
 	test("should set timelines", function () {
@@ -492,7 +492,7 @@
 			return false;
 		};
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
-		startDayData.Date = moment().zone(-startDayData.BaseUtcOffsetInMinutes).format(constants.dateOnlyFormat);
+		startDayData.Date = moment().zone(-startDayData.BaseUtcOffsetInMinutes).format(constants.serviceDateTimeFormat.dateOnly);
 		startDayData.Schedule.OpenHourPeriod = { EndTime: "13:00:00", StartTime: "08:00:00" };
 		propabilities = createPropabilities(["12:00:00", "15:00:00"], startDayData.Date);
 
@@ -511,7 +511,7 @@
 		};
 		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 		startDayData.CheckStaffingByIntraday = true;
-		startDayData.Date = moment().zone(-startDayData.BaseUtcOffsetInMinutes).format(constants.dateOnlyFormat);
+		startDayData.Date = moment().zone(-startDayData.BaseUtcOffsetInMinutes).format(constants.serviceDateTimeFormat.dateOnly);
 
 		startDayData.Schedule.Periods.forEach(function (period) {
 			period.StartTime = startDayData.Date + "T" + moment(period.StartTime).format("HH:mm:ss");

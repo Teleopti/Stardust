@@ -194,7 +194,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	}
 
 	function getCurrentUserDate() {
-		var day = Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(self.baseUtcOffsetInMinutes).format(constants.dateOnlyFormat);
+		var day = Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(self.baseUtcOffsetInMinutes).format(constants.serviceDateTimeFormat.dateOnly);
 		return moment(day);
 	}
 
@@ -336,8 +336,8 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		if (data) {
 			var count = self.requestCount();
 			var date = moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth));
-			var formattedDate = date.format(constants.dateOnlyFormat);
-			if (self.requestDay.format(constants.dateOnlyFormat) === formattedDate) {
+			var formattedDate = date.format(constants.serviceDateTimeFormat.dateOnly);
+			if (self.requestDay.format(constants.serviceDateTimeFormat.dateOnly) === formattedDate) {
 				count++;
 			}
 			self.requestCount(count);

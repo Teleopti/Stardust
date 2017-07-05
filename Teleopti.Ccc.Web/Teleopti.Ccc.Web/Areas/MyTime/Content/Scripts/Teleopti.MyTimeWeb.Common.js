@@ -48,7 +48,11 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 				vertical: 0,
 				horizontal: 1
 			},
-			dateOnlyFormat:"YYYY-MM-DD"
+			serviceDateTimeFormat: {
+				dateTime: "YYYY-MM-DD HH:mm",
+				dateOnly: "YYYY-MM-DD",
+				timeOnly: "HH:mm"
+			}
 		};
 
 	function isToggleEnabled(toggleName) {
