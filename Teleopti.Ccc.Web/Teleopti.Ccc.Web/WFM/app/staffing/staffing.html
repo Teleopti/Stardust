@@ -93,32 +93,37 @@
             <h2>Overtime settings</h2>
         </div>
         <div class="con-row">
-            <form novalidate ng-submit="vm.suggestOvertime()" name="overtimeForm">
-                <div class="con-flex">
-                    <div ng-repeat="comp in vm.compensations">
-                        <div class="wfm-radio">
-                            <label>
-				<input type="radio" required name="radio" value={{comp.Id}} ng-model="vm.overtimeSettings.Compensation">
+            <div class="con-flex">
+                <h3>Compensations</h3>
+                <div ng-repeat="comp in vm.compensations">
+                    <div class="wfm-radio">
+                        <label>
+				<input type="radio" ng-checked="$index==0?true:false" required name="radio" value={{comp.Id}} ng-model="vm.overtimeSettings.Compensation">
 				<span class="wfm-radio-toggle"></span>
 				<span class="wfm-radio-label">{{comp.Name}}</span>
 			</label>
-                        </div>
                     </div>
                 </div>
+            </div>
+            <form class="con-flex" novalidate ng-submit="vm.suggestOvertime()" name="overtimeForm">
+                <h3>Amount of allowed overtime (hh:mm)</h3>
+
                 <div class="con-flex">
-                    <label for="To">Minimum Overtime(hh:mm)</label>
+                    <label for="To">Minimum</label>
                     <input required type="time" name="To" placeholder="HH:mm:ss" ng-model="vm.overtimeSettings.MinMinutesToAdd" ng-change=""
                         value="00:00:00">
                 </div>
                 <div class="con-flex">
-                    <label for="From">Maximum Overtime(hh:mm)</label>
+                    <label for="From">Maximum</label>
                     <input required type="time" name="From" placeholder="HH:mm:ss" ng-model="vm.overtimeSettings.MaxMinutesToAdd" value="10:00:00">
                 </div>
-                <button class="wfm-btn" ng-class="!overtimeForm.$valid ? 'wfm-btn-primary-disabled' : 'wfm-btn-primary'" ng-disabled="!overtimeForm.$valid"
-                    type="submit">{{'GetSuggestionsForOvertime' | translate}}</button>
+                <button style="float:right;" class="wfm-btn" ng-class="!overtimeForm.$valid ? 'wfm-btn-primary-disabled' : 'wfm-btn-primary'"
+                    ng-disabled="!overtimeForm.$valid" type="submit">{{'GetSuggestionsForOvertime' | translate}}</button>
                 <span class="error" ng-show="overtimeForm.input.$error">
          Not a valid date!</span>
             </form>
+            <div class="con-flex x3"></div>
+
         </div>
     </div>
 
