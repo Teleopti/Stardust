@@ -472,6 +472,8 @@
 		}
 
 		vm.searchPlaceholder = $translate.instant('Search');
+
+		personSelectionSvc.clearPersonInfo();
 	}
 
 	function replaceArrayValues(from, to) {
