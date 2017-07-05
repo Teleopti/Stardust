@@ -243,7 +243,6 @@
     <Compile Include="FakeRepositories\FakeQueuedAbsenceRequestRepository.cs" />
     <Compile Include="FakeRepositories\FakePersonScheduleDayReadModelFinder.cs" />
     <Compile Include="FakeRepositories\FakeProjectionVersionPersister.cs" />
-    <Compile Include="FakeRepositories\FakeQueuedOvertimeRequestRepository.cs" />
     <Compile Include="FakeRepositories\FakeReadModelValidationResultPersistor.cs" />
     <Compile Include="FakeRepositories\FakeRequestStrategySettingsReader.cs" />
     <Compile Include="FakeRepositories\FakeRuleSetBagRepository.cs" />

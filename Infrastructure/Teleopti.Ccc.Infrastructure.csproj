@@ -261,7 +261,6 @@
     <Compile Include="Hangfire\QueueFromArgumentAttribute.cs" />
     <Compile Include="Hangfire\JobExpirationTimeAttribute.cs" />
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
-    <Compile Include="Repositories\QueuedOvertimeRequestRepository.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="Repositories\UserDeviceRepository.cs" />
     <Compile Include="Repositories\RequeueHangfireRepository.cs" />

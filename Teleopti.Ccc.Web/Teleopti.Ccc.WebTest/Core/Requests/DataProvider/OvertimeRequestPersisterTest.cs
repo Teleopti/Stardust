@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			system.UseTestDouble(new FakeLoggedOnUser(_person)).For<ILoggedOnUser>();
 			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
-			system.UseTestDouble<FakeQueuedOvertimeRequestRepository>().For<IQueuedOvertimeRequestRepository>();
 			system.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
 		}
 
