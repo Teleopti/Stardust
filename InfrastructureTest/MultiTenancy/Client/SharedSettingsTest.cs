@@ -30,16 +30,6 @@ namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 		}
 
 		[Test]
-		public void QueueCanBeOverriden()
-		{
-			var value = RandomName.Make();
-			var org = new Dictionary<string, string> { { "Queue", value } };
-			var target = new SharedSettings { Queue = RandomName.Make() };
-			var result = target.AddToAppSettings(org);
-			result["Queue"].Should().Be.EqualTo(value);
-		}
-
-		[Test]
 		public void NumberOfDaysToShowNonPendingRequestsCanBeOverriden()
 		{
 			const string value = "47";

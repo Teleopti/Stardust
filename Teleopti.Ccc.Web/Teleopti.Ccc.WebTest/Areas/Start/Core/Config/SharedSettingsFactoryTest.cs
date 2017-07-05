@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.Web.Areas.Start.Core.Config;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 {
@@ -61,20 +60,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Config
 			var result = target.Create();
 
 			result.RtaPollingInterval.Should().Be.EqualTo(expected);
-		}
-
-		[Test]
-		public void ShouldGetQueue()
-		{
-			var expected = RandomName.Make();
-			var appConfig = new FakeConfigReader();
-			appConfig.FakeConnectionString("Queue", expected);
-			var target = new SharedSettingsFactory(appConfig, new FakeLoadPasswordPolicyService());
-
-			var result = target.Create();
-
-			var decryptedResult = Encryption.DecryptStringFromBase64(result.Queue, EncryptionConstants.Image1, EncryptionConstants.Image2);
-			decryptedResult.Should().Be.EqualTo(expected);
 		}
 
 		[Test]

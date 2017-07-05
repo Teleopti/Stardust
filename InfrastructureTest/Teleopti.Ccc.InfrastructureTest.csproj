@@ -213,7 +213,6 @@
     <Compile Include="MultiTenancy\Admin\TenantExistsTest.cs" />
     <Compile Include="MultiTenancy\Client\AuthenticationQuerierResultConverterTest.cs" />
     <Compile Include="MultiTenancy\Client\ChangePasswordTest.cs" />
-    <Compile Include="MultiTenancy\Client\SharedSettingsQuerierForNoWebTest.cs" />
     <Compile Include="MultiTenancy\Client\SharedSettingsTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantDataManagerTest.cs" />
     <Compile Include="MultiTenancy\Client\TenantLogonDataManagerTest.cs" />

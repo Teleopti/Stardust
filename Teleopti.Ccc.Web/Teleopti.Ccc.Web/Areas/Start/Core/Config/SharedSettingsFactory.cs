@@ -20,14 +20,12 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Config
 
 		public SharedSettings Create()
 		{
-			var connectionString = _configReader.ConnectionString("Queue");
 			var hangfireConnection = _configReader.ConnectionString("Hangfire");
 			return new SharedSettings
 			{
 				MessageBroker = _configReader.AppConfig("MessageBroker"),
 				MessageBrokerLongPolling = _configReader.AppConfig("MessageBrokerLongPolling"),
 				RtaPollingInterval = _configReader.AppConfig("RtaPollingInterval"),
-				Queue = connectionString == null ? string.Empty : Encryption.EncryptStringToBase64(connectionString, EncryptionConstants.Image1, EncryptionConstants.Image2),
 				Hangfire = hangfireConnection == null ? string.Empty : Encryption.EncryptStringToBase64(hangfireConnection, EncryptionConstants.Image1, EncryptionConstants.Image2),
 				PasswordPolicy = _passwordPolicyService.DocumentAsString,
 				NumberOfDaysToShowNonPendingRequests = Convert.ToInt32(_configReader.AppConfig("NumberOfDaysToShowNonPendingRequests")),
