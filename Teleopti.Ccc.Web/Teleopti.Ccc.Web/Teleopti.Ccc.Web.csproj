@@ -1654,6 +1654,7 @@
     <Content Include="WFM\app\staffing\staffing.util.service.js" />
     <Content Include="WFM\app\staffing\_modules.js" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.addOvertime.html" />
+    <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.moveShift.spec.js" />
     <Content Include="WFM\app\teamSchedule\html\teamsDatetimePicker.tpl.html" />
     <Content Include="WFM\app\teamSchedule\commands\teams.component.cmd.moveShift.html" />
     <Content Include="WFM\app\teamSchedule\html\noteEditor.html" />

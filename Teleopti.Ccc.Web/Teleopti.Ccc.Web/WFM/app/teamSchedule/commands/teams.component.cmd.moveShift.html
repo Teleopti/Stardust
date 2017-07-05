@@ -6,13 +6,19 @@
 			<h3>{{'StartTime' | translate}}:</h3>
 			<div uib-timepicker class="focus-default" ng-model="$ctrl.moveToTime" required show-meridian="$ctrl.showMeridian" meridians="$ctrl.meridians" md-autofocus="::$ctrl.containerCtrl.onReady()"></div>
 		</form>
+		<div ng-if="$ctrl.agentsInDifferentTimeZone.length > 0" class="text-danger has-agent-in-different-timezone">
+			<i class="mdi mdi-alert-octagon"></i>
+			<span>{{'CannotApplyThisToAgentsInADifferentTimeZone'|translate}}{{'Colon'|translate}}<b>{{$ctrl.agentsInDifferentTimeZone.join(', ')}}</b></span>
+		
+		</div>
 		<div ng-if="$ctrl.anyInvalidAgent()" class="text-danger">
 			<i class="mdi mdi-alert-octagon"></i>
 			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} <strong>{{$ctrl.invalidAgents | names }}</strong>.</span>
 		</div>
+		
 		<button id="applyMoveShift" class="wfm-btn form-submit"
 				ng-class="{ 'wfm-btn-primary': $ctrl.anyValidAgent() && moveShiftForm.$valid && !$ctrl.checkingCommand, 'wfm-btn-primary-disabled': !$ctrl.anyValidAgent() || !moveShiftForm.$valid || $ctrl.checkingCommand}"
-				ng-disabled="$ctrl.processingCommand || !$ctrl.anyValidAgent() || !moveShiftForm.$valid"
+				ng-disabled="$ctrl.processingCommand || !$ctrl.anyValidAgent() || !moveShiftForm.$valid || $ctrl.agentsInDifferentTimeZone.length > 0"
 				ng-click="$ctrl.moveShift()">
 			{{'Apply' | translate}}
 		</button>

@@ -18,11 +18,13 @@
 		ctrl.showMeridian = /h:/.test($locale.DATETIME_FORMATS.shortTime);
 		ctrl.meridians = ctrl.showMeridian ? $locale.DATETIME_FORMATS.AMPMS : [];
 		ctrl.invalidAgents = [];
+		ctrl.agentsInDifferentTimeZone = [];
 
 		ctrl.$onInit = function () {
 			ctrl.selectedAgents = personSelectionSvc.getSelectedPersonInfoList();
 			ctrl.moveToTime = getDefaultMoveToTime();
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
+			findAgentsInDifferentTimezone();
 
 			$scope.$watch(function () {
 				return getMoveToStartTimeStr();
@@ -133,5 +135,16 @@
 			validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, moment(getMoveToStartTimeStr()), currentTimezone);
 			ctrl.invalidAgents = validator.getInvalidPeople();
 		}
+
+		function findAgentsInDifferentTimezone() {
+			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
+			ctrl.selectedAgents.forEach(function (agent) {
+				if (currentTimezone != ctrl.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId).Timezone.IanaId) {
+					ctrl.agentsInDifferentTimeZone.push(agent.Name);
+				}
+
+			});
+		}
+		
 	}
 })();
