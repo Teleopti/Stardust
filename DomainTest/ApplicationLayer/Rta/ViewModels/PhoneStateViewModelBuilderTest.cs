@@ -42,5 +42,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			result.Name.Should().Be("phone");
 		}
 
+		[Test]
+		public void ShouldReturnEmnptyIfStateGroupNotFound()
+		{
+			var phoneId = Guid.NewGuid();
+			Database
+				.WithStateGroup(phoneId, "phone")
+				.WithStateGroup(Guid.NewGuid(), "someOtherStateGroup");
+
+			var result = Target.For(new[] { Guid.NewGuid() }).PhoneStates;
+
+			result.Should().Be.Empty();
+			
+		}
 	}
 }
