@@ -233,6 +233,7 @@
     <Compile Include="ApplicationLayer\Intraday\ExtractSkillForecastIntervals.cs" />
     <Compile Include="ApplicationLayer\IPersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IOrganizationReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\OrganizationSiteModel.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="Infrastructure\PublishInitializeReadModelEventHandler.cs" />
     <Compile Include="Infrastructure\RequeueHangfireEventHandler.cs" />
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequest.cs" />
+    <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestProcessor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserDevice.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IRequeueHangfireRepository.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />

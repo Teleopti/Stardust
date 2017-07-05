@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public IOvertimeRequestPersister Target;
 		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
 		private IPerson _person;
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			_person = PersonFactory.CreatePerson();
@@ -28,6 +30,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			system.UseTestDouble(new FakeLoggedOnUser(_person)).For<ILoggedOnUser>();
 			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
 			system.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
+			system.UseTestDouble(new OvertimeRequestProcessor()).For<IOvertimeRequestProcessor>();
 		}
 
 		[Test]

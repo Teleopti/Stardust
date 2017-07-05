@@ -194,6 +194,7 @@
     <Compile Include="FakeHttpServer.cs" />
     <Compile Include="FakeLicenseActivator.cs" />
     <Compile Include="FakeLicenseActivatorProvider.cs" />
+    <Compile Include="FakeOvertimeRequestProcessor.cs" />
     <Compile Include="FakeRepositories\FakePlanningGroupRepository.cs" />
     <Compile Include="FakeRepositories\FakeCryptoKeyInfoRepository.cs" />
     <Compile Include="FakeRepositories\FakeAgentBadgeTransactionRepository.cs" />

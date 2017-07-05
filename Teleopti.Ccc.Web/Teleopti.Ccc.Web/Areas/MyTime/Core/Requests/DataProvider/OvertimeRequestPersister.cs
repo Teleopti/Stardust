@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -10,13 +11,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly OvertimeRequestFormMapper _mapper;
 		private readonly RequestsViewModelMapper _requestsMapper;
+		private readonly IOvertimeRequestProcessor _overtimeRequestProcessor;
 
 		public OvertimeRequestPersister(IPersonRequestRepository personRequestRepository, OvertimeRequestFormMapper mapper,
-			RequestsViewModelMapper requestsMapper)
+			RequestsViewModelMapper requestsMapper, IOvertimeRequestProcessor overtimeRequestProcessor)
 		{
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;
 			_requestsMapper = requestsMapper;
+			_overtimeRequestProcessor = overtimeRequestProcessor;
 		}
 
 		public RequestViewModel Persist(OvertimeRequestForm form)
@@ -43,15 +46,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 			if (isCreatingNew)
 			{
 				_personRequestRepository.Add(personRequest);
-				process(personRequest);
+
+				_overtimeRequestProcessor.Process(personRequest);
 			}
 
 			return _requestsMapper.Map(personRequest);
 		}
-
-		private void process(IPersonRequest personRequest)
-		{
-			personRequest.Pending();
-		}
+		
 	}
 }
