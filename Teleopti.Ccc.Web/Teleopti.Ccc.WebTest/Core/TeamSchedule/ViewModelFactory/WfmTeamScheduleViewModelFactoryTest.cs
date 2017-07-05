@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,13 +12,11 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
-using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.TeamSchedule;
 using Teleopti.Interfaces.Domain;
@@ -40,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		private IPerson personInUtc;
 		private IPerson personInHongKong;
 
-		private void SetUpPersonAndCulture(bool addSecondPerson = false)
+		private void setUpPersonAndCulture(bool addSecondPerson = false)
 		{
 			personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes");
 			personInHongKong = PersonFactory.CreatePerson("A", "Detective");
@@ -74,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldSortScheduleInDifferentTimezoneByAbsoluteStartTime()
 		{
-			SetUpPersonAndCulture(true);
+			setUpPersonAndCulture(true);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -102,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsNoScheduleForScheduleSearch()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -124,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnCorrectProjectionWhenThereIsMainShiftForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -165,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnShiftCategoryDescriptionWhenThereIsMainShiftForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
@@ -195,7 +192,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnNullShiftCategoryWhenThereIsDayOffForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
@@ -226,7 +223,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnNullShiftCategoryWhenThereIsFullDayAbsenceOnlyForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
@@ -256,7 +253,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnCorrectProjectionWhenThereIsDayOffForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
@@ -290,7 +287,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldGetCorrectIdsForNeighboringPersonAbsences()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
@@ -328,7 +325,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -356,7 +353,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnCorrectProjectionWhenThereIsFullDayAbsenceAndShiftForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -392,7 +389,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -518,7 +515,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndWithPermissionForConfidentialForScheduleSearch()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			PeopleSearchProvider.AddPersonWithViewConfidentialPermission(personInUtc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -570,7 +567,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnEmptyScheduleWhenScheduleIsUnpublishedAndNoViewUnpublishedSchedulePermissionForScheduleSearch()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
@@ -608,7 +605,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnScheduleForPreviousDayWhenThereIsOvernightShiftForScheduleSearch()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
@@ -642,7 +639,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnEmptyScheduleVmForEmptyScheduleWhenThereIsOvernightShiftForScheduleSearch()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -668,7 +665,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnEmptyScheduleVmWhenThereIsNoSelectedTeam()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -692,7 +689,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldIndicateOvertimeActivityForScheduleSearch()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -803,7 +800,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldSetUniqueShiftLayerIdForLayersBelongingToOneShiftLayer()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -998,7 +995,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectProjectionForPeople()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			PersonRepository.Add(personInHongKong);
 			var scheduleDate = new DateTime(2015, 01, 01, 00, 00, 00, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
@@ -1026,7 +1023,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForWorkingDay()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -1061,7 +1058,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForDayOff()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020, 1, 1);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -1093,7 +1090,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForFullDayAbsence()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -1130,7 +1127,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldIndicateTerminationForTerminatedPerson()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -1169,7 +1166,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldShowPersonScheduleOnTheTerminationDate()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -1206,7 +1203,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForNotPermittedConfidentialAbs()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -1246,7 +1243,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForPermittedConfidentialAbs()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			PeopleSearchProvider.AddPersonWithViewConfidentialPermission(personInUtc);
 
@@ -1288,7 +1285,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForNotPermittedUnpublishedSchedule()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			personInUtc.WorkflowControlSet = new WorkflowControlSet();
 			personInUtc.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2019, 1, 1);
@@ -1330,7 +1327,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForPermittedUnpublishedSchedule()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2019, 12, 30);
 			personInUtc.WorkflowControlSet = new WorkflowControlSet();
 			personInUtc.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2019, 1, 1);
@@ -1374,7 +1371,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnInternalNotesWhenThereIsForScheduleSearch()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -1397,7 +1394,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnTimezoneWhenThereIsForScheduleSearch()
 		{
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			personInUtc.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("China Standard Time"));
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -1423,7 +1420,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldProvideWeeklyContractTimeInWeeklyViewModel()
 		{
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020, 1, 1);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -1501,7 +1498,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void CreateViewModelForPeopleShouldReturnAgentsEvenTheyhaveNoScheduleDay()
 		{
 
-			SetUpPersonAndCulture();
+			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020, 1, 1);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);

@@ -184,8 +184,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		}
 
-
-
 		public void FindInTeams(IPersonFinderSearchCriteria personFinderSearchCriteria, Guid[] teamIds)
 		{
 			personFinderSearchCriteria.TotalRows = 0;

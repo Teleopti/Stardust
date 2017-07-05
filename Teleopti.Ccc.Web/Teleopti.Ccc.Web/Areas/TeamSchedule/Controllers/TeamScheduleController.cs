@@ -116,7 +116,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(result);
 		}
 
-
 		[UnitOfWork, HttpPost, Route("api/TeamSchedule/GetSchedules")]
 		public virtual GroupScheduleViewModel GetSchedulesForPeople(GetSchedulesForPeopleFormData form)
 		{
@@ -178,8 +177,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Ok(failResults);
 		}
 
-
-
 		[HttpPost, UnitOfWork, Route("api/TeamSchedule/UpdateAgentsPerPage")]
 		public virtual IHttpActionResult UpdateAgentsPerPageSetting(int agents)
 		{
@@ -223,6 +220,5 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			var scheduleDateOnly = new DateOnly(date);
 			return _teamScheduleViewModelFactory.CreateViewModelForPeople(personIds.ToArray(), scheduleDateOnly);
 		}
-
 	}
 }

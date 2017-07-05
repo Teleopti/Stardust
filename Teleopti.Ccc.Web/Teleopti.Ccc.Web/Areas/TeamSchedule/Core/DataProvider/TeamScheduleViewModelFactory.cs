@@ -315,8 +315,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 				.Select(person => person.Id.GetValueOrDefault()).ToArray();
 
 			var scheduleDays = _scheduleProvider.GetScheduleForPersons(scheduleDate, people, true).ToLookup(d => d.Person);
-			//var personScheduleDaysToSort = scheduleDays.Select(s => new Tuple<IPerson,IScheduleDay>(s.Person,s)).ToArray();
-			//Array.Sort(personScheduleDaysToSort,new TeamScheduleComparer(canSeeUnpublishedSchedules,_permissionProvider));
 			var previousDay = scheduleDate.AddDays(-1);
 			var scheduleDaysForPreviousDayLookup =
 				_scheduleProvider.GetScheduleForPersons(scheduleDate.AddDays(-1), people).ToLookup(p => p.Person);
