@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();
 			system.UseTestDouble<FakeScheduleProvider>().For<IScheduleProvider>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-        }
+		}
 	}
 
 	[TestFixture, MyTimeWebTeamScheduleViewModelFactoryTest]
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var person2Assignment_2 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person2, new DateOnly(2015, 5, 23));
 			person2Assignment_2.SetDayOff(new DayOffTemplate(new Description("Day Off", "DO")));
-			
+
 			var person3Assignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person3, new DateOnly(2015, 5, 19));
 			person3Assignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 12, 2015, 5, 19, 15));
 			PersonAssignmentRepository.Add(person1Assignment_1);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			var person1Schedule = ScheduleDayFactory.Create(new DateOnly(2015, 5, 21), person1, scenario);
-			var person1Assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,scenario, new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21 ,16));
+			var person1Assignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, scenario, new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21, 16));
 			person1Assignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21, 16));
 			person1Assignment1.AddOvertimeActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 6, 2015, 5, 21, 8), new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			person1Assignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 11, 2015, 5, 21, 12));
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			ScheduleProvider.AddScheduleDay(person3Schedule);
 
 			var person1Schedule2 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 22), person1, scenario);
-			var person1Assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,scenario, new DateTimePeriod(2015, 5, 22, 10, 2015, 5, 22 ,16));
+			var person1Assignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(person1, scenario, new DateTimePeriod(2015, 5, 22, 10, 2015, 5, 22, 16));
 			person1Assignment2.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 22, 8, 2015, 5, 22, 16));
 			person1Assignment2.AddOvertimeActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 22, 6, 2015, 5, 22, 8), new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			person1Schedule2.Add(person1Assignment2);
@@ -122,16 +122,13 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			person2Assignment2.AddOvertimeActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 22, 6, 2015, 5, 22, 8), new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
 			person2Schedule.Add(person2Assignment2);
 			ScheduleProvider.AddScheduleDay(person2Schedule);
-
 		}
-
 
 		[Test]
 		public void TargetFactoryNotNull()
 		{
 			Target.Should().Not.Be.Null();
 		}
-
 
 		[Test]
 		public void PermissionProviderShouldBeUsed()
@@ -159,7 +156,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				PersonRepository.LoadAll().Select(x => x.Id.Value), new Paging());
 
 			personScheduleReadModels.Should().Have.Count.EqualTo(3);
-
 		}
 
 		[Test]
@@ -171,14 +167,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				ScheduleDate = new DateOnly(2015, 5, 19),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging {Take = 20, Skip = 0},
+				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = ""
 			});
 
 			result.TimeLine.Max(t => t.EndTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 20, 15, 0));
 			result.TimeLine.Min(t => t.StartTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 7, 45, 0));
 		}
-		
+
 		[Test]
 		public void TeamScheduleControllerShouldReturnCorrectTimeLineNoReadModel()
 		{
@@ -188,7 +184,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
-				Paging = new Paging {Take = 20, Skip = 0},
+				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = ""
 			});
 
@@ -200,7 +196,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public void ShouldReturnCorrectAgentSchedulesWithNameSearch()
 		{
 			SetUp();
-	
+
 			var result = Target.GetViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 19),
@@ -218,7 +214,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			SetUp();
 
 			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
-	
+
 			var result = Target.GetViewModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
@@ -230,14 +226,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
 			agentSchedule.MinStart.Should().Be.EqualTo(new DateTime(2015, 5, 21, 10, 0, 0));
 		}
-		
+
 		[Test]
 		public void ShouldReturnMyScheduleWithDateNoReadModel()
 		{
 			SetUp();
 			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
 			LoggedOnUser.SetFakeLoggedOnUser(person1);
-	
+
 			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
@@ -251,14 +247,14 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			result.AgentSchedules.Count().Should().Be.EqualTo(2);
 			result.TimeLine.Count().Should().Be.EqualTo(12);
 		}
-		
+
 		[Test]
 		public void ShouldReturnMyScheduleCorrectlyWithDateWhenMyScheduleUnpublishedNoReadModel()
 		{
 			SetUp();
 			var person = PersonRepository.LoadAll().First(p => p.Name.LastName == "3");
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-	
+
 			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
@@ -279,7 +275,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			SetUp();
 			var personMe = PersonRepository.LoadAll().First(p => p.Name.FirstName == "Unpublish_person");
 			PermissionProvider.PermitApplicationFunction(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules, true);
-		
+
 			LoggedOnUser.SetFakeLoggedOnUser(personMe);
 
 			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
@@ -322,7 +318,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			SetUp();
 
 			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
-	
+
 			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 21),
@@ -334,7 +330,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == person1.Id.Value);
 			agentSchedule.StartTimeUtc.Should().Be.EqualTo(new DateTime(2015, 5, 21, 6, 0, 0));
 		}
-		
+
 		[Test]
 		public void ShouldReturnEmptyLayersWhenHasEmptyScheduleWithDateNoReadModel()
 		{
@@ -366,8 +362,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			agentSchedule.IsDayOff.Should().Be.EqualTo(false);
 			agentSchedule.ScheduleLayers.Count().Should().Be.EqualTo(0);
 			result.TimeLine.Count().Should().Be.EqualTo(11);
-		}	
-	
+		}
+
 		[Test]
 		public void ShouldIndicateFullDayAbsenceWhenHasMainShiftWithDateNoReadModel()
 		{
@@ -403,7 +399,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			agentSchedule.IsFullDayAbsence.Should().Be.EqualTo(true);
 			agentSchedule.ScheduleLayers.Count().Should().Be.EqualTo(1);
 		}
-		
+
 		[Test]
 		public void ShouldIndicateFullDayAbsenceWhenHasDayoffWithDateNoReadModel()
 		{
@@ -438,8 +434,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var agentSchedule = result.AgentSchedules.Single(s => s.PersonId == p5.Id.Value);
 			agentSchedule.IsFullDayAbsence.Should().Be.EqualTo(true);
 			agentSchedule.ScheduleLayers.Count().Should().Be.EqualTo(1);
-		}	
-	
+		}
+
 		[Test]
 		public void ShouldReturnDayoffWhenHasDayoffWithDateNoReadModel()
 		{
@@ -473,7 +469,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			agentSchedule.IsDayOff.Should().Be.EqualTo(true);
 			agentSchedule.DayOffName.Should().Be.EqualTo("dayoff");
 		}
-	
+
 		[Test]
 		public void ShouldReturnDayoffWhenHasFullAbsenceOnContractDayOffWithDateNoReadModel()
 		{
@@ -491,7 +487,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var schedulePeriod = SchedulePeriodFactory.CreateSchedulePeriod(new DateOnly(2015, 5, 22));
 			p5.AddSchedulePeriod(schedulePeriod);
 			p5.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			
+
 			PersonRepository.Add(p5);
 
 			var p5ScheduleOn23 = ScheduleDayFactory.Create(new DateOnly(2015, 5, 23), p5, scenario);
@@ -518,7 +514,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			agentSchedule.IsDayOff.Should().Be.EqualTo(true);
 			agentSchedule.DayOffName.Should().Be.EqualTo("");
 		}
-		
+
 		[Test]
 		public void ShouldIndicateOvertimeWithDateNoReadModelOnlyForMySchedule()
 		{
@@ -526,7 +522,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var me = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
 			var teamate = PersonRepository.LoadAll().First(p => p.Name.LastName == "a");
 			LoggedOnUser.SetFakeLoggedOnUser(me);
-	
+
 			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 22),
@@ -540,8 +536,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			result.MySchedule.ScheduleLayers[0].IsOvertime.Should().Be.True();
 			result.MySchedule.ScheduleLayers[1].IsOvertime.Should().Be.False();
-		}	
-	
+		}
+
 		[Test]
 		public void ShouldSortAgentScheduleCorrectlyWithDateNoReadModel()
 		{
@@ -611,7 +607,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Add(p4);
 			PersonRepository.Add(p5);
 			PersonRepository.Add(p6);
-	
+
 			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
@@ -629,7 +625,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			agentSchedules[5].PersonId.Should().Be.EqualTo(p4.Id.GetValueOrDefault());
 			agentSchedules[6].PersonId.Should().Be.EqualTo(person3.Id.GetValueOrDefault());
 		}
-	
+
 		[Test]
 		public void ShouldSortAgentScheduleCorrectlyWhenThereIsMultiDayAbsenceWithDateNoReadModel()
 		{
@@ -697,7 +693,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Add(p4);
 			PersonRepository.Add(p5);
 			PersonRepository.Add(p6);
-	
+
 			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
@@ -715,7 +711,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			agentSchedules[5].Name.Should().Be.EqualTo("p5 p5");
 			agentSchedules[6].Name.Should().Be.EqualTo("Unpublish_person 3");
 		}
-	
+
 		[Test]
 		public void ShouldSortAgentWithEmptyScheduleButNonNullPersonAssLastWithDateNoReadModel()
 		{
@@ -791,7 +787,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Add(p4);
 			PersonRepository.Add(p5);
 			PersonRepository.Add(p6);
-	
+
 			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
@@ -809,7 +805,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			agentSchedules[5].PersonId.Should().Be.EqualTo(p4.Id.GetValueOrDefault());
 			agentSchedules[6].PersonId.Should().Be.EqualTo(person3.Id.GetValueOrDefault());
 		}
-	
+
 		[Test]
 		public void ShouldReturnAgentSchedulesCorrectlyWithDateForSpecificPageNoReadModel()
 		{
@@ -879,7 +875,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PersonRepository.Add(p4);
 			PersonRepository.Add(p5);
 			PersonRepository.Add(p6);
-	
+
 			var result = Target.GetViewModelNoReadModel(new TeamScheduleViewModelData
 			{
 				ScheduleDate = new DateOnly(2015, 5, 23),
@@ -906,8 +902,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				Paging = new Paging { Take = 20, Skip = 0 },
 				TimeFilter = new TimeFilterInfo
 				{
-					StartTimes = new List<DateTimePeriod>{ new DateTimePeriod(2015, 5, 19, 7, 2015, 5, 19, 9)},
-					EndTimes = new List<DateTimePeriod> {new DateTimePeriod(2015, 5, 19, 13, 2015, 5, 19, 15)},
+					StartTimes = new List<DateTimePeriod> { new DateTimePeriod(2015, 5, 19, 7, 2015, 5, 19, 9) },
+					EndTimes = new List<DateTimePeriod> { new DateTimePeriod(2015, 5, 19, 13, 2015, 5, 19, 15) },
 					IsDayOff = false,
 					IsWorkingDay = true,
 					IsEmptyDay = false
@@ -988,7 +984,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				SearchNameText = ""
 			});
 
-			result.AgentSchedules.Should().Have.Count.EqualTo(1);			
+			result.AgentSchedules.Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -1013,7 +1009,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				SearchNameText = ""
 			});
 
-			result.AgentSchedules.Should().Have.Count.EqualTo(1);	
+			result.AgentSchedules.Should().Have.Count.EqualTo(1);
 		}
 
 		[Test]
@@ -1037,7 +1033,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				SearchNameText = ""
 			});
 
-			result.AgentSchedules.Should().Have.Count.EqualTo(3);	
+			result.AgentSchedules.Should().Have.Count.EqualTo(3);
 		}
 
 	}

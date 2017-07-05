@@ -78,7 +78,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(SearchDaySchedulesFormData input)
 		{
 			var currentDate = input.Date;
-			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
 
 			if (input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
 				return
@@ -98,9 +97,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual JsonResult<GroupWeekScheduleViewModel> SearchWeekSchedules(SearchWeekSchedulesFormData input)
 		{
 			var currentDate = new DateOnly(input.Date);
-			var myTeam = _loggonUser.CurrentUser().MyTeam(currentDate);
-
-
 			if (input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
 				return
 					Json(new GroupWeekScheduleViewModel

@@ -398,7 +398,6 @@
     <Compile Include="Areas\TeamSchedule\Core\TeamScheduleCommandHandlingProviderTest.cs" />
     <Compile Include="Areas\TeamSchedule\PermissionCheckerTest.cs" />
     <Compile Include="Areas\TeamSchedule\SwapMainShiftForTwoPersonsHandlerTest.cs" />
-    <Compile Include="Areas\TeamSchedule\TeamScheduleControllerIntegrationTest.cs" />
     <Compile Include="Areas\TeamSchedule\TeamScheduleControllerTest.cs" />
     <Compile Include="Areas\TeamSchedule\TeamScheduleTestAttribute.cs" />
     <Compile Include="Areas\Toggle\ToggleHandlerControllerTest.cs" />
