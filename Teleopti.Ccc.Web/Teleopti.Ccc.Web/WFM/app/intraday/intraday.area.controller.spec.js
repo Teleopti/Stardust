@@ -568,7 +568,7 @@ describe('IntradayAreaCtrl', function () {
 		scope.selectedSkillAreaChange(scope.skillAreas[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.actualStaffingSeries.length).toEqual(1);
+		expect(scope.viewObj.actualStaffingSeries.length).toBeGreaterThan(3);
 	});
 
 	it('should not show optimal staffing when toggle is disabled', function () {
