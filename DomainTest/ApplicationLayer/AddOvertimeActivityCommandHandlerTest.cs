@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public AddOvertimeActivityCommandHandlerPersistDeltas Target;
 		public FakeWriteSideRepository<IPerson> PersonRepository;
 		public FakeWriteSideRepository<IActivity> ActivityRepository;
-		//public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeScheduleStorage ScheduleStorage;
 		public FakeWriteSideRepository<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetRepository;
