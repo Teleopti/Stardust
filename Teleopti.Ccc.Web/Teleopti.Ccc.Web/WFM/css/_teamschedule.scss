@@ -206,7 +206,7 @@ wfm-multiple-search-input .advanced-input {
         padding: 7px;
         color: inherit !important;
         background-size: 11px 11px;
-        background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, 0.2) 8px, transparent 8px, transparent);
+        background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(209, 209, 209, 0.7) 8px, transparent 8px, transparent);
     }
 
     .absolute {
@@ -896,6 +896,9 @@ teamschedule-command-container {
     md-select {
         width: 100%;
         min-height: 40px;
+		.md-select-value.md-select-placeholder {
+			color: inherit;
+		}
     }
 
     md-content button.wfm-btn {
