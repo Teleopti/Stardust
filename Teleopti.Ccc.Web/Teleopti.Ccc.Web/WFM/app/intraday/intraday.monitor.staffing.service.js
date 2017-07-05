@@ -44,6 +44,9 @@
                     staffingData.hasEmailSkill = true;
                 }
 
+				if (showOptimalStaffing)
+					staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
+
                 if (showScheduledStaffing) staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
 
                 angular.forEach(
@@ -66,7 +69,7 @@
                 } else {
                     staffingData.forecastedStaffing.max = updatedForecastedStaffingMax;
                 }
-
+				
                 staffingData.forecastedStaffing.series.splice(0, 0, 'Forecasted_staffing');
                 staffingData.forecastedStaffing.updatedSeries.splice(0, 0, 'Updated_forecasted_staffing');
                 staffingData.actualStaffingSeries.splice(0, 0, 'Actual_staffing');
@@ -201,6 +204,8 @@
 
             service.loadStaffingChart = function(sData) {
                 if (!sData) return;
+				console.log('sData', sData);
+				//actualStaffingSeries har 1 nu
                 service.staffingChart.load({
                     columns: [
                         sData.timeSeries,
