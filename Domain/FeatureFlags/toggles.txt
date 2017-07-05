@@ -103,7 +103,7 @@ Wfm_People_MoveImportJobToBackgroundService_43582 = true
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 WfmIntraday_MonitorActualvsForecasted_35176 = true
 Wfm_HideUnusedTeamsAndSites_42690 = RC
-Wfm_SearchAgentBasedOnCorrectPeriod_44552 = DEV
+Wfm_SearchAgentBasedOnCorrectPeriod_44552 = RC
 
 MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = true
 MyTimeWeb_ShiftTradeBoardNoReadModel_36662 = true
