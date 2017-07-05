@@ -125,32 +125,27 @@
 	}
 
 	function _buildPostData() {
-		var startDateMoment = moment(self.StartDate());
-		var endDateMoment = moment(self.StartDate()).startOf('day');
-		if (self.StartTime()) {
-			endDateMoment = moment(startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat) + ' ' + self.StartTime());
-		}
+		var dateTimeFormats = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat;
+
+		var startDate = self.StartDate() ? moment(self.StartDate()) : moment().startOf("day");
+		var periodStart = moment(startDate.format(dateTimeFormats.dateOnly) + " " + self.StartTime());
+
+		var periodEnd = moment(periodStart);
 		if (self.RequestDuration()) {
-			endDateMoment.add(self.RequestDuration().split(':')[0], 'hours')
-				.add(self.RequestDuration().split(':')[1], 'minutes');
+			var durationParts = self.RequestDuration().split(":");
+			periodEnd.add(durationParts[0], "hours").add(durationParts[1], "minutes");
 		}
-
-		var endDate = startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
-		if (endDateMoment.isAfter(startDateMoment.endOf('day'))) {
-			endDate = endDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
-		}
-
-		var startDateString = startDateMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+		
 		return {
 			Id: self.Id(),
 			Subject: self.Subject(),
 			Message: self.Message(),
 			MultiplicatorDefinitionSet: self.MultiplicatorDefinitionSetId(),
 			Period: {
-				StartDate: startDateString,
-				StartTime: moment(startDateString + ' ' + self.StartTime()).format('HH:mm'),
-				EndDate: endDate,
-				EndTime: endDateMoment.format('HH:mm')
+				StartDate: periodStart.format(dateTimeFormats.dateOnly),
+				StartTime: periodStart.format(dateTimeFormats.timeOnly),
+				EndDate: periodEnd.format(dateTimeFormats.dateOnly),
+				EndTime: periodEnd.format(dateTimeFormats.timeOnly)
 			}
 		};
 	}

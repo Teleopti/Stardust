@@ -241,15 +241,15 @@ $(document).ready(function () {
 			DateTimeTo: "2017-06-30T06:45:00.0000000",
 			MultiplicatorDefinitionSet: "9019D62F-0086-44B1-A977-9BB900B8C361"
 		};
-		var vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, fakeRequestListViewModel, fakeRequestDetailViewModel);
 
-		vm.Initialize(data);
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, fakeRequestListViewModel, fakeRequestDetailViewModel);
+		requestVm.Initialize(data);
 
-		equal(vm.Subject(), "subject");
-		equal(vm.Message(), "text");
-		equal(vm.StartDate().format("YYYY-MM-DD"), "2017-06-30");
-		equal(vm.StartTime(), "03:45");
-		equal(vm.RequestDuration(), "03:00");
-		equal(vm.MultiplicatorDefinitionSetId(), "9019D62F-0086-44B1-A977-9BB900B8C361");
+		equal(requestVm.Subject(), "subject");
+		equal(requestVm.Message(), "text");
+		equal(requestVm.StartDate().format("YYYY-MM-DD"), "2017-06-30");
+		equal(requestVm.StartTime(), "03:45");
+		equal(requestVm.RequestDuration(), "03:00");
+		equal(requestVm.MultiplicatorDefinitionSetId(), "9019D62F-0086-44B1-A977-9BB900B8C361");
 	});
 });
