@@ -31,6 +31,8 @@
 		vm.dynamicIcon = dynamicIcon;
 		vm.compensations = [];
 		vm.overtimeSettings = {};
+		vm.showOverstaffSettings = false;
+		vm.toggleOverstaffSettings = toggleOverstaffSettings;
 
 		var events = [];
 		var allSkills = [];
@@ -41,7 +43,6 @@
 			date: null,
 			status: 'full'
 		}
-
 		getSkills();
 		getSkillAreas();
 		prepareDays();
@@ -55,6 +56,10 @@
 				insertData.date = newDate;
 				events.push(insertData);
 			}
+		}
+
+		function toggleOverstaffSettings() {
+			vm.showOverstaffSettings = !vm.showOverstaffSettings;
 		}
 
 		function getDayClass(data) {
@@ -236,6 +241,17 @@
 				vm.hasRequestedSuggestion = false;
 			});
 		};
+		function convertOvertimeHoursToMinutes(dateTime) {
+			return (dateTime.getMinutes() + dateTime.getHours() * 60);
+		}
+
+		function prepareSettings(vmSettings){
+			var preparedSettings = {};
+			preparedSettings.Id = vmSettings.Id
+			preparedSettings.MaxMinutesToAdd = convertOvertimeHoursToMinutes(vmSettings.MaxMinutesToAdd);
+			preparedSettings.MaxMinutesToAdd = convertOvertimeHoursToMinutes(vmSettings.MinMinutesToAdd);
+			return preparedSettings;
+		}
 
 		function getCompensations() {
 			var query = staffingService.getCompensations.query();
@@ -255,8 +271,9 @@
 				skillIds = [currentSkills.Id];
 			}
 			vm.hasRequestedSuggestion = true;
+			var settings = prepareSettings(vm.overtimeSettings)
 
-			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: vm.timeSerie, OvertimePreferences: vm.overtimeSettings });
+			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: vm.timeSerie, OvertimePreferences: settings });
 			query.$promise.then(function (response) {
 				vm.hasRequestedSuggestion = false;
 
