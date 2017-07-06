@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 				_analyticsRequestRepository.Delete(@event.PersonRequestId);
 				return;
 			}
-			if (personRequest.Person.IsTerminated() && personRequest.RequestedDate > personRequest.Person.TerminalDate.Value.Date)
+			if (personRequest.Person.TerminalDate.HasValue && personRequest.RequestedDate > personRequest.Person.TerminalDate.Value.Date)
 			{
 				// Person has been terminated and request is after termination date, remove from analytics if it already exists
 				_analyticsRequestRepository.Delete(@event.PersonRequestId);
