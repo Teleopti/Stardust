@@ -9,12 +9,14 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -838,13 +840,25 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var request = new PersonRequest(person, absenceRequest).WithId();
 			request.Pending();
 
-			var approvalService = MockRepository.GenerateMock<IRequestApprovalService>();
-			approvalService.Stub(x => x.ApproveAbsence(absence, absenceRequest.Period, person))
-				.IgnoreArguments()
-				.Return(new List<IBusinessRuleResponse>());
+			var approvalService = createAbsenceRequestApproveService();
 
 			request.Approve(approvalService, MockRepository.GenerateMock<IPersonRequestCheckAuthorization>());
 			return request;
+		}
+
+		private static AbsenceRequestApprovalService createAbsenceRequestApproveService()
+		{
+			var scenario = ScenarioFactory.CreateScenario("Default", true, false);
+			var dateTimePeriod = new DateTimePeriod(2010, 1, 1, 2010, 1, 2);
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
+			var person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var businessRules = new FakeNewBusinessRuleCollection();
+			businessRules.SetRuleResponse(new List<IBusinessRuleResponse> { new BusinessRuleResponse(typeof(BusinessRuleResponse), "warning", true, false, dateTimePeriod, person, new DateOnlyPeriod(2010, 1, 1, 2010, 1, 2), "test warning") });
+			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
+			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
+			return new AbsenceRequestApprovalService(scenario, scheduleDictionary, businessRules, scheduleDayChangeCallback, globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(personAbsenceAccountRepository));
 		}
 
 	}

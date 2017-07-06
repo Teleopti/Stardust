@@ -20,5 +20,11 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return _approvalService ?? (_approvalService = MockRepository.GenerateMock<IRequestApprovalService>());
 		}
+
+		public IRequestApprovalService MakeRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary, IScenario scenario,
+			IPersonRequest personRequest)
+		{
+			return _approvalService ?? (_approvalService = MockRepository.GenerateMock<IRequestApprovalService>());
+		}
 	}
 }

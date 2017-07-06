@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 					}
 
 					var approvalService = _requestFactory.GetRequestApprovalService(allEnabledRules, scenario,
-						_schedulingResultStateHolder);
+						_schedulingResultStateHolder, personRequest);
 
 					personRequest.Pending();
 

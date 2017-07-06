@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			var absenceReportConsumer = new NewAbsenceReport( _currentScenario,
 				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), requestFactory, scheduleDictionarySaver,
-				_loadSchedulesForRequestWithoutResourceCalculation, _personRepository, businessRules);
+				_loadSchedulesForRequestWithoutResourceCalculation, _personRepository, businessRules, new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
 			return absenceReportConsumer;
 		}
 

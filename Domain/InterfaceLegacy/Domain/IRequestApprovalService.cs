@@ -12,8 +12,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </remarks>
 	public interface IRequestApprovalService
 	{
-		IEnumerable<IBusinessRuleResponse> ApproveAbsence(IAbsence absence, DateTimePeriod period, IPerson person);
-
 		/// <summary>
 		/// Approves the shift trade.
 		/// </summary>
@@ -25,6 +23,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// </remarks>
 		IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest);
 
-		IPersonAbsence GetApprovedPersonAbsence();
+		IEnumerable<IBusinessRuleResponse> Approve(IPersonRequest personRequest);
 	}
 }

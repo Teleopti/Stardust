@@ -30,13 +30,29 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			
 			return new RequestApprovalServiceScheduler(
 				scheduleDictionary,
-				scenario,
 				_swapAndModifyService,
 				businessRules,
-				_scheduleDayChangeCallback,
-				_globalSettingDataRepository,
-				_checkingPersonalAccountDaysProvider,
 				_personRequestCheckAuthorization);
+		}
+
+		public IRequestApprovalService MakeRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary, IScenario scenario, IPersonRequest personRequest)
+		{
+			var requestType = personRequest.Request.RequestType;
+			if (requestType == RequestType.AbsenceRequest)
+			{
+				var scheduleRange = scheduleDictionary[personRequest.Person];
+				var businessRules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
+
+				return new AbsenceRequestApprovalService(
+					scenario,
+					scheduleDictionary,
+					businessRules,
+					_scheduleDayChangeCallback,
+					_globalSettingDataRepository,
+					_checkingPersonalAccountDaysProvider);
+			}
+
+			return MakeRequestApprovalServiceScheduler(scheduleDictionary, scenario, personRequest.Person);
 		}
 	}
 }

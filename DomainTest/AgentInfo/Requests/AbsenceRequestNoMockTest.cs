@@ -50,14 +50,13 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var personRequest = createAbsenceRequest(person, absence, new DateTimePeriod(startDateTime, endDateTime));
 			var scheduleDictionary = _scheduleRepository.FindSchedulesForPersonOnlyInGivenPeriod(person, null, period, _currentScenario.Current());
 
-			var requestApprovalServiceScheduler = new RequestApprovalServiceScheduler(
-				scheduleDictionary,
+			var absenceRequestApprovalService = new AbsenceRequestApprovalService(
 				_currentScenario.Current(),
-				_swapAndModifyService,
-				NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), null, null);
+				scheduleDictionary,
+				NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), null);
 
 			personRequest.Pending();
-			personRequest.Approve(requestApprovalServiceScheduler, new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Approve(absenceRequestApprovalService, new PersonRequestAuthorizationCheckerForTest());
 
 			var scheduleDay = scheduleDictionary[person].ScheduledDay(new DateOnly(startDateTime));
 			var personAbsences = scheduleDay.PersonAbsenceCollection(true);

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.Services
 {
-	public class ApprovalServiceForTest : IRequestApprovalService
+	public class ApprovalServiceForTest : IRequestApprovalService, IAbsenceRequestApprovalService
 	{
 	    private IEnumerable<IBusinessRuleResponse> businessRuleResponse = new List<IBusinessRuleResponse>();
 
@@ -35,5 +36,10 @@ namespace Teleopti.Ccc.TestCommon.Services
 	    {
 	        businessRuleResponse = brokenRule;
 	    }
+
+		public IEnumerable<IBusinessRuleResponse> Approve(IPersonRequest personRequest)
+		{
+			return businessRuleResponse;
+		}
 	}
 }

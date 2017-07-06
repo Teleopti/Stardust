@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public interface IRequestFactory
 	{
-		IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, IScenario scenario, ISchedulingResultStateHolder schedulingResultStateHolder);
+		IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, IScenario scenario, ISchedulingResultStateHolder schedulingResultStateHolder, IPersonRequest personRequest);
 		IShiftTradeRequestStatusChecker GetShiftTradeRequestStatusChecker(ISchedulingResultStateHolder schedulingResultStateHolder);
 	}
 
@@ -35,11 +35,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "1")]
 		public IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, IScenario scenario,
-			ISchedulingResultStateHolder schedulingResultStateHolder)
+			ISchedulingResultStateHolder schedulingResultStateHolder, IPersonRequest personRequest)
 		{
+			if (personRequest != null && personRequest.Request.RequestType == RequestType.AbsenceRequest)
+			{
+				return new AbsenceRequestApprovalService(scenario, schedulingResultStateHolder.Schedules, allNewRules,
+					_scheduleDayChangeCallback,
+					_globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
+			}
+
 			return new RequestApprovalServiceScheduler(schedulingResultStateHolder.Schedules,
-				scenario, _swapAndModifyService, allNewRules, _scheduleDayChangeCallback,
-				_globalSettingDataRepository, _checkingPersonalAccountDaysProvider, _personRequestCheckAuthorization);
+				 _swapAndModifyService, allNewRules, _personRequestCheckAuthorization);
 		}
 
 		public IShiftTradeRequestStatusChecker GetShiftTradeRequestStatusChecker(ISchedulingResultStateHolder schedulingResultStateHolder)

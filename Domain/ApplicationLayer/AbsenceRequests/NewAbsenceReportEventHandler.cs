@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -34,12 +35,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IPersonRepository _personRepository;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
+		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
+		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
+		private readonly ICheckingPersonalAccountDaysProvider _checkingPersonalAccountDaysProvider;
+
 		public NewAbsenceReport(ICurrentScenario scenarioRepository,
 			ISchedulingResultStateHolderProvider schedulingResultStateHolderProvider, IRequestFactory factory,
 			IScheduleDifferenceSaver scheduleDictionarySaver,
 			ILoadSchedulesForRequestWithoutResourceCalculation loadSchedulesForRequestWithoutResourceCalculation,
 			IPersonRepository personRepository,
-			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, IScheduleDayChangeCallback scheduleDayChangeCallback, IGlobalSettingDataRepository globalSettingDataRepository, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider)
 		{
 			_scenarioRepository = scenarioRepository;
 			_schedulingResultStateHolderProvider = schedulingResultStateHolderProvider;
@@ -48,6 +53,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_loadSchedulesForRequestWithoutResourceCalculation = loadSchedulesForRequestWithoutResourceCalculation;
 			_personRepository = personRepository;
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
+			_scheduleDayChangeCallback = scheduleDayChangeCallback;
+			_globalSettingDataRepository = globalSettingDataRepository;
+			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
 
 			_loadDataActions = new List<LoadDataAction>
 			{
@@ -119,10 +127,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var businessRules =
 						_businessRulesForPersonalAccountUpdate.FromScheduleRange(_schedulingResultStateHolder.Schedules[person]);
 
-					var requestApprovalServiceScheduler = _factory.GetRequestApprovalService(businessRules,
-						_scenarioRepository.Current(), _schedulingResultStateHolder);
+					var requestApprovalServiceScheduler = new AbsenceRequestApprovalService(_scenarioRepository.Current(), _schedulingResultStateHolder.Schedules, businessRules, _scheduleDayChangeCallback,
+																	_globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
 
-					var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(reportedAbsence, period, person);
+
+					var brokenBusinessRules = requestApprovalServiceScheduler.Approve(reportedAbsence, period, person);
 
 					if (logger.IsDebugEnabled)
 					{

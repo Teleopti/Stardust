@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using log4net;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -93,7 +94,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 
 			IPersonAccountBalanceCalculator personAccountBalanceCalculator = null;
-			IRequestApprovalService requestApprovalServiceScheduler = null;
+			IRequestApprovalService absenceRequestApprovalService = null;
 			IPersonAbsenceAccount affectedPersonAbsenceAccount = null;
 			var agentTimeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = absenceRequest.Period.ToDateOnlyPeriod(agentTimeZone);
@@ -128,9 +129,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 				var businessRules = NewBusinessRuleCollection.Minimum();
 
-				requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(businessRules,
-					_scenarioRepository.Current(), schedulingResultStateHolder);
-				simulateApproveAbsence(absenceRequest, requestApprovalServiceScheduler);
+				absenceRequestApprovalService = _requestFactory.GetRequestApprovalService(businessRules,
+					_scenarioRepository.Current(), schedulingResultStateHolder, personRequest);
+				simulateApproveAbsence(absenceRequest, absenceRequestApprovalService);
 
 				//Will issue a rollback for simulated schedule data
 				handleInvalidSchedule();
@@ -138,7 +139,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 			var requiredForProcessingAbsenceRequest = new RequiredForProcessingAbsenceRequest(
 				undoRedoContainer,
-				requestApprovalServiceScheduler,
+				absenceRequestApprovalService,
 				_authorization,
 				()
 					=>
@@ -167,7 +168,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 					unitOfWork.Merge(affectedPersonAbsenceAccount);
 				}
 
-				var approvedPersonAbsence = requestApprovalServiceScheduler.GetApprovedPersonAbsence();
+				var approvedPersonAbsence = ((AbsenceRequestApprovalService)absenceRequestApprovalService).GetApprovedPersonAbsence();
 				approvedPersonAbsence?.IntradayAbsence(personRequest.Person, new TrackedCommandInfo
 				{
 					OperatedPersonId = personRequest.Person.Id.GetValueOrDefault(),
@@ -315,10 +316,10 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		}
 
 
-		private static void simulateApproveAbsence(IAbsenceRequest absenceRequest, IRequestApprovalService requestApprovalServiceScheduler)
+		private static void simulateApproveAbsence(IAbsenceRequest absenceRequest, IRequestApprovalService absenceRequestApprovalService)
 		{
 			var personRequest = absenceRequest.Parent as IPersonRequest;
-			var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(absenceRequest.Absence, absenceRequest.Period, absenceRequest.Person);
+			var brokenBusinessRules = absenceRequestApprovalService.Approve(personRequest);
 			if (logger.IsDebugEnabled)
 			{
 				foreach (var brokenBusinessRule in brokenBusinessRules)

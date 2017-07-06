@@ -171,9 +171,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
 			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
 
-			requestFactory.Stub(x => x.GetRequestApprovalService(null, null, schedulingResultState))
+			requestFactory.Stub(x => x.GetRequestApprovalService(null, null, schedulingResultState, personRequest))
 				.Constraints(Is.Matching<INewBusinessRuleCollection>(b => true), Is.Equal(scenario),
-					Is.Equal(schedulingResultState))
+					Is.Equal(schedulingResultState), Is.Equal(personRequest))
 				.Return(approvalService);
 			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
 			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
 			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
-			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState))
+			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState, personRequest))
 				.IgnoreArguments()
 				.Return(approvalService);
 			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
 			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest))
 				.Return(new List<IBusinessRuleResponse> { ruleResponse1, ruleResponse1, ruleResponse2 });
-			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState))
+			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState, personRequest))
 				.IgnoreArguments().Return(approvalService);
 			personRequestRepository.Stub(x => x.Get(accept.PersonRequestId)).Return(personRequest);
 			scenarioRepository.Stub(x => x.Current()).Return(scenario);

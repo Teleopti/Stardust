@@ -6,8 +6,10 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
@@ -124,21 +126,18 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         public void VerifyApproveAbsenceCallWorks()
         {
             MockRepository mocks = new MockRepository();
-            IRequestApprovalService requestApprovalService = mocks.StrictMock<IRequestApprovalService>();
-            IPersonRequestCheckAuthorization authorization = mocks.StrictMock<IPersonRequestCheckAuthorization>();
-            DateTimePeriod period = new DateTimePeriod();
-            IPerson person = PersonFactory.CreatePerson();
+	        var service = createAbsenceRequestApproveService();
+			IPersonRequestCheckAuthorization authorization = mocks.StrictMock<IPersonRequestCheckAuthorization>();
 
-            Expect.Call(requestApprovalService.ApproveAbsence(null, period, null)).Return(new List<IBusinessRuleResponse>()).IgnoreArguments();
-			Expect.Call(requestApprovalService.GetApprovedPersonAbsence()).Return(null).IgnoreArguments();
 			Expect.Call(() => authorization.VerifyEditRequestPermission(null)).IgnoreArguments();
 
             mocks.ReplayAll();
 
-            PersonRequest personRequest = new PersonRequest(person, _target);
-            personRequest.Pending();
+			var person = PersonFactory.CreatePerson();
+			PersonRequest personRequest = new PersonRequest(person, _target);
+			personRequest.Pending();
 
-            IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, authorization);
+			IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(service, authorization);
             Assert.AreEqual(0, brokenRules.Count);
            
             Assert.IsNotEmpty(_target.TextForNotification);
@@ -153,21 +152,19 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             absence.Description = new Description("Holiday", "861");
 
             var mocks = new MockRepository();
-            var requestApprovalService = mocks.StrictMock<IRequestApprovalService>();
-            var authorization = mocks.StrictMock<IPersonRequestCheckAuthorization>();
+	        var requestApprovalService = createAbsenceRequestApproveService();
+			var authorization = mocks.StrictMock<IPersonRequestCheckAuthorization>();
             var period = new DateTimePeriod(new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
                                         new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc));
-            IPerson person = PersonFactory.CreatePerson();
-            person.SetId(Guid.Empty);
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.Empty);
             var target = new AbsenceRequest(absence, period);
+			PersonRequest personRequest = new PersonRequest(person, target);
 
-            Expect.Call(requestApprovalService.ApproveAbsence(null, period, null)).Return(new List<IBusinessRuleResponse>()).IgnoreArguments();
-			Expect.Call(requestApprovalService.GetApprovedPersonAbsence()).Return(null).IgnoreArguments();
 			Expect.Call(() => authorization.VerifyEditRequestPermission(null)).IgnoreArguments();
 
             mocks.ReplayAll();
-
-            PersonRequest personRequest = new PersonRequest(person, target);
+            
             personRequest.Pending();
 
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, authorization);
@@ -182,10 +179,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var mocks = new MockRepository();
             var requestApprovalService = mocks.StrictMock<IRequestApprovalService>();
             var authorization = mocks.StrictMock<IPersonRequestCheckAuthorization>();
-            var period = new DateTimePeriod();
             var person = PersonFactory.CreatePerson();
 
-            Expect.Call(requestApprovalService.ApproveAbsence(null, period, null)).Return(new List<IBusinessRuleResponse>{null}).IgnoreArguments();
+            Expect.Call(requestApprovalService.Approve(null)).Return(new List<IBusinessRuleResponse>{null}).IgnoreArguments();
             Expect.Call(() => authorization.VerifyEditRequestPermission(null)).IgnoreArguments();
 
             mocks.ReplayAll();
@@ -254,7 +250,22 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
         }
 
-        private class RequestPartForTest : Request
+	    private AbsenceRequestApprovalService createAbsenceRequestApproveService()
+	    {
+			var scenario = ScenarioFactory.CreateScenario("Default", true, false);
+			var dateTimePeriod = new DateTimePeriod(2010, 1, 1, 2010, 1, 2);
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
+			var person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var businessRules = new FakeNewBusinessRuleCollection();
+			businessRules.SetRuleResponse(new List<IBusinessRuleResponse> { new BusinessRuleResponse(typeof(BusinessRuleResponse), "warning", true, false, dateTimePeriod, person, new DateOnlyPeriod(2010, 1, 1, 2010, 1, 2), "test warning") });
+			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
+			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
+			return new AbsenceRequestApprovalService(scenario, scheduleDictionary, businessRules, scheduleDayChangeCallback, globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(personAbsenceAccountRepository));
+		}
+
+		private class RequestPartForTest : Request
         {
             public IPerson GetPerson()
             {

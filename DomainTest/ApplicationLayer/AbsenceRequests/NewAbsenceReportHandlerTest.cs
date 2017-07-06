@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -12,9 +13,11 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
@@ -68,10 +71,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			MockRepository.GenerateMock<IBudgetGroupAllowanceSpecification>();
 			MockRepository.GenerateMock<IBudgetGroupHeadCountSpecification>();
 			var businessRules = MockRepository.GenerateMock<IBusinessRulesForPersonalAccountUpdate>();
+			businessRules.Stub(x => x.FromScheduleRange(null)).IgnoreArguments().Return(NewBusinessRuleCollection.Minimum());
 
 			_target = new NewAbsenceReport( _scenarioRepository,
 				new FakeSchedulingResultStateHolderProvider(_schedulingResultStateHolder), _factory, _scheduleDictionarySaver,
-				_loaderWithoutResourceCalculation, _personRepository, businessRules);
+				_loaderWithoutResourceCalculation, _personRepository, businessRules, new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), new CheckingPersonalAccountDaysProvider(new FakePersonAbsenceAccountRepository()));
 		}
 
 		[Test]
@@ -79,10 +83,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			prepareAbsenceReport();
 			expectLoadOfSchedules();
-			_requestApprovalService.Stub(x => x.ApproveAbsence(_absence, _period, _person))
+			_requestApprovalService.Stub(x => x.Approve(null)).IgnoreArguments()
 				.Return(new List<IBusinessRuleResponse>());
 
-			_factory.Stub(x => x.GetRequestApprovalService(null, _scenario, _schedulingResultStateHolder)).IgnoreArguments().Return(_requestApprovalService);
+			//_factory.Stub(x => x.GetRequestApprovalService(null, _scenario, _schedulingResultStateHolder)).IgnoreArguments().Return(_requestApprovalService);
 
 			_target.Handle(_message);
 
@@ -118,7 +122,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		private void createServices()
 		{
-			_requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();
+			//_requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();
+			_requestApprovalService = MockRepository.GenerateMock<AbsenceRequestApprovalService, IRequestApprovalService, IAbsenceRequestApprovalService>();
 		}
 
 		private void createInfrastructure()
@@ -141,6 +146,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		{
 			_schedulingResultStateHolder = new SchedulingResultStateHolder();
 			_scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
+			_scheduleDictionary.Stub(x => x.Modify(ScheduleModifier.Request, null, null,
+					null, null))
+				.IgnoreArguments()
+				.Return(new BusinessRuleResponse[] {});
 			_scheduleDictionarySaver = MockRepository.GenerateMock<IScheduleDifferenceSaver>();
 			_schedulingResultStateHolder.Schedules = _scheduleDictionary;
 		}

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
-			var target = new RequestApprovalServiceScheduler(scheduleDictionary, scenario, swapAndModifyService, businessRules, scheduleDayChangeCallback, globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(personAbsenceAccountRepository), new PersonRequestAuthorizationCheckerForTest());
+			var target = new RequestApprovalServiceScheduler(scheduleDictionary, swapAndModifyService, businessRules, new PersonRequestAuthorizationCheckerForTest());
 
 			var shiftTradeRequest =
 		        new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
@@ -54,12 +54,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var businessRules = new FakeNewBusinessRuleCollection();
 			businessRules.SetRuleResponse(new List<IBusinessRuleResponse> {new BusinessRuleResponse(typeof(BusinessRuleResponse),"warning",true,false,dateTimePeriod,person,new DateOnlyPeriod(2010,1,1,2010,1,2), "test warning")});
 			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
-			var swapAndModifyService = new SwapAndModifyService(new SwapService(), scheduleDayChangeCallback);
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
-			var target = new RequestApprovalServiceScheduler(scheduleDictionary, scenario, swapAndModifyService, businessRules, scheduleDayChangeCallback, globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(personAbsenceAccountRepository), new PersonRequestAuthorizationCheckerForTest());
-		    var result = target.ApproveAbsence(absence, period, person);
+			var target = new AbsenceRequestApprovalService(scenario, scheduleDictionary, businessRules, scheduleDayChangeCallback, globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(personAbsenceAccountRepository));
+		    var result = target.Approve(absence, period, person);
 
 		    Assert.IsTrue(result.IsEmpty());
 	    }

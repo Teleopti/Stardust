@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			setupUndo(undoRedoContainer, schedulingResultStateHolder);
 
 			var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(allNewRules,
-				_scenarioRepository.Current(), schedulingResultStateHolder);
+				_scenarioRepository.Current(), schedulingResultStateHolder, shiftTradeRequest.Parent as IPersonRequest);
 			var brokenBusinessRules = requestApprovalServiceScheduler.ApproveShiftTrade(shiftTradeRequest).ToList();
 
 			undoRedoContainer.UndoAll();

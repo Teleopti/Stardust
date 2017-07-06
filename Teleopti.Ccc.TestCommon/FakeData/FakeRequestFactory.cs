@@ -21,11 +21,10 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_scheduleDictionary = scheduleDictionary;
 		}
 
-		public IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, IScenario scenario, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public IRequestApprovalService GetRequestApprovalService(INewBusinessRuleCollection allNewRules, IScenario scenario, ISchedulingResultStateHolder schedulingResultStateHolder, IPersonRequest personRequest)
 		{
-			var approvalService = new RequestApprovalServiceScheduler(_scheduleDictionary, scenario,
-				new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()), allNewRules,
-				new DoNothingScheduleDayChangeCallBack(), new FakeGlobalSettingDataRepository(), null, null);
+			var approvalService = new RequestApprovalServiceScheduler(_scheduleDictionary, 
+				new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()), allNewRules, null);
 	        return approvalService;
 		}
 
@@ -34,5 +33,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return new ShiftTradeRequestStatusCheckerForTestDoesNothing();
 		}
-    }
+	}
 }

@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			setBusinessRules(person, account);
 
-			setRequestApprovalService();
-			var responses = _requestApprovalService.ApproveAbsence(absence, absenceDateTimePeriod, person);
+			setAbsenceApprovalService();
+			var responses = _requestApprovalService.Approve(personRequest);
 
 			Assert.AreEqual(0, responses.Count());
 			Assert.AreEqual(24, accountDay1.Remaining.TotalDays);
@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			setBusinessRules(person, holidayAccount);
 
-			setRequestApprovalService();
-			var responses = _requestApprovalService.ApproveAbsence(holidayAbsence, absenceDateTimePeriod, person);
+			setAbsenceApprovalService();
+			var responses = _requestApprovalService.Approve(personRequest);
 
 			Assert.AreEqual(0, responses.Count());
 			Assert.AreEqual(24, holidayAccountDay1.Remaining.TotalDays);
@@ -118,9 +118,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			setBusinessRules(person, account);
 
-			setRequestApprovalService();
-			var absence1Responses =_requestApprovalService.ApproveAbsence(absence, absence1DateTimePeriod, person);
-			var absence2Responses = _requestApprovalService.ApproveAbsence(absence, absence2DateTimePeriod, person);
+			setAbsenceApprovalService();
+			var absence1Responses =_requestApprovalService.Approve(personRequest1);
+			var absence2Responses = _requestApprovalService.Approve(personRequest2);
 
 			Assert.AreEqual(0, absence1Responses.Count());
 			Assert.AreEqual(0, absence2Responses.Count());
@@ -283,8 +283,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 		private void setRequestApprovalService()
 		{
-			_requestApprovalService = new RequestApprovalServiceScheduler(_scheduleDictionary, _scenario, _swapAndModifyService,
-				_newBusinessRules, _scheduleDayChangeCallback, _globalSettingsDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), null);
+			_requestApprovalService = new RequestApprovalServiceScheduler(_scheduleDictionary, _swapAndModifyService,
+				_newBusinessRules, null);
+		}
+
+		private void setAbsenceApprovalService()
+		{
+			_requestApprovalService = new AbsenceRequestApprovalService(_scenario, _scheduleDictionary, _newBusinessRules, 
+				_scheduleDayChangeCallback, _globalSettingsDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
 		}
 	}
 }
