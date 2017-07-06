@@ -28,10 +28,12 @@
 
 			$scope.$watch(function () {
 				return getMoveToStartTimeStr();
-			}, function(n, o) {
-				updateInvalidAgents();
+			}, function (n, o) {
+				if (ctrl.agentsInDifferentTimeZone.length === 0) {
+					updateInvalidAgents();
+				}
+				
 			});
-
 			addTabindexAndFocus();
 		};
 
