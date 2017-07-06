@@ -655,8 +655,6 @@ input[type=search]::-ms-clear {
 .request-add-container{
 	position: relative;
 }
-.request-add-body{
-}
 
 .posting-mask {
 	position: absolute;
@@ -696,7 +694,7 @@ input[type=search]::-ms-clear {
 @media (max-width: 500px) {
 	.overtime-request-type, .overtime-request-date, .overtime-request-starttime, .overtime-request-duration {
 		width: 100%;
-		margin: 20px 0;
+		margin-top: 5px;
 	}
 }
 

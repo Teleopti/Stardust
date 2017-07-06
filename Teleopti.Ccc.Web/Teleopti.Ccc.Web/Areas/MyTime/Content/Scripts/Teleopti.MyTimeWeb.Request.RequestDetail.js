@@ -244,6 +244,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _addOvertimeRequest() {
 		var overtimeRequestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, Teleopti.MyTimeWeb.Request.List, parentViewModel);
 		parentViewModel.requestViewModel(overtimeRequestViewModel);
+		Teleopti.MyTimeWeb.Request.List.HideRequests(true);
 	}
 
 	return {

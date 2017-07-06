@@ -90,6 +90,15 @@
 						<a id="addPostShiftForTrade" href=" #" class="postshiftfortrade-request-add" data-bind="click: addPostShiftForTradeRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
 					</li>
 				}
+
+				@if (Model.RequestPermission.OvertimeRequestPermission)
+				{
+					<li class="col-xs-12 col-sm-4" data-bind="css: {active: addOvertimeRequestActive }, visible: addOvertimeRequestEnabled">
+						<a id="addOvertimeRequest" href="#" class="" data-bind="click: addOvertimeRequest">
+							<i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest
+						</a>
+					</li>
+				}
 			</ul>
 		</div>
 	</div>
