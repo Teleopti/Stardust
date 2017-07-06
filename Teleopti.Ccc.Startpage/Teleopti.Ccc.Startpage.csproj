@@ -225,6 +225,7 @@
     <Content Include="favicon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="forecast.html" />
     <Content Include="index.html" />
   </ItemGroup>
   <ItemGroup>
