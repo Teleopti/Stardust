@@ -262,7 +262,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I am navigating to intraday staffing view")]
 		public void WhenIAmNavigatingToIntradayStaffingView()
 		{
-			Browser.Interactions.Javascript("$('md-tab-item:nth-child(3)').click();");
+			Browser.Interactions.Javascript("$('md-tab-item:nth-child(3)').click();" +
+											"setTimeout(function(){console.log('delay')}, 500);");
 		}
 
 		[Then(@"I should see staffing data in the chart")]
