@@ -1,8 +1,10 @@
 ﻿using System.Timers;
+using log4net;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -16,13 +18,16 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly INow _now;
 		private readonly IJobStartTimeRepository _jobStartTimeRepository;
 		private readonly ICurrentBusinessUnit _currentBusinessUnit;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private static readonly ILog logger = LogManager.GetLogger(typeof(UpdateStaffingLevelReadModelHandler));
 
-		public UpdateStaffingLevelReadModelHandler(UpdateStaffingLevelReadModelOnlySkillCombinationResources updateStaffingLevelReadModel, INow now, IJobStartTimeRepository jobStartTimeRepository, ICurrentBusinessUnit currentBusinessUnit)
+		public UpdateStaffingLevelReadModelHandler(UpdateStaffingLevelReadModelOnlySkillCombinationResources updateStaffingLevelReadModel, INow now, IJobStartTimeRepository jobStartTimeRepository, ICurrentBusinessUnit currentBusinessUnit, ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_updateStaffingLevelReadModel = updateStaffingLevelReadModel;
 			_now = now;
 			_jobStartTimeRepository = jobStartTimeRepository;
 			_currentBusinessUnit = currentBusinessUnit;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		[AsSystem]
@@ -40,7 +45,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 				var period = new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(@event.Days).AddHours(1));
 
 				_updateStaffingLevelReadModel.Update(period);
-
+				var current = _currentUnitOfWork.Current();
+				if (current.IsDirty())
+				{
+					current.Clear();
+					logger.Warn("The unit of work was modified while running the readmodel update job on business unit " + @event.LogOnBusinessUnitId);
+				}
 				_jobStartTimeRepository.ResetLockTimestamp(@event.LogOnBusinessUnitId);
 			}
 			finally
@@ -48,6 +58,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				jobLockTimer.Elapsed -= updateJobLock;
 				jobLockTimer.Dispose();
 			}
+			
 		}
 
 		private void updateJobLock(object source, ElapsedEventArgs e)
