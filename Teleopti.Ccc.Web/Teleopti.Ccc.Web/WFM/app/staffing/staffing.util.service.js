@@ -8,14 +8,26 @@
     utilService.inject = ['$translate', '$filter', '$q'];
     function utilService($translate, $filter, $q) {
         var service = {
-			prepareStaffingData: prepareStaffingData,
-			roundDataToOneDecimal: roundDataToOneDecimal
-
+            prepareStaffingData: prepareStaffingData,
+            roundDataToOneDecimal: roundDataToOneDecimal,
+            prepareSettings: prepareSettings
         };
 
         return service;
 
         ////////////////
+        function prepareSettings(vmSettings) {
+            var preparedSettings = {};
+            preparedSettings.Id = vmSettings.Compensation;
+            preparedSettings.MaxMinutesToAdd = convertOvertimeHoursToMinutes(vmSettings.MaxMinutesToAdd);
+            preparedSettings.MinMinutesToAdd = convertOvertimeHoursToMinutes(vmSettings.MinMinutesToAdd);
+            return preparedSettings;
+        }
+
+        function convertOvertimeHoursToMinutes(dateTime) {
+            return (dateTime.getMinutes() + dateTime.getHours() * 60);
+        }
+
         function roundArrayContents(input, decimals) {
             var roundedInput = [];
             input.forEach(function (elm) {
@@ -51,7 +63,7 @@
                 staffingData.time);
             staffingData.time.unshift('x');
             deferred.resolve(staffingData);
-            
+
             return deferred.promise
         }
     }

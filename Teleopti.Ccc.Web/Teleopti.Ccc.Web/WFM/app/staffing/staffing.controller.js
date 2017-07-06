@@ -241,23 +241,13 @@
 				vm.hasRequestedSuggestion = false;
 			});
 		};
-		function convertOvertimeHoursToMinutes(dateTime) {
-			return (dateTime.getMinutes() + dateTime.getHours() * 60);
-		}
 
-		function prepareSettings(vmSettings){
-			var preparedSettings = {};
-			preparedSettings.Id = vmSettings.Id
-			preparedSettings.MaxMinutesToAdd = convertOvertimeHoursToMinutes(vmSettings.MaxMinutesToAdd);
-			preparedSettings.MaxMinutesToAdd = convertOvertimeHoursToMinutes(vmSettings.MinMinutesToAdd);
-			return preparedSettings;
-		}
+		
 
 		function getCompensations() {
 			var query = staffingService.getCompensations.query();
 			query.$promise.then(function (data) {
 				vm.compensations = data;
-				console.log(vm.compensations);
 			});
 		}
 
@@ -271,7 +261,7 @@
 				skillIds = [currentSkills.Id];
 			}
 			vm.hasRequestedSuggestion = true;
-			var settings = prepareSettings(vm.overtimeSettings)
+			var settings = utilService.prepareSettings(vm.overtimeSettings)
 
 			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: vm.timeSerie, OvertimePreferences: settings });
 			query.$promise.then(function (response) {

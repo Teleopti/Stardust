@@ -98,7 +98,7 @@
                 <div ng-repeat="comp in vm.compensations">
                     <div class="wfm-radio">
                         <label>
-				<input type="radio" ng-checked="$index==0?true:false" required name="radio" value={{comp.Id}} ng-model="vm.overtimeSettings.Compensation">
+				<input type="radio" required name="radio" value={{comp.Id}} ng-model="vm.overtimeSettings.Compensation">
 				<span class="wfm-radio-toggle"></span>
 				<span class="wfm-radio-label">{{comp.Name}}</span>
 			</label>
@@ -110,12 +110,11 @@
 
                 <div class="con-flex">
                     <label for="To">Minimum</label>
-                    <input required type="time" name="To" placeholder="HH:mm:ss" ng-model="vm.overtimeSettings.MinMinutesToAdd" ng-change=""
-                        value="00:00:00">
+                    <input required type="time" name="To" placeholder="HH:mm:ss" ng-model="vm.overtimeSettings.MinMinutesToAdd">
                 </div>
                 <div class="con-flex">
                     <label for="From">Maximum</label>
-                    <input required type="time" name="From" placeholder="HH:mm:ss" ng-model="vm.overtimeSettings.MaxMinutesToAdd" value="10:00:00">
+                    <input required type="time" name="From" placeholder="HH:mm:ss" ng-model="vm.overtimeSettings.MaxMinutesToAdd">
                 </div>
                 <button style="float:right;" class="wfm-btn" ng-class="!overtimeForm.$valid ? 'wfm-btn-primary-disabled' : 'wfm-btn-primary'"
                     ng-disabled="!overtimeForm.$valid" type="submit">{{'GetSuggestionsForOvertime' | translate}}</button>
