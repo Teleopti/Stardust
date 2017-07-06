@@ -1,10 +1,10 @@
-(function() {
+(function () {
     'use strict';
     angular.module('wfm.intraday').service('intradayPerformanceService', [
         '$filter',
         'intradayService',
         '$translate',
-        function($filter, intradayService, $translate) {
+        function ($filter, intradayService, $translate) {
             var service = {
                 performanceChart: {}
             };
@@ -36,8 +36,8 @@
 
             var hiddenArray = [];
             var intervalStart;
-            var mixedArea = null;
-            service.setPerformanceData = function(result, showEsl, showEmailSkill, isToday) {
+            var mixedArea = false;
+            service.setPerformanceData = function (result, showEsl, showEmailSkill, isToday) {
                 clearData();
 
                 performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
@@ -78,16 +78,15 @@
                         result.Summary.EstimatedServiceLevel,
                         1
                     );
+
                 if (showEmailSkill && mixedArea) {
-                    performanceData.abandonedRateObj.series = [];
-                    performanceData.hasEmailSkill = true;
-                } else {
-                    performanceData.hasEmailSkill = null;
-                }
+	                performanceData.abandonedRateObj.series = [];
+		            performanceData.hasEmailSkill = true;
+	            }
 
                 angular.forEach(
                     result.DataSeries.Time,
-                    function(value, key) {
+                    function (value, key) {
                         this.push($filter('date')(value, 'shortTime'));
                     },
                     performanceData.timeSeries
@@ -107,11 +106,11 @@
                 return performanceData;
             };
 
-            service.getData = function() {
+            service.getData = function () {
                 return performanceData;
             };
 
-            var getCurrent = function() {
+            var getCurrent = function () {
                 for (var i = 0; i < performanceData.timeSeries.length; i++) {
                     if (performanceData.timeSeries[i] === intervalStart) {
                         performanceData.currentInterval[i] = performanceData.averageSpeedOfAnswerObj.max;
@@ -122,7 +121,7 @@
                 performanceData.currentInterval[0] = 'Current';
             };
 
-            var clearData = function() {
+            var clearData = function () {
                 performanceData.hasEmailSkill = false;
                 performanceData.timeSeries = [];
                 performanceData.averageSpeedOfAnswerObj.series = [];
@@ -131,98 +130,102 @@
                 performanceData.estimatedServiceLevelObj.series = [];
             };
 
-            service.pollSkillData = function(selectedItem, toggles) {
+            service.pollSkillData = function (selectedItem, toggles) {
                 performanceData.waitingForData = true;
-                if (selectedItem.SkillType === 'SkillTypeEmail') {
-                    mixedArea = selectedItem;
-                } else {
-                    mixedArea = false;
-                }
+	            service.checkMixedArea(selectedItem);
                 intradayService.getSkillMonitorPerformance
                     .query({
                         id: selectedItem.Id
                     })
                     .$promise.then(
-                        function(result) {
-                            performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl, true);
-                        },
-                        function(error) {
-                            performanceData.hasMonitorData = false;
-                        }
+                    function (result) {
+                        performanceData.waitingForData = false;
+                        service.setPerformanceData(
+                            result,
+                            toggles.showEsl,
+                            toggles.showEmailSkill,
+                            true);
+                    },
+                    function (error) {
+                        performanceData.hasMonitorData = false;
+                    }
                     );
             };
 
-            service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+            service.pollSkillDataByDayOffset = function (selectedItem, toggles, dayOffset) {
                 performanceData.waitingForData = true;
+	            service.checkMixedArea(selectedItem);
                 intradayService.getSkillMonitorPerformanceByDayOffset
                     .query({
                         id: selectedItem.Id,
                         dayOffset: dayOffset
                     })
                     .$promise.then(
-                        function(result) {
-                            performanceData.waitingForData = false;
-                            service.setPerformanceData(
-                                result,
-                                toggles.showEsl,
-                                toggles.showEmailSkill,
-                                dayOffset === 0
-                            );
-                        },
-                        function(error) {
-                            performanceData.hasMonitorData = false;
-                        }
+                    function (result) {
+                        performanceData.waitingForData = false;
+                        service.setPerformanceData(
+                            result,
+                            toggles.showEsl,
+                            toggles.showEmailSkill,
+                            dayOffset === 0
+                        );
+                    },
+                    function (error) {
+                        performanceData.hasMonitorData = false;
+                    }
                     );
             };
 
-            service.pollSkillAreaData = function(selectedItem, toggles) {
+            service.pollSkillAreaData = function (selectedItem, toggles) {
                 performanceData.waitingForData = true;
-
-                function findEmail(area) {
-                    return area.SkillType === 'SkillTypeEmail';
-                }
-                mixedArea = selectedItem.Skills.find(findEmail);
+	            service.checkMixedArea(selectedItem);
                 intradayService.getSkillAreaMonitorPerformance
                     .query({
                         id: selectedItem.Id
                     })
                     .$promise.then(
-                        function(result) {
-                            performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, true);
-                        },
-                        function(error) {
-                            performanceData.hasMonitorData = false;
-                        }
+                    function (result) {
+                        performanceData.waitingForData = false;
+                        service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, true);
+                    },
+                    function (error) {
+                        performanceData.hasMonitorData = false;
+                    }
                     );
             };
 
-            service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
+            service.pollSkillAreaDataByDayOffset = function (selectedItem, toggles, dayOffset) {
                 performanceData.waitingForData = true;
-
-                function findEmail(area) {
-                    return area.SkillType === 'SkillTypeEmail';
-                }
-                mixedArea = selectedItem.Skills.find(findEmail);
-
+	            service.checkMixedArea(selectedItem);
                 intradayService.getSkillAreaMonitorPerformanceByDayOffset
                     .query({
                         id: selectedItem.Id,
                         dayOffset: dayOffset
                     })
                     .$promise.then(
-                        function(result) {
-                            performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl, dayOffset === 0);
-                        },
-                        function(error) {
-                            performanceData.hasMonitorData = false;
-                        }
+                    function (result) {
+                        performanceData.waitingForData = false;
+                        service.setPerformanceData(result, toggles.showEsl, dayOffset === 0);
+                    },
+                    function (error) {
+                        performanceData.hasMonitorData = false;
+                    }
                     );
             };
 
-            service.initPerformanceChart = function() {
+	        service.checkMixedArea = function (selectedItem) {
+		        //If multiskill
+		        if (selectedItem.Skills) {
+			        function findEmail(area) {
+				        return area.SkillType === 'SkillTypeEmail';
+			        }
+			        mixedArea = selectedItem.Skills.find(findEmail);
+		        } else {
+			        mixedArea = selectedItem.SkillType === 'SkillTypeEmail';
+		        }
+	        }
+
+            service.initPerformanceChart = function () {
                 service.performanceChart = c3.generate({
                     bindto: '#performanceChart',
                     data: {
@@ -296,7 +299,7 @@
                     },
                     legend: {
                         item: {
-                            onclick: function(id) {
+                            onclick: function (id) {
                                 if (hiddenArray.indexOf(id) > -1) {
                                     hiddenArray.splice(hiddenArray.indexOf(id), 1);
                                 } else {

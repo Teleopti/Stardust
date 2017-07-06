@@ -92,7 +92,6 @@
 			<div class="panel material-depth-1">
 				<div class="sub-header">
 					<h2 class="skill-list-header"><b>{{ selectedSkillArea.Name }}</b>: {{selectedSkillArea.Skills.length}} {{'PersonSkill'|translate}} <span ng-if="skillAreaMessage">({{skillAreaMessage}})</span></h2>
-					<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'EmailSkillSelected'|translate}}</p>
 					<div class="head-actions panel-menu">
 						<div tabindex=0 class="context-menu card-context">
 							<i class="skill-area-options mdi mdi-dots-vertical"></i>
@@ -130,7 +129,7 @@
 		</div>
 	</div>
 
-	<div class="con-row" ng-show="selectedSkill.Name || selectedSkillArea.Name">
+<div class="con-row" ng-show="selectedSkill.Name || selectedSkillArea.Name">
 		<div class="con-flex">
 			<div class="panel material-depth-1">
 				<div class="wfm-slide-tabs tabbed-panel">
@@ -272,6 +271,7 @@
 								<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
 									<div class="con-row">
 										<div class="con-flex">
+											<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
 											<div class="wfm-chart intraday-chart" id="staffingChart" ng-show="viewObj.hasMonitorData"></div>
 										</div>
 									</div>
