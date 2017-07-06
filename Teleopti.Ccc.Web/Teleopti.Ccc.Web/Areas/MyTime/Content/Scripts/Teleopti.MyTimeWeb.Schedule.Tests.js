@@ -149,6 +149,7 @@ $(document).ready(function() {
 			RequestPermission: {
 				AbsenceReportPermission: true,
 				AbsenceRequestPermission: true,
+				OvertimeRequestPermission: true,
 				OvertimeAvailabilityPermission: true,
 				PersonAccountPermission: true,
 				ShiftExchangePermission: true,
@@ -1040,6 +1041,34 @@ $(document).ready(function() {
 		var timeline = { Time: "1.00:00:00", TimeLineDisplay: "00:00", PositionPercentage: 1, TimeFixedFormat: null };
 		var timelineViewModel = new Teleopti.MyTimeWeb.Schedule.TimelineViewModel(timeline, 100, 0);
 		equal(timelineViewModel.minutes, 1440);
+	});
+
+	test("should read overtime request toggle", function () {
+		initUserTexts();
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_OvertimeRequest_44558") return false;
+			return false;
+		};
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+
+		var fakeScheduleData = getFakeScheduleData();
+		fakeScheduleData.RequestPermission.OvertimeRequestPermission = true;
+
+		vm.initializeData(fakeScheduleData);
+
+		equal(vm.isOvertimeRequestAvailable(), false);
+	});
+
+	test("should read overtime request permission", function () {
+		initUserTexts();
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
+			return false;
+		};
+		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
+		vm.initializeData(getFakeScheduleData());
+
+		equal(vm.isOvertimeRequestAvailable(), true);
 	});
 
 	test("should not show overtime probability toggle when OvertimeProbability is disabled", function () {

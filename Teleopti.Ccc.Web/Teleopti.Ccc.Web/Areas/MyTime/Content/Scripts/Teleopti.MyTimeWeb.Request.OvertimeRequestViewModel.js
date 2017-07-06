@@ -9,7 +9,7 @@
 	self.Subject = ko.observable();
 	self.Message = ko.observable();
 
-	self.StartDate = ko.observable();
+	self.DateFrom = ko.observable();
 	self.StartTime = ko.observable();
 	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 
@@ -82,7 +82,7 @@
 
 			self.Subject(data.Subject);
 			self.Message(data.Text);
-			self.StartDate(moment(data.DateTimeFrom));
+			self.DateFrom(moment(data.DateTimeFrom));
 
 			if (self.ShowMeridian) {
 				self.StartTime(moment(data.DateTimeFrom).format("hh:mm A"));
@@ -127,7 +127,7 @@
 	function _buildPostData() {
 		var dateTimeFormats = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat;
 
-		var startDate = self.StartDate() ? moment(self.StartDate()) : moment().startOf("day");
+		var startDate = self.DateFrom() ? moment(self.DateFrom()) : moment().startOf("day");
 		var periodStart = moment(startDate.format(dateTimeFormats.dateOnly) + " " + self.StartTime());
 
 		var periodEnd = moment(periodStart);

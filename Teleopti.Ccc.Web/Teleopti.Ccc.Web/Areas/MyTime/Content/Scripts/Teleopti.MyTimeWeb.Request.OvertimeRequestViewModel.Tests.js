@@ -52,7 +52,7 @@ $(document).ready(function () {
 	test('should submit overtime request', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.StartDate('2017-06-27');
+		vm.DateFrom('2017-06-27');
 		vm.StartTime('19:00');
 		vm.RequestDuration('03:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
@@ -82,7 +82,7 @@ $(document).ready(function () {
 	test('should save overtime request', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.StartDate('2017-06-27');
+		vm.DateFrom('2017-06-27');
 		vm.StartTime('19:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -94,7 +94,7 @@ $(document).ready(function () {
 	test('should post correct EndDate and EndTime with cross day', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.StartDate('2017-06-27');
+		vm.DateFrom('2017-06-27');
 		vm.StartTime('19:00');
 		vm.RequestDuration('06:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
@@ -110,7 +110,7 @@ $(document).ready(function () {
 	test('should post correct EndDate and EndTime with intraday', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.StartDate('2017-06-27');
+		vm.DateFrom('2017-06-27');
 		vm.StartTime('19:30');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
@@ -126,7 +126,7 @@ $(document).ready(function () {
 	test('should calculate correct EndDate and EndTime with meridian', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.StartDate('2017-06-27');
+		vm.DateFrom('2017-06-27');
 		vm.StartTime('09:30 AM');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
@@ -248,7 +248,7 @@ $(document).ready(function () {
 
 		equal(requestVm.Subject(), "subject");
 		equal(requestVm.Message(), "text");
-		equal(requestVm.StartDate().format("YYYY-MM-DD"), "2017-06-30");
+		equal(requestVm.DateFrom().format("YYYY-MM-DD"), "2017-06-30");
 		equal(requestVm.StartTime(), "03:45");
 		equal(requestVm.RequestDuration(), "03:00");
 		equal(requestVm.MultiplicatorDefinitionSetId(), "9019D62F-0086-44B1-A977-9BB900B8C361");

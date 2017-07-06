@@ -476,6 +476,33 @@ $(document).ready(function() {
 			}
 		};
 		viewModel.readData(rawData);
+		equal(viewModel.showPostShiftTradeMenu(), false);
+	});
+
+	test("should not show add overtime request command when toggle is off", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+			if (x === "MyTimeWeb_OvertimeRequest_44558") return false;
+			return false;
+		};
+
+		var viewModel = new Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel();
+
+		var rawData = {
+			Date: moment().format('YYYY-MM-DD'),
+			Schedule: {
+				FixedDate: null,
+				Summary: {
+					Color: null,
+					Title: null,
+					TimeSpan: null
+				},
+				Header:{Title: null}
+			},
+			RequestPermission:{
+				OvertimeRequestPermission: true
+			}
+		};
+		viewModel.readData(rawData);
 		equal(viewModel.showAddOvertimeRequestMenu(), false);
 	});
 
@@ -502,7 +529,7 @@ $(document).ready(function() {
 			}
 		};
 		viewModel.readData(rawData);
-		equal(viewModel.showPostShiftTradeMenu(), false);
+		equal(viewModel.showAddOvertimeRequestMenu(), false);
 	});
 
 	test("should not show probability option icon without toggle on", function () {

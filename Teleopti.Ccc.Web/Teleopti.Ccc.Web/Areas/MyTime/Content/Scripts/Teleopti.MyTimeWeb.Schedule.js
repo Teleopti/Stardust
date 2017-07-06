@@ -178,6 +178,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.staffingProbabilityForMultipleDaysEnabled = false;
 		self.absenceProbabilityEnabled = ko.observable();
 		self.overtimeProbabilityEnabled = ko.observable();
+		self.isOvertimeRequestAvailable = ko.observable();
 		self.showProbabilityToggle = ko.observable();
 		self.loadingProbabilityData = ko.observable(false);
 
@@ -197,6 +198,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.selectedDate = ko.observable(moment().startOf("day"));
 
 		self.requestViewModel = ko.observable();
+		self.requestViewModelTypes = {
+			overtimeAvailability: 'overtimeAvailability',
+			textRequest: 'textRequest',
+			absenceRequest: 'absenceRequest',
+			shiftOffer: 'shiftOffer',
+			absenceReport: 'absenceReport',
+			overtimeRequest: 'overtimeRequest'
+		};
 
 		self.initialRequestDay = ko.observable();
 		self.selectedDateSubscription = null;
@@ -357,11 +366,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		function _fillFormData(data) {
 			var requestViewModel = self.requestViewModel().model;
-			requestViewModel.DateFormat(self.datePickerFormat());
+			requestViewModel.DateFormat && requestViewModel.DateFormat(self.datePickerFormat());
 			var requestDay = moment(self.initialRequestDay(), Teleopti.MyTimeWeb.Common.ServiceDateFormat);
 
-			requestViewModel.DateFrom(requestDay);
-			requestViewModel.DateTo(requestDay);
+			requestViewModel.DateFrom && requestViewModel.DateFrom(requestDay);
+			requestViewModel.DateTo && requestViewModel.DateTo(requestDay);
 			if (requestViewModel.LoadRequestData) {
 				if (data && data.StartTime) {
 					requestViewModel.LoadRequestData(data);
@@ -394,10 +403,20 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return self.absenceReportPermission() && isPermittedDate;
 		});
 
+		var innerRequestModel = createRequestViewModel();
+
+		var addRequestModel = {
+			model: innerRequestModel,
+			type: innerRequestModel.TypeEnum,
+			CancelAddingNewRequest: self.CancelAddingNewRequest
+		};
+
 		self.showAddTextRequestForm = function (data) {
 			if (self.textPermission() !== true) {
 				return;
 			}
+
+			addRequestModel.type = function(){return self.requestViewModelTypes.textRequest;}
 			self.requestViewModel(addRequestModel);
 			self.requestViewModel().model.IsPostingData(false);
 			_fillFormData(data);
@@ -409,6 +428,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if (self.absenceRequestPermission() !== true) {
 				return;
 			}
+			addRequestModel.type = function(){return self.requestViewModelTypes.absenceRequest;};
 			self.requestViewModel(addRequestModel);
 			self.requestViewModel().model.IsPostingData(false);
 			self.requestViewModel().model.readPersonalAccountPermission(self.personAccountPermission());
@@ -421,6 +441,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			if (self.absenceReportPermission() !== true) {
 				return;
 			}
+
+			var addAbsenceReportModel = {
+				model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule),
+				type: function () { return self.requestViewModelTypes.absenceReport; },
+				CancelAddingNewRequest: self.CancelAddingNewRequest
+			};
+
 			self.requestViewModel(addAbsenceReportModel);
 			_fillFormData(data);
 		};
@@ -434,45 +461,33 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			_fetchData();
 		}
 
-		var addOvertimeModel = {
-			model: new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability),
-			type: function () { return "overtime"; },
-			CancelAddingNewRequest: self.CancelAddingNewRequest
-		};
-
-		var innerRequestModel = createRequestViewModel();
-
-		var addRequestModel = {
-			model: innerRequestModel,
-			type: innerRequestModel.TypeEnum,
-			CancelAddingNewRequest: self.CancelAddingNewRequest
-		};
-
-		var addAbsenceReportModel = {
-			model: new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(ajax, reloadSchedule),
-			type: function () { return "absenceReport"; },
-			CancelAddingNewRequest: self.CancelAddingNewRequest
-		};
-
 		self.showAddShiftExchangeOfferForm = function (data) {
 			if (!self.shiftExchangePermission()) {
 				return;
 			}
 			var addShiftOfferModel = {
 				model: new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(ajax, _displayRequest).Create(defaultDateTimes),
-				type: function () { return "shiftOffer"; },
+				type: function () { return self.requestViewModelTypes.shiftOffer; },
 				CancelAddingNewRequest: self.CancelAddingNewRequest
 			};
 			self.requestViewModel(addShiftOfferModel);
 			_fillFormData(data);
 		};
 
-		self.showAddOvertimeAvailabilityForm = function (data) {
+		self.showAddOvertimeAvailabilityForm = function(data) {
 			if (!self.overtimeAvailabilityPermission()) {
 				return;
 			}
 
-			self.requestViewModel(addOvertimeModel);
+			var addOvertimeAvailabilityModel = {
+				model: new Teleopti.MyTimeWeb.Schedule.OvertimeAvailabilityViewModel(ajax, displayOvertimeAvailability),
+				type: function() {
+					return self.requestViewModelTypes.overtimeAvailability;
+				},
+				CancelAddingNewRequest: self.CancelAddingNewRequest
+			};
+
+			self.requestViewModel(addOvertimeAvailabilityModel);
 			_fillFormData(data);
 		};
 
@@ -480,19 +495,23 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.showAddRequestFormWithData(day.fixedDate(), day.overtimeAvailability());
 		};
 
-		var defaultRequestFunction = function () {
-			if (self.overtimeAvailabilityPermission())
-				return self.showAddOvertimeAvailabilityForm;
-			if (self.absenceRequestPermission())
-				return self.showAddAbsenceRequestForm;
-
-			return self.showAddTextRequestForm;
+		self.showAddOvertimeRequestForm = function (data) {
+			if (!self.isOvertimeRequestAvailable()) {
+				return;
+			}
+			var addOvertimeRequestModel = {
+				model: new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, self.CancelAddingNewRequest, self, self.weekStart),
+				type: function () { return self.requestViewModelTypes.overtimeRequest; },
+				CancelAddingNewRequest: self.CancelAddingNewRequest
+			};
+			self.requestViewModel(addOvertimeRequestModel);
+			_fillFormData(data);
 		};
 
 		self.showAddRequestFormWithData = function (date, data) {
 			self.initialRequestDay(date);
 
-			if ((self.requestViewModel() !== undefined) && (self.requestViewModel().type() === "absenceReport") && !self.isAbsenceReportAvailable()) {
+			if ((self.requestViewModel() !== undefined) && (self.requestViewModel().type() === self.requestViewModelTypes.absenceReport) && !self.isAbsenceReportAvailable()) {
 				self.requestViewModel(null);
 			}
 
@@ -503,6 +522,15 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			defaultRequestFunction()(data);
 		};
+
+		function defaultRequestFunction() {
+			if (self.overtimeAvailabilityPermission())
+				return self.showAddOvertimeAvailabilityForm;
+			if (self.absenceRequestPermission())
+				return self.showAddAbsenceRequestForm;
+
+			return self.showAddTextRequestForm;
+		}
 
 		function createRequestViewModel() {
 			var model = addRequestViewModel && addRequestViewModel();
@@ -523,14 +551,17 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var currentUserDate = getCurrentUserDateTime(self.baseUtcOffsetInMinutes).format("YYYY-MM-DD");
 		self.isCurrentWeek(data.IsCurrentWeek);
 
+		self.isOvertimeRequestAvailable(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_OvertimeRequest_44558"));
+
 		if (data.RequestPermission) {
-			self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
-			self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
-			self.overtimeAvailabilityPermission(data.RequestPermission.OvertimeAvailabilityPermission);
-			self.shiftExchangePermission(data.RequestPermission.ShiftExchangePermission);
-			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
-			self.textPermission(data.RequestPermission.TextRequestPermission);
-			self.requestPermission(data.RequestPermission.TextRequestPermission || data.RequestPermission.AbsenceRequestPermission);
+			self.absenceRequestPermission(!!data.RequestPermission.AbsenceRequestPermission);
+			self.absenceReportPermission(!!data.RequestPermission.AbsenceReportPermission);
+			self.overtimeAvailabilityPermission(!!data.RequestPermission.OvertimeAvailabilityPermission);
+			self.shiftExchangePermission(!!data.RequestPermission.ShiftExchangePermission);
+			self.personAccountPermission(!!data.RequestPermission.PersonAccountPermission);
+			self.textPermission(!!data.RequestPermission.TextRequestPermission);
+			self.requestPermission(!!data.RequestPermission.TextRequestPermission || !!data.RequestPermission.AbsenceRequestPermission);
+			self.isOvertimeRequestAvailable(!!data.RequestPermission.OvertimeRequestPermission && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_OvertimeRequest_44558"));
 		}
 
 		self.staffingProbabilityEnabled = data.ViewPossibilityPermission && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_ViewIntradayStaffingProbability_41608");

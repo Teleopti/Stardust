@@ -137,7 +137,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			self.absenceRequestPermission(!!data.RequestPermission.AbsenceRequestPermission);
 			self.shiftTradeRequestPermission(!!data.RequestPermission.ShiftTradeRequestPermission);
 			self.personAccountPermission(!!data.RequestPermission.PersonAccountPermission);
-			self.showAddOvertimeRequestMenu(!!data.RequestPermission.OvertimeRequestPermission);
+			self.showAddOvertimeRequestMenu(!!data.RequestPermission.OvertimeRequestPermission && Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_OvertimeRequest_44558"));
 		}
 
 		setSelectedDateSubscription(data.Date);
@@ -414,7 +414,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 
 	self.showAddOvertimeRequestForm = function(){
-		var requestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(parent.Ajax(), addRequestCallBack, self);
+		var requestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(parent.Ajax(), addRequestCallBack, self, weekStart);
 
 		requestViewModel.AddRequestCallback = function (data) {
 			addRequestCallBack(data);
