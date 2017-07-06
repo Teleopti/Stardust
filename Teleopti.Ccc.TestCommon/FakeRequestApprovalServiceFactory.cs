@@ -1,6 +1,12 @@
-﻿using Rhino.Mocks;
+﻿using System;
+using System.Collections.Generic;
+using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 
@@ -21,10 +27,10 @@ namespace Teleopti.Ccc.TestCommon
 			return _approvalService ?? (_approvalService = MockRepository.GenerateMock<IRequestApprovalService>());
 		}
 
-		public IRequestApprovalService MakeRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary, IScenario scenario,
+		public IRequestApprovalService MakeAbsenceRequestApprovalService(IScheduleDictionary scheduleDictionary, IScenario scenario,
 			IPersonRequest personRequest)
 		{
-			return _approvalService ?? (_approvalService = MockRepository.GenerateMock<IRequestApprovalService>());
+			return _approvalService ?? (_approvalService = MockRepository.GenerateMock<AbsenceRequestApprovalService, IRequestApprovalService, IAbsenceRequestApprovalService>(scenario, scheduleDictionary,null,null,null,null));
 		}
 	}
 }

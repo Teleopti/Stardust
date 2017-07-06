@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				_personRequestCheckAuthorization);
 		}
 
-		public IRequestApprovalService MakeRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary, IScenario scenario, IPersonRequest personRequest)
+		public IRequestApprovalService MakeAbsenceRequestApprovalService(IScheduleDictionary scheduleDictionary, IScenario scenario, IPersonRequest personRequest)
 		{
 			var requestType = personRequest.Request.RequestType;
 			if (requestType == RequestType.AbsenceRequest)
