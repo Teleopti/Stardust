@@ -45,6 +45,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.requestPermission = ko.observable();
 	self.showAbsenceReportingCommandItem = ko.observable();
 	self.showPostShiftTradeMenu = ko.observable(false);
+	self.showAddOvertimeRequestMenu = ko.observable(false);
 	self.baseUtcOffsetInMinutes = 0;
 
 	self.overtimeAvailabililty = null;
@@ -127,14 +128,16 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		});
 		self.layers(layers);
 
+		self.showAddOvertimeRequestMenu(Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_OvertimeRequest_44558"));
 
 		if (data.RequestPermission) {
-			self.overtimeAvailabilityPermission(data.RequestPermission.OvertimeAvailabilityPermission);
-			self.absenceReportPermission(data.RequestPermission.AbsenceReportPermission);
-			self.textRequestPermission(data.RequestPermission.TextRequestPermission);
-			self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
-			self.shiftTradeRequestPermission(data.RequestPermission.ShiftTradeRequestPermission);
-			self.personAccountPermission(data.RequestPermission.PersonAccountPermission);
+			self.overtimeAvailabilityPermission(!!data.RequestPermission.OvertimeAvailabilityPermission);
+			self.absenceReportPermission(!!data.RequestPermission.AbsenceReportPermission);
+			self.textRequestPermission(!!data.RequestPermission.TextRequestPermission);
+			self.absenceRequestPermission(!!data.RequestPermission.AbsenceRequestPermission);
+			self.shiftTradeRequestPermission(!!data.RequestPermission.ShiftTradeRequestPermission);
+			self.personAccountPermission(!!data.RequestPermission.PersonAccountPermission);
+			self.showAddOvertimeRequestMenu(!!data.RequestPermission.OvertimeRequestPermission);
 		}
 
 		setSelectedDateSubscription(data.Date);
@@ -319,10 +322,12 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.focusingRequestForm(false);
 	}
 
-	function setupRequestViewModel(requestViewModel, cancelAddingNewRequest) {
+	self.CancelAddingNewRequest = resetRequestViewModel;
+
+	function setupRequestViewModel(requestViewModel) {
 		self.requestViewModel({
 			model: requestViewModel,
-			CancelAddingNewRequest: cancelAddingNewRequest
+			CancelAddingNewRequest: self.CancelAddingNewRequest
 		});
 		if (requestViewModel.DateFormat) {
 			requestViewModel.DateFormat(self.datePickerFormat());
@@ -350,7 +355,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 			parent.ReloadSchedule();
 			resetRequestViewModel();
 		});
-		setupRequestViewModel(requestViewModel, resetRequestViewModel);
+		setupRequestViewModel(requestViewModel);
 
 		fillRequestFormData(requestViewModel);
 		requestViewModel.LoadRequestData(self.overtimeAvailabililty);
@@ -360,7 +365,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		var requestViewModel = new Teleopti.MyTimeWeb.Schedule.AbsenceReportViewModel(parent.Ajax(), function () {
 			resetRequestViewModel();
 		});
-		setupRequestViewModel(requestViewModel, resetRequestViewModel);
+		setupRequestViewModel(requestViewModel);
 		fillRequestFormData(requestViewModel);
 	};
 
@@ -375,7 +380,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		};
 
 		requestViewModel.AddTextRequest(false);
-		setupRequestViewModel(requestViewModel, resetRequestViewModel);
+		setupRequestViewModel(requestViewModel);
 		fillRequestFormData(requestViewModel);
 	};
 
@@ -391,7 +396,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 		requestViewModel.readPersonalAccountPermission(self.personAccountPermission());
 		requestViewModel.AddAbsenceRequest(false);
-		setupRequestViewModel(requestViewModel, resetRequestViewModel);
+		setupRequestViewModel(requestViewModel);
 		fillRequestFormData(requestViewModel);
 	}
 
@@ -403,7 +408,19 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		var requestViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(parent.Ajax(), addRequestCallBack)
 			.Create(Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
 
-		setupRequestViewModel(requestViewModel, resetRequestViewModel);
+		setupRequestViewModel(requestViewModel);
+		fillRequestFormData(requestViewModel);
+	};
+
+
+	self.showAddOvertimeRequestForm = function(){
+		var requestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(parent.Ajax(), addRequestCallBack, self);
+
+		requestViewModel.AddRequestCallback = function (data) {
+			addRequestCallBack(data);
+		};
+
+		setupRequestViewModel(requestViewModel);
 		fillRequestFormData(requestViewModel);
 	};
 

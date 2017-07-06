@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, requestListViewModel, requestDetailParentViewModel, weekStart) {
+﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart) {
 	var self = this;
 
 	self.Id = ko.observable();
@@ -55,7 +55,7 @@
 		}
 
 		self.IsPostingData(true);
-		
+
 		ajax.Ajax({
 			url: 'Requests/PersistOvertimeRequest',
 			data: _buildPostData(),
@@ -63,7 +63,7 @@
 			type: 'POST',
 			success: function (data) {
 				self.IsPostingData(false);
-				requestListViewModel.AddItemAtTop(data, true);
+				doneCallback(data);
 				self.CancelAddRequest();
 			},
 			error: function() {
@@ -73,7 +73,7 @@
 	};
 
 	self.CancelAddRequest = function() {
-		requestDetailParentViewModel.CancelAddingNewRequest();
+		parentViewModel.CancelAddingNewRequest();
 	};
 
 	self.Initialize = function (data) {

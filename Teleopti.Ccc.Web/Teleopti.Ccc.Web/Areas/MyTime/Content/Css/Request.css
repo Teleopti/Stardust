@@ -691,13 +691,6 @@ input[type=search]::-ms-clear {
 	white-space: nowrap;
 }
 
-@media (max-width: 500px) {
-	.overtime-request-type, .overtime-request-date, .overtime-request-starttime, .overtime-request-duration {
-		width: 100%;
-		margin-top: 5px;
-	}
-}
-
 .overtime-request-duration span.input-sm {
 	padding-left: 12px;
 	padding-right: 12px;
@@ -713,4 +706,15 @@ input[type=search]::-ms-clear {
 	width: 100%;
 	left: initial;
 	right: 0;
+}
+
+@media (max-width: 500px) {
+	.overtime-request-type, .overtime-request-date, .overtime-request-starttime, .overtime-request-duration {
+		width: 100%;
+		margin-top: 5px;
+	}
+
+	.overtime-request-duration .dropdown-menu{
+		max-height: 80px;
+	}
 }

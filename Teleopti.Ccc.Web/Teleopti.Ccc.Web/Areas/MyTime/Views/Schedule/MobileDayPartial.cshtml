@@ -39,6 +39,9 @@
 <script type="text/html" id="shift-exchange-offer-template">
 	@Html.Partial("AddShiftExchangeOfferPartial")
 </script>
+<script type="text/html" id="add-overtime-request-template">
+	@Html.Partial("~/Areas/MyTime/Views/Requests/AddNewOvertimeRequestView.cshtml")
+</script>
 <div class="mobile-start-day">
 	<div class="navbar navbar-teleopti subnavbar">
 		<div class="container mobile-start-day-nav">
@@ -176,6 +179,9 @@
 			</li>
 			<li data-bind="visible: showPostShiftTradeMenu" class="col-xs-12 col-sm-4">
 				<a href="#" data-bind="click: showPostShiftForTradeForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.AnnounceShift</a>
+			</li>
+			<li data-bind="visible: showAddOvertimeRequestMenu" class="col-xs-12 col-sm-4">
+				<a href="#" data-bind="click: showAddOvertimeRequestForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeRequest</a>
 			</li>
 		</ul>
 	</div>

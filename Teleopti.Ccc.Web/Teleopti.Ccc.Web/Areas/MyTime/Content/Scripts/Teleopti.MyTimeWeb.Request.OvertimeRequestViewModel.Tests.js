@@ -10,11 +10,6 @@ $(document).ready(function () {
 		fakeOvertimeRequestResponse = {
 			Id: '7155082E-108B-4F72-A36A-C1430C37CADA'
 		},
-		fakeRequestListViewModel = {
-			AddItemAtTop: function(item) {
-				addedOvertimeRequest = item;
-			}
-		},
 		fakeRequestDetailViewModel = {
 			CancelAddingNewRequest: function() {
 				requestFormClosed = true;
@@ -31,7 +26,11 @@ $(document).ready(function () {
 	function setup() {
 		setupAjax();
 		requestFormClosed = false;
-		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, fakeRequestListViewModel, fakeRequestDetailViewModel);
+		addedOvertimeRequest = undefined;
+
+		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
+			addedOvertimeRequest = data;
+		}, fakeRequestDetailViewModel);
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 	}
 
@@ -242,7 +241,9 @@ $(document).ready(function () {
 			MultiplicatorDefinitionSet: "9019D62F-0086-44B1-A977-9BB900B8C361"
 		};
 
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, fakeRequestListViewModel, fakeRequestDetailViewModel);
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
+			addedOvertimeRequest = data;
+		}, fakeRequestDetailViewModel);
 		requestVm.Initialize(data);
 
 		equal(requestVm.Subject(), "subject");

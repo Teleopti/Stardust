@@ -51,7 +51,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		};
 
 		self.createOvertimeRequestViewModel = function(data) {
-			var overtimeRequestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, Teleopti.MyTimeWeb.Request.List, parentViewModel, weekStart);
+			var overtimeRequestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, _addItemAtTop, parentViewModel, weekStart);
 			self.requestViewModel(overtimeRequestViewModel);
 			self.requestViewModel().Initialize(data);
 		};
@@ -242,7 +242,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _addOvertimeRequest() {
-		var overtimeRequestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, Teleopti.MyTimeWeb.Request.List, parentViewModel);
+		var overtimeRequestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, _addItemAtTop, parentViewModel);
 		parentViewModel.requestViewModel(overtimeRequestViewModel);
 		Teleopti.MyTimeWeb.Request.List.HideRequests(true);
 	}

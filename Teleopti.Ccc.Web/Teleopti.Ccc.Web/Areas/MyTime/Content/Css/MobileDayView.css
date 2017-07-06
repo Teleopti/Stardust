@@ -156,3 +156,11 @@
 	overflow-y: auto;
 	-webkit-overflow-scrolling: touch;
 }
+
+.mobile-add-request-form .overtime-add-container .overtime-request-duration{
+	height: 100px;
+}
+.mobile-add-request-form .overtime-add-container .overtime-request-duration .dropdown-menu{
+	max-height: 100px;
+}
+
