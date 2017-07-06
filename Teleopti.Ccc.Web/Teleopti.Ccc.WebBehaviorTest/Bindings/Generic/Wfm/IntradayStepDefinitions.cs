@@ -334,5 +334,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 											$"scope.changeChosenOffset('{offset}');" +
 											"setTimeout(function(){console.log('delay')}, 1000);");
 		}
+
+		[Then(@"I should see the export to excel button")]
+		public void ThenIShouldSeeTheExportToExcelButton()
+		{
+			Browser.Interactions.IsVisible(".mdi-file-excel");
+		}
+
 	}
 }

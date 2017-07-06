@@ -101,3 +101,11 @@ Scenario: View incoming traffic for one skill for a provided date
 	And I am viewing intraday page
 	When I change date offset to '-1'
 	Then I should see incoming traffic data in the chart
+
+@OnlyRunIfEnabled('WFM_Intraday_Export_To_Excel_44892')
+Scenario: If toggled we should see export to excel button
+	Given the time is '2016-12-21 14:00'
+	And there is queue statistics for the skill 'Skill A' up until '2016-12-21 17:00'
+	And there is forecast data for skill 'Skill A' for date '2016-12-21'
+	And I am viewing intraday page
+	Then I should see the export to excel button
