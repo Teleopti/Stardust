@@ -103,9 +103,6 @@
 			var element = setUp(moment('2017-07-05').toDate());
 			var applyButton = angular.element(element[0].querySelector(".move-shift .form-submit"));
 			var errorMessage = element[0].querySelector(".move-shift .has-agent-in-different-timezone");
-
-
-			expect(applyButton.hasClass('wfm-btn-primary-disabled')).toBeTruthy();
 			expect(applyButton.attr('disabled')).toBe('disabled');
 			expect(errorMessage).toBeTruthy();
 
