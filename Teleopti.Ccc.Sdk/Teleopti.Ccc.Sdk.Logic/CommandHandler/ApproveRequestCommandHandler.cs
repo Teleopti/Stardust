@@ -57,15 +57,20 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		public virtual IRequestApprovalService GetRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary,
 													IScenario scenario,
 													ISwapAndModifyService swapAndModifyService,
-													INewBusinessRuleCollection newBusinessRules)
+													INewBusinessRuleCollection newBusinessRules, IPersonRequest personRequest)
 		{
-			
-
-		   return new RequestApprovalServiceScheduler(scheduleDictionary,
-																		  scenario,
-																		  swapAndModifyService, newBusinessRules,
-																																					_scheduleDayChangeCallback,
-                                                                          _globalSettingDataRepository, _checkingPersonalAccountDaysProvider, _authorization);
+			IRequestApprovalService service;
+			if (personRequest.Request.RequestType == RequestType.AbsenceRequest)
+			{
+				service = new AbsenceRequestApprovalService(scenario, scheduleDictionary, newBusinessRules, _scheduleDayChangeCallback,
+					_globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
+			}
+			else
+			{
+				service = new RequestApprovalServiceScheduler(scheduleDictionary,
+					new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization);
+			}
+			return service;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -80,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
 				var approvalService = GetRequestApprovalServiceScheduler(scheduleDictionary,
 																		  _scenarioRepository.Current(),
-																		  _swapAndModifyService, allNewRules);
+																		  _swapAndModifyService, allNewRules, personRequest);
 				try
 				{
 					personRequest.Approve(approvalService, _authorization);

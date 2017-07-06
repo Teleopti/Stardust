@@ -89,7 +89,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public IList<IBusinessRuleResponse> Approve(INewBusinessRuleCollection newBusinessRules)
 		{
-			var service = new RequestApprovalServiceScheduler(_schedules, _scenario, new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _scheduleDayChangeCallback, _globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), _authorization);
+			IRequestApprovalService service;
+			if (Model.PersonRequest.Request.RequestType == RequestType.AbsenceRequest)
+			{
+				service = new AbsenceRequestApprovalService(_scenario, _schedules, newBusinessRules, _scheduleDayChangeCallback,
+					_globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
+			}
+			else
+			{
+				service = new RequestApprovalServiceScheduler(_schedules,
+					new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization);
+			}
+			
 
 			return Model.PersonRequest.Approve(service, _authorization);
 		}
