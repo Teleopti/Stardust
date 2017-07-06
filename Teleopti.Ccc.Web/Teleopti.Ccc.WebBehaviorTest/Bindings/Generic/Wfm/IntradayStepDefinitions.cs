@@ -87,7 +87,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Javascript("var scope = angular.element(document.querySelector('.c3')).scope();" +
 											"var skillet = scope.skills.find(function(e){{return e.Name === \"{skillName}\"}});" +
 											"scope.selectedSkill = skillet;scope.selectedSkillChange(skillet);" +
-											"scope.changeChosenOffset(scope.chosenOffset.value);");
+											"scope.changeChosenOffset(scope.chosenOffset.value);" +
+											"setTimeout(function(){console.log('delay')}, 500);");
 		}
 
 		[Given(@"I select the skill '(.*)'")]
@@ -278,11 +279,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				"var forecastedStaffing = parseFloat(scope.viewObj.forecastedStaffing.updatedSeries[count-1]);" +
 				"return (forecastedStaffing >= 0);"
 				, "True");
-			//Browser.Interactions.AssertJavascriptResultContains(
-			//	"var scope = angular.element(document.querySelector('.c3')).scope();" +
-			//	"var actualStaffing = parseFloat(scope.viewObj.actualStaffingSeries[1]);" +
-   //             "return (actualStaffing >= 0);"
-   //             , "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
 				"var scheduledStaffing = parseFloat(scope.viewObj.scheduledStaffing[1]);" +
