@@ -1594,7 +1594,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 							using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 							{
 								//check and repair if an old delete has went wrong and a deleted person still exists in tenant
-								var deletedPerson = _personRepository.Load(result.ExistingPerson) as IDeleteTag;
+								var deletedPerson = _personRepository.Get(result.ExistingPerson) as IDeleteTag;
 								if (deletedPerson != null && deletedPerson.IsDeleted)
 									isThisDeleted = true;
 							}
