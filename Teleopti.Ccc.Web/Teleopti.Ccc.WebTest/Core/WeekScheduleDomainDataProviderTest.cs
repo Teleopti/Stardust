@@ -694,6 +694,31 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldMapOvertimeRequestPermission()
+		{
+			var date = new DateOnly(2012, 08, 26);
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date.Date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date.Date, CultureInfo.CurrentCulture));
+			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
+
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(lastDayOfWeek.Date);
+			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+			var layer = new StubFactory().VisualLayerStub(projectionPeriod);
+			var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb)).Return(true);
+
+			var result = target.GetWeekSchedule(firstDayOfWeek);
+
+			result.OvertimeRequestPermission.Should().Be.True();
+		}
+
+		[Test]
 		public void ShouldMapIsCurrentWeek()
 		{
 			var date = new DateTime(2014, 08, 26);
@@ -1365,6 +1390,33 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			result.AbsenceRequestPermission.Should().Be.True();
 		}
+
+
+		[Test]
+		public void ShouldMapOvertimeRequestPermissionOnGetDaySchedule()
+		{
+			var date = new DateOnly(2012, 08, 26);
+			var period = new DateOnlyPeriod(date.AddDays(-1), date);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(date.Date);
+
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(date.Date);
+			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+			var layer = new StubFactory().VisualLayerStub(projectionPeriod);
+			var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+			permissionProvider
+				.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb))
+				.Return(true);
+
+			var result = target.GetDaySchedule(date);
+
+			result.OvertimeRequestPermission.Should().Be.True();
+		}
+
 
 		[Test]
 		public void ShouldMapIsCurrentDayOnGetDaySchedule()

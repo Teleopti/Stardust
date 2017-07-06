@@ -66,6 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				TextRequestPermission = periodSchedule.TextRequestPermission,
 				OvertimeAvailabilityPermission = periodSchedule.OvertimeAvailabilityPermission,
 				AbsenceRequestPermission = periodSchedule.AbsenceRequestPermission,
+				OvertimeRequestPermission = periodSchedule.OvertimeRequestPermission,
 				AbsenceReportPermission = periodSchedule.AbsenceReportPermission,
 				ShiftExchangePermission = periodSchedule.ShiftExchangePermission,
 				ShiftTradeBulletinBoardPermission = periodSchedule.ShiftTradeBulletinBoardPermission,
@@ -172,6 +173,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeAvailabilityWeb);
 			var absenceRequestPermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
+			var overtimeRequestPermission =
+				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.OvertimeRequestWeb);
 			var absenceReportPermission =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceReport);
 			var shiftTradeBulletinBoardPermission =
@@ -195,6 +198,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				TextRequestPermission = textRequestPermission,
 				OvertimeAvailabilityPermission = overtimeAvailabilityPermission,
 				AbsenceRequestPermission = absenceRequestPermission,
+				OvertimeRequestPermission = overtimeRequestPermission,
 				AbsenceReportPermission = absenceReportPermission,
 				ShiftExchangePermission = shiftExchangePermission,
 				ShiftTradeBulletinBoardPermission = shiftTradeBulletinBoardPermission,

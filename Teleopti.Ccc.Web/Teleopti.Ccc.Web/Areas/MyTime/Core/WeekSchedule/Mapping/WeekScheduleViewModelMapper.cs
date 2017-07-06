@@ -203,6 +203,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			{
 				AbsenceReportPermission = s.AbsenceReportPermission,
 				AbsenceRequestPermission = s.AbsenceRequestPermission,
+				OvertimeRequestPermission = s.OvertimeRequestPermission,
 				OvertimeAvailabilityPermission = s.OvertimeAvailabilityPermission,
 				PersonAccountPermission = s.PersonAccountPermission,
 				ShiftTradeBulletinBoardPermission = s.ShiftTradeBulletinBoardPermission,

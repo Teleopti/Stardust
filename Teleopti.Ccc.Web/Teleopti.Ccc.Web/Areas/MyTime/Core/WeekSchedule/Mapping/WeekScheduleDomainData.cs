@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		public bool TextRequestPermission { get; set; }
 		public bool OvertimeAvailabilityPermission { get; set; }
 		public bool AbsenceRequestPermission { get; set; }
+		public bool OvertimeRequestPermission { get; set; }
 		public bool AbsenceReportPermission { get; set; }
 		public bool ShiftExchangePermission { get; set; }
 		public bool PersonAccountPermission { get; set; }
