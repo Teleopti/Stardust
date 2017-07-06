@@ -64,6 +64,7 @@
 		Wfm_SearchAgentBasedOnCorrectPeriod_44552,
 
 		WfmTeamSchedule_MoveOvertimeActivity_44888,
+		WfmTeamSchedule_SortRows_45056,
 		WebByPassDefaultPermissionCheck_37984,
 
 		WfmReportPortal_Basic_38825,
