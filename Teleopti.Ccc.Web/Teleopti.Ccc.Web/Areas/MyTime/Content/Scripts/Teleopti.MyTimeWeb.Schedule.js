@@ -403,6 +403,10 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return self.absenceReportPermission() && isPermittedDate;
 		});
 
+		self.CancelAddingNewRequest = function () {
+			self.requestViewModel(undefined);
+		};
+
 		var innerRequestModel = createRequestViewModel();
 
 		var addRequestModel = {
@@ -416,7 +420,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return;
 			}
 
-			addRequestModel.type = function(){return self.requestViewModelTypes.textRequest;}
+			addRequestModel.type = function(){return self.requestViewModelTypes.textRequest;};
 			self.requestViewModel(addRequestModel);
 			self.requestViewModel().model.IsPostingData(false);
 			_fillFormData(data);
@@ -429,6 +433,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return;
 			}
 			addRequestModel.type = function(){return self.requestViewModelTypes.absenceRequest;};
+
 			self.requestViewModel(addRequestModel);
 			self.requestViewModel().model.IsPostingData(false);
 			self.requestViewModel().model.readPersonalAccountPermission(self.personAccountPermission());
@@ -450,10 +455,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 			self.requestViewModel(addAbsenceReportModel);
 			_fillFormData(data);
-		};
-
-		self.CancelAddingNewRequest = function () {
-			self.requestViewModel(undefined);
 		};
 
 		function displayOvertimeAvailability() {
