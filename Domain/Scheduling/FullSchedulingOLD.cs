@@ -3,8 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -66,8 +70,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var stateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(stateHolder, people, null, period);
+			var extendedPeriod = new DateOnlyPeriod(period.StartDate.AddDays(-14), period.EndDate.AddDays(14));
+
 			_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate), _schedulingProgress,
-				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false);
+				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(extendedPeriod), extendedPeriod, false);
 		}
 	}
 }

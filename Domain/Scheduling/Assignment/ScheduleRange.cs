@@ -152,6 +152,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return differenceService.Difference(org, current);
 		}
 
+		public IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<IPersistableScheduleData> differenceService, DateOnlyPeriod period)
+		{
+			var org = new List<IPersistableScheduleData>(Snapshot.PersistableScheduleDataInternalCollection().Where(x=> x.BelongsToPeriod(period)));
+			var current = new List<IPersistableScheduleData>(PersistableScheduleDataInternalCollection().Where(x => x.BelongsToPeriod(period)));
+
+			return differenceService.Difference(org, current);
+		}
+
 		//don't use this from client. use scheduledictionary.modify instead!
 		public void ModifyInternal(IScheduleDay part)
 		{
