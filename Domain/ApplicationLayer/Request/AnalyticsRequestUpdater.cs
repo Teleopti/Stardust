@@ -77,12 +77,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Request
 			{
 				// Request has been deleted, remove from analytics
 				_analyticsRequestRepository.Delete(@event.PersonRequestId);
+				var requestedDays = _analyticsRequestRepository.GetAnalyticsRequestedDays(@event.PersonRequestId);
+				_analyticsRequestRepository.Delete(requestedDays);
 				return;
 			}
 			if (personRequest.Person.TerminalDate.HasValue && personRequest.RequestedDate > personRequest.Person.TerminalDate.Value.Date)
 			{
 				// Person has been terminated and request is after termination date, remove from analytics if it already exists
 				_analyticsRequestRepository.Delete(@event.PersonRequestId);
+				var requestedDays = _analyticsRequestRepository.GetAnalyticsRequestedDays(@event.PersonRequestId);
+				_analyticsRequestRepository.Delete(requestedDays);
 				return;
 			}
 
