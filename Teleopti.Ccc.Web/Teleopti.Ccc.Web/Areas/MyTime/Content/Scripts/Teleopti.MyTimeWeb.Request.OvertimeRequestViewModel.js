@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart) {
+﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function(ajax, doneCallback, parentViewModel, weekStart) {
 	var self = this;
 
 	self.Id = ko.observable();
@@ -50,7 +50,7 @@
 	};
 
 	self.AddRequest = function() {
-		if (!_validateRequiredFields()) {
+		if (!_validateRequiredFields() || !self.ReadyToSave()) {
 			return;
 		}
 
@@ -61,7 +61,7 @@
 			data: _buildPostData(),
 			dataType: 'json',
 			type: 'POST',
-			success: function (data) {
+			success: function(data) {
 				self.IsPostingData(false);
 				doneCallback(data);
 				self.CancelAddRequest();
@@ -76,7 +76,23 @@
 		parentViewModel.CancelAddingNewRequest();
 	};
 
-	self.Initialize = function (data) {
+	self.SubjectTextChange = function(data, event) {
+		_validateRequiredFields();
+	};
+
+	self.ReadyToSave = ko.computed(function() {
+		if ((!self.Subject() || !/\S/.test(self.Subject())) || (self.ErrorMessage() && !self.ErrorMessage())) {
+			return false;
+		}
+
+		if (self.RequestDuration() == undefined || self.RequestDuration().length != 5 || _buildPostData().Period.StartTime.length != 5) {
+			return false;
+		}
+
+		return !self.IsPostingData();
+	});
+
+	self.Initialize = function(data) {
 		if (data) {
 			self.Id(data.Id);
 
@@ -93,7 +109,7 @@
 			var seconds = (moment(data.DateTimeTo) - moment(data.DateTimeFrom)) / 1000;
 			var hours = '0' + moment.duration(seconds, 'seconds').hours();
 			var minutes = '0' + moment.duration(seconds, 'seconds').minutes();
-			
+
 			self.RequestDuration(hours.substr(-2, 2) + ":" + minutes.substr(-2, 2));
 			self.MultiplicatorDefinitionSetId(data.MultiplicatorDefinitionSet);
 			self.ShowCancelButton(false);
@@ -112,16 +128,19 @@
 	}
 
 	function _validateRequiredFields() {
-		self.ShowError(false);
-		self.ErrorMessage('');
+		var dataValid = false;
 
-		var result = true;
-		if (!self.Subject()) {
-			result = false;
-			self.ShowError(true);
+		if (!!self.Subject() && /\S/.test(self.Subject())) {
+			dataValid = true;
+			self.ShowError(!dataValid);
+			self.ErrorMessage('');
+		} else {
+			dataValid = false;
+			self.ShowError(!dataValid);
 			self.ErrorMessage(requestsMessagesUserTexts.MissingSubject);
 		}
-		return result;
+
+		return dataValid;
 	}
 
 	function _buildPostData() {
@@ -135,7 +154,7 @@
 			var durationParts = self.RequestDuration().split(":");
 			periodEnd.add(durationParts[0], "hours").add(durationParts[1], "minutes");
 		}
-		
+
 		return {
 			Id: self.Id(),
 			Subject: self.Subject(),

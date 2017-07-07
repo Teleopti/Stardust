@@ -1,4 +1,4 @@
-﻿var messages = {
+﻿var requestsMessagesUserTexts = {
 	MissingSubject: "Missing subject"
 };
 $(document).ready(function () {
@@ -84,6 +84,7 @@ $(document).ready(function () {
 		vm.Message('I want to work overtime');
 		vm.DateFrom('2017-06-27');
 		vm.StartTime('19:00');
+		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
@@ -140,19 +141,38 @@ $(document).ready(function () {
 	});
 
 	test('should enable save button after posting data', function () {
-		vm.IsPostingData(true);
-		vm.Subject('subject');
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.DateFrom('2017-06-27');
+		vm.StartTime('19:00');
+		vm.RequestDuration('01:00');
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+
 		vm.AddRequest();
 
-		equal(vm.IsPostingData(), false);
+		equal(vm.ReadyToSave(), true);
+	});
+
+	test('should disable save button when post data is not ready', function () {
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.DateFrom('2017-06-27');
+		vm.StartTime('19:00');
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+
+		equal(vm.ReadyToSave(), false);
 	});
 
 	test('should close overtime request form panel after posting data', function () {
-		vm.IsPostingData(true);
-		vm.Subject('subject');
+		vm.IsPostingData(false);
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.DateFrom('2017-06-27');
+		vm.StartTime('19:00');
+		vm.RequestDuration('01:00');
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		equal(requestFormClosed, false);
-
 		vm.AddRequest();
 		equal(requestFormClosed, true);
 	});
