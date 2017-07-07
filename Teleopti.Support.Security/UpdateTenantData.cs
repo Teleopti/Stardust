@@ -30,7 +30,7 @@ namespace Teleopti.Support.Security
 			log.Debug("Updating tenant connection strings...");
 			using (_tenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
-				var allTenants = new LoadAllTenants(_currentTenantSession).Tenants();
+				var allTenants = new LoadAllTenants(_currentTenantSession).Tenants().Where(t => t.Active);
 				var numberOfTenants = allTenants.Count();
 				if (numberOfTenants != 1)
 				{
