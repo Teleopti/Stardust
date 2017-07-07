@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -45,19 +46,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			return approveAbsence(person, period, absence);
 		}
 
-		public IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest)
-		{
-			throw new System.NotImplementedException();
-		}
-
 		public IPersonAbsence GetApprovedPersonAbsence()
 		{
 			return _approvedPersonAbsence;
 		}
 
-		public IEnumerable<IBusinessRuleResponse> Approve(IPersonRequest personRequest)
+		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
 		{
-			var absenceRequest = personRequest.Request as IAbsenceRequest;
+			var absenceRequest = request as IAbsenceRequest;
+			if (absenceRequest == null)
+			{
+				throw new InvalidCastException("Request type should be AbsenceRequest!");
+			}
+
 			var person = absenceRequest.Person;
 			var period = absenceRequest.Period;
 			var absence = absenceRequest.Absence;

@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				.Constraints(Is.Matching<INewBusinessRuleCollection>(b => true), Is.Equal(scenario),
 					Is.Equal(schedulingResultState), Is.Equal(personRequest))
 				.Return(approvalService);
-			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
+			approvalService.Stub(x => x.Approve(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
 			requestFactory.Stub(x => x.GetShiftTradeRequestStatusChecker(schedulingResultState)).Return(statusChecker);
 			((FakeBusinessRuleProvider)businessRuleProvider).SetBusinessRules(newBusinessRuleCollection);
 			target.Handle(accept);
@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
 			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
-			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
+			approvalService.Stub(x => x.Approve(shiftTradeRequest)).Return(new List<IBusinessRuleResponse>());
 			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState, personRequest))
 				.IgnoreArguments()
 				.Return(approvalService);
@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var shiftTradeRequest = (IShiftTradeRequest)personRequest.Request;
 			validator.Stub(x => x.Validate(shiftTradeRequest)).Return(new ShiftTradeRequestValidationResult(true));
 			personRepository.Stub(x => x.Get(accept.AcceptingPersonId)).Return(toPerson);
-			approvalService.Stub(x => x.ApproveShiftTrade(shiftTradeRequest))
+			approvalService.Stub(x => x.Approve(shiftTradeRequest))
 				.Return(new List<IBusinessRuleResponse> { ruleResponse1, ruleResponse1, ruleResponse2 });
 			requestFactory.Stub(x => x.GetRequestApprovalService(null, scenario, schedulingResultState, personRequest))
 				.IgnoreArguments().Return(approvalService);

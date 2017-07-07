@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         {
             IRequestApprovalService requestApprovalService = _mockRepository.StrictMock<IRequestApprovalService>();
 
-            Expect.Call(requestApprovalService.ApproveShiftTrade(((IShiftTradeRequest)_personRequest2.Request))).Return(
+            Expect.Call(requestApprovalService.Approve(_personRequest2.Request)).Return(
                 new List<IBusinessRuleResponse>());
             _mockRepository.ReplayAll();
 

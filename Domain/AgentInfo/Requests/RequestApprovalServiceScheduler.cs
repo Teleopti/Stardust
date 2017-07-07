@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -25,8 +26,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 		}
 
-		public IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest)
+		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
 		{
+			var shiftTradeRequest = request as IShiftTradeRequest;
+			if (shiftTradeRequest == null)
+			{
+				throw new InvalidCastException("Request type should be ShiftTradeRequest!");
+			}
+
 			var shiftTradeRequestStatusChecker = new ShiftTradeRequestStatusCheckerWithSchedule(_scheduleDictionary, _personRequestCheckAuthorization);
 			var shiftTradeStatus = shiftTradeRequest.GetShiftTradeStatus(shiftTradeRequestStatusChecker);
 			if (shiftTradeStatus == ShiftTradeStatus.Referred)
@@ -41,11 +48,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			return _swapAndModifyService.SwapShiftTradeSwapDetails(shiftTradeRequest.ShiftTradeSwapDetails,
 																  _scheduleDictionary,
 																   _newBusinessRules, new ScheduleTagSetter(NullScheduleTag.Instance));
-		}
-
-		public IEnumerable<IBusinessRuleResponse> Approve(IPersonRequest personRequest)
-		{
-			throw new System.NotImplementedException();
 		}
 	}
 }

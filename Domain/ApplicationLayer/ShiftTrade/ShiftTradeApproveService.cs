@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 			var requestApprovalServiceScheduler = _requestFactory.GetRequestApprovalService(allNewRules,
 				_scenarioRepository.Current(), schedulingResultStateHolder, shiftTradeRequest.Parent as IPersonRequest);
-			var brokenBusinessRules = requestApprovalServiceScheduler.ApproveShiftTrade(shiftTradeRequest).ToList();
+			var brokenBusinessRules = requestApprovalServiceScheduler.Approve(shiftTradeRequest).ToList();
 
 			undoRedoContainer.UndoAll();
 			return brokenBusinessRules;

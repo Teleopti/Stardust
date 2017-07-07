@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 						if (processAbsenceRequest.GetType() != typeof(DenyAbsenceRequest))
 						{
-							simulateApproveAbsence(personRequest, absenceRequestApprovalService);
+							simulateApproveAbsence(personRequest.Request, absenceRequestApprovalService);
 						}
 					}
 
@@ -477,9 +477,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 		}
 
-		private static void simulateApproveAbsence(IPersonRequest personRequest, IRequestApprovalService absenceRequestApprovalService)
+		private static void simulateApproveAbsence(IRequest request, IRequestApprovalService absenceRequestApprovalService)
 		{
-			absenceRequestApprovalService.Approve(personRequest);
+			absenceRequestApprovalService.Approve(request);
 		}
 
 

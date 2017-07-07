@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			setBusinessRules(person, account);
 
 			setAbsenceApprovalService();
-			var responses = _requestApprovalService.Approve(personRequest);
+			var responses = _requestApprovalService.Approve(personRequest.Request);
 
 			Assert.AreEqual(0, responses.Count());
 			Assert.AreEqual(24, accountDay1.Remaining.TotalDays);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			setBusinessRules(person, holidayAccount);
 
 			setAbsenceApprovalService();
-			var responses = _requestApprovalService.Approve(personRequest);
+			var responses = _requestApprovalService.Approve(personRequest.Request);
 
 			Assert.AreEqual(0, responses.Count());
 			Assert.AreEqual(24, holidayAccountDay1.Remaining.TotalDays);
@@ -119,8 +119,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			setBusinessRules(person, account);
 
 			setAbsenceApprovalService();
-			var absence1Responses =_requestApprovalService.Approve(personRequest1);
-			var absence2Responses = _requestApprovalService.Approve(personRequest2);
+			var absence1Responses =_requestApprovalService.Approve(personRequest1.Request);
+			var absence2Responses = _requestApprovalService.Approve(personRequest2.Request);
 
 			Assert.AreEqual(0, absence1Responses.Count());
 			Assert.AreEqual(0, absence2Responses.Count());
@@ -149,9 +149,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_newBusinessRules = new FakeNewBusinessRuleCollection();
 
 			setRequestApprovalService();
-			_requestApprovalService.ApproveShiftTrade((IShiftTradeRequest)shiftTradeRequest1.Request);
-			_requestApprovalService.ApproveShiftTrade((IShiftTradeRequest)shiftTradeRequest2.Request);
-			_requestApprovalService.ApproveShiftTrade((IShiftTradeRequest)shiftTradeRequest3.Request);
+			_requestApprovalService.Approve(shiftTradeRequest1.Request);
+			_requestApprovalService.Approve(shiftTradeRequest2.Request);
+			_requestApprovalService.Approve(shiftTradeRequest3.Request);
 
 			assertShiftTradeRequestStatus(shiftTradeRequest1, ShiftTradeStatus.OkByBothParts);
 			assertScheduleSwaped(shiftTradeRequest1);

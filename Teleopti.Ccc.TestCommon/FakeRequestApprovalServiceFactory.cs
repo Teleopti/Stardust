@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Rhino.Mocks;
+﻿using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {

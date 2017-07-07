@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -25,11 +26,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var businessRules = new FakeNewBusinessRuleCollection();
 			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
 			var swapAndModifyService = new SwapAndModifyService(new SwapService(), scheduleDayChangeCallback);
-			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
-			var personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
 			var target = new RequestApprovalServiceScheduler(scheduleDictionary, swapAndModifyService, businessRules, new PersonRequestAuthorizationCheckerForTest());
-
+	
 			var shiftTradeRequest =
 		        new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
 		        {
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 				        new DateOnly(2010, 1, 2))
 		        });
 
-			var result = target.ApproveShiftTrade(shiftTradeRequest);
+			var result = target.Approve(shiftTradeRequest);
 	        Assert.IsTrue(result.IsEmpty());
         }
 

@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                 mocks.StrictMock<IRequestApprovalService>();
             PersonRequest personRequest = new PersonRequest(_requestedPerson, _target);
 
-            Expect.Call(requestApprovalService.ApproveShiftTrade(null)).Return(new List<IBusinessRuleResponse>()).IgnoreArguments();
+            Expect.Call(requestApprovalService.Approve(null)).Return(new List<IBusinessRuleResponse>()).IgnoreArguments();
 
             mocks.ReplayAll();
 
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                 mocks.StrictMock<IRequestApprovalService>();
             PersonRequest personRequest = new PersonRequest(_requestedPerson, _target);
 
-            Expect.Call(requestApprovalService.ApproveShiftTrade(null)).Return(new List<IBusinessRuleResponse>{null}).IgnoreArguments();
+            Expect.Call(requestApprovalService.Approve(null)).Return(new List<IBusinessRuleResponse>{null}).IgnoreArguments();
 
             mocks.ReplayAll();
 
@@ -490,7 +490,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                 mocks.StrictMock<IRequestApprovalService>();
             PersonRequest personRequest = new PersonRequest(_requestedPerson, target);
 
-            Expect.Call(requestApprovalService.ApproveShiftTrade(null)).Return(new List<IBusinessRuleResponse>()).IgnoreArguments();
+            Expect.Call(requestApprovalService.Approve(null)).Return(new List<IBusinessRuleResponse>()).IgnoreArguments();
 
             mocks.ReplayAll();
 

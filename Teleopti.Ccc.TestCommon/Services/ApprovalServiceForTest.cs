@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.TestCommon.Services
 	        businessRuleResponse = brokenRule;
 	    }
 
-		public IEnumerable<IBusinessRuleResponse> Approve(IPersonRequest personRequest)
+		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
 		{
 			return businessRuleResponse;
 		}

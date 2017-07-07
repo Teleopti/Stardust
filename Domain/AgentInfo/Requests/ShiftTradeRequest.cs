@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		protected internal override IEnumerable<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService)
 		{
-			var businessRuleResponses = approvalService.ApproveShiftTrade(this).ToArray();
+			var businessRuleResponses = approvalService.Approve(this).ToArray();
 			if (businessRuleResponses.Any())
 			{
 				return businessRuleResponses;

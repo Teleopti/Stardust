@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
 			var personRequest = Parent as IPersonRequest;
 			
-			var result = approvalService.Approve(personRequest);
+			var result = approvalService.Approve(this);
             if (result.IsEmpty())
             {
 				setupTextForNotification (Resources.AbsenceRequestForOneDayHasBeenApprovedDot, Resources.AbsenceRequestHasBeenApprovedDot);
