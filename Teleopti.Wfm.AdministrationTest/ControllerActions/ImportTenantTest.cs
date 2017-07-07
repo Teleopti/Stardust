@@ -122,6 +122,41 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 
 		}
 
+		[Test]
+		public void ShouldReturnFalseIfImportingSameDatabaseAgain()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			var builder = TestPollutionCleaner.TestTenantConnection();
+			builder.IntegratedSecurity = false;
+			builder.UserID = "dbcreatorperson";
+			builder.Password = "password";
+
+			var sqlVersion = new SqlVersion(12, false);
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password", sqlVersion);
+
+			var tempModel = new CreateTenantModelForTest();
+			var connStringBuilder =
+				new SqlConnectionStringBuilder(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
+
+			var importModel = new ImportDatabaseModel
+			{
+				Server = connStringBuilder.DataSource,
+				AdminUser = tempModel.CreateDbUser,
+				AdminPassword = tempModel.CreateDbPassword,
+				UserName = "appuser",
+				Password = "password",
+				UseIntegratedSecurity = true,
+				AppDatabase = connStringBuilder.InitialCatalog,
+				AnalyticsDatabase = connStringBuilder.InitialCatalog,
+				Tenant = "NewFineTenant"
+			};
+
+			var result = Target.ImportExisting(importModel);
+			result.Content.Success.Should().Be.EqualTo(false);
+
+			result.Content.Message.Should().Contain("not allowed");
+
+		}
 		private string appConnString(string  connectionString)
 		{
 			var retString = "";

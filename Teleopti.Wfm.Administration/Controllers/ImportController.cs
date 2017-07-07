@@ -19,15 +19,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly Import _import;
 		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
 		private readonly IUpgradeLogRetriever _upgradeLogRetriever;
+		private readonly ILoadAllTenants _loadAllTenants;
 
 		public ImportController(IDatabaseHelperWrapper databaseHelperWrapper, ITenantExists tenantExists, Import import,
-			ICheckDatabaseVersions checkDatabaseVersions, IUpgradeLogRetriever upgradeLogRetriever)
+			ICheckDatabaseVersions checkDatabaseVersions, IUpgradeLogRetriever upgradeLogRetriever, ILoadAllTenants loadAllTenants)
 		{
 			_databaseHelperWrapper = databaseHelperWrapper;
 			_tenantExists = tenantExists;
 			_import = import;
 			_checkDatabaseVersions = checkDatabaseVersions;
 			_upgradeLogRetriever = upgradeLogRetriever;
+			_loadAllTenants = loadAllTenants;
 		}
 
 		[HttpPost]
@@ -41,13 +43,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 			if(string.IsNullOrEmpty(model.Server) || string.IsNullOrEmpty(model.AnalyticsDatabase) || string.IsNullOrEmpty(model.AppDatabase) || string.IsNullOrEmpty(model.UserName) || string.IsNullOrEmpty(model.Password))
 				return Json(new ImportTenantResultModel { Success = false, Message = "All properties must be filled in." });
 
-			var appBuilder = new SqlConnectionStringBuilder {DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password};
+			var appBuilder = new SqlConnectionStringBuilder {DataSource = model.Server, InitialCatalog = model.AppDatabase, UserID = model.UserName, Password = model.Password, IntegratedSecurity = model.UseIntegratedSecurity};
+			
 			var analBuilder = new SqlConnectionStringBuilder(appBuilder.ConnectionString) {InitialCatalog = model.AnalyticsDatabase};
 
 			var result = _databaseHelperWrapper.Exists(appBuilder.ConnectionString, DatabaseType.TeleoptiCCC7);
 			if(!result.Exists)
 				return Json(new ImportTenantResultModel { Success = false, Message = result.Message});
 
+			if(!isOtherTenantDb(appBuilder.InitialCatalog))
+				return Json(new ImportTenantResultModel { Success = false, Message = "It is not allowed to import the same database again. Every Tenant must have it's own database." });
+			
 			var version = _checkDatabaseVersions.GetVersions(appBuilder.ConnectionString);
 			if(!(version.ImportAppVersion > 360))
 				return Json(new ImportTenantResultModel { Success = false, Message = "This is a version that is too early to import this way!" });
@@ -87,6 +93,9 @@ namespace Teleopti.Wfm.Administration.Controllers
 				type = DatabaseType.TeleoptiAnalytics;
 			if (model.DbType.Equals(3))
 				type = DatabaseType.TeleoptiCCCAgg;
+			if(type == DatabaseType.TeleoptiCCC7 && !isOtherTenantDb(model.Database))
+				return Json(new DbCheckResultModel { Exists = false, Message = "It is not allowed to import the same database again. Every Tenant must have it's own database." });
+
 			var appBuilder = new SqlConnectionStringBuilder { DataSource = model.Server, InitialCatalog = model.Database, UserID = model.AdminUser, Password = model.AdminPassword };
 			//first connect as admin to see if it is there
 			var result = _databaseHelperWrapper.Exists(appBuilder.ConnectionString, type);
@@ -178,6 +187,18 @@ namespace Teleopti.Wfm.Administration.Controllers
 				return new TenantResultModel { Success = false, Message = "The user does not have permission to create logins and views." };
 
 			return new TenantResultModel { Success = true, Message = "The user does have permission to create databases, logins and views." };
+		}
+
+		private bool isOtherTenantDb(string initialCatalog)
+		{
+			var allOtherTenants = _loadAllTenants.Tenants();
+			foreach (var otherTenant in allOtherTenants)
+			{
+				var builder = new SqlConnectionStringBuilder(otherTenant.DataSourceConfiguration.ApplicationConnectionString);
+				if (builder.InitialCatalog == initialCatalog)
+					return false;
+			}
+			return true;
 		}
 	}
 }

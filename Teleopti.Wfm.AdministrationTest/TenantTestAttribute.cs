@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.IocCommon;
@@ -35,6 +36,7 @@ namespace Teleopti.Wfm.AdministrationTest
 			system.AddService<DbPathProviderFake>();
 			system.AddService<CheckPasswordStrengthFake>();
 			system.AddService<TestPollutionCleaner>();
+			system.AddService<LoadAllTenants>();
 		}
 
 		public static TenantUnitOfWorkManager TenantUnitOfWorkForTest()
