@@ -102,7 +102,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization);
 					break;
 			}
-			if (service == null) throw new NotSupportedException("RequestType is not supported :" + Model.PersonRequest.Request.RequestType);
 			return Model.PersonRequest.Approve(service, _authorization);
 		}
 

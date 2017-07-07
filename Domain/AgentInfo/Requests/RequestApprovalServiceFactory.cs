@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						_personRequestCheckAuthorization);
 			}
 
-			throw new NotSupportedException("RequestType is not supported :" + requestType);
+			return null;
 		}
 	}
 }

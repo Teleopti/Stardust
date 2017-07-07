@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization);
 			}
 
-			throw new NotSupportedException("RequestType is not supported :" + personRequest.Request.RequestType);
+			return null;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

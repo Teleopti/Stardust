@@ -241,6 +241,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.IsTrue(accountDay.LatestCalculatedBalance.Equals(balance));
 		}
 
+		[Test]
+		public void ShouldApproveTextRequest()
+		{
+			var personRequestFactory = new PersonRequestFactory { Person = PersonFactory.CreatePerson() };
+			var personRequest = personRequestFactory.CreatePersonRequest();
+			var textRequest = new TextRequest(DateOnly.Today.ToDateTimePeriod(TimeZoneInfo.Utc));
+			personRequest.Request = textRequest;
+			personRequest.SetId(Guid.NewGuid());
+			_personRequestRepository.Add(personRequest);
+
+			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value };
+			_approveRequestCommandHandler.Handle(command);
+
+			Assert.IsTrue(personRequest.IsApproved);
+		}
+
 		private PersonRequest createAbsenceRequest (IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
 		{
 			var personRequestFactory = new PersonRequestFactory() {Person = person};
