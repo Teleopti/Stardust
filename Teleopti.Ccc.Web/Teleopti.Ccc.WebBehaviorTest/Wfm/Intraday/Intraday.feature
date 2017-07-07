@@ -46,7 +46,6 @@ Scenario: View performance for a skill area
 	Then I should see performance data in the chart
 	And I should see a summary of today's performance
 	
-@ignore
 Scenario: View staffing for one skill
 	Given the time is '2016-12-22 14:00'
 	And there is queue statistics for the skill 'Skill A' up until '2016-12-22 13:30'
