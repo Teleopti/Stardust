@@ -185,11 +185,6 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return null;
 		}
-
-		public IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<IPersistableScheduleData> differenceService, DateOnlyPeriod period)
-		{
-			return new DifferenceCollection<IPersistableScheduleData>();
-		}
 	}
 }
 

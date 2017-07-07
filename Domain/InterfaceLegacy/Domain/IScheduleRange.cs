@@ -133,17 +133,9 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<IPersistableScheduleData> differenceService);
 
 		/// <summary>
-		/// What is the (potential) changes on this schedule range?
-		/// </summary>
-		/// <param name="differenceService"></param>
-		/// <param name="period"></param>
-		/// <returns></returns>
-		IDifferenceCollection<IPersistableScheduleData> DifferenceSinceSnapshot(IDifferenceCollectionService<IPersistableScheduleData> differenceService, DateOnlyPeriod period);
-
-		/// <summary>
 		/// Tells the domain that current state corresponds with db state
 		/// </summary>
-		void TakeSnapshot();
+    	void TakeSnapshot();
 
     	/// <summary>
     	/// Added to be able to view unpublished data in reports

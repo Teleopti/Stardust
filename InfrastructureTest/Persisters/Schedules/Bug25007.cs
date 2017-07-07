@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			day.CreateAndAddActivity(Activity, new DateTimePeriod(start, start.AddHours(2)), ShiftCategory);
 			DoModify(day);
 
-			var conflict = Target.Persist(myScheduleRange,myScheduleRange.Period.ToDateOnlyPeriod(TimeZoneInfo.Utc)).PersistConflicts.Single();
+			var conflict = Target.Persist(myScheduleRange).PersistConflicts.Single();
 
 			((IUnvalidatedScheduleRangeUpdate)myScheduleRange).SolveConflictBecauseOfExternalInsert(conflict.DatabaseVersion, false);
 			var dayAfterConflict = myScheduleRange.ScheduledDay(date);

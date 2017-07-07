@@ -24,17 +24,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			WhenOtherHasChanged(otherRange);
 
 			var myRange = LoadScheduleRange();
-			Target.Persist(otherRange, otherRange.Period.ToDateOnlyPeriod(TimeZoneInfo.Utc));
+			Target.Persist(otherRange);
 
 			WhenImChanging(myRange);
 
 			if (ExpectOptimistLockException)
 			{
-				Assert.Throws<OptimisticLockException>(() => Target.Persist(myRange, myRange.Period.ToDateOnlyPeriod(TimeZoneInfo.Utc)));
+				Assert.Throws<OptimisticLockException>(() => Target.Persist(myRange));
 			}
 			else
 			{
-				var conflicts = Target.Persist(myRange, myRange.Period.ToDateOnlyPeriod(TimeZoneInfo.Utc)).PersistConflicts;
+				var conflicts = Target.Persist(myRange).PersistConflicts;
 				Then(conflicts);
 				Then(myRange);
 
