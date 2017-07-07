@@ -24,6 +24,7 @@ properties {
 	$AzurePackagePath_Large = "$WorkingDir\TeleoptiWFM_Large.cspkg"
 	
 	$IndexMSBuildFile = "$WorkingDir\StartPage\index.html"
+	$ForecastHtmlFile = "$WorkingDir\StartPage\forecast.html"
 	$CSPackEXE = "$env:AzureSDK_2_8_Path\bin\cspack.exe"
 	#
 }
@@ -120,15 +121,18 @@ function global:CorrectingURLinHTML {
     #$env:Path = $env:Path + ";C:\Program Files (x86)\MSBuild\14.0\bin\amd64"
 	#Compile UpdateIndexHtml.msbuild
     #exec { msbuild $IndexMSBuildFile /p:WorkingDirectory=$WorkingDir /toolsversion:14.0 }
-	
-	$path = $IndexMSBuildFile
 	$word = "/TeleoptiWFM/"
 	$replacement = "/"
-	$text = get-content $path 
 	
+	$path = $IndexMSBuildFile
+	$text = get-content $path 
 	Write-Host "Updating $IndexMSBuildFile..."
 	Write-Host "Replacing: $word  with: $replacement"
-	
 	$newText = $text -replace $word,$replacement | Out-File $Path -Encoding UTF8
-		
+	
+	$path = $ForecastHtmlFile
+	$text = get-content $path
+	Write-Host "Updating $ForecastHtmlFile..."
+	Write-Host "Replacing: $word  with: $replacement"
+	$newText = $text -replace $word,$replacement | Out-File $Path -Encoding UTF8
 }
