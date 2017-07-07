@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			var scheduleDayChangeCallback = new DoNothingScheduleDayChangeCallBack();
 			var swapAndModifyService = new SwapAndModifyService(new SwapService(), scheduleDayChangeCallback);
 
-			var target = new RequestApprovalServiceScheduler(scheduleDictionary, swapAndModifyService, businessRules, new PersonRequestAuthorizationCheckerForTest());
+			var target = new ShiftTradeRequestApprovalService(scheduleDictionary, swapAndModifyService, businessRules, new PersonRequestAuthorizationCheckerForTest());
 	
 			var shiftTradeRequest =
 		        new ShiftTradeRequest(new List<IShiftTradeSwapDetail>

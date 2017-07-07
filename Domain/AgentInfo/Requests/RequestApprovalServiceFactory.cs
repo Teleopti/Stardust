@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 
@@ -23,36 +24,31 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
-		public IRequestApprovalService MakeRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary, IScenario scenario, IPerson person)
-		{
-			var scheduleRange = scheduleDictionary[person];
-			var businessRules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
-			
-			return new RequestApprovalServiceScheduler(
-				scheduleDictionary,
-				_swapAndModifyService,
-				businessRules,
-				_personRequestCheckAuthorization);
-		}
-
-		public IRequestApprovalService MakeAbsenceRequestApprovalService(IScheduleDictionary scheduleDictionary, IScenario scenario, IPersonRequest personRequest)
+		public IRequestApprovalService MakeRequestApprovalService(IScheduleDictionary scheduleDictionary, IScenario scenario, IPersonRequest personRequest)
 		{
 			var requestType = personRequest.Request.RequestType;
-			if (requestType == RequestType.AbsenceRequest)
-			{
-				var scheduleRange = scheduleDictionary[personRequest.Person];
-				var businessRules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
+			var scheduleRange = scheduleDictionary[personRequest.Person];
+			var businessRules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
 
-				return new AbsenceRequestApprovalService(
-					scenario,
-					scheduleDictionary,
-					businessRules,
-					_scheduleDayChangeCallback,
-					_globalSettingDataRepository,
-					_checkingPersonalAccountDaysProvider);
+			switch (requestType)
+			{
+				case RequestType.AbsenceRequest:
+					return new AbsenceRequestApprovalService(
+						scenario,
+						scheduleDictionary,
+						businessRules,
+						_scheduleDayChangeCallback,
+						_globalSettingDataRepository,
+						_checkingPersonalAccountDaysProvider);
+				case RequestType.ShiftTradeRequest:
+					return new ShiftTradeRequestApprovalService(
+						scheduleDictionary,
+						_swapAndModifyService,
+						businessRules,
+						_personRequestCheckAuthorization);
 			}
 
-			return MakeRequestApprovalServiceScheduler(scheduleDictionary, scenario, personRequest.Person);
+			throw new NotSupportedException("RequestType is not supported :" + requestType);
 		}
 	}
 }

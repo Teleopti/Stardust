@@ -4,7 +4,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public interface IRequestApprovalServiceFactory
 	{
-		IRequestApprovalService MakeRequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary, IScenario scenario, IPerson person);
-		IRequestApprovalService MakeAbsenceRequestApprovalService(IScheduleDictionary scheduleDictionary, IScenario scenario, IPersonRequest personRequest);
+		IRequestApprovalService MakeRequestApprovalService(IScheduleDictionary scheduleDictionary, IScenario scenario, IPersonRequest personRequest);
 	}
 }

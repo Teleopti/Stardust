@@ -2751,7 +2751,7 @@
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestReferredSpecification.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestSetChecksum.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestStatusChecker.cs" />
-    <Compile Include="AgentInfo\Requests\RequestApprovalServiceScheduler.cs" />
+    <Compile Include="AgentInfo\Requests\ShiftTradeRequestApprovalService.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequest.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeRequestStatusCheckerWithScheduleDictionary.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeSwapDetail.cs" />

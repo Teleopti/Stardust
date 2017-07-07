@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -11,7 +12,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -59,18 +59,17 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 													ISwapAndModifyService swapAndModifyService,
 													INewBusinessRuleCollection newBusinessRules, IPersonRequest personRequest)
 		{
-			IRequestApprovalService service;
-			if (personRequest.Request.RequestType == RequestType.AbsenceRequest)
+			switch (personRequest.Request.RequestType)
 			{
-				service = new AbsenceRequestApprovalService(scenario, scheduleDictionary, newBusinessRules, _scheduleDayChangeCallback,
-					_globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
+				case RequestType.AbsenceRequest:
+					return new AbsenceRequestApprovalService(scenario, scheduleDictionary, newBusinessRules, _scheduleDayChangeCallback,
+						_globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
+				case RequestType.ShiftTradeRequest:
+					return new ShiftTradeRequestApprovalService(scheduleDictionary,
+						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization);
 			}
-			else
-			{
-				service = new RequestApprovalServiceScheduler(scheduleDictionary,
-					new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization);
-			}
-			return service;
+
+			throw new NotSupportedException("RequestType is not supported :" + personRequest.Request.RequestType);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 					_globalSettingDataRepository, _checkingPersonalAccountDaysProvider);
 			}
 
-			return new RequestApprovalServiceScheduler(schedulingResultStateHolder.Schedules,
+			return new ShiftTradeRequestApprovalService(schedulingResultStateHolder.Schedules,
 				 _swapAndModifyService, allNewRules, _personRequestCheckAuthorization);
 		}
 

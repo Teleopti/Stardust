@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 		private void setRequestApprovalService()
 		{
-			_requestApprovalService = new RequestApprovalServiceScheduler(_scheduleDictionary, _swapAndModifyService,
+			_requestApprovalService = new ShiftTradeRequestApprovalService(_scheduleDictionary, _swapAndModifyService,
 				_newBusinessRules, null);
 		}
 

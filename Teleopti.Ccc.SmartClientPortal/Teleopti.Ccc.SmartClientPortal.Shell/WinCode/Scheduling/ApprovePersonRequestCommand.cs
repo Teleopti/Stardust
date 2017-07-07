@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 		private bool TryModify()
 		{
 			var lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
-			var lstBusinessRuleResponse = Approve( _newBusinessRules);
+			var lstBusinessRuleResponse = Approve(_newBusinessRules);
 			var handleBusinessRules = new HandleBusinessRules(_handleBusinessRuleResponse, _view, _overriddenBusinessRulesHolder);
 			lstBusinessRuleResponseToOverride.AddRange(handleBusinessRules.Handle(lstBusinessRuleResponse, lstBusinessRuleResponseToOverride));
 			if (!lstBusinessRuleResponse.Any())
@@ -64,7 +65,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			if (lstBusinessRuleResponseToOverride.Count > 0)
 			{
 				lstBusinessRuleResponseToOverride.ForEach(_newBusinessRules.DoNotHaltModify);
-				lstBusinessRuleResponse = Approve( _newBusinessRules);
+				lstBusinessRuleResponse = Approve(_newBusinessRules);
 				lstBusinessRuleResponseToOverride = new List<IBusinessRuleResponse>();
 				foreach (var response in lstBusinessRuleResponse)
 				{
@@ -89,19 +90,19 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
 		public IList<IBusinessRuleResponse> Approve(INewBusinessRuleCollection newBusinessRules)
 		{
-			IRequestApprovalService service;
-			if (Model.PersonRequest.Request.RequestType == RequestType.AbsenceRequest)
+			IRequestApprovalService service = null;
+			switch (Model.PersonRequest.Request.RequestType)
 			{
-				service = new AbsenceRequestApprovalService(_scenario, _schedules, newBusinessRules, _scheduleDayChangeCallback,
-					_globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
+				case RequestType.AbsenceRequest:
+					service = new AbsenceRequestApprovalService(_scenario, _schedules, newBusinessRules, _scheduleDayChangeCallback,
+						_globalSettingDataRepository, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository));
+					break;
+				case RequestType.ShiftTradeRequest:
+					service = new ShiftTradeRequestApprovalService(_schedules,
+						new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization);
+					break;
 			}
-			else
-			{
-				service = new RequestApprovalServiceScheduler(_schedules,
-					new SwapAndModifyService(new SwapService(), _scheduleDayChangeCallback), newBusinessRules, _authorization);
-			}
-			
-
+			if (service == null) throw new NotSupportedException("RequestType is not supported :" + Model.PersonRequest.Request.RequestType);
 			return Model.PersonRequest.Approve(service, _authorization);
 		}
 

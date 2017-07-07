@@ -8,14 +8,14 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public class RequestApprovalServiceScheduler : IRequestApprovalService
+	public class ShiftTradeRequestApprovalService : IRequestApprovalService
 	{
 		private readonly ISwapAndModifyService _swapAndModifyService;
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly INewBusinessRuleCollection _newBusinessRules;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 
-		public RequestApprovalServiceScheduler(IScheduleDictionary scheduleDictionary,
+		public ShiftTradeRequestApprovalService(IScheduleDictionary scheduleDictionary,
 			ISwapAndModifyService swapAndModifyService,
 			INewBusinessRuleCollection newBusinessRules,
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization)
