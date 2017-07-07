@@ -12,7 +12,6 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 	[TenantTest]
 	public class UpgradeDatabase
 	{
-		
 		public UpgradeDatabasesController UpgradeDatabasesController;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
