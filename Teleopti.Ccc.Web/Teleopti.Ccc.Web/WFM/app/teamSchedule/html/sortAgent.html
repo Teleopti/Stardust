@@ -1,0 +1,8 @@
+<div tabindex=0 class="context-menu card-context">
+	<i class="mdi mdi-menu"></i>
+	<span class="context-menu-bottom">
+		<ul class="wfm-list" ng-repeat="option in $ctrl.availableOptions">
+			<li ng-click="$ctrl.select(option)">{{option.key | translate}} <i ng-show="option.isSelected" class="mdi mdi-check pull-right"></i></li>
+		</ul>
+	</span>
+</div>
