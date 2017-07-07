@@ -87,12 +87,12 @@ namespace CheckPreRequisites.Checks
         // ReSharper disable InconsistentNaming
         public void RunWebChecks()
         {
-            Get461FromRegistry();
+            Get461OrHigerFromRegistry();
             checkFeatures();
             //CheckNetFx();
             //CheckIIS();
         }
-        private void Get461FromRegistry()
+        private void Get461OrHigerFromRegistry()
         {
             var lineNumber = _form1.printNewFeature(".NET Framework", "System", "Installed", "4.6.1+");
             using (RegistryKey ndpKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry32).OpenSubKey("SOFTWARE\\Microsoft\\NET Framework Setup\\NDP\\v4\\Full\\"))
@@ -104,7 +104,9 @@ namespace CheckPreRequisites.Checks
 		                _form1.printFeatureStatus(true, ".Net framework 4.6.1 is installed", lineNumber);
 					else if (installed == 394802 || installed == 394806)
 						_form1.printFeatureStatus(true, ".Net framework 4.6.2 is installed", lineNumber);
-                    else
+					else if(installed== 460798 || installed == 460805)
+						_form1.printFeatureStatus(true,".Net framework 4.7 is installed", lineNumber);
+					else 
                         _form1.printFeatureStatus(false, ".Net framework 4.6.1 is not installed", lineNumber);
                 }
                 else
