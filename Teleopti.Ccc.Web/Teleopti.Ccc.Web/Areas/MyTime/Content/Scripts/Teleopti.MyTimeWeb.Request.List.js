@@ -137,12 +137,12 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.isLoadingRequests = ko.observable(true);
 		self.hideRequestsOnPhone = ko.observable(false);
 		self.filters = [
-			{ name: messages.CURRENT_REQUESTS, show: "true" },
-			{ name: messages.ALL_REQUESTS, show: "false" }
+			{ name: requestsMessagesUserTexts.CURRENT_REQUESTS, show: "true" },
+			{ name: requestsMessagesUserTexts.ALL_REQUESTS, show: "false" }
 		];
 		self.sorters = [
-			{ name: messages.BY_STARTDATE, show: "false" },
-			{ name: messages.BY_UPDATEDATE, show: "true" }
+			{ name: requestsMessagesUserTexts.BY_STARTDATE, show: "false" },
+			{ name: requestsMessagesUserTexts.BY_UPDATEDATE, show: "true" }
 		];
 		self.newFilterToggle = Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826');
 		self.ShowRequests = function (data) {

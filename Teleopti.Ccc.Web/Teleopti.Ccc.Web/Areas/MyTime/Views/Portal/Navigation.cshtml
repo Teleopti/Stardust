@@ -35,6 +35,15 @@
 			DateTimeDefaultValues: dateTimeDefaultValues
 		});
 	});
+
+	var requestsMessagesUserTexts = {
+		CURRENT_REQUESTS: "@Html.Raw(@Resources.CurrentRequests)",
+		ALL_REQUESTS: "	@Html.Raw(@Resources.AllRequests)",
+		BY_STARTDATE: "@Html.Raw(@Resources.SortByStartDate)",
+		BY_UPDATEDATE: "@Html.Raw(@Resources.SortByUpdateDate)",
+		MissingSubject: "@Html.Raw(@Resources.MissingSubject)"
+	};
+
 </script>
 
 <div id="autocollapse" class="navbar navbar-default navbar-inverse bdd-mytime-top-menu">

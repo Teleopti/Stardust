@@ -119,7 +119,7 @@
 		if (!self.Subject()) {
 			result = false;
 			self.ShowError(true);
-			self.ErrorMessage(messages.MissingSubject);
+			self.ErrorMessage(requestsMessagesUserTexts.MissingSubject);
 		}
 		return result;
 	}
