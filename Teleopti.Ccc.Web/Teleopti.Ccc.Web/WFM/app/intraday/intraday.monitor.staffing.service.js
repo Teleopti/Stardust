@@ -39,6 +39,11 @@
                 if (result.DataSeries == null) return staffingData;
                 staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
 
+	            staffingData.hasEmailSkill = (showEmailSkill && mixedArea);
+
+				if(!showEmailSkill || !mixedArea)
+					staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
+
                 if (showOptimalStaffing) staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
 
                 if (showScheduledStaffing) staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
@@ -68,11 +73,6 @@
                 staffingData.forecastedStaffing.updatedSeries.splice(0, 0, 'Updated_forecasted_staffing');
                 staffingData.actualStaffingSeries.splice(0, 0, 'Actual_staffing');
                 staffingData.scheduledStaffing.splice(0, 0, 'Scheduled_staffing');
-
-	            if (showEmailSkill && mixedArea) {
-                    staffingData.forecastedStaffing.updatedSeries = [];
-		            staffingData.hasEmailSkill = true;
-	            }
 
                 service.initStaffingChart();
 
