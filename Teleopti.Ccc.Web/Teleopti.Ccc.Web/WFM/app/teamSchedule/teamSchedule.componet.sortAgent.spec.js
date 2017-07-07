@@ -60,6 +60,21 @@ fdescribe('sortAgent component tests', function () {
 		expect(isUpdateCalled).toEqual(true);
 	});
 
+	it('should keep the selected sorting option when switching from week view to day view', function() {
+		var bindings = {};
+		var ctrl = $componentController('sortAgent', null, bindings);
+		ctrl.$onInit();
+		ctrl.select(ctrl.availableOptions[2]);
+		var selected = ctrl.availableOptions.filter(function(item) {
+			return item.isSelected;
+		});
+		expect(selected.length).toEqual(1);
+		expect(selected[0].key).toEqual(ctrl.availableOptions[2].key);
+
+		//not finished yet
+
+
+	});
 
 
 });
