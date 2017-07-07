@@ -1,6 +1,6 @@
 'use strict';
 
-describe('PermissionsController', function() {
+describe('PermissionsController', function () {
 
 	var $httpBackend,
 		fakeBackend,
@@ -22,11 +22,11 @@ describe('PermissionsController', function() {
 
 	var organizationSelection;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		module('wfm.permissions');
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _fakePermissionsBackend_, _$controller_, _$timeout_, _permissionsDataService_) {
+	beforeEach(inject(function (_$httpBackend_, _fakePermissionsBackend_, _$controller_, _$timeout_, _permissionsDataService_) {
 		$httpBackend = _$httpBackend_;
 		fakeBackend = _fakePermissionsBackend_;
 		$controller = _$controller_;
@@ -38,50 +38,50 @@ describe('PermissionsController', function() {
 
 		$httpBackend.expectGET("../ToggleHandler/AllToggles").respond(200, 'mock');
 
-		$httpBackend.whenPOST('../api/Permissions/Roles').respond(function(method, url, data, headers) {
+		$httpBackend.whenPOST('../api/Permissions/Roles').respond(function (method, url, data, headers) {
 			return [201, {
 				DescriptionText: 'rolename',
 				Id: '123'
 			}];
 		});
 
-		$httpBackend.whenDELETE('../api/Permissions/Roles/AvailableData/41815804-7c51-4f43-a1ae-ecb2a17a2177').respond(function(method, url, data, headers) {
+		$httpBackend.whenDELETE('../api/Permissions/Roles/AvailableData/41815804-7c51-4f43-a1ae-ecb2a17a2177').respond(function (method, url, data, headers) {
 			return 200;
 		});
 
-		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64').respond(function(method, url, data, headers) {
+		$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64').respond(function (method, url, data, headers) {
 			return 200;
 		});
-		$httpBackend.whenDELETE('../api/Permissions/Roles/f1e9237f-7bd8-4ca9-aebb-e49b80d8a4cf').respond(function(method, url, data, headers) {
+		$httpBackend.whenDELETE('../api/Permissions/Roles/f1e9237f-7bd8-4ca9-aebb-e49b80d8a4cf').respond(function (method, url, data, headers) {
 			return 200;
 		});
-		$httpBackend.whenPUT('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64?newDescription=%7B%7D').respond(function(method, url, data, headers) {
+		$httpBackend.whenPUT('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64?newDescription=%7B%7D').respond(function (method, url, data, headers) {
 			response = angular.fromJson(data);
 			fakeBackend.setName(response.Id, response.newDescription)
 			return [200, {
 				newDescription: response.newDescription
 			}];
 		});
-		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Copy').respond(function(method, url, data, headers) {
+		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Copy').respond(function (method, url, data, headers) {
 			return [200, {
 				Name: 'Agent',
 				Id: '123'
 			}];
 		});
-		$httpBackend.whenPOST('../api/Permissions/Roles/DeleteFunction/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64').respond(function(method, url, data, headers) {
+		$httpBackend.whenPOST('../api/Permissions/Roles/DeleteFunction/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64').respond(function (method, url, data, headers) {
 			return 200;
 		});
-		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/DeleteFunction/8ecf6029-4f3c-409c-89db-46bd8d7d402d').respond(function(method, url, data, headers) {
+		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/DeleteFunction/8ecf6029-4f3c-409c-89db-46bd8d7d402d').respond(function (method, url, data, headers) {
 			response = angular.fromJson(data);
 			return 200;
 		});
-		$httpBackend.whenPOST('../api/Permissions/Roles/Functions').respond(function(method, url, data, headers) {
+		$httpBackend.whenPOST('../api/Permissions/Roles/Functions').respond(function (method, url, data, headers) {
 			return 200;
 		});
-		$httpBackend.whenPOST('../api/Permissions/Roles/4b102279-888a-45ee-b537-b48036bc27d0/Functions').respond(function(method, url, data, headers) {
+		$httpBackend.whenPOST('../api/Permissions/Roles/4b102279-888a-45ee-b537-b48036bc27d0/Functions').respond(function (method, url, data, headers) {
 			return 200;
 		});
-		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Functions').respond(function(method, url, data, headers) {
+		$httpBackend.whenPOST('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Functions').respond(function (method, url, data, headers) {
 			response = angular.fromJson(data);
 			return 200;
 		});
@@ -174,14 +174,14 @@ describe('PermissionsController', function() {
 		};
 	}));
 
-	afterEach(function() {
+	afterEach(function () {
 		$httpBackend.verifyNoOutstandingExpectation();
 		$httpBackend.verifyNoOutstandingRequest();
 	});
 
-	describe('PermissionsController - roles', function() {
+	describe('PermissionsController - roles', function () {
 
-		it('should get a role', function() {
+		it('should get a role', function () {
 			fakeBackend
 				.withRole(defaultRole);
 
@@ -190,7 +190,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[0].Id).toEqual('e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
 		});
 
-		it('should get roles', function() {
+		it('should get roles', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRole(adminRole);
@@ -200,7 +200,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles.length).toEqual(2);
 		});
 
-		it('should create role', function() {
+		it('should create role', function () {
 			fakeBackend
 				.withOrganizationSelection(organizationSelection.BusinessUnit);
 			$httpBackend.flush();
@@ -211,7 +211,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles.length).toBe(1);
 		});
 
-		it('should not be able to create role with no name', function() {
+		it('should not be able to create role with no name', function () {
 			fakeBackend
 				.withOrganizationSelection(organizationSelection.BusinessUnit);
 			$httpBackend.flush();
@@ -221,7 +221,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles.length).toBe(0);
 		});
 
-		it('should select newly created role', function() {
+		it('should select newly created role', function () {
 			fakeBackend
 				.withOrganizationSelection(organizationSelection.BusinessUnit);
 			$httpBackend.flush();
@@ -232,7 +232,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[0].IsSelected).toBe(true);
 		});
 
-		it('should toggle input if role has all function available', function() {
+		it('should toggle input if role has all function available', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -251,7 +251,7 @@ describe('PermissionsController', function() {
 			expect(vm.isAllFunctionSelected).toEqual(true);
 		});
 
-		it('should unselect previous selected role when creating new role', function() {
+		it('should unselect previous selected role when creating new role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withOrganizationSelection(organizationSelection.BusinessUnit);
@@ -264,7 +264,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[1].IsSelected).toBe(false);
 		});
 
-		it('should unselect new roll when selecting other role', function() {
+		it('should unselect new roll when selecting other role', function () {
 			var name = 'rolename';
 			fakeBackend
 				.withRole(defaultRole)
@@ -281,7 +281,7 @@ describe('PermissionsController', function() {
 
 		});
 
-		it('should close create role modal on submit', function() {
+		it('should close create role modal on submit', function () {
 			fakeBackend
 				.withOrganizationSelection(organizationSelection.BusinessUnit);
 			$httpBackend.flush();
@@ -292,7 +292,7 @@ describe('PermissionsController', function() {
 			expect(vm.showCreateModal).toBe(false);
 		});
 
-		it('should clear new role name on submit', function() {
+		it('should clear new role name on submit', function () {
 			var name = 'rolename';
 			fakeBackend
 				.withOrganizationSelection(organizationSelection.BusinessUnit);
@@ -304,7 +304,7 @@ describe('PermissionsController', function() {
 			expect(vm.roleName).toBe('');
 		});
 
-		it('should put newly created roll on top of roles list', function() {
+		it('should put newly created roll on top of roles list', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRole(adminRole)
@@ -317,7 +317,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[0].DescriptionText).toBe('rolename');
 		});
 
-		it('should be able to edit the name of a role', function() {
+		it('should be able to edit the name of a role', function () {
 			fakeBackend
 				.withRole(defaultRole);
 			$httpBackend.flush();
@@ -328,7 +328,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[0].DescriptionText).toBe('newRoleName');
 		});
 
-		it('should select edited role after name change', function() {
+		it('should select edited role after name change', function () {
 			fakeBackend.withRole(defaultRole);
 			$httpBackend.flush();
 
@@ -338,7 +338,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[0].IsSelected).toBe(true);
 		});
 
-		it('should be able to delete a roll', function() {
+		it('should be able to delete a roll', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withOrganizationSelection(organizationSelection.BusinessUnit);
@@ -350,7 +350,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles.length).toEqual(0);
 		});
 
-		it('should clear selected role when deleting selected role', function() {
+		it('should clear selected role when deleting selected role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withOrganizationSelection(organizationSelection.BusinessUnit);
@@ -363,7 +363,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedRole.Id).not.toEqual('e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
 		});
 
-		it('should not be able to delete a built in roll', function() {
+		it('should not be able to delete a built in roll', function () {
 			fakeBackend
 				.withRole(adminRole);
 			$httpBackend.flush();
@@ -373,7 +373,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles.length).toEqual(1);
 		});
 
-		it('should not be able to modify Built in role', function() {
+		it('should not be able to modify Built in role', function () {
 			fakeBackend.withRole(adminRole);
 			$httpBackend.flush();
 
@@ -382,7 +382,7 @@ describe('PermissionsController', function() {
 			expect(result).toEqual(false);
 		});
 
-		it('should be able to copy a role', function() {
+		it('should be able to copy a role', function () {
 			fakeBackend
 				.withRole(defaultRole);
 			$httpBackend.flush();
@@ -395,7 +395,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[1].Name).toEqual('Agent');
 		});
 
-		it('should select newly copied role', function() {
+		it('should select newly copied role', function () {
 			fakeBackend
 				.withRole(defaultRole);
 			$httpBackend.flush();
@@ -406,7 +406,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[1].IsSelected).toBe(true);
 		});
 
-		it('should set newly copied role to selected role', function() {
+		it('should set newly copied role to selected role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -425,7 +425,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles.length).toEqual(2);
 		});
 
-		it('should unselect previously selected role when copying role', function() {
+		it('should unselect previously selected role when copying role', function () {
 			fakeBackend
 				.withRole(defaultRole);
 			$httpBackend.flush();
@@ -436,7 +436,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[0].IsSelected).toBe(false);
 		});
 
-		it('should put copied role under the copied role', function() {
+		it('should put copied role under the copied role', function () {
 			fakeBackend
 				.withRole(defaultRole2)
 				.withRole(defaultRole);
@@ -448,7 +448,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[1].Name).toEqual('Agent');
 		});
 
-		it('should be able to select a role', function() {
+		it('should be able to select a role', function () {
 			fakeBackend
 				.withRole(defaultRole);
 
@@ -460,7 +460,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[0].IsSelected).toBe(true);
 		});
 
-		it('should deselect selcted role when selecting another role', function() {
+		it('should deselect selcted role when selecting another role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRole(defaultRole2)
@@ -479,7 +479,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles[1].IsSelected).toBe(true);
 		});
 
-		it('should fetch additional info for selected role', function() {
+		it('should fetch additional info for selected role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -499,9 +499,9 @@ describe('PermissionsController', function() {
 
 	});
 
-	describe('PermissionsController - functions', function() {
+	describe('PermissionsController - functions', function () {
 
-		it('should get an application function', function() {
+		it('should get an application function', function () {
 			fakeBackend
 				.withApplicationFunction(defaultApplicationFunction);
 
@@ -515,7 +515,7 @@ describe('PermissionsController', function() {
 			expect(vm.applicationFunctions[0].LocalizedFunctionDescription).toEqual('Open Teleopti WFM');
 		});
 
-		it('should get application functions', function() {
+		it('should get application functions', function () {
 			fakeBackend
 				.withApplicationFunction(defaultApplicationFunction)
 				.withApplicationFunction(defaultApplicationFunction2);
@@ -525,7 +525,7 @@ describe('PermissionsController', function() {
 			expect(vm.applicationFunctions.length).toEqual(2);
 		});
 
-		it('should allways keep top node open', function() {
+		it('should allways keep top node open', function () {
 			fakeBackend
 				.withApplicationFunction(allFunction)
 				.withApplicationFunction(defaultApplicationFunction);
@@ -536,7 +536,7 @@ describe('PermissionsController', function() {
 			expect(vm.applicationFunctions[1].IsOpen).toEqual(true);
 		});
 
-		it('should remove function with the name All', function() {
+		it('should hide function with the name All', function () {
 			fakeBackend
 				.withApplicationFunction(allFunction)
 				.withApplicationFunction(defaultApplicationFunction);
@@ -547,7 +547,7 @@ describe('PermissionsController', function() {
 			expect(vm.applicationFunctions[0].IsHidden).toEqual(true);
 		});
 
-		it('should unselect role functions when deleting that role', function() {
+		it('should unselect role functions when deleting that role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withApplicationFunction(defaultApplicationFunction)
@@ -566,7 +566,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedFunctions['63656f9a-be16-4bb7-9012-9bde01232075']).toEqual(undefined);
 		});
 
-		it('should not unselect role functions for selected role when deleting other role', function() {
+		it('should not unselect role functions for selected role when deleting other role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withApplicationFunction(defaultApplicationFunction)
@@ -589,7 +589,7 @@ describe('PermissionsController', function() {
 			expect(vm.roles.length).toEqual(1);
 		});
 
-		it('should indicate available functions for selected role', function() {
+		it('should indicate available functions for selected role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -607,7 +607,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedFunctions['7884b7dd-31ea-4e40-b004-c7ce3b5deaf3']).toEqual(true);
 		});
 
-		it('should indicate available functions for selected role', function() {
+		it('should indicate available functions for selected role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -631,7 +631,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedFunctions['63656f9a-be16-4bb7-9012-9bde01232074']).toEqual(undefined);
 		});
 
-		it('should indicate all available functions for selected role', function() {
+		it('should indicate all available functions for selected role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -657,25 +657,53 @@ describe('PermissionsController', function() {
 			expect(vm.selectedFunctions['f73154af-8d6d-4250-b066-d6ead56bfc16']).toEqual(true);
 		});
 
-		it('should not select all functions checkbox when selecting second to last unselected function', function() {
-			$httpBackend.whenDELETE('../api/Permissions/Roles/Function/5ad43bfa-7842-4cca-ae9e-8d03ddc789e9').respond(200);
+		it('should not select all functions checkbox when selecting second to last unselected function', function () {
+			$httpBackend.whenDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Function/5ad43bfa-7842-4cca-ae9e-8d03ddc789e9').respond(200);
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
-						Id: defaultRole.Id
-					})
+					Id: defaultRole.Id
+				})
 				.withApplicationFunction(allFunction)
 				.withApplicationFunction(defaultApplicationFunction)
 				.withApplicationFunction(defaultApplicationFunction2)
+			$httpBackend.flush();
 
-				$httpBackend.flush();
-				vm.onFunctionClick(vm.applicationFunctions[1].ChildFunctions[0]);
-				$httpBackend.flush();
+			vm.selectedRole = vm.roles[0];
+			vm.onFunctionClick(vm.applicationFunctions[1].ChildFunctions[0]);
+			$httpBackend.expectDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Function/8ecf6029-4f3c-409c-89db-46bd8d7d402d').respond(200);
+			$httpBackend.flush();
 
-				expect(vm.isAllFunctionSelected).toEqual(false);
+			expect(vm.isAllFunctionSelected).toEqual(false);
 		});
 
-		it('should indicate all available functions for selected role but BETTER', function() {
+		it('should delete all function when not all functions are selected BUG #45022', function () {
+			fakeBackend
+				.withRole(defaultRole)
+				.withRoleInfo({
+					Id: defaultRole.Id
+				})
+				.withApplicationFunction(allFunction)
+				.withApplicationFunction(defaultApplicationFunction)
+				.withApplicationFunction(defaultApplicationFunction2);
+			$httpBackend.flush();
+
+			vm.selectRole(vm.roles[0]);
+			$httpBackend.flush();
+			vm.toggleAllFunction();
+			$httpBackend.flush();
+			vm.selectFunction(vm.applicationFunctions[1].ChildFunctions[0]);
+			vm.onFunctionClick(vm.applicationFunctions[1].ChildFunctions[0]);
+			$httpBackend.expectDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Function/8ecf6029-4f3c-409c-89db-46bd8d7d402d').respond(200);
+			$httpBackend.expectDELETE('../api/Permissions/Roles/e7f360d3-c4b6-41fc-9b2d-9b5e015aae64/Function/5ad43bfa-7842-4cca-ae9e-8d03ddc789e9').respond(200);
+			$httpBackend.flush();
+
+			expect(vm.isAllFunctionSelected).toEqual(false);
+			expect(vm.selectedFunctions['5ad43bfa-7842-4cca-ae9e-8d03ddc789e9']).toBe(undefined);
+			expect(vm.selectedFunctions['8ecf6029-4f3c-409c-89db-46bd8d7d402d']).toBe(undefined);
+		});
+
+		it('should indicate all available functions for selected role but BETTER', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -710,7 +738,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedFunctions['f73154af-8d6d-4250-b066-d6ead56bfc16']).toEqual(true);
 		});
 
-		it('should indicate all ApplicationFunctions and its ChildFunctions for selected role', function() {
+		it('should indicate all ApplicationFunctions and its ChildFunctions for selected role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -757,7 +785,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedFunctions['52b6f3de-55e0-45b2-922e-316f8538f60c']).toEqual(true);
 		});
 
-		it('should select all functions when toggle all function', function() {
+		it('should select all functions when toggle all function', function () {
 			fakeBackend
 				.withApplicationFunction(allFunction)
 				.withApplicationFunction({
@@ -790,7 +818,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedFunctions['f73154af-8d6d-4250-b066-d6ead56bfc16']).toEqual(true);
 		});
 
-		it('should save all functions for role when toggle all function', function() {
+		it('should save all functions for role when toggle all function', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -839,7 +867,7 @@ describe('PermissionsController', function() {
 			expect(response).toEqual(expectedResponse);
 		});
 
-		it('should delete all functions for role when untoggle all function', function() {
+		it('should delete all functions for role when untoggle all function', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -891,7 +919,7 @@ describe('PermissionsController', function() {
 			expect(response).toEqual(expectedResponse);
 		});
 
-		it('should deselect all functions when toggle all function', function() {
+		it('should deselect all functions when toggle all function', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -943,9 +971,9 @@ describe('PermissionsController', function() {
 		});
 	});
 
-	describe('PermissionsController - organization', function() {
+	describe('PermissionsController - organization', function () {
 
-		it('should get an organization selection', function() {
+		it('should get an organization selection', function () {
 			fakeBackend
 				.withOrganizationSelection(organizationSelection.BusinessUnit, organizationSelection.DynamicOptions);
 			$httpBackend.flush();
@@ -957,7 +985,7 @@ describe('PermissionsController', function() {
 			expect(vm.organizationSelection.DynamicOptions[0].Name).toEqual("None");
 		});
 
-		it('should send selected dynamic option to the server', function() {
+		it('should send selected dynamic option to the server', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withOrganizationSelection(organizationSelection.BusinessUnit, organizationSelection.DynamicOptions);
@@ -970,7 +998,7 @@ describe('PermissionsController', function() {
 			expect(permissionsDataService.selectDynamicOption).toHaveBeenCalledWith(organizationSelection.DynamicOptions[0], vm.selectedRole);
 		});
 
-		it('should unselect selected org data for previous role when creating new role', function() {
+		it('should unselect selected org data for previous role when creating new role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -996,7 +1024,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedOrgData['58643cfb-6f7d-4128-a014-0c8f82209d68']).toEqual(undefined);
 		});
 
-		it('should unselect selected org data for previous role when deleting that role', function() {
+		it('should unselect selected org data for previous role when deleting that role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -1019,7 +1047,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedOrgData['58643cfb-6f7d-4128-a014-0c8f82209d68']).toEqual(undefined);
 		});
 
-		it('should fetch organization info for selected role', function() {
+		it('should fetch organization info for selected role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withOrganizationSelection(organizationSelection.BusinessUnit)
@@ -1045,7 +1073,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedRole.AvailableTeams[0].Id).toEqual('6a21c802-7a34-4917-8dfd-9b5e015ab461');
 		});
 
-		it('should indicate available site for selected role', function() {
+		it('should indicate available site for selected role', function () {
 			fakeBackend
 				.withRole(defaultRole)
 				.withRoleInfo({
@@ -1073,7 +1101,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedOrgData[organizationSelection.BusinessUnit.ChildNodes[0].ChildNodes[0].Id]).toBe(true);
 		});
 
-		it('should indicate available org data when selecting a different role', function() {
+		it('should indicate available org data when selecting a different role', function () {
 			fakeBackend
 				.withRole({
 					Id: '4b102279-888a-45ee-b537-b48036bc27d0',
@@ -1162,7 +1190,7 @@ describe('PermissionsController', function() {
 			expect(vm.selectedOrgData['930addd3-79c6-47ef-96e2-6c68c8f522f3']).toBe(true);
 		});
 
-		it('should indicate available org data when selecting a different role without selected BU', function() {
+		it('should indicate available org data when selecting a different role without selected BU', function () {
 			fakeBackend
 				.withRole({
 					Id: '4b102279-888a-45ee-b537-b48036bc27d0',
@@ -1233,10 +1261,10 @@ describe('PermissionsController', function() {
 		});
 	});
 
-	describe('PermissionsController - filters', function() {
+	describe('PermissionsController - filters', function () {
 
-		it('should only show selected function when pressing selected filter', function() {
-			inject(function($filter) {
+		it('should only show selected function when pressing selected filter', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole(defaultRole)
 					.withRoleInfo({
@@ -1258,8 +1286,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should only show unselected function when pressing unselected filter', function() {
-			inject(function($filter) {
+		it('should only show unselected function when pressing unselected filter', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole(defaultRole)
 					.withRoleInfo({
@@ -1281,8 +1309,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should reset filters', function() {
-			inject(function($filter) {
+		it('should reset filters', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole({
 						BuiltIn: false,
@@ -1326,8 +1354,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should filter on selected org data', function() {
-			inject(function($filter) {
+		it('should filter on selected org data', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole(defaultRole)
 					.withOrganizationSelection(organizationSelection.BusinessUnit)
@@ -1352,8 +1380,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should filter on unselected org data', function() {
-			inject(function($filter) {
+		it('should filter on unselected org data', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole(defaultRole)
 					.withOrganizationSelection({
@@ -1407,8 +1435,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should filter with searchString', function() {
-			inject(function($filter) {
+		it('should filter with searchString', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole({
 						BuiltIn: false,
@@ -1479,8 +1507,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should find org data with search string', function() {
-			inject(function($filter) {
+		it('should find org data with search string', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole({
 						BuiltIn: false,
@@ -1538,8 +1566,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should show all children under found bu', function() {
-			inject(function($filter) {
+		it('should show all children under found bu', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole({
 						BuiltIn: false,
@@ -1597,8 +1625,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should show all children under found site', function() {
-			inject(function($filter) {
+		it('should show all children under found site', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole({
 						BuiltIn: false,
@@ -1657,8 +1685,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should show correct selected filtered functions when switching role', function() {
-			inject(function($filter) {
+		it('should show correct selected filtered functions when switching role', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole(defaultRole)
 					.withRole(defaultRole2)
@@ -1689,8 +1717,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should show correct unselected filtered functions when switching role', function() {
-			inject(function($filter) {
+		it('should show correct unselected filtered functions when switching role', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole(defaultRole)
 					.withRole(defaultRole2)
@@ -1750,8 +1778,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should show correct selected filtered org data when switching role', function() {
-			inject(function($filter) {
+		it('should show correct selected filtered org data when switching role', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole(defaultRole)
 					.withRole(defaultRole2)
@@ -1817,8 +1845,8 @@ describe('PermissionsController', function() {
 			});
 		});
 
-		it('should show correct unselected filtered org data when switching role', function() {
-			inject(function($filter) {
+		it('should show correct unselected filtered org data when switching role', function () {
+			inject(function ($filter) {
 				fakeBackend
 					.withRole(defaultRole)
 					.withRole(defaultRole2)

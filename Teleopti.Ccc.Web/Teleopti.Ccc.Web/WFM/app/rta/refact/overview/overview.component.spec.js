@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-fdescribe('rtaOverviewComponent', function () {
+xdescribe('rtaOverviewComponent', function () {
   var $controllerBuilder,
     $fakeBackend,
     $componentController,
@@ -62,7 +62,7 @@ fdescribe('rtaOverviewComponent', function () {
   });
 
   //DET VAR NÅGOT ON INIT, får ingen respons..... 
-  fit('should display site card with skill data', function () {
+  it('should display site card with skill data', function () {
     stateParams.skillIds = ['channelSalesId'];
     $fakeBackend
       .withSiteAdherence({
@@ -156,7 +156,7 @@ fdescribe('rtaOverviewComponent', function () {
     expect(ctrl.siteCards[0].teams[0].Color).toEqual('warning');
   });
 
-  //  fit('should display team data in site card with skill when clicked', function () {
+  //  it('should display team data in site card with skill when clicked', function () {
   //   stateParams.skillIds = ['channelSalesId'];
   //   $fakeBackend
   //     .withSiteAdherence({

@@ -361,6 +361,7 @@
 			} else {
 				vm.selectedFunctions[func.FunctionId] = true;
 			}
+				delete vm.selectedFunctions[vm.applicationFunctions[0].FunctionId];
 		}
 
 		function createFlatFunctions(functions, flatFunctions) {
@@ -388,10 +389,22 @@
 			}
 			createFlatFunctions(vm.applicationFunctions, flatFunctions);
 
-			vm.isAllFunctionSelected = flatFunctions.every(function (func) {
+			flatFunctions.shift();
+			var flatFunctionsWithoutAll = flatFunctions;
+
+			vm.isAllFunctionSelected = flatFunctionsWithoutAll.every(function (func) {
 				return isFunctionSelected(func);
 			});
-			permissionsDataService.selectFunction(vm.selectedRole, functions, fn);
+
+			if(vm.isAllFunctionSelected) vm.selectedFunctions[vm.applicationFunctions[0].FunctionId] = true;
+
+				PermissionsServiceRefact.deleteFunction.delete({
+					Id: vm.selectedRole.Id,
+					FunctionId: vm.applicationFunctions[0].FunctionId
+				}).$promise.then(function () {
+					permissionsDataService.selectFunction(vm.selectedRole, functions, fn);
+				})
+
 		}
 
 		function toggleSelection(functions, selectedOrNot) {
