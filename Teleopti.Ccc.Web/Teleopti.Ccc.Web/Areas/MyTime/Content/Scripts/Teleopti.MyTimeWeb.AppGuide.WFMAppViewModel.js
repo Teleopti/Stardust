@@ -17,10 +17,11 @@
 
 	self.generateMyTimeQRCode = function () {
 		var customUrl = self.myTimeCustomUrl();
-		var codeUrl = window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl;
+		var codeUrl = window.location.origin + Teleopti.MyTimeWeb.AjaxSettings.baseUrl.slice(0, -1);
 		if (!!customUrl) {
 			codeUrl = customUrl;
 		}
+		console.log("url", codeUrl);
 		self.myTimeWebBaseUrl(codeUrl);
 		self.myTimeQRCode(drawQrcode(codeUrl));
 	};
