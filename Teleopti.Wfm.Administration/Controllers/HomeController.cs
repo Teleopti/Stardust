@@ -22,14 +22,16 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly ITenantExists _tenantExists;
 		private readonly DeleteTenant _deleteTenant;
 		private readonly ICheckDatabaseVersions _checkDatabaseVersions;
+		private readonly IDatabaseHelperWrapper _databaseHelperWrapper;
 
-		public HomeController(ILoadAllTenants loadAllTenants, SaveTenant saveTenant, ITenantExists tenantExists, DeleteTenant deleteTenant, ICheckDatabaseVersions checkDatabaseVersions)
+		public HomeController(ILoadAllTenants loadAllTenants, SaveTenant saveTenant, ITenantExists tenantExists, DeleteTenant deleteTenant, ICheckDatabaseVersions checkDatabaseVersions, IDatabaseHelperWrapper databaseHelperWrapper)
 		{
 			_loadAllTenants = loadAllTenants;
 			_saveTenant = saveTenant;
 			_tenantExists = tenantExists;
 			_deleteTenant = deleteTenant;
 			_checkDatabaseVersions = checkDatabaseVersions;
+			_databaseHelperWrapper = databaseHelperWrapper;
 		}
 
 
@@ -112,7 +114,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 			var tenant = _loadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals(name));
 			_deleteTenant.Delete(tenant);
-
+			_databaseHelperWrapper.ActivateTenantOnDelete(tenant);
 			return Json(new TenantResultModel { Success = true, Message =
 				$"Deleted Tenant {name}. The databases are not deleted."
 			});

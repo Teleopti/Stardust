@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
 
@@ -62,6 +63,16 @@ namespace Teleopti.Wfm.AdministrationTest
 			string tenantPassword)
 		{
 			
+		}
+
+		public void DeActivateTenantOnImport(string connectionString)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void ActivateTenantOnDelete(Tenant tenant)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

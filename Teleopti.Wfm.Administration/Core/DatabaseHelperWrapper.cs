@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core
@@ -145,6 +146,18 @@ namespace Teleopti.Wfm.Administration.Core
 		{
 			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
 			return helper.LoginCanBeCreated(login, password, sqlVersion, out message);
+		}
+
+		public void DeActivateTenantOnImport(string connectionString)
+		{
+			var helper = new DatabaseHelper(connectionString, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			helper.DeActivateTenantOnImport(connectionString);
+		}
+
+		public void ActivateTenantOnDelete(Tenant tenant)
+		{
+			var helper = new DatabaseHelper(tenant.DataSourceConfiguration.ApplicationConnectionString, DatabaseType.TeleoptiCCC7) { DbManagerFolderPath = _dbPathProvider.GetDbPath() };
+			helper.ReActivateTenentOnDelete(tenant.DataSourceConfiguration.ApplicationConnectionString, tenant.DataSourceConfiguration.AnalyticsConnectionString, tenant.DataSourceConfiguration.AggregationConnectionString);
 		}
 	}
 }

@@ -117,6 +117,29 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 				LoadAllTenants.Tenants().FirstOrDefault(x => x.Name.Equals("NewFineTenant")).Should().Not.Be.EqualTo(null);
 				LoadAllTenants.Tenants().Single(x => x.Name == "NewFineTenant").RtaKey.Should().Not.Be.Null();
 			}
+
+			appConnString(TestPollutionCleaner.TestTenantConnection().ConnectionString).Should().Contain("NOT IN USE");
+
+		}
+
+		private string appConnString(string  connectionString)
+		{
+			var retString = "";
+			using (var conn = new SqlConnection(connectionString))
+			{
+				conn.Open();
+				using (var cmd = conn.CreateCommand())
+				{
+					cmd.CommandText = string.Format("select ApplicationConnectionString from Tenant.Tenant");
+					var reader = cmd.ExecuteReader();
+					if (!reader.HasRows) return retString;
+					reader.Read();
+					retString = reader.GetString(0);
+				}
+				conn.Close();
+			}
+			
+			return retString;
 		}
 	}
 }

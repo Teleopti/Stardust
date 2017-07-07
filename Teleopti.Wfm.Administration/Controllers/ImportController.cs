@@ -66,7 +66,10 @@ namespace Teleopti.Wfm.Administration.Controllers
 			}
 
 			var importResult = _import.Execute(model.Tenant, appBuilder.ConnectionString, analBuilder.ConnectionString, aggConnectionstring, model.AdminUser, model.AdminPassword);
-		
+			if (importResult.Success)
+			{
+				_databaseHelperWrapper.DeActivateTenantOnImport(appBuilder.ConnectionString);
+			}
 			return Json(new ImportTenantResultModel { Success = importResult.Success, Message = importResult.Message, TenantId = importResult.TenantId });
 			
 		}

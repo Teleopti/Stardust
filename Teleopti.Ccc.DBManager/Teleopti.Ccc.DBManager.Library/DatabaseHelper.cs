@@ -1,5 +1,6 @@
 using System;
 using System.Data.SqlClient;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -209,6 +210,24 @@ namespace Teleopti.Ccc.DBManager.Library
 		public DatabaseTasks Tasks()
 		{
 			return new DatabaseTasks(_usingMaster);
+		}
+
+		public void DeActivateTenantOnImport(string connectionString)
+		{
+			var inactivateTenant = @"UPDATE [Tenant].[Tenant] SET Active = 0, 
+  ApplicationConnectionString = 'NOT IN USE, look in master Tenant db', 
+  AnalyticsConnectionString  = 'NOT IN USE, look in master Tenant db', 
+  AggregationConnectionString = 'NOT IN USE, look in master Tenant db'";
+			_usingDatabase.ExecuteTransactionlessNonQuery(inactivateTenant, 300);
+		}
+
+		public void ReActivateTenentOnDelete(string appConnection, string analytConnection, string aggConnection)
+		{
+			var activateTenant = @"UPDATE [Tenant].[Tenant] SET Active = 1, 
+  ApplicationConnectionString = '{0}', 
+  AnalyticsConnectionString  = '{1}', 
+  AggregationConnectionString = '{2}'";
+			_usingDatabase.ExecuteTransactionlessNonQuery(string.Format(activateTenant,appConnection,analytConnection, aggConnection), 300);
 		}
 	}
 }

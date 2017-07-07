@@ -1,5 +1,6 @@
 using System;
 using Teleopti.Ccc.DBManager.Library;
+using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.Administration.Core
@@ -17,5 +18,7 @@ namespace Teleopti.Wfm.Administration.Core
 		void AddDatabaseUser(string connectionToNewDb, DatabaseType databaseType, string login, string pwd, SqlVersion sqlVersion);
 		SqlVersion Version(string connectionToNewDb);
 		void AddSystemUserToPersonInfo(string connectionToNewDb, Guid personId, string userName, string password, string tenantPassword);
+		void DeActivateTenantOnImport(string connectionString);
+		void ActivateTenantOnDelete(Tenant tenant);
 	}
 }

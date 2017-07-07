@@ -1,19 +1,24 @@
 ﻿using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Administration.Controllers;
+using Teleopti.Wfm.Administration.Core;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 {
 	[TenantTest]
 	public class DeleteTenantTest
 	{
+		public TestPollutionCleaner TestPollutionCleaner;
+		public IDatabaseHelperWrapper DatabaseHelperWrapper;
 		public HomeController Target;
 		public ITenantUnitOfWork TenantUnitOfWork;
 		public ICurrentTenantSession CurrentTenantSession;
@@ -31,7 +36,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 
-         using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
+			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Teleopti WFM");
 				tenant.DataSourceConfiguration.SetApplicationConnectionString(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
@@ -41,15 +46,27 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		}
 
 		[Test]
-		public void ShoulAllowDeleteOnNotBaseTenant()
+		public void ShouldAllowDeleteOnNotBaseTenant()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+
+
+			TestPollutionCleaner.Clean("tenant", "appuser");
+			var builder = TestPollutionCleaner.TestTenantConnection();
+			builder.IntegratedSecurity = false;
+			builder.UserID = "dbcreatorperson";
+			builder.Password = "password";
+
+			var sqlVersion = new SqlVersion(12, false);
+			DatabaseHelperWrapper.CreateLogin(builder.ConnectionString, "appuser", "password", sqlVersion);
+			DatabaseHelperWrapper.CreateDatabase(builder.ConnectionString, DatabaseType.TeleoptiCCC7, "appuser", "password", sqlVersion,
+				"NewFineTenant", 1);
 
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
 			{
 				var tenant = new Tenant("Teleopti WFM");
-				tenant.DataSourceConfiguration.SetAnalyticsConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
-				tenant.DataSourceConfiguration.SetApplicationConnectionString("Integrated Security=true;Initial Catalog=Northwind;server=(local");
+				tenant.DataSourceConfiguration.SetAnalyticsConnectionString(builder.ConnectionString);//not important here
+				tenant.DataSourceConfiguration.SetApplicationConnectionString(builder.ConnectionString);
 				CurrentTenantSession.CurrentSession().Save(tenant);
 			}
 			using (TenantUnitOfWork.EnsureUnitOfWorkIsStarted())
@@ -61,7 +78,26 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			{
 				LoadAllTenants.Tenants().Count().Should().Be.EqualTo(1);
 			}
+			appConnString(builder.ConnectionString).Should().Contain(builder.InitialCatalog);
 		}
 
+		private string appConnString(string connectionString)
+		{
+			var retString = "";
+			using (var conn = new SqlConnection(connectionString))
+			{
+				conn.Open();
+				using (var cmd = conn.CreateCommand())
+				{
+					cmd.CommandText = string.Format("select ApplicationConnectionString from Tenant.Tenant");
+					var reader = cmd.ExecuteReader();
+					if (!reader.HasRows) return retString;
+					reader.Read();
+					retString = reader.GetString(0);
+				}
+				conn.Close();
+			}
+			return retString;
+		}
 	}
 }
