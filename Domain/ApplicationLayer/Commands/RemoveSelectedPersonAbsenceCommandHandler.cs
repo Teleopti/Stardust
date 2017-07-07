@@ -60,41 +60,48 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var personAssignment = scheduleDay.PersonAssignment();
-			var periodToRemove = personAssignment != null && personAssignment.ShiftLayers.Any()
-				? coverAllDay(personAssignment.Period, personAbsences.Period, person.PermissionInformation.DefaultTimeZone())
-				: scheduleDay.Period;
+			var previousPersonAssignmentPeriod = scheduleRange?.ScheduledDay(command.Date.AddDays(-1))?.PersonAssignment()?.Period;
+			var periodToRemove = personAssignment == null || !personAssignment.ShiftLayers.Any()
+				? scheduleDay.Period
+				: excludeOvernightFromPreviousDay(previousPersonAssignmentPeriod, personAssignment.Period.Contains(personAbsences.Period)
+					? personAssignment.Period
+					: coverWholeDayAndOvernight(personAssignment.Period, personAbsences.Period, person.PermissionInformation.DefaultTimeZone()));
 
 			command.ErrorMessages = _personAbsenceRemover.RemovePartPersonAbsence(command.Date, person, personAbsences,
 				periodToRemove, scheduleRange, command.TrackedCommandInfo).ToList();
 			_currentUnitOfWork.Current().PersistAll();
 		}
 
-		private DateTimePeriod coverAllDay(DateTimePeriod period, DateTimePeriod absencePeriod, TimeZoneInfo timezone)
+		private DateTimePeriod excludeOvernightFromPreviousDay(DateTimePeriod? previousPeriod, DateTimePeriod period)
 		{
-			if (period.Contains(absencePeriod))
-			{
+			if (previousPeriod == null)
 				return period;
+
+			var prePeriod = previousPeriod.GetValueOrDefault();
+
+			var previousDayIsOvernight = period.ContainsPart(prePeriod);
+
+			if (previousDayIsOvernight)
+			{
+				return new DateTimePeriod(prePeriod.EndDateTime, period.EndDateTime);
 			}
 
+			return period;
+		}
+
+		private DateTimePeriod coverWholeDayAndOvernight(DateTimePeriod period, DateTimePeriod absencePeriod, TimeZoneInfo timezone)
+		{
 			var startTimeLocal = period.StartDateTimeLocal(timezone);
 			var endTimeLocal = period.EndDateTimeLocal(timezone);
+			var startOfDay = new DateTime(startTimeLocal.Year, startTimeLocal.Month, startTimeLocal.Day, 0, 0, 0);
+			var endOfDay = startOfDay.AddDays(1);
 
-			var laterThanZero =
-				endTimeLocal.CompareTo(new DateTime(endTimeLocal.Year, endTimeLocal.Month, endTimeLocal.Day, 0, 0, 0)) > 0;
-			if (laterThanZero)
-			{
-				endTimeLocal = endTimeLocal.AddDays(1);
-			}
+			var overnight = endTimeLocal.CompareTo(endOfDay) > 0;
 
-			var startAdjusted =
-				TimeZoneHelper.ConvertToUtc(new DateTime(startTimeLocal.Year, startTimeLocal.Month, startTimeLocal.Day, 0, 0, 0),
-					timezone);
-			var endAdjusted =
-				TimeZoneHelper.ConvertToUtc(new DateTime(endTimeLocal.Year, endTimeLocal.Month, endTimeLocal.Day, 0, 0, 0),
-					timezone);
+			var startAdjusted = TimeZoneHelper.ConvertToUtc(startOfDay, timezone);
+			var endAdjusted = TimeZoneHelper.ConvertToUtc(overnight ? endTimeLocal : endOfDay, timezone);
 
-			period = new DateTimePeriod(startAdjusted, endAdjusted);
-			return period;
+			return new DateTimePeriod(startAdjusted, endAdjusted);
 		}
 
 		private void appendErrorMessage(IList<string> errorMessages, string newMessage)
