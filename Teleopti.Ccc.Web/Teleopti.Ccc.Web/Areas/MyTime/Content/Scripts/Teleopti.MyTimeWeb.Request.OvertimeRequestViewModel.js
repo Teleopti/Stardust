@@ -50,7 +50,7 @@
 	};
 
 	self.AddRequest = function() {
-		if (!_validateRequiredFields() || !self.ReadyToSave()) {
+		if (!_validateRequiredFields()) {
 			return;
 		}
 
@@ -76,19 +76,7 @@
 		parentViewModel.CancelAddingNewRequest();
 	};
 
-	self.SubjectTextChange = function(data, event) {
-		_validateRequiredFields();
-	};
-
 	self.ReadyToSave = ko.computed(function() {
-		if ((!self.Subject() || !/\S/.test(self.Subject())) || (self.ErrorMessage() && !self.ErrorMessage())) {
-			return false;
-		}
-
-		if (self.RequestDuration() == undefined || self.RequestDuration().length != 5 || _buildPostData().Period.StartTime.length != 5) {
-			return false;
-		}
-
 		return !self.IsPostingData();
 	});
 
@@ -130,14 +118,22 @@
 	function _validateRequiredFields() {
 		var dataValid = false;
 
-		if (!!self.Subject() && /\S/.test(self.Subject())) {
-			dataValid = true;
-			self.ShowError(!dataValid);
-			self.ErrorMessage('');
-		} else {
+		if (!self.Subject() || !/\S/.test(self.Subject())) {
 			dataValid = false;
 			self.ShowError(!dataValid);
 			self.ErrorMessage(requestsMessagesUserTexts.MissingSubject);
+		} else if(_buildPostData().Period.StartTime.length != 5){
+			dataValid = false;
+			self.ShowError(!dataValid);
+			self.ErrorMessage(requestsMessagesUserTexts.MissingStartTime);
+		} else if(!self.RequestDuration() || self.RequestDuration().length != 5){
+			dataValid = false;
+			self.ShowError(!dataValid);
+			self.ErrorMessage(requestsMessagesUserTexts.MissingDuration);
+		} else{
+			dataValid = true;
+			self.ShowError(!dataValid);
+			self.ErrorMessage('');
 		}
 
 		return dataValid;

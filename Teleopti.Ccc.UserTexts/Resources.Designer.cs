@@ -17204,6 +17204,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Missing duration.
+        /// </summary>
+        public static string MissingDuration {
+            get {
+                return ResourceManager.GetString("MissingDuration", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Missing forecast from.
         /// </summary>
         public static string MissingForecastFrom {
@@ -17254,6 +17263,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string MissingSkillsForPeriod {
             get {
                 return ResourceManager.GetString("MissingSkillsForPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Missing start time.
+        /// </summary>
+        public static string MissingStartTime {
+            get {
+                return ResourceManager.GetString("MissingStartTime", resourceCulture);
             }
         }
         

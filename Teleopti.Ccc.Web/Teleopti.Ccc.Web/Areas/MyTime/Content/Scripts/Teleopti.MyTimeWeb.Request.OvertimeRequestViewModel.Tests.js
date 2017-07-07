@@ -148,6 +148,8 @@ $(document).ready(function () {
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
+		vm.IsPostingData(true);
+
 		vm.AddRequest();
 
 		equal(vm.ReadyToSave(), true);
@@ -159,6 +161,8 @@ $(document).ready(function () {
 		vm.DateFrom('2017-06-27');
 		vm.StartTime('19:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+
+		vm.IsPostingData(true);
 
 		equal(vm.ReadyToSave(), false);
 	});

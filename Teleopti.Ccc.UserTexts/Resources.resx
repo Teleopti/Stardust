@@ -16204,4 +16204,12 @@ Do you want to participate?</value>
     <value>Cannot apply this to agents in a different time zone</value>
     <comment>Error message in Teams</comment>
   </data>
+  <data name="MissingDuration" xml:space="preserve">
+    <value>Missing duration</value>
+    <comment>Missing duration</comment>
+  </data>
+  <data name="MissingStartTime" xml:space="preserve">
+    <value>Missing start time</value>
+    <comment>Missing start time</comment>
+  </data>
 </root>
