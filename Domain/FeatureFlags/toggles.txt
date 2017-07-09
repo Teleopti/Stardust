@@ -103,7 +103,7 @@ Wfm_People_MoveImportJobToBackgroundService_43582 = true
 
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 WfmIntraday_MonitorActualvsForecasted_35176 = true
-Wfm_HideUnusedTeamsAndSites_42690 = RC
+Wfm_HideUnusedTeamsAndSites_42690 = true
 Wfm_SearchAgentBasedOnCorrectPeriod_44552 = RC
 
 MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = true
@@ -123,7 +123,7 @@ MyTimeWeb_PreferencePerformanceForMultipleUsers_43322 = true
 MyTimeWeb_DayScheduleForStartPage_43446 = true
 MyTimeWeb_DayScheduleForStartPage_Command_44209 = true
 MyTimeWeb_ViewWFMAppGuide_43848 = true
-MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686 = RC
+MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686 = true
 MyTimeWeb_OvertimeRequest_44558 = DEV
 
 Scheduler_IntradayOptimization_36617 = true
@@ -140,7 +140,7 @@ ResourcePlanner_MergeTeamblockClassicScheduling_44289 = RC
 ResourcePlanner_RemoveBackToLegalStateGui_44333 = true
 ResourcePlanner_CalculateShiftValuesInParallel_44681 = DEV
 ResourcePlanner_RespectSkillGroupShoveling_44156 = RC
-ResourcePlanner_OvertimeNightShifts_44311 = RC
+ResourcePlanner_OvertimeNightShifts_44311 = true
 ResourcePlanner_SchedulingIslands_44757 = RC
 
 Wfm_DisplayOnlineHelp_39402 = RC
@@ -195,7 +195,7 @@ Staffing_Info_Configuration_44687 = RC
 WfmStaffing_AllowActions_42524 = RC #Enables the entire Staffing page!
 Staffing_ReadModel_Update14Days_43840 = true
 Staffing_ReadModel_BetterAccuracy_43447 = true
-Staffing_ReadModel_BetterAccuracy_Step2_44271 = RC
+Staffing_ReadModel_BetterAccuracy_Step2_44271 = true
 Staffing_ReadModel_BetterAccuracy_Step3_44331 = RC
 Staffing_ReadModel_Keep8DaysHistoricalData_44652 = RC # don't enable without Staffing_ReadModel_Update14Days_43840
 
@@ -212,5 +212,5 @@ WFM_Intraday_Show_For_Other_Days_43504 = RC
 WFM_Intraday_SupportMultisiteSkill_43874 = true
 WFM_Intraday_Export_To_Excel_44892 = DEV
 WFM_Forecaster_Refact_44480 = DEV
-Wfm_Outbound_IgnoreScheduleForReplan_43752 = RC
+Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 WFM_Export_Forecast_44716 = true
