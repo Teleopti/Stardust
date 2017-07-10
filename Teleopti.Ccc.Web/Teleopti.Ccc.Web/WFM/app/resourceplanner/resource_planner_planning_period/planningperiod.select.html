@@ -37,14 +37,14 @@
 				<!--<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-calendar-check"></i>
 				<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="mdi mdi-calendar-remove"></i>-->
 				<h1>{{p.StartDate | amDateFormat:"LL"}} - {{p.EndDate | amDateFormat:"LL"}}</h1>
-				<div class="subtext plan-group-pp-days">{{p.Number}} {{p.Type | translate}}</div>
+				<div class="subtext">{{p.Number}} {{p.Type | translate}}</div>
 			</div>
 			<div class="list-header-content">
-				<div tabindex=0 class="context-menu card-context icon-botton-second" ng-if="$first" ng-click="vm.getLastPp(p);$event.stopPropagation();">
+				<div tabindex=0 class="context-menu card-context" ng-if="$first" ng-click="vm.getLastPp(p);$event.stopPropagation();">
 					<i class="mdi mdi-pencil"></i>
 					<md-tooltip>{{'ChangePlanningDuration' | translate}}</md-tooltip>
 				</div>
-				<div tabindex=0 class="context-menu card-context icon-botton-second" ng-if="$first && vm.planningPeriods.length > 1" ng-click="vm.getPpInfo(p);$event.stopPropagation();">
+				<div tabindex=0 class="context-menu card-context" ng-if="$first && vm.planningPeriods.length > 1" ng-click="vm.getPpInfo(p);$event.stopPropagation();">
 					<i class="mdi mdi-delete"></i>
 					<md-tooltip>{{'DeletePlanningPeriod' | translate}}</md-tooltip>
 				</div>

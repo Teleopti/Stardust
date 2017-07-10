@@ -40,14 +40,14 @@
 		<div class="list-content plan-group" ng-click="vm.goPlanningGroup(planningGroup.Id)">
 			<div class="list-header">
 				<h1>{{planningGroup.Name }}</h1>
-				<div class="subtext plan-group-pp-days">{{planningGroup.AgentCount}} {{'Agents' | translate}}</div>
+				<div class="subtext">{{planningGroup.AgentCount}} {{'Agents' | translate}}</div>
 			</div>
 			<div class="list-header-content">
-				<div tabindex=0 class="context-menu card-context icon-botton-second edit-plan-group" ng-click="vm.goEditPlanningGroup(planningGroup.Id);$event.stopPropagation();">
+				<div tabindex=0 class="context-menu card-context edit-plan-group" ng-click="vm.goEditPlanningGroup(planningGroup.Id);$event.stopPropagation();">
 					<i class="mdi mdi-pencil"></i>
 					<md-tooltip>{{'EditPlanningGroup' | translate}}</md-tooltip>
 				</div>
-				<div tabindex=0 class="context-menu card-context icon-botton-second delete-plan-group" ng-click="vm.goDayOffRule(planningGroup.Id);$event.stopPropagation();">
+				<div tabindex=0 class="context-menu card-context delete-plan-group" ng-click="vm.goDayOffRule(planningGroup.Id);$event.stopPropagation();">
 					<i class="mdi mdi-settings"></i>
 					<md-tooltip>{{'DayOffRuleSetting' | translate}}</md-tooltip>
 				</div>
