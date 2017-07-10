@@ -296,6 +296,7 @@ CD "%DBMANAGERPATH%"
 "%DBMANAGER%" -S%INSTANCE% -D"%TELEOPTICCC%" -E -OTeleoptiCCC7 %TRUNK% -F"%DATABASEPATH%" >> "%ROOTDIR%\upgradeDB.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=3 & GOTO :error
 
+SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\database\tsql\DemoDatabase\SetTenantActive.sql"
 
 IF EXIST "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" %MSBUILD% "%ROOTDIR%\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%LogFolder%\build.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
