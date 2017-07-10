@@ -32,7 +32,7 @@
 		var singleMode = checkIsSingleMode($attrs)
 		var searchText = ''
 		var searchCache = {}
-
+	
 		var ctrl = this
 
 		ctrl.longestName = ''
@@ -49,6 +49,11 @@
 			}
 		}
 
+        ctrl.$postLink = function () {
+            var element = $element.find("md-select-value");
+            element.focus();
+        }
+
 		ctrl.$onInit = function () {
 			var menuPosition = $mdPanel.newPanelPosition().relativeTo($element).addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW)
 
@@ -63,7 +68,8 @@
 				contentElement: $element.find('orgpicker-menu'),
 				clickOutsideToClose: true,
 				escapeToClose: true,
-				zIndex: 40,
+                zIndex: 40,
+				trapFocus:true,
 				attachTo: angular.element(document.body), // must-have for text inputs on ie11
 				position: menuPosition,
 				onOpenComplete: function () {
@@ -183,7 +189,20 @@
 						slaveSite.collapsed = true
 					}
 				}
-			},
+            },
+
+            siteFocused: {
+                value: function (site) {
+                    site.isFocused = true;
+                }
+            },
+
+            siteBlured: {
+                value: function (site) {
+                    site.isFocused = false;
+                }
+            },
+
 			toggleTeam: {
 				value: function (slaveTeam) {
 					slaveTeam.site.toggle(slaveTeam.m.id)
@@ -204,8 +223,8 @@
 				}
 			},
 			toggleSite: {
-				value: function (event, slaveSite) {
-					event.stopPropagation()
+				value: function (slaveSite) {
+					//event.stopPropagation()
 
 					slaveSite.toggleAll()
 

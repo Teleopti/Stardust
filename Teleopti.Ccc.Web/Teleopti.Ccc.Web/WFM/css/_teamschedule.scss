@@ -1156,6 +1156,14 @@ organization-picker {
 				width: 100%;
 				height: 100%;
 			}
+
+			.md-button:focus {
+				background-color: rgba(158,158,158,0.2);
+			}
+		}
+
+		.focused {
+			background-color: rgba(158,158,158,0.2);
 		}
 
 		.md-button-toggle {
@@ -1243,7 +1251,6 @@ organization-picker {
 		background-color: $green-300;
 	}
 }
-
 
 /* End of Organization Picker */
 

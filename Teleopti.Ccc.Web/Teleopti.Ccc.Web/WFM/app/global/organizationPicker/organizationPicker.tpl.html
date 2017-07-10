@@ -7,24 +7,26 @@
 		<orgpicker-menu class="orgpicker-menu">
 			<div class="header">
 				<i class="mdi mdi-magnify"></i>
-				<input type="text" class="search md-text" placeholder="{{ 'Search' |translate}}" ng-model="$ctrl.searchText" />
+				<input type="text" md-autofocus class="search md-text" placeholder="{{ 'Search' |translate}}" ng-model="$ctrl.searchText" />
 			</div>
 			<div class="longest-name">{{$ctrl.longestName}}</div>
 			<md-virtual-repeat-container class="virtual-repeat">
 				<div md-virtual-repeat="o in $ctrl.orgsInView" class="repeated-item" flex>
-					<div ng-click="$ctrl.collapseSite(o)" class="site md-button-toggle md-button md-ink-ripple" ng-if=" o.m.isSite ">
+					<div ng-class="{focused:o.isFocused}" class="site md-button-toggle md-button md-ink-ripple" ng-if=" o.m.isSite ">
 						<div flex layout="row">
-							<div class="wfm-checkbox" ng-click="$event.stopPropagation()" ng-class="{'indeterminate': o.isIndeterminate()}">
-								<label>
-									<input type="checkbox" ng-click="$ctrl.toggleSite($event, o)" ng-checked="o.isChecked()" />
+							<div class="wfm-checkbox" ng-class="{'indeterminate': o.isIndeterminate()}">
+								<label ng-blur="$ctrl.siteBlured(o)" ng-focus="$ctrl.siteFocused(o)" ng-click="$ctrl.toggleSite(o)" >
+									<input ng-click="$ctrl.toggleSite(o)" type="checkbox" ng-checked="o.isChecked()" />
 									<span class="wfm-checkbox-toggle"></span>
 									<span class="wfm-checkbox-label" ng-bind-html="o.m.name | searchFilter:$ctrl.searchText"></span>
 								</label>
 							</div>
 							<span flex></span>
-							<span class="md-toggle-icon">
-								<i class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
-							</span>
+							<div ng-blur="$ctrl.siteBlured(o)" ng-focus="$ctrl.siteFocused(o)" ng-click="$ctrl.collapseSite(o)">
+								<span class="md-toggle-icon">
+									<i style="height:25px" class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
+								</span>
+							</div>
 						</div>
 					</div>
 					<button type="button" ng-if=" !o.m.isSite " ng-click="$ctrl.toggleTeam(o)" class="team md-button md-ink-ripple">
@@ -38,7 +40,7 @@
 			</md-virtual-repeat-container>
 			<div class="footer">
 				<button ng-click="$ctrl.clearAll()" class="wfm-btn wfm-btn-invis-default selection-clear">{{'Clear'|translate}}</button>
-				<button ng-click="$ctrl.menuRef.close()" class="wfm-btn wfm-btn-invis-default selection-done">{{'Done'|translate}}</button>
+				<button ng-click="$ctrl.menuRef.close()" class="wfm-btn wfm-btn-invis-default selection-done">{{'Close'|translate}}</button>
 			</div>
 		</orgpicker-menu>
 	</div>
