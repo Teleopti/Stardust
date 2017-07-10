@@ -21,7 +21,6 @@
 		if (!!customUrl) {
 			codeUrl = customUrl;
 		}
-		console.log("url", codeUrl);
 		self.myTimeWebBaseUrl(codeUrl);
 		self.myTimeQRCode(drawQrcode(codeUrl));
 	};
