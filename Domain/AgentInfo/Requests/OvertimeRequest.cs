@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		protected internal override IEnumerable<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService)
 		{
-			throw new NotImplementedException();
+			return approvalService.Approve(this);
 		}
 
 		public override string RequestTypeDescription

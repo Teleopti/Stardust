@@ -46,6 +46,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						_swapAndModifyService,
 						businessRules,
 						_personRequestCheckAuthorization);
+				case RequestType.OvertimeRequest:
+					return new OvertimeRequestApprovalService();
 			}
 
 			return null;
