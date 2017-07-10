@@ -200,6 +200,61 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.ForecastedStaffing.Last().Should().Not.Be.EqualTo(forecastedAgentsEnd);
 		}
 
+		[Test]
+		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
+		public void ShouldHandleForecastedStaffingWithDayBeforeScheduledAgents()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var _slaFourHours =
+				new ServiceAgreement(new ServiceLevel(new Percent(1), 14400), new Percent(0), new Percent(1));
+			var skillEmail = StaffingViewModelCreatorTestHelper.CreateEmailSkill(_skillResolution, "skill", new TimePeriod(8, 0, 10, 0));
+			SkillRepository.Has(skillEmail);
+			var skillDayYesterday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(-1), new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
+			var skillDayToday = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow, new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
+			var skillDayTomorrow = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillEmail, scenario, userNow.AddDays(1), new TimePeriod(8, 0, 10, 0), false, _slaFourHours);
+			var skillDayCalculator = new SkillDayCalculator(skillEmail,
+				new List<ISkillDay>() { skillDayYesterday, skillDayToday, skillDayTomorrow },
+				new DateOnlyPeriod(new DateOnly(userNow.AddDays(-1)), new DateOnly(userNow.AddDays(1))));
+			skillDayYesterday.SkillDayCalculator = skillDayCalculator;
+			skillDayToday.SkillDayCalculator = skillDayCalculator;
+			skillDayTomorrow.SkillDayCalculator = skillDayCalculator;
+			SkillDayRepository.Has(skillDayToday, skillDayTomorrow, skillDayYesterday);
+
+			var vm1 = Target.Load(new[] { skillEmail.Id.Value });
+
+			var forecastedAgentsStart = vm1.DataSeries.ForecastedStaffing.First();
+			var forecastedAgentsEnd = vm1.DataSeries.ForecastedStaffing.Last();
+
+			var skillCombinationResources = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					SkillCombination = new []{ skillEmail.Id.GetValueOrDefault() } ,
+					StartDateTime = userNow.AddDays(-1),
+					EndDateTime = userNow.AddDays(-1).AddMinutes(_skillResolution),
+					Resource = 10
+				},
+				new SkillCombinationResource
+				{
+					SkillCombination = new []{ skillEmail.Id.GetValueOrDefault() },
+					StartDateTime = userNow.AddDays(-1).AddMinutes(_skillResolution),
+					EndDateTime = userNow.AddDays(-1).AddMinutes(2*_skillResolution),
+					Resource = 20
+				},
+			};
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), skillCombinationResources);
+
+			var vm2 = Target.Load(new[] { skillEmail.Id.Value });
+
+			vm2.DataSeries.Should().Not.Be.EqualTo(null);
+			vm2.DataSeries.ForecastedStaffing.First().Should().Not.Be.EqualTo(forecastedAgentsStart);
+			vm2.DataSeries.ForecastedStaffing.Last().Should().Not.Be.EqualTo(forecastedAgentsEnd);
+		}
+
 
 		[Test]
 		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
