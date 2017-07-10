@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -217,6 +218,47 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			schedulerStateHolderFrom.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Hour.Should().Be.EqualTo(8);
 			schedulerStateHolderFrom.Schedules[agent].ScheduledDay(dateOnly).PersonAssignment().Period.StartDateTime.Minute.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		[Ignore("44818 - to be fixed")]
+		public void ShouldNotCrashOnSchedulePeriodSameShiftCategoryAndKeepActivityLength()
+		{
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var date = new DateOnly(2014, 4, 1);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
+			var scenario = new Scenario("Default").WithId();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var activity = new Activity("_");
+			var skill = new Skill().WithId().For(activity).InTimeZone(TimeZoneInfo.Utc).IsOpen();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var contract = new ContractWithMaximumTolerance();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodOneWeek(date);
+			agent.SchedulePeriod(date).SetDaysOff(2);
+			var asses = new List<IPersonAssignment>();
+			for (var i = 0; i < 7; i++)
+			{
+				var ass = new PersonAssignment(agent, scenario, date.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16));
+				asses.Add(ass);
+				if (i == 5 || i == 6)
+				{
+					ass.SetDayOff(new DayOffTemplate());
+				}
+			}
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date, 1, 1, 1, 1, 1, 1, 1);
+			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, asses, skillDays);
+			var optimizationPreferences = new OptimizationPreferences
+			{
+				General = new GeneralPreferences { ScheduleTag = NullScheduleTag.Instance, OptimizationStepShiftsWithinDay = true },
+				Extra = new ExtraPreferences { UseTeamBlockOption = true, UseBlockSameShiftCategory = true, BlockTypeValue = BlockFinderType.SchedulePeriod},
+				Shifts = {KeepActivityLength = true, ActivityToKeepLengthOn = new Activity("_")}
+			};
+
+			Assert.DoesNotThrow(() =>
+			{
+				Target.Execute(new NoSchedulingProgress(), stateHolder, new[] {agent}, period, optimizationPreferences,
+					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+			});
 		}
 	}
 }
