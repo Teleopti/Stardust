@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -43,15 +44,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_fakeScheduleStorage = new FakeScheduleStorage();
 			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_fakeScheduleStorage);
 
-			var businessRules = new BusinessRulesForPersonalAccountUpdate (_personAbsenceAccountRepository, new SchedulingResultStateHolder());
+			var businessRules = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository, new SchedulingResultStateHolder());
 
 			_requestApprovalServiceFactory = new RequestApprovalServiceFactory(
-				new SwapAndModifyService(null, null), 
+				new SwapAndModifyService(null, null),
 				new FakeGlobalSettingDataRepository(),
 				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new DoNothingScheduleDayChangeCallBack(), null
 			);
-			
-			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator ( 
+
+			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator(
 				new FakePermissions(), new FakeCommonAgentNameProvider(), new FakeLoggedOnUser(), new SwedishCulture());
 
 			_approveRequestCommandHandler = new ApproveRequestCommandHandler(
@@ -59,13 +60,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				new PersonRequestAuthorizationCheckerForTest(),
 				new DifferenceEntityCollectionService<IPersistableScheduleData>(),
 				_personRequestRepository, _requestApprovalServiceFactory,
-				_scenario, writeProtectedScheduleCommandValidator );
+				_scenario, writeProtectedScheduleCommandValidator);
 		}
 
 		[Test]
 		public void ShouldUpdatePersonalAccountWhenRequestIsGranted()
 		{
-			var absenceDateTimePeriod = new DateTimePeriod (2016, 01, 01, 00, 2016, 01, 01, 23);
+			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
 
 			var person = PersonFactory.CreatePersonWithId();
 			var absence = new Absence();
@@ -75,24 +76,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			addAssignment(person, absenceDateTimePeriod);
 			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 
-			_approveRequestCommandHandler.Handle(new ApproveRequestCommand(){ PersonRequestId = personRequest.Id.Value });
+			_approveRequestCommandHandler.Handle(new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value });
 
 			Assert.IsTrue(personRequest.IsApproved);
-			Assert.AreEqual (24, accountDay.Remaining.TotalDays);
+			Assert.AreEqual(24, accountDay.Remaining.TotalDays);
 		}
 
 		[Test]
 		public void ShouldPublishAbsenceAddedEventWhenRequestIsGranted()
 		{
-			var absenceDateTimePeriod = new DateTimePeriod(2016,01,01,00,2016,01,01,23);
+			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
 
 			var person = PersonFactory.CreatePersonWithId();
 			var absence = new Absence();
 
-			var accountDay = createAccountDay(person,absence,new DateOnly(2015,12,1));
+			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1));
 
-			addAssignment(person,absenceDateTimePeriod);
-			var personRequest = createAbsenceRequest(person,absence,absenceDateTimePeriod);
+			addAssignment(person, absenceDateTimePeriod);
+			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 
 			_approveRequestCommandHandler.Handle(new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value });
 
@@ -122,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					messagePropertyChanged = true;
 				}
 			};
-			var command = new ApproveRequestCommand() {PersonRequestId = personRequest.Id.Value, ReplyMessage = "test"};
+			var command = new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value, ReplyMessage = "test" };
 
 			_approveRequestCommandHandler.Handle(command);
 
@@ -163,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var balance = TimeSpan.FromDays(7);
 			var accountDay = createAccountDay(person, absence, new DateOnly(2015, 12, 1), balance);
-			
+
 			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
 			addAssignment(person, absenceDateTimePeriod);
 
@@ -185,11 +186,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			var absence = AbsenceFactory.CreateAbsenceWithId();
-			
-			var absenceDateTimePeriod = new DateTimePeriod(2016,01,01,00,2016,01,01,23);
-			addAssignment(person,absenceDateTimePeriod);
 
-			var personRequest = createAbsenceRequest(person,absence,absenceDateTimePeriod);
+			var absenceDateTimePeriod = new DateTimePeriod(2016, 01, 01, 00, 2016, 01, 01, 23);
+			addAssignment(person, absenceDateTimePeriod);
+
+			var personRequest = createAbsenceRequest(person, absence, absenceDateTimePeriod);
 
 			personRequest.SetDeleted();
 
@@ -257,14 +258,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Assert.IsTrue(personRequest.IsApproved);
 		}
 
-		private PersonRequest createAbsenceRequest (IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
-		{
-			var personRequestFactory = new PersonRequestFactory() {Person = person};
-			var absenceRequest = personRequestFactory.CreateAbsenceRequest (absence,dateTimePeriod);
-			var personRequest = absenceRequest.Parent as PersonRequest;
-			personRequest.SetId (Guid.NewGuid());
 
-			_personRequestRepository.Add (personRequest);
+		[Test]
+		public void ShouldLoadScheduleForOvertimeRequest()
+		{
+			var skill1 = new Domain.Forecasting.Skill("skill1");
+			var baseDate = new DateOnly(2016, 12, 1);
+			var person = PersonFactory.CreatePersonWithPersonPeriod(baseDate, new[] { skill1 });
+
+			var personRequestFactory = new PersonRequestFactory { Person = person };
+			var personRequest = personRequestFactory.CreatePersonRequest();
+			var overtimePeriod = DateOnly.Today.ToDateTimePeriod(TimeZoneInfo.Utc);
+			var overtimeRequest = new OvertimeRequest(new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime), overtimePeriod);
+			personRequest.Request = overtimeRequest;
+			personRequest.SetId(Guid.NewGuid());
+			_personRequestRepository.Add(personRequest);
+
+			addAssignment(person, overtimePeriod);
+
+			var command = new ApproveRequestCommand { PersonRequestId = personRequest.Id.Value };
+			_approveRequestCommandHandler.Handle(command);
+
+			Assert.IsTrue(personRequest.IsApproved);
+			var schedules =_fakeScheduleStorage.LoadAll();
+			Assert.IsTrue(schedules.Count() == 1);
+		}
+
+		private PersonRequest createAbsenceRequest(IPerson person, IAbsence absence, DateTimePeriod dateTimePeriod)
+		{
+			var personRequestFactory = new PersonRequestFactory() { Person = person };
+			var absenceRequest = personRequestFactory.CreateAbsenceRequest(absence, dateTimePeriod);
+			var personRequest = absenceRequest.Parent as PersonRequest;
+			personRequest.SetId(Guid.NewGuid());
+
+			_personRequestRepository.Add(personRequest);
 
 			return personRequest;
 		}

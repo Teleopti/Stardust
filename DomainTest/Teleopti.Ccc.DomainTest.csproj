@@ -187,6 +187,7 @@
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentSummaryTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\WorkbookHandlerTest.cs" />
     <Compile Include="ApplicationLayer\MoveShiftCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestApprovalServiceTest.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessorTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\OldChangesTest.cs" />
     <Compile Include="ApplicationLayer\PersonAssociationChanged\DeletedPersonTest.cs" />

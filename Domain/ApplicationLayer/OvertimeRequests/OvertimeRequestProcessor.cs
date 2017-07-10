@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
-	public class OvertimeRequestProcessor:IOvertimeRequestProcessor
+	public class OvertimeRequestProcessor : IOvertimeRequestProcessor
 	{
 		private readonly ICommandDispatcher _commandDispatcher;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(OvertimeRequestProcessor));
@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		public void Process(IPersonRequest personRequest)
 		{
-				personRequest.Pending();
+			personRequest.Pending();
 
 			var command = new ApproveRequestCommand
 			{
@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				logger.Warn(command.ErrorMessages);
 			}
+
 
 			//return !command.ErrorMessages.Any();
 		}

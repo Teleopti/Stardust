@@ -158,11 +158,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		{
 			var personList = new List<IPerson>();
 
-			var absenceRequest = personRequest.Request as IAbsenceRequest;
-			if (absenceRequest != null)
+			if (personRequest.Request is IOvertimeRequest || personRequest.Request is IAbsenceRequest)
 			{
-				personList.Add(absenceRequest.Person);
+				personList.Add(personRequest.Request.Person);
 			}
+
 			var shiftTradeRequest = personRequest.Request as IShiftTradeRequest;
 			if (shiftTradeRequest != null)
 			{
