@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
 		public void ShouldHandleForecastedStaffingWithDayBeforeScheduledAgents()
-		{
+		{ 
 			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
 			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
 
