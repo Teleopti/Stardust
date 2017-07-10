@@ -51,7 +51,7 @@ RTA_SolidProofWhenManagingAgentAdherence_39351 = true
 WfmPermission_ReplaceOldPermission_34671 = true
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = RC
-WfmTeamSchedule_SortRows_45056 = RC
+WfmTeamSchedule_SortRows_45056 = DEV
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
 
