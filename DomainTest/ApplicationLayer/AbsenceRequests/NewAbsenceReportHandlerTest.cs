@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private void createServices()
 		{
 			//_requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();
-			_requestApprovalService = MockRepository.GenerateMock<AbsenceRequestApprovalService, IRequestApprovalService, IAbsenceRequestApprovalService>();
+			_requestApprovalService = MockRepository.GenerateMock<AbsenceRequestApprovalService, IRequestApprovalService, IAbsenceApprovalService>();
 		}
 
 		private void createInfrastructure()

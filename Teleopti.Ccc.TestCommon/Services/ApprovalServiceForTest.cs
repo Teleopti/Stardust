@@ -6,24 +6,24 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.Services
 {
-	public class ApprovalServiceForTest : IRequestApprovalService, IAbsenceRequestApprovalService
+	public class ApprovalServiceForTest : IRequestApprovalService, IAbsenceApprovalService
 	{
-	    private IEnumerable<IBusinessRuleResponse> businessRuleResponse = new List<IBusinessRuleResponse>();
+		private IEnumerable<IBusinessRuleResponse> businessRuleResponse = new List<IBusinessRuleResponse>();
 
 		public IScenario Scenario
 		{
 			get { throw new NotImplementedException(); }
 		}
 
-		public IEnumerable<IBusinessRuleResponse> ApproveAbsence (IAbsence absence, DateTimePeriod period, IPerson person)
+		public IEnumerable<IBusinessRuleResponse> Approve(IAbsence absence, DateTimePeriod period, IPerson person)
 		{
-		    return businessRuleResponse;
+			return businessRuleResponse;
 
 		}
 
 		public IEnumerable<IBusinessRuleResponse> ApproveShiftTrade(IShiftTradeRequest shiftTradeRequest)
 		{
-		    return businessRuleResponse;
+			return businessRuleResponse;
 
 		}
 
@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.TestCommon.Services
 		{
 			return null;
 		}
-		
+
 		public void SetBusinessRuleResponse(params IBusinessRuleResponse[] brokenRule)
-	    {
-	        businessRuleResponse = brokenRule;
-	    }
+		{
+			businessRuleResponse = brokenRule;
+		}
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
 		{

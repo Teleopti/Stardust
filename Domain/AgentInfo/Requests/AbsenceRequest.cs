@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (result.IsEmpty())
             {
 				setupTextForNotification (Resources.AbsenceRequestForOneDayHasBeenApprovedDot, Resources.AbsenceRequestHasBeenApprovedDot);
-	            var approvedPersonAbsence = ((IAbsenceRequestApprovalService)approvalService).GetApprovedPersonAbsence();
+	            var approvedPersonAbsence = ((IAbsenceApprovalService)approvalService).GetApprovedPersonAbsence();
 				approvedPersonAbsence?.IntradayAbsence(personRequest.Person,new TrackedCommandInfo
 				{
 					OperatedPersonId = personRequest.Person.Id.GetValueOrDefault(),

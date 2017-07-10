@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			_approveRequestCommandHandler.Handle(new ApproveRequestCommand() { PersonRequestId = personRequest.Id.Value });
 
-			var personAbsence = ((IAbsenceRequestApprovalService)_approveRequestCommandHandler.GetRequestApprovalService()).GetApprovedPersonAbsence();
+			var personAbsence = ((IAbsenceApprovalService)_approveRequestCommandHandler.GetRequestApprovalService()).GetApprovedPersonAbsence();
 
 			var @events = personAbsence.PopAllEvents();
 			@events.Single().Should().Be.OfType<PersonAbsenceAddedEvent>();

@@ -11,12 +11,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-	public interface IAbsenceRequestApprovalService
+	public interface IAbsenceApprovalService
 	{
 		IPersonAbsence GetApprovedPersonAbsence();
+
+		IEnumerable<IBusinessRuleResponse> Approve(IAbsence absence, DateTimePeriod period, IPerson person);
 	}
 
-	public class AbsenceRequestApprovalService : IRequestApprovalService, IAbsenceRequestApprovalService
+	public class AbsenceRequestApprovalService : IRequestApprovalService, IAbsenceApprovalService
 	{
 		private readonly IScenario _scenario;
 		private readonly IScheduleDictionary _scheduleDictionary;
