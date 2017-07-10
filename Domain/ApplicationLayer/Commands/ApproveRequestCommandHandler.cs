@@ -157,16 +157,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private IScheduleDictionary getSchedules(IPersonRequest personRequest)
 		{
 			var personList = new List<IPerson>();
-
-			if (personRequest.Request is IOvertimeRequest || personRequest.Request is IAbsenceRequest)
+			if (personRequest.Request.RequestType == RequestType.AbsenceRequest ||
+			personRequest.Request.RequestType == RequestType.OvertimeRequest)
 			{
 				personList.Add(personRequest.Request.Person);
 			}
-
-			var shiftTradeRequest = personRequest.Request as IShiftTradeRequest;
-			if (shiftTradeRequest != null)
+			if (personRequest.Request.RequestType == RequestType.ShiftTradeRequest)
 			{
-				personList.AddRange(shiftTradeRequest.InvolvedPeople());
+				if (personRequest.Request is IShiftTradeRequest shiftTradeRequest)
+					personList.AddRange(shiftTradeRequest.InvolvedPeople());
 			}
 			var scheduleDictionary = getScheduleDictionary(personRequest, personList);
 			return scheduleDictionary;
