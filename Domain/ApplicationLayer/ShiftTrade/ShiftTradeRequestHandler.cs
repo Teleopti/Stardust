@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 				try
 				{
 					logger.DebugFormat("Accepting ShiftTrade: {0}", personRequest.GetSubject(new NormalizeText()));
-					personRequest.Request.Accept(acceptingPerson, checkSum, _authorization);
+					((IShiftTradeRequest)personRequest.Request).Accept(acceptingPerson, checkSum, _authorization);
 					setUpdatedMessage(@event, personRequest);
 
 					_schedulingResultStateHolder.UseMinWeekWorkTime = @event.UseMinWeekWorkTime;

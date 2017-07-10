@@ -146,9 +146,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             PersonRequestViewModel shiftTradePersonRequestViewModel =
                 new PersonRequestViewModel(shiftTradePersonRequest, _shiftTradeRequestStatusChecker, _personAccount, null, _TimeZoneInfo);
             Assert.IsFalse(shiftTradePersonRequestViewModel.IsEditable);
-            shiftTradePersonRequest.Request.Accept(tradeWithPerson, new EmptyShiftTradeRequestSetChecksum(), new PersonRequestAuthorizationCheckerForTest());
+            ((IShiftTradeRequest)shiftTradePersonRequest.Request).Accept(tradeWithPerson, new EmptyShiftTradeRequestSetChecksum(), new PersonRequestAuthorizationCheckerForTest());
             Assert.IsTrue(shiftTradePersonRequestViewModel.IsEditable);
-            shiftTradePersonRequest.Request.Refer(new PersonRequestAuthorizationCheckerForTest());
+            ((IShiftTradeRequest)shiftTradePersonRequest.Request).Refer(new PersonRequestAuthorizationCheckerForTest());
             Assert.IsFalse(shiftTradePersonRequestViewModel.IsEditable);
         }
 

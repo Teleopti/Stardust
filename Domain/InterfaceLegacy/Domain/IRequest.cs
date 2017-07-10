@@ -58,28 +58,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </remarks>
         void Deny(IPerson denyPerson);
 
-	    /// <summary>
-		/// Accepts this instance.
-		/// </summary>
-		/// <param name="acceptingPerson">The accepting person.</param>
-		/// <param name="shiftTradeRequestSetChecksum">The shift trade request set checksum instance.</param>
-		/// <param name="authorization">The authorization checker.</param>
-		/// <remarks>
-		/// Created by: peterwe
-		/// Created date: 2009-06-17
-		/// </remarks>
-		void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization);
-
-
-        /// <summary>
-        /// Refers this instance.
-        /// </summary>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2009-08-28
-        /// </remarks>
-        void Refer(IPersonRequestCheckAuthorization authorization);
-
         /// <summary>
         /// Refers this instance.
         /// </summary>

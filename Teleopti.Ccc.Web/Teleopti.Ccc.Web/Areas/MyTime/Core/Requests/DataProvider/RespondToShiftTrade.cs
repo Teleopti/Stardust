@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				return new RequestViewModel();
 			}
 
-			personRequest.Request.Accept(personRequest.Person, _shiftTradeRequestSetChecksum, _personRequestCheckAuthorization);
+			((IShiftTradeRequest)personRequest.Request).Accept(personRequest.Person, _shiftTradeRequestSetChecksum, _personRequestCheckAuthorization);
 
             _eventSyncronization.WhenDone(() => _publisher.Publish(new NewShiftTradeRequestCreatedEvent
             {

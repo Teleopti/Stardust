@@ -36,16 +36,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			throw new NotImplementedException();
 		}
 
-		public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void Refer(IPersonRequestCheckAuthorization authorization)
-		{
-			throw new NotImplementedException();
-		}
-
 		public override string GetDetails(CultureInfo cultureInfo)
 		{
 			var text = _multiplicatorDefinitionSet.Name;

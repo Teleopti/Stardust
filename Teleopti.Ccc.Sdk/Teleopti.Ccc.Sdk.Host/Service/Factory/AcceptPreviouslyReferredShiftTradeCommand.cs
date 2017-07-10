@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 				var domainPersonRequest = _personRequestRepository.Load(_personRequestDto.Id.GetValueOrDefault(Guid.Empty));
 				try
 				{
-					domainPersonRequest.Request.Accept(domainPersonRequest.Person, shiftTradeRequestSetChecksum, new SdkPersonRequestAuthorizationCheck());
+					((IShiftTradeRequest)domainPersonRequest.Request).Accept(domainPersonRequest.Person, shiftTradeRequestSetChecksum, new SdkPersonRequestAuthorizationCheck());
 					domainPersonRequest.TrySetMessage(_personRequestDto.Message);
 				}
 				catch (ShiftTradeRequestStatusException exception)

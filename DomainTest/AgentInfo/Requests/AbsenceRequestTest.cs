@@ -46,18 +46,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         }
 
         [Test]
-        public void VerifyAcceptNotImplemented()
-        {
-            Assert.Throws<NotImplementedException>(() => _target.Accept(null, null, null));
-        }
-
-        [Test]
-        public void VerifyReferNotImplemented()
-        {
-			Assert.Throws<NotImplementedException>(() => _target.Refer(null));
-        }
-
-        [Test]
         public void VerifyHasEmptyConstructor()
         {
             Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(_target.GetType()));
@@ -282,16 +270,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 	        {
 		        throw new NotImplementedException();
 	        }
-
-	        public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
-            {
-                throw new NotImplementedException();
-            }
-
-            public override void Refer(IPersonRequestCheckAuthorization authorization)
-            {
-                throw new NotImplementedException();
-            }
 
             public override string GetDetails(CultureInfo cultureInfo)
             {

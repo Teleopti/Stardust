@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             IShiftTradeRequest shiftTradeRequest = (IShiftTradeRequest)_personRequest2.Request;
             shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumFrom = 100;
             shiftTradeRequest.ShiftTradeSwapDetails[0].ChecksumTo = new ShiftTradeChecksumCalculator(_schedulePart2).CalculateChecksum();
-            _personRequest2.Request.Accept(_person1,new EmptyShiftTradeRequestSetChecksum(),_authorization);
+            ((IShiftTradeRequest)_personRequest2.Request).Accept(_person1,new EmptyShiftTradeRequestSetChecksum(),_authorization);
             _personRequest2.Approve(requestApprovalService,_authorization);
             Assert.IsTrue(_personRequest2.IsApproved);
             _target.Check(shiftTradeRequest);

@@ -74,16 +74,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     		return Period.StartDateTimeLocal(timeZone).Date == Period.EndDateTimeLocal(timeZone).Date;
     	}
 
-		public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override void Refer(IPersonRequestCheckAuthorization authorization)
-        {
-            throw new NotImplementedException();
-        }
-
         public override string GetDetails(CultureInfo cultureInfo)
         {
             string text = Absence.Name;

@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		/// Created by: peterwe
 		/// Created date: 2009-06-17
 		/// </remarks>
-		public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum,
+		public virtual void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum,
 			IPersonRequestCheckAuthorization authorization)
 		{
 			InParameter.NotNull(nameof(acceptingPerson), acceptingPerson);
@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			TextForNotification = notification;
 		}
 
-		public override void Refer(IPersonRequestCheckAuthorization authorization)
+		public virtual void Refer(IPersonRequestCheckAuthorization authorization)
 		{
 			SetShiftTradeStatus(ShiftTradeStatus.Referred, authorization);
 			TextForNotification = getNotificationForRefer();

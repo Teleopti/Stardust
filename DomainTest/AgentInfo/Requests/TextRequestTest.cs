@@ -43,18 +43,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         }
 
         [Test]
-        public void VerifyAcceptNotImplemented()
-        {
-			Assert.Throws<NotImplementedException>(() => target.Accept(null,null,null));
-        }
-
-        [Test]
-        public void VerifyReferNotImplemented()
-        {
-			Assert.Throws<NotImplementedException>(() => target.Refer(null));
-        }
-
-        [Test]
         public void VerifyHasEmptyConstructor()
         {
             Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(target.GetType()));
