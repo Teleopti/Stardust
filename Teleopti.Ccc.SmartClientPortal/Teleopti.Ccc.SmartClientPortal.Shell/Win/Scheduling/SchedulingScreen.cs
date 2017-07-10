@@ -3203,7 +3203,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					if (progress != null && _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_SchedulingIslands_44757))
 					{
 						var part = progress.SchedulePart;
-						scheduleStatusBarUpdate(string.Format(CultureInfo.CurrentCulture, "{0} {1}", _schedulerState.CommonAgentName(part.Person), part.DateOnlyAsPeriod.DateOnly.ToShortDateString()));
+						if (part != null)
+						{
+							scheduleStatusBarUpdate(string.Format(CultureInfo.CurrentCulture, "{0} {1}",
+								_schedulerState.CommonAgentName(part.Person), 
+								part.DateOnlyAsPeriod.DateOnly.ToShortDateString()));
+						}
 					}
 					else
 					{
