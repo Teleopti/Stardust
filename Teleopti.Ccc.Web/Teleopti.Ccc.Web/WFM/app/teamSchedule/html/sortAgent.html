@@ -1,13 +1,13 @@
-<div tabindex=0 class="context-menu card-context">
+<label tabindex=0 class="context-menu card-context sort-menu" >
 	<i class="mdi mdi-menu"></i>
 	<span class="context-menu-bottom" style="z-index: 2;">
 		<ul class="wfm-list">
 			<li class="item" ng-repeat="option in $ctrl.availableOptions" ng-click="$ctrl.select(option)">
 				<div>
-					<span class="pull-left">{{option.key | translate}}</span>
-					<span ng-show="option.isSelected" class="mdi mdi-check pull-right"></span>
+					<span >{{option.key | translate}}</span>
+					<i ng-show="option.isSelected" class="mdi mdi-check"></i>
 				</div>
 			</li>
 		</ul>
 	</span>
-</div>
+</label>

@@ -11,7 +11,8 @@
 		self.all = function getToggles() {
 			return {
 				Wfm_HideUnusedTeamsAndSites_42690: toggleSvc.Wfm_HideUnusedTeamsAndSites_42690,
-				WfmTeamSchedule_MoveOvertimeActivity_44888: toggleSvc.WfmTeamSchedule_MoveOvertimeActivity_44888
+				WfmTeamSchedule_MoveOvertimeActivity_44888: toggleSvc.WfmTeamSchedule_MoveOvertimeActivity_44888,
+				WfmTeamSchedule_SortRows_45056: toggleSvc.WfmTeamSchedule_SortRows_45056
 			};
 		}
 

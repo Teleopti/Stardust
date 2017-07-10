@@ -2,14 +2,11 @@
 	'use strict';
 	angular.module('wfm.teamSchedule').component('sortAgent', {
 		controller: SortAgentCtrl,
-		templateUrl: 'app/teamSchedule/html/sortAgent.html',
-		bindings: {
-			onUpdate: '&'
-		}
+		templateUrl: 'app/teamSchedule/html/sortAgent.html'
 	});
 
-	SortAgentCtrl.$inject = [];
-	function SortAgentCtrl() {
+	SortAgentCtrl.$inject = ['$scope'];
+	function SortAgentCtrl($scope) {
 		var ctrl = this;
 		ctrl.selectedOption = "";
 		ctrl.availableOptions = [];
@@ -39,18 +36,13 @@
 			];
 		};
 
-		ctrl.select = function(item) {
+		ctrl.select = function (item) {
 			ctrl.selectedOption = item.key;
-
 			ctrl.availableOptions.forEach(function(item) {
 				item.isSelected = false;
 			});
 			item.isSelected = true;
-
-			ctrl.onUpdate && ctrl.onUpdate(ctrl.selectedOption);
-
+			$scope.$emit('teamSchedule.sortOption.update', { option: ctrl.selectedOption });
 		}
-
 	}
-
 })(angular);
