@@ -316,6 +316,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		}
 
 		[Test]
+		[SetCulture("sv-SE")]
 		public void ShouldBuildForMultipleSitesForSkillOrderSitesNameAccordingToSwedishName()
 		{
 			Now.Is("2016-06-21 08:30");
