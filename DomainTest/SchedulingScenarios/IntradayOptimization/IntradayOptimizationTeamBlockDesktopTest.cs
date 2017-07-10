@@ -221,7 +221,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test]
-		[Ignore("44818 - to be fixed")]
 		public void ShouldNotCrashOnSchedulePeriodSameShiftCategoryAndKeepActivityLength()
 		{
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
