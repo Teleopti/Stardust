@@ -19817,7 +19817,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No permission to move activity for agent {0}.	.
+        ///   Looks up a localized string similar to No permission to move activity for agent(s)	.
         /// </summary>
         public static string NoPermissionMoveAgentActivity {
             get {
@@ -19826,7 +19826,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No permission to move overtime for agent {0}.
+        ///   Looks up a localized string similar to No permission to move overtime for agent(s).
         /// </summary>
         public static string NoPermissionMoveAgentOvertime {
             get {

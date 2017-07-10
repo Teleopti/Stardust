@@ -14421,7 +14421,7 @@ Check your internet connection or contact your administrator.</value>
     <comment>Used in the workflow control set, Absence Request settings page in the Admin Client.</comment>
   </data>
   <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
-    <value>No permission to move activity for agent {0}.	</value>
+    <value>No permission to move activity for agent(s)	</value>
     <comment>Error message to notify missing permission for moving activity</comment>
   </data>
   <data name="SelectedAgentsColon" xml:space="preserve">
@@ -16194,7 +16194,7 @@ Do you want to participate?</value>
     <value>Move Overtime</value>
   </data>
   <data name="NoPermissionMoveAgentOvertime" xml:space="preserve">
-    <value>No permission to move overtime for agent {0}</value>
+    <value>No permission to move overtime for agent(s)</value>
   </data>
   <data name="ChooseDayOffset" xml:space="preserve">
     <value>Choose day offset</value>
