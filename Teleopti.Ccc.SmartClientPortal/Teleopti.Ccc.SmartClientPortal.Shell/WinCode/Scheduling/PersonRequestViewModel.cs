@@ -234,6 +234,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             {
                 type = Resources.RequestTypeShiftTrade;
             }
+			else if (_personRequest.Request is IOvertimeRequest)
+            {
+	            type = Resources.RequestTypeOvertime;
+            }
             return type;
         }
 

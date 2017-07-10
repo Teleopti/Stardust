@@ -48,7 +48,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public override string GetDetails(CultureInfo cultureInfo)
 		{
-			throw new NotImplementedException();
+			var text = _multiplicatorDefinitionSet.Name;
+			var timeZone = Person.PermissionInformation.DefaultTimeZone();
+			var localStart = Period.StartDateTimeLocal(timeZone);
+			var localEnd = Period.EndDateTimeLocal(timeZone);
+			if (!localStart.AddDays(1).AddSeconds(-1).Equals(localEnd))
+			{
+				text = string.Format(cultureInfo, "{0}, {1} - {2}",
+									 _multiplicatorDefinitionSet.Name,
+									 localStart.ToString("t", cultureInfo),
+									 localEnd.ToString("t", cultureInfo));
+			}
+			return text;
 		}
 
 		protected internal override IEnumerable<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService)
