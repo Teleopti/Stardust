@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular
-		 .module('adminApp')
-		 .controller('importController', importController, ['tokenHeaderService']);
+		.module('adminApp')
+		.controller('importController', importController, ['tokenHeaderService']);
 
 	function importController($http, tokenHeaderService) {
 		var vm = this;
@@ -42,24 +42,24 @@
 
 		vm.ShowTheLog = false;
 		vm.ShowLog = false;
-		vm.ShowHide = function () {
+		vm.ShowHide = function() {
 			//If DIV is visible it will be hidden and vice versa.
 			vm.ShowTheLog = vm.ShowLog;
-		}
+		};
 
-		vm.CheckTenantName = function () {
+		vm.CheckTenantName = function() {
 			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
-				.success(function (data) {
+				.success(function(data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
 					//vm.CheckUsers();
 
-				}).error(function (xhr, ajaxOptions, thrownError) {
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
-		}
+		};
 
-		vm.CheckImportAdmin = function () {
+		vm.CheckImportAdmin = function() {
 			vm.Message = '';
 			if (vm.CreateDbUser === '' || vm.CreateDbPassword === '' || vm.Server === '') {
 				vm.SqlUserOkMessage = '';
@@ -71,18 +71,18 @@
 				AdminUser: vm.CreateDbUser,
 				AdminPassword: vm.CreateDbPassword,
 				UseIntegratedSecurity: false
-			}
+			};
 
 			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.SqlUserOk = data.Success,
-				vm.SqlUserOkMessage = data.Message;
-			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-			});
-		}
+				.success(function(data) {
+					vm.SqlUserOk = data.Success,
+						vm.SqlUserOkMessage = data.Message;
+				}).error(function(xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		};
 
-		vm.CheckAppLogin = function () {
+		vm.CheckAppLogin = function() {
 			vm.Message = '';
 			if (vm.SqlUserOk === false) {
 				vm.AppLoginMessage = '';
@@ -99,92 +99,101 @@
 				AdminUser: vm.CreateDbUser,
 				AdminPassword: vm.CreateDbPassword,
 				UserName: vm.UserName,
-				Password: vm.Password 
-			}
+				Password: vm.Password
+			};
 
 			$http.post('./CheckAppLogin', model, tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.AppLoginOk = data.Success,
-				vm.AppLoginMessage = data.Message;
-			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-			});
-		}
+				.success(function(data) {
+					vm.AppLoginOk = data.Success,
+						vm.AppLoginMessage = data.Message;
+				}).error(function(xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		};
 
-		vm.CheckAppDb = function () {
-			$http.post('./DbExists', {
-				Server: vm.Server,
-				AdminUser: vm.CreateDbUser,
-				AdminPassword: vm.CreateDbPassword,
-				UserName: vm.UserName,
-				Password: vm.Password,
-				Database: vm.AppDatabase,
-				DbType: 1
-			}, tokenHeaderService.getHeaders())
-				.success(function (data) {
+		vm.CheckAppDb = function() {
+			$http.post('./DbExists',
+					{
+						Server: vm.Server,
+						AdminUser: vm.CreateDbUser,
+						AdminPassword: vm.CreateDbPassword,
+						UserName: vm.UserName,
+						Password: vm.Password,
+						Database: vm.AppDatabase,
+						DbType: 1
+					},
+					tokenHeaderService.getHeaders())
+				.success(function(data) {
 					vm.AppDbOk = data.Exists;
 					vm.AppDbCheckMessage = data.Message;
 					if (vm.AppDbOk) {
 						vm.CheckVersions();
 						//vm.CheckUsers();
 					}
-				}).error(function (xhr, ajaxOptions, thrownError) {
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					vm.AppDbCheckMessage = xhr.Message + xhr.ExceptionMessage;
 				});
-		}
-		vm.CheckAnalDb = function () {
-			$http.post('./DbExists', {
-				Server: vm.Server,
-				AdminUser: vm.CreateDbUser,
-				AdminPassword: vm.CreateDbPassword,
-				UserName: vm.UserName,
-				Password: vm.Password,
-				Database: vm.AnalyticsDatabase,
-				DbType: 2
-			}, tokenHeaderService.getHeaders())
-				.success(function (data) {
+		};
+
+		vm.CheckAnalDb = function() {
+			$http.post('./DbExists',
+					{
+						Server: vm.Server,
+						AdminUser: vm.CreateDbUser,
+						AdminPassword: vm.CreateDbPassword,
+						UserName: vm.UserName,
+						Password: vm.Password,
+						Database: vm.AnalyticsDatabase,
+						DbType: 2
+					},
+					tokenHeaderService.getHeaders())
+				.success(function(data) {
 					vm.AnalDbOk = data.Exists;
 					vm.AnalDbCheckMessage = data.Message;
-				}).error(function (xhr, ajaxOptions, thrownError) {
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					vm.AnalDbCheckMessage = xhr.Message + xhr.ExceptionMessage;
 				});
-		}
+		};
 
-		vm.CheckAggDb = function () {
+		vm.CheckAggDb = function() {
 			if (vm.AggDatabase === "") {
 				vm.AggDbOk = false;
 				vm.AggDbCheckMessage = "Input Aggregation database (this is optional)";
 				return;
 			}
-			$http.post('./DbExists', {
-				Server: vm.Server,
-				AdminUser: vm.CreateDbUser,
-				AdminPassword: vm.CreateDbPassword,
-				UserName: vm.UserName,
-				Password: vm.Password,
-				Database: vm.AggDatabase,
-				DbType: 3
-			}, tokenHeaderService.getHeaders())
-				.success(function (data) {
+			$http.post('./DbExists',
+					{
+						Server: vm.Server,
+						AdminUser: vm.CreateDbUser,
+						AdminPassword: vm.CreateDbPassword,
+						UserName: vm.UserName,
+						Password: vm.Password,
+						Database: vm.AggDatabase,
+						DbType: 3
+					},
+					tokenHeaderService.getHeaders())
+				.success(function(data) {
 					vm.AggDbOk = data.Exists;
 					vm.AggDbCheckMessage = data.Message;
-				}).error(function (xhr, ajaxOptions, thrownError) {
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 					vm.AggDbCheckMessage = xhr.Message + xhr.ExceptionMessage;
 				});
-		}
+		};
 
-		vm.CheckVersions = function () {
+		vm.CheckVersions = function() {
 			vm.ToEarlyVersionMessage = '';
-			$http.post('./api/UpgradeDatabases/GetVersions', {
-				Server: vm.Server,
-				UserName: vm.UserName,
-				Password: vm.Password,
-				AppDatabase: vm.AppDatabase
-			}, tokenHeaderService.getHeaders())
-				.success(function (data) {
+			$http.post('./api/UpgradeDatabases/GetVersions',
+					{
+						Server: vm.Server,
+						UserName: vm.UserName,
+						Password: vm.Password,
+						AppDatabase: vm.AppDatabase
+					},
+					tokenHeaderService.getHeaders())
+				.success(function(data) {
 					vm.HeadVersion = data.HeadVersion;
 					vm.ImportAppVersion = data.ImportAppVersion;
 					vm.AppVersionOk = data.AppVersionOk;
@@ -192,14 +201,14 @@
 					if (vm.ToEarly) {
 						vm.ToEarlyVersionMessage = 'This is a version that is too early to import this way!';
 					}
-					
-				}).error(function (xhr, ajaxOptions, thrownError) {
+
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.status + xhr.responseText + thrownError);
 				});
-		}
+		};
 
 		vm.startImport = function () {
-			if (vm.AppVersionOk != true && vm.SqlUserOk != true) {
+			if (vm.AppVersionOk !== true && vm.SqlUserOk !== true) {
 				alert("When importing an older version you must provide a valid account to upgrade the databases.");
 				return;
 			}

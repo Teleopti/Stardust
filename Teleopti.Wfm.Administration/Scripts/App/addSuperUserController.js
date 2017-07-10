@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular
-		 .module('adminApp')
-		 .controller('addSuperUserController', addSuperUserController, ['tokenHeaderService']);
+		.module('adminApp')
+		.controller('addSuperUserController', addSuperUserController, ['tokenHeaderService']);
 
 	function addSuperUserController($http, $routeParams, tokenHeaderService) {
 		var vm = this;
@@ -17,21 +17,21 @@
 		vm.NewUserOk = false;
 		vm.NewUserOkMessage = "";
 
-		vm.CheckUser = function () {
+		vm.CheckUser = function() {
 			var model = {
 				FirstUser: vm.UserName,
 				FirstUserPassword: vm.Password
-			}
+			};
 
 			$http.post('./CheckFirstUser', model, tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.NewUserOk = data.Success,
-				vm.NewUserOkMessage = data.Message;
+				.success(function(data) {
+					vm.NewUserOk = data.Success,
+						vm.NewUserOkMessage = data.Message;
 
-			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-			});
-		}
+				}).error(function(xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		};
 
 		vm.save = function () {
 			$http.post('./AddSuperUserToTenant', {

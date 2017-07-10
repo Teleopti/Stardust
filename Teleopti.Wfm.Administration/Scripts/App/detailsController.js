@@ -57,12 +57,12 @@
 			});
 		};
 
-		vm.LoadTenant = function () {
+		vm.LoadTenant = function() {
 			$http.post('./GetOneTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
-				.success(function (data) {
+				.success(function(data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantId = data.Id,
-					vm.TenantOk = data.Success;
+						vm.TenantOk = data.Success;
 					vm.Server = data.Server;
 					vm.UseIntegratedSecurity = data.UseIntegratedSecurity;
 					vm.AnalyticsDatabase = data.AnalyticsDatabase;
@@ -76,10 +76,10 @@
 					//vm.CheckAnalDb();
 					vm.CheckDelete();
 					vm.GetImportLog();
-				}).error(function (xhr, ajaxOptions, thrownError) {
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
-		}
+		};
 
 		vm.ShowUpgrade = function () {
 			return true;
@@ -89,12 +89,12 @@
 
 		vm.ShowTheLog = false;
 		vm.ShowLog = false;
-		vm.ShowHide = function () {
+		vm.ShowHide = function() {
 			//If DIV is visible it will be hidden and vice versa.
 			vm.ShowTheLog = vm.ShowLog;
-		}
+		};
 
-		vm.CheckImportAdmin = function () {
+		vm.CheckImportAdmin = function() {
 			vm.Message = '';
 			if (vm.UseIntegratedSecurity && vm.Server === '') {
 				vm.SqlUserOkMessage = '';
@@ -108,22 +108,22 @@
 					return;
 				}
 			}
-			
+
 			var model = {
 				Server: vm.Server,
 				AdminUser: vm.CreateDbUser,
 				AdminPassword: vm.CreateDbPassword,
 				UseIntegratedSecurity: vm.UseIntegratedSecurity
-			}
+			};
 
 			$http.post('./CheckImportAdmin', model, tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.SqlUserOk = data.Success,
-				vm.SqlUserOkMessage = data.Message;
-			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-			});
-		}
+				.success(function(data) {
+					vm.SqlUserOk = data.Success,
+						vm.SqlUserOkMessage = data.Message;
+				}).error(function(xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		};
 		//vm.CheckTenantName = function () {
 		//	$http.post('./api/Home/NameIsFree', {
 		//		OriginalName: vm.OriginalName,
@@ -139,14 +139,14 @@
 		//		});
 		//}
 
-		vm.CheckDelete = function () {
+		vm.CheckDelete = function() {
 			$http.post('./TenantCanBeDeleted', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
-				.success(function (data) {
+				.success(function(data) {
 					vm.AllowDelete = data.Success;
-				}).error(function (xhr, ajaxOptions, thrownError) {
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
-		}
+		};
 
 		vm.Delete = function() {
 			$http.post('./DeleteTenant', '"' + vm.OriginalName + '"', tokenHeaderService.getHeaders())
@@ -159,40 +159,40 @@
 				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
-		}
+		};
 
-		vm.UpgradeTenant = function () {
+		vm.UpgradeTenant = function() {
 			var model = {
 				Tenant: vm.OriginalName,
 				AdminUserName: vm.CreateDbUser,
 				AdminPassword: vm.CreateDbPassword,
 				UseIntegratedSecurity: vm.UseIntegratedSecurity
-			}
+			};
 			$http.post('./UpgradeTenant', model, tokenHeaderService.getHeaders())
-				.success(function (data) {
+				.success(function(data) {
 					if (data.Success === false) {
 						vm.Message = data.Message;
 						return;
 					}
 					window.location = "#";
-				}).error(function (xhr, ajaxOptions, thrownError) {
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
-		}
+		};
 
-		vm.AddBu = function () {
+		vm.AddBu = function() {
 			var model = {
 				Tenant: vm.OriginalName,
 				BuName: vm.BuName
 
-			}
+			};
 			$http.post('./AddBusinessUnitToTenant', model, tokenHeaderService.getHeaders())
-				.success(function (data) {
-						vm.NewBusinessUnitMessage = data.Message;
-				}).error(function (xhr, ajaxOptions, thrownError) {
+				.success(function(data) {
+					vm.NewBusinessUnitMessage = data.Message;
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
-		}
+		};
 		vm.LoadTenant();
 
 		//vm.CheckAppDb = function () {
@@ -233,8 +233,8 @@
 		//			console.log(xhr.status + xhr.responseText + thrownError);
 		//		});
 		//}
-		
-		vm.save = function () {
+
+		vm.save = function() {
 			//if (vm.AppDbOk === false) {
 			//	alert("Fix the settings to the Application database.");
 			//	return;
@@ -248,7 +248,8 @@
 			//	return;
 			//}
 
-					$http.post('./UpdateTenant', {
+			$http.post('./UpdateTenant',
+					{
 						OriginalName: vm.OriginalName,
 						NewName: vm.Tenant,
 						AppDatabase: vm.AppDatabase,
@@ -256,35 +257,36 @@
 						Server: vm.Server,
 						UserName: vm.UserName,
 						Password: vm.Password,
-						UseIntegratedSecurity : vm.UseIntegratedSecurity,
+						UseIntegratedSecurity: vm.UseIntegratedSecurity,
 						CommandTimeout: vm.CommandTimeout,
 						Active: vm.Active,
 						MobileQRCodeUrl: vm.MobileQRCodeUrl
-					}, tokenHeaderService.getHeaders())
-						.success(function (data) {
-							if (data.Success === false) {
-								vm.Message = data.Message;
-								return;
-							}
-							window.location = "#";
-						})
-						.error(function (xhr, ajaxOptions, thrownError) {
-							vm.Message = xhr.status + xhr.responseText + thrownError;
-							vm.Success = false;
-							console.log(xhr.status + xhr.responseText + thrownError);
-						});
+					},
+					tokenHeaderService.getHeaders())
+				.success(function(data) {
+					if (data.Success === false) {
+						vm.Message = data.Message;
+						return;
+					}
+					window.location = "#";
+				})
+				.error(function(xhr, ajaxOptions, thrownError) {
+					vm.Message = xhr.status + xhr.responseText + thrownError;
+					vm.Success = false;
+					console.log(xhr.status + xhr.responseText + thrownError);
+				});
 
-			}
+		};
 
-		vm.GetImportLog = function () {
+		vm.GetImportLog = function() {
 			$http.post('./GetImportLog', vm.TenantId, tokenHeaderService.getHeaders())
-				.success(function (data) {
+				.success(function(data) {
 					vm.Log = data;
-				}).error(function (xhr, ajaxOptions, thrownError) {
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
-		}
+		};
 
-		}
+	}
 
 })();

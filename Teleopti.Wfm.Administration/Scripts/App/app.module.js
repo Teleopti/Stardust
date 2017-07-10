@@ -7,82 +7,68 @@
 
 			$routeProvider
 				.when('/', {
-					templateUrl: 'list.html',
-					//controller: 'listController'
+					templateUrl: 'list.html'
 				})
 				.when('/login', {
-					templateUrl: 'login.html',
-					//controller: 'loginController'
+					templateUrl: 'login.html'
 				})
 				.when('/details/:tenant', {
-					templateUrl: 'details.html',
-					//controller: 'detailsController'
+					templateUrl: 'details.html'
 				})
 				.when('/addSuperUser/:tenant', {
-					templateUrl: 'addSuperUser.html',
-					//controller: 'addSuperUserController'
+					templateUrl: 'addSuperUser.html'
 				})
 				.when('/import', {
-					templateUrl: 'import.html',
-					//controller: 'importController'
+					templateUrl: 'import.html'
 				})
 				.when('/create', {
-					templateUrl: 'create.html',
-					//controller: 'createController'
+					templateUrl: 'create.html'
 				})
 				.when('/users', {
-					templateUrl: 'users.html',
-					//controller: 'usersController'
+					templateUrl: 'users.html'
 				})
 				.when('/userdetails/:id', {
-					templateUrl: 'userdetails.html',
-					//controller: 'userdetailsController'
+					templateUrl: 'userdetails.html'
 				})
 				.when('/adduser', {
-					templateUrl: 'adduser.html',
-					//controller: 'adduserController'
+					templateUrl: 'adduser.html'
 				})
 				.when('/changepassword/:id', {
-					templateUrl: 'changePassword.html',
-					//controller: 'changePasswordController'
+					templateUrl: 'changePassword.html'
 				})
 				.when('/configurationdetails/:key', {
 					templateUrl: 'configurationDetails.html'
 				})
 				.when('/other', {
-					templateUrl: 'other.html',
-					//controller: 'otherController'
+					templateUrl: 'other.html'
 				})
 				.when('/StardustDashboard', {
-					templateUrl: 'StardustDashboard/stardust.html',
-					//controller: 'summaryController'
+					templateUrl: 'StardustDashboard/stardust.html'
 				})
 				.when('/StardustDashboard/nodes', {
-					templateUrl: 'StardustDashboard/nodes.html',
-					//controller: 'nodeController'
+					templateUrl: 'StardustDashboard/nodes.html'
 				})
 				.when('/StardustDashboard/nodes/:nodeId', {
-					templateUrl: 'StardustDashboard/nodedetails.html',
-					//controller: 'nodeDetailsController'
+					templateUrl: 'StardustDashboard/nodedetails.html'
 				})
 				.when('/StardustDashboard/jobs', {
-					templateUrl: 'StardustDashboard/jobs.html',
+					templateUrl: 'StardustDashboard/jobs.html'
 				})
 				.when('/StardustDashboard/jobs/:jobId', {
-					templateUrl: 'StardustDashboard/jobdetails.html',
+					templateUrl: 'StardustDashboard/jobdetails.html'
 				})
 				.when('/StardustDashboard/queue', {
-					templateUrl: 'StardustDashboard/queue.html',
+					templateUrl: 'StardustDashboard/queue.html'
 				})
 				.when('/StardustDashboard/queue/:jobId', {
-					templateUrl: 'StardustDashboard/jobqueuedetails.html',
+					templateUrl: 'StardustDashboard/jobqueuedetails.html'
 				})
 				.when('/StardustDashboard/failedJobs', {
-					templateUrl: 'StardustDashboard/failedJobs.html',
+					templateUrl: 'StardustDashboard/failedJobs.html'
 				})
 
 				.when('/HangfireDashboard', {
-					templateUrl: 'HangfireDashboard.html',
+					templateUrl: 'HangfireDashboard.html'
 				})
 				.when('/HangfireMonitoring', {
 					templateUrl: 'HangfireMonitoring.html'

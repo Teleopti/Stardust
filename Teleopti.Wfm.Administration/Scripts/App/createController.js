@@ -2,8 +2,8 @@
 	'use strict';
 
 	angular
-		 .module('adminApp')
-		 .controller('createController', createController, ['tokenHeaderService']);
+		.module('adminApp')
+		.controller('createController', createController, ['tokenHeaderService']);
 
 	function createController($http, tokenHeaderService) {
 		var vm = this;
@@ -36,33 +36,33 @@
 		vm.Message = '';
 		vm.Creating = '';
 
-		vm.BuAndUserOk = function () {
+		vm.BuAndUserOk = function() {
 			return vm.FirstUserOk === true && vm.BusinessUnitOk === true;
-		}
+		};
 
-		vm.CheckBU = function () {
+		vm.CheckBU = function() {
 			vm.Message = '';
-			if (vm.BusinessUnit != '') {
+			if (vm.BusinessUnit !== '') {
 				vm.BusinessUnitOk = true;
 				vm.BusinessUnitOkMessage = 'Name of Business Unit is ok.';
 				return;
 			}
 			vm.BusinessUnitOk = false;
 			vm.BusinessUnitOkMessage = 'The Business Unit can not be empty.';
-		}
+		};
 
-		vm.CheckTenantName = function () {
+		vm.CheckTenantName = function() {
 			vm.Message = '';
 			$http.post('./api/Import/IsNewTenant', '"' + vm.Tenant + '"', tokenHeaderService.getHeaders())
-				.success(function (data) {
+				.success(function(data) {
 					vm.TenantMessage = data.Message;
 					vm.TenantOk = data.Success;
-				}).error(function (xhr, ajaxOptions, thrownError) {
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
-		}
+		};
 
-		vm.CheckServer = function () {
+		vm.CheckServer = function() {
 			vm.Message = '';
 			if (vm.CreateDbUser === '' || vm.CreateDbPassword === '') {
 				vm.SqlUserOkMessage = '';
@@ -71,20 +71,20 @@
 			var model = {
 				CreateDbUser: vm.CreateDbUser,
 				CreateDbPassword: vm.CreateDbPassword
-			}
+			};
 
 			$http.post('./CheckCreateDb', model, tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.SqlUserOk = data.Success,
-				vm.SqlUserOkMessage = data.Message;
-				vm.CheckLogin();
+				.success(function(data) {
+					vm.SqlUserOk = data.Success,
+						vm.SqlUserOkMessage = data.Message;
+					vm.CheckLogin();
 
-			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-			});
-		}
+				}).error(function(xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		};
 
-		vm.CheckLogin = function () {
+		vm.CheckLogin = function() {
 			vm.Message = '';
 			if (vm.AppUser === '' || vm.AppPassword === '') {
 				vm.UserOkMessage = 'Fill in both login and password.';
@@ -101,19 +101,19 @@
 				CreateDbPassword: vm.CreateDbPassword,
 				AppUser: vm.AppUser,
 				AppPassword: vm.AppPassword
-			}
+			};
 
 			$http.post('./CheckLogin', model, tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.UserOk = data.Success,
-				vm.UserOkMessage = data.Message;
+				.success(function(data) {
+					vm.UserOk = data.Success,
+						vm.UserOkMessage = data.Message;
 
-			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-			});
-		}
+				}).error(function(xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		};
 
-		vm.Create = function () {
+		vm.Create = function() {
 			vm.Creating = 'Calling server to create new Tenant...';
 			vm.Message = '';
 			$("#loading").show();
@@ -127,38 +127,39 @@
 				FirstUser: vm.FirstUser,
 				FirstUserPassword: vm.FirstUserPassword,
 				BusinessUnit: vm.BusinessUnit
-			}
+			};
 
 			$http.post('./CreateTenant', model, tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.Success = data.Success,
-				vm.Message = data.Message;
-				vm.Creating = '';
-				$("#loading").hide();
+				.success(function(data) {
+					vm.Success = data.Success,
+						vm.Message = data.Message;
+					vm.Creating = '';
+					$("#loading").hide();
 
-			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-				vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
-				vm.Creating = '';
-				vm.Success = false;
-				$("#loading").hide();
-			});
-		}
-		vm.CheckFirstUser = function () {
+				}).error(function(xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+					vm.Message = xhr.Message + ': ' + xhr.ExceptionMessage;
+					vm.Creating = '';
+					vm.Success = false;
+					$("#loading").hide();
+				});
+		};
+
+		vm.CheckFirstUser = function() {
 			var model = {
 				FirstUser: vm.FirstUser,
 				FirstUserPassword: vm.FirstUserPassword
-			}
+			};
 
 			$http.post('./CheckFirstUser', model, tokenHeaderService.getHeaders())
-			.success(function (data) {
-				vm.FirstUserOk = data.Success,
-				vm.FirstUserOkMessage = data.Message;
+				.success(function(data) {
+					vm.FirstUserOk = data.Success,
+						vm.FirstUserOkMessage = data.Message;
 
-			}).error(function (xhr, ajaxOptions, thrownError) {
-				console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
-			});
-		}
+				}).error(function(xhr, ajaxOptions, thrownError) {
+					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
+				});
+		};
 	}
 
 })();

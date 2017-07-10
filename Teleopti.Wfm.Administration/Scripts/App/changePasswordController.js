@@ -2,11 +2,11 @@
 	'use strict';
 
 	angular
-		 .module('adminApp')
-		 .controller('changePasswordController', changePasswordController, ['tokenHeaderService']);
+		.module('adminApp')
+		.controller('changePasswordController', changePasswordController, ['tokenHeaderService']);
 
 	function changePasswordController($http, $routeParams, tokenHeaderService) {
-		var vm = this;;
+		var vm = this;
 		vm.UserId = $routeParams.id;
 		vm.OldPassword = "";
 		vm.Password = "";
@@ -17,8 +17,8 @@
 		vm.PasswordMessage = "The password can not be empty";
 
 		vm.ErrorMessage = "";
-		
-		vm.CheckOld = function () {
+
+		vm.CheckOld = function() {
 			if (vm.Name === '') {
 				vm.OldPasswordMessage = "The old password can not be empty";
 				vm.OldOk = false;
@@ -26,9 +26,9 @@
 			}
 			vm.OldPasswordMessage = "";
 			vm.OldOk = true;
-		}
+		};
 
-		vm.CheckPassword = function () {
+		vm.CheckPassword = function() {
 			if (vm.Password === '') {
 				vm.PasswordMessage = "The password can not be empty";
 				vm.PasswordOk = false;
@@ -41,8 +41,7 @@
 			}
 			vm.PasswordMessage = "";
 			vm.PasswordOk = true;
-		}
-
+		};
 
 		vm.save = function () {
 			$http.post('./ChangePassword', {

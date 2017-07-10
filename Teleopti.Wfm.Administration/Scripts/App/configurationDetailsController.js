@@ -14,24 +14,24 @@
 
 		vm.Message = "";
 
-	    var loadConfiguration = function () {
+		var loadConfiguration = function() {
 			$http.post('./Configuration', '"' + vm.Key + '"', tokenHeaderService.getHeaders())
-				.success(function (data) {
+				.success(function(data) {
 					vm.Value = data;
-				}).error(function (xhr, ajaxOptions, thrownError) {
+				}).error(function(xhr, ajaxOptions, thrownError) {
 					console.log(xhr.Message + ': ' + xhr.ExceptionMessage);
 				});
-		}
+		};
 
 		loadConfiguration();
 
-		var check  = function () {
+		var check = function() {
 			if (vm.Key === "FrameAncestors") {
 				return vm.example = "ex: http://anothersite.teleopti.com";
 			} else {
 				return vm.example = vm.Key;
 			}
-		}
+		};
 
 		check();
 
