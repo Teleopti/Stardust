@@ -105,7 +105,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
 
 		if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
-			var dayDate = moment(data.Schedule.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+			var dayDate = moment(data.Schedule.FixedDate, Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
 			self.dayOfWeek(dayDate.format("dddd"));
 		} else {
 			self.dayOfWeek(data.Schedule.Header.Title);

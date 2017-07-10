@@ -275,7 +275,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 	function _formatServiceDate(date) {
 		// prevent locale translation to non-decimal symbols
 		var localeSafeMoment = moment(date).locale('en');
-		return localeSafeMoment.format(Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+		return localeSafeMoment.format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
 	};
 
 	function _isFixedDate(dateString) {
@@ -416,8 +416,6 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 	};
 
 })(jQuery);
-
-Teleopti.MyTimeWeb.Common.ServiceDateFormat = 'YYYY-MM-DD';
 
 Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 	return {

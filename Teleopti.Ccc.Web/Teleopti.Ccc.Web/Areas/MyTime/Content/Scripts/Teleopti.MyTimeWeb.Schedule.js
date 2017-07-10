@@ -162,6 +162,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	var WeekScheduleViewModel = function (addRequestViewModel, navigateToRequestsMethod, defaultDateTimes, weekStart) {
 		var self = this;
+		var serviceDateFormat = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly;
+
 		self.initializeData = initializeWeekViewModel;
 		self.navigateToRequestsMethod = navigateToRequestsMethod;
 		self.userTexts = Teleopti.MyTimeWeb.Common.GetUserTexts();
@@ -367,7 +369,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		function _fillFormData(data) {
 			var requestViewModel = self.requestViewModel().model;
 			requestViewModel.DateFormat && requestViewModel.DateFormat(self.datePickerFormat());
-			var requestDay = moment(self.initialRequestDay(), Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+			var requestDay = moment(self.initialRequestDay(), serviceDateFormat);
 
 			requestViewModel.DateFrom && requestViewModel.DateFrom(requestDay);
 			requestViewModel.DateTo && requestViewModel.DateTo(requestDay);
@@ -394,7 +396,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			else
 				momentToday = moment().format();
 
-			var momentInitialRequestDay = moment(self.initialRequestDay(), Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+			var momentInitialRequestDay = moment(self.initialRequestDay(), serviceDateFormat);
 
 			var dateDiff = momentInitialRequestDay.diff(momentToday, "days");
 

@@ -31,7 +31,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 
 	var dayDescription = "";
 	var dayNumberDisplay = "";
-	var dayDate = moment(scheduleDay.FixedDate, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+	var dayDate = moment(scheduleDay.FixedDate, Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
 
 	if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
 		self.headerTitle = ko.observable(dayDate.format("dddd"));
@@ -168,7 +168,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 
 	self.showOvertimeAvailability = function (data) {
 		var date = self.fixedDate();
-		var momentDate = moment(date, Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+		var momentDate = moment(date, Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
 		if (data.startPositionPercentage() === 0 && data.overtimeAvailabilityYesterday) {
 			momentDate.add("days", -1);
 		}
@@ -184,8 +184,13 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 	};
 
 	self.showStaffingProbabilityBar = ko.computed(function () {
-		if(parent.staffingProbabilityForMultipleDaysEnabled)
-			return  (moment(self.fixedDate()) >= moment(self.formatedCurrentUserDate())) && (moment(self.fixedDate()) < moment(self.formatedCurrentUserDate()).add('day', constants.maximumDaysDisplayingProbability));
+		var fixedDateMoment = moment(self.fixedDate());
+		var currentUserDate = moment(self.formatedCurrentUserDate());
+		if (parent.staffingProbabilityForMultipleDaysEnabled)
+		{
+			return (fixedDateMoment >= currentUserDate) &&
+				(fixedDateMoment < currentUserDate.add('day', constants.maximumDaysDisplayingProbability));
+		}
 
 		return self.formattedFixedDate() === self.formatedCurrentUserDate();
 	});

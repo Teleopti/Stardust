@@ -113,7 +113,7 @@ Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel = function (ajax, reloadData, bl
 	function _fillFormData(data) {
 		var requestViewModel = self.requestViewModel().model;
 		requestViewModel.DateFormat(self.datePickerFormat());
-		var requestDay = moment(self.initialRequestDay(), Teleopti.MyTimeWeb.Common.ServiceDateFormat);
+		var requestDay = moment(self.initialRequestDay(), Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
 		requestViewModel.DateFrom(requestDay);
 		requestViewModel.DateTo(requestDay);
 
