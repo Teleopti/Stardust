@@ -1,5 +1,5 @@
 ﻿<div class="orgpicker-wrapper">
-	<md-select-value class="md-select-value" ng-click="$ctrl.openMenu($event)" ng-class="{'none-selected': $ctrl.selectedTeamIds.length == 0}">
+	<md-select-value role="button" class="md-select-value" ng-click="$ctrl.openMenu($event)" ng-class="{'none-selected': $ctrl.selectedTeamIds.length == 0}">
 		<span class="selected-text">{{ $ctrl.selectedText() }}</span>
 		<span class="md-select-icon" aria-hidden="true"></span>
 	</md-select-value>
@@ -34,9 +34,11 @@
 					</div>
 					<div ng-if=" !o.m.isSite " ng-class="{focused: o.isFocused}" class="team md-button md-ink-ripple">
 						<div class="wfm-checkbox">
-							<input type="checkbox" ng-click="$ctrl.toggleTeam(o)" ng-checked="o.m.site.checkTeamIsSelected(o.m.id)" ng-blur="$ctrl.orgBlurred(o)" ng-focus="$ctrl.orgFocused(o)" />
-							<span class="wfm-checkbox-toggle"></span>
-							<span class="wfm-checkbox-label" ng-bind-html="o.m.name | searchFilter:$ctrl.searchText"></span>
+							<label tabindex="-1">
+								<input type="checkbox" ng-click="$ctrl.toggleTeam(o)" ng-checked="o.m.site.checkTeamIsSelected(o.m.id)" ng-blur="$ctrl.orgBlurred(o)" ng-focus="$ctrl.orgFocused(o)" />
+								<span class="wfm-checkbox-toggle"></span>
+								<span class="wfm-checkbox-label" ng-bind-html="o.m.name | searchFilter:$ctrl.searchText"></span>
+							</label>
 						</div>
 					</div>
 				</div>
