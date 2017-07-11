@@ -50,7 +50,7 @@
             showEsl: [],
             showEmailSkill: [],
             showOtherDay: [],
-			exportToExcel: []
+            exportToExcel: []
         };
         var message = $translate
             .instant('WFMReleaseNotificationWithoutOldModuleLink')
@@ -68,8 +68,8 @@
             $scope.toggles.showScheduledStaffing = toggleSvc.Wfm_Intraday_ScheduledStaffing_41476;
             $scope.toggles.showEsl = toggleSvc.Wfm_Intraday_ESL_41827;
             $scope.toggles.showEmailSkill = toggleSvc.Wfm_Intraday_SupportSkillTypeEmail_44002;
-			$scope.toggles.showOtherDay = toggleSvc.WFM_Intraday_Show_For_Other_Days_43504;
-			$scope.toggles.exportToExcel = toggleSvc.WFM_Intraday_Export_To_Excel_44892;
+            $scope.toggles.showOtherDay = toggleSvc.WFM_Intraday_Show_For_Other_Days_43504;
+            $scope.toggles.exportToExcel = toggleSvc.WFM_Intraday_Export_To_Excel_44892;
         });
 
         var getAutoCompleteControls = function() {
@@ -131,9 +131,10 @@
         $scope.selectedSkillChange = function(item) {
             if (item) {
                 if (item.DoDisplayData) {
-                    $scope.chosenOffset.value = 0;
+					// $scope.chosenOffset.value = 0;
+					$scope.changeChosenOffset($scope.chosenOffset.value);
                     $scope.skillSelected(item);
-                    pollActiveTabData($scope.activeTab);
+                    pollActiveTabDataByDayOffset($scope.activeTab, $scope.chosenOffset.value);
                     if (prevSkill) {
                         if (!(prevSkill === autocompleteSkill.selectedSkill)) {
                             clearPrev();
@@ -154,7 +155,7 @@
 
         $scope.selectedSkillAreaChange = function(item) {
             if (item) {
-                $scope.chosenOffset.value = 0;
+                // $scope.chosenOffset.value = 0;
                 $scope.skillAreaSelected(item);
 
                 pollData($scope.activeTab);
@@ -202,7 +203,6 @@
                     $scope.latest = $filter('orderBy')(result.SkillAreas, 'Name');
                     //TO DO: get a date to filter by
                     // $scope.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
-                    // console.log($scope.latest);
                 }
                 $scope.HasPermissionToModifySkillArea = result.HasPermissionToModifySkillArea;
 
@@ -338,7 +338,7 @@
 
         function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
             var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
-
+			
             if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
                 if ($scope.selectedItem.Skills) {
                     services[activeTab].pollSkillAreaDataByDayOffset($scope.selectedItem, $scope.toggles, dayOffset);
@@ -424,7 +424,8 @@
             pollActiveTabDataByDayOffset($scope.activeTab, value);
             if (value === 0) {
                 poll();
-            }
+			}
+			
         };
     }
 })();
