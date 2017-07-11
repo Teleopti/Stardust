@@ -188,32 +188,37 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var personSchedule1 = (Tuple<IPerson, IScheduleDay>)x;
 			var personSchedule2 = (Tuple<IPerson, IScheduleDay>)y;
 
-			if (isEmptySchedule(personSchedule1.Item2) && isEmptySchedule(personSchedule2.Item2))
+			var isPS1Empty = isEmptySchedule(personSchedule1.Item2);
+			var isPS2Empty = isEmptySchedule(personSchedule2.Item2);
+			var isPS1DayOff = isDayOff(personSchedule1.Item2);
+			var isPS2DayOff = isDayOff(personSchedule2.Item2);
+
+			if (isPS1Empty && isPS2Empty || (isPS1DayOff && isPS2DayOff))
 			{
 				return string.CompareOrdinal(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
 			}
 
-			if (isEmptySchedule(personSchedule1.Item2) && !isEmptySchedule(personSchedule2.Item2))
+			if (isPS1Empty || isPS1DayOff)
 			{
 				return 1;
 			}
-			if (!isEmptySchedule(personSchedule1.Item2) && isEmptySchedule(personSchedule2.Item2))
+			if (isPS2Empty || isPS2DayOff)
 			{
 				return -1;
 			}
 
-			var ps1 = personSchedule1.Item2?.PersonAssignment();
+			var ps1 = personSchedule1.Item2.PersonAssignment();
 			var end1 = ps1 != null ? _predicate(ps1.Period) : _predicate(personSchedule1.Item2.Period);
 
 			var ps2 = personSchedule2.Item2?.PersonAssignment();
 			var end2 = ps2 != null ? _predicate(ps2.Period) : _predicate(personSchedule2.Item2.Period);
 			
-
 			if (end1.Equals(end2))
 			{
 				return string.CompareOrdinal(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
 			}
 			return end1.IsEarlierThan(end2) ? -1 : 1;
+
 		}
 
 		private bool isEmptySchedule(IScheduleDay schedule)
@@ -224,8 +229,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			}
 			var date = schedule.DateOnlyAsPeriod.DateOnly;
 			var person = schedule.Person;
-			return !_permissionProvider.IsPersonSchedulePublished(date, person, _scheduleVisibleReason) 
+			return !_permissionProvider.IsPersonSchedulePublished(date, person, _scheduleVisibleReason)
 					&& !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+		}
+
+		private bool isDayOff(IScheduleDay schedule)
+		{
+			if (schedule == null) return false;
+			var significantPart = schedule.SignificantPartForDisplay();
+			return schedule.HasDayOff() || significantPart == SchedulePartView.ContractDayOff;
 		}
 	}
 }

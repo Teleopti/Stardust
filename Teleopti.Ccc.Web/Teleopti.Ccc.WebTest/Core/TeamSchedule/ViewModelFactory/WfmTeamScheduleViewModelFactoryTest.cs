@@ -2258,9 +2258,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				});
 
 			var schedules = result.Schedules.ToArray();
-			schedules[0].Name.Should().Be.EqualTo("p3@p3");
-			schedules[3].Name.Should().Be.EqualTo("p2@p2");
-			schedules[6].Name.Should().Be.EqualTo("p1@p1");
+			
+			schedules[0].Name.Should().Be.EqualTo("p2@p2");
+			schedules[3].Name.Should().Be.EqualTo("p1@p1");
+			schedules[6].Name.Should().Be.EqualTo("p3@p3");
 		}
 	}
 }
