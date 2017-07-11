@@ -1,7 +1,8 @@
 ﻿var requestsMessagesUserTexts = {
 	MissingSubject: "Missing subject",
 	MissingStartTime: "Missing start time",
-	MissingDuration: "Missing duration"
+	MissingDuration: "Missing duration",
+	REQUESTDATE_EXCEEDS_14DAYS: "Request date exceeds 14 days"
 };
 $(document).ready(function () {
 	var vm,
@@ -13,10 +14,11 @@ $(document).ready(function () {
 			Id: '7155082E-108B-4F72-A36A-C1430C37CADA'
 		},
 		fakeRequestDetailViewModel = {
-			CancelAddingNewRequest: function() {
+			CancelAddingNewRequest: function () {
 				requestFormClosed = true;
 			}
-		};
+		},
+		requestDate = moment().format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
 
 	module('Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel',
 		{
@@ -30,7 +32,7 @@ $(document).ready(function () {
 		requestFormClosed = false;
 		addedOvertimeRequest = undefined;
 
-		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
+		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function (data) {
 			addedOvertimeRequest = data;
 		}, fakeRequestDetailViewModel);
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
@@ -48,13 +50,13 @@ $(document).ready(function () {
 	}
 
 	test('should have template', function () {
-		equal(vm.Template,'add-overtime-request-template');
+		equal(vm.Template, 'add-overtime-request-template');
 	});
 
 	test('should submit overtime request', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom('2017-06-27');
+		vm.DateFrom(requestDate);
 		vm.StartTime('19:00');
 		vm.RequestDuration('03:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
@@ -66,8 +68,8 @@ $(document).ready(function () {
 		equal(sentData.MultiplicatorDefinitionSet, '29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		var period = sentData.Period;
-		equal(period.StartDate, '2017-06-27');
-		equal(period.EndDate, '2017-06-27');
+		equal(period.StartDate, requestDate);
+		equal(period.EndDate, requestDate);
 		equal(period.StartTime, '19:00');
 		equal(period.EndTime, '22:00');
 	});
@@ -84,7 +86,7 @@ $(document).ready(function () {
 	test('should save overtime request', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom('2017-06-27');
+		vm.DateFrom(requestDate);
 		vm.StartTime('19:00');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
@@ -97,56 +99,57 @@ $(document).ready(function () {
 	test('should post correct EndDate and EndTime with cross day', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom('2017-06-27');
+		vm.DateFrom(requestDate);
 		vm.StartTime('19:00');
 		vm.RequestDuration('06:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
 
-		equal(sentData.Period.StartDate, '2017-06-27');
+		equal(sentData.Period.StartDate, requestDate);
 		equal(sentData.Period.StartTime, '19:00');
-		equal(sentData.Period.EndDate, '2017-06-28');
+		equal(sentData.Period.EndDate, moment(requestDate).add(1, 'days').format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly));
 		equal(sentData.Period.EndTime, '01:00');
 	});
 
 	test('should post correct EndDate and EndTime with intraday', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom('2017-06-27');
+		vm.DateFrom(requestDate);
 		vm.StartTime('19:30');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
 
-		equal(sentData.Period.StartDate, '2017-06-27');
+		equal(sentData.Period.StartDate, requestDate);
 		equal(sentData.Period.StartTime, '19:30');
-		equal(sentData.Period.EndDate, '2017-06-27');
+		equal(sentData.Period.EndDate, requestDate);
 		equal(sentData.Period.EndTime, '20:30');
 	});
 
 	test('should calculate correct EndDate and EndTime with meridian', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom('2017-06-27');
+		vm.DateFrom(requestDate);
 		vm.StartTime('09:30 AM');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
 
-		equal(sentData.Period.StartDate, '2017-06-27');
+		equal(sentData.Period.StartDate, requestDate);
 		equal(sentData.Period.StartTime, '09:30');
-		equal(sentData.Period.EndDate, '2017-06-27');
+		equal(sentData.Period.EndDate, requestDate);
 		equal(sentData.Period.EndTime, '10:30');
 	});
 
 	test('should not pass validation when post data has no subject', function () {
 		vm.Message('I want to work overtime');
-		vm.DateFrom('2017-06-27');
+		vm.DateFrom(requestDate);
 		vm.StartTime('19:00');
-		vm.RequestDuration('01:00');
+		vm.RequestDuration
+			('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
@@ -158,7 +161,7 @@ $(document).ready(function () {
 	test('should not pass validation when post data has no start time', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom('2017-06-27');
+		vm.DateFrom(requestDate);
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -171,7 +174,7 @@ $(document).ready(function () {
 	test('should not pass validation when post data has no duration', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom('2017-06-27');
+		vm.DateFrom(requestDate);
 		vm.StartTime('19:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
@@ -181,11 +184,25 @@ $(document).ready(function () {
 		equal(vm.ErrorMessage(), 'Missing duration');
 	});
 
+	test('should not pass validation when request date exceeds 14 days', function () {
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.DateFrom(moment().add(15, 'days').format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly));
+		vm.StartTime('19:00');
+		vm.RequestDuration('01:00');
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+
+		vm.AddRequest();
+
+		equal(addedOvertimeRequest, undefined);
+		equal(vm.ErrorMessage(), 'Request date exceeds 14 days');
+	});
+
 	test('should close overtime request form panel after posting data', function () {
 		vm.IsPostingData(false);
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom('2017-06-27');
+		vm.DateFrom(requestDate);
 		vm.StartTime('19:00');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
@@ -279,7 +296,7 @@ $(document).ready(function () {
 			MultiplicatorDefinitionSet: "9019D62F-0086-44B1-A977-9BB900B8C361"
 		};
 
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function (data) {
 			addedOvertimeRequest = data;
 		}, fakeRequestDetailViewModel);
 		requestVm.Initialize(data);

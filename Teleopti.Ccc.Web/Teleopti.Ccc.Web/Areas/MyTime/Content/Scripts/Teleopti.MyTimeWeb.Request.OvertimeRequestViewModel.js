@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function(ajax, doneCallback, parentViewModel, weekStart) {
+﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart) {
 	var self = this;
 
 	self.Id = ko.observable();
@@ -22,14 +22,14 @@
 	self.MultiplicatorDefinitionSetId = ko.observable();
 	self.TimeList = _createTimeList();
 
-	self.checkMessageLength = function(data, event) {
+	self.checkMessageLength = function (data, event) {
 		var text = $(event.target)[0].value;
 		if (text.length > 2000) {
 			self.Message(text.substr(0, 2000));
 		}
 	};
 
-	self.validateDuration = function(data, event) {
+	self.validateDuration = function (data, event) {
 		var value = $(event.target)[0].value;
 		if (!value) return;
 
@@ -49,7 +49,7 @@
 		}
 	};
 
-	self.AddRequest = function() {
+	self.AddRequest = function () {
 		if (!_validateRequiredFields()) {
 			return;
 		}
@@ -61,22 +61,22 @@
 			data: _buildPostData(),
 			dataType: 'json',
 			type: 'POST',
-			success: function(data) {
+			success: function (data) {
 				self.IsPostingData(false);
 				doneCallback(data);
 				self.CancelAddRequest();
 			},
-			error: function() {
+			error: function () {
 				self.IsPostingData(false);
 			}
 		});
 	};
 
-	self.CancelAddRequest = function() {
+	self.CancelAddRequest = function () {
 		parentViewModel.CancelAddingNewRequest();
 	};
 
-	self.Initialize = function(data) {
+	self.Initialize = function (data) {
 		if (data) {
 			self.Id(data.Id);
 
@@ -115,24 +115,26 @@
 		var dataValid = false;
 
 		if (!self.Subject() || !/\S/.test(self.Subject())) {
-			dataValid = false;
-			self.ShowError(!dataValid);
 			self.ErrorMessage(requestsMessagesUserTexts.MissingSubject);
-		} else if(_buildPostData().Period.StartTime.length != 5){
-			dataValid = false;
-			self.ShowError(!dataValid);
+		} else if (_buildPostData().Period.StartTime.length != 5) {
 			self.ErrorMessage(requestsMessagesUserTexts.MissingStartTime);
-		} else if(!self.RequestDuration() || self.RequestDuration().length != 5){
-			dataValid = false;
-			self.ShowError(!dataValid);
+		} else if (!self.RequestDuration() || self.RequestDuration().length != 5) {
 			self.ErrorMessage(requestsMessagesUserTexts.MissingDuration);
-		} else{
+		} else if (!_isDateFromWithin14Days()) {
+			self.ErrorMessage(requestsMessagesUserTexts.REQUESTDATE_EXCEEDS_14DAYS);
+		}
+		else {
 			dataValid = true;
-			self.ShowError(!dataValid);
 			self.ErrorMessage('');
 		}
 
+		self.ShowError(!dataValid);
 		return dataValid;
+	}
+
+	function _isDateFromWithin14Days() {
+		var days = Math.ceil(moment.duration(moment(self.DateFrom(), Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly) - moment()).asDays());
+		return days <= 14 && days >= 0;
 	}
 
 	function _buildPostData() {

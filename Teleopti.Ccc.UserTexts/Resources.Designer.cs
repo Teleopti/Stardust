@@ -25266,6 +25266,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Request date exceeds 14 days.
+        /// </summary>
+        public static string RequestDateExceeds14Days {
+            get {
+                return ResourceManager.GetString("RequestDateExceeds14Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There is already absence in the schedule for given period..
         /// </summary>
         public static string RequestDenyReasonAlreadyAbsent {
