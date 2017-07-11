@@ -14,7 +14,7 @@ angular.module('wfm.forecasting')
 function ForecastChartCtrl($translate, $filter) {
 	var ctrl = this;
 	var chart;
-	var selection = 0;
+	var selectedItems = [];
 	ctrl.refresh = generateForecastChart;
 
 	function checkSelection(arr, item) {
@@ -34,7 +34,7 @@ function ForecastChartCtrl($translate, $filter) {
 			return;
 		}
 
-		var selection = 0;
+		var selectedItems = [];
 		var preparedData = {};
 		ctrl.onClick(ctrl.selectedDays);
 
@@ -45,17 +45,32 @@ function ForecastChartCtrl($translate, $filter) {
 			vtacwSeries: ['vtacw'],
 			vtcSeries: ['vtc'],
 			vttSeries: ['vtt'],
-			vtttSeries: ['vttt']
+			vtttSeries: ['vttt'],
+			vcamSeries: ['vcampaign'],
+			voverrideSeries: ['voverride']
 		}
 
 		for (var i = 0; i < days.length; i++) {
-			preparedData.dateSeries.push(moment(days[i].date).format('L'));
+			preparedData.dateSeries.push(moment(days[i].date).format('DD/MM/YYYY'));
 			preparedData.vacwSeries.push(days[i].vacw);
 			preparedData.vcSeries.push(days[i].vc);
 			preparedData.vtacwSeries.push(days[i].vtacw);
 			preparedData.vtcSeries.push(days[i].vtc);
 			preparedData.vttSeries.push(days[i].vtt);
 			preparedData.vtttSeries.push(days[i].vttt);
+
+			if (days[i].vcampaign) {
+				preparedData.vcamSeries.push(days[i].vcampaign);
+			} else{
+				preparedData.vcamSeries.push(null);
+			}
+
+			if (days[i].voverride) {
+				preparedData.voverrideSeries.push(days[i].voverride);
+			} else{
+				preparedData.voverrideSeries.push(null);
+			}
+
 		}
 
 		chart = c3.generate({
@@ -64,6 +79,8 @@ function ForecastChartCtrl($translate, $filter) {
 				x: 'date',
 				columns: [
 					preparedData.dateSeries,
+					preparedData.vcamSeries,
+					preparedData.voverrideSeries,
 
 					preparedData.vtcSeries,
 					preparedData.vcSeries,
@@ -76,6 +93,8 @@ function ForecastChartCtrl($translate, $filter) {
 				],
 				names: {
 					vtc: $translate.instant('TotalCallsCaret'),
+					vcampaign: $translate.instant('Campaign'),
+					voverride: $translate.instant('Override'),
 					vc: $translate.instant('CallsCaret'),
 					vttt: $translate.instant('TotalTalkTimeCaret'),
 					vtt: $translate.instant('TalkTimeCaret'),
@@ -88,7 +107,9 @@ function ForecastChartCtrl($translate, $filter) {
 					vttt: '#77ac39',
 					vtt: '#C2E085',
 					vtacw: '#eb2e9e',
-					vacw: '#F488C8'
+					vacw: '#F488C8',
+					voverride: '#9C27B0',
+					vcampaign: '#EF5350'
 				},
 				hide: ['vc', 'vtt', 'vacw'],
 				selection: {
@@ -96,13 +117,20 @@ function ForecastChartCtrl($translate, $filter) {
 					draggable: true,
 					grouped: true
 				},
-				onselected: function(){
-					selection = chart.selected();
-					ctrl.onClick(selection);
+				onselected: function(d){
+					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format('YYYY-MM-DDTHH:MM:SSZ');
+
+					if (selectedItems.indexOf(temp) == -1) {
+					    selectedItems.push({date:temp});
+					}
+					ctrl.onClick(selectedItems);
 				},
-				onunselected: function () {
-					selection = chart.selected();
-					ctrl.onClick(selection);
+				onunselected: function (d) {
+					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format('YYYY-MM-DDTHH:MM:SSZ');
+					if (selectedItems.indexOf(temp) == -1) {
+							selectedItems.splice(selectedItems.indexOf(temp),1);
+					}
+					ctrl.onClick(selectedItems);
 				}
 			},//end of data
 			point: {

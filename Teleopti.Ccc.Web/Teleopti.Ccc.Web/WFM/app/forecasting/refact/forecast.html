@@ -41,25 +41,26 @@
             <md-progress-linear md-mode="indeterminate"></md-progress-linear>
           </div>
           <div ng-if="!vm.skillMaster.IsForecastRunning">
-            <div class="con-row">
-              <div class="con-flex x3">
+            <div class="con-row"  style="align-items:baseline;">
+              <div class="con-flex">
                 <!-- {{'ForecastWorkloadIntro' | translate}} -->
                 This is the current forecast for this workload.
               </div>
-              <div class="con-flex"></div>
-              <div class="con-flex">
+              <div class="con-flex" >
                 <md-select ng-model="vm.selectedScenario" placeholder="{{'Scenario' | translate}}">
                   <md-option ng-repeat="scenario in vm.skillMaster.Scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
                 </md-select>
                 <md-tooltip>{{'Scenario' | translate}}</md-tooltip>
               </div>
-            </div>
-            <div class="con-row">
-              <div class="con-flex">
+              <div class="con-flex line-right">
                 <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart(skill.ChartId, vm.currentWorkload.Days)">
                   <i class="mdi mdi-sync" ></i>
                   <md-tooltip>Refresh chart</md-tooltip>
                 </div>
+              </div>
+            </div>
+            <div class="con-row">
+              <div class="con-flex">
                 <forecast-chart chart-id="skill.ChartId" selectable="false" refresh="vm.loadChart" on-click="vm.pointClick"> </forecast-chart>
               </div>
             </div>

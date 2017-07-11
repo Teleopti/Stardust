@@ -145,6 +145,7 @@
 					$scope.modifyDays = [];
 					var isOnlyOneDaySelected = workload.selectedDayCount == 1;
 					angular.forEach(workload.selectedDays(), function (value) {
+
 						if (value.id == 'vc') {
 							$scope.modifyDays.push({
 								date: new Date(Date.UTC(value.x.getFullYear(), value.x.getMonth(), value.x.getDate(), 0, 0, 0))
@@ -168,6 +169,7 @@
 
 				$scope.modalModifyLaunch = false;
 				$scope.displayModifyModal = function (workload) {
+
 					if ($scope.disableModify(workload.selectedDays().length)) {
 						return;
 					}

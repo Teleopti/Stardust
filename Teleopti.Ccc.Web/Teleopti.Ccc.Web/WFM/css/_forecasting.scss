@@ -124,8 +124,12 @@
 .c3-circles-vcombo > .c3-circle,
 .c3-circles-voverride > .c3-circle,
 .c3-circles-vcampaign > .c3-circle{
-	transition: .1s all ease-in-out;
 	stroke-width: 5!important;
+	z-index: 99;
+}
+
+.wfm-chart .c3-selected-circle{
+	fill:rgba(255, 255, 255, 0.4);
 }
 
 forecast-result-chart >.c3 > svg{
