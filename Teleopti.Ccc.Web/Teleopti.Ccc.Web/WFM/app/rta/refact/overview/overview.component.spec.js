@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-xdescribe('rtaOverviewComponent', function () {
+describe('rtaOverviewComponent', function () {
   var $controllerBuilder,
     $fakeBackend,
     $componentController,
@@ -10,6 +10,23 @@ xdescribe('rtaOverviewComponent', function () {
     scope,
     stateParams,
     vm;
+
+  var
+    channelSales,
+    phone,
+    invoice,
+    bts;
+
+  var
+    skills1,
+    skills2,
+    allSkills;
+
+  var
+    skillArea1,
+    skillArea2;
+
+  var skillAreas;
 
   var goodColor = '#C2E085';
   var warningColor = '#FFC285';
@@ -37,6 +54,43 @@ xdescribe('rtaOverviewComponent', function () {
     $fakeBackend.clear();
     scope = $controllerBuilder.setup('RtaMainController');
 
+
+    channelSales = {
+      Name: 'Channel Sales',
+      Id: 'channelSalesId'
+    };
+
+    phone = {
+      Name: 'Phone',
+      Id: 'phoneId'
+    };
+
+    invoice = {
+      Name: 'Invoice',
+      Id: 'invoiceId'
+    };
+
+    bts = {
+      Name: 'BTS',
+      Id: 'btsId'
+    };
+
+    skills1 = [channelSales, phone];
+    skills2 = [invoice, bts];
+    allSkills = [channelSales, phone, invoice, bts];
+
+    skillArea1 = {
+      Id: 'skillArea1Id',
+      Name: 'SkillArea1',
+      Skills: skills1
+    };
+    skillArea2 = {
+      Id: 'skillArea2Id',
+      Name: 'SkillArea2',
+      Skills: skills2
+    };
+    skillAreas = [skillArea1, skillArea2];
+
   }));
 
   it('should display site card data', function () {
@@ -61,7 +115,6 @@ xdescribe('rtaOverviewComponent', function () {
     expect(ctrl.siteCards[0].site.Color).toEqual(warningColor);
   });
 
-  //DET VAR NÅGOT ON INIT, får ingen respons..... 
   it('should display site card with skill data', function () {
     stateParams.skillIds = ['channelSalesId'];
     $fakeBackend
@@ -72,18 +125,61 @@ xdescribe('rtaOverviewComponent', function () {
         AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
+      })
+      .withSiteAdherence({
+        Id: 'parisId',
+        Name: 'Paris',
+        SkillId: 'phoneId',
+        AgentsCount: 10,
+        InAlarmCount: 5,
+        Color: 'warning'
       });
 
     vm = $controllerBuilder.createController().vm;
+    $httpBackend.flush();
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
 
+    expect(ctrl.siteCards.length).toEqual(1);
     expect(ctrl.siteCards[0].site.Id).toEqual('londonId');
     expect(ctrl.siteCards[0].site.Name).toEqual('London');
     expect(ctrl.siteCards[0].site.AgentsCount).toEqual(11);
     expect(ctrl.siteCards[0].site.InAlarmCount).toEqual(5);
     expect(ctrl.siteCards[0].site.Color).toEqual(warningColor);
+  });
+
+  it('should display site card with skill area data', function () {
+    stateParams.skillAreaId = 'skillArea1Id';
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId',
+        SkillId: 'channelSalesId',
+        Name: 'London',
+        AgentsCount: 11,
+        InAlarmCount: 2,
+        Color: 'good'
+      })
+      .withSiteAdherence({
+        Id: 'parisId',
+        SkillId: 'invoiceId',
+        Name: 'Paris',
+        AgentsCount: 7,
+        InAlarmCount: 2,
+        Color: 'good'
+      });
+
+    vm = $controllerBuilder.createController(undefined, skillAreas).vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards
+    });
+
+    expect(ctrl.siteCards.length).toEqual(1);
+    expect(ctrl.siteCards[0].site.Id).toEqual('londonId');
+    expect(ctrl.siteCards[0].site.Name).toEqual('London');
+    expect(ctrl.siteCards[0].site.AgentsCount).toEqual(11);
+    expect(ctrl.siteCards[0].site.InAlarmCount).toEqual(2);
+    expect(ctrl.siteCards[0].site.Color).toEqual(goodColor);
   });
 
   it('should display closed site cards by default', function () {

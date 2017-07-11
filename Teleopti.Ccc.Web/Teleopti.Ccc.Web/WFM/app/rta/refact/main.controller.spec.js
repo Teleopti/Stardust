@@ -222,11 +222,20 @@ describe('RtaMainController', function () {
           AgentsCount: 11,
           InAlarmCount: 5,
           Color: 'warning'
+        })
+         .withSiteAdherence({
+          Id: 'parisId',
+          Name: 'Paris',
+          SkillId: 'invoiceId',
+          AgentsCount: 10,
+          InAlarmCount: 5,
+          Color: 'warning'
         });
 
       vm = $controllerBuilder.createController().vm;
       $httpBackend.flush();
 
+      expect(vm.siteCards.length).toEqual(1);
       expect(vm.siteCards[0].site.Id).toEqual('londonId');
       expect(vm.siteCards[0].site.Name).toEqual('London');
       expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
