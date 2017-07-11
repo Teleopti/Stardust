@@ -24,6 +24,7 @@
 		vm.teamNameMap = $stateParams.teamNameMap || {};
 		vm.enableClickableCell = true;
 		vm.onCellClick = openSelectedAgentDayInNewWindow;
+		vm.sortOption = $stateParams.selectedSortOption;
 
 		Object.defineProperty(vm, 'selectedTeamIds', { value: [] });
 

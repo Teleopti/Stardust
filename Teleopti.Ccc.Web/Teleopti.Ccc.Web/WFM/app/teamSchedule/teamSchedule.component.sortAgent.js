@@ -44,5 +44,17 @@
 			item.isSelected = true;
 			$scope.$emit('teamSchedule.sortOption.update', { option: ctrl.selectedOption });
 		}
+		$scope.$on("teamSchedule.init.sortOption",
+			function (e, d) {
+				ctrl.availableOptions.forEach(function (item) {
+					if (item.key === d.option) {
+						item.isSelected = true;
+						ctrl.selectedOption = d.option;
+					} else {
+						item.isSelected = false;
+					}
+					
+				});
+			});
 	}
 })(angular);

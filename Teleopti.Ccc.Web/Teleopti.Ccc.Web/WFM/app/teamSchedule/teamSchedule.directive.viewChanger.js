@@ -14,7 +14,8 @@
 				selectedDate: '=?',
 				selectedTeamIds: '=?',
 				teamNameMap: '=?',
-				selectedFavorite: '=?'
+				selectedFavorite: '=?',
+				selectedSortOption: '=?'
 			},
 			bindToController: true,
 			controller: viewChangerController
@@ -36,13 +37,12 @@
 		vc.changeView = function(viewState) {
 			var params = {};
 			params.do = true;
-
 			if (angular.isDefined(vc.keyword)) params.keyword = vc.keyword;
 			if (angular.isDefined(vc.selectedDate)) params.selectedDate = vc.selectedDate;
 			if (angular.isDefined(vc.selectedTeamIds)) params.selectedTeamIds = vc.selectedTeamIds;
 			if (angular.isDefined(vc.teamNameMap)) params.teamNameMap = vc.teamNameMap;
 			if (angular.isDefined(vc.selectedFavorite)) params.selectedFavorite = vc.selectedFavorite;
-
+			if (angular.isDefined(vc.selectedSortOption)) params.selectedSortOption = vc.selectedSortOption;
 			$state.go(viewState, params);
 		};
 	}

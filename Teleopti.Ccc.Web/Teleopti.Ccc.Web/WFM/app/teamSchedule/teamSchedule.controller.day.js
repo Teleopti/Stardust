@@ -450,7 +450,10 @@
 					replaceArrayValues([loggedonUsersTeamId], vm.selectedTeamIds);
 				}
 			}
-
+			if ($stateParams.selectedSortOption) {
+				vm.sortOption = $stateParams.selectedSortOption;
+				$scope.$broadcast('teamSchedule.init.sortOption', {option:vm.sortOption});
+			}
 			vm.resetSchedulePage();
 		});
 

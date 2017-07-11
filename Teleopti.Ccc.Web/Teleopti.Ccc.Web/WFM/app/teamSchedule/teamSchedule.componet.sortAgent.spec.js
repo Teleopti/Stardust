@@ -1,12 +1,15 @@
 describe('sortAgent component tests', function () {
-	var $componentController, $rootScope;
+	var $componentController, $rootScope, $compile;
+	beforeEach(module('wfm.templates'));
+
 	beforeEach(function () {
 		module("wfm.teamSchedule");
 	});
 
-	beforeEach(inject(function (_$componentController_, _$rootScope_) {
+	beforeEach(inject(function (_$componentController_, _$rootScope_, _$compile_) {
 		$componentController = _$componentController_;
 		$rootScope = _$rootScope_;
+		$compile = _$compile_;
 	}));
 
 	it('should view all sorting options',function() {
@@ -53,5 +56,21 @@ describe('sortAgent component tests', function () {
 		ctrl.select(ctrl.availableOptions[0]);
 
 		expect(selectedOption).toEqual(ctrl.availableOptions[0].key);
+	});
+
+	it('should init selected sort option when there is option', function () {
+		var html = '<sort-agent></sort-agent>';
+		var scope = $rootScope.$new();
+		var target = $compile(html)(scope);
+		scope.$apply();
+		var innerScope = angular.element(target[0].querySelector('.sort-menu')).scope();
+		scope.$broadcast('teamSchedule.init.sortOption', { option: "StartTime" });
+		var selected = innerScope.$ctrl.availableOptions.filter(function (item) {
+			return item.isSelected;
+		});
+
+		expect(selected.length).toEqual(1);
+		expect(selected[0].key).toEqual("StartTime");
+		expect(innerScope.$ctrl.selectedOption).toEqual("StartTime");
 	});
 });
