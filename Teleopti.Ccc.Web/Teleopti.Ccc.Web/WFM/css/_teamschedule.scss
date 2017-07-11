@@ -1185,9 +1185,7 @@ organization-picker {
 		input[type='checkbox'] {
 			display: inline;
 			opacity: 0;
-			height: 20px;
-			width: 20px;
-			margin: -5px 0 0 -20px;
+			position: absolute;
 		}
 	}
 
@@ -1262,12 +1260,8 @@ organization-picker {
 	}
 }
 
-.shadow-site-toggle:focus + .site-toggle {
-	box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
-	border-radius: 50%;
-	width: 1em;
-	height: 1em;
-	overflow: hidden;
+.orgpicker-menu .shadow-site-toggle:focus + .site-toggle {
+	background-color: rgba(158,158,158,0.26);
 }
 
 .orgpicker-menu.single-mode {

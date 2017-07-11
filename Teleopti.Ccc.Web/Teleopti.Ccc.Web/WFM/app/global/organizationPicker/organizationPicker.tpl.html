@@ -22,10 +22,10 @@
 								</label>
 							</div>
 							<span flex></span>
-							<div tabindex="-1">
-								<label tabindex="-1">
-									<input type="checkbox" class="shadow-site-toggle" ng-blur="$ctrl.orgBlurred(o)" ng-focus="$ctrl.orgFocused(o)" ng-click="$ctrl.collapseSite(o)" />
-									<span class="xmd-toggle-icon site-toggle" tabindex="-1">
+							<input type="checkbox" id="org-{{::o.m.id}}" class="shadow-site-toggle" ng-blur="$ctrl.orgBlurred(o)" ng-focus="$ctrl.orgFocused(o)" ng-click="$ctrl.collapseSite(o)" />
+							<div tabindex="-1" class="site-toggle">
+								<label for="org-{{::o.m.id}}">
+									<span class="md-toggle-icon" tabindex="-1">
 										<i class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
 									</span>
 								</label>
