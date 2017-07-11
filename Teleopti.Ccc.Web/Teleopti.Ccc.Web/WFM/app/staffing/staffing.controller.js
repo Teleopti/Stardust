@@ -195,23 +195,23 @@
 		};
 
 		function dynamicIcon(skill) {
-			//good use of case switch
 			if (!skill.DoDisplayData) {
 				return 'mdi mdi-alert';
 			}
 			if (skill.IsMultisiteSkill) {
 				return 'mdi mdi-hexagon-multiple';
 			}
-			if (skill.SkillType === 'SkillTypeChat') {
-				return 'mdi mdi-message-text-outline';
-			} else if (skill.SkillType === 'SkillTypeEmail') {
-				return 'mdi mdi-email-outline';
-			} else if (skill.SkillType === 'SkillTypeEmail') {
-				return 'mdi mdi-email-outline';
-			} else if (skill.SkillType === 'SkillTypeInboundTelephony') {
-				return 'mdi mdi-phone';
-			} else if (skill.SkillType === 'SkillTypeRetail') {
-				return 'mdi mdi-credit-card';
+			switch (skill.SkillType) {
+				case 'SkillTypeChat':
+					return 'mdi mdi-message-text-outline';
+				case 'SkillTypeEmail':
+					return 'mdi mdi-email-outline';
+				case 'SkillTypeInboundTelephony':
+					return 'mdi mdi-phone';
+				case 'SkillTypeRetail':
+					return 'mdi mdi-credit-card';
+				default:
+					return 'mdi mdi-creation'
 			}
 		}
 
@@ -241,8 +241,6 @@
 				vm.hasRequestedSuggestion = false;
 			});
 		};
-
-		
 
 		function getCompensations() {
 			var query = staffingService.getCompensations.query();
@@ -275,14 +273,12 @@
 				if (staffingPrecheck(response.DataSeries)) {
 					if (response.StaffingHasData) {
 						vm.hasSuggestionData = true;
-
 					} else {
 						vm.hasSuggestionData = false;
 						vm.hasRequestedSuggestion = false;
 					}
 					vm.staffingDataAvailable = true;
 					vm.overTimeModels = response.OverTimeModels;
-
 					staffingData.scheduledStaffing = utilService.roundDataToOneDecimal(response.DataSeries.ScheduledStaffing);
 					staffingData.forcastedStaffing = utilService.roundDataToOneDecimal(response.DataSeries.ForecastedStaffing);
 					staffingData.absoluteDifference = response.DataSeries.AbsoluteDifference;
@@ -300,9 +296,7 @@
 					vm.staffingDataAvailable = false;
 				}
 			});
-
 		};
-
 		function generateChartForView(data) {
 			c3.generate(chartService.config(data));
 		}
