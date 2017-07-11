@@ -9,6 +9,7 @@ GO
 --				yyyy-mm-dd Some comment
 -- Description:	Make it possible to add a firewall rule with limited persmissions
 -- Example call: EXEC [dbo].[add_teleopti_firewall_rule] @ip_address='65.132.155.83', @personId='A2D29585-C3F3-47FF-86EF-BC4CAB5087CC'
+-- select * from sys.database_firewall_rules
 -- =============================================
 CREATE PROC [dbo].[add_teleopti_firewall_rule]
 @ip_address varchar(50),
@@ -24,10 +25,15 @@ RETURN 0
 
 --init
 declare @ruleName nvarchar(128) = ''
+declare @ClientPrefix nvarchar(50) = 'SmartClientPortal_'
 
 --clean up old entries (>30 days)
-DECLARE IP_cursor CURSOR FOR  
-select [Name] from sys.database_firewall_rules where dateadd(day,30,create_date) < getutcdate()
+DECLARE IP_cursor CURSOR FOR
+	SELECT [Name] FROM sys.database_firewall_rules
+	WHERE 1=1
+	AND name LIKE @ClientPrefix + '%'
+	AND dateadd(day,30,create_date) < getutcdate() 
+
 OPEN IP_cursor   
 FETCH NEXT FROM IP_cursor INTO @ruleName
 	WHILE @@FETCH_STATUS = 0   
@@ -39,7 +45,7 @@ CLOSE IP_cursor
 DEALLOCATE IP_cursor
 
 --Add new IP, if needed
-set @ruleName = N'SmartClientPortal_' + @ip_address + '_' + cast(@personId as varchar(36))
+set @ruleName = @ClientPrefix + @ip_address + '_' + cast(@personId as varchar(36))
 if not exists (select 1 from sys.database_firewall_rules where start_ip_address = @ip_address)
 begin
 	execute sp_set_database_firewall_rule @name=@ruleName, @start_ip_address=@ip_address, @end_ip_address=@ip_address
