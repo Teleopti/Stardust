@@ -27,7 +27,7 @@ declare @ruleName nvarchar(128) = ''
 
 --clean up old entries (>30 days)
 DECLARE IP_cursor CURSOR FOR  
-select [Name] from sys.database_firewall_rules where dateadd(day,30,create_date) > getutcdate()
+select [Name] from sys.database_firewall_rules where dateadd(day,30,create_date) < getutcdate()
 OPEN IP_cursor   
 FETCH NEXT FROM IP_cursor INTO @ruleName
 	WHILE @@FETCH_STATUS = 0   
