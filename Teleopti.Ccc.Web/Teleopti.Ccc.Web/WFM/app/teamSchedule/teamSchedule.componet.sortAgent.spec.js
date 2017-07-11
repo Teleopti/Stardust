@@ -73,4 +73,20 @@ describe('sortAgent component tests', function () {
 		expect(selected[0].key).toEqual("StartTime");
 		expect(innerScope.$ctrl.selectedOption).toEqual("StartTime");
 	});
+
+	it('should deselect the sort option when select the selected option again', function() {
+
+		var ctrl = $componentController('sortAgent');
+		ctrl.$onInit();
+		ctrl.select(ctrl.availableOptions[0]);
+		ctrl.select(ctrl.availableOptions[0]);
+
+		var selected = ctrl.availableOptions.filter(function (item) {
+			return item.isSelected;
+		});
+
+		expect(selected.length).toEqual(0);
+		expect(!!ctrl.selectedOption).toEqual(false);
+	});
+
 });

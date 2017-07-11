@@ -10,7 +10,7 @@
 		var ctrl = this;
 		ctrl.selectedOption = "";
 		ctrl.availableOptions = [];
-		
+
 		ctrl.$onInit = function () {
 			ctrl.availableOptions = [
 				{
@@ -37,11 +37,15 @@
 		};
 
 		ctrl.select = function (item) {
-			ctrl.selectedOption = item.key;
-			ctrl.availableOptions.forEach(function(item) {
+			ctrl.availableOptions.forEach(function (item) {
 				item.isSelected = false;
 			});
-			item.isSelected = true;
+			if (ctrl.selectedOption === item.key) {
+				ctrl.selectedOption = undefined;
+			} else {
+				ctrl.selectedOption = item.key;
+				item.isSelected = true;
+			}
 			$scope.$emit('teamSchedule.sortOption.update', { option: ctrl.selectedOption });
 		}
 		$scope.$on("teamSchedule.init.sortOption",
@@ -53,7 +57,7 @@
 					} else {
 						item.isSelected = false;
 					}
-					
+
 				});
 			});
 	}
