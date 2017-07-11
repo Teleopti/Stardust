@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -556,9 +557,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			PersonRequestRepository.Add(textRequest);
 
 			var result = Target.FetchDayData(date).Schedule;
-			result.TextRequestCount.Should().Be.EqualTo(2);
+			result.RequestsCount.Should().Be.EqualTo(2);
 		}
 
+
+		[Test]
+		public void ShouldMapOvertimeRequestCountOnFetchDayData()
+		{
+			var date = new DateOnly(2014, 12, 18);
+			var period = new DateTimePeriod(2014, 12, 18, 8, 2014, 12, 18, 17);
+			var overtimeRequest = new PersonRequest(User.CurrentUser(), new OvertimeRequest(new MultiplicatorDefinitionSet("test",MultiplicatorType.Overtime),period));
+			PersonRequestRepository.Add(overtimeRequest);
+			PersonRequestRepository.Add(overtimeRequest);
+
+			var result = Target.FetchDayData(date).Schedule;
+			result.RequestsCount.Should().Be.EqualTo(2);
+		}
 		[Test]
 		public void ShouldMapSummaryForDayWithOtherSignificantPartOnFetchDayData()
 		{

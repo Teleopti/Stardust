@@ -221,7 +221,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return item.fixedDate() === fixedDate;
 			});
 			if (arr.length > 0) {
-				arr[0].textRequestCount(arr[0].textRequestCount() + 1);
+				arr[0].requestsCount(arr[0].requestsCount() + 1);
 			}
 		};
 

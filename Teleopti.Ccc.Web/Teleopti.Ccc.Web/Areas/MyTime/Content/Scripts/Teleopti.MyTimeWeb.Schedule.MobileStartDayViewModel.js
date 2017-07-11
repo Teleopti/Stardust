@@ -33,7 +33,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.layers = ko.observableArray();
 	self.scheduleHeight = ko.observable();
 	self.unreadMessageCount = ko.observable(0);
-	self.requestCount = ko.observable(0);
+	self.requestsCount = ko.observable(0);
 	self.requestViewModel = ko.observable();
 
 	self.textRequestPermission = ko.observable();
@@ -101,7 +101,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.openHourPeriod = data.Schedule.OpenHourPeriod;
 
 		self.hasOvertime(data.Schedule.HasOvertime);
-		self.requestCount(data.Schedule.TextRequestCount);
+		self.requestsCount(data.Schedule.RequestsCount);
 		self.baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
 
 		if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
@@ -339,13 +339,13 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 	function addRequestCallBack(data) {
 		if (data) {
-			var count = self.requestCount();
+			var count = self.requestsCount();
 			var date = moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth));
 			var formattedDate = date.format(constants.serviceDateTimeFormat.dateOnly);
 			if (self.requestDay.format(constants.serviceDateTimeFormat.dateOnly) === formattedDate) {
 				count++;
 			}
-			self.requestCount(count);
+			self.requestsCount(count);
 		}
 		resetRequestViewModel();
 	}

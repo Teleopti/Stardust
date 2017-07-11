@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 
 	public class DayViewModel
 	{
-		public int TextRequestCount { get; set; }
+		public int RequestsCount { get; set; }
 		public string Date { get; set; }
 		public string FixedDate { get; set; }
 		public SpecialDateState State { get; set; }

@@ -161,19 +161,19 @@
 	});
 
 	test("should show request link for current day when there are requests", function () {
-		startDayData.Schedule.TextRequestCount = 1;
+		startDayData.Schedule.RequestsCount = 1;
 
 		setupRequestCountTemplate();
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-		equal(vm.requestCount(), 1);
+		equal(vm.requestsCount(), 1);
 
 		equal(1, $("#page:visible").length);
 	});
 
 	test("should navigate to requests", function () {
-		startDayData.Schedule.TextRequestCount = 1;
+		startDayData.Schedule.RequestsCount = 1;
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
 		vm.navigateToRequests();
@@ -185,7 +185,7 @@
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
 		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm();
-		equal(vm.requestCount(), 0);
+		equal(vm.requestsCount(), 0);
 
 		equal(0, $("#page:visible").length);
 	});
@@ -229,7 +229,7 @@
 
 		equal(requestViewModel.Template(), templateConfig.default);
 
-		equal(vm.requestCount(), 1);
+		equal(vm.requestsCount(), 1);
 	});
 
 	test("should show add absence request form", function () {
@@ -295,7 +295,7 @@
 
 		equal(requestViewModel.Template(), templateConfig.default);
 
-		equal(vm.requestCount(), 1);
+		equal(vm.requestsCount(), 1);
 	});
 
 	test("should show absence reporting form", function () {
@@ -423,7 +423,7 @@
 		startDayData.Date = "2017-04-28";
 		requestViewModel.SaveShiftExchangeOffer();
 
-		equal(vm.requestCount(), 1);
+		equal(vm.requestsCount(), 1);
 		equal(requestViewModel.Template, templateConfig.postShiftForTrade);
 	});
 
@@ -454,7 +454,7 @@
 
 		equal(requestViewModel.Template(), templateConfig.default);
 
-		equal(vm.requestCount(), 0);
+		equal(vm.requestsCount(), 0);
 	});
 
 	test("should navigate to team schedule", function () {
@@ -554,7 +554,7 @@
 	}
 
 	function setupRequestCountTemplate() {
-		var template = $("<span id='page' class='glyphicon glyphicon-comment' data-bind='visible: requestCount() > 0'></span>");
+		var template = $("<span id='page' class='glyphicon glyphicon-comment' data-bind='visible: requestsCount() > 0'></span>");
 		$("body").append(template);
 		templates.push(template);
 	}
@@ -639,7 +639,7 @@
 			"DisplayDate": "28/04/2017",
 			"IsToday": false,
 			"Schedule": {
-				"TextRequestCount": 0,
+				"RequestsCount": 0,
 				"Date": "28/04/2017",
 				"FixedDate": "2017-04-28",
 				"State": 0,

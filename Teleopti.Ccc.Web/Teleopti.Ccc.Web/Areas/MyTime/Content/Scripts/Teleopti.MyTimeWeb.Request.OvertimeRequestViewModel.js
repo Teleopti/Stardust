@@ -113,7 +113,7 @@
 
 	function _validateRequiredFields() {
 		var dataValid = false;
-
+		
 		if (!self.Subject() || !/\S/.test(self.Subject())) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_SUBJECT);
 		} else if (_buildPostData().Period.StartTime.length != 5) {
@@ -133,7 +133,11 @@
 	}
 
 	function _isDateFromWithin14Days() {
-		var days = Math.ceil(moment.duration(moment(self.DateFrom(), Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly) - moment()).asDays());
+		var dateFromMoment = self.DateFrom();
+		if (!moment.isMoment(dateFromMoment))
+			dateFromMoment = moment(dateFromMoment, Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
+
+		var days = Math.ceil(moment.duration(dateFromMoment - moment()).asDays());
 		return days <= 14 && days >= 0;
 	}
 

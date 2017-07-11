@@ -68,7 +68,7 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 		return $("<div/>").text(scheduleDay.Note.Message).html();
 	});
 
-	self.textRequestCount = ko.observable(scheduleDay.TextRequestCount);
+	self.requestsCount = ko.observable(scheduleDay.RequestsCount);
 	self.overtimeAvailability = ko.observable(scheduleDay.OvertimeAvailabililty);
 	self.probabilityClass = ko.observable(scheduleDay.ProbabilityClass);
 	self.probabilityText = ko.observable(scheduleDay.ProbabilityText);
@@ -85,8 +85,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 		return self.probabilityClass();
 	});
 
-	self.hasTextRequest = ko.computed(function () {
-		return self.textRequestCount() > 0;
+	self.hasRequests = ko.computed(function () {
+		return self.requestsCount() > 0;
 	});
 
 	self.hasNote = ko.observable(scheduleDay.HasNote);
@@ -129,8 +129,8 @@ Teleopti.MyTimeWeb.Schedule.DayViewModel = function (scheduleDay, parent) {
 		return message;
 	});
 
-	self.textRequestText = ko.computed(function () {
-		return parent.userTexts.XRequests.format(self.textRequestCount());
+	self.requestsText = ko.computed(function () {
+		return parent.userTexts.XRequests.format(self.requestsCount());
 	});
 
 	self.textOvertimeAvailabilityText = ko.computed(function () {

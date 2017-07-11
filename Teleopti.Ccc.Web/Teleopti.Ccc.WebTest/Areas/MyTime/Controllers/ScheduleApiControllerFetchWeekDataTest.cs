@@ -643,7 +643,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			PersonRequestRepository.Add(textRequest);
 
 			var result = Target.FetchWeekData(null).Days.ElementAt(3);
-			result.TextRequestCount.Should().Be.EqualTo(2);
+			result.RequestsCount.Should().Be.EqualTo(2);
 		}
 
 		[Test]

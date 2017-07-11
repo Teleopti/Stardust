@@ -152,7 +152,7 @@
                         <!-- /ko -->
                     </div>
                     <div class="weekview-day-symbol" data-bind="click: $parent.showAddRequestForm, css: { 'weekview-day-show-request': requestPermission }">
-                        <div class="weekview-day-symbol-request pull-right weekview-day-icon" data-bind="visible: hasTextRequest, tooltip: { title: textRequestText, html: true }, click: navigateToRequests">
+                        <div class="weekview-day-symbol-request pull-right weekview-day-icon" data-bind="visible: hasRequests, tooltip: { title: requestsText, html: true }, click: navigateToRequests">
                             <i class="glyphicon glyphicon-comment"></i>
                         </div>
                         <div class="holiday-agents weekview-day-show-request pull-right weekview-day-icon" data-bind="visible: absenceRequestPermission, tooltip: { title: holidayChanceText, html: true }">
