@@ -33,6 +33,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 		}
 
 		[Test]
+		public void ShouldGetNullAgentStateForNoSelection()
+		{
+			
+			var agentState = Target.For(new AgentStateFilter { InAlarm = false}).States;
+
+			agentState.Should().Be.Null();
+		}
+		[Test]
 		public void ShouldGetAgentStatesForSites()
 		{
 			var personId1 = Guid.NewGuid();

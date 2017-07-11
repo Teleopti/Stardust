@@ -91,6 +91,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		
 		public AgentStatesViewModel For(AgentStateFilter filter)
 		{
+			if (filter.SiteIds ==  null && filter.TeamIds == null && filter.SkillIds == null && filter.ExcludedStates == null)
+				return new AgentStatesViewModel {};
 			return new AgentStatesViewModel
 			{
 				Time = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()),
