@@ -9,7 +9,7 @@
 			<img src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader.gif")" alt="Saving..." />
 		</div>
 		<div class="form-group">
-			<input type="text" class="request-new-subject form-control" placeholder="@Resources.Subject *" data-bind="value: Subject, enable: IsEditable" maxlength="80"/>
+			<input type="text" class="request-new-subject form-control" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" maxlength="80"/>
 		</div>
 		<div class="form-group">
 			<textarea class="request-new-message form-control" placeholder="@Resources.Message" data-bind="value: Message, valueUpdate: 'afterkeydown', event:{change:checkMessageLength}, enable: IsEditable" />
@@ -32,7 +32,7 @@
 		<div class="row form-group">
 			<div class="col-xs-4 col-sm-4 col-md-4 overtime-request-date">
 				<label>
-					@Resources.Date *
+					@Resources.Date
 				</label>
 				<span class="input-group">
 					<input class="input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable" type="text" />
@@ -45,7 +45,7 @@
 			</div>
 			<div class="col-xs-4 col-sm-4 col-md-4 overtime-request-starttime">
 				<label>
-					@Resources.StartTime *
+					@Resources.StartTime
 				</label>
 				<div class="bootstrap-timepicker">
 					<div class="input-group">
@@ -61,7 +61,7 @@
 
 			<div class="col-xs-4 col-sm-4 col-md-4 overtime-request-duration">
 				<label>
-					@Resources.Duration *
+					@Resources.Duration
 				</label>
 				<div class="input-group">
 					<input type="text" class="input-sm form-control" data-bind="value: RequestDuration, event:{change:validateDuration}, enable: IsEditable " maxlength="5">
@@ -83,6 +83,6 @@
 	</div>
 	<div class="pull-right">
 		<button class="request-new-cancel btn" data-bind="click: CancelAddRequest, visible: ShowCancelButton">@Resources.Cancel</button>
-		<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, enable: true, visible: IsEditable">@Resources.Save</button>
+		<button class="request-new-send btn btn-primary" data-bind="click: AddRequest, visible: IsEditable">@Resources.Save</button>
 	</div>
 </div>

@@ -1,5 +1,7 @@
 ﻿var requestsMessagesUserTexts = {
-	MissingSubject: "Missing subject"
+	MissingSubject: "Missing subject",
+	MissingStartTime: "Missing start time",
+	MissingDuration: "Missing duration"
 };
 $(document).ready(function () {
 	var vm,
@@ -140,31 +142,43 @@ $(document).ready(function () {
 		equal(sentData.Period.EndTime, '10:30');
 	});
 
-	test('should enable save button after posting data', function () {
-		vm.Subject('overtime request');
+	test('should not pass validation when post data has no subject', function () {
 		vm.Message('I want to work overtime');
 		vm.DateFrom('2017-06-27');
 		vm.StartTime('19:00');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
-		vm.IsPostingData(true);
+		vm.AddRequest();
+
+		equal(addedOvertimeRequest, undefined);
+		equal(vm.ErrorMessage(), 'Missing subject');
+	});
+
+	test('should not pass validation when post data has no start time', function () {
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.DateFrom('2017-06-27');
+		vm.RequestDuration('01:00');
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
 
-		equal(vm.ReadyToSave(), true);
+		equal(addedOvertimeRequest, undefined);
+		equal(vm.ErrorMessage(), 'Missing start time');
 	});
 
-	test('should disable save button when post data is not ready', function () {
+	test('should not pass validation when post data has no duration', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom('2017-06-27');
 		vm.StartTime('19:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
-		vm.IsPostingData(true);
+		vm.AddRequest();
 
-		equal(vm.ReadyToSave(), false);
+		equal(addedOvertimeRequest, undefined);
+		equal(vm.ErrorMessage(), 'Missing duration');
 	});
 
 	test('should close overtime request form panel after posting data', function () {

@@ -76,10 +76,6 @@
 		parentViewModel.CancelAddingNewRequest();
 	};
 
-	self.ReadyToSave = ko.computed(function() {
-		return !self.IsPostingData();
-	});
-
 	self.Initialize = function(data) {
 		if (data) {
 			self.Id(data.Id);
