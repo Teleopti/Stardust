@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
@@ -11,5 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public int PageSize { get; set; }
 		public int CurrentPageIndex { get; set; }
 		public bool IsOnlyAbsences { get; set; }
+
+		public TeamScheduleSortOption SortOption { get; set; }
 	}
 }

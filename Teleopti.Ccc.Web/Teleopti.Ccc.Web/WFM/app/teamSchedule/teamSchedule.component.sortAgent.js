@@ -26,11 +26,11 @@
 					isSelected: false
 				},
 				{
-					key: "ShiftStart",
+					key: "StartTime",
 					isSelected: false
 				},
 				{
-					key: "ShiftEnd",
+					key: "EndTime",
 					isSelected: false
 				}
 			];

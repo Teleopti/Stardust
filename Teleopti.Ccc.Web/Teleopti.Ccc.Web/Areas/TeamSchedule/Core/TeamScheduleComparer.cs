@@ -1,7 +1,12 @@
 using System;
 using System.Collections;
 using System.Linq;
+using System.Linq.Expressions;
+using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.Reporting.Core;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
@@ -23,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 		public ScheduleVisibleReasons ScheduleVisibleReason
 		{
-			set { _scheduleVisibleReason = value; } 
+			set { _scheduleVisibleReason = value; }
 		}
 
 		public int Compare(object x, object y)
@@ -55,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				return _isFullAbsenceBeforeDayOff ? 1 : -1;
 			}
 
-			if ((isDayOff(schedule1)|| isFullDayAbsence(schedule1)) && !isDayOff(schedule2) && !isFullDayAbsence(schedule2))
+			if ((isDayOff(schedule1) || isFullDayAbsence(schedule1)) && !isDayOff(schedule2) && !isFullDayAbsence(schedule2))
 			{
 				return 1;
 			}
@@ -81,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				return string.CompareOrdinal(person1.Name.LastName, person2.Name.LastName);
 			}
 
-			if (!isDayOff(schedule1)&& !isFullDayAbsence(schedule1) && (isDayOff(schedule2)||isFullDayAbsence(schedule2)))
+			if (!isDayOff(schedule1) && !isFullDayAbsence(schedule1) && (isDayOff(schedule2) || isFullDayAbsence(schedule2)))
 			{
 				return -1;
 			}
@@ -101,7 +106,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		}
 
 		private int getMinActivityStartTimeOffset(scheduleDayDetail schedule)
-		{			
+		{
 			var fixedReferencePoint = schedule.ScheduleDay.DateOnlyAsPeriod.DateOnly.ToDateTimePeriod(TimeZoneInfo.Utc).StartDateTime;
 			return (int)schedule.PersonAssignment.Value.Period.StartDateTime.Subtract(fixedReferencePoint).TotalMinutes;
 		}
@@ -163,6 +168,64 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			public Lazy<SchedulePartView> SignificantPartForDisplay { get; }
 
 			public Lazy<IVisualLayerCollection> Projection { get; }
+		}
+	}
+
+	public class TeamScheduleTimeComparer : IComparer
+	{
+		private readonly Func<DateTimePeriod, DateTime> _predicate;
+		private readonly IPermissionProvider _permissionProvider;
+		private ScheduleVisibleReasons _scheduleVisibleReason = ScheduleVisibleReasons.Published;
+
+		public TeamScheduleTimeComparer(Func<DateTimePeriod, DateTime> predicate, IPermissionProvider permissionProvider)
+		{
+			_predicate = predicate;
+			_permissionProvider = permissionProvider;
+		}
+
+		public int Compare(object x, object y)
+		{
+			var personSchedule1 = (Tuple<IPerson, IScheduleDay>)x;
+			var personSchedule2 = (Tuple<IPerson, IScheduleDay>)y;
+
+			if (isEmptySchedule(personSchedule1.Item2) && isEmptySchedule(personSchedule2.Item2))
+			{
+				return string.CompareOrdinal(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
+			}
+
+			if (isEmptySchedule(personSchedule1.Item2) && !isEmptySchedule(personSchedule2.Item2))
+			{
+				return 1;
+			}
+			if (!isEmptySchedule(personSchedule1.Item2) && isEmptySchedule(personSchedule2.Item2))
+			{
+				return -1;
+			}
+
+			var ps1 = personSchedule1.Item2?.PersonAssignment();
+			var end1 = ps1 != null ? _predicate(ps1.Period) : _predicate(personSchedule1.Item2.Period);
+
+			var ps2 = personSchedule2.Item2?.PersonAssignment();
+			var end2 = ps2 != null ? _predicate(ps2.Period) : _predicate(personSchedule2.Item2.Period);
+			
+
+			if (end1.Equals(end2))
+			{
+				return string.CompareOrdinal(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
+			}
+			return end1.IsEarlierThan(end2) ? -1 : 1;
+		}
+
+		private bool isEmptySchedule(IScheduleDay schedule)
+		{
+			if (schedule == null)
+			{
+				return true;
+			}
+			var date = schedule.DateOnlyAsPeriod.DateOnly;
+			var person = schedule.Person;
+			return !_permissionProvider.IsPersonSchedulePublished(date, person, _scheduleVisibleReason) 
+					&& !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 		}
 	}
 }

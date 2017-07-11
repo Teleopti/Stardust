@@ -90,8 +90,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var searchTerm = new Dictionary<PersonFinderField, string>();
 
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(2020, 1, 1), 20, 1, false);
-
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] {team.Id.Value},
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(2020, 1, 1),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 			result.Total.Should().Be(2);
 			result.Schedules.First().Name.Should().Be.EqualTo("A@Detective");
 		}
@@ -109,7 +117,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(2019, 12, 30), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(2019, 12, 30),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 
 			result.Total.Should().Be(1);
 
@@ -138,7 +155,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 
 			result.Schedules.Count().Should().Be.EqualTo(3);
 
@@ -179,7 +205,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 
 			var schedule = result.Schedules.First();
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
@@ -208,7 +243,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 
 			result.Schedules.Count().Should().Be.EqualTo(3);
 
@@ -242,8 +286,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
-
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 			var schedule = result.Schedules.First();
 			schedule.IsFullDayAbsence.Should().Be.EqualTo(true);
 			schedule.ShiftCategory.Should().Be.Null();
@@ -269,7 +321,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
+		
 
 			var schedule = result.Schedules.First();
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
@@ -310,7 +372,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 
 			var schedule = result.Schedules.First();
 			var projectionVm = schedule.Projection.ToList();
@@ -337,7 +408,15 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(new SearchDaySchedulesInput
+			{
+				TeamIds = new[] { team.Id.Value },
+				CriteriaDictionary = searchTerm,
+				DateInUserTimeZone = new DateOnly(scheduleDate),
+				PageSize = 20,
+				CurrentPageIndex = 1,
+				IsOnlyAbsences = false
+			});
 
 			var schedule = result.Schedules.First();
 			schedule.IsFullDayAbsence.Should().Be.EqualTo(true);
@@ -370,8 +449,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
-
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
+			
 
 			var schedule = result.Schedules.First();
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
@@ -405,7 +493,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
+			
 
 
 			var schedule = result.Schedules.First();
@@ -447,7 +545,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
+			
 
 
 			var schedule = result.Schedules.First();
@@ -492,8 +600,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
-
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
+			
 
 			var schedule = result.Schedules.First();
 			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
@@ -540,8 +657,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
-
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
+			
 
 
 			var schedule = result.Schedules.First();
@@ -590,7 +716,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
+			
 
 			var schedule = result.Schedules.First();
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
@@ -627,8 +763,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
-
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
+			
 			var schedules = result.Schedules;
 
 			schedules.Count().Should().Be.EqualTo(3);
@@ -652,8 +797,17 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
-
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
+			
 			var schedules = result.Schedules;
 
 			schedules.Count().Should().Be.EqualTo(3);
@@ -679,7 +833,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new Guid[0], searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new Guid[0],
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 
 			var schedules = result.Schedules;
 
@@ -706,7 +869,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 
 			result.Schedules.Count().Should().Be.EqualTo(3);
 			result.Schedules.First().Date.Should().Be.EqualTo("2020-01-01");
@@ -784,7 +956,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "a1 b1 c1 d1 e1 f1"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 
 			var schedules = result.Schedules.ToArray();
 
@@ -818,7 +999,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 
 			var shiftLayers = pa.ShiftLayers.ToList();
 			var schedule = result.Schedules.First();
@@ -900,7 +1090,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "a1 b1 c1 d1 e1 f1"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 			var schedules = result.Schedules.ToArray();
 
 			result.Total.Should().Be.EqualTo(6);
@@ -982,7 +1181,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			{
 				{PersonFinderField.FirstName, "a1 b1 c1 d1 e1 f1"}
 			};
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 2, 2, false);
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 2,
+					CurrentPageIndex = 2,
+					IsOnlyAbsences = false
+				});
 
 			var schedules = result.Schedules.ToArray();
 			result.Total.Should().Be.EqualTo(6);
@@ -1010,7 +1218,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			personAssignment2.AddActivity(new Activity("activity2"), new DateTimePeriod(scheduleDate.AddHours(8), scheduleDate.AddHours(18)));
 			ScheduleStorage.Add(personAssignment2);
 
-			var result = Target.CreateViewModelForPeople(new []{personInUtc.Id.Value,personInHongKong.Id.Value},new DateOnly(scheduleDate) );
+			var result = Target.CreateViewModelForPeople(
+				new []{personInUtc.Id.Value,personInHongKong.Id.Value},new DateOnly(scheduleDate) );
 
 			result.Total.Should().Be(2);
 			var schedules = result.Schedules.ToArray();
@@ -1383,8 +1592,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
-
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 			var schedule = result.Schedules.First();
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
 			schedule.InternalNotes.Should().Be("dummy notes");
@@ -1404,8 +1621,16 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateViewModel(new[] { team.Id.Value }, searchTerm, new DateOnly(scheduleDate), 20, 1, false);
-
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
 			result.Total.Should().Be.EqualTo(1);
 
 			var schedule = result.Schedules.First();
@@ -1540,6 +1765,502 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			schedule.PersonId.Should().Be.EqualTo(person.Id.GetValueOrDefault().ToString());
 			schedule.Projection.Should().Be.Empty();
 			schedule.MultiplicatorDefinitionSetIds.Single().Should().Be.EqualTo(mds.Id.Value);
+		}
+
+		[Test]
+		public void ShouldReturnCorrectOrderIfSortByFirstName()
+		{
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			var person2 = PersonFactory.CreatePersonWithGuid("f1", "f1");
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+			var person3 = PersonFactory.CreatePersonWithGuid("c1", "c1");
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa1);
+
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa2);
+
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+			ScheduleStorage.Add(pa3);
+
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.FirstName
+				});
+
+			var schedules = result.Schedules.ToArray();
+
+			schedules[0].Name.Should().Be.EqualTo("a1@a1");
+			schedules[3].Name.Should().Be.EqualTo("c1@c1");
+			schedules[6].Name.Should().Be.EqualTo("f1@f1");
+		}
+
+		[Test]
+		public void ShouldReturnCorrectOrderIfSortByLastName()
+		{
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "e1");
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			var person2 = PersonFactory.CreatePersonWithGuid("f1", "c1");
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+			var person3 = PersonFactory.CreatePersonWithGuid("c1", "k1");
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa1);
+
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa2);
+
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+			ScheduleStorage.Add(pa3);
+
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.LastName
+				});
+
+			var schedules = result.Schedules.ToArray();
+
+			schedules[0].Name.Should().Be.EqualTo("f1@c1");
+			schedules[3].Name.Should().Be.EqualTo("a1@e1");
+			schedules[6].Name.Should().Be.EqualTo("c1@k1");
+		}
+
+		[Test]
+		public void ShouldReturnCorrectOrderIfSortByEmploymentNumber()
+		{
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "e1");
+			person1.SetEmploymentNumber("456");
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			var person2 = PersonFactory.CreatePersonWithGuid("f1", "c1");
+			person2.SetEmploymentNumber("123");
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+			var person3 = PersonFactory.CreatePersonWithGuid("c1", "k1");
+			person3.SetEmploymentNumber("254");
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa1);
+
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa2);
+
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+			ScheduleStorage.Add(pa3);
+
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.EmploymentNumber
+				});
+
+			var schedules = result.Schedules.ToArray();
+
+			schedules[0].Name.Should().Be.EqualTo("f1@c1");
+			schedules[3].Name.Should().Be.EqualTo("c1@k1");
+			schedules[6].Name.Should().Be.EqualTo("a1@e1");
+		}
+		[Test]
+		public void ShouldReturnCorrectOrderIfSortByStartTime()
+		{
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "e1");
+			person1.SetEmploymentNumber("456");
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			var person2 = PersonFactory.CreatePersonWithGuid("f1", "c1");
+			person2.SetEmploymentNumber("123");
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+			var person3 = PersonFactory.CreatePersonWithGuid("c1", "k1");
+			person3.SetEmploymentNumber("254");
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa1);
+
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa2);
+
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+			ScheduleStorage.Add(pa3);
+
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.StartTime
+				});
+
+			var schedules = result.Schedules.ToArray();
+
+			schedules[0].Name.Should().Be.EqualTo("f1@c1");
+			schedules[6].Name.Should().Be.EqualTo("c1@k1");
+			schedules[3].Name.Should().Be.EqualTo("a1@e1");
+		}
+		[Test]
+		public void ShouldReturnCorrectOrderIfSortByEndTime()
+		{
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("p1", "e1");
+			person1.SetEmploymentNumber("456");
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			var person2 = PersonFactory.CreatePersonWithGuid("p2", "c1");
+			person2.SetEmploymentNumber("123");
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+			var person3 = PersonFactory.CreatePersonWithGuid("p3", "k1");
+			person3.SetEmploymentNumber("254");
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 18), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa1);
+
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 7, 2020, 1, 1, 12), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa2);
+
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 9), ShiftCategoryFactory.CreateShiftCategory("test"));
+			ScheduleStorage.Add(pa3);
+
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.EndTime
+				});
+
+			var schedules = result.Schedules.ToArray();
+
+		
+			schedules[0].Name.Should().Be.EqualTo("p3@k1");
+			schedules[3].Name.Should().Be.EqualTo("p2@c1");
+			schedules[6].Name.Should().Be.EqualTo("p1@e1");
+		}
+
+		[Test]
+		public void ShouldReturnCorrectOrderWhenSortingByStartTimeIfNoPermissionToViewUnpublishedSchedule()
+		{
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var wfc = new WorkflowControlSet();
+			wfc.SchedulePublishedToDate = new DateTime(2019, 12, 31);
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "e1");
+			person1.SetEmploymentNumber("456");
+			person1.WorkflowControlSet = wfc;
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			var person2 = PersonFactory.CreatePersonWithGuid("f1", "c1");
+			person2.SetEmploymentNumber("123");
+			person2.WorkflowControlSet = wfc;
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+			var person3 = PersonFactory.CreatePersonWithGuid("c1", "k1");
+			person3.SetEmploymentNumber("254");
+			person3.WorkflowControlSet = wfc;
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+			PermissionProvider.Enable();
+			PermissionProvider.PublishToDate(new DateOnly(new DateTime(2019, 12, 31)));
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa1);
+
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa2);
+
+			var pa3 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person3,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 6, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
+			ScheduleStorage.Add(pa3);
+
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.StartTime
+				});
+
+			var schedules = result.Schedules.ToArray();
+
+			schedules[0].Name.Should().Be.EqualTo("f1@c1");
+			schedules[3].Name.Should().Be.EqualTo("a1@e1");
+			schedules[6].Name.Should().Be.EqualTo("c1@k1");
+		}
+
+		[Test]
+		public void ShouldReturnCorrectOrderWhenSortingByStartTimeWithEmptySchedule()
+		{
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "e1");
+			person1.SetEmploymentNumber("456");
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			var person2 = PersonFactory.CreatePersonWithGuid("f1", "c1");
+			person2.SetEmploymentNumber("123");
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+			var person3 = PersonFactory.CreatePersonWithGuid("c1", "k1");
+			person3.SetEmploymentNumber("254");
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa1);
+
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa2);
+
+			
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.StartTime
+				});
+
+			var schedules = result.Schedules.ToArray();
+
+			schedules[0].Name.Should().Be.EqualTo("f1@c1");
+			schedules[3].Name.Should().Be.EqualTo("a1@e1");
+			schedules[6].Name.Should().Be.EqualTo("c1@k1");
+		}
+		[Test]
+		public void ShouldReturnCorrectOrderWhenSortingByStartTimeWithDayOffSchedule()
+		{
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("p1", "p1");
+			person1.SetEmploymentNumber("456");
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			var person2 = PersonFactory.CreatePersonWithGuid("p2", "p2");
+			person2.SetEmploymentNumber("123");
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+			var person3 = PersonFactory.CreatePersonWithGuid("p3", "p3");
+			person3.SetEmploymentNumber("254");
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa1);
+
+			var pa2 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person2,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 8, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa2);
+
+			var pa3 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person3, scenario,
+				new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
+			ScheduleStorage.Add(pa3);
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.StartTime
+				});
+
+			var schedules = result.Schedules.ToArray();
+			schedules[0].Name.Should().Be.EqualTo("p3@p3");
+			schedules[3].Name.Should().Be.EqualTo("p2@p2");
+			schedules[6].Name.Should().Be.EqualTo("p1@p1");
 		}
 	}
 }
