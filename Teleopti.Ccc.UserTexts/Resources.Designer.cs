@@ -9452,6 +9452,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have active suggestion data, if you continue this will be discarded.
+        /// </summary>
+        public static string DiscardSuggestionData {
+            get {
+                return ResourceManager.GetString("DiscardSuggestionData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dismiss.
         /// </summary>
         public static string Dismiss {
