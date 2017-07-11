@@ -14,6 +14,7 @@ using Teleopti.Ccc.WinCodeTest.Helpers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling.Requests;
@@ -222,10 +223,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.IsTrue(listener.HasFired("StatusText"));
         }
 
-       
+		[Test]
+		public void VerifyOvertimeRequestType()
+		{
+			var overtimeRequest = new OvertimeRequest(new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime), _period);
+			var personRequest = new PersonRequest(_person, overtimeRequest);
+			personRequest.Pending();
+			_personRequestViewModel = new PersonRequestViewModel(personRequest, _shiftTradeRequestStatusChecker, _personAccount, null, _TimeZoneInfo);
 
-        #region helpers
-        private static IPersonRequest CreateRequestObject(IPerson person, DateTimePeriod period, IAbsence absence)
+			Assert.AreEqual(UserTexts.Resources.RequestTypeOvertime, _personRequestViewModel.RequestType);
+		}
+
+		#region helpers
+		private static IPersonRequest CreateRequestObject(IPerson person, DateTimePeriod period, IAbsence absence)
         {
             
             IAbsenceRequest part = new AbsenceRequest(absence, period);

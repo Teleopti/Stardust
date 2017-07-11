@@ -150,6 +150,7 @@
     <Compile Include="AbsenceWaitlisting\AbsenceRequestWaitlistProviderTest.cs" />
     <Compile Include="AgentInfo\PlanningGroupStaffLoaderTest.cs" />
     <Compile Include="AgentInfo\ExtractBudgetGroupPeriodsTest.cs" />
+    <Compile Include="AgentInfo\Requests\OvertimeRequestTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestFixtureTest.cs" />
     <Compile Include="Aop\ThrowIfRepositoriesAreUsedOnTestMethodTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
