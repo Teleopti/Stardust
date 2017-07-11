@@ -8,7 +8,7 @@ describe('StaffingController', function () {
         module('wfm.staffing');
     });
 
-    beforeEach(inject(function (_$httpBackend_, _$controller_, ) {
+    beforeEach(inject(function (_$httpBackend_, _$controller_ ) {
         $httpBackend = _$httpBackend_;
         $controller = _$controller_;
 
