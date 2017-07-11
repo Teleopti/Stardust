@@ -71,7 +71,7 @@
 		if (!site) throw Error('Could not find site');
 
 		var siteCheckbox = site.querySelector('.wfm-checkbox input[type=checkbox]');
-		siteCheckbox.click();
+		angular.element(siteCheckbox).triggerHandler('click');
 	}
 
 
