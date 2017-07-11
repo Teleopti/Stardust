@@ -21807,6 +21807,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The overtime request {0} was denied..
+        /// </summary>
+        public static string OvertimeRequestForOneDayHasBeenDeniedDot {
+            get {
+                return ResourceManager.GetString("OvertimeRequestForOneDayHasBeenDeniedDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overtime request was cancelled..
+        /// </summary>
+        public static string OvertimeRequestWasCancelled {
+            get {
+                return ResourceManager.GetString("OvertimeRequestWasCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overtime Type.
         /// </summary>
         public static string OvertimeType {

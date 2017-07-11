@@ -27,12 +27,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		public override void Deny(IPerson denyPerson)
 		{
-			throw new NotImplementedException();
+			var timeZone = Person.PermissionInformation.DefaultTimeZone();
+			var culture = Person.PermissionInformation.Culture();
+			TextForNotification =
+					string.Format(culture, Resources.OvertimeRequestForOneDayHasBeenDeniedDot,
+						Period.StartDateTimeLocal(timeZone).Date.ToString("d", culture));
 		}
 
 		public override void Cancel ()
 		{
-			throw new NotImplementedException();
+			TextForNotification = Resources.OvertimeRequestWasCancelled;
 		}
 
 		public override string GetDetails(CultureInfo cultureInfo)

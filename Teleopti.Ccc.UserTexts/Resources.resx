@@ -10705,6 +10705,14 @@ These options are activated:
     <value>The absence request {0} was denied.</value>
     <comment>Denied absence request for one day.</comment>
   </data>
+	<data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>The overtime request {0} was denied.</value>
+    <comment>Denied overtime request for one day.</comment>
+  </data>
+  <data name="OvertimeRequestWasCancelled" xml:space="preserve">
+    <value>Overtime request was cancelled.</value>
+    <comment>Overtime request was cancelled.</comment>
+  </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Hourly Availability Fulfillment</value>
     <comment>Student Availability Fulfillment</comment>
