@@ -1160,6 +1160,10 @@ organization-picker {
 			.md-button:focus {
 				background-color: rgba(158,158,158,0.2);
 			}
+
+			.site-toggle {
+				cursor: pointer;
+			}
 		}
 
 		.focused {
@@ -1168,6 +1172,16 @@ organization-picker {
 
 		.md-button-toggle {
 			padding: 0 1em;
+		}
+
+		// make styleguide checkboxes receive focus
+		// TODO: remove after styleguide is upgraded
+		input[type='checkbox'] {
+			display: initial;
+			opacity: 0;
+			height: 20px;
+			width: 20px;
+			margin: -5px 0 0 -20px;
 		}
 	}
 
@@ -1240,6 +1254,14 @@ organization-picker {
 		display: flex;
 		align-items: center;
 	}
+}
+
+.shadow-site-toggle:focus + .site-toggle {
+	box-shadow: 0 8px 17px 0 rgba(0,0,0,.2);
+	border-radius: 50%;
+	width: 1em;
+	height: 1em;
+	overflow: hidden;
 }
 
 .orgpicker-menu.single-mode {
