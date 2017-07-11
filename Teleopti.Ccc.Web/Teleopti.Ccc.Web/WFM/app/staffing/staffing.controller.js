@@ -133,7 +133,7 @@
 
 		function navigateToNewDay() {
 			if (vm.hasSuggestionData) {
-				if (confirm('you have suggestion data, if you continue this will be discarded')) {
+				if (confirm($translate.instant('DiscardSuggestionData'))) {
 					clearSuggestions();
 					vm.generateChart(vm.selectedSkill, vm.selectedArea);
 				}

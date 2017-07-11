@@ -10705,7 +10705,7 @@ These options are activated:
     <value>The absence request {0} was denied.</value>
     <comment>Denied absence request for one day.</comment>
   </data>
-	<data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+  <data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>The overtime request {0} was denied.</value>
     <comment>Denied overtime request for one day.</comment>
   </data>
@@ -16223,5 +16223,21 @@ Do you want to participate?</value>
   <data name="RequestDateExceeds14Days" xml:space="preserve">
     <value>Request date exceeds 14 days</value>
     <comment>Request date exceeds 14 days</comment>
+  </data>
+  <data name="AllowedOvertime" xml:space="preserve">
+    <value>Allowed overtime</value>
+    <comment>Allowed amount of overtime</comment>
+  </data>
+  <data name="CloseOvertimeSettings" xml:space="preserve">
+    <value>Close overtime settings</value>
+    <comment>Close the view for overtime settings</comment>
+  </data>
+  <data name="Compensations" xml:space="preserve">
+    <value>Compensations</value>
+    <comment>Different overtime presets</comment>
+  </data>
+  <data name="OvertimeSettings" xml:space="preserve">
+    <value>Overtime settings</value>
+    <comment>Settings for overtime</comment>
   </data>
 </root>

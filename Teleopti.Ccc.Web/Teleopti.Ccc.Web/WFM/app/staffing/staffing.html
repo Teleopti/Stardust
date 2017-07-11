@@ -82,7 +82,7 @@
         <div class="con-footer">
             <button class="wfm-btn" ng-class="vm.showOverstaffSettings ? 'wfm-btn-invis-default' : 'wfm-btn-invis-primary'" ng-click="vm.toggleOverstaffSettings()">
                 <span ng-if="!vm.showOverstaffSettings">{{'GetSuggestionsForOvertime' | translate}}</span>
-                <span ng-if="vm.showOverstaffSettings">Close overtime settings</span>
+                <span ng-if="vm.showOverstaffSettings">{{CloseOvertimeSettings | translate}}</span>
                 </button>
             <button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!vm.hasSuggestionData"
                 ng-click="vm.addOvertime()">{{'ApplySuggestion' | translate}}</button>
@@ -91,11 +91,11 @@
     <form novalidate ng-submit="vm.suggestOvertime()" name="overtimeForm">
         <div class="panel material-depth-1" ng-show="vm.showOverstaffSettings">
             <div class="sub-header">
-                <h2>Overtime settings</h2>
+                <h2>{{OvertimeSettings | translate}}</h2>
             </div>
             <div class="con-row">
                 <div class="con-flex">
-                    <h3>Compensations</h3>
+                    <h3>{{Compensations | translate}}</h3>
                     <div ng-repeat="comp in vm.compensations">
                         <div class="wfm-radio">
                             <label>
@@ -107,20 +107,18 @@
                     </div>
                 </div>
                 <div class="con-flex">
-                    <h3>Amount of allowed overtime (hh:mm)</h3>
+                    <h3>{{AllowedOvertime | translate}}</h3>
 
                     <div class="con-flex">
-                        <label for="To">Minimum</label>
-                        <input class="withoutAMPM" required type="time" name="To" placeholder="HH:mm:ss" ng-model="vm.overtimeSettings.MinMinutesToAdd">
+                        <label for="To">{{Min | translate}}</label>
+                        <div uib-timepicker ng-model="vm.overtimeSettings.MinMinutesToAdd" show-meridian="false"></div>
                     </div>
                     <div class="con-flex">
-                        <label for="From">Maximum</label>
-                        <input class="withoutAMPM" required type="time" name="From" placeholder="HH:mm:ss" ng-model="vm.overtimeSettings.MaxMinutesToAdd">
+                        <label for="From">{{Max | translate}}</label>
+                        <div uib-timepicker ng-model="vm.overtimeSettings.MaxMinutesToAdd" show-meridian="false"></div>
                     </div>
-                    <button class="wfm-btn" ng-class="!overtimeForm.$valid ? 'wfm-btn-primary-disabled' : 'wfm-btn-primary'"
-                        ng-disabled="!overtimeForm.$valid" type="submit">{{'GetSuggestionsForOvertime' | translate}}</button>
-                    <span class="error" ng-show="overtimeForm.input.$error">
-         Not a valid date!</span>
+                    <button class="wfm-btn" ng-class="!overtimeForm.$valid ? 'wfm-btn-primary-disabled' : 'wfm-btn-primary'" ng-disabled="!overtimeForm.$valid"
+                        type="submit">{{'GetSuggestionsForOvertime' | translate}}</button>
                 </div>
                 <div class="con-flex x3"></div>
 

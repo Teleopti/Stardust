@@ -2339,6 +2339,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allowed overtime.
+        /// </summary>
+        public static string AllowedOvertime {
+            get {
+                return ResourceManager.GetString("AllowedOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can Change and Save.
         /// </summary>
         public static string AllowPersonModifications {
@@ -6245,6 +6254,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close overtime settings.
+        /// </summary>
+        public static string CloseOvertimeSettings {
+            get {
+                return ResourceManager.GetString("CloseOvertimeSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close Previous
         ///Period.
         /// </summary>
@@ -6422,6 +6440,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CompareWithTeamsFrom {
             get {
                 return ResourceManager.GetString("CompareWithTeamsFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compensations.
+        /// </summary>
+        public static string Compensations {
+            get {
+                return ResourceManager.GetString("Compensations", resourceCulture);
             }
         }
         
@@ -21821,6 +21848,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OvertimeRequestWasCancelled {
             get {
                 return ResourceManager.GetString("OvertimeRequestWasCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overtime settings.
+        /// </summary>
+        public static string OvertimeSettings {
+            get {
+                return ResourceManager.GetString("OvertimeSettings", resourceCulture);
             }
         }
         
