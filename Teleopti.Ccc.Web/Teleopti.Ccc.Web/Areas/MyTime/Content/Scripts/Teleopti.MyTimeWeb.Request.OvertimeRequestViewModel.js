@@ -115,11 +115,11 @@
 		var dataValid = false;
 
 		if (!self.Subject() || !/\S/.test(self.Subject())) {
-			self.ErrorMessage(requestsMessagesUserTexts.MissingSubject);
+			self.ErrorMessage(requestsMessagesUserTexts.MISSING_SUBJECT);
 		} else if (_buildPostData().Period.StartTime.length != 5) {
-			self.ErrorMessage(requestsMessagesUserTexts.MissingStartTime);
+			self.ErrorMessage(requestsMessagesUserTexts.MISSING_STARTTIME);
 		} else if (!self.RequestDuration() || self.RequestDuration().length != 5) {
-			self.ErrorMessage(requestsMessagesUserTexts.MissingDuration);
+			self.ErrorMessage(requestsMessagesUserTexts.MISSING_DURATION);
 		} else if (!_isDateFromWithin14Days()) {
 			self.ErrorMessage(requestsMessagesUserTexts.REQUESTDATE_EXCEEDS_14DAYS);
 		}

@@ -1,7 +1,7 @@
 ﻿var requestsMessagesUserTexts = {
-	MissingSubject: "Missing subject",
-	MissingStartTime: "Missing start time",
-	MissingDuration: "Missing duration",
+	MISSING_SUBJECT: "Missing subject",
+	MISSING_STARTTIME: "Missing start time",
+	MISSING_DURATION: "Missing duration",
 	REQUESTDATE_EXCEEDS_14DAYS: "Request date exceeds 14 days"
 };
 $(document).ready(function () {
