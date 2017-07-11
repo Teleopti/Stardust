@@ -11,6 +11,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenIClickFor(string state)
 		{
 			Browser.Interactions.ClickContaining(".sendbatch", state.ToUpper());
+			//dummy steps
+			Browser.Interactions.ClickVisibleOnly(".toggle-all-agents");
+			Browser.Interactions.ClickVisibleOnly(".toggle-all-agents");
 		}
 	}
 
