@@ -36,6 +36,7 @@ SQLCMD -S%dbServer% -E -Q "if exists(select 1 from sys.databases where name=""%a
 
 ::upgrade appdb
 %dbmanagerExe% -S%dbServer% -D"%appDb%" -E -OTeleoptiCCC7 -F"%RepoRoot%\Database" -T
+SQLCMD -S%dbServer% -E -d"%appDb%" -i"%RepoRoot%\.debug-Setup\database\tsql\DemoDatabase\SetTenantActive.sql"
 %securityExe% -DS%dbServer% -AP"%appDb%" -AN"%analDb%" -CD"%aggDb%" -EE 
 
 exit

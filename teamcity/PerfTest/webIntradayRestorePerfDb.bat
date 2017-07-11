@@ -36,6 +36,7 @@ IF %ERRORLEVEL% NEQ 0 GOTO :restoreAnalyticsDbError
 ::Create agg
 SQLCMD -S%dbServer% -E -Q "alter database [%aggDb%] set single_user with rollback immediate"
 SQLCMD -S%dbServer% -E -Q "if exists(select 1 from sys.databases where name=""%aggDb%"") drop database [%aggDb%]"
+SQLCMD -S%dbServer% -E -d"%appDb%" -i"%RepoRoot%\.debug-Setup\database\tsql\DemoDatabase\SetTenantActive.sql"
 %dbmanagerExe% -S%dbServer% -D%aggDb% -E -OTeleoptiCCCAgg -F"%RepoRoot%\Database" -C
 
 ::upgrade db 
