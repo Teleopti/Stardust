@@ -1170,6 +1170,14 @@ organization-picker {
 
 			.site-toggle {
 				cursor: pointer;
+
+				&:active {
+					background-color: rgba(158,158,158,0.26);
+				}
+
+				label {
+					cursor: pointer;
+				}
 			}
 		}
 
