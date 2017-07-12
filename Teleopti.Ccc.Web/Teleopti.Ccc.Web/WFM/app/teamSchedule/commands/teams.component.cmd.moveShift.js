@@ -25,14 +25,10 @@
 			ctrl.moveToTime = getDefaultMoveToTime();
 			ctrl.trackId = ctrl.containerCtrl.getTrackId();
 			findAgentsInDifferentTimezone();
-
 			$scope.$watch(function () {
 				return getMoveToStartTimeStr();
 			}, function (n, o) {
-				if (ctrl.agentsInDifferentTimeZone.length === 0) {
-					updateInvalidAgents();
-				}
-				
+				updateInvalidAgents();
 			});
 			addTabindexAndFocus();
 		};
@@ -68,15 +64,21 @@
 		ctrl.anyInvalidAgent = function () {
 			return ctrl.invalidAgents.length > 0;
 		};
-
 		ctrl.anyValidAgent = function () {
-			return ctrl.invalidAgents.length !== ctrl.selectedAgents.length;
+			return ctrl.invalidAgents.length !== ctrl.selectedAgents.length ;
+		};
+		ctrl.anyAgentsInDifferentTimeZone = function() {
+			return ctrl.agentsInDifferentTimeZone.length > 0;
 		};
 
 		ctrl.moveShift = function () {
 			var invalidAgentIds = ctrl.invalidAgents.map(function(a) {
 				return a.PersonId;
 			});
+			var agentsInDifferentTimeZone = ctrl.agentsInDifferentTimeZone.map(function(a) {
+				return a.PersonId;
+			});
+			invalidAgentIds = invalidAgentIds.concat(agentsInDifferentTimeZone);
 
 			var validAgents = ctrl.selectedAgents.filter(function(agent) {
 				return invalidAgentIds.indexOf(agent.PersonId) < 0;
@@ -135,16 +137,30 @@
 		function updateInvalidAgents() {
 			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
 			validator.validateMoveToTimeForShift(ctrl.containerCtrl.scheduleManagementSvc, moment(getMoveToStartTimeStr()), currentTimezone);
-			ctrl.invalidAgents = validator.getInvalidPeople();
+			var invalidAgents = validator.getInvalidPeople();
+			if (ctrl.agentsInDifferentTimeZone.length > 0) {
+				ctrl.invalidAgents = filterAgentArray(invalidAgents.concat(ctrl.agentsInDifferentTimeZone));
+			}
+		}
+
+		function filterAgentArray(arr) {
+			var map = {};
+			return arr.filter(function(agent) {
+				if (map[agent.PersonId])
+					return false;
+				else {
+					return map[agent.PersonId] = true;
+				}
+			});
 		}
 
 		function findAgentsInDifferentTimezone() {
+			ctrl.agentsInDifferentTimeZone.splice(0);
 			var currentTimezone = ctrl.containerCtrl.getCurrentTimezone();
 			ctrl.selectedAgents.forEach(function (agent) {
 				if (currentTimezone != ctrl.containerCtrl.scheduleManagementSvc.findPersonScheduleVmForPersonId(agent.PersonId).Timezone.IanaId) {
-					ctrl.agentsInDifferentTimeZone.push(agent.Name);
+					ctrl.agentsInDifferentTimeZone.push(agent);
 				}
-
 			});
 		}
 		
