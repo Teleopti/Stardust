@@ -2263,5 +2263,60 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			schedules[3].Name.Should().Be.EqualTo("p1@p1");
 			schedules[6].Name.Should().Be.EqualTo("p3@p3");
 		}
+
+		[Test]
+		public void ShouldReturnCorrectOrderWhenSortingByStartTimeOnlyWithDayOffOrEmptySchedule()
+		{
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("p1", "p1");
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			var person2 = PersonFactory.CreatePersonWithGuid("p2", "p2");
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+			var person3 = PersonFactory.CreatePersonWithGuid("p3", "p3");
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+			var person4 = PersonFactory.CreatePersonWithGuid("p4", "p4");
+			PeopleSearchProvider.Add(person4);
+			person4.AddPersonPeriod(personPeriod);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa2 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person2, scenario,
+				new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
+			ScheduleStorage.Add(pa2);
+
+			var pa3 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person3, scenario,
+				new DateOnly(scheduleDate), new DayOffTemplate(new Description("testDayoff")));
+			ScheduleStorage.Add(pa3);
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.StartTime
+				});
+
+			var schedules = result.Schedules.ToArray();
+
+			schedules[0].Name.Should().Be.EqualTo("p2@p2");
+			schedules[3].Name.Should().Be.EqualTo("p3@p3");
+			schedules[6].Name.Should().Be.EqualTo("p1@p1");
+			schedules[7].Name.Should().Be.EqualTo("p4@p4");
+
+		}
 	}
 }

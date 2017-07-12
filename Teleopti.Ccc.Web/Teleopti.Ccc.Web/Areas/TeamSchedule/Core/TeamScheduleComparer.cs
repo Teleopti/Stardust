@@ -198,21 +198,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 				return string.CompareOrdinal(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
 			}
 
-			if (isPS1Empty || isPS1DayOff)
-			{
-				return 1;
-			}
-			if (isPS2Empty || isPS2DayOff)
-			{
-				return -1;
-			}
+			if (isPS1Empty || isPS1DayOff && !isPS2Empty) return 1;
+			if (isPS2Empty || isPS2DayOff) return -1;
 
 			var ps1 = personSchedule1.Item2.PersonAssignment();
 			var end1 = ps1 != null ? _predicate(ps1.Period) : _predicate(personSchedule1.Item2.Period);
 
 			var ps2 = personSchedule2.Item2?.PersonAssignment();
 			var end2 = ps2 != null ? _predicate(ps2.Period) : _predicate(personSchedule2.Item2.Period);
-			
+
 			if (end1.Equals(end2))
 			{
 				return string.CompareOrdinal(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
