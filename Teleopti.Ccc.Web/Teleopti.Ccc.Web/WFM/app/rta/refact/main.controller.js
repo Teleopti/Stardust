@@ -17,6 +17,7 @@
 		vm.organization = [];
 		vm.siteCards = [];
 		vm.urlParams = $stateParams;
+		vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 
 		(function fetchDataForFilterComponent() {
 			if (vm.skillIds.length > 0) {
@@ -49,7 +50,6 @@
 				if (angular.isDefined(ids)) {
 					rtaService.getSiteCardsFor(ids).then(function (result) {
 						vm.siteCards = buildSiteCards(result);
-						console.log('cards', vm.siteCards);
 					});
 				} else {
 					rtaService.getSiteCardsFor().then(function (result) {
@@ -135,7 +135,7 @@
 						pollingIntervals.forEach(function (i) {
 							$interval.cancel(i.interval);
 						});
-					pollingIntervals = [];
+						pollingIntervals = [];
 					}
 					if (newValue.length) {
 						sitePollingWithSkills = $interval(function () {
@@ -180,26 +180,24 @@
 
 			vm.filterOutput = function (selectedItem) {
 				if (!angular.isDefined(selectedItem)) {
-
 					vm.skillIds = [];
 					$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
 					getSiteCards();
-
+					vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 				} else if (selectedItem.hasOwnProperty('Skills')) {
 
 					$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
 					vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
 					getSiteCards(vm.skillIds);
+					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + selectedItem.Id + '"})';
 
 				} else {
-
 					vm.skillIds = [selectedItem.Id];
 					$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
 					getSiteCards(vm.skillIds);
-
+					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + selectedItem.Id + '"]})';
 				}
 			}
-
 		})();
 	}
 })();

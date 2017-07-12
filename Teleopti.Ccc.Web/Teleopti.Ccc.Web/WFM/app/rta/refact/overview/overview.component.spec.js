@@ -4,7 +4,8 @@ describe('rtaOverviewComponent', function () {
   var $controllerBuilder,
     $fakeBackend,
     $componentController,
-    $httpBackend;
+    $httpBackend,
+    $state;
 
   var ctrl,
     scope,
@@ -45,13 +46,15 @@ describe('rtaOverviewComponent', function () {
     });
   });
 
-  beforeEach(inject(function (_ControllerBuilder_, _FakeRtaBackend_, _$componentController_, _$httpBackend_) {
+  beforeEach(inject(function (_ControllerBuilder_, _FakeRtaBackend_, _$componentController_, _$httpBackend_, _$state_) {
     $controllerBuilder = _ControllerBuilder_;
     $fakeBackend = _FakeRtaBackend_;
     $componentController = _$componentController_;
     $httpBackend = _$httpBackend_;
+    $state = _$state_;
 
     $fakeBackend.clear();
+    spyOn($state, 'go');
     scope = $controllerBuilder.setup('RtaMainController');
 
 
@@ -592,5 +595,49 @@ describe('rtaOverviewComponent', function () {
     expect(vm.siteCards[0].teams[0].Color).toEqual('good');
   });
 
+  it('should set agents state for site', function () {
+    vm = $controllerBuilder.createController().vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState
+    });
 
+    expect(ctrl.agentsState).toEqual('rta.agents({siteIds: card.site.Id})');
+  });
+
+  it('should set agents state for site with skill', function () {
+    vm = $controllerBuilder.createController().vm;
+    vm.filterOutput(channelSales);
+    $httpBackend.flush();
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState
+    });
+
+    expect(ctrl.agentsState).toEqual('rta.agents({siteIds: card.site.Id, skillIds: ["channelSalesId"]})');
+  });
+
+  it('should set agents state for site with skill area', function () {
+    vm = $controllerBuilder.createController(undefined, skillAreas).vm;
+    vm.filterOutput(skillArea1);
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState
+    });
+
+    expect(ctrl.agentsState).toEqual('rta.agents({siteIds: card.site.Id, skillAreaId: "skillArea1Id"})');
+  });
+  
+  it('should set agents state for site when clearing filter selection', function () {
+    vm = $controllerBuilder.createController().vm;
+    vm.filterOutput(channelSales);
+    vm.filterOutput();
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState
+    });
+
+    expect(ctrl.agentsState).toEqual('rta.agents({siteIds: card.site.Id})');
+  });
+  
 });

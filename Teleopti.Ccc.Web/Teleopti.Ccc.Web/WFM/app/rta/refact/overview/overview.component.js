@@ -8,6 +8,7 @@
       controller: RtaOverviewComponentController,
       bindings: {
         siteCards: '=',
+        agentsState: '='
       },
     });
 

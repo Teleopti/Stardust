@@ -1,9 +1,12 @@
 ﻿<rta-card ng-repeat="card in $ctrl.siteCards" ng-open="card.isOpen" ng-click="card.fetchTeamData(card)">
     <rta-card-header ng-attr-styles="border-left-color: {{card.site.Color}};">
-        <span><b>{{card.site.Name}}</b></span>
-        <span class="full-padding">{{'InAlarm'|translate}}:
+        <div style="position: absolute; width: 100%">
+        <div style="float: left; width:46%"><b>{{card.site.Name}}</b></div>
+        <div style="float: left; width:46%">{{'InAlarm'|translate}}:
 			<b>{{card.site.InAlarmCount}}</b>
-		</span>
+        </div>
+        <div style="line-height: 33px; float: left; width:4%"><a ui-sref="{{$ctrl.agentsState}}"><i class="mdi mdi-arrow-right"></i><md-tooltip>See agents</md-tooltip></a></div>
+        </div>
     </rta-card-header>
     <rta-card-body>
         <div class="con-row">
