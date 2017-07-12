@@ -223,7 +223,7 @@ describe('RtaMainController', function () {
           InAlarmCount: 5,
           Color: 'warning'
         })
-         .withSiteAdherence({
+        .withSiteAdherence({
           Id: 'parisId',
           Name: 'Paris',
           SkillId: 'invoiceId',
@@ -647,7 +647,6 @@ describe('RtaMainController', function () {
       },
         { notify: false });
     });
-
   });
 
 });

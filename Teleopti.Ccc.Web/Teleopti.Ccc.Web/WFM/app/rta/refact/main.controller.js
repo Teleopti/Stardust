@@ -49,6 +49,7 @@
 				if (angular.isDefined(ids)) {
 					rtaService.getSiteCardsFor(ids).then(function (result) {
 						vm.siteCards = buildSiteCards(result);
+						console.log('cards', vm.siteCards);
 					});
 				} else {
 					rtaService.getSiteCardsFor().then(function (result) {
@@ -130,6 +131,12 @@
 					if (angular.isDefined(sitePollingWithSkills)) {
 						$interval.cancel(sitePollingWithSkills);
 					}
+					if (pollingIntervals.length) {
+						pollingIntervals.forEach(function (i) {
+							$interval.cancel(i.interval);
+						});
+					pollingIntervals = [];
+					}
 					if (newValue.length) {
 						sitePollingWithSkills = $interval(function () {
 							rtaService.getSiteCardsFor(vm.skillIds).then(function (result) {
@@ -160,10 +167,12 @@
 			}
 
 			$scope.$on('$destroy', function () {
-				if (pollingIntervals.length)
+				if (pollingIntervals.length) {
 					pollingIntervals.forEach(function (i) {
 						$interval.cancel(i.interval);
 					});
+					pollingIntervals = [];
+				}
 
 				$interval.cancel(sitePolling);
 				$interval.cancel(sitePollingWithSkills);
