@@ -459,6 +459,49 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(5);	
 		}
 
+		[Test]
+		[Ignore("44950")]
+		public void ShouldHandleMasterActivityOnExtendedActivityAgentKnowOneOfThePossibleUnderlyingActivities()
+		{
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = ActivityRepository.Has("_");
+			var activityExtended = ActivityRepository.Has("A");
+			var activityExtendedAgentDontKnow = ActivityRepository.Has("_");
+			var masterActivity = new MasterActivity().WithId();
+			masterActivity.ActivityCollection.Add(activityExtended);
+			masterActivity.ActivityCollection.Add(activityExtendedAgentDontKnow);
+			var skillMainActivity = SkillRepository.Has("_", activity);
+			var skillExtendedActivity = SkillRepository.Has("_", activityExtended);
+			var skillExtendedActivityAgentDontKnow = SkillRepository.Has("_", activityExtendedAgentDontKnow);
+			var scenario = ScenarioRepository.Has("_");
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), shiftCategory));
+			ruleSet.AddExtender(new ActivityRelativeStartExtender(masterActivity, new TimePeriodWithSegment(1, 0, 1, 0, 15), new TimePeriodWithSegment(0, 0, 0, 0, 15)));
+			var agent = PersonRepository.Has(new Contract("_"), contractSchedule, new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skillMainActivity, skillExtendedActivity);
+			SkillDayRepository.Has(skillMainActivity.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			SkillDayRepository.Has(skillExtendedActivity.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			SkillDayRepository.Has(skillExtendedActivityAgentDontKnow.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 10, 10, 10, 10, 10, 10, 10));
+			var dayOffTemplate = new DayOffTemplate(new Description("_")).WithId();
+			DayOffTemplateRepository.Add(dayOffTemplate);
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				DayOffTemplate = dayOffTemplate,
+				TagToUseOnScheduling = NullScheduleTag.Instance,
+				UseBlock = true,
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff
+			});
+
+			Target.DoScheduling(period);
+
+			AssignmentRepository.Find(new[] { agent }, period, scenario)
+				.Where(personAssignment => !personAssignment.AssignedWithDayOff(dayOffTemplate))
+				.Count(personAssignment => !personAssignment.ShiftLayers.All(x => x.Payload.Equals(activityExtendedAgentDontKnow)) 
+											&& personAssignment.ShiftLayers.Any(y => y.Payload.Equals(activityExtended)))
+				.Should().Be.EqualTo(5);
+		}
+
 		[TestCase(true)] //not included because agent doesn't know skill
 		[TestCase(false)] //not included because filtered in ShiftFromMasterActivityService (not sure it's correct but that's current impl)
 		public void ShouldHandleMasterActivityAsBaseActivity_RequiresSkill_AgentDoesntKnowActivity(bool masterActivityActivityRequiresSkill)
