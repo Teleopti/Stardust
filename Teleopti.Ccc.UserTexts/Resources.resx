@@ -16244,4 +16244,8 @@ Do you want to participate?</value>
     <value>Overtime settings</value>
     <comment>Settings for overtime</comment>
   </data>
+  <data name="PressEscToClose" xml:space="preserve">
+    <value>Press Esc to close</value>
+    <comment>tooltip for organization picker</comment>
+  </data>
 </root>

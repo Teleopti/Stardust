@@ -23719,6 +23719,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Press Esc to close.
+        /// </summary>
+        public static string PressEscToClose {
+            get {
+                return ResourceManager.GetString("PressEscToClose", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Preview.
         /// </summary>
         public static string Preview {
