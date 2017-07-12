@@ -645,12 +645,13 @@ describe('IntradayAreaCtrl', function () {
 
 	it('should get traffic data corresponding to chosenOffset', function(){
 		skillAreaInfo.SkillAreas = [];
+		isUnsupportedSkillTest = false;
 
 		createController(false);
 		scope.activeTab = 0;
 		scope.toggles.showOtherDay = true;
-
 		scope.selectedSkillChange(skills[0]);
+		
 		scope.changeChosenOffset(1);
 		$httpBackend.flush();
 
@@ -660,7 +661,8 @@ describe('IntradayAreaCtrl', function () {
 
 	it('should get performance data corresponding to chosenOffset', function(){
 		skillAreaInfo.SkillAreas = [];
-
+		isUnsupportedSkillTest = false;
+		
 		createController(false);
 		scope.activeTab = 1;
 		scope.toggles.showOtherDay = true;
@@ -674,6 +676,7 @@ describe('IntradayAreaCtrl', function () {
 
 	it('should get staffing data corresponding to chosenOffset', function(){
 		skillAreaInfo.SkillAreas = [];
+		isUnsupportedSkillTest = false;
 
 		createController(false);
 		scope.activeTab = 2;
