@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -587,19 +588,25 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)
 		{
-			return Session.GetNamedQuery("AgentSkillMatrix")
+			using(Session.BeginTransaction(IsolationLevel.ReadUncommitted))
+			{
+				return Session.GetNamedQuery("AgentSkillMatrix")
 					  .SetEntity("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current())
 					  .SetEntity("scenario", scenario)
 					  .SetProperties(period)
 									.List<Tuple<Guid, Guid>>();
+			}
 		}
 
 		public IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period)
 		{
-			return Session.GetNamedQuery("AgentSiteMatrix")
-					  .SetEntity("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current())
-					  .SetProperties(period)
-					  .List<Guid>();
+			using (Session.BeginTransaction(IsolationLevel.ReadUncommitted))
+			{
+				return Session.GetNamedQuery("AgentSiteMatrix")
+					.SetEntity("bu", ServiceLocatorForEntity.CurrentBusinessUnit.Current())
+					.SetProperties(period)
+					.List<Guid>();
+			}
 		}
 
 		private static DetachedCriteria findActivePeriod(ITeam[] teams,DateOnlyPeriod dateOnlyPeriod)

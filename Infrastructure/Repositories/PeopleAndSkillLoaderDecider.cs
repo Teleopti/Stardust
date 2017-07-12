@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ILoaderDeciderResult Execute(IScenario scenario, DateTimePeriod period, IEnumerable<IPerson> people)
         {
             var matrix = _personRepository.PeopleSkillMatrix(scenario, period);
-			IList<Guid> peopleGuids = people.Select(p => p.Id.GetValueOrDefault()).ToList();
+			var peopleGuids = people.Select(p => p.Id.GetValueOrDefault()).ToArray();
 
             var result = _matrixService.CreateDependencies(matrix, peopleGuids);
             var peopleGuidDependencies = result.FirstDependencies.ToArray();
