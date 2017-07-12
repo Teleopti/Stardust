@@ -20,8 +20,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			if (!skillForBaseActivity)
 				return false;
 
-			return ruleSet.ExtenderCollection.SelectMany(workShiftExtender => workShiftExtender.ExtendWithActivity.ActivityCollection)
-				.All(activity => !activity.RequiresSkill || skillList.Any(skill => skill.Activity.Equals(activity)));
+
+			foreach (var workShiftExtender in ruleSet.ExtenderCollection)
+			{
+				var skillForExtendedActivity = workShiftExtender.ExtendWithActivity.ActivityCollection.Any(
+					activity => !activity.RequiresSkill || skillList.Any(skill => skill.Activity.Equals(activity)));
+
+				if (!skillForExtendedActivity)
+					return false;
+			}
+
+			return true;
 		}
 	}
 }

@@ -460,7 +460,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("44950")]
 		public void ShouldHandleMasterActivityOnExtendedActivityAgentKnowOneOfThePossibleUnderlyingActivities()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
