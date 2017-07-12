@@ -32,15 +32,9 @@
 		this.getAllRequestsPromise_old = function (filter, sortingOrders) {
 			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
 		};
-		this.lastRequestFilter = null;
 		this.getAllRequestsPromise = function (filter, sortingOrders, paging) {
 			return $q(function (resolve, reject) {
 				var requestFilter = requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging);
-				if (JSON.stringify(svc.lastRequestFilter) === JSON.stringify(requestFilter)) {
-					resolve();
-					return;
-				}
-				svc.lastRequestFilter = angular.copy(requestFilter);
 				resolve($http.post(listRequestsUrl, requestFilter));
 			});
 		};
