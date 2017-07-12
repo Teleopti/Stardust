@@ -43,17 +43,14 @@
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EO.Base, Version=16.1.4.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EO.WebBrowser.16.1.4.0\lib\EO.Base.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="EO.Base, Version=17.2.0.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.17.2.0.0\lib\EO.Base.dll</HintPath>
     </Reference>
-    <Reference Include="EO.WebBrowser, Version=16.1.4.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EO.WebBrowser.16.1.4.0\lib\EO.WebBrowser.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="EO.WebBrowser, Version=17.2.0.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.17.2.0.0\lib\EO.WebBrowser.dll</HintPath>
     </Reference>
-    <Reference Include="EO.WebEngine, Version=16.1.4.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EO.WebBrowser.16.1.4.0\lib\EO.WebEngine.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="EO.WebEngine, Version=17.2.0.0, Culture=neutral, PublicKeyToken=e92353a6bf73fffc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EO.WebBrowser.17.2.0.0\lib\EO.WebEngine.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\packages\Newtonsoft.Json.10.0.2\lib\net20\Newtonsoft.Json.dll</HintPath>
