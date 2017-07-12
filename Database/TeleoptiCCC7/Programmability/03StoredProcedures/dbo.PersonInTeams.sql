@@ -29,7 +29,7 @@ INNER JOIN dbo.Person p with (nolock) ON pp.Parent = p.Id
 WHERE ISNULL(p.TerminalDate, '2100-01-01') >=  @start_date_ISO  
 AND p.IsDeleted = 0
 AND (pp.StartDate IS NULL OR pp.StartDate <=  @start_date_ISO  ) 
-AND (pp.EndDate IS NULL OR pp.EndDate >=  @end_date_ISO )
+AND pp.StartDate <= @end_date_ISO AND (pp.EndDate IS NULL OR EndDate >= @start_date_ISO)
 
 END
 GO
