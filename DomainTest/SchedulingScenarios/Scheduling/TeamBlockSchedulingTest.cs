@@ -423,7 +423,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#44950 - to be fixed")]
 		public void ShouldHandleMasterActivityOnBaseActivityAgentKnowOneOfThePossibleUnderlyingActivities()
 		{
 			var firstDay = new DateOnly(2015, 10, 12);
