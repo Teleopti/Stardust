@@ -90,25 +90,20 @@ namespace Stardust.Manager
 				{
 					connection.OpenWithRetry(_retryPolicy);
 
-					var ordinalPosForHeartBeat = 0;
-					var ordinalPosForUrl = 0;
-
-					var allAliveNodes = new List<object[]>();
-
+					var allAliveNodes = new List<Tuple<DateTime,string>>();
 					using (var commandSelectAll = new SqlCommand(selectCommand, connection))
 					{
 						using (var readAllWorkerNodes = commandSelectAll.ExecuteReaderWithRetry(_retryPolicy))
 						{
 							if (readAllWorkerNodes.HasRows)
 							{
-								ordinalPosForHeartBeat = readAllWorkerNodes.GetOrdinal("Heartbeat");
-								ordinalPosForUrl = readAllWorkerNodes.GetOrdinal("Url");
+								var ordinalPosForHeartBeat = readAllWorkerNodes.GetOrdinal("Heartbeat");
+								var ordinalPosForUrl = readAllWorkerNodes.GetOrdinal("Url");
 
 								while (readAllWorkerNodes.Read())
 								{
-									var temp = new object[readAllWorkerNodes.FieldCount];
-									readAllWorkerNodes.GetValues(temp);
-									allAliveNodes.Add(temp);
+									allAliveNodes.Add(new Tuple<DateTime, string>(readAllWorkerNodes.GetDateTime(ordinalPosForHeartBeat),
+										readAllWorkerNodes.GetString(ordinalPosForUrl)));
 								}
 							}
 						}
@@ -125,16 +120,16 @@ namespace Stardust.Manager
 
 								foreach (var node in allAliveNodes)
 								{
-									var heartBeatDateTime = (DateTime)node[ordinalPosForHeartBeat];
-									var url = node[ordinalPosForUrl];
+									var heartBeatDateTime = node.Item1;
+									var url = node.Item2;
 									var currentDateTime = DateTime.UtcNow;
 									var dateDiff = (currentDateTime - heartBeatDateTime).TotalSeconds;
-									if (!(dateDiff > timeSpan.TotalSeconds)) continue;
+									if (dateDiff <= timeSpan.TotalSeconds) continue;
 
 									commandUpdate.Parameters["@Alive"].Value = false;
 									commandUpdate.Parameters["@Url"].Value = url;
 									commandUpdate.ExecuteNonQueryWithRetry(_retryPolicy);
-									deadNodes.Add(url.ToString());
+									deadNodes.Add(url);
 								}
 							}
 							trans.Commit();
