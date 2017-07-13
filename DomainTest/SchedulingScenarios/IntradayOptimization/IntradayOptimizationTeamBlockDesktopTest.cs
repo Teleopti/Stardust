@@ -261,7 +261,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test]
-		[Ignore("#45136 - to be fixed ")]
 		public void ShouldNotCrashWhenAgentHaveNoSkill()
 		{
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());

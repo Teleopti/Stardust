@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -48,12 +49,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		public double TargetValue(ITeamBlockInfo teamBlockInfo, IAdvancedPreferences advancedPreferences)
 		{
 			var groupMembers = teamBlockInfo.TeamInfo.GroupMembers;
-
 			var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
 			var dateOnlyList = blockPeriod.DayCollection();
 			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupMembers, blockPeriod).ToList();
-			var minimumResolution = skills.Min(x => x.DefaultResolution);
-
+			var minimumResolution = skills.IsEmpty() ? int.MaxValue : skills.Min(x => x.DefaultResolution);
 			dateOnlyList.Add(dateOnlyList.Max().AddDays(1));
 			var skillIntervalPerDayList = getSkillIntervalListForEachDay(dateOnlyList, skills, minimumResolution);
 			var finalSkillIntervalData = calculateMedianValue(skillIntervalPerDayList, dateOnlyList.Min());
