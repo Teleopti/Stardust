@@ -71,17 +71,15 @@ namespace ManagerTest
 		}
 
 		[Test]
-		[ExpectedException(typeof (UriFormatException))]
 		public void ShouldThrowExceptionWhenConstructorArgumentIsStringEmpty()
 		{
-			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(string.Empty);
+			Assert.Throws<UriFormatException>(() => NodeUriBuilderHelperToTest = new NodeUriBuilderHelper(string.Empty));
 		}
 
 		[Test]
-		[ExpectedException(typeof (UriFormatException))]
 		public void ShouldThrowExceptionWhenConstructorArgumentStringIsIvalidUri()
 		{
-			NodeUriBuilderHelperToTest = new NodeUriBuilderHelper("invalid uri");
+			Assert.Throws<UriFormatException>(() => NodeUriBuilderHelperToTest = new NodeUriBuilderHelper("invalid uri"));
 		}
 	}
 }

@@ -34,7 +34,7 @@ namespace ManagerTest
 		private WorkerNode _workerNode;
 		private FakeHttpSender FakeHttpSender => (FakeHttpSender) HttpSender;
 
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void TextFixtureSetUp()
 		{
 			_workerNode = new WorkerNode
