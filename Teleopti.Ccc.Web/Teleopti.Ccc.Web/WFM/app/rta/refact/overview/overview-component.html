@@ -1,10 +1,11 @@
 ﻿<rta-card ng-repeat="card in $ctrl.siteCards" ng-open="card.isOpen" ng-click="card.fetchTeamData(card)">
     <rta-card-header ng-attr-styles="border-left-color: {{card.site.Color}};">
         <div style="position: absolute; width: 100%">
-        <div style="float: left; width:46%"><b>{{card.site.Name}}</b></div>
-        <div style="float: left; width:46%">{{'InAlarm'|translate}}:
+        <div style="float: left; width:44%"><b>{{card.site.Name}}</b></div>
+        <div style="float: left; width:44%">{{'InAlarm'|translate}}:
 			<b>{{card.site.InAlarmCount}}</b>
         </div>
+        <div ng-click="$event.stopPropagation(); $ctrl.selectItem(card)" style="line-height: 33px; float: left; width:4%"><i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i><md-tooltip>{{card.isSelected ? "Unselect site" : "Select site"}}</md-tooltip></div>
         <div style="line-height: 33px; float: left; width:4%"><a ui-sref="{{$ctrl.agentsState}}"><i class="mdi mdi-arrow-right"></i><md-tooltip>See agents</md-tooltip></a></div>
         </div>
     </rta-card-header>

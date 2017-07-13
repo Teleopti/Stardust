@@ -15,6 +15,8 @@
   RtaOverviewComponentController.inject = [];
   function RtaOverviewComponentController() {
     var ctrl = this;
-    
+    ctrl.selectItem = function(card) {
+      card.isSelected = !card.isSelected;
+    }
   }
 })();

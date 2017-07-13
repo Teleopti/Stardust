@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe('rtaOverviewComponent', function () {
+fdescribe('rtaOverviewComponent', function () {
   var $controllerBuilder,
     $fakeBackend,
     $componentController,
@@ -338,8 +338,8 @@ describe('rtaOverviewComponent', function () {
     })
       .wait(5000);
 
-    expect(vm.siteCards[0].teams[0].InAlarmCount).toEqual(2);
-    expect(vm.siteCards[0].teams[0].Color).toEqual('good');
+    expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(2);
+    expect(ctrl.siteCards[0].teams[0].Color).toEqual('good');
   });
 
   it('should not update team adherence when site is closed', function () {
@@ -441,8 +441,8 @@ describe('rtaOverviewComponent', function () {
     })
       .wait(5000);
 
-    expect(vm.siteCards[0].teams[0].InAlarmCount).toEqual(2);
-    expect(vm.siteCards[0].teams[0].Color).toEqual('good');
+    expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(2);
+    expect(ctrl.siteCards[0].teams[0].Color).toEqual('good');
   });
 
   it('should not update team adherence when site is closed and skill is selected', function () {
@@ -503,8 +503,8 @@ describe('rtaOverviewComponent', function () {
     })
       .wait(5000);
 
-    expect(vm.siteCards[0].teams[0].InAlarmCount).toEqual(2);
-    expect(vm.siteCards[0].teams[0].Color).toEqual('good');
+    expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(2);
+    expect(ctrl.siteCards[0].teams[0].Color).toEqual('good');
   });
 
   it('should not update team adherence when skill changes', function () {
@@ -591,8 +591,8 @@ describe('rtaOverviewComponent', function () {
     })
       .wait(5000);
 
-    expect(vm.siteCards[0].teams[0].InAlarmCount).toEqual(1);
-    expect(vm.siteCards[0].teams[0].Color).toEqual('good');
+    expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(1);
+    expect(ctrl.siteCards[0].teams[0].Color).toEqual('good');
   });
 
   it('should set agents state for site', function () {
@@ -627,7 +627,7 @@ describe('rtaOverviewComponent', function () {
 
     expect(ctrl.agentsState).toEqual('rta.agents({siteIds: card.site.Id, skillAreaId: "skillArea1Id"})');
   });
-  
+
   it('should set agents state for site when clearing filter selection', function () {
     vm = $controllerBuilder.createController().vm;
     vm.filterOutput(channelSales);
@@ -639,5 +639,46 @@ describe('rtaOverviewComponent', function () {
 
     expect(ctrl.agentsState).toEqual('rta.agents({siteIds: card.site.Id})');
   });
-  
+
+  it('should select site', function () {
+     $fakeBackend
+     .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      })
+    vm = $controllerBuilder.createController().vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState
+    });
+
+    ctrl.selectItem(ctrl.siteCards[0]);
+
+    expect(ctrl.siteCards[0].isSelected).toEqual(true);
+  });
+
+  it('should unselect site', function () {
+     $fakeBackend
+     .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      })
+    vm = $controllerBuilder.createController().vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState
+    });
+
+    ctrl.selectItem(ctrl.siteCards[0]);
+    ctrl.selectItem(ctrl.siteCards[0]);
+
+    expect(ctrl.siteCards[0].isSelected).toEqual(false);
+  });
+
 });

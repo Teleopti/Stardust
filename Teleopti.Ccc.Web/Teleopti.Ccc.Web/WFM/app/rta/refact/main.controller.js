@@ -64,7 +64,8 @@
 					return {
 						site: site,
 						isOpen: $stateParams.open != "false",
-						fetchTeamData: fetchTeamData
+						fetchTeamData: fetchTeamData,
+						isSelected: false
 					}
 				});
 			}
