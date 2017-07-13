@@ -23,6 +23,7 @@
 
 using System.Windows.Forms;
 using EO.WebBrowser;
+using EO.WinForm;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.SmartParts;
@@ -69,10 +70,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this._statusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.splitContainer = new Syncfusion.Windows.Forms.Tools.SplitContainerAdv();
 			this.outlookBarWorkSpace1 = new Teleopti.Ccc.SmartClientPortal.Shell.Controls.OutlookBarWorkSpace();
-			this.webControl1 = new EO.WebBrowser.WinForm.WebControl();
+			this.webControl1 = new EO.WinForm.WebControl();
 			this.webView1 = new EO.WebBrowser.WebView();
-			this.wfmWebControl = new EO.WebBrowser.WinForm.WebControl();
-			this.webControlDataProtection = new EO.WebBrowser.WinForm.WebControl();
+			this.wfmWebControl = new EO.WinForm.WebControl();
+			this.webControlDataProtection = new EO.WinForm.WebControl();
 			this.wfmWebView = new EO.WebBrowser.WebView();
 			this.gridWorkspace = new GridWorkspace();
 			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
@@ -627,11 +628,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private Syncfusion.Windows.Forms.BackStageButton backStageButtonOptions;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButtonAbout;
 		private Syncfusion.Windows.Forms.BackStageButton backStageButtonExitTELEOPTICCC;
-		private EO.WebBrowser.WinForm.WebControl webControl1;
+		private WebControl webControl1;
 		private EO.WebBrowser.WebView webView1;
         private TabPageAdv tabPageAdv1;
-		  private EO.WebBrowser.WinForm.WebControl wfmWebControl;
-		private EO.WebBrowser.WinForm.WebControl webControlDataProtection;
+		  private WebControl wfmWebControl;
+		private WebControl webControlDataProtection;
 		private EO.WebBrowser.WebView wfmWebView;
 		private WebView webViewDataProtection;
 	}

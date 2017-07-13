@@ -30,7 +30,7 @@
         {
 			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.webControl1 = new EO.WebBrowser.WinForm.WebControl();
+			this.webControl1 = new EO.WinForm.WebControl();
 			this.webView1 = new EO.WebBrowser.WebView();
 			this.notifyIconScheduleMessenger = new System.Windows.Forms.NotifyIcon(this.components);
 			this.SuspendLayout();
@@ -76,7 +76,7 @@
 
         #endregion
 
-        private EO.WebBrowser.WinForm.WebControl webControl1;
+        private EO.WinForm.WebControl webControl1;
         private EO.WebBrowser.WebView webView1;
 		private System.Windows.Forms.NotifyIcon notifyIconScheduleMessenger;
     }

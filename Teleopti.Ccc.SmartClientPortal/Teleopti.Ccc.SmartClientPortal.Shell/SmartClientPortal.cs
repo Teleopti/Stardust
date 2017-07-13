@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			var enableLargeAddressSpaceSetting = ConfigurationManager.AppSettings["EOEnableLargeAddressSpace"];
 			var enableLargeAddressSpace = false;
 			if(bool.TryParse(enableLargeAddressSpaceSetting, out enableLargeAddressSpace))
-				EO.Base.Runtime.EnableLargeAddressSpace = enableLargeAddressSpace;
+				EO.Base.Runtime.EnableEOWP = enableLargeAddressSpace;
 		}
 
 		private void yesResponse(object sender, JSExtInvokeArgs jsExtInvokeArgs)

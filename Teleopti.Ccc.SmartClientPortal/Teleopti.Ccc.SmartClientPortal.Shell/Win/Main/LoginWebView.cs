@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 			var enableLargeAddressSpace = false;
 			var enableLargeAddressSpaceSetting = ConfigurationManager.AppSettings["EOEnableLargeAddressSpace"];
 			if (bool.TryParse(enableLargeAddressSpaceSetting, out enableLargeAddressSpace))
-				EO.Base.Runtime.EnableLargeAddressSpace = enableLargeAddressSpace;
+				EO.Base.Runtime.EnableEOWP = enableLargeAddressSpace;
 			webView1.LoadCompleted += webView1LoadCompleted;
 		}
 

@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
+﻿using EO.WinForm;
+
+namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 {
 	partial class LoginWebView
 	{
@@ -31,7 +33,7 @@
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LoginWebView));
 			Syncfusion.Windows.Forms.CaptionImage captionImage1 = new Syncfusion.Windows.Forms.CaptionImage();
 			this.labelVersion = new System.Windows.Forms.Label();
-			this.webControl = new EO.WebBrowser.WinForm.WebControl();
+			this.webControl = new EO.WinForm.WebControl();
 			this.webView1 = new EO.WebBrowser.WebView();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.SuspendLayout();
@@ -119,7 +121,7 @@
 		#endregion
 
 		private System.Windows.Forms.Label labelVersion;
-		private EO.WebBrowser.WinForm.WebControl webControl;
+		private WebControl webControl;
 		private EO.WebBrowser.WebView webView1;
 		private System.Windows.Forms.Panel panel1;
 	}
