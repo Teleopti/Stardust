@@ -24,15 +24,15 @@ namespace Teleopti.Ccc.Domain.Tracking
 
         public void RefreshIfNeeded(IAccount account)
         {
-            if (account != null && NeedsRefresh(account)) RefreshAndAddToCache(account);
+            if (account != null && NeedsRefresh(account)) refreshAndAddToCache(account);
         }
 
         public void Refresh(IAccount account)
         {
-            if (account != null) RefreshAndAddToCache(account);
+            if (account != null) refreshAndAddToCache(account);
         }
 
-        private void RefreshAndAddToCache(IAccount account)
+        private void refreshAndAddToCache(IAccount account)
         {
             account.CalculateUsed(_scheduleStorage, _currentScenario.Current());
            _refreshedAccounts.Add(account);
