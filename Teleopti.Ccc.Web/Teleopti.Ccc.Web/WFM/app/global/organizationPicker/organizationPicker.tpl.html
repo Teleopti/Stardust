@@ -13,33 +13,33 @@
 			<md-virtual-repeat-container class="virtual-repeat">
 				<div md-virtual-repeat="o in $ctrl.orgsInView" class="repeated-item" flex>
 					<div ng-class="{focused: o.isFocused}" class="site md-button-toggle md-button md-ink-ripple" ng-if=" o.m.isSite ">
-						<div flex layout="row">
-							<div class="wfm-checkbox" ng-class="{'indeterminate': o.isIndeterminate()}">
-								<label tabindex="-1" ng-click="$ctrl.toggleSite(o)" >
-									<input ng-click="$ctrl.toggleSite(o)" type="checkbox" ng-checked="o.isChecked()" ng-blur="$ctrl.orgBlurred(o)" ng-focus="$ctrl.orgFocused(o)" />
-									<span class="wfm-checkbox-toggle"></span>
-									<span class="wfm-checkbox-label" ng-bind-html="o.m.name | searchFilter:$ctrl.searchText"></span>
-								</label>
+						<label class="clickable-area" tabindex="-1" for="site-{{o.m.id}}">
+							<div flex layout="row">
+								<div class="wfm-checkbox" ng-class="{'indeterminate': o.isIndeterminate()}">
+										<input type="checkbox" id="site-{{o.m.id}}" ng-click="$ctrl.toggleSite(o)" ng-checked="o.isChecked()" ng-blur="$ctrl.orgBlurred(o)" ng-focus="$ctrl.orgFocused(o)" />
+										<span class="wfm-checkbox-toggle"></span>
+										<span class="wfm-checkbox-label" ng-bind-html="o.m.name | searchFilter:$ctrl.searchText"></span>
+								</div>
+								<span flex></span>
+								<input type="checkbox" id="toggle-{{o.m.id}}" class="shadow-site-toggle" ng-blur="$ctrl.orgBlurred(o)" ng-focus="$ctrl.orgFocused(o)" ng-click="$ctrl.collapseSite(o)" />
+								<div tabindex="-1" class="site-toggle">
+									<label for="toggle-{{o.m.id}}">
+										<span class="md-toggle-icon" tabindex="-1">
+											<i class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
+										</span>
+									</label>
+								</div>
 							</div>
-							<span flex></span>
-							<input type="checkbox" id="org-{{::o.m.id}}" class="shadow-site-toggle" ng-blur="$ctrl.orgBlurred(o)" ng-focus="$ctrl.orgFocused(o)" ng-click="$ctrl.collapseSite(o)" />
-							<div tabindex="-1" class="site-toggle">
-								<label for="org-{{::o.m.id}}">
-									<span class="md-toggle-icon" tabindex="-1">
-										<i class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
-									</span>
-								</label>
-							</div>
-						</div>
+						</label>
 					</div>
 					<div ng-if=" !o.m.isSite " ng-class="{focused: o.isFocused}" class="team md-button md-ink-ripple">
-						<div class="wfm-checkbox">
-							<label tabindex="-1">
-								<input type="checkbox" ng-click="$ctrl.toggleTeam(o)" ng-checked="o.m.site.checkTeamIsSelected(o.m.id)" ng-blur="$ctrl.orgBlurred(o)" ng-focus="$ctrl.orgFocused(o)" />
-								<span class="wfm-checkbox-toggle"></span>
-								<span class="wfm-checkbox-label" ng-bind-html="o.m.name | searchFilter:$ctrl.searchText"></span>
-							</label>
-						</div>
+						<label class="clickable-area" tabindex="-1">
+							<div class="wfm-checkbox">
+									<input type="checkbox" ng-click="$ctrl.toggleTeam(o)" ng-checked="o.m.site.checkTeamIsSelected(o.m.id)" ng-blur="$ctrl.orgBlurred(o)" ng-focus="$ctrl.orgFocused(o)" />
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label" ng-bind-html="o.m.name | searchFilter:$ctrl.searchText"></span>
+							</div>
+						</label>
 					</div>
 				</div>
 			</md-virtual-repeat-container>

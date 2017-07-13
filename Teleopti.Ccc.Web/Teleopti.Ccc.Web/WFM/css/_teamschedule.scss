@@ -1145,8 +1145,19 @@ organization-picker {
 				border-radius: 2px;
 			}
 
+			label.clickable-area {
+				cursor: pointer;
+				display: block !important;
+				padding: 0 1em;
+				margin: 0;
+			}
+
 			.team {
-				padding: 0 1em 0 2em;
+				padding: 0;
+
+				label.clickable-area {
+					padding: 0 1em 0 2em;
+				}
 			}
 
 			.md-button {
@@ -1171,7 +1182,7 @@ organization-picker {
 			.site-toggle {
 				cursor: pointer;
 
-				&:active {
+				&:active, &:hover {
 					background-color: rgba(158,158,158,0.26);
 				}
 
@@ -1186,7 +1197,7 @@ organization-picker {
 		}
 
 		.md-button-toggle {
-			padding: 0 1em;
+			padding: 0;
 		}
 		// make styleguide checkboxes receive focus
 		// TODO: remove after styleguide is upgraded
