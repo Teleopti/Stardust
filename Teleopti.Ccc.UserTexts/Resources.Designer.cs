@@ -6128,6 +6128,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Classic Intraday.
+        /// </summary>
+        public static string ClassicIntraday {
+            get {
+                return ResourceManager.GetString("ClassicIntraday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Clear.
         /// </summary>
         public static string Clear {
@@ -9461,7 +9470,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You have active suggestion data, if you continue this will be discarded.
+        ///   Looks up a localized string similar to You have active suggestion data. If you continue this will be discarded.
         /// </summary>
         public static string DiscardSuggestionData {
             get {

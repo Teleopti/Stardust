@@ -16268,4 +16268,8 @@ Do you want to participate?</value>
     <value> Edit name and  filters for selected planning group</value>
     <comment>Edit name and  filters for selected planning group</comment>
   </data>
+  <data name="ClassicIntraday" xml:space="preserve">
+    <value>Classic Intraday</value>
+    <comment>Classic Intraday</comment>
+  </data>
 </root>

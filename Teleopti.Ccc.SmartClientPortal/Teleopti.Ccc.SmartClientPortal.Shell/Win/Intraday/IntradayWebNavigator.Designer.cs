@@ -60,7 +60,7 @@
 			this.toolStripEx1.Padding = new System.Windows.Forms.Padding(12, 0, 1, 0);
 			this.toolStripEx1.ShowCaption = false;
 			this.toolStripEx1.ShowLauncher = false;
-			this.toolStripEx1.Size = new System.Drawing.Size(299, 156);
+			this.toolStripEx1.Size = new System.Drawing.Size(299, 136);
 			this.toolStripEx1.TabIndex = 1;
 			this.toolStripEx1.Text = "toolStripEx1";
 			this.toolStripEx1.VisualStyle = Syncfusion.Windows.Forms.Tools.ToolStripExStyle.Metro;
@@ -69,7 +69,7 @@
 			// 
 			this.toolStripLabel1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.toolStripLabel1.Name = "toolStripLabel1";
-			this.toolStripLabel1.Size = new System.Drawing.Size(285, 23);
+			this.toolStripLabel1.Size = new System.Drawing.Size(285, 17);
 			this.toolStripLabel1.Text = "xxActions";
 			// 
 			// toolStripButtonIntraday
@@ -79,7 +79,7 @@
 			this.toolStripButtonIntraday.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonIntraday.Name = "toolStripButtonIntraday";
 			this.toolStripButtonIntraday.Padding = new System.Windows.Forms.Padding(4);
-			this.toolStripButtonIntraday.Size = new System.Drawing.Size(285, 35);
+			this.toolStripButtonIntraday.Size = new System.Drawing.Size(285, 32);
 			this.toolStripButtonIntraday.Text = "xxIntraday";
 			this.toolStripButtonIntraday.Click += new System.EventHandler(this.toolStripButtonIntraday_Click);
 			// 
@@ -89,7 +89,7 @@
 			this.toolStripButtonRta.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonRta.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonRta.Name = "toolStripButtonRta";
-			this.toolStripButtonRta.Size = new System.Drawing.Size(285, 27);
+			this.toolStripButtonRta.Size = new System.Drawing.Size(285, 24);
 			this.toolStripButtonRta.Text = "xxRealTimeAdherence";
 			this.toolStripButtonRta.Click += new System.EventHandler(this.toolStripButtonRta_Click);
 			// 
@@ -104,13 +104,13 @@
 			this.toolStripButtonOldIntraday.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.toolStripButtonOldIntraday.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonOldIntraday.Name = "toolStripButtonOldIntraday";
-			this.toolStripButtonOldIntraday.Size = new System.Drawing.Size(285, 27);
-			this.toolStripButtonOldIntraday.Text = "xxOldIntraday";
+			this.toolStripButtonOldIntraday.Size = new System.Drawing.Size(285, 24);
+			this.toolStripButtonOldIntraday.Text = "xxClassicIntraday";
 			this.toolStripButtonOldIntraday.Click += new System.EventHandler(this.toolStripButtonOldIntraday_Click);
 			// 
 			// IntradayWebNavigator
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 21F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 17F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.Color.White;
 			this.Controls.Add(this.toolStripEx1);
