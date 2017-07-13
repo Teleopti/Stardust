@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				var denyCommand = new DenyRequestCommand()
 				{
 					PersonRequestId = personRequest.Id.GetValueOrDefault(),
-					DenyReason = Resources.OvertimeRequestDenyReasonExpired,
+					DenyReason = string.Format(Resources.OvertimeRequestDenyReasonExpired, personRequest.Request.Period.StartDateTime, minimumApprovalThresholdTimeInMinutes),
 					DenyOption = PersonRequestDenyOption.AutoDeny
 				};
 				_commandDispatcher.Execute(denyCommand);

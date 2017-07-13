@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldApproveOvertimeRequest()
 		{
 			var skill1 = new Domain.Forecasting.Skill("skill1");
-			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new[] { skill1 });
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(Now.UtcDateTime()), new[] { skill1 });
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldDenyOvertimeRequestWhenItsStartTimeIsWithinUpcoming15Mins()
 		{
 			var skill1 = new Domain.Forecasting.Skill("skill1");
-			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new[] { skill1 });
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(Now.UtcDateTime()), new[] { skill1 });
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });
