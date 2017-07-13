@@ -1,4 +1,4 @@
-fdescribe('sortAgent component tests', function () {
+describe('sortAgent component tests', function () {
 	var $componentController, $rootScope, $compile;
 	beforeEach(module('wfm.templates'));
 
