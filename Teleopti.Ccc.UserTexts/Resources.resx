@@ -10713,6 +10713,10 @@ These options are activated:
     <value>Overtime request was cancelled.</value>
     <comment>Overtime request was cancelled.</comment>
   </data>
+  <data name="OvertimeRequestDenyReasonExpired" xml:space="preserve">
+    <value>Your overtime request has been denied automatically. The start time of this request is {0}, it must be at least {1} minutes later than current time</value>
+    <comment>{0} start time of request, {1} minimum minutes for expired threshold</comment>
+  </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Hourly Availability Fulfillment</value>
     <comment>Student Availability Fulfillment</comment>

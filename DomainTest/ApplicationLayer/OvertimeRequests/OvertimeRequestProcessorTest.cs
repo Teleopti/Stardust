@@ -1,10 +1,10 @@
 ﻿using System;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -14,6 +14,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 
@@ -28,6 +29,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public FakeCurrentScenario CurrentScenario;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public const int MinimumApprovalThresholdTimeInMinutes = 15;
+		public INow Now;
+
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -35,22 +39,45 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<DoNothingScheduleDayChangeCallBack>().For<IScheduleDayChangeCallback>();
+			system.UseTestDouble(new ThisIsNow(new DateTime(2017, 07, 12, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
 		}
 
 		[Test]
 		public void ShouldApproveOvertimeRequest()
 		{
 			var skill1 = new Domain.Forecasting.Skill("skill1");
-			var baseDate = new DateOnly(2016, 12, 1);
-			var person = PersonFactory.CreatePersonWithPersonPeriod(baseDate, new[] { skill1 });
-			var personRequest = createOvertimeRequest(person, DateOnly.Today.ToDateTimePeriod(TimeZoneInfo.Utc));
-
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new[] { skill1 });
 			LoggedOnUser.SetFakeLoggedOnUser(person);
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });
+
+			var requestStartTime = Now.UtcDateTime().AddMinutes(MinimumApprovalThresholdTimeInMinutes + 1);
+
+			var personRequest = createOvertimeRequest(person, new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
 
 			Target.Process(personRequest);
 
 			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldDenyOvertimeRequestWhenItsStartTimeIsWithinUpcoming15Mins()
+		{
+			var skill1 = new Domain.Forecasting.Skill("skill1");
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new[] { skill1 });
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });
+
+			var requestStartTime = Now.UtcDateTime().AddMinutes(MinimumApprovalThresholdTimeInMinutes - 1);
+
+			var personRequest = createOvertimeRequest(person, new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
+
+			Target.Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should().Be.EqualTo(string.Format(Resources.OvertimeRequestDenyReasonExpired, requestStartTime, MinimumApprovalThresholdTimeInMinutes));
 		}
 
 		private IPersonRequest createOvertimeRequest(IPerson person, DateTimePeriod period)

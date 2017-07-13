@@ -21843,6 +21843,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your overtime request has been denied automatically. The start time of this request is {0}, it must be at least {1} minutes later than current time.
+        /// </summary>
+        public static string OvertimeRequestDenyReasonExpired {
+            get {
+                return ResourceManager.GetString("OvertimeRequestDenyReasonExpired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The overtime request {0} was denied..
         /// </summary>
         public static string OvertimeRequestForOneDayHasBeenDeniedDot {
