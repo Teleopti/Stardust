@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.AspNet.SignalR.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Broker
@@ -21,11 +22,9 @@ namespace Teleopti.Ccc.Web.Broker
 
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
-
-			var prefix = settingsFromParser.SignalRBackplanePrefix == null
-				? ""
-				: settingsFromParser.SignalRBackplanePrefix.Substring(0,
-					Math.Min(30, settingsFromParser.SignalRBackplanePrefix.Length));
+			
+			var prefix = settingsFromParser.SignalRBackplanePrefix?.Substring(0,
+							 Math.Min(30, settingsFromParser.SignalRBackplanePrefix.Length)) ?? "";
 			switch (settingsFromParser.SignalRBackplaneType)
 			{
 				case SignalRBackplaneType.SqlServer:
@@ -39,11 +38,21 @@ namespace Teleopti.Ccc.Web.Broker
 			        break;
 			}
 
+			GlobalHost.DependencyResolver.UseThisAssemblyForHubs();
+
 			if (!settingsFromParser.EnablePerformanceCounters)
 				GlobalHost.DependencyResolver.Register(typeof(IPerformanceCounterManager), () => new FakePerformanceCounterInitializer());
 			
 			mapSignalR();
 
+		}
+	}
+
+	public static class SignalRHubConfigurationExtensions
+	{
+		public static void UseThisAssemblyForHubs(this IDependencyResolver resolver)
+		{
+			resolver.Register(typeof(IAssemblyLocator), () => new EnumerableOfAssemblyLocator(new[] { typeof(SignalRHubConfigurationExtensions).Assembly }));
 		}
 	}
 
