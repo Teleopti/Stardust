@@ -2,13 +2,16 @@
 	'use strict';
 	angular.module('wfm.teamSchedule').component('sortAgent', {
 		controller: SortAgentCtrl,
-		templateUrl: 'app/teamSchedule/html/sortAgent.html'
+		templateUrl: 'app/teamSchedule/html/sortAgent.html',
+		bindings: {
+			ngModel:'='
+		}
 	});
 
 	SortAgentCtrl.$inject = ['$scope'];
 	function SortAgentCtrl($scope) {
 		var ctrl = this;
-		ctrl.selectedOption = "";
+		ctrl.selectedOption = ctrl.ngModel;
 		ctrl.availableOptions = [];
 
 		ctrl.$onInit = function () {
@@ -34,6 +37,15 @@
 					isSelected: false
 				}
 			];
+			if (!!ctrl.selectedOption) {
+				ctrl.availableOptions.forEach(function (item) {
+					if (item.key === ctrl.selectedOption) {
+						item.isSelected = true;
+					} else {
+						item.isSelected = false;
+					}
+				});
+			}
 		};
 
 		ctrl.select = function (item) {
@@ -46,19 +58,7 @@
 				ctrl.selectedOption = item.key;
 				item.isSelected = true;
 			}
-			$scope.$emit('teamSchedule.sortOption.update', { option: ctrl.selectedOption });
+			$scope.$emit('teamSchedule.update.sortOption', { option: ctrl.selectedOption });
 		}
-		$scope.$on("teamSchedule.init.sortOption",
-			function (e, d) {
-				ctrl.availableOptions.forEach(function (item) {
-					if (item.key === d.option) {
-						item.isSelected = true;
-						ctrl.selectedOption = d.option;
-					} else {
-						item.isSelected = false;
-					}
-
-				});
-			});
 	}
 })(angular);

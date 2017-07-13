@@ -10,7 +10,7 @@
 					</label>
 				</div>
 				<div ng-hide="::vm.selectMode" class="wfm-checkbox-label nowrap">{{'AgentName' | translate}}</div>
-				<sort-agent ng-if="vm.toggles.WfmTeamSchedule_SortRows_45056" class="pull-right"></sort-agent>
+				<sort-agent ng-if="vm.toggles.WfmTeamSchedule_SortRows_45056" ng-model="vm.selectedSortOption" class="pull-right"></sort-agent>
 			</th>
 
 			<th class="shift-category-cell-header"></th>

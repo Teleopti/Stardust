@@ -1,4 +1,4 @@
-describe('sortAgent component tests', function () {
+fdescribe('sortAgent component tests', function () {
 	var $componentController, $rootScope, $compile;
 	beforeEach(module('wfm.templates'));
 
@@ -15,7 +15,7 @@ describe('sortAgent component tests', function () {
 	it('should view all sorting options',function() {
 			var ctrl = $componentController('sortAgent');
 			ctrl.$onInit();
-			expect(ctrl.selectedOption).toEqual("");
+			expect(!!ctrl.selectedOption).toEqual(false);
 			expect(ctrl.availableOptions.length).toEqual(5);
 	});
 
@@ -47,7 +47,7 @@ describe('sortAgent component tests', function () {
 	it('should emit sort option update event if the selected option is changed', function() {
 		var selectedOption = '';
 		var scope = $rootScope.$new();
-		scope.$on('teamSchedule.sortOption.update',
+		scope.$on('teamSchedule.update.sortOption',
 			function (e, d) {
 				selectedOption = d.option;
 			});
@@ -59,23 +59,17 @@ describe('sortAgent component tests', function () {
 	});
 
 	it('should init selected sort option when there is option', function () {
-		var html = '<sort-agent></sort-agent>';
-		var scope = $rootScope.$new();
-		var target = $compile(html)(scope);
-		scope.$apply();
-		var innerScope = angular.element(target[0].querySelector('.sort-menu')).scope();
-		scope.$broadcast('teamSchedule.init.sortOption', { option: "StartTime" });
-		var selected = innerScope.$ctrl.availableOptions.filter(function (item) {
+		var ctrl = $componentController('sortAgent', null, { ngModel: "StartTime" });
+		ctrl.$onInit();
+		var selected = ctrl.availableOptions.filter(function (item) {
 			return item.isSelected;
 		});
-
 		expect(selected.length).toEqual(1);
 		expect(selected[0].key).toEqual("StartTime");
-		expect(innerScope.$ctrl.selectedOption).toEqual("StartTime");
+		expect(ctrl.selectedOption).toEqual("StartTime");
 	});
 
-	it('should deselect the sort option when select the selected option again', function() {
-
+	it('should deselect the sort option when select the same option again', function() {
 		var ctrl = $componentController('sortAgent');
 		ctrl.$onInit();
 		ctrl.select(ctrl.availableOptions[0]);

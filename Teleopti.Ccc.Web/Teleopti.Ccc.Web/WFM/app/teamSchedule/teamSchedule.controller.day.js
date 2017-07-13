@@ -50,6 +50,7 @@
 
 		vm.hasSelectedAllPeopleInEveryPage = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
+		
 
 
 		var commandContainerId = 'teamschedule-command-container';
@@ -81,7 +82,7 @@
 				vm.isLoading = false;
 			});
 
-		$scope.$on('teamSchedule.sortOption.update',
+		$scope.$on('teamSchedule.update.sortOption',
 			function (e, d) {
 				vm.sortOption = d.option;
 				vm.loadSchedules();
@@ -96,7 +97,7 @@
 			focusingSearch: false
 		};
 		vm.selectedFavorite = $stateParams.do ? $stateParams.selectedFavorite : null;
-
+		vm.sortOption = $stateParams.selectedSortOption;
 
 		vm.openSettingsPanel = function () {
 			closeAllCommandSidenav();
@@ -450,10 +451,7 @@
 					replaceArrayValues([loggedonUsersTeamId], vm.selectedTeamIds);
 				}
 			}
-			if ($stateParams.selectedSortOption) {
-				vm.sortOption = $stateParams.selectedSortOption;
-				$scope.$broadcast('teamSchedule.init.sortOption', {option:vm.sortOption});
-			}
+			
 			vm.resetSchedulePage();
 		});
 

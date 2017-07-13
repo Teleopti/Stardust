@@ -10,6 +10,7 @@
 				selectMode: '=',
 				selectedDate: '=',
 				selectedTimezone: '<',
+				selectedSortOption: '<',
 				showWarnings: '=?',				
 				paginationOptions: '<?'
 			},
