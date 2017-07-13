@@ -40,22 +40,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 				}
 				return _latestCalculatedBalance;
 			}
-			set { _latestCalculatedBalance = value; }
+			set => _latestCalculatedBalance = value;
 		}
 
 		public virtual DateOnly StartDate
 		{
-			get { return _startDate; }
-			set { _startDate = value;}
+			get => _startDate;
+			set => _startDate = value;
 		}
 
-		public virtual TimeSpan Remaining
-		{
-			get
-			{
-				return BalanceIn.Add(Accrued).Add(Extra).Subtract(LatestCalculatedBalance).Subtract(BalanceOut);
-			}
-		}
+		public virtual TimeSpan Remaining => BalanceIn.Add(Accrued).Add(Extra).Subtract(LatestCalculatedBalance).Subtract(BalanceOut);
 
 		public virtual bool IsExceeded
 		{
@@ -135,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 					}
 				}
 			}
-			if (Owner != null && Owner.Person.TerminalDate.HasValue)
+			if (Owner?.Person.TerminalDate != null)
 			{
 				var terminateDate = Owner.Person.TerminalDate.Value;
 				if (terminateDate < endDate)
@@ -152,10 +146,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.PersonalAccount
 			return StartDate.Add(DefaultMaxPeriodLength);
 		}
 
-		public virtual IPersonAbsenceAccount Owner
-		{
-			get { return (IPersonAbsenceAccount) Parent; }
-		}
+		public virtual IPersonAbsenceAccount Owner => (IPersonAbsenceAccount) Parent;
 
 		public virtual IAccount NoneEntityClone()
 		{

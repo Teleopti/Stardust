@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -29,7 +28,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _traceableRefreshService = traceableRefreshService;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(SetPersonAccountForPersonCommandDto command)
         {
             using (var unitOfWork = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -38,8 +36,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 if (foundPerson == null) throw new FaultException("Person does not exist.");
                 var foundAbsence = _absenceRepository.Get(command.AbsenceId);
                 if (foundAbsence == null) throw new FaultException("Absence does not exist.");
-                var dateFrom = command.DateFrom.ToDateOnly();
 
+				var dateFrom = command.DateFrom.ToDateOnly();
 				foundPerson.VerifyCanBeModifiedByCurrentUser(dateFrom);
 
 				var accounts = _personAbsenceAccountRepository.Find(foundPerson);
