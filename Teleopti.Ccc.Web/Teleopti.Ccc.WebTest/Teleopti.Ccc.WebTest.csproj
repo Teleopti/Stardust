@@ -264,6 +264,7 @@
     <Compile Include="Areas\MultiTenancy\PersonInfoLogonInfoFromIdentitiesTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerFetchDayDataTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerFetchMonthDataTest.cs" />
+    <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerGetIntradayScheduleEdgeTimeTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerTimeLineTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleStaffingPossibilityControllerTest.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleApiControllerFetchWeekDataTest.cs" />

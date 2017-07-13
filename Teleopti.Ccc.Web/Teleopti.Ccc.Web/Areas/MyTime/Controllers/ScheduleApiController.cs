@@ -4,6 +4,8 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MonthSchedule;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
@@ -19,12 +21,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IScheduleViewModelFactory _scheduleViewModelFactory;
 		private readonly INow _now;
 		private readonly IUserTimeZone _timeZone;
+		private readonly IIntradayScheduleEdgeTimeCalculator _intradayScheduleEdgeTimeCalculator;
 
-		public ScheduleApiController(IScheduleViewModelFactory scheduleViewModelFactory, INow now, IUserTimeZone timeZone)
+		public ScheduleApiController(IScheduleViewModelFactory scheduleViewModelFactory, INow now, IUserTimeZone timeZone, IIntradayScheduleEdgeTimeCalculator intradayScheduleEdgeTimeCalculator)
 		{
 			_scheduleViewModelFactory = scheduleViewModelFactory;
 			_now = now;
 			_timeZone = timeZone;
+			_intradayScheduleEdgeTimeCalculator = intradayScheduleEdgeTimeCalculator;
+		}
+
+		[UnitOfWork, Route("api/Schedule/GetIntradayScheduleEdgeTime"), HttpGet]
+		public virtual IntradayScheduleEdgeTime GetIntradayScheduleEdgeTime([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly? date)
+		{
+			var nowForUser = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
+			var showForDate = date ?? new DateOnly(nowForUser.Date);
+
+			var period = _intradayScheduleEdgeTimeCalculator.GetSchedulePeriodForCurrentUser(showForDate);
+
+			return period;
 		}
 
 		[UnitOfWork, Route("api/Schedule/FetchDayData"), HttpGet]
