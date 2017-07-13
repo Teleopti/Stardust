@@ -647,6 +647,246 @@ describe('RtaMainController', function () {
       },
         { notify: false });
     });
+
+    it('should go to agents for selected site', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'parisId',
+          Name: 'Paris',
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: 'good'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.goToAgents();
+      });
+
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: [], skillAreaId: undefined });
+    });
+
+    it('should go to agents for the right selected site after deselecting some other', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'parisId',
+          Name: 'Paris',
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: 'good'
+        })
+        .withSiteAdherence({
+          Id: 'londonId',
+          Name: 'London',
+          AgentsCount: 8,
+          InAlarmCount: 2,
+          Color: 'good'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.getSelectedItems(vm.siteCards[1]);
+        vm.getSelectedItems(vm.siteCards[1]);
+        vm.goToAgents();
+      });
+
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: [], skillAreaId: undefined });
+    });
+
+    it('should go to agents for selected site with selected skill', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'parisId',
+          SkillId: 'channelSalesId',
+          Name: 'Paris',
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: 'good'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+      vm.filterOutput(channelSales);
+      $httpBackend.flush();
+
+      c.apply(function () {
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.goToAgents();
+      });
+
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: ['channelSalesId'], skillAreaId: undefined });
+    });
+
+    it('should go to agents for selected site with preselected skill', function () {
+      stateParams.skillIds = ['channelSalesId'];
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'parisId',
+          SkillId: 'channelSalesId',
+          Name: 'Paris',
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: 'good'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+      $httpBackend.flush();
+
+      c.apply(function () {
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.goToAgents();
+      });
+
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: ['channelSalesId'], skillAreaId: undefined });
+    });
+
+    
+    it('should go to agents for selected site after clearing skill selection', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'parisId',
+          SkillId: 'channelSalesId',
+          Name: 'Paris',
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: 'good'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+      vm.filterOutput(channelSales);
+      $httpBackend.flush();
+
+      c.apply(function () {
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.filterOutput();
+        vm.goToAgents();
+      });
+
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], skillIds: [], skillAreaId: undefined });
+    });
+
+    it('should go to agents for selected site after clearing skill selection when skill was preselected', function () {
+      stateParams.skillIds = ['channelSalesId'];
+      $fakeBackend
+         .withSiteAdherence({
+          Id: 'parisId',
+          Name: 'Paris',
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: 'good'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+      $httpBackend.flush();
+      vm.filterOutput();
+      $httpBackend.flush();
+
+      c.apply(function () {
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.goToAgents();
+      });
+
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: [], skillAreaId: undefined });
+    });
+
+    it('should go to agents for selected site with selected skill area', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'parisId',
+          SkillId: 'channelSalesId',
+          Name: 'Paris',
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: 'good'
+        })
+        .withSiteAdherence({
+          Id: 'parisId',
+          SkillId: 'phoneId',
+          Name: 'Paris',
+          AgentsCount: 6,
+          InAlarmCount: 2,
+          Color: 'good'
+        });
+      var c = $controllerBuilder.createController(undefined, skillAreas);
+      vm = c.vm;
+      vm.filterOutput(skillArea1);
+      c.apply(function () {
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.goToAgents();
+      });
+
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: [], skillAreaId: 'skillArea1Id' });
+    });
+
+    it('should go to agents for selected site with preselected skill area', function () {
+      stateParams.skillAreaId = 'skillArea1Id';
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'parisId',
+          SkillId: 'channelSalesId',
+          Name: 'Paris',
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: 'good'
+        })
+        .withSiteAdherence({
+          Id: 'parisId',
+          SkillId: 'phoneId',
+          Name: 'Paris',
+          AgentsCount: 6,
+          InAlarmCount: 2,
+          Color: 'good'
+        });
+      var c = $controllerBuilder.createController(undefined, skillAreas);
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.goToAgents();
+      });
+
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: [], skillAreaId: 'skillArea1Id' });
+    });
+
+    it('should reset selected sites when changing skill', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'parisId',
+          SkillId: 'channelSalesId',
+          Name: 'Paris',
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: 'good'
+        })
+        .withSiteAdherence({
+          Id: 'londonId',
+          SkillId: 'phoneId',
+          Name: 'London',
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: 'good'
+        });
+
+      var c = $controllerBuilder.createController(skills1);
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.filterOutput(skills1[0]);
+        $httpBackend.flush();
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.filterOutput(skills1[1]);
+        $httpBackend.flush();
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.goToAgents();
+      });
+
+      expect(vm.selectedItems).toEqual({ siteIds: ['londonId'], skillIds: ['phoneId'], skillAreaId: undefined });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['londonId'], skillIds: ['phoneId'], skillAreaId: undefined });
+    });
+
   });
 
 });

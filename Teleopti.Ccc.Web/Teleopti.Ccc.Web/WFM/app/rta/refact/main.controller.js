@@ -18,6 +18,9 @@
 		vm.siteCards = [];
 		vm.urlParams = $stateParams;
 		vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
+		vm.organizationSelection = false;
+
+		vm.selectedItems = { siteIds: [], skillIds: [], skillAreaId: undefined };
 
 		(function fetchDataForFilterComponent() {
 			if (vm.skillIds.length > 0) {
@@ -36,6 +39,23 @@
 			var sitePolling;
 			var sitePollingWithSkills;
 			var pollingIntervals = [];
+
+			vm.setInitialSelectionsAndState = function () {
+				if (angular.isDefined(vm.urlParams.skillAreaId)) {
+					vm.selectedItems.skillAreaId = vm.urlParams.skillAreaId;
+					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + vm.urlParams.skillAreaId + '"})';
+				}
+				else if (angular.isDefined(vm.urlParams.skillIds)) {
+					vm.selectedItems.skillIds = vm.urlParams.skillIds;
+					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + vm.urlParams.skillIds[0] + '"]})';
+				}
+				else {
+					vm.selectedItems = { siteIds: [], skillIds: [], skillAreaId: undefined };
+					vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
+				}
+			}
+
+			vm.setInitialSelectionsAndState();
 
 			if (angular.isDefined(vm.skillAreaId)) {
 				vm.skillIds = getSkillIdsFromSkillAreaId(vm.skillAreaId);
@@ -65,7 +85,7 @@
 						site: site,
 						isOpen: $stateParams.open != "false",
 						fetchTeamData: fetchTeamData,
-						isSelected: false
+						//isSelected: false
 					}
 				});
 			}
@@ -184,20 +204,39 @@
 					vm.skillIds = [];
 					$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
 					getSiteCards();
+					vm.urlParams.skillIds = undefined;
+					vm.urlParams.skillAreaId = undefined;
+					vm.selectedItems = { siteIds: [], skillIds: [], skillAreaId: undefined };
 					vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 				} else if (selectedItem.hasOwnProperty('Skills')) {
-
+					vm.selectedItems = {siteIds:[], skillIds: [], skillAreaId: selectedItem.Id};
+					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + selectedItem.Id + '"})';
 					$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
 					vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
 					getSiteCards(vm.skillIds);
-					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + selectedItem.Id + '"})';
-
 				} else {
 					vm.skillIds = [selectedItem.Id];
+					vm.selectedItems = {siteIds:[], skillIds: vm.skillIds, skillAreaId: undefined};
+					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + selectedItem.Id + '"]})';
 					$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
 					getSiteCards(vm.skillIds);
-					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + selectedItem.Id + '"]})';
 				}
+			}
+
+			vm.getSelectedItems = function (card) {
+				var indexOfSite = vm.selectedItems.siteIds.indexOf(card.site.Id);
+				var siteAlreadySelected = indexOfSite > -1;
+				if (!siteAlreadySelected) {
+					vm.selectedItems.siteIds.push(card.site.Id);
+				}
+				else {
+					vm.selectedItems.siteIds.splice(indexOfSite, 1);
+				}
+				vm.organizationSelection = vm.selectedItems.siteIds.length;
+			}
+
+			vm.goToAgents = function () {
+				$state.go('rta.agents', vm.selectedItems);
 			}
 		})();
 	}

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-fdescribe('rtaOverviewComponent', function () {
+describe('rtaOverviewComponent', function () {
   var $controllerBuilder,
     $fakeBackend,
     $componentController,
@@ -652,7 +652,8 @@ fdescribe('rtaOverviewComponent', function () {
     vm = $controllerBuilder.createController().vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
-      agentsState: vm.agentsState
+      agentsState: vm.agentsState,
+      getSelectedItems: vm.getSelectedItems
     });
 
     ctrl.selectItem(ctrl.siteCards[0]);
@@ -672,7 +673,8 @@ fdescribe('rtaOverviewComponent', function () {
     vm = $controllerBuilder.createController().vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
-      agentsState: vm.agentsState
+      agentsState: vm.agentsState,
+      getSelectedItems: vm.getSelectedItems
     });
 
     ctrl.selectItem(ctrl.siteCards[0]);

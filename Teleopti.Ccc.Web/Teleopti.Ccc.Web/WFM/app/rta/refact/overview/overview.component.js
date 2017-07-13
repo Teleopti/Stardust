@@ -8,15 +8,18 @@
       controller: RtaOverviewComponentController,
       bindings: {
         siteCards: '=',
-        agentsState: '='
+        agentsState: '=',
+        getSelectedItems: '='
       },
     });
 
   RtaOverviewComponentController.inject = [];
   function RtaOverviewComponentController() {
     var ctrl = this;
+    ctrl.selectedItems = {siteIds: []};
     ctrl.selectItem = function(card) {
       card.isSelected = !card.isSelected;
+      ctrl.getSelectedItems(card);
     }
   }
 })();
