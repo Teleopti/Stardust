@@ -202,7 +202,8 @@
 		WFM_Intraday_SupportMultisiteSkill_43874,
 		WFM_Intraday_Export_To_Excel_44892,
 		WFM_Forecaster_Refact_44480,
-		WFM_Export_Forecast_44716
+		WFM_Export_Forecast_44716,
+		WFM_RedirectPermissionToWeb_44562
 		// ReSharper restore InconsistentNaming
 	}
 }

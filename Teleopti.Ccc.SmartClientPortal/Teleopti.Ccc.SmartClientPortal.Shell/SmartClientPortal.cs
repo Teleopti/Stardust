@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -501,6 +502,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						}
 					}
 				}
+				else if (_toggleManager.IsEnabled(Toggles.WFM_RedirectPermissionToWeb_44562))
+				{
+					Process.Start(buildWfmUri("WFM/#/permissions").ToString());				
+				}
 				else
 				{
 					logInfo("toolStripButtonPermissons_Click: Showing permissions EO:URL " + wfmWebView.Url);
@@ -508,6 +513,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 					toggleWebControls(false);
 				}
 			}
+			
 		}
 
 		private void permissionForm_Saved(object sender, EventArgs e)
