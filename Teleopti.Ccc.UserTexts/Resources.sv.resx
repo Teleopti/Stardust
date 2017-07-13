@@ -14802,4 +14802,34 @@ Vill du registrera dig?</value>
   <data name="NoPermissionMoveAgentOvertime" xml:space="preserve">
     <value>Rättigheter för att flytta övertid för agent {0} saknas</value>
   </data>
+  <data name="ETOTRequests" xml:space="preserve">
+    <value>Övertidsförfrågningar</value>
+  </data>
+  <data name="CannotApplyThisToAgentsInADifferentTimeZone" xml:space="preserve">
+    <value>Denna åtgärd kan inte utföras för agenter i en annan tidszon</value>
+  </data>
+  <data name="MissingDuration" xml:space="preserve">
+    <value>Längd saknas</value>
+  </data>
+  <data name="MissingStartTime" xml:space="preserve">
+    <value>Starttid saknas</value>
+  </data>
+  <data name="AllowedOvertime" xml:space="preserve">
+    <value>Tillåten övertid</value>
+  </data>
+  <data name="CloseOvertimeSettings" xml:space="preserve">
+    <value>Stäng övertidsinställningar</value>
+  </data>
+  <data name="Compensations" xml:space="preserve">
+    <value>Ersättning</value>
+  </data>
+  <data name="DiscardSuggestionData" xml:space="preserve">
+    <value>Du har aktiva förslag. Om du fortsätter kommer dessa att kastas,</value>
+  </data>
+  <data name="OvertimeSettings" xml:space="preserve">
+    <value>Övertidsinställningar</value>
+  </data>
+  <data name="PressEscToClose" xml:space="preserve">
+    <value>Tryck Esc för att stänga</value>
+  </data>
 </root>

@@ -16241,7 +16241,7 @@ Do you want to participate?</value>
     <comment>Different overtime presets</comment>
   </data>
   <data name="DiscardSuggestionData" xml:space="preserve">
-    <value>You have active suggestion data, if you continue this will be discarded</value>
+    <value>You have active suggestion data. If you continue this will be discarded</value>
     <comment>Confirm message that warns the user if continuing will discard data</comment>
   </data>
   <data name="OvertimeSettings" xml:space="preserve">
