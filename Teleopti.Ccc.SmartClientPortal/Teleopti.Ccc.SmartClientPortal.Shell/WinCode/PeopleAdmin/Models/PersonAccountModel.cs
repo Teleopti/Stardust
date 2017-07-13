@@ -23,19 +23,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
         private readonly ITraceableRefreshService _refreshService;
         private readonly IPersonAccountCollection _containedEntity;
         private IAccount _currentAccount;
-        private bool _expandState;
-        private CommonNameDescriptionSetting _commonNameDescription;
-
-        //This ctor is only used from tests
-        public PersonAccountModel(ITraceableRefreshService refreshService, DateOnly selectedDate, IPersonAccountCollection personAccounts)
-            : this()
-        {
-            _refreshService = refreshService;
-            _containedEntity = personAccounts;
-            //gör som bulgarerna - fel här! kan vara flera, en per absence
-            _currentAccount = personAccounts.Find(selectedDate).FirstOrDefault();
-        }
-
+	    private CommonNameDescriptionSetting _commonNameDescription;
+		
         public PersonAccountModel(ITraceableRefreshService refreshService, IPersonAccountCollection personAccounts, IAccount account, CommonNameDescriptionSetting commonNameDescription)
             : this()
         {
@@ -60,12 +49,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        public IPersonAccountCollection Parent
-        {
-            get { return _containedEntity; }
-        }
+        public IPersonAccountCollection Parent => _containedEntity;
 
-        private bool CheckPersonAccountDayType()
+	    private bool CheckPersonAccountDayType()
         {
             return _currentAccount.GetType() == typeof(AccountDay);
         }
@@ -83,12 +69,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
 
         public DateOnly? AccountDate
         {
-            get
-            {
-                if (_currentAccount == null) return null;
-                return _currentAccount.StartDate;
-            }
-            set
+            get => _currentAccount?.StartDate;
+	        set
             {
                 if (_currentAccount != null && value.HasValue)
                 {                   
@@ -219,15 +201,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        public bool CanGray
-        {
-            get
-            {
-                return _currentAccount == null;
-            }
-        }
+        public bool CanGray => _currentAccount == null;
 
-        public int PersonAccountCount
+	    public int PersonAccountCount
         {
             get
             {
@@ -239,26 +215,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             }
         }
 
-        public bool ExpandState
-        {
-            get { return _expandState; }
-            set { _expandState = value; }
-        }
+        public bool ExpandState { get; set; }
 
-        public  IAccount CurrentAccount
-        {
-            get { return _currentAccount; }
-        }
+	    public  IAccount CurrentAccount => _currentAccount;
 
-        public IAbsence TrackingAbsence
+	    public IAbsence TrackingAbsence
         {
-            get
-            {
-                if (_currentAccount == null)
-                    return null;
-                return _currentAccount.Owner.Absence;
-            }
-            set
+			get => _currentAccount?.Owner.Absence;
+			set
             {
                 if (_currentAccount != null)
                 {
@@ -285,11 +249,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models
             return _currentAccount;
         }
 
-        public bool CanBold
-        {
-            get; 
-            set;
-        }
+        public bool CanBold { get; set; }
 
         public void ResetCanBoldPropertyOfChildAdapters()
         {

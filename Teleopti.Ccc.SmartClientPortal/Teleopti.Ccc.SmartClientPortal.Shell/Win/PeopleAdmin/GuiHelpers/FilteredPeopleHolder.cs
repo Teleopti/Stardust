@@ -1414,20 +1414,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 			}
 		}
 
-		public IDictionary<IPerson, IPersonAccountCollection> AllAccounts
-		{
-			get { return _allAccounts; }
-		}
+		public IDictionary<IPerson, IPersonAccountCollection> AllAccounts => _allAccounts;
 
-		public IList<PersonGeneralModel> ValidatePasswordPolicy
-		{
-			get { return _validatePasswordPolicy; }
-		}
+		public IList<PersonGeneralModel> ValidatePasswordPolicy => _validatePasswordPolicy;
 
-		public ITraceableRefreshService RefreshService
-		{
-			get { return _refreshService; }
-		}
+		public ITraceableRefreshService RefreshService => _refreshService;
 
 		private void GetParentPersonAccounts(IPerson person, DateOnly selectedDate)
 		{

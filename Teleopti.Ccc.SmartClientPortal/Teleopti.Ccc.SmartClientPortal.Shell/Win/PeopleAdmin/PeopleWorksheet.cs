@@ -83,11 +83,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin
         public PeopleWorksheet(WorksheetStateHolder state, FilteredPeopleHolder filteredPeopleHolder, IEventAggregator globalEventAggregator, IComponentContext componentContext, Form mainWindow)
             : this()
         {
-            if (filteredPeopleHolder == null) throw new ArgumentNullException("filteredPeopleHolder");
+            if (filteredPeopleHolder == null) throw new ArgumentNullException(nameof(filteredPeopleHolder));
             _mainWindow = mainWindow;
             _filteredPeopleHolder = filteredPeopleHolder;
             _globalEventAggregator = globalEventAggregator;
-            //          _componentContext = componentContext;
             var lifetimeScope = componentContext.Resolve<ILifetimeScope>();
             _container = lifetimeScope.BeginLifetimeScope();
             _toggleManager = componentContext.Resolve<IToggleManager>();

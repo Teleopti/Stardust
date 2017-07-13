@@ -72,18 +72,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		private bool _expandedGridSelection = false;
 
-		internal override ViewType Type
-		{
-			get { return ViewType.PersonalAccountGridView; }
-		}
+		internal override ViewType Type => ViewType.PersonalAccountGridView;
 
-		public override int ParentGridLastColumnIndex
-		{
-			get
-			{
-				return 12;
-			}
-		}
+		public override int ParentGridLastColumnIndex => 12;
 
 		internal override void SaveCellInfo(object sender, GridSaveCellInfoEventArgs e)
 		{
@@ -200,10 +191,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			}
 		}
 
-		public bool ExpandedGridSelection
-		{
-			get { return _expandedGridSelection; }
-		}
+		public bool ExpandedGridSelection => _expandedGridSelection;
 
 		internal override void SelectionChanged(GridSelectionChangedEventArgs e, bool eventCancel)
 		{
@@ -238,8 +226,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 						top = rangeInfo.Top;
 						length = top + rangeInfo.Height - 1;
 						RowCount += rangeInfo.Height;
-						break;
-					default:
 						break;
 				}
 
@@ -323,10 +309,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			e.DataItem.CanBold = true;
 
 			PeopleAdminHelper.InvalidateGridRange(e.SaveCellInfoEventArgs.RowIndex, _gridColumns.Count, Grid);
-			if (Grid != null)
-			{
-				Grid.InvalidateRange(Grid.ViewLayout.VisibleCellsRange);
-			}
+			Grid?.InvalidateRange(Grid.ViewLayout.VisibleCellsRange);
 		}
 
 		void ParentColumn_CellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<IPersonAccountModel> e)
@@ -410,13 +393,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			CanCopyChildRow = false;
 			var gridModel = sender as GridModel;
 
-			if (gridModel == null) return;
-
-			var grid = gridModel.ActiveGridView as GridControl;
-			if (grid == null) return;
+			var grid = gridModel?.ActiveGridView as GridControl;
 
 			// child copy processings
-			var personPeriodChildCollection = grid.Tag as ReadOnlyCollection<IPersonAccountChildModel>;
+			var personPeriodChildCollection = grid?.Tag as ReadOnlyCollection<IPersonAccountChildModel>;
 			if (personPeriodChildCollection == null) return;
 
 			CanCopyChildRow = true;
@@ -454,69 +434,58 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		{
 			var grid = sender as GridControl;
 
-			if (grid != null)
+			var personAccountChildCollection = grid?.Tag as ReadOnlyCollection<IPersonAccountChildModel>;
+
+			if (personAccountChildCollection != null)
 			{
-				var personAccountChildCollection = grid.Tag as ReadOnlyCollection<IPersonAccountChildModel>;
+				var rangeLength = grid.Model.SelectedRanges.Count;
 
-				if (personAccountChildCollection != null)
+				if (rangeLength != 0)
 				{
-					var rangeLength = grid.Model.SelectedRanges.Count;
+					IList<IAccount> list = new List<IAccount>();
+					IList<IPersonAccountChildModel> gridDataList =
+						new List<IPersonAccountChildModel>();
 
-					if (rangeLength != 0)
+					for (var rangeIndex = 0; rangeIndex < rangeLength; rangeIndex++)
 					{
-						IList<IAccount> list = new List<IAccount>();
-						IList<IPersonAccountChildModel> gridDataList =
-							 new List<IPersonAccountChildModel>();
+						var rangeInfo = grid.Model.SelectedRanges[rangeIndex];
 
-						for (var rangeIndex = 0; rangeIndex < rangeLength; rangeIndex++)
+						var top = 1; // This is to skip if Range is Empty.
+						var length = 0;
+						
+						switch (rangeInfo.RangeType)
 						{
-							var rangeInfo = grid.Model.SelectedRanges[rangeIndex];
-
-							var top = 1; // This is to skip if Range is Empty.
-							var length = 0;
-
-							// TODO: Need to refactor this /kosalanp.
-
-							#region Prepare range information
-
-							switch (rangeInfo.RangeType)
-							{
-								case GridRangeInfoType.Cols:
-								case GridRangeInfoType.Table:
-									top = 1;
-									length = FilteredPeopleHolder.FilteredPersonCollection.Count;
-									RowCount += length;
-									break;
-								case GridRangeInfoType.Rows:
-								case GridRangeInfoType.Cells:
-									top = rangeInfo.Top;
-									length = top + rangeInfo.Height - 1;
-									RowCount += rangeInfo.Height;
-									break;
-								default:
-									break;
-							}
-
-							#endregion
-
-							if (top > 0)
-							{
-								for (int index = top - 1; index < length; index++)
-								{
-									if (personAccountChildCollection.Count < length)
-										return;
-
-									// Child Adding goes here
-									list.Add(personAccountChildCollection[index].ContainedEntity);
-									gridDataList.Add(personAccountChildCollection[index]);
-								}
-							}
+							case GridRangeInfoType.Cols:
+							case GridRangeInfoType.Table:
+								top = 1;
+								length = FilteredPeopleHolder.FilteredPersonCollection.Count;
+								RowCount += length;
+								break;
+							case GridRangeInfoType.Rows:
+							case GridRangeInfoType.Cells:
+								top = rangeInfo.Top;
+								length = top + rangeInfo.Height - 1;
+								RowCount += rangeInfo.Height;
+								break;
 						}
 
-						_currentParentRowIndex = Grid.CurrentCell.RowIndex;
-						_currentChildGrid = grid;
-						CurrentGrid = grid;
+						if (top > 0)
+						{
+							for (int index = top - 1; index < length; index++)
+							{
+								if (personAccountChildCollection.Count < length)
+									return;
+
+								// Child Adding goes here
+								list.Add(personAccountChildCollection[index].ContainedEntity);
+								gridDataList.Add(personAccountChildCollection[index]);
+							}
+						}
 					}
+
+					_currentParentRowIndex = Grid.CurrentCell.RowIndex;
+					_currentChildGrid = grid;
+					CurrentGrid = grid;
 				}
 			}
 		}
@@ -547,11 +516,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			e.DataItem.CanBold = true;
 
 			var grid = FilteredPeopleHolder.PersonAccountModelCollection[Grid.CurrentCell.RowIndex - 1].GridControl;
-
-			if (grid != null)
-			{
-				grid.InvalidateRange(grid.ViewLayout.VisibleCellsRange);
-			}
+			grid?.InvalidateRange(grid.ViewLayout.VisibleCellsRange);
 		}
 
 		void ChildColumn_CellDisplayChanged(object sender, ColumnCellDisplayChangedEventArgs<IPersonAccountChildModel> e)
@@ -764,7 +729,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 		{
 			if (Grid.Model.CurrentCellInfo == null)
 			{
-				//TODO:Need to implement when person is not selected scenario 
 				return;
 			}
 
@@ -1154,10 +1118,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			return Grid.CurrentCell.RowIndex > 0;
 		}
 
-		private IPersonAccountModel CurrentPersonAccountView
-		{
-			get { return FilteredPeopleHolder.PersonAccountModelCollection[CurrentRowIndex]; }
-		}
+		private IPersonAccountModel CurrentPersonAccountView => FilteredPeopleHolder.PersonAccountModelCollection[CurrentRowIndex];
 
 		private bool IsCurrentRowExpanded()
 		{
@@ -1165,10 +1126,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 				 && CurrentPersonAccountView.ExpandState;
 		}
 
-		private int CurrentRowIndex
-		{
-			get { return Grid.CurrentCell.RowIndex - 1; }
-		}
+		private int CurrentRowIndex => Grid.CurrentCell.RowIndex - 1;
 
 		private int GetColumnIndex()
 		{
@@ -1487,9 +1445,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 				// child copy processings
 				var grid = Grid[Grid.CurrentCell.RowIndex, GridInCellColumnIndex].Control as GridControl;
-				if (grid == null) return;
 
-				var personAccountChildCollection = grid.Tag as ReadOnlyCollection<IPersonAccountChildModel>;
+				var personAccountChildCollection = grid?.Tag as ReadOnlyCollection<IPersonAccountChildModel>;
 				if (personAccountChildCollection == null) return;
 
 				var gridRangeInfoList = grid.Model.SelectedRanges;
@@ -1610,14 +1567,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 			Grid.Selections.Add(range);
 		}
 
-		public ReadOnlyCollection<IPersonAccountModel> GetSelectedPersonAccounts
-		{
-			get
-			{
-				if (_currentSelectedPersonAccounts == null) return new ReadOnlyCollection<IPersonAccountModel>(new List<IPersonAccountModel>());
-				return new ReadOnlyCollection<IPersonAccountModel>(_currentSelectedPersonAccounts);
-			}
-		}
+		public ReadOnlyCollection<IPersonAccountModel> GetSelectedPersonAccounts => new ReadOnlyCollection<IPersonAccountModel>(_currentSelectedPersonAccounts ?? new List<IPersonAccountModel>());
 
 		internal override IList<IPerson> GetSelectedPersons()
 		{

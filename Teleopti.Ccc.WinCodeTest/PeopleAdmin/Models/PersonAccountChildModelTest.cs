@@ -5,18 +5,15 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 
 namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 {
@@ -28,21 +25,19 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         private IAccount _account3;
         private PersonAccountChildModel _targetDay;
         private PersonAccountChildModel _targetTime;
-        private IAbsence _absenceDay = new Absence(), _absenceTime = new Absence();
-        private DateOnly _from;
-        private MockRepository _mocker;
+        private readonly IAbsence _absenceDay = new Absence();
+	    private readonly IAbsence _absenceTime = new Absence();
+	    private DateOnly _from;
         private ITraceableRefreshService _traceableRefreshService;
 	    private IPersonAccountUpdater _personAccountUpdater;
         private PersonAccountCollection _acc;
 	    private IPerson _person;
-
-
+		
         [SetUp]
         public void Setup()
         {
-            _mocker = new MockRepository();
-            _traceableRefreshService = _mocker.StrictMock<ITraceableRefreshService>();
-	        _personAccountUpdater = _mocker.StrictMock<IPersonAccountUpdater>();
+            _traceableRefreshService = MockRepository.GenerateMock<ITraceableRefreshService>();
+	        _personAccountUpdater = new PersonAccountUpdaterDummy();
             _person = PersonFactory.CreatePerson("Mama Hawa");
             _from = new DateOnly(2008, 1, 3);
             var from2 = new DateOnly(2009, 1, 3);
@@ -50,40 +45,42 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _absenceDay.Tracker = Tracker.CreateDayTracker();
             _absenceTime.Tracker = Tracker.CreateTimeTracker();
 
-            _account1 = new AccountDay(_from);
-            _account1.BalanceIn = TimeSpan.FromDays(5);
-            _account1.Accrued = TimeSpan.FromDays(20);
-            _account1.Extra = TimeSpan.FromDays(5);
-            _account1.BalanceOut = TimeSpan.FromDays(2);
-            _account2 = new AccountTime(from2);
-            _account2.BalanceIn = new TimeSpan(3);
-            _account2.BalanceOut = TimeSpan.FromDays(1);
-            _account3 = new AccountDay(from3);
-            _account3.BalanceIn = TimeSpan.FromDays(3);
-            _account3.Accrued = TimeSpan.FromDays(20);
-            _account3.Extra = TimeSpan.FromDays(3);
-            _account3.BalanceOut = TimeSpan.FromDays(1);
+	        _account1 = new AccountDay(_from)
+	        {
+		        BalanceIn = TimeSpan.FromDays(5),
+		        Accrued = TimeSpan.FromDays(20),
+		        Extra = TimeSpan.FromDays(5),
+		        BalanceOut = TimeSpan.FromDays(2)
+	        };
+	        _account2 = new AccountTime(from2)
+	        {
+		        BalanceIn = new TimeSpan(3),
+		        BalanceOut = TimeSpan.FromDays(1)
+	        };
+	        _account3 = new AccountDay(from3)
+	        {
+		        BalanceIn = TimeSpan.FromDays(3),
+		        Accrued = TimeSpan.FromDays(20),
+		        Extra = TimeSpan.FromDays(3),
+		        BalanceOut = TimeSpan.FromDays(1)
+	        };
 
-            _acc = new PersonAccountCollection(_person);
-			var accountDay = new PersonAbsenceAccount(_person, _absenceDay);
+	        var accountDay = new PersonAbsenceAccount(_person, _absenceDay);
 			var accountTime = new PersonAbsenceAccount(_person, _absenceTime);
 
-            _acc.Add(accountDay);
-            _acc.Add(accountTime);
+	        _acc = new PersonAccountCollection(_person) {accountDay, accountTime};
 
-            accountDay.Add(_account1);
+	        accountDay.Add(_account1);
             accountDay.Add(_account3);
             accountTime.Add(_account2);
 
             _targetDay = new PersonAccountChildModel(_traceableRefreshService, _acc, _account1,null, null);
-           
             _targetTime = new PersonAccountChildModel(_traceableRefreshService, _acc, _account2, null, null);
         }
 
         [Test]
         public void VerifyPropertyNotNullOrEmpty()
         {
-
             Assert.IsNotNull(_targetDay.Parent);
             Assert.IsNotEmpty(_targetDay.FullName);
             Assert.IsNotNull(_targetDay.AccountDate);
@@ -91,8 +88,6 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.IsNotNull(_targetDay.BalanceIn);
             Assert.IsNotNull(_targetDay.BalanceOut);
             Assert.IsNotNull(_targetDay.Extra);
-            //henrika 080824: removed, return something from mock if you want to check this property 
-            //Assert.IsNotNull(_target.Used);
             Assert.IsNotNull(_targetDay.CurrentAccount);
             Assert.IsFalse(_targetDay.CanGray);
             Assert.IsFalse(_targetDay.CanBold);
@@ -101,36 +96,27 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyAccrued()
         {
-            IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
-            IUnitOfWork unitOfWork = _mocker.StrictMock<IUnitOfWork>();
-            ICurrentScenario scenario = _mocker.StrictMock<ICurrentScenario>();
-            Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
-            unitOfWork.Dispose();
-            LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account1);
-            LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account2);
-            LastCall.Repeat.AtLeastOnce();
-
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+			var scenario = new FakeCurrentScenario();
+			
 			_targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
             ((PersonAccountChildModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
-
-
+			
 			_targetTime = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account2, null, _personAccountUpdater);
             ((PersonAccountChildModelForTest)_targetTime).SetUnitOfWorkFactory(unitOfWorkFactory);
-            _mocker.ReplayAll();
             
             _targetDay.Accrued = 2;
             Assert.AreEqual(2, _targetDay.Accrued);
-
-
+			
             _targetTime.Accrued = new TimeSpan(2);
             Assert.AreEqual(new TimeSpan(2), _targetTime.Accrued);
             
-            SetTargetDayWithoutAccount(unitOfWork, scenario);
+            SetTargetDayWithoutAccount(scenario);
             Assert.IsNull(_targetDay.Accrued);
-            _mocker.VerifyAll();
-        }
+			
+	        _traceableRefreshService.AssertWasCalled(x => x.Refresh(_account1));
+	        _traceableRefreshService.AssertWasCalled(x => x.Refresh(_account2));
+		}
 
         [Test]
         public void VerifyUsed()
@@ -155,73 +141,51 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
         [Test]
         public void VerifyBalanceIn()
         {
-            
-
-            IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
-            ICurrentScenario scenario = _mocker.DynamicMock<ICurrentScenario>();
-			PersonAccountChildModelForTest targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
-			PersonAccountChildModelForTest targetTime = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account2, null, _personAccountUpdater);
-
-
+            var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+            var scenario = new FakeCurrentScenario();
+			var targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
+			var targetTime = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account2, null, _personAccountUpdater);
+			
             targetDay.SetUnitOfWorkFactory(unitOfWorkFactory);
             targetTime.SetUnitOfWorkFactory(unitOfWorkFactory);
-
-            IUnitOfWork unitOfWork = _mocker.StrictMock<IUnitOfWork>();
-            Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
-            unitOfWork.Dispose();
-            LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account1);
-            LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account2);
-            LastCall.Repeat.AtLeastOnce();
-
-            _mocker.ReplayAll();
-
+			
             targetDay.BalanceIn = 3;
             targetTime.BalanceIn = new TimeSpan(2, 0, 0, 0);
 
             Assert.AreEqual(3, targetDay.BalanceIn);
             Assert.AreEqual(new TimeSpan(2, 0, 0, 0), targetTime.BalanceIn);
 
-            SetTargetDayWithoutAccount(unitOfWork, scenario);
+            SetTargetDayWithoutAccount(scenario);
             Assert.IsNull(_targetDay.BalanceIn);
-
-            _mocker.VerifyAll();
-        }
+			
+	        _traceableRefreshService.AssertWasCalled(x => x.Refresh(_account1));
+	        _traceableRefreshService.AssertWasCalled(x => x.Refresh(_account2));
+		}
 
         [Test]
         public void VerifyBalanceOut()
         {
-            IUnitOfWork unitOfWork = _mocker.StrictMock<IUnitOfWork>();
-            ICurrentScenario scenario = _mocker.DynamicMock<ICurrentScenario>();        
-            IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
-			PersonAccountChildModelForTest targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
-			PersonAccountChildModelForTest targetTime = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account2, null, _personAccountUpdater);
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+	        var scenario = new FakeCurrentScenario();
+
+			var targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
+			var targetTime = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account2, null, _personAccountUpdater);
 
             targetDay.SetUnitOfWorkFactory(unitOfWorkFactory);
             targetTime.SetUnitOfWorkFactory(unitOfWorkFactory);
-
-            Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
-            unitOfWork.Dispose();
-            LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account1);
-            LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account2);
-            LastCall.Repeat.AtLeastOnce();
-
-            _mocker.ReplayAll();
-
+			
             targetDay.BalanceOut = 3;
             targetTime.BalanceOut = new TimeSpan(2, 0, 0, 0);
 
             Assert.AreEqual(3, targetDay.BalanceOut);
             Assert.AreEqual(new TimeSpan(2, 0, 0, 0), targetTime.BalanceOut);
 
-            SetTargetDayWithoutAccount(unitOfWork, scenario);
+            SetTargetDayWithoutAccount(scenario);
             Assert.IsNull(_targetDay.BalanceOut);
 
-            _mocker.VerifyAll();
-        }
+	        _traceableRefreshService.AssertWasCalled(x => x.Refresh(_account1));
+	        _traceableRefreshService.AssertWasCalled(x => x.Refresh(_account2));
+		}
 
         [Test]
         public void VerifyRemaining()
@@ -232,39 +196,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             Assert.IsNull(_targetDay.Remaining);
         }
 
-        //[Test]
-        //public void VerifyCanSetTrackingAbsence()
-        //{
-        //    //IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
-        //    //IUnitOfWork unitOfWork = _mocker.StrictMock<IUnitOfWork>();
-        //    //Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-        //    //unitOfWork.Dispose();
-        //    //_traceableRefreshService.Refresh(_targetDay.CurrentAccount, unitOfWork);
-        //    _mocker.ReplayAll();
-        //    IAbsence absence = AbsenceFactory.CreateAbsence("Ada Enna Behe Wage");
-        //    ICurrentScenario scenario = _mocker.DynamicMock<ICurrentScenario>();
-        //    var personAbsenceAccountRepository = _mocker.DynamicMock<IPersonAbsenceAccountRepository>();
-        //    var refreshService = _mocker.DynamicMock<ITraceableRefreshService>();
-        //    _targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, new PersonAccountUpdater(personAbsenceAccountRepository, refreshService));
-        //    //((PersonAccountChildModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
-        //    Assert.AreNotSame(absence, _targetDay.TrackingAbsence);
-
-        //    Assert.Throws<ArgumentException>(()=> _targetDay.TrackingAbsence = absence);
-
-        //    //Assert.AreSame(absence, _targetDay.TrackingAbsence);
-        //    _mocker.VerifyAll();
-        //}
-
         [Test]
         public void VerifyDate()
         {
-            IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
-            IPersonAccountUpdater personAccountUpdater = _mocker.StrictMock<IPersonAccountUpdater>();
-
-            Expect.Call(() => personAccountUpdater.Update(_person));
-
-            _mocker.ReplayAll();
-
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+			var personAccountUpdater = MockRepository.GenerateMock<IPersonAccountUpdater>();
+			
             _targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null,
                                                             personAccountUpdater);
             ((PersonAccountChildModelForTest) _targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
@@ -273,26 +210,17 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
             _targetDay.AccountDate = new DateOnly(DateTime.MinValue);
             Assert.AreEqual(DateTime.MinValue, _targetDay.AccountDate.Value.Date);
-            _mocker.VerifyAll();
-        }
 
-       
+	        personAccountUpdater.AssertWasCalled(x => x.Update(_person));
+		}
+		
         [Test]
         public void VerifyExtra()
         {
-            IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
-            IUnitOfWork unitOfWork = _mocker.StrictMock<IUnitOfWork>();
-            ICurrentScenario scenario = _mocker.DynamicMock<ICurrentScenario>();
-            Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.AtLeastOnce();
-            unitOfWork.Dispose();
-            LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account1);
-            LastCall.Repeat.AtLeastOnce();
-            _traceableRefreshService.Refresh(_account2);
-            LastCall.Repeat.AtLeastOnce();
-
-            _mocker.ReplayAll();
-			_targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
+			var unitOfWorkFactory = new FakeUnitOfWorkFactory();
+	        var scenario = new FakeCurrentScenario();
+			
+            _targetDay = new PersonAccountChildModelForTest(_traceableRefreshService, _acc, _account1, null, _personAccountUpdater);
             ((PersonAccountChildModelForTest)_targetDay).SetUnitOfWorkFactory(unitOfWorkFactory);
             _targetDay.Extra = 10;
             Assert.AreEqual(10, _targetDay.Extra);
@@ -302,15 +230,17 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _targetTime.Extra = new TimeSpan(10);
             Assert.AreEqual(new TimeSpan(10), _targetTime.Extra);
 
-            SetTargetDayWithoutAccount(unitOfWork, scenario);
+            SetTargetDayWithoutAccount(scenario);
             Assert.IsNull(_targetDay.BalanceOut);
-            _mocker.VerifyAll();
-        }
 
-        [Test] //Fix on monday
+	        _traceableRefreshService.AssertWasCalled(x => x.Refresh(_account1));
+	        _traceableRefreshService.AssertWasCalled(x => x.Refresh(_account2));
+		}
+
+        [Test]
         public void VerifyAccountCount()
         {
-            PersonAccountModel personAccountAdapter = new PersonAccountModel(_traceableRefreshService, new DateOnly(2008, 5, 2), _targetDay.Parent);
+            var personAccountAdapter = new PersonAccountModel(_traceableRefreshService, _targetDay.Parent, _account1, new CommonNameDescriptionSetting());
 
             Assert.AreEqual(3, personAccountAdapter.PersonAccountCount);
         }
@@ -346,26 +276,16 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 
         private void SetTargetDayWithoutAccount()
         {
-            IUnitOfWorkFactory unitOfWorkFactory = _mocker.StrictMock<IUnitOfWorkFactory>();
-            ICurrentScenario scenario = _mocker.DynamicMock<ICurrentScenario>();
+            var scenario = new FakeCurrentScenario();
             var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
-	        var repositoryFactory = new RepositoryFactory();
-	        var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork();
-
-	        var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-	        _targetDay =
-                new PersonAccountChildModel(
-                    new TraceableRefreshService(scenario, new ScheduleStorage(currentUnitOfWork, repositoryFactory, new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork))), _acc, account, null, null);
+	        
+	        _targetDay = new PersonAccountChildModel(new TraceableRefreshService(scenario, new FakeScheduleStorage()), _acc, account, null, null);
         }
 
-        private void SetTargetDayWithoutAccount(IUnitOfWork unitOfWork, ICurrentScenario scenario)
+        private void SetTargetDayWithoutAccount(ICurrentScenario scenario)
         {
 			var account = _acc.Find(new DateOnly(2005, 5, 2)).FirstOrDefault();
-	        var repositoryFactory = new RepositoryFactory();
-	        var currentUnitOfWork = new ThisUnitOfWork(unitOfWork);
-	        _targetDay =
-		        new PersonAccountChildModel(
-			        new TraceableRefreshService(scenario,new ScheduleStorage(currentUnitOfWork, repositoryFactory,new PersistableScheduleDataPermissionChecker(), new ScheduleStorageRepositoryWrapper(repositoryFactory, currentUnitOfWork))), _acc, account, null, null);
+	        _targetDay = new PersonAccountChildModel(new TraceableRefreshService(scenario,new FakeScheduleStorage()), _acc, account, null, null);
         }
 
         [Test]
