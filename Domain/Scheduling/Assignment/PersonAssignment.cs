@@ -431,9 +431,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public virtual void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment assignment, TimeSpan periodOffset)
+		public virtual void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment assignment, TimeSpan periodOffset, bool muteEvent = false)
 		{
-			Clear();
+			Clear(muteEvent);
 			SetShiftCategory(assignment.ShiftCategory);
 			foreach (var mainLayer in assignment.MainActivities())
 			{

@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 
-
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class ExtractedSchedule : Schedule, IScheduleDay
@@ -86,19 +85,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return new IsDayScheduled().Check(this);
 		}
 
-			public IPersonAssignment PersonAssignment(bool createIfNotExists = false)
+		public IPersonAssignment PersonAssignment(bool createIfNotExists = false)
+		{
+			var currentAss = ScheduleDataInternalCollection().OfType<IPersonAssignment>().SingleOrDefault();
+			if (createIfNotExists)
 			{
-				var currentAss = ScheduleDataInternalCollection().OfType<IPersonAssignment>().SingleOrDefault();
-				if (createIfNotExists)
+				if (currentAss == null)
 				{
-					if (currentAss == null)
-					{
-						currentAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-						Add(currentAss);
-					}
+					currentAss = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
+					Add(currentAss);
 				}
-				return currentAss;
 			}
+			return currentAss;
+		}
 
 		public IScheduleDay ReFetch()
 		{
@@ -168,10 +167,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			// temporärt så länge båda finns
 			var scheduleDataInternalCollection = ScheduleDataInternalCollection().ToList();
-			IEnumerable<IScheduleDataRestriction> dataRestrictions = scheduleDataInternalCollection.OfType<IScheduleDataRestriction>();
+			var dataRestrictions = scheduleDataInternalCollection.OfType<IScheduleDataRestriction>();
 
-			IEnumerable<PreferenceDay> persistRestrictions = scheduleDataInternalCollection.OfType<PreferenceDay>();
-			IEnumerable<StudentAvailabilityDay> studentRestrictions = scheduleDataInternalCollection.OfType<StudentAvailabilityDay>();
+			var persistRestrictions = scheduleDataInternalCollection.OfType<PreferenceDay>();
+			var studentRestrictions = scheduleDataInternalCollection.OfType<StudentAvailabilityDay>();
 			var ret = new List<IScheduleData>();
 
 			foreach (var dataRestriction in dataRestrictions)
@@ -246,36 +245,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			Merge(source, isDelete, false);
 		}
 
-		public void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges, bool ignoreAssignmentPermission = false)
+		public void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges,
+			bool ignoreAssignmentPermission = false, bool muteEvent = false)
 		{
-			SchedulePartView view = source.SignificantPartForDisplay();
+			var view = source.SignificantPartForDisplay();
 
 			switch (view)
 			{
 				case SchedulePartView.DayOff:
-					if (isDelete) DeleteDayOff(); else mergeDayOff(source, true, ignoreAssignmentPermission); break;
+					if (isDelete) DeleteDayOff(); else mergeDayOff(source, true, ignoreAssignmentPermission);
+					break;
 
 				case SchedulePartView.ContractDayOff:
 					if (isDelete) DeleteFullDayAbsence(source); else mergeFullDayAbsence(source);
 					break;
 
 				case SchedulePartView.FullDayAbsence:
-					if (isDelete) DeleteFullDayAbsence(source); else mergeFullDayAbsence(source); break;
+					if (isDelete) DeleteFullDayAbsence(source); else mergeFullDayAbsence(source);
+					break;
 
 				case SchedulePartView.Absence:
-					if (isDelete) DeleteAbsence(false); else mergeAbsence(source); break;
+					if (isDelete) DeleteAbsence(false); else mergeAbsence(source);
+					break;
 
 				case SchedulePartView.MainShift:
-					if (isDelete) DeleteMainShift(); else mergeMainShift(source, ignoreTimeZoneChanges, true); break;
+					if (isDelete) DeleteMainShift(); else mergeMainShift(source, ignoreTimeZoneChanges, true, muteEvent);
+					break;
 
 				case SchedulePartView.PersonalShift:
-					if (isDelete) DeletePersonalStuff(); else mergePersonalStuff(source, ignoreTimeZoneChanges); break;
+					if (isDelete) DeletePersonalStuff(); else mergePersonalStuff(source, ignoreTimeZoneChanges);
+					break;
 
 				case SchedulePartView.PreferenceRestriction:
-					if (isDelete) DeletePreferenceRestriction(); else MergePreferenceRestriction(source); break;
+					if (isDelete) DeletePreferenceRestriction(); else MergePreferenceRestriction(source);
+					break;
 
 				case SchedulePartView.StudentAvailabilityRestriction:
-					if (isDelete) DeleteStudentAvailabilityRestriction(); else MergeStudentAvailabilityRestriction(source); break;
+					if (isDelete) DeleteStudentAvailabilityRestriction(); else MergeStudentAvailabilityRestriction(source);
+					break;
 			}
 		}
 
@@ -336,14 +343,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-			//borde tas bort!
+		//borde tas bort!
 		public void DeleteDayOff()
 		{
 			var ass = PersonAssignment();
-					if (ass != null)
-					{
-						ass.SetDayOff(null);
-					}
+			if (ass != null)
+			{
+				ass.SetDayOff(null);
+			}
 		}
 
 		private void mergeDayOff(IScheduleDay source, bool deleteAbsence, bool ignoreAssignmentPermission)
@@ -533,28 +540,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		}
 
-		private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges, bool splitAbsence)
+		private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges, bool splitAbsence, bool muteEvent = false)
 		{
-					var sourceAssignment = source.PersonAssignment();
-					if (sourceAssignment == null)
-						return;
+			var sourceAssignment = source.PersonAssignment();
+			if (sourceAssignment == null)
+				return;
 
-					var periodOffsetCalculator = new PeriodOffsetCalculator();
-					var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceAssignment.Period);
+			var periodOffsetCalculator = new PeriodOffsetCalculator();
+			var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceAssignment.Period);
 
-					var workingCopyOfAssignment = sourceAssignment.NoneEntityClone();
-					workingCopyOfAssignment.SetActivitiesAndShiftCategoryFromWithOffset(sourceAssignment, periodOffset);
+			var workingCopyOfAssignment = sourceAssignment.NoneEntityClone();
+			workingCopyOfAssignment.SetActivitiesAndShiftCategoryFromWithOffset(sourceAssignment, periodOffset, muteEvent);
 
-					var period = source.Period.MovePeriod(periodOffset);
-					if (PersonAssignment()==null && SignificantPart() == SchedulePartView.DayOff)
-					{
-						DeleteDayOff();
-					}
+			var period = source.Period.MovePeriod(periodOffset);
+			if (PersonAssignment() == null && SignificantPart() == SchedulePartView.DayOff)
+			{
+				DeleteDayOff();
+			}
 
 			var currentAssignment = PersonAssignment(true);
-					currentAssignment.SetActivitiesAndShiftCategoryFrom(workingCopyOfAssignment);
-					if(splitAbsence) SplitAbsences(period);
-					updateDateOnlyAsPeriod(workingCopyOfAssignment);
+			currentAssignment.SetActivitiesAndShiftCategoryFrom(workingCopyOfAssignment);
+			if (splitAbsence) SplitAbsences(period);
+			updateDateOnlyAsPeriod(workingCopyOfAssignment);
 		}
 
 		/// <summary>
@@ -564,17 +571,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		/// we also check the property even if the ignoretimechanges is false. 
 		/// </summary>
 		/// <param name="mainShift"></param>
-				private void updateDateOnlyAsPeriod(IPersonAssignment mainShift)
-				{
-					if (mainShift.MainActivities().Any())
-					{
-						DateTimePeriod mainShiftPeriod = mainShift.Period;
-						DateTime dateTime = mainShiftPeriod.StartDateTime;
-						DateTime localDateTime = TimeZoneHelper.ConvertFromUtc(dateTime, Person.PermissionInformation.DefaultTimeZone());
-						DateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(localDateTime.Date), Person.PermissionInformation.DefaultTimeZone());
-					}
-				}
-
+		private void updateDateOnlyAsPeriod(IPersonAssignment mainShift)
+		{
+			if (mainShift.MainActivities().Any())
+			{
+				DateTimePeriod mainShiftPeriod = mainShift.Period;
+				DateTime dateTime = mainShiftPeriod.StartDateTime;
+				DateTime localDateTime = TimeZoneHelper.ConvertFromUtc(dateTime, Person.PermissionInformation.DefaultTimeZone());
+				DateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(localDateTime.Date), Person.PermissionInformation.DefaultTimeZone());
+			}
+		}
 
 		public void SplitAbsences(DateTimePeriod period)
 		{
@@ -763,8 +769,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IMemento CreateMemento()
 		{
-			return new Memento<IScheduleDay>(this, 
-									Owner[Person].ReFetch(this));
+			return new Memento<IScheduleDay>(this, Owner[Person].ReFetch(this));
 		}
 
 		public override string ToString()

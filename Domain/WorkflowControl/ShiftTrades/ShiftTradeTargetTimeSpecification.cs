@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 					var changeTo = (IScheduleDay)shiftTradeDetail.SchedulePartTo.Clone();
 
 					changeTo.Clear<IPersonAssignment>();
-					changeTo.Merge(changeFrom, false);
+					changeTo.Merge(changeFrom, false, false, false, true);
 
 					suggestedChanges.Add(changeTo);
 				}

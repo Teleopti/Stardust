@@ -123,7 +123,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		/// <param name="isDelete">if set to <c>true</c> [delete].</param>
 		/// <param name="ignoreTimeZoneChanges">if set to <c>true</c> calculate with time changes.</param>
 		/// <param name="ignoreAssignmentPermission">if set to <c>true</c> when team leader has approve shift trade permission, ignore this modify assignment permission.</param>
-		void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges, bool ignoreAssignmentPermission = false);
+		/// <param name="muteEvent">True to not publish DayUnscheduledEvent on clear PersonAssignment</param>
+		void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges, bool ignoreAssignmentPermission = false, bool muteEvent = false);
 
 		#endregion
 
