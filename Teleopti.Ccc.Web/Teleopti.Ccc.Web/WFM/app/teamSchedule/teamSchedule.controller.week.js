@@ -51,13 +51,8 @@
 		vm.resetSchedulePage = function () {
 			vm.paginationOptions.pageNumber = 1;
 			vm.scheduleFullyLoaded = false;
-            vm.loadSchedules();
-            resetFocus();
+			vm.loadSchedules();
 		};
-
-        function resetFocus() {
-            $scope.$broadcast("resetFocus", "organizationPicker");
-        };
 
 		vm.onStartOfWeekChanged = function () {
 			vm.scheduleDate = new Date(vm.startOfWeek.getTime());
