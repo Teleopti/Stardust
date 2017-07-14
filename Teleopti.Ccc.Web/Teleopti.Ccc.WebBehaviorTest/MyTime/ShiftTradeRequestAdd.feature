@@ -136,7 +136,7 @@ Scenario: Should show error message for server side error
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And the time is '2079-05-20'
 	# Max smalldatetime for SQL Server is 2079-06-06
-	When I view Add Shift Trade Request for date '2079-06-06'
+	When I view Add Shift Trade Request for date '2079-06-05'
 	And I click on the next date
 	Then I should see an error message
 
