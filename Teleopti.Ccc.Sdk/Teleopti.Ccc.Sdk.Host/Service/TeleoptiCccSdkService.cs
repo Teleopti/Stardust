@@ -1876,16 +1876,17 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 
 			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				IRepositoryFactory repositoryFactory = new RepositoryFactory();
+				var repositoryFactory = new RepositoryFactory();
 				var accRep = repositoryFactory.CreatePersonAbsenceAccountRepository(unitOfWork);
 				var perRep = repositoryFactory.CreatePersonRepository(unitOfWork);
-				IPerson loadedPerson = perRep.Load(person.Id.GetValueOrDefault(Guid.Empty));
+				var loadedPerson = perRep.Load(person.Id.GetValueOrDefault());
 				var accounts = accRep.Find(loadedPerson);
+				var dateOnly = containingDate.ToDateOnly();
+				var timeAssembler = new PersonAccountAssembler();
 				foreach (IPersonAbsenceAccount personAbsenceAccount in accounts)
 				{
-					IAccount personAccount = personAbsenceAccount.Find(new DateOnly(containingDate.DateTime));
+					var personAccount = personAbsenceAccount.Find(dateOnly);
 					if (personAccount == null) continue;
-					PersonAccountAssembler timeAssembler = new PersonAccountAssembler();
 					result.Add(timeAssembler.DomainEntityToDto(personAccount));
 				}
 			}
@@ -2032,13 +2033,13 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service
 		public ICollection<PersonPeriodDetailDto> GetPersonPeriods(PersonPeriodLoadOptionDto loadOptionDto, DateOnlyDto startDate, DateOnlyDto endDate)
 		{
 			if (loadOptionDto == null)
-				throw new ArgumentNullException("loadOptionDto");
+				throw new ArgumentNullException(nameof(loadOptionDto));
 
 			if (startDate == null)
-				throw new ArgumentNullException("startDate");
+				throw new ArgumentNullException(nameof(startDate));
 
 			if (endDate == null)
-				throw new ArgumentNullException("endDate");
+				throw new ArgumentNullException(nameof(endDate));
 
 			return
 #pragma warning disable 618
