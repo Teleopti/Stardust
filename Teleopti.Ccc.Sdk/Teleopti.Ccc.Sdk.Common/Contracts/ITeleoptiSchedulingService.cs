@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         [OperationContract]
         ICollection<MultiplicatorDataDto> GetPersonMultiplicatorDataForPersons(PersonDto[] personCollection, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId);
 
-        [OperationContract(AsyncPattern = true)]
+        [OperationContract(AsyncPattern = true), Obsolete("Support for this functionality will be removed.")]
         IAsyncResult BeginCreateServerScheduleDistribution(PersonDto[] personList, DateOnlyDto startDate, DateOnlyDto endDate, string timeZoneId, AsyncCallback callback, object asyncState);
 
         /// <summary>
@@ -414,7 +414,8 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         [OperationContract]
         void SavePlanningTimeBank(PersonDto personDto, DateOnlyDto dateOnlyDto, int balanceOutMinute);
 
-        void EndCreateServerScheduleDistribution(IAsyncResult result);
+		[Obsolete("Support for this functionality will be removed.")]
+		void EndCreateServerScheduleDistribution(IAsyncResult result);
 
 		/// <summary>
 		/// Get the schedules for the given query.
