@@ -27,11 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 			if (!daySchedule.ScheduleDay.Projection.HasLayers)
 			{
-				if (new DateOnly(_now.UtcDateTime())== date)
-				{
-					return TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime().AddHours(1), _timeZone.TimeZone());
-				}
-				return new DateTime(date.Year, date.Month, date.Day, 8, 0, 0);
+				return TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime().AddHours(1), _timeZone.TimeZone());
 			}
 
 			return TimeZoneHelper.ConvertFromUtc(daySchedule.ScheduleDay.Projection.First().Period.StartDateTime, _timeZone.TimeZone());
@@ -43,11 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider
 
 			if (!daySchedule.ScheduleDay.Projection.HasLayers)
 			{
-				if (new DateOnly(_now.UtcDateTime()) == date)
-				{
-					return TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime().AddHours(1), _timeZone.TimeZone());
-				}
-				return new DateTime(date.Year, date.Month, date.Day, 17, 0, 0);
+				return TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime().AddHours(1), _timeZone.TimeZone());
 			}
 
 			return TimeZoneHelper.ConvertFromUtc(daySchedule.ScheduleDay.Projection.Last().Period.EndDateTime, _timeZone.TimeZone());

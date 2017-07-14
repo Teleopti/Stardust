@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			Now.Is(nowDateTimeStr);
 			var date = new DateOnly(Now.UtcDateTime().AddDays(1));
-			var defaultDateTimePeriod = new DateTimePeriod(nowDateTimeStr.Utc().AddDays(1).AddHours(-nowDateTimeStr.Utc().AddDays(1).Hour + 8), nowDateTimeStr.Utc().AddDays(1).AddHours(-nowDateTimeStr.Utc().AddDays(1).Hour + 17));
+			var defaultDateTimePeriod = new DateTimePeriod(nowDateTimeStr.Utc().AddHours(1), nowDateTimeStr.Utc().AddHours(1));
 			var personAssignment = new PersonAssignment(User.CurrentUser(), Scenario.Current(), date);
 
 			ScheduleData.Set(new IScheduleData[] { personAssignment });
