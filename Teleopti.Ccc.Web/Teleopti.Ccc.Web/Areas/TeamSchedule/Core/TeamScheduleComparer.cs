@@ -176,11 +176,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 		private readonly Func<DateTimePeriod, DateTime> _predicate;
 		private readonly IPermissionProvider _permissionProvider;
 		private ScheduleVisibleReasons _scheduleVisibleReason = ScheduleVisibleReasons.Published;
+		private StringComparer _stringComparer;
 
-		public TeamScheduleTimeComparer(Func<DateTimePeriod, DateTime> predicate, IPermissionProvider permissionProvider)
+		public TeamScheduleTimeComparer(Func<DateTimePeriod, DateTime> predicate, IPermissionProvider permissionProvider, StringComparer stringComparer)
 		{
 			_predicate = predicate;
 			_permissionProvider = permissionProvider;
+			_stringComparer = stringComparer;
 		}
 
 		public int Compare(object x, object y)
@@ -195,7 +197,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			if (isPS1Empty && isPS2Empty || (isPS1DayOff && isPS2DayOff))
 			{
-				return string.CompareOrdinal(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
+				return _stringComparer.Compare(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
 			}
 
 			if (isPS1Empty || isPS1DayOff && !isPS2Empty) return 1;
@@ -209,7 +211,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 			if (end1.Equals(end2))
 			{
-				return string.CompareOrdinal(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
+				return _stringComparer.Compare(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
 			}
 			return end1.IsEarlierThan(end2) ? -1 : 1;
 

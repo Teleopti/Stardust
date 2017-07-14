@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		private IPerson personInUtc;
 		private IPerson personInHongKong;
 
+
 		private void setUpPersonAndCulture(bool addSecondPerson = false)
 		{
 			personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes");
@@ -1825,6 +1826,49 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			schedules[0].Name.Should().Be.EqualTo("a1@a1");
 			schedules[3].Name.Should().Be.EqualTo("c1@c1");
 			schedules[6].Name.Should().Be.EqualTo("f1@f1");
+		}
+
+		[Test]
+		[SetUICulture("zh-CN")]
+		public void ShouldBasedOnUserUiCultureIfSortByFirstName() {
+			
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			
+			var person2 = PersonFactory.CreatePersonWithGuid("绿", "俄");
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+
+			var person3 = PersonFactory.CreatePersonWithGuid("阿", "画");
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+
+			
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.FirstName
+				});
+
+			var schedules = result.Schedules.ToArray();
+
+			schedules[0].Name.Should().Be.EqualTo("a1@a1");
+			schedules[1].Name.Should().Be.EqualTo("阿@画");
+			schedules[2].Name.Should().Be.EqualTo("绿@俄");
 		}
 
 		[Test]

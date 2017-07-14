@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IPersonRepository _personRepository;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IToggleManager _toggleManager;
-
+		private readonly IUserUiCulture _userUiCulture;
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider,
 			ITeamScheduleProjectionProvider teamScheduleProjectionProvider, IProjectionProvider projectionProvider,
 			ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
-			IPersonRepository personRepository, IIanaTimeZoneProvider ianaTimeZoneProvider, IToggleManager toggleManager)
+			IPersonRepository personRepository, IIanaTimeZoneProvider ianaTimeZoneProvider, IToggleManager toggleManager, IUserUiCulture userUiCulture)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_personRepository = personRepository;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_toggleManager = toggleManager;
+			_userUiCulture = userUiCulture;
 		}
 
 		public GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input)
@@ -141,22 +142,23 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		private Tuple<IPerson, IScheduleDay>[] sortSchedules(Tuple<IPerson, IScheduleDay>[] personScheduleDaysToSort, TeamScheduleSortOption sortOption, bool canSeeUnpublishedSchedules)
 		{
+			var stringComparer = StringComparer.Create(_userUiCulture.GetUiCulture(), false);
 			switch (sortOption)
 			{
 				case TeamScheduleSortOption.FirstName:
-					personScheduleDaysToSort = personScheduleDaysToSort.OrderBy(ps => ps.Item1.Name.FirstName).ToArray();
+					personScheduleDaysToSort = personScheduleDaysToSort.OrderBy(ps => ps.Item1.Name.FirstName, stringComparer).ToArray();
 					break;
 				case TeamScheduleSortOption.LastName:
-					personScheduleDaysToSort = personScheduleDaysToSort.OrderBy(ps => ps.Item1.Name.LastName).ToArray();
+					personScheduleDaysToSort = personScheduleDaysToSort.OrderBy(ps => ps.Item1.Name.LastName, stringComparer).ToArray();
 					break;
 				case TeamScheduleSortOption.EmploymentNumber:
-					personScheduleDaysToSort = personScheduleDaysToSort.OrderBy(ps => ps.Item1.EmploymentNumber).ToArray();
+					personScheduleDaysToSort = personScheduleDaysToSort.OrderBy(ps => ps.Item1.EmploymentNumber, stringComparer).ToArray();
 					break;
 				case TeamScheduleSortOption.StartTime:
-					Array.Sort(personScheduleDaysToSort, new TeamScheduleTimeComparer(period => period.StartDateTime,_permissionProvider));
+					Array.Sort(personScheduleDaysToSort, new TeamScheduleTimeComparer(period => period.StartDateTime, _permissionProvider,stringComparer));
 					break;
 				case TeamScheduleSortOption.EndTime:
-					Array.Sort(personScheduleDaysToSort, new TeamScheduleTimeComparer(period => period.EndDateTime,_permissionProvider));
+					Array.Sort(personScheduleDaysToSort, new TeamScheduleTimeComparer(period => period.EndDateTime, _permissionProvider, stringComparer));
 					break;
 				default:
 					Array.Sort(personScheduleDaysToSort, new TeamScheduleComparer(canSeeUnpublishedSchedules, _permissionProvider));
