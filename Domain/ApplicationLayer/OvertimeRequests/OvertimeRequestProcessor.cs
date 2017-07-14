@@ -15,15 +15,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 	{
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly INow _now;
-
+		private readonly ILoggedOnUser _loggedOnUser;
 
 		private static readonly ILog logger = LogManager.GetLogger(typeof(OvertimeRequestProcessor));
 		private const int minimumApprovalThresholdTimeInMinutes = 15;
 
-		public OvertimeRequestProcessor(ICommandDispatcher commandDispatcher, INow now)
+		public OvertimeRequestProcessor(ICommandDispatcher commandDispatcher, INow now, ILoggedOnUser loggedOnUser)
 		{
 			_commandDispatcher = commandDispatcher;
 			_now = now;
+			_loggedOnUser = loggedOnUser;
 		}
 
 		public void Process(IPersonRequest personRequest)
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				var denyCommand = new DenyRequestCommand()
 				{
 					PersonRequestId = personRequest.Id.GetValueOrDefault(),
-					DenyReason = string.Format(Resources.OvertimeRequestDenyReasonExpired, personRequest.Request.Period.StartDateTime, minimumApprovalThresholdTimeInMinutes),
+					DenyReason = string.Format(Resources.OvertimeRequestDenyReasonExpired, TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.StartDateTime,_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()), minimumApprovalThresholdTimeInMinutes),
 					DenyOption = PersonRequestDenyOption.AutoDeny
 				};
 				_commandDispatcher.Execute(denyCommand);

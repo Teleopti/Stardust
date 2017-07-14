@@ -63,10 +63,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldDenyOvertimeRequestWhenItsStartTimeIsWithinUpcoming15Mins()
 		{
+			var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			var skill1 = new Domain.Forecasting.Skill("skill1");
 			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(Now.UtcDateTime()), new[] { skill1 });
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			LoggedOnUser.SetDefaultTimeZone(timeZoneInfo);
 			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });
 
 			var requestStartTime = Now.UtcDateTime().AddMinutes(MinimumApprovalThresholdTimeInMinutes - 1);
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
-			personRequest.DenyReason.Should().Be.EqualTo(string.Format(Resources.OvertimeRequestDenyReasonExpired, requestStartTime, MinimumApprovalThresholdTimeInMinutes));
+			personRequest.DenyReason.Should().Be.EqualTo(string.Format(Resources.OvertimeRequestDenyReasonExpired,TimeZoneHelper.ConvertFromUtc(requestStartTime,timeZoneInfo), MinimumApprovalThresholdTimeInMinutes));
 		}
 
 		private IPersonRequest createOvertimeRequest(IPerson person, DateTimePeriod period)
