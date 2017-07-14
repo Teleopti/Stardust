@@ -19,9 +19,9 @@
 	self.ShowError = ko.observable(false);
 	self.ErrorMessage = ko.observable();
 	self.ShowCancelButton = ko.observable(true);
-	self.RequestDuration = ko.observable();
 	self.MultiplicatorDefinitionSetId = ko.observable();
 	self.TimeList = _createTimeList();
+	self.RequestDuration = ko.observable(self.TimeList[0]);
 	self.DateFromChangeSubscription = undefined;
 
 	self.checkMessageLength = function (data, event) {

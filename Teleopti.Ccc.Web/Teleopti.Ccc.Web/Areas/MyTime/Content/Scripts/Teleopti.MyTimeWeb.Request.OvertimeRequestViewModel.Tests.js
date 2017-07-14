@@ -184,6 +184,7 @@ $(document).ready(function () {
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
 		vm.StartTime('19:00');
+		vm.RequestDuration('');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
@@ -328,5 +329,9 @@ $(document).ready(function () {
 
 		equal(fakeScheduleEdgeTimeData.EndDateTime.indexOf(vm.DateFrom()) > -1, true);
 		equal(fakeScheduleEdgeTimeData.EndDateTime.indexOf(vm.StartTime()) > -1, true);
+	});
+
+	test('should set overtime request duration to one hour by default', function() {
+		equal(vm.RequestDuration(), '01:00');
 	});
 });
