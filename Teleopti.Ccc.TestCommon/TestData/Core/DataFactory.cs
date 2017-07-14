@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			_applied.Add(setup);
 		}
 
-		public IEnumerable<IDataSetup> Applied { get { return _applied; } }
-
+		public IEnumerable<IDataSetup> Applied => _applied;
 	}
 }

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Specific;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.TestData.Core
 {
@@ -55,14 +52,14 @@ namespace Teleopti.Ccc.TestCommon.TestData.Core
 			_userDataSetups.Add(setup);
 		}
 
-		public IEnumerable<object> Applied { get { return _userSetups.Cast<object>().Union(_userDataSetups); } }
-		
+		public IEnumerable<object> Applied => _userSetups.Cast<object>().Union(_userDataSetups);
+
 		public string LogOnName { get; private set; }
 		public void Set(string logonName)
 		{
 			LogOnName = logonName;
 		}
-		public IPerson Person { get { return _person; } }
-		public CultureInfo Culture { get { return Person.PermissionInformation.Culture(); } }
+		public IPerson Person => _person;
+		public CultureInfo Culture => Person.PermissionInformation.Culture();
 	}
 }
