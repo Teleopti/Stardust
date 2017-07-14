@@ -18,6 +18,10 @@ $(document).ready(function () {
 				requestFormClosed = true;
 			}
 		},
+		fakeScheduleEdgeTimeData = {
+			StartDateTime: "2017-07-14 11:00",
+			EndDateTime: "2017-07-14 21:00"
+		},
 		requestDate = moment().format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
 
 	module('Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel',
@@ -44,6 +48,9 @@ $(document).ready(function () {
 				if (options.url === 'Requests/PersistOvertimeRequest') {
 					sentData = options.data;
 					options.success(fakeOvertimeRequestResponse);
+				}
+				if(options.url.indexOf('GetIntradayScheduleEdgeTime') > -1){
+					options.success(fakeScheduleEdgeTimeData);
 				}
 			}
 		};
@@ -161,6 +168,7 @@ $(document).ready(function () {
 	test('should not pass validation when post data has no start time', function () {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
+		vm.DateFromChangeSubscription.dispose();
 		vm.DateFrom(requestDate);
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
@@ -287,7 +295,7 @@ $(document).ready(function () {
 		$('#duration').remove();
 	});
 
-	test('should initialize with data', function () {
+	test('should initialize with data when viewing request detail', function () {
 		var data = {
 			Subject: "subject",
 			Text: "text",
@@ -295,10 +303,11 @@ $(document).ready(function () {
 			DateTimeTo: "2017-06-30T06:45:00.0000000",
 			MultiplicatorDefinitionSet: "9019D62F-0086-44B1-A977-9BB900B8C361"
 		};
+		var isViewingDetail = true;
 
 		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function (data) {
 			addedOvertimeRequest = data;
-		}, fakeRequestDetailViewModel);
+		}, fakeRequestDetailViewModel,null,isViewingDetail);
 		requestVm.Initialize(data);
 
 		equal(requestVm.Subject(), "subject");
@@ -307,5 +316,17 @@ $(document).ready(function () {
 		equal(requestVm.StartTime(), "03:45");
 		equal(requestVm.RequestDuration(), "03:00");
 		equal(requestVm.MultiplicatorDefinitionSetId(), "9019D62F-0086-44B1-A977-9BB900B8C361");
+	});
+
+	test('should get suggested overtime request start time by default', function() {
+		fakeScheduleEdgeTimeData = {
+			StartDateTime: "2017-07-14 11:00",
+			EndDateTime: "2017-07-14 20:00"
+		};
+
+		vm.DateFrom(fakeScheduleEdgeTimeData.EndDateTime.split(' ')[0]);
+
+		equal(fakeScheduleEdgeTimeData.EndDateTime.indexOf(vm.DateFrom()) > -1, true);
+		equal(fakeScheduleEdgeTimeData.EndDateTime.indexOf(vm.StartTime()) > -1, true);
 	});
 });

@@ -1,4 +1,4 @@
-﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart) {
+﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart, isViewingDetail) {
 	var self = this;
 
 	self.Id = ko.observable();
@@ -9,6 +9,7 @@
 	self.Subject = ko.observable();
 	self.Message = ko.observable();
 
+	self.Today = ko.observable(moment());
 	self.DateFrom = ko.observable();
 	self.StartTime = ko.observable();
 	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
@@ -21,6 +22,7 @@
 	self.RequestDuration = ko.observable();
 	self.MultiplicatorDefinitionSetId = ko.observable();
 	self.TimeList = _createTimeList();
+	self.DateFromChangeSubscription = undefined;
 
 	self.checkMessageLength = function (data, event) {
 		var text = $(event.target)[0].value;
@@ -72,17 +74,42 @@
 		});
 	};
 
-	self.CancelAddRequest = function () {
+	self.GetDefaultStartTime = function() {
+		ajax.Ajax({
+			url: '../api/Schedule/GetIntradayScheduleEdgeTime',
+			data: {
+				date: moment.isMoment(self.DateFrom()) ? self.DateFrom().format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly) : self.DateFrom()
+			},
+			dataType: 'json',
+			type: 'Get',
+			success: function(data) {
+				self.StartTime(moment(data.EndDateTime).format('HH:mm'));
+			}
+		});
+	};
+
+	if(!isViewingDetail){
+		self.DateFromChangeSubscription = self.DateFrom.subscribe(function(newVal){
+			self.GetDefaultStartTime();
+		});
+	}
+
+	self.CancelAddRequest = function() {
 		parentViewModel.CancelAddingNewRequest();
 	};
 
 	self.Initialize = function (data) {
-		if (data) {
+		if (isViewingDetail && data) {
 			self.Id(data.Id);
 
 			self.Subject(data.Subject);
 			self.Message(data.Text);
-			self.DateFrom(moment(data.DateTimeFrom));
+
+			self.DateFromChangeSubscription = self.DateFrom.subscribe(function(newVal){
+				self.GetDefaultStartTime();
+			});
+
+			self.DateFrom(moment(data.DateTimeFrom).format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly));
 
 			if (self.ShowMeridian) {
 				self.StartTime(moment(data.DateTimeFrom).format("hh:mm A"));
