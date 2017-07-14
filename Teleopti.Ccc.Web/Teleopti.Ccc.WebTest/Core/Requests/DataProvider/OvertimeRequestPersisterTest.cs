@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public IOvertimeRequestPersister Target;
 		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
 		public FakeScheduleDictionary ScheduleDictionary;
+		public FakeLoggedOnUser LoggedOnUser;
 
 		private IPerson _person;
 		private ICommandDispatcher _commandDispatcher;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
 			system.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
 			system.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();
-			system.UseTestDouble(new OvertimeRequestProcessor(_commandDispatcher, new ThisIsNow(currentDateTime))).For<IOvertimeRequestProcessor>();
+			system.UseTestDouble(new OvertimeRequestProcessor(_commandDispatcher, new ThisIsNow(currentDateTime), LoggedOnUser)).For<IOvertimeRequestProcessor>();
 		}
 
 		[Test]
