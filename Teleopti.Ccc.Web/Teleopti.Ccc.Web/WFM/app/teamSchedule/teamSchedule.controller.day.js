@@ -1,7 +1,8 @@
 ﻿(function () {
 	'use strict';
 	angular.module('wfm.teamSchedule').controller('TeamScheduleController', [
-		'$scope',
+        '$scope',
+		'$element',
 		'$q',
 		'$translate',
 		'$stateParams',
@@ -21,7 +22,7 @@
 		'teamsPermissions',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, teamsPermissions) {
+    function TeamScheduleController($scope, $element, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, teamsPermissions) {
 		var vm = this;
 
 		vm.isLoading = false;
@@ -187,8 +188,12 @@
 			vm.hasSelectedAllPeopleInEveryPage = false;
 			vm.scheduleFullyLoaded = false;
 			vm.loadSchedules();
+			resetFocus();
 		};
-
+	
+        function resetFocus() {
+            $scope.$broadcast("resetFocus", "organizationPicker");
+		};
 		function getParamsForLoadingSchedules(options) {
 			options = options || {};
 			var params = {

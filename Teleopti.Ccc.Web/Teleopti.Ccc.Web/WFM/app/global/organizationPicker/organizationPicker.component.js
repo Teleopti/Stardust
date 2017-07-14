@@ -54,6 +54,11 @@
 			element.focus();
 		}
 
+        $scope.$on("resetFocus", function (elementName) {
+            var element = $element.find("md-select-value");
+            element.focus();
+        });
+
 		ctrl.$onInit = function () {
 			var menuPosition = $mdPanel.newPanelPosition().relativeTo($element).addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW)
 
