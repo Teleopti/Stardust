@@ -429,12 +429,9 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2009-01-28
         /// </remarks>
-        public static DateTime MinSmallDateTime
-        {
-            get { return minSmallDateTime; }
-        }
+        public static DateTime MinSmallDateTime => minSmallDateTime;
 
-        /// <summary>
+		/// <summary>
         /// Gets the max small date time.
         /// </summary>
         /// <value>The max small date time.</value>
@@ -442,10 +439,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: robink
         /// Created date: 2009-01-28
         /// </remarks>
-        public static DateTime MaxSmallDateTime
-        {
-            get { return maxSmallDateTime; }
-        }
+        public static DateTime MaxSmallDateTime => maxSmallDateTime;
 
 		// Matched to work similar to SQL small date time. https://msdn.microsoft.com/en-us/library/ms182418.aspx
 		public static DateTime GetSmallDateTime(DateTime value)

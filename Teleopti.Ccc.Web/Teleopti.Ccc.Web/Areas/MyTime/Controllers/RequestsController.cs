@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
@@ -196,8 +197,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWork]
 		[HttpPostOrPut]
-		public virtual JsonResult ShiftTradeRequestSchedule(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
+		public virtual ActionResult ShiftTradeRequestSchedule(DateOnly selectedDate, ScheduleFilter filter, Paging paging)
 		{
+			if (selectedDate > new DateOnly(2079,6,6)) return new HttpStatusCodeResult(HttpStatusCode.InternalServerError, "The given date was out of range."); 
 			var allTeamIds = new List<Guid>();
 			if (!string.IsNullOrEmpty(filter.TeamIds))
 			{
