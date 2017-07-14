@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		{
 			return session().Auditer().CreateQuery()
 				.ForRevisionsOfEntity(typeof (PersonAssignment), false, true)
-				.AddProjection(AuditEntity.RevisionNumber())
+				.AddProjection(AuditEntity.RevisionNumber().Distinct())
 				.Add(AuditEntity.Property("Person").Eq(agent))
 				.Add(AuditEntity.Property("Date").Eq(dateOnly))
 				.AddOrder(AuditEntity.RevisionNumber().Desc())
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		{
 			return session().Auditer().CreateQuery()
 				.ForRevisionsOfEntity(typeof (PersonAbsence), false, true)
-				.AddProjection(AuditEntity.RevisionNumber())
+				.AddProjection(AuditEntity.RevisionNumber().Distinct())
 				.Add(AuditEntity.Property("Person").Eq(agent))
 				.Add(AuditEntity.Property("Layer.Period.period.Minimum").Lt(dateTimePeriod.EndDateTime))
 				.Add(AuditEntity.Property("Layer.Period.period.Maximum").Gt(dateTimePeriod.StartDateTime))

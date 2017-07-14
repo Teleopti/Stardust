@@ -80,6 +80,52 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		}
 
 		[Test]
+		public void ShouldFindDistinctRevision()
+		{
+			var expected = new[] { new Revision { Id = revisionNumberAfterOneUnitTestModification }, new Revision { Id = revisionNumberAtSetupStart } };
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var absenceRepository = new PersonAbsenceRepository(new ThisUnitOfWork(uow));
+				absenceRepository.Remove(PersonAbsence);
+				absenceRepository.Add(PersonAbsence);
+				uow.PersistAll();
+			}
+
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var session = uow.FetchSession();
+				session.CreateSQLQuery(
+						"insert into Auditing.PersonAssignment_AUD (Id, REV, REVTYPE,[Version],Person,Scenario,ShiftCategory,[Date])" +
+						"Values(NEWID(), :rev, 1, 1, :personId, :scenario, :shiftCategory, :date)")
+					.SetInt32("rev", (int) revisionNumberAfterOneUnitTestModification)
+					.SetGuid("personId", PersonAssignment.Person.Id.Value)
+					.SetGuid("scenario", PersonAssignment.Scenario.Id.Value)
+					.SetGuid("shiftCategory", PersonAssignment.ShiftCategory.Id.Value)
+					.SetDateTime("date", new DateOnly(Today).Date)
+					.ExecuteUpdate();
+
+				session.CreateSQLQuery(
+						"insert into Auditing.PersonAssignment_AUD (Id, REV, REVTYPE,[Version],Person,Scenario,ShiftCategory,[Date])" +
+						"Values(NEWID(), :rev, 2, 1, :personId, :scenario, :shiftCategory, :date)")
+					.SetInt32("rev", (int) revisionNumberAfterOneUnitTestModification)
+					.SetGuid("personId", PersonAssignment.Person.Id.Value)
+					.SetGuid("scenario", PersonAssignment.Scenario.Id.Value)
+					.SetGuid("shiftCategory", PersonAssignment.ShiftCategory.Id.Value)
+					.SetDateTime("date", new DateOnly(Today).Date)
+					.ExecuteUpdate();
+
+				uow.PersistAll();
+			}
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var revIds = target.FindRevisions(Agent, new DateOnly(Today), 2);
+				revIds.Count().Should().Be(2);
+				revIds.Should().Have.SameSequenceAs(expected);
+			}
+		}
+
+		[Test]
 		public void ShouldNotFindSchedulesInTheFuture()
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
