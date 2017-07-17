@@ -50,7 +50,7 @@ RTA_SolidProofWhenManagingAgentAdherence_39351 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
-WfmTeamSchedule_MoveOvertimeActivity_44888 = RC
+WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = RC
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
@@ -207,7 +207,7 @@ ETL_SpeedUpNightlyDayOff_38213 = true
 WFM_ImproveIntradaySkillArea_44246 = true
 Wfm_Intraday_SupportSkillTypeWebChat_42591 = true
 MyTimeWeb_MobileResponsive_43826 = true
-Wfm_Intraday_SupportSkillTypeEmail_44002 = RC
+Wfm_Intraday_SupportSkillTypeEmail_44002 = true
 WFM_Intraday_Show_For_Other_Days_43504 = RC
 WFM_Intraday_SupportMultisiteSkill_43874 = true
 WFM_Intraday_Export_To_Excel_44892 = DEV
