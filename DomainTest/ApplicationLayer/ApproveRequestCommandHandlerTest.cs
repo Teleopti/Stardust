@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -46,10 +48,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var businessRules = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository, new SchedulingResultStateHolder());
 
+			var overtimeRequestSkillProvider = MockRepository.GenerateMock<IOvertimeRequestSkillProvider>();
+			overtimeRequestSkillProvider.Stub(s => s.GetAvailableSkills(new DateTimePeriod()))
+				.IgnoreArguments()
+				.Return(new ISkill[] {});
 			_requestApprovalServiceFactory = new RequestApprovalServiceFactory(
 				new SwapAndModifyService(null, null),
 				new FakeGlobalSettingDataRepository(),
-				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new DoNothingScheduleDayChangeCallBack(), null
+				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new DoNothingScheduleDayChangeCallBack()
+				, null, null, overtimeRequestSkillProvider, null
 			);
 
 			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator(
@@ -279,7 +286,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new ApproveRequestCommand { PersonRequestId = personRequest.Id.Value };
 			_approveRequestCommandHandler.Handle(command);
 
-			Assert.IsTrue(personRequest.IsApproved);
 			var schedules =_fakeScheduleStorage.LoadAll();
 			Assert.IsTrue(schedules.Count() == 1);
 		}

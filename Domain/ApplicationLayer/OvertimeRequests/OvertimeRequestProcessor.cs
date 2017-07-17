@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;

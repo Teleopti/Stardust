@@ -84,6 +84,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<RequestStrategySettingsReader>().As<IRequestStrategySettingsReader>().SingleInstance();
 			builder.RegisterType<IntradayRequestProcessor>().SingleInstance();
+			builder.RegisterType<OvertimeRequestUnderStaffingSkillProvider>().As<IOvertimeRequestUnderStaffingSkillProvider>();
+			builder.RegisterType<SkillStaffingReadModelDataLoader>().As<ISkillStaffingReadModelDataLoader>();
+			builder.RegisterType<OvertimeRequestSkillProvider>().As<IOvertimeRequestSkillProvider>();
+			builder.RegisterType<SkillOpenHourFilter>().As<ISkillOpenHourFilter>();
 		}
 
 		private void registerType<T, TToggleOn, TToggleOff>(ContainerBuilder builder, Toggles toggle)

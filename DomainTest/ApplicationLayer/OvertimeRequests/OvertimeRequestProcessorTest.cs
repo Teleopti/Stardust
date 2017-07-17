@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public const int MinimumApprovalThresholdTimeInMinutes = 15;
 		public INow Now;
 
-
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<OvertimeRequestProcessor>().For<IOvertimeRequestProcessor>();
@@ -40,24 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<DoNothingScheduleDayChangeCallBack>().For<IScheduleDayChangeCallback>();
 			system.UseTestDouble(new ThisIsNow(new DateTime(2017, 07, 12, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
-		}
-
-		[Test]
-		public void ShouldApproveOvertimeRequest()
-		{
-			var skill1 = new Domain.Forecasting.Skill("skill1");
-			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(Now.UtcDateTime()), new[] { skill1 });
-			LoggedOnUser.SetFakeLoggedOnUser(person);
-			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });
-
-			var requestStartTime = Now.UtcDateTime().AddMinutes(MinimumApprovalThresholdTimeInMinutes + 1);
-
-			var personRequest = createOvertimeRequest(person, new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
-
-			Target.Process(personRequest);
-
-			personRequest.IsApproved.Should().Be.True();
 		}
 
 		[Test]
