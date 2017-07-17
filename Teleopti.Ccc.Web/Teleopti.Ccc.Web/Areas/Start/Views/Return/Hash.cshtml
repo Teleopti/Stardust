@@ -10,7 +10,6 @@
 		var globalApplicationAreas = ['MyTime', 'Anywhere', 'Messages', 'Reporting', 'WFM', 'HealthCheck', 'MyTime/ASM', 'MyTime/ASMWidget', 'MyTime/CiscoWidget'];//any descendent area is not here? please add if missing.
 
 		tryToSaveReturnHash(findTheDeepestArea());
-		redirect();
 
 		function findTheDeepestArea() {
 		    var theDeepestArea = undefined; 
@@ -25,12 +24,25 @@
 		}
 
 		function tryToSaveReturnHash(areaToGo) {
-			
-			if (areaToGo !== undefined) {
-				saveAreaToGoInCookie(areaToGo);
-			} else {
-				deleteCookie('returnHash');
+			try {
+				localStorage.setItem('isPrivateMode', '1');
+				localStorage.removeItem('isPrivateMode');
+				window.isPrivateMode = false;
+			} catch(e) {
+				window.isPrivateMode = true;
 			}
+			if (!window.isPrivateMode && window.localStorage) { 
+				if (areaToGo !== undefined) {
+					saveAreaToGoInCookie(areaToGo);
+				} else {
+					deleteCookie('returnHash');
+				}
+				redirect();
+			}
+			else{
+				alert('Your web browser does not support store settings locally. Please trun off the private browsing mode of your brower or swtich to another browser to access to our web.');
+				redirectToWFM();
+			}		
 		}
 
 		function saveAreaToGoInCookie(areaToGo) {
@@ -69,17 +81,24 @@
 					return;
 				}
 			}
-			if (redirectUrl){
+			if (redirectUrl) {
 				window.location.replace(redirectUrl);
 			}
+		}
+
+		function redirectToWFM() {
+			var redirectUrl = getParameterByName('redirectUrl');
+			var redirectLink = (/(.*?TeleoptiWFM\/)/).exec(redirectUrl);
+			window.location.replace(redirectLink[0]);
 		}
 
 		function getParameterByName(name) {
 			name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 			var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
 				results = regex.exec(location.search);
-			return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+			return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, ""));
 		}
+
 	</script>
 </head>
 <body>
