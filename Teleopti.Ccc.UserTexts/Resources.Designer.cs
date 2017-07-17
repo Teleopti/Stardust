@@ -19565,6 +19565,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Agent has no available skill for overtime.
+        /// </summary>
+        public static string NoAvailableSkillForOvertime {
+            get {
+                return ResourceManager.GetString("NoAvailableSkillForOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to One or more days during this requested period {0} has no budget allowance..
         /// </summary>
         public static string NoBudgetDefineForSomeRequestedDays {
@@ -20551,6 +20560,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NotWorking {
             get {
                 return ResourceManager.GetString("NotWorking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no critical underStaffing skill for overtime request.
+        /// </summary>
+        public static string NoUnderStaffingSkill {
+            get {
+                return ResourceManager.GetString("NoUnderStaffingSkill", resourceCulture);
             }
         }
         
@@ -22641,6 +22659,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PeriodInLegalState {
             get {
                 return ResourceManager.GetString("PeriodInLegalState", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Request period is out of skill open hours.
+        /// </summary>
+        public static string PeriodIsOutOfSkillOpenHours {
+            get {
+                return ResourceManager.GetString("PeriodIsOutOfSkillOpenHours", resourceCulture);
             }
         }
         

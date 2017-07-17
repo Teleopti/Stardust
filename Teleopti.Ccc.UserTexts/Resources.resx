@@ -16271,5 +16271,17 @@ Do you want to participate?</value>
   <data name="ClassicIntraday" xml:space="preserve">
     <value>Classic Intraday</value>
     <comment>Classic Intraday</comment>
+  </data>  
+  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
+    <value>Agent has no available skill for overtime</value>
+    <comment>Use in Mytime overtime request. An error message when agent has no available skill within person period.</comment>
+  </data>
+  <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
+    <value>Request period is out of skill open hours</value>
+    <comment>Use in Mytime overtime request. An error message when overtime request period is out of skill open hours</comment>
+  </data>
+  <data name="NoUnderStaffingSkill" xml:space="preserve">
+    <value>There is no critical underStaffing skill for overtime request</value>
+    <comment>Use in Mytime overtime request. An error message when there is no under staffing skill for request period.</comment>
   </data>
 </root>

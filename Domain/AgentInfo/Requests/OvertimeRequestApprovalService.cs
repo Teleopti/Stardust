@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
@@ -41,31 +42,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(period).ToList();
 			if (!skills.Any())
 			{
-				return new IBusinessRuleResponse[]
-				{
-					new BusinessRuleResponse(null, "There is no available skill for overtime", true, true, period
-						, person, period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()), string.Empty)
-				};
+				return getBusinessRuleResponses(Resources.NoAvailableSkillForOvertime, period, person);
 			}
 
 			skills = _skillOpenHourFilter.Filter(period, skills).ToList();
 			if (!skills.Any())
 			{
-				return new IBusinessRuleResponse[]
-				{
-					new BusinessRuleResponse(null, "There is no open skill in request period", true, true, period
-						, person, period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()), string.Empty)
-				};
+				return getBusinessRuleResponses(Resources.PeriodIsOutOfSkillOpenHours, period, person);
 			}
 
 			var skill = _overtimeRequestUnderStaffingSkillProvider.GetUnderStaffingSkill(period, skills);
 			if (skill == null)
 			{
-				return new IBusinessRuleResponse[]
-				{
-					new BusinessRuleResponse(null, "There is no critical underStaffing skill for overtime request", true, true, period
-						, person, period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()), string.Empty)
-				};
+				return getBusinessRuleResponses(Resources.NoUnderStaffingSkill, period, person);
 			}
 
 			var definitionSet = overtimeRequest.MultiplicatorDefinitionSet;
@@ -76,6 +65,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_scheduleDictionary.Modify(scheduleDay, _scheduleDayChangeCallback);
 
 			return new List<IBusinessRuleResponse>();
+		}
+
+		private static IEnumerable<IBusinessRuleResponse> getBusinessRuleResponses(string message, DateTimePeriod period, IPerson person)
+		{
+			return new IBusinessRuleResponse[]
+			{
+				new BusinessRuleResponse(null, message, true, true, period
+					, person, period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()), string.Empty)
+			};
 		}
 	}
 }

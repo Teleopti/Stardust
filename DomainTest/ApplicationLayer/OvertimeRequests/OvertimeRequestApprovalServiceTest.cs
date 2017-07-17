@@ -17,6 +17,7 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
@@ -164,7 +165,58 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
 
 			result.Count().Should().Be(1);
-			result.First().Message.Should().Be("There is no open skill in request period");
+			result.First().Message.Should().Be(Resources.PeriodIsOutOfSkillOpenHours);
+			personAssignment.Should().Not.Be.Null();
+			personAssignment.OvertimeActivities().Count().Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotApprovedWhenAgentSkillIsOutOfPersonPeriod()
+		{
+			var person = User.CurrentUser();
+			var activity1 = createActivity("activity1");
+			var skill1 = createSkill("skill1");
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			var startDate = new DateOnly(2017, 7, 17);
+			setupIntradayStaffingForSkill(skill1, 10d, 6d);
+			addPersonSkillsToPersonPeriod(startDate, personSkill1);
+			createAssignment(person, activity1);
+
+			var requestPeriod = startDate.AddDays(-1).ToDateTimePeriod(new TimePeriod(21, 22), person.PermissionInformation.DefaultTimeZone());
+			var personRequest = createOvertimeRequest(person, requestPeriod);
+
+			_target = createTarget();
+			var result = _target.Approve(personRequest.Request);
+
+			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+
+			result.Count().Should().Be(1);
+			result.First().Message.Should().Be(Resources.NoAvailableSkillForOvertime);
+			personAssignment.Should().Not.Be.Null();
+			personAssignment.OvertimeActivities().Count().Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotApprovedWhenHasNoCriticalUnderStaffingSkill()
+		{
+			var person = User.CurrentUser();
+			var activity1 = createActivity("activity1");
+			var skill1 = createSkill("skill1");
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			setupIntradayStaffingForSkill(skill1, 6d, 10d);
+			addPersonSkillsToPersonPeriod(personSkill1);
+			createAssignment(person, activity1);
+
+			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(19, 21), person.PermissionInformation.DefaultTimeZone());
+			var personRequest = createOvertimeRequest(person, requestPeriod);
+
+			_target = createTarget();
+			var result = _target.Approve(personRequest.Request);
+
+			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+
+			result.Count().Should().Be(1);
+			result.First().Message.Should().Be(Resources.NoUnderStaffingSkill);
 			personAssignment.Should().Not.Be.Null();
 			personAssignment.OvertimeActivities().Count().Should().Be(0);
 		}
@@ -273,24 +325,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return personSkill;
 		}
 
-		private void addPersonSkillsToPersonPeriod(params IPersonSkill[] personSkills)
+		private void addPersonSkillsToPersonPeriod(DateOnly startDate, params IPersonSkill[] personSkills)
 		{
-			var personPeriod = getOrAddPersonPeriod();
+			var personPeriod = getOrAddPersonPeriod(startDate);
 			foreach (var personSkill in personSkills)
 			{
 				personPeriod.AddPersonSkill(personSkill);
 			}
 		}
 
-		private PersonPeriod getOrAddPersonPeriod()
+		private void addPersonSkillsToPersonPeriod(params IPersonSkill[] personSkills)
 		{
-			var personPeriod =
-				(PersonPeriod)User.CurrentUser().PersonPeriods(Now.ServerDate_DontUse().ToDateOnlyPeriod()).FirstOrDefault();
+			addPersonSkillsToPersonPeriod(Now.ServerDate_DontUse(), personSkills);
+		}
+
+
+		private PersonPeriod getOrAddPersonPeriod(DateOnly startDate)
+		{
+			var personPeriod = (PersonPeriod)User.CurrentUser().PersonPeriods(startDate.ToDateOnlyPeriod()).FirstOrDefault();
 			if (personPeriod != null) return personPeriod;
 			var team = TeamFactory.CreateTeam("team1", "site1");
 			personPeriod =
 				(PersonPeriod)
-				PersonPeriodFactory.CreatePersonPeriod(Now.ServerDate_DontUse(), PersonContractFactory.CreatePersonContract(), team);
+				PersonPeriodFactory.CreatePersonPeriod(startDate, PersonContractFactory.CreatePersonContract(), team);
 			User.CurrentUser().AddPersonPeriod(personPeriod);
 			return personPeriod;
 		}
