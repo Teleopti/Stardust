@@ -84,8 +84,7 @@
 					return {
 						site: site,
 						isOpen: $stateParams.open != "false",
-						fetchTeamData: fetchTeamData,
-						//isSelected: false
+						fetchTeamData: fetchTeamData
 					}
 				});
 			}
@@ -209,14 +208,14 @@
 					vm.selectedItems = { siteIds: [], skillIds: [], skillAreaId: undefined };
 					vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 				} else if (selectedItem.hasOwnProperty('Skills')) {
-					vm.selectedItems = {siteIds:[], skillIds: [], skillAreaId: selectedItem.Id};
+					vm.selectedItems = { siteIds: [], skillIds: [], skillAreaId: selectedItem.Id };
 					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + selectedItem.Id + '"})';
 					$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
 					vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
 					getSiteCards(vm.skillIds);
 				} else {
 					vm.skillIds = [selectedItem.Id];
-					vm.selectedItems = {siteIds:[], skillIds: vm.skillIds, skillAreaId: undefined};
+					vm.selectedItems = { siteIds: [], skillIds: vm.skillIds, skillAreaId: undefined };
 					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + selectedItem.Id + '"]})';
 					$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
 					getSiteCards(vm.skillIds);
@@ -236,6 +235,11 @@
 			}
 
 			vm.goToAgents = function () {
+				$state.go('rta.agents', vm.selectedItems);
+			}
+
+			vm.openTeam = function (team) {
+				vm.selectedItems.teamIds = [team.Id];
 				$state.go('rta.agents', vm.selectedItems);
 			}
 		})();

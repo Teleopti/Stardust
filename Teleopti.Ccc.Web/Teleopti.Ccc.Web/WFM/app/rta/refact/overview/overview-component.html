@@ -1,12 +1,14 @@
 ﻿<rta-card ng-repeat="card in $ctrl.siteCards" ng-open="card.isOpen" ng-click="card.fetchTeamData(card)">
     <rta-card-header ng-attr-styles="border-left-color: {{card.site.Color}};">
         <div style="position: absolute; width: 100%">
-        <div style="float: left; width:44%"><b>{{card.site.Name}}</b></div>
-        <div style="float: left; width:44%">{{'InAlarm'|translate}}:
-			<b>{{card.site.InAlarmCount}}</b>
-        </div>
-        <div ng-click="$event.stopPropagation(); $ctrl.selectItem(card);" style="line-height: 33px; float: left; width:4%"><i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i><md-tooltip>{{card.isSelected ? "Unselect site" : "Select site"}}</md-tooltip></div>
-        <div style="line-height: 33px; float: left; width:4%"><a ui-sref="{{$ctrl.agentsState}}"><i class="mdi mdi-arrow-right"></i><md-tooltip>See agents</md-tooltip></a></div>
+            <div style="float: left; width:44%"><b>{{card.site.Name}}</b></div>
+            <div style="float: left; width:44%">{{'InAlarm'|translate}}:
+                <b>{{card.site.InAlarmCount}}</b>
+            </div>
+            <div ng-click="$event.stopPropagation(); $ctrl.selectItem(card);" style="line-height: 33px; float: left; width:4%"><i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>
+                <md-tooltip>{{card.isSelected ? "Unselect site" : "Select site"}}</md-tooltip>
+            </div>
+            <div style="line-height: 33px; float: left; width:4%"><a ui-sref="{{$ctrl.agentsState}}"><i class="mdi mdi-arrow-right"></i><md-tooltip>See agents</md-tooltip></a></div>
         </div>
     </rta-card-header>
     <rta-card-body>
@@ -14,7 +16,7 @@
             <div class="con-flex">
                 <div class="wfm-grid" class="animate-show">
                     <div class="grid-card-mini" ng-repeat="team in card.teams">
-                        <a ui-sref="rta.agents({teamIds: team.Id})" class="rta-card-link" ng-click="$event.stopPropagation();">
+                        <!-- <a ui-sref="rta.agents({teamIds: team.Id})" class="rta-card-link" ng-click="$event.stopPropagation();">
                             <div class="list-content" style="padding: 1%;" ng-class="team.Color">
                                 <b><span class="wfm-checkbox-label org-name-container" ng-attr-data-max="{{team.AgentsCount}}">
 								{{team.Name}}
@@ -23,7 +25,21 @@
 								<b>{{team.InAlarmCount}}</b>
 							</span>
                             </div>
-                        </a>
+                        </a> -->
+                        <div class="list-content">
+                            <div class="list-header" ng-click="vm.selectItem(team)" ng-class="team.Color">
+                                <h1 ng-attr-data-max="{{team.AgentsCount}}">{{team.Name}}
+                                    <!-- <i class="mdi pull-right" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>
+                                    <md-tooltip>{{card.isSelected ? "Unselect site" : "Select site"}}</md-tooltip> -->
+                                </h1>
+                                <div class="subtext"><span class="full-padding" ng-attr-data-value="{{team.InAlarmCount}}">{{'InAlarm'|translate}}:
+								<b>{{team.InAlarmCount}}</b>
+							</span></div>
+                            </div>
+                            <div class="list-header-content">
+                                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="$ctrl.goToAgentsForTeam(team)">Open</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

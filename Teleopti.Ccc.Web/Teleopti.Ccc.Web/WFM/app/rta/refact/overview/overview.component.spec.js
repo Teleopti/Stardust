@@ -641,8 +641,8 @@ describe('rtaOverviewComponent', function () {
   });
 
   it('should select site', function () {
-     $fakeBackend
-     .withSiteAdherence({
+    $fakeBackend
+      .withSiteAdherence({
         Id: 'londonId',
         Name: 'London',
         AgentsCount: 11,
@@ -662,14 +662,14 @@ describe('rtaOverviewComponent', function () {
   });
 
   it('should unselect site', function () {
-     $fakeBackend
-     .withSiteAdherence({
+    $fakeBackend
+      .withSiteAdherence({
         Id: 'londonId',
         Name: 'London',
         AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
-      })
+      });
     vm = $controllerBuilder.createController().vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,

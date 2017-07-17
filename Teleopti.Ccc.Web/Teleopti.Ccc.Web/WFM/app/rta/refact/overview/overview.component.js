@@ -9,17 +9,23 @@
       bindings: {
         siteCards: '=',
         agentsState: '=',
-        getSelectedItems: '='
+        getSelectedItems: '=',
+        openTeam: '='
       },
     });
 
-  RtaOverviewComponentController.inject = [];
-  function RtaOverviewComponentController() {
+  RtaOverviewComponentController.inject = ['$state'];
+  function RtaOverviewComponentController($state) {
     var ctrl = this;
     ctrl.selectedItems = {siteIds: []};
     ctrl.selectItem = function(card) {
       card.isSelected = !card.isSelected;
       ctrl.getSelectedItems(card);
+    };
+
+    ctrl.goToAgentsForTeam = function(team) {
+      ctrl.openTeam(team);
     }
+
   }
 })();
