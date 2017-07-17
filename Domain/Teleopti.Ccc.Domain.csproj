@@ -243,7 +243,10 @@
     <Compile Include="ApplicationLayer\Intraday\ExtractSkillForecastIntervals.cs" />
     <Compile Include="ApplicationLayer\IPersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessor.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestStartTimeValidator.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestValidationResult.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IOrganizationReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\OrganizationSiteModel.cs" />

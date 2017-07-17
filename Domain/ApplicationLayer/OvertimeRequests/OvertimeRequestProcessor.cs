@@ -1,37 +1,35 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
 	public class OvertimeRequestProcessor : IOvertimeRequestProcessor
 	{
 		private readonly ICommandDispatcher _commandDispatcher;
-		private readonly INow _now;
-		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IEnumerable<IOvertimeRequestValidator> _overtimeRequestValidators;
 
 		private static readonly ILog logger = LogManager.GetLogger(typeof(OvertimeRequestProcessor));
-		private const int minimumApprovalThresholdTimeInMinutes = 15;
 
-		public OvertimeRequestProcessor(ICommandDispatcher commandDispatcher, INow now, ILoggedOnUser loggedOnUser)
+		public OvertimeRequestProcessor(ICommandDispatcher commandDispatcher,
+			IEnumerable<IOvertimeRequestValidator> overtimeRequestValidators)
 		{
 			_commandDispatcher = commandDispatcher;
-			_now = now;
-			_loggedOnUser = loggedOnUser;
+			_overtimeRequestValidators = overtimeRequestValidators;
 		}
 
 		public void Process(IPersonRequest personRequest)
 		{
-			if (isRequestStartTimeWithinUpcoming15Mins(personRequest))
+			foreach (var overtimeRequestValidator in _overtimeRequestValidators)
 			{
+				var result = overtimeRequestValidator.Validate(personRequest);
+				if (result.IsValid) continue;
 				var denyCommand = new DenyRequestCommand()
 				{
 					PersonRequestId = personRequest.Id.GetValueOrDefault(),
-					DenyReason = string.Format(Resources.OvertimeRequestDenyReasonExpired, TimeZoneHelper.ConvertFromUtc(personRequest.Request.Period.StartDateTime,_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone()), minimumApprovalThresholdTimeInMinutes),
+					DenyReason = result.InvalidReason,
 					DenyOption = PersonRequestDenyOption.AutoDeny
 				};
 				_commandDispatcher.Execute(denyCommand);
@@ -51,14 +49,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				logger.Warn(command.ErrorMessages);
 			}
-		}
-
-		private bool isRequestStartTimeWithinUpcoming15Mins(IPersonRequest personRequest)
-		{
-			var span = personRequest.Request.Period.StartDateTime - _now.UtcDateTime();
-			if (Math.Ceiling(span.TotalMinutes) < minimumApprovalThresholdTimeInMinutes) return true;
-			
-			return false;
 		}
 	}
 }
