@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Now.Is("2016-01-15 00:00");
 			Target.Handle(new TenantHourTickEvent());
 
-			Publisher.PublishedEvents.Should().Have.Count.EqualTo(1);
+			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Should().Have.Count.EqualTo(1);
 		}
 
 	}
