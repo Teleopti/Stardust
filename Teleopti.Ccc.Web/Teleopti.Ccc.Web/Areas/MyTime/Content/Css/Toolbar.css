@@ -330,25 +330,28 @@ End personal drop down menu
 	}
 }
 
-.navbar-offcanvas.canvas-slid .navbar-nav .open .dropdown-menu {
-	top: 100%;
-	left: 0;
-	z-index: 1000;
-	position: static;
-	float: none;
-	width: auto;
-	background-color: transparent;
-	border: 0;
-	box-shadow: none;
-	min-width: 160px;
-	padding: 5px 0;
-	margin: 2px 0 0;
-	list-style: none;
-	font-size: 15px;
-	text-align: left;
-	overflow-y: auto;
-}
 
-.navbar-offcanvas.canvas-slid .navbar-nav .open .dropdown-menu > li > a {
-		color: #ffffff;
+@media(max-width: 768px){
+	.navbar-offcanvas.canvas-slid.in .navbar-nav .open .dropdown-menu > li > a {
+		top: 100%;
+		left: 0;
+		z-index: 1000;
+		position: static;
+		float: none;
+		width: auto;
+		background-color: transparent;
+		border: 0;
+		box-shadow: none;
+		min-width: 160px;
+		padding: 5px 15px;
+		margin: 2px 0 0;
+		list-style: none;
+		font-size: 15px;
+		text-align: left;
+		overflow-y: auto;
 	}
+
+	.navbar-offcanvas.canvas-slid.in .navbar-nav .open .dropdown-menu > li > a {
+		color: white;
+	}
+}
