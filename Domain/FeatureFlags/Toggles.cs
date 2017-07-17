@@ -62,6 +62,7 @@
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 		Wfm_SearchAgentBasedOnCorrectPeriod_44552,
+		Wfm_AddMyTimeLink_45088,
 
 		WfmTeamSchedule_MoveOvertimeActivity_44888,
 		WfmTeamSchedule_SortRows_45056,
