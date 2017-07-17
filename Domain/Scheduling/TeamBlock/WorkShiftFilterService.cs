@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public interface IWorkShiftFilterService
 	{
 		IList<ShiftProjectionCache> FilterForRoleModel(IGroupPersonSkillAggregator groupPersonSkillAggregator, IScheduleDictionary schedules, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions, WorkShiftFinderResult finderResult, bool isSameOpenHoursInBlock, bool useShiftsForRestrictions, IEnumerable<ISkillDay> skillDays);
-		IList<ShiftProjectionCache> FilterForTeamMember(IScheduleDictionary schedules, DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions, WorkShiftFinderResult finderResult, bool useShiftsForRestrictions);
+		IList<ShiftProjectionCache> FilterForTeamMember(IScheduleDictionary schedules, DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions, WorkShiftFinderResult finderResult, bool useShiftsForRestrictions, IEnumerable<ISkillDay> skillDays);
 	}
 
 	[RemoveMeWithToggle("Remove this and rename back old type", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public IList<ShiftProjectionCache> FilterForTeamMember(IScheduleDictionary schedules, DateOnly dateOnly, IPerson person,
 			ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, SchedulingOptions schedulingOptions,
-			WorkShiftFinderResult finderResult, bool useShiftsForRestrictions)
+			WorkShiftFinderResult finderResult, bool useShiftsForRestrictions, IEnumerable<ISkillDay> skillDays)
 		{
 			if (effectiveRestriction == null)
 				return null;
@@ -191,6 +191,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 
 			shiftList = _disallowedShiftProjectionCachesFilter.Filter(schedulingOptions.NotAllowedShiftProjectionCaches, shiftList, finderResult);
+
+			if (schedulingOptions.UseTeam)
+			{
+				shiftList = _openHoursFilter.Filter(shiftList, skillDays, person, dateOnly);
+			}
 
 			if (shiftList == null)
 				return null;

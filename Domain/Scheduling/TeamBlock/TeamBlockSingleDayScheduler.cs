@@ -80,14 +80,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (restriction == null)
 				return resultList;
 
+			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
+
 			var shifts = _workShiftFilterService.FilterForTeamMember(schedulingResultStateHolder.Schedules, day, person, teamBlockSingleDayInfo, restriction,
 				schedulingOptions,
-				new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day), false);
+				new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day), false, allSkillDays);
 
 			if (shifts.IsNullOrEmpty())
 				return resultList;
 
-			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
 			var activityInternalData = _activityIntervalDataCreator.CreateFor(_groupPersonSkillAggregator, teamBlockSingleDayInfo, day, allSkillDays, false);
 
 
@@ -164,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var shifts = _workShiftFilterService.FilterForTeamMember(schedules, day, person, teamBlockSingleDayInfo, restriction,
 						schedulingOptions,
 						new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day), 
-						useShiftsForRestrictions);
+						useShiftsForRestrictions, allSkillDays);
 
 			if (shifts.IsNullOrEmpty())
 				return null;

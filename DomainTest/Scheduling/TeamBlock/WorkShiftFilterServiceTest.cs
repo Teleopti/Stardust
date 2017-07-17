@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					new RuleSetProjectionEntityService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())),
 					new WorkShiftFromEditableShift()), new RuleSetPersonalSkillsActivityFilter(new RuleSetSkillActivityChecker(), new PersonalSkillsProvider()),
 				new DisallowedShiftProjectionCachesFilter(), new ActivityRequiresSkillProjectionFilter(new PersonalSkillsProvider()),
-				new OpenHoursFilter(new IsAnySkillOpen()));
+				new OpenHoursFilter(new IsAnySkillOpen(), new PersonalSkillsProvider()));
 			
 			_group = new Group(new List<IPerson>{_person}, "Hej");
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };

@@ -698,15 +698,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("44802 - to be fixed")]
 		public void ShouldNotPlaceShiftOutsideOpenHoursWhenOtherTeamMemberKnowOpenSkill()
 		{
 			DayOffTemplateRepository.Add(new DayOffTemplate(new Description("_")).WithId());
 			var firstDay = new DateOnly(2015, 10, 12);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = ActivityRepository.Has("_");
-			var closedSkill = SkillRepository.Has("_", activity).IsClosed();
-			var openSkill = SkillRepository.Has("_", activity).IsOpen();
+			var closedSkill = SkillRepository.Has("Closed", activity, new TimePeriod(18, 23));
+			var openSkill = SkillRepository.Has("Open", activity);
 			var scenario = ScenarioRepository.Has("_");
 			var team = new Team().WithDescription(new Description("team")).WithId();
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
@@ -714,6 +713,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15), new ShiftCategory("_").WithId()));
 			PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, openSkill);
 			var agentOnlyKnowingClosedSkill = PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, closedSkill);
+			agentOnlyKnowingClosedSkill.SetName(new Name("AgentClosed", "AgentClosed"));
 			SkillDayRepository.Has(closedSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			SkillDayRepository.Has(openSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
