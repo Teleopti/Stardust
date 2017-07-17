@@ -779,6 +779,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void ShouldNotPublishDayUnscheduledEventWhenMuteEvent()
+		{
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
+			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false);
+			scenario.SetId(Guid.NewGuid());
+
+			target = new PersonAssignment(agent, scenario, new DateOnly(2000, 1, 1));
+			target.AddPersonalActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
+			target.AddOvertimeActivity(new Activity("_"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2),
+				new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime));
+			var source = PersonAssignmentFactory.CreateAssignmentWithMainShift(testPerson,
+				scenario, new Activity("_"), new DateTimePeriod(2000, 1, 3, 2000, 1, 4), new ShiftCategory("_"));
+
+			target.SetActivitiesAndShiftCategoryFromWithOffset(source, TimeSpan.Zero, true);
+
+			var allEvents = target.PopAllEvents();
+			allEvents.OfType<DayUnscheduledEvent>().Count().Should().Be(0);
+		}
+
+		[Test]
 		public void ShouldRaiseMainShiftCategoryReplaceEvent()
 		{
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
