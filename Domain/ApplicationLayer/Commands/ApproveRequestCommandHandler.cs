@@ -95,6 +95,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var anyRuleBroken = brokenRuleResponses != null && brokenRuleResponses.Any();
+
+			if (anyRuleBroken)
+			{
+				command.ErrorMessages.Clear();
+				brokenRuleResponses.ForEach(b => command.ErrorMessages.Add(b.Message));
+			}
+
 			var scheduleChangedWithBrokenRules = false;
 			foreach (var range in scheduleDictionary.Values)
 			{

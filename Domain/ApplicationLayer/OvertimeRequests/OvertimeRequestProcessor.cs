@@ -48,6 +48,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			if (command.ErrorMessages.Any())
 			{
 				logger.Warn(command.ErrorMessages);
+				var denyCommand = new DenyRequestCommand
+				{
+					PersonRequestId = personRequest.Id.GetValueOrDefault(),
+					DenyReason = command.ErrorMessages.FirstOrDefault(),
+					DenyOption = PersonRequestDenyOption.AutoDeny
+				};
+				_commandDispatcher.Execute(denyCommand);
 			}
 		}
 	}

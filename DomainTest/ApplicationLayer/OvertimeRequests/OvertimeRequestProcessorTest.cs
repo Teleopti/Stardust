@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
@@ -8,6 +9,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -61,6 +63,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personRequest.IsApproved.Should().Be.False();
 			personRequest.IsDenied.Should().Be.True();
 			personRequest.DenyReason.Should().Be.EqualTo(string.Format(Resources.OvertimeRequestDenyReasonExpired,TimeZoneHelper.ConvertFromUtc(requestStartTime,timeZoneInfo), MinimumApprovalThresholdTimeInMinutes));
+		}
+
+		[Test]
+		public void ShouldDenyRequestWhenApproveFailed()
+		{
+			var person = PersonFactory.CreatePerson();
+			var requestStartTime = Now.UtcDateTime().AddMinutes(MinimumApprovalThresholdTimeInMinutes + 1);
+			var overtimeRequest = createOvertimeRequest(person, new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
+
+			Target.Process(overtimeRequest);
+
+			Assert.AreEqual(overtimeRequest.IsDenied, true);
 		}
 
 		private IPersonRequest createOvertimeRequest(IPerson person, DateTimePeriod period)

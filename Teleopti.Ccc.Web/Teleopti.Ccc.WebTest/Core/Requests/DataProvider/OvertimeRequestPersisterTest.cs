@@ -36,12 +36,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			_person = PersonFactory.CreatePerson();
 			_commandDispatcher = new FakeCommandDispatcher();
-			
+
 			system.UseTestDouble(new FakeLoggedOnUser(_person)).For<ILoggedOnUser>();
 			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
 			system.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
 			system.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();
-			system.UseTestDouble(new OvertimeRequestProcessor(_commandDispatcher, new ThisIsNow(currentDateTime), LoggedOnUser)).For<IOvertimeRequestProcessor>();
+			system.UseTestDouble(new OvertimeRequestProcessor(_commandDispatcher, new IOvertimeRequestValidator[] {}))
+				.For<IOvertimeRequestProcessor>();
 		}
 
 		[Test]
