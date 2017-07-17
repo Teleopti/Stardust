@@ -665,39 +665,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("#44540")]
-		public void ShouldNotPlaceShiftOutsideOpenSkill([Values(true, false)] bool otherAgentKnowsBothOpenAndClosedSkill)
-		{
-			DayOffTemplateRepository.Add(new DayOffTemplate(new Description("_")).WithId());
-			var firstDay = new DateOnly(2015, 10, 12);
-			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
-			var activity = ActivityRepository.Has("_");
-			var closedSkill = SkillRepository.Has("_", activity, new TimePeriod(10, 19));
-			var openSkill = SkillRepository.Has("_", activity);
-			var scenario = ScenarioRepository.Has("_");
-			var team = new Team().WithDescription(new Description("team")).WithId();
-			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
-			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(12, 0, 12, 0, 15), new TimePeriodWithSegment(20, 0, 20, 0, 15), new ShiftCategory("_").WithId()));
-			var otherAgentsSkill = otherAgentKnowsBothOpenAndClosedSkill ? new[] {openSkill, closedSkill} : new[] {openSkill};
-			PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, otherAgentsSkill);
-			var agentOnlyKnowingClosedSkill = PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"), team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, closedSkill);
-			SkillDayRepository.Has(closedSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
-			SkillDayRepository.Has(openSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
-			{
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight(UserTexts.Resources.Main, GroupPageType.Hierarchy),
-				UseTeam = true,
-				TeamSameShiftCategory = true
-			});
-
-			Target.DoScheduling(period);
-
-			AssignmentRepository.Find(new[] {agentOnlyKnowingClosedSkill}, period, scenario).Any(x => x.ShiftLayers.Any())
-				.Should().Be.False();
-		}
-
-		[Test]
 		public void ShouldNotPlaceShiftOutsideOpenHoursWhenOtherTeamMemberKnowOpenSkill()
 		{
 			DayOffTemplateRepository.Add(new DayOffTemplate(new Description("_")).WithId());
