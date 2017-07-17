@@ -10715,7 +10715,11 @@ These options are activated:
   </data>
   <data name="OvertimeRequestDenyReasonExpired" xml:space="preserve">
     <value>Your overtime request has been denied automatically. The start time of this request is {0}, it must be at least {1} minutes later than current time</value>
-    <comment>{0} start time of request, {1} minimum minutes for expired threshold</comment>
+    <comment>used in mytime overtime request deny reason,when request start time is expired</comment>
+  </data>
+	<data name="OvertimeRequestDenyReasonOutOfSiteOpenHour" xml:space="preserve">
+    <value>Your overtime request has been denied automatically. The period of this request is {0}, but site open hour is {1}</value>
+    <comment>used in mytime overtime request deny reason,when request period is out of site open hour</comment>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Hourly Availability Fulfillment</value>

@@ -21906,6 +21906,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your overtime request has been denied automatically. The period of this request is {0}, but site open hour is {1}.
+        /// </summary>
+        public static string OvertimeRequestDenyReasonOutOfSiteOpenHour {
+            get {
+                return ResourceManager.GetString("OvertimeRequestDenyReasonOutOfSiteOpenHour", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The overtime request {0} was denied..
         /// </summary>
         public static string OvertimeRequestForOneDayHasBeenDeniedDot {

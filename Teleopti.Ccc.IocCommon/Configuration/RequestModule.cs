@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<AbsenceRequestIntradayFilter>().As<IAbsenceRequestIntradayFilter>().SingleInstance();
 			builder.RegisterType<OvertimeRequestProcessor>().As<IOvertimeRequestProcessor>().SingleInstance();
 			builder.RegisterType<OvertimeRequestStartTimeValidator>().As<IOvertimeRequestValidator>().SingleInstance();
+			builder.RegisterType<OvertimeRequestSiteOpenHourValidator>().As<IOvertimeRequestValidator>().SingleInstance();
 
 			registerType<IFilterRequestsWithDifferentVersion, FilterRequestsWithDifferentVersion, FilterRequestsWithDifferentVersion41930ToggleOff>(builder,
 				Toggles.Wfm_Requests_ApprovingModifyRequests_41930);

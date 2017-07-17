@@ -245,6 +245,7 @@
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessor.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestSiteOpenHourValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestStartTimeValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestValidationResult.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandler.cs" />
