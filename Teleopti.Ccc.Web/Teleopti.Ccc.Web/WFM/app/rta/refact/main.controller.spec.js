@@ -664,8 +664,8 @@ describe('RtaMainController', function () {
         vm.getSelectedItems(vm.siteCards[0]);
         vm.goToAgents();
       });
-
-      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: [], skillAreaId: undefined });
+      
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], teamIds: [], skillIds: [], skillAreaId: undefined });
     });
 
     it('should go to agents for the right selected site after deselecting some other', function () {
@@ -694,7 +694,7 @@ describe('RtaMainController', function () {
         vm.goToAgents();
       });
 
-      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: [], skillAreaId: undefined });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], teamIds: [], skillIds: [], skillAreaId: undefined });
     });
 
     it('should go to agents for selected site with selected skill', function () {
@@ -717,7 +717,7 @@ describe('RtaMainController', function () {
         vm.goToAgents();
       });
 
-      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: ['channelSalesId'], skillAreaId: undefined });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], teamIds: [], skillIds: ['channelSalesId'], skillAreaId: undefined });
     });
 
     it('should go to agents for selected site with preselected skill', function () {
@@ -740,7 +740,7 @@ describe('RtaMainController', function () {
         vm.goToAgents();
       });
 
-      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: ['channelSalesId'], skillAreaId: undefined });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], teamIds: [], skillIds: ['channelSalesId'], skillAreaId: undefined });
     });
 
 
@@ -765,7 +765,7 @@ describe('RtaMainController', function () {
         vm.goToAgents();
       });
 
-      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], skillIds: [], skillAreaId: undefined });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined });
     });
 
     it('should go to agents for selected site after clearing skill selection when skill was preselected', function () {
@@ -789,7 +789,7 @@ describe('RtaMainController', function () {
         vm.goToAgents();
       });
 
-      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: [], skillAreaId: undefined });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], teamIds: [], skillIds: [], skillAreaId: undefined });
     });
 
     it('should go to agents for selected site with selected skill area', function () {
@@ -818,7 +818,7 @@ describe('RtaMainController', function () {
         vm.goToAgents();
       });
 
-      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: [], skillAreaId: 'skillArea1Id' });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], teamIds: [], skillIds: [], skillAreaId: 'skillArea1Id' });
     });
 
     it('should go to agents for selected site with preselected skill area', function () {
@@ -848,7 +848,7 @@ describe('RtaMainController', function () {
         vm.goToAgents();
       });
 
-      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], skillIds: [], skillAreaId: 'skillArea1Id' });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], teamIds: [], skillIds: [], skillAreaId: 'skillArea1Id' });
     });
 
     it('should reset selected sites when changing skill', function () {
@@ -883,8 +883,8 @@ describe('RtaMainController', function () {
         vm.goToAgents();
       });
 
-      expect(vm.selectedItems).toEqual({ siteIds: ['londonId'], skillIds: ['phoneId'], skillAreaId: undefined });
-      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['londonId'], skillIds: ['phoneId'], skillAreaId: undefined });
+      expect(vm.selectedItems).toEqual({ siteIds: ['londonId'], teamIds: [], skillIds: ['phoneId'], skillAreaId: undefined });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['londonId'], teamIds: [], skillIds: ['phoneId'], skillAreaId: undefined });
     });
 
     it('should go to agents for team', function () {
@@ -1031,6 +1031,37 @@ describe('RtaMainController', function () {
       vm.openTeam(vm.siteCards[0].teams[0]);
 
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['greenId'], skillIds: [], skillAreaId: 'skillArea1Id' });
+    });
+
+    it('should go to agents for selected team', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'londonId',
+          Name: 'London',
+          AgentsCount: 11,
+          InAlarmCount: 5,
+          Color: 'warning'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'greenId',
+          Name: 'Green',
+          AgentsCount: 11,
+          InAlarmCount: 5,
+          Color: 'warning'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.siteCards[0].isOpen = true;
+        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
+        $httpBackend.flush();
+        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.goToAgents();
+      });
+
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['greenId'], skillIds: [], skillAreaId: undefined });
     });
 
   });

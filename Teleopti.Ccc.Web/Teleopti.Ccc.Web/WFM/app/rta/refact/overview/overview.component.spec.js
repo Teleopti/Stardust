@@ -312,6 +312,7 @@ describe('rtaOverviewComponent', function () {
       })
       .withTeamAdherence({
         SiteId: 'londonId',
+        Id: 'greenId',
         Name: 'Green',
         AgentsCount: 11,
         InAlarmCount: 5,
@@ -327,9 +328,11 @@ describe('rtaOverviewComponent', function () {
     ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
     $httpBackend.flush();
     c.apply(function () {
-      $fakeBackend.clearTeamAdherences()
+      $fakeBackend
+        .clearTeamAdherences()
         .withTeamAdherence({
           SiteId: 'londonId',
+          Id: 'greenId',
           Name: 'Green',
           AgentsCount: 11,
           InAlarmCount: 2,
@@ -681,6 +684,77 @@ describe('rtaOverviewComponent', function () {
     ctrl.selectItem(ctrl.siteCards[0]);
 
     expect(ctrl.siteCards[0].isSelected).toEqual(false);
+  });
+
+  it('should select team', function () {
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London',
+        SkillId: 'channelSalesId',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Name: 'Green',
+        SkillId: 'channelSalesId',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      });
+
+    vm = $controllerBuilder.createController().vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState,
+      getSelectedItems: vm.getSelectedItems
+    });
+
+    ctrl.siteCards[0].isOpen = true;
+    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+    $httpBackend.flush();
+
+    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+
+    expect(ctrl.siteCards[0].teams[0].isSelected).toEqual(true);
+  });
+
+  it('should unselect team', function () {
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London',
+        SkillId: 'channelSalesId',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Name: 'Green',
+        SkillId: 'channelSalesId',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      });
+
+    vm = $controllerBuilder.createController().vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState,
+      getSelectedItems: vm.getSelectedItems
+    });
+
+    ctrl.siteCards[0].isOpen = true;
+    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+    $httpBackend.flush();
+
+    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+
+    expect(ctrl.siteCards[0].teams[0].isSelected).toEqual(false);
   });
 
 });

@@ -11,26 +11,16 @@
             <div style="line-height: 33px; float: left; width:4%"><a ui-sref="{{$ctrl.agentsState}}"><i class="mdi mdi-arrow-right"></i><md-tooltip>See agents</md-tooltip></a></div>
         </div>
     </rta-card-header>
-    <rta-card-body>
+    <rta-card-body ng-click="$event.stopPropagation();">
         <div class="con-row">
             <div class="con-flex">
                 <div class="wfm-grid" class="animate-show">
                     <div class="grid-card-mini" ng-repeat="team in card.teams">
-                        <!-- <a ui-sref="rta.agents({teamIds: team.Id})" class="rta-card-link" ng-click="$event.stopPropagation();">
-                            <div class="list-content" style="padding: 1%;" ng-class="team.Color">
-                                <b><span class="wfm-checkbox-label org-name-container" ng-attr-data-max="{{team.AgentsCount}}">
-								{{team.Name}}
-							</span></b>
-                                <span class="full-padding" ng-attr-data-value="{{team.InAlarmCount}}">{{'InAlarm'|translate}}:
-								<b>{{team.InAlarmCount}}</b>
-							</span>
-                            </div>
-                        </a> -->
                         <div class="list-content">
-                            <div class="list-header" ng-click="vm.selectItem(team)" ng-class="team.Color">
+                            <div class="list-header" ng-click="$ctrl.selectItem(team)" ng-class="team.Color">
                                 <h1 ng-attr-data-max="{{team.AgentsCount}}">{{team.Name}}
-                                    <!-- <i class="mdi pull-right" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>
-                                    <md-tooltip>{{card.isSelected ? "Unselect site" : "Select site"}}</md-tooltip> -->
+                                     <i class="mdi pull-right" ng-class="{'mdi-check': team.isSelected, '': !team.isSelected}"></i>
+                                    <!-- <md-tooltip>{{card.isSelected ? "Unselect site" : "Select site"}}</md-tooltip>  -->
                                 </h1>
                                 <div class="subtext"><span class="full-padding" ng-attr-data-value="{{team.InAlarmCount}}">{{'InAlarm'|translate}}:
 								<b>{{team.InAlarmCount}}</b>

@@ -20,7 +20,7 @@
 		vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 		vm.organizationSelection = false;
 
-		vm.selectedItems = { siteIds: [], skillIds: [], skillAreaId: undefined };
+		vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
 
 		(function fetchDataForFilterComponent() {
 			if (vm.skillIds.length > 0) {
@@ -50,7 +50,7 @@
 					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + vm.urlParams.skillIds[0] + '"]})';
 				}
 				else {
-					vm.selectedItems = { siteIds: [], skillIds: [], skillAreaId: undefined };
+					vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
 					vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 				}
 			}
@@ -100,12 +100,23 @@
 				} else {
 					fetchTeams(card);
 					teamPolling = $interval(function () {
-						fetchTeams(card);
+						if (vm.skillIds.length) {
+							rtaService.getTeamCardsFor({ siteIds: card.site.Id, skillIds: vm.skillIds }).then(function (teams) {
+								updateTeamCards(card, teams);
+							})
+						}
+						else {
+							rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
+								updateTeamCards(card, teams);
+							});
+						}
 					}, 5000);
+
 					pollingIntervals.push({
 						siteId: card.site.Id,
 						interval: teamPolling
 					});
+
 				}
 			}
 
@@ -119,6 +130,16 @@
 						card.teams = teams;
 					});
 				}
+			}
+
+			function updateTeamCards(card, teams) {
+				card.teams.forEach(function (team) {
+					var match = teams.find(function (t) {
+						return t.Id === team.Id;
+					});
+					team.Color = match.Color;
+					team.InAlarmCount = match.InAlarmCount;
+				});
 			}
 
 			function getSkillIdsFromSkillAreaId(id) {
@@ -205,33 +226,46 @@
 					getSiteCards();
 					vm.urlParams.skillIds = undefined;
 					vm.urlParams.skillAreaId = undefined;
-					vm.selectedItems = { siteIds: [], skillIds: [], skillAreaId: undefined };
+					vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
 					vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 				} else if (selectedItem.hasOwnProperty('Skills')) {
-					vm.selectedItems = { siteIds: [], skillIds: [], skillAreaId: selectedItem.Id };
+					vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: selectedItem.Id };
 					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + selectedItem.Id + '"})';
 					$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
 					vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
 					getSiteCards(vm.skillIds);
 				} else {
 					vm.skillIds = [selectedItem.Id];
-					vm.selectedItems = { siteIds: [], skillIds: vm.skillIds, skillAreaId: undefined };
+					vm.selectedItems = { siteIds: [], teamIds: [], skillIds: vm.skillIds, skillAreaId: undefined };
 					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + selectedItem.Id + '"]})';
 					$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
 					getSiteCards(vm.skillIds);
 				}
 			}
 
-			vm.getSelectedItems = function (card) {
-				var indexOfSite = vm.selectedItems.siteIds.indexOf(card.site.Id);
-				var siteAlreadySelected = indexOfSite > -1;
-				if (!siteAlreadySelected) {
-					vm.selectedItems.siteIds.push(card.site.Id);
+			vm.getSelectedItems = function (item) {
+				var itemIsSite = angular.isDefined(item.site);
+				if (itemIsSite) {
+					var indexOfSite = vm.selectedItems.siteIds.indexOf(item.site.Id);
+					var siteAlreadySelected = indexOfSite > -1;
+					if (!siteAlreadySelected) {
+						vm.selectedItems.siteIds.push(item.site.Id);
+					}
+					else {
+						vm.selectedItems.siteIds.splice(indexOfSite, 1);
+					}
 				}
 				else {
-					vm.selectedItems.siteIds.splice(indexOfSite, 1);
+					var indexOfTeam = vm.selectedItems.teamIds.indexOf(item.Id);
+					var teamAlreadySelected = indexOfTeam > -1;
+					if (!teamAlreadySelected) {
+						vm.selectedItems.teamIds.push(item.Id);
+					}
+					else {
+						vm.selectedItems.teamIds.splice(indexOfTeam, 1);
+					}
 				}
-				vm.organizationSelection = vm.selectedItems.siteIds.length;
+				vm.organizationSelection = vm.selectedItems.siteIds.length || vm.selectedItems.teamIds.length;
 			}
 
 			vm.goToAgents = function () {

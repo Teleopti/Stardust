@@ -18,9 +18,9 @@
   function RtaOverviewComponentController($state) {
     var ctrl = this;
     ctrl.selectedItems = {siteIds: []};
-    ctrl.selectItem = function(card) {
-      card.isSelected = !card.isSelected;
-      ctrl.getSelectedItems(card);
+    ctrl.selectItem = function(item) {
+      item.isSelected = !item.isSelected;
+      ctrl.getSelectedItems(item);
     };
 
     ctrl.goToAgentsForTeam = function(team) {
