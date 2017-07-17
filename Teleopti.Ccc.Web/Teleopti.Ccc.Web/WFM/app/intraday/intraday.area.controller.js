@@ -132,7 +132,7 @@
             if (item) {
                 if (item.DoDisplayData) {
 					// $scope.chosenOffset.value = 0;
-					$scope.changeChosenOffset($scope.chosenOffset.value);
+					$scope.changeChosenOffset($scope.chosenOffset.value, true);
                     $scope.skillSelected(item);
                     pollActiveTabDataByDayOffset($scope.activeTab, $scope.chosenOffset.value);
                     if (prevSkill) {
@@ -318,7 +318,7 @@
         function pollActiveTabData(activeTab) {
             var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
 
-            if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
+            if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem)) {
                 if ($scope.selectedItem.Skills) {
                     services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.toggles);
                     var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
@@ -337,9 +337,10 @@
         }
 
         function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
+			
             var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
 			
-            if ($scope.selectedItem !== null && $scope.selectedItem !== undefined) {
+            if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem)) {
                 if ($scope.selectedItem.Skills) {
                     services[activeTab].pollSkillAreaDataByDayOffset($scope.selectedItem, $scope.toggles, dayOffset);
                     if (dayOffset === 0) {
@@ -416,12 +417,14 @@
             return ret;
         };
 
-        $scope.changeChosenOffset = function(value) {
+        $scope.changeChosenOffset = function(value, dontPoll) {
             $interval.cancel(polling);
             var d = angular.copy($scope.chosenOffset);
             d.value = value;
-            $scope.chosenOffset = d;
-            pollActiveTabDataByDayOffset($scope.activeTab, value);
+			$scope.chosenOffset = d;
+			if(!dontPoll){
+	            pollActiveTabDataByDayOffset($scope.activeTab, value);
+			}
             if (value === 0) {
                 poll();
 			}
