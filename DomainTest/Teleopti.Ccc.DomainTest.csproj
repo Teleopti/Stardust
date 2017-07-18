@@ -439,6 +439,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\MinMaxStaffingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\PerformanceTestHackTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCallbackDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenario.cs" />
