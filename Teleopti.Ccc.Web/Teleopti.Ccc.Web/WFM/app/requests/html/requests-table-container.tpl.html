@@ -1,6 +1,6 @@
 ﻿<div id="shift-detail" ui-grid="requestsTableContainer.gridOptions" class="ui-grid h-60-vh" style="height: 60vh" ui-grid-auto-resize ui-grid-selection ui-grid-resize-columns ui-grid-pinning ui-grid-save-state ui-grid-disable-animation></div>
 
 <i ng-show="requestsTableContainer.gridOptions.enableFiltering" ng-click="requestsTableContainer.clearFilters()" class="mdi mdi-block-helper pointer" style="cursor: pointer; position: absolute; top: 5rem; left: .8rem;"><md-tooltip>{{'Clear'|translate}}</md-tooltip></i>
-<div  ng-mouseleave="requestsTableContainer.hideShiftDetail()" ng-if="requestsTableContainer.displayShiftDetail" ng-style="requestsTableContainer.shiftDetailStyleJson()" class="schedule-container">
+<div  outside-click="requestsTableContainer.hideShiftDetail()" ng-if="requestsTableContainer.displayShiftDetail" ng-style="requestsTableContainer.shiftDetailStyleJson()" class="schedule-container">
 	<requests-schedule-table schedules="requestsTableContainer.schedules"/>
 </div>
