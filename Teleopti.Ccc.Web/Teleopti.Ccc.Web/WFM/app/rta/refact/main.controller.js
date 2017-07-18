@@ -124,12 +124,23 @@
 				if (vm.skillIds.length) {
 					rtaService.getTeamCardsFor({ siteIds: card.site.Id, skillIds: vm.skillIds }).then(function (teams) {
 						card.teams = teams;
+						if (card.isSelected) {
+							card.teams.forEach(function (team) {
+								team.isSelected = true;
+							});
+						}
 					});
 				} else {
 					rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
 						card.teams = teams;
+						if (card.isSelected) {
+							card.teams.forEach(function (team) {
+								team.isSelected = true;
+							});
+						}
 					});
 				}
+
 			}
 
 			function updateTeamCards(card, teams) {
@@ -272,7 +283,6 @@
 						vm.selectedItems.siteIds.push(match.site.Id);
 					}
 					else if (!match.isSelected && siteIndex > -1) {
-						//console.log(vm.selectedItems);
 						vm.selectedItems.siteIds.splice(siteIndex, 1);
 						match.teams.forEach(function (team) {
 							if (team.Id !== item.Id) {

@@ -794,4 +794,29 @@ describe('rtaOverviewComponent', function () {
     expect(ctrl.siteCards[0].isSelected).toEqual(false);
   });
 
+  it('should select all teams under site when site is selected and initially closed', function () {
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Id: 'greenId'
+      });
+
+    vm = $controllerBuilder.createController().vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState,
+      getSelectedItems: vm.getSelectedItems
+    });
+
+    ctrl.selectItem(ctrl.siteCards[0]);
+    ctrl.siteCards[0].isOpen = true;
+    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+    $httpBackend.flush();
+
+    expect(ctrl.siteCards[0].teams[0].isSelected).toEqual(true);
+  });
+
 });
