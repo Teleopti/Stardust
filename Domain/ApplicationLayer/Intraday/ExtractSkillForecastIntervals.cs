@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 				}
 				getSkillStaffingIntervals(skillDay).ForEach(i => returnList.Add(i));
 			}
-			return returnList.Where(x => period.Contains((DateTime) x.StartDateTime));
+			return returnList.Where(x => period.Contains(x.StartDateTime) || x.DateTimePeriod.Contains(period.StartDateTime));
 		}
 
 		public static DateOnlyPeriod GetLongestPeriod(IList<ISkill> skills, DateTimePeriod period)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -396,8 +397,33 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			staffingIntervals.Single(x => x.StartDateTime == period.StartDateTime && x.Id == skillA.Id.GetValueOrDefault()).StaffingLevel.Should().Be.EqualTo(9);
 			staffingIntervals.Single(x => x.StartDateTime == period.StartDateTime && x.Id == skillB.Id.GetValueOrDefault()).StaffingLevel.Should().Be.EqualTo(2.8);
 		}
+
+		[Test]
+		public void ShouldGetStaffIntervals()
+		{
+			Now.Is(new DateTime(2017, 7, 18, 07, 00, 00, DateTimeKind.Utc));
+
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			skill.DefaultResolution = 60;
+			var period = new DateTimePeriod(new DateTime(2017, 7, 18, 11, 1, 0, DateTimeKind.Utc), new DateTime(2017, 7, 18, 11, 15, 0, DateTimeKind.Utc));
+			var scenario = ScenarioRepository.Has("scenario");
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.EndDateTime), 5));
+			
+			var combinationResources = new List<SkillCombinationResource>()
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = period.StartDateTime.AddMinutes(-1),
+					EndDateTime = period.EndDateTime,
+					Resource = 5.7,
+					SkillCombination = new[] {skill.Id.GetValueOrDefault()}
+				}
+			};
+
+			var result = Target.GetSkillStaffIntervalsAllSkills(period, combinationResources, true);
+			result.Count.Should().Be.EqualTo(1);
+		}
 		
 	}
-
-	
 }
