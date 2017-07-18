@@ -1,15 +1,27 @@
 ﻿'use strict';
 describe('AreasController', function() {
 	var $httpBackend,
-			$controller;
+		$controller,
+		$q;
 
 	beforeEach(function () {
 		module('wfm.areas');
+		module(function ($provide) {
+			$provide.service('Toggle', function () {
+				return {
+					Wfm_AddMyTimeLink_45088: true,
+					togglesLoaded: $q(function (resolve, reject) {
+						resolve();
+					})
+				}
+			});
+		});
 	});
 
-	beforeEach(inject(function (_$httpBackend_, _$controller_) {
+	beforeEach(inject(function (_$httpBackend_, _$controller_, _$q_) {
 		$httpBackend = _$httpBackend_;
 		$controller = _$controller_;
+		$q = _$q_;
 	}));
 
 	it('should get an area', inject(function() {
