@@ -14,10 +14,9 @@ GO
 --				2012-01-09 Pass BU to report_get_AgentsMultipleTeams
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- =============================================
--- exec mart.report_data_absence_time_per_agent @scenario_id=N'0',@date_from='2011-01-21 00:00:00',@date_to='2011-01-21 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'0',@team_set=N'7',@agent_code=N'00000000-0000-0000-0000-000000000002',@absence_set=N'',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id=4,@language_id=1053
--- exec mart.report_data_absence_time_per_agent @scenario_id=N'0',@date_from='2009-01-01 00:00:00',@date_to='2009-03-31 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'0',@team_set=N'7',@agent_code=N'11610fe4-0130-4568-97de-9b5e015b2564',@absence_set=N'1,4,2,3,0',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id=4,@language_id=1053
--- exec mart.report_data_absence_time_per_agent @scenario_id=N'0',@date_from='2009-01-01 00:00:00',@date_to='2009-03-31 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'0',@team_set=N'7',@agent_code=N'11610fe4-0130-4568-97de-9b5e015b2564',@absence_set=N'1,4,2,3,0',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id=4,@language_id=1053
-
+/*
+exec mart.report_data_absence_time_per_agent @scenario_id=N'3',@date_from='2009-02-02 00:00:00',@date_to='2009-03-01 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'-1, 26, 25, 24, 12, 17, 19, 11, 13, 22, 14, 10, 23, 16, 2, 20, 5, 0, 3, 6, 18, 4, 1, 9, 7, 8,',@agent_code=N'00000000-0000-0000-0000-000000000002',@absence_set=N'3,4,1,5,2,0,6',@details=1,@person_code='B8F5BE96-2C4D-44B5-A5DB-9C6400BB5860',@report_id='C5B88862-F7BE-431B-A63F-3DD5FF8ACE54',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+*/
 CREATE PROCEDURE [mart].[report_data_absence_time_per_agent]
 @scenario_id int,
 @date_from datetime,
@@ -75,8 +74,8 @@ CREATE TABLE #person(
 	person_id int,
 	person_code uniqueidentifier,
 	person_name nvarchar(200), 
-	valid_from_date_id_local smalldatetime, 
-	valid_to_date_id_local smalldatetime
+	valid_from_date_id_local int, 
+	valid_to_date_id_local int
 )
 
 /* Get the agents to report on */
