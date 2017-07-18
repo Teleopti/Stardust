@@ -44,7 +44,7 @@
 	  "\n" +
 	  "\t\t\t\t\t\t  ng-style=\"{left: dayOff.StartPosition + '%', width: dayOff.Length + '%'}\">\r" +
 	  "\n" +
-	  "\t\t\t\t\t\t<md-tooltip ng-if=\"dayOff.DayOffName !=''\"> {{dayOff.DayOffName}} </md-tooltip>\r" +
+	  "\t\t\t\t\t\t<md-tooltip md-z-index='1200' ng-if=\"dayOff.DayOffName !=''\"> {{dayOff.DayOffName}} </md-tooltip>\r" +
 	  "\n" +
 	  "\t\t\t\t\t</span>\r" +
 	  "\n" +
@@ -60,7 +60,7 @@
 	  "\n" +
 	  "\t\t\t\t\t\t\t hasSelected: !projection.IsOvertime, selected:projection.Selected, lighterBorder: projection.UseLighterBorder}\">\r" +
 	  "\n" +
-	  "\t\t\t\t\t\t\t<md-tooltip>{{projection.Description}}</md-tooltip>\r" +
+	  "\t\t\t\t\t\t\t<md-tooltip md-z-index='1200'>{{projection.Description}}</md-tooltip>\r" +
 	  "\n" +
 	  "\t\t\t\t\t\t</div>\r" +
 	  "\n" +
