@@ -38,6 +38,23 @@
 		height: 100%;
 		min-width: 200px;
 		overflow-y: auto;
+
+		.my-time-link {
+			.main-menu-link > .con-row {
+				justify-content: space-between;
+			}
+
+			.open-in-new {
+				color: $gray054;
+				display: none;
+			}
+
+			&:hover {
+				.open-in-new {
+					display: block;
+				}
+			}
+		}
 	}
 
 	.main-menu-link{
