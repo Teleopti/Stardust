@@ -22,6 +22,25 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonRepository PersonRepository;
 
 		[Test]
+		//green from start, remove? (purist)
+		public void ShouldSetPeriod()
+		{
+			var agent = new Person().WithId().WithPersonPeriod(new Skill().WithId());
+			var period = new DateOnlyPeriod(2015, 10, 12, 2016, 1, 1);
+			PersonRepository.Has(agent);
+
+			Target.Execute(new SchedulingCommand
+			{
+				Period = period,
+				AgentsToSchedule = new[] { agent }
+			});
+
+			var optimizationWasOrdered = EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single();
+			optimizationWasOrdered.StartDate.Should().Be.EqualTo(period.StartDate);
+			optimizationWasOrdered.EndDate.Should().Be.EqualTo(period.EndDate);
+		}
+
+		[Test]
 		[Ignore("#45197")]
 		public void ShouldCreateTwoEventsIfTwoAgentsWithDifferentSkills()
 		{
