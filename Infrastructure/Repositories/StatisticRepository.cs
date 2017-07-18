@@ -11,7 +11,6 @@ using System.Data.SqlClient;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.ETL;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -21,7 +20,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -101,7 +99,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources, DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset)
+		public ICollection<IStatisticTask> LoadDailyStatisticForSpecificDates(ICollection<IQueueSource> sources,
+			DateTimePeriod period, string timeZoneId, TimeSpan midnightBreakOffset)
 		{
 			if (sources.Count == 0) return new List<IStatisticTask>();
 
@@ -154,6 +153,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					if (date.EndDate.HasValue && date.EndDate.Value < endDate)
 						endDate = date.EndDate.Value;
 				}
+
 				if (startDate == DateTime.MinValue)
 					return null;
 				return new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
@@ -190,9 +190,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				 .QueueMartId.ToString(CultureInfo.InvariantCulture)).ToArray());
 		}
 
-		private IQuery createDailyStatisticQuery(IStatelessUnitOfWork uow, DateTimePeriod date, string queueList, string timeZoneId, TimeSpan midnightBreakOffset)
+		private IQuery createDailyStatisticQuery(IStatelessUnitOfWork uow, DateTimePeriod date, string queueList, string timeZoneId,
+			TimeSpan midnightBreakOffset)
 		{
-			return session(uow).CreateSQLQuery("exec mart.raptor_queue_statistics_load @DateFrom=:DateFrom, @DateTo=:DateTo, @QueueList=:QueueList, @TimeZoneCode=:TimeZoneId, @MidnightBreakDifference=:MidnightBreakDifference")
+			return session(uow).CreateSQLQuery("exec mart.raptor_queue_statistics_load @DateFrom=:DateFrom, @DateTo=:DateTo, "
+				+ "@QueueList=:QueueList, @TimeZoneCode=:TimeZoneId, @MidnightBreakDifference=:MidnightBreakDifference")
 				.AddScalar("StatAverageTaskTimeSeconds", NHibernateUtil.Double)
 				.AddScalar("StatAverageAfterTaskTimeSeconds", NHibernateUtil.Double)
 				.AddScalar("StatOfferedTasks", NHibernateUtil.Double)
@@ -263,7 +265,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static IQuery createAgentCountQuery(IStatelessUnitOfWork uow, ISkill skill, DateTimePeriod period)
 		{
-			return session(uow).CreateSQLQuery("exec mart.raptor_load_agent_count @skill=:skill,@start_date=:start_date, @end_date=:end_date")
+			return session(uow).CreateSQLQuery("exec mart.raptor_load_agent_count @skill=:skill,@start_date=:start_date, "
+				+ "@end_date=:end_date")
 				 .AddScalar("ActiveAgents", NHibernateUtil.Int32)
 				 .AddScalar("Interval", NHibernateUtil.DateTime)
 				 .SetReadOnly(true)
@@ -340,11 +343,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		public IList LoadAdherenceData(DateTime dateTime, string timeZoneId, Guid personCode, Guid agentPersonCode, int languageId, int adherenceId)
+		public IList LoadAdherenceData(DateTime dateTime, string timeZoneId, Guid personCode, Guid agentPersonCode, int languageId,
+			int adherenceId)
 		{
 			return repositoryActionWithRetry(uow => session(uow).CreateSQLQuery(
-				"exec mart.raptor_adherence_report_load @date_from=:date_from, @time_zone_id=:time_zone_id, @person_code=:person_code, @agent_person_code=:agent_person_code, @language_id=:language_id, @adherence_id=:adherence_id")
-
+					"exec mart.raptor_adherence_report_load @date_from=:date_from, @time_zone_id=:time_zone_id, @person_code=:person_code, "
+					+ "@agent_person_code=:agent_person_code, @language_id=:language_id, @adherence_id=:adherence_id")
 				.SetReadOnly(true)
 				.SetDateTime("date_from", dateTime)
 				.SetString("time_zone_id", timeZoneId)
@@ -358,8 +362,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList LoadAgentStat(Guid scenarioCode, DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode)
 		{
 			return repositoryActionWithRetry(uow => session(uow).CreateSQLQuery(
-				"exec mart.raptor_stat_agent @scenario_code=:scenario_code, @date_from=:date_from, @date_to=:date_to, @time_zone_code=:time_zone_code, @person_code=:person_code")
-
+					"exec mart.raptor_stat_agent @scenario_code=:scenario_code, @date_from=:date_from, @date_to=:date_to, "
+					+ "@time_zone_code=:time_zone_code, @person_code=:person_code")
 				.SetReadOnly(true)
 				.SetGuid("scenario_code", scenarioCode)
 				.SetDateTime("date_from", startDate)
@@ -372,40 +376,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IList LoadAgentQueueStat(DateTime startDate, DateTime endDate, string timeZoneId, Guid personCode)
 		{
 			return repositoryActionWithRetry(uow => session(uow).CreateSQLQuery(
-				"exec mart.raptor_stat_agent_queue @date_from=:date_from, @date_to=:date_to, @time_zone_code=:time_zone_code, @person_code=:person_code")
-
+					"exec mart.raptor_stat_agent_queue @date_from=:date_from, @date_to=:date_to, @time_zone_code=:time_zone_code, "
+					+ "@person_code=:person_code")
 				.SetReadOnly(true)
 				.SetDateTime("date_from", startDate)
 				.SetDateTime("date_to", endDate)
 				.SetString("time_zone_code", timeZoneId)
 				.SetGuid("person_code", personCode)
 				.List());
-		}
-
-		public IEnumerable<RunningEtlJob> GetRunningEtlJobs()
-		{
-			return repositoryActionWithRetry(uow =>
-			{
-				const string sql = "exec [mart].[sys_etl_job_running_info_get]";
-
-				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(sql)
-					.AddScalar("computer_name", NHibernateUtil.String)
-					.AddScalar("start_time", NHibernateUtil.DateTime)
-					.AddScalar("job_name", NHibernateUtil.String)
-					.AddScalar("is_started_by_service", NHibernateUtil.Boolean)
-					.AddScalar("lock_until", NHibernateUtil.DateTime)
-					.SetReadOnly(true)
-					.List<object[]>()
-					.Select(x =>
-					  new RunningEtlJob
-					  {
-						  ComputerName = (string)x[0],
-						  StartTime = (DateTime)x[1],
-						  JobName = (string)x[2],
-						  IsStartedByService = (bool)x[3],
-						  LockUntil = (DateTime)x[4]
-					  });
-			});
 		}
 
 		public IEnumerable<HistoricalDataDetail> GetLogObjectDetails()
@@ -463,13 +441,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					_logger.Warn(string.Format("Retry - Count:{0}, Exception:{1}, StackTrace:{2}", attempt, ex, ex.StackTrace));
 					return repositoryActionWithRetry(innerAction, ++attempt);
 				}
+
 				throw;
 			}
 		}
 
 		private IAnalyticsUnitOfWorkFactory StatisticUnitOfWorkFactory()
 		{
-			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
+			var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
 			return identity.DataSource.Analytics;
 		}
 	}
@@ -480,7 +459,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public DateTime? EndDate { get; set; }
 	}
 
-	//
 	public class IntradayStatistics: IIntradayStatistics
 	{
 		public Guid SkillId { get; set; }

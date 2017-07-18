@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 {
@@ -31,7 +30,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 		private INow now;
 		private IUnitOfWorkFactory loggedOnUnitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
-		private IRunningEtlJobChecker etlJobChecker;
 		private IGlobalSettingDataRepository globalSettingRep;
 		private Guid _businessUnitId;
 
@@ -86,9 +84,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.AgentBadge
 			badgeWithRankCalculator.Stub(x => x.CalculateAnsweredCallsBadges(new List<IPerson>(), "", DateOnly.Today,
 				new GamificationSetting(settingNameForTest), _businessUnitId))
 				.IgnoreArguments().Return(new List<IAgentBadgeWithRankTransaction>());
-
-			etlJobChecker = MockRepository.GenerateMock<IRunningEtlJobChecker>();
-			etlJobChecker.Stub(x => x.NightlyEtlJobStillRunning()).Return(false);
 
 			target = new CalculateBadges(teamSettingsRepository, msgRepository, badgeCalculator, badgeWithRankCalculator,
 				badgeRepository, badgeWithRankRepository, globalSettingRep, personRepository);

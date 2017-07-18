@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<AgentBadgeCalculator>().As<IAgentBadgeCalculator>();
 			builder.RegisterType<AgentBadgeWithRankCalculator>().As<IAgentBadgeWithRankCalculator>();
-			builder.RegisterType<RunningEtlJobChecker>().As<IRunningEtlJobChecker>();
 			builder.RegisterType<LogObjectDateChecker>().As<ILogObjectDateChecker>();
 			builder.RegisterType<PerformBadgeCalculation>().As<IPerformBadgeCalculation>();
 			builder.RegisterType<CalculateBadges>();
