@@ -40,12 +40,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private IEnumerable<SkillStaffingData> createSkillStaffingDatas(DateTimePeriod period, IList<ISkill> skills)
 		{
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-			var fullDayPeriod = dateOnlyPeriod.ToDateTimePeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+			var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
+			var dateOnlyPeriod = period.ToDateOnlyPeriod(timezone);
+			var fullDayPeriod = dateOnlyPeriod.ToDateTimePeriod(timezone);
 			var skillIds = skills.Select(skill => skill.Id).ToList();
 			var combinationResources =
-				_skillCombinationResourceRepository.LoadSkillCombinationResources(
-						new DateTimePeriod(fullDayPeriod.StartDateTime.AddDays(-2), fullDayPeriod.EndDateTime.AddDays(2)))
+				_skillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(fullDayPeriod.StartDateTime.AddDays(-2), fullDayPeriod.EndDateTime.AddDays(2)))
 					.Where(s => s.SkillCombination.Any(skillId => skillIds.Contains(skillId)))
 					.ToList();
 
@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				var skillStaffingDatas = new List<SkillStaffingData>();
 				var calculationPeriodDictionarys = resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items();
 				var resolution = skills.Min(s => s.DefaultResolution);
-				var timezone = _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
 
 				foreach (var calculationPeriodDictionary in calculationPeriodDictionarys)
 				{
@@ -81,7 +80,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 							Skill = calculationPeriodDictionary.Key,
 							ForecastedStaffing = ((SkillStaffingInterval)resourceCalculationPeriod.Value).FStaff,
 							ScheduledStaffing = ((SkillStaffingInterval)resourceCalculationPeriod.Value).StaffingLevel,
-							Time = TimeZoneHelper.ConvertFromUtc(resourceCalculationPeriod.Key.StartDateTime, timezone),
+							Time = resourceCalculationPeriod.Key.StartDateTime,
 							Date = new DateOnly(resourceCalculationPeriod.Key.StartDateTime),
 							Resolution = resolution
 						});

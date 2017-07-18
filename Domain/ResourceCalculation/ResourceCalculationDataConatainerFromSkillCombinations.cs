@@ -34,7 +34,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			foreach (var skillCombinationResource in skillCombinationResources)
 			{
 				var actId = skillCombinationResource.SkillCombination.Select(s => _allSkills[s].First().Activity.Id).First();
-				var allSkillsInCombination = skillCombinationResource.SkillCombination.Select(s => _allSkills[s].FirstOrDefault()).ToArray();
+				var allSkillsInCombination =
+					skillCombinationResource.SkillCombination.Select(s => _allSkills[s].FirstOrDefault())
+						.Where(s => s != null)
+						.ToArray();
 
 				var skillCombination = new SkillCombination(allSkillsInCombination,skillCombinationResource.Period().ToDateOnlyPeriod(TimeZoneInfo.Utc), new SkillEffiencyResource[] {}, allSkillsInCombination);
 				
@@ -52,7 +55,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			foreach (var skillCombinationResource in _skillCombinationResources)
 			{
 				if (!periodToCalculate.Contains(skillCombinationResource.StartDateTime)) continue;
-				var allSkillsInCombination = skillCombinationResource.SkillCombination.Select(s => _allSkills[s].FirstOrDefault()).ToArray();
+				var allSkillsInCombination = skillCombinationResource.SkillCombination.Select(s => _allSkills[s].FirstOrDefault()).Where(s=>s!=null).ToArray();
 				if (!(allSkillsInCombination.FirstOrDefault().Activity.Id == activity.Id)) continue;
 
 				var skillCombination = new SkillCombination(allSkillsInCombination, periodToCalculate.ToDateOnlyPeriod(TimeZoneInfo.Utc), new SkillEffiencyResource[] { }, allSkillsInCombination);

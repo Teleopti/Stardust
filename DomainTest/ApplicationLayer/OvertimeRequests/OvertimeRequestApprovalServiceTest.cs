@@ -200,6 +200,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldNotApprovedWhenHasNoCriticalUnderStaffingSkill()
 		{
 			var person = User.CurrentUser();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var activity1 = createActivity("activity1");
 			var skill1 = createSkill("skill1");
 			var personSkill1 = createPersonSkill(activity1, skill1);
