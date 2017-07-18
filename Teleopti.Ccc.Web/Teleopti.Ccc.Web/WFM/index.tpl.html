@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html ng-app="wfm">
 <head lang="en">
 	<meta charset="UTF-8">
@@ -54,9 +54,19 @@
 				</span>
 			</div>
 	</div>
-		<div ng-show="vm.mainMenuState" class="main-menu-slide main-menu-link-wrapper material-depth-1">
-			<mainmenu data="a" open="vm.mainMenuState" ng-click="vm.toggleMobileMenu();" ng-repeat="a in vm.areas"></mainmenu>
-		</div>
+			<div ng-show="vm.mainMenuState" class="main-menu-slide main-menu-link-wrapper material-depth-1">
+				<div ng-repeat="a in vm.areas">
+					<mainmenu ng-if="a.InternalName !=='myTime'" data="a" open="vm.mainMenuState" ng-click="vm.toggleMobileMenu();"></mainmenu>
+					<a ng-if="a.InternalName ==='myTime'" href="/TeleoptiWFM/web/mytime" target="_blank" ui-sref-opts="{reload: true}" ui-sref-active="main-menu-link-active nav-item-active">
+						<div class="con-row main-menu-link">
+							<div class="con-flex">
+								<i class="mdi mdi-rotate-3d"></i>
+								<span class="main-menu-label">{{a.Name}}</span>
+							</div>
+						</div>
+					</a>
+				</div>
+			</div>
 	</div>
 
 

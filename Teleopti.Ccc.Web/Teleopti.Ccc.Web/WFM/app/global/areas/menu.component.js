@@ -54,6 +54,10 @@ function MenuController() {
 		{
 			i: 'mdi mdi-rotate-3d',
 			name: 'staffing'
+		},
+		{
+			i: 'mdi mdi-rotate-3d',
+			name: 'myTime'
 		}
 	]
 
