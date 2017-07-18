@@ -89,6 +89,10 @@
 		}
 
 		ctrl.openMenu = function (event) {
+			// do not pass character to search input
+			if (event.type === 'keypress')
+				event.stopPropagation()
+
 			ctrl.menuRef.open()
 		}
 
