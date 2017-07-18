@@ -261,6 +261,12 @@
 					var siteAlreadySelected = indexOfSite > -1;
 					if (!siteAlreadySelected) {
 						vm.selectedItems.siteIds.push(item.site.Id);
+						if (angular.isDefined(item.teams)) {
+							item.teams.forEach(function (team) {
+								var teamIsSelected = vm.selectedItems.teamIds.indexOf(team.Id);
+								if (teamIsSelected > -1) vm.selectedItems.teamIds.splice(teamIsSelected, 1);
+							});
+						}
 					}
 					else {
 						vm.selectedItems.siteIds.splice(indexOfSite, 1);

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe('RtaMainController', function () {
+fdescribe('RtaMainController', function () {
   var
     $controllerBuilder,
     $fakeBackend,
@@ -1116,7 +1116,7 @@ describe('RtaMainController', function () {
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['redId'], skillIds: ['phoneId'], skillAreaId: undefined });
     });
 
-    it('should go to agents for site if all teams under it are selected and site has been initially opened', function () {
+    it('should go to agents for site if all teams under it are selected', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'londonId',
@@ -1176,6 +1176,38 @@ describe('RtaMainController', function () {
 
       expect(vm.selectedItems).toEqual({ siteIds: [], teamIds: ['redId'], skillIds: [], skillAreaId: undefined });
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['redId'], skillIds: [], skillAreaId: undefined });
+    });
+
+    it('should always clear teams selection for teams under site if site is selected', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'londonId',
+          Name: 'London'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'greenId'
+        })
+         .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'redId'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.siteCards[0].isOpen = true;
+        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
+        $httpBackend.flush();
+        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.getSelectedItems(vm.siteCards[0].teams[1]);
+        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.goToAgents();
+      });
+
+      expect(vm.selectedItems).toEqual({ siteIds: ['londonId'], teamIds: [], skillIds: [], skillAreaId: undefined });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['londonId'], teamIds: [], skillIds: [], skillAreaId: undefined });
     });
 
   });
