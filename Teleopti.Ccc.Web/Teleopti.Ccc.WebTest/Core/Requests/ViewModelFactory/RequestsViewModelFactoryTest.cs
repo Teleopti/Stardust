@@ -17,7 +17,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
@@ -26,6 +25,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Data;
 using Teleopti.Ccc.WebTest.Core.Requests.DataProvider;
@@ -128,9 +128,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var result = target.CreatePageViewModel();
 
-			var overtimeType = result.OvertimeTypes.FirstOrDefault();
-			overtimeType.Name.Should().Be.EqualTo(multiplicatorDefinitionSet.Name);
-			overtimeType.Id.Should().Be.EqualTo(multiplicatorDefinitionSet.Id);
+			//Ensure returning List<OvertimeTypeViewModel> for IE to display OvertimeTypes correctly.
+			Assert.AreEqual(result.OvertimeTypes.GetType(), typeof(List<OvertimeTypeViewModel>));
+			Assert.AreEqual(result.OvertimeTypes.FirstOrDefault().Name, multiplicatorDefinitionSet.Name);
+			Assert.AreEqual(result.OvertimeTypes.FirstOrDefault().Id, multiplicatorDefinitionSet.Id);
 		}
 
 		[Test]

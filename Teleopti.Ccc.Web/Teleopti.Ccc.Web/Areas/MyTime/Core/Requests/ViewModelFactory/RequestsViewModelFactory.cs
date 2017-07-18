@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 				{
 					Id = definitionSet.Id,
 					Name = definitionSet.Name
-				})
+				}).ToList()
 			};
 		}
 
