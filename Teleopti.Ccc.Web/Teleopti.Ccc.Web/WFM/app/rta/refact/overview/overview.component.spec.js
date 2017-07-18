@@ -188,11 +188,7 @@ describe('rtaOverviewComponent', function () {
   it('should display closed site cards by default', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: 'londonId',
-        Name: 'London',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'londonId'
       });
 
     var vm = $controllerBuilder.createController().vm;
@@ -207,11 +203,7 @@ describe('rtaOverviewComponent', function () {
     stateParams.open = 'true';
     $fakeBackend
       .withSiteAdherence({
-        Id: 'londonId',
-        Name: 'London',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'londonId'
       });
 
     var vm = $controllerBuilder.createController().vm;
@@ -305,16 +297,12 @@ describe('rtaOverviewComponent', function () {
     $fakeBackend
       .withSiteAdherence({
         Id: 'londonId',
-        Name: 'London',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
         Id: 'greenId',
-        Name: 'Green',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       });
@@ -333,8 +321,6 @@ describe('rtaOverviewComponent', function () {
         .withTeamAdherence({
           SiteId: 'londonId',
           Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
           InAlarmCount: 2,
           Color: 'good'
         });
@@ -349,14 +335,11 @@ describe('rtaOverviewComponent', function () {
     $fakeBackend
       .withSiteAdherence({
         Id: 'londonId',
-        Name: 'London',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       });
@@ -374,8 +357,6 @@ describe('rtaOverviewComponent', function () {
         .clearTeamAdherences()
         .withTeamAdherence({
           SiteId: 'londonId',
-          Name: 'Green',
-          AgentsCount: 11,
           InAlarmCount: 2,
           Color: 'good'
         });
@@ -390,8 +371,6 @@ describe('rtaOverviewComponent', function () {
         .clearTeamAdherences()
         .withTeamAdherence({
           SiteId: 'londonId',
-          Name: 'Green',
-          AgentsCount: 11,
           InAlarmCount: 10,
           Color: 'danger'
         });
@@ -407,17 +386,13 @@ describe('rtaOverviewComponent', function () {
     $fakeBackend
       .withSiteAdherence({
         Id: 'londonId',
-        Name: 'London',
         SkillId: 'channelSalesId',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
-        Name: 'Green',
         SkillId: 'channelSalesId',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       });
@@ -436,8 +411,6 @@ describe('rtaOverviewComponent', function () {
         .withTeamAdherence({
           SiteId: 'londonId',
           SkillId: 'channelSalesId',
-          Name: 'Green',
-          AgentsCount: 11,
           InAlarmCount: 2,
           Color: 'good'
         });
@@ -453,17 +426,13 @@ describe('rtaOverviewComponent', function () {
     $fakeBackend
       .withSiteAdherence({
         Id: 'londonId',
-        Name: 'London',
         SkillId: 'channelSalesId',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
-        Name: 'Green',
         SkillId: 'channelSalesId',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       });
@@ -482,8 +451,6 @@ describe('rtaOverviewComponent', function () {
         .withTeamAdherence({
           SiteId: 'londonId',
           SkillId: 'channelSalesId',
-          Name: 'Green',
-          AgentsCount: 11,
           InAlarmCount: 2,
           Color: 'good'
         });
@@ -498,8 +465,6 @@ describe('rtaOverviewComponent', function () {
         .clearTeamAdherences()
         .withTeamAdherence({
           SiteId: 'londonId',
-          Name: 'Green',
-          AgentsCount: 11,
           InAlarmCount: 10,
           Color: 'danger'
         });
@@ -515,33 +480,25 @@ describe('rtaOverviewComponent', function () {
     $fakeBackend
       .withSiteAdherence({
         Id: 'londonId',
-        Name: 'London',
         SkillId: 'channelSalesId',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
-        Name: 'Green',
         SkillId: 'channelSalesId',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       })
       .withSiteAdherence({
         Id: 'londonId',
         SkillId: 'phoneId',
-        Name: 'London',
-        AgentsCount: 8,
         InAlarmCount: 4,
         Color: 'warning'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
         SkillId: 'phoneId',
-        Name: 'Green',
-        AgentsCount: 8,
         InAlarmCount: 2,
         Color: 'good'
       });
@@ -561,16 +518,12 @@ describe('rtaOverviewComponent', function () {
         .withTeamAdherence({
           SiteId: 'londonId',
           SkillId: 'channelSalesId',
-          Name: 'Green',
-          AgentsCount: 11,
           InAlarmCount: 2,
           Color: 'good'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
-          Name: 'Green',
           SkillId: 'phoneId',
-          AgentsCount: 8,
           InAlarmCount: 1,
           Color: 'good'
         });
@@ -585,9 +538,7 @@ describe('rtaOverviewComponent', function () {
         .clearTeamAdherences()
         .withTeamAdherence({
           SiteId: 'londonId',
-          Name: 'Green',
           SkillId: 'phoneId',
-          AgentsCount: 8,
           InAlarmCount: 8,
           Color: 'danger'
         });
@@ -646,11 +597,7 @@ describe('rtaOverviewComponent', function () {
   it('should select site', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: 'londonId',
-        Name: 'London',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'londonId'
       })
     vm = $controllerBuilder.createController().vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
@@ -667,11 +614,7 @@ describe('rtaOverviewComponent', function () {
   it('should unselect site', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: 'londonId',
-        Name: 'London',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'londonId'
       });
     vm = $controllerBuilder.createController().vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
@@ -689,20 +632,11 @@ describe('rtaOverviewComponent', function () {
   it('should select team', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: 'londonId',
-        Name: 'London',
-        SkillId: 'channelSalesId',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'londonId'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
-        Name: 'Green',
-        SkillId: 'channelSalesId',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'greenId'
       });
 
     vm = $controllerBuilder.createController().vm;
@@ -724,20 +658,11 @@ describe('rtaOverviewComponent', function () {
   it('should unselect team', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: 'londonId',
-        Name: 'London',
-        SkillId: 'channelSalesId',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'londonId'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
-        Name: 'Green',
-        SkillId: 'channelSalesId',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'greenId'
       });
 
     vm = $controllerBuilder.createController().vm;
@@ -760,20 +685,11 @@ describe('rtaOverviewComponent', function () {
   it('should select all teams under site when site is selected and opened', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: 'londonId',
-        Name: 'London',
-        SkillId: 'channelSalesId',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'londonId'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
-        Name: 'Green',
-        SkillId: 'channelSalesId',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'greenId'
       });
 
     vm = $controllerBuilder.createController().vm;
@@ -795,20 +711,11 @@ describe('rtaOverviewComponent', function () {
   it('should unselect all teams under site when site is unselected and opened', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: 'londonId',
-        Name: 'London',
-        SkillId: 'channelSalesId',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'londonId'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
-        Name: 'Green',
-        SkillId: 'channelSalesId',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'greenId'
       });
 
     vm = $controllerBuilder.createController().vm;
@@ -831,19 +738,11 @@ describe('rtaOverviewComponent', function () {
   it('should select site if all teams under it are selected and site is opened', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: 'londonId',
-        Name: 'London',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'londonId'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
-        Id: 'greenId',
-        Name: 'Green',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'greenId'
       });
 
     vm = $controllerBuilder.createController().vm;
@@ -866,25 +765,15 @@ describe('rtaOverviewComponent', function () {
   it('should unselect site if at least one team under it is unselected and site is opened', function () {
     $fakeBackend
       .withSiteAdherence({
-        Id: 'londonId',
-        Name: 'London',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'londonId'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
-        Name: 'Green',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'greenId'
       })
       .withTeamAdherence({
         SiteId: 'londonId',
-        Name: 'Red',
-        AgentsCount: 11,
-        InAlarmCount: 5,
-        Color: 'warning'
+        Id: 'redId'
       });
 
     vm = $controllerBuilder.createController().vm;

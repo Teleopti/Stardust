@@ -304,8 +304,6 @@ describe('RtaMainController', function () {
       $fakeBackend.withSiteAdherence({
         Id: 'londonId',
         SkillId: 'phoneId',
-        Name: 'London',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       });
@@ -319,8 +317,6 @@ describe('RtaMainController', function () {
           .withSiteAdherence({
             Id: 'londonId',
             SkillId: 'phoneId',
-            Name: "London",
-            AgentsCount: 11,
             InAlarmCount: 2,
             Color: 'good'
           })
@@ -336,16 +332,12 @@ describe('RtaMainController', function () {
         .withSiteAdherence({
           Id: 'londonId',
           SkillId: 'channelSalesId',
-          Name: 'London',
-          AgentsCount: 11,
           InAlarmCount: 5,
           Color: 'warning'
         })
         .withSiteAdherence({
           Id: 'londonId',
           SkillId: 'phoneId',
-          Name: 'London',
-          AgentsCount: 11,
           InAlarmCount: 4,
           Color: 'warning'
         });
@@ -359,8 +351,6 @@ describe('RtaMainController', function () {
           .withSiteAdherence({
             Id: 'londonId',
             SkillId: 'channelSalesId',
-            Name: 'London',
-            AgentsCount: 11,
             InAlarmCount: 2,
             Color: 'good'
           })
@@ -376,8 +366,6 @@ describe('RtaMainController', function () {
       $fakeBackend.withSiteAdherence({
         Id: 'londonId',
         SkillId: 'channelSalesId',
-        Name: 'London',
-        AgentsCount: 11,
         InAlarmCount: 5,
         Color: 'warning'
       });
@@ -390,8 +378,6 @@ describe('RtaMainController', function () {
           .withSiteAdherence({
             Id: 'londonId',
             SkillId: 'channelSalesId',
-            Name: 'London',
-            AgentsCount: 11,
             InAlarmCount: 2,
             Color: 'good'
           })
@@ -408,16 +394,12 @@ describe('RtaMainController', function () {
         .withSiteAdherence({
           Id: 'londonId',
           SkillId: 'channelSalesId',
-          Name: 'London',
-          AgentsCount: 11,
           InAlarmCount: 5,
           Color: 'warning'
         })
         .withSiteAdherence({
           Id: 'londonId',
           SkillId: 'phoneId',
-          Name: 'London',
-          AgentsCount: 11,
           InAlarmCount: 4,
           Color: 'warning'
         });
@@ -430,8 +412,6 @@ describe('RtaMainController', function () {
           .withSiteAdherence({
             Id: 'londonId',
             SkillId: 'channelSalesId',
-            Name: 'London',
-            AgentsCount: 11,
             InAlarmCount: 2,
             Color: 'good'
           })
@@ -671,18 +651,10 @@ describe('RtaMainController', function () {
     it('should go to agents for the right selected site after deselecting some other', function () {
       $fakeBackend
         .withSiteAdherence({
-          Id: 'parisId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          Id: 'parisId'
         })
         .withSiteAdherence({
-          Id: 'londonId',
-          Name: 'London',
-          AgentsCount: 8,
-          InAlarmCount: 2,
-          Color: 'good'
+          Id: 'londonId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -701,11 +673,7 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'channelSalesId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'channelSalesId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -725,11 +693,7 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'channelSalesId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'channelSalesId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -748,11 +712,7 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'channelSalesId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'channelSalesId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -772,11 +732,7 @@ describe('RtaMainController', function () {
       stateParams.skillIds = ['channelSalesId'];
       $fakeBackend
         .withSiteAdherence({
-          Id: 'parisId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          Id: 'parisId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -796,19 +752,11 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'channelSalesId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'channelSalesId'
         })
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'phoneId',
-          Name: 'Paris',
-          AgentsCount: 6,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'phoneId'
         });
       var c = $controllerBuilder.createController(undefined, skillAreas);
       vm = c.vm;
@@ -826,19 +774,11 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'channelSalesId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'channelSalesId'
         })
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'phoneId',
-          Name: 'Paris',
-          AgentsCount: 6,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'phoneId'
         });
       var c = $controllerBuilder.createController(undefined, skillAreas);
       vm = c.vm;
@@ -855,19 +795,11 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'channelSalesId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'channelSalesId'
         })
         .withSiteAdherence({
           Id: 'londonId',
-          SkillId: 'phoneId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'phoneId'
         });
 
       var c = $controllerBuilder.createController(skills1);
@@ -890,19 +822,11 @@ describe('RtaMainController', function () {
     it('should go to agents for team', function () {
       $fakeBackend
         .withSiteAdherence({
-          Id: 'londonId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          Id: 'londonId'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          Id: 'greenId'
         });
       vm = $controllerBuilder.createController().vm;
 
@@ -918,20 +842,12 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'londonId',
-          SkillId: 'channelSalesId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          SkillId: 'channelSalesId'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
           SkillId: 'channelSalesId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          Id: 'greenId'
         });
       vm = $controllerBuilder.createController().vm;
       vm.filterOutput(channelSales);
@@ -949,20 +865,12 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'londonId',
-          SkillId: 'channelSalesId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          SkillId: 'channelSalesId'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
           SkillId: 'channelSalesId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          Id: 'greenId'
         });
       vm = $controllerBuilder.createController().vm;
       $httpBackend.flush();
@@ -978,20 +886,12 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'londonId',
-          SkillId: 'channelSalesId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          SkillId: 'channelSalesId'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
           SkillId: 'channelSalesId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          Id: 'greenId'
         });
       vm = $controllerBuilder.createController(undefined, skillAreas).vm;
       vm.filterOutput(skillArea1);
@@ -1009,20 +909,12 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'londonId',
-          SkillId: 'channelSalesId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          SkillId: 'channelSalesId'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
           SkillId: 'channelSalesId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          Id: 'greenId'
         });
       vm = $controllerBuilder.createController(undefined, skillAreas).vm;
       vm.siteCards[0].isOpen = true;
@@ -1037,18 +929,11 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'londonId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          Name: 'London'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          Id: 'greenId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -1068,20 +953,12 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'londonId',
-          SkillId: 'channelSalesId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          SkillId: 'channelSalesId'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
           SkillId: 'channelSalesId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          Id: 'greenId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -1103,20 +980,12 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'londonId',
-          SkillId: 'channelSalesId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          SkillId: 'channelSalesId'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
           SkillId: 'channelSalesId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          Id: 'greenId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -1136,37 +1005,21 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'channelSalesId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'channelSalesId'
         })
         .withTeamAdherence({
           SiteId: 'parisId',
           SkillId: 'channelSalesId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          Id: 'greenId'
         })
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'phoneId',
-          Name: 'Paris',
-          AgentsCount: 6,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'phoneId'
         })
         .withTeamAdherence({
           SiteId: 'parisId',
           SkillId: 'phoneId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 6,
-          InAlarmCount: 2,
-          Color: 'good'
+          Id: 'greenId'
         })
         ;
       var c = $controllerBuilder.createController(undefined, skillAreas);
@@ -1189,37 +1042,21 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'channelSalesId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'channelSalesId'
         })
         .withTeamAdherence({
           SiteId: 'parisId',
           SkillId: 'channelSalesId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          Id: 'greenId'
         })
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'phoneId',
-          Name: 'Paris',
-          AgentsCount: 6,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'phoneId'
         })
         .withTeamAdherence({
           SiteId: 'parisId',
           SkillId: 'phoneId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 6,
-          InAlarmCount: 2,
-          Color: 'good'
+          Id: 'greenId'
         })
         ;
       var c = $controllerBuilder.createController(undefined, skillAreas);
@@ -1239,37 +1076,21 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'channelSalesId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'channelSalesId'
         })
         .withTeamAdherence({
           SiteId: 'parisId',
           SkillId: 'channelSalesId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          Id: 'greenId'
         })
         .withSiteAdherence({
           Id: 'parisId',
-          SkillId: 'phoneId',
-          Name: 'Paris',
-          AgentsCount: 8,
-          InAlarmCount: 2,
-          Color: 'good'
+          SkillId: 'phoneId'
         })
         .withTeamAdherence({
           SiteId: 'parisId',
           SkillId: 'phoneId',
-          Id: 'redId',
-          Name: 'Red',
-          AgentsCount: 8,
-          InAlarmCount: 2,
-          Color: 'good'
+          Id: 'redId'
         });
 
       var c = $controllerBuilder.createController(skills1);
@@ -1299,26 +1120,15 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'londonId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'danger'
+          Name: 'London'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 6,
-          InAlarmCount: 5,
-          Color: 'danger'
+          Id: 'greenId'
         })
          .withTeamAdherence({
           SiteId: 'londonId',
-          Id: 'redId',
-          Name: 'Red',
-          AgentsCount: 5,
-          InAlarmCount: 5,
-          Color: 'danger'
+          Id: 'redId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -1341,26 +1151,15 @@ describe('RtaMainController', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'londonId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 5,
-          Color: 'warning'
+          Name: 'London'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
-          Id: 'greenId',
-          Name: 'Green',
-          AgentsCount: 8,
-          InAlarmCount: 5,
-          Color: 'danger'
+          Id: 'greenId'
         })
         .withTeamAdherence({
           SiteId: 'londonId',
-          Id: 'redId',
-          Name: 'Red',
-          AgentsCount: 5,
-          InAlarmCount: 5,
-          Color: 'danger'
+          Id: 'redId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
