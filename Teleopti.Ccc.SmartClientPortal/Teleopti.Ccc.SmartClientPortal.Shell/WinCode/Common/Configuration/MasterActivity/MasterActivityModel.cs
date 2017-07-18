@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration.Mast
     public class MasterActivityModel : IMasterActivityModel
     {
         private readonly IMasterActivity _masterActivityEntity;
-        private readonly ILocalizedUpdateInfo _localizer;
+        private readonly LocalizedUpdateInfo _localizer;
 
-        public MasterActivityModel(IMasterActivity masterActivityEntity, ILocalizedUpdateInfo localizer)
+        public MasterActivityModel(IMasterActivity masterActivityEntity, LocalizedUpdateInfo localizer)
         {
             _masterActivityEntity = masterActivityEntity;
             _localizer = localizer;
@@ -21,36 +21,27 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration.Mast
         {
             get
             {
-                return _masterActivityEntity.ActivityCollection.Select(activity => new ActivityModel(activity)).Cast<IActivityModel>().ToList();
+                return _masterActivityEntity.ActivityCollection.Select(activity => (IActivityModel)new ActivityModel(activity)).ToList();
             }
         }
 
         public Color Color
         {
-            get { return _masterActivityEntity.DisplayColor; }
-            set { _masterActivityEntity.DisplayColor = value; }
+            get => _masterActivityEntity.DisplayColor;
+	        set => _masterActivityEntity.DisplayColor = value;
         }
 
         public string Name
         {
-            get { return _masterActivityEntity.Description.Name; }
-            set { _masterActivityEntity.Description = new Description(value, _masterActivityEntity.Description.ShortName); }
+            get => _masterActivityEntity.Description.Name;
+	        set => _masterActivityEntity.Description = new Description(value, _masterActivityEntity.Description.ShortName);
         }
 
-        public string UpdateInfo
-        {
-            get
-            {
-                return _localizer.UpdatedByText(_masterActivityEntity, UserTexts.Resources.UpdatedByColon);
-            }
-        }
+        public string UpdateInfo => _localizer.UpdatedByText(_masterActivityEntity, UserTexts.Resources.UpdatedByColon);
 
-        public IMasterActivity Entity
-        {
-            get { return _masterActivityEntity; }
-        }
+	    public IMasterActivity Entity => _masterActivityEntity;
 
-        public void UpdateActivities(IList<IActivityModel> activities)
+	    public void UpdateActivities(IList<IActivityModel> activities)
         {
             var lst = activities.Select(activityModel => activityModel.Entity).ToList();
             _masterActivityEntity.UpdateActivityCollection(lst);

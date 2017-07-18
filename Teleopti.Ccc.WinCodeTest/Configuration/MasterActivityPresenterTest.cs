@@ -7,8 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration.MasterActivity;
-using Teleopti.Interfaces.Domain;
-
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
 {
@@ -19,7 +17,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         private IMasterActivityView _view;
         private MasterActivityPresenter _target;
         private IMasterActivityViewModel _viewModel;
-        private ILocalizedUpdateInfo _localizer;
+        private LocalizedUpdateInfo _localizer;
 
         [SetUp]
         public void Setup()
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _mocks = new MockRepository();
             _view = _mocks.StrictMock<IMasterActivityView>();
             _viewModel = _mocks.StrictMock<IMasterActivityViewModel>();
-            _localizer = _mocks.StrictMock<ILocalizedUpdateInfo>();
+            _localizer = new LocalizedUpdateInfo();
             _target = new MasterActivityPresenter(_view, _viewModel);
         }
 
@@ -97,8 +95,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(() => _view.Color = Color.Firebrick);
             Expect.Call(_viewModel.AllNotDeletedActivities).Return(new List<IActivityModel>());
             Expect.Call(() => _view.LoadTwoList(new List<IActivityModel>(), new List<IActivityModel>()));
-            Expect.Call(_localizer.UpdatedByText(null, "")).IgnoreArguments().Return("hej");
-            Expect.Call(() => _view.SetUpdateInfo("hej"));
+            Expect.Call(() => _view.SetUpdateInfo(""));
             _mocks.ReplayAll();
 
             _target.OnAddNew();
@@ -120,8 +117,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(() => _view.Color = Color.DodgerBlue);
             Expect.Call(_viewModel.AllNotDeletedActivities).Return(new List<IActivityModel>());
             Expect.Call(() => _view.LoadTwoList(new List<IActivityModel>(), new List<IActivityModel>()));
-            Expect.Call(_localizer.UpdatedByText(null, "")).IgnoreArguments().Return("hej");
-            Expect.Call(() => _view.SetUpdateInfo("hej"));
+            Expect.Call(() => _view.SetUpdateInfo(""));
             _mocks.ReplayAll();
 
             _target.OnDeleteMasterActivity(master1);

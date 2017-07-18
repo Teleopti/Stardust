@@ -27,23 +27,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private const short firstItemIndex = 0;
 		private const short itemDiffernce = 1;
 		private const short shortNameMaxLength = 2;
-		private readonly ILocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
+		private readonly LocalizedUpdateInfo _localizer = new LocalizedUpdateInfo();
 
-		public int LastItemIndex
-		{
-			get
-			{
-				return comboBoxAdvDaysOffCollection.Items.Count - itemDiffernce;
-			}
-		}
+		public int LastItemIndex => comboBoxAdvDaysOffCollection.Items.Count - itemDiffernce;
 
-		public IDayOffTemplate SelectedDayOff
-		{
-			get
-			{
-				return comboBoxAdvDaysOffCollection.SelectedItem as IDayOffTemplate;
-			}
-		}
+		public IDayOffTemplate SelectedDayOff => comboBoxAdvDaysOffCollection.SelectedItem as IDayOffTemplate;
 
 		public IDayOffTemplateRepository Repository { get; private set; }
 
@@ -377,9 +365,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			throw new NotImplementedException();
 		}
 
-		public ViewType ViewType
-		{
-			get { return ViewType.DaysOff; }
-		}
+		public ViewType ViewType => ViewType.DaysOff;
 	}
 }

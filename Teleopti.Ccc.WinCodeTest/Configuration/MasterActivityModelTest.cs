@@ -8,8 +8,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration.MasterActivity;
-using Teleopti.Interfaces.Domain;
-
+using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
 {
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         private IMasterActivityRepository _masterActivityRepository;
         private MasterActivityModel _model;
         private ActivityModel _activityModel;
-        private ILocalizedUpdateInfo _localizer;
+        private LocalizedUpdateInfo _localizer;
 
         [SetUp]
         public void Setup()
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             _mocks = new MockRepository();
             _activityRepository = _mocks.StrictMock<IActivityRepository>();
             _masterActivityRepository = _mocks.StrictMock<IMasterActivityRepository>();
-            _localizer = _mocks.DynamicMock<ILocalizedUpdateInfo>();
+            _localizer = new LocalizedUpdateInfo();
             _target = new MasterActivityViewModel(_activityRepository, _masterActivityRepository);
         }
 
@@ -231,16 +231,17 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Assert.That(activity.GetHashCode(), Is.EqualTo(_activityModel.GetHashCode()));
         }
 
-        [Test]
+        [Test, Culture("sv-SE")]
         public void ShouldShouldReturnUpdateInfoFromMasterActivity()
         {
-            var master = _mocks.StrictMock<IMasterActivity>();
-            _model = new MasterActivityModel(master,_localizer);
+            var master = new MasterActivity();
+			ReflectionHelper.SetUpdatedOn(master,new DateTime(2001,1,1));
+			ReflectionHelper.SetUpdatedBy(master,PersonFactory.CreatePerson());
 
-            Expect.Call(_localizer.UpdatedByText(master, UserTexts.Resources.UpdatedByColon)).Return("updated by: ola");
-
+			_model = new MasterActivityModel(master,_localizer);
+			
             _mocks.ReplayAll();
-            Assert.That(_model.UpdateInfo, Is.EqualTo("updated by: ola"));
+            Assert.That(_model.UpdateInfo, Is.EqualTo("Updated by: arne arne 2001-01-01 01:00:00"));
             _mocks.VerifyAll();
         }
 
