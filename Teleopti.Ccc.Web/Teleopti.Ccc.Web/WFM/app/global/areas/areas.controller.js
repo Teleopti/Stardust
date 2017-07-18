@@ -5,9 +5,9 @@
   .module('wfm.areas', ['ngResource'])
   .controller('AreasController', AreasController);
 
-  AreasController.$inject = ['areasService'];
+  AreasController.$inject = ["$q","areasService", "Toggle"];
 
-  function AreasController(areasService) {
+  function AreasController($q, areasService, toggleService) {
     var vm = this;
     vm.areas = [];
     var filters = [];
@@ -30,7 +30,10 @@
       if (vm.detectMobile() == false && vm.mainMenuState) {
         vm.mainMenuState = false;
       }
-    }
+	}
+	  $q.all([toggleService.togglesLoaded]).then(function() {
+		  vm.myTimeLinkEnabled = toggleService.Wfm_AddMyTimeLink_45088;
+	  });
 
     vm.loadAreas();
     vm.unauthModal = true;
