@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var personRequest = createOvertimeRequest(person, new DateTimePeriod(requestStartTime.AddHours(18), requestStartTime.AddHours(19)));
 
 			var requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();
-			requestApprovalService.Stub(r => r.Approve(personRequest.Request)).Return(new IBusinessRuleResponse[] {});
+			requestApprovalService.Stub(r => r.Approve(personRequest.Request)).Return(new IBusinessRuleResponse[] { });
 			RequestApprovalServiceFactory.SetApprovalService(requestApprovalService);
 
 			Target.Process(personRequest);
@@ -126,6 +126,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var person = PersonFactory.CreatePerson();
 			var requestStartTime = Now.UtcDateTime().AddMinutes(MinimumApprovalThresholdTimeInMinutes + 1);
 			var overtimeRequest = createOvertimeRequest(person, new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
+
+			var requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();
+			requestApprovalService.Stub(r => r.Approve(overtimeRequest.Request)).Return(new IBusinessRuleResponse[] { new BusinessRuleResponse(null, "error", true, false, overtimeRequest.Request.Period, overtimeRequest.Person, DateOnly.Today.ToDateOnlyPeriod(), string.Empty) });
+			RequestApprovalServiceFactory.SetApprovalService(requestApprovalService);
 
 			Target.Process(overtimeRequest);
 
