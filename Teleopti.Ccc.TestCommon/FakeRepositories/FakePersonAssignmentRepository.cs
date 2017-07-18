@@ -31,9 +31,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			_storage = storage;
 		}
-
-
-
+		
 		public void Has(IPersonAssignment personAssignment)
 		{
 			Add(personAssignment);

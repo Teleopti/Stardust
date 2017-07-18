@@ -397,7 +397,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual IWorkload NoneEntityClone()
         {
             Workload retobj = (Workload)MemberwiseClone();
-            retobj.SetId(null);
+	        CloneEvents(retobj);
+			retobj.SetId(null);
             retobj._templateWeekCollection = new Dictionary<int, IWorkloadDayTemplate>();
             foreach (KeyValuePair<int, IWorkloadDayTemplate> keyValuePair in _templateWeekCollection)
             {
@@ -417,7 +418,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual IWorkload EntityClone()
         {
             Workload retobj = (Workload)MemberwiseClone();
-            retobj._templateWeekCollection = new Dictionary<int, IWorkloadDayTemplate>();
+	        CloneEvents(retobj);
+			retobj._templateWeekCollection = new Dictionary<int, IWorkloadDayTemplate>();
             foreach (KeyValuePair<int, IWorkloadDayTemplate> keyValuePair in _templateWeekCollection)
             {
                 IWorkloadDayTemplate template = keyValuePair.Value.EntityClone();

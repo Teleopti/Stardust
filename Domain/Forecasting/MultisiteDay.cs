@@ -453,7 +453,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual IMultisiteDay NoneEntityClone(IScenario scenario)
         {
             MultisiteDay retObj = (MultisiteDay) NoneEntityClone();
-            retObj._scenario = scenario;
+	        CloneEvents(retObj);
+			retObj._scenario = scenario;
             return retObj;
         }
 
@@ -472,7 +473,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual IMultisiteDay NoneEntityClone()
         {
             MultisiteDay retobj = (MultisiteDay)MemberwiseClone();
-            retobj.SetId(null);
+	        CloneEvents(retobj);
+			retobj.SetId(null);
             retobj._multisitePeriodCollection = new HashSet<IMultisitePeriod>();
             foreach (IMultisitePeriod multisitePeriod in _multisitePeriodCollection)
             {
@@ -491,7 +493,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual IMultisiteDay EntityClone()
         {
             MultisiteDay retobj = (MultisiteDay)MemberwiseClone();
-            retobj._multisitePeriodCollection = new HashSet<IMultisitePeriod>();
+	        CloneEvents(retobj);
+			retobj._multisitePeriodCollection = new HashSet<IMultisitePeriod>();
             foreach (IMultisitePeriod multisitePeriod in _multisitePeriodCollection)
             {
                 IMultisitePeriod clonedPeriod = multisitePeriod.EntityClone();

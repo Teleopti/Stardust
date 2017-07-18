@@ -6,14 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    //rk - cut/paste from aggregateroot.
-    public interface ILocalizedUpdateInfo
-    {
-       string UpdatedTimeInUserPerspective(IChangeInfo entity);
-       string UpdatedByText(IChangeInfo entity, string localizedUpdatedByText);
-    }
-
-    public class LocalizedUpdateInfo : ILocalizedUpdateInfo
+    public class LocalizedUpdateInfo
     {
         public string UpdatedTimeInUserPerspective(IChangeInfo entity)
         {

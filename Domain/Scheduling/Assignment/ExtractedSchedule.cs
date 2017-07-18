@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return ret;
 		}
 
-		public TimeZoneInfo TimeZone { get; private set; }
+		public TimeZoneInfo TimeZone { get; }
 
 		public IDateOnlyAsDateTimePeriod DateOnlyAsPeriod { get; private set; }
 
@@ -52,10 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public bool FullAccess { get; set; }
 
-		public IList<IBusinessRuleResponse> BusinessRuleResponseCollection
-		{
-			get { return BusinessRuleResponseInternalCollection; }
-		}
+		public IList<IBusinessRuleResponse> BusinessRuleResponseCollection => BusinessRuleResponseInternalCollection;
 
 		public virtual SchedulePartView SignificantPart()
 		{
@@ -238,15 +235,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					internalCollection.OfType<IPersonAbsence>().Any());
 		}
 
-		#region Methods (7)
-
 		public void Merge(IScheduleDay source, bool isDelete)
 		{
 			Merge(source, isDelete, false);
 		}
 
 		public void Merge(IScheduleDay source, bool isDelete, bool ignoreTimeZoneChanges,
-			bool ignoreAssignmentPermission = false, bool muteEvent = false)
+			bool ignoreAssignmentPermission = false)
 		{
 			var view = source.SignificantPartForDisplay();
 
@@ -269,7 +264,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					break;
 
 				case SchedulePartView.MainShift:
-					if (isDelete) DeleteMainShift(); else mergeMainShift(source, ignoreTimeZoneChanges, true, muteEvent);
+					if (isDelete) DeleteMainShift(); else mergeMainShift(source, ignoreTimeZoneChanges, true);
 					break;
 
 				case SchedulePartView.PersonalShift:
@@ -304,7 +299,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public bool HasDayOff()
 		{
 			var ass = PersonAssignment();
-			return ass != null && ass.DayOff() != null;
+			return ass?.DayOff() != null;
 		}
 
 		private void MergePreferenceRestriction(IScheduleDay source)
@@ -347,10 +342,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void DeleteDayOff()
 		{
 			var ass = PersonAssignment();
-			if (ass != null)
-			{
-				ass.SetDayOff(null);
-			}
+			ass?.SetDayOff(null);
 		}
 
 		private void mergeDayOff(IScheduleDay source, bool deleteAbsence, bool ignoreAssignmentPermission)
@@ -401,7 +393,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 				IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
 				var assignment = PersonAssignment();
-				if (assignment != null && assignment.ShiftCategory != null)
+				if (assignment?.ShiftCategory != null)
 				{
 					if (assignment.Period != personAbsenceUpForDelete.Period)
 					{
@@ -437,7 +429,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			foreach (var sourceAbsence in source.PersonAbsenceCollection())
 			{
-				if (layerCollection.HasLayers)
+				if (layerCollectionPeriod.HasValue)
 				{
 					if (sourceAbsence.Layer.Period.Contains(layerCollectionPeriod.Value))
 					{
@@ -477,7 +469,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var layerCollectionPeriod = layerCollection.Period();
 			foreach (IPersonAbsence personAbsence in PersonAbsenceCollection(true).Reverse())
 			{
-				if (layerCollection.HasLayers)
+				if (layerCollectionPeriod.HasValue)
 				{
 					if (!personAbsence.Layer.Period.Contains(layerCollectionPeriod.Value))
 					{
@@ -498,8 +490,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					removeList.Add(personAbsence);
 				}
 			}
-
-
+			
 			foreach(IPersonAbsence personAbsence in removeList)
 			{
 				Remove(personAbsence);
@@ -509,27 +500,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void DeleteOvertime()
 		{
 			IPersonAssignment highAss = PersonAssignment();
-
-			if (highAss != null)
-				highAss.ClearOvertimeActivities();
+			highAss?.ClearOvertimeActivities();
 		}
 
 		public void DeleteMainShift()
 		{
 			IPersonAssignment highAss = PersonAssignment();
-
-			if (highAss != null)
-			{
-				highAss.ClearMainActivities();
-				highAss.ClearOvertimeActivities();
-			}
-				
+			highAss?.ClearMainActivities();
+			highAss?.ClearOvertimeActivities();
 		}
 
 		public void DeleteMainShiftSpecial()
 		{
 			var highAss = PersonAssignment();
-
 			highAss?.ClearMainActivities();
 		}
 
@@ -540,7 +523,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		}
 
-		private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges, bool splitAbsence, bool muteEvent = false)
+		private void mergeMainShift(IScheduleDay source, bool ignoreTimeZoneChanges, bool splitAbsence)
 		{
 			var sourceAssignment = source.PersonAssignment();
 			if (sourceAssignment == null)
@@ -550,7 +533,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var periodOffset = periodOffsetCalculator.CalculatePeriodOffset(source, this, ignoreTimeZoneChanges, sourceAssignment.Period);
 
 			var workingCopyOfAssignment = sourceAssignment.NoneEntityClone();
-			workingCopyOfAssignment.SetActivitiesAndShiftCategoryFromWithOffset(sourceAssignment, periodOffset, muteEvent);
+			workingCopyOfAssignment.SetActivitiesAndShiftCategoryFromWithOffset(sourceAssignment, periodOffset);
 
 			var period = source.Period.MovePeriod(periodOffset);
 			if (PersonAssignment() == null && SignificantPart() == SchedulePartView.DayOff)
@@ -587,8 +570,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
 			IList<IPersonAbsence> deleteList = new List<IPersonAbsence>();
 			IVisualLayerCollection layerCollection = ProjectionService().CreateProjection();
-			if (!layerCollection.Period().HasValue) return;
-			var dateTimePeriod = layerCollection.Period().Value;
+			var projectionPeriod = layerCollection.Period();
+			if (!projectionPeriod.HasValue) return;
+			var dateTimePeriod = projectionPeriod.Value;
 
 			//loop absences in source
 			foreach (IPersonAbsence personAbsence in PersonAbsenceCollection())
@@ -620,8 +604,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public void DeletePersonalStuff()
 		{
 			IPersonAssignment ass = PersonAssignment();
-			if (ass != null)
-				ass.ClearPersonalActivities();
+			ass?.ClearPersonalActivities();
 		}
 
 		private void mergePersonalStuff(IScheduleDay source, bool ignoreTimeZoneChanges)
@@ -679,8 +662,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	   
 		public void CreateAndAddOvertime(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet definitionSet, bool muteEvent = false)
 		{
-					var foundPersonAssignment = PersonAssignment(true);
-					foundPersonAssignment.AddOvertimeActivity(activity, period, definitionSet,muteEvent);
+			var foundPersonAssignment = PersonAssignment(true);
+			foundPersonAssignment.AddOvertimeActivity(activity, period, definitionSet, muteEvent);
 		}
 
 		public void MergeOvertime(IScheduleDay source)
@@ -716,10 +699,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return;
 
 			var ass = PersonAssignment();
-
 			if ( ass != null)
 			{
-				if ((!ass.ShiftLayers.Any() || DateOnlyAsPeriod.Period().Contains(period.StartDateTime) || ass.Period.Intersect(period) || ass.Period.AdjacentTo(period)))
+				if (!ass.ShiftLayers.Any() || DateOnlyAsPeriod.Period().Contains(period.StartDateTime) || ass.Period.Intersect(period) || ass.Period.AdjacentTo(period))
 				{
 					ass.AddActivity(activity, period);
 					if (ass.ShiftCategory == null)
@@ -729,8 +711,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					return;
 				}
 			}
-
-			//TODO create inparameters to check on if to create new personassignment
+			
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
 			newPersonAssignment.AddActivity(activity, period);
 			newPersonAssignment.SetShiftCategory(shiftCategory);
@@ -759,8 +740,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				currentAss.SetActivitiesAndShiftCategoryFrom(mainShiftSource);
 			}
 
-		#endregion Methods
-
 		public void Restore(IScheduleDay previousState)
 		{
 			var callback = UndoRedoState.ScheduleDayChangeCallback ?? new DoNothingScheduleDayChangeCallBack();
@@ -780,7 +759,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		protected override void CloneDerived(Schedule clone)
 		{
-			var thisClone = ((ExtractedSchedule)clone);
+			var thisClone = (ExtractedSchedule)clone;
 			thisClone.ServiceForSignificantPart = null;
 			thisClone.ServiceForSignificantPartForDisplay = null;
 		}

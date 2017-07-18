@@ -65,14 +65,14 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				new TimePeriod(8,0,16,0));
 
 			var agent1Assignment = PersonAssignmentRepository.GetSingle(date,agent1) as PersonAssignment;
+			agent1Assignment.PopAllEvents();
+
 			var scheduleDictionary = ScheduleDictionaryForTest.WithPersonAssignment(scenario,date.Date,agent1Assignment);
 
-			agent1Assignment.PopAllEvents();
-					
 			Target.Swap(agent1,agent2,
 				new List<DateOnly> { date },new List<DateOnly>(),scheduleDictionary,NewBusinessRuleCollection.Minimum(),new ScheduleTagSetter(NullScheduleTag.Instance));
 
-			var events = agent1Assignment.PopAllEvents().ToList();
+			var events = scheduleDictionary[agent1].ScheduledDay(date).PersonAssignment().PopAllEvents().ToList();
 			events.Any(e => e.GetType() == typeof(PersonAssignmentLayerRemovedEvent)).Should().Be.True();			
 		}
 
@@ -96,18 +96,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				new TimePeriod(15,0,20,0));
 
 			var agent1Assignment = PersonAssignmentRepository.GetSingle(date,agent1) as PersonAssignment;
-			var agent2Assignment = PersonAssignmentRepository.GetSingle(date,agent2) as PersonAssignment;
-			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario,
-				(new DateOnlyPeriod(date,date)).ToDateTimePeriod(TimeZoneInfo.Local), new [] { agent1Assignment ,agent2Assignment } );
-			
 			agent1Assignment.PopAllEvents();
 
+			var agent2Assignment = PersonAssignmentRepository.GetSingle(date,agent2) as PersonAssignment;
+			var scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(scenario, date.ToDateTimePeriod(TimeZoneInfo.Local), agent1Assignment, agent2Assignment);
+			
 			Target.Swap(agent1,agent2,
 				new List<DateOnly> { date },new List<DateOnly>(),scheduleDictionary,NewBusinessRuleCollection.Minimum(),new ScheduleTagSetter(NullScheduleTag.Instance));
 
-			var events = agent1Assignment.PopAllEvents().ToList();
+			var events = scheduleDictionary[agent1].ScheduledDay(date).PersonAssignment().PopAllEvents().ToList();
 			events.Any(e => e.GetType() == typeof(ActivityAddedEvent)).Should().Be.True();
 		}
-		
 	}
 }

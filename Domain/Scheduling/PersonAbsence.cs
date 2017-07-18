@@ -231,20 +231,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// <summary>
 		/// Gets or sets the Scenario
 		/// </summary>
-		public virtual IScenario Scenario
-		{
-			get { return _scenario; }
-		}
+		public virtual IScenario Scenario => _scenario;
 
 		public virtual bool BelongsToScenario(IScenario scenario)
 		{
 			return Scenario.Equals(scenario);
 		}	
 
-		public virtual string FunctionPath
-		{
-			get { return DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence; }
-		}
+		public virtual string FunctionPath => DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence;
 
 		public virtual IPersistableScheduleData CreateTransient()
 		{
@@ -254,6 +248,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual IPersistableScheduleData CloneAndChangeParameters(IScheduleParameters parameters)
 		{
 			var retObj = (PersonAbsence)NoneEntityClone();
+			CloneEvents(retObj);
 			retObj._scenario = parameters.Scenario;
 			retObj._person = parameters.Person;
 			return retObj;
@@ -268,10 +263,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// Created by: rogerkr
 		/// Created date: 2008-02-06
 		/// </remarks>
-		public virtual DateTimePeriod Period
-		{
-			get { return Layer.Period; }
-		}
+		public virtual DateTimePeriod Period => Layer.Period;
 
 		/// <summary>
 		/// Returns a list with the absence splitted on specified period
@@ -326,8 +318,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual DateTime? LastChange
 		{
-			get { return _lastChange; }
-			set { _lastChange = value; }
+			get => _lastChange;
+			set => _lastChange = value;
 		}
 
 		public virtual void ReplaceLayer(IAbsence newAbsence, DateTimePeriod newPeriod)
@@ -380,6 +372,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			PersonAbsence retObj = (PersonAbsence)MemberwiseClone();
 			retObj.SetId(null);
+			CloneEvents(retObj);
 			retObj._layer = (IAbsenceLayer)Layer.NoneEntityClone();
 
 			return retObj;
@@ -396,6 +389,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual IPersonAbsence EntityClone()
 		{
 			PersonAbsence retObj = (PersonAbsence)MemberwiseClone();
+			CloneEvents(retObj);
 			retObj._layer = (AbsenceLayer)Layer.EntityClone();
 
 			return retObj;
@@ -404,9 +398,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		#endregion
 
 
-		public virtual IAggregateRoot MainRoot
-		{
-			get { return Person; }
-		}
+		public virtual IAggregateRoot MainRoot => Person;
 	}
 }

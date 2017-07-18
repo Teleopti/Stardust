@@ -1458,7 +1458,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual ISkillDay NoneEntityClone(IScenario scenario)
         {
             SkillDay newSkillDay = (SkillDay)Clone();
-            newSkillDay.SetId(null);
+	        CloneEvents(newSkillDay);
+			newSkillDay.SetId(null);
             newSkillDay.Scenario = scenario;
             newSkillDay._workloadDayCollection = new HashSet<IWorkloadDay>();
             foreach (WorkloadDay workloadDay in _workloadDayCollection)

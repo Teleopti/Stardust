@@ -779,11 +779,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void ShouldNotPublishDayUnscheduledEventWhenMuteEvent()
+		public void ShouldOnlyAppendEventsToCurrentInstanceWhenCloned()
 		{
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc);
-			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false);
-			scenario.SetId(Guid.NewGuid());
+			var scenario = ScenarioFactory.CreateScenario("TestScenario", true, false).WithId();
 
 			target = new PersonAssignment(agent, scenario, new DateOnly(2000, 1, 1));
 			target.AddPersonalActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
@@ -792,7 +791,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var source = PersonAssignmentFactory.CreateAssignmentWithMainShift(testPerson,
 				scenario, new Activity("_"), new DateTimePeriod(2000, 1, 3, 2000, 1, 4), new ShiftCategory("_"));
 
-			target.SetActivitiesAndShiftCategoryFromWithOffset(source, TimeSpan.Zero, true);
+			var clone = target.NoneEntityClone();
+			clone.SetActivitiesAndShiftCategoryFromWithOffset(source, TimeSpan.Zero);
 
 			var allEvents = target.PopAllEvents();
 			allEvents.OfType<DayUnscheduledEvent>().Count().Should().Be(0);

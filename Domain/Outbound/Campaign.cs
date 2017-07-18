@@ -192,6 +192,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 		{
 			Campaign retobj = (Campaign) MemberwiseClone();
 			retobj.SetId(null);
+			CloneEvents(retobj);
 			retobj._workingHours = new Dictionary<DayOfWeek, TimePeriod>();
 			foreach (KeyValuePair<DayOfWeek, TimePeriod> keyValuePair in _workingHours)
 			{
@@ -211,6 +212,7 @@ namespace Teleopti.Ccc.Domain.Outbound
 		public virtual IOutboundCampaign EntityClone()
 		{
 			Campaign retobj = (Campaign) MemberwiseClone();
+			CloneEvents(retobj);
 			retobj._workingHours = new Dictionary<DayOfWeek, TimePeriod>();
 			foreach (KeyValuePair<DayOfWeek, TimePeriod> keyValuePair in _workingHours)
 			{

@@ -52,16 +52,13 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get { return _businessUnit ?? (_businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current()); }
-			protected set { _businessUnit = value; }
+			get => _businessUnit ?? (_businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			protected set => _businessUnit = value;
 		}
 
 		private int? _version;
 
-		public virtual int? Version
-		{
-			get { return _version; }
-		}
+		public virtual int? Version => _version;
 
 		public virtual void SetVersion(int version)
 		{
@@ -76,8 +73,8 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get { return _businessUnit ?? (_businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current()); }
-			protected set { _businessUnit = value; }
+			get => _businessUnit ?? (_businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			protected set => _businessUnit = value;
 		}
 	}
 
@@ -88,8 +85,8 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual IBusinessUnit BusinessUnit
 		{
-			get { return _businessUnit ?? (_businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current()); }
-			protected set { _businessUnit = value; }
+			get => _businessUnit ?? (_businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			protected set => _businessUnit = value;
 		}
 	}
 
@@ -98,10 +95,7 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 	{
 		private int? _version;
 
-		public virtual int? Version
-		{
-			get { return _version; }
-		}
+		public virtual int? Version => _version;
 
 		public virtual void SetVersion(int version)
 		{
@@ -115,9 +109,9 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 	{
 		private IPerson _updatedBy;
 		private DateTime? _updatedOn;
-		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
+		private static readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
 
-		private readonly Events _events = new Events();
+		private Events _events = new Events();
 
 		public virtual void NotifyCommandId(Guid commandId)
 		{
@@ -130,6 +124,11 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public virtual void NotifyTransactionComplete(DomainUpdateType operation)
 		{
+		}
+
+		protected void CloneEvents(AggregateRoot clone)
+		{
+			clone._events = _events.Clone();
 		}
 
 		protected void AddEvent(Func<IEvent> @event)
@@ -151,19 +150,13 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		{
 			return _events.HasEvents();
 		}
-
-
-
-
-		public virtual IPerson UpdatedBy
-		{
-			get { return _updatedBy; }
-		}
+		
+		public virtual IPerson UpdatedBy => _updatedBy;
 
 		public virtual DateTime? UpdatedOn
 		{
-			get { return _updatedOn; }
-			set { _updatedOn = value; }
+			get => _updatedOn;
+			set => _updatedOn = value;
 		}
 
 		public override void ClearId()
@@ -173,19 +166,12 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			_updatedOn = null;
 		}
 
-		public virtual string UpdatedTimeInUserPerspective
-		{
-			get
-			{
-				return _localizedUpdateInfo.UpdatedTimeInUserPerspective(this);
-			}
-		}
-
+		public virtual string UpdatedTimeInUserPerspective => _localizedUpdateInfo.UpdatedTimeInUserPerspective(this);
 	}
 
 	public class Events
 	{
-		private readonly IList<Func<IEvent>> _events = new List<Func<IEvent>>();
+		private IList<Func<IEvent>> _events = new List<Func<IEvent>>();
 		private Guid? _commandId;
 
 		public void NotifyCommandId(Guid commandId)
@@ -219,10 +205,14 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			return allEvents;
 		}
 
+		public Events Clone()
+		{
+			return new Events {_events = new List<Func<IEvent>>(_events)};
+		}
+
 		public bool HasEvents()
 		{
 			return _events.Any();
 		}
 	}
-
 }

@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
@@ -131,7 +130,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 				return _shiftCategory;
 			}
-			protected set { _shiftCategory = value; }
+			protected set => _shiftCategory = value;
 		}
 
 		public virtual IEnumerable<MainShiftLayer> MainActivities()
@@ -255,6 +254,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
 			retobj.SetId(null);
+			CloneEvents(retobj);
 			retobj._shiftLayers = new List<ShiftLayer>();
 			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
@@ -269,6 +269,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual IPersonAssignment EntityClone()
 		{
 			var retobj = (PersonAssignment)MemberwiseClone();
+			CloneEvents(retobj);
 			retobj._shiftLayers = new List<ShiftLayer>();
 			foreach (var newLayer in _shiftLayers.Select(layer => layer.EntityClone()))
 			{
@@ -431,9 +432,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public virtual void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment assignment, TimeSpan periodOffset, bool muteEvent = false)
+		public virtual void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment assignment, TimeSpan periodOffset)
 		{
-			Clear(muteEvent);
+			Clear();
 			SetShiftCategory(assignment.ShiftCategory);
 			foreach (var mainLayer in assignment.MainActivities())
 			{
@@ -620,11 +621,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			RemoveActivity(shiftLayer);
 
 			var newLayerPeriod = new DateTimePeriod(newStartTimeInUtc, newStartTimeInUtc.Add(shiftLayer.Period.EndDateTime.Subtract(shiftLayer.Period.StartDateTime)));
-			if ((shiftLayer as MainShiftLayer) != null)
+			if (shiftLayer is MainShiftLayer)
 			{
 				InsertActivity(shiftLayer.Payload, newLayerPeriod, originalOrderIndex);
 			}
-			else if (shiftLayer as PersonalShiftLayer != null)
+			else if (shiftLayer is PersonalShiftLayer)
 			{
 				InsertPersonalLayer(shiftLayer.Payload, newLayerPeriod, originalOrderIndex);
 			}

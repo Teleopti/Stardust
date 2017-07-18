@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	    public virtual IMultisiteDayTemplate NoneEntityClone()
         {
             MultisiteDayTemplate retobj = (MultisiteDayTemplate)MemberwiseClone();
-            retobj.SetId(null);
+	        retobj.SetId(null);
             retobj._templateMultisitePeriodCollection = new HashSet<ITemplateMultisitePeriod>();
             foreach (ITemplateMultisitePeriod templateSkillDataPeriod in _templateMultisitePeriodCollection)
             {

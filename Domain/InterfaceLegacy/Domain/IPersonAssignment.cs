@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 			TrackedCommandInfo trackedCommandInfo, bool muteEvent = false);
 
 		void AddActivity(IActivity activity, TimePeriod period);
-		void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment sourceAssignment, TimeSpan periodOffset, bool muteEvent = false);
+		void SetActivitiesAndShiftCategoryFromWithOffset(IPersonAssignment sourceAssignment, TimeSpan periodOffset);
 		void MoveLayerDown(ShiftLayer shiftLayer);
 		void MoveLayerUp(ShiftLayer shiftLayer);
 	}

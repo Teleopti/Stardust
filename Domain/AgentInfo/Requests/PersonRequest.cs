@@ -280,6 +280,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual IPersonRequest NoneEntityClone()
 		{
 			var clone = (PersonRequest)MemberwiseClone();
+			CloneEvents(clone);
 			var request = getRequest();
 			if (request != null)
 			{
@@ -295,6 +296,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		public virtual IPersonRequest EntityClone()
 		{
 			var clone = (PersonRequest)MemberwiseClone();
+			CloneEvents(clone);
 			var request = getRequest();
 			if (request != null)
 			{

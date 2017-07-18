@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IList<IScheduleDay> Swap(IScheduleDictionary schedules, IList<IScheduleDay> selectedSchedules, TrackedCommandInfo trackedCommandInfo = null)
 		{
 			if(schedules == null)
-				throw new ArgumentNullException("schedules");
+				throw new ArgumentNullException(nameof(schedules));
 
 			if (!CanSwapAssignments(selectedSchedules))
 				throw new ConstraintException("Can not swap assignments");

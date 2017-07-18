@@ -677,7 +677,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual ISkill NoneEntityClone()
         {
             Skill retobj = (Skill)MemberwiseClone();
-            retobj.SetId(null);
+	        CloneEvents(retobj);
+			retobj.SetId(null);
             retobj._templateWeekCollection = new Dictionary<int, ISkillDayTemplate>();
             foreach (KeyValuePair<int, ISkillDayTemplate> keyValuePair in _templateWeekCollection)
             {
@@ -697,7 +698,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public virtual ISkill EntityClone()
         {
             Skill retobj = (Skill)MemberwiseClone();
-            retobj._templateWeekCollection = new Dictionary<int, ISkillDayTemplate>();
+	        CloneEvents(retobj);
+			retobj._templateWeekCollection = new Dictionary<int, ISkillDayTemplate>();
             foreach (KeyValuePair<int, ISkillDayTemplate> keyValuePair in _templateWeekCollection)
             {
                 ISkillDayTemplate template = keyValuePair.Value.EntityClone();
