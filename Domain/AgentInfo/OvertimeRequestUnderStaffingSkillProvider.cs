@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			if (!skillStaffingDatas.Any())
 				return null;
 
-			var skillStaffingDataGroups = skillStaffingDatas.GroupBy(s => s.Skill);
+			var skillStaffingDataGroups = skillStaffingDatas.GroupBy(s => s.Skill).ToList();
+			var seriousUnderstaffingSkills = new List<ISkill>();
 			foreach (var skillStaffingDataGroup in skillStaffingDataGroups)
 			{
 				var skillStaffingDataInPeriod = skillStaffingDataGroup.Where(s => s.Time >= dateTimePeriod.StartDateTime
@@ -34,8 +35,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 				if (skillStaffingDataInPeriod.Any(s => !hasSeriousUnderstaffing(skillStaffingDataGroup.Key, s)))
 					continue;
 
+				seriousUnderstaffingSkills.Add(skillStaffingDataGroup.Key);
+			}
+
+			if (seriousUnderstaffingSkills.Count == skillStaffingDataGroups.Count)
+			{
 				// todo maybe there are more than 1 skill to return
-				return skillStaffingDataGroup.Key;
+				return seriousUnderstaffingSkills.First();
 			}
 
 			return null;

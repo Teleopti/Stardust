@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		public void ShouldAddCriticalUnderStaffingSkillActivityWhenIntradayRequestIsApproved()
+		public void ShouldAddActivityOfSkillWhenApproved()
 		{
 			var person = User.CurrentUser();
 			var activity1 = createActivity("activity1");
@@ -87,7 +87,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		public void ShouldAddCriticalUnderStaffingSkillActivityForPrimarySkillWhenIntradayRequestIsApproved()
+		public void ShouldAddActivityOfTheFirstSkillWhenApproved()
+		{
+			var person = User.CurrentUser();
+			var activity1 = createActivity("activity1");
+			var activity2 = createActivity("activity2");
+			var skill1 = createSkill("skill1");
+			var skill2 = createSkill("skill2");
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			var personSkill2 = createPersonSkill(activity2, skill2);
+			setupIntradayStaffingForSkill(skill1, 10d, 6d);
+			setupIntradayStaffingForSkill(skill2, 10d, 6d);
+			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
+			createAssignment(person, activity1);
+
+			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(19, 21), person.PermissionInformation.DefaultTimeZone());
+			var personRequest = createOvertimeRequest(person, requestPeriod);
+
+			_target = createTarget();
+			var result = _target.Approve(personRequest.Request);
+
+			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+
+			result.Count().Should().Be(0);
+			personAssignment.Should().Not.Be.Null();
+			personAssignment.OvertimeActivities().Count().Should().Be(1);
+			personAssignment.OvertimeActivities().First().Payload.Should().Be(skill1.Activity);
+			personAssignment.OvertimeActivities().First().Period.Should().Be(requestPeriod);
+		}
+
+		[Test]
+		public void ShouldAddActivityOfPrimarySkillWhenApproved()
 		{
 			var person = User.CurrentUser();
 			var primarySkill = createSkill("primarySkill");
@@ -120,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		public void ShouldAddCriticalUnderStaffingSkillActivityWhenCrossDayRequestIsApproved()
+		public void ShouldApproveCrossDayRequest()
 		{
 			var person = User.CurrentUser();
 			var activity1 = createActivity("activity1");
@@ -207,6 +237,40 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(skill1, 6d, 10d);
 			addPersonSkillsToPersonPeriod(personSkill1);
 			createAssignment(person, activity1);
+
+			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(19, 21), person.PermissionInformation.DefaultTimeZone());
+			var personRequest = createOvertimeRequest(person, requestPeriod);
+
+			_target = createTarget();
+			var result = _target.Approve(personRequest.Request);
+
+			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+
+			result.Count().Should().Be(1);
+			result.First().Message.Should().Be(Resources.NoUnderStaffingSkill);
+			personAssignment.Should().Not.Be.Null();
+			personAssignment.OvertimeActivities().Count().Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotApprovedWhenAnySkillIsNotCriticalUnderStaffing()
+		{
+			var person = User.CurrentUser();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var activity1 = createActivity("activity1");
+			var activity2 = createActivity("activity2");
+
+			var notUnderStaffingSkill = createSkill("notUnderStaffingSkill");
+			var criticalUnderStaffingSkill = createSkill("criticalUnderStaffingSkill");
+
+			var personSkill1 = createPersonSkill(activity1, notUnderStaffingSkill);
+			var personSkill2 = createPersonSkill(activity2, criticalUnderStaffingSkill);
+
+			setupIntradayStaffingForSkill(notUnderStaffingSkill, 10d, 10d);
+			setupIntradayStaffingForSkill(criticalUnderStaffingSkill, 10d, 6d);
+
+			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
+			createAssignment(person, activity1, activity2);
 
 			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(19, 21), person.PermissionInformation.DefaultTimeZone());
 			var personRequest = createOvertimeRequest(person, requestPeriod);
