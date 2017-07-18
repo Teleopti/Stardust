@@ -1,5 +1,5 @@
 'use strict';
-describe('IntradayAreaCtrl', function () {
+fdescribe('IntradayAreaCtrl', function () {
 	var $httpBackend,
 	$controller,
 	$filter,
