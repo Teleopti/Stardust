@@ -258,11 +258,36 @@
 				else {
 					var indexOfTeam = vm.selectedItems.teamIds.indexOf(item.Id);
 					var teamAlreadySelected = indexOfTeam > -1;
-					if (!teamAlreadySelected) {
-						vm.selectedItems.teamIds.push(item.Id);
+					var match = vm.siteCards.find(function (card) {
+						return card.site.Id === item.SiteId;
+					});
+					var siteIndex = vm.selectedItems.siteIds.indexOf(match.site.Id);
+
+					if (match.isSelected) {
+						match.teams.forEach(function (team) {
+							var index = vm.selectedItems.teamIds.indexOf(team.Id);
+							vm.selectedItems.teamIds.splice(index, 1);
+						});
+
+						vm.selectedItems.siteIds.push(match.site.Id);
+					}
+					else if (!match.isSelected && siteIndex > -1) {
+						//console.log(vm.selectedItems);
+						vm.selectedItems.siteIds.splice(siteIndex, 1);
+						match.teams.forEach(function (team) {
+							if (team.Id !== item.Id) {
+								vm.selectedItems.teamIds.push(team.Id);
+							}
+						});
+
 					}
 					else {
-						vm.selectedItems.teamIds.splice(indexOfTeam, 1);
+						if (!teamAlreadySelected) {
+							vm.selectedItems.teamIds.push(item.Id);
+						}
+						else {
+							vm.selectedItems.teamIds.splice(indexOfTeam, 1);
+						}
 					}
 				}
 				vm.organizationSelection = vm.selectedItems.siteIds.length || vm.selectedItems.teamIds.length;

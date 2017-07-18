@@ -757,4 +757,152 @@ describe('rtaOverviewComponent', function () {
     expect(ctrl.siteCards[0].teams[0].isSelected).toEqual(false);
   });
 
+  it('should select all teams under site when site is selected and opened', function () {
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London',
+        SkillId: 'channelSalesId',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Name: 'Green',
+        SkillId: 'channelSalesId',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      });
+
+    vm = $controllerBuilder.createController().vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState,
+      getSelectedItems: vm.getSelectedItems
+    });
+
+    ctrl.siteCards[0].isOpen = true;
+    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+    $httpBackend.flush();
+
+    ctrl.selectItem(ctrl.siteCards[0]);
+
+    expect(ctrl.siteCards[0].teams[0].isSelected).toEqual(true);
+  });
+
+  it('should unselect all teams under site when site is unselected and opened', function () {
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London',
+        SkillId: 'channelSalesId',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Name: 'Green',
+        SkillId: 'channelSalesId',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      });
+
+    vm = $controllerBuilder.createController().vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState,
+      getSelectedItems: vm.getSelectedItems
+    });
+
+    ctrl.siteCards[0].isOpen = true;
+    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+    $httpBackend.flush();
+
+    ctrl.selectItem(ctrl.siteCards[0]);
+    ctrl.selectItem(ctrl.siteCards[0]);
+
+    expect(ctrl.siteCards[0].teams[0].isSelected).toEqual(false);
+  });
+
+  it('should select site if all teams under it are selected and site is opened', function () {
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Id: 'greenId',
+        Name: 'Green',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      });
+
+    vm = $controllerBuilder.createController().vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState,
+      getSelectedItems: vm.getSelectedItems,
+      selectedItems: vm.selectedItems
+    });
+
+    ctrl.siteCards[0].isOpen = true;
+    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+    $httpBackend.flush();
+
+    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+
+    expect(ctrl.siteCards[0].isSelected).toEqual(true);
+  });
+
+  it('should unselect site if at least one team under it is unselected and site is opened', function () {
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Name: 'Green',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Name: 'Red',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      });
+
+    vm = $controllerBuilder.createController().vm;
+    ctrl = $componentController('rtaOverviewComponent', null, {
+      siteCards: vm.siteCards,
+      agentsState: vm.agentsState,
+      getSelectedItems: vm.getSelectedItems
+    });
+
+    ctrl.siteCards[0].isOpen = true;
+    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
+    $httpBackend.flush();
+
+    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    ctrl.selectItem(ctrl.siteCards[0].teams[1]);
+    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+
+    expect(ctrl.siteCards[0].isSelected).toEqual(false);
+  });
+
 });

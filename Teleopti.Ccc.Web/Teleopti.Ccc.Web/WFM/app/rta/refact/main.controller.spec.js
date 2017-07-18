@@ -1295,6 +1295,90 @@ describe('RtaMainController', function () {
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['redId'], skillIds: ['phoneId'], skillAreaId: undefined });
     });
 
+    it('should go to agents for site if all teams under it are selected and site has been initially opened', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'londonId',
+          Name: 'London',
+          AgentsCount: 11,
+          InAlarmCount: 5,
+          Color: 'danger'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'greenId',
+          Name: 'Green',
+          AgentsCount: 6,
+          InAlarmCount: 5,
+          Color: 'danger'
+        })
+         .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'redId',
+          Name: 'Red',
+          AgentsCount: 5,
+          InAlarmCount: 5,
+          Color: 'danger'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.siteCards[0].isOpen = true;
+        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
+        $httpBackend.flush();
+        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].isSelected = true; //site gets to be selected in component, don't know how to set it in controller test
+        vm.getSelectedItems(vm.siteCards[0].teams[1]);
+        vm.goToAgents();
+      });
+
+      expect(vm.selectedItems).toEqual({ siteIds: ['londonId'], teamIds: [], skillIds: [], skillAreaId: undefined });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['londonId'], teamIds: [], skillIds: [], skillAreaId: undefined });
+    });
+
+    it('should go to agents for teams if all teams under a site were selected and then one was unselected', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'londonId',
+          Name: 'London',
+          AgentsCount: 11,
+          InAlarmCount: 5,
+          Color: 'warning'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'greenId',
+          Name: 'Green',
+          AgentsCount: 8,
+          InAlarmCount: 5,
+          Color: 'danger'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'redId',
+          Name: 'Red',
+          AgentsCount: 5,
+          InAlarmCount: 5,
+          Color: 'danger'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.siteCards[0].isOpen = true;
+        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
+        $httpBackend.flush();
+        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.getSelectedItems(vm.siteCards[0].teams[1]);
+        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.goToAgents();
+      });
+
+      expect(vm.selectedItems).toEqual({ siteIds: [], teamIds: ['redId'], skillIds: [], skillAreaId: undefined });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['redId'], skillIds: [], skillAreaId: undefined });
+    });
+
   });
 
 });
