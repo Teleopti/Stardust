@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonRepository PersonRepository;
 
 		[Test]
-		//green from start, remove? (purist)
+		//green from start, if purist remove
 		public void ShouldSetPeriod()
 		{
 			var agent = new Person().WithId().WithPersonPeriod(new Skill().WithId());
@@ -38,6 +38,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var optimizationWasOrdered = EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single();
 			optimizationWasOrdered.StartDate.Should().Be.EqualTo(period.StartDate);
 			optimizationWasOrdered.EndDate.Should().Be.EqualTo(period.EndDate);
+		}
+
+		[Test]
+		//green from start, if purist remove
+		public void ShouldSetAgentsToScheduleIds()
+		{
+			var agent = new Person().WithId().WithPersonPeriod(new Skill().WithId());
+			PersonRepository.Has(agent);
+
+			Target.Execute(new SchedulingCommand
+			{
+				Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10),
+				AgentsToSchedule = new[] { agent }
+			});
+
+			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>()
+				.Single()
+				.AgentsToSchedule.Single()
+				.Should()
+				.Be.EqualTo(agent.Id.Value);
 		}
 
 		[Test]
