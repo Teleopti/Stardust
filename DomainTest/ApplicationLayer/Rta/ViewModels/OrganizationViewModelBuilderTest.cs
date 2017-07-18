@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -175,5 +176,136 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 		}
 
+		[Test]
+		[SetCulture("sv-SE")]
+		public void ShouldOrderBySitesNameAccordingToSwedishName()
+		{
+			var businessUnitId = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var siteId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId2 = Guid.NewGuid();
+			var personId3 = Guid.NewGuid();
+			var siteId3 = Guid.NewGuid();
+			var skill = Guid.NewGuid();
+
+			Database
+				.WithSite(siteId1, "Å")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId1,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId1,
+					SiteName = "Å",
+					TeamId = Guid.NewGuid()
+				})
+				.WithAgent(personId1)
+				.WithSkill(skill)
+				.WithSite(siteId2, "Ä")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId2,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId2,
+					SiteName = "Ä",
+					TeamId = Guid.NewGuid()
+				})
+				.WithAgent(personId2)
+				.WithSkill(skill)
+				.WithSite(siteId3, "A")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId3,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId3,
+					SiteName = "A",
+					TeamId = Guid.NewGuid()
+				})
+				.WithAgent(personId3)
+				.WithSkill(skill);
+
+			var result = Target.Build();
+			result.Select(x => x.Id)
+				.Should().Have.SameSequenceAs(new[]
+				{
+					siteId3,
+					siteId1,
+					siteId2
+				});
+			var resultForSkill = Target.BuildForSkills(new[] { skill }).Select(x => x.Id);
+			result.Select(x => x.Id).Should().Have.SameSequenceAs(resultForSkill);
+		}
+
+		[Test]
+		[SetCulture("sv-SE")]
+		public void ShouldOrderTeams()
+		{
+			var businessUnitId = Guid.NewGuid();
+			
+			var site = Guid.NewGuid();
+			var teamId1 = Guid.NewGuid();
+			var teamId2 = Guid.NewGuid();
+			var teamId3 = Guid.NewGuid();
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var personId3 = Guid.NewGuid();
+			var skill = Guid.NewGuid();
+
+			Database
+				.WithSite(site, "s")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId1,
+					BusinessUnitId = businessUnitId,
+					SiteId = site,
+					SiteName = "s",
+					TeamId = teamId1,
+					TeamName = "Å"
+				})
+				.WithTeam(teamId1, "Å")
+				.WithAgent(personId1)
+				.WithSkill(skill)
+
+				.WithTeam(teamId2, "Ö")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId2,
+					BusinessUnitId = businessUnitId,
+					SiteId = site,
+					SiteName = "s",
+					TeamId = teamId2,
+					TeamName = "Ö"
+				})
+				.WithAgent(personId2)
+				.WithSkill(skill)
+
+
+				.WithTeam(teamId3, "Ä")
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId3,
+					BusinessUnitId = businessUnitId,
+					SiteId = site,
+					SiteName = "s",
+					TeamId = teamId3,
+					TeamName = "Ä"
+				})
+				.WithAgent(personId3)
+				.WithSkill(skill)
+				;
+
+			var result = Target.Build().Single()
+				.Teams.Select(x => x.Id);
+			result
+				.Should().Have.SameSequenceAs(new[]
+				{
+					teamId1,
+					teamId3,
+					teamId2
+				});
+
+			var resultForSkill = Target.BuildForSkills(new[] { skill }).Single().Teams.Select(x => x.Id);
+			result.Should().Have.SameSequenceAs(resultForSkill);
+		}
 	}
 }

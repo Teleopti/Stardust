@@ -43,18 +43,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			return (
 				from s in sites
 				let isPermittedSite = auth.IsPermitted(rtaOverview, _userNow.Date(),
-						  new SiteAuthorization { BusinessUnitId = s.BusinessUnitId, SiteId = s.SiteId })
+					new SiteAuthorization {BusinessUnitId = s.BusinessUnitId, SiteId = s.SiteId})
 				let teams = (from t in s.Teams
 					where auth.IsPermitted(rtaOverview, _userNow.Date(),
 						new TeamAuthorization {BusinessUnitId = s.BusinessUnitId, SiteId = s.SiteId, TeamId = t.TeamId})
 					select t).ToArray()
 				where isPermittedSite || teams.Any()
+				orderby s.SiteName
 				select new OrganizationSiteViewModel
 				{
 					Id = s.SiteId,
 					Name = s.SiteName,
 					FullPermission = isPermittedSite,
-					Teams = from t in teams
+					Teams =
+						from t in teams
+						orderby t.TeamName
 						select new OrganizationTeamViewModel
 						{
 							Id = t.TeamId,
