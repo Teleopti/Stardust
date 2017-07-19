@@ -47,7 +47,7 @@ RTA_FasterAgentsView_42039 = true
 RTA_EventPackagesOptimization_43924 = true
 RTA_AsyncOptimization_43924 = true
 RTA_SolidProofWhenManagingAgentAdherence_39351 = true
-RTA_FrontEndRefactor_44772 = false
+RTA_FrontEndRefactor_44772 = DEV
 
 WfmPermission_ReplaceOldPermission_34671 = true
 

@@ -5,9 +5,9 @@
 		.module('wfm.rta')
 		.controller('RtaMainController', RtaMainController);
 
-	RtaMainController.$inject = ['rtaService', 'skills', 'skillAreas', '$state', '$stateParams', '$interval', '$scope'];
+	RtaMainController.$inject = ['rtaService', 'rtaRouteService', 'skills', 'skillAreas', '$state', '$stateParams', '$interval', '$scope'];
 
-	function RtaMainController(rtaService, skills, skillAreas, $state, $stateParams, $interval, $scope) {
+	function RtaMainController(rtaService, rtaRouteService, skills, skillAreas, $state, $stateParams, $interval, $scope) {
 		var vm = this;
 		vm.skillIds = $stateParams.skillIds || [];
 		vm.skillAreaId = $stateParams.skillAreaId;
@@ -19,6 +19,7 @@
 		vm.urlParams = $stateParams;
 		vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 		vm.organizationSelection = false;
+		vm.goToAgentsView = function () { rtaRouteService.goToSelectSkill(); };
 
 		vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
 

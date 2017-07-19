@@ -5,9 +5,9 @@
 		.module('wfm.rta')
 		.factory('rtaRouteService', rtaRouteService);
 
-	rtaRouteService.$inject = ['$state'];
+	rtaRouteService.$inject = ['$state', 'Toggle'];
 
-	function rtaRouteService($state) {
+	function rtaRouteService($state, Toggle) {
 
 		var service = {
 			goToSites: goToSites,
@@ -26,9 +26,19 @@
 		////////////////////////
 
 		function goToSites(skillId, skillAreaId) {
-			if (angular.isDefined(skillId)) $state.go('rta.sites', { skillIds: skillId, skillAreaId: undefined });
-			else if (angular.isDefined(skillAreaId)) $state.go('rta.sites', { skillIds: undefined, skillAreaId: skillAreaId });
-			else $state.go('rta');
+			var toggles = {};
+
+			Toggle.togglesLoaded.then(function () {
+				toggles = Toggle;
+				if (toggles.RTA_FrontEndRefactor_44772) {
+					$state.go('refact-rta');
+				}
+				else {
+					if (angular.isDefined(skillId)) $state.go('rta.sites', { skillIds: skillId, skillAreaId: undefined });
+					else if (angular.isDefined(skillAreaId)) $state.go('rta.sites', { skillIds: undefined, skillAreaId: skillAreaId });
+					else $state.go('rta');
+				}
+			});
 		}
 
 		function goToTeams(siteIds, skillId, skillAreaId) {
@@ -63,14 +73,14 @@
 		}
 
 		function urlForSites(skillIds, skillAreaId) {
-			if(skillIds !== null && angular.isDefined(skillIds)) return '#/rta/?skillIds=' + skillIds;
-			else if(skillAreaId !== null && angular.isDefined(skillAreaId)) return '#/rta/?skillAreaId=' + skillAreaId;
+			if (skillIds !== null && angular.isDefined(skillIds)) return '#/rta/?skillIds=' + skillIds;
+			else if (skillAreaId !== null && angular.isDefined(skillAreaId)) return '#/rta/?skillAreaId=' + skillAreaId;
 			else return '#/rta';
 		}
-		
+
 		function urlForTeams(siteIds, skillIds, skillAreaId) {
-			if(skillAreaId !== null && angular.isDefined(skillAreaId)) return '#/rta/teams/?siteIds=' + siteIds + '&skillAreaId=' + skillAreaId;
-			else if(skillIds !== null && angular.isDefined(skillIds)) return '#/rta/teams/?siteIds=' + siteIds + '&skillIds=' + skillIds;
+			if (skillAreaId !== null && angular.isDefined(skillAreaId)) return '#/rta/teams/?siteIds=' + siteIds + '&skillAreaId=' + skillAreaId;
+			else if (skillIds !== null && angular.isDefined(skillIds)) return '#/rta/teams/?siteIds=' + siteIds + '&skillIds=' + skillIds;
 			else return '#/rta/teams/?siteIds=' + siteIds;
 		}
 	};
