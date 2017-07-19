@@ -499,7 +499,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			bool retValue = false;
 			if (person.TerminalDate.HasValue)
 			{
-	            retValue = person.TerminalDate.Value.AddDays(0) < date;
+	            retValue = person.TerminalDate.Value < date;
 			}
 
             return retValue;
