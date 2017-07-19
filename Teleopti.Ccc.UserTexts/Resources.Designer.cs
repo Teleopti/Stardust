@@ -19466,7 +19466,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have access to any sites.
+        ///   Looks up a localized string similar to You don&apos;t have access to any sites or teams.
         /// </summary>
         public static string NoAccessToSites {
             get {

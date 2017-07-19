@@ -16289,7 +16289,7 @@ Do you want to participate?</value>
     <comment>Use in Mytime overtime request. An error message when there is no under staffing skill for request period.</comment>
   </data>
   <data name="NoAccessToSites" xml:space="preserve">
-    <value>You don't have access to any sites</value>
+    <value>You don't have access to any sites or teams</value>
     <comment>No permissions to see sites in RTA</comment>
   </data>
 </root>
