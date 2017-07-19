@@ -339,17 +339,19 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         private static void addPreferencesDays(IScheduleDictionary retDic, IEnumerable<IPreferenceDay> preferenceDays)
         {
-            foreach (var preferenceDay in preferenceDays)
+	        var preferenceByPerson = preferenceDays.ToLookup(p => p.Person);
+            foreach (var preferenceDay in preferenceByPerson)
             {
-                ((ScheduleRange)retDic[preferenceDay.Person]).Add(preferenceDay);
+                ((ScheduleRange)retDic[preferenceDay.Key]).AddRange(preferenceDay);
             }
         }
 
         private static void addStudentAvailabilityDays(IScheduleDictionary retDic, IEnumerable<IStudentAvailabilityDay> availabilityDays)
         {
-            foreach (var availabilityDay in availabilityDays)
+	        var availabilityByPerson = availabilityDays.ToLookup(a => a.Person);
+            foreach (var availabilityDay in availabilityByPerson)
             {
-                ((ScheduleRange)retDic[availabilityDay.Person]).Add(availabilityDay);
+                ((ScheduleRange)retDic[availabilityDay.Key]).AddRange(availabilityDay);
             }
         }
 
@@ -433,54 +435,50 @@ namespace Teleopti.Ccc.Domain.Scheduling
         }
 
         private static void addNotes(IScheduleDictionary retDic, IEnumerable<INote> notes)
-        {
-            foreach (INote note in notes)
-            {
-                ((ScheduleRange)retDic[note.Person]).Add(note);
-            }
-        }
+		{
+			var notesByPerson = notes.ToLookup(n => n.Person);
+			foreach (var note in notesByPerson)
+			{
+				((ScheduleRange)retDic[note.Key]).AddRange(note);
+			}
+		}
 
         private static void addPublicNotes(IScheduleDictionary retDic, IEnumerable<IPublicNote> notes)
         {
-            foreach (IPublicNote note in notes)
+	        var notesByPerson = notes.ToLookup(n => n.Person);
+            foreach (var note in notesByPerson)
             {
-                ((ScheduleRange)retDic[note.Person]).Add(note);
+                ((ScheduleRange)retDic[note.Key]).AddRange(note);
             }
         }
 
         private static void addAgentDayScheduleTags(IScheduleDictionary retDic, IEnumerable<IAgentDayScheduleTag> tags)
         {
-            foreach (var tag in tags)
+	        var tagsByPerson = tags.ToLookup(t => t.Person);
+            foreach (var tag in tagsByPerson)
             {
-                ((ScheduleRange)retDic[tag.Person]).Add(tag);
+                ((ScheduleRange)retDic[tag.Key]).AddRange(tag);
             }
         }
 
 		private static void addPersonAssignments(IScheduleDictionary retDic, IEnumerable<IPersonAssignment> personAssignments, bool loadDaysAfterLeft = false)
         {
-            IDictionary<IPerson, IList<IPersonAssignment>> dic = new Dictionary<IPerson, IList<IPersonAssignment>>();
-            foreach (IPersonAssignment personAssignment in personAssignments)
+	        var assignmentsByPerson = personAssignments.ToLookup(k => k.Person);
+            foreach (var person in assignmentsByPerson)
             {
-                IPerson per = personAssignment.Person;
-	            IList<IPersonAssignment> list;
-	            if (!dic.TryGetValue(per, out list))
-                    dic[per] = list = new List<IPersonAssignment>();
-	            if (loadDaysAfterLeft || !checkIfPersonLeft(per, personAssignment.Period))
-		            list.Add(personAssignment);
-            }
-            foreach (IPerson person in dic.Keys)
-            {
-				((ScheduleRange)retDic[person]).AddRange(dic[person]);
+	            ((ScheduleRange) retDic[person.Key]).AddRange(
+		            person.Where(pa => loadDaysAfterLeft || !checkIfPersonLeft(person.Key, pa.Date)));
             }
         }
 
         private static void addPersonAbsences(IScheduleDictionary retDic, IEnumerable<IPersonAbsence> personAbsences, bool loadDaysAfterLeft = false)
         {
-            foreach (IPersonAbsence personAbsence in personAbsences)
-            {
-				if (loadDaysAfterLeft || !checkIfPersonLeft(personAbsence.Person, personAbsence.Period))
-		            ((ScheduleRange) retDic[personAbsence.Person]).Add(personAbsence);
-            }
+	        var absencesByPerson = personAbsences.ToLookup(p => p.Person);
+	        foreach (var personAbsence in absencesByPerson)
+	        {
+		        ((ScheduleRange) retDic[personAbsence.Key]).AddRange(
+			        personAbsence.Where(pa => loadDaysAfterLeft || !checkIfPersonLeft(personAbsence.Key, pa.Period)));
+	        }
         }
 
 	    private static bool checkIfPersonLeft(IPerson person, DateTimePeriod period)
@@ -491,6 +489,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var timezone = person.PermissionInformation.DefaultTimeZone();
 				var convertedTerminalDate = TimeZoneHelper.ConvertToUtc(person.TerminalDate.Value.Date, timezone);
 	            retValue = convertedTerminalDate.AddDays(1) < period.StartDateTime;
+			}
+
+            return retValue;
+	    }
+
+	    private static bool checkIfPersonLeft(IPerson person, DateOnly date)
+	    {
+			bool retValue = false;
+			if (person.TerminalDate.HasValue)
+			{
+	            retValue = person.TerminalDate.Value.AddDays(0) < date;
 			}
 
             return retValue;
