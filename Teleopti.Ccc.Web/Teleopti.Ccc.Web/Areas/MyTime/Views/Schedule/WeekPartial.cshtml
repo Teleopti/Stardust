@@ -88,7 +88,7 @@
 </div>
 
 <div class="container pagebody">
-
+    <div class="schedule-request-form">
     <ul class="nav nav-pills navbar-weekview" data-bind="visible: showAddRequestToolbar">
         <li data-bind="visible: overtimeAvailabilityPermission, css: { active: requestViewModel() != undefined && requestViewModel().type() == requestViewModelTypes.overtimeAvailability }">
             <a class="overtime-availability-add" href="#" data-bind="click: showAddOvertimeAvailabilityForm"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.OvertimeAvailability</a>
@@ -117,6 +117,8 @@
         </div>
     </div>
     <!-- /ko -->
+    </div>
+
     <div class="schedule-table-container">
         <div class="container fixed-non-responsive">
             <div class="week-schedule-ASM-permission-granted" data-bind="if : asmPermission">yes</div>

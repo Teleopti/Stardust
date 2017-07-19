@@ -331,6 +331,27 @@ $(document).ready(function () {
 		equal(fakeScheduleEdgeTimeData.EndDateTime.indexOf(vm.StartTime()) > -1, true);
 	});
 
+	test('should set start date to tomorrow if today schedule ends at midnight', function() {
+		fakeScheduleEdgeTimeData = {
+			StartDateTime: moment(requestDate).startOf('day').add(13, 'hour').format('YYYY-MM-DD HH:mm'),
+			EndDateTime: moment(requestDate).startOf('day').add(24, 'hour').format('YYYY-MM-DD HH:mm')
+		};
+
+		vm.IsPostingData(false);
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.DateFrom(requestDate);
+		vm.RequestDuration('01:00');
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+
+		vm.AddRequest();
+
+		equal(sentData.Period.StartDate, moment(fakeScheduleEdgeTimeData.EndDateTime).format('YYYY-MM-DD'));
+		equal(sentData.Period.StartTime, vm.StartTime());
+		equal(sentData.Period.EndDate, moment(fakeScheduleEdgeTimeData.EndDateTime).format('YYYY-MM-DD'));
+		equal(sentData.Period.EndTime, moment(fakeScheduleEdgeTimeData.EndDateTime).startOf('days').add(vm.RequestDuration().split(':')[0], 'hours').add(vm.RequestDuration().split(':')[1], 'minutes').format('HH:mm'));
+	});
+
 	test('should set overtime request duration to one hour by default', function() {
 		equal(vm.RequestDuration(), '01:00');
 	});
