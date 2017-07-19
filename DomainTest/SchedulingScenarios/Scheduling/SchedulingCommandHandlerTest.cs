@@ -72,6 +72,20 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
+		//green from start, if purist remove
+		public void ShouldSetCommandIdOnEvent()
+		{
+			var agent = new Person().WithId().WithPersonPeriod(new Skill().WithId());
+			var period = new DateOnlyPeriod(2015, 10, 12, 2016, 1, 1);
+			PersonRepository.Has(agent);
+			var command = new SchedulingCommand { Period = period, AgentsToSchedule  = new[]{agent} };
+
+			Target.Execute(command);
+
+			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().CommandId.Should().Be.EqualTo(command.CommandId);
+		}
+
+		[Test]
 		[Ignore("#45197")]
 		public void ShouldCreateTwoEventsIfTwoAgentsWithDifferentSkills()
 		{
