@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-fdescribe('RtaMainController', function () {
+describe('RtaMainController', function () {
   var
     $controllerBuilder,
     $fakeBackend,
