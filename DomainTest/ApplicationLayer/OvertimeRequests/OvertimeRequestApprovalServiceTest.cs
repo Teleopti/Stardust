@@ -5,12 +5,12 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -39,9 +39,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public ISupportedSkillsInIntradayProvider SupportedSkillsInIntradayProvider;
 		public IOvertimeRequestSkillProvider OvertimeRequestSkillProvider;
 		public ISkillOpenHourFilter SkillOpenHourFilter;
+		public ICommandDispatcher CommandDispatcher;
+		public FakeWriteSideRepository<IActivity> ActivityProxyForId;
+		public FakeWriteSideRepository<IPerson> PersonProxyForId;
+		public FakeWriteSideRepository<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetProxyForId;
+		public FakePersonAssignmentWriteSideRepository PersonAssignmentWriteSideRepository;
 
 		private OvertimeRequestApprovalService _target;
-		private IScheduleDictionary _scheduleDictionary;
+
 		private readonly IScenario _scenario = new Scenario("default") { DefaultScenario = true };
 		private TimeSpan[] _intervals;
 		private readonly TimePeriod _defaultOpenPeriod = new TimePeriod(8, 00, 21, 00);
@@ -57,13 +62,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			system.UseTestDouble<SupportedSkillsInIntradayProvider>().For<ISupportedSkillsInIntradayProvider>();
 			system.UseTestDouble<OvertimeRequestSkillProvider>().For<IOvertimeRequestSkillProvider>();
 			system.UseTestDouble<SkillOpenHourFilter>().For<ISkillOpenHourFilter>();
+			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
+			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
+			system.UseTestDouble<FakeWriteSideRepository<IMultiplicatorDefinitionSet>>().For<IProxyForId<IMultiplicatorDefinitionSet>>();
+			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>()
+				.For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
 			_intervals = createIntervals();
 		}
 
 		[Test]
 		public void ShouldAddActivityOfSkillWhenApproved()
 		{
-			var person = User.CurrentUser();
+			var person = getCurrentUser();
 			var activity1 = createActivity("activity1");
 			var skill1 = createSkill("skill1");
 			var personSkill1 = createPersonSkill(activity1, skill1);
@@ -77,7 +87,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			_target = createTarget();
 			var result = _target.Approve(personRequest.Request);
 
-			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Person = person,
+				Date = new DateOnly(requestPeriod.StartDateTime),
+				Scenario = _scenario
+			});
 
 			result.Count().Should().Be(0);
 			personAssignment.Should().Not.Be.Null();
@@ -89,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldAddActivityOfTheFirstSkillWhenApproved()
 		{
-			var person = User.CurrentUser();
+			var person = getCurrentUser();
 			var activity1 = createActivity("activity1");
 			var activity2 = createActivity("activity2");
 			var skill1 = createSkill("skill1");
@@ -107,7 +122,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			_target = createTarget();
 			var result = _target.Approve(personRequest.Request);
 
-			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Person = person,
+				Date = new DateOnly(requestPeriod.StartDateTime),
+				Scenario = _scenario
+			});
 
 			result.Count().Should().Be(0);
 			personAssignment.Should().Not.Be.Null();
@@ -119,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldAddActivityOfPrimarySkillWhenApproved()
 		{
-			var person = User.CurrentUser();
+			var person = getCurrentUser();
 			var primarySkill = createSkill("primarySkill");
 			primarySkill.SetCascadingIndex(1);
 			setupIntradayStaffingForSkill(primarySkill, 10d, 6d);
@@ -140,7 +160,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			_target = createTarget();
 			var result = _target.Approve(personRequest.Request);
 
-			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Person = person,
+				Date = new DateOnly(requestPeriod.StartDateTime),
+				Scenario = _scenario
+			});
 
 			result.Count().Should().Be(0);
 			personAssignment.Should().Not.Be.Null();
@@ -152,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldApproveCrossDayRequest()
 		{
-			var person = User.CurrentUser();
+			var person = getCurrentUser();
 			var activity1 = createActivity("activity1");
 			var skill1 = createSkill("skill1", new TimePeriod(TimeSpan.Zero, TimeSpan.FromDays(1)));
 			var personSkill1 = createPersonSkill(activity1, skill1);
@@ -166,7 +191,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			_target = createTarget();
 			var result = _target.Approve(personRequest.Request);
 
-			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Person = person,
+				Date = new DateOnly(requestPeriod.StartDateTime),
+				Scenario = _scenario
+			});
 
 			result.Count().Should().Be(0);
 			personAssignment.Should().Not.Be.Null();
@@ -178,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldNotApprovedWhenSkillOpenHourIsNotAvailable()
 		{
-			var person = User.CurrentUser();
+			var person = getCurrentUser();
 			var activity1 = createActivity("activity1");
 			var skill1 = createSkill("skill1");
 			var personSkill1 = createPersonSkill(activity1, skill1);
@@ -192,7 +222,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			_target = createTarget();
 			var result = _target.Approve(personRequest.Request);
 
-			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Person = person,
+				Date = new DateOnly(requestPeriod.StartDateTime),
+				Scenario = _scenario
+			});
 
 			result.Count().Should().Be(1);
 			result.First().Message.Should().Be(Resources.PeriodIsOutOfSkillOpenHours);
@@ -203,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldNotApprovedWhenAgentSkillIsOutOfPersonPeriod()
 		{
-			var person = User.CurrentUser();
+			var person = getCurrentUser();
 			var activity1 = createActivity("activity1");
 			var skill1 = createSkill("skill1");
 			var personSkill1 = createPersonSkill(activity1, skill1);
@@ -218,18 +253,22 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			_target = createTarget();
 			var result = _target.Approve(personRequest.Request);
 
-			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Person = person,
+				Date = startDate.AddDays(-1),
+				Scenario = _scenario
+			});
 
 			result.Count().Should().Be(1);
 			result.First().Message.Should().Be(Resources.NoAvailableSkillForOvertime);
-			personAssignment.Should().Not.Be.Null();
-			personAssignment.OvertimeActivities().Count().Should().Be(0);
+			personAssignment.Should().Be.Null();
 		}
 
 		[Test]
 		public void ShouldNotApprovedWhenHasNoCriticalUnderStaffingSkill()
 		{
-			var person = User.CurrentUser();
+			var person = getCurrentUser();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var activity1 = createActivity("activity1");
 			var skill1 = createSkill("skill1");
@@ -244,7 +283,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			_target = createTarget();
 			var result = _target.Approve(personRequest.Request);
 
-			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Person = person,
+				Date = new DateOnly(requestPeriod.StartDateTime),
+				Scenario = _scenario
+			});
 
 			result.Count().Should().Be(1);
 			result.First().Message.Should().Be(Resources.NoUnderStaffingSkill);
@@ -255,7 +299,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldNotApprovedWhenAnySkillIsNotCriticalUnderStaffing()
 		{
-			var person = User.CurrentUser();
+			var person = getCurrentUser();
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 			var activity1 = createActivity("activity1");
 			var activity2 = createActivity("activity2");
@@ -278,7 +322,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			_target = createTarget();
 			var result = _target.Approve(personRequest.Request);
 
-			var personAssignment = _scheduleDictionary.SchedulesForDay(Now.ServerDate_DontUse()).FirstOrDefault()?.PersonAssignment();
+			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Person = person,
+				Date = new DateOnly(requestPeriod.StartDateTime),
+				Scenario = _scenario
+			});
 
 			result.Count().Should().Be(1);
 			result.First().Message.Should().Be(Resources.NoUnderStaffingSkill);
@@ -288,17 +337,18 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		private OvertimeRequestApprovalService createTarget()
 		{
-			return new OvertimeRequestApprovalService(_scheduleDictionary, new DoNothingScheduleDayChangeCallBack()
-				, OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider, SkillOpenHourFilter);
+			return new OvertimeRequestApprovalService(OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider, SkillOpenHourFilter,
+				CommandDispatcher);
 		}
 
 		private IPersonRequest createOvertimeRequest(IPerson person, DateTimePeriod period)
 		{
 			var personRequestFactory = new PersonRequestFactory();
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("name", MultiplicatorType.Overtime);
+			MultiplicatorDefinitionSetProxyForId.Add(multiplicatorDefinitionSet);
 
 			var personRequest = personRequestFactory.CreatePersonRequest(person);
-			var overTimeRequest = new OvertimeRequest(new MultiplicatorDefinitionSet("name", MultiplicatorType.Overtime),
-				period);
+			var overTimeRequest = new OvertimeRequest(multiplicatorDefinitionSet, period);
 			personRequest.Request = overTimeRequest;
 			return personRequest;
 		}
@@ -376,10 +426,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return new StaffingThresholds(new Percent(-0.3), new Percent(-0.1), new Percent(0.1));
 		}
 
-		private static IActivity createActivity(string name)
+		private IActivity createActivity(string name)
 		{
 			var activity = ActivityFactory.CreateActivity(name);
 			activity.RequiresSkill = true;
+			ActivityProxyForId.Add(activity);
 			return activity;
 		}
 
@@ -421,13 +472,17 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		{
 			var startDate = Now.UtcDateTime().Date.AddHours(8);
 			var endDate = Now.UtcDateTime().Date.AddHours(17);
-			var scheduleDatas = new List<IScheduleData>();
 			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,
 				Scenario.Current(), new DateTimePeriod(startDate, endDate),
 				ShiftCategoryFactory.CreateShiftCategory(), activities);
-			scheduleDatas.Add(assignment);
-			_scheduleDictionary = ScheduleDictionaryForTest.WithScheduleDataForManyPeople(_scenario,
-				new DateTimePeriod(startDate, endDate), scheduleDatas.ToArray());
+			PersonAssignmentWriteSideRepository.Add(assignment);
+		}
+
+		private IPerson getCurrentUser()
+		{
+			var person = User.CurrentUser();
+			PersonProxyForId.Add(person);
+			return person;
 		}
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
@@ -10,23 +12,20 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public class OvertimeRequestApprovalService : IRequestApprovalService
 	{
-		private readonly IScheduleDictionary _scheduleDictionary;
-		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly IOvertimeRequestUnderStaffingSkillProvider _overtimeRequestUnderStaffingSkillProvider;
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
 		private readonly ISkillOpenHourFilter _skillOpenHourFilter;
+		private readonly ICommandDispatcher _commandDispatcher;
 
-		public OvertimeRequestApprovalService(IScheduleDictionary scheduleDictionary,
-			IScheduleDayChangeCallback scheduleDayChangeCallback,
+		public OvertimeRequestApprovalService(
 			IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
 			IOvertimeRequestSkillProvider overtimeRequestSkillProvider,
-			ISkillOpenHourFilter skillOpenHourFilter)
+			ISkillOpenHourFilter skillOpenHourFilter, ICommandDispatcher commandDispatcher)
 		{
-			_scheduleDictionary = scheduleDictionary;
-			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_overtimeRequestUnderStaffingSkillProvider = overtimeRequestUnderStaffingSkillProvider;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 			_skillOpenHourFilter = skillOpenHourFilter;
+			_commandDispatcher = commandDispatcher;
 		}
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
@@ -57,14 +56,21 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return getBusinessRuleResponses(Resources.NoUnderStaffingSkill, period, person);
 			}
 
-			var definitionSet = overtimeRequest.MultiplicatorDefinitionSet;
-			var scheduleDateOnly = new DateOnly(period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone()));
-			var scheduleRange = _scheduleDictionary[person];
-			var scheduleDay = scheduleRange.ScheduledDay(scheduleDateOnly);
-			scheduleDay.CreateAndAddOvertime(skill.Activity, period, definitionSet);
-			_scheduleDictionary.Modify(scheduleDay, _scheduleDayChangeCallback);
+			addOvertimeActivity(skill.Activity.Id.GetValueOrDefault(), overtimeRequest);
 
 			return new List<IBusinessRuleResponse>();
+		}
+
+		private void addOvertimeActivity(Guid activityId, IOvertimeRequest overtimeRequest)
+		{
+			_commandDispatcher.Execute(new AddOvertimeActivityCommand
+			{
+				ActivityId = activityId,
+				Date = new DateOnly(overtimeRequest.Period.StartDateTime),
+				MultiplicatorDefinitionSetId = overtimeRequest.MultiplicatorDefinitionSet.Id.GetValueOrDefault(),
+				Period = overtimeRequest.Period,
+				PersonId = overtimeRequest.Person.Id.GetValueOrDefault()
+			});
 		}
 
 		private static IEnumerable<IBusinessRuleResponse> getBusinessRuleResponses(string message, DateTimePeriod period, IPerson person)
