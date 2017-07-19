@@ -9,17 +9,13 @@ namespace Teleopti.Ccc.Domain.Tracking
     [Serializable]
     public abstract class Tracker : ITracker
     {
-       
         private readonly Type _type;
 
         private ITrackerCalculator _calculator = new TrackerCalculator();
 
-        protected ITrackerCalculator Calculator
-        {
-            get { return _calculator; }
-        }
+        protected ITrackerCalculator Calculator => _calculator;
 
-        public void InjectCalculator(ITrackerCalculator calculator)
+	    public void InjectCalculator(ITrackerCalculator calculator)
         {
             _calculator = calculator;
         }
@@ -57,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Tracking
 
         public static IList<ITracker> AllTrackers()
         {
-            return (new List<ITracker> { CreateTimeTracker(), CreateDayTracker()/*, CreateCompTracker(), CreateOvertimeTracker()*/ }).AsReadOnly();
+            return new List<ITracker> { CreateTimeTracker(), CreateDayTracker()/*, CreateCompTracker(), CreateOvertimeTracker()*/ }.AsReadOnly();
         }
 
         public abstract Description Description { get; }
@@ -90,12 +86,9 @@ namespace Teleopti.Ccc.Domain.Tracking
                 _description = new Description(UserTexts.Resources.HolidayDays);
             }
 
-            public override Description Description
-            {
-                get { return _description; }
-            }
+            public override Description Description => _description;
 
-            public override TimeSpan TrackForReset(IAbsence absence, IList<IScheduleDay> scheduleDays)
+	        public override TimeSpan TrackForReset(IAbsence absence, IList<IScheduleDay> scheduleDays)
             {
                 return Calculator.CalculateNumberOfDaysOnScheduleDays(absence, scheduleDays);
             }
@@ -121,13 +114,10 @@ namespace Teleopti.Ccc.Domain.Tracking
                 _description = new Description(UserTexts.Resources.HolidayTime);
             }
 
-            public override Description Description
-            {
-                get { return _description; }
-            }
+            public override Description Description => _description;
 
 
-            public override TimeSpan TrackForReset(IAbsence absence, IList<IScheduleDay> scheduleDays)
+	        public override TimeSpan TrackForReset(IAbsence absence, IList<IScheduleDay> scheduleDays)
             {
                 return Calculator.CalculateTotalTimeOnScheduleDays(absence, scheduleDays);
             }
@@ -141,28 +131,21 @@ namespace Teleopti.Ccc.Domain.Tracking
             {
                 traceable.Track(Calculator.CalculateTotalTimeOnScheduleDays(absence, scheduleDays));
             }
-
-            
         }
 
         private class CompTracker : Tracker
         {
             private readonly Description _description;
-
-
+			
             internal CompTracker()
             {
                 _description = new Description(UserTexts.Resources.CompTime);
             }
 
-            public override Description Description
-            {
-                get { return _description; }
-            }
+            public override Description Description => _description;
 
-            public override TimeSpan TrackForReset(IAbsence absence, IList<IScheduleDay> scheduleDays)
+	        public override TimeSpan TrackForReset(IAbsence absence, IList<IScheduleDay> scheduleDays)
             {
-                //throw new NotImplementedException();
                 return TimeSpan.Zero;
             }
 
@@ -170,33 +153,26 @@ namespace Teleopti.Ccc.Domain.Tracking
             {
                 return new AccountTime(dateTime);
             }
-
-
+			
             protected override void PerformTracking(ITraceable traceable, IAbsence absence, IList<IScheduleDay> scheduleDays)
             {
                 //NOT IMPLEMENTED 2009-03-18
             }
-
         }
 
         private class OvertimeTracker : Tracker
         {
             private readonly Description _description;
-
-
+			
             internal OvertimeTracker()
             {
                 _description = new Description(UserTexts.Resources.Overtime);
             }
 
-            public override Description Description
-            {
-                get { return _description; }
-            }
+            public override Description Description => _description;
 
-            public override TimeSpan TrackForReset(IAbsence absence, IList<IScheduleDay> scheduleDays)
+	        public override TimeSpan TrackForReset(IAbsence absence, IList<IScheduleDay> scheduleDays)
             {
-                //throw new NotImplementedException();
                 return TimeSpan.Zero;
             }
 

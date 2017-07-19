@@ -45,9 +45,9 @@ namespace Teleopti.Ccc.Domain.Collection
 						ret.WorkTime.Add(layer.WorkTime()),
 						ret.ContractTime.Add(layer.ThisLayerContractTime()),
 						ret.PaidTime.Add(layer.PaidTime()),
-						ret.OverTime.Add((layer.DefinitionSet != null &&
-							layer.HighestPriorityAbsence == null &&
-							layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime) ? layer.WorkTime() : TimeSpan.Zero));
+						ret.OverTime.Add(layer.DefinitionSet != null &&
+										 layer.HighestPriorityAbsence == null &&
+										 layer.DefinitionSet.MultiplicatorType == MultiplicatorType.Overtime ? layer.WorkTime() : TimeSpan.Zero));
 				}
 				return ret;
 			});

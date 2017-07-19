@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	        _unitOfWorkFactory = unitOfWorkFactory;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(DeletePersonAccountForPersonCommandDto command)
 		{
 			var result = new CommandResultDto {AffectedId = command.PersonId, AffectedItems = 0};
