@@ -57,14 +57,18 @@
 		vm.internalNoteTab = 'InternalNote';
 		vm.publicNoteTab = 'PublicNote';
 		vm.WfmTeamSchedule_DisplayAndEditPublicNote_44783 = teamsToggles.all().WfmTeamSchedule_DisplayAndEditPublicNote_44783;
-		vm.submit = function() {
-			ScheduleNoteMgmt.submitInternalNoteForPerson(vm.noteInputOption.personId, vm.internalNotes, vm.noteInputOption.selectedDate).then(function(data) {
+		vm.submit = function () {
+			var note = {
+				internalNotes: vm.internalNotes,
+				publicNotes: vm.publicNotes
+			};
+			ScheduleNoteMgmt.submitNoteForPerson(vm.noteInputOption.personId, note, vm.noteInputOption.selectedDate).then(function(data) {
 				vm.noteInputOption.showEditor = false;
 				if (data && data.length > 0) {
 					var errorMsg = data[0].ErrorMessages.join(', ');
 					NoticeService.error(errorMsg, null, true);
 				} else {
-					ScheduleNoteMgmt.setInternalNoteForPerson(vm.noteInputOption.personId, vm.internalNotes);
+					ScheduleNoteMgmt.setNoteForPerson(vm.noteInputOption.personId, note);
 				}
 			});
 		};

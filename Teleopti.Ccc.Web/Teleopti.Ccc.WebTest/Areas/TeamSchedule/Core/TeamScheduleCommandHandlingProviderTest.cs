@@ -873,7 +873,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 
 
 		[Test]
-		public void ShouldNotChangeNoteForWriteProtectedSchedule()
+		public void ShouldNotChangeInternalNoteForWriteProtectedSchedule()
 		{
 			PermissionProvider.Enable();
 			var person = PersonFactory.CreatePersonWithGuid("a", "b");
@@ -896,6 +896,56 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core
 			results.Count.Should().Be.EqualTo(1);
 			results.First().ErrorMessages.Count.Should().Be.EqualTo(1);
 			results.First().ErrorMessages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
+		}
+
+		[Test]
+		public void ShouldNotChangePublicNoteForWriteProtectedSchedule()
+		{
+			PermissionProvider.Enable();
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			person.PersonWriteProtection.PersonWriteProtectedDate = new DateOnly(2016, 6, 1);
+
+			var date = new DateOnly(2016, 4, 16);
+
+			var input = new EditScheduleNoteFormData
+			{
+				SelectedDate = date,
+				PersonId = person.Id.Value,
+				PublicNote = "public note"
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+			var results = Target.EditScheduleNote(input);
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(0);
+
+			results.Count.Should().Be.EqualTo(1);
+			results.First().ErrorMessages.Count.Should().Be.EqualTo(1);
+			results.First().ErrorMessages[0].Should().Be.EqualTo(Resources.WriteProtectSchedule);
+
+		}
+
+		[Test]
+		public void ShouldInvokeEditNoteCommandHandlerWhenPublicNoteChanged()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("a", "b");
+			PersonRepository.Has(person);
+			var date = new DateOnly(2016, 4, 16);
+
+			var input = new EditScheduleNoteFormData
+			{
+				SelectedDate = date,
+				PersonId = person.Id.Value,
+				PublicNote = "public note"
+			};
+
+			ActivityCommandHandler.ResetCalledCount();
+			var results = Target.EditScheduleNote(input);
+
+			ActivityCommandHandler.CalledCount.Should().Be.EqualTo(1);
+			(ActivityCommandHandler.CalledCommands.Single() as EditScheduleNoteCommand).PublicNote.Should()
+				.Be.EqualTo("public note");
+			results.Count.Should().Be.EqualTo(0);
 		}
 
 		[Test]

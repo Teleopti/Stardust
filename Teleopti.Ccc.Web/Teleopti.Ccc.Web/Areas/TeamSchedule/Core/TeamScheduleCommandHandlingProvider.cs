@@ -525,7 +525,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			{
 				PersonId = input.PersonId,
 				Date = input.SelectedDate,
-				InternalNote = input.InternalNote
+				InternalNote = input.InternalNote,
+				PublicNote = input.PublicNote
 			};
 			_commandDispatcher.Execute(command);
 

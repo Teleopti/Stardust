@@ -11,8 +11,8 @@
 
 		self.resetScheduleNotes = resetScheduleNotes;
 		self.getNoteForPerson = getNoteForPerson;
-		self.setInternalNoteForPerson = setInternalNoteForPerson;
-		self.submitInternalNoteForPerson = submitInternalNoteForPerson;
+		self.setNoteForPerson = setNoteForPerson;
+		self.submitNoteForPerson = submitNoteForPerson;
 
 		function resetScheduleNotes(scheduleData, selectedDateMoment) {
 			noteDict = {};
@@ -30,16 +30,17 @@
 			return noteDict[personId];
 		}
 
-		function setInternalNoteForPerson(personId, note) {
+		function setNoteForPerson(personId, note) {
 			noteDict[personId] = note;
 		}
 
-		function submitInternalNoteForPerson(personId, note, date) {
+		function submitNoteForPerson(personId, note, date) {
 			var deferred = $q.defer();
 			var inputData = {
 				SelectedDate: moment(date).format('YYYY-MM-DD'),
 				PersonId: personId,
-				InternalNote: note
+				InternalNote: note.internalNotes,
+				PublicNote: note.publicNotes
 			}
 			$http.post(editScheduleNoteUrl, inputData).then(function (response) {
 				deferred.resolve(response.data);
