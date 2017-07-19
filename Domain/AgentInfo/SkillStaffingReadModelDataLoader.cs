@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var skillIds = skills.Select(skill => skill.Id).ToList();
 			var combinationResources =
 				_skillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(fullDayPeriod.StartDateTime.AddDays(-2), fullDayPeriod.EndDateTime.AddDays(2)))
-					.Where(s => s.SkillCombination.Any(skillId => skillIds.Contains(skillId)))
+					.Where(s => s.SkillCombination.All(skillId => skillIds.Contains(skillId)))
 					.ToList();
 
 			using (getContext(combinationResources, skills, false))
