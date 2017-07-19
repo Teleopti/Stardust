@@ -77,7 +77,7 @@
 			},
 			function(newValue) {
 				if (newValue) {
-					vm.internalNotes = ScheduleNoteMgmt.getInternalNoteForPerson(vm.noteInputOption.personId);
+					vm.internalNotes = ScheduleNoteMgmt.getNoteForPerson(vm.noteInputOption.personId).internalNotes;
 				}
 			}
 		);

@@ -10,7 +10,7 @@
 		var editScheduleNoteUrl = '../api/TeamScheduleCommand/EditScheduleNote';
 
 		self.resetScheduleNotes = resetScheduleNotes;
-		self.getInternalNoteForPerson = getInternalNoteForPerson;
+		self.getNoteForPerson = getNoteForPerson;
 		self.setInternalNoteForPerson = setInternalNoteForPerson;
 		self.submitInternalNoteForPerson = submitInternalNoteForPerson;
 
@@ -18,12 +18,12 @@
 			noteDict = {};
 			scheduleData.forEach(function (schedule) {
 				if (selectedDateMoment.isSame(schedule.Date, 'day')) {
-					noteDict[schedule.PersonId] = schedule.InternalNotes;
+					noteDict[schedule.PersonId] = { internalNotes: schedule.InternalNotes };
 				}
 			});
 		}
 
-		function getInternalNoteForPerson(personId) {
+		function getNoteForPerson(personId) {
 			return noteDict[personId];
 		}
 

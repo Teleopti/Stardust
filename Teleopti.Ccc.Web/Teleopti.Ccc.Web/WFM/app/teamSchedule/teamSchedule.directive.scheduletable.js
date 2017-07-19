@@ -126,7 +126,7 @@
 		};
 
 		vm.getScheduleNoteForPerson = function (personId) {
-			return ScheduleNoteMgmt.getInternalNoteForPerson(personId);
+			return ScheduleNoteMgmt.getNoteForPerson(personId);
 		};
 
 		vm.editScheduleNote = function (personId) {
