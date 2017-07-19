@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
@@ -58,6 +59,16 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.AgentsToSchedule.Single()
 				.Should()
 				.Be.EqualTo(agent.Id.Value);
+		}
+
+		[Test]
+		//green from start, if purist remove
+		public void ShouldSetRandomCommandIdOnCommand()
+		{
+			var command1 = new SchedulingCommand();
+			var command2 = new SchedulingCommand();
+			command1.CommandId.Should().Not.Be.EqualTo(Guid.Empty);
+			command1.CommandId.Should().Not.Be.EqualTo(command2.CommandId);
 		}
 
 		[Test]
