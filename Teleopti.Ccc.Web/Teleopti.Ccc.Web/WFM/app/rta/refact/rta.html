@@ -29,6 +29,20 @@
 	</div>
 </div>
 
+
+
+<div class="con-row" ng-if="vm.noSiteCards">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="con-row">
+				<div class="con-flex">
+					{{vm.skillSelected ? 'NoSitesFound' : 'NoAccessToSites' | translate}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div class="con-row demo-outline">
 	<div class="con-flex">
 		<rta-overview-component site-cards="vm.siteCards" agents-state="vm.agentsState" get-selected-items="vm.getSelectedItems"

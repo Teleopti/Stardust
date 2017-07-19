@@ -19,6 +19,8 @@
 		vm.urlParams = $stateParams;
 		vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 		vm.organizationSelection = false;
+		vm.skillSelected = vm.skillIds.length;
+		vm.noSiteCards = !vm.siteCards.length;
 		vm.goToAgentsView = function () { rtaRouteService.goToSelectSkill(); };
 
 		vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
@@ -191,6 +193,7 @@
 						pollingIntervals = [];
 					}
 					if (newValue.length) {
+						vm.skillSelected = true;
 						sitePollingWithSkills = $interval(function () {
 							rtaService.getSiteCardsFor(vm.skillIds).then(function (result) {
 								result.forEach(function (r) {
@@ -200,6 +203,7 @@
 						}, 5000);
 						$interval.cancel(sitePolling);
 					} else {
+						vm.skillSelected = false;
 						sitePolling = $interval(function () {
 							rtaService.getSiteCardsFor().then(function (result) {
 								result.forEach(function (r) {
