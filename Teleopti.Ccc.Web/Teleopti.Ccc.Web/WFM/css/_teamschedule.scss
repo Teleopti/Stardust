@@ -298,9 +298,14 @@ wfm-multiple-search-input .advanced-input {
 		cursor: not-allowed !important;
 	}
 
-	note-editor textarea {
-		width: 100%;
-		min-height: 200px;
+	note-editor {
+		.md-tab {
+			text-transform: none;
+		}
+		textarea {
+			width: 100%;
+			min-height: 200px;
+		}
 	}
 }
 //Header

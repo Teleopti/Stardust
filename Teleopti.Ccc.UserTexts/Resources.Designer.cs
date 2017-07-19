@@ -24155,6 +24155,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Public Note.
+        /// </summary>
+        public static string PublicNote {
+            get {
+                return ResourceManager.GetString("PublicNote", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Public Note:.
         /// </summary>
         public static string PublicNoteColon {

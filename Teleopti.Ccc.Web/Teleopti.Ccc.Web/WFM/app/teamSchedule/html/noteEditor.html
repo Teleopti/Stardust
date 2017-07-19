@@ -1,8 +1,30 @@
 ﻿<modal-dialog show="vm.noteInputOption.showEditor" ng-cloak>
-	<h1 class="modal-title" translate>{{vm.label}}</h1>
-	<div class="modal-inner-content internal-note">
-		<textarea ng-model="vm.internalNotes" maxlength="255"></textarea>
+	<div ng-if="vm.WfmTeamSchedule_DisplayAndEditPublicNote_44783">
+		<h1 class="modal-title" translate>{{'EditNote'}}</h1>
+		<md-tabs md-dynamic-height md-border-bottom>
+			<md-tab label="{{vm.internalNoteTab | translate}}">
+				<md-content class="md-padding">
+					<div class="modal-inner-content internal-note">
+						<textarea ng-model="vm.internalNotes" maxlength="255"></textarea>
+					</div>
+				</md-content>
+			</md-tab>
+			<md-tab label="{{vm.publicNoteTab | translate}}">
+				<md-content class="md-padding">
+					<div class="modal-inner-content public-note">
+						<textarea ng-model="vm.publicNotes" maxlength="255"></textarea>
+					</div>
+				</md-content>
+			</md-tab>
+		</md-tabs>
 	</div>
+	<div ng-if="!vm.WfmTeamSchedule_DisplayAndEditPublicNote_44783">
+		<h1 class="modal-title" translate>{{vm.internalNoteTab}}</h1>
+		<div class="modal-inner-content internal-note">
+			<textarea ng-model="vm.internalNotes" maxlength="255"></textarea>
+		</div>
+	</div>
+
 	<div class="modal-actions">
 		<aside>
 			<button class="wfm-btn wfm-btn-invis-default" id="cancel-note-edit" ng-click="vm.cancel()">{{ 'Cancel' | translate }}</button>

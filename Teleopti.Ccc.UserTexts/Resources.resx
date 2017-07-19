@@ -16292,4 +16292,8 @@ Do you want to participate?</value>
     <value>You don't have access to any sites or teams</value>
     <comment>No permissions to see sites in RTA</comment>
   </data>
+  <data name="PublicNote" xml:space="preserve">
+    <value>Public Note</value>
+    <comment>Public Note</comment>
+  </data>
 </root>

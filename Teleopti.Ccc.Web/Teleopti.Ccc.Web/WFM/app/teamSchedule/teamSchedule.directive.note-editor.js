@@ -50,12 +50,13 @@
 		};
 	}
 
-	noteEditorCtrl.$inject = ['$scope', 'ScheduleNoteManagementService', 'NoticeService'];
+	noteEditorCtrl.$inject = ['$scope', 'ScheduleNoteManagementService', 'NoticeService', 'teamsToggles'];
 
-	function noteEditorCtrl($scope, ScheduleNoteMgmt, NoticeService) {
+	function noteEditorCtrl($scope, ScheduleNoteMgmt, NoticeService, teamsToggles) {
 		var vm = this;
-		vm.label = 'InternalNote';
-
+		vm.internalNoteTab = 'InternalNote';
+		vm.publicNoteTab = 'PublicNote';
+		vm.WfmTeamSchedule_DisplayAndEditPublicNote_44783 = teamsToggles.all().WfmTeamSchedule_DisplayAndEditPublicNote_44783;
 		vm.submit = function() {
 			ScheduleNoteMgmt.submitInternalNoteForPerson(vm.noteInputOption.personId, vm.internalNotes, vm.noteInputOption.selectedDate).then(function(data) {
 				vm.noteInputOption.showEditor = false;
@@ -78,6 +79,7 @@
 			function(newValue) {
 				if (newValue) {
 					vm.internalNotes = ScheduleNoteMgmt.getNoteForPerson(vm.noteInputOption.personId).internalNotes;
+					vm.publicNotes = ScheduleNoteMgmt.getNoteForPerson(vm.noteInputOption.personId).publicNotes;
 				}
 			}
 		);
