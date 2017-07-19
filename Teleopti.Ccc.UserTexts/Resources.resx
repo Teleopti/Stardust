@@ -10717,7 +10717,7 @@ These options are activated:
     <value>Your overtime request has been denied automatically. The start time of this request is {0}, it must be at least {1} minutes later than current time</value>
     <comment>used in mytime overtime request deny reason,when request start time is expired</comment>
   </data>
-	<data name="OvertimeRequestDenyReasonOutOfSiteOpenHour" xml:space="preserve">
+  <data name="OvertimeRequestDenyReasonOutOfSiteOpenHour" xml:space="preserve">
     <value>Your overtime request has been denied automatically. The period of this request is {0}, but site open hour is {1}</value>
     <comment>used in mytime overtime request deny reason,when request period is out of site open hour</comment>
   </data>
@@ -16275,7 +16275,7 @@ Do you want to participate?</value>
   <data name="ClassicIntraday" xml:space="preserve">
     <value>Classic Intraday</value>
     <comment>Classic Intraday</comment>
-  </data>  
+  </data>
   <data name="NoAvailableSkillForOvertime" xml:space="preserve">
     <value>Agent has no available skill for overtime</value>
     <comment>Use in Mytime overtime request. An error message when agent has no available skill within person period.</comment>
@@ -16287,5 +16287,9 @@ Do you want to participate?</value>
   <data name="NoUnderStaffingSkill" xml:space="preserve">
     <value>There is no critical underStaffing skill for overtime request</value>
     <comment>Use in Mytime overtime request. An error message when there is no under staffing skill for request period.</comment>
+  </data>
+  <data name="NoAccessToSites" xml:space="preserve">
+    <value>You don't have access to any sites</value>
+    <comment>No permissions to see sites in RTA</comment>
   </data>
 </root>
