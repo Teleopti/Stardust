@@ -50,8 +50,7 @@
 		}
 
 		ctrl.$postLink = function () {
-			var element = $element.find("md-select-value");
-			element.focus();
+			setDefaultFocus();
 		}
 
 		ctrl.$onInit = function () {
@@ -85,6 +84,9 @@
 						ctrl.onOpen()
 				},
 				onRemoving: (ctrl.onClose ? function () { ctrl.onClose() } : angular.noop),
+				onCloseSuccess: function(){
+							setDefaultFocus();
+				},
 			})
 		}
 
@@ -94,6 +96,11 @@
 				event.stopPropagation()
 
 			ctrl.menuRef.open()
+		}
+
+		function setDefaultFocus(){
+			var element = $element.find("md-select-value");
+			element.focus();
 		}
 
 		function findTeamIndexInVirtualRepeatContainerById(teamId) {
