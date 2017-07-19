@@ -20,7 +20,6 @@
 		vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 		vm.organizationSelection = false;
 		vm.skillSelected = vm.skillIds.length;
-		vm.noSiteCards = !vm.siteCards.length;
 		vm.goToAgentsView = function () { rtaRouteService.goToSelectSkill(); };
 
 		vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
@@ -73,10 +72,12 @@
 				if (angular.isDefined(ids)) {
 					rtaService.getSiteCardsFor(ids).then(function (result) {
 						vm.siteCards = buildSiteCards(result);
+						vm.noSiteCards = !vm.siteCards.length;
 					});
 				} else {
 					rtaService.getSiteCardsFor().then(function (result) {
 						vm.siteCards = buildSiteCards(result);
+						vm.noSiteCards = !vm.siteCards.length;
 					});
 				}
 			}
