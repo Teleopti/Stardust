@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public bool IsFullDayAbsence { get; set; }
 		public GroupScheduleDayOffViewModel DayOff { get; set; }
 		public string InternalNotes { get; set; }
+		public string PublicNotes { get; set; }
 		public TimeZoneViewModel Timezone { get; set; }
 
 	}

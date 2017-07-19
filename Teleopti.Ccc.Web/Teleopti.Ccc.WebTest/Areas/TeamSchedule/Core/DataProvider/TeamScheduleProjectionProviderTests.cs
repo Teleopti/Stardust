@@ -155,6 +155,34 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		}
 
 		[Test]
+		public void ShouldFetchPublicNote()
+		{
+			_toggleManager.Enable(Toggles.WfmTeamSchedule_DisplayAndEditPublicNote_44783);
+			var date = new DateOnly(2015, 01, 01);
+			var timezoneChina = TimeZoneInfoFactory.ChinaTimeZoneInfo();
+
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+
+			ITeam team = TeamFactory.CreateSimpleTeam();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
+
+			var person = PersonFactory.CreatePersonWithGuid("bill", "gates");
+			person.AddPersonPeriod(personPeriod);
+			person.PermissionInformation.SetDefaultTimeZone(timezoneChina);
+
+			var scheduleDay = ScheduleDayFactory.Create(date, person, scenario);
+			var note = new PublicNote(person, date, scenario, "Oh my God");
+			scheduleDay.Add(note);
+
+			var viewModel = target.MakeViewModel(person, date, scheduleDay, false, false, true,
+				_commonAgentNameProvider.CommonAgentNameSettings);
+			
+			viewModel.PublicNotes.Should().Be.EqualTo("Oh my God");
+		}
+
+		[Test]
 		public void ShouldGetProjection()
 		{
 			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);

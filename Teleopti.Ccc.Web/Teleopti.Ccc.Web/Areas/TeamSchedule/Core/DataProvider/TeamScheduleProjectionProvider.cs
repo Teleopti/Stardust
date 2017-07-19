@@ -73,6 +73,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 					vm.InternalNotes = note != null
 						? note.GetScheduleNote(new NormalizeText())
 						: string.Empty;
+					if (_toggleManager.IsEnabled(Toggles.WfmTeamSchedule_DisplayAndEditPublicNote_44783))
+					{
+						var publicNotes = scheduleDay.PublicNoteCollection().FirstOrDefault();
+						vm.PublicNotes = publicNotes != null ? publicNotes.GetScheduleNote(new NormalizeText()) : String.Empty;
+					}
 				}
 			}
 

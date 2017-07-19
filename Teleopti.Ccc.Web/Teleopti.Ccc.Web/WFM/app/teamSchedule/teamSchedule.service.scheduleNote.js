@@ -18,7 +18,10 @@
 			noteDict = {};
 			scheduleData.forEach(function (schedule) {
 				if (selectedDateMoment.isSame(schedule.Date, 'day')) {
-					noteDict[schedule.PersonId] = { internalNotes: schedule.InternalNotes };
+					noteDict[schedule.PersonId] = {
+						internalNotes: schedule.InternalNotes,
+						publicNotes: schedule.PublicNotes
+					};
 				}
 			});
 		}
