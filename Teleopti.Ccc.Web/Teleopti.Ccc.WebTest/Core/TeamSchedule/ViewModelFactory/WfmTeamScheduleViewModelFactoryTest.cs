@@ -2247,6 +2247,126 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			schedules[3].Name.Should().Be.EqualTo("a1@e1");
 			schedules[6].Name.Should().Be.EqualTo("c1@k1");
 		}
+
+		[Test]
+		public void ShouldReturnCorrectOrderWhenSortingByStartTimeWithEmptyScheduleAndFullDayAbsence()
+		{
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "e1");
+			person1.SetEmploymentNumber("456");
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			var person2 = PersonFactory.CreatePersonWithGuid("f1", "c1");
+			person2.SetEmploymentNumber("123");
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+			var person3 = PersonFactory.CreatePersonWithGuid("c1", "k1");
+			person3.SetEmploymentNumber("254");
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa1);
+
+			var personAbs = PersonAbsenceFactory.CreatePersonAbsence(person2, scenario,
+				new DateTimePeriod(2020, 1, 1, 0, 2020, 1, 1, 23));
+
+			ScheduleStorage.Add(personAbs);
+
+			var pa3 = PersonAssignmentFactory.CreateEmptyAssignment(person3, scenario,
+				new DateTimePeriod(2020, 1, 1, 0, 2020, 1, 1, 23));
+			ScheduleStorage.Add(pa3);
+			
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.StartTime
+				});
+
+			var schedules = result.Schedules.ToArray();
+
+			schedules[0].Name.Should().Be.EqualTo("f1@c1");
+			schedules[3].Name.Should().Be.EqualTo("a1@e1");
+			schedules[6].Name.Should().Be.EqualTo("c1@k1");
+		}
+		[Test]
+		public void ShouldReturnCorrectOrderWhenSortingByStartTimeWithEmptyScheduleAndDayOff()
+		{
+			var contract = ContractFactory.CreateContract("Contract");
+			contract.WithId();
+			team = TeamFactory.CreateSimpleTeam().WithId();
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract(contract);
+			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
+
+
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "e1");
+			person1.SetEmploymentNumber("456");
+			PeopleSearchProvider.Add(person1);
+			person1.AddPersonPeriod(personPeriod);
+			var person2 = PersonFactory.CreatePersonWithGuid("f1", "c1");
+			person2.SetEmploymentNumber("123");
+			PeopleSearchProvider.Add(person2);
+			person2.AddPersonPeriod(personPeriod);
+			var person3 = PersonFactory.CreatePersonWithGuid("c1", "k1");
+			person3.SetEmploymentNumber("254");
+			PeopleSearchProvider.Add(person3);
+			person3.AddPersonPeriod(personPeriod);
+
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var pa1 =
+				PersonAssignmentFactory.CreateAssignmentWithMainShift(person1,
+					scenario, ActivityFactory.CreateActivity("activity1", new Color()), new DateTimePeriod(2020, 1, 1, 10, 2020, 1, 1, 17), ShiftCategoryFactory.CreateShiftCategory("test"));
+
+			ScheduleStorage.Add(pa1);
+
+			var pa2 = PersonAssignmentFactory.CreateEmptyAssignment(person2, scenario,
+				new DateTimePeriod(2020, 1, 1, 0, 2020, 1, 1, 23));
+			ScheduleStorage.Add(pa2);
+
+			var pa3 = PersonAssignmentFactory.CreateAssignmentWithDayOff(person3, scenario, new DateOnly(2020, 1, 1),
+				new DayOffTemplate());
+
+			ScheduleStorage.Add(pa3);
+
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					SortOption = TeamScheduleSortOption.StartTime
+				});
+
+			var schedules = result.Schedules.ToArray();
+			schedules[0].Name.Should().Be.EqualTo("a1@e1");
+			schedules[3].Name.Should().Be.EqualTo("c1@k1");
+			schedules[6].Name.Should().Be.EqualTo("f1@c1");
+		}
 		[Test]
 		public void ShouldReturnCorrectOrderWhenSortingByStartTimeWithDayOffSchedule()
 		{

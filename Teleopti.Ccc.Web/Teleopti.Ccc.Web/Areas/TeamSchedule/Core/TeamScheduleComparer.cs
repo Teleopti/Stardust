@@ -204,16 +204,16 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			if (isPS2Empty || isPS2DayOff) return -1;
 
 			var ps1 = personSchedule1.Item2.PersonAssignment();
-			var end1 = ps1 != null ? _predicate(ps1.Period) : _predicate(personSchedule1.Item2.Period);
+			var time1 = ps1 != null ? _predicate(ps1.Period) : _predicate(personSchedule1.Item2.Period);
 
 			var ps2 = personSchedule2.Item2?.PersonAssignment();
-			var end2 = ps2 != null ? _predicate(ps2.Period) : _predicate(personSchedule2.Item2.Period);
+			var time2 = ps2 != null ? _predicate(ps2.Period) : _predicate(personSchedule2.Item2.Period);
 
-			if (end1.Equals(end2))
+			if (time1.Equals(time2))
 			{
 				return _stringComparer.Compare(personSchedule1.Item1.Name.LastName, personSchedule2.Item1.Name.LastName);
 			}
-			return end1.IsEarlierThan(end2) ? -1 : 1;
+			return time1.IsEarlierThan(time2) ? -1 : 1;
 
 		}
 
@@ -225,8 +225,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			}
 			var date = schedule.DateOnlyAsPeriod.DateOnly;
 			var person = schedule.Person;
+			var hasLayers = schedule.ProjectionService().CreateProjection().HasLayers;
 			return !_permissionProvider.IsPersonSchedulePublished(date, person, _scheduleVisibleReason)
-					&& !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+					&& !_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules) || !isDayOff(schedule) && !hasLayers;
 		}
 
 		private bool isDayOff(IScheduleDay schedule)

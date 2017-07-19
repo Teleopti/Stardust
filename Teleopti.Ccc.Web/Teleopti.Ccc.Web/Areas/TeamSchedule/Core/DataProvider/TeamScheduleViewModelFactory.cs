@@ -50,8 +50,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		public GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input)
 		{
-
-
 			var targetIds = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552)
 				? _searchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone), input.TeamIds, input.CriteriaDictionary)
 				: _searchProvider.FindPersonIds(input.DateInUserTimeZone, input.TeamIds, input.CriteriaDictionary);
@@ -166,7 +164,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			}
 			return personScheduleDaysToSort;
 		}
-
 
 		public GroupWeekScheduleViewModel CreateWeekScheduleViewModel(
 			Guid[] teamIds,
