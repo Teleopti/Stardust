@@ -145,6 +145,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\packages\EO.WebBrowser.17.2.0.0\lib\eowp.exe">
+      <Link>eowp.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="favicon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
