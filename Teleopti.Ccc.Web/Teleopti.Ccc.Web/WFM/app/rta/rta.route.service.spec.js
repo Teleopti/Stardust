@@ -3,6 +3,7 @@ describe('rtaRouteService', function () {
 	var target, $state, curDate;
 
 	beforeEach(module('wfm.rta'));
+
 	beforeEach(inject(function (_$state_, rtaRouteService) {
 		target = rtaRouteService;
 		$state = _$state_;
@@ -13,13 +14,22 @@ describe('rtaRouteService', function () {
 		jasmine.clock().mockDate(curDate);
 	});
 
-	xit('should go back to sites overview', function () {
+	it('should go back to sites overview', function () {
 		spyOn($state, 'go');
 
 		target.goToSites();
 
 		expect($state.go).toHaveBeenCalledWith('rta');
 	});
+
+	it('should go back to refactored overview', function () {
+		spyOn($state, 'go');
+
+		target.goToSitesRefact();
+
+		expect($state.go).toHaveBeenCalledWith('refact-rta');
+	});
+
 
 	it('should go back to teams view', function () {
 		spyOn($state, 'go');

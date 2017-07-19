@@ -11,6 +11,7 @@
 
 		var service = {
 			goToSites: goToSites,
+			goToSitesRefact: goToSitesRefact,
 			goToTeams: goToTeams,
 			goToAgents: goToAgents,
 			goToSelectSkill: goToSelectSkill,
@@ -23,22 +24,16 @@
 		}
 
 		return service;
-		////////////////////////
+		///////////////////////
 
 		function goToSites(skillId, skillAreaId) {
-			var toggles = {};
+			if (angular.isDefined(skillId)) $state.go('rta.sites', { skillIds: skillId, skillAreaId: undefined });
+			else if (angular.isDefined(skillAreaId)) $state.go('rta.sites', { skillIds: undefined, skillAreaId: skillAreaId });
+			else $state.go('rta');
+		}
 
-			Toggle.togglesLoaded.then(function () {
-				toggles = Toggle;
-				if (toggles.RTA_FrontEndRefactor_44772) {
-					$state.go('refact-rta');
-				}
-				else {
-					if (angular.isDefined(skillId)) $state.go('rta.sites', { skillIds: skillId, skillAreaId: undefined });
-					else if (angular.isDefined(skillAreaId)) $state.go('rta.sites', { skillIds: undefined, skillAreaId: skillAreaId });
-					else $state.go('rta');
-				}
-			});
+		function goToSitesRefact() {
+			$state.go('refact-rta');
 		}
 
 		function goToTeams(siteIds, skillId, skillAreaId) {

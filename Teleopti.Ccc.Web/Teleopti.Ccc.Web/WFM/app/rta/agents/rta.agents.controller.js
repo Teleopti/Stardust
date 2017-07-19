@@ -46,7 +46,7 @@
 		rtaRouteService,
 		fakeTimeService,
 		localeLanguageSortingService,
-		toggleService,
+		Toggle,
 		NoticeService
 	) {
 
@@ -95,6 +95,11 @@
 		vm.maxNumberOfAgents = 50;
 		vm.isLoading = angular.toJson($stateParams) !== '{}';
 
+		var toggles = {};
+		Toggle.togglesLoaded.then(function () {
+			toggles = Toggle;
+		});
+
 		vm.getTableHeight = function() {
 			var rowHeight = 30;
 			var headerHeight = 30;
@@ -121,7 +126,7 @@
 		vm.showAdherenceUpdates = function() { return vm.adherencePercent !== null; };
 		vm.changeScheduleUrl = function(personId) { return rtaRouteService.urlForChangingSchedule(personId); };
 		vm.historicalAdherenceUrl = function(personId) { return rtaRouteService.urlForHistoricalAdherence(personId); };
-		vm.goToOverview = function () { rtaRouteService.goToSites(); }
+		vm.goToOverview = function () { toggles.RTA_FrontEndRefactor_44772 ? rtaRouteService.goToSitesRefact() : rtaRouteService.goToSites(); }
 		vm.goToSelectItem = function () { rtaRouteService.goToSelectSkill(); }
 		
 		vm.rightPanelOptions = {
