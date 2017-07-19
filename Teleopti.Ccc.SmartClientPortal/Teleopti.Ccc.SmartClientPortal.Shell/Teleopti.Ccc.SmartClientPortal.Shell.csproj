@@ -5164,6 +5164,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\packages\EO.WebBrowser.17.2.0.0\lib\eowp.exe">
+      <Link>eowp.exe</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <SubType>Designer</SubType>
