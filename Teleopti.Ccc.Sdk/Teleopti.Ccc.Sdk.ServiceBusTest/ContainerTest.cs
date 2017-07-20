@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterModule<ServiceBusCommonModule>();
-			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterModule<SchedulingModule>();
 			builder.RegisterModule<IntraIntervalSolverServiceModule>();
 
 			using (var container = builder.Build())
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
 			builder.RegisterModule(CommonModule.ForTest());
 			builder.RegisterInstance(appData);
-			builder.RegisterModule<AuthorizationContainerInstaller>();
+			builder.RegisterModule<AuthorizationModule>();
 		}
 
 		private class fakeTenantUnitOfWork : ITenantUnitOfWork

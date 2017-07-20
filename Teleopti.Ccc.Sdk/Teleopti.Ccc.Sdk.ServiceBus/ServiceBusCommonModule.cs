@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public static ICurrentUnitOfWorkFactory Current
 		{
-			get { return _current ?? UnitOfWorkFactory.CurrentUnitOfWorkFactory(); }
-			set { _current = value; }
+			get => _current ?? UnitOfWorkFactory.CurrentUnitOfWorkFactory();
+			set => _current = value;
 		}
 	}
 

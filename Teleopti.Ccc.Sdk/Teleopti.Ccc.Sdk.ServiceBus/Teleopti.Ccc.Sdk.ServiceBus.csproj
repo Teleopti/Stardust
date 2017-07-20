@@ -186,7 +186,7 @@
     <Compile Include="Payroll\PayrollContainerInstaller.cs" />
     <Compile Include="Payroll\PayrollDllCopy.cs" />
     <Compile Include="ServiceBusCommonModule.cs" />
-    <Compile Include="AuthorizationContainerInstaller.cs" />
+    <Compile Include="AuthorizationModule.cs" />
     <Compile Include="Container\ContainerConfiguration.cs" />
     <Compile Include="Payroll\ChannelCreator.cs" />
     <Compile Include="Payroll\FormatLoader\AssemblyFileLoader.cs" />
@@ -208,8 +208,8 @@
     <Compile Include="Payroll\PayrollExportFeedback.cs" />
     <Compile Include="Payroll\PayrollPeopleLoader.cs" />
     <Compile Include="Payroll\PersonBusAssembler.cs" />
-    <Compile Include="BusBootStrapper.cs" />
-    <Compile Include="SchedulingContainerInstaller.cs" />
+    <Compile Include="DataSourceForTenantWrapper.cs" />
+    <Compile Include="SchedulingModule.cs" />
     <Compile Include="ServiceBusRunner.cs" />
   </ItemGroup>
   <ItemGroup>

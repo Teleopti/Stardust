@@ -1,13 +1,11 @@
-﻿using System;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-    public class AuthorizationContainerInstaller : Module
+    public class AuthorizationModule : Module
     {
 		protected override void Load(ContainerBuilder builder)
 		{

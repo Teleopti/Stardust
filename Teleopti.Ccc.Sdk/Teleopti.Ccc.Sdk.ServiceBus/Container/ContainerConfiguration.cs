@@ -46,10 +46,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Container
 				OptimizeScheduleChangedEvents_DontUseFromWeb = true
 			}, _toggleManager)));
 			
-			build.RegisterModule<AuthorizationContainerInstaller>();
+			build.RegisterModule<AuthorizationModule>();
 			build.RegisterModule<ServiceBusCommonModule>();
 			build.RegisterModule<PayrollContainerInstaller>();
-			build.RegisterModule<SchedulingContainerInstaller>();
+			build.RegisterModule<SchedulingModule>();
 			build.Register(c => StatisticRepositoryFactory.Create()).As<IStatisticRepository>();
 			build.RegisterModule(new NotificationModule(_toggleManager));
 			build.RegisterModule<IntraIntervalSolverServiceModule>();

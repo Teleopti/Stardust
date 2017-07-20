@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-    public class SchedulingContainerInstaller : Module
+    public class SchedulingModule : Module
     {
 		protected override void Load(ContainerBuilder builder)
 		{
