@@ -1,14 +1,14 @@
 ﻿<rta-card ng-repeat="card in $ctrl.siteCards" ng-open="card.isOpen" ng-click="card.fetchTeamData(card)">
     <rta-card-header ng-attr-styles="border-left-color: {{card.site.Color}};">
-        <div style="position: absolute; display: flex; width: 96%">
-            <div style="flex: 3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding-right: 6px;"><b>{{card.site.Name}}</b></div>
-            <div style="flex: 9;">{{'InAlarm'|translate}}:
+        <div class="rta-card-content-wrapper flex">
+            <div class = "rta-site-name-container"><b>{{card.site.Name}}</b></div>
+            <div class="rta-alarm-values-container">{{'InAlarm'|translate}}:
                 <b>{{card.site.InAlarmCount}}</b>
             </div>
-            <div ng-click="$event.stopPropagation(); $ctrl.selectItem(card);" style="text-align: center; flex: 1"><i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>
+            <div ng-click="$event.stopPropagation(); $ctrl.selectItem(card);" class="rta-icons-container"><i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>
                 <md-tooltip>{{card.isSelected ? "Unselect site" : "Select site"}}</md-tooltip>
             </div>
-            <a ui-sref="{{$ctrl.agentsState}}" style="text-align: center; flex: 1; text-decoration: none; ">
+            <a ui-sref="{{$ctrl.agentsState}}" class="rta-icons-container" style="text-decoration: none; ">
                 <div><i class="mdi mdi-arrow-right"></i>
                     <md-tooltip>See agents</md-tooltip>
                 </div>
@@ -22,9 +22,9 @@
                     <div class="grid-card-mini" ng-repeat="team in card.teams">
                         <div class="list-content">
                             <div class="list-header" ng-click="$ctrl.selectItem(team)" ng-class="team.Color">
-                                <div style="display: flex;">
-                                    <h1 ng-attr-data-max="{{team.AgentsCount}}" style="flex:9;">{{team.Name}}</h1>
-                                    <i style="flex:1;" class="mdi pull-right" ng-class="{'mdi-check': team.isSelected, '': !team.isSelected}"></i>
+                                <div class="flex">
+                                    <h1 ng-attr-data-max="{{team.AgentsCount}}" class="rta-team-name-container">{{team.Name}}</h1>
+                                    <i class="mdi pull-right flex-1" ng-class="{'mdi-check': team.isSelected, '': !team.isSelected}"></i>
                                      <md-tooltip>{{team.isSelected ? "Unselect team" : "Select team"}}</md-tooltip>
                                 </div>
                                 <div class="subtext"><span class="full-padding" ng-attr-data-value="{{team.InAlarmCount}}">{{'InAlarm'|translate}}:

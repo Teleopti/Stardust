@@ -50,6 +50,36 @@
 	min-width: 80px;
 }
 
+.flex {
+    display: flex;
+}
+
+.rta-card-content-wrapper {
+    position: absolute;
+    width: 94%;
+}
+
+.rta-site-name-container {
+    flex: 3; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    padding-right: 6px;
+}
+
+.rta-team-name-container, .rta-alarm-values-container {
+    flex: 9;
+}
+
+.rta-icons-container {
+    text-align: center; 
+    flex: 1;
+}
+
+.flex-1 {
+    flex: 1;
+} 
+
 /////////End of Sites & teams///////////////
 ///////////rta-skills///////////////////////
 .rta-top-buttons-wrapper {
@@ -315,6 +345,14 @@
     @media screen and (max-width: 960px) {
         .hidden-md {
             display: none;
+        }
+
+        .rta-site-name-container, .rta-alarm-values-container {
+            flex: 1;
+        }
+
+        .rta-card-content-wrapper {
+            width: 86%;
         }
     }
 
