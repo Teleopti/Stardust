@@ -80,5 +80,77 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var updatedNote = schedule.NoteCollection().FirstOrDefault();
 			updatedNote.GetScheduleNote(new NoFormatting()).Should().Be("new note");
 		}
+
+		[Test]
+		public void ShouldAddNewPublicNote()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepo.Add(person);
+			var date = new DateOnly(2016, 9, 29);
+
+			var command = new EditScheduleNoteCommand
+			{
+				Date = new DateOnly(2016, 9, 29),
+				PersonId = person.Id.GetValueOrDefault(),
+				PublicNote = "new note"
+			};
+
+			Target.Handle(command);
+			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
+				person, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(date, date), CurrentScenario.Current())[person].ScheduledDayCollection(new DateOnlyPeriod(date, date)).Single();
+			var note = schedule.PublicNoteCollection().FirstOrDefault();
+			note.GetScheduleNote(new NoFormatting()).Should().Be("new note");
+		}
+
+		[Test]
+		public void ShouldClearPublicNote()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepo.Add(person);
+			var date = new DateOnly(2016, 9, 29);
+			var existingNote = new PublicNote(person, date, CurrentScenario.Current(), "existing note").WithId();
+			ScheduleStorage.Add(existingNote);
+
+			var command = new EditScheduleNoteCommand
+			{
+				Date = new DateOnly(2016, 9, 29),
+				PersonId = person.Id.GetValueOrDefault(),
+				PublicNote = ""
+			};
+
+			Target.Handle(command);
+
+			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
+				person, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(date, date), CurrentScenario.Current())[person].ScheduledDayCollection(new DateOnlyPeriod(date, date)).Single();
+			var note = schedule.PublicNoteCollection().SingleOrDefault();
+			note.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldUpdatePublicNote()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepo.Add(person);
+			var date = new DateOnly(2016, 9, 29);
+			var existingNote = new PublicNote(person, date, CurrentScenario.Current(), "existing note");
+			existingNote.WithId();
+			ScheduleStorage.Add(existingNote);
+
+			var command = new EditScheduleNoteCommand
+			{
+				Date = new DateOnly(2016, 9, 29),
+				PersonId = person.Id.GetValueOrDefault(),
+				PublicNote = "another one"
+			};
+
+			Target.Handle(command);
+
+			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
+				person, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(date, date), CurrentScenario.Current())[person].ScheduledDayCollection(new DateOnlyPeriod(date, date)).Single();
+			var note = schedule.PublicNoteCollection().SingleOrDefault();
+			note.Should().Not.Be.Null();
+			note.Id.Should().Be.EqualTo(existingNote.Id);
+			note.GetScheduleNote(new NoFormatting()).Should().Be("another one");
+		}
 	}
 }
