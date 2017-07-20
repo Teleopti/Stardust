@@ -24,7 +24,7 @@
                             <div class="list-header" ng-click="$ctrl.selectItem(team)" ng-class="team.Color">
                                 <div class="flex">
                                     <h1 ng-attr-data-max="{{team.AgentsCount}}" class="rta-team-name-container">{{team.Name}}</h1>
-                                    <i class="mdi pull-right flex-1" ng-class="{'mdi-check': team.isSelected, '': !team.isSelected}"></i>
+                                    <i class="mdi pull-right flex-1" ng-class="{'mdi-check': team.isSelected, 'mdi-plus': !team.isSelected}"></i>
                                      <md-tooltip>{{team.isSelected ? "Unselect team" : "Select team"}}</md-tooltip>
                                 </div>
                                 <div class="subtext"><span class="full-padding" ng-attr-data-value="{{team.InAlarmCount}}">{{'InAlarm'|translate}}:
