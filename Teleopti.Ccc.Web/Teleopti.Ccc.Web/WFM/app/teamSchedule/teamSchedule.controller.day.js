@@ -187,6 +187,11 @@
 			vm.hasSelectedAllPeopleInEveryPage = false;
 			vm.scheduleFullyLoaded = false;
 			vm.loadSchedules();
+			resetFocus();
+		};
+		
+		function resetFocus() {
+			$scope.$broadcast("resetFocus", "organizationPicker");
 		};
 
 		function getParamsForLoadingSchedules(options) {

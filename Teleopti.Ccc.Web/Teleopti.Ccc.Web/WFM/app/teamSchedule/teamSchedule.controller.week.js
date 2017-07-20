@@ -52,6 +52,11 @@
 			vm.paginationOptions.pageNumber = 1;
 			vm.scheduleFullyLoaded = false;
 			vm.loadSchedules();
+			resetFocus()
+		};
+
+		function resetFocus() {
+			$scope.$broadcast("resetFocus", "organizationPicker");
 		};
 
 		vm.onStartOfWeekChanged = function () {

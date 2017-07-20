@@ -52,7 +52,11 @@
 		ctrl.$postLink = function () {
 			setDefaultFocus();
 		}
-
+		
+		$scope.$on("resetFocus", function (elementName) {
+			setDefaultFocus();
+		});
+		
 		ctrl.$onInit = function () {
 			var menuPosition = $mdPanel.newPanelPosition().relativeTo($element).addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW)
 
