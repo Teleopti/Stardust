@@ -104,10 +104,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			webViewDataProtection.RegisterJSExtensionFunction("yesResponseCallback", yesResponse);
 			webViewDataProtection.RegisterJSExtensionFunction("noOrNotNowResponseCallback", noResponse);
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
-			var enableLargeAddressSpaceSetting = ConfigurationManager.AppSettings["EOEnableLargeAddressSpace"];
-			var enableLargeAddressSpace = false;
-			if(bool.TryParse(enableLargeAddressSpaceSetting, out enableLargeAddressSpace))
-				EO.Base.Runtime.EnableEOWP = enableLargeAddressSpace;
 		}
 
 		private void yesResponse(object sender, JSExtInvokeArgs jsExtInvokeArgs)

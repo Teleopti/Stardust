@@ -49,6 +49,7 @@ namespace Teleopti.Runtime.Environment
 		                "tKbC4q1pmaTA6YxDl6Sxy7to2PD9GvZ3hI6xy59Zs/MDD+SrwPL3Gp+d2Pj2" +
 		                "6KFvprfA3a9qq6axHvSbvPwBFPE=");
 	                EO.Base.Runtime.EnableEOWP = true;
+	                EO.Base.Runtime.InitWorkerProcessExecutable("eowp.exe");
 					Application.Run(new MainForm(url));
                 }
                 else
