@@ -15613,7 +15613,7 @@ Do you want to participate?</value>
     <comment>Subitle of agents view in RTA</comment>
   </data>
   <data name="AbsenceCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
-    <value>Can't add to agent(s) in another time zone</value>
+    <value>Cant add to agent in other time zone and Note that Absences always added in Agent’s time zone, independent of the time shown in the Dropdown menu.</value>
     <comment>Error message for adding full-day absence to agent in another time zone in Teams</comment>
   </data>
   <data name="InvalidColumn" xml:space="preserve">
@@ -16217,7 +16217,7 @@ Do you want to participate?</value>
     <comment>Used on intraday, used to choose day to view by offset -7 to +1</comment>
   </data>
   <data name="CannotApplyThisToAgentsInADifferentTimeZone" xml:space="preserve">
-    <value>Cannot apply this to agents in a different time zone</value>
+    <value>Cant add to agent in other time zone and Note that shift always moved in Agent’s time zone, independent of the time shown in the Dropdown menu.</value>
     <comment>Error message in Teams</comment>
   </data>
   <data name="MissingDuration" xml:space="preserve">
