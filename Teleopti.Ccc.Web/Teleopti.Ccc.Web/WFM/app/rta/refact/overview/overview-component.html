@@ -8,7 +8,7 @@
             <div ng-click="$event.stopPropagation(); $ctrl.selectItem(card);" style="text-align: center; flex: 1"><i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>
                 <md-tooltip>{{card.isSelected ? "Unselect site" : "Select site"}}</md-tooltip>
             </div>
-            <a ui-sref="{{$ctrl.agentsState}}" style="text-align: center; flex: 1 ">
+            <a ui-sref="{{$ctrl.agentsState}}" style="text-align: center; flex: 1; text-decoration: none; ">
                 <div><i class="mdi mdi-arrow-right"></i>
                     <md-tooltip>See agents</md-tooltip>
                 </div>
