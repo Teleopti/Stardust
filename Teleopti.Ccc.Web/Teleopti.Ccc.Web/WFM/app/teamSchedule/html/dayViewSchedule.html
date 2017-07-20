@@ -8,7 +8,7 @@
 	</div>
 </div>
 
-<div class="team-schedule panel wfm-block material-depth-1" ng-click="vm.showDatePicker && (vm.showDatePicker = false)" wait-for="vm.boostrap">
+<div class="team-schedule panel wfm-block material-depth-1" wait-for="vm.boostrap">
 	<div class="teamschedule-header" layout="row">
 		<div class="leftside-part">
 
@@ -32,7 +32,7 @@
 				<wfm-multiple-search-input search-options="vm.searchOptions" title="vm.searchPlaceholder" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
 			</div>
 
-			<span class="datepicker-container" ng-click="$event.stopPropagation()">
+			<span class="datepicker-container">
 				<team-schedule-datepicker selected-date="vm.scheduleDate" status="vm.showDatePicker" on-date-change="vm.onScheduleDateChanged()" class="inline-block"></team-schedule-datepicker>
 			</span>
 

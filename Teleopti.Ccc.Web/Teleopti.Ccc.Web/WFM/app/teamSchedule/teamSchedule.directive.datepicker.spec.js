@@ -23,8 +23,6 @@
 		var vm = result.commandControl;
 
 		var dateStringInput = angular.element(result.container[0].querySelector(".teamschedule-datepicker #teamschedule-datepicker-input"));
-
-		expect(vm.shortDateFormat).toBe('2016-06-01');
 		expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-01');
 		expect(dateStringInput.val()).toBe('2016-06-01');
 	});
@@ -35,14 +33,12 @@
 
 		var dateStringInput = angular.element(result.container[0].querySelector(".teamschedule-datepicker #teamschedule-datepicker-input"));
 
-		expect(vm.shortDateFormat).toBe('2016-06-01');
 		expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-01');
 		expect(dateStringInput.val()).toBe('2016-06-01');
 
 		vm.selectedDate = moment('2016-06-02').toDate();
 		result.scope.$apply();
 
-		expect(vm.shortDateFormat).toBe('2016-06-02');
 		expect(moment(vm.selectedDate).format('YYYY-MM-DD')).toBe('2016-06-02');
 		expect(dateStringInput.val()).toBe('2016-06-02');
 	});

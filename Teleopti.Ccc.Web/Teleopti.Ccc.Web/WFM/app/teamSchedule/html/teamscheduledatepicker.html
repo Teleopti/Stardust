@@ -3,12 +3,11 @@
 		<i class="mdi mdi-chevron-double-left"></i>
 	</button>
 
-	<input type="text" id="teamschedule-datepicker-input" class="pointer" ng-model="vm.shortDateFormat" ng-model-options="{ updateOn: 'blur change', allowInvalid: false }" placeholder="YYYY-MM-DD" teams-short-date
-		   ng-change="vm.onDateInputChange(vm.shortDateFormat)" />
-
-	<div class="wfm-datepicker-wrap" ng-if="vm.isCalendarOpened">
-		<div uib-datepicker ng-model="vm.selectedDate" class="wfm-datepicker" ng-change="vm.afterDateChangeDatePicker()" datepicker-options="vm.options"></div>
-	</div>
+	<input type="text" id="teamschedule-datepicker-input" uib-datepicker-popup is-open="vm.isCalendarOpened" class="pointer"
+		   ng-model="vm.selectedDate" ng-model-options="{ updateOn: 'blur change', allowInvalid: false }"
+		   placeholder="YYYY-MM-DD"
+		   ng-change="vm.onDateInputChange()"
+		   show-button-bar="false" />
 
 	<button type="button" class="wfm-btn wfm-btn-invis-primary wfm-btn-sm toggle-datepicker" ng-click="vm.toggleCalendar()">
 		<i class="mdi mdi-calendar"></i>
