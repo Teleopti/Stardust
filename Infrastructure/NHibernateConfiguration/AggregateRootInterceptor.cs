@@ -48,10 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public InterceptorIteration Iteration { get; set; }
 		
-		public IEnumerable<IRootChangeInfo> ModifiedRoots
-		{
-			get { return modifiedRoots; }
-		}
+		public IEnumerable<IRootChangeInfo> ModifiedRoots => modifiedRoots;
 
 		public override int[] FindDirty(object entity, object id, object[] currentState, object[] previousState,
 												  string[] propertyNames, IType[] types)
@@ -137,10 +134,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 			var ent = entity as IEntity;
 			var entityToCheck = entity as IRestrictionChecker;
-			if (entityToCheck != null)
-			{
-				entityToCheck.CheckRestrictions();
-			}
+			entityToCheck?.CheckRestrictions();
 
 			markRoot(ent);
 
