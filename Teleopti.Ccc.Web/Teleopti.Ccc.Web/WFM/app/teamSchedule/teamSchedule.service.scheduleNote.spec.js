@@ -18,27 +18,32 @@ describe("teamschedule schedule note management service tests", function () {
 		"PersonId": "221B-Baker-SomeoneElse",
 		"Name": "SomeoneElse",
 		"Date": scheduleDate,
-		"InternalNotes":"test"
+		"InternalNotes": "test",
+		"PublicNotes": "public"
 	};
 	var schedule2 = {
 		"PersonId": "221B-Sherlock",
 		"Name": "Sherlock Holmes",
 		"Date": scheduleDate,
-		"InternalNotes": null
+		"InternalNotes": null,
+		"PublicNotes": null
 	};
 
 	var schedule3 = {
 		"PersonId": "221B-Baker-SomeoneElse",
 		"Name": "SomeoneElse",
 		"Date": yesterday,
-		"InternalNotes": null
+		"InternalNotes": null,
+		"PublicNotes": null
 	};
 
 	it("Can create note dictionary for selected date", inject(function () {
 		target.resetScheduleNotes([schedule1, schedule3, schedule2], scheduleDateMoment);
-		var note1 = target.getInternalNoteForPerson("221B-Baker-SomeoneElse");
-		var note2 = target.getInternalNoteForPerson("221B-Sherlock");
-		expect(note1).toEqual("test");
-		expect(note2).toEqual(null);
+		var note1 = target.getNoteForPerson("221B-Baker-SomeoneElse");
+		var note2 = target.getNoteForPerson("221B-Sherlock");
+		expect(note1.internalNotes).toEqual("test");
+		expect(note1.publicNotes).toEqual("public");
+		expect(note2.publicNotes).toEqual(null);
+		expect(note2.internalNotes).toEqual(null);
 	}));
 });

@@ -11,6 +11,16 @@ describe('teamschedule note editor directive tests', function () {
 				fakeNoticeService = new FakeNoticeService();
 				return fakeNoticeService;
 			});
+			$provide.service('teamsToggles',
+				function() {
+					return {
+						all: function() {
+							return {
+								WfmTeamSchedule_DisplayAndEditPublicNote_44783: true
+							}
+						}
+					}
+				});
 		});
 	});
 
@@ -45,7 +55,8 @@ describe('teamschedule note editor directive tests', function () {
 		"PersonId": "221B-Sherlock",
 		"Name": "Sherlock Holmes",
 		"Date": scheduleDate,
-		"InternalNotes": null
+		"InternalNotes": null,
+		"PublicNotes":null
 	};
 
 	it("Can set schedule note for person", inject(function () {
@@ -54,10 +65,12 @@ describe('teamschedule note editor directive tests', function () {
 
 		controller = setUp();
 		controller.internalNotes = "newNotes for sherlock";
+		controller.publicNotes = 'new public note';
 		controller.submit();
 		$httpBackend.flush();
 
-		expect(noteMgmt.getInternalNoteForPerson("221B-Sherlock")).toEqual("newNotes for sherlock");
+		expect(noteMgmt.getNoteForPerson("221B-Sherlock").internalNotes).toEqual("newNotes for sherlock");
+		expect(noteMgmt.getNoteForPerson("221B-Sherlock").publicNotes).toEqual('new public note');
 		$httpBackend.verifyNoOutstandingRequest();
 	}));
 
@@ -70,7 +83,7 @@ describe('teamschedule note editor directive tests', function () {
 		controller.submit();
 		$httpBackend.flush();
 
-		expect(noteMgmt.getInternalNoteForPerson("221B-Sherlock")).toEqual(null);
+		expect(noteMgmt.getNoteForPerson("221B-Sherlock").internalNotes).toEqual(null);
 		expect(fakeNoticeService.getLastError()).toEqual('error');
 		$httpBackend.verifyNoOutstandingRequest();
 	}));
