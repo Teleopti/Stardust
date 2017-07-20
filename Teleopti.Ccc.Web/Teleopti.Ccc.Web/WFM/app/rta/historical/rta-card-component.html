@@ -1,6 +1,6 @@
 <div class="rta-card wfm-card-list">
     <md-card ng-class="{'wfm-card-selected material-depth-2 rta-card-full-width': $ctrl.ngOpen, 'wfm-card-unselected rta-card-full-width': !$ctrl.ngOpen}">
-        <div ng-transclude="header"></div>
+        <div ng-transclude="header" style="height: 100%"></div>
         <div ng-if="$ctrl.ngOpen" ng-transclude="body"></div>
     </md-card>
 </div>
