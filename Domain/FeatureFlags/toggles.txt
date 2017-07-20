@@ -53,7 +53,7 @@ WfmPermission_ReplaceOldPermission_34671 = true
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = RC
-WfmTeamSchedule_DisplayAndEditPublicNote_44783 = DEV
+WfmTeamSchedule_DisplayAndEditPublicNote_44783 = RC
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
 
