@@ -89,14 +89,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			ThePeriodThatWasUsedForFindingSchedules = period;
 
-			var absencesPeriod =
-				_data.OfType<IPersonAbsence>()
-					.Where(
-						p =>
-							p.Period.Intersect(period) && (absence == null || p.Layer.Payload.Equals(absence)) && p.Scenario.Equals(scenario) &&
-							p.Person.Equals(person)).Select(s => s.Period).Aggregate((a, b) => a.MaximumPeriod(b));
+			var periods = _data.OfType<IPersonAbsence>()
+				.Where(
+					p =>
+						p.Period.Intersect(period) && (absence == null || p.Layer.Payload.Equals(absence)) && p.Scenario.Equals(scenario) &&
+						p.Person.Equals(person)).Select(s => s.Period);
+			var absencesPeriod = !periods.Any() ? period : periods.Aggregate((a, b) => a.MaximumPeriod(b));
 
-			var scheduleData = _data.Where(d => d.BelongsToScenario(scenario)).ToArray();
+			var scheduleData = _data.Where(d => d.BelongsToScenario(scenario) && d.Period.Intersect(absencesPeriod)).ToArray();
 			return ScheduleDictionaryForTest.WithScheduleData(person, scenario, absencesPeriod, scheduleData)[person];
 		}
 
