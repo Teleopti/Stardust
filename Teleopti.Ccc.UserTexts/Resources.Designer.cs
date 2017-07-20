@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cant add to agent in other time zone and Note that Absences always added in Agent’s time zone, independent of the time shown in the Dropdown menu..
+        ///   Looks up a localized string similar to Note: Absences always added in Agent’s time zone, independent of the time shown in the Dropdown menu..
         /// </summary>
         public static string AbsenceCannotBeAddedToAgentsInAnotherTimeZone {
             get {
@@ -5340,7 +5340,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cant add to agent in other time zone and Note that shift always moved in Agent’s time zone, independent of the time shown in the Dropdown menu..
+        ///   Looks up a localized string similar to Cant add to agent in other time zone.
         /// </summary>
         public static string CannotApplyThisToAgentsInADifferentTimeZone {
             get {
@@ -29599,6 +29599,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftBags {
             get {
                 return ResourceManager.GetString("ShiftBags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: Shift always moved in Agent’s time zone, independent of the time shown in the Dropdown menu..
+        /// </summary>
+        public static string ShiftCannotBeAddedToAgentsInAnotherTimeZone {
+            get {
+                return ResourceManager.GetString("ShiftCannotBeAddedToAgentsInAnotherTimeZone", resourceCulture);
             }
         }
         

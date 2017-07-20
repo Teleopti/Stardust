@@ -42,16 +42,17 @@
 			<div class="text-danger" ng-if="vm.invalidAgentNameListString && vm.invalidAgentNameListString.length > 0">
 				<p ng-if="vm.isFullDayAbsence">
 					<i class="mdi mdi-alert-octagon"></i>
-					<span>{{'AbsenceCannotBeAddedToAgentsInAnotherTimeZone'|translate}}: <b>{{vm.invalidAgentNameListString}}</b></span>
+					<span>{{'CannotApplyThisToAgentsInADifferentTimeZone'|translate}}: <b>{{vm.invalidAgentNameListString}}</b></span>
 				</p>
 				<p ng-if="!vm.isFullDayAbsence">
 					<i class="mdi mdi-alert-octagon"></i>
 					<span>{{'TheAbsenceCanNotBeAddedTo'|translate}} <b>{{vm.invalidAgentNameListString}}</b></span>
 				</p>
 			</div>
-
 		</form>
-
+		<span class="text-danger" ng-if="vm.invalidAgentNameListString && vm.invalidAgentNameListString.length > 0 && vm.isFullDayAbsence">
+			{{'AbsenceCannotBeAddedToAgentsInAnotherTimeZone'|translate}}
+		</span>
 		<button id="applyAbsence" class="wfm-btn form-submit"
 				ng-class="{'wfm-btn-primary': newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() && (!vm.runningCommand), 'wfm-btn-primary-disabled': !(newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() && (!vm.runningCommand))}"
 				ng-disabled="newAbsenceForm.$valid && vm.isTimeRangeValid() && vm.anyValidAgent() && (! vm.runningCommand)?'':'disabled'"

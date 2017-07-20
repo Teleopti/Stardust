@@ -14,6 +14,8 @@
 			<i class="mdi mdi-alert-octagon"></i>
 			<span>{{'TheNewTimeIsNotAllowedFor'|translate}} <strong>{{$ctrl.invalidAgents | names }}</strong>.</span>
 		</div>
+
+		<span class="text-danger" ng-if="$ctrl.anyAgentsInDifferentTimeZone()">{{'ShiftCannotBeAddedToAgentsInAnotherTimeZone'|translate}}</span>
 		<button id="applyMoveShift" class="wfm-btn form-submit"
 				ng-class="{ 'wfm-btn-primary': $ctrl.anyValidAgent() && moveShiftForm.$valid && !$ctrl.checkingCommand, 'wfm-btn-primary-disabled': !$ctrl.anyValidAgent() || !moveShiftForm.$valid || $ctrl.checkingCommand}"
 				ng-disabled="$ctrl.processingCommand || !$ctrl.anyValidAgent() || !moveShiftForm.$valid"
