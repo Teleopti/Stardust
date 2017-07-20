@@ -82,6 +82,27 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
+		public void ShouldNotUpdatePublicNoteWhenInputIsNull()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			PersonRepo.Add(person);
+			var date = new DateOnly(2016, 9, 29);
+			var existingNote = new PublicNote(person, date, CurrentScenario.Current(), "existing note").WithId();
+			ScheduleStorage.Add(existingNote);
+
+			var command = new EditScheduleNoteCommand
+			{
+				Date = new DateOnly(2016, 9, 29),
+				PersonId = person.Id.GetValueOrDefault(),
+			};
+
+			Target.Handle(command);
+			var schedule = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(
+				person, new ScheduleDictionaryLoadOptions(true, true), new DateOnlyPeriod(date, date), CurrentScenario.Current())[person].ScheduledDayCollection(new DateOnlyPeriod(date, date)).Single();
+			var note = schedule.PublicNoteCollection().FirstOrDefault();
+			note.GetScheduleNote(new NoFormatting()).Should().Be("existing note");
+		}
+		[Test]
 		public void ShouldAddNewPublicNote()
 		{
 			var person = PersonFactory.CreatePerson().WithId();

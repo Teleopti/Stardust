@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			updateInternalNote(command.InternalNote, scheduleDay);
 			updatePublicNote(command.PublicNote, scheduleDay);
-
 			((IReadOnlyScheduleDictionary) scheduleDic).MakeEditable();
 			var errorResponses = scheduleDic.Modify(scheduleDay, new DoNothingScheduleDayChangeCallBack()).ToList();
 			if (errorResponses.Count > 0)
@@ -72,6 +71,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 		private static void updatePublicNote(string publicNote, IScheduleDay scheduleDay)
 		{
+			if(publicNote == null) return;
+
 			var note = scheduleDay.PublicNoteCollection().FirstOrDefault();
 			if (!string.IsNullOrEmpty(publicNote))
 			{
