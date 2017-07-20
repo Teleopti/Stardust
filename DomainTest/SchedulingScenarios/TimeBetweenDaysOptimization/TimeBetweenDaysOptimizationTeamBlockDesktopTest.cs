@@ -23,10 +23,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public OptimizationExecuter Target;
-		public FakeRuleSetBagRepository RuleSetBagRepository; //needed also in Desktop tests becaused used in grouppagecreator
+		public FakeRuleSetBagRepository RuleSetBagRepository;
 
 		[Test]
-		[Ignore("#45214")]
 		public void ShouldNotCrashOnAgentWithLeavingDate()
 		{
 			var date = new DateOnly(2015, 10, 12);

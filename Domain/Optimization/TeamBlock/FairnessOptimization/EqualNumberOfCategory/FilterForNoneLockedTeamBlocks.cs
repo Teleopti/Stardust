@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualN
 					foreach (var person in teamInfo.GroupMembers)
 					{
 						var matrix = teamInfo.MatrixForMemberAndDate(person, dateOnly);
+						if (matrix == null) continue;
 						var scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
 						if (!matrix.UnlockedDays.Contains(scheduleDayPro))
 						{
