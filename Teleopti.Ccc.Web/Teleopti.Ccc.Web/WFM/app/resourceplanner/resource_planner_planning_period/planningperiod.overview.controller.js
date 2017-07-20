@@ -86,13 +86,16 @@
     }
 
     function openModal() {
+      if (vm.isDisable || vm.dayNodes == null) {
+        return;
+      }
       return vm.confirmModal = true;
     }
 
     function clearSchedules() {
       if (selectedPpId !== null) {
         vm.clearRunning = true;
-        vm.status = $translate.instant('ClearScheduleResultAndHistoryData'); 
+        vm.status = $translate.instant('ClearScheduleResultAndHistoryData');
         planningPeriodServiceNew.clearSchedules({ id: selectedPpId }).$promise.then(function () {
           vm.clearRunning = false;
           vm.isScheduled = false;
