@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Remove(IAbsence root)
 		{
-			throw new NotImplementedException();
+			_absences.Remove(root);
 		}
 
 		public IAbsence Get(Guid id)

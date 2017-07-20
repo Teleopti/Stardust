@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ServiceModel;
 using NUnit.Framework;
-using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -13,19 +12,17 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
     [TestFixture]
     public class SetPersonAccountForPersonCommandHandlerTest
     {
-        private MockRepository _mock;
-        private IPersonRepository _personRepository;
-        private IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
-        private IAbsenceRepository _absenceRepository;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+        private FakePersonRepository _personRepository;
+        private FakePersonAbsenceAccountRepository _personAbsenceAccountRepository;
+        private FakeAbsenceRepository _absenceRepository;
         private SetPersonAccountForPersonCommandHandler _target;
         private IPerson _person;
         private IAbsence _absence;
@@ -39,20 +36,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         [SetUp]
         public void Setup()
         {
-            _mock = new MockRepository();
-            _personRepository = _mock.StrictMock<IPersonRepository>();
-            _personAbsenceAccountRepository = _mock.StrictMock<IPersonAbsenceAccountRepository>();
-            _absenceRepository = _mock.StrictMock<IAbsenceRepository>();
-            _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
-            _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
-            _tracesableRefreshService = _mock.DynamicMock<ITraceableRefreshService>();
+            _personRepository = new FakePersonRepository(new FakeStorage());
+            _personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
+            _absenceRepository = new FakeAbsenceRepository();
+            _currentUnitOfWorkFactory = new FakeCurrentUnitOfWorkFactory();
+            _tracesableRefreshService = new TraceableRefreshService(new FakeCurrentScenario(), new FakeScheduleStorage());
             _target = new SetPersonAccountForPersonCommandHandler(_personRepository,_personAbsenceAccountRepository,_absenceRepository,_currentUnitOfWorkFactory,_tracesableRefreshService);
 
-            _person = PersonFactory.CreatePerson("test");
-            _person.SetId(Guid.NewGuid());
+            _person = PersonFactory.CreatePerson("test").WithId();
+            _personRepository.Add(_person);
 
-            _absence = AbsenceFactory.CreateAbsence("test absence");
-            _absence.SetId(Guid.NewGuid());
+            _absence = AbsenceFactory.CreateAbsence("test absence").WithId();
+            _absenceRepository.Add(_absence);
 
             _setPersonAccountForPersonCommandDto = new SetPersonAccountForPersonCommandDto
                                                        {
@@ -65,113 +60,42 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                                                        };
         }
 
-        [Test]
-        public void ShouldSetPersonAccountForPerson()
-        {
-            var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
-            var personAccounts = _mock.StrictMock<IPersonAccountCollection>();
-            var account = _mock.StrictMock<IAccount>();
-            
-            using(_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(_person);
-                Expect.Call(_absenceRepository.Get(_setPersonAccountForPersonCommandDto.AbsenceId)).Return(_absence);
-                Expect.Call(_personAbsenceAccountRepository.Find(_person)).Return(personAccounts);
-                Expect.Call(account.StartDate).Return(_dateOnly);
-                Expect.Call(personAccounts.Find(_absence, _dateOnly )).Return(account);
-                Expect.Call(unitOfWork.PersistAll());
-                Expect.Call(account.Accrued = TimeSpan.FromMinutes(10));
-                Expect.Call(account.BalanceIn = TimeSpan.FromMinutes(11));
-                Expect.Call(account.Extra = TimeSpan.FromMinutes(12));
-            }
-            using(_mock.Playback())
-            {
-                _target.Handle(_setPersonAccountForPersonCommandDto);
-            }
-        }
+	    [Test]
+	    public void ShouldSetPersonAccountForPerson()
+	    {
+		    var personAbsenceAccount = new PersonAbsenceAccount(_person, _absence);
+		    var accountDay = new AccountDay(_dateOnly);
+		    personAbsenceAccount.Add(accountDay);
+		    _personAbsenceAccountRepository.Add(personAbsenceAccount);
 
-        [Test]
-        public void ShouldThrowExceptionIfPersonDoesNotFound()
-        {
-            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
-            
-            using (_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(null);
-                Expect.Call(unitOfWork.Dispose);
-            }
-            using (_mock.Playback())
-            {
-                Assert.Throws<FaultException>(() => _target.Handle(_setPersonAccountForPersonCommandDto));
-            }
-        }
+		    _target.Handle(_setPersonAccountForPersonCommandDto);
 
-        [Test]
-        public void ShouldThrowExceptionIfAbsenceDoesNotFound()
-        {
-            var unitOfWork = _mock.StrictMock<IUnitOfWork>();
+		    accountDay.Accrued.Should().Be.EqualTo(TimeSpan.FromMinutes(10));
+		    accountDay.BalanceIn.Should().Be.EqualTo(TimeSpan.FromMinutes(11));
+		    accountDay.Extra.Should().Be.EqualTo(TimeSpan.FromMinutes(12));
+	    }
 
-            using (_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(_person);
-                Expect.Call(_absenceRepository.Get(_setPersonAccountForPersonCommandDto.AbsenceId)).Return(null);
-                Expect.Call(unitOfWork.Dispose);
-            }
-            using (_mock.Playback())
-            {
-                Assert.Throws<FaultException>(() => _target.Handle(_setPersonAccountForPersonCommandDto));
-            }
-        }
+	    [Test]
+	    public void ShouldThrowExceptionIfPersonDoesNotFound()
+	    {
+		    _personRepository.Remove(_person);
+		    Assert.Throws<FaultException>(() => _target.Handle(_setPersonAccountForPersonCommandDto));
+	    }
 
-        [Test]
-        public void ShouldSetPersonAccount()
-        {
-            var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
-            var personAccounts = _mock.StrictMock<IPersonAccountCollection>();
-            var account = _mock.DynamicMock<IAccount>();
+	    [Test]
+	    public void ShouldThrowExceptionIfAbsenceDoesNotFound()
+	    {
+		    _absenceRepository.Remove(_absence);
+		    Assert.Throws<FaultException>(() => _target.Handle(_setPersonAccountForPersonCommandDto));
+	    }
 
-            using (_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(_person);
-                Expect.Call(_absenceRepository.Get(_setPersonAccountForPersonCommandDto.AbsenceId)).Return(_absence);
-                Expect.Call(_personAbsenceAccountRepository.Find(_person)).Return(personAccounts);
-                Expect.Call(account.StartDate).Return(_dateOnly);
-                Expect.Call(personAccounts.Find(_absence, _dateOnly)).Return(account);
-                Expect.Call(() => unitOfWork.PersistAll());
-            }
-            using (_mock.Playback())
-            {
-                _target.Handle(_setPersonAccountForPersonCommandDto);
-            }
-        }
-
-        [Test]
-        public void ShouldThrowExceptionIfNotPermitted()
-        {
-            var unitOfWork = _mock.DynamicMock<IUnitOfWork>();
-
-            using (_mock.Record())
-            {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(_currentUnitOfWorkFactory.Current()).Return(_unitOfWorkFactory);
-                Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(_person);
-                Expect.Call(_absenceRepository.Get(_setPersonAccountForPersonCommandDto.AbsenceId)).Return(_absence);
-            }
-            using (_mock.Playback())
-            {
-                using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
-                {
-                    Assert.Throws<FaultException>(() => _target.Handle(_setPersonAccountForPersonCommandDto));
-                }
-            }
-        }
+	    [Test]
+	    public void ShouldThrowExceptionIfNotPermitted()
+	    {
+		    using (CurrentAuthorization.ThreadlyUse(new NoPermission()))
+		    {
+			    Assert.Throws<FaultException>(() => _target.Handle(_setPersonAccountForPersonCommandDto));
+		    }
+	    }
     }
 }
