@@ -50,13 +50,14 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return getBusinessRuleResponses(Resources.PeriodIsOutOfSkillOpenHours, period, person);
 			}
 
-			var skill = _overtimeRequestUnderStaffingSkillProvider.GetUnderStaffingSkill(period, skills);
-			if (skill == null)
+			var seriousUnderstaffingSkills = _overtimeRequestUnderStaffingSkillProvider.GetSeriousUnderstaffingSkills(period, skills);
+			if (seriousUnderstaffingSkills.Count == 0)
 			{
 				return getBusinessRuleResponses(Resources.NoUnderStaffingSkill, period, person);
 			}
 
-			addOvertimeActivity(skill.Activity.Id.GetValueOrDefault(), overtimeRequest);
+			// todo only return the first activity of skill now
+			addOvertimeActivity(seriousUnderstaffingSkills.First().Activity.Id.GetValueOrDefault(), overtimeRequest);
 
 			return new List<IBusinessRuleResponse>();
 		}

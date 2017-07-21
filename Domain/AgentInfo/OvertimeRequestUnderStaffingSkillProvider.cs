@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_skillStaffingReadModelDataLoader = skillStaffingReadModelDataLoader;
 		}
 
-		public ISkill GetUnderStaffingSkill(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills)
+		public IList<ISkill> GetSeriousUnderstaffingSkills(DateTimePeriod dateTimePeriod, IEnumerable<ISkill> skills)
 		{
 			var skillStaffingDatas = _skillStaffingReadModelDataLoader.Load(skills.ToList(), dateTimePeriod);
 			if (!skillStaffingDatas.Any())
-				return null;
+				return new ISkill[]{};
 
 			var skillStaffingDataGroups = skillStaffingDatas.GroupBy(s => s.Skill).ToList();
 			var seriousUnderstaffingSkills = new List<ISkill>();
@@ -40,11 +40,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 			if (seriousUnderstaffingSkills.Count == skillStaffingDataGroups.Count)
 			{
-				// todo maybe there are more than 1 skill to return
-				return seriousUnderstaffingSkills.First();
+				return seriousUnderstaffingSkills;
 			}
 
-			return null;
+			return new ISkill[] { };
 		}
 
 		private bool hasSeriousUnderstaffing(ISkill skill, SkillStaffingData skillStaffingData)
