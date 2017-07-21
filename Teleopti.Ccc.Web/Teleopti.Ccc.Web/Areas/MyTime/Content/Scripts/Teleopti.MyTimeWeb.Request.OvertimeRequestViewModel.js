@@ -131,9 +131,8 @@
 		var dateFromMoment = self.DateFrom();
 		if (!moment.isMoment(dateFromMoment))
 			dateFromMoment = moment(dateFromMoment, dateTimeFormats.dateOnly);
-
-		var days = Math.ceil(moment.duration(dateFromMoment - moment()).asDays());
-		return days <= 14 && days >= 0;
+		var days = Math.ceil(moment.duration(dateFromMoment - moment().startOf("day")).asDays());
+		return days <= 13 && days >= 0;
 	}
 
 	function _buildPostData() {

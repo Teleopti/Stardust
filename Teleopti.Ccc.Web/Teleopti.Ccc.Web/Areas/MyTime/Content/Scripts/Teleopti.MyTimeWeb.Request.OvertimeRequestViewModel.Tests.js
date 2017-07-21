@@ -186,7 +186,7 @@ $(document).ready(function() {
 	test('should not pass validation when request date exceeds 14 days', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFrom(moment().add(15, 'days').format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly));
+		vm.DateFrom(moment().add(14, 'days').format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly));
 		vm.StartTime('19:00');
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
