@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -19,21 +20,23 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private IAbsenceLayer _layer;
 		private DateTime? _lastChange;
 		
-		public PersonAbsence(IPerson agent, IScenario scenario, IAbsenceLayer layer)
+		public PersonAbsence(IPerson agent, IScenario scenario, IAbsenceLayer layer) : this(scenario)
 		{
 			_person = agent;
-			_scenario = scenario;
 			_layer = layer;
-			
 		}
 	
-
 		/// <summary>
 		/// Constructor for CommandHandlers
 		/// </summary>
-		public PersonAbsence(IScenario scenario)
+		public PersonAbsence(IScenario scenario) : this()
 		{
 			_scenario = scenario;
+		}
+
+		protected PersonAbsence()
+		{
+			_lastChange = ServiceLocatorForEntity.Now.UtcDateTime();
 		}
 
 		/// <summary>
@@ -198,13 +201,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			AddEvent(personAbsenceModifiedEvent);
 		}
-				
-		protected PersonAbsence()
-		{
-		}
-
-
-
+		
 		/// <summary>
 		/// Gets the layer.
 		/// </summary>
@@ -213,20 +210,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// Created by: rogerkr
 		/// Created date: 2008-02-15
 		/// </remarks>
-		public virtual IAbsenceLayer Layer
-		{
-			get { return _layer; }
-		}
-
-
-
+		public virtual IAbsenceLayer Layer => _layer;
+		
 		/// <summary>
 		/// Gets or sets the Person
 		/// </summary>
-		public virtual IPerson Person
-		{
-			get { return _person; }
-		}
+		public virtual IPerson Person => _person;
 
 		/// <summary>
 		/// Gets or sets the Scenario

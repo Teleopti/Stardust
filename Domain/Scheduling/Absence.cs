@@ -20,9 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private Color _displayColor;
         private bool _confidential;
 
-        #region Properties
-
-        /// <summary>
+		/// <summary>
         /// Gets or sets the priority.
         /// Used if a person has multiple PersonAbsences
         /// </summary>
@@ -37,13 +35,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
             set { _priority = value; }
         }
 
-        public virtual string Name
-        {
-            get { return Description.Name; }
-        }
-
-   
-        public virtual bool Requestable
+        public virtual string Name => Description.Name;
+		
+		public virtual bool Requestable
         {
             get { return _requestable; }
             set { _requestable = value; }
@@ -55,9 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             set { _payrollCode = value; }
         }
 
-		#endregion
-
-	    public override void NotifyTransactionComplete(DomainUpdateType operation)
+		public override void NotifyTransactionComplete(DomainUpdateType operation)
 	    {
 			base.NotifyTransactionComplete(operation);
 			switch (operation)
@@ -162,9 +154,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return (IAbsence) MemberwiseClone();
         }
 
-        public override IPayload UnderlyingPayload
-        {
-            get { return this; }
-        }
-    }
+        public override IPayload UnderlyingPayload => this;
+	}
 }

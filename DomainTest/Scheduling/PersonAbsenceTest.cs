@@ -34,7 +34,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             person = PersonFactory.CreatePerson();
             scenario = ScenarioFactory.CreateScenarioAggregate();
             target = new PersonAbsence(person, scenario, new AbsenceLayer(absence, new DateTimePeriod(2001,1,1,2002,1,1)));
-            
         }
 
 
@@ -51,8 +50,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.IsNotNull(target.Person);
             Assert.IsNotNull(target.Scenario);
             Assert.IsNotNull(target.Layer);
+			
             Assert.AreEqual(DefinedRaptorApplicationFunctionPaths.ModifyPersonAbsence, target.FunctionPath);
         }
+
+	    [Test]
+	    public void ShouldAlwaysHaveCreationTimeAsLastChangeForCorrectPrioWhenSamePrioOnAbsence()
+	    {
+			target.LastChange.Value.Should().Be.GreaterThan(DateTime.UtcNow.AddSeconds(-30));
+		}
 
         [Test]
         public void VerifyLastChange()

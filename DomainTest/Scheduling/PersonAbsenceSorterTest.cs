@@ -23,7 +23,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         public void VerifySorting()
         {
             IPersonAbsence abs1 = createPersonAbsense(100);
+	        abs1.LastChange = null;
             IPersonAbsence abs2 = createPersonAbsense(80);
+	        abs2.LastChange = null;
             IPersonAbsence abs3 = createPersonAbsense(80);
             abs3.LastChange = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
             IPersonAbsence abs4 = createPersonAbsense(80);

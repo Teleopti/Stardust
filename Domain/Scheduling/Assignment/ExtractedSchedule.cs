@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			foreach (var personAbsence in org)
 			{
-				if (period.Intersect(personAbsence.Period) || (projPeriod.HasValue && personAbsence.Period.Intersect(projPeriod.Value)))
+				if (period.Intersect(personAbsence.Period) || projPeriod.HasValue && personAbsence.Period.Intersect(projPeriod.Value))
 					ret.Add(personAbsence);
 			}
 			ret.Sort(sorter);
