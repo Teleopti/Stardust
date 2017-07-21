@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -15,15 +17,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly INow _now;
 		private readonly IntradayRequestProcessor _intradayRequestProcessor;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
+		private readonly ICommandDispatcher _commandDispatcher;
 
 		public AbsenceRequestIntradayFilter(IntradayRequestProcessor intradayRequestProcessor,
 											IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, INow now,
-											IAbsenceRequestValidatorProvider absenceRequestValidatorProvider)
+											IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ICommandDispatcher commandDispatcher)
 		{
 			_intradayRequestProcessor = intradayRequestProcessor;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_now = now;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
+			_commandDispatcher = commandDispatcher;
 		}
 
 
@@ -36,22 +40,53 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
 			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 
-			var isIntradayRequest = personRequest.Request.Period.ElapsedTime() <= TimeSpan.FromDays(1) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
-			if (isIntradayRequest && validators.Any(v => v is StaffingThresholdValidator))
+
+			if (checkIfNoValidatorIsUsed(validators))
 			{
-				_intradayRequestProcessor.Process(personRequest, startDateTime);
+				//this looks strange but is how it works. Pending = no autogrant, Grant = autogrant
+				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
+				if (autoGrant)
+				{
+					var command = new ApproveRequestCommand
+					{
+						PersonRequestId = personRequest.Id.GetValueOrDefault(),
+						IsAutoGrant = true
+					};
+					_commandDispatcher.Execute(command);
+				}
 			}
 			else
 			{
-				var queuedAbsenceRequest = new QueuedAbsenceRequest
+				var isIntradayRequest = personRequest.Request.Period.ElapsedTime() <= TimeSpan.FromDays(1) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
+				if (isIntradayRequest && validators.Any(v => v is StaffingThresholdValidator))
 				{
-					PersonRequest = personRequest.Id.GetValueOrDefault(),
-					Created = personRequest.CreatedOn.GetValueOrDefault(),
-					StartDateTime = personRequest.Request.Period.StartDateTime,
-					EndDateTime = personRequest.Request.Period.EndDateTime
-				};
-				_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+					_intradayRequestProcessor.Process(personRequest, startDateTime);
+				}
+				else
+				{
+					var queuedAbsenceRequest = new QueuedAbsenceRequest
+					{
+						PersonRequest = personRequest.Id.GetValueOrDefault(),
+						Created = personRequest.CreatedOn.GetValueOrDefault(),
+						StartDateTime = personRequest.Request.Period.StartDateTime,
+						EndDateTime = personRequest.Request.Period.EndDateTime
+					};
+					_queuedAbsenceRequestRepository.Add(queuedAbsenceRequest);
+				}
 			}
+
+			
+		}
+
+		private bool checkIfNoValidatorIsUsed(IEnumerable<IAbsenceRequestValidator> validators)
+		{
+			if (validators.Any(v => v is StaffingThresholdValidator) ||
+				validators.Any(v => v is StaffingThresholdValidatorCascadingSkillsWithShrinkage) ||
+				validators.Any(v => v is BudgetGroupAllowanceValidator) ||
+				validators.Any(v => v is BudgetGroupHeadCountValidator) ||
+				validators.Any(v => v is StaffingThresholdWithShrinkageValidator))
+				return false;
+			return true;
 		}
 	}
 }
