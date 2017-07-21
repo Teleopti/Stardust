@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 			var studentAvailabilityPeriodFeedbackProvider =
 				MockRepository.GenerateMock<IStudentAvailabilityPeriodFeedbackProvider>();
 			studentAvailabilityPeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today))
-				.Return(new PeriodFeedback {TargetTime = new MinMax<TimeSpan>(TimeSpan.FromDays(2), TimeSpan.FromDays(5))});
+				.Return(new PeriodFeedback {TargetTime = new TimePeriod(TimeSpan.FromDays(2), TimeSpan.FromDays(5))});
 			var target = new StudentAvailabilityPeriodFeedbackViewModelFactory(studentAvailabilityPeriodFeedbackProvider);
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.StudentAvailability.ViewModelFa
 			var studentAvailabilityPeriodFeedbackProvider =
 				MockRepository.GenerateMock<IStudentAvailabilityPeriodFeedbackProvider>();
 			studentAvailabilityPeriodFeedbackProvider.Stub(x => x.PeriodFeedback(DateOnly.Today))
-				.Return(new PeriodFeedback {TargetTime = new MinMax<TimeSpan>(TimeSpan.FromDays(2), TimeSpan.FromDays(5))});
+				.Return(new PeriodFeedback {TargetTime = new TimePeriod(TimeSpan.FromDays(2), TimeSpan.FromDays(5))});
 			var target = new StudentAvailabilityPeriodFeedbackViewModelFactory(studentAvailabilityPeriodFeedbackProvider);
 
 			var result = target.CreatePeriodFeedbackViewModel(DateOnly.Today);

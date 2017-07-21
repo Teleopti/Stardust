@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			virtualSchedulePeriodProvider.Stub(x => x.VirtualSchedulePeriodForDate(DateOnly.Today)).Return(virtualSchedulePeriod);
 			virtualSchedulePeriod.Stub(x => x.DateOnlyPeriod).Return(dateOnlyPeriod);
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(dateOnlyPeriod)).Return(scheduleDays);
-			var targetTime = new MinMax<TimeSpan>(TimeSpan.FromHours(2), TimeSpan.FromHours(5));
+			var targetTime = new TimePeriod(TimeSpan.FromHours(2), TimeSpan.FromHours(5));
 			schedulePeriodTargetTimeCalculator.Stub(x => x.TargetTimeWithTolerance(virtualSchedulePeriod, scheduleDays)).Return(targetTime);
 
 			var target = new PreferencePeriodFeedbackProvider(

@@ -44,6 +44,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 	{
 		public MinMax<int> TargetDaysOff { get; set; }
 		public int PossibleResultDaysOff { get; set; }
-		public MinMax<TimeSpan> TargetTime { get; set; }
+		public TimePeriod TargetTime { get; set; }
 	}
 }

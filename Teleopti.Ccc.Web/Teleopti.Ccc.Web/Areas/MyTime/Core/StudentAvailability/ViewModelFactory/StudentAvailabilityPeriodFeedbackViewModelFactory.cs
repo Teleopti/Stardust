@@ -20,8 +20,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.ViewModelFactor
 				{
 					TargetContractTime = new TargetContractTimeViewModel
 						{
-							LowerMinutes = feedback.TargetTime.Minimum.TotalMinutes,
-							UpperMinutes = feedback.TargetTime.Maximum.TotalMinutes
+							LowerMinutes = feedback.TargetTime.StartTime.TotalMinutes,
+							UpperMinutes = feedback.TargetTime.EndTime.TotalMinutes
 						},
 				};
 		}
