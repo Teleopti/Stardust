@@ -86,6 +86,22 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
+		//green from start, if purist remove
+		public void ShouldSetSpecificAgentsToOptimizeWhenOneIsland()
+		{
+			var skill = new Skill().WithId();
+			var agent1 = new Person().WithId().WithPersonPeriod(skill);
+			var agent2 = new Person().WithId().WithPersonPeriod(skill);
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1 } });
+
+			var @event = EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single();
+			@event.AgentsToSchedule.Should().Have.SameValuesAs(agent1.Id.Value);
+		}
+
+		[Test]
 		[Ignore("#45197")]
 		public void ShouldCreateTwoEventsIfTwoAgentsWithDifferentSkills()
 		{
