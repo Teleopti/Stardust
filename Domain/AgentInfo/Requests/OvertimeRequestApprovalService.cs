@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -16,16 +18,21 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
 		private readonly ISkillOpenHourFilter _skillOpenHourFilter;
 		private readonly ICommandDispatcher _commandDispatcher;
+		private readonly IScenario _scenario;
+		private readonly IScheduleStorage _scheduleStorage;
+
 
 		public OvertimeRequestApprovalService(
 			IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
 			IOvertimeRequestSkillProvider overtimeRequestSkillProvider,
-			ISkillOpenHourFilter skillOpenHourFilter, ICommandDispatcher commandDispatcher)
+			ISkillOpenHourFilter skillOpenHourFilter, ICommandDispatcher commandDispatcher, IScheduleStorage scheduleStorage, IScenario scenario)
 		{
 			_overtimeRequestUnderStaffingSkillProvider = overtimeRequestUnderStaffingSkillProvider;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 			_skillOpenHourFilter = skillOpenHourFilter;
 			_commandDispatcher = commandDispatcher;
+			_scheduleStorage = scheduleStorage;
+			_scenario = scenario;
 		}
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
@@ -56,10 +63,34 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return getBusinessRuleResponses(Resources.NoUnderStaffingSkill, period, person);
 			}
 
+			var withoutOvertimeSkills = seriousUnderstaffingSkills
+				.Where(s => !overtimeAlreadyExists(period, person, s.Activity)).ToList();
+			if (withoutOvertimeSkills.Count == 0)
+			{
+				return getBusinessRuleResponses(Resources.RequestDenyReasonAlreadyOvertime, period, person);
+			}
+
 			// todo only return the first activity of skill now
-			addOvertimeActivity(seriousUnderstaffingSkills.First().Activity.Id.GetValueOrDefault(), overtimeRequest);
+			addOvertimeActivity(withoutOvertimeSkills.First().Activity.Id.GetValueOrDefault(), overtimeRequest);
 
 			return new List<IBusinessRuleResponse>();
+		}
+
+		private bool overtimeAlreadyExists(DateTimePeriod period, IPerson person, IActivity activity)
+		{
+
+			var dic = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(period), _scenario,
+				new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), new[] { person });
+
+			var scheduleDay = dic[person].ScheduledDay(new DateOnly(period.StartDateTime));
+
+			var personAssignment = scheduleDay.PersonAssignment();
+			if (personAssignment == null)
+				return false;
+
+			var overtimeActivities = personAssignment.OvertimeActivities();
+
+			return overtimeActivities.Any(a => a.Payload == activity && a.Period.Intersect(period));
 		}
 
 		private void addOvertimeActivity(Guid activityId, IOvertimeRequest overtimeRequest)

@@ -25473,6 +25473,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is already overtime in the schedule for given period..
+        /// </summary>
+        public static string RequestDenyReasonAlreadyOvertime {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonAlreadyOvertime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your absence request has been denied automatically, due to a rule set up by the administrator..
         /// </summary>
         public static string RequestDenyReasonAutodeny {

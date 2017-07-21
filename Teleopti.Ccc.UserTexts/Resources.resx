@@ -10474,6 +10474,10 @@ These options are activated:
     <value>There is already absence in the schedule for given period.</value>
     <comment>There is already absence in the schedule for given period.</comment>
   </data>
+	 <data name="RequestDenyReasonAlreadyOvertime" xml:space="preserve">
+    <value>There is already overtime in the schedule for given period.</value>
+    <comment>There is already overtime in the schedule for given period.</comment>
+  </data>
   <data name="CustomReports" xml:space="preserve">
     <value>Custom reports</value>
     <comment>Custom reports</comment>

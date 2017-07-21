@@ -18,10 +18,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
 		private readonly ISkillOpenHourFilter _skillOpenHourFilter;
 		private readonly ICommandDispatcher _commandDispatcher;
+		private readonly IScheduleStorage _scheduleStorage;
 
 		public RequestApprovalServiceFactory(ISwapAndModifyService swapAndModifyService, IGlobalSettingDataRepository globalSettingDataRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider, IScheduleDayChangeCallback scheduleDayChangeCallback, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
 		IOvertimeRequestSkillProvider overtimeRequestSkillProvider,
-		ISkillOpenHourFilter skillOpenHourFilter, ICommandDispatcher commandDispatcher)
+		ISkillOpenHourFilter skillOpenHourFilter, ICommandDispatcher commandDispatcher, IScheduleStorage scheduleStorage)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 			_skillOpenHourFilter = skillOpenHourFilter;
 			_commandDispatcher = commandDispatcher;
+			_scheduleStorage = scheduleStorage;
 			_swapAndModifyService = swapAndModifyService;
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						_personRequestCheckAuthorization);
 				case RequestType.OvertimeRequest:
 					return new OvertimeRequestApprovalService(_overtimeRequestUnderStaffingSkillProvider, _overtimeRequestSkillProvider, _skillOpenHourFilter,
-						_commandDispatcher);
+						_commandDispatcher, _scheduleStorage, scenario);
 			}
 
 			return null;
