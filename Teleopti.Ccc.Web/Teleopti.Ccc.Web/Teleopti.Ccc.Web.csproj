@@ -1516,6 +1516,7 @@
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
+    <Content Include="WFM\app\rta\refact\main.controller.redirects.spec.js" />
     <Content Include="WFM\css\_staffing.scss" />
     <None Include="WFM\css\_wfmmultiplesearchinput.scss" />
     <Content Include="WFM\app\permissions\functionsrefact\permissions-function-tree.html" />

@@ -294,7 +294,6 @@
 					var siteIndex = vm.selectedItems.siteIds.indexOf(match.site.Id);
 
 					if (match.isSelected) {
-						console.log('hej hej');
 						match.teams.forEach(function (team) {
 							var index = vm.selectedItems.teamIds.indexOf(team.Id);
 							vm.selectedItems.teamIds.splice(index, 1);
