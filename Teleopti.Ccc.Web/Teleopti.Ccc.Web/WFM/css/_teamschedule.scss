@@ -1054,6 +1054,7 @@ md-tooltip.layer-summary {
 		max-width: 600px;
 		white-space: normal;
 	}
+
 }
 
 .multiline-tooltip.margin-top-22 {
@@ -1384,4 +1385,10 @@ organization-picker {
 .context-menu.card-context.sort-menu:hover, .context-menu.card-context.sort-menu:focus {
 	background: none;
 	box-shadow: none !important;
+}
+.truncated {
+	max-width: 200px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
