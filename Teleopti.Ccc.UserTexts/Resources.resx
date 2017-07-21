@@ -15613,7 +15613,7 @@ Do you want to participate?</value>
     <comment>Subitle of agents view in RTA</comment>
   </data>
   <data name="AbsenceCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
-    <value>Note: Absences always added in Agent’s time zone, independent of the time shown in the Dropdown menu.</value>
+    <value>Note: To add an absence to an agent in a different timezone, firstly select their timezone from the timezone dropdown.</value>
     <comment>Error message for adding full-day absence to agent in another time zone in Teams</comment>
   </data>
   <data name="InvalidColumn" xml:space="preserve">
@@ -16217,7 +16217,7 @@ Do you want to participate?</value>
     <comment>Used on intraday, used to choose day to view by offset -7 to +1</comment>
   </data>
   <data name="CannotApplyThisToAgentsInADifferentTimeZone" xml:space="preserve">
-    <value>Cant add to agent in other time zone</value>
+    <value>Can't apply to agents in other time zones</value>
     <comment>Error message in Teams</comment>
   </data>
   <data name="MissingDuration" xml:space="preserve">
@@ -16297,7 +16297,7 @@ Do you want to participate?</value>
     <comment>Public Note</comment>
   </data>
   <data name="ShiftCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
-    <value>Note: Shift always moved in Agent’s time zone, independent of the time shown in the Dropdown menu.</value>
+    <value>Note: To move a shift for an agent in a different timezone, firstly select their timezone from the timezone dropdown.</value>
     <comment>Error message for move shift to agent in another time zone in Teams</comment>
   </data>
   <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
