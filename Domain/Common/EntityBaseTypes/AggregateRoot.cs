@@ -105,7 +105,8 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 	public abstract class AggregateRoot : Entity,
 		IAggregateRoot,
-		IChangeInfo
+		IChangeInfo,
+		IEventsRoot
 	{
 		private IPerson _updatedBy;
 		private DateTime? _updatedOn;
@@ -129,6 +130,11 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		protected void CloneEvents(AggregateRoot clone)
 		{
 			clone._events = _events.Clone();
+		}
+
+		void IEventsRoot.CloneEventsAfterMerge(AggregateRoot clone)
+		{
+			CloneEvents(clone);
 		}
 
 		protected void AddEvent(Func<IEvent> @event)
@@ -167,6 +173,11 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		}
 
 		public virtual string UpdatedTimeInUserPerspective => _localizedUpdateInfo.UpdatedTimeInUserPerspective(this);
+	}
+
+	public interface IEventsRoot
+	{
+		void CloneEventsAfterMerge(AggregateRoot clone);
 	}
 
 	public class Events

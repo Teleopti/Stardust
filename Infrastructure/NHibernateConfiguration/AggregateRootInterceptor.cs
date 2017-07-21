@@ -109,10 +109,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 			var ent = entity as IEntity;
 			var entityToCheck = entity as IRestrictionChecker;
-			if (entityToCheck != null)
-			{
-				entityToCheck.CheckRestrictions();
-			}
+			entityToCheck?.CheckRestrictions();
 
 			var root = ent as IAggregateRoot;
 			if (root != null)

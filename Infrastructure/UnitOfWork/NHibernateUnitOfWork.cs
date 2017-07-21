@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain;
 using log4net;
 using NHibernate;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -83,7 +84,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				throw new DataSourceException("Cannot merge transient root.");
 			try
 			{
-				return Session.Merge(root);
+				var merge = Session.Merge(root);
+				(root as IEventsRoot)?.CloneEventsAfterMerge(merge as AggregateRoot);
+				return merge;
 			}
 			catch (StaleStateException staleStateEx)
 			{
