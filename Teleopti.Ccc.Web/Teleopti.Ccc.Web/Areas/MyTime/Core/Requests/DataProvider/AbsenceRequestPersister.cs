@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 					_activityRepository.LoadAll();
 				}
 				
-				checkAndProcessDeny(personRequest);
 				_personRequestRepository.Add(personRequest);
+				checkAndProcessDeny(personRequest);
 
 				if (!personRequest.IsDenied)
 				{

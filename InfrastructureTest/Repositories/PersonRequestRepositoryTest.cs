@@ -832,6 +832,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(_absence);
 			PersistAndRemoveFromUnitOfWork(request1);
 			request1.Deny("ResourceKey", new PersonRequestAuthorizationCheckerForTest());
+			Session.Update(request1);
 			UnitOfWork.PersistAll();
 
 			IList list = Session.CreateCriteria(typeof (PushMessageDialogue)).List();
