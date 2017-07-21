@@ -21,6 +21,7 @@
     ctrl.selectItem = function (item) {
       item.isSelected = !item.isSelected;
       var itemIsSite = angular.isDefined(item.site);
+      
       if (itemIsSite && item.isSelected && item.isOpen) {
         item.teams.forEach(function (team) {
           team.isSelected = true;

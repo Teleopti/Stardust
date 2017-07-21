@@ -42,7 +42,7 @@
 			var sitePollingWithSkills;
 			var pollingIntervals = [];
 
-			vm.setInitialSelectionsAndState = function () {
+			function initialSetUp () {
 				if (angular.isDefined(vm.urlParams.skillAreaId)) {
 					vm.selectedItems.skillAreaId = vm.urlParams.skillAreaId;
 					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + vm.urlParams.skillAreaId + '"})';
@@ -57,7 +57,7 @@
 				}
 			}
 
-			vm.setInitialSelectionsAndState();
+			initialSetUp();
 
 			if (angular.isDefined(vm.skillAreaId)) {
 				vm.skillIds = getSkillIdsFromSkillAreaId(vm.skillAreaId);
@@ -245,26 +245,38 @@
 
 			vm.filterOutput = function (selectedItem) {
 				if (!angular.isDefined(selectedItem)) {
-					vm.skillIds = [];
-					$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
+					resetOnNoSkills();
 					getSiteCards();
-					vm.urlParams.skillIds = undefined;
-					vm.urlParams.skillAreaId = undefined;
-					vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
-					vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 				} else if (selectedItem.hasOwnProperty('Skills')) {
-					vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: selectedItem.Id };
-					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + selectedItem.Id + '"})';
-					$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
-					vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
+					setUpForSkillArea(selectedItem);
 					getSiteCards(vm.skillIds);
 				} else {
-					vm.skillIds = [selectedItem.Id];
-					vm.selectedItems = { siteIds: [], teamIds: [], skillIds: vm.skillIds, skillAreaId: undefined };
-					vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + selectedItem.Id + '"]})';
-					$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
+					setUpForSkill(selectedItem);
 					getSiteCards(vm.skillIds);
 				}
+			}
+
+			function resetOnNoSkills() {
+				vm.skillIds = [];
+				vm.urlParams.skillIds = undefined;
+				vm.urlParams.skillAreaId = undefined;
+				vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
+				vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
+				$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
+			}
+
+			function setUpForSkillArea(selectedItem) {
+				vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
+				vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: selectedItem.Id };
+				vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + selectedItem.Id + '"})';
+				$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
+			}
+
+			function setUpForSkill(selectedItem) {
+				vm.skillIds = [selectedItem.Id];
+				vm.selectedItems = { siteIds: [], teamIds: [], skillIds: vm.skillIds, skillAreaId: undefined };
+				vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + selectedItem.Id + '"]})';
+				$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
 			}
 
 			vm.getSelectedItems = function (item) {
@@ -272,12 +284,13 @@
 				if (itemIsSite) {
 					var indexOfSite = vm.selectedItems.siteIds.indexOf(item.site.Id);
 					var siteAlreadySelected = indexOfSite > -1;
+
 					if (!siteAlreadySelected) {
 						vm.selectedItems.siteIds.push(item.site.Id);
 						if (angular.isDefined(item.teams)) {
 							item.teams.forEach(function (team) {
-								var teamIsSelected = vm.selectedItems.teamIds.indexOf(team.Id);
-								if (teamIsSelected > -1) vm.selectedItems.teamIds.splice(teamIsSelected, 1);
+								var indexOfTeam = vm.selectedItems.teamIds.indexOf(team.Id);
+								if (indexOfTeam > -1) vm.selectedItems.teamIds.splice(indexOfTeam, 1);
 							});
 						}
 					}
@@ -298,7 +311,6 @@
 							var index = vm.selectedItems.teamIds.indexOf(team.Id);
 							vm.selectedItems.teamIds.splice(index, 1);
 						});
-
 						vm.selectedItems.siteIds.push(match.site.Id);
 					}
 					else if (!match.isSelected && siteIndex > -1) {
@@ -308,7 +320,6 @@
 								vm.selectedItems.teamIds.push(team.Id);
 							}
 						});
-
 					}
 					else {
 						if (!teamAlreadySelected) {
