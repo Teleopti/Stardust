@@ -364,6 +364,7 @@
     <Compile Include="Optimization\FetchPlanningGroupModelTest.cs" />
     <Compile Include="Optimization\WebIntradayOptimizationStardustHandlerTest.cs" />
     <Compile Include="Reports\ReportNavigationModelTest.cs" />
+    <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromSkillCombinationsTest.cs" />
     <Compile Include="ResourceCalculation\UpdateStaffingLevelReadModelOnlySkillCombinationResourcesTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftFinderServiceTest.cs" />
     <Compile Include="ResourcePlanner\Validation\MissingForecastValidatorTest.cs" />

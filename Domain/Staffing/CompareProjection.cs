@@ -14,15 +14,19 @@ namespace Teleopti.Ccc.Domain.Staffing
 	{
 		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IActivityRepository _activityRepository;
+		private readonly ISkillRepository _skillRepository;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
 		private readonly IPersonSkillProvider _personSkillProvider;
 
-		public CompareProjection(IIntervalLengthFetcher intervalLengthFetcher, IActivityRepository activityRepository, IDisableDeletedFilter disableDeletedFilter, IPersonSkillProvider personSkillProvider)
+		public CompareProjection(IIntervalLengthFetcher intervalLengthFetcher, IActivityRepository activityRepository,
+			IDisableDeletedFilter disableDeletedFilter, IPersonSkillProvider personSkillProvider,
+			ISkillRepository skillRepository)
 		{
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_activityRepository = activityRepository;
 			_disableDeletedFilter = disableDeletedFilter;
 			_personSkillProvider = personSkillProvider;
+			_skillRepository = skillRepository;
 		}
 
 		public IEnumerable<SkillCombinationResource> Compare(IScheduleDay scheduleDayBefore, IScheduleDay scheduleDayAfter)
@@ -33,16 +37,18 @@ namespace Teleopti.Ccc.Domain.Staffing
 				throw new Exception("ScheduleDays must be for the same date!");
 
 			IEnumerable<IActivity> allActivities;
+			IEnumerable<ISkill> allSkills;
 			using (_disableDeletedFilter.Disable())
 			{
 				allActivities = _activityRepository.LoadAll();
+				allSkills = _skillRepository.LoadAll();
 			}
 			var personSkills = _personSkillProvider.SkillsOnPersonDate(scheduleDayBefore.Person, scheduleDayAfter.DateOnlyAsPeriod.DateOnly);
 
 			var resolution = _intervalLengthFetcher.IntervalLength;
 			var beforeIntervals = getActivityIntervals(scheduleDayBefore, resolution).ToList();
 			var afterIntervals = getActivityIntervals(scheduleDayAfter, resolution).ToList();
-
+			var skillResolution = resolution;
 
 			var allIntervals = new List<ActivityResourceInterval>();
 			allIntervals.AddRange(beforeIntervals);
@@ -66,24 +72,44 @@ namespace Teleopti.Ccc.Domain.Staffing
 				foreach (var activityResourceInterval in before)
 				{
 					var activity = allActivities.First(x => x.Id == activityResourceInterval.Activity);
+					var aSkill = allSkills.FirstOrDefault(x => x.Activity.Equals(activity));
+					if(aSkill != null)
+						skillResolution = aSkill.DefaultResolution;
+					var diff = skillResolution / resolution;
+					var minute =  TimeHelper.FitToDefaultResolutionRoundDown(
+						TimeSpan.FromMinutes(activityResourceInterval.Interval.StartDateTime.Minute), skillResolution).Minutes;
+					var splittedStart = activityResourceInterval.Interval.StartDateTime;
+					var startOnInterval = new DateTime(splittedStart.Year, splittedStart.Month, splittedStart.Day, splittedStart.Hour,
+						minute, 0, DateTimeKind.Utc);
+					var interval = new DateTimePeriod(startOnInterval, startOnInterval.AddMinutes(skillResolution));
 					if (activity.RequiresSkill && personSkills.Skills.Select(x => x.Activity).Contains(activity))
 						intervalOutput.Add(new ActivityResourceInterval
 						{
-							Interval = activityResourceInterval.Interval,
+							Interval = interval,
 							Activity = activityResourceInterval.Activity,
-							Resource = -activityResourceInterval.Resource //negative
+							Resource = -(activityResourceInterval.Resource / diff) //negative
 						});
 				}
 
 				foreach (var activityResourceInterval in after)
 				{
 					var activity = allActivities.First(x => x.Id == activityResourceInterval.Activity);
+					var aSkill = allSkills.FirstOrDefault(x => x.Activity.Equals(activity));
+					if (aSkill != null)
+						skillResolution = aSkill.DefaultResolution;
+					var diff = skillResolution / resolution;
+					var minute = TimeHelper.FitToDefaultResolutionRoundDown(
+						TimeSpan.FromMinutes(activityResourceInterval.Interval.StartDateTime.Minute), skillResolution).Minutes;
+					var splittedStart = activityResourceInterval.Interval.StartDateTime;
+					var startOnInterval = new DateTime(splittedStart.Year, splittedStart.Month, splittedStart.Day, splittedStart.Hour,
+						minute, 0, DateTimeKind.Utc);
+					var interval = new DateTimePeriod(startOnInterval, startOnInterval.AddMinutes(skillResolution));
 					if (activity.RequiresSkill && personSkills.Skills.Select(x => x.Activity).Contains(activity))
 						intervalOutput.Add(new ActivityResourceInterval
 						{
-							Interval = activityResourceInterval.Interval,
+							Interval = interval,
 							Activity = activityResourceInterval.Activity,
-							Resource = activityResourceInterval.Resource
+							Resource = activityResourceInterval.Resource/ diff
 						});
 				}
 

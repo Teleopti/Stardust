@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -10,15 +9,14 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public class ResourceCalculationDataConatainerFromSkillCombinations : IResourceCalculationDataContainerWithSingleOperation
 	{
-		private readonly ConcurrentDictionary<Tuple<GuidCombinationKey, DateTimePeriod>, PeriodResource> _dictionary = new ConcurrentDictionary<Tuple<GuidCombinationKey, DateTimePeriod>, PeriodResource>();
-		private readonly List<SkillCombinationResource> _skillCombinationResources;
+		private readonly ConcurrentDictionary<DateTimePeriod, PeriodResource> _dictionary = new ConcurrentDictionary<DateTimePeriod, PeriodResource>();
+		private readonly ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>> _skills = new ConcurrentDictionary<DoubleGuidCombinationKey, IEnumerable<ISkill>>();
 		private readonly ILookup<Guid, ISkill> _allSkills;
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
 
 		public ResourceCalculationDataConatainerFromSkillCombinations(List<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> allSkills, bool useAllSkills)
 		{
-			_skillCombinationResources = skillCombinationResources;
 			_allSkills = allSkills.ToLookup(s => s.Id.GetValueOrDefault());
 			PrimarySkillMode = false;
 			MinSkillResolution = allSkills.Any() ? allSkills.Min(s => s.DefaultResolution) : 15;
@@ -31,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		private void createDictionary(IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
-			foreach (var skillCombinationResource in skillCombinationResources)
+			foreach (var skillCombinationResource in skillCombinationResources.OrderBy(x => x.StartDateTime))
 			{
 				var actId = skillCombinationResource.SkillCombination.Select(s => _allSkills[s].First().Activity.Id).First();
 				var allSkillsInCombination =
@@ -41,10 +39,42 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				var skillCombination = new SkillCombination(allSkillsInCombination,skillCombinationResource.Period().ToDateOnlyPeriod(TimeZoneInfo.Utc), new SkillEffiencyResource[] {}, allSkillsInCombination);
 				
+				var skills = skillCombination.OriginalSkills;
+				_skills.TryAdd(skillCombination.MergedKey(), skills);
+
 				var fractionPeriod = new DateTimePeriod(skillCombinationResource.StartDateTime, skillCombinationResource.EndDateTime);
-				var resource = new PeriodResource();
-				resource.AppendResource(new ActivitySkillsCombination(actId.GetValueOrDefault(), skillCombination),skillCombination, 0, skillCombinationResource.Resource,fractionPeriod);
-				_dictionary.TryAdd(new Tuple<GuidCombinationKey, DateTimePeriod>(new GuidCombinationKey(skillCombination.Key),fractionPeriod ), resource);
+
+				PeriodResource resource;
+				if (_dictionary.TryGetValue(fractionPeriod, out resource))
+					resource.AppendResource(new ActivitySkillsCombination(actId.GetValueOrDefault(), skillCombination),
+						skillCombination, 0, skillCombinationResource.Resource, fractionPeriod);
+				else
+				{
+					resource = new PeriodResource();
+					resource.AppendResource(new ActivitySkillsCombination(actId.GetValueOrDefault(), skillCombination),
+						skillCombination, 0, skillCombinationResource.Resource, fractionPeriod);
+					_dictionary.TryAdd( fractionPeriod, resource);
+				}
+
+			}
+		}
+
+		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
+		{
+			try
+			{
+				if (!_dictionary.TryGetValue(resourceLayer.Period, out PeriodResource resources))
+					return;
+
+				var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
+				if (skills.Key.Length == 0) return;
+				var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
+
+				resources.RemoveResource(key, skills, 0, resourceLayer.Resource, resourceLayer.FractionPeriod);
+			}
+			catch (ArgumentOutOfRangeException ex) //just to get more info if/when #44525 occurs
+			{
+				throw new ArgumentOutOfRangeException($"Resources are negative for agent {person.Id.GetValueOrDefault()} on period {resourceLayer.Period}", ex);
 			}
 		}
 
@@ -52,47 +82,76 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			var result = new Dictionary<DoubleGuidCombinationKey, AffectedSkills>();
 
-			foreach (var skillCombinationResource in _skillCombinationResources)
+			var activityKey = activity.Id.GetValueOrDefault();
+			PeriodResource interval;
+			if (_dictionary.TryGetValue(periodToCalculate, out interval))
 			{
-				if (!periodToCalculate.Contains(skillCombinationResource.StartDateTime)) continue;
-				var allSkillsInCombination = skillCombinationResource.SkillCombination.Select(s => _allSkills[s].FirstOrDefault()).Where(s=>s!=null).ToArray();
-				if (!(allSkillsInCombination.FirstOrDefault().Activity.Id == activity.Id)) continue;
-
-				var skillCombination = new SkillCombination(allSkillsInCombination, periodToCalculate.ToDateOnlyPeriod(TimeZoneInfo.Utc), new SkillEffiencyResource[] { }, allSkillsInCombination);
-				PeriodResource interval;
-				if (!_dictionary.TryGetValue(new Tuple<GuidCombinationKey, DateTimePeriod>(new GuidCombinationKey(skillCombination.Key), periodToCalculate), out interval)) continue;
-
-				foreach (var pair in interval.GetSkillKeyResources(activity.Id.GetValueOrDefault()))
+				foreach (var pair in interval.GetSkillKeyResources(activityKey))
 				{
-					AffectedSkills value;
-					double previousResource = 0;
-					double previousCount = 0;
-					var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource);
-					if (result.TryGetValue(pair.SkillKey, out value))
+					IEnumerable<ISkill> skills;
+					if (_skills.TryGetValue(pair.SkillKey, out skills))
 					{
-						previousResource = value.Resource;
-						previousCount = value.Count;
+						AffectedSkills value;
+						double previousResource = 0;
+						double previousCount = 0;
+						var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource );
+						if (result.TryGetValue(pair.SkillKey, out value))
+						{
+							previousResource = value.Resource;
+							previousCount = value.Count;
+							addEfficienciesFromSkillCombination(value.SkillEffiencies, accumulatedEffiencies);
+						}
+						value = new AffectedSkills
+						{
+							Skills = skills,
+							Resource = previousResource + pair.Resource.Resource ,
+							Count = previousCount + pair.Resource.Count ,
+							SkillEffiencies = accumulatedEffiencies
+						};
+
+						result[pair.SkillKey] = value;
 					}
-
-					var affectedSkills = allSkillsInCombination.ToList();
-					if (!UseAllSkills)
-						affectedSkills = allSkillsInCombination.Where(s => !s.IsCascading() || s.CascadingIndex == allSkillsInCombination.Min(x => x.CascadingIndex)).ToList();
-
-					value = new AffectedSkills
+				}
+				return result;
+			}
+			var divider = periodToCalculate.ElapsedTime().TotalMinutes / MinSkillResolution;
+			var periodSplit = periodToCalculate.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
+			foreach (var dateTimePeriod in periodSplit)
+			{
+				if (_dictionary.TryGetValue(dateTimePeriod, out interval))
+				{
+					foreach (var pair in interval.GetSkillKeyResources(activityKey))
 					{
-						Skills = affectedSkills,
-						Resource = previousResource + pair.Resource.Resource,
-						Count = previousCount + pair.Resource.Count,
-						SkillEffiencies = accumulatedEffiencies
-					};
+						IEnumerable<ISkill> skills;
+						if (_skills.TryGetValue(pair.SkillKey, out skills))
+						{
+							AffectedSkills value;
+							double previousResource = 0;
+							double previousCount = 0;
+							var accumulatedEffiencies = pair.Effiencies.ToDictionary(k => k.Skill, v => v.Resource / divider);
+							if (result.TryGetValue(pair.SkillKey, out value))
+							{
+								previousResource = value.Resource;
+								previousCount = value.Count;
+								addEfficienciesFromSkillCombination(value.SkillEffiencies, accumulatedEffiencies);
+							}
+							value = new AffectedSkills
+							{
+								Skills = skills,
+								Resource = previousResource + pair.Resource.Resource / divider,
+								Count = previousCount + pair.Resource.Count / divider,
+								SkillEffiencies = accumulatedEffiencies
+							};
 
-					result[pair.SkillKey] = value;
+							result[pair.SkillKey] = value;
+						}
+					}
 				}
 			}
-
 			return result;
 		}
 
+		
 		public int MinSkillResolution { get; }
 
 		public void Clear()
@@ -117,29 +176,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
+			PeriodResource resources = _dictionary.GetOrAdd(resourceLayer.Period, new PeriodResource());
+
 			var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
 			if (skills.Key.Length == 0) return;
 			var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
-			//_skills.TryAdd(skills.MergedKey(), skills.Skills);
-
-			var resources = _dictionary.GetOrAdd(Tuple.Create(new GuidCombinationKey(skills.Key), resourceLayer.Period), new PeriodResource());
-
-			var relevantSkillCombinations = _skillCombinationResources.Where(s =>
-				s.Period().StartDateTime.Equals(resourceLayer.Period.StartDateTime) &&
-				s.SkillCombination.NonSequenceEquals(skills.Skills.Select(skill => skill.Id.GetValueOrDefault())));
-
-			if (relevantSkillCombinations.Any())
-				relevantSkillCombinations.First().Resource += resourceLayer.Resource;
-			else
-			{
-				_skillCombinationResources.Add(new SkillCombinationResource
-				{
-					StartDateTime = resourceLayer.Period.StartDateTime,
-					EndDateTime =  resourceLayer.Period.EndDateTime,
-					Resource =  resourceLayer.Resource,
-					SkillCombination = skills.Skills.Select(s => s.Id.GetValueOrDefault())
-				});
-			}
+			_skills.TryAdd(skills.MergedKey(), skills.Skills);
 			//if (resourceLayer.RequiresSeat)
 			//{
 			//	_activityRequiresSeat.TryAdd(resourceLayer.PayloadId, true);
@@ -147,22 +189,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			resources.AppendResource(key, skills, 0, resourceLayer.Resource, resourceLayer.FractionPeriod);
 		}
 
-		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
+		
+		
+
+		private static void addEfficienciesFromSkillCombination(IDictionary<Guid, double> skillEfficienciesForSkillCombination,
+			IDictionary<Guid, double> accumulatedEffiencies)
 		{
-			try
+			foreach (var skill in skillEfficienciesForSkillCombination)
 			{
-				var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
-				if (skills.Key.Length == 0) return;
-				var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
-
-				if (!_dictionary.TryGetValue(Tuple.Create(new GuidCombinationKey(skills.Key), resourceLayer.Period), out PeriodResource resources))
-					return;
-
-				resources.RemoveResource(key, skills, 0,resourceLayer.Resource, resourceLayer.FractionPeriod);
-			}
-			catch (ArgumentOutOfRangeException ex) //just to get more info if/when #44525 occurs
-			{
-				throw new ArgumentOutOfRangeException($"Resources are negative for agent {person.Id.GetValueOrDefault()} on period {resourceLayer.Period}. Resource = {resourceLayer.Resource}", ex);
+				double effiency;
+				if (accumulatedEffiencies.TryGetValue(skill.Key, out effiency))
+				{
+					accumulatedEffiencies[skill.Key] = effiency + skill.Value;
+				}
+				else
+				{
+					accumulatedEffiencies.Add(skill.Key, skill.Value);
+				}
 			}
 		}
 
@@ -172,7 +215,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		}
 
 		public bool PrimarySkillMode { get; }
-
 
 		private SkillCombination fetchSkills(IPerson person, DateOnly personDate)
 		{

@@ -427,5 +427,33 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			activityResourceIntervals.Count().Should().Be.EqualTo(1);
 			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod2.StartDateTime).Resource.Should().Be.EqualTo(-1);
 		}
+
+		[Test]
+		public void ShouldGiveTheIntervalLengthOfTheSkill()
+		{
+			const int resolution = 15;
+			IntervalLengthFetcher.Has(resolution);
+			var now = new DateTime(2017, 5, 1, 0, 0, 0);
+			Now.Is(now);
+
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("activity");
+			var skill = SkillRepository.Has("skill", activity).WithId();
+			skill.DefaultResolution = 60;
+			var person = PersonRepository.Has(skill);
+
+			var assignmentPeriod1 = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 9);
+			var assignmentPeriod2 = new DateTimePeriod(2017, 5, 1, 9, 2017, 5, 1, 10);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod1, new ShiftCategory("category"));
+			PersonAssignmentRepository.Has(assignment);
+			var beforeCopy = (IScheduleDay)ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario)[person].ScheduledDay(new DateOnly(now)).Clone();
+			assignment.AddActivity(activity, assignmentPeriod2);
+			var after = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario)[person].ScheduledDay(new DateOnly(now));
+			var activityResourceIntervals = Target.Compare(beforeCopy, after);
+			activityResourceIntervals.Count().Should().Be.EqualTo(4);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod2.StartDateTime).Resource.Should().Be.EqualTo(0.25);
+			activityResourceIntervals.First().StartDateTime.Should().Be.EqualTo(assignmentPeriod2.StartDateTime);
+			activityResourceIntervals.First().EndDateTime.Should().Be.EqualTo(assignmentPeriod2.EndDateTime);
+		}
 	}
 }

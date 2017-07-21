@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 			var period = new DateTimePeriod(now.AddDays(-2), now.AddDays(2));
 			WithUnitOfWork.Do(() =>
 			{
-				UpdateStaffingLevel.Update(period);
+				//UpdateStaffingLevel.Update(period);
 
 				var viewModel = StaffingViewModelCreator.Load(skillIds);
 				timeSerie = viewModel.DataSeries.Time;
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 					NumberOfPersonsToTry = 1000
 				});
 				Console.WriteLine($"{DateTime.Now} GetSuggestion() gave {resultModels.Models.Count} models");
-				AddOverTime.Apply(resultModels.Models, oneMulti.Id.GetValueOrDefault());
+				//AddOverTime.Apply(resultModels.Models, oneMulti.Id.GetValueOrDefault());
 				Console.WriteLine($"{DateTime.Now} Done!");
 			});
 
