@@ -342,6 +342,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
+		public void ShouldNotApprovedWhenOnlyUnderStaffingButNoCriticalSkill()
+		{
+			var person = getCurrentUser();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var activity1 = createActivity("activity1");
+			var skill1 = createSkill("skill1");
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			setupIntradayStaffingForSkill(skill1, 10d, 20d);
+			addPersonSkillsToPersonPeriod(personSkill1);
+			createAssignment(person, activity1);
+
+			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(19, 21), person.PermissionInformation.DefaultTimeZone());
+			var personRequest = createOvertimeRequest(person, requestPeriod);
+
+			_target = createTarget();
+			var result = _target.Approve(personRequest.Request);
+
+			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Person = person,
+				Date = new DateOnly(requestPeriod.StartDateTime),
+				Scenario = _scenario
+			});
+
+			result.Count().Should().Be(1);
+			result.First().Message.Should().Be(Resources.NoUnderStaffingSkill);
+			personAssignment.Should().Not.Be.Null();
+			personAssignment.OvertimeActivities().Count().Should().Be(0);
+		}
+
+		[Test]
 		public void ShouldNotApprovedWhenAnySkillIsNotCriticalUnderStaffing()
 		{
 			var person = getCurrentUser();
@@ -401,7 +432,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var result = _target.Approve(personRequest.Request);
 
 			result.Count().Should().Be(1);
-			result.First().Message.Should().Be("There is already overtime in the schedule for given period.");
+			result.First().Message.Should().Be("There is already same activity in the schedule for given period.");
 		}
 
 		[Test]
@@ -425,7 +456,28 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var result = _target.Approve(personRequest.Request);
 
 			result.Count().Should().Be(1);
-			result.First().Message.Should().Be("There is already overtime in the schedule for given period.");
+			result.First().Message.Should().Be("There is already same activity in the schedule for given period.");
+		}
+
+		[Test]
+		public void ShouldNotApprovedWhenThereSameActivityWithinRequestPeriod()
+		{
+			var person = getCurrentUser();
+			var activity1 = createActivity("activity1");
+			var skill1 = createSkill("skill1");
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			setupIntradayStaffingForSkill(skill1, 10d, 6d);
+			addPersonSkillsToPersonPeriod(personSkill1);
+			createAssignment(person, activity1);
+
+			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(16, 17), person.PermissionInformation.DefaultTimeZone());
+			var personRequest = createOvertimeRequest(person, requestPeriod);
+
+			_target = createTarget();
+			var result = _target.Approve(personRequest.Request);
+
+			result.Count().Should().Be(1);
+			result.First().Message.Should().Be("There is already same activity in the schedule for given period.");
 		}
 
 		private OvertimeRequestApprovalService createTarget()

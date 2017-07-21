@@ -21942,6 +21942,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There is already same activity in the schedule for given period..
+        /// </summary>
+        public static string OvertimeRequestSameActivityInPeriod {
+            get {
+                return ResourceManager.GetString("OvertimeRequestSameActivityInPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overtime request was cancelled..
         /// </summary>
         public static string OvertimeRequestWasCancelled {
@@ -25469,15 +25478,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestDenyReasonAlreadyAbsent {
             get {
                 return ResourceManager.GetString("RequestDenyReasonAlreadyAbsent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There is already overtime in the schedule for given period..
-        /// </summary>
-        public static string RequestDenyReasonAlreadyOvertime {
-            get {
-                return ResourceManager.GetString("RequestDenyReasonAlreadyOvertime", resourceCulture);
             }
         }
         

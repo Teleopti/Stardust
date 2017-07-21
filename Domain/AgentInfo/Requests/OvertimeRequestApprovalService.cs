@@ -63,20 +63,20 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return getBusinessRuleResponses(Resources.NoUnderStaffingSkill, period, person);
 			}
 
-			var withoutOvertimeSkills = seriousUnderstaffingSkills
-				.Where(s => !overtimeAlreadyExists(period, person, s.Activity)).ToList();
-			if (withoutOvertimeSkills.Count == 0)
+			var withoutActivitySkills = seriousUnderstaffingSkills
+				.Where(s => !activityAlreadyExists(period, person, s.Activity)).ToList();
+			if (withoutActivitySkills.Count == 0)
 			{
-				return getBusinessRuleResponses(Resources.RequestDenyReasonAlreadyOvertime, period, person);
+				return getBusinessRuleResponses(Resources.OvertimeRequestSameActivityInPeriod, period, person);
 			}
 
 			// todo only return the first activity of skill now
-			addOvertimeActivity(withoutOvertimeSkills.First().Activity.Id.GetValueOrDefault(), overtimeRequest);
+			addOvertimeActivity(withoutActivitySkills.First().Activity.Id.GetValueOrDefault(), overtimeRequest);
 
 			return new List<IBusinessRuleResponse>();
 		}
 
-		private bool overtimeAlreadyExists(DateTimePeriod period, IPerson person, IActivity activity)
+		private bool activityAlreadyExists(DateTimePeriod period, IPerson person, IActivity activity)
 		{
 
 			var dic = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(period), _scenario,
@@ -88,9 +88,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (personAssignment == null)
 				return false;
 
+			var mainActivities = personAssignment.MainActivities();
 			var overtimeActivities = personAssignment.OvertimeActivities();
 
-			return overtimeActivities.Any(a => a.Payload == activity && a.Period.Intersect(period));
+			return mainActivities.Any(a => a.Payload == activity && a.Period.Intersect(period))
+					||
+					overtimeActivities.Any(a => a.Payload == activity && a.Period.Intersect(period));
 		}
 
 		private void addOvertimeActivity(Guid activityId, IOvertimeRequest overtimeRequest)
