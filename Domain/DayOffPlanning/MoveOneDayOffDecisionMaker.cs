@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -25,14 +26,14 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 
         public bool Execute(ILockableBitArray lockableBitArray, IList<double?> values)
         {
-            string decisionMakerName = this.ToString();
+            string decisionMakerName = ToString();
             _logWriter.LogInfo("Execute of " + decisionMakerName);
 
             IEnumerable<int> indexesToMoveFrom = CreatePreferredIndexesToMoveFrom(lockableBitArray, values);
             IEnumerable<int> indexesToMoveTo = CreatePreferredIndexesToMoveTo(lockableBitArray, values);
 
-            _logWriter.LogInfo("Move from preference index: " + CreateCommaSeparatedString(indexesToMoveFrom));
-            _logWriter.LogInfo("Move to preference index: " + CreateCommaSeparatedString(indexesToMoveTo));
+            _logWriter.LogInfo("Move from preference index: " + string.Join(",", indexesToMoveFrom));
+            _logWriter.LogInfo("Move to preference index: " + string.Join(",", indexesToMoveTo));
 
             foreach (int moveFrom in indexesToMoveFrom)
             {
@@ -129,23 +130,22 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
         {
             //should be an unlocked no day off
             List<KeyValuePair<int, double>> test = new List<KeyValuePair<int, double>>();
-
-            IList<int> ret = new List<int>();
-
+			
             //should be an unlocked day off
             foreach (int index in lockableBitArray.UnlockedIndexes)
             {
-                if (!lockableBitArray[index] && values[index - lockableBitArray.PeriodArea.Minimum].HasValue)
-                    test.Add(new KeyValuePair<int, double>(index, values[index - lockableBitArray.PeriodArea.Minimum].Value));
+	            if (!lockableBitArray[index])
+	            {
+		            var val = values[index - lockableBitArray.PeriodArea.Minimum];
+		            if (val.HasValue)
+		            {
+			            test.Add(new KeyValuePair<int, double>(index, val.Value));
+		            }
+	            }
             }
 
             test.Sort(SortByValueDescending);
-            foreach (KeyValuePair<int, double> keyValuePair in test)
-            {
-                ret.Add(keyValuePair.Key);
-            }
-
-            return ret;
+	        return test.Select(t => t.Key).ToList();
         }
 
         private static int SortByValueAscending(KeyValuePair<int, double> x, KeyValuePair<int, double> y)
@@ -161,20 +161,5 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 
 			return ret == 0 ? x.Key.CompareTo(y.Key) : ret;
 		}
-
-        private static string CreateCommaSeparatedString(IEnumerable<int> indexesToMoveFrom)
-        {
-            StringBuilder stringBuilder = new StringBuilder();
-            foreach (int i in indexesToMoveFrom)
-            {
-                stringBuilder.Append(i.ToString(CultureInfo.CurrentCulture) + ",");
-            }
-            string result = stringBuilder.ToString();
-            if (result.Length > 0)
-                result = result.Substring(0, result.Length - 1);
-            return result;
-        }
     }
-
-
 }

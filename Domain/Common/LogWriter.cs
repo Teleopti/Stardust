@@ -27,12 +27,9 @@ namespace Teleopti.Ccc.Domain.Common
             _log = log;
         }
 
-        public ILog Log
-        {
-            get { return _log; }
-        }
+        public ILog Log => _log;
 
-        public void LogInfo(string message)
+	    public void LogInfo(string message)
         {
             _log.Info(message);
         }

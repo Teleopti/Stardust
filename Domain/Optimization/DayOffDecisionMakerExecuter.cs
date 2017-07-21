@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -253,16 +252,16 @@ namespace Teleopti.Ccc.Domain.Optimization
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
         private void writeToLogWorkShiftBackToLegalStateRemovedDays(IEnumerable<DateOnly> removedIllegalWorkTimeDays)
         {
-            string loginfo = ("Work Shift back to legal state service removed the following days: " +
-                              createCommaSeparatedString(removedIllegalWorkTimeDays));
+            string loginfo = "Work Shift back to legal state service removed the following days: " +
+							 string.Join(",",removedIllegalWorkTimeDays.Select(d => d.ToShortDateString(CultureInfo.CurrentCulture)));
             _logWriter.LogInfo(loginfo);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
         private void writeToLogDayOffBackToLegalStateRemovedDays(IEnumerable<DateOnly> movedDays)
         {
-            string loginfo = ("Day off back to legal state service removed the following days: " +
-                              createCommaSeparatedString(movedDays));
+            string loginfo = "Day off back to legal state service removed the following days: " +
+							 string.Join(",", movedDays.Select(d => d.ToShortDateString(CultureInfo.CurrentCulture)));
             _logWriter.LogInfo(loginfo);
         }
 
@@ -276,7 +275,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
         private void writeToLogMovedDays(IEnumerable<DateOnly> movedDays)
         {
-            string loginfo = ("Day Off executer will work with the following days: " + createCommaSeparatedString(movedDays));
+            string loginfo = "Day Off executer will work with the following days: " + string.Join(",", movedDays.Select(d => d.ToShortDateString(CultureInfo.CurrentCulture)));
             _logWriter.LogInfo(loginfo);
         }
 
@@ -310,7 +309,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                         matrix.OuterWeeksPeriodDays[i + bitArrayToMatrixOffset];
                         IScheduleDay part = scheduleDayPro.DaySchedulePart();
                     	IPersonAssignment assignment = part.PersonAssignment();
-						if (assignment == null || assignment.ShiftCategory == null)
+						if (assignment?.ShiftCategory == null)
 							return new dayOffOptimizerMoveDaysResult { Result = false, MovedDays = movedDays };
 
                         var changed = new changedDay
@@ -491,20 +490,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             return removedIllegalDates;
         }
-
-        private static string createCommaSeparatedString(IEnumerable<DateOnly> days)
-        {
-            var stringBuilder = new StringBuilder();
-            foreach (DateOnly day in days)
-            {
-                stringBuilder.Append(day.ToShortDateString(CultureInfo.CurrentCulture) + ",");
-            }
-            string result = stringBuilder.ToString();
-            if (result.Length > 0)
-                result = result.Substring(0, result.Length - 1);
-            return result;
-        }
-
+		
         private class changedDay
         {
             public DateOnly DateChanged { get; set; }

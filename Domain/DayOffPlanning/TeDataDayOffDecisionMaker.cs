@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
@@ -55,19 +53,19 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			_logWriter.LogInfo("Execute of " + decisionMakerName);
 
 			IList<int> indexesToMoveFrom = createPreferredIndexesToMoveFrom(workingBitArray, values);
-			if (indexesToMoveFrom.Count() < 2)
+			if (indexesToMoveFrom.Count < 2)
 				return false;
 
 			int weekIndex = (int)Math.Floor(indexesToMoveFrom.First() / 7d);
 			IList<int> indexesToMoveTo = createPreferredIndexesToMoveTo(workingBitArray, values, weekIndex);
-			if (indexesToMoveTo.Count() < 2)
+			if (indexesToMoveTo.Count < 2)
 				return false;
 
 			while(!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
 			{
 				workingBitArray.Lock(indexesToMoveTo.First(), true);
 				indexesToMoveTo = createPreferredIndexesToMoveTo(workingBitArray, values, weekIndex);
-				if (indexesToMoveTo.Count() < 2)
+				if (indexesToMoveTo.Count < 2)
 					return false;
 			}
 
@@ -77,28 +75,27 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 					weekIndex = 0;
 
 				indexesToMoveFrom = findMoveInSpecificWeek(weekIndex + 1, workingBitArray, values);
-				if (indexesToMoveFrom.Count() < 2)
+				if (indexesToMoveFrom.Count < 2)
 					return false;
 
 				weekIndex = (int)Math.Floor(indexesToMoveFrom.First() / 7d);
 				indexesToMoveTo = createPreferredIndexesToMoveTo(workingBitArray, values, weekIndex);
-				if (indexesToMoveTo.Count() < 2)
+				if (indexesToMoveTo.Count < 2)
 					return false;
 
 				while (!moveAndValidate(indexesToMoveFrom, indexesToMoveTo, workingBitArray, _validatorListWithoutMaxConsecutiveWorkdays))
 				{
 					workingBitArray.Lock(indexesToMoveTo.First(), true);
 					indexesToMoveTo = createPreferredIndexesToMoveTo(workingBitArray, values, weekIndex);
-					if (indexesToMoveTo.Count() < 2)
+					if (indexesToMoveTo.Count < 2)
 						return false;
 				}
 
 			}
 
-			_logWriter.LogInfo("Move from preference index: " + createCommaSeparatedString(indexesToMoveFrom));
-			_logWriter.LogInfo("Move to preference index: " + createCommaSeparatedString(indexesToMoveTo));
-
-
+			_logWriter.LogInfo("Move from preference index: " + string.Join(",",indexesToMoveFrom));
+			_logWriter.LogInfo("Move to preference index: " + string.Join(",", indexesToMoveTo));
+			
 			for (int i = 0; i < lockableBitArray.Count; i++)
 			{
 				if(!lockableBitArray.IsLocked(i,true))
@@ -138,14 +135,14 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 					continue;
 				if (lockableBitArray.IsLocked(index + 1, true))
 					continue;
-				if (!values[index - lockableBitArray.PeriodArea.Minimum].HasValue)
+				var currentVal = values[index - lockableBitArray.PeriodArea.Minimum];
+				if (!currentVal.HasValue)
 					continue;
-				if (!values[index + 1 - lockableBitArray.PeriodArea.Minimum].HasValue)
+				var nextVal = values[index + 1 - lockableBitArray.PeriodArea.Minimum];
+				if (!nextVal.HasValue)
 					continue;
 
-				double pairValue = values[index - lockableBitArray.PeriodArea.Minimum].Value +
-								   values[index + 1 - lockableBitArray.PeriodArea.Minimum].Value;
-
+				double pairValue = currentVal.Value + nextVal.Value;
 				if (pairValue < lowestPairValue)
 				{
 					lowestPairValue = pairValue;
@@ -205,9 +202,11 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 					continue;
 				if(lockableBitArray.IsLocked(unlockedIndex+1, true))
 					continue;
-				if(!values[unlockedIndex - lockableBitArray.PeriodArea.Minimum].HasValue)
+				var currentVal = values[unlockedIndex - lockableBitArray.PeriodArea.Minimum];
+				if(!currentVal.HasValue)
 					continue;
-				if (!values[unlockedIndex + 1 - lockableBitArray.PeriodArea.Minimum].HasValue)
+				var nextVal = values[unlockedIndex + 1 - lockableBitArray.PeriodArea.Minimum];
+				if (!nextVal.HasValue)
 					continue;
 				//In same week?
 				double d1 = Math.Floor(unlockedIndex/7d);
@@ -215,8 +214,8 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 				if(d1 != d2)
 					continue;
 
-				double pairValue = values[unlockedIndex - lockableBitArray.PeriodArea.Minimum].Value +
-				                   values[unlockedIndex + 1 - lockableBitArray.PeriodArea.Minimum].Value;
+				double pairValue = currentVal.Value +
+				                   nextVal.Value;
 				if (pairValue < lowestPairValue)
 				{
 					lowestPairValue = pairValue;
@@ -241,20 +240,18 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 				int index = i + 7*weekIndex;
 				if (lockableBitArray[index])
 					continue;
-				//if (lockableBitArray[index + 1])
-				//    continue;
 				if (lockableBitArray.IsLocked(index, true))
 					continue;
 				if (lockableBitArray.IsLocked(index + 1, true))
 					continue;
-				if (!values[index - lockableBitArray.PeriodArea.Minimum].HasValue)
+				var currentVal = values[index - lockableBitArray.PeriodArea.Minimum];
+				if (!currentVal.HasValue)
 					continue;
-				if (!values[index + 1 - lockableBitArray.PeriodArea.Minimum].HasValue)
+				var nextVal = values[index + 1 - lockableBitArray.PeriodArea.Minimum];
+				if (!nextVal.HasValue)
 					continue;
 
-				double pairValue = values[index - lockableBitArray.PeriodArea.Minimum].Value +
-								   values[index + 1 - lockableBitArray.PeriodArea.Minimum].Value;
-
+				double pairValue = currentVal.Value + nextVal.Value;
 				if(pairValue > highestPairValue)
 				{
 					highestPairValue = pairValue;
@@ -286,7 +283,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			}
 			return true;
 		}
-
 		
 		private static bool validateIndex(BitArray daysOffArray, int index, IList<IDayOffLegalStateValidator> validatorList)
 		{
@@ -296,19 +292,6 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 					return false;
 			}
 			return true;
-		}
-
-		private static string createCommaSeparatedString(IEnumerable<int> indexesToMoveFrom)
-		{
-			StringBuilder stringBuilder = new StringBuilder();
-			foreach (int i in indexesToMoveFrom)
-			{
-				stringBuilder.Append(i.ToString(CultureInfo.CurrentCulture) + ",");
-			}
-			string result = stringBuilder.ToString();
-			if (result.Length > 0)
-				result = result.Substring(0, result.Length - 1);
-			return result;
 		}
 	}
 }
