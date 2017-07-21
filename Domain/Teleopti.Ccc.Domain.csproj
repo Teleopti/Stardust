@@ -421,13 +421,11 @@
     <Compile Include="ApplicationLayer\Events\ScheduleBackoutEvent.cs" />
     <Compile Include="ApplicationLayer\Events\TenantDayTickEvent.cs" />
     <Compile Include="ApplicationLayer\Events\UnknownStateCodeReceviedEvent.cs" />
-    <Compile Include="ApplicationLayer\Events\UpdateStaffingLevelReadModel2WeeksEvent.cs" />
     <Compile Include="ApplicationLayer\GlobalSettingData\AnalyticsPersonNameUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\UpdateStaffingLevelReadModelEvent.cs" />
     <Compile Include="ApplicationLayer\Intraday\SkillStaffingIntervalProvider.cs" />
     <Compile Include="ApplicationLayer\Intraday\SplitSkillStaffInterval.cs" />
     <Compile Include="Staffing\StaffingSettingsReader.cs" />
-    <Compile Include="Staffing\UpdateStaffingLevelReadModel2WeeksHandler.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsHourlyAvailabilityMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsOptionalColumnGroupPageHandler.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsPreferenceMatchingPerson.cs" />

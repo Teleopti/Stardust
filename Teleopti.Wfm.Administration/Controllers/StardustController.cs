@@ -115,7 +115,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 			
 			foreach (var bu in bus)
 			{
-				if (logOnModel.Days == 1)
+				//if (logOnModel.Days == 1)
 					_eventPublisher.Publish(
 						new UpdateStaffingLevelReadModelEvent
 						{
@@ -123,15 +123,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 							LogOnDatasource = logOnModel.Tenant,
 							LogOnBusinessUnitId = bu
 						});
-				else
-					_eventPublisher.Publish(
-						new UpdateStaffingLevelReadModel2WeeksEvent
-						{
-							Days = 14,
-							LogOnDatasource = logOnModel.Tenant,
-							LogOnBusinessUnitId = bu
-						}
-					);
+				//else
+					//_eventPublisher.Publish(
+					//	new UpdateStaffingLevelReadModel2WeeksEvent
+					//	{
+					//		Days = 14,
+					//		LogOnDatasource = logOnModel.Tenant,
+					//		LogOnBusinessUnitId = bu
+					//	}
+					//);
 			}
 
 			return Ok();

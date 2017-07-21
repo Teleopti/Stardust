@@ -77,7 +77,7 @@
 			$http.post("./Stardust/TriggerResourceCalculation",
 				{
 					"Tenant": vm.selectedTenantName, 
-					"Days": 1
+					"Days": 14
 				},
 				tokenHeaderService.getHeaders()
 			);

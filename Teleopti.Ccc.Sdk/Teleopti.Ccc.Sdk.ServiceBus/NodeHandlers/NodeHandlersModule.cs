@@ -14,8 +14,6 @@ using Teleopti.Ccc.Infrastructure.Absence;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
@@ -37,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterModule<PayrollContainerInstaller>();
 			builder.RegisterType<StardustJobFeedback>().As<IStardustJobFeedback>().SingleInstance();
 			builder.RegisterType<UpdateStaffingLevelReadModelHandler>().As<IHandle<UpdateStaffingLevelReadModelEvent>>().SingleInstance();
-			builder.RegisterType<UpdateStaffingLevelReadModel2WeeksHandler>().As<IHandle<UpdateStaffingLevelReadModel2WeeksEvent>>().SingleInstance();
+			//builder.RegisterType<UpdateStaffingLevelReadModel2WeeksHandler>().As<IHandle<UpdateStaffingLevelReadModel2WeeksEvent>>().SingleInstance();
 			builder.RegisterType<ValidateReadModelsHandler>().As<IHandle<ValidateReadModelsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<FixReadModelsHandler>().As<IHandle<FixReadModelsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MultiAbsenceRequestsHandler>().As<IHandle<NewMultiAbsenceRequestsCreatedEvent>>().InstancePerLifetimeScope().ApplyAspects();
