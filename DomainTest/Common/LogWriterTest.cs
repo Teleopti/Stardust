@@ -8,7 +8,6 @@ namespace Teleopti.Ccc.DomainTest.Common
     [TestFixture]
     public class LogWriterTest
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test]
         public void VerifyTwoLogWriterSharesSameLogObject()
         {
@@ -16,8 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             LogWriter<object> writer2 = new LogWriter<object>();
             Assert.AreSame(writer1.Log, writer2.Log);
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		
         [Test]
         public void VerifyWriterOfDifferentTypeHaveDifferentLogObject()
         {
@@ -25,9 +23,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             LogWriter<object> writer2 = new LogWriter<object>();
             Assert.AreNotSame(writer1.Log, writer2.Log);
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), 
-        System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Common.LogWriter<System.Object>.LogInfo(System.String)")]
+		
         [Test]
         public void VerifyInnerLogCalled()
         {
@@ -39,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Common
             
             using(mockRepository.Record())
             {
+	            Expect.Call(innerLogger.IsInfoEnabled).Return(true);
                 innerLogger.Info(message);
             }
             using(mockRepository.Playback())
