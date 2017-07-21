@@ -49,21 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Security
 
             Assert.AreEqual(_original, roundtrip);
         }
-
-        [Test]
-        public void VerifyBase64DecryptionOfDictionary()
-        {
-            // Encrypt the string to an array of bytes.
-            string encrypted = Encryption.EncryptStringToBase64(_original, _myRijndael.Key, _myRijndael.IV);
-
-            IDictionary<int,string> myEncryptedDictionary = new Dictionary<int, string>();
-            myEncryptedDictionary.Add(1,encrypted);
-            // Decrypt the bytes to a string.
-            var result = myEncryptedDictionary.DecryptDictionary(_myRijndael.Key, _myRijndael.IV);
-
-            Assert.AreEqual(_original, result[1]);
-        }
-
+		
         private static string typicalConfiguration()
         {
             return string.Concat(

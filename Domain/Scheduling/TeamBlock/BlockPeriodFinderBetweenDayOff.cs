@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         public DateOnlyPeriod? GetBlockPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnly providedDateOnly)
         {
             //isSingleAgentTeam can be removed if more scheduling options are needed then we can move the scheduling options.
-            if (scheduleMatrixPro == null) throw new ArgumentNullException("scheduleMatrixPro");
+            if (scheduleMatrixPro == null) throw new ArgumentNullException(nameof(scheduleMatrixPro));
 	        var person = scheduleMatrixPro.Person;
 			var rangeForPerson = scheduleMatrixPro.ActiveScheduleRange;
 	        
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var schedulePeriod = scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod;
 			var personPeriod = person.Period(providedDateOnly);
 			if (personPeriod == null)
-				return new DateOnlyPeriod(providedDateOnly, providedDateOnly);
+				return providedDateOnly.ToDateOnlyPeriod();
 
 	        var terminalDate = person.TerminalDate;
 	        var personPeriodStartDate = personPeriod.StartDate;

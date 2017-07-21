@@ -10,14 +10,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
     {
         public TimePeriod TargetWithTolerance(IScheduleMatrixPro matrix)
         {
-			if (matrix == null) throw new ArgumentNullException("matrix");
-        	var result = TargetTimeWithTolerance(matrix.SchedulePeriod, MatrixScheduleDays(matrix));
-        	return new TimePeriod(result.Minimum, result.Maximum);
+			if (matrix == null) throw new ArgumentNullException(nameof(matrix));
+        	return TargetTimeWithTolerance(matrix.SchedulePeriod, MatrixScheduleDays(matrix));
         }
 
 		public TimeSpan TargetTime(IScheduleMatrixPro matrix)
     	{
-			if (matrix == null) throw new ArgumentNullException("matrix");
+			if (matrix == null) throw new ArgumentNullException(nameof(matrix));
 			return TargetTime(matrix.SchedulePeriod, MatrixScheduleDays(matrix));
     	}
 
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return target;
 		}
 
-		public MinMax<TimeSpan> TargetTimeWithTolerance(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
+		public TimePeriod TargetTimeWithTolerance(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
 		{
 			var contract = virtualSchedulePeriod.Contract;
 			var employmentType = contract.EmploymentType;
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var maxTime = TimeSpan.FromSeconds(contract.WorkTimeDirective.MaxTimePerWeek.TotalSeconds * weeks);
 				if (maxTime < virtualSchedulePeriod.MinTimeSchedulePeriod)
 					maxTime = virtualSchedulePeriod.MinTimeSchedulePeriod;
-				return new MinMax<TimeSpan>(virtualSchedulePeriod.MinTimeSchedulePeriod, maxTime);
+				return new TimePeriod(virtualSchedulePeriod.MinTimeSchedulePeriod, maxTime);
 			}
 
 			var target = TargetTime(virtualSchedulePeriod, scheduleDays);
@@ -65,8 +64,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (schedulePeriod.Contract.EmploymentType == EmploymentType.FixedStaffDayWorkTime)
 				return PeriodTargetForStaffDayWorkTime(schedulePeriod, scheduleDays);
-			else
-				return schedulePeriod.PeriodTarget();
+
+			return schedulePeriod.PeriodTarget();
 		}
 
 		private static TimeSpan PeriodTargetForStaffDayWorkTime(IVirtualSchedulePeriod schedulePeriod, IEnumerable<IScheduleDay> scheduleDays)
@@ -105,11 +104,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return time;
 		}
 
-		private static MinMax<TimeSpan> ApplyTolerance(IContract contract, TimeSpan target)
+		private static TimePeriod ApplyTolerance(IContract contract, TimeSpan target)
 		{
 			var min = target.Subtract(contract.NegativePeriodWorkTimeTolerance);
 			var max = target.Add(contract.PositivePeriodWorkTimeTolerance);
-			return new MinMax<TimeSpan>(min, max);
+			return new TimePeriod(min, max);
 		}
 	}
 

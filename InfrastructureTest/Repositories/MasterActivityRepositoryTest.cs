@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         /// <param name="loadedAggregateFromDatabase">The loaded aggregate from database.</param>
         protected override void VerifyAggregateGraphProperties(IMasterActivity loadedAggregateFromDatabase)
         {
-            if (loadedAggregateFromDatabase == null) throw new ArgumentNullException("loadedAggregateFromDatabase");
+            if (loadedAggregateFromDatabase == null) throw new ArgumentNullException(nameof(loadedAggregateFromDatabase));
             IMasterActivity org = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(org.Description.Name, loadedAggregateFromDatabase.Description.Name);
             Assert.AreEqual(org.DisplayColor.ToArgb(), loadedAggregateFromDatabase.DisplayColor.ToArgb());

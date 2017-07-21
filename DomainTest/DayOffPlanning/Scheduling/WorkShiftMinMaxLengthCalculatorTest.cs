@@ -696,7 +696,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
     	}
 
     	public TimeSpan TargetTime(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays) { throw new NotImplementedException(); }
-    	public MinMax<TimeSpan> TargetTimeWithTolerance(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays) { throw new NotImplementedException(); }
+    	public TimePeriod TargetTimeWithTolerance(IVirtualSchedulePeriod virtualSchedulePeriod, IEnumerable<IScheduleDay> scheduleDays) { throw new NotImplementedException(); }
     }
 
     public class PossibleMinMaxWorkShiftLengthExtractorForTest : IPossibleMinMaxWorkShiftLengthExtractor

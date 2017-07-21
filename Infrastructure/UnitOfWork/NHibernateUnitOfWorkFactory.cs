@@ -55,15 +55,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_currentPreCommitHooks = currentPreCommitHooks;
 		}
 
-		public string Name
-		{
-			get { return ((ISessionFactoryImplementor)_factory).Settings.SessionFactoryName; }
-		}
+		public string Name => ((ISessionFactoryImplementor)_factory).Settings.SessionFactoryName;
 
-		public ISessionFactory SessionFactory
-		{
-			get { return _factory; }
-		}
+		public ISessionFactory SessionFactory => _factory;
 
 		public IStatelessUnitOfWork CreateAndOpenStatelessUnitOfWork()
 		{
@@ -85,12 +79,9 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return _context.Get() != null;
 		}
 
-		public IAuditSetter AuditSetting
-		{
-			get { return _auditSettingProvider; }
-		}
+		public IAuditSetter AuditSetting => _auditSettingProvider;
 
-		public string ConnectionString { get; private set; }
+		public string ConnectionString { get; }
 
 		public IUnitOfWork CreateAndOpenUnitOfWork()
 		{
@@ -138,5 +129,4 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_factory.Dispose();
 		}
 	}
-
 }

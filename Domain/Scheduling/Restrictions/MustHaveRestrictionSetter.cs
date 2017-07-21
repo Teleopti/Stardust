@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
 		public bool SetMustHave(DateOnly dateOnly, IPerson person, bool mustHave)
 		{
-			if (person == null) throw new ArgumentNullException("person");
+			if (person == null) throw new ArgumentNullException(nameof(person));
 			IPreferenceDay preferenceDay;
 			if (mustHave)
 			{

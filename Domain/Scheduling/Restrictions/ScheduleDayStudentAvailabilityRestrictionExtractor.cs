@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         public IList<IScheduleDay> AllUnavailable(IList<IScheduleDay> scheduleDays)
         {
             if(scheduleDays == null)
-                throw new ArgumentNullException("scheduleDays");
+                throw new ArgumentNullException(nameof(scheduleDays));
 
             IList<IScheduleDay> restrictedDays = new List<IScheduleDay>();
 
@@ -41,26 +41,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         public IList<IScheduleDay> AllAvailable(IList<IScheduleDay> scheduleDays)
         {
             if(scheduleDays == null)
-                throw new ArgumentNullException("scheduleDays");
+                throw new ArgumentNullException(nameof(scheduleDays));
 
-            IList<IScheduleDay> restrictedDays = new List<IScheduleDay>();
-
-            foreach (var scheduleDay in scheduleDays)
-            {
-                var result = _restrictionExtractor.Extract(scheduleDay);
-                if (!result.StudentAvailabilityList.Any()) continue;
-
-                restrictedDays.Add(scheduleDay);
-            }
-
-            return restrictedDays;
+	        List<IScheduleDay> list = new List<IScheduleDay>();
+	        foreach (var scheduleDay in scheduleDays)
+	        {
+		        IExtractedRestrictionResult result = _restrictionExtractor.Extract(scheduleDay);
+		        if (result.StudentAvailabilityList.Any()) list.Add(scheduleDay);
+	        }
+	        return list;
         }
 
 
         public IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if (restrictionChecker == null)
-                throw new ArgumentNullException("restrictionChecker");
+                throw new ArgumentNullException(nameof(restrictionChecker));
 
             return restrictionChecker.CheckStudentAvailability(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }

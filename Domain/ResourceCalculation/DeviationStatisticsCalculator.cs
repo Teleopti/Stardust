@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public DeviationStatisticsCalculator(IEnumerable<double> expectedValues, IEnumerable<double> realValues)
         {
             if (expectedValues == null)
-                throw new ArgumentNullException("expectedValues");
+                throw new ArgumentNullException(nameof(expectedValues));
             if (realValues == null)
-                throw new ArgumentNullException("realValues");
+                throw new ArgumentNullException(nameof(realValues));
 
             IList<double> expectedList = new List<double>(expectedValues);
             IList<double> realList = new List<double>(realValues);

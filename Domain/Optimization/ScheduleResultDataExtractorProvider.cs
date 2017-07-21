@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    public IScheduleResultDataExtractor CreatePersonalSkillDataExtractor(IScheduleMatrixPro scheduleMatrix, IAdvancedPreferences optimizerPreferences, ISchedulingResultStateHolder schedulingResultStateHolder)
         {
             if(scheduleMatrix == null)
-                throw new ArgumentNullException("scheduleMatrix");
+                throw new ArgumentNullException(nameof(scheduleMatrix));
 
             ISkillExtractor skillExtractor = new ScheduleMatrixPersonalSkillExtractor(scheduleMatrix, _personalSkillsProvider);
             if (optimizerPreferences.UseTweakedValues)

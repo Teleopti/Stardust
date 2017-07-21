@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public ITeamInfo CreateTeamInfo(IEnumerable<IPerson> personsInOrganisation, IPerson person, DateOnly dateOnly, IEnumerable<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
-		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
+		    if (allMatrixesInScheduler == null) throw new ArgumentNullException(nameof(allMatrixesInScheduler));
 			DateOnly firstDateOfMatrix = dateOnly;
 			Group group = _groupPersonBuilderWrapper.ForOptimization().BuildGroup(personsInOrganisation, person, firstDateOfMatrix);
 			if (!group.GroupMembers.Any()) return null;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public ITeamInfo CreateTeamInfo(IEnumerable<IPerson> personsInOrganisation, IPerson person, DateOnlyPeriod period, IEnumerable<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
-		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
+		    if (allMatrixesInScheduler == null) throw new ArgumentNullException(nameof(allMatrixesInScheduler));
 		    Group group = _groupPersonBuilderWrapper.ForOptimization().BuildGroup(personsInOrganisation, person, period.StartDate);
 		    if (group == null) return null;
 			if (!group.GroupMembers.Any()) return null;

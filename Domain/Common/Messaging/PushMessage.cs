@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
     	public virtual string GetTitle(ITextFormatter formatter)
     	{
 			if (formatter == null)
-				throw new ArgumentNullException("formatter");
+				throw new ArgumentNullException(nameof(formatter));
 			
 			return formatter.Format(_title);
     	}
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
     	public virtual string GetMessage(ITextFormatter formatter)
     	{
 			if (formatter == null)
-				throw new ArgumentNullException("formatter");
+				throw new ArgumentNullException(nameof(formatter));
 			
 			return formatter.Format(_message);
     	}
@@ -81,15 +81,10 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
                 _sender = value;
             }
         }
+		
+        public virtual IList<string> ReplyOptions => _replyOptions;
 
-        
-
-        public virtual IList<string> ReplyOptions
-        {
-            get { return _replyOptions; }
-        }
-
-        public virtual bool CheckReply(string replyToCheck)
+	    public virtual bool CheckReply(string replyToCheck)
         {
             return (_replyOptions.Contains(replyToCheck));
         }

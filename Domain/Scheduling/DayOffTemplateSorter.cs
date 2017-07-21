@@ -9,10 +9,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public int Compare(IDayOffTemplate x, IDayOffTemplate y)
         {
             if(x == null)
-                throw new ArgumentNullException("x");
+                throw new ArgumentNullException(nameof(x));
 
             if(y == null)
-                throw new ArgumentNullException("y");
+                throw new ArgumentNullException(nameof(y));
 
             return string.Compare(x.Description.Name, y.Description.Name, StringComparison.CurrentCultureIgnoreCase);
         }

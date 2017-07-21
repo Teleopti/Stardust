@@ -33,15 +33,15 @@ namespace Teleopti.Interfaces.Domain
             period = new MinMax<TimeSpan>(start, end);
         }
 		
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TimePeriod"/> struct.
-        /// </summary>
-        /// <param name="startAndEnd">The start and end.</param>
-        /// <remarks>
-        /// Created by: henryg
-        /// Created date: 2007-11-28
-        /// </remarks>
-        public TimePeriod(string startAndEnd)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TimePeriod"/> struct.
+		/// </summary>
+		/// <param name="startAndEnd">The start and end.</param>
+		/// <remarks>
+		/// Created by: henryg
+		/// Created date: 2007-11-28
+		/// </remarks>
+		public TimePeriod(string startAndEnd)
         {
             TimePeriod tp;
             if (TryParse(startAndEnd, out tp))

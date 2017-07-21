@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		public IEffectiveRestriction Combine(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
 		{
 			if (scheduleDay == null)
-				throw new ArgumentNullException("scheduleDay");
+				throw new ArgumentNullException(nameof(scheduleDay));
 
 			if (effectiveRestriction == null)
 				return null;
@@ -36,11 +36,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			IList<IEffectiveRestriction> asEffectiveRestrictions = new List<IEffectiveRestriction>();
 			foreach (var p in periods)
 			{
-				var workTime = p.TimePeriod(timeZoneInfo).SpanningTime();
+				var timePeriod = p.TimePeriod(timeZoneInfo);
+				var workTime = timePeriod.SpanningTime();
 				if (workTime >= TimeSpan.FromHours(24)) workTime = new TimeSpan(23, 59, 59);
 				asEffectiveRestrictions.Add(new EffectiveRestriction(
-														 new StartTimeLimitation(null, p.TimePeriod(timeZoneInfo).StartTime),
-														 new EndTimeLimitation(p.TimePeriod(timeZoneInfo).EndTime, null),
+														 new StartTimeLimitation(null, timePeriod.StartTime),
+														 new EndTimeLimitation(timePeriod.EndTime, null),
 														 new WorkTimeLimitation(workTime, null),
 														 null,
 														 null,

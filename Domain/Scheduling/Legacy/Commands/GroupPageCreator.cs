@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		public IGroupPagePerDate CreateGroupPagePerDate(IEnumerable<IPerson> allPermittedPersons, IScheduleDictionary schedules, IEnumerable<DateOnly> dates, IGroupScheduleGroupPageDataProvider groupPageDataProvider, GroupPageLight selectedGrouping)
 		{
-			if (dates == null) throw new ArgumentNullException("dates");
-			if (groupPageDataProvider == null) throw new ArgumentNullException("groupPageDataProvider");
+			if (dates == null) throw new ArgumentNullException(nameof(dates));
+			if (groupPageDataProvider == null) throw new ArgumentNullException(nameof(groupPageDataProvider));
 	
 			var concDic = new ConcurrentDictionary<DateOnly, IGroupPage>();
 			foreach (var date in dates)

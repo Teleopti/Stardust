@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Aop
 			{
 				if (pi == null)
 				{
-					throw new ArgumentNullException("pi");
+					throw new ArgumentNullException(nameof(pi));
 				}
 
 				if (pi.IsOptional)

@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public bool IsShiftCategoryOverWeekLimit(IShiftCategoryLimitation shiftCategoryLimitation, IScheduleRange personRange, DateOnlyPeriod queryWeek, out IList<DateOnly> datesWithCategory)
         {
             if (shiftCategoryLimitation == null)
-                throw new ArgumentNullException("shiftCategoryLimitation");
+                throw new ArgumentNullException(nameof(shiftCategoryLimitation));
             if (!shiftCategoryLimitation.Weekly)
                 throw new ArgumentException("shiftCategoryLimitation.Weekly must be true");
 
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleRange personRange, DateOnlyPeriod queryWeek, out IList<DateOnly> datesWithCategory)
         {
             if (shiftCategoryLimitation == null)
-                throw new ArgumentNullException("shiftCategoryLimitation");
+                throw new ArgumentNullException(nameof(shiftCategoryLimitation));
 
             if (!shiftCategoryLimitation.Weekly)
                 throw new ArgumentException("shiftCategoryLimitation.Weekly must be true");

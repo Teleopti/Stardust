@@ -33,15 +33,12 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			if (x == null)
 			{
-				throw new ArgumentNullException("x");
+				throw new ArgumentNullException(nameof(x));
 			}
 			return x.GetHashCode();
 		}
 
-		public bool IsMutable
-		{
-			get { return true; }
-		}
+		public bool IsMutable => true;
 
 		public object NullSafeGet(IDataReader rs, string[] names, object owner)
 		{
@@ -49,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				throw new InvalidOperationException("names array has more than one element. can't handle this!");
 
 			var valueToGet = (string)NHibernateUtil.String.NullSafeGet(rs, names[0]);
-			return valueToGet != null ? valueToGet.ToUncompressedString() : null;
+			return valueToGet?.ToUncompressedString();
 		}
 
 		public void NullSafeSet(IDbCommand cmd, object value, int index)
@@ -69,14 +66,8 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			throw new NotImplementedException();
 		}
 
-		public Type ReturnedType
-		{
-			get { return typeof(string); }
-		}
+		public Type ReturnedType => typeof(string);
 
-		public SqlType[] SqlTypes
-		{
-			get { return new[] { new SqlType(DbType.String) }; }
-		}
+		public SqlType[] SqlTypes => new[] { new SqlType(DbType.String) };
 	}
 }

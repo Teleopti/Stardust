@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         public IList<IScheduleDay> AllUnavailable(IList<IScheduleDay> scheduleDays)
         {
             if(scheduleDays == null)
-                throw new ArgumentNullException("scheduleDays");
+                throw new ArgumentNullException(nameof(scheduleDays));
 
             var restrictedDays = new List<IScheduleDay>();
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         public IList<IScheduleDay> AllAvailable(IList<IScheduleDay> scheduleDays)
         {
             if(scheduleDays == null)
-                throw new ArgumentNullException("scheduleDays");
+                throw new ArgumentNullException(nameof(scheduleDays));
 
             var restrictedDays = new List<IScheduleDay>();
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         public IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if (restrictionChecker == null)
-                throw new ArgumentNullException("restrictionChecker");
+                throw new ArgumentNullException(nameof(restrictionChecker));
 
             return restrictionChecker.CheckAvailability(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }

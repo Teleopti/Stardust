@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		public virtual string GetSubject(ITextFormatter formatter)
 		{
 			if (formatter == null)
-				throw new ArgumentNullException("formatter");
+				throw new ArgumentNullException(nameof(formatter));
 			
 			return formatter.Format(_subject);
 		}
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		public virtual string GetLocation(ITextFormatter formatter)
 		{
 			if (formatter == null)
-				throw new ArgumentNullException("formatter");
+				throw new ArgumentNullException(nameof(formatter));
 			
 			return formatter.Format(_location);
 		}
@@ -121,21 +121,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		public virtual string GetDescription(ITextFormatter formatter)
 		{
 			if (formatter == null)
-				throw new ArgumentNullException("formatter");
+				throw new ArgumentNullException(nameof(formatter));
 			
 			return formatter.Format(_description);
 		}
 
 		public virtual TimeZoneInfo TimeZone
 		{
-			get
-			{
-				if (_timeZoneCache == null)
-				{
-					_timeZoneCache = TimeZoneInfo.FindSystemTimeZoneById(_timeZone);
-				}
-				return _timeZoneCache;
-			}
+			get => _timeZoneCache ?? (_timeZoneCache = TimeZoneInfo.FindSystemTimeZoneById(_timeZone));
 			set
 			{
 				verifyLastKnownStateIsSet();
@@ -177,12 +170,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 			verifyLastKnownStateIsSet();
 		}
 
-		public virtual IScenario Scenario
-		{
-			get { return _scenario; }
-		}
-
-
+		public virtual IScenario Scenario => _scenario;
+		
 		public virtual TimeSpan StartTime
 		{
 			get { return _startTime; }
@@ -240,13 +229,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 			return _endTime.Subtract(_startTime);
 		}
 
-		public virtual IRecurrentMeetingOption MeetingRecurrenceOption
-		{
-			get
-			{
-				return meetingRecurrenceOptions.FirstOrDefault();
-			}
-		}
+		public virtual IRecurrentMeetingOption MeetingRecurrenceOption => meetingRecurrenceOptions.FirstOrDefault();
 
 		public virtual void ClearMeetingPersons()
 		{
@@ -281,7 +264,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		{
 			IList<IPersonMeeting> personMeetings = new List<IPersonMeeting>();
 			IMeetingPerson meetingPerson = _meetingPersons.FirstOrDefault(mp => mp.Person.Equals(person));
-		//	var meetingPerson = _meetingPersons.FirstOrDefault(mp => mp.Person.Id == person.Id);
 			if (meetingPerson != null)
 			{
 				foreach (DateOnly recurringDate in GetRecurringDates())

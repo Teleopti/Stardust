@@ -214,8 +214,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
     	public IWorkloadDayBase GetTemplateWorkloadDay(IWorkloadDayTemplate workloadDayTemplate, IList<IWorkloadDayBase> workloadDays)
 		{
-    		if (workloadDayTemplate == null) throw new ArgumentNullException("workloadDayTemplate");
-    		if (workloadDays == null) throw new ArgumentNullException("workloadDays");
+    		if (workloadDayTemplate == null) throw new ArgumentNullException(nameof(workloadDayTemplate));
+    		if (workloadDays == null) throw new ArgumentNullException(nameof(workloadDays));
 			
 			var workloadDay = new WorkloadDay();
 			workloadDay.Create(SkillDayTemplate.BaseDate, _workload, workloadDayTemplate.OpenHourList);

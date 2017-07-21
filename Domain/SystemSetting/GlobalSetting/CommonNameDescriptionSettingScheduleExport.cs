@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
         public virtual string BuildCommonNameDescription(IPerson person)
         {
             if(person == null)
-                throw new ArgumentNullException("person");
+                throw new ArgumentNullException(nameof(person));
 
             string builded = AliasFormat;
             builded = builded.Replace(FirstName, person.Name.FirstName);
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.SystemSetting.GlobalSetting
         public string BuildCommonNameDescription(ILightPerson lightPerson)
         {
             if (lightPerson == null)
-                throw new ArgumentNullException("lightPerson");
+                throw new ArgumentNullException(nameof(lightPerson));
 
             string builded = AliasFormat;
             builded = builded.Replace(FirstName, lightPerson.FirstName);

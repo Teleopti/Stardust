@@ -100,20 +100,11 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			StoreRootCacheKey();
 		}
 
-		public string Region
-		{
-			get { return region; }
-		}
+		public string Region => region;
 
-		public TimeSpan Expiration
-		{
-			get { return expiration; }
-		}
+		public TimeSpan Expiration => expiration;
 
-		public CacheItemPriority Priority
-		{
-			get { return priority; }
-		}
+		public CacheItemPriority Priority => priority;
 
 		private void Configure(IDictionary<string, string> props)
 		{
@@ -243,7 +234,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			string cacheKey = GetCacheKey(key);
 			if (log.IsDebugEnabled)
 			{
-				log.Debug(String.Format("Fetching object '{0}' from the cache.", cacheKey));
+				log.Debug($"Fetching object '{cacheKey}' from the cache.");
 			}
 
 			object obj = cache.Get(cacheKey);
@@ -257,28 +248,25 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			{
 				return de.Value;
 			}
-			else
-			{
-				return null;
-			}
+			return null;
 		}
 
 		public void Put(object key, object value)
 		{
 			if (key == null)
 			{
-				throw new ArgumentNullException("key", "null key not allowed");
+				throw new ArgumentNullException(nameof(key), "null key not allowed");
 			}
 			if (value == null)
 			{
-				throw new ArgumentNullException("value", "null value not allowed");
+				throw new ArgumentNullException(nameof(value), "null value not allowed");
 			}
 			string cacheKey = GetCacheKey(key);
 			if (cache[cacheKey] != null)
 			{
 				if (log.IsDebugEnabled)
 				{
-					log.Debug(String.Format("updating value of key '{0}' to '{1}'.", cacheKey, value));
+					log.Debug($"updating value of key '{cacheKey}' to '{value}'.");
 				}
 
 				// Remove the key to re-add it again below
@@ -288,7 +276,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			{
 				if (log.IsDebugEnabled)
 				{
-					log.Debug(String.Format("adding new data: key={0}&value={1}", cacheKey, value));
+					log.Debug($"adding new data: key={cacheKey}&value={value}");
 				}
 			}
 
@@ -311,7 +299,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			if (key == null)
 			{
-				throw new ArgumentNullException("key");
+				throw new ArgumentNullException(nameof(key));
 			}
 			string cacheKey = GetCacheKey(key);
 			if (log.IsDebugEnabled)
@@ -380,15 +368,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			return Timestamper.Next();
 		}
 
-		public int Timeout
-		{
-			get { return Timestamper.OneMs * 60000; } // 60 seconds
-		}
+		public int Timeout => Timestamper.OneMs * 60000;
 
-		public string RegionName
-		{
-			get { return region; }
-		}
+		public string RegionName => region;
 	}
 
 	internal class CacheConfig
@@ -409,16 +391,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		}
 
 		/// <summary></summary>
-		public string Region
-		{
-			get { return regionName; }
-		}
+		public string Region => regionName;
 
 		/// <summary></summary>
-		public IDictionary<string, string> Properties
-		{
-			get { return properties; }
-		}
+		public IDictionary<string, string> Properties => properties;
 	}
 
 	/// <summary>

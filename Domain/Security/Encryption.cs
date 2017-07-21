@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Domain.Security
         {
             // Check arguments.
             if (key == null || key.Length <= 0)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
             if (iv == null || iv.Length <= 0)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(iv));
 
             // Declare the streams used
             // to encrypt to an in memory
@@ -66,16 +66,12 @@ namespace Teleopti.Ccc.Domain.Security
                 // Clean things up.
 
                 // Close the streams.
-                if (swEncrypt != null)
-                    swEncrypt.Close();
-                if (csEncrypt != null)
-                    csEncrypt.Close();
-                if (msEncrypt != null)
-                    msEncrypt.Close();
+	            swEncrypt?.Close();
+	            csEncrypt?.Close();
+	            msEncrypt?.Close();
 
-                // Clear the RijndaelManaged object.
-                if (aesAlg != null)
-                    aesAlg.Clear();
+	            // Clear the RijndaelManaged object.
+	            aesAlg?.Clear();
             }
 
             // Return the encrypted bytes from the memory stream.
@@ -93,11 +89,11 @@ namespace Teleopti.Ccc.Domain.Security
         {
             // Check arguments.
             if (cipherText == null || cipherText.Length <= 0)
-                throw new ArgumentNullException("cipherText");
+                throw new ArgumentNullException(nameof(cipherText));
             if (key == null || key.Length <= 0)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
             if (iv == null || iv.Length <= 0)
-                throw new ArgumentNullException("key");
+                throw new ArgumentNullException(nameof(key));
 
             // TDeclare the streams used
             // to decrypt to an in memory
@@ -137,15 +133,11 @@ namespace Teleopti.Ccc.Domain.Security
                 // Clean things up.
 
                 // Close the streams.
-                if (srDecrypt != null)
-                    srDecrypt.Close();
-                if (csDecrypt != null)
-                    csDecrypt.Close();
-                if (msDecrypt != null)
-                    msDecrypt.Close();
-                // Clear the RijndaelManaged object.
-                if (aesAlg != null)
-                    aesAlg.Clear();
+	            srDecrypt?.Close();
+	            csDecrypt?.Close();
+	            msDecrypt?.Close();
+	            // Clear the RijndaelManaged object.
+	            aesAlg?.Clear();
             }
 
             return plaintext;
@@ -173,16 +165,6 @@ namespace Teleopti.Ccc.Domain.Security
         public static string DecryptStringFromBase64(string cipherTextInBase64, byte[] key, byte[] iv)
         {
             return DecryptStringFromBytes(Convert.FromBase64String(cipherTextInBase64), key, iv);
-        }
-
-        public static IDictionary<TKey, string> DecryptDictionary<TKey>(this IDictionary<TKey,string> encryptedDictionary, byte[] key, byte[] iv)
-        {
-	        var ret = new Dictionary<TKey, string>(encryptedDictionary.Count);
-            foreach (var encryptedKey in encryptedDictionary.Keys.ToList())
-            {
-                ret[encryptedKey] = DecryptStringFromBase64(encryptedDictionary[encryptedKey], key, iv);
-            }
-	        return ret;
         }
     }
 }

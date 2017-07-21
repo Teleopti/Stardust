@@ -91,11 +91,11 @@ namespace Teleopti.Ccc.Domain.Helper
 		{
 			if (sourceRow == null)
 			{
-				throw new ArgumentNullException("sourceRow");
+				throw new ArgumentNullException(nameof(sourceRow));
 			}
 			if (targetRow == null)
 			{
-				throw new ArgumentNullException("targetRow");
+				throw new ArgumentNullException(nameof(targetRow));
 			}
 			var maxIndex = sourceRow.LastCellNum;
 			if (startIndex < 0 || endIndex > maxIndex)

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool ContainsDeletedShiftCategory(IWorkShiftRuleSet ruleSet)
 		{
 			if (ruleSet == null)
-				throw new ArgumentNullException("ruleSet");
+				throw new ArgumentNullException(nameof(ruleSet));
 
 			if (((IDeleteTag)ruleSet.TemplateGenerator.Category).IsDeleted)
 				return true;

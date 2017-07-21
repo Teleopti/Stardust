@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public IList<IScheduleDay> AllRestrictedDays(IList<IScheduleDay> scheduleDays)
         {
-            if(scheduleDays == null) throw new ArgumentNullException("scheduleDays");
+            if(scheduleDays == null) throw new ArgumentNullException(nameof(scheduleDays));
 
             IList<IScheduleDay> restrictedDays = new List<IScheduleDay>();
 

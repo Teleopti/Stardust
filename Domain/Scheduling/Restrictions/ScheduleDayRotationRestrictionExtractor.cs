@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         public IList<IScheduleDay> AllRestrictedDayOffs(IList<IScheduleDay> scheduleDays)
         {
             if (scheduleDays == null)
-                throw new ArgumentNullException("scheduleDays");
+                throw new ArgumentNullException(nameof(scheduleDays));
 
             var restrictedDays = new List<IScheduleDay>();
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         public IList<IScheduleDay> AllRestrictedShifts(IList<IScheduleDay> scheduleDays)
         {
             if (scheduleDays == null)
-                throw new ArgumentNullException("scheduleDays");
+                throw new ArgumentNullException(nameof(scheduleDays));
 
             var restrictedDays = new List<IScheduleDay>();
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         public IScheduleDay RestrictionFulfilled(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if (restrictionChecker == null)
-                throw new ArgumentNullException("restrictionChecker");
+                throw new ArgumentNullException(nameof(restrictionChecker));
 
             return restrictionChecker.CheckRotations(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		public IScheduleDay RestrictionFulfilledDayOff(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if(restrictionChecker == null)
-                throw new ArgumentNullException("restrictionChecker");
+                throw new ArgumentNullException(nameof(restrictionChecker));
 
 			return restrictionChecker.CheckRotationDayOff(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		public IScheduleDay RestrictionFulfilledShift(ICheckerRestriction restrictionChecker, IScheduleDay scheduleDay)
         {
             if(restrictionChecker == null)
-                throw new ArgumentNullException("restrictionChecker");
+                throw new ArgumentNullException(nameof(restrictionChecker));
 
 			return restrictionChecker.CheckRotationShift(scheduleDay) == PermissionState.Satisfied ? scheduleDay : null;
         }

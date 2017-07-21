@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
         public ScheduleTagSetter(IScheduleTag tag)
         {
         	if (tag == null) 
-				throw new ArgumentNullException("tag");
+				throw new ArgumentNullException(nameof(tag));
         	_tag = tag;
         }
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ScheduleTagging
         public void ChangeTagToSet(IScheduleTag tag)
         {
         	if (tag == null) 
-				throw new ArgumentNullException("tag");
+				throw new ArgumentNullException(nameof(tag));
         	_tag = tag;
         }
 

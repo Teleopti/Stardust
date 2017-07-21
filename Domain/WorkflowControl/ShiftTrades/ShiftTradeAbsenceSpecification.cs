@@ -8,15 +8,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
 	public class ShiftTradeAbsenceSpecification : ShiftTradeSpecification
 	{
-		public override string DenyReason
-		{
-			get { return "ShiftTradeAbsenceDenyReason"; }
-		}
+		public override string DenyReason => "ShiftTradeAbsenceDenyReason";
 
 		public override bool IsSatisfiedBy(IEnumerable<IShiftTradeSwapDetail> obj)
 		{
 			if (obj == null)
-				throw new ArgumentNullException("obj");
+				throw new ArgumentNullException(nameof(obj));
 
 			foreach (var shiftTradeSwapDetail in obj)
 			{
