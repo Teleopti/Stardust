@@ -77,11 +77,11 @@
 
 			<div class="form-group">
 				<label>Email</label>
-				<input class="form-control" type="text" ng-model="loginVm.loginEmail" autocorrect="false" />
+				<input class="form-control" type="text" ng-model="loginVm.loginEmail" autocorrect="off" autocapitalize="off" />
 			</div>
 			<div class="form-group">
 				<label>Password</label>
-				<input class="form-control" type="password" ng-model="loginVm.loginPassword" autocomplete="false">
+				<input class="form-control" type="password" ng-model="loginVm.loginPassword" autocomplete="off">
 			</div>
 			<button type="submit" ng-click="loginVm.login()" class="btn btn-default signInBtn">Log In</button>
 			<div>
