@@ -21,31 +21,23 @@
 
 	function teamScheduleDatePickerCtrl($timeout) {
 		var vm = this;
-		vm.format = 'YYYY-MM-DD';
 		vm.step = parseInt(vm.step) || 1;
 
 		vm.onDateInputChange = function () {
-			if (!vm.selectedDate) {
+			if (!vm.selectedDate || !moment(vm.selectedDate).isValid()) {
 				return;
 			}
-			var newDateObj = moment(vm.selectedDate).toDate();
-			if (!isValidDate(newDateObj)) {
-				return;
-			}
-			newDateObj.setHours(vm.selectedDate.getHours());
-			newDateObj.setMinutes(vm.selectedDate.getMinutes());
-			vm.selectedDate = newDateObj;
 			vm.onDateChange && $timeout(function () { vm.onDateChange({ date: vm.selectedDate }); });
 		};
 
 		vm.gotoPreviousDate = function () {
-			var currentDate = moment(vm.selectedDate).add(-(vm.step), 'day').format(vm.format);
-			vm.onDateInputChange(currentDate);
+			vm.selectedDate = moment(vm.selectedDate).add(-(vm.step), 'day').toDate();
+			vm.onDateInputChange();
 		};
 
 		vm.gotoNextDate = function () {
-			var currentDate = moment(vm.selectedDate).add(vm.step, 'day').format(vm.format);
-			vm.onDateInputChange(currentDate);
+			vm.selectedDate = moment(vm.selectedDate).add(vm.step, 'day').toDate();
+			vm.onDateInputChange();
 		};
 
 		vm.toggleCalendar = function () {
@@ -53,7 +45,5 @@
 		};
 	}
 
-	function isValidDate(dateObj) {
-		return (!isNaN(dateObj.getTime()) && dateObj.getTime() > 0);
-	}
 })();
+
