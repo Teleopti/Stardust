@@ -194,6 +194,7 @@
     <Compile Include="Foundation\DatabaseVersionTest.cs" />
     <Compile Include="Foundation\InitializeMessageBrokerTest.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactoryTest.cs" />
+    <Compile Include="Persisters\Schedules\ScheduleDifferenceSaverTest.cs" />
     <Compile Include="Repositories\JobStartTimeTest.cs" />
     <Compile Include="Intraday\PersonProviderForOvertimeTest.cs" />
     <Compile Include="Repositories\PersonRequestRepositoryOvertimeTest.cs" />
