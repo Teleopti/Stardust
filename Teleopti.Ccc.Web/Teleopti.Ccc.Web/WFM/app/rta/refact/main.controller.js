@@ -128,23 +128,15 @@
 				if (vm.skillIds.length) {
 					rtaService.getTeamCardsFor({ siteIds: card.site.Id, skillIds: vm.skillIds }).then(function (teams) {
 						card.teams = teams;
-						if (card.isSelected) {
-							card.teams.forEach(function (team) {
-								team.isSelected = true;
-							});
-						}
+						setTeamToSelected(card);
 					});
 				} else {
 					rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
 						card.teams = teams;
-						if (card.isSelected) {
-							card.teams.forEach(function (team) {
-								team.isSelected = true;
-							});
-						}
+						setTeamToSelected(card);
 					});
-				}
 
+				}
 			}
 
 			function updateTeamCards(card, teams) {
@@ -155,6 +147,21 @@
 					team.Color = match.Color;
 					team.InAlarmCount = match.InAlarmCount;
 				});
+			}
+
+			function setTeamToSelected(card) {
+				var indexOfSite = vm.selectedItems.siteIds.indexOf(card.site.Id);
+				if (indexOfSite > -1) {
+					card.teams.forEach(function (team) {
+						team.isSelected = true;
+					});
+				}
+				else {
+					card.teams.forEach(function (team) {
+						var indexOfTeam = vm.selectedItems.teamIds.indexOf(team.Id);
+						if (indexOfTeam > -1) team.isSelected = true;
+					});
+				}
 			}
 
 			function getSkillIdsFromSkillAreaId(id) {
@@ -287,6 +294,7 @@
 					var siteIndex = vm.selectedItems.siteIds.indexOf(match.site.Id);
 
 					if (match.isSelected) {
+						console.log('hej hej');
 						match.teams.forEach(function (team) {
 							var index = vm.selectedItems.teamIds.indexOf(team.Id);
 							vm.selectedItems.teamIds.splice(index, 1);

@@ -1116,7 +1116,7 @@ describe('RtaMainController', function () {
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['redId'], skillIds: ['phoneId'], skillAreaId: undefined });
     });
 
-    it('should go to agents for site if all teams under it are selected', function () {
+    it('should go to agents for site if all teams under it are selected one by one', function () {
       $fakeBackend
         .withSiteAdherence({
           Id: 'londonId',
@@ -1126,7 +1126,7 @@ describe('RtaMainController', function () {
           SiteId: 'londonId',
           Id: 'greenId'
         })
-         .withTeamAdherence({
+        .withTeamAdherence({
           SiteId: 'londonId',
           Id: 'redId'
         });
@@ -1188,7 +1188,7 @@ describe('RtaMainController', function () {
           SiteId: 'londonId',
           Id: 'greenId'
         })
-         .withTeamAdherence({
+        .withTeamAdherence({
           SiteId: 'londonId',
           Id: 'redId'
         });
@@ -1210,6 +1210,61 @@ describe('RtaMainController', function () {
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['londonId'], teamIds: [], skillIds: [], skillAreaId: undefined });
     });
 
+  });
+
+  it('should select teams under site when site is not selected and team is', function () {
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Id: 'greenId'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Id: 'redId'
+      });
+    var c = $controllerBuilder.createController();
+    vm = c.vm;
+
+    c.apply(function () {
+      vm.siteCards[0].isOpen = true;
+      vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
+      $httpBackend.flush();
+      vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      vm.siteCards[0].isOpen = false;
+      vm.siteCards[0].isOpen = true;
+      vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
+      $httpBackend.flush();
+
+    });
+
+    expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
+  });
+
+  it('should select all teams under site when site is selected and initially closed', function () {
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Id: 'greenId'
+      });
+
+    var c = $controllerBuilder.createController()
+    vm = c.vm;
+
+    c.apply(function () {
+      vm.getSelectedItems(vm.siteCards[0]);
+      vm.siteCards[0].isOpen = true;
+      vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
+      $httpBackend.flush();
+    });
+
+    expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
   });
 
 });
