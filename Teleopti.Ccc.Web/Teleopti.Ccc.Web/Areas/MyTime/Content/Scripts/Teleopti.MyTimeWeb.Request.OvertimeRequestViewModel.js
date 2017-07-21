@@ -1,7 +1,6 @@
 ﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart, isViewingDetail) {
 	var self = this,
 		postDataStartDate,
-		dateOnlyFormat = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly,
 		dateTimeFormats = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat;
 
 	self.Id = ko.observable();
@@ -25,8 +24,6 @@
 	self.MultiplicatorDefinitionSetId = ko.observable();
 	self.TimeList = undefined;
 	self.RequestDuration = ko.observable();
-	self.DateFromChangeSubscription = undefined;
-	self.StartTimeChangeSubscription = undefined;
 
 	self.checkMessageLength = function (data, event) {
 		var text = $(event.target)[0].value;
@@ -78,40 +75,15 @@
 		});
 	};
 
-	self.GetDefaultStartTime = function() {
-		ajax.Ajax({
-			url: '../api/Schedule/GetIntradayScheduleEdgeTime',
-			data: {
-				date: moment.isMoment(self.DateFrom()) ? self.DateFrom().format(dateOnlyFormat) : self.DateFrom()
-			},
-			dataType: 'json',
-			type: 'Get',
-			success: function(data) {
-				if(moment(data.EndDateTime).isAfter(moment(self.DateFrom()).endOf('day'))){
-					postDataStartDate = moment(data.EndDateTime).format(dateOnlyFormat);
-				}
-
-				self.StartTime(moment(data.EndDateTime).format('HH:mm'));
-				_buildStartTimeSubscription();
-			}
-		});
-	};
-
 	self.Initialize = function (data) {
 		if (isViewingDetail && data) {
 			self.Id(data.Id);
 
 			self.Subject(data.Subject);
 			self.Message(data.Text);
-			!self.DateFromChangeSubscription && _buildDateFromSubscription();
 
-			self.DateFrom(moment(data.DateTimeFrom).format(dateOnlyFormat));
-
-			if (self.ShowMeridian) {
-				self.StartTime(moment(data.DateTimeFrom).format("hh:mm A"));
-			} else {
-				self.StartTime(moment(data.DateTimeFrom).format("HH:mm"));
-			}
+			self.DateFrom(moment(data.DateTimeFrom).format(dateTimeFormats.dateOnly));
+			self.StartTime(self.ShowMeridian ? moment(data.DateTimeFrom).format("hh:mm A") : moment(data.DateTimeFrom).format("HH:mm"));
 
 			var seconds = (moment(data.DateTimeTo) - moment(data.DateTimeFrom)) / 1000;
 			var hours = '0' + moment.duration(seconds, 'seconds').hours();
@@ -139,7 +111,7 @@
 
 		if (!self.Subject() || !/\S/.test(self.Subject())) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_SUBJECT);
-		} else if (_buildPostData().Period.StartTime.length != 5) {
+		} else if (_buildPostData().Period.StartTime.length != 5 || self.StartTime() == '') {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_STARTTIME);
 		} else if (!self.RequestDuration() || self.RequestDuration().length != 5) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_DURATION);
@@ -158,22 +130,15 @@
 	function _isDateFromWithin14Days() {
 		var dateFromMoment = self.DateFrom();
 		if (!moment.isMoment(dateFromMoment))
-			dateFromMoment = moment(dateFromMoment, dateOnlyFormat);
+			dateFromMoment = moment(dateFromMoment, dateTimeFormats.dateOnly);
 
 		var days = Math.ceil(moment.duration(dateFromMoment - moment()).asDays());
 		return days <= 14 && days >= 0;
 	}
 
-	function _getStartDateForPostData(){
-		var startDate = !moment.isMoment(self.DateFrom()) ? moment(self.DateFrom()) : moment().startOf("day");
-		if(startDate.format(dateOnlyFormat) != postDataStartDate){
-			startDate = moment(postDataStartDate);
-		}
-		return startDate.format(dateTimeFormats.dateOnly);
-	}
-
 	function _buildPostData() {
-		var periodStart = moment(_getStartDateForPostData() + " " + self.StartTime());
+		var startDate = !moment.isMoment(self.DateFrom()) ? moment(self.DateFrom()) : moment().startOf("day");
+		var periodStart = moment(startDate.format(dateTimeFormats.dateOnly) + " " + self.StartTime());
 		var periodEnd = moment(periodStart);
 		if (self.RequestDuration()) {
 			var durationParts = self.RequestDuration().split(":");
@@ -194,23 +159,13 @@
 		};
 	}
 
-	function _buildDateFromSubscription(){
-		self.DateFromChangeSubscription = self.DateFrom.subscribe(self.GetDefaultStartTime);
-	}
-
-	function _buildStartTimeSubscription(){
-		self.StartTimeChangeSubscription = self.StartTime.subscribe(function(newValue){
-			postDataStartDate = moment(self.DateFrom()).format(dateOnlyFormat);
-		});
-	}
-
 	function _initializeViewModel(){
 		self.ShowError(false);
 		self.ShowCancelButton(true);
+		self.StartTime(self.ShowMeridian ? moment().format('hh:mm A') : moment().format('HH:mm'));
 		self.TimeList = _createTimeList();
 		self.RequestDuration(self.TimeList[0]);
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;
-		!isViewingDetail &&	_buildDateFromSubscription();
 	}
 
 	_initializeViewModel();

@@ -4,7 +4,7 @@
 	MISSING_DURATION: "Missing duration",
 	REQUESTDATE_EXCEEDS_14DAYS: "Request date exceeds 14 days"
 };
-$(document).ready(function () {
+$(document).ready(function() {
 	var vm,
 		ajax,
 		sentData,
@@ -14,29 +14,24 @@ $(document).ready(function () {
 			Id: '7155082E-108B-4F72-A36A-C1430C37CADA'
 		},
 		fakeRequestDetailViewModel = {
-			CancelAddingNewRequest: function () {
+			CancelAddingNewRequest: function() {
 				requestFormClosed = true;
 			}
 		},
-		fakeScheduleEdgeTimeData = {
-			StartDateTime: "2017-07-14 11:00",
-			EndDateTime: "2017-07-14 21:00"
-		},
 		requestDate = moment().format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
 
-	module('Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel',
-		{
-			setup: function () {
-				setup();
-			}
-		});
+	module('Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel', {
+		setup: function() {
+			setup();
+		}
+	});
 
 	function setup() {
 		setupAjax();
 		requestFormClosed = false;
 		addedOvertimeRequest = undefined;
 
-		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function (data) {
+		vm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
 			addedOvertimeRequest = data;
 		}, fakeRequestDetailViewModel);
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
@@ -44,23 +39,20 @@ $(document).ready(function () {
 
 	function setupAjax() {
 		ajax = {
-			Ajax: function (options) {
+			Ajax: function(options) {
 				if (options.url === 'Requests/PersistOvertimeRequest') {
 					sentData = options.data;
 					options.success(fakeOvertimeRequestResponse);
-				}
-				if(options.url.indexOf('GetIntradayScheduleEdgeTime') > -1){
-					options.success(fakeScheduleEdgeTimeData);
 				}
 			}
 		};
 	}
 
-	test('should have template', function () {
+	test('should have template', function() {
 		equal(vm.Template, 'add-overtime-request-template');
 	});
 
-	test('should submit overtime request', function () {
+	test('should submit overtime request', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
@@ -82,7 +74,7 @@ $(document).ready(function () {
 	});
 
 
-	test('should input subject', function () {
+	test('should input subject', function() {
 		vm.Subject('');
 
 		vm.AddRequest();
@@ -90,7 +82,7 @@ $(document).ready(function () {
 		equal(vm.ErrorMessage(), 'Missing subject');
 	});
 
-	test('should save overtime request', function () {
+	test('should save overtime request', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
@@ -103,7 +95,7 @@ $(document).ready(function () {
 		equal(JSON.stringify(addedOvertimeRequest), JSON.stringify(fakeOvertimeRequestResponse));
 	});
 
-	test('should post correct EndDate and EndTime with cross day', function () {
+	test('should post correct EndDate and EndTime with cross day', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
@@ -119,7 +111,7 @@ $(document).ready(function () {
 		equal(sentData.Period.EndTime, '01:00');
 	});
 
-	test('should post correct EndDate and EndTime with intraday', function () {
+	test('should post correct EndDate and EndTime with intraday', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
@@ -135,7 +127,7 @@ $(document).ready(function () {
 		equal(sentData.Period.EndTime, '20:30');
 	});
 
-	test('should calculate correct EndDate and EndTime with meridian', function () {
+	test('should calculate correct EndDate and EndTime with meridian', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
@@ -151,12 +143,11 @@ $(document).ready(function () {
 		equal(sentData.Period.EndTime, '10:30');
 	});
 
-	test('should not pass validation when post data has no subject', function () {
+	test('should not pass validation when post data has no subject', function() {
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
 		vm.StartTime('19:00');
-		vm.RequestDuration
-			('01:00');
+		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
@@ -165,21 +156,20 @@ $(document).ready(function () {
 		equal(vm.ErrorMessage(), 'Missing subject');
 	});
 
-	test('should not pass validation when post data has no start time', function () {
+	test('should not pass validation when post data has no start time', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
-		vm.DateFromChangeSubscription.dispose();
+		vm.StartTime('');
 		vm.DateFrom(requestDate);
 		vm.RequestDuration('01:00');
 		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
 
 		vm.AddRequest();
-
 		equal(addedOvertimeRequest, undefined);
 		equal(vm.ErrorMessage(), 'Missing start time');
 	});
 
-	test('should not pass validation when post data has no duration', function () {
+	test('should not pass validation when post data has no duration', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(requestDate);
@@ -193,7 +183,7 @@ $(document).ready(function () {
 		equal(vm.ErrorMessage(), 'Missing duration');
 	});
 
-	test('should not pass validation when request date exceeds 14 days', function () {
+	test('should not pass validation when request date exceeds 14 days', function() {
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
 		vm.DateFrom(moment().add(15, 'days').format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly));
@@ -207,7 +197,7 @@ $(document).ready(function () {
 		equal(vm.ErrorMessage(), 'Request date exceeds 14 days');
 	});
 
-	test('should close overtime request form panel after posting data', function () {
+	test('should close overtime request form panel after posting data', function() {
 		vm.IsPostingData(false);
 		vm.Subject('overtime request');
 		vm.Message('I want to work overtime');
@@ -221,7 +211,7 @@ $(document).ready(function () {
 		equal(requestFormClosed, true);
 	});
 
-	test('should limit lenght of message to 2000 chars', function () {
+	test('should limit lenght of message to 2000 chars', function() {
 		var html = '<textarea id="MessageBox" data-bind="value: Message, event:{change:checkMessageLength}" />';
 
 		$('body').append(html);
@@ -235,7 +225,7 @@ $(document).ready(function () {
 		$('#MessageBox').remove();
 	});
 
-	test('should not exceed 23 hours for request duration', function () {
+	test('should not exceed 23 hours for request duration', function() {
 		var html = '<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>';
 
 		$('body').append(html);
@@ -249,7 +239,7 @@ $(document).ready(function () {
 		$('#duration').remove();
 	});
 
-	test('should not exceed 59 minutes for request duration', function () {
+	test('should not exceed 59 minutes for request duration', function() {
 		var html = '<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>';
 
 		$('body').append(html);
@@ -263,7 +253,7 @@ $(document).ready(function () {
 		$('#duration').remove();
 	});
 
-	test('should allow empty request duration', function () {
+	test('should allow empty request duration', function() {
 		var html = '<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>';
 
 		$('body').append(html);
@@ -277,7 +267,7 @@ $(document).ready(function () {
 		$('#duration').remove();
 	});
 
-	test('should contains only one : in request duration', function () {
+	test('should contains only one : in request duration', function() {
 		var html = '<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>';
 
 		$('body').append(html);
@@ -296,7 +286,7 @@ $(document).ready(function () {
 		$('#duration').remove();
 	});
 
-	test('should initialize with data when viewing request detail', function () {
+	test('should initialize with data when viewing request detail', function() {
 		var data = {
 			Subject: "subject",
 			Text: "text",
@@ -306,9 +296,9 @@ $(document).ready(function () {
 		};
 		var isViewingDetail = true;
 
-		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function (data) {
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(data) {
 			addedOvertimeRequest = data;
-		}, fakeRequestDetailViewModel,null,isViewingDetail);
+		}, fakeRequestDetailViewModel, null, isViewingDetail);
 		requestVm.Initialize(data);
 
 		equal(requestVm.Subject(), "subject");
@@ -319,37 +309,28 @@ $(document).ready(function () {
 		equal(requestVm.MultiplicatorDefinitionSetId(), "9019D62F-0086-44B1-A977-9BB900B8C361");
 	});
 
-	test('should get suggested overtime request start time by default', function() {
-		fakeScheduleEdgeTimeData = {
-			StartDateTime: "2017-07-14 11:00",
-			EndDateTime: "2017-07-14 20:00"
-		};
+	test('should set default start time in AM/PM format when showing Meridian', function() {
+		var html = '<div id="showMeridianDiv" data-culture-show-meridian="true"></div>';
+		$('body').append(html);
 
-		vm.DateFrom(fakeScheduleEdgeTimeData.EndDateTime.split(' ')[0]);
+		moment.locale('en-gb');
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
 
-		equal(fakeScheduleEdgeTimeData.EndDateTime.indexOf(vm.DateFrom()) > -1, true);
-		equal(fakeScheduleEdgeTimeData.EndDateTime.indexOf(vm.StartTime()) > -1, true);
+		equal(requestVm.StartTime(), moment().format('hh:mm A'));
+
+		$('#showMeridianDiv').remove();
 	});
 
-	test('should set start date to tomorrow if today schedule ends at midnight', function() {
-		fakeScheduleEdgeTimeData = {
-			StartDateTime: moment(requestDate).startOf('day').add(13, 'hour').format('YYYY-MM-DD HH:mm'),
-			EndDateTime: moment(requestDate).startOf('day').add(24, 'hour').format('YYYY-MM-DD HH:mm')
-		};
+	test('should set default start time in 24 hours format when not showing Meridian', function() {
+		var html = '<div id="showMeridianDiv" data-culture-show-meridian="false"></div>';
+		$('body').append(html);
 
-		vm.IsPostingData(false);
-		vm.Subject('overtime request');
-		vm.Message('I want to work overtime');
-		vm.DateFrom(requestDate);
-		vm.RequestDuration('01:00');
-		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+		moment.locale('en-gb');
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
 
-		vm.AddRequest();
+		equal(requestVm.StartTime(), moment().format('HH:mm'));
 
-		equal(sentData.Period.StartDate, moment(fakeScheduleEdgeTimeData.EndDateTime).format('YYYY-MM-DD'));
-		equal(sentData.Period.StartTime, vm.StartTime());
-		equal(sentData.Period.EndDate, moment(fakeScheduleEdgeTimeData.EndDateTime).format('YYYY-MM-DD'));
-		equal(sentData.Period.EndTime, moment(fakeScheduleEdgeTimeData.EndDateTime).startOf('days').add(vm.RequestDuration().split(':')[0], 'hours').add(vm.RequestDuration().split(':')[1], 'minutes').format('HH:mm'));
+		$('#showMeridianDiv').remove();
 	});
 
 	test('should set overtime request duration to one hour by default', function() {
