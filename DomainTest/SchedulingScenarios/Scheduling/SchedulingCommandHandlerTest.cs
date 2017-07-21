@@ -95,7 +95,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
 
-			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1 } });
+			Target.Execute(new SchedulingCommand
+			{
+				Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10),
+				AgentsToSchedule = new[] {agent1}
+			});
 
 			var @event = EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single();
 			@event.AgentsToSchedule.Should().Have.SameValuesAs(agent1.Id.Value);
@@ -116,6 +120,26 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10),
 				AgentsToSchedule = new[] {agent1, agent2}
+			});
+
+			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		[Ignore("#45197 - will probably go green when ShouldCreateTwoEventsIfTwoAgentsWithDifferentSkills is fixed")]
+		public void ShouldCreateTwoEventsIfSameSkillsButDiffersDueToPrimarySkill()
+		{
+			var skill1 = new Skill().WithId().CascadingIndex(1);
+			var skill2 = new Skill().WithId().CascadingIndex(2);
+			var agent1 = new Person().WithId().WithPersonPeriod(skill1, skill2);
+			var agent2 = new Person().WithId().WithPersonPeriod(skill2);
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new SchedulingCommand
+			{
+				Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10),
+				AgentsToSchedule = new[] { agent1, agent2 }
 			});
 
 			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Count().Should().Be.EqualTo(2);
