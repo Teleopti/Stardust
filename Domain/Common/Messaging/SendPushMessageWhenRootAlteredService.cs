@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -60,7 +61,8 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
 		public IList<IAggregateRoot> SendPushMessages(IEnumerable<IRootChangeInfo> changedRoots, IPushMessagePersister repository)
         {
             SendPushMessagesWhenRootAltered.Clear();
-            AddAlteredRoots(changedRoots);
+			var filteredChangedRoots = changedRoots.Where(changedRoot => changedRoot.Status != DomainUpdateType.Insert);
+            AddAlteredRoots(filteredChangedRoots);
             
             return SendPushMessages(repository);
         }

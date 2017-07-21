@@ -21933,6 +21933,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The overtime request {0}-{1} has been approved..
+        /// </summary>
+        public static string OvertimeRequestHasBeenApprovedDot {
+            get {
+                return ResourceManager.GetString("OvertimeRequestHasBeenApprovedDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overtime request was cancelled..
         /// </summary>
         public static string OvertimeRequestWasCancelled {

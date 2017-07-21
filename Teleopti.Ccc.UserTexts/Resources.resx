@@ -16300,4 +16300,7 @@ Do you want to participate?</value>
     <value>Note: Shift always moved in Agent’s time zone, independent of the time shown in the Dropdown menu.</value>
     <comment>Error message for move shift to agent in another time zone in Teams</comment>
   </data>
+  <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
+    <value>The overtime request {0}-{1} has been approved.</value>
+  </data>
 </root>

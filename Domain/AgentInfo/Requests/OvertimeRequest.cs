@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -57,7 +58,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		protected internal override IEnumerable<IBusinessRuleResponse> Approve(IRequestApprovalService approvalService)
 		{
-			return approvalService.Approve(this);
+			var result = approvalService.Approve(this);
+			if (result.IsEmpty())
+			{
+				var timeZone = Person.PermissionInformation.DefaultTimeZone();
+				var culture = Person.PermissionInformation.Culture();
+				TextForNotification = string.Format(culture, Resources.OvertimeRequestHasBeenApprovedDot,
+					Period.StartDateTimeLocal(timeZone).ToString(culture.DateTimeFormat.FullDateTimePattern, culture),
+					Period.EndDateTimeLocal(timeZone).ToString(culture.DateTimeFormat.FullDateTimePattern, culture));
+			}
+			return result;
 		}
 
 		public override string RequestTypeDescription

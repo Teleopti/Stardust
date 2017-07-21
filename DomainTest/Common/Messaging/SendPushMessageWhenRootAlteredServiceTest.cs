@@ -58,7 +58,8 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
             var pushMessageService = _mocks.StrictMock<ISendPushMessageService>();
             var pushMessageReceipt = _mocks.StrictMock<ISendPushMessageReceipt>();
 
-            IList<IRootChangeInfo> changedRoots = new List<IRootChangeInfo> { rootChangedInfo1 };
+			rootChangedInfo1.Stub(x=>x.Status).Return(DomainUpdateType.Update);
+			IList<IRootChangeInfo> changedRoots = new List<IRootChangeInfo> { rootChangedInfo1 };
 
             using (_mocks.Record())
             {
@@ -78,5 +79,18 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
                 addedRoots.Count.Should().Be.EqualTo(1);
             }
         }
+
+	    [Test]
+	    public void ShuldNotSendPushMessgaeForStatusInsert()
+	    {
+			var rootChangedInfo1 = _mocks.StrictMock<IRootChangeInfo>();
+			var repository = _mocks.StrictMock<IPushMessagePersister>();
+
+			rootChangedInfo1.Stub(x => x.Status).Return(DomainUpdateType.Insert);
+			IList<IRootChangeInfo> changedRoots = new List<IRootChangeInfo> { rootChangedInfo1 };
+
+			IList<IAggregateRoot> addedRoots = _target.SendPushMessages(changedRoots, repository);
+			addedRoots.Count.Should().Be.EqualTo(0);
+		}
     }
 }
