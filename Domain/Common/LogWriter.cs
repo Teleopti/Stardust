@@ -31,7 +31,10 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public void LogInfo(string message)
         {
-            _log.Info(message);
+	        if (_log.IsInfoEnabled)
+	        {
+		        _log.Info(message);
+	        }
         }
     }
 }
