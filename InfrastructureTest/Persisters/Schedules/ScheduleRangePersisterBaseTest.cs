@@ -21,7 +21,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 {
@@ -137,10 +136,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 			}
 		}
 
-		protected virtual bool ExpectOptimistLockException
-		{
-			get { return false; }
-		}
+		protected virtual bool ExpectOptimistLockException => false;
 
 		protected virtual IScheduleRangeConflictCollector ConflictCollector()
 		{

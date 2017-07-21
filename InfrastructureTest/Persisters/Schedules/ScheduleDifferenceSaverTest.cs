@@ -4,7 +4,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -54,21 +53,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Schedules
 
 			var eventPublisher = new LegacyFakeEventPublisher();
 			using (Publisher.OnThisThreadPublishTo(eventPublisher))
+			{
+				using (var setup = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
+					var scheduleDictionary =
+						ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2100, 1, 1)),
+							scenario, new PersonProvider(new[] {agent}), new ScheduleDictionaryLoadOptions(false, false), new[] {agent});
+					//make sure we clone the assignment
+					var scheduleRange = scheduleDictionary[agent];
+					var scheduleDay = scheduleRange.ScheduledDay(date);
+					scheduleDay.CreateAndAddOvertime(activity, new DateTimePeriod(2000, 1, 1, 10, 2000, 1, 1, 11),
+						multiplicatorDefinitionSet);
+					scheduleDictionary.Modify(scheduleDay, new DoNothingScheduleDayChangeCallBack());
+					Target.SaveChanges(
+						scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()),
+						(ScheduleRange) scheduleRange);
+					setup.PersistAll();
+
+					eventPublisher.PublishedEvents.Single().Should().Be.OfType<ActivityAddedEvent>();
+				}
+			}
+
 			using (var setup = CurrentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
-				var scheduleDictionary = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(1900, 1, 1, 2100, 1, 1)), scenario, new PersonProvider(new[] { agent }), new ScheduleDictionaryLoadOptions(false, false), new[] { agent });
-				//make sure we clone the assignment
-				var scheduleRange = scheduleDictionary[agent];
-				var scheduleDay = scheduleRange.ScheduledDay(date);
-				scheduleDay.CreateAndAddOvertime(activity, new DateTimePeriod(2000, 1, 1, 10, 2000, 1, 1, 11), multiplicatorDefinitionSet);
-				scheduleDictionary.Modify(scheduleDay, new DoNothingScheduleDayChangeCallBack());
-				Target.SaveChanges(
-					scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()),
-					(ScheduleRange)scheduleRange);
-				setup.PersistAll();
+				var session = setup.FetchSession();
+				var personAssignment = PersonAssignmentRepository.LoadAll().First();
+				session.Delete(personAssignment);
+				session.Delete(multiplicatorDefinitionSet);
+				session.Delete(activity);
+				session.Delete(personAssignment.Person);
+				session.Delete(personAssignment.Scenario);
+				session.Flush();
+				session.Transaction.Commit();
 			}
-			
-			eventPublisher.PublishedEvents.Single().Should().Be.OfType<ActivityAddedEvent>();
 		}
 	}
 }
