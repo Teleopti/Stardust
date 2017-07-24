@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		public FakeUserTimeZone UserTimeZone;
 		public AddOverTime Target;
 		public FakePersonForOvertimeProvider FakePersonForOvertimeProvider;
+		public FakeIntervalLengthFetcher FakeIntervalLengthFetcher;
 		private IScenario scenario;
 		private IActivity activity;
 		private ISkill skill;
@@ -58,6 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 		private void setup()
 		{
+			FakeIntervalLengthFetcher.Has(60);
 			scenario = ScenarioRepository.Has("scenario");
 			activity = ActivityRepository.Has("activity");
 			skill = SkillRepository.Has("skill", activity);
