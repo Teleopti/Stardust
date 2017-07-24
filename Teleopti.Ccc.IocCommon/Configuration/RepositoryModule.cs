@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 		protected override void Load(ContainerBuilder builder)
 		{
-			foreach (var type in typeof(PersonRepository).Assembly.GetTypes().Where(t => isRepository(t) && hasCorrectCtor(t)))
+			foreach (var type in typeof(PersonRepository).Assembly.GetExportedTypes().Where(t => isRepository(t) && hasCorrectCtor(t)))
 			{
 				if (type.GetConstructors().Length == 1)
 				{

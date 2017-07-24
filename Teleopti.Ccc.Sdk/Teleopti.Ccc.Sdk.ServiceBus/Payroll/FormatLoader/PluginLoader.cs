@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 				foreach (var file in files)
                 {
                     var assembly = Assembly.LoadFile(file);
-                    foreach (var type in assembly.GetTypes())
+                    foreach (var type in assembly.GetExportedTypes())
                     {
                         if (!type.IsClass || type.IsNotPublic) continue;
                         var interfaces = type.GetInterfaces();
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll.FormatLoader
 			foreach (var file in files)
 			{
 				var assembly = Assembly.LoadFile(file);
-				foreach (var type in assembly.GetTypes())
+				foreach (var type in assembly.GetExportedTypes())
 				{
 					if (!type.IsClass || type.IsNotPublic) continue;
 					var interfaces = type.GetInterfaces();

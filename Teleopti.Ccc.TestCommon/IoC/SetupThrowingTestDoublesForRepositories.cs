@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 		public static void Execute(ISystem system)
 		{
-			foreach (var type in typeof(IPersonRepository).Assembly.GetTypes().Where(t => t.Name.EndsWith("Repository", StringComparison.Ordinal) && t.IsInterface))
+			foreach (var type in typeof(IPersonRepository).Assembly.GetExportedTypes().Where(t => t.Name.EndsWith("Repository", StringComparison.Ordinal) && t.IsInterface))
 			{
 				system.UseTestDouble(proxyFactory.CreateProxy(type, new throwRepositoryInterceptor())).For(type);
 			}

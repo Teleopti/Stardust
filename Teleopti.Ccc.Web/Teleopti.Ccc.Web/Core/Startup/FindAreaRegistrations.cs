@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 	{
 		public IEnumerable<AreaRegistration> AreaRegistrations()
 		{
-			return GetType().Assembly.GetTypes()
+			return GetType().Assembly.GetExportedTypes()
 				.Where(x => x.IsSubclassOf(typeof (AreaRegistration)))
 				.Select(x => (AreaRegistration)Activator.CreateInstance(x));
 		}

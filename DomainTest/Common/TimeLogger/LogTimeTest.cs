@@ -82,9 +82,8 @@ namespace Teleopti.Ccc.DomainTest.Common.TimeLogger
 			{
 				var attr = (AspectAttribute)Activator.CreateInstance(attrType);
 				if(attr.Order<=orderOfLogTime)
-					Assert.Fail(string.Format("Attribute {0} has lower or equal Order than LogTimeAttribute. This is (probably) wrong because we want LogTime to measure the time spent in {0} as well.", attrType.FullName));
+					Assert.Fail("Attribute {0} has lower or equal Order than LogTimeAttribute. This is (probably) wrong because we want LogTime to measure the time spent in {0} as well.", attrType.FullName);
 			}
 		}
-
 	}
 }
