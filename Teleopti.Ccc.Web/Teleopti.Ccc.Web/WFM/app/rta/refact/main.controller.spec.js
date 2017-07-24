@@ -143,50 +143,6 @@ describe('RtaMainController', function () {
       expect(vm.skillAreas[1].Skills[1].Name).toEqual('BTS');
     });
 
-    it('should get organization', function () {
-      $fakeBackend.withOrganization({
-        Id: 'londonId',
-        Name: 'London',
-        Teams: [{
-          Id: 'teamPreferencesId',
-          Name: 'Team Preferences'
-        }, {
-          Id: 'teamStudentsId',
-          Name: 'Team Students'
-        }]
-      })
-
-      vm = $controllerBuilder.createController().vm;
-
-      expect(vm.organization[0].Id).toEqual('londonId');
-      expect(vm.organization[0].Name).toEqual('London');
-      expect(vm.organization[0].Teams[0].Id).toEqual('teamPreferencesId');
-      expect(vm.organization[0].Teams[0].Name).toEqual('Team Preferences');
-      expect(vm.organization[0].Teams[1].Id).toEqual('teamStudentsId');
-      expect(vm.organization[0].Teams[1].Name).toEqual('Team Students');
-    });
-
-    it('should get organization by skill', function () {
-      stateParams.skillIds = ['channelSalesId'];
-      $fakeBackend
-        .withOrganizationOnSkills({
-          Id: 'londonId',
-          Name: 'London',
-          Teams: [{
-            Id: 'teamPreferencesId',
-            Name: 'Team Preferences'
-          }]
-        }, 'channelSalesId');
-
-      vm = $controllerBuilder.createController(allSkills).vm;
-
-      expect(vm.organization.length).toEqual(1);
-      expect(vm.organization[0].Id).toEqual('londonId');
-      expect(vm.organization[0].Name).toEqual('London');
-      expect(vm.organization[0].Teams[0].Id).toEqual('teamPreferencesId');
-      expect(vm.organization[0].Teams[0].Name).toEqual('Team Preferences');
-    });
-
   });
 
   describe('RtaOverviewComponent handling', function () {
@@ -233,8 +189,7 @@ describe('RtaMainController', function () {
         });
 
       vm = $controllerBuilder.createController().vm;
-      $httpBackend.flush();
-
+      
       expect(vm.siteCards.length).toEqual(1);
       expect(vm.siteCards[0].site.Id).toEqual('londonId');
       expect(vm.siteCards[0].site.Name).toEqual('London');
@@ -532,7 +487,6 @@ describe('RtaMainController', function () {
           Color: 'good'
         });
       vm = $controllerBuilder.createController().vm;
-      $httpBackend.flush();
 
       vm.filterOutput(undefined);
       $fakeBackend
@@ -551,7 +505,6 @@ describe('RtaMainController', function () {
           InAlarmCount: 8,
           Color: 'danger'
         });
-
       $httpBackend.flush();
 
       expect(vm.siteCards.length).toEqual(2);

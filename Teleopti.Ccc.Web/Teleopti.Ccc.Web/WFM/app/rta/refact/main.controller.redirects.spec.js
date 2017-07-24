@@ -111,7 +111,7 @@ describe('RtaMainController', function () {
     $state.current.name = 'rta-refact';
   }));
 
-  describe('RtaOverviewComponent handling', function () {
+  describe('Redirects', function () {
 
     it('should go to sites by skill state', function () {
       vm = $controllerBuilder.createController(allSkills).vm;
@@ -243,7 +243,6 @@ describe('RtaMainController', function () {
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
-      $httpBackend.flush();
 
       c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
@@ -282,7 +281,7 @@ describe('RtaMainController', function () {
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
-      $httpBackend.flush();
+
       vm.filterOutput();
       $httpBackend.flush();
 
@@ -419,7 +418,7 @@ describe('RtaMainController', function () {
           Id: 'greenId'
         });
       vm = $controllerBuilder.createController().vm;
-      $httpBackend.flush();
+
       vm.siteCards[0].isOpen = true;
       vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
       $httpBackend.flush();
@@ -535,7 +534,6 @@ describe('RtaMainController', function () {
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
-      $httpBackend.flush();
 
       c.apply(function () {
         vm.siteCards[0].isOpen = true;

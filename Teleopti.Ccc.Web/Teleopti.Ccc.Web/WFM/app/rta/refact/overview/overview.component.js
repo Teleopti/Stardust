@@ -18,10 +18,11 @@
   RtaOverviewComponentController.inject = [];
   function RtaOverviewComponentController() {
     var ctrl = this;
+    
     ctrl.selectItem = function (item) {
       item.isSelected = !item.isSelected;
       var itemIsSite = angular.isDefined(item.site);
-      
+
       if (itemIsSite && item.isSelected && item.isOpen) {
         item.teams.forEach(function (team) {
           team.isSelected = true;
@@ -39,7 +40,7 @@
         var allTeamsAreSelected = match.teams.every(function (team) {
           return team.isSelected;
         });
-        if (allTeamsAreSelected) match.isSelected = true; 
+        if (allTeamsAreSelected) match.isSelected = true;
       }
       else if (!itemIsSite && !item.isSelected) {
         var match = ctrl.siteCards.find(function (site) {

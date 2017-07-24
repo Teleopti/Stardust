@@ -14,7 +14,6 @@
 		$stateParams.open = ($stateParams.open || "false");
 		vm.skills = skills || [];
 		vm.skillAreas = skillAreas || [];
-		vm.organization = [];
 		vm.siteCards = [];
 		vm.urlParams = $stateParams;
 		vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
@@ -23,18 +22,6 @@
 		vm.goToAgentsView = function () { rtaRouteService.goToSelectSkill(); };
 
 		vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
-
-		(function fetchDataForFilterComponent() {
-			if (vm.skillIds.length > 0) {
-				rtaService.getOrganizationForSkills({ skillIds: vm.skillIds }).then(function (result) {
-					vm.organization = result;
-				});
-			} else {
-				rtaService.getOrganization().then(function (result) {
-					vm.organization = result;
-				});
-			}
-		})();
 
 		(function OverviewComponentHandler() {
 			var teamPolling;

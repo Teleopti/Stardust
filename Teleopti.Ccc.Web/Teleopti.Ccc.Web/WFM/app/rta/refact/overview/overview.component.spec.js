@@ -139,7 +139,6 @@ describe('rtaOverviewComponent', function () {
       });
 
     vm = $controllerBuilder.createController().vm;
-    $httpBackend.flush();
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
@@ -275,11 +274,9 @@ describe('rtaOverviewComponent', function () {
         Color: 'warning'
       });
     var vm = $controllerBuilder.createController().vm;
-    $httpBackend.flush();
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
-
 
     ctrl.siteCards[0].isOpen = true;
     ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
@@ -396,13 +393,12 @@ describe('rtaOverviewComponent', function () {
         InAlarmCount: 5,
         Color: 'warning'
       });
-
     var c = $controllerBuilder.createController();
     vm = c.vm;
-    $httpBackend.flush();
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
+
     ctrl.siteCards[0].isOpen = true;
     ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
     $httpBackend.flush();
@@ -436,10 +432,8 @@ describe('rtaOverviewComponent', function () {
         InAlarmCount: 5,
         Color: 'warning'
       });
-
     var c = $controllerBuilder.createController();
     vm = c.vm;
-    $httpBackend.flush();
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
@@ -459,7 +453,6 @@ describe('rtaOverviewComponent', function () {
 
     ctrl.siteCards[0].isOpen = false;
     ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-
     c.apply(function () {
       $fakeBackend
         .clearTeamAdherences()
@@ -505,7 +498,6 @@ describe('rtaOverviewComponent', function () {
 
     var c = $controllerBuilder.createController();
     vm = c.vm;
-    $httpBackend.flush();
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
