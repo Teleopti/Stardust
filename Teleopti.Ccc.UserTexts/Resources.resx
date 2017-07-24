@@ -10475,8 +10475,8 @@ These options are activated:
     <comment>There is already absence in the schedule for given period.</comment>
   </data>
 	 <data name="OvertimeRequestSameActivityInPeriod" xml:space="preserve">
-    <value>There is already same activity in the schedule for given period.</value>
-    <comment>Using in mytime over time request when there is already same activity in the schedule for given period.</comment>
+    <value>This activity is already scheduled within this period.</value>
+    <comment>Using in mytime overtime request when same activity already scheduled within this period.</comment>
   </data>
   <data name="CustomReports" xml:space="preserve">
     <value>Custom reports</value>

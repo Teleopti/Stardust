@@ -21942,7 +21942,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is already same activity in the schedule for given period..
+        ///   Looks up a localized string similar to This activity is already scheduled within this period..
         /// </summary>
         public static string OvertimeRequestSameActivityInPeriod {
             get {
