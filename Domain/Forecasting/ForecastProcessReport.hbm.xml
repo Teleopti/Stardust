@@ -48,11 +48,11 @@
 
 	<sql-query name="ExistingForecast">
 		<![CDATA[
-    select sk.Name as Name, sk.Id as Id, sdb.SkillDayDate as CurrentDate from Skill sk
-                                inner join SkillType st on sk.SkillType=st.Id
-																left join SkillDay sdb on (sk.Id=sdb.Skill) and (sdb.SkillDayDate between :startDate and :endDate) and (sdb.Scenario = :scenario) 
-																left join WorkloadDay wld on (wld.Parent = sdb.Id) and (wld.TemplateName is null OR wld.TemplateName <> :longtermKey)
-																left join WorkloadDayBase wldb on wld.WorkloadDayBase = wldb.Id
+    select sk.Name as Name, sk.Id as Id, sdb.SkillDayDate as CurrentDate from Skill sk WITH (NOLOCK)
+                                inner join SkillType st WITH (NOLOCK) on sk.SkillType=st.Id
+																left join SkillDay sdb WITH (NOLOCK) on (sk.Id=sdb.Skill) and (sdb.SkillDayDate between :startDate and :endDate) and (sdb.Scenario = :scenario) 
+																left join WorkloadDay wld WITH (NOLOCK) on (wld.Parent = sdb.Id) and (wld.TemplateName is null OR wld.TemplateName <> :longtermKey)
+																left join WorkloadDayBase wldb WITH (NOLOCK) on wld.WorkloadDayBase = wldb.Id
                                 where sk.IsDeleted = 0
                                 and st.Name != 'SkillTypeOutbound'
 																and sk.BusinessUnit = :businessUnit
