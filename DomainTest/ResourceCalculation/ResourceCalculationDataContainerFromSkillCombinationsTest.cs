@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			var result = _target.AffectedResources(_activity, _period);
 			var affectedSkill = result.First().Value;
-			//affectedSkill.SkillEffiencies[_skill.Id.GetValueOrDefault()].Should().Be.EqualTo(0.9);
+			
 			affectedSkill.Resource.Should().Be.EqualTo(9.5);
 			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
 		}
@@ -211,45 +211,46 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			affectedSkill.Resource.Should().Be.EqualTo(10.5);
 			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
 		}
-
+		
 		[Test]
-		public void ShouldReturnOnWholePeriod()
+		public void ShouldIncludeQuarterResourcesInSum()
 		{
 			_target.AddResources(_person, _date,
-				  new ResourceLayer
-				  {
-					  PayloadId = _activity.Id.GetValueOrDefault(),
-					  Period = new DateTimePeriod(_period.StartDateTime, _period.StartDateTime.AddMinutes(15)),
-					  Resource = 10
-				  });
+				new ResourceLayer
+				{
+					PayloadId = _activity.Id.GetValueOrDefault(),
+					Period = new DateTimePeriod(_period.StartDateTime, _period.StartDateTime.AddMinutes(15)),
+					Resource = 1
+				});
 			_target.AddResources(_person, _date,
 				new ResourceLayer
 				{
 					PayloadId = _activity.Id.GetValueOrDefault(),
 					Period = new DateTimePeriod(_period.StartDateTime.AddMinutes(15), _period.StartDateTime.AddMinutes(30)),
-					Resource = 10
+					Resource = 1
 				});
 			_target.AddResources(_person, _date,
 				new ResourceLayer
 				{
 					PayloadId = _activity.Id.GetValueOrDefault(),
 					Period = new DateTimePeriod(_period.StartDateTime.AddMinutes(30), _period.StartDateTime.AddMinutes(45)),
-					Resource = 10
+					Resource = 1
 				});
 			_target.AddResources(_person, _date,
 				new ResourceLayer
 				{
 					PayloadId = _activity.Id.GetValueOrDefault(),
 					Period = new DateTimePeriod(_period.StartDateTime.AddMinutes(45), _period.StartDateTime.AddMinutes(60)),
-					Resource = 10
+					Resource = 1
 				});
+			
+
 			var result = _target.AffectedResources(_activity, _period);
 			var affectedSkill = result.First().Value;
-			affectedSkill.Resource.Should().Be.EqualTo(10);
+			
+			affectedSkill.Resource.Should().Be.EqualTo(11);
 			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
 		}
-
-
 
 	}
 }

@@ -1059,7 +1059,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
 			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
 			vm.DataSeries.ScheduledStaffing.Length.Should().Be.EqualTo(2);
-			Math.Round(vm.DataSeries.ScheduledStaffing.First().Value, 2).Equals(25.00);
+			Math.Round(vm.DataSeries.ScheduledStaffing.First().Value, 2).Should().Be.EqualTo(25.00);
 
 			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, null, true);
 
@@ -1140,8 +1140,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm.DataSeries.Time.Length.Should().Be.EqualTo(2);
 			vm.DataSeries.Time.First().Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(userNow, TimeZone.TimeZone()));
 			vm.DataSeries.ScheduledStaffing.Length.Should().Be.EqualTo(2);
-			Math.Round(vm.DataSeries.ScheduledStaffing.First().Value, 2).Equals(25.00);
-			Math.Round(vm.DataSeries.ScheduledStaffing.Last().Value, 2).Equals(25.00);
+			Math.Round(vm.DataSeries.ScheduledStaffing.First().Value, 2).Should().Be.EqualTo(25.00);
+			Math.Round(vm.DataSeries.ScheduledStaffing.Last().Value, 2).Should().Be.EqualTo(25.00);
 
 			var vm2 = Target.Load(new[] { skill2.Id.GetValueOrDefault() }, null, true);
 

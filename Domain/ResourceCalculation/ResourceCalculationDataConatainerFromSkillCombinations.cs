@@ -91,6 +91,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					IEnumerable<ISkill> skills;
 					if (_skills.TryGetValue(pair.SkillKey, out skills))
 					{
+						var affectedSkills = skills.ToList();
+						if (!UseAllSkills)
+							affectedSkills = affectedSkills.Where(s => !s.IsCascading() || s.CascadingIndex == affectedSkills.Min(x => x.CascadingIndex)).ToList();
 						AffectedSkills value;
 						double previousResource = 0;
 						double previousCount = 0;
@@ -103,7 +106,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						}
 						value = new AffectedSkills
 						{
-							Skills = skills,
+							Skills = affectedSkills,
 							Resource = previousResource + pair.Resource.Resource ,
 							Count = previousCount + pair.Resource.Count ,
 							SkillEffiencies = accumulatedEffiencies
@@ -112,10 +115,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						result[pair.SkillKey] = value;
 					}
 				}
-				return result;
+				
 			}
 			var divider = periodToCalculate.ElapsedTime().TotalMinutes / MinSkillResolution;
 			var periodSplit = periodToCalculate.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
+			if (periodSplit.Count < 2)
+				return result;
 			foreach (var dateTimePeriod in periodSplit)
 			{
 				if (_dictionary.TryGetValue(dateTimePeriod, out interval))
