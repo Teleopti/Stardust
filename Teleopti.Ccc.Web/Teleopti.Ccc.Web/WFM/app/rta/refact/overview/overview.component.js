@@ -18,38 +18,26 @@
   RtaOverviewComponentController.inject = [];
   function RtaOverviewComponentController() {
     var ctrl = this;
-    
+
     ctrl.selectItem = function (item) {
       item.isSelected = !item.isSelected;
-      var itemIsSite = angular.isDefined(item.site);
+      var isSite = angular.isDefined(item.site);
+      var isTeam = !isSite;
 
-      if (itemIsSite && item.isSelected && item.isOpen) {
-        item.teams.forEach(function (team) {
-          team.isSelected = true;
-        })
-      }
-      else if (itemIsSite && !item.isSelected && item.isOpen) {
-        item.teams.forEach(function (team) {
-          team.isSelected = false;
-        })
-      }
-      else if (!itemIsSite && item.isSelected) {
-        var match = ctrl.siteCards.find(function (site) {
-          return site.site.Id === item.SiteId;
-        });
-        var allTeamsAreSelected = match.teams.every(function (team) {
-          return team.isSelected;
-        });
-        if (allTeamsAreSelected) match.isSelected = true;
-      }
-      else if (!itemIsSite && !item.isSelected) {
-        var match = ctrl.siteCards.find(function (site) {
-          return site.site.Id === item.SiteId;
-        });
-        match.isSelected = false;
+      if (isSite && item.isOpen)
+        flipTeamSelected(item, item.isSelected);
+      else if (isTeam) {
+        var parentSite = ctrl.siteCards.find(function (site) { return site.site.Id === item.SiteId; });
+        parentSite.isSelected = parentSite.teams.every(function (team) { return team.isSelected; });
       }
       ctrl.getSelectedItems(item);
     };
+
+    function flipTeamSelected(site, selected) {
+      site.teams.forEach(function (team) {
+        team.isSelected = selected;
+      })
+    }
 
     ctrl.goToAgentsForTeam = function (team) {
       ctrl.openTeam(team);
