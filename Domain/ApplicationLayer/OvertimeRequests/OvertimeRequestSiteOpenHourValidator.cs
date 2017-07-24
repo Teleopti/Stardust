@@ -29,14 +29,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var requestPeriod = personRequest.Request.Period.StartDateTimeLocal(timeZone) + " - " +
 								personRequest.Request.Period.EndDateTimeLocal(timeZone);
 			var siteOpenHour = personRequest.Person.SiteOpenHour(
-					new DateOnly(personRequest.Request.Period.StartDateTimeLocal(timeZone))).TimePeriod;
+					new DateOnly(personRequest.Request.Period.StartDateTimeLocal(timeZone)));
+
+			if (siteOpenHour.IsClosed)
+			{
+				return new OvertimeRequestValidationResult
+				{
+					InvalidReason = string.Format(Resources.OvertimeRequestDenyReasonSiteOpenHourClosed,
+						requestPeriod,
+						siteOpenHour.TimePeriod)
+				};
+
+			}
 
 			return new OvertimeRequestValidationResult
 			{
 				InvalidReason = string.Format(Resources.OvertimeRequestDenyReasonOutOfSiteOpenHour,
 					requestPeriod,
-					siteOpenHour),
-				IsValid = false
+					siteOpenHour.TimePeriod),
 			};
 		}
 	}

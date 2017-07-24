@@ -121,6 +121,32 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
+		[SetCulture("en-US")]
+		public void ShouldDenyOvertimeRequestWhenSiteOpenHourIsClosed()
+		{
+			var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var person = createPersonWithSiteOpenHours(8, 17, true);
+
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			LoggedOnUser.SetDefaultTimeZone(timeZoneInfo);
+			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });
+
+			var requestStartTime = new DateTime(2017, 7, 17, 0, 0, 0, DateTimeKind.Utc);
+
+			var personRequest = createOvertimeRequest(person,
+				new DateTimePeriod(requestStartTime.AddHours(16), requestStartTime.AddHours(17)));
+
+			Target.Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should()
+				.Be.EqualTo(string.Format(Resources.OvertimeRequestDenyReasonSiteOpenHourClosed,
+					personRequest.Request.Period.StartDateTimeLocal(timeZoneInfo) + " - " +
+					personRequest.Request.Period.EndDateTimeLocal(timeZoneInfo)));
+		}
+
+		[Test]
 		public void ShouldDenyRequestWhenApproveFailed()
 		{
 			var person = PersonFactory.CreatePerson();
@@ -151,7 +177,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		private IPerson createPersonWithSiteOpenHours(int startHour, int endHour, bool isOpenHoursClosed = false)
 		{
 			var team = TeamFactory.CreateTeam("team", "site");
-			var siteOpenHour = new SiteOpenHour()
+			var siteOpenHour = new SiteOpenHour
 			{
 				Parent = team.Site,
 				TimePeriod = new TimePeriod(startHour, 0, endHour, 0),

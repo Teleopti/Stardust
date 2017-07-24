@@ -10725,6 +10725,10 @@ These options are activated:
     <value>Your overtime request has been denied automatically. The period of this request is {0}, but site open hour is {1}</value>
     <comment>used in mytime overtime request deny reason,when request period is out of site open hour</comment>
   </data>
+	<data name="OvertimeRequestDenyReasonSiteOpenHourClosed" xml:space="preserve">
+    <value>Your overtime request has been denied automatically. The period of this request is {0}, but site open hour is closed</value>
+    <comment>used in mytime overtime request deny reason,when site open hour is closed</comment>
+  </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Hourly Availability Fulfillment</value>
     <comment>Student Availability Fulfillment</comment>
