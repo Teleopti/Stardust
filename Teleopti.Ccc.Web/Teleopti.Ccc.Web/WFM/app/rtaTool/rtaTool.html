@@ -88,7 +88,7 @@
 
 								<tbody>
 									<tr ng-repeat="agent in vm.agents | filter:filterAgents | limitTo: vm.agentsShown" ng-click="agent.selectAgent()" style="cursor: pointer;">
-										<td ng-class="{'selected-row':agent.isSelected}">{{agent.Name}}</td>
+										<td ng-class="{'selected-row':agent.isSelected}" class="for-test-agent">{{agent.Name}}</td>
 										<td ng-class="{'selected-row':agent.isSelected}">{{agent.DataSource}} _ {{agent.UserCode}} </td>
 										<td ng-click="$event.stopPropagation();">
 											<md-select ng-model="pickedStateCode" placeholder="Pick a state" ng-change="agent.sendState(pickedStateCode)">

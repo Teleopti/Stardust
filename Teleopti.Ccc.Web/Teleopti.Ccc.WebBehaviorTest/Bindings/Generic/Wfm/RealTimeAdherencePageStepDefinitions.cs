@@ -10,8 +10,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I send '(.*)' for all agents")]
 		public void WhenIClickFor(string state)
 		{
+			Browser.Interactions.AssertExists(".for-test-agent");
 			Browser.Interactions.ClickContaining(".sendbatch", state.ToUpper());
-			Browser.Interactions.AssertExists(".notice-info");
+			Browser.Interactions.AssertExists(".notice-info", "Done!");
 		}
 	}
 
