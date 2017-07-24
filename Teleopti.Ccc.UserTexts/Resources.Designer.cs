@@ -21906,6 +21906,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Request date exceeds 14 days.
+        /// </summary>
+        public static string OvertimeRequestDateExceeds14Days {
+            get {
+                return ResourceManager.GetString("OvertimeRequestDateExceeds14Days", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can not add overtime request on past date.
+        /// </summary>
+        public static string OvertimeRequestDateIsPast {
+            get {
+                return ResourceManager.GetString("OvertimeRequestDateIsPast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your overtime request has been denied automatically. The start time of this request is {0}, it must be at least {1} minutes later than current time.
         /// </summary>
         public static string OvertimeRequestDenyReasonExpired {
@@ -25460,15 +25478,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestDateColon {
             get {
                 return ResourceManager.GetString("RequestDateColon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Request date exceeds 14 days.
-        /// </summary>
-        public static string RequestDateExceeds14Days {
-            get {
-                return ResourceManager.GetString("RequestDateExceeds14Days", resourceCulture);
             }
         }
         

@@ -2,7 +2,8 @@
 	MISSING_SUBJECT: "Missing subject",
 	MISSING_STARTTIME: "Missing start time",
 	MISSING_DURATION: "Missing duration",
-	REQUESTDATE_EXCEEDS_14DAYS: "Request date exceeds 14 days"
+	OVERTIME_REQUEST_DATE_EXCEEDS_14DAYS: "Request date exceeds 14 days",
+	OVERTIME_REQUEST_DATE_IS_PAST: "Can not add overtime request on past date"
 };
 $(document).ready(function() {
 	var vm,
@@ -195,6 +196,20 @@ $(document).ready(function() {
 
 		equal(addedOvertimeRequest, undefined);
 		equal(vm.ErrorMessage(), 'Request date exceeds 14 days');
+	});
+
+	test('should not pass validation when request date is past date', function () {
+		vm.Subject('overtime request');
+		vm.Message('I want to work overtime');
+		vm.DateFrom(moment().add(-1, 'days').format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly));
+		vm.StartTime('19:00');
+		vm.RequestDuration('01:00');
+		vm.MultiplicatorDefinitionSetId('29F7ECE8-D340-408F-BE40-9BB900B8A4CB');
+
+		vm.AddRequest();
+
+		equal(addedOvertimeRequest, undefined);
+		equal(vm.ErrorMessage(), 'Can not add overtime request on past date');
 	});
 
 	test('should close overtime request form panel after posting data', function() {

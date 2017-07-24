@@ -115,8 +115,10 @@
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_STARTTIME);
 		} else if (!self.RequestDuration() || self.RequestDuration().length != 5) {
 			self.ErrorMessage(requestsMessagesUserTexts.MISSING_DURATION);
-		} else if (!_isDateFromWithin14Days()) {
-			self.ErrorMessage(requestsMessagesUserTexts.REQUESTDATE_EXCEEDS_14DAYS);
+		} else if (_isDateFromPast()) {
+			self.ErrorMessage(requestsMessagesUserTexts.OVERTIME_REQUEST_DATE_IS_PAST);
+		} else if (_isDateFromExceeds14Days()) {
+			self.ErrorMessage(requestsMessagesUserTexts.OVERTIME_REQUEST_DATE_EXCEEDS_14DAYS);
 		}
 		else {
 			dataValid = true;
@@ -127,12 +129,20 @@
 		return dataValid;
 	}
 
-	function _isDateFromWithin14Days() {
+	function _isDateFromPast() {
 		var dateFromMoment = self.DateFrom();
 		if (!moment.isMoment(dateFromMoment))
 			dateFromMoment = moment(dateFromMoment, dateTimeFormats.dateOnly);
 		var days = Math.ceil(moment.duration(dateFromMoment - moment().startOf("day")).asDays());
-		return days <= 13 && days >= 0;
+		return days < 0;
+	}
+
+	function _isDateFromExceeds14Days() {
+		var dateFromMoment = self.DateFrom();
+		if (!moment.isMoment(dateFromMoment))
+			dateFromMoment = moment(dateFromMoment, dateTimeFormats.dateOnly);
+		var days = Math.ceil(moment.duration(dateFromMoment - moment().startOf("day")).asDays());
+		return days > 13;
 	}
 
 	function _buildPostData() {

@@ -16232,9 +16232,13 @@ Do you want to participate?</value>
     <value>Missing start time</value>
     <comment>Missing start time</comment>
   </data>
-  <data name="RequestDateExceeds14Days" xml:space="preserve">
+  <data name="OvertimeRequestDateExceeds14Days" xml:space="preserve">
     <value>Request date exceeds 14 days</value>
-    <comment>Request date exceeds 14 days</comment>
+    <comment>Used in mytime overtime request when request date exceeds 14 days</comment>
+  </data>
+	<data name="OvertimeRequestDateIsPast" xml:space="preserve">
+    <value>Can not add overtime request on past date</value>
+    <comment>Used in mytime overtime request when request date is past date</comment>
   </data>
   <data name="AllowedOvertime" xml:space="preserve">
     <value>Allowed overtime</value>
