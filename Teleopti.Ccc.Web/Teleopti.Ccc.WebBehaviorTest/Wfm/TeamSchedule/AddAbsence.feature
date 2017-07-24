@@ -39,6 +39,7 @@ Background:
 	And there is a skill named 'A skill' with activity 'Phone'
 	And 'John Smith' has a workflow control set publishing schedules until '2017-12-31'
 	And 'Bill Gates' has a workflow control set publishing schedules until '2017-12-31'
+	And 'Bill Gates' is in Hawaii time zone
 	And 'John Smith' has a person period with
 	| Field                | Value                |
 	| Shift bag            | A shift bag          |
@@ -57,8 +58,7 @@ Background:
 	| Contract             | A contract           |
 	| Contract schedule    | A contract schedule  |
 	| Part time percentage | Part time percentage |
-	And 'Bill Gates' is in Hawaii time zone
-
+	
 Scenario: Can add intraday absence to agent in another time zone
 	Given 'John Smith' has a shift with
 	| Field          | Value            |
