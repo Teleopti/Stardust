@@ -432,7 +432,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var result = _target.Approve(personRequest.Request);
 
 			result.Count().Should().Be(1);
-			result.First().Message.Should().Be("There is already same activity in the schedule for given period.");
+			result.First().Message.Should().Be("This activity is already scheduled within this period.");
 		}
 
 		[Test]
@@ -456,7 +456,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var result = _target.Approve(personRequest.Request);
 
 			result.Count().Should().Be(1);
-			result.First().Message.Should().Be("There is already same activity in the schedule for given period.");
+			result.First().Message.Should().Be("This activity is already scheduled within this period.");
 		}
 
 		[Test]
@@ -477,7 +477,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var result = _target.Approve(personRequest.Request);
 
 			result.Count().Should().Be(1);
-			result.First().Message.Should().Be("There is already same activity in the schedule for given period.");
+			result.First().Message.Should().Be("This activity is already scheduled within this period.");
 		}
 
 		private OvertimeRequestApprovalService createTarget()
