@@ -149,6 +149,7 @@
 		public const string WebStaffing = "0140";
 		public const string RemoveOvertime = "0142";
 		public const string MoveOvertime = "0145";
+		public const string BpoExchange = "0147";
 
 		//Seat Planner
 		public const string SeatPlanner = "0107";
@@ -158,5 +159,6 @@
 
 		// Reports
 		public const string ViewBadgeLeaderboardUnderReports = "0134";
+		
 	}
 }

@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return _toggleManager.IsEnabled(Toggles.WfmStaffing_AllowActions_42524);
 			}
-
+			
 			return true;
 		}
 

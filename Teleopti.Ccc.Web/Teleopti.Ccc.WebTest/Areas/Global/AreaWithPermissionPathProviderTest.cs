@@ -206,5 +206,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			areas.Count().Should().Be(1);
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebRequests);
 		}
+		
 	}
 }

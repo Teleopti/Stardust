@@ -64,8 +64,8 @@ function MenuController() {
 	ctrl.icon = setIcon();
 
 	function setIcon() {
-		var match = icons.find(function(icon) {
-			return icon.name === ctrl.data.InternalName
+        var match = icons.find(function (icon) {
+            return icon.name === ctrl.data.InternalName
 		})
 		return match.i;
 	}

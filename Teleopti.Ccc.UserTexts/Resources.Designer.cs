@@ -4269,6 +4269,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bpo Exchange.
+        /// </summary>
+        public static string BpoExchange {
+            get {
+                return ResourceManager.GetString("BpoExchange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Breaks.
         /// </summary>
         public static string Breaks {

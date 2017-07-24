@@ -149,5 +149,6 @@
 		public const string WebModifySkill = "Raptor/Anywhere/WebForecasts/WebModifySkill";
 		public const string WebModifySkillArea = "Raptor/Anywhere/WebIntraday/WebModifySkillArea";
 		public const string WebStaffing = "Raptor/Anywhere/WebStaffing";
+		public const string BpoExchange = "Raptor/Anywhere/WebStaffing/BPOExchange";
 	}
 }

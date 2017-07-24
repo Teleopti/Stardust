@@ -13,8 +13,9 @@
     var filters = [];
 
     vm.loadAreas = function() {
-      areasService.getAreas().then(function (result) {
-        for (var i = 0; i < result.length; i++) {
+        areasService.getAreas().then(function (result) {
+            console.log(result);
+          for (var i = 0; i < result.length; i++) {
           result[i].filters = [];
         }
         vm.areas = result;

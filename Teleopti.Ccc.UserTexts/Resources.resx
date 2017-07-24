@@ -10474,7 +10474,7 @@ These options are activated:
     <value>There is already absence in the schedule for given period.</value>
     <comment>There is already absence in the schedule for given period.</comment>
   </data>
-	 <data name="OvertimeRequestSameActivityInPeriod" xml:space="preserve">
+  <data name="OvertimeRequestSameActivityInPeriod" xml:space="preserve">
     <value>This activity is already scheduled within this period.</value>
     <comment>Using in mytime overtime request when same activity already scheduled within this period.</comment>
   </data>
@@ -10725,7 +10725,7 @@ These options are activated:
     <value>Your overtime request has been denied automatically. The period of this request is {0}, but site open hour is {1}</value>
     <comment>used in mytime overtime request deny reason,when request period is out of site open hour</comment>
   </data>
-	<data name="OvertimeRequestDenyReasonSiteOpenHourClosed" xml:space="preserve">
+  <data name="OvertimeRequestDenyReasonSiteOpenHourClosed" xml:space="preserve">
     <value>Your overtime request has been denied automatically. The site is closed during the request period {0}</value>
     <comment>used in mytime overtime request deny reason,when site is closed during the request period</comment>
   </data>
@@ -16240,7 +16240,7 @@ Do you want to participate?</value>
     <value>The request date is more than 14 days in the future.</value>
     <comment>Used in mytime overtime request when request date is more than 14 days in the future</comment>
   </data>
-	<data name="OvertimeRequestDateIsPast" xml:space="preserve">
+  <data name="OvertimeRequestDateIsPast" xml:space="preserve">
     <value>Can not add overtime request for a past date</value>
     <comment>Used in mytime overtime request when request date is a past date</comment>
   </data>
@@ -16314,5 +16314,9 @@ Do you want to participate?</value>
   </data>
   <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
     <value>The overtime request {0}-{1} has been approved.</value>
+  </data>
+  <data name="BpoExchange" xml:space="preserve">
+    <value>Bpo Exchange</value>
+    <comment>bpo exchange permission</comment>
   </data>
 </root>
