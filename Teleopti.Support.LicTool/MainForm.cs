@@ -123,6 +123,7 @@ namespace Teleopti.Support.LicTool
 			chkVNextPilot.Checked = false;
 			chkOutbound.Checked = false;
 			chkSeatPlanner.Checked = false;
+			chkBPOExchange.Checked = false;
 		}
 
 		private void EnterDemoSettings()
@@ -232,6 +233,7 @@ namespace Teleopti.Support.LicTool
 						if (options.Contains("VNext")) chkVNextPilot.Checked = true;
 						if (options.Contains("Outbound")) chkOutbound.Checked = true;
 						if (options.Contains("SeatPlanner")) chkSeatPlanner.Checked = true;
+						if (options.Contains("BPOExchange")) chkBPOExchange.Checked = true;
 						
 						//Freemium
 						if (options.Contains("Forecasts")) chkFreemium.Checked = true;
@@ -322,6 +324,8 @@ namespace Teleopti.Support.LicTool
 					elmOptions.AppendChild(xdoc.CreateElement("Outbound")).AppendChild(xdoc.CreateTextNode("true"));
 				if (chkSeatPlanner.Checked)
 					elmOptions.AppendChild(xdoc.CreateElement("SeatPlanner")).AppendChild(xdoc.CreateTextNode("true"));
+				if (chkBPOExchange.Checked)
+					elmOptions.AppendChild(xdoc.CreateElement("BPOExchange")).AppendChild(xdoc.CreateTextNode("true"));
 				
 				rootNode.AppendChild(elmOptions);
 			}

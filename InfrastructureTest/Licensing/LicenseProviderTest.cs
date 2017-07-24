@@ -260,6 +260,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiWFMMyTeamEnabled { get; private set; }
 	        public bool TeleoptiWFMOutboundEnabled { get; private set; }
 	        public bool TeleoptiWFMSeatPlannerEnabled { get; private set; }
+	        public bool TeleoptiWFMBPOExchangeEnabled { get; private set; }
 
 	        #endregion
         }
@@ -277,6 +278,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 
 				  TeleoptiWFMOutboundEnabled = true;
 				  TeleoptiWFMSeatPlannerEnabled = true;
+				  TeleoptiWFMBPOExchangeEnabled = true;
 			  }
 
 			  #region Implementation of IDisposable
@@ -339,6 +341,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 			  public bool TeleoptiWFMMyTeamEnabled { get; private set; }
 			  public bool TeleoptiWFMOutboundEnabled { get; private set; }
 			  public bool TeleoptiWFMSeatPlannerEnabled { get; private set; }
+			  public bool TeleoptiWFMBPOExchangeEnabled { get; private set; }
 
 			  #endregion
 		  }
@@ -462,8 +465,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiWFMSeatPlannerEnabled { get; private set; }
 
 	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
+	        public bool TeleoptiWFMBPOExchangeEnabled { get; private set; }
 
-            #endregion
+	        #endregion
         }
 
         private class stubPilotCustomersLicenseService : ILicenseService
@@ -585,8 +589,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
 	        public bool TeleoptiWFMSeatPlannerEnabled { get; private set; }
 
 	        public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
+	        public bool TeleoptiWFMBPOExchangeEnabled { get; private set; }
 
-            #endregion
+	        #endregion
         }
     }
 }

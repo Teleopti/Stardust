@@ -87,6 +87,7 @@
 			this.label11 = new System.Windows.Forms.Label();
 			this.comboBoxMajor = new System.Windows.Forms.ComboBox();
 			this.chkPerpetual = new System.Windows.Forms.CheckBox();
+			this.chkBPOExchange = new System.Windows.Forms.CheckBox();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgents)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numMaxActiveAgentsGrace)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.numExpirationGracePeriodDays)).BeginInit();
@@ -146,7 +147,7 @@
 			this.label1.AutoSize = true;
 			this.label1.Location = new System.Drawing.Point(15, 85);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(95, 15);
+			this.label1.Size = new System.Drawing.Size(80, 13);
 			this.label1.TabIndex = 22;
 			this.label1.Text = "Customer name";
 			// 
@@ -155,7 +156,7 @@
 			this.label2.AutoSize = true;
 			this.label2.Location = new System.Drawing.Point(15, 150);
 			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(89, 15);
+			this.label2.Size = new System.Drawing.Size(77, 13);
 			this.label2.TabIndex = 7;
 			this.label2.Text = "Expiration date";
 			// 
@@ -164,7 +165,7 @@
 			this.label3.AutoSize = true;
 			this.label3.Location = new System.Drawing.Point(15, 251);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(71, 15);
+			this.label3.Size = new System.Drawing.Size(62, 13);
 			this.label3.TabIndex = 8;
 			this.label3.Text = "Max agents";
 			// 
@@ -173,7 +174,7 @@
 			this.label4.AutoSize = true;
 			this.label4.Location = new System.Drawing.Point(16, 279);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(105, 15);
+			this.label4.Size = new System.Drawing.Size(92, 13);
 			this.label4.TabIndex = 9;
 			this.label4.Text = "Max agents grace";
 			// 
@@ -182,7 +183,7 @@
 			this.label5.AutoSize = true;
 			this.label5.Location = new System.Drawing.Point(16, 222);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(96, 15);
+			this.label5.Size = new System.Drawing.Size(83, 13);
 			this.label5.TabIndex = 10;
 			this.label5.Text = "Expiration grace";
 			// 
@@ -208,7 +209,7 @@
 			this.label6.AutoSize = true;
 			this.label6.Location = new System.Drawing.Point(175, 220);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(32, 15);
+			this.label6.Size = new System.Drawing.Size(29, 13);
 			this.label6.TabIndex = 12;
 			this.label6.Text = "days";
 			// 
@@ -244,7 +245,7 @@
 			// 
 			// btnCreateAndSave
 			// 
-			this.btnCreateAndSave.Location = new System.Drawing.Point(453, 690);
+			this.btnCreateAndSave.Location = new System.Drawing.Point(450, 706);
 			this.btnCreateAndSave.Name = "btnCreateAndSave";
 			this.btnCreateAndSave.Size = new System.Drawing.Size(99, 27);
 			this.btnCreateAndSave.TabIndex = 18;
@@ -257,7 +258,7 @@
 			this.chkBase.AutoSize = true;
 			this.chkBase.Location = new System.Drawing.Point(6, 19);
 			this.chkBase.Name = "chkBase";
-			this.chkBase.Size = new System.Drawing.Size(57, 19);
+			this.chkBase.Size = new System.Drawing.Size(50, 17);
 			this.chkBase.TabIndex = 6;
 			this.chkBase.Text = "Base";
 			this.chkBase.UseVisualStyleBackColor = true;
@@ -267,7 +268,7 @@
 			this.chkLifestyle.AutoSize = true;
 			this.chkLifestyle.Location = new System.Drawing.Point(6, 41);
 			this.chkLifestyle.Name = "chkLifestyle";
-			this.chkLifestyle.Size = new System.Drawing.Size(73, 19);
+			this.chkLifestyle.Size = new System.Drawing.Size(64, 17);
 			this.chkLifestyle.TabIndex = 7;
 			this.chkLifestyle.Text = "Lifestyle";
 			this.chkLifestyle.UseVisualStyleBackColor = true;
@@ -278,7 +279,7 @@
 			this.chkShiftTrader.AutoSize = true;
 			this.chkShiftTrader.Location = new System.Drawing.Point(33, 63);
 			this.chkShiftTrader.Name = "chkShiftTrader";
-			this.chkShiftTrader.Size = new System.Drawing.Size(92, 19);
+			this.chkShiftTrader.Size = new System.Drawing.Size(81, 17);
 			this.chkShiftTrader.TabIndex = 8;
 			this.chkShiftTrader.Text = "Shift Trader";
 			this.chkShiftTrader.UseVisualStyleBackColor = true;
@@ -288,7 +289,7 @@
 			this.chkVacationPlanner.AutoSize = true;
 			this.chkVacationPlanner.Location = new System.Drawing.Point(33, 85);
 			this.chkVacationPlanner.Name = "chkVacationPlanner";
-			this.chkVacationPlanner.Size = new System.Drawing.Size(122, 19);
+			this.chkVacationPlanner.Size = new System.Drawing.Size(107, 17);
 			this.chkVacationPlanner.TabIndex = 9;
 			this.chkVacationPlanner.Text = "Vacation Planner";
 			this.chkVacationPlanner.UseVisualStyleBackColor = true;
@@ -298,7 +299,7 @@
 			this.chkOvertimeAvailability.AutoSize = true;
 			this.chkOvertimeAvailability.Location = new System.Drawing.Point(33, 107);
 			this.chkOvertimeAvailability.Name = "chkOvertimeAvailability";
-			this.chkOvertimeAvailability.Size = new System.Drawing.Size(137, 19);
+			this.chkOvertimeAvailability.Size = new System.Drawing.Size(120, 17);
 			this.chkOvertimeAvailability.TabIndex = 10;
 			this.chkOvertimeAvailability.Text = "Overtime Availability";
 			this.chkOvertimeAvailability.UseVisualStyleBackColor = true;
@@ -308,7 +309,7 @@
 			this.chkRealtimeAdherence.AutoSize = true;
 			this.chkRealtimeAdherence.Location = new System.Drawing.Point(33, 149);
 			this.chkRealtimeAdherence.Name = "chkRealtimeAdherence";
-			this.chkRealtimeAdherence.Size = new System.Drawing.Size(141, 19);
+			this.chkRealtimeAdherence.Size = new System.Drawing.Size(122, 17);
 			this.chkRealtimeAdherence.TabIndex = 11;
 			this.chkRealtimeAdherence.Text = "Realtime Adherence";
 			this.chkRealtimeAdherence.UseVisualStyleBackColor = true;
@@ -318,7 +319,7 @@
 			this.chkPerformanceManager.AutoSize = true;
 			this.chkPerformanceManager.Location = new System.Drawing.Point(6, 241);
 			this.chkPerformanceManager.Name = "chkPerformanceManager";
-			this.chkPerformanceManager.Size = new System.Drawing.Size(153, 19);
+			this.chkPerformanceManager.Size = new System.Drawing.Size(131, 17);
 			this.chkPerformanceManager.TabIndex = 12;
 			this.chkPerformanceManager.Text = "Performance Manager";
 			this.chkPerformanceManager.UseVisualStyleBackColor = true;
@@ -328,13 +329,14 @@
 			this.chkPayrollIntegration.AutoSize = true;
 			this.chkPayrollIntegration.Location = new System.Drawing.Point(6, 264);
 			this.chkPayrollIntegration.Name = "chkPayrollIntegration";
-			this.chkPayrollIntegration.Size = new System.Drawing.Size(127, 19);
+			this.chkPayrollIntegration.Size = new System.Drawing.Size(110, 17);
 			this.chkPayrollIntegration.TabIndex = 13;
 			this.chkPayrollIntegration.Text = "Payroll Integration";
 			this.chkPayrollIntegration.UseVisualStyleBackColor = true;
 			// 
 			// grpBoxModules
 			// 
+			this.grpBoxModules.Controls.Add(this.chkBPOExchange);
 			this.grpBoxModules.Controls.Add(this.chkVNextPilot);
 			this.grpBoxModules.Controls.Add(this.chkSeatPlanner);
 			this.grpBoxModules.Controls.Add(this.chkOutbound);
@@ -353,7 +355,7 @@
 			this.grpBoxModules.Controls.Add(this.chkBase);
 			this.grpBoxModules.Location = new System.Drawing.Point(45, 338);
 			this.grpBoxModules.Name = "grpBoxModules";
-			this.grpBoxModules.Size = new System.Drawing.Size(211, 379);
+			this.grpBoxModules.Size = new System.Drawing.Size(211, 403);
 			this.grpBoxModules.TabIndex = 14;
 			this.grpBoxModules.TabStop = false;
 			this.grpBoxModules.Text = "Teleopti WFM options";
@@ -363,7 +365,7 @@
 			this.chkVNextPilot.AutoSize = true;
 			this.chkVNextPilot.Location = new System.Drawing.Point(6, 308);
 			this.chkVNextPilot.Name = "chkVNextPilot";
-			this.chkVNextPilot.Size = new System.Drawing.Size(88, 19);
+			this.chkVNextPilot.Size = new System.Drawing.Size(78, 17);
 			this.chkVNextPilot.TabIndex = 43;
 			this.chkVNextPilot.Text = "VNext Pilot";
 			this.chkVNextPilot.UseVisualStyleBackColor = true;
@@ -373,7 +375,7 @@
 			this.chkSeatPlanner.AutoSize = true;
 			this.chkSeatPlanner.Location = new System.Drawing.Point(6, 354);
 			this.chkSeatPlanner.Name = "chkSeatPlanner";
-			this.chkSeatPlanner.Size = new System.Drawing.Size(100, 19);
+			this.chkSeatPlanner.Size = new System.Drawing.Size(87, 17);
 			this.chkSeatPlanner.TabIndex = 42;
 			this.chkSeatPlanner.Text = "Seat Planner";
 			this.chkSeatPlanner.UseVisualStyleBackColor = true;
@@ -383,7 +385,7 @@
 			this.chkOutbound.AutoSize = true;
 			this.chkOutbound.Location = new System.Drawing.Point(6, 331);
 			this.chkOutbound.Name = "chkOutbound";
-			this.chkOutbound.Size = new System.Drawing.Size(83, 19);
+			this.chkOutbound.Size = new System.Drawing.Size(73, 17);
 			this.chkOutbound.TabIndex = 41;
 			this.chkOutbound.Text = "Outbound";
 			this.chkOutbound.UseVisualStyleBackColor = true;
@@ -393,7 +395,7 @@
 			this.chkMyTeam.AutoSize = true;
 			this.chkMyTeam.Location = new System.Drawing.Point(6, 287);
 			this.chkMyTeam.Name = "chkMyTeam";
-			this.chkMyTeam.Size = new System.Drawing.Size(77, 19);
+			this.chkMyTeam.Size = new System.Drawing.Size(67, 17);
 			this.chkMyTeam.TabIndex = 19;
 			this.chkMyTeam.Text = "MyTeam";
 			this.chkMyTeam.UseVisualStyleBackColor = true;
@@ -403,7 +405,7 @@
 			this.chkCalendarLink.AutoSize = true;
 			this.chkCalendarLink.Location = new System.Drawing.Point(33, 218);
 			this.chkCalendarLink.Name = "chkCalendarLink";
-			this.chkCalendarLink.Size = new System.Drawing.Size(105, 19);
+			this.chkCalendarLink.Size = new System.Drawing.Size(91, 17);
 			this.chkCalendarLink.TabIndex = 18;
 			this.chkCalendarLink.Text = "Calendar Link";
 			this.chkCalendarLink.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -414,7 +416,7 @@
 			this.chkNotify.AutoSize = true;
 			this.chkNotify.Location = new System.Drawing.Point(6, 126);
 			this.chkNotify.Name = "chkNotify";
-			this.chkNotify.Size = new System.Drawing.Size(59, 19);
+			this.chkNotify.Size = new System.Drawing.Size(53, 17);
 			this.chkNotify.TabIndex = 16;
 			this.chkNotify.Text = "Notify";
 			this.chkNotify.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -426,7 +428,7 @@
 			this.chkSMSLink.AutoSize = true;
 			this.chkSMSLink.Location = new System.Drawing.Point(33, 195);
 			this.chkSMSLink.Name = "chkSMSLink";
-			this.chkSMSLink.Size = new System.Drawing.Size(82, 19);
+			this.chkSMSLink.Size = new System.Drawing.Size(72, 17);
 			this.chkSMSLink.TabIndex = 17;
 			this.chkSMSLink.Text = "SMS Link";
 			this.chkSMSLink.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
@@ -437,7 +439,7 @@
 			this.chkAgentScheduleMessenger.AutoSize = true;
 			this.chkAgentScheduleMessenger.Location = new System.Drawing.Point(33, 172);
 			this.chkAgentScheduleMessenger.Name = "chkAgentScheduleMessenger";
-			this.chkAgentScheduleMessenger.Size = new System.Drawing.Size(180, 19);
+			this.chkAgentScheduleMessenger.Size = new System.Drawing.Size(157, 17);
 			this.chkAgentScheduleMessenger.TabIndex = 15;
 			this.chkAgentScheduleMessenger.Text = "Agent Schedule Messenger";
 			this.chkAgentScheduleMessenger.UseVisualStyleBackColor = true;
@@ -478,7 +480,7 @@
 			this.label7.AutoSize = true;
 			this.label7.Location = new System.Drawing.Point(176, 279);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(48, 15);
+			this.label7.Size = new System.Drawing.Size(43, 13);
 			this.label7.TabIndex = 31;
 			this.label7.Text = "percent";
 			// 
@@ -499,7 +501,7 @@
 			this.label8.AutoSize = true;
 			this.label8.Location = new System.Drawing.Point(258, 220);
 			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(38, 15);
+			this.label8.Size = new System.Drawing.Size(33, 13);
 			this.label8.TabIndex = 33;
 			this.label8.Text = "hours";
 			// 
@@ -508,7 +510,7 @@
 			this.label9.AutoSize = true;
 			this.label9.Location = new System.Drawing.Point(15, 113);
 			this.label9.Name = "label9";
-			this.label9.Size = new System.Drawing.Size(113, 15);
+			this.label9.Size = new System.Drawing.Size(97, 13);
 			this.label9.TabIndex = 34;
 			this.label9.Text = "License agreement";
 			// 
@@ -530,7 +532,7 @@
             this.helpToolStripMenuItem});
 			this.menuTopmenu.Location = new System.Drawing.Point(0, 0);
 			this.menuTopmenu.Name = "menuTopmenu";
-			this.menuTopmenu.Size = new System.Drawing.Size(639, 28);
+			this.menuTopmenu.Size = new System.Drawing.Size(639, 24);
 			this.menuTopmenu.TabIndex = 36;
 			this.menuTopmenu.Text = "Top Menu";
 			// 
@@ -542,34 +544,34 @@
             this.clearAllFieldsToolStripMenuItem,
             this.quitToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			this.fileToolStripMenuItem.Size = new System.Drawing.Size(44, 24);
+			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "File";
 			// 
 			// loadLicenseToolStripMenuItem
 			// 
 			this.loadLicenseToolStripMenuItem.Name = "loadLicenseToolStripMenuItem";
-			this.loadLicenseToolStripMenuItem.Size = new System.Drawing.Size(193, 26);
+			this.loadLicenseToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.loadLicenseToolStripMenuItem.Text = "Load license";
 			this.loadLicenseToolStripMenuItem.Click += new System.EventHandler(this.loadProductActivationKeyToolStripMenuItem_Click);
 			// 
 			// createAndSaveToolStripMenuItem
 			// 
 			this.createAndSaveToolStripMenuItem.Name = "createAndSaveToolStripMenuItem";
-			this.createAndSaveToolStripMenuItem.Size = new System.Drawing.Size(193, 26);
+			this.createAndSaveToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.createAndSaveToolStripMenuItem.Text = "Create and save";
 			this.createAndSaveToolStripMenuItem.Click += new System.EventHandler(this.createAndSaveToolStripMenuItem_Click);
 			// 
 			// clearAllFieldsToolStripMenuItem
 			// 
 			this.clearAllFieldsToolStripMenuItem.Name = "clearAllFieldsToolStripMenuItem";
-			this.clearAllFieldsToolStripMenuItem.Size = new System.Drawing.Size(193, 26);
+			this.clearAllFieldsToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.clearAllFieldsToolStripMenuItem.Text = "Clear all settings";
 			this.clearAllFieldsToolStripMenuItem.Click += new System.EventHandler(this.clearAllFieldsToolStripMenuItem_Click);
 			// 
 			// quitToolStripMenuItem
 			// 
 			this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-			this.quitToolStripMenuItem.Size = new System.Drawing.Size(193, 26);
+			this.quitToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
 			this.quitToolStripMenuItem.Text = "Quit";
 			this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
 			// 
@@ -578,13 +580,13 @@
 			this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.demoSettingsToolStripMenuItem});
 			this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-			this.editToolStripMenuItem.Size = new System.Drawing.Size(67, 24);
+			this.editToolStripMenuItem.Size = new System.Drawing.Size(56, 20);
 			this.editToolStripMenuItem.Text = "Presets";
 			// 
 			// demoSettingsToolStripMenuItem
 			// 
 			this.demoSettingsToolStripMenuItem.Name = "demoSettingsToolStripMenuItem";
-			this.demoSettingsToolStripMenuItem.Size = new System.Drawing.Size(180, 26);
+			this.demoSettingsToolStripMenuItem.Size = new System.Drawing.Size(150, 22);
 			this.demoSettingsToolStripMenuItem.Text = "Demo settings";
 			this.demoSettingsToolStripMenuItem.Click += new System.EventHandler(this.demoSettingsToolStripMenuItem_Click);
 			// 
@@ -593,13 +595,13 @@
 			this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem});
 			this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-			this.helpToolStripMenuItem.Size = new System.Drawing.Size(53, 24);
+			this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
 			this.helpToolStripMenuItem.Text = "Help";
 			// 
 			// aboutToolStripMenuItem
 			// 
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(125, 26);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(107, 22);
 			this.aboutToolStripMenuItem.Text = "About";
 			// 
 			// comboBoxAgentsOrSeats
@@ -619,7 +621,7 @@
 			this.label10.AutoSize = true;
 			this.label10.Location = new System.Drawing.Point(188, 245);
 			this.label10.Name = "label10";
-			this.label10.Size = new System.Drawing.Size(108, 15);
+			this.label10.Size = new System.Drawing.Size(97, 13);
 			this.label10.TabIndex = 38;
 			this.label10.Text = "License count type";
 			// 
@@ -656,7 +658,7 @@
 			this.labelRatio.AutoSize = true;
 			this.labelRatio.Location = new System.Drawing.Point(424, 245);
 			this.labelRatio.Name = "labelRatio";
-			this.labelRatio.Size = new System.Drawing.Size(36, 15);
+			this.labelRatio.Size = new System.Drawing.Size(32, 13);
 			this.labelRatio.TabIndex = 40;
 			this.labelRatio.Text = "Ratio";
 			// 
@@ -675,7 +677,7 @@
 			this.chkFreemium.AutoSize = true;
 			this.chkFreemium.Location = new System.Drawing.Point(8, 19);
 			this.chkFreemium.Name = "chkFreemium";
-			this.chkFreemium.Size = new System.Drawing.Size(86, 19);
+			this.chkFreemium.Size = new System.Drawing.Size(71, 17);
 			this.chkFreemium.TabIndex = 7;
 			this.chkFreemium.Text = "Freemium";
 			this.chkFreemium.UseVisualStyleBackColor = true;
@@ -686,7 +688,7 @@
 			this.label11.AutoSize = true;
 			this.label11.Location = new System.Drawing.Point(16, 310);
 			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(83, 15);
+			this.label11.Size = new System.Drawing.Size(71, 13);
 			this.label11.TabIndex = 41;
 			this.label11.Text = "Major Version";
 			// 
@@ -707,16 +709,26 @@
 			this.chkPerpetual.AutoSize = true;
 			this.chkPerpetual.Location = new System.Drawing.Point(18, 182);
 			this.chkPerpetual.Name = "chkPerpetual";
-			this.chkPerpetual.Size = new System.Drawing.Size(140, 19);
+			this.chkPerpetual.Size = new System.Drawing.Size(121, 17);
 			this.chkPerpetual.TabIndex = 43;
 			this.chkPerpetual.Text = "Display as perpetual";
 			this.chkPerpetual.UseVisualStyleBackColor = true;
+			// 
+			// chkBPOExchange
+			// 
+			this.chkBPOExchange.AutoSize = true;
+			this.chkBPOExchange.Location = new System.Drawing.Point(6, 377);
+			this.chkBPOExchange.Name = "chkBPOExchange";
+			this.chkBPOExchange.Size = new System.Drawing.Size(99, 17);
+			this.chkBPOExchange.TabIndex = 44;
+			this.chkBPOExchange.Text = "BPO Exchange";
+			this.chkBPOExchange.UseVisualStyleBackColor = true;
 			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(639, 729);
+			this.ClientSize = new System.Drawing.Size(639, 753);
 			this.Controls.Add(this.chkPerpetual);
 			this.Controls.Add(this.comboBoxMajor);
 			this.Controls.Add(this.label11);
@@ -830,6 +842,7 @@
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.ComboBox comboBoxMajor;
 		private System.Windows.Forms.CheckBox chkPerpetual;
+		private System.Windows.Forms.CheckBox chkBPOExchange;
 	}
 }
 
