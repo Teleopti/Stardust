@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	[TestFixture]
 	public class ResourceCalculationDataContainerFromSkillCombinationsTest
 	{
-		private ResourceCalculationDataConatainerFromSkillCombinations _target;
+		private ResourceCalculationDataContainerFromSkillCombinations _target;
 		private readonly DateOnly _date = new DateOnly(2013, 8, 16);
 		private DateTimePeriod _period = new DateTimePeriod(new DateTime(2013, 8, 16, 12, 0, 0, DateTimeKind.Utc), new DateTime(2013, 8, 16, 13, 0, 0, DateTimeKind.Utc));
 		private readonly IActivity _activity = ActivityFactory.CreateActivity("Phone").WithId();
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				SkillCombination = new[] { _skill.Id.GetValueOrDefault() },
 				Resource = 10
 			};
-			_target = new ResourceCalculationDataConatainerFromSkillCombinations(new List<SkillCombinationResource>() { resource }, new[] { _skill }, false);
+			_target = new ResourceCalculationDataContainerFromSkillCombinations(new List<SkillCombinationResource>() { resource }, new[] { _skill }, false);
 		}
 
 		[Test]
