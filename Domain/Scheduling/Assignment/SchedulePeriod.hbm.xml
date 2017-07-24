@@ -85,14 +85,14 @@ SELECT PeriodType,Number,DateFrom,Culture,COUNT(*) AS [Priority] FROM (SELECT pp
 	(
 		SELECT CASE WHEN ISNULL(p.LeavingDate,'20591231 00:00') < MIN(DATEADD(DAY,-1,ISNULL(pp2.DateFrom,'20591231 00:00'))) THEN ISNULL(p.LeavingDate,'20591231 00:00')
 					ELSE MIN(DATEADD(DAY,-1,ISNULL(pp2.DateFrom,'20591231 00:00'))) END
-		FROM scheduleperiod pp2
+		FROM scheduleperiod pp2 WITH (NOLOCK)
 		WHERE pp2.parent = pp.parent
 		AND pp2.DateFrom > pp.DateFrom
 	)
 		,ISNULL(p.LeavingDate,'20591231 00:00')) AS EndDate
-FROM scheduleperiod pp
-INNER JOIN Person ON Person.Id = pp.Parent
-INNER JOIN readmodel.GroupingReadOnly p ON p.PersonId = pp.Parent and p.StartDate <= :date and p.EndDate >= :date
+FROM scheduleperiod pp WITH (NOLOCK)
+INNER JOIN Person WITH (NOLOCK) ON Person.Id = pp.Parent
+INNER JOIN readmodel.GroupingReadOnly p WITH (NOLOCK) ON p.PersonId = pp.Parent and p.StartDate <= :date and p.EndDate >= :date
 WHERE p.BusinessUnitId = :businessUnit AND pp.DateFrom <= isnull(p.LeavingDate,'20591231 00:00')) AS x
 WHERE x.EndDate >= :date and x.DateFrom <= :date
 GROUP BY PeriodType,Number,DateFrom,Culture
@@ -106,14 +106,14 @@ SELECT PeriodType,Number,DateFrom,Culture,COUNT(*) AS [Priority] FROM (SELECT pp
 	(
 		SELECT CASE WHEN ISNULL(p.LeavingDate,'20591231 00:00') < MIN(DATEADD(DAY,-1,ISNULL(pp2.DateFrom,'20591231 00:00'))) THEN ISNULL(p.LeavingDate,'20591231 00:00')
 					ELSE MIN(DATEADD(DAY,-1,ISNULL(pp2.DateFrom,'20591231 00:00'))) END
-		FROM scheduleperiod pp2
+		FROM scheduleperiod pp2 WITH (NOLOCK)
 		WHERE pp2.parent = pp.parent
 		AND pp2.DateFrom > pp.DateFrom
 	)
 		,ISNULL(p.LeavingDate,'20591231 00:00')) AS EndDate
-FROM scheduleperiod pp
-INNER JOIN Person person ON person.Id = pp.Parent
-INNER JOIN readmodel.GroupingReadOnly p ON p.PersonId = pp.Parent and p.StartDate <= :date and p.EndDate >= :date
+FROM scheduleperiod pp WITH (NOLOCK)
+INNER JOIN Person person WITH (NOLOCK) ON person.Id = pp.Parent
+INNER JOIN readmodel.GroupingReadOnly p WITH (NOLOCK) ON p.PersonId = pp.Parent and p.StartDate <= :date and p.EndDate >= :date
 WHERE p.BusinessUnitId = :businessUnit AND pp.DateFrom <= isnull(p.LeavingDate,'20591231 00:00') AND person.Id in (:personIds)) AS x
 WHERE x.EndDate >= :date
 GROUP BY PeriodType,Number,DateFrom,Culture
