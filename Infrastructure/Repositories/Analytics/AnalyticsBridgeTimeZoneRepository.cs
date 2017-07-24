@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 				using (var sqlBulkCopy = new SqlBulkCopy((SqlConnection) session.Connection, SqlBulkCopyOptions.Default, (SqlTransaction) transaction))
 				{
 					sqlBulkCopy.DestinationTableName = "[mart].[bridge_time_zone]";
+					sqlBulkCopy.BulkCopyTimeout = 300;
 					sqlBulkCopy.WriteToServer(dt);
 				}
 				
