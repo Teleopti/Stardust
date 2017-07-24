@@ -53,89 +53,113 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 
 			var timeZoneIntervalLength = timeZoneprovider.Provide(userTimezone.TimeZoneId);
 			var date = getDateInput();
+			var numberOfDaysBack = getNumberOfDaysInput();
 
 			Console.WriteLine($"Using timezone '{timeZoneIntervalLength.TimeZoneId}' and date '{date.ToShortDateString()}'");
-			
-			var time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, date);
-			Console.WriteLine("");
-			Console.WriteLine("");
-			Console.WriteLine("Stats will be generated up until {0}. Enter other time if needed.", time.ToShortTimeString());
-			var timeText = Console.ReadLine();
-			if (!string.IsNullOrEmpty(timeText))
+
+			var times = new List<DateTime>();
+			for (int backDay = 0; backDay >= numberOfDaysBack * -1; backDay--)
 			{
-				DateTime temp;
-				if (!DateTime.TryParse(timeText, Thread.CurrentThread.CurrentCulture, DateTimeStyles.None, out temp))
-				{
-					Console.WriteLine("{0} is not a valid time. Press any key to exit.", timeText);
-					Console.ReadKey();
-					return;
-				}
-				time = time.Date.Add(temp.TimeOfDay);
-				time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, time);
+				var time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, date.AddDays(backDay));
+				times.Add(time);
 			}
 
-			Console.WriteLine("We're doing stuff. Please hang around...");
-			var timeUtc = TimeZoneInfo.Local.SafeConvertTimeToUtc(DateTime.SpecifyKind(time, DateTimeKind.Unspecified));
-			var currentIntervalUtc = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, timeUtc);
-
-			var workloads = workloadQueuesProvider.Provide();
-
-			foreach (var workloadInfo in workloads)
+			Console.WriteLine("");
+			Console.WriteLine("");
+			foreach (var t in times)
 			{
-				var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId, currentIntervalUtc, timeUtc);
-
-				if (forecastIntervals.Count == 0 || Math.Abs(forecastIntervals.Sum(x => x.Calls)) < 0.001)
-					continue;
-
-				var targetQueue = uniqueQueueProvider.Get(workloadInfo);
-
-				queueDataDictionary.Add(targetQueue.QueueId, generateQueueDataIntervals(forecastIntervals, targetQueue));
-			}
-
-			queueDataPersister.Persist(queueDataDictionary, timeZoneIntervalLength.TimeZoneId, time);
-
-			var skillsContainingQueue = new List<string>();
-
-			foreach (var queueId in queueDataDictionary.Keys)
-			{
-				foreach (var workload in workloads)
+				var time = t;
+				Console.WriteLine("Stats will be generated up until {0}. Enter other time if needed.",
+					$"{time.ToShortDateString()} {time.ToShortTimeString()}");
+				var timeText = Console.ReadLine();
+				if (!string.IsNullOrEmpty(timeText))
 				{
-					foreach (var queue in workload.Queues)
+					DateTime temp;
+					if (!DateTime.TryParse(timeText, Thread.CurrentThread.CurrentCulture, DateTimeStyles.None, out temp))
 					{
-						if (queueId == queue.QueueId)
-						{
-							if (!skillsContainingQueue.Contains(workload.SkillName))
-							{
-								skillsContainingQueue.Add(workload.SkillName);
-							}
+						Console.WriteLine("{0} is not a valid time. Press any key to exit.", timeText);
+						Console.ReadKey();
+						return;
+					}
+					time = time.Date.Add(temp.TimeOfDay);
+					time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, time);
+				}
 
+				Console.WriteLine("We're doing stuff. Please hang around...");
+				var timeUtc = TimeZoneInfo.Local.SafeConvertTimeToUtc(DateTime.SpecifyKind(time, DateTimeKind.Unspecified));
+				var currentIntervalUtc = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, timeUtc);
+
+				var workloads = workloadQueuesProvider.Provide();
+
+				foreach (var workloadInfo in workloads)
+				{
+					var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId, currentIntervalUtc, timeUtc);
+
+					if (forecastIntervals.Count == 0 || Math.Abs(forecastIntervals.Sum(x => x.Calls)) < 0.001)
+						continue;
+
+					var targetQueue = uniqueQueueProvider.Get(workloadInfo);
+
+					queueDataDictionary.Add(targetQueue.QueueId, generateQueueDataIntervals(forecastIntervals, targetQueue));
+				}
+
+				queueDataPersister.Persist(queueDataDictionary, timeZoneIntervalLength.TimeZoneId, time);
+
+				var skillsContainingQueue = new List<string>();
+
+				foreach (var queueId in queueDataDictionary.Keys)
+				{
+					foreach (var workload in workloads)
+					{
+						foreach (var queue in workload.Queues)
+						{
+							if (queueId == queue.QueueId)
+							{
+								if (!skillsContainingQueue.Contains(workload.SkillName))
+								{
+									skillsContainingQueue.Add(workload.SkillName);
+								}
+
+							}
 						}
 					}
 				}
-			}
 
-			skillsContainingQueue.Sort();
+				skillsContainingQueue.Sort();
 
-			var skillsAffectedText = new StringBuilder();
-			foreach (var skillName in skillsContainingQueue)
-				skillsAffectedText.Append(skillName + " | ");
+				var skillsAffectedText = new StringBuilder();
+				foreach (var skillName in skillsContainingQueue)
+					skillsAffectedText.Append(skillName + " | ");
 
-			Console.WriteLine("");
-			Console.WriteLine("");
-			if (skillsAffectedText.Length > 0)
-			{
-				Console.WriteLine("Queue stats were generated for the following skills:");
-				Console.WriteLine(skillsAffectedText);
-			}
-			else
-			{
-				Console.WriteLine("No queue stats generated. Probably you did not fulfill the checklist.");
+				Console.WriteLine("");
+				Console.WriteLine("");
+				if (skillsAffectedText.Length > 0)
+				{
+					Console.WriteLine("Queue stats were generated for the following skills:");
+					Console.WriteLine(skillsAffectedText);
+				}
+				else
+				{
+					Console.WriteLine("No queue stats generated. Probably you did not fulfill the checklist.");
+				}
+
+				queueDataDictionary = new Dictionary<int, IList<QueueInterval>>();
 			}
 
 			Console.WriteLine("");
 			Console.WriteLine("");
 			Console.WriteLine("We're done! Press any key to exit.");
 			Console.ReadKey();
+		}
+
+		private static int getNumberOfDaysInput()
+		{
+			while (true)
+			{
+				Console.Write("Enter number of days in the past to generate data for (default, selected date only): ");
+				var input = Console.ReadLine();
+				return int.TryParse(input, out int n) ? n : 0;
+			}
 		}
 
 		private static DateTime getDateInput()
