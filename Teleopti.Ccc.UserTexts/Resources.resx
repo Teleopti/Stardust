@@ -10726,8 +10726,8 @@ These options are activated:
     <comment>used in mytime overtime request deny reason,when request period is out of site open hour</comment>
   </data>
 	<data name="OvertimeRequestDenyReasonSiteOpenHourClosed" xml:space="preserve">
-    <value>Your overtime request has been denied automatically. The period of this request is {0}, but site open hour is closed</value>
-    <comment>used in mytime overtime request deny reason,when site open hour is closed</comment>
+    <value>Your overtime request has been denied automatically. The site is closed during the request period {0}</value>
+    <comment>used in mytime overtime request deny reason,when site is closed during the request period</comment>
   </data>
   <data name="StudentAvailabilityFulfillment" xml:space="preserve">
     <value>Hourly Availability Fulfillment</value>
@@ -16237,12 +16237,12 @@ Do you want to participate?</value>
     <comment>Missing start time</comment>
   </data>
   <data name="OvertimeRequestDateExceeds14Days" xml:space="preserve">
-    <value>Request date exceeds 14 days</value>
-    <comment>Used in mytime overtime request when request date exceeds 14 days</comment>
+    <value>The request date is more than 14 days in the future.</value>
+    <comment>Used in mytime overtime request when request date is more than 14 days in the future</comment>
   </data>
 	<data name="OvertimeRequestDateIsPast" xml:space="preserve">
-    <value>Can not add overtime request on past date</value>
-    <comment>Used in mytime overtime request when request date is past date</comment>
+    <value>Can not add overtime request for a past date</value>
+    <comment>Used in mytime overtime request when request date is a past date</comment>
   </data>
   <data name="AllowedOvertime" xml:space="preserve">
     <value>Allowed overtime</value>

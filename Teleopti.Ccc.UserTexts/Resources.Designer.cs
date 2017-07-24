@@ -21906,7 +21906,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request date exceeds 14 days.
+        ///   Looks up a localized string similar to The request date is more than 14 days in the future..
         /// </summary>
         public static string OvertimeRequestDateExceeds14Days {
             get {
@@ -21915,7 +21915,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can not add overtime request on past date.
+        ///   Looks up a localized string similar to Can not add overtime request for a past date.
         /// </summary>
         public static string OvertimeRequestDateIsPast {
             get {
@@ -21942,7 +21942,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your overtime request has been denied automatically. The period of this request is {0}, but site open hour is closed.
+        ///   Looks up a localized string similar to Your overtime request has been denied automatically. The site is closed during the request period {0}.
         /// </summary>
         public static string OvertimeRequestDenyReasonSiteOpenHourClosed {
             get {
