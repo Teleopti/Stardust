@@ -131,32 +131,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldGetPossibilitiesOnlyForSkillsInSchedule()
-		{
-			var person = User.CurrentUser();
-			var activity = createActivity();
-			var skill1 = createSkill("skill1");
-			var personSkill1 = createPersonSkill(activity, skill1);
-			setupIntradayStaffingForSkill(skill1, new double?[] { 10d, 10d }, new double?[] { 12d, 11d });
-
-			var activity2 = createActivity();
-			var skill2 = createSkill("skill2");
-			var personSkill2 = createPersonSkill(activity2, skill2);
-			setupIntradayStaffingForSkill(skill2, new double?[] { 10d, 10d }, new double?[] { 6d, 12d });
-
-			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
-
-			createAssignment(person, activity2);
-
-			var possibilities =
-				getIntradayAbsencePossibility(null, StaffingPossiblityType.Overtime)
-					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat()).ToList();
-			Assert.AreEqual(2, possibilities.Count);
-			Assert.AreEqual(1, possibilities.ElementAt(0).Possibility);
-			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
-		}
-
-		[Test]
 		public void ShouldGetPossibilitiesWhenUsingShrinkageValidator()
 		{
 			setupSiteOpenHour();

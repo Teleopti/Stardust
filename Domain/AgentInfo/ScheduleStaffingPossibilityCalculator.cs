@@ -101,20 +101,19 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			Func<ISkill, IValidatePeriod, bool> isSatisfied, IScheduleDictionary scheduleDictionary, bool ignoreCurrentUsersSchedule = false)
 		{
 			var intervalPossibilities = new Dictionary<DateTime, int>();
+			var personAssignmentDictionary = skillStaffingDatas.Select(s => s.Date).Distinct()
+				.ToDictionary(d => d, d => getPersonAssignment(scheduleDictionary, d));
 			foreach (var skillStaffingData in skillStaffingDatas)
 			{
-				var personAssignment = getPersonAssignment(scheduleDictionary, skillStaffingData.Date);
-
-				if (!isPersonAssignmentNullOrEmpty(personAssignment) && !isSkillScheduled(personAssignment, skillStaffingData.Skill))
-					continue;
-
 				if (!staffingDataHasValue(skillStaffingData)) continue;
 
 				if (hasFairPossibilityInThisInterval(intervalPossibilities, skillStaffingData.Time))
 					continue;
 
 				if (ignoreCurrentUsersSchedule)
-					substractUsersSchedule(skillStaffingData, personAssignment);
+				{
+					substractUsersSchedule(skillStaffingData, personAssignmentDictionary[skillStaffingData.Date]);
+				}
 
 				var possibility = calculatePossibility(skillStaffingData, isSatisfied);
 				var key = skillStaffingData.Time;
@@ -139,13 +138,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			};
 			var isSatisfied = staffingSpecification(skillStaffingData.Skill, staffingInterval);
 			return isSatisfied ? ScheduleStaffingPossibilityConsts.FairPossibility : ScheduleStaffingPossibilityConsts.GoodPossibility;
-		}
-
-		private static bool isSkillScheduled(IPersonAssignment personAssignment, ISkill skill)
-		{
-			var scheduledActivities = personAssignment.MainActivities().Select(m => m.Payload).Where(p => p.RequiresSkill);
-
-			return scheduledActivities.Contains(skill.Activity);
 		}
 
 		private static bool isSkillScheduled(IPersonAssignment personAssignment, DateTimePeriod period, ISkill skill)
