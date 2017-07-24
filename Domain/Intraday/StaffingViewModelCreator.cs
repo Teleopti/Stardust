@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var latestStatsTime = getLastestStatsTime(statisticsPerWorkloadInterval);
 			
-			var forecastedCallsModel = _forecastedCallsProvider.Load(skillDaysBySkills, latestStatsTime, minutesPerInterval, dateOnly?.Date ?? DateTime.Now);
+			var forecastedCallsModel = _forecastedCallsProvider.Load(skillDaysBySkills, latestStatsTime, minutesPerInterval);
 
 			var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skills.Any(x => x is MultisiteSkill) ? skillDaysBySkills.Keys.ToList() : skills, minutesPerInterval, dateOnly, useShrinkage);
 

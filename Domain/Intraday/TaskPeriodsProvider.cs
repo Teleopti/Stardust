@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Template;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -25,26 +24,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			DateTime? latestStatisticsTime)
 		{
 			var usersNow = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone());
-			var usersNowStartOfDayUtc = TimeZoneHelper.ConvertToUtc(usersNow.Date, _timeZone.TimeZone());
-			var latestStatisticsTimeUtc = getLatestStatisticsTimeUtc(latestStatisticsTime);
-
-			var taskPeriods = new List<ITemplateTaskPeriod>();
-
-			foreach (var workloadDay in skillDay.WorkloadDayCollection)
-			{
-				taskPeriods.AddRange(taskPeriodsUpUntilNow(workloadDay.OpenTaskPeriodList, minutesPerInterval, skillDay.Skill.DefaultResolution, latestStatisticsTimeUtc, usersNowStartOfDayUtc));
-			}
-
-			return taskPeriods;
-		}
-
-		public IEnumerable<ITemplateTaskPeriod> Load(ISkillDay skillDay,
-			int minutesPerInterval,
-			DateTime? latestStatisticsTime,
-			DateTime currentDateTime)
-		{
-			var current = new MutableNow(currentDateTime.ToUniversalTime());
-			var usersNow = TimeZoneHelper.ConvertFromUtc(current.UtcDateTime(), _timeZone.TimeZone());
 			var usersNowStartOfDayUtc = TimeZoneHelper.ConvertToUtc(usersNow.Date, _timeZone.TimeZone());
 			var latestStatisticsTimeUtc = getLatestStatisticsTimeUtc(latestStatisticsTime);
 

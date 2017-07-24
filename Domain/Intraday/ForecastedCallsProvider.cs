@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_taskPeriodsProvider = taskPeriodsProvider;
 		}
 
-		public ForecastedCallsModel Load(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateTime? latestStatisticsTime, int minutesPerInterval, DateTime currentDateTime)
+		public ForecastedCallsModel Load(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateTime? latestStatisticsTime, int minutesPerInterval)
 		{
 
 			var callsPerSkill= new Dictionary<Guid, List<SkillIntervalStatistics>>();
@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 								
 				foreach (var skillDay in skillDaysForSkill)
 				{
-				    var templateTaskPeriods = _taskPeriodsProvider.Load(skillDay, minutesPerInterval, latestStatisticsTime, currentDateTime).ToList();
+				    var templateTaskPeriods = _taskPeriodsProvider.Load(skillDay, minutesPerInterval, latestStatisticsTime)
+                        .ToList();
 				    mergedTaskPeriodList.AddRange(templateTaskPeriods);
 
 					skillStatsRange.Add(getSkillStatsRange(templateTaskPeriods, skill, skillDay));
