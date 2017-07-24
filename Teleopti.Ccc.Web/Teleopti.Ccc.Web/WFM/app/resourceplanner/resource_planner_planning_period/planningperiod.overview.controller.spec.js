@@ -99,13 +99,11 @@ describe('planningPeriodOverviewController', function () {
             Successful: false,
             TotalSteps: 2
         });
-        $httpBackend.flush();
-
         vm.launchSchedule();
         $httpBackend.flush();
 
         expect(planningPeriodServiceNew.launchScheduling).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6', runAsynchronously: true });
-        expect(vm.schedulingPerformed).toEqual(true);
+        expect(vm.schedulingPerformed).toEqual(true); 
     });
 
     it('should check progress and return schedule is running on step 0', function () {
@@ -150,7 +148,6 @@ describe('planningPeriodOverviewController', function () {
             Successful: true,
             TotalSteps: 2
         });
-        vm.launchSchedule();
         $httpBackend.flush();
 
         expect(NoticeService.success).toHaveBeenCalledWith('SuccessfullyScheduledPlanningPeriodFromTo', null, true);
@@ -202,8 +199,6 @@ describe('planningPeriodOverviewController', function () {
             HasJob: true,
             Successful: false
         });
-        $httpBackend.flush();
-
         vm.intraOptimize();
         $httpBackend.flush();
 
@@ -288,7 +283,7 @@ describe('planningPeriodOverviewController', function () {
         vm.publishRunning = true;
         vm.publishSchedule();
 
-        expect(NoticeService.warning).toHaveBeenCalledWith('PublishingScheduleSuccess', null, true);
+        expect(NoticeService.warning).not.toHaveBeenCalledWith('PublishingScheduleSuccess', null, true);
         expect(vm.publishRunning).toEqual(true);
     });
 });
