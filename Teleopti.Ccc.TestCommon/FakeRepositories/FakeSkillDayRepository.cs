@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeSkillDayRepository : ISkillDayRepository
 	{
 		private readonly List<ISkillDay> _skillDays = new List<ISkillDay>();
-		private IEnumerable<SkillTaskDetailsModel> _skillTaskDetailsModels = new List<SkillTaskDetailsModel>();
 
 		public void Add(ISkillDay root)
 		{
@@ -87,16 +86,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 						period.Contains(skillDayInDb.CurrentDate) && 
 						skills.Contains(skillDayInDb.Skill))
 				.ToList();
-		}
-
-		public IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
-		{
-			return _skillTaskDetailsModels.Where(x=>x.Minimum >= period.StartDateTime && x.Minimum <=period.EndDateTime );
-		}
-
-		public void AddFakeTemplateTaskModels(IEnumerable<SkillTaskDetailsModel> skillTaskDetailsModels)
-		{
-			_skillTaskDetailsModels = skillTaskDetailsModels;
 		}
 	}
 }

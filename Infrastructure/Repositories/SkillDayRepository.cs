@@ -4,7 +4,6 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.SqlCommand;
-using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Angel.LegacyWrappers;
@@ -14,7 +13,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -308,17 +306,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 throw new DataSourceException(ex.Message, ex);
             }
         }
-
-		 public IEnumerable<SkillTaskDetailsModel> GetSkillsTasksDetails(DateTimePeriod period, IList<ISkill> skills, IScenario scenario)
-		 {
-			 var taskDetails = Session.GetNamedQuery("SkillTaskDetails")
-				 .SetEntity("scenario", scenario)
-				 .SetDateTime("startDate", period.StartDateTime.Date)
-				 .SetDateTime("endDate", period.EndDateTime)
-				 .SetString("longTermKey", TemplateReference.LongtermTemplateKey)
-				 .SetResultTransformer(new AliasToBeanResultTransformer(typeof(SkillTaskDetailsModel)))
-				 .List<SkillTaskDetailsModel>();
-			 return taskDetails;
-		 }
 	}
 }
