@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.PayrollTest
 	    [Test]
 	    public void VerifyPayrollTimeExport()
 	    {
-		    var mocks = new MockRepository();
-
 		    var dateTimePeriodDto =
 			    new DateTimePeriodDtoForPayrollTest(new DateTime(2009, 2, 1, 0, 0, 0, DateTimeKind.Utc),
 			                                        new DateTime(2009, 2, 28, 0, 0, 0, DateTimeKind.Utc));
@@ -43,8 +41,8 @@ namespace Teleopti.Ccc.PayrollTest
 			    new DateOnly(2009, 2, 28));
 
 
-		    var organizationService = mocks.StrictMock<ITeleoptiOrganizationService>();
-		    var schedulingService = mocks.StrictMock<ITeleoptiSchedulingService>();
+		    var organizationService = MockRepository.GenerateMock<ITeleoptiOrganizationService>();
+		    var schedulingService = MockRepository.GenerateMock<ITeleoptiSchedulingService>();
 
 		    PersonDto person1 = new PersonDtoForPayrollTest(Guid.NewGuid());
 		    PersonDto person2 = new PersonDtoForPayrollTest(Guid.NewGuid());
@@ -87,7 +85,7 @@ namespace Teleopti.Ccc.PayrollTest
 		    schedulePartDto3.PersonId = person3.Id.Value;
 		    schedulePartDto4.PersonId = person4.Id.Value;
 
-			Expect.Call(schedulingService.GetTeleoptiDetailedExportData(new[] { person1, person2, person3, person4 }, startDate,
+			schedulingService.Stub(x => x.GetTeleoptiDetailedExportData(new[] { person1, person2, person3, person4 }, startDate,
 													 endDate, "Utc")).Return(new Collection<PayrollBaseExportDto>
 				                                         {
 					                                         new PayrollBaseExportDto
@@ -107,8 +105,6 @@ namespace Teleopti.Ccc.PayrollTest
 				                                         })
 							 .IgnoreArguments();
 		    
-		    mocks.ReplayAll();
-
 		    var result = Target.ProcessPayrollData(schedulingService, organizationService,
 		                                                       new PayrollExportDtoForPayrollTest(personDtos,
 		                                                                                          TargetDateOnlyPeriodDto,
@@ -147,8 +143,6 @@ namespace Teleopti.Ccc.PayrollTest
 			    navigator.SelectSingleNode(string.Format(System.Globalization.CultureInfo.InvariantCulture, "//Person[.='{0}']",
 			                                             person4.Id.Value));
 		    Assert.IsNull(xmlNodeList);
-
-		    mocks.VerifyAll();
 	    }
 
 
@@ -156,8 +150,7 @@ namespace Teleopti.Ccc.PayrollTest
 	    [Test]
 	    public void BatchingShouldNotHaveIntersection()
 		{
-			var mocks = new MockRepository();
-			var schedulingService = mocks.DynamicMock<ITeleoptiSchedulingService>();
+			var schedulingService = MockRepository.GenerateMock<ITeleoptiSchedulingService>();
 
 			var payrollExportDto = new PayrollExportDto
 			{
@@ -169,15 +162,14 @@ namespace Teleopti.Ccc.PayrollTest
 			for (var i = 0; i < 51; i++)
 				payrollExportDto.PersonCollection.Add(new PersonDto());
 
-			schedulingService.Expect(s => s.GetTeleoptiDetailedExportData(null, null, null, null))
+			schedulingService.Stub(s => s.GetTeleoptiDetailedExportData(null, null, null, null))
 							 .IgnoreArguments()
 							 .Return(new List<PayrollBaseExportDto>
 			                     {
 				                     new PayrollBaseExportDto(),
 				                     new PayrollBaseExportDto()
 			                     });
-			mocks.ReplayAll();
-
+			
 			Target.ProcessPayrollData(schedulingService, null, payrollExportDto);
 			var argumentsUsed =
 				schedulingService.GetArgumentsForCallsMadeOn(s => s.GetTeleoptiDetailedExportData(null, null, null, null));
