@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWork, Route("api/ScheduleStaffingPossibility"), HttpGet]
-		public virtual IEnumerable<PeriodStaffingPossibilityViewModel> GetIntradayAbsencePossibility(
+		public virtual IEnumerable<PeriodStaffingPossibilityViewModel> GetPossibilityViewModels(
 			[ModelBinder(typeof(DateOnlyModelBinder))] DateOnly? date,
 			StaffingPossiblityType staffingPossiblityType = StaffingPossiblityType.None,
 			bool returnOneWeekData = true)

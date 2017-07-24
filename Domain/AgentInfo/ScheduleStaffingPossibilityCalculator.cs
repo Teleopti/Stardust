@@ -51,10 +51,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var scheduleDictionary = loadScheduleDictionary(period);
 			var skills = _primaryPersonSkillFilter.Filter(getSupportedPersonSkills(period)).Select(s => s.Skill).ToList();
-			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period);
+			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, isSiteOpened);
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => !new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
 			return calculatePossibilities(skillStaffingDatas, isSatisfied, scheduleDictionary);
+		}
+		private bool isSiteOpened(DateOnly date)
+		{
+			var siteOpenHour = _loggedOnUser.CurrentUser().SiteOpenHour(date);
+			if (siteOpenHour==null) return true;
+			return !siteOpenHour.IsClosed;
 		}
 
 		private bool isCheckingIntradayStaffing(DateOnly date)
