@@ -86,7 +86,7 @@
     }
 
     function openModal() {
-      if (vm.isDisable || vm.dayNodes == null) {
+      if (isDisable() || vm.dayNodes == null) {
         return;
       }
       return vm.confirmModal = true;
@@ -110,11 +110,12 @@
     }
 
     function launchSchedule() {
-      if (selectedPpId !== null) {
-        planningPeriodServiceNew.launchScheduling({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
-          checkProgress();
-        });
+      if (isDisable() || selectedPpId == null) {
+        return;
       }
+      planningPeriodServiceNew.launchScheduling({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
+        checkProgress();
+      });
     }
 
     function checkProgress() {
@@ -173,12 +174,13 @@
     }
 
     function intraOptimize() {
-      if (selectedPpId !== null) {
-        vm.optimizeRunning = true;
-        planningPeriodServiceNew.launchIntraOptimize({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
-          checkIntradayOptimizationProgress();
-        });
+      if (isDisable() || selectedPpId == null) {
+        return;
       }
+      vm.optimizeRunning = true;
+      planningPeriodServiceNew.launchIntraOptimize({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
+        checkIntradayOptimizationProgress();
+      });
     }
 
     function checkIntradayOptimizationProgress() {
@@ -213,6 +215,9 @@
     }
 
     function publishSchedule() {
+      if (isDisable() || selectedPpId == null) {
+        return;
+      }
       if (vm.publishRunning === true) {
         NoticeService.warning(
           $translate.instant('PublishingScheduleSuccess')
@@ -220,15 +225,13 @@
             .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
         return;
       }
-      if (selectedPpId !== null) {
-        vm.publishRunning = true;
-        planningPeriodServiceNew.publishPeriod({ id: selectedPpId }).$promise.then(function () {
-          NoticeService.success($translate.instant('PublishScheduleSucessForSelectedPlanningPeriod')
-            .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-            .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
-          vm.publishRunning = false;
-        });
-      }
+      vm.publishRunning = true;
+      planningPeriodServiceNew.publishPeriod({ id: selectedPpId }).$promise.then(function () {
+        NoticeService.success($translate.instant('PublishScheduleSucessForSelectedPlanningPeriod')
+          .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+          .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
+        vm.publishRunning = false;
+      });
     }
 
     function loadLastResult() {
