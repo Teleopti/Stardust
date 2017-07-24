@@ -350,7 +350,7 @@ IF EXIST "%postDbRestoreSqlFile%" (
    FOR %%f IN ("%postDbRestoreSqlFile%") DO (
       ECHO    Applying "%%~nf%%~xf"...
       ECHO ** Apply "%%~nf%%~xf"...>>"%ROOTDIR%\PostDbRestore.log"
-      SQLCMD -S%INSTANCE% -E -dmaster -i"%%f" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%">>"%ROOTDIR%\PostDbRestore.log"
+      SQLCMD -S%INSTANCE% -E -dmaster -i"%%f" -v BRANCH="%BRANCH%" -v TELEOPTICCC="%TELEOPTICCC%" -v TELEOPTIANALYTICS="%TELEOPTIANALYTICS%" -v TELEOPTIAGG="%TELEOPTIAGG%">>"%ROOTDIR%\PostDbRestore.log"
    )
    ECHO Done!
    ECHO ------
