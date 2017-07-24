@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public IList<CalculatedPossibilityModel> CalculateIntradayAbsenceIntervalPossibilities(DateOnlyPeriod period)
 		{
 			var scheduleDictionary = loadScheduleDictionary(period);
-			var skills = getSupportedPersonSkills(period).Select(s => s.Skill).ToList();
+			var skills = getSupportedPersonSkills(period).Select(s => s.Skill).ToArray();
 			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, isCheckingIntradayStaffing);
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => new IntervalHasUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public IList<CalculatedPossibilityModel> CalculateIntradayOvertimeIntervalPossibilities(DateOnlyPeriod period)
 		{
 			var scheduleDictionary = loadScheduleDictionary(period);
-			var skills = _primaryPersonSkillFilter.Filter(getSupportedPersonSkills(period)).Select(s => s.Skill).ToList();
+			var skills = _primaryPersonSkillFilter.Filter(getSupportedPersonSkills(period)).Select(s => s.Skill).ToArray();
 			var skillStaffingDatas = _skillStaffingDataLoader.Load(skills, period, isSiteOpened);
 			Func<ISkill, IValidatePeriod, bool> isSatisfied =
 				(skill, validatePeriod) => !new IntervalHasSeriousUnderstaffing(skill).IsSatisfiedBy(validatePeriod);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var scheduleDictionary = _scheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(
 				new[] { _loggedOnUser.CurrentUser() },
-				new ScheduleDictionaryLoadOptions(false, false),
+				new ScheduleDictionaryLoadOptions(false, false){LoadAgentDayScheduleTags = false},
 				period,
 				_scenarioRepository.Current());
 			return scheduleDictionary;
@@ -123,14 +123,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 				var possibility = calculatePossibility(skillStaffingData, isSatisfied);
 				var key = skillStaffingData.Time;
-				if (intervalPossibilities.ContainsKey(key))
-				{
-					intervalPossibilities[key] = possibility;
-				}
-				else
-				{
-					intervalPossibilities.Add(key, possibility);
-				}
+				intervalPossibilities[key] = possibility;
 			}
 			return intervalPossibilities;
 		}
@@ -160,8 +153,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		private static IPersonAssignment getPersonAssignment(IScheduleDictionary scheduleDictionary, DateOnly date)
 		{
-			var scheduleDays = scheduleDictionary.SchedulesForDay(date).ToList();
-			var scheduleDay = scheduleDays.Any() ? scheduleDays.First() : null;
+			var scheduleDays = scheduleDictionary.SchedulesForDay(date);
+			var scheduleDay = scheduleDays.FirstOrDefault();
 			var personAssignment = scheduleDay?.PersonAssignment();
 			return personAssignment;
 		}
@@ -201,13 +194,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var person = _loggedOnUser.CurrentUser();
 			var personPeriod = person.PersonPeriods(period).ToArray();
-			if (!personPeriod.Any())
+			if (personPeriod.Length == 0)
 				return new IPersonSkill[] { };
 
 			var personSkills = personPeriod.SelectMany(p => _personalSkills.PersonSkills(p))
 				.Where(p => _supportedSkillsInIntradayProvider.CheckSupportedSkill(p.Skill)).ToArray();
 
-			return !personSkills.Any() ? new IPersonSkill[] { } : personSkills.Distinct();
+			return personSkills.Distinct();
 		}
 
 	}
