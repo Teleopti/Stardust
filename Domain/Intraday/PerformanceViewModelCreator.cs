@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var skillDays = _skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(usersToday, usersToday.AddDays(1)), skills, scenario);
 			var queueStatistics = _incomingTrafficViewModelCreator.Load(skillIdList, date);
 
-			var eslIntervals = _estimatedServiceLevelProvider.CalculateEslIntervals(skillDays, queueStatistics, minutesPerInterval);
+			var eslIntervals = _estimatedServiceLevelProvider.CalculateEslIntervals(skillDays, queueStatistics, minutesPerInterval, date);
 
 			return new IntradayPerformanceViewModel
 			{

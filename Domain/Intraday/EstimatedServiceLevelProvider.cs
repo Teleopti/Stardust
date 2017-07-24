@@ -37,14 +37,15 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public IList<EslInterval> CalculateEslIntervals(
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
 			IntradayIncomingViewModel queueStatistics,
-			int minutesPerInterval)
+			int minutesPerInterval,
+			DateTime currDate)
 		{
 			var eslIntervals = new List<EslInterval>();
 			if (!skillDays.Any())
 				return eslIntervals;
 			var serviceCalculatorService = new StaffingCalculatorServiceFacade();
 
-			var forecastedCalls = _forecastedCallsProvider.Load(skillDays, queueStatistics.LatestActualIntervalStart, minutesPerInterval);
+			var forecastedCalls = _forecastedCallsProvider.Load(skillDays, queueStatistics.LatestActualIntervalStart, minutesPerInterval, currDate);
 			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skillDays, minutesPerInterval, null, false)
 				.Where(x => x.StartTime <= queueStatistics.LatestActualIntervalStart)
 				.ToList();
