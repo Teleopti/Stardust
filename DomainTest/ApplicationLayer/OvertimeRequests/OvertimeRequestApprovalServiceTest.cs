@@ -177,49 +177,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		public void ShouldAddActivityOfTheFirstSkillWithoutOvertimeWhenApproved()
-		{
-			var person = getCurrentUser();
-			var activity1 = createActivity("activity1");
-			var activity2 = createActivity("activity2");
-			var skill1 = createSkill("skill1");
-			var skill2 = createSkill("skill2");
-			var personSkill1 = createPersonSkill(activity1, skill1);
-			var personSkill2 = createPersonSkill(activity2, skill2);
-			setupIntradayStaffingForSkill(skill1, 10d, 6d);
-			setupIntradayStaffingForSkill(skill2, 10d, 6d);
-			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
-
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(person, _scenario, Now.ServerDate_DontUse());
-
-			assignment.AddOvertimeActivity(activity1, Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(19, 20), person.PermissionInformation.DefaultTimeZone()),
-				new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime));
-			assignment.AddActivity(activity2, new TimePeriod(8, 17));
-
-			PersonAssignmentWriteSideRepository.Add(assignment);
-			ScheduleStorage.Add(assignment);
-
-			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(19, 21), person.PermissionInformation.DefaultTimeZone());
-			var personRequest = createOvertimeRequest(person, requestPeriod);
-
-			_target = createTarget();
-			var result = _target.Approve(personRequest.Request);
-
-			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
-			{
-				Person = person,
-				Date = new DateOnly(requestPeriod.StartDateTime),
-				Scenario = _scenario
-			});
-
-			result.Count().Should().Be(0);
-			personAssignment.Should().Not.Be.Null();
-			personAssignment.OvertimeActivities().Count().Should().Be(2);
-			personAssignment.OvertimeActivities().Select(o=>o.Payload).Contains(skill2.Activity).Should().Be(true);
-			personAssignment.OvertimeActivities().Select(o => o.Period).Contains(requestPeriod).Should().Be(true);
-		}
-
-		[Test]
 		public void ShouldApproveCrossDayRequest()
 		{
 			var person = getCurrentUser();
@@ -411,79 +368,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personAssignment.OvertimeActivities().Count().Should().Be(0);
 		}
 
-		[Test]
-		public void ShouldNotApprovedWhenThereIsOvertimeActivityWithinRequestPeriod()
-		{
-			var person = getCurrentUser();
-			var activity1 = createActivity("activity1");
-			var skill1 = createSkill("skill1");
-			var personSkill1 = createPersonSkill(activity1, skill1);
-			setupIntradayStaffingForSkill(skill1, 10d, 6d);
-			addPersonSkillsToPersonPeriod(personSkill1);
-
-			var requestPeriod = Now.ServerDate_DontUse()
-				.ToDateTimePeriod(new TimePeriod(19, 21), person.PermissionInformation.DefaultTimeZone());
-
-			createOvertimeAssignment(Now.ServerDate_DontUse(), new TimePeriod(19, 21), person, activity1);
-
-			var personRequest = createOvertimeRequest(person, requestPeriod);
-
-			_target = createTarget();
-			var result = _target.Approve(personRequest.Request);
-
-			result.Count().Should().Be(1);
-			result.First().Message.Should().Be("This activity is already scheduled within this period.");
-		}
-
-		[Test]
-		public void ShouldNotApprovedWhenThereIsOvertimeActivityPartialWithInRequestPeriod()
-		{
-			var person = getCurrentUser();
-			var activity1 = createActivity("activity1");
-			var skill1 = createSkill("skill1");
-			var personSkill1 = createPersonSkill(activity1, skill1);
-			setupIntradayStaffingForSkill(skill1, 10d, 6d);
-			addPersonSkillsToPersonPeriod(personSkill1);
-
-			var requestPeriod = Now.ServerDate_DontUse()
-				.ToDateTimePeriod(new TimePeriod(19, 21), person.PermissionInformation.DefaultTimeZone());
-
-			createOvertimeAssignment(Now.ServerDate_DontUse(), new TimePeriod(18, 21), person, activity1);
-
-			var personRequest = createOvertimeRequest(person, requestPeriod);
-
-			_target = createTarget();
-			var result = _target.Approve(personRequest.Request);
-
-			result.Count().Should().Be(1);
-			result.First().Message.Should().Be("This activity is already scheduled within this period.");
-		}
-
-		[Test]
-		public void ShouldNotApprovedWhenThereSameActivityWithinRequestPeriod()
-		{
-			var person = getCurrentUser();
-			var activity1 = createActivity("activity1");
-			var skill1 = createSkill("skill1");
-			var personSkill1 = createPersonSkill(activity1, skill1);
-			setupIntradayStaffingForSkill(skill1, 10d, 6d);
-			addPersonSkillsToPersonPeriod(personSkill1);
-			createAssignment(person, activity1);
-
-			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(16, 17), person.PermissionInformation.DefaultTimeZone());
-			var personRequest = createOvertimeRequest(person, requestPeriod);
-
-			_target = createTarget();
-			var result = _target.Approve(personRequest.Request);
-
-			result.Count().Should().Be(1);
-			result.First().Message.Should().Be("This activity is already scheduled within this period.");
-		}
-
 		private OvertimeRequestApprovalService createTarget()
 		{
 			return new OvertimeRequestApprovalService(OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider, SkillOpenHourFilter,
-				CommandDispatcher, ScheduleStorage, _scenario);
+				CommandDispatcher);
 		}
 
 		private IPersonRequest createOvertimeRequest(IPerson person, DateTimePeriod period)

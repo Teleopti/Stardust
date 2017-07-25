@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -35,6 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public const int MinimumApprovalThresholdTimeInMinutes = 15;
 		public INow Now;
 		public FakeRequestApprovalServiceFactory RequestApprovalServiceFactory;
+		public IScheduleStorage ScheduleStorage;
 		private readonly DateOnly _periodStartDate = new DateOnly(2016, 1, 1);
 
 
@@ -46,8 +48,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			system.UseTestDouble<DoNothingScheduleDayChangeCallBack>().For<IScheduleDayChangeCallback>();
 			system.UseTestDouble<OvertimeRequestStartTimeValidator>().For<IOvertimeRequestValidator>();
 			system.UseTestDouble<OvertimeRequestSiteOpenHourValidator>().For<IOvertimeRequestValidator>();
+			system.UseTestDouble<OvertimeRequestAlreadyHasScheduleValidator>().For<IOvertimeRequestValidator>();
 			system.UseTestDouble<SiteOpenHoursSpecification>().For<ISiteOpenHoursSpecification>();
 			system.UseTestDouble<FakeRequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
+			system.UseTestDouble<ScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble(new ThisIsNow(new DateTime(2017, 07, 12, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
 		}
 
@@ -160,6 +164,31 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			Target.Process(overtimeRequest);
 
 			Assert.AreEqual(overtimeRequest.IsDenied, true);
+		}
+
+		[Test]
+		public void ShouldDenyWhenThereIsScheduleWithinRequestPeriod()
+		{
+			var timeZoneInfo = TimeZoneInfo.Utc;
+			var person = createPersonWithSiteOpenHours(8, 20);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			LoggedOnUser.SetDefaultTimeZone(timeZoneInfo);
+
+			var requestStartTime = new DateTime(2017, 7, 17, 17, 0, 0, DateTimeKind.Utc);
+			var personRequest = createOvertimeRequest(person, new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
+
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, CurrentScenario.Current(), ActivityFactory.CreateActivity("phone").WithId(), period, shiftCategory);
+			ScheduleStorage.Add(pa);
+
+			Target.Process(personRequest);
+
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should()
+				.Be.EqualTo(string.Format(Resources.OvertimeRequestAlreadyHasScheduleInPeriod,
+					personRequest.Request.Period.StartDateTimeLocal(timeZoneInfo),
+					personRequest.Request.Period.EndDateTimeLocal(timeZoneInfo)));
 		}
 
 		private IPersonRequest createOvertimeRequest(IPerson person, DateTimePeriod period)

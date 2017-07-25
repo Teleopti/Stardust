@@ -21915,6 +21915,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There was already an activity during this period {0}-{1}.
+        /// </summary>
+        public static string OvertimeRequestAlreadyHasScheduleInPeriod {
+            get {
+                return ResourceManager.GetString("OvertimeRequestAlreadyHasScheduleInPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The request date is more than 14 days in the future..
         /// </summary>
         public static string OvertimeRequestDateExceeds14Days {
@@ -21974,15 +21983,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string OvertimeRequestHasBeenApprovedDot {
             get {
                 return ResourceManager.GetString("OvertimeRequestHasBeenApprovedDot", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to This activity is already scheduled within this period..
-        /// </summary>
-        public static string OvertimeRequestSameActivityInPeriod {
-            get {
-                return ResourceManager.GetString("OvertimeRequestSameActivityInPeriod", resourceCulture);
             }
         }
         
