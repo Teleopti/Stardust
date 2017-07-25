@@ -4,21 +4,21 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Common.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Schedule.js" />
 
-$(document).ready(function() {
+$(document).ready(function () {
 	module("Teleopti.MyTimeWeb.Schedule");
 
 	var hash = "";
 
 	var constants = Teleopti.MyTimeWeb.Common.Constants;
-	var fakeAddRequestViewModel = function() {
+	var fakeAddRequestViewModel = function () {
 		return {
-			DateFormat: function() {
+			DateFormat: function () {
 				return 'YYYY-MM-DD';
 			}
 		};
 	};
-	var momentWithLocale = function(date){return moment(date).locale('en-gb');};
-	var basedDate = momentWithLocale(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD'); 
+	var momentWithLocale = function (date) { return moment(date).locale('en-gb'); };
+	var basedDate = momentWithLocale(Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(this.BaseUtcOffsetInMinutes)).format('YYYY-MM-DD');
 
 	function getFakeScheduleData() {
 		return {
@@ -45,101 +45,101 @@ $(document).ready(function() {
 			},
 			BaseUtcOffsetInMinutes: 60,
 			Days: [{
-					FixedDate: basedDate,
-					Header: {
-						Title: 'Today',
-						Date: basedDate,
-						DayDescription: '',
-						DayNumber: '18'
-					},
-					Note: {
-						Message: 'Note 1'
-					},
-					Summary: {
-						Title: 'Early',
-						TimeSpan: '09:30 - 16:45',
-						StartTime: momentWithLocale(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						EndTime: momentWithLocale(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
-						Summary: '7:15',
-						StyleClassName: 'color_80FF80',
-						Meeting: null,
-						StartPositionPercentage: 0.0,
-						EndPositionPercentage: 0.0,
-						Color: 'rgb(128,255,128)',
-						IsOvertime: false
-					},
-					OvertimeAvailabililty: {
-						HasOvertimeAvailability: false,
-						StartTime: null,
-						EndTime: null,
-						EndTimeNextDay: false,
-						DefaultStartTime: '17:00',
-						DefaultEndTime: '18:00',
-						DefaultEndTimeNextDay: false
-					},
-					SeatBookings: [],
-					Periods: [{
-						'Title': 'Phone',
-						'TimeSpan': '09:30 - 16:45',
-						'StartTime': momentWithLocale(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						'EndTime': momentWithLocale(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
-						'Summary': '7:15',
-						'StyleClassName': 'color_80FF80',
-						'Meeting': null,
-						'StartPositionPercentage': 0.1896551724137931034482758621,
-						'EndPositionPercentage': 1,
-						'Color': '128,255,128',
-						'IsOvertime': false
-					}]
+				FixedDate: basedDate,
+				Header: {
+					Title: 'Today',
+					Date: basedDate,
+					DayDescription: '',
+					DayNumber: '18'
 				},
-				{
-					FixedDate: momentWithLocale(basedDate).add('day', 1).format('YYYY-MM-DD'),
-					Header: {
-						Title: 'Tomorrow',
-						Date: momentWithLocale(basedDate).add('day', 1).format('YYYY-MM-DD'),
-						DayDescription: '',
-						DayNumber: '18'
-					},
-					Note: {
-						Message: 'Note2'
-					},
-					Summary: {
-						Title: 'Early',
-						TimeSpan: '09:30 - 16:45',
-						StartTime: momentWithLocale(basedDate).add('day', 1).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						EndTime: momentWithLocale(basedDate).add('day', 1).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
-						Summary: '7:15',
-						StyleClassName: 'color_80FF80',
-						Meeting: null,
-						StartPositionPercentage: 0.0,
-						EndPositionPercentage: 0.0,
-						Color: 'rgb(128,255,128)',
-						IsOvertime: false
-					},
-					OvertimeAvailabililty: {
-						HasOvertimeAvailability: false,
-						StartTime: null,
-						EndTime: null,
-						EndTimeNextDay: false,
-						DefaultStartTime: '17:00',
-						DefaultEndTime: '18:00',
-						DefaultEndTimeNextDay: false
-					},
-					SeatBookings: [],
-					Periods: [{
-						'Title': 'Phone',
-						'TimeSpan': '09:30 - 16:45',
-						'StartTime': momentWithLocale(basedDate).startOf('day').add('day', 1).add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
-						'EndTime': momentWithLocale(basedDate).startOf('day').add('day', 1).add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
-						'Summary': '7:15',
-						'StyleClassName': 'color_80FF80',
-						'Meeting': null,
-						'StartPositionPercentage': 0.1896551724137931034482758621,
-						'EndPositionPercentage': 1,
-						'Color': '128,255,128',
-						'IsOvertime': false
-					}]
-				}
+				Note: {
+					Message: 'Note 1'
+				},
+				Summary: {
+					Title: 'Early',
+					TimeSpan: '09:30 - 16:45',
+					StartTime: momentWithLocale(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+					EndTime: momentWithLocale(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+					Summary: '7:15',
+					StyleClassName: 'color_80FF80',
+					Meeting: null,
+					StartPositionPercentage: 0.0,
+					EndPositionPercentage: 0.0,
+					Color: 'rgb(128,255,128)',
+					IsOvertime: false
+				},
+				OvertimeAvailabililty: {
+					HasOvertimeAvailability: false,
+					StartTime: null,
+					EndTime: null,
+					EndTimeNextDay: false,
+					DefaultStartTime: '17:00',
+					DefaultEndTime: '18:00',
+					DefaultEndTimeNextDay: false
+				},
+				SeatBookings: [],
+				Periods: [{
+					'Title': 'Phone',
+					'TimeSpan': '09:30 - 16:45',
+					'StartTime': momentWithLocale(basedDate).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+					'EndTime': momentWithLocale(basedDate).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+					'Summary': '7:15',
+					'StyleClassName': 'color_80FF80',
+					'Meeting': null,
+					'StartPositionPercentage': 0.1896551724137931034482758621,
+					'EndPositionPercentage': 1,
+					'Color': '128,255,128',
+					'IsOvertime': false
+				}]
+			},
+			{
+				FixedDate: momentWithLocale(basedDate).add('day', 1).format('YYYY-MM-DD'),
+				Header: {
+					Title: 'Tomorrow',
+					Date: momentWithLocale(basedDate).add('day', 1).format('YYYY-MM-DD'),
+					DayDescription: '',
+					DayNumber: '18'
+				},
+				Note: {
+					Message: 'Note2'
+				},
+				Summary: {
+					Title: 'Early',
+					TimeSpan: '09:30 - 16:45',
+					StartTime: momentWithLocale(basedDate).add('day', 1).startOf('day').add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+					EndTime: momentWithLocale(basedDate).add('day', 1).startOf('day').add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+					Summary: '7:15',
+					StyleClassName: 'color_80FF80',
+					Meeting: null,
+					StartPositionPercentage: 0.0,
+					EndPositionPercentage: 0.0,
+					Color: 'rgb(128,255,128)',
+					IsOvertime: false
+				},
+				OvertimeAvailabililty: {
+					HasOvertimeAvailability: false,
+					StartTime: null,
+					EndTime: null,
+					EndTimeNextDay: false,
+					DefaultStartTime: '17:00',
+					DefaultEndTime: '18:00',
+					DefaultEndTimeNextDay: false
+				},
+				SeatBookings: [],
+				Periods: [{
+					'Title': 'Phone',
+					'TimeSpan': '09:30 - 16:45',
+					'StartTime': momentWithLocale(basedDate).startOf('day').add('day', 1).add('hour', 9).add('minute', 30).format('YYYY-MM-DDTHH:mm:ss'),
+					'EndTime': momentWithLocale(basedDate).startOf('day').add('day', 1).add('hour', 16).add('minute', 45).format('YYYY-MM-DDTHH:mm:ss'),
+					'Summary': '7:15',
+					'StyleClassName': 'color_80FF80',
+					'Meeting': null,
+					'StartPositionPercentage': 0.1896551724137931034482758621,
+					'EndPositionPercentage': 1,
+					'Color': '128,255,128',
+					'IsOvertime': false
+				}]
+			}
 			],
 			IsCurrentWeek: true,
 			AbsenceProbabilityEnabled: true,
@@ -158,21 +158,21 @@ $(document).ready(function() {
 				TextRequestPermission: true,
 			},
 			TimeLine: [{
-					Time: "09:15:00",
-					TimeLineDisplay: "09:15",
-					PositionPercentage: 0,
-					TimeFixedFormat: null
-				},
-				{
-					Time: "17:00:00",
-					TimeLineDisplay: "17:00",
-					PositionPercentage: 1,
-					TimeFixedFormat: null
-				}]
+				Time: "09:15:00",
+				TimeLineDisplay: "09:15",
+				PositionPercentage: 0,
+				TimeFixedFormat: null
+			},
+			{
+				Time: "17:00:00",
+				TimeLineDisplay: "17:00",
+				PositionPercentage: 1,
+				TimeFixedFormat: null
+			}]
 		};
 	}
 
-	function getFakeProbabilityData(){
+	function getFakeProbabilityData() {
 		return [
 			{
 				Date: basedDate,
@@ -188,11 +188,11 @@ $(document).ready(function() {
 		];
 	}
 
-	function fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(formattedDate){
+	function fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(formattedDate) {
 		var result = [];
 		for (var i = 0; i < 24 * 60 / constants.probabilityIntervalLengthInMinute; i++) {
 			result.push({
-				Date: formattedDate, 
+				Date: formattedDate,
 				StartTime: momentWithLocale(formattedDate).startOf('day').add(constants.probabilityIntervalLengthInMinute * i, "minutes").format('YYYY-MM-DDTHH:mm:ss'),
 				EndTime: momentWithLocale(formattedDate).startOf('day').add(constants.probabilityIntervalLengthInMinute * (i + 1), "minutes").format('YYYY-MM-DDTHH:mm:ss'),
 				Possibility: constants.probabilityIntervalLengthInMinute * i < 12 * 60 ? 0 : 1
@@ -224,7 +224,7 @@ $(document).ready(function() {
 		equal(vm.absenceReportPermission(), true);
 	});
 
-	test("should read scheduled days", function() {
+	test("should read scheduled days", function () {
 		var fakeScheduleData = getFakeScheduleData();
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
 
@@ -279,7 +279,7 @@ $(document).ready(function() {
 	});
 
 	test("should show no overtime possibility if the feature is toggle off in fat client", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 			if (x === "Staffing_Info_Configuration_44687") return true;
 		};
@@ -295,7 +295,7 @@ $(document).ready(function() {
 	});
 
 	test("should show no absence possibility if the feature is toggle off in fat client", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 			if (x === "Staffing_Info_Configuration_44687") return true;
 		};
@@ -309,7 +309,7 @@ $(document).ready(function() {
 	});
 
 	test("should not consider value AbsenceProbabilityEnabled when Staffing_Info_Configuration_44687 is off", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 			if (x === "Staffing_Info_Configuration_44687") return false;
 		};
@@ -325,7 +325,7 @@ $(document).ready(function() {
 	});
 
 	test("should show no absence possibility if the feature is disabled", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return false;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -334,13 +334,13 @@ $(document).ready(function() {
 		week.selectedProbabilityType = constants.probabilityType.absence;
 		week.updateProbabilityData(getFakeProbabilityData());
 
-		week.days().forEach(function(day){
+		week.days().forEach(function (day) {
 			equal(day.probabilities().length, 0);
 		});
 	});
 
 	test("should not consider value OvertimeProbabilityEnabled when Staffing_Info_Configuration_44687 is off", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 			if (x === "Staffing_Info_Configuration_44687") return false;
 		};
@@ -354,7 +354,7 @@ $(document).ready(function() {
 	});
 
 	test("should show no overtime possibility if the feature is disabled", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return false;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -364,13 +364,13 @@ $(document).ready(function() {
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
-		week.days().forEach(function(day){
+		week.days().forEach(function (day) {
 			equal(day.probabilities().length, 0);
 		});
 	});
 
 	test("should show no absence possibility if set to hide probability", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -382,7 +382,7 @@ $(document).ready(function() {
 		var fakeProbabilityData = fakeProbabilitiesDataLowBeforeTwelveAndHighAfter(week.days()[0].fixedDate());
 		week.updateProbabilityData(fakeProbabilityData);
 
-		week.days().forEach(function(day){
+		week.days().forEach(function (day) {
 			equal(day.probabilities().length, 0);
 		});
 	});
@@ -391,7 +391,7 @@ $(document).ready(function() {
 		initUserTexts();
 		setupHash();
 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -406,16 +406,16 @@ $(document).ready(function() {
 
 		week.previousWeek();
 
-		equal(week.selectedProbabilityType, constants.probabilityType.none); 
+		equal(week.selectedProbabilityType, constants.probabilityType.none);
 
 		week.switchProbabilityType(constants.probabilityType.absence);
-		equal(Teleopti.MyTimeWeb.Portal.ParseHash({hash: hash}).hash.indexOf('Probability/' + constants.probabilityType.absence)> -1, true);
+		equal(Teleopti.MyTimeWeb.Portal.ParseHash({ hash: hash }).hash.indexOf('Probability/' + constants.probabilityType.absence) > -1, true);
 
 		week.switchProbabilityType(constants.probabilityType.overtime);
-		equal(Teleopti.MyTimeWeb.Portal.ParseHash({hash: hash}).hash.indexOf('Probability/' + constants.probabilityType.overtime)> -1, true);
+		equal(Teleopti.MyTimeWeb.Portal.ParseHash({ hash: hash }).hash.indexOf('Probability/' + constants.probabilityType.overtime) > -1, true);
 
 		week.switchProbabilityType(constants.probabilityType.none);
-		equal(Teleopti.MyTimeWeb.Portal.ParseHash({hash: hash}).hash.indexOf('Probability/' + constants.probabilityType.none)> -1, true);
+		equal(Teleopti.MyTimeWeb.Portal.ParseHash({ hash: hash }).hash.indexOf('Probability/' + constants.probabilityType.none) > -1, true);
 	});
 
 	test("should keep possibility selection for today when changing date", function () {
@@ -423,7 +423,7 @@ $(document).ready(function() {
 
 		setupHash();
 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -438,7 +438,7 @@ $(document).ready(function() {
 
 		week.previousWeek();
 
-		equal(week.selectedProbabilityType, constants.probabilityType.absence); 
+		equal(week.selectedProbabilityType, constants.probabilityType.absence);
 
 		equal(Teleopti.MyTimeWeb.Portal.ParseHash({ hash: hash }).probability, constants.probabilityType.absence);
 
@@ -469,7 +469,7 @@ $(document).ready(function() {
 
 		setupHash();
 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -488,7 +488,7 @@ $(document).ready(function() {
 		initUserTexts();
 		setupHash();
 
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
 		};
@@ -510,7 +510,7 @@ $(document).ready(function() {
 	});
 
 	test("should show absence possibility within schedule time range", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -533,7 +533,7 @@ $(document).ready(function() {
 	});
 
 	test("should show overtime possibility within timeline range", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -564,7 +564,7 @@ $(document).ready(function() {
 	});
 
 	test("should hide absence possibility earlier than now", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -591,7 +591,7 @@ $(document).ready(function() {
 	});
 
 	test("should hide overtime possibility earlier than now", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -620,7 +620,7 @@ $(document).ready(function() {
 	});
 
 	test("should show no absence possibility for dayoff", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -637,7 +637,7 @@ $(document).ready(function() {
 	});
 
 	test("should show no absence possibility for fullday absence", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -653,7 +653,7 @@ $(document).ready(function() {
 	});
 
 	test("should show overtime possibility for dayoff", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -687,7 +687,7 @@ $(document).ready(function() {
 
 	test("should show overtime possibility based on site open hour", function () {
 		initUserTexts();
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -712,7 +712,7 @@ $(document).ready(function() {
 
 	test("should show overtime possibility for dayoff based on intraday open hour", function () {
 		initUserTexts();
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -733,13 +733,13 @@ $(document).ready(function() {
 		// So should be (15 - 10) * 4
 		equal(week.days()[0].probabilities().length, 20);
 		for (var i = 0; i < week.days()[0].probabilities().length; i++) {
-			equal( week.days()[0].probabilities()[i].tooltips().length > 0, true);
+			equal(week.days()[0].probabilities()[i].tooltips().length > 0, true);
 		}
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
 	test("should show overtime possibility for fullday absence", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -773,7 +773,7 @@ $(document).ready(function() {
 	});
 
 	test("should show correct overtime possibility for cross day schedule", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -808,7 +808,7 @@ $(document).ready(function() {
 	});
 
 	test("should show correct absence possibility for cross day schedule", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -832,7 +832,7 @@ $(document).ready(function() {
 	});
 
 	test("should show absence possibility for night shift schedule", function () {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 		};
 		var fakeScheduleData = getFakeScheduleData();
@@ -865,7 +865,7 @@ $(document).ready(function() {
 
 	test("should apply multiple day probabilities to week view model when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on ", function () {
 		initUserTexts();
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
 		};
@@ -895,7 +895,7 @@ $(document).ready(function() {
 
 	test("should apply single day probabilities to week view model when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is off ", function () {
 		initUserTexts();
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return false;
 		};
@@ -918,8 +918,8 @@ $(document).ready(function() {
 		Teleopti.MyTimeWeb.Portal.ResetParsedHash();
 	});
 
-	test("should not show probability toggle if current week doesn't intercept with 14 upcoming days period even when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on ", function() {
-		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function(x) {
+	test("should not show probability toggle if current week doesn't intercept with 14 upcoming days period even when MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880 is on ", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
 			if (x === "MyTimeWeb_ViewIntradayStaffingProbability_41608") return true;
 			if (x === "MyTimeWeb_ViewStaffingProbabilityForMultipleDays_43880") return true;
 		};
@@ -1006,13 +1006,13 @@ $(document).ready(function() {
 
 		var fakeScheduleData = getFakeScheduleData();
 		var week = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
-		week.initializeData(fakeScheduleData); 
+		week.initializeData(fakeScheduleData);
 
 		week.switchProbabilityType(constants.probabilityType.absence);
 
 		fakeScheduleData.CheckStaffingByIntraday = false;
 
-		week.initializeData(fakeScheduleData); 
+		week.initializeData(fakeScheduleData);
 
 		equal(userTexts.HideStaffingInfo, $(".probabilityLabel").text());
 
@@ -1032,7 +1032,7 @@ $(document).ready(function() {
 
 		vm.initializeData(fakeScheduleData);
 
-		vm.mobile(); 
+		vm.mobile();
 
 		equal("#Schedule/MobileDay/", hash);
 	});
@@ -1102,10 +1102,46 @@ $(document).ready(function() {
 		fakeScheduleData.OvertimeProbabilityEnabled = false;
 
 		var vm = new Teleopti.MyTimeWeb.Schedule.WeekScheduleViewModel(fakeAddRequestViewModel, null, null, null);
-		vm.initializeData(fakeScheduleData); 
+		vm.initializeData(fakeScheduleData);
 
 		equal(vm.showProbabilityToggle(), false);
 	});
+
+	test("should reserve parameter when fetching data triggered from ReloadScheduleListener", function () {
+		var probabilityParamterValue;
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === "../api/Schedule/FetchWeekData") {
+					probabilityParamterValue = options.data.staffingPossiblityType;
+				}
+			}
+		};
+		Teleopti.MyTimeWeb.UserInfo.WhenLoaded = function (callback) {
+			callback({ WeekStart: 1 });
+		}
+		Teleopti.MyTimeWeb.MessageBroker = {
+			ConvertMbDateTimeToJsDate: function (date) {
+				return date;
+			}
+		}
+		Teleopti.MyTimeWeb.Schedule.PartialInit(function () { },
+			function () { },
+			ajax
+		);
+		Teleopti.MyTimeWeb.Schedule.SetupViewModel(
+			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues,
+			Teleopti.MyTimeWeb.Schedule.LoadAndBindData
+		);
+		var vm = Teleopti.MyTimeWeb.Schedule.Vm();
+		var fakeScheduleData = getFakeScheduleData();
+		vm.initializeData(fakeScheduleData);
+		vm.selectedProbabilityType = constants.probabilityType.overtime;
+
+		var date = momentWithLocale(basedDate).weekday(1);
+		Teleopti.MyTimeWeb.Schedule.ReloadScheduleListener({ StartDate: date, EndDate: date });
+		equal(probabilityParamterValue, constants.probabilityType.overtime);
+	});
+
 	function setupHash() {
 		this.hasher = {
 			initialized: {
@@ -1115,7 +1151,7 @@ $(document).ready(function() {
 				add: function () { }
 			},
 			init: function () { },
-			setHash: function (data) { hash = "#"+data; }
+			setHash: function (data) { hash = "#" + data; }
 		};
 	}
 });

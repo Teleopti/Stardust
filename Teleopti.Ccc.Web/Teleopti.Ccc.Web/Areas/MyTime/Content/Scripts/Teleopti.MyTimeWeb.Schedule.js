@@ -796,7 +796,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var messageEndDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.EndDate);
 
 			if (vm.isWithinSelected(messageStartDate, messageEndDate)) {
-				_fetchData();
+				_fetchData(vm.selectedProbabilityType, _subscribeForChanges);
 			};
 		},
 		PartialDispose: function () {
