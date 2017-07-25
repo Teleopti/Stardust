@@ -57,7 +57,7 @@
 			<div ng-show="vm.mainMenuState" class="main-menu-slide main-menu-link-wrapper material-depth-1">
 				<div ng-repeat="a in vm.areas">
 					<mainmenu ng-if="a.InternalName !=='myTime'" data="a" open="vm.mainMenuState" ng-click="vm.toggleMobileMenu();"></mainmenu>
-					<a ng-if="vm.myTimeLinkEnabled && a.InternalName ==='myTime'" href="/TeleoptiWFM/Web/MyTime" target="_blank" class="my-time-link">
+					<a ng-if="vm.myTimeLinkEnabled && a.InternalName ==='myTime'" href="../MyTime"   target="_blank" class="my-time-link">
 						<div class="con-row main-menu-link">
 							<div class="con-flex con-row">
 								<div>
@@ -118,7 +118,6 @@ var changeToClassicTheme = function() {
 		angular.element(document.getElementById('overlay')).scope().toggleOverlay(false);
 	}
 };
-
 </script>
 <!-- build:template
 <% if (environment === 'dev') { %>
