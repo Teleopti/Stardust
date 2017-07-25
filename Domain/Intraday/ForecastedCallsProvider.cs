@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_timeZone = timeZone;
 			_taskPeriodsProvider = taskPeriodsProvider;
 		}
-
-		public ForecastedCallsModel Load(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateTime? latestStatisticsTime, int minutesPerInterval, DateTime currentDateTime)
+		
+		public ForecastedCallsModel Load(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateTime? latestStatisticsTime, int minutesPerInterval, DateTime? currentDateTime = null)
 		{
 
 			var callsPerSkill= new Dictionary<Guid, List<SkillIntervalStatistics>>();
@@ -106,5 +106,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 					endTime)
 			};
 		}
+
 	}
 }

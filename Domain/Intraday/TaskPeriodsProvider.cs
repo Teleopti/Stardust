@@ -41,9 +41,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public IEnumerable<ITemplateTaskPeriod> Load(ISkillDay skillDay,
 			int minutesPerInterval,
 			DateTime? latestStatisticsTime,
-			DateTime currentDateTime)
+			DateTime? nullableCurrentDateTime)
 		{
-			var current = new MutableNow(currentDateTime.ToUniversalTime());
+			if (nullableCurrentDateTime == null) return Load(skillDay, minutesPerInterval, latestStatisticsTime);
+
+			var dateTime = nullableCurrentDateTime?.ToUniversalTime() ?? DateTime.Now.ToUniversalTime();
+			var current = new MutableNow(dateTime);
 			var usersNow = TimeZoneHelper.ConvertFromUtc(current.UtcDateTime(), _timeZone.TimeZone());
 			var usersNowStartOfDayUtc = TimeZoneHelper.ConvertToUtc(usersNow.Date, _timeZone.TimeZone());
 			var latestStatisticsTimeUtc = getLatestStatisticsTimeUtc(latestStatisticsTime);

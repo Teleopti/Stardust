@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(userDateOnly, userDateOnly.AddDays(1)), skills, scenario);
 
-			calculateForecastedAgentsForEmailSkills(dateOnly, useShrinkage, skillDaysBySkills, timeZone);
+			calculateForecastedAgentsForEmailSkills(useShrinkage, skillDaysBySkills, timeZone);
 
 			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skillDaysBySkills, minutesPerInterval, dateOnly, useShrinkage);
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var latestStatsTime = getLastestStatsTime(statisticsPerWorkloadInterval);
 			
-			var forecastedCallsModel = _forecastedCallsProvider.Load(skillDaysBySkills, latestStatsTime, minutesPerInterval, dateOnly?.Date ?? DateTime.Now);
+			var forecastedCallsModel = _forecastedCallsProvider.Load(skillDaysBySkills, latestStatsTime, minutesPerInterval, dateOnly?.Date);
 
 			var scheduledStaffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skills.Any(x => x is MultisiteSkill) ? skillDaysBySkills.Keys.ToList() : skills, minutesPerInterval, dateOnly, useShrinkage);
 
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			};
 		}
 
-		private void calculateForecastedAgentsForEmailSkills(DateOnly? dateOnly, bool useShrinkage, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, TimeZoneInfo timeZone)
+		private void calculateForecastedAgentsForEmailSkills(bool useShrinkage, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, TimeZoneInfo timeZone)
 		{
 			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
 			var skillGroupsByResuolution = skillDays.Keys

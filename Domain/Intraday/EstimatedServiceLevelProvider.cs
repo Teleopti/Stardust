@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, 
 			IntradayIncomingViewModel queueStatistics,
 			int minutesPerInterval,
-			DateTime currDate)
+			DateTime? currDate = null)
 		{
 			var eslIntervals = new List<EslInterval>();
 			if (!skillDays.Any())
