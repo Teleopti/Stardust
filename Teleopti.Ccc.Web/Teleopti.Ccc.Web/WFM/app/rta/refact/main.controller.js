@@ -249,58 +249,103 @@
 			$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
 		}
 
+
 		vm.getSelectedItems = function (item) {
-			var itemIsSite = angular.isDefined(item.site);
-			if (itemIsSite) {
-				var indexOfSite = vm.selectedItems.siteIds.indexOf(item.site.Id);
-				var siteAlreadySelected = indexOfSite > -1;
-
-				if (!siteAlreadySelected) {
-					vm.selectedItems.siteIds.push(item.site.Id);
-					if (angular.isDefined(item.teams)) {
-						item.teams.forEach(function (team) {
-							var indexOfTeam = vm.selectedItems.teamIds.indexOf(team.Id);
-							if (indexOfTeam > -1) vm.selectedItems.teamIds.splice(indexOfTeam, 1);
-						});
-					}
-				}
-				else {
-					vm.selectedItems.siteIds.splice(indexOfSite, 1);
-				}
+			var selectedItemsHandler = createSelectedItemsHandler(vm.selectedItems);
+			
+			if (angular.isDefined(item.site)) {
+				selectSite(selectedItemsHandler, item);
+			} else {
+				selectTeam(selectedItemsHandler, item);
 			}
-			else {
-				var indexOfTeam = vm.selectedItems.teamIds.indexOf(item.Id);
-				var teamAlreadySelected = indexOfTeam > -1;
-				var match = vm.siteCards.find(function (card) {
-					return card.site.Id === item.SiteId;
-				});
-				var siteIndex = vm.selectedItems.siteIds.indexOf(match.site.Id);
 
-				if (match.isSelected) {
-					match.teams.forEach(function (team) {
-						var index = vm.selectedItems.teamIds.indexOf(team.Id);
-						vm.selectedItems.teamIds.splice(index, 1);
-					});
-					vm.selectedItems.siteIds.push(match.site.Id);
-				}
-				else if (!match.isSelected && siteIndex > -1) {
-					vm.selectedItems.siteIds.splice(siteIndex, 1);
-					match.teams.forEach(function (team) {
-						if (team.Id !== item.Id) {
-							vm.selectedItems.teamIds.push(team.Id);
-						}
-					});
-				}
-				else {
-					if (!teamAlreadySelected) {
-						vm.selectedItems.teamIds.push(item.Id);
-					}
-					else {
-						vm.selectedItems.teamIds.splice(indexOfTeam, 1);
-					}
-				}
-			}
 			vm.organizationSelection = vm.selectedItems.siteIds.length || vm.selectedItems.teamIds.length;
+		}
+
+		function selectSite(selectedItemsHandler, site) {
+			var siteAlreadySelected = vm.selectedItems.siteIds.indexOf(site.site.Id) > -1;
+
+			if (siteAlreadySelected) {
+				selectedItemsHandler.removeSite(site);
+			} else {
+				selectedItemsHandler.addSite(site);
+
+				if (angular.isDefined(site.teams)) {
+					selectedItemsHandler.clearTeams(site);
+				}
+			}
+		}
+
+		function selectTeam(selectedItemsHandler, team) {
+			var parentSite = vm.siteCards.find(function (card) { return card.site.Id === team.SiteId; });
+			var siteNoLongerHasAllTeamsSelected = !parentSite.isSelected && vm.selectedItems.siteIds.indexOf(parentSite.site.Id) > -1;
+			var allTeamsInSiteAreNowSelected = parentSite.isSelected;
+
+			if (allTeamsInSiteAreNowSelected) {
+				selectedItemsHandler
+					.clearTeams(parentSite)
+					.addSite(parentSite);
+
+			} else if (siteNoLongerHasAllTeamsSelected) {
+				selectedItemsHandler
+					.removeSite(parentSite)
+					.addAllTeams(parentSite)
+					.toggleTeam(team);
+
+			} else {
+				selectedItemsHandler
+					.toggleTeam(team);
+			}
+		}
+
+		function createSelectedItemsHandler(selecteItems) {
+			var that = {
+				addSite: addSite,
+				removeSite: removeSite,
+				addAllTeams: addAllTeams,
+				clearTeams: clearTeams,
+				toggleTeam: toggleTeam
+			};
+
+			var _selectedItems = selecteItems;
+
+			function addSite(parentSite) {
+				_selectedItems.siteIds.push(parentSite.site.Id);
+				return that;
+			}
+
+			function removeSite(parentSite) {
+				var selectedSiteIndex = _selectedItems.siteIds.indexOf(parentSite.site.Id);
+				_selectedItems.siteIds.splice(selectedSiteIndex, 1);
+				return that;
+			}
+
+			function addAllTeams(parentSite) {
+				parentSite.teams.forEach(function (team) {
+					_selectedItems.teamIds.push(team.Id);
+				});
+				return that;
+			}
+
+			function clearTeams(parentSite) {
+				parentSite.teams.forEach(function (team) {
+					var index = _selectedItems.teamIds.indexOf(team.Id);
+					_selectedItems.teamIds.splice(index, 1);
+				});
+				return that;
+			}
+
+			function toggleTeam(item) {
+				var indexOfTeam = _selectedItems.teamIds.indexOf(item.Id);
+				var teamNotSelected = indexOfTeam == -1;
+				if (teamNotSelected)
+					_selectedItems.teamIds.push(item.Id);
+				else
+					_selectedItems.teamIds.splice(indexOfTeam, 1);
+				return that;
+			}
+
+			return that;
 		}
 
 		vm.goToAgents = function () {

@@ -722,6 +722,36 @@ describe('RtaMainController', function () {
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['redId'], skillIds: [], skillAreaId: undefined });
     });
 
+    it('should go to agents for teams if site were selected and then one was unselected', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'londonId',
+          Name: 'London'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'greenId'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'redId'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      c.apply(function () {
+        vm.siteCards[0].isOpen = true;
+        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
+        $httpBackend.flush();
+        vm.getSelectedItems(vm.siteCards[0]);
+        vm.getSelectedItems(vm.siteCards[0].teams[1]);
+        vm.goToAgents();
+      });
+
+      expect(vm.selectedItems).toEqual({ siteIds: [], teamIds: ['greenId'], skillIds: [], skillAreaId: undefined });
+      expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['greenId'], skillIds: [], skillAreaId: undefined });
+    });
+
     it('should always clear teams selection for teams under site if site is selected', function () {
       $fakeBackend
         .withSiteAdherence({
