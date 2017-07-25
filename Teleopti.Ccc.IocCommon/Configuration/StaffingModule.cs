@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<PrimaryPersonSkillFilterToggle44686Off>().As<IPrimaryPersonSkillFilter>().SingleInstance();
 			}
+			builder.RegisterType<SkillCombinationResourceBpoRepository>().As<ISkillCombinationResourceBpoRepository>().SingleInstance();
 		}
 	}
 }
