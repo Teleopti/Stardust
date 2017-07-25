@@ -1,6 +1,8 @@
-﻿using log4net;
+﻿using System;
+using log4net;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 
 namespace Teleopti.Ccc.DomainTest.Common
@@ -27,21 +29,34 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyInnerLogCalled()
         {
-            MockRepository mockRepository = new MockRepository();
-            ILog innerLogger = mockRepository.StrictMock<ILog>();
+            ILog innerLogger = MockRepository.GenerateMock<ILog>();
             LogWriter<object> writer1 = new LogWriter<object>();
             LogWriter<object>.SetExplicitLog(innerLogger);
-            string message = "Log Message";
-            
-            using(mockRepository.Record())
-            {
-	            Expect.Call(innerLogger.IsInfoEnabled).Return(true);
-                innerLogger.Info(message);
-            }
-            using(mockRepository.Playback())
-            {
-                writer1.LogInfo(message);
-            }
-        }
-    }
+
+	        innerLogger.Stub(x => x.IsInfoEnabled).Return(true);
+
+	        writer1.LogInfo(()=>$"Log Message");
+
+	        innerLogger.AssertWasCalled(x => x.Info("Log Message"));
+		}
+
+	    [Test]
+	    public void ShouldNotEvaluateWhenInfoDisabled()
+	    {
+		    ILog innerLogger = MockRepository.GenerateMock<ILog>();
+		    LogWriter<object> writer1 = new LogWriter<object>();
+		    LogWriter<object>.SetExplicitLog(innerLogger);
+		    int increase = 0;
+		    Func<int> action = () => {
+				increase++;
+			    return increase;
+		    };
+
+		    innerLogger.Stub(x => x.IsInfoEnabled).Return(false);
+
+		    writer1.LogInfo(()=>$"Log Message {action()}");
+
+		    increase.Should().Be.EqualTo(0);
+	    }
+	}
 }

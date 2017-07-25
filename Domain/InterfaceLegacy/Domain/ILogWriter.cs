@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
+﻿using System;
+
+namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 {
     /// <summary>
     /// Interface for logging.
@@ -9,6 +11,6 @@
         /// Logs the message as info.
         /// </summary>
         /// <param name="message">The message.</param>
-        void LogInfo(string message);
+        void LogInfo(Func<FormattableString> message);
     }
 }

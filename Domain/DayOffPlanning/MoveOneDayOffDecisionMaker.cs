@@ -1,8 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
@@ -26,14 +24,13 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 
         public bool Execute(ILockableBitArray lockableBitArray, IList<double?> values)
         {
-            string decisionMakerName = ToString();
-            _logWriter.LogInfo("Execute of " + decisionMakerName);
+            _logWriter.LogInfo(()=>$"Execute of {nameof(MoveOneDayOffDecisionMaker)}");
 
             IEnumerable<int> indexesToMoveFrom = CreatePreferredIndexesToMoveFrom(lockableBitArray, values);
             IEnumerable<int> indexesToMoveTo = CreatePreferredIndexesToMoveTo(lockableBitArray, values);
 
-            _logWriter.LogInfo("Move from preference index: " + string.Join(",", indexesToMoveFrom));
-            _logWriter.LogInfo("Move to preference index: " + string.Join(",", indexesToMoveTo));
+            _logWriter.LogInfo(()=>$"Move from preference index: {string.Join(",", indexesToMoveFrom)}");
+            _logWriter.LogInfo(()=>$"Move to preference index: {string.Join(",", indexesToMoveTo)}");
 
             foreach (int moveFrom in indexesToMoveFrom)
             {
@@ -52,14 +49,14 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                         lockableBitArray.Set(moveFrom, false);
                         lockableBitArray.Set(moveTo, true);
 
-                        _logWriter.LogInfo(string.Format(CultureInfo.CurrentCulture, "{0} has moved the following day index: from{1}, to{2}", decisionMakerName, moveFrom.ToString(CultureInfo.CurrentCulture), moveTo.ToString(CultureInfo.CurrentCulture)));
+                        _logWriter.LogInfo(()=>$"{nameof(MoveOneDayOffDecisionMaker)} has moved the following day index: from {moveFrom}, to {moveTo}");
 
                         return true;
                     }
                 }
             }
 
-            _logWriter.LogInfo(string.Format(CultureInfo.CurrentCulture, "{0} has not found any legal day to move", decisionMakerName));
+            _logWriter.LogInfo(()=>$"{nameof(MoveOneDayOffDecisionMaker)} has not found any legal day to move");
 
             return false;
         }

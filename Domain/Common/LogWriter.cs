@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System;
+using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -29,11 +30,11 @@ namespace Teleopti.Ccc.Domain.Common
 
         public ILog Log => _log;
 
-	    public void LogInfo(string message)
+	    public void LogInfo(Func<FormattableString> message)
         {
 	        if (_log.IsInfoEnabled)
 	        {
-		        _log.Info(message);
+		        _log.Info(message().ToString());
 	        }
         }
     }

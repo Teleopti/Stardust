@@ -240,43 +240,38 @@ namespace Teleopti.Ccc.Domain.Optimization
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
         private void writeToLogValueNotBetter()
         {
-            _logWriter.LogInfo("Move did not result in a better value " + _periodValueCalculator);
+            _logWriter.LogInfo(()=>$"Move did not result in a better value {_periodValueCalculator}");
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
         private void writeToLogReschedulingFailed()
         {
-            _logWriter.LogInfo("Rescheduling failed and a roll back was performed");
+            _logWriter.LogInfo(()=>$"Rescheduling failed and a roll back was performed");
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
         private void writeToLogWorkShiftBackToLegalStateRemovedDays(IEnumerable<DateOnly> removedIllegalWorkTimeDays)
         {
-            string loginfo = "Work Shift back to legal state service removed the following days: " +
-							 string.Join(",",removedIllegalWorkTimeDays.Select(d => d.ToShortDateString(CultureInfo.CurrentCulture)));
-            _logWriter.LogInfo(loginfo);
+            _logWriter.LogInfo(()=>$"Work Shift back to legal state service removed the following days: { string.Join(",", removedIllegalWorkTimeDays.Select(d => d.ToShortDateString(CultureInfo.CurrentCulture))) }");
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
         private void writeToLogDayOffBackToLegalStateRemovedDays(IEnumerable<DateOnly> movedDays)
         {
-            string loginfo = "Day off back to legal state service removed the following days: " +
-							 string.Join(",", movedDays.Select(d => d.ToShortDateString(CultureInfo.CurrentCulture)));
-            _logWriter.LogInfo(loginfo);
+	        _logWriter.LogInfo(()=>
+		        $"Day off back to legal state service removed the following days: {string.Join(",", movedDays.Select(d => d.ToShortDateString(CultureInfo.CurrentCulture)))}");
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
         private void writeToLogBackToLegalStateFailed()
         {
-            const string loginfo = "Days off back to legal state failed";
-            _logWriter.LogInfo(loginfo);
+            _logWriter.LogInfo(()=>$"Days off back to legal state failed");
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.ILogWriter.LogInfo(System.String)")]
         private void writeToLogMovedDays(IEnumerable<DateOnly> movedDays)
         {
-            string loginfo = "Day Off executer will work with the following days: " + string.Join(",", movedDays.Select(d => d.ToShortDateString(CultureInfo.CurrentCulture)));
-            _logWriter.LogInfo(loginfo);
+            _logWriter.LogInfo(()=>$"Day Off executer will work with the following days: { string.Join(", ", movedDays.Select(d => d.ToShortDateString(CultureInfo.CurrentCulture))) }");
         }
 
         private bool removeIllegalDayOffs(ILockableBitArray workingBitArray, IDaysOffPreferences daysOffPreferences)

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -31,14 +30,13 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 
         public bool Execute(ILockableBitArray lockableBitArray, IList<double?> values)
         {
-            string decisionMakerName = ToString();
-            _logWriter.LogInfo("Execute of " + decisionMakerName);
+            _logWriter.LogInfo(()=>$"Execute of {nameof(MoveWeekendDayOffDecisionMaker)}");
 
             IList<int> indexesToMoveFrom = CreatePreferredIndexesToMoveFrom(lockableBitArray, values);
             IList<int> indexesToMoveTo = CreatePreferredIndexesToMoveTo(lockableBitArray, values);
 
-            _logWriter.LogInfo("Move from preference index: " + string.Join(",",indexesToMoveFrom));
-            _logWriter.LogInfo("Move to preference index: " + string.Join(",",indexesToMoveTo));
+            _logWriter.LogInfo(()=>$"Move from preference index: {string.Join(", ",indexesToMoveFrom)}");
+            _logWriter.LogInfo(()=>$"Move to preference index: {string.Join(", ",indexesToMoveTo)}");
 
             IEnumerable<KeyValuePair<int, int>> indexPairsToMoveFrom =
                 CreateIndexPairsToMoveWeekDay(indexesToMoveFrom);
@@ -86,16 +84,14 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
                             lockableBitArray.Lock(moveTo.Value, true);
                         }
 
-                        _logWriter.LogInfo(string.Format(CultureInfo.CurrentCulture, "{0} has moved the following day indexes: from{1}-to{2}; from{3}-to{4}", decisionMakerName,
-                            moveFrom.Key.ToString(CultureInfo.CurrentCulture), moveTo.Key.ToString(CultureInfo.CurrentCulture),
-                            moveFrom.Value.ToString(CultureInfo.CurrentCulture), moveTo.Value.ToString(CultureInfo.CurrentCulture)));
+                        _logWriter.LogInfo(()=>$"{nameof(MoveWeekendDayOffDecisionMaker)} has moved the following day indexes: from {moveFrom.Key}-to {moveTo.Key}; from{moveFrom.Value}-to{moveTo.Value}");
 
                         return true;
                     }
                 }
             }
 
-            _logWriter.LogInfo(string.Format(CultureInfo.CurrentCulture, "{0} has not found any legal day to move", decisionMakerName));
+            _logWriter.LogInfo(()=>$"{nameof(MoveWeekendDayOffDecisionMaker)} has not found any legal day to move");
             return false;
         }
 

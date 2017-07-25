@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -6,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "Te"), TestFixture]
+	[TestFixture]
 	public class TeDataDayOffDecisionMakerTest
 	{
 		private IDayOffDecisionMaker _target;
@@ -95,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
 	public class LogWriterForTest : ILogWriter
 	{
-		public void LogInfo(string message)
+		public void LogInfo(Func<FormattableString> message)
 		{
 			//do nothing
 		}

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             ILogWriter logWriter = new LogWriter<DayOffOptimizer>();
             string agent = matrix.Person.Name.ToString(NameOrderOption.FirstNameLastName);
-            logWriter.LogInfo("Day off optimization for " + agent);
+            logWriter.LogInfo(()=>$"Day off optimization for {agent}");
         }
     }
 }
