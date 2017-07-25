@@ -56,6 +56,12 @@ namespace Teleopti.Runtime.Environment
 			form.Show();
 		}
 
+		private void WebView1_CertificateErrorHandler(object sender, CertificateErrorEventArgs e)
+		{
+			if ((int)e.ErrorCode == -214)
+				e.Continue();
+		}
+
 		private void WebView_NewWindow(object sender, NewWindowEventArgs e)
 		{
 			if (e.TargetUrl.ToLower().StartsWith("https://wiki.teleopti.com"))

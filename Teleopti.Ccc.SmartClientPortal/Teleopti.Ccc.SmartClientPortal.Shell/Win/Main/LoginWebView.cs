@@ -52,8 +52,16 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 
 		private void handlingCertificateErrors(object sender, CertificateErrorEventArgs e)
 		{
-			webView1.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
-			_logger.Error("The following url is missing a certificate. " + e.Url);
+			if ((int) e.ErrorCode == -214)
+			{
+				_logger.Info($"Certificate error ({e.ErrorCode}) for {e.Url}.");
+				e.Continue();
+			}
+			else
+			{
+				webView1.LoadHtml($"<!doctype html><html><head></head><body>The following url is missing a certificate. <br/> {e.Url} </body></html>");
+				_logger.Error("The following url is missing a certificate. " + e.Url); 
+			}
 		}
 
 		public void Warning(string warning)
@@ -191,7 +199,4 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Main
 		}
 	}
 
-
-
-	
 }
