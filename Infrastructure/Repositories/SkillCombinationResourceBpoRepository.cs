@@ -100,7 +100,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					}
 					transaction.Commit();
 				}
-
 			}
 		}
 
@@ -128,11 +127,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 									where sb.Id= scrb.SourceId")
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(SkillCombinationResourceBpo)))
 				.List<SkillCombinationResourceBpo>();
-
-			
 			return result;
 		}
-
-		
 	}
 }
