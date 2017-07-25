@@ -107,13 +107,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
                 if (options.MainShift)
                 {
                     tempPart = (IScheduleDay)part.Clone();
-                    tempPart.PersonAssignment(true).SetDayOff(null);
                     tempPart.Clear<IPersonAbsence>();
                     tempPart.Clear<IPreferenceDay>();
                     tempPart.Clear<IStudentAvailabilityDay>();
                     
                     if(tempPart.SignificantPart() == SchedulePartView.MainShift)
-                        destination.Merge(tempPart, false, true);
+                    {
+	                    tempPart.PersonAssignment(true).SetDayOff(null);
+	                    destination.Merge(tempPart, false, true);
+                    }
                 }
 
                 if (options.PersonalShifts)
