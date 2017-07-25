@@ -21915,7 +21915,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There was already an activity during this period {0}-{1}.
+        ///   Looks up a localized string similar to There is already an activity scheduled during the period {0}-{1}.
         /// </summary>
         public static string OvertimeRequestAlreadyHasScheduleInPeriod {
             get {

@@ -10475,7 +10475,7 @@ These options are activated:
     <comment>There is already absence in the schedule for given period.</comment>
   </data>
   <data name="OvertimeRequestAlreadyHasScheduleInPeriod" xml:space="preserve">
-    <value>There was already an activity during this period {0}-{1}</value>
+    <value>There is already an activity scheduled during the period {0}-{1}</value>
     <comment>Using in mytime overtime request when already scheduled or overtime within this period.</comment>
   </data>
   <data name="CustomReports" xml:space="preserve">
