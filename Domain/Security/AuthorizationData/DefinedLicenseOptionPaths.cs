@@ -50,5 +50,7 @@
         public const string TeleoptiCccPilotCustomersPermissions = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Permissions";
         public const string TeleoptiCccPilotCustomersReports = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/Reports";
 
-    }
+        public const string TeleoptiCccPilotCustomersBpoExchange = DefinedLicenseSchemaCodes.TeleoptiWFMPilotCustomersSchema + "/BpoExchange";
+		
+	}
 }

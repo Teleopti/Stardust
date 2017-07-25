@@ -307,6 +307,7 @@
     <Compile Include="Scheduling\WebLegacy\IDesktopContextData.cs" />
     <Compile Include="Scheduling\WebLegacy\LockInfoForStateHolder.cs" />
     <Compile Include="Scheduling\WebLegacy\MoveSchedulesToOriginalStateHolderAfterIsland.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiWfmBpoExchangeLicenseOption.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
     <Compile Include="ResourcePlanner\Validation\IScheduleValidator.cs" />
     <Compile Include="Scheduling\Overtime\IOvertimeSkillPeriodData.cs" />
