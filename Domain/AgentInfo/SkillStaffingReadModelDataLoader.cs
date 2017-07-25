@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
@@ -21,16 +18,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public IList<SkillStaffingData> Load(IList<ISkill> skills, DateTimePeriod dateTimePeriod)
 		{
-			var skillStaffingList = new List<SkillStaffingData>();
-			if (!skills.Any()) return skillStaffingList;
+			if (!skills.Any()) return new List<SkillStaffingData>();
 
-			var skillStaffingDatas = createSkillStaffingDatas(dateTimePeriod, skills);
-
-			skillStaffingList.AddRange(skillStaffingDatas);
-			return skillStaffingList;
+			return createSkillStaffingDatas(dateTimePeriod, skills);
 		}
 
-		private IEnumerable<SkillStaffingData> createSkillStaffingDatas(DateTimePeriod period, IList<ISkill> skills)
+		private IList<SkillStaffingData> createSkillStaffingDatas(DateTimePeriod period, IList<ISkill> skills)
 		{
 			var resolution = skills.Min(s => s.DefaultResolution);
 			var skillDictionary = skills.Distinct().ToDictionary(s => s.Id.GetValueOrDefault());
@@ -44,18 +37,15 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 			foreach (var skillStaffingIntervalGroup in skillStaffingIntervalGroups)
 			{
-				foreach (var skillStaffingInterval in skillStaffingIntervalGroup)
+				skillStaffingDatas.AddRange(skillStaffingIntervalGroup.Select(skillStaffingInterval => new SkillStaffingData
 				{
-					skillStaffingDatas.Add(new SkillStaffingData
-					{
-						Skill = skillDictionary[skillStaffingIntervalGroup.Key],
-						ForecastedStaffing = skillStaffingInterval.FStaff,
-						ScheduledStaffing = skillStaffingInterval.StaffingLevel,
-						Time = skillStaffingInterval.StartDateTime,
-						Date = new DateOnly(skillStaffingInterval.StartDateTime),
-						Resolution = resolution
-					});
-				}
+					Skill = skillDictionary[skillStaffingIntervalGroup.Key],
+					ForecastedStaffing = skillStaffingInterval.FStaff,
+					ScheduledStaffing = skillStaffingInterval.StaffingLevel,
+					Time = skillStaffingInterval.StartDateTime,
+					Date = new DateOnly(skillStaffingInterval.StartDateTime),
+					Resolution = resolution
+				}));
 			}
 
 			return skillStaffingDatas;
