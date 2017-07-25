@@ -29,19 +29,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			_activityRepository = activityRepository;
 		}
 
-		public IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution, bool useShrinkage)
+		public IList<SkillStaffingIntervalLightModel> StaffingForSkills(Guid[] skillIdList, DateTimePeriod period,
+			TimeSpan resolution, bool useShrinkage)
+		{
+			var relevantSkillStaffingIntervals =
+				StaffingIntervalsForSkills(skillIdList, period, resolution, useShrinkage).ToList();
+			if (!relevantSkillStaffingIntervals.Any())
+			{
+				return new List<SkillStaffingIntervalLightModel>();
+			}
+			var splittedIntervals = _splitSkillStaffInterval.Split(relevantSkillStaffingIntervals, resolution, false);
+			return splittedIntervals;
+		}
+
+		public IList<SkillStaffingInterval> StaffingIntervalsForSkills(Guid[] skillIdList, DateTimePeriod period, TimeSpan resolution, bool useShrinkage)
 		{
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
 			if (!combinationResources.Any())
 			{
-				return new List<SkillStaffingIntervalLightModel>();
+				return new List<SkillStaffingInterval>();
 			}
 
 			var allSkillStaffingIntervals = GetSkillStaffIntervalsAllSkills(period, combinationResources, useShrinkage);
 			var relevantSkillStaffingIntervals = allSkillStaffingIntervals.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime && skillIdList.Contains(x.SkillId)).ToList();
-			var splittedIntervals = _splitSkillStaffInterval.Split(relevantSkillStaffingIntervals, resolution, false); 
-			return splittedIntervals;
-
+			return relevantSkillStaffingIntervals;
 		}
 
 		public List<SkillStaffingInterval> GetSkillStaffIntervalsAllSkills(DateTimePeriod period, List<SkillCombinationResource> combinationResources, bool useShrinkage)
