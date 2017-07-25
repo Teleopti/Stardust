@@ -1,6 +1,5 @@
 ﻿Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel = function (ajax, doneCallback, parentViewModel, weekStart, isViewingDetail) {
 	var self = this,
-		postDataStartDate,
 		dateTimeFormats = Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat;
 
 	self.Id = ko.observable();
@@ -171,7 +170,9 @@
 	function _initializeViewModel(){
 		self.ShowError(false);
 		self.ShowCancelButton(true);
-		self.StartTime(self.ShowMeridian ? moment().format('hh:mm A') : moment().format('HH:mm'));
+		var currentUserDateTime = parentViewModel.baseUtcOffsetInMinutes ? Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(parentViewModel.baseUtcOffsetInMinutes)
+			: moment();
+		self.StartTime(self.ShowMeridian ? currentUserDateTime.format('hh:mm A') : currentUserDateTime.format('HH:mm'));
 		self.TimeList = _createTimeList();
 		self.RequestDuration(self.TimeList[0]);
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;

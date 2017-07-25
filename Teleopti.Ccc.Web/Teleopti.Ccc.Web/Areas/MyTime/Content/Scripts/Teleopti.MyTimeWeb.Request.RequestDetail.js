@@ -27,14 +27,17 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var parentViewModel = null;
 	var defaultDateTimes = null;
 	var weekStart = 3;
+	var baseUtcOffsetInMinutes;
 	Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 		weekStart = data.WeekStart;
+		baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
 	});
 
 	var RequestDetailParentViewModel = function () {
 
 		var self = this;
 		self.requestViewModel = ko.observable();
+		self.baseUtcOffsetInMinutes = baseUtcOffsetInMinutes;
 
 		self.createRequestViewModel = function () {
 			var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart, defaultDateTimes);

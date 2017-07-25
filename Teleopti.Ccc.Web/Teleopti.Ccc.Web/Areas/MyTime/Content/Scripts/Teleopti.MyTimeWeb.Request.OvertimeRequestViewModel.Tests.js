@@ -351,4 +351,10 @@ $(document).ready(function() {
 	test('should set overtime request duration to one hour by default', function() {
 		equal(vm.RequestDuration(), '01:00');
 	});
+
+	test('should display default start date and time by agents timezone', function() {
+		fakeRequestDetailViewModel.baseUtcOffsetInMinutes = -600;
+		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
+		equal(requestVm.StartTime(), moment().zone(-fakeRequestDetailViewModel.baseUtcOffsetInMinutes).format("HH:mm"));
+	});
 });
