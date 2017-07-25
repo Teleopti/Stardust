@@ -1,8 +1,14 @@
 function MenuController() {
 	var ctrl = this;
-	ctrl.setIcon = setIcon;
+	
+	ctrl.$onInit = function() {
+		ctrl.menuItem = setMenuItem();
+	}
+	ctrl.closeMenuOnPhones = function () {
+		ctrl.open = false;
+	}
 
-	var icons = [
+	var menuItems = [
 		{
 			i: 'mdi mdi-chart-line',
 			name: 'forecasting'
@@ -56,24 +62,21 @@ function MenuController() {
 			name: 'staffing'
 		},
 		{
-			i: 'mdi mdi-rotate-3d',
-			name: 'myTime'
+			i: 'mdi mdi-calendar-clock',
+			name: 'myTime',
+			url: '../MyTime',
+			isStateless: true,
+			isOpenInNewTab: true
 		}
-	]
-
-	ctrl.icon = setIcon();
-
-	function setIcon() {
-        var match = icons.find(function (icon) {
-            return icon.name === ctrl.data.InternalName
-		})
-		return match.i;
+	];
+	function setMenuItem() {
+		var match = menuItems.find(function (icon) {
+			return icon.name === ctrl.data.InternalName;
+		});
+		match.displayName = ctrl.data.Name;
+		return match;
 	}
-
-	ctrl.closeMenuOnPhones = function () {
-		ctrl.open = false;
-	}
-
+	
 }
 
 angular.module('wfm.areas').component('mainmenu', {

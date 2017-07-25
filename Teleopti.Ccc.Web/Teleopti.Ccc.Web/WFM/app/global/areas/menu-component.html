@@ -1,8 +1,22 @@
-<a ui-sref={{$ctrl.data.InternalName}} ui-sref-opts="{reload: true}" ui-sref-active="main-menu-link-active nav-item-active">
-  <div class="con-row main-menu-link">
-    <div class="con-flex">
-    <i ng-class="$ctrl.icon"></i>
-    <span class="main-menu-label">{{$ctrl.data.Name}}</span>
-    </div>
-  </div>
+<a ng-if="!$ctrl.menuItem.isStateless"ui-sref={{$ctrl.menuItem.name}} ui-sref-opts="{reload: true}" ui-sref-active="main-menu-link-active nav-item-active">
+	<div class="con-row main-menu-link">
+		<div class="con-flex">
+			<i ng-class="$ctrl.menuItem.i"></i>
+			<span class="main-menu-label">{{$ctrl.menuItem.displayName}}</span>
+		</div>
+	</div>
+</a>
+<a ng-if="$ctrl.menuItem.isStateless" ng-href="{{$ctrl.menuItem.url}}" target="{{$ctrl.menuItem.isOpenInNewTab?'_blank':'_self'}}" class="my-time-link">
+	<div class="con-row main-menu-link">
+		<div class="con-flex con-row">
+			<div>
+				<i ng-class="$ctrl.menuItem.i"></i>
+				<span class="main-menu-label">{{$ctrl.menuItem.displayName}}</span>
+			</div>
+			
+			<div class="open-in-new" ng-if="$ctrl.menuItem.isOpenInNewTab">
+				<i class="mdi mdi-open-in-new"></i>
+			</div>
+		</div>
+	</div>
 </a>

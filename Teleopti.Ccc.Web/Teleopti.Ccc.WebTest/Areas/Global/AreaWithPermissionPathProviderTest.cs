@@ -206,6 +206,46 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			areas.Count().Should().Be(1);
 			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebRequests);
 		}
-		
+
+		[Test]
+		public void ShouldHaveMyTimeAreaWhenPermittedAndFeatureIsEnabled()
+		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.MyTimeWeb }
+					, o => true);
+			PermissionProvider.Enable();
+			ToggleManager.Enable(Toggles.Wfm_AddMyTimeLink_45088);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTimeWeb);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldNotHaveMyTimeAreaWhenFeatureIsEnabledButWithoutPermission()
+		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.MyTimeWeb }
+					, o => true);
+			PermissionProvider.Enable();
+			ToggleManager.Enable(Toggles.Wfm_AddMyTimeLink_45088);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotHaveMyTimeAreaWhenFeatureIsDisabled()
+		{
+			PermissionProvider.Enable();
+			ToggleManager.Disable(Toggles.Wfm_AddMyTimeLink_45088);
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTimeWeb);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
+		}
 	}
 }

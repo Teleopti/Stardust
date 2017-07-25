@@ -6,16 +6,6 @@ describe('AreasController', function() {
 
 	beforeEach(function () {
 		module('wfm.areas');
-		module(function ($provide) {
-			$provide.service('Toggle', function () {
-				return {
-					Wfm_AddMyTimeLink_45088: true,
-					togglesLoaded: $q(function (resolve, reject) {
-						resolve();
-					})
-				}
-			});
-		});
 	});
 
 	beforeEach(inject(function (_$httpBackend_, _$controller_, _$q_) {

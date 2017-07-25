@@ -125,6 +125,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return _toggleManager.IsEnabled(Toggles.WfmStaffing_AllowActions_42524);
 			}
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.MyTimeWeb))
+			{
+				return _toggleManager.IsEnabled(Toggles.Wfm_AddMyTimeLink_45088);
+			}
 			
 			return true;
 		}
