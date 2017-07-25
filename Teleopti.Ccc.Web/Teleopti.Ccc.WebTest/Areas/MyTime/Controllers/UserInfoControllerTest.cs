@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Globalization;
 using NUnit.Framework;
-using Rhino.Mocks;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -14,9 +11,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[Test]
 		public void Culture_WhenUsersCultureHasMondayAsFirstDay_ShouldSetWeekStartTo1()
 		{
-			var cultureStub = MockRepository.GenerateStub<IUserCulture>();
-			cultureStub.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
-			var target = new UserInfoController(cultureStub, getUserTimeZoneStub());
+			var cultureStub = new SwedishCulture();
+			var target = new UserInfoController(cultureStub, new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 			
 			var result = target.Culture();
 			dynamic content = result.Data;
@@ -26,11 +22,10 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void Culture_DateFormatIsCorrectForSwidishCulture()
+		public void Culture_DateFormatIsCorrectForSwedishCulture()
 		{
-			var cultureStub = MockRepository.GenerateStub<IUserCulture>();
-			cultureStub.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
-			var target = new UserInfoController(cultureStub, getUserTimeZoneStub());
+			var cultureStub = new SwedishCulture();
+			var target = new UserInfoController(cultureStub, new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
 			var result = target.Culture();
 			dynamic content = result.Data;
@@ -40,24 +35,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void Culture_BaseUtcOffsetInMinutesIsCorrectForSwidishCulture()
+		public void Culture_BaseUtcOffsetInMinutesIsCorrectForSwedishCulture()
 		{
-			var cultureStub = MockRepository.GenerateStub<IUserCulture>();
-			cultureStub.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
-			var target = new UserInfoController(cultureStub, getUserTimeZoneStub());
+			var cultureStub = new SwedishCulture();
+			var target = new UserInfoController(cultureStub, new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
 
 			var result = target.Culture();
 			dynamic content = result.Data;
 
 			Assert.That((object)content.BaseUtcOffsetInMinutes, Is.EqualTo(60));
 			Assert.That(result, Is.Not.Null);
-		}
-
-		private IUserTimeZone getUserTimeZoneStub()
-		{
-			var timezoneStub = MockRepository.GenerateStub<IUserTimeZone>();
-			timezoneStub.Expect(c => c.TimeZone()).Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			return timezoneStub;
 		}
 	}
 }
