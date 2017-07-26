@@ -14,12 +14,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly ILookup<Guid, ISkill> _allSkills;
 		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>> _personCombination = new ConcurrentDictionary<IPerson, ConcurrentBag<SkillCombination>>();
-
+		private readonly IList<ISkill> _allTheSkills;
 		public ResourceCalculationDataContainerFromSkillCombinations(List<SkillCombinationResource> skillCombinationResources, IEnumerable<ISkill> allSkills, bool useAllSkills)
 		{
-			_allSkills = allSkills.ToLookup(s => s.Id.GetValueOrDefault());
+			_allTheSkills = allSkills.ToList();
+			_allSkills = _allTheSkills.ToLookup(s => s.Id.GetValueOrDefault());
 			PrimarySkillMode = false;
-			MinSkillResolution = allSkills.Any() ? allSkills.Min(s => s.DefaultResolution) : 15;
+			MinSkillResolution = _allTheSkills.Any() ? _allTheSkills.Min(s => s.DefaultResolution) : 15;
 			createDictionary(skillCombinationResources);
 			UseAllSkills = useAllSkills;
 			_personSkillProvider = new PersonSkillProvider();
@@ -61,16 +62,27 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void RemoveResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
+			var skillResolution = MinSkillResolution;
+			var aSkill = _allTheSkills.FirstOrDefault(x => x.Activity.Id.GetValueOrDefault().Equals(resourceLayer.PayloadId));
+			if (aSkill != null)
+				skillResolution = aSkill.DefaultResolution;
+			var diff = skillResolution / MinSkillResolution;
+			var minute = TimeHelper.FitToDefaultResolutionRoundDown(
+				TimeSpan.FromMinutes(resourceLayer.Period.StartDateTime.Minute), skillResolution).Minutes;
+			var splittedStart = resourceLayer.Period.StartDateTime;
+			var startOnInterval = new DateTime(splittedStart.Year, splittedStart.Month, splittedStart.Day, splittedStart.Hour,
+				minute, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startOnInterval, startOnInterval.AddMinutes(skillResolution));
 			try
 			{
-				if (!_dictionary.TryGetValue(resourceLayer.Period, out PeriodResource resources))
+				if (!_dictionary.TryGetValue(period, out PeriodResource resources))
 					return;
 
 				var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
 				if (skills.Key.Length == 0) return;
 				var key = new ActivitySkillsCombination(resourceLayer.PayloadId, skills);
 
-				resources.RemoveResource(key, skills, 0, resourceLayer.Resource, resourceLayer.FractionPeriod);
+				resources.RemoveResource(key, skills, 0, resourceLayer.Resource/ diff, resourceLayer.FractionPeriod);
 			}
 			catch (ArgumentOutOfRangeException ex) //just to get more info if/when #44525 occurs
 			{
@@ -115,7 +127,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 						result[pair.SkillKey] = value;
 					}
 				}
-				
+				return result;
 			}
 			var divider = periodToCalculate.ElapsedTime().TotalMinutes / MinSkillResolution;
 			var periodSplit = periodToCalculate.Intervals(TimeSpan.FromMinutes(MinSkillResolution));
@@ -181,7 +193,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public void AddResources(IPerson person, DateOnly personDate, ResourceLayer resourceLayer)
 		{
-			PeriodResource resources = _dictionary.GetOrAdd(resourceLayer.Period, new PeriodResource());
+			var skillResolution = MinSkillResolution;
+			var aSkill = _allTheSkills.FirstOrDefault(x => x.Activity.Id.GetValueOrDefault().Equals(resourceLayer.PayloadId));
+			if (aSkill != null)
+				skillResolution = aSkill.DefaultResolution;
+			var diff = skillResolution / MinSkillResolution;
+			var minute = TimeHelper.FitToDefaultResolutionRoundDown(
+				TimeSpan.FromMinutes(resourceLayer.Period.StartDateTime.Minute), skillResolution).Minutes;
+			var splittedStart = resourceLayer.Period.StartDateTime;
+			var startOnInterval = new DateTime(splittedStart.Year, splittedStart.Month, splittedStart.Day, splittedStart.Hour,
+				minute, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startOnInterval, startOnInterval.AddMinutes(skillResolution));
+
+			PeriodResource resources = _dictionary.GetOrAdd(period, new PeriodResource());
 
 			var skills = fetchSkills(person, personDate).ForActivity(resourceLayer.PayloadId);
 			if (skills.Key.Length == 0) return;
@@ -191,7 +215,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			//{
 			//	_activityRequiresSeat.TryAdd(resourceLayer.PayloadId, true);
 			//}
-			resources.AppendResource(key, skills, 0, resourceLayer.Resource, resourceLayer.FractionPeriod);
+			resources.AppendResource(key, skills, 0, resourceLayer.Resource /diff, resourceLayer.FractionPeriod);
 		}
 
 		

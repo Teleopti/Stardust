@@ -19,12 +19,15 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private DateTimePeriod _period = new DateTimePeriod(new DateTime(2013, 8, 16, 12, 0, 0, DateTimeKind.Utc), new DateTime(2013, 8, 16, 13, 0, 0, DateTimeKind.Utc));
 		private readonly IActivity _activity = ActivityFactory.CreateActivity("Phone").WithId();
 		private readonly ISkill _skill = SkillFactory.CreateSkill("Skill1").WithId();
+		private readonly ISkill _skill15Min = SkillFactory.CreateSkill("Skill15").WithId();
+		
 		private IPerson _person;
 
 		[SetUp]
 		public void Setup()
 		{
 			_skill.Activity = _activity;
+			_skill.DefaultResolution = 60;
 			_person = PersonFactory.CreatePersonWithPersonPeriod(_date, new[] { _skill });
 			var resource = new SkillCombinationResource
 			{
@@ -33,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				SkillCombination = new[] { _skill.Id.GetValueOrDefault() },
 				Resource = 10
 			};
-			_target = new ResourceCalculationDataContainerFromSkillCombinations(new List<SkillCombinationResource>() { resource }, new[] { _skill }, false);
+			_target = new ResourceCalculationDataContainerFromSkillCombinations(new List<SkillCombinationResource>() { resource }, new[] { _skill,_skill15Min }, false);
 		}
 
 		[Test]
@@ -84,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldSumResourcesOnSkillForTwoIntervals()
+		public void ShouldSumResourcesOnSkillResolution()
 		{
 			_period = _period.MovePeriod(TimeSpan.FromHours(1));
 			_target.AddResources(_person, _date,
@@ -115,9 +118,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 					Period = new DateTimePeriod(_period.StartDateTime.AddMinutes(45), _period.StartDateTime.AddMinutes(60)),
 					Resource = 20
 				});
-			var result = _target.AffectedResources(_activity, new DateTimePeriod(_period.StartDateTime, _period.StartDateTime.AddMinutes(30)));
+			var result = _target.AffectedResources(_activity, _period);
 
-			result.Values.First().Resource.Should().Be.EqualTo(10);
+			result.Values.First().Resource.Should().Be.EqualTo(15);
 		}
 
 		[Test]
@@ -252,5 +255,121 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
 		}
 
+		[Test]
+		public void ShouldRemoveResourcesFromHourWhenQuarterIsMinResolution()
+		{
+			
+			_target.RemoveResources(_person, _date,
+				new ResourceLayer
+				{
+					PayloadId = _activity.Id.GetValueOrDefault(),
+					Period = new DateTimePeriod(_period.StartDateTime, _period.StartDateTime.AddMinutes(15)),
+					Resource = 1
+				});
+			_target.RemoveResources(_person, _date,
+				new ResourceLayer
+				{
+					PayloadId = _activity.Id.GetValueOrDefault(),
+					Period = new DateTimePeriod(_period.StartDateTime.AddMinutes(15), _period.StartDateTime.AddMinutes(30)),
+					Resource = 1
+				});
+			
+			
+			var result = _target.AffectedResources(_activity, _period);
+			var affectedSkill = result.First().Value;
+
+			affectedSkill.Resource.Should().Be.EqualTo(9.5);
+			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
+		}
+
+		[Test]
+		public void ShouldAddResourcesToHourWhenQuarterIsMinResolutionAndSkillIsHour()
+		{
+
+			_target.AddResources(_person, _date,
+				new ResourceLayer
+				{
+					PayloadId = _activity.Id.GetValueOrDefault(),
+					Period = new DateTimePeriod(_period.StartDateTime, _period.StartDateTime.AddMinutes(15)),
+					Resource = 1
+				});
+			_target.AddResources(_person, _date,
+				new ResourceLayer
+				{
+					PayloadId = _activity.Id.GetValueOrDefault(),
+					Period = new DateTimePeriod(_period.StartDateTime.AddMinutes(15), _period.StartDateTime.AddMinutes(30)),
+					Resource = 1
+				});
+
+
+			var result = _target.AffectedResources(_activity, _period);
+			var affectedSkill = result.First().Value;
+
+			affectedSkill.Resource.Should().Be.EqualTo(10.5);
+			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
+		}
+
+		[Test]
+		public void ShouldAddResourcesToHourWhenQuarterIsMinResolutionANdHourIsMissing()
+		{
+			_target = new ResourceCalculationDataContainerFromSkillCombinations(new List<SkillCombinationResource>() , new[] { _skill, _skill15Min }, false);
+			_target.AddResources(_person, _date,
+				new ResourceLayer
+				{
+					PayloadId = _activity.Id.GetValueOrDefault(),
+					Period = new DateTimePeriod(_period.StartDateTime, _period.StartDateTime.AddMinutes(15)),
+					Resource = 10
+				});
+			_target.AddResources(_person, _date,
+				new ResourceLayer
+				{
+					PayloadId = _activity.Id.GetValueOrDefault(),
+					Period = new DateTimePeriod(_period.StartDateTime.AddMinutes(15), _period.StartDateTime.AddMinutes(30)),
+					Resource = 10
+				});
+			_target.AddResources(_person, _date,
+				new ResourceLayer
+				{
+					PayloadId = _activity.Id.GetValueOrDefault(),
+					Period = new DateTimePeriod(_period.StartDateTime.AddMinutes(30), _period.StartDateTime.AddMinutes(45)),
+					Resource = 11
+				});
+			_target.AddResources(_person, _date,
+				new ResourceLayer
+				{
+					PayloadId = _activity.Id.GetValueOrDefault(),
+					Period = new DateTimePeriod(_period.StartDateTime.AddMinutes(45), _period.StartDateTime.AddMinutes(60)),
+					Resource = 11
+				});
+
+			var result = _target.AffectedResources(_activity, _period);
+			var affectedSkill = result.First().Value;
+
+			affectedSkill.Resource.Should().Be.EqualTo(10.5);
+			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
+		}
+		[Test]
+		public void tst()
+		{
+			var interval = new List<SkillStaffingInterval>
+			{
+				new SkillStaffingInterval{StartDateTime = new DateTime(2017,7,26,12,45,0),FStaff = 10, CalculatedResource = 15},
+				new SkillStaffingInterval{StartDateTime = new DateTime(2017,7,26,12,45,0),FStaff = 10, CalculatedResource = 15},
+				new SkillStaffingInterval{StartDateTime = new DateTime(2017,7,26,13,0,0),FStaff = 10, CalculatedResource = 15}
+			};
+
+			var grouped = interval.GroupBy(l => l.StartDateTime)
+				.Select(cl => new SkillStaffingInterval
+					{
+						StartDateTime =  cl.First().StartDateTime,
+						FStaff = cl.Sum(c => c.FStaff),
+						CalculatedResource = cl.Sum(c => c.CalculatedResource),
+					}).ToList<SkillStaffingInterval>();
+
+			grouped.Count.Should().Be.EqualTo(2);
+			grouped.First().CalculatedResource.Should().Be.EqualTo(30);
+		}
 	}
+
+	
 }

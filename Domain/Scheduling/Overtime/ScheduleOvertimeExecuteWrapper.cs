@@ -91,7 +91,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 					resourceCalculationPeriods.AddRange(inPeriod);
 				}
 
-				return new OvertimeWrapperModel(resourceCalculationPeriods, overtimeModels);
+				var grouped = resourceCalculationPeriods.GroupBy(l => l.StartDateTime)
+					.Select(cl => new SkillStaffingInterval
+					{
+						StartDateTime = cl.First().StartDateTime,
+						EndDateTime =  cl.First().EndDateTime,
+						FStaff = cl.Sum(c => c.FStaff),
+						StaffingLevel = cl.Sum(c => c.StaffingLevel),
+						SkillId = skillsToAddOvertime.First().Id.GetValueOrDefault()
+					}).OrderBy(x => x.StartDateTime).ToList<SkillStaffingInterval>();
+
+				return new OvertimeWrapperModel(grouped, overtimeModels);
 			}
 		}
 

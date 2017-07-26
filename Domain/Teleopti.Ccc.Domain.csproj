@@ -1436,7 +1436,7 @@
     <Compile Include="Repositories\ScheduleStorageRepositoryWrapper.cs" />
     <Compile Include="ResourceCalculation\FilterPersonsOnSkill.cs" />
     <Compile Include="ResourceCalculation\NoShovelingCallback.cs" />
-    <Compile Include="ResourceCalculation\ResourceCalculationDataConatainerFromSkillCombinations.cs" />
+    <Compile Include="ResourceCalculation\ResourceCalculationDataContainerFromSkillCombinations.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationExtensions.cs" />
     <Compile Include="ResourceCalculation\SharedResourceContextOldSchedulingScreenBehaviorWithoutShoveling.cs" />
     <Compile Include="ResourceCalculation\SkillCombinationHolder.cs" />
