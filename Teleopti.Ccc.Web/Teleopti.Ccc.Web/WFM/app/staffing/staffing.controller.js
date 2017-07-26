@@ -33,6 +33,7 @@
 		vm.overtimeSettings = {};
 		vm.showOverstaffSettings = false;
 		vm.toggleOverstaffSettings = toggleOverstaffSettings;
+		vm.validSettings = validSettings;
 
 		var events = [];
 		var allSkills = [];
@@ -247,6 +248,14 @@
 			query.$promise.then(function (data) {
 				vm.compensations = data;
 			});
+		}
+		function validSettings(input) {
+			if (input.MinMinutesToAdd > input.MaxMinutesToAdd) {
+				return false;
+			}
+			else{
+				return true;
+			}
 		}
 
 		function suggestOvertime() {
