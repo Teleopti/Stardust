@@ -11,8 +11,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
-	[TestFixture]
-	[TestWithStaticDependenciesAvoidUse]
 	public class ProjectionMidnightSplitterMergerTest
 	{
 		private IProjectionMerger target;
@@ -21,9 +19,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		private IVisualLayerFactory visualLayerFactory;
 		private TimeSpan tzDiffTime;
 
-		private void setup()
+		[SetUp]
+		public void Setup()
 		{
-			var userZone = StateHolderReader.Instance.StateReader.UserTimeZone;
+			var userZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			tzDiffTime = userZone.BaseUtcOffset;
 			target = new ProjectionMidnightSplitterMerger(userZone);
             activity = ActivityFactory.CreateActivity("f");
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldSplitOverMidnight()
 		{
-			setup();
 			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2000, 1, 2, 7, 0, 0, DateTimeKind.Utc);
 			var midnightInUtc = new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc);
@@ -53,9 +51,48 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
+		public void ShouldSplitOverEveryMidnightWithOvertimeLayer()
+		{
+			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2000, 1, 2, 7, 0, 0, DateTimeKind.Utc);
+			var midnightInUtc = new DateTime(2000, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+
+			var overtimeLayer = createLayer(new DateTimePeriod(end,end.AddHours(24)));
+			overtimeLayer.DefinitionSet = new MultiplicatorDefinitionSet("sdf", MultiplicatorType.Overtime);
+
+			var layers = new IVisualLayer[]
+			{
+				createLayer(new DateTimePeriod(start, end)),
+				overtimeLayer
+			};
+			var res = target.MergedCollection(layers, person);
+			res.Length.Should().Be.EqualTo(4);
+			var period2 = res.Last().Period;
+			
+			period2.Should().Be.EqualTo(new DateTimePeriod(midnightInUtc.AddHours(24).Add(-tzDiffTime), end.AddHours(24)));
+		}
+
+		[Test]
+		public void ShouldSplitOverEveryMidnightWithLongLayer()
+		{
+			var start = new DateTime(2000, 1, 1, 22, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2000, 1, 3, 3, 0, 0, DateTimeKind.Utc);
+			var midnightInUtc = new DateTime(2000, 1, 3, 0, 0, 0, DateTimeKind.Utc);
+			
+			var layers = new IVisualLayer[]
+			{
+				createLayer(new DateTimePeriod(start, end))
+			};
+			var res = target.MergedCollection(layers, person);
+			res.Length.Should().Be.EqualTo(3);
+			var period2 = res.Last().Period;
+
+			period2.Should().Be.EqualTo(new DateTimePeriod(midnightInUtc.Add(-tzDiffTime), end));
+		}
+
+		[Test]
 		public void ShouldKeepDefinitionSetWhenSplit()
 		{
-			setup();
 			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2000, 1, 2, 7, 0, 0, DateTimeKind.Utc);
 			var layer = createLayer(new DateTimePeriod(start, end));
@@ -74,7 +111,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void ShouldKeepPersonWhenSplit()
         {
-			setup();
 			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2000, 1, 2, 7, 0, 0, DateTimeKind.Utc);
             var layer = createLayer(new DateTimePeriod(start, end));
@@ -94,7 +130,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void ShouldKeepAbsenceWhenSplit()
 		{
-			setup();
 			var start = new DateTime(2000, 1, 1, 20, 0, 0, DateTimeKind.Utc);
 			var end = new DateTime(2000, 1, 2, 7, 0, 0, DateTimeKind.Utc);
 			var layer = createLayer(new DateTimePeriod(start, end));
@@ -113,7 +148,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void ShouldSplitMidnightUsingPassedInTimeZone()
         {
-			setup();
 			var userDefinedTimeZone = (TimeZoneInfo.FindSystemTimeZoneById("Jordan Standard Time"));
             target = new ProjectionMidnightSplitterMerger(userDefinedTimeZone);
             var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
