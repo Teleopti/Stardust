@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			var principal = _currentTeleoptiPrincipal.Current();
 			var principalCacheable = principal as TeleoptiPrincipalCacheable;
 			
-			var defaultTimezone = (principalCacheable != null) && (!principalCacheable.Person.PermissionInformation.DefaultTimeZoneString().IsNullOrEmpty())
+			var defaultTimezone = principalCacheable != null && !principalCacheable.Person.PermissionInformation.DefaultTimeZoneString().IsNullOrEmpty()
 				? principalCacheable.Person.PermissionInformation.DefaultTimeZone()
 				: principal.Regional.TimeZone;
 			
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 				DefaultTimeZoneName = defaultTimezone.DisplayName,
 				Language = regionnal.UICulture.IetfLanguageTag,
 				DateFormatLocale = regionnal.Culture.Name,
-				NumberFormat = CultureInfo.CurrentCulture.NumberFormat
+				CultureInfo.CurrentCulture.NumberFormat
 			};
 		}
 	}
