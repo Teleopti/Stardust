@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -693,6 +694,47 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			Target.DoScheduling(period);
 
 			AssignmentRepository.Find(new[] { agentOnlyKnowingClosedSkill }, period, scenario).Any(x => x.ShiftLayers.Any()).Should().Be.False();
+		}
+
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldOnlyFilterRuleSetExcludationsWhenUsingBlockSameShiftBug45285(bool useSameShift)
+		{
+			DayOffTemplateRepository.Add(new DayOffTemplate(new Description("_")).WithId());
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = ActivityRepository.Has("_");
+			var openSkill = SkillRepository.Has("_", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var team = new Team().WithDescription(new Description("team")).WithId();
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateBusinessUnitAndAppend(team).WithId(ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.Value));
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(17, 0, 17, 0, 15),
+				new ShiftCategory("_").WithId()));
+			ruleSet.AddAccessibilityDayOfWeek(DayOfWeek.Sunday);
+			var agent = PersonRepository.Has(new ContractWithMaximumTolerance(), contractSchedule, new PartTimePercentage("_"),
+				team, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, openSkill);
+			SkillDayRepository.Has(openSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod,
+				UseBlock = true,
+				BlockSameStartTime = !useSameShift,
+				BlockSameShift = useSameShift
+			});
+
+			Target.DoScheduling(period);
+
+			var assignment = AssignmentRepository.Find(new[] {agent}, period, scenario);
+			if (useSameShift)
+			{
+				assignment.Any(x => x.ShiftLayers.Any()).Should().Be.False();
+			}
+			else
+			{
+				assignment.Any(x => x.ShiftLayers.Any()).Should().Be.True();
+			}
 		}
 
 		public TeamBlockSchedulingTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
