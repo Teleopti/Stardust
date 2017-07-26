@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.IocCommon;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 	{
 		public IOvertimeRequestUnderStaffingSkillProvider OvertimeRequestUnderStaffingSkillProvider;
 		public FakeLoggedOnUser LoggedOnUser;
-		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
+		public FakeSkillCombinationResourceNoZeroValueRepository SkillCombinationResourceRepository;
 		public FakeSkillCombinationResourceRepository CombinationRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public ILoggedOnUser User;
@@ -69,6 +70,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			system.UseTestDouble<FakeWriteSideRepository<IMultiplicatorDefinitionSet>>().For<IProxyForId<IMultiplicatorDefinitionSet>>();
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>()
 				.For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
+			system.UseTestDouble<FakeSkillCombinationResourceNoZeroValueRepository>().For<ISkillCombinationResourceRepository>();
 			_intervals = createIntervals();
 		}
 
@@ -188,6 +190,37 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			createAssignment(person, activity1);
 
 			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(19, 25), person.PermissionInformation.DefaultTimeZone());
+			var personRequest = createOvertimeRequest(person, requestPeriod);
+
+			_target = createTarget();
+			var result = _target.Approve(personRequest.Request);
+
+			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Person = person,
+				Date = new DateOnly(requestPeriod.StartDateTime),
+				Scenario = _scenario
+			});
+
+			result.Count().Should().Be(0);
+			personAssignment.Should().Not.Be.Null();
+			personAssignment.OvertimeActivities().Count().Should().Be(1);
+			personAssignment.OvertimeActivities().First().Payload.Should().Be(skill1.Activity);
+			personAssignment.OvertimeActivities().First().Period.Should().Be(requestPeriod);
+		}
+
+		[Test]
+		public void ShouldApproveWhenScheduleAgentsIsZero()
+		{
+			var person = getCurrentUser();
+			var activity1 = createActivity("activity1");
+			var skill1 = createSkill("skill1");
+			var personSkill1 = createPersonSkill(activity1, skill1);
+			setupIntradayStaffingForSkill(skill1, 10d, 0d);
+			addPersonSkillsToPersonPeriod(personSkill1);
+			createAssignment(person, activity1);
+
+			var requestPeriod = Now.ServerDate_DontUse().ToDateTimePeriod(new TimePeriod(19, 21), person.PermissionInformation.DefaultTimeZone());
 			var personRequest = createOvertimeRequest(person, requestPeriod);
 
 			_target = createTarget();
