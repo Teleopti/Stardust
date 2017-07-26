@@ -131,7 +131,7 @@ LEFT JOIN
 	mart.dim_interval	dist
 ON
 	f.interval_id = dist.interval_id
-LEFT JOIN
+INNER JOIN
 	mart.dim_scenario	ds
 ON
 	f.scenario_code = ds.scenario_code

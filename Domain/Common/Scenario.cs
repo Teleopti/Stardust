@@ -44,10 +44,7 @@ namespace Teleopti.Ccc.Domain.Common
 		{
 		}
 
-		public virtual Description Description
-		{
-			get { return _description; }
-		}
+		public virtual Description Description => _description;
 
 		public virtual void ChangeName(string name)
 		{
@@ -61,10 +58,7 @@ namespace Teleopti.Ccc.Domain.Common
 			set { _defaultScenario = value; }
 		}
 
-		public virtual bool IsDeleted
-		{
-			get { return _isDeleted; }
-		}
+		public virtual bool IsDeleted => _isDeleted;
 
 		public virtual bool EnableReporting
 		{
