@@ -3,7 +3,7 @@ using Microsoft.Web.Administration;
 
 namespace Teleopti.Support.Tool.Tool
 {
-	public class FrameAncestorsUpdator : IFrameAncestorsUpdator
+	public class FrameAncestorsUpdator
 	{
 		public void Update(string url)
 		{

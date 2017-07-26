@@ -37,7 +37,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[HttpGet]
 		[TenantUnitOfWork]
-		[Route("GetAllTenants")]
+		[Route("AllTenants")]
 		public virtual JsonResult<IEnumerable<TenantModel>> GetAllTenants()
 		{
 			return Json(_loadAllTenants.Tenants().Select(t => new TenantModel

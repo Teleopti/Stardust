@@ -62,7 +62,7 @@
 				}
 
 			});
-		$http.get("./GetAllTenants", tokenHeaderService.getHeaders())
+		$http.get("./AllTenants", tokenHeaderService.getHeaders())
 			.success(function(data) {
 				vm.Tenants = data;
 			});

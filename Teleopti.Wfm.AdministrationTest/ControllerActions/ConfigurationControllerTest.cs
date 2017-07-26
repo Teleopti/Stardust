@@ -21,16 +21,26 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void GetAllShouldContainFrameAncestors()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
-			var configurationModel = Target.GetAllConfigurations().Content.Single();
-			configurationModel.Key.Should().Be.EqualTo("FrameAncestors");
-			configurationModel.Value.Should().Be.EqualTo("");
+			var configurationModels = Target.GetAllConfigurations().Content;
+			configurationModels.First().Key.Should().Be.EqualTo("FrameAncestors");
+			configurationModels.First().Value.Should().Be.EqualTo("");
+			configurationModels.Last().Key.Should().Be.EqualTo("InstrumentationKey");
+			configurationModels.Last().Value.Should().Be.EqualTo("");
 		}
 
 		[Test]
-		public void ShouldGet()
+		public void ShouldGetFrameAncestors()
 		{
 			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
 			var value = Target.GetConfiguration("FrameAncestors").Content;
+			value.Should().Be.EqualTo("");
+		}
+
+		[Test]
+		public void ShouldGetInstrumentationKey()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			var value = Target.GetConfiguration("InstrumentationKey").Content;
 			value.Should().Be.EqualTo("");
 		}
 

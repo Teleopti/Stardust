@@ -14,12 +14,14 @@ namespace Teleopti.Support.Tool.Tool
 		public void Execute(ModeFile modeFile)
 		{
 			var configurations = _dbHelper.GetServerConfigurations();
-			foreach (var configuration in configurations)
+			string val;
+			if (configurations.TryGetValue(ServerConfiguration.FrameAncestors, out val))
 			{
-				if (configuration.Key == ServerConfiguration.FrameAncestors)
-				{
-					new FrameAncestorsUpdator().Update(configuration.Value);
-				}
+				new FrameAncestorsUpdator().Update(val);
+			}
+			if (configurations.TryGetValue(ServerConfiguration.InstrumentationKey, out val) && !string.IsNullOrEmpty(val))
+			{
+				new ApplicationInsightsInstrumentationKeyUpdator().Update(val);
 			}
 		}
 	}
@@ -27,5 +29,6 @@ namespace Teleopti.Support.Tool.Tool
 	public class ServerConfiguration
 	{
 		public const string FrameAncestors = "FrameAncestors";
+		public const string InstrumentationKey = "InstrumentationKey";
 	}
 }

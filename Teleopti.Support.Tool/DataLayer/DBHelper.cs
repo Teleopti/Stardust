@@ -4,7 +4,6 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Linq;
 
-
 namespace  Teleopti.Support.Tool.DataLayer
 {
 
@@ -51,12 +50,9 @@ namespace  Teleopti.Support.Tool.DataLayer
 
         }
 
-        public string ServerName
-        {
-            get { return _serverName; }
-        }
+        public string ServerName => _serverName;
 
-        public string GetDatabaseVersion()
+	    public string GetDatabaseVersion()
         {
             SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(ConnectionString);
             return GetDatabaseVersion(builder.InitialCatalog);
@@ -77,21 +73,11 @@ namespace  Teleopti.Support.Tool.DataLayer
 
 	    public Dictionary<string, string> GetServerConfigurations()
 	    {
-			var result = new Dictionary<string, string>();
 			var builder = new SqlConnectionStringBuilder(ConnectionString);
 			using (var ds = Execute("select [Key], [Value] from Tenant.ServerConfiguration", builder.InitialCatalog))
 			{
-				foreach (DataTable table in ds.Tables)
-				{
-					foreach (DataRow row in table.Rows)
-					{
-						var key = Convert.ToString(row.ItemArray[0], System.Globalization.CultureInfo.InvariantCulture);
-						var value = Convert.ToString(row.ItemArray[1], System.Globalization.CultureInfo.InvariantCulture);
-						result.Add(key, value);
-					}
-				}
+				return ds.Tables[0].AsEnumerable().ToDictionary(row => row.Field<string>(0), row => row.Field<string>(1));
 			}
-			return result;
 		}
 
 		public int GetDatabaseBuildNumber()
@@ -200,7 +186,7 @@ namespace  Teleopti.Support.Tool.DataLayer
             {
                 conn = GrabConnection(database);
                 //get version of sql server, not really used now, but maybe for future use
-                using (DataSet ds = Execute("SELECT SERVERPROPERTY('productversion')", "master"))
+                using (Execute("SELECT SERVERPROPERTY('productversion')", "master"))
                 {
 
                 }
@@ -256,9 +242,8 @@ namespace  Teleopti.Support.Tool.DataLayer
         /// <returns>A DataSet with the returning ResultSet(s)</returns>
         private DataSet Execute(string command, string database)
         {
-            DataSet ds = new DataSet();
-            ds.Locale = System.Globalization.CultureInfo.InvariantCulture;
-            SqlConnection conn = null;
+	        DataSet ds = new DataSet {Locale = System.Globalization.CultureInfo.InvariantCulture};
+	        SqlConnection conn = null;
             try
             {
                 conn = GrabConnection(database);
@@ -301,10 +286,7 @@ namespace  Teleopti.Support.Tool.DataLayer
         {
             try
             {
-                if (connection != null)
-                {
-                    connection.Close();
-                }
+	            connection?.Close();
             }
             catch (SqlException) { }
         }
@@ -349,11 +331,8 @@ namespace  Teleopti.Support.Tool.DataLayer
             }
             catch (SqlException)
             {
-                if (tran != null)
-                {
-                    tran.Rollback();
-                }
-                throw;
+	            tran?.Rollback();
+	            throw;
             }
             finally
             {
@@ -395,9 +374,10 @@ namespace  Teleopti.Support.Tool.DataLayer
                     dbUsers.Add("---------------"); //blank row...
                     foreach (DataRow row in ds.Tables[0].Rows)
                     {
-                        if (!row[0].ToString().StartsWith("##", StringComparison.Ordinal))
+	                    var name = row[0].ToString();
+	                    if (!name.StartsWith("##", StringComparison.Ordinal))
                         {
-                            dbUsers.Add(row[0].ToString());
+                            dbUsers.Add(name);
                         }
                     }
                 }
@@ -405,20 +385,18 @@ namespace  Teleopti.Support.Tool.DataLayer
             }
         }
 
-        public string ConnectionString
-        {
-            get { return _connString; }
-        }
+        public string ConnectionString => _connString;
 
-        public string GetDataFolder()
+	    public string GetDataFolder()
         {
             var dbFolder = new List<string>();
             using (var ds = Execute("select physical_name from sys.database_files where physical_name like '%master%'", "master")
                 )
             {
-                dbFolder.AddRange(from DataRow row in ds.Tables[0].Rows
-                                  where !row[0].ToString().StartsWith("##", StringComparison.Ordinal)
-                                  select row[0].ToString());
+	            dbFolder.AddRange(from DataRow row in ds.Tables[0].Rows
+		            let name = row[0].ToString()
+		            where !name.StartsWith("##", StringComparison.Ordinal)
+		            select name);
             }
             // ReSharper disable PossibleNullReferenceException
             return dbFolder.FirstOrDefault().Replace(@"\master.mdf", "");

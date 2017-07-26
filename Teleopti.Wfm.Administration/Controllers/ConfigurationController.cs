@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Results;
 using Teleopti.Ccc.Domain.MultiTenancy;
@@ -22,30 +23,34 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		[HttpGet]
 		[TenantUnitOfWork]
-		[Route("GetAllConfigurations")]
+		[Route("AllConfigurations")]
 		public virtual JsonResult<IEnumerable<ConfigurationModel>> GetAllConfigurations()
 		{
-			var serverConfigurations = _serverConfigurationRepository.AllConfigurations();
+			var serverConfigurations = _serverConfigurationRepository.AllConfigurations().ToArray();
 			return Json(map(serverConfigurations));
 		}
 
 		private IEnumerable<ConfigurationModel> map(IEnumerable<ServerConfiguration> serverConfigurations)
 		{
-			var result = new List<ConfigurationModel>();
-			foreach (var serverConfiguration in serverConfigurations)
+			const string frameAncestors = "FrameAncestors";
+			const string instrumentationKey = "InstrumentationKey";
+			return serverConfigurations.Select(serverConfiguration =>
 			{
 				var configurationModel = new ConfigurationModel
 				{
 					Key = serverConfiguration.Key,
 					Value = serverConfiguration.Value
 				};
-				if (configurationModel.Key == "FrameAncestors")
+				if (configurationModel.Key == frameAncestors)
 				{
 					configurationModel.Description = "Add urls to let mytime or ASM widget work in an iframe.";
 				}
-				result.Add(configurationModel);
-			}
-			return result;
+				if (configurationModel.Key == instrumentationKey)
+				{
+					configurationModel.Description = "Add Application Insights instrumentation key for log analytics.";
+				}
+				return configurationModel;
+			});
 		}
 
 		[HttpPost]

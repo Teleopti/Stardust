@@ -231,13 +231,13 @@
       <DependentUpon>ChangeSettings.cs</DependentUpon>
     </Compile>
     <Compile Include="SettingsInRegistry.cs" />
+    <Compile Include="Tool\ApplicationInsightsInstrumentationKeyUpdator.cs" />
     <Compile Include="Tool\CommandLineArgument.cs" />
     <Compile Include="Tool\CompositeCommand.cs" />
     <Compile Include="Tool\ConfigServerCommand.cs" />
     <Compile Include="Tool\CustomSection.cs" />
     <Compile Include="Tool\CustomSectionContainer.cs" />
     <Compile Include="Tool\FrameAncestorsUpdator.cs" />
-    <Compile Include="Tool\IFrameAncestorsUpdator.cs" />
     <Compile Include="Tool\ISupportCommand.cs" />
     <Compile Include="Tool\ModeFile.cs" />
     <Compile Include="Tool\MoveCustomReportsCommand.cs" />

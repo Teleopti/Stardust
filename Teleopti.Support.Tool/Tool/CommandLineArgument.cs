@@ -41,17 +41,21 @@ namespace Teleopti.Support.Tool.Tool
 		private void readArguments()
 		{
 			var helpCommand = new HelpWindow(_helpText);
-			var restoreCommand = new ConfigurationRestoreHandler(new CustomSection(), new ConfigFilePathReader());
-			var backupCommand = new ConfigurationBackupHandler(new CustomSection(), new ConfigFilePathReader());
+			var configFilePathReader = new ConfigFilePathReader();
+			var customSection = new CustomSection();
+			var restoreCommand = new ConfigurationRestoreHandler(customSection, configFilePathReader);
+			var backupCommand = new ConfigurationBackupHandler(customSection, configFilePathReader);
+			var refreshConfigFile = new RefreshConfigFile();
+			var refreshConfigsRunner = new RefreshConfigsRunner(refreshConfigFile);
 
 			var modeCommonCommand = new CompositeCommand(
-				new RefreshConfigsRunner(new RefreshConfigFile()),
+				refreshConfigsRunner,
 				restoreCommand,
 				new MoveCustomReportsCommand()
 				);
 
 			var modeDeployCommand = new CompositeCommand(
-				new RefreshConfigsRunner(new RefreshConfigFile()),
+				refreshConfigsRunner,
 				restoreCommand
 				);
 
