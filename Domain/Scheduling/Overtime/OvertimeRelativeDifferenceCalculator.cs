@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 
 		private static DateTimePeriod adjustedToMappedData(DateTimePeriod period, IEnumerable<OvertimePeriodValue> overtimePeriodValueMappedData)
 		{
-			if (!overtimePeriodValueMappedData.Any(x => x.Period.Contains(period.EndDateTime)))
+			if (!overtimePeriodValueMappedData.Any(x => x.Period.ContainsPart(period.EndDateTime)))
 			{
 				var last = overtimePeriodValueMappedData.LastOrDefault(x => period.Contains(x.Period));
 				if(last != null)
