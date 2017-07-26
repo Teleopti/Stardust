@@ -16,18 +16,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_timeZone = timeZone;
 			_now = now;
 		}
-
-		public IList<StaffingIntervalModel> StaffingPerSkill(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, int minutesPerInterval, DateTime? currDate, bool useShrinkage)
-		{
-			DateOnly? d = null;
-			if (currDate != null)
-			{
-				d = new DateOnly(currDate.Value.Year, currDate.Value.Month, currDate.Value.Day);
-			}
-
-			return StaffingPerSkill(skillDays, minutesPerInterval, d, useShrinkage);
-		}
-
+		
 		public IList<StaffingIntervalModel> StaffingPerSkill(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, int minutesPerInterval, DateOnly? dateOnly, bool useShrinkage)
 		{
 			var startTimeLocal = dateOnly?.Date ?? TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()).Date;
@@ -58,6 +47,5 @@ namespace Teleopti.Ccc.Domain.Intraday
 				Agents = skillStaffPeriod.FStaff
 			});
 		}
-
 	}
 }
