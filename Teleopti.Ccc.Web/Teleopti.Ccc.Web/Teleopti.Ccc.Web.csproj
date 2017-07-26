@@ -1383,6 +1383,8 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.FakeData.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Probability.Tests.js" />
     <Content Include="Areas\MyTime\Views\Static\appdownload.html" />
     <Content Include="Areas\MyTime\Content\Css\CiscoWidget.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileDayView.css" />

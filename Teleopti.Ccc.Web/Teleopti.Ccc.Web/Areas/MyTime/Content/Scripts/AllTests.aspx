@@ -77,9 +77,11 @@
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.MobileStartDay.DataService.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.RequestDetail.js?bust=<%=version %>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.js?bust=<%=version %>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.FakeData.js?bust=<%=version %>"></script>
 
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Common.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Tests.js?bust=<%=version%>"></script>
+		<script type="text/javascript" src="Teleopti.MyTimeWeb.Schedule.Probability.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Request.ShiftTradeBulletinBoardViewModel.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.Settings.SettingsViewModel.Tests.js?bust=<%=version%>"></script>
 		<script type="text/javascript" src="Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel.Tests.js?bust=<%=version%>"></script>
