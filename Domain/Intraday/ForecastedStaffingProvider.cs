@@ -22,7 +22,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			DateOnly? d = null;
 			if (currDate != null)
 			{
-				d = new DateOnly(currDate.Value.Year, currDate.Value.Month, currDate.Value.Day);
+				var cd = currDate.Value.ToUniversalTime();
+				d = new DateOnly(cd.Year, cd.Month, cd.Day);
 			}
 
 			return StaffingPerSkill(skillDays, minutesPerInterval, d, useShrinkage);

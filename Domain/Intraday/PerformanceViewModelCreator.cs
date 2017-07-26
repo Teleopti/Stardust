@@ -57,9 +57,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var scenario = _scenarioRepository.LoadDefaultScenario();
 			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			var skillDays = _skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(usersToday, usersToday.AddDays(1)), skills, scenario);
-			var queueStatistics = _incomingTrafficViewModelCreator.Load(skillIdList, date);
+			var queueStatistics = _incomingTrafficViewModelCreator.Load(skillIdList, usersNow);
 
-			var eslIntervals = _estimatedServiceLevelProvider.CalculateEslIntervals(skillDays, queueStatistics, minutesPerInterval, date);
+			var eslIntervals = _estimatedServiceLevelProvider.CalculateEslIntervals(skillDays, queueStatistics, minutesPerInterval, usersNow);
 
 			return new IntradayPerformanceViewModel
 			{
