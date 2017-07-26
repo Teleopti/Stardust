@@ -147,4 +147,58 @@ $(document).ready(function () {
 
 		equal(vm.isOvertimeRequestAvailable(), true);
 	});
+
+	test("should increase request count after creating an overtime request", function () {
+		Teleopti.MyTimeWeb.Common.IsToggleEnabled = function (x) {
+			if (x === "MyTimeWeb_OvertimeRequest_44558") return true;
+			return false;
+		};
+
+		Teleopti.MyTimeWeb.UserInfo.WhenLoaded = function (callback) {
+			callback({ WeekStart: 1 });
+		}
+
+		var requestDate = moment().format(Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);
+		var responseData = {}
+		responseData.DateFromYear = moment().year();
+		responseData.DateFromMonth = moment().month() + 1;
+		responseData.DateFromDayOfMonth = moment().date();
+		var ajax = {
+			Ajax: function (options) {
+				if (options.url === "Requests/PersistOvertimeRequest") {
+					options.success(responseData);
+				}
+			}
+		};
+		Teleopti.MyTimeWeb.Schedule.PartialInit(function () { },
+			function () { },
+			ajax
+		);
+
+		Teleopti.MyTimeWeb.Schedule.SetupViewModel(
+			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues,
+			Teleopti.MyTimeWeb.Schedule.LoadAndBindData
+		);
+
+		var vm = Teleopti.MyTimeWeb.Schedule.Vm();
+		vm.initializeData(getFakeScheduleData());
+
+		var scheduleDayViewModel = $.grep(vm.days(), function (item) {
+			return item.fixedDate() === requestDate;
+		})[0];
+		scheduleDayViewModel.requestsCount(0);
+
+		vm.showAddOvertimeRequestForm();
+		var overtimeRequestViewModel = vm.requestViewModel().model;
+		overtimeRequestViewModel.Subject("test");
+		overtimeRequestViewModel.Subject("overtime request");
+		overtimeRequestViewModel.Message("I want to work overtime");
+		overtimeRequestViewModel.DateFrom(requestDate);
+		overtimeRequestViewModel.StartTime("19:00");
+		overtimeRequestViewModel.RequestDuration("03:00");
+		overtimeRequestViewModel.MultiplicatorDefinitionSetId("29F7ECE8-D340-408F-BE40-9BB900B8A4CB");
+		overtimeRequestViewModel.AddRequest();
+
+		equal(scheduleDayViewModel.requestsCount(), 1);
+	});
 });

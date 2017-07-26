@@ -503,8 +503,14 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				return;
 			}
 			var addOvertimeRequestModel = {
-				model: new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, self.CancelAddingNewRequest, self, self.weekStart),
-				type: function () { return self.requestViewModelTypes.overtimeRequest; },
+				model: new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax,
+					function(data) {
+						self.CancelAddingNewRequest(data);
+						_displayRequest(data);
+					},
+					self,
+					self.weekStart),
+				type: function() { return self.requestViewModelTypes.overtimeRequest; },
 				CancelAddingNewRequest: self.CancelAddingNewRequest
 			};
 			self.requestViewModel(addOvertimeRequestModel);
