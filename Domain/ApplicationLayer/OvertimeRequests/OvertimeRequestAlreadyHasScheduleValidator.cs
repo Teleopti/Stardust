@@ -34,9 +34,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 			var mainActivities = personAssignment.MainActivities();
 			var overtimeActivities = personAssignment.OvertimeActivities();
-			var hasSchedule = mainActivities.Any(a => a.Period.Intersect(period)) || overtimeActivities.Any(a => a.Period.Intersect(period));
 
-			if (!hasSchedule) return new OvertimeRequestValidationResult { IsValid = true };
+			if( mainActivities.Any(a => !a.Payload.InContractTime && a.Period.Contains(period))) return new OvertimeRequestValidationResult { IsValid = true };
+
+			var hasWorkingSchedule = mainActivities.Any(a => a.Period.Intersect(period)) || overtimeActivities.Any(a => a.Period.Intersect(period));
+			if (!hasWorkingSchedule) return new OvertimeRequestValidationResult { IsValid = true };
 
 			return new OvertimeRequestValidationResult
 			{

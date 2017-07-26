@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -65,12 +64,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });
 
 			var requestStartTime = new DateTime(2017, 7, 17, 0, 0, 0, DateTimeKind.Utc);
-
 			var personRequest = createOvertimeRequest(person, new DateTimePeriod(requestStartTime.AddHours(18), requestStartTime.AddHours(19)));
-
-			var requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();
-			requestApprovalService.Stub(r => r.Approve(personRequest.Request)).Return(new IBusinessRuleResponse[] { });
-			RequestApprovalServiceFactory.SetApprovalService(requestApprovalService);
+			mockRequestApprovalServiceApproved(personRequest);
 
 			Target.Process(personRequest);
 
@@ -177,9 +172,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var requestStartTime = new DateTime(2017, 7, 17, 17, 0, 0, DateTimeKind.Utc);
 			var personRequest = createOvertimeRequest(person, new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
 
-			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, CurrentScenario.Current(), ActivityFactory.CreateActivity("phone").WithId(), period, shiftCategory);
+			var pa = createMainPersonAssignment(person, period);
 			ScheduleStorage.Add(pa);
 
 			Target.Process(personRequest);
@@ -189,6 +183,46 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				.Be.EqualTo(string.Format(Resources.OvertimeRequestAlreadyHasScheduleInPeriod,
 					personRequest.Request.Period.StartDateTimeLocal(timeZoneInfo),
 					personRequest.Request.Period.EndDateTimeLocal(timeZoneInfo)));
+		}
+
+		[Test]
+		public void ShouldApprovedWhenScheduleIsNotInContractTime()
+		{
+			var timeZoneInfo = TimeZoneInfo.Utc;
+			var person = createPersonWithSiteOpenHours(8, 20);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			LoggedOnUser.SetDefaultTimeZone(timeZoneInfo);
+
+			var requestStartTime = new DateTime(2017, 7, 17, 11, 0, 0, DateTimeKind.Utc);
+			var personRequest = createOvertimeRequest(person, new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
+
+			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
+			var pa = createMainPersonAssignment(person, period);
+			var lunch = ActivityFactory.CreateActivity("lunch").WithId();
+			lunch.InContractTime = false;
+			pa.AddActivity(lunch, new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 12));
+			ScheduleStorage.Add(pa);
+
+			mockRequestApprovalServiceApproved(personRequest);
+
+			Target.Process(personRequest);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		private void mockRequestApprovalServiceApproved(IPersonRequest personRequest)
+		{
+			var requestApprovalService = MockRepository.GenerateMock<IRequestApprovalService>();
+			requestApprovalService.Stub(r => r.Approve(personRequest.Request)).Return(new IBusinessRuleResponse[] { });
+			RequestApprovalServiceFactory.SetApprovalService(requestApprovalService);
+		}
+
+		private IPersonAssignment createMainPersonAssignment(IPerson person, DateTimePeriod period)
+		{
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
+			var main = ActivityFactory.CreateActivity("phone").WithId();
+			main.AllowOverwrite = true;
+			return PersonAssignmentFactory.CreateAssignmentWithMainShift(person, CurrentScenario.Current(), main, period, shiftCategory);
 		}
 
 		private IPersonRequest createOvertimeRequest(IPerson person, DateTimePeriod period)
