@@ -630,6 +630,7 @@
     <Compile Include="UnitOfWork\SetSourceOnPersonAssignment.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkAspect.cs" />
     <Compile Include="UnitOfWork\AllBusinessUnitsUnitOfWorkAspect.cs" />
+    <Compile Include="Util\ApplicationInsightsFilterOutSignalR.cs" />
     <Compile Include="Util\AppVersionTelemetryInitializer.cs" />
     <Compile Include="Util\CloudSafeSqlExecute.cs" />
     <Compile Include="Util\CompressionExtensions.cs" />
