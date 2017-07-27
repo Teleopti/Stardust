@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -60,6 +62,21 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		public DateTime GetLastCalculatedTime()
 		{
 			return _lastCalcualted ?? _now.UtcDateTime().AddMinutes(-10);
+		}
+
+		public void PersistSkillCombinationResourceBpo(DateTime utcDateTime, List<ImportSkillCombinationResourceBpo> combinationResources)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Dictionary<Guid, string> LoadSourceBpo(SqlConnection connection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<SkillCombinationResourceBpo> LoadBpoSkillCombinationResources()
+		{
+			throw new NotImplementedException();
 		}
 
 		public void SetLastCalculatedTime(DateTime dt)

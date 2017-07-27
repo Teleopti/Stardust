@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -11,5 +13,12 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period);
 		void PersistChanges(IEnumerable<SkillCombinationResource> deltas);
 		DateTime GetLastCalculatedTime();
+		void PersistSkillCombinationResourceBpo(DateTime utcDateTime, List<ImportSkillCombinationResourceBpo> combinationResources);
+		Dictionary<Guid, string> LoadSourceBpo(SqlConnection connection);
+		/// <summary>
+		/// Used for testing
+		/// </summary>
+		/// <returns></returns>
+		IList<SkillCombinationResourceBpo> LoadBpoSkillCombinationResources();
 	}
 }

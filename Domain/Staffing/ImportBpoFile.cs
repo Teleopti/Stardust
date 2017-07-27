@@ -1,11 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
+	public class ImportSkillCombinationResourceBpo
+	{
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+		public double Resources { get; set; }
+		public List<Guid> SkillIds { get; set; }
+		public string Source { get; set; }
+	}
+
 	public class SkillCombinationResourceBpo
 	{
 		public DateTime StartDateTime { get; set; }
@@ -61,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 			var allSkills = _skillRepository.LoadAllSkills().ToList();
 
-			var bpoList = new List<SkillCombinationResourceBpo>();
+			var bpoList = new List<ImportSkillCombinationResourceBpo>();
 			foreach (var line in linesWithNumbers.Skip(1))
 			{
 				var bpoStrings = tokenizeSkillCombinationResourceBpo(line, fieldNames, tokenSeparator);
@@ -84,39 +94,42 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 		}
 
-		private SkillCombinationResourceBpo createSkillCombinationResourceBpo(Dictionary<string, string> bpoStrings, IFormatProvider importFormatProvider, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
+		private ImportSkillCombinationResourceBpo createSkillCombinationResourceBpo(Dictionary<string, string> bpoStrings, IFormatProvider importFormatProvider, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
 		{
-			var resourceBpo = new SkillCombinationResourceBpo
+			var resourceBpo = new ImportSkillCombinationResourceBpo()
 			{
 				Source = bpoStrings[source],
 				StartDateTime = DateTime.Parse(bpoStrings[startdatetime], importFormatProvider),
 				EndDateTime = DateTime.Parse(bpoStrings[enddatetime], importFormatProvider),
 				Resources = double.Parse(bpoStrings[resources], importFormatProvider),
-				SkillCombinationId = lookupSkillCombinationId(bpoStrings[skillgroup], skillSeparator, allSkills, result)
+				SkillIds = lookupSkillIds(bpoStrings[skillgroup], skillSeparator, allSkills, result)
 			};
 			return resourceBpo;
 		}
 
-		private Guid lookupSkillCombinationId(string skillGroupString, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
+		private List<Guid> lookupSkillIds(string skillGroupString, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
 		{
+			var skillIds = new List<Guid>();
 			var skillStringList = skillGroupString.Replace(" ", "").Split(skillSeparator);
-			// TODO: lookup Ids for single Skills
 			foreach (var skillString in skillStringList)
 			{
-				var skillCount = allSkills.Count(s => s.Name == skillString);
-				if (skillCount == 0)
+				var skills = allSkills.Where(s => s.Name == skillString).ToList();
+				if (skills.IsEmpty())
 				{
 					result.Success = false;
 					result.ErrorInformation.Add($"The skill with name {skillString} is not defined in the system.");
 				}
-				else if (skillCount > 1)
+				if (skills.Count == 1)
+				{
+					skillIds.Add(skills.First().Id.GetValueOrDefault());
+				}
+				else if (skills.Count > 1)
 				{
 					result.Success = false;
-					result.ErrorInformation.Add($"The skill with name {skillString} is defined {skillCount} times in the system. Only once is allowed when using this function.");
+					result.ErrorInformation.Add($"The skill with name {skillString} is defined {skills.Count} times in the system. Only once is allowed when using this function.");
 				}
 			}
-			// TODO: lookup SkillCombinationId for this combination
-			return new Guid(); // replace with real guid
+			return skillIds; // replace with real guid
 		}
 
 		private Dictionary<string, string> tokenizeSkillCombinationResourceBpo(LineWithNumber lineWithNumber, string[] fieldNames, char tokenSeparator)

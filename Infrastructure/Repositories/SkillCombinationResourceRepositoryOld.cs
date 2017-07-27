@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 
@@ -321,7 +322,22 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 				.UniqueResult<DateTime>();
 
 			return latest;
-		}		
+		}
+
+		public void PersistSkillCombinationResourceBpo(DateTime utcDateTime, List<ImportSkillCombinationResourceBpo> combinationResources)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Dictionary<Guid, string> LoadSourceBpo(SqlConnection connection)
+		{
+			throw new NotImplementedException();
+		}
+
+		public IList<SkillCombinationResourceBpo> LoadBpoSkillCombinationResources()
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 }

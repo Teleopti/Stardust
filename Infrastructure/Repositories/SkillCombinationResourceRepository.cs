@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 
@@ -121,6 +122,104 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			{
 				tryPersistSkillCombinationResource(dataLoaded,  skillCombinationResources);
 			});
+		}
+
+		public Dictionary<Guid, string> LoadSourceBpo(SqlConnection connection)
+		{
+			var bpoList = new Dictionary<Guid, string>();
+			using (var command = new SqlCommand("select Id, Source from [BusinessProcessOutsourcer]", connection))
+			{
+				using (var reader = command.ExecuteReader())
+				{
+					if (reader.HasRows)
+						while (reader.Read())
+							bpoList.Add(reader.GetGuid(0), reader.GetString(1));
+				}
+			}
+			return bpoList;
+		}
+
+		//may be just for testing if not then better not to use the current unit of work
+		public IList<SkillCombinationResourceBpo> LoadBpoSkillCombinationResources()
+		{
+			var result = _currentUnitOfWork.Current().Session()
+				.CreateSQLQuery(@"select SkillCombinationId,StartDateTime,EndDateTime,Resources,sb.source as Source
+								FROM ReadModel.SkillCombinationResourceBpo scrb,  BusinessProcessOutsourcer sb
+									where sb.Id= scrb.SourceId")
+				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(SkillCombinationResourceBpo)))
+				.List<SkillCombinationResourceBpo>();
+			return result;
+		}
+
+		public void PersistSkillCombinationResourceBpo(DateTime utcDateTime, List<ImportSkillCombinationResourceBpo> combinationResources)
+		{
+			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				//connection.OpenWithRetry(_retryPolicy);
+				connection.Open();
+				var bpoList = LoadSourceBpo(connection);
+
+				var dt = new DataTable();
+				dt.Columns.Add("SkillCombinationId", typeof(Guid));
+				dt.Columns.Add("StartDateTime", typeof(DateTime));
+				dt.Columns.Add("EndDateTime", typeof(DateTime));
+				dt.Columns.Add("InsertedOn", typeof(DateTime));
+				dt.Columns.Add("Resources", typeof(double));
+				dt.Columns.Add("SourceId", typeof(Guid));
+				var insertedOn = _now.UtcDateTime();
+
+				using (var transaction = connection.BeginTransaction())
+				{ 
+					var skillCombinations = loadSkillCombination(connection, transaction);
+					foreach (var skillCombinationResourceBpo in combinationResources)
+					{
+						var key = keyFor(skillCombinationResourceBpo.SkillIds);
+						Guid id;
+
+						if (!skillCombinations.TryGetValue(key, out id))
+						{
+							id = persistSkillCombination(skillCombinationResourceBpo.SkillIds, connection, transaction);
+							skillCombinations.Add(key, id);
+						}
+						var row = dt.NewRow();
+
+						row["SkillCombinationId"] = id;
+						row["StartDateTime"] = skillCombinationResourceBpo.StartDateTime;
+						row["EndDateTime"] = skillCombinationResourceBpo.EndDateTime;
+						row["InsertedOn"] = insertedOn;
+						row["Resources"] = skillCombinationResourceBpo.Resources;
+
+						var bpoId = Guid.NewGuid();
+						if (bpoList.ContainsValue(skillCombinationResourceBpo.Source))
+							bpoId = bpoList.First(x => x.Value == skillCombinationResourceBpo.Source).Key;
+						else
+						{
+							using (var insertCommand = new SqlCommand(@"insert into [BusinessProcessOutsourcer] (Id, Source) Values (@id,@source)", connection, transaction))
+							{
+								insertCommand.Parameters.AddWithValue("@id", bpoId);
+								insertCommand.Parameters.AddWithValue("@source", skillCombinationResourceBpo.Source);
+								//set lock time to null
+								insertCommand.ExecuteNonQuery();
+							}
+							bpoList.Add(bpoId, skillCombinationResourceBpo.Source);
+						}
+						row["SourceId"] = bpoId;
+						dt.Rows.Add(row);
+					}
+					transaction.Commit();
+				}
+
+				using (var transaction = connection.BeginTransaction())
+				{
+					using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+					{
+						sqlBulkCopy.DestinationTableName = "[ReadModel].[SkillCombinationResourceBpo]";
+						sqlBulkCopy.WriteToServer(dt);
+					}
+					transaction.Commit();
+				}
+			}
 		}
 
 		private void tryPersistSkillCombinationResource(DateTime dataLoaded,
