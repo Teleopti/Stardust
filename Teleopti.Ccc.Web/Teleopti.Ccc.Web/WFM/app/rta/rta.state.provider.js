@@ -15,10 +15,21 @@ angular
         };
 
         this.config = function ($stateProvider) {
-            $stateProvider.state('rta', {
-                url: '/rta',
-                templateUrl: 'app/rta/rta.html'
-            })
+            $stateProvider
+                .state('rta', {
+                    url: '/rta',
+                    templateUrl: 'app/rta/rta.html',
+                    resolve: {
+                        toggles: function (Toggle) {
+                            return Toggle;
+                        }
+                    },
+                    controller: function ($state, toggles) {
+                        if (toggles.RTA_FrontEndRefactor_44772)
+                            $state.go('refact-rta');
+                    },
+
+                })
                 .state('rta.sites', {
                     url: '/?skillIds&skillAreaId',
                     templateUrl: 'app/rta/overview/rta-sites.html',
