@@ -1077,6 +1077,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers
 
 			var rep = new OptionalColumnRepository(GetUnitOfWork);
 			_optionalColumnCollection = rep.GetOptionalColumns<Person>();
+			foreach (var optionalColumn in _optionalColumnCollection)
+			{
+				GetUnitOfWork.Remove(optionalColumn);
+			}
 		}
 
 		public void LoadIt()
