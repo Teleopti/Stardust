@@ -259,7 +259,7 @@
 			}
 		}
 
-		function suggestOvertime() {
+		function suggestOvertime(form) {
 			var skillIds;
 			if (currentSkills.Skills) {
 				skillIds = currentSkills.Skills.map(function (skill) {
@@ -269,7 +269,7 @@
 				skillIds = [currentSkills.Id];
 			}
 			vm.hasRequestedSuggestion = true;
-			var settings = utilService.prepareSettings(vm.overtimeSettings)
+			var settings = utilService.prepareSettings(form)
 
 			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: vm.timeSerie, OvertimePreferences: settings });
 			query.$promise.then(function (response) {
