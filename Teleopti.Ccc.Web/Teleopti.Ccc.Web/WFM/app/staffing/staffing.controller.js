@@ -30,7 +30,6 @@
 		vm.generateChart = generateChart;
 		vm.dynamicIcon = dynamicIcon;
 		vm.compensations = [];
-		vm.overtimeSettings = {};
 		vm.showOverstaffSettings = false;
 		vm.openImportData = false;
 		vm.toggleOverstaffSettings = toggleOverstaffSettings;
