@@ -42,7 +42,7 @@ namespace Teleopti.Support.Tool.Tool
 						f = Path.GetFullPath(f);
 						return Directory.GetFiles(f, "ApplicationInsights.config", SearchOption.AllDirectories);
 					}
-					catch (Exception e)
+					catch (Exception)
 					{
 						return new string[0];
 					}
@@ -57,7 +57,7 @@ namespace Teleopti.Support.Tool.Tool
 						File.WriteAllText(file, contents.Replace(keyPlaceholder, instrumentationKey));
 					}
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 				}
 			}
