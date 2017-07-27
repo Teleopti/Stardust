@@ -348,27 +348,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			affectedSkill.Resource.Should().Be.EqualTo(10.5);
 			affectedSkill.Skills.First().Should().Be.EqualTo(_skill);
 		}
-		[Test]
-		public void tst()
-		{
-			var interval = new List<SkillStaffingInterval>
-			{
-				new SkillStaffingInterval{StartDateTime = new DateTime(2017,7,26,12,45,0),FStaff = 10, CalculatedResource = 15},
-				new SkillStaffingInterval{StartDateTime = new DateTime(2017,7,26,12,45,0),FStaff = 10, CalculatedResource = 15},
-				new SkillStaffingInterval{StartDateTime = new DateTime(2017,7,26,13,0,0),FStaff = 10, CalculatedResource = 15}
-			};
-
-			var grouped = interval.GroupBy(l => l.StartDateTime)
-				.Select(cl => new SkillStaffingInterval
-					{
-						StartDateTime =  cl.First().StartDateTime,
-						FStaff = cl.Sum(c => c.FStaff),
-						CalculatedResource = cl.Sum(c => c.CalculatedResource),
-					}).ToList<SkillStaffingInterval>();
-
-			grouped.Count.Should().Be.EqualTo(2);
-			grouped.First().CalculatedResource.Should().Be.EqualTo(30);
-		}
+		
 	}
 
 	
