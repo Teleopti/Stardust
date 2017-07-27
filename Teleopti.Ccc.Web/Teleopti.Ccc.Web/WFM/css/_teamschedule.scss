@@ -1107,6 +1107,9 @@ organization-picker {
 			width: $DEFAULT-WIDTH;
 			border-bottom-color: $NG-MATERIAL-DEFAULT;
 			outline: none !important;
+			line-height: 20px;
+			min-height: 20px !important;
+			padding-top:8px;
 
 			&:focus {
 				border-bottom: 1px solid $blue-100;
