@@ -1,3 +1,13 @@
 ﻿.withoutAMPM::-webkit-datetime-edit-ampm-field {
 	display: none;
 }
+
+.modal-box .modalbg .drop-box {
+    height: 65px;
+    margin: 10px;
+    padding: 9.5px;
+    text-align: center;
+    border: 1px solid #ddd;
+    background: rgba(0, 0, 0, 0.06);
+    border-radius: 0;
+}

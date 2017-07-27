@@ -32,6 +32,7 @@
 		vm.compensations = [];
 		vm.overtimeSettings = {};
 		vm.showOverstaffSettings = false;
+		vm.openImportData = false;
 		vm.toggleOverstaffSettings = toggleOverstaffSettings;
 		vm.validSettings = validSettings;
 

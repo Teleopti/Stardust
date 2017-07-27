@@ -1,0 +1,31 @@
+<div class="wfm-block">
+    <div ngf-drop ngf-select class="drop-box" ngf-allow-dir="false" ngf-pattern="'.csv'" ngf-accept="text/csv" ngf-change="vm.checkValid($files)"
+        ngf-model-options="{allowInvalid: true}">
+        Drag and drop .csv files here or click to upload
+    </div>
+    <div class="import-file-template">
+        {{'ReferToFileTemplate'|translate}}
+        <a href="" ng-click="vm.getFileTemplate()">&nbsp;{{'here'|translate}}</a>
+    </div>
+    <div ng-if="vm.validFile.name">
+        {{'ImportFileNameColon'|translate}} {{vm.validFile.name}}
+    </div>
+    <div ng-if="vm.invalidFile.name" class="alert-error notice-spacer">
+        <i class='mdi mdi-alert-octagon'></i> {{'TheSelectedFileCanNotBeAcceptedPleaseCheckTheFileType'|translate}} {{'RejectedFiles'|translate}}
+        {{vm.invalidFile.name}}
+    </div>
+    <md-progress-linear ng-show="vm.isProcessing" md-mode="indeterminate"></md-progress-linear>
+    <div ng-show="vm.isSuccessful">
+        <div ng-show="!vm.hasInvalidData" class="alert-success notice-spacer"><i class='mdi mdi-thumb-up'></i>{{'SuccessfullyImportedCountColon'|translate}} {{vm.successCount}}.</div>
+        <div ng-show="vm.hasInvalidData">
+            <div ng-show="vm.successCount > 0" class="alert-success notice-spacer">
+                <i class='mdi mdi-thumb-up'></i>{{ vm.getSuccessMessage(vm.successCount) }}.
+            </div>
+            <div class="alert-warning notice-spacer">
+                <i class='mdi mdi-information'></i>{{ vm.getWarningMessage(vm.warningCount) }}. {{ vm.getFailureMessage(vm.failedCount)
+                }}. {{'PleaseFindTheDownloadedExcelSheetToCheckTheError'|translate}}
+            </div>
+        </div>
+    </div>
+    <div ng-show="vm.isFailed" class="alert-error notice-spacer"><i class='mdi mdi-alert-octagon'></i>{{'ImportError'|translate}}! {{vm.errorMsg}}</div>
+</div>
