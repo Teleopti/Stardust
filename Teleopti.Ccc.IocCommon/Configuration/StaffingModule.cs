@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleStaffingPossibilityCalculator>().As<IScheduleStaffingPossibilityCalculator>().SingleInstance();
 			builder.RegisterType<SkillStaffingDataLoader>().As<ISkillStaffingDataLoader>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingViewModelCreator>().SingleInstance();
+			builder.RegisterType<ImportBpoFile>().SingleInstance();
 
 			if (_configuration.Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686))
 			{

@@ -410,7 +410,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedCombinationResources.Single(x => x.StartDateTime.Equals(start)).Resource.Should().Be.EqualTo(1d);
 			loadedCombinationResources.Single(x => x.StartDateTime.Equals(start.AddMinutes(15))).Resource.Should().Be.EqualTo(3d);
 		}
-
 	}
 
 	

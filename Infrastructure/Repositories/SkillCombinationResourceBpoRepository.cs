@@ -6,18 +6,10 @@ using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class SkillCombinationResourceBpo
-	{
-		public DateTime StartDateTime { get; set; }
-		public DateTime EndDateTime { get; set; }
-		public double Resources { get; set; }
-		public Guid SkillCombinationId { get; set; }
-		public string Source { get; set; }
-	}
-
 	public interface ISkillCombinationResourceBpoRepository
 	{
 		void PersistSkillCombinationResourceBpo(DateTime utcDateTime, List<SkillCombinationResourceBpo> combinationResources);
@@ -75,7 +67,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					{
 						using (var transaction = connection.BeginTransaction())
 						{
-							using (var insertCommand = new SqlCommand(@"insert into ReadModel.[SourceBpo] (Id, Source) Values (@id,@source)", connection,transaction))
+							using (var insertCommand = new SqlCommand(@"insert into [BusinessProcessOutsourcer] (Id, Source) Values (@id,@source)", connection,transaction))
 							{
 								insertCommand.Parameters.AddWithValue("@id", bpoId);
 								insertCommand.Parameters.AddWithValue("@source", skillCombinationResourceBpo.Source);
@@ -106,7 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public Dictionary<Guid,string> LoadSourceBpo(SqlConnection connection)
 		{
 			var bpoList = new Dictionary<Guid, string>();
-			using (var command = new SqlCommand("select Id, Source from [ReadModel].[SourceBpo]", connection))
+			using (var command = new SqlCommand("select Id, Source from [BusinessProcessOutsourcer]", connection))
 			{
 				using (var reader = command.ExecuteReader())
 				{
@@ -123,7 +115,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			var result = _currentUnitOfWork.Current().Session()
 				.CreateSQLQuery(@"select SkillCombinationId,StartDateTime,EndDateTime,Resources,sb.source as Source
-								FROM ReadModel.SkillCombinationResourceBpo scrb,  ReadModel.sourcebpo sb
+								FROM ReadModel.SkillCombinationResourceBpo scrb,  BusinessProcessOutsourcer sb
 									where sb.Id= scrb.SourceId")
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(SkillCombinationResourceBpo)))
 				.List<SkillCombinationResourceBpo>();
