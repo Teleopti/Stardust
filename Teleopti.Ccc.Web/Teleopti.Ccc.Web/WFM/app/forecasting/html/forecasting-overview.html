@@ -7,7 +7,8 @@
 	</div>
 
 	<div class="fab-wrapper forecast-create-fad">
-		<button class="wfm-fab grow-out forecast-create-button material-depth-1" ng-click="displayForecastingModal()" ng-class="{'shrink-in':isForecastRunning}" ng-disabled="isForecastRunning" ng-class="{'wfm-btn-invis-disabled': isForecastRunning}">
+		<button class="wfm-fab grow-out forecast-create-button material-depth-1" ng-click="displayForecastingModal()" ng-class="{'shrink-in':isForecastRunning}"
+		 ng-disabled="isForecastRunning" ng-class="{'wfm-btn-invis-disabled': isForecastRunning}">
 			<i class="mdi mdi-arrow-right"></i>
 			<md-tooltip>
 				{{'ForecastAll' | translate}}
@@ -37,8 +38,10 @@
 			<div ng-click="getForecastResult(workload)" tabindex="0">
 				<span><b>{{workload.Name}}</b></span>
 				<md-progress-circular class="workload-spinner" md-mode="indeterminate" ng-if="workload.ShowProgress"></md-progress-circular>
-				<span class="workload-indicator" ng-if="workload.IsSuccess"><md-tooltip>{{'SuccessTip' | translate}}</md-tooltip><i class="mdi mdi-check"></i></span>
-				<span class="workload-indicator" ng-if="workload.IsFailed"><md-tooltip>{{workload.Message}}</md-tooltip><i class="mdi mdi-close"></i></span>
+				<span class="workload-indicator" ng-if="workload.IsSuccess">
+					<md-tooltip>{{'SuccessTip' | translate}}</md-tooltip><i class="mdi mdi-check"></i></span>
+				<span class="workload-indicator" ng-if="workload.IsFailed">
+					<md-tooltip>{{workload.Message}}</md-tooltip><i class="mdi mdi-close"></i></span>
 				<span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
 			</div>
 		</card-header>
@@ -60,7 +63,8 @@
 				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
 			</div>
 			<div ng-show="workload.forecastResultLoaded">
-				<forecast-result-chart class="wfm-chart" chart-id="workload.ChartId" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays" selected-day-count="workload.selectedDayCount"></forecast-result-chart>
+				<forecast-result-chart class="wfm-chart" chart-id="workload.ChartId" refresh-fn="workload.Refresh" selected-fn="workload.selectedDays"
+				 selected-day-count="workload.selectedDayCount"></forecast-result-chart>
 			</div>
 			<div class="con-footer">
 				<button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="displayExportModal(workload)" ng-if="isExportEnabled">
@@ -77,14 +81,16 @@
 					</md-tooltip>
 				</button>
 
-				<button class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-primary': workload.selectedDayCount > 0,'wfm-btn-invis-disabled': workload.selectedDayCount < 1}"  ng-click="displayModifyModal(workload)" >
+				<button class="wfm-btn forecast-modify-button" ng-class="{'wfm-btn-invis-primary': workload.selectedDayCount > 0,'wfm-btn-invis-disabled': workload.selectedDayCount < 1}"
+				 ng-click="displayModifyModal(workload)">
 					<md-tooltip ng-if="workload.selectedDayCount < 1">
 						{{ 'SelectToModify' | translate }}
 					</md-tooltip>
 					{{ 'Modify' | translate }} <span ng-bind="formatSelectedDayCount(workload.selectedDayCount)"></span>
 				</button>
 
-				<button class="wfm-btn forecast-workload" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-default': workload.forecastResultLoaded && !disableDoForecast(), 'wfm-btn-invis-disabled': !workload.forecastResultLoaded || disableDoForecast()}" ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
+				<button class="wfm-btn forecast-workload" ng-click="displayForecastingModal(workload)" ng-class="{'wfm-btn-invis-default': workload.forecastResultLoaded && !disableDoForecast(), 'wfm-btn-invis-disabled': !workload.forecastResultLoaded || disableDoForecast()}"
+				 ng-disabled="!workload.forecastResultLoaded || disableDoForecast()">
 					{{ 'ForecastDo' | translate }}
 					<md-tooltip>
 						{{ 'GenerateForecastTip' | translate }}
@@ -132,7 +138,8 @@
 	<div class="modal-actions">
 		<aside>
 			<button class="wfm-btn wfm-btn-invis-default" ng-click="cancelForecastingModal()">{{ 'Close' | translate }}</button>
-			<button class="wfm-btn do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-primary': !disableDoForecast(), 'wfm-btn-invis-disabled': disableDoForecast()}" ng-click="doForecast(query.period)">{{ 'ForecastDo' | translate }}</button>
+			<button class="wfm-btn do-forecast" ng-disabled="disableDoForecast()" ng-class="{'wfm-btn-invis-primary': !disableDoForecast(), 'wfm-btn-invis-disabled': disableDoForecast()}"
+			 ng-click="doForecast(query.period)">{{ 'ForecastDo' | translate }}</button>
 		</aside>
 	</div>
 </modal-dialog>
@@ -154,7 +161,7 @@
 	<div class="modal-actions">
 		<aside>
 			<button class="wfm-btn wfm-btn-invis-default" ng-click="displayExportModal()">{{ 'Close' | translate }}</button>
-			<button ng-disabled="exporting" class="wfm-btn wfm-btn-invis-default" ng-click="exportToFile(query.period, modalForecastingInfo)" >
+			<button ng-disabled="exporting" class="wfm-btn wfm-btn-invis-default" ng-click="exportToFile(query.period, modalForecastingInfo)">
 				{{ 'Export' | translate }}
 			</button>
 			<md-progress-linear md-mode="indeterminate" ng-cloak ng-if="exporting"></md-progress-linear>
@@ -183,7 +190,8 @@
 						<span>{{ 'Campaign' | translate }}</span>
 					</label>
 
-					<label ng-click="clearOverride()" class="wfm-btn forecast-clear-override-button" ng-class="{'wfm-btn-invis-primary': !disableClearOverride(),'wfm-btn-invis-disabled': disableClearOverride()}" style="font-weight: normal;">
+					<label ng-click="clearOverride()" class="wfm-btn forecast-clear-override-button" ng-class="{'wfm-btn-invis-primary': !disableClearOverride(),'wfm-btn-invis-disabled': disableClearOverride()}"
+					 style="font-weight: normal;">
 						<input type="checkbox" style="display: none;" />
 						<span>{{ 'ClearOverride' | translate }}</span>
 					</label>
@@ -201,8 +209,7 @@
 				<div class="con-flex">
 					<h2>{{ 'Campaign' | translate }}</h2>
 					<p>
-						{{ 'AddCampaignIntro' | translate }}.
-						{{modalModifyInfo.selectedDaysText}}.
+						{{ 'AddCampaignIntro' | translate }}. {{modalModifyInfo.selectedDaysText}}.
 						<br/>
 						<span>{{ 'Calls' | translate }}: </span>
 						<span class="forecast-campaign-calls-count">{{sumOfCallsForSelectedDays}}. </span>
@@ -252,8 +259,7 @@
 				<div class="con-flex">
 					<h2>{{ 'AbsenceOverride' | translate }}</h2>
 					<p>
-						{{ 'ForecastOverrideMsg' | translate }}
-						{{ modalModifyInfo.selectedDaysText }}.
+						{{ 'ForecastOverrideMsg' | translate }} {{ modalModifyInfo.selectedDaysText }}.
 					</p>
 				</div>
 			</div>
@@ -344,3 +350,9 @@
 		</div>
 	</div>
 </modal-dialog>
+<div class="con-row">
+	<div class="con-flex" style="margin:auto 50px;">
+		<iframe style="position: absolute; height: 80%; width:80%; border: none" class="con-flex" src="https://www.youtube.com/embed/RBHY5_VXDmM"
+		 frameborder="0" allowfullscreen></iframe>
+	</div>
+</div>
