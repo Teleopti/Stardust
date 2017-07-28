@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			"/vendor/"
 		};
 
+		private bool _isDisposed;
+
 		public void Init(HttpApplication application)
 		{
 			// this will run on every HttpApplication initialization in the application pool
@@ -47,6 +49,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			// exclude TestController from principal stuff
 			var url = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
 			if (isTestController(url)) return;
+			if (_isDisposed) return;
 
 			var requestContextInitializer = DependencyResolver.Current.GetService<IRequestContextInitializer>();
 
@@ -97,6 +100,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public void Dispose()
 		{
+			_isDisposed = true;
 		}
 	}
 }
