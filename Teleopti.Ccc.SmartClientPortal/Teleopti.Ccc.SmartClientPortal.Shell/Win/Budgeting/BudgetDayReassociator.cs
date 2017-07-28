@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
@@ -22,6 +23,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting
 			unitOfWork.Reassociate(_budgetGroupMainModel.BudgetGroup);
 			if (!LazyLoadingManager.IsInitialized(_budgetGroupMainModel.BudgetGroup))
 				LazyLoadingManager.Initialize(_budgetGroupMainModel.BudgetGroup);
+
+			unitOfWork.Reassociate(_budgetGroupMainModel.BudgetGroup.SkillCollection.OfType<IChildSkill>().Select(s => s.ParentSkill).Distinct());
 			unitOfWork.Reassociate(_budgetGroupMainModel.BudgetGroup.SkillCollection);
 			foreach (ISkill skill in _budgetGroupMainModel.BudgetGroup.SkillCollection)
 			{
