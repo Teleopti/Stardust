@@ -1079,6 +1079,13 @@ md-select-menu md-option:first-child:not([disabled]):hover {
 	}
 }
 
+// temp
+._off-screen {
+	visibility: hidden;
+	position: absolute;
+	left: -9999px;
+}
+
 /*****************************
  *    Organization Picker    *
  *****************************/

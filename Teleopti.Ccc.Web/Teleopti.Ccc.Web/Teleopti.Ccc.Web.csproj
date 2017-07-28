@@ -1459,6 +1459,11 @@
     <Content Include="WFM\app\global\favoriteSearch\favoriteSearchPanel.tpl.html" />
     <Content Include="WFM\app\global\favoriteSearch\_modules.js" />
     <Content Include="WFM\app\global\focusInput\focusInput.directive.js" />
+    <Content Include="WFM\app\global\groupPage\groupPage.component.js" />
+    <Content Include="WFM\app\global\groupPage\groupPage.component.spec.js" />
+    <Content Include="WFM\app\global\groupPage\groupPage.service.js" />
+    <Content Include="WFM\app\global\groupPage\groupPagePicker.tpl.html" />
+    <Content Include="WFM\app\global\groupPage\_modules.js" />
     <Content Include="WFM\app\global\localeLanguageSort\localeLanguageSorting.service.js" />
     <Content Include="WFM\app\global\modal\miniConfirmModal.tpl.html" />
     <Content Include="WFM\app\global\modal\modal.service.js" />
