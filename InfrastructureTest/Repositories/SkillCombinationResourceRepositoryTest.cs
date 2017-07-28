@@ -452,5 +452,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.EqualTo(3d);
 		}
 
+		[Test, Ignore("WIP")]
+		public void ShouldReturnResourcesIfNoBpoSourceAvailable()
+		{
+			
+		}
+
 	}
 }

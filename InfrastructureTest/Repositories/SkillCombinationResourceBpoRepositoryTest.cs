@@ -5,14 +5,12 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -146,7 +144,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			
 			Target.PersistSkillCombinationResourceBpo(Now.UtcDateTime(), combinationResources);
-			CurrentUnitOfWork.Current().PersistAll();
+			//CurrentUnitOfWork.Current().PersistAll();
 
 			var bpoList = new Dictionary<Guid, string>();
 			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
@@ -155,12 +153,37 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				bpoList = Target.LoadSourceBpo(connection);
 			}
 			bpoList.Count.Should().Be.EqualTo(1);
-			}
-
-			//[Test]
-			//public void ShouldCreateSkillCombinationWhenMissing()
-			//{
-
-			//}
 		}
+
+		[Test, Ignore("ignoreing it for now as we will have some way of loading the BPO resources later")]
+		public void ShouldCreateSkillCombinationWhenMissing()
+		{
+			var skill1Id = persistSkill();
+			var skill2Id = persistSkill();
+			var startDate = new DateTime(2016, 12, 20, 0, 0, 0);
+			var endDate = new DateTime(2016, 12, 20, 0, 15, 0);
+
+			var combinationResources = new List<ImportSkillCombinationResourceBpo>
+			{
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate,
+					EndDateTime = endDate,
+					Resources = 1,
+					SkillIds = new List<Guid>{skill1Id,skill2Id},
+					Source = "TPBrazil"
+				},
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate.AddMinutes(15),
+					EndDateTime = endDate.AddMinutes(15),
+					Resources = 3.5,
+					SkillIds = new List<Guid>{skill1Id,skill2Id},
+					Source = "TPBrazil"
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(Now.UtcDateTime(), combinationResources);
+			
+		}
+	}
 }
