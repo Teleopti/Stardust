@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 
 
-			using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
+			using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.CheckConstraints, transaction))
 			{
 				sqlBulkCopy.DestinationTableName = "[ReadModel].[SkillCombination]";
 				sqlBulkCopy.WriteToServer(dt);
