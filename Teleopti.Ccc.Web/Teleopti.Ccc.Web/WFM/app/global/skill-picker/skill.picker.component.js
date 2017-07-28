@@ -18,6 +18,11 @@
   function SkillPickerComponentController() {
     var ctrl = this;
 
+    // behavior test 
+    ctrl.skillsLoaded = true;
+    ctrl.skillAreasLoaded = true;
+    // end
+
     ctrl.$onInit = function () {
       if (angular.isDefined(ctrl.preselectedItem.skillIds)) {
         ctrl.selectedSkill = ctrl.skills.find(function(skill) {

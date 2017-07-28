@@ -1,7 +1,7 @@
-﻿<rta-card ng-repeat="card in $ctrl.siteCards" ng-open="card.isOpen" ng-click="card.fetchTeamData(card)">
+﻿<rta-card class="site" ng-repeat="card in $ctrl.siteCards" ng-open="card.isOpen" ng-click="card.fetchTeamData(card)">
     <rta-card-header ng-attr-styles="border-left-color: {{card.site.Color}};">
         <div class="rta-card-content-wrapper flex">
-            <div class = "rta-site-name-container"><b>{{card.site.Name}}</b></div>
+            <div class = "rta-site-name-container"><b ng-attr-data-max="{{card.site.AgentsCount}}" ng-attr-data-value="{{card.site.InAlarmCount}}">{{card.site.Name}}</b></div>
             <div class="rta-alarm-values-container">{{'InAlarm'|translate}}:
                 <b>{{card.site.InAlarmCount}}</b>
             </div>
@@ -19,11 +19,11 @@
         <div class="con-row">
             <div class="con-flex">
                 <div class="wfm-grid" class="animate-show">
-                    <div class="grid-card-mini" ng-repeat="team in card.teams">
+                    <div class="grid-card-mini team" ng-repeat="team in card.teams">
                         <div class="list-content">
                             <div class="list-header" ng-click="$ctrl.selectItem(team)" ng-class="team.Color">
                                 <div class="flex">
-                                    <h1 ng-attr-data-max="{{team.AgentsCount}}" class="rta-team-name-container">{{team.Name}}</h1>
+                                    <h1 ng-attr-data-max="{{team.AgentsCount}}" ng-attr-data-value="{{team.InAlarmCount}}" class="rta-team-name-container">{{team.Name}}</h1>
                                     <i class="mdi pull-right flex-1" ng-class="{'mdi-check': team.isSelected, 'mdi-plus': !team.isSelected}"></i>
                                      <md-tooltip>{{team.isSelected ? "Unselect team" : "Select team"}}</md-tooltip>
                                 </div>

@@ -1,6 +1,7 @@
 ﻿<div class="con-row">
     <div class="con-flex">
         <md-autocomplete 
+        ng-attr-skillsLoaded="{{$ctrl.skillsLoaded}}"
         md-min-length="0"
         md-selected-item="$ctrl.selectedSkill" 
         md-selected-item-change="$ctrl.selectSkill(skill)" 
@@ -19,6 +20,7 @@
 
     <div class="con-flex">
         <md-autocomplete 
+        ng-attr-skillAreasLoaded="{{$ctrl.skillAreasLoaded}}"
         md-min-length="0" 
         md-selected-item="$ctrl.selectedSkillArea" 
         md-selected-item-change="$ctrl.selectSkillArea(skillArea)" 

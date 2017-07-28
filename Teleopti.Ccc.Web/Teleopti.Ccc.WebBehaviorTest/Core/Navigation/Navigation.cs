@@ -455,7 +455,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoRealTimeAdherenceForTeamsOnSite(Guid siteId)
 		{
-			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&pollingInterval=100");
+			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&pollingInterval=100&open");
 		}
 
 		public static void GotoRealTimeAdherenceForSites(IEnumerable<Guid> siteIds)
@@ -472,22 +472,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GotoRealTimeAdherenceForSkillForTeamsOnSite(Guid skillId, Guid siteId)
 		{
-			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillIds=" + skillId + "&pollingInterval=100");
+			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillIds=" + skillId + "&pollingInterval=100&open");
 		}
 
 		public static void GotoRealTimeAdherenceForSkillForSites(Guid skillId)
 		{
-			GoToPage("wfm/#/rta/?skillIds=" + skillId + "&pollingInterval=100");
+			GoToPage("wfm/#/rta/?skillIds=" + skillId + "&pollingInterval=100&open");
 		}
 
 		public static void GotoRealTimeAdherenceForSkillAreaForSites(Guid skillAreaId)
 		{
-			GoToPage("wfm/#/rta/?skillAreaId=" + skillAreaId + "&pollingInterval=100");
+			GoToPage("wfm/#/rta/?skillAreaId=" + skillAreaId + "&pollingInterval=100&open");
 		}
 
 		public static void GotoRealTimeAdherenceForSkillAreaForTeamsOnSite(Guid skillAreaId, Guid siteId)
 		{
-			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillAreaId=" + skillAreaId + "&pollingInterval=100");
+			GoToPage("wfm/#/rta/teams/?siteIds=" + siteId + "&skillAreaId=" + skillAreaId + "&pollingInterval=100&open");
 		}
 
 		public static void GotoRealTimeAdherenceAgentsOnTeam( Guid teamId)

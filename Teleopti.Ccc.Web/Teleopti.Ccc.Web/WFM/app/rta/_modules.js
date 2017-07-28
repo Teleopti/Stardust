@@ -28,7 +28,15 @@
 
 		var result = $rootScope.$on('$stateChangeSuccess',
 			function (event, toState) {
-				if ($location.url() == $state.current.url && toState.name == 'rta') $state.go('rta.sites');
+				var location = $location.url();
+				if (location == $state.current.url && toState.name == 'rta') {
+					if (toggles.RTA_FrontEndRefactor_44772) {
+						$state.go('refact-rta')
+					} else {
+						$state.go('rta.sites')
+					}
+				}
+
 			});
 		return result;
 	}

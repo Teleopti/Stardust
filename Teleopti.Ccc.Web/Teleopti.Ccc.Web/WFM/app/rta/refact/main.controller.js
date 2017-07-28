@@ -49,6 +49,7 @@
 			} else {
 				getSiteCards();
 			}
+
 		})();
 
 		function getSiteCards(ids) {
@@ -56,13 +57,22 @@
 				rtaService.getSiteCardsFor(ids).then(function (result) {
 					vm.siteCards = buildSiteCards(result);
 					vm.noSiteCards = !vm.siteCards.length;
+					fetchTeamsForAllSiteCards();
 				});
 			} else {
 				rtaService.getSiteCardsFor().then(function (result) {
 					vm.siteCards = buildSiteCards(result);
 					vm.noSiteCards = !vm.siteCards.length;
+					fetchTeamsForAllSiteCards();
 				});
 			}
+		}
+
+		function fetchTeamsForAllSiteCards() {
+			vm.siteCards.forEach(function (s) {
+				if (s.isOpen)
+					fetchTeamData(s);
+			})
 		}
 
 		function buildSiteCards(sites) {
@@ -204,8 +214,10 @@
 				var match = vm.siteCards.find(function (card) {
 					return card.site.Id === site.Id;
 				});
-				match.site.Color = translateSiteColors(site);
-				match.site.InAlarmCount = site.InAlarmCount;
+				if (match) {
+					match.site.Color = translateSiteColors(site);
+					match.site.InAlarmCount = site.InAlarmCount;
+				}
 			});
 		}
 
@@ -252,7 +264,7 @@
 
 		vm.getSelectedItems = function (item) {
 			var selectedItemsHandler = createSelectedItemsHandler(vm.selectedItems);
-			
+
 			if (angular.isDefined(item.site)) {
 				selectSite(selectedItemsHandler, item);
 			} else {

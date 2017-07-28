@@ -18,17 +18,7 @@ angular
             $stateProvider
                 .state('rta', {
                     url: '/rta',
-                    templateUrl: 'app/rta/rta.html',
-                    resolve: {
-                        toggles: function (Toggle) {
-                            return Toggle;
-                        }
-                    },
-                    controller: function ($state, toggles) {
-                        if (toggles.RTA_FrontEndRefactor_44772)
-                            $state.go('refact-rta');
-                    },
-
+                    templateUrl: 'app/rta/rta.html'
                 })
                 .state('rta.sites', {
                     url: '/?skillIds&skillAreaId',
@@ -45,6 +35,25 @@ angular
                 })
                 .state('rta.teams', {
                     url: '/teams/?siteIds&skillIds&skillAreaId',
+                    resolve: {
+                        toggles: function (Toggle) {
+                            return Toggle;
+                        }
+                    },
+                    controller: function ($state, $stateParams, toggles) {
+                        if (toggles.RTA_FrontEndRefactor_44772) {
+                            $state.go('refact-rta', { open: 'true' })
+                        } else {
+                            $state.go('rta.teams2', {
+                                siteIds: $stateParams.siteIds,
+                                skillIds: $stateParams.skillIds,
+                                skillAreaId: $stateParams.skillAreaId
+                            })
+                        }
+                    }
+                })
+                .state('rta.teams2', {
+                    url: '/teams2/?siteIds&skillIds&skillAreaId',
                     templateUrl: 'app/rta/overview/rta-teams.html',
                     controller: 'RtaOverviewController as vm',
                     params: {

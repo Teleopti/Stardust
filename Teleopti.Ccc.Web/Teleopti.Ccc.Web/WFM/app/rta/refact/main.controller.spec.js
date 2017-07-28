@@ -168,6 +168,89 @@ describe('RtaMainController', function () {
       expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
+    it('should build site card view model when open in url is true', function () {
+      stateParams.open = 'true';
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'londonId',
+          Name: 'London',
+          AgentsCount: 11,
+          InAlarmCount: 5,
+          Color: 'warning'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'greenId'
+        });
+
+      vm = $controllerBuilder.createController().vm;
+
+      expect(vm.siteCards[0].teams.length).toEqual(1);
+      expect(vm.siteCards[0].teams[0].SiteId).toEqual('londonId');
+      expect(vm.siteCards[0].teams[0].Id).toEqual('greenId');
+    });
+
+    it('should build site card view model with skill ids when open in url is true', function () {
+      stateParams.open = 'true';
+      stateParams.skillIds = ['phoneId'];
+
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'londonId',
+          Name: 'London',
+          AgentsCount: 11,
+          InAlarmCount: 5,
+          SkillId: 'phoneId',
+          Color: 'warning'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          SkillId: 'phoneId',
+          Id: 'greenId'
+        });
+
+      vm = $controllerBuilder.createController().vm;
+
+      expect(vm.siteCards[0].teams.length).toEqual(1);
+      expect(vm.siteCards[0].teams[0].SiteId).toEqual('londonId');
+      expect(vm.siteCards[0].teams[0].Id).toEqual('greenId');
+    });
+
+    it('should update adherence for teams when open in url is true', function () {
+      stateParams.open = 'true';
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'londonId',
+          Name: 'London',
+          AgentsCount: 11,
+          InAlarmCount: 5,
+          Color: 'warning'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'greenId',
+          InAlarmCount: 2,
+          Color: 'good'
+        });
+
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+      c.apply(function () {
+        $fakeBackend
+          .clearTeamAdherences()
+          .withTeamAdherence({
+            SiteId: 'londonId',
+            Id: 'greenId',
+            InAlarmCount: 6,
+            Color: 'warning'
+          });
+      })
+        .wait(5000);
+
+      expect(vm.siteCards[0].teams[0].InAlarmCount).toEqual(6);
+      expect(vm.siteCards[0].teams[0].Color).toEqual('warning');
+    });
+
     it('should build site card view model when preselected skill', function () {
       stateParams.skillIds = ['phoneId'];
       $fakeBackend
@@ -189,7 +272,7 @@ describe('RtaMainController', function () {
         });
 
       vm = $controllerBuilder.createController().vm;
-      
+
       expect(vm.siteCards.length).toEqual(1);
       expect(vm.siteCards[0].site.Id).toEqual('londonId');
       expect(vm.siteCards[0].site.Name).toEqual('London');
