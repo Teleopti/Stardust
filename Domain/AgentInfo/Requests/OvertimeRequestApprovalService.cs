@@ -65,10 +65,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
 		private void addOvertimeActivity(Guid activityId, IOvertimeRequest overtimeRequest)
 		{
+			var agentDateTime = TimeZoneHelper.ConvertFromUtc(overtimeRequest.Period.StartDateTime, overtimeRequest.Person.PermissionInformation.DefaultTimeZone());
 			_commandDispatcher.Execute(new AddOvertimeActivityCommand
 			{
 				ActivityId = activityId,
-				Date = new DateOnly(overtimeRequest.Period.StartDateTime),
+				Date = new DateOnly(agentDateTime),
 				MultiplicatorDefinitionSetId = overtimeRequest.MultiplicatorDefinitionSet.Id.GetValueOrDefault(),
 				Period = overtimeRequest.Period,
 				PersonId = overtimeRequest.Person.Id.GetValueOrDefault()
