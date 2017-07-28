@@ -513,13 +513,6 @@ namespace Teleopti.Interfaces.Domain
                 }
             }
             
-            // Try to parse as TimeSpan
-            TimeSpan timeSpan;
-            if (TimeSpan.TryParse(timeAsText, out timeSpan))
-            {
-                timeValue = timeSpan;
-                return true;
-            }
             return TryParseLongHourString(timeAsText, out timeValue, timeFormatsType);
         }
 

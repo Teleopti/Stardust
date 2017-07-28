@@ -20,6 +20,14 @@ namespace Teleopti.Ccc.DomainTest.Time
     {
         private TimeSpan timeValue;
 
+	    [Test]
+	    public void ShouldInterpret24HoursAs24HoursBug44951()
+	    {
+			string timeAsText = "24:00:00";
+		    Assert.IsTrue(TimeHelper.TryParseLongHourStringDefaultInterpretation(timeAsText, TimeSpan.MaxValue, out timeValue, TimeFormatsType.HoursMinutesSeconds, false));
+		    Assert.That(timeValue, Is.EqualTo(TimeSpan.FromHours(24)));
+		}
+
         [Test]
         public void CanUseDefaultInterpretationParseAsMinutes()
         {
