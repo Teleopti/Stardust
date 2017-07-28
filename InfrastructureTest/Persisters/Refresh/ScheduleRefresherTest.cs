@@ -104,8 +104,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.Refresh
 			var personAbsences = scheduleDay.PersonAbsenceCollection();
 			
 			personAbsences.Count.Should().Be(2);
-			personAbsences[0].Should().Be.EqualTo(personAbsence);
-			personAbsences[1].Should().Be.EqualTo(newPersonAbsence);
+			personAbsences.Contains(personAbsence).Should().Be.True();
+			personAbsences.Contains(newPersonAbsence).Should().Be.True();
 		}
 
 
