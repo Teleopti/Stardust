@@ -13,7 +13,6 @@ using Teleopti.Analytics.ReportTexts;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Areas.Reporting.Reports.CCC;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting
 {
@@ -149,7 +148,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		private void hideTimeZoneParameter(bool hide)
 		{
 			// Check if time zone will be hidden or not
-			if (hide || ((bool)_dataTable.Rows[0]["hide_time_zone"]))
+			if (hide || (bool)_dataTable.Rows[0]["hide_time_zone"])
 			{
 				trTimeZoneParameter.Style.Add("display", "none");
 			}
@@ -384,8 +383,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 
 				var tableCell = makeTableCell(text, HorizontalAlign.Center, VerticalAlign.Middle, cssClass);
 				var interval = summaryData.Value.Interval;
-				//if (((interval + 1) % _intervalsPerHour == 0) && (interval > 0))
-				if (((interval + 1) % _intervalsPerHour == 0))
+				if ((interval + 1) % _intervalsPerHour == 0)
 					tableCell.Style.Add("border-right", "solid 2px silver");
 
 				tableCells.Add(tableCell);
@@ -414,7 +412,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			else
 			{
 				var tableCellColumnSpan = makeTableCell("&nbsp;", HorizontalAlign.Center, VerticalAlign.Middle, cssClass);
-				tableCellColumnSpan.ColumnSpan = (_intervalsPerDay - _timeLineStartIntervalDayBefore) + (_timeLineEndInterval - _timeLineStartInterval) + _timeLineEndIntervalDayAfter;
+				tableCellColumnSpan.ColumnSpan = _intervalsPerDay - _timeLineStartIntervalDayBefore + (_timeLineEndInterval - _timeLineStartInterval) + _timeLineEndIntervalDayAfter;
 				tableRow.Cells.Add(tableCellColumnSpan);
 			}
 
@@ -914,9 +912,9 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 						intervalToolTip.EndIntervalCounter = previousIntervalCounter;
 						intervalToolTipList.Add(intervalToolTip);
 
-						if (_intervalToolTipDictionary.ContainsKey(previousPersonId))
+						if (_intervalToolTipDictionary.TryGetValue(previousPersonId, out var temp))
 							foreach (var tooltip in intervalToolTipList)
-								_intervalToolTipDictionary[previousPersonId].Add(tooltip);
+								temp.Add(tooltip);
 						else
 							_intervalToolTipDictionary.Add(previousPersonId, intervalToolTipList);
 					}
@@ -931,13 +929,9 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				}
 
 				if (
-					(!isNewPerson)
+					!isNewPerson
 					&&
-					(
-						((activityId == -1 && previousActivityId == activityId) && (absenceId == -1 && previousAbsenceId == absenceId))
-						||
-						((previousActivityId != activityId) || (previousAbsenceId != absenceId))
-					)
+					((activityId == -1 && previousActivityId == activityId) && (absenceId == -1 && previousAbsenceId == absenceId) || (previousActivityId != activityId) || (previousAbsenceId != absenceId))
 					)
 				{
 					// We are in the start of a new layer. Save the end interval of the previous layer 
@@ -1007,9 +1001,11 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 		private void changeDateParameter(int dayCount)
 		{
 			checkParametersCollection();
-			dateOffset.Value = (Convert.ToInt32(dateOffset.Value) + dayCount).ToString();
-			_sqlParameterList[0].Value = ((DateTime)_sqlParameterList[0].Value).AddDays(Convert.ToDouble(dateOffset.Value));
-			_parameterTextList[0] = ((DateTime)_sqlParameterList[0].Value).ToShortDateString();
+			var daysOffset = Convert.ToInt32(dateOffset.Value) + dayCount;
+			dateOffset.Value = daysOffset.ToString();
+			var dateTime = ((DateTime)_sqlParameterList[0].Value).AddDays(daysOffset);
+			_sqlParameterList[0].Value = dateTime;
+			_parameterTextList[0] = dateTime.ToShortDateString();
 
 			createReport();
 		}
