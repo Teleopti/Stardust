@@ -22,9 +22,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		public static Exception ErrorAtStartup { get; set; }
 		public static Task[] TasksFromStartup { get; set; }
 		private readonly object _taskWaitLockObject = new object();
-
-		private Action unsubscribeStartupErrorsAction;
-		private Action unsubscribePostAuthenticateAction;
+		private bool _noStartupErrors;
 
 		private static readonly string[] keyWords = {
 			"/togglehandler/",
@@ -42,9 +40,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			// this will run on every HttpApplication initialization in the application pool
 			application.PostAuthenticateRequest += setupPrincipal;
 			application.BeginRequest += checkForStartupErrors;
-
-			unsubscribeStartupErrorsAction = () => { application.BeginRequest -= checkForStartupErrors; };
-			unsubscribePostAuthenticateAction = () => { application.PostAuthenticateRequest -= setupPrincipal; };
 		}
 
 		private void setupPrincipal(object sender, EventArgs e)
@@ -52,7 +47,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			// exclude TestController from principal stuff
 			var url = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
 			if (isTestController(url)) return;
-			
+
 			var requestContextInitializer = DependencyResolver.Current.GetService<IRequestContextInitializer>();
 
 			requestContextInitializer.SetupPrincipalAndCulture(onlyUseGregorianCalendar(HttpContext.Current));
@@ -65,6 +60,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		private void checkForStartupErrors(object sender, EventArgs e)
 		{
+			if (_noStartupErrors) return;
+
 			var url = HttpContext.Current.Request.Url.AbsolutePath.ToLowerInvariant();
 			if (url.Contains("/togglehandler/")) return;
 
@@ -87,7 +84,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				throw startupException;
 			}
 
-			unsubscribeStartupErrorsAction?.Invoke();
+			_noStartupErrors = true;
 		}
 
 		private bool onlyUseGregorianCalendar(HttpContext context)
@@ -100,11 +97,6 @@ namespace Teleopti.Ccc.Web.Core.Startup
 
 		public void Dispose()
 		{
-			unsubscribeStartupErrorsAction?.Invoke();
-			unsubscribePostAuthenticateAction?.Invoke();
-
-			unsubscribeStartupErrorsAction = null;
-			unsubscribePostAuthenticateAction = null;
 		}
 	}
 }
