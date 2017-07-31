@@ -60,7 +60,7 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 		}
 
 		[Test]
-		public void ShouldReturnInformationOnEmptyHeader()
+		public void ShouldReturnInformationOnEmptyHeaderLine()
 		{
 			var fileContents = @"
 TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
@@ -71,17 +71,87 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("1")).Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldReturnInformationOnEmptyDataLine()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+
+TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
+
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			result.ErrorInformation.Count.Should().Be.EqualTo(1);
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("2")).Should().Not.Be.Null();
+		}
 
 		[Test]
-		public void ShouldReturnInformationOnEmptyMandatoryField()
+		public void ShouldReturnInformationOnEmptySourceField()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,12.5";
+
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("source")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnInformationOnEmptySkillGroupField()
 		{
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
 TPBRZIL,,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
-			//SkillRepository.Has("ChannelSales", new Activity());
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("Directsales")).Should().Not.Be.Null();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("skillgroup")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnInformationOnEmptyStartDateTimeField()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+TPBRZIL,ChannelSales,,2017-07-24 10:15,12.5";
+
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("startdatetime")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnInformationOnEmptyEndDateTimeField()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+TPBRZIL,ChannelSales,2017-07-24 10:00,,12.5";
+
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("enddatetime")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnInformationOnEmptyResourcesField()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,";
+
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("resources")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnInformationOnAllEmptyField()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+,,,,";
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			result.ErrorInformation.Count.Should().Be.EqualTo(5);
+			result.ErrorInformation.Count(e => e.Contains(" source")).Should().Be.EqualTo(1);
+			result.ErrorInformation.Count(e => e.Contains(" skillgroup")).Should().Be.EqualTo(1);
+			result.ErrorInformation.Count(e => e.Contains(" startdatetime")).Should().Be.EqualTo(1);
+			result.ErrorInformation.Count(e => e.Contains(" enddatetime")).Should().Be.EqualTo(1);
+			result.ErrorInformation.Count(e => e.Contains(" resources")).Should().Be.EqualTo(1);
 		}
 
 		[Test]

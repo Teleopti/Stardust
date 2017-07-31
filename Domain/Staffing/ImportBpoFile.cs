@@ -7,9 +7,37 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
+	public class ImportSkillCombinationResourceBpo
+	{
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+		public double Resources { get; set; }
+		public List<Guid> SkillIds { get; set; }
+		public string Source { get; set; }
+	}
 
+	public class SkillCombinationResourceBpo
+	{
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+		public double Resources { get; set; }
+		public Guid SkillCombinationId { get; set; }
+		public string Source { get; set; }
+	}
+
+	public class LineWithNumber
+	{
+		public string LineContent;
+		public int LineNumber;
 		public Dictionary<string, string> Tokens = new Dictionary<string, string>();
+	}
+
+	public class ImportBpoFileResult
+	{
+		public bool Success = true;
+		public HashSet<string> ErrorInformation = new HashSet<string>();
 		public string SuccessInformation;
+	}
 
 	public class ImportBpoFile
 	{
@@ -41,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			if (fileContents.IsNullOrEmpty())
 			{
 				result.Success = false;
-				result.ErrorInformation.Add(FormatGeneralLineErrorMessage(new LineWithNumber{ LineContent = "", LineNumber = 1 }, "The import file cannot be empty."));
+				result.ErrorInformation.Add(formatGeneralLineErrorMessage(new LineWithNumber{ LineContent = "", LineNumber = 1 }, "The import file cannot be empty."));
 				return result;
 			}
 
@@ -49,11 +77,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var lineNumber = 1;
 			var linesWithNumbers = lines.Select(line => new LineWithNumber{LineContent = line, LineNumber = lineNumber++}).ToList();
 			var headerWithFieldNames = linesWithNumbers[0].LineContent.Split(tokenSeparator);
-			if (headerWithFieldNames.IsNullOrEmpty())
+			if (headerWithFieldNames.IsNullOrEmpty() || (headerWithFieldNames.Length==1 && headerWithFieldNames.FirstOrDefault().IsNullOrEmpty()))
 			{
 				result.Success = false;
-				result.ErrorInformation.Add(FormatGeneralLineErrorMessage(linesWithNumbers[0],
+				result.ErrorInformation.Add(formatGeneralLineErrorMessage(linesWithNumbers[0],
 					"First line in file (header line) cannot be empty."));
+				return result;
 			}
 			assertFieldNames(headerWithFieldNames, result);
 
@@ -88,14 +117,24 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		private ImportSkillCombinationResourceBpo createSkillCombinationResourceBpo(LineWithNumber lineWithNumber, IFormatProvider importFormatProvider, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
 		{
-			var bpoStrings = lineWithNumber.Tokens;
+			var bpoLineTokens = lineWithNumber.Tokens;
+
+			bpoLineTokens.Where(token => token.Value.IsNullOrEmpty()).
+				ForEach(token => result.ErrorInformation.Add(formatParameterEmptyErrorMessage(lineWithNumber, token.Key)));
+
+			if (result.ErrorInformation.Any())
+			{
+				result.Success = false;
+				return null;
+			}
+
 			var resourceBpo = new ImportSkillCombinationResourceBpo
 			{
-				Source = bpoStrings[source],
-				StartDateTime = DateTime.Parse(bpoStrings[startdatetime], importFormatProvider),
-				EndDateTime = DateTime.Parse(bpoStrings[enddatetime], importFormatProvider),
-				Resources = double.Parse(bpoStrings[resources], importFormatProvider),
-				SkillIds = lookupSkillIds(lineWithNumber, bpoStrings[skillgroup], skillSeparator, allSkills, result)
+				Source = bpoLineTokens[source],
+				StartDateTime = DateTime.Parse(bpoLineTokens[startdatetime], importFormatProvider),
+				EndDateTime = DateTime.Parse(bpoLineTokens[enddatetime], importFormatProvider),
+				Resources = double.Parse(bpoLineTokens[resources], importFormatProvider),
+				SkillIds = lookupSkillIds(lineWithNumber, bpoLineTokens[skillgroup], skillSeparator, allSkills, result)
 			};
 			return resourceBpo;
 		}
@@ -106,11 +145,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var skillStringList = skillGroupString.Replace(" ", "").Split(skillSeparator);
 			foreach (var skillString in skillStringList)
 			{
-				var skills = allSkills.ToList().Where(s => s.Name == skillString).ToList();
+				var skills = allSkills.Where(s => s.Name == skillString).ToList();
 				if (skills.IsEmpty())
 				{
 					result.Success = false;
-					result.ErrorInformation.Add(FormatGeneralLineErrorMessage(lineWithNumber, $"The skill with name {skillString} is not defined in the system."));
+					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, $"The skill with name {skillString} is not defined in the system."));
 				}
 				if (skills.Count == 1)
 				{
@@ -119,7 +158,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				else if (skills.Count > 1)
 				{
 					result.Success = false;
-					result.ErrorInformation.Add(FormatGeneralLineErrorMessage(lineWithNumber, $"The skill with name {skillString} is defined {skills.Count} times in the system. Only once is allowed when using this function."));
+					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, $"The skill with name {skillString} is defined {skills.Count} times in the system. Only once is allowed when using this function."));
 				}
 			}
 			return skillIds; // replace with real guid
@@ -131,9 +170,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var result = new Dictionary<string, string>();
 			if (parameters.Length != fieldNames.Length)
 			{
-				bpoResult.Success = false;
+			bpoResult.Success = false;
 				bpoResult.ErrorInformation.Add(FormatGeneralLineErrorMessage(lineWithNumber,
 					$"Line has {parameters.Length} parameters but expected {fieldNames.Length} parameters."));
+
 			}
 			else
 			{
@@ -145,7 +185,12 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		}
 
-		private string FormatGeneralLineErrorMessage(LineWithNumber lineWithNumber, string specificMessage)
+		private string formatParameterEmptyErrorMessage(LineWithNumber lineWithNumber, string emptyParameterName)
+		{
+			return formatGeneralLineErrorMessage(lineWithNumber, $"Parameter {emptyParameterName} cannot be empty");
+		}
+
+		private string formatGeneralLineErrorMessage(LineWithNumber lineWithNumber, string specificMessage)
 		{
 			var lineMessage = $"File import error. Error found on line number {lineWithNumber.LineNumber} with contents:\r\n{lineWithNumber.LineContent}\r\n{specificMessage}";
 			return lineMessage;
