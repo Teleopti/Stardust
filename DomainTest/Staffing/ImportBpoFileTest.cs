@@ -49,6 +49,42 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 		}
 
 		[Test]
+		public void ShouldReturnInformationOnEmptyFile()
+		{
+			var fileContents = @"";
+
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			result.ErrorInformation.Count.Should().Be.EqualTo(1);
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("1")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnInformationOnEmptyHeader()
+		{
+			var fileContents = @"
+TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
+
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			result.ErrorInformation.Count.Should().Be.EqualTo(1);
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("1")).Should().Not.Be.Null();
+		}
+
+
+		[Test]
+		public void ShouldReturnInformationOnEmptyMandatoryField()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+TPBRZIL,,2017-07-24 10:00,2017-07-24 10:15,12.5";
+
+			//SkillRepository.Has("ChannelSales", new Activity());
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("Directsales")).Should().Not.Be.Null();
+		}
+
+		[Test]
 		public void ShouldReturnInformationOnMissingSkill()
 		{
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources

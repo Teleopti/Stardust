@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.Repositories;
 namespace Teleopti.Ccc.Domain.Staffing
 {
 
+		public Dictionary<string, string> Tokens = new Dictionary<string, string>();
+		public string SuccessInformation;
 
 	public class ImportBpoFile
 	{
@@ -35,12 +37,25 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public ImportBpoFileResult ImportFile(string fileContents, IFormatProvider importFormatProvider,char tokenSeparator = ',', char skillSeparator = '|')
 		{
 			var result = new ImportBpoFileResult();
-			
+
+			if (fileContents.IsNullOrEmpty())
+			{
+				result.Success = false;
+				result.ErrorInformation.Add(FormatGeneralLineErrorMessage(new LineWithNumber{ LineContent = "", LineNumber = 1 }, "The import file cannot be empty."));
+				return result;
+			}
+
 			var lines = fileContents.Split(new[] { lineSeparator }, StringSplitOptions.None);
 			var lineNumber = 1;
 			var linesWithNumbers = lines.Select(line => new LineWithNumber{LineContent = line, LineNumber = lineNumber++}).ToList();
-			var fieldNames = linesWithNumbers[0].LineContent.Split(tokenSeparator);
-			assertFieldNames(fieldNames, result);
+			var headerWithFieldNames = linesWithNumbers[0].LineContent.Split(tokenSeparator);
+			if (headerWithFieldNames.IsNullOrEmpty())
+			{
+				result.Success = false;
+				result.ErrorInformation.Add(FormatGeneralLineErrorMessage(linesWithNumbers[0],
+					"First line in file (header line) cannot be empty."));
+			}
+			assertFieldNames(headerWithFieldNames, result);
 
 			if (!result.Success) return result;
 
@@ -49,9 +64,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var bpoResourceList = new List<ImportSkillCombinationResourceBpo>();
 			foreach (var line in linesWithNumbers.Skip(1))
 			{
-				var bpoStrings = tokenizeSkillCombinationResourceBpo(line, fieldNames, tokenSeparator, result);
-				if(bpoStrings.IsEmpty()) continue;
-				var resourceBpo = createSkillCombinationResourceBpo(bpoStrings, importFormatProvider, skillSeparator, allSkills, result);
+				line.Tokens = tokenizeSkillCombinationResourceBpo(line, headerWithFieldNames, tokenSeparator);
+				if(line.Tokens.IsEmpty()) continue;
+				var resourceBpo = createSkillCombinationResourceBpo(line, importFormatProvider, skillSeparator, allSkills, result);
 				bpoResourceList.Add(resourceBpo);
 			}
 			if(result.Success )
@@ -71,30 +86,31 @@ namespace Teleopti.Ccc.Domain.Staffing
 			}
 		}
 
-		private ImportSkillCombinationResourceBpo createSkillCombinationResourceBpo(Dictionary<string, string> bpoStrings, IFormatProvider importFormatProvider, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
+		private ImportSkillCombinationResourceBpo createSkillCombinationResourceBpo(LineWithNumber lineWithNumber, IFormatProvider importFormatProvider, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
 		{
-			var resourceBpo = new ImportSkillCombinationResourceBpo()
+			var bpoStrings = lineWithNumber.Tokens;
+			var resourceBpo = new ImportSkillCombinationResourceBpo
 			{
 				Source = bpoStrings[source],
 				StartDateTime = DateTime.Parse(bpoStrings[startdatetime], importFormatProvider),
 				EndDateTime = DateTime.Parse(bpoStrings[enddatetime], importFormatProvider),
 				Resources = double.Parse(bpoStrings[resources], importFormatProvider),
-				SkillIds = lookupSkillIds(bpoStrings[skillgroup], skillSeparator, allSkills, result)
+				SkillIds = lookupSkillIds(lineWithNumber, bpoStrings[skillgroup], skillSeparator, allSkills, result)
 			};
 			return resourceBpo;
 		}
 
-		private List<Guid> lookupSkillIds(string skillGroupString, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
+		private List<Guid> lookupSkillIds(LineWithNumber lineWithNumber, string skillGroupString, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
 		{
 			var skillIds = new List<Guid>();
 			var skillStringList = skillGroupString.Replace(" ", "").Split(skillSeparator);
 			foreach (var skillString in skillStringList)
 			{
-				var skills = allSkills.Where(s => s.Name == skillString).ToList();
+				var skills = allSkills.ToList().Where(s => s.Name == skillString).ToList();
 				if (skills.IsEmpty())
 				{
 					result.Success = false;
-					result.ErrorInformation.Add($"The skill with name {skillString} is not defined in the system.");
+					result.ErrorInformation.Add(FormatGeneralLineErrorMessage(lineWithNumber, $"The skill with name {skillString} is not defined in the system."));
 				}
 				if (skills.Count == 1)
 				{
@@ -103,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				else if (skills.Count > 1)
 				{
 					result.Success = false;
-					result.ErrorInformation.Add($"The skill with name {skillString} is defined {skills.Count} times in the system. Only once is allowed when using this function.");
+					result.ErrorInformation.Add(FormatGeneralLineErrorMessage(lineWithNumber, $"The skill with name {skillString} is defined {skills.Count} times in the system. Only once is allowed when using this function."));
 				}
 			}
 			return skillIds; // replace with real guid
@@ -131,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		private string FormatGeneralLineErrorMessage(LineWithNumber lineWithNumber, string specificMessage)
 		{
-			var lineMessage = $"File import error. Error found on row number {lineWithNumber.LineNumber} with contents:\r\n{lineWithNumber.LineContent}\r\n{specificMessage}";
+			var lineMessage = $"File import error. Error found on line number {lineWithNumber.LineNumber} with contents:\r\n{lineWithNumber.LineContent}\r\n{specificMessage}";
 			return lineMessage;
 		}
 	}
