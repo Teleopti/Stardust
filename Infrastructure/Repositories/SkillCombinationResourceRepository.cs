@@ -4,8 +4,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
+using NHibernate.Mapping;
 using NHibernate.SqlAzure;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -13,6 +15,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
@@ -25,14 +28,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private readonly RetryPolicy _retryPolicy;
 		private readonly object skillCombinationLock = new object();
 		private readonly IStardustJobFeedback _stardustJobFeedback;
+		private readonly IToggleManager _toggleManager;
 
 		public SkillCombinationResourceRepository(INow now, ICurrentUnitOfWork currentUnitOfWork,
-												  ICurrentBusinessUnit currentBusinessUnit, IStardustJobFeedback stardustJobFeedback)
+												  ICurrentBusinessUnit currentBusinessUnit, IStardustJobFeedback stardustJobFeedback, IToggleManager toggleManager)
 		{
 			_now = now;
 			_currentUnitOfWork = currentUnitOfWork;
 			_currentBusinessUnit = currentBusinessUnit;
 			_stardustJobFeedback = stardustJobFeedback;
+			_toggleManager = toggleManager;
 			_retryPolicy = new RetryPolicy<SqlTransientErrorDetectionStrategyWithTimeouts>(5, TimeSpan.FromMilliseconds(100));
 		}
 
@@ -139,19 +144,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return bpoList;
 		}
 
-		//may be just for testing if not then better not to use the current unit of work
-		public IList<SkillCombinationResourceBpo> LoadBpoSkillCombinationResources()
-		{
-			var result = _currentUnitOfWork.Current().Session()
-				.CreateSQLQuery(@"select SkillCombinationId,StartDateTime,EndDateTime,Resources,sb.source as Source
-								FROM ReadModel.SkillCombinationResourceBpo scrb,  BusinessProcessOutsourcer sb
-									where sb.Id= scrb.SourceId")
-				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(SkillCombinationResourceBpo)))
-				.List<SkillCombinationResourceBpo>();
-			return result;
-		}
+		
 
-		public void PersistSkillCombinationResourceBpo(DateTime utcDateTime, List<ImportSkillCombinationResourceBpo> combinationResources)
+		public void PersistSkillCombinationResourceBpo(List<ImportSkillCombinationResourceBpo> combinationResources)
 		{
 			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
 			using (var connection = new SqlConnection(connectionString))
@@ -307,9 +302,80 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
+		//Add business unit in the table
+		private IList<SkillCombinationResourceWithCombinationId> LoadSkillCombinationResourcesBpo(DateTimePeriod period)
+		{
+			var result = _currentUnitOfWork.Current().Session()
+				.CreateSQLQuery(@"select SkillCombinationId,StartDateTime,EndDateTime,sum(Resources) as Resource, c.SkillId
+								FROM ReadModel.SkillCombinationResourceBpo scrb INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = scrb.SkillCombinationId 
+									where  scrb.StartDateTime < :endDateTime AND scrb.EndDateTime > :startDateTime
+									group by SkillCombinationId,StartDateTime,EndDateTime,c.skillId")
+				.SetDateTime("startDateTime", period.StartDateTime)
+				.SetDateTime("endDateTime", period.EndDateTime)
+				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(RawSkillCombinationResource)))
+				.List<RawSkillCombinationResource>();
 
+			var mergedResult =
+				result.GroupBy(x => new { x.SkillCombinationId, x.StartDateTime, x.EndDateTime, x.Resource })
+					.Select(
+						x =>
+							new SkillCombinationResourceWithCombinationId
+							{
+								StartDateTime = x.Key.StartDateTime.Utc(),
+								EndDateTime = x.Key.EndDateTime.Utc(),
+								Resource = x.Key.Resource,
+								SkillCombinationId = x.Key.SkillCombinationId,
+								SkillCombination = x.Select(s => s.SkillId).OrderBy(s => s).ToList()
+							});
+
+			return mergedResult.ToList();
+		}
 
 		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
+		{
+			if(!_toggleManager.IsEnabled(Toggles.Staffing_BPOExchangeImport_45202))
+				return skillCombinationResourcesWithoutBpo(period);
+			return skillCombinationResourcesWithBpo(period);
+		}
+
+		private IEnumerable<SkillCombinationResource> skillCombinationResourcesWithBpo(DateTimePeriod period)
+		{
+			var combinationResources = skillCombinationResourcesWithoutBpo(period).ToList();
+			combinationResources.AddRange(LoadSkillCombinationResourcesBpo(period));
+		
+			var newList = new List<SkillCombinationResourceWithCombinationId>();
+			newList.AddRange(combinationResources.Select(x=> new SkillCombinationResourceWithCombinationId
+			{
+				StartDateTime = x.StartDateTime.Utc(),
+				EndDateTime = x.EndDateTime.Utc(),
+				Resource = x.Resource,
+				SkillCombinationId = ((SkillCombinationResourceWithCombinationId)x).SkillCombinationId,
+				SkillCombination = x.SkillCombination
+			}));
+
+			var result = new List<SkillCombinationResource>();
+
+			newList.ForEach(item =>
+			{
+				if (result.Contains(item))
+				{
+					var foundItem =
+						result.FirstOrDefault(
+							x =>
+								x.StartDateTime == item.StartDateTime && x.EndDateTime == item.EndDateTime &&
+								!x.SkillCombination.Except(item.SkillCombination).Any());
+					foundItem.Resource += item.Resource;
+
+				}else
+					result.Add(item);
+					
+			});
+			
+			return result;
+		}
+
+
+		private IEnumerable<SkillCombinationResource> skillCombinationResourcesWithoutBpo(DateTimePeriod period)
 		{
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var result = _currentUnitOfWork.Current().Session()

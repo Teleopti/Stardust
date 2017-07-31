@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	public class FakeSkillCombinationResourceRepository : ISkillCombinationResourceRepository
 	{
 		private List<SkillCombinationResource> _combinationResources = new List<SkillCombinationResource>();
+		private List<ImportSkillCombinationResourceBpo> _combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>();
 		private readonly INow _now;
 		private DateTime? _lastCalcualted;
 
@@ -64,9 +65,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _lastCalcualted ?? _now.UtcDateTime().AddMinutes(-10);
 		}
 
-		public void PersistSkillCombinationResourceBpo(DateTime utcDateTime, List<ImportSkillCombinationResourceBpo> combinationResources)
+		public void PersistSkillCombinationResourceBpo( List<ImportSkillCombinationResourceBpo> combinationResources)
 		{
-			throw new NotImplementedException();
+			_combinationResourcesBpo = combinationResources;
 		}
 
 		public Dictionary<Guid, string> LoadSourceBpo(SqlConnection connection)
@@ -74,9 +75,15 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public IList<SkillCombinationResourceBpo> LoadBpoSkillCombinationResources()
+		public IList<SkillCombinationResourceBpo> LoadSkillCombinationResourcesBpo()
 		{
-			throw new NotImplementedException();
+			return _combinationResourcesBpo.Select(x => new SkillCombinationResourceBpo()
+			{
+				StartDateTime = x.StartDateTime,
+				EndDateTime = x.EndDateTime,
+				Source = x.Source,
+				Resources = x.Resources
+			}).ToList();
 		}
 
 		public void SetLastCalculatedTime(DateTime dt)

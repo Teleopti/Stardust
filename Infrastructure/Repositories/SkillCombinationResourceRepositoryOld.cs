@@ -324,7 +324,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 			return latest;
 		}
 
-		public void PersistSkillCombinationResourceBpo(DateTime utcDateTime, List<ImportSkillCombinationResourceBpo> combinationResources)
+		public void PersistSkillCombinationResourceBpo(List<ImportSkillCombinationResourceBpo> combinationResources)
 		{
 			throw new NotImplementedException();
 		}
@@ -334,7 +334,7 @@ LEFT JOIN [ReadModel].[SkillCombinationResourceDelta] d ON d.SkillCombinationId 
 			throw new NotImplementedException();
 		}
 
-		public IList<SkillCombinationResourceBpo> LoadBpoSkillCombinationResources()
+		public IList<SkillCombinationResourceBpo> LoadSkillCombinationResourcesBpo()
 		{
 			throw new NotImplementedException();
 		}

@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 			var currentBu = new FakeCurrentBusinessUnit();
 			currentBu.FakeBusinessUnit(BusinessUnitFactory.CreateWithId(theSkill.BusinessUnit.Id.GetValueOrDefault()));
 
-			var skillCombinationReadModel = new SkillCombinationResourceRepository(new MutableNow(_theDate.Date.AddHours(7)), currentUnitOfWork, currentBu, new FakeStardustJobFeedback());
+			var skillCombinationReadModel = new SkillCombinationResourceRepository(new MutableNow(_theDate.Date.AddHours(7)), currentUnitOfWork, currentBu, new FakeStardustJobFeedback(),new TrueToggleManager());
 			skillCombinationReadModel.PersistSkillCombinationResource(_theDate.Date.AddHours(7), new List<SkillCombinationResource> {new SkillCombinationResource
 																	  {
 																		 StartDateTime = _theDate.Date.AddHours(8),

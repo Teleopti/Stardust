@@ -16,10 +16,12 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 	{
 		public ImportBpoFile Target;
 		public FakeSkillRepository SkillRepository;
+		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
+			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
 		}
 
 		[Test]
@@ -80,6 +82,91 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.False();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("ChannelSales")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnInformationIfAnSourceIsMissing()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+								Directsales,2017-07-24 10:15,2017-07-24 10:30, 6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReturnInformationIfStartDateTimeIsMissing()
+		{
+			var fileContents = @"source,skillgroup, startdatetime, enddatetime, resources
+								TPBRZIL,Directsales,2017-07-24 10:30, 6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldReturnTrueIfItemsAreWithSpace()
+		{
+			var fileContents = @"source, skillgroup, startdatetime, enddatetime, resources
+								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfItemsAreMoreThanFive()
+		{
+			var fileContents = @"source, skillgroup, startdatetime, enddatetime, resources
+								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6,0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldSaveImportedDataInSkillCombinationBpo()
+		{
+			var fileContents = @"source, skillgroup, startdatetime, enddatetime, resources
+								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.True();
+
+			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldSaveImportedDataForTwoDifferentBpos()
+		{
+			var fileContents = @"source, skillgroup, startdatetime, enddatetime, resources
+								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0
+								TPPARIS, Channel, 2017-07-24 10:15, 2017-07-24 10:30, 10.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Channel", new Activity());
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.True();
+
+			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldNotSaveIfSkillIsMissing()
+		{
+			var fileContents = @"source, skillgroup, startdatetime, enddatetime, resources
+								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0
+								TPBRZIL, KLINGON, 2017-07-24 10:15, 2017-07-24 10:30, 6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+
+			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(0);
 		}
 	}
 }

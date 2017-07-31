@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return _fakeSkillCombinationResourceRepository.GetLastCalculatedTime();
 		}
 
-		public void PersistSkillCombinationResourceBpo(DateTime utcDateTime, List<ImportSkillCombinationResourceBpo> combinationResources)
+		public void PersistSkillCombinationResourceBpo( List<ImportSkillCombinationResourceBpo> combinationResources)
 		{
 			throw new NotImplementedException();
 		}
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			throw new NotImplementedException();
 		}
 
-		public IList<SkillCombinationResourceBpo> LoadBpoSkillCombinationResources()
+		public IList<SkillCombinationResourceBpo> LoadSkillCombinationResourcesBpo()
 		{
 			throw new NotImplementedException();
 		}

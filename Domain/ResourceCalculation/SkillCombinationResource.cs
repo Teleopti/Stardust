@@ -1,10 +1,13 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
-	public class SkillCombinationResource
+	public class SkillCombinationResource : IEquatable<SkillCombinationResource>
 	{
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
@@ -23,6 +26,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			_period =  new DateTimePeriod(StartDateTime, EndDateTime);
 
 			return _period.Value;
+		}
+
+		public bool Equals(SkillCombinationResource other)
+		{
+			return StartDateTime == other.StartDateTime && EndDateTime == other.EndDateTime &&
+				   !SkillCombination.Except(other.SkillCombination).Any();
 		}
 	}
 }

@@ -13,12 +13,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period);
 		void PersistChanges(IEnumerable<SkillCombinationResource> deltas);
 		DateTime GetLastCalculatedTime();
-		void PersistSkillCombinationResourceBpo(DateTime utcDateTime, List<ImportSkillCombinationResourceBpo> combinationResources);
+		void PersistSkillCombinationResourceBpo(List<ImportSkillCombinationResourceBpo> combinationResources);
 		Dictionary<Guid, string> LoadSourceBpo(SqlConnection connection);
-		/// <summary>
-		/// Used for testing
-		/// </summary>
-		/// <returns></returns>
-		IList<SkillCombinationResourceBpo> LoadBpoSkillCombinationResources();
 	}
 }

@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -65,20 +66,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					Source = "TPBrazil"
 				}
 			};
-			
-			Target.PersistSkillCombinationResourceBpo(Now.UtcDateTime(), combinationResources);
+
+			Target.PersistSkillCombinationResourceBpo(combinationResources);
 			CurrentUnitOfWork.Current().PersistAll();
-			
-			var loadedBpoCombinationResources = Target.LoadBpoSkillCombinationResources();
-			loadedBpoCombinationResources.Count.Should().Be.EqualTo(1);
+
+			var loadedBpoCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 2016, 12, 21));
+			loadedBpoCombinationResources.ToList().Count.Should().Be.EqualTo(1);
 			var first = loadedBpoCombinationResources.First();
-			first.SkillCombinationId.Should().Not.Be.Null();
-			first.Resources.Should().Be.EqualTo(1);
+			first.Resource.Should().Be.EqualTo(1);
 			first.StartDateTime.Should().Be.EqualTo(startDate);
 			first.EndDateTime.Should().Be.EqualTo(endDate);
-			first.Source.Should().Be.EqualTo("TPBrazil");
 			CurrentUnitOfWork.Current().PersistAll();
-		
 		}
 
 		[Test]
@@ -107,11 +105,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					Source = "TPParis"
 				}
 			};
-			
-			Target.PersistSkillCombinationResourceBpo(Now.UtcDateTime(), combinationResources);
+
+			Target.PersistSkillCombinationResourceBpo(combinationResources);
 			CurrentUnitOfWork.Current().PersistAll();
-			
-			var loadedBpoCombinationResources = Target.LoadBpoSkillCombinationResources();
+
+			var loadedBpoCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 2016, 12, 21)).ToList();
 			loadedBpoCombinationResources.Count.Should().Be.EqualTo(2);
 			CurrentUnitOfWork.Current().PersistAll();
 		}
@@ -143,7 +141,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				}
 			};
 			
-			Target.PersistSkillCombinationResourceBpo(Now.UtcDateTime(), combinationResources);
+			Target.PersistSkillCombinationResourceBpo(combinationResources);
 			//CurrentUnitOfWork.Current().PersistAll();
 
 			var bpoList = new Dictionary<Guid, string>();
@@ -155,8 +153,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			bpoList.Count.Should().Be.EqualTo(1);
 		}
 
-		[Test, Ignore("ignoreing it for now as we will have some way of loading the BPO resources later")]
-		public void ShouldCreateSkillCombinationWhenMissing()
+		[Test, Ignore("ignoring it for now as we will have some way of loading the BPO resources later")]
+		public void ShouldCreateSkillCombinationIfMissing()
 		{
 			var skill1Id = persistSkill();
 			var skill2Id = persistSkill();
@@ -182,7 +180,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					Source = "TPBrazil"
 				}
 			};
-			Target.PersistSkillCombinationResourceBpo(Now.UtcDateTime(), combinationResources);
+			Target.PersistSkillCombinationResourceBpo( combinationResources);
 			
 		}
 	}
