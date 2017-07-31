@@ -592,6 +592,10 @@ team-schedule-datepicker {
 			}
 		}
 
+		& > button:not(:focus) {
+			outline: none !important;
+		}
+
 		> div[uib-datepicker-popup-wrap] {
 			display: inline-block;
 		}
