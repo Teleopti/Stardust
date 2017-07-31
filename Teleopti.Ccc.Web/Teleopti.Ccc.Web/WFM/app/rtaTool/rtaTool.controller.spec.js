@@ -23,12 +23,14 @@ describe('RtaToolController', function () {
     fakeBackend.withAgent({
       Name: 'John Smith',
       UserCode: '0019',
-      DataSource: '1'
+      DataSource: '1',
+      TeamName: 'Students',
+      SiteName: 'London'
     });
 
     vm = $RtaToolControllerBuilder.createController().vm;
 
-    expect(vm.agents.length).toEqual(1);
+    expect(vm.filteredAgents.length).toEqual(1);
   });
 
   it('should get phone states', function () {
@@ -56,12 +58,12 @@ describe('RtaToolController', function () {
 
     vm = $RtaToolControllerBuilder.createController().vm;
 
-    expect(vm.agents[0].Name).toEqual('John Smith');
-    expect(vm.agents[0].UserCode).toEqual('0019');
-    expect(vm.agents[0].DataSource).toEqual('1');
-    expect(vm.agents[0].StateCodes.length).toEqual(1);
-    expect(vm.agents[0].StateCodes[0].Code).toEqual('Ready');
-    expect(vm.agents[0].StateCodes[0].Name).toEqual('Ready');
+    expect(vm.filteredAgents[0].Name).toEqual('John Smith');
+    expect(vm.filteredAgents[0].UserCode).toEqual('0019');
+    expect(vm.filteredAgents[0].DataSource).toEqual('1');
+    expect(vm.filteredAgents[0].StateCodes.length).toEqual(1);
+    expect(vm.filteredAgents[0].StateCodes[0].Code).toEqual('Ready');
+    expect(vm.filteredAgents[0].StateCodes[0].Name).toEqual('Ready');
   });
 
   it('should send single state', function () {
@@ -82,7 +84,7 @@ describe('RtaToolController', function () {
       });
     vm = $RtaToolControllerBuilder.createController().vm;
 
-    vm.agents[0].sendState(vm.agents[0].StateCodes[0]);
+    vm.filteredAgents[0].sendState(vm.filteredAgents[0].StateCodes[0]);
     $httpBackend.flush();
 
     expect(requestBody.AuthenticationKey).toEqual('!#¤atAbgT%');
@@ -156,8 +158,8 @@ describe('RtaToolController', function () {
         Name: 'Ready'
       });
     vm = $RtaToolControllerBuilder.createController().vm;
-    vm.agents[0].selectAgent();
-    vm.agents[1].selectAgent();
+    vm.filteredAgents[0].selectAgent();
+    vm.filteredAgents[1].selectAgent();
 
     vm.stateCodes[0].sendBatch();
     $httpBackend.flush();
@@ -191,9 +193,9 @@ describe('RtaToolController', function () {
         Name: 'Ready'
       });
     vm = $RtaToolControllerBuilder.createController().vm;
-    vm.agents[0].selectAgent();
-    vm.agents[1].selectAgent();
-    vm.agents[0].selectAgent();
+    vm.filteredAgents[0].selectAgent();
+    vm.filteredAgents[1].selectAgent();
+    vm.filteredAgents[0].selectAgent();
 
     vm.stateCodes[0].sendBatch();
     $httpBackend.flush();
@@ -219,8 +221,76 @@ describe('RtaToolController', function () {
 
     vm.toggleAgents();
 
-    expect(vm.agents[0].isSelected).toEqual(true);
-    expect(vm.agents[1].isSelected).toEqual(true);
+    expect(vm.filteredAgents[0].isSelected).toEqual(true);
+    expect(vm.filteredAgents[1].isSelected).toEqual(true);
+  });
+
+  it('should select all filtered agents', function () {
+    fakeBackend
+      .withAgent({
+        Name: 'John Smith',
+        UserCode: '0019',
+        DataSource: '1'
+      })
+      .withAgent({
+        Name: 'Ashley Andeen',
+        UserCode: '2002',
+        DataSource: '1'
+      });
+    vm = $RtaToolControllerBuilder.createController().vm;
+
+    vm.filterText = 'joh';
+    vm.filterAgents();
+    vm.toggleAgents();
+
+    expect(vm.filteredAgents.length).toEqual(1);
+    expect(vm.filteredAgents[0].isSelected).toEqual(true);
+  });
+
+  it('should see all agents after removing filter', function () {
+    fakeBackend
+      .withAgent({
+        Name: 'John Smith',
+        UserCode: '0019',
+        DataSource: '1'
+      })
+      .withAgent({
+        Name: 'Ashley Andeen',
+        UserCode: '2002',
+        DataSource: '1'
+      });
+    vm = $RtaToolControllerBuilder.createController().vm;
+
+    vm.filterText = 'joh';
+    vm.filterAgents();
+    vm.filterText = '';
+    vm.filterAgents();
+
+    expect(vm.filteredAgents.length).toEqual(2);
+  });
+
+  it('should see all agents after removing filter', function () {
+    fakeBackend
+      .withAgent({
+        Name: 'John Smith',
+        UserCode: '0019',
+        DataSource: '1'
+      })
+      .withAgent({
+        Name: 'Ashley Andeen',
+        UserCode: '2002',
+        DataSource: '1'
+      });
+    vm = $RtaToolControllerBuilder.createController().vm;
+
+    vm.filterText = 'joh';
+    vm.filterAgents();
+    vm.toggleAgents();
+    vm.filterText = '';
+    vm.filterAgents();
+
+    expect(vm.filteredAgents[0].isSelected).toEqual(true);
+    expect(vm.filteredAgents[1].isSelected).toEqual(false);
   });
 
   it('should deselect all agents', function () {
@@ -240,8 +310,8 @@ describe('RtaToolController', function () {
     vm.toggleAgents();
     vm.toggleAgents();
 
-    expect(vm.agents[0].isSelected).toEqual(false);
-    expect(vm.agents[1].isSelected).toEqual(false);
+    expect(vm.filteredAgents[0].isSelected).toEqual(false);
+    expect(vm.filteredAgents[1].isSelected).toEqual(false);
   });
 
   it('should select all agents even if one is already selected', function () {
@@ -258,11 +328,11 @@ describe('RtaToolController', function () {
       });
     vm = $RtaToolControllerBuilder.createController().vm;
 
-    vm.agents[0].selectAgent();
+    vm.filteredAgents[0].selectAgent();
     vm.toggleAgents();
 
-    expect(vm.agents[0].isSelected).toEqual(true);
-    expect(vm.agents[1].isSelected).toEqual(true);
+    expect(vm.filteredAgents[0].isSelected).toEqual(true);
+    expect(vm.filteredAgents[1].isSelected).toEqual(true);
   });
 
   it('should only send batch with selected agents', function () {
@@ -285,8 +355,8 @@ describe('RtaToolController', function () {
     var vm = scope.vm;
 
     scope
-    .apply(vm.togglePause())
-    .wait(5000)
+      .apply(vm.togglePause())
+      .wait(5000)
 
     expect(requestBody.States.length).toEqual(1);
     expect(requestBody.States[0].UserCode).toEqual('0019');

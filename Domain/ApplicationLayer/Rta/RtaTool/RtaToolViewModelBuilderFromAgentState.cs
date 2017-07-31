@@ -43,6 +43,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
 							state?.FirstName,
 							state?.LastName,
 							state?.EmploymentNumber),
+						SiteName = state?.SiteName,
+						TeamName = state?.TeamName,
 						UserCode = externalLogOn.UserCode,
 						DataSource = dataSource
 					})

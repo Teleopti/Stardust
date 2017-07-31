@@ -61,7 +61,7 @@
 					<div class="sub-header">
 						<label for="filter" class="input-icon">
               <i class="mdi mdi-filter-outline">
-              <input type="text" id="filter" placeholder="filter agents" ng-model="filterAgents">
+              <input type="text" id="filter" placeholder="filter agents" ng-change="vm.filterAgents()" ng-model="vm.filterText">
               <md-tooltip>Filter</md-tooltip>
               </i>
             </label>
@@ -72,6 +72,8 @@
 								<thead>
 									<tr>
 										<th>Name</th>
+										<th>Site</th>
+										<th>Team</th>
 										<th>User Code</th>
 										<th>State</th>
 									</tr>
@@ -85,10 +87,11 @@
 
 								<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.toggleAgents()">Toggle all agents</button>
 								<button class="wfm-btn wfm-btn-invis-default">Fetch all agents</button>
-
 								<tbody>
-									<tr ng-repeat="agent in vm.agents | filter:filterAgents | limitTo: vm.agentsShown" ng-click="agent.selectAgent()" style="cursor: pointer;">
-										<td ng-class="{'selected-row':agent.isSelected}" class="for-test-agent">{{agent.Name}}</td>
+									<tr ng-repeat="agent in vm.filteredAgents | limitTo: vm.agentsShown" ng-click="agent.selectAgent()" style="cursor: pointer;" class="for-test-agent">
+										<td ng-class="{'selected-row':agent.isSelected}">{{agent.Name}}</td>
+										<td ng-class="{'selected-row':agent.isSelected}">{{agent.SiteName}}</td>
+										<td ng-class="{'selected-row':agent.isSelected}">{{agent.TeamName}}</td>
 										<td ng-class="{'selected-row':agent.isSelected}">{{agent.DataSource}} _ {{agent.UserCode}} </td>
 										<td ng-click="$event.stopPropagation();">
 											<md-select ng-model="pickedStateCode" placeholder="Pick a state" ng-change="agent.sendState(pickedStateCode)">

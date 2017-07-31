@@ -19,9 +19,9 @@
 		vm.sendInterval = { time: 5 };
 		vm.snapshot = false;
 		vm.authKey = "!#¤atAbgT%";
-		vm.agents = [];
+		vm.filteredAgents = [];
 		vm.stateCodes = [];
-		vm.agentsShown = 100;
+		vm.filteredAgentsShown = 100;
 
 		var sendingBatchWithRandomStatesTrigger = null;
 
@@ -38,6 +38,7 @@
 				.then(rtaToolService.getAgents)
 				.then(function (_agents) {
 					vm.agents = _agents.map(function (agent) {
+						agent.isSelected = false;
 						agent.selectAgent = function () {
 							agent.isSelected = !agent.isSelected;
 						}
@@ -47,39 +48,44 @@
 						};
 						return agent;
 					});
+
+					vm.filteredAgents = vm.agents.slice(0);
 					showMoreAgents();
 				});
 		})();
 
 
+		vm.filterAgents = function () {
+			vm.filteredAgents = $filter('filter')(vm.agents, vm.filterText)
+		}
+
 		vm.toggleAgents = function () {
 			var selectedAgents = findSelectedAgents();
-			var shouldSelectAll = selectedAgents.length != vm.agents.length;
+			var shouldSelectAll = selectedAgents.length != vm.filteredAgents.length;
 
-			vm.agents.forEach(function (agent) {
+			vm.filteredAgents.forEach(function (agent) {
 				agent.isSelected = shouldSelectAll;
 			});
 		}
 
 		vm.sendRandom = function () {
 			var selectedAgents = findSelectedAgents();
-			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents;
+			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.filteredAgents;
 
 			var randomAgent = selectedAgents[Math.floor(Math.random() * selectedAgents.length)];
 			var state = vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)];
 			randomAgent.sendState(state);
-
 		}
 
-		 function findSelectedAgents() {
-			return vm.agents.filter(function (a) {
+		function findSelectedAgents() {
+			return vm.filteredAgents.filter(function (a) {
 				return a.isSelected;
 			});
 		}
 
 		function sendBatch(stateCode) {
 			var selectedAgents = findSelectedAgents();
-			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.agents;
+			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.filteredAgents;
 			var snapshotId = now();
 			var distinctDatasources = selectedAgents
 				.map(function (s) {
@@ -117,7 +123,7 @@
 					States: states
 				};
 
-				rtaToolService.sendBatch(batch).then(function(){
+				rtaToolService.sendBatch(batch).then(function () {
 					NoticeService.info('Done!', 5000, true);
 				});
 			});
@@ -161,13 +167,13 @@
 			}
 		}
 
-		vm.loadMore = function() {
-			vm.agentsShown += 100;
+		vm.loadMore = function () {
+			vm.filteredAgentsShown += 100;
 			showMoreAgents();
 		}
 
 		function showMoreAgents() {
-			vm.noMoreLoading = vm.agentsShown >= vm.agents.length;
+			vm.noMoreLoading = vm.filteredAgentsShown >= vm.filteredAgents.length;
 			vm.loadingText = vm.noMoreLoading ? "No more agents to load" : "Load more";
 		}
 	};
