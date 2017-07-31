@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			_toggleManager = toggleManager;
 		}
 
-		public RequestViewModel Map(RequestViewModel requestViewModel, IPersonRequest request)
+		public RequestViewModel Map(RequestViewModel requestViewModel, IPersonRequest request, NameFormatSettings nameFormatSettings)
 		{
 			var team = request.Person.MyTeam(new DateOnly(request.Request.Period.StartDateTime));
 			requestViewModel.Id = request.Id.GetValueOrDefault();
@@ -47,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			requestViewModel.UpdatedTime = request.UpdatedOn.HasValue
 				? TimeZoneHelper.ConvertFromUtc(request.UpdatedOn.Value, request.Person.PermissionInformation.DefaultTimeZone())
 				: (DateTime?)null;
-			requestViewModel.AgentName = _personNameProvider.BuildNameFromSetting(request.Person.Name);
+			requestViewModel.AgentName = _personNameProvider.BuildNameFromSetting(request.Person.Name, nameFormatSettings);
 			requestViewModel.PersonId = request.Person.Id.GetValueOrDefault();
 			requestViewModel.Seniority = request.Person.Seniority;
 			requestViewModel.Type = request.Request.RequestType;

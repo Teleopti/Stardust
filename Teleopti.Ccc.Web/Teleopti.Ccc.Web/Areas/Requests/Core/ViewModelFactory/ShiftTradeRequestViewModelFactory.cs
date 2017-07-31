@@ -3,8 +3,10 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
@@ -22,9 +24,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IScheduleProvider _scheduleProvider;
 		private readonly IUserCulture _userCulture;
 		private readonly IRequestFilterCreator _requestFilterCreator;
+		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
 
 		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IScheduleProvider scheduleProvider, IUserCulture userCulture
-			, IRequestFilterCreator requestFilterCreator)
+			, IRequestFilterCreator requestFilterCreator, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
 		{
 			_requestsProvider = requestsProvider;
 			_requestViewModelMapper = requestViewModelMapper;
@@ -33,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			_scheduleProvider = scheduleProvider;
 			_userCulture = userCulture;
 			_requestFilterCreator = requestFilterCreator;
+			_nameFormatSettings = nameFormatSettings;
 		}
 
 		public ShiftTradeRequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
@@ -63,9 +67,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			requestListModel.Skip = input.Paging.Skip;
 			requestListModel.Take = input.Paging.Take;
 
+			var nameFormatSettings = _nameFormatSettings.Get();
+
 			if (requests.Any())
 			{
-				requestListModel.Requests = requests.Select(request => _requestViewModelMapper.Map(createShiftTradeRequestViewModel(request), request)).ToList();
+				requestListModel.Requests = requests.Select(request => _requestViewModelMapper.Map(createShiftTradeRequestViewModel(request, nameFormatSettings), request, nameFormatSettings)).ToList();
 				var maximumRequestDate = requests.Max(r => r.Request.Period.EndDateTimeLocal(TimeZoneHelper.CurrentSessionTimeZone));
 				if (maximumRequestDate > requestListModel.MaximumDateTime)
 				{
@@ -77,7 +83,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			return requestListModel;
 		}
 
-		private ShiftTradeRequestViewModel createShiftTradeRequestViewModel(IPersonRequest request)
+		private ShiftTradeRequestViewModel createShiftTradeRequestViewModel(IPersonRequest request, NameFormatSettings nameFormatSettings)
 		{
 			var shiftTradeRequest = (IShiftTradeRequest)request.Request;
 			var personTo = shiftTradeRequest.PersonTo;
@@ -86,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 			return new ShiftTradeRequestViewModel
 			{
-				PersonTo = _personNameProvider.BuildNameFromSetting(personTo.Name),
+				PersonTo = _personNameProvider.BuildNameFromSetting(personTo.Name, nameFormatSettings),
 				PersonIdTo = personTo.Id.GetValueOrDefault(),
 				PersonToTeam = personToTeam?.SiteAndTeam,
 				PersonToTimeZone = _ianaTimeZoneProvider.WindowsToIana(personTo.PermissionInformation.DefaultTimeZone().Id),
