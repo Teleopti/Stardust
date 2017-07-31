@@ -401,6 +401,34 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			personAssignment.OvertimeActivities().Count().Should().Be(0);
 		}
 
+		[Test]
+		public void ShouldAddActivityOnAgentTimezone()
+		{
+			var person = getCurrentUser();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var activity1 = createActivity("activity1");
+			var skill = createSkill("skill");
+			var personSkill1 = createPersonSkill(activity1, skill);
+			var startDate = new DateOnly(2017, 7, 17);
+			setupIntradayStaffingForSkill(skill, 10d, 6d);
+			addPersonSkillsToPersonPeriod(startDate, personSkill1);
+			createOvertimeAssignment(startDate, new TimePeriod(0, 1), person, activity1);
+
+			var requestPeriod = startDate.ToDateTimePeriod(new TimePeriod(0, 1), person.PermissionInformation.DefaultTimeZone());
+			var personRequest = createOvertimeRequest(person, requestPeriod);
+
+			_target = createTarget();
+			_target.Approve(personRequest.Request);
+
+			var personAssignment = PersonAssignmentWriteSideRepository.LoadAggregate(new PersonAssignmentKey
+			{
+				Person = person,
+				Date = startDate,
+				Scenario = _scenario
+			});
+
+			personAssignment.OvertimeActivities().First().Period.Should().Be(requestPeriod);
+		}
 		private OvertimeRequestApprovalService createTarget()
 		{
 			return new OvertimeRequestApprovalService(OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider, SkillOpenHourFilter,
