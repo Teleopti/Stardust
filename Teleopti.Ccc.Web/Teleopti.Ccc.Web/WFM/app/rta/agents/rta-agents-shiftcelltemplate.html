@@ -6,7 +6,13 @@
 	</span>
 	<span class="rta-current-time"></span>
 	<div class="rta-shift">
-		<div tabindex="-1" ng-repeat="activity in COL_FIELD" class="rta-layer absolute floatleft selectable ng-scope noneSelected {{activity.Class}}" tabindex="0" ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}};"
-						ng-attr-name="{{activity.Name}}"></div>
-</div>
+		<div tabindex="-1" ng-repeat="activity in COL_FIELD" class="rta-layer absolute floatleft selectable ng-scope noneSelected {{activity.Class}}"
+		 tabindex="0" ng-attr-style="width: {{activity.Width}}; left: {{activity.Offset}}; background-color: {{activity.Color}};"
+		 ng-attr-name="{{activity.Name}}">
+			<md-tooltip class="multiline-tooltip layer-summary">
+				<div>{{activity.Name}}</div>
+				<div>{{activity.Time}}</div>
+			</md-tooltip>
+		</div>
+	</div>
 </div>

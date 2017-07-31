@@ -91,6 +91,7 @@
 						Offset: Math.max(rtaFormatService.timeToPercent(timeInfo.time, s.StartTime), 0) + '%',
 						Width: Math.min(rtaFormatService.timePeriodToPercent(timeInfo.windowStart, s.StartTime, s.EndTime), 100) + "%",
 						Name: s.Name,
+						Time: moment(s.StartTime).format("HH:mm")+ ' - '+ moment(s.EndTime).format("HH:mm"),
 						Class: getClassForActivity(timeInfo.time, s.StartTime, s.EndTime)
 					};
 				});
