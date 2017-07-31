@@ -6,163 +6,167 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.InfrastructureTest.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	[TestFixture]
-	public class GroupingReadOnlyRepositoryTest : DatabaseTest
+	[DatabaseTest]
+	public class GroupingReadOnlyRepositoryTest
 	{
-		private IGroupingReadOnlyRepository _target;
-
-		protected override void SetupForRepositoryTest()
-		{
-			_target = new GroupingReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
-		}
+		public IGroupingReadOnlyRepository Target;
+		public WithUnitOfWork WithUnitOfWork;
+		public ICurrentUnitOfWork CurrentUnitOfWork;
+		public ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
+		public IPersonRepository PersonRepository;
+		public ITeamRepository TeamRepository;
+		public ISiteRepository SiteRepository;
+		public ISkillRepository SkillRepository;
+		public ISkillTypeRepository SkillTypeRepository;
+		public IActivityRepository ActivityRepository;
+		public IContractRepository ContractRepository;
+		public IContractScheduleRepository ContractScheduleRepository;
+		public IPartTimePercentageRepository PartTimePercentageRepository;
 
 		[Test]
 		public void ShouldGroupPagesFromReadModel()
-		{
-			var items = _target.AvailableGroupPages();
-			items.Count().Should().Be.EqualTo(0);
+		{ 
+			WithUnitOfWork.Do(() =>
+			{
+				var items = Target.AvailableGroupPages();
+				items.Count().Should().Be.EqualTo(0);
+			});
 		}
 
 		[Test]
 		public void ShouldLoadAvailableGroupsWithPageIdFromReadModel()
 		{
-			var items = _target.AvailableGroups(new ReadOnlyGroupPage {PageId = Group.PageMainId, PageName = "xxMain"},
+			WithUnitOfWork.Do(() =>
+			{
+				var items = Target.AvailableGroups(new ReadOnlyGroupPage { PageId = Group.PageMainId, PageName = "xxMain" },
 				DateOnly.Today);
-			items.Count().Should().Be.EqualTo(0);
+				items.Count().Should().Be.EqualTo(0);
+			});
+			
 		}
 
 		[Test]
 		public void ShouldLoadAvailableGroupsFromReadModel()
 		{
-			var items = _target.AvailableGroups(new ReadOnlyGroupPage { PageName = "xxMain",PageId = Group.PageMainId}, DateOnly.Today);
-			items.Count().Should().Be.EqualTo(0);
+			WithUnitOfWork.Do(() =>
+			{
+				var items = Target.AvailableGroups(new ReadOnlyGroupPage { PageName = "xxMain", PageId = Group.PageMainId }, DateOnly.Today);
+				items.Count().Should().Be.EqualTo(0);
+			});
 		}
 
 		[Test]
 		public void ShouldLoadDetailsForGroupFromReadModel()
 		{
-			var items = _target.DetailsForGroup(Guid.Empty, DateOnly.Today);
-			items.Count().Should().Be.EqualTo(0);
+			WithUnitOfWork.Do(() =>
+			{
+				var items = Target.DetailsForGroup(Guid.Empty, DateOnly.Today);
+				items.Count().Should().Be.EqualTo(0);
+			});
 		}
-
 		[Test]
 		public void ShouldLoadDetailsForGroupFromReadModelForRange()
 		{
 			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
 
 			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
-			PersistAndRemoveFromUnitOfWork(team.Site);
-			PersistAndRemoveFromUnitOfWork(team);
-
+			
 			var personContract = PersonContractFactory.CreatePersonContract();
 			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
 												personContract,
 												team);
 			personToTest.AddPersonPeriod(personPeriod);
 
-			PersistAndRemoveFromUnitOfWork(personContract.Contract);
-			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
-			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+				PersonRepository.Add(personToTest);
+			});
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
 			
-			PersistAndRemoveFromUnitOfWork(personToTest);
-
-			_target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
-			
-			var items = _target.DetailsForGroup(team.Id.GetValueOrDefault(), new DateOnlyPeriod(2001,1,1,2001,1,2));
-			items.Count().Should().Be.EqualTo(1);
+			WithUnitOfWork.Do(() =>
+			{
+				var items = Target.DetailsForGroup(team.Id.GetValueOrDefault(), new DateOnlyPeriod(2001, 1, 1, 2001, 1, 2));
+				items.Count().Should().Be.EqualTo(1);
+			});
 		}
 
 		[Test]
 		public void ShouldNotIncludePersonThatLeftTheBusiness()
 		{
 			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
-			
 			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
-			PersistAndRemoveFromUnitOfWork(team.Site);
-			PersistAndRemoveFromUnitOfWork(team);
-			
+
 			var personContract = PersonContractFactory.CreatePersonContract();
 			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
 												personContract,
 												team);
 			personToTest.AddPersonPeriod(personPeriod);
-			
-			PersistAndRemoveFromUnitOfWork(personContract.Contract);
-			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
-			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);
-			
 			personToTest.TerminatePerson(new DateOnly(2000, 12, 31), new PersonAccountUpdaterDummy());
-			PersistAndRemoveFromUnitOfWork(personToTest);
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+				PersonRepository.Add(personToTest);
+			});
 
-			_target.UpdateGroupingReadModel(new List<Guid> {Guid.Empty});
-
-			var items = _target.DetailsForGroup(team.Id.GetValueOrDefault(), new DateOnlyPeriod(2001, 1, 1, 2001, 1, 2));
-			items.Count().Should().Be.EqualTo(0);
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+			
+			WithUnitOfWork.Do(() =>
+			{
+				var items = Target.DetailsForGroup(team.Id.GetValueOrDefault(), new DateOnlyPeriod(2001, 1, 1, 2001, 1, 2));
+				items.Count().Should().Be.EqualTo(0);
+			});
 		}
 
 		[Test]
-		public void ShouldIncludePersonThatLeftTheBusinessMidPeriod()
+		public void ShouldCallUpdateGroupingReadModelDataWithoutCrash()
 		{
-			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
-
-			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
-			PersistAndRemoveFromUnitOfWork(team.Site);
-			PersistAndRemoveFromUnitOfWork(team);
-
-			var personContract = PersonContractFactory.CreatePersonContract();
-			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
-												personContract,
-												team);
-			personToTest.AddPersonPeriod(personPeriod);
-
-			PersistAndRemoveFromUnitOfWork(personContract.Contract);
-			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
-			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);
-
-			personToTest.TerminatePerson(new DateOnly(2001, 1, 3), new PersonAccountUpdaterDummy());
-			PersistAndRemoveFromUnitOfWork(personToTest);
-
-			_target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
-
-			var items = _target.DetailsForGroup(team.Id.GetValueOrDefault(), new DateOnlyPeriod(2001, 1, 1, 2001, 1, 5));
-			items.Count().Should().Be.EqualTo(1);
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModelData(new[] { Guid.NewGuid() });
+			});
 		}
 
 		[Test]
-		public void ShouldIncludeGroupWithPersonThatLeftTheBusinessMidPeriod()
+		public void ShouldCallUpdateGroupingReadModelGroupPageWithoutCrash()
 		{
-			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModelGroupPage(new[] { Guid.NewGuid() });
+			});
+		}
 
-			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
-			PersistAndRemoveFromUnitOfWork(team.Site);
-			PersistAndRemoveFromUnitOfWork(team);
-
-			var personContract = PersonContractFactory.CreatePersonContract();
-			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
-												personContract,
-												team);
-			personToTest.AddPersonPeriod(personPeriod);
-
-			PersistAndRemoveFromUnitOfWork(personContract.Contract);
-			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
-			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);
-
-			personToTest.TerminatePerson(new DateOnly(2001, 1, 3), new PersonAccountUpdaterDummy());
-			PersistAndRemoveFromUnitOfWork(personToTest);
-
-			_target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
-
-			var items = _target.AvailableGroups(new ReadOnlyGroupPage { PageName = "xxMain", PageId = Group.PageMainId }, new DateOnlyPeriod(2001, 1, 1, 2001, 1, 5));
-			items.Count().Should().Be.EqualTo(1);
+		[Test]
+		public void ShouldCallUpdateReadModelWithoutCrash()
+		{
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new[] { Guid.NewGuid() });
+			});
 		}
 
 		[Test]
@@ -171,8 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
 
 			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
-			PersistAndRemoveFromUnitOfWork(team.Site);
-			PersistAndRemoveFromUnitOfWork(team);
+			
 
 			var personContract = PersonContractFactory.CreatePersonContract();
 			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
@@ -180,33 +183,190 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 												team);
 			personToTest.AddPersonPeriod(personPeriod);
 
-			PersistAndRemoveFromUnitOfWork(personContract.Contract);
-			PersistAndRemoveFromUnitOfWork(personContract.ContractSchedule);
-			PersistAndRemoveFromUnitOfWork(personContract.PartTimePercentage);
-			PersistAndRemoveFromUnitOfWork(personToTest);
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+				PersonRepository.Add(personToTest);
+			});
 
-			_target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
 
-			var items = _target.DetailsForPeople(new [] { personToTest.Id.GetValueOrDefault()});
-			items.Count().Should().Be.EqualTo(1);
+			WithUnitOfWork.Do(() =>
+			{
+				var items = Target.DetailsForPeople(new[] { personToTest.Id.GetValueOrDefault() });
+				items.Count().Should().Be.EqualTo(1);
+			});
 		}
 
 		[Test]
-        public void ShouldCallUpdateReadModelWithoutCrash()
-        {
-            _target.UpdateGroupingReadModel(new[] { Guid.NewGuid() });
-        }
+		public void ShouldIncludePersonThatLeftTheBusinessMidPeriod()
+		{
+			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+			var personContract = PersonContractFactory.CreatePersonContract();
+			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
+												personContract,
+												team);
+			personToTest.AddPersonPeriod(personPeriod);
+			personToTest.TerminatePerson(new DateOnly(2001, 1, 3), new PersonAccountUpdaterDummy());
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+				PersonRepository.Add(personToTest);
+			});
 
-        [Test]
-        public void ShouldCallUpdateGroupingReadModelGroupPageWithoutCrash()
-        {
-            _target.UpdateGroupingReadModelGroupPage(new[] { Guid.NewGuid() });
-        }
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
 
-        [Test]
-        public void ShouldCallUpdateGroupingReadModelDataWithoutCrash()
-        {
-            _target.UpdateGroupingReadModelData(new[] { Guid.NewGuid() });
-        }
+			WithUnitOfWork.Do(() =>
+			{
+				var items = Target.DetailsForGroup(team.Id.GetValueOrDefault(), new DateOnlyPeriod(2001, 1, 1, 2001, 1, 5));
+				items.Count().Should().Be.EqualTo(1);
+			});
+		}
+
+		[Test]
+		public void ShouldIncludeGroupWithPersonThatLeftTheBusinessMidPeriod()
+		{
+			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+
+			var personContract = PersonContractFactory.CreatePersonContract();
+			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
+												personContract,
+												team);
+			personToTest.AddPersonPeriod(personPeriod);
+
+			personToTest.TerminatePerson(new DateOnly(2001, 1, 3), new PersonAccountUpdaterDummy());
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+				PersonRepository.Add(personToTest);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var items = Target.AvailableGroups(new ReadOnlyGroupPage { PageName = "xxMain", PageId = Group.PageMainId }, new DateOnlyPeriod(2001, 1, 1, 2001, 1, 5));
+				items.Count().Should().Be.EqualTo(1);
+			});
+		}
+
+		[Test]
+		public void ShouldReturnAvailableGroupPagesBasedOnOneDayPeriod()
+		{
+			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+			var activity = new Activity("dummy activity");
+			var skill = SkillFactory.CreateSkill("dummy skill");
+			skill.Activity = activity;
+			var personContract = PersonContractFactory.CreatePersonContract();
+
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ActivityRepository.Add(activity);
+				SkillTypeRepository.Add(skill.SkillType);
+				SkillRepository.Add(skill);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+			});
+
+			var personPeriod = new PersonPeriod(new DateOnly(2017, 6, 1),
+												personContract,
+												team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
+			personToTest.AddPersonPeriod(personPeriod);
+			personToTest.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1),personContract, team));
+
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.Add(personToTest);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var period = new DateOnlyPeriod(new DateOnly(2017, 5, 28), new DateOnly(2017, 05, 28));
+				var result = Target.AvailableGroupsBasedOnPeriod(period);
+
+				result.Count().Should().Be.EqualTo(4);
+			});
+		}
+		[Test]
+		public void ShouldReturnAvailableGroupPagesBasedOnPeriod()
+		{
+			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+			var activity = new Activity("dummy activity");
+			var skill = SkillFactory.CreateSkill("dummy skill");
+			skill.Activity = activity;
+			var personContract = PersonContractFactory.CreatePersonContract();
+
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ActivityRepository.Add(activity);
+				SkillTypeRepository.Add(skill.SkillType);
+				SkillRepository.Add(skill);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+			});
+
+			var personPeriod = new PersonPeriod(new DateOnly(2017, 6, 1),
+												personContract,
+												team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
+			personToTest.AddPersonPeriod(personPeriod);
+			personToTest.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1),personContract, team));
+
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.Add(personToTest);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var period = new DateOnlyPeriod(new DateOnly(2017, 5, 28), new DateOnly(2017, 06, 2));
+				var result = Target.AvailableGroupsBasedOnPeriod(period);
+
+				result.Count().Should().Be.EqualTo(5);
+			});
+		}
 	}
 }

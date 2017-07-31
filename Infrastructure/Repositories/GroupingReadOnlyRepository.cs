@@ -208,6 +208,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_currentUnitOfWork.Session().CreateSQLQuery(
 				"exec [ReadModel].[UpdateGroupingReadModelData] :idList").SetString("idList", ids).ExecuteUpdate();
 		}
+
+		public IEnumerable<ReadOnlyGroupPage> AvailableGroupsBasedOnPeriod(DateOnlyPeriod period)
+		{
+			const string sql =
+				"SELECT DISTINCT PageName,PageId "
+				+ "FROM ReadModel.groupingreadonly "
+				+ "WHERE businessunitid=:businessUnitId "
+				+ "AND :startDate <= EndDate AND :endDate >= StartDate "
+				+ " ORDER BY pagename";
+			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
+					.SetGuid("businessUnitId", getBusinessUnitId())
+					.SetDateOnly("startDate", period.StartDate)
+					.SetDateOnly("endDate", period.EndDate)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupPage)))
+					.SetReadOnly(true)
+					.List<ReadOnlyGroupPage>();
+		}
 	}
 
 }
