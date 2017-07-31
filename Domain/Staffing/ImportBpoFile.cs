@@ -7,37 +7,37 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
-	public class ImportSkillCombinationResourceBpo
-	{
-		public DateTime StartDateTime { get; set; }
-		public DateTime EndDateTime { get; set; }
-		public double Resources { get; set; }
-		public List<Guid> SkillIds { get; set; }
-		public string Source { get; set; }
-	}
+	//public class ImportSkillCombinationResourceBpo
+	//{
+	//	public DateTime StartDateTime { get; set; }
+	//	public DateTime EndDateTime { get; set; }
+	//	public double Resources { get; set; }
+	//	public List<Guid> SkillIds { get; set; }
+	//	public string Source { get; set; }
+	//}
 
-	public class SkillCombinationResourceBpo
-	{
-		public DateTime StartDateTime { get; set; }
-		public DateTime EndDateTime { get; set; }
-		public double Resources { get; set; }
-		public Guid SkillCombinationId { get; set; }
-		public string Source { get; set; }
-	}
+	//public class SkillCombinationResourceBpo
+	//{
+	//	public DateTime StartDateTime { get; set; }
+	//	public DateTime EndDateTime { get; set; }
+	//	public double Resources { get; set; }
+	//	public Guid SkillCombinationId { get; set; }
+	//	public string Source { get; set; }
+	//}
 
-	public class LineWithNumber
-	{
-		public string LineContent;
-		public int LineNumber;
-		public Dictionary<string, string> Tokens = new Dictionary<string, string>();
-	}
+	//public class LineWithNumber
+	//{
+	//	public string LineContent;
+	//	public int LineNumber;
+	//	public Dictionary<string, string> Tokens = new Dictionary<string, string>();
+	//}
 
-	public class ImportBpoFileResult
-	{
-		public bool Success = true;
-		public HashSet<string> ErrorInformation = new HashSet<string>();
-		public string SuccessInformation;
-	}
+	//public class ImportBpoFileResult
+	//{
+	//	public bool Success = true;
+	//	public HashSet<string> ErrorInformation = new HashSet<string>();
+	//	public string SuccessInformation;
+	//}
 
 	public class ImportBpoFile
 	{
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var bpoResourceList = new List<ImportSkillCombinationResourceBpo>();
 			foreach (var line in linesWithNumbers.Skip(1))
 			{
-				line.Tokens = tokenizeSkillCombinationResourceBpo(line, headerWithFieldNames, tokenSeparator);
+				line.Tokens = tokenizeSkillCombinationResourceBpo(line, headerWithFieldNames, tokenSeparator, result);
 				if(line.Tokens.IsEmpty()) continue;
 				var resourceBpo = createSkillCombinationResourceBpo(line, importFormatProvider, skillSeparator, allSkills, result);
 				bpoResourceList.Add(resourceBpo);
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			if (parameters.Length != fieldNames.Length)
 			{
 			bpoResult.Success = false;
-				bpoResult.ErrorInformation.Add(FormatGeneralLineErrorMessage(lineWithNumber,
+				bpoResult.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber,
 					$"Line has {parameters.Length} parameters but expected {fieldNames.Length} parameters."));
 
 			}
@@ -219,11 +219,13 @@ namespace Teleopti.Ccc.Domain.Staffing
 	{
 		public string LineContent;
 		public int LineNumber;
+		public Dictionary<string, string> Tokens = new Dictionary<string, string>();
 	}
 
 	public class ImportBpoFileResult
 	{
 		public bool Success = true;
 		public HashSet<string> ErrorInformation = new HashSet<string>();
+		public string SuccessInformation;
 	}
 }

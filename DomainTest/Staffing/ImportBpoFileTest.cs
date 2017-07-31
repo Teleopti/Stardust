@@ -140,7 +140,7 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,";
 		}
 
 		[Test]
-		public void ShouldReturnInformationOnAllEmptyField()
+		public void ShouldReturnInformationOnAllEmptyFields()
 		{
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
 ,,,,";
@@ -215,10 +215,11 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 		[Test]
 		public void ShouldReturnTrueIfItemsAreWithSpace()
 		{
-			var fileContents = @"source, skillgroup, startdatetime, enddatetime, resources
-								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0";
+			var fileContents = @"source, skillgroup , startdatetime , enddatetime , resources 
+								TPBRZIL, Directsales | Channel  , 2017-07-24 10:15 , 2017-07-24 10:30, 6.0";
 
 			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Channel", new Activity());
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.True();
 		}
