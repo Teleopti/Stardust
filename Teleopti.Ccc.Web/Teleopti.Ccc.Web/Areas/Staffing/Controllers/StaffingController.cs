@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
@@ -25,11 +26,12 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly ISkillAreaRepository _skillAreaRepository;
 		private readonly ScheduledStaffingViewModelCreator _staffingViewModelCreator;
+		private readonly ImportBpoFile _bpoFile;
 
 		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillAreaRepository skillAreaRepository,
-								  ScheduledStaffingViewModelCreator staffingViewModelCreator)
+								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 			_skillAreaRepository = skillAreaRepository;
 			_staffingViewModelCreator = staffingViewModelCreator;
+			_bpoFile = bpoFile;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillareastaffing")]
@@ -104,6 +107,14 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 
 			return Ok(retList);
 		}
+
+		[UnitOfWork, HttpPost, Route("api/staffing/importBpo")]
+		public virtual IHttpActionResult ImportBpo([FromBody]string fileContents)
+		{
+			var result = _bpoFile.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			return Ok(result);
+		}
+
 		private OverTimeSuggestionResultModel extractDataSeries(OverTimeSuggestionModel overTimeSuggestionModel,OvertimeWrapperModel wrapperModels)
 		{
 			var sourceTimeZone = _timeZone.TimeZone();

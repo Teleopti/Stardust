@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		private string formatGeneralLineErrorMessage(LineWithNumber lineWithNumber, string specificMessage)
 		{
-			var lineMessage = $"File import error. Error found on line number {lineWithNumber.LineNumber} with contents:\r\n{lineWithNumber.LineContent}\r\n{specificMessage}";
+			var lineMessage = $"Error found on line number {lineWithNumber.LineNumber} with contents:{lineWithNumber.LineContent} {specificMessage}";
 			return lineMessage;
 		}
 	}
