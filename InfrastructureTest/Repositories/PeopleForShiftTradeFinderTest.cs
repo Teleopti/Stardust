@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private ISite site;
 		private ITeam team;
 
-
 		[SetUp]
 		public void SetUp()
 		{
@@ -71,7 +70,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFilterPersonWithMustHaveSkil()
 		{
-
 			var skills = createAndPersistSkills();
 
 			var workflowControlSet = createAndPersistWorkflowControlSet(skills[0]);
@@ -84,11 +82,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			assertPeopleResult(result, 1, per2);
 		}
 
-
 		[Test]
 		public void ShouldFilterPersonWithInactiveMustHaveSkil()
 		{
-
 			var skills = createAndPersistSkills();
 
 			var workflowControlSet = createAndPersistWorkflowControlSet(skills[0]);
@@ -126,7 +122,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFilterOutWhenFromDoesntHaveSkillFromMergedWCSMustHaveSkills()
 		{
-
 			var skills = createAndPersistSkills();
 
 			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[1]);
@@ -137,13 +132,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var result = invokeGetPeople(per1, team);
 			assertPeopleResult(result, 0);
-
 		}
 
 		[Test]
 		public void ShouldFilterPersonWhenDifferentSkillsInMergedMatchingSkills()
 		{
-
 			var skills = createAndPersistSkills();
 
 			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[0], skills[1]);
@@ -159,7 +152,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldFilterPersonWithoutAnySkillSameAsPersonFromAndDifferentSkillsInMergedMatchingSkills()
 		{
-
 			var skills = createAndPersistSkills();
 
 			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[0], skills[1]);
@@ -175,7 +167,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotFilterPersonWhenDifferentSkillsNotInMergedMatchingSkills()
 		{
-
 			var skills = createAndPersistSkills();
 
 			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[0], skills[1]);
@@ -191,7 +182,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldNotFilterPersonWhenDifferentSkillsIsEmpty()
 		{
-
 			var skills = createAndPersistSkills();
 
 			var workflowControlSetA = createAndPersistWorkflowControlSet(skills[0], skills[1]);
@@ -219,7 +209,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			assertPeopleResult(result, 0);
 		}
 
-
 		private IPerson createPersonWithSkill(ITeam team, IWorkflowControlSet workflowControlSet, params ISkill[] skills)
 		{
 			var person = createPersonWithWorkflowControlSet(workflowControlSet);
@@ -231,7 +220,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private IList<IPersonAuthorization> invokeGetPeople(IPerson personFrom, ITeam team)
 		{
 			target = new PeopleForShiftTradeFinder(CurrentUnitOfWork.Make());
-			var result = target.GetPeople(personFrom, new DateOnly(2017, 3, 23), new List<Guid> { team.Id.Value }, "");
+			var result = target.GetPeople(personFrom, new DateOnly(2017, 3, 23), new List<Guid> {team.Id.Value}, "");
 			return result;
 		}
 
@@ -244,7 +233,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				result.Any(r => r.PersonId.Equals(expectedPerson.Id.Value)).Should().Be(true);
 			}
 		}
-
 
 		private Team createAndPersistTeam(ISite site)
 		{
@@ -279,8 +267,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			spanish.Activity = activity;
 			PersistAndRemoveFromUnitOfWork(spanish);
 
-
-			return new[] { swedish, english, spanish };
+			return new[] {swedish, english, spanish};
 		}
 
 		private static IPerson createPersonWithWorkflowControlSet(IWorkflowControlSet workflowControlSet)
@@ -294,10 +281,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var personPeriod = new PersonPeriod(new DateOnly(2011, 1, 1), createPersonContract(contract), team);
 			skills.ForEach(skill =>
-		   {
-			   var personSkill = new PersonSkill(skill, new Percent(100));
-			   personPeriod.AddPersonSkill(personSkill);
-		   });
+			{
+				var personSkill = new PersonSkill(skill, new Percent(100));
+				personPeriod.AddPersonSkill(personSkill);
+			});
 			person.AddPersonPeriod(personPeriod);
 			return personPeriod;
 		}
@@ -312,9 +299,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			skills.ForEach(skill =>
-		   {
-			   workflowControlSet.AddSkillToMatchList(skill);
-		   });
+			{
+				workflowControlSet.AddSkillToMatchList(skill);
+			});
 
 			PersistAndRemoveFromUnitOfWork(workflowControlSet);
 
@@ -338,12 +325,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private void persistReadModel(IPerson person, ITeam team, ISite site)
 		{
-
 			PersistAndRemoveFromUnitOfWork(person);
 
-			const string populateReadModelQuery = @"INSERT INTO [ReadModel].[GroupingReadOnly] 
-                ([PersonId],[StartDate],[TeamId],[SiteId],[BusinessUnitId] ,[GroupId],[PageId])
-			 VALUES (:personId,:startDate,:teamId,:siteId,:businessUnitId,:groupId,:pageId)";
+			const string populateReadModelQuery
+				= "INSERT INTO [ReadModel].[GroupingReadOnly]" +
+				  "([PersonId],[StartDate],[TeamId],[SiteId],[BusinessUnitId] ,[GroupId],[PageId])" +
+				  "VALUES (:personId,:startDate,:teamId,:siteId,:businessUnitId,:groupId,:pageId)";
 
 			Session.CreateSQLQuery(populateReadModelQuery)
 				.SetGuid("personId", person.Id.Value)
@@ -358,7 +345,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		private Guid getBusinessUnitId()
 		{
-			return ((ITeleoptiIdentity)ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
+			return ((ITeleoptiIdentity) ClaimsPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault();
 		}
 	}
 }
