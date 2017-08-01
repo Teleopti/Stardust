@@ -40,6 +40,7 @@
 		var allSkillAreas = [];
 		var currentSkills;
 		var staffingData = {};
+		var suggestedStaffingData = {};
 		var sample = {
 			date: null,
 			status: 'full'
@@ -100,21 +101,15 @@
 				var query = getSkillAreaStaffingByDate(area.Id, vm.selectedDate, vm.useShrinkage);
 			}
 			query.$promise.then(function (result) {
-
 				if (staffingPrecheck(result.DataSeries)) {
-
 					vm.timeSerie = result.DataSeries.Time;
-					var staffingData = utilService.prepareStaffingData(result);
-					staffingData.then(function (processedData) {
-						generateChartForView(processedData);
-					})
+					staffingData = utilService.prepareStaffingData(result);
+					generateChartForView(staffingData);
 				} else {
 					vm.staffingDataAvailable = false;
 				}
 			});
 		}
-
-
 
 		function staffingPrecheck(data) {
 			if (!angular.equals(data, {}) && data != null) {
@@ -253,13 +248,15 @@
 			if (input.MinMinutesToAdd > input.MaxMinutesToAdd) {
 				return false;
 			}
-			else{
+			else {
 				return true;
 			}
 		}
 
 		function suggestOvertime(form) {
+			vm.hasRequestedSuggestion = true;
 			var skillIds;
+			var settings = utilService.prepareSettings(form);
 			if (currentSkills.Skills) {
 				skillIds = currentSkills.Skills.map(function (skill) {
 					return skill.Id;
@@ -267,47 +264,30 @@
 			} else {
 				skillIds = [currentSkills.Id];
 			}
-			vm.hasRequestedSuggestion = true;
-			var settings = utilService.prepareSettings(form)
-
+			
 			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: vm.timeSerie, OvertimePreferences: settings });
 			query.$promise.then(function (response) {
 				vm.hasRequestedSuggestion = false;
-
-				staffingData.time = [];
-				staffingData.scheduledStaffing = [];
-				staffingData.forcastedStaffing = [];
-				staffingData.suggestedStaffing = [];
-				staffingData.absoluteDifference = [];
 				if (staffingPrecheck(response.DataSeries)) {
 					if (response.StaffingHasData) {
 						vm.hasSuggestionData = true;
+						suggestedStaffingData = utilService.prepareSuggestedStaffingData(staffingData, response);
 					} else {
 						vm.hasSuggestionData = false;
 						vm.hasRequestedSuggestion = false;
+						return;
 					}
 					vm.staffingDataAvailable = true;
 					vm.overTimeModels = response.OverTimeModels;
-					staffingData.scheduledStaffing = utilService.roundDataToOneDecimal(response.DataSeries.ScheduledStaffing);
-					staffingData.forcastedStaffing = utilService.roundDataToOneDecimal(response.DataSeries.ForecastedStaffing);
-					staffingData.absoluteDifference = response.DataSeries.AbsoluteDifference;
-					staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
-					staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
-					vm.timeSerie = response.DataSeries.Time;
-					angular.forEach(response.DataSeries.Time,
-						function (value, key) {
-							staffingData.time.push($filter('date')(value, 'shortTime'));
-						},
-						staffingData.time);
-					staffingData.time.unshift('x');
-					generateChartForView(staffingData);
+					generateChartForView(suggestedStaffingData, true);
 				} else {
 					vm.staffingDataAvailable = false;
 				}
 			});
 		};
-		function generateChartForView(data) {
-			c3.generate(chartService.config(data));
+
+		function generateChartForView(data, isSuggestedData) {
+			c3.generate(chartService.staffingChartConfig(data, isSuggestedData));
 		}
 	}
 })();

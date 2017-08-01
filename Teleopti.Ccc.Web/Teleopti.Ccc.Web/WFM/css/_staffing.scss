@@ -11,3 +11,39 @@
     background: rgba(0, 0, 0, 0.06);
     border-radius: 0;
 }
+
+.c3-target-UnderStaffScaffold {
+    fill-opacity: 0 !important;
+}
+
+.c3-target-OverStaffScaffold {
+    fill-opacity: 0 !important;
+}
+
+.c3-bars-OverStaffScaffold > path{
+    opacity: 0 !important;
+}
+
+.c3-bars-UnderStaffScaffold > path{
+    opacity: 0 !important;
+}
+
+.c3-target-SuggestedUnderStaffScaffold {
+    fill-opacity: 0 !important;
+}
+
+.c3-target-SuggestedOverStaffScaffold {
+    fill-opacity: 0 !important;
+}
+
+.c3-bars-SuggestedOverStaffScaffold > path{
+    opacity: 0 !important;
+}
+
+.c3-bars-SuggestedUnderStaffScaffold > path{
+    opacity: 0 !important;
+}
+
+
+
+

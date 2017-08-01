@@ -7,22 +7,51 @@
 
     chartService.inject = ['$translate'];
     function chartService($translate) {
-        this.config = staffingChartConfig;
+        this.staffingChartConfig = staffingChartConfig;
 
         ////////////////
-        function staffingChartConfig(data) {
-            var staffingData = data;
-            var staffing = generateOverUnderStaffing(data);
-            var scaffold = generateScaffold(data);
-            var chartColors = generateColorObject(staffing, scaffold);
-            var types = generateTypeObject(data);
+        function staffingChartConfig(staffingData, isSuggestedData) {
+            var staffing = generateOverUnderStaffing(staffingData.absoluteDifference);
+            var scaffold = generateScaffold(staffingData);
+            var groups = [[scaffold.over[0], staffing.over[0], scaffold.under[0], staffing.under[0]]];
+            var hide = [scaffold.under[0], scaffold.over[0]];
+            var columns = [
+                staffingData.time,
+                staffingData.scheduledStaffing,
+                scaffold.over,
+                scaffold.under,
+                staffing.over,
+                staffing.under
+            ];
+
+            if (!isSuggestedData) {
+                var chartColors = generateColorObject(staffing, scaffold);
+                var types = generateTypeObject(staffingData);
+                columns.unshift(staffingData.forcastedStaffing);
+            } else if (isSuggestedData) {
+                var suggestedStaffing = generateOverUnderStaffing(staffingData.suggested.absoluteDifference, isSuggestedData);
+                var suggestedScaffold = generateScaffold(staffingData.suggested, isSuggestedData);
+                var chartColors = generateColorObject(staffing, scaffold, suggestedStaffing, suggestedScaffold);
+                var types = generateTypeObject(staffingData, isSuggestedData);
+                groups.push([suggestedScaffold.over[0], suggestedStaffing.over[0], suggestedScaffold.under[0], suggestedStaffing.under[0]]);
+                hide.push(suggestedScaffold.under[0], suggestedScaffold.over[0]);
+                columns.unshift(staffingData.suggested.forcastedStaffing);
+                columns.push(
+                    staffingData.suggested.scheduledStaffing,
+                    suggestedScaffold.over,
+                    suggestedScaffold.under,
+                    suggestedStaffing.over,
+                    suggestedStaffing.under
+                );
+            }
+
             var config = {
                 bindto: '#staffingChart',
                 point: {
                     show: false
                 },
                 legend: {
-                    hide: [scaffold.under[0], scaffold.over[0]],
+                    hide: hide
                 },
                 data: {
                     colors: chartColors,
@@ -30,20 +59,8 @@
                     type: 'bar',
                     x: "x",
                     types: types,
-                    columns: [
-                        staffingData.time,
-                        staffingData.forcastedStaffing,
-                        staffingData.scheduledStaffing,
-                        scaffold.over,
-                        scaffold.under,
-                        staffing.over,
-                        staffing.under
-
-                    ],
-                    groups: [
-                        [scaffold.over[0], staffing.over[0]],
-                        [scaffold.under[0], staffing.under[0]]
-                    ]
+                    columns: columns,
+                    groups: groups
                 },
                 tooltip: {
                     contents: tooltip_contents
@@ -68,7 +85,8 @@
                 zoom: {
                     enabled: false,
                 },
-            }
+            };
+
             return config;
         };
 
@@ -83,7 +101,9 @@
             for (i = 0; i < d.length; i++) {
                 if (!(d[i] && (d[i].value || d[i].value === 0))) { continue; }
 
-                if (d[i].name === 'OverStaffScaffold' || d[i].name === 'UnderStaffScaffold') { continue; }
+                if (d[i].name === 'OverStaffScaffold' || d[i].name === 'UnderStaffScaffold' || d[i].name === 'SuggestedOverStaffScaffold' || d[i].name === 'SuggestedUnderStaffScaffold') {
+                    continue;
+                }
 
                 if (!text) {
                     title = config.axis_x_categories[d[i].index];
@@ -99,64 +119,104 @@
                 text += "<td class='value'>" + value + "</td>";
                 text += "</tr>";
             }
+
             return text + "</table>";
         };
-        function generateScaffold(staffingData) {
+
+        function generateOverUnderStaffing(absoluteDifference, isSuggestedData) {
+            var staffing = {};
+            staffing.over = [];
+            staffing.under = [];
+
+            for (var index = 0; index <= absoluteDifference.length; index++) {
+                var value = absoluteDifference[index];
+                if (value < 0) {
+                    staffing.under.push(Math.abs(value.toFixed(1)));
+                    staffing.over.push(null);
+                } else if (value >= 0) {
+                    staffing.over.push(value.toFixed(1));
+                    staffing.under.push(null);
+                }
+            }
+
+            if (isSuggestedData) {
+                staffing.over.unshift($translate.instant('Suggested overstaffing'));
+                staffing.under.unshift($translate.instant('Suggested understaffing'));
+            } else {
+                staffing.over.unshift($translate.instant('Overstaffing'));
+                staffing.under.unshift($translate.instant('Understaffing'));
+            }
+
+            return staffing;
+        }
+
+        function generateScaffold(staffingData, isSuggestedData) {
             var scaffold = {};
             scaffold.under = staffingData.scheduledStaffing.concat();
             scaffold.under.shift();
-            scaffold.under.unshift('UnderStaffScaffold');
-
             scaffold.over = staffingData.forcastedStaffing.concat();
             scaffold.over.shift();
-            scaffold.over.unshift('OverStaffScaffold');
+
+            for (var index = 0; index <= staffingData.absoluteDifference.length; index++) {
+                var value = staffingData.absoluteDifference[index];
+                if (value < 0) {
+                    scaffold.over[index] = 0;
+                } else if (value >= 0) {
+                    scaffold.under[index] = 0;
+                }
+            }
+
+            if (isSuggestedData) {
+                scaffold.under.unshift('SuggestedUnderStaffScaffold');
+                scaffold.over.unshift('SuggestedOverStaffScaffold');
+            } else {
+                scaffold.under.unshift('UnderStaffScaffold');
+                scaffold.over.unshift('OverStaffScaffold');
+            }
+
             return scaffold;
         };
 
-        function generateTypeObject(staffingData) {
+        function generateTypeObject(staffingData, isSuggestedData) {
             var types = {};
             var forcastingTypeKey = staffingData.forcastedStaffing[0];
             var staffingTypeKey = staffingData.scheduledStaffing[0];
             types[forcastingTypeKey] = 'line';
             types[staffingTypeKey] = 'line';
+
+            if (isSuggestedData) {
+                var suggestedStaffingTypeKey = staffingData.suggested.scheduledStaffing[0];
+                types[suggestedStaffingTypeKey] = 'line';
+            }
+
             return types;
         };
 
-        function generateColorObject(staffingObj, scaffoldObj) {
+        function generateColorObject(staffing, scaffold, suggestedStaffing, suggestedScaffold) {
             var colors = {};
-            var overstaffColorKey = staffingObj.over[0];
-            var understaffColorKey = staffingObj.under[0];
-            var overScaffoldKey = scaffoldObj.over[0];
-            var underScaffoldKey = scaffoldObj.under[0];
+            var overstaffColorKey = staffing.over[0];
+            var understaffColorKey = staffing.under[0];
+            var overScaffoldKey = scaffold.over[0];
+            var underScaffoldKey = scaffold.under[0];
 
-            colors[overstaffColorKey] = '#4286f4';
-            colors[understaffColorKey] = '#f44141';
+            colors[overstaffColorKey] = '#0a84d6';
+            colors[understaffColorKey] = '#D32F2F';
             colors[underScaffoldKey] = '#fff';
             colors[overScaffoldKey] = '#fff';
-            return colors;
-        };
-        function generateOverUnderStaffing(staffingData) {
-            var staffing = {};
-            staffing.over = [];
-            staffing.under = [];
-            staffing.over.unshift($translate.instant('Overstaffing'));
-            staffing.under.unshift($translate.instant('Understaffing'));
 
-            for (var index = 0; index <= staffingData.absoluteDifference.length; index++) {
-                var value = staffingData.absoluteDifference[index];
-                value = parseFloat(value);
-                if (value < 0) {
-                    staffing.under.push(Math.abs(value.toFixed(1)));
-                    staffing.over.push(0);
-                } else if(value>=0){
-                    staffing.over.push(value.toFixed(1));
-                    staffing.under.push(0);
-                }
+            if (suggestedStaffing && suggestedScaffold) {
+                var suggestedOverstaffColorKey = suggestedStaffing.over[0];
+                var suggestedUnderstaffColorKey = suggestedStaffing.under[0];
+                var suggestedOverScaffoldKey = suggestedScaffold.over[0];
+                var suggestedUnderScaffoldKey = suggestedScaffold.under[0]; 
 
+                colors[suggestedOverstaffColorKey] = '#99D6FF';
+                colors[suggestedUnderstaffColorKey] = '#EE8F7D';
+                colors[suggestedUnderScaffoldKey] = '#fff';
+                colors[suggestedOverScaffoldKey] = '#fff';
             }
 
-            return staffing
-        }
-
+            return colors;
+        };
     }
 })();
