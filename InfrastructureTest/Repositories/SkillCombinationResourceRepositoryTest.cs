@@ -6,13 +6,16 @@ using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -23,7 +26,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[TestFixture]
 	[UnitOfWorkTest]
 	[AllTogglesOn]
-	public class SkillCombinationResourceRepositoryTest
+	public class SkillCombinationResourceRepositoryTest : ISetup
 	{
 		public ISkillCombinationResourceRepository Target;
 		public MutableNow Now;
@@ -32,9 +35,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public ISkillTypeRepository SkillTypeRepository;
 		public IActivityRepository ActivityRepository;
 		public IBusinessUnitRepository BusinessUnitRepository;
-
-
-		private Guid persistSkill()
+		public CurrentBusinessUnit CurrentBusinessUnit;
+		
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<CurrentBusinessUnit>().For<ICurrentBusinessUnit>();
+		}
+		private Guid persistSkill(IBusinessUnit businessUnit=null)
 		{
 			var activity = new Activity("act");
 			var skillType = SkillTypeFactory.CreateSkillType();
@@ -44,6 +51,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Activity = activity
 			};
 
+			if (businessUnit != null)
+			{
+				activity.SetBusinessUnit(businessUnit);
+				skill.SetBusinessUnit(businessUnit);
+			}
 			SkillTypeRepository.Add(skillType);
 			ActivityRepository.Add(activity);
 			SkillRepository.Add(skill);
@@ -456,29 +468,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				.EqualTo(3d);
 		}
 
-		[Test, Ignore("to toggle")]
-		public void ShouldReturnActualResourcesIfNoBpoResourceAvailable()
-		{
-			var skillId = persistSkill();
-			Now.Is("2017-06-01 08:00");
-			var combinationResourcesOld = new List<SkillCombinationResource>
-			{
-				new SkillCombinationResource
-				{
-					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
-					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
-					Resource = 1,
-					SkillCombination = new[] {skillId}
-				}
-			};
-
-			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
-			
-			var loadedCombinationResources =
-				Target.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12));
-			loadedCombinationResources.Count().Should().Be.EqualTo(1);
-		}
-
 		[Test]
 		public void ShouldReturnActualAndBpoResources()
 		{
@@ -527,7 +516,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				{
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
-					Resource = 2,
+					Resource = 2.1,
 					SkillCombination = new[] {skillId}
 				},
 				new SkillCombinationResource
@@ -565,7 +554,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var loadedCombinationResources =
 				Target.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12));
 			loadedCombinationResources.Count().Should().Be.EqualTo(2);
-			loadedCombinationResources.FirstOrDefault(x=>x.StartDateTime== new DateTime(2017, 06, 01, 0, 0, 0)).Resource.Should().Be.EqualTo(5.1);
+			loadedCombinationResources.FirstOrDefault(x=>x.StartDateTime== new DateTime(2017, 06, 01, 0, 0, 0)).Resource.Should().Be.EqualTo(5.2);
 			loadedCombinationResources.FirstOrDefault(x=>x.StartDateTime== new DateTime(2017, 06, 01, 0, 15, 0)).Resource.Should().Be.EqualTo(8.1);
 		}
 
@@ -607,31 +596,84 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedCombinationResources.Count().Should().Be.EqualTo(2);			
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldNotAddBpoResourceFromAnotherBu()
 		{
-
-			var activity = new Activity("act");
-			var skillType = SkillTypeFactory.CreateSkillType();
-			var skill2 = new Skill("skill", "skill", Color.Blue, 15, skillType)
+			Now.Is("2017-06-01 08:00");
+			//for first bu
+			var bu1 = CurrentBusinessUnit.Current();
+			var skillId1 = persistSkill();
+			var combinationResourcesOld = new List<SkillCombinationResource>
 			{
-				TimeZone = TimeZoneInfo.Utc,
-				Activity = activity
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId1}
+				}
 			};
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+			List<ImportSkillCombinationResourceBpo> combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resources = 5,
+					Source = "TPBRAZIL",
+					SkillIds = new List<Guid>(){skillId1}
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			//for secondbu
 			var bu2 = BusinessUnitFactory.CreateSimpleBusinessUnit("Test2");
 			BusinessUnitRepository.Add(bu2);
-			activity.SetBusinessUnit(bu2);
-			SkillTypeRepository.Add(skillType);
-			ActivityRepository.Add(activity);
-			skill2.SetBusinessUnit(bu2);
-			SkillRepository.Add(skill2);
 			CurrentUnitOfWork.Current().PersistAll();
-			
+
+			CurrentBusinessUnit.OnThisThreadUse(bu2);
+			var skillId2 = persistSkill(bu2);
+			combinationResourcesOld = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resource = 2,
+					SkillCombination = new[] {skillId2}
+				}
+			};
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+			combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resources = 2,
+					Source = "TPBRAZIL",
+					SkillIds = new List<Guid>(){skillId2}
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
 
 
-			var skillId1 = persistSkill();
-			
+			CurrentBusinessUnit.OnThisThreadUse(bu2);
+
+			var loadedCombinationResources =
+				Target.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12));
+			loadedCombinationResources.Count().Should().Be.EqualTo(1);
+			loadedCombinationResources.First().Resource.Should().Be.EqualTo(4);
+		}
+
+		[Test, Ignore("WIP")]
+		public void ShouldHandleDecimalRoudingWithBpoResources()
+		{
 			Now.Is("2017-06-01 08:00");
+			//for first bu
+			var bu1 = CurrentBusinessUnit.Current();
+			var skillId1 = persistSkill();
 			var combinationResourcesOld = new List<SkillCombinationResource>
 			{
 				new SkillCombinationResource
@@ -642,6 +684,89 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					SkillCombination = new[] {skillId1}
 				}
 			};
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+			List<ImportSkillCombinationResourceBpo> combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resources = 5.2,
+					Source = "TPBRAZIL",
+					SkillIds = new List<Guid>(){skillId1}
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+			//for secondbu
+			var bu2 = BusinessUnitFactory.CreateSimpleBusinessUnit("Test2");
+			BusinessUnitRepository.Add(bu2);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			CurrentBusinessUnit.OnThisThreadUse(bu2);
+			var skillId2 = persistSkill(bu2);
+			combinationResourcesOld = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resource = 2.3,
+					SkillCombination = new[] {skillId2}
+				}
+			};
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+			combinationResourcesBpo = new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resources = 2.4,
+					Source = "TPBRAZIL",
+					SkillIds = new List<Guid>(){skillId2}
+				}
+			};
+			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
+
+
+			CurrentBusinessUnit.OnThisThreadUse(bu1);
+
+			var loadedCombinationResources =
+				Target.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12));
+			loadedCombinationResources.Count().Should().Be.EqualTo(1);
+			loadedCombinationResources.First().Resource.Should().Be.EqualTo(6.3);
+		}
+
+		[Test]
+		public void ShouldReturnActualAndBpoResourcesTESTTT()
+		{
+			var skillId = persistSkill();
+			Now.Is("2017-06-01 08:00");
+			var combinationResourcesOld = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resource = 1,
+					SkillCombination = new[] {skillId}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0,30, 0),
+					Resource = 2,
+					SkillCombination = new[] {skillId}
+				},new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 30, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 45, 0),
+					Resource = 3,
+					SkillCombination = new[] {skillId}
+				}
+
+			};
 
 			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
 
@@ -651,25 +776,33 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				{
 					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
 					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
-					Resources = 5.1,
+					Resources = 6.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){skillId1}
+					SkillIds = new List<Guid>(){skillId}
 				},
 				new ImportSkillCombinationResourceBpo()
 				{
-					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
-					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
-					Resources = 2.3,
+					StartDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 30, 0),
+					Resources = 7.1,
 					Source = "TPBRAZIL",
-					SkillIds = new List<Guid>(){ skill2.Id.GetValueOrDefault() }
+					SkillIds = new List<Guid>(){skillId}
+				},new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 30, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 45, 0),
+					Resources = 8.1,
+					Source = "TPBRAZIL",
+					SkillIds = new List<Guid>(){skillId}
 				}
+
 			};
 			Target.PersistSkillCombinationResourceBpo(combinationResourcesBpo);
 
 			var loadedCombinationResources =
-				Target.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12));
+				Target.LoadSkillCombinationResources(new DateTimePeriod(new DateTime(2017, 06, 01, 0, 15, 0,DateTimeKind.Utc), new DateTime(2017, 06, 01, 0, 30, 0,DateTimeKind.Utc)));
 			loadedCombinationResources.Count().Should().Be.EqualTo(1);
-			loadedCombinationResources.First().Resource.Should().Be.EqualTo(6.2);
+			loadedCombinationResources.First().Resource.Should().Be.EqualTo(9.1);
 		}
 	}
 }

@@ -149,6 +149,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public void PersistSkillCombinationResourceBpo(List<ImportSkillCombinationResourceBpo> combinationResources)
 		{
 			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
+			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			using (var connection = new SqlConnection(connectionString))
 			{
 				//connection.OpenWithRetry(_retryPolicy);
@@ -162,6 +163,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				dt.Columns.Add("InsertedOn", typeof(DateTime));
 				dt.Columns.Add("Resources", typeof(double));
 				dt.Columns.Add("SourceId", typeof(Guid));
+				dt.Columns.Add("BusinessUnit", typeof(Guid));
 				var insertedOn = _now.UtcDateTime();
 
 				using (var transaction = connection.BeginTransaction())
@@ -200,6 +202,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							bpoList.Add(bpoId, skillCombinationResourceBpo.Source);
 						}
 						row["SourceId"] = bpoId;
+						row["BusinessUnit"] = bu;
 						dt.Rows.Add(row);
 					}
 					transaction.Commit();
@@ -302,16 +305,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		//Add business unit in the table
-		private IList<SkillCombinationResourceWithCombinationId> LoadSkillCombinationResourcesBpo(DateTimePeriod period)
+		private IList<SkillCombinationResourceWithCombinationId> loadSkillCombinationResourcesBpo(DateTimePeriod period)
 		{
+			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var result = _currentUnitOfWork.Current().Session()
 				.CreateSQLQuery(@"select SkillCombinationId,StartDateTime,EndDateTime,sum(Resources) as Resource, c.SkillId
-								FROM ReadModel.SkillCombinationResourceBpo scrb INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = scrb.SkillCombinationId 
-									where  scrb.StartDateTime < :endDateTime AND scrb.EndDateTime > :startDateTime
-									group by SkillCombinationId,StartDateTime,EndDateTime,c.skillId")
+								FROM ReadModel.SkillCombinationResourceBpo scrb 
+								INNER JOIN [ReadModel].[SkillCombination] c ON c.Id = scrb.SkillCombinationId 
+								where  scrb.StartDateTime < :endDateTime 
+									AND scrb.EndDateTime > :startDateTime
+									AND scrb.BusinessUnit = :bu
+								group by SkillCombinationId,StartDateTime,EndDateTime,c.skillId")
 				.SetDateTime("startDateTime", period.StartDateTime)
 				.SetDateTime("endDateTime", period.EndDateTime)
+				.SetParameter("bu", bu)
 				.SetResultTransformer(new AliasToBeanResultTransformer(typeof(RawSkillCombinationResource)))
 				.List<RawSkillCombinationResource>();
 
@@ -341,7 +348,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private IEnumerable<SkillCombinationResource> skillCombinationResourcesWithBpo(DateTimePeriod period)
 		{
 			var combinationResources = skillCombinationResourcesWithoutBpo(period).ToList();
-			combinationResources.AddRange(LoadSkillCombinationResourcesBpo(period));
+			combinationResources.AddRange(loadSkillCombinationResourcesBpo(period));
 		
 			var newList = new List<SkillCombinationResourceWithCombinationId>();
 			newList.AddRange(combinationResources.Select(x=> new SkillCombinationResourceWithCombinationId
@@ -364,7 +371,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							x =>
 								x.StartDateTime == item.StartDateTime && x.EndDateTime == item.EndDateTime &&
 								!x.SkillCombination.Except(item.SkillCombination).Any());
-					foundItem.Resource += item.Resource;
+					foundItem.Resource = foundItem.Resource+ item.Resource;
 
 				}else
 					result.Add(item);
