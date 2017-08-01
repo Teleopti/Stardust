@@ -64,8 +64,8 @@ BEGIN
 	INSERT INTO #TempTeamWithPerson
 		SELECT distinct(Team)
 		FROM #TempPersonPeriodWithEndDate sub
-		where sub.Team not in (select id from #TempDeletedTeam) 
-	    and sub.PersonId not in (select id from #TempDeletedPerson )
+		where not exists (select id from #TempDeletedTeam dt where dt.id = sub.Team) 
+	    and not exists (select id from #TempDeletedPerson dt where dt.id = sub.PersonId )
 	
 
 	--declare
