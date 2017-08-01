@@ -12,6 +12,8 @@ Background:
 	And I have a role with
 	 | Field                | Value |
 	 | Access to everything | true  |
+	 | Access to team       | Red   |
+	
 	And Pierre Baldi has a person period with
 	 | Field          | Value        |
 	 | Team           | Red          |
