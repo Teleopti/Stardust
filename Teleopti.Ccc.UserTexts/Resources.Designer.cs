@@ -16718,6 +16718,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The searching person count will exceed {0}, please refine your search.
+        /// </summary>
+        public static string MaxSearchPersonCountExceeded {
+            get {
+                return ResourceManager.GetString("MaxSearchPersonCountExceeded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Max Seat Limit Broken.
         /// </summary>
         public static string MaxSeatLimitBroken {

@@ -8716,6 +8716,10 @@ Period: {3}</value>
     <value>Shift trade denied because schedule contract time tolerance was exceeded.</value>
     <comment>denyreason when shifttrade is rejected because of the targettime</comment>
   </data>
+  <data name="MaxSearchPersonCountExceeded" xml:space="preserve">
+    <value>The searching person count will exceed {0}, please refine your search</value>
+    <comment>error message for WFM/ShiftradeRequest when searching person count is greater than the maximum</comment>
+  </data>
   <data name="WorkflowControlSetNotSetDenyReason" xml:space="preserve">
     <value>Shift trade denied because there is no workflow control set defined.</value>
     <comment>denyReason when the controlset isnt set</comment>

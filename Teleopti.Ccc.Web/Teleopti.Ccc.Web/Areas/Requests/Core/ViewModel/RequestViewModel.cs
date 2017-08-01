@@ -71,6 +71,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel
 		public int Skip;
 		public int Take;
 		public IEnumerable<RequestViewModel> Requests;
+		public bool IsSearchPersonCountExceeded;
+		public int MaxSearchPersonCount;
 	}
 
 	public class ShiftTradeRequestListViewModel : RequestListViewModel

@@ -6,9 +6,9 @@
 		.controller('requestsOverviewCtrl', requestsOverviewController)
 		.directive('requestsOverview', requestsOverviewDirective);
 
-	requestsOverviewController.$inject = ['$scope', "$attrs", 'requestsDataService', "Toggle", "requestCommandParamsHolder", "$translate"];
+	requestsOverviewController.$inject = ['$scope', "$attrs", 'requestsDataService', "Toggle", "requestsNotificationService"];
 
-	function requestsOverviewController($scope, $attrs, requestsDataService, toggleService, requestCommandParamsHolder, $translate) {
+	function requestsOverviewController($scope, $attrs, requestsDataService, toggleService, requestsNotificationService) {
 		var vm = this;
 
 		vm.loadRequestWatchersInitialized = false;
@@ -48,7 +48,10 @@
 					
 				vm.requests = requests.data.Requests;
 
-				if (vm.requests && vm.requests.length > 0) {
+				if (requests.data.IsSearchPersonCountExceeded) {
+					vm.requests = [];
+					requestsNotificationService.notifyMaxSearchPersonCountExceeded(requests.data.MaxSearchPersonCount);
+				} else if (vm.requests && vm.requests.length > 0) {
 					vm.shiftTradeRequestDateSummary = {
 						Minimum: requests.data.MinimumDateTime,
 						Maximum: requests.data.MaximumDateTime,

@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		private readonly IRequestFilterCreator _requestFilterCreator;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
 
+		private const int maxSearchPersonCount = 5000;
+
 		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IScheduleProvider scheduleProvider, IUserCulture userCulture
 			, IRequestFilterCreator requestFilterCreator, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
 		{
@@ -58,6 +60,17 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			int totalCount;
 
 			var requestFilter = _requestFilterCreator.Create(input, new[] { RequestType.ShiftTradeRequest });
+
+			if (requestFilter.Persons != null && requestFilter.Persons.Count() > maxSearchPersonCount)
+			{
+				return new ShiftTradeRequestListViewModel
+				{
+					Requests = new RequestViewModel[] {},
+					IsSearchPersonCountExceeded = true,
+					MaxSearchPersonCount = maxSearchPersonCount
+				};
+			}
+
 			requestFilter.OnlyIncludeRequestsStartingWithinPeriod = true;
 			requestFilter.ExcludeInvalidShiftTradeRequest = true;
 

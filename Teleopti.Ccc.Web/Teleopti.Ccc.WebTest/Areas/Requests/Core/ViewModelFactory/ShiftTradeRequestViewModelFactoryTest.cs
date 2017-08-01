@@ -24,6 +24,7 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 using Teleopti.Ccc.Web.Core;
+using Teleopti.Ccc.WebTest.Areas.Global;
 using Teleopti.Ccc.WebTest.Areas.Requests.Core.IOC;
 using Teleopti.Interfaces.Domain;
 
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IShiftTradeRequestViewModelFactory ShiftTradeRequestViewModelFactory;
 		public IPersonRequestRepository PersonRequestRepository;
 		public IPermissionProvider PermissionProvider;
-		public IPeopleSearchProvider PeopleSearchProvider;
+		public FakePeopleSearchProvider PeopleSearchProvider;
 		public IPersonRequestCheckAuthorization PersonRequestCheckAuthorization;
 		public IScheduleStorage ScheduleStorage;
 		public IShiftTradeRequestStatusChecker ShiftTradeRequestStatusChecker;
@@ -424,6 +425,42 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			requestListViewModel.FirstDayOfWeek.Should().Be (7);
 		}
 
+		[Test]
+		public void ShouldReturnEmptyResultWhenSearchingPersonCountIsExceeded()
+		{
+			var personTo = PersonFactory.CreatePerson("Person", "To");
+			var personFrom = PersonFactory.CreatePerson("Person", "From");
+			var personrequest = createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3), personFrom,
+				personTo);
+			((ShiftTradeRequest)personrequest.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts,
+				new PersonRequestAuthorizationCheckerConfigurable());
+			var schedule = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
+				new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(2016, 03, 01, 2016, 03, 03), Scenario.Current());
+			setShiftTradeSwapDetailsToAndFrom((IShiftTradeRequest)personrequest.Request, schedule, personTo, personFrom);
+			personrequest.Pending();
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2016, 3, 1),
+				EndDate = new DateOnly(2016, 3, 3),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>
+				{
+					{ PersonFinderField.Organization, "test" }
+				},
+				SelectedTeamIds = new[] { Guid.NewGuid() }
+			};
+
+			for (var i = 0; i < 5001; i++)
+			{
+				PeopleSearchProvider.Add(PersonFactory.CreatePerson());
+			}
+
+			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
+			requestListViewModel.Requests.Count().Should().Be(0);
+			requestListViewModel.IsSearchPersonCountExceeded.Should().Be(true);
+			requestListViewModel.MaxSearchPersonCount.Should().Be(5000);
+		}
 
 		private static void setShiftTradeSwapDetailsToAndFrom(IShiftTradeRequest shiftTradeRequest, IScheduleDictionary schedule, IPerson personTo, IPerson personFrom)
 		{

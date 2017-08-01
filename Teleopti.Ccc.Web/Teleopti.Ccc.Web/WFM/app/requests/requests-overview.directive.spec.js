@@ -2,7 +2,7 @@
 	'use strict';
 
 	describe('[Requests overview directive]', function () {
-		var $compile, $rootScope, requestsDataService, requestsDefinitions, $injector, requestsFilterService;
+		var $compile, $rootScope, requestsDataService, requestsDefinitions, $injector, requestsFilterService, requestsNotificationService;
 
 		var targetElement, targetScope;
 
@@ -11,6 +11,7 @@
 
 		beforeEach(function () {
 			var requestsDataService = new FakeRequestsDataService();
+			requestsNotificationService = new FakeRequestsNotificationService();
 
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
@@ -31,10 +32,14 @@
 				$provide.service('requestsDataService', function () {
 					return requestsDataService;
 				});
+
+				$provide.service('requestsNotificationService', function () {
+					return requestsNotificationService;
+				});
 			});
 		});
 
-		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_, _$injector_, _RequestsFilter_) {
+		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_, _$injector_, _RequestsFilter_, _requestsNotificationService_) {
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			requestsDataService = _requestsDataService_;
@@ -42,6 +47,7 @@
 			targetScope = $rootScope.$new();
 			$injector = _$injector_;
 			requestsFilterService = _RequestsFilter_;
+			requestsNotificationService = _requestsNotificationService_;
 		}));
 
 		it("show requests table container", function () {
@@ -272,6 +278,28 @@
 			targetScope.$digest();
 
 			expect(requestsDataService.getCallCounts()).toEqual(1);
+		});
+
+		it('should display error when searching person count is exceeded', function () {
+			requestsDataService.setGetAllRequetsCallbackData({
+				IsSearchPersonCountExceeded: true,
+				MaxSearchPersonCount: 5000
+			});
+
+			targetScope.initFooter = function () { };
+			targetElement = $compile('<requests-overview ' +
+				'on-init-call-back="initCallBack(count)"' +
+				'period="absencePeriod"></requests-overview>')(targetScope);
+			targetScope.$digest();
+			var scope = getInnerScope(targetElement);
+			scope.requestsOverview.isActive = false;
+			scope.requestsOverview.selectedTeamIds = ["team"];
+			scope.requestsOverview.init();
+			targetScope.$digest();
+			scope.requestsOverview.isActive = true;
+			scope.$apply();
+			expect(scope.requestsOverview.requests.length).toEqual(0);
+			expect(requestsNotificationService.getNotificationResult()).toEqual(5000);
 		});
 
 		function getInnerScope(element) {
@@ -761,21 +789,37 @@
 	}
 
 	function FakeRequestsDataService() {
-		var _requests;
+		var _requests = [];
 		var _hasSentRequests;
 		var _lastRequestParameters;
 		var _callCounts = 0;
+		var _getAllRequetsCallbackData = {
+			Requests: _requests,
+			TotalCount: _requests.length
+		}
 
 		this.reset = function () {
 			_requests = [];
 			_hasSentRequests = false;
 			_lastRequestParameters = null;
 			_callCounts = 0;
+			_getAllRequetsCallbackData = {
+				Requests: _requests,
+				TotalCount: _requests.length
+			}
 		};
 
 		this.setRequests = function (requests) {
 			_requests = requests;
+			_getAllRequetsCallbackData = {
+				Requests: _requests,
+				TotalCount: _requests.length
+			}
 		};
+
+		this.setGetAllRequetsCallbackData = function(data) {
+			_getAllRequetsCallbackData = data;
+		}
 
 		this.getHasSentRequests = function () { return _hasSentRequests; }
 		this.getLastRequestParameters = function () { return _lastRequestParameters; }
@@ -797,10 +841,7 @@
 				then: function (cb) {
 					_callCounts++;
 					cb({
-						data: {
-							Requests: _requests,
-							TotalCount: _requests.length
-						}
+						data: _getAllRequetsCallbackData
 					});
 				}
 			}
@@ -829,6 +870,16 @@
 
 		this.getCallCounts = function() {
 			return _callCounts;
+		}
+	}
+
+	function FakeRequestsNotificationService() {
+		var _notificationResult;
+		this.notifyMaxSearchPersonCountExceeded = function (maxSearchPersonCount) {
+			_notificationResult = maxSearchPersonCount;
+		}
+		this.getNotificationResult = function () {
+			return _notificationResult;
 		}
 	}
 })();
