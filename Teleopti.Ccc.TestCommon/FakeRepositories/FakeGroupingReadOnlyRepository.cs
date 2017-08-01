@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return _readOnlyGroupPages;
 		}
 
-		public IEnumerable<ReadOnlyGroupDetail> AvailableGroupsBasedOnPeriod(List<ReadOnlyGroupPage> groupPages, DateOnlyPeriod period)
+		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(List<ReadOnlyGroupPage> groupPages, DateOnlyPeriod period)
 		{
 			return _details;
 		}

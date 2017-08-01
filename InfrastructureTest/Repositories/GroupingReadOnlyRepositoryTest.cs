@@ -368,5 +368,60 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				result.Count().Should().Be.EqualTo(5);
 			});
 		}
+
+		[Test]
+		public void ShouldReturnAvailableGroupDetailsBasedOnPeriod()
+		{
+			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+			var team = TeamFactory.CreateTeam("Dummy Team", "Dummy Site");
+			var activity = new Activity("dummy activity");
+			var skill = SkillFactory.CreateSkill("dummy skill");
+			skill.Activity = activity;
+			var personContract = PersonContractFactory.CreatePersonContract();
+
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ActivityRepository.Add(activity);
+				SkillTypeRepository.Add(skill.SkillType);
+				SkillRepository.Add(skill);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+			});
+
+			var personPeriod = new PersonPeriod(new DateOnly(2017, 6, 1),
+												personContract,
+												team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
+			personToTest.AddPersonPeriod(personPeriod);
+			personToTest.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1), personContract, team));
+
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.Add(personToTest);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var period = new DateOnlyPeriod(new DateOnly(2017, 5, 28), new DateOnly(2017, 06, 2));
+				var gps = Target.AvailableGroupsBasedOnPeriod(period).ToList();
+				var result = Target.AvailableGroups(gps, period).ToLookup(gp => gp.PageId);
+				var orgs = result[Group.PageMainId].ToLookup(o => o.SiteId);
+				var normalGroups = gps.Where(gp => gp.PageId != Group.PageMainId).OrderBy(gp => gp.PageName);
+
+				orgs.Count().Should().Be.EqualTo(1);
+				orgs[team.Site.Id].Count().Should().Be.EqualTo(1);
+				orgs[team.Site.Id].Single().GroupName.Should().Be.EqualTo("Dummy Site/Dummy Team");
+				result[normalGroups.First().PageId].Single().GroupName.Should().Be.EqualTo("dummyContract");
+
+			});
+		}
 	}
 }

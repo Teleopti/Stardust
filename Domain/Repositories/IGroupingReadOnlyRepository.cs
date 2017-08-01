@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<ReadOnlyGroupPage> AvailableGroupPages();
 		IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnly queryDate);
 		IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage, DateOnly queryDate);
-		IEnumerable<ReadOnlyGroupDetail> AvailableGroups(IEnumerable<ReadOnlyGroupPage> groupPages, DateOnly queryDate);
 		IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate);
 	    void UpdateGroupingReadModel(ICollection<Guid> inputIds);
         void UpdateGroupingReadModelGroupPage(ICollection<Guid> inputIds);
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnlyPeriod queryRange);
 		IEnumerable<ReadOnlyGroupDetail> DetailsForPeople(IEnumerable<Guid> peopleIdCollection);
 		IEnumerable<ReadOnlyGroupPage> AvailableGroupsBasedOnPeriod(DateOnlyPeriod period);
-		IEnumerable<ReadOnlyGroupDetail> AvailableGroupsBasedOnPeriod(List<ReadOnlyGroupPage> groupPages, DateOnlyPeriod period);
+		IEnumerable<ReadOnlyGroupDetail> AvailableGroups(List<ReadOnlyGroupPage> groupPages, DateOnlyPeriod period);
 	}
 
 	public class ReadOnlyGroupDetail : IPersonAuthorization

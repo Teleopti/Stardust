@@ -109,22 +109,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<ReadOnlyGroupDetail>();
 		}
 
-		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(IEnumerable<ReadOnlyGroupPage> groupPages, DateOnly queryDate)
-		{
-			const string sql =
-				"exec [ReadModel].[LoadAvailableGroups] @businessUnitId=:businessUnitId, @date=:queryDate,@pageIds=:pageIds";
-
-			var pageIds = string.Join(",", groupPages.Select(p => p.PageId).ToArray());
-
-			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
-				.SetGuid("businessUnitId", getBusinessUnitId())
-				.SetDateOnly("queryDate", queryDate)
-				.SetString("pageIds", pageIds)
-				.SetResultTransformer(Transformers.AliasToBean(typeof (ReadOnlyGroupDetail)))
-				.SetReadOnly(true)
-				.List<ReadOnlyGroupDetail>();
-		}
-
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForPeople(IEnumerable<Guid> peopleIdCollection)
 		{
 			const string sql =
@@ -226,9 +210,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<ReadOnlyGroupPage>();
 		}
 
-		public IEnumerable<ReadOnlyGroupDetail> AvailableGroupsBasedOnPeriod(List<ReadOnlyGroupPage> groupPages, DateOnlyPeriod period)
+		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(List<ReadOnlyGroupPage> groupPages, DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			const string sql =
+				"exec [ReadModel].[LoadAvailableGroups] @businessUnitId=:businessUnitId, @startDate=:startDate, @endDate=:endDate, @pageIds=:pageIds";
+
+			var pageIds = string.Join(",", groupPages.Select(p => p.PageId).ToArray());
+
+			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
+				.SetGuid("businessUnitId", getBusinessUnitId())
+				.SetDateOnly("startDate", period.StartDate)
+				.SetDateOnly("endDate", period.EndDate)
+				.SetString("pageIds", pageIds)
+				.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
+				.SetReadOnly(true)
+				.List<ReadOnlyGroupDetail>();
 		}
 	}
 

@@ -15,7 +15,8 @@ GO
 -- =============================================
 CREATE PROCEDURE [ReadModel].[LoadAvailableGroups]
    @businessUnitId uniqueidentifier,
-   @date smalldatetime,
+   @startDate smalldatetime,
+   @endDate smalldatetime,
    @pageIds nvarchar(max)
 AS
 BEGIN
@@ -33,16 +34,16 @@ BEGIN
       ,'' FirstName
       ,'' LastName
       ,'' EmploymentNumber
-      ,CAST('00000000-0000-0000-0000-000000000000' AS UNIQUEIDENTIFIER) TeamId
-      ,CAST('00000000-0000-0000-0000-000000000000' AS UNIQUEIDENTIFIER) SiteId
+      ,TeamId
+      ,SiteId
       ,BusinessUnitId
    FROM ReadModel.groupingreadonly
    Join #AllPageId on ReadModel.groupingreadonly.PageId = #AllPageId.Id
    WHERE businessunitid = @businessUnitId
-      AND @date BETWEEN StartDate
-        AND isnull(EndDate, '2059-12-31')
+      AND @startDate <= isnull(EndDate, '2059-12-31')
+	  AND @endDate >= isnull(StartDate, '1900-01-01')
       AND (
-        LeavingDate >= @date
+        LeavingDate BETWEEN @startDate AND @endDate
         OR LeavingDate IS NULL
         )
    ORDER BY groupname

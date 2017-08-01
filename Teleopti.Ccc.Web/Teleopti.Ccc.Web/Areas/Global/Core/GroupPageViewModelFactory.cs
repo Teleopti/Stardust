@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupsBasedOnPeriod(period);
 
 			var allAvailableGroups =
-				_groupingReadOnlyRepository.AvailableGroupsBasedOnPeriod(allGroupPages.ToList(), period)
+				_groupingReadOnlyRepository.AvailableGroups(allGroupPages.ToList(), period)
 					.ToLookup(t => t.PageId);
 
 			var actualOrgs = new List<dynamic>();
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 
 			var groupPages = buildInGroupPages.Union(customGroupPages).ToList();
 			
-			var allAvailableGroups = _groupingReadOnlyRepository.AvailableGroups(groupPages, date).ToLookup(t => t.PageId);
+			var allAvailableGroups = _groupingReadOnlyRepository.AvailableGroups(groupPages, new DateOnlyPeriod(date, date)).ToLookup(t => t.PageId);
 
 			var actualGroupPages = groupPages.Select(gp =>
 			{
