@@ -35,48 +35,43 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 					.ToLookup(t => t.PageId);
 
 			var actualOrgs = new List<dynamic>();
-			var groupPages = new List<dynamic>();
+			
+			var orgsLookup = allAvailableGroups[Group.PageMainId].ToLookup(g => g.SiteId);
+			foreach (var siteLookUp in orgsLookup)
+			{
+				var teams = orgsLookup[siteLookUp.Key];
+				var children = teams.Select(t => new
+				{
+					Name = t.GroupName.Split('/')[1],
+					Id = t.TeamId
+				}).OrderBy(c => c.Name, stringComparer);
+				actualOrgs.Add(new
+				{
+					Name = teams.First().GroupName.Split('/')[0],
+					Id = siteLookUp.Key,
+					Children = children
+				});
+			}
 
-			foreach (var groupPage in allGroupPages)
+			var actualGroupPages = new List<dynamic>();
+			foreach (var groupPage in allGroupPages.Where(gp => gp.PageId != Group.PageMainId))
 			{
 				var childGroups = allAvailableGroups[groupPage.PageId];
-				if (groupPage.PageId == Group.PageMainId)
+				actualGroupPages.Add(new
 				{
-					var orgsLookup = childGroups.ToLookup(g => g.SiteId);
-					foreach (var siteLookUp in orgsLookup)
+					Id = groupPage.PageId,
+					Name = _userTextTranslator.TranslateText(groupPage.PageName),
+					Children = childGroups.Select(g => new
 					{
-						var teams = orgsLookup[siteLookUp.Key];
-						var children = teams.Select(t => new
-						{
-							Name = t.GroupName.Split('/')[1],
-							Id = t.TeamId
-						}).OrderBy(c => c.Name, stringComparer);
-						actualOrgs.Add(new
-						{
-							Name = teams.First().GroupName.Split('/')[0],
-							Id = siteLookUp.Key,
-							Children = children
-						});
-					}
-				}
-				else
-				{
-					groupPages.Add(new
-					{
-						Id = groupPage.PageId,
-						Name = _userTextTranslator.TranslateText(groupPage.PageName),
-						Children = childGroups.Select(g => new
-						{
-							Name = g.GroupName,
-							Id = g.GroupId
-						}).Distinct().ToArray().OrderBy(c => c.Name, stringComparer)
-					});
-				}
+						Name = g.GroupName,
+						Id = g.GroupId
+					}).Distinct().ToArray().OrderBy(c => c.Name, stringComparer)
+				});
 			}
 			return new
 			{
 				BusinessHierarchy = actualOrgs.OrderBy(o => o.Name as string, stringComparer),
-				GroupPages = groupPages.OrderBy(g => g.Name as string, stringComparer)
+				GroupPages = actualGroupPages.OrderBy(g => g.Name as string, stringComparer)
 			};
 		}
 	}
