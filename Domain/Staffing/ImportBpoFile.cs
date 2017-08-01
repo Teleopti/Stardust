@@ -142,14 +142,15 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private List<Guid> lookupSkillIds(LineWithNumber lineWithNumber, string skillGroupString, char skillSeparator, IEnumerable<ISkill> allSkills, ImportBpoFileResult result)
 		{
 			var skillIds = new List<Guid>();
-			var skillStringList = skillGroupString.Replace(" ", "").Split(skillSeparator);
+			var skillStringList = skillGroupString.Split(skillSeparator);
 			foreach (var skillString in skillStringList)
 			{
-				var skills = allSkills.Where(s => s.Name == skillString).ToList();
+				var skillStringTrimmed = skillString.Trim();
+				var skills = allSkills.Where(s => s.Name == skillStringTrimmed).ToList();
 				if (skills.IsEmpty())
 				{
 					result.Success = false;
-					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, $"The skill with name {skillString} is not defined in the system."));
+					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, $"The skill with name {skillStringTrimmed} is not defined in the system."));
 				}
 				if (skills.Count == 1)
 				{
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				else if (skills.Count > 1)
 				{
 					result.Success = false;
-					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, $"The skill with name {skillString} is defined {skills.Count} times in the system. Only once is allowed when using this function."));
+					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, $"The skill with name {skillStringTrimmed} is defined {skills.Count} times in the system. Only once is allowed when using this function."));
 				}
 			}
 			return skillIds; // replace with real guid
@@ -226,6 +227,5 @@ namespace Teleopti.Ccc.Domain.Staffing
 	{
 		public bool Success = true;
 		public HashSet<string> ErrorInformation = new HashSet<string>();
-		public string SuccessInformation;
 	}
 }

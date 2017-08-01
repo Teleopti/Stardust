@@ -39,6 +39,9 @@
             fileReader.onload = function (event) {
                 var data = JSON.stringify(event.currentTarget.result);
                 var query = staffingService.importbpo.save(data);
+                vm.isSuccessful = false;
+                vm.isFailed = false;
+                vm.errors = [];
                 query.$promise.then(function(response){
                     if(response.Success){
                         vm.isSuccessful = true;
