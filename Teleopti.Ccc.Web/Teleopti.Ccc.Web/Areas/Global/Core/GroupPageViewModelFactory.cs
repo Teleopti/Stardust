@@ -14,18 +14,20 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IUserTextTranslator _userTextTranslator;
 		private readonly IUserUiCulture _uiCulture;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 		public GroupPageViewModelFactory(
 			IGroupingReadOnlyRepository groupingReadOnlyRepository,
 			IUserTextTranslator userTextTranslator,
-			IUserUiCulture uiCulture)
+			IUserUiCulture uiCulture, ILoggedOnUser loggedOnUser)
 		{
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_userTextTranslator = userTextTranslator;
 			_uiCulture = uiCulture;
+			_loggedOnUser = loggedOnUser;
 		}
 
-		public object CreateViewModel(DateOnlyPeriod period)
+		public dynamic CreateViewModel(DateOnlyPeriod period)
 		{
 			var stringComparer = StringComparer.Create(_uiCulture.GetUiCulture(), false);
 			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupsBasedOnPeriod(period);
@@ -73,6 +75,59 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 				BusinessHierarchy = actualOrgs.OrderBy(o => o.Name as string, stringComparer),
 				GroupPages = actualGroupPages.OrderBy(g => g.Name as string, stringComparer)
 			};
+		}
+
+		public dynamic CreateViewModel(DateOnly date)
+		{
+			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupPages().ToArray();
+
+			var buildInGroupPages = new List<ReadOnlyGroupPage>();
+			var customGroupPages = new List<ReadOnlyGroupPage>();
+			ReadOnlyGroupPage businessHierarchyPage = null;
+			foreach (var readOnlyGroupPage in allGroupPages)
+			{
+				var name = _userTextTranslator.TranslateText(readOnlyGroupPage.PageName);
+				if (name != readOnlyGroupPage.PageName)
+				{
+					readOnlyGroupPage.PageName = name;
+
+					if (readOnlyGroupPage.PageId == Group.PageMainId)
+						businessHierarchyPage = readOnlyGroupPage;
+					else
+						buildInGroupPages.Add(readOnlyGroupPage);
+				}
+				else
+					customGroupPages.Add(readOnlyGroupPage);
+			}
+
+			buildInGroupPages = buildInGroupPages.OrderBy(x => x.PageName).ToList();
+			customGroupPages = customGroupPages.OrderBy(x => x.PageName).ToList();
+
+			if (businessHierarchyPage != null)
+				buildInGroupPages.Insert(0, businessHierarchyPage);
+
+			var groupPages = buildInGroupPages.Union(customGroupPages).ToList();
+			
+			var allAvailableGroups = _groupingReadOnlyRepository.AvailableGroups(groupPages, date).ToLookup(t => t.PageId);
+
+			var actualGroupPages = groupPages.Select(gp =>
+			{
+				var name = gp.PageName;
+				return new
+				{
+					Name = name,
+					Groups = allAvailableGroups[gp.PageId].Select(g => new
+					{
+						Name = gp.PageId == Group.PageMainId ? g.GroupName : name + "/" + g.GroupName,
+						Id = g.GroupId
+					}).Distinct().ToArray()
+				};
+			}).ToList();
+
+			var team = _loggedOnUser.CurrentUser().MyTeam(date);
+			var defaultGroupId = team?.Id;
+
+			return new { GroupPages = actualGroupPages, DefaultGroupId = defaultGroupId };
 		}
 	}
 }
