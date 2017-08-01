@@ -4,7 +4,10 @@ using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
@@ -71,6 +74,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly ProperAlarm _appliedAlarm;
 		private readonly IAgentStateReadModelReader _reader;
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
+		private readonly ICurrentAuthorization _authorization;
+		private readonly IUserNow _userNow;
 
 		public AgentStatesViewModelBuilder(
 			INow now,
@@ -78,8 +83,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			IUserCulture culture,
 			ProperAlarm appliedAlarm,
 			IAgentStateReadModelReader reader,
-			ICommonAgentNameProvider nameDisplaySetting
-			)
+			ICommonAgentNameProvider nameDisplaySetting,
+			ICurrentAuthorization authorization, 
+			IUserNow userNow)
 		{
 			_now = now;
 			_timeZone = timeZone;
@@ -87,6 +93,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_appliedAlarm = appliedAlarm;
 			_reader = reader;
 			_nameDisplaySetting = nameDisplaySetting;
+			_authorization = authorization;
+			_userNow = userNow;
 		}
 		
 		public AgentStatesViewModel For(AgentStateFilter filter)
@@ -103,8 +111,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private IEnumerable<AgentStateViewModel> buildStates(IEnumerable<AgentStateReadModel> states)
 		{
 			var nameDisplayedAs = _nameDisplaySetting.CommonAgentNameSettings;
+			var auth = _authorization.Current();
 			return from state in states
-				   where !state.IsDeleted
+				   where !state.IsDeleted && (
+						auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _userNow.Date(), new SiteAuthorization { BusinessUnitId = state.BusinessUnitId.GetValueOrDefault(), SiteId = state.SiteId.GetValueOrDefault() }) ||
+						auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _userNow.Date(), new TeamAuthorization { BusinessUnitId = state.BusinessUnitId.GetValueOrDefault(), SiteId = state.SiteId.GetValueOrDefault(), TeamId = state.TeamId.GetValueOrDefault() })
+					)
 				   let timeInAlarm = calculateTimeInAlarm(state)
 				   select new AgentStateViewModel
 				   {

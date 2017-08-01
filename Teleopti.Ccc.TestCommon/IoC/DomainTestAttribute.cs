@@ -38,7 +38,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Ccc.TestCommon.Services;
-using Teleopti.Ccc.Web.Areas.Global.Core;
 
 namespace Teleopti.Ccc.TestCommon.IoC
 {

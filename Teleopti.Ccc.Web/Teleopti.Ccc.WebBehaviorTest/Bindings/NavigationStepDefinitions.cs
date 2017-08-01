@@ -489,6 +489,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		}
 
 		[Given(@"I am viewing real time adherence on sites '(.*)' only")]
+		[When(@"I am viewing real time adherence on site '(.*)'")]
 		public void GivenIAmViewingRealTimeAdherenceOnSites(string sites)
 		{
 			TestControllerMethods.Logon();
