@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakeGroupingReadOnlyRepository : IGroupingReadOnlyRepository
 	{
 		private ReadOnlyGroupDetail[] _details;
-		private readonly IList<ReadOnlyGroupPage> _readOnlyGroupPages;
+		private IList<ReadOnlyGroupPage> _readOnlyGroupPages;
 
 		public FakeGroupingReadOnlyRepository(params ReadOnlyGroupDetail[] details)
 		{
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakeGroupingReadOnlyRepository Has(ReadOnlyGroupDetail model)
 		{
-			_details = _details.Concat(new[] {model}).ToArray();
+			_details = _details.Concat(new[] { model }).ToArray();
 			return this;
 		}
 
@@ -94,7 +94,19 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<ReadOnlyGroupPage> AvailableGroupsBasedOnPeriod(DateOnlyPeriod period)
 		{
-			throw new NotImplementedException();
+			return _readOnlyGroupPages;
+		}
+
+		public IEnumerable<ReadOnlyGroupDetail> AvailableGroupsBasedOnPeriod(List<ReadOnlyGroupPage> groupPages, DateOnlyPeriod period)
+		{
+			return _details;
+		}
+
+		public void Has(IList<ReadOnlyGroupPage> readOnlyGroupPages,
+			IList<ReadOnlyGroupDetail> readOnlyGroupDetails)
+		{
+			_readOnlyGroupPages = readOnlyGroupPages;
+			_details = readOnlyGroupDetails.ToArray();
 		}
 	}
 

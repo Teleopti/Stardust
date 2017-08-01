@@ -432,11 +432,12 @@
     <Compile Include="Areas\Forecasting\Core\IOverridePersister.cs" />
     <Compile Include="Areas\Forecasting\Core\OverridePersister.cs" />
     <Compile Include="Areas\Global\DataProtectionController.cs" />
+    <Compile Include="Areas\Global\Core\GroupPageViewModelFactory.cs" />
     <Compile Include="Areas\Global\ScenarioController.cs" />
     <Compile Include="Areas\Global\ScenarioViewModel.cs" />
     <Compile Include="Areas\Global\ThemeController.cs" />
     <Compile Include="Areas\Global\BusinessUnitController.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\GroupPageController.cs" />
+    <Compile Include="Areas\Global\GroupPageController.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleDayViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleDayViewModelFactory.cs" />

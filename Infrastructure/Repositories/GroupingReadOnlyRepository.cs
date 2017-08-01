@@ -225,6 +225,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupPage>();
 		}
+
+		public IEnumerable<ReadOnlyGroupDetail> AvailableGroupsBasedOnPeriod(List<ReadOnlyGroupPage> groupPages, DateOnlyPeriod period)
+		{
+			throw new NotImplementedException();
+		}
 	}
 
 }

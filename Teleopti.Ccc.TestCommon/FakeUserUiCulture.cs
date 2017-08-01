@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
@@ -9,6 +8,10 @@ namespace Teleopti.Ccc.TestCommon
 	{
 		private CultureInfo _culture;
 
+		public FakeUserUiCulture()
+		{
+			Is(CultureInfoFactory.CreateSwedishCulture());
+		}
 		public FakeUserUiCulture(CultureInfo culture)
 		{
 			_culture = culture;

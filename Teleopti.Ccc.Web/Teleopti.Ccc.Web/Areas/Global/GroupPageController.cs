@@ -7,24 +7,33 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.Global.Core;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
+namespace Teleopti.Ccc.Web.Areas.Global
 {
 	public class GroupPageController : ApiController
 	{
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IUserTextTranslator _userTextTranslator;
+		private GroupPageViewModelFactory _groupPageViewModelFactory;
 
 		public GroupPageController(IGroupingReadOnlyRepository groupingReadOnlyRepository, ILoggedOnUser loggedOnUser,
-			IUserTextTranslator userTextTranslator)
+			IUserTextTranslator userTextTranslator, GroupPageViewModelFactory groupPageViewModelFactory)
 		{
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_loggedOnUser = loggedOnUser;
 			_userTextTranslator = userTextTranslator;
+			_groupPageViewModelFactory = groupPageViewModelFactory;
 		}
 
+		[UnitOfWork, HttpGet, Route("api/GroupPage/AvailableStructuredGroupPages")]
+		public virtual IHttpActionResult AvailableStructuredGroupPages(DateOnlyPeriod period)
+		{
+			
+			return Ok(_groupPageViewModelFactory.CreateViewModel(period));
+		}
 		[UnitOfWork, HttpGet, Route("api/GroupPage/AvailableGroupPages")]
 		public virtual IHttpActionResult AvailableGroupPages(DateTime date)
 		{
@@ -76,8 +85,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			var team = _loggedOnUser.CurrentUser().MyTeam(queryDate);
 			var defaultGroupId = team?.Id;
 
-			return Ok(new {GroupPages = actualGroupPages, DefaultGroupId = defaultGroupId});
+			return Ok(new { GroupPages = actualGroupPages, DefaultGroupId = defaultGroupId });
 		}
 	}
-	
 }

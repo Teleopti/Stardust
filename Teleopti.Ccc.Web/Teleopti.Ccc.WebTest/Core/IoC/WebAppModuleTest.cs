@@ -30,6 +30,7 @@ using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Secrets.Licensing;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
+using Teleopti.Ccc.Web.Areas.Global;
 using Teleopti.Ccc.Web.Areas.MultiTenancy;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;

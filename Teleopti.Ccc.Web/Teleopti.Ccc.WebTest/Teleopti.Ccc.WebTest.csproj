@@ -225,7 +225,8 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\BusinessUnitControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\GroupPageControllerTest.cs" />
+    <Compile Include="Areas\Global\Core\GroupPageViewModelFactoryTest.cs" />
+    <Compile Include="Areas\Global\GroupPageControllerTest.cs" />
     <Compile Include="Areas\Anywhere\ReportsControllerTest.cs" />
     <Compile Include="Areas\Anywhere\PublishedScheduleSpecificationTest.cs" />
     <Compile Include="Areas\Anywhere\PersonScheduleDayViewModelFactoryTest.cs" />

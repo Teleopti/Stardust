@@ -4,6 +4,7 @@ using Autofac.Configuration;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
@@ -18,6 +19,7 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Forecasting.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Global;
+using Teleopti.Ccc.Web.Areas.Global.Core;
 using Teleopti.Ccc.Web.Areas.Mart.Core.IoC;
 using Teleopti.Ccc.Web.Areas.Messages.Core.Ioc;
 using Teleopti.Ccc.Web.Areas.MultiTenancy.Core;
@@ -168,6 +170,9 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<ThemeSettingProvider>().As<ISettingsPersisterAndProvider<ThemeSetting>>().SingleInstance();
 
 			builder.RegisterType<LicenseCustomerNameProvider>().As<ILicenseCustomerNameProvider>().SingleInstance();
+
+			builder.RegisterType<UserTextTranslator>().As<IUserTextTranslator>().SingleInstance();
+			builder.RegisterType<GroupPageViewModelFactory>().SingleInstance();
 		}
 
 		private static void tenantWebSpecificTypes(ContainerBuilder builder)
