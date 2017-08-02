@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (persons == null) return;
 
 			var people = persons.ToArray();
-	
+
 			var personIn = createPersonInCriterion("Person", people);
 			var personInShiftTradeTo = includeRequestsWithShiftTradePersonTo(people);
 
@@ -354,16 +354,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			addAutoDeniedFilterIfDeniedFilterIsIncluded(statusFilters);
 
 			var statusCriterion = statusFilters
-				.Select(x => (ICriterion) Restrictions.Eq("personRequests.requestStatus", x))
+				.Select(x => (ICriterion)Restrictions.Eq("personRequests.requestStatus", x))
 				.Aggregate(Restrictions.Or);
 			criteria.Add(statusCriterion);
 		}
 
 		private static void addAutoDeniedFilterIfDeniedFilterIsIncluded(ICollection<int> statusFilters)
 		{
-			if (statusFilters.Contains((int) PersonRequestStatus.Denied))
+			if (statusFilters.Contains((int)PersonRequestStatus.Denied))
 			{
-				statusFilters.Add((int) PersonRequestStatus.AutoDenied);
+				statusFilters.Add((int)PersonRequestStatus.AutoDenied);
 			}
 		}
 
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			if (!subjectKeywords.Any()) return null;
 
 			var criteria = subjectKeywords
-				.Select(x => (ICriterion) Restrictions.Like(propertyPath, $"%{x}%"))
+				.Select(x => (ICriterion)Restrictions.Like(propertyPath, $"%{x}%"))
 				.Aggregate(Restrictions.And);
 			return criteria;
 		}
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var filteredRequests = allRequests.Where(x => requestTypes.Contains(x.Request.RequestType));
 			if (earliestDate != null)
 			{
-				filteredRequests = filteredRequests.Where(x=>x.Request.Period.StartDateTime >= earliestDate);
+				filteredRequests = filteredRequests.Where(x => x.Request.Period.StartDateTime >= earliestDate);
 			}
 
 			return filteredRequests;
@@ -711,8 +711,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			var personRequests =
 				(from result in personRequestResults
-					from request in result
-					select request).Distinct();
+				 from request in result
+				 select request).Distinct();
 
 			var personRequestList = personRequests.ToList();
 
@@ -767,14 +767,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,
 			DateOnly shiftTradeDate)
 		{
-			return Session.CreateCriteria(typeof(IShiftExchangeOffer), "offer")
-				.CreateCriteria("Parent", "req", JoinType.InnerJoin)
-				.Add(Restrictions.Eq("req.IsDeleted", false))
-				.Add(Restrictions.Eq("offer.Date", shiftTradeDate))
-				.Add(Restrictions.InG("offer.Person", personList.ToArray()))
-				.Add(Restrictions.Ge("offer.Criteria.ValidTo", new DateOnly(DateTime.UtcNow.Date)))
-				.Add(Restrictions.Eq("offer.Status", ShiftExchangeOfferStatus.Pending))
-				.List<ShiftExchangeOffer>();
+			var result = new List<IShiftExchangeOffer>();
+			personList.Batch(2000)
+				.ForEach(l =>
+				{
+					var batchResult = Session.CreateCriteria(typeof(IShiftExchangeOffer), "offer")
+							.CreateCriteria("Parent", "req", JoinType.InnerJoin)
+							.Add(Restrictions.Eq("req.IsDeleted", false))
+							.Add(Restrictions.Eq("offer.Date", shiftTradeDate))
+							.Add(Restrictions.InG("offer.Person", l.ToArray()))
+							.Add(Restrictions.Ge("offer.Criteria.ValidTo", new DateOnly(DateTime.UtcNow.Date)))
+							.Add(Restrictions.Eq("offer.Status", ShiftExchangeOfferStatus.Pending))
+							.List<ShiftExchangeOffer>();
+					result.AddRange(batchResult);
+				});
+			return result;
 		}
 
 		private static void sortPersonRequests(ICriteria criteria, IList<RequestsSortingOrder> sortingOrders)
@@ -866,13 +873,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<Guid> GetWaitlistRequests(DateTimePeriod dateTimePeriod)
 		{
-			return  Session.CreateSQLQuery(
+			return Session.CreateSQLQuery(
 				  @"SELECT DISTINCT pr.Id from PersonRequest pr, request r WITH(NOLOCK) 
 					where
 				  		pr.id = r.parent and 
 						pr.RequestStatus = 5 and
 				  		r.startDateTime <= :endDate and 
-						r.endDateTime >= :startDate" )
+						r.endDateTime >= :startDate")
 										  .SetDateTime("startDate", dateTimePeriod.StartDateTime)
 										  .SetDateTime("endDate", dateTimePeriod.EndDateTime)
 										  .List<Guid>();
