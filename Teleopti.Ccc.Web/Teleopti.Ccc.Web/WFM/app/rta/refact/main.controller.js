@@ -54,13 +54,13 @@
 
 		function getSiteCards(ids) {
 			if (angular.isDefined(ids)) {
-				rtaService.getSiteCardsFor(ids).then(function (result) {
+				rtaService.getOverviewModelFor(ids).then(function (result) {
 					vm.siteCards = buildSiteCards(result);
 					vm.noSiteCards = !vm.siteCards.length;
 					fetchTeamsForAllSiteCards();
 				});
 			} else {
-				rtaService.getSiteCardsFor().then(function (result) {
+				rtaService.getOverviewModelFor().then(function (result) {
 					vm.siteCards = buildSiteCards(result);
 					vm.noSiteCards = !vm.siteCards.length;
 					fetchTeamsForAllSiteCards();
@@ -76,7 +76,7 @@
 		}
 
 		function buildSiteCards(sites) {
-			return sites.map(function (site) {
+			return sites.Sites.map(function (site) {
 				site.Color = translateSiteColors(site);
 				return {
 					site: site,
@@ -181,14 +181,14 @@
 					vm.skillSelected = true;
 					sitePollingWithSkills = $interval(function () {
 						rtaService
-							.getSiteCardsFor(vm.skillIds)
+							.getOverviewModelFor(vm.skillIds)
 							.then(updateSiteCards);
 					}, 5000);
 				} else {
 					vm.skillSelected = false;
 					sitePolling = $interval(function () {
 						rtaService
-							.getSiteCardsFor()
+							.getOverviewModelFor()
 							.then(updateSiteCards)
 					}, 5000);
 				}
@@ -210,7 +210,7 @@
 		}
 
 		function updateSiteCards(sites) {
-			sites.forEach(function (site) {
+			sites.Sites.forEach(function (site) {
 				var match = vm.siteCards.find(function (card) {
 					return card.site.Id === site.Id;
 				});

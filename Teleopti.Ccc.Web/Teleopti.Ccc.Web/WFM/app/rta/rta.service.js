@@ -15,7 +15,7 @@
             getOrganization: getOrganization,
             getOrganizationForSkills: getOrganizationForSkills,
             agentStatesFor: agentStatesFor,
-            getSiteCardsFor: getSiteCardsFor,
+            getOverviewModelFor: getOverviewModelFor,
             getTeamCardsFor: getTeamCardsFor,
             getSkillArea: getSkillArea,
             getPhoneStates: getPhoneStates,
@@ -76,16 +76,15 @@
             }).$promise;
         };
 
-        function getSiteCardsFor(data) {
+        function getOverviewModelFor(data) {
             return $resource('../api/Overview/SiteCards', {}, {
                 query: {
-                    method: 'GET',
-                    isArray: true
+                    method: 'GET'
                 }
             }).query({
                 skillIds: data
             }).$promise;
-        };
+        }
 
         function getSkillArea(data) {
             return $resource('../api/SkillArea/For', {}, {

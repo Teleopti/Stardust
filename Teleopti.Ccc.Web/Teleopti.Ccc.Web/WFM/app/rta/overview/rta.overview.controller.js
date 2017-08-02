@@ -152,11 +152,11 @@
 								pollingLock = true;
 							});
 					} else if (angular.isDefined(vm.sites)) {
-						rtaService.getSiteCardsFor(vm.skillId)
+						rtaService.getOverviewModelFor(vm.skillId)
 							.then(function (siteAdherences) {
 								currentState = JSON.stringify(siteAdherences);
 								if (previousState != currentState) {
-									vm.sites = siteAdherences;
+									vm.sites = siteAdherences.Sites;
 									previousState = currentState;
 								}
 								pollingLock = true;
@@ -173,10 +173,10 @@
 							pollingLock = true;
 						});
 				} else {
-					rtaService.getSiteCardsFor().then(function (siteAdherences) {
+					rtaService.getOverviewModelFor().then(function (siteAdherences) {
 						currentState = JSON.stringify(siteAdherences);
 						if (previousState != currentState) {
-							vm.sites = siteAdherences;
+							vm.sites = siteAdherences.Sites;
 							previousState = currentState;
 						}
 						pollingLock = true;
@@ -231,8 +231,8 @@
 			function getSitesBySkillsInfo() {
 				pollingLock = false;
 				vm.skillIds = getSkillIds();
-				return rtaService.getSiteCardsFor(vm.skillIds).then(function (sitesBySkill) {
-					vm.sites = sitesBySkill;
+				return rtaService.getOverviewModelFor(vm.skillIds).then(function (sitesBySkill) {
+					vm.sites = sitesBySkill.Sites;
 					pollingLock = true;
 				});
 			}
@@ -247,8 +247,8 @@
 
 			function getSitesInfo() {
 				pollingLock = false;
-				rtaService.getSiteCardsFor().then(function (siteAdherences) {
-					vm.sites = siteAdherences;
+				rtaService.getOverviewModelFor().then(function (siteAdherences) {
+					vm.sites = siteAdherences.Sites;
 					pollingLock = true;
 				});
 			};

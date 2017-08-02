@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 	public class SiteCardViewModel
 	{
 		public int TotalAgentsInAlarm { get; set; }
-		public IEnumerable<SiteViewModel> Sites;
+		public IEnumerable<SiteViewModel> Sites { get; set; }
 	}
 
 	public class SiteViewModel
