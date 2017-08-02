@@ -1,8 +1,16 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class SiteCardViewModel
+	{
+		public int TotalAgentsInAlarm { get; set; }
+		public IEnumerable<SiteViewModel> Sites;
+	}
+
+	public class SiteViewModel
 	{
 		public Guid Id { get; set; }
 		public string Name { get; set; }

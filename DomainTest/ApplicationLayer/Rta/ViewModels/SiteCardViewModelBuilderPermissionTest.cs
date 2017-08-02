@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			var result = Target.Build();
 
-			result.Select(x => x.Id)
+			result.Sites.Select(x => x.Id)
 				.Should().Have.SameValuesAs(site1);
 		}
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 
 			var result = Target.Build();
 
-			result.Select(x => x.Id)
+			result.Sites.Select(x => x.Id)
 				.Should().Have.SameValuesAs(site);
 		}
 

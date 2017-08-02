@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				})
 				.WithAgent(personId);
 
-			var viewModel = Target.Build().Single();
+			var viewModel = Target.Build().Sites.Single();
 
 			viewModel.Id.Should().Be(siteId);
 			viewModel.Name.Should().Be("London");
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgent(personId)
 				.WithSkill(skill);
 
-			var viewModel = Target.Build(new[] { skill }).Single();
+			var viewModel = Target.Build(new[] { skill }).Sites.Single();
 
 			viewModel.Id.Should().Be(siteId);
 			viewModel.Name.Should().Be("London");
@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgent(personId3)
 				.WithSkill(skill);
 
-			var result = Target.Build(new[] { skill });
+			var result = Target.Build(new[] { skill }).Sites;
 
 			result.Single(x => x.Id == siteId1).InAlarmCount.Should().Be(1);
 			result.Single(x => x.Id == siteId2).InAlarmCount.Should().Be(2);
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgent(personId)
 				.WithSkill(skill);
 
-			var viewModel = Target.Build(new[] { skill }).Single();
+			var viewModel = Target.Build(new[] { skill }).Sites.Single();
 
 			viewModel.Id.Should().Be(site);
 			viewModel.InAlarmCount.Should().Be(0);
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithSkill(skill1)
 				.WithSkill(skill2);
 
-			var viewModel = Target.Build(new[] { skill1, skill2 }).Single();
+			var viewModel = Target.Build(new[] { skill1, skill2 }).Sites.Single();
 
 			viewModel.Id.Should().Be(siteId);
 			viewModel.InAlarmCount.Should().Be(1);
@@ -245,7 +245,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithAgent(personWithoutSkill)
 				.WithSkill(skill2);
 
-			var viewModel = Target.Build(new[] { skill1 }).Single();
+			var viewModel = Target.Build(new[] { skill1 }).Sites.Single();
 
 			viewModel.Id.Should().Be(siteId);
 			viewModel.AgentsCount.Should().Be(1);
@@ -306,7 +306,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithSkill(skill);
 
 			var result = Target.Build(new[] { skill });
-			result.Select(x => x.Id)
+			result.Sites.Select(x => x.Id)
 				.Should().Have.SameSequenceAs(new[]
 				{
 					siteId3,
@@ -371,7 +371,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				.WithSkill(skill);
 
 			var result = Target.Build(new[] { skill });
-			result.Select(x => x.Id)
+			result.Sites.Select(x => x.Id)
 				.Should().Have.SameSequenceAs(new[]
 				{
 					siteId3,
@@ -409,9 +409,47 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					TeamId = team2,
 				});
 
-			var viewModel = Target.Build().Single();
+			var viewModel = Target.Build().Sites.Single();
 
 			viewModel.AgentsCount.Should().Be(2);
+		}
+
+
+		[Test]
+		public void ShouldContainTotalNumberOfAgentsInAlarm()
+		{
+			var personId1 = Guid.NewGuid();
+			var personId2 = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var team1 = Guid.NewGuid();
+			var team2 = Guid.NewGuid();
+			Now.Is("2017-08-02 08:30");
+			Database
+				.WithSite(siteId, "London")
+				.WithTeam(team1)
+				.WithAgent(personId1)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId1,
+					SiteId = siteId,
+					TeamId = team1,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2017-08-02 08:00".Utc(),
+				})
+				.WithTeam(team2)
+				.WithAgent(personId2)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = personId2,
+					SiteId = siteId,
+					TeamId = team2,
+					IsRuleAlarm = true,
+					AlarmStartTime = "2017-08-02 08:00".Utc(),
+				});
+
+			var viewModel = Target.Build();
+
+			viewModel.TotalAgentsInAlarm.Should().Be(2);
 		}
 	}
 }

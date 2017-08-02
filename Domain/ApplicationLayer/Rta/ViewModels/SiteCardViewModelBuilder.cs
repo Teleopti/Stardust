@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_userNow = userNow;
 		}
 
-		public IEnumerable<SiteCardViewModel> Build()
+		public SiteCardViewModel Build()
 		{
 			return Build(null);
 		}
 
-		public IEnumerable<SiteCardViewModel> Build(IEnumerable<Guid> skillIds)
+		public SiteCardViewModel Build(IEnumerable<Guid> skillIds)
 		{
 			var teamsInAlarm = skillIds == null ? 
 				_teamCardReader.Read() : 
@@ -57,17 +57,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						})
 					.ToArray();
 
-			var result = sitesInAlarm
-				.Select(s => new SiteCardViewModel
+			var sites = sitesInAlarm
+				.Select(s => new SiteViewModel
 				{
 					Id = s.SiteId,
 					Name = s.SiteName,
 					AgentsCount = s.AgentsCount,
 					InAlarmCount = s.InAlarmCount,
 					Color = getColor(s.InAlarmCount, s.AgentsCount)
-				});
-
-			return result.OrderBy(x => x.Name).ToArray();
+				}).OrderBy(x => x.Name).ToArray();
+			
+			return new SiteCardViewModel
+			{
+				Sites = sites,
+				TotalAgentsInAlarm = sites.Sum(s=>s.InAlarmCount)
+			};
 		}
 		
 		private string getColor(int inAlarmCount, int agentsCount)
