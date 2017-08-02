@@ -7,7 +7,9 @@
 		</h1>
 	</div>
 </div>
-
+<div>
+	
+</div>
 <div class="team-schedule panel wfm-block material-depth-1" wait-for="vm.boostrap">
 	<div class="teamschedule-header" layout="row">
 		<div class="leftside-part">
@@ -17,8 +19,10 @@
 							 apply-favorite="vm.applyFavorite(currentFavorite)"
 							 get-search="vm.getSearch()"
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
+			
+			<group-page-picker ng-if="vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled" group-pages="vm.availableGroups"></group-page-picker>
 
-			<organization-picker ng-if="vm.searchEnabled"
+			<organization-picker ng-if="!vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled"
 				sites-and-teams="vm.sitesAndTeams"
 				class="organization-picker-container inline-block"
 				on-open="vm.searchOptions.focusingSearch = false"

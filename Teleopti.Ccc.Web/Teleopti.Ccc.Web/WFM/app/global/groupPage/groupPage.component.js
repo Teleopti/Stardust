@@ -20,10 +20,12 @@
 		ctrl.mode = 'BusinessHierarchy';
 		ctrl.tabs = [
 			{
-				title: 'BusinessHierarchy'
+				title: 'BusinessHierarchy',
+				icon:'file-tree'
 			},
 			{
-				title: 'GroupPages'
+				title: 'GroupPages',
+				icon:'folder-account'
 			}
 		];
 
@@ -67,13 +69,20 @@
 		}
 
 		ctrl.$onChanges = function (changesObj) {
-			if (!!changesObj.groupPages && changesObj.groupPages.currentValue !== changesObj.groupPages.previousValue) {
-				populateGroupListAndNamemapAndFindLongestName(changesObj.groupPages.currentValue[ctrl.mode]);
-				ctrl.groupsInView = ctrl.searchForOrgsByName('');
-				//console.log('groupsInView:', ctrl.groupsInView);
+			if (!!changesObj.groupPages && !!changesObj.groupPages.currentValue && changesObj.groupPages.currentValue !== changesObj.groupPages.previousValue) {
+				ctrl.setPickerData();
 			}
-
 		};
+
+		ctrl.setPickerData = function() {
+			populateGroupListAndNamemapAndFindLongestName(ctrl.groupPages[ctrl.mode]);
+			ctrl.groupsInView = ctrl.searchForOrgsByName('');
+		}
+
+		ctrl.changeTab = function (tab) {
+			ctrl.mode = tab.title;
+			ctrl.setPickerData();
+		}
 
 		ctrl.searchForOrgsByName = function(searchText) {
 			var textIsEmpty = (searchText === '');

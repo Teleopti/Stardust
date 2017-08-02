@@ -18,17 +18,16 @@
 		'ScheduleNoteManagementService',
 		'teamsToggles',
 		'bootstrapCommon',
-		'teamsPermissions',
+		'groupPageService',
 		TeamScheduleController]);
 
-	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, teamsPermissions) {
+	function TeamScheduleController($scope, $q, $translate, $stateParams, $state, $mdSidenav, $mdComponentRegistry, teamScheduleSvc, groupScheduleFactory, personSelectionSvc, scheduleMgmtSvc, NoticeService, ValidateRulesService, CommandCheckService, ScheduleNoteManagementService, teamsToggles, bootstrapCommon, groupPageService) {
 		var vm = this;
 
 		vm.isLoading = false;
 		vm.scheduleFullyLoaded = false;
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.availableTimezones = [];
-		vm.availableGroups = [];
 		vm.sitesAndTeams = undefined;
 		vm.onlyLoadScheduleWithAbsence = false;
 
@@ -421,6 +420,15 @@
 			loggedonUsersTeamId.resolve(null);
 			vm.onFavoriteSearchInitDefer.resolve();
 		}
+		vm.getGroupPagesAsync = function() {
+			var dateStr = moment(vm.scheduleDate).format('YYYY-MM-DD');
+			groupPageService.fetchAvailableGroupPages(dateStr, dateStr).then(function(data) {
+				vm.availableGroups = data;
+				console.log("groups", data);
+			});
+		};
+
+		vm.getGroupPagesAsync();
 
 		vm.getSitesAndTeamsAsync = function () {
 			return $q(function (resolve, reject) {

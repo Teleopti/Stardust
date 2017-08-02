@@ -3,47 +3,49 @@
 	<span class="md-select-icon" aria-hidden="true"></span>
 </md-select-value>
 <div class="_off-screen">
-	<group-pages-panel>
-	<md-content>
-		<md-tabs md-selected="$ctrl.selectedIndex">
-			<md-tab ng-repeat="tab in $ctrl.tabs" label="{{tab.title|translate}}">
-				<md-content>
-					<md-virtual-repeat-container class="virtual-repeat">
-						<div md-virtual-repeat="o in $ctrl.groupsInView" class="repeated-item" flex>
-							<div ng-if="o.origin.isParent" class="group md-button-toggle md-button md-ink-ripple">
-								<label class="clickable-area" tabindex="-1" for="group-{{o.id}}">
-									<div flex layout="row">
-										<div class="wfm-checkbox">
-											<input type="checkbox" id="group-{{o.id}}" ng-click="$ctrl.toggleGroup(o)" />
-											<span class="wfm-checkbox-toggle"></span>
-											<span class="wfm-checkbox-label" ng-bind-html="o.name"></span>
-										</div>
-										<span flex></span>
-										<input type="checkbox" id="toggle-{{o.id}}" class="shadow-group-toggle" />
-										<div tabindex="-1" class="group-toggle" ng-click="$ctrl.collapseGroup(o)">
-											<label for="toggle-{{o.id}}">
-												<span class="md-toggle-icon" tabindex="-1">
-													<i class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
-												</span>
-											</label>
-										</div>
+	<group-pages-panel class="group-page-picker-menu">
+		<div class="longest-name">{{$ctrl.longestName}}</div>
+		<md-content>
+			<md-tabs md-selected="$ctrl.selectedIndex" md-dynamic-height>
+				<md-tab ng-repeat="tab in $ctrl.tabs" label="{{tab.title|translate}}" ng-click="$ctrl.changeTab(tab)">
+					<md-tab-label><i class="mdi mdi-{{tab.icon}}"></i></md-tab-label>
+					<md-tab-body>
+						<md-virtual-repeat-container class="virtual-repeat">
+								<div md-virtual-repeat="o in $ctrl.groupsInView" class="repeated-item" flex>
+									<div ng-if="o.origin.isParent" class="group md-button-toggle md-button md-ink-ripple">
+										<label class="clickable-area" tabindex="-1" for="group-{{o.id}}">
+											<div flex layout="row">
+												<div class="wfm-checkbox">
+													<input type="checkbox" id="group-{{o.id}}" ng-click="$ctrl.toggleGroup(o)" />
+													<span class="wfm-checkbox-toggle"></span>
+													<span class="wfm-checkbox-label" ng-bind-html="o.name"></span>
+												</div>
+												<span flex></span>
+												<input type="checkbox" id="toggle-{{o.id}}" class="shadow-group-toggle" />
+												<div tabindex="-1" class="group-toggle" ng-click="$ctrl.collapseGroup(o)">
+													<label for="toggle-{{o.id}}">
+														<span class="md-toggle-icon" tabindex="-1">
+															<i class="mdi" ng-class=" o.collapsed ? 'mdi-chevron-down' : 'mdi-chevron-up' "></i>
+														</span>
+													</label>
+												</div>
+											</div>
+										</label>
 									</div>
-								</label>
-							</div>
-							<div ng-if=" !o.origin.isParent " class="child md-button md-ink-ripple">
-								<label class="clickable-area" tabindex="-1">
-									<div class="wfm-checkbox">
-										<input type="checkbox" ng-click="$ctrl.toggleSubGroup(o)" />
-										<span class="wfm-checkbox-toggle"></span>
-										<span class="wfm-checkbox-label" ng-bind-html="o.name"></span>
+									<div ng-if=" !o.origin.isParent " class="child md-button md-ink-ripple">
+										<label class="clickable-area" tabindex="-1">
+											<div class="wfm-checkbox">
+												<input type="checkbox" ng-click="$ctrl.toggleSubGroup(o)" />
+												<span class="wfm-checkbox-toggle"></span>
+												<span class="wfm-checkbox-label" ng-bind-html="o.name"></span>
+											</div>
+										</label>
 									</div>
-								</label>
-							</div>
-						</div>
-					</md-virtual-repeat-container>
-				</md-content>
-			</md-tab>
-		</md-tabs>
-	</md-content>
+								</div>
+							</md-virtual-repeat-container>
+					</md-tab-body>
+				</md-tab>
+			</md-tabs>
+		</md-content>
 	</group-pages-panel>
 </div>

@@ -15,8 +15,9 @@
 			'wfm.confirmModal',
 			'wfm.favoriteSearch',
 			'wfm.organizationPicker',
-			'wfm.focusInput'
-		])
+			'wfm.focusInput',
+			'wfm.groupPage'
+	])
 	.config(['$mdThemingProvider', teamScheduleConfig])
 		.run(['$rootScope', '$state', '$location', 'FavoriteSearchDataService', teamScheduleRun]);
 
