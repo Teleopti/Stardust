@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -27,12 +28,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_personNameProvider = personNameProvider;
 		}
 
-		public ShiftTradeSwapDetailsViewModel Map(IShiftTradeSwapDetail s)
+		public ShiftTradeSwapDetailsViewModel Map(IShiftTradeSwapDetail s, NameFormatSettings nameFormatSettings)
 		{
 			return new ShiftTradeSwapDetailsViewModel
 			{
-				PersonFrom = s.PersonFrom==null ? null : _personNameProvider.BuildNameFromSetting(s.PersonFrom.Name),
-				PersonTo = s.PersonTo==null ? null : _personNameProvider.BuildNameFromSetting(s.PersonTo.Name),
+				PersonFrom = s.PersonFrom==null ? null : _personNameProvider.BuildNameFromSetting(s.PersonFrom.Name,nameFormatSettings),
+				PersonTo = s.PersonTo==null ? null : _personNameProvider.BuildNameFromSetting(s.PersonTo.Name, nameFormatSettings),
 				To = Map(s.SchedulePartTo),
 				From = Map(s.SchedulePartFrom),
 				TimeLineHours = _timelineViewModelFactory.CreateTimeLineHours(createTimelinePeriod(s)),

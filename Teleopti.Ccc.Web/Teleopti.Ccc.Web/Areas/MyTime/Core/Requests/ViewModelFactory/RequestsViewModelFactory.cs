@@ -4,8 +4,10 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly ShiftTradeSwapDetailViewModelMapper _shiftTradeSwapDetailViewModelMapper;
 		private readonly PersonAccountViewModelMapper _personAccountViewModelMapper;
 		private readonly IMultiplicatorDefinitionSetProvider _multiplicatorDefinitionSetProvider;
+		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
 
 		public RequestsViewModelFactory(
 			IPersonRequestProvider personRequestProvider,
@@ -47,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			RequestsViewModelMapper mapper,
 			ShiftTradeSwapDetailViewModelMapper shiftTradeSwapDetailViewModelMapper,
 			PersonAccountViewModelMapper personAccountViewModelMapper,
-			IMultiplicatorDefinitionSetProvider multiplicatorDefinitionSetProvider)
+			IMultiplicatorDefinitionSetProvider multiplicatorDefinitionSetProvider, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
 		{
 			_personRequestProvider = personRequestProvider;
 			_absenceTypesProvider = absenceTypesProvider;
@@ -64,6 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_shiftTradeSwapDetailViewModelMapper = shiftTradeSwapDetailViewModelMapper;
 			_personAccountViewModelMapper = personAccountViewModelMapper;
 			_multiplicatorDefinitionSetProvider = multiplicatorDefinitionSetProvider;
+			_nameFormatSettings = nameFormatSettings;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
@@ -110,7 +114,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		public IEnumerable<RequestViewModel> CreatePagingViewModel(Paging paging, RequestListFilter filter)
 		{
 			var requests = _personRequestProvider.RetrieveRequestsForLoggedOnUser(paging, filter);
-			return requests.Select(_mapper.Map).ToArray();
+			return requests.Select(s=>_mapper.Map(s,_nameFormatSettings.Get())).ToArray();
 		}
 
 		public RequestViewModel CreateRequestViewModel(Guid id)
@@ -158,10 +162,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 			_shiftTradeRequestStatusChecker.Check(personRequest.Request as IShiftTradeRequest);
 			var req = personRequest.Request as IShiftTradeRequest;
-
+			var nameFormatSetting = _nameFormatSettings.Get();
 			foreach (var detail in req.ShiftTradeSwapDetails)
 			{
-				var shiftTradeSwapDetails = _shiftTradeSwapDetailViewModelMapper.Map(detail);
+				var shiftTradeSwapDetails = _shiftTradeSwapDetailViewModelMapper.Map(detail, nameFormatSetting);
 
 				var startTimeForTimeline = shiftTradeSwapDetails.TimeLineStartDateTime;
 

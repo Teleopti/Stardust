@@ -6,9 +6,11 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Models.Shared;
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			_toggleManager = toggleManager;
 		}
 
-		public RequestViewModel Map(IPersonRequest s)
+		public RequestViewModel Map(IPersonRequest s, NameFormatSettings nameFormatSettings=null)
 		{
 			return new RequestViewModel
 			{
@@ -89,10 +91,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				IsCreatedByUser = isCreatedByUser(s.Request, _loggedOnUser),
 				From = s.Request.PersonFrom == null
 					? string.Empty
-					: _personNameProvider.BuildNameFromSetting(s.Request.PersonFrom.Name),
+					: _personNameProvider.BuildNameFromSetting(s.Request.PersonFrom.Name,nameFormatSettings),
 				To = s.Request.PersonTo == null
 					? string.Empty
-					: _personNameProvider.BuildNameFromSetting(s.Request.PersonTo.Name),
+					: _personNameProvider.BuildNameFromSetting(s.Request.PersonTo.Name,nameFormatSettings),
 				DenyReason = denyReason(s),
 				ExchangeOffer = exchangeOffer(s),
 				Id = s.Id.ToString(),

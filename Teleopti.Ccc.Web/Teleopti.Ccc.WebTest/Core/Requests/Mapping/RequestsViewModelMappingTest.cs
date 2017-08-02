@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_shiftTradeRequestStatusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
-			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name)).Return("LoggedOn Agent");
+			_personNameProvider.Stub(x => x.BuildNameFromSetting(_loggedOnUser.CurrentUser().Name,null)).IgnoreArguments().Return("LoggedOn Agent");
 
 			_toggleManager = new TrueToggleManager();
 			
@@ -446,7 +446,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
 
 			_personNameProvider = MockRepository.GenerateMock<IPersonNameProvider>();
-			_personNameProvider.Stub(x => x.BuildNameFromSetting(sender.Name)).Return("Sender");
+			_personNameProvider.Stub(x => x.BuildNameFromSetting(sender.Name,null)).IgnoreArguments().Return("Sender");
 
 			target = new RequestsViewModelMapper(_userTimeZone,_linkProvider,_loggedOnUser,_shiftTradeRequestStatusChecker,_personNameProvider,new TrueToggleManager());
 			var result = target.Map(personRequest);

@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Core
 
 		public string BuildNameFromSetting(Name name, NameFormatSettings setting)
 		{
-			return BuildNameFromSetting(name.FirstName, name.LastName, setting);
+			return setting == null ? BuildNameFromSetting(name.FirstName, name.LastName) : BuildNameFromSetting(name.FirstName, name.LastName, setting);
 		}
 
 		public string BuildNameFromSetting(string firstName, string lastName, NameFormatSettings setting)
