@@ -4287,6 +4287,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Line has {0} parameters but expected {1} parameters..
+        /// </summary>
+        public static string BpoLineHasIncorrectParameterCount {
+            get {
+                return ResourceManager.GetString("BpoLineHasIncorrectParameterCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Breaks.
         /// </summary>
         public static string Breaks {
@@ -10802,6 +10811,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error found on line number {0} with contents:{1} {2}.
+        /// </summary>
+        public static string ErrorFoundOnLineNumberXWithContentsY {
+            get {
+                return ResourceManager.GetString("ErrorFoundOnLineNumberXWithContentsY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error Message.
         /// </summary>
         public static string ErrorMessage {
@@ -12158,6 +12176,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string FirstComeFirstServed {
             get {
                 return ResourceManager.GetString("FirstComeFirstServed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to First line in file (header line) cannot be empty..
+        /// </summary>
+        public static string FirstLineInFileHeaderLineCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("FirstLineInFileHeaderLineCannotBeEmpty", resourceCulture);
             }
         }
         
@@ -14679,6 +14706,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InvalidEndTime {
             get {
                 return ResourceManager.GetString("InvalidEndTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid field name in header: &apos;{0}&apos;. Valid field names are: ({1}).
+        /// </summary>
+        public static string InvalidFieldNameInHeader {
+            get {
+                return ResourceManager.GetString("InvalidFieldNameInHeader", resourceCulture);
             }
         }
         
@@ -22131,6 +22167,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Parameter {0} cannot be empty.
+        /// </summary>
+        public static string ParameterCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("ParameterCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Adding activities for {0} agent(s), {1} succeeded and {2} failed..
         /// </summary>
         public static string PartialSuccessMessageForAddingActivity {
@@ -23768,6 +23813,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PosNeg {
             get {
                 return ResourceManager.GetString("PosNeg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string PossibilityToGetAbsenceColon {
+            get {
+                return ResourceManager.GetString("PossibilityToGetAbsenceColon", resourceCulture);
             }
         }
         
@@ -30920,6 +30974,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The skill with name {0} is defined {1} times in the system. Only once is allowed when using this function..
+        /// </summary>
+        public static string SkillDefinedMultipleTimesInTheSystem {
+            get {
+                return ResourceManager.GetString("SkillDefinedMultipleTimesInTheSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skill loaded.
         /// </summary>
         public static string SkillLoaded {
@@ -33054,6 +33117,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The import file cannot be empty..
+        /// </summary>
+        public static string TheImportFileCannotBeEmpty {
+            get {
+                return ResourceManager.GetString("TheImportFileCannotBeEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The input text can not be empty..
         /// </summary>
         public static string TheInputTextCanNotBeEmptyDot {
@@ -33222,6 +33294,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TheServiceLevelForSpecifiedIntervalLengthIsTooLongDot {
             get {
                 return ResourceManager.GetString("TheServiceLevelForSpecifiedIntervalLengthIsTooLongDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The skill with name {0} is not defined in the system..
+        /// </summary>
+        public static string TheSkillWithNameIsNotDefinedInTheSystem {
+            get {
+                return ResourceManager.GetString("TheSkillWithNameIsNotDefinedInTheSystem", resourceCulture);
             }
         }
         

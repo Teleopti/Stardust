@@ -16347,4 +16347,36 @@ Do you want to participate?</value>
     <value>{0} groups selected</value>
     <comment>For group page picker display</comment>
   </data>
+  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+    <value>The skill with name {0} is not defined in the system.</value>
+    <comment>The skill listed in the BPO import file is not defined in the system</comment>
+  </data>
+  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+    <value>The skill with name {0} is defined {1} times in the system. Only once is allowed when using this function.</value>
+    <comment>The skill listed in the BPO import file is defined x times in the system.</comment>
+  </data>
+  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+    <value>Line has {0} parameters but expected {1} parameters.</value>
+    <comment>Text line in BPO import file has X parameters but expected Y parameters</comment>
+  </data>
+  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>Error found on line number {0} with contents:{1} {2}</value>
+    <comment>Error found in BPO import file on text line number X with contents</comment>
+  </data>
+  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+    <value>Parameter {0} cannot be empty</value>
+    <comment>A line containing data in a BPO import file has an empty parameter</comment>
+  </data>
+  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+    <value>Invalid field name in header: '{0}'. Valid field names are: ({1})</value>
+  <comment>Invalid field name in header: '{0}'. Valid field names are: ({1})</comment></data>
+  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+    <value>The import file cannot be empty.</value>
+  <comment>The import file cannot be empty.</comment></data>
+  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+    <value>First line in file (header line) cannot be empty.</value>
+  <comment>First line in file (header line) cannot be empty.</comment></data>
+  <data name="PossibilityToGetAbsenceColon" xml:space="preserve">
+    <value></value>
+  </data>
 </root>

@@ -72,16 +72,17 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 		}
 
 		[Test]
-		public void ShouldReturnInformationOnEmptyDataLine()
+		public void ShouldSkipEmptyDataLine()
 		{
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
 
-TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
+TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
+			SkillRepository.Has("Channel Sales", new Activity());
+			SkillRepository.Has("Direct Sales", new Activity());
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
-			result.Success.Should().Be.False();
-			result.ErrorInformation.Count.Should().Be.EqualTo(1);
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("2")).Should().Not.Be.Null();
+			result.Success.Should().Be.True();
+			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
@@ -213,13 +214,25 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 		}
 
 		[Test]
-		public void ShouldReturnTrueIfItemsAreWithSpace()
+		public void ShouldReturnTrueIfItemsUseInitialOrTrailingSpace()
 		{
 			var fileContents = @"source, skillgroup , startdatetime , enddatetime , resources 
 								TPBRZIL, Directsales | Channel  , 2017-07-24 10:15 , 2017-07-24 10:30, 6.0";
 
 			SkillRepository.Has("Directsales", new Activity());
 			SkillRepository.Has("Channel", new Activity());
+			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			result.Success.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldHandleSkillGroupsNamesWithSpace()
+		{
+			var fileContents = @"source, skillgroup , startdatetime , enddatetime , resources 
+								TPBRZIL, Direct sales | Channel sales  , 2017-07-24 10:15 , 2017-07-24 10:30, 6.0";
+
+			SkillRepository.Has("Direct sales", new Activity());
+			SkillRepository.Has("Channel sales", new Activity());
 			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			result.Success.Should().Be.True();
 		}
