@@ -9713,6 +9713,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Drag and drop .CSV files here or click to upload.
+        /// </summary>
+        public static string DragAndDropCSVFilesHereOrClickToUpload {
+            get {
+                return ResourceManager.GetString("DragAndDropCSVFilesHereOrClickToUpload", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Drag and drop .xls or .xlsx files here or click to upload.
         /// </summary>
         public static string DragAndDropExcelFilesHereOrClickToUpload {
@@ -31933,6 +31942,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SuccessfullyExportedMeetings {
             get {
                 return ResourceManager.GetString("SuccessfullyExportedMeetings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import successfull.
+        /// </summary>
+        public static string SuccessfullyImported {
+            get {
+                return ResourceManager.GetString("SuccessfullyImported", resourceCulture);
             }
         }
         

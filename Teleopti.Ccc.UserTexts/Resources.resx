@@ -16323,4 +16323,12 @@ Do you want to participate?</value>
     <value>Bpo Exchange</value>
     <comment>bpo exchange permission</comment>
   </data>
+  <data name="DragAndDropCSVFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Drag and drop .CSV files here or click to upload</value>
+    <comment>Interaction tip for the user on how to upload files</comment>
+  </data>
+  <data name="SuccessfullyImported" xml:space="preserve">
+    <value>Import successfull</value>
+    <comment>An import has been processed successfully</comment>
+  </data>
 </root>
