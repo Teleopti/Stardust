@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		[Test]
 		public void ShouldGroupPagesFromReadModel()
-		{ 
+		{
 			WithUnitOfWork.Do(() =>
 			{
 				var items = Target.AvailableGroupPages();
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				DateOnly.Today);
 				items.Count().Should().Be.EqualTo(0);
 			});
-			
+
 		}
 
 		[Test]
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
 
 			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
-			
+
 			var personContract = PersonContractFactory.CreatePersonContract();
 			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
 												personContract,
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
 			});
-			
+
 			WithUnitOfWork.Do(() =>
 			{
 				var items = Target.DetailsForGroup(team.Id.GetValueOrDefault(), new DateOnlyPeriod(2001, 1, 1, 2001, 1, 2));
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
 			});
-			
+
 			WithUnitOfWork.Do(() =>
 			{
 				var items = Target.DetailsForGroup(team.Id.GetValueOrDefault(), new DateOnlyPeriod(2001, 1, 1, 2001, 1, 2));
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
 
 			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
-			
+
 
 			var personContract = PersonContractFactory.CreatePersonContract();
 			var personPeriod = new PersonPeriod(new DateOnly(2000, 1, 1),
@@ -301,7 +301,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 												team);
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
 			personToTest.AddPersonPeriod(personPeriod);
-			personToTest.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1),personContract, team));
+			personToTest.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1), personContract, team));
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 												team);
 			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
 			personToTest.AddPersonPeriod(personPeriod);
-			personToTest.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1),personContract, team));
+			personToTest.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1), personContract, team));
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -412,7 +412,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				var period = new DateOnlyPeriod(new DateOnly(2017, 5, 28), new DateOnly(2017, 06, 2));
 				var gps = Target.AvailableGroupsBasedOnPeriod(period).ToList();
-				var result = Target.AvailableGroups(gps, period).ToLookup(gp => gp.PageId);
+				var result = Target.AvailableGroups(period, gps.Select(gp => gp.PageId).ToArray())
+				.ToLookup(gp => gp.PageId);
 				var orgs = result[Group.PageMainId].ToLookup(o => o.SiteId);
 				var normalGroups = gps.Where(gp => gp.PageId != Group.PageMainId).OrderBy(gp => gp.PageName);
 

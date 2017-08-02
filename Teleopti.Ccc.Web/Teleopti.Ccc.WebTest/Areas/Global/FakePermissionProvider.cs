@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		private readonly IList<PersonPermissionData> _personPermissionDatas = new List<PersonPermissionData>();
 		private readonly IList<SitePermissionData> _sitePermissionData = new List<SitePermissionData>();
 		private readonly IList<TeamPermissionData> _teamPermissionData = new List<TeamPermissionData>();
+		private readonly IList<GroupPermissionData> _groupPermissionData = new List<GroupPermissionData>();
 		private DateOnly? _schedulePublishedToDate;
 		private bool enabled;
 
@@ -46,11 +47,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					x => x.ApplicationFunctionPath == applicationfunctionpath && x.Date == today && x.Site == site);
 		}
 
-		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IPersonAuthorization personAuthorizationInfo)
+		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date)
 		{
 			if (!enabled) return true;
 			return _applicationFunctions.ContainsKey(applicationFunctionPath)
 				&& (!_applicationFunctions[applicationFunctionPath].HasValue || _applicationFunctions[applicationFunctionPath] <= date);
+		}
+
+		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IPersonAuthorization personAuthorizationInfo)
+		{
+			if (!enabled) return true;
+			return
+				_groupPermissionData.Any(
+					x => x.ApplicationFunctionPath == applicationFunctionPath &&
+					x.Date == date && x.PersonAuthorization.SiteId == personAuthorizationInfo.SiteId
+					&& x.PersonAuthorization.TeamId == personAuthorizationInfo.TeamId);
 		}
 
 		public bool IsPersonSchedulePublished(DateOnly date, IPerson person,
@@ -105,6 +116,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void PermitTeam(string applicationFunction, ITeam team, DateOnly date)
 		{
 			_teamPermissionData.Add(new TeamPermissionData(applicationFunction, date, team));
+		}
+
+		public void PermitGroup(string applicationFunctionPath, DateOnly date, IPersonAuthorization personAuthorization)
+		{
+			_groupPermissionData.Add(new GroupPermissionData(applicationFunctionPath, date, personAuthorization));
+		}
+	}
+
+	class GroupPermissionData
+	{
+		public string ApplicationFunctionPath;
+		public DateOnly Date;
+		public IPersonAuthorization PersonAuthorization;
+
+		public GroupPermissionData(string applicationFunctionPath, DateOnly date, IPersonAuthorization personAuthorization)
+		{
+			ApplicationFunctionPath = applicationFunctionPath;
+			Date = date;
+			PersonAuthorization = personAuthorization;
 		}
 	}
 

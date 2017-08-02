@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -213,11 +214,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public void ShouldNotSeeRequestBeforePermissionDate()
 		{
 			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
-			setUpRequests();
-
+			var requests = setUpRequests().ToArray();
+			var date = new DateOnly(2015, 10, 3);
 			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
 			permissionProvider.Enable();
-			permissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebRequests, new DateOnly(2015, 10, 3));
+			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests,date , new PersonAuthorization
+			{
+				PersonId = requests[0].Person.Id.GetValueOrDefault(),
+				TeamId = requests[0].Person.MyTeam(date)?.Id.GetValueOrDefault(),
+				SiteId = requests[0].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
+			});
+			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests,date , new PersonAuthorization
+			{
+				PersonId = requests[1].Person.Id.GetValueOrDefault(),
+				TeamId = requests[1].Person.MyTeam(date)?.Id.GetValueOrDefault(),
+				SiteId = requests[1].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
+			});
+			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests,date , new PersonAuthorization
+			{
+				PersonId = requests[2].Person.Id.GetValueOrDefault(),
+				TeamId = requests[2].Person.MyTeam(date)?.Id.GetValueOrDefault(),
+				SiteId = requests[2].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
+			});
 
 			var input = new AllRequestsFormData
 			{
@@ -302,12 +320,30 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public void ShouldNotSeeRequestBeforePermissionDateInRequestListViewModel()
 		{
 			((FakeToggleManager)ToggleManager).Disable(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
-			setUpRequests();
+			var requests = setUpRequests().ToArray();
+			var date = new DateOnly(2015, 10, 3);
 
 			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
 			permissionProvider.Enable();
 
-			permissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebRequests, new DateOnly(2015, 10, 3));
+			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
+			{
+				PersonId = requests[0].Person.Id.GetValueOrDefault(),
+				TeamId = requests[0].Person.MyTeam(date)?.Id.GetValueOrDefault(),
+				SiteId = requests[0].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
+			});
+			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
+			{
+				PersonId = requests[1].Person.Id.GetValueOrDefault(),
+				TeamId = requests[1].Person.MyTeam(date)?.Id.GetValueOrDefault(),
+				SiteId = requests[1].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
+			});
+			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
+			{
+				PersonId = requests[2].Person.Id.GetValueOrDefault(),
+				TeamId = requests[2].Person.MyTeam(date)?.Id.GetValueOrDefault(),
+				SiteId = requests[2].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
+			});
 
 			var input = new AllRequestsFormData
 			{

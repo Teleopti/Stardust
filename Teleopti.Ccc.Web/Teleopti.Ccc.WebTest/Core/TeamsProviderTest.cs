@@ -2,9 +2,11 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -27,6 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core
 		private FakePersonRepository personRepository;
 		public FakeLoggedOnUser CurrentLoggedOnUser;
 		public FakePersonSelectorReadOnlyRepository PersonSelectorReadOnlyRepository;
+		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -283,10 +286,37 @@ namespace Teleopti.Ccc.WebTest.Core
 			var site = SiteFactory.CreateSimpleSite("mysite").WithId();
 			site.AddTeam(team);
 			site.AddTeam(anotherTeam);
-			PersonSelectorReadOnlyRepository.Has(team);
-			PersonSelectorReadOnlyRepository.Has(anotherTeam);
+			GroupingReadOnlyRepository.Has(new[]
+			{
+				new ReadOnlyGroupPage
+				{
+					PageId = Group.PageMainId
+				}
+			}, new[]
+			{
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					SiteId = site.Id.Value,
+					TeamId = team.Id.Value,
+					GroupName = team.SiteAndTeam
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					SiteId = site.Id.Value,
+					TeamId = anotherTeam.Id.Value,
+					GroupName = anotherTeam.SiteAndTeam
+				}
+			});
+			
 			PermissionProvider.Enable();
-			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team, date);
+			//PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, new PersonAuthorization
+			{
+				SiteId = site.Id.Value,
+				TeamId = team.Id.Value
+			});
 
 			var permittedHierachy = Target.GetOrganizationWithPeriod(new DateOnlyPeriod(date, date), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
@@ -321,16 +351,38 @@ namespace Teleopti.Ccc.WebTest.Core
 
 			CurrentLoggedOnUser.SetFakeLoggedOnUser(me);
 			site.AddTeam(team);
-			PersonSelectorReadOnlyRepository.Has(team);
+
+			GroupingReadOnlyRepository.Has(new[]
+			{
+				new ReadOnlyGroupPage
+				{
+					PageId = Group.PageMainId
+				}
+			}, new[]
+			{
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					SiteId = site.Id.Value,
+					TeamId = team.Id.Value,
+					GroupName = team.SiteAndTeam
+				}
+
+			});
+			
 			PermissionProvider.Enable();
-			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team, date);
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules,  date,new PersonAuthorization
+			{
+				SiteId = site.Id.Value,
+				TeamId = team.Id.Value
+			});
 
 			var permittedHierachy = Target.GetOrganizationWithPeriod(new DateOnlyPeriod(date, date), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			permittedHierachy.Children.Count.Should().Be.EqualTo(1);
 			permittedHierachy.Name.Should().Be.EqualTo("_");
-			permittedHierachy.Children.First().Name.Should().Be.EqualTo("mysite");
-			permittedHierachy.Children.First().Children.Single().Name.Should().Be.EqualTo("myteam");
+			permittedHierachy.Children.Single().Name.Should().Be.EqualTo("mysite");
+			permittedHierachy.Children.Single().Children.Single().Name.Should().Be.EqualTo("myteam");
 			permittedHierachy.LogonUserTeamId.Should().Be(null);
 		}
 
@@ -358,8 +410,23 @@ namespace Teleopti.Ccc.WebTest.Core
 			CurrentLoggedOnUser.SetFakeLoggedOnUser(me);
 
 			site.AddTeam(team);
-
-			PersonSelectorReadOnlyRepository.Has(team);
+			GroupingReadOnlyRepository.Has(new[]
+			{
+				new ReadOnlyGroupPage
+				{
+					PageId = Group.PageMainId
+				}
+			}, new[]
+			{
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					SiteId = site.Id.Value,
+					TeamId = team.Id.Value,
+					GroupName = team.SiteAndTeam
+				}
+				
+			});
 			PermissionProvider.Enable();
 			PermissionProvider.PermitPerson(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, me, date);
 
@@ -397,19 +464,67 @@ namespace Teleopti.Ccc.WebTest.Core
 			site2.AddTeam(team4);
 			site3.AddTeam(team3);
 
-		
-			PersonSelectorReadOnlyRepository.Has(team1);
-			PersonSelectorReadOnlyRepository.Has(team2);
-			PersonSelectorReadOnlyRepository.Has(team3);
-			PersonSelectorReadOnlyRepository.Has(team4);
+			GroupingReadOnlyRepository.Has(new[]
+			{
+				new ReadOnlyGroupPage
+				{
+					PageId = Group.PageMainId
+				}
+			}, new[]
+			{
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					SiteId = site1.Id.Value,
+					TeamId = team1.Id.Value,
+					GroupName = team1.SiteAndTeam
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					SiteId = site2.Id.Value,
+					TeamId = team2.Id.Value,
+					GroupName = team2.SiteAndTeam
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					SiteId = site3.Id.Value,
+					TeamId = team3.Id.Value,
+					GroupName = team3.SiteAndTeam
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					SiteId = site2.Id.Value,
+					TeamId = team4.Id.Value,
+					GroupName = team4.SiteAndTeam
+				}
+			});
 
 			CurrentLoggedOnUser.CurrentUser().PermissionInformation.SetUICulture(new CultureInfo("sv"));
 			PermissionProvider.Enable();
 
-			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team1, date);
-			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team2, date);
-			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team3, date);
-			PermissionProvider.PermitTeam(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, team4, date);
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules,date, new PersonAuthorization
+			{
+				SiteId = site1.Id.Value,
+				TeamId = team1.Id.Value
+			});
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, new PersonAuthorization
+			{
+				SiteId = site2.Id.Value,
+				TeamId = team2.Id.Value
+			});
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, new PersonAuthorization
+			{
+				SiteId = site3.Id.Value,
+				TeamId = team3.Id.Value
+			});
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, date, new PersonAuthorization
+			{
+				SiteId = site2.Id.Value,
+				TeamId = team4.Id.Value
+			});
 
 			var permittedHierachy = Target.GetOrganizationWithPeriod(new DateOnlyPeriod(date, date), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 			permittedHierachy.Children.Last().Name.Should().Be("Ä");

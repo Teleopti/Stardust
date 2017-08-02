@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupPage>();
 		}
-		
+
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnly queryDate)
 		{
 			const string sql =
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault();
 		}
 
-		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage,DateOnly queryDate)
+		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage, DateOnly queryDate)
 		{
 			const string sql =
 				"SELECT DISTINCT GroupName, "
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupDetail>();
 		}
-		
+
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnlyPeriod queryRange)
 		{
 			const string sql =
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupDetail>();
 		}
-		
+
 		public void UpdateGroupingReadModel(ICollection<Guid> inputIds)
 		{
 			string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
@@ -210,12 +210,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<ReadOnlyGroupPage>();
 		}
 
-		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(List<ReadOnlyGroupPage> groupPages, DateOnlyPeriod period)
+		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnlyPeriod period, params Guid[] groupPageIds)
 		{
 			const string sql =
 				"exec [ReadModel].[LoadAvailableGroups] @businessUnitId=:businessUnitId, @startDate=:startDate, @endDate=:endDate, @pageIds=:pageIds";
 
-			var pageIds = string.Join(",", groupPages.Select(p => p.PageId).ToArray());
+			var pageIds = string.Join(",", groupPageIds);
 
 			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
 				.SetGuid("businessUnitId", getBusinessUnitId())

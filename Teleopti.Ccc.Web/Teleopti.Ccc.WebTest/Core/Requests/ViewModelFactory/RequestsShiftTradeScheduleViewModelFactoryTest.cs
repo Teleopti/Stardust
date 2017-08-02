@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -260,7 +261,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
-			var team = TeamFactory.CreateTeamWithId("team");
+			var team = TeamFactory.CreateTeam("team", "site").WithId();
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
 			personPublished.AddPersonPeriod(personPeriod);
@@ -279,6 +280,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 11, 0, 0), DateTimeKind.Utc)), confidentialAbs);
 			ScheduleStorage.Add(personAss);
 			ScheduleStorage.Add(personAbs);
+
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.ViewSchedules, new DateOnly(startTime), new PersonAuthorization
+			{
+				SiteId = team.Site.Id,
+				TeamId = team.Id
+			});
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
@@ -305,7 +312,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
-			var team = TeamFactory.CreateTeamWithId("team");
+			var team = TeamFactory.CreateTeam("team", "site").WithId();
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
 			personPublished.AddPersonPeriod(personPeriod);
@@ -324,6 +331,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 					DateTime.SpecifyKind(new DateTime(2016, 1, 13, 11, 0, 0), DateTimeKind.Utc)), confidentialAbs);
 			ScheduleStorage.Add(personAss);
 			ScheduleStorage.Add(personAbs);
+
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.ViewSchedules, new DateOnly(startTime), new PersonAuthorization
+			{
+				SiteId = team.Site.Id,
+				TeamId = team.Id
+			});
 
 			var result = Target.CreateViewModel(new ShiftTradeScheduleViewModelData
 			{
