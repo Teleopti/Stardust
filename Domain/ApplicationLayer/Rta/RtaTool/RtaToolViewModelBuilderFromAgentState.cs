@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Common;
@@ -11,9 +12,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
 		private readonly IExternalLogonReader _externalLogons;
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
 		private readonly IDataSourceReader _dataSources;
+		private static Random _random = new Random();
+
 
 		public RtaToolViewModelBuilderFromAgentState(
-			IAgentStateReadModelReader agentStates, 
+			IAgentStateReadModelReader agentStates,
 			IExternalLogonReader externalLogons,
 			ICommonAgentNameProvider nameDisplaySetting,
 			IDataSourceReader dataSources)
@@ -33,21 +36,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
 				.Read(externalLogOns.Select(x => x.PersonId))
 				.ToLookup(x => x.PersonId);
 
-			return (
-					from externalLogOn in externalLogOns
-					let state = agentStates[externalLogOn.PersonId].FirstOrDefault()
-					let dataSource = dataSources[externalLogOn.DataSourceId.GetValueOrDefault()].FirstOrDefault()
-					select new RtaToolViewModel
-					{
-						Name = nameDisplayedAs.BuildCommonNameDescription(
-							state?.FirstName,
-							state?.LastName,
-							state?.EmploymentNumber),
-						SiteName = state?.SiteName,
-						TeamName = state?.TeamName,
-						UserCode = externalLogOn.UserCode,
-						DataSource = dataSource
-					})
+			return
+				(
+					from vm in
+					(
+						from externalLogOn in externalLogOns
+						let state = agentStates[externalLogOn.PersonId].FirstOrDefault()
+						let dataSource = dataSources[externalLogOn.DataSourceId.GetValueOrDefault()].FirstOrDefault()
+						select new RtaToolViewModel
+						{
+							Name = nameDisplayedAs.BuildCommonNameDescription(
+								state?.FirstName,
+								state?.LastName,
+								state?.EmploymentNumber),
+							SiteName = state?.SiteName,
+							TeamName = state?.TeamName,
+							UserCode = externalLogOn.UserCode,
+							DataSource = dataSource
+						})
+					group vm by vm.TeamName
+					into g
+					select g
+				)
+				.Select(g => g.OrderBy(v => _random.Next()).Take(25))
+				.SelectMany(x => x)
 				.ToArray();
 		}
 	}
