@@ -171,11 +171,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					var skillCombinations = loadSkillCombination(connection, transaction);
 					foreach (var skillCombinationResourceBpo in combinationResources)
 					{
+						var bpoCreated = false;
+						var skillCombCreated = false;
 						var key = keyFor(skillCombinationResourceBpo.SkillIds);
 						Guid id;
 
 						if (!skillCombinations.TryGetValue(key, out id))
 						{
+							skillCombCreated = true;
 							id = persistSkillCombination(skillCombinationResourceBpo.SkillIds, connection, transaction);
 							skillCombinations.Add(key, id);
 						}
@@ -192,6 +195,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							bpoId = bpoList.First(x => x.Value == skillCombinationResourceBpo.Source).Key;
 						else
 						{
+							bpoCreated = true;
 							using (var insertCommand = new SqlCommand(@"insert into [BusinessProcessOutsourcer] (Id, Source) Values (@id,@source)", connection, transaction))
 							{
 								insertCommand.Parameters.AddWithValue("@id", bpoId);
@@ -203,6 +207,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						}
 						row["SourceId"] = bpoId;
 						row["BusinessUnit"] = bu;
+
+						if(!bpoCreated && !skillCombCreated)
+						{
+							removeExistingBpoInterval(id, bpoId, skillCombinationResourceBpo.StartDateTime);
+						}
 						dt.Rows.Add(row);
 					}
 					transaction.Commit();
@@ -210,6 +219,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 				using (var transaction = connection.BeginTransaction())
 				{
+					using (var deleteCommand = new SqlCommand(@"DELETE FROM [ReadModel].[SkillCombinationResourceBpo] 
+						WHERE StartDateTime <= @8DaysAgo", connection, transaction))
+					{
+						deleteCommand.Parameters.AddWithValue("@buid", bu);
+						deleteCommand.Parameters.AddWithValue("@8DaysAgo", _now.UtcDateTime().AddDays(-8));
+						deleteCommand.ExecuteNonQuery();
+					}
+
 					using (var sqlBulkCopy = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
 					{
 						sqlBulkCopy.DestinationTableName = "[ReadModel].[SkillCombinationResourceBpo]";
@@ -218,6 +235,31 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					transaction.Commit();
 				}
 			}
+		}
+
+		private void removeExistingBpoInterval(Guid id, Guid bpoId, DateTime startDateTime)
+		{
+			var connectionString = _currentUnitOfWork.Current().Session().Connection.ConnectionString;
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				using (var transaction = connection.BeginTransaction())
+				{
+					using (var deleteCommand = new SqlCommand(@"DELETE  FROM ReadModel.SkillCombinationResourceBpo 
+							WHERE SkillCombinationId = @id
+								AND StartDateTime = @startDateTime
+								AND SourceId = @bpoId ", connection, transaction))
+					{
+						deleteCommand.Parameters.AddWithValue("@id", id);
+						deleteCommand.Parameters.AddWithValue("@StartDateTime", startDateTime);
+						deleteCommand.Parameters.AddWithValue("@bpoId", bpoId);
+						deleteCommand.ExecuteNonQuery();
+					}
+					
+					transaction.Commit();
+				}
+			}
+			
 		}
 
 		private void tryPersistSkillCombinationResource(DateTime dataLoaded,
