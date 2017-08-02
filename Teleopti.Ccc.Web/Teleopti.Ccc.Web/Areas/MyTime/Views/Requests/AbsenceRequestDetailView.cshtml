@@ -57,12 +57,7 @@
 <div class="row form-group">
 	<div class="col-xs-12">
 		<span class="input-group">
-			<![if (!IE)|(gt IE 8)]>
 			<input class="request-edit-datefrom input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable() && IsDateInputEditable" type="text" />
-			<![endif]>
-			<!--[if lte IE 8]>
-			<input class="request-edit-datefrom input-sm form-control" data-bind="value: DateFrom().format(DateFormat())"  readonly="readonly" type="text" />
-			<![endif]-->
 			<span class="input-group-btn">
 				<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
 					<i class="glyphicon glyphicon-calendar"></i>
@@ -72,7 +67,7 @@
 	</div>
 	<div class="col-xs-12 bootstrap-timepicker">
 		<div class="request-edit-timefrom input-group">
-			<input type="text" class="input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEditable, visible: IsTimeInputVisible" />
+			<input type="text" class="input-sm form-control" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, visible: IsTimeInputVisible, scrollIntoViewWhenClick:'#Request-add-section'" />
 			<span class="input-group-btn">
 				<button class="btn btn-sm" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian }, visible: IsTimeInputVisible">
 					<i class="glyphicon glyphicon-time"></i>
@@ -84,12 +79,7 @@
 <div class="row form-group">
 	<div class="col-xs-12">
 		<span class="input-group">
-			<![if (!IE)|(gt IE 8)]>
 			<input class="request-edit-dateto input-sm form-control" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart() }, enable: IsEditable() && IsDateInputEditable" type="text" />
-			<![endif]>
-			<!--[if lte IE 8]>
-			<input class="request-edit-dateto input-sm form-control" data-bind="value: DateTo().format(DateFormat())" readonly="readonly" type="text" />
-			<![endif]-->
 			<span class="input-group-btn">
 				<button class="btn btn-sm" data-bind="datepicker: DateTo, datepickerOptions: { autoHide: true, weekStart: weekStart() }, enable: IsEditable">
 					<i class="glyphicon glyphicon-calendar"></i>
@@ -99,7 +89,7 @@
 	</div>
 	<div class="col-xs-12 bootstrap-timepicker">
 		<div class="request-edit-timeto input-group">
-			<input type="text" class="input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsTimeInputEditable, visible: IsTimeInputVisible" />
+			<input type="text" class="input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, visible: IsTimeInputVisible, scrollIntoViewWhenClick:'#Request-add-section'" />
 			<span class="input-group-btn">
 				<button class="btn btn-sm" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian }, visible: IsTimeInputVisible">
 					<i class="glyphicon glyphicon-time"></i>
@@ -111,7 +101,7 @@
 <label class="checkbox">
 	<input type="checkbox" class="request-edit-fullday" data-bind="checked: IsFullDay, enable: IsEditable" /> @Resources.FullDay
 </label>
-<div class="request-edit-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />
+<div class="request-edit-error alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage"></div>
 <div class="clearfix" data-bind="if: IsEditable">
 	<button class="request-edit-update btn btn-primary pull-right" data-bind="click: AddRequest">@Resources.Save</button>
 </div>

@@ -24,6 +24,8 @@
 	self.TimeList = undefined;
 	self.RequestDuration = ko.observable();
 
+	self.IsMobile = Teleopti.MyTimeWeb.Portal.IsMobile();
+
 	self.checkMessageLength = function (data, event) {
 		var text = $(event.target)[0].value;
 		if (text.length > 2000) {

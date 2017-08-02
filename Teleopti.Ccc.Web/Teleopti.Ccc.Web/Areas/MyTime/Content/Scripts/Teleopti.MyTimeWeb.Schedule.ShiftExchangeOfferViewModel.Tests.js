@@ -45,17 +45,4 @@ $(document).ready(function() {
 
 
 	});
-
-	test("should disable date and time selection input in mobile",
-		function() {
-			var fakeMobileWindow = {
-				navigator: {
-					appVersion: '5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1',
-					userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
-				}
-			}; 
-			var vm = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel(null, null, fakeMobileWindow);
-
-			equal(vm.IsTimeInputEditable, false);
-		});
 });

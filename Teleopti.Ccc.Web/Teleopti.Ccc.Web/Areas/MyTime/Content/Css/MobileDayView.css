@@ -58,7 +58,12 @@
 	font-size: 12px;
 	padding: 3px;
 }
-.mobile-start-day .mobile-start-day-body {
+
+.mobile-start-day-body {
+	-webkit-overflow-scrolling: touch;
+	height: calc(100% - 53px);
+	padding-bottom: 50px;
+	overflow-y: auto;
 	cursor: pointer;
 }
 .mobile-start-day .mobile-summary-content {
@@ -143,7 +148,7 @@
 	border-bottom-left-radius: 3px;
 	border-bottom: 1px solid #DFDFDF;
 }
-.mobile-add-request-form{
+#Request-add-section{
 	box-shadow: 0 -8px 17px 0 rgba(0,0,0,.2);
 	position: fixed;
 	bottom: 0;
@@ -154,6 +159,7 @@
 	z-index: 1002;
 	max-height: 100%;
 	overflow-y: auto;
+	overflow-x: hidden;
 	-webkit-overflow-scrolling: touch;
 }
 
@@ -161,3 +167,6 @@
 	max-height: 80px;
 }
 
+.mobile-start-day .form-control[disabled]{
+	background-color: #f1f1f1;
+}

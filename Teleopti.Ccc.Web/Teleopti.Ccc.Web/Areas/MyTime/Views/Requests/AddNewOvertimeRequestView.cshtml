@@ -35,7 +35,7 @@
 					@Resources.Date
 				</label>
 				<span class="input-group">
-					<input class="input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart(), startDate: Today() }, enable: IsEditable" type="text" />
+					<input class="input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart(), startDate: Today() }, enable: IsEditable && !IsMobile" type="text" />
 					<span class="input-group-btn">
 						<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart(), startDate: Today() }, enable: IsEditable">
 							<i class="glyphicon glyphicon-calendar"></i>
@@ -49,9 +49,9 @@
 				</label>
 				<div class="bootstrap-timepicker">
 					<div class="input-group">
-						<input type="text" class="input-sm form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsEditable" />
+						<input type="text" id="request-start-time" class="input-sm form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, minuteStep: 1}, enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'" />
 						<span class="input-group-btn">
-							<button class="btn btn-sm right-align" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian }, enable: IsEditable">
+							<button class="btn btn-sm right-align" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, modalBackdrop: true}, enable: IsEditable">
 								<i class="glyphicon glyphicon-time"></i>
 							</button>
 						</span>
@@ -64,7 +64,7 @@
 					@Resources.Duration
 				</label>
 				<div class="input-group">
-					<input type="text" class="input-sm form-control" data-bind="value: RequestDuration, event:{change:validateDuration}, enable: IsEditable " maxlength="5">
+					<input type="text" class="input-sm form-control" data-bind="value: RequestDuration, event:{change:validateDuration}, enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'" maxlength="5">
 					<ul role="menu" class="dropdown-menu">
 						<!-- ko foreach: TimeList-->
 						<li class="ui-menu-item" role="presentation">

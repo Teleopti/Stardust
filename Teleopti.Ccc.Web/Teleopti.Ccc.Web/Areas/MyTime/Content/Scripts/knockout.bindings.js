@@ -179,3 +179,15 @@ ko.bindingHandlers.hideTooltipAfterMouseLeave = {
 		}
 	}
 };
+
+ko.bindingHandlers.scrollIntoViewWhenClick = {
+	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+		$(element).click(function(event) {
+			var ele = this;
+			setTimeout(function(){
+				$(valueAccessor()).scrollTop($(ele).offset().top);
+				console.log($(valueAccessor()), 'scroll');
+			}, 500);
+		});
+	}
+};

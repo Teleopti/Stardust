@@ -29,7 +29,6 @@ Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModel = function ShiftExchange
 	self.EndTime = ko.observable();
 	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 
-	self.IsTimeInputEditable = !Teleopti.MyTimeWeb.Portal.IsMobile(mywindow);
 	self.isReadyLoaded = ko.observable(false);
 
 	self.Id = ko.observable(null);

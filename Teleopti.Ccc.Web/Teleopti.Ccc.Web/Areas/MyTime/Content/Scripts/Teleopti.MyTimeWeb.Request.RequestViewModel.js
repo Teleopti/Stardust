@@ -77,9 +77,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstD
 	self.IsDateInputEditable = !Teleopti.MyTimeWeb.Portal.IsMobile(mywindow);
 	self.IsNewInProgress = ko.observable(false);
 	self.weekStart = ko.observable(firstDayOfWeek);
-	self.IsTimeInputEditable = ko.computed(function () {
-		return !self.IsFullDay() && !Teleopti.MyTimeWeb.Portal.IsMobile(mywindow);
-	});
 	self.IsTimeInputVisible = ko.computed(function () {
 		return !self.IsFullDay();
 	});
