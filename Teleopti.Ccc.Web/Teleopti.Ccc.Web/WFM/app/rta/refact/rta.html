@@ -45,6 +45,14 @@
 
 <div class="con-row demo-outline">
 	<div class="con-flex">
+		<div class="wfm-chip-wrap">
+			<span class="wfm-chip" style="cursor:default;">
+				<span class="chip-handle">
+				<i class="mdi mdi-alert-circle"></i>
+				</span>
+			<span class="chip-text">{{'TotalAgentsInAlarm'|translate}}: <b>{{vm.totalAgentsInAlarm}}</b></span>
+			</span>
+		</div>
 		<rta-overview-component site-cards="vm.siteCards" agents-state="vm.agentsState" get-selected-items="vm.getSelectedItems"
 		 selected-items="vm.selectedItems" open-team="vm.openTeam"></rta-overview-component>
 	</div>

@@ -33784,6 +33784,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total Agents In Alarm.
+        /// </summary>
+        public static string TotalAgentsInAlarm {
+            get {
+                return ResourceManager.GetString("TotalAgentsInAlarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total ATW.
         /// </summary>
         public static string TotalATW {

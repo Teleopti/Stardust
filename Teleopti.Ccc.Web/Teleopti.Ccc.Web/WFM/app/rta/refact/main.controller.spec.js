@@ -168,6 +168,28 @@ describe('RtaMainController', function () {
       expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
+    it('should set total number of agents', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'londonId',
+          Name: 'London',
+          AgentsCount: 11,
+          InAlarmCount: 5,
+          Color: 'warning'
+        })
+        .withSiteAdherence({
+          Id: 'parisId',
+          Name: 'Paris',
+          AgentsCount: 10,
+          InAlarmCount: 9,
+          Color: 'warning'
+        });
+
+      vm = $controllerBuilder.createController().vm;
+
+      expect(vm.totalAgentsInAlarm).toEqual(14);
+    });
+
     it('should build site card view model when open in url is true', function () {
       stateParams.open = 'true';
       $fakeBackend

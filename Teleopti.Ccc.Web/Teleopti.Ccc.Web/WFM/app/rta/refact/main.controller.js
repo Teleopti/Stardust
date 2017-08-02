@@ -15,6 +15,7 @@
 		vm.skills = skills || [];
 		vm.skillAreas = skillAreas || [];
 		vm.siteCards = [];
+		vm.totalAgentsInAlarm = 0;
 		vm.urlParams = $stateParams;
 		vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 		vm.organizationSelection = false;
@@ -56,12 +57,14 @@
 			if (angular.isDefined(ids)) {
 				rtaService.getOverviewModelFor(ids).then(function (result) {
 					vm.siteCards = buildSiteCards(result);
+					vm.totalAgentsInAlarm = result.TotalAgentsInAlarm;
 					vm.noSiteCards = !vm.siteCards.length;
 					fetchTeamsForAllSiteCards();
 				});
 			} else {
 				rtaService.getOverviewModelFor().then(function (result) {
 					vm.siteCards = buildSiteCards(result);
+					vm.totalAgentsInAlarm = result.TotalAgentsInAlarm;
 					vm.noSiteCards = !vm.siteCards.length;
 					fetchTeamsForAllSiteCards();
 				});
