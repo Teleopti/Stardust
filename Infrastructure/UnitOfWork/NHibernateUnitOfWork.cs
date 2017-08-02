@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		private void transactionEnsure()
 		{
-			if (_transaction != null) return;
+			if (_transaction != null && _transaction.IsActive) return;
 
 			try
 			{
