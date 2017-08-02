@@ -1,6 +1,7 @@
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[FindPeopleForShiftTrade]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [ReadModel].[FindPeopleForShiftTrade]
 GO
+
 /****** Object:  StoredProcedure [ReadModel].[LoadPersonForScheduleSearch]    Script Date: 25/09/2016 11:02:37 AM ******/
 SET ANSI_NULLS ON
 GO
@@ -10,14 +11,11 @@ GO
 CREATE PROCEDURE [ReadModel].[FindPeopleForShiftTrade]
     @scheduleDate smalldatetime,
     @groupIdList varchar(max),
-    @businessUnitId uniqueidentifier,
     @name nvarchar(max),
     @noSpaceInName bit,
     @firstNameFirst bit,
     @workflowControlSetId uniqueidentifier,
-    @fromPersonId uniqueidentifier,
-    @shiftStartUTC smalldatetime,
-    @shiftEndUTC smalldatetime
+    @fromPersonId uniqueidentifier
 AS
 BEGIN
     -- SET NOCOUNT ON added to prevent extra result sets from
@@ -38,7 +36,7 @@ BEGIN
       INTO #fromPersonSkill
       FROM PersonSkill ps with (nolock)
      INNER JOIN PersonPeriod pp with (nolock) ON pp.Id = ps.Parent
-       AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+       AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate, '2059-12-31')
      INNER JOIN Person p with (nolock) ON pp.Parent = p.Id
      WHERE p.id = @fromPersonId
        AND ps.Active = 1
@@ -48,7 +46,7 @@ BEGIN
       INTO #personSkill
       FROM PersonSkill ps with (nolock)
      INNER JOIN PersonPeriod pp with (nolock) ON pp.Id = ps.Parent
-       AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+       AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate, '2059-12-31')
      INNER JOIN Person p with (nolock) ON pp.Parent = p.Id
      INNER JOIN #fromWorkflowControlSetSkills m on m.Skill = ps.Skill
      WHERE p.id = @fromPersonId
@@ -58,53 +56,57 @@ BEGIN
 
     INSERT INTO @GroupIds SELECT * FROM dbo.SplitStringString(@groupIdList)
 
-    --the number of skills that must match
+    -- the number of skills that must match
     DECLARE @numMatch int = (SELECT COUNT(*) FROM #personSkill)
 
     --  bypass syntax checking so we can fill #persons in else clause below --
-    SELECT p.Id,p.WorkflowControlSet INTO #persons
+    SELECT p.Id, p.WorkflowControlSet INTO #persons
       FROM Person p with (nolock)
      WHERE 1=0;
 
     IF (@numMatch = 0)
     BEGIN
         INSERT INTO #persons
-        SELECT p.id,p.WorkflowControlSet
+        SELECT p.id, p.WorkflowControlSet
           FROM Person p with (nolock)
          INNER JOIN PersonPeriod pp with (nolock) ON p.Id = pp.Parent
-           AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+           AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate, '2059-12-31')
            AND pp.Team in (SELECT * FROM @GroupIds)
           LEFT JOIN PersonSkill ps with (nolock) ON ps.Parent = pp.Id AND ps.Active = 1
          WHERE (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
            AND p.WorkflowControlSet IS NOT NULL
            AND p.id <> @fromPersonId
            AND p.IsDeleted = 0
-         GROUP BY p.id,p.WorkflowControlSet
+         GROUP BY p.id, p.WorkflowControlSet
     END
     ELSE
     BEGIN
-        SELECT Parent into #personSkill2 from PersonSkill with (nolock) where Skill in (SELECT skill FROM #personSkill) and Active = 1
+        SELECT Parent into #personSkill2
+          FROM PersonSkill with (nolock)
+         WHERE Skill IN (SELECT skill FROM #personSkill)
+           AND Active = 1
+
         -- all the person that have the skills that are must to make trade
         Insert INTO #persons
-        SELECT p.id,p.WorkflowControlSet
+        SELECT p.id, p.WorkflowControlSet
           FROM Person p with (nolock)
          INNER JOIN PersonPeriod pp with (nolock) ON p.Id = pp.Parent
            AND pp.Team in(SELECT * FROM @GroupIds)
-           AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+           AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate, '2059-12-31')
          INNER JOIN #personSkill2 ps ON ps.Parent = pp.Id
          WHERE (p.TerminalDate >= '2016-09-25' OR p.TerminalDate IS NULL)
            AND p.WorkflowControlSet IS NOT NULL
            AND p.id <> @fromPersonId
            AND p.IsDeleted = 0
-         GROUP BY p.id,p.WorkflowControlSet
+         GROUP BY p.id, p.WorkflowControlSet
         HAVING count(*) = @numMatch
     END
 
     DECLARE @toPersonId uniqueidentifier, @toWorkflowControlSetId uniqueidentifier
-    DECLARE persons_cursor CURSOR FOR SELECT id,WorkflowControlSet FROM #persons
+    DECLARE persons_cursor CURSOR FOR SELECT id, WorkflowControlSet FROM #persons
 
     OPEN persons_cursor
-    FETCH NEXT FROM persons_cursor INTO @toPersonId,@toWorkflowControlSetId
+    FETCH NEXT FROM persons_cursor INTO @toPersonId, @toWorkflowControlSetId
 
     WHILE @@FETCH_STATUS = 0
     BEGIN
@@ -113,7 +115,7 @@ BEGIN
           INTO #toPersonSkill
           FROM PersonSkill ps with (nolock)
          INNER JOIN PersonPeriod pp with (nolock) ON pp.Id = ps.Parent
-           AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate,'2059-12-31')
+           AND @scheduleDate BETWEEN pp.StartDate and isnull(pp.EndDate, '2059-12-31')
          INNER JOIN Person p with (nolock) ON pp.Parent = p.Id
          WHERE p.id = @toPersonId
            AND ps.Active = 1
@@ -150,7 +152,7 @@ BEGIN
         DROP TABLE #toPersonSkill
         DROP TABLE #differentSkill
 
-        FETCH NEXT FROM persons_cursor INTO @toPersonId,@toWorkflowControlSetId
+        FETCH NEXT FROM persons_cursor INTO @toPersonId, @toWorkflowControlSetId
     END
 
     CLOSE persons_cursor
@@ -164,7 +166,7 @@ BEGIN
       FROM ReadModel.GroupingReadOnly gr with (nolock)
      INNER JOIN Person p with (nolock) ON p.id = gr.PersonId
      WHERE gr.PersonId IN(select id from #persons)
-       AND @scheduleDate BETWEEN gr.StartDate and isnull(gr.EndDate,'2059-12-31')
+       AND @scheduleDate BETWEEN gr.StartDate and isnull(gr.EndDate, '2059-12-31')
        AND (gr.LeavingDate >= @scheduleDate OR gr.LeavingDate IS NULL)
        AND ((@namesearch is null or @namesearch = '')
            OR (@noSpaceInName = 1 AND @firstNameFirst = 0 AND ((p.LastName + p.FirstName) like @namesearch))
