@@ -18,7 +18,7 @@
 		vm.suggestOvertime = suggestOvertime;
 		vm.addOvertime = addOvertime;
 		vm.navigateToNewDay = navigateToNewDay;
-		vm.hasSuggestionData = false;
+		vm.hasSuggestionData = undefined;
 		vm.hasRequestedSuggestion = false;
 		vm.hasRequestedOvertime = false;
 		vm.timeSerie = [];
@@ -96,8 +96,10 @@
 
 		function generateChart(skill, area) {
 			if (skill) {
+				clearSuggestions();
 				var query = getSkillStaffingByDate(skill.Id, vm.selectedDate, vm.useShrinkage);
 			} else if (area) {
+				clearSuggestions();
 				var query = getSkillAreaStaffingByDate(area.Id, vm.selectedDate, vm.useShrinkage);
 			}
 			query.$promise.then(function (result) {
@@ -123,8 +125,8 @@
 		}
 
 		function clearSuggestions() {
-			vm.hasSuggestionData = false;
-			vm.hasRequestedSuggestion = false
+			vm.hasSuggestionData = undefined;
+			vm.hasRequestedSuggestion = false;
 		}
 
 		function navigateToNewDay() {
@@ -264,7 +266,7 @@
 			} else {
 				skillIds = [currentSkills.Id];
 			}
-			
+
 			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: vm.timeSerie, OvertimePreferences: settings });
 			query.$promise.then(function (response) {
 				vm.hasRequestedSuggestion = false;
@@ -274,7 +276,6 @@
 						suggestedStaffingData = utilService.prepareSuggestedStaffingData(staffingData, response);
 					} else {
 						vm.hasSuggestionData = false;
-						vm.hasRequestedSuggestion = false;
 						return;
 					}
 					vm.staffingDataAvailable = true;
