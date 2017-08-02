@@ -18,6 +18,7 @@ describe("teamschedule controller tests", function() {
 			$provide.service('CurrentUserInfo', setupMockCurrentUserInfoService);
 			$provide.service('$locale', setupMockLocale);
 			$provide.service('Toggle', setupMockAllTrueToggleService);
+			$provide.service('groupPageService', setUpMockGroupPagesService);
 		});
 	});
 
@@ -28,6 +29,7 @@ describe("teamschedule controller tests", function() {
 		scheduleMgmt = _ScheduleManagement_;
 		setupMockTeamScheduleService(_TeamSchedule_);
 		controller = setUpController(_$controller_);
+		
 	}));
 
 	it("can display person selection status correctly when turning pages", inject(function () {
@@ -312,6 +314,20 @@ describe("teamschedule controller tests", function() {
 
 	function setupMockAllTrueToggleService() {
 		return { };
+	}
+
+	function setUpMockGroupPagesService() {
+		return {
+			fetchAvailableGroupPages: function() {
+				return {
+					then: function() {
+
+					}
+			};
+			}
+
+		};
+
 	}
 
 	function setupMockCurrentUserInfoService() {

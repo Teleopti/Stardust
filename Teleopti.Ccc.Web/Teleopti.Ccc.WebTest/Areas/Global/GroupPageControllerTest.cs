@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 						new FakeGroupingReadOnlyRepository(new[] {groupPage}, new List<ReadOnlyGroupDetail>()),
 						new UserTextTranslator(),
 						new FakeUserUiCulture(),
-						new FakeLoggedOnUser()));
+						new FakeLoggedOnUser(),
+						new FakePermissionProvider()));
 
 			dynamic result = ((dynamic)(target).AvailableGroupPages(DateTime.Now)).Content;
 
@@ -72,7 +73,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 						new FakeGroupingReadOnlyRepository(new[] { new ReadOnlyGroupPage { PageName = "" } }, new[] { firstGroup, secondGroup }),
 						new UserTextTranslator(),
 						new FakeUserUiCulture(),
-						loggedOnUser));
+						loggedOnUser,
+						new FakePermissionProvider()));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
@@ -89,7 +91,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					new FakeGroupingReadOnlyRepository(new[] { new ReadOnlyGroupPage { PageName = "" } }, new[] { new ReadOnlyGroupDetail() }),
 					new UserTextTranslator(),
 						new FakeUserUiCulture(),
-						new FakeLoggedOnUser()));
+						new FakeLoggedOnUser(),
+						new FakePermissionProvider()));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
@@ -112,7 +115,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 						new FakeGroupingReadOnlyRepository(new[] { groupPage }, new List<ReadOnlyGroupDetail>()),
 					new UserTextTranslator(),
 						new FakeUserUiCulture(),
-						new FakeLoggedOnUser()));
+						new FakeLoggedOnUser(),
+						new FakePermissionProvider()));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
@@ -142,7 +146,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 				new FakeGroupingReadOnlyRepository(new[] { groupPage }, new[] { firstGroup }),
 				new UserTextTranslator(),
 						new FakeUserUiCulture(),
-						new FakeLoggedOnUser()));
+						new FakeLoggedOnUser(),
+						null));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
@@ -171,7 +176,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					new FakeGroupingReadOnlyRepository(new[] {groupPage}, new[] {firstGroup}),
 					new UserTextTranslator(),
 					new FakeUserUiCulture(),
-					new FakeLoggedOnUser()));
+					new FakeLoggedOnUser(),
+					null));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
@@ -200,7 +206,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					new FakeGroupingReadOnlyRepository(new[] { groupPage1, groupPage2 }, new List<ReadOnlyGroupDetail>()),
 					new UserTextTranslator(),
 					new FakeUserUiCulture(),
-					new FakeLoggedOnUser()));
+					new FakeLoggedOnUser(),
+					null));
 
 			var result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 			(result.GroupPages[0].Name as string).Should()
@@ -227,7 +234,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					new FakeGroupingReadOnlyRepository(new[] { groupPage1, groupPage2 }, new List<ReadOnlyGroupDetail>()),
 					new UserTextTranslator(),
 					new FakeUserUiCulture(),
-					new FakeLoggedOnUser()));
+					new FakeLoggedOnUser(),
+					null));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 			(result.GroupPages[0].Name as string).Should().Be.EqualTo(groupPage2.PageName);
@@ -253,7 +261,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					new FakeGroupingReadOnlyRepository(new[] { groupPage1, groupPage2 }, new List<ReadOnlyGroupDetail>()),
 					new UserTextTranslator(),
 					new FakeUserUiCulture(),
-					new FakeLoggedOnUser()));
+					new FakeLoggedOnUser(),
+					null));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 			(result.GroupPages[0].Name as string).Should()

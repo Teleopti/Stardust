@@ -46,18 +46,31 @@ describe('<group-page-picker>', function () {
 		var picker = setupComponent('group-pages="groupPages"', testScope());
 
 		var tabs = picker.find('md-tab-item');
+		var icon = tabs[0].querySelector('i');
 
 		expect(tabs.length).toEqual(2);
-		expect(tabs[0].innerText).toEqual('BusinessHierarchy');
+		expect(icon.title).toEqual('BusinessHierarchy');
 		expect(angular.element(tabs[0]).hasClass('md-active')).toEqual(true);
 	});
 
-	it('should switch views when tabs are selected', function() {
+	it('should switch views when tabs are selected', function () {
 		var picker = setupComponent('group-pages="groupPages"', testScope());
-		clickTab(picker, 1);
-		var tab = picker.find('md-tab-item')[1];
-		expect(tab.innerText).toEqual('GroupPages');
+		openPanel(picker);
+		expectPanelOpen();
+
+		var tabs = $document[0].querySelectorAll('group-pages-panel md-tab-item');
+		var tab = tabs[1];
+		angular.element(tab).triggerHandler('click');
+
+		var icon = tab.querySelector('i');
+		expect(icon.title).toEqual('GroupPages');
 		expect(angular.element(tab).hasClass('md-active')).toEqual(true);
+		var group = $document[0].querySelector('.group label[for="group-groupPage1"]');
+		expect(group.innerText.trim()).toEqual('groupPage1');
+
+		var groups = $document[0].querySelectorAll('.group');
+		expect(groups.length).toEqual(4);
+
 	});
 
 	it('should render business hierarchy group list',function() {
@@ -94,14 +107,6 @@ describe('<group-page-picker>', function () {
 		
 
 	});
-
-	function clickParentGroup() {
-
-	}
-
-	function clickChildGroup() {
-
-	}
 
 	function expectPanelOpen() {
 		var panel = angular.element($document[0].querySelector('.md-panel-outer-wrapper'));
@@ -166,6 +171,37 @@ describe('<group-page-picker>', function () {
 						}
 					]
 				}
+			],
+			'GroupPages': [
+				{
+				Id: 'groupPage1',
+				Name: 'groupPage1',
+				Children: [
+					{
+						Id: 'childGroup1_1',
+						Name: 'childGroup1_1'
+					},
+					{
+						Id: 'childGroup1_2',
+						Name: 'childGroup1_2'
+					}
+				]
+				},
+				{
+					Id: 'groupPage2',
+					Name: 'groupPage2',
+					Children: [
+						{
+							Id: 'groupPage2_1',
+							Name: 'groupPage2_1'
+						},
+						{
+							Id: 'groupPage2_2',
+							Name: 'groupPage2_2'
+						}
+					]
+				}
+
 			]
 		};
 		return scope;

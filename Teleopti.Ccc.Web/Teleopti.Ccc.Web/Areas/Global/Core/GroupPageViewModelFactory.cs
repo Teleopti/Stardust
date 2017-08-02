@@ -15,19 +15,22 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 		private readonly IUserTextTranslator _userTextTranslator;
 		private readonly IUserUiCulture _uiCulture;
 		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IPermissionProvider _permissionProvider;
 
 		public GroupPageViewModelFactory(
 			IGroupingReadOnlyRepository groupingReadOnlyRepository,
 			IUserTextTranslator userTextTranslator,
-			IUserUiCulture uiCulture, ILoggedOnUser loggedOnUser)
+			IUserUiCulture uiCulture, ILoggedOnUser loggedOnUser,
+			IPermissionProvider permissionProvider)
 		{
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_userTextTranslator = userTextTranslator;
 			_uiCulture = uiCulture;
 			_loggedOnUser = loggedOnUser;
+			_permissionProvider = permissionProvider;
 		}
 
-		public dynamic CreateViewModel(DateOnlyPeriod period)
+		public dynamic CreateViewModel(DateOnlyPeriod period, string functionPath)
 		{
 			var stringComparer = StringComparer.Create(_uiCulture.GetUiCulture(), false);
 			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupsBasedOnPeriod(period);
@@ -41,15 +44,17 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			var orgsLookup = allAvailableGroups[Group.PageMainId].ToLookup(g => g.SiteId);
 			foreach (var siteLookUp in orgsLookup)
 			{
-				var teams = orgsLookup[siteLookUp.Key];
-				var children = teams.Select(t => new
+				var permittedTeams = orgsLookup[siteLookUp.Key].Where(team => _permissionProvider.HasOrganisationDetailPermission(functionPath, period.StartDate, team));
+				if (!permittedTeams.Any())
+					continue;
+				var children = permittedTeams.Select(t => new
 				{
 					Name = t.GroupName.Split('/')[1],
 					Id = t.TeamId
 				}).OrderBy(c => c.Name, stringComparer);
 				actualOrgs.Add(new
 				{
-					Name = teams.First().GroupName.Split('/')[0],
+					Name = permittedTeams.First().GroupName.Split('/')[0],
 					Id = siteLookUp.Key,
 					Children = children
 				});

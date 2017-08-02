@@ -7,8 +7,8 @@
 		<div class="longest-name">{{$ctrl.longestName}}</div>
 		<md-content>
 			<md-tabs md-selected="$ctrl.selectedIndex" md-dynamic-height>
-				<md-tab ng-repeat="tab in $ctrl.tabs" label="{{tab.title|translate}}" ng-click="$ctrl.changeTab(tab)">
-					<md-tab-label><i class="mdi mdi-{{tab.icon}}"></i></md-tab-label>
+				<md-tab ng-repeat="tab in $ctrl.tabs">
+					<md-tab-label><i title="{{tab.title|translate}}" class="mdi mdi-{{tab.icon}}"></i></md-tab-label>
 					<md-tab-body>
 						<md-virtual-repeat-container class="virtual-repeat">
 								<div md-virtual-repeat="o in $ctrl.groupsInView" class="repeated-item" flex>

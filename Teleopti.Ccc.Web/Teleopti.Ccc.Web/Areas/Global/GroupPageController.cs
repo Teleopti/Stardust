@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Global.Core;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		[UnitOfWork, HttpGet, Route("api/GroupPage/AvailableStructuredGroupPages")]
 		public virtual IHttpActionResult AvailableStructuredGroupPages([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly startDate, [ModelBinder(typeof(DateOnlyModelBinder))]DateOnly endDate)
 		{
-			return Ok(_groupPageViewModelFactory.CreateViewModel(new DateOnlyPeriod(startDate, endDate)));
+			return Ok(_groupPageViewModelFactory.CreateViewModel(new DateOnlyPeriod(startDate, endDate), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
 		}
 		[UnitOfWork, HttpGet, Route("api/GroupPage/AvailableGroupPages")]
 		public virtual IHttpActionResult AvailableGroupPages(DateTime date)

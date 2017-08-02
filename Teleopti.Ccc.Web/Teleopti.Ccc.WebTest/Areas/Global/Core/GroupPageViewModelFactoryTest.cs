@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -23,12 +25,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		public GroupPageViewModelFactory Target;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakeUserUiCulture UserCulture;
+		public FakePermissionProvider PermissionProvider;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<UserTextTranslator>().For<IUserTextTranslator>();
 			system.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
 			system.AddService<GroupPageViewModelFactory>();
+			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			
 		}
 
@@ -70,7 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage },
 				groupDetails);
 			
-			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var orgs = ((IEnumerable<dynamic>)result.BusinessHierarchy).ToList();
 			dynamic gp = ((IEnumerable<dynamic>)result.GroupPages).ToList()[0];
@@ -158,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage, groupPage2 },
 				groupDetails);
 
-			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var orgs = ((IEnumerable<dynamic>)result.BusinessHierarchy).ToList();
 			var gps = ((IEnumerable<dynamic>) result.GroupPages).ToList();
@@ -204,7 +208,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			GroupingReadOnlyRepository.Has(new[] { groupPage },
 				groupDetails);
 
-			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var gps = ((IEnumerable<dynamic>)result.GroupPages).ToList();
 			dynamic gp0 = gps[0];
@@ -286,7 +290,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			GroupingReadOnlyRepository.Has(new[] {mainPage, groupPage,groupPage1,groupPage2 },
 				groupDetails);
 
-			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
+			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
 			var ogs = ((IEnumerable<dynamic>)result.BusinessHierarchy).ToList();
 			var childrenForFirstSite = ((IEnumerable<dynamic>)ogs[0].Children).ToList();
@@ -302,6 +306,89 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			var childrenForFirstGroupPage = ((IEnumerable<dynamic>)gps[0].Children).ToList();
 			((string)childrenForFirstGroupPage[0].Name).Should().Be.EqualTo("cEmail");
 			((string)childrenForFirstGroupPage[1].Name).Should().Be.EqualTo("åEmail");
+		}
+
+		[Test]
+		public void ShouldReturnPermittedGroups()
+		{
+			var mainPage = new ReadOnlyGroupPage()
+			{
+				PageName = "Main",
+				PageId = Group.PageMainId
+			};
+			var groupPage = new ReadOnlyGroupPage
+			{
+				PageName = "Skill",
+				PageId = Guid.NewGuid()
+			};
+			var businessUnitId = Guid.NewGuid();
+			var site1Id = Guid.NewGuid();
+			var site2Id = Guid.NewGuid();
+			var team1InSite1Id = Guid.NewGuid();
+			var team1InSite2Id = Guid.NewGuid();
+			var groupDetails = new List<ReadOnlyGroupDetail>
+			{
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					GroupName = "site1/team1",
+					SiteId = site1Id,
+					TeamId =  team1InSite1Id,
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					GroupName = "site2/team1",
+					SiteId = site2Id,
+					TeamId =  team1InSite2Id,
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = groupPage.PageId,
+					GroupName = "Email",
+					SiteId = site1Id,
+					TeamId = team1InSite1Id,
+					GroupId = team1InSite1Id,
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = groupPage.PageId,
+					GroupName = "Outbound",
+					SiteId = site2Id,
+					TeamId = team1InSite2Id,
+					GroupId = team1InSite2Id,
+					BusinessUnitId = businessUnitId
+				}
+			};
+			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage },
+				groupDetails);
+			PermissionProvider.Enable();
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, DateOnly.Today, new PersonAuthorization
+			{
+				SiteId = site1Id,
+				TeamId = team1InSite1Id,
+				BusinessUnitId = businessUnitId
+			});
+
+			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			var orgs = ((IEnumerable<dynamic>)result.BusinessHierarchy).ToList();
+			var gps = ((IEnumerable<dynamic>) result.GroupPages).ToList();
+			dynamic gp = gps[0];
+			var gpChildren = ((IEnumerable<dynamic>)orgs[0].Children).ToList();
+			orgs.Count.Should().Be.EqualTo(1);
+			((object)orgs[0].Name).Should().Be.EqualTo("site1");
+			((object)orgs[0].Id).Should().Be.EqualTo(site1Id);
+			((IEnumerable<dynamic>)orgs[0].Children).Count().Should().Be.EqualTo(1);
+			gps.Count.Should().Be.EqualTo(1);
+			((object)gp.Name).Should().Be.EqualTo(groupPage.PageName);
+			gpChildren.Count.Should().Be.EqualTo(1);
+			((Guid)gpChildren.Single().Id).Should().Be.EqualTo(team1InSite1Id);
 		}
 
 	}

@@ -29,7 +29,16 @@
 			}
 		];
 
-		ctrl.selectedIndex = 0;
+		var selectedIndex = 0;
+
+		Object.defineProperty(ctrl, 'selectedIndex',
+		{
+			get: function () { return selectedIndex; },
+			set: function(value) {
+				selectedIndex = value;
+				ctrl.changeTab(ctrl.tabs[selectedIndex]);
+			}
+		});
 
 		ctrl.longestName = '';
 		ctrl.selectedGroups = {
@@ -58,12 +67,12 @@
 		};
 
 		ctrl.collapseGroup = function (groupCopy) {
-			var index = this.groupsInView.indexOf(groupCopy)
+			var index = ctrl.groupsInView.indexOf(groupCopy)
 			if (groupCopy.collapsed) {
 				var args = [index + 1, 0].concat(groupCopy.children)
-				this.groupsInView.splice.apply(this.groupsInView, args)
+				ctrl.groupsInView.splice.apply(ctrl.groupsInView, args)
 			} else {
-				this.orgsInView.splice(index + 1, groupCopy.children.length)
+				ctrl.groupsInView.splice(index + 1, groupCopy.children.length)
 			}
 			groupCopy.collapsed = !groupCopy.collapsed;
 		}
@@ -77,11 +86,13 @@
 		ctrl.setPickerData = function() {
 			populateGroupListAndNamemapAndFindLongestName(ctrl.groupPages[ctrl.mode]);
 			ctrl.groupsInView = ctrl.searchForOrgsByName('');
+			
 		}
 
 		ctrl.changeTab = function (tab) {
 			ctrl.mode = tab.title;
 			ctrl.setPickerData();
+			console.log(ctrl.groupsInView, ctrl.groupList);
 		}
 
 		ctrl.searchForOrgsByName = function(searchText) {
