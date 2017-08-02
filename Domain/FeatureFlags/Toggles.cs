@@ -64,6 +64,7 @@
 		Wfm_SearchAgentBasedOnCorrectPeriod_44552,
 		Wfm_AddMyTimeLink_45088,
 		Wfm_GroupPages_45057,
+		Wfm_FetchBusinessHierarchyFromReadModel_45275,
 
 		WfmTeamSchedule_MoveOvertimeActivity_44888,
 		WfmTeamSchedule_SortRows_45056,

@@ -109,6 +109,7 @@ Wfm_HideUnusedTeamsAndSites_42690 = true
 Wfm_SearchAgentBasedOnCorrectPeriod_44552 = RC
 Wfm_AddMyTimeLink_45088 = RC
 Wfm_GroupPages_45057 = DEV
+Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
 
 MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = true
 MyTimeWeb_ShiftTradeBoardNoReadModel_36662 = true

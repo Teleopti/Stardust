@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Requests.Core.FormData;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
@@ -23,16 +25,18 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		private readonly IShiftTradeRequestViewModelFactory _shiftTradeRequestViewModelFactory;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly ITeamsProvider _teamsProvider;
+		private readonly IToggleManager _toggleManager;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory,
 			IRequestCommandHandlingProvider commandHandlingProvider,
-			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory, ITeamsProvider teamsProvider)
+			ILoggedOnUser loggedOnUser, IShiftTradeRequestViewModelFactory shiftTradeRequestViewModelFactory, ITeamsProvider teamsProvider, IToggleManager toggleManager)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_commandHandlingProvider = commandHandlingProvider;
 			_loggedOnUser = loggedOnUser;
 			_shiftTradeRequestViewModelFactory = shiftTradeRequestViewModelFactory;
 			_teamsProvider = teamsProvider;
+			_toggleManager = toggleManager;
 		}
 
 		[HttpPost, Route("api/Requests/loadTextAndAbsenceRequests"), UnitOfWork]
@@ -103,8 +107,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		[UnitOfWork, HttpGet, Route("api/Requests/GetOrganizationWithPeriod")]
 		public virtual BusinessUnitWithSitesViewModel GetOrganizationWithPeriod(DateTime startDate,DateTime endDate)
 		{
-			return _teamsProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
-				DefinedRaptorApplicationFunctionPaths.WebRequests);
+			return _toggleManager.IsEnabled(Toggles.Wfm_FetchBusinessHierarchyFromReadModel_45275)
+				? _teamsProvider.GetOrganizationWithPeriod(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
+					DefinedRaptorApplicationFunctionPaths.WebRequests)
+				: _teamsProvider.GetOrganizationBasedOnRawData(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
+					DefinedRaptorApplicationFunctionPaths.WebRequests);
 
 		}
 	}
