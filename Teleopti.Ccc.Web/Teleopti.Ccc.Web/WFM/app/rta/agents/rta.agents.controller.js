@@ -141,9 +141,9 @@
 
 		(function initialize() {
 			pollingLock = false;
-			if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
+			//if (siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId) {
 				agentState();
-			}
+			//}
 		})();
 
 		$scope.$watch(
@@ -242,14 +242,11 @@
 		}
 
 		function updateAgentStates(agentStates) {
-			if (skip()) return;
-			var excludedStates = excludedStateIds();
-			setStatesAndStuff(agentStates);
-			updateUrlWithExcludedStateIds(excludedStates);
-		};
-
-		function skip() {
-			return vm.pause || !(siteIds.length > 0 || teamIds.length > 0 || skillIds.length > 0 || skillAreaId)
+			if(!vm.pause) {
+				var excludedStates = excludedStateIds();
+				setStatesAndStuff(agentStates);
+				updateUrlWithExcludedStateIds(excludedStates);
+			}
 		}
 
 		function setStatesAndStuff(states) {
