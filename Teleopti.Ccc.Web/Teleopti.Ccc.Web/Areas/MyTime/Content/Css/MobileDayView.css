@@ -148,7 +148,15 @@
 	border-bottom-left-radius: 3px;
 	border-bottom: 1px solid #DFDFDF;
 }
+
 #Request-add-section{
+	max-height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	-webkit-overflow-scrolling: touch;
+}
+
+.mobile-start-day #Request-add-section{
 	box-shadow: 0 -8px 17px 0 rgba(0,0,0,.2);
 	position: fixed;
 	bottom: 0;
@@ -156,11 +164,8 @@
 	right: 0;
 	height: auto;
 	cursor: pointer;
-	z-index: 1002;
-	max-height: 100%;
-	overflow-y: auto;
-	overflow-x: hidden;
-	-webkit-overflow-scrolling: touch;
+	z-index: 198;
+	
 }
 
 .mobile-add-request-form .overtime-add-container .overtime-request-duration .dropdown-menu{
@@ -169,4 +174,8 @@
 
 .mobile-start-day .form-control[disabled]{
 	background-color: #f1f1f1;
+}
+
+.datepicker.dropdown-menu{
+	z-index: 199;
 }
