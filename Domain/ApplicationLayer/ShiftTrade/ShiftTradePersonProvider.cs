@@ -50,6 +50,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			return processShiftTradePeople(shiftTradeDate, personForShiftTradeList);
 		}
 
+		public IEnumerable<IPerson> RetrievePeopleOptimized(DateOnly shiftTradeDate, Guid[] peopleIds)
+		{
+			var personForShiftTradeList = _peopleForShiftTradeFinder.GetPeople(_loggedOnUser.CurrentUser(), shiftTradeDate,
+				peopleIds);
+
+			return processShiftTradePeople(shiftTradeDate, personForShiftTradeList);
+		}
+
 		private IEnumerable<IPerson> processShiftTradePeople(DateOnly shiftTradeDate, IList<IPersonAuthorization> personForShiftTradeList)
 		{
 			var me = _loggedOnUser.CurrentUser();
@@ -81,5 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 		IEnumerable<IPerson> RetrievePeopleOptimized(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
 			NameFormatSetting nameFormatSettings);
+
+		IEnumerable<IPerson> RetrievePeopleOptimized(DateOnly shiftTradeDate, Guid[] peopleIds);
 	}
 }

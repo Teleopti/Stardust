@@ -60,5 +60,37 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			return result;
 		}
+
+
+		public IList<IPersonAuthorization> GetPeople(IPerson personFrom, DateOnly shiftTradeDate, IList<Guid> peopleIdList)
+		{
+			const string sql = "exec ReadModel.FindPeopleForShiftTradeByPeopleIDs @scheduleDate=:scheduleDate,"
+							+ "@peopleIdList=:peopleIdList,"
+							+ "@workflowControlSetId = :workflowControlSetId,"
+							+ "@fromPersonId = :fromPersonId";
+
+		 
+			var personFromId = personFrom.Id.GetValueOrDefault();
+			var workflowControlSetId = personFrom.WorkflowControlSet.Id.GetValueOrDefault();
+
+			var result = new List<IPersonAuthorization>();
+
+			var statelessSession = ((NHibernateUnitOfWork)_unitOfWork.Current()).Session.SessionFactory.OpenStatelessSession();
+			peopleIdList.Batch(2000).ForEach(groupIdBatch =>
+			{
+				var groups = string.Join(",", groupIdBatch);
+				var batchResult = statelessSession.CreateSQLQuery(sql)
+					.SetDateOnly("scheduleDate", shiftTradeDate)
+					.SetParameter("peopleIdList", groups, NHibernateUtil.StringClob)
+					.SetGuid("workflowControlSetId", workflowControlSetId)
+					.SetGuid("fromPersonId", personFromId)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(PersonSelectorShiftTrade)))
+					.SetReadOnly(true)
+					.List<IPersonAuthorization>();
+				result.AddRange(batchResult);
+			});
+
+			return result;
+		}
 	}
 }

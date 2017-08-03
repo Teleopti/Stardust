@@ -11,5 +11,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		IList<IPersonAuthorization> GetPeople(IPerson personFrom, DateOnly shiftTradeDate
 			, IList<Guid> teamIdList, string name, NameFormatSetting nameFormat = NameFormatSetting.FirstNameThenLastName);
+
+		IList<IPersonAuthorization> GetPeople(IPerson personFrom, DateOnly shiftTradeDate, IList<Guid> peopleIdList);
 	}
 }

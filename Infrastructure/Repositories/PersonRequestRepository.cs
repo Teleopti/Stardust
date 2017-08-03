@@ -764,24 +764,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			base.Remove(entity);
 		}
 
-		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,
-			DateOnly shiftTradeDate)
+		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList, DateOnly shiftTradeDate)
 		{
-			var result = new List<IShiftExchangeOffer>();
-			personList.Batch(2000)
-				.ForEach(l =>
-				{
-					var batchResult = Session.CreateCriteria(typeof(IShiftExchangeOffer), "offer")
+			
+				return Session.CreateCriteria(typeof(IShiftExchangeOffer), "offer")
 							.CreateCriteria("Parent", "req", JoinType.InnerJoin)
 							.Add(Restrictions.Eq("req.IsDeleted", false))
 							.Add(Restrictions.Eq("offer.Date", shiftTradeDate))
-							.Add(Restrictions.InG("offer.Person", l.ToArray()))
 							.Add(Restrictions.Ge("offer.Criteria.ValidTo", new DateOnly(DateTime.UtcNow.Date)))
 							.Add(Restrictions.Eq("offer.Status", ShiftExchangeOfferStatus.Pending))
 							.List<ShiftExchangeOffer>();
-					result.AddRange(batchResult);
-				});
-			return result;
+				
 		}
 
 		private static void sortPersonRequests(ICriteria criteria, IList<RequestsSortingOrder> sortingOrders)

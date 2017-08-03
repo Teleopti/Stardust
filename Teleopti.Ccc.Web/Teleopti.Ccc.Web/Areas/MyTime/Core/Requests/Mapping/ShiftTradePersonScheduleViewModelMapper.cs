@@ -53,16 +53,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var myScheduleDay = _personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new List<IPerson>
 				{_loggedOnUser.CurrentUser()}).FirstOrDefault();
 
-			var persons = _possibleShiftTradePersonsProvider.RetrievePersons(inputData);
-			var shiftTradeRequests = _personRequestRepository.FindShiftExchangeOffersForBulletin(persons.Persons,
-					inputData.ShiftTradeDate).Where(x => x.IsWantedSchedule(myScheduleDay));
 
-			var allPossibleScheduleDayTuples = shiftTradeRequests.Select(
+			var shiftTradeRequests = _personRequestRepository.FindShiftExchangeOffersForBulletin(null,inputData.ShiftTradeDate).Where(x => x.IsWantedSchedule(myScheduleDay));
+
+			var ids = new HashSet<Guid>();
+			var shiftExchangeOffers = shiftTradeRequests as IShiftExchangeOffer[] ?? shiftTradeRequests.ToArray();
+			foreach (var request in shiftExchangeOffers)
+			{
+				if (request.Person.Id != null) ids.Add(request.Person.Id.Value);
+			}
+
+			var personDictionary = _possibleShiftTradePersonsProvider.RetrievePersons(inputData, ids.ToArray())
+							.Persons.Distinct()
+							.ToDictionary(p => p.Id);
+
+			var allPossibleScheduleDayTuples = shiftExchangeOffers.Select(
 				req =>
 				{
 					var person = req.Person;
+					if (!personDictionary.ContainsKey(person.Id))
+					{
+						return null;
+					}
 					var scheduleDay =
-						_personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] {person}).SingleOrDefault();
+						_personScheduleProvider.GetScheduleForPersons(inputData.ShiftTradeDate, new[] { person }).SingleOrDefault();
 					if (_teamScheduleProjectionProjectionProvider.IsFullDayAbsence(scheduleDay) ||
 						_teamScheduleProjectionProjectionProvider.IsOvertimeOnDayOff(scheduleDay))
 					{

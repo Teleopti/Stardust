@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -40,6 +42,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			};
 
 			return datePersons;
+		}
+
+		public DatePersons RetrievePersons(ShiftTradeScheduleViewModelData shiftTradeArguments, Guid[] personIds)
+		{
+			var personList = _shiftTradePersonProvider.RetrievePeopleOptimized(shiftTradeArguments.ShiftTradeDate, personIds);
+
+
+			var datePersons = new DatePersons
+			{
+				Date = shiftTradeArguments.ShiftTradeDate,
+				Persons = personList
+			};
+
+			return datePersons;
+
 		}
 	}
 }
