@@ -180,6 +180,7 @@
     <Compile Include="FakeData\FakeLatestStatisticsIntervalIdLoader.cs" />
     <Compile Include="FakeData\FakeNewBusinessRuleCollection.cs" />
     <Compile Include="FakeData\FakePersonSkillProvider.cs" />
+    <Compile Include="FakeData\FakePossibleShiftTradePersonsProvider.cs" />
     <Compile Include="FakeData\FakePushMessageDialogueRepository.cs" />
     <Compile Include="FakeData\FakeSchedulingResultStateHolderProvider.cs" />
     <Compile Include="FakeData\FakeScheduleRangePersister.cs" />

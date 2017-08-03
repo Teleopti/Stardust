@@ -48,63 +48,57 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(data);
-			return getShiftTradeScheduleViewModel(data.Paging, data.ShiftTradeDate, data.TimeFilter,data.TimeSortOrder, possibleTradePersons);
+			return getShiftTradeScheduleViewModel(data.Paging, data.ShiftTradeDate, data.TimeFilter, data.TimeSortOrder, possibleTradePersons);
 		}
 
-		private IEnumerable<IShiftExchangeOffer> getMatchShiftExchangeOffers(IEnumerable<IPerson> persons, DateOnly shiftTradeDate)
+		private IEnumerable<IShiftExchangeOffer> getMatchShiftExchangeOffers(DateOnly shiftTradeDate)
 		{
 			var myScheduleDay =
-				_scheduleProvider.GetScheduleForPersons(shiftTradeDate, new List<IPerson> {_loggedOnUser.CurrentUser()})
+				_scheduleProvider.GetScheduleForPersons(shiftTradeDate, new List<IPerson> { _loggedOnUser.CurrentUser() })
 					.FirstOrDefault();
 
 			if (myScheduleDay == null)
 			{
 				return new List<IShiftExchangeOffer>();
 			}
-			else
-			{
-				var result = _personRequestRepository.FindShiftExchangeOffersForBulletin(persons, shiftTradeDate);
-				return result.Where(x => x.IsWantedSchedule(myScheduleDay));
-			}			
+			var result = _personRequestRepository.FindShiftExchangeOffersForBulletin(shiftTradeDate);
+			return result.Where(x => x.IsWantedSchedule(myScheduleDay));
 		}
 
 		private IScheduleDay getScheduleDayForShiftExchangeOffer(IShiftExchangeOffer offer)
 		{
-			IEnumerable<IPerson> persons = new List<IPerson>() { offer.Person};
+			IEnumerable<IPerson> persons = new List<IPerson>() { offer.Person };
 			return _scheduleProvider.GetScheduleForPersons(offer.Date, persons).FirstOrDefault();
 		}
 
 		private IEnumerable<IShiftExchangeOffer> getMatchShiftExchangeOffers(IEnumerable<IShiftExchangeOffer> shiftExchangeOffers, TimeFilterInfo timeFilter)
 		{
-			var possibleTargets = shiftExchangeOffers.Select( x => new
+			var possibleTargets = shiftExchangeOffers.Select(x => new
 			{
-				ShiftExchangeOffer = x, 
+				ShiftExchangeOffer = x,
 				ScheduleDay = getScheduleDayForShiftExchangeOffer(x)
 			});
 
-			Func<IScheduleDay, bool> filterFunc = (s =>
+			Func<IScheduleDay, bool> filterFunc = s =>
 			{
-				if (timeFilter.IsDayOff && s.HasDayOff())
+				if (s != null && timeFilter.IsDayOff && s.HasDayOff())
 				{
 					return true;
 				}
 
-				var period = s.ProjectionService().CreateProjection().Period();
+				var period = s?.ProjectionService().CreateProjection().Period();
 				if (period.HasValue)
 				{
 					bool startMatch = timeFilter.StartTimes.IsEmpty() ||
-					                  !timeFilter.StartTimes.Where(start => start.Contains(period.Value.StartDateTime)).IsEmpty();
+									  !timeFilter.StartTimes.Where(start => start.Contains(period.Value.StartDateTime)).IsEmpty();
 					bool endMatch = timeFilter.EndTimes.IsEmpty() ||
-					                !timeFilter.EndTimes.Where(end => end.Contains(period.Value.EndDateTime)).IsEmpty();
+									!timeFilter.EndTimes.Where(end => end.Contains(period.Value.EndDateTime)).IsEmpty();
 					return startMatch && endMatch;
 				}
-				else
-				{					
-					return !s.HasDayOff() && timeFilter.IsEmptyDay;
-				}
-			});
+				return s != null && !s.HasDayOff() && timeFilter.IsEmptyDay;
+			};
 
-			return possibleTargets.Where(x => filterFunc(x.ScheduleDay)).Select(x => x.ShiftExchangeOffer);			
+			return possibleTargets.Where(x => filterFunc(x.ScheduleDay)).Select(x => x.ShiftExchangeOffer);
 		}
 
 
@@ -114,15 +108,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				return new ShiftTradeScheduleViewModel();
 			}
-			var possibleTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(data);
-			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(data.ShiftTradeDate);
-			var myScheduleViewModel = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
 
-			var filteredShiftExchangeOffers = getMatchShiftExchangeOffers(possibleTradePersons.Persons, data.ShiftTradeDate);
+			var filteredShiftExchangeOffers = getMatchShiftExchangeOffers(data.ShiftTradeDate);
+			var ids = new HashSet<Guid>();
+			var shiftExchangeOffers = filteredShiftExchangeOffers as IShiftExchangeOffer[] ?? filteredShiftExchangeOffers.ToArray();
+			foreach (var request in shiftExchangeOffers)
+			{
+				if (request.Person.Id != null) ids.Add(request.Person.Id.Value);
+			}
+
+			var personDictionary = _possibleShiftTradePersonsProvider.RetrievePersons(data, ids.ToArray())
+								.Persons.Distinct()
+								.ToDictionary(p => p.Id);
+
+			filteredShiftExchangeOffers = filteredShiftExchangeOffers.Where(a => personDictionary.ContainsKey(a.Person.Id.Value));
 			if (data.TimeFilter != null)
 			{
 				filteredShiftExchangeOffers = getMatchShiftExchangeOffers(filteredShiftExchangeOffers, data.TimeFilter);
 			}
+
+			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(data.ShiftTradeDate);
+			var myScheduleViewModel = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
 
 			if (myScheduleViewModel != null)
 			{
@@ -143,9 +149,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var possibleTradeScheduleNum = possibleTradeSchedule.Any()
 				? possibleTradeSchedule.First().Total
 				: 0;
-			var pageCount = possibleTradeScheduleNum%paging.Take != 0
-				? possibleTradeScheduleNum/paging.Take + 1
-				: possibleTradeScheduleNum/paging.Take;
+			var pageCount = possibleTradeScheduleNum % paging.Take != 0
+				? possibleTradeScheduleNum / paging.Take + 1
+				: possibleTradeScheduleNum / paging.Take;
 
 			var timeLineHours = _shiftTradeTimeLineHoursViewModelMapper.Map(mySchedule, possibleTradeSchedule,
 				shiftTradeDate);
@@ -160,14 +166,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		}
 
 		private ShiftTradeScheduleViewModel getShiftTradeScheduleViewModel(Paging paging, DateOnly shiftTradeDate,
-			TimeFilterInfo timeFilter,string timeSortOrder, DatePersons possibleTradePersons)
+			TimeFilterInfo timeFilter, string timeSortOrder, DatePersons possibleTradePersons)
 		{
 			var ret = new ShiftTradeScheduleViewModel();
 			var myScheduleDayReadModel = _shiftTradeRequestProvider.RetrieveMySchedule(shiftTradeDate);
 			var mySchedule = _shiftTradePersonScheduleViewModelMapper.Map(myScheduleDayReadModel, true);
 			ret.MySchedule = mySchedule;
 			var possibleTradeSchedule = new List<ShiftTradeAddPersonScheduleViewModel>();
-			if (mySchedule == null ||!mySchedule.IsFullDayAbsence)
+			if (mySchedule == null || !mySchedule.IsFullDayAbsence)
 			{
 				possibleTradeSchedule = timeFilter == null
 				? getPossibleTradeSchedules(possibleTradePersons, paging, timeSortOrder).ToList()
@@ -194,11 +200,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return ret;
 		}
 
-		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getBulletinSchedules(IEnumerable<IShiftExchangeOffer> offers , Paging paging)
+		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getBulletinSchedules(IEnumerable<IShiftExchangeOffer> offers, Paging paging)
 		{
 			var offerList = offers.ToList();
 			if (offerList.Any())
-			{                                              
+			{
 				var schedules = _shiftTradeRequestProvider.RetrieveBulletinTradeSchedules(offerList.Select(x => x.ShiftExchangeOfferId), paging);
 				return _shiftTradePersonScheduleViewModelMapper.Map(schedules);
 			}
@@ -207,7 +213,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		}
 
 		private IEnumerable<ShiftTradeAddPersonScheduleViewModel> getPossibleTradeSchedules(DatePersons datePersons,
-			Paging paging,string timeSortOrder)
+			Paging paging, string timeSortOrder)
 		{
 			if (datePersons.Persons.Any())
 			{

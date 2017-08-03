@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				{_loggedOnUser.CurrentUser()}).FirstOrDefault();
 
 
-			var shiftTradeRequests = _personRequestRepository.FindShiftExchangeOffersForBulletin(null,inputData.ShiftTradeDate).Where(x => x.IsWantedSchedule(myScheduleDay));
+			var shiftTradeRequests = _personRequestRepository.FindShiftExchangeOffersForBulletin(inputData.ShiftTradeDate).Where(x => x.IsWantedSchedule(myScheduleDay));
 
 			var ids = new HashSet<Guid>();
 			var shiftExchangeOffers = shiftTradeRequests as IShiftExchangeOffer[] ?? shiftTradeRequests.ToArray();

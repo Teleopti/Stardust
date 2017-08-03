@@ -1717,8 +1717,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferReq2);
 
 			var foundShiftExchangeRequests =
-				new PersonRequestRepository(UnitOfWork).FindShiftExchangeOffersForBulletin(new[] {_person},
-					new DateOnly(startDate)).ToList();
+				new PersonRequestRepository(UnitOfWork).FindShiftExchangeOffersForBulletin(new DateOnly(startDate)).ToList();
 
 			Assert.AreEqual(1, foundShiftExchangeRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundShiftExchangeRequests[0]));

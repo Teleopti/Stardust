@@ -130,8 +130,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IList<IShiftExchangeOffer> FindOfferByStatus(IPerson person, DateOnly date, ShiftExchangeOfferStatus status);
 
-		IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,
-			DateOnly shiftTradeDate);
+		IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(DateOnly shiftTradeDate);
 
 		IList<Guid> GetWaitlistRequests(DateTimePeriod dateTimePeriod);
 

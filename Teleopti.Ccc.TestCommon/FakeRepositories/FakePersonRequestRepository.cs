@@ -181,12 +181,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			throw new NotImplementedException();
 		}
 
-		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(IEnumerable<IPerson> personList,
-			DateOnly shiftTradeDate)
+		public IEnumerable<IShiftExchangeOffer> FindShiftExchangeOffersForBulletin(DateOnly shiftTradeDate)
 		{
 			var result = RequestRepository.Where(request => request.Request.RequestType == RequestType.ShiftExchangeOffer
-															 && request.RequestedDate.Date == shiftTradeDate.Date
-															 && personList.Contains(request.Person) && request.IsPending)
+															 && request.RequestedDate.Date == shiftTradeDate.Date)
 				.Select(pr => (IShiftExchangeOffer)pr.Request)
 				.ToList();
 			return result;
