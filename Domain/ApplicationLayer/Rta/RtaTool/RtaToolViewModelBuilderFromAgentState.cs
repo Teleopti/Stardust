@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
 					into g
 					select g
 				)
-				.Select(g => g.OrderBy(v => _random.Next()).Take(25))
+				.Select(g => g.OrderBy(v => _random.Next()).Take(15))
 				.SelectMany(x => x)
 				.ToArray();
 		}
