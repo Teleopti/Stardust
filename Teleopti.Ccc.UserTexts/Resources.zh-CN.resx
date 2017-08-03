@@ -13913,4 +13913,12 @@ Teleopti R&amp;D</value>
   <data name="WFMAppGuideTitle" xml:space="preserve">
     <value>Teleopti WFM 手机应用</value>
   </data>
+  <data name="AnywhereMigrated" xml:space="preserve">
+    <value>Anywhere 已经迁移到 {0}WFM{1}！</value>
+    <comment>Message displayed for users on access Anywhere</comment>
+  </data>
+  <data name="PageWillBeRedirected" xml:space="preserve">
+    <value>页面将在 {0} 秒内自动跳转至 WFM……</value>
+    <comment>Message displayed for users on access Anywhere</comment>
+  </data>
 </root>

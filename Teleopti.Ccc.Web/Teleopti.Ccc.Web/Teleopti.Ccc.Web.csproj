@@ -1378,6 +1378,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="appdownload.html" />
+    <Content Include="Areas\Anywhere\Views\Application\redirect.aspx" />
     <Content Include="Areas\MyTime\Content\Css\MobileApp.css" />
     <Content Include="Areas\MyTime\Content\Images\download-on-the-app-store.png" />
     <Content Include="Areas\MyTime\Content\Images\google-play-badge.png" />

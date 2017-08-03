@@ -2816,6 +2816,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Anywhere has been migrated to {0}WFM{1}!.
+        /// </summary>
+        public static string AnywhereMigrated {
+            get {
+                return ResourceManager.GetString("AnywhereMigrated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Appointment time.
         /// </summary>
         public static string ApointmentTime {
@@ -22091,6 +22100,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PageSize {
             get {
                 return ResourceManager.GetString("PageSize", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This page will automatic redirect to WFM in {0} seconds....
+        /// </summary>
+        public static string PageWillBeRedirected {
+            get {
+                return ResourceManager.GetString("PageWillBeRedirected", resourceCulture);
             }
         }
         

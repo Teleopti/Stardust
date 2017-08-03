@@ -4,12 +4,10 @@ using System.Web.Mvc;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -25,17 +23,17 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly IAuthorization _authorization;
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
-		private readonly IToggleManager _toggles;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly INow _now;
 		private readonly ICurrentDataSource _currentDataSource;
 
-		public ApplicationController(IAuthorization authorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, IIanaTimeZoneProvider ianaTimeZoneProvider, IToggleManager toggles, IUserTimeZone userTimeZone, INow now, ICurrentDataSource currentDataSource)
+		public ApplicationController(IAuthorization authorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
+			IIanaTimeZoneProvider ianaTimeZoneProvider, IUserTimeZone userTimeZone, INow now,
+			ICurrentDataSource currentDataSource)
 		{
 			_authorization = authorization;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
-			_toggles = toggles;
 			_userTimeZone = userTimeZone;
 			_now = now;
 			_currentDataSource = currentDataSource;
@@ -44,6 +42,34 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		public ViewResult Index()
 		{
 			return new ViewResult();
+		}
+
+		public ActionResult Redirect()
+		{
+			const int waitingTimeInSecond = 5;
+
+			var principal = _currentTeleoptiPrincipal.Current();
+			var currentUserName = principal.Identity.Name;
+			var currentBusinessUnit = (principal.Identity as ITeleoptiIdentity)?.BusinessUnit.Name;
+			var resAnywhereMigrated = string.Format(UserTexts.Resources.AnywhereMigrated, "<a href='./WFM'>", "</a>");
+			var resPageWillBeRedirected = string.Format(UserTexts.Resources.PageWillBeRedirected, waitingTimeInSecond);
+
+			return new ViewResult
+			{
+				ViewData = new ViewDataDictionary
+				{
+					{"WaitingTimeInSecond", waitingTimeInSecond * 1000 },
+					{"CurrentUserName",  currentUserName},
+					{"CurrentBusinessUnit",  currentBusinessUnit},
+					{"ResTeamSchedule", UserTexts.Resources.Schedules},
+					{"ResRta", UserTexts.Resources.RealTimeAdherence},
+					{"ResReports", UserTexts.Resources.Reports},
+					{"ResSignOut", UserTexts.Resources.SignOut},
+					{"ResMyTeamMigrated", resAnywhereMigrated},
+					{"ResPageWillBeRedirected", resPageWillBeRedirected }
+				},
+				ViewName = "Redirect"
+			};
 		}
 
 		[UnitOfWork, HttpGet]
@@ -67,8 +93,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
 			var currentName = _currentDataSource.CurrentName();
 			var isSmsLinkAvailable = DefinedLicenseDataFactory.HasLicense(currentName) &&
-									  DefinedLicenseDataFactory.GetLicenseActivator(currentName).EnabledLicenseOptionPaths.Contains(
-										  DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
+									 DefinedLicenseDataFactory.GetLicenseActivator(currentName).EnabledLicenseOptionPaths.Contains(
+										 DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
 
 			return Json(new
 			{

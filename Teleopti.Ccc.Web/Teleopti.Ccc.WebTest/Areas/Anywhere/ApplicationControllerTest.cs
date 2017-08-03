@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Web;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
 			ianaTimeZoneProvider = MockRepository.GenerateMock<IIanaTimeZoneProvider>();
 			currentDataSource = new FakeCurrentDatasource("ds1");
-			target = new ApplicationController(authorization, currentTeleoptiPrincipal, ianaTimeZoneProvider, new FakeToggleManager(), new UtcTimeZone(), new Now(), currentDataSource);
+			target = new ApplicationController(authorization, currentTeleoptiPrincipal, ianaTimeZoneProvider, new UtcTimeZone(), new Now(), currentDataSource);
 		}
 
 		[TearDown]
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var result = target.NavigationContent();
 			dynamic content = result.Data;
 
-			((object) content.UserName).Should().Be.EqualTo("fake");
+			((object)content.UserName).Should().Be.EqualTo("fake");
 			((object)content.IsMyTimeAvailable).Should().Be.EqualTo(true);
 			((object)content.IsRealTimeAdherenceAvailable).Should().Be.EqualTo(false);
 			((object)content.PersonId).Should().Be.EqualTo(person.Id);

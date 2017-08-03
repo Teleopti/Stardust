@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere
 			var mapRoute = context.MapRoute(
 				"Anywhere-authentication",
 				"Anywhere/Authentication/{action}",
-				new { controller = "Authentication", action = "SignIn", area = "Start", origin = "Anywhere" },
+				new {controller = "Authentication", action = "SignIn", area = "Start", origin = "Anywhere"},
 				null,
 				new[] {"Teleopti.Ccc.Web.Areas.Start.*"});
 			mapRoute.DataTokens["area"] = "Start";
@@ -19,9 +19,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere
 			context.MapRoute(
 				"Anywhere-default",
 				"Anywhere/{controller}/{action}",
-				new { controller = "Application", action = "Index" }
-				);
+				new {controller = "Application", action = "Redirect"}
+			);
 		}
 	}
-
 }

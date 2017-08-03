@@ -16335,4 +16335,12 @@ Do you want to participate?</value>
     <value>Total Agents In Alarm</value>
     <comment>Total Agents In Alarm</comment>
   </data>
+  <data name="AnywhereMigrated" xml:space="preserve">
+    <value>Anywhere has been migrated to {0}WFM{1}!</value>
+    <comment>Message displayed for users on access Anywhere</comment>
+  </data>
+  <data name="PageWillBeRedirected" xml:space="preserve">
+    <value>This page will automatic redirect to WFM in {0} seconds...</value>
+    <comment>Message displayed for users on access Anywhere</comment>
+  </data>
 </root>
