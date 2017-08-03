@@ -93,54 +93,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Anywhere\ManageAgentScheduleInOtherTimeZone.feature.cs">
-      <DependentUpon>ManageAgentScheduleInOtherTimeZone.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\ModifyAbsence.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ModifyAbsence.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Anywhere\ScheduleChangePermissionControl.feature.cs">
-      <DependentUpon>ScheduleChangePermissionControl.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\MoveActivityOnShift.feature.cs">
-      <DependentUpon>MoveActivityOnShift.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\AddActivityOnShift.feature.cs">
-      <DependentUpon>AddActivityOnShift.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\AddIntradayAbsenceOnShift.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AddIntradayAbsenceOnShift.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Anywhere\BusterTests.feature.cs">
-      <DependentUpon>BusterTests.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\ViewScheduleActivityDetails.feature.cs">
-      <DependentUpon>ViewScheduleActivityDetails.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\Reports.feature.cs">
-      <DependentUpon>Reports.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Bindings\Generic\QueueSourceDefinitions.cs" />
     <Compile Include="Bindings\Generic\RuleStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\Anywhere\DescriptionToggle.cs" />
     <Compile Include="Bindings\Generic\Diagnosis\DiagnosisViewPageStepDefinition.cs" />
     <Compile Include="Bindings\Generic\EmptyDayStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\LogonAsAnotherUserStepDefinitions.cs" />
@@ -315,11 +269,6 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Anywhere\Session.feature.cs">
-      <DependentUpon>Session.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="SignOut.feature.cs">
       <DependentUpon>SignOut.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -337,36 +286,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Anywhere\ViewFullDayAbsenceOnDayOff.feature.cs">
-      <DependentUpon>ViewFullDayAbsenceOnDayOff.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\ViewFullDayAbsence.feature.cs">
-      <DependentUpon>ViewFullDayAbsence.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\TeamScheduleSorting.feature.cs">
-      <DependentUpon>TeamScheduleSorting.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\ViewConfidentialAbsence.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ViewConfidentialAbsence.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Anywhere\ViewDaysOff.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ViewDaysOff.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Anywhere\ViewGroupSchedule.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ViewGroupSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Bindings\Generic\CalendarLinkStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\GroupPageStepDefinitions.cs" />
@@ -441,26 +360,6 @@
     </Compile>
     <Compile Include="Data\Setups\Configurable\CalendarLinkConfigurable.cs" />
     <Compile Include="Data\ScenarioDataFactory.cs" />
-    <Compile Include="Anywhere\AddFullDayAbsence.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Anywhere\RemoveAbsence.feature.cs">
-      <DependentUpon>RemoveAbsence.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\ViewPersonSchedule.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ViewPersonSchedule.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Anywhere\ViewTeamSchedule.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ViewTeamSchedule.feature</DependentUpon>
-    </Compile>
     <Compile Include="MyTime\AsmSummerToWinter.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -474,12 +373,10 @@
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="MyTime\AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SkillStepDefinitions.cs" />
     <Compile Include="Data\Setups\DoNotUse\AbsenceInContractTime.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="Bindings\Generic\ServerStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\Anywhere\ApplicationPageStepDefinition.cs" />
     <Compile Include="Session.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -489,7 +386,6 @@
     <Compile Include="Data\Setups\DoNotUse\AbsenceTimeConfigurable.cs" />
     <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\TeamStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
@@ -1052,62 +948,6 @@
       <Link>phantomjs.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Anywhere\ManageAgentScheduleInOtherTimeZone.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ManageAgentScheduleInOtherTimeZone.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\ModifyAbsence.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ModifyAbsence.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\ScheduleChangePermissionControl.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ScheduleChangePermissionControl.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\MoveActivityOnShift.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>MoveActivityOnShift.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\AddActivityOnShift.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AddActivityOnShift.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\AddIntradayAbsenceOnShift.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AddIntradayAbsenceOnShift.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\BusterTests.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>BusterTests.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\ViewScheduleActivityDetails.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewScheduleActivityDetails.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\ViewFullDayAbsenceOnDayOff.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewFullDayAbsenceOnDayOff.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\ViewFullDayAbsence.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewFullDayAbsence.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\ViewGroupSchedule.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewGroupSchedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\TeamScheduleSorting.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>TeamScheduleSorting.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\ViewDaysOff.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewDaysOff.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\Reports.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Reports.feature.cs</LastGenOutput>
-    </None>
     <None Include="MultiTenancy\Tenants.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>Tenants.feature.cs</LastGenOutput>
@@ -1196,10 +1036,6 @@
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MessageBrokerTool.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\Session.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Session.feature.cs</LastGenOutput>
-    </None>
     <None Include="SignOut.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SignOut.feature.cs</LastGenOutput>
@@ -1211,10 +1047,6 @@
     <Content Include="phantomjs-license.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="Anywhere\ViewConfidentialAbsence.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewConfidentialAbsence.feature.cs</LastGenOutput>
-    </None>
     <None Include="SignInWithProviders.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>SignInWithProviders.feature.cs</LastGenOutput>
@@ -1258,22 +1090,6 @@
     <None Include="MyTime\ShiftTradeRequestEdit.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ShiftTradeRequestEdit.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\RemoveAbsence.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>RemoveAbsence.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\ViewPersonSchedule.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewPersonSchedule.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\AddFullDayAbsence.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AddFullDayAbsence.feature.cs</LastGenOutput>
-    </None>
-    <None Include="Anywhere\ViewTeamSchedule.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewTeamSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="MyTime\PreferencesExtendedTemplate.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

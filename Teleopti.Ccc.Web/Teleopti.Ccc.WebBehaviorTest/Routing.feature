@@ -53,12 +53,6 @@ Scenario: Browse to MyTime and sign in
 	When I navigate to MyTime
 	And I sign in
 	Then I should see MyTime
-	
-Scenario: Browse to Anywhere and sign in
-	Given I have the role 'Access to all areas'
-	When I navigate to Anywhere
-	And I sign in
-	Then I should see Anywhere
 
 Scenario: keep url
 	Given I have the role 'Access to all areas'
