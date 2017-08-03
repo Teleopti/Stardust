@@ -100,7 +100,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 				}
 
 				if (dataSeries.ScheduledStaffing[index].HasValue)
-					dataSeries.AbsoluteDifference[index] = dataSeries.ScheduledStaffing[index] - dataSeries.ForecastedStaffing[index];
+				{
+					dataSeries.AbsoluteDifference[index] = Math.Round((double)dataSeries.ScheduledStaffing[index], 1) -
+														   Math.Round((double)dataSeries.ForecastedStaffing[index], 1);
+					dataSeries.AbsoluteDifference[index] = Math.Round((double) dataSeries.AbsoluteDifference[index],1);
+				}
+					
 			}
 		}
 
