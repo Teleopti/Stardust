@@ -85,6 +85,7 @@
               <ul class="wfm-list">
                 <li ng-click="vm.modifyPanelHelper(true)">Add override</li>
                 <li ng-click="vm.modifyPanelHelper(false)">Add campaign</li>
+                <li ng-click="vm.clearCampaign()">Clear campaign</li>
                 <li ng-click="vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days)">Clear selection</li>
               </ul>
             </span>
@@ -93,7 +94,7 @@
         </div>
       </div>
       <div class="con-row">
-        <div class="con-flex">
+        <div class="con-flex" >
           <forecast-chart chart-id="vm.selectedWorkload.ChartId" selectable="true" refresh="vm.loadChart" on-click="vm.pointClick"> </forecast-chart>
         </div>
       </div>

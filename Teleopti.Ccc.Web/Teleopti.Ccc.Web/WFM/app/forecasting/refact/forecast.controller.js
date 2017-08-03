@@ -86,8 +86,8 @@
       });
     }
 
-    function loadChart(chartId) {
-      console.log('FAILED GEN');
+    function loadChart() {
+      console.log('FAILED GEN1');
       return;
     }
 

@@ -19,27 +19,14 @@
     vm.overridePanel = false;
     vm.applyOverride = applyOverride;
     vm.applyCampaign = applyCampaign;
+    vm.clearCampaign = clearCampaign;
     vm.overrideStatus = {
       tasks: false,
       talkTime: false,
       acw: false
     };
 
-    function manageLocalStorage() {
-      if ($stateParams.days !== undefined && $stateParams.days.length > 0) {
-        $window.localStorage['workload'] = angular.toJson($stateParams);
-      }
-      storage = angular.fromJson($window.localStorage['workload']);
-    };
     manageLocalStorage();
-
-    vm.selectedWorkload = {
-      Id: storage.workloadId,
-      ChartId: storage.skill.ChartId,
-      SkillId: storage.skill.SkillId,
-      Days: storage.days,
-      Name: storage.skill.Workload.Name
-    }
 
     function resetForms() {
       vm.campaignPercentage = null;
@@ -64,6 +51,11 @@
         vm.overridePanel = false;
       }
       resetForms();
+    }
+
+    function clearCampaign() {
+      vm.campaignPercentage = 0;
+      applyCampaign();
     }
 
     function applyCampaign() {
@@ -115,13 +107,30 @@
           })
         };
 
-        function loadChart(chartId, days) {
-          //placeholder function
+        function loadChart() {
+          console.log('FAILED GEN2');
+          return;
         }
 
         function pointClick(days) {
           vm.selectedDayCount = days;
         }
+
+        function manageLocalStorage() {
+          if ($stateParams.days !== undefined && $stateParams.days.length > 0) {
+            $window.localStorage['workload'] = angular.toJson($stateParams);
+          }
+          storage = angular.fromJson($window.localStorage['workload']);
+
+          vm.selectedWorkload = {
+            Id: storage.workloadId,
+            ChartId: storage.skill.ChartId,
+            SkillId: storage.skill.SkillId,
+            Days: storage.days,
+            Name: storage.skill.Workload.Name
+          }
+          vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
+        };
       }
 
     })();
