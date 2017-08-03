@@ -77,5 +77,84 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 					}))
 				.Count().Should().Be(50);
 		}
+
+
+		[Test]
+		public void ShouldGetAgentStatesForEntireBu()
+		{
+
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var siteLondonId = Guid.NewGuid();
+			var siteParisId = Guid.NewGuid();
+
+			WithUnitOfWork.Do(() =>
+			{
+				
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = person1,
+					SiteId = siteLondonId
+
+				});
+
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = person2,
+					SiteId = siteParisId
+
+				});
+
+			});
+
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter
+				{
+					InAlarm = false
+				}))
+				.Select(x => x.SiteId.GetValueOrDefault())
+				.Should().Have.SameValuesAs(new[] {siteLondonId, siteParisId});
+
+		}
+
+		[Test]
+		public void ShouldGetAgentStatesInAlramForEntireBu()
+		{
+			Now.Is("2017-08-04 08:30");
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var siteLondonId = Guid.NewGuid();
+			var siteParisId = Guid.NewGuid();
+
+			WithUnitOfWork.Do(() =>
+			{
+
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = person1,
+					SiteId = siteLondonId,
+					AlarmStartTime = "2017-08-03 08:00".Utc(),
+					IsRuleAlarm = true
+
+				});
+
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = person2,
+					SiteId = siteParisId,
+					AlarmStartTime = "2017-08-03 08:00".Utc(),
+					IsRuleAlarm = true
+
+				});
+
+			});
+
+			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter
+			{
+				InAlarm = true
+			}))
+				.Select(x => x.SiteId.GetValueOrDefault())
+				.Should().Have.SameValuesAs(new[] { siteLondonId, siteParisId });
+
+		}
 	}
 }
