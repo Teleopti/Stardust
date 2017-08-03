@@ -8,7 +8,7 @@
 	StaffingController.$inject = ['staffingService', 'Toggle', 'UtilService', 'ChartService', '$filter', 'NoticeService', '$translate'];
 	function StaffingController(staffingService, toggleService, utilService, chartService, $filter, NoticeService, $translate) {
 		var vm = this;
-		vm.staffingDataAvailable = false;
+
 		vm.selectedSkill;
 		vm.selectedSkillArea;
 		vm.selectedSkillChange = selectedSkillChange;
@@ -18,52 +18,61 @@
 		vm.suggestOvertime = suggestOvertime;
 		vm.addOvertime = addOvertime;
 		vm.navigateToNewDay = navigateToNewDay;
-		vm.hasSuggestionData = undefined;
-		vm.hasRequestedSuggestion = false;
-		vm.hasRequestedOvertime = false;
-		vm.timeSerie = [];
-		vm.overTimeModels = [];
-		vm.selectedDate = new Date();
-		vm.options = { customClass: getDayClass };
-		vm.useShrinkage = false;
 		vm.useShrinkageForStaffing = useShrinkageForStaffing;
 		vm.generateChart = generateChart;
 		vm.dynamicIcon = dynamicIcon;
-		vm.compensations = [];
-		vm.showOverstaffSettings = false;
-		vm.openImportData = false;
 		vm.toggleOverstaffSettings = toggleOverstaffSettings;
 		vm.validSettings = validSettings;
+		vm.isRunning = isRunning;
+		vm.isNoSuggestion = isNoSuggestion;
+
+		vm.showOverstaffSettings = false;
+		vm.openImportData = false;
+		vm.useShrinkage = false;
+		vm.staffingDataAvailable = false;
+		vm.hasSuggestionData = false;
 		vm.showBpoInterface = false;
+
+		vm.compensations = [];
+		vm.selectedDate = new Date();
 
 		var events = [];
 		var allSkills = [];
 		var allSkillAreas = [];
+		var overTimeModels = [];
+		var timeSerie = [];
 		var currentSkills;
 		var staffingData = {};
 		var suggestedStaffingData = {};
+		var isRequestingSuggestions = false;
+		var isRequestingOvertime = false;
+		var hasRequestedSuggestions = false;
 		var sample = {
 			date: null,
 			status: 'full'
 		}
+
 		getSkills();
 		getSkillAreas();
-		prepareDays();
 		getCompensations();
 		getLicenseForBpo();
 
-		function prepareDays() {
-			for (var i = 0; i < 14; i++) {
-				var newDate = new Date();
-				newDate.setDate(newDate.getDate() + i);
-				var insertData = angular.copy(sample);
-				insertData.date = newDate;
-				events.push(insertData);
-			}
+		function toggleOverstaffSettings() {
+			return vm.showOverstaffSettings = !vm.showOverstaffSettings;
 		}
 
-		function toggleOverstaffSettings() {
-			vm.showOverstaffSettings = !vm.showOverstaffSettings;
+		function isRunning() {
+			return isRequestingSuggestions || isRequestingOvertime;
+		}
+
+		function isNoSuggestion() {
+			return !vm.hasSuggestionData && hasRequestedSuggestions;
+		}
+
+		function clearSuggestions() {
+			vm.hasSuggestionData = false;
+			suggestedStaffingData = {};
+			hasRequestedSuggestions = false;
 		}
 
 		function getLicenseForBpo() {
@@ -71,21 +80,6 @@
 			data.$promise.then(function (response) {
 				vm.showBpoInterface = response.isLicenseAvailable;
 			})
-		}
-
-		function getDayClass(data) {
-			var date = data.date,
-				mode = data.mode;
-			if (mode === 'day') {
-				var dayToCheck = new Date(date).setHours(0, 0, 0, 0);
-				for (var i = 0; i < events.length; i++) {
-					var currentDay = new Date(events[i].date).setHours(0, 0, 0, 0);
-					if (dayToCheck === currentDay) {
-						return events[i].status;
-					}
-				}
-			}
-			return '';
 		}
 
 		function getSkillStaffingByDate(skillId, date, shrinkage) {
@@ -100,7 +94,7 @@
 
 		function useShrinkageForStaffing() {
 			vm.useShrinkage = !vm.useShrinkage;
-			generateChart(vm.selectedSkill, vm.selectedArea);
+			return generateChart(vm.selectedSkill, vm.selectedArea);
 		}
 
 		function generateChart(skill, area) {
@@ -113,7 +107,7 @@
 			}
 			query.$promise.then(function (result) {
 				if (staffingPrecheck(result.DataSeries)) {
-					vm.timeSerie = result.DataSeries.Time;
+					timeSerie = result.DataSeries.Time;
 					staffingData = utilService.prepareStaffingData(result);
 					generateChartForView(staffingData);
 				} else {
@@ -131,11 +125,6 @@
 			}
 			vm.staffingDataAvailable = false;
 			return false;
-		}
-
-		function clearSuggestions() {
-			vm.hasSuggestionData = undefined;
-			vm.hasRequestedSuggestion = false;
 		}
 
 		function navigateToNewDay() {
@@ -231,21 +220,19 @@
 		};
 
 		function addOvertime() {
-			vm.hasSuggestionData = false;
-			if (vm.overTimeModels.length === 0) {
-				vm.hasRequestedSuggestion = false;
+			if (overTimeModels.length === 0) {
 				return;
 			}
-			vm.hasRequestedOvertime = true;
-			var query = staffingService.addOvertime.save(vm.overTimeModels);
+			isRequestingOvertime = true;
+			var query = staffingService.addOvertime.save(overTimeModels);
 			query.$promise.then(function () {
 				if (vm.selectedSkill) {
 					generateChart(vm.selectedSkill, null);
 				} else if (vm.selectedSkillArea) {
 					generateChart(null, vm.selectedSkillArea);
 				}
-				vm.hasRequestedOvertime = false;
-				vm.hasRequestedSuggestion = false;
+				clearSuggestions();
+				isRequestingOvertime = false;
 			});
 		};
 
@@ -265,7 +252,8 @@
 		}
 
 		function suggestOvertime(form) {
-			vm.hasRequestedSuggestion = true;
+			hasRequestedSuggestions = false;
+			isRequestingSuggestions = true;
 			var skillIds;
 			var settings = utilService.prepareSettings(form);
 			if (currentSkills.Skills) {
@@ -276,9 +264,10 @@
 				skillIds = [currentSkills.Id];
 			}
 
-			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: vm.timeSerie, OvertimePreferences: settings });
+			var query = staffingService.getSuggestion.save({ SkillIds: skillIds, TimeSerie: timeSerie, OvertimePreferences: settings });
 			query.$promise.then(function (response) {
-				vm.hasRequestedSuggestion = false;
+				isRequestingSuggestions = false;
+				hasRequestedSuggestions = true;
 				if (staffingPrecheck(response.DataSeries)) {
 					if (response.StaffingHasData) {
 						vm.hasSuggestionData = true;
@@ -288,7 +277,7 @@
 						return;
 					}
 					vm.staffingDataAvailable = true;
-					vm.overTimeModels = response.OverTimeModels;
+					overTimeModels = response.OverTimeModels;
 					generateChartForView(suggestedStaffingData, true);
 				} else {
 					vm.staffingDataAvailable = false;

@@ -49,7 +49,7 @@
                 </div>
                 <div class="con-flex datepicker-container" style="margin-top: -10px;">
                     <team-schedule-datepicker selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay(vm.selectedDate)"
-                        options="vm.options" class="inline-block"></team-schedule-datepicker>
+                        class="inline-block"></team-schedule-datepicker>
                 </div>
                 <div class="con-flex" ng-show="vm.showBpoInterface">
                     <button class="wfm-btn wfm-btn-primary" ng-click="vm.openImportData = true">Import Data</button>
@@ -59,20 +59,10 @@
     </div>
 </div>
 <div class="panel material-depth-1" ng-show="vm.staffingDataAvailable">
-    <md-progress-linear ng-show="vm.hasRequestedSuggestion || vm.hasRequestedOvertime" md-mode="indeterminate"></md-progress-linear>
+    <md-progress-linear ng-show="vm.isRunning()" md-mode="indeterminate"></md-progress-linear>
     <div class="sub-header">
         <h2>{{'Staffing' | translate}} - {{vm.selectedDate | date:'yyyy-MM-dd'}}
-            <div class="wfm-chip-wrap" ng-show="vm.hasRequestedSuggestion || vm.hasRequestedOvertime">
-                <div class="wfm-chip-wrap">
-                    <span class="wfm-chip">
-                        <span class="chip-handle">
-                            <i class="mdi mdi-alert-circle"></i>
-                        </span>
-                        <span class="chip-text">{{'Loading' | translate}}</span>
-                    </span>
-                </div>
-            </div>
-            <div class="wfm-chip-wrap" ng-show="vm.hasSuggestionData == false">
+            <div class="wfm-chip-wrap" ng-show="vm.isNoSuggestion()">
                 <div class="wfm-chip-wrap">
                     <span class="wfm-chip">
                         <span class="chip-handle chip-warning">
