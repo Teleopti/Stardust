@@ -16727,7 +16727,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This search will return results for more than {0} people, please refine your search by adding additional criteria...
+        ///   Looks up a localized string similar to This search will return results for more than {0} people, please refine your search by adding additional criteria..
         /// </summary>
         public static string MaxSearchPersonCountExceeded {
             get {

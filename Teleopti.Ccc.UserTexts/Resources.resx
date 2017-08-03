@@ -8717,7 +8717,7 @@ Period: {3}</value>
     <comment>denyreason when shifttrade is rejected because of the targettime</comment>
   </data>
   <data name="MaxSearchPersonCountExceeded" xml:space="preserve">
-    <value>This search will return results for more than {0} people, please refine your search by adding additional criteria..</value>
+    <value>This search will return results for more than {0} people, please refine your search by adding additional criteria.</value>
     <comment>error message for WFM/ShiftradeRequest when return results for more than {x} people</comment>
   </data>
   <data name="WorkflowControlSetNotSetDenyReason" xml:space="preserve">
