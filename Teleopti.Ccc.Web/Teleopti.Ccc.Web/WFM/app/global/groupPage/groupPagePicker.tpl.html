@@ -15,8 +15,8 @@
 									<div ng-if="o.origin.isParent" class="group md-button-toggle md-button md-ink-ripple">
 										<label class="clickable-area" tabindex="-1" for="group-{{o.id}}">
 											<div flex layout="row">
-												<div class="wfm-checkbox">
-													<input type="checkbox" id="group-{{o.id}}" ng-click="$ctrl.toggleGroup(o)" />
+												<div class="wfm-checkbox" ng-class="{'indeterminate': o.isIndeterminate()}">
+													<input type="checkbox" id="group-{{o.id}}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()" />
 													<span class="wfm-checkbox-toggle"></span>
 													<span class="wfm-checkbox-label" ng-bind-html="o.name"></span>
 												</div>
