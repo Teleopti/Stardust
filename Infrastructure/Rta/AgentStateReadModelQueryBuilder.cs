@@ -111,9 +111,13 @@ ORDER BY AlarmStartTime ASC ",
 						.Append("(" + string.Join(" OR ", selections.QueryFor(SelectionType.Org)) + ")");
 			}
 			else
+			{
 				builder
-					.Append(" WHERE a.IsDeleted = 0 AND ")
-					.Append("(" + string.Join(" OR ", selections.QueryFor(SelectionType.Org)) + ")");
+					.Append(" WHERE a.IsDeleted = 0 ");
+				if(selections.Any(SelectionType.Org))
+					builder.Append("AND (" + string.Join(" OR ", selections.QueryFor(SelectionType.Org)) + ")");
+			}
+				
 
 			if (selections.Any(SelectionType.ExcludeStateGroups))
 				builder

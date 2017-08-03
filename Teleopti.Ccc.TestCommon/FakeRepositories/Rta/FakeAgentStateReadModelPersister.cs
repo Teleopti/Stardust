@@ -208,8 +208,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			if (filter.InAlarm)
 				result = filterInAlarm(result)
 					.OrderBy(x => x.AlarmStartTime);
-
-			return result.ToArray();
+		
+			return result.Take(50).ToArray();
 		}
 		
 		private IEnumerable<AgentStateReadModel> includeSites(IEnumerable<Guid> siteIds)
