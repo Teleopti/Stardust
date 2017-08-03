@@ -13,7 +13,8 @@
     vm.selectedDayCount = [];
     vm.forecastModalObj = {};
     vm.currentWorkload = {
-      Days: []
+      Days: [],
+      Id: ''
     };
     vm.selectedScenario = {};
     vm.forecastPeriod = {
@@ -91,7 +92,6 @@
     }
 
     function getWorkloadForecastData(skill) {
-      console.log($state.current)
       vm.forecastModalObj = skill;
       vm.skillMaster.isForecastRunning = true;
       var wl = {
@@ -106,6 +106,7 @@
         function(data, status, headers, config) {
           vm.skillMaster.isForecastRunning = false;
           vm.currentWorkload.Days = data.Days;
+          vm.currentWorkload.Id = data.WorkloadId;
           vm.loadChart('chart'+ data.WorkloadId, data.Days);
         },
         function(data, status, headers, config) {
@@ -158,16 +159,17 @@
             ForecastStart: vm.forecastPeriod.startDate,
             ForecastEnd: vm.forecastPeriod.endDate,
             ScenarioId: vm.selectedScenario.Id,
-            SkillId: vm.forecastModalObj.SkillId
-          }), function(data, status, headers, config) {
-            if (status !== 200) {
-              console.log(data, 'Export failed');
-            }
+            SkillId: vm.forecastModalObj.SkillId,
+            WorkloadId: vm.currentWorkload.Id
+          }), function (data, status, headers, config) {
             var blob = new Blob([data], {
               type: headers['content-type']
             });
-            var d = moment().format('L');
-            saveAs(blob, d + ".xlsx");
+            var fileName = moment(vm.forecastPeriod.startDate).format('YYYY-MM-DD') +
+              ' - ' +
+              moment(vm.forecastPeriod.endDate).format('YYYY-MM-DD') +
+              '.xlsx';
+            saveAs(blob, fileName);
             vm.skillMaster.isForecastRunning = false;
             vm.exportModal = false;
           }, function(data, status, headers, config) {

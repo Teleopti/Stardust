@@ -47,7 +47,8 @@ function ForecastChartCtrl($translate, $filter) {
 			vttSeries: ['vtt'],
 			vtttSeries: ['vttt'],
 			vcamSeries: ['vcampaign'],
-			voverrideSeries: ['voverride']
+			voverrideSeries: ['voverride'],
+			vcomboSeries: ['vcombo']
 		}
 
 		for (var i = 0; i < days.length; i++) {
@@ -71,6 +72,11 @@ function ForecastChartCtrl($translate, $filter) {
 				preparedData.voverrideSeries.push(null);
 			}
 
+			if (days[i].vcombo) {
+				preparedData.vcomboSeries.push(days[i].vcombo);
+			} else{
+				preparedData.vcomboSeries.push(null);
+			}
 		}
 
 		chart = c3.generate({
@@ -81,6 +87,7 @@ function ForecastChartCtrl($translate, $filter) {
 					preparedData.dateSeries,
 					preparedData.vcamSeries,
 					preparedData.voverrideSeries,
+					preparedData.vcomboSeries,
 
 					preparedData.vtcSeries,
 					preparedData.vcSeries,
@@ -95,6 +102,7 @@ function ForecastChartCtrl($translate, $filter) {
 					vtc: $translate.instant('TotalCallsCaret'),
 					vcampaign: $translate.instant('Campaign'),
 					voverride: $translate.instant('Override'),
+					vcombo: $translate.instant('BothOverrideAndCampaignAdded'),
 					vc: $translate.instant('CallsCaret'),
 					vttt: $translate.instant('TotalTalkTimeCaret'),
 					vtt: $translate.instant('TalkTimeCaret'),
@@ -109,7 +117,8 @@ function ForecastChartCtrl($translate, $filter) {
 					vtacw: '#eb2e9e',
 					vacw: '#F488C8',
 					voverride: '#9C27B0',
-					vcampaign: '#EF5350'
+					vcampaign: '#EF5350',
+					vcombo: '#888'
 				},
 				hide: ['vc', 'vtt', 'vacw'],
 				selection: {
