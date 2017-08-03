@@ -51,7 +51,7 @@
                     <team-schedule-datepicker selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay(vm.selectedDate)"
                         options="vm.options" class="inline-block"></team-schedule-datepicker>
                 </div>
-                <div class="con-flex">
+                <div class="con-flex" ng-show="vm.showBpoInterface">
                     <button class="wfm-btn wfm-btn-primary" ng-click="vm.openImportData = true">Import Data</button>
                 </div>
             </div>
@@ -68,7 +68,7 @@
                         <span class="chip-handle">
                             <i class="mdi mdi-alert-circle"></i>
                         </span>
-                    <span class="chip-text">{{'Loading' | translate}}</span>
+                        <span class="chip-text">{{'Loading' | translate}}</span>
                     </span>
                 </div>
             </div>

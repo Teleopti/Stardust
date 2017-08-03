@@ -14,7 +14,8 @@
         var overtime = $resource('../api/staffing/overtime');
         var suggestion = $resource('../api/staffing/overtime/suggestion');
         var compensations = $resource('../api/staffing/GetCompensations');
-        var savebpo = $resource('../api/staffing/importBpo')
+        var savebpo = $resource('../api/staffing/importBpo');
+        var fileImportLicense = $resource('../api/staffing/GetLicense');
         ////////////////
 
         var service = {
@@ -25,7 +26,8 @@
             addOvertime: overtime,
             getSuggestion: suggestion,
             getCompensations: compensations,
-            importbpo: savebpo
+            importbpo: savebpo,
+            fileImportLicense: fileImportLicense
         };
 
         return service;

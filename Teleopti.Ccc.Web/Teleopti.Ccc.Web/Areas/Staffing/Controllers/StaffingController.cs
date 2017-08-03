@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Web.Http;
+using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
@@ -12,7 +14,10 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
@@ -27,11 +32,12 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ISkillAreaRepository _skillAreaRepository;
 		private readonly ScheduledStaffingViewModelCreator _staffingViewModelCreator;
 		private readonly ImportBpoFile _bpoFile;
+		private readonly ICurrentDataSource _currentDataSource;
 
 		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillAreaRepository skillAreaRepository,
-								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile)
+								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -41,9 +47,10 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_skillAreaRepository = skillAreaRepository;
 			_staffingViewModelCreator = staffingViewModelCreator;
 			_bpoFile = bpoFile;
+			_currentDataSource = currentDataSource;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillareastaffing")]
+		[UnitOfWork, System.Web.Http.HttpGet, System.Web.Http.Route("api/staffing/monitorskillareastaffing")]
 		public virtual IHttpActionResult MonitorSkillAreaStaffingByDate(Guid SkillAreaId, DateTime DateTime, bool UseShrinkage)
 		{
 			var skillArea = _skillAreaRepository.Get(SkillAreaId);
@@ -52,14 +59,14 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			//return Ok(_staffingViewModelCreator.Load(skillIdList));
 		}
 
-		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillstaffing")]
+		[UnitOfWork, System.Web.Http.HttpGet, System.Web.Http.Route("api/staffing/monitorskillstaffing")]
 		public virtual IHttpActionResult MonitorSkillStaffingByDate(Guid SkillId, DateTime DateTime, bool UseShrinkage)
 		{
 			return Ok(_staffingViewModelCreator.Load(new[] { SkillId }, new DateOnly(DateTime), UseShrinkage));
 			//return Ok(_staffingViewModelCreator.Load(new[] { SkillId }));
 		}
 
-		[UnitOfWork, HttpPost, Route("api/staffing/overtime/suggestion")]
+		[UnitOfWork, System.Web.Http.HttpPost, System.Web.Http.Route("api/staffing/overtime/suggestion")]
 		public virtual IHttpActionResult ShowAddOvertime([FromBody]GetOvertimeSuggestionModel getModel)
 		{
 			if (getModel == null || getModel.SkillIds.IsEmpty()) return BadRequest();
@@ -86,7 +93,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			return Ok(returnModel);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/staffing/overtime")]
+		[UnitOfWork, System.Web.Http.HttpPost, System.Web.Http.Route("api/staffing/overtime")]
 		public virtual IHttpActionResult AddOvertime([FromBody]IList<OverTimeModel> models)
 		{
 			if (models == null || models.IsEmpty()) return BadRequest();
@@ -95,7 +102,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/staffing/GetCompensations")]
+		[UnitOfWork, System.Web.Http.HttpGet, System.Web.Http.Route("api/staffing/GetCompensations")]
 		public virtual IHttpActionResult GetCompensations()
 		{
 			var multiplicationDefinitions = _multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions();
@@ -108,11 +115,30 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			return Ok(retList);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/staffing/importBpo")]
+		[UnitOfWork, System.Web.Http.HttpPost, System.Web.Http.Route("api/staffing/importBpo")]
 		public virtual IHttpActionResult ImportBpo([FromBody]string fileContents)
 		{
 			var result = _bpoFile.ImportFile(fileContents, CultureInfo.InvariantCulture);
 			return Ok(result);
+		}
+
+		[UnitOfWork, System.Web.Http.HttpGet, System.Web.Http.Route("api/staffing/GetLicense")]
+		public virtual IHttpActionResult GetLicense()
+		{
+			var currentName = _currentDataSource.CurrentName();
+			var isLicenseAvailible = DefinedLicenseDataFactory.HasLicense(currentName) &&
+									 DefinedLicenseDataFactory.GetLicenseActivator(currentName).EnabledLicenseOptionPaths.Contains(
+										 DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBpoExchange);
+			var returnVal = new returnObj
+			{
+				isLicenseAvailable = isLicenseAvailible
+			};
+			return Ok(returnVal);
+		}
+
+		class returnObj
+		{
+			public bool isLicenseAvailable { get; set; }
 		}
 
 		private OverTimeSuggestionResultModel extractDataSeries(OverTimeSuggestionModel overTimeSuggestionModel,OvertimeWrapperModel wrapperModels)

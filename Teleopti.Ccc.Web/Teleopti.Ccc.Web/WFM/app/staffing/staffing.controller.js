@@ -34,6 +34,7 @@
 		vm.openImportData = false;
 		vm.toggleOverstaffSettings = toggleOverstaffSettings;
 		vm.validSettings = validSettings;
+		vm.showBpoInterface = false;
 
 		var events = [];
 		var allSkills = [];
@@ -49,6 +50,7 @@
 		getSkillAreas();
 		prepareDays();
 		getCompensations();
+		getLicenseForBpo();
 
 		function prepareDays() {
 			for (var i = 0; i < 14; i++) {
@@ -62,6 +64,13 @@
 
 		function toggleOverstaffSettings() {
 			vm.showOverstaffSettings = !vm.showOverstaffSettings;
+		}
+
+		function getLicenseForBpo() {
+			var data = staffingService.fileImportLicense.get()
+			data.$promise.then(function (response) {
+				vm.showBpoInterface = response.isLicenseAvailable;
+			})
 		}
 
 		function getDayClass(data) {
