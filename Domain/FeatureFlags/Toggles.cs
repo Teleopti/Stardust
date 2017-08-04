@@ -108,6 +108,7 @@
 		Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450,
 		Wfm_Requests_SaveFavoriteSearches_42578,
 		Wfm_Requests_TriggerResourceCalculationFromGui_43129,
+		Wfm_Requests_OvertimeRequestHandling_45177,
 
 		Wfm_Outbound_IgnoreScheduleForReplan_43752,
 		Wfm_Seatplan_UseDatePeriodForPlanning_42167,
