@@ -13918,7 +13918,7 @@ Teleopti R&amp;D</value>
     <comment>Message displayed for users on access Anywhere</comment>
   </data>
   <data name="PageWillBeRedirected" xml:space="preserve">
-    <value>页面将在 {0} 秒内自动跳转至 WFM……</value>
+    <value>页面将在 {0} 秒后自动跳转至 WFM……</value>
     <comment>Message displayed for users on access Anywhere</comment>
   </data>
 </root>

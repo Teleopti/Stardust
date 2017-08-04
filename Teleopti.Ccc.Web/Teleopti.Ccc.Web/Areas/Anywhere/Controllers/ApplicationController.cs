@@ -52,21 +52,22 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			var currentUserName = principal.Identity.Name;
 			var currentBusinessUnit = (principal.Identity as ITeleoptiIdentity)?.BusinessUnit.Name;
 			var resAnywhereMigrated = string.Format(UserTexts.Resources.AnywhereMigrated, "<a href='./WFM'>", "</a>");
-			var resPageWillBeRedirected = string.Format(UserTexts.Resources.PageWillBeRedirected, waitingTimeInSecond);
+			var resPageWillBeRedirected = string.Format(UserTexts.Resources.PageWillBeRedirected,
+				"<span id='pendingTime'>" + waitingTimeInSecond + "</span>");
 
 			return new ViewResult
 			{
 				ViewData = new ViewDataDictionary
 				{
-					{"WaitingTimeInSecond", waitingTimeInSecond * 1000 },
-					{"CurrentUserName",  currentUserName},
-					{"CurrentBusinessUnit",  currentBusinessUnit},
+					{"WaitingTimeInSecond", waitingTimeInSecond},
+					{"CurrentUserName", currentUserName},
+					{"CurrentBusinessUnit", currentBusinessUnit},
 					{"ResTeamSchedule", UserTexts.Resources.Schedules},
 					{"ResRta", UserTexts.Resources.RealTimeAdherence},
 					{"ResReports", UserTexts.Resources.Reports},
 					{"ResSignOut", UserTexts.Resources.SignOut},
 					{"ResMyTeamMigrated", resAnywhereMigrated},
-					{"ResPageWillBeRedirected", resPageWillBeRedirected }
+					{"ResPageWillBeRedirected", resPageWillBeRedirected}
 				},
 				ViewName = "Redirect"
 			};
@@ -208,7 +209,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 				TimeZoneOffsetMinutes = _userTimeZone.TimeZone().GetUtcOffset(_now.UtcDateTime()).TotalMinutes,
 
 				LanguageCode = CultureInfo.CurrentCulture.IetfLanguageTag,
-				FirstDayOfWeek = (int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek,
+				FirstDayOfWeek = (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek,
 				ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Contains("t")
 			}, Formatting.Indented);
 
@@ -224,10 +225,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			TimeSpanSetting fullDayAbsenceRequestEndTimeSetting;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				fullDayAbsenceRequestStartTimeSetting = new GlobalSettingDataRepository(uow).FindValueByKey("FullDayAbsenceRequestStartTime",
-					new TimeSpanSetting(new TimeSpan(0, 0, 0)));
-				fullDayAbsenceRequestEndTimeSetting = new GlobalSettingDataRepository(uow).FindValueByKey("FullDayAbsenceRequestEndTime",
-					new TimeSpanSetting(new TimeSpan(23, 59, 0)));
+				fullDayAbsenceRequestStartTimeSetting = new GlobalSettingDataRepository(uow)
+					.FindValueByKey("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0)));
+				fullDayAbsenceRequestEndTimeSetting = new GlobalSettingDataRepository(uow)
+					.FindValueByKey("FullDayAbsenceRequestEndTime", new TimeSpanSetting(new TimeSpan(23, 59, 0)));
 			}
 			return Json(new
 			{

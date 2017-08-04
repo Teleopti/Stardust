@@ -20,8 +20,22 @@
 	<link rel="stylesheet" href="Content/bootstrap/Content/bootstrap-theme.css" />
 
 	<link href="content/favicon.ico?v=2" rel="shortcut icon" type="image/x-icon" />
+	<script type="text/javascript" src="Content/jquery/jquery-1.12.4.min.js"></script>
 	<script type="text/javascript">
-		setTimeout(function () { window.location.href = "./WFM" }, <%= ViewData.Eval("WaitingTimeInSecond") %>);
+		function showPendingTime(pendingTimeInSecond) {
+			$("#pendingTime").html(pendingTimeInSecond);
+
+			if (pendingTimeInSecond <= 0) {
+				window.location.href = "./WFM";
+			} else {
+				pendingTimeInSecond -= 1;
+				setTimeout(function () {
+					showPendingTime(pendingTimeInSecond);
+				}, 1000);
+			}
+		}
+
+		showPendingTime(<%= ViewData.Eval("WaitingTimeInSecond") %>);
 	</script>
 </head>
 <body>
