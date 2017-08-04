@@ -88,15 +88,19 @@
 								<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.toggleAgents()">Toggle all agents</button>
 								<button class="wfm-btn wfm-btn-invis-default">Fetch all agents</button>
 								<tbody>
-									<tr ng-repeat="agent in vm.filteredAgents | limitTo: vm.agentsShown" ng-click="agent.selectAgent()" style="cursor: pointer;" class="for-test-agent">
+									<tr ng-repeat="agent in vm.filteredAgents | limitTo: vm.agentsShown" ng-click="agent.selectAgent()" style="cursor: pointer;"
+									 class="for-test-agent">
 										<td ng-class="{'selected-row':agent.isSelected}">{{agent.Name}}</td>
 										<td ng-class="{'selected-row':agent.isSelected}">{{agent.SiteName}}</td>
 										<td ng-class="{'selected-row':agent.isSelected}">{{agent.TeamName}}</td>
 										<td ng-class="{'selected-row':agent.isSelected}">{{agent.DataSource}} _ {{agent.UserCode}} </td>
 										<td ng-click="$event.stopPropagation();">
-											<md-select ng-model="pickedStateCode" placeholder="Pick a state" ng-change="agent.sendState(pickedStateCode)">
-												<md-option ng-repeat="state in vm.stateCodes" ng-value="state"><span ng-bind="state.Name"></span></md-option>
-											</md-select>
+											<select ng-model="pickedStateCode" ng-change="agent.sendState(pickedStateCode)">
+												<option value="" disabled selected>Pick a state</option>
+												<option ng-repeat="state in vm.stateCodes">
+													{{state.Name}}
+												</option>	
+											</select>
 										</td>
 									</tr>
 								</tbody>

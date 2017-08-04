@@ -32,17 +32,25 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[UnitOfWork, HttpGet, Route("RtaTool/PhoneStates/For")]
 		public virtual IHttpActionResult GetPhoneStates()
 		{
-			return Ok(_stateGroups.LoadAllCompleteGraph()
-				.Where(x => !x.StateCollection.IsNullOrEmpty())
-				.OrderByDescending(x => x.Available)
-				.ThenBy(x => x.DefaultStateGroup)
-				.ThenBy(x => x.IsLogOutState)
+			var stateGroups = _stateGroups.LoadAllCompleteGraph().Where(x => !x.StateCollection.IsNullOrEmpty()).ToArray();
+			
+			var availableStateGroup = stateGroups.FirstOrDefault(x => x.Available);
+			var defaultStateGroup = stateGroups.FirstOrDefault(x => x.DefaultStateGroup);
+			var loggedOutStateGroup = stateGroups.FirstOrDefault(x => x.IsLogOutState);
+			var result = new[] { availableStateGroup, defaultStateGroup, loggedOutStateGroup };
+			var quasiRandom = stateGroups
+				.Except(result)
+				.OrderBy(x => x.Name).Take(3);
+			
+			return Ok(
+				result
+				.Where(x => x != null)
+				.Concat(quasiRandom)
 				.Select(x => new
 				{
 					Name = x.Name,
 					Code = x.StateCollection.First().StateCode
-				})
-				.ToArray());
+				}));
 		}
 	}
 }
