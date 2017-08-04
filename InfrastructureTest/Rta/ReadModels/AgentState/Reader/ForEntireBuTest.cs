@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				{
 					InAlarm = false
 				}))
-				.Select(x => x.SiteId.GetValueOrDefault())
+				.Select(x => x.SiteId.Value)
 				.Should().Have.SameValuesAs(new[] {siteLondonId, siteParisId});
 
 		}
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 			{
 				InAlarm = true
 			}))
-				.Select(x => x.SiteId.GetValueOrDefault())
+				.Select(x => x.SiteId.Value)
 				.Should().Have.SameValuesAs(new[] { siteLondonId, siteParisId });
 
 		}
