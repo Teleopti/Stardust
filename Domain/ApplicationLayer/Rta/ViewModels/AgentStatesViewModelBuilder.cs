@@ -176,6 +176,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				  userTime.ToString(_culture.GetCulture().DateTimeFormat.ShortTimePattern)
 				;
 		}
-
 	}
 }
