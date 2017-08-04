@@ -424,7 +424,6 @@
 			var dateStr = moment(vm.scheduleDate).format('YYYY-MM-DD');
 			groupPageService.fetchAvailableGroupPages(dateStr, dateStr).then(function(data) {
 				vm.availableGroups = data;
-				console.log("groups", data);
 			});
 		};
 
