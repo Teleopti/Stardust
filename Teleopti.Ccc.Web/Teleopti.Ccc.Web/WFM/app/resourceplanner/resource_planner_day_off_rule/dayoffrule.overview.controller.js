@@ -58,7 +58,6 @@
 		vm.dayOffRules = [];
 		vm.textManageDoRule = $translate.instant("ManageDayOffForPlanningGroup").replace("{0}", vm.planningGroup.Name);
 		vm.textDoRuleAppliedFilter = $translate.instant("DayOffRuleAppliedFilters").replace("{0}", vm.planningGroup.Name);
-		vm.goDoRulesSetting = goDoRulesSetting;
 
 		getDayOffRules();
 
@@ -66,12 +65,6 @@
 			return dayOffRuleService.getDayOffRulesByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 				vm.dayOffRules = data.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
 				return vm.dayOffRules;
-			});
-		}
-
-		function goDoRulesSetting() {
-			$state.go('resourceplanner.dayoffrulesoverview', {
-				groupId: $stateParams.groupId,
 			});
 		}
 	}

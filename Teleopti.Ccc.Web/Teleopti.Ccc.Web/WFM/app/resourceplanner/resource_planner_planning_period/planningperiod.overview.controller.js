@@ -5,9 +5,9 @@
     .module('wfm.resourceplanner')
     .controller('planningPeriodOverviewController', Controller);
 
-  Controller.$inject = ['$stateParams', 'planningPeriodServiceNew', 'NoticeService', '$translate', '$interval', '$scope', '$timeout', 'selectedPp', 'planningGroupInfo'];
+  Controller.$inject = ['$stateParams', '$state', 'planningPeriodServiceNew', 'NoticeService', '$translate', '$interval', '$scope', '$timeout', 'selectedPp', 'planningGroupInfo'];
 
-  function Controller($stateParams, planningPeriodServiceNew, NoticeService, $translate, $interval, $scope, $timeout, selectedPp, planningGroupInfo) {
+  function Controller($stateParams, $state, planningPeriodServiceNew, NoticeService, $translate, $interval, $scope, $timeout, selectedPp, planningGroupInfo) {
     var vm = this;
     var selectedPpId = $stateParams.ppId ? $stateParams.ppId : null;
     var checkProgressRef;
@@ -17,6 +17,7 @@
     vm.selectedPp = selectedPp ? selectedPp : {};
     vm.totalAgents = selectedPp ? selectedPp.TotalAgents : 0;
     vm.scheduledAgents = 0;
+    vm.validationRunning = false;
     vm.publishRunning = false;
     vm.schedulingPerformed = false;
     vm.optimizeRunning = false;
@@ -40,6 +41,7 @@
     vm.openModal = openModal;
     vm.valNumber = getTotalValidationErrorsNumber;
     vm.showTab = showTab;
+    vm.goDoRulesSetting = goDoRulesSetting;
     vm.textForClearPp = $translate.instant("AreYouSureYouWantToClearPlanningPeriodData")
       .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
       .replace('{1}', moment(vm.selectedPp.EndDate).format('L'));
@@ -327,6 +329,13 @@
           }
         ]
       };
+    }
+
+    function goDoRulesSetting() {
+      console.log('ahat')
+      $state.go('resourceplanner.dayoffrulesoverview', {
+        groupId: $stateParams.groupId,
+      });
     }
   }
 })();

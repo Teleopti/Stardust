@@ -20,8 +20,7 @@
 							<i class="mdi mdi-play"></i>
 							<md-tooltip>{{'ScheduleVerb' | translate}}</md-tooltip>
 						</div>
-						<div tabindex=0 class="context-menu card-context icon-botton-primary" ng-disabled="vm.isDisable()"
-						 ng-click="vm.intraOptimize()">
+						<div tabindex=0 class="context-menu card-context icon-botton-primary" ng-disabled="vm.isDisable()" ng-click="vm.intraOptimize()">
 							<i class="mdi mdi-source-pull"></i>
 							<md-tooltip>{{'IntraOptimize' | translate}}</md-tooltip>
 						</div>
@@ -54,15 +53,40 @@
 <div class="con-row tabContent active" id="tabs-1">
 	<div class="con-flex">
 		<div class="panel material-depth-1">
-			<div class="sub-header">
-				<h2><i class="mdi mdi-view-dashboard"></i> {{'Overview' | translate}}</h2>
-				<div class="subtext">View the relative differences for the skills</div>
+			<div class="con-row dashborad-container">
+				<div class="wfm-chip-wrap" ng-if="vm.valLoading" ng-click="vm.showTab('tabs2')">
+					<span class="wfm-chip">
+					<span class="chip-handle chip-error">
+						...
+					</span>
+					<span class="chip-text">Validation is loading</span>
+					</span>
+					<md-tooltip>Validation is loading, it might takes few minute.</md-tooltip>
+				</div>
+				<div class="wfm-chip-wrap" ng-if="!vm.valLoading && vm.valData.totalValNum > 0" ng-click="vm.showTab('tabs2')">
+					<span class="wfm-chip">
+					<span class="chip-handle chip-error">
+						{{vm.valData.totalValNum}}
+					</span>
+					<span class="chip-text">Validation Issues</span>
+					</span>
+					<md-tooltip>Validation Issues might have effects to the scheduled results</md-tooltip>
+				</div>
+				<div class="wfm-chip-wrap">
+					<span class="wfm-chip">
+					<span class="chip-handle">
+						{{vm.scheduledAgents}}/{{vm.totalAgents}}
+					</span>
+					<span class="chip-text">Scheduled Agents</span>
+					</span>
+					<md-tooltip ng-show="vm.dayNodes">{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}</md-tooltip>
+					<md-tooltip ng-hide="vm.dayNodes">{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsHaveScheduled'|translate}}</md-tooltip>
+				</div>
 			</div>
 			<div class="con-row">
-				<div class="con-flex result-container">
-					<span class="pp-agentnumber" ng-show="vm.dayNodes">{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsSuccessfullyScheduled'|translate}}</span>
-					<span class="pp-agentnumber" ng-hide="vm.dayNodes">{{vm.scheduledAgents}}/{{vm.totalAgents}} {{'AgentsHaveScheduled'|translate}}</span>
+				<div class="con-flex result-container ">
 					<div class="legends" ng-show="vm.dayNodes">
+						<h1>Scheduled Skills Heatmap</h1>
 						<span>
 							<div class="legend critUnderstaffed"></div>
 							{{'CriticalUnderstaffingColon' | translate}}
@@ -112,26 +136,20 @@
 		</div>
 	</div>
 </div>
-<div class="con-row tabContent" id="tabs-2">
-	<div class="con-flex">
-		<div class="panel material-depth-1">
-			<div class="pp-progress" ng-show="vm.valData.totalValNum == 0">
-				<md-progress-linear md-mode="indeterminate"></md-progress-linear>
-			</div>
-			<div class="sub-header">
-				<h2><i class="mdi mdi-clipboard-alert"></i> {{'Validation' | translate}}</h2>
-				<div class="subtext">View the validation issues for the planning period</div>
-			</div>
-			<div pp-validation val-data="vm.valData" val-loading="vm.valLoading" val-number="vm.valNumber()"></div>
-		</div>
-	</div>
-</div>
+<div class="tabContent" id="tabs-2" pp-validation val-data="vm.valData" val-loading="vm.valLoading" val-number="vm.valNumber()"></div>
 <div class="con-row tabContent" id="tabs-3">
 	<div class="con-flex">
 		<div class="panel material-depth-1">
-			<div class="sub-header">
-				<h2><i class="mdi mdi-settings"></i> {{'DayOffRules' | translate}}</h2>
-				<div class="subtext">View the day off rules for the planning group</div>
+			<div class="con-row dashborad-container">
+				<button ng-click="vm.goDoRulesSetting()" class="wfm-btn wfm-btn-invis-default"><i class="mdi mdi-settings"></i> {{'DayOffRuleSetting' | translate}}</button>
+				<div class="wfm-chip-wrap">
+					<span class="wfm-chip">
+						<span class="chip-handle chip-warning">
+							<i class="mdi mdi-alert"></i>
+						</span>
+					<span class="chip-text">The day off rules are applied for the planning group</span>
+					</span>
+				</div>
 			</div>
 			<div dayoff-rules is-disable="vm.isDisableDo" planning-group="vm.planningGroup"></div>
 		</div>

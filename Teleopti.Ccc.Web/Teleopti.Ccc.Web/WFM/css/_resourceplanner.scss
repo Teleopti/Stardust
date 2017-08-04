@@ -577,6 +577,24 @@ table.overview {
 }
 
 wfm-card.pp-validation-card > md-card {
-	border-left: 5px solid rgb(0, 153, 255);
+	border-left: 5px solid $red-600 ;
+}
+
+//try
+.dashborad-container {
+	margin: 0 5px;
+	padding:5px;
+	border-bottom: 1px solid $gray026;
+}
+
+.pg-wfm-list > md-content {
+	 margin: -10px 0px 0 -2px;
+}
+
+.pp-validation-number {
+	padding: 5px;
+    margin-left: 10px;
+    background-color: $red-600;
+    border-radius: 15px;
 }
 	
