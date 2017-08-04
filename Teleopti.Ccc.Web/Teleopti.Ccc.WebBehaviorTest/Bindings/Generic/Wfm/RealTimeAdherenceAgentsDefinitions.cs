@@ -40,6 +40,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			assertAgentStatus(status);
 		}
 
+		[Then(@"I should see an agent '(.*)'")]
+		public void ThenIShouldSeeAgent(string agent)
+		{
+			var personId = DataMaker.Person(agent).Person.Id.Value;
+			Browser.Interactions.AssertExists("body", "[agentid='" + personId + "']");
+		}
+
+
 		[Then(@"I should not see agent '(.*)'")]
 		public void ThenIShouldNotSeeAgent(string agent)
 		{
