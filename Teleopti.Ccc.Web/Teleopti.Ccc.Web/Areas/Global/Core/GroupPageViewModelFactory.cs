@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.Global.Models;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Global.Core
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			_permissionProvider = permissionProvider;
 		}
 
-		public dynamic CreateViewModel(DateOnlyPeriod period, string functionPath)
+		public GroupPagesViewModel CreateViewModel(DateOnlyPeriod period, string functionPath)
 		{
 			var stringComparer = StringComparer.Create(_uiCulture.GetUiCulture(), false);
 			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupsBasedOnPeriod(period);
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 				_groupingReadOnlyRepository.AvailableGroups(period, allGroupPages.Select(gp=>gp.PageId).ToArray())
 					.ToLookup(t => t.PageId);
 
-			var actualOrgs = new List<dynamic>();
+			var actualOrgs = new List<SiteViewModelWithTeams>();
 			
 			var orgsLookup = allAvailableGroups[Group.PageMainId].ToLookup(g => g.SiteId);
 			foreach (var siteLookUp in orgsLookup)
@@ -47,38 +48,38 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 				var permittedTeams = orgsLookup[siteLookUp.Key].Where(team => _permissionProvider.HasOrganisationDetailPermission(functionPath, period.StartDate, team));
 				if (!permittedTeams.Any())
 					continue;
-				var children = permittedTeams.Select(t => new
+				var children = permittedTeams.Select(t => new TeamViewModel
 				{
 					Name = t.GroupName.Split('/')[1],
-					Id = t.TeamId
+					Id = t.TeamId.GetValueOrDefault()
 				}).OrderBy(c => c.Name, stringComparer);
-				actualOrgs.Add(new
+				actualOrgs.Add(new SiteViewModelWithTeams
 				{
 					Name = permittedTeams.First().GroupName.Split('/')[0],
-					Id = siteLookUp.Key,
-					Children = children
+					Id = siteLookUp.Key.GetValueOrDefault(),
+					Children = children.ToList()
 				});
 			}
 
-			var actualGroupPages = new List<dynamic>();
+			var actualGroupPages = new List<GroupPageViewModel>();
 			foreach (var groupPage in allGroupPages.Where(gp => gp.PageId != Group.PageMainId))
 			{
 				var childGroups = allAvailableGroups[groupPage.PageId];
-				actualGroupPages.Add(new
+				actualGroupPages.Add(new GroupPageViewModel
 				{
 					Id = groupPage.PageId,
 					Name = _userTextTranslator.TranslateText(groupPage.PageName),
-					Children = childGroups.Select(g => new
+					Children = childGroups.Select(g => new GroupViewModel
 					{
 						Name = g.GroupName,
 						Id = g.GroupId
-					}).Distinct().ToArray().OrderBy(c => c.Name, stringComparer)
+					}).Distinct().ToArray().OrderBy(c => c.Name, stringComparer).ToList()
 				});
 			}
-			return new
+			return new GroupPagesViewModel
 			{
-				BusinessHierarchy = actualOrgs.OrderBy(o => o.Name as string, stringComparer),
-				GroupPages = actualGroupPages.OrderBy(g => g.Name as string, stringComparer)
+				BusinessHierarchy = actualOrgs.OrderBy(o => o.Name as string, stringComparer).ToArray(),
+				GroupPages = actualGroupPages.OrderBy(g => g.Name as string, stringComparer).ToArray()
 			};
 		}
 

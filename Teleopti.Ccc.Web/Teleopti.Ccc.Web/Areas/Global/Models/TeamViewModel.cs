@@ -1,7 +1,6 @@
-﻿
-using System;
+﻿using System;
 
-namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
+namespace Teleopti.Ccc.Web.Areas.Global.Models
 {
 	public class TeamViewModel
 	{

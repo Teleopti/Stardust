@@ -416,6 +416,7 @@
     <Compile Include="Areas\Forecasting\Controllers\ForecastExportController.cs" />
     <Compile Include="Areas\Forecasting\Core\ForecastExportToExcel.cs" />
     <Compile Include="Areas\Global\ChangeDefaultFormData.cs" />
+    <Compile Include="Areas\Global\Models\GroupPagesViewModel.cs" />
     <Compile Include="Areas\Global\FavoriteSearchController.cs" />
     <Compile Include="Areas\Global\FavoriteSearchFormData.cs" />
     <Compile Include="Areas\Anywhere\Controllers\AdherenceController.cs" />
@@ -804,9 +805,9 @@
     <Compile Include="Areas\SeatPlanner\Core\IOC\SeatPlannerAreaModule.cs" />
     <Compile Include="Core\ITeamsProvider.cs" />
     <Compile Include="Core\TeamsProvider.cs" />
-    <Compile Include="Areas\SeatPlanner\Core\ViewModels\SiteViewModel.cs" />
-    <Compile Include="Areas\SeatPlanner\Core\ViewModels\SiteViewModelWithTeams.cs" />
-    <Compile Include="Areas\SeatPlanner\Core\ViewModels\TeamViewModel.cs" />
+    <Compile Include="Areas\Global\Models\SiteViewModel.cs" />
+    <Compile Include="Areas\Global\Models\SiteViewModelWithTeams.cs" />
+    <Compile Include="Areas\Global\Models\TeamViewModel.cs" />
     <Compile Include="Areas\MultiTenancy\Core\HttpRequestUserAgent.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IdentityAuthentication.cs" />
     <Compile Include="Areas\MultiTenancy\Core\IHttpRequestUserAgent.cs" />

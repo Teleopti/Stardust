@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Web.Areas.Global.Models;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 using Teleopti.Interfaces.Domain;
 
@@ -18,8 +19,8 @@ namespace Teleopti.Ccc.Web.Core
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
-		private IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
-		private ITeamRepository _teamRepository;
+		private readonly IPersonSelectorReadOnlyRepository _personSelectorReadOnlyRepository;
+		private readonly ITeamRepository _teamRepository;
 
 		public TeamsProvider(ISiteRepository siteRepository,
 			ICurrentBusinessUnit currentBusinessUnit,

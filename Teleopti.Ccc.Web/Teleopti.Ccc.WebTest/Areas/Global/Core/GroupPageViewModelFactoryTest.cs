@@ -74,17 +74,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage },
 				groupDetails);
 			
-			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
-			var orgs = ((IEnumerable<dynamic>)result.BusinessHierarchy).ToList();
-			dynamic gp = ((IEnumerable<dynamic>)result.GroupPages).ToList()[0];
-			var gpChildren = ((IEnumerable<dynamic>)orgs[0].Children).ToList();
-			((int)orgs.Count).Should().Be.EqualTo(1);
-			((object)orgs[0].Name).Should().Be.EqualTo("site1");
-			((object)orgs[0].Id).Should().Be.EqualTo(siteId);
-			((object)gp.Name).Should().Be.EqualTo(groupPage.PageName);
-			gpChildren.Count().Should().Be.EqualTo(1);
-			((Guid)gpChildren.Single().Id).Should().Be.EqualTo(teamId);
+			var orgs = result.BusinessHierarchy.ToList();
+			var gp = result.GroupPages[0];
+			var gpChildren = orgs[0].Children;
+			orgs.Count.Should().Be.EqualTo(1);
+			orgs[0].Name.Should().Be.EqualTo("site1");
+			orgs[0].Id.Should().Be.EqualTo(siteId);
+			gp.Name.Should().Be.EqualTo(groupPage.PageName);
+			gpChildren.Count.Should().Be.EqualTo(1);
+			gpChildren.Single().Id.Should().Be.EqualTo(teamId);
 		}
 		[Test]
 		public void ShouldReturnSortedGroupPages()
@@ -162,22 +162,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage, groupPage2 },
 				groupDetails);
 
-			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
-			var orgs = ((IEnumerable<dynamic>)result.BusinessHierarchy).ToList();
-			var gps = ((IEnumerable<dynamic>) result.GroupPages).ToList();
-			dynamic gp0 = gps[0];
-			dynamic gp1 = gps[1];
-			var childGroupsForSite1 = ((IEnumerable<dynamic>)orgs[1].Children).ToList();
-			var childGroupsForGroupPage1 = ((IEnumerable<dynamic>) gp1.Children).ToList();
-			((object)orgs[0].Name).Should().Be.EqualTo("ASite");
-			((object)orgs[1].Name).Should().Be.EqualTo("Site1");
-			((object)childGroupsForSite1[0].Name).Should().Be.EqualTo("ATeam");
-			((object)childGroupsForSite1[1].Name).Should().Be.EqualTo("Team1");
-			((string)gp0.Name).Should().Be.EqualTo("Contract");
-			((string)gp1.Name).Should().Be.EqualTo("Skill");
-			((object)childGroupsForGroupPage1[0].Name).Should().Be.EqualTo("ASkill");
-			((object)childGroupsForGroupPage1[1].Name).Should().Be.EqualTo("Email");
+			var orgs = result.BusinessHierarchy;
+			var gps = result.GroupPages;
+			var gp0 = gps[0];
+			var gp1 = gps[1];
+			var childGroupsForSite1 = orgs[1].Children;
+			var childGroupsForGroupPage1 = gp1.Children;
+			orgs[0].Name.Should().Be.EqualTo("ASite");
+			orgs[1].Name.Should().Be.EqualTo("Site1");
+			childGroupsForSite1[0].Name.Should().Be.EqualTo("ATeam");
+			childGroupsForSite1[1].Name.Should().Be.EqualTo("Team1");
+			gp0.Name.Should().Be.EqualTo("Contract");
+			gp1.Name.Should().Be.EqualTo("Skill");
+			childGroupsForGroupPage1[0].Name.Should().Be.EqualTo("ASkill");
+			childGroupsForGroupPage1[1].Name.Should().Be.EqualTo("Email");
 		}
 
 		[Test, SetUICulture("sv-SE")]
@@ -208,11 +208,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			GroupingReadOnlyRepository.Has(new[] { groupPage },
 				groupDetails);
 
-			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
-			var gps = ((IEnumerable<dynamic>)result.GroupPages).ToList();
-			dynamic gp0 = gps[0];
-			((string)gp0.Name).Should().Be.EqualTo("Kompetens");
+			var gps = result.GroupPages;
+			var gp0 = gps[0];
+			gp0.Name.Should().Be.EqualTo("Kompetens");
 		}
 
 		[Test]
@@ -290,22 +290,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			GroupingReadOnlyRepository.Has(new[] {mainPage, groupPage,groupPage1,groupPage2 },
 				groupDetails);
 
-			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
-			var ogs = ((IEnumerable<dynamic>)result.BusinessHierarchy).ToList();
-			var childrenForFirstSite = ((IEnumerable<dynamic>)ogs[0].Children).ToList();
-			((string)ogs[0].Name).Should().Be.EqualTo("Site1");
-			((string)ogs[1].Name).Should().Be.EqualTo("åSite");
-			((string)childrenForFirstSite[0].Name).Should().Be.EqualTo("Team1");
-			((string)childrenForFirstSite[1].Name).Should().Be.EqualTo("åTeam");
+			var ogs = result.BusinessHierarchy;
+			var childrenForFirstSite = ogs[0].Children;
+			ogs[0].Name.Should().Be.EqualTo("Site1");
+			ogs[1].Name.Should().Be.EqualTo("åSite");
+			childrenForFirstSite[0].Name.Should().Be.EqualTo("Team1");
+			childrenForFirstSite[1].Name.Should().Be.EqualTo("åTeam");
 
-			var gps = ((IEnumerable<dynamic>)result.GroupPages).ToList();
-			((string)gps[0].Name).Should().Be.EqualTo("a");
-			((string)gps[1].Name).Should().Be.EqualTo("b");
-			((string)gps[2].Name).Should().Be.EqualTo("åå");
-			var childrenForFirstGroupPage = ((IEnumerable<dynamic>)gps[0].Children).ToList();
-			((string)childrenForFirstGroupPage[0].Name).Should().Be.EqualTo("cEmail");
-			((string)childrenForFirstGroupPage[1].Name).Should().Be.EqualTo("åEmail");
+			var gps = result.GroupPages.ToList();
+			gps[0].Name.Should().Be.EqualTo("a");
+			gps[1].Name.Should().Be.EqualTo("b");
+			gps[2].Name.Should().Be.EqualTo("åå");
+			var childrenForFirstGroupPage = gps[0].Children;
+			childrenForFirstGroupPage[0].Name.Should().Be.EqualTo("cEmail");
+			childrenForFirstGroupPage[1].Name.Should().Be.EqualTo("åEmail");
 		}
 
 		[Test]
@@ -375,20 +375,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 				BusinessUnitId = businessUnitId
 			});
 
-			dynamic result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
-			var orgs = ((IEnumerable<dynamic>)result.BusinessHierarchy).ToList();
-			var gps = ((IEnumerable<dynamic>) result.GroupPages).ToList();
-			dynamic gp = gps[0];
-			var gpChildren = ((IEnumerable<dynamic>)orgs[0].Children).ToList();
-			orgs.Count.Should().Be.EqualTo(1);
-			((object)orgs[0].Name).Should().Be.EqualTo("site1");
-			((object)orgs[0].Id).Should().Be.EqualTo(site1Id);
-			((IEnumerable<dynamic>)orgs[0].Children).Count().Should().Be.EqualTo(1);
-			gps.Count.Should().Be.EqualTo(1);
-			((object)gp.Name).Should().Be.EqualTo(groupPage.PageName);
+			var orgs = result.BusinessHierarchy;
+			var gps = result.GroupPages;
+			var gp = gps[0];
+			var gpChildren = orgs[0].Children;
+			orgs.Length.Should().Be.EqualTo(1);
+			orgs[0].Name.Should().Be.EqualTo("site1");
+			orgs[0].Id.Should().Be.EqualTo(site1Id);
+			orgs[0].Children.Count.Should().Be.EqualTo(1);
+			gps.Length.Should().Be.EqualTo(1);
+			gp.Name.Should().Be.EqualTo(groupPage.PageName);
 			gpChildren.Count.Should().Be.EqualTo(1);
-			((Guid)gpChildren.Single().Id).Should().Be.EqualTo(team1InSite1Id);
+			gpChildren.Single().Id.Should().Be.EqualTo(team1InSite1Id);
 		}
 
 	}

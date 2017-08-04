@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Web.Areas.Global.Models;
 
 namespace Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels
 {
