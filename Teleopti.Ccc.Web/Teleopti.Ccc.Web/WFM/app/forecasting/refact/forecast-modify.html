@@ -78,7 +78,7 @@
             <i class="mdi mdi-sync" ></i>
             <md-tooltip>Refresh chart</md-tooltip>
           </div>
-          <div tabindex=0 class="context-menu card-context wfm-badge-wrapper">
+          <div tabindex=0 ng-show="vm.selectedDayCount.length/9 > 0" class="grow-out context-menu card-context wfm-badge-wrapper">
             <i class="mdi mdi-dots-vertical"></i>
             <wfm-badge badge-model="vm.selectedDayCount.length/9" status="'notice-success'"> </wfm-badge>
             <span class="context-menu-left">

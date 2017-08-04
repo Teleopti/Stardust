@@ -88,7 +88,10 @@
 
 .c3-lines-vcampaign,
 .c3-lines-vcombo,
-.c3-lines-voverride{
+.c3-lines-voverride,
+.c3-selected-circles-vcampaign,
+.c3-selected-circles-voverride,
+.c3-selected-circles-vcombo{
 	opacity: 0;
 }
 
@@ -129,7 +132,7 @@
 }
 
 .wfm-chart .c3-selected-circle{
-	fill:rgba(255, 255, 255, 0.4);
+	fill:$white;
 }
 
 forecast-result-chart >.c3 > svg{

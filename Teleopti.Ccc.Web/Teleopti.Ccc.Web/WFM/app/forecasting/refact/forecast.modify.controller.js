@@ -129,7 +129,6 @@
             Days: storage.days,
             Name: storage.skill.Workload.Name
           }
-          vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
         };
       }
 
