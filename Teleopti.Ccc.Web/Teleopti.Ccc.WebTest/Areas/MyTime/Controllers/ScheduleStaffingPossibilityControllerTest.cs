@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldSubstractCurrentUsersScheduleWhenCalculatingProbability()
+		public void ShouldSubstractCurrentUsersMainShiftWhenCalculatingAbsenceProbability()
 		{
 			setupDefaultTestData(new double?[] { 1, 1 }, new double?[] { 1, 1 });
 			setupWorkFlowControlSet();
@@ -378,6 +378,35 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
 			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
 		}
+
+		[Test]
+		public void ShouldSubstractCurrentUsersOvertimeShiftWhenCalculatingAbsenceProbability()
+		{
+			var activity = createActivity();
+			var skill = createSkill("test1");
+			var personSkill = createPersonSkill(activity, skill);
+			addPersonSkillsToPersonPeriod(personSkill);
+			setupIntradayStaffingForSkill(skill, new double?[] { 0.1d, 0.1d }, new double?[] { 1d, 1d });
+			setupWorkFlowControlSet();
+
+			var startDate = Now.UtcDateTime().Date.AddHours(8);
+			var endDate = Now.UtcDateTime().Date.AddHours(17);
+			var scheduleDatas = new List<IScheduleData>();
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithOvertimeShift(User.CurrentUser(),
+				Scenario.Current(), activity, new DateTimePeriod(startDate, endDate));
+			scheduleDatas.Add(assignment);
+			ScheduleData.Set(scheduleDatas);
+
+
+			var possibilities =
+				getPossibilityViewModels(null, StaffingPossiblityType.Absence)
+					.Where(d => d.Date == Now.ServerDate_DontUse().ToFixedClientDateOnlyFormat())
+					.ToList();
+			Assert.AreEqual(2, possibilities.Count);
+			Assert.AreEqual(0, possibilities.ElementAt(0).Possibility);
+			Assert.AreEqual(0, possibilities.ElementAt(1).Possibility);
+		}
+
 
 		[Test]
 		[Toggle(Toggles.MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686)]

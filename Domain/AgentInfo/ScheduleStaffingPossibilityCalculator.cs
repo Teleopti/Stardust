@@ -144,8 +144,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			if (isPersonAssignmentNullOrEmpty(personAssignment))
 				return false;
 
+			var mainActivities = personAssignment.MainActivities();
+			var overtimeActivities = personAssignment.OvertimeActivities();
+
 			var isSkillScheduled =
-				personAssignment.MainActivities()
+				mainActivities
+					.Any(m => m.Payload.RequiresSkill && m.Payload == skill.Activity && m.Period.Intersect(period))
+				|| overtimeActivities
 					.Any(m => m.Payload.RequiresSkill && m.Payload == skill.Activity && m.Period.Intersect(period));
 
 			return isSkillScheduled;
