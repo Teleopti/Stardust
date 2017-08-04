@@ -16343,4 +16343,8 @@ Do you want to participate?</value>
     <value>This page will automatic redirect to WFM in {0} seconds...</value>
     <comment>Message displayed for users on access Anywhere</comment>
   </data>
+  <data name="SeveralGroupsSelected" xml:space="preserve">
+    <value>{0} groups selected</value>
+    <comment>For group page picker display</comment>
+  </data>
 </root>
