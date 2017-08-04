@@ -26,7 +26,14 @@
 			$("#pendingTime").html(pendingTimeInSecond);
 
 			if (pendingTimeInSecond <= 0) {
-				window.location.href = "./WFM";
+				var targetUrl = "./WFM";
+				if (window.location.href.indexOf("/Anywhere#teamschedule/") > 0) {
+					targetUrl += "/#/teams";
+				} else if (window.location.href.indexOf("/Anywhere#realtimeadherencesites/") > 0) {
+					targetUrl += "/#/rta";
+				}
+
+				window.location.href = targetUrl;
 			} else {
 				pendingTimeInSecond -= 1;
 				setTimeout(function () {
