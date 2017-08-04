@@ -34,44 +34,62 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 
 
 		[Test]
-		public void ShouldGetMamimum50AgentStatesForEntireBu()
+		public void ShouldGetAgentStatesForEntireBu()
 		{
-			Enumerable.Range(0, 51)
-				.ForEach(i =>
-				{
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var siteLondonId = Guid.NewGuid();
+			var siteParisId = Guid.NewGuid();
+
+		
 					Database
 						.Has(new AgentStateReadModel
 						{
-							PersonId = Guid.NewGuid(),
-							SiteId = Guid.NewGuid(),
+							PersonId = person1,
+							SiteId = siteLondonId
+						})
+						.Has(new AgentStateReadModel
+						{
+							PersonId = person2,
+							SiteId = siteParisId
 						});
-				});
 
-			var agentState = Target.For(new AgentStateFilter {InAlarm = false}).States.ToArray();
-
-			agentState.Length.Should().Be(50);
+			Target.For(new AgentStateFilter { InAlarm = false })
+				.States.Select(x => x.SiteId)
+				.Should().Have.SameValuesAs(siteLondonId.ToString(), siteParisId.ToString());
+			
 		}
 
 		[Test]
-		public void ShouldGetMamimum50AgentStatesInAlarmForEntireBu()
+		public void ShouldGetAgentStatesInAlarmForEntireBu()
 		{
-			Now.Is("2017-08-02 08:30");
-			Enumerable.Range(0, 51)
-				.ForEach(i =>
+			Now.Is("2017-08-04 08:30");
+			var person1 = Guid.NewGuid();
+			var person2 = Guid.NewGuid();
+			var siteLondonId = Guid.NewGuid();
+			var siteParisId = Guid.NewGuid();
+
+
+			Database
+				.Has(new AgentStateReadModel
 				{
-					Database
-						.Has(new AgentStateReadModel
-						{
-							PersonId = Guid.NewGuid(),
-							SiteId = Guid.NewGuid(),
-							AlarmStartTime = "2017-08-02 08:00".Utc(),
-							IsRuleAlarm = true
-						});
+					PersonId = person1,
+					SiteId = siteLondonId,
+					AlarmStartTime = "2017-08-03 08:00".Utc(),
+					IsRuleAlarm = true
+
+				})
+				.Has(new AgentStateReadModel
+				{
+					PersonId = person2,
+					SiteId = siteParisId,
+					AlarmStartTime = "2017-08-03 08:00".Utc(),
+					IsRuleAlarm = true
 				});
 
-			var agentState = Target.For(new AgentStateFilter {InAlarm = true}).States.ToArray();
-
-			agentState.Length.Should().Be(50);
+			Target.For(new AgentStateFilter { InAlarm = true })
+				.States.Select(x => x.SiteId)
+				.Should().Have.SameValuesAs(siteLondonId.ToString(), siteParisId.ToString());
 		}
 	}
 }
