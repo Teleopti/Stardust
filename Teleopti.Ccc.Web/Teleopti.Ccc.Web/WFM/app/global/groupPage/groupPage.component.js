@@ -203,7 +203,9 @@
 
 
 		function resetSelectedGroups() {
-			var groups = ctrl.groupsInView.filter(g => g.id == ctrl.selectedGroups.groupPageId);
+			var groups = ctrl.groupsInView.filter(function (g) {
+				return g.id == ctrl.selectedGroups.groupPageId;
+			});
 			if (groups.length > 0) {
 				ctrl.toggleGroup(groups[0])
 			}
