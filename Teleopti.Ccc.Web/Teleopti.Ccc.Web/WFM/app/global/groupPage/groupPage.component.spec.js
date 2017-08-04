@@ -37,13 +37,13 @@ describe('<group-page-picker>', function () {
 	});
 
 	it('should display panel when clicking on groupPage input', function () {
-		var picker = setupComponent('group-pages="groupPages"', testScope());
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', testScope());
 		openPanel(picker);
 		expectPanelOpen();
 	});
 
 	it('should display two tabs and business hierarchy should be selected by default.', function () {
-		var picker = setupComponent('group-pages="groupPages"', testScope());
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', testScope());
 
 		var tabs = picker.find('md-tab-item');
 		var icon = tabs[0].querySelector('i');
@@ -54,27 +54,22 @@ describe('<group-page-picker>', function () {
 	});
 
 	it('should switch views when tabs are selected', function () {
-		var picker = setupComponent('group-pages="groupPages"', testScope());
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', testScope());
 		openPanel(picker);
 		expectPanelOpen();
 
-		var tabs = $document[0].querySelectorAll('group-pages-panel md-tab-item');
-		var tab = tabs[1];
-		angular.element(tab).triggerHandler('click');
+		clickTab(1);
+		expectTabOpen(1, 'GroupPages');
 
-		var icon = tab.querySelector('i');
-		expect(icon.title).toEqual('GroupPages');
-		expect(angular.element(tab).hasClass('md-active')).toEqual(true);
 		var group = $document[0].querySelector('.group label[for="group-groupPage1"]');
 		expect(group.innerText.trim()).toEqual('groupPage1');
 
 		var groups = $document[0].querySelectorAll('.group');
 		expect(groups.length).toEqual(4);
-
 	});
 
-	it('should render business hierarchy group list',function() {
-		var picker = setupComponent('group-pages="groupPages"', testScope());
+	it('should render business hierarchy group list', function () {
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', testScope());
 		openPanel(picker);
 		expectPanelOpen();
 		var tabContents = $document.find('group-pages-panel').find('md-tab-content');
@@ -83,7 +78,7 @@ describe('<group-page-picker>', function () {
 	});
 
 	it('should render child group after expand the group', function () {
-		var picker = setupComponent('group-pages="groupPages"', testScope());
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', testScope());
 		openPanel(picker);
 		expectPanelOpen();
 		var tabContents = $document.find('group-pages-panel').find('md-tab-content');
@@ -94,8 +89,8 @@ describe('<group-page-picker>', function () {
 
 	});
 
-	it('should collapse all groups by default',function() {
-		var picker = setupComponent('group-pages="groupPages"', testScope());
+	it('should collapse all groups by default', function () {
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', testScope());
 		openPanel(picker);
 		expectPanelOpen();
 
@@ -104,8 +99,8 @@ describe('<group-page-picker>', function () {
 
 	});
 
-	it('can toggle group',function() {
-		var picker = setupComponent('group-pages="groupPages"', testScope());
+	it('can toggle group', function () {
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', testScope());
 		openPanel(picker);
 		expectPanelOpen();
 
@@ -126,14 +121,197 @@ describe('<group-page-picker>', function () {
 		expect(childGroups.length).toEqual(0);
 	});
 
-	describe('sync selection both on UI and bound data', function () {
-		it('should check parent group when all child groups are checked', function () {
+	it('should clear selected groups when switching to group pages tab', function () {
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', testScope());
+		openPanel(picker);
+		expectPanelOpen();
+
+		var toggle = angular.element($document[0].querySelector('.group .group-toggle'));
+		toggle.triggerHandler('click');
+		toggle = angular.element($document[0].querySelector('.group .group-toggle'));
+		expect(toggle.find('i').hasClass('mdi-chevron-up')).toEqual(true);
+		var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+		childGroups[0].querySelector('.wfm-checkbox-toggle').click();
+		childGroups[1].querySelector('.wfm-checkbox-toggle').click();
+
+		expect(childGroups.length).toEqual(2);
+
+		var ctrl = picker.isolateScope().$ctrl;
+		expect(ctrl.selectedGroups.mode).toEqual('BusinessHierarchy');
+		expect(ctrl.selectedGroups.groupIds.length).toEqual(2);
+
+		clickTab(1);
+
+		expect(ctrl.selectedGroups.mode).toEqual('GroupPages');
+		expect(ctrl.selectedGroups.groupIds.length).toEqual(0);
+	});
+
+
+	it('should clear all selection when click clear button ', function () {
+		var scope = testScope();
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+		openPanel(picker);
+		expectPanelOpen();
+
+		clickTab(1);
+
+		checkGroupPage(0);
+
+		expect(scope.selectedGroups.mode).toEqual('GroupPages');
+		expect(scope.selectedGroups.groupIds.length).toEqual(2);
+		expect(scope.selectedGroups.groupPageId).toEqual('groupPage1');
+
+		var clearButton = $document[0].querySelector('.selection-clear');
+		clearButton.click();
+		expect(scope.selectedGroups.groupIds.length).toEqual(0);
+		expect(scope.selectedGroups.groupPageId).toEqual('');
+	});
+
+	it('should close panel when I click the Close button', function () {
+		var scope = testScope();
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+		openPanel(picker);
+		expectPanelOpen();
+
+		var closeButton = $document[0].querySelector('.selection-done');
+		closeButton.click();
+
+		expectPanelClosed();
+	});
+
+	xit('should display how many teams are selected',
+		function() {
 			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages"', scope);
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
 
-			var parentGroup = $document[0].querySelector('.group'); 
+			checkGroupPage(0);
+			checkGroupPage(1);
+
+			var selectValue = $document[0].querySelector("md-select-value .selected-text");
+
+			expect(selectValue.innerText.trim()).toEqual("");
+
+		});
+
+	describe('when I am on the Group Pages tab,', function () {
+		it('should reset selected groups when switching to another group page and current group page is selected', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(1);
+
+			checkGroupPage(0);
+
+			expect(scope.selectedGroups.mode).toEqual('GroupPages');
+			expect(scope.selectedGroups.groupIds.length).toEqual(2);
+			expect(scope.selectedGroups.groupPageId).toEqual('groupPage1');
+
+			checkGroupPage(1);
+
+			expect(scope.selectedGroups.mode).toEqual('GroupPages');
+			expect(scope.selectedGroups.groupIds.length).toEqual(2);
+			expect(scope.selectedGroups.groupPageId).toEqual('groupPage2');
+		});
+
+		it('should reset selected groups when switching to another group value and current group page is selected', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(1);
+			checkGroupPage(0);
+
+			expect(scope.selectedGroups.mode).toEqual('GroupPages');
+			expect(scope.selectedGroups.groupIds.length).toEqual(2);
+			expect(scope.selectedGroups.groupPageId).toEqual('groupPage1');
+
+			findAndCheckChildGroup(1, 0);
+
+			expect(scope.selectedGroups.mode).toEqual('GroupPages');
+			expect(scope.selectedGroups.groupIds.length).toEqual(1);
+			expect(scope.selectedGroups.groupPageId).toEqual('groupPage2');
+		});
+
+		it('should reset selected groups when switching to another group page and current group page is partially selected', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(1);
+			findAndCheckChildGroup(0, 0);
+
+			expect(scope.selectedGroups.mode).toEqual('GroupPages');
+			expect(scope.selectedGroups.groupIds.length).toEqual(1);
+			expect(scope.selectedGroups.groupPageId).toEqual('groupPage1');
+
+			toggleGroupPage(0);
+			checkGroupPage(1);
+
+			expect(scope.selectedGroups.mode).toEqual('GroupPages');
+			expect(scope.selectedGroups.groupIds.length).toEqual(2);
+			expect(scope.selectedGroups.groupPageId).toEqual('groupPage2');
+		});
+
+		it('should reset selected groups when switching to another group value and current group page is partially selected', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(1);
+			findAndCheckChildGroup(0, 0);
+
+			expect(scope.selectedGroups.mode).toEqual('GroupPages');
+			expect(scope.selectedGroups.groupIds.length).toEqual(1);
+			expect(scope.selectedGroups.groupPageId).toEqual('groupPage1');
+
+			toggleGroupPage(0);
+			findAndCheckChildGroup(1, 0);
+
+			expect(scope.selectedGroups.mode).toEqual('GroupPages');
+			expect(scope.selectedGroups.groupIds.length).toEqual(1);
+			expect(scope.selectedGroups.groupPageId).toEqual('groupPage2');
+		});
+	});
+
+
+	describe('should sync data, and', function () {
+		it('should check parent group when all child groups are checked', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			var parentGroup = $document[0].querySelector('.group');
+			var toggle = angular.element($document[0].querySelector('.group .group-toggle'));
+			toggle.triggerHandler('click');
+
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			childGroups[0].querySelector('.wfm-checkbox-toggle').click();
+			childGroups[1].querySelector('.wfm-checkbox-toggle').click();
+
+			expect(parentGroup.querySelector('.wfm-checkbox input').checked).toEqual(true);
+			expect(childGroups[0].querySelector('input').checked).toEqual(true);
+			expect(childGroups[1].querySelector('input').checked).toEqual(true);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			expect(ctrl.selectedGroups.mode).toEqual('BusinessHierarchy');
+			expect(ctrl.selectedGroups.groupIds.length).toEqual(2);
+		});
+
+		it('should uncheck parent group when all child groups are unchecked', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			var parentGroup = $document[0].querySelector('.group');
 			var toggle = angular.element($document[0].querySelector('.group .group-toggle'));
 			toggle.triggerHandler('click');
 
@@ -162,11 +340,11 @@ describe('<group-page-picker>', function () {
 
 		it('should display  indeterminate status for parent group when some of child groups are checked', function () {
 			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages"', scope);
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
 
-			var parentGroup = $document[0].querySelector('.group'); 
+			var parentGroup = $document[0].querySelector('.group');
 			var toggle = angular.element($document[0].querySelector('.group .group-toggle'));
 			toggle.triggerHandler('click');
 
@@ -182,11 +360,11 @@ describe('<group-page-picker>', function () {
 
 		it('should check all child groups when an unchecked parent group is checked', function () {
 			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages"', scope);
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
 
-			var parentGroup = $document[0].querySelector('.group'); 
+			var parentGroup = $document[0].querySelector('.group');
 			var parentCheckGroup = parentGroup.querySelector('.wfm-checkbox input');
 			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
 
@@ -196,8 +374,36 @@ describe('<group-page-picker>', function () {
 			expect(parentCheckGroup.checked).toEqual(true);
 			expect(ctrl.selectedGroups.groupIds.length).toEqual(2);
 		});
+
+		it('should check all when group page  is partially selected', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			var toggle = angular.element($document[0].querySelectorAll('.group .group-toggle'));
+			toggle[0].click();
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			childGroups[0].querySelector('.wfm-checkbox-toggle').click();
+			expect(scope.selectedGroups.groupIds.length).toEqual(1);
+			checkGroupPage(0);
+			expect(scope.selectedGroups.groupIds.length).toEqual(2);
+
+		});
+
 	});
 
+	function expectTabOpen(index, title) {
+		var tab = $document[0].querySelectorAll('group-pages-panel md-tab-item')[index];
+		var icon = tab.querySelector('i');
+		expect(icon.title).toEqual(title);
+		expect(angular.element(tab).hasClass('md-active')).toEqual(true);
+	}
+
+	function expectPanelClosed() {
+		var panel = $document[0].querySelector('.md-panel-outer-wrapper');
+		expect(panel).toBe(null);
+	}
 
 	function expectPanelOpen() {
 		var panel = angular.element($document[0].querySelector('.md-panel-outer-wrapper'));
@@ -212,9 +418,29 @@ describe('<group-page-picker>', function () {
 		$material.flushInterimElement();
 	}
 
-	function clickTab(pickerPanel, tabIndex) {
-		var tab = pickerPanel.find('md-tab-item')[tabIndex];
-		if (!tab) throw Error('Could not find tab');
+	function checkGroupPage(index) {
+		expectPanelOpen();
+		var groupPageCheckboxes = $document[0].querySelectorAll('md-tab-content.md-active .group .wfm-checkbox');
+		groupPageCheckboxes[index].click();
+	}
+
+	function findAndCheckChildGroup(groupPageIndex, childIndex) {
+		var toggles = angular.element($document[0].querySelectorAll('.group .group-toggle'));
+		toggles[groupPageIndex].click();
+		var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+		childGroups[childIndex].querySelector('.wfm-checkbox-toggle').click();
+
+		return childGroups;
+	}
+
+	function toggleGroupPage(pageIndex) {
+		var toggles = angular.element($document[0].querySelectorAll('.group .group-toggle'));
+		toggles[pageIndex].click();
+	}
+
+	function clickTab(tabIndex) {
+		var tabs = $document[0].querySelectorAll('group-pages-panel md-tab-item');
+		var tab = tabs[tabIndex];
 		angular.element(tab).triggerHandler('click');
 	}
 
@@ -232,6 +458,7 @@ describe('<group-page-picker>', function () {
 
 	function testScope() {
 		var scope = $rootScope.$new();
+		scope.selectedGroups = {};
 		scope.groupPages = {
 			'BusinessHierarchy': [
 				{
@@ -265,18 +492,18 @@ describe('<group-page-picker>', function () {
 			],
 			'GroupPages': [
 				{
-				Id: 'groupPage1',
-				Name: 'groupPage1',
-				Children: [
-					{
-						Id: 'childGroup1_1',
-						Name: 'childGroup1_1'
-					},
-					{
-						Id: 'childGroup1_2',
-						Name: 'childGroup1_2'
-					}
-				]
+					Id: 'groupPage1',
+					Name: 'groupPage1',
+					Children: [
+						{
+							Id: 'childGroup1_1',
+							Name: 'childGroup1_1'
+						},
+						{
+							Id: 'childGroup1_2',
+							Name: 'childGroup1_2'
+						}
+					]
 				},
 				{
 					Id: 'groupPage2',

@@ -9,13 +9,13 @@
 				onOpen: '&?',
 				onClose: '&?',
 				groupPages: '<',
-				selection: '<'
+				selectedGroups: '<'
 			}
 		});
 
-	GroupPagePickerController.$inject = ['$mdPanel', '$element', '$scope'];
+	GroupPagePickerController.$inject = ['$mdPanel', '$element', '$scope','$translate'];
 
-	function GroupPagePickerController($mdPanel, $element, $scope) {
+	function GroupPagePickerController($mdPanel, $element, $scope, $translate) {
 		var ctrl = this;
 		ctrl.mode = 'BusinessHierarchy';
 		ctrl.tabs = [
@@ -41,9 +41,9 @@
 			});
 
 		ctrl.longestName = '';
-		ctrl.selectedGroups = {
-			mode: ctrl.mode,
-			groupIds: []
+
+		ctrl.clearAll = function() {
+			resetSelectedGroups();
 		};
 
 		ctrl.openMenu = function (event) {
@@ -51,17 +51,35 @@
 		};
 
 		ctrl.$onInit = function () {
+			if (!ctrl.selectedText)
+				ctrl.selectedText = ctrl.defaultSelectedTextFn;
+
+			resetSelectedGroups();
+
 			ctrl.menuRef = createPanel();
+		}
+		ctrl.defaultSelectedTextFn = function() {
+			return ctrl.selectedGroups.groupIds.map(function(id) {
+					return ctrl.nameMap[id];
+				}).filter(function(name) {
+					return !!name;
+				}).join(', ');
+
 		}
 
 		ctrl.toggleGroup = function (parentGroupCopy) {
 			parentGroupCopy.toggleAll();
 			if (parentGroupCopy.isChecked()) {
+				if (ctrl.mode === "GroupPages") {
+					ctrl.selectedGroups.groupIds = [];
+					ctrl.selectedGroups.groupPageId = parentGroupCopy.id;
+				}
 				parentGroupCopy.selectedChildGroupIds.forEach(function (id) {
 					if (ctrl.selectedGroups.groupIds.indexOf(id) === -1) {
 						ctrl.selectedGroups.groupIds.push(id);
 					}
 				});
+				
 			} else {
 				parentGroupCopy.children.forEach(function (childGroupCopy) {
 					var index = ctrl.selectedGroups.groupIds.indexOf(childGroupCopy.origin.id);
@@ -108,10 +126,11 @@
 
 		}
 
-		ctrl.changeTab = function (tab) {
+		ctrl.changeTab = function(tab) {
 			ctrl.mode = tab.title;
 			ctrl.setPickerData();
-		}
+			resetSelectedGroups();
+		};
 
 		ctrl.searchForOrgsByName = function (searchText) {
 			var textIsEmpty = (searchText === '');
@@ -131,6 +150,12 @@
 			});
 			return ret;
 		};
+
+		function resetSelectedGroups() {
+			ctrl.selectedGroups.mode = ctrl.mode;
+			ctrl.selectedGroups.groupIds = [];
+			ctrl.selectedGroups.groupPageId = '';
+		}
 
 		function ParentGroupCopy(originalParentGroup) {
 			this.selectedChildGroupIds = [];
