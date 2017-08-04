@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
@@ -422,6 +423,77 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				orgs[team.Site.Id].Single().GroupName.Should().Be.EqualTo("Dummy Site/Dummy Team");
 				result[normalGroups.First().PageId].Single().GroupName.Should().Be.EqualTo("dummyContract");
 
+			});
+		}
+
+		[Test]
+		public void ShouldReturnAvailableGroupDetailsWhoIsTerminatedLaterThanPeriodStart()
+		{
+			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+			var anotherPerson = PersonFactory.CreatePerson("dummyAgent2");
+			var team = TeamFactory.CreateTeam("Dummy Team 1", "Dummy Site");
+			var teamAnother = TeamFactory.CreateSimpleTeam("Dummy Team 2");
+			teamAnother.Site = team.Site;
+			var activity = new Activity("dummy activity");
+			var skill = SkillFactory.CreateSkill("dummy skill");
+			skill.Activity = activity;
+			var personContract = PersonContractFactory.CreatePersonContract();
+
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				TeamRepository.Add(teamAnother);
+				ActivityRepository.Add(activity);
+				SkillTypeRepository.Add(skill.SkillType);
+				SkillRepository.Add(skill);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+			});
+
+			personToTest.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1), personContract, team));
+			personToTest.TerminatePerson(new DateOnly(2017, 7, 1),  new PersonAccountUpdaterDummy());
+			anotherPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1), personContract, teamAnother ));
+			anotherPerson.TerminatePerson(new DateOnly(2017, 5, 31), new PersonAccountUpdaterDummy() ); 
+
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.Add(personToTest);
+				PersonRepository.Add(anotherPerson);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var period = new DateOnlyPeriod(new DateOnly(2017, 5, 28), new DateOnly(2017, 06, 2));
+				var gps = Target.AvailableGroupsBasedOnPeriod(period).ToList();
+				var result = Target.AvailableGroups(period, gps.Select(gp => gp.PageId).ToArray())
+				.ToLookup(gp => gp.PageId);
+				var orgs = result[Group.PageMainId].ToLookup(o => o.SiteId);
+				var normalGroups = gps.Where(gp => gp.PageId != Group.PageMainId).OrderBy(gp => gp.PageName);
+
+				orgs.Count().Should().Be.EqualTo(1);
+				orgs[team.Site.Id].Count().Should().Be.EqualTo(2);
+				orgs[team.Site.Id].First().GroupName.Should().Be.EqualTo("Dummy Site/Dummy Team 1");
+				orgs[team.Site.Id].Second().GroupName.Should().Be.EqualTo("Dummy Site/Dummy Team 2");
+				result[normalGroups.First().PageId].Count().Should().Be.EqualTo(2);
+				result[normalGroups.First().PageId].First().GroupName.Should().Be.EqualTo("dummyContract");
+
+				period = new DateOnlyPeriod(new DateOnly(2017, 6, 1), new DateOnly(2017, 6, 2));
+				result = Target.AvailableGroups(period, gps.Select(gp => gp.PageId).ToArray()).ToLookup(gp => gp.PageId);
+				orgs = result[Group.PageMainId].ToLookup(o => o.SiteId);
+				normalGroups = gps.Where(gp => gp.PageId != Group.PageMainId).OrderBy(gp => gp.PageName);
+
+				orgs.Count().Should().Be.EqualTo(1);
+				orgs[team.Site.Id].Count().Should().Be.EqualTo(1);
+				orgs[team.Site.Id].First().GroupName.Should().Be.EqualTo("Dummy Site/Dummy Team 1");
+				result[normalGroups.First().PageId].Count().Should().Be.EqualTo(1);
+				result[normalGroups.First().PageId].First().GroupName.Should().Be.EqualTo("dummyContract");
 			});
 		}
 	}

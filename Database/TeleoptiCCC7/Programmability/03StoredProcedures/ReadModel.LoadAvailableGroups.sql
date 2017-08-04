@@ -43,7 +43,7 @@ BEGIN
       AND @startDate <= isnull(EndDate, '2059-12-31')
 	  AND @endDate >= isnull(StartDate, '1900-01-01')
       AND (
-        LeavingDate BETWEEN @startDate AND @endDate
+        LeavingDate >= @startDate
         OR LeavingDate IS NULL
         )
    ORDER BY groupname
