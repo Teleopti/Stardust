@@ -138,7 +138,6 @@ WfmGlobalLayout_personalOptions_37114 = true
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = true
 ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI until we have a proper UI
 ResourcePlanner_CategorizeShiftSelection_xx = false
-ResourcePlanner_MasterActivityBaseLayer_44134 = true
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_TeamSameDayOff_44265 = true
 ResourcePlanner_MergeTeamblockClassicScheduling_44289 = true

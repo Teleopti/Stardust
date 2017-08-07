@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -14,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_MasterActivityBaseLayer_44134)]
 	public class ShiftsFromMasterActivityBaseActivityServiceTest
 	{
 		public IShiftFromMasterActivityService Target;

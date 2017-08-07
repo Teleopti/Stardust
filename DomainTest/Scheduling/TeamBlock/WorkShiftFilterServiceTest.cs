@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				new CommonActivityFilter(),
 				new RuleSetAccordingToAccessabilityFilterOLD(new RuleSetBagExtractorProvider(),
 					new TeamBlockIncludedWorkShiftRuleFilter(), new RuleSetSkillActivityChecker()),
-				new ShiftProjectionCacheManager(new ShiftFromMasterActivityService(), new RuleSetDeletedActivityChecker(),
+				new ShiftProjectionCacheManager(new ShiftsFromMasterActivityBaseActivityService(), new RuleSetDeletedActivityChecker(),
 					new RuleSetDeletedShiftCategoryChecker(),
 					new RuleSetProjectionEntityService(new ShiftCreatorService(new CreateWorkShiftsFromTemplate())),
 					new WorkShiftFromEditableShift()), new RuleSetPersonalSkillsActivityFilter(new RuleSetSkillActivityChecker(), new PersonalSkillsProvider()),

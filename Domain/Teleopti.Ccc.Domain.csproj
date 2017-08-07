@@ -3001,7 +3001,6 @@
     <Compile Include="Scheduling\ShiftCreator\OperatorLimiter.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionEntityService.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionService.cs" />
-    <Compile Include="Scheduling\ShiftCreator\ShiftFromMasterActivityService.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftAddStopperCallback.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkshiftCollection.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftProjection.cs" />
