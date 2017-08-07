@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			return EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count();
+			return EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count();
 		}
 
 
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			return EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count();
+			return EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count();
 		}
 
 		[Test]
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be(2);
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be(2);
 		}
 
 		[Test]
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			var events = EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>();
+			var events = EventPublisher.PublishedEvents.OfType<IIslandInfo>();
 
 			events.Count().Should().Be.EqualTo(2);
 			events.Any(x => x.AgentsInIsland.Count() == 8).Should().Be.True();
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be(1);
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be(1);
 		}
 
 		[Test]
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be(1);
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be(1);
 		}
 
 		[Test]
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be(1);
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be(1);
 		}
 
 		[Test]
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be(1);
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be(1);
 		}
 
 		[Test]
@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			var events = EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>();
+			var events = EventPublisher.PublishedEvents.OfType<IIslandInfo>();
 			events.Count().Should().Be.EqualTo(2);
 			events.Any(x => x.AgentsInIsland.Count() == 7).Should().Be.True();
 			events.Any(x => x.AgentsInIsland.Count() == 2).Should().Be.True();
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be.EqualTo(2);
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be.EqualTo(2);
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -257,7 +257,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be.EqualTo(2);
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -270,7 +270,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().AgentsInIsland.Count().Should().Be.EqualTo(1);
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Single().AgentsInIsland.Count().Should().Be.EqualTo(1);
 		}
 
 		[Test, Timeout(5000)]
@@ -290,7 +290,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count()
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count()
 				.Should().Be.EqualTo(numberOfAgents);
 		}
 
@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			executeTarget();
 
-			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Count().Should().Be.EqualTo(3);
+			EventPublisher.PublishedEvents.OfType<IIslandInfo>().Count().Should().Be.EqualTo(3);
 		}
 
 		private void executeTarget()

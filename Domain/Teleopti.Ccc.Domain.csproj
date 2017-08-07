@@ -250,6 +250,7 @@
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestStartTimeValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestValidationResult.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\ClearPlanningPeriodSchedulingCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\ResourcePlanner\IIslandInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IOrganizationReader.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\OrganizationSiteModel.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\HistoricalAdherenceMaintainer.cs" />
