@@ -318,6 +318,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			switch (_sut)
 			{
 				case SUT.Scheduling:
+					SchedulingCommandHandler.Execute(new SchedulingCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 					break;
 				case SUT.IntradayOptimization:
 					IntradayOptimizationCommandHandler.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
