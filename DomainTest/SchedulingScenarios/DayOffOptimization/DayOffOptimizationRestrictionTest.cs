@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -16,7 +15,6 @@ using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
@@ -28,13 +26,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	[DomainTest]
 	public class DayOffOptimizationRestrictionTest : DayOffOptimizationScenario
 	{
-		private readonly bool _teamBlockDayOffForIndividuals;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IDayOffOptimizationDesktop Target;
 
 		public DayOffOptimizationRestrictionTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
 		{
-			_teamBlockDayOffForIndividuals = teamBlockDayOffForIndividuals;
 		}
 
 		[Test]
@@ -85,16 +81,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				.Should().Be.False();//saturday
 			stateHolder.Schedules[agent].ScheduledDay(firstDay.AddDays(1)).HasDayOff()
 				.Should().Be.True();//tuesday
-		}
-
-		public override void Configure(FakeToggleManager toggleManager)
-		{
-			base.Configure(toggleManager);
-			if (_teamBlockDayOffForIndividuals)
-				toggleManager.Enable(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998);
-			else
-				toggleManager.Disable(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998);
-
 		}
 	}
 }
