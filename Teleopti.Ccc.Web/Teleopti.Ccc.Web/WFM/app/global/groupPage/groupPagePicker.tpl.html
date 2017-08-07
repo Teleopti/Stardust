@@ -5,12 +5,17 @@
 	</md-select-value>
 	<div class="_off-screen">
 		<group-pages-panel class="group-page-picker-menu">
+			
 			<div class="longest-name">{{$ctrl.longestName}}</div>
 			<md-content>
 				<md-tabs md-selected="$ctrl.selectedIndex" md-dynamic-height>
 					<md-tab ng-repeat="tab in $ctrl.tabs">
 						<md-tab-label><i title="{{tab.title|translate}}" class="mdi mdi-{{tab.icon}}"></i></md-tab-label>
 						<md-tab-body>
+							<div class="header">
+								<i class="mdi mdi-magnify"></i>
+								<input type="text" md-autofocus class="search md-text" placeholder="{{ 'Search' | translate}}" ng-model="$ctrl.searchText" />
+							</div>
 							<md-virtual-repeat-container class="virtual-repeat">
 								<div md-virtual-repeat="o in $ctrl.groupsInView" class="repeated-item" flex>
 									<div ng-if="o.origin.isParent" class="group md-button-toggle md-button md-ink-ripple">

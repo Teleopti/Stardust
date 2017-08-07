@@ -50,6 +50,7 @@
 			});
 
 		ctrl.longestName = '';
+		ctrl.searchText = '';
 
 		ctrl.clearAll = function () {
 			resetSelectedGroups();
@@ -117,8 +118,9 @@
 		ctrl.toggleGroup = function (parentGroupCopy) {
 			parentGroupCopy.toggleAll();
 			if (parentGroupCopy.isChecked()) {
-				if (ctrl.selectedGroups.mode === "GroupPages") {
-					ctrl.selectedGroups.groupIds = [];
+				if (ctrl.selectedGroups.mode === "GroupPages" &&
+					ctrl.selectedGroups.groupPageId !== parentGroupCopy.id) {
+					resetSelectedGroups();
 					ctrl.selectedGroups.groupPageId = parentGroupCopy.id;
 				}
 				parentGroupCopy.selectedChildGroupIds.forEach(function (id) {
@@ -138,13 +140,14 @@
 		};
 
 		ctrl.toggleSubGroup = function (childGroupCopy) {
-			childGroupCopy.parent.toggle(childGroupCopy.id);
-			childGroupCopy.origin.parent.toggle(childGroupCopy.id);
-
-			if (childGroupCopy.parent.id !== ctrl.selectedGroups.groupPageId) {
+			if (ctrl.selectedGroups.mode === 'GroupPages'
+				&& childGroupCopy.parent.id !== ctrl.selectedGroups.groupPageId) {
 				resetSelectedGroups();
 				ctrl.selectedGroups.groupPageId = childGroupCopy.parent.id;
 			}
+			childGroupCopy.parent.toggle(childGroupCopy.id);
+			childGroupCopy.origin.parent.toggle(childGroupCopy.id);
+
 			var index = ctrl.selectedGroups.groupIds.indexOf(childGroupCopy.origin.id);
 			if (index > -1) {
 				ctrl.selectedGroups.groupIds.splice(index, 1);
@@ -158,13 +161,13 @@
 		ctrl.collapseGroup = function (groupCopy) {
 			var index = ctrl.groupsInView.indexOf(groupCopy)
 			if (groupCopy.collapsed) {
-				var args = [index + 1, 0].concat(groupCopy.children)
-				ctrl.groupsInView.splice.apply(ctrl.groupsInView, args)
+				var args = [index + 1, 0].concat(groupCopy.children);
+				ctrl.groupsInView.splice.apply(ctrl.groupsInView, args);
+				updateSelectedGroupsInView();
 			} else {
 				ctrl.groupsInView.splice(index + 1, groupCopy.children.length)
 			}
 			groupCopy.collapsed = !groupCopy.collapsed;
-			updateSelectedGroupsInView();
 		}
 
 

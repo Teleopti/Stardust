@@ -143,7 +143,6 @@ describe('<group-page-picker>', function () {
 		expect(ctrl.selectedGroups.groupIds.length).toEqual(0);
 	});
 
-
 	it('should clear all selection when click clear button ', function () {
 		var scope = testScope();
 		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
@@ -186,7 +185,6 @@ describe('<group-page-picker>', function () {
 		expect(selectValue.innerText.trim()).toEqual("SeveralTeamsSelected");
 	});
 
-
 	it('should display groups are selected', function () {
 		var scope = testScope();
 		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
@@ -199,7 +197,6 @@ describe('<group-page-picker>', function () {
 		expect(selectValue.innerText.trim()).toEqual("SeveralGroupsSelected");
 	});
 
-
 	it('should preselect teams ', function () {
 		var scope = testScope();
 		scope.selectedGroups = {
@@ -209,7 +206,6 @@ describe('<group-page-picker>', function () {
 		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 		openPanel(picker);
 		expectPanelOpen();
-		
 
 		var ctrl = picker.isolateScope().$ctrl;
 
@@ -226,7 +222,6 @@ describe('<group-page-picker>', function () {
 		toggleGroupPage(1);
 		childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
 		expect(childGroups[0].querySelector('input').checked).toEqual(true);
-		
 	});
 
 	it('should preselect group pages', function () {
@@ -275,6 +270,21 @@ describe('<group-page-picker>', function () {
 			expect(scope.selectedGroups.mode).toEqual('GroupPages');
 			expect(scope.selectedGroups.groupIds.length).toEqual(2);
 			expect(scope.selectedGroups.groupPageId).toEqual('groupPage2');
+
+			var parentGroups = $document[0].querySelectorAll('.group');
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(false);
+			expect(parentGroups[1].querySelector('.wfm-checkbox input').checked).toEqual(true);
+
+			toggleGroupPage(0);
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups[0].querySelector('input').checked).toEqual(false);
+			expect(childGroups[1].querySelector('input').checked).toEqual(false);
+			toggleGroupPage(0);
+
+			toggleGroupPage(1);
+			childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups[0].querySelector('input').checked).toEqual(true);
+
 		});
 
 		it('should reset selected groups when switching to another group value and current group page is selected', function () {
@@ -340,6 +350,49 @@ describe('<group-page-picker>', function () {
 		});
 	});
 
+	describe("when I am on the Business Hierarchy tab", function () {
+		it('can select multiple sites', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(0);
+			checkGroupPage(0);
+			checkGroupPage(1);
+
+			var parentGroups = $document[0].querySelectorAll('.group');
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(true);
+			expect(parentGroups[1].querySelector('.wfm-checkbox input').checked).toEqual(true);
+
+		})
+
+		it('can select teams from multiple sites', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			findAndCheckChildGroup(0, 0);
+
+			toggleGroupPage(0);
+
+			findAndCheckChildGroup(1, 0);
+
+			var parentGroups = $document[0].querySelectorAll('.group');
+			
+			expect(angular.element(parentGroups[0].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
+			expect(angular.element(parentGroups[1].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups[0].querySelector('input').checked).toEqual(true);
+
+			toggleGroupPage(1);
+			toggleGroupPage(0);
+			childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups[0].querySelector('input').checked).toEqual(true);
+			expect(childGroups[1].querySelector('input').checked).toEqual(false);
+		});
+	});
 
 	describe('should sync data, and', function () {
 		it('should check parent group when all child groups are checked', function () {
@@ -394,7 +447,7 @@ describe('<group-page-picker>', function () {
 
 		});
 
-		it('should display  indeterminate status for parent group when some of child groups are checked', function () {
+		it('should display indeterminate status for parent group when some of child groups are checked', function () {
 			var scope = testScope();
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
@@ -427,6 +480,23 @@ describe('<group-page-picker>', function () {
 			var ctrl = picker.isolateScope().$ctrl;
 			expect(parentCheckGroup.checked).toEqual(true);
 			expect(ctrl.selectedGroups.groupIds.length).toEqual(2);
+		});
+
+		it('should check all child groups when checking partially selected parent group', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+			clickTab(1);
+			findAndCheckChildGroup(0, 1);
+			var parentGroup = $document[0].querySelector('.group');
+			var parentCheckGroup = parentGroup.querySelector('.wfm-checkbox input');
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			parentCheckGroup.click();
+			var ctrl = picker.isolateScope().$ctrl;
+			expect(parentCheckGroup.checked).toEqual(true);
+			expect(ctrl.selectedGroups.groupIds.length).toEqual(2);
+			expect(childGroups[0].querySelector('input').checked).toEqual(true);
 		});
 
 		it('should check all when group page  is partially selected', function () {
