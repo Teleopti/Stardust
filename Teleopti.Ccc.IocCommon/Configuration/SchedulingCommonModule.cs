@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			//check scopes here when we get further! might be singleinstances everywhere....
 			if (_configuration.Toggle(Toggles.ResourcePlanner_SchedulingIslands_44757))
 			{
-				builder.RegisterType<SchedulingCommandHandler>().InstancePerLifetimeScope();
+				builder.RegisterType<SchedulingCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<FullScheduling>().As<IFullScheduling>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			}
