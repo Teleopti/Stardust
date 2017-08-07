@@ -16245,7 +16245,7 @@ Do you want to participate?</value>
     <comment>Used in mytime overtime request when request date is more than 14 days in the future</comment>
   </data>
   <data name="OvertimeRequestDateIsPast" xml:space="preserve">
-    <value>Can not add overtime request for a past date</value>
+    <value>Cannot add an overtime request for a past date</value>
     <comment>Used in mytime overtime request when request date is a past date</comment>
   </data>
   <data name="AllowedOvertime" xml:space="preserve">
@@ -16285,8 +16285,8 @@ Do you want to participate?</value>
     <comment>Filter day off rules</comment>
   </data>
   <data name="PlansPageEditPlanningGroup" xml:space="preserve">
-    <value> Edit name and  filters for selected planning group</value>
-    <comment>Edit name and  filters for selected planning group</comment>
+    <value> Edit name and filters for selected planning group</value>
+    <comment>Edit name and filters for selected planning group</comment>
   </data>
   <data name="ClassicIntraday" xml:space="preserve">
     <value>Classic Intraday</value>
@@ -16297,7 +16297,7 @@ Do you want to participate?</value>
     <comment>Use in Mytime overtime request. An error message when agent has no available skill within person period.</comment>
   </data>
   <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
-    <value>Request period is out of skill open hours</value>
+    <value>The request period is outside of the skills' open hours</value>
     <comment>Use in Mytime overtime request. An error message when overtime request period is out of skill open hours</comment>
   </data>
   <data name="NoUnderStaffingSkill" xml:space="preserve">
@@ -16313,7 +16313,7 @@ Do you want to participate?</value>
     <comment>Public Note</comment>
   </data>
   <data name="ShiftCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
-    <value>Note: To move a shift for an agent in a different timezone, firstly select their timezone from the timezone dropdown.</value>
+    <value>Note: To move a shift for an agent in a different time zone, firstly select their time zone from the time zone dropdown.</value>
     <comment>Error message for move shift to agent in another time zone in Teams</comment>
   </data>
   <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">

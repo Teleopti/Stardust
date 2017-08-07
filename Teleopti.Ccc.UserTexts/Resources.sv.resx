@@ -14832,4 +14832,79 @@ Vill du registrera dig?</value>
   <data name="PressEscToClose" xml:space="preserve">
     <value>Tryck Esc för att stänga</value>
   </data>
+  <data name="OvertimeRequestDateIsPast" xml:space="preserve">
+    <value>Övertidsförfrågan kan inte skapas för ett datum som är passerat</value>
+  </data>
+  <data name="CreateDayOffRule" xml:space="preserve">
+    <value>Skapa fridagsregel</value>
+  </data>
+  <data name="EditDayOffRule" xml:space="preserve">
+    <value>Ändra fridagsregel</value>
+  </data>
+  <data name="FilterDayOffRules" xml:space="preserve">
+    <value>Filtrera fridagsregler</value>
+  </data>
+  <data name="PlansPageEditPlanningGroup" xml:space="preserve">
+    <value>Ändra namn och filter för vald planeringsgrupp</value>
+  </data>
+  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
+    <value>Agenten har ingen tillgänglig kompetens för övertiden</value>
+  </data>
+  <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
+    <value>Perioden för förfrågan är utanför kompetensernas öppettider</value>
+  </data>
+  <data name="NoAccessToSites" xml:space="preserve">
+    <value>Du har inte åtkomst till några enheter eller team</value>
+  </data>
+  <data name="PublicNote" xml:space="preserve">
+    <value>Publik notering</value>
+  </data>
+  <data name="ShiftCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>Obs! För att flytta ett skift för en agent i en annan tidszon, välj först deras tidszon i tidszonsmenyn.</value>
+  </data>
+  <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
+    <value>Övertidsförfrågan {0}-{1} har godkänts. </value>
+  </data>
+  <data name="DragAndDropCSVFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Dra och släpp .csv-filer här, eller klicka för att ladda upp</value>
+  </data>
+  <data name="SuccessfullyImported" xml:space="preserve">
+    <value>Importen lyckades</value>
+  </data>
+  <data name="TotalAgentsInAlarm" xml:space="preserve">
+    <value>Totalt antal agenter med larm</value>
+  </data>
+  <data name="AnywhereMigrated" xml:space="preserve">
+    <value>Anywhere har flyttats till {0}WFM{1}!</value>
+  </data>
+  <data name="PageWillBeRedirected" xml:space="preserve">
+    <value>Den här sidan kommer automatiskt att omdirigeras till WFM om {0} sekunder...</value>
+  </data>
+  <data name="SeveralGroupsSelected" xml:space="preserve">
+    <value>{0} valda grupper</value>
+  </data>
+  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+    <value>Kompetensen med namnet {0} är inte definierad i systemet.</value>
+  </data>
+  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+    <value>Kompetensen med namnet {0} är definierad {1} gånger i systemet. Endast en gång är tillåtet vid användning av denna funktion. </value>
+  </data>
+  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+    <value>Raden har {0} parametrar, men {1} parametrar förväntades.</value>
+  </data>
+  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>Fel på rad nummer {0} med innehåll: {1} {2}</value>
+  </data>
+  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+    <value>Parameter {0} kan inte vara tom</value>
+  </data>
+  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+    <value>Ogiltigt namn i rubrikraden: '{0}'. Giltiga namn är: ({1})</value>
+  </data>
+  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+    <value>Importfilen kan inte vara tom.</value>
+  </data>
+  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+    <value>Första raden i filen (rubrikraden) kan inte vara tom. </value>
+  </data>
 </root>
