@@ -16336,11 +16336,11 @@ Do you want to participate?</value>
     <comment>Total Agents In Alarm</comment>
   </data>
   <data name="AnywhereMigrated" xml:space="preserve">
-    <value>Anywhere has been migrated to {0}WFM{1}!</value>
-    <comment>Message displayed for users on access Anywhere</comment>
+    <value>Anywhere has been migrated to {0}Teleopti WFM{1}!</value>
+    <comment>Message displayed for users on access Anywhere; "{0}" and "{1}" will be replaced with HTML code, so please do not change text "{0}Teleopti WFM{1}" on localization.</comment>
   </data>
   <data name="PageWillBeRedirected" xml:space="preserve">
-    <value>This page will automatic redirect to WFM in {0} seconds...</value>
+    <value>This page will automatically redirect to WFM in {0} seconds...</value>
     <comment>Message displayed for users on access Anywhere</comment>
   </data>
   <data name="SeveralGroupsSelected" xml:space="preserve">
