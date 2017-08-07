@@ -3,11 +3,11 @@
 
     angular.module('wfm.staffing')
         .directive('staffingImportData', ImportDataDirective)
-        .controller('ImportDataCtrl', ['$timeout', 'Toggle', '$translate', 'staffingService', ImportDataController]);
+        .controller('ImportDataController', ['$timeout', 'Toggle', '$translate', 'staffingService', ImportDataController]);
 
     function ImportDataDirective() {
         return {
-            controller: 'ImportDataCtrl',
+            controller: 'ImportDataController',
             controllerAs: 'vm',
             bindToController: true,
             scope: {
@@ -57,7 +57,7 @@
         function readFile(input) {
             var fileReader = new FileReader();
             fileReader.onload = function (event) {
-                var data = JSON.stringify(event.currentTarget.result);
+                var data = angular.toJson(event.currentTarget.result);
                 var query = staffingService.importbpo.save(data);
                 vm.isSuccessful = false;
                 vm.isFailed = false;
@@ -72,7 +72,7 @@
                 })
             }
             fileReader.onerror = function (event) {
-                console.log(event);
+                //console.log(event);
             }
             var result = fileReader.readAsText(input[0]);
 
