@@ -117,12 +117,13 @@
 
 		ctrl.toggleGroup = function (parentGroupCopy) {
 			parentGroupCopy.toggleAll();
+			if (ctrl.selectedGroups.mode === "GroupPages" &&
+				ctrl.selectedGroups.groupPageId !== parentGroupCopy.id) {
+				resetSelectedGroups();
+				ctrl.selectedGroups.groupPageId = parentGroupCopy.id;
+			}
 			if (parentGroupCopy.isChecked()) {
-				if (ctrl.selectedGroups.mode === "GroupPages" &&
-					ctrl.selectedGroups.groupPageId !== parentGroupCopy.id) {
-					resetSelectedGroups();
-					ctrl.selectedGroups.groupPageId = parentGroupCopy.id;
-				}
+				
 				parentGroupCopy.selectedChildGroupIds.forEach(function (id) {
 					if (ctrl.selectedGroups.groupIds.indexOf(id) === -1) {
 						ctrl.selectedGroups.groupIds.push(id);
@@ -154,8 +155,6 @@
 			} else {
 				ctrl.selectedGroups.groupIds.push(childGroupCopy.origin.id);
 			}
-
-			
 		};
 
 		ctrl.collapseGroup = function (groupCopy) {
@@ -170,12 +169,9 @@
 			groupCopy.collapsed = !groupCopy.collapsed;
 		}
 
-
-
 		ctrl.setPickerData = function () {
 			populateGroupListAndNamemapAndFindLongestName(ctrl.groupPages[ctrl.selectedGroups.mode]);
-			ctrl.groupsInView = ctrl.searchForOrgsByName('');
-
+			ctrl.groupsInView = ctrl.filterGroups('');
 		}
 
 		ctrl.changeTab = function (tab) {
@@ -184,23 +180,36 @@
 			resetSelectedGroups();
 		};
 
-		ctrl.searchForOrgsByName = function (searchText) {
+		ctrl.onSearchTextChanged = function () {
+			ctrl.groupsInView = ctrl.filterGroups(ctrl.searchText);
+			updateSelectedGroupsInView();
+		};
+
+		ctrl.filterGroups = function (searchText) {
 			var textIsEmpty = (searchText === '');
-			var ret = [];
+			var results = [];
+			var query = new RegExp(searchText, 'i');
+
 			ctrl.groupList.forEach(function (group) {
-				var slaveGroup = new ParentGroupCopy(group);
-				slaveGroup.collapsed = textIsEmpty;
-				var r = [slaveGroup];
+				var parentGroupCopy = new ParentGroupCopy(group);
+				parentGroupCopy.collapsed = textIsEmpty;
+				var searchResultsInParentGroup = [parentGroupCopy];
+				var parentGroupNameMatched = group.name.search(query) != -1
 				group.children.forEach(function (child) {
-					var sc = new ChildGroupCopy(child, slaveGroup);
-					slaveGroup.addChild(sc);
-					if (!slaveGroup.collapsed) {
-						r.push(sc);
+					if (parentGroupNameMatched || textIsEmpty || child.name.search(query) != -1) {
+						var childGroupCopy = new ChildGroupCopy(child, parentGroupCopy);
+						parentGroupCopy.addChild(childGroupCopy);
+						if (!parentGroupCopy.collapsed) {
+							searchResultsInParentGroup.push(childGroupCopy);
+						}
 					}
 				});
-				ret = ret.concat(r);
+				if (parentGroupNameMatched || textIsEmpty || searchResultsInParentGroup.length > 1) {
+					results = results.concat(searchResultsInParentGroup);
+				}
 			});
-			return ret;
+
+			return results;
 		};
 
 
@@ -210,7 +219,7 @@
 				return g.id == ctrl.selectedGroups.groupPageId;
 			});
 			if (groups.length > 0) {
-				ctrl.toggleGroup(groups[0])
+				groups[0].clearAll();
 			}
 			ctrl.selectedGroups.groupIds = [];
 			ctrl.selectedGroups.groupPageId = '';
@@ -243,6 +252,10 @@
 			this.children.forEach(function (childGroup) {
 				this.selectedChildGroupIds.push(childGroup.id);
 			}, this);
+		};
+		ParentGroupCopy.prototype.clearAll = function () {
+			this.selectedChildGroupIds = [];
+			
 		};
 		ParentGroupCopy.prototype.isIndeterminate = function () {
 			return this.selectedChildGroupIds.length !== 0 && this.selectedChildGroupIds.length !== this.children.length;

@@ -5,7 +5,7 @@
 	</md-select-value>
 	<div class="_off-screen">
 		<group-pages-panel class="group-page-picker-menu">
-			
+
 			<div class="longest-name">{{$ctrl.longestName}}</div>
 			<md-content>
 				<md-tabs md-selected="$ctrl.selectedIndex" md-dynamic-height>
@@ -14,9 +14,9 @@
 						<md-tab-body>
 							<div class="header">
 								<i class="mdi mdi-magnify"></i>
-								<input type="text" md-autofocus class="search md-text" placeholder="{{ 'Search' | translate}}" ng-model="$ctrl.searchText" />
-							</div>
-							<md-virtual-repeat-container class="virtual-repeat">
+								<input type="text" md-autofocus class="search md-text" ng-change="$ctrl.onSearchTextChanged()" placeholder="{{ 'Search' | translate}}" ng-model="$ctrl.searchText" />
+							</div>- 
+							<md-virtual-repeat-container class="virtual-repeat" xng-if="tab.title == $ctrl.selectedGroups.mode">
 								<div md-virtual-repeat="o in $ctrl.groupsInView" class="repeated-item" flex>
 									<div ng-if="o.origin.isParent" class="group md-button-toggle md-button md-ink-ripple">
 										<label class="clickable-area" tabindex="-1" for="group-{{o.id}}">
@@ -39,9 +39,9 @@
 										</label>
 									</div>
 									<div ng-if=" !o.origin.isParent " class="child md-button md-ink-ripple">
-										<label class="clickable-area" tabindex="-1">
+										<label class="clickable-area" tabindex="-1" id="group-{{o.id}}">
 											<div class="wfm-checkbox">
-												<input type="checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()"/>
+												<input type="checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()" />
 												<span class="wfm-checkbox-toggle"></span>
 												<span class="wfm-checkbox-label" ng-bind-html="o.name"></span>
 											</div>

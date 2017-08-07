@@ -123,16 +123,13 @@ describe('<group-page-picker>', function () {
 		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', testScope());
 		openPanel(picker);
 		expectPanelOpen();
-
+	
 		toggleGroupPage(0);
+		checkGroupById('site1team1');
+		checkGroupById('site1team2');
 		var toggle = angular.element($document[0].querySelector('.group .group-toggle'));
 		expect(toggle.find('i').hasClass('mdi-chevron-up')).toEqual(true);
-		var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
-		childGroups[0].querySelector('.wfm-checkbox-toggle').click();
-		childGroups[1].querySelector('.wfm-checkbox-toggle').click();
-
-		expect(childGroups.length).toEqual(2);
-
+		
 		var ctrl = picker.isolateScope().$ctrl;
 		expect(ctrl.selectedGroups.mode).toEqual('BusinessHierarchy');
 		expect(ctrl.selectedGroups.groupIds.length).toEqual(2);
@@ -201,7 +198,7 @@ describe('<group-page-picker>', function () {
 		var scope = testScope();
 		scope.selectedGroups = {
 			mode: 'BusinessHierarchy',
-			groupIds: ['site1team1','site2team1']
+			groupIds: ['site1team1', 'site2team1']
 		};
 		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 		openPanel(picker);
@@ -326,6 +323,10 @@ describe('<group-page-picker>', function () {
 			expect(scope.selectedGroups.mode).toEqual('GroupPages');
 			expect(scope.selectedGroups.groupIds.length).toEqual(2);
 			expect(scope.selectedGroups.groupPageId).toEqual('groupPage2');
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(false);
+			expect(parentGroups[1].querySelector('.wfm-checkbox input').checked).toEqual(true);
 		});
 
 		it('should reset selected groups when switching to another group value and current group page is partially selected', function () {
@@ -348,6 +349,201 @@ describe('<group-page-picker>', function () {
 			expect(scope.selectedGroups.groupIds.length).toEqual(1);
 			expect(scope.selectedGroups.groupPageId).toEqual('groupPage2');
 		});
+
+		it('should filter groups when child group names are matched', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(1);
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'childGroup1_1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups.length).toEqual(1);
+			expect(parentGroups[0].innerText.indexOf('groupPage1') > -1).toEqual(true);
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups.length).toEqual(1);
+			expect(childGroups[0].innerText.indexOf('childGroup1_1') > -1).toEqual(true);
+		});
+
+		it('should filter groups when parent groups are matched', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(1);
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'groupPage1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups.length).toEqual(1);
+			expect(parentGroups[0].innerText.trim()).toEqual("groupPage1");
+
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups.length).toEqual(2);
+		});
+
+		it('should display selection status when filtering result contains selected groups only', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			increaseRepeatContainerHeight(picker);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(1);
+			findAndCheckChildGroup(0, 1);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'childGroup1_2';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups.length).toEqual(1);
+			expect(parentGroups[0].innerText.trim()).toEqual('groupPage1');
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(true);
+
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups.length).toEqual(1);
+			expect(childGroups[0].innerText.trim()).toEqual('childGroup1_2');
+			expect(childGroups[0].querySelector('input').checked).toEqual(true);
+
+			expect(ctrl.selectedGroups.groupIds.length).toEqual(1);
+		});
+
+		it('should display selection status when filtering result contains selected groups', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			increaseRepeatContainerHeight(picker);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(1);
+			findAndCheckChildGroup(0, 1);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'groupPage1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups.length).toEqual(1);
+			expect(parentGroups[0].innerText.trim()).toEqual('groupPage1');
+			expect(angular.element(parentGroups[0].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
+
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups.length).toEqual(2);
+			expect(childGroups[0].innerText.trim()).toEqual('childGroup1_1');
+			expect(childGroups[0].querySelector('input').checked).toEqual(false);
+			expect(childGroups[1].innerText.trim()).toEqual('childGroup1_2');
+			expect(childGroups[1].querySelector('input').checked).toEqual(true);
+
+		});
+
+		it('should display selection status when the whole parent group is selected and filtering result contains selected groups', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(1);
+			checkGroupPage(0);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'groupPage1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups.length).toEqual(1);
+			expect(parentGroups[0].innerText.trim()).toEqual('groupPage1');
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(true);
+
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups.length).toEqual(2);
+			expect(childGroups[0].innerText.trim()).toEqual('childGroup1_1');
+			expect(childGroups[0].querySelector('input').checked).toEqual(true);
+			expect(childGroups[1].innerText.trim()).toEqual('childGroup1_2');
+			expect(childGroups[1].querySelector('input').checked).toEqual(true);
+		});
+
+		it('should preserve selection status when select filtered group', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(1);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'groupPage1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			checkGroupById('childGroup1_1');
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(angular.element(parentGroups[0].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
+
+			ctrl.searchText = '';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+			expect(angular.element(parentGroups[0].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
+
+			toggleGroupPage(0);
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups.length).toEqual(2);
+			expect(childGroups[0].innerText.trim()).toEqual('childGroup1_1');
+			expect(childGroups[1].innerText.trim()).toEqual('childGroup1_2');
+			expect(childGroups[0].querySelector('input').checked).toEqual(true);
+			expect(childGroups[1].querySelector('input').checked).toEqual(false);
+		});
+
+		it('should preserve selection status when whole site is checked', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(1);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'groupPage1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			checkGroupById('childGroup1_1');
+			checkGroupById('childGroup1_2');
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(true);
+
+			ctrl.searchText = '';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(true);
+
+		});
+
+		it('should the indeterminate status be switched to checked '
+			+ 'when initail filtered site is partially checked '
+			+ 'and then changing filter to contain 1 group only', function () {
+				var scope = testScope();
+				var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+				openPanel(picker);
+				expectPanelOpen();
+
+				clickTab(1);
+				var ctrl = picker.isolateScope().$ctrl;
+				ctrl.searchText = 'groupPage1';
+				picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+				checkGroupById('childGroup1_1');
+				var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+				expect(angular.element(parentGroups[0].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
+
+				var ctrl = picker.isolateScope().$ctrl;
+				ctrl.searchText = 'childGroup1_1';
+				picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+				expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(true);
+			});
 	});
 
 	describe("when I am on the Business Hierarchy tab", function () {
@@ -380,7 +576,7 @@ describe('<group-page-picker>', function () {
 			findAndCheckChildGroup(1, 0);
 
 			var parentGroups = $document[0].querySelectorAll('.group');
-			
+
 			expect(angular.element(parentGroups[0].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
 			expect(angular.element(parentGroups[1].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
 			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
@@ -392,6 +588,202 @@ describe('<group-page-picker>', function () {
 			expect(childGroups[0].querySelector('input').checked).toEqual(true);
 			expect(childGroups[1].querySelector('input').checked).toEqual(false);
 		});
+
+		it('should filter teams when team names are matched', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			increaseRepeatContainerHeight(picker);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(0);
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'team1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups.length).toEqual(2);
+			expect(parentGroups[0].innerText.trim()).toEqual('site1');
+			expect(parentGroups[1].innerText.trim()).toEqual('site2');
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups[0].innerText.trim()).toEqual('site1 team1');
+			expect(childGroups[1].innerText.trim()).toEqual('site2 team1');
+		});
+
+		it('should filter sites when site names are matched', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			increaseRepeatContainerHeight(picker);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(0);
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'site1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups.length).toEqual(1);
+			expect(parentGroups[0].innerText.trim()).toEqual('site1');
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups.length).toEqual(2);
+			expect(childGroups[0].innerText.trim()).toEqual('site1 team1');
+			expect(childGroups[1].innerText.trim()).toEqual('site1 team2');
+		});
+
+		it('should display selection status when filtering result contains selected teams only', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			increaseRepeatContainerHeight(picker);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(0);
+			findAndCheckChildGroup(0, 1);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'site1 team2';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups.length).toEqual(1);
+			expect(parentGroups[0].innerText.trim()).toEqual('site1');
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(true);
+
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups.length).toEqual(1);
+			expect(childGroups[0].innerText.trim()).toEqual('site1 team2');
+			expect(childGroups[0].querySelector('input').checked).toEqual(true);
+
+		});
+		it('should display selection status when filtering result contains selected teams', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			increaseRepeatContainerHeight(picker);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(0);
+			findAndCheckChildGroup(0, 1);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'site1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups.length).toEqual(1);
+			expect(parentGroups[0].innerText.trim()).toEqual('site1');
+			expect(angular.element(parentGroups[0].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
+
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups.length).toEqual(2);
+			expect(childGroups[0].innerText.trim()).toEqual('site1 team1');
+			expect(childGroups[0].querySelector('input').checked).toEqual(false);
+			expect(childGroups[1].innerText.trim()).toEqual('site1 team2');
+			expect(childGroups[1].querySelector('input').checked).toEqual(true);
+
+		});
+		it('should display selection status when the whole site is selected and filtering result contains selected teams', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(0);
+			checkGroupPage(0);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'site1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups.length).toEqual(1);
+			expect(parentGroups[0].innerText.trim()).toEqual('site1');
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(true);
+
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups.length).toEqual(2);
+			expect(childGroups[0].innerText.trim()).toEqual('site1 team1');
+			expect(childGroups[0].querySelector('input').checked).toEqual(true);
+			expect(childGroups[1].innerText.trim()).toEqual('site1 team2');
+			expect(childGroups[1].querySelector('input').checked).toEqual(true);
+		});
+
+		it('should preserve selection status when select filtered team', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(0);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'site1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			checkGroupById('site1team1');
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(angular.element(parentGroups[0].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
+
+			ctrl.searchText = '';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+			expect(angular.element(parentGroups[0].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
+
+			toggleGroupPage(0);
+			var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+			expect(childGroups.length).toEqual(2);
+			expect(childGroups[0].innerText.trim()).toEqual('site1 team1');
+			expect(childGroups[1].innerText.trim()).toEqual('site1 team2');
+			expect(childGroups[0].querySelector('input').checked).toEqual(true);
+			expect(childGroups[1].querySelector('input').checked).toEqual(false);
+		});
+
+		it('should preserve selection status when whole site is checked', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(0);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'site1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			checkGroupById('site1team1');
+			checkGroupById('site1team2');
+
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(true);
+
+			ctrl.searchText = '';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(true);
+			
+		});
+		it('should the indeterminate status be switched to checked '
+			+ 'when initail filtered site is partially checked '
+			+ 'and then changing filter to contain 1 team only', function () {
+			var scope = testScope();
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			clickTab(0);
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'site1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+			checkGroupById('site1team1');
+			var parentGroups = $document[0].querySelectorAll('md-tab-content.md-active .group');
+			expect(angular.element(parentGroups[0].querySelector('.wfm-checkbox')).hasClass('indeterminate')).toEqual(true);
+
+			var ctrl = picker.isolateScope().$ctrl;
+			ctrl.searchText = 'site1 team1';
+			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+			expect(parentGroups[0].querySelector('.wfm-checkbox input').checked).toEqual(true);
+		});
+
 	});
 
 	describe('should sync data, and', function () {
@@ -516,6 +908,12 @@ describe('<group-page-picker>', function () {
 
 	});
 
+	function increaseRepeatContainerHeight(picker) {
+		var container = picker[0].querySelector('group-pages-panel md-virtual-repeat-container');
+		container.style.height = '400px';
+		container.style.display = 'block';
+	}
+
 	function expectTabOpen(index, title) {
 		var tab = $document[0].querySelectorAll('group-pages-panel md-tab-item')[index];
 		var icon = tab.querySelector('i');
@@ -540,6 +938,13 @@ describe('<group-page-picker>', function () {
 		component.find('md-select-value').triggerHandler('click');
 		$material.flushInterimElement();
 
+	}
+
+	function checkGroupById(id) {
+		var selector = 'md-tab-content.md-active #group-' + id;
+		var groups = $document[0].querySelectorAll(selector);
+		expect(groups.length).toBe(1);
+		groups[0].querySelector('input').click();
 	}
 
 	function checkGroupPage(index) {
