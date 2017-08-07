@@ -186,8 +186,7 @@ ko.bindingHandlers.scrollIntoViewWhenClick = {
 			var ele = this;
 			setTimeout(function(){
 				$(valueAccessor()).scrollTop($(ele).offset().top);
-				$(ele).val(' ');
-				$(ele).val('');
+				$(ele).val($(ele).val());
 			}, 500);
 		});
 	}

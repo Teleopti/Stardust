@@ -149,11 +149,16 @@
 	border-bottom: 1px solid #DFDFDF;
 }
 
-#Request-add-section{
-	max-height: 100%;
-	overflow-y: auto;
-	overflow-x: hidden;
-	-webkit-overflow-scrolling: touch;
+@media(max-width: 768px){
+	#Request-add-section{
+		margin-top 40px;
+		padding-top: 40px;
+		max-height: 250px;
+		min-height: 200px;
+		overflow-y: auto;
+		overflow-x: hidden;
+		-webkit-overflow-scrolling: touch;
+	}
 }
 
 .mobile-start-day #Request-add-section{
@@ -165,7 +170,6 @@
 	height: auto;
 	cursor: pointer;
 	z-index: 198;
-	
 }
 
 .mobile-add-request-form .overtime-add-container .overtime-request-duration .dropdown-menu{
