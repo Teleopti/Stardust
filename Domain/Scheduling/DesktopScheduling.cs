@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 			{
-				var fixedStaffPeople = selectedAgents.FixedStaffPeople(selectedPeriod);
-				ExecuteScheduling(schedulingCallback, schedulingOptions, backgroundWorker, fixedStaffPeople, selectedPeriod);
+				ExecuteScheduling(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod);
 			}
 			else
 			{
@@ -82,7 +81,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		protected override void ExecuteScheduling(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, true);
+			var fixedStaffPeople = selectedAgents.FixedStaffPeople(selectedPeriod);
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, fixedStaffPeople, selectedPeriod, true);
 		}
 	}
 }

@@ -1,4 +1,5 @@
 using System.Linq;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			var @event = new SchedulingWasOrdered
 			{
-				AgentsToSchedule = schedulingCommand.AgentsToSchedule.Select(x => x.Id.Value),
+				AgentsToSchedule = schedulingCommand.AgentsToSchedule.FixedStaffPeople(schedulingCommand.Period).Select(x => x.Id.Value),
 				StartDate = schedulingCommand.Period.StartDate,
 				EndDate = schedulingCommand.Period.EndDate,
 				RunWeeklyRestSolver = schedulingCommand.RunWeeklyRestSolver,
