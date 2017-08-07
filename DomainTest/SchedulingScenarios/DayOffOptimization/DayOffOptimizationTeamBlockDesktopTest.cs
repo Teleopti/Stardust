@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -15,28 +14,23 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(false, true)]
-	[TestFixture(true, true)]
-	[TestFixture(false, false)]
-	[TestFixture(true, false)]
+	[TestFixture(false)]
+	[TestFixture(true)]
 	[DomainTestWithStaticDependenciesAvoidUse]
 	public class DayOffOptimizationTeamBlockDesktopTest : DayOffOptimizationScenario
 	{
-		private readonly bool _teamSameDayOff;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public DayOffOptimizationDesktopTeamBlock Target;
 		public FakeRuleSetBagRepository RuleSetBagRepository; //needed also in Desktop tests becaused used in grouppagecreator
 
-		public DayOffOptimizationTeamBlockDesktopTest(bool teamBlockDayOffForIndividuals, bool teamSameDayOff) : base(teamBlockDayOffForIndividuals)
+		public DayOffOptimizationTeamBlockDesktopTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
 		{
-			_teamSameDayOff = teamSameDayOff;
 		}
 
 		[Test]
@@ -300,13 +294,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 					consecutiveDaysOff = 0;
 				}
 			}
-		}
-
-		public override void Configure(FakeToggleManager toggleManager)
-		{
-			base.Configure(toggleManager);
-			if(_teamSameDayOff)
-				toggleManager.Enable(Toggles.ResourcePlanner_TeamSameDayOff_44265);
 		}
 	}
 }

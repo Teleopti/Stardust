@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -21,8 +20,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IOptimizerHelperHelper _optimizerHelper;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly DayOffOptimizerStandard _dayOffOptimizeStandard;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_TeamSameDayOff_44265)]
-		private readonly IDayOffOptimizerUseTeamSameDaysOff _dayOffOptimizerUseTeamSameDaysOff;
 
 		public TeamBlockDayOffOptimizer(
 			IAllTeamMembersInSelectionSpecification allTeamMembersInSelectionSpecification,
@@ -30,8 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IOptimizerHelperHelper optimizerHelper,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			DayOffOptimizerStandard dayOffOptimizeStandard,
-			IDayOffOptimizerUseTeamSameDaysOff dayOffOptimizerUseTeamSameDaysOff)
+			DayOffOptimizerStandard dayOffOptimizeStandard)
 		{
 			_allTeamMembersInSelectionSpecification = allTeamMembersInSelectionSpecification;
 			_teamBlockDaysOffSameDaysOffLockSyncronizer = teamBlockDaysOffSameDaysOffLockSyncronizer;
@@ -39,11 +35,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_optimizerHelper = optimizerHelper;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_dayOffOptimizeStandard = dayOffOptimizeStandard;
-			_dayOffOptimizerUseTeamSameDaysOff = dayOffOptimizerUseTeamSameDaysOff;
 		}
 
 		[TestLog]
-		[RemoveMeWithToggle("Remove if about team + sameDO below", Toggles.ResourcePlanner_TeamSameDayOff_44265)]
 		public virtual void OptimizeDaysOff(
 			IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,
@@ -95,28 +89,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var cancelMe = false;
 			while (remainingInfoList.Count > 0)
 			{
-				IEnumerable<ITeamInfo> teamInfosToRemove;
-				if(optimizationPreferences.Extra.UseTeams && optimizationPreferences.Extra.UseTeamSameDaysOff)
-				{
-					teamInfosToRemove = _dayOffOptimizerUseTeamSameDaysOff.Execute(periodValueCalculatorForAllSkills, optimizationPreferences, rollbackService,
-					                                            remainingInfoList, schedulingOptions, selectedPersons,
-					                                            resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, ()=>
-					                                            {
-						                                            cancelMe = true;
-					                                            },
-																dayOffOptimizationPreferenceProvider, schedulingProgress);
-				}
-				else
-				{
-					teamInfosToRemove = _dayOffOptimizeStandard.Execute(periodValueCalculatorForAllSkills, optimizationPreferences, rollbackService,
-					                                                           remainingInfoList, schedulingOptions,
-					                                                           selectedPersons,
-																			   resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, () =>
-																			   {
-																				   cancelMe = true;
-																			   },
-																			   dayOffOptimizationPreferenceProvider, schedulingProgress);
-				}
+				var teamInfosToRemove = _dayOffOptimizeStandard.Execute(periodValueCalculatorForAllSkills, optimizationPreferences, rollbackService,
+					remainingInfoList, schedulingOptions,
+					selectedPersons,
+					resourceCalculateDelayer, schedulerStateHolder.SchedulingResultState, () =>
+					{
+						cancelMe = true;
+					},
+					dayOffOptimizationPreferenceProvider, schedulingProgress);
 
 				if (cancelMe)
 					break;

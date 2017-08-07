@@ -335,8 +335,6 @@
     <Compile Include="Optimization\OptimizationPreferencesPerfTestProvider.cs" />
     <Compile Include="Optimization\TeamBlock\AffectedDayOffs.cs" />
     <Compile Include="Optimization\TeamBlock\DayOffOptimizerStandard.cs" />
-    <Compile Include="Optimization\TeamBlock\DayOffOptimizerUseTeamSameDaysOff.cs" />
-    <Compile Include="Optimization\TeamBlock\IDayOffOptimizerUseTeamSameDaysOff.cs" />
     <Compile Include="Optimization\TeamBlock\MovedDaysOff.cs" />
     <Compile Include="Reports\IReportNavigationModel.cs" />
     <Compile Include="Reports\ReportNavigationModel.cs" />

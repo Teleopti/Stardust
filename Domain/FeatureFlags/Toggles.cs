@@ -131,7 +131,6 @@
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_CategorizeShiftSelection_xx,
 		ResourcePlanner_RunPerfTestAsTeam_43537,
-		ResourcePlanner_TeamSameDayOff_44265,
 		ResourcePlanner_MergeTeamblockClassicScheduling_44289,
 		ResourcePlanner_RemoveBackToLegalStateGui_44333,
 		ResourcePlanner_CalculateShiftValuesInParallel_44681,

@@ -333,14 +333,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RestrictionOverLimitValidator>().SingleInstance();
 			builder.RegisterType<TeamBlockDayOffOptimizer>().InstancePerLifetimeScope().ApplyAspects();
 			builder.RegisterType<DayOffOptimizerStandard>().InstancePerLifetimeScope();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_TeamSameDayOff_44265))
-			{
-				builder.RegisterType<DayOffOptimizerStandard>().As<IDayOffOptimizerUseTeamSameDaysOff>().InstancePerLifetimeScope();
-			}
-			else
-			{
-				builder.RegisterType<DayOffOptimizerUseTeamSameDaysOff>().As<IDayOffOptimizerUseTeamSameDaysOff>().InstancePerLifetimeScope();
-			}
 			builder.RegisterType<AffectedDayOffs>().SingleInstance();
 			builder.RegisterType<DayOffOptimizerPreMoveResultPredictor>().InstancePerLifetimeScope();
 
