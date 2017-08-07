@@ -19,7 +19,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Configuration
 {
@@ -174,13 +173,13 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			IWorkflowControlSet workflowControlSet3 = new WorkflowControlSet("new one");
 			IWorkflowControlSet workflowControlSet4 = new WorkflowControlSet("new to delete");
 			IWorkflowControlSet workflowControlSet5 = workflowControlSet2.EntityClone();
-			IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet>
-																  {
-																	  workflowControlSet1,
-																	  workflowControlSet2,
-																	  workflowControlSet3,
-																	  workflowControlSet4
-																  };
+			var repositoryCollection = new List<IWorkflowControlSet>
+			{
+				workflowControlSet1,
+				workflowControlSet2,
+				workflowControlSet3,
+				workflowControlSet4
+			};
 
 			using (_mocks.Record())
 			{
@@ -256,7 +255,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			{
 				ExpectInitialize(repositoryCollection);
 				ExpectSetSelectedWorkflowControlSetModel();
-				Expect.Call(() => _view.SetOpenPeriodsGridRowCount(_workflowControlSetModel.AbsenceRequestPeriodModels.Count)).IgnoreArguments();
+				Expect.Call(() => _view.SetOpenPeriodsGridRowCount(_workflowControlSetModel.AbsenceRequestPeriodModels.Count))
+					.IgnoreArguments();
 				_view.RefreshOpenPeriodsGrid();
 			}
 
@@ -268,7 +268,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				Assert.AreEqual(0, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
 				_target.AddOpenDatePeriod();
 				Assert.AreEqual(1, _target.SelectedModel.AbsenceRequestPeriodModels.Count);
-				IAbsenceRequestOpenPeriod absenceRequestOpenPeriod = _target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity;
+				IAbsenceRequestOpenPeriod absenceRequestOpenPeriod =
+					_target.SelectedModel.AbsenceRequestPeriodModels[0].DomainEntity;
 				Assert.IsNotNull(absenceRequestOpenPeriod.Absence);
 				Assert.AreEqual(_target.RequestableAbsenceCollection[0], absenceRequestOpenPeriod.Absence);
 				Assert.IsNull(absenceRequestOpenPeriod.Absence.Tracker);
@@ -288,7 +289,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			{
 				ExpectInitialize(repositoryCollection);
 				ExpectSetSelectedWorkflowControlSetModel();
-				Expect.Call(() => _view.SetOpenPeriodsGridRowCount(_workflowControlSetModel.AbsenceRequestPeriodModels.Count)).IgnoreArguments();
+				Expect.Call(() => _view.SetOpenPeriodsGridRowCount(_workflowControlSetModel.AbsenceRequestPeriodModels.Count))
+					.IgnoreArguments();
 				_view.RefreshOpenPeriodsGrid();
 			}
 
@@ -769,7 +771,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				_target.SetStudentAvailabilityPeriod(expected1);
 				_target.SetPublishedToDate(null);
 
-				var expected2 = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(DateHelper.MinSmallDateTime));
+				var expected2 = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime),
+					new DateOnly(DateHelper.MinSmallDateTime));
 
 				var result = _target.BasicVisualizerPublishedPeriods();
 				Assert.AreEqual(2, result.Count);
@@ -862,8 +865,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			{
 				Expect.Call(() => _view.SetName("name")).IgnoreArguments();
 				Expect.Call(() => _view.SetUpdatedInfo("")).IgnoreArguments();
-				Expect.Call(
-					() => _view.SetOpenPeriodsGridRowCount(_workflowControlSetModel.AbsenceRequestPeriodModels.Count)).IgnoreArguments();
+				Expect.Call(() => _view.SetOpenPeriodsGridRowCount(_workflowControlSetModel.AbsenceRequestPeriodModels.Count))
+					.IgnoreArguments();
 				Expect.Call(() => _view.SetWriteProtectedDays(null));
 				Expect.Call(() => _view.SetShiftTradeTargetTimeFlexibility(flexibility));
 				Expect.Call(() => _view.FillWorkloadControlSetCombo(null, "Name")).IgnoreArguments();
@@ -884,6 +887,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				Expect.Call(() => _view.SetAbsenceRequestExpiration(null)).IgnoreArguments();
 				Expect.Call(() => _view.SetAbsenceProbability(false)).IgnoreArguments();
 				Expect.Call(() => _view.SetOvertimeProbability(false)).IgnoreArguments();
+				Expect.Call(() => _view.SetAutoGrantOvertimeRequest(false)).IgnoreArguments();
+				Expect.Call(() => _view.SetCheckStaffingForOvertimeRequest(false)).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
@@ -1001,7 +1006,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 		}
 
 		[Test]
-		public void ShouldUpdateModelOnOvertimeProbabilityCheckChanged()
+		public void ShouldUpdateModelOnOvertimeConfigurationCheckChanged()
 		{
 			IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
 			using (_mocks.Record())
@@ -1014,18 +1019,27 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				_target.Initialize();
 				_target.SetSelectedWorkflowControlSetModel(_workflowControlSetModel);
 				_target.SetOvertimeProbability(true);
+				_target.SetAutoGrantOvertimeRequest(true);
+				_target.SetCheckStaffingForOvertimeRequest(true);
+
 				Assert.AreEqual(true, _workflowControlSetModel.IsOvertimeProbabilityEnabled);
+				Assert.AreEqual(true, _workflowControlSetModel.AutoGrantOvertimeRequest);
+				Assert.AreEqual(true, _workflowControlSetModel.CheckStaffingForOvertimeRequest);
 			}
 			_mocks.VerifyAll();
 		}
 
 		public void ExpectInitialize(IList<IWorkflowControlSet> repositoryCollection)
 		{
-			ExpectInitialize(_mocks, _view, _unitOfWorkFactory, _repositoryFactory, repositoryCollection, _categories, _dayOffTemplates, _absenceList,
-							 _activityList, _skillList, _culture);
+			ExpectInitialize(_mocks, _view, _unitOfWorkFactory, _repositoryFactory, repositoryCollection, _categories,
+				_dayOffTemplates, _absenceList, _activityList, _skillList, _culture);
 		}
 
-		public static void ExpectInitialize(MockRepository mocks, IWorkflowControlSetView view, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IList<IWorkflowControlSet> workflowControlSets, IList<IShiftCategory> shiftCategories, IList<IDayOffTemplate> dayOffTemplates, IList<IAbsence> absences, IList<IActivity> activities, IList<ISkill> skills, CultureInfo culture)
+		public static void ExpectInitialize(MockRepository mocks, IWorkflowControlSetView view,
+			IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory,
+			IList<IWorkflowControlSet> workflowControlSets, IList<IShiftCategory> shiftCategories,
+			IList<IDayOffTemplate> dayOffTemplates, IList<IAbsence> absences, IList<IActivity> activities, IList<ISkill> skills,
+			CultureInfo culture)
 		{
 			var unitOfWork = mocks.StrictMock<IUnitOfWork>();
 			var repository = mocks.StrictMock<IWorkflowControlSetRepository>();
@@ -1100,6 +1114,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			Expect.Call(view.EnableAllAuthorized);
 			Expect.Call(() => view.SetAbsenceProbability(false)).IgnoreArguments();
 			Expect.Call(() => view.SetOvertimeProbability(false)).IgnoreArguments();
+			Expect.Call(() => view.SetAutoGrantOvertimeRequest(false)).IgnoreArguments();
+			Expect.Call(() => view.SetCheckStaffingForOvertimeRequest(false)).IgnoreArguments();
 		}
 	}
 }

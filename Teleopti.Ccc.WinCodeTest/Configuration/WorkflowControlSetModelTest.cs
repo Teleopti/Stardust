@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             // Existing entity
             _domainEntity.SetId(Guid.NewGuid());
 
-            DateTime updatedDate = new DateTime(2010, 2, 2, 9, 12, 0);
-            IPerson person = PersonFactory.CreatePerson("kalle","kula");
+            var updatedDate = new DateTime(2010, 2, 2, 9, 12, 0);
+            var person = PersonFactory.CreatePerson("kalle","kula");
             ReflectionHelper.SetUpdatedBy(_domainEntity, person);
             ReflectionHelper.SetUpdatedOn(_domainEntity, updatedDate);
 
@@ -105,26 +105,28 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         public void VerifyCanGetDefaultInstancesForType()
         {
             Assert.AreEqual(2, WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters.Count);
-            Assert.IsTrue(typeof(AbsenceRequestOpenDatePeriod).IsInstanceOfType(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item));
+            Assert.IsTrue(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item is AbsenceRequestOpenDatePeriod);
             Assert.AreEqual(Resources.FromTo, WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].DisplayText);
-            Assert.IsTrue(typeof(AbsenceRequestOpenRollingPeriod).IsInstanceOfType(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item));
+            Assert.IsTrue(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item is AbsenceRequestOpenRollingPeriod);
             Assert.AreEqual(Resources.Rolling, WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].DisplayText);
-            Assert.IsTrue(typeof(AbsenceRequestOpenDatePeriod).IsInstanceOfType(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item));
+            Assert.IsTrue(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item is AbsenceRequestOpenDatePeriod);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         [Test]
         public void VerifyDefaultValuesForAbsenceRequestPeriods()
         {
-            AbsenceRequestOpenDatePeriod datePeriod = (AbsenceRequestOpenDatePeriod)WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
-            AbsenceRequestOpenRollingPeriod rollingDatePeriod = (AbsenceRequestOpenRollingPeriod)WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
+	        var datePeriod =
+		        (AbsenceRequestOpenDatePeriod) WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0].Item;
+	        var rollingDatePeriod =
+		        (AbsenceRequestOpenRollingPeriod) WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1].Item;
 
-            DateOnly todayDateOnly = DateOnly.Today;
-            DateOnly inNextMonthDateOnly = new DateOnly(todayDateOnly.Date.AddMonths(1));
+            var todayDateOnly = DateOnly.Today;
+            var inNextMonthDateOnly = new DateOnly(todayDateOnly.Date.AddMonths(1));
 
-            DateOnly startDateOnly = new DateOnly(inNextMonthDateOnly.Year, inNextMonthDateOnly.Month, 1);
-            DateOnly endDateOnly = new DateOnly(startDateOnly.Date.AddMonths(1).AddDays(-1));
-            DateOnlyPeriod requestPeriod = new DateOnlyPeriod(startDateOnly, endDateOnly);
+            var startDateOnly = new DateOnly(inNextMonthDateOnly.Year, inNextMonthDateOnly.Month, 1);
+            var endDateOnly = new DateOnly(startDateOnly.Date.AddMonths(1).AddDays(-1));
+            var requestPeriod = new DateOnlyPeriod(startDateOnly, endDateOnly);
             // Default values for date period of requests is next month
             Assert.AreEqual(requestPeriod, datePeriod.Period);
 
@@ -133,7 +135,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
             startDateOnly = new DateOnly(todayDateOnly.Year, todayDateOnly.Month, 1);
             endDateOnly = new DateOnly(startDateOnly.Date.AddMonths(1).AddDays(-1));
-            DateOnlyPeriod openForRequestPeriod = new DateOnlyPeriod(startDateOnly, endDateOnly);
+            var openForRequestPeriod = new DateOnlyPeriod(startDateOnly, endDateOnly);
             // Default values for period to make requests is current month
             Assert.AreEqual(openForRequestPeriod, datePeriod.OpenForRequestsPeriod);
             Assert.AreEqual(openForRequestPeriod, rollingDatePeriod.OpenForRequestsPeriod);
@@ -143,29 +145,36 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Assert.AreEqual(new StaffingThresholdValidator(), rollingDatePeriod.StaffingThresholdValidator);
         }
 
-        [Test]
-        public void VerifyCanGetAbsenceRequestPeriodList()
-        {
-            _target.DomainEntity.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod());
-            _target.DomainEntity.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod());
+	    [Test]
+	    public void VerifyCanGetAbsenceRequestPeriodList()
+	    {
+		    _target.DomainEntity.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod());
+		    _target.DomainEntity.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod());
 
-            Assert.AreEqual(2, _target.AbsenceRequestPeriodModels.Count);
-            Assert.IsTrue(
-                _target.AbsenceRequestPeriodModels[0].PeriodType.Equals(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0]));
-            Assert.IsTrue(
-                _target.AbsenceRequestPeriodModels[1].PeriodType.Equals(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1]));
-            Assert.IsFalse(
-                _target.AbsenceRequestPeriodModels[0].PeriodType.Equals(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[1]));
-            Assert.IsFalse(
-                _target.AbsenceRequestPeriodModels[1].PeriodType.Equals(WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters[0]));
-            Assert.AreEqual(Resources.FromTo, _target.AbsenceRequestPeriodModels[0].PeriodType.DisplayText);
-        }
+		    var targetPeriodModels = _target.AbsenceRequestPeriodModels;
+		    var periodAdapters = WorkflowControlSetModel.DefaultAbsenceRequestPeriodAdapters;
 
-        [Test]
+		    Assert.AreEqual(2, _target.AbsenceRequestPeriodModels.Count);
+		    Assert.IsTrue(targetPeriodModels[0].PeriodType.Equals(periodAdapters[0]));
+		    Assert.IsTrue(targetPeriodModels[1].PeriodType.Equals(periodAdapters[1]));
+		    Assert.IsFalse(targetPeriodModels[0].PeriodType.Equals(periodAdapters[1]));
+		    Assert.IsFalse(targetPeriodModels[1].PeriodType.Equals(periodAdapters[0]));
+		    Assert.AreEqual(Resources.FromTo, _target.AbsenceRequestPeriodModels[0].PeriodType.DisplayText);
+	    }
+
+	    [Test]
         public void VerifyCanGetAndSetPeriodFromModel()
         {
-            _target.DomainEntity.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod{Period = new DateOnlyPeriod(2010,6,1,2010,8,31),OpenForRequestsPeriod = new DateOnlyPeriod(2010,3,1,2010,3,31)});
-            _target.DomainEntity.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod{BetweenDays = new MinMax<int>(2,14), OpenForRequestsPeriod = new DateOnlyPeriod(2010,1,1,2010,12,31)});
+            _target.DomainEntity.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+            {
+	            Period = new DateOnlyPeriod(2010,6,1,2010,8,31),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2010,3,1,2010,3,31)
+            });
+            _target.DomainEntity.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod
+            {
+	            BetweenDays = new MinMax<int>(2,14),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2010,1,1,2010,12,31)
+            });
 
             var absenceRequestPeriodList = _target.AbsenceRequestPeriodModels;
             var datePeriod = absenceRequestPeriodList[0];
@@ -214,9 +223,12 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         public void VerifyOtherPropertiesOnPeriod()
         {
             _target.DomainEntity.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod());
-            Assert.AreEqual(_target.DomainEntity.AbsenceRequestOpenPeriods[0].AbsenceRequestProcessList.Count, _target.AbsenceRequestPeriodModels[0].AbsenceRequestProcessList.Count);
-            Assert.AreEqual(_target.DomainEntity.AbsenceRequestOpenPeriods[0].PersonAccountValidatorList.Count, _target.AbsenceRequestPeriodModels[0].PersonAccountValidatorList.Count);
-            Assert.AreEqual(_target.DomainEntity.AbsenceRequestOpenPeriods[0].StaffingThresholdValidatorList.Count, _target.AbsenceRequestPeriodModels[0].StaffingThresholdValidatorList.Count);
+            Assert.AreEqual(_target.DomainEntity.AbsenceRequestOpenPeriods[0].AbsenceRequestProcessList.Count,
+				_target.AbsenceRequestPeriodModels[0].AbsenceRequestProcessList.Count);
+            Assert.AreEqual(_target.DomainEntity.AbsenceRequestOpenPeriods[0].PersonAccountValidatorList.Count,
+				_target.AbsenceRequestPeriodModels[0].PersonAccountValidatorList.Count);
+            Assert.AreEqual(_target.DomainEntity.AbsenceRequestOpenPeriods[0].StaffingThresholdValidatorList.Count,
+				_target.AbsenceRequestPeriodModels[0].StaffingThresholdValidatorList.Count);
             Assert.AreEqual(new PendingAbsenceRequest(),_target.AbsenceRequestPeriodModels[0].AbsenceRequestProcess);
             _target.AbsenceRequestPeriodModels[0].AbsenceRequestProcess = new GrantAbsenceRequest();
             Assert.AreEqual(new GrantAbsenceRequest(), _target.AbsenceRequestPeriodModels[0].AbsenceRequestProcess);
@@ -241,7 +253,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifyAllowedPreferenceActivityCanBeSet()
         {
-            IActivity activity = ActivityFactory.CreateActivity("Lunch");
+            var activity = ActivityFactory.CreateActivity("Lunch");
             _target.AllowedPreferenceActivity = activity;
             Assert.AreEqual(activity, _target.AllowedPreferenceActivity);
         }
@@ -249,14 +261,14 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifyPreferenceInputPeriod()
         {
-            DateOnlyPeriod insertPeriod = new DateOnlyPeriod(2010, 4, 1, 2010, 4, 30);
+            var insertPeriod = new DateOnlyPeriod(2010, 4, 1, 2010, 4, 30);
             _target.PreferenceInputPeriod = insertPeriod;
             Assert.AreEqual(insertPeriod, _target.PreferenceInputPeriod);
         }
         [Test]
         public void VerifyPreferencePeriod()
         {
-            DateOnlyPeriod preferencetPeriod = new DateOnlyPeriod(2010, 5, 1, 2010, 5, 31);
+            var preferencetPeriod = new DateOnlyPeriod(2010, 5, 1, 2010, 5, 31);
             _target.PreferencePeriod = preferencetPeriod;
             Assert.AreEqual(preferencetPeriod, _target.PreferencePeriod);
         }
@@ -290,7 +302,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifyShiftTradePeriodCanBeSet()
         {
-            MinMax<int> periodDays = new MinMax<int>(-10, 20);
+            var periodDays = new MinMax<int>(-10, 20);
             _target.ShiftTradeOpenPeriodDays = periodDays;
 
             Assert.AreEqual(periodDays, _target.ShiftTradeOpenPeriodDays);
@@ -346,7 +358,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
         [Test]
         public void VerifyShiftTradeTargetTimeFlexibility()
         {
-            TimeSpan flexibility = new TimeSpan(0, 12, 0);
+            var flexibility = new TimeSpan(0, 12, 0);
 
             _target.ShiftTradeTargetTimeFlexibility = flexibility;
             Assert.AreEqual(flexibility, _target.ShiftTradeTargetTimeFlexibility);
@@ -354,8 +366,8 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 
         private static string getUpdateInfo(IChangeInfo domainEntity)
         {
-            LocalizedUpdateInfo localizer = new LocalizedUpdateInfo();
-            string changed = localizer.UpdatedByText(domainEntity, Resources.UpdatedByColon);
+            var localizer = new LocalizedUpdateInfo();
+            var changed = localizer.UpdatedByText(domainEntity, Resources.UpdatedByColon);
             
             return changed;
         }

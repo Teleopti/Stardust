@@ -57,12 +57,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			timeSpanTextBox1.TimeSpanBoxWidth = timeSpanTextBox1.Width;
 			dateTimePickerAdvViewpoint.SetCultureInfoSafe(TeleoptiPrincipal.CurrentPrincipal.Regional.Culture);
 			setAbsenceRequestVisibilityOptions(toggleManager);
-			setETOTRequestVisibility();
+			setOvertimeRequestVisibility();
 		}
 
-		private void setETOTRequestVisibility()
+		private void setOvertimeRequestVisibility()
 		{
-			if(!_toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687)) tabPageAdvETOTRequest.Hide();
+			if (!_toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687))
+			{
+				tabPageAdvETOTRequest.Hide();
+			}
 		}
 
 		private void setAbsenceRequestVisibilityOptions(IToggleManager toggleManager)
@@ -835,6 +838,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			checkBoxAdvOvertimeProbability.CheckStateChanged += checkBoxAdvOvertimeProbability_CheckStateChanged;
 		}
 
+		public void SetAutoGrantOvertimeRequest(bool autoGrantOvertimeRequest)
+		{
+			checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged -= checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged;
+			checkBoxAdvAutoGrantOvertimeRequest.Checked = autoGrantOvertimeRequest;
+			checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged += checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged;
+		}
+
+		public void SetCheckStaffingForOvertimeRequest(bool checkStaffingForOvertimeRequest)
+		{
+			checkBoxAdvCheckStaffingForOvertimeRequest.CheckStateChanged -= checkBoxAdvCheckStaffingForOvertimeRequest_CheckStateChanged;
+			checkBoxAdvCheckStaffingForOvertimeRequest.Checked = checkStaffingForOvertimeRequest;
+			checkBoxAdvCheckStaffingForOvertimeRequest.CheckStateChanged += checkBoxAdvCheckStaffingForOvertimeRequest_CheckStateChanged;
+		}
+
 		public void DisableAllButAdd()
 		{
 			tabControlAdvArea.Enabled = false;
@@ -1245,5 +1262,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			_presenter.SetOvertimeProbability(checkBoxAdvOvertimeProbability.Checked);
 		}
 
+		private void checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged(object sender, EventArgs e)
+		{
+			_presenter.SetAutoGrantOvertimeRequest(checkBoxAdvAutoGrantOvertimeRequest.Checked);
+		}
+
+		private void checkBoxAdvCheckStaffingForOvertimeRequest_CheckStateChanged(object sender, EventArgs e)
+		{
+			_presenter.SetCheckStaffingForOvertimeRequest(checkBoxAdvCheckStaffingForOvertimeRequest.Checked);
+		}
 	}
 }

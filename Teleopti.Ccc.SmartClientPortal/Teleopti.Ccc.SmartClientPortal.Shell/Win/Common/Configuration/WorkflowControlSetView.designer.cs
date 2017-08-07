@@ -170,10 +170,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.checkBoxAdvLockTrading = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.tabPageAdvETOTRequest = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
 			this.tableLayoutPanelETOTRequest = new System.Windows.Forms.TableLayoutPanel();
+			this.panelOvertimeRequestHeaderBasic = new System.Windows.Forms.Panel();
+			this.labelOvertimeRequestBasic = new System.Windows.Forms.Label();
+			this.checkBoxAdvOvertimeProbability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxAdvAutoGrantOvertimeRequest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
+			this.checkBoxAdvCheckStaffingForOvertimeRequest = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-			this.checkBoxAdvOvertimeProbability = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelHeader)).BeginInit();
 			this.gradientPanelHeader.SuspendLayout();
 			this.tableLayoutPanelHeader.SuspendLayout();
@@ -234,8 +238,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvLockTrading)).BeginInit();
 			this.tabPageAdvETOTRequest.SuspendLayout();
 			this.tableLayoutPanelETOTRequest.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+			this.panelOvertimeRequestHeaderBasic.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrantOvertimeRequest)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvCheckStaffingForOvertimeRequest)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// gradientPanelHeader
@@ -1040,7 +1047,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.labelPublishSchedules.AutoSize = true;
 			this.labelPublishSchedules.Location = new System.Drawing.Point(3, 45);
 			this.labelPublishSchedules.Name = "labelPublishSchedules";
-			this.labelPublishSchedules.Size = new System.Drawing.Size(155, 15);
+			this.labelPublishSchedules.Size = new System.Drawing.Size(154, 15);
 			this.labelPublishSchedules.TabIndex = 2;
 			this.labelPublishSchedules.Text = "xxPublishSchedulesToColon";
 			// 
@@ -1392,7 +1399,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.dateTimePickerAdvViewpoint.Calendar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(209)))), ((int)(((byte)(211)))), ((int)(((byte)(212)))));
 			this.dateTimePickerAdvViewpoint.Calendar.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.dateTimePickerAdvViewpoint.Calendar.BottomHeight = 25;
-			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("en-US");
+			this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("zh-CN");
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(153)))), ((int)(((byte)(255)))));
 			this.dateTimePickerAdvViewpoint.Calendar.DayNamesFont = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.dateTimePickerAdvViewpoint.Calendar.DaysFont = new System.Drawing.Font("Segoe UI", 9F);
@@ -1917,45 +1924,45 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
             this.toolStripMenuItemMoveDown});
 			this.contextMenuStripOpenPeriodsGrid.Name = "contextMenuStripOpenPeriodsGrid";
 			this.contextMenuStripOpenPeriodsGrid.ShowImageMargin = false;
-			this.contextMenuStripOpenPeriodsGrid.Size = new System.Drawing.Size(158, 120);
+			this.contextMenuStripOpenPeriodsGrid.Size = new System.Drawing.Size(157, 120);
 			// 
 			// toolStripMenuItemFromToPeriod
 			// 
 			this.toolStripMenuItemFromToPeriod.Name = "toolStripMenuItemFromToPeriod";
-			this.toolStripMenuItemFromToPeriod.Size = new System.Drawing.Size(157, 22);
+			this.toolStripMenuItemFromToPeriod.Size = new System.Drawing.Size(156, 22);
 			this.toolStripMenuItemFromToPeriod.Text = "xxAddFromToPeriod";
 			this.toolStripMenuItemFromToPeriod.Click += new System.EventHandler(this.toolStripMenuItemFromToPeriod_Click);
 			// 
 			// toolStripMenuItemRollingPeriod
 			// 
 			this.toolStripMenuItemRollingPeriod.Name = "toolStripMenuItemRollingPeriod";
-			this.toolStripMenuItemRollingPeriod.Size = new System.Drawing.Size(157, 22);
+			this.toolStripMenuItemRollingPeriod.Size = new System.Drawing.Size(156, 22);
 			this.toolStripMenuItemRollingPeriod.Text = "xxAddRollingPeriod";
 			this.toolStripMenuItemRollingPeriod.Click += new System.EventHandler(this.toolStripMenuItemRollingPeriod_Click);
 			// 
 			// toolStripMenuItemDelete
 			// 
 			this.toolStripMenuItemDelete.Name = "toolStripMenuItemDelete";
-			this.toolStripMenuItemDelete.Size = new System.Drawing.Size(157, 22);
+			this.toolStripMenuItemDelete.Size = new System.Drawing.Size(156, 22);
 			this.toolStripMenuItemDelete.Text = "xxDelete";
 			this.toolStripMenuItemDelete.Click += new System.EventHandler(this.toolStripMenuItemDelete_Click);
 			// 
 			// toolStripSeparator2
 			// 
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
-			this.toolStripSeparator2.Size = new System.Drawing.Size(154, 6);
+			this.toolStripSeparator2.Size = new System.Drawing.Size(153, 6);
 			// 
 			// toolStripMenuItemMoveUp
 			// 
 			this.toolStripMenuItemMoveUp.Name = "toolStripMenuItemMoveUp";
-			this.toolStripMenuItemMoveUp.Size = new System.Drawing.Size(157, 22);
+			this.toolStripMenuItemMoveUp.Size = new System.Drawing.Size(156, 22);
 			this.toolStripMenuItemMoveUp.Text = "xxMoveUp";
 			this.toolStripMenuItemMoveUp.Click += new System.EventHandler(this.toolStripMenuItemMoveUp_Click);
 			// 
 			// toolStripMenuItemMoveDown
 			// 
 			this.toolStripMenuItemMoveDown.Name = "toolStripMenuItemMoveDown";
-			this.toolStripMenuItemMoveDown.Size = new System.Drawing.Size(157, 22);
+			this.toolStripMenuItemMoveDown.Size = new System.Drawing.Size(156, 22);
 			this.toolStripMenuItemMoveDown.Text = "xxMoveDown";
 			this.toolStripMenuItemMoveDown.Click += new System.EventHandler(this.toolStripMenuItemMoveDown_Click);
 			// 
@@ -2088,7 +2095,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.minMaxIntegerTextBoxControl1.LabelMinDaysText = "xxDays";
 			this.minMaxIntegerTextBoxControl1.LabelToText = "xxTo";
 			this.minMaxIntegerTextBoxControl1.Location = new System.Drawing.Point(6, 46);
-			this.minMaxIntegerTextBoxControl1.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
+			this.minMaxIntegerTextBoxControl1.Margin = new System.Windows.Forms.Padding(6);
 			this.minMaxIntegerTextBoxControl1.MaxTextBoxValue = 1;
 			this.minMaxIntegerTextBoxControl1.MinTextBoxValue = 1;
 			this.minMaxIntegerTextBoxControl1.Name = "minMaxIntegerTextBoxControl1";
@@ -2165,7 +2172,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			this.timeSpanTextBox1.TabIndex = 9;
 			this.timeSpanTextBox1.TimeFormat = Teleopti.Interfaces.Domain.TimeFormatsType.HoursMinutes;
 			this.timeSpanTextBox1.TimeSpanBoxHeight = 23;
-			this.timeSpanTextBox1.TimeSpanBoxWidth = 50473;
+			this.timeSpanTextBox1.TimeSpanBoxWidth = 80146;
 			this.timeSpanTextBox1.Leave += new System.EventHandler(this.timeSpanTextBox1_Leave);
 			// 
 			// labelTolerancePosNeg
@@ -2247,17 +2254,91 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			// tableLayoutPanelETOTRequest
 			// 
+			this.tableLayoutPanelETOTRequest.AutoSize = true;
 			this.tableLayoutPanelETOTRequest.ColumnCount = 1;
-			this.tableLayoutPanelETOTRequest.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 0);
+			this.tableLayoutPanelETOTRequest.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.panelOvertimeRequestHeaderBasic, 0, 0);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvOvertimeProbability, 0, 1);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvAutoGrantOvertimeRequest, 0, 2);
+			this.tableLayoutPanelETOTRequest.Controls.Add(this.checkBoxAdvCheckStaffingForOvertimeRequest, 0, 3);
+			this.tableLayoutPanelETOTRequest.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanelETOTRequest.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanelETOTRequest.Margin = new System.Windows.Forms.Padding(0);
 			this.tableLayoutPanelETOTRequest.Name = "tableLayoutPanelETOTRequest";
-			this.tableLayoutPanelETOTRequest.RowCount = 2;
+			this.tableLayoutPanelETOTRequest.RowCount = 5;
+			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
 			this.tableLayoutPanelETOTRequest.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelETOTRequest.Size = new System.Drawing.Size(959, 400);
+			this.tableLayoutPanelETOTRequest.Size = new System.Drawing.Size(965, 429);
 			this.tableLayoutPanelETOTRequest.TabIndex = 4;
+			// 
+			// panelOvertimeRequestHeaderBasic
+			// 
+			this.panelOvertimeRequestHeaderBasic.AutoSize = true;
+			this.panelOvertimeRequestHeaderBasic.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(191)))), ((int)(((byte)(234)))));
+			this.tableLayoutPanelETOTRequest.SetColumnSpan(this.panelOvertimeRequestHeaderBasic, 2);
+			this.panelOvertimeRequestHeaderBasic.Controls.Add(this.labelOvertimeRequestBasic);
+			this.panelOvertimeRequestHeaderBasic.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panelOvertimeRequestHeaderBasic.Location = new System.Drawing.Point(3, 3);
+			this.panelOvertimeRequestHeaderBasic.Name = "panelOvertimeRequestHeaderBasic";
+			this.panelOvertimeRequestHeaderBasic.Size = new System.Drawing.Size(959, 34);
+			this.panelOvertimeRequestHeaderBasic.TabIndex = 19;
+			// 
+			// labelOvertimeRequestBasic
+			// 
+			this.labelOvertimeRequestBasic.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.labelOvertimeRequestBasic.AutoSize = true;
+			this.labelOvertimeRequestBasic.BackColor = System.Drawing.Color.Transparent;
+			this.labelOvertimeRequestBasic.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.labelOvertimeRequestBasic.ForeColor = System.Drawing.Color.GhostWhite;
+			this.labelOvertimeRequestBasic.Location = new System.Drawing.Point(3, 8);
+			this.labelOvertimeRequestBasic.Name = "labelOvertimeRequestBasic";
+			this.labelOvertimeRequestBasic.Size = new System.Drawing.Size(53, 17);
+			this.labelOvertimeRequestBasic.TabIndex = 0;
+			this.labelOvertimeRequestBasic.Text = "xxBasic";
+			// 
+			// checkBoxAdvOvertimeProbability
+			// 
+			this.checkBoxAdvOvertimeProbability.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxAdvOvertimeProbability.BeforeTouchSize = new System.Drawing.Size(460, 24);
+			this.checkBoxAdvOvertimeProbability.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
+			this.checkBoxAdvOvertimeProbability.Location = new System.Drawing.Point(3, 43);
+			this.checkBoxAdvOvertimeProbability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAdvOvertimeProbability.Name = "checkBoxAdvOvertimeProbability";
+			this.checkBoxAdvOvertimeProbability.Size = new System.Drawing.Size(460, 24);
+			this.checkBoxAdvOvertimeProbability.TabIndex = 15;
+			this.checkBoxAdvOvertimeProbability.Text = "xxEnableOvertimeProbability";
+			this.checkBoxAdvOvertimeProbability.ThemesEnabled = false;
+			// 
+			// checkBoxAdvAutoGrantOvertimeRequest
+			// 
+			this.checkBoxAdvAutoGrantOvertimeRequest.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxAdvAutoGrantOvertimeRequest.BeforeTouchSize = new System.Drawing.Size(460, 24);
+			this.checkBoxAdvAutoGrantOvertimeRequest.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
+			this.checkBoxAdvAutoGrantOvertimeRequest.Location = new System.Drawing.Point(3, 73);
+			this.checkBoxAdvAutoGrantOvertimeRequest.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAdvAutoGrantOvertimeRequest.Name = "checkBoxAdvAutoGrantOvertimeRequest";
+			this.checkBoxAdvAutoGrantOvertimeRequest.Size = new System.Drawing.Size(460, 24);
+			this.checkBoxAdvAutoGrantOvertimeRequest.TabIndex = 17;
+			this.checkBoxAdvAutoGrantOvertimeRequest.Text = "xxAutoGrant";
+			this.checkBoxAdvAutoGrantOvertimeRequest.ThemesEnabled = false;
+			this.checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged += new System.EventHandler(this.checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged);
+			// 
+			// checkBoxAdvCheckStaffingForOvertimeRequest
+			// 
+			this.checkBoxAdvCheckStaffingForOvertimeRequest.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.checkBoxAdvCheckStaffingForOvertimeRequest.BeforeTouchSize = new System.Drawing.Size(460, 24);
+			this.checkBoxAdvCheckStaffingForOvertimeRequest.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
+			this.checkBoxAdvCheckStaffingForOvertimeRequest.Location = new System.Drawing.Point(3, 103);
+			this.checkBoxAdvCheckStaffingForOvertimeRequest.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
+			this.checkBoxAdvCheckStaffingForOvertimeRequest.Name = "checkBoxAdvCheckStaffingForOvertimeRequest";
+			this.checkBoxAdvCheckStaffingForOvertimeRequest.Size = new System.Drawing.Size(460, 24);
+			this.checkBoxAdvCheckStaffingForOvertimeRequest.TabIndex = 18;
+			this.checkBoxAdvCheckStaffingForOvertimeRequest.Text = "xxCheckStaffing";
+			this.checkBoxAdvCheckStaffingForOvertimeRequest.ThemesEnabled = false;
+			this.checkBoxAdvCheckStaffingForOvertimeRequest.CheckStateChanged += new System.EventHandler(this.checkBoxAdvCheckStaffingForOvertimeRequest_CheckStateChanged);
 			// 
 			// toolStripSeparator1
 			// 
@@ -2268,19 +2349,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			// 
 			this.errorProvider1.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
 			this.errorProvider1.ContainerControl = this;
-			// 
-			// checkBoxAdvOvertimeProbability
-			// 
-			this.checkBoxAdvOvertimeProbability.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.checkBoxAdvOvertimeProbability.BeforeTouchSize = new System.Drawing.Size(460, 24);
-			this.checkBoxAdvOvertimeProbability.ImageCheckBoxSize = new System.Drawing.Size(26, 26);
-			this.checkBoxAdvOvertimeProbability.Location = new System.Drawing.Point(3, 3);
-			this.checkBoxAdvOvertimeProbability.MetroColor = System.Drawing.Color.FromArgb(((int)(((byte)(88)))), ((int)(((byte)(89)))), ((int)(((byte)(91)))));
-			this.checkBoxAdvOvertimeProbability.Name = "checkBoxAdvOvertimeProbability";
-			this.checkBoxAdvOvertimeProbability.Size = new System.Drawing.Size(460, 24);
-			this.checkBoxAdvOvertimeProbability.TabIndex = 15;
-			this.checkBoxAdvOvertimeProbability.Text = "xxEnableOvertimeProbability";
-			this.checkBoxAdvOvertimeProbability.ThemesEnabled = false;
 			// 
 			// WorkflowControlSetView
 			// 
@@ -2378,9 +2446,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAnonymousTrading)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvLockTrading)).EndInit();
 			this.tabPageAdvETOTRequest.ResumeLayout(false);
+			this.tabPageAdvETOTRequest.PerformLayout();
 			this.tableLayoutPanelETOTRequest.ResumeLayout(false);
-			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+			this.tableLayoutPanelETOTRequest.PerformLayout();
+			this.panelOvertimeRequestHeaderBasic.ResumeLayout(false);
+			this.panelOvertimeRequestHeaderBasic.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvOvertimeProbability)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAutoGrantOvertimeRequest)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvCheckStaffingForOvertimeRequest)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -2512,5 +2586,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private TableLayoutPanel tableLayoutPanelAbsenceProbability;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxEnableAbsenceProbability;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvOvertimeProbability;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvAutoGrantOvertimeRequest;
+		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxAdvCheckStaffingForOvertimeRequest;
+		private Panel panelOvertimeRequestHeaderBasic;
+		private Label labelOvertimeRequestBasic;
 	}
 }

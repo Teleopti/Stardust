@@ -31,12 +31,16 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void VerifyPrimitiveProperties()
         {
+            var longestPeriod = new DateOnlyPeriod(
+                new DateOnly(DateHelper.MinSmallDateTime),
+                new DateOnly(DateHelper.MaxSmallDateTime));
+
             Assert.That(_target.Name, Is.EqualTo("MyWorkflowControlSet"));
             Assert.That(_target.AllowedPreferenceActivity, Is.Null);
-            Assert.That(_target.PreferencePeriod, Is.EqualTo(new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(DateHelper.MaxSmallDateTime))));
-            Assert.That(_target.PreferenceInputPeriod, Is.EqualTo(new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(DateHelper.MaxSmallDateTime))));
-            Assert.That(_target.StudentAvailabilityPeriod, Is.EqualTo(new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(DateHelper.MaxSmallDateTime))));
-            Assert.That(_target.StudentAvailabilityInputPeriod, Is.EqualTo(new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), new DateOnly(DateHelper.MaxSmallDateTime))));
+            Assert.That(_target.PreferencePeriod, Is.EqualTo(longestPeriod));
+            Assert.That(_target.PreferenceInputPeriod, Is.EqualTo(longestPeriod));
+            Assert.That(_target.StudentAvailabilityPeriod, Is.EqualTo(longestPeriod));
+            Assert.That(_target.StudentAvailabilityInputPeriod, Is.EqualTo(longestPeriod));
 
             _target.Name = "NewName";
             var activity = ActivityFactory.CreateActivity("Lunch");
@@ -135,8 +139,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.AreEqual(period1, _target.AbsenceRequestOpenPeriods[0]);
             Assert.AreEqual(period2, _target.AbsenceRequestOpenPeriods[1]);
 
-            int orderIndex = _target.RemoveOpenAbsenceRequestPeriod(period2);
-
+            var orderIndex = _target.RemoveOpenAbsenceRequestPeriod(period2);
             Assert.AreEqual(1,_target.AbsenceRequestOpenPeriods.Count);
             Assert.AreEqual(1, orderIndex);
         }
@@ -258,7 +261,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _target.AddOpenAbsenceRequestPeriod(period1);
             _target.SetId(Guid.NewGuid());
 
-            IWorkflowControlSet clone = (IWorkflowControlSet)_target.Clone();
+            var clone = (IWorkflowControlSet)_target.Clone();
             Assert.IsFalse(clone.Id.HasValue);
             Assert.AreEqual(_target.Name, clone.Name);
             Assert.AreEqual(_target.AbsenceRequestOpenPeriods.Count,clone.AbsenceRequestOpenPeriods.Count);
@@ -454,11 +457,19 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		}
 
 		[Test]
-		public void VerifyCanSetOvertimeProbability()
+		public void VerifyCanSetOvertimeRequestConfigurations()
 		{
 			Assert.IsFalse(_target.OvertimeProbabilityEnabled);
+			Assert.IsFalse(_target.AutoGrantOvertimeRequest);
+			Assert.IsFalse(_target.CheckStaffingForOvertimeRequest);
+
 			_target.OvertimeProbabilityEnabled = true;
+			_target.AutoGrantOvertimeRequest = true;
+			_target.CheckStaffingForOvertimeRequest = true;
+
 			Assert.IsTrue(_target.OvertimeProbabilityEnabled);
+			Assert.IsTrue(_target.AutoGrantOvertimeRequest);
+			Assert.IsTrue(_target.CheckStaffingForOvertimeRequest);
 		}
 
 		private bool checkingByIntradayWithSpecificValidator(IAbsenceRequestValidator absenceRequestValidator)

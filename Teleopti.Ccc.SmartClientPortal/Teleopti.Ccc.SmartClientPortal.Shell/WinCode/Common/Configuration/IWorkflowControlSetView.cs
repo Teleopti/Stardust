@@ -201,5 +201,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		void SetStudentAvailabilityPeriods(DateOnlyPeriod insertPeriod, DateOnlyPeriod studentAvailabilityPeriod);
 
 		void SetOvertimeProbability(bool overtimeProbability);
+		void SetAutoGrantOvertimeRequest(bool autoGrantOvertimeRequest);
+		void SetCheckStaffingForOvertimeRequest(bool checkStaffingForOvertimeRequest);
 	}
 }

@@ -58,7 +58,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		int? AbsenceRequestExpiredThreshold { get; set; }
 
 		bool AbsenceProbabilityEnabled { get; set; }
+
 		bool IsOvertimeProbabilityEnabled { get; set; }
+		bool AutoGrantOvertimeRequest { get; set; }
+		bool CheckStaffingForOvertimeRequest { get; set; }
 	}
 
 	public class WorkflowControlSetModel : IWorkflowControlSetModel
@@ -67,9 +70,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		private readonly List<AbsenceRequestPeriodModel> _absenceRequestPeriodModels = new List<AbsenceRequestPeriodModel>();
 
 		public WorkflowControlSetModel(IWorkflowControlSet domainEntity)
-			: this(domainEntity, domainEntity.EntityClone())
-		{
-		}
+			: this(domainEntity, domainEntity.EntityClone()) { }
 
 		public WorkflowControlSetModel(IWorkflowControlSet originalDomainEntity, IWorkflowControlSet clonedDomainEntity)
 		{
@@ -77,14 +78,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			DomainEntity = clonedDomainEntity;
 		}
 
-		public Guid? Id
-		{
-			get { return DomainEntity.Id; }
-		}
+		public Guid? Id => DomainEntity.Id;
 
 		public string Name
 		{
-			get { return DomainEntity.Name; }
+			get => DomainEntity.Name;
 			set
 			{
 				if (DomainEntity.Name == value) return;
@@ -95,7 +93,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public TimeSpan ShiftTradeTargetTimeFlexibility
 		{
-			get { return DomainEntity.ShiftTradeTargetTimeFlexibility; }
+			get => DomainEntity.ShiftTradeTargetTimeFlexibility;
 			set
 			{
 				if (DomainEntity.ShiftTradeTargetTimeFlexibility == value) return;
@@ -106,7 +104,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public int? WriteProtection
 		{
-			get { return DomainEntity.WriteProtection; }
+			get => DomainEntity.WriteProtection;
 			set
 			{
 				if (DomainEntity.WriteProtection == value) return;
@@ -117,7 +115,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public IActivity AllowedPreferenceActivity
 		{
-			get { return DomainEntity.AllowedPreferenceActivity; }
+			get => DomainEntity.AllowedPreferenceActivity;
 			set
 			{
 				if (DomainEntity.AllowedPreferenceActivity == value) return;
@@ -141,7 +139,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public bool ToBeDeleted { get; set; }
 
-		public bool IsNew { get { return !Id.HasValue; } }
+		public bool IsNew => !Id.HasValue;
 
 		public IWorkflowControlSet OriginalDomainEntity { get; private set; }
 
@@ -166,7 +164,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public DateTime? SchedulePublishedToDate
 		{
-			get { return DomainEntity.SchedulePublishedToDate; }
+			get => DomainEntity.SchedulePublishedToDate;
 			set
 			{
 				if (DomainEntity.SchedulePublishedToDate == value) return;
@@ -177,7 +175,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public DateOnlyPeriod PreferenceInputPeriod
 		{
-			get { return DomainEntity.PreferenceInputPeriod; }
+			get => DomainEntity.PreferenceInputPeriod;
 			set
 			{
 				if (DomainEntity.PreferenceInputPeriod == value) return;
@@ -188,7 +186,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public DateOnlyPeriod PreferencePeriod
 		{
-			get { return DomainEntity.PreferencePeriod; }
+			get => DomainEntity.PreferencePeriod;
 			set
 			{
 				if (DomainEntity.PreferencePeriod == value) return;
@@ -199,7 +197,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public DateOnlyPeriod StudentAvailabilityInputPeriod
 		{
-			get { return DomainEntity.StudentAvailabilityInputPeriod; }
+			get => DomainEntity.StudentAvailabilityInputPeriod;
 			set
 			{
 				if (DomainEntity.StudentAvailabilityInputPeriod == value) return;
@@ -210,7 +208,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public DateOnlyPeriod StudentAvailabilityPeriod
 		{
-			get { return DomainEntity.StudentAvailabilityPeriod; }
+			get => DomainEntity.StudentAvailabilityPeriod;
 			set
 			{
 				if (DomainEntity.StudentAvailabilityPeriod == value) return;
@@ -221,7 +219,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public MinMax<int> ShiftTradeOpenPeriodDays
 		{
-			get { return DomainEntity.ShiftTradeOpenPeriodDaysForward; }
+			get => DomainEntity.ShiftTradeOpenPeriodDaysForward;
 			set
 			{
 				if (DomainEntity.ShiftTradeOpenPeriodDaysForward == value) return;
@@ -230,42 +228,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			}
 		}
 
-		public IEnumerable<IDayOffTemplate> AllowedPreferenceDayOffs
-		{
-			get
-			{
-				return DomainEntity.AllowedPreferenceDayOffs;
-			}
-		}
+		public IEnumerable<IDayOffTemplate> AllowedPreferenceDayOffs => DomainEntity.AllowedPreferenceDayOffs;
 
-		public IEnumerable<IShiftCategory> AllowedPreferenceShiftCategories
-		{
-			get
-			{
-				return DomainEntity.AllowedPreferenceShiftCategories;
-			}
-		}
+		public IEnumerable<IShiftCategory> AllowedPreferenceShiftCategories => DomainEntity.AllowedPreferenceShiftCategories;
 
-		public IEnumerable<IAbsence> AllowedPreferenceAbsences
-		{
-			get
-			{
-				return DomainEntity.AllowedPreferenceAbsences;
-			}
-		}
+		public IEnumerable<IAbsence> AllowedPreferenceAbsences => DomainEntity.AllowedPreferenceAbsences;
 
-		public IEnumerable<IAbsence> AllowedAbsencesForReport
-		{
-			get
-			{
-				return DomainEntity.AllowedAbsencesForReport;
-			}
-		}
+		public IEnumerable<IAbsence> AllowedAbsencesForReport => DomainEntity.AllowedAbsencesForReport;
 
-		public IEnumerable<ISkill> MustMatchSkills
-		{
-			get { return DomainEntity.MustMatchSkills; }
-		}
+		public IEnumerable<ISkill> MustMatchSkills => DomainEntity.MustMatchSkills;
 
 		public virtual void AddAllowedPreferenceDayOff(IDayOffTemplate dayOff)
 		{
@@ -340,7 +311,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 			_defaultAbsenceRequestPeriodAdapters = new List<AbsenceRequestPeriodTypeModel>
 			{
-				new AbsenceRequestPeriodTypeModel(openDatePeriod,Resources.FromTo),
+				new AbsenceRequestPeriodTypeModel(openDatePeriod, Resources.FromTo),
 				new AbsenceRequestPeriodTypeModel(openRollingPeriod, Resources.Rolling)
 			};
 		}
@@ -374,7 +345,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public bool AutoGrantShiftTradeRequest
 		{
-			get { return DomainEntity.AutoGrantShiftTradeRequest; }
+			get => DomainEntity.AutoGrantShiftTradeRequest;
 			set
 			{
 				if (DomainEntity.AutoGrantShiftTradeRequest == value) return;
@@ -395,15 +366,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			IsDirty = true;
 		}
 
-		public bool IsDirty
-		{
-			get;
-			set;
-		}
+		public bool IsDirty { get; set; }
 
 		public bool AnonymousTrading
 		{
-			get { return DomainEntity.AnonymousTrading; }
+			get => DomainEntity.AnonymousTrading;
 			set
 			{
 				if (DomainEntity.AnonymousTrading == value) return;
@@ -414,7 +381,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public bool LockTrading
 		{
-			get { return DomainEntity.LockTrading; }
+			get => DomainEntity.LockTrading;
 			set
 			{
 				if (DomainEntity.LockTrading == value) return;
@@ -425,7 +392,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public bool AbsenceRequestWaitlistingEnabled
 		{
-			get { return DomainEntity.AbsenceRequestWaitlistEnabled; }
+			get => DomainEntity.AbsenceRequestWaitlistEnabled;
 			set
 			{
 				if (DomainEntity.AbsenceRequestWaitlistEnabled == value) return;
@@ -436,7 +403,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public WaitlistProcessOrder AbsenceRequestWaitlistingProcessOrder
 		{
-			get { return DomainEntity.AbsenceRequestWaitlistProcessOrder; }
+			get => DomainEntity.AbsenceRequestWaitlistProcessOrder;
 			set
 			{
 				if (DomainEntity.AbsenceRequestWaitlistProcessOrder == value) return;
@@ -447,7 +414,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public int? AbsenceRequestCancellationThreshold
 		{
-			get { return DomainEntity.AbsenceRequestCancellationThreshold; }
+			get => DomainEntity.AbsenceRequestCancellationThreshold;
 			set
 			{
 				if (DomainEntity.AbsenceRequestCancellationThreshold == value) return;
@@ -458,7 +425,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public int? AbsenceRequestExpiredThreshold
 		{
-			get { return DomainEntity.AbsenceRequestExpiredThreshold; }
+			get => DomainEntity.AbsenceRequestExpiredThreshold;
 			set
 			{
 				if (DomainEntity.AbsenceRequestExpiredThreshold == value) return;
@@ -469,7 +436,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		public bool IsOvertimeProbabilityEnabled
 		{
-			get { return DomainEntity.OvertimeProbabilityEnabled; }
+			get => DomainEntity.OvertimeProbabilityEnabled;
 			set
 			{
 				if (DomainEntity.OvertimeProbabilityEnabled == value) return;
@@ -478,9 +445,31 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			}
 		}
 
+		public bool AutoGrantOvertimeRequest
+		{
+			get => DomainEntity.AutoGrantOvertimeRequest;
+			set
+			{
+				if (DomainEntity.AutoGrantOvertimeRequest == value) return;
+				DomainEntity.AutoGrantOvertimeRequest = value;
+				IsDirty = true;
+			}
+		}
+
+		public bool CheckStaffingForOvertimeRequest
+		{
+			get => DomainEntity.CheckStaffingForOvertimeRequest;
+			set
+			{
+				if (DomainEntity.CheckStaffingForOvertimeRequest == value) return;
+				DomainEntity.CheckStaffingForOvertimeRequest = value;
+				IsDirty = true;
+			}
+		}
+
 		public bool AbsenceProbabilityEnabled
 		{
-			get { return DomainEntity.AbsenceProbabilityEnabled; }
+			get => DomainEntity.AbsenceProbabilityEnabled;
 			set
 			{
 				if (DomainEntity.AbsenceProbabilityEnabled == value) return;
@@ -488,6 +477,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 				IsDirty = true;
 			}
 		}
-
 	}
 }
