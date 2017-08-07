@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -52,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual void DoScheduling(SchedulingWasOrdered @event, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod)
 		{
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsToSchedule,
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland,
 				new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod);
 
 			var schedulingCallback = _currentSchedulingCallback.Current();
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			_scheduleExecutor.Execute(schedulingCallback,
 				_schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate), schedulingProgress,
-				schedulerStateHolder.AllPermittedPersons,
+				schedulerStateHolder.AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)).ToArray(),
 				selectedPeriod, @event.RunWeeklyRestSolver);
 		}
 	}

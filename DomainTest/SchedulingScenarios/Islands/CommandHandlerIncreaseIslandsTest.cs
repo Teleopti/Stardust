@@ -35,10 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		public CommandHandlerIncreaseIslandsTest(SUT sut)
 		{
 			_sut = sut;
-			if(sut == SUT.Scheduling)
-				Assert.Ignore("To be fixed #45197");
 		}
-
 
 		[TestCase(5, 1, ExpectedResult = 2)]
 		[TestCase(4, 1, ExpectedResult = 1)]

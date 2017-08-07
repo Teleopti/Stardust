@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			Setup(period, people);
 			_schedulingCommandHandler.Execute(new SchedulingCommand
 			{
-				AgentsToSchedule = stateHolder.SchedulingResultState.PersonsInOrganization,
 				Period = period,
 				RunWeeklyRestSolver = false
 			});
