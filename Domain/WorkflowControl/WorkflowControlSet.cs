@@ -11,6 +11,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
 {
+	// ReSharper disable ArrangeAccessorOwnerBody
+	// ReSharper disable ConvertToAutoProperty
 	public class WorkflowControlSet : VersionedAggregateRootWithBusinessUnit, IWorkflowControlSet, IDeleteTag
 	{
 		private string _name = string.Empty;
@@ -44,6 +46,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private IActivity _allowedPreferenceActivity;
 		private int fairnessTypeAsInt = (int)FairnessType.EqualNumberOfShiftCategory;
 		private bool _overtimeProbabilityEnabled;
+		private bool _autoGrantOvertimeRequest;
+		private bool _checkStaffingForOvertimeRequest;
 
 		public WorkflowControlSet()
 		{
@@ -105,21 +109,19 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		public virtual void MovePeriodDown(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
 			var index = _absenceRequestOpenPeriods.IndexOf(absenceRequestOpenPeriod);
-			if (index < _absenceRequestOpenPeriods.Count - 1)
-			{
-				_absenceRequestOpenPeriods.Remove(absenceRequestOpenPeriod);
-				_absenceRequestOpenPeriods.Insert(index + 1, absenceRequestOpenPeriod);
-			}
+			if (index >= _absenceRequestOpenPeriods.Count - 1) { return; }
+
+			_absenceRequestOpenPeriods.Remove(absenceRequestOpenPeriod);
+			_absenceRequestOpenPeriods.Insert(index + 1, absenceRequestOpenPeriod);
 		}
 
 		public virtual void MovePeriodUp(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
 		{
 			var index = _absenceRequestOpenPeriods.IndexOf(absenceRequestOpenPeriod);
-			if (index > 0)
-			{
-				_absenceRequestOpenPeriods.Remove(absenceRequestOpenPeriod);
-				_absenceRequestOpenPeriods.Insert(index - 1, absenceRequestOpenPeriod);
-			}
+			if (index <= 0) { return; }
+
+			_absenceRequestOpenPeriods.Remove(absenceRequestOpenPeriod);
+			_absenceRequestOpenPeriods.Insert(index - 1, absenceRequestOpenPeriod);
 		}
 
 		public virtual int RemoveOpenAbsenceRequestPeriod(IAbsenceRequestOpenPeriod absenceRequestOpenPeriod)
@@ -136,7 +138,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 			_absenceRequestOpenPeriods.Insert(orderIndex, absenceRequestOpenPeriod);
 		}
 
-		public virtual ReadOnlyCollection<IAbsenceRequestOpenPeriod> AbsenceRequestOpenPeriods { get { return new ReadOnlyCollection<IAbsenceRequestOpenPeriod>(_absenceRequestOpenPeriods); } }
+		public virtual ReadOnlyCollection<IAbsenceRequestOpenPeriod> AbsenceRequestOpenPeriods
+		{
+			get { return new ReadOnlyCollection<IAbsenceRequestOpenPeriod>(_absenceRequestOpenPeriods); }
+		}
 
 		public virtual bool IsDeleted { get { return _isDeleted; } }
 
@@ -361,6 +366,18 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			get { return _absenceProbabilityEnabled; }
 			set { _absenceProbabilityEnabled = value; }
+		}
+
+		public virtual bool AutoGrantOvertimeRequest
+		{
+			get { return _autoGrantOvertimeRequest; }
+			set { _autoGrantOvertimeRequest = value; }
+		}
+
+		public virtual bool CheckStaffingForOvertimeRequest
+		{
+			get { return _checkStaffingForOvertimeRequest; }
+			set { _checkStaffingForOvertimeRequest = value; }
 		}
 
 		public virtual void AddAllowedAbsenceForReport(IAbsence absence)

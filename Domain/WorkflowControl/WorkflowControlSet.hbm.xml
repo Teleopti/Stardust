@@ -81,10 +81,10 @@
         <property name="ShiftTradeTargetTimeFlexibility"></property>
 
         <property name="fairnessTypeAsInt"
-                access="field"
-                column="FairnessType"
-                type="int"
-                not-null="true" />
+                  access="field"
+                  column="FairnessType"
+                  type="int"
+                  not-null="true" />
 
         <set name="MustMatchSkills"
              table="WorkflowControlSetSkills">
@@ -146,9 +146,13 @@
 
         <property name="AbsenceProbabilityEnabled" type="bool" not-null="true" />
 
+        <property name="AutoGrantOvertimeRequest" type="bool" not-null="true" />
+
+        <property name="CheckStaffingForOvertimeRequest" type="bool" not-null="true" />
+
         <property name="LockTrading" type="bool" not-null="true" />
 
-				<property name="OvertimeProbabilityEnabled" type="bool" not-null="true" />
+        <property name="OvertimeProbabilityEnabled" type="bool" not-null="true" />
 
         <filter name="businessUnitFilter"
                 condition=":businessUnitParameter = BusinessUnit" />
