@@ -11,17 +11,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 {
 	public class TeamCardViewModelBuilder
 	{
-		private readonly INow _now;
 		private readonly ITeamCardReader _teamCardReader;
 		private readonly ICurrentAuthorization _authorization;
+		private readonly IUserNow _userNow;
 
 		public TeamCardViewModelBuilder(
 			ITeamCardReader teamCardReader, 
-			ICurrentAuthorization authorization, INow now)
+			ICurrentAuthorization authorization, 
+			IUserNow userNow)
 		{
 			_teamCardReader = teamCardReader;
 			_authorization = authorization;
-			_now = now;
+			_userNow = userNow;
 		}
 
 		public IEnumerable<TeamCardViewModel> Build(Guid siteId)
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 				teamsInAlarm
 					.Where(x =>
 						_authorization.Current()
-							.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _now.ServerDate_DontUse(),
+							.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _userNow.Date(),
 								new TeamAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId, TeamId = x.TeamId }))
 					.ToArray();
 			
