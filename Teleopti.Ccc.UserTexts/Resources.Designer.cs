@@ -21221,6 +21221,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open site.
+        /// </summary>
+        public static string OpenSite {
+            get {
+                return ResourceManager.GetString("OpenSite", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open hourly availability.
         /// </summary>
         public static string OpenStudentAvailability {
