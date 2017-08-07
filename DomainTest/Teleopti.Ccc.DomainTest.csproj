@@ -400,6 +400,7 @@
     <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayTest.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodJobCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\IntraIntervalOptimization\IntraIntervalOptimizationTest.cs" />
+    <Compile Include="SchedulingScenarios\Islands\CommandHandlerIncreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandExtendedModelTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelAfterReducingTest.cs" />
     <Compile Include="SchedulingScenarios\Islands\IslandModelBeforeReducingTest.cs" />
@@ -408,7 +409,6 @@
     <Compile Include="ResourceCalculation\FakeSkillStaffPeriodHolder.cs" />
     <Compile Include="ScheduleStorageRepositoryWrapperTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationTest.cs" />
-    <Compile Include="SchedulingScenarios\IntradayOptimization\IntradayOptimizationCommandHandlerIncreaseIslandsTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationTeamBlockDesktopTest.cs" />
@@ -443,7 +443,6 @@
     <Compile Include="SchedulingScenarios\Scheduling\MinMaxStaffingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\PerformanceTestHackTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCallbackDesktopTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\SchedulingCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenario.cs" />
