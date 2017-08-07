@@ -364,14 +364,12 @@
 		}
 
 		vm.goToAgents = function () {
-			var url = $state.href('rta.agents', vm.selectedItems);
-			window.open(url, '_blank');
+			$state.go('rta.agents', vm.selectedItems);
 		}
 
 		vm.openTeam = function (team) {
 			vm.selectedItems.teamIds = [team.Id];
-			var url = $state.href('rta.agents', vm.selectedItems);
-			window.open(url, '_blank');
+			$state.go('rta.agents', vm.selectedItems);
 		}
 
 	}
