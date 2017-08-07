@@ -8,7 +8,7 @@
             <div ng-click="$event.stopPropagation(); $ctrl.selectItem(card);" class="rta-icons-container"><i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>
                 <md-tooltip>{{card.isSelected ? "Unselect site" : "Select site"}}</md-tooltip>
             </div>
-            <a ui-sref="{{$ctrl.agentsState}}" class="rta-icons-container" style="text-decoration: none; ">
+            <a ui-sref="{{$ctrl.agentsState}}" class="rta-icons-container" style="text-decoration: none;">
                 <div><i class="mdi mdi-arrow-right"></i>
                     <md-tooltip>{{'OpenSite'|translate}}</md-tooltip>
                 </div>
@@ -32,7 +32,7 @@
                             </span></div>
                             </div>
                             <div class="list-header-content">
-                                <button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="$ctrl.goToAgentsForTeam(team)">Open</button>
+                                <a ui-sref="{{$ctrl.agentsStateForTeam}}" style="text-decoration: none;"><button class="wfm-btn wfm-btn-invis-primary pull-right">Open</button></a>
                             </div>
                         </div>
                     </div>

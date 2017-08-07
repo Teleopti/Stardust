@@ -9,8 +9,8 @@
       bindings: {
         siteCards: '=',
         agentsState: '=',
+        agentsStateForTeam: '=',
         getSelectedItems: '=',
-        openTeam: '=',
         selectedItems: '='
       },
     });
@@ -37,10 +37,6 @@
       site.teams.forEach(function (team) {
         team.isSelected = selected;
       })
-    }
-
-    ctrl.goToAgentsForTeam = function (team) {
-      ctrl.openTeam(team);
     }
 
   }
