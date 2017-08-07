@@ -1,3 +1,7 @@
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[FindPeopleForShiftTradeByPeopleIDs]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [ReadModel].[FindPeopleForShiftTradeByPeopleIDs]
+GO
+
 CREATE PROCEDURE [ReadModel].[FindPeopleForShiftTradeByPeopleIDs]
     @scheduleDate smalldatetime,
     @peopleIdList varchar(max),
