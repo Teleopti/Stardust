@@ -64,16 +64,17 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			var actualGroupPages = new List<GroupPageViewModel>();
 			foreach (var groupPage in allGroupPages.Where(gp => gp.PageId != Group.PageMainId))
 			{
-				var childGroups = allAvailableGroups[groupPage.PageId];
+				var childGroups = allAvailableGroups[groupPage.PageId].ToLookup(g => g.GroupId);
+
 				actualGroupPages.Add(new GroupPageViewModel
 				{
 					Id = groupPage.PageId,
 					Name = _userTextTranslator.TranslateText(groupPage.PageName),
 					Children = childGroups.Select(g => new GroupViewModel
 					{
-						Name = g.GroupName,
-						Id = g.GroupId
-					}).Distinct().ToArray().OrderBy(c => c.Name, stringComparer).ToList()
+						Name = g.First().GroupName,
+						Id = g.First().GroupId
+					}).OrderBy(c => c.Name, stringComparer).ToList()
 				});
 			}
 			return new GroupPagesViewModel

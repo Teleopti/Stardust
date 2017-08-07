@@ -391,6 +391,86 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			gpChildren.Single().Id.Should().Be.EqualTo(team1InSite1Id);
 		}
 
+		[Test]
+		public void ShouldReturnDistincteGroupPages()
+		{
+			var mainPage = new ReadOnlyGroupPage()
+			{
+				PageName = "Main",
+				PageId = Group.PageMainId
+			};
+			var groupPage = new ReadOnlyGroupPage
+			{
+				PageName = "Skill",
+				PageId = Guid.NewGuid()
+			};
+
+			var businessUnitId = Guid.NewGuid();
+			var siteId = Guid.NewGuid();
+			var teamId = Guid.NewGuid();
+			var childGroupId = Guid.NewGuid();
+			var groupDetails = new List<ReadOnlyGroupDetail>
+			{
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					GroupName = "Site1/Team1",
+					SiteId = siteId,
+					TeamId =  teamId,
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					GroupName = "Site1/ATeam",
+					SiteId = siteId,
+					TeamId = Guid.NewGuid(),
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					GroupName = "ASite/ATeam",
+					SiteId = Guid.NewGuid(),
+					TeamId = Guid.NewGuid(),
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = groupPage.PageId,
+					GroupName = "Email",
+					GroupId = childGroupId,
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = groupPage.PageId,
+					GroupName = "Email",
+					GroupId = childGroupId,
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = groupPage.PageId,
+					GroupName = "Phone",
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				}
+			};
+			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage},
+				groupDetails);
+
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			var orgs = result.BusinessHierarchy;
+			var gps = result.GroupPages;
+			var gp0 = gps[0];
+			gps.Count().Should().Be.EqualTo(1);
+			gp0.Children.Count().Should().Be.EqualTo(2);
+		}
 	}
 
 }
