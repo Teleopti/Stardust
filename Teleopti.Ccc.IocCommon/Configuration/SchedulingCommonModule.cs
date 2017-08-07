@@ -470,9 +470,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			if (_configuration.Args().IsFatClient)
 			{
+				builder.RegisterType<DesktopPeopleInOrganization>().As<IPeopleInOrganization>().SingleInstance();
 				builder.RegisterType<DesktopOptimizationContext>()
 					.As<IOptimizationPreferencesProvider>()
-					.As<IPeopleInOrganization>()
 					.As<ICurrentIntradayOptimizationCallback>()
 					.AsSelf()
 					.ApplyAspects()
