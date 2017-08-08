@@ -49,9 +49,9 @@
 				</label>
 				<div class="bootstrap-timepicker">
 					<div class="input-group">
-						<input type="text" id="request-start-time" class="input-sm form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, minuteStep: 1}, enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'" />
+						<input type="text" id="request-start-time" class="input-sm form-control" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, minuteStep: 1, showInputs: false}, enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'" />
 						<span class="input-group-btn">
-							<button class="btn btn-sm right-align" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, modalBackdrop: true}, enable: IsEditable">
+							<button class="btn btn-sm right-align" data-bind="timepicker: StartTime, timepickerOptions: { showMeridian: ShowMeridian, modalBackdrop: true, showInputs: false}, enable: IsEditable">
 								<i class="glyphicon glyphicon-time"></i>
 							</button>
 						</span>

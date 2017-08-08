@@ -150,11 +150,7 @@
 }
 
 @media(max-width: 768px){
-	#Request-add-section{
-		margin-top 40px;
-		padding-top: 40px;
-		max-height: 250px;
-		min-height: 200px;
+	.mobile-start-day #Request-add-section{
 		overflow-y: auto;
 		overflow-x: hidden;
 		-webkit-overflow-scrolling: touch;
@@ -170,6 +166,9 @@
 	height: auto;
 	cursor: pointer;
 	z-index: 198;
+	max-height: 250px;
+	min-height: 200px;
+	padding-top: 40px;
 }
 
 .mobile-add-request-form .overtime-add-container .overtime-request-duration .dropdown-menu{
