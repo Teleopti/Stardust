@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			_contextPerCommand[commandIdentifier.CommandId] = contextData;
 			return new GenericDisposable(() =>
 			{
-				_contextPerCommand.TryRemove(commandIdentifier.CommandId, out IDesktopContextData foo);
+				_contextPerCommand.TryRemove(commandIdentifier.CommandId, out IDesktopContextData _);
 			});
 		}
 	}
