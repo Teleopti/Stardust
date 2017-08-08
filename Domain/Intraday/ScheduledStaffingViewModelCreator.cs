@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				ForecastedStaffing = _forecastedStaffingToDataSeries.DataSeries(forecastedStaffing, timeSeries),
 				ScheduledStaffing = _scheduledStaffingToDataSeries.DataSeries(scheduledStaffingPerSkill, timeSeries)
 			};
-			calculateRelativeDifference(dataSeries);
+			calculateAbsoluteDifference(dataSeries);
 			return new ScheduledStaffingViewModel
 			{
 				DataSeries = dataSeries,
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			};
 		}
 
-		private static void calculateRelativeDifference(StaffingDataSeries dataSeries)
+		private static void calculateAbsoluteDifference(StaffingDataSeries dataSeries)
 		{
 			dataSeries.AbsoluteDifference = new double?[dataSeries.ForecastedStaffing.Length];
 			for (var index = 0; index < dataSeries.ForecastedStaffing.Length; index++)
@@ -104,8 +104,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 					dataSeries.AbsoluteDifference[index] = Math.Round((double)dataSeries.ScheduledStaffing[index], 1) -
 														   Math.Round((double)dataSeries.ForecastedStaffing[index], 1);
 					dataSeries.AbsoluteDifference[index] = Math.Round((double) dataSeries.AbsoluteDifference[index],1);
+					dataSeries.ScheduledStaffing[index] = Math.Round((double)dataSeries.ScheduledStaffing[index], 1);
 				}
-					
+				dataSeries.ForecastedStaffing[index] = Math.Round((double) dataSeries.ForecastedStaffing[index], 1);
 			}
 		}
 

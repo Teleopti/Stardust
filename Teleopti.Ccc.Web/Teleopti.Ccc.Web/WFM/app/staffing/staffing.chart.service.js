@@ -131,10 +131,10 @@
             for (var index = 0; index <= absoluteDifference.length; index++) {
                 var value = absoluteDifference[index];
                 if (value < 0) {
-                    staffing.under.push(Math.abs(value.toFixed(1)));
+                    staffing.under.push(Math.abs(value));
                     staffing.over.push(0);
                 } else if (value >= 0) {
-                    staffing.over.push(value.toFixed(1));
+                    staffing.over.push(value);
                     staffing.under.push(0);
                 }
             }

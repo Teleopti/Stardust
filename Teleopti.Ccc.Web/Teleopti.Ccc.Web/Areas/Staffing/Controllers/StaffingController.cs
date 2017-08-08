@@ -166,12 +166,12 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 				x.StartDateTime = TimeZoneHelper.ConvertFromUtc(x.StartDateTime, sourceTimeZone);
 				x.EndDateTime = TimeZoneHelper.ConvertFromUtc(x.EndDateTime, sourceTimeZone);
 			});
-			calculateRelativeDifference(returnModel.DataSeries);
+			calculateAbsoluteDifference(returnModel.DataSeries);
 			returnModel.OverTimeModels = wrapperModels.Models;
 			return returnModel;
 		}
 
-		private void calculateRelativeDifference(StaffingDataSeries dataSeries)
+		private void calculateAbsoluteDifference(StaffingDataSeries dataSeries)
 		{
 			dataSeries.AbsoluteDifference = new double?[dataSeries.ForecastedStaffing.Length];
 			for (var index = 0; index < dataSeries.ForecastedStaffing.Length; index++)
@@ -184,8 +184,13 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 						continue;
 					}
 
-					if (dataSeries.ScheduledStaffing[index].HasValue)
-						dataSeries.AbsoluteDifference[index] = dataSeries.ScheduledStaffing[index] - dataSeries.ForecastedStaffing[index];
+					if (dataSeries.ScheduledStaffing[index].HasValue) {
+						dataSeries.AbsoluteDifference[index] = Math.Round((double)dataSeries.ScheduledStaffing[index], 1) -
+															   Math.Round((double)dataSeries.ForecastedStaffing[index], 1);
+						dataSeries.AbsoluteDifference[index] = Math.Round((double)dataSeries.AbsoluteDifference[index], 1);
+						dataSeries.ScheduledStaffing[index] = Math.Round((double)dataSeries.ScheduledStaffing[index], 1);
+					}
+					dataSeries.ForecastedStaffing[index] = Math.Round((double)dataSeries.ForecastedStaffing[index], 1);
 				}
 
 			}

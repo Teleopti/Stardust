@@ -9,7 +9,6 @@
     function utilService($translate, $filter, $q) {
         var service = {
             prepareStaffingData: prepareStaffingData,
-            roundDataToOneDecimal: roundDataToOneDecimal,
             prepareSettings: prepareSettings,
             prepareSuggestedStaffingData: prepareSuggestedStaffingData
         };
@@ -26,22 +25,7 @@
         }
 
         function convertOvertimeHoursToMinutes(dateTime) {
-            return dateTime;
-            //return (dateTime.getMinutes() + dateTime.getHours() * 60);
-        }
-
-        function roundArrayContents(input, decimals) {
-            var roundedInput = [];
-            input.forEach(function (elm) {
-                if (typeof elm != 'number') return
-                roundedInput.push(parseFloat(elm.toFixed(decimals)));
-            })
-            return roundedInput;
-        }
-
-        function roundDataToOneDecimal(input) {
-            input = roundArrayContents(input, 1)
-            return input;
+            return (dateTime.getMinutes() + dateTime.getHours() * 60);
         }
 
         function prepareStaffingData(data) {
@@ -52,8 +36,8 @@
             staffingData.forcastedStaffing = [];
             staffingData.absoluteDifference = [];
 
-            staffingData.scheduledStaffing = roundDataToOneDecimal(data.DataSeries.ScheduledStaffing);
-            staffingData.forcastedStaffing = roundDataToOneDecimal(data.DataSeries.ForecastedStaffing);
+            staffingData.scheduledStaffing = data.DataSeries.ScheduledStaffing;
+            staffingData.forcastedStaffing = data.DataSeries.ForecastedStaffing;
             staffingData.absoluteDifference = data.DataSeries.AbsoluteDifference;
             staffingData.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
             staffingData.scheduledStaffing.unshift($translate.instant('ScheduledStaff'));
@@ -76,8 +60,8 @@
             staffingData.suggested.scheduledStaffing = [];
             staffingData.suggested.absoluteDifference = [];
 
-            staffingData.suggested.scheduledStaffing = roundDataToOneDecimal(data.DataSeries.ScheduledStaffing);
-            staffingData.suggested.forcastedStaffing = roundDataToOneDecimal(data.DataSeries.ForecastedStaffing);
+            staffingData.suggested.scheduledStaffing = data.DataSeries.ScheduledStaffing;
+            staffingData.suggested.forcastedStaffing = data.DataSeries.ForecastedStaffing;
             staffingData.suggested.absoluteDifference = data.DataSeries.AbsoluteDifference;
             staffingData.suggested.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
             staffingData.suggested.scheduledStaffing.unshift($translate.instant('Suggested scheduled agents'));
