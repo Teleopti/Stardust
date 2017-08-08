@@ -219,3 +219,4 @@ WFM_Forecaster_Refact_44480 = DEV
 Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 WFM_Export_Forecast_44716 = true
 WFM_RedirectPermissionToWeb_44562 = RC
+WFM_TrainingPlanner_44780 = RC

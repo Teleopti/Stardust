@@ -15,6 +15,7 @@ using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
@@ -38,6 +39,7 @@ using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.Sdk.Logic.MultiTenancy;
 using Teleopti.Ccc.Sdk.Logic.Payroll;
+using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfHost.Service;
 using Teleopti.Ccc.Sdk.WcfHost.Service.Factory;
@@ -146,6 +148,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost
 			builder.RegisterType<PersonalShiftLayerConstructor>().As<ILayerConstructor<PersonalShiftLayer>>().InstancePerLifetimeScope();
 			builder.RegisterType<UserCultureProvider>().As<IUserCultureProvider>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
+
+			if (configuration.Toggle(Toggles.WFM_TrainingPlanner_44780))
+				builder.RegisterType<GetStaffingUsingReadModel>().As<ILoadSkillDaysByPeriod>().InstancePerLifetimeScope();
+			else
+				builder.RegisterType<GetStaffingUsingResourceCalculation>().As<ILoadSkillDaysByPeriod>().InstancePerLifetimeScope();
 
 			registerDataSourcesFactory(builder);
 

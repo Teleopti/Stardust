@@ -178,6 +178,9 @@
     <Compile Include="CommandHandler\SetPersonExternalLogOnCommandHandler.cs" />
     <Compile Include="CommandHandler\SetPersonOptionalValuesForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetSchedulePeriodWorktimeOverrideCommandHandler.cs" />
+    <Compile Include="QueryHandler\GetStaffingUsingReadModel.cs" />
+    <Compile Include="QueryHandler\GetStaffingUsingResourceCalculation.cs" />
+    <Compile Include="QueryHandler\ILoadSkillDaysByPeriod.cs" />
     <Compile Include="Restrictions\PreferenceRestrictionConstructor.cs" />
     <Compile Include="QueryHandler\GetPersonsByIdentitiesQueryHandler.cs" />
     <Compile Include="QueryHandler\GetPersonsByIdsQueryHandler.cs" />

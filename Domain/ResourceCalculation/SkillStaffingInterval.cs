@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public DateTimePeriod CalculationPeriod => new DateTimePeriod(StartDateTime, EndDateTime);
 		public double CalculatedLoggedOn { get; private set; }
 
+		public Percent EstimatedServiceLevel { get; set; }
+
 		public void SetCalculatedUsedSeats(double usedSeats)
 		{
 		}

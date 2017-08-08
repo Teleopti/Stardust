@@ -208,7 +208,8 @@
 		WFM_Forecaster_Refact_44480,
 		WFM_Export_Forecast_44716,
 		WFM_RedirectPermissionToWeb_44562,
-		Staffing_BPOExchangeImport_45202
+		Staffing_BPOExchangeImport_45202,
+		WFM_TrainingPlanner_44780
 		// ReSharper restore InconsistentNaming
 	}
 }
