@@ -66,13 +66,23 @@
 		}).state('resourceplanner.createplanninggroup', {
 			url: '/createplanninggroup',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group/planninggroup.createform.html',
-			controller: 'planningGroupFormController as vm'
+			controller: 'planningGroupFormController as vm',
+			resolve: {
+				editPlanningGroup: function () {
+					return null;
+				}
+			}
 		}).state('resourceplanner.editplanninggroup', {
 			url: '/planninggroup/:groupId/edit',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group/planninggroup.createform.html',
 			controller: 'planningGroupFormController as vm',
 			params: {
 				groupId: ''
+			},
+			resolve: {
+				editPlanningGroup: ['planningGroupService', '$stateParams', function (planningGroupService, $stateParams) {
+					return planningGroupService.getPlanningGroupById({ id: $stateParams.groupId }).$promise;
+				}]
 			}
 		}).state('resourceplanner.selectplanningperiod', {
 			url: '/planninggroup/:groupId/selectplanningperiod',

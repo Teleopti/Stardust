@@ -5,19 +5,19 @@
 		.module('wfm.resourceplanner')
 		.controller('planningGroupFormController', Controller);
 
-	Controller.$inject = ['$state', '$timeout', '$stateParams', 'planningGroupService', 'NoticeService', '$translate', 'debounceService', 'localeLanguageSortingService'];
+	Controller.$inject = ['$state', '$timeout', '$stateParams', 'planningGroupService', 'NoticeService', '$translate', 'debounceService', 'localeLanguageSortingService', 'editPlanningGroup'];
 
-	function Controller($state, $timeout, $stateParams, planningGroupService, NoticeService, $translate, debounceService, localeLanguageSortingService) {
+	function Controller($state, $timeout, $stateParams, planningGroupService, NoticeService, $translate, debounceService, localeLanguageSortingService, editPlanningGroup) {
 		var vm = this;
 
-		var planningGroupId = $stateParams.groupId ? $stateParams.groupId : null;
 		vm.searchString = '';
 		vm.selectedResults = [];
 		vm.filterResults = [];
 		vm.name = '';
 		vm.cancel = cancel;
-		vm.editPlanningGroup = {};
 		vm.deletePlanningGroupText = '';
+		vm.editPlanningGroup = editPlanningGroup;
+		vm.isEditGroup = editPlanningGroup ? true : false;
 		vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
 		vm.selectResultItem = selectResultItem;
 		vm.isValidFilters = isValidFilters;
@@ -27,30 +27,24 @@
 		vm.persist = persist;
 		vm.removePlanningGroup = removePlanningGroup;
 
-		getPlanningGroupById();
+		prepareEditInfo();
 
-		function getPlanningGroupById() {
-			if (planningGroupId == null)
+		function prepareEditInfo() {
+			if (editPlanningGroup == null)
 				return;
-			var getPlanningGroup = planningGroupService.getPlanningGroupById({ id: planningGroupId });
-			return getPlanningGroup.$promise.then(function (data) {
-				vm.editPlanningGroup = data;
-				vm.deletePlanningGroupText = $translate.instant("AreYouSureYouWantToDeleteThePlanningGroup").replace("{0}", vm.editPlanningGroup.Name);
-				vm.name = data.Name;
-				vm.selectedResults = data.Filters.sort(localeLanguageSortingService.localeSort('+FilterType','+Name'));
-				return vm.editPlanningGroup;
-			});
+			vm.deletePlanningGroupText = $translate.instant("AreYouSureYouWantToDeleteThePlanningGroup").replace("{0}", editPlanningGroup.Name);
+			vm.name = editPlanningGroup.Name;
+			vm.selectedResults = editPlanningGroup.Filters.sort(localeLanguageSortingService.localeSort('+FilterType', '+Name'));
 		}
 
 		function inputFilterData() {
 			if (vm.searchString == '')
 				return [];
 			var filters = planningGroupService.getFilterData({ searchString: vm.searchString });
-			filters.$promise.then(function (data) {
+			return filters.$promise.then(function (data) {
 				removeSelectedFiltersInList(data, vm.selectedResults);
 				return vm.filterResults = data;
 			});
-			return filters;
 		}
 
 		function removeSelectedFiltersInList(filters, selectedFilters) {
@@ -70,7 +64,7 @@
 				return;
 			if (isValidUnit(item)) {
 				vm.selectedResults.push(item);
-				vm.selectedResults.sort(localeLanguageSortingService.localeSort('+FilterType','+Name'));
+				vm.selectedResults.sort(localeLanguageSortingService.localeSort('+FilterType', '+Name'));
 				clearInput();
 			} else {
 				clearInput();
@@ -84,7 +78,7 @@
 				if (node.Id === item.Id) {
 					check = false;
 				};
-			});
+			}); 
 			return check;
 		}
 
@@ -116,25 +110,22 @@
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 				return;
 			}
-			planningGroupService.savePlanningGroup({
-				Id: vm.editPlanningGroup.Id,
+			return planningGroupService.savePlanningGroup({
+				Id: editPlanningGroup ? editPlanningGroup.Id : null,
 				Name: vm.name,
 				Filters: vm.selectedResults
 			}).$promise.then(function () {
-				vm.editPlanningGroup = {};
 				$state.go('resourceplanner.newoverview');
 			});
 		}
 
 		function cancel() {
 			$state.go('resourceplanner.newoverview');
-			vm.editPlanningGroup = {};
 		}
 
-		function removePlanningGroup(id) {
-			if (!id) return;
-			planningGroupService.removePlanningGroup({ id: id }).$promise.then(function () {
-				vm.editPlanningGroup = {};
+		function removePlanningGroup() {
+			if (!editPlanningGroup) return;
+			return planningGroupService.removePlanningGroup({ id: editPlanningGroup.Id }).$promise.then(function () {
 				$state.go('resourceplanner.newoverview');
 			});
 		}

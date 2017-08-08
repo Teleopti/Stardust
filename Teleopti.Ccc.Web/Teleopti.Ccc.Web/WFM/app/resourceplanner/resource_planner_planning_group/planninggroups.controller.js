@@ -5,19 +5,19 @@
     .module('wfm.resourceplanner')
     .controller('planningGroupsController', Controller);
 
-  Controller.$inject = ['$state', 'planningGroupService','planningGroups','localeLanguageSortingService'];
+  Controller.$inject = ['$state', 'planningGroupService', 'planningGroups', 'localeLanguageSortingService'];
 
-  function Controller($state, planningGroupService, planningGroups,localeLanguageSortingService) {
+  function Controller($state, planningGroupService, planningGroups, localeLanguageSortingService) {
     var vm = this;
 
     vm.goForm = goForm;
     vm.goPlanningGroup = goPlanningGroup;
     vm.goEditPlanningGroup = goEditPlanningGroup;
     vm.goDayOffRule = goDayOffRule;
-    vm.planningGroups = planningGroups.sort(localeLanguageSortingService.localeSort('+Name'));
-    vm.hasAg = hasAg;
+    vm.planningGroups = planningGroups ? planningGroups.sort(localeLanguageSortingService.localeSort('+Name')) : [];
+    vm.hasPg = hasPg;
 
-    function hasAg() {
+    function hasPg() {
       if (vm.planningGroups.length > 0)
         return true;
     }

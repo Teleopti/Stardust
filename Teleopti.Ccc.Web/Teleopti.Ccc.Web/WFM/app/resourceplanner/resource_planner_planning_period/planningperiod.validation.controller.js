@@ -13,6 +13,7 @@
 
         vm.valLoading = false;
         vm.getValidationByPpId = getValidationByPpId;
+        vm.hasValidations = hasValidations;
 
         getValidationByPpId();
 
@@ -25,6 +26,11 @@
                 vm.valLoading = false;
                 vm.valNumber();
             });
+        }
+
+        function hasValidations() {
+            if (!vm.valData.totalValNum == 0)
+                return true;
         }
     }
 

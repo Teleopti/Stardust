@@ -1,10 +1,10 @@
 <div class="view-header">
-	<div class="view-title" ng-hide="vm.editPlanningGroup.Id">
+	<div class="view-title" ng-if="!vm.isEditGroup">
 		<h1><i class="mdi mdi-calendar"></i> {{'CreatePlanningGroup' | translate}}</h1>
 		<p>{{'PlansPageCreatePlanningGroup' | translate}}</p>
 	</div>
-	<div class="view-title" ng-if="vm.editPlanningGroup.Id">
-		<h1><i class="mdi mdi-calendar"></i> {{'EditPlanningGroup' | translate}}: {{vm.editPlanningGroup.Name}}</h1>
+	<div class="view-title" ng-if="vm.isEditGroup">
+		<h1><i class="mdi mdi-calendar"></i> {{'EditPlanningGroup' | translate}}: {{::vm.name}}</h1>
 		<p>{{'PlansPageEditPlanningGroup' | translate}}</p>
 	</div>
 </div>
@@ -62,13 +62,13 @@
 			</div>
 			<div class="con-footer">
 				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
-				<button ng-show="vm.editPlanningGroup.Id" class="wfm-btn wfm-btn-invis-default delete-plan-group" ng-click='confirmModal1=true;'>{{'Delete'|translate}}</button>
+				<button ng-if="vm.isEditGroup" class="wfm-btn wfm-btn-invis-default delete-plan-group" ng-click='vm.confirmDeleteModal=true;'>{{'Delete'|translate}}</button>
 				<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
 				 ng-click="vm.persist()">
 					{{'Save'|translate}}
 	 			</button>
 				<div ng-cloak class="modal-box">
-					<div ng-show="confirmModal1">
+					<div ng-show="vm.confirmDeleteModal">
 						<div class="modalbg">
 							<div class="dialog-mini material-depth-1">
 								<div class="modal-inner-content">
@@ -77,8 +77,8 @@
 								</div>
 								<div class="modal-actions">
 									<aside>
-										<button ng-click="confirmModal1=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-										<button ng-click="confirmModal1=false; vm.removePlanningGroup(vm.editPlanningGroup.Id)" class="wfm-btn wfm-btn-invis-primary confirm-delete-plan-group">{{'Delete'|translate}}</button>
+										<button ng-click="vm.confirmDeleteModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+										<button ng-click="vm.confirmDeleteModal=false; vm.removePlanningGroup()" class="wfm-btn wfm-btn-invis-primary confirm-delete-plan-group">{{'Delete'|translate}}</button>
 									</aside>
 								</div>
 							</div>

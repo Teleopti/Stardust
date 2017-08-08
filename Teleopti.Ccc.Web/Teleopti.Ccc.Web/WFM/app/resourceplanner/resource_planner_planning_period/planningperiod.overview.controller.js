@@ -95,27 +95,27 @@
     }
 
     function clearSchedules() {
-      if (selectedPpId !== null) {
-        vm.clearRunning = true;
-        vm.status = $translate.instant('ClearScheduleResultAndHistoryData');
-        planningPeriodServiceNew.clearSchedules({ id: selectedPpId }).$promise.then(function () {
-          vm.clearRunning = false;
-          vm.isScheduled = false;
-          vm.scheduledAgents = 0;
-          vm.dayNodes = undefined;
-          vm.status = "";
-          NoticeService.success($translate.instant('SuccessClearPlanningPeriodData')
-            .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-            .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), 20000, true);
-        });
-      }
+      if (selectedPpId == null)
+        return;
+      vm.clearRunning = true;
+      vm.status = $translate.instant('ClearScheduleResultAndHistoryData');
+      return planningPeriodServiceNew.clearSchedules({ id: selectedPpId }).$promise.then(function () {
+        vm.clearRunning = false;
+        vm.isScheduled = false;
+        vm.scheduledAgents = 0;
+        vm.dayNodes = undefined;
+        vm.status = "";
+        NoticeService.success($translate.instant('SuccessClearPlanningPeriodData')
+          .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+          .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), 20000, true);
+      });
     }
 
     function launchSchedule() {
       if (isDisable() || selectedPpId == null) {
         return;
       }
-      planningPeriodServiceNew.launchScheduling({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
+      return planningPeriodServiceNew.launchScheduling({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
         checkProgress();
       });
     }
@@ -127,40 +127,47 @@
             if (!result.HasJob) {
               vm.schedulingPerformed = false;
             } else {
-              if (result.Successful === true) {
-                if (vm.schedulingPerformed === true) {
-                  vm.schedulingPerformed = false;
-                  NoticeService.success($translate.instant('SuccessfullyScheduledPlanningPeriodFromTo')
-                    .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-                    .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
-                  loadLastResult();
-                }
-              } else if (result.Failed === true) {
-                vm.schedulingPerformed = false;
-                vm.lastJobFail = true;
-                if (result.CurrentStep === 0) {
-                  handleScheduleOrOptimizeError(
-                    $translate.instant('FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError')
-                      .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-                      .replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
-                  );
-                } else if (result.CurrentStep === 1) {
-                  handleScheduleOrOptimizeError(
-                    $translate.instant('FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError')
-                      .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-                      .replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
-                  );
-                }
-              } else {
+              if (!result.Successful && !result.Failed) {
                 vm.schedulingPerformed = true;
-                if (result.CurrentStep === 0) {
-                  vm.status = $translate.instant('PresentTenseSchedule');
-                } else if (result.CurrentStep === 1) {
-                  vm.status = $translate.instant('OptimizingDaysOff');
-                }
+                return msgForScheduleRunning(result.CurrentStep);
+              }
+              if (result.Failed) {
+                vm.schedulingPerformed = false;
+                return msgForScheduleFail(result.CurrentStep);
+              }
+              if (result.Successful && vm.schedulingPerformed) {
+                vm.schedulingPerformed = false;
+                NoticeService.success($translate.instant('SuccessfullyScheduledPlanningPeriodFromTo')
+                  .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+                  .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
+                return loadLastResult();
               }
             }
           });
+      }
+    }
+
+    function msgForScheduleRunning(step) {
+      if (step === 0) {
+        vm.status = $translate.instant('PresentTenseSchedule');
+      } else if (step === 1) {
+        vm.status = $translate.instant('OptimizingDaysOff');
+      }
+    }
+
+    function msgForScheduleFail(step) {
+      if (step === 0) {
+        handleScheduleOrOptimizeError(
+          $translate.instant('FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError')
+            .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+            .replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
+        );
+      } else if (step === 1) {
+        handleScheduleOrOptimizeError(
+          $translate.instant('FailedToOptimizeDayoffForSelectedPlanningPeriodDueToTechnicalError')
+            .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+            .replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
+        );
       }
     }
 
@@ -180,7 +187,7 @@
         return;
       }
       vm.optimizeRunning = true;
-      planningPeriodServiceNew.launchIntraOptimize({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
+      return planningPeriodServiceNew.launchIntraOptimize({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
         checkIntradayOptimizationProgress();
       });
     }
@@ -191,25 +198,27 @@
           if (!result.HasJob) {
             vm.optimizeRunning = false;
           } else {
-            if (result.Successful) {
-              if (vm.optimizeRunning) {
-                vm.optimizeRunning = false;
-                NoticeService.success($translate.instant('SuccessfullyIntradayOptimizationPlanningPeriodFromTo')
-                  .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-                  .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
-                loadLastResult();
-              }
-            } else if (result.Failed) {
-              vm.optimizeRunning = false;
-              vm.status = '';
-              handleScheduleOrOptimizeError(
-                $translate.instant('FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError')
-                  .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
-                  .replace('{1}', moment(vm.selectedPp.EndDate).format('L'))
-              );
-            } else {
+            if (!result.Successful && !result.Failed) {
               vm.optimizeRunning = true;
               vm.status = $translate.instant('RunningIntradayOptimization');
+              return;
+            }
+            if (result.Successful && vm.optimizeRunning) {
+              vm.optimizeRunning = false;
+              vm.status = '';
+              NoticeService.success(
+                $translate.instant('SuccessfullyIntradayOptimizationPlanningPeriodFromTo')
+                  .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+                  .replace('{1}', moment(vm.selectedPp.EndDate).format('L')));
+              return loadLastResult();
+            }
+            if (result.Failed ) {
+              vm.optimizeRunning = false;
+              vm.status = '';
+              return handleScheduleOrOptimizeError(
+                $translate.instant('FailedToIntradayOptimizeForSelectedPlanningPeriodDueToTechnicalError')
+                  .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
+                  .replace('{1}', moment(vm.selectedPp.EndDate).format('L')));
             }
           }
         });
@@ -228,7 +237,7 @@
         return;
       }
       vm.publishRunning = true;
-      planningPeriodServiceNew.publishPeriod({ id: selectedPpId }).$promise.then(function () {
+      return planningPeriodServiceNew.publishPeriod({ id: selectedPpId }).$promise.then(function () {
         NoticeService.success($translate.instant('PublishScheduleSucessForSelectedPlanningPeriod')
           .replace('{0}', moment(vm.selectedPp.StartDate).format('L'))
           .replace('{1}', moment(vm.selectedPp.EndDate).format('L')), null, true);
@@ -239,9 +248,7 @@
     function loadLastResult() {
       if (selectedPpId == null)
         return;
-      vm.valData.scheduleIssues = [];
-      vm.scheduledAgents = 0;
-      planningPeriodServiceNew.lastJobResult({ id: selectedPpId })
+      return planningPeriodServiceNew.lastJobResult({ id: selectedPpId })
         .$promise.then(function (data) {
           if (data.ScheduleResult) {
             vm.isScheduled = true;
@@ -273,12 +280,12 @@
     }
 
     function initResult(interResult) {
-      if (interResult) {
-        vm.dayNodes = interResult.SkillResultList ? interResult.SkillResultList : undefined;
-        parseRelativeDifference(vm.dayNodes);
-        parseWeekends(vm.dayNodes);
-        displayGrid();
-      }
+      if (!interResult)
+        return;
+      vm.dayNodes = interResult.SkillResultList ? interResult.SkillResultList : undefined;
+      parseRelativeDifference(vm.dayNodes);
+      parseWeekends(vm.dayNodes);
+      displayGrid();
     }
 
     function parseRelativeDifference(nodes) {
@@ -332,7 +339,6 @@
     }
 
     function goDoRulesSetting() {
-      console.log('ahat')
       $state.go('resourceplanner.dayoffrulesoverview', {
         groupId: $stateParams.groupId,
       });

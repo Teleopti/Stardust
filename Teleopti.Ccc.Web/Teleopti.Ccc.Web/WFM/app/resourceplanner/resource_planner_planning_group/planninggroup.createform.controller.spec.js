@@ -6,6 +6,15 @@ describe('planningGroupFormController', function () {
 		$injector,
 		planningGroupService,
 		debounceService,
+		editPlanningGroup = {
+			Id: "aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e",
+			Name: "Plan Group 2",
+			Filters: [{
+				Id: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
+				Name: "Skill 1",
+				FilterType: "Skill"
+			}]
+		},
 		stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' };
 
 	beforeEach(function () {
@@ -40,18 +49,6 @@ describe('planningGroupFormController', function () {
 			return [200, true];
 		});
 
-		$httpBackend.whenGET('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
-			return [200, {
-				Id: "aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e",
-				Name: "Plan Group 2",
-				Filters: [{
-					Id: "0ffeb898-11bf-43fc-8104-9b5e015ab3c2",
-					Name: "Skill 1",
-					FilterType: "Skill"
-				}]
-			}, {}];
-		});
-
 		$httpBackend.whenDELETE('../api/resourceplanner/planninggroup/aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e').respond(function (method, url, data, headers) {
 			return [200, true];
 		});
@@ -67,7 +64,7 @@ describe('planningGroupFormController', function () {
 	});
 
 	it('should call function with debounce 250', function () {
-		var vm = $controller('planningGroupFormController');
+		var vm = $controller('planningGroupFormController', { editPlanningGroup: null });
 		vm.searchString = "skill";
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -76,7 +73,7 @@ describe('planningGroupFormController', function () {
 	});
 
 	it('should get filter results', function () {
-		var vm = $controller('planningGroupFormController');
+		var vm = $controller('planningGroupFormController', { editPlanningGroup: null });
 		vm.searchString = "skill";
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -87,7 +84,7 @@ describe('planningGroupFormController', function () {
 	});
 
 	it('should add one filter from filter results', function () {
-		var vm = $controller('planningGroupFormController');
+		var vm = $controller('planningGroupFormController', { editPlanningGroup: null });
 		vm.searchString = "skill";
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -99,7 +96,7 @@ describe('planningGroupFormController', function () {
 	});
 
 	it('should remove one filter from filter results', function () {
-		var vm = $controller('planningGroupFormController');
+		var vm = $controller('planningGroupFormController', { editPlanningGroup: null });
 		vm.searchString = "skill";
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -111,7 +108,7 @@ describe('planningGroupFormController', function () {
 	});
 
 	it('should not create planning group when submit data is invalid', function () {
-		var vm = $controller('planningGroupFormController');
+		var vm = $controller('planningGroupFormController', { editPlanningGroup: null });
 		vm.persist();
 		$httpBackend.flush();
 
@@ -119,7 +116,7 @@ describe('planningGroupFormController', function () {
 	});
 
 	it('should create new planning group when submit data is valid', function () {
-		var vm = $controller('planningGroupFormController');
+		var vm = $controller('planningGroupFormController', { editPlanningGroup: null });
 		vm.searchString = "skill";
 		vm.inputFilterData();
 		$httpBackend.flush();
@@ -133,14 +130,7 @@ describe('planningGroupFormController', function () {
 	});
 
 	it('should load edit planning group', function () {
-		var vm = $controller('planningGroupFormController', { $stateParams: stateparams });
-		$httpBackend.flush();
-
-		expect(vm.editPlanningGroup.Id).toEqual('aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e');
-	});
-
-	it('should load edit planning group', function () {
-		var vm = $controller('planningGroupFormController', { $stateParams: stateparams });
+		var vm = $controller('planningGroupFormController', { $stateParams: stateparams, editPlanningGroup: editPlanningGroup });
 		$httpBackend.flush();
 
 		expect(vm.editPlanningGroup.Id).toEqual('aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e');
@@ -148,7 +138,7 @@ describe('planningGroupFormController', function () {
 
 	it('should save new name for selected edit planning group', function () {
 		spyOn(planningGroupService, 'savePlanningGroup').and.callThrough();
-		var vm = $controller('planningGroupFormController', { $stateParams: stateparams });
+		var vm = $controller('planningGroupFormController', { $stateParams: stateparams, editPlanningGroup: editPlanningGroup });
 		$httpBackend.flush();
 
 		var id = vm.editPlanningGroup.Id;
@@ -157,13 +147,13 @@ describe('planningGroupFormController', function () {
 		vm.persist();
 		$httpBackend.flush();
 
-		expect(planningGroupService.savePlanningGroup).toHaveBeenCalledWith({Id:id, Name: vm.name, Filters: filter });
+		expect(planningGroupService.savePlanningGroup).toHaveBeenCalledWith({ Id: id, Name: vm.name, Filters: filter });
 		expect($state.go).toHaveBeenCalledWith('resourceplanner.newoverview');
 	});
 
 	it('should delete selected planning group', function () {
 		spyOn(planningGroupService, 'removePlanningGroup').and.callThrough();
-		var vm = $controller('planningGroupFormController', { $stateParams: stateparams });
+		var vm = $controller('planningGroupFormController', { $stateParams: stateparams, editPlanningGroup: editPlanningGroup });
 		$httpBackend.flush();
 
 		var id = vm.editPlanningGroup.Id;
@@ -172,7 +162,7 @@ describe('planningGroupFormController', function () {
 		vm.removePlanningGroup(id);
 		$httpBackend.flush();
 
-		expect(planningGroupService.removePlanningGroup).toHaveBeenCalledWith({id:id});
+		expect(planningGroupService.removePlanningGroup).toHaveBeenCalledWith({ id: id });
 		expect($state.go).toHaveBeenCalledWith('resourceplanner.newoverview');
 	});
 });

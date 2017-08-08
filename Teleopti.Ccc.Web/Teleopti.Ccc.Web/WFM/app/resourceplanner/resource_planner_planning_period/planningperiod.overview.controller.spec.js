@@ -217,7 +217,7 @@ describe('planningPeriodOverviewController', function () {
         $httpBackend.flush();
 
         expect(planningPeriodServiceNew.lastJobStatus).toHaveBeenCalledWith({ id: 'a557210b-99cc-4128-8ae0-138d812974b6' });
-        expect(NoticeService.success).toHaveBeenCalledWith('SuccessfullyIntradayOptimizationPlanningPeriodFromTo', null, true);
+        expect(NoticeService.success).toHaveBeenCalledWith('SuccessfullyIntradayOptimizationPlanningPeriodFromTo');
         expect(vm.status).toEqual('');
         expect(vm.optimizeRunning).toEqual(false);
     });
