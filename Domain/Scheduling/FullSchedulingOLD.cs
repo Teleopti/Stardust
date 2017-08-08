@@ -66,8 +66,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var stateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(stateHolder, people, null, period);
+			var extendedPeriod = period;
+			if (period.StartDate.Day == 1 && period.EndDate.AddDays(1).Day == 1)
+			{
+				extendedPeriod = new DateOnlyPeriod(period.StartDate.AddDays(-6), period.EndDate.AddDays(6));
+			}
 			_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate), _schedulingProgress,
-				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false);
+				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(extendedPeriod), extendedPeriod, false);
 		}
 	}
 }

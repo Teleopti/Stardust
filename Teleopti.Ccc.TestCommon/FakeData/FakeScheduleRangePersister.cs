@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_personAssignmentRepository = personAssignmentRepository;
 		}
 
-		public SchedulePersistResult Persist(IScheduleRange scheduleRange)
+		public SchedulePersistResult Persist(IScheduleRange scheduleRange, DateOnlyPeriod period)
 		{
 			var diffSvc = new DifferenceEntityCollectionService<IPersistableScheduleData>();
 

@@ -31,8 +31,10 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			{
 				using (_transactionHooksScope.OnThisThreadExclude<ScheduleChangedMessageSender>())
 				{
-					var result = _scheduleRangePersister.Persist(scheduleRange);
-			
+					var result = _scheduleRangePersister.Persist(scheduleRange,
+						scheduleDictionary.Period.VisiblePeriod.ToDateOnlyPeriod(
+							scheduleRange.Person.PermissionInformation.DefaultTimeZone()));
+
 					var persistConflicts = completeResult.PersistConflicts.ToList();
 					persistConflicts.AddRange(result.PersistConflicts);
 					completeResult.PersistConflicts = persistConflicts;

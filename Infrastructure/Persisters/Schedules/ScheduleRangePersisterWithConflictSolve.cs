@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 {
@@ -30,9 +31,9 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 			_clearScheduleEvents = clearScheduleEvents;
 		}
 
-		public SchedulePersistResult Persist(IScheduleRange scheduleRange)
+		public SchedulePersistResult Persist(IScheduleRange scheduleRange, DateOnlyPeriod period)
 		{
-			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService);
+			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService, new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(-1)));
 			if (diff.IsEmpty())
 				return new SchedulePersistResult
 				{
