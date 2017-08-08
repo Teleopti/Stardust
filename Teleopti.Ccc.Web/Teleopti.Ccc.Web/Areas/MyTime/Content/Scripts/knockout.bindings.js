@@ -184,9 +184,11 @@ ko.bindingHandlers.scrollIntoViewWhenClick = {
 	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
 		$(element).click(function(event) {
 			var ele = this;
-			setTimeout(function(){
-				$(valueAccessor()).scrollTop($(ele).offset().top);
-			}, 500);
+			if(!navigator.userAgent.match(/iPhone/)){
+				setTimeout(function(){
+					$(valueAccessor()).scrollTop($(ele).offset().top);
+				}, 500);
+			}
 		});
 	}
 };
