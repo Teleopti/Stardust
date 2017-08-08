@@ -4,585 +4,596 @@
 }
 
 .wfm-requests {
-	.request-footer{
-		height:35px;
-		.pagination{
-			margin:inherit !important;
+	.request-footer {
+		height: 35px;
+
+		.pagination {
+			margin: inherit !important;
 		}
 	}
-	.total-requests-count{
+
+	.total-requests-count {
 		margin-right: 40px;
 		margin-top: 5px;
 	}
-	.m-t-5{
-		margin-top:5px;
+
+	.m-t-5 {
+		margin-top: 5px;
 	}
-	.request-body{
+
+	.request-body {
 		border-bottom: 1px solid rgba(0,0,0,.26);
-		margin-bottom:10px;
-	}
-	.h-60-vh{
-		/*height:inherit !important;*/
-		height:60vh;
+		margin-bottom: 10px;
 	}
 
-    .wfm-checkbox-toggle {
-        position: relative;
-    }
+	.requests-uigrid-table {
+		height: 60vh;
+	}
 
-    md-tab-content.md-active {
-        transform: inherit !important; //why transform nothing? what about all the position fixed element inside
-    }
+	.wfm-checkbox-toggle {
+		position: relative;
+	}
 
-    .show-replay {
-        display: block !important;
-    }
+	md-tab-content.md-active {
+		transform: inherit !important; //why transform nothing? what about all the position fixed element inside
+	}
 
-    .inline-block{
-        display: inline-block;
-    }
+	.show-replay {
+		display: block !important;
+	}
 
-    .relative {
-        position: relative;
-    }
+	.inline-block {
+		display: inline-block;
+	}
 
-    .absolute {
-        position: absolute;
-    }
+	.relative {
+		position: relative;
+	}
 
-    .auto {
-        overflow: auto;
-    }
+	.absolute {
+		position: absolute;
+	}
 
-    .m-h-400 {
-        max-height: 400px;
-    }
+	.auto {
+		overflow: auto;
+	}
 
-    .no-scroll {
-        overflow-y: inherit !important;
-    }
+	.m-h-400 {
+		max-height: 400px;
+	}
 
-    .message-reply-container-first textarea {
-        min-height: 150px;
-        width: 50%;
-        margin-bottom: 10px;
-    }
+	.no-scroll {
+		overflow-y: inherit !important;
+	}
 
-    .message-reply-container-last textarea {
-        min-height: 50px;
-        width: 50%;
-    }
+	.message-reply-container-first textarea {
+		min-height: 150px;
+		width: 50%;
+		margin-bottom: 10px;
+	}
 
-    .message-reply-label {
-        min-width: 50px;
-    }
+	.message-reply-container-last textarea {
+		min-height: 50px;
+		width: 50%;
+	}
 
-    schedule-table .wfm-checkbox-toggle {
-        display: none;
-    }
+	.message-reply-label {
+		min-width: 50px;
+	}
 
-    .is-close-day input[type=checkbox]:checked ~ .wfm-checkbox-toggle:after, .is-close-day input[type=checkbox]:checked ~ label .wfm-checkbox-toggle:after {
-        content: 'X';
-    }
+	schedule-table .wfm-checkbox-toggle {
+		display: none;
+	}
 
-    .schedule-container {
-        border: 1px solid #A3A3A3;
-        background-color: #fff;
-        padding: 5px;
-        width: 710px;
-        height: 145px;
-        z-index: 1000;
-    }
+	.is-close-day input[type=checkbox]:checked ~ .wfm-checkbox-toggle:after, .is-close-day input[type=checkbox]:checked ~ label .wfm-checkbox-toggle:after {
+		content: 'X';
+	}
 
-    .time-line {
-        min-width: 300px;
-        z-index: 10;
+	.schedule-container {
+		border: 1px solid #A3A3A3;
+		background-color: #fff;
+		padding: 5px;
+		width: 710px;
+		height: 145px;
+		z-index: 1000;
+	}
 
-        .ruler {
-            height: 100%;
-            width: 1px;
-            background-color: $gray012;
-            z-index: 10;
-        }
+	.time-line {
+		min-width: 300px;
+		z-index: 10;
 
-        .label {
-            font-size: xx-small;
-            height: 1.32em;
-            z-index: 11;
-            transform: translateX(-50%);
-        }
-    }
+		.ruler {
+			height: 100%;
+			width: 1px;
+			background-color: $gray012;
+			z-index: 10;
+		}
 
-    .shift {
-        .layer {
-            z-index: 10;
-            height: 22px;
-            text-align: center;
-        }
+		.label {
+			font-size: xx-small;
+			height: 1.32em;
+			z-index: 11;
+			transform: translateX(-50%);
+		}
+	}
 
-        .layer.noneSelected {
-            opacity: 1;
-        }
+	.shift {
+		.layer {
+			z-index: 10;
+			height: 22px;
+			text-align: center;
+		}
 
-        .layer.lighterBorder {
-            border-color: #00ffff;
-        }
+		.layer.noneSelected {
+			opacity: 1;
+		}
 
-        .layer:first-of-type {
-            -webkit-border-radius: 4px 0px 0px 4px;
-            -moz-border-radius: 4px 0px 0px 4px;
-            border-radius: 4px 0px 0px 4px;
-        }
+		.layer.lighterBorder {
+			border-color: #00ffff;
+		}
 
-        .layer:last-of-type {
-            -webkit-border-radius: 0px 4px 4px 0px;
-            -moz-border-radius: 0px 4px 4px 0px;
-            border-radius: 0px 4px 4px 0px;
-        }
+		.layer:first-of-type {
+			-webkit-border-radius: 4px 0px 0px 4px;
+			-moz-border-radius: 4px 0px 0px 4px;
+			border-radius: 4px 0px 0px 4px;
+		}
 
-        .layer:only-child {
-            -webkit-border-radius: 4px 4px 4px 4px;
-            -moz-border-radius: 4px 4px 4px 4px;
-            border-radius: 4px 4px 4px 4px;
-        }
+		.layer:last-of-type {
+			-webkit-border-radius: 0px 4px 4px 0px;
+			-moz-border-radius: 0px 4px 4px 0px;
+			border-radius: 0px 4px 4px 0px;
+		}
 
-    }
+		.layer:only-child {
+			-webkit-border-radius: 4px 4px 4px 4px;
+			-moz-border-radius: 4px 4px 4px 4px;
+			border-radius: 4px 4px 4px 4px;
+		}
+	}
 
-    [id="time-zone-switch"] {
-        position: relative;
-    }
+	[id="time-zone-switch"] {
+		position: relative;
+	}
 
-    .filter-switch {
-        display: inline-block;
-        padding-left: 3px;
-    }
+	.filter-switch {
+		display: inline-block;
+		padding-left: 3px;
+	}
 
-    .operation-container {
-        display: flex;
-        justify-content: space-between;
-        background-color: $white;
-        padding: 0;
-        padding-left: 12px;
+	.operation-container {
+		display: flex;
+		justify-content: space-between;
+		background-color: $white;
+		padding: 0;
+		padding-left: 12px;
 
-        .left-part {
-            padding: .4em 0;
-            flex: 1 1 80%;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: flex-start;
+		.left-part {
+			padding: .4em 0;
+			flex: 1 1 80%;
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: flex-start;
 
-            & > .people-search-container, & > .wfm-switch {
-                margin: 10px 10px 10px 0;
-            }
+			& > .people-search-container, & > .wfm-switch {
+				margin: 10px 10px 10px 0;
+			}
 
-            wfm-multiple-search-input {
-                margin: 0;
+			wfm-multiple-search-input {
+				margin: 0;
 
-                .full-padding {
-                    width: 50%;
-                }
+				.full-padding {
+					width: 50%;
+				}
 
-                .advanced-input-dropdown {
-                    width: 321px;
-                }
+				.advanced-input-dropdown {
+					width: 321px;
+				}
 
-                .advanced-input {
-                    width: 150px;
-                }
+				.advanced-input {
+					width: 150px;
+				}
 
-                .expand-advanced-input {
-                    max-width: 100%;
-                    width: 150px !important;
-                }
-            }
+				.expand-advanced-input {
+					max-width: 100%;
+					width: 150px !important;
+				}
+			}
 
-    		.focusing-search {
-    			color: $blue-500;
-    		}
+			.focusing-search {
+				color: $blue-500;
+			}
 
-            .request-date-range-picker {
-                margin-right: 1em;
-            }
-        }
+			.request-date-range-picker {
+				margin-right: 1em;
+			}
+		}
 
-        .right-part {
-            flex: 1 1 20%;
-            display: flex;
-            justify-content: flex-end;
-        }
-    }
+		.right-part {
+			flex: 1 1 20%;
+			display: flex;
+			justify-content: flex-end;
+		}
+	}
 
-    .request-filter {
-        .input-prepend {
-            width: 300px;
-        }
-    }
+	.request-filter {
+		.input-prepend {
+			width: 300px;
+		}
+	}
 
-    .ui-grid {
-        /*height: 68vh;*/
-        margin: 15px 0;
-        /*align filter input to the left*/
-        div[ui-grid-filter] {
-            text-align: left !important;
-            padding-left: 3px !important;
+	.ui-grid {
+		/*height: 68vh;*/
+		margin: 15px 0;
+		/*align filter input to the left*/
+		div[ui-grid-filter] {
+			text-align: left !important;
+			padding-left: 3px !important;
 
-            .ui-grid-filter-container {
-                padding-left: 3px !important;
-            }
-        }
+			.ui-grid-filter-container {
+				padding-left: 3px !important;
+			}
+		}
 
-        .ui-grid-cell-contents.ui-grid-cell-contents {
-            width: 85%;
-            text-align: left;
-            text-overflow: ellipsis;
-        }
+		.ui-grid-cell-contents.ui-grid-cell-contents {
+			width: 85%;
+			text-align: left;
+			text-overflow: ellipsis;
+		}
 
-        .ui-grid-column-menu-button-last-col {
-            margin-right: 0;
-        }
-    }
+		.ui-grid-column-menu-button-last-col {
+			margin-right: 0;
+		}
+	}
 
-    .request-header-full-height {
-        height: 60px;
-    }
-    requests-overview[shift-trade-view] .paging {
-        position: relative;
-        top: 8px;
-    }
+	.request-header-full-height {
+		height: 60px;
+	}
 
-    requests-commands-pane .wfm-btn-primary-disabled {
-        background-color: transparent;
-    }
+	requests-overview[shift-trade-view] .paging {
+		position: relative;
+		top: 8px;
+	}
 
-    input.ui-grid-filter-input {
-        text-overflow: ellipsis;
-    }
+	requests-commands-pane .wfm-btn-primary-disabled {
+		background-color: transparent;
+	}
 
-    .ui-grid-filter-container > input[type="text"] {
-        margin-top: 2px;
-    }
+	input.ui-grid-filter-input {
+		text-overflow: ellipsis;
+	}
 
-    .multiSelect {
-        overflow: hidden;
-        display: block;
+	.ui-grid-filter-container > input[type="text"] {
+		margin-top: 2px;
+	}
 
-        > button {
-            width: 100%;
-            max-height: 22px;
-            font-weight: 400;
-            min-height: 20px !important;
-            background-image: none;
-            background-color: #fff;
-            border-radius: 0px;
-            margin-top: 0;
-            white-space: nowrap;
-        }
+	.multiSelect {
+		overflow: hidden;
+		display: block;
 
-        .buttonLabel {
-            padding: 0;
-        }
+		> button {
+			width: 100%;
+			max-height: 22px;
+			font-weight: 400;
+			min-height: 20px !important;
+			background-image: none;
+			background-color: #fff;
+			border-radius: 0px;
+			margin-top: 0;
+			white-space: nowrap;
+		}
 
-        .checkboxLayer {
-            width: 90%;
-            min-width: 150px;
-            margin-left: 5px;
-        }
+		.buttonLabel {
+			padding: 0;
+		}
 
-        .checkBoxContainer {
-            text-align: left;
-        }
+		.checkboxLayer {
+			width: 90%;
+			min-width: 150px;
+			margin-left: 5px;
+		}
 
-        .multiSelectItem {
-            min-width: 120px;
-        }
+		.checkBoxContainer {
+			text-align: left;
+		}
 
-        .multiSelectGroup:hover,
-        .multiSelectItem:hover {
-            background-image: none;
-            background: #E0E0E0 !important;
-            color: #000000 !important;
-        }
-    }
+		.multiSelectItem {
+			min-width: 120px;
+		}
 
-    [role="tabpanel"], md-tabs {
-        transition: none;
-    }
-    /* Fix angular material issue where tabs are not displayed correctly on occasion
+		.multiSelectGroup:hover,
+		.multiSelectItem:hover {
+			background-image: none;
+			background: #E0E0E0 !important;
+			color: #000000 !important;
+		}
+	}
+
+	[role="tabpanel"], md-tabs {
+		transition: none;
+	}
+	/* Fix angular material issue where tabs are not displayed correctly on occasion
         https://github.com/angular/material/issues/9660
         https://github.com/angular/material/issues/9644 seem to be related.
     */
-    md-tab-item {
-        float: none !important;
-        top: 6px !important;
-    }
+	md-tab-item {
+		float: none !important;
+		top: 6px !important;
+	}
 
-    .ui-grid-canvas .ui-grid-cell {
-        display: flex;
-        flex-flow: column nowrap;
-        text-overflow: ellipsis;
-        border-bottom-width: 1px !important;
+	.ui-grid-canvas .ui-grid-cell {
+		display: flex;
+		flex-flow: column nowrap;
+		text-overflow: ellipsis;
+		border-bottom-width: 1px !important;
 
-        td {
-            overflow: hidden;
-            max-width: 10px;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-    }
+		td {
+			overflow: hidden;
+			max-width: 10px;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
+	}
 
 
-    .text-absence-view {
-        .ui-grid-top-panel {
-            overflow: visible;
-        }
-
-        .ui-grid-header-viewport {
-            overflow: visible;
-        }
-        /*.ui-grid-menu-button.ui-grid-menu-button {
-			margin-right: -15px;
-		}*/
-        .absence-account-cell {
-            float: left;
-        }
-
-        .absence-account-cell-content {
-            text-align: center;
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
-
-        .arrow-box {
-            position: relative;
-            background: $teal-300;
-            padding-left: 3px;
-            margin-right: 12px;
-            padding-right: 3px;
-        }
-
-        .arrow-box:after, .arrow-box:before {
-            left: 100%;
-            top: 50%;
-            border: solid transparent;
-            content: " ";
-            height: 0;
-            width: 0;
-            position: absolute;
-            pointer-events: none;
-        }
-
-        .arrow-box:after {
-            border-color: rgba(136, 183, 213, 0);
-            border-left-color: $teal-100;
-            border-width: 10px;
-            margin-top: -10px;
-        }
-
-        .arrow-box:before {
-            border-color: rgba(0, 0, 0, 0);
-            border-left-color: #000000;
-            border-width: 11px;
-            margin-top: -11px;
-        }
-
-        .arrow-box-no-border {
-            margin-right: 2px !important;
-        }
-
-        .arrow-box-no-border:after, .arrow-box-no-border:before {
-            border: none !important;
-        }
-
-		.ui-grid-menu-button.ui-grid-menu-button {
-            right: -8px;
-        }
-
-		div.ui-grid-viewport.ng-isolate-scope{
-			overflow-x:hidden !important
+	.text-absence-view {
+		.ui-grid-top-panel {
+			overflow: visible;
 		}
 
-		overflow-x:hidden
-    }
+		.ui-grid-header-viewport {
+			overflow: visible;
+		}
+		/*.ui-grid-menu-button.ui-grid-menu-button {
+			margin-right: -15px;
+		}*/
+		.absence-account-cell {
+			float: left;
+		}
 
-    .shift-trade-view {
-        overflow: hidden !important;
-        /* show scroll bar outside of grid*/
-        .ui-grid-render-container-body .ui-grid-viewport {
-            position: absolute;
-        }
+		.absence-account-cell-content {
+			text-align: center;
+			margin-top: 5px;
+			margin-bottom: 5px;
+		}
 
-        .ui-grid-pinned-container-right {
+		.arrow-box {
+			position: relative;
+			background: $teal-300;
+			padding-left: 3px;
+			margin-right: 12px;
+			padding-right: 3px;
+		}
 
+		.arrow-box:after, .arrow-box:before {
+			left: 100%;
+			top: 50%;
+			border: solid transparent;
+			content: " ";
+			height: 0;
+			width: 0;
+			position: absolute;
+			pointer-events: none;
+		}
 
-            .ui-grid-header-cell:first-child, .ui-grid-cell:first-child {
-                border-left: none;
-            }
-        }
-        /* Fixes for layout of the non-pinned container used for the Shift Trade View so that it takes up space appropriately*/
-        [container-id="body"], .ui-grid-render-container-body {
+		.arrow-box:after {
+			border-color: rgba(136, 183, 213, 0);
+			border-left-color: $teal-100;
+			border-width: 10px;
+			margin-top: -10px;
+		}
 
-            .ui-grid-header-viewport {
-                width: 100%;
-                background-color: #99d6ff;
-            }
+		.arrow-box:before {
+			border-color: rgba(0, 0, 0, 0);
+			border-left-color: #000000;
+			border-width: 11px;
+			margin-top: -11px;
+		}
 
+		.arrow-box-no-border {
+			margin-right: 2px !important;
+		}
 
-            .ui-grid-canvas {
-                width: auto !important;
-            }
+		.arrow-box-no-border:after, .arrow-box-no-border:before {
+			border: none !important;
+		}
 
+		.ui-grid-menu-button.ui-grid-menu-button {
+			right: -8px;
+		}
 
-            .ui-grid-row {
-                width: 100%;
-            }
+		div.ui-grid-viewport.ng-isolate-scope {
+			overflow-x: hidden !important
+		}
 
-            .ui-grid-canvas .ui-grid-cell {
-                width: 100% !important;
-                max-width: none !important;
-            }
-        }
+		overflow-x: hidden
+	}
 
-        .ui-grid-row .ui-grid-cell {
-            border-bottom-color: $gray054 !important;
-        }
+	.shift-trade-view {
+		overflow: hidden !important;
+		/* show scroll bar outside of grid*/
+		.ui-grid-render-container-body .ui-grid-viewport {
+			position: absolute;
+		}
 
-        .shift-trade-cell {
-            box-sizing: border-box;
-            width: 100% !important;
-            height: 30px !important;
-        }
-
-        .ui-grid-menu-button.ui-grid-menu-button {
-            right: -8px;
-        }
-
-        .ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
-            border-right-style: hidden;
-        }
-
-        .isWeekend {
-            width: 40px;
-            height: 100%;
-            position: absolute;
-            background-color: $orange-400;
-            opacity: 0.8;
-        }
-
-        .is-day-off {
-            background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, 0.2) 8px, transparent 8px, transparent);
-            background-size: 11px 11px;
-        }
-
-
-        .shift-trade-header-container {
-            position: relative;
-        }
-
-        .shift-trade-header {
-            padding-top: 5px;
-            width: 40px;
-            max-width: 40px;
-            min-width: 40px;
-            min-height: 60px;
-            position: absolute;
-        }
-
-        .shift-trade-header-day-number {
-            padding-top: 10px;
-        }
-
-        .shift-trade-header-start-of-week {
-            padding-left: 12px;
-            white-space: nowrap;
-        }
+		.ui-grid-pinned-container-right {
 
 
-        .shift-trade-cell-text {
-            margin-right: 5px;
-            margin-left: 5px;
-            text-align: center;
-            border: 1px solid #000;
-            border-radius: 2px;
-            margin-top: 5px;
-            margin-bottom: 5px;
-            width: 30px;
-            min-height: 22px;
-        }
+			.ui-grid-header-cell:first-child, .ui-grid-cell:first-child {
+				border-left: none;
+			}
+		}
+		/* Fixes for layout of the non-pinned container used for the Shift Trade View so that it takes up space appropriately*/
+		[container-id="body"], .ui-grid-render-container-body {
 
-        .ui-grid-pinned-container-left .ui-grid-top-panel,
-        .ui-grid-pinned-container-right .ui-grid-top-panel {
-            overflow: visible;
-        }
+			.ui-grid-header-viewport {
+				width: 100%;
+				background-color: #99d6ff;
+			}
 
-        .ui-grid-pinned-container-left .ui-grid-viewport,
-        .ui-grid-pinned-container-right .ui-grid-viewport {
-            overflow-x: hidden !important;
-        }
 
-        .ui-grid-pinned-container-left .ui-grid-header-viewport,
-        .ui-grid-pinned-container-right .ui-grid-header-viewport {
-            overflow: visible;
-        }
-    }
+			.ui-grid-canvas {
+				width: auto !important;
+			}
 
-    .wfm-switch {
-        vertical-align: top;
-        margin-top: 15px;
-        margin-left: 10px;
 
-        label {
-            position: relative;
-        }
+			.ui-grid-row {
+				width: 100%;
+			}
 
-        .wfm-switch-toggle {
-            margin: 0;
-            top: 0;
-        }
-    }
+			.ui-grid-canvas .ui-grid-cell {
+				width: 100% !important;
+				max-width: none !important;
+			}
+		}
 
-    .ng-cloak {
-        display: none !important;
-    }
+		.ui-grid-row .ui-grid-cell {
+			border-bottom-color: $gray054 !important;
+		}
 
-    .pagination li.disabled a {
-        cursor: not-allowed;
-    }
+		.shift-trade-cell {
+			box-sizing: border-box;
+			width: 100% !important;
+			height: 30px !important;
+		}
 
-    input:-ms-input-placeholder {
-        color: $text-color-muted;
-    }
+		.ui-grid-menu-button.ui-grid-menu-button {
+			right: -8px;
+		}
 
-    .request-broken-rules .ui-grid-cell-contents {
-        white-space: normal;
-        word-wrap: break-word;
-    }
+		.ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
+			border-right-style: hidden;
+		}
 
-    working-hours-picker {
-        .working-hours-row .con-flex:first-child{
-            flex-grow:1.5;
-        }
-    }
+		.isWeekend {
+			width: 40px;
+			height: 100%;
+			position: absolute;
+			background-color: $orange-400;
+			opacity: 0.8;
+		}
 
-    .requests-allowance {
-        #allowance_detail {
-            padding-top: 20px;
-            padding-bottom: 15px;
+		.is-day-off {
+			background-image: linear-gradient(135deg, transparent, transparent 7px, rgba(0, 0, 0, 0.2) 8px, transparent 8px, transparent);
+			background-size: 11px 11px;
+		}
 
-            .current-date {
-                background-color: #C2DBFF;
-            }
 
-            .weekend {
-                background-color: #FFF3DE;
-            }
+		.shift-trade-header-container {
+			position: relative;
+		}
 
-            .used-by-absence {
-                color: #009688;
-            }
-        }
+		.shift-trade-header {
+			padding-top: 5px;
+			width: 40px;
+			max-width: 40px;
+			min-width: 40px;
+			min-height: 60px;
+			position: absolute;
+		}
 
-        team-schedule-datepicker > span {
-            bottom: 6px;
-        }
-    }
+		.shift-trade-header-day-number {
+			padding-top: 10px;
+		}
+
+		.shift-trade-header-start-of-week {
+			padding-left: 12px;
+			white-space: nowrap;
+		}
+
+
+		.shift-trade-cell-text {
+			margin-right: 5px;
+			margin-left: 5px;
+			text-align: center;
+			border: 1px solid #000;
+			border-radius: 2px;
+			margin-top: 5px;
+			margin-bottom: 5px;
+			width: 30px;
+			min-height: 22px;
+		}
+
+		.ui-grid-pinned-container-left .ui-grid-top-panel,
+		.ui-grid-pinned-container-right .ui-grid-top-panel {
+			overflow: visible;
+		}
+
+		.ui-grid-pinned-container-left .ui-grid-viewport,
+		.ui-grid-pinned-container-right .ui-grid-viewport {
+			overflow-x: hidden !important;
+		}
+
+		.ui-grid-pinned-container-left .ui-grid-header-viewport,
+		.ui-grid-pinned-container-right .ui-grid-header-viewport {
+			overflow: visible;
+		}
+	}
+
+	.wfm-switch {
+		vertical-align: top;
+		margin-top: 15px;
+		margin-left: 10px;
+
+		label {
+			position: relative;
+		}
+
+		.wfm-switch-toggle {
+			margin: 0;
+			top: 0;
+		}
+	}
+
+	.ng-cloak {
+		display: none !important;
+	}
+
+	.pagination li.disabled a {
+		cursor: not-allowed;
+	}
+
+	input:-ms-input-placeholder {
+		color: $text-color-muted;
+	}
+
+	.request-broken-rules .ui-grid-cell-contents {
+		white-space: normal;
+		word-wrap: break-word;
+	}
+
+	working-hours-picker {
+		.working-hours-row .con-flex:first-child {
+			flex-grow: 1.5;
+		}
+	}
+
+	.requests-allowance {
+		#allowance_detail {
+			padding-top: 20px;
+			padding-bottom: 15px;
+
+			.current-date {
+				background-color: #C2DBFF;
+			}
+
+			.weekend {
+				background-color: #FFF3DE;
+			}
+
+			.used-by-absence {
+				color: #009688;
+			}
+		}
+
+		team-schedule-datepicker > span {
+			bottom: 6px;
+		}
+	}
+
+	.clear-all-filters {
+		cursor: pointer;
+		position: absolute;
+		top: 5rem;
+		left: .8rem;
+	}
 }

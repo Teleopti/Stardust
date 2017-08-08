@@ -67,7 +67,7 @@
 			return text;
 		};
 
-		vm.activeAbsenceAndTextTab = function() {
+		vm.activeAbsenceAndTextTab = function () {
 			var params = {
 				period: vm.absencePeriod,
 				agentSearchTerm: '',
@@ -165,17 +165,21 @@
 			vm.agentSearchOptions.focusingSearch = false;
 
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
-			$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: vm.selectedTeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });
+			$scope.$broadcast('reload.requests.with.selection',
+				{
+					selectedTeamIds: vm.selectedTeamIds,
+					agentSearchTerm: vm.agentSearchOptions.keyword
+				});
 		};
 
-		vm.initFooter = function (count) {
+		vm.initFooter = function (requestsTotalCount) {
 			vm.isFooterInited = true;
 
-			var totalPages = Math.ceil(count / vm.paging.pageSize);
+			var totalPages = Math.ceil(requestsTotalCount / vm.paging.pageSize);
 			if (totalPages !== vm.paging.totalPages) vm.paging.pageNumber = 1;
 
 			vm.paging.totalPages = totalPages;
-			vm.paging.totalRequestsCount = count;
+			vm.paging.totalRequestsCount = requestsTotalCount;
 		};
 
 		vm.hideSearchIfNoSelectedTeam = function () {
@@ -244,7 +248,7 @@
 		}
 
 		function isShiftTradeViewActive() {
-			return $state.current.url.indexOf('/requests/shiftTrade') > -1;
+			return $state.current.url.indexOf('/requests-refactor/shiftTrade') > -1;
 		}
 
 		function canApproveOrDenyRequest() {
@@ -315,7 +319,7 @@
 		$scope.$watch(function () {
 			return vm.period;
 		}, function (newValue, oldValue) {
-			$scope.$evalAsync(function() {
+			$scope.$evalAsync(function () {
 				if (isShiftTradeViewActive()) {
 					vm.shiftTradePeriod = newValue;
 				} else {
@@ -329,7 +333,28 @@
 						vm.getSitesAndTeamsAsync();
 					}
 				}
+
+				$scope.$broadcast('reload.requests.with.selection',
+					{
+						period: vm.period
+					});
 			});
+		});
+
+		$scope.$watch(function() {
+				return vm.filterEnabled;
+		},
+		function() {
+				$scope.$broadcast('requests.filterEnabled.changed',
+					vm.filterEnabled);
+		});
+
+		$scope.$watch(function () {
+			return vm.isUsingRequestSubmitterTimeZone;
+		},
+		function () {
+			$scope.$broadcast('requests.isUsingRequestSubmitterTimeZone.changed',
+				vm.isUsingRequestSubmitterTimeZone);
 		});
 	}
 
