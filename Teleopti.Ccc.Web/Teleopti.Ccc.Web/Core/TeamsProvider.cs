@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Web.Core
 							Name = t.GroupName.Split('/').Second()
 						}).OrderBy(t => t.Name, compare)
 						.ToList();
-
+				if(!permittedTeams.Any()) continue;
 				sites.Add(new SiteViewModelWithTeams
 				{
 					Id = teams.First().SiteId.Value,

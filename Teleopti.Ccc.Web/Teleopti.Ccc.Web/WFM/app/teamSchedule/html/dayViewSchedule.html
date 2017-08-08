@@ -20,7 +20,7 @@
 							 get-search="vm.getSearch()"
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 			
-			<group-page-picker ng-if="vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled" group-pages="vm.availableGroups"></group-page-picker>
+			<group-page-picker ng-if="vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled" group-pages="vm.availableGroups" xselected-groups="vm.selectedGroups"></group-page-picker>
 
 			<organization-picker ng-if="!vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled"
 				sites-and-teams="vm.sitesAndTeams"
