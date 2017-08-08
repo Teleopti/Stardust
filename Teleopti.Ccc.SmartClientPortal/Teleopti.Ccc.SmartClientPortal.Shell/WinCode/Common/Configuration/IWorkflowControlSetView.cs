@@ -202,6 +202,5 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		void SetOvertimeProbability(bool overtimeProbability);
 		void SetAutoGrantOvertimeRequest(bool autoGrantOvertimeRequest);
-		void SetCheckStaffingForOvertimeRequest(bool checkStaffingForOvertimeRequest);
 	}
 }

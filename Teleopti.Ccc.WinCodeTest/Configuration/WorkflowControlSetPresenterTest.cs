@@ -888,7 +888,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				Expect.Call(() => _view.SetAbsenceProbability(false)).IgnoreArguments();
 				Expect.Call(() => _view.SetOvertimeProbability(false)).IgnoreArguments();
 				Expect.Call(() => _view.SetAutoGrantOvertimeRequest(false)).IgnoreArguments();
-				Expect.Call(() => _view.SetCheckStaffingForOvertimeRequest(false)).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
@@ -1020,11 +1019,9 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 				_target.SetSelectedWorkflowControlSetModel(_workflowControlSetModel);
 				_target.SetOvertimeProbability(true);
 				_target.SetAutoGrantOvertimeRequest(true);
-				_target.SetCheckStaffingForOvertimeRequest(true);
 
 				Assert.AreEqual(true, _workflowControlSetModel.IsOvertimeProbabilityEnabled);
 				Assert.AreEqual(true, _workflowControlSetModel.AutoGrantOvertimeRequest);
-				Assert.AreEqual(true, _workflowControlSetModel.CheckStaffingForOvertimeRequest);
 			}
 			_mocks.VerifyAll();
 		}
@@ -1115,7 +1112,6 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
 			Expect.Call(() => view.SetAbsenceProbability(false)).IgnoreArguments();
 			Expect.Call(() => view.SetOvertimeProbability(false)).IgnoreArguments();
 			Expect.Call(() => view.SetAutoGrantOvertimeRequest(false)).IgnoreArguments();
-			Expect.Call(() => view.SetCheckStaffingForOvertimeRequest(false)).IgnoreArguments();
 		}
 	}
 }

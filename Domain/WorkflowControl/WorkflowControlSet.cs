@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		private int fairnessTypeAsInt = (int)FairnessType.EqualNumberOfShiftCategory;
 		private bool _overtimeProbabilityEnabled;
 		private bool _autoGrantOvertimeRequest;
-		private bool _checkStaffingForOvertimeRequest;
 
 		public WorkflowControlSet()
 		{
@@ -372,12 +371,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 		{
 			get { return _autoGrantOvertimeRequest; }
 			set { _autoGrantOvertimeRequest = value; }
-		}
-
-		public virtual bool CheckStaffingForOvertimeRequest
-		{
-			get { return _checkStaffingForOvertimeRequest; }
-			set { _checkStaffingForOvertimeRequest = value; }
 		}
 
 		public virtual void AddAllowedAbsenceForReport(IAbsence absence)

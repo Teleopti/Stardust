@@ -61,7 +61,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 
 		bool IsOvertimeProbabilityEnabled { get; set; }
 		bool AutoGrantOvertimeRequest { get; set; }
-		bool CheckStaffingForOvertimeRequest { get; set; }
 	}
 
 	public class WorkflowControlSetModel : IWorkflowControlSetModel
@@ -452,17 +451,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			{
 				if (DomainEntity.AutoGrantOvertimeRequest == value) return;
 				DomainEntity.AutoGrantOvertimeRequest = value;
-				IsDirty = true;
-			}
-		}
-
-		public bool CheckStaffingForOvertimeRequest
-		{
-			get => DomainEntity.CheckStaffingForOvertimeRequest;
-			set
-			{
-				if (DomainEntity.CheckStaffingForOvertimeRequest == value) return;
-				DomainEntity.CheckStaffingForOvertimeRequest = value;
 				IsDirty = true;
 			}
 		}

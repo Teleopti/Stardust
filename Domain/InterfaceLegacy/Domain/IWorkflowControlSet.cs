@@ -279,10 +279,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		bool AbsenceProbabilityEnabled { get; set; }
 
-		bool AutoGrantOvertimeRequest { get; set; }
-
-		bool CheckStaffingForOvertimeRequest { get; set; }
-
 		/// <summary>
 		/// Adds an absence allowed for report.
 		/// </summary>
@@ -308,5 +304,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		bool IsAbsenceRequestCheckStaffingByIntraday(DateOnly today, DateOnly date);
 
 		bool OvertimeProbabilityEnabled { get; set; }
+
+		bool AutoGrantOvertimeRequest { get; set; }
 	}
 }

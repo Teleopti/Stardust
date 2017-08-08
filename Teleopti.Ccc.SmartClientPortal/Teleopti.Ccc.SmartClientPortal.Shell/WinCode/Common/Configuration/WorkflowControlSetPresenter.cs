@@ -84,7 +84,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 			_view.SetAbsenceProbability(_selectedModel.AbsenceProbabilityEnabled);
 			_view.SetOvertimeProbability(_selectedModel.IsOvertimeProbabilityEnabled);
 			_view.SetAutoGrantOvertimeRequest(_selectedModel.AutoGrantOvertimeRequest);
-			_view.SetCheckStaffingForOvertimeRequest(_selectedModel.CheckStaffingForOvertimeRequest);
 		}
 
 		public IWorkflowControlSetModel SelectedModel
@@ -607,11 +606,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Configuration
 		public void SetAutoGrantOvertimeRequest(bool autoGrantOvertimeRequest)
 		{
 			_selectedModel.AutoGrantOvertimeRequest = autoGrantOvertimeRequest;
-		}
-
-		public void SetCheckStaffingForOvertimeRequest(bool checkStaffingForOvertimeRequest)
-		{
-			_selectedModel.CheckStaffingForOvertimeRequest = checkStaffingForOvertimeRequest;
 		}
 	}
 }

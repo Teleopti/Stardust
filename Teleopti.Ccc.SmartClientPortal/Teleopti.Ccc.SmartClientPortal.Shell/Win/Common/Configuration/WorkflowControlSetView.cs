@@ -70,7 +70,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_OvertimeRequestHandling_45177))
 			{
 				checkBoxAdvAutoGrantOvertimeRequest.Visible = false;
-				checkBoxAdvCheckStaffingForOvertimeRequest.Visible = false;
 			}
 		}
 
@@ -500,7 +499,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		public void Unload()
 		{
-
 		}
 
 		public void SetUnitOfWork(IUnitOfWork value)
@@ -615,6 +613,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				rowCount = _presenter.RequestableAbsenceCollection.Count;
 			}
+
 			e.Count = rowCount;
 			e.Handled = true;
 		}
@@ -633,10 +632,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				e.Style.Tag = _presenter.ProjectionPeriod;
 				e.Style.ShowButtons = GridShowButtons.ShowCurrentCell;
 			}
+
 			if (e.RowIndex > 0 && e.ColIndex == 1)
 			{
 				e.Style.CellValue = _presenter.RequestableAbsenceCollection[e.RowIndex - 1].Name;
 			}
+
 			if (e.RowIndex <= 0 || e.ColIndex != 2) return;
 			var absence = _presenter.RequestableAbsenceCollection[e.RowIndex - 1];
 			var extractor = _presenter.SelectedModel.DomainEntity.GetExtractorForAbsence(absence);
@@ -650,6 +651,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				visualiser = new MonthlyProjectionVisualiser { Dock = DockStyle.Fill };
 				_projectionCache.Add(absence, visualiser);
 			}
+
 			visualiser.SetControlDatePeriod(_presenter.ProjectionPeriod);
 			visualiser.SetLayerCollection(layers.Select(p => new DateOnlyProjectionItem
 			{
@@ -851,13 +853,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			checkBoxAdvAutoGrantOvertimeRequest.CheckStateChanged += checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged;
 		}
 
-		public void SetCheckStaffingForOvertimeRequest(bool checkStaffingForOvertimeRequest)
-		{
-			checkBoxAdvCheckStaffingForOvertimeRequest.CheckStateChanged -= checkBoxAdvCheckStaffingForOvertimeRequest_CheckStateChanged;
-			checkBoxAdvCheckStaffingForOvertimeRequest.Checked = checkStaffingForOvertimeRequest;
-			checkBoxAdvCheckStaffingForOvertimeRequest.CheckStateChanged += checkBoxAdvCheckStaffingForOvertimeRequest_CheckStateChanged;
-		}
-
 		public void DisableAllButAdd()
 		{
 			tabControlAdvArea.Enabled = false;
@@ -913,6 +908,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				monthlyProjectionVisualizer.Value.Dispose();
 			}
+
 			_projectionCache.Clear();
 			gridControlVisualisation.RowCount = 0;
 			gridControlVisualisation.RowCount = _presenter.DoRequestableAbsencesExist ? _presenter.RequestableAbsenceCollection.Count : 0;
@@ -1000,6 +996,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				_presenter.MoveUp(absenceRequestPeriodModel);
 			}
+
 			gridControlAbsenceRequestOpenPeriods.Selections.ChangeSelection(activeRange, activeRange.OffsetRange(-1, 0));
 		}
 
@@ -1013,6 +1010,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				_presenter.MoveDown(absenceRequestPeriodModel);
 			}
+
 			gridControlAbsenceRequestOpenPeriods.Selections.ChangeSelection(activeRange, activeRange.OffsetRange(1, 0));
 		}
 
@@ -1115,6 +1113,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				error = Resources.StartDateMustBeSmallerThanEndDate;
 				e.Cancel = true;
 			}
+
 			errorProvider1.SetError((Control)sender, error);
 		}
 
@@ -1127,6 +1126,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				error = Resources.FromDaysMustBeLessThanToDays;
 				e.Cancel = true;
 			}
+
 			errorProvider1.SetError((Control)sender, error);
 		}
 
@@ -1262,7 +1262,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		{
 			_presenter.SetAbsenceProbability(checkBoxEnableAbsenceProbability.Checked);
 		}
-		
+
 		private void checkBoxAdvOvertimeProbability_CheckStateChanged(object sender, EventArgs e)
 		{
 			_presenter.SetOvertimeProbability(checkBoxAdvOvertimeProbability.Checked);
@@ -1271,11 +1271,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void checkBoxAdvAutoGrantOvertimeRequest_CheckStateChanged(object sender, EventArgs e)
 		{
 			_presenter.SetAutoGrantOvertimeRequest(checkBoxAdvAutoGrantOvertimeRequest.Checked);
-		}
-
-		private void checkBoxAdvCheckStaffingForOvertimeRequest_CheckStateChanged(object sender, EventArgs e)
-		{
-			_presenter.SetCheckStaffingForOvertimeRequest(checkBoxAdvCheckStaffingForOvertimeRequest.Checked);
 		}
 	}
 }
