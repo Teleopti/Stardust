@@ -26,7 +26,8 @@
         }
 
         function convertOvertimeHoursToMinutes(dateTime) {
-            return (dateTime.getMinutes() + dateTime.getHours() * 60);
+            return dateTime;
+            //return (dateTime.getMinutes() + dateTime.getHours() * 60);
         }
 
         function roundArrayContents(input, decimals) {
