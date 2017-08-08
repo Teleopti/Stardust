@@ -66,6 +66,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				tabPageAdvETOTRequest.Hide();
 			}
+
+			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_OvertimeRequestHandling_45177))
+			{
+				checkBoxAdvAutoGrantOvertimeRequest.Visible = false;
+				checkBoxAdvCheckStaffingForOvertimeRequest.Visible = false;
+			}
 		}
 
 		private void setAbsenceRequestVisibilityOptions(IToggleManager toggleManager)
