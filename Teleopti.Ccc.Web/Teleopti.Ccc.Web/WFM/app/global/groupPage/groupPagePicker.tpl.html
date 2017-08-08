@@ -15,19 +15,19 @@
 							<div class="header">
 								<i class="mdi mdi-magnify"></i>
 								<input type="text" md-autofocus class="search md-text" ng-change="$ctrl.onSearchTextChanged()" placeholder="{{ 'Search' | translate}}" ng-model="$ctrl.searchText" />
-							</div>- 
-							<md-virtual-repeat-container class="virtual-repeat" xng-if="tab.title == $ctrl.selectedGroups.mode">
-								<div md-virtual-repeat="o in $ctrl.groupsInView" class="repeated-item" flex>
+							</div>
+							<md-virtual-repeat-container class="virtual-repeat">
+								<div md-virtual-repeat="o in $ctrl.groupsInView[tab.title]" class="repeated-item" flex>
 									<div ng-if="o.origin.isParent" class="group md-button-toggle md-button md-ink-ripple">
 										<label class="clickable-area" tabindex="-1" for="group-{{o.id}}">
 											<div flex layout="row">
 												<div class="wfm-checkbox" ng-class="{'indeterminate': o.isIndeterminate()}">
-													<input type="checkbox" id="group-{{o.id}}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()" />
+													<input type="checkbox" id="group-{{o.id}}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()"/>
 													<span class="wfm-checkbox-toggle"></span>
 													<span class="wfm-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText"></span>
 												</div>
 												<span flex></span>
-												<input type="checkbox" id="toggle-{{o.id}}" class="shadow-group-toggle" ng-click="$ctrl.collapseGroup(o)" />
+												<input type="checkbox" id="toggle-{{o.id}}" class="shadow-group-toggle" ng-click="$ctrl.collapseGroup(o)"/>
 												<div tabindex="-1" class="group-toggle">
 													<label for="toggle-{{o.id}}">
 														<span class="md-toggle-icon" tabindex="-1">
@@ -41,7 +41,7 @@
 									<div ng-if=" !o.origin.isParent " class="child md-button md-ink-ripple">
 										<label class="clickable-area" tabindex="-1" id="group-{{o.id}}">
 											<div class="wfm-checkbox">
-												<input type="checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()" />
+												<input type="checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()"/>
 												<span class="wfm-checkbox-toggle"></span>
 												<span class="wfm-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText"></span>
 											</div>

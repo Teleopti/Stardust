@@ -17,6 +17,10 @@
 
 	function GroupPagePickerController($mdPanel, $element, $scope, $translate) {
 		var ctrl = this;
+		ctrl.groupsInView = {
+			BusinessHierarchy: [],
+			GroupPages: []
+		};
 		ctrl.tabs = [
 			{
 				title: 'BusinessHierarchy',
@@ -27,7 +31,7 @@
 				icon: 'folder-account'
 			}
 		];
-		
+
 		function initSelectedGroups() {
 			if (!ctrl.selectedGroups) {
 				ctrl.selectedGroups = {};
@@ -63,9 +67,11 @@
 		ctrl.$onInit = function () {
 			ctrl.menuRef = createPanel();
 		}
+		var rawData = {};
 
 		ctrl.$onChanges = function (changesObj) {
 			if (!!changesObj.groupPages && !!changesObj.groupPages.currentValue && changesObj.groupPages.currentValue !== changesObj.groupPages.previousValue) {
+				rawData = changesObj.groupPages.currentValue;
 				ctrl.setPickerData();
 				updateSelectedGroupsInView();
 			}
@@ -94,11 +100,11 @@
 		};
 
 		function updateSelectedGroupsInView() {
-
-			if (!angular.isArray(ctrl.selectedGroups.groupIds) || !angular.isArray(ctrl.groupsInView))
+			var groupsInView = ctrl.groupsInView[ctrl.selectedGroups.mode];
+			if (!angular.isArray(ctrl.selectedGroups.groupIds) || !angular.isArray(groupsInView))
 				return
-			for (var i = 0; i < ctrl.groupsInView.length; i++) {
-				var groupCopy = ctrl.groupsInView[i]
+			for (var i = 0; i < groupsInView.length; i++) {
+				var groupCopy = groupsInView[i]
 
 				if (!groupCopy.origin.isParent) {
 					continue
@@ -117,13 +123,16 @@
 
 		ctrl.toggleGroup = function (parentGroupCopy) {
 			parentGroupCopy.toggleAll();
-			if (ctrl.selectedGroups.mode === "GroupPages" &&
-				ctrl.selectedGroups.groupPageId !== parentGroupCopy.id) {
-				resetSelectedGroups();
+			if (ctrl.selectedGroups.mode === "GroupPages"
+				&& ctrl.selectedGroups.groupPageId !== parentGroupCopy.id) {
+				if (!!ctrl.selectedGroups.groupPageId) {
+					resetSelectedGroups();
+				}
+				
 				ctrl.selectedGroups.groupPageId = parentGroupCopy.id;
 			}
 			if (parentGroupCopy.isChecked()) {
-				
+
 				parentGroupCopy.selectedChildGroupIds.forEach(function (id) {
 					if (ctrl.selectedGroups.groupIds.indexOf(id) === -1) {
 						ctrl.selectedGroups.groupIds.push(id);
@@ -158,31 +167,32 @@
 		};
 
 		ctrl.collapseGroup = function (groupCopy) {
-			var index = ctrl.groupsInView.indexOf(groupCopy)
+			var groupsInView = ctrl.groupsInView[ctrl.selectedGroups.mode];
+			var index = groupsInView.indexOf(groupCopy);
 			if (groupCopy.collapsed) {
 				var args = [index + 1, 0].concat(groupCopy.children);
-				ctrl.groupsInView.splice.apply(ctrl.groupsInView, args);
+				groupsInView.splice.apply(groupsInView, args);
 				updateSelectedGroupsInView();
 			} else {
-				ctrl.groupsInView.splice(index + 1, groupCopy.children.length)
+				groupsInView.splice(index + 1, groupCopy.children.length)
 			}
 			groupCopy.collapsed = !groupCopy.collapsed;
 		}
 
 		ctrl.setPickerData = function () {
 			populateGroupListAndNamemapAndFindLongestName(ctrl.groupPages[ctrl.selectedGroups.mode]);
-			ctrl.groupsInView = ctrl.filterGroups('');
+			ctrl.groupsInView[ctrl.selectedGroups.mode] = ctrl.filterGroups('');
 		}
 
 		ctrl.changeTab = function (tab) {
 			ctrl.selectedGroups.mode = tab.title;
-			ctrl.setPickerData();
 			resetSelectedGroups();
+			ctrl.setPickerData();
 			ctrl.searchText = '';
 		};
 
 		ctrl.onSearchTextChanged = function () {
-			ctrl.groupsInView = ctrl.filterGroups(ctrl.searchText);
+			ctrl.groupsInView[ctrl.selectedGroups.mode] = ctrl.filterGroups(ctrl.searchText);
 			updateSelectedGroupsInView();
 		};
 
@@ -213,15 +223,20 @@
 			return results;
 		};
 
-
-
 		function resetSelectedGroups() {
-			var groups = ctrl.groupsInView.filter(function (g) {
-				return g.id == ctrl.selectedGroups.groupPageId;
+			
+			var parentGroupCopies = ctrl.groupsInView[ctrl.selectedGroups.mode].filter(function (g) {
+				if (!g.origin.isParent)
+					return false;
+				if (ctrl.selectedGroups.mode === 'BusinessHierarchy')
+					return g.isChecked() || g.isIndeterminate();
+				return g.id === ctrl.selectedGroups.groupPageId;
 			});
-			if (groups.length > 0) {
-				groups[0].clearAll();
-			}
+
+			parentGroupCopies.forEach(function (g) {
+				g.clearAll();
+			});
+
 			ctrl.selectedGroups.groupIds = [];
 			ctrl.selectedGroups.groupPageId = '';
 		}
@@ -256,7 +271,7 @@
 		};
 		ParentGroupCopy.prototype.clearAll = function () {
 			this.selectedChildGroupIds = [];
-			
+
 		};
 		ParentGroupCopy.prototype.isIndeterminate = function () {
 			return this.selectedChildGroupIds.length !== 0 && this.selectedChildGroupIds.length !== this.children.length;
