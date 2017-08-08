@@ -1473,6 +1473,7 @@
     <Content Include="WFM\app\global\modal\modal.service.js" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.component.js" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.component.spec.js" />
+    <Content Include="WFM\app\global\groupPage\searchFilter.filter.js" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.service.js" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.single.tpl.html" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.tpl.html" />

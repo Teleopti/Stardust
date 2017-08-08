@@ -1,9 +1,9 @@
 describe('<group-page-picker>', function () {
 	var attachedElements = [];
-	var $componentController, $q, $compile, $rootScope, $document, $mdPanel;
+	var $componentController, $q, $compile, $rootScope, $document;
 
 	beforeEach(function () {
-		module('wfm.templates', 'wfm.groupPage', 'ngMaterial', 'ngMaterial-mock');
+		module('wfm.templates', 'wfm.groupPage', 'ngMaterial', 'ngMaterial-mock', 'wfm.searchFilter');
 
 		inject(function ($injector) {
 			$componentController = $injector.get('$componentController');
@@ -66,6 +66,26 @@ describe('<group-page-picker>', function () {
 
 		var groups = $document[0].querySelectorAll('.group');
 		expect(groups.length).toEqual(4);
+	});
+
+	it('should clear filter text when tabs are selected', function () {
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', testScope());
+		openPanel(picker);
+		expectPanelOpen();
+
+		var ctrl = picker.isolateScope().$ctrl;
+		ctrl.searchText = "site1";
+		picker.isolateScope().$apply(ctrl.onSearchTextChanged);
+
+		clickTab(1);
+		expectTabOpen(1, 'GroupPages');
+
+		var group = $document[0].querySelector('.group label[for="group-groupPage1"]');
+		expect(group.innerText.trim()).toEqual('groupPage1');
+
+		var groups = $document[0].querySelectorAll('.group');
+		expect(groups.length).toEqual(4);
+		expect(ctrl.searchText).toEqual("");
 	});
 
 	it('should render business hierarchy group list', function () {
@@ -248,14 +268,18 @@ describe('<group-page-picker>', function () {
 	});
 
 	describe('when I am on the Group Pages tab,', function () {
-		it('should reset selected groups when switching to another group page and current group page is selected', function () {
-			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+		var scope, picker;
+
+		beforeEach(function() {
+			scope = testScope();
+			picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			increaseRepeatContainerHeight(picker);
 			openPanel(picker);
 			expectPanelOpen();
-
 			clickTab(1);
+		});
 
+		it('should reset selected groups when switching to another group page and current group page is selected', function () {
 			checkGroupPage(0);
 
 			expect(scope.selectedGroups.mode).toEqual('GroupPages');
@@ -285,12 +309,6 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should reset selected groups when switching to another group value and current group page is selected', function () {
-			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
-			openPanel(picker);
-			expectPanelOpen();
-
-			clickTab(1);
 			checkGroupPage(0);
 
 			expect(scope.selectedGroups.mode).toEqual('GroupPages');
@@ -305,12 +323,6 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should reset selected groups when switching to another group page and current group page is partially selected', function () {
-			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
-			openPanel(picker);
-			expectPanelOpen();
-
-			clickTab(1);
 			findAndCheckChildGroup(0, 0);
 
 			expect(scope.selectedGroups.mode).toEqual('GroupPages');
@@ -330,12 +342,6 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should reset selected groups when switching to another group value and current group page is partially selected', function () {
-			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
-			openPanel(picker);
-			expectPanelOpen();
-
-			clickTab(1);
 			findAndCheckChildGroup(0, 0);
 
 			expect(scope.selectedGroups.mode).toEqual('GroupPages');
@@ -351,12 +357,6 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should filter groups when child group names are matched', function () {
-			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
-			openPanel(picker);
-			expectPanelOpen();
-
-			clickTab(1);
 			var ctrl = picker.isolateScope().$ctrl;
 			ctrl.searchText = 'childGroup1_1';
 			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
@@ -370,12 +370,6 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should filter groups when parent groups are matched', function () {
-			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
-			openPanel(picker);
-			expectPanelOpen();
-
-			clickTab(1);
 			var ctrl = picker.isolateScope().$ctrl;
 			ctrl.searchText = 'groupPage1';
 			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
@@ -389,13 +383,6 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should display selection status when filtering result contains selected groups only', function () {
-			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
-			increaseRepeatContainerHeight(picker);
-			openPanel(picker);
-			expectPanelOpen();
-
-			clickTab(1);
 			findAndCheckChildGroup(0, 1);
 
 			var ctrl = picker.isolateScope().$ctrl;
@@ -416,13 +403,6 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should display selection status when filtering result contains selected groups', function () {
-			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
-			increaseRepeatContainerHeight(picker);
-			openPanel(picker);
-			expectPanelOpen();
-
-			clickTab(1);
 			findAndCheckChildGroup(0, 1);
 
 			var ctrl = picker.isolateScope().$ctrl;
@@ -444,12 +424,6 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should display selection status when the whole parent group is selected and filtering result contains selected groups', function () {
-			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
-			openPanel(picker);
-			expectPanelOpen();
-
-			clickTab(1);
 			checkGroupPage(0);
 
 			var ctrl = picker.isolateScope().$ctrl;
@@ -470,13 +444,6 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should preserve selection status when select filtered group', function () {
-			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
-			openPanel(picker);
-			expectPanelOpen();
-
-			clickTab(1);
-
 			var ctrl = picker.isolateScope().$ctrl;
 			ctrl.searchText = 'groupPage1';
 			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
@@ -499,13 +466,6 @@ describe('<group-page-picker>', function () {
 		});
 
 		it('should preserve selection status when whole site is checked', function () {
-			var scope = testScope();
-			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
-			openPanel(picker);
-			expectPanelOpen();
-
-			clickTab(1);
-
 			var ctrl = picker.isolateScope().$ctrl;
 			ctrl.searchText = 'groupPage1';
 			picker.isolateScope().$apply(ctrl.onSearchTextChanged);
@@ -525,12 +485,6 @@ describe('<group-page-picker>', function () {
 		it('should the indeterminate status be switched to checked '
 			+ 'when initail filtered site is partially checked '
 			+ 'and then changing filter to contain 1 group only', function () {
-				var scope = testScope();
-				var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
-				openPanel(picker);
-				expectPanelOpen();
-
-				clickTab(1);
 				var ctrl = picker.isolateScope().$ctrl;
 				ctrl.searchText = 'groupPage1';
 				picker.isolateScope().$apply(ctrl.onSearchTextChanged);

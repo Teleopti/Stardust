@@ -24,7 +24,7 @@
 												<div class="wfm-checkbox" ng-class="{'indeterminate': o.isIndeterminate()}">
 													<input type="checkbox" id="group-{{o.id}}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()" />
 													<span class="wfm-checkbox-toggle"></span>
-													<span class="wfm-checkbox-label" ng-bind-html="o.name"></span>
+													<span class="wfm-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText"></span>
 												</div>
 												<span flex></span>
 												<input type="checkbox" id="toggle-{{o.id}}" class="shadow-group-toggle" ng-click="$ctrl.collapseGroup(o)" />
@@ -43,7 +43,7 @@
 											<div class="wfm-checkbox">
 												<input type="checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()" />
 												<span class="wfm-checkbox-toggle"></span>
-												<span class="wfm-checkbox-label" ng-bind-html="o.name"></span>
+												<span class="wfm-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText"></span>
 											</div>
 										</label>
 									</div>

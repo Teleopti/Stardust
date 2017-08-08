@@ -2,7 +2,7 @@
 
 	'use strict';
 
-	angular.module('wfm.organizationPicker')
+	angular.module('wfm.searchFilter', [])
 		.filter('searchFilter', ['$sce', searchFilter]);
 
 	var entityMap = {

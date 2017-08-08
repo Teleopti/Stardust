@@ -178,6 +178,7 @@
 			ctrl.selectedGroups.mode = tab.title;
 			ctrl.setPickerData();
 			resetSelectedGroups();
+			ctrl.searchText = '';
 		};
 
 		ctrl.onSearchTextChanged = function () {
