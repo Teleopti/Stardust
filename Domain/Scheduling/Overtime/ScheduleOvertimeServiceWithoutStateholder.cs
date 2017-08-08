@@ -47,8 +47,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			var skills = _personSkillsForScheduleDaysOvertimeProvider.Execute(overtimePreferences, person.Period(dateOnly)).ToList();
 			if (!skills.Any())
 				return null;
+			//var minResolution = OvertimeLengthDecider.GetMinimumResolution(skills.Where(x=>x.Activity.Id.GetValueOrDefault()== overtimePreferences.SkillActivity.Id.GetValueOrDefault()).ToArray(), overtimeDuration, scheduleRange.ScheduledDay(dateOnly));
+			//should we use all skills?? or just the currrnet skill resolution
 			var minResolution = OvertimeLengthDecider.GetMinimumResolution(skills, overtimeDuration, scheduleRange.ScheduledDay(dateOnly));
-			var overtimeSkillIntervalDataAggregatedList = getAggregatedOvertimeSkillIntervals(resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items());
+			var overtimeSkillIntervalDataAggregatedList =
+				getAggregatedOvertimeSkillIntervals(
+					resourceCalculationData.SkillResourceCalculationPeriodDictionary.Items()
+						.Where(x => x.Key.Activity.Id.GetValueOrDefault() == overtimePreferences.SkillActivity.Id.GetValueOrDefault()));
+
 			var overtimeLayerLengthPeriodsUtc = _calculateBestOvertime.GetBestOvertimeInUtc(overtimeDuration, requestedPeriod, scheduleRange, dateOnly, minResolution
 												   , overtimePreferences.AvailableAgentsOnly, overtimeSkillIntervalDataAggregatedList);
 

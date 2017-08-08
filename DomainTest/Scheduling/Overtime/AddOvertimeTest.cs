@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		public FakePersonForOvertimeProvider FakePersonForOvertimeProvider;
 		public FakeIntervalLengthFetcher FakeIntervalLengthFetcher;
 		private IScenario scenario;
-		private IActivity activity;
+		private IActivity phoneActivity;
+		private IActivity emailActivity;
 		private ISkill skill;
 		private IMultiplicatorDefinitionSet multiplicatorDefinitionSet;
 		private IShiftCategory shiftCategory;
@@ -61,9 +62,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 		{
 			FakeIntervalLengthFetcher.Has(60);
 			scenario = ScenarioRepository.Has("scenario");
-			activity = ActivityRepository.Has("activity");
-			skill = SkillRepository.Has("skill", activity);
+			phoneActivity = ActivityRepository.Has("phoneActivity");
+			emailActivity = ActivityRepository.Has("emailActivity");
+			skill = SkillRepository.Has("skill", phoneActivity);
 			skill.DefaultResolution = 60;
+
 			shiftCategory = new ShiftCategory("shiftCategory").WithId();
 			multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			contract = new Contract("contract");
@@ -93,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnly, 1));
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(15, 16));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(15, 16));
 			PersonAssignmentRepository.Has(ass);
 			var overtimePreference = new OvertimePreferences
 			{
@@ -101,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(16, 0, 17, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 1, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 
 			var model = new OverTimeSuggestionModel
@@ -134,11 +137,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var dateOnly = new DateOnly(2017, 06, 1);
 
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(15, 16));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(15, 16));
 			PersonAssignmentRepository.Has(ass);
 			PersonRepository.Has(agent);
 			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(15, 16));
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(15, 16));
 			PersonAssignmentRepository.Has(ass2);
 			PersonRepository.Has(agent2);
 
@@ -151,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(16, 0, 17, 0),
 				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(1), TimeSpan.FromHours(1)),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 			var model = new OverTimeSuggestionModel
 			{
@@ -163,6 +166,111 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var result = Target.GetSuggestion(model);
 
 			result.Models.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotScheduleOvertimeOutSideShiftHours()
+		{
+			FakeIntervalLengthFetcher.Has(60);
+			scenario = ScenarioRepository.Has("scenario");
+			phoneActivity = ActivityRepository.Has("phoneActivity");
+			emailActivity = ActivityRepository.Has("emailActivity");
+			
+			var emailSkill = SkillFactory.CreateSkill("email");
+			emailSkill.Activity = emailActivity;
+			emailSkill.IsOpenBetween(13, 14);
+			emailSkill.DefaultResolution = 60;
+			emailSkill.SetId(Guid.NewGuid());
+			SkillRepository.Add(emailSkill);
+
+			var phoneSkill = SkillFactory.CreateSkill("phone");
+			phoneSkill.Activity = phoneActivity;
+			phoneSkill.IsOpenBetween(13, 15);
+			phoneSkill.DefaultResolution = 30;
+			phoneSkill.SetId(Guid.NewGuid());
+			SkillRepository.Add(phoneSkill);
+
+
+			shiftCategory = new ShiftCategory("shiftCategory").WithId();
+			multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
+			contract = new Contract("contract");
+			contract.AddMultiplicatorDefinitionSetCollection(multiplicatorDefinitionSet);
+
+			Now.Is("2017-06-01 08:00");
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 1, 13, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 01, 13, 30, 0).Utc(),
+					Resource = 8,
+					SkillCombination = new[] { phoneSkill.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 1, 13, 30, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 01, 14, 0, 0).Utc(),
+					Resource = 6,
+					SkillCombination = new[] { phoneSkill.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 1, 14, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 01, 14, 30, 0).Utc(),
+					Resource = 8,
+					SkillCombination = new[] { phoneSkill.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 1, 14, 30, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 01, 15, 0, 0).Utc(),
+					Resource =5,
+					SkillCombination = new[] { phoneSkill.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 1, 13, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 06, 01, 14, 0, 0).Utc(),
+					Resource = 0.1,
+					SkillCombination = new[] {emailSkill.Id.GetValueOrDefault()}
+				}
+			});
+
+			var dateOnly = new DateOnly(2017, 06, 1);
+
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, phoneSkill, emailSkill).WithSchedulePeriodOneWeek(dateOnly);
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(12, 13));
+			PersonAssignmentRepository.Has(ass);
+			PersonRepository.Has(agent);
+
+			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, phoneSkill, emailSkill).WithSchedulePeriodOneWeek(dateOnly);
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(12, 13));
+			PersonAssignmentRepository.Has(ass2);
+			PersonRepository.Has(agent2);
+
+			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> {  new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() }, new SuggestedPersonsModel { PersonId = agent2.Id.GetValueOrDefault() } });
+
+			SkillDayRepository.Has(phoneSkill.CreateSkillDayWithDemand(scenario, dateOnly, 0.1));
+			SkillDayRepository.Has(emailSkill.CreateSkillDayWithDemand(scenario, dateOnly, 5));
+			var overtimePreference = new OvertimePreferences
+			{
+				OvertimeType = multiplicatorDefinitionSet,
+				ScheduleTag = new NullScheduleTag(),
+				SelectedSpecificTimePeriod = new TimePeriod(11, 0, 17, 0),
+				SelectedTimePeriod = new TimePeriod(TimeSpan.FromMinutes(1), TimeSpan.FromHours(2)),
+				SkillActivity = phoneActivity
+			};
+			var model = new OverTimeSuggestionModel
+			{
+				SkillIds = new[] { phoneSkill.Id.GetValueOrDefault(), emailSkill.Id.GetValueOrDefault() },
+				TimeSerie = new[] { new DateTime(2017, 06, 1, 0, 0, 0), new DateTime(2017, 06, 2, 0, 0, 0) },
+				OvertimePreferences = overtimePreference
+			};
+
+			var result = Target.GetSuggestion(model);
+
+			result.Models.Count(x => x.StartDateTime >= new DateTime(2017, 06, 1, 13, 0, 0) && x.EndDateTime <= new DateTime(2017, 06, 1, 14, 0, 0)).Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -192,11 +300,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
 			PersonRepository.Has(agent);
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(15, 16));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(15, 16));
 			PersonAssignmentRepository.Has(ass);
 
 			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(15, 17));
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(15, 17));
 			PersonAssignmentRepository.Has(ass2);
 
 			PersonRepository.Has(agent2);
@@ -209,7 +317,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(16, 0, 19, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 3, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 			var model = new OverTimeSuggestionModel
 			{
@@ -264,11 +372,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var dateOnly = new DateOnly(2017, 06, 1);
 
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(15, 16));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(15, 16));
 			PersonAssignmentRepository.Has(ass);
 
 			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
-			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(15, 16));
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(15, 16));
 			PersonAssignmentRepository.Has(ass2);
 
 			PersonRepository.Has(agent);
@@ -282,7 +390,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(16, 0, 20, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 
 			var model = new OverTimeSuggestionModel
@@ -328,12 +436,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time")).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
 			var timePeriodInUtc = new DateTimePeriod(2017, 06, 01, 5, 2017, 06, 01, 6);
 
-			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, timePeriodInUtc);
+			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, timePeriodInUtc);
 			PersonAssignmentRepository.Has(ass);
 
 			// Mountain Standard Time -7H
 			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time")).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
-			var ass2 = new PersonAssignment(agent2, scenario, may31DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, timePeriodInUtc);
+			var ass2 = new PersonAssignment(agent2, scenario, may31DateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, timePeriodInUtc);
 			PersonAssignmentRepository.Has(ass2);
 
 			PersonRepository.Has(agent);
@@ -349,7 +457,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(6, 0, 10, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 
 			var model = new OverTimeSuggestionModel
@@ -387,7 +495,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(dateOnly);
 			var timePeriodInUtc = new DateTimePeriod(2017, 06, 01, 6, 2017, 06, 01, 7);
 
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, timePeriodInUtc);
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, timePeriodInUtc);
 			PersonAssignmentRepository.Has(ass);
 
 			PersonRepository.Has(agent);
@@ -401,7 +509,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(1, 0, 7, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 
 			var model = new OverTimeSuggestionModel
@@ -442,13 +550,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Singapore Standard Time")).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
 			var timePeriodInUtc = new DateTimePeriod(2017, 06, 01, 5, 2017, 06, 01, 6);
 
-			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, timePeriodInUtc);
+			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, timePeriodInUtc);
 			PersonAssignmentRepository.Has(ass);
 
 			// Mountain Standard Time -7H
 			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById("Mountain Standard Time")).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
 
-			var ass2 = new PersonAssignment(agent2, scenario, may31DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, timePeriodInUtc);
+			var ass2 = new PersonAssignment(agent2, scenario, may31DateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, timePeriodInUtc);
 			PersonAssignmentRepository.Has(ass2);
 
 			PersonRepository.Has(agent);
@@ -462,7 +570,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(1, 0, 5, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 
 			var model = new OverTimeSuggestionModel
@@ -501,7 +609,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june1DateOnly, 1));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june2DateOnly, 1));
-			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(23, 24));
+			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(23, 24));
 			PersonAssignmentRepository.Has(ass);
 
 			PersonRepository.Has(agent);
@@ -514,7 +622,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(15, 0, 22, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 			var model = new OverTimeSuggestionModel
 			{
@@ -550,7 +658,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(contract, skill).WithSchedulePeriodOneWeek(june1DateOnly);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june1DateOnly, 1));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june2DateOnly, 1));
-			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(22, 23));
+			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(22, 23));
 			PersonAssignmentRepository.Has(ass);
 
 			PersonRepository.Has(agent);
@@ -602,7 +710,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june1DateOnly, 1));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june2DateOnly, 1));
-			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(16, 17));
+			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(16, 17));
 			PersonAssignmentRepository.Has(ass);
 			var overtimePreference = new OvertimePreferences
 			{
@@ -652,7 +760,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june1DateOnly, 1));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, june2DateOnly, 1));
-			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(22, 23));
+			var ass = new PersonAssignment(agent, scenario, june1DateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(22, 23));
 			PersonAssignmentRepository.Has(ass);
 			var overtimePreference = new OvertimePreferences
 			{
@@ -700,7 +808,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
 
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnly, 1));
-			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(15, 16));
+			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(15, 16));
 			PersonAssignmentRepository.Has(ass);
 			var overtimePreference = new OvertimePreferences
 			{
@@ -753,8 +861,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune1, 1));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune2, 1));
-			var assJune1 = new PersonAssignment(agent, scenario, dateOnlyJune1).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(19, 20));
-			var assJune2 = new PersonAssignment(agent, scenario, dateOnlyJune2).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(07, 08));
+			var assJune1 = new PersonAssignment(agent, scenario, dateOnlyJune1).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(19, 20));
+			var assJune2 = new PersonAssignment(agent, scenario, dateOnlyJune2).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(07, 08));
 			PersonAssignmentRepository.Has(assJune1);
 			PersonAssignmentRepository.Has(assJune2);
 
@@ -764,7 +872,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(20, 0, 24, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 
 			var model = new OverTimeSuggestionModel
@@ -810,8 +918,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			FakePersonForOvertimeProvider.Fill(new List<SuggestedPersonsModel> { new SuggestedPersonsModel { PersonId = agent.Id.GetValueOrDefault() } });
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune1, 1));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune2, 1));
-			var assJune1 = new PersonAssignment(agent, scenario, dateOnlyJune1).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(19, 20));
-			var assJune2 = new PersonAssignment(agent, scenario, dateOnlyJune2).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(07, 08));
+			var assJune1 = new PersonAssignment(agent, scenario, dateOnlyJune1).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(19, 20));
+			var assJune2 = new PersonAssignment(agent, scenario, dateOnlyJune2).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(07, 08));
 			PersonAssignmentRepository.Has(assJune1);
 			PersonAssignmentRepository.Has(assJune2);
 
@@ -821,7 +929,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(3, 0, 7, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 
 			var model = new OverTimeSuggestionModel
@@ -872,13 +980,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune10, 1));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune11, 1));
 
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(16, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(16, 17)));
 			//36 hours between
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(5, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune10).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(5, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune10).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17)));
 
 			var overtimePreference = new OvertimePreferences
 			{
@@ -886,7 +994,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(17, 0, 21, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 
 			var model = new OverTimeSuggestionModel
@@ -937,13 +1045,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune10, 1));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune11, 1));
 
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune6).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 20)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune6).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 20)));
 			//36 hours between
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 9)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 9)));
 
 			var overtimePreference = new OvertimePreferences
 			{
@@ -951,7 +1059,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(4, 0, 8, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 
 			var model = new OverTimeSuggestionModel
@@ -1002,12 +1110,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune10, 1));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune11, 1));
 
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune6).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune6).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
 
 			var overtimePreference = new OvertimePreferences
 			{
@@ -1015,7 +1123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(5, 0, 9, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 
 			var model = new OverTimeSuggestionModel
@@ -1066,12 +1174,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune10, 1));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, dateOnlyJune11, 1));
 
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune10).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
-			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune5).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune7).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune8).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune9).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune10).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
+			PersonAssignmentRepository.Has(new PersonAssignment(agent, scenario, dateOnlyJune11).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(9, 17)));
 
 			var overtimePreference = new OvertimePreferences
 			{
@@ -1079,7 +1187,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 				ScheduleTag = new NullScheduleTag(),
 				SelectedSpecificTimePeriod = new TimePeriod(17, 0, 21, 0),
 				SelectedTimePeriod = new TimePeriod(1, 0, 4, 0),
-				SkillActivity = activity
+				SkillActivity = phoneActivity
 			};
 
 			var model = new OverTimeSuggestionModel
