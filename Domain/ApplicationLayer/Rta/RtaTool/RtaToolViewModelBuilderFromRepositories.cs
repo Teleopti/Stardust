@@ -44,5 +44,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
 				.ToArray();
 		}
 
+		public IEnumerable<RtaToolViewModel> Build(RtaToolAgentStateFilter rtaToolAgentStateFilter)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

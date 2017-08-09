@@ -1,13 +1,16 @@
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Castle.Core.Internal;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool;
-using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
-using Teleopti.Interfaces.Domain;
+
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 {
@@ -16,17 +19,26 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	{
 		private readonly IRtaToolViewModelBuilder _viewModelBuilder;
 		private readonly IRtaStateGroupRepository _stateGroups;
-	
-		public RtaToolController(IRtaToolViewModelBuilder viewModelBuilder, IRtaStateGroupRepository stateGroups)
+		private readonly ITeamCardReader _teamCardReader;
+
+		public RtaToolController(IRtaToolViewModelBuilder viewModelBuilder, IRtaStateGroupRepository stateGroups, ITeamCardReader teamCardReader)
 		{
 			_viewModelBuilder = viewModelBuilder;
 			_stateGroups = stateGroups;
+			_teamCardReader = teamCardReader;
 		}
 
 		[UnitOfWork, ReadModelUnitOfWork, AnalyticsUnitOfWork,  HttpGet, Route("RtaTool/Agents/For")]
-		public virtual IHttpActionResult GetAgents()
+		public virtual IHttpActionResult GetAgents([FromUri] RtaToolAgentStateFilter filter)
 		{
-			return Ok(_viewModelBuilder.Build());
+			if(filter == null)
+				return Ok(_viewModelBuilder.Build());
+			return Ok(_viewModelBuilder.Build(new RtaToolAgentStateFilter
+				{
+					SiteIds = filter.SiteIds,
+					TeamIds = filter.TeamIds
+				}
+			));
 		}
 
 		[UnitOfWork, HttpGet, Route("RtaTool/PhoneStates/For")]
@@ -52,5 +64,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 					Code = x.StateCollection.First().StateCode
 				}));
 		}
+
+		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("RtaTool/Organization/For")]
+		public virtual IHttpActionResult GetOrganization()
+		{
+			var availableSites = _teamCardReader.Read().GroupBy(x => x.SiteId).Select(x=> new{SiteId = x.Key,SiteName = x.FirstOrDefault()?.SiteName}).ToArray();
+			var availableTeams = _teamCardReader.Read().GroupBy(x => x.TeamId).Select(x => new { TeamId = x.Key, TeamName = x.FirstOrDefault()?.TeamName }).ToArray(); ;
+			return Ok(new
+			{
+				Sites = availableSites,
+				Teams = availableTeams
+			});
+		}
 	}
+
 }
