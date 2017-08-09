@@ -322,26 +322,23 @@ namespace Teleopti.Ccc.Domain.Collection
 	                        var absences =
 		                        partBefore.PersonAbsenceCollection().Concat(part.PersonAbsenceCollection())
 			                        .Select(a => a.Period.ToDateOnlyPeriod(part.Person.PermissionInformation.DefaultTimeZone()));
-	                        IEnumerable<IScheduleDay> partsBefore;
 	                        if (absences.Any())
 	                        {
-		                        partsBefore = range.ScheduledDayCollection(absences.OrderByDescending(a => a.EndDate).First().Inflate(1));
-	                        }
+		                        var partsBefore = range.ScheduledDayCollection(absences.OrderByDescending(a => a.EndDate).First().Inflate(1));
+		                        range.ModifyInternal(part);
+		                        foreach (var scheduleDay in partsBefore)
+		                        {
+			                        scheduleDayChangeCallback.ScheduleDayChanged(scheduleDay);
+		                        }
+		                        var partAfter2 = range.ReFetch(part);
+		                        OnPartModified(new ModifyEventArgs(modifier, partAfter2.Person, partAfter2.Period, part));
+							}
 	                        else
 	                        {
-		                        partsBefore = new[] {partBefore};
-	                        }
-
-                            range.ModifyInternal(part);
-							// permission can prevent part to be applied so let us check
-
-	                        foreach (var scheduleDay in partsBefore)
-							{
-								scheduleDayChangeCallback.ScheduleDayChanged(scheduleDay);
+		                        range.ModifyInternal(part);
+		                        scheduleDayChangeCallback.ScheduleDayChanged(partBefore);
+		                        OnPartModified(new ModifyEventArgs(modifier, part.Person, part.Period, part));
 							}
-
-							var partAfter2 = range.ReFetch(part);
-							OnPartModified(new ModifyEventArgs(modifier, partAfter2.Person, partAfter2.Period, part));
 						}
                     }
 
