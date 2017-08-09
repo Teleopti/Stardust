@@ -16386,4 +16386,8 @@ Do you want to participate?</value>
     <value>Open site</value>
     <comment>Open site</comment>
   </data>
+  <data name="NoSuggestionsFound" xml:space="preserve">
+    <value>There are no suggestions according to the extra overtime settings</value>
+    <comment>No suggestions found according to user defined parameters</comment>
+  </data>
 </root>

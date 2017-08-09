@@ -20357,6 +20357,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to There are no suggestions according to the extra overtime settings.
+        /// </summary>
+        public static string NoSuggestionsFound {
+            get {
+                return ResourceManager.GetString("NoSuggestionsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not a JPEG, SVG or a PNG!.
         /// </summary>
         public static string NotAJPEGSVGOrAPNG {
@@ -22005,7 +22014,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can not add overtime request for a past date.
+        ///   Looks up a localized string similar to Cannot add an overtime request for a past date.
         /// </summary>
         public static string OvertimeRequestDateIsPast {
             get {
@@ -22825,7 +22834,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Request period is out of skill open hours.
+        ///   Looks up a localized string similar to The request period is outside of the skills&apos; open hours.
         /// </summary>
         public static string PeriodIsOutOfSkillOpenHours {
             get {
@@ -23610,7 +23619,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to  Edit name and  filters for selected planning group.
+        ///   Looks up a localized string similar to  Edit name and filters for selected planning group.
         /// </summary>
         public static string PlansPageEditPlanningGroup {
             get {
@@ -29756,7 +29765,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Note: To move a shift for an agent in a different timezone, firstly select their timezone from the timezone dropdown..
+        ///   Looks up a localized string similar to Note: To move a shift for an agent in a different time zone, firstly select their time zone from the time zone dropdown..
         /// </summary>
         public static string ShiftCannotBeAddedToAgentsInAnotherTimeZone {
             get {
