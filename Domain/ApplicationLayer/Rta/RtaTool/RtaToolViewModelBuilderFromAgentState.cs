@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool
 					TeamName = v.TeamName,
 					UserCode = v.UserCode,
 					DataSource = v.DataSource
-				});
+				}).Take(50);
 		}
 	}
 
