@@ -55,8 +55,23 @@
       });
 
     fake(/\.\.\/RtaTool\/Agents\/For(.*)/,
-      function () {
-        return [200, agents];
+      function (params) {
+        var ret = (function () {
+          if (params.siteIds != null) {
+            var agentsBySite = agents.filter(function (a) {
+              return params.siteIds.indexOf(a.SiteId) >= 0
+            });
+            return agentsBySite;
+          }
+          if (params.teamIds != null) {
+            var agentsByTeam = agents.filter(function (a) {
+              return params.teamIds.indexOf(a.TeamId) >= 0
+            });
+            return agentsByTeam;
+          }
+          return agents;
+        })();     
+        return [200, ret];
       });
 
     function withAgent(agent) {

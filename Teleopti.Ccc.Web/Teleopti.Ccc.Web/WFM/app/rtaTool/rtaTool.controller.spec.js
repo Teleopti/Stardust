@@ -7,7 +7,38 @@ describe('RtaToolController', function () {
     fakeBackend,
     vm;
 
+  var organization = {
+        Sites: [
+          {
+            SiteName: 'London',
+            SiteId: 'londonId'
+          },
+          {
+            SiteName: 'Paris',
+            SiteId: 'parisId'
+          }
+        ],
+        Teams: [
+          {
+            TeamName: 'Students',
+            TeamId: 'studentsId'
+          },
+          {
+            TeamName: 'Team nigths',
+            SiteId: 'teamNightsId'
+          }
+        ]
+      }
+
   beforeEach(module('wfm.rtaTool'));
+
+  beforeEach(function () {
+    module(function ($provide) {
+      $provide.value('organization', function () {
+        return organization;
+      });
+    });
+  });
 
   beforeEach(inject(function (_$httpBackend_, _RtaToolControllerBuilder_, _FakeRtaToolBackend_) {
     $httpBackend = _$httpBackend_;
@@ -28,9 +59,78 @@ describe('RtaToolController', function () {
       SiteName: 'London'
     });
 
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
 
     expect(vm.filteredAgents.length).toEqual(1);
+  });
+
+  it('should get agents by site', function () {
+    fakeBackend
+      .withAgent({
+        Name: 'John Smith',
+        UserCode: '0019',
+        DataSource: '1',
+        TeamName: 'Students',
+        SiteName: 'London',
+        SiteId: 'londonId'
+      })
+      .withAgent({
+        Name: 'Marcio Dias',
+        UserCode: '0068',
+        DataSource: '1',
+        TeamName: 'Team nights',
+        SiteName: 'Paris',
+        SiteId: 'parisId'
+      });
+
+    var c = $RtaToolControllerBuilder.createController(organization);
+    vm = c.vm;
+
+    c.apply(function () {
+      vm.organization.Sites[0].isChecked = true;
+      vm.selectSites();
+    }
+    );
+
+    expect(vm.filteredAgents.length).toEqual(1);
+    expect(vm.filteredAgents[0].Name).toEqual('John Smith');
+    expect(vm.filteredAgents[0].UserCode).toEqual('0019');
+    expect(vm.filteredAgents[0].DataSource).toEqual('1');
+    expect(vm.filteredAgents[0].TeamName).toEqual('Students');
+    expect(vm.filteredAgents[0].SiteName).toEqual('London');
+  });
+
+  it('should get agents by team', function () {
+    fakeBackend
+      .withAgent({
+        Name: 'John Smith',
+        UserCode: '0019',
+        DataSource: '1',
+        TeamName: 'Students',
+       TeamId: 'studentsId'
+      })
+      .withAgent({
+        Name: 'Marcio Dias',
+        UserCode: '0068',
+        DataSource: '1',
+        TeamName: 'Team nights',
+        SiteId: 'teamNightsId'
+      });
+
+    var c = $RtaToolControllerBuilder.createController(organization);
+    vm = c.vm;
+
+    c.apply(function () {
+      vm.organization.Teams[0].isChecked = true;
+      vm.selectTeams();
+    }
+    );
+
+    expect(vm.filteredAgents.length).toEqual(1);
+    expect(vm.filteredAgents[0].Name).toEqual('John Smith');
+    expect(vm.filteredAgents[0].UserCode).toEqual('0019');
+    expect(vm.filteredAgents[0].DataSource).toEqual('1');
+    expect(vm.filteredAgents[0].TeamName).toEqual('Students');
   });
 
   it('should get phone states', function () {

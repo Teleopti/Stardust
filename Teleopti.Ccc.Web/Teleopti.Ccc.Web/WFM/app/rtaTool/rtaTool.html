@@ -50,8 +50,8 @@
 
 						<div class="con-flex">
 							<div class="relative">
-								<input type="text" placeholder="Select sites" ng-click="vm.openPicker = !vm.openPicker" />
-								<form ng-cloak name="form" class="wfm-form wfm-dropdown-panel panel material-depth-2 animate-show" novalidate ng-show="vm.openPicker">
+								<input type="text" placeholder="Select sites" ng-click="vm.toggleDropdown(1)" />
+								<form ng-cloak name="form" class="wfm-form wfm-dropdown-panel panel material-depth-2 animate-show" novalidate ng-show="vm.openSitePicker">
 									<div ng-repeat="site in vm.organization.Sites">
 										<div class="wfm-checkbox">
 											<label>
@@ -61,7 +61,26 @@
 										</label>
 										</div>
 									</div>
-									<button class="wfm-btn wfm-btn-primary" ng-click="vm.selectSites()">Select site</button>
+									<button class="wfm-btn wfm-btn-primary" ng-click="vm.selectSites()">Select sites</button>
+								</form>
+
+							</div>
+						</div>
+
+						<div class="con-flex">
+							<div class="relative">
+								<input type="text" placeholder="Select teams" ng-click="vm.toggleDropdown(2)" />
+								<form ng-cloak name="form" class="wfm-form wfm-dropdown-panel panel material-depth-2 animate-show" novalidate ng-show="vm.openTeamPicker">
+									<div ng-repeat="team in vm.organization.Teams">
+										<div class="wfm-checkbox">
+											<label>
+											<input type="checkbox" name="checkbox" value="{{team.TeamId}}" ng-click="team.toggle()">
+											<span class="wfm-checkbox-toggle"></span>
+											<span class="wfm-checkbox-label">{{team.TeamName}}</span>
+										</label>
+										</div>
+									</div>
+									<button class="wfm-btn wfm-btn-primary" ng-click="vm.selectTeams()">Select teams</button>
 								</form>
 
 							</div>

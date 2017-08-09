@@ -24,10 +24,11 @@
 			return scope;
 		};
 
-		function createController() {
+		function createController(organization) {
 
 			var vm = $controller(controllerName, {
-				$scope: scope
+				$scope: scope,
+				organization: organization
 			});
 
 			scope.$digest();

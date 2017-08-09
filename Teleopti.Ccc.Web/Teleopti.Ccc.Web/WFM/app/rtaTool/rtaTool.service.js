@@ -13,6 +13,7 @@
 			getStateCodes: getStateCodes,
 			getAgents: getAgents,
 			getAgentsForSites: getAgentsForSites,
+			getAgentsForTeams: getAgentsForTeams,
 			sendBatch: sendBatch,
 			getOrganization: getOrganization
 		}
@@ -24,11 +25,15 @@
 		}
 
 		function getAgents() {
-			return $resource('../RtaTool/Agents/For', {}, { query: { method: 'GET', isArray: true }}).query().$promise;
+			return $resource('../RtaTool/Agents/For', {}, { query: { method: 'GET', isArray: true } }).query().$promise;
 		}
 
 		function getAgentsForSites(siteIds) {
-			return $resource('../RtaTool/Agents/For', {siteIds: siteIds}, { query: { method: 'GET', isArray: true }}).query().$promise;
+			return $resource('../RtaTool/Agents/For', { siteIds: siteIds }, { query: { method: 'GET', isArray: true } }).query().$promise;
+		}
+
+		function getAgentsForTeams(teamIds) {
+			return $resource('../RtaTool/Agents/For', { teamIds: teamIds }, { query: { method: 'GET', isArray: true } }).query().$promise;
 		}
 
 		function sendBatch(batch) {
@@ -36,7 +41,7 @@
 		}
 
 		function getOrganization() {
-			return $resource('../RtaTool/Organization/For', {}, { query: { method: 'GET', isArray: false }}).query().$promise;
+			return $resource('../RtaTool/Organization/For', {}, { query: { method: 'GET', isArray: false } }).query().$promise;
 		}
 
 	};

@@ -10,9 +10,10 @@
 		'$q',
 		'$interval',
 		'$filter',
-		'NoticeService'];
+		'NoticeService',
+		'organization'];
 
-	function RtaToolController(rtaToolService, $scope, $q, $interval, $filter, NoticeService) {
+	function RtaToolController(rtaToolService, $scope, $q, $interval, $filter, NoticeService, organization) {
 		var vm = this;
 
 		vm.pause = true;
@@ -22,9 +23,12 @@
 		vm.filteredAgents = [];
 		vm.stateCodes = [];
 		vm.filteredAgentsShown = 100;
-		vm.organization;
 		vm.selectSites = selectSites;
-		vm.openPicker = false;
+		vm.selectTeams = selectTeams;
+		vm.openSitePicker = false;
+		vm.openTeamPicker = false;
+		vm.organization = organization;
+		vm.toggleDropdown = toggleDropdown;
 
 		var sendingBatchWithRandomStatesTrigger = null;
 
@@ -55,15 +59,19 @@
 					vm.filteredAgents = vm.agents.slice(0);
 					showMoreAgents();
 				});
-			
-			rtaToolService.getOrganization().then(function(result){
-				vm.organization = result;
-				vm.organization.Sites.forEach(function(site){
-					site.isChecked = false;
-					site.toggle = function() {
-						site.isChecked = !site.isChecked;
-					}
-				});
+
+			vm.organization.Sites.forEach(function (site) {
+				site.isChecked = false;
+				site.toggle = function () {
+					site.isChecked = !site.isChecked;
+				}
+			});
+
+			vm.organization.Teams.forEach(function (team) {
+				team.isChecked = false;
+				team.toggle = function () {
+					team.isChecked = !team.isChecked;
+				}
 			});
 		})();
 
@@ -191,16 +199,41 @@
 		}
 
 		function selectSites() {
-			vm.openPicker = false;
-			var selectedSiteIds = vm.organization.Sites.filter(function(site){
+			vm.openSitePicker = false;
+			var selectedSiteIds = vm.organization.Sites.filter(function (site) {
 				return site.isChecked;
-			}).map(function(site){
+			}).map(function (site) {
 				return site.SiteId;
 			});
 
-			rtaToolService.getAgentsForSites(selectedSiteIds).then(function(result){
+			rtaToolService.getAgentsForSites(selectedSiteIds).then(function (result) {
 				vm.filteredAgents = result;
 			});
+
+		}
+
+		function selectTeams() {
+			vm.openTeamPicker = false;
+			var selectedTeamIds = vm.organization.Teams.filter(function (team) {
+				return team.isChecked;
+			}).map(function (team) {
+				return team.TeamId;
+			});
+
+			rtaToolService.getAgentsForTeams(selectedTeamIds).then(function (result) {
+				vm.filteredAgents = result;
+			});
+		}
+
+		function toggleDropdown(key) {
+			if (key === 1) {
+				vm.openSitePicker = !vm.openSitePicker;
+				if (vm.openTeamPicker) vm.openTeamPicker = false;
+			}
+			else {
+				vm.openTeamPicker = !vm.openTeamPicker;
+				if (vm.openSitePicker) vm.openSitePicker = false;
+			}
 
 		}
 	};
