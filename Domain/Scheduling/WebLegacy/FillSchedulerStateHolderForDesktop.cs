@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 				var fromScheduleDays = fromDic[agent].ScheduledDayCollection(period);
 				foreach (var fromScheduleDay in fromScheduleDays)
 				{
-					var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly);
+					var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly, true);
 					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAssignment>().ForEach(x => toScheduleDay.Add(x));
 					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAbsence>().ForEach(x => toScheduleDay.Add(x));
 					fromScheduleDay.PersonMeetingCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));

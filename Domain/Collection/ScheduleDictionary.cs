@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.Domain.Collection
                         foreach (var part in scheduleParts)
                         {
                             var range = (ScheduleRange) this[part.Person];
-                            var partBefore = range.ReFetch(part);
+                            var partBefore = range.ScheduledDay(part.DateOnlyAsPeriod.DateOnly, true);
 	                        var absences =
 		                        partBefore.PersonAbsenceCollection().Concat(part.PersonAbsenceCollection())
 			                        .Select(a => a.Period.ToDateOnlyPeriod(part.Person.PermissionInformation.DefaultTimeZone()));
@@ -330,7 +330,7 @@ namespace Teleopti.Ccc.Domain.Collection
 		                        {
 			                        scheduleDayChangeCallback.ScheduleDayChanged(scheduleDay);
 		                        }
-		                        var partAfter2 = range.ReFetch(part);
+		                        var partAfter2 = range.ScheduledDay(part.DateOnlyAsPeriod.DateOnly, true);
 		                        OnPartModified(new ModifyEventArgs(modifier, partAfter2.Person, partAfter2.Period, part));
 							}
 	                        else
