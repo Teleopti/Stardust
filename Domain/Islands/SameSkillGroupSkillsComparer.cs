@@ -1,17 +1,16 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class SameSkillGroupSkillsComparer : IEqualityComparer<ICollection<ISkill>>
+	public class SameSkillGroupSkillsComparer : IEqualityComparer<ISet<ISkill>>
 	{
-		public bool Equals(ICollection<ISkill> x, ICollection<ISkill> y)
+		public bool Equals(ISet<ISkill> x, ISet<ISkill> y)
 		{
-			return x.All(y.Contains);
+			return x.SetEquals(y);
 		}
 
-		public int GetHashCode(ICollection<ISkill> obj)
+		public int GetHashCode(ISet<ISkill> obj)
 		{
 			return obj.Count;
 		}

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public IEnumerable<Island> Create(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> peopleInOrganization, DateOnlyPeriod period)
 		{
-			var allSkillGroups = new List<SkillGroup>(_createSkillGroups.Create(peopleInOrganization, period.StartDate));
+			var allSkillGroups = _createSkillGroups.Create(peopleInOrganization, period.StartDate).ToList();
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillGroups);
 			while (true)
 			{

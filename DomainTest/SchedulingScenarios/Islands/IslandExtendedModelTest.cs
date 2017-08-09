@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		{
 			var skill1 = new Skill("1");
 			var skill2 = new Skill("2");
-			var skillgroup1 = new SkillGroup(new[] { skill1, skill2 }, new IPerson[] { });
-			var skillgroup2 = new SkillGroup(new[] { skill2 }, new IPerson[] { });
+			var skillgroup1 = new SkillGroup(new HashSet<ISkill> { skill1, skill2 }, new HashSet<IPerson>());
+			var skillgroup2 = new SkillGroup(new HashSet<ISkill> { skill2 }, new HashSet<IPerson>());
 			var model = new Island(new[] {skillgroup1, skillgroup2}, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
 
 			model.SkillsInIsland.Count().Should().Be.EqualTo(2);
@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		{
 			var skill1 = new Skill("1");
 			var skill2 = new Skill("2");
-			var skillgroup1 = new SkillGroup(new[] { skill1, skill2 }, new IPerson[] { });
-			var skillgroup2 = new SkillGroup(new[] { skill2 }, new IPerson[] { });
+			var skillgroup1 = new SkillGroup(new HashSet<ISkill> { skill1, skill2 }, new HashSet<IPerson>());
+			var skillgroup2 = new SkillGroup(new HashSet<ISkill> { skill2 }, new HashSet<IPerson>());
 			var model = new Island(new[] { skillgroup1, skillgroup2 }, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
 
 			model.SkillGroupsInIsland.Count().Should().Be.EqualTo(2);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		{
 			var skill1 = new Skill("1");		
 			var agent1 = new Person();
-			var skillgroup1 = new SkillGroup(new[] { skill1 }, new IPerson[] { agent1 });
+			var skillgroup1 = new SkillGroup(new HashSet<ISkill> { skill1 }, new HashSet<IPerson> { agent1 });
 
 			var model = new Island(new[] { skillgroup1 }, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
 

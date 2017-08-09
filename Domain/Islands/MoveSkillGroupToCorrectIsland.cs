@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			return touchedIslands.Any();
 		}
 
-		private static void moveSkillGroupForOneIslandToCorrectIsland(ICollection<SkillGroup> allSkillGroups, IEnumerable<ICollection<SkillGroup>> islands, ICollection<SkillGroup> island, HashSet<ICollection<SkillGroup>> touchedIslands)
+		private static void moveSkillGroupForOneIslandToCorrectIsland(ICollection<SkillGroup> allSkillGroups, IEnumerable<ICollection<SkillGroup>> islands, ICollection<SkillGroup> island, ISet<ICollection<SkillGroup>> touchedIslands)
 		{
 			foreach (var skillGroup in island.ToArray())
 			{

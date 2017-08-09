@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
@@ -7,10 +6,10 @@ namespace Teleopti.Ccc.Domain.Islands
 {
 	public class SkillGroup
 	{
-		private readonly ICollection<IPerson> _agents;
-		private readonly ICollection<ISkill> _skills;
+		private readonly ISet<IPerson> _agents;
+		private readonly ISet<ISkill> _skills;
 
-		public SkillGroup(ICollection<ISkill> skills, ICollection<IPerson> agents)
+		public SkillGroup(ISet<ISkill> skills, ISet<IPerson> agents)
 		{
 			_skills = skills;
 			_agents = agents;
@@ -21,9 +20,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public bool HasSameSkillsAs(SkillGroup otherSkillGroup)
 		{
-			var theseSkills = new HashSet<ISkill>(Skills);
-			var otherSkills = new HashSet<ISkill>(otherSkillGroup.Skills);
-			return theseSkills.SetEquals(otherSkills);
+			return _skills.SetEquals(otherSkillGroup._skills);
 		}
 
 		public void AddAgentsFrom(SkillGroup skillGroup)
@@ -38,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public bool HasAnySkillSameAs(SkillGroup skillGroup)
 		{
-			return Skills.Intersect(skillGroup.Skills).Any();
+			return _skills.Overlaps(skillGroup._skills);
 		}
 	}
 }
