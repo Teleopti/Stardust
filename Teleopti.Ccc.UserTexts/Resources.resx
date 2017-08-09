@@ -16390,16 +16390,4 @@ Do you want to participate?</value>
     <value>There are no suggestions according to the extra overtime settings</value>
     <comment>No suggestions found according to user defined parameters</comment>
   </data>
-  <data name="ImportBpoWrongDateFormat" xml:space="preserve">
-    <value>The date format is incorrect</value>
-    <comment>while importing staffing data the date format is wrong.</comment>
-  </data>
-  <data name="ImportBpoWrongResourceFormat" xml:space="preserve">
-    <value>The resource format is incorrect</value>
-    <comment>while importing staffing data the resource format is wrong.</comment>
-  </data>
-  <data name="ImportBpoDuplicateRecord" xml:space="preserve">
-    <value>Duplicate record found</value>
-    <comment>Found a duplicate record while importing</comment>
-  </data>
 </root>

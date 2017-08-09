@@ -13863,33 +13863,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duplicate record found.
-        /// </summary>
-        public static string ImportBpoDuplicateRecord {
-            get {
-                return ResourceManager.GetString("ImportBpoDuplicateRecord", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The date format is incorrect.
-        /// </summary>
-        public static string ImportBpoWrongDateFormat {
-            get {
-                return ResourceManager.GetString("ImportBpoWrongDateFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The resource format is incorrect.
-        /// </summary>
-        public static string ImportBpoWrongResourceFormat {
-            get {
-                return ResourceManager.GetString("ImportBpoWrongResourceFormat", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Import error.
         /// </summary>
         public static string ImportError {

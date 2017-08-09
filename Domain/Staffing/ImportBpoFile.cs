@@ -67,13 +67,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 				line.Tokens = tokenizeSkillCombinationResourceBpo(line, headerWithFieldNames, tokenSeparator, result);
 				var resourceBpo = createSkillCombinationResourceBpo(line, importFormatProvider, skillSeparator, allSkills, result);
-				if (bpoResourceList.Contains(resourceBpo))
-				{
-					result.Success = false;
-					result.ErrorInformation.Add(formatGeneralLineErrorMessage(line, Resources.ImportBpoDuplicateRecord));
-				}
-				else if(result.Success)
-					bpoResourceList.Add(resourceBpo);
+				bpoResourceList.Add(resourceBpo);
 			}
 			if(result.Success )
 				_skillCombinationResourceRepository.PersistSkillCombinationResourceBpo(bpoResourceList);
@@ -95,52 +89,25 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		private ImportSkillCombinationResourceBpo createSkillCombinationResourceBpo(LineWithNumber lineWithNumber, IFormatProvider importFormatProvider, char skillSeparator, IList<ISkill> allSkills, ImportBpoFileResult result)
 		{
-			var resourceBpo = new ImportSkillCombinationResourceBpo();
-			resourceBpo = null;
 			var bpoLineTokens = lineWithNumber.Tokens;
 
 			bpoLineTokens.Where(token => token.Value.IsNullOrEmpty()).
 				ForEach(token => result.ErrorInformation.Add(formatParameterEmptyErrorMessage(lineWithNumber, token.Key)));
 
-			if ((bpoLineTokens.Count==0 || bpoLineTokens.Any(token => token.Value.IsNullOrEmpty())) && result.ErrorInformation.Any())
+			if (result.ErrorInformation.Any())
 			{
 				result.Success = false;
+				return null;
 			}
-			else
-			{
-				DateTime sd, ed;
-				double d;
-				
-				if (!DateTime.TryParse(bpoLineTokens[startdatetime], out sd))
-				{
-					result.Success = false;
-					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, Resources.ImportBpoWrongDateFormat));
-				}
-				if (!DateTime.TryParse(bpoLineTokens[enddatetime], out ed))
-				{
-					result.Success = false;
-					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, Resources.ImportBpoWrongDateFormat));
-				}
-				if (!double.TryParse(bpoLineTokens[resources], out d))
-				{
-					result.Success = false;
-					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, Resources.ImportBpoWrongResourceFormat));
-				}
-				if (result.Success)
-				{
-					resourceBpo = new ImportSkillCombinationResourceBpo
-					{
-						Source = bpoLineTokens[source],
-						StartDateTime = DateTime.Parse(bpoLineTokens[startdatetime], importFormatProvider),
-						EndDateTime = DateTime.Parse(bpoLineTokens[enddatetime], importFormatProvider),
-						Resources = double.Parse(bpoLineTokens[resources], importFormatProvider),
-						SkillIds = lookupSkillIds(lineWithNumber, bpoLineTokens[skillgroup], skillSeparator, allSkills, result)
-					};
-				}
-			}
-			
 
-			
+			var resourceBpo = new ImportSkillCombinationResourceBpo
+			{
+				Source = bpoLineTokens[source],
+				StartDateTime = DateTime.Parse(bpoLineTokens[startdatetime], importFormatProvider),
+				EndDateTime = DateTime.Parse(bpoLineTokens[enddatetime], importFormatProvider),
+				Resources = double.Parse(bpoLineTokens[resources], importFormatProvider),
+				SkillIds = lookupSkillIds(lineWithNumber, bpoLineTokens[skillgroup], skillSeparator, allSkills, result)
+			};
 			return resourceBpo;
 		}
 
@@ -206,19 +173,13 @@ namespace Teleopti.Ccc.Domain.Staffing
 		}
 	}
 
-	public class ImportSkillCombinationResourceBpo : IEquatable<ImportSkillCombinationResourceBpo>
+	public class ImportSkillCombinationResourceBpo
 	{
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
 		public double Resources { get; set; }
 		public List<Guid> SkillIds { get; set; }
 		public string Source { get; set; }
-		public bool Equals(ImportSkillCombinationResourceBpo other)
-		{
-			if (other == null) return false;
-			return other.StartDateTime == StartDateTime && other.Source == Source &&
-				   !SkillIds.Except(other.SkillIds).Any();
-		}
 	}
 
 	public class SkillCombinationResourceBpo

@@ -288,52 +288,5 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 
 			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(0);
 		}
-
-		[Test]
-		public void ShouldReturnFalseIfStartDateTimeFormatIsWrong()
-		{
-			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
-TPBRZIL,ChannelSales,2017-07-24 1000,2017-07-24 10:15,10.5";
-
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
-			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("date")).Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldReturnFalseIfEndDateTimeFormatIsWrong()
-		{
-			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
-TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 1015,10.5";
-
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
-			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("date")).Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldReturnFalseIfResourceFormatIsWrong()
-		{
-			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
-TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,10.5€";
-
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
-			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("resource")).Should().Not.Be.Null();
-		}
-
-		[Test]
-		public void ShouldReturnFalseIfDuplicateRecordsAreFoundInTheFile()
-		{
-			SkillRepository.Has("Channel Sales", new Activity());
-			SkillRepository.Has("Direct Sales", new Activity());
-			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
-TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5
-TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
-
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
-			result.Success.Should().Be.False();
-			result.ErrorInformation.SingleOrDefault(e => e.Contains("Duplicate")).Should().Not.Be.Null();
-		}
 	}
 }
