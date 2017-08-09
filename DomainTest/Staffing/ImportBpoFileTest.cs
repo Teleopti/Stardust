@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var fileContents = @"sourceWrong,skillgroup,startdatetime,enddatetime,resources
 TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.Single().Should().Contain("sourceWrong");
 		}
@@ -41,7 +41,7 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 			var fileContents = @"sourceWrong,teleopti,startdatetime,enddatetime,resources
 TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.Count.Should().Be.EqualTo(2);
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("sourceWrong")).Should().Not.Be.Null();
@@ -53,7 +53,7 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 		{
 			var fileContents = @"";
 
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.Count.Should().Be.EqualTo(1);
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("1")).Should().Not.Be.Null();
@@ -65,7 +65,7 @@ TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 			var fileContents = @"
 TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.Count.Should().Be.EqualTo(1);
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("1")).Should().Not.Be.Null();
@@ -80,7 +80,7 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
 			SkillRepository.Has("Channel Sales", new Activity());
 			SkillRepository.Has("Direct Sales", new Activity());
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.True();
 			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(1);
 		}
@@ -91,7 +91,7 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
 ,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("source")).Should().Not.Be.Null();
 		}
@@ -102,7 +102,7 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,12.5";
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
 TPBRZIL,,2017-07-24 10:00,2017-07-24 10:15,12.5";
 
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("skillgroup")).Should().Not.Be.Null();
 		}
@@ -113,7 +113,7 @@ TPBRZIL,,2017-07-24 10:00,2017-07-24 10:15,12.5";
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
 TPBRZIL,ChannelSales,,2017-07-24 10:15,12.5";
 
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("startdatetime")).Should().Not.Be.Null();
 		}
@@ -124,7 +124,7 @@ TPBRZIL,ChannelSales,,2017-07-24 10:15,12.5";
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
 TPBRZIL,ChannelSales,2017-07-24 10:00,,12.5";
 
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("enddatetime")).Should().Not.Be.Null();
 		}
@@ -135,7 +135,7 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,,12.5";
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
 TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,";
 
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("resources")).Should().Not.Be.Null();
 		}
@@ -145,7 +145,7 @@ TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,";
 		{
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
 ,,,,";
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.Count.Should().Be.EqualTo(5);
 			result.ErrorInformation.Count(e => e.Contains(" source")).Should().Be.EqualTo(1);
@@ -167,7 +167,7 @@ TPBRZIL,Directsales,2017-07-24 10:00,2017-07-24 10:15,1.5
 TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 
 			SkillRepository.Has("ChannelSales", new Activity());
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("Directsales")).Should().Not.Be.Null();
 		}
@@ -186,7 +186,7 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 			SkillRepository.Has("ChannelSales", new Activity());
 			SkillRepository.Has("ChannelSales", new Activity());
 			SkillRepository.Has("Directsales", new Activity());
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("ChannelSales")).Should().Not.Be.Null();
 		}
@@ -198,7 +198,7 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 								Directsales,2017-07-24 10:15,2017-07-24 10:30, 6.0";
 
 			SkillRepository.Has("Directsales", new Activity());
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 		}
 
@@ -209,7 +209,7 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 								TPBRZIL,Directsales,2017-07-24 10:30, 6.0";
 
 			SkillRepository.Has("Directsales", new Activity());
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 		}
 
@@ -221,7 +221,7 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 
 			SkillRepository.Has("Directsales", new Activity());
 			SkillRepository.Has("Channel", new Activity());
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.True();
 		}
 
@@ -233,7 +233,7 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 
 			SkillRepository.Has("Direct sales", new Activity());
 			SkillRepository.Has("Channel sales", new Activity());
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.True();
 		}
 
@@ -244,7 +244,7 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6,0";
 
 			SkillRepository.Has("Directsales", new Activity());
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 		}
 
@@ -255,7 +255,7 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0";
 
 			SkillRepository.Has("Directsales", new Activity());
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.True();
 
 			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(1);
@@ -270,7 +270,7 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 
 			SkillRepository.Has("Directsales", new Activity());
 			SkillRepository.Has("Channel", new Activity());
-			var result = Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.True();
 
 			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(2);
@@ -284,9 +284,56 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 								TPBRZIL, KLINGON, 2017-07-24 10:15, 2017-07-24 10:30, 6.0";
 
 			SkillRepository.Has("Directsales", new Activity());
-			Target.ImportFile(fileContents, CultureInfo.InvariantCulture);
+			Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 
 			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfStartDateTimeFormatIsWrong()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+TPBRZIL,ChannelSales,2017-07-24 1000,2017-07-24 10:15,10.5";
+
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("date")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfEndDateTimeFormatIsWrong()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 1015,10.5";
+
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("date")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfResourceFormatIsWrong()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,10.5€";
+
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("resource")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnFalseIfDuplicateRecordsAreFoundInTheFile()
+		{
+			SkillRepository.Has("Channel Sales", new Activity());
+			SkillRepository.Has("Direct Sales", new Activity());
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5
+TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
+
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("Duplicate")).Should().Not.Be.Null();
 		}
 	}
 }
