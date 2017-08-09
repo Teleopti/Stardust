@@ -29,6 +29,9 @@
 		vm.openTeamPicker = false;
 		vm.organization = organization;
 		vm.toggleDropdown = toggleDropdown;
+		vm.searchSite = "";
+		vm.searchTeam = "";
+		vm.closeDropdown = closeDropdown;
 
 		var sendingBatchWithRandomStatesTrigger = null;
 
@@ -234,7 +237,15 @@
 				vm.openTeamPicker = !vm.openTeamPicker;
 				if (vm.openSitePicker) vm.openSitePicker = false;
 			}
+			vm.searchSite = "";
+			vm.searchTeam = "";
+		}
 
+		function closeDropdown(key) {
+			if (key === 1) vm.openSitePicker = false;
+			else vm.openTeamPicker = false;
+			vm.searchSite = "";
+			vm.searchTeam = "";
 		}
 	};
 })();
