@@ -114,6 +114,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		{		
 			var team = TeamFactory.CreateSimpleTeam();
 			team.SetId(Guid.NewGuid());
+			team.Site = SiteFactory.CreateSimpleSite().WithId();
 			var agentRole = new ApplicationRole {Name = "Agent", AvailableData = new AvailableData()};
 			agentRole.WithId();
 			agentRole.AvailableData.AddAvailableTeam(team);
