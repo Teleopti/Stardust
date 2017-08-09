@@ -139,7 +139,7 @@ describe('RtaToolController', function () {
       Name: 'Ready'
     });
 
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
 
     expect(vm.stateCodes.length).toEqual(1);
   });
@@ -156,7 +156,7 @@ describe('RtaToolController', function () {
         Name: 'Ready'
       });
 
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
 
     expect(vm.filteredAgents[0].Name).toEqual('John Smith');
     expect(vm.filteredAgents[0].UserCode).toEqual('0019');
@@ -182,7 +182,7 @@ describe('RtaToolController', function () {
         Code: 'Ready',
         Name: 'Ready'
       });
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
 
     vm.filteredAgents[0].sendState(vm.filteredAgents[0].StateCodes[0]);
     $httpBackend.flush();
@@ -216,7 +216,7 @@ describe('RtaToolController', function () {
         Code: 'Ready',
         Name: 'Ready'
       });
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
 
     vm.stateCodes[0].sendBatch();
     $httpBackend.flush();
@@ -257,7 +257,7 @@ describe('RtaToolController', function () {
         Code: 'Ready',
         Name: 'Ready'
       });
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
     vm.filteredAgents[0].selectAgent();
     vm.filteredAgents[1].selectAgent();
 
@@ -292,7 +292,7 @@ describe('RtaToolController', function () {
         Code: 'Ready',
         Name: 'Ready'
       });
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
     vm.filteredAgents[0].selectAgent();
     vm.filteredAgents[1].selectAgent();
     vm.filteredAgents[0].selectAgent();
@@ -317,7 +317,7 @@ describe('RtaToolController', function () {
         UserCode: '2002',
         DataSource: '1'
       });
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
 
     vm.toggleAgents();
 
@@ -337,7 +337,7 @@ describe('RtaToolController', function () {
         UserCode: '2002',
         DataSource: '1'
       });
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
 
     vm.filterText = 'joh';
     vm.filterAgents();
@@ -359,7 +359,7 @@ describe('RtaToolController', function () {
         UserCode: '2002',
         DataSource: '1'
       });
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
 
     vm.filterText = 'joh';
     vm.filterAgents();
@@ -381,7 +381,7 @@ describe('RtaToolController', function () {
         UserCode: '2002',
         DataSource: '1'
       });
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
 
     vm.filterText = 'joh';
     vm.filterAgents();
@@ -405,7 +405,7 @@ describe('RtaToolController', function () {
         UserCode: '2002',
         DataSource: '1'
       });
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
 
     vm.toggleAgents();
     vm.toggleAgents();
@@ -426,7 +426,7 @@ describe('RtaToolController', function () {
         UserCode: '2002',
         DataSource: '1'
       });
-    vm = $RtaToolControllerBuilder.createController().vm;
+    vm = $RtaToolControllerBuilder.createController(organization).vm;
 
     vm.filteredAgents[0].selectAgent();
     vm.toggleAgents();
@@ -451,7 +451,7 @@ describe('RtaToolController', function () {
         Code: 'Ready',
         Name: 'Ready'
       });
-    var scope = $RtaToolControllerBuilder.createController();
+    var scope = $RtaToolControllerBuilder.createController(organization);
     var vm = scope.vm;
 
     scope
