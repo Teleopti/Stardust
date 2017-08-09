@@ -30,13 +30,21 @@
 		vm.availableTimezones = [];
 		vm.sitesAndTeams = undefined;
 		vm.onlyLoadScheduleWithAbsence = false;
+		vm.selectedGroups = {
+			mode: 'BusinessHierarchy',
+			groupIds: [],
+			groupPageId: ''
+		};
+		if (angular.isArray($stateParams.selectedTeamIds)) {
+			replaceArrayValues($stateParams.selectedTeamIds, vm.selectedGroups.groupIds);
+		}
 
 		vm.lastCommandTrackId = '';
 		vm.showDatePicker = false;
 
 		vm.getSearch = function () {
 			return {
-				TeamIds: vm.selectedTeamIds,
+				TeamIds: vm.selectedGroups.mode === 'BusinessHierarchy' ? vm.selectedGroups.groupIds : [],
 				SearchTerm: vm.searchOptions.keyword
 			};
 		};
@@ -49,7 +57,7 @@
 
 		vm.hasSelectedAllPeopleInEveryPage = false;
 		vm.agentsPerPageSelection = [20, 50, 100, 500];
-		
+
 
 
 		var commandContainerId = 'teamschedule-command-container';
@@ -88,7 +96,7 @@
 			});
 
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
-		vm.selectedTeamIds = $stateParams.selectedTeamIds || [];
+
 		vm.teamNameMap = $stateParams.teamNameMap || {};
 		vm.searchOptions = {
 			keyword: $stateParams.keyword || '',
@@ -188,7 +196,7 @@
 			vm.loadSchedules();
 			resetFocus();
 		};
-		
+
 		function resetFocus() {
 			$scope.$broadcast("resetFocus", "organizationPicker");
 		};
@@ -196,7 +204,7 @@
 		function getParamsForLoadingSchedules(options) {
 			options = options || {};
 			var params = {
-				SelectedTeamIds: vm.selectedTeamIds ? vm.selectedTeamIds : [],
+				SelectedTeamIds: vm.selectedGroups.groupIds ? vm.selectedGroups.groupIds : [],
 				Keyword: options.keyword || vm.searchOptions.keyword,
 				Date: options.date || vm.scheduleDateMoment().format('YYYY-MM-DD'),
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,
@@ -347,12 +355,6 @@
 
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 
-		Object.defineProperty(vm, 'selectedTeamIds', { value: [] });
-
-		if (angular.isArray($stateParams.selectedTeamIds)) {
-			replaceArrayValues($stateParams.selectedTeamIds, vm.selectedTeamIds);
-		}
-
 		vm.searchOptions = {
 			keyword: $stateParams.keyword || '',
 			searchKeywordChanged: false,
@@ -376,13 +378,14 @@
 
 		vm.applyFavorite = function (currentFavorite) {
 			vm.selectedFavorite = currentFavorite;
-			replaceArrayValues(currentFavorite.TeamIds, vm.selectedTeamIds);
+			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
+			vm.selectedGroups.mode = 'BusinessHierarchy';
 			vm.searchOptions.keyword = currentFavorite.SearchTerm;
 			vm.resetSchedulePage();
 		};
 
 		vm.hideSearchIfNoSelectedTeam = function () {
-			if (angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0) {
+			if (angular.isArray(vm.selectedGroups.groupIds) && vm.selectedGroups.groupIds.length > 0) {
 				return 'visible';
 			}
 			return 'hidden';
@@ -390,17 +393,17 @@
 
 		vm.orgPickerSelectedText = function () {
 			var text = '';
-			switch (vm.selectedTeamIds.length) {
+			switch (vm.selectedGroups.groupIds.length) {
 				case 0:
 					text = $translate.instant('SelectOrganization');
 					break;
 
 				case 1:
-					text = vm.teamNameMap[vm.selectedTeamIds[0]];
+					text = vm.teamNameMap[vm.selectedGroups.groupIds[0]];
 					break;
 
 				default:
-					text = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.selectedTeamIds.length);
+					text = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.selectedGroups.groupIds.length);
 					break;
 			}
 			return text;
@@ -420,9 +423,9 @@
 			loggedonUsersTeamId.resolve(null);
 			vm.onFavoriteSearchInitDefer.resolve();
 		}
-		vm.getGroupPagesAsync = function() {
+		vm.getGroupPagesAsync = function () {
 			var dateStr = moment(vm.scheduleDate).format('YYYY-MM-DD');
-			groupPageService.fetchAvailableGroupPages(dateStr, dateStr).then(function(data) {
+			groupPageService.fetchAvailableGroupPages(dateStr, dateStr).then(function (data) {
 				vm.availableGroups = data;
 			});
 		};
@@ -456,14 +459,14 @@
 
 			if (!$stateParams.do) {
 				if (defaultFavoriteSearch) {
-					replaceArrayValues(defaultFavoriteSearch.TeamIds, vm.selectedTeamIds);
+					replaceArrayValues(defaultFavoriteSearch.TeamIds, vm.selectedGroups.groupIds);
 					vm.searchOptions.keyword = defaultFavoriteSearch.SearchTerm;
 					vm.selectedFavorite = defaultFavoriteSearch;
-				} else if (loggedonUsersTeamId && vm.selectedTeamIds.length === 0) {
-					replaceArrayValues([loggedonUsersTeamId], vm.selectedTeamIds);
+				} else if (loggedonUsersTeamId && vm.selectedGroups.groupIds.length === 0) {
+					replaceArrayValues([loggedonUsersTeamId], vm.selectedGroups.groupIds);
 				}
 			}
-			
+
 			vm.resetSchedulePage();
 		});
 

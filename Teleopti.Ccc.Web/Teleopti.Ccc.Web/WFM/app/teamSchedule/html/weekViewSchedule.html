@@ -7,26 +7,21 @@
 	</div>
 </div>
 
-<div class="team-schedule panel wfm-block material-depth-1 week-view" ng-click="vm.showDatePicker && (vm.showDatePicker = false)" wait-for="vm.boostrap">
+<div class="team-schedule panel wfm-block material-depth-1 week-view" ng-click="vm.showDatePicker && (vm.showDatePicker = false)"
+ wait-for="vm.boostrap">
 	<div class="teamschedule-header">
 		<div class="leftside-part">
 
-			<favorite-search
-				current-favorite="vm.selectedFavorite"
-				apply-favorite="vm.applyFavorite(currentFavorite)"
-				get-search="vm.getSearch()"
-				on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
+			<favorite-search current-favorite="vm.selectedFavorite" apply-favorite="vm.applyFavorite(currentFavorite)" get-search="vm.getSearch()"
+			 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
 
-			<organization-picker
-				sites-and-teams="vm.sitesAndTeams"
-				class="organization-picker-container"
-				on-open="vm.searchOptions.focusingSearch = false"
-				on-close="vm.onSelectedTeamsChanged()"
-				selected-text="vm.orgPickerSelectedText()"
-				selected-team-ids="vm.selectedTeamIds"></organization-picker>
+			<group-page-picker ng-if="vm.toggles.Wfm_GroupPages_45057" group-pages="vm.availableGroups" selected-groups="vm.selectedGroups"></group-page-picker>
 
-			<div class="people-search-container inline-block"
-			     ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
+			<organization-picker ng-if="!vm.toggles.Wfm_GroupPages_45057" sites-and-teams="vm.sitesAndTeams" class="organization-picker-container"
+			 on-open="vm.searchOptions.focusingSearch = false" on-close="vm.onSelectedTeamsChanged()" selected-text="vm.orgPickerSelectedText()"
+			 selected-team-ids="vm.selectedGroups.groupIds"></organization-picker>
+
+			<div class="people-search-container inline-block" ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
 				<wfm-multiple-search-input search-options="vm.searchOptions" title="vm.searchPlaceholder" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
 			</div>
 
@@ -34,11 +29,8 @@
 				<team-schedule-datepicker selected-date="vm.startOfWeek" status="vm.showDatePicker" on-date-change="vm.onStartOfWeekChanged()" step="7"></team-schedule-datepicker>
 			</span>
 
-			<view-changer selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"
-				selected-team-ids="vm.selectedTeamIds"
-				team-name-map="vm.teamNameMap"
-						selected-favorite="vm.selectedFavorite"
-						  selected-sort-option="vm.sortOption"></view-changer>
+			<view-changer selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword" selected-team-ids="vm.selectedGroups.groupIds"
+			 team-name-map="vm.teamNameMap" selected-favorite="vm.selectedFavorite" selected-sort-option="vm.sortOption"></view-changer>
 		</div>
 	</div>
 
@@ -85,4 +77,3 @@
 		</div>
 	</div>
 </div>
-

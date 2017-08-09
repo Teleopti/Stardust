@@ -128,7 +128,7 @@
 				if (!!ctrl.selectedGroups.groupPageId) {
 					resetSelectedGroups();
 				}
-				
+
 				ctrl.selectedGroups.groupPageId = parentGroupCopy.id;
 			}
 			if (parentGroupCopy.isChecked()) {
@@ -224,7 +224,7 @@
 		};
 
 		function resetSelectedGroups() {
-			
+
 			var parentGroupCopies = ctrl.groupsInView[ctrl.selectedGroups.mode].filter(function (g) {
 				if (!g.origin.isParent)
 					return false;
@@ -350,6 +350,11 @@
 			element.focus();
 		}
 
+		function repaintPanel() {
+			$scope.$broadcast('$md-resize');
+			updateSelectedGroupsInView();
+		}
+
 		function createPanel() {
 			var menuPosition = $mdPanel.newPanelPosition().relativeTo($element)
 				.addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW);
@@ -363,7 +368,7 @@
 				attachTo: angular.element(document.body), // must-have for text inputs on ie11
 				position: menuPosition,
 				onOpenComplete: function () {
-					$scope.$broadcast('$md-resize');
+					repaintPanel();
 
 					if (ctrl.onOpen)
 						ctrl.onOpen();
