@@ -13,22 +13,6 @@
 
     function TreePickerController() {
         var ctrl = this;
-
-        ctrl.$onInit = function () {
-            ctrl.validData = validateData();
-        };
-
-        function validateData() {
-            if (ctrl.data.length == undefined && !ctrl.data.hasOwnProperty('parents')){
-                throw new Error('fix the data jao');
-                return;
-            } 
-            else {
-                return JSON.parse(JSON.stringify(ctrl.data));
-            } 
-        }
-
-
     }
 
 

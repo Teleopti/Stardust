@@ -6,16 +6,16 @@
         '$scope',
         function($scope) {
             $scope.data = {
-                parents: [
+                nodes: [
                     {
                         name: 'parent1',
-                        children: [
+                        nodes: [
                             {
                                 name: 'child1',
-                                children: [
+                                nodes: [
                                     {
                                         name: 'grandchild1',
-                                        children: []
+                                        nodes: []
                                     }
                                 ]
                             }
@@ -23,22 +23,22 @@
                     },
                     {
                         name: 'parent2',
-                        children: [
+                        nodes: [
                             {
                                 name: 'child1',
-                                children: [
+                                nodes: [
                                     {
                                         name: 'grandchild1',
-                                        children: []
+                                        nodes: []
                                     }
                                 ]
                             },
                             {
                                 name: 'child2',
-                                children: [
+                                nodes: [
                                     {
                                         name: 'grandchild2',
-                                        children: []
+                                        nodes: []
                                     }
                                 ]
                             }
@@ -49,4 +49,6 @@
 
         }
     ]);
+
+
 })();
