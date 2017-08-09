@@ -22,6 +22,9 @@
 		vm.filteredAgents = [];
 		vm.stateCodes = [];
 		vm.filteredAgentsShown = 100;
+		vm.organization;
+		vm.selectSites = selectSites;
+		vm.openPicker = false;
 
 		var sendingBatchWithRandomStatesTrigger = null;
 
@@ -52,6 +55,16 @@
 					vm.filteredAgents = vm.agents.slice(0);
 					showMoreAgents();
 				});
+			
+			rtaToolService.getOrganization().then(function(result){
+				vm.organization = result;
+				vm.organization.Sites.forEach(function(site){
+					site.isChecked = false;
+					site.toggle = function() {
+						site.isChecked = !site.isChecked;
+					}
+				});
+			});
 		})();
 
 
@@ -175,6 +188,20 @@
 		function showMoreAgents() {
 			vm.noMoreLoading = vm.filteredAgentsShown >= vm.filteredAgents.length;
 			vm.loadingText = vm.noMoreLoading ? "No more agents to load" : "Load more";
+		}
+
+		function selectSites() {
+			vm.openPicker = false;
+			var selectedSiteIds = vm.organization.Sites.filter(function(site){
+				return site.isChecked;
+			}).map(function(site){
+				return site.SiteId;
+			});
+
+			rtaToolService.getAgentsForSites(selectedSiteIds).then(function(result){
+				vm.filteredAgents = result;
+			});
+
 		}
 	};
 })();

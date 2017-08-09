@@ -49,6 +49,22 @@
 						</div>
 
 						<div class="con-flex">
+							<div class="relative">
+								<input type="text" placeholder="Select sites" ng-click="vm.openPicker = !vm.openPicker" />
+								<form ng-cloak name="form" class="wfm-form wfm-dropdown-panel panel material-depth-2 animate-show" novalidate ng-show="vm.openPicker">
+									<div ng-repeat="site in vm.organization.Sites">
+										<div class="wfm-checkbox">
+											<label>
+											<input type="checkbox" name="checkbox" value="{{site.SiteId}}" ng-click="site.toggle()">
+											<span class="wfm-checkbox-toggle"></span>
+											<span class="wfm-checkbox-label">{{site.SiteName}}</span>
+										</label>
+										</div>
+									</div>
+									<button class="wfm-btn wfm-btn-primary" ng-click="vm.selectSites()">Select site</button>
+								</form>
+
+							</div>
 						</div>
 					</div>
 				</div>

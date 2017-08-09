@@ -12,7 +12,9 @@
 		var service = {
 			getStateCodes: getStateCodes,
 			getAgents: getAgents,
-			sendBatch: sendBatch
+			getAgentsForSites: getAgentsForSites,
+			sendBatch: sendBatch,
+			getOrganization: getOrganization
 		}
 
 		return service;
@@ -25,8 +27,16 @@
 			return $resource('../RtaTool/Agents/For', {}, { query: { method: 'GET', isArray: true }}).query().$promise;
 		}
 
+		function getAgentsForSites(siteIds) {
+			return $resource('../RtaTool/Agents/For', {siteIds: siteIds}, { query: { method: 'GET', isArray: true }}).query().$promise;
+		}
+
 		function sendBatch(batch) {
 			return $resource('../Rta/State/Batch', {}, { query: { method: 'POST', }, }).query(batch).$promise;
+		}
+
+		function getOrganization() {
+			return $resource('../RtaTool/Organization/For', {}, { query: { method: 'GET', isArray: false }}).query().$promise;
 		}
 
 	};
