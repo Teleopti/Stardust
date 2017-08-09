@@ -273,8 +273,10 @@ namespace Teleopti.Ccc.Web.Areas.Permissions.Controllers
 			var role = _roleRepository.Get(roleId);
 			if (role.BuiltIn) return BadRequest(CannotModifyBuiltInRoleErrorMessage);
 
-			var teams = role.AvailableData.AvailableTeams.Where(t => teamId == t.Id.GetValueOrDefault()).ToArray();
-			teams.ForEach(role.AvailableData.DeleteAvailableTeam);
+			var teamsToBeDeleted = role.AvailableData.AvailableTeams.Where(t => teamId == t.Id.GetValueOrDefault()).ToArray();
+			var sitesToBeDeleted = teamsToBeDeleted.Select(t => t.Site);
+			teamsToBeDeleted.ForEach(role.AvailableData.DeleteAvailableTeam);
+			sitesToBeDeleted.ForEach(role.AvailableData.DeleteAvailableSite);
 
 			return Ok();
 		}

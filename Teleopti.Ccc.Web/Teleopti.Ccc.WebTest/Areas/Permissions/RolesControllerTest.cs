@@ -124,6 +124,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Permissions
 		}
 
 		[Test]
+		public void ShouldRemoveSiteThatTeamBelongsToWhenRemovingAvailableTeamAndMakingWholeSiteNotAvailableFromRole()
+		{		
+			var team1 = TeamFactory.CreateSimpleTeam().WithId();
+			var team2 = TeamFactory.CreateSimpleTeam().WithId();
+			var site = SiteFactory.CreateSimpleSite().WithId();
+			team1.Site = site;
+			team2.Site = site;
+
+			var agentRole = new ApplicationRole {Name = "Agent", AvailableData = new AvailableData()}.WithId();
+
+			agentRole.AvailableData.AddAvailableTeam(team1);
+			agentRole.AvailableData.AddAvailableTeam(team2);
+			agentRole.AvailableData.AddAvailableSite(site);
+			ApplicationRoleRepository.Add(agentRole);
+			Target.RemoveAvailableTeam(agentRole.Id.Value, team1.Id.GetValueOrDefault());
+
+			agentRole.AvailableData.AvailableTeams.Should().Have.Count.EqualTo(1);
+			agentRole.AvailableData.AvailableSites.Should().Have.Count.EqualTo(0);
+		}
+
+		[Test]
 		public void ShouldRemoveAvailableSiteFromRole()
 		{			
 			var site = SiteFactory.CreateSimpleSite();
