@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	'use strict';
 
 	angular.module('wfm.teamSchedule').directive('viewChanger', viewChangerDirective);
@@ -12,7 +12,7 @@
 			scope: {
 				keyword: '=?',
 				selectedDate: '=?',
-				selectedTeamIds: '=?',
+				selectedGroups: '=?',
 				teamNameMap: '=?',
 				selectedFavorite: '=?',
 				selectedSortOption: '=?'
@@ -34,15 +34,24 @@
 			'week': 'teams.weekView'
 		};
 
-		vc.changeView = function(viewState) {
+		vc.changeView = function (viewState) {
 			var params = {};
 			params.do = true;
 			if (angular.isDefined(vc.keyword)) params.keyword = vc.keyword;
 			if (angular.isDefined(vc.selectedDate)) params.selectedDate = vc.selectedDate;
-			if (angular.isDefined(vc.selectedTeamIds)) params.selectedTeamIds = vc.selectedTeamIds;
 			if (angular.isDefined(vc.teamNameMap)) params.teamNameMap = vc.teamNameMap;
 			if (angular.isDefined(vc.selectedFavorite)) params.selectedFavorite = vc.selectedFavorite;
 			if (angular.isDefined(vc.selectedSortOption)) params.selectedSortOption = vc.selectedSortOption;
+			if (angular.isDefined(vc.selectedGroups)) {
+				if (vc.selectedGroups.mode === 'BusinessHierarchy') {
+					params.selectedTeamIds = vc.selectedGroups.groupIds;
+				} else {
+					params.selectedGroupPage = {
+						pageId: vc.selectedGroups.groupPageId,
+						groupIds: vc.selectedGroups.groupIds
+					};
+				}
+			}
 			$state.go(viewState, params);
 		};
 	}

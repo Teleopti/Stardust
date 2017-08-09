@@ -35,8 +35,13 @@
 			groupIds: [],
 			groupPageId: ''
 		};
-		if (angular.isArray($stateParams.selectedTeamIds)) {
+		if (angular.isArray($stateParams.selectedTeamIds) && $stateParams.selectedTeamIds.length > 0) {
 			replaceArrayValues($stateParams.selectedTeamIds, vm.selectedGroups.groupIds);
+		}
+		else if ($stateParams.selectedGroupPage && $stateParams.selectedGroupPage.groupIds.length > 0) {
+			replaceArrayValues($stateParams.selectedGroupPage.groupIds, vm.selectedGroups.groupIds);
+			vm.selectedGroups.mode = 'GroupPages';
+			vm.selectedGroups.groupPageId = $stateParams.selectedGroupPage.pageId;
 		}
 
 		vm.lastCommandTrackId = '';
