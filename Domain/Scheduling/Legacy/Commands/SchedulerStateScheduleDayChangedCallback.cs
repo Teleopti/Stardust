@@ -24,11 +24,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	        }
         }
 
-        public void ScheduleDayChanged(IScheduleDay partBefore, IScheduleDay partAfter)
+        public void ScheduleDayChanged(IScheduleDay partBefore)
         {
-            if (partBefore != null && partAfter!=null)
+            if (partBefore != null)
             {
-                applyChangesToResourceContainer(partBefore, partAfter);
+	            var partAfter = partBefore.ReFetch();
+				applyChangesToResourceContainer(partBefore, partAfter);
                 markDaysToRecalculate(partBefore, partAfter);
             }
         }

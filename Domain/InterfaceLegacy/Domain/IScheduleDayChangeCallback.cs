@@ -7,6 +7,6 @@
     {
         void ScheduleDayBeforeChanging();
 
-        void ScheduleDayChanged(IScheduleDay partBefore, IScheduleDay partAfter);
+        void ScheduleDayChanged(IScheduleDay partBefore);
     }
 }

@@ -23,8 +23,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			ResourceCalculationContext.Fetch();
 		}
 
-		public void ScheduleDayChanged(IScheduleDay partBefore, IScheduleDay partAfter)
+		public void ScheduleDayChanged(IScheduleDay partBefore)
 		{
+			var partAfter = partBefore.ReFetch();
 			applyChangesToResourceContainer(partBefore, partAfter);
 			markModifiedDates(partBefore, partAfter);
 		}

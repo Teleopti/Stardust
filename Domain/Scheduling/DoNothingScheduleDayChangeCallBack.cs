@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 		}
 
-		public void ScheduleDayChanged(IScheduleDay partBefore, IScheduleDay partAfter)
+		public void ScheduleDayChanged(IScheduleDay partBefore)
 		{
 		}
 	}

@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
 			{
 				SetAuthorizationServiceExpectations();
 				Expect.Call(() => scheduleDayChangeCallback.ScheduleDayBeforeChanging()).IgnoreArguments();
-				Expect.Call(() => scheduleDayChangeCallback.ScheduleDayChanged(null, null)).IgnoreArguments();
+				Expect.Call(() => scheduleDayChangeCallback.ScheduleDayChanged(null)).IgnoreArguments();
 			}
 			using (mocks.Playback())
 			{

@@ -337,9 +337,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
 	                        foreach (var scheduleDay in partsBefore)
 							{
-								var partAfter = range.ReFetch(scheduleDay);
-
-								scheduleDayChangeCallback.ScheduleDayChanged(scheduleDay, partAfter);
+								scheduleDayChangeCallback.ScheduleDayChanged(scheduleDay);
 							}
 
 							var partAfter2 = range.ReFetch(part);
