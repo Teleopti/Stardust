@@ -23,16 +23,15 @@
 		vm.filteredAgents = [];
 		vm.stateCodes = [];
 		vm.filteredAgentsShown = 100;
-		vm.selectSites = selectSites;
-		vm.selectTeams = selectTeams;
+		vm.selectItems = selectItems;
 		vm.openSitePicker = false;
 		vm.openTeamPicker = false;
 		vm.organization = organization;
 		vm.toggleDropdown = toggleDropdown;
+		vm.closeDropdown = closeDropdown;
 		vm.searchSite = "";
 		vm.searchTeam = "";
-		vm.closeDropdown = closeDropdown;
-
+		
 		var sendingBatchWithRandomStatesTrigger = null;
 
 		(function init() {
@@ -201,29 +200,29 @@
 			vm.loadingText = vm.noMoreLoading ? "No more agents to load" : "Load more";
 		}
 
-		function selectSites() {
-			vm.openSitePicker = false;
-			var selectedSiteIds = vm.organization.Sites.filter(function (site) {
-				return site.isChecked;
-			}).map(function (site) {
-				return site.SiteId;
+		function selectItems(key) {
+			var items = [];
+			var params = { siteIds: [], teamIds: [] };
+
+			if (key === 1) items = vm.organization.Sites;
+			else items = vm.organization.Teams;
+
+			var selectedIds = items.filter(function (item) {
+				return item.isChecked;
+			}).map(function (item) {
+				return key===1 ? item.SiteId : item.TeamId;
 			});
 
-			rtaToolService.getAgentsForSites(selectedSiteIds).then(function (result) {
-				vm.filteredAgents = result;
-			});
+			if (key === 1) {
+				params.siteIds = selectedIds;
+				vm.openSitePicker = false;
+			}
+			else {
+				params.teamIds = selectedIds;
+				vm.openTeamPicker = false;
+			}
 
-		}
-
-		function selectTeams() {
-			vm.openTeamPicker = false;
-			var selectedTeamIds = vm.organization.Teams.filter(function (team) {
-				return team.isChecked;
-			}).map(function (team) {
-				return team.TeamId;
-			});
-
-			rtaToolService.getAgentsForTeams(selectedTeamIds).then(function (result) {
+			rtaToolService.getAgents(params).then(function (result) {
 				vm.filteredAgents = result;
 			});
 		}
@@ -237,13 +236,16 @@
 				vm.openTeamPicker = !vm.openTeamPicker;
 				if (vm.openSitePicker) vm.openSitePicker = false;
 			}
-			vm.searchSite = "";
-			vm.searchTeam = "";
+			resetSearchTerms();
 		}
 
 		function closeDropdown(key) {
 			if (key === 1) vm.openSitePicker = false;
 			else vm.openTeamPicker = false;
+			resetSearchTerms();
+		}
+
+		function resetSearchTerms() {
 			vm.searchSite = "";
 			vm.searchTeam = "";
 		}

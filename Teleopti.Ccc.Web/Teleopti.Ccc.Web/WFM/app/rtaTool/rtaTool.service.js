@@ -12,8 +12,6 @@
 		var service = {
 			getStateCodes: getStateCodes,
 			getAgents: getAgents,
-			getAgentsForSites: getAgentsForSites,
-			getAgentsForTeams: getAgentsForTeams,
 			sendBatch: sendBatch,
 			getOrganization: getOrganization
 		}
@@ -24,16 +22,8 @@
 			return $resource('../RtaTool/PhoneStates/For', {}, { query: { method: 'GET', isArray: true } }).query().$promise;
 		}
 
-		function getAgents() {
-			return $resource('../RtaTool/Agents/For', {}, { query: { method: 'GET', isArray: true } }).query().$promise;
-		}
-
-		function getAgentsForSites(siteIds) {
-			return $resource('../RtaTool/Agents/For', { siteIds: siteIds }, { query: { method: 'GET', isArray: true } }).query().$promise;
-		}
-
-		function getAgentsForTeams(teamIds) {
-			return $resource('../RtaTool/Agents/For', { teamIds: teamIds }, { query: { method: 'GET', isArray: true } }).query().$promise;
+		function getAgents(params) {
+			return $resource('../RtaTool/Agents/For', params, { query: { method: 'GET', isArray: true } }).query().$promise;
 		}
 
 		function sendBatch(batch) {

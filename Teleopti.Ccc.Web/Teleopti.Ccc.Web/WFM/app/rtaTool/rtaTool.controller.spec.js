@@ -88,7 +88,7 @@ describe('RtaToolController', function () {
 
     c.apply(function () {
       vm.organization.Sites[0].isChecked = true;
-      vm.selectSites();
+      vm.selectItems(1);
     }
     );
 
@@ -122,7 +122,7 @@ describe('RtaToolController', function () {
 
     c.apply(function () {
       vm.organization.Teams[0].isChecked = true;
-      vm.selectTeams();
+      vm.selectItems(2);
     }
     );
 
