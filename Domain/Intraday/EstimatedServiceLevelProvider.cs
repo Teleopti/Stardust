@@ -95,6 +95,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var scheduledStaffingInterval = scheduledStaffing
 				.SingleOrDefault(x => x.Id == interval.SkillId && x.StartDateTime == interval.StartTime).StaffingLevel;
 			var task = forecastedCalls.CallsPerSkill[skill.Id.Value].FirstOrDefault(x => x.StartTime == interval.StartTime);
+
+			if(task == null)
+				return new EslInterval();
+
 			var esl = serviceCalculatorService.ServiceLevelAchievedOcc(
 				scheduledStaffingInterval,
 				serviceAgreement.ServiceLevel.Seconds,
