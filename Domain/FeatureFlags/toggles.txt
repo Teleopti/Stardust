@@ -146,7 +146,7 @@ ResourcePlanner_RespectSkillGroupShoveling_44156 = RC
 ResourcePlanner_OvertimeNightShifts_44311 = true
 ResourcePlanner_SchedulingIslands_44757 = RC
 
-Wfm_DisplayOnlineHelp_39402 = RC
+Wfm_DisplayOnlineHelp_39402 = true
 
 ETL_SpeedUpPersonPeriodNightly_38097 = true
 ETL_SpeedUpNightlyReloadDatamart_38131 = true
