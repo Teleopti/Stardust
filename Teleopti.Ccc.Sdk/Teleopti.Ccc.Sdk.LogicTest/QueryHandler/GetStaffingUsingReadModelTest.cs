@@ -14,11 +14,8 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.IntraIntervalAnalyze;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -26,7 +23,6 @@ using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
-using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
@@ -38,7 +34,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private IPersonRepository personRepository;
 		private ICurrentScenario currentScenario;
 		private ISkillRepository skillRepository;
-		private IDateTimePeriodAssembler dateTimePeriodAssembler;
 		private IResourceCalculation resourceOptimizationHelper;
 		private FakeSkillDayRepository skillDayRepository;
 		private FakeMultisiteDayRepository multisiteDayRepository;
@@ -51,7 +46,6 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		{
 			var userNow = new DateTime(2014, 4, 1, 8, 0, 0, DateTimeKind.Utc);
 			skillCombinationResourceRepository = new FakeSkillCombinationResourceRepository(new ThisIsNow(userNow));
-			dateTimePeriodAssembler = new DateTimePeriodAssembler();
 			personRepository = new FakePersonRepositoryLegacy();
 			currentScenario = new FakeCurrentScenario();
 			skillRepository = new FakeSkillRepository();
@@ -68,9 +62,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			multisiteDayRepository = new FakeMultisiteDayRepository();
 			var skillLoadHelper = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository);
 			skillStaffingIntervalProvider = new SkillStaffingIntervalProvider(null, skillCombinationResourceRepository, 
-				skillRepository, resourceOptimizationHelper, new ExtractSkillForecastIntervals(skillDayRepository, currentScenario), new FakeActivityRepository(), skillDayRepository, currentScenario );
+				skillRepository, resourceOptimizationHelper, new ExtractSkillForecastIntervals(skillDayRepository, currentScenario), new FakeActivityRepository());
 			target = new GetStaffingUsingReadModel(new FakeCurrentUnitOfWorkFactory(), skillRepository, currentScenario, skillLoadHelper, new FakeActivityRepository(), 
-				skillStaffingIntervalProvider);
+				skillStaffingIntervalProvider, skillDayRepository);
 		}
 
 		[Test]
@@ -202,7 +196,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			skillRepository.Stub(x => x.FindAllWithSkillDays(period)).Return(skills);
 
 			var skillLoadHelper = new SkillDayLoadHelper(skillDayRepository, multisiteDayRepository);
-			target = new GetStaffingUsingReadModel(new FakeCurrentUnitOfWorkFactory(), skillRepository, currentScenario, skillLoadHelper, new FakeActivityRepository(), skillStaffingIntervalProvider);
+			target = new GetStaffingUsingReadModel(new FakeCurrentUnitOfWorkFactory(), skillRepository, currentScenario, skillLoadHelper, new FakeActivityRepository(), skillStaffingIntervalProvider, skillDayRepository);
 
 			target.GetSkillDayDto(new GetSkillDaysByPeriodQueryDto
 			{

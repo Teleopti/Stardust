@@ -24,13 +24,15 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IActivityRepository _activityRepository;
 		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
+		private readonly ISkillDayRepository _skillDayRepository;
 
 		public GetStaffingUsingReadModel(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			ISkillRepository skillRepository,
 			ICurrentScenario scenarioRepository,
 			ISkillDayLoadHelper skillDayLoadHelper,
 			IActivityRepository activityRepository,
-			SkillStaffingIntervalProvider skillStaffingIntervalProvider)
+			SkillStaffingIntervalProvider skillStaffingIntervalProvider,
+			ISkillDayRepository skillDayRepository)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_skillRepository = skillRepository;
@@ -38,6 +40,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_activityRepository = activityRepository;
 			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
+			_skillDayRepository = skillDayRepository;
 		}
 
 		public ICollection<SkillDayDto> GetSkillDayDto(GetSkillDaysByPeriodQueryDto query)
@@ -56,13 +59,15 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				}
 				var requestedScenario = _scenarioRepository.Current();
 				var period = dateOnlyPeriod.ToDateTimePeriod(timeZoneInfo);
+				var dayCollection = dateOnlyPeriod.DayCollection();
 				var skillDaysPeriod = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
 				var skills = _skillRepository.FindAllWithSkillDays(skillDaysPeriod.ToDateOnlyPeriod(timeZoneInfo)).ToArray();
-				var dayCollection = dateOnlyPeriod.DayCollection();
 				var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, requestedScenario);
 				var skillIdList = skills.Any(x => x is MultisiteSkill) ? skillDaysBySkills.Keys.Select(x => x.Id).ToArray() 
 										: skills.Select(y => y.Id).ToArray();
-				var staffingPerSkill = _skillStaffingIntervalProvider.StaffingIntervalsForSkills(skillIdList,  new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1)), false);
+				var staffingPerSkill = _skillStaffingIntervalProvider.StaffingIntervalsForSkills(skillIdList,  skillDaysPeriod, false);
+
+				SetSkillStaffPeriodWithFStaffAndEsl(staffingPerSkill.ToList(), skills, skillDaysBySkills, timeZoneInfo);
 
 				foreach (var skill in skills)
 				{
@@ -89,6 +94,44 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 			}
 			return returnList;
+		}
+
+		private void SetSkillStaffPeriodWithFStaffAndEsl(List<SkillStaffingInterval> skillStaffingIntervals, ISkill[] skills, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysPerSkill, TimeZoneInfo timeZone)
+		{
+
+			foreach (var skill in skills)
+			{
+				var staffingIntervals = skillStaffingIntervals.Where(x => x.SkillId == skill.Id.Value);
+				var skillDays = skillDaysPerSkill[skill];
+				foreach (var skillDay in skillDays)
+				{
+					foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
+					{
+						var intervalStartLocal = skillStaffPeriod.Period.StartDateTime;
+						var scheduledStaff =
+							staffingIntervals.FirstOrDefault(x => x.StartDateTime == intervalStartLocal);
+						if (scheduledStaff == null)
+							continue;
+						skillStaffPeriod.SetCalculatedResource65(0);
+						if (scheduledStaff.StaffingLevel > 0)
+						{
+							skillStaffPeriod.SetCalculatedResource65(scheduledStaff.StaffingLevel);
+						}
+					}
+				}
+
+				foreach (var skillStaffingInterval in staffingIntervals)
+				{
+					var skillDay = skillDays.FirstOrDefault(x => x.CurrentDate.Date ==
+																 skillStaffingInterval.StartDateTime.Date);
+					var skillStaffPeriod = skillDay?.SkillStaffPeriodCollection
+						.FirstOrDefault(y => y.Period.StartDateTime == skillStaffingInterval.StartDateTime);
+					if (skillStaffPeriod == null)
+						continue;
+					skillStaffingInterval.Forecast = skillStaffPeriod.FStaff;
+					skillStaffingInterval.EstimatedServiceLevel = skillStaffPeriod.EstimatedServiceLevel;
+				}
+			}
 		}
 
 		private ICollection<SkillDataDto> GetSkillDataCollection(IEnumerable<SkillStaffingInterval> staffingDay, TimeZoneInfo timeZoneInfo)
