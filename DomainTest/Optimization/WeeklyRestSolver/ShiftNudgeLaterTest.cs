@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.WeeklyRestSolver
 	public class ShiftNudgeLaterTest
 	{
 		private MockRepository _mocks;
-		private IShiftNudgeLater _target;
+		private ShiftNudgeLater _target;
 		private IScheduleDay _scheduleDay;
 		private ITeamBlockClearer _teamBlockClearer;
 		private ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;

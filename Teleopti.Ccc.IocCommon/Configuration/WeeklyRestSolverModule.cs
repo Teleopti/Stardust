@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<ShiftNudgeEarlier>().As<IShiftNudgeEarlier>();
+			builder.RegisterType<ShiftNudgeEarlier>();
 			builder.RegisterType<ContractWeeklyRestForPersonWeek>().As<IContractWeeklyRestForPersonWeek>();
 			builder.RegisterType<DayOffToTimeSpanExtractor>().As<IDayOffToTimeSpanExtractor>();
 			builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WeeklyRestSolverService>();
 			builder.RegisterType<DeleteScheduleDayFromUnsolvedPersonWeek>().SingleInstance();
 			builder.RegisterType<IdentifyDayOffWithHighestSpan>();
-			builder.RegisterType<ShiftNudgeLater>().As<IShiftNudgeLater>();
+			builder.RegisterType<ShiftNudgeLater>();
 			builder.RegisterType<ShiftNudgeManager>().As<IShiftNudgeManager>();
 			builder.RegisterType<DayOffMaxFlexCalculator>().As<IDayOffMaxFlexCalculator>();
 			builder.RegisterType<EnsureWeeklyRestRule>().As<IEnsureWeeklyRestRule>();

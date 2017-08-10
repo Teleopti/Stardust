@@ -11,15 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 
 namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
-	public interface IShiftNudgeEarlier
-	{
-		bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
-			SchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder,
-			IOptimizationPreferences optimizationPreferences, bool firstNudge);
-	}
-
-	public class ShiftNudgeEarlier : IShiftNudgeEarlier
+	public class ShiftNudgeEarlier
 	{
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
