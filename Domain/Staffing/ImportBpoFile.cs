@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -111,17 +112,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 				DateTime sd, ed;
 				double d;
 				
-				if (!DateTime.TryParse(bpoLineTokens[startdatetime], out sd))
+				if (!DateTime.TryParse(bpoLineTokens[startdatetime], importFormatProvider, DateTimeStyles.None, out sd))
 				{
 					result.Success = false;
 					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, Resources.ImportBpoWrongDateFormat));
 				}
-				if (!DateTime.TryParse(bpoLineTokens[enddatetime], out ed))
+				if (!DateTime.TryParse(bpoLineTokens[enddatetime],importFormatProvider,DateTimeStyles.None, out ed))
 				{
 					result.Success = false;
 					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, Resources.ImportBpoWrongDateFormat));
 				}
-				if (!double.TryParse(bpoLineTokens[resources], out d))
+				if (!double.TryParse(bpoLineTokens[resources],NumberStyles.Float,importFormatProvider,out d))
 				{
 					result.Success = false;
 					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, Resources.ImportBpoWrongResourceFormat));
