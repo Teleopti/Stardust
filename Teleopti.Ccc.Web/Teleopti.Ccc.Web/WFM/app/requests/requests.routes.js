@@ -18,13 +18,13 @@
 			{
 				url: '/absenceAndText',
 				params: {
-					period: undefined,
 					agentSearchTerm: '',
 					selectedTeamIds: [],
 					filterEnabled: undefined,
 					onInitCallBack: undefined,
 					paging: {},
-					isUsingRequestSubmitterTimeZone: undefined
+					isUsingRequestSubmitterTimeZone: undefined,
+					getPeriod: undefined
 				},
 				templateUrl: 'app/requests/html/requests-absenceAndText.html',
 				controller: 'requestsAbsenceAndTextCtrl as vm'
