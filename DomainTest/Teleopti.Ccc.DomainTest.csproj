@@ -913,9 +913,7 @@
     <Compile Include="Optimization\WeeklyRestSolver\IdentifyDayOffWithHighestSpanTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\PersonWeekVoilatingWeeklyRestSpecificationTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayWorkShiftTimeExtractorTest.cs" />
-    <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeEarlierTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ContractWeeklyRestForPersonWeekTest.cs" />
-    <Compile Include="Optimization\WeeklyRestSolver\ShiftNudgeLaterTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\ScheduleDayIsLockedSpecificationTest.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\VerifyWeeklyRestAroundDayOffSpecificationTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
