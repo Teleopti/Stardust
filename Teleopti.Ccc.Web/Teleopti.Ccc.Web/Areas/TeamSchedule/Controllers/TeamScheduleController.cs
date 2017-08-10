@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			//var criteriaDictionary = SearchTermParser.Parse(input.Keyword);
 
 			var result =
-				_teamScheduleViewModelFactory.CreateViewModel(new SearchDaySchedulesInput
+				_teamScheduleViewModelFactory.CreateViewModelForGroups(new SearchDaySchedulesInput
 				{
 					GroupIds = input.SelectedGroupIds ?? new Guid[0],
 					CriteriaDictionary = new Dictionary<PersonFinderField, string>(),
