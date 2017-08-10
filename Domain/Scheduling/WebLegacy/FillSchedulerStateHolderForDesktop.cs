@@ -73,10 +73,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			IEnumerable<IPerson> agents,
 			DateOnlyPeriod period)
 		{
+			var toScheduleDays = new List<IScheduleDay>();
 			foreach (var agent in agents)
 			{
-				var fromScheduleDays = fromDic[agent].ScheduledDayCollection(period);
-				foreach (var fromScheduleDay in fromScheduleDays)
+				var fromScheduleDaysAgent = fromDic[agent].ScheduledDayCollection(period);
+				foreach (var fromScheduleDay in fromScheduleDaysAgent)
 				{
 					var toScheduleDay = toDic[agent].ScheduledDay(fromScheduleDay.DateOnlyAsPeriod.DateOnly, true);
 					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPersonAssignment>().ForEach(x => toScheduleDay.Add(x));
@@ -84,11 +85,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 					fromScheduleDay.PersonMeetingCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
 					fromScheduleDay.PersonRestrictionCollection().ForEach(x => ((ScheduleRange)toDic[agent]).Add(x));
 					fromScheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().ForEach(x => toScheduleDay.Add(x));
-
-					toDic.Modify(ScheduleModifier.Scheduler, toScheduleDay, NewBusinessRuleCollection.Minimum(),
-						new DoNothingScheduleDayChangeCallBack(), new ScheduleTagSetter(fromScheduleDay.ScheduleTag()));
+					fromScheduleDay.PersistableScheduleDataCollection().OfType<IAgentDayScheduleTag>().ForEach(x => toScheduleDay.Add(x));
+					toScheduleDays.Add(toScheduleDay);
 				}
 			}
+			//Maybe this should be done per agent instead? So far, testing has shown that fastest is to this with as many schedule days as possible though
+			//Could it cause OOM ex in REALLY big dbs?
+			toDic.Modify(ScheduleModifier.Scheduler, toScheduleDays, NewBusinessRuleCollection.Minimum(), new DoNothingScheduleDayChangeCallBack(), new NoScheduleTagSetter());
 		}
 	}
 }
