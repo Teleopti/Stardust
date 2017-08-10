@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         private string _shortName;
         private const int _nameLength = 50;
         private const int _shortNameLength = 25;
+	    private static int _increaseNameLength = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Description"/> class.
@@ -27,15 +28,25 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
             _shortName = shortName;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Description"/> struct.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-26
-        /// </remarks>
-        public Description(string name) : this(name,null)
+	    public Description(string name, string shortName, int increaseNameLength)
+	    {
+		    _name = name;
+		    _shortName = shortName;
+		    _increaseNameLength = increaseNameLength;
+			ValidateName(name, shortName);
+	    }
+
+
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Description"/> struct.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2007-10-26
+		/// </remarks>
+		public Description(string name) : this(name,null)
         {
         }
 
@@ -52,7 +63,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         {
             InParameter.NotStringEmptyOrWhiteSpace(nameof(name), name);
 
-            if (name.Length > _nameLength)
+            if (name.Length > _nameLength + _increaseNameLength)
                 throw new ArgumentOutOfRangeException(nameof(name), "String too long.");
             if (shortName!=null && shortName.Length > _shortNameLength)
                 throw new ArgumentOutOfRangeException(nameof(shortName), "String too long.");

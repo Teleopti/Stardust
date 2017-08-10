@@ -33,11 +33,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 
 			foreach (var group in groups)
 			{
-				var groupName = group.Key.Length > 50
-					? group.Key.Substring(0, 48) + ".."
-					: group.Key;
-
-				IRootPersonGroup rootGroup = new RootPersonGroup(groupName)
+				IRootPersonGroup rootGroup = new RootPersonGroup(group.Key, 50)
 				{
 					Entity = optionalColumn
 				};

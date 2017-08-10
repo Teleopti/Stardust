@@ -39,15 +39,22 @@ namespace Teleopti.Ccc.Domain.Common
             _description = new Description(description);
         }
 
-        /// <summary>
-        /// Gets or sets the description.
-        /// </summary>
-        /// <value>The description.</value>
-        /// <remarks>
-        /// Created by: kosalanp
-        /// Created date: 2008-06-23
-        /// </remarks>
-        public virtual Description Description
+	    protected PersonGroupBase(string description, int increaseNameLength)
+		    : this()
+	    {
+		    InParameter.NotStringEmptyOrNull(nameof(description), description);
+		    _description = new Description(description, null, increaseNameLength);
+	    }
+
+		/// <summary>
+		/// Gets or sets the description.
+		/// </summary>
+		/// <value>The description.</value>
+		/// <remarks>
+		/// Created by: kosalanp
+		/// Created date: 2008-06-23
+		/// </remarks>
+		public virtual Description Description
         {
             get { return _description; }
             set { _description = value; }
