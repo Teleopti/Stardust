@@ -125,6 +125,10 @@ namespace Teleopti.Ccc.Infrastructure.Licensing
 				{
 					DefinedLicenseOptionPaths.TeleoptiWfmSeatPlanner,
 					licenseService.TeleoptiWFMSeatPlannerEnabled
+				},
+				{
+					DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBpoExchange,
+					licenseService.TeleoptiWFMBPOExchangeEnabled
 				}
 			};
 

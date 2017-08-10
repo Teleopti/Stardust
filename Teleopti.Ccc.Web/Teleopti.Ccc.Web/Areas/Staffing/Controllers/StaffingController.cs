@@ -126,7 +126,9 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		public virtual IHttpActionResult GetLicense()
 		{
 			var currentName = _currentDataSource.CurrentName();
-			var isLicenseAvailible = DefinedLicenseDataFactory.HasLicense(currentName) ;
+			var isLicenseAvailible = DefinedLicenseDataFactory.HasLicense(currentName) &&
+									 DefinedLicenseDataFactory.GetLicenseActivator(currentName).EnabledLicenseOptionPaths.Contains(
+										 DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBpoExchange);
 			var returnVal = new returnObj
 			{
 				isLicenseAvailable = isLicenseAvailible
