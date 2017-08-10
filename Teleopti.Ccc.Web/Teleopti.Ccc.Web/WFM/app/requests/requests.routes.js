@@ -14,8 +14,9 @@
 				url: '/requests-refactor',
 				templateUrl: 'app/requests/html/requests.refactor.html',
 				controller: 'RequestsRefactorCtrl as vm'
-			}).state('requestsRefactor.absenceAndText',
+			}).state('requestsRefactor-absenceAndText',
 			{
+				parent: 'requestsRefactor',
 				url: '/absenceAndText',
 				params: {
 					agentSearchTerm: '',
@@ -28,8 +29,9 @@
 				},
 				templateUrl: 'app/requests/html/requests-absenceAndText.html',
 				controller: 'requestsAbsenceAndTextCtrl as vm'
-			}).state('requestsRefactor.shiftTrade',
+			}).state('requestsRefactor-shiftTrade',
 			{
+				parent: 'requestsRefactor',
 				url: '/shiftTrade',
 				templateUrl: 'app/requests/html/requests-shiftTrade.html',
 				controller: 'requestsShiftTradeCtrl as vm'

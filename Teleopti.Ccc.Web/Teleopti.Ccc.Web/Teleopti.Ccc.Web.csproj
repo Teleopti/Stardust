@@ -1514,6 +1514,8 @@
     <Content Include="WFM\app\requests\html\requests-absenceAndText.html" />
     <Content Include="WFM\app\requests\html\requests.refactor.html" />
     <Content Include="WFM\app\requests\html\requests-shiftTrade.html" />
+    <Content Include="WFM\app\requests\requests.controller refactor.spec.js" />
+    <Content Include="WFM\app\requests\requests.controller.absenceAndText.spec.js" />
     <Content Include="WFM\app\requests\requests.service.uigrid.utilities.js" />
     <Content Include="WFM\app\requests\requests-budget-allowance.directive.js" />
     <Content Include="WFM\app\requests\requests-budget-allowance.directive.spec.js" />

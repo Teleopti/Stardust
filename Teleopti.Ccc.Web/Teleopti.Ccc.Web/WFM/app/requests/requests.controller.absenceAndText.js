@@ -120,7 +120,7 @@
 			vm.filters = vm.requestFiltersMgr.Filters;
 			vm.subjectFilter = undefined;
 			vm.messageFilter = undefined;
-		};
+		}; 
 
 		vm.init = function () {
 			vm.defaultStatusesLoaded = false;
@@ -135,14 +135,12 @@
 			}
 			vm.initialized = true;
 			vm.filterEnabled = $stateParams.filterEnabled;
-
-			getRequestTypes();
-
 			vm.AllRequestStatuses = requestsDataService.getAllRequestStatuses(false);
 
 			if (!$stateParams.getPeriod)
 				return;
 
+			getRequestTypes();
 			setupWatch();
 		};
 
@@ -187,8 +185,10 @@
 						filters: vm.filters
 					};
 				},
-				function(newVal) {
-					if (newVal && vm.initialized) {
+				function (newVal) {
+					if (!newVal || !vm.initialized)
+						return;
+					if (validateDateParameters(newVal.period.startDate, newVal.period.endDate)) {
 						vm.period = newVal.period;
 						vm.reload($stateParams);
 					}
@@ -207,12 +207,15 @@
 
 		function initialiseGridStateHandling() {
 			requestGridStateService.restoreState(vm);
-
 			// delay the setup of these handlers a little to let the table load
 			$timeout(function() {
-					requestGridStateService.setupGridEventHandlers($scope, vm);
-				},
-				500);
+				requestGridStateService.setupGridEventHandlers($scope, vm);
+			}, 500);
+		}
+
+		function validateDateParameters(startDate, endDate) {
+			if (endDate === null || startDate === null) return false;
+			return !(moment(endDate).isBefore(startDate, 'day')) && moment(startDate).year() > 1969 && moment(endDate).year() > 1969;
 		}
 
 		function getGridOptions() {

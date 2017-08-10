@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsRefactorCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "$q", "$translate", "$state", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo"];
+	requestsController.$inject = ["$scope", "$state", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo"];
 
-	function requestsController($scope, $q, $translate, $state, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo) {
+	function requestsController($scope, $state, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo) {
 		var vm = this;
 
 		vm.searchPlaceholder = $translate.instant('Search');
@@ -42,7 +42,7 @@
 			vm.onFavoriteSearchInitDefer.resolve();
 		}
 
-		Object.defineProperty(this, 'selectedTeamIds', { value: [] });
+		Object.defineProperty(this, 'selectedTeamIds', { value: []});
 
 		var loggedonUsersTeamId = $q.defer();
 		if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {
@@ -69,7 +69,7 @@
 
 		vm.activeAbsenceAndTextTab = function () {
 			var params = {
-				agentSearchTerm: '',
+				agentSearchTerm: vm.agentSearchOptions.keyword,
 				selectedTeamIds: vm.selectedTeamIds,
 				filterEnabled: vm.filterEnabled,
 				onInitCallBack: vm.initFooter,
@@ -81,7 +81,7 @@
 			};
 
 			vm.period = vm.absencePeriod;
-			$state.go("requestsRefactor.absenceAndText", params);
+			$state.go("requestsRefactor-absenceAndText", params);
 		};
 
 
@@ -98,7 +98,7 @@
 
 			vm.period = vm.shiftTradePeriod;
 
-			$state.go("requestsRefactor.shiftTrade", params);
+			$state.go("requestsRefactor-shiftTrade", params);
 		};
 
 		vm.getSitesAndTeamsAsync = function () {
@@ -119,16 +119,6 @@
 				});
 			});
 		};
-
-		$q.all([toggleService.togglesLoaded])
-			.then(FavoriteSearchSvc.hasPermission().then(function (response) {
-				vm.hasFavoriteSearchPermission = response.data;
-			}))
-			.then(loggedonUsersTeamId.promise.then(function (defaultTeam) {
-				if (angular.isString(defaultTeam) && defaultTeam.length > 0)
-					replaceArrayValues([defaultTeam], vm.selectedTeamIds);
-			}))
-			.then(init);
 
 		vm.dateRangeCustomValidators = [{
 			key: 'max60Days',
@@ -187,7 +177,7 @@
 			return 'hidden';
 		};
 
-		function init() {
+		vm.init = function() {
 			initToggles();
 			vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
 			vm.dateRangeTemplateType = 'popup';
@@ -208,8 +198,7 @@
 			vm.onApproveBasedOnBusinessRulesFinished = onApproveBasedOnBusinessRulesFinished;
 			vm.getSitesAndTeamsAsync();
 			setReleaseNotification();
-
-			vm.onFavoriteSearchInitDefer.promise.then(function (defaultSearch) {
+			vm.onFavoriteSearchInitDefer.promise.then(function(defaultSearch) {
 				if (defaultSearch) {
 					replaceArrayValues(defaultSearch.TeamIds, vm.selectedTeamIds);
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
@@ -217,7 +206,17 @@
 				vm.activeAbsenceAndTextTab();
 				setupPeriodWatch();
 			});
-		}
+		};
+
+		$q.all([toggleService.togglesLoaded])
+			.then(FavoriteSearchSvc.hasPermission().then(function (response) {
+				vm.hasFavoriteSearchPermission = response.data;
+			}))
+			.then(loggedonUsersTeamId.promise.then(function (defaultTeam) {
+				if (angular.isString(defaultTeam) && defaultTeam.length > 0)
+					replaceArrayValues([defaultTeam], vm.selectedTeamIds);
+			}))
+			.then(vm.init);
 
 		function initToggles() {
 			vm.isRequestsEnabled = toggleService.Wfm_Requests_Basic_35986;
@@ -335,35 +334,33 @@
 			$scope.$watch(function () {
 				return vm.filterEnabled;
 			},
-			function () {
-				$scope.$broadcast('requests.filterEnabled.changed',
-					vm.filterEnabled);
-			});
+				function () {
+					$scope.$broadcast('requests.filterEnabled.changed',
+						vm.filterEnabled);
+				});
 
 			$scope.$watch(function () {
 				return vm.isUsingRequestSubmitterTimeZone;
 			},
-			function () {
-				$scope.$broadcast('requests.isUsingRequestSubmitterTimeZone.changed',
-					vm.isUsingRequestSubmitterTimeZone);
-			});
+				function () {
+					$scope.$broadcast('requests.isUsingRequestSubmitterTimeZone.changed',
+						vm.isUsingRequestSubmitterTimeZone);
+				});
 		}
 
+		function replaceArrayValues(from, to) {
+			to.splice(0);
+			from.forEach(function (x) { to.push(x); });
+		}
 
-	}
-
-	function replaceArrayValues(from, to) {
-		to.splice(0);
-		from.forEach(function (x) { to.push(x); });
-	}
-
-	function extractTeamNames(sites) {
-		var teamNameMap = {};
-		sites.forEach(function (site) {
-			site.Children.forEach(function (team) {
-				teamNameMap[team.Id] = team.Name;
+		function extractTeamNames(sites) {
+			var teamNameMap = {};
+			sites.forEach(function (site) {
+				site.Children.forEach(function (team) {
+					teamNameMap[team.Id] = team.Name;
+				});
 			});
-		});
-		return teamNameMap;
+			return teamNameMap;
+		}
 	}
 })();
