@@ -74,6 +74,33 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(permissions);
 		}
 
+		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchSchedulesByGroups")]
+		public virtual JsonResult<GroupScheduleViewModel> SearchSchedulesByGroups(SearchDaySchedulesFormData input)
+		{
+			var currentDate = input.Date;
+
+			if (input.SelectedGroupIds != null && !input.SelectedGroupIds.Any())
+				return
+					Json(new GroupScheduleViewModel { Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = "" });
+
+			//var criteriaDictionary = SearchTermParser.Parse(input.Keyword);
+
+			var result =
+				_teamScheduleViewModelFactory.CreateViewModel(new SearchDaySchedulesInput
+				{
+					GroupIds = input.SelectedGroupIds ?? new Guid[0],
+					CriteriaDictionary = new Dictionary<PersonFinderField, string>(),
+					DateInUserTimeZone = currentDate,
+					PageSize = input.PageSize,
+					CurrentPageIndex = input.CurrentPageIndex,
+					IsOnlyAbsences = input.IsOnlyAbsences,
+					SortOption = input.SortOption
+				});
+			result.Keyword = input.Keyword;
+
+			return Json(result);
+		}
+
 		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchSchedules")]
 		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(SearchDaySchedulesFormData input)
 		{

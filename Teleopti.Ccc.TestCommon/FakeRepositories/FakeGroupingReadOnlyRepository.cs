@@ -108,6 +108,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_readOnlyGroupPages = readOnlyGroupPages;
 			_details = readOnlyGroupDetails.ToArray();
 		}
+
+		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroups(Guid[] groupIds, DateOnlyPeriod queryRange)
+		{
+			return _details.Where(detail => groupIds.Contains(detail.GroupId));
+		}
 	}
 
 }

@@ -7,6 +7,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		public FakeCurrentScenario CurrentScenario;
 		public FakeUserTimeZone UserTimeZone;
 		public Areas.Global.FakePermissionProvider PermissionProvider;
+		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		private ITeam team;
 		private IPerson personInUtc;
 		private IPerson personInHongKong;
@@ -94,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] {team.Id.Value},
+					TeamIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(2020, 1, 1),
 					PageSize = 20,
@@ -332,7 +334,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false
 				});
-		
+
 
 			var schedule = result.Schedules.First();
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
@@ -460,7 +462,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false
 				});
-			
+
 
 			var schedule = result.Schedules.First();
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
@@ -504,7 +506,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false
 				});
-			
+
 
 
 			var schedule = result.Schedules.First();
@@ -556,7 +558,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false
 				});
-			
+
 
 
 			var schedule = result.Schedules.First();
@@ -611,7 +613,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false
 				});
-			
+
 
 			var schedule = result.Schedules.First();
 			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
@@ -668,7 +670,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false
 				});
-			
+
 
 
 			var schedule = result.Schedules.First();
@@ -727,7 +729,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false
 				});
-			
+
 
 			var schedule = result.Schedules.First();
 			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
@@ -774,7 +776,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false
 				});
-			
+
 			var schedules = result.Schedules;
 
 			schedules.Count().Should().Be.EqualTo(3);
@@ -808,7 +810,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false
 				});
-			
+
 			var schedules = result.Schedules;
 
 			schedules.Count().Should().Be.EqualTo(3);
@@ -984,7 +986,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		{
 			setUpPersonAndCulture();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			
+
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
@@ -1029,7 +1031,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			team = TeamFactory.CreateSimpleTeam().WithId();
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(scheduleDate.AddDays(-1)), team);
 			personPeriod.PersonContract.ContractSchedule.AddContractScheduleWeek(new ContractScheduleWeek());
-			
+
 			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
 			PeopleSearchProvider.Add(person1);
 			person1.AddPersonPeriod(personPeriod);
@@ -1220,7 +1222,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			ScheduleStorage.Add(personAssignment2);
 
 			var result = Target.CreateViewModelForPeople(
-				new []{personInUtc.Id.Value,personInHongKong.Id.Value},new DateOnly(scheduleDate) );
+				new[] { personInUtc.Id.Value, personInHongKong.Id.Value }, new DateOnly(scheduleDate));
 
 			result.Total.Should().Be(2);
 			var schedules = result.Schedules.ToArray();
@@ -1831,7 +1833,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		[SetUICulture("zh-CN")]
 		public void ShouldBasedOnUserUiCultureIfSortByFirstName() {
-			
+
 			var contract = ContractFactory.CreateContract("Contract");
 			contract.WithId();
 			team = TeamFactory.CreateSimpleTeam().WithId();
@@ -1843,7 +1845,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
 			PeopleSearchProvider.Add(person1);
 			person1.AddPersonPeriod(personPeriod);
-			
+
 			var person2 = PersonFactory.CreatePersonWithGuid("绿", "俄");
 			PeopleSearchProvider.Add(person2);
 			person2.AddPersonPeriod(personPeriod);
@@ -1852,7 +1854,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
 
-			
+
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
@@ -2113,7 +2115,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var schedules = result.Schedules.ToArray();
 
-		
+
 			schedules[0].Name.Should().Be.EqualTo("p3@k1");
 			schedules[3].Name.Should().Be.EqualTo("p2@c1");
 			schedules[6].Name.Should().Be.EqualTo("p1@e1");
@@ -2228,7 +2230,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			ScheduleStorage.Add(pa2);
 
-			
+
 
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
@@ -2289,7 +2291,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var pa3 = PersonAssignmentFactory.CreateEmptyAssignment(person3, scenario,
 				new DateTimePeriod(2020, 1, 1, 0, 2020, 1, 1, 23));
 			ScheduleStorage.Add(pa3);
-			
+
 
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
@@ -2422,7 +2424,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				});
 
 			var schedules = result.Schedules.ToArray();
-			
+
 			schedules[0].Name.Should().Be.EqualTo("p2@p2");
 			schedules[3].Name.Should().Be.EqualTo("p1@p1");
 			schedules[6].Name.Should().Be.EqualTo("p3@p3");
@@ -2481,6 +2483,169 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			schedules[6].Name.Should().Be.EqualTo("p1@p1");
 			schedules[7].Name.Should().Be.EqualTo("p4@p4");
 
+		}
+
+		[Test]
+		public void ShouldReturnCorrectProjectionWhenThereIsNoScheduleForScheduleSearchWithGroup()
+		{
+			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
+			PeopleSearchProvider.Add(person1);
+			var groupPage1 = new ReadOnlyGroupPage { PageId = Guid.NewGuid(), PageName = "group page 1" };
+			var groupPageDetails1 = new ReadOnlyGroupDetail
+			{
+				PageId = groupPage1.PageId,
+				GroupId = Guid.NewGuid(),
+				PersonId = person1.Id.Value
+			};
+
+			GroupingReadOnlyRepository.Has(new List<ReadOnlyGroupPage>()
+			{
+				groupPage1
+			}, new List<ReadOnlyGroupDetail>
+			{
+				groupPageDetails1
+			});
+
+			var searchTerm = new Dictionary<PersonFinderField, string>
+			{
+				{PersonFinderField.All, ""}
+			};
+
+			var result = Target.CreateViewModelForGroups(
+				new SearchDaySchedulesInput
+				{
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(2019, 12, 30),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					GroupIds = new Guid[] { groupPageDetails1.GroupId }
+				});
+
+			var schedules = result.Schedules.ToArray();
+
+			result.Total.Should().Be.EqualTo(1);
+			schedules[0].PersonId.Should().Be.EqualTo(person1.Id.ToString());
+		}
+
+		[Test]
+		public void ShouldReturnCorrectProjectionWhenThereIsMainShiftForScheduleSearchWithGroup() {
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			setUpPersonAndCulture();
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var groupPage1 = new ReadOnlyGroupPage { PageId = Guid.NewGuid(), PageName = "group page 1" };
+			var groupPageDetails1 = new ReadOnlyGroupDetail
+			{
+				PageId = groupPage1.PageId,
+				GroupId = Guid.NewGuid(),
+				PersonId = personInUtc.Id.Value
+			};
+
+			GroupingReadOnlyRepository.Has(new List<ReadOnlyGroupPage>()
+			{
+				groupPage1
+			}, new List<ReadOnlyGroupDetail>
+			{
+
+				groupPageDetails1
+			});
+
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
+				scenario,
+				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 9, 0, 0, DateTimeKind.Utc)),
+				ShiftCategoryFactory.CreateShiftCategory("Day", "blue"), ActivityFactory.CreateActivity("activity1", new Color()));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
+				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
+
+			ScheduleStorage.Add(pa);
+			var searchTerm = new Dictionary<PersonFinderField, string>
+			{
+				{PersonFinderField.FirstName, "Sherlock"}
+			};
+
+			var result = Target.CreateViewModelForGroups(
+				new SearchDaySchedulesInput
+				{
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false,
+					GroupIds = new Guid[] { groupPageDetails1.GroupId }
+				});
+			result.Schedules.Count().Should().Be.EqualTo(3);
+
+			var schedule = result.Schedules.First();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
+
+			var projectionVm = schedule.Projection.ToList();
+			projectionVm.Count.Should().Be.EqualTo(2);
+
+			projectionVm[0].Description.Should().Be.EqualTo("activity1");
+			projectionVm[0].Start.Should().Be.EqualTo("2020-01-01 08:00");
+			projectionVm[0].Minutes.Should().Be.EqualTo(60);
+
+			projectionVm[1].Description.Should().Be.EqualTo("activity2");
+			projectionVm[1].Start.Should().Be.EqualTo("2020-01-01 09:00");
+			projectionVm[1].Minutes.Should().Be.EqualTo(120);
+		}
+		[Test]
+		public void ShouldReturnShiftCategoryDescriptionWhenThereIsMainShiftForScheduleSearchWithGroup()
+		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			setUpPersonAndCulture();
+			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
+			CurrentScenario.FakeScenario(scenario);
+
+			var groupPage1 = new ReadOnlyGroupPage { PageId = Guid.NewGuid(), PageName = "group page 1" };
+			var groupPageDetails1 = new ReadOnlyGroupDetail
+			{
+				PageId = groupPage1.PageId,
+				GroupId = Guid.NewGuid(),
+				PersonId = personInUtc.Id.Value
+			};
+
+			GroupingReadOnlyRepository.Has(new List<ReadOnlyGroupPage>()
+			{
+				groupPage1
+			}, new List<ReadOnlyGroupDetail>
+			{
+
+				groupPageDetails1
+			});
+			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
+				scenario,
+				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 9, 0, 0, DateTimeKind.Utc)),
+				shiftCategory, ActivityFactory.CreateActivity("activity1", new Color()));
+			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
+				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
+
+			ScheduleStorage.Add(pa);
+			var searchTerm = new Dictionary<PersonFinderField, string>
+			{
+				{PersonFinderField.FirstName, "Sherlock"}
+			};
+
+			var result = Target.CreateViewModel(
+				new SearchDaySchedulesInput
+				{
+					TeamIds = new[] { team.Id.Value },
+					CriteriaDictionary = searchTerm,
+					DateInUserTimeZone = new DateOnly(scheduleDate),
+					PageSize = 20,
+					CurrentPageIndex = 1,
+					IsOnlyAbsences = false
+				});
+
+			var schedule = result.Schedules.First();
+			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
+			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
+
+			schedule.ShiftCategory.Name.Should().Be.EqualTo(shiftCategory.Description.Name);
 		}
 	}
 }

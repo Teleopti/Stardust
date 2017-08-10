@@ -13,6 +13,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public int CurrentPageIndex { get; set; }
 		public bool IsOnlyAbsences { get; set; }
 
+		public Guid[] SelectedGroupIds { get; set; }
+
 		public TeamScheduleSortOption SortOption { get; set; }
 	}
 }

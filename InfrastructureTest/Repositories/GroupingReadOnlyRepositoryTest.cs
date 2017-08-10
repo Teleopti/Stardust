@@ -452,9 +452,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 
 			personToTest.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1), personContract, team));
-			personToTest.TerminatePerson(new DateOnly(2017, 7, 1),  new PersonAccountUpdaterDummy());
-			anotherPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1), personContract, teamAnother ));
-			anotherPerson.TerminatePerson(new DateOnly(2017, 5, 31), new PersonAccountUpdaterDummy() ); 
+			personToTest.TerminatePerson(new DateOnly(2017, 7, 1), new PersonAccountUpdaterDummy());
+			anotherPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1), personContract, teamAnother));
+			anotherPerson.TerminatePerson(new DateOnly(2017, 5, 31), new PersonAccountUpdaterDummy());
 
 			WithUnitOfWork.Do(() =>
 			{
@@ -493,6 +493,89 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				orgs[team.Site.Id].First().GroupName.Should().Be.EqualTo("Dummy Site/Dummy Team 1");
 				result[normalGroups.First().PageId].Count().Should().Be.EqualTo(1);
 				result[normalGroups.First().PageId].First().GroupName.Should().Be.EqualTo("dummyContract");
+			});
+		}
+
+		[Test]
+		public void ShouldReturnAvailaleGroupDetailsForMutilpleGroupsBasedOnPeriod()
+		{
+			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+			var anotherPerson = PersonFactory.CreatePerson("dummyAgent2");
+			var team = TeamFactory.CreateTeam("Dummy Team", "Dummy Site");
+			var teamAnother = TeamFactory.CreateSimpleTeam("Dummy Team 2");
+			teamAnother.Site = team.Site;
+			var activity = new Activity("dummy activity");
+			var skill = SkillFactory.CreateSkill("dummy skill");
+			skill.Activity = activity;
+			var personContract = PersonContractFactory.CreatePersonContract();
+
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				TeamRepository.Add(teamAnother);
+				ActivityRepository.Add(activity);
+				SkillTypeRepository.Add(skill.SkillType);
+				SkillRepository.Add(skill);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+			});
+
+			var personPeriod = new PersonPeriod(new DateOnly(2017, 6, 1),
+												personContract,
+												team);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
+			personToTest.AddPersonPeriod(personPeriod);
+			personToTest.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1), personContract, team));
+
+			anotherPerson.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 7, 1), personContract, teamAnother));
+
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.Add(personToTest);
+				PersonRepository.Add(anotherPerson);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var period = new DateOnlyPeriod(new DateOnly(2017, 5, 28), new DateOnly(2017, 06, 2));
+				var gps = Target.AvailableGroupsBasedOnPeriod(period).ToList();
+
+				var result = Target.DetailsForGroups(new[] { personContract.Contract.Id.Value }, period);
+				var personIds = result.Select(d => d.PersonId).Distinct();
+				result.Count().Should().Be.EqualTo(2);
+				personIds.Count().Should().Be.EqualTo(1);
+				result.First().FirstName.Should().Be.EqualTo("dummyAgent1");
+				result.First().PersonId.Should().Be.EqualTo(personToTest.Id.Value);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var period = new DateOnlyPeriod(new DateOnly(2016,11 , 28), new DateOnly(2016, 12, 28));
+				var gps = Target.AvailableGroupsBasedOnPeriod(period).ToList();
+
+				var result = Target.DetailsForGroups(new[] { personContract.Contract.Id.Value }, period);
+				var personIds = result.Select(d => d.PersonId).Distinct();
+				result.Count().Should().Be.EqualTo(0);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var period = new DateOnlyPeriod(new DateOnly(2017, 7, 1), new DateOnly(2017, 12, 28));
+				var gps = Target.AvailableGroupsBasedOnPeriod(period).ToList();
+
+				var result = Target.DetailsForGroups(new[] { personContract.Contract.Id.Value }, period);
+				var personIds = result.Select(d => d.PersonId).Distinct();
+				result.Count().Should().Be.EqualTo(2);
+				result.Select(p => p.PersonId).Distinct().Should().Be.Equals(2);
+				
+				result.Select(p => p.PersonId).Contains(personToTest.Id.Value).Should().Be.EqualTo(true);
 			});
 		}
 	}

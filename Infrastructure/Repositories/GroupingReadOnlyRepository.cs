@@ -216,6 +216,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetReadOnly(true)
 				.List<ReadOnlyGroupDetail>();
 		}
+
+		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroups(Guid[] groupIds, DateOnlyPeriod queryRange)
+		{
+			const string sql =
+				"exec [ReadModel].[LoadPeopleInGroups] @businessUnitId=:businessUnitId, @startDate=:startDate, @endDate=:endDate, @groupIds=:groupIds";
+
+			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
+				.SetGuid("businessUnitId", getBusinessUnitId())
+				.SetDateOnly("startDate", queryRange.StartDate)
+				.SetDateOnly("endDate", queryRange.EndDate)
+				.SetString("groupIds",string.Join(",", groupIds))
+				.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
+				.SetReadOnly(true)
+				.List<ReadOnlyGroupDetail>();
+		}
 	}
 
 }

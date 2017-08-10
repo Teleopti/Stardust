@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 {
 	public interface ITeamScheduleViewModelFactory
 	{
+		GroupScheduleViewModel CreateViewModelForGroups(SearchDaySchedulesInput input);
 		GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input);
 		GroupScheduleViewModel CreateViewModelForPeople(Guid[] personIds, DateOnly scheduleDate);
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public int CurrentPageIndex { get; set; }
 		public bool IsOnlyAbsences { get; set; }
 		public TeamScheduleSortOption SortOption { get; set; }
-
+		public Guid[] GroupIds { get; set; }
 	}
 
 	public enum TeamScheduleSortOption
