@@ -68,8 +68,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		[UnitOfWork, ReadModelUnitOfWork, HttpGet, Route("RtaTool/Organization/For")]
 		public virtual IHttpActionResult GetOrganization()
 		{
-			var availableSites = _teamCardReader.Read().GroupBy(x => x.SiteId).Select(x=> new{SiteId = x.Key,SiteName = x.FirstOrDefault()?.SiteName}).ToArray();
-			var availableTeams = _teamCardReader.Read().GroupBy(x => x.TeamId).Select(x => new { TeamId = x.Key, TeamName = x.FirstOrDefault()?.TeamName }).ToArray(); ;
+			var availableSites = _teamCardReader.Read().GroupBy(x => x.SiteId).Select(x=> new{SiteId = x.Key,SiteName = x.FirstOrDefault()?.SiteName}).OrderBy(x=>x.SiteName).ToArray();
+			var availableTeams = _teamCardReader.Read().GroupBy(x => x.TeamId).Select(x => new { TeamId = x.Key, TeamName = x.FirstOrDefault()?.TeamName }).OrderBy(x => x.TeamName).ToArray(); ;
 			return Ok(new
 			{
 				Sites = availableSites,
