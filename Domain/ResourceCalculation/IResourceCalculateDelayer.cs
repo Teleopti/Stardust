@@ -8,7 +8,5 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	public interface IResourceCalculateDelayer
 	{
 		void CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation);
-		void Pause();
-		void Resume();
 	}
 }

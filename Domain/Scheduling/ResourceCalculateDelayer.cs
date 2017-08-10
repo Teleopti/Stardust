@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IUserTimeZone _userTimeZone;
 		private DateOnly? _lastDate;
 		private int _counter = 1;
-		private bool _paused;
 
 		public ResourceCalculateDelayer(
 			IResourceCalculation resourceOptimizationHelper, 
@@ -31,9 +30,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public void CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation)
 		{
-			if (_paused)
-				return;
-
 			if (!_lastDate.HasValue)
 				_lastDate = scheduleDateOnly;
 
@@ -63,16 +59,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 
 			_counter++;
-		}
-
-		public void Pause()
-		{
-			_paused = true;
-		}
-
-		public void Resume()
-		{
-			_paused = false;
 		}
 
 		private bool isNightShift(DateTimePeriod period)

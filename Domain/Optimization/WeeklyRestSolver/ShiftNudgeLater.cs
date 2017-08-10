@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -32,8 +33,8 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		}
 
 		public bool Nudge(IScheduleDay scheduleDay, ISchedulePartModifyAndRollbackService rollbackService,
-			SchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, IOptimizationPreferences optimizationPreferences, bool firstNudge)
+			SchedulingOptions schedulingOptions, ITeamBlockInfo teamBlockInfo, ISchedulingResultStateHolder schedulingResultStateHolder, 
+			IOptimizationPreferences optimizationPreferences, bool firstNudge)
 		{
 			var personAssignment = scheduleDay.PersonAssignment();
 			var projectionPeriodUtc = personAssignment.ProjectionService().CreateProjection().Period().Value;
@@ -77,17 +78,11 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				new List<IActivityRestriction>(effectiveRestriction.ActivityRestrictionCollection));
 
 			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, shiftDate, schedulingOptions,
-				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules,
+				rollbackService, new DoNothingResourceCalculateDelayer(), schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules,
 				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Right), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
 			if (!result)
 			{
 				rollbackService.Rollback();
-				var blockPeriod = teamBlockInfo.BlockInfo.BlockPeriod;
-				foreach (var dateOnly in blockPeriod.DayCollection())
-				{
-					resourceCalculateDelayer.CalculateIfNeeded(dateOnly, null, false);
-				}
-				resourceCalculateDelayer.CalculateIfNeeded(blockPeriod.EndDate.AddDays(1), null, false);
 			}
 			rollbackService.ClearModificationCollection();
 			

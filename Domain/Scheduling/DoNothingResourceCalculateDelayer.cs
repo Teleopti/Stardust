@@ -8,13 +8,5 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public void CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, bool doIntraIntervalCalculation)
 		{
 		}
-
-		public void Pause()
-		{
-		}
-
-		public void Resume()
-		{
-		}
 	}
 }
