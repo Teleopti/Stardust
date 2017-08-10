@@ -102,23 +102,5 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 			groupPage.Should().Be.EqualTo(null);
 		}
 
-		[Test]
-		public void ShouldTruncateLongGroupPageNames()
-		{
-			var person1 = new Person().WithId();
-			person1.AddOptionalColumnValue(new OptionalColumnValue("this group name is longer than 50 characters by just a bit"), _optionalColumn);
-
-			var options = new GroupPageOptions(new[] { person1 }) { CurrentGroupPageName = _optionalColumn.Name };
-			var groupPage = _target.CreateGroupPage(new[] { _optionalColumn }, options);
-
-			groupPage.Description.Name.Should().Be.EqualTo(_optionalColumn.Name);
-			groupPage.DescriptionKey.Should().Be.EqualTo(null);
-			groupPage.Id.Should().Be.EqualTo(_optionalColumn.Id.Value);
-			groupPage.RootGroupCollection.Count.Should().Be.EqualTo(1);
-			var group1 = groupPage.RootGroupCollection.SingleOrDefault(x => x.Description.Name == "this group name is longer than 50 characters by ..");
-			group1.PersonCollection.Should().Contain(person1);
-			group1.Id.Should().Not.Be.EqualTo(null);
-			group1.Entity.Should().Be.SameInstanceAs(_optionalColumn);
-		}
 	}
 }
