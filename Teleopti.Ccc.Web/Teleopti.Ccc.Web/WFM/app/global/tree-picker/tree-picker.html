@@ -1,22 +1,20 @@
 ﻿<div class="tree">
     <div ui-tree data-drag-enabled="false">
-        <ol ui-tree-nodes="" ng-model="$ctrl.data.nodes" class="tree-line">
-            <li ng-repeat="node in $ctrl.data.nodes" class="perm-tree" ui-tree-node>
+        <ol ui-tree-nodes="" ng-model="$ctrl.isolatedData.nodes" class="tree-line">
+            <li ng-repeat="node in $ctrl.isolatedData.nodes" class="perm-tree" ui-tree-node>
 
 
                 <div class="tree-toggle-group">
-                    <div class="toggle-handle" ng-class="{open: togg, 'non-pointer':node.nodes.length===0 } "
-                        ng-click="togg = !togg">
+                    <div class="toggle-handle" ng-class="{open: node.isOpenInUI, 'non-pointer':node.nodes.length===0 } " ng-click="node.openNode(node)">
                         <i ng-hide="node.nodes.length===0 " class="mdi mdi-chevron-right perm-expander"></i>
                     </div>
-                    <div class="tree-handle-wrapper">
-                        <div ui-tree-handle ng-class="{selected: togg}">
+                    <div class="tree-handle-wrapper" ng-click="node.selectNode(node)">
+                        <div ui-tree-handle ng-class="{selected: node.isSelectedInUI}">
                             {{node.name}}
                         </div>
                     </div>
                 </div>
-
-                <tree-picker ng-show="togg" class="animate-show" data="node"></tree-picker>
+                <tree-picker ng-show="node.isOpenInUI" class="animate-show" data="node"></tree-picker>
             </li>
         </ol>
     </div>
