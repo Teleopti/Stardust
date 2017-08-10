@@ -134,17 +134,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)
 		{
 			const string sql =
-				"SELECT PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId "
-				+ "FROM ReadModel.groupingreadonly "
-				+ "WHERE businessunitid=:businessUnitId "
-				+ "AND groupid=:groupId "
-				+ "AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') "
-				+ "AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) "
-				+ "ORDER BY groupname";
+				"exec [ReadModel].[LoadPeopleInGroups] @businessUnitId=:businessUnitId, @startDate=:startDate, @endDate=:endDate, @groupIds=:groupIds";
+
 			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
-					.SetGuid("businessUnitId", getBusinessUnitId())
-					.SetGuid("groupId", groupId)
-					.SetDateOnly("currentDate", queryDate)
+				.SetGuid("businessUnitId", getBusinessUnitId())
+				.SetDateOnly("startDate", queryDate)
+				.SetDateOnly("endDate", queryDate)
+				.SetString("groupIds", groupId.ToString())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupDetail>();
@@ -153,19 +149,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnlyPeriod queryRange)
 		{
 			const string sql =
-				"SELECT PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId "
-				+ "FROM ReadModel.groupingreadonly "
-				+ "WHERE businessunitid=:businessUnitId "
-				+ "AND groupid=:groupId "
-				+ "AND :startDate <= isnull(EndDate, '2059-12-31') "
-				+ "AND :endDate >= StartDate "
-				+ "AND (LeavingDate >= :startDate OR LeavingDate IS NULL) "
-				+ "ORDER BY groupname";
+				"exec [ReadModel].[LoadPeopleInGroups] @businessUnitId=:businessUnitId, @startDate=:startDate, @endDate=:endDate, @groupIds=:groupIds";
+
 			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
 					.SetGuid("businessUnitId", getBusinessUnitId())
-					.SetGuid("groupId", groupId)
 					.SetDateOnly("startDate", queryRange.StartDate)
 					.SetDateOnly("endDate", queryRange.EndDate)
+					.SetString("groupIds", groupId.ToString())
 					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
 					.SetReadOnly(true)
 					.List<ReadOnlyGroupDetail>();
