@@ -59,19 +59,20 @@
 									<input type="text" id="filter" placeholder="Filter sites" ng-model="vm.searchSite">
 									<md-tooltip>Filter sites</md-tooltip>
 								</label>
+								<i class="mdi mdi-close pull-right" ng-click="vm.closeDropdown(1)" style="cursor: pointer"><md-tooltip>Close</md-tooltip></i>
 										</div>
 									</div>
 									<div ng-repeat="site in vm.organization.Sites | filter:vm.searchSite">
 										<div class="wfm-checkbox">
 											<label>
-											<input type="checkbox" name="checkbox" value="{{site.SiteId}}" ng-click="site.toggle()">
+											<input type="checkbox" name="checkbox" value="{{site.SiteId}}" ng-click="site.toggle()" ng-checked="site.isChecked">
 											<span class="wfm-checkbox-toggle"></span>
 											<span class="wfm-checkbox-label">{{site.SiteName}}</span>
 										</label>
 										</div>
 									</div>
 									<button class="wfm-btn wfm-btn-primary" ng-click="vm.selectItems(1)">Select sites</button>
-									<button class="wfm-btn wfm-btn-primary" ng-click="vm.closeDropdown(1)">Close</button>
+									<button class="wfm-btn wfm-btn-primary" ng-click="vm.clearSelection(1)">Clear</button>
 								</form>
 
 							</div>
@@ -79,7 +80,7 @@
 
 						<div class="con-flex">
 							<div class="relative" style="padding-top:10px">
-								<input type="text" placeholder="Select teams" ng-click="vm.toggleDropdown(2)" />
+								<input type="text" placeholder="Select teams" ng-click="vm.toggleDropdown(2)"/>
 								<form ng-cloak name="form" class="wfm-form wfm-dropdown-panel panel material-depth-2 animate-show" novalidate ng-show="vm.openTeamPicker">
 									<div class="sub-header">
 										<div>
@@ -88,19 +89,20 @@
 									<input type="text" id="filter" placeholder="Filter teams" ng-model="vm.searchTeam">
 									<md-tooltip>Filter teams</md-tooltip>
 								</label>
+								<i class="mdi mdi-close pull-right" ng-click="vm.closeDropdown(2)" style="cursor: pointer"><md-tooltip>Close</md-tooltip></i>
 										</div>
 									</div>
 									<div ng-repeat="team in vm.organization.Teams | filter:vm.searchTeam">
 										<div class="wfm-checkbox">
 											<label>
-											<input type="checkbox" name="checkbox" value="{{team.TeamId}}" ng-click="team.toggle()">
+											<input type="checkbox" name="checkbox" value="{{team.TeamId}}" ng-click="team.toggle()" ng-checked="team.isChecked">
 											<span class="wfm-checkbox-toggle"></span>
 											<span class="wfm-checkbox-label">{{team.TeamName}}</span>
 										</label>
 										</div>
 									</div>
 									<button class="wfm-btn wfm-btn-primary" ng-click="vm.selectItems(2)">Select teams</button>
-									<button class="wfm-btn wfm-btn-primary" ng-click="vm.closeDropdown(2)">Close</button>
+									<button class="wfm-btn wfm-btn-primary" ng-click="vm.clearSelection(2)">Clear</button>
 								</form>
 
 							</div>

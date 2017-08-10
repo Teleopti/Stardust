@@ -8,27 +8,27 @@ describe('RtaToolController', function () {
     vm;
 
   var organization = {
-        Sites: [
-          {
-            SiteName: 'London',
-            SiteId: 'londonId'
-          },
-          {
-            SiteName: 'Paris',
-            SiteId: 'parisId'
-          }
-        ],
-        Teams: [
-          {
-            TeamName: 'Students',
-            TeamId: 'studentsId'
-          },
-          {
-            TeamName: 'Team nigths',
-            SiteId: 'teamNightsId'
-          }
-        ]
+    Sites: [
+      {
+        SiteName: 'London',
+        SiteId: 'londonId'
+      },
+      {
+        SiteName: 'Paris',
+        SiteId: 'parisId'
       }
+    ],
+    Teams: [
+      {
+        TeamName: 'Students',
+        TeamId: 'studentsId'
+      },
+      {
+        TeamName: 'Team nigths',
+        SiteId: 'teamNightsId'
+      }
+    ]
+  }
 
   beforeEach(module('wfm.rtaTool'));
 
@@ -107,7 +107,7 @@ describe('RtaToolController', function () {
         UserCode: '0019',
         DataSource: '1',
         TeamName: 'Students',
-       TeamId: 'studentsId'
+        TeamId: 'studentsId'
       })
       .withAgent({
         Name: 'Marcio Dias',
@@ -131,6 +131,106 @@ describe('RtaToolController', function () {
     expect(vm.filteredAgents[0].UserCode).toEqual('0019');
     expect(vm.filteredAgents[0].DataSource).toEqual('1');
     expect(vm.filteredAgents[0].TeamName).toEqual('Students');
+  });
+
+  it('should reset on clear', function () {
+    fakeBackend
+      .withAgent({
+        Name: 'John Smith',
+        UserCode: '0019',
+        DataSource: '1',
+        TeamName: 'Students',
+        SiteName: 'London',
+        SiteId: 'londonId'
+      })
+      .withAgent({
+        Name: 'Marcio Dias',
+        UserCode: '0068',
+        DataSource: '1',
+        TeamName: 'Team nights',
+        SiteName: 'Paris',
+        SiteId: 'parisId'
+      });
+
+    var c = $RtaToolControllerBuilder.createController(organization);
+    vm = c.vm;
+
+    c.apply(function () {
+      vm.searchSite = "Lon";
+      vm.organization.Sites[0].isChecked = true;
+      vm.selectItems(1);
+      vm.clearSelection(1);
+    }
+    );
+
+    expect(vm.filteredAgents.length).toEqual(2);
+    expect(vm.searchSite).toEqual('');
+  });
+
+
+  it('should reset on close', function () {
+    fakeBackend
+      .withAgent({
+        Name: 'John Smith',
+        UserCode: '0019',
+        DataSource: '1',
+        TeamName: 'Students',
+        SiteName: 'London',
+        SiteId: 'londonId'
+      })
+      .withAgent({
+        Name: 'Marcio Dias',
+        UserCode: '0068',
+        DataSource: '1',
+        TeamName: 'Team nights',
+        SiteName: 'Paris',
+        SiteId: 'parisId'
+      });
+
+    var c = $RtaToolControllerBuilder.createController(organization);
+    vm = c.vm;
+
+    c.apply(function () {
+      vm.searchSite = "Lon";
+      vm.closeDropdown(1);
+    }
+    );
+
+    expect(vm.searchSite).toEqual('');
+  });
+
+  it('should reset search term and close sites when opening teams', function () {
+    fakeBackend
+      .withAgent({
+        Name: 'John Smith',
+        UserCode: '0019',
+        DataSource: '1',
+        TeamName: 'Students',
+        TeamId: 'studentsId',
+        SiteName: 'London',
+        SiteId: 'londonId'
+      })
+      .withAgent({
+        Name: 'Marcio Dias',
+        UserCode: '0068',
+        DataSource: '1',
+        TeamName: 'Team nights',
+        TeamId: 'teamNightsId',
+        SiteName: 'Paris',
+        SiteId: 'parisId'
+      });
+
+    var c = $RtaToolControllerBuilder.createController(organization);
+    vm = c.vm;
+
+    c.apply(function () {
+      vm.searchSite = "Lon";
+      vm.toggleDropdown(2);
+    }
+    );
+
+    expect(vm.searchSite).toEqual('');
+    expect(vm.openSitePicker).toEqual(false);
   });
 
   it('should get phone states', function () {

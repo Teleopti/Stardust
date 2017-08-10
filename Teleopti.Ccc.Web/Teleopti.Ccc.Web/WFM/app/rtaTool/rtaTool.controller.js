@@ -29,9 +29,10 @@
 		vm.organization = organization;
 		vm.toggleDropdown = toggleDropdown;
 		vm.closeDropdown = closeDropdown;
+		vm.clearSelection = clearSelection;
 		vm.searchSite = "";
 		vm.searchTeam = "";
-		
+
 		var sendingBatchWithRandomStatesTrigger = null;
 
 		(function init() {
@@ -204,13 +205,19 @@
 			var items = [];
 			var params = { siteIds: [], teamIds: [] };
 
-			if (key === 1) items = vm.organization.Sites;
-			else items = vm.organization.Teams;
+			if (key === 1) {
+				items = vm.organization.Sites;
+				unselectItems(vm.organization.Teams);
+			}
+			else {
+				items = vm.organization.Teams;
+				unselectItems(vm.organization.Sites);
+			}
 
 			var selectedIds = items.filter(function (item) {
 				return item.isChecked;
 			}).map(function (item) {
-				return key===1 ? item.SiteId : item.TeamId;
+				return key === 1 ? item.SiteId : item.TeamId;
 			});
 
 			if (key === 1) {
@@ -227,16 +234,28 @@
 			});
 		}
 
+		function unselectItems(items) {
+			items.forEach(function (item) {
+				item.isChecked = false;
+			});
+		}
+
 		function toggleDropdown(key) {
+			var params = { siteIds: [], teamIds: [] };
 			if (key === 1) {
 				vm.openSitePicker = !vm.openSitePicker;
 				if (vm.openTeamPicker) vm.openTeamPicker = false;
+				unselectItems(vm.organization.Teams);
 			}
 			else {
 				vm.openTeamPicker = !vm.openTeamPicker;
 				if (vm.openSitePicker) vm.openSitePicker = false;
+				unselectItems(vm.organization.Sites);
 			}
 			resetSearchTerms();
+			rtaToolService.getAgents(params).then(function (result) {
+				vm.filteredAgents = result;
+			});
 		}
 
 		function closeDropdown(key) {
@@ -245,9 +264,21 @@
 			resetSearchTerms();
 		}
 
+		function clearSelection(key) {
+			var params = { siteIds: [], teamIds: [] };
+			resetSearchTerms();
+			if (key === 1) unselectItems(vm.organization.Sites);
+			else unselectItems(vm.organization.Teams);
+
+			rtaToolService.getAgents(params).then(function (result) {
+				vm.filteredAgents = result;
+			});
+		}
+
 		function resetSearchTerms() {
 			vm.searchSite = "";
 			vm.searchTeam = "";
 		}
+
 	};
 })();
