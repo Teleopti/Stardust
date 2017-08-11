@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 {
 	public interface IShiftProjectionIntraIntervalBestFitCalculator
 	{
-		IWorkShiftCalculationResultHolder GetShiftProjectionCachesSortedByBestIntraIntervalFit(IList<IWorkShiftCalculationResultHolder> workShiftCalculationResults, IList<ISkillStaffPeriod> issues, ISkill skill, double limit);
+		IWorkShiftCalculationResultHolder GetShiftProjectionCachesSortedByBestIntraIntervalFit(IEnumerable<IWorkShiftCalculationResultHolder> workShiftCalculationResults, IList<ISkillStaffPeriod> issues, ISkill skill, double limit);
 	}
 
 	public class ShiftProjectionIntraIntervalBestFitCalculator : IShiftProjectionIntraIntervalBestFitCalculator
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization.IntraIntervalOptimization
 		}
 
 
-		public IWorkShiftCalculationResultHolder GetShiftProjectionCachesSortedByBestIntraIntervalFit(IList<IWorkShiftCalculationResultHolder> workShiftCalculationResults, IList<ISkillStaffPeriod> issues, ISkill skill, double limit)
+		public IWorkShiftCalculationResultHolder GetShiftProjectionCachesSortedByBestIntraIntervalFit(IEnumerable<IWorkShiftCalculationResultHolder> workShiftCalculationResults, IList<ISkillStaffPeriod> issues, ISkill skill, double limit)
 		{
 			var bestValue = Double.MaxValue;
 			ShiftProjectionCache bestShiftProjectionCache = null;

@@ -16,14 +16,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
-
-		IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
-			ITeamBlockInfo teamBlockInfo,
-			SchedulingOptions schedulingOptions,
-			DateOnly day,
-			ShiftProjectionCache roleModelShift,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IPerson person);
 	}
 
 	public class TeamBlockSingleDayScheduler : ITeamBlockSingleDayScheduler
@@ -32,72 +24,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IProposedRestrictionAggregator _proposedRestrictionAggregator;
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 		private readonly TeamScheduling _teamScheduling;
-		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
-		private readonly IWorkShiftSelectorForIntraInterval _workSelectorForIntraInterval;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public TeamBlockSingleDayScheduler(ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
 			IProposedRestrictionAggregator proposedRestrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService,
 			TeamScheduling teamScheduling,
-			IActivityIntervalDataCreator activityIntervalDataCreator,
-			IWorkShiftSelectorForIntraInterval workSelectorForIntraInterval,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 		{
 			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
 			_proposedRestrictionAggregator = proposedRestrictionAggregator;
 			_workShiftFilterService = workShiftFilterService;
 			_teamScheduling = teamScheduling;
-			_activityIntervalDataCreator = activityIntervalDataCreator;
-			_workSelectorForIntraInterval = workSelectorForIntraInterval;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
-		}
-
-		// TODO Move to separate class
-		public IList<IWorkShiftCalculationResultHolder> GetShiftProjectionCaches(
-			ITeamBlockInfo teamBlockInfo,
-			SchedulingOptions schedulingOptions, 
-			DateOnly day,
-			ShiftProjectionCache roleModelShift,
-			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IPerson person)
-		{
-			IList<IWorkShiftCalculationResultHolder> resultList = new List<IWorkShiftCalculationResultHolder>();
-			//TODO: should probably consider "IsClassic" here...
-			var isSingleAgentTeamAndBlockWithSameShift = !schedulingOptions.UseTeam && schedulingOptions.UseBlock &&
-															 schedulingOptions.BlockSameShift;
-			if (isSingleAgentTeamAndBlockWithSameShift)
-				return resultList;
-
-			var teamInfo = teamBlockInfo.TeamInfo;
-			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamInfo, day);
-			if (isTeamBlockScheduledForSelectedTeamMembers(new List<IPerson> { person }, day, teamBlockSingleDayInfo, schedulingOptions))
-				return resultList;
-
-			var restriction = _proposedRestrictionAggregator.Aggregate(schedulingResultStateHolder.Schedules, schedulingOptions, teamBlockInfo, day, person,
-						roleModelShift);
-
-			if (restriction == null)
-				return resultList;
-
-			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
-
-			var shifts = _workShiftFilterService.FilterForTeamMember(schedulingResultStateHolder.Schedules, day, person, teamBlockSingleDayInfo, restriction,
-				schedulingOptions,
-				new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day), false, allSkillDays);
-
-			if (shifts.IsNullOrEmpty())
-				return resultList;
-
-			var activityInternalData = _activityIntervalDataCreator.CreateFor(_groupPersonSkillAggregator, teamBlockSingleDayInfo, day, allSkillDays, false);
-
-
-			var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumStaffing, schedulingOptions.UseMaximumStaffing);
-
-			resultList = _workSelectorForIntraInterval.SelectAllShiftProjectionCaches(shifts, activityInternalData,
-				parameters, TimeZoneGuard.Instance.CurrentTimeZone());
-
-			return resultList;
 		}
 
 		public bool ScheduleSingleDay(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, DateOnly day,

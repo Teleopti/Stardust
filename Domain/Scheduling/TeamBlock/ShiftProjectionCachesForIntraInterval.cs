@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -12,43 +13,93 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public class ShiftProjectionCachesForIntraInterval
 	{
 		private readonly TeamBlockRoleModelSelector _roleModelSelector;
-		private readonly ITeamBlockSingleDayScheduler _singleDayScheduler;
+		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
+		private readonly IWorkShiftSelectorForIntraInterval _workSelectorForIntraInterval;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
+		private readonly IProposedRestrictionAggregator _proposedRestrictionAggregator;
+		private readonly IWorkShiftFilterService _workShiftFilterService;
 
-		public ShiftProjectionCachesForIntraInterval(TeamBlockRoleModelSelector roleModelSelector, 
-																								ITeamBlockSingleDayScheduler singleDayScheduler,
-																								IWorkShiftSelector workShiftSelector,
-																								IGroupPersonSkillAggregator groupPersonSkillAggregator)
+		public ShiftProjectionCachesForIntraInterval(TeamBlockRoleModelSelector roleModelSelector,
+			IActivityIntervalDataCreator activityIntervalDataCreator,
+			IWorkShiftSelectorForIntraInterval workSelectorForIntraInterval,
+			IWorkShiftSelector workShiftSelector,
+			IGroupPersonSkillAggregator groupPersonSkillAggregator,
+			ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
+			IProposedRestrictionAggregator proposedRestrictionAggregator,
+			IWorkShiftFilterService workShiftFilterService)
 		{
 			_roleModelSelector = roleModelSelector;
-			_singleDayScheduler = singleDayScheduler;
+			_activityIntervalDataCreator = activityIntervalDataCreator;
+			_workSelectorForIntraInterval = workSelectorForIntraInterval;
 			_workShiftSelector = workShiftSelector;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
+			_teamBlockSchedulingCompletionChecker = teamBlockSchedulingCompletionChecker;
+			_proposedRestrictionAggregator = proposedRestrictionAggregator;
+			_workShiftFilterService = workShiftFilterService;
 		}
 
-		public IList<IWorkShiftCalculationResultHolder> Execute(
+		public IEnumerable<IWorkShiftCalculationResultHolder> Execute(
 			ITeamBlockInfo teamBlockInfo,
 			IPerson person,
 			DateOnly datePointer,
 			SchedulingOptions schedulingOptions,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			IList<IWorkShiftCalculationResultHolder> resultList = new List<IWorkShiftCalculationResultHolder>();
 			var teamInfo = teamBlockInfo.TeamInfo;
 			var selectedTeamMembers = teamInfo.GroupMembers.Intersect(teamInfo.UnLockedMembers(datePointer)).ToList();
 			if (selectedTeamMembers.IsEmpty())
-				return resultList;
+				return Enumerable.Empty<IWorkShiftCalculationResultHolder>();
 
 			var roleModelShift = _roleModelSelector.Select(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.AllSkillDays(), _workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(), schedulingOptions, new EffectiveRestriction(), _groupPersonSkillAggregator);
 
-			if (roleModelShift == null)
-				return resultList;
+			return roleModelShift == null ? 
+				Enumerable.Empty<IWorkShiftCalculationResultHolder>() : 
+				shiftProjectionCaches(teamBlockInfo, schedulingOptions, datePointer, roleModelShift, schedulingResultStateHolder, person);
+		}
 
-			resultList = _singleDayScheduler.GetShiftProjectionCaches(teamBlockInfo, schedulingOptions, datePointer,
-				roleModelShift, schedulingResultStateHolder, person);
+		private IEnumerable<IWorkShiftCalculationResultHolder> shiftProjectionCaches(
+			ITeamBlockInfo teamBlockInfo,
+			SchedulingOptions schedulingOptions,
+			DateOnly day,
+			ShiftProjectionCache roleModelShift,
+			ISchedulingResultStateHolder schedulingResultStateHolder,
+			IPerson person)
+		{
+			//TODO: should probably consider "IsClassic" here...
+			var isSingleAgentTeamAndBlockWithSameShift = !schedulingOptions.UseTeam && schedulingOptions.UseBlock &&
+														 schedulingOptions.BlockSameShift;
+			if (isSingleAgentTeamAndBlockWithSameShift)
+				return Enumerable.Empty<IWorkShiftCalculationResultHolder>();
 
-			return resultList;
+			var teamInfo = teamBlockInfo.TeamInfo;
+			var teamBlockSingleDayInfo = new TeamBlockSingleDayInfo(teamInfo, day);
+
+			if(_teamBlockSchedulingCompletionChecker.IsDayScheduledInTeamBlockForSelectedPersons(teamBlockSingleDayInfo, day, new List<IPerson> { person }, schedulingOptions))
+				return Enumerable.Empty<IWorkShiftCalculationResultHolder>();
+
+			var restriction = _proposedRestrictionAggregator.Aggregate(schedulingResultStateHolder.Schedules, schedulingOptions, teamBlockInfo, day, person,
+				roleModelShift);
+
+			if (restriction == null)
+				return Enumerable.Empty<IWorkShiftCalculationResultHolder>();
+
+			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
+
+			var shifts = _workShiftFilterService.FilterForTeamMember(schedulingResultStateHolder.Schedules, day, person, teamBlockSingleDayInfo, restriction,
+				schedulingOptions,
+				new WorkShiftFinderResult(teamBlockSingleDayInfo.TeamInfo.GroupMembers.First(), day), false, allSkillDays);
+
+			if (shifts.IsNullOrEmpty())
+				return Enumerable.Empty<IWorkShiftCalculationResultHolder>();
+
+			var activityInternalData = _activityIntervalDataCreator.CreateFor(_groupPersonSkillAggregator, teamBlockSingleDayInfo, day, allSkillDays, false);
+
+
+			var parameters = new PeriodValueCalculationParameters(schedulingOptions.WorkShiftLengthHintOption, schedulingOptions.UseMinimumStaffing, schedulingOptions.UseMaximumStaffing);
+
+			return _workSelectorForIntraInterval.SelectAllShiftProjectionCaches(shifts, activityInternalData,parameters, TimeZoneGuard.Instance.CurrentTimeZone());
 		}
 	}
 }
