@@ -448,7 +448,6 @@
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenario.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingTrackResourceCalculationsDesktopTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\ShiftCategoryLimitationWithAndWithoutRandomnessTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\TeamBlockPeriodSchedulingTest.cs" />
     <Compile Include="SchedulingScenarios\TakeShiftWithLatestShiftStartIfSameShiftValue.cs" />
     <Compile Include="SchedulingScenarios\TeamBlockType.cs" />

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			system.UseTestDouble<SchedulingOptionsProvider>().For<ISchedulingOptionsProvider>();
 		}
 
-		public SchedulingTrackResourceCalculationsDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
+		public SchedulingTrackResourceCalculationsDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757, bool resourcePlannerSchedulingFewerResourceCalculations45429) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757, resourcePlannerSchedulingFewerResourceCalculations45429)
 		{
 		}
 	}
