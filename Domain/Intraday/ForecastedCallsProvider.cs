@@ -78,8 +78,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return forecastedCalls;
 		}
 
-		private static SkillDayStatsRange getSkillStatsRange(List<ITemplateTaskPeriod> templateTaskPeriods, 
-			ISkill skill, 
+		private static SkillDayStatsRange getSkillStatsRange(List<ITemplateTaskPeriod> templateTaskPeriods,
+			ISkill skill,
 			ISkillDay skillDay)
 		{
 			if (!templateTaskPeriods.Any())
@@ -89,6 +89,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var endTime = new DateTime();
 			foreach (var workloadDay in skillDay.WorkloadDayCollection)
 			{
+				if (workloadDay.OpenTaskPeriodList.Count <= 0)
+					continue;
+
 				var start = workloadDay.OpenTaskPeriodList.Min(x => x.Period.StartDateTime);
 				var end = workloadDay.OpenTaskPeriodList.Max(x => x.Period.EndDateTime);
 				if (startTime != null || startTime > start)
