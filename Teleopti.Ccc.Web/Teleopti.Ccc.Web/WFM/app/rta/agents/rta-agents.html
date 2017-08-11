@@ -45,34 +45,44 @@
 		</div>
 		<div class="con-flex split-3-1"></div>
 		<div class="con-flex">
-			<div class="wfm-switch panel-switch line-right">
-				<input id="switch1" ng-model="vm.showInAlarm" type="checkbox" ng-disabled="vm.pause" />
-				<label class="rta-agents-in-alarm-switch" for="switch1" ng-if="vm.agentStates.length <= vm.maxNumberOfAgents && !vm.isLoading">
-					<span class="wfm-switch-label">{{'InAlarm'|translate}}</span>
-					<span class="wfm-switch-toggle" ng-class="vm.pause ? 'rta-disabled-switch' : ''"></span>
-				</label>
-				<span ng-if="vm.agentStates.length > vm.maxNumberOfAgents">{{'AgentsInAlarm'|translate}}</span>
+			<div class="view-changer-wrapper">
+				<div class="view-changer">
+					<div class="view-option">
+						<label ng-click="vm.showInAlarm = true;">
+				<input type="radio" name="alarm-view" class="view-option-radio"  ng-value="vm.showAll" ng-model="vm.showInAlarm" tabindex="0"/>
+				<div class="view-name"><div translate>{{'InAlarm'|translate}}</div></div>        
+			</label>
+					</div>
+					<div class="view-option">
+						<label ng-click="vm.showInAlarm = false; vm.showAll = true" class="rta-agents-in-alarm-switch">
+				<input type="radio" name="all-view" class="view-option-radio" ng-value="!vm.showInAlarm" ng-model="vm.showAll" tabindex="0"/>
+				<div class="view-name"><div translate>All</div></div>
+			</label>
+					</div>
+				</div>
 			</div>
+
+			
 		</div>
 	</div>
 	<div class="con-row">
 		<div class="con-flex agent-table-wrapper">
 			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.allGrid && !vm.showInAlarm" ui-grid-auto-resize ui-grid-resize-columns
-				ui-grid-disable-animation ui-grid="vm.allGrid"></div>
-		<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.showInAlarm" ui-grid-auto-resize ui-grid-resize-columns
-			ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>
-</div>
-</div>
-<wfm-right-panel ng-if="vm.showInAlarm && !vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
-	<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
-	<div ng-repeat="state in vm.states">
-		<div class="wfm-checkbox">
-			<label>
+			 ui-grid-disable-animation ui-grid="vm.allGrid"></div>
+			<div class="grid" ng-style="vm.getTableHeight()" ng-if="vm.inAlarmGrid && vm.showInAlarm" ui-grid-auto-resize ui-grid-resize-columns
+			 ui-grid-disable-animation ui-grid="vm.inAlarmGrid"></div>
+		</div>
+	</div>
+	<wfm-right-panel ng-if="vm.showInAlarm && !vm.pause" class="rta-right-panel-wrapper" panel-options="vm.rightPanelOptions">
+		<h3><i class="mdi mdi-filter-outline"></i>{{'IncludeAgentsInStatesColon'|translate}}</h3>
+		<div ng-repeat="state in vm.states">
+			<div class="wfm-checkbox">
+				<label>
 					<input type="checkbox" name="checkbox" id="{{state.Id}}" ng-model="state.Selected" />
 					<span class="wfm-checkbox-toggle"></span>
 					<span class="wfm-checkbox-label rta-deselect-state">{{state.Name}}</span>
 				</label>
+			</div>
 		</div>
-	</div>
-</wfm-right-panel>
+	</wfm-right-panel>
 </div>

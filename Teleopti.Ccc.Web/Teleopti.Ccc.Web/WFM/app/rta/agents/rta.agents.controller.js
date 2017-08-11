@@ -55,6 +55,7 @@
 		var allAgentStates = [];
 		vm.agentStates = [];
 		vm.showInAlarm = !$stateParams.showAllAgents;
+		vm.showAll = true;
 		vm.allGrid = rtaGridService.makeAllGrid();
 		vm.inAlarmGrid = rtaGridService.makeInAlarmGrid();
 		vm.allGrid.data = 'vm.agentStates';
