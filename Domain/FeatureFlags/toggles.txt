@@ -47,13 +47,13 @@ RTA_FasterAgentsView_42039 = true
 RTA_EventPackagesOptimization_43924 = true
 RTA_AsyncOptimization_43924 = true
 RTA_SolidProofWhenManagingAgentAdherence_39351 = true
-RTA_FrontEndRefactor_44772 = RC
+RTA_FrontEndRefactor_44772 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
-WfmTeamSchedule_SortRows_45056 = RC
-WfmTeamSchedule_DisplayAndEditPublicNote_44783 = RC
+WfmTeamSchedule_SortRows_45056 = true
+WfmTeamSchedule_DisplayAndEditPublicNote_44783 = true
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
 
@@ -107,7 +107,7 @@ Wfm_People_MoveImportJobToBackgroundService_43582 = true
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 WfmIntraday_MonitorActualvsForecasted_35176 = true
 Wfm_HideUnusedTeamsAndSites_42690 = true
-Wfm_SearchAgentBasedOnCorrectPeriod_44552 = RC
+Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
 Wfm_AddMyTimeLink_45088 = RC
 Wfm_GroupPages_45057 = DEV
 Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
@@ -225,5 +225,5 @@ Staffing_BPOExchangeImport_45202 = RC
 WFM_Forecaster_Refact_44480 = DEV
 Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 WFM_Export_Forecast_44716 = true
-WFM_RedirectPermissionToWeb_44562 = RC
+WFM_RedirectPermissionToWeb_44562 = true
 WFM_TrainingPlanner_44780 = RC
