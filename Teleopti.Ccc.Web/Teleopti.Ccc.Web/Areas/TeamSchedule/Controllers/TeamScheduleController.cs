@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				_teamScheduleViewModelFactory.CreateViewModelForGroups(new SearchDaySchedulesInput
 				{
 					GroupIds = input.SelectedGroupIds ?? new Guid[0],
-					CriteriaDictionary = new Dictionary<PersonFinderField, string>(),
+					CriteriaDictionary = SearchTermParser.Parse(input.Keyword),
 					DateInUserTimeZone = currentDate,
 					PageSize = input.PageSize,
 					CurrentPageIndex = input.CurrentPageIndex,
