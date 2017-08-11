@@ -578,5 +578,88 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				result.Select(p => p.PersonId).Contains(personToTest.Id.Value).Should().Be.EqualTo(true);
 			});
 		}
+
+		[Test]
+		public void ShouldReturnAvailableGroupDetailsBasedOnSearchCriteria()
+		{
+			var person1 = PersonFactory.CreatePerson("dummyAgent1");
+			var person2 = PersonFactory.CreatePerson("dummyAgent2");
+			var team1 = TeamFactory.CreateTeam("Dummy Team", "Dummy Site");
+			var team2 = TeamFactory.CreateSimpleTeam("Dummy Team 2");
+			team2.Site = team1.Site;
+			var activity = new Activity("dummy activity");
+			var skill = SkillFactory.CreateSkill("dummy skill");
+			skill.Activity = activity;
+			var personContract = PersonContractFactory.CreatePersonContract();
+
+			WithUnitOfWork.Do(() =>
+			{
+				SiteRepository.Add(team1.Site);
+				TeamRepository.Add(team1);
+				TeamRepository.Add(team2);
+				ActivityRepository.Add(activity);
+				SkillTypeRepository.Add(skill.SkillType);
+				SkillRepository.Add(skill);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+			});
+
+			var personPeriod = new PersonPeriod(new DateOnly(2017, 6, 1),
+												personContract,
+												team1);
+			personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.44)));
+			person1.AddPersonPeriod(personPeriod);
+			person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 1, 1), personContract, team1));
+
+			person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2017, 7, 1), personContract, team2));
+
+			WithUnitOfWork.Do(() =>
+			{
+				PersonRepository.Add(person1);
+				PersonRepository.Add(person2);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				Target.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var period = new DateOnlyPeriod(new DateOnly(2017, 5, 28), new DateOnly(2017, 06, 2));
+				var gps = Target.AvailableGroupsBasedOnPeriod(period).ToList();
+
+				var result = Target.DetailsForGroups(new[] { personContract.Contract.Id.Value }, period);
+				var personIds = result.Select(d => d.PersonId).Distinct();
+				result.Count().Should().Be.EqualTo(2);
+				personIds.Count().Should().Be.EqualTo(1);
+				result.First().FirstName.Should().Be.EqualTo("dummyAgent1");
+				result.First().PersonId.Should().Be.EqualTo(person1.Id.Value);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var period = new DateOnlyPeriod(new DateOnly(2016, 11, 28), new DateOnly(2016, 12, 28));
+				var gps = Target.AvailableGroupsBasedOnPeriod(period).ToList();
+
+				var result = Target.DetailsForGroups(new[] { personContract.Contract.Id.Value }, period);
+				var personIds = result.Select(d => d.PersonId).Distinct();
+				result.Count().Should().Be.EqualTo(0);
+			});
+
+			WithUnitOfWork.Do(() =>
+			{
+				var period = new DateOnlyPeriod(new DateOnly(2017, 7, 1), new DateOnly(2017, 12, 28));
+				var gps = Target.AvailableGroupsBasedOnPeriod(period).ToList();
+
+				var result = Target.DetailsForGroups(new[] { personContract.Contract.Id.Value }, period);
+				var personIds = result.Select(d => d.PersonId).Distinct();
+				result.Count().Should().Be.EqualTo(2);
+				result.Select(p => p.PersonId).Distinct().Should().Be.Equals(2);
+
+				result.Select(p => p.PersonId).Contains(person1.Id.Value).Should().Be.EqualTo(true);
+			});
+		}
 	}
 }

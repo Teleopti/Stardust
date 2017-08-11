@@ -326,6 +326,35 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetString("inputIds", inputIds)
 				.ExecuteUpdate();
 		}
+
+		public List<Guid> FindPersonIdsInGroupsBasedOnPersonPeriod(DateOnlyPeriod period,
+			Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria)
+		{
+			var result = new List<Guid>();
+
+			if (groupIds.Length == 0)
+			{
+				return result;
+			}
+
+			foreach (var groupIdsBatch in groupIds.Batch(100))
+			{
+				var groupIdsString = string.Join(",", groupIdsBatch.Select(x => x.ToString()));
+
+				var searchString = createSearchString(searchCriteria);
+				var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
+					"exec [ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeriod] @business_unit_id=:business_unit_id, @search_criterias=:search_criterias, @start_date=:start_date, @end_date=:end_date, @group_ids=:group_ids")
+					.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+					.SetString("search_criterias", searchString)
+					.SetDateOnly("start_date", period.StartDate)
+					.SetDateOnly("end_date", period.EndDate)
+					.SetString("group_ids", groupIdsString)
+					.SetReadOnly(true)
+					.List<Guid>();
+				result.AddRange(batchResult);
+			}
+			return result;
+		}
 	}
 	public class PeoplePersonFinderSearchCriteria : IPeoplePersonFinderSearchCriteria
 	{
