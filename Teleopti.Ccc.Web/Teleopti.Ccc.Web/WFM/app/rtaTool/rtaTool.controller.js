@@ -47,20 +47,7 @@
 				})
 				.then(rtaToolService.getAgents)
 				.then(function (_agents) {
-					vm.agents = _agents.map(function (agent) {
-						agent.isSelected = false;
-						agent.selectAgent = function () {
-							agent.isSelected = !agent.isSelected;
-						}
-						agent.StateCodes = vm.stateCodes;
-						agent.sendState = function (state) {
-							sendState(agent, state);
-						};
-						return agent;
-					});
-
-					vm.filteredAgents = vm.agents.slice(0);
-					showMoreAgents();
+					buildAgents(_agents);
 				});
 
 			vm.organization.Sites.forEach(function (site) {
@@ -78,7 +65,6 @@
 			});
 		})();
 
-
 		vm.filterAgents = function () {
 			vm.filteredAgents = $filter('filter')(vm.agents, vm.filterText)
 		}
@@ -95,10 +81,26 @@
 		vm.sendRandom = function () {
 			var selectedAgents = findSelectedAgents();
 			selectedAgents = selectedAgents.length > 0 ? selectedAgents : vm.filteredAgents;
-
 			var randomAgent = selectedAgents[Math.floor(Math.random() * selectedAgents.length)];
 			var state = vm.stateCodes[Math.floor(Math.random() * vm.stateCodes.length)];
 			randomAgent.sendState(state);
+		}
+
+		function buildAgents(_agents) {
+			vm.agents = _agents.map(function (agent) {
+				agent.isSelected = false;
+				agent.selectAgent = function () {
+					agent.isSelected = !agent.isSelected;
+				}
+				agent.StateCodes = vm.stateCodes;
+				agent.sendState = function (state) {
+					sendState(agent, state);
+				};
+				return agent;
+			});
+
+			vm.filteredAgents = vm.agents.slice(0);
+			showMoreAgents();
 		}
 
 		function findSelectedAgents() {
@@ -230,7 +232,7 @@
 			}
 
 			rtaToolService.getAgents(params).then(function (result) {
-				vm.filteredAgents = result;
+				buildAgents(result);
 			});
 		}
 
@@ -253,9 +255,6 @@
 				unselectItems(vm.organization.Sites);
 			}
 			resetSearchTerms();
-			rtaToolService.getAgents(params).then(function (result) {
-				vm.filteredAgents = result;
-			});
 		}
 
 		function closeDropdown(key) {
