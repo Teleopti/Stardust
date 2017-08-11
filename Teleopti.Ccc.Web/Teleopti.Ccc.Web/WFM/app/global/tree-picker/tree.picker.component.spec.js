@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-fdescribe('treePickerComponent', function () {
+describe('treePickerComponent', function () {
     var
         $componentController,
         ctrl,
@@ -214,32 +214,7 @@ fdescribe('treePickerComponent', function () {
         expect(ctrl.isolatedData.nodes[0].isOpenInUI).toBe(false);
     });
 
-    it('should select parent node', function () {
-        ctrl = $componentController('treePicker', null, {
-            data: mockedData,
-            outputData: mockedOutputData
-        });
-
-        ctrl.$onInit();
-        ctrl.isolatedData.nodes[0].selectNode(ctrl.isolatedData.nodes[0]);
-
-        expect(ctrl.outputData[0]).toEqual(ctrl.isolatedData.nodes[0].id);
-    });
-
-    it('should uselect parent node', function () {
-        ctrl = $componentController('treePicker', null, {
-            data: mockedData,
-            outputData: mockedOutputData
-        });
-
-        ctrl.$onInit();
-        ctrl.isolatedData.nodes[0].selectNode(ctrl.isolatedData.nodes[0]);
-        ctrl.isolatedData.nodes[0].selectNode(ctrl.isolatedData.nodes[0]);
-
-        expect(ctrl.outputData.length).toEqual(0);
-    });
-
-     it('should select all child nodes when selectin parent', function () {
+    it('should select all child nodes when selecting parent', function () {
         ctrl = $componentController('treePicker', null, {
             data: mockedData,
             outputData: mockedOutputData
@@ -252,6 +227,19 @@ fdescribe('treePickerComponent', function () {
         expect(ctrl.outputData[0]).toEqual(ctrl.isolatedData.nodes[0].id);
         expect(ctrl.outputData[1]).toEqual(ctrl.isolatedData.nodes[0].nodes[0].id);
         expect(ctrl.outputData[2]).toEqual(ctrl.isolatedData.nodes[0].nodes[0].nodes[0].id);
+    });
+
+    it('should unselect all child nodes when unselecting parent', function () {
+        ctrl = $componentController('treePicker', null, {
+            data: mockedData,
+            outputData: mockedOutputData
+        });
+        ctrl.$onInit();
+
+        ctrl.isolatedData.nodes[0].selectNode(ctrl.isolatedData.nodes[0]);
+        ctrl.isolatedData.nodes[0].selectNode(ctrl.isolatedData.nodes[0]);
+        
+        expect(ctrl.outputData.length).toEqual(0);
     });
 
 });

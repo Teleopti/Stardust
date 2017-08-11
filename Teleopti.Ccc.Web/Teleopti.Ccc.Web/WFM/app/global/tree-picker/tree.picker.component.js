@@ -13,17 +13,18 @@
     TreePickerController.inject = [];
 
     function TreePickerController() {
-        var ctrl = this;
 
+        var ctrl = this;
         ctrl.$onInit = function () {
             ctrl.isolatedData = JSON.parse(JSON.stringify(ctrl.data));
             traverseNodes(ctrl.isolatedData.nodes, buildNode);
+            handledNodes = {};
         }
 
         function buildNode(node) {
             node.selectNode = selectNode;
             node.isSelectedInUI = false;
-            if (node.nodes != null && node.nodes.length) {
+            if (doesNodeHaveChildren(node)) {
                 node.isOpenInUI = false;
                 node.openNode = openNode;
             }
@@ -32,26 +33,35 @@
         function selectNode(node) {
             node.isSelectedInUI = !node.isSelectedInUI;
             if (isNodeSelected(node.id)) {
-                console.log('im removing stuff', node.id);
-                removeNode(node.id)
-            }
-            else {
-                console.log(node);
+                removeNode(node);
+                if (doesNodeHaveChildren(node)) traverseNodes(node.nodes, removeNode);
+            } else {
                 ctrl.outputData.push(node.id);
-                if (node.nodes != null && node.nodes.length) traverseNodes(node.nodes, selectNode);
-            }   
+                if (doesNodeHaveChildren(node)) traverseNodes(node.nodes, selectNode);
+            }
         }
 
+        var handledNodes = {};
+
         function traverseNodes(nodes, callback) {
-            console.log('nodes in traverse', nodes);
             nodes.forEach(function (node) {
-                callback(node);
-                if (node.nodes != null && node.nodes.length) {
+                if (!isNodeHandled(node)) {
+                    handledNodes[node.id] = true;
+                    callback(node);
+                } else {
+                    handledNodes = {};
+                }
+
+                if (doesNodeHaveChildren(node)) {
                     traverseNodes(node.nodes, callback);
                 }
+
             });
         }
 
+        function isNodeHandled(node) {
+            return !!handledNodes[node.id];
+        }
 
         function openNode(node) {
             node.isOpenInUI = !node.isOpenInUI;
@@ -62,9 +72,12 @@
         }
 
         function removeNode(id) {
-            console.log(ctrl.outputData);
             var index = ctrl.outputData.indexOf(id);
             ctrl.outputData.splice(index, 1);
+        }
+
+        function doesNodeHaveChildren(node) {
+            return node.nodes != null && node.nodes.length;
         }
     }
 
