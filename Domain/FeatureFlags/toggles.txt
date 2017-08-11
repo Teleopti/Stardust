@@ -142,7 +142,7 @@ ResourcePlanner_HideSkillPrioSliders_41312 = RC
 Wfm_SkillPriorityRoutingGUI_39885 = RC
 WfmGlobalLayout_personalOptions_37114 = true
 
-SchedulingScreen_BatchAgentValidation_41552 = RC
+SchedulingScreen_BatchAgentValidation_41552 = true #Toggle for feature 41542
 Scheduler_LoadWithoutRequests_38567 = true
 
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = true
