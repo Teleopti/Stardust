@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldMatchAllValuesInGivenGroupsWithGivenCriteria()
 		{
 			var scheduleDate = new DateOnly(2000, 1, 1);
-			var personToTest = PersonFactory.CreatePerson("dummyAgent1");
+			var personToTest = PersonFactory.CreatePerson(new Name("dummyAgent1", "dummy"));
 
 			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
 
@@ -59,32 +59,59 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				GroupingReadonly.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
 			});
 
-			createAndSaveReadModel(personToTest.Id.Value, personToTest.Name.FirstName, personToTest.Name.LastName, team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date);
+			createAndSaveReadModel(PersonFinderField.FirstName, personToTest.Id.Value, personToTest.Name.FirstName, team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date);
+
 			WithUnitOfWork.Do(() =>
 			{
 				var result = Target.FindPersonIdsInGroupsBasedOnPersonPeriod(new DateOnlyPeriod(scheduleDate, scheduleDate), new[] { personContract.Contract.Id.Value },
 				new Dictionary<PersonFinderField, string> {
-					{ PersonFinderField.FirstName, "dummyAgent1" }
+					{ PersonFinderField.FirstName, "dummyAgent1"}
 				});
 
 				result.Count.Should().Be.EqualTo(1);
 				result.Single().Should().Be.EqualTo(personToTest.Id.Value);
 			});
+
+			personToTest.SetEmploymentNumber("137545");
+			createAndSaveReadModel(PersonFinderField.EmploymentNumber, personToTest.Id.Value, personToTest.EmploymentNumber, team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date);
+
+			WithUnitOfWork.Do(() =>
+			{
+				var result = Target.FindPersonIdsInGroupsBasedOnPersonPeriod(new DateOnlyPeriod(scheduleDate, scheduleDate), new[] { personContract.Contract.Id.Value },
+				new Dictionary<PersonFinderField, string> {
+					{ PersonFinderField.FirstName, "dummyAgent1"},
+					{PersonFinderField.EmploymentNumber, "137545"}
+				});
+
+				result.Count.Should().Be.EqualTo(1);
+			});
+
+			createAndSaveReadModel(PersonFinderField.LastName, personToTest.Id.Value, personToTest.Name.LastName, team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date);
+
+			WithUnitOfWork.Do(() =>
+			{
+				var result = Target.FindPersonIdsInGroupsBasedOnPersonPeriod(new DateOnlyPeriod(scheduleDate, scheduleDate), new[] { personContract.Contract.Id.Value },
+				new Dictionary<PersonFinderField, string> {
+					{ PersonFinderField.FirstName, "dummyAgent1"},
+					{PersonFinderField.LastName, "dummy" }
+				});
+
+				result.Count.Should().Be.EqualTo(1);
+			});
+
 		}
 
-
-
-		private void createAndSaveReadModel(Guid personId, string firstName, string lastName, Guid teamId, Guid siteId, Guid businessUnitId, DateTime startDateTime)
+		private void createAndSaveReadModel(PersonFinderField searchType, Guid personId, string searchValue,
+			 Guid teamId, Guid siteId, Guid businessUnitId, DateTime startDateTime)
 		{
 			WithUnitOfWork.Do(uow =>
 			{
 				uow.Current().FetchSession().CreateSQLQuery(
 			  "Insert into [ReadModel].[FindPerson] (PersonId,  FirstName,  LastName,  EmploymentNumber,Note,TerminalDate,SearchValue, SearchValueId                        ,SearchType        , TeamId, SiteId,BusinessUnitId, StartDateTime, EndDateTime)" +
-			  " Values (                            :personId, :firstName, :lastName,   '137545'           ,''  ,NULL ,  :searchValue   ,'11610FE4-0130-4568-97DE-9B5E015B2564','FirstName',:teamId, :siteId,:businessUnitId, :startDateTime, NULL)")
+			  " Values (                            :personId, '', '',   '137545'           ,''  ,NULL ,  :searchValue,'11610FE4-0130-4568-97DE-9B5E015B2564',:searchType,:teamId, :siteId,:businessUnitId, :startDateTime, NULL)")
+			  .SetString("searchType", searchType.ToString())
 			  .SetGuid("personId", personId)
-			  .SetString("firstName", firstName)
-			  .SetString("lastName", lastName)
-			  .SetString("searchValue", firstName)
+			  .SetString("searchValue", searchValue)
 			  .SetDateTime("startDateTime", startDateTime)
 			  .SetGuid("businessUnitId", businessUnitId)
 			  .SetGuid("teamId", teamId)

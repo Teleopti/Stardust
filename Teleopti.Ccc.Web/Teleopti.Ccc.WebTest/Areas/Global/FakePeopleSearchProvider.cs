@@ -12,27 +12,30 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Global
 {
 	public class FakePeopleSearchProvider : IPeopleSearchProvider
-	{	
+	{
 		private readonly PeopleSummaryModel _model;
 		private readonly IList<IPerson> _permittedPeople;
 		private readonly IList<IPerson> _peopleWithConfidentialAbsencePermission;
-		private readonly IDictionary<DateOnly, IList<IPerson>> _permittedPeopleByDate;
+		private readonly IDictionary<DateOnly, List<IPerson>> _permittedPeopleByDate;
+		private readonly IDictionary<Guid, List<IPerson>> _permittedPeopleWithGroup;
 		private bool _enableDateFilter;
 		private readonly IDictionary<IPerson, string> _personApplicationRoleDictionary;
 
+
 		const string quotePattern = "(?!\")[^\"]*?(?=\")";
 
-		public FakePeopleSearchProvider(IEnumerable<IPerson> peopleList,IEnumerable<IOptionalColumn> optionalColumns)
+		public FakePeopleSearchProvider(IEnumerable<IPerson> peopleList, IEnumerable<IOptionalColumn> optionalColumns)
 		{
 			_permittedPeople = new List<IPerson>();
 			_peopleWithConfidentialAbsencePermission = new List<IPerson>();
-			_permittedPeopleByDate = new Dictionary<DateOnly, IList<IPerson>>();
+			_permittedPeopleByDate = new Dictionary<DateOnly, List<IPerson>>();
 			_model = new PeopleSummaryModel
 			{
 				People = peopleList.ToList(),
 				OptionalColumns = optionalColumns.ToList()
 			};
 			_personApplicationRoleDictionary = new Dictionary<IPerson, string>();
+			_permittedPeopleWithGroup = new Dictionary<Guid, List<IPerson>>();
 		}
 
 		public void EnableDateFilter()
@@ -40,17 +43,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			_enableDateFilter = true;
 		}
 
-		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField,string> criteriaDictionary,
-			int pageSize,int currentPageIndex,
-			DateOnly currentDate,IDictionary<string,bool> sortedColumns,string function)
+		public PeopleSummaryModel SearchPermittedPeopleSummary(IDictionary<PersonFinderField, string> criteriaDictionary,
+			int pageSize, int currentPageIndex,
+			DateOnly currentDate, IDictionary<string, bool> sortedColumns, string function)
 		{
 			return _model;
 		}
 
-		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField,string> criteriaDictionary,
-			DateOnly dateInUserTimeZone,string function)
+		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
+			DateOnly dateInUserTimeZone, string function)
 		{
-			if(_enableDateFilter)
+			if (_enableDateFilter)
 			{
 				return !_permittedPeopleByDate.ContainsKey(dateInUserTimeZone) ? new List<IPerson>() : _permittedPeopleByDate[dateInUserTimeZone].ToList();
 			}
@@ -71,9 +74,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		public IEnumerable<IPerson> SearchPermittedPeople(PersonFinderSearchCriteria searchCriteria,
-			DateOnly dateInUserTimeZone,string function)
+			DateOnly dateInUserTimeZone, string function)
 		{
-			if(_enableDateFilter)
+			if (_enableDateFilter)
 			{
 				return !_permittedPeopleByDate.ContainsKey(dateInUserTimeZone) ? new List<IPerson>() : _permittedPeopleByDate[dateInUserTimeZone].ToList();
 			}
@@ -82,11 +85,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 				: _permittedPeople;
 		}
 
-		public IEnumerable<Guid> GetPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria,DateOnly currentDate,
+		public IEnumerable<Guid> GetPermittedPersonIdList(PersonFinderSearchCriteria searchCriteria, DateOnly currentDate,
 			string function)
 		{
 
-			if(_enableDateFilter)
+			if (_enableDateFilter)
 			{
 				return !_permittedPeopleByDate.ContainsKey(currentDate) ? new List<Guid>() : _permittedPeopleByDate[currentDate].Select(p => p.Id.GetValueOrDefault()).ToList();
 			}
@@ -95,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 				? _peopleWithConfidentialAbsencePermission.Select(p => p.Id.GetValueOrDefault())
 				: _permittedPeople.Select(p => p.Id.GetValueOrDefault());
 		}
-		
+
 		public IEnumerable<IPerson> SearchPermittedPeopleWithAbsence(IEnumerable<IPerson> permittedPeople,
 			DateOnly dateInUserTimeZone)
 		{
@@ -103,10 +106,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		}
 
 		public PersonFinderSearchCriteria CreatePersonFinderSearchCriteria(
-			IDictionary<PersonFinderField,string> criteriaDictionary,int pageSize,
-			int currentPageIndex,DateOnly currentDate,IDictionary<string,bool> sortedColumns)
+			IDictionary<PersonFinderField, string> criteriaDictionary, int pageSize,
+			int currentPageIndex, DateOnly currentDate, IDictionary<string, bool> sortedColumns)
 		{
-			return new PersonFinderSearchCriteria(criteriaDictionary,pageSize,currentDate,sortedColumns,currentDate);
+			return new PersonFinderSearchCriteria(criteriaDictionary, pageSize, currentDate, sortedColumns, currentDate);
 		}
 
 		public IEnumerable<Guid> GetPermittedPersonIdList(IEnumerable<IPerson> people, DateOnly currentDate, string function)
@@ -116,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public IEnumerable<IPerson> GetPermittedPersonList(IEnumerable<IPerson> people, DateOnly currentDate, string function)
 		{
-			if(_enableDateFilter)
+			if (_enableDateFilter)
 			{
 				return !_permittedPeopleByDate.ContainsKey(currentDate) ? new List<IPerson>() : _permittedPeopleByDate[currentDate].ToList();
 			}
@@ -124,14 +127,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 				? _peopleWithConfidentialAbsencePermission
 				: _permittedPeople;
 		}
-	
+
 		public void PopulateSearchCriteriaResult(PersonFinderSearchCriteria search)
 		{
 			var people = new List<IPerson>();
 			var date = search.BelongsToDate;
 			if (_enableDateFilter)
 			{
-				people = !_permittedPeopleByDate.ContainsKey(date) ? new List<IPerson>() : _permittedPeopleByDate[date].ToList();				
+				people = !_permittedPeopleByDate.ContainsKey(date) ? new List<IPerson>() : _permittedPeopleByDate[date].ToList();
 			}
 			else
 			{
@@ -139,7 +142,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			}
 
 			search.TotalRows = people.Count;
-			int row = 0; 
+			int row = 0;
 			people.ForEach(p =>
 			{
 				search.SetRow(row, toPersonFinderDisplayRow(p, date, row + 1));
@@ -171,8 +174,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public List<Guid> FindPersonIds(DateOnly date, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
-			var people = new List<IPerson>();			
-			if(_enableDateFilter)
+			var people = new List<IPerson>();
+			if (_enableDateFilter)
 			{
 				people = !_permittedPeopleByDate.ContainsKey(date) ? new List<IPerson>() : _permittedPeopleByDate[date].ToList();
 			}
@@ -214,19 +217,33 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			}
 		}
 
-		public void Add(DateOnly date, IPerson person)
+		public void Add(DateOnly date, params IPerson[] persons)
 		{
 			if (_permittedPeopleByDate.ContainsKey(date))
 			{
-				_permittedPeopleByDate[date].Add(person);
+				_permittedPeopleByDate[date].AddRange(persons);
 			}
 			else
 			{
-				_permittedPeopleByDate[date] = new List<IPerson> {person};
+				_permittedPeopleByDate[date] = persons.ToList();
 			}
 		}
 
-		public void AddPersonUnavailableSince(IPerson person,DateOnly date)
+		public void Add(DateOnly date, Guid groupId, params IPerson[] persons)
+		{
+			if (!_permittedPeopleWithGroup.ContainsKey(groupId))
+			{
+				_permittedPeopleWithGroup.Add(groupId, persons.ToList());
+			}
+			else
+			{
+				_permittedPeopleWithGroup[groupId].AddRange(persons);
+			}
+
+			Add(date, persons);
+		}
+
+		public void AddPersonUnavailableSince(IPerson person, DateOnly date)
 		{
 
 		}
@@ -235,6 +252,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		{
 			_peopleWithConfidentialAbsencePermission.Add(person);
 		}
-		
+
+		public List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria)
+		{
+			return _permittedPeopleWithGroup
+				.Where(g => groupIds.Contains(g.Key))
+				.SelectMany(g => g.Value.Select(p => p.Id.Value))
+				.ToList();
+
+		}
 	}
 }

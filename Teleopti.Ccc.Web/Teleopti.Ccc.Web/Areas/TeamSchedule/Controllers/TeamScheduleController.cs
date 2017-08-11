@@ -83,7 +83,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				return
 					Json(new GroupScheduleViewModel { Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = "" });
 
-			//var criteriaDictionary = SearchTermParser.Parse(input.Keyword);
 
 			var result =
 				_teamScheduleViewModelFactory.CreateViewModelForGroups(new SearchDaySchedulesInput

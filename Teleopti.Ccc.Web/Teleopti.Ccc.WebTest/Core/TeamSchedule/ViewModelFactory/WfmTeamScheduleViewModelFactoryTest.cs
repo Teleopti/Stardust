@@ -1832,7 +1832,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 		[Test]
 		[SetUICulture("zh-CN")]
-		public void ShouldBasedOnUserUiCultureIfSortByFirstName() {
+		public void ShouldBasedOnUserUiCultureIfSortByFirstName()
+		{
 
 			var contract = ContractFactory.CreateContract("Contract");
 			contract.WithId();
@@ -2488,23 +2489,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsNoScheduleForScheduleSearchWithGroup()
 		{
+			PeopleSearchProvider.EnableDateFilter();
+			var scheduleDate = new DateOnly(2019, 12, 30);
 			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
-			PeopleSearchProvider.Add(person1);
-			var groupPage1 = new ReadOnlyGroupPage { PageId = Guid.NewGuid(), PageName = "group page 1" };
-			var groupPageDetails1 = new ReadOnlyGroupDetail
-			{
-				PageId = groupPage1.PageId,
-				GroupId = Guid.NewGuid(),
-				PersonId = person1.Id.Value
-			};
+			var groupId = Guid.NewGuid();
+			PeopleSearchProvider.Add(scheduleDate, groupId, person1);
 
-			GroupingReadOnlyRepository.Has(new List<ReadOnlyGroupPage>()
-			{
-				groupPage1
-			}, new List<ReadOnlyGroupDetail>
-			{
-				groupPageDetails1
-			});
 
 			var searchTerm = new Dictionary<PersonFinderField, string>
 			{
@@ -2515,11 +2505,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				new SearchDaySchedulesInput
 				{
 					CriteriaDictionary = searchTerm,
-					DateInUserTimeZone = new DateOnly(2019, 12, 30),
+					DateInUserTimeZone = scheduleDate,
 					PageSize = 20,
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false,
-					GroupIds = new Guid[] { groupPageDetails1.GroupId }
+					GroupIds = new Guid[] { groupId }
 				});
 
 			var schedules = result.Schedules.ToArray();
@@ -2528,124 +2518,5 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			schedules[0].PersonId.Should().Be.EqualTo(person1.Id.ToString());
 		}
 
-		[Test]
-		public void ShouldReturnCorrectProjectionWhenThereIsMainShiftForScheduleSearchWithGroup() {
-			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
-
-			var groupPage1 = new ReadOnlyGroupPage { PageId = Guid.NewGuid(), PageName = "group page 1" };
-			var groupPageDetails1 = new ReadOnlyGroupDetail
-			{
-				PageId = groupPage1.PageId,
-				GroupId = Guid.NewGuid(),
-				PersonId = personInUtc.Id.Value
-			};
-
-			GroupingReadOnlyRepository.Has(new List<ReadOnlyGroupPage>()
-			{
-				groupPage1
-			}, new List<ReadOnlyGroupDetail>
-			{
-
-				groupPageDetails1
-			});
-
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
-				scenario,
-				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 9, 0, 0, DateTimeKind.Utc)),
-				ShiftCategoryFactory.CreateShiftCategory("Day", "blue"), ActivityFactory.CreateActivity("activity1", new Color()));
-			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
-				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
-
-			ScheduleStorage.Add(pa);
-			var searchTerm = new Dictionary<PersonFinderField, string>
-			{
-				{PersonFinderField.FirstName, "Sherlock"}
-			};
-
-			var result = Target.CreateViewModelForGroups(
-				new SearchDaySchedulesInput
-				{
-					CriteriaDictionary = searchTerm,
-					DateInUserTimeZone = new DateOnly(scheduleDate),
-					PageSize = 20,
-					CurrentPageIndex = 1,
-					IsOnlyAbsences = false,
-					GroupIds = new Guid[] { groupPageDetails1.GroupId }
-				});
-			result.Schedules.Count().Should().Be.EqualTo(3);
-
-			var schedule = result.Schedules.First();
-			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
-			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
-
-			var projectionVm = schedule.Projection.ToList();
-			projectionVm.Count.Should().Be.EqualTo(2);
-
-			projectionVm[0].Description.Should().Be.EqualTo("activity1");
-			projectionVm[0].Start.Should().Be.EqualTo("2020-01-01 08:00");
-			projectionVm[0].Minutes.Should().Be.EqualTo(60);
-
-			projectionVm[1].Description.Should().Be.EqualTo("activity2");
-			projectionVm[1].Start.Should().Be.EqualTo("2020-01-01 09:00");
-			projectionVm[1].Minutes.Should().Be.EqualTo(120);
-		}
-		[Test]
-		public void ShouldReturnShiftCategoryDescriptionWhenThereIsMainShiftForScheduleSearchWithGroup()
-		{
-			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-			setUpPersonAndCulture();
-			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
-			CurrentScenario.FakeScenario(scenario);
-
-			var groupPage1 = new ReadOnlyGroupPage { PageId = Guid.NewGuid(), PageName = "group page 1" };
-			var groupPageDetails1 = new ReadOnlyGroupDetail
-			{
-				PageId = groupPage1.PageId,
-				GroupId = Guid.NewGuid(),
-				PersonId = personInUtc.Id.Value
-			};
-
-			GroupingReadOnlyRepository.Has(new List<ReadOnlyGroupPage>()
-			{
-				groupPage1
-			}, new List<ReadOnlyGroupDetail>
-			{
-
-				groupPageDetails1
-			});
-			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("testShift");
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(personInUtc,
-				scenario,
-				new DateTimePeriod(new DateTime(2020, 1, 1, 8, 0, 0, DateTimeKind.Utc), new DateTime(2020, 1, 1, 9, 0, 0, DateTimeKind.Utc)),
-				shiftCategory, ActivityFactory.CreateActivity("activity1", new Color()));
-			pa.AddActivity(ActivityFactory.CreateActivity("activity2", new Color()),
-				new DateTimePeriod(2020, 1, 1, 9, 2020, 1, 1, 11));
-
-			ScheduleStorage.Add(pa);
-			var searchTerm = new Dictionary<PersonFinderField, string>
-			{
-				{PersonFinderField.FirstName, "Sherlock"}
-			};
-
-			var result = Target.CreateViewModel(
-				new SearchDaySchedulesInput
-				{
-					TeamIds = new[] { team.Id.Value },
-					CriteriaDictionary = searchTerm,
-					DateInUserTimeZone = new DateOnly(scheduleDate),
-					PageSize = 20,
-					CurrentPageIndex = 1,
-					IsOnlyAbsences = false
-				});
-
-			var schedule = result.Schedules.First();
-			schedule.Name.Should().Be.EqualTo("Sherlock@Holmes");
-			schedule.IsFullDayAbsence.Should().Be.EqualTo(false);
-
-			schedule.ShiftCategory.Name.Should().Be.EqualTo(shiftCategory.Description.Name);
-		}
 	}
 }

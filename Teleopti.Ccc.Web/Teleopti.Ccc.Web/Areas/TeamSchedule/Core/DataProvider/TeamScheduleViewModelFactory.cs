@@ -30,14 +30,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IToggleManager _toggleManager;
 		private readonly IUserUiCulture _userUiCulture;
-		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 
 		public TeamScheduleViewModelFactory(IPermissionProvider permissionProvider, IScheduleProvider scheduleProvider,
 			ITeamScheduleProjectionProvider teamScheduleProjectionProvider, IProjectionProvider projectionProvider,
 			ICommonAgentNameProvider commonAgentNameProvider, IPeopleSearchProvider searchProvider,
 			IPersonRepository personRepository, IIanaTimeZoneProvider ianaTimeZoneProvider,
-			IToggleManager toggleManager, IUserUiCulture userUiCulture,
-			IGroupingReadOnlyRepository groupingReadOnlyRepository)
+			IToggleManager toggleManager,
+			IUserUiCulture userUiCulture)
 		{
 			_permissionProvider = permissionProvider;
 			_scheduleProvider = scheduleProvider;
@@ -49,16 +48,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_toggleManager = toggleManager;
 			_userUiCulture = userUiCulture;
-			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 		}
 
 		public GroupScheduleViewModel CreateViewModelForGroups(SearchDaySchedulesInput input)
 		{
-			var details = _groupingReadOnlyRepository.DetailsForGroups(input.GroupIds, new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone));
-			var personIds = details.Select(d => d.PersonId).Distinct().ToList();
+			var personIds = _searchProvider.FindPersonIdsInPeriodWithGroup(new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone),
+				input.GroupIds,
+				input.CriteriaDictionary);
+			
 			return createViewModelForPeople(personIds, input);
 		}
-		
+
 		public GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input)
 		{
 			var targetIds = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552)
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			return createViewModelForPeople(targetIds, input);
 		}
-		
+
 		public GroupWeekScheduleViewModel CreateWeekScheduleViewModel(
 			Guid[] teamIds,
 			IDictionary<PersonFinderField, string> criteriaDictionary,
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
-		
+
 
 		public GroupScheduleViewModel CreateViewModelForPeople(Guid[] personIds, DateOnly scheduleDate)
 		{
