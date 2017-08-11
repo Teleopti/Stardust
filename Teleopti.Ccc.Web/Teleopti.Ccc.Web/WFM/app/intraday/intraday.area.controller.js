@@ -337,9 +337,9 @@
         }
 
         function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
-			
+
             var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
-			
+
             if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem)) {
                 if ($scope.selectedItem.Skills) {
                     services[activeTab].pollSkillAreaDataByDayOffset($scope.selectedItem, $scope.toggles, dayOffset);
@@ -371,7 +371,7 @@
         });
 
         $scope.configMode = function() {
-            $state.go('intraday.config', {
+            $state.go('intraday.skill-area-config', {
                 isNewSkillArea: false
             });
         };
@@ -428,7 +428,7 @@
             if (value === 0) {
                 poll();
 			}
-			
+
         };
     }
 })();

@@ -20,9 +20,9 @@
 			templateUrl: 'app/intraday/intraday-area.html',
 			controller: 'IntradayAreaCtrl'
 		})
-		.state('intraday.config',
+		.state('intraday.skill-area-config',
 		{
-			url: '/config',
+			url: '/skill-area-config',
 			templateUrl: 'app/intraday/intraday-config-new.html',
 			controller: 'IntradayConfigCtrl'
 		})
