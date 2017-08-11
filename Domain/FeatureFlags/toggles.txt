@@ -130,10 +130,20 @@ MyTimeWeb_DayScheduleForStartPage_Command_44209 = true
 MyTimeWeb_ViewWFMAppGuide_43848 = true
 MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686 = true
 MyTimeWeb_OvertimeRequest_44558 = RC
+MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
+QRCodeForMobileApps_42695 = true
+ConfigQRCodeURLForMobileApps_43224 = true
+MobileApps_EnableMobileNotifications_44476 = true
+MyTimeWeb_MobileResponsive_43826 = true
 
 Scheduler_IntradayOptimization_36617 = true
 Scheduler_ShowSkillPrioLevels_41980 = true
+ResourcePlanner_HideSkillPrioSliders_41312 = RC
+Wfm_SkillPriorityRoutingGUI_39885 = RC
 WfmGlobalLayout_personalOptions_37114 = true
+
+SchedulingScreen_BatchAgentValidation_41552 = RC
+Scheduler_LoadWithoutRequests_38567 = true
 
 ResourcePlanner_TeamBlockDayOffForIndividuals_37998 = true
 ResourcePlanner_CascadingSkillsGUI_40018 = false #Hold release of Cascading UI until we have a proper UI
@@ -145,6 +155,7 @@ ResourcePlanner_CalculateShiftValuesInParallel_44681 = DEV
 ResourcePlanner_RespectSkillGroupShoveling_44156 = RC
 ResourcePlanner_OvertimeNightShifts_44311 = true
 ResourcePlanner_SchedulingIslands_44757 = RC
+Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
 
 Wfm_DisplayOnlineHelp_39402 = true
 
@@ -154,7 +165,6 @@ ETL_SpeedUpFactScheduleNightly_38019 = RC # not to be released until pbi 38304 a
 ETL_SpeedUpScenarioNightly_38300 = RC
 ETL_SpeedUpNightlyActivity_38303 = true
 ETL_SpeedUpNightlySkill_37543 = true
-Scheduler_LoadWithoutRequests_38567 = true
 ETL_SpeedUpNightlyOvertime_38304 = true
 ETL_SpeedUpNightlyAbsence_38301 = true
 ETL_MoveBadgeCalculationToETL_38421 = true
@@ -166,33 +176,39 @@ ETL_SpeedUpNightlyRequest_38914 = RC
 ETL_SpeedUpGroupPagePersonNightly_37623 = RC
 ETL_SpeedUpNightlyWorkload_38928 = RC
 ETL_SpeedUpNightlyForecastWorkload_38929 = RC
-HealthCheck_ValidateReadModelPersonScheduleDay_39421 = true
-HealthCheck_ValidateReadModelScheduleDay_39423 = true
-HealthCheck_EasyValidateAndFixReadModels_39696 = true
-HealthCheck_ReinitializeReadModels_39697 = true
 ETL_SpeedUpIntradayBusinessUnit_38932 = true
 ETL_SpeedUpNightlyBusinessUnit_38932 = RC
 ETL_EventbasedDate_39562 = true
 NewPasswordHash_40460 = true
-Wfm_Intraday_OptimalStaffing_40921 = true
-Wfm_SkillPriorityRoutingGUI_39885 = RC
 ETL_EventbasedTimeZone_40870 = true
 ETL_RemoveTimeZoneAndDateNightly_40870 = true
-ResourcePlanner_HideSkillPrioSliders_41312 = RC
 ETL_EventBasedAgentNameDescription_41432 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
-MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
-Wfm_ArchiveSchedule_41498 = true
-Wfm_ImportSchedule_41247 = true
-SchedulingScreen_BatchAgentValidation_41552 = RC
-Wfm_Intraday_ScheduledStaffing_41476 = true
+ETL_SpeedUpNightlyDayOff_38213 = true
+
 Mailbox_Optimization_41900 = true
 No_UnitOfWork_Nesting_42175 = true
-Wfm_Intraday_ESL_41827 = true
-Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
 Landing_Page_Data_Protection_Question_35721 = true
-Wfm_ResourcePlanner_SchedulingOnStardust_42874 = RC
 Reporting_Optional_Columns_42066 = true
+
+Wfm_ArchiveSchedule_41498 = true
+Wfm_ImportSchedule_41247 = true
+
+Wfm_Intraday_OptimalStaffing_40921 = true
+Wfm_Intraday_ScheduledStaffing_41476 = true
+Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
+Wfm_Intraday_ESL_41827 = true
+Wfm_Intraday_SupportSkillTypeWebChat_42591 = true
+Wfm_Intraday_SupportSkillTypeEmail_44002 = true
+WFM_Intraday_Show_For_Other_Days_43504 = RC
+WFM_Intraday_SupportMultisiteSkill_43874 = true
+WFM_Intraday_Export_To_Excel_44892 = DEV
+
+HealthCheck_ValidateReadModelPersonScheduleDay_39421 = true
+HealthCheck_ValidateReadModelScheduleDay_39423 = true
+HealthCheck_EasyValidateAndFixReadModels_39696 = true
+HealthCheck_ReinitializeReadModels_39697 = true
+
 
 Staffing_Info_Configuration_44687 = RC
 WfmStaffing_AllowActions_42524 = RC #Enables the entire Staffing page!
@@ -203,17 +219,7 @@ Staffing_ReadModel_BetterAccuracy_Step3_44331 = RC
 Staffing_ReadModel_Keep8DaysHistoricalData_44652 = RC # don't enable without Staffing_ReadModel_Update14Days_43840
 Staffing_BPOExchangeImport_45202 = RC
 
-QRCodeForMobileApps_42695 = true
-ConfigQRCodeURLForMobileApps_43224 = true
-MobileApps_EnableMobileNotifications_44476 = true
 
-ETL_SpeedUpNightlyDayOff_38213 = true
-Wfm_Intraday_SupportSkillTypeWebChat_42591 = true
-MyTimeWeb_MobileResponsive_43826 = true
-Wfm_Intraday_SupportSkillTypeEmail_44002 = true
-WFM_Intraday_Show_For_Other_Days_43504 = RC
-WFM_Intraday_SupportMultisiteSkill_43874 = true
-WFM_Intraday_Export_To_Excel_44892 = DEV
 WFM_Forecaster_Refact_44480 = DEV
 Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 WFM_Export_Forecast_44716 = true
