@@ -133,9 +133,11 @@
 			if (vm.hasSuggestionData) {
 				if (confirm($translate.instant('DiscardSuggestionData'))) {
 					clearSuggestions();
+					vm.showOverstaffSettings = false;
 					vm.generateChart(vm.selectedSkill, vm.selectedArea);
 				}
 			} else {
+				vm.showOverstaffSettings = false;
 				vm.generateChart(vm.selectedSkill, vm.selectedArea);
 			}
 		}
