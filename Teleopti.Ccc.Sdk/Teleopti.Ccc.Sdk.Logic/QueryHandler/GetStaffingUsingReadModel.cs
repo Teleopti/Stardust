@@ -77,7 +77,8 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 					var staffingList = staffingPerSkill.Where(x => x.SkillId == skill.Id);
 					foreach (var dateOnly in dayCollection)
 					{
-						var staffingDay = staffingList.Where(y => y.StartDateTime.Date == dateOnly.Date);
+						var dateTimeUtc = dateOnly.ToDateOnlyPeriod().ToDateTimePeriod(timeZoneInfo);
+						var staffingDay = staffingList.Where(y => y.StartDateTime >= dateTimeUtc.StartDateTime && y.EndDateTime <= dateTimeUtc.EndDateTime);
 						var skillDayDto = new SkillDayDto { DisplayDate = new DateOnlyDto { DateTime = dateOnly.Date } };
 						var skillDay = skillDays.FirstOrDefault(x => x.CurrentDate == dateOnly);
 						if (skillDay == null)
