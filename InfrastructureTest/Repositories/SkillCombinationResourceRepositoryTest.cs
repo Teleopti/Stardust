@@ -862,6 +862,38 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedCombinationResources.Count().Should().Be.EqualTo(1);
 			loadedCombinationResources.First().Resource.Should().Be.EqualTo(9.6);
 		}
-	
+
+		[Test]
+		public void ShouldNotMergeSkillCombResourceWhichAreAlmostTheSame()
+		{
+			var skillId1 = persistSkill();
+			var skillId2 = persistSkill();
+			Now.Is("2017-06-01 08:00");
+
+			var combinationResourcesOld = new List<SkillCombinationResource>
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resource = 2.1,
+					SkillCombination = new[] { skillId1 , skillId2}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 06, 01, 0, 0, 0),
+					EndDateTime = new DateTime(2017, 06, 01, 0, 15, 0),
+					Resource = 6,
+					SkillCombination = new[] { skillId1 }
+				}
+			};
+
+			Target.PersistSkillCombinationResource(Now.UtcDateTime(), combinationResourcesOld);
+			
+			var loadedCombinationResources =
+				Target.LoadSkillCombinationResources(new DateTimePeriod(2017, 01, 01, 2017, 12, 12));
+			loadedCombinationResources.Count().Should().Be.EqualTo(2);
+		}
+
 	}
 }
