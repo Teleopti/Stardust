@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 					fractionPeriodResult = dateTimePeriods.ToArray();
 				}
 				var res = d.Resource - resource;
-				if (res < 0 && Math.Round(res, 5) == 0.00000d)
+				if (res < 0 || Math.Round(res, 5) == 0.00000d)
 				{
 					res = 0;
 				}
