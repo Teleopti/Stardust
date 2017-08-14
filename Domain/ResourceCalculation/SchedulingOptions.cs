@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public int RefreshRate { get; set; }
         public bool UseSameDayOffs { get; set; }
         public IScheduleTag TagToUseOnScheduling { get; set; }
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SchedulingFewerResourceCalculations_45429, Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
     	public int ResourceCalculateFrequency { get; set; }
     	public TimeSpan? UseCustomTargetTime { get; set; }
     	public bool ShowTroubleshot { get; set; }
