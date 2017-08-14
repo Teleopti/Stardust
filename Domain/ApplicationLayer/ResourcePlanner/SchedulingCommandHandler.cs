@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var events = new List<IEvent>();
 			if (teamScheduling(command))
 			{
-				var agentsToSchedule = command.AgentsToSchedule ?? _peopleInOrganization.Agents(command.Period);
+				var agentsToSchedule = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command);
 				var agentIds = agentsToSchedule.Select(x => x.Id.Value);
 				events.Add(new SchedulingWasOrdered
 				{
@@ -86,6 +86,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_eventPublisher.Publish(events.ToArray());
 		}
 
+		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
+		[UnitOfWork]
+		public virtual IEnumerable<IPerson> AllAgents_DeleteThisLater(SchedulingCommand command)
+		{
+			return _peopleInOrganization.Agents(command.Period);
+		}
 		private bool teamScheduling(SchedulingCommand command)
 		{
 			using (CommandScope.Create(command))
@@ -93,6 +99,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				return _schedulingOptionsProvider.Fetch(null).UseTeam;
 			}
 		}
+		//
 
 		[UnitOfWork]
 		protected virtual IEnumerable<Island> CreateIslands(DateOnlyPeriod period, SchedulingCommand command)

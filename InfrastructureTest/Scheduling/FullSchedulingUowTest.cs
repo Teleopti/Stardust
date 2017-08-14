@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public IWorkShiftRuleSetRepository WorkShiftRuleSetRepository;
 		public IActivityRepository ActivityRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
+		public SchedulingOptionsProvider SchedulingOptionsProvider;
 
 		private readonly DateOnly date = new DateOnly(2017, 6, 1);
 
@@ -44,9 +45,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			_resourcePlannerSchedulingIslands44757 = resourcePlannerSchedulingIslands44757;
 		}
 
-		[Test]
-		public void ShouldNotCrashDueToLazyLoadingForShiftBagOnAgent()
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldNotCrashDueToLazyLoadingForShiftBagOnAgent(bool teamScheduling)
 		{
+			if (teamScheduling)
+			{
+				var defaultOptions = SchedulingOptionsProvider.Fetch(new DayOffTemplate());
+				defaultOptions.UseTeam = true;
+				defaultOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag);
+				SchedulingOptionsProvider.SetFromTest(defaultOptions);
+			}
+
 			fillDatabaseWithEnoughDataToRunScheduling();
 
 			Target.DoScheduling(DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1));
