@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ITeamInfoFactory teamInfoFactory)
 		{
 			_teamBlockScheduleSelected.ScheduleSelected(schedulingCallback, matrixes, selectedPeriod,
-				selectedAgents, rollbackService, new MightResourceCalculateBeforeFindingShift(resourceCalculateDelayer, _schedulingResourceCalculationLimiter, _createSkillGroups.Create(_schedulerStateHolder().SchedulingResultState.PersonsInOrganization, selectedPeriod.StartDate)),
+				selectedAgents, rollbackService, new MightResourceCalculateBeforeFindingShift(resourceCalculateDelayer, _schedulingResourceCalculationLimiter, _createSkillGroups.Create(selectedAgents, selectedPeriod.StartDate)),
 				_schedulerStateHolder().SchedulingResultState, schedulingOptions, teamInfoFactory);
 		}
 	}

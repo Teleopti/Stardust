@@ -115,6 +115,35 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.GreaterThanOrEqualTo(10 * 7 - dueToSomeOtherSmallOptimizations);
 		}
 
+		[Test]
+		public void ShouldRespectNumberOfSelectedAgents()
+		{
+			var firstDay = new DateOnly(2017, 5, 15);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
+			var activity = new Activity("_").WithId();
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var scenario = new Scenario("_");
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), new ShiftCategory("_").WithId()));
+			var contract = new Contract("_") { WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(90), TimeSpan.FromHours(8), TimeSpan.FromHours(0)) };
+			var agents = new List<IPerson>();
+			for (var i = 0; i < 10; i++)
+			{
+				agents.Add(new Person().WithId()
+					.InTimeZone(TimeZoneInfo.Utc)
+					.WithPersonPeriod(ruleSet, contract, skill)
+					.WithSchedulePeriodOneWeek(firstDay));
+			}
+			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1);
+			SchedulerStateHolderFrom.Fill(scenario, period, agents, Enumerable.Empty<IPersonAssignment>(), skillDays);
+
+			SchedulingResourceCalculationLimiter.SetLimits_UseOnlyFromTest(10, new Percent(0.01));
+			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), agents.Take(5), period);
+
+			const int dueToSomeOtherSmallOptimizations = 3;
+			ResourceCalculation.NumberOfCalculationsOnSingleDay
+				.Should().Be.GreaterThanOrEqualTo(5 * 7 - dueToSomeOtherSmallOptimizations);
+		}
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ResourceCalculationWithCount>().For<IResourceCalculation>();
