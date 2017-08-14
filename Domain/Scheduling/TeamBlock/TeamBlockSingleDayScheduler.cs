@@ -135,8 +135,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (shiftNudgeRestriction != null)
 						restriction = restriction.Combine(shiftNudgeRestriction);
 
-					var mightResourceCalculateBeforeFindingShift = resourceCalculateDelayer as MightResourceCalculateBeforeFindingShift;
-					mightResourceCalculateBeforeFindingShift?.Execute(person);
+					//hack for now - #45429
+					if (teamBlockInfo.TeamInfo.GroupMembers.Count() > 1)
+					{
+						var mightResourceCalculateBeforeFindingShift = resourceCalculateDelayer as MightResourceCalculateBeforeFindingShift;
+						mightResourceCalculateBeforeFindingShift?.Execute(person);
+					}
+					//hack for now - #45429
 
 					bestShiftProjectionCache = filterAndSelect(workShiftSelector, schedulingOptions, day, person, teamBlockSingleDayInfo,
 						restriction, allSkillDays, schedules, false);

@@ -441,6 +441,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingWithCategorizedShiftSelectionResultTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingResultTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\MinMaxStaffingDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\NumberOfResourceCalculationsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\PerformanceTestHackTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\ScheduleCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCallbackDesktopTest.cs" />

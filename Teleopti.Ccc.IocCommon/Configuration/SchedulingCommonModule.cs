@@ -128,6 +128,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				if (_configuration.Toggle(Toggles.ResourcePlanner_SchedulingFewerResourceCalculations_45429))
 				{
 					builder.RegisterType<SchedulingFewerResourceCalculations>().As<IScheduling>().InstancePerLifetimeScope();
+					builder.RegisterType<SchedulingResourceCalculationLimiter>().SingleInstance();
 				}
 				else
 				{

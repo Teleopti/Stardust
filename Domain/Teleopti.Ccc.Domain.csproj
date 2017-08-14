@@ -303,6 +303,7 @@
     <Compile Include="Scheduling\SchedulingEventHandler.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulingWasOrdered.cs" />
     <Compile Include="Scheduling\TeamBlock\MightResourceCalculateBeforeFindingShift.cs" />
+    <Compile Include="Scheduling\TeamBlock\SchedulingResourceCalculationLimiter.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopContext.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopPeopleInOrganization.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopSchedulingContext.cs" />
