@@ -6,57 +6,11 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Rta;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateViewModelBuilder
 {
-
-	[DomainTest]
-	[TestFixture]
-	[FakePermissions]
-	public class GetAllAgentsForEntireBU
-	{
-		public AgentStatesViewModelBuilder Target;
-		public FakeAgentStateReadModelPersister Database;
-		public MutableNow Now;
-		public FakePermissions Permissions;
-
-		[Test]
-		public void GetNoOfAgentsForNoSelection()
-		{
-
-			var siteId = Guid.NewGuid();
-			Permissions.HasPermissionForSite(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, siteId);
-			Enumerable.Range(1, 50)
-				.Select(i =>
-					Database
-						.Has(new AgentStateReadModel
-						{
-							PersonId = Guid.NewGuid(),
-							SiteId = i%2 == 0 ? siteId : Guid.NewGuid(),
-						}));
-
-			var noOfAgentsForNoSelection = Target.For(new AgentStateFilter {InAlarm = false})
-				.States.Count();
-
-			Target.For(new AgentStateFilter { SiteIds = new []{ siteId },InAlarm = false })
-				.States.Count().Equals(noOfAgentsForNoSelection);
-
-		}
-	}
-
-
-
-
-
-
-
-
-
 	[DomainTest]
 	[TestFixture]
 	public class InAlarmTest

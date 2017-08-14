@@ -104,8 +104,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			system.UseTestDouble<TestConnectionStrings>().For<IConnectionStrings>();
 			system.UseTestDouble<MutableFakeCurrentHttpContext>().For<ICurrentHttpContext>();
 
-
-			system.AddService<FakePermissionsAttribute>();
 			// fake for now. if real repo needs to be included in the scope....
 			system.UseTestDouble<FakeLicenseRepository>().For<ILicenseRepository, ILicenseRepositoryForLicenseVerifier>();
 		}
