@@ -16,17 +16,19 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly INow _now;
+		private readonly ICurrentBusinessUnit _businessUnit;
 
-		public AgentStateReadModelReader(ICurrentUnitOfWork unitOfWork, INow now)
+		public AgentStateReadModelReader(ICurrentUnitOfWork unitOfWork, INow now, ICurrentBusinessUnit businessUnit)
 		{
 			_unitOfWork = unitOfWork;
 			_now = now;
+			_businessUnit = businessUnit;
 		}
 
 		public IEnumerable<AgentStateReadModel> Read(AgentStateFilter filter)
 		{
 			var queryBuilder =
-				new AgentStateReadModelQueryBuilder(_now)
+				new AgentStateReadModelQueryBuilder(_now, _businessUnit)
 					.WithSelection(filter.SiteIds, filter.TeamIds, filter.SkillIds);
 			if (filter.InAlarm)
 				queryBuilder.InAlarm();

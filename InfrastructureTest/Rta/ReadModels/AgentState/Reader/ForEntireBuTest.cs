@@ -7,11 +7,16 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 {
+
 	[DatabaseTest]
 	[TestFixture]
 	public class ForEntireBuTest
@@ -21,6 +26,34 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IAgentStateReadModelReader Target;
+		public ICurrentBusinessUnit BusinessUnit;
+		[Test]
+		public void GetNoOfAgentsForNoSelection()
+		{
+
+			WithUnitOfWork.Do(() =>
+			{
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = Guid.NewGuid(),
+					BusinessUnitId = BusinessUnit.Current().Id,
+
+				});
+				StatePersister.PersistWithAssociation(new AgentStateReadModelForTest
+				{
+					PersonId = Guid.NewGuid(),
+					BusinessUnitId = Guid.NewGuid(),
+
+				});
+			});
+
+			WithUnitOfWork.Get(() =>
+					Target.Read(new AgentStateFilter
+					{
+						InAlarm = false
+					}))
+				.Count().Should().Be(1);
+		}
 
 		[Test]
 		public void ShouldGetMamimum50AgentStatesForEntireBu()

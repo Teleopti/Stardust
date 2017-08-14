@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 		public MutableNow Now;
 		public WithUnitOfWork WithUnitOfWork;
 		public IAgentStateReadModelReader Target;
+		public ICurrentBusinessUnit BusinessUnit;
 
 		[Test]
 		public void ShouldReadNameForEverything()
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 INSERT INTO [ReadModel].[AgentState] 
 (
 	PersonId,
+	BusinessUnitId,
 	SiteId,
 	TeamId,
 	SiteName,
@@ -58,6 +61,7 @@ INSERT INTO [ReadModel].[AgentState]
 	IsDeleted
 ) VALUES (
 	'{personId1}',
+	'{BusinessUnit.Current().Id.Value}',
 	'{siteId}',
 	'{teamId}',
 	'site',

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NHibernate;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -16,33 +17,35 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 	public class AgentStateReadModelQueryBuilder
 	{
-		private readonly SelectionInfos selections = new SelectionInfos();
+		private readonly SelectionInfos _selections = new SelectionInfos();
 		private readonly INow _now;
+		private readonly ICurrentBusinessUnit _businessUnit;
 		private Guid?[] excluded;
 
-		public AgentStateReadModelQueryBuilder(INow now)
+		public AgentStateReadModelQueryBuilder(INow now, ICurrentBusinessUnit businessUnit)
 		{
 			_now = now;
+			_businessUnit = businessUnit;
 		}
 
 		public AgentStateReadModelQueryBuilder WithSelection(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
 			if (siteIds != null)
-				selections.Add(new SelectionInfo
+				_selections.Add(new SelectionInfo
 				{
 					Query = "a.SiteId IN (:siteIds)",
 					Set = s => s.SetParameterList("siteIds", siteIds),
 					SelectionType = SelectionType.Org
 				});
 			if (teamIds != null)
-				selections.Add(new SelectionInfo
+				_selections.Add(new SelectionInfo
 				{
 					Query = "a.TeamId IN (:teamIds)",
 					Set = s => s.SetParameterList("teamIds", teamIds),
 					SelectionType = SelectionType.Org
 				});
 			if (skillIds != null)
-				selections.Add(new SelectionInfo
+				_selections.Add(new SelectionInfo
 				{
 					Query = @"
 INNER JOIN ReadModel.GroupingReadOnly AS g
@@ -61,7 +64,7 @@ AND :today BETWEEN g.StartDate and g.EndDate",
 
 		public AgentStateReadModelQueryBuilder InAlarm()
 		{
-			selections.Add(new SelectionInfo
+			_selections.Add(new SelectionInfo
 			{
 				Query = @" 
 AlarmStartTime <= :now 
@@ -76,21 +79,21 @@ ORDER BY AlarmStartTime ASC ",
 		{
 			excluded = excludedStates.ToArray();
 			if (excluded.All(x => x.HasValue))
-				selections.Add(new SelectionInfo
+				_selections.Add(new SelectionInfo
 				{
 					Query = "StateGroupId NOT IN(:excludedStateGroupIds) OR StateGroupId IS NULL ",
 					Set = s => s.SetParameterList("excludedStateGroupIds", excluded.Where(x => x.HasValue)),
 					SelectionType = SelectionType.ExcludeStateGroups
 				});
 			else if (excluded.Any(x => x.HasValue))
-				selections.Add(new SelectionInfo
+				_selections.Add(new SelectionInfo
 				{
 					Query = "StateGroupId NOT IN(:excludedStateGroupIds) ",
 					Set = s => s.SetParameterList("excludedStateGroupIds", excluded.Where(x => x.HasValue)),
 					SelectionType = SelectionType.ExcludeStateGroups
 				});
 			else
-				selections.Add(new SelectionInfo
+				_selections.Add(new SelectionInfo
 				{
 					Query = "StateGroupId IS NOT NULL ",
 					Set = s => s,
@@ -102,37 +105,44 @@ ORDER BY AlarmStartTime ASC ",
 		public Selection Build()
 		{
 			var builder = new StringBuilder("SELECT DISTINCT TOP 50 a.* FROM [ReadModel].AgentState a WITH (NOLOCK) ");
-			if (selections.Any(SelectionType.Skill))
+
+
+
+			if (_selections.Any(SelectionType.Skill))
 			{
-				builder.Append(selections.QueryFor(SelectionType.Skill).Single());
-				if (selections.Any(SelectionType.Org))
+				builder.Append(_selections.QueryFor(SelectionType.Skill).Single());
+				if (_selections.Any(SelectionType.Org))
 					builder
 						.Append(" AND a.IsDeleted = 0 AND ")
-						.Append("(" + string.Join(" OR ", selections.QueryFor(SelectionType.Org)) + ")");
+						.Append("(" + string.Join(" OR ", _selections.QueryFor(SelectionType.Org)) + ")");
 			}
 			else
 			{
 				builder
 					.Append(" WHERE a.IsDeleted = 0 ");
-				if(selections.Any(SelectionType.Org))
-					builder.Append("AND (" + string.Join(" OR ", selections.QueryFor(SelectionType.Org)) + ")");
+				if(_selections.Any(SelectionType.Org))
+					builder.Append("AND (" + string.Join(" OR ", _selections.QueryFor(SelectionType.Org)) + ")");
 			}
 				
 
-			if (selections.Any(SelectionType.ExcludeStateGroups))
+			if (_selections.Any(SelectionType.ExcludeStateGroups))
 				builder
 					.Append(" AND ")
-					.Append("(" + selections.QueryFor(SelectionType.ExcludeStateGroups).Single() + ")");
+					.Append("(" + _selections.QueryFor(SelectionType.ExcludeStateGroups).Single() + ")");
 
-			if (selections.Any(SelectionType.Alarm))
+			builder.Append(" AND a.BusinessUnitId = :BusinessUnitId ");
+
+			if (_selections.Any(SelectionType.Alarm))
 				builder
 					.Append(" AND ")
-					.Append(selections.QueryFor(SelectionType.Alarm).Single());
+					.Append(_selections.QueryFor(SelectionType.Alarm).Single());
 
 			return new Selection
 			{
 				Query = builder.ToString(),
-				ParameterFuncs = selections.ParameterFuncs().ToArray()
+				ParameterFuncs = _selections.ParameterFuncs()
+					.Append(s => s.SetGuid("BusinessUnitId", _businessUnit.Current().Id.Value))
+					.ToArray()
 			};
 		}
 	}
