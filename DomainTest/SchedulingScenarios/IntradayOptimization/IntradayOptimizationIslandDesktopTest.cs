@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				{
 					new PersonAbsence(agent, scenario, new AbsenceLayer(new Absence(), new DateTimePeriod(2010, 1, 1, 8, 2010, 1, 1, 9))),
 					personMeeting,
-					new PreferenceDay(agent, dateOnly, new PreferenceRestriction()), 
+					new PreferenceDay(agent, dateOnly, new PreferenceRestriction()) 
 				}, skillDay);
 		
 			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);

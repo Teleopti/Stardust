@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			Database
 				.Has(new AgentStateReadModel
 				{
-					PersonId = personId1,
+					PersonId = personId1
 				})
 				.WithPersonSkill(personId1, skillId1)
 				.Has(new AgentStateReadModel

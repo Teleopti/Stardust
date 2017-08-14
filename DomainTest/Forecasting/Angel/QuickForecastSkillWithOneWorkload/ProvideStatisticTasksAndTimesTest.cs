@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Angel.QuickForecastSkillWithOneWor
 					StatOfferedTasks = 6,
 					StatAverageTaskTimeSeconds = 35,
 					StatAverageAfterTaskTimeSeconds = 50
-				},
+				}
 			};
 		}
 

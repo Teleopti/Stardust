@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(90), TimeSpan.FromHours(8), TimeSpan.FromHours(0)),
 				WorkTime = new WorkTime(TimeSpan.FromHours(8)),
-				NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(40),
+				NegativePeriodWorkTimeTolerance = TimeSpan.FromHours(40)
 			};
 			var agent = PersonRepository.Has(contract, ContractScheduleFactory.CreateWorkingWeekContractSchedule(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));

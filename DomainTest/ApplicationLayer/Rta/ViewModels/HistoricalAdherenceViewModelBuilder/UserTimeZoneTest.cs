@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 				new HistoricalOutOfAdherenceReadModel
 				{
 					StartTime = "2016-10-12 14:00".Utc(),
-					EndTime = "2016-10-12 15:00".Utc(),
+					EndTime = "2016-10-12 15:00".Utc()
 				}
 			});
 
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 			{
 				PersonId = person,
 				BelongsToDate = "2017-04-18".Date(),
-				Timestamp = "2017-04-18 08:20".Utc(),
+				Timestamp = "2017-04-18 08:20".Utc()
 			});
 
 			var data = Target.Build(person);

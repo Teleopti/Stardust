@@ -603,7 +603,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			stateHolder.Schedules = _dictionary;
 			_dictionary.AddTestItem(_person, GetExpectationForTwoDays(date, absence, requestedDateTimePeriod, new List<IVisualLayer> { existingLayerWithSameAbsence, existingLayerWithSameAbsence2 }));
 
-			var personSkillProvider = new FakePersonSkillProvider { SkillCombination = new SkillCombination(new[] { _skill }, new DateOnlyPeriod(), new[] { new SkillEffiencyResource(_skill.Id.GetValueOrDefault(), 1), }, new[] { _skill }) };
+			var personSkillProvider = new FakePersonSkillProvider { SkillCombination = new SkillCombination(new[] { _skill }, new DateOnlyPeriod(), new[] { new SkillEffiencyResource(_skill.Id.GetValueOrDefault(), 1) }, new[] { _skill }) };
 
 			var result = _target.GetUnderStaffingDays(absenceRequest, new RequiredForHandlingAbsenceRequest(stateHolder, null, _resourceOptimizationHelper, null), personSkillProvider);
 			result.UnderstaffingDays.Count().Should().Be.EqualTo(2);

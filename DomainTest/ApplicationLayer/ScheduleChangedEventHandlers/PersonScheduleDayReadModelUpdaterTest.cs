@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 										{
 											StartDateTime = new DateTime(2013, 10, 08, 0, 0, 0),
 											EndDateTime = new DateTime(2013, 10, 09, 0, 0, 0)
-										},
+										}
 								}
 						}
 			});

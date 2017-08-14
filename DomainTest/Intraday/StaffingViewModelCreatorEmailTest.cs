@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					StartDateTime = userNow.AddMinutes(_skillResolution),
 					EndDateTime = userNow.AddMinutes(2*_skillResolution),
 					Resource = 2
-				},
+				}
 			};
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), skillCombinationResources);
@@ -243,7 +243,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					StartDateTime = userNow.AddDays(-1).AddMinutes(_skillResolution),
 					EndDateTime = userNow.AddDays(-1).AddMinutes(2*_skillResolution),
 					Resource = 20
-				},
+				}
 			};
 
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), skillCombinationResources);

@@ -639,7 +639,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning.Scheduling
 		        _scheduleDayPro9,
 		        _scheduleDayPro10,
 		        _scheduleDayPro11,
-		        _scheduleDayPro12,
+		        _scheduleDayPro12
 	        };
         }
 

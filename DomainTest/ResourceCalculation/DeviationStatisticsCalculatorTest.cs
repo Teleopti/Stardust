@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyCalculatorWorksWithNonNumberValues()
         {
-            double[] expected = { 1, 0d,  };
+            double[] expected = { 1, 0d  };
             double[] real = { 1.5, 1d };
 
             _target = new DeviationStatisticsCalculator(expected, real);

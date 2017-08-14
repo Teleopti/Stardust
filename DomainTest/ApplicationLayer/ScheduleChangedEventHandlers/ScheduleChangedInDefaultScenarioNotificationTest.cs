@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 						Shift = new ProjectionChangedEventShift
 						{
 							StartDateTime = "2016-06-03 08:00".Utc(),
-							EndDateTime = "2016-06-03 17:00".Utc(),
+							EndDateTime = "2016-06-03 17:00".Utc()
 						}
 					}
 				}

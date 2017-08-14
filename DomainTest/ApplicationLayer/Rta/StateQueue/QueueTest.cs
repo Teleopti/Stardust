@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 					new BatchStateInputModel
 					{
 						UserCode = "usercode",
-						StateCode = "phone",
+						StateCode = "phone"
 					}
 				}
 			});
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.StateQueue
 					new BatchStateInputModel
 					{
 						UserCode = "usercode",
-						StateCode = "phone",
+						StateCode = "phone"
 					}
 				}
 			});

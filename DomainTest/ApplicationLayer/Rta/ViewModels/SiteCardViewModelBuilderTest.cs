@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteName = "London",
 					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
-					AlarmStartTime = "2017-03-30 08:29".Utc(),
+					AlarmStartTime = "2017-03-30 08:29".Utc()
 				})
 				.WithAgent(personId);
 
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteName = "London",
 					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
-					AlarmStartTime = "2017-03-30 08:29".Utc(),
+					AlarmStartTime = "2017-03-30 08:29".Utc()
 				})
 				.WithAgent(personId)
 				.WithSkill(skill);
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteId = siteId1,
 					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personId)
 				.WithSkill(skill)
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteId = siteId2,
 					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personId2)
 				.WithSkill(skill)
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteId = siteId2,
 					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personId3)
 				.WithSkill(skill);
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					PersonId = personId,
 					BusinessUnitId = businessUnitId,
 					TeamId = Guid.NewGuid(),
-					SiteId = site,
+					SiteId = site
 				})
 				.WithAgent(personId)
 				.WithSkill(skill);
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteId = siteId,
 					TeamId = teamId,
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personId)
 				.WithSkill(skill1)
@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteId = siteId,
 					TeamId = teamId,
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personWithSkill)
 				.WithSkill(skill1)
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteId = siteId,
 					TeamId = teamId,
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personWithoutSkill)
 				.WithSkill(skill2);
@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteName = "B",
 					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personId1)
 				.WithSkill(skill)
@@ -287,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteName = "C",
 					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personId2)
 				.WithSkill(skill)
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteName = "A",
 					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personId3)
 				.WithSkill(skill);
@@ -339,7 +339,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteName = "Å",
 					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personId1)
 				.WithSkill(skill)
@@ -352,7 +352,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteName = "Ä",
 					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personId2)
 				.WithSkill(skill)
@@ -365,7 +365,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteName = "A",
 					TeamId = Guid.NewGuid(),
 					IsRuleAlarm = true,
-					AlarmStartTime = "2016-06-21 08:29".Utc(),
+					AlarmStartTime = "2016-06-21 08:29".Utc()
 				})
 				.WithAgent(personId3)
 				.WithSkill(skill);
@@ -398,7 +398,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				{
 					PersonId = personId1,
 					SiteId = siteId,
-					TeamId = team1,
+					TeamId = team1
 				})
 				.WithTeam(team2)
 				.WithAgent(personId2)
@@ -406,7 +406,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 				{
 					PersonId = personId2,
 					SiteId = siteId,
-					TeamId = team2,
+					TeamId = team2
 				});
 
 			var viewModel = Target.Build().Sites.Single();
@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteId = siteId,
 					TeamId = team1,
 					IsRuleAlarm = true,
-					AlarmStartTime = "2017-08-02 08:00".Utc(),
+					AlarmStartTime = "2017-08-02 08:00".Utc()
 				})
 				.WithTeam(team2)
 				.WithAgent(personId2)
@@ -444,7 +444,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 					SiteId = siteId,
 					TeamId = team2,
 					IsRuleAlarm = true,
-					AlarmStartTime = "2017-08-02 08:00".Utc(),
+					AlarmStartTime = "2017-08-02 08:00".Utc()
 				});
 
 			var viewModel = Target.Build();

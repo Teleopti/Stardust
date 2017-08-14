@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 							new MainShiftLayer(_shbrAct, period1),
 							new MainShiftLayer(_lunchAct, period2),
 							new MainShiftLayer(_baseAct, period3),
-							new MainShiftLayer(_baseAct, period4),
+							new MainShiftLayer(_baseAct, period4)
 						}.CreateProjection();
 				}
 

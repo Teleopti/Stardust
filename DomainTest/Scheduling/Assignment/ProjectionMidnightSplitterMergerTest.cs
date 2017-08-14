@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			var layers = new IVisualLayer[]
 			             	{
-			             		createLayer(new DateTimePeriod(start, end)),
+			             		createLayer(new DateTimePeriod(start, end))
 			             	};
 			var res = target.MergedCollection(layers, person);
 			res.Length.Should().Be.EqualTo(2);
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             var end = new DateTime(2000, 1, 2, 10, 0, 0, DateTimeKind.Utc);
             var layers = new IVisualLayer[]
 			             	{
-			             		createLayer(new DateTimePeriod(start, end)),
+			             		createLayer(new DateTimePeriod(start, end))
 			             	};
 
             var res = target.MergedCollection(layers, person);

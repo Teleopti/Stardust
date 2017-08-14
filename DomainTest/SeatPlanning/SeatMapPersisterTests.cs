@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 
 			var command = new SaveSeatMapCommand()
 			{
-				SeatMapData = dummyJsonData,
+				SeatMapData = dummyJsonData
 			};
 
 			_target.Save(command);
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				Seats = new[]
 				{
 					new SeatInfo(){ Id = Guid.Parse("{d9664f22-886b-f5bf-f799-7d59765c2604}"), IsNew = true, Name = "New Seat"},
-					new SeatInfo(){ Id = Guid.Parse("{8e48dd65-e68a-0834-fdc5-eae75f12065c}"), IsNew = true, Name = "New Seat 2"},
+					new SeatInfo(){ Id = Guid.Parse("{8e48dd65-e68a-0834-fdc5-eae75f12065c}"), IsNew = true, Name = "New Seat 2"}
 				}
 			};
 
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				Seats = new[]
 				{
 					new SeatInfo(){ Id = Guid.Parse("{d9664f22-886b-f5bf-f799-7d59765c2604}"), IsNew = true, Name = "New Seat"},
-					new SeatInfo(){ Id = Guid.Parse("{8e48dd65-e68a-0834-fdc5-eae75f12065c}"), IsNew = true, Name = "New Seat 2"},
+					new SeatInfo(){ Id = Guid.Parse("{8e48dd65-e68a-0834-fdc5-eae75f12065c}"), IsNew = true, Name = "New Seat 2"}
 				}
 			};
 
@@ -553,7 +553,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				Seats = new[]
 				{
 					new SeatInfo(){ Id = Guid.Parse("{d9664f22-886b-f5bf-f799-7d59765c2604}"), IsNew = true, Name = "New Seat"},
-					new SeatInfo(){ Id = Guid.Parse("{8e48dd65-e68a-0834-fdc5-eae75f12065c}"), IsNew = true, Name = "New Seat 2"},
+					new SeatInfo(){ Id = Guid.Parse("{8e48dd65-e68a-0834-fdc5-eae75f12065c}"), IsNew = true, Name = "New Seat 2"}
 				}
 			};
 

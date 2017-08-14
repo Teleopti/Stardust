@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
+				StateCode = "phone"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
+				StateCode = "phone"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
+				StateCode = "phone"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
@@ -105,13 +105,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
+				StateCode = "phone"
 			});
 			Now.Is("2015-02-20 18:59");
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
+				StateCode = "phone"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
+				StateCode = "phone"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonInAdherenceEvent>()
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
+				StateCode = "phone"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonOutOfAdherenceEvent>()
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "admin",
+				StateCode = "admin"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonNeutralAdherenceEvent>()
@@ -254,7 +254,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "admin",
+				StateCode = "admin"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonActivityActualStartEvent>()
@@ -276,7 +276,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
+				StateCode = "phone"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonStateChangedEvent>()
@@ -298,7 +298,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			Target.ProcessState(new StateForTest
 			{
 				UserCode = "usercode",
-				StateCode = "phone",
+				StateCode = "phone"
 			});
 
 			Publisher.PublishedEvents.OfType<PersonRuleChangedEvent>()

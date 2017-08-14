@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					new AgentStateActivityReadModel
 					{
 						StartTime = "2016-05-29 12:00:00".Utc(),
-						EndTime = "2016-05-29 13:00:00".Utc(),
+						EndTime = "2016-05-29 13:00:00".Utc()
 					}
 				}
 			});
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			{
 				PersonId = personId,
 				TeamId = teamId,
-				RuleStartTime = "2016-06-08 08:00".Utc(),
+				RuleStartTime = "2016-06-08 08:00".Utc()
 			});
 			Now.Is("2016-06-08 08:02".Utc());
 
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 				.WithPersonSkill(person, skill)
 				.Has(new AgentStateReadModel
 				{
-					PersonId = person,
+					PersonId = person
 				});
 
 			var agentState = Target.For(new AgentStateFilter {SkillIds = new[] { skill } }).States.Single();

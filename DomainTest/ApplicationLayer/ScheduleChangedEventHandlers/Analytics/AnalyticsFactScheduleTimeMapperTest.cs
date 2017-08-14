@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 				PayloadId = _guidActInPaid,
 				WorkTime = TimeSpan.FromMinutes(10),
 				StartDateTime = start,
-				EndDateTime = start.AddMinutes(10),
+				EndDateTime = start.AddMinutes(10)
 			};
 			var result = Target.Handle(layer, 12, 22, _shiftLengths.First().ShiftLength, TimeSpan.Zero);
 

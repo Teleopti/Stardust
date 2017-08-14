@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			IAvailabilityRestriction availabilityDayRestriction617 = new AvailabilityRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(10, 0, 0), null),
-				EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(17, 0, 0)),
+				EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(17, 0, 0))
 			};
 
 			var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction617 };
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			IAvailabilityRestriction availabilityDayRestriction617 = new AvailabilityRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(10, 0, 0), null),
-				EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(17, 0, 0)),
+				EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(17, 0, 0))
 			};
 
 			var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction617 };
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 			IAvailabilityRestriction availabilityDayRestriction617 = new AvailabilityRestriction
 			{
 				StartTimeLimitation = new StartTimeLimitation(new TimeSpan(10, 0, 0), null),
-				EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(17, 0, 0)),
+				EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(17, 0, 0))
 			};
 
 			var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction617 };
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IAvailabilityRestriction availabilityDayRestriction617 = new AvailabilityRestriction
                                                                             {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(10, 0, 0),null),
-                EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(17, 0, 0)),
+                EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(17, 0, 0))
             };
 
             var baseRestrictions = new List<IRestrictionBase> { availabilityDayRestriction617 };
@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             IAvailabilityRestriction availabilityDayRestriction617 = new AvailabilityRestriction
             {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(8, 0, 0), null),
-                EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(21, 0, 0)),
+                EndTimeLimitation = new EndTimeLimitation(null, new TimeSpan(21, 0, 0))
             };
 
             

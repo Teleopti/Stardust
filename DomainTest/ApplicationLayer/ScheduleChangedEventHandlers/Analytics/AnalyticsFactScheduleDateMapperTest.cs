@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var invalidLayer = new ProjectionChangedEventLayer
 			{
 				StartDateTime = new DateTime(2014, 12, 1, 0, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2014, 12, 3, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2014, 12, 3, 0, 0, 0, DateTimeKind.Utc)
 			};
 			var analyticsFactScheduleDate = Target.Map(_shiftStartDateUtc, _shiftEndDateUtc, _shiftStartDateLocal, invalidLayer, _scheduleChangeTime, minutesPerInterval);
 			analyticsFactScheduleDate.Should().Be.Null();
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var invalidLayer = new ProjectionChangedEventLayer
 			{
 				StartDateTime = new DateTime(2014, 12, 3, 0, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2014, 12, 5, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2014, 12, 5, 0, 0, 0, DateTimeKind.Utc)
 			};
 			var maxBefore = AnalyticsDates.MaxDate();
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var invalidLayer = new ProjectionChangedEventLayer
 			{
 				StartDateTime = new DateTime(2014, 12, 3, 0, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2014, 12, 4, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2014, 12, 4, 0, 0, 0, DateTimeKind.Utc)
 			};
 			var invalidShiftStart = new DateTime(2014, 12, 1, 0, 0, 0, DateTimeKind.Utc);
 			var analyticsFactScheduleDate = Target.Map(invalidShiftStart, _shiftEndDateUtc, _shiftStartDateLocal, invalidLayer, _scheduleChangeTime, minutesPerInterval);
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers.
 			var invalidLayer = new ProjectionChangedEventLayer
 			{
 				StartDateTime = new DateTime(2014, 12, 3, 0, 0, 0, DateTimeKind.Utc),
-				EndDateTime = new DateTime(2014, 12, 4, 0, 0, 0, DateTimeKind.Utc),
+				EndDateTime = new DateTime(2014, 12, 4, 0, 0, 0, DateTimeKind.Utc)
 			};
 			var invalidShiftEnd = new DateTime(2014, 12, 5, 0, 0, 0, DateTimeKind.Utc);
 			var maxBefore = AnalyticsDates.MaxDate();

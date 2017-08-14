@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					{
 						UserCode = "usercode1",
 						StateCode = "statecode"
-					},
+					}
 				}
 			});
 			Target.CloseSnapshot(new CloseSnapshotForTest
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					new BatchStateForTest
 					{
 						UserCode = "usercode2",
-						StateCode = "statecode",
+						StateCode = "statecode"
 					}
 				}
 			});
@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					new BatchStateForTest
 					{
 						UserCode = "usercode1",
-						StateCode = "statecode",
+						StateCode = "statecode"
 					}
 				}
 			});
@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				UserCode = "usercode2",
 				SourceId = "source1",
-				StateCode = "statecode1",
+				StateCode = "statecode1"
 			});
 
 			Target.Process(new BatchForTest
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					new BatchStateForTest
 					{
 						UserCode = "usercode1",
-						StateCode = "statecode2",
+						StateCode = "statecode2"
 					}
 				}
 			});
@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				UserCode = "usercode2",
 				SourceId = "source2",
-				StateCode = "statecode1",
+				StateCode = "statecode1"
 			});
 
 			Target.Process(new BatchForTest
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 					new BatchStateForTest
 					{
 						UserCode = "usercode1",
-						StateCode = "statecode2",
+						StateCode = "statecode2"
 					}
 				}
 			});

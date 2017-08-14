@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 					AttritionRate = new Percent(0),
 					Recruitment = 0,
 					Contractors = 0,
-					ForecastedHours = 800,
+					ForecastedHours = 800
 				};
 
 			var guid = Guid.NewGuid();

@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				Shift = new ProjectionChangedEventShift
 				{
 					StartDateTime = period.StartDateTime,
-					EndDateTime = period.EndDateTime,
+					EndDateTime = period.EndDateTime
 				}
 			};
 			var message = new ProjectionChangedEvent
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 				Shift = new ProjectionChangedEventShift
 				{
 					StartDateTime = period.StartDateTime,
-					EndDateTime = period.EndDateTime,
+					EndDateTime = period.EndDateTime
 				}
 			};
 			var message = new ProjectionChangedEvent

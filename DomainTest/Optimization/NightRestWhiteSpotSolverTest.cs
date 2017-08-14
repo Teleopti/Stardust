@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                         _scheduleDayPro4,
                                                         _scheduleDayPro5,
                                                         _scheduleDayPro6,
-                                                        _scheduleDayPro7,
+                                                        _scheduleDayPro7
                                                     };
 			
             Expect.Call(_matrix.EffectivePeriodDays).Return(periodList).Repeat.Any();

@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var command = new EditScheduleNoteCommand
 			{
 				Date = new DateOnly(2016, 9, 29),
-				PersonId = person.Id.GetValueOrDefault(),
+				PersonId = person.Id.GetValueOrDefault()
 			};
 
 			Target.Handle(command);

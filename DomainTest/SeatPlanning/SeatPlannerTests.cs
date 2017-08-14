@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				createPersonWithPersonPeriodFromTeam(startDate, teams[1]),
 				createPersonWithPersonPeriodFromTeam(startDate, teams[1]),
 				createPersonWithPersonPeriodFromTeam(startDate, teams[1]),
-				createPersonWithPersonPeriodFromTeam(startDate, teams[1]),
+				createPersonWithPersonPeriodFromTeam(startDate, teams[1])
 			};
 
 			var personAssignments = new[]
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				addAssignment (people[2], startDate, endDate),
 				addAssignment (people[3], startDate, endDate),
 				addAssignment (people[4], startDate, endDate),
-				addAssignment (people[5], startDate, endDate),
+				addAssignment (people[5], startDate, endDate)
 			};
 
 			var childLocations = new[]
@@ -291,12 +291,12 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 					new Seat ("Location 1, Seat 1", 1),
 					new Seat ("Location 1, Seat 2", 2),
 					new Seat ("Location 1, Seat 3", 3),
-					new Seat ("Location 1, Seat 4", 4),
+					new Seat ("Location 1, Seat 4", 4)
 				}),
 				addLocation ("Location2", null, new[]
 				{
 					new Seat ("Location 2, Seat 1", 1),
-					new Seat ("Location 2, Seat 2", 2),
+					new Seat ("Location 2, Seat 2", 2)
 				})
 			};
 
@@ -347,7 +347,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				createPersonWithPersonPeriodFromTeam(startDateDay1, teams[1]),
 				createPersonWithPersonPeriodFromTeam(startDateDay1, teams[1]),
 				createPersonWithPersonPeriodFromTeam(startDateDay1, teams[1]),
-				createPersonWithPersonPeriodFromTeam(startDateDay1, teams[1]),
+				createPersonWithPersonPeriodFromTeam(startDateDay1, teams[1])
 			};
 
 			var assignments = new[]
@@ -364,7 +364,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				addAssignment (people[2], startDateDay2, endDateDay2),
 				addAssignment (people[3], startDateDay2, endDateDay2),
 				addAssignment (people[4], startDateDay2, endDateDay2),
-				addAssignment (people[5], startDateDay2, endDateDay2),
+				addAssignment (people[5], startDateDay2, endDateDay2)
 			};
 
 			var childLocations = new[]
@@ -374,12 +374,12 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 					new Seat ("Location 1, Seat 1", 1),
 					new Seat ("Location 1, Seat 2", 2),
 					new Seat ("Location 1, Seat 3", 3),
-					new Seat ("Location 1, Seat 4", 4),
+					new Seat ("Location 1, Seat 4", 4)
 				}),
 				addLocation ("Location2", null, new[]
 				{
 					new Seat ("Location 2, Seat 1", 1),
-					new Seat ("Location 2, Seat 2", 2),
+					new Seat ("Location 2, Seat 2", 2)
 				})
 			};
 
@@ -425,7 +425,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				createPersonWithPersonPeriodFromTeam(startDate, team),
 				// by putting people[1] in a different team, they will not be included in the seat 
 				// planning process and should retain their existing booking.
-				createPersonWithPersonPeriodFromTeam(endDate, addTeam("Team Other")),
+				createPersonWithPersonPeriodFromTeam(endDate, addTeam("Team Other"))
 			};
 
 			var personAssignment = addAssignment(people[0], startDate, assignmentEndDateTime);
@@ -465,7 +465,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				// by putting people[0] in a different team, they will not be included in the seat 
 				// planning process and should retain their existing booking (even though we havent created a schedule here).
 					createPersonWithPersonPeriodFromTeam(startDate,  addTeam("Team Other")),
-					createPersonWithPersonPeriodFromTeam(startDate, team),
+					createPersonWithPersonPeriodFromTeam(startDate, team)
 			};
 
 			var childLocation = addLocation("ChildLocation", null, new Seat("Seat 1", 1));
@@ -506,7 +506,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seatMapLocation = addLocation("Location", null, new[]
 			{
 				new Seat("Seat One",1), 
-				new Seat("Seat Two",2), 
+				new Seat("Seat Two",2) 
 			});
 
 			addSeatBooking(person, date, date, date.AddHours(10), seatMapLocation.Seats.Last());
@@ -622,13 +622,13 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var people = new[]
 			{
 				createPersonWithPersonPeriodFromTeam(new DateTime(2015, 01, 01), teams[0]),
-				createPersonWithPersonPeriodFromTeam(new DateTime(2015, 01, 01), teams[1]),
+				createPersonWithPersonPeriodFromTeam(new DateTime(2015, 01, 01), teams[1])
 			};
 
 			var assignments = new[]
 			{
 				addAssignment (people[0],new DateTime(2015, 1, 21, 11, 0, 0, DateTimeKind.Utc),new DateTime(2015, 1, 21, 17, 0, 0, DateTimeKind.Utc)),
-				addAssignment (people[1],new DateTime(2015, 1, 21, 8, 0, 0, DateTimeKind.Utc),new DateTime(2015, 1, 21, 12, 0, 0, DateTimeKind.Utc)),
+				addAssignment (people[1],new DateTime(2015, 1, 21, 8, 0, 0, DateTimeKind.Utc),new DateTime(2015, 1, 21, 12, 0, 0, DateTimeKind.Utc))
 			};
 
 			var locations = new[] { addLocation("Location", null, new Seat("Seat One", 1)) };
@@ -667,7 +667,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 				addAssignment (people[1], new DateTime(2015, 1, 20, 10, 0, 0, DateTimeKind.Utc),new DateTime(2015, 1, 20, 18, 30, 0, DateTimeKind.Utc)),
 				addAssignment (people[2], new DateTime(2015, 1, 20, 19, 0, 0, DateTimeKind.Utc),new DateTime(2015, 1, 21, 1, 30, 0, DateTimeKind.Utc)),
 
-				addAssignment (people[0], new DateTime(2015, 1, 21, 1, 0, 0, DateTimeKind.Utc),new DateTime(2015, 1, 21, 9, 30, 0, DateTimeKind.Utc)),
+				addAssignment (people[0], new DateTime(2015, 1, 21, 1, 0, 0, DateTimeKind.Utc),new DateTime(2015, 1, 21, 9, 30, 0, DateTimeKind.Utc))
 			};
 
 			var location = addLocation("Location", null, new Seat("Seat One", 1));
@@ -1189,7 +1189,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			var seatMapLocation = addLocation("Location", null, new[]
 			{
 				new Seat("Seat One",1),
-				new Seat("Seat Two",2),
+				new Seat("Seat Two",2)
 			});
 
 			addSeatBooking(person, date, date, date.AddHours(10), seatMapLocation.Seats.Last());

@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 14, 00, 00, DateTimeKind.Utc),
-				EndTime = new DateTime(2013, 11, 14, 15, 00, 00, DateTimeKind.Utc),
+				EndTime = new DateTime(2013, 11, 14, 15, 00, 00, DateTimeKind.Utc)
 			};
 			Target.Handle(command);
 
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 14, 00, 00),
-				EndTime = new DateTime(2013, 11, 14, 15, 00, 00),
+				EndTime = new DateTime(2013, 11, 14, 15, 00, 00)
 			};
 			Target.Handle(command);
 
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				Date = new DateOnly(2013, 11, 14),
 				ActivityId = addedActivity.Id.Value,
 				StartTime = new DateTime(2013, 11, 14, 5, 0, 0),
-				EndTime = new DateTime(2013, 11, 14, 8, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 8, 0, 0)
 			};
 			Target.Handle(command);
 

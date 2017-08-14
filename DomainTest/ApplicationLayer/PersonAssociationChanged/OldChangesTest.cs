@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			{
 				PersonId = personId,
 				CurrentTeamId = @event.TeamId,
-				ExternalLogons = @event.ExternalLogons,
+				ExternalLogons = @event.ExternalLogons
 			});
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>()
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			{
 				PersonId = personId,
 				CurrentTeamId = @event.TeamId,
-				ExternalLogons = @event.ExternalLogons,
+				ExternalLogons = @event.ExternalLogons
 			});
 
 			Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>()

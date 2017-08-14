@@ -626,7 +626,7 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 			{
 				new SeatBooking (agents[0], dateOfBooking, dateOfBooking.Date.AddHours (8), dateOfBooking.Date.AddHours (17)),
 				new SeatBooking (agents[1], dateOfBooking, dateOfBooking.Date.AddHours (9), dateOfBooking.Date.AddHours (17)),
-				new SeatBooking (agents[2], dateOfBooking, dateOfBooking.Date.AddHours (10), dateOfBooking.Date.AddHours (17)),
+				new SeatBooking (agents[2], dateOfBooking, dateOfBooking.Date.AddHours (10), dateOfBooking.Date.AddHours (17))
 			};
 
 			var seatBookingRequest = new SeatBookingRequest (agentShifts);

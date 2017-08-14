@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 				new AgentExtractionResult
 				{
 					Feedback = { ErrorMessages = { "has error"}},
-					Row = row,
+					Row = row
 				}
 			};
 

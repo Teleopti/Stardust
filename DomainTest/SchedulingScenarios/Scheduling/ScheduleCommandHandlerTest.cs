@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
 			{
 				UseTeam = true,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag)
 			});
 
 			var agent1 = new Person().WithId().WithPersonPeriod(new Skill().WithId());

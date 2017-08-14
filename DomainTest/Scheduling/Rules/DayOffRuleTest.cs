@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			DayOffTemplateRepository.Add(dayOffTemplate);
 			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
 			{
-				DayOffTemplate = dayOffTemplate,
+				DayOffTemplate = dayOffTemplate
 			});
 
 			Target.DoScheduling(period);

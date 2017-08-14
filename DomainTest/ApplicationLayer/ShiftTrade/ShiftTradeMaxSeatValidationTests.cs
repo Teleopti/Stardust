@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var peopleInSiteOne = new[]
 			{
 				personTo,
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly)),
+				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
 			};
 
 			addPersonAssignment(peopleInSiteOne[1], morningShiftTimePeriod, _requiresSeatActivity);
@@ -333,7 +333,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var peopleInSiteOne = new[]
 			{
 				personTo,
-				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly)),
+				_shiftTradeTestHelper.CreatePersonInTeam (personTo.MyTeam (scheduleDateOnly))
 			};
 
 			addPersonAssignment(peopleInSiteOne[1], morningShiftTimePeriod, _requiresSeatActivity);

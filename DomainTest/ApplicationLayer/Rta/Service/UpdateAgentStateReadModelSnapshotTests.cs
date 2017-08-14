@@ -179,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				UserCode = "usercode2",
 				SourceId = "source1",
-				StateCode = "statecode1",
+				StateCode = "statecode1"
 			});
 
 			Target.Process(new BatchForTest
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.Service
 			{
 				UserCode = "usercode2",
 				SourceId = "source2",
-				StateCode = "statecode1",
+				StateCode = "statecode1"
 			});
 
 			Target.Process(new BatchForTest

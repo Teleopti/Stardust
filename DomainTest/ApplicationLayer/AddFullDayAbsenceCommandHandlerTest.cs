@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					AbsenceId = _absenceRepository.Single().Id.Value,
 					PersonId = _personRepository.Single().Id.Value,
 					StartDate = new DateTime(2013, 3, 25),
-					EndDate = new DateTime(2013, 3, 25),
+					EndDate = new DateTime(2013, 3, 25)
 				};
 			target.Handle(command);
 
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					AbsenceId = _absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
 					StartDate = new DateTime(2013, 3, 25),
-					EndDate = new DateTime(2013, 3, 25),
+					EndDate = new DateTime(2013, 3, 25)
 				};
 			target.Handle(command);
 
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					AbsenceId = _absenceRepository.Single().Id.Value,
 					PersonId = _personRepository.Single().Id.Value,
 					StartDate = new DateTime(2013, 3, 25),
-					EndDate = new DateTime(2013, 3, 25),
+					EndDate = new DateTime(2013, 3, 25)
 				});
 
 			var personAbsence = _scheduleStorage.LoadAll().Single(scheduleItem => scheduleItem is PersonAbsence) as PersonAbsence;
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					AbsenceId = _absenceRepository.Single().Id.Value,
 					PersonId = _personRepository.Single().Id.Value,
 					StartDate = new DateTime(2013, 3, 25),
-					EndDate = new DateTime(2013, 3, 25),
+					EndDate = new DateTime(2013, 3, 25)
 				});
 
 			var personAbsence = _scheduleStorage.LoadAll().Single(scheduleItem => scheduleItem is PersonAbsence) as PersonAbsence;
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					AbsenceId = _absenceRepository.Single().Id.Value,
 					PersonId = _personRepository.Single().Id.Value,
 					StartDate = new DateTime(2013, 3, 25),
-					EndDate = new DateTime(2013, 3, 25),
+					EndDate = new DateTime(2013, 3, 25)
 				});
 
 			var personAbsence = _scheduleStorage.LoadAll().Single(scheduleItem => scheduleItem is PersonAbsence) as PersonAbsence;

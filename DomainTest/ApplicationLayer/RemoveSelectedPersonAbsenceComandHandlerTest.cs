@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = _person.Id.Value,
 				PersonAbsenceId = selectedPersonAbsence.Id.Value,
-				Date = new DateOnly(2016,10,1),
+				Date = new DateOnly(2016,10,1)
 			};
 
 			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario,_personAbsenceRepository,_scheduleStorage,
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = _person.Id.Value,
 				PersonAbsenceId = selectedPersonAbsence.Id.Value,
-				Date = new DateOnly(2016,10,1),
+				Date = new DateOnly(2016,10,1)
 			};
 
 
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = _person.Id.Value,
 				PersonAbsenceId = personAbsence.Id.Value,
-				Date = new DateOnly(2016,10,2),
+				Date = new DateOnly(2016,10,2)
 			};
 
 			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario,_personAbsenceRepository,_scheduleStorage,
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = _person.Id.Value,
 				PersonAbsenceId = selectedPersonAbsence.Id.Value,
-				Date = new DateOnly(2016, 10, 1),
+				Date = new DateOnly(2016, 10, 1)
 			};
 
 			target.Handle(command);
@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = _person.Id.Value,
 				PersonAbsenceId = personAbsence.Id.Value,
-				Date = new DateOnly(2017, 2, 21),
+				Date = new DateOnly(2017, 2, 21)
 			};
 
 			var target = new RemoveSelectedPersonAbsenceCommandHandler(_scenario, _personAbsenceRepository, _scheduleStorage,

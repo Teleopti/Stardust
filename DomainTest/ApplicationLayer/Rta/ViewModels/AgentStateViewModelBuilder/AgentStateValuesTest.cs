@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 			Database.Has(
 				new AgentStateReadModel
 				{
-					TeamId = teamId,
+					TeamId = teamId
 				}
 				);
 

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Scenarios
 			var otherActivity = new Activity("_")
 			{
 				InWorkTime = true,
-				InContractTime = true,
+				InContractTime = true
 			}.WithId();
 
 			var skill =

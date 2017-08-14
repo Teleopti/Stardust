@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 					new HistoricalOutOfAdherenceReadModel
 					{
 						StartTime = "2016-10-11 16:00".Utc(),
-						EndTime = "2016-10-11 17:00".Utc(),
+						EndTime = "2016-10-11 17:00".Utc()
 					}
 				});
 

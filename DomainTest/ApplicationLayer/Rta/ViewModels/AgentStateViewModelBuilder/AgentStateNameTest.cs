@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.AgentStateView
 					new AgentStateFilter {SkillIds = new[] {SkillId}},
 					new AgentStateFilter {SiteIds = new[] {SiteId}, SkillIds = new[] {SkillId}},
 					new AgentStateFilter {TeamIds = new[] {TeamId}, SkillIds = new[] {SkillId}},
-					new AgentStateFilter {SiteIds = new[] {SiteId}, TeamIds = new[] {TeamId}, SkillIds = new[] {SkillId}},
+					new AgentStateFilter {SiteIds = new[] {SiteId}, TeamIds = new[] {TeamId}, SkillIds = new[] {SkillId}}
 				};
 
 				return from p in permutations

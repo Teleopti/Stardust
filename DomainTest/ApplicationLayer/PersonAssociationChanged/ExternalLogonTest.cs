@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 				PersonId = person,
 				PreviousTerminationDate = "2016-08-30".Utc(),
 				TerminationDate = "2016-08-25".Utc(),
-				ExternalLogons = new[] {new ExternalLogon {DataSourceId = 7, UserCode = "usercode"}, }
+				ExternalLogons = new[] {new ExternalLogon {DataSourceId = 7, UserCode = "usercode"} }
 			});
 
 			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Target.Handle(new PersonTeamChangedEvent
 			{
 				PersonId = person,
-				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 7, UserCode = "usercode" }, }
+				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 7, UserCode = "usercode" } }
 			});
 
 			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonAssociationChanged
 			Target.Handle(new PersonPeriodChangedEvent
 			{
 				PersonId = person,
-				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 7, UserCode = "usercode" }, }
+				ExternalLogons = new[] { new ExternalLogon { DataSourceId = 7, UserCode = "usercode" } }
 			});
 
 			var @event = Publisher.PublishedEvents.OfType<PersonAssociationChangedEvent>().Single();

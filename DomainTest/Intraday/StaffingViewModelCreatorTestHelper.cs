@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				Calls = totalTasks,
 				AnsweredCalls = answeredCalls,
 				HandleTime = handleTime,
-				AverageHandleTime = totalAverageHandlingTime,
+				AverageHandleTime = totalAverageHandlingTime
 			};
 		}
 

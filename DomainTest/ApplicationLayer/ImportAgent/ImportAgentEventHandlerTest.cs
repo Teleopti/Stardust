@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			Target.Handle(new ImportAgentEvent
 			{
-				JobResultId = updated.Id.Value,
+				JobResultId = updated.Id.Value
 			});
 
 			updated.Details.Count().Should().Be(1);
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			Target.Handle(new ImportAgentEvent
 			{
-				JobResultId = updated.Id.Value,
+				JobResultId = updated.Id.Value
 			});
 
 			updated.Details.Count().Should().Be(1);

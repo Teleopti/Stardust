@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Reports
 			var authorization = _mocks.StrictMock<IAuthorization>();
 			var reportFunctions = new List<IApplicationFunction>
 			{
-				new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54", ForeignSource = DefinedForeignSourceNames.SourceMatrix},
+				new ApplicationFunction {ForeignId = "C5B88862-F7BE-431B-A63F-3DD5FF8ACE54", ForeignSource = DefinedForeignSourceNames.SourceMatrix}
 			};
 
 			using (_mocks.Record())

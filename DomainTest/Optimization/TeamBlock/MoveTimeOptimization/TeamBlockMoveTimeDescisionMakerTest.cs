@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock.MoveTimeOptimization
 																		  _scheduleDayPro0218Thu,
 																		  _scheduleDayPro0219Fri,
 																		  _scheduleDayPro0220Sat,
-																		  _scheduleDayPro0221Sun,
+																		  _scheduleDayPro0221Sun
 																	 };
 
 
