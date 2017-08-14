@@ -76,16 +76,17 @@
 				attachTo: angular.element(document.body), // must-have for text inputs on ie11
 				position: menuPosition,
 				onOpenComplete: function () {
-					$scope.$broadcast('$md-resize')
+					$scope.$broadcast('$md-resize');
 
 					if (singleMode && ctrl.selectedTeamIds[0]) {
 						ctrl.topIndex = findTeamIndexInVirtualRepeatContainerById(ctrl.selectedTeamIds[0])
 					}
 
-					ctrl.updateSelectedTeamsInView()
+					ctrl.updateSelectedTeamsInView();
 
 					if (ctrl.onOpen)
-						ctrl.onOpen()
+						ctrl.onOpen();
+
 				},
 				onRemoving: (ctrl.onClose ? function () { ctrl.onClose() } : angular.noop),
 				onCloseSuccess: function(){

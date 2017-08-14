@@ -223,6 +223,21 @@
 			return results;
 		};
 
+		ctrl.groupFocused = function(groupCopy) {
+			groupCopy.isFocused = true;
+		};
+
+		ctrl.groupBlurred = function(groupCopy) {
+			groupCopy.isFocused = false;
+		};
+
+		ctrl.$postLink = function () {
+			setDefaultFocus();
+		}
+		$scope.$on("resetFocus", function () {
+			setDefaultFocus();
+		});
+
 		function resetSelectedGroups() {
 
 			var parentGroupCopies = ctrl.groupsInView[ctrl.selectedGroups.mode].filter(function (g) {
@@ -372,6 +387,7 @@
 
 					if (ctrl.onOpen)
 						ctrl.onOpen();
+					document.querySelector(".group-page-picker-menu md-tab-item.md-active").focus();
 				},
 				onRemoving: (ctrl.onClose ? function () { ctrl.onClose() } : angular.noop),
 				onCloseSuccess: function () {

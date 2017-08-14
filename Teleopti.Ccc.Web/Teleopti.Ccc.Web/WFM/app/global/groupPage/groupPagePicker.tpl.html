@@ -1,5 +1,5 @@
-<div>
-	<md-select-value role="button" class="md-select-value" ng-click="$ctrl.openMenu($event)">
+<div class="group-picker-wrapper">
+	<md-select-value role="button" class="md-select-value" ng-click="$ctrl.openMenu($event)" ng-class="{'none-selected': $ctrl.selectedGroups.groupIds.length == 0}">
 		<span class="selected-text">{{ $ctrl.groupPagesSelectedText() }}</span>
 		<span class="md-select-icon" aria-hidden="true"></span>
 	</md-select-value>
@@ -18,16 +18,16 @@
 							</div>
 							<md-virtual-repeat-container class="virtual-repeat">
 								<div md-virtual-repeat="o in $ctrl.groupsInView[tab.title]" class="repeated-item" flex>
-									<div ng-if="o.origin.isParent" class="group md-button-toggle md-button md-ink-ripple">
+									<div ng-if="o.origin.isParent" ng-class="{focused: o.isFocused}" class="group md-button-toggle md-button md-ink-ripple">
 										<label class="clickable-area" tabindex="-1" for="group-{{o.id}}">
 											<div flex layout="row">
 												<div class="wfm-checkbox" ng-class="{'indeterminate': o.isIndeterminate()}">
-													<input type="checkbox" id="group-{{o.id}}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()"/>
+													<input type="checkbox" id="group-{{o.id}}" ng-click="$ctrl.toggleGroup(o)" ng-checked="o.isChecked()" ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"/>
 													<span class="wfm-checkbox-toggle"></span>
 													<span class="wfm-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText"></span>
 												</div>
 												<span flex></span>
-												<input type="checkbox" id="toggle-{{o.id}}" class="shadow-group-toggle" ng-click="$ctrl.collapseGroup(o)"/>
+												<input type="checkbox" id="toggle-{{o.id}}" class="shadow-group-toggle" ng-click="$ctrl.collapseGroup(o)" ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)" />
 												<div tabindex="-1" class="group-toggle">
 													<label for="toggle-{{o.id}}">
 														<span class="md-toggle-icon" tabindex="-1">
@@ -38,10 +38,10 @@
 											</div>
 										</label>
 									</div>
-									<div ng-if=" !o.origin.isParent " class="child md-button md-ink-ripple">
+									<div ng-if=" !o.origin.isParent " ng-class="{focused: o.isFocused}" class="child md-button md-ink-ripple">
 										<label class="clickable-area" tabindex="-1" id="group-{{o.id}}">
 											<div class="wfm-checkbox">
-												<input type="checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()"/>
+												<input type="checkbox" ng-click="$ctrl.toggleSubGroup(o)" ng-checked="o.isChecked()" ng-focus="$ctrl.groupFocused(o)" ng-blur="$ctrl.groupBlurred(o)"/>
 												<span class="wfm-checkbox-toggle"></span>
 												<span class="wfm-checkbox-label" ng-bind-html="o.name | searchFilter:$ctrl.searchText"></span>
 											</div>

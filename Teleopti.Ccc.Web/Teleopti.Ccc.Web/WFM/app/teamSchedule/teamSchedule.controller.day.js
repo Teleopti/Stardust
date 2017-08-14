@@ -203,7 +203,7 @@
 		};
 
 		function resetFocus() {
-			$scope.$broadcast("resetFocus", "organizationPicker");
+			$scope.$broadcast("resetFocus");
 		};
 
 		function getParamsForLoadingSchedules(options) {
