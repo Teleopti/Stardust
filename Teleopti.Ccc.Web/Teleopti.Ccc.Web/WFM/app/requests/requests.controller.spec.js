@@ -4,7 +4,23 @@ describe('RequestsControllerTests', function () {
 		$controller,
 		requestCommandParamsHolder,
 		$q,
-		requestsDataService;
+		requestsDataService,
+		toggleObject = {
+			Wfm_Requests_Basic_35986: true,
+			Wfm_Requests_People_Search_36294: true,
+			Wfm_Requests_Performance_36295: true,
+			Wfm_Requests_ApproveDeny_36297: true,
+			Wfm_Requests_ApproveDeny_ShiftTrade_38494: true,
+			Wfm_Requests_SaveFavoriteSearches_42578: true
+		},
+		fakeState = {
+			current: {
+				url: ''
+			},
+			go: function (url) {
+				this.current.url = url;
+			}
+		};
 
 	var absenceRequestTabIndex = 0;
 	var shiftTradeRequestTabIndex = 1;
@@ -16,18 +32,11 @@ describe('RequestsControllerTests', function () {
 		requestsDataService = new FakeRequestsDataService();
 
 		module(function ($provide) {
-			$provide.service('Toggle', function() {
-				return {
-					Wfm_Requests_Basic_35986: true,
-					Wfm_Requests_People_Search_36294: true,
-					Wfm_Requests_Performance_36295: true,
-					Wfm_Requests_ApproveDeny_36297: true,
-					Wfm_Requests_ApproveDeny_ShiftTrade_38494: true,
-					Wfm_Requests_SaveFavoriteSearches_42578: true,
-					togglesLoaded: $q(function(resolve, reject) {
-						resolve();
-					})
-				}
+			$provide.service('Toggle', function () {
+				toggleObject.togglesLoaded = $q(function(resolve, reject) {
+					resolve();
+				});
+				return toggleObject;
 			});
 			$provide.service('requestCommandParamsHolder', function () {
 				return requestCommandParamsHolder;
@@ -46,8 +55,9 @@ describe('RequestsControllerTests', function () {
 		var scope = $rootScope.$new();
 
 		var target = $controller('RequestsCtrl', {
-			$scope: scope
-		});		
+			$scope: scope,
+			$state: fakeState
+		});
 
 		return { target: target, scope: scope };
 	}
@@ -247,5 +257,11 @@ describe('RequestsControllerTests', function () {
 			TeamIds: ['fakeTeam1Id']
 		});
 		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
+	});
+
+	it('should go to requests-refactor page when toggle Wfm_Requests_OvertimeRequestHandling_45177 on', function () {
+		toggleObject['Wfm_Requests_OvertimeRequestHandling_45177'] = true;
+		setUpTarget();
+		expect(fakeState.current.url).toEqual('requestsRefactor');
 	});
 });

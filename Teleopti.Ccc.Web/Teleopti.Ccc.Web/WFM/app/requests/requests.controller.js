@@ -3,22 +3,14 @@
 
 	angular.module('wfm.requests').controller('RequestsCtrl', requestsController);
 
-	requestsController.$inject = [
-		"$scope",
-		"$q",
-		"$translate",
-		"Toggle",
-		"requestsDefinitions",
-		"requestsNotificationService",
-		"requestsDataService",
-		"requestCommandParamsHolder",
-		"NoticeService",
-		"FavoriteSearchDataService",
-		"CurrentUserInfo",
-		"groupPageService"
-	];
+	requestsController.$inject = ["$state", "$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo", "groupPageService"];
 
-	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService) {
+	function requestsController($state, $scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService) {
+		if (toggleService.Wfm_Requests_OvertimeRequestHandling_45177) {
+			$state.go("requestsRefactor");
+			return;
+		}
+
 		var vm = this;
 
 		vm.searchPlaceholder = $translate.instant('Search');
