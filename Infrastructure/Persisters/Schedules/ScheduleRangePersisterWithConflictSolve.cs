@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 
 		public SchedulePersistResult Persist(IScheduleRange scheduleRange, DateOnlyPeriod period)
 		{
-			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService, new DateOnlyPeriod(period.StartDate, period.EndDate.AddDays(-1)));
+			var diff = scheduleRange.DifferenceSinceSnapshot(_differenceCollectionService, period);
 			if (diff.IsEmpty())
 				return new SchedulePersistResult
 				{
