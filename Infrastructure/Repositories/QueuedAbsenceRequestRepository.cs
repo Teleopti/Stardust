@@ -85,5 +85,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			sqlQuery.SetGuid("id", id);
 			return sqlQuery.ExecuteUpdate();
 		}
+
+		public void ResetSent(DateTime eventSent)
+		{
+			var hql = @"update [dbo].[QueuedAbsenceRequest] set [Sent] = null where Sent = :sent";
+			var sqlQuery = Session.CreateSQLQuery(hql);
+			sqlQuery.SetDateTime("sent", eventSent);
+			sqlQuery.ExecuteUpdate();
+		}
 	}
 }

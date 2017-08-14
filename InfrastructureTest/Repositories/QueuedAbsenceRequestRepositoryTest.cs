@@ -120,8 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var sent = DateTime.UtcNow;
 
 			var personRequest1 = createQueduedRequest(new DateTime(2008, 7, 10, 10, 0, 0), new DateTime(2008, 7, 14, 9, 0, 0), sent);
-			var personRequest2 = createQueduedRequest(new DateTime(2008, 7, 10, 18, 0, 0), new DateTime(2008, 7, 10, 20, 0, 0), sent);
-
+			
 			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
 			var queuedAbsenceRequests = target.FindByPersonRequestIds(new[] {personRequest1});
 
@@ -241,6 +240,38 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var queuedRequest = target.LoadAll().FirstOrDefault();
 			queuedRequest.StartDateTime.Should().Be.EqualTo(startDateTime);
 			queuedRequest.EndDateTime.Should().Be.EqualTo(endDateTime);
+		}
+
+		[Test]
+		public void ShouldResetSentColumn()
+		{
+			var startDateTime = new DateTime(2008, 7, 10, 10, 0, 0, DateTimeKind.Utc);
+			var endDateTime = new DateTime(2008, 7, 14, 9, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(startDateTime, endDateTime);
+			var personRequest = new PersonRequest(_person);
+			var absenceRequest = new AbsenceRequest(_absence ?? _absence, period);
+			personRequest.Request = absenceRequest;
+			personRequest.Pending();
+
+			var sent = DateTime.Now;
+
+			PersistAndRemoveFromUnitOfWork(personRequest);
+
+			var queued = new QueuedAbsenceRequest
+			{
+				PersonRequest = personRequest.Id.GetValueOrDefault(),
+				StartDateTime = absenceRequest.Period.StartDateTime,
+				EndDateTime = absenceRequest.Period.EndDateTime,
+				Created = personRequest.CreatedOn.GetValueOrDefault(),
+				Sent = sent
+			};
+			PersistAndRemoveFromUnitOfWork(queued);
+
+			var target = new QueuedAbsenceRequestRepository(CurrUnitOfWork);
+			target.ResetSent(sent);
+			
+			var queuedRequest = target.LoadAll().FirstOrDefault();
+			queuedRequest.Sent.HasValue.Should().Be.False();
 		}
 	}
 }

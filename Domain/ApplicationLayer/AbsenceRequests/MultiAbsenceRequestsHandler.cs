@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
@@ -54,17 +55,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 
 			_feedback.SendProgress($"Done Checking Person Requests. {personRequests.Count} will be processed.");
-			if (!personRequests.IsNullOrEmpty())
+			var itsLockSafe = true;
+			try
 			{
-				var personRequestIds = personRequests.Select(p => p.Id.GetValueOrDefault()).ToList();
-				_multiAbsenceRequestsUpdater.UpdateAbsenceRequest(personRequestIds, requestValidators);
+				if (!personRequests.IsNullOrEmpty())
+				{
+					var personRequestIds = personRequests.Select(p => p.Id.GetValueOrDefault()).ToList();
+					_multiAbsenceRequestsUpdater.UpdateAbsenceRequest(personRequestIds, requestValidators);
+				}
 			}
-				
-			using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+			catch (Exception e)
 			{
-				_queuedAbsenceRequestRepository.Remove(@event.Sent);
-				uow.PersistAll();
+				if (e.IsSqlDeadlock())
+					itsLockSafe = false;
+				else
+					throw;
 			}
+			if (itsLockSafe)
+			{
+				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
+					_queuedAbsenceRequestRepository.Remove(@event.Sent);
+					uow.PersistAll();
+				}
+			}
+			else
+			{
+				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
+				{
+					//reset sent column
+					_queuedAbsenceRequestRepository.ResetSent(@event.Sent);
+					uow.PersistAll();
+				}
+			}
+			
 		}
 
 		private List<IPersonRequest> checkPersonRequest(NewMultiAbsenceRequestsCreatedEvent @event)

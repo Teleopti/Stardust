@@ -13,5 +13,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		void CheckAndUpdateSent(int minutes);
 		int UpdateRequestPeriod(Guid id, DateTimePeriod period);
 		IList<IQueuedAbsenceRequest> FindByPersonRequestIds(IEnumerable<Guid> personRequestIds);
+		void ResetSent(DateTime eventSent);
 	}
 }

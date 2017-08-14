@@ -103,5 +103,14 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return _queuedRequests.Where(q => personRequestIds.Contains(q.PersonRequest)).ToList();
 		}
+
+		public void ResetSent(DateTime eventSent)
+		{
+			var sentRequests = _queuedRequests.Where(y => y.Sent == eventSent).ToList();
+			foreach (var request in sentRequests)
+			{
+				request.Sent = null;
+			}
+		}
 	}
 }

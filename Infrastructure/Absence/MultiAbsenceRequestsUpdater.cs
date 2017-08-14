@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using log4net;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -143,7 +146,8 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 						var person = personRequest.Person;
 						if (person.WorkflowControlSet != null)
 						{
-							var mergedPeriod = person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
+							var mergedPeriod =
+								person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
 							aggregatedValidatorList.UnionWith(mergedPeriod.GetSelectedValidatorList());
 							if (_absenceRequestValidators != null &&
 								_absenceRequestValidators.ContainsKey(personRequest.Id.GetValueOrDefault()))
@@ -152,7 +156,7 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 							}
 						}
 					}
-
+					
 					stopwatch.Restart();
 					loadDataForResourceCalculation(personRequests, aggregatedValidatorList);
 					stopwatch.Stop();
@@ -163,7 +167,9 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 
 					stopwatch.Restart();
 #pragma warning disable 618
-					using (_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules, _schedulingResultStateHolder.Skills, false))
+					using (
+						_resourceCalculationContextFactory.Create(_schedulingResultStateHolder.Schedules,
+							_schedulingResultStateHolder.Skills, false))
 #pragma warning restore 618
 					{
 						stopwatch.Stop();
@@ -179,6 +185,11 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 			}
 			catch (Exception exp)
 			{
+				if (exp.IsSqlDeadlock())
+				{
+					_feedback.SendProgress("The bulk for absence requests cannot be processed due to a deadlock " + exp);
+					throw;
+				}
 				_feedback.SendProgress("The bulk for absence requests failed! " + exp);
 				logger.Error("The bulk for absence requests failed! ", exp);
 				using (var uow = _currentUnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
@@ -527,5 +538,4 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 				});
 		}
 	}
-	
 }
