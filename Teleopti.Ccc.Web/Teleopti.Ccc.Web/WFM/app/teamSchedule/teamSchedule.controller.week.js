@@ -95,7 +95,8 @@
 		vm.loadSchedules = function () {
 			vm.isLoading = true;
 			var inputForm = getParamsForLoadingSchedules();
-			weekViewScheduleSvc.getSchedules(inputForm).then(function (data) {
+
+			weekViewScheduleSvc.getSchedules(inputForm, vm.selectedGroups.mode === 'GroupPages').then(function (data) {
 				vm.groupWeeks = WeekViewCreator.Create(data.PersonWeekSchedules);
 				vm.paginationOptions.totalPages = vm.paginationOptions.pageSize > 0 ? Math.ceil(data.Total / (vm.paginationOptions.pageSize + 0.01)) : 0;
 				vm.isLoading = false;
@@ -229,11 +230,12 @@
 		function getParamsForLoadingSchedules(options) {
 			options = options || {};
 			var params = {
-				SelectedTeamIds: vm.selectedGroups.groupIds ? vm.selectedGroups.groupIds : [],
+				SelectedTeamIds: vm.selectedGroups.groupIds,
 				Keyword: options.keyword || vm.searchOptions.keyword,
 				Date: options.date || moment(vm.startOfWeek).format('YYYY-MM-DD'),
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,
-				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber
+				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
+				SelectedGroupIds: vm.selectedGroups.groupIds
 			};
 			return params;
 		}

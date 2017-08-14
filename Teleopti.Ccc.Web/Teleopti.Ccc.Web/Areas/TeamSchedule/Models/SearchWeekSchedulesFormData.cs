@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 		public DateTime Date { get; set; }
 		public int PageSize { get; set; }
 		public int CurrentPageIndex { get; set; }
+		public Guid[] SelectedGroupIds { get; set; }
 	}
 }

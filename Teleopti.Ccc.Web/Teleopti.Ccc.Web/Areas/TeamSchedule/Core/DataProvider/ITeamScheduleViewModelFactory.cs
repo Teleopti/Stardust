@@ -12,18 +12,28 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input);
 		GroupScheduleViewModel CreateViewModelForPeople(Guid[] personIds, DateOnly scheduleDate);
 
-		GroupWeekScheduleViewModel CreateWeekScheduleViewModel(Guid[] teamIds,IDictionary<PersonFinderField, string> criteriaDictionary, DateOnly startOfWeekInUserTimeZone, int pageSize, int currentPageIndex);
+		GroupWeekScheduleViewModel CreateWeekScheduleViewModel(SearchWeekSchedulesInput input);
+		GroupWeekScheduleViewModel CreateWeekScheduleViewModelForGroups(SearchWeekSchedulesInput input);
 	}
 
-	public class SearchDaySchedulesInput
+	public class SearchDaySchedulesInput : SearchSchedulesInput
+	{
+		public bool IsOnlyAbsences { get; set; }
+		public TeamScheduleSortOption SortOption { get; set; }
+	}
+
+	public class SearchWeekSchedulesInput: SearchSchedulesInput
+	{
+		
+	}
+
+	public class SearchSchedulesInput
 	{
 		public Guid[] TeamIds { get; set; }
 		public IDictionary<PersonFinderField, string> CriteriaDictionary { get; set; }
 		public DateOnly DateInUserTimeZone { get; set; }
 		public int PageSize { get; set; }
 		public int CurrentPageIndex { get; set; }
-		public bool IsOnlyAbsences { get; set; }
-		public TeamScheduleSortOption SortOption { get; set; }
 		public Guid[] GroupIds { get; set; }
 	}
 
