@@ -9,7 +9,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public SchedulingResourceCalculationLimiter()
 		{
-			//add test and limits later...
+			limits.Add(100, new Percent(0.5));
+			limits.Add(500, new Percent(0.1));
 		}
 
 		public Percent Limit(int sizeOfSkillGroup)

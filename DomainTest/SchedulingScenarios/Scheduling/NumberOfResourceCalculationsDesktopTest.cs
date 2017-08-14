@@ -144,6 +144,18 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.GreaterThanOrEqualTo(5 * 7 - dueToSomeOtherSmallOptimizations);
 		}
 
+		[TestCase(0, 1)]
+		[TestCase(99, 1)]
+		[TestCase(100, 0.50)]
+		[TestCase(499, 0.50)]
+		[TestCase(500, 0.10)]
+		[TestCase(int.MaxValue, 0.10)]
+		public void VerifyLimits(int sizeOfSkillGroup, double percentValue)
+		{
+			SchedulingResourceCalculationLimiter.Limit(sizeOfSkillGroup).Value
+				.Should().Be.EqualTo(percentValue);
+		}
+
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<ResourceCalculationWithCount>().For<IResourceCalculation>();
