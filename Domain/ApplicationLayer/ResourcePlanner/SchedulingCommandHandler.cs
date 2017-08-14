@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Islands;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
@@ -18,44 +19,79 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly CreateIslands _createIslands;
 		private readonly ReduceSkillGroups _reduceSkillGroups;
 		private readonly IPeopleInOrganization _peopleInOrganization;
+		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
+		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
+		//
 
-		public SchedulingCommandHandler(IEventPublisher eventPublisher, IGridlockManager gridLockManager, CreateIslands createIslands, ReduceSkillGroups reduceSkillGroups, IPeopleInOrganization peopleInOrganization)
+		public SchedulingCommandHandler(IEventPublisher eventPublisher, 
+				IGridlockManager gridLockManager, 
+				CreateIslands createIslands, 
+				ReduceSkillGroups reduceSkillGroups, 
+				IPeopleInOrganization peopleInOrganization,
+				ISchedulingOptionsProvider schedulingOptionsProvider)
 		{
 			_eventPublisher = eventPublisher;
 			_gridLockManager = gridLockManager;
 			_createIslands = createIslands;
 			_reduceSkillGroups = reduceSkillGroups;
 			_peopleInOrganization = peopleInOrganization;
+			_schedulingOptionsProvider = schedulingOptionsProvider;
 		}
 
 		public void Execute(SchedulingCommand command)
 		{
-			var events = new List<IEvent>();
-			var islands = CreateIslands(command.Period, command);
 			var userLocks = _gridLockManager.LockInfos();
-			foreach (var island in islands)
+			var events = new List<IEvent>();
+			if (teamScheduling(command))
 			{
-				var agentsInIsland = island.AgentsInIsland();
-				var agentsToSchedule = (command.AgentsToSchedule?.Where(x => agentsInIsland.Contains(x)).ToArray() ?? agentsInIsland)
-					.FixedStaffPeople(command.Period);
-
-				if (agentsToSchedule.Any())
+				var agentsToSchedule = command.AgentsToSchedule ?? _peopleInOrganization.Agents(command.Period);
+				var agentIds = agentsToSchedule.Select(x => x.Id.Value);
+				events.Add(new SchedulingWasOrdered
 				{
-					var @event = new SchedulingWasOrdered
+					AgentsToSchedule = agentIds,
+					AgentsInIsland = agentIds,
+					StartDate = command.Period.StartDate,
+					EndDate = command.Period.EndDate,
+					RunWeeklyRestSolver = command.RunWeeklyRestSolver,
+					CommandId = command.CommandId,
+					UserLocks = userLocks
+				});
+			}
+			else
+			{
+				var islands = CreateIslands(command.Period, command);
+				foreach (var island in islands)
+				{
+					var agentsInIsland = island.AgentsInIsland();
+					var agentsToSchedule = (command.AgentsToSchedule?.Where(x => agentsInIsland.Contains(x)).ToArray() ?? agentsInIsland)
+						.FixedStaffPeople(command.Period);
+
+					if (agentsToSchedule.Any())
 					{
-						AgentsToSchedule = agentsToSchedule.Select(x => x.Id.Value),
-						AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
-						StartDate = command.Period.StartDate,
-						EndDate = command.Period.EndDate,
-						RunWeeklyRestSolver = command.RunWeeklyRestSolver,
-						CommandId = command.CommandId,
-						UserLocks = userLocks
-					};
-					events.Add(@event);
+						var @event = new SchedulingWasOrdered
+						{
+							AgentsToSchedule = agentsToSchedule.Select(x => x.Id.Value),
+							AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
+							StartDate = command.Period.StartDate,
+							EndDate = command.Period.EndDate,
+							RunWeeklyRestSolver = command.RunWeeklyRestSolver,
+							CommandId = command.CommandId,
+							UserLocks = userLocks
+						};
+						events.Add(@event);
+					}
 				}
 			}
 
 			_eventPublisher.Publish(events.ToArray());
+		}
+
+		private bool teamScheduling(SchedulingCommand command)
+		{
+			using (CommandScope.Create(command))
+			{
+				return _schedulingOptionsProvider.Fetch(null).UseTeam;
+			}
 		}
 
 		[UnitOfWork]

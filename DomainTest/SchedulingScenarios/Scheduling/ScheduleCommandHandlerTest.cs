@@ -5,6 +5,9 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
@@ -19,6 +22,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public SchedulingCommandHandler Target;
 		public FakeEventPublisher EventPublisher;
 		public FakePersonRepository PersonRepository;
+		//remove me when islands works with team
+		public SchedulingOptionsProvider SchedulingOptionsProvider;
 
 		[Test]
 		public void ShouldNotCreateEventsForIslandsWithNoAgentsThatAreSetToBeOptimized()
@@ -48,6 +53,25 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var event2 = events[1];
 			event1.AgentsToSchedule.Single()
 				.Should().Not.Be.EqualTo(event2.AgentsToSchedule.Single());
+		}
+
+		[Test]
+		public void ShouldNotCreateEventsForIslandsIfTeamSchedulingIsUsed()
+		{
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				UseTeam = true,
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
+			});
+
+			var agent1 = new Person().WithId().WithPersonPeriod(new Skill().WithId());
+			var agent2 = new Person().WithId().WithPersonPeriod(new Skill().WithId());
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1, agent2 } });
+
+			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().AgentsToSchedule.Count().Should().Be.EqualTo(2);
 		}
 	}
 }
