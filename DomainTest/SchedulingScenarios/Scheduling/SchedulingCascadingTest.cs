@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[TestCase(false)]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation(bool resourceCalculationHasBeenMade)
 		{
-			const int numberOfAgents = 100;
+			const int numberOfAgents = 50;
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				WorkTimeDirective =
 					new WorkTimeDirective(TimeSpan.FromHours(1), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
 			};
-			Enumerable.Range(0,100).ForEach(i => PersonRepository.Has(contract, new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skillA, skillB));
+			Enumerable.Range(0, numberOfAgents).ForEach(i => PersonRepository.Has(contract, new SchedulePeriod(date, SchedulePeriodType.Day, 1), ruleSet, skillA, skillB));
 			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, date, 1), skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)));
 			if(resourceCalculationHasBeenMade)
 				ResourceCalculation.ResourceCalculateAllDays(new NoSchedulingProgress(), false);

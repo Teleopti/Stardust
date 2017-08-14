@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[TestCase(false)]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation(bool resourceCalculationHasBeenMade)
 		{
-			const int numberOfAgents = 100;
+			const int numberOfAgents = 50;
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[TestCase(false)]
 		public void ShouldBaseBestShiftOnNonShoveledResourceCalculation_TeamBlock(bool resourceCalculationHasBeenMade)
 		{
-			const int numberOfAgents = 100;
+			const int numberOfAgents = 50;
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
 			var earlyInterval = new TimePeriod(7, 45, 8, 0);
 			var lateInterval = new TimePeriod(15, 45, 16, 0);
