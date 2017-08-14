@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (_lastSuccessful == null)
 				return;
 
-			if (_schedulingResourceCalculationLimiter.Limit(_skillGroups.NumberOfAgentsInSameSkillGroup(person)).Value > _random.NextDouble())
+			if (person==null || _schedulingResourceCalculationLimiter.Limit(_skillGroups.NumberOfAgentsInSameSkillGroup(person)).Value > _random.NextDouble())
 			{
 				_resourceCalculateDelayer.CalculateIfNeeded(_lastSuccessful.ScheduleDateOnly, _lastSuccessful.WorkShiftProjectionPeriod, _lastSuccessful.DoIntraIntervalCalculation);
 				_lastSuccessful = null;
