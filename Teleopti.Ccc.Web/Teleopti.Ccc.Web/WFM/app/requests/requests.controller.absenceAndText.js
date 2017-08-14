@@ -48,19 +48,8 @@
 				return;
 			}
 
-			if (vm.filters && vm.filters.length > 0) {
-				vm.SelectedRequestStatuses = [];
-				var defaultStatusFilter = vm.filters[0].Status;
-				vm.requestFiltersMgr.SetFilter('status', defaultStatusFilter);
-				angular.forEach(defaultStatusFilter.split(' '),
-					function(value) {
-						if (value.trim() !== '') {
-							vm.SelectedRequestStatuses.push({ Id: value.trim() });
-						}
-					});
-
-				vm.defaultStatusesLoaded = true;
-			}
+			vm.SelectedRequestStatuses = uiGridUtilitiesService.getDefaultStatus(vm.filters, vm.requestFiltersMgr);
+			vm.defaultStatusesLoaded = true;
 		};
 
 		vm.subjectFilterChanged = function() {
@@ -125,7 +114,7 @@
 		vm.init = function () {
 			vm.defaultStatusesLoaded = false;
 			vm.showRequestsInDefaultStatus = toggleService.Wfm_Requests_Default_Status_Filter_39472;
-			vm.isUsingRequestSubmitterTimeZone = angular.copy($stateParams.isUsingRequestSubmitterTimeZone);
+			vm.isUsingRequestSubmitterTimeZone = $stateParams.isUsingRequestSubmitterTimeZone;
 			onInitCallBack = $stateParams.onInitCallBack;
 			vm.userTimeZone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
 			vm.gridOptions = getGridOptions();
@@ -164,7 +153,7 @@
 
 		$scope.$on('requests.isUsingRequestSubmitterTimeZone.changed',
 			function (event, data) {
-				vm.isUsingRequestSubmitterTimeZone = angular.copy(data);
+				vm.isUsingRequestSubmitterTimeZone = data;
 				prepareComputedColumns(vm.requests);
 			});
 
@@ -182,7 +171,8 @@
 			$scope.$watch(function() {
 					return{
 						period: $stateParams.getPeriod(),
-						filters: vm.filters
+						filters: vm.filters,
+						sortOrder: vm.sortingOrders
 					};
 				},
 				function (newVal) {
@@ -227,14 +217,14 @@
 				enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
 				enableVerticalScrollbar: uiGridConstants.scrollbars.WHEN_NEEDED,
 				useExternalSorting: true,
-				headerTemplate: 'shift-trade-header-template.html',
+				headerTemplate: 'app/requests/html/requests-absence-and-text-header.html',
 				gridMenuTitleFilter: $translate,
 				columnVirtualizationThreshold: 200,
 				rowHeight: 35,
 
 				onRegisterApi: function(gridApi) {
 					vm.gridApi = gridApi;
-					gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
+					gridApi.core.on.sortChanged($scope, function (grid, sortColumns) {
 							vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder)
 								.filter(function(x) { return x !== null; });
 						});
@@ -272,7 +262,7 @@
 			var visibleRequestsIds = vm.gridOptions.data.map(function(row) { return row.Id; });
 			var visibleSelectedRequestsIds = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Id; });
 			var messages = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Message; });
-			uiGridUtilitiesService.setSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, messages);
+			uiGridUtilitiesService.setAbsenceAndTextSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, messages);
 			vm.gridApi.grid.selection.selectAll = vm.requests && (vm.requests.length === visibleSelectedRequestsIds.length) && vm.requests.length > 0;
 		}
 

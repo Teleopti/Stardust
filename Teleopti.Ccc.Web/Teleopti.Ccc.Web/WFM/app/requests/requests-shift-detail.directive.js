@@ -5,11 +5,11 @@
 	var requestsShiftDetailDirective = function(teamScheduleSvc, groupScheduleFactory, currentUserInfo) {
 		return {
 			restrict: "A",
-			require: ["^requestsTableContainer"],
 			scope: {
 				personIds: "=",
 				date: "=",
-				targetTimezone: "="
+				targetTimezone: "=",
+				showShiftDetail: "&"
 			},
 			link: postlink
 		};
@@ -18,12 +18,11 @@
 			var personIds = scope.personIds;
 			var scheduleDate = scope.date;
 			var targetTimezone = scope.targetTimezone;
+			var showShiftDetail = scope.showShiftDetail;
 
-			var requestsTableContainerCtrl = ctrls[0];
 			elem.bind("click", function(oEvent) {
 				var position = getShiftDetailDisplayPosition(oEvent);
-				updateShiftStatusForSelectedPerson(personIds, moment(scheduleDate), targetTimezone,
-					requestsTableContainerCtrl, position);
+				updateShiftStatusForSelectedPerson(personIds, moment(scheduleDate), targetTimezone, position, showShiftDetail);
 				oEvent.stopPropagation();
 			});
 		}
@@ -42,7 +41,7 @@
 			};
 		}
 
-		function updateShiftStatusForSelectedPerson(personIds, scheduleDate, targetTimezone, requestsTableContainerCtrl, position) {
+		function updateShiftStatusForSelectedPerson(personIds, scheduleDate, targetTimezone, position, showShiftDetail) {
 			if (personIds.length === 0) {
 				return;
 			}
@@ -80,7 +79,7 @@
 					}
 
 					var schedules = groupScheduleFactory.Create(schedulesToDisplay, scheduleStartDate, 48);
-					requestsTableContainerCtrl.showShiftDetail(position.top, position.left, schedules);
+					showShiftDetail && showShiftDetail({ params: { left: position.left, top: position.top, schedules: schedules}});
 				});
 		}
 	};

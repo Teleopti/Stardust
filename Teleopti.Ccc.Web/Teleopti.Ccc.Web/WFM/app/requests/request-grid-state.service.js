@@ -60,6 +60,10 @@
 
 			function setupGridEventHandlers($scope, vm) {
 				vm.gridApi.core.on.columnVisibilityChanged($scope, function() { saveState(vm) });
+				vm.gridApi.core.on.sortChanged($scope, function() {
+					saveState(vm);
+				});
+
 				if (vm.gridApi.colResizable) {
 					vm.gridApi.colResizable.on.columnSizeChanged($scope, function() { saveState(vm) });
 				};

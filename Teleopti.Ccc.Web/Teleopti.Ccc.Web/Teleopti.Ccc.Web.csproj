@@ -1512,6 +1512,8 @@
     <Content Include="WFM\app\requests\html\requests-budget-allowance.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-footer.tpl.html" />
     <Content Include="WFM\app\requests\html\requests-absenceAndText.html" />
+    <Content Include="WFM\app\requests\html\requests-absence-and-text-header.html" />
+    <Content Include="WFM\app\requests\html\requests-shift-trade-header.html" />
     <Content Include="WFM\app\requests\html\requests.refactor.html" />
     <Content Include="WFM\app\requests\html\requests-shiftTrade.html" />
     <Content Include="WFM\app\requests\requests.controller refactor.spec.js" />

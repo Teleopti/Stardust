@@ -80,31 +80,56 @@
 				});
 		};
 
-		svc.setSelectedRequestIds = function (visibleSelectedRequestsIds, visibleRequestsIds, messages) {
+		svc.setShiftTradeSelectedRequestIds = function (visibleSelectedRequestsIds, visibleRequestsIds, messages) {
 			if (visibleSelectedRequestsIds.length === 1) {
 				requestCommandParamsHolder.setSelectedIdAndMessage(visibleSelectedRequestsIds, messages);
 			}
 
+			requestCommandParamsHolder.setSelectedRequestIds(setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, true), true);
+		};
+
+		svc.setAbsenceAndTextSelectedRequestIds = function(visibleSelectedRequestsIds, visibleRequestsIds, messages) {
+			if (visibleSelectedRequestsIds.length === 1) {
+				requestCommandParamsHolder.setSelectedIdAndMessage(visibleSelectedRequestsIds, messages);
+			}
+
+			requestCommandParamsHolder.setSelectedRequestIds(setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, false), false);
+		};
+
+		function setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, isShiftTradeView) {
 			var visibleNotSelectedRequestsIds = visibleRequestsIds.filter(function (id) {
 				return visibleSelectedRequestsIds.indexOf(id) < 0;
 			});
 
-			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(false);
-			var newAllSelectedRequestsId = [];
+			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(isShiftTradeView);
+			var newAllSelectedRequestsIds = [];
 
-			angular.forEach(allSelectedRequestsIds,
-				function (id) {
-					if (visibleNotSelectedRequestsIds.indexOf(id) < 0)
-						newAllSelectedRequestsId.push(id);
-				});
+			angular.forEach(allSelectedRequestsIds, function (id) {
+				if (visibleNotSelectedRequestsIds.indexOf(id) < 0)
+					newAllSelectedRequestsIds.push(id);
+			});
 
-			angular.forEach(visibleSelectedRequestsIds,
-				function (id) {
-					if (newAllSelectedRequestsId.indexOf(id) < 0)
-						newAllSelectedRequestsId.push(id);
-				});
+			angular.forEach(visibleSelectedRequestsIds, function (id) {
+				if (newAllSelectedRequestsIds.indexOf(id) < 0)
+					newAllSelectedRequestsIds.push(id);
+			});
 
-			requestCommandParamsHolder.setSelectedRequestIds(newAllSelectedRequestsId, false);
+			return newAllSelectedRequestsIds;
+		}
+
+		svc.getDefaultStatus = function (filters, requestFiltersMgr) {
+			var selectedRequestStatuses = [];
+			if (filters && filters.length > 0) {
+				var defaultStatusFilter = filters[0].Status;
+				requestFiltersMgr.SetFilter('status', defaultStatusFilter);
+				angular.forEach(defaultStatusFilter.split(' '),
+					function(value) {
+						if (value.trim() !== '') {
+							selectedRequestStatuses.push({ Id: value.trim() });
+						}
+					});
+			}
+			return selectedRequestStatuses;
 		}
 
 		return svc;

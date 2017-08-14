@@ -80,6 +80,7 @@
 				}
 			};
 
+			vm.selectedTabIndex = 0;
 			vm.period = vm.absencePeriod;
 			$state.go("requestsRefactor-absenceAndText", params);
 		};
@@ -87,17 +88,19 @@
 
 		vm.activeShiftTradeTab = function () {
 			var params = {
-				period: vm.shiftTradePeriod,
 				agentSearchTerm: '',
 				selectedTeamIds: vm.selectedTeamIds,
 				filterEnabled: vm.filterEnabled,
 				onInitCallBack: vm.initFooter,
 				paging: vm.paging,
-				isUsingRequestSubmitterTimeZone: vm.isUsingRequestSubmitterTimeZone
+				isUsingRequestSubmitterTimeZone: vm.isUsingRequestSubmitterTimeZone,
+				getPeriod: function () {
+					return vm.period;
+				}
 			};
 
+			vm.selectedTabIndex = 1;
 			vm.period = vm.shiftTradePeriod;
-
 			$state.go("requestsRefactor-shiftTrade", params);
 		};
 
@@ -203,7 +206,11 @@
 					replaceArrayValues(defaultSearch.TeamIds, vm.selectedTeamIds);
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 				}
-				vm.activeAbsenceAndTextTab();
+				if (isShiftTradeViewActive()) {
+					vm.activeShiftTradeTab();
+				} else {
+					vm.activeAbsenceAndTextTab();
+				}
 				setupPeriodWatch();
 			});
 		};
@@ -241,7 +248,7 @@
 		}
 
 		function isShiftTradeViewActive() {
-			return $state.current.url.indexOf('/requests-refactor/shiftTrade') > -1;
+			return $state.current.url.indexOf('shiftTrade') > -1;
 		}
 
 		function canApproveOrDenyRequest() {

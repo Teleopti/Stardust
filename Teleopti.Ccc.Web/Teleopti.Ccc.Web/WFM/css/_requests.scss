@@ -408,6 +408,14 @@
 		overflow-x: hidden
 	}
 
+	.text-absence-view{
+		.ui-grid-pinned-container-right {
+				.ui-grid-header-cell:first-child, .ui-grid-cell:first-child {
+				border-left: none;
+			}
+		}
+	}
+
 	.shift-trade-view {
 		overflow: hidden !important;
 		/* show scroll bar outside of grid*/
@@ -416,8 +424,6 @@
 		}
 
 		.ui-grid-pinned-container-right {
-
-
 			.ui-grid-header-cell:first-child, .ui-grid-cell:first-child {
 				border-left: none;
 			}

@@ -22,6 +22,7 @@ describe('Requests - absence and text controller tests',
 		var controller, scope;
 
 		beforeEach(function () {
+			module('wfm.templates');
 			module('wfm.requests');
 			requestsDataService = new FakeRequestsDataService();
 			requestsNotificationService = new FakeRequestsNotificationService();

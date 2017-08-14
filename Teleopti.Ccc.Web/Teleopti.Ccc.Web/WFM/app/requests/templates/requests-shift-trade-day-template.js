@@ -12,7 +12,7 @@
 			// setup shift trade day display
 			template += '<div style=\'position: relative\' ng-repeat=\"day in grid.appScope.shiftTradeScheduleViewModels[row.entity.Id]\">' +
 				'		<div ng-style="{\'display\': \'inline-block\', \'position\': \'absolute\', \'left\': day.LeftOffset}\" >' +
-				'			<div requests-shift-detail person-ids=\"[row.entity[\'PersonId\'],row.entity[\'PersonIdTo\']]\" date=\"day.originalDate\" target-timezone=\"day.targetTimezone\">' +
+				'			<div requests-shift-detail show-shift-detail=\"grid.appScope.showShiftDetail(params)\" person-ids=\"[row.entity[\'PersonId\'],row.entity[\'PersonIdTo\']]\" date=\"day.originalDate\" target-timezone=\"day.targetTimezone\">' +
 				'				<div class=\"shift-trade-cell-text\" ng-class=\"day.FromScheduleDayDetail.IsDayOff ? \'is-day-off\':\'\'\" ng-style=\"{\'background-color\': day.FromScheduleDayDetail.Color, \'cursor\': \'pointer\'}\">' +
 				'					{{::day.FromScheduleDayDetail.ShortName}}' +
 				'					<md-tooltip>' +

@@ -33,6 +33,15 @@
 			{
 				parent: 'requestsRefactor',
 				url: '/shiftTrade',
+				params: {
+					agentSearchTerm: '',
+					selectedTeamIds: [],
+					filterEnabled: undefined,
+					onInitCallBack: undefined,
+					paging: {},
+					isUsingRequestSubmitterTimeZone: undefined,
+					getPeriod: undefined
+				},
 				templateUrl: 'app/requests/html/requests-shiftTrade.html',
 				controller: 'requestsShiftTradeCtrl as vm'
 			});

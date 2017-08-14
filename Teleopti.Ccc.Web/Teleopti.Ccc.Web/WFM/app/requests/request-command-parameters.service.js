@@ -39,15 +39,13 @@
 			}
 		};
 
-		this.getSelectedRequestsIds = function (isShiftTrade) {
+		this.getSelectedRequestsIds = function(isShiftTrade) {
 			if (isShiftTrade) {
 				return self._state.selectedShiftTradeRequestIds;
 			} else {
 				return self._state.selectedTextAndAbsenceRequestIds;
 			}
-		}
-
-
+		};
 	}
 
 })();

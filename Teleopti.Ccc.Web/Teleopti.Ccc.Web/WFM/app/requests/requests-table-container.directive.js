@@ -58,10 +58,10 @@
 			vm.setDefaultStatuses();
 		}
 
-		function showShiftDetail(top, left, schedules) {
-			vm.schedules = schedules;
-			vm.shiftDetailTop = top;
-			vm.shiftDetailLeft = left;
+		function showShiftDetail(params) {
+			vm.schedules = params.schedules;
+			vm.shiftDetailTop = params.top;
+			vm.shiftDetailLeft = params.left;
 			vm.displayShiftDetail = true;
 		}
 
