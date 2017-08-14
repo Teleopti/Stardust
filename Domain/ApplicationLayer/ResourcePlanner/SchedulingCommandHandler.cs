@@ -38,7 +38,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_schedulingOptionsProvider = schedulingOptionsProvider;
 		}
 
-		public void Execute(SchedulingCommand command)
+		[TestLog]
+		public virtual void Execute(SchedulingCommand command)
 		{
 			var userLocks = _gridLockManager.LockInfos();
 			var events = new List<IEvent>();
