@@ -209,7 +209,6 @@
 		function getParamsForLoadingSchedules(options) {
 			options = options || {};
 			var params = {
-				SelectedTeamIds:  vm.selectedGroups.groupIds,
 				Keyword: options.keyword || vm.searchOptions.keyword,
 				Date: options.date || vm.scheduleDateMoment().format('YYYY-MM-DD'),
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,
@@ -260,7 +259,7 @@
 			if (vm.searchEnabled) {
 				var params = getParamsForLoadingSchedules();
 
-				teamScheduleSvc.searchSchedules(params, vm.selectedGroups.mode === "GroupPages").then(function (response) {
+				teamScheduleSvc.searchSchedules(params).then(function (response) {
 					var result = response.data;
 					scheduleMgmtSvc.resetSchedules(result.Schedules, vm.scheduleDateMoment(), vm.currentTimezone);
 					ScheduleNoteManagementService.resetScheduleNotes(result.Schedules, vm.scheduleDateMoment());

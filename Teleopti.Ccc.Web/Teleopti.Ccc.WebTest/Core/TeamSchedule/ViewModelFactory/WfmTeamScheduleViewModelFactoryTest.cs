@@ -39,7 +39,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		private IPerson personInUtc;
 		private IPerson personInHongKong;
 
-
 		private void setUpPersonAndCulture(bool addSecondPerson = false)
 		{
 			personInUtc = PersonFactory.CreatePerson("Sherlock", "Holmes");
@@ -74,6 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldSortScheduleInDifferentTimezoneByAbsoluteStartTime()
 		{
+			var scheduleDate = new DateOnly(2020, 1, 1);
 			setUpPersonAndCulture(true);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -96,9 +96,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
-					DateInUserTimeZone = new DateOnly(2020, 1, 1),
+					DateInUserTimeZone = scheduleDate,
 					PageSize = 20,
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false
@@ -110,6 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsNoScheduleForScheduleSearch()
 		{
+			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -123,9 +124,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
-					DateInUserTimeZone = new DateOnly(2019, 12, 30),
+					DateInUserTimeZone = scheduleDate,
 					PageSize = 20,
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false
@@ -161,7 +162,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -211,7 +212,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -249,7 +250,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -292,7 +293,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -327,7 +328,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -378,7 +379,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -413,7 +414,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			};
 			var result = Target.CreateViewModel(new SearchDaySchedulesInput
 			{
-				TeamIds = new[] { team.Id.Value },
+				GroupIds = new[] { team.Id.Value },
 				CriteriaDictionary = searchTerm,
 				DateInUserTimeZone = new DateOnly(scheduleDate),
 				PageSize = 20,
@@ -455,7 +456,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -499,7 +500,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -551,7 +552,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -606,7 +607,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -635,14 +636,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectProjectionWhenThereIsConfidentialAbsenceAndShiftAndWithPermissionForConfidentialForScheduleSearch()
 		{
+			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 			setUpPersonAndCulture();
 			PeopleSearchProvider.AddPersonWithViewConfidentialPermission(personInUtc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-
-			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-
 
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
 			pa.AddActivity(ActivityFactory.CreateActivity("activity1", Color.White),
@@ -663,7 +662,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -696,10 +695,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnEmptyScheduleWhenScheduleIsUnpublishedAndNoViewUnpublishedSchedulePermissionForScheduleSearch()
 		{
-			setUpPersonAndCulture();
-
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-
+			setUpPersonAndCulture();
 			personInUtc.WorkflowControlSet = new WorkflowControlSet("testWCS")
 			{
 				SchedulePublishedToDate = new DateTime(2019, 12, 30)
@@ -722,7 +719,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -744,9 +741,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnScheduleForPreviousDayWhenThereIsOvernightShiftForScheduleSearch()
 		{
-			setUpPersonAndCulture();
-
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			setUpPersonAndCulture();
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -769,7 +765,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -787,9 +783,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnEmptyScheduleVmForEmptyScheduleWhenThereIsOvernightShiftForScheduleSearch()
 		{
-			setUpPersonAndCulture();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -803,7 +798,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -822,9 +817,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnEmptyScheduleVmWhenThereIsNoSelectedTeam()
 		{
-			setUpPersonAndCulture();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -839,7 +833,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new Guid[0],
+					GroupIds = new Guid[0],
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -855,9 +849,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldIndicateOvertimeActivityForScheduleSearch()
 		{
-			setUpPersonAndCulture();
+			
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
@@ -875,7 +869,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -962,7 +956,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -984,9 +978,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldSetUniqueShiftLayerIdForLayersBelongingToOneShiftLayer()
 		{
-			setUpPersonAndCulture();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-
+			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 			var pa = PersonAssignmentFactory.CreatePersonAssignment(personInUtc, scenario, new DateOnly(scheduleDate));
@@ -1005,7 +998,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -1096,7 +1089,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -1187,7 +1180,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 2,
@@ -1206,10 +1199,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectProjectionForPeople()
 		{
-			setUpPersonAndCulture();
-			PersonRepository.Add(personInHongKong);
 			var scheduleDate = new DateTime(2015, 01, 01, 00, 00, 00, DateTimeKind.Utc);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
+			setUpPersonAndCulture();
+			PersonRepository.Add(personInHongKong);
+
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -1235,6 +1229,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForWorkingDay()
 		{
+			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -1251,12 +1246,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new SearchWeekSchedulesInput
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
 			{
 
-				TeamIds = new[] { team.Id.Value },
+				GroupIds = new[] { team.Id.Value },
 				CriteriaDictionary = searchTerm,
-				DateInUserTimeZone = new DateOnly(2019, 12, 30),
+				DateInUserTimeZone = scheduleDate,
 				PageSize = 20,
 				CurrentPageIndex = 1
 			});
@@ -1278,11 +1273,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForDayOff()
 		{
+			var queryDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
-			var scheduleDate = new DateOnly(2020, 1, 1);
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
-
+			var scheduleDate = new DateOnly(2020, 1, 1);
 			var pa = PersonAssignmentFactory.CreateAssignmentWithDayOff(personInUtc, scenario, scheduleDate, DayOffFactory.CreateDayOff(new Description("DayOff")));
 
 			ScheduleStorage.Add(pa);
@@ -1293,11 +1288,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			};
 
 			var result = Target.CreateWeekScheduleViewModel(
-				new SearchWeekSchedulesInput
+				new SearchSchedulesInput
 				{
 					CriteriaDictionary = searchTerm,
-					TeamIds = new[] { team.Id.Value },
-					DateInUserTimeZone = new DateOnly(2019, 12, 30),
+					GroupIds = new[] { team.Id.Value },
+					DateInUserTimeZone = queryDate,
 					PageSize = 20,
 					CurrentPageIndex = 1
 				});
@@ -1318,8 +1313,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForFullDayAbsence()
 		{
-			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2019, 12, 30);
+			setUpPersonAndCulture();
+
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -1338,11 +1334,12 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new SearchWeekSchedulesInput {
-				TeamIds = new[] { team.Id.Value },
-				 CriteriaDictionary = searchTerm,
-				 DateInUserTimeZone = scheduleDate,
-				 PageSize = 20,
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
+			{
+				GroupIds = new[] { team.Id.Value },
+				CriteriaDictionary = searchTerm,
+				DateInUserTimeZone = scheduleDate,
+				PageSize = 20,
 				CurrentPageIndex = 1
 			});
 
@@ -1361,8 +1358,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldIndicateTerminationForTerminatedPerson()
 		{
-			setUpPersonAndCulture();
+			
 			var scheduleDate = new DateOnly(2019, 12, 30);
+			setUpPersonAndCulture();
+
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 			personInUtc.TerminatePerson(new DateOnly(2019, 12, 1), new PersonAccountUpdaterDummy());
@@ -1382,9 +1381,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new SearchWeekSchedulesInput
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
 			{
-				TeamIds = new[] { team.Id.Value },
+				GroupIds = new[] { team.Id.Value },
 				CriteriaDictionary = searchTerm,
 				DateInUserTimeZone = scheduleDate,
 				PageSize = 20,
@@ -1407,6 +1406,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldShowPersonScheduleOnTheTerminationDate()
 		{
+			
+			var scheduleDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
@@ -1426,11 +1427,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new SearchWeekSchedulesInput
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
 			{
-				TeamIds = new[] { team.Id.Value },
+				GroupIds = new[] { team.Id.Value },
 				CriteriaDictionary = searchTerm,
-				DateInUserTimeZone = new DateOnly(2019, 12, 30),
+				DateInUserTimeZone = scheduleDate,
 				PageSize = 20,
 				CurrentPageIndex = 1
 			});
@@ -1451,8 +1452,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForNotPermittedConfidentialAbs()
 		{
+			var queryDate = new DateOnly(2019, 12, 30);
 			setUpPersonAndCulture();
-			var scheduleDate = new DateOnly(2019, 12, 30);
+
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -1473,11 +1475,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new SearchWeekSchedulesInput
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
 			{
-				TeamIds = new[] { team.Id.Value },
+				GroupIds = new[] { team.Id.Value },
 				CriteriaDictionary = searchTerm,
-				DateInUserTimeZone = scheduleDate,
+				DateInUserTimeZone = queryDate,
 				PageSize = 20,
 				CurrentPageIndex = 1
 			});
@@ -1498,8 +1500,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForPermittedConfidentialAbs()
 		{
-			setUpPersonAndCulture();
+			
 			var scheduleDate = new DateOnly(2019, 12, 30);
+			setUpPersonAndCulture();
+
 			PeopleSearchProvider.AddPersonWithViewConfidentialPermission(personInUtc);
 
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
@@ -1522,9 +1526,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new SearchWeekSchedulesInput
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
 			{
-				TeamIds = new[] { team.Id.Value },
+				GroupIds = new[] { team.Id.Value },
 				CriteriaDictionary = searchTerm,
 				DateInUserTimeZone = scheduleDate,
 				PageSize = 20,
@@ -1547,8 +1551,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForNotPermittedUnpublishedSchedule()
 		{
-			setUpPersonAndCulture();
+			
 			var scheduleDate = new DateOnly(2019, 12, 30);
+			setUpPersonAndCulture();
+
 			personInUtc.WorkflowControlSet = new WorkflowControlSet();
 			personInUtc.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2019, 1, 1);
 
@@ -1572,9 +1578,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new SearchWeekSchedulesInput
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
 			{
-				TeamIds = new[] { team.Id.Value },
+				GroupIds = new[] { team.Id.Value },
 				CriteriaDictionary = searchTerm,
 				DateInUserTimeZone = scheduleDate,
 				PageSize = 20,
@@ -1596,8 +1602,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnCorrectDayScheduleSummaryForPermittedUnpublishedSchedule()
 		{
-			setUpPersonAndCulture();
+
 			var scheduleDate = new DateOnly(2019, 12, 30);
+			setUpPersonAndCulture();
+
 			personInUtc.WorkflowControlSet = new WorkflowControlSet();
 			personInUtc.WorkflowControlSet.SchedulePublishedToDate = new DateTime(2019, 1, 1);
 
@@ -1622,9 +1630,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new SearchWeekSchedulesInput
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
 			{
-				TeamIds = new[] { team.Id.Value },
+				GroupIds = new[] { team.Id.Value },
 				CriteriaDictionary = searchTerm,
 				DateInUserTimeZone = scheduleDate,
 				PageSize = 20,
@@ -1647,8 +1655,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldReturnInternalNotesWhenThereIsForScheduleSearch()
 		{
-			setUpPersonAndCulture();
 			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			setUpPersonAndCulture();
+
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 			var note = new Note(personInUtc, new DateOnly(scheduleDate), scenario, "dummy notes");
@@ -1662,7 +1671,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -1691,7 +1700,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					CriteriaDictionary = searchTerm,
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
@@ -1712,8 +1721,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void ShouldProvideWeeklyContractTimeInWeeklyViewModel()
 		{
-			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020, 1, 1);
+			setUpPersonAndCulture();
+
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -1730,9 +1740,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.FirstName, "Sherlock"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new SearchWeekSchedulesInput
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
 			{
-				TeamIds = new[] { team.Id.Value },
+				GroupIds = new[] { team.Id.Value },
 				CriteriaDictionary = searchTerm,
 				DateInUserTimeZone = scheduleDate,
 				PageSize = 20,
@@ -1783,9 +1793,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				{PersonFinderField.All, "e"}
 			};
 
-			var result = Target.CreateWeekScheduleViewModel(new SearchWeekSchedulesInput
+			var result = Target.CreateWeekScheduleViewModel(new SearchSchedulesInput
 			{
-				TeamIds = new[] { team.Id.Value },
+				GroupIds = new[] { team.Id.Value },
 				CriteriaDictionary = searchTerm,
 				DateInUserTimeZone = scheduleDate,
 				PageSize = 20,
@@ -1803,9 +1813,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[Test]
 		public void CreateViewModelForPeopleShouldReturnAgentsEvenTheyhaveNoScheduleDay()
 		{
-
-			setUpPersonAndCulture();
 			var scheduleDate = new DateOnly(2020, 1, 1);
+			setUpPersonAndCulture();
+
 			var scenario = ScenarioFactory.CreateScenarioWithId("test", true);
 			CurrentScenario.FakeScenario(scenario);
 
@@ -1893,7 +1903,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
 					CurrentPageIndex = 1,
@@ -1912,7 +1922,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 		[SetUICulture("zh-CN")]
 		public void ShouldBasedOnUserUiCultureIfSortByFirstName()
 		{
-
 			var contract = ContractFactory.CreateContract("Contract");
 			contract.WithId();
 			team = TeamFactory.CreateSimpleTeam().WithId();
@@ -1933,11 +1942,10 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			PeopleSearchProvider.Add(person3);
 			person3.AddPersonPeriod(personPeriod);
 
-
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
 					CurrentPageIndex = 1,
@@ -1997,7 +2005,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
 					CurrentPageIndex = 1,
@@ -2022,7 +2030,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2010, 1, 1), personContract, team);
 
 
-			var scheduleDate = new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+			var scheduleDate = new DateOnly(new DateTime(2020, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
 			var person1 = PersonFactory.CreatePersonWithGuid("a1", "e1");
 			person1.SetEmploymentNumber("456");
 			PeopleSearchProvider.Add(person1);
@@ -2060,8 +2068,8 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
-					DateInUserTimeZone = new DateOnly(scheduleDate),
+					GroupIds = new[] { team.Id.Value },
+					DateInUserTimeZone = scheduleDate,
 					PageSize = 20,
 					CurrentPageIndex = 1,
 					IsOnlyAbsences = false,
@@ -2122,7 +2130,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
 					CurrentPageIndex = 1,
@@ -2184,7 +2192,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
 					CurrentPageIndex = 1,
@@ -2193,7 +2201,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 				});
 
 			var schedules = result.Schedules.ToArray();
-
 
 			schedules[0].Name.Should().Be.EqualTo("p3@k1");
 			schedules[3].Name.Should().Be.EqualTo("p2@c1");
@@ -2255,7 +2262,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
 					CurrentPageIndex = 1,
@@ -2314,7 +2321,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
 					CurrentPageIndex = 1,
@@ -2375,7 +2382,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
 					CurrentPageIndex = 1,
@@ -2435,7 +2442,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
 					CurrentPageIndex = 1,
@@ -2494,7 +2501,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
 					CurrentPageIndex = 1,
@@ -2547,7 +2554,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			var result = Target.CreateViewModel(
 				new SearchDaySchedulesInput
 				{
-					TeamIds = new[] { team.Id.Value },
+					GroupIds = new[] { team.Id.Value },
 					DateInUserTimeZone = new DateOnly(scheduleDate),
 					PageSize = 20,
 					CurrentPageIndex = 1,
@@ -2561,69 +2568,6 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			schedules[3].Name.Should().Be.EqualTo("p3@p3");
 			schedules[6].Name.Should().Be.EqualTo("p1@p1");
 			schedules[7].Name.Should().Be.EqualTo("p4@p4");
-
-		}
-
-		[Test]
-		public void ShouldReturnCorrectProjectionWhenThereIsNoScheduleForScheduleSearchWithGroup()
-		{
-			PeopleSearchProvider.EnableDateFilter();
-			var scheduleDate = new DateOnly(2019, 12, 30);
-			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
-			var groupId = Guid.NewGuid();
-			PeopleSearchProvider.Add(scheduleDate, groupId, person1);
-
-
-			var searchTerm = new Dictionary<PersonFinderField, string>
-			{
-				{PersonFinderField.All, ""}
-			};
-
-			var result = Target.CreateViewModelForGroups(
-				new SearchDaySchedulesInput
-				{
-					CriteriaDictionary = searchTerm,
-					DateInUserTimeZone = scheduleDate,
-					PageSize = 20,
-					CurrentPageIndex = 1,
-					IsOnlyAbsences = false,
-					GroupIds = new Guid[] { groupId }
-				});
-
-			var schedules = result.Schedules.ToArray();
-
-			result.Total.Should().Be.EqualTo(1);
-			schedules[0].PersonId.Should().Be.EqualTo(person1.Id.ToString());
-		}
-
-		[Test]
-		public void ShouldReturnCorrectProjectionForScheduleSearchWithGroup()
-		{
-			PeopleSearchProvider.EnableDateFilter();
-			var scheduleDate = new DateOnly(2019, 12, 30);
-			var person1 = PersonFactory.CreatePersonWithGuid("a1", "a1");
-			var groupId = Guid.NewGuid();
-			PeopleSearchProvider.Add(scheduleDate, groupId, person1);
-
-			var searchTerm = new Dictionary<PersonFinderField, string>
-			{
-				{PersonFinderField.All, ""}
-			};
-
-			var result = Target.CreateWeekScheduleViewModelForGroups(
-				new SearchWeekSchedulesInput
-				{
-					CriteriaDictionary = searchTerm,
-					DateInUserTimeZone = scheduleDate,
-					PageSize = 20,
-					CurrentPageIndex = 1,
-					GroupIds = new Guid[] { groupId }
-				});
-
-			var schedules = result.PersonWeekSchedules.ToArray();
-
-			result.Total.Should().Be.EqualTo(1);
-			schedules[0].PersonId.Should().Be.EqualTo(person1.Id.Value);
 
 		}
 

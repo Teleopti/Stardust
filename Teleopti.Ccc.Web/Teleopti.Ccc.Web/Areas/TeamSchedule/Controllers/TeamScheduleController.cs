@@ -74,18 +74,13 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(permissions);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchSchedulesByGroups")]
-		public virtual JsonResult<GroupScheduleViewModel> SearchSchedulesByGroups(SearchDaySchedulesFormData input)
+		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchSchedules")]
+		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(SearchDaySchedulesFormData input)
 		{
 			var currentDate = input.Date;
 
-			if (input.SelectedGroupIds != null && !input.SelectedGroupIds.Any())
-				return
-					Json(new GroupScheduleViewModel { Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = "" });
-
-
 			var result =
-				_teamScheduleViewModelFactory.CreateViewModelForGroups(new SearchDaySchedulesInput
+				_teamScheduleViewModelFactory.CreateViewModel(new SearchDaySchedulesInput
 				{
 					GroupIds = input.SelectedGroupIds ?? new Guid[0],
 					CriteriaDictionary = SearchTermParser.Parse(input.Keyword),
@@ -100,81 +95,15 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			return Json(result);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchSchedules")]
-		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(SearchDaySchedulesFormData input)
-		{
-			var currentDate = input.Date;
-
-			if (input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
-				return
-					Json(new GroupScheduleViewModel {Schedules = new List<GroupScheduleShiftViewModel>(), Total = 0, Keyword = ""});
-
-			var criteriaDictionary = SearchTermParser.Parse(input.Keyword);
-
-			var result =
-				_teamScheduleViewModelFactory.CreateViewModel(new SearchDaySchedulesInput
-				{
-					TeamIds = input.SelectedTeamIds ?? new Guid[0],
-					CriteriaDictionary = criteriaDictionary,
-					DateInUserTimeZone = currentDate,
-					PageSize = input.PageSize,
-					CurrentPageIndex = input.CurrentPageIndex,
-					IsOnlyAbsences = input.IsOnlyAbsences,
-					SortOption = input.SortOption
-				}); 
-			result.Keyword = input.Keyword;
-
-			return Json(result);
-		}
-
 		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchWeekSchedules")]
 		public virtual JsonResult<GroupWeekScheduleViewModel> SearchWeekSchedules(SearchWeekSchedulesFormData input)
 		{
 			var currentDate = new DateOnly(input.Date);
-			if (input.SelectedTeamIds != null && !input.SelectedTeamIds.Any())
-				return
-					Json(new GroupWeekScheduleViewModel
-					{
-						PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
-						Total = 0,
-						Keyword = ""
-					});
-
-			var criteriaDictionary = SearchTermParser.Parse(input.Keyword);
-
-
-			var result =
-				_teamScheduleViewModelFactory.CreateWeekScheduleViewModel(new SearchWeekSchedulesInput {
-					CriteriaDictionary = criteriaDictionary,
-					TeamIds = input.SelectedTeamIds,
-					DateInUserTimeZone = new DateOnly(input.Date),
-					PageSize = input.PageSize,
-					CurrentPageIndex = input.CurrentPageIndex
-
-				});
-			result.Keyword = input.Keyword;
-
-			return Json(result);
-		}
-
-
-		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchWeekSchedulesByGroups")]
-		public virtual JsonResult<GroupWeekScheduleViewModel> SearchWeekSchedulesByGroups(SearchWeekSchedulesFormData input)
-		{
-			var currentDate = new DateOnly(input.Date);
-			if (input.SelectedGroupIds != null && !input.SelectedGroupIds.Any())
-				return
-					Json(new GroupWeekScheduleViewModel
-					{
-						PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
-						Total = 0,
-						Keyword = ""
-					});
 
 			var criteriaDictionary = SearchTermParser.Parse(input.Keyword);
 
 			var result =
-				_teamScheduleViewModelFactory.CreateWeekScheduleViewModelForGroups(new SearchWeekSchedulesInput
+				_teamScheduleViewModelFactory.CreateWeekScheduleViewModel(new SearchSchedulesInput
 				{
 					GroupIds = input.SelectedGroupIds ?? new Guid[0],
 					CriteriaDictionary = criteriaDictionary,

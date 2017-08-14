@@ -8,7 +8,6 @@
 
 		var service = this;	
 		var searchDayViewScheduleUrl = '../api/TeamSchedule/SearchSchedules';
-		var searchDayViewScheduleForGroupsUrl = '../api/TeamSchedule/SearchSchedulesByGroups';
 		var hierarchyUrl;
 
 		if (toggles.Wfm_HideUnusedTeamsAndSites_42690) {
@@ -19,10 +18,9 @@
 
 		service.searchSchedules = searchSchedule;
 
-		function searchSchedule(input, isForGroup) {
-			var url = isForGroup ? searchDayViewScheduleForGroupsUrl : searchDayViewScheduleUrl;
+		function searchSchedule(input) {
 			return $q(function (resolve, reject) {
-				$http.post(url, input)
+				$http.post(searchDayViewScheduleUrl, input)
 					.then(function (data) {
 						resolve(data);
 					},

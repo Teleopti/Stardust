@@ -6,11 +6,9 @@
 
 	function weekViewScheduleSvc($http, $q) {
 		var apiEndpoint = '../api/TeamSchedule/SearchWeekSchedules';
-		var apiEndpointByGroup = '../api/TeamSchedule/SearchWeekSchedulesByGroups';
-		function getSchedules(query, isGroupPages) {
+		function getSchedules(query) {
 			var deferred = $q.defer();
-			var url = isGroupPages ? apiEndpointByGroup : apiEndpoint;
-			$http.post(url, query).then(function (resp) {
+			$http.post(apiEndpoint, query).then(function (resp) {
 				deferred.resolve(resp.data);
 			}, function(error) {
 				deferred.reject(error);

@@ -6,7 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 {
 	public class SearchDaySchedulesFormData
 	{
-		public Guid[] SelectedTeamIds { get; set; }
 		public string Keyword { get; set; }
 		public DateOnly Date { get; set; }
 		public int PageSize { get; set; }

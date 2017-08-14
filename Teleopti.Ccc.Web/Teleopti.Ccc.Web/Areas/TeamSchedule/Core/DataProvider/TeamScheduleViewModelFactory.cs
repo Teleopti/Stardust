@@ -50,57 +50,64 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			_userUiCulture = userUiCulture;
 		}
 
-		public GroupScheduleViewModel CreateViewModelForGroups(SearchDaySchedulesInput input)
+		public GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input)
 		{
-			var personIds = _searchProvider.FindPersonIdsInPeriodWithGroup(new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone),
-				input.GroupIds,
-				input.CriteriaDictionary);
+			if (!input.GroupIds.Any())
+				return new GroupScheduleViewModel
+				{
+					Schedules = new List<GroupScheduleShiftViewModel>(),
+					Keyword = "",
+					Total = 0
+				};
+
+			var personIds = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552) ||
+							_toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057)
+							? _searchProvider.FindPersonIdsInPeriodWithGroup(new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone), input.GroupIds, input.CriteriaDictionary)
+							: _searchProvider.FindPersonIds(input.DateInUserTimeZone, input.GroupIds, input.CriteriaDictionary);
+
 
 			return createViewModelForPeople(personIds, input);
 		}
 
-		public GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input)
-		{
-			var targetIds = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552)
-				? _searchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone), input.TeamIds, input.CriteriaDictionary)
-				: _searchProvider.FindPersonIds(input.DateInUserTimeZone, input.TeamIds, input.CriteriaDictionary);
 
-			return createViewModelForPeople(targetIds, input);
-		}
-
-		public GroupWeekScheduleViewModel CreateWeekScheduleViewModel(SearchWeekSchedulesInput input)
+		public GroupWeekScheduleViewModel CreateWeekScheduleViewModel(SearchSchedulesInput input)
 		{
+			if (!input.GroupIds.Any())
+				return new GroupWeekScheduleViewModel
+				{
+					PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
+					Total = 0,
+					Keyword = ""
+				};
+
 			var week = new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone.AddDays(6));
-
-			var weekDays = week.DayCollection();
-			var targetIds = new List<Guid>();
-
-			if (_toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552))
+			var personIds = new List<Guid>();
+			if (_toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552) ||
+				_toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057))
 			{
-				targetIds = _searchProvider.FindPersonIdsInPeriod(week, input.TeamIds, input.CriteriaDictionary);
+				personIds = _searchProvider.FindPersonIdsInPeriodWithGroup(week, input.GroupIds, input.CriteriaDictionary);
 			}
 			else
 			{
-				foreach (var d in weekDays)
+				foreach (var d in week.DayCollection())
 				{
-					targetIds.AddRange(_searchProvider.FindPersonIds(d, input.TeamIds, input.CriteriaDictionary));
+					personIds.AddRange(_searchProvider.FindPersonIds(d, input.GroupIds, input.CriteriaDictionary));
 				}
-				targetIds = targetIds.Distinct().ToList();
+				personIds = personIds.Distinct().ToList();
 			}
-			return createWeekViewModelForPeople(targetIds, input);
-
-		}
-
-
-		public GroupWeekScheduleViewModel CreateWeekScheduleViewModelForGroups(SearchWeekSchedulesInput input)
-		{
-			var week = new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone.AddDays(6));
-			var personIds = _searchProvider.FindPersonIdsInPeriodWithGroup(week, input.GroupIds, input.CriteriaDictionary);
 			return createWeekViewModelForPeople(personIds, input);
 		}
 
 		public GroupScheduleViewModel CreateViewModelForPeople(Guid[] personIds, DateOnly scheduleDate)
 		{
+			if (personIds == null || !personIds.Any())
+			{
+				return new GroupScheduleViewModel
+				{
+					Schedules = new List<GroupScheduleShiftViewModel>(),
+					Total = 0
+				};
+			}
 			var canSeeUnpublishedSchedules =
 				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
 			var people = _personRepository.FindPeople(personIds);
@@ -271,7 +278,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			};
 		}
 
-		private GroupWeekScheduleViewModel createWeekViewModelForPeople(IList<Guid> personIds, SearchWeekSchedulesInput input)
+		private GroupWeekScheduleViewModel createWeekViewModelForPeople(IList<Guid> personIds, SearchSchedulesInput input)
 		{
 			var week = new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone.AddDays(6));
 			var weekDays = week.DayCollection();

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -17,7 +18,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		private readonly IList<IPerson> _permittedPeople;
 		private readonly IList<IPerson> _peopleWithConfidentialAbsencePermission;
 		private readonly IDictionary<DateOnly, List<IPerson>> _permittedPeopleByDate;
-		private readonly IDictionary<Guid, List<IPerson>> _permittedPeopleWithGroup;
 		private bool _enableDateFilter;
 		private readonly IDictionary<IPerson, string> _personApplicationRoleDictionary;
 
@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 				OptionalColumns = optionalColumns.ToList()
 			};
 			_personApplicationRoleDictionary = new Dictionary<IPerson, string>();
-			_permittedPeopleWithGroup = new Dictionary<Guid, List<IPerson>>();
 		}
 
 		public void EnableDateFilter()
@@ -228,21 +227,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 				_permittedPeopleByDate[date] = persons.ToList();
 			}
 		}
-
-		public void Add(DateOnly date, Guid groupId, params IPerson[] persons)
-		{
-			if (!_permittedPeopleWithGroup.ContainsKey(groupId))
-			{
-				_permittedPeopleWithGroup.Add(groupId, persons.ToList());
-			}
-			else
-			{
-				_permittedPeopleWithGroup[groupId].AddRange(persons);
-			}
-
-			Add(date, persons);
-		}
-
 		public void AddPersonUnavailableSince(IPerson person, DateOnly date)
 		{
 
@@ -255,11 +239,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
-			return _permittedPeopleWithGroup
-				.Where(g => groupIds.Contains(g.Key))
-				.SelectMany(g => g.Value.Select(p => p.Id.Value))
-				.ToList();
-
+			return _permittedPeople.Select(p => p.Id.Value).ToList();
 		}
 	}
 }
