@@ -5,7 +5,6 @@ using System.Text;
 using NHibernate;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.Rta
 {
@@ -17,88 +16,78 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 
 	public class AgentStateReadModelQueryBuilder
 	{
-		private readonly SelectionInfos _selections = new SelectionInfos();
+		private readonly IList<string> _froms = new List<string>();
+		private readonly IList<string> _wheres = new List<string>();
+		private readonly IList<string> _orderbys = new List<string>();
+		private readonly IList<Func<ISQLQuery, IQuery>> _parameters = new List<Func<ISQLQuery, IQuery>>();
 		private readonly INow _now;
-		private readonly ICurrentBusinessUnit _businessUnit;
-		private Guid?[] excluded;
 
 		public AgentStateReadModelQueryBuilder(INow now, ICurrentBusinessUnit businessUnit)
 		{
 			_now = now;
-			_businessUnit = businessUnit;
+			_wheres.Add("IsDeleted = 0");
+			_wheres.Add("a.BusinessUnitId = :BusinessUnitId");
+			_parameters.Add(s => s.SetGuid("BusinessUnitId", businessUnit.Current().Id.Value));
 		}
 
 		public AgentStateReadModelQueryBuilder WithSelection(IEnumerable<Guid> siteIds, IEnumerable<Guid> teamIds, IEnumerable<Guid> skillIds)
 		{
+			var teamSiteWheres = new List<string>();
+
 			if (siteIds != null)
-				_selections.Add(new SelectionInfo
-				{
-					Query = "a.SiteId IN (:siteIds)",
-					Set = s => s.SetParameterList("siteIds", siteIds),
-					SelectionType = SelectionType.Org
-				});
+			{
+				teamSiteWheres.Add("a.SiteId IN (:siteIds)");
+				_parameters.Add(s => s.SetParameterList("siteIds", siteIds));
+			}
 			if (teamIds != null)
-				_selections.Add(new SelectionInfo
-				{
-					Query = "a.TeamId IN (:teamIds)",
-					Set = s => s.SetParameterList("teamIds", teamIds),
-					SelectionType = SelectionType.Org
-				});
+			{
+				teamSiteWheres.Add("a.TeamId IN (:teamIds)");
+				_parameters.Add(s => s.SetParameterList("teamIds", teamIds));
+			}
+			
+			if (teamSiteWheres.Any())
+				_wheres.Add($"({string.Join(" OR ", teamSiteWheres)})");
+
 			if (skillIds != null)
-				_selections.Add(new SelectionInfo
-				{
-					Query = @"
-INNER JOIN ReadModel.GroupingReadOnly AS g
-ON a.PersonId = g.PersonId
-WHERE g.PageId = :skillGroupingPageId	
+			{
+				_froms.Add("INNER JOIN ReadModel.GroupingReadOnly AS g ON a.PersonId = g.PersonId");
+				_wheres.Add(@"g.PageId = :skillGroupingPageId	
 AND g.GroupId IN (:SkillIds)
-AND :today BETWEEN g.StartDate and g.EndDate",
-					Set = s => s
-						.SetParameterList("SkillIds", skillIds)
-						.SetParameter("today", _now.UtcDateTime().Date)
-						.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Id),
-					SelectionType = SelectionType.Skill
-				});
+AND :today BETWEEN g.StartDate and g.EndDate");
+				_parameters.Add(s => s
+					.SetParameterList("SkillIds", skillIds)
+					.SetParameter("today", _now.UtcDateTime().Date)
+					.SetParameter("skillGroupingPageId", HardcodedSkillGroupingPageId.Id)
+				);
+			}
 			return this;
 		}
 
 		public AgentStateReadModelQueryBuilder InAlarm()
 		{
-			_selections.Add(new SelectionInfo
-			{
-				Query = @" 
-AlarmStartTime <= :now 
-ORDER BY AlarmStartTime ASC ",
-				Set = s => s.SetParameter("now", _now.UtcDateTime()),
-				SelectionType = SelectionType.Alarm
-			});
+			_wheres.Add("AlarmStartTime <= :now ");
+			_orderbys.Add("AlarmStartTime ASC");
+			_parameters.Add(s => s.SetParameter("now", _now.UtcDateTime()));
 			return this;
 		}
 
 		public AgentStateReadModelQueryBuilder Exclude(IEnumerable<Guid?> excludedStates)
 		{
-			excluded = excludedStates.ToArray();
+			var excluded = excludedStates.ToArray();
 			if (excluded.All(x => x.HasValue))
-				_selections.Add(new SelectionInfo
-				{
-					Query = "StateGroupId NOT IN(:excludedStateGroupIds) OR StateGroupId IS NULL ",
-					Set = s => s.SetParameterList("excludedStateGroupIds", excluded.Where(x => x.HasValue)),
-					SelectionType = SelectionType.ExcludeStateGroups
-				});
+			{
+				_wheres.Add("( StateGroupId NOT IN(:excludedStateGroupIds) OR StateGroupId IS NULL )");
+				_parameters.Add(s => s.SetParameterList("excludedStateGroupIds", excluded.Where(x => x.HasValue)));
+			}
 			else if (excluded.Any(x => x.HasValue))
-				_selections.Add(new SelectionInfo
-				{
-					Query = "StateGroupId NOT IN(:excludedStateGroupIds) ",
-					Set = s => s.SetParameterList("excludedStateGroupIds", excluded.Where(x => x.HasValue)),
-					SelectionType = SelectionType.ExcludeStateGroups
-				});
+			{
+				_wheres.Add("StateGroupId NOT IN(:excludedStateGroupIds)");
+				_parameters.Add(s => s.SetParameterList("excludedStateGroupIds", excluded.Where(x => x.HasValue)));
+			}
 			else
-				_selections.Add(new SelectionInfo
-				{
-					Query = "StateGroupId IS NOT NULL ",
-					Set = s => s,
-					SelectionType = SelectionType.ExcludeStateGroups
-				});
+			{
+				_wheres.Add("StateGroupId IS NOT NULL ");
+			}
 			return this;
 		}
 
@@ -106,43 +95,24 @@ ORDER BY AlarmStartTime ASC ",
 		{
 			var builder = new StringBuilder("SELECT DISTINCT TOP 50 a.* FROM [ReadModel].AgentState a WITH (NOLOCK) ");
 
+			_froms.ForEach(s => builder.Append(s));
 
+			builder.Append(" WHERE ");
+			builder.Append(string.Join(" AND ", _wheres));
 
-			if (_selections.Any(SelectionType.Skill))
+			if (_orderbys.Any())
 			{
-				builder.Append(_selections.QueryFor(SelectionType.Skill).Single());
-				if (_selections.Any(SelectionType.Org))
-					builder
-						.Append(" AND a.IsDeleted = 0 AND ")
-						.Append("(" + string.Join(" OR ", _selections.QueryFor(SelectionType.Org)) + ")");
+				builder.Append(" ORDER BY ");
+				_orderbys.ForEach(s =>
+				{
+					builder.Append(s);
+				});
 			}
-			else
-			{
-				builder
-					.Append(" WHERE a.IsDeleted = 0 ");
-				if(_selections.Any(SelectionType.Org))
-					builder.Append("AND (" + string.Join(" OR ", _selections.QueryFor(SelectionType.Org)) + ")");
-			}
-				
-
-			if (_selections.Any(SelectionType.ExcludeStateGroups))
-				builder
-					.Append(" AND ")
-					.Append("(" + _selections.QueryFor(SelectionType.ExcludeStateGroups).Single() + ")");
-
-			builder.Append(" AND a.BusinessUnitId = :BusinessUnitId ");
-
-			if (_selections.Any(SelectionType.Alarm))
-				builder
-					.Append(" AND ")
-					.Append(_selections.QueryFor(SelectionType.Alarm).Single());
-
+			
 			return new Selection
 			{
 				Query = builder.ToString(),
-				ParameterFuncs = _selections.ParameterFuncs()
-					.Append(s => s.SetGuid("BusinessUnitId", _businessUnit.Current().Id.Value))
-					.ToArray()
+				ParameterFuncs = _parameters
 			};
 		}
 	}

@@ -462,7 +462,6 @@
     <Compile Include="Rta\KeyValueStorePersister.cs" />
     <Compile Include="Rta\Persisters\MappingReadModelPersister.cs" />
     <Compile Include="Rta\Persisters\TeamCardReader.cs" />
-    <Compile Include="Rta\SelectionInfos.cs" />
     <Compile Include="Rta\StateQueue.cs" />
     <Compile Include="Rta\StateQueueUtilities.cs" />
     <Compile Include="SeatManagement\PersonScheduleWithSeatBooking.cs" />
