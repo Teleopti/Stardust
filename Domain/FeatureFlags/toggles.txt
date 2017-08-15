@@ -39,7 +39,6 @@ Backlog_Module_23980 = DEV
 Wfm_MinimumScaffolding_32659 = RC
 Wfm_ResourcePlanner_32892 = true
 Wfm_ChangePlanningPeriod_33043 = true
-MyTimeWeb_ShowSeatBookingMonthView_39068 = true
 
 RTA_SeeAllOutOfAdherencesToday_39146 = true
 RTA_SpreadTransactionLocksStrategy_41823 = true
@@ -54,6 +53,7 @@ WfmPermission_ReplaceOldPermission_34671 = true
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = true
 WfmTeamSchedule_DisplayAndEditPublicNote_44783 = true
+
 WfmReportPortal_Basic_38825 = true
 WfmReportPortal_LeaderBoard_39440 = true
 
@@ -97,15 +97,11 @@ Wfm_Requests_Refactoring_45470 = DEV
 
 Wfm_Seatplan_UseDatePeriodForPlanning_42167 = true
 
-Wfm_Intraday_38074 = true
-
 Wfm_People_PrepareForRelease_39040 = RC #Was not ready enough
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true
 Wfm_People_MoveImportJobToBackgroundService_43582 = true
 
-MyTimeWeb_TeamScheduleNoReadModel_36210 = true
-WfmIntraday_MonitorActualvsForecasted_35176 = true
 Wfm_HideUnusedTeamsAndSites_42690 = true
 Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
 Wfm_AddMyTimeLink_45088 = RC
@@ -136,12 +132,20 @@ QRCodeForMobileApps_42695 = true
 ConfigQRCodeURLForMobileApps_43224 = true
 MobileApps_EnableMobileNotifications_44476 = true
 MyTimeWeb_MobileResponsive_43826 = true
+MyTimeWeb_ShowSeatBookingMonthView_39068 = true
+MyTimeWeb_TeamScheduleNoReadModel_36210 = true
 
 Scheduler_IntradayOptimization_36617 = true
 Scheduler_ShowSkillPrioLevels_41980 = true
 ResourcePlanner_HideSkillPrioSliders_41312 = RC
 Wfm_SkillPriorityRoutingGUI_39885 = RC
 WfmGlobalLayout_personalOptions_37114 = true
+Wfm_ArchiveSchedule_41498 = true
+Wfm_ImportSchedule_41247 = true
+Mailbox_Optimization_41900 = true
+No_UnitOfWork_Nesting_42175 = true
+Landing_Page_Data_Protection_Question_35721 = true
+Reporting_Optional_Columns_42066 = true
 
 SchedulingScreen_BatchAgentValidation_41552 = true #Toggle for feature 41542
 Scheduler_LoadWithoutRequests_38567 = true
@@ -188,14 +192,8 @@ ETL_EventBasedAgentNameDescription_41432 = true
 ETL_FixScheduleForPersonPeriod_41393 = true
 ETL_SpeedUpNightlyDayOff_38213 = true
 
-Mailbox_Optimization_41900 = true
-No_UnitOfWork_Nesting_42175 = true
-Landing_Page_Data_Protection_Question_35721 = true
-Reporting_Optional_Columns_42066 = true
-
-Wfm_ArchiveSchedule_41498 = true
-Wfm_ImportSchedule_41247 = true
-
+Wfm_Intraday_38074 = true
+WfmIntraday_MonitorActualvsForecasted_35176 = true
 Wfm_Intraday_OptimalStaffing_40921 = true
 Wfm_Intraday_ScheduledStaffing_41476 = true
 Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
