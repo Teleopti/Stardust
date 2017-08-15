@@ -20,6 +20,7 @@
     vm.applyOverride = applyOverride;
     vm.applyCampaign = applyCampaign;
     vm.clearCampaign = clearCampaign;
+    vm.clearOverride = clearOverride;
     vm.overrideStatus = {
       tasks: false,
       talkTime: false,
@@ -105,6 +106,25 @@
             modifyPanelHelper();
             vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
           })
+        };
+
+        function clearOverride() {
+          forecastingService.override(JSON.stringify(
+            {
+              Days: vm.selectedDayCount,
+              WorkloadId: vm.selectedWorkload.Id,
+              ScenarioId: 'e21d813c-238c-4c3f-9b49-9b5e015ab432',
+              ShouldSetOverrideTasks: true,
+              ShouldSetOverrideTalkTime: true,
+              ShouldSetOverrideAfterCallWork: true
+            }), function (data, status, headers, config) {
+
+            }, function (data, status, headers, config) {
+
+            }, function () {
+              modifyPanelHelper();
+              vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
+            })
         };
 
         function loadChart() {
