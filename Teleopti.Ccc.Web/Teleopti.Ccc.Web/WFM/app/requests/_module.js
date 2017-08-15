@@ -11,8 +11,8 @@
 		'pascalprecht.translate',
 		'wfm.notice',
 		'currentUserInfoService',
-        'wfm.signalR',
-        'wfm.teamSchedule',
+		'wfm.signalR',
+		'wfm.teamSchedule',
 		'wfm.multiplesearchinput',
 		'wfm.favoriteSearch',
 		'wfm.organizationPicker',
@@ -20,12 +20,13 @@
 		'wfm.ngEnter'
 	]).run(moduleRun);
 
-	moduleRun.$inject = ['$rootScope', 'FavoriteSearchDataService'];
-	function moduleRun($rootScope, FavoriteSearchDataService) {
+	moduleRun.$inject = ['$rootScope', 'FavoriteSearchDataService', 'groupPageService'];
+	function moduleRun($rootScope, FavoriteSearchDataService, GroupPageService) {
 		$rootScope.$on('$stateChangeSuccess',
 			function (event, toState) {
 				if (toState.name === "requests" || toState.name.indexOf("requestsRefactor") > -1) {
 					FavoriteSearchDataService.setModule("wfm.requests");
+					GroupPageService.setModule("wfm.requests");
 				}
 			});
 	}

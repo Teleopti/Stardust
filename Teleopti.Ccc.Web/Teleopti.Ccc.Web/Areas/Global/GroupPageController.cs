@@ -1,13 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web.Http;
 using System.Web.Http.ModelBinding;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.GroupPageCreator;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.Global.Core;
 using Teleopti.Ccc.Web.Core;
@@ -29,10 +23,17 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		{
 			return Ok(_groupPageViewModelFactory.CreateViewModel(new DateOnlyPeriod(startDate, endDate), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules));
 		}
+
 		[UnitOfWork, HttpGet, Route("api/GroupPage/AvailableGroupPages")]
 		public virtual IHttpActionResult AvailableGroupPages(DateTime date)
 		{
 			return Ok(_groupPageViewModelFactory.CreateViewModel(new DateOnly(date)));
+		}
+
+		[UnitOfWork, HttpGet, Route("api/GroupPage/AvailableStructuredGroupPagesForRequests")]
+		public virtual IHttpActionResult AvailableStructuredGroupPagesForRequests([ModelBinder(typeof(DateOnlyModelBinder))]DateOnly startDate, [ModelBinder(typeof(DateOnlyModelBinder))]DateOnly endDate)
+		{
+			return Ok(_groupPageViewModelFactory.CreateViewModel(new DateOnlyPeriod(startDate, endDate), DefinedRaptorApplicationFunctionPaths.WebRequests));
 		}
 	}
 }

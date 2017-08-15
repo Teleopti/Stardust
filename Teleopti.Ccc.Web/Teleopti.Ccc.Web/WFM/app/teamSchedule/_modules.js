@@ -19,7 +19,7 @@
 			'wfm.groupPage'
 	])
 	.config(['$mdThemingProvider', teamScheduleConfig])
-		.run(['$rootScope', '$state', '$location', 'FavoriteSearchDataService', teamScheduleRun]);
+		.run(['$rootScope', '$state', '$location', 'FavoriteSearchDataService','groupPageService', teamScheduleRun]);
 
 	function teamScheduleConfig($mdThemingProvider) {
 		var teleoptiStyleguideWarnMap = $mdThemingProvider.extendPalette('orange', {
@@ -41,13 +41,14 @@
 			});
 	}
 
-	function teamScheduleRun($rootScope, $state, $location, FavoriteSearchDataService) {
+	function teamScheduleRun($rootScope, $state, $location, FavoriteSearchDataService,GroupPageService) {
 		$rootScope.$on('$stateChangeSuccess',
 			function (event, toState) {
 				if (!toState) return;
 				if ($location.url() == $state.current.url && toState.name == 'teams') $state.go('teams.dayView');
 				if (toState.name.indexOf("teams.") === 0) {
 					FavoriteSearchDataService.setModule("wfm.teamSchedule");
+					GroupPageService.setModule('wfm.teamSchedule');
 				}
 			});
 	}
