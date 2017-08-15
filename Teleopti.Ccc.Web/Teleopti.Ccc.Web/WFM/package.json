@@ -63,29 +63,31 @@
     "karma-teamcity-reporter": "1.0.0",
     "moment": "2.15.0",
     "moment-timezone": "0.4.1",
+    "ncat": "1.1.1",
     "ng-file-upload": "12.2.3",
     "ngstorage": "0.3.9",
+    "npm-run-all": "4.0.2",
+    "onchange": "3.2.1",
     "teleopti-styleguide": "1.9.23",
     "webpack": "2.2.1"
   },
-   "scripts": {
-    "pretest": "npm run ng-templates",
+  "scripts": {
+    "pretest": "npm run concat:html",
     "test": "karma start karma.conf.js",
     "devTest": "npm test -- --reporters dots --no-single-run --autoWatchBatchDelay 1000",
-
-    "prebuild":"echo prebuild",
-    "build": "echo build",
-
-    "prestart": "start http://localhost:52858/TeleoptiWFM/Web/",
-    "start": "npm run iis",
-    "webpack": ".\\node_modules\\.bin\\webpack",
-    "iis": " c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site",
-
-    "ng-templates": "nghtml2js -m wfm.templates -f app/**/*.html -o ./dist/templates.js",
-
-    "sass": "npm run sass:classic && npm run sass:dark",
     "minify:css": ".\\node_modules\\.bin\\cleancss --source-map './css/style_classic.css' -o ./dist/dist.min.css",
-    "sass:classic": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/style.scss > ./css/style_classic.css",
-    "sass:dark": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/darkstyle.scss > ./css/style_dark.css"
+
+    "prestart": "..\\.node\\grunt.cmd devDist && start http://localhost:52858/TeleoptiWFM/Web/",
+    "start": ".\\node_modules\\.bin\\npm-run-all --parallel iis watch:* ",
+    "iis": "c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site",
+    "sass": "npm run sass:classic && npm run sass:dark",
+    "sass:classic": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/style.scss > ./dist/style_classic.min.css",
+    "sass:dark": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/darkstyle.scss > ./dist/style_dark.min.css",
+    "concat:js": ".\\node_modules\\.bin\\ncat  \"./app/**/!(*.spec|*.fake|*.fortest|app_desktop_client).js\" -o ./dist/main.min.js",
+    "concat:html": "nghtml2js -m wfm.templates -f app/**/*.html -o ./dist/templates.min.js",
+    "watch:js": ".\\node_modules\\.bin\\onchange ./app/**/*.js  -v -- npm run concat:js",
+    "watch:sass": ".\\node_modules\\.bin\\onchange ./css/*.scss  -v -- npm run sass",
+    "watch:html": ".\\node_modules\\.bin\\onchange ./app/**/*.html  -v -- npm run concat:html "
   }
 }
+
