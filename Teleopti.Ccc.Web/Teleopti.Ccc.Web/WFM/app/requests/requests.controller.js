@@ -230,7 +230,8 @@
 			vm.disableInteraction = false;
 			vm.onProcessWaitlistFinished = onProcessWaitlistFinished;
 			vm.onApproveBasedOnBusinessRulesFinished = onApproveBasedOnBusinessRulesFinished;
-			vm.getSitesAndTeamsAsync();
+			if (!toggleService.Wfm_GroupPages_45057)
+				vm.getSitesAndTeamsAsync();
 			vm.getGroupPagesAsync();
 			setReleaseNotification();
 
