@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[DomainTest]
 	[UseIocForFatClient]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class SchedulingTrackResourceCalculationsDesktopTest : SchedulingScenario, ISetup
 	{
 		public DesktopScheduling Target;
@@ -29,6 +31,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldRespectResourceCalculateFrequency()
 		{
+			if(ResourcePlannerMergeTeamblockClassicScheduling44289)
+				Assert.Ignore("Frequency setting should not be in use in new teamblock code branch (PBI 45429).");
 			var firstDay = new DateOnly(2017, 5, 15);
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1);
 			var activity = new Activity("_").WithId();

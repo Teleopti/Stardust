@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public int RefreshRate { get; set; }
         public bool UseSameDayOffs { get; set; }
         public IScheduleTag TagToUseOnScheduling { get; set; }
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
     	public int ResourceCalculateFrequency { get; set; }
     	public TimeSpan? UseCustomTargetTime { get; set; }
     	public bool ShowTroubleshot { get; set; }

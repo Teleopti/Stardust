@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, schedulingOptions.ResourceCalculateFrequency,
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1,
 				schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
 			ISchedulePartModifyAndRollbackService rollbackService =
 				new SchedulePartModifyAndRollbackService(_schedulerStateHolder().SchedulingResultState,

@@ -25,6 +25,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private readonly IEnumerable<IShiftCategory> _shiftCategories;
 		[RemoveMeWithToggle("Should be replaced with false", Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
 		private readonly bool _backToLegalStateDialog;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+		private readonly bool _hideScheduleFrequency;
 		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
 		private readonly IList<GroupPageLight> _groupPages;
 		private readonly IList<GroupPageLight> _groupPagesForTeamBlockPer;
@@ -42,6 +44,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			IDaysOffPreferences daysOffPreferences, 
 			IEnumerable<IShiftCategory> shiftCategories,
 			bool backToLegalStateDialog, 
+			bool hideScheduleFrequency,
 			ISchedulerGroupPagesProvider groupPagesProvider,
 			IEnumerable<IScheduleTag> scheduleTags, 
 			string settingValue, 
@@ -53,6 +56,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			_shiftCategories = shiftCategories;
 			
 			_backToLegalStateDialog = backToLegalStateDialog;
+			_hideScheduleFrequency = hideScheduleFrequency;
 			_groupPagesProvider = groupPagesProvider;
 			_groupPages = groupPagesProvider.GetGroups(true);
 			_groupPagesForTeamBlockPer = groupPagesProvider.GetGroups(true);
@@ -147,7 +151,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			loadPersonalSettings();
 
 			schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories,
-				_backToLegalStateDialog, _groupPagesProvider, _scheduleTags, _availableActivity);
+				_backToLegalStateDialog, _hideScheduleFrequency, _groupPagesProvider, _scheduleTags, _availableActivity);
 
 			dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
 			dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;

@@ -1130,7 +1130,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
 			using (var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 					daysOffPreferences, _schedulerState.CommonStateHolder.ActiveShiftCategories,
-					true, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptions",
+					true, _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289), 
+					_groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptions",
 					_schedulerState.CommonStateHolder.ActiveActivities))
 			{
 				if (options.ShowDialog(this) == DialogResult.OK)
@@ -3057,7 +3058,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					using (var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 							daysOffPreferences,
 							_schedulerState.CommonStateHolder.ActiveShiftCategories,
-							false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags,
+							false, _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289), _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags,
 							"SchedulingOptions", _schedulerState.CommonStateHolder.ActiveActivities))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
@@ -3096,7 +3097,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				using (
 					var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
 						new DaysOffPreferences(), _schedulerState.CommonStateHolder.ActiveShiftCategories,
-						false, _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptionsActivities",
+						false, _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289), 
+						_groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptionsActivities",
 						_schedulerState.CommonStateHolder.ActiveActivities))
 				{
 					if (options.ShowDialog(this) == DialogResult.OK)

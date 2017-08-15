@@ -1,10 +1,12 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Cascading;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 {
+	[RemoveMeWithToggle("ATM this is only used when toggle is true", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class ResourceCalculationWithCount : CascadingResourceCalculation
 	{
 		public ResourceCalculationWithCount(ResourceOptimizationHelper resourceOptimizationHelper, ShovelResources shovelResources) : base(resourceOptimizationHelper, shovelResources)

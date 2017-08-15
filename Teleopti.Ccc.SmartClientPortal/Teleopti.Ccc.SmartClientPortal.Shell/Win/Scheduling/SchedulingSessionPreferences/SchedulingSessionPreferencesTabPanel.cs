@@ -30,8 +30,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			if (!DesignMode) SetTexts();
 		}
 
-		[RemoveMeWithToggle("Remove backToLegalState, replace with false",Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
-		public void Initialize(SchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, bool backToLegalStateDialog, ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
+		[RemoveMeWithToggle("Remove backToLegalState",Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
+		[RemoveMeWithToggle("Remove hideScheduleFrequency param and win controls only visible when false",Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+		public void Initialize(SchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, bool backToLegalStateDialog, bool hideScheduleFrequency, ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
 		{
 			_groupPagesProvider = groupPagesProvider;
 			_availableActivity = availableActivity;
@@ -51,16 +52,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 				tableLayoutPanel2.RowStyles[1].Height = 0;
 			}
 
+			//REMOVE THESE CONTROLS WITH TOGGLE 
 			labelResourceCalculateEveryColon.Visible = true;
 			numericUpDownResourceCalculateEvery.Visible = true;
 			labelScheduleOrSchedules1.Visible = true;
 
-			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff)
+			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.HourlyStaff || hideScheduleFrequency)
 			{
 				labelResourceCalculateEveryColon.Visible = false;
 				numericUpDownResourceCalculateEvery.Visible = false;
 				labelScheduleOrSchedules1.Visible = false;
 			}
+			//
 
 			_schedulingOptions = schedulingOptions;
 			_shiftCategories = shiftCategories;

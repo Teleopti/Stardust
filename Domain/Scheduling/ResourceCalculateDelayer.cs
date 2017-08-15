@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -14,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private DateOnly? _lastDate;
 		private int _counter = 1;
 
+		[RemoveMeWithToggle("Remove param calc freq", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		public ResourceCalculateDelayer(
 			IResourceCalculation resourceOptimizationHelper, 
 			int calculationFrequency, 
