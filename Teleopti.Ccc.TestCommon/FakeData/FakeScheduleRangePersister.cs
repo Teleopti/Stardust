@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			var diffSvc = new DifferenceEntityCollectionService<IPersistableScheduleData>();
 
-			var diff = scheduleRange.DifferenceSinceSnapshot(diffSvc);
+			var diff = scheduleRange.DifferenceSinceSnapshot(diffSvc, period);
 			lock (lockToPreventSimultaniousReadWritesToRepoBecauseItShouldNotBeAProblemUsingRealRepository)
 			{
 				foreach (var scheduleChange in diff)

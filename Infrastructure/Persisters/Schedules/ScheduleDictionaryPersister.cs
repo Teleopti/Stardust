@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -32,8 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters.Schedules
 				using (_transactionHooksScope.OnThisThreadExclude<ScheduleChangedMessageSender>())
 				{
 					var result = _scheduleRangePersister.Persist(scheduleRange,
-						scheduleDictionary.Period.VisiblePeriod.ToDateOnlyPeriod(
-							scheduleRange.Person.PermissionInformation.DefaultTimeZone()));
+						scheduleDictionary.Period.VisiblePeriod.ToDateOnlyPeriod(TimeZoneInfo.Utc));
 
 					var persistConflicts = completeResult.PersistConflicts.ToList();
 					persistConflicts.AddRange(result.PersistConflicts);
