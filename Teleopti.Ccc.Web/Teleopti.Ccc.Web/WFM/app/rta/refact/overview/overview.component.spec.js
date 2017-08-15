@@ -230,14 +230,15 @@ describe('rtaOverviewComponent', function () {
         Color: 'warning'
       });
 
-    var vm = $controllerBuilder.createController().vm;
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
 
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = true;
+    });
 
     expect(ctrl.siteCards[0].teams[0].SiteId).toEqual('londonId');
     expect(ctrl.siteCards[0].teams[0].Name).toEqual('Green');
@@ -273,14 +274,15 @@ describe('rtaOverviewComponent', function () {
         InAlarmCount: 4,
         Color: 'warning'
       });
-    var vm = $controllerBuilder.createController().vm;
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
 
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = true;
+    });
 
     expect(ctrl.siteCards[0].teams.length).toEqual(1);
     expect(ctrl.siteCards[0].teams[0].SiteId).toEqual('londonId');
@@ -309,9 +311,10 @@ describe('rtaOverviewComponent', function () {
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
+
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = true;
+    });
     c.apply(function () {
       $fakeBackend
         .clearTeamAdherences()
@@ -346,33 +349,29 @@ describe('rtaOverviewComponent', function () {
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
-    c.apply(function () {
-      $fakeBackend
-        .clearTeamAdherences()
-        .withTeamAdherence({
-          SiteId: 'londonId',
-          InAlarmCount: 2,
-          Color: 'good'
-        });
-    })
-      .wait(5000);
-
-    ctrl.siteCards[0].isOpen = false;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
 
     c.apply(function () {
-      $fakeBackend
-        .clearTeamAdherences()
-        .withTeamAdherence({
-          SiteId: 'londonId',
-          InAlarmCount: 10,
-          Color: 'danger'
-        });
-    })
-      .wait(5000);
+      ctrl.siteCards[0].isOpen = true;
+    });
+    $fakeBackend
+      .clearTeamAdherences()
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        InAlarmCount: 2,
+        Color: 'good'
+      });
+    c.wait(5000);
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = false;
+    });
+    $fakeBackend
+      .clearTeamAdherences()
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        InAlarmCount: 10,
+        Color: 'danger'
+      });
+    c.wait(5000);
 
     expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(2);
     expect(ctrl.siteCards[0].teams[0].Color).toEqual('good');
@@ -399,19 +398,17 @@ describe('rtaOverviewComponent', function () {
       siteCards: vm.siteCards
     });
 
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
     c.apply(function () {
-      $fakeBackend.clearTeamAdherences()
-        .withTeamAdherence({
-          SiteId: 'londonId',
-          SkillId: 'channelSalesId',
-          InAlarmCount: 2,
-          Color: 'good'
-        });
-    })
-      .wait(5000);
+      ctrl.siteCards[0].isOpen = true;
+    });
+    $fakeBackend.clearTeamAdherences()
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        SkillId: 'channelSalesId',
+        InAlarmCount: 2,
+        Color: 'good'
+      });
+    c.wait(5000);
 
     expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(2);
     expect(ctrl.siteCards[0].teams[0].Color).toEqual('good');
@@ -437,107 +434,30 @@ describe('rtaOverviewComponent', function () {
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards
     });
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
     c.apply(function () {
-      $fakeBackend.clearTeamAdherences()
-        .withTeamAdherence({
-          SiteId: 'londonId',
-          SkillId: 'channelSalesId',
-          InAlarmCount: 2,
-          Color: 'good'
-        });
-    })
-      .wait(5000);
-
-    ctrl.siteCards[0].isOpen = false;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    c.apply(function () {
-      $fakeBackend
-        .clearTeamAdherences()
-        .withTeamAdherence({
-          SiteId: 'londonId',
-          InAlarmCount: 10,
-          Color: 'danger'
-        });
-    })
-      .wait(5000);
-
-    expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(2);
-    expect(ctrl.siteCards[0].teams[0].Color).toEqual('good');
-  });
-
-  it('should not update team adherence when skill changes', function () {
-    stateParams.skillIds = ['channelSalesId'];
-    $fakeBackend
-      .withSiteAdherence({
-        Id: 'londonId',
-        SkillId: 'channelSalesId',
-        InAlarmCount: 5,
-        Color: 'warning'
-      })
+      ctrl.siteCards[0].isOpen = true;
+    });
+    $fakeBackend.clearTeamAdherences()
       .withTeamAdherence({
         SiteId: 'londonId',
         SkillId: 'channelSalesId',
-        InAlarmCount: 5,
-        Color: 'warning'
-      })
-      .withSiteAdherence({
-        Id: 'londonId',
-        SkillId: 'phoneId',
-        InAlarmCount: 4,
-        Color: 'warning'
-      })
-      .withTeamAdherence({
-        SiteId: 'londonId',
-        SkillId: 'phoneId',
         InAlarmCount: 2,
         Color: 'good'
       });
-
-    var c = $controllerBuilder.createController();
-    vm = c.vm;
-    ctrl = $componentController('rtaOverviewComponent', null, {
-      siteCards: vm.siteCards
+    c.wait(5000);
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = false;
     });
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
-    c.apply(function () {
-      $fakeBackend
-        .clearTeamAdherences()
-        .withTeamAdherence({
-          SiteId: 'londonId',
-          SkillId: 'channelSalesId',
-          InAlarmCount: 2,
-          Color: 'good'
-        })
-        .withTeamAdherence({
-          SiteId: 'londonId',
-          SkillId: 'phoneId',
-          InAlarmCount: 1,
-          Color: 'good'
-        });
-    })
-      .wait(5000);
+    $fakeBackend
+      .clearTeamAdherences()
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        InAlarmCount: 10,
+        Color: 'danger'
+      });
+    c.wait(5000);
 
-    vm.skillIds = ['phoneId'];
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
-    c.apply(function () {
-      $fakeBackend
-        .clearTeamAdherences()
-        .withTeamAdherence({
-          SiteId: 'londonId',
-          SkillId: 'phoneId',
-          InAlarmCount: 8,
-          Color: 'danger'
-        });
-    })
-      .wait(5000);
-
-    expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(1);
+    expect(ctrl.siteCards[0].teams[0].InAlarmCount).toEqual(2);
     expect(ctrl.siteCards[0].teams[0].Color).toEqual('good');
   });
 
@@ -552,9 +472,13 @@ describe('rtaOverviewComponent', function () {
   });
 
   it('should set agents state for site with skill', function () {
-    vm = $controllerBuilder.createController().vm;
-    vm.filterOutput(channelSales);
-    $httpBackend.flush();
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
+
+    c.apply(function () {
+      vm.filterOutput(channelSales);
+    });
+
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState
@@ -564,8 +488,12 @@ describe('rtaOverviewComponent', function () {
   });
 
   it('should set agents state for site with skill area', function () {
-    vm = $controllerBuilder.createController(undefined, skillAreas).vm;
-    vm.filterOutput(skillArea1);
+    var c = $controllerBuilder.createController(undefined, skillAreas);
+    var vm = c.vm;
+
+    c.apply(function () {
+      vm.filterOutput(skillArea1);
+    });
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState
@@ -575,9 +503,16 @@ describe('rtaOverviewComponent', function () {
   });
 
   it('should set agents state for site when clearing filter selection', function () {
-    vm = $controllerBuilder.createController().vm;
-    vm.filterOutput(channelSales);
-    vm.filterOutput();
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
+
+    c.apply(function () {
+      vm.filterOutput(channelSales);
+    });
+    c.apply(function () {
+      vm.filterOutput();
+    });
+
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState
@@ -591,14 +526,17 @@ describe('rtaOverviewComponent', function () {
       .withSiteAdherence({
         Id: 'londonId'
       })
-    vm = $controllerBuilder.createController().vm;
+    var c = $controllerBuilder.createController()
+    var vm = c.vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState,
       getSelectedItems: vm.getSelectedItems
     });
 
-    ctrl.selectItem(ctrl.siteCards[0]);
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0]);
+    });
 
     expect(ctrl.siteCards[0].isSelected).toEqual(true);
   });
@@ -608,15 +546,20 @@ describe('rtaOverviewComponent', function () {
       .withSiteAdherence({
         Id: 'londonId'
       });
-    vm = $controllerBuilder.createController().vm;
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState,
       getSelectedItems: vm.getSelectedItems
     });
 
-    ctrl.selectItem(ctrl.siteCards[0]);
-    ctrl.selectItem(ctrl.siteCards[0]);
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0]);
+    });
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0]);
+    });
 
     expect(ctrl.siteCards[0].isSelected).toEqual(false);
   });
@@ -631,18 +574,20 @@ describe('rtaOverviewComponent', function () {
         Id: 'greenId'
       });
 
-    vm = $controllerBuilder.createController().vm;
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState,
       getSelectedItems: vm.getSelectedItems
     });
 
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
-
-    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = true;
+    });
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    });
 
     expect(ctrl.siteCards[0].teams[0].isSelected).toEqual(true);
   });
@@ -657,19 +602,23 @@ describe('rtaOverviewComponent', function () {
         Id: 'greenId'
       });
 
-    vm = $controllerBuilder.createController().vm;
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState,
       getSelectedItems: vm.getSelectedItems
     });
 
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
-
-    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
-    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = true;
+    });
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    });
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    });
 
     expect(ctrl.siteCards[0].teams[0].isSelected).toEqual(false);
   });
@@ -684,18 +633,20 @@ describe('rtaOverviewComponent', function () {
         Id: 'greenId'
       });
 
-    vm = $controllerBuilder.createController().vm;
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState,
       getSelectedItems: vm.getSelectedItems
     });
 
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
-
-    ctrl.selectItem(ctrl.siteCards[0]);
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = true;
+    });
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0]);
+    });
 
     expect(ctrl.siteCards[0].teams[0].isSelected).toEqual(true);
   });
@@ -710,19 +661,23 @@ describe('rtaOverviewComponent', function () {
         Id: 'greenId'
       });
 
-    vm = $controllerBuilder.createController().vm;
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState,
       getSelectedItems: vm.getSelectedItems
     });
 
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
-
-    ctrl.selectItem(ctrl.siteCards[0]);
-    ctrl.selectItem(ctrl.siteCards[0]);
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = true;
+    });
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0]);
+    });
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0]);
+    });
 
     expect(ctrl.siteCards[0].teams[0].isSelected).toEqual(false);
   });
@@ -737,7 +692,8 @@ describe('rtaOverviewComponent', function () {
         Id: 'greenId'
       });
 
-    vm = $controllerBuilder.createController().vm;
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState,
@@ -745,11 +701,12 @@ describe('rtaOverviewComponent', function () {
       selectedItems: vm.selectedItems
     });
 
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
-
-    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = true;
+    });
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    });
 
     expect(ctrl.siteCards[0].isSelected).toEqual(true);
   });
@@ -768,20 +725,27 @@ describe('rtaOverviewComponent', function () {
         Id: 'redId'
       });
 
-    vm = $controllerBuilder.createController().vm;
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState,
       getSelectedItems: vm.getSelectedItems
     });
 
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
 
-    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
-    ctrl.selectItem(ctrl.siteCards[0].teams[1]);
-    ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = true;
+    });
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    });
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0].teams[1]);
+    });
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0].teams[0]);
+    });
 
     expect(ctrl.siteCards[0].isSelected).toEqual(false);
   });
@@ -796,17 +760,21 @@ describe('rtaOverviewComponent', function () {
         Id: 'greenId'
       });
 
-    vm = $controllerBuilder.createController().vm;
+    var c = $controllerBuilder.createController();
+    var vm = c.vm;
     ctrl = $componentController('rtaOverviewComponent', null, {
       siteCards: vm.siteCards,
       agentsState: vm.agentsState,
       getSelectedItems: vm.getSelectedItems
     });
 
-    ctrl.selectItem(ctrl.siteCards[0]);
-    ctrl.siteCards[0].isOpen = true;
-    ctrl.siteCards[0].fetchTeamData(ctrl.siteCards[0]);
-    $httpBackend.flush();
+
+    c.apply(function () {
+      ctrl.selectItem(ctrl.siteCards[0]);
+    });
+    c.apply(function () {
+      ctrl.siteCards[0].isOpen = true;
+    });
 
     expect(ctrl.siteCards[0].teams[0].isSelected).toEqual(true);
   });

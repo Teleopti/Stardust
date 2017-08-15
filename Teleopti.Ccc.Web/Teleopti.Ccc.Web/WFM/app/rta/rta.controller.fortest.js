@@ -4,9 +4,9 @@
 		.module('wfm.rta')
 		.factory('ControllerBuilder', controllerBuilder);
 
-	controllerBuilder.$inject = ['$controller', '$interval', '$httpBackend', '$rootScope', '$log'];
+	controllerBuilder.$inject = ['$controller', '$interval', '$timeout', '$httpBackend', '$rootScope', '$log'];
 
-	function controllerBuilder($controller, $interval, $httpBackend, $rootScope, $log) {
+	function controllerBuilder($controller, $interval, $timeout, $httpBackend, $rootScope, $log) {
 		var controllerName = "hejsan";
 		var scope;
 
@@ -49,6 +49,7 @@
 
 				wait: function(milliseconds) {
 					$interval.flush(milliseconds);
+					$timeout.flush(milliseconds);
 					safeBackendFlush();
 					return callbacks;
 				},

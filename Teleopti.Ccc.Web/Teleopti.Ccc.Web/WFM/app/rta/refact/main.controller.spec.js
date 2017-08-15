@@ -165,7 +165,6 @@ describe('RtaMainController', function () {
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(5);
       expect(vm.siteCards[0].site.Color).toEqual(warningColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
-      expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
     it('should set total number of agents', function () {
@@ -205,7 +204,7 @@ describe('RtaMainController', function () {
           Id: 'greenId'
         });
 
-      vm = $controllerBuilder.createController().vm;
+      var vm = $controllerBuilder.createController().vm;
 
       expect(vm.siteCards[0].teams.length).toEqual(1);
       expect(vm.siteCards[0].teams[0].SiteId).toEqual('londonId');
@@ -302,7 +301,6 @@ describe('RtaMainController', function () {
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(5);
       expect(vm.siteCards[0].site.Color).toEqual(warningColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
-      expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
     it('should build site card view model when preselected skill area', function () {
@@ -325,7 +323,6 @@ describe('RtaMainController', function () {
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
       expect(vm.siteCards[0].site.Color).toEqual(goodColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
-      expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
     it('should update adherence', function () {
@@ -357,7 +354,6 @@ describe('RtaMainController', function () {
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
       expect(vm.siteCards[0].site.Color).toEqual(goodColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
-      expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
     it('should update adherence for site with skill', function () {
@@ -528,7 +524,6 @@ describe('RtaMainController', function () {
       expect(vm.siteCards[0].site.InAlarmCount).toEqual(9);
       expect(vm.siteCards[0].site.Color).toEqual(dangerColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
-      expect(typeof vm.siteCards[0].fetchTeamData).toBe('function');
     });
 
     it('should stop polling when page is about to destroy', function () {
@@ -623,6 +618,32 @@ describe('RtaMainController', function () {
       expect(vm.siteCards[1].site.AgentsCount).toEqual(10);
       expect(vm.siteCards[1].site.InAlarmCount).toEqual(8);
       expect(vm.siteCards[1].site.Color).toEqual(dangerColor);
+    });
+
+    it('should update total agents in alarm', function () {
+      $fakeBackend.withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London',
+        AgentsCount: 11,
+        InAlarmCount: 5,
+        Color: 'warning'
+      });
+
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+      c.apply(function () {
+        $fakeBackend.clearSiteAdherences()
+          .withSiteAdherence({
+            Id: 'londonId',
+            Name: 'London',
+            AgentsCount: 11,
+            InAlarmCount: 2,
+            Color: 'good'
+          });
+      })
+        .wait(5000);
+
+      expect(vm.totalAgentsInAlarm).toEqual(2);
     });
 
   });

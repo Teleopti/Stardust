@@ -5,9 +5,9 @@
 		.module('wfm.rta')
 		.controller('RtaMainController', RtaMainController);
 
-	RtaMainController.$inject = ['rtaService', 'rtaRouteService', 'skills', 'skillAreas', '$state', '$stateParams', '$interval', '$scope'];
+	RtaMainController.$inject = ['rtaService', 'rtaRouteService', 'skills', 'skillAreas', '$state', '$stateParams', '$interval', '$scope', '$q', '$timeout'];
 
-	function RtaMainController(rtaService, rtaRouteService, skills, skillAreas, $state, $stateParams, $interval, $scope) {
+	function RtaMainController(rtaService, rtaRouteService, skills, skillAreas, $state, $stateParams, $interval, $scope, $q, $timeout) {
 		var vm = this;
 		vm.skillIds = $stateParams.skillIds || [];
 		vm.skillAreaId = $stateParams.skillAreaId;
@@ -24,10 +24,7 @@
 		vm.goToAgentsView = function () { rtaRouteService.goToSelectSkill(); };
 		vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
 
-		var teamPolling;
-		var sitePolling;
-		var sitePollingWithSkills;
-		var pollingIntervals = [];
+		var pollPromise;
 
 		(function () {
 			if (angular.isDefined(vm.urlParams.skillAreaId)) {
@@ -48,94 +45,83 @@
 
 			if (angular.isDefined(vm.skillAreaId)) {
 				vm.skillIds = getSkillIdsFromSkillAreaId(vm.skillAreaId);
-				getSiteCards(vm.skillIds);
-			} else if (vm.skillIds.length) {
-				getSiteCards(vm.skillIds);
-			} else {
-				getSiteCards();
 			}
+
+
 
 		})();
 
-		function getSiteCards(ids) {
-			if (angular.isDefined(ids)) {
-				rtaService.getOverviewModelFor(ids).then(function (result) {
-					vm.siteCards = buildSiteCards(result);
-					vm.totalAgentsInAlarm = result.TotalAgentsInAlarm;
-					vm.noSiteCards = !vm.siteCards.length;
-					fetchTeamsForAllSiteCards();
-				});
-			} else {
-				rtaService.getOverviewModelFor().then(function (result) {
-					vm.siteCards = buildSiteCards(result);
-					vm.totalAgentsInAlarm = result.TotalAgentsInAlarm;
-					vm.noSiteCards = !vm.siteCards.length;
-					fetchTeamsForAllSiteCards();
-				});
-			}
+		function pollInitiate() {
+			vm.siteCards = [];
+			pollNow();
 		}
 
-		function fetchTeamsForAllSiteCards() {
-			vm.siteCards.forEach(function (s) {
-				if (s.isOpen)
-					fetchTeamData(s);
-			})
+		function pollNow() {
+			pollStop();
+			getSites()
+				.then(getTeamsForSites)
+				.then(pollNext);
 		}
 
-		function buildSiteCards(sites) {
-			return sites.Sites.map(function (site) {
-				site.Color = translateSiteColors(site);
-				return {
-					site: site,
-					isOpen: $stateParams.open != "false",
-					fetchTeamData: fetchTeamData
-				}
-			});
+		function pollNext() {
+			pollPromise = $timeout(getData, 5000);
 		}
 
-		function fetchTeamData(card) {
-			if (!card.isOpen) {
-				var match = pollingIntervals.find(function (interval) {
-					return interval.siteId === card.site.Id;
-				});
-				var index = pollingIntervals.indexOf(match);
-				pollingIntervals.splice(index, 1);
-				$interval.cancel(match.interval);
-			} else {
-				fetchTeams(card);
-				teamPolling = $interval(function () {
-					if (vm.skillIds.length) {
-						rtaService.getTeamCardsFor({ siteIds: card.site.Id, skillIds: vm.skillIds }).then(function (teams) {
-							updateTeamCards(card, teams);
-						})
-					}
-					else {
-						rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
-							updateTeamCards(card, teams);
+		function pollStop() {
+			if (pollPromise)
+				$timeout.cancel(pollPromise);
+		}
+
+		pollInitiate();
+		
+		$scope.$on('$destroy', pollStop);
+
+		function getData() {
+			$q.all([
+				getSites(),
+				getTeamsForSites()
+			]).then(pollNext);
+		};
+
+		function getSites() {
+			return rtaService.getOverviewModelFor(vm.skillIds)
+				.then(function (sites) {
+					sites.Sites.forEach(function (site) {
+						var siteCard = vm.siteCards.find(function (siteCard) {
+							return siteCard.site.Id === site.Id;
 						});
-					}
-				}, 5000);
-
-				pollingIntervals.push({
-					siteId: card.site.Id,
-					interval: teamPolling
+						if (!siteCard) {
+							siteCard = {
+								site: site,
+								isOpen: $stateParams.open != "false"
+							};
+							$scope.$watch(function () { return siteCard.isOpen }, pollNow);
+							vm.siteCards.push(siteCard);
+						};
+						siteCard.site.Color = translateSiteColors(site);
+						siteCard.site.InAlarmCount = site.InAlarmCount;
+					});
+					vm.totalAgentsInAlarm = sites.TotalAgentsInAlarm;
+					vm.noSiteCards = !vm.siteCards.length;
 				});
-			}
 		}
 
-		function fetchTeams(card) {
-			if (vm.skillIds.length) {
-				rtaService.getTeamCardsFor({ siteIds: card.site.Id, skillIds: vm.skillIds }).then(function (teams) {
-					card.teams = teams;
-					setTeamToSelected(card);
-				});
-			} else {
-				rtaService.getTeamCardsFor({ siteIds: card.site.Id }).then(function (teams) {
-					card.teams = teams;
-					setTeamToSelected(card);
-				});
+		function getTeamsForSites() {
+			return $q.all(
+				vm.siteCards
+					.filter(function (s) { return s.isOpen; })
+					.map(function (s) {
+						return getTeamsForSite(s);
+					})
+			);
+		}
 
-			}
+		function getTeamsForSite(s) {
+			return rtaService.getTeamCardsFor({ siteIds: s.site.Id, skillIds: vm.skillIds })
+				.then(function (teams) {
+					s.teams = teams;
+					setTeamToSelected(s);
+				});
 		}
 
 		function setTeamToSelected(card) {
@@ -151,16 +137,6 @@
 					if (indexOfTeam > -1) team.isSelected = true;
 				});
 			}
-		}
-
-		function updateTeamCards(card, teams) {
-			card.teams.forEach(function (team) {
-				var match = teams.find(function (t) {
-					return t.Id === team.Id;
-				});
-				team.Color = match.Color;
-				team.InAlarmCount = match.InAlarmCount;
-			});
 		}
 
 		function getSkillIdsFromSkillAreaId(id) {
@@ -180,69 +156,15 @@
 			}
 		}
 
-		$scope.$watch(function () { return vm.skillIds; },
-			function (newValue) {
-				clearSitePolls();
-
-				if (newValue.length) {
-					vm.skillSelected = true;
-					sitePollingWithSkills = $interval(function () {
-						rtaService
-							.getOverviewModelFor(vm.skillIds)
-							.then(updateSiteCards);
-					}, 5000);
-				} else {
-					vm.skillSelected = false;
-					sitePolling = $interval(function () {
-						rtaService
-							.getOverviewModelFor()
-							.then(updateSiteCards)
-					}, 5000);
-				}
-			});
-
-		function clearSitePolls() {
-			if (angular.isDefined(sitePollingWithSkills)) {
-				$interval.cancel(sitePollingWithSkills);
-			}
-			if (angular.isDefined(sitePolling)) {
-				$interval.cancel(sitePolling);
-			}
-			if (pollingIntervals.length) {
-				pollingIntervals.forEach(function (i) {
-					$interval.cancel(i.interval);
-				});
-				pollingIntervals = [];
-			}
-		}
-
-		function updateSiteCards(sites) {
-			sites.Sites.forEach(function (site) {
-				var match = vm.siteCards.find(function (card) {
-					return card.site.Id === site.Id;
-				});
-				if (match) {
-					match.site.Color = translateSiteColors(site);
-					match.site.InAlarmCount = site.InAlarmCount;
-				}
-			});
-		}
-
-		$scope.$on('$destroy', function () {
-			clearSitePolls();
-		});
-
 		vm.filterOutput = function (selectedItem) {
 			if (!angular.isDefined(selectedItem)) {
 				resetOnNoSkills();
-				getSiteCards();
 			} else if (selectedItem.hasOwnProperty('Skills')) {
 				setUpForSkillArea(selectedItem);
-				getSiteCards(vm.skillIds);
 			} else {
 				setUpForSkill(selectedItem);
-				getSiteCards(vm.skillIds);
 			}
+			pollInitiate();
 		}
 
 		function resetOnNoSkills() {
@@ -272,13 +194,13 @@
 		}
 
 
-		vm.getSelectedItems = function (item) {
+		vm.getSelectedItems = function (siteCard) {
 			var selectedItemsHandler = createSelectedItemsHandler(vm.selectedItems);
 
-			if (angular.isDefined(item.site)) {
-				selectSite(selectedItemsHandler, item);
+			if (angular.isDefined(siteCard.site)) {
+				selectSite(selectedItemsHandler, siteCard);
 			} else {
-				selectTeam(selectedItemsHandler, item);
+				selectTeam(selectedItemsHandler, siteCard);
 			}
 
 			vm.organizationSelection = vm.selectedItems.siteIds.length || vm.selectedItems.teamIds.length;

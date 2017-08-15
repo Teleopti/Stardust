@@ -136,8 +136,9 @@ describe('RtaMainController', function () {
       var c = $controllerBuilder.createController(allSkills, skillAreas);
       vm = c.vm;
 
-      vm.filterOutput(vm.skills[0]);
-      $httpBackend.flush();
+      c.apply(function () {
+        vm.filterOutput(vm.skills[0]);
+      });
 
       expect($state.go).toHaveBeenCalledWith($state.current.name, {
         skillAreaId: undefined,
@@ -148,10 +149,12 @@ describe('RtaMainController', function () {
 
     it('should go to sites with skill area when changing selection from skill to skill area', function () {
       stateParams.skillIds = ['channelSalesId'];
-      vm = $controllerBuilder.createController(allSkills, skillAreas).vm
+      var c = $controllerBuilder.createController(allSkills, skillAreas)
+      vm = c.vm
 
-      vm.filterOutput(vm.skillAreas[0]);
-      $httpBackend.flush();
+      c.apply(function () {
+        vm.filterOutput(skillArea1);
+      });
 
       expect($state.go).toHaveBeenCalledWith($state.current.name, {
         skillAreaId: 'skillArea1Id',
@@ -162,10 +165,12 @@ describe('RtaMainController', function () {
 
     it('should clear url when sending in empty input in filter', function () {
       stateParams.skillIds = ['channelSalesId'];
-      vm = $controllerBuilder.createController().vm;
+      var c = $controllerBuilder.createController()
+      vm = c.vm;
 
-      vm.filterOutput(undefined);
-      $httpBackend.flush();
+      c.apply(function () {
+        vm.filterOutput(undefined);
+      });
 
       expect($state.go).toHaveBeenCalledWith($state.current.name, {
         skillAreaId: undefined,
@@ -188,6 +193,8 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -207,8 +214,14 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[1]);
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[1]);
+      });
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -223,11 +236,15 @@ describe('RtaMainController', function () {
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
-      vm.filterOutput(channelSales);
-      $httpBackend.flush();
 
       c.apply(function () {
+        vm.filterOutput(channelSales);
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      $state.go.calls.reset();
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -246,6 +263,8 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -261,12 +280,18 @@ describe('RtaMainController', function () {
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
-      vm.filterOutput(channelSales);
-      $httpBackend.flush();
 
       c.apply(function () {
+        vm.filterOutput(channelSales);
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      c.apply(function () {
         vm.filterOutput();
+      });
+      $state.go.calls.reset();
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -282,11 +307,14 @@ describe('RtaMainController', function () {
       var c = $controllerBuilder.createController();
       vm = c.vm;
 
-      vm.filterOutput();
-      $httpBackend.flush();
-
+      c.apply(function () {
+        vm.filterOutput();
+      });
       c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      $state.go.calls.reset();
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -305,16 +333,22 @@ describe('RtaMainController', function () {
         });
       var c = $controllerBuilder.createController(undefined, skillAreas);
       vm = c.vm;
-      vm.filterOutput(skillArea1);
+
+      c.apply(function () {
+        vm.filterOutput(skillArea1);
+      })
       c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      $state.go.calls.reset();
+      c.apply(function () {
         vm.goToAgents();
       });
 
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], teamIds: [], skillIds: [], skillAreaId: 'skillArea1Id' });
     });
 
-    it('should go to agents for selected site with preselected skill area', function () {
+    it('should go to agents for selected site with   skill area', function () {
       stateParams.skillAreaId = 'skillArea1Id';
       $fakeBackend
         .withSiteAdherence({
@@ -330,6 +364,8 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -352,11 +388,18 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.filterOutput(skills1[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      c.apply(function () {
         vm.filterOutput(skills1[1]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      $state.go.calls.reset();
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -379,11 +422,14 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.siteCards[0].isOpen = true;
-        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      });
+      c.apply(function () {
         vm.goToAgents();
       });
+
 
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['greenId'], skillIds: [], skillAreaId: undefined });
     });
@@ -404,13 +450,18 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.filterOutput(channelSales);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.siteCards[0].isOpen = true;
-        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      });
+      $state.go.calls.reset();
+      c.apply(function () {
         vm.goToAgents();
       });
+
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['greenId'], skillIds: ['channelSalesId'], skillAreaId: undefined });
     });
 
@@ -431,11 +482,14 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.siteCards[0].isOpen = true;
-        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      });
+      c.apply(function () {
         vm.goToAgents();
       });
+
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['greenId'], skillIds: ['channelSalesId'], skillAreaId: undefined });
     });
 
@@ -464,14 +518,17 @@ describe('RtaMainController', function () {
       vm = c.vm;
       c.apply(function () {
         vm.filterOutput(skillArea1);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.siteCards[0].isOpen = true;
-        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      });
+      $state.go.calls.reset();
+      c.apply(function () {
         vm.goToAgents();
       });
-
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['greenId'], skillIds: [], skillAreaId: 'skillArea1Id' });
     });
 
@@ -501,9 +558,11 @@ describe('RtaMainController', function () {
       vm = c.vm;
       c.apply(function () {
         vm.siteCards[0].isOpen = true;
-        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      });
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -536,17 +595,24 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.filterOutput(skills1[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.siteCards[0].isOpen = true;
-        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      });
+      c.apply(function () {
         vm.filterOutput(skills1[1]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.siteCards[0].isOpen = true;
-        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      });
+      $state.go.calls.reset();
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -573,11 +639,17 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.siteCards[0].isOpen = true;
-        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
-        vm.siteCards[0].isSelected = true; //site gets to be selected in component, don't know how to set it in controller test
+      });
+      c.apply(function () {
+        vm.siteCards[0].isSelected = true;
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[1]);
+      });
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -604,11 +676,17 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.siteCards[0].isOpen = true;
-        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[1]);
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      });
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -635,10 +713,14 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.siteCards[0].isOpen = true;
-        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[1]);
+      });
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -665,12 +747,20 @@ describe('RtaMainController', function () {
 
       c.apply(function () {
         vm.siteCards[0].isOpen = true;
-        vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-        $httpBackend.flush();
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[1]);
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      });
+      c.apply(function () {
         vm.getSelectedItems(vm.siteCards[0]);
+      });
+      c.apply(function () {
         vm.goToAgents();
       });
 
@@ -699,14 +789,15 @@ describe('RtaMainController', function () {
 
     c.apply(function () {
       vm.siteCards[0].isOpen = true;
-      vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-      $httpBackend.flush();
+    });
+    c.apply(function () {
       vm.getSelectedItems(vm.siteCards[0].teams[0]);
+    });
+    c.apply(function () {
       vm.siteCards[0].isOpen = false;
+    });
+    c.apply(function () {
       vm.siteCards[0].isOpen = true;
-      vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-      $httpBackend.flush();
-
     });
 
     expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
@@ -727,9 +818,9 @@ describe('RtaMainController', function () {
 
     c.apply(function () {
       vm.getSelectedItems(vm.siteCards[0]);
+    });
+    c.apply(function () {
       vm.siteCards[0].isOpen = true;
-      vm.siteCards[0].fetchTeamData(vm.siteCards[0]);
-      $httpBackend.flush();
     });
 
     expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
