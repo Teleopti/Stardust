@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedTeamIds = new List<Guid>().ToArray()
+				SelectedGroupIds = new List<Guid>().ToArray()
 			};
 
 			var result = Target.CreateRequestListViewModel(input);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new []{team.Id.Value},
+				SelectedGroupIds = new []{team.Id.Value},
 				SortingOrders = new List<RequestsSortingOrder>()
 			};
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new []{Guid.NewGuid()},
+				SelectedGroupIds = new []{Guid.NewGuid()},
 				SortingOrders = new List<RequestsSortingOrder>()
 			};
 
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new []{Guid.NewGuid()}
+				SelectedGroupIds = new []{Guid.NewGuid()}
 			};
 
 			var result = Target.CreateRequestListViewModel(input);
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid() }
 			};
 			input.AgentSearchTerm.Add(PersonFinderField.Role, roleDescription);
 
@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid() }
 			};
 
 			var result = Target.CreateRequestListViewModel(input);
@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, "test1" } },
-				SelectedTeamIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid() }
 			};
 
 			var result = Target.CreateRequestListViewModel(input);
@@ -468,7 +468,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 3),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid() }
 			};
 
 			var result = Target.CreateRequestListViewModel(input);

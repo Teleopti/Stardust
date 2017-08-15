@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 {
 	public interface IRequestFilterCreator
 	{
-		RequestFilter Create (AllRequestsFormData input, IEnumerable<RequestType> requestTypes);
+		RequestFilter Create(AllRequestsFormData input, IEnumerable<RequestType> requestTypes);
 	}
 
 	public class RequestFilterCreator : IRequestFilterCreator
@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var queryDateTimePeriod = dateTimePeriod.ChangeEndTime(TimeSpan.FromSeconds(-1));
 			var businessHierachyToggle = _toggleManager.IsEnabled(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
 			var searchAgentBasedOnCorrectPeriodToggle = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552);
+			var groupPageToggle = _toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057);
 			var filter = new RequestFilter
 			{
 				RequestFilters = input.Filters,
@@ -53,17 +54,31 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				SortingOrders = input.SortingOrders
 			};
 
-			if (businessHierachyToggle)
-			{			
-				var targetIds = searchAgentBasedOnCorrectPeriodToggle?
-					_peopleSearchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(input.StartDate,input.EndDate), input.SelectedTeamIds, input.AgentSearchTerm)
-					: _peopleSearchProvider.FindPersonIds(input.StartDate, input.SelectedTeamIds, input.AgentSearchTerm);
+			if (businessHierachyToggle || groupPageToggle)
+			{
+				List<Guid> targetIds;
+				if (groupPageToggle)
+				{
+					targetIds = _peopleSearchProvider.FindPersonIdsInPeriodWithGroup(
+						new DateOnlyPeriod(input.StartDate, input.EndDate),
+						input.SelectedGroupIds, input.AgentSearchTerm);
+				}
+				else if (searchAgentBasedOnCorrectPeriodToggle)
+				{
+					targetIds = _peopleSearchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(input.StartDate, input.EndDate),
+						input.SelectedGroupIds, input.AgentSearchTerm);
+				}
+				else
+				{
+					targetIds = _peopleSearchProvider.FindPersonIds(input.StartDate, input.SelectedGroupIds, input.AgentSearchTerm);
+				}
+
 				if (targetIds.Count == 0)
 					filter.Persons = new List<IPerson>();
 				else
 				{
 					var matchedPersons = _groupingReadOnlyRepository.DetailsForPeople(targetIds);
-					filter.Persons = matchedPersons.Where(p => _permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.WebRequests,input.StartDate,p)).Select(
+					filter.Persons = matchedPersons.Where(p => _permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.WebRequests, input.StartDate, p)).Select(
 						p =>
 						{
 							var person = new Person();
@@ -72,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 						}).ToList();
 				}
 			}
-			else if(input.AgentSearchTerm.Any())
+			else if (input.AgentSearchTerm.Any())
 			{
 				adjustRoleFieldValue(input.AgentSearchTerm);
 				filter.Persons = _peopleSearchProvider.SearchPermittedPeople(input.AgentSearchTerm,
@@ -94,7 +109,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			var separator = ";";
 			var roleNames = roleNameValues.Split(separator[0]);
 			var adjustedRoleNames = new List<string>(roleNames.Length);
-			foreach (var roleName  in roleNames)
+			foreach (var roleName in roleNames)
 			{
 				if (string.IsNullOrWhiteSpace(roleName))
 					continue;

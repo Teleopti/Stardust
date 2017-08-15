@@ -72,14 +72,14 @@
 			}
 			if (params) {
 				if (params.agentSearchTerm) vm.agentSearchTerm = params.agentSearchTerm;
-				if (params.selectedTeamIds) vm.selectedTeamIds = params.selectedTeamIds;
+				if (params.selectedGroupIds) vm.selectedGroupIds = params.selectedGroupIds;
 				if (params.paging) vm.paging = params.paging;
 			}
 
 			var requestsFilter = {
 				period: vm.period,
 				agentSearchTerm: vm.agentSearchTerm,
-				selectedTeamIds: vm.selectedTeamIds,
+				selectedGroupIds: vm.selectedGroupIds,
 				filters: vm.filters
 			};
 
@@ -108,7 +108,7 @@
 			scope: {
 				period: '=?',
 				agentSearchTerm: '=?',
-				selectedTeamIds: '=?',
+				selectedGroupIds: '=?',
 				filters: '=?',
 				filterEnabled: '=?',
 				isActive: '=?',
@@ -145,7 +145,7 @@
 
 			function listenToReload() {
 				scope.$on('reload.requests.with.selection', function (event, data) {
-					if((!angular.isArray(vm.selectedTeamIds) || vm.selectedTeamIds.length == 0) && angular.isUndefined(data)){
+					if((!angular.isArray(vm.selectedGroupIds) || vm.selectedGroupIds.length == 0) && angular.isUndefined(data)){
 						return;
 					}
 

@@ -108,7 +108,7 @@
 				EndDate: moment(filter.period.endDate).format('YYYY-MM-DD'),
 				SortingOrders: sortingOrders,
 				AgentSearchTerm: terms, 
-				SelectedTeamIds: filter.selectedTeamIds,
+				SelectedGroupIds: filter.selectedGroupIds,
 				Filters: filters
 			};
 

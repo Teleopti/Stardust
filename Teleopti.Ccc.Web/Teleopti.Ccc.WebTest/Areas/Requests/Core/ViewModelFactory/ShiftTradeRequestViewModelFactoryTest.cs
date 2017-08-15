@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 1),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new List<Guid>().ToArray()
+				SelectedGroupIds = new List<Guid>().ToArray()
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 10),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid() }
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 10),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid() }
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 10),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new []{Guid.NewGuid()}
+				SelectedGroupIds = new []{Guid.NewGuid()}
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				{
 					{ PersonFinderField.Organization, "test" }
 				},
-				SelectedTeamIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid() }
 			};
 
 			for (var i = 0; i < 5001; i++)
@@ -526,7 +526,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 1),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new [] {Guid.NewGuid()}
+				SelectedGroupIds = new [] {Guid.NewGuid()}
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -599,7 +599,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = startDate,
 				EndDate = endDate,
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedTeamIds = new []{Guid.NewGuid()}
+				SelectedGroupIds = new []{Guid.NewGuid()}
 			};
 			return ShiftTradeRequestViewModelFactory.CreateRequestListViewModel (input);
 		}

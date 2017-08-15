@@ -208,7 +208,7 @@
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 				}
 				if (vm.saveFavoriteSearchesToggleEnabled && vm.hasFavoriteSearchPermission) {
-					$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: vm.selectedGroups.groupIds, agentSearchTerm: vm.agentSearchOptions.keyword });
+					$scope.$broadcast('reload.requests.with.selection', { selectedGroupIds: vm.selectedGroups.groupIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 				}
 
 			});

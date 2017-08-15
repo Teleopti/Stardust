@@ -213,20 +213,20 @@
 
 		it('should get agentSearchTerm and selectedTeamIds from event',function(){
 			targetScope.agentSearchTerm = 'text';
-			targetScope.selectedTeamIds = ['1','2','3'];
-			targetElement = $compile('<requests-overview shift-trade-view="true" agent-search-term="agentSearchTerm" selected-team-ids="selectedTeamIds"></requests-overview>')(targetScope);
+			targetScope.selectedGroupIds = ['1','2','3'];
+			targetElement = $compile('<requests-overview shift-trade-view="true" agent-search-term="agentSearchTerm" selected-group-ids="selectedTeamIds"></requests-overview>')(targetScope);
 			targetScope.$digest();
 
 			var vm = getInnerScope(targetElement).requestsOverview;
 			vm.isActive = true;
 			vm.isPaginationEnabled = false;
 
-			targetScope.$broadcast('reload.requests.with.selection',{selectedTeamIds:['selectedTeamIds1','selectedTeamIds2'],agentSearchTerm:'testSearchTerm'});
+			targetScope.$broadcast('reload.requests.with.selection',{selectedGroupIds:['selectedTeamIds1','selectedTeamIds2'],agentSearchTerm:'testSearchTerm'});
 
 			expect(vm.agentSearchTerm).toEqual('testSearchTerm');
-			expect(vm.selectedTeamIds.length).toEqual(2);
-			expect(vm.selectedTeamIds[0]).toEqual('selectedTeamIds1');
-			expect(vm.selectedTeamIds[1]).toEqual('selectedTeamIds2');
+			expect(vm.selectedGroupIds.length).toEqual(2);
+			expect(vm.selectedGroupIds[0]).toEqual('selectedTeamIds1');
+			expect(vm.selectedGroupIds[1]).toEqual('selectedTeamIds2');
 		});
 
 		it('should not call data service more than once in the first time', function() {

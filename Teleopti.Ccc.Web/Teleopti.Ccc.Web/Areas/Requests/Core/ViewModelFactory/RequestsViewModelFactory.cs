@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		public RequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
 		{
-			if (input == null || input.SelectedTeamIds.Length == 0)
+			if (input == null || input.SelectedGroupIds.Length == 0)
 			{
 				return new RequestListViewModel
 				{

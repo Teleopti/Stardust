@@ -13,6 +13,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 		public IDictionary<PersonFinderField, string> AgentSearchTerm { get; set; }
 		public IDictionary<RequestFilterField, string> Filters { get; set; }
 		public Paging Paging { get; set; }
-		public Guid[] SelectedTeamIds { get; set; }
+		public Guid[] SelectedGroupIds { get; set; }
 	}
 }
