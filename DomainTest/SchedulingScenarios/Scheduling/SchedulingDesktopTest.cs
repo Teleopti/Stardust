@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -104,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedules.Count(x => x.PersonAssignment().Period.StartDateTime.Hour == 8).Should().Be.EqualTo(5);
 		}
 
-		public SchedulingDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757, bool resourcePlannerSchedulingFewerResourceCalculations45429) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757, resourcePlannerSchedulingFewerResourceCalculations45429)
+		public SchedulingDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
 		{
 		}
 	}

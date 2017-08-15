@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Islands;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -76,7 +74,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions,
 				_groupPersonBuilderWrapper, selectedPeriod);
 
-			ScheduleSelected(schedulingCallback, schedulingOptions, selectedAgents, selectedPeriod, matrixes, rollbackService, resourceCalculateDelayer, teamInfoFactory);
+			_teamBlockScheduleSelected.ScheduleSelected(schedulingCallback, matrixes, selectedPeriod,
+				selectedAgents, rollbackService, resourceCalculateDelayer,
+				_schedulerStateHolder().SchedulingResultState, schedulingOptions, teamInfoFactory);
 
 			if (schedulingCallback.IsCancelled)
 				return;
@@ -94,45 +94,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			//TODO: get rid of _backgroundWorker here...
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents, rollbackService, resourceCalculateDelayer,
 				selectedPeriod, matrixes, backgroundWorker, null);
-		}
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_SchedulingFewerResourceCalculations_45429)]
-		protected virtual void ScheduleSelected(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
-			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleMatrixPro> matrixes,
-			ISchedulePartModifyAndRollbackService rollbackService, ResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamInfoFactory teamInfoFactory)
-		{
-			_teamBlockScheduleSelected.ScheduleSelected(schedulingCallback, matrixes, selectedPeriod,
-				selectedAgents, rollbackService, resourceCalculateDelayer,
-				_schedulerStateHolder().SchedulingResultState, schedulingOptions, teamInfoFactory);
-		}
-	}
-
-	[RemoveMeWithToggle("Move this impl into Scheduling", Toggles.ResourcePlanner_SchedulingFewerResourceCalculations_45429)]
-	public class SchedulingFewerResourceCalculations : Scheduling
-	{
-		private readonly SchedulingResourceCalculationLimiter _schedulingResourceCalculationLimiter;
-		private readonly CreateSkillGroups _createSkillGroups;
-		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly TeamBlockScheduleSelected _teamBlockScheduleSelected;
-
-		public SchedulingFewerResourceCalculations(SchedulingResourceCalculationLimiter schedulingResourceCalculationLimiter, CreateSkillGroups createSkillGroups,
-			Func<ISchedulerStateHolder> schedulerStateHolder, Func<IScheduleDayChangeCallback> scheduleDayChangeCallback, AdvanceDaysOffSchedulingService advanceDaysOffSchedulingService, MatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand, IGroupPersonBuilderWrapper groupPersonBuilderWrapper, IResourceCalculation resourceCalculation, IUserTimeZone userTimeZone, TeamBlockScheduleSelected teamBlockScheduleSelected, TeamInfoFactoryFactory teamInfoFactoryFactory, INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory) : base(schedulerStateHolder, scheduleDayChangeCallback, advanceDaysOffSchedulingService, matrixListFactory, weeklyRestSolverCommand, groupPersonBuilderWrapper, resourceCalculation, userTimeZone, teamBlockScheduleSelected, teamInfoFactoryFactory, nightRestWhiteSpotSolverServiceFactory)
-		{
-			_schedulingResourceCalculationLimiter = schedulingResourceCalculationLimiter;
-			_createSkillGroups = createSkillGroups;
-			_schedulerStateHolder = schedulerStateHolder;
-			_teamBlockScheduleSelected = teamBlockScheduleSelected;
-		}
-
-		protected override void ScheduleSelected(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
-			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleMatrixPro> matrixes,
-			ISchedulePartModifyAndRollbackService rollbackService, ResourceCalculateDelayer resourceCalculateDelayer,
-			ITeamInfoFactory teamInfoFactory)
-		{
-			_teamBlockScheduleSelected.ScheduleSelected(schedulingCallback, matrixes, selectedPeriod,
-				selectedAgents, rollbackService, new MightResourceCalculateBeforeFindingShift(resourceCalculateDelayer, _schedulingResourceCalculationLimiter, _createSkillGroups.Create(selectedAgents, selectedPeriod.StartDate)),
-				_schedulerStateHolder().SchedulingResultState, schedulingOptions, teamInfoFactory);
 		}
 	}
 }

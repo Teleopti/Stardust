@@ -69,13 +69,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (selectedTeamMembers.IsEmpty())
 				return true;
 
-			//hack for now - #45429
-			var mightResourceCalculateBeforeFindingShift = resourceCalculateDelayer as MightResourceCalculateBeforeFindingShift;
-			mightResourceCalculateBeforeFindingShift?.Execute(teamBlockInfo.TeamInfo.GroupMembers.Count() > 1
-				? null
-				: teamBlockInfo.TeamInfo.GroupMembers.Single());
-			//hack for now - #45429
-
 			ShiftProjectionCache roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),
 				schedulingOptions, shiftNudgeDirective.EffectiveRestriction, groupPersonSkillAggregator);
 

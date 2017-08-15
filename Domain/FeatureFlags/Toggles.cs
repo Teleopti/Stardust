@@ -138,7 +138,6 @@
 		ResourcePlanner_RespectSkillGroupShoveling_44156,
 		ResourcePlanner_OvertimeNightShifts_44311,
 		ResourcePlanner_SchedulingIslands_44757,
-		ResourcePlanner_SchedulingFewerResourceCalculations_45429,
 
 		Wfm_DisplayOnlineHelp_39402,
 
