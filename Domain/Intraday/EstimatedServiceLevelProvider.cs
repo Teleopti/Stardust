@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var serviceCalculatorService = new StaffingCalculatorServiceFacade();
 
 			var forecastedCalls = _forecastedCallsProvider.Load(skillDays, queueStatistics.LatestActualIntervalStart, minutesPerInterval, currDate);
-			var forecastedStaffing = _forecastedStaffingProvider.StaffingPerSkill(skillDays, minutesPerInterval, null, false)
+			var forecastedStaffing = _forecastedStaffingProvider
+				.StaffingPerSkill(skillDays, minutesPerInterval, currDate != null ? new DateOnly(currDate.Value) : new DateOnly?(), false)
 				.Where(x => x.StartTime <= queueStatistics.LatestActualIntervalStart)
 				.ToList();
 			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(skillDays.Keys.ToList(), minutesPerInterval);
