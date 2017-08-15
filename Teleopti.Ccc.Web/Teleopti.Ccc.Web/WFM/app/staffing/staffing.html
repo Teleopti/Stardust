@@ -84,11 +84,9 @@
                 <span ng-if="!vm.showOverstaffSettings">{{'GetSuggestionsForOvertime' | translate}}</span>
                 <span ng-if="vm.showOverstaffSettings">{{'CloseOvertimeSettings' | translate}}</span>
                 </button>
-        <button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!vm.hasSuggestionData"
-            ng-click="vm.addOvertime()">{{'ApplySuggestion' | translate}}</button>
     </div>
 </div>
-<form novalidate ng-submit="vm.suggestOvertime(overtimeForm)" name="overtimeForm">
+<form novalidate ng-submit="vm.suggestOvertime(vm.overtimeForm)" name="vm.overtimeForm">
     <div class="panel material-depth-1" ng-show="vm.showOverstaffSettings">
         <div class="sub-header">
             <h2>{{'OvertimeSettings' | translate}}</h2>
@@ -99,7 +97,7 @@
                 <div ng-repeat="comp in vm.compensations">
                     <div class="wfm-radio">
                         <label>
-                            <input type="radio" required name="radio" value={{comp.Id}} ng-model="overtimeForm.Compensation">
+                            <input type="radio" required name="radio" value={{comp.Id}} ng-model="vm.overtimeForm.Compensation">
                             <span class="wfm-radio-toggle"></span>
                             <span class="wfm-radio-label">{{comp.Name}}</span>
                         </label>
@@ -107,16 +105,24 @@
                 </div>
             </div>
             <div class="con-flex">
-                <h3>{{'AllowedOvertime' | translate}}</h3>
+                <h3>{{'Duration' | translate}}</h3>
                 <div class="con-row">
-                    <div uib-timepicker required ng-change="vm.validSettings(overtimeForm)" ng-model="overtimeForm.MinMinutesToAdd" show-meridian="false"></div>
+                    <div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)" ng-model="vm.overtimeForm.MinMinutesToAdd"
+                        show-meridian="false"></div>
                     -
-                    <div uib-timepicker required ng-change="vm.validSettings(overtimeForm)" ng-model="overtimeForm.MaxMinutesToAdd" show-meridian="false"></div>
+                    <div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)" ng-model="vm.overtimeForm.MaxMinutesToAdd" show-meridian="false"></div>
                 </div>
-                <button class="wfm-btn" ng-class="!overtimeForm.$valid||!vm.validSettings(overtimeForm) ? 'wfm-btn-primary-disabled' : 'wfm-btn-primary'"
-                    ng-disabled="!overtimeForm.$valid; !vm.validSettings(overtimeForm)" type="submit">{{'GetSuggestionsForOvertime' | translate}}</button>
+                <div class="con-row">
+                   
+                </div>
             </div>
             <div class="con-flex x3"></div>
+        </div>
+        <div class="con-footer">
+            <button class="wfm-btn" ng-class="!vm.overtimeForm.$valid||!vm.validSettings(vm.overtimeForm) ? 'wfm-btn-primary-disabled' : 'wfm-btn-primary'"
+            ng-disabled="!vm.overtimeForm.$valid || !vm.validSettings(vm.overtimeForm)" type="submit">{{'GetSuggestionsForOvertime' | translate}}</button>
+            <button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!vm.hasSuggestionData"
+                ng-click="vm.addOvertime()">{{'ApplySuggestion' | translate}}</button>
         </div>
     </div>
 </form>

@@ -32,6 +32,7 @@
 		vm.staffingDataAvailable = false;
 		vm.hasSuggestionData = false;
 		vm.showBpoInterface = false;
+		vm.overtimeForm = {};
 
 		vm.compensations = [];
 		vm.selectedDate = new Date();
@@ -59,6 +60,19 @@
 
 		function toggleOverstaffSettings() {
 			return vm.showOverstaffSettings = !vm.showOverstaffSettings;
+		}
+
+		function selectFirstCompensation(compensations) {
+			vm.overtimeForm.Compensation = compensations[0].Id;
+			setDefaultValueForOvertimeRange();
+
+		}
+
+		function setDefaultValueForOvertimeRange() {
+			vm.overtimeForm.MinMinutesToAdd = new Date();
+			vm.overtimeForm.MinMinutesToAdd.setHours(0, 15, 0);
+			vm.overtimeForm.MaxMinutesToAdd = new Date();
+			vm.overtimeForm.MaxMinutesToAdd.setHours(1, 0, 0)
 		}
 
 		function isRunning() {
@@ -244,9 +258,11 @@
 			var query = staffingService.getCompensations.query();
 			query.$promise.then(function (data) {
 				vm.compensations = data;
+				selectFirstCompensation(data);
 			});
 		}
 		function validSettings(input) {
+			console.log(input)
 			if (input.MinMinutesToAdd > input.MaxMinutesToAdd) {
 				return false;
 			}
