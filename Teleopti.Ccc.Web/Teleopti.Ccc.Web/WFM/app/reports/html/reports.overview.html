@@ -38,7 +38,7 @@
                 <li>{{rep.Name}}</li>
               </a>
               <a ui-sref="{{rep.Url}}" ng-if="rep.IsWeb" style="text-decoration:none;"  target="_blank">
-                <li>{{rep.Name}}</li>
+                <li>{{rep.Name}} {{rep.Url}} 1</li>
               </a>
             </div>
           </ul>
@@ -54,7 +54,6 @@
       <div class="con-row">
         <div class="con-flex">
           <b>{{report.Type}}</b>
-          <!-- ({{(report.childNodes | filter:reportFilter).length}}) -->
         </div>
       </div>
       <div class="con-row">
@@ -64,8 +63,8 @@
               <a href="{{rep.Url}}" ng-if="!rep.IsWeb" style="text-decoration:none;"  target="_blank">
                 <li>{{rep.Name}}</li>
               </a>
-              <a ui-sref="{{rep.Url}}" ng-if="rep.IsWeb" style="text-decoration:none;"  target="_blank">
-                <li>{{rep.Name}}</li>
+              <a ui-sref="leaderboardreport" ng-if="rep.IsWeb" style="text-decoration:none;"  target="_blank">
+                  <li>{{rep.Name}}</li> <!-- refactor ui-sref when more web reports are added-->
               </a>
             </div>
           </ul>

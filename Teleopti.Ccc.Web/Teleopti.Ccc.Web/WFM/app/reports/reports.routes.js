@@ -6,9 +6,9 @@
 		.config(stateConfig);
 
 	function stateConfig($stateProvider) {
-		$stateProvider.state('reports/leaderboard',
+		$stateProvider.state('leaderboardreport',
 				{
-					url: '/reports/leaderboard',
+					url: '/report/leaderboard',
 					templateUrl: 'app/reports/html/leaderboard.html',
 					controller: 'LeaderBoardController as vm'
 				})
