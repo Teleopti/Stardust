@@ -1,4 +1,5 @@
 ﻿@WFM
+@OnlyRunIfDisabled('Wfm_GroupPages_45057')
 Feature: ShiftCategory
 	In order to find the mismatched shift
 	As a team leader

@@ -1,4 +1,5 @@
 ﻿@WFM
+@OnlyRunIfDisabled('Wfm_GroupPages_45057')
 Feature: Undo Schedule Change
 	As a team leader
 	I need to undo my last schedule change

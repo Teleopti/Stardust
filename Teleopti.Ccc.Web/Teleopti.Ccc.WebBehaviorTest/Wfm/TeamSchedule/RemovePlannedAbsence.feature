@@ -1,4 +1,5 @@
 ﻿@WFM
+@OnlyRunIfDisabled('Wfm_GroupPages_45057')
 Feature: Remove Planned Absence
 	As a team leader
 	I need to remove or shorten absences for multiple reasons.
