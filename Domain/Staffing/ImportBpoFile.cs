@@ -216,9 +216,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 		public string Source { get; set; }
 		public bool Equals(ImportSkillCombinationResourceBpo other)
 		{
+			//not considering resource here 
 			if (other == null) return false;
-			return other.StartDateTime == StartDateTime && other.Source == Source &&
-				   !SkillIds.Except(other.SkillIds).Any();
+			return other.StartDateTime == StartDateTime && other.Source == Source && EndDateTime == other.EndDateTime &&
+				   Enumerable.SequenceEqual(SkillIds.OrderBy(s=>s),other.SkillIds.OrderBy(s => s));
 		}
 	}
 

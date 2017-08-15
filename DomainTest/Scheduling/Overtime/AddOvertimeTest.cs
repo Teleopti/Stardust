@@ -1202,5 +1202,29 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Overtime
 			result.Models.Should().Be.Empty();
 		}
 
+		[Test]
+		public void ShouldVerifyIfTheObjectsAreSame()
+		{
+			var skill1 = Guid.NewGuid();
+			var skill2 = Guid.NewGuid();
+			var scr1 = new SkillCombinationResource()
+			{
+				StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				Resource = 10,
+				SkillCombination = new [] {skill1, skill2}
+			};
+
+			var scr2 = new SkillCombinationResource()
+			{
+				StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				Resource = 10,
+				SkillCombination = new[] {  skill2, skill1 }
+			};
+
+			Assert.True(scr1.Equals(scr2));
+		}
+
 	}
 }

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public bool Equals(SkillCombinationResource other)
 		{
 			var result = StartDateTime == other.StartDateTime && EndDateTime == other.EndDateTime &&
-				   Enumerable.SequenceEqual(SkillCombination,other.SkillCombination);
+				   Enumerable.SequenceEqual(SkillCombination.OrderBy(s=>s),other.SkillCombination.OrderBy(s => s));
 			return result;
 		}
 	}

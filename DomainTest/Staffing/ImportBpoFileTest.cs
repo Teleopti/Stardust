@@ -1,8 +1,11 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
@@ -334,6 +337,84 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("Duplicate")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldVerifyThatObjectsAreNotSame()
+		{
+			var skill1 = Guid.NewGuid();
+			var skill2 = Guid.NewGuid();
+			var scr1 = new ImportSkillCombinationResourceBpo()
+			{
+				StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				Source = "BPO",
+				Resources = 10,
+				SkillIds = new List<Guid>() { skill1  }
+			};
+
+			var scr2 = new ImportSkillCombinationResourceBpo()
+			{
+				StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				Source = "BPO",
+				Resources = 10,
+				SkillIds = new List<Guid>() {  skill1, skill2 }
+			};
+
+			Assert.False(scr1.Equals(scr2));
+		}
+
+		[Test]
+		public void ShouldVerifyThatObjectsAreSame()
+		{
+			var skill1 = Guid.NewGuid();
+			var skill2 = Guid.NewGuid();
+			var scr1 = new ImportSkillCombinationResourceBpo()
+			{
+				StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				Source = "BPO",
+				Resources = 10,
+				SkillIds =  new List<Guid>() { skill1, skill2 }
+			};
+
+			var scr2 = new ImportSkillCombinationResourceBpo()
+			{
+				StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				Source = "BPO",
+				Resources = 10,
+				SkillIds = new List<Guid>() { skill2, skill1 }
+			};
+
+			Assert.True(scr1.Equals(scr2));
+		}
+
+		[Test]
+		public void ShouldVerifyThatObjectsAreNotSameWithEndDate()
+		{
+			var skill1 = Guid.NewGuid();
+			var skill2 = Guid.NewGuid();
+			var scr1 = new ImportSkillCombinationResourceBpo()
+			{
+				StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0),
+				Source = "BPO",
+				Resources = 11,
+				SkillIds = new List<Guid>() { skill1, skill2 }
+			};
+
+			var scr2 = new ImportSkillCombinationResourceBpo()
+			{
+				StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				EndDateTime = new DateTime(2017, 08, 15, 8, 0, 0),
+				Source = "BPO",
+				Resources = 10,
+				SkillIds = new List<Guid>() { skill2, skill1 }
+			};
+
+			Assert.False(scr1.Equals(scr2));
 		}
 	}
 }
