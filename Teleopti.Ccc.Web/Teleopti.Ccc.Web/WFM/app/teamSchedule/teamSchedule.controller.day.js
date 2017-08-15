@@ -435,7 +435,8 @@
 			});
 		};
 
-		vm.getGroupPagesAsync();
+		if (vm.toggles.Wfm_GroupPages_45057)
+			vm.getGroupPagesAsync();
 
 		vm.getSitesAndTeamsAsync = function () {
 			return $q(function (resolve, reject) {
@@ -451,8 +452,8 @@
 					});
 			});
 		};
-
-		vm.getSitesAndTeamsAsync();
+		if (!vm.toggles.Wfm_GroupPages_45057)
+			vm.getSitesAndTeamsAsync();
 
 		$q.all(asyncData).then(function init(data) {
 			if (data.pageSetting.Agents > 0) {
