@@ -161,6 +161,7 @@ ResourcePlanner_CalculateShiftValuesInParallel_44681 = DEV
 ResourcePlanner_RespectSkillGroupShoveling_44156 = RC
 ResourcePlanner_OvertimeNightShifts_44311 = true
 ResourcePlanner_SchedulingIslands_44757 = RC
+ResourcePlanner_MergeTeamblockClassicIntraday_45508 = false
 
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
 
