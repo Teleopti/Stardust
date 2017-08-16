@@ -218,8 +218,11 @@
         fake(/\.\.\/api\/Overview\/TeamCards(.*)/,
             function (params) {
                 var result = teamAdherences;
+                result = result.filter(function (ta) {
+                    return params.siteId == ta.SiteId;
+                });
                 if (params.skillIds)
-                    result = teamAdherences.filter(function (ta) {
+                    result = result.filter(function (ta) {
                         return params.skillIds.indexOf(ta.SkillId) > -1;
                     });
                 return [200, result];

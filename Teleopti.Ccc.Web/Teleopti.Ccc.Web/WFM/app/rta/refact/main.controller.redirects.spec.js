@@ -187,12 +187,16 @@ describe('RtaMainController', function () {
           AgentsCount: 11,
           InAlarmCount: 2,
           Color: 'good'
+        })
+        .withTeamAdherence({
+          SiteId: 'parisId',
+          Id: 'redId',
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
 
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+       vm.siteCards[0].isSelected = true;
       });
       c.apply(function () {
         vm.goToAgents();
@@ -213,13 +217,13 @@ describe('RtaMainController', function () {
       vm = c.vm;
 
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+        vm.siteCards[0].isSelected = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[1]);
+       vm.siteCards[1].isSelected = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[1]);
+        vm.siteCards[1].isSelected = false;
       });
       c.apply(function () {
         vm.goToAgents();
@@ -233,6 +237,11 @@ describe('RtaMainController', function () {
         .withSiteAdherence({
           Id: 'parisId',
           SkillId: 'channelSalesId'
+        })
+        .withTeamAdherence({
+          SiteId: 'parisId',
+          Id: 'redId',
+          SkillId: 'channelSalesId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -241,7 +250,7 @@ describe('RtaMainController', function () {
         vm.filterOutput(channelSales);
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+        vm.siteCards[0].isSelected = true;
       });
       $state.go.calls.reset();
       c.apply(function () {
@@ -257,12 +266,17 @@ describe('RtaMainController', function () {
         .withSiteAdherence({
           Id: 'parisId',
           SkillId: 'channelSalesId'
+        })   
+        .withTeamAdherence({
+          SiteId: 'parisId',
+          Id: 'redId',
+          SkillId: 'channelSalesId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
 
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+        vm.siteCards[0].isSelected = true;
       });
       c.apply(function () {
         vm.goToAgents();
@@ -285,7 +299,7 @@ describe('RtaMainController', function () {
         vm.filterOutput(channelSales);
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+        vm.siteCards[0].isSelected = true;
       });
       c.apply(function () {
         vm.filterOutput();
@@ -311,7 +325,7 @@ describe('RtaMainController', function () {
         vm.filterOutput();
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+        vm.siteCards[0].isSelected = true;
       });
       $state.go.calls.reset();
       c.apply(function () {
@@ -338,7 +352,7 @@ describe('RtaMainController', function () {
         vm.filterOutput(skillArea1);
       })
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+        vm.siteCards[0].isSelected = true;
       });
       $state.go.calls.reset();
       c.apply(function () {
@@ -363,7 +377,7 @@ describe('RtaMainController', function () {
       vm = c.vm;
 
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+        vm.siteCards[0].isSelected = true;
       });
       c.apply(function () {
         vm.goToAgents();
@@ -378,8 +392,18 @@ describe('RtaMainController', function () {
           Id: 'parisId',
           SkillId: 'channelSalesId'
         })
+        .withTeamAdherence({
+          SiteId: 'parisId',
+          SkillId: 'channelSalesId',
+          Id: 'redId'
+        })
         .withSiteAdherence({
           Id: 'londonId',
+          SkillId: 'phoneId'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'greenId',
           SkillId: 'phoneId'
         });
 
@@ -390,20 +414,19 @@ describe('RtaMainController', function () {
         vm.filterOutput(skills1[0]);
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+        vm.siteCards[0].isSelected = true;
       });
       c.apply(function () {
         vm.filterOutput(skills1[1]);
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+        vm.siteCards[0].isSelected = true;
       });
       $state.go.calls.reset();
       c.apply(function () {
         vm.goToAgents();
       });
 
-      expect(vm.selectedItems).toEqual({ siteIds: ['londonId'], teamIds: [], skillIds: ['phoneId'], skillAreaId: undefined });
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['londonId'], teamIds: [], skillIds: ['phoneId'], skillAreaId: undefined });
     });
 
@@ -416,6 +439,10 @@ describe('RtaMainController', function () {
         .withTeamAdherence({
           SiteId: 'londonId',
           Id: 'greenId'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          Id: 'redId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -424,7 +451,7 @@ describe('RtaMainController', function () {
         vm.siteCards[0].isOpen = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = true;
       });
       c.apply(function () {
         vm.goToAgents();
@@ -444,6 +471,11 @@ describe('RtaMainController', function () {
           SiteId: 'londonId',
           SkillId: 'channelSalesId',
           Id: 'greenId'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          SkillId: 'channelSalesId',
+          Id: 'redId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -455,7 +487,7 @@ describe('RtaMainController', function () {
         vm.siteCards[0].isOpen = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = true;
       });
       $state.go.calls.reset();
       c.apply(function () {
@@ -476,6 +508,11 @@ describe('RtaMainController', function () {
           SiteId: 'londonId',
           SkillId: 'channelSalesId',
           Id: 'greenId'
+        })
+        .withTeamAdherence({
+          SiteId: 'londonId',
+          SkillId: 'channelSalesId',
+          Id: 'redId'
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
@@ -484,7 +521,7 @@ describe('RtaMainController', function () {
         vm.siteCards[0].isOpen = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = true;
       });
       c.apply(function () {
         vm.goToAgents();
@@ -503,6 +540,11 @@ describe('RtaMainController', function () {
           SiteId: 'parisId',
           SkillId: 'channelSalesId',
           Id: 'greenId'
+        })
+        .withTeamAdherence({
+          SiteId: 'parisId',
+          SkillId: 'channelSalesId',
+          Id: 'redId'
         })
         .withSiteAdherence({
           Id: 'parisId',
@@ -523,7 +565,7 @@ describe('RtaMainController', function () {
         vm.siteCards[0].isOpen = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = true;
       });
       $state.go.calls.reset();
       c.apply(function () {
@@ -544,6 +586,11 @@ describe('RtaMainController', function () {
           SkillId: 'channelSalesId',
           Id: 'greenId'
         })
+        .withTeamAdherence({
+          SiteId: 'parisId',
+          SkillId: 'channelSalesId',
+          Id: 'redId'
+        })
         .withSiteAdherence({
           Id: 'parisId',
           SkillId: 'phoneId'
@@ -560,7 +607,7 @@ describe('RtaMainController', function () {
         vm.siteCards[0].isOpen = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = true;
       });
       c.apply(function () {
         vm.goToAgents();
@@ -580,6 +627,11 @@ describe('RtaMainController', function () {
           SkillId: 'channelSalesId',
           Id: 'greenId'
         })
+        .withTeamAdherence({
+          SiteId: 'parisId',
+          SkillId: 'channelSalesId',
+          Id: 'redId'
+        })
         .withSiteAdherence({
           Id: 'parisId',
           SkillId: 'phoneId'
@@ -588,6 +640,11 @@ describe('RtaMainController', function () {
           SiteId: 'parisId',
           SkillId: 'phoneId',
           Id: 'redId'
+        })
+        .withTeamAdherence({
+          SiteId: 'parisId',
+          SkillId: 'phoneId',
+          Id: 'pinkId'
         });
 
       var c = $controllerBuilder.createController(skills1);
@@ -600,7 +657,7 @@ describe('RtaMainController', function () {
         vm.siteCards[0].isOpen = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = true;
       });
       c.apply(function () {
         vm.filterOutput(skills1[1]);
@@ -609,14 +666,13 @@ describe('RtaMainController', function () {
         vm.siteCards[0].isOpen = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = true;
       });
       $state.go.calls.reset();
       c.apply(function () {
         vm.goToAgents();
       });
 
-      expect(vm.selectedItems).toEqual({ siteIds: [], teamIds: ['redId'], skillIds: ['phoneId'], skillAreaId: undefined });
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['redId'], skillIds: ['phoneId'], skillAreaId: undefined });
     });
 
@@ -641,19 +697,15 @@ describe('RtaMainController', function () {
         vm.siteCards[0].isOpen = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = true;
       });
       c.apply(function () {
-        vm.siteCards[0].isSelected = true;
-      });
-      c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[1]);
+        vm.siteCards[0].teams[1].isSelected = true;
       });
       c.apply(function () {
         vm.goToAgents();
       });
 
-      expect(vm.selectedItems).toEqual({ siteIds: ['londonId'], teamIds: [], skillIds: [], skillAreaId: undefined });
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['londonId'], teamIds: [], skillIds: [], skillAreaId: undefined });
     });
 
@@ -678,19 +730,18 @@ describe('RtaMainController', function () {
         vm.siteCards[0].isOpen = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[1]);
+        vm.siteCards[0].teams[1].isSelected = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = false;
       });
       c.apply(function () {
         vm.goToAgents();
       });
 
-      expect(vm.selectedItems).toEqual({ siteIds: [], teamIds: ['redId'], skillIds: [], skillAreaId: undefined });
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['redId'], skillIds: [], skillAreaId: undefined });
     });
 
@@ -715,16 +766,15 @@ describe('RtaMainController', function () {
         vm.siteCards[0].isOpen = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+        vm.siteCards[0].isSelected = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[1]);
+        vm.siteCards[0].teams[1].isSelected = false;
       });
       c.apply(function () {
         vm.goToAgents();
       });
 
-      expect(vm.selectedItems).toEqual({ siteIds: [], teamIds: ['greenId'], skillIds: [], skillAreaId: undefined });
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: [], teamIds: ['greenId'], skillIds: [], skillAreaId: undefined });
     });
 
@@ -749,22 +799,21 @@ describe('RtaMainController', function () {
         vm.siteCards[0].isOpen = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[1]);
+        vm.siteCards[0].teams[1].isSelected = true;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0].teams[0]);
+        vm.siteCards[0].teams[0].isSelected = false;
       });
       c.apply(function () {
-        vm.getSelectedItems(vm.siteCards[0]);
+        vm.siteCards[0].isSelected = true;
       });
       c.apply(function () {
         vm.goToAgents();
       });
 
-      expect(vm.selectedItems).toEqual({ siteIds: ['londonId'], teamIds: [], skillIds: [], skillAreaId: undefined });
       expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['londonId'], teamIds: [], skillIds: [], skillAreaId: undefined });
     });
 
@@ -791,7 +840,7 @@ describe('RtaMainController', function () {
       vm.siteCards[0].isOpen = true;
     });
     c.apply(function () {
-      vm.getSelectedItems(vm.siteCards[0].teams[0]);
+      vm.siteCards[0].teams[0].isSelected = true;
     });
     c.apply(function () {
       vm.siteCards[0].isOpen = false;
@@ -817,13 +866,58 @@ describe('RtaMainController', function () {
     vm = c.vm;
 
     c.apply(function () {
-      vm.getSelectedItems(vm.siteCards[0]);
+      vm.siteCards[0].isSelected = true;
     });
     c.apply(function () {
       vm.siteCards[0].isOpen = true;
     });
 
     expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
+  });
+
+  it('should go to agents team and site in cross site selection where one site has only one team', function () {
+    $fakeBackend
+      .withSiteAdherence({
+        Id: 'londonId',
+        Name: 'London'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Id: 'greenId'
+      })
+      .withTeamAdherence({
+        SiteId: 'londonId',
+        Id: 'pinkId'
+      })
+      .withSiteAdherence({
+        Id: 'parisId',
+        Name: 'Paris'
+      })
+      .withTeamAdherence({
+        SiteId: 'parisId',
+        Id: 'redId'
+      });
+    var c = $controllerBuilder.createController();
+    vm = c.vm;
+
+    c.apply(function () {
+      vm.siteCards[0].isOpen = true;
+    });
+    c.apply(function () {
+      vm.siteCards[0].teams[0].isSelected = true;
+    });
+    c.apply(function () {
+      vm.siteCards[1].isOpen = true;
+    });
+    c.apply(function () {
+      vm.siteCards[1].teams[0].isSelected = true;
+    });
+    c.apply(function () {
+      vm.goToAgents();
+    });
+
+    //expect(vm.selectedItems).toEqual({ siteIds: ['parisId'], teamIds: ['greenId'], skillIds: [], skillAreaId: undefined });
+    expect($state.go).toHaveBeenCalledWith('rta.agents', { siteIds: ['parisId'], teamIds: ['greenId'], skillIds: [], skillAreaId: undefined });
   });
 
 });

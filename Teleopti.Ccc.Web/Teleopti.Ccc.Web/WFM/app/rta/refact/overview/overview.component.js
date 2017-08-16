@@ -9,9 +9,7 @@
       bindings: {
         siteCards: '=',
         agentsState: '=',
-        agentsStateForTeam: '=',
-        getSelectedItems: '=',
-        selectedItems: '='
+        agentsStateForTeam: '='
       },
     });
 
@@ -30,7 +28,6 @@
         var parentSite = ctrl.siteCards.find(function (site) { return site.site.Id === item.SiteId; });
         parentSite.isSelected = parentSite.teams.every(function (team) { return team.isSelected; });
       }
-      ctrl.getSelectedItems(item);
     };
 
     function flipTeamSelected(site, selected) {

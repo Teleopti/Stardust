@@ -47,8 +47,6 @@
 				vm.skillIds = getSkillIdsFromSkillAreaId(vm.skillAreaId);
 			}
 
-
-
 		})();
 
 		function pollInitiate() {
@@ -73,7 +71,7 @@
 		}
 
 		pollInitiate();
-		
+
 		$scope.$on('$destroy', pollStop);
 
 		function getData() {
@@ -93,16 +91,28 @@
 						if (!siteCard) {
 							siteCard = {
 								site: site,
-								isOpen: $stateParams.open != "false"
+								isOpen: $stateParams.open != "false",
+								isSelected: false,
+								teams: []
 							};
 							$scope.$watch(function () { return siteCard.isOpen }, pollNow);
+							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
+								if (newValue != oldValue) {
+									if (newValue)
+										siteCard.teams.forEach(function (t) {
+											t.isSelected = true;
+										});
+								}
+							});
 							vm.siteCards.push(siteCard);
 						};
 						siteCard.site.Color = translateSiteColors(site);
 						siteCard.site.InAlarmCount = site.InAlarmCount;
+				
 					});
 					vm.totalAgentsInAlarm = sites.TotalAgentsInAlarm;
 					vm.noSiteCards = !vm.siteCards.length;
+
 				});
 		}
 
@@ -119,22 +129,36 @@
 		function getTeamsForSite(s) {
 			return rtaService.getTeamCardsFor({ siteIds: s.site.Id, skillIds: vm.skillIds })
 				.then(function (teams) {
-					s.teams = teams;
+					teams.forEach(function (team) {
+						var teamVm = s.teams.find(function (t) {
+							return team.Id === t.Id;
+						});
+
+						if (!teamVm) {
+							teamVm = team;
+							teamVm.isSelected = false;
+							$scope.$watch(function () { return teamVm.isSelected }, function (newValue, oldValue) {
+								if (newValue) {
+									var areAllTeamsSelected = s.teams.every(function(t){return t.isSelected});
+									if (areAllTeamsSelected) s.isSelected = true;
+								}
+								else {
+									s.isSelected = false;
+								}
+							});
+							s.teams.push(teamVm);
+						};
+						teamVm.Color = team.Color;
+						teamVm.InAlarmCount = team.InAlarmCount;
+					})
 					setTeamToSelected(s);
 				});
 		}
 
 		function setTeamToSelected(card) {
-			var indexOfSite = vm.selectedItems.siteIds.indexOf(card.site.Id);
-			if (indexOfSite > -1) {
+			if (card.isSelected) {
 				card.teams.forEach(function (team) {
 					team.isSelected = true;
-				});
-			}
-			else {
-				card.teams.forEach(function (team) {
-					var indexOfTeam = vm.selectedItems.teamIds.indexOf(team.Id);
-					if (indexOfTeam > -1) team.isSelected = true;
 				});
 			}
 		}
@@ -178,6 +202,7 @@
 		}
 
 		function setUpForSkillArea(selectedItem) {
+			vm.urlParams.skillAreaId = selectedItem.Id;
 			vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
 			vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: selectedItem.Id };
 			vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + selectedItem.Id + '"})';
@@ -186,6 +211,7 @@
 		}
 
 		function setUpForSkill(selectedItem) {
+			vm.urlParams.skillIds = [selectedItem.Id];
 			vm.skillIds = [selectedItem.Id];
 			vm.selectedItems = { siteIds: [], teamIds: [], skillIds: vm.skillIds, skillAreaId: undefined };
 			vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + selectedItem.Id + '"]})';
@@ -193,107 +219,18 @@
 			$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
 		}
 
-
-		vm.getSelectedItems = function (siteCard) {
-			var selectedItemsHandler = createSelectedItemsHandler(vm.selectedItems);
-
-			if (angular.isDefined(siteCard.site)) {
-				selectSite(selectedItemsHandler, siteCard);
-			} else {
-				selectTeam(selectedItemsHandler, siteCard);
-			}
-
-			vm.organizationSelection = vm.selectedItems.siteIds.length || vm.selectedItems.teamIds.length;
-		}
-
-		function selectSite(selectedItemsHandler, site) {
-			var siteAlreadySelected = vm.selectedItems.siteIds.indexOf(site.site.Id) > -1;
-
-			if (siteAlreadySelected) {
-				selectedItemsHandler.removeSite(site);
-			} else {
-				selectedItemsHandler.addSite(site);
-
-				if (angular.isDefined(site.teams)) {
-					selectedItemsHandler.clearTeams(site);
-				}
-			}
-		}
-
-		function selectTeam(selectedItemsHandler, team) {
-			var parentSite = vm.siteCards.find(function (card) { return card.site.Id === team.SiteId; });
-			var siteNoLongerHasAllTeamsSelected = !parentSite.isSelected && vm.selectedItems.siteIds.indexOf(parentSite.site.Id) > -1;
-			var allTeamsInSiteAreNowSelected = parentSite.isSelected;
-
-			if (allTeamsInSiteAreNowSelected) {
-				selectedItemsHandler
-					.clearTeams(parentSite)
-					.addSite(parentSite);
-
-			} else if (siteNoLongerHasAllTeamsSelected) {
-				selectedItemsHandler
-					.removeSite(parentSite)
-					.addAllTeams(parentSite)
-					.toggleTeam(team);
-
-			} else {
-				selectedItemsHandler
-					.toggleTeam(team);
-			}
-		}
-
-		function createSelectedItemsHandler(selecteItems) {
-			var that = {
-				addSite: addSite,
-				removeSite: removeSite,
-				addAllTeams: addAllTeams,
-				clearTeams: clearTeams,
-				toggleTeam: toggleTeam
-			};
-
-			var _selectedItems = selecteItems;
-
-			function addSite(parentSite) {
-				_selectedItems.siteIds.push(parentSite.site.Id);
-				return that;
-			}
-
-			function removeSite(parentSite) {
-				var selectedSiteIndex = _selectedItems.siteIds.indexOf(parentSite.site.Id);
-				_selectedItems.siteIds.splice(selectedSiteIndex, 1);
-				return that;
-			}
-
-			function addAllTeams(parentSite) {
-				parentSite.teams.forEach(function (team) {
-					_selectedItems.teamIds.push(team.Id);
-				});
-				return that;
-			}
-
-			function clearTeams(parentSite) {
-				parentSite.teams.forEach(function (team) {
-					var index = _selectedItems.teamIds.indexOf(team.Id);
-					_selectedItems.teamIds.splice(index, 1);
-				});
-				return that;
-			}
-
-			function toggleTeam(item) {
-				var indexOfTeam = _selectedItems.teamIds.indexOf(item.Id);
-				var teamNotSelected = indexOfTeam == -1;
-				if (teamNotSelected)
-					_selectedItems.teamIds.push(item.Id);
-				else
-					_selectedItems.teamIds.splice(indexOfTeam, 1);
-				return that;
-			}
-
-			return that;
-		}
-
 		vm.goToAgents = function () {
-			$state.go('rta.agents', vm.selectedItems);
+			var teamIds = [];
+			var siteIds = [];
+			var skillIds = angular.isDefined(vm.urlParams.skillIds) ? vm.urlParams.skillIds : [];
+			vm.siteCards.forEach(function (siteCard) {
+				if (siteCard.isSelected) siteIds.push(siteCard.site.Id);
+				else siteCard.teams.forEach(function (team) {
+					if (team.isSelected) teamIds.push(team.Id);
+				});
+			});
+
+			$state.go('rta.agents', { siteIds: siteIds, teamIds: teamIds, skillIds: skillIds, skillAreaId: vm.urlParams.skillAreaId });
 		}
 	}
 })();
