@@ -4,10 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 {
@@ -71,7 +68,7 @@ namespace Teleopti.Ccc.Web.Core.RequestContext.Initialize
 			try
 			{
 				var token = _tokenIdentityProvider.RetrieveToken();
-				var principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, token == null ? null : token.OriginalToken);
+				var principal = _principalFactory.MakePrincipal(person, dataSource, businessUnit, token?.OriginalToken);
 				_roleToPrincipalCommand.Execute(principal, unitOfWorkFactory, personRepository);
 				return principal;
 			}
