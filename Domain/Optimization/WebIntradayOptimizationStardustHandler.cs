@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
 
-		public WebIntradayOptimizationStardustHandler(IntradayOptimization intradayOptimization,
+		public WebIntradayOptimizationStardustHandler(IIntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
 			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager,
 			IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope)

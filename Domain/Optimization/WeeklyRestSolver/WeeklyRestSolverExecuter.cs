@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 			_userTimeZone = userTimeZone;
 		}
 
-		public void Resolve(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod period, IList<IPerson> people, 
+		public void Resolve(IOptimizationPreferences optimizationPreferences, DateOnlyPeriod period, IEnumerable<IPerson> people, 
 							IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizationPreferences);

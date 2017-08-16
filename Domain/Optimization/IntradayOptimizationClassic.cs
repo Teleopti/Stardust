@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -8,7 +10,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptimization
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
+	public interface IIntradayOptimization
+	{
+		void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule);
+	}
+
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
+	public class IntradayOptimizationClassic : IIntradayOptimization
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IntradayOptimizerCreator _intradayOptimizerCreator;
@@ -18,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 		private readonly IResourceCalculation _resourceOptimization;
 
-		public IntradayOptimization(Func<ISchedulerStateHolder> schedulerStateHolder,
+		public IntradayOptimizationClassic(Func<ISchedulerStateHolder> schedulerStateHolder,
 			IntradayOptimizerCreator intradayOptimizerCreator,
 			IntradayOptimizationContext intradayOptimizationContext,
 			IIntradayOptimizerContainer intradayOptimizerContainer,
@@ -35,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimization = resourceOptimization;
 		}
 
-		public void Execute(DateOnlyPeriod period, IPerson[] agents, bool runResolveWeeklyRestRule)
+		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();

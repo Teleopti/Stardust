@@ -2100,7 +2100,7 @@
     <Compile Include="Optimization\IIntradayOptimizerContainer.cs" />
     <Compile Include="Optimization\IIntradayOptimizerLimiter.cs" />
     <Compile Include="Optimization\IntradayDatesToSkip.cs" />
-    <Compile Include="Optimization\IntradayOptimization.cs" />
+    <Compile Include="Optimization\IntradayOptimizationClassic.cs" />
     <Compile Include="Optimization\IntradayOptimizationEventRunInProcessHandler.cs" />
     <Compile Include="Optimization\CurrentIntradayOptimizationCallback.cs" />
     <Compile Include="Optimization\IntradayOptimizeOnDayCallBackDoNothing.cs" />
