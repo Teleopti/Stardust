@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			Assert.False(forecastedData.Equals(""));
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldReturnCorrectNumberOfRequiredFields()
 		{
 			var skill = createSkill(15, "skill", new TimePeriod(8, 0, 8, 30));
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			rows.Second().Split(',').Length.Should().Be.EqualTo(7);
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldReturnCurrentDemand()
 		{
 			var skill = createSkill(15, "skill", new TimePeriod(8, 0, 8, 30));

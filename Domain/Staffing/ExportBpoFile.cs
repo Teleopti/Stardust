@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_scheduledStaffingProvider = scheduledStaffingProvider;
 		}
 
-		public string ForecastData(ISkill skill, DateOnlyPeriod period, IFormatProvider importFormatProvider, string seperator=",", string dateTimeFormat = "yyyyMMdd HH:mm")
+		public string ForecastData(ISkill skill, DateOnlyPeriod period, IFormatProvider formatProvider, string seperator=",", string dateTimeFormat = "yyyyMMdd HH:mm")
 		{
 			var skillDays = _skillDayRepository.FindRange(period,skill, _currentScenario.Current());
 			var loadSkillSchedule = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill, skillDays.ToList() } };
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var allIntervals = new List<SkillStaffingIntervalLightModel>();
 			foreach (var dateOnly in period.DayCollection())
 			{
-				allIntervals.AddRange(_scheduledStaffingProvider.StaffingPerSkill(new List<ISkill>(){skill},skill.DefaultResolution,dateOnly ));
+				allIntervals.AddRange(_scheduledStaffingProvider.StaffingPerSkill(new List<ISkill>{skill},skill.DefaultResolution,dateOnly ));
 			}
 			
 			if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out skillStaffPeriods))
@@ -58,11 +58,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 						staffing = staffingInterval.First().StaffingLevel;
 					}
 
-					var startDateTime = ssiStartDate.ToString(dateTimeFormat, importFormatProvider);
-					var endDateTime = ssiEndDate.ToString(dateTimeFormat, importFormatProvider);
+					var startDateTime = ssiStartDate.ToString(dateTimeFormat, formatProvider);
+					var endDateTime = ssiEndDate.ToString(dateTimeFormat, formatProvider);
 					var newDemand = skillStaffPeriod.FStaff - staffing;
 					var row = $"{skill.Name}{seperator}{startDateTime}{seperator}{endDateTime}{seperator}" +
-							  $"0{seperator}0{seperator}0{seperator}{newDemand}";
+							  $"0{seperator}0{seperator}0{seperator}{newDemand.ToString(formatProvider)}";
 					forecastedData.AppendLine(row);
 				}
 			}
