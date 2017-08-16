@@ -9,7 +9,7 @@ describe('Requests - absence and text controller tests',
 			},
 			fakeStateParams = {
 				agentSearchTerm: '',
-				selectedTeamIds: [],
+				selectedGroupIds: [],
 				filterEnabled: false,
 				onInitCallBack: undefined,
 				paging: {},
@@ -106,7 +106,7 @@ describe('Requests - absence and text controller tests',
 			};
 			requestsDataService.setRequests([request, request]);
 
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			var element = compileUIGridHtml(scope, controller.gridOptions);
 			scope.$digest();
 
@@ -122,7 +122,7 @@ describe('Requests - absence and text controller tests',
 			};
 			requestsDataService.setRequests([request]);
 
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			scope.$digest();
 
@@ -137,7 +137,7 @@ describe('Requests - absence and text controller tests',
 			};
 			requestsDataService.setRequests([request]);
 
-			fakeStateParams.selectedTeamIds = [];
+			fakeStateParams.selectedGroupIds = [];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			expect(requestsDataService.getHasSentRequests()).toBeFalsy();
@@ -146,7 +146,7 @@ describe('Requests - absence and text controller tests',
 
 		it('should not request data when period is invalid', function () {
 			requestsDataService.setRequests([]);
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			requestsDataService.reset();
@@ -161,7 +161,7 @@ describe('Requests - absence and text controller tests',
 
 		it('should request data when period is valid', function () {
 			requestsDataService.setRequests([]);
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			requestsDataService.reset();
@@ -176,7 +176,7 @@ describe('Requests - absence and text controller tests',
 
 		it('should request data when search term changed', function () {
 			requestsDataService.setRequests([]);
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			requestsDataService.reset();
@@ -190,7 +190,7 @@ describe('Requests - absence and text controller tests',
 		it('should set isLoading to false after reload requests action finished', function () {
 			requestsDataService.setRequests([]);
 
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			requestsDataService.reset();
@@ -209,7 +209,7 @@ describe('Requests - absence and text controller tests',
 		});
 
 		it('should not call data service more than once after initialized', function () {
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			period = {
 				startDate: moment().add(-1, 'd')._d,
@@ -226,7 +226,7 @@ describe('Requests - absence and text controller tests',
 				MaxSearchPersonCount: 5000
 			});
 
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			scope.$digest();
 
@@ -235,7 +235,7 @@ describe('Requests - absence and text controller tests',
 		});
 
 		it('startTime, endTime, createdTime and updatedTime columns should shown in the same timezone as backend says', function () {
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			controller.isUsingRequestSubmitterTimeZone = true;
 			compileUIGridHtml(scope, controller.gridOptions);
 
@@ -268,7 +268,7 @@ describe('Requests - absence and text controller tests',
 			currentUserInfo.setCurrentUserInfo('Europe/Berlin');
 			setUpTarget();
 
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			var requests = [
@@ -310,7 +310,7 @@ describe('Requests - absence and text controller tests',
 		});
 
 		it('should display correct time for DST', function () {
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			var requests = [
@@ -335,7 +335,7 @@ describe('Requests - absence and text controller tests',
 		});
 
 		it('should clear subject and message filters', function () {
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			controller.subjectFilter = ['a'];
@@ -350,7 +350,7 @@ describe('Requests - absence and text controller tests',
 		it('should toggle filters status', function () {
 			var columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'];
 
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			
 			scope.$digest();

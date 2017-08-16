@@ -201,11 +201,11 @@ describe('Requests - Refactor(remove later) controller controllers',
 				eventData = data;
 			});
 
-			controller.selectedTeamIds.push('123');
+			controller.selectedGroups.groupIds.push('123');
 			controller.agentSearchOptions.keyword = 'FirstName:aaa';
 			controller.onSearchTermChangedCallback();
 
-			expect(eventData.selectedTeamIds[0]).toEqual('123');
+			expect(eventData.selectedGroupIds[0]).toEqual('123');
 			expect(eventData.agentSearchTerm).toEqual('FirstName:aaa');
 		});
 
@@ -265,8 +265,8 @@ describe('Requests - Refactor(remove later) controller controllers',
 			var controller = setUpTarget().controller;
 
 			controller.agentSearchOptions.keyword = 'a';
-			controller.selectedTeamIds.push('123');
-			controller.selectedTeamIds.push('456');
+			controller.selectedGroups.groupIds.push('123');
+			controller.selectedGroups.groupIds.push('456');
 			controller.filterEnabled = true;
 			controller.paging.pageSize = 100;
 			controller.isUsingRequestSubmitterTimeZone = true;
@@ -275,8 +275,8 @@ describe('Requests - Refactor(remove later) controller controllers',
 			controller.activeAbsenceAndTextTab();
 
 			expect(fakeStateParams != undefined).toEqual(true);
-			expect(fakeStateParams.selectedTeamIds[0]).toEqual('123');
-			expect(fakeStateParams.selectedTeamIds[1]).toEqual('456');
+			expect(fakeStateParams.selectedGroupIds[0]).toEqual('123');
+			expect(fakeStateParams.selectedGroupIds[1]).toEqual('456');
 			expect(fakeStateParams.filterEnabled).toEqual(true);
 			expect(fakeStateParams.paging.pageSize).toEqual(100);
 			expect(fakeStateParams.isUsingRequestSubmitterTimeZone).toEqual(true);
@@ -288,8 +288,8 @@ describe('Requests - Refactor(remove later) controller controllers',
 			var controller = setUpTarget().controller;
 
 			controller.agentSearchOptions.keyword = 'a';
-			controller.selectedTeamIds.push('123');
-			controller.selectedTeamIds.push('456');
+			controller.selectedGroups.groupIds.push('123');
+			controller.selectedGroups.groupIds.push('456');
 			controller.filterEnabled = true;
 			controller.paging.pageSize = 100;
 			controller.isUsingRequestSubmitterTimeZone = true;
@@ -298,8 +298,8 @@ describe('Requests - Refactor(remove later) controller controllers',
 			controller.activeShiftTradeTab();
 
 			expect(fakeStateParams != undefined).toEqual(true);
-			expect(fakeStateParams.selectedTeamIds[0]).toEqual('123');
-			expect(fakeStateParams.selectedTeamIds[1]).toEqual('456');
+			expect(fakeStateParams.selectedGroupIds[0]).toEqual('123');
+			expect(fakeStateParams.selectedGroupIds[1]).toEqual('456');
 			expect(fakeStateParams.filterEnabled).toEqual(true);
 			expect(fakeStateParams.paging.pageSize).toEqual(100);
 			expect(fakeStateParams.isUsingRequestSubmitterTimeZone).toEqual(true);

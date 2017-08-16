@@ -137,6 +137,8 @@
 		};
 
 		this.translateSingleSortingOrder = function (sortColumn) {
+			if(!sortColumn) return;
+
 			var Orders = self.REQUEST_SORTING_ORDERS;
 
 			if (sortColumn.displayName === 'AgentName') {

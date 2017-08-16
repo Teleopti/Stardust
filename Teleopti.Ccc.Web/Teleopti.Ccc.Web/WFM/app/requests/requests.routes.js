@@ -20,7 +20,7 @@
 				url: '/absenceAndText',
 				params: {
 					agentSearchTerm: '',
-					selectedTeamIds: [],
+					selectedGroupIds: [],
 					filterEnabled: undefined,
 					onInitCallBack: undefined,
 					paging: {},
@@ -35,7 +35,7 @@
 				url: '/shiftTrade',
 				params: {
 					agentSearchTerm: '',
-					selectedTeamIds: [],
+					selectedGroupIds: [],
 					filterEnabled: undefined,
 					onInitCallBack: undefined,
 					paging: {},

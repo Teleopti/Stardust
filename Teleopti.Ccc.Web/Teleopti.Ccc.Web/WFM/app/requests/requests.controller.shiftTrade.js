@@ -35,7 +35,7 @@
 		vm.isLoading = false;
 		vm.sortingOrders = [];
 		vm.agentSearchTerm = '';
-		vm.selectedTeamIds = [];
+		vm.selectedGroupIds = [];
 		vm.paging = {};
 		vm.initialized = false;
 		vm.shiftTradeView = true;
@@ -74,14 +74,14 @@
 		vm.reload = function(params) {
 			if (params) {
 				vm.agentSearchTerm = params.agentSearchTerm || vm.agentSearchTerm;
-				vm.selectedTeamIds = params.selectedTeamIds || vm.selectedTeamIds;
+				vm.selectedGroupIds = params.selectedGroupIds || vm.selectedGroupIds;
 				vm.paging = params.paging || vm.paging;
 			}
 
 			var requestsFilter = {
 				period: vm.period,
 				agentSearchTerm: vm.agentSearchTerm,
-				selectedTeamIds: vm.selectedTeamIds,
+				selectedGroupIds: vm.selectedGroupIds,
 				filters: vm.filters
 			};
 
@@ -145,6 +145,11 @@
 			vm.isUsingRequestSubmitterTimeZone = $stateParams.isUsingRequestSubmitterTimeZone;
 			onInitCallBack = $stateParams.onInitCallBack;
 			vm.userTimeZone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
+
+			var sortingOrder = requestsDefinitions.translateSingleSortingOrder(requestGridStateService.getShiftTradeSorting());
+			if(sortingOrder)
+				vm.sortingOrders.push(sortingOrder);
+
 			vm.gridOptions = getGridOptions();
 			vm.saveGridColumnState = toggleService.Wfm_Requests_Save_Grid_Columns_37976;
 			vm.showRelevantInfo = toggleService.Wfm_Requests_ShiftTrade_More_Relevant_Information_38492;
@@ -294,7 +299,7 @@
 		}
 
 		function getRequests(requestsFilter, sortingOrders, paging) {
-			if (requestsFilter.selectedTeamIds.length === 0) {
+			if (requestsFilter.selectedGroupIds.length === 0) {
 				getRequestsCallback({
 					data: {
 						Requests: []

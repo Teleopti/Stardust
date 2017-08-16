@@ -101,10 +101,6 @@
 		};
 
 		vm.getGroupPagesAsync = function () {
-			if (!vm.Wfm_GroupPages_45057) {
-				return;
-			}
-			
 			var startDateStr = moment(vm.period.startDate).format('YYYY-MM-DD');
 			var endDateStr = moment(vm.period.endDate).format('YYYY-MM-DD');
 
@@ -222,11 +218,13 @@
 			vm.disableInteraction = false;
 			vm.onProcessWaitlistFinished = onProcessWaitlistFinished;
 			vm.onApproveBasedOnBusinessRulesFinished = onApproveBasedOnBusinessRulesFinished;
-			if (!toggleService.Wfm_GroupPages_45057)
-				vm.getSitesAndTeamsAsync();
-			vm.getGroupPagesAsync();
-			setReleaseNotification();
 
+			if (vm.Wfm_GroupPages_45057)
+				vm.getGroupPagesAsync();
+			else
+				vm.getSitesAndTeamsAsync();
+
+			setReleaseNotification();
 		}
 
 		function setReleaseNotification() {

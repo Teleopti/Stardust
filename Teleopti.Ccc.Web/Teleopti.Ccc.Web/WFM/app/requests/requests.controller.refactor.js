@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsRefactorCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "$state", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo"];
+	requestsController.$inject = ["$scope", "$state", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo", "groupPageService"];
 
-	function requestsController($scope, $state, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo) {
+	function requestsController($scope, $state, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService) {
 		var vm = this;
 
 		vm.searchPlaceholder = $translate.instant('Search');
@@ -14,6 +14,13 @@
 		vm.translations.To = $translate.instant('DateTo');
 		vm.pageSizeOptions = [20, 50, 100, 200];
 		vm.sitesAndTeams = [];
+		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
+
+		vm.selectedGroups = {
+			mode: 'BusinessHierarchy',
+			groupIds: [],
+			groupPageId: ''
+		};
 
 		vm.paging = {
 			pageSize: 20,
@@ -36,13 +43,9 @@
 		vm.hasFavoriteSearchPermission = false;
 		vm.onFavoriteSearchInitDefer = $q.defer();
 
-		vm.teamNameMap = {};
-
 		if (!vm.saveFavoriteSearchesToggleEnabled) {
 			vm.onFavoriteSearchInitDefer.resolve();
 		}
-
-		Object.defineProperty(this, 'selectedTeamIds', { value: []});
 
 		var loggedonUsersTeamId = $q.defer();
 		if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {
@@ -51,17 +54,17 @@
 
 		vm.orgPickerSelectedText = function () {
 			var text = '';
-			switch (vm.selectedTeamIds.length) {
+			switch (vm.selectedGroups.groupIds.length) {
 				case 0:
 					text = $translate.instant('SelectOrganization');
 					break;
 
 				case 1:
-					text = vm.teamNameMap[vm.selectedTeamIds[0]];
+					text = vm.teamNameMap[vm.selectedGroups.groupIds[0]];
 					break;
 
 				default:
-					text = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.selectedTeamIds.length);
+					text = $translate.instant('SeveralTeamsSelected').replace('{0}', vm.selectedGroups.groupIds.length);
 					break;
 			}
 			return text;
@@ -70,7 +73,7 @@
 		vm.activeAbsenceAndTextTab = function () {
 			var params = {
 				agentSearchTerm: vm.agentSearchOptions.keyword,
-				selectedTeamIds: vm.selectedTeamIds,
+				selectedGroupIds: vm.selectedGroups.groupIds,
 				filterEnabled: vm.filterEnabled,
 				onInitCallBack: vm.initFooter,
 				paging: vm.paging,
@@ -85,11 +88,10 @@
 			$state.go("requestsRefactor-absenceAndText", params);
 		};
 
-
 		vm.activeShiftTradeTab = function () {
 			var params = {
 				agentSearchTerm: '',
-				selectedTeamIds: vm.selectedTeamIds,
+				selectedGroupIds: vm.selectedGroups.groupIds,
 				filterEnabled: vm.filterEnabled,
 				onInitCallBack: vm.initFooter,
 				paging: vm.paging,
@@ -117,9 +119,16 @@
 					resolve(data);
 					vm.sitesAndTeams = data.Children;
 					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
-
-					angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
 				});
+			});
+		};
+
+		vm.getGroupPagesAsync = function () {
+			var startDateStr = moment(vm.period.startDate).format('YYYY-MM-DD');
+			var endDateStr = moment(vm.period.endDate).format('YYYY-MM-DD');
+
+			groupPageService.fetchAvailableGroupPages(startDateStr, endDateStr).then(function (data) {
+				vm.availableGroups = data;
 			});
 		};
 
@@ -137,17 +146,17 @@
 		};
 
 		vm.applyFavorite = function (currentFavorite) {
-			replaceArrayValues(currentFavorite.TeamIds, vm.selectedTeamIds);
+			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
 
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
-			$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: currentFavorite.TeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });
+			$scope.$broadcast('reload.requests.with.selection', { selectedGroupIds: currentFavorite.TeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 			vm.agentSearchOptions.focusingSearch = false;
 		};
 
 		vm.getSearch = function () {
 			return {
-				TeamIds: vm.selectedTeamIds,
+				TeamIds: vm.selectedGroups.groupIds,
 				SearchTerm: vm.agentSearchOptions.keyword
 			};
 		};
@@ -158,7 +167,7 @@
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 			$scope.$broadcast('reload.requests.with.selection',
 				{
-					selectedTeamIds: vm.selectedTeamIds,
+					selectedGroupIds: vm.selectedGroups.groupIds,
 					agentSearchTerm: vm.agentSearchOptions.keyword
 				});
 		};
@@ -174,7 +183,7 @@
 		};
 
 		vm.hideSearchIfNoSelectedTeam = function () {
-			if (angular.isArray(vm.selectedTeamIds) && vm.selectedTeamIds.length > 0) {
+			if (angular.isArray(vm.selectedGroups.groupIds) && vm.selectedGroups.groupIds.length > 0) {
 				return 'visible';
 			}
 			return 'hidden';
@@ -199,11 +208,16 @@
 			vm.disableInteraction = false;
 			vm.onProcessWaitlistFinished = onProcessWaitlistFinished;
 			vm.onApproveBasedOnBusinessRulesFinished = onApproveBasedOnBusinessRulesFinished;
-			vm.getSitesAndTeamsAsync();
+
+			if (vm.Wfm_GroupPages_45057)
+				vm.getGroupPagesAsync();
+			else 
+				vm.getSitesAndTeamsAsync();
+
 			setReleaseNotification();
 			vm.onFavoriteSearchInitDefer.promise.then(function(defaultSearch) {
 				if (defaultSearch) {
-					replaceArrayValues(defaultSearch.TeamIds, vm.selectedTeamIds);
+					replaceArrayValues(defaultSearch.TeamIds, vm.selectedGroups.groupIds);
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 				}
 				if (isShiftTradeViewActive()) {
@@ -221,7 +235,7 @@
 			}))
 			.then(loggedonUsersTeamId.promise.then(function (defaultTeam) {
 				if (angular.isString(defaultTeam) && defaultTeam.length > 0)
-					replaceArrayValues([defaultTeam], vm.selectedTeamIds);
+					replaceArrayValues([defaultTeam], vm.selectedGroups.groupIds);
 			}))
 			.then(vm.init);
 
@@ -358,16 +372,6 @@
 		function replaceArrayValues(from, to) {
 			to.splice(0);
 			from.forEach(function (x) { to.push(x); });
-		}
-
-		function extractTeamNames(sites) {
-			var teamNameMap = {};
-			sites.forEach(function (site) {
-				site.Children.forEach(function (team) {
-					teamNameMap[team.Id] = team.Name;
-				});
-			});
-			return teamNameMap;
 		}
 	}
 })();

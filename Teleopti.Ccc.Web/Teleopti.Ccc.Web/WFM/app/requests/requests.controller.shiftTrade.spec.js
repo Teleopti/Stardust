@@ -9,7 +9,7 @@ describe('Requests shift trade controller tests',
 		},
 			fakeStateParams = {
 				agentSearchTerm: '',
-				selectedTeamIds: [],
+				selectedGroupIds: [],
 				filterEnabled: false,
 				onInitCallBack: undefined,
 				paging: {},
@@ -68,7 +68,7 @@ describe('Requests shift trade controller tests',
 			};
 			requestsDataService.setRequests([request]);
 
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			scope.$digest();
 
@@ -83,7 +83,7 @@ describe('Requests shift trade controller tests',
 			};
 			requestsDataService.setRequests([request]);
 
-			fakeStateParams.selectedTeamIds = [];
+			fakeStateParams.selectedGroupIds = [];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			expect(requestsDataService.getHasSentRequests()).toBeFalsy();
@@ -92,7 +92,7 @@ describe('Requests shift trade controller tests',
 
 		it('should not request data when period is invalid', function () {
 			requestsDataService.setRequests([]);
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			requestsDataService.reset();
@@ -107,7 +107,7 @@ describe('Requests shift trade controller tests',
 
 		it('should request data when period is valid', function () {
 			requestsDataService.setRequests([]);
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			requestsDataService.reset();
@@ -122,7 +122,7 @@ describe('Requests shift trade controller tests',
 
 		it('should request data when search term changed', function () {
 			requestsDataService.setRequests([]);
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			requestsDataService.reset();
@@ -136,7 +136,7 @@ describe('Requests shift trade controller tests',
 		it('should set isLoading to false after reload requests action finished', function () {
 			requestsDataService.setRequests([]);
 
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			requestsDataService.reset();
@@ -155,7 +155,7 @@ describe('Requests shift trade controller tests',
 		});
 
 		it('should not call data service more than once after initialized', function () {
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			period = {
 				startDate: moment().add(-1, 'd')._d,
@@ -172,7 +172,7 @@ describe('Requests shift trade controller tests',
 				MaxSearchPersonCount: 5000
 			});
 
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			scope.$digest();
 
@@ -208,7 +208,7 @@ describe('Requests shift trade controller tests',
 			};
 			requestsDataService.setRequests([request, request]);
 
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			var element = compileUIGridHtml(scope, controller.gridOptions);
 			scope.$digest();
 
@@ -218,7 +218,7 @@ describe('Requests shift trade controller tests',
 		});
 
 		it('startTime, endTime, createdTime and updatedTime columns should shown in the same timezone as backend says', function () {
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			controller.isUsingRequestSubmitterTimeZone = true;
 			compileUIGridHtml(scope, controller.gridOptions);
 
@@ -252,7 +252,7 @@ describe('Requests shift trade controller tests',
 			setUpTarget();
 			setUpShiftTradeRequestData();
 
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			requestsDataService.setRequests(scope.requests);
 			scope.$digest();
@@ -272,7 +272,7 @@ describe('Requests shift trade controller tests',
 				Maximum: '2016-06-02T00:00:00',
 				FirstDayOfWeek: 1
 			};
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			requestsDataService.setRequests(scope.requests, dateSummary);
 
@@ -296,7 +296,7 @@ describe('Requests shift trade controller tests',
 				Maximum: '2016-06-02T00:00:00',
 				FirstDayOfWeek: 1
 			};
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 
 			compileUIGridHtml(scope, controller.gridOptions);
 			requestsDataService.setRequests(scope.requests, dateSummary);
@@ -339,7 +339,7 @@ describe('Requests shift trade controller tests',
 				Maximum: '2016-06-02T00:00:00',
 				FirstDayOfWeek: 1
 			};
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			var brokenRules = ["Not allowed change", "Weekly rest time"];
 			scope.requests[0].BrokenRules = brokenRules;
@@ -366,7 +366,7 @@ describe('Requests shift trade controller tests',
 				Maximum: '2016-06-02T00:00:00',
 				FirstDayOfWeek: 1
 			};
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			var shiftTradeDay = scope.requests[0].ShiftTradeDays[0];
 			shiftTradeDay.ToScheduleDayDetail = { Color: null, Name: null, ShortName: null, Type: 0 };
@@ -384,7 +384,7 @@ describe('Requests shift trade controller tests',
 				Maximum: '2016-06-02T00:00:00',
 				FirstDayOfWeek: 1
 			};
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 			var shiftTradeDay = scope.requests[0].ShiftTradeDays[0];
 			shiftTradeDay.ToScheduleDayDetail = { Color: null, Name: null, ShortName: null, Type: 0 };
@@ -397,7 +397,7 @@ describe('Requests shift trade controller tests',
 		});
 
 		it('should display correct time for DST', function () {
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			var requests = [
@@ -428,7 +428,7 @@ describe('Requests shift trade controller tests',
 				Maximum: '2017-01-09T22:59:00',
 				FirstDayOfWeek: 1
 			};
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			var submitterTimezone = 'Europe/Berlin';
@@ -449,7 +449,7 @@ describe('Requests shift trade controller tests',
 				Maximum: '2017-01-09T22:59:00',
 				FirstDayOfWeek: 1
 			};
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			var submitterTimezone = 'Europe/Berlin';
@@ -498,7 +498,7 @@ describe('Requests shift trade controller tests',
 				Maximum: '2017-01-09T22:59:00',
 				FirstDayOfWeek: 1
 			};
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			controller.isUsingRequestSubmitterTimeZone = true;
 			compileUIGridHtml(scope, controller.gridOptions);
 
@@ -543,7 +543,7 @@ describe('Requests shift trade controller tests',
 		});
 
 		it('should clear subject and message filters', function () {
-			fakeStateParams.selectedTeamIds = ['team'];
+			fakeStateParams.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			controller.subjectFilter = ['a'];
