@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.UserTexts;
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly SetMainShiftOptimizeActivitySpecificationForTeamBlock _setMainShiftOptimizeActivitySpecificationForTeamBlock;
+		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockScheduler teamBlockScheduler,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
@@ -38,7 +40,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			IWorkShiftSelector workShiftSelector,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
-			SetMainShiftOptimizeActivitySpecificationForTeamBlock setMainShiftOptimizeActivitySpecificationForTeamBlock)
+			SetMainShiftOptimizeActivitySpecificationForTeamBlock setMainShiftOptimizeActivitySpecificationForTeamBlock,
+			IOptimizerHelperHelper optimizerHelperHelper)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
@@ -51,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_workShiftSelector = workShiftSelector;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_setMainShiftOptimizeActivitySpecificationForTeamBlock = setMainShiftOptimizeActivitySpecificationForTeamBlock;
+			_optimizerHelperHelper = optimizerHelperHelper;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -71,6 +75,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.CollectingData, optimizationPreferences.Advanced.RefreshScreenInterval, ()=>cancelMe=true));
 			if (progressResult.ShouldCancel) cancelMe = true;
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			_optimizerHelperHelper.LockDaysForIntradayOptimization(allPersonMatrixList, selectedPeriod);
 			var teamBlocks = teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 			var remainingInfoList = new List<ITeamBlockInfo>(teamBlocks);
 

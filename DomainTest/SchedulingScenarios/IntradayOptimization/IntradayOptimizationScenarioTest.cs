@@ -10,13 +10,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[TestFixture(OptimizationCodeBranch.Classic)]
 	public abstract class IntradayOptimizationScenarioTest : IConfigureToggleManager
 	{
-		private readonly OptimizationCodeBranch _resourcePlannerMergeTeamblockClassicIntraday45508;
+		protected readonly OptimizationCodeBranch _resourcePlannerMergeTeamblockClassicIntraday45508;
 
 		protected IntradayOptimizationScenarioTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508)
 		{
 			_resourcePlannerMergeTeamblockClassicIntraday45508 = resourcePlannerMergeTeamblockClassicIntraday45508;
-			if(_resourcePlannerMergeTeamblockClassicIntraday45508==OptimizationCodeBranch.TeamBlock)
-				Assert.Ignore("To be fixed!");
 		}
 
 		public void Configure(FakeToggleManager toggleManager)
