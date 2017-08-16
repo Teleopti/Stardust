@@ -56,6 +56,30 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			return skill;
 		}
 
+		public static ISkillDay CreateSkillDayWithDemand(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours, double demand )
+		{
+			
+			var random = new Random();
+			ISkillDay skillDay;
+			skillDay =
+					skill.CreateSkillDayWithDemandOnInterval(scenario, new DateOnly(userNow), 3, new Tuple<TimePeriod, double>(openHours, demand)).WithId();
+
+			var index = 0;
+
+			var workloadDay = skillDay.WorkloadDayCollection.First();
+			workloadDay.Lock();
+			for (TimeSpan intervalStart = openHours.StartTime; intervalStart < openHours.EndTime; intervalStart = intervalStart.Add(TimeSpan.FromMinutes(skill.DefaultResolution)))
+			{
+				workloadDay.TaskPeriodList[index].Tasks = random.Next(5, 50);
+				workloadDay.TaskPeriodList[index].AverageTaskTime = TimeSpan.FromSeconds(120);
+				workloadDay.TaskPeriodList[index].AverageAfterTaskTime = TimeSpan.FromSeconds(200);
+				index++;
+			}
+			workloadDay.Release();
+
+			return skillDay;
+		}
+
 		public static ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours, bool addSkillDataPeriodDuplicate, bool giveDemand = true)
 		{
 			var demand = 3;
