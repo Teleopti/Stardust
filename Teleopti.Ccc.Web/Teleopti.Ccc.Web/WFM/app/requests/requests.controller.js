@@ -6,7 +6,7 @@
 	requestsController.$inject = ["$state", "$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo", "groupPageService"];
 
 	function requestsController($state, $scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService) {
-		if (toggleService.Wfm_Requests_OvertimeRequestHandling_45177) {
+		if (toggleService.Wfm_Requests_Refactoring_45470) {
 			$state.go("requestsRefactor");
 			return;
 		}

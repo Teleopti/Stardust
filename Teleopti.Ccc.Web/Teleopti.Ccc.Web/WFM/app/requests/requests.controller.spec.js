@@ -260,7 +260,7 @@ describe('RequestsControllerTests', function () {
 	});
 
 	it('should go to requests-refactor page when toggle Wfm_Requests_OvertimeRequestHandling_45177 on', function () {
-		toggleObject['Wfm_Requests_OvertimeRequestHandling_45177'] = true;
+		toggleObject['Wfm_Requests_Refactoring_45470'] = true;
 		setUpTarget();
 		expect(fakeState.current.url).toEqual('requestsRefactor');
 	});
