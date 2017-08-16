@@ -52,9 +52,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1, stateHolder.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);
 			//TODO: fel tag? från optpref istället?
-			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(new NullScheduleTag()));
+			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag));
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(stateHolder.Schedules, stateHolder.SchedulingResultState.PersonsInOrganization, period);
-			//TODO: fel! not hard coded hierarchy schedulingOptions.GroupOnGroupPageForTeamBlockPer;
+			//TODO: fel! not hard coded hierarchy schedulingOptions.GroupOnGroupPageForTeamBlockPer, behöver fixas när även "teamblockspåret" går in hit (just nu bara classic)
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons,_schedulerStateHolder().Schedules, new GroupPageLight("_", GroupPageType.SingleAgent));
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
 
