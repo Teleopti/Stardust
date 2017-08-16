@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[UseIocForFatClient]
-	public class IntradayOptimizationIslandDesktopTest
+	public class IntradayOptimizationIslandDesktopTest : IntradayOptimizationScenarioTest
 	{
 		public OptimizeIntradayIslandsDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -682,6 +682,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(assBefore.Id);
 			assAfter.ShiftLayers.Single().Id
 				.Should().Be.EqualTo(assBefore.ShiftLayers.Single().Id);
+		}
+
+		public IntradayOptimizationIslandDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
 		}
 	}
 }

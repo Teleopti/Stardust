@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	public class IntradayOptimizationTeamBlockDesktopTest
+	public class IntradayOptimizationTeamBlockDesktopTest : IntradayOptimizationScenarioTest
 	{
 		public OptimizationExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -297,6 +297,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				Target.Execute(new NoSchedulingProgress(), stateHolder, new[] { agent }, period, optimizationPreferences,
 					new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 			});
+		}
+
+		public IntradayOptimizationTeamBlockDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
 		}
 	}
 }

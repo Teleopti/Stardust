@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	public class IntradayOptimizationReduceUnnecessaryCallsTest : ISetup
+	public class IntradayOptimizationReduceUnnecessaryCallsTest : IntradayOptimizationScenarioTest, ISetup
 	{
 		public OptimizationExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -111,6 +111,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<WorkShiftSelectorTrackWhatSkillDays>().For<WorkShiftSelectorForMaxSeat>();
+		}
+
+		public IntradayOptimizationReduceUnnecessaryCallsTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
 		}
 	}
 }

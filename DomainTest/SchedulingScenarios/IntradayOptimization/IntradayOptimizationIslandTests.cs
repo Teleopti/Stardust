@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationIslandTests
+	public class IntradayOptimizationIslandTests : IntradayOptimizationScenarioTest
 	{
 		public IntradayOptimizationFromWeb Target;
 		public FakeSkillRepository SkillRepository;
@@ -61,6 +61,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var dateTime2 = TimeZoneHelper.ConvertToUtc(dateOnly.Date, agent2.PermissionInformation.DefaultTimeZone());
 			PersonAssignmentRepository.GetSingle(dateOnly, agent2).Period
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime2.AddHours(8).AddMinutes(15), dateTime2.AddHours(17).AddMinutes(15)));
+		}
+
+		public IntradayOptimizationIslandTests(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
 		}
 	}
 }

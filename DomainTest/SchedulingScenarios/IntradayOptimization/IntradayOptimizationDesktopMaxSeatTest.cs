@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[UseIocForFatClient]
-	public class IntradayOptimizationDesktopMaxSeatTest
+	public class IntradayOptimizationDesktopMaxSeatTest : IntradayOptimizationScenarioTest
 	{
 		public OptimizationExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -96,6 +96,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			TeamNonHierarchy,
 			Block,
 			Classic
+		}
+
+		public IntradayOptimizationDesktopMaxSeatTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
 		}
 	}
 }

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationStopWhenLargeGroupTest : ISetup
+	public class IntradayOptimizationStopWhenLargeGroupTest : IntradayOptimizationScenarioTest, ISetup
 	{
 		public IntradayOptimizationFromWeb Target;
 		public TrackOptimizeDaysForAgents TrackOptimizeDaysForAgents;
@@ -242,6 +242,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		{
 			system.UseTestDouble<TrackOptimizeDaysForAgents>().For<IIntradayOptimizeOneDayCallback>();
 			system.UseTestDouble<OptimizationPreferencesDefaultValueProvider>().For<IOptimizationPreferencesProvider>();
+		}
+
+		public IntradayOptimizationStopWhenLargeGroupTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
 		}
 	}
 }

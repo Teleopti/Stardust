@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationIncreaseIslandsTest
+	public class IntradayOptimizationIncreaseIslandsTest : IntradayOptimizationScenarioTest
 	{
 		public IntradayOptimizationFromWeb Target;
 		public FakeSkillRepository SkillRepository;
@@ -68,6 +68,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var shiftLayer = PersonAssignmentRepository.GetSingle(date, agentABC).ShiftLayers.Single();
 			shiftLayer.Period.StartDateTime.TimeOfDay.Should().Be.EqualTo(TimeSpan.FromHours(8));
 			shiftLayer.Payload.Should().Be.EqualTo(activityC);
+		}
+
+		public IntradayOptimizationIncreaseIslandsTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
 		}
 	}
 }

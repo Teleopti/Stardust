@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	[UseIocForFatClient]
-	public class IntradayOptimizationCallbackDesktopTest
+	public class IntradayOptimizationCallbackDesktopTest : IntradayOptimizationScenarioTest
 	{
 		public OptimizeIntradayIslandsDesktop Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -68,6 +68,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var callbackTracker = new TrackIntradayOptimizationCallback();
 			Target.Optimize(asses.Select(x => x.Person), new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), callbackTracker);
 			callbackTracker.UnSuccessfulOptimizations().Should().Be.EqualTo(10);
+		}
+
+		public IntradayOptimizationCallbackDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
 		}
 	}
 }

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
 	[UseIocForFatClient]
-	public class IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayTest
+	public class IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayTest : IntradayOptimizationScenarioTest
 	{
 		public OptimizationExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderOrg;
@@ -50,6 +50,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().ShiftCategory
 				.Should().Be.EqualTo(shiftCategoryAm);
+		}
+
+		public IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
 		}
 	}
 }

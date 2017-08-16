@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[TestFixture]
 	[DomainTest]
 	[Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874)]
-	public class IntradayOptimizationFromWebTest
+	public class IntradayOptimizationFromWebTest : IntradayOptimizationScenarioTest
 	{
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public FakePlanningGroupRepository PlanningGroupRepository;
@@ -51,6 +51,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var jobResult = JobResultRepository.LoadAll().Single();
 			jobResult.JobCategory.Should().Be.EqualTo(JobCategory.WebIntradayOptimiztion);
 			jobResult.Period.Should().Be.EqualTo(planningPeriod.Range);
+		}
+
+		public IntradayOptimizationFromWebTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
 		}
 	}
 }

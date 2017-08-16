@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[DomainTest]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
-	public class IntradayOptimizationStandardDeviationTest
+	public class IntradayOptimizationStandardDeviationTest : IntradayOptimizationScenarioTest
 	{
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
@@ -80,6 +80,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(planningPeriod.Id.Value, false);
 
 			PersonAssignmentRepository.GetSingle(dateOnly, agent1).ShiftCategory.Should().Be.EqualTo(shiftCategory);
+		}
+
+		public IntradayOptimizationStandardDeviationTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
 		}
 	}
 }
