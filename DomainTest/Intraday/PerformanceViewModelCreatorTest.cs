@@ -295,6 +295,87 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
+		public void ShouldReturnEslForNewZealandTimezoneAndDayOffset()
+		{
+			var dayOffset = -1;
+			TimeZone.IsNewZealand();
+			var userNow = new DateTime(2016, 8, 26, 6, 0, 0, DateTimeKind.Local);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTimeLocal = new DateTime(2016, 8, 26, 5, 45, 0, DateTimeKind.Local).AddDays(dayOffset);
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 24, 0), false);
+			createSkillDaysYesterdayTodayTomorrow(skill, userNow.AddDays(dayOffset));
+
+			createStatistics(latestStatsTimeLocal.Date, latestStatsTimeLocal.Date.AddDays(1), latestStatsTimeLocal);
+
+			SkillRepository.Has(skill);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value }, dayOffset);
+
+			result.DataSeries.Time.Length.Should().Be.EqualTo(96);
+			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(96);
+
+			var latestStatsIntervalPosition = new IntervalBase(latestStatsTimeLocal, (60 / minutesPerInterval) * 24).Id;
+			result.DataSeries.EstimatedServiceLevels.First().Should().Be.GreaterThan(0);
+			result.DataSeries.EstimatedServiceLevels[latestStatsIntervalPosition].Should().Be.GreaterThan(0);
+			result.DataSeries.EstimatedServiceLevels[latestStatsIntervalPosition + 1].Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldReturnEslForHawaiiTimezoneAndDayOffset()
+		{
+			var dayOffset = -1;
+			TimeZone.IsHawaii();
+			var userNow = new DateTime(2016, 8, 26, 20, 0, 0, DateTimeKind.Local);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTimeLocal = new DateTime(2016, 8, 26, 19, 45, 0, DateTimeKind.Local).AddDays(dayOffset);
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(0, 0, 24, 0), false);
+			createSkillDaysYesterdayTodayTomorrow(skill, userNow.AddDays(dayOffset));
+
+			createStatistics(latestStatsTimeLocal.Date, latestStatsTimeLocal.Date.AddDays(1), latestStatsTimeLocal);
+
+			SkillRepository.Has(skill);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value }, dayOffset);
+
+			result.DataSeries.Time.Length.Should().Be.EqualTo(96);
+			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(96);
+
+			var latestStatsIntervalPosition = new IntervalBase(latestStatsTimeLocal, (60 / minutesPerInterval) * 24).Id;
+			result.DataSeries.EstimatedServiceLevels.First().Should().Be.GreaterThan(0);
+			result.DataSeries.EstimatedServiceLevels[latestStatsIntervalPosition].Should().Be.GreaterThan(0);
+			result.DataSeries.EstimatedServiceLevels[latestStatsIntervalPosition + 1].Should().Be.EqualTo(null);
+		}
+
+		[Test]
+		public void ShouldReturnEslForOneSkillAndDayOffset()
+		{
+			var dayOffset = -1;
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc).AddDays(dayOffset);
+
+			var skill = createSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 15), false);
+			var skillDay = createSkillDay(skill, Now.UtcDateTime().AddDays(dayOffset), new TimePeriod(8, 0, 8, 15), false);
+
+			var scheduledStaffingList = createScheduledStaffing(skillDay);
+
+			createStatistics(latestStatsTime, latestStatsTime.AddMinutes(minutesPerInterval), latestStatsTime);
+
+			SkillRepository.Has(skill);
+			SkillDayRepository.Add(skillDay);
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(DateTime.MinValue, scheduledStaffingList);
+
+			var result = Target.Load(new Guid[] { skill.Id.Value }, dayOffset);
+
+			var esl = calculateEsl(scheduledStaffingList, skillDay, skillDay.WorkloadDayCollection.First().TaskPeriodList.First().Tasks, 0);
+
+			result.DataSeries.EstimatedServiceLevels.Length.Should().Be.EqualTo(1);
+			Math.Round(result.DataSeries.EstimatedServiceLevels.First().Value, 5).Should().Be.EqualTo(Math.Round(esl * 100, 5));
+		}
+		
+		[Test]
 		public void ShouldReturnEslDaySummary()
 		{
 			var userNow = new DateTime(2016, 8, 26, 8, 30, 0, DateTimeKind.Utc);

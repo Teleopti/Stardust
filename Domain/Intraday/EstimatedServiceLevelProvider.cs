@@ -45,12 +45,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 				return eslIntervals;
 			var serviceCalculatorService = new StaffingCalculatorServiceFacade();
 
+			var userDateOnly = (currDate != null) ? new DateOnly(TimeZoneHelper.ConvertFromUtc(currDate.Value, _timeZone.TimeZone())) : new DateOnly?();
+			
 			var forecastedCalls = _forecastedCallsProvider.Load(skillDays, queueStatistics.LatestActualIntervalStart, minutesPerInterval, currDate);
 			var forecastedStaffing = _forecastedStaffingProvider
-				.StaffingPerSkill(skillDays, minutesPerInterval, null, false)
+				.StaffingPerSkill(skillDays, minutesPerInterval, userDateOnly, false)
 				.Where(x => x.StartTime <= queueStatistics.LatestActualIntervalStart)
 				.ToList();
-			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(skillDays.Keys.ToList(), minutesPerInterval);
+			var scheduledStaffing = _scheduledStaffingProvider.StaffingPerSkill(skillDays.Keys.ToList(), minutesPerInterval, userDateOnly);
 
 			foreach (var skill in skillDays.Keys)
 			{
