@@ -62,6 +62,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons,_schedulerStateHolder().Schedules, new GroupPageLight("_", GroupPageType.SingleAgent));
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
 
+			//TODO: we probably need something like using (_intradayOptimizationContext.Create(period)) here when getting largeGRoupTEsts green
+
 			_teamBlockIntradayOptimizationService.Optimize(allMatrixes,
 				period,
 				agents,
