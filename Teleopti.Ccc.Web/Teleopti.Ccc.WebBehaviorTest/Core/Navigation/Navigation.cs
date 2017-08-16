@@ -328,11 +328,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			if (date.HasValue)
 			{
-				GoToPage("wfm/#/seatPlan/" + date.Value.ToString("yyyy-MM-dd"), new WaitUntilLoaded());
+				GoToPage("wfm/#/seatPlan/" + date.Value.ToString("yyyy-MM-dd"));
 			}
 			else
 			{
-				GoToPage("wfm/#/seatPlan", new WaitUntilLoaded());
+				GoToPage("wfm/#/seatPlan");
 			}
 		}
 		
