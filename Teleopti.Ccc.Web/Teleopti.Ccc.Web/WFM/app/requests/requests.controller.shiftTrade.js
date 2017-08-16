@@ -93,11 +93,6 @@
 				function(column) {
 					column.filters[0].term = undefined;
 				});
-
-			angular.forEach(vm.AllRequestableAbsences,
-				function(absence) {
-					absence.Selected = false;
-				});
 			vm.SelectedTypes = [];
 
 			angular.forEach(vm.AllRequestStatuses,

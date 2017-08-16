@@ -1,9 +1,9 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('wfm.requests').service('UIGridUtilitiesService', ['$filter', 'requestsDefinitions', 'requestCommandParamsHolder', uiGridUtilitiesService]);
+	angular.module('wfm.requests').service('UIGridUtilitiesService', ['$filter', '$translate', 'requestsDefinitions', 'requestCommandParamsHolder', uiGridUtilitiesService]);
 
-	function uiGridUtilitiesService($filter, requestsDefinitions, requestCommandParamsHolder) {
+	function uiGridUtilitiesService($filter, $translate, requestsDefinitions, requestCommandParamsHolder) {
 		var svc = this;
 
 		svc.formatDateTime = function (dateTime,
@@ -77,6 +77,20 @@
 						}
 						return typeText;
 					};
+
+					row.GetBrokenRules = function() {
+						var translatedBrokenRules = new Array();
+						var brokenRules = row.BrokenRules;
+						if (brokenRules) {
+							angular.forEach(brokenRules,
+								function(value) {
+									translatedBrokenRules.push($translate.instant(value));
+								});
+							return translatedBrokenRules.join(', ');
+						}
+						return brokenRules;
+					};
+
 				});
 		};
 

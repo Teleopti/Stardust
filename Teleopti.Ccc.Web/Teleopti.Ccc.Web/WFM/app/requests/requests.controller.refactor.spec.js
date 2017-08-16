@@ -254,6 +254,13 @@ describe('Requests - Refactor(remove later) controller controllers',
 			expect(fakeState.current.url).toEqual('requestsRefactor-absenceAndText');
 		});
 
+		it('should get correct url when go to shift trade requests tab', function () {
+			var controller = setUpTarget().controller;
+			controller.activeShiftTradeTab();
+			expect(fakeStateParams != undefined).toEqual(true);
+			expect(fakeState.current.url).toEqual('requestsRefactor-shiftTrade');
+		});
+
 		it('should pass correct params to absence and text requests', function () {
 			var controller = setUpTarget().controller;
 
@@ -266,6 +273,29 @@ describe('Requests - Refactor(remove later) controller controllers',
 			controller.init();
 
 			controller.activeAbsenceAndTextTab();
+
+			expect(fakeStateParams != undefined).toEqual(true);
+			expect(fakeStateParams.selectedTeamIds[0]).toEqual('123');
+			expect(fakeStateParams.selectedTeamIds[1]).toEqual('456');
+			expect(fakeStateParams.filterEnabled).toEqual(true);
+			expect(fakeStateParams.paging.pageSize).toEqual(100);
+			expect(fakeStateParams.isUsingRequestSubmitterTimeZone).toEqual(true);
+			expect(fakeStateParams.getPeriod().startDate).toEqual(moment().startOf('week')._d);
+			expect(fakeStateParams.getPeriod().endDate).toEqual(moment().endOf('week')._d);
+		});
+
+		it('should pass correct params to shift trade requests', function () {
+			var controller = setUpTarget().controller;
+
+			controller.agentSearchOptions.keyword = 'a';
+			controller.selectedTeamIds.push('123');
+			controller.selectedTeamIds.push('456');
+			controller.filterEnabled = true;
+			controller.paging.pageSize = 100;
+			controller.isUsingRequestSubmitterTimeZone = true;
+			controller.init();
+
+			controller.activeShiftTradeTab();
 
 			expect(fakeStateParams != undefined).toEqual(true);
 			expect(fakeStateParams.selectedTeamIds[0]).toEqual('123');
