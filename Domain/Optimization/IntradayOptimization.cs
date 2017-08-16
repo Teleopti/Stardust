@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
@@ -22,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
+		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly TeamBlockIntradayOptimizationService _teamBlockIntradayOptimizationService;
 
 		public IntradayOptimization(TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
@@ -32,7 +34,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IUserTimeZone userTimeZone,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
-			ITeamBlockInfoFactory teamBlockInfoFactory)
+			ITeamBlockInfoFactory teamBlockInfoFactory,
+			WeeklyRestSolverExecuter weeklyRestSolverExecuter)
 		{
 			_teamBlockIntradayOptimizationService = teamBlockIntradayOptimizationService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -43,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
+			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 		}
 
 		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule)
@@ -69,6 +73,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 				stateHolder.SchedulingResultState.PersonsInOrganization,
 				NewBusinessRuleCollection.AllForScheduling(stateHolder.SchedulingResultState),
 				teamBlockGenerator);
+
+			if (runResolveWeeklyRestRule)
+			{
+				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, agents, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+			}
 		}
 	}
 }
