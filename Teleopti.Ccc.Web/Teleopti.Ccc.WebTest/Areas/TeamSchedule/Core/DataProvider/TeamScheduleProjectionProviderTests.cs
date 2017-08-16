@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 		private readonly Scenario scenario = new Scenario("d");
 		private FakeToggleManager _toggleManager;
 		private CommonAgentNameProvider _commonAgentNameProvider;
+		private IUserTextTranslator _userTextTranslator;
 
 		[SetUp]
 		public void SetupTeamScheduleProjectionProvider()
@@ -46,9 +47,10 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			var nameFormatSettingsPersisterAndProvider = new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository());
 			nameFormatSettingsPersisterAndProvider.Persist(
 				new NameFormatSettings {NameFormatId = (int) NameFormatSetting.LastNameThenFirstName});
+			_userTextTranslator = new FakeUserTextTranslator();
 			target = new TeamScheduleProjectionProvider(projectionProvider, loggonUser, _toggleManager,
 				new ScheduleProjectionHelper(), new ProjectionSplitter(projectionProvider, new ScheduleProjectionHelper()),
-				new FakeIanaTimeZoneProvider(), new PersonNameProvider(nameFormatSettingsPersisterAndProvider));
+				new FakeIanaTimeZoneProvider(), new PersonNameProvider(nameFormatSettingsPersisterAndProvider), _userTextTranslator);
 		}
 
 		[Test]
@@ -743,5 +745,61 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule.Core.DataProvider
 			return string.Format(CultureInfo.CurrentCulture, "{0} - {1}",
 				start.ToShortTimeString(), end.ToShortTimeString());
 		}
+
+		
+
+		[Test]
+		[SetUICulture("zh-CN")]
+		public void ShouldShowCorrectDescriptionNameForAbsenceWithoutConfidentialPermission()
+		{
+			var date = new DateTime(2015, 01, 01, 0, 0, 0, DateTimeKind.Utc);
+			var person1 = PersonFactory.CreatePersonWithGuid("agent", "1");
+
+			var assignment1Person1 = PersonAssignmentFactory.CreatePersonAssignment(person1, scenario, new DateOnly(date));
+			var scheduleDayOnePerson1 = ScheduleDayFactory.Create(new DateOnly(date), person1, scenario);
+			var phoneActivityPeriod = new DateTimePeriod(date.AddHours(8), date.AddHours(16));
+			var lunchActivityPeriod = new DateTimePeriod(date.AddHours(11), date.AddHours(12));
+			var absencePeriod = new DateTimePeriod(date.AddHours(12), date.AddHours(13));
+			var phoneActivity = ActivityFactory.CreateActivity("Phone", Color.Blue);
+			var lunchActivity = ActivityFactory.CreateActivity("Lunch", Color.Red);
+			var testAbsence = AbsenceFactory.CreateAbsence("test");
+
+			phoneActivity.InContractTime = true;
+			lunchActivity.InContractTime = true;
+			lunchActivity.InWorkTime = false;
+			phoneActivity.InWorkTime = true;
+			assignment1Person1.AddActivity(phoneActivity, phoneActivityPeriod);
+			assignment1Person1.AddActivity(lunchActivity, lunchActivityPeriod);
+			scheduleDayOnePerson1.Add(assignment1Person1);
+
+			var absenceLayer = new AbsenceLayer(testAbsence, absencePeriod);
+			absenceLayer.Payload.Confidential = true;
+			var personAbsence = scheduleDayOnePerson1.CreateAndAddAbsence(absenceLayer);
+			
+			personAbsence.SetId(Guid.NewGuid());
+
+			var vm = target.Projection(scheduleDayOnePerson1, false, _commonAgentNameProvider.CommonAgentNameSettings);
+
+			vm.DayOff.Should().Be(null);
+			vm.Name.Should().Be("agent1");
+			vm.Projection.Count().Should().Be(4);
+			vm.IsFullDayAbsence.Should().Be(false);
+			vm.Date.Should().Be(date.ToFixedDateFormat());
+
+			var personAbsenceProjection = vm.Projection.ElementAt(2);
+
+			vm.Projection.First().ParentPersonAbsences.Should().Be.Null();
+			vm.Projection.Second().ParentPersonAbsences.Should().Be.Null();
+			personAbsenceProjection.ParentPersonAbsences.First().Should().Be(personAbsence.Id);
+			vm.Projection.Last().ParentPersonAbsences.Should().Be.Null();
+
+			vm.Projection.First().Description.Should().Be(phoneActivity.Description.Name);
+			vm.Projection.Second().Description.Should().Be(lunchActivity.Description.Name);
+			personAbsenceProjection.Description.Should().Be("其他");
+			vm.Projection.Last().Description.Should().Be(phoneActivity.Description.Name);
+			
+		}
+
+		
 	}
 }
