@@ -65,7 +65,7 @@
           {
             Days: vm.selectedDayCount,
             WorkloadId: vm.selectedWorkload.Id,
-            ScenarioId: 'e21d813c-238c-4c3f-9b49-9b5e015ab432',
+            ScenarioId: vm.selectedWorkload.ScenarioId,
             CampaignTasksPercent: vm.campaignPercentage
           }), function (data, status, headers, config) {
 
@@ -91,7 +91,7 @@
           {
             Days: vm.selectedDayCount,
             WorkloadId: vm.selectedWorkload.Id,
-            ScenarioId: 'e21d813c-238c-4c3f-9b49-9b5e015ab432',
+            ScenarioId: vm.selectedWorkload.ScenarioId,
             OverrideTasks: form.overrideTasksValue,
             OverrideTalkTime: form.overrideTalkTimeValue,
             OverrideAfterCallWork: form.overrideAfterCallWorkValue,
@@ -113,7 +113,7 @@
             {
               Days: vm.selectedDayCount,
               WorkloadId: vm.selectedWorkload.Id,
-              ScenarioId: 'e21d813c-238c-4c3f-9b49-9b5e015ab432',
+              ScenarioId: vm.selectedWorkload.ScenarioId,
               ShouldSetOverrideTasks: true,
               ShouldSetOverrideTalkTime: true,
               ShouldSetOverrideAfterCallWork: true
@@ -147,8 +147,10 @@
             ChartId: storage.skill.ChartId,
             SkillId: storage.skill.SkillId,
             Days: storage.days,
-            Name: storage.skill.Workload.Name
+            Name: storage.skill.Workload.Name,
+            ScenarioId: storage.scenarioId
           }
+          console.log(vm.selectedWorkload.ScenarioId);
         };
       }
 

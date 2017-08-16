@@ -33,7 +33,8 @@
       params: {
         workloadId: undefined,
         skill: undefined,
-        days: undefined
+        days: undefined,
+        scenarioId: undefined
       },
     })
     .state('forecasting.start', {

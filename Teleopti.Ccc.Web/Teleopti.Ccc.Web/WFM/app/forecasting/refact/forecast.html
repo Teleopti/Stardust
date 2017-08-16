@@ -7,7 +7,7 @@
 <div class="view-header with-fab with-desc">
   <div class="view-title">
     <h1><i class="mdi mdi-chart-line"></i> {{'Forecasts' | translate}}</h1>
-    <p ng-click="vm.skillMaster.Skills= []">
+    <p>
       {{'OverView' | translate}}
     </p>
   </div>
@@ -47,7 +47,7 @@
                 This is the current forecast for this workload.
               </div>
               <div class="con-flex" >
-                <md-select ng-model="vm.selectedScenario" placeholder="{{'Scenario' | translate}}">
+                <md-select ng-model="vm.selectedScenario" ng-change="vm.getWorkloadForecastData(skill)" placeholder="{{'Scenario' | translate}}">
                   <md-option ng-repeat="scenario in vm.skillMaster.Scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
                 </md-select>
                 <md-tooltip>{{'Scenario' | translate}}</md-tooltip>
@@ -71,8 +71,7 @@
                   {{'ExportToFile'|translate}}
                 </md-tooltip>
               </button>
-
-              <a ui-sref="modify({workloadId:skill.Workload.Id, skill:skill,  days:vm.currentWorkload.Days})" style="text-decoration:none;">
+              <a ui-sref="modify({workloadId:skill.Workload.Id, skill:skill, scenarioId:vm.selectedScenario.Id, days:vm.currentWorkload.Days})" style="text-decoration:none;">
                 <button class="wfm-btn wfm-btn-invis-default" >
                   {{ 'Modify' | translate }}
                 </button>
