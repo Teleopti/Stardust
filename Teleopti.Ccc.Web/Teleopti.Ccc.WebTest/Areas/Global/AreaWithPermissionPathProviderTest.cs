@@ -247,5 +247,39 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			areas.Count().Should().Be(0);
 		}
+
+		[Test]
+		public void ShouldNotHavePeopleAreaWhenFeatureDisabled()
+		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.WebPeople }
+					, o => true);
+
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebPeople);
+			ToggleManager.Disable(Toggles.Wfm_People_PrepareForRelease_39040);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Count().Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldHavePeopleAreaWhenFeatureEnabledAndPermitted()
+		{
+			ApplicationFunctionsToggleFilter
+				.AddFakeFunction(new ApplicationFunction { FunctionCode = DefinedRaptorApplicationFunctionPaths.WebPeople }
+					, o => true);
+
+			PermissionProvider.Enable();
+			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebPeople);
+			ToggleManager.Enable(Toggles.Wfm_People_PrepareForRelease_39040);
+
+			var areas = Target.GetWfmAreasWithPermissions();
+
+			areas.Single().Path.Should().Be(DefinedRaptorApplicationFunctionPaths.WebPeople);
+			areas.Single().Name.Invoke().Should().Be(Resources.People);
+			areas.Single().InternalName.Should().Be("people");
+		}
 	}
 }
