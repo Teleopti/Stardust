@@ -31,13 +31,7 @@ describe('Requests shift trade controller tests',
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
 					return {
-						Wfm_Requests_Basic_35986: true,
-						Wfm_Requests_People_Search_36294: true,
-						Wfm_Requests_Performance_36295: true,
-						Wfm_Requests_ApproveDeny_36297: true,
-						Wfm_Requests_Filtering_37748: true,
 						Wfm_Requests_Default_Status_Filter_39472: true,
-						Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309: true,
 						Wfm_Requests_Save_Grid_Columns_37976: true,
 						Wfm_Requests_Show_Pending_Reasons_39473: true,
 						togglesLoaded: {
@@ -64,18 +58,6 @@ describe('Requests shift trade controller tests',
 			$controller = _$controller_;
 			$httpBackend = _$httpBackend_;
 			requestsDefinitions = _requestsDefinitions_;
-
-			$httpBackend.whenGET('../api/Absence/GetRequestableAbsences').respond([{
-				'Id': '47d9292f-ead6-40b2-ac4f-9b5e015ab330',
-				'Name': 'Holiday',
-				'ShortName': 'HO'
-			},
-			{
-				'Id': '041db668-3185-4d7a-8781-9b5e015ab330',
-				'Name': 'Time off in lieu',
-				'ShortName': 'TL'
-			}]);
-
 			setUpTarget();
 		}));
 
