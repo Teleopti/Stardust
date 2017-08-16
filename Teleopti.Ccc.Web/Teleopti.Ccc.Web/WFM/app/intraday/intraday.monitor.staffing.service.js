@@ -151,7 +151,7 @@
                         staffingData.waitingForData = false;
                         return service.setStaffingData(
                             result,
-                            toggles.showOptimalStaffing,
+                            toggles.showOptimalStaffing && dayOffset <= 0,
                             toggles.showScheduledStaffing,
                             toggles.showEmailSkill
                         );
@@ -175,7 +175,7 @@
                         staffingData.waitingForData = false;
                         return service.setStaffingData(
                             result,
-                            toggles.showOptimalStaffing,
+							toggles.showOptimalStaffing && dayOffset <= 0,
                             toggles.showScheduledStaffing,
                             toggles.showEmailSkill
                         );
