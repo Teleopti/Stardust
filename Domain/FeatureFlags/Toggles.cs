@@ -78,7 +78,6 @@
 		Wfm_Requests_Performance_36295,
 		Wfm_Requests_Waitlist_36232,
 		Wfm_Requests_Filtering_37748,
-		Wfm_Requests_Cancel_37741,
 		Wfm_Requests_Cancel_Agent_38055,
 		Wfm_Requests_Run_waitlist_38071,
 		Wfm_Requests_ShiftTrade_37751,

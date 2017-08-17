@@ -20,7 +20,6 @@
 		vm.denyRequests = denyRequests;
 		vm.disableCommands = disableCommands;
 		vm.canCancelRequests = canCancelRequests;
-		vm.cancelToggleIsEnabled = cancelToggleIsEnabled;
 		vm.isUpdateResourceCalculationsEnabled = toggleSvc.Wfm_Requests_TriggerResourceCalculationFromGui_43129;
 		vm.toggleCancelConfirmationModal = toggleCancelConfirmationModal;
 		vm.toggleProcessWaitlistModal = toggleProcessWaitlistModal;
@@ -244,10 +243,6 @@
 			var selectedRequestIds = getSelectedRequestIds();
 			if (vm.commandsDisabled) return true;
 			return !selectedRequestIds || selectedRequestIds.length === 0;
-		}
-
-		function cancelToggleIsEnabled() {
-			return toggleSvc.Wfm_Requests_Cancel_37741 === true;
 		}
 
 		function runWaitlistToggleIsEnabled() {

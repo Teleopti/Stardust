@@ -31,7 +31,6 @@
 				<span translate>Deny</span>
 			</li>
 			<li ng-click="requestsCommandsPane.toggleCancelConfirmationModal()"
-				ng-show="requestsCommandsPane.cancelToggleIsEnabled()"
 				ng-class="{'wfm-btn-primary-disabled' : !requestsCommandsPane.canCancelRequests()}"
 				ng-if="!requestsCommandsPane.isShiftTradeViewActive">
 				<i class="mdi mdi-backup-restore"></i>

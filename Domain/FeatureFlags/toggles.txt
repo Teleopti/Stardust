@@ -62,7 +62,6 @@ WebByPassDefaultPermissionCheck_37984 = true
 Report_UseOpenXmlFormat_35797 = true
 Wfm_Requests_Performance_36295 = true
 Wfm_Requests_Waitlist_36232 = true
-Wfm_Requests_Cancel_37741 = true
 Wfm_Requests_Cancel_Agent_38055 = true
 Wfm_Requests_Filtering_37748 = true
 Wfm_Requests_Run_waitlist_38071 = true
