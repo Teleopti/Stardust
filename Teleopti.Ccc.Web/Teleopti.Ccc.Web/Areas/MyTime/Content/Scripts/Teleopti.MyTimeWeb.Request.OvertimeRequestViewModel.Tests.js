@@ -325,26 +325,16 @@ $(document).ready(function() {
 	});
 
 	test('should set default start time in AM/PM format when showing Meridian', function() {
-		var html = '<div id="showMeridianDiv" data-culture-show-meridian="true"></div>';
-		$('body').append(html);
-
-		moment.locale('en-gb');
+		Teleopti.MyTimeWeb.Common.TimeFormat = "hh:mm A";
 		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
 		equal(requestVm.StartTime(), moment().add(20, 'minutes').format('hh:mm A'));
-
-		$('#showMeridianDiv').remove();
 	});
 
 	test('should set default start time in 24 hours format when not showing Meridian', function() {
-		var html = '<div id="showMeridianDiv" data-culture-show-meridian="false"></div>';
-		$('body').append(html);
-
-		moment.locale('en-gb');
+		Teleopti.MyTimeWeb.Common.TimeFormat = "HH:mm";
 		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
 
 		equal(requestVm.StartTime(), moment().add(20, 'minutes').format('HH:mm'));
-
-		$('#showMeridianDiv').remove();
 	});
 
 	test('should set overtime request duration to one hour by default', function() {

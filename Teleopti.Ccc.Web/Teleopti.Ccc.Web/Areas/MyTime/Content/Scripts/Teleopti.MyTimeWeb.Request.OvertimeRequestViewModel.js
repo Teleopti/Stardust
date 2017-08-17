@@ -84,7 +84,7 @@
 			self.Message(data.Text);
 
 			self.DateFrom(moment(data.DateTimeFrom).format(dateTimeFormats.dateOnly));
-			self.StartTime(self.ShowMeridian ? moment(data.DateTimeFrom).format("hh:mm A") : moment(data.DateTimeFrom).format("HH:mm"));
+			self.StartTime(moment(data.DateTimeFrom).format(Teleopti.MyTimeWeb.Common.TimeFormat));
 
 			var seconds = (moment(data.DateTimeTo) - moment(data.DateTimeFrom)) / 1000;
 			var hours = '0' + moment.duration(seconds, 'seconds').hours();
@@ -176,7 +176,7 @@
 			? Teleopti.MyTimeWeb.Common.GetCurrentUserDateTime(parentViewModel.baseUtcOffsetInMinutes, parentViewModel.daylightSavingAdjustment)
 			: moment();
 		var defaultStartTime = currentUserDateTime.add(20, 'minutes');
-		self.StartTime(self.ShowMeridian ? defaultStartTime.format('hh:mm A') : defaultStartTime.format('HH:mm'));
+		self.StartTime(defaultStartTime.format(Teleopti.MyTimeWeb.Common.TimeFormat));
 		self.TimeList = _createTimeList();
 		self.RequestDuration(self.TimeList[0]);
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;
