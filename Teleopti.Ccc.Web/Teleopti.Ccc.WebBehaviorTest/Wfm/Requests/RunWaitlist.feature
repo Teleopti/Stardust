@@ -1,5 +1,4 @@
 ﻿@WFM
-@OnlyRunIfEnabled('Wfm_Requests_Waitlist_36232')
 @OnlyRunIfEnabled('Wfm_Requests_Run_waitlist_38071')
 Feature: RunWaitlist
 	As a manger

@@ -75,18 +75,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void setAbsenceRequestVisibilityOptions(IToggleManager toggleManager)
 		{
-			var allAbsenceRequestMiscOptionsAreHidden = true;
-
-			if (!toggleManager.IsEnabled(Toggles.Wfm_Requests_Waitlist_36232))
-			{
-				hideAbsenceRequestWaitlistingOptions();
-			}
-			else
-			{
-				allAbsenceRequestMiscOptionsAreHidden = false;
-			}
-
-			allAbsenceRequestMiscOptionsAreHidden = false;
+			var allAbsenceRequestMiscOptionsAreHidden = false;
 
 			if (allAbsenceRequestMiscOptionsAreHidden)
 			{
