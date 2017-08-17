@@ -46,16 +46,16 @@
                 <!-- {{'ForecastWorkloadIntro' | translate}} -->
                 This is the current forecast for this workload.
               </div>
-              <div class="con-flex" >
-                <md-select ng-model="vm.selectedScenario" ng-change="vm.getWorkloadForecastData(skill)" placeholder="{{'Scenario' | translate}}">
-                  <md-option ng-repeat="scenario in vm.skillMaster.Scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
-                </md-select>
-                <md-tooltip>{{'Scenario' | translate}}</md-tooltip>
-              </div>
               <div class="con-flex line-right">
                 <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart(skill.ChartId, vm.currentWorkload.Days)">
                   <i class="mdi mdi-sync" ></i>
                   <md-tooltip>Refresh chart</md-tooltip>
+                </div>
+                <div class="con-flex inline-flex">
+                  <md-select ng-model="vm.selectedScenario" ng-change="vm.getWorkloadForecastData(skill)" placeholder="{{'Scenario' | translate}}">
+                    <md-option ng-repeat="scenario in vm.skillMaster.Scenarios" ng-value="scenario">{{scenario.Name}}</md-option>
+                  </md-select>
+                  <md-tooltip>{{'Scenario' | translate}}</md-tooltip>
                 </div>
               </div>
             </div>

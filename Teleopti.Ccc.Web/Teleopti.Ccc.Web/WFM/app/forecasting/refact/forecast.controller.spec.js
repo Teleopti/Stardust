@@ -94,4 +94,13 @@ describe('ForecastCtrl', function () {
     expect(vm.selectedScenario.Id).toEqual('e21d813c-238c-4c3f-9b49-9b5e015ab432');
   }));
 
+  it('should not allow forecasts longer than one year', inject(function () {
+    vm.forecastPeriod = {
+      startDate:  moment().utc().add(1, 'months').startOf('month').toDate(),
+      endDate: moment().utc().add(2, 'years').startOf('month').toDate()
+    };
+
+    expect(vm.disableMoreThanOneYear()).toEqual(true);
+  }));
+
 });

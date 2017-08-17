@@ -118,7 +118,6 @@
 
     function forecastWorkload (blockToken) {
       if (disableMoreThanOneYear()) {
-        console.log('not more that one year');
         return;
       }
 
