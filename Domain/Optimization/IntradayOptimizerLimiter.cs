@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class IntradayOptmizerLimiter : IIntradayOptimizerLimiter
+	public class IntradayOptimizerLimiter : IIntradayOptimizerLimiter
 	{
 		private Percent _minPercentOfGroupLimit = new Percent(0.5);
 		private int _minSizeLimit = 100; 

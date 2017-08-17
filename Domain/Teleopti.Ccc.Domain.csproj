@@ -2108,7 +2108,7 @@
     <Compile Include="Optimization\IntradayOptimizeOneday.cs" />
     <Compile Include="Optimization\IntradayOptimizerContainerConsiderLargeGroups.cs" />
     <Compile Include="Optimization\IntradayOptimizerCreator.cs" />
-    <Compile Include="Optimization\IntradayOptmizerLimiter.cs" />
+    <Compile Include="Optimization\IntradayOptimizerLimiter.cs" />
     <Compile Include="Optimization\IIntradayOptimizationCallback.cs" />
     <Compile Include="Optimization\ISynchronizeSchedulesAfterIsland.cs" />
     <Compile Include="Optimization\OptimizationPreferencesDefaultValueProvider.cs" />
