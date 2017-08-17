@@ -14263,7 +14263,7 @@ Vill du registrera dig?</value>
     <value>Bevaka upp till 50 agenter</value>
   </data>
   <data name="AbsenceCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
-    <value>Kan inte lägga till för agent(er) i en annan tidszon</value>
+    <value>Kan inte lägga till för agent(er) i en annan tidszon, välj först deras tidszon från menyn</value>
   </data>
   <data name="InvalidColumn" xml:space="preserve">
     <value>Ogiltig {0} : {1}</value>
@@ -14906,5 +14906,47 @@ Vill du registrera dig?</value>
   </data>
   <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
     <value>Första raden i filen (rubrikraden) kan inte vara tom. </value>
+  </data>
+  <data name="RequestTypeOvertime" xml:space="preserve">
+    <value>Övertid</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonSiteOpenHourClosed" xml:space="preserve">
+    <value>Din övertidsförfrågan har avslagits automatiskt. Enheten är stängd vid perioden för förfrågan {0}</value>
+  </data>
+  <data name="OvertimeType" xml:space="preserve">
+    <value>Övertidstyp</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonOutOfSiteOpenHour" xml:space="preserve">
+    <value>Din övertidsförfrågan har avslagits automatiskt. Perioden för förfrågan är {0} men öppettiderna på enheten är {1}</value>
+  </data>
+  <data name="MaxSearchPersonCountExceeded" xml:space="preserve">
+    <value>Den här sökningen kommer att returnera resultat för mer än {0} personer, var god förfina sökningen genom att lägga till fler sökkriterier. </value>
+  </data>
+  <data name="OvertimeRequestWasCancelled" xml:space="preserve">
+    <value>Övertidsförfrågan avbröts.</value>
+  </data>
+  <data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>Övertidsförfrågan {0} avslogs.</value>
+  </data>
+  <data name="OvertimeRequest" xml:space="preserve">
+    <value>Övertidsförfrågan</value>
+  </data>
+  <data name="OvertimeRequestAlreadyHasScheduleInPeriod" xml:space="preserve">
+    <value>Det finns redan en schemalagd aktivitet under perioden {0}-{1}</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonExpired" xml:space="preserve">
+    <value>Din övertidsförfrågan har avslagits automatiskt. Starttiden för förfrågan är {0}, och den måste vara minst {1} minuter senare än aktuell tid. </value>
+  </data>
+  <data name="ImportBpoWrongDateFormat" xml:space="preserve">
+    <value>Datumformatet är felaktigt</value>
+  </data>
+  <data name="NoSuggestionsFound" xml:space="preserve">
+    <value>Det finns inga förslag enligt inställningarna för extra övertid</value>
+  </data>
+  <data name="ClassicIntraday" xml:space="preserve">
+    <value>Inom dag Classic</value>
+  </data>
+  <data name="OvertimeRequestDateExceeds14Days" xml:space="preserve">
+    <value>Datumet för förfrågan är mer än 14 dagar fram i tiden</value>
   </data>
 </root>
