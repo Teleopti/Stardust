@@ -240,7 +240,6 @@
 			vm.canApproveOrDenyShiftTradeRequest = toggleService.Wfm_Requests_ApproveDeny_ShiftTrade_38494;
 			vm.isShiftTradeViewActive = isShiftTradeViewActive;
 			vm.canApproveOrDenyRequest = canApproveOrDenyRequest;
-			vm.isShiftTradeViewVisible = toggleService.Wfm_Requests_ShiftTrade_37751;
 			vm.filterEnabled = true;
 		}
 

@@ -61,7 +61,6 @@ WebByPassDefaultPermissionCheck_37984 = true
 
 Report_UseOpenXmlFormat_35797 = true
 Wfm_Requests_Performance_36295 = true
-Wfm_Requests_ShiftTrade_37751 = true
 Wfm_Requests_ShiftTrade_More_Relevant_Information_38492 = true
 Wfm_Requests_PrepareForRelease_38771 = true
 Wfm_Requests_ApproveDeny_ShiftTrade_38494 = true
