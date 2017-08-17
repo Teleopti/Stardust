@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void Culture_WhenUsersCultureHasMondayAsFirstDay_ShouldSetWeekStartTo1()
 		{
 			var cultureStub = new SwedishCulture();
-			var target = new UserInfoController(cultureStub, new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), null);
+			var target = new UserInfoController(cultureStub, new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), new MutableNow());
 			
 			var result = target.Culture();
 			dynamic content = result.Data;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void Culture_DateFormatIsCorrectForSwedishCulture()
 		{
 			var cultureStub = new SwedishCulture();
-			var target = new UserInfoController(cultureStub, new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), null);
+			var target = new UserInfoController(cultureStub, new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), new MutableNow());
 
 			var result = target.Culture();
 			dynamic content = result.Data;
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void Culture_BaseUtcOffsetInMinutesIsCorrectForSwedishCulture()
 		{
 			var cultureStub = new SwedishCulture();
-			var target = new UserInfoController(cultureStub, new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), null);
+			var target = new UserInfoController(cultureStub, new FakeUserTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")), new MutableNow());
 
 			var result = target.Culture();
 			dynamic content = result.Data;
