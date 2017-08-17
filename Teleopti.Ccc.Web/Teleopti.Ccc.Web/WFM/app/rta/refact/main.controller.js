@@ -94,11 +94,11 @@
 							$scope.$watch(function () { return siteCard.isOpen }, pollNow);
 							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
 								if (newValue != oldValue) {
-									if (newValue){
+									if (newValue) {
 										siteCard.teams.forEach(function (t) {
 											t.isSelected = true;
 										});
-									}					
+									}
 								}
 							});
 							vm.siteCards.push(siteCard);
@@ -108,15 +108,15 @@
 					});
 					vm.totalAgentsInAlarm = sites.TotalAgentsInAlarm;
 					vm.noSiteCards = !vm.siteCards.length;
-					
-					var selectedList = [];
-					vm.siteCards.forEach(function(siteCard){
-						if(siteCard.isSelected) selectedList.push(siteCard);
-						siteCard.teams.forEach(function(team){
-							if(team.isSelected) selectedList.push(team);
+
+					var selected = 0;
+					vm.siteCards.forEach(function (siteCard) {
+						if (siteCard.isSelected) selected += 1;
+						siteCard.teams.forEach(function (team) {
+							if (team.isSelected) selected += 1;
 						})
 					});
-					vm.organizationSelection = selectedList.length;	
+					vm.organizationSelection = selected > 0;
 				});
 		}
 
@@ -143,7 +143,7 @@
 							teamVm.isSelected = false;
 							$scope.$watch(function () { return teamVm.isSelected }, function (newValue, oldValue) {
 								if (newValue) {
-									var areAllTeamsSelected = s.teams.every(function(t){return t.isSelected});
+									var areAllTeamsSelected = s.teams.every(function (t) { return t.isSelected });
 									if (areAllTeamsSelected) s.isSelected = true;
 								}
 								else {
@@ -221,22 +221,17 @@
 		}
 
 		vm.goToAgents = function () {
-			var params = buildParams();
-			$state.go('rta.agents', params);
-		}
+			var teamIds = [];
+			var siteIds = [];
+			var skillIds = angular.isDefined(vm.urlParams.skillIds) ? vm.urlParams.skillIds : [];
 
-		function buildParams() {
-			var params = {siteIds: [], teamIds: [], skillIds: [], skillAreaId: vm.urlParams.skillAreaId};
-
-			params.skillIds = angular.isDefined(vm.urlParams.skillIds) ? vm.urlParams.skillIds : [];
 			vm.siteCards.forEach(function (siteCard) {
-				if (siteCard.isSelected) params.siteIds.push(siteCard.site.Id);
+				if (siteCard.isSelected) siteIds.push(siteCard.site.Id);
 				else siteCard.teams.forEach(function (team) {
-					if (team.isSelected) params.teamIds.push(team.Id);
+					if (team.isSelected) teamIds.push(team.Id);
 				});
 			});
-
-			return params;
+			$state.go('rta.agents', {siteIds: siteIds, teamIds: teamIds, skillIds: skillIds, skillAreaId: vm.urlParams.skillAreaId});
 		}
 	}
 })();
