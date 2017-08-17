@@ -45,12 +45,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			SchedulingOptions schedulingOption,
 			ITeamInfoFactory teamInfoFactory)
 		{
-			void DayScheduled(object sender, SchedulingServiceBaseEventArgs e)
-			{
-				schedulingCallback.Scheduled(new SchedulingCallbackInfo(e.SchedulePart, e.IsSuccessful));
-			}
-
-			_teamBlockScheduler.DayScheduled += DayScheduled;
 			var dateOnlySkipList = new List<DateOnly>();
 
 			var allTeamInfoListOnStartDate = getAllTeamInfoList(schedulingResultStateHolder, allPersonMatrixList, selectedPeriod, selectedPersons, teamInfoFactory);
@@ -67,8 +61,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					checkedTeams.OkList, datePointer, dateOnlySkipList,
 					resourceCalculateDelayer, schedulingResultStateHolder, schedulingOption);
 			}
-
-			_teamBlockScheduler.DayScheduled -= DayScheduled;
 		}
 
 		private void runSchedulingForAllTeamInfoOnStartDate(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
@@ -82,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (teamBlockInfo == null) continue;
 
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
-				if (_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, datePointer, schedulingOption,
+				if (_teamBlockScheduler.ScheduleTeamBlockDay(schedulingCallback, _workShiftSelector, teamBlockInfo, datePointer, schedulingOption,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
 					verifyScheduledTeamBlock(schedulingCallback, selectedPersons, schedulePartModifyAndRollbackService, datePointer,

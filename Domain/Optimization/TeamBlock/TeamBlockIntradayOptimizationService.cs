@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
@@ -132,7 +133,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (teamBlockInfo.BlockInfo.BlockPeriod.StartDate > firstSelectedDay)
 					datePoint = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 
-				var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
+				var success = _teamBlockScheduler.ScheduleTeamBlockDay(new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), scheduleDictionary, new ShiftNudgeDirective(), businessRuleCollection, _groupPersonSkillAggregator);
 

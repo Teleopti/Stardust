@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						_setMainShiftOptimizeActivitySpecificationForTeamBlock.Execute(optimizationPreferences, teamBlockInfo, schedulingOptions);
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, scheduleCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
-						var scheduleWasSuccess = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelectorForMaxSeat, teamBlockInfo,
+						var scheduleWasSuccess = _teamBlockScheduler.ScheduleTeamBlockDay(new NoSchedulingCallback(), _workShiftSelectorForMaxSeat, teamBlockInfo,
 							datePoint, schedulingOptions, rollbackService,
 							new DoNothingResourceCalculateDelayer(), allSkillDaysExceptMaxSeat.Union(skillDaysForTeamBlockInfo), schedules,
 							new ShiftNudgeDirective(), businessRules, _groupPersonSkillAggregator);

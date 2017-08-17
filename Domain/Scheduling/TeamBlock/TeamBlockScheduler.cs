@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -14,9 +12,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockScheduler
 	{
-		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-
-		bool ScheduleTeamBlockDay(IWorkShiftSelector workShiftSelector,
+		bool ScheduleTeamBlockDay(ISchedulingCallback schedulingCallback, 
+								IWorkShiftSelector workShiftSelector,
 								ITeamBlockInfo teamBlockInfo, 
 								DateOnly datePointer, 
 								SchedulingOptions schedulingOptions, 
@@ -38,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public TeamBlockScheduler(ITeamBlockSingleDayScheduler singleDayScheduler,
-															TeamBlockRoleModelSelector roleModelSelector,
+									TeamBlockRoleModelSelector roleModelSelector,
 									ITeamBlockClearer teamBlockClearer, 
 									ITeamBlockSchedulingOptions teamBlockSchedulingOptions,
 									IGroupPersonSkillAggregator groupPersonSkillAggregator)
@@ -50,9 +47,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-
-		public bool ScheduleTeamBlockDay(IWorkShiftSelector workShiftSelector,
+		public bool ScheduleTeamBlockDay(ISchedulingCallback schedulingCallback, 
+			IWorkShiftSelector workShiftSelector,
 			ITeamBlockInfo teamBlockInfo, 
 			DateOnly datePointer,
 			SchedulingOptions schedulingOptions,
@@ -61,7 +57,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IEnumerable<ISkillDay> allSkillDays,
 			IScheduleDictionary schedules,
 			ShiftNudgeDirective shiftNudgeDirective,
-			INewBusinessRuleCollection businessRules, IGroupPersonSkillAggregator groupPersonSkillAggregator)
+			INewBusinessRuleCollection businessRules, 
+			IGroupPersonSkillAggregator groupPersonSkillAggregator)
 
 		{
 			var teamInfo = teamBlockInfo.TeamInfo;
@@ -72,36 +69,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ShiftProjectionCache roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),
 				schedulingOptions, shiftNudgeDirective.EffectiveRestriction, groupPersonSkillAggregator);
 
-			var cancelMe = false;
 			if (roleModelShift == null)
 			{
-				onDayScheduledFailed(new SchedulingServiceFailedEventArgs(()=>cancelMe=true));
+				schedulingCallback.Scheduled(new SchedulingCallbackInfo(null, false));
 				return false;
 			}
 			var selectedBlockDays = teamBlockInfo.BlockInfo.UnLockedDates();
-			bool success = tryScheduleBlock(workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays,
-				roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules, () =>
-				{
-					cancelMe = true;
-				});
+			bool success = tryScheduleBlock(schedulingCallback, workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays,
+				roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules);
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockWithSameShiftCategoryInvolved(schedulingOptions))
 			{
 				schedulingOptions.NotAllowedShiftCategories.Clear();
 				while (roleModelShift != null && !success)
 				{
-					if(cancelMe)
+					if(schedulingCallback.IsCancelled)
 						break;
 
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),
 						schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _groupPersonSkillAggregator);
-					success = tryScheduleBlock(workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays,
-						roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules, ()=>
-						{
-							cancelMe = true;
-						});
+					success = tryScheduleBlock(schedulingCallback, workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays,
+						roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules);
 				}
 
 				if (!success)
@@ -121,10 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 				roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _groupPersonSkillAggregator);		
-				success = tryScheduleBlock(workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays, roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules, ()=>
-				{
-					cancelMe = true;
-				});
+				success = tryScheduleBlock(schedulingCallback, workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays, roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules);
 
 				if (!success)
 				{
@@ -140,7 +127,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return success;
 		}
 
-		private bool tryScheduleBlock(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, IList<DateOnly> selectedBlockDays, ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules, ShiftNudgeDirective shiftNudgeDirective, INewBusinessRuleCollection businessRules, Action cancelAction)
+		private bool tryScheduleBlock(ISchedulingCallback schedulingCallback, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, IList<DateOnly> selectedBlockDays, ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules, ShiftNudgeDirective shiftNudgeDirective, INewBusinessRuleCollection businessRules)
 		{
 			var lastIndex = selectedBlockDays.Count - 1;
 			IEffectiveRestriction shiftNudgeRestriction = new EffectiveRestriction();
@@ -156,14 +143,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				var successful = _singleDayScheduler.ScheduleSingleDay(workShiftSelector, teamBlockInfo, schedulingOptions, day,
 					roleModelShift, rollbackService,
-					resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeRestriction, businessRules, (e) =>
+					resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeRestriction, businessRules, e =>
 					{
-						if (DayScheduled != null)
-						{
-							DayScheduled(this, e);
-							if (e.Cancel) return true;
-						}
-						return false;
+						schedulingCallback.Scheduled(new SchedulingCallbackInfo(e.SchedulePart, e.IsSuccessful));
+						return schedulingCallback.IsCancelled;
 					});
 
 				if(shiftNudgeDirective.Direction == ShiftNudgeDirective.NudgeDirection.Right && dayIndex == 0)
@@ -171,24 +154,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				if (!successful)
 				{
-					var progressResult = onDayScheduledFailed(new SchedulingServiceFailedEventArgs(cancelAction));
-					if (progressResult.ShouldCancel) cancelAction();
+					schedulingCallback.Scheduled(new SchedulingCallbackInfo(null, false));
 					return false;
 				}
 			}
 			
 			return true;
-		}
-
-		private CancelSignal onDayScheduledFailed(SchedulingServiceBaseEventArgs args)
-		{
-			var handler = DayScheduled;
-			if (handler != null)
-			{
-				handler(this, args);
-				if (args.Cancel) return new CancelSignal {ShouldCancel = true};
-			}
-			return new CancelSignal();
 		}
 	}
 }

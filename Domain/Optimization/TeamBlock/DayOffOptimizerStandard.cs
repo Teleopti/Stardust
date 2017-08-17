@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -280,7 +281,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
-				if (!_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
+				if (!_teamBlockScheduler.ScheduleTeamBlockDay(new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
 					rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(),
 					schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(),
 					NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))

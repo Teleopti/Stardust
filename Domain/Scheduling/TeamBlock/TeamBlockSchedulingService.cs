@@ -47,12 +47,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 										ITeamInfoFactory teamInfoFactory)
 		{
 			var workShiftFinderResultHolder = new WorkShiftFinderResultHolder();
-			void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
-			{
-				schedulingCallback.Scheduled(new SchedulingCallbackInfo(e.SchedulePart, e.IsSuccessful));
-			}
 
-			_teamBlockScheduler.DayScheduled += dayScheduled;
 		    if (schedulePartModifyAndRollbackService == null)
 		    {
 				return workShiftFinderResultHolder;    
@@ -84,7 +79,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			                                           resourceCalculateDelayer, schedulingResultStateHolder, schedulingOption);
 		    }
 
-		    _teamBlockScheduler.DayScheduled -= dayScheduled;
 			return workShiftFinderResultHolder;
 	    }
 
@@ -101,11 +95,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 if (teamBlockInfo == null) continue;
 
                 schedulePartModifyAndRollbackService.ClearModificationCollection();
-	            if (_teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, datePointer, schedulingOption,
+	            if (_teamBlockScheduler.ScheduleTeamBlockDay(schedulingCallback, _workShiftSelector, teamBlockInfo, datePointer, schedulingOption,
 	                                                          schedulePartModifyAndRollbackService,
 	                                                         resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
-		            verifyScheduledTeamBlock(schedulingCallback, selectedPersons, schedulePartModifyAndRollbackService, datePointer,
+				{
+					verifyScheduledTeamBlock(schedulingCallback, selectedPersons, schedulePartModifyAndRollbackService, datePointer,
 		                                     dateOnlySkipList, teamBlockInfo, schedulingOption);
+				}
 				else
 				{
 					schedulingCallback.Scheduled(new SchedulingCallbackInfo(null, false));
