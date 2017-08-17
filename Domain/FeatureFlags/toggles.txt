@@ -106,7 +106,7 @@ Wfm_People_MoveImportJobToBackgroundService_43582 = true
 Wfm_HideUnusedTeamsAndSites_42690 = true
 Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
 Wfm_AddMyTimeLink_45088 = RC
-Wfm_GroupPages_45057 = DEV
+Wfm_GroupPages_45057 = RC
 Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
 
 MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = true
