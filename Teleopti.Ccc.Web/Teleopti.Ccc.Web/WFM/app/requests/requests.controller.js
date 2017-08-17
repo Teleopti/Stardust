@@ -106,6 +106,7 @@
 
 			groupPageService.fetchAvailableGroupPages(startDateStr, endDateStr).then(function (data) {
 				vm.availableGroups = data;
+				loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 			});
 		};
 
