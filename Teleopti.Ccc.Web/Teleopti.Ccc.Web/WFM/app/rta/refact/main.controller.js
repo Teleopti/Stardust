@@ -22,23 +22,19 @@
 		vm.organizationSelection = false;
 		vm.skillSelected = vm.skillIds.length;
 		vm.goToAgentsView = function () { rtaRouteService.goToSelectSkill(); };
-		vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
 
 		var pollPromise;
 
 		(function () {
 			if (angular.isDefined(vm.urlParams.skillAreaId)) {
-				vm.selectedItems.skillAreaId = vm.urlParams.skillAreaId;
-				vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + vm.urlParams.skillAreaId + '"})';
+				vm.agentsState = 'rta.agents({siteId	s: card.site.Id, skillAreaId: "' + vm.urlParams.skillAreaId + '"})';
 				vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id, skillAreaId: "' + vm.urlParams.skillAreaId + '"})';
 			}
 			else if (angular.isDefined(vm.urlParams.skillIds)) {
-				vm.selectedItems.skillIds = vm.urlParams.skillIds;
 				vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + vm.urlParams.skillIds[0] + '"]})';
 				vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id, skillIds: ["' + vm.urlParams.skillIds[0] + '"]})';
 			}
 			else {
-				vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
 				vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 				vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id})';
 			}
@@ -98,21 +94,29 @@
 							$scope.$watch(function () { return siteCard.isOpen }, pollNow);
 							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
 								if (newValue != oldValue) {
-									if (newValue)
+									if (newValue){
 										siteCard.teams.forEach(function (t) {
 											t.isSelected = true;
 										});
+									}					
 								}
 							});
 							vm.siteCards.push(siteCard);
 						};
 						siteCard.site.Color = translateSiteColors(site);
 						siteCard.site.InAlarmCount = site.InAlarmCount;
-				
 					});
 					vm.totalAgentsInAlarm = sites.TotalAgentsInAlarm;
 					vm.noSiteCards = !vm.siteCards.length;
-
+					
+					var selectedList = [];
+					vm.siteCards.forEach(function(siteCard){
+						if(siteCard.isSelected) selectedList.push(siteCard);
+						siteCard.teams.forEach(function(team){
+							if(team.isSelected) selectedList.push(team);
+						})
+					});
+					vm.organizationSelection = selectedList.length;	
 				});
 		}
 
@@ -195,7 +199,6 @@
 			vm.skillIds = [];
 			vm.urlParams.skillIds = undefined;
 			vm.urlParams.skillAreaId = undefined;
-			vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined };
 			vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 			vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id})';
 			$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
@@ -204,7 +207,6 @@
 		function setUpForSkillArea(selectedItem) {
 			vm.urlParams.skillAreaId = selectedItem.Id;
 			vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
-			vm.selectedItems = { siteIds: [], teamIds: [], skillIds: [], skillAreaId: selectedItem.Id };
 			vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + selectedItem.Id + '"})';
 			vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id, skillAreaId: "' + selectedItem.Id + '"})';
 			$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
@@ -213,24 +215,28 @@
 		function setUpForSkill(selectedItem) {
 			vm.urlParams.skillIds = [selectedItem.Id];
 			vm.skillIds = [selectedItem.Id];
-			vm.selectedItems = { siteIds: [], teamIds: [], skillIds: vm.skillIds, skillAreaId: undefined };
 			vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + selectedItem.Id + '"]})';
 			vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id, skillIds: ["' + selectedItem.Id + '"]})';
 			$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
 		}
 
 		vm.goToAgents = function () {
-			var teamIds = [];
-			var siteIds = [];
-			var skillIds = angular.isDefined(vm.urlParams.skillIds) ? vm.urlParams.skillIds : [];
+			var params = buildParams();
+			$state.go('rta.agents', params);
+		}
+
+		function buildParams() {
+			var params = {siteIds: [], teamIds: [], skillIds: [], skillAreaId: vm.urlParams.skillAreaId};
+
+			params.skillIds = angular.isDefined(vm.urlParams.skillIds) ? vm.urlParams.skillIds : [];
 			vm.siteCards.forEach(function (siteCard) {
-				if (siteCard.isSelected) siteIds.push(siteCard.site.Id);
+				if (siteCard.isSelected) params.siteIds.push(siteCard.site.Id);
 				else siteCard.teams.forEach(function (team) {
-					if (team.isSelected) teamIds.push(team.Id);
+					if (team.isSelected) params.teamIds.push(team.Id);
 				});
 			});
 
-			$state.go('rta.agents', { siteIds: siteIds, teamIds: teamIds, skillIds: skillIds, skillAreaId: vm.urlParams.skillAreaId });
+			return params;
 		}
 	}
 })();
