@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public IDesktopContextData CurrentContext()
 		{
-			return _contextPerCommand[CommandScope.Current().CommandId];
+			var currentScope = CommandScope.Current();
+			return currentScope == null ? null : _contextPerCommand[currentScope.CommandId];
 		}
 
 		public IDisposable SetContextFor(ICommandIdentifier commandIdentifier, IDesktopContextData contextData)

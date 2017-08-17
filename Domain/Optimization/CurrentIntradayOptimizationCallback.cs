@@ -4,19 +4,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public IIntradayOptimizationCallback Current()
 		{
-			return new nullIntradayOptimizationCallback();
-		}
-
-		private class nullIntradayOptimizationCallback : IIntradayOptimizationCallback
-		{
-			public void Optimizing(IntradayOptimizationCallbackInfo callbackInfo)
-			{
-			}
-
-			public bool IsCancelled()
-			{
-				return false;
-			}
+			return new NoIntradayOptimizationCallback();
 		}
 	}
 }

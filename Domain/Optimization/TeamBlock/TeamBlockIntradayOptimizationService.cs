@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly SetMainShiftOptimizeActivitySpecificationForTeamBlock _setMainShiftOptimizeActivitySpecificationForTeamBlock;
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
+		private readonly ICurrentIntradayOptimizationCallback _currentIntradayOptimizationCallback;
 
 		public TeamBlockIntradayOptimizationService(ITeamBlockScheduler teamBlockScheduler,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IWorkShiftSelector workShiftSelector,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			SetMainShiftOptimizeActivitySpecificationForTeamBlock setMainShiftOptimizeActivitySpecificationForTeamBlock,
-			IOptimizerHelperHelper optimizerHelperHelper)
+			IOptimizerHelperHelper optimizerHelperHelper,
+			ICurrentIntradayOptimizationCallback currentIntradayOptimizationCallback)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
@@ -55,6 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 			_setMainShiftOptimizeActivitySpecificationForTeamBlock = setMainShiftOptimizeActivitySpecificationForTeamBlock;
 			_optimizerHelperHelper = optimizerHelperHelper;
+			_currentIntradayOptimizationCallback = currentIntradayOptimizationCallback;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -115,6 +118,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			Action cancelAction)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
+			var callback = _currentIntradayOptimizationCallback.Current();
 
 			var sortedTeamBlockInfos = _teamBlockIntradayDecisionMaker.Decide(allTeamBlockInfos, optimizationPreferences,
 				schedulingOptions);
@@ -149,6 +153,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var success = _teamBlockScheduler.ScheduleTeamBlockDay(_workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), scheduleDictionary, new ShiftNudgeDirective(), businessRuleCollection, _groupPersonSkillAggregator);
+
+				callback.Optimizing(new IntradayOptimizationCallbackInfo(teamBlockInfo, success, totalTeamBlockInfos - runningTeamBlockCounter));
+
+
 				if (!success)
 				{
 					var progressResult = onReportProgress(new ResourceOptimizerProgressEventArgs(0, 0, Resources.OptimizingIntraday + Resources.Colon + Resources.RollingBackSchedulesFor + " " +

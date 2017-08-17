@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var ass = new PersonAssignment(agent, scenario, dateOnly).WithLayer(phoneActivity, new TimePeriod(8, 17)).ShiftCategory(new ShiftCategory("_").WithId());
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA, skillDayB });
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
+			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), new NoIntradayOptimizationCallback());
 
 			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().AbsoluteDifference
 				.Should().Be.EqualTo(0);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				var stateHolder = SchedulerStateHolderFrom();
 				ResourceCalculation.ResourceCalculate(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.ToResourceOptimizationData(stateHolder.ConsiderShortBreaks, false));
 
-				Target.Optimize(new[] { agentAB, agentB }, date.ToDateOnlyPeriod(), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
+				Target.Optimize(new[] { agentAB, agentB }, date.ToDateOnlyPeriod(), new OptimizationPreferencesDefaultValueProvider().Fetch(), new NoIntradayOptimizationCallback());
 
 				schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
 					.Should().Be.EqualTo(1);
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var stateHolder = SchedulerStateHolderFrom();
 			ResourceCalculation.ResourceCalculate(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.ToResourceOptimizationData(stateHolder.ConsiderShortBreaks, false));
 
-			Target.Optimize(new[] { agentAB, agentB }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
+			Target.Optimize(new[] { agentAB, agentB }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), new NoIntradayOptimizationCallback());
 
 			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().CalculatedLoggedOn
 				.Should().Be.EqualTo(1);
@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var stateHolder = SchedulerStateHolderFrom();
 			ResourceCalculation.ResourceCalculate(stateHolder.RequestedPeriod.DateOnlyPeriod, stateHolder.SchedulingResultState.ToResourceOptimizationData(stateHolder.ConsiderShortBreaks, false));
 
-			Target.Optimize(new[] { agentAB, agentAC }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
+			Target.Optimize(new[] { agentAB, agentAC }, new DateOnlyPeriod(date, date), new OptimizationPreferencesDefaultValueProvider().Fetch(), new NoIntradayOptimizationCallback());
 
 			var skillASSkillStaffPeriod = schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First();
 			var skillBSSkillStaffPeriod = schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillB].Single().SkillStaffPeriodCollection.First();
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, new DateOnlyPeriod(dateOnly, dateOnly), new[] { agent }, new[] { ass }, new[] { skillDayA });
 			schedulerStateHolderFrom.ConsiderShortBreaks = true;
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), null);
+			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), new OptimizationPreferencesDefaultValueProvider().Fetch(), new NoIntradayOptimizationCallback());
 
 			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().IntraIntervalDeviation
 				.Should().Not.Be.EqualTo(0);
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
 			optimizationPreferences.Rescheduling.ConsiderShortBreaks = false;
 
-			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, null);
+			Target.Optimize(new[] { agent }, new DateOnlyPeriod(dateOnly, dateOnly), optimizationPreferences, new NoIntradayOptimizationCallback());
 
 			schedulerStateHolderFrom.SchedulingResultState.SkillDays[skillA].Single().SkillStaffPeriodCollection.First().IntraIntervalDeviation
 				.Should().Be.EqualTo(0);

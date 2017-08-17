@@ -46,7 +46,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 
 		public IIntradayOptimizationCallback Current()
 		{
-			return contextData().IntradayOptimizationCallback;
+			var ctxData = contextData();
+			return ctxData == null ? new NoIntradayOptimizationCallback() : ctxData.IntradayOptimizationCallback;
 		}
 	}
 }
