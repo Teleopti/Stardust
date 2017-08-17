@@ -129,6 +129,7 @@
 
 			groupPageService.fetchAvailableGroupPages(startDateStr, endDateStr).then(function (data) {
 				vm.availableGroups = data;
+				loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 			});
 		};
 
@@ -148,6 +149,7 @@
 		vm.applyFavorite = function (currentFavorite) {
 			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
+			vm.selectedGroups.mode = 'BusinessHierarchy';
 
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 			$scope.$broadcast('reload.requests.with.selection', { selectedGroupIds: currentFavorite.TeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });
