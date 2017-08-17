@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -12,6 +14,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -37,6 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly DayOffOptimizationDesktopTeamBlock _dayOffOptimizationDesktopTeamBlock;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly MaxSeatOptimization _maxSeatOptimization;
+		private readonly DesktopOptimizationContext _desktopOptimizationContext;
 
 		public TeamBlockOptimization(TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -55,7 +59,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			MaxSeatOptimization maxSeatOptimization)
+			MaxSeatOptimization maxSeatOptimization,
+			DesktopOptimizationContext desktopOptimizationContext)
 		{
 			_teamBlockIntradayOptimizationService = teamBlockIntradayOptimizationService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -75,6 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_dayOffOptimizationDesktopTeamBlock = dayOffOptimizationDesktopTeamBlock;
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_maxSeatOptimization = maxSeatOptimization;
+			_desktopOptimizationContext = desktopOptimizationContext;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons,
@@ -231,20 +237,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ITeamBlockGenerator teamBlockGenerator)
 		{
-			_teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
-			_teamBlockIntradayOptimizationService.Optimize(
-				allMatrixes,
-				selectedPeriod,
-				selectedPersons,
-				optimizationPreferences,
-				schedulePartModifyAndRollbackService,
-				resourceCalculateDelayer,
-				_schedulerStateHolder().SchedulingResultState.SkillDays,
-				_schedulerStateHolder().Schedules,
-				_schedulerStateHolder().SchedulingResultState.PersonsInOrganization,
-				NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState),
-				teamBlockGenerator);
-			_teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
+			//temp hack until we get further with 45508 and use optimizeintradaydesktop here (=islands)
+			var tempCmd = new tempCommand {CommandId = Guid.NewGuid()};
+			using (_desktopOptimizationContext.Set(tempCmd, null, null, new IntradayOptimizationCallback(_backgroundWorker)))
+			{
+				using (CommandScope.Create(tempCmd))
+				{
+					_teamBlockIntradayOptimizationService.Optimize(
+						allMatrixes,
+						selectedPeriod,
+						selectedPersons,
+						optimizationPreferences,
+						schedulePartModifyAndRollbackService,
+						resourceCalculateDelayer,
+						_schedulerStateHolder().SchedulingResultState.SkillDays,
+						_schedulerStateHolder().Schedules,
+						_schedulerStateHolder().SchedulingResultState.PersonsInOrganization,
+						NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState),
+						teamBlockGenerator);
+				}
+			}
+		}
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
+		private class tempCommand : ICommandIdentifier
+		{
+			public Guid CommandId { get; set; }
 		}
 
 		private void resourceOptimizerPersonOptimized(object sender, ResourceOptimizerProgressEventArgs e)
