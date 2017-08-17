@@ -51,18 +51,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule)
 		{
-			//TODO: param runResolveWeeklyRestRule?
 			var stateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1, stateHolder.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);
-			//TODO: fel tag? från optpref istället?
 			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag));
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(stateHolder.Schedules, stateHolder.SchedulingResultState.PersonsInOrganization, period);
 			//TODO: fel! not hard coded hierarchy schedulingOptions.GroupOnGroupPageForTeamBlockPer, behöver fixas när även "teamblockspåret" går in hit (just nu bara classic)
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons,_schedulerStateHolder().Schedules, new GroupPageLight("_", GroupPageType.SingleAgent));
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
 
-			//TODO: we probably need something like using (_intradayOptimizationContext.Create(period)) here when getting largeGRoupTEsts green
+			//TODO: we probably need something like using (_intradayOptimizationContext.Create(period)) here when getting largeGRoupTEsts green (and for perfreasons)
 
 			_teamBlockIntradayOptimizationService.Optimize(allMatrixes,
 				period,
