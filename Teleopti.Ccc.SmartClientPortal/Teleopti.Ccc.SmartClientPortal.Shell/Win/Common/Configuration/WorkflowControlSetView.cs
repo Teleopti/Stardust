@@ -86,14 +86,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 				allAbsenceRequestMiscOptionsAreHidden = false;
 			}
 
-			if (!toggleManager.IsEnabled(Toggles.Wfm_Requests_Cancel_Agent_38055))
-			{
-				hideAbsenceCancellationOptions();
-			}
-			else
-			{
-				allAbsenceRequestMiscOptionsAreHidden = false;
-			}
+			allAbsenceRequestMiscOptionsAreHidden = false;
 
 			if (allAbsenceRequestMiscOptionsAreHidden)
 			{

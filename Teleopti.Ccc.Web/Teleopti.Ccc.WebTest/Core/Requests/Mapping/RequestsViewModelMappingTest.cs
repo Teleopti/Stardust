@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			setupStateHolderProxy();
 
-			var toggleManager = new FakeToggleManager(Toggles.Wfm_Requests_Cancel_Agent_38055);
+			var toggleManager = new FakeToggleManager();
 
 			var result = setupForToggleCheckOnApprovedRequest(toggleManager);
 

@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private bool canCancelPersonRequest(IPersonRequest personRequest)
 		{
-			if (!personRequest.IsApproved || !_toggleManager.IsEnabled(Toggles.Wfm_Requests_Cancel_Agent_38055))
+			if (!personRequest.IsApproved)
 			{
 				return false;
 			}
