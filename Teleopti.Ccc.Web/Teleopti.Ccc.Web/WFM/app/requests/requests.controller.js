@@ -175,9 +175,7 @@
 			vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
 
 			vm.dateRangeTemplateType = 'popup';
-
-			vm.filterToggleEnabled = toggleService.Wfm_Requests_Filtering_37748;
-			vm.filterEnabled = vm.filterToggleEnabled;
+			vm.filterEnabled = true;
 
 			vm.onFavoriteSearchInitDefer.promise.then(function (defaultSearch) {
 				if (defaultSearch) {

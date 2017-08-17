@@ -241,8 +241,7 @@
 			vm.isShiftTradeViewActive = isShiftTradeViewActive;
 			vm.canApproveOrDenyRequest = canApproveOrDenyRequest;
 			vm.isShiftTradeViewVisible = toggleService.Wfm_Requests_ShiftTrade_37751;
-			vm.filterToggleEnabled = toggleService.Wfm_Requests_Filtering_37748;
-			vm.filterEnabled = vm.filterToggleEnabled;
+			vm.filterEnabled = true;
 		}
 
 		function setReleaseNotification() {

@@ -76,7 +76,6 @@
 		WfmReportPortal_LeaderBoard_39440,
 
 		Wfm_Requests_Performance_36295,
-		Wfm_Requests_Filtering_37748,
 		Wfm_Requests_Run_waitlist_38071,
 		Wfm_Requests_ShiftTrade_37751,
 		Wfm_Requests_ShiftTrade_More_Relevant_Information_38492,

@@ -32,7 +32,6 @@ describe('Requests - Refactor(remove later) controller controllers',
 						Wfm_Requests_People_Search_36294: true,
 						Wfm_Requests_Performance_36295: true,
 						Wfm_Requests_ApproveDeny_ShiftTrade_38494: true,
-						Wfm_Requests_Filtering_37748: true,
 						togglesLoaded: $q(function (resolve, reject) {
 							resolve();
 						})
