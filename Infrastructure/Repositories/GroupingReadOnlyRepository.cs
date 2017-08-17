@@ -189,8 +189,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				"SELECT DISTINCT PageName,PageId "
 				+ "FROM ReadModel.groupingreadonly "
 				+ "WHERE businessunitid=:businessUnitId "
-				+ "AND :startDate <= EndDate AND :endDate >= StartDate "
-				+ " ORDER BY pagename";
+				+ "AND :startDate <= EndDate AND :endDate >= StartDate ";
 			return _currentUnitOfWork.Session().CreateSQLQuery(sql)
 					.SetGuid("businessUnitId", getBusinessUnitId())
 					.SetDateOnly("startDate", period.StartDate)

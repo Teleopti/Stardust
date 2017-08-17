@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.Web.Areas.Global.Core;
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 		public FakeUserUiCulture UserCulture;
 		public FakePermissionProvider PermissionProvider;
+		public FakeLoggedOnUser LoggedOnUser;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			system.UseTestDouble<FakeUserUiCulture>().For<IUserUiCulture>();
 			system.AddService<GroupPageViewModelFactory>();
 			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
-			
+			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 		}
 
 		[Test]
@@ -465,11 +467,101 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 
 			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
 
-			var orgs = result.BusinessHierarchy;
 			var gps = result.GroupPages;
 			var gp0 = gps[0];
-			gps.Count().Should().Be.EqualTo(1);
-			gp0.Children.Count().Should().Be.EqualTo(2);
+			gps.Length.Should().Be.EqualTo(1);
+			gp0.Children.Count.Should().Be.EqualTo(2);
+		}
+
+
+		[Test]
+		public void ShouldReturnLogonUserTeamIdInViewModel()
+		{
+			var mainPage = new ReadOnlyGroupPage()
+			{
+				PageName = "Main",
+				PageId = Group.PageMainId
+			};
+			var groupPage = new ReadOnlyGroupPage
+			{
+				PageName = "Skill",
+				PageId = Guid.NewGuid()
+			};
+			var businessUnitId = Guid.NewGuid();
+			
+			var site2Id = Guid.NewGuid();
+			var site = SiteFactory.CreateSiteWithOneTeam("mySite").WithId();
+			var site1Id = site.Id;
+			var team1InSite1Id = site.TeamCollection.Single().WithId().Id;
+			var team1InSite2Id = Guid.NewGuid();
+			var groupDetails = new List<ReadOnlyGroupDetail>
+			{
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					GroupName = "site1/team1",
+					SiteId = site1Id,
+					TeamId =  team1InSite1Id,
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					GroupName = "site2/team1",
+					SiteId = site2Id,
+					TeamId =  team1InSite2Id,
+					GroupId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = groupPage.PageId,
+					GroupName = "Email",
+					SiteId = site1Id,
+					TeamId = team1InSite1Id,
+					GroupId = team1InSite1Id.GetValueOrDefault(),
+					BusinessUnitId = businessUnitId
+				},
+				new ReadOnlyGroupDetail
+				{
+					PageId = groupPage.PageId,
+					GroupName = "Outbound",
+					SiteId = site2Id,
+					TeamId = team1InSite2Id,
+					GroupId = team1InSite2Id,
+					BusinessUnitId = businessUnitId
+				}
+			};
+			GroupingReadOnlyRepository.Has(new[] { mainPage, groupPage },
+				groupDetails);
+			var me = PersonFactory.CreatePerson("me").WithId();
+			me.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(DateOnly.Today, site.TeamCollection.Single()));
+			
+			LoggedOnUser.SetFakeLoggedOnUser(me);
+			PermissionProvider.Enable();
+			PermissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.MyTeamSchedules, DateOnly.Today, new PersonAuthorization
+			{
+				SiteId = site1Id,
+				TeamId = team1InSite1Id,
+				BusinessUnitId = businessUnitId
+			});
+
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			var orgs = result.BusinessHierarchy;
+			var gps = result.GroupPages;
+			var gp = gps[0];
+			var gpChildren = orgs[0].Children;
+			orgs.Length.Should().Be.EqualTo(1);
+			orgs[0].Name.Should().Be.EqualTo("site1");
+			orgs[0].Id.Should().Be.EqualTo(site1Id);
+			orgs[0].Children.Count.Should().Be.EqualTo(1);
+			gps.Length.Should().Be.EqualTo(1);
+			gp.Name.Should().Be.EqualTo(groupPage.PageName);
+			gpChildren.Count.Should().Be.EqualTo(1);
+			gpChildren.Single().Id.Should().Be.EqualTo(team1InSite1Id);
+			result.LogonUserTeamId.Should().Be.EqualTo(team1InSite1Id);
 		}
 	}
 

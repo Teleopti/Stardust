@@ -181,7 +181,7 @@
 			vm.resetSchedulePage();
 			updateShiftStatusForSelectedPerson();
 			if (vm.toggles.Wfm_HideUnusedTeamsAndSites_42690) {
-				vm.getSitesAndTeamsAsync();
+				vm.toggles.Wfm_GroupPages_45057 ? vm.getGroupPagesAsync() : vm.getSitesAndTeamsAsync();
 			}
 		};
 
@@ -432,6 +432,7 @@
 			var dateStr = moment(vm.scheduleDate).format('YYYY-MM-DD');
 			groupPageService.fetchAvailableGroupPages(dateStr, dateStr).then(function (data) {
 				vm.availableGroups = data;
+				loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 			});
 		};
 

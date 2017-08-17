@@ -79,8 +79,9 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 			}
 			return new GroupPagesViewModel
 			{
-				BusinessHierarchy = actualOrgs.OrderBy(o => o.Name as string, stringComparer).ToArray(),
-				GroupPages = actualGroupPages.OrderBy(g => g.Name as string, stringComparer).ToArray()
+				BusinessHierarchy = actualOrgs.OrderBy(o => o.Name, stringComparer).ToArray(),
+				GroupPages = actualGroupPages.OrderBy(g => g.Name, stringComparer).ToArray(),
+				LogonUserTeamId = _loggedOnUser.CurrentUser().MyTeam(period.StartDate)?.Id.GetValueOrDefault()
 			};
 		}
 

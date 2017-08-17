@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
 
 namespace Teleopti.Ccc.Web.Areas.Global.Models
 {
@@ -8,6 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Models
 	{
 		public SiteViewModelWithTeams[] BusinessHierarchy { get; set; }
 		public GroupPageViewModel[] GroupPages { get; set; }
+		public Guid? LogonUserTeamId { get; set; }
 	}
 
 	public class GroupPageViewModel
