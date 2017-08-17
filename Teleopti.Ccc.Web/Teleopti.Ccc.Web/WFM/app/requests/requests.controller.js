@@ -171,7 +171,6 @@
 			vm.canApproveOrDenyShiftTradeRequest = toggleService.Wfm_Requests_ApproveDeny_ShiftTrade_38494;
 			vm.isShiftTradeViewActive = isShiftTradeViewActive;
 			vm.canApproveOrDenyRequest = canApproveOrDenyRequest;
-			vm.isRequestsCommandsEnabled = toggleService.Wfm_Requests_ApproveDeny_36297;
 			vm.isShiftTradeViewVisible = toggleService.Wfm_Requests_ShiftTrade_37751;
 			vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
 

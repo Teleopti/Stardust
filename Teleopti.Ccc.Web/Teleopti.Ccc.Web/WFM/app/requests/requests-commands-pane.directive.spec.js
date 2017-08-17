@@ -27,7 +27,6 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 				return {
 					Wfm_Requests_People_Search_36294: true,
 					Wfm_Requests_Performance_36295: true,
-					Wfm_Requests_ApproveDeny_36297: true,
 					Wfm_Requests_Approve_Based_On_Budget_Allotment_39626: true,
 					togglesLoaded: $q(function (resolve, reject) {
 						resolve();

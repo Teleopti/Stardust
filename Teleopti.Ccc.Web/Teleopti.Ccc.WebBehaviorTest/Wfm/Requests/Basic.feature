@@ -202,7 +202,6 @@ Scenario: Can view different page
 	Then I see the request from 'John Smith' in the list	
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve requests
 	Given 'Ashley Andeen' has an existing text request with
 	| Field       | Value            |
@@ -217,7 +216,6 @@ Scenario: Can approve requests
 	Then I should see request for 'Ashley Andeen' approved
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can approve waitlisted requests
 	Given 'John Smith' has an open workflow control set with absence request waitlisting enabled
 	And 'John Smith' has an existing absence request with
@@ -233,7 +231,6 @@ Scenario: Can approve waitlisted requests
 	Then I should see request for 'John Smith' approved
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can deny waitlisted requests
 	Given 'John Smith' has an open workflow control set with absence request waitlisting enabled
 	And 'John Smith' has an existing absence request with
@@ -249,7 +246,6 @@ Scenario: Can deny waitlisted requests
 	Then I should see request for 'John Smith' denied
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_ApproveDeny_36297')
 Scenario: Can deny requests
 	Given 'Ashley Andeen' has an existing text request with
 	| Field       | Value            |

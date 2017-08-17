@@ -76,7 +76,6 @@
 		WfmReportPortal_LeaderBoard_39440,
 
 		Wfm_Requests_Performance_36295,
-		Wfm_Requests_ApproveDeny_36297,
 		Wfm_Requests_Waitlist_36232,
 		Wfm_Requests_Filtering_37748,
 		Wfm_Requests_Cancel_37741,

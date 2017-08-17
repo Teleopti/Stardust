@@ -18,7 +18,6 @@
 					return {
 						Wfm_Requests_People_Search_36294: true,
 						Wfm_Requests_Performance_36295: true,
-						Wfm_Requests_ApproveDeny_36297: true,
 						Wfm_Requests_Filtering_37748: true,
 						Wfm_Requests_Default_Status_Filter_39472: true,
 						Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309: true,
@@ -322,8 +321,6 @@
 					return {
 						Wfm_Requests_People_Search_36294: true,
 						Wfm_Requests_Performance_36295: true,
-						Wfm_Requests_ApproveDeny_36297: true,
-						Wfm_Requests_Filtering_37748: true,
 						Wfm_Requests_ShiftTrade_More_Relevant_Information_38492: true,
 						Wfm_Requests_Default_Status_Filter_39472: true,
 						Wfm_Requests_Show_Pending_Reasons_39473: true,
