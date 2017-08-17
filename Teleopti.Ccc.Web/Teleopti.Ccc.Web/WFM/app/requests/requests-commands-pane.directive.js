@@ -24,7 +24,6 @@
 		vm.toggleCancelConfirmationModal = toggleCancelConfirmationModal;
 		vm.toggleProcessWaitlistModal = toggleProcessWaitlistModal;
 		vm.processWaitlistRequests = processWaitlistRequests;
-		vm.runWaitlistToggleIsEnabled = runWaitlistToggleIsEnabled;
 		vm.cancelRequests = cancelRequests;
 		vm.showApproveBasedOnRulesPanel = false;
 		vm.shouldShowResourceCalculations = false;
@@ -243,10 +242,6 @@
 			var selectedRequestIds = getSelectedRequestIds();
 			if (vm.commandsDisabled) return true;
 			return !selectedRequestIds || selectedRequestIds.length === 0;
-		}
-
-		function runWaitlistToggleIsEnabled() {
-			return toggleSvc.Wfm_Requests_Run_waitlist_38071 === true;
 		}
 
 		function canCancelRequests() {
