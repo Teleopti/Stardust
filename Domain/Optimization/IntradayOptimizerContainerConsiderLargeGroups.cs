@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					}
 					if (callback != null)
 					{
-						callback.Optimizing(new IntradayOptimizationCallbackInfo(optimizer.ContainerOwner, result.HasValue, optimizersToLoop.Count)); //these numbers are just strange - tried to keep as before, but needs to be looked at
+						callback.Optimizing(new IntradayOptimizationCallbackInfo(optimizer.ContainerOwner, result.HasValue, optimizersToLoop.Count));
 						if (callback.IsCancelled())
 							return;
 					}
