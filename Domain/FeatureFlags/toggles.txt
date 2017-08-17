@@ -60,7 +60,6 @@ WfmReportPortal_LeaderBoard_39440 = true
 WebByPassDefaultPermissionCheck_37984 = true
 
 Report_UseOpenXmlFormat_35797 = true
-Wfm_Requests_People_Search_36294 = true
 Wfm_Requests_Performance_36295 = true
 Wfm_Requests_ApproveDeny_36297 = true
 Wfm_Requests_Waitlist_36232 = true

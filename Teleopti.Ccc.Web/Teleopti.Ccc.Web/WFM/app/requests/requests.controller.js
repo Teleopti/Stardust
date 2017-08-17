@@ -168,7 +168,6 @@
 		};
 
 		function init() {
-			vm.isPeopleSearchEnabled = toggleService.Wfm_Requests_People_Search_36294;
 			vm.canApproveOrDenyShiftTradeRequest = toggleService.Wfm_Requests_ApproveDeny_ShiftTrade_38494;
 			vm.isShiftTradeViewActive = isShiftTradeViewActive;
 			vm.canApproveOrDenyRequest = canApproveOrDenyRequest;
