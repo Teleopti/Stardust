@@ -91,7 +91,6 @@ Wfm_Requests_ApprovingModifyRequests_41930 = true
 Wfm_Requests_ShowBudgetAllowanceDetail_41945 = true
 Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309 = true
 Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450 = true
-Wfm_Requests_SaveFavoriteSearches_42578 = true
 Wfm_Requests_TriggerResourceCalculationFromGui_43129 = false
 Wfm_Requests_OvertimeRequestHandling_45177 = DEV
 Wfm_Requests_Refactoring_45470 = DEV

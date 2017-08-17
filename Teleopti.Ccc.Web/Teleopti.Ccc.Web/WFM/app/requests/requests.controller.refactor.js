@@ -39,13 +39,8 @@
 			]
 		};
 		vm.businessHierarchyToggleEnabled = toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309;
-		vm.saveFavoriteSearchesToggleEnabled = toggleService.Wfm_Requests_SaveFavoriteSearches_42578;
 		vm.hasFavoriteSearchPermission = false;
 		vm.onFavoriteSearchInitDefer = $q.defer();
-
-		if (!vm.saveFavoriteSearchesToggleEnabled) {
-			vm.onFavoriteSearchInitDefer.resolve();
-		}
 
 		var loggedonUsersTeamId = $q.defer();
 		if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {

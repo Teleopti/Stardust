@@ -38,16 +38,11 @@
 			]
 		};
 		vm.businessHierarchyToggleEnabled = toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309;
-		vm.saveFavoriteSearchesToggleEnabled = toggleService.Wfm_Requests_SaveFavoriteSearches_42578;
 		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
 		vm.hasFavoriteSearchPermission = false;
 		vm.onFavoriteSearchInitDefer = $q.defer();
 
 		vm.teamNameMap = {};
-
-		if (!vm.saveFavoriteSearchesToggleEnabled) {
-			vm.onFavoriteSearchInitDefer.resolve();
-		}
 
 		var periodForAbsenceRequest, periodForShiftTradeRequest;
 		var absenceRequestTabIndex = 0;
@@ -112,7 +107,7 @@
 			.then(loggedonUsersTeamId.promise.then(function (defaultTeam) {
 				if (angular.isString(defaultTeam) && defaultTeam.length > 0)
 					replaceArrayValues([defaultTeam], vm.selectedGroups.groupIds);
-				if (vm.businessHierarchyToggleEnabled && (!vm.saveFavoriteSearchesToggleEnabled || !vm.hasFavoriteSearchPermission)) {
+				if (vm.businessHierarchyToggleEnabled && !vm.hasFavoriteSearchPermission) {
 					$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: vm.selectedGroups.groupIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 				}
 			}))
@@ -192,7 +187,7 @@
 					replaceArrayValues(defaultSearch.TeamIds, vm.selectedGroups.groupIds);
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 				}
-				if (vm.saveFavoriteSearchesToggleEnabled && vm.hasFavoriteSearchPermission) {
+				if (vm.hasFavoriteSearchPermission) {
 					$scope.$broadcast('reload.requests.with.selection', { selectedGroupIds: vm.selectedGroups.groupIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 				}
 

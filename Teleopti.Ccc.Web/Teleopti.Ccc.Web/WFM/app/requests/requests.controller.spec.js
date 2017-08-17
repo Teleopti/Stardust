@@ -10,8 +10,7 @@ describe('RequestsControllerTests', function () {
 			Wfm_Requests_People_Search_36294: true,
 			Wfm_Requests_Performance_36295: true,
 			Wfm_Requests_ApproveDeny_36297: true,
-			Wfm_Requests_ApproveDeny_ShiftTrade_38494: true,
-			Wfm_Requests_SaveFavoriteSearches_42578: true
+			Wfm_Requests_ApproveDeny_ShiftTrade_38494: true
 		};
 
 	var absenceRequestTabIndex = 0;
