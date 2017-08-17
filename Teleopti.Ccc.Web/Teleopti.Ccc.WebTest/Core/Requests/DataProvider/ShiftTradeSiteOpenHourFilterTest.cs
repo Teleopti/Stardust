@@ -129,28 +129,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
-		public void ShouldFilterScheduleDayWhenPersonFromScheduleLayersIsNull()
-		{
-			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
-			{
-				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(33)) }
-			});
-			prepareData(personFrom);
-
-			var person1 = createPersonWithSiteOpenHours(8, 15);
-
-			var scheduleDays = new[]
-			{
-				createScheduleDay(person1, new TimePeriod(TimeSpan.FromHours(22), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(10))))
-			};
-			_personFromScheduleView.ScheduleLayers = null;
-			var filteredScheduleDays =
-				scheduleDays.Where(scheduleDay => Target.FilterSchedule(scheduleDay, _personFromScheduleView)).ToList();
-
-			filteredScheduleDays.Count.Should().Be(0);
-		}
-
-		[Test]
 		public void ShouldFilterScheduleViewModelWhenPersonToScheduleIsNull()
 		{
 			prepareData();
@@ -275,17 +253,75 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var personFrom = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
 			{
-				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(9), TimeSpan.FromHours(33)) }
+				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(19), TimeSpan.FromHours(37)) },
+				{ DayOfWeek.Tuesday, new TimePeriod(TimeSpan.FromHours(19), TimeSpan.FromHours(37)) }
 			});
 			prepareData(personFrom);
 
-			var person1 = createPersonWithSiteOpenHours(8, 15);
+			_personFromScheduleView = createShiftTradeAddPersonScheduleViewModel(_personFrom, _shiftTradeDate, new[]
+			{
+				new TimePeriod(
+					TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(45))
+					, TimeSpan.FromDays(1).Add(TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(45))))
+			});
+
+			var person1 = createPersonWithSiteOpenHours(new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{ DayOfWeek.Monday, new TimePeriod(TimeSpan.FromHours(19), TimeSpan.FromHours(37)) },
+				{ DayOfWeek.Tuesday, new TimePeriod(TimeSpan.FromHours(19), TimeSpan.FromHours(37)) }
+			});
 
 			var shiftTradeAddPersonScheduleViews = new[]
 			{
 				createShiftTradeAddPersonScheduleViewModel(person1, _shiftTradeDate, new[]
 				{
-					new TimePeriod(TimeSpan.FromHours(22), TimeSpan.FromDays(1).Add(TimeSpan.FromHours(5)))
+					new TimePeriod(
+					TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(45))
+					, TimeSpan.FromDays(1).Add(TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(45))))
+				})
+			};
+
+			var datePersons = new DatePersons { Date = _shiftTradeDate, Persons = new[] { person1 } };
+			var filteredShiftTradeAddPersonScheduleViews =
+				Target.FilterScheduleView(shiftTradeAddPersonScheduleViews, _personFromScheduleView, datePersons).ToList();
+
+			filteredShiftTradeAddPersonScheduleViews.Count.Should().Be(1);
+			filteredShiftTradeAddPersonScheduleViews.First().PersonId.Should().Be(person1.Id.GetValueOrDefault());
+		}
+
+		[Test]
+		public void ShouldFilterScheduleViewWithNightShiftScheduleWhenSiteOpenHoursIs24Hours()
+		{
+			var fullDayPeriod = new TimePeriod(TimeSpan.FromHours(0), TimeSpan.FromHours(24));
+			var openHours = new Dictionary<DayOfWeek, TimePeriod>
+			{
+				{DayOfWeek.Monday, fullDayPeriod},
+				{DayOfWeek.Tuesday, fullDayPeriod},
+				{DayOfWeek.Wednesday, fullDayPeriod},
+				{DayOfWeek.Thursday, fullDayPeriod},
+				{DayOfWeek.Friday, fullDayPeriod},
+				{DayOfWeek.Saturday, fullDayPeriod},
+				{DayOfWeek.Sunday, fullDayPeriod}
+			};
+
+			var personFrom = createPersonWithSiteOpenHours(openHours);
+			prepareData(personFrom);
+			_personFromScheduleView = createShiftTradeAddPersonScheduleViewModel(_personFrom, _shiftTradeDate, new[]
+			{
+				new TimePeriod(
+					TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(45))
+					, TimeSpan.FromDays(1).Add(TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(45))))
+			});
+
+			var person1 = createPersonWithSiteOpenHours(openHours);
+
+			var shiftTradeAddPersonScheduleViews = new[]
+			{
+				createShiftTradeAddPersonScheduleViewModel(person1, _shiftTradeDate, new[]
+				{
+					new TimePeriod(
+					TimeSpan.FromHours(23).Add(TimeSpan.FromMinutes(45))
+					, TimeSpan.FromDays(1).Add(TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(45))))
 				})
 			};
 
