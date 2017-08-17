@@ -69,8 +69,8 @@ describe('Requests - Refactor(remove later) controller controllers',
 		});
 
 		it('should keep different date range', function () {
-			var controller = setUpTarget();
-			controller.scope.$digest();
+			var test = setUpTarget();
+			test.scope.$digest();
 
 			var periodForAbsenceRequest = {
 				startDate: new Date(2016, 1 - 1, 1, 0, 0, 0, 0),
@@ -82,7 +82,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 				endDate: new Date(2016, 6 - 1, 1, 0, 0, 0, 0)
 			};
 
-			var controller = controller.controller;
+			var controller = test.controller;
 			controller.absencePeriod = periodForAbsenceRequest;
 			controller.activeAbsenceAndTextTab();
 
