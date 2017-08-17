@@ -121,9 +121,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 
+				//should probably be deleted
 				var previousTargetValue = 1d;
 				if (teamBlockInfo.TeamInfo.GroupMembers.Count() > 1 || teamBlockInfo.BlockInfo.BlockPeriod.DayCount() > 1)
 					previousTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
+				//
 
 				_setMainShiftOptimizeActivitySpecificationForTeamBlock.Execute(optimizationPreferences, teamBlockInfo, schedulingOptions);
 
@@ -153,19 +155,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				}
 
+				//should probably be deleted
 				var newTargetValue = -1d;
 				if (teamBlockInfo.TeamInfo.GroupMembers.Count() > 1 || teamBlockInfo.BlockInfo.BlockPeriod.DayCount() > 1)
 					newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
+				//
 
 				if (teamBlockInfo.TeamInfo.GroupMembers.Count() == 1 && teamBlockInfo.BlockInfo.BlockPeriod.DayCount() == 1)
 					teamBlockToRemove.Add(teamBlockInfo);
 
+				//should probably be deleted
 				var isWorse = newTargetValue >= previousTargetValue;
 				if (isWorse)
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 				}
+				//
 			}
 			return teamBlockToRemove;
 		}
