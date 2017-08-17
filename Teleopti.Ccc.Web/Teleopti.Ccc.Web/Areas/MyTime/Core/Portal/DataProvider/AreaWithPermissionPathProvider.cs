@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		{
 			var systemFunctions = _applicationFunctionsToggleFilter.FilteredFunctions();
 			var result = wfmAreaWithPermissionPaths
-				.Where(a => _permissionProvider.HasApplicationFunctionPermission(a.Path) && isPathEnabled(a.Path) 
+				.Where(a => _permissionProvider.HasApplicationFunctionPermission(a.Path) && isPathEnabled(a.Path)
 				&& isPathLicensed(systemFunctions, a.Path));
 
 			return result;
@@ -111,9 +111,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebRequests))
 			{
-				return _toggleManager.IsEnabled(Toggles.Wfm_Requests_Basic_35986);
+				return true;
 			}
-			if(path.Equals(DefinedRaptorApplicationFunctionPaths.WebIntraday))
+			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebIntraday))
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_Intraday_38074);
 			}
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			{
 				return _toggleManager.IsEnabled(Toggles.Wfm_People_PrepareForRelease_39040);
 			}
-			
+
 			return true;
 		}
 

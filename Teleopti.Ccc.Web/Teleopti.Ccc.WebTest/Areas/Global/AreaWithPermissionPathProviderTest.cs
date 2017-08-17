@@ -199,8 +199,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebRequests);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.SeatPlanner);
 
-			ToggleManager.Enable(Toggles.Wfm_Requests_Basic_35986);
-
 			var areas = Target.GetWfmAreasWithPermissions();
 
 			areas.Count().Should().Be(1);

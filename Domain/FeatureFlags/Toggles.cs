@@ -75,7 +75,6 @@
 		WfmReportPortal_Basic_38825,
 		WfmReportPortal_LeaderBoard_39440,
 
-		Wfm_Requests_Basic_35986,
 		Wfm_Requests_People_Search_36294,
 		Wfm_Requests_Performance_36295,
 		Wfm_Requests_ApproveDeny_36297,
