@@ -105,11 +105,15 @@
     <div class="modal-inner-content" style="text-align:center;">
       <!-- <label>{{'ForecastPeriod' | translate}}: </label><br/> -->
       <date-range-picker ng-model="vm.forecastPeriod"></date-range-picker>
+      <div class="text-warning" ng-cloak class="animate-show" ng-show="vm.disableMoreThanOneYear()">
+        <i class='mdi mdi-alert'></i>
+        {{ 'ForecastPeriodLength' | translate }}.
+      </div>
     </div>
     <div class="modal-actions">
       <aside>
         <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal()" >{{'Cancel'|translate}}</button>
-        <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.forecastWorkload()">{{'Apply'|translate}}</button>
+        <button class="wfm-btn wfm-btn-invis-primary" ng-disabled="vm.disableMoreThanOneYear()" ng-click="vm.forecastWorkload()">{{'Apply'|translate}}</button>
       </aside>
     </div>
   </div>
@@ -119,7 +123,7 @@
   <div ng-if="vm.forecastModalObj">
     <div class="con-row">
       <div class="con-flex">
-        <b>Export</b>
+        <b>{{'ExportToFile'|translate}}</b>
       </div>
     </div>
     <div class="modal-inner-content" style="text-align:center;">
@@ -131,6 +135,9 @@
         <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal()" >{{'Cancel'|translate}}</button>
         <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.exportToFile()">{{'Export'|translate}}</button>
       </aside>
+    </div>
+    <div ng-if="vm.skillMaster.isForecastRunning">
+      <md-progress-linear md-mode="indeterminate"></md-progress-linear>
     </div>
   </div>
 </modal-dialog>

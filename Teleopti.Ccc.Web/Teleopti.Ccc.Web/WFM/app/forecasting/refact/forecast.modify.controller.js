@@ -21,6 +21,7 @@
     vm.applyCampaign = applyCampaign;
     vm.clearCampaign = clearCampaign;
     vm.clearOverride = clearOverride;
+    vm.isForecastRunning = false;
     vm.overrideStatus = {
       tasks: false,
       talkTime: false,
@@ -73,7 +74,7 @@
 
           }, function () {
             modifyPanelHelper();
-            vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
+            refreshOnModify();
           }
         );
       };
@@ -104,7 +105,7 @@
 
           }, function () {
             modifyPanelHelper();
-            vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
+            refreshOnModify();
           })
         };
 
@@ -123,7 +124,8 @@
 
             }, function () {
               modifyPanelHelper();
-              vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
+              refreshOnModify();
+              // vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
             })
         };
 
@@ -134,6 +136,25 @@
 
         function pointClick(days) {
           vm.selectedDayCount = days;
+        }
+
+        function refreshOnModify() {
+          vm.isForecastRunning = true;
+          var wl = {
+            ForecastStart: moment().utc().add(1, 'months').startOf('month').toDate(),
+            ForecastEnd: moment().utc().add(2, 'months').startOf('month').toDate(),
+            WorkloadId: vm.selectedWorkload.Id,
+            ScenarioId: vm.selectedWorkload.ScenarioId
+          };
+
+          forecastingService.result(
+            wl,
+            function(data, status, headers, config) {
+              vm.selectedWorkload.Days = data.Days;
+              vm.isForecastRunning = false;
+              vm.loadChart('chart'+ vm.selectedWorkload.Id, data.Days);
+            }
+          )
         }
 
         function manageLocalStorage() {
@@ -150,7 +171,6 @@
             Name: storage.skill.Workload.Name,
             ScenarioId: storage.scenarioId
           }
-          console.log(vm.selectedWorkload.ScenarioId);
         };
       }
 

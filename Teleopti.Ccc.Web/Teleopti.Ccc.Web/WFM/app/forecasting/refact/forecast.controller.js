@@ -29,6 +29,7 @@
     };
 
     vm.forecastingModal = forecastingModal;
+    vm.disableMoreThanOneYear = disableMoreThanOneYear;
     vm.getWorkloadForecastData = getWorkloadForecastData;
     vm.pointClick = pointClick;
     vm.loadChart = loadChart;
@@ -116,6 +117,11 @@
     }
 
     function forecastWorkload (blockToken) {
+      if (disableMoreThanOneYear()) {
+        console.log('not more that one year');
+        return;
+      }
+
       vm.skillMaster.IsForecastRunning = true;
       var temp = {
         WorkloadId: vm.forecastModalObj.Workload.Id,
@@ -176,6 +182,13 @@
             vm.skillMaster.isForecastRunning = false;
           }
         );
+      };
+
+      function disableMoreThanOneYear() {
+        if (vm.forecastPeriod.endDate && vm.forecastPeriod.startDate) {
+          return moment(vm.forecastPeriod.endDate).diff(moment(vm.forecastPeriod.startDate), 'years') >= 1;
+        } else
+          return false;
       };
 
       function forecastingModal(forecast, exporting) {
