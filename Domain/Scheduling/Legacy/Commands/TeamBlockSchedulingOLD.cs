@@ -103,13 +103,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				_groupPersonBuilderWrapper, selectedPeriod);
 			_advanceDaysOffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
-			_teamBlockSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-			var workShiftFinderResultHolder = _teamBlockSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
+			var workShiftFinderResultHolder = _teamBlockSchedulingService.ScheduleSelected(schedulingCallback, allVisibleMatrixes, selectedPeriod,
 				matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(),
 				rollbackService, resourceCalculateDelayer,
 				_schedulerStateHolder().SchedulingResultState, schedulingOptions,
 				new TeamInfoFactory(_groupPersonBuilderWrapper));
-			_teamBlockSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
 			_weeklyRestSolverCommand.Execute(schedulingOptions, null, selectedAgents.ToArray(), rollbackService, resourceCalculateDelayer,
 				selectedPeriod, allVisibleMatrixes, _backgroundWorker, null);
