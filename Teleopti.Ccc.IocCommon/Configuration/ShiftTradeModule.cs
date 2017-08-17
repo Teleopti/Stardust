@@ -47,15 +47,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ShiftTradeMaxSeatValidator>().As<IShiftTradeMaxSeatValidator>().SingleInstance();
 			}
 
-			if (_configuration.Toggle(Toggles.Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450))
-			{
-				builder.RegisterType<SpecificationCheckerWithConfig>().As<ISpecificationChecker>();
-			}
-			else
-			{
-				builder.RegisterType<SpecificationChecker>().As<ISpecificationChecker>();
-			}
-
+			builder.RegisterType<SpecificationCheckerWithConfig>().As<ISpecificationChecker>();
 			builder.RegisterType<ShiftTradeValidator>().As<IShiftTradeValidator>();
 			builder.RegisterType<ShiftTradeLightValidator>().As<IShiftTradeLightValidator>();
 			builder.RegisterType<ShiftTradeRequestSetChecksum>().As<IShiftTradeRequestSetChecksum>().SingleInstance();

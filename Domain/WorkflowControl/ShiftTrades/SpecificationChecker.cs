@@ -1,37 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
-	[DisabledBy(Toggles.Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450)]
-	public class SpecificationChecker : ISpecificationChecker
-	{
-		private readonly IEnumerable<IShiftTradeSpecification> _shiftTradeSpecifications;
-
-		public SpecificationChecker(IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications)
-		{
-			_shiftTradeSpecifications = shiftTradeSpecifications;
-		}
-
-		public ShiftTradeRequestValidationResult Check(IList<IShiftTradeSwapDetail> swapDetails)
-		{
-			foreach (var specification in _shiftTradeSpecifications)
-			{
-				var result = specification.Validate(swapDetails);
-				if (!result.IsOk)
-				{
-					return new ShiftTradeRequestValidationResult(result.IsOk, true, result.DenyReason);
-				}
-			}
-			return new ShiftTradeRequestValidationResult(true);
-		}
-	}
-
-	[EnabledBy(Toggles.Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450)]
 	public class SpecificationCheckerWithConfig : ISpecificationChecker
 	{
 		private readonly IEnumerable<IShiftTradeSpecification> _shiftTradeSpecifications;

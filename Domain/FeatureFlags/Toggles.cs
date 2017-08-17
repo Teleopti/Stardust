@@ -96,7 +96,6 @@
 		Wfm_Requests_ApprovingModifyRequests_41930,
 		Wfm_Requests_ShowBudgetAllowanceDetail_41945,
 		Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309,
-		Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450,
 		Wfm_Requests_TriggerResourceCalculationFromGui_43129,
 		Wfm_Requests_OvertimeRequestHandling_45177,
 		Wfm_Requests_Refactoring_45470,

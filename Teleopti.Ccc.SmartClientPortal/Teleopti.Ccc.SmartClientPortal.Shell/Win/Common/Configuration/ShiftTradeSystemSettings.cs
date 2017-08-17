@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void loadBusinessRuleConfigs()
 		{
-			var defaultBusinessRuleConfigs = getDefaultBusinessRuleConfigs().ToList();
+			var defaultBusinessRuleConfigs = getDefaultBusinessRuleConfigs();
 
 			if (_shiftTradeSettings.BusinessRuleConfigs == null)
 				_shiftTradeSettings.BusinessRuleConfigs = new ShiftTradeBusinessRuleConfig[] { };
@@ -305,16 +305,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private IEnumerable<ShiftTradeBusinessRuleConfig> getDefaultBusinessRuleConfigs()
 		{
-			var configs = _businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest()
+			return _businessRuleConfigProvider.GetDefaultConfigForShiftTradeRequest()
 				.Select(s => (ShiftTradeBusinessRuleConfig) s).ToList();
-
-			if (!_toggleManager.IsEnabled(Toggles.Wfm_Requests_Configuarable_ShiftTradeTargetTimeSpecification_42450))
-			{
-				var shiftTradeTargetTimeSpecificationRuleConfig = configs.First(x => x.BusinessRuleType == typeof(ShiftTradeTargetTimeSpecification).FullName);
-				configs.Remove(shiftTradeTargetTimeSpecificationRuleConfig);
-			}
-
-			return configs;
 		}
 	}
 }
