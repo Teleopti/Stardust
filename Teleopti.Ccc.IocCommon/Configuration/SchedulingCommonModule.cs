@@ -656,7 +656,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SplitSchedulePeriodToWeekPeriod>().As<ISplitSchedulePeriodToWeekPeriod>().SingleInstance();
 			builder.RegisterType<TeamScheduling>().SingleInstance();
 			builder.RegisterType<TeamBlockSingleDayScheduler>().As<ITeamBlockSingleDayScheduler>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockScheduler>().As<ITeamBlockScheduler>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockScheduler>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSchedulingService>().InstancePerLifetimeScope();
 			builder.RegisterType<ShiftProjectionCachesForIntraInterval>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockGenerator>().As<ITeamBlockGenerator>().InstancePerLifetimeScope();

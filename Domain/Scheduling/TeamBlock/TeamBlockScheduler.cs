@@ -10,23 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface ITeamBlockScheduler
-	{
-		bool ScheduleTeamBlockDay(ISchedulingCallback schedulingCallback, 
-								IWorkShiftSelector workShiftSelector,
-								ITeamBlockInfo teamBlockInfo, 
-								DateOnly datePointer, 
-								SchedulingOptions schedulingOptions, 
-								ISchedulePartModifyAndRollbackService rollbackService, 
-								IResourceCalculateDelayer resourceCalculateDelayer,
-								IEnumerable<ISkillDay> allSkillDays,
-								IScheduleDictionary schedules,
-								ShiftNudgeDirective shiftNudgeDirective,
-								INewBusinessRuleCollection businessRules,
-								IGroupPersonSkillAggregator groupPersonSkillAggregator);
-	}
-
-	public class TeamBlockScheduler : ITeamBlockScheduler
+	public class TeamBlockScheduler
 	{
 		private readonly ITeamBlockSingleDayScheduler _singleDayScheduler;
 		private readonly TeamBlockRoleModelSelector _roleModelSelector;

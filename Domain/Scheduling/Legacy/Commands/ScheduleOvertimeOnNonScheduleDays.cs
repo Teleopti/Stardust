@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class ScheduleOvertimeOnNonScheduleDays
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly ITeamBlockScheduler _teamBlockScheduler;
+		private readonly TeamBlockScheduler _teamBlockScheduler;
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ITeamInfoFactory _teamInfoFactory;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly PrimaryOrAllPersonSkillForNonOvertimeProvider _personSkillsForNonOvertimeProvider;
 		
 		public ScheduleOvertimeOnNonScheduleDays(Func<ISchedulerStateHolder> schedulerStateHolder,
-			ITeamBlockScheduler teamBlockScheduler,
+			TeamBlockScheduler teamBlockScheduler,
 			MatrixListFactory matrixListFactory,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ITeamInfoFactory teamInfoFactory,

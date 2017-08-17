@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public class TeamBlockSchedulingService
     {
-	    private readonly ITeamBlockScheduler _teamBlockScheduler;
+	    private readonly TeamBlockScheduler _teamBlockScheduler;
 	    private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 	    private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly ValidatedTeamBlockInfoExtractor  _validatedTeamBlockExtractor;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly IWorkShiftSelector _workShiftSelector;
 	    private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
-	    public TeamBlockSchedulingService(ITeamBlockScheduler teamBlockScheduler,
+	    public TeamBlockSchedulingService(TeamBlockScheduler teamBlockScheduler,
 			    ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			    IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
 			    ValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor,

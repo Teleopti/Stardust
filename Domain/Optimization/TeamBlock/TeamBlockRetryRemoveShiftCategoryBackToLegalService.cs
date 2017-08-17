@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public class TeamBlockRetryRemoveShiftCategoryBackToLegalService
 	{
-		private readonly ITeamBlockScheduler _teamBlockScheduler;
+		private readonly TeamBlockScheduler _teamBlockScheduler;
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ITeamBlockClearer _teamBlockClearer;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public TeamBlockRetryRemoveShiftCategoryBackToLegalService(ITeamBlockScheduler teamBlockScheduler, 
+		public TeamBlockRetryRemoveShiftCategoryBackToLegalService(TeamBlockScheduler teamBlockScheduler, 
 			ITeamInfoFactory teamInfoFactory, 
 			ITeamBlockInfoFactory teamBlockInfoFactory, 
 			ITeamBlockClearer teamBlockClearer, 

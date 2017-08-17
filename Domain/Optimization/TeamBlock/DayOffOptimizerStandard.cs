@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	public class DayOffOptimizerStandard
 	{
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
-		private readonly ITeamBlockScheduler _teamBlockScheduler;
+		private readonly TeamBlockScheduler _teamBlockScheduler;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamDayOffModifier _teamDayOffModifier;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public DayOffOptimizerStandard(
 			ILockableBitArrayFactory lockableBitArrayFactory,
-			ITeamBlockScheduler teamBlockScheduler,
+			TeamBlockScheduler teamBlockScheduler,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamDayOffModifier teamDayOffModifier,

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public class TeamBlockIntradayOptimizationService
 	{
-		private readonly ITeamBlockScheduler _teamBlockScheduler;
+		private readonly TeamBlockScheduler _teamBlockScheduler;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly ICurrentIntradayOptimizationCallback _currentIntradayOptimizationCallback;
 
-		public TeamBlockIntradayOptimizationService(ITeamBlockScheduler teamBlockScheduler,
+		public TeamBlockIntradayOptimizationService(TeamBlockScheduler teamBlockScheduler,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
