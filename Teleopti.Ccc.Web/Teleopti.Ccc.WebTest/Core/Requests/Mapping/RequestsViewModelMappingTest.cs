@@ -214,14 +214,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldNotMapCancelMethodIfToggleOff()
-		{
-			var result = setupForToggleCheckOnApprovedRequest(new FakeToggleManager());
-
-			result.Link.Methods.Should().Not.Contain ("CANCEL");
-		}
-
-		[Test]
 		public void ShouldMapCancelMethodIfToggleOn()
 		{
 			setupStateHolderProxy();
