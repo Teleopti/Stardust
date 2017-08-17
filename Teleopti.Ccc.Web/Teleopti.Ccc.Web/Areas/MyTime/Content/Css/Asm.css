@@ -23,7 +23,7 @@
 	height: 65px;
 	display: none; /*hide when loaded, before moved to correct place*/
 	margin: 1px 1px 1px 1px;
-	margin-top: -50px;
+	/*margin-top: -50px;*/
 }
 
 .asm-layer
