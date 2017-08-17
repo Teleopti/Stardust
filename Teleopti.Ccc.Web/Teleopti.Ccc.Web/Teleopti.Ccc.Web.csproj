@@ -27,7 +27,7 @@
     <WebGreaseLibPath>..\..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
     <TargetFrameworkProfile />
     <NuGetPackageImportStamp>0ed6d578</NuGetPackageImportStamp>
-    <UseGlobalApplicationHostFile />
+    <UseGlobalApplicationHostFile />    
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -473,6 +473,7 @@
     <Compile Include="Areas\Global\WfmAreaRegistration.cs" />
     <Compile Include="Areas\Global\UserController.cs" />
     <Compile Include="Areas\HealthCheck\Controllers\HealthCheckApiController.cs" />
+    <Compile Include="Areas\Intraday\IntradayExportController.cs" />
     <Compile Include="Areas\Intraday\IntradayMonitorPerformanceController.cs" />
     <Compile Include="Areas\Intraday\IntradayMonitorStaffingController.cs" />
     <Compile Include="Areas\Intraday\IntradayMonitorStatisticsController.cs" />

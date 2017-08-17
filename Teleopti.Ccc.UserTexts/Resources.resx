@@ -16399,4 +16399,19 @@ Do you want to participate?</value>
     <value>Duplicate record found</value>
     <comment>Found a duplicate record while importing</comment>
   </data>
+  <data name="AbandonedRateParenthesisPercentSign" xml:space="preserve">
+    <value>Abandoned rate (%)</value>
+  </data>
+  <data name="AverageSpeedOfAnswersParenthesisSeconds" xml:space="preserve">
+    <value>Average Speed of Answer (s)</value>
+  </data>
+  <data name="ESLParenthesisPercentSign" xml:space="preserve">
+    <value>ESL (%)</value>
+  </data>
+  <data name="Interval" xml:space="preserve">
+    <value>Interval</value>
+  </data>
+  <data name="SkillsParenthesisS" xml:space="preserve">
+    <value>Skill(s)</value>
+  </data>
 </root>

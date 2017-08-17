@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -120,6 +120,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AbandonedRate {
             get {
                 return ResourceManager.GetString("AbandonedRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Abandoned rate (%).
+        /// </summary>
+        public static string AbandonedRateParenthesisPercentSign {
+            get {
+                return ResourceManager.GetString("AbandonedRateParenthesisPercentSign", resourceCulture);
             }
         }
         
@@ -3824,6 +3833,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AverageSpeedOfAnswer {
             get {
                 return ResourceManager.GetString("AverageSpeedOfAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Average Speed of Answer (s).
+        /// </summary>
+        public static string AverageSpeedOfAnswersParenthesisSeconds {
+            get {
+                return ResourceManager.GetString("AverageSpeedOfAnswersParenthesisSeconds", resourceCulture);
             }
         }
         
@@ -10946,6 +10964,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ESL (%).
+        /// </summary>
+        public static string ESLParenthesisPercentSign {
+            get {
+                return ResourceManager.GetString("ESLParenthesisPercentSign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Estimated occupancy.
         /// </summary>
         public static string EstimatedOccupancy {
@@ -14535,6 +14562,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InterruptedShutDown {
             get {
                 return ResourceManager.GetString("InterruptedShutDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interval.
+        /// </summary>
+        public static string Interval {
+            get {
+                return ResourceManager.GetString("Interval", resourceCulture);
             }
         }
         
@@ -31060,6 +31096,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Skills {
             get {
                 return ResourceManager.GetString("Skills", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill(s).
+        /// </summary>
+        public static string SkillsParenthesisS {
+            get {
+                return ResourceManager.GetString("SkillsParenthesisS", resourceCulture);
             }
         }
         

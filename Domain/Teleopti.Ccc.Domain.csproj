@@ -285,6 +285,8 @@
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestProcessor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserDevice.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IRequeueHangfireRepository.cs" />
+    <Compile Include="Intraday\IntradayExcelCreator.cs" />
+    <Compile Include="Intraday\IntradayExportCreator.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModelCreator.cs" />
     <Compile Include="Notification\UserDeviceService.cs" />
