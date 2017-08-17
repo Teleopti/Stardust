@@ -28,9 +28,11 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var defaultDateTimes = null;
 	var weekStart = 3;
 	var baseUtcOffsetInMinutes;
+	var daylightSavingAdjustment;
 	Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 		weekStart = data.WeekStart;
 		baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
+		daylightSavingAdjustment = data.DaylightSavingTimeAdjustment;
 	});
 
 	var RequestDetailParentViewModel = function () {
@@ -38,6 +40,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		var self = this;
 		self.requestViewModel = ko.observable();
 		self.baseUtcOffsetInMinutes = baseUtcOffsetInMinutes;
+		self.daylightSavingAdjustment = daylightSavingAdjustment;
 
 		self.createRequestViewModel = function () {
 			var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart, defaultDateTimes);

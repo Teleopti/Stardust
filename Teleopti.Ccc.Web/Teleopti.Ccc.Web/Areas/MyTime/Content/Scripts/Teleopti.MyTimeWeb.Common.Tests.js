@@ -273,5 +273,17 @@ $(document).ready(function () {
 
         var texts = common.GetUserTexts();
         equal("Fair", texts.Fair);
-    });
+	});
+
+	test("Should get current user date time", function() {
+		var utcOffsetInMinutes = 60;
+		var daylightSavingAdjustment = {
+			StartDateTime: "2016-03-26 01:00:00",
+			EndDateTime: "2016-10-29 02:00:00",
+			AdjustmentOffsetInMinutes: 60
+		}
+		var userDateTime = common.GetCurrentUserDateTime(utcOffsetInMinutes, daylightSavingAdjustment);
+
+		equal(userDateTime.format("HH:mm"), moment().zone(-60).format("HH:mm"));
+	});
 });

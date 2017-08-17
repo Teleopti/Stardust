@@ -172,9 +172,11 @@
 	function _initializeViewModel(){
 		self.ShowError(false);
 		self.ShowCancelButton(true);
-		var currentUserDateTime = parentViewModel.baseUtcOffsetInMinutes ? Teleopti.MyTimeWeb.Schedule.GetCurrentUserDateTime(parentViewModel.baseUtcOffsetInMinutes)
+		var currentUserDateTime = parentViewModel.baseUtcOffsetInMinutes
+			? Teleopti.MyTimeWeb.Common.GetCurrentUserDateTime(parentViewModel.baseUtcOffsetInMinutes, parentViewModel.daylightSavingAdjustment)
 			: moment();
-		self.StartTime(self.ShowMeridian ? currentUserDateTime.format('hh:mm A') : currentUserDateTime.format('HH:mm'));
+		var defaultStartTime = currentUserDateTime.add(20, 'minutes');
+		self.StartTime(self.ShowMeridian ? defaultStartTime.format('hh:mm A') : defaultStartTime.format('HH:mm'));
 		self.TimeList = _createTimeList();
 		self.RequestDuration(self.TimeList[0]);
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;

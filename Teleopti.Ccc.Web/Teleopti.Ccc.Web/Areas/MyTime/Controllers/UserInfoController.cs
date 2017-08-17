@@ -1,5 +1,7 @@
 ﻿using System.Web.Mvc;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
@@ -8,11 +10,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 	{
 		private readonly IUserCulture _userCulture;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly INow _now;
 
-		public UserInfoController(IUserCulture userCulture, IUserTimeZone userTimeZone)
+		public UserInfoController(IUserCulture userCulture, IUserTimeZone userTimeZone, INow now)
 		{
 			_userCulture = userCulture;
 			_userTimeZone = userTimeZone;
+			_now = now;
 		}
 
 		[HttpGet]
@@ -22,8 +26,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			{
 				WeekStart = (int)_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek,
 				DateFormatForMoment = _userCulture.GetCulture().DateTimeFormat.ShortDatePattern.ToUpper(),
-				BaseUtcOffsetInMinutes = _userTimeZone.TimeZone().BaseUtcOffset.TotalMinutes
+				BaseUtcOffsetInMinutes = _userTimeZone.TimeZone().BaseUtcOffset.TotalMinutes,
+				DaylightSavingTimeAdjustment = GetDaylightSavingTimeAdjustment()
 			}, JsonRequestBehavior.AllowGet);
+		}
+
+		private DaylightSavingsTimeAdjustmentViewModel GetDaylightSavingTimeAdjustment()
+		{
+			var daylightSavingAdjustment = TimeZoneHelper.GetDaylightChanges(_userTimeZone.TimeZone(), _now.ServerDateTime_DontUse().Year);
+			var daylightModel = daylightSavingAdjustment != null
+				? new DaylightSavingsTimeAdjustmentViewModel(daylightSavingAdjustment)
+				: null;
+
+			return daylightModel;
 		}
 	}
 }

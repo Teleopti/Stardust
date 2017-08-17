@@ -330,8 +330,7 @@ $(document).ready(function() {
 
 		moment.locale('en-gb');
 		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
-
-		equal(requestVm.StartTime(), moment().format('hh:mm A'));
+		equal(requestVm.StartTime(), moment().add(20, 'minutes').format('hh:mm A'));
 
 		$('#showMeridianDiv').remove();
 	});
@@ -343,7 +342,7 @@ $(document).ready(function() {
 		moment.locale('en-gb');
 		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
 
-		equal(requestVm.StartTime(), moment().format('HH:mm'));
+		equal(requestVm.StartTime(), moment().add(20, 'minutes').format('HH:mm'));
 
 		$('#showMeridianDiv').remove();
 	});
@@ -355,6 +354,6 @@ $(document).ready(function() {
 	test('should display default start date and time by agents timezone', function() {
 		fakeRequestDetailViewModel.baseUtcOffsetInMinutes = -600;
 		var requestVm = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, function(){}, fakeRequestDetailViewModel, null, false);
-		equal(requestVm.StartTime(), moment().zone(-fakeRequestDetailViewModel.baseUtcOffsetInMinutes).format("HH:mm"));
+		equal(requestVm.StartTime(), moment().add(20, 'minutes').zone(-fakeRequestDetailViewModel.baseUtcOffsetInMinutes).format("HH:mm"));
 	});
 });

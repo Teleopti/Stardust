@@ -311,6 +311,59 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		return formattedNumber;
 	};
 
+	function stripTeleoptiTimeToUTCForScenarioTest() {
+		var timeWithTimezone, teleoptiTime = Date.prototype.getTeleoptiTime && Date.prototype.getTeleoptiTime();
+		if (teleoptiTime)
+			timeWithTimezone = moment(teleoptiTime).format();
+		else
+			timeWithTimezone = moment().format();
+
+		return moment(timeWithTimezone.substr(0, 19) + "+00:00");//btw, timezone info is wrong? why? need confirmation
+	}
+
+	function _ensureDST(userTime, daylightSavingAdjustment, utcOffsetInMinutes) {
+		//whether in DST is judged in UTC time
+		if (daylightSavingAdjustment == undefined || daylightSavingAdjustment === null) {
+			return;
+		}
+
+		var userTimestamp = userTime.valueOf();
+		var dstStartTimestamp = moment(daylightSavingAdjustment.StartDateTime + "+00:00").valueOf();
+		var dstEndTimestamp = moment(daylightSavingAdjustment.EndDateTime + "+00:00").add(-daylightSavingAdjustment.AdjustmentOffsetInMinutes, "minutes").valueOf();
+
+		if (dstStartTimestamp < dstEndTimestamp) {
+			if (dstStartTimestamp < userTimestamp && userTimestamp < dstEndTimestamp) {
+				adjustToDST(userTime, daylightSavingAdjustment, utcOffsetInMinutes);
+			} else {
+				resetToUserTimeWithoutDST(userTime, utcOffsetInMinutes);
+			}
+		} else { // for DST like Brasilia
+			if (dstEndTimestamp <= userTimestamp && userTimestamp <= dstStartTimestamp) {
+				resetToUserTimeWithoutDST(userTime, utcOffsetInMinutes);
+			}
+			else {
+				adjustToDST(userTime, daylightSavingAdjustment, utcOffsetInMinutes);
+			}
+		}
+	};
+
+	function adjustToDST(userTime, daylightSavingAdjustment, baseUtcOffsetInMinutes) {
+		userTime.zone(-daylightSavingAdjustment.AdjustmentOffsetInMinutes - baseUtcOffsetInMinutes);
+	}
+
+	function resetToUserTimeWithoutDST(userTime, baseUtcOffsetInMinutes) {
+		userTime.zone(-baseUtcOffsetInMinutes);
+	}
+
+	function _getCurrentUserDateTime(utcOffsetInMinutes, daylightSavingAdjustment) {
+		var currentUserDateTime = Date.prototype.getTeleoptiTimeChangedByScenario === true
+			? stripTeleoptiTimeToUTCForScenarioTest().zone(-utcOffsetInMinutes)
+			: moment().zone(-utcOffsetInMinutes);//work in user timezone, just make life easier
+
+		_ensureDST(currentUserDateTime, daylightSavingAdjustment, utcOffsetInMinutes);
+		return currentUserDateTime;
+	};
+
 	return {
 		Init: function (settings, ajax) {
 			_settings = settings;
@@ -412,7 +465,8 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		HideAgentScheduleMessenger: function () {
 			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar #asm-divider").hide();
 			$("#autocollapse.bdd-mytime-top-menu ul.show-outside-toolbar #asm-link").hide();
-		}
+		},
+		GetCurrentUserDateTime: _getCurrentUserDateTime
 	};
 
 })(jQuery);
