@@ -24,7 +24,7 @@
 	function moduleRun($rootScope, FavoriteSearchDataService, GroupPageService) {
 		$rootScope.$on('$stateChangeSuccess',
 			function (event, toState) {
-				if (toState.name === "requests" || toState.name.indexOf("requestsRefactor") > -1) {
+				if (toState.name.indexOf("requests") > -1) {
 					FavoriteSearchDataService.setModule("wfm.requests");
 					GroupPageService.setModule("wfm.requests");
 				}

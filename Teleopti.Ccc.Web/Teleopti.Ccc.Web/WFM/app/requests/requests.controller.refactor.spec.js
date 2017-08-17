@@ -11,10 +11,10 @@ describe('Requests - Refactor(remove later) controller controllers',
 			fakeStateParams,
 			fakeState = {
 				current: {
-					url: ''
+					name: ''
 				},
-				go: function (url, params) {
-					this.current.url = url;
+				go: function (name, params) {
+					this.current.name = name;
 					fakeStateParams = params;
 				}
 			};
@@ -26,6 +26,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 			requestCommandParamsHolder = new fakeRequestCommandParamsHolder();
 
 			module(function ($provide) {
+				$provide.service('$state', function () { return fakeState; });
 				$provide.service('Toggle', function () {
 					return {
 						Wfm_Requests_Basic_35986: true,
@@ -251,14 +252,14 @@ describe('Requests - Refactor(remove later) controller controllers',
 			var controller = setUpTarget().controller;
 			controller.activeAbsenceAndTextTab();
 			expect(fakeStateParams != undefined).toEqual(true);
-			expect(fakeState.current.url).toEqual('requestsRefactor-absenceAndText');
+			expect(fakeState.current.name).toEqual('requestsRefactor-absenceAndText');
 		});
 
 		it('should get correct url when go to shift trade requests tab', function () {
 			var controller = setUpTarget().controller;
 			controller.activeShiftTradeTab();
 			expect(fakeStateParams != undefined).toEqual(true);
-			expect(fakeState.current.url).toEqual('requestsRefactor-shiftTrade');
+			expect(fakeState.current.name).toEqual('requestsRefactor-shiftTrade');
 		});
 
 		it('should pass correct params to absence and text requests', function () {
@@ -354,7 +355,6 @@ describe('Requests - Refactor(remove later) controller controllers',
 
 			var controller = $controller('RequestsRefactorCtrl', {
 				$scope: scope,
-				$state: fakeState,
 				$q: $q
 			});
 

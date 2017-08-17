@@ -12,37 +12,31 @@ describe('RequestsControllerTests', function () {
 			Wfm_Requests_ApproveDeny_36297: true,
 			Wfm_Requests_ApproveDeny_ShiftTrade_38494: true,
 			Wfm_Requests_SaveFavoriteSearches_42578: true
-		},
-		fakeState = {
-			current: {
-				url: ''
-			},
-			go: function (url) {
-				this.current.url = url;
-			}
 		};
 
 	var absenceRequestTabIndex = 0;
 	var shiftTradeRequestTabIndex = 1;
 
-	beforeEach(function () {
+	beforeEach(function() {
 		module('wfm.groupPage');
 		module('wfm.requests');
 
 		requestCommandParamsHolder = new fakeRequestCommandParamsHolder();
 		requestsDataService = new FakeRequestsDataService();
 
-		module(function ($provide) {
-			$provide.service('Toggle', function () {
+		module(function($provide) {
+			$provide.service('Toggle', function() {
 				toggleObject.togglesLoaded = $q(function(resolve, reject) {
 					resolve();
 				});
 				return toggleObject;
 			});
-			$provide.service('requestCommandParamsHolder', function () {
+			$provide.service('requestCommandParamsHolder', function() {
 				return requestCommandParamsHolder;
 			});
-			$provide.service('requestsDataService', function () { return requestsDataService; });
+			$provide.service('requestsDataService', function() {
+				return requestsDataService;
+			});
 		});
 	});
 
@@ -55,9 +49,8 @@ describe('RequestsControllerTests', function () {
 	function setUpTarget() {
 		var scope = $rootScope.$new();
 
-		var target = $controller('RequestsCtrl', {
-			$scope: scope,
-			$state: fakeState
+		var target = $controller('RequestsOriginCtrl', {
+			$scope: scope
 		});
 
 		return { target: target, scope: scope };
@@ -258,11 +251,5 @@ describe('RequestsControllerTests', function () {
 			TeamIds: ['fakeTeam1Id']
 		});
 		expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
-	});
-
-	it('should go to requests-refactor page when toggle Wfm_Requests_OvertimeRequestHandling_45177 on', function () {
-		toggleObject['Wfm_Requests_Refactoring_45470'] = true;
-		setUpTarget();
-		expect(fakeState.current.url).toEqual('requestsRefactor');
 	});
 });

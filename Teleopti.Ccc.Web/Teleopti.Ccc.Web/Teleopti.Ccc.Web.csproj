@@ -1519,6 +1519,7 @@
     <Content Include="WFM\app\requests\requests.controller.refactor.spec.js" />
     <Content Include="WFM\app\requests\requests.controller.shiftTrade.spec.js" />
     <Content Include="WFM\app\requests\requests.controller.absenceAndText.spec.js" />
+    <Content Include="WFM\app\requests\requests.js" />
     <Content Include="WFM\app\requests\requests.service.uigrid.utilities.js" />
     <Content Include="WFM\app\requests\requests-budget-allowance.directive.js" />
     <Content Include="WFM\app\requests\requests-budget-allowance.directive.spec.js" />
@@ -1529,6 +1530,7 @@
     <Content Include="WFM\app\requests\requests-synchronize-header-height.directive.js" />
     <Content Include="WFM\app\requests\requests-fix-bug43683-for-uigrid.js" />
     <Content Include="WFM\app\requests\requests.controller.refactor.js" />
+    <Content Include="WFM\app\requests\requests.spec.js" />
     <Content Include="WFM\app\resourceplanner\organization-tree-node.html" />
     <Content Include="WFM\app\resourceplanner\planningperiods-overview.html" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.manageschedule.hierarchy.service.js" />

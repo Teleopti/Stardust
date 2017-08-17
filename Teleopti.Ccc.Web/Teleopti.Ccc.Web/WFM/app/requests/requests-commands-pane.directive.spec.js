@@ -556,7 +556,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 			isShiftTradeViewActived = false;
 		}
 		var scope = $rootScope.$new();
-		requestsController = $controller('RequestsCtrl',
+		requestsController = $controller('RequestsOriginCtrl',
 		{
 			$scope: scope,
 			requestsNotificationService: requestsNotificationService,

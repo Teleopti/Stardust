@@ -49,7 +49,9 @@
 				var sortingColumn = state.columns.filter(function(column){
 					return column.sort.direction
 				})[0];
-				sortingColumn.displayName = sortingColumn.name;
+
+				if(sortingColumn)
+					sortingColumn.displayName = sortingColumn.name;
 
 				return sortingColumn;
 			}

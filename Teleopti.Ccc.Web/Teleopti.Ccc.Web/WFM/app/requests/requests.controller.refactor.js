@@ -227,7 +227,7 @@
 				} else {
 					vm.activeAbsenceAndTextTab();
 				}
-				setupPeriodWatch();
+				setupWatches();
 			});
 		};
 
@@ -264,7 +264,7 @@
 		}
 
 		function isShiftTradeViewActive() {
-			return $state.current.url.indexOf('shiftTrade') > -1;
+			return $state.current.name.indexOf('requestsRefactor-shiftTrade') > -1;
 		}
 
 		function canApproveOrDenyRequest() {
@@ -332,43 +332,40 @@
 			requestsNotificationService.notifyCommandError(error);
 		}
 
-		function setupPeriodWatch() {
-			$scope.$watch(function () {
+		function setupWatches() {
+			$scope.$watch(function() {
 				return vm.period;
-			},
-				function (newValue, oldValue) {
-					$scope.$evalAsync(function () {
-						if (isShiftTradeViewActive()) {
-							vm.shiftTradePeriod = newValue;
-						} else {
-							vm.absencePeriod = newValue;
-						}
-						requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
-						vm.agentSearchOptions.focusingSearch = false;
+			}, function(newValue, oldValue) {
+				$scope.$evalAsync(function() {
+					if (isShiftTradeViewActive()) {
+						vm.shiftTradePeriod = newValue;
+					} else {
+						vm.absencePeriod = newValue;
+					}
+					requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
+					vm.agentSearchOptions.focusingSearch = false;
 
-						if (newValue && JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
-							if (toggleService.Wfm_HideUnusedTeamsAndSites_42690) {
-								vm.getSitesAndTeamsAsync();
-							}
+					if (newValue && JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+						if (toggleService.Wfm_HideUnusedTeamsAndSites_42690) {
+							vm.getSitesAndTeamsAsync();
 						}
-					});
+					}
 				});
+			});
 
-			$scope.$watch(function () {
+			$scope.$watch(function() {
 				return vm.filterEnabled;
-			},
-				function () {
-					$scope.$broadcast('requests.filterEnabled.changed',
-						vm.filterEnabled);
-				});
+			}, function() {
+				$scope.$broadcast('requests.filterEnabled.changed',
+					vm.filterEnabled);
+			});
 
-			$scope.$watch(function () {
+			$scope.$watch(function() {
 				return vm.isUsingRequestSubmitterTimeZone;
-			},
-				function () {
-					$scope.$broadcast('requests.isUsingRequestSubmitterTimeZone.changed',
-						vm.isUsingRequestSubmitterTimeZone);
-				});
+			}, function() {
+				$scope.$broadcast('requests.isUsingRequestSubmitterTimeZone.changed',
+					vm.isUsingRequestSubmitterTimeZone);
+			});
 		}
 
 		function replaceArrayValues(from, to) {
