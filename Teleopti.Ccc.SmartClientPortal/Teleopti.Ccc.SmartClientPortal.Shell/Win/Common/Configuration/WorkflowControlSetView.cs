@@ -75,13 +75,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void setAbsenceRequestVisibilityOptions(IToggleManager toggleManager)
 		{
-			var allAbsenceRequestMiscOptionsAreHidden = false;
-
-			if (allAbsenceRequestMiscOptionsAreHidden)
-			{
-				hideMiscAbsenceRequestOptions();
-			}
-
 			if (!toggleManager.IsEnabled(Toggles.Wfm_Requests_Waitlist_Process_Order_39869))
 			{
 				radioButtonWaitlistFirstComeFirstServed.Visible = false;
