@@ -11954,24 +11954,6 @@ Lokasjon(er) åpningstider</value>
   <data name="OptimizingMaxSeats" xml:space="preserve">
     <value>Optimalisere maks plasser</value>
   </data>
-  <data name="ViewPossibility" xml:space="preserve">
-    <value>Vis mulighet</value>
-  </data>
-  <data name="HideStaffingPossibility" xml:space="preserve">
-    <value>Skjul mulig bemanning </value>
-  </data>
-  <data name="ShowAbsencePossibility" xml:space="preserve">
-    <value>Vis mulig fravær</value>
-  </data>
-  <data name="ShowOvertimePossibility" xml:space="preserve">
-    <value>Vis mulig overtid </value>
-  </data>
-  <data name="PossibilityToGetAbsenceColon" xml:space="preserve">
-    <value>Mulighet til å få fravær:</value>
-  </data>
-  <data name="PossibilityToGetOvertimeColon" xml:space="preserve">
-    <value>Muligheten til å få overtid:</value>
-  </data>
   <data name="DoNotBreakMaxSeatDotDotDot" xml:space="preserve">
     <value>Ikke bryt maks plass ...</value>
   </data>

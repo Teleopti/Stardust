@@ -23862,15 +23862,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
-        /// </summary>
-        public static string PossibilityToGetAbsenceColon {
-            get {
-                return ResourceManager.GetString("PossibilityToGetAbsenceColon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Possible Matches.
         /// </summary>
         public static string PossibleMatches {

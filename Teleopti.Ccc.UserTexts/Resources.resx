@@ -16379,9 +16379,6 @@ Do you want to participate?</value>
     <value>First line in file (header line) cannot be empty.</value>
     <comment>First line in file (header line) cannot be empty.</comment>
   </data>
-  <data name="PossibilityToGetAbsenceColon" xml:space="preserve">
-    <value />
-  </data>
   <data name="OpenSite" xml:space="preserve">
     <value>Open site</value>
     <comment>Open site</comment>
