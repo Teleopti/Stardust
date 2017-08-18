@@ -61,7 +61,6 @@ WebByPassDefaultPermissionCheck_37984 = true
 
 Report_UseOpenXmlFormat_35797 = true
 Wfm_Requests_Performance_36295 = true
-Wfm_Requests_Show_Pending_Reasons_39473 = true
 Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until function 'Approve based on business rules' is ready
 Wfm_Requests_Reply_Message_39629 = true
 Wfm_Requests_Show_Personal_Account_39628 = true

@@ -52,18 +52,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		}
 
 		[Test]
-		public void ShouldNotTradeShiftsOGetBrokenBusinessRulesWhenToggle39473IsOff()
-		{
-			var workflowControlSet = ShiftTradeTestHelper.CreateWorkFlowControlSet(false);
-
-			var result = doBasicShiftTrade(workflowControlSet, true, true);
-
-			Assert.IsFalse(result.PersonRequest.IsApproved);
-			Assert.IsTrue(result.PersonToSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == result.ActivityTo.Id);
-			Assert.IsTrue(result.PersonFromSchedule.PersonAssignment().ShiftLayers.Single().Payload.Id == result.ActivityFrom.Id);
-		}
-
-		[Test]
 		public void ShouldSetMinWeeklyWorkTimeBrokenRuleWhenUseMinWeekWorkTimeIsOn()
 		{
 			var businessRuleProvider = new BusinessRuleProvider();
@@ -160,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			return businessRuleProvider;
 		}
 
-		private basicShiftTradeTestResult doBasicShiftTrade(IWorkflowControlSet workflowControlSet, bool addBrokenBusinessRules = false, bool toggle39473IsOff = false)
+		private basicShiftTradeTestResult doBasicShiftTrade(IWorkflowControlSet workflowControlSet, bool addBrokenBusinessRules = false)
 		{
 			var personTo = PersonFactory.CreatePerson("To").WithId();
 			var personFrom = PersonFactory.CreatePerson("With").WithId();
@@ -197,7 +185,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
 
-			_shiftTradeTestHelper.HandleRequest(_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.Value), toggle39473IsOff);
+			_shiftTradeTestHelper.HandleRequest(_shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.Value));
 
 			return new basicShiftTradeTestResult
 			{
@@ -246,7 +234,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				new DateOnlyPeriod(new DateOnly(scheduleDate), new DateOnly(scheduleDate.AddDays(7))), _currentScenario.Current());
 			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
 
-			_shiftTradeTestHelper.HandleRequest(@event, false, businessRuleProvider);
+			_shiftTradeTestHelper.HandleRequest(@event, businessRuleProvider);
 			return personRequest;
 		}
 

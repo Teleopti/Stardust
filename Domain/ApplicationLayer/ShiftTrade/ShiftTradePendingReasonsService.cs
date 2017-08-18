@@ -14,11 +14,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			personRequest.TrySetBrokenBusinessRule(rulesToSave);
 		}
 	}
-
-	public class ShiftTradePendingReasonsService39473ToggleOff : IShiftTradePendingReasonsService
-	{
-		public void SetBrokenBusinessRulesFieldOnPersonRequest (IEnumerable<IBusinessRuleResponse> ruleRepsonses, IPersonRequest personRequest)
-		{}
-	}
-
 }

@@ -256,7 +256,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			var businessRuleProvider = new ConfigurableBusinessRuleProvider(_globalSettingDataRepository);
 			_shiftTradeTestHelper.SetScheduleDictionary(scheduleDictionary);
 
-			_shiftTradeTestHelper.HandleRequest(@event, false, businessRuleProvider);
+			_shiftTradeTestHelper.HandleRequest(@event, businessRuleProvider);
 		}
 
 		private IPerson createPerson(bool autoGrantShiftTrade = true)

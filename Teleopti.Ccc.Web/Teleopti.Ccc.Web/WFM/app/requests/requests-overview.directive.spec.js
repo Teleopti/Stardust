@@ -319,7 +319,6 @@
 					return {
 						Wfm_Requests_People_Search_36294: true,
 						Wfm_Requests_Performance_36295: true,
-						Wfm_Requests_Show_Pending_Reasons_39473: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}

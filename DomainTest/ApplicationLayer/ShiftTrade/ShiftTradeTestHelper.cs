@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 			SetScheduleDictionary(scheduleDictionary);
 
-			HandleRequest(@event, false, businessRuleProvider);
+			HandleRequest(@event, businessRuleProvider);
 			return personRequest;
 		}
 
@@ -217,19 +217,19 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			
 		}
 
-		internal void HandleRequest(AcceptShiftTradeEvent acceptShiftTradeEvent, bool toggle39473IsOff = false, IBusinessRuleProvider businessRuleProvider = null)
+		internal void HandleRequest(AcceptShiftTradeEvent acceptShiftTradeEvent, IBusinessRuleProvider businessRuleProvider = null)
 		{
-			setShiftTradeRequestHandler(toggle39473IsOff, businessRuleProvider);
+			setShiftTradeRequestHandler(businessRuleProvider);
 			_target.Handle(acceptShiftTradeEvent);
 		}
 
-		internal void HandleRequest(NewShiftTradeRequestCreatedEvent newShiftTradeRequestCreatedEvent, bool toggle39473IsOff = false, IBusinessRuleProvider businessRuleProvider = null)
+		internal void HandleRequest(NewShiftTradeRequestCreatedEvent newShiftTradeRequestCreatedEvent, IBusinessRuleProvider businessRuleProvider = null)
 		{
-			setShiftTradeRequestHandler(toggle39473IsOff, businessRuleProvider);
+			setShiftTradeRequestHandler(businessRuleProvider);
 			_target.Handle(newShiftTradeRequestCreatedEvent);
 		}
 
-		private void setShiftTradeRequestHandler(bool toggle39473IsOff, IBusinessRuleProvider businessRuleProvider)
+		private void setShiftTradeRequestHandler(IBusinessRuleProvider businessRuleProvider)
 		{
 			var authorization = new PersonRequestAuthorizationCheckerForTest();
 			var differenceService = new DifferenceEntityCollectionService<IPersistableScheduleData>();
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				, authorization,
 				_loadSchedulingDataForRequestWithoutResourceCalculation,
 				businessRuleProvider ?? _businessRuleProvider,
-				toggle39473IsOff ? new ShiftTradePendingReasonsService39473ToggleOff() : _shiftTradePendingReasonsService,
+				_shiftTradePendingReasonsService,
 				shiftTradeApproveService);
 		}
 

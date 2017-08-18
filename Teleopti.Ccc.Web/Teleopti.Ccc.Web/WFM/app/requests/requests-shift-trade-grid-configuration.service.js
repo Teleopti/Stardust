@@ -334,20 +334,18 @@
 				if (columns.length === 0) {
 					setupStandardColumns();
 
-					if (toggleSvc.Wfm_Requests_Show_Pending_Reasons_39473) {
-						var brokenRulesColumn = {
-							displayName: 'BrokenRules',
-							field: 'GetBrokenRules()',
-							headerCellFilter: 'translate',
-							cellClass: 'request-broken-rules',
-							visible: true,
-							pinnedRight: true,
-							enablePinning: false,
-							enableSorting: false,
-							minWidth: 111
-						};
-						columns.splice(10, 0, brokenRulesColumn);
-					}
+					var brokenRulesColumn = {
+						displayName: 'BrokenRules',
+						field: 'GetBrokenRules()',
+						headerCellFilter: 'translate',
+						cellClass: 'request-broken-rules',
+						visible: true,
+						pinnedRight: true,
+						enablePinning: false,
+						enableSorting: false,
+						minWidth: 111
+					};
+					columns.splice(10, 0, brokenRulesColumn);
 				}
 
 				if (shiftTradeRequestDateSummary) {
