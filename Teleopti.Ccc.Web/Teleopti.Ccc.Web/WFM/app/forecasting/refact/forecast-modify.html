@@ -1,7 +1,15 @@
 <div class="view-header with-desc">
-  <div class="view-title">
-    <h1><i class="mdi mdi-chart-line"></i> {{vm.selectedWorkload.Name}}</h1>
+  <div class="view-title" ng-if="vm.selectedWorkload.Days.length > 1">
+    <h1><i class="mdi mdi-chart-line"></i> {{vm.selectedWorkload.Name}} ({{vm.selectedWorkload.Scenario.Name}})</h1>
     <p>{{'ForecastWorkloadIntro'|translate}}</p>
+  </div>
+  <div ng-if="vm.selectedWorkload.Days.length < 1">
+    <p>No forecast data found for {{vm.selectedWorkload.Name}}, try running a forecast on the selected skill with "{{vm.selectedWorkload.Scenario.Name}}" scenario</p>
+    <a ui-sref="forecast"><!-- todo: fix missing data issue -->
+      <button type="button" class="wfm-btn wfm-btn-primary" name="button">
+        {{'BackToList'|translate}}
+      </button>
+    </a>
   </div>
 </div>
 
@@ -67,7 +75,7 @@
 
 
 <!-- Chart -->
-<div class="con-row">
+<div class="con-row" ng-if="vm.selectedWorkload.Days.length > 1">
   <div class="con-flex">
     <div class="panel material-depth-1">
       <div class="sub-header">

@@ -34,7 +34,7 @@
         workloadId: undefined,
         skill: undefined,
         days: undefined,
-        scenarioId: undefined
+        scenario: undefined
       },
     })
     .state('forecasting.start', {

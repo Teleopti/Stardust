@@ -66,7 +66,7 @@
           {
             Days: vm.selectedDayCount,
             WorkloadId: vm.selectedWorkload.Id,
-            ScenarioId: vm.selectedWorkload.ScenarioId,
+            ScenarioId: vm.selectedWorkload.Scenario.Id,
             CampaignTasksPercent: vm.campaignPercentage
           }), function (data, status, headers, config) {
 
@@ -93,7 +93,7 @@
           {
             Days: vm.selectedDayCount,
             WorkloadId: vm.selectedWorkload.Id,
-            ScenarioId: vm.selectedWorkload.ScenarioId,
+            ScenarioId: vm.selectedWorkload.Scenario.Id,
             OverrideTasks: form.overrideTasksValue,
             OverrideTalkTime: form.overrideTalkTimeValue,
             OverrideAfterCallWork: form.overrideAfterCallWorkValue,
@@ -116,7 +116,7 @@
             {
               Days: vm.selectedDayCount,
               WorkloadId: vm.selectedWorkload.Id,
-              ScenarioId: vm.selectedWorkload.ScenarioId,
+              ScenarioId: vm.selectedWorkload.Scenario.Id,
               ShouldSetOverrideTasks: true,
               ShouldSetOverrideTalkTime: true,
               ShouldSetOverrideAfterCallWork: true
@@ -147,7 +147,7 @@
               ForecastStart: moment().utc().add(1, 'months').startOf('month').toDate(),
               ForecastEnd: moment().utc().add(2, 'months').startOf('month').toDate(),
               WorkloadId: vm.selectedWorkload.Id,
-              ScenarioId: vm.selectedWorkload.ScenarioId
+              ScenarioId: vm.selectedWorkload.Scenario.Id
             };
 
             forecastingService.result(
@@ -161,19 +161,16 @@
           }
 
           function manageLocalStorage() {
-            if ($stateParams.days !== undefined && $stateParams.days.length > 0) {
-              $window.localStorage['workload'] = angular.toJson($stateParams);
-            }
-            storage = angular.fromJson($window.localStorage['workload']);
-
             vm.selectedWorkload = {
-              Id: storage.workloadId,
-              ChartId: storage.skill.ChartId,
-              SkillId: storage.skill.SkillId,
-              Days: storage.days,
-              Name: storage.skill.Workload.Name,
-              ScenarioId: storage.scenarioId
+              Id: $stateParams.workloadId,
+              ChartId: $stateParams.skill.ChartId,
+              SkillId: $stateParams.skill.SkillId,
+              Days: $stateParams.days,
+              Name: $stateParams.skill.Workload.Name,
+              Scenario: $stateParams.scenario
             }
+            console.log('selected', vm.selectedWorkload);
+            console.log('stateparams: ',$stateParams)
           };
         }
 
