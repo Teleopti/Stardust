@@ -103,6 +103,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 		self.hasOvertime(data.Schedule.HasOvertime);
 		self.requestsCount(data.Schedule.RequestsCount);
 		self.baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
+		self.daylightSavingAdjustment = data.DaylightSavingTimeAdjustment;
 
 		if (Teleopti.MyTimeWeb.Common.UseJalaaliCalendar) {
 			var dayDate = moment(data.Schedule.FixedDate, Teleopti.MyTimeWeb.Common.Constants.serviceDateTimeFormat.dateOnly);

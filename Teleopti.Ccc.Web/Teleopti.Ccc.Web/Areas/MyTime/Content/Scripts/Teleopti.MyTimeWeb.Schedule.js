@@ -557,6 +557,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	function initializeWeekViewModel(data) {
 		var self = this;
 		self.baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
+		self.daylightSavingAdjustment = data.DaylightSavingTimeAdjustment;
 		var currentUserDate = getCurrentUserDateTime(self.baseUtcOffsetInMinutes).format("YYYY-MM-DD");
 		self.isCurrentWeek(data.IsCurrentWeek);
 
