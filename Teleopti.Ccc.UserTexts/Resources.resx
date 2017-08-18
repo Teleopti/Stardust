@@ -16392,11 +16392,11 @@ Do you want to participate?</value>
     <comment>while importing staffing data the date format is wrong.</comment>
   </data>
   <data name="ImportBpoWrongResourceFormat" xml:space="preserve">
-    <value>The resource format is incorrect</value>
+    <value>The resources parameter (parameter number {0} with value: {1} ) is invalid. Parameter must be given as decimal number, for example 14.2.</value>
     <comment>while importing staffing data the resource format is wrong.</comment>
   </data>
   <data name="ImportBpoDuplicateRecord" xml:space="preserve">
-    <value>Duplicate record found</value>
+    <value>Duplicate record found. The same information is entered on more than one line in the import file and this is not allowed.</value>
     <comment>Found a duplicate record while importing</comment>
   </data>
   <data name="AbandonedRateParenthesisPercentSign" xml:space="preserve">

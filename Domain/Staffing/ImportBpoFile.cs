@@ -96,8 +96,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 
 		private ImportSkillCombinationResourceBpo createSkillCombinationResourceBpo(LineWithNumber lineWithNumber, IFormatProvider importFormatProvider, char skillSeparator, IList<ISkill> allSkills, ImportBpoFileResult result)
 		{
-			var resourceBpo = new ImportSkillCombinationResourceBpo();
-			resourceBpo = null;
+			ImportSkillCombinationResourceBpo resourceBpo = null;
 			var bpoLineTokens = lineWithNumber.Tokens;
 
 			bpoLineTokens.Where(token => token.Value.IsNullOrEmpty()).
@@ -125,7 +124,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 				if (!double.TryParse(bpoLineTokens[resources],NumberStyles.Float,importFormatProvider,out d))
 				{
 					result.Success = false;
-					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber, Resources.ImportBpoWrongResourceFormat));
+					result.ErrorInformation.Add(formatGeneralLineErrorMessage(lineWithNumber,
+						string.Format(Resources.ImportBpoWrongResourceFormat,validFieldNames.IndexOf(resources) + 1, bpoLineTokens[resources])));
 				}
 				if (result.Success)
 				{
@@ -139,9 +139,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 					};
 				}
 			}
-			
-
-			
 			return resourceBpo;
 		}
 
@@ -219,7 +216,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			//not considering resource here 
 			if (other == null) return false;
 			return other.StartDateTime == StartDateTime && other.Source == Source && EndDateTime == other.EndDateTime &&
-				   Enumerable.SequenceEqual(SkillIds.OrderBy(s=>s),other.SkillIds.OrderBy(s => s));
+				   SkillIds.OrderBy(s=>s).SequenceEqual(other.SkillIds.OrderBy(s => s));
 		}
 	}
 

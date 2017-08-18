@@ -13890,7 +13890,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Duplicate record found.
+        ///   Looks up a localized string similar to Duplicate record found. The same information is entered on more than one line in the import file and this is not allowed..
         /// </summary>
         public static string ImportBpoDuplicateRecord {
             get {
@@ -13908,7 +13908,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The resource format is incorrect.
+        ///   Looks up a localized string similar to The resources parameter (parameter number {0} with value: {1} ) is invalid. Parameter must be given as decimal number, for example 14.2..
         /// </summary>
         public static string ImportBpoWrongResourceFormat {
             get {
