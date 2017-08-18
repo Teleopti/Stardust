@@ -382,7 +382,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
 			target.RemoveChildSkill(target.ChildSkills[0]);
 			target.RemoveChildSkill(target.ChildSkills[0]);
             Assert.AreEqual(0, target.ChildSkills.Count);
-            target.AddChildSkill(_childSkill1);
+	        _childSkill1 = SkillFactory.CreateChildSkill("Child1", target);
+			target.AddChildSkill(_childSkill1);
             Assert.AreEqual(1, target.ChildSkills.Count);
             Assert.AreEqual(_childSkill1, target.ChildSkills[0]);
             target.AddChildSkill(_childSkill1);

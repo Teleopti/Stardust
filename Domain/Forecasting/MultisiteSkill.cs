@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-04-18
         /// </remarks>
-        public virtual ReadOnlyCollection<IChildSkill> ChildSkills => new ReadOnlyCollection<IChildSkill>(_childSkills.ToArray());
+        public virtual ReadOnlyCollection<IChildSkill> ChildSkills => new ReadOnlyCollection<IChildSkill>(_childSkills.Where(c => !((IDeleteTag)c).IsDeleted).ToArray());
 
 	    /// <summary>
         /// Sets the template at.
@@ -103,12 +104,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-04-22
         /// </remarks>
-        public virtual IDictionary<int, IMultisiteDayTemplate> TemplateMultisiteWeekCollection
-        {
-            get { return new ReadOnlyDictionary<int, IMultisiteDayTemplate>(_templateMultisiteWeekCollection); }
-        }
+        public virtual IDictionary<int, IMultisiteDayTemplate> TemplateMultisiteWeekCollection => new ReadOnlyDictionary<int, IMultisiteDayTemplate>(_templateMultisiteWeekCollection);
 
-        /// <summary>
+	    /// <summary>
         /// Tries to the find the template by name.
         /// </summary>
         /// <param name="target">The target.</param>
@@ -137,15 +135,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: robink
         /// Created date: 2008-04-22
         /// </remarks>
-        public override IRestrictionSet<ISkill> RestrictionSet
-        {
-            get
-            {
-                return MultisiteSkillRestrictionSet.CurrentRestrictionSet;
-            }
-        }
+        public override IRestrictionSet<ISkill> RestrictionSet => MultisiteSkillRestrictionSet.CurrentRestrictionSet;
 
-        /// <summary>
+	    /// <summary>
         /// Adds the template.
         /// </summary>
         /// <param name="dayTemplate">The day template.</param>
@@ -191,7 +183,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 throw new ArgumentException("There are still templates using this sub skill. Make sure all templates have zero values first.");
             }
 
-            _childSkills.Remove(childSkill);
+            //_childSkills.Remove(childSkill);
             //TODO! Maybe do this a nicer way? :)
             ((Skill)childSkill).SetDeleted();
         }
