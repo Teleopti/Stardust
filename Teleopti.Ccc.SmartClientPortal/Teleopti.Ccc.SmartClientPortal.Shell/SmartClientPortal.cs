@@ -597,8 +597,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 						break;
 					case DefinedRaptorApplicationFunctionPaths.OpenSchedulePage:
 						outlookBarSmartPartInfo.Icon = Resources.Schedules_filled_space_32x32;
-						if (_toggleManager.IsEnabled(Toggles.Wfm_Requests_PrepareForRelease_38771) &&
-							PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebRequests))
+						if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.WebRequests))
 						{
 							outlookBarSmartPartInfo.PreviewText = UserTexts.Resources.PreviewTheNewRequestsModule;
 							outlookBarSmartPartInfo.PreviewUrl = buildWfmUri("WFM/#/requests");

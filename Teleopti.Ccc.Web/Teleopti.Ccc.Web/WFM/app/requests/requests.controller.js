@@ -211,13 +211,11 @@
 		}
 
 		function setReleaseNotification() {
-			if (toggleService.Wfm_Requests_PrepareForRelease_38771) {
-				var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
-					.replace('{0}', $translate.instant('Requests'))
-					.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
-					.replace('{2}', '</a>');
-				noticeSvc.info(message, null, true);
-			}
+			var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
+				.replace('{0}', $translate.instant('Requests'))
+				.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
+				.replace('{2}', '</a>');
+			noticeSvc.info(message, null, true);
 		}
 
 		function isShiftTradeViewActive() {
