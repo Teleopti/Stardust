@@ -22,7 +22,6 @@
 		vm.thereIsRequest = thereIsRequest;
 		vm.isDayOff = isDayOff;
 		vm.shouldDisplayShiftTradeDayDetail = shouldDisplayShiftTradeDayDetail;
-		vm.showRelevantInfo = toggleSvc.Wfm_Requests_ShiftTrade_More_Relevant_Information_38492;
 		vm.showRequestsInDefaultStatus = toggleSvc.Wfm_Requests_Default_Status_Filter_39472;
 		vm.saveGridColumnState = toggleSvc.Wfm_Requests_Save_Grid_Columns_37976;
 		vm.setFilterEnabled = setFilterEnabled;
@@ -66,7 +65,6 @@
 		}
 
 		function hideShiftDetail() {
-			if (!vm.showRelevantInfo) return;
 			vm.displayShiftDetail = false;
 		}
 

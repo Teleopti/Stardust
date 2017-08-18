@@ -115,7 +115,6 @@
 		};
 
 		vm.hideShiftDetail = function () {
-			if (!vm.showRelevantInfo) return;
 			vm.displayShiftDetail = false;
 		};
 
@@ -152,7 +151,6 @@
 
 			vm.gridOptions = getGridOptions();
 			vm.saveGridColumnState = toggleService.Wfm_Requests_Save_Grid_Columns_37976;
-			vm.showRelevantInfo = toggleService.Wfm_Requests_ShiftTrade_More_Relevant_Information_38492;
 			if (toggleService.Wfm_Requests_Default_Status_Filter_39472) {
 				vm.filters = [{
 					'Status': '0'
