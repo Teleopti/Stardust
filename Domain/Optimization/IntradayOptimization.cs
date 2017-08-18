@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
+		private readonly IntradayOptimizationContext _intradayOptimizationContext;
 		private readonly TeamBlockIntradayOptimizationService _teamBlockIntradayOptimizationService;
 
 		public IntradayOptimization(TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
@@ -35,7 +37,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
-			WeeklyRestSolverExecuter weeklyRestSolverExecuter)
+			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
+			IntradayOptimizationContext intradayOptimizationContext) //flytta till rätt namespace
 		{
 			_teamBlockIntradayOptimizationService = teamBlockIntradayOptimizationService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -47,6 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
+			_intradayOptimizationContext = intradayOptimizationContext;
 		}
 
 		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule)
@@ -60,23 +64,24 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons,_schedulerStateHolder().Schedules, new GroupPageLight("_", GroupPageType.SingleAgent));
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
 
-			//TODO: we probably need something like using (_intradayOptimizationContext.Create(period)) here when getting largeGRoupTEsts green (and for perfreasons)
-
-			_teamBlockIntradayOptimizationService.Optimize(allMatrixes,
-				period,
-				agents,
-				optimizationPreferences,
-				rollbackService,
-				resourceCalculateDelayer,
-				stateHolder.SchedulingResultState.SkillDays,
-				stateHolder.Schedules,
-				stateHolder.SchedulingResultState.PersonsInOrganization,
-				NewBusinessRuleCollection.AllForScheduling(stateHolder.SchedulingResultState),
-				teamBlockGenerator);
-
-			if (runResolveWeeklyRestRule)
+			using (_intradayOptimizationContext.Create(period)) //no need for virtual skill part here - if not needed, switch to _resourceCalculationContext only
 			{
-				_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, agents, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+				_teamBlockIntradayOptimizationService.Optimize(allMatrixes,
+					period,
+					agents,
+					optimizationPreferences,
+					rollbackService,
+					resourceCalculateDelayer,
+					stateHolder.SchedulingResultState.SkillDays,
+					stateHolder.Schedules,
+					stateHolder.SchedulingResultState.PersonsInOrganization,
+					NewBusinessRuleCollection.AllForScheduling(stateHolder.SchedulingResultState),
+					teamBlockGenerator);
+
+				if (runResolveWeeklyRestRule)
+				{
+					_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, agents, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
+				}
 			}
 		}
 	}
