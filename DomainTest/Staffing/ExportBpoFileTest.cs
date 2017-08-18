@@ -209,14 +209,14 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 				{
 					StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
-					Resource = 20,
+					Resource = 4,
 					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
 				},
 				new SkillCombinationResource
 				{
 					StartDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
 					EndDateTime = new DateTime(2017, 08, 15, 8, 30, 0).Utc(),
-					Resource = 20,
+					Resource = 10,
 					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
 				}
 			});
@@ -224,8 +224,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
 			var forecastedData = Target.ForecastData(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
-			rows.First().Should().Be.EqualTo("skill,20170815 8:00,20170815 8:15,0,0,0,0");
-			rows.Second().Should().Be.EqualTo("skill,20170815 8:15,20170815 8:30,0,0,0,0");
+			rows.First().Should().Be.EqualTo("Direct sales,20170815 08:00,20170815 08:15,0,0,0,11.7");
+			rows.Second().Should().Be.EqualTo("Direct sales,20170815 08:15,20170815 08:30,0,0,0,5.7");
 		}
 
 		[Test, Ignore("WIP")]

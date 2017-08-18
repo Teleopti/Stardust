@@ -17,13 +17,15 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly ISkillDayRepository _skillDayRepository;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
+		private readonly IUserTimeZone _userTimeZone;
+		
 
-
-		public ExportBpoFile(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, ScheduledStaffingProvider scheduledStaffingProvider)
+		public ExportBpoFile(ISkillDayRepository skillDayRepository, ICurrentScenario currentScenario, ScheduledStaffingProvider scheduledStaffingProvider, IUserTimeZone userTimeZone)
 		{
 			_skillDayRepository = skillDayRepository;
 			_currentScenario = currentScenario;
 			_scheduledStaffingProvider = scheduledStaffingProvider;
+			_userTimeZone = userTimeZone;
 		}
 
 		public string ForecastData(ISkill skill, DateOnlyPeriod period, IFormatProvider formatProvider, string seperator=",", string dateTimeFormat = "yyyyMMdd HH:mm")
@@ -35,16 +37,17 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var forecastedData = new StringBuilder();
 			var allIntervals = new List<SkillStaffingInterval>();
 			allIntervals.AddRange(_scheduledStaffingProvider.StaffingPerSkill(new List<ISkill>{skill},period.ToDateTimePeriod(TimeZoneInfo.Utc),false,false));
+			//var allIntervals = new List<SkillStaffingIntervalLightModel>();
+			//foreach (var dateOnly in period.DayCollection())
+			//{
+			//	allIntervals.AddRange(_scheduledStaffingProvider.StaffingPerSkill(new List<ISkill> { skill },skill.DefaultResolution,dateOnly));
+			//}
 			
 			
 			if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out skillStaffPeriods))
 			{
 				foreach (var skillStaffPeriod in skillStaffPeriods.Values)
 				{
-					//var startDateTime = skillStaffPeriod.Period.StartDateTimeLocal(skill.TimeZone)
-					//	.ToString(dateTimeFormat, CultureInfo.InvariantCulture);
-					//var endDateTime = skillStaffPeriod.Period.StartDateTimeLocal(skill.TimeZone)
-					//	.ToString(dateTimeFormat, CultureInfo.InvariantCulture);
 					var ssiStartDate = skillStaffPeriod.Period.StartDateTime;
 					var ssiEndDate = skillStaffPeriod.Period.EndDateTime;
 					var staffingInterval =
@@ -56,8 +59,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 						staffing = staffingInterval.First().StaffingLevel;
 					}
 
-					var startDateTime = ssiStartDate.ToString(dateTimeFormat, formatProvider);
-					var endDateTime = ssiEndDate.ToString(dateTimeFormat, formatProvider);
+					//var startDateTime = ssiStartDate.ToString(dateTimeFormat, formatProvider);
+					//var endDateTime = ssiEndDate.ToString(dateTimeFormat, formatProvider);
+					var startDateTime = skillStaffPeriod.Period.StartDateTimeLocal(skill.TimeZone).ToString(dateTimeFormat, formatProvider);
+					var endDateTime = skillStaffPeriod.Period.EndDateTimeLocal(skill.TimeZone).ToString(dateTimeFormat, formatProvider);
 					var newDemand = skillStaffPeriod.FStaff - staffing;
 					if (newDemand < 0) newDemand = 0;
 					var row = $"{skill.Name}{seperator}{startDateTime}{seperator}{endDateTime}{seperator}" +
