@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling.Assignment
+namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class IntradayOptimizationContext
 	{

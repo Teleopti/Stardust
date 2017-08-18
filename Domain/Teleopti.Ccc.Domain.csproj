@@ -2143,7 +2143,7 @@
     <Compile Include="Repositories\ISkillAreaRepository.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculationContextFactory.cs" />
     <Compile Include="Scheduling\Assignment\ILimitForNoResourceCalculation.cs" />
-    <Compile Include="Scheduling\Assignment\IntradayOptimizationContext.cs" />
+    <Compile Include="Optimization\IntradayOptimizationContext.cs" />
     <Compile Include="Scheduling\Assignment\IResourceCalculateAfterDeleteDecider.cs" />
     <Compile Include="Scheduling\Assignment\LimitForNoResourceCalculation.cs" />
     <Compile Include="Scheduling\Assignment\ResourceCalculateAfterDeleteDecider.cs" />
