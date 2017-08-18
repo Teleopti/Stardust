@@ -73,21 +73,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			_optimizerHelperHelper.LockDaysForIntradayOptimization(allPersonMatrixList, selectedPeriod);
 			var teamBlocks = teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
-			var remainingInfoList = new List<ITeamBlockInfo>(teamBlocks);
 
-			while (remainingInfoList.Count > 0)
+			while (teamBlocks.Count > 0)
 			{
 				if (_currentIntradayOptimizationCallback.Current().IsCancelled())
 					return;
 
 				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, optimizationPreferences,
-					schedulingOptions, remainingInfoList,
+					schedulingOptions, teamBlocks,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer,
 					skillDays, scheduleDictionary, businessRuleCollection);
 				foreach (var teamBlock in teamBlocksToRemove)
 				{
-					remainingInfoList.Remove(teamBlock);
+					teamBlocks.Remove(teamBlock);
 				}
 			}
 		}

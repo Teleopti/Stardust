@@ -47,14 +47,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    return false;
 			
 		    assignShiftProjection(shiftProjectionCache, scheduleDay,
-			    schedulePartModifyAndRollbackService, businessRules, schedulingOptions);
+			    schedulePartModifyAndRollbackService, businessRules, schedulingOptions, resourceCalculateDelayer, doIntraIntervalCalculation);
 
-			resourceCalculateDelayer.CalculateIfNeeded(scheduleDay.DateOnlyAsPeriod.DateOnly,
-			    shiftProjectionCache.WorkShiftProjectionPeriod, doIntraIntervalCalculation);
 			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		}
 
-		private void assignShiftProjection(ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, SchedulingOptions schedulingOptions)
+		private void assignShiftProjection(ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, 
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, 
+			SchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation)
         {
 			shiftProjectionCache.SetDate(destinationScheduleDay.DateOnlyAsPeriod);
 
@@ -74,6 +74,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_assignScheduledLayers.Execute(schedulingOptions, destinationScheduleDay, shiftProjectionCache.TheMainShift);
 					
             schedulePartModifyAndRollbackService.Modify(destinationScheduleDay, businessRules);
-        }
+
+	        resourceCalculateDelayer.CalculateIfNeeded(destinationScheduleDay.DateOnlyAsPeriod.DateOnly,
+		        shiftProjectionCache.WorkShiftProjectionPeriod, doIntraIntervalCalculation);
+		}
     }
 }
