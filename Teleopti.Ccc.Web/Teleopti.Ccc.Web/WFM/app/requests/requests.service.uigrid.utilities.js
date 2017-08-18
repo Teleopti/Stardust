@@ -113,8 +113,10 @@
 		svc.getDefaultStatus = function (filters, tabName) {
 			var selectedRequestStatuses = [];
 			if (filters && filters.length > 0) {
-				var defaultStatusFilter = filters[0].Status;
-				requestFiltersMgr.setFilter('status', defaultStatusFilter, tabName);
+				if(!filters.filter(function(f){return Object.keys(f)[0] == 'Status';})[0]) return;
+
+				var defaultStatusFilter = filters.filter(function(f){return Object.keys(f)[0] == 'Status';})[0].Status;
+				requestFiltersMgr.setFilter('Status', defaultStatusFilter, tabName);
 				angular.forEach(defaultStatusFilter.split(' '),
 					function(value) {
 						if (value.trim() !== '') {

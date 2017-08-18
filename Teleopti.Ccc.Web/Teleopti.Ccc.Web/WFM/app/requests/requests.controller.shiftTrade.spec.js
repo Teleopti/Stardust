@@ -1,12 +1,23 @@
 ﻿'use strict';
 describe('Requests shift trade controller tests',
 	function () {
-		var $rootScope, $filter, $compile, $controller, $httpBackend, requestsDataService, requestsDefinitions, requestsNotificationService, currentUserInfo;
+		var $rootScope,
+			$filter,
+			$compile,
+			$controller,
+			controller,
+			scope,
+			requestsDataService,
+			requestsDefinitions,
+			requestsNotificationService,
+			currentUserInfo,
+			requestsFilterSvc,
+			requestsTabNames;
 
 		var period = {
-			startDate: moment().startOf('week')._d,
-			endDate: moment().endOf('week')._d
-		},
+				startDate: moment().startOf('week')._d,
+				endDate: moment().endOf('week')._d
+			},
 			fakeStateParams = {
 				agentSearchTerm: '',
 				selectedGroupIds: [],
@@ -18,8 +29,6 @@ describe('Requests shift trade controller tests',
 					return period;
 				}
 			};
-
-		var controller, scope;
 
 		beforeEach(function () {
 			module('wfm.templates');
@@ -48,13 +57,14 @@ describe('Requests shift trade controller tests',
 			});
 		});
 
-		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _$httpBackend_, _requestsDefinitions_) {
+		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestsFilter_, REQUESTS_TAB_NAMES) {
 			$filter = _$filter_;
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			$controller = _$controller_;
-			$httpBackend = _$httpBackend_;
 			requestsDefinitions = _requestsDefinitions_;
+			requestsFilterSvc = _RequestsFilter_;
+			requestsTabNames = REQUESTS_TAB_NAMES;
 			setUpTarget();
 		}));
 
@@ -327,6 +337,69 @@ describe('Requests shift trade controller tests',
 			expect(selectedStatus[0].Id).toEqual(status0.trim());
 			expect(selectedStatus[1].Id).toEqual(status1.trim());
 			expect(selectedStatus[2].Id).toEqual(status2.trim());
+		});
+
+		it('should save the filters data in RequestsFilter service for shiftTrade', function() {
+			compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			expect(requestsFilterSvc.filters[requestsTabNames.shiftTrade]).not.toBe(null);
+
+			var status0 = '79',
+				status1 = '86',
+				status2 = '93',
+				filterName = 'Status',
+				expectedFilters = [{}];
+
+			expectedFilters[0][filterName] = status0 + ' ' + status1 + ' ' + status2 ;
+
+			controller.selectedRequestStatuses = [
+				{
+					Id: status0
+				}, {
+					Id: status1
+				}, {
+					Id: status2
+				}];
+			controller.statusFilterClose();
+
+
+			var shiftTradeFilters = requestsFilterSvc.filters[requestsTabNames.shiftTrade];
+			expect(shiftTradeFilters.length).toEqual(expectedFilters.length);
+			expect(Object.keys(shiftTradeFilters[0])[0]).toEqual(Object.keys(expectedFilters[0])[0]);
+			expect(shiftTradeFilters[0][filterName]).toEqual(expectedFilters[0][filterName]);
+		});
+
+		it('should clear the filters data in RequestsFilter service for shiftTrade', function() {
+			compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			expect(requestsFilterSvc.filters[requestsTabNames.shiftTrade]).not.toBe(null);
+
+			var status0 = '79',
+				status1 = '86',
+				status2 = '93',
+				filterName = 'Status',
+				expectedFilters = [{}];
+
+			expectedFilters[0][filterName] = status0 + ' ' + status1 + ' ' + status2 ;
+
+			controller.selectedRequestStatuses = [
+				{
+					Id: status0
+				}, {
+					Id: status1
+				}, {
+					Id: status2
+				}];
+
+			controller.statusFilterClose();
+
+			var shiftTradeFilters = requestsFilterSvc.filters[requestsTabNames.shiftTrade];
+			expect(shiftTradeFilters[0][filterName]).toEqual(expectedFilters[0][filterName]);
+
+			controller.clearAllFilters();
+			expect(shiftTradeFilters.length).toEqual(0);
 		});
 
 		it('should get broken rules column', function () {

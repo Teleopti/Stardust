@@ -32,6 +32,8 @@
 		vm.requests = [];
 		vm.period = {};
 		vm.filters = [];
+		vm.subjectFilter = undefined;
+		vm.messageFilter = undefined;
 		vm.isLoading = false;
 		vm.sortingOrders = [];
 		vm.agentSearchTerm = '';
@@ -100,7 +102,7 @@
 				});
 			vm.selectedRequestStatuses = [];
 
-			requestFilterSvc.resetFilter();
+			requestFilterSvc.resetFilter(requestsTabNames.shiftTrade);
 			vm.filters = requestFilterSvc.filters[requestsTabNames.shiftTrade];
 			vm.subjectFilter = undefined;
 			vm.messageFilter = undefined;
@@ -148,9 +150,21 @@
 				vm.sortingOrders.push(sortingOrder);
 
 			vm.gridOptions = getGridOptions();
-			vm.filters = [{
-				'Status': '0'
-			}];
+
+			if(requestFilterSvc.filters[requestsTabNames.shiftTrade]){
+				vm.filters = requestFilterSvc.filters[requestsTabNames.shiftTrade];
+
+				var subjectFilter = vm.filters.filter(function(f){return Object.keys(f)[0] == 'Subject';})[0];
+				var messageFilter = vm.filters.filter(function(f){return Object.keys(f)[0] == 'Message';})[0];
+
+				if(subjectFilter)
+					vm.subjectFilter = subjectFilter['Subject'];
+				if(messageFilter)
+					vm.messageFilter = messageFilter['Message'];
+			} else{
+				vm.filters = [{ 'Status': '0' }];
+			}
+
 			vm.initialized = true;
 			vm.filterEnabled = $stateParams.filterEnabled;
 			vm.allRequestStatuses = requestsDataService.getAllRequestStatuses(vm.shiftTradeView);

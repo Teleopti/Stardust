@@ -36,23 +36,32 @@
 		};
 
 		svc.setFilter = function(name, filter, tabName) {
-			var nameInLowerCase = name.trim().toLowerCase();
-			var expectedFilterNames = ['status', 'subject', 'message', 'type'];
+			var expectedFilterNames = ['Status', 'Subject', 'Message', 'Type'];
+			var index;
 
-			if (expectedFilterNames.indexOf(nameInLowerCase) > -1) {
-				var filterName = nameInLowerCase.charAt(0).toUpperCase() + nameInLowerCase.slice(1);
-				svc.removeFilter(filterName, tabName);
+			angular.forEach(svc.filters[tabName], function(f, i){
+				if(Object.keys(f)[0] == name)
+					index = i;
+			});
 
-				if (filter == undefined || filter.trim().length === 0) return;
+			if (expectedFilterNames.indexOf(name) > -1) {
+				if(svc.filters[tabName] && index > -1){
+					if(filter && filter.length > 0)
+						svc.filters[tabName][index][name] = filter;
+					else 
+						svc.removeFilter(name, tabName);
+				}else {
+					if (filter == undefined || filter.trim().length === 0) return;
 
-				var filterObj = {};
-				filterObj[filterName] = filter.trim();
+					var filterObj = {};
+					filterObj[name] = filter.trim();
 
-				if(svc.filters[tabName] == undefined){
-					svc.filters[tabName] = [];
+					if(svc.filters[tabName] == undefined){
+						svc.filters[tabName] = [];
+					}
+
+					svc.filters[tabName].push(filterObj);
 				}
-
-				svc.filters[tabName].push(filterObj);
 			}
 		};
 

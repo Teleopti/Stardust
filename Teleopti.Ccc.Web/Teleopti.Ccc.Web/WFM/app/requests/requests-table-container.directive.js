@@ -39,7 +39,7 @@
 			if (vm.filters && vm.filters.length > 0) {
 				vm.selectedRequestStatuses = [];
 				var defaultStatusFilter = vm.filters[0].Status;
-				requestFilterSvc.setFilter('status', defaultStatusFilter, tabName);
+				requestFilterSvc.setFilter('Status', defaultStatusFilter, tabName);
 				angular.forEach(defaultStatusFilter.split(' '), function (value) {
 					if (value.trim() !== '') {
 						vm.selectedRequestStatuses.push({ Id: value.trim() });
@@ -48,7 +48,7 @@
 
 				vm.defaultStatusesLoaded = true;
 			}
-		}
+		};
 
 		function showShiftDetail(params) {
 			vm.schedules = params.schedules;
@@ -137,8 +137,8 @@
 				status.Selected = false;
 			});
 			vm.selectedRequestStatuses = [];
-			
-			requestFilterSvc.resetFilter();
+
+			requestFilterSvc.resetFilter(tabName);
 			vm.filters = requestFilterSvc.filters[tabName];
 			vm.subjectFilter = undefined;
 			vm.messageFilter = undefined;

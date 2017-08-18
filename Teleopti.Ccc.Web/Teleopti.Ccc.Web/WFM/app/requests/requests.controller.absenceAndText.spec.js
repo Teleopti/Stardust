@@ -1,7 +1,16 @@
 ﻿'use strict';
 describe('Requests - absence and text controller tests',
 	function () {
-		var $rootScope, $filter, $compile, $controller, $httpBackend, requestsDataService, requestsDefinitions, requestsNotificationService, currentUserInfo;
+		var $rootScope,
+			$filter,
+			$compile,
+			$controller,
+			requestsDataService,
+			requestsDefinitions,
+			requestsNotificationService,
+			currentUserInfo,
+			requestsFilterSvc,
+			requestsTabNames;
 
 		var period = {
 				startDate: moment().startOf('week')._d,
@@ -50,24 +59,14 @@ describe('Requests - absence and text controller tests',
 			});
 		});
 
-		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _$httpBackend_, _requestsDefinitions_) {
+		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestsFilter_, REQUESTS_TAB_NAMES) {
 			$filter = _$filter_;
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			$controller = _$controller_;
-			$httpBackend = _$httpBackend_;
 			requestsDefinitions = _requestsDefinitions_;
-
-			$httpBackend.whenGET('../api/Absence/GetRequestableAbsences').respond([{
-				'Id': '47d9292f-ead6-40b2-ac4f-9b5e015ab330',
-				'Name': 'Holiday',
-				'ShortName': 'HO'
-			},
-			{
-				'Id': '041db668-3185-4d7a-8781-9b5e015ab330',
-				'Name': 'Time off in lieu',
-				'ShortName': 'TL'
-				}]);
+			requestsFilterSvc = _RequestsFilter_;
+			requestsTabNames = REQUESTS_TAB_NAMES;
 
 			setUpTarget();
 		}));
@@ -302,6 +301,70 @@ describe('Requests - absence and text controller tests',
 			expect(selectedStatus[1].Id).toEqual(status1.trim());
 			expect(selectedStatus[2].Id).toEqual(status2.trim());
 		});
+
+		it('should save the filters data in RequestsFilter service for absenceAndText', function() {
+			compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			expect(requestsFilterSvc.filters[requestsTabNames.absenceAndText]).not.toBe(null);
+
+			var status0 = '79',
+				status1 = '86',
+				status2 = '93',
+				filterName = 'Status',
+				expectedFilters = [{}];
+
+			expectedFilters[0][filterName] = status0 + ' ' + status1 + ' ' + status2 ;
+
+			controller.selectedRequestStatuses = [
+				{
+					Id: status0
+				}, {
+					Id: status1
+				}, {
+					Id: status2
+				}];
+			controller.statusFilterClose();
+
+
+			var absenceAndTextFilters = requestsFilterSvc.filters[requestsTabNames.absenceAndText];
+			expect(absenceAndTextFilters.length).toEqual(expectedFilters.length);
+			expect(Object.keys(absenceAndTextFilters[0])[0]).toEqual(Object.keys(expectedFilters[0])[0]);
+			expect(absenceAndTextFilters[0][filterName]).toEqual(expectedFilters[0][filterName]);
+		});
+
+		it('should clear the filters data in RequestsFilter service for absenceAndText', function() {
+			compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			expect(requestsFilterSvc.filters[requestsTabNames.absenceAndText]).not.toBe(null);
+
+			var status0 = '79',
+				status1 = '86',
+				status2 = '93',
+				filterName = 'Status',
+				expectedFilters = [{}];
+
+			expectedFilters[0][filterName] = status0 + ' ' + status1 + ' ' + status2 ;
+
+			controller.selectedRequestStatuses = [
+				{
+					Id: status0
+				}, {
+					Id: status1
+				}, {
+					Id: status2
+				}];
+
+			controller.statusFilterClose();
+
+			var absenceAndTextFilters = requestsFilterSvc.filters[requestsTabNames.absenceAndText];
+			expect(absenceAndTextFilters[0][filterName]).toEqual(expectedFilters[0][filterName]);
+
+			controller.clearAllFilters();
+			expect(absenceAndTextFilters.length).toEqual(0);
+		});
+
 
 		it('should display correct time for DST', function () {
 			fakeStateParams.selectedGroupIds = ['team'];

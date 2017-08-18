@@ -6,9 +6,9 @@
 		.controller('requestsOverviewCtrl', requestsOverviewController)
 		.directive('requestsOverview', requestsOverviewDirective);
 
-	requestsOverviewController.$inject = ['$scope', "$attrs", 'requestsDataService', "Toggle", "requestsNotificationService"];
+	requestsOverviewController.$inject = ['$scope', "$attrs", 'requestsDataService', "Toggle", "requestsNotificationService", "RequestsFilter", "REQUESTS_TAB_NAMES"];
 
-	function requestsOverviewController($scope, $attrs, requestsDataService, toggleService, requestsNotificationService) {
+	function requestsOverviewController($scope, $attrs, requestsDataService, toggleService, requestsNotificationService, requestFilterSvc, requestsTabNames) {
 		var vm = this;
 
 		vm.loadRequestWatchersInitialized = false;
@@ -31,7 +31,13 @@
 			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAllRequestsPromise;
 			// By default, show shift trade requests in pending only;
 			// and show absence and text requests in pending and waitlisted only;
-			vm.filters = [{ "Status": vm.shiftTradeView ? "0" : "0 5" }];
+			var tabName = vm.shiftTradeView ? requestsTabNames.shiftTrade : requestsTabNames.absenceAndText;
+
+			if(requestFilterSvc.filters[tabName]){
+				vm.filters = requestFilterSvc.filters[tabName];
+			} else{
+				vm.filters = [{ "Status": vm.shiftTradeView ? "0" : "0 5" }];
+			}
 		}
 
 		toggleService.togglesLoaded.then(init);
@@ -42,7 +48,7 @@
 					vm.isLoading = false;
 					return;
 				}
-					
+
 				vm.requests = requests.data.Requests;
 
 				if (requests.data.IsSearchPersonCountExceeded) {
@@ -99,7 +105,6 @@
 				period: '=?',
 				agentSearchTerm: '=?',
 				selectedGroupIds: '=?',
-				filters: '=?',
 				filterEnabled: '=?',
 				isActive: '=?',
 				onInitCallBack: '&?',
