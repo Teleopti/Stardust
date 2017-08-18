@@ -15,7 +15,7 @@ namespace Stardust.Node
 			NodeName = nodeName;
 			PingToManagerSeconds = pingToManagerSeconds;
 			SendDetailsToManagerMilliSeconds = sendDetailsToManagerMilliSeconds;
-
+			PriorityBelowNormal = true;
 			ValidateParameters();
 		}
 		
@@ -25,6 +25,7 @@ namespace Stardust.Node
 		public Assembly HandlerAssembly { get; }
 		public double PingToManagerSeconds { get; }
 		public double SendDetailsToManagerMilliSeconds { get; }
+		public bool PriorityBelowNormal { get; set; }
 
 		private void ValidateParameters()
 		{
