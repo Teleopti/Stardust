@@ -285,17 +285,6 @@
 						minWidth: 111
 					},
 					{
-						displayName: 'Id',
-						field: 'Id',
-						headerCellFilter: 'translate',
-						cellClass: 'request-id',
-						visible: false,
-						headerCellClass: 'request-id-header',
-						pinnedRight: true,
-						enablePinning: false,
-						minWidth: 111
-					},
-					{
 						displayName: 'UpdatedOn',
 						field: 'FormatedUpdatedTime()',
 						headerCellFilter: 'translate',
