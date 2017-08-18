@@ -71,9 +71,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_shiftTradeMaxSeatValidator = new ShiftTradeMaxSeatValidator(_currentScenario, _scheduleStorage, _personRepository);
 			_activeShiftTradeMaxSeatValidator = _shiftTradeMaxSeatValidator;
 
-			var specificatonChecker = new SpecificationChecker(GetDefaultShiftTradeSpecifications());
+			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings
+			{
+				BusinessRuleConfigs = new ShiftTradeBusinessRuleConfig[] { }
+			});
 
-			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificatonChecker);
+			var specificationChecker = new SpecificationCheckerWithConfig(GetDefaultShiftTradeSpecifications(), globalSettingDataRepository);
+
+			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificationChecker);
 			_loadSchedulingDataForRequestWithoutResourceCalculation =
 				new LoadSchedulesForRequestWithoutResourceCalculation(new FakePersonAbsenceAccountRepository(), _scheduleStorage);
 		}
@@ -87,8 +93,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		internal void UseSpecificationChecker(IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications)
 		{
-			var specificatonChecker = new SpecificationChecker(shiftTradeSpecifications);
-			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificatonChecker);
+			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings
+			{
+				BusinessRuleConfigs = new ShiftTradeBusinessRuleConfig[] { }
+			});
+
+			var specificationChecker = new SpecificationCheckerWithConfig(GetDefaultShiftTradeSpecifications(), globalSettingDataRepository);
+			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificationChecker);
 		}
 
 		internal List<IShiftTradeSpecification> GetDefaultShiftTradeSpecifications()
@@ -126,7 +138,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				new ValidatorSpecificationForTest (true, "_openShiftTradePeriodSpecification"),
 				new ShiftTradeMaxSeatsSpecification (_globalSettingDataRepository, shiftTradeMaxSeatValidator)
 			};
-			var specificationChecker = new SpecificationChecker(shiftTradeSpecifications);
+			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
+			globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings
+			{
+				BusinessRuleConfigs = new ShiftTradeBusinessRuleConfig[] { }
+			});
+
+			var specificationChecker = new SpecificationCheckerWithConfig(GetDefaultShiftTradeSpecifications(), globalSettingDataRepository);
 
 			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificationChecker);
 			_activeShiftTradeMaxSeatValidator = shiftTradeMaxSeatValidator;
