@@ -233,9 +233,7 @@
 			.then(vm.init);
 
 		function initToggles() {
-			vm.canApproveOrDenyShiftTradeRequest = toggleService.Wfm_Requests_ApproveDeny_ShiftTrade_38494;
 			vm.isShiftTradeViewActive = isShiftTradeViewActive;
-			vm.canApproveOrDenyRequest = canApproveOrDenyRequest;
 			vm.filterEnabled = true;
 		}
 
@@ -249,10 +247,6 @@
 
 		function isShiftTradeViewActive() {
 			return $state.current.name.indexOf('requestsRefactor-shiftTrade') > -1;
-		}
-
-		function canApproveOrDenyRequest() {
-			return !isShiftTradeViewActive() || (isShiftTradeViewActive() && vm.canApproveOrDenyShiftTradeRequest);
 		}
 
 		function forceRequestsReloadWithoutSelection() {

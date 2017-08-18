@@ -47,8 +47,7 @@
 		</div>
 
 		<div class="right-part">
-			<requests-commands-pane ng-if="vm.canApproveOrDenyRequest()"
-									before-command="vm.onBeforeCommand()"
+			<requests-commands-pane before-command="vm.onBeforeCommand()"
 									is-shift-trade-view-active="vm.isShiftTradeViewActive()"
 									after-command-success="vm.onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod)"
 									on-error-messages="vm.onErrorMessages(errorMessages)"

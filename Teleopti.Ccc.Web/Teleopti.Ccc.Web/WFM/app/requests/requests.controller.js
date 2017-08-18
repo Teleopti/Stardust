@@ -165,9 +165,7 @@
 		};
 
 		function init() {
-			vm.canApproveOrDenyShiftTradeRequest = toggleService.Wfm_Requests_ApproveDeny_ShiftTrade_38494;
 			vm.isShiftTradeViewActive = isShiftTradeViewActive;
-			vm.canApproveOrDenyRequest = canApproveOrDenyRequest;
 			vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
 
 			vm.dateRangeTemplateType = 'popup';
@@ -220,11 +218,6 @@
 
 		function isShiftTradeViewActive() {
 			return vm.selectedTabIndex === shiftTradeRequestTabIndex;
-		}
-
-		function canApproveOrDenyRequest() {
-			return (vm.selectedTabIndex === absenceRequestTabIndex) ||
-				(vm.selectedTabIndex === shiftTradeRequestTabIndex && vm.canApproveOrDenyShiftTradeRequest);
 		}
 
 		function forceRequestsReloadWithoutSelection() {
