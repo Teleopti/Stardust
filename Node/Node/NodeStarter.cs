@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
@@ -70,12 +69,6 @@ namespace Stardust.Node
 
 				//to start it
 				container.Resolve<NodeController>();
-
-				//set process priority class to BelowNormal
-				if (nodeConfiguration.PriorityBelowNormal)
-				{
-					Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
-				}
 
 				_quitEvent.WaitOne();
 			}
