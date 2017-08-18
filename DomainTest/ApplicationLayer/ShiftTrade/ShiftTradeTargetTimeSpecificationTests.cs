@@ -56,15 +56,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		}
 
 		[Test]
-		public void ShouldDenyWhenUsingSpecificationChecker()
-		{
-			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(new[] {new ShiftTradeBusinessRuleConfig()},
-				useSpecificationCheckerWithConfig: false);
-			Assert.IsTrue(personRequest.IsDenied);
-			Assert.IsTrue(personRequest.DenyReason == "ShiftTradeTargetTimeDenyReason");
-		}
-
-		[Test]
 		public void ShouldNotValidateWhenSpecificationIsConfiguredAsDisabled()
 		{
 			var shiftTradeBusinessRuleConfig = new ShiftTradeBusinessRuleConfig
@@ -123,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				HandleOptionOnFailed = RequestHandleOption.Pending
 			};
 			var personRequest = createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(
-				new[] {shiftTradeBusinessRuleConfig}, false);
+				new[] {shiftTradeBusinessRuleConfig});
 			Assert.IsTrue(personRequest.IsPending);
 
 			acceptShiftTradeWithShiftTradeTargetTimeSpecificationBroken(personRequest);
@@ -198,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 
 		private IPersonRequest createShiftTradeWithShiftTradeTargetTimeSpecificationBroken(
 			ShiftTradeBusinessRuleConfig[] shiftTradeBusinessRuleConfigs
-			, bool autoGrantShiftTrade = true, bool useSpecificationCheckerWithConfig = true)
+			, bool autoGrantShiftTrade = true)
 		{
 			var scheduleDate = new DateTime(2016, 7, 25);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
@@ -232,14 +223,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 				BusinessRuleConfigs = shiftTradeBusinessRuleConfigs
 			});
 
-			if (useSpecificationCheckerWithConfig)
-			{
-				_shiftTradeTestHelper.UseSpecificationCheckerWithConfig(shiftTradeSpecifications, _globalSettingDataRepository);
-			}
-			else
-			{
-				_shiftTradeTestHelper.UseSpecificationChecker(shiftTradeSpecifications);
-			}
+			_shiftTradeTestHelper.UseSpecificationCheckerWithConfig(shiftTradeSpecifications, _globalSettingDataRepository);
 
 			_shiftTradeTestHelper.HandleRequest(@event);
 			return personRequest;

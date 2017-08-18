@@ -91,18 +91,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificatonChecker);
 		}
 
-		internal void UseSpecificationChecker(IEnumerable<IShiftTradeSpecification> shiftTradeSpecifications)
-		{
-			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
-			globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings
-			{
-				BusinessRuleConfigs = new ShiftTradeBusinessRuleConfig[] { }
-			});
-
-			var specificationChecker = new SpecificationCheckerWithConfig(GetDefaultShiftTradeSpecifications(), globalSettingDataRepository);
-			_validator = new ShiftTradeValidator(new FakeShiftTradeLightValidator(), specificationChecker);
-		}
-
 		internal List<IShiftTradeSpecification> GetDefaultShiftTradeSpecifications()
 		{
 			var shiftTradeSpecifications = new List<IShiftTradeSpecification>
