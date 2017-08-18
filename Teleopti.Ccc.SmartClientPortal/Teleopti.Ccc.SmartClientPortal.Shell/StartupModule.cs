@@ -1,4 +1,5 @@
 ﻿using System.Runtime;
+using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		public StartupModule(IIocConfiguration configuration)
 		{
-			ProfileOptimization.SetProfileRoot(@".");
+			ProfileOptimization.SetProfileRoot(Application.UserAppDataPath);
 			ProfileOptimization.StartProfile("StartupModule.Profile");
 			_configuration = configuration;
 		}

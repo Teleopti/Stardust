@@ -12,7 +12,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 		public ApplicationStartup(IComponentContext componentContext, ILogonPresenter logonPresenter, WebUrlHolder webUrlHolder)
 		{
-			ProfileOptimization.StartProfile("ApplicationStartup.Profile");
 			_componentContext = componentContext;
 			_logonPresenter = logonPresenter;
 			_webUrlHolder = webUrlHolder;

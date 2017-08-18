@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Common.Library
 
         protected SmartClientApplication(IComponentContext container)
         {
-			ProfileOptimization.StartProfile("SmartClientApplication.Profile");
             _container = container;
         }
 
