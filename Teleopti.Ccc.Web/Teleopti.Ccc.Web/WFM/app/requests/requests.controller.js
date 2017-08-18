@@ -37,7 +37,7 @@
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 			]
 		};
-
+		vm.businessHierarchyToggleEnabled = toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309;
 		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
 		vm.hasFavoriteSearchPermission = false;
 		vm.onFavoriteSearchInitDefer = $q.defer();
@@ -49,6 +49,9 @@
 		var shiftTradeRequestTabIndex = 1;
 
 		var loggedonUsersTeamId = $q.defer();
+		if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {
+			loggedonUsersTeamId.resolve(null);
+		}
 
 		vm.orgPickerSelectedText = function () {
 			var text = '';
@@ -104,7 +107,7 @@
 			.then(loggedonUsersTeamId.promise.then(function (defaultTeam) {
 				if (angular.isString(defaultTeam) && defaultTeam.length > 0)
 					replaceArrayValues([defaultTeam], vm.selectedGroups.groupIds);
-				if (!vm.hasFavoriteSearchPermission) {
+				if (vm.businessHierarchyToggleEnabled && !vm.hasFavoriteSearchPermission) {
 					$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: vm.selectedGroups.groupIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 				}
 			}))
