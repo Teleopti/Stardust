@@ -68,7 +68,7 @@
     "ngstorage": "0.3.9",
     "npm-run-all": "4.0.2",
     "onchange": "3.2.1",
-    "teleopti-styleguide": "1.9.23",
+    "teleopti-styleguide": "1.9.24",
     "webpack": "2.2.1"
   },
   "scripts": {
