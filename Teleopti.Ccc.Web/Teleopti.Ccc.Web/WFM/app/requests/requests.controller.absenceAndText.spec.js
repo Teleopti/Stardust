@@ -32,7 +32,6 @@ describe('Requests - absence and text controller tests',
 				$provide.service('Toggle', function () {
 					return {
 						Wfm_Requests_People_Search_36294: true,
-						Wfm_Requests_Performance_36295: true,
 						Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309: true,
 						Wfm_Requests_Save_Grid_Columns_37976: true,
 						togglesLoaded: {
@@ -419,16 +418,6 @@ describe('Requests - absence and text controller tests',
 
 			this.getHasSentRequests = function () { return _hasSentRequests; };
 			this.getLastRequestParameters = function () { return _lastRequestParameters; };
-
-			this.getAllRequestsPromise_old = function () {
-				_hasSentRequests = true;
-				_lastRequestParameters = arguments;
-				return {
-					then: function (cb) {
-						cb({ data: _requests });
-					}
-				};
-			};
 
 			this.getAllRequestsPromise = function () {
 				_hasSentRequests = true;

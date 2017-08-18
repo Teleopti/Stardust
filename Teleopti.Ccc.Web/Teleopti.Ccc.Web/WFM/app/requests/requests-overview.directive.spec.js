@@ -17,7 +17,6 @@
 				$provide.service('Toggle', function () {
 					return {
 						Wfm_Requests_People_Search_36294: true,
-						Wfm_Requests_Performance_36295: true,
 						Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
@@ -209,14 +208,14 @@
 
 		it('should get agentSearchTerm and selectedTeamIds from event',function(){
 			targetScope.agentSearchTerm = 'text';
-			targetScope.selectedGroupIds = ['1','2','3'];
-			targetElement = $compile('<requests-overview shift-trade-view="true" agent-search-term="agentSearchTerm" selected-group-ids="selectedTeamIds"></requests-overview>')(targetScope);
+			targetScope.onInitCallBack = function() {};
+			targetScope.selectedGroupIds = ['1', '2', '3'];
+
+			targetElement = $compile('<requests-overview shift-trade-view="true" agent-search-term="agentSearchTerm" selected-group-ids="selectedTeamIds" on-init-call-back="onInitCallBack"></requests-overview>')(targetScope);
 			targetScope.$digest();
 
 			var vm = getInnerScope(targetElement).requestsOverview;
 			vm.isActive = true;
-			vm.isPaginationEnabled = false;
-
 			targetScope.$broadcast('reload.requests.with.selection',{selectedGroupIds:['selectedTeamIds1','selectedTeamIds2'],agentSearchTerm:'testSearchTerm'});
 
 			expect(vm.agentSearchTerm).toEqual('testSearchTerm');
@@ -318,7 +317,6 @@
 				$provide.service('Toggle', function () {
 					return {
 						Wfm_Requests_People_Search_36294: true,
-						Wfm_Requests_Performance_36295: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}
@@ -814,17 +812,20 @@
 		this.getHasSentRequests = function () { return _hasSentRequests; }
 		this.getLastRequestParameters = function () { return _lastRequestParameters; }
 
-		this.getAllRequestsPromise_old = function () {
+		this.getAllRequestsPromise = function () {
 			_hasSentRequests = true;
 			_lastRequestParameters = arguments;
 			return {
 				then: function (cb) {
-					cb({ data: _requests });
+					_callCounts++;
+					cb({
+						data: _getAllRequetsCallbackData
+					});
 				}
 			}
-		};
+		}
 
-		this.getAllRequestsPromise = function () {
+		this.getShiftTradeRequestsPromise = function () {
 			_hasSentRequests = true;
 			_lastRequestParameters = arguments;
 			return {

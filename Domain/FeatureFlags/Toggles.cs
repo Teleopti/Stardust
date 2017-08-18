@@ -75,7 +75,6 @@
 		WfmReportPortal_Basic_38825,
 		WfmReportPortal_LeaderBoard_39440,
 
-		Wfm_Requests_Performance_36295,
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Show_Personal_Account_39628,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,

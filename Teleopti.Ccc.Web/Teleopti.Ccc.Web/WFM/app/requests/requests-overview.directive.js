@@ -29,7 +29,6 @@
 
 		function init() {
 			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAllRequestsPromise;
-			vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
 			// By default, show shift trade requests in pending only;
 			// and show absence and text requests in pending and waitlisted only;
 			vm.filters = [{ "Status": vm.shiftTradeView ? "0" : "0 5" }];
@@ -82,14 +81,7 @@
 			};
 
 			vm.isLoading = true;
-			if (vm.isPaginationEnabled) {
-				getRequests(requestsFilter, vm.sortingOrders, vm.paging);
-			} else {
-				requestsDataService.getAllRequestsPromise_old(requestsFilter, vm.sortingOrders).then(function(requests) {
-					vm.requests = requests.data;
-					vm.isLoading = false;
-				});
-			}
+			getRequests(requestsFilter, vm.sortingOrders, vm.paging);
 		}
 	}
 

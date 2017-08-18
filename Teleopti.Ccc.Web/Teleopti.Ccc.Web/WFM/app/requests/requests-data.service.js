@@ -4,8 +4,6 @@
 	angular.module('wfm.requests').service('requestsDataService', ['$q', '$http', '$translate', 'requestsDefinitions', 'Toggle', requestsDataService]);
 
 	function requestsDataService($q, $http, $translate, requestsDefinitions, toggleSvc) {
-		var svc = this;
-		var loadTextAndAbsenceRequestsUrl_old = '../api/Requests/loadTextAndAbsenceRequests';
 		var listRequestsUrl = '../api/Requests/requests';
 		var listShiftTradeRequestsUrl = '../api/Requests/shiftTradeRequests';
 		var approveRequestsUrl = '../api/Requests/approveRequests';
@@ -29,9 +27,6 @@
 			hierarchyUrl = '../api/Requests/FetchPermittedTeamHierachy';
 		}
 
-		this.getAllRequestsPromise_old = function (filter, sortingOrders) {
-			return $http.post(loadTextAndAbsenceRequestsUrl_old, requestsDefinitions.normalizeRequestsFilter_old(filter, sortingOrders));
-		};
 		this.getAllRequestsPromise = function (filter, sortingOrders, paging) {
 			return $q(function (resolve, reject) {
 				var requestFilter = requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging);

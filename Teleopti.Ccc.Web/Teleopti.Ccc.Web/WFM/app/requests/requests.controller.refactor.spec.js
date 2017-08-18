@@ -30,7 +30,6 @@ describe('Requests - Refactor(remove later) controller controllers',
 				$provide.service('Toggle', function () {
 					return {
 						Wfm_Requests_People_Search_36294: true,
-						Wfm_Requests_Performance_36295: true,
 						togglesLoaded: $q(function (resolve, reject) {
 							resolve();
 						})

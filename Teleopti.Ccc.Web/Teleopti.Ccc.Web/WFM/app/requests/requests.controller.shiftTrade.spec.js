@@ -629,16 +629,6 @@ describe('Requests shift trade controller tests',
 			this.getHasSentRequests = function () { return _hasSentRequests; };
 			this.getLastRequestParameters = function () { return _lastRequestParameters; };
 
-			this.getAllRequestsPromise_old = function () {
-				_hasSentRequests = true;
-				_lastRequestParameters = arguments;
-				return {
-					then: function (cb) {
-						cb({ data: _requests });
-					}
-				};
-			};
-
 			this.getAllRequestsPromise = function () {
 				_hasSentRequests = true;
 				_lastRequestParameters = arguments;

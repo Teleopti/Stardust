@@ -39,12 +39,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			_toggleManager = toggleManager;
 		}
 
-		[HttpPost, Route("api/Requests/loadTextAndAbsenceRequests"), UnitOfWork]
-		public virtual IEnumerable<RequestViewModel> AllRequests(AllRequestsFormData input)
-		{
-			return _requestsViewModelFactory.Create(input);
-		}
-
 		[HttpPost, Route("api/Requests/requests"), UnitOfWork]
 		public virtual RequestListViewModel GetRequests([FromBody]AllRequestsFormData input)
 		{

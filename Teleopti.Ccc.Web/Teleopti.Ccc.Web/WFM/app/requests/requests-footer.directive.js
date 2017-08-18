@@ -8,7 +8,6 @@
 
 	function requestsFooterController($rootScope, $scope, toggleService, requestCommandParamsHolder, $translate) {
 		var vm = this;
-		vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
 		vm.onPageSizeChanges = onPageSizeChanges;
 		vm.onPageNumberChange = onPageNumberChange;
 		vm.isUsingRequestSubmitterTimeZone = true;

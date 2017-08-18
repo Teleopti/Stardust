@@ -16,7 +16,6 @@
 						function() {
 							return {
 								Wfm_Requests_People_Search_36294: true,
-								Wfm_Requests_Performance_36295: true,
 								togglesLoaded: {
 									then: function(cb) { cb(); }
 								}

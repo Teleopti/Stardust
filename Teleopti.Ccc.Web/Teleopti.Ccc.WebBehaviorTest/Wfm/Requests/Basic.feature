@@ -162,7 +162,6 @@ Scenario: Find requests for multiple agent search criterias
 
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_Performance_36295')
 Scenario: Can use paging
 	Given the page size is set to '1'
 	And there are '10' requests from 'Ashley Andeen' on '2015-10-05'
@@ -172,7 +171,6 @@ Scenario: Can use paging
 	And I should see in total '10' pages 
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_Performance_36295')
 Scenario: Can change page size
 	Given there are '30' requests from 'Ashley Andeen' on '2015-10-05'
 	When I view wfm requests
@@ -184,7 +182,6 @@ Scenario: Can change page size
 
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_Performance_36295')
 Scenario: Can view different page
 	Given the page size is set to '1'
 	And 'Ashley Andeen' has an existing text request with
