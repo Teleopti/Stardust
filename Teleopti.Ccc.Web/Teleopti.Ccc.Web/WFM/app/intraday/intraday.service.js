@@ -1,8 +1,8 @@
 ﻿(function() {
     'use strict';
     angular.module('wfm.intraday').service('intradayService', [
-        '$resource',
-        function($resource) {
+		'$resource', '$http',
+        function($resource, $http) {
             this.getSkills = $resource(
                 '../api/intraday/skills',
                 {},
@@ -235,7 +235,38 @@
                         isArray: false
                     }
                 }
-            );
+			);
+
+			this.getIntradayExportForSkillArea = function (data, successCb, errorCb) {
+
+		        $http({
+					url: '../api/intraday/exportskillareadatatoexcel',
+				        method: 'POST',
+				        data: data,
+				        responseType: 'arraybuffer',
+				        headers: {
+					        'Accept': 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+				        }
+			        })
+			        .success(successCb)
+			        .error(errorCb);
+	        };
+
+
+			this.getIntradayExportForSkill = function (data, successCb, errorCb) {
+
+		        $http({
+					url: '../api/intraday/exportskilldatatoexcel',
+				        method: 'POST',
+				        data: data,
+				        responseType: 'arraybuffer',
+				        headers: {
+					        'Accept': 'application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+				        }
+			        })
+			        .success(successCb)
+			        .error(errorCb);
+	        };
         }
     ]);
 })();

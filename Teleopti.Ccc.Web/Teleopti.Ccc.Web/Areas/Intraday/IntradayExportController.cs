@@ -34,22 +34,22 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			_skillRepository = skillRepository;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/exportskillareadatatoexcel/{id}/{dayOffset}")]
-		public virtual HttpResponseMessage GetIntradayDataAsExcelFileFromSkillArea(Guid id, int dayOffset)
+		[UnitOfWork, HttpPost, Route("api/intraday/exportskillareadatatoexcel")]
+		public virtual HttpResponseMessage GetIntradayDataAsExcelFileFromSkillArea(IndradayExportInput input)
 		{
-			var skillArea = _skillAreaRepository.Get(id);
+			var skillArea = _skillAreaRepository.Get(input.id);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
 			var intradayExportDataToExcel = new IntradayExportCreator();
 
 			var data = intradayExportDataToExcel.ExportDataToExcel(
 				new IntradayExcelExport()
 				{
-					Date = DateTime.Now.AddDays(dayOffset),
+					Date = DateTime.Now.AddDays(input.dayOffset),
 					SkillAreaName = skillArea.Name,
 					Skills = skillArea.Skills.Select(skill => skill.Name).ToArray(),
-					PerformanceViewModel = _performanceViewModelCreator.Load(skillIdList, dayOffset),
-					StaffingViewModel = _staffingViewModelCreator.Load(skillIdList, dayOffset),
-					IncomingViewModel = _incomingTrafficViewModelCreator.Load(skillIdList, dayOffset)
+					PerformanceViewModel = _performanceViewModelCreator.Load(skillIdList, input.dayOffset),
+					StaffingViewModel = _staffingViewModelCreator.Load(skillIdList, input.dayOffset),
+					IncomingViewModel = _incomingTrafficViewModelCreator.Load(skillIdList, input.dayOffset)
 				}
 			);
 
@@ -60,21 +60,21 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return response;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/exportskilldatatoexcel/{id}/{dayOffset}")]
-		public virtual HttpResponseMessage GetIntradayDataAsExcelFileFromSkill(Guid id, int dayOffset)
+		[UnitOfWork, HttpPost, Route("api/intraday/exportskilldatatoexcel")]
+		public virtual HttpResponseMessage GetIntradayDataAsExcelFileFromSkill(IndradayExportInput input)
 		{
-			var skill = _skillRepository.Get(id);
+			var skill = _skillRepository.Get(input.id);
 			var intradayExportDataToExcel = new IntradayExportCreator();
 
 			var data = intradayExportDataToExcel.ExportDataToExcel(
 				new IntradayExcelExport
 				{
-					Date = DateTime.Now.AddDays(dayOffset),
+					Date = DateTime.Now.AddDays(input.dayOffset),
 					SkillAreaName = string.Empty,
 					Skills = new[] { skill.Name },
-					PerformanceViewModel = _performanceViewModelCreator.Load(new[] { id }, dayOffset),
-					StaffingViewModel = _staffingViewModelCreator.Load(new[] { id }, dayOffset),
-					IncomingViewModel = _incomingTrafficViewModelCreator.Load(new[] { id }, dayOffset)
+					PerformanceViewModel = _performanceViewModelCreator.Load(new[] { input.id }, input.dayOffset),
+					StaffingViewModel = _staffingViewModelCreator.Load(new[] { input.id }, input.dayOffset),
+					IncomingViewModel = _incomingTrafficViewModelCreator.Load(new[] { input.id }, input.dayOffset)
 				}
 			);
 
@@ -84,5 +84,11 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			response.Content.Headers.Add("Content-Disposition", "attachment; filename=IntradayExportData.xlsx");
 			return response;
 		}
+	}
+
+	public class IndradayExportInput
+	{
+		public Guid id { get; set; }
+		public int dayOffset { get; set; }
 	}
 }

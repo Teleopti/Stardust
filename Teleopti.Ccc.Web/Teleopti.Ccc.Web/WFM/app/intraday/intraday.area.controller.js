@@ -429,6 +429,40 @@
                 poll();
 			}
 
-        };
+		};
+
+		$scope.exportIntradayData = function () {
+			if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem) && !$scope.exporting) {
+				$scope.exporting = true;
+
+				if ($scope.selectedItem.Skills) {
+					intradayService.getIntradayExportForSkillArea(JSON.stringify(
+							{
+								id: $scope.selectedItem.Id,
+								dayOffset: $scope.chosenOffset.value
+							}),
+						saveData,
+						errorSaveData);
+				} else {
+					intradayService.getIntradayExportForSkill(JSON.stringify(
+							{
+								id: $scope.selectedItem.Id,
+								dayOffset: $scope.chosenOffset.value
+							}),
+						saveData,
+						errorSaveData);
+				}
+			}
+		};
+
+		function saveData(data, status, headers, config) {
+			var blob = new Blob([data]);
+			saveAs(blob, 'IntradayExportedData ' + moment().format('YYYY-MM-DD') + '.xlsx');
+		    $scope.exporting = false;
+		};
+
+		function errorSaveData(data, status, headers, config) {
+			$scope.exporting = false;
+		}
     }
 })();
