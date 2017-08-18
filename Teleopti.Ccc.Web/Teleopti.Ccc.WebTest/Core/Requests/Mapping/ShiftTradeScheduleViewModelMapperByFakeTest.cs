@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public IBusinessUnitRepository BusinessUnitRepository;
 		public ITeamRepository TeamRepository;
 		public IPersonAssignmentRepository PersonAssignmentRepository;
-		public ILoggedOnUser LoggedOnUser;
+		public FakeLoggedOnUser LoggedOnUser;
 
 		protected void SetUp()
 		{
@@ -48,7 +49,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			PersonRepository.Add(person2);
 			PersonRepository.Add(person3);
 			PersonRepository.Add(person4);
-			PersonRepository.Add(LoggedOnUser.CurrentUser());
+
+			var currentUser = LoggedOnUser.CurrentUser();
+			currentUser.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			PersonRepository.Add(currentUser);
 
 
 			var person1Assignment_1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person1, new DateOnly(2015, 5, 19));
@@ -68,12 +72,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var person4Assignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person4, new DateOnly(2015, 5, 19));
 			person4Assignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 12, 2015, 5, 19, 15));
 
+			var currentUserAssignment1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(currentUser, new DateOnly(2015, 5, 19));
+			currentUserAssignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 8, 2015, 5, 19, 14));
+
 			PersonAssignmentRepository.Add(person1Assignment_1);
 			PersonAssignmentRepository.Add(person1Assignment_2);
 			PersonAssignmentRepository.Add(person2Assignment_1);
 			PersonAssignmentRepository.Add(person2Assignment_2);
 			PersonAssignmentRepository.Add(person3Assignment);
-
+			PersonAssignmentRepository.Add(currentUserAssignment1);
 		}
 
 		[Test]
@@ -121,6 +128,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldReturnCorrectAgentSchedulesWithDate()
 		{
 			SetUp();
+
+			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2015, 5, 21));
+			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21, 16));
+			PersonAssignmentRepository.Add(currentUserAssignment);
 
 			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
 
@@ -184,6 +195,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			SetUp();
 
+			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2015, 5, 23));
+			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
+			PersonAssignmentRepository.Add(currentUserAssignment);
+
 			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = new DateOnly(2015, 5, 23),
@@ -208,6 +223,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldSeeCorrectAgentSchedulesWhenBothDayOffAndEmptyDayFilterEnabled()
 		{
 			SetUp();
+
+			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2015, 5, 23));
+			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
+			PersonAssignmentRepository.Add(currentUserAssignment);
 
 			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{

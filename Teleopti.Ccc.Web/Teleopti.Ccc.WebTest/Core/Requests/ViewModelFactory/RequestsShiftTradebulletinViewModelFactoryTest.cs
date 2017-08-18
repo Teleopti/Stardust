@@ -72,6 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			scenario = CurrentScenario.Current();
 			team = TeamFactory.CreateSimpleTeam("team");
+			SiteFactory.CreateSimpleSite("site").AddTeam(team);
 			TeamRepository.Add(team);
 			personPeriod = PersonPeriodFactory.CreatePersonPeriod(baseDateOnly, team);
 			me = PersonFactory.CreatePerson("me");

@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var scenario = CurrentScenario.Current();
 			var me = PersonFactory.CreatePerson("me");
 			var team = TeamFactory.CreateSimpleTeam("team");
+			SiteFactory.CreateSimpleSite().AddTeam(team);
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
 			me.AddPersonPeriod(personPeriod);
@@ -161,6 +162,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var agent = PersonFactory.CreatePersonWithGuid("agent", "Unpublish");
 			var me = PersonFactory.CreatePersonWithGuid("me", "me");
 			var team = TeamFactory.CreateTeamWithId("team");
+			SiteFactory.CreateSimpleSite("site").AddTeam(team);
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
 			agent.AddPersonPeriod(personPeriod);
@@ -711,6 +713,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
+			SiteFactory.CreateSimpleSite("site").AddTeam(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 16), team);
 			personPublished.AddPersonPeriod(personPeriod);
 			me.AddPersonPeriod(personPeriod);

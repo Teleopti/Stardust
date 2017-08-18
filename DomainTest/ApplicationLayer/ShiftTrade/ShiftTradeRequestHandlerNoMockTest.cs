@@ -197,8 +197,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			};
 		}
 
-		private IPersonRequest doShiftTradeWithBrokenRules(IBusinessRuleProvider businessRuleProvider
-			, bool useSiteOpenHoursRule = true, bool useMinWeekWorkTime = false, bool autoGrantShiftTrade = true)
+		private IPersonRequest doShiftTradeWithBrokenRules(IBusinessRuleProvider businessRuleProvider, bool useMinWeekWorkTime = false, bool autoGrantShiftTrade = true)
 		{
 			var scheduleDate = new DateTime(2016, 7, 25);
 			var scheduleDateOnly = new DateOnly(scheduleDate);
@@ -226,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_shiftTradeTestHelper.SetPersonAccounts(personTo, personFrom, scheduleDateOnly);
 
 			var @event = _shiftTradeTestHelper.GetAcceptShiftTradeEvent(personTo, personRequest.Id.GetValueOrDefault());
-			@event.UseSiteOpenHoursRule = useSiteOpenHoursRule;
+			@event.UseSiteOpenHoursRule = true;
 			@event.UseMinWeekWorkTime = useMinWeekWorkTime;
 			_schedulingResultStateHolder.UseMinWeekWorkTime = useMinWeekWorkTime;
 

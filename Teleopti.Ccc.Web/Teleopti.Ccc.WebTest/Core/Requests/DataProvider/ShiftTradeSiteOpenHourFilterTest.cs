@@ -487,7 +487,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 		private void prepareData(IPerson person = null)
 		{
-			ToggleManager.Enable(Toggles.Wfm_Requests_Site_Open_Hours_39936);
 			_personFrom = person ?? createPersonWithSiteOpenHours(8, 15);
 			LoggedOnUser.SetFakeLoggedOnUser(_personFrom);
 			_personFromScheduleView = createShiftTradeAddPersonScheduleViewModel(_personFrom, _shiftTradeDate, new[]

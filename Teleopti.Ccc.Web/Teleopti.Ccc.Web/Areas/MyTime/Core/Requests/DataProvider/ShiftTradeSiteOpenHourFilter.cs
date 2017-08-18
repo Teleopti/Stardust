@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -14,15 +12,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	public class ShiftTradeSiteOpenHourFilter : IShiftTradeSiteOpenHourFilter
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IToggleManager _toggleManager;
 		private readonly ISiteOpenHoursSpecification _siteOpenHoursSpecification;
 		private readonly IProjectionProvider _projectionProvider;
 
-		public ShiftTradeSiteOpenHourFilter(ILoggedOnUser loggedOnUser, IToggleManager toggleManager,
+		public ShiftTradeSiteOpenHourFilter(ILoggedOnUser loggedOnUser,
 			ISiteOpenHoursSpecification siteOpenHoursSpecification, IProjectionProvider projectionProvider)
 		{
 			_loggedOnUser = loggedOnUser;
-			_toggleManager = toggleManager;
 			_siteOpenHoursSpecification = siteOpenHoursSpecification;
 			_projectionProvider = projectionProvider;
 		}
@@ -32,10 +28,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			var isSatisfiedPersonFromSiteOpenHours = true;
 			var isSatisfiedPersonToSiteOpenHours = true;
 
-			if (!isFilterEnabled())
-			{
-				return true;
-			}
 			if (toScheduleDay == null) return true;
 			var personTo = toScheduleDay.Person;
 			var personFrom = _loggedOnUser.CurrentUser();
@@ -65,11 +57,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			IEnumerable<ShiftTradeAddPersonScheduleViewModel> personToScheduleViews,
 			ShiftTradeAddPersonScheduleViewModel personFromScheduleView, DatePersons datePersons)
 		{
-			if (!isFilterEnabled())
-			{
-				return personToScheduleViews;
-			}
-
 			if (personFromScheduleView.ScheduleLayers == null || !personFromScheduleView.ScheduleLayers.Any())
 			{
 				return personToScheduleViews;
@@ -114,11 +101,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public bool FilterShiftExchangeOffer(IShiftExchangeOffer shiftExchangeOffer,
 			ShiftTradeAddPersonScheduleViewModel personFromScheduleView)
 		{
-			if (!isFilterEnabled())
-			{
-				return true;
-			}
-
 			if (personFromScheduleView.ScheduleLayers == null || !personFromScheduleView.ScheduleLayers.Any())
 			{
 				return true;
@@ -146,11 +128,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			});
 
 			return isSatisfiedPersonFromSiteOpenHours && isSatisfiedPersonToSiteOpenHours;
-		}
-
-		private bool isFilterEnabled()
-		{
-			return _toggleManager.IsEnabled(Toggles.Wfm_Requests_Site_Open_Hours_39936);
 		}
 
 		private DateTimePeriod getSchedulePeriod(

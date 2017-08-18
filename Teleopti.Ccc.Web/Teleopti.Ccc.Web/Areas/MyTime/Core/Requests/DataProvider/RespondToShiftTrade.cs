@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				Message = personRequest.GetMessage(new NoFormatting()),
 				UseMinWeekWorkTime =
 					_toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635),
-				UseSiteOpenHoursRule = _toggleManager.IsEnabled(Domain.FeatureFlags.Toggles.Wfm_Requests_Site_Open_Hours_39936)
+				UseSiteOpenHoursRule = true
 			});
 		}
 
