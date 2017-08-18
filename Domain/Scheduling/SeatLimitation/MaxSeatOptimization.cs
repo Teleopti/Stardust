@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 						_setMainShiftOptimizeActivitySpecificationForTeamBlock.Execute(optimizationPreferences, teamBlockInfo, schedulingOptions);
 						var rollbackService = new SchedulePartModifyAndRollbackService(null, scheduleCallback, tagSetter);
 						_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, businessRules);
-						//TODO: check assignmentthingy #45540
+						//TODO: should pass in orginal assignments here to fix same issue as #45540 for shiftswithinday
 						var scheduleWasSuccess = _teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelectorForMaxSeat, teamBlockInfo,
 							datePoint, schedulingOptions, rollbackService,
 							new DoNothingResourceCalculateDelayer(), allSkillDaysExceptMaxSeat.Union(skillDaysForTeamBlockInfo), schedules,

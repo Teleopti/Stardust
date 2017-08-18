@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 				effectiveRestriction.DayOffTemplate, effectiveRestriction.Absence,
 				new List<IActivityRestriction>(effectiveRestriction.ActivityRestrictionCollection));
 
-			//TODO: check assignmentthingy #45540
+			//TODO: should pass in orginal assignments here to fix same issue as #45540 for shiftswithinday
 			bool result = _teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, shiftDate, schedulingOptions,
 				rollbackService, new DoNothingResourceCalculateDelayer(), schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules,
 				new ShiftNudgeDirective(adjustedEffectiveRestriction, ShiftNudgeDirective.NudgeDirection.Left), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);

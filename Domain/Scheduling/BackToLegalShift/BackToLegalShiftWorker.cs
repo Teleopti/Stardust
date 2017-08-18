@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 			var date = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 			var rules = NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder);
-			//fix org assignments later if needed, see #45540 for shifts within day
+			//TODO: should pass in orginal assignments here to fix same issue as #45540 for shiftswithinday
 			var success = _teamBlockSingleDayScheduler.ScheduleSingleDay(Enumerable.Empty<IPersonAssignment>(), _workShiftSelector, teamBlockInfo, schedulingOptions, date, roleModelShift,
 				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, null, rules, null);
 			if (!success)

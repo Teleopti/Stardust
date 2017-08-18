@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			var shiftNudgeDirective = new ShiftNudgeDirective();
 			var allSkillDays = schedulingResultStateHolder.AllSkillDays();
 			schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Long;
-			//TODO: check assignmentthingy #45540
+			//TODO: should pass in orginal assignments here to fix same issue as #45540 for shiftswithinday
 			var success = _teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelector, firstTeamBlock, firstDayDate, schedulingOptions,
 				rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator);
 

@@ -281,7 +281,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!_teamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
-				//TODO: check assignmentthingy #45540
 				if (!_teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
 					rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(),
 					schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(),
