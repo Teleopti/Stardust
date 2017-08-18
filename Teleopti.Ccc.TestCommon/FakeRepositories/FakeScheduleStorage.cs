@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			var scheduleData = _data
 				.Where(d => d.BelongsToScenario(scenario))
+				.Where(d => d.Person.Equals(person))
 				.Where(d =>
 				{
 					var maybePersonAssignment = d as PersonAssignment;

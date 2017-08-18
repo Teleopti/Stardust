@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -76,6 +77,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private readonly ICommonAgentNameProvider _nameDisplaySetting;
 		private readonly ICurrentAuthorization _authorization;
 		private readonly IUserNow _userNow;
+	    private readonly ILoggedOnUser _user;
 
 		public AgentStatesViewModelBuilder(
 			INow now,
@@ -85,7 +87,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			IAgentStateReadModelReader reader,
 			ICommonAgentNameProvider nameDisplaySetting,
 			ICurrentAuthorization authorization, 
-			IUserNow userNow)
+			IUserNow userNow, 
+			ILoggedOnUser user)
 		{
 			_now = now;
 			_timeZone = timeZone;
@@ -95,15 +98,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 			_nameDisplaySetting = nameDisplaySetting;
 			_authorization = authorization;
 			_userNow = userNow;
+		    _user = user;
 		}
 		
 		public AgentStatesViewModel For(AgentStateFilter filter)
 		{
-			return new AgentStatesViewModel
-			{
-				Time = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()),
-				States = buildStates(_reader.Read(filter))
-			};
+		    if (filter.SiteIds.EmptyIfNull().IsEmpty() && filter.TeamIds.EmptyIfNull().IsEmpty())
+		    {
+		        var userRoles = _user.CurrentUser().PermissionInformation.ApplicationRoleCollection.EmptyIfNull();
+				var team = _user.CurrentUser().Period(_userNow.Date())?.Team;
+
+				if (team != null)
+				{
+					if (userRoles
+						.All(x => x.AvailableData.AvailableDataRange == AvailableDataRangeOption.MySite))
+						filter.SiteIds = new[] {team.Site.Id.Value};
+		        
+					if (userRoles
+						.All(x => x.AvailableData.AvailableDataRange == AvailableDataRangeOption.MyTeam))
+						filter.TeamIds = new[] {team.Id.Value};
+				}
+		    }
+
+		    return new AgentStatesViewModel
+		    {
+		        Time = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _timeZone.TimeZone()),
+		        States = buildStates(_reader.Read(filter))
+		    };
 		}
 
 		private IEnumerable<AgentStateViewModel> buildStates(IEnumerable<AgentStateReadModel> states)

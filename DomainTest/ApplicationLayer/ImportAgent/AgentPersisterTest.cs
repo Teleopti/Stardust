@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 		public CheckPasswordStrengthFake CheckPasswordStrengthFake;
 		public FakeCurrentDatasource CurrentDatasource;
 		public FakeTenants FindTenantByName;
+		public ILoggedOnUser User;
 
 		public void Setup(ISystem system,IIocConfiguration configuration)
 		{
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 
 			Target.Persist(new List<AgentExtractionResult> { new AgentExtractionResult { Agent = agentData } }, TimeZoneInfo.Utc);
 
-			var persistedUser = PersonRepository.LoadAll().Single();
+			var persistedUser = PersonRepository.LoadAll().Last();
 			var persistedTenant = TenantUserRepository.LastPersist;
 
 			persistedUser.Name.FirstName.Should().Be(agentData.Firstname);
@@ -92,7 +93,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			agentData.ApplicationUserId = "existingId@teleopti.com";
 			var holder = new AgentExtractionResult {Agent = agentData};
 			Target.Persist(new List<AgentExtractionResult> { holder }, TimeZoneInfo.Utc);
-			PersonRepository.LoadAll().Should().Be.Empty();
+			PersonRepository.LoadAll()
+				.Where(x => x != User.CurrentUser())
+				.Should().Be.Empty();
 			holder.Feedback.ErrorMessages.Single().Should().Be(Resources.DuplicatedApplicationLogonErrorMsgSemicolon);
 		}
 
@@ -103,7 +106,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var holder = new AgentExtractionResult { Agent = agentData};
 			holder.Feedback.ErrorMessages.Add("existing data error");
 			Target.Persist(new List<AgentExtractionResult> { holder }, TimeZoneInfo.Utc);
-			PersonRepository.LoadAll().Should().Be.Empty();
+			PersonRepository.LoadAll()
+				.Where(x => x != User.CurrentUser())
+				.Should().Be.Empty();
 		}
 
 
@@ -113,10 +118,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ImportAgent
 			var agentData = getAgentDataModel();
 			var holder = new AgentExtractionResult { Agent = agentData };
 			var persisted = Target.Persist(new List<AgentExtractionResult> { holder }, TimeZoneInfo.Utc);
-			PersonRepository.LoadAll().Count.Should().Be(1);
+			PersonRepository.LoadAll()
+				.Where(x => x != User.CurrentUser())
+				.Count().Should().Be(1);
 			Target.Rollback(persisted);
 
-			PersonRepository.LoadAll().Should().Be.Empty();
+			PersonRepository.LoadAll()
+				.Where(x => x != User.CurrentUser())
+				.Should().Be.Empty();
 			TenantUserRepository.RollBacked.Should().Be.True();
 
 		}

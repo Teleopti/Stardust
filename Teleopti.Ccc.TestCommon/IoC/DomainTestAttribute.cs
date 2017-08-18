@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -136,13 +137,13 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			}
 			else
 			{
+				system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 				system.UseTestDouble<FakeMultisiteDayRepository>().For<IMultisiteDayRepository>();
 				system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 				system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
 				system.UseTestDouble<FakePersonAssignmentRepository>().For<IPersonAssignmentRepository>();
 				system.UseTestDouble<FakeSkillDayRepository>().For<ISkillDayRepository>();
 				system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
-				system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 				system.UseTestDouble<FakeGroupPageRepository>().For<IGroupPageRepository>();
 				system.UseTestDouble<FakeExternalLogOnRepository>().For<IExternalLogOnRepository>();
 				system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
@@ -244,12 +245,14 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			var signedIn = QueryAllAttributes<LoggedOffAttribute>().IsEmpty();
 			if (signedIn)
 			{
-				var person = new Person().WithName(new Name("Fake", "Login"));
-				person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-				person.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
-				person.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
+				_loggedOnPerson = new Person()
+					.WithName(new Name("Fake", "Login"))
+					.WithId();
+				_loggedOnPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+				_loggedOnPerson.PermissionInformation.SetCulture(CultureInfoFactory.CreateEnglishCulture());
+				_loggedOnPerson.PermissionInformation.SetUICulture(CultureInfoFactory.CreateEnglishCulture());
 				var loggedOnBu = new BusinessUnit("loggedOnBu").WithId();
-				var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", new FakeDataSource(DefaultTenantName), loggedOnBu, null, null), person);
+				var principal = new TeleoptiPrincipal(new TeleoptiIdentity("Fake Login", new FakeDataSource(DefaultTenantName), loggedOnBu, null, null), _loggedOnPerson);
 				context.SetCurrentPrincipal(principal);
 			}
 
@@ -259,11 +262,15 @@ namespace Teleopti.Ccc.TestCommon.IoC
 		public IAuthorizationScope AuthorizationScope;
 		public IAuthorization Authorization;
 		public ICurrentTeleoptiPrincipal CurrentTeleoptiPrincipal;
+		public IPersonRepository Persons;
 		private IDisposable _authorizationScope;
-
+		private Person _loggedOnPerson;
+		
 		protected override void BeforeTest()
 		{
 			base.BeforeTest();
+
+			createDefaultData();
 
 			// because DomainTest project has OneTimeSetUp that sets FullPermissions globally... 
 			// ... we need to scope real/fake/full for this test
@@ -273,6 +280,12 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				_authorizationScope = AuthorizationScope.OnThisThreadUse((FakePermissions) Authorization);
 			else
 				_authorizationScope = AuthorizationScope.OnThisThreadUse((FullPermission) Authorization);
+		}
+
+		private void createDefaultData()
+		{
+			if (_loggedOnPerson != null)
+				(Persons as FakePersonRepository)?.Has(_loggedOnPerson);
 		}
 
 		private bool fullPermissions()
