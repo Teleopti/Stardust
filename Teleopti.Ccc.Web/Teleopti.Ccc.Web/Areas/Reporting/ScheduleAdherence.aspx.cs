@@ -795,8 +795,8 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					intervalToolTip = new IntervalToolTip
 					{
 						StartInterval = intervalId,
-						StartIntervalCounter = ((int)row["date_interval_counter"]),
-						AbsenceOrActivityName = ((string)row["activity_absence_name"])
+						StartIntervalCounter = (int)row["date_interval_counter"],
+						AbsenceOrActivityName = (string)row["activity_absence_name"]
 					};
 				}
 
@@ -923,7 +923,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					intervalToolTip = new IntervalToolTip
 					{
 						StartInterval = intervalId,
-						StartIntervalCounter = ((int)row["date_interval_counter"]),
+						StartIntervalCounter = (int)row["date_interval_counter"],
 						AbsenceOrActivityName = activityId == -1 && absenceId == -1 && activityAbsenceName == "Multiple things" ? Resources.MultipleActivitiesOrAbsences : (string)row["activity_absence_name"]
 					};
 				}
@@ -946,7 +946,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					intervalToolTip = new IntervalToolTip
 					{
 						StartInterval = intervalId,
-						StartIntervalCounter = ((int)row["date_interval_counter"]),
+						StartIntervalCounter = (int)row["date_interval_counter"],
 						AbsenceOrActivityName = activityId == -1 && absenceId == -1 && activityAbsenceName == "Multiple things" ? Resources.MultipleActivitiesOrAbsences : (string)row["activity_absence_name"]
 					};
 				}
@@ -1051,16 +1051,17 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 					return;
 				Response.Redirect($"~/Reporting/Report/{ReportId}#{ReportId}");
 			}
-			var princip = Thread.CurrentPrincipal;
-			var loggedOnPerson = ((TeleoptiPrincipalCacheable) princip).Person;
+			var princip = (TeleoptiPrincipalCacheable)Thread.CurrentPrincipal;
+			var teleoptiIdentity = (TeleoptiIdentity)princip.Identity;
+			var loggedOnPerson = princip.Person;
 			var id = loggedOnPerson.Id;
-			var dataSource = ((TeleoptiIdentity)princip.Identity).DataSource;
-			var bu = ((TeleoptiIdentity)princip.Identity).BusinessUnit.Id;
+			var dataSource = teleoptiIdentity.DataSource;
+			var bu = teleoptiIdentity.BusinessUnit.Id;
 
 			ParameterSelector.ConnectionString = dataSource.Analytics.ConnectionString;
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
-			ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICulture().LCID;
+			ParameterSelector.LanguageId = princip.Person.PermissionInformation.UICulture().LCID;
 			ParameterSelector.UserTimeZone = loggedOnPerson.PermissionInformation.DefaultTimeZone();
 			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ParameterSelector.ReportId))
 			{

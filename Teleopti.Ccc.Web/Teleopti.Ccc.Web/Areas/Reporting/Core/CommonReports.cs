@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 				_dbTimeout = 180;
 		}
 
-		public int DbTimeout { get { return _dbTimeout; } }
+		public int DbTimeout => _dbTimeout;
 
 		public DataSet GetReportData(Guid personCode, Guid businessUnitCode, IList<SqlParameter> parameters)
 		{
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Core
 		public string HelpKey { get; set; }
 
 		public string ResourceKey { get; private set; }
-		public string Name { get { return _name; } }
+		public string Name => _name;
 
 		public DataSet ExecuteDataSet(string procedureName, IEnumerable<SqlParameter> parameters)
 		{

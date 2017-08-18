@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
 				{
 					Guid groupPageComboBoxControlCollectionId = commonReports.GetGroupPageComboBoxControlCollectionId();
-					string groupPageComboBoxControlCollectionIdName = string.Format("ParameterSelector$Drop{0}",
-						groupPageComboBoxControlCollectionId);
+					string groupPageComboBoxControlCollectionIdName = $"ParameterSelector$Drop{groupPageComboBoxControlCollectionId}";
 
 					GroupPageCode = string.IsNullOrEmpty(Request.Form.Get(groupPageComboBoxControlCollectionIdName))
 						? Selector.BusinessHierarchyCode
@@ -49,7 +48,6 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 				buttonShowExcel.ToolTip = UserTexts.Resources.ShowExcelReport;
 				buttonShowWord.ToolTip = UserTexts.Resources.ShowWordReport;
 				buttonShowPdf.ToolTip = UserTexts.Resources.ShowPDFReport;
-
 			}
 		}
 
@@ -59,13 +57,14 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			{
 				if (!Guid.TryParse(Request.QueryString["REPORTID"], out ReportId))
 					return;
-				Response.Redirect(string.Format("~/Reporting/Report/{0}#{1}", ReportId, ReportId));
+				Response.Redirect($"~/Reporting/Report/{ReportId}#{ReportId}");
 			}
-			var princip = Thread.CurrentPrincipal;
-			var person = ((TeleoptiPrincipalCacheable)princip).Person;
+			var princip = (TeleoptiPrincipalCacheable)Thread.CurrentPrincipal;
+			var teleoptiIdentity = (TeleoptiIdentity)princip.Identity;
+			var person = princip.Person;
 			var id = person.Id;
-			var dataSource = ((TeleoptiIdentity)princip.Identity).DataSource;
-			var bu = ((TeleoptiIdentity)princip.Identity).BusinessUnit.Id;
+			var dataSource = teleoptiIdentity.DataSource;
+			var bu = teleoptiIdentity.BusinessUnit.Id;
 
 			Thread.CurrentThread.CurrentUICulture = person.PermissionInformation.UICulture().FixPersianCulture();
 			Thread.CurrentThread.CurrentCulture = person.PermissionInformation.Culture().FixPersianCulture();
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			ParameterSelector.ConnectionString = dataSource.Analytics.ConnectionString;
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
-			ParameterSelector.LanguageId = ((TeleoptiPrincipalCacheable)princip).Person.PermissionInformation.UICulture().LCID;
+			ParameterSelector.LanguageId = princip.Person.PermissionInformation.UICulture().LCID;
 			ParameterSelector.UserTimeZone = person.PermissionInformation.DefaultTimeZone();
 			using (var commonReports = new CommonReports(ParameterSelector.ConnectionString, ReportId))
 			{
