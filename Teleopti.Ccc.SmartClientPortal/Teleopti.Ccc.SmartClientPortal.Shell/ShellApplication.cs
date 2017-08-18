@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			if (bool.TryParse(enableLargeAddressSpaceSetting, out enableLargeAddressSpace) && enableLargeAddressSpace)
 			{
 				EO.Base.Runtime.EnableEOWP = true;
-				EO.Base.Runtime.InitWorkerProcessExecutable("eowp.exe");
+				EO.Base.Runtime.InitWorkerProcessExecutable(System.IO.Path.Combine(Application.StartupPath, "eowp.exe"));
 			}
 			XmlConfigurator.Configure();
 
@@ -370,10 +370,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			for (int i = 0; i < forms.Count; i++)
 			{
 				BaseRibbonForm baseRibbonFormToClose = forms[i] as BaseRibbonForm;
-				if (baseRibbonFormToClose != null)
-				{
-					baseRibbonFormToClose.FormKill();
-				}
+				baseRibbonFormToClose?.FormKill();
 			}
 		}
 	}
