@@ -80,7 +80,6 @@
 		Wfm_Requests_Show_Personal_Account_39628,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
 		Wfm_Requests_Site_Open_Hours_39936,
-		Wfm_Requests_Waitlist_Process_Order_39869,
 		Wfm_Requests_Save_Grid_Columns_37976,
 		Wfm_Requests_Check_Max_Seats_39937,
 		Wfm_Requests_Check_Max_Seats_NoReadModel_39937,
