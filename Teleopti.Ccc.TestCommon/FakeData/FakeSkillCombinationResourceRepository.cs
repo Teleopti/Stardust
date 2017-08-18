@@ -33,9 +33,29 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_combinationResources = skillCombinationResources.ToList();
 		}
 
-		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
+		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period, bool useBpoExchange = true)
 		{
-			var resources = _combinationResources.Where(x => x.StartDateTime >= period.StartDateTime && x.StartDateTime < period.EndDateTime);
+			var resources = _combinationResources.Where(x => x.StartDateTime >= period.StartDateTime && x.StartDateTime < period.EndDateTime).ToList();
+			if (useBpoExchange)
+			{
+				foreach (var importSkillCombinationResourceBpo in _combinationResourcesBpo)
+				{
+					var newType = new SkillCombinationResource()
+					{
+						StartDateTime = importSkillCombinationResourceBpo.StartDateTime,
+						EndDateTime = importSkillCombinationResourceBpo.EndDateTime,
+						Resource = importSkillCombinationResourceBpo.Resources,
+						SkillCombination = importSkillCombinationResourceBpo.SkillIds
+					};
+					if (resources.Contains(newType))
+						resources.FirstOrDefault(x => x.Equals(newType)).Resource += newType.Resource;
+					else
+					{
+						resources.Add(newType);
+					}
+				}
+			}
+			
 			return resources.Select(resource => new SkillCombinationResource
 									{
 										StartDateTime = resource.StartDateTime, EndDateTime = resource.EndDateTime, Resource = resource.Resource, SkillCombination = resource.SkillCombination

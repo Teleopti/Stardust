@@ -33,11 +33,9 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var skillStaffPeriodHolder = new SkillStaffPeriodHolder(loadSkillSchedule);
 			ISkillStaffPeriodDictionary skillStaffPeriods;
 			var forecastedData = new StringBuilder();
-			var allIntervals = new List<SkillStaffingIntervalLightModel>();
-			foreach (var dateOnly in period.DayCollection())
-			{
-				allIntervals.AddRange(_scheduledStaffingProvider.StaffingPerSkill(new List<ISkill>{skill},skill.DefaultResolution,dateOnly ));
-			}
+			var allIntervals = new List<SkillStaffingInterval>();
+			allIntervals.AddRange(_scheduledStaffingProvider.StaffingPerSkill(new List<ISkill>{skill},period.ToDateTimePeriod(TimeZoneInfo.Utc),false,false));
+			
 			
 			if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out skillStaffPeriods))
 			{
@@ -51,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 					var ssiEndDate = skillStaffPeriod.Period.EndDateTime;
 					var staffingInterval =
 						allIntervals.Where(
-							x => x.StartDateTime == ssiStartDate && x.EndDateTime == ssiEndDate && x.Id == skill.Id.GetValueOrDefault());
+							x => x.StartDateTime == ssiStartDate && x.EndDateTime == ssiEndDate && x.SkillId == skill.Id.GetValueOrDefault());
 					var staffing = 0d;
 					if (staffingInterval.Any())
 					{

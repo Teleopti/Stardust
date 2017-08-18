@@ -380,11 +380,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return mergedResult.ToList();
 		}
 
-		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
+		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period, bool useBpoExchange = true)
 		{
-			if(!_toggleManager.IsEnabled(Toggles.Staffing_BPOExchangeImport_45202))
+			if (!useBpoExchange)
+			{
 				return skillCombinationResourcesWithoutBpo(period);
-			return skillCombinationResourcesWithBpo(period);
+			}
+			else
+			{
+				if (!_toggleManager.IsEnabled(Toggles.Staffing_BPOExchangeImport_45202))
+					return skillCombinationResourcesWithoutBpo(period);
+				return skillCombinationResourcesWithBpo(period);
+			}
+			
 		}
 
 		private IEnumerable<SkillCombinationResource> skillCombinationResourcesWithBpo(DateTimePeriod period)

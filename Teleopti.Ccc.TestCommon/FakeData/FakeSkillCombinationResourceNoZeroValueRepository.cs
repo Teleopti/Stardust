@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			_fakeSkillCombinationResourceRepository.PersistSkillCombinationResource(dataLoaded, skillCombinationResources);
 		}
 
-		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
+		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period,bool useBpoStaffing = true)
 		{
 			return _fakeSkillCombinationResourceRepository.LoadSkillCombinationResources(period).Where(r => r.Resource > 0);
 		}

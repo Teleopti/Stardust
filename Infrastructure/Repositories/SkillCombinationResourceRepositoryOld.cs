@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 
 
-		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period)
+		public IEnumerable<SkillCombinationResource> LoadSkillCombinationResources(DateTimePeriod period,bool useBpoStaffing = true)
 		{
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			var result = _currentUnitOfWork.Current().Session()
