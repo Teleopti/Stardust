@@ -183,7 +183,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 throw new ArgumentException("There are still templates using this sub skill. Make sure all templates have zero values first.");
             }
 
-            //_childSkills.Remove(childSkill);
             //TODO! Maybe do this a nicer way? :)
             ((Skill)childSkill).SetDeleted();
         }
