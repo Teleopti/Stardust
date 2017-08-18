@@ -38,6 +38,7 @@
         </card-header>
         <card-body class="panel">
           <div ng-if="vm.skillMaster.IsForecastRunning">
+            {{'RunningForecast' | translate}}
             <md-progress-linear md-mode="indeterminate"></md-progress-linear>
           </div>
           <div ng-if="!vm.skillMaster.IsForecastRunning">
@@ -49,7 +50,7 @@
               <div class="con-flex line-right">
                 <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart(skill.ChartId, vm.currentWorkload.Days)">
                   <i class="mdi mdi-sync" ></i>
-                  <md-tooltip>Refresh chart</md-tooltip>
+                  <md-tooltip>{{'Refresh'|translate}}</md-tooltip>
                 </div>
                 <div class="con-flex inline-flex">
                   <md-select ng-model="vm.selectedScenario" ng-change="vm.getWorkloadForecastData(skill)" placeholder="{{'Scenario' | translate}}">
@@ -103,7 +104,7 @@
     </div>
 
     <div class="modal-inner-content" style="text-align:center;">
-      <!-- <label>{{'ForecastPeriod' | translate}}: </label><br/> -->
+      <label>{{'ForecastPeriod' | translate}}: </label><br/>
       <date-range-picker ng-model="vm.forecastPeriod"></date-range-picker>
       <div class="text-warning" ng-cloak class="animate-show" ng-show="vm.disableMoreThanOneYear()">
         <i class='mdi mdi-alert'></i>

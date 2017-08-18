@@ -5,9 +5,9 @@
   .module('wfm.forecasting')
   .controller('ForecastModCtrl', ForecastModCtrl);
 
-  ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window'];
+  ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window', 'NoticeService', '$translate'];
 
-  function ForecastModCtrl(forecastingService, $stateParams, $window) {
+  function ForecastModCtrl(forecastingService, $stateParams, $window, NoticeService, $translate) {
     var vm = this;
 
     var storage = {};
@@ -73,6 +73,7 @@
           }, function (data, status, headers, config) {
 
           }, function () {
+            NoticeService.success($translate.instant('CampaignValuesUpdated'), 5000, true);
             modifyPanelHelper();
             refreshOnModify();
           }
@@ -104,6 +105,7 @@
           }, function (data, status, headers, config) {
 
           }, function () {
+            NoticeService.success($translate.instant('OverrideValuesUpdated'), 5000, true);
             modifyPanelHelper();
             refreshOnModify();
           })
@@ -123,55 +125,56 @@
             }, function (data, status, headers, config) {
 
             }, function () {
+              NoticeService.success($translate.instant('OverrideValuesCleared'), 5000, true);
               modifyPanelHelper();
               refreshOnModify();
               // vm.loadChart(vm.selectedWorkload.ChartId, vm.selectedWorkload.Days);
             })
-        };
-
-        function loadChart() {
-          console.log('FAILED GEN2');
-          return;
-        }
-
-        function pointClick(days) {
-          vm.selectedDayCount = days;
-        }
-
-        function refreshOnModify() {
-          vm.isForecastRunning = true;
-          var wl = {
-            ForecastStart: moment().utc().add(1, 'months').startOf('month').toDate(),
-            ForecastEnd: moment().utc().add(2, 'months').startOf('month').toDate(),
-            WorkloadId: vm.selectedWorkload.Id,
-            ScenarioId: vm.selectedWorkload.ScenarioId
           };
 
-          forecastingService.result(
-            wl,
-            function(data, status, headers, config) {
-              vm.selectedWorkload.Days = data.Days;
-              vm.isForecastRunning = false;
-              vm.loadChart('chart'+ vm.selectedWorkload.Id, data.Days);
+          function loadChart() {
+            console.log('FAILED GEN2');
+            return;
+          }
+
+          function pointClick(days) {
+            vm.selectedDayCount = days;
+          }
+
+          function refreshOnModify() {
+            vm.isForecastRunning = true;
+            var wl = {
+              ForecastStart: moment().utc().add(1, 'months').startOf('month').toDate(),
+              ForecastEnd: moment().utc().add(2, 'months').startOf('month').toDate(),
+              WorkloadId: vm.selectedWorkload.Id,
+              ScenarioId: vm.selectedWorkload.ScenarioId
+            };
+
+            forecastingService.result(
+              wl,
+              function(data, status, headers, config) {
+                vm.selectedWorkload.Days = data.Days;
+                vm.isForecastRunning = false;
+                vm.loadChart('chart'+ vm.selectedWorkload.Id, data.Days);
+              }
+            )
+          }
+
+          function manageLocalStorage() {
+            if ($stateParams.days !== undefined && $stateParams.days.length > 0) {
+              $window.localStorage['workload'] = angular.toJson($stateParams);
             }
-          )
+            storage = angular.fromJson($window.localStorage['workload']);
+
+            vm.selectedWorkload = {
+              Id: storage.workloadId,
+              ChartId: storage.skill.ChartId,
+              SkillId: storage.skill.SkillId,
+              Days: storage.days,
+              Name: storage.skill.Workload.Name,
+              ScenarioId: storage.scenarioId
+            }
+          };
         }
 
-        function manageLocalStorage() {
-          if ($stateParams.days !== undefined && $stateParams.days.length > 0) {
-            $window.localStorage['workload'] = angular.toJson($stateParams);
-          }
-          storage = angular.fromJson($window.localStorage['workload']);
-
-          vm.selectedWorkload = {
-            Id: storage.workloadId,
-            ChartId: storage.skill.ChartId,
-            SkillId: storage.skill.SkillId,
-            Days: storage.days,
-            Name: storage.skill.Workload.Name,
-            ScenarioId: storage.scenarioId
-          }
-        };
-      }
-
-    })();
+      })();
