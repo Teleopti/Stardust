@@ -7,11 +7,12 @@ angular.module('wfm.forecasting')
 		chartId: '=',
 		onClick: '=',
 		refresh: '=',
-		selectable: '='
+		selectable: '=',
+		days: '='
 	}
 });
 
-function ForecastChartCtrl($translate, $filter) {
+function ForecastChartCtrl($translate, $filter, $timeout) {
 	var ctrl = this;
 	var chart;
 	var selectedItems = [];
@@ -26,6 +27,13 @@ function ForecastChartCtrl($translate, $filter) {
 		}
 		return false;
 	}
+
+	$timeout(function () {
+		if (ctrl.days != null && ctrl.days.length > 0) {
+			generateForecastChart(ctrl.chartId,  ctrl.days);
+			chart.unzoom();
+		}
+	});
 
 	function generateForecastChart(chartId, days) {
 		console.log('Start generate');
@@ -130,14 +138,14 @@ function ForecastChartCtrl($translate, $filter) {
 					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format('YYYY-MM-DDTHH:MM:SSZ');
 
 					if (selectedItems.indexOf(temp) == -1) {
-					    selectedItems.push({date:temp});
+						selectedItems.push({date:temp});
 					}
 					ctrl.onClick(selectedItems);
 				},
 				onunselected: function (d) {
 					var temp = moment(this.internal.config.axis_x_categories[d.x], 'DD/MM/YYYY').format('YYYY-MM-DDTHH:MM:SSZ');
 					if (selectedItems.indexOf(temp) == -1) {
-							selectedItems.splice(selectedItems.indexOf(temp),1);
+						selectedItems.splice(selectedItems.indexOf(temp),1);
 					}
 					ctrl.onClick(selectedItems);
 				}

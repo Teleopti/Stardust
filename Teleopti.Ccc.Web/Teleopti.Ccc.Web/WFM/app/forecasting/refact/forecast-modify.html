@@ -102,7 +102,7 @@
       </div>
       <div class="con-row" ng-hide="vm.isForecastRunning">
         <div class="con-flex" >
-          <forecast-chart  chart-id="vm.selectedWorkload.ChartId" selectable="true" refresh="vm.loadChart" on-click="vm.pointClick"> </forecast-chart>
+          <forecast-chart  chart-id="vm.selectedWorkload.ChartId" selectable="true" refresh="vm.loadChart" on-click="vm.pointClick" days="vm.selectedWorkload.Days"> </forecast-chart>
         </div>
       </div>
       <!-- <div class="con-footer">
