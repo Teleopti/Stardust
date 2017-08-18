@@ -3476,7 +3476,6 @@
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeLightValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMaxSeatReadModelValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMaxSeatsSpecification.cs" />
-    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMaxSeatValidator.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMeetingSpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradePersonalActivitySpecification.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeSkillSpecification.cs" />

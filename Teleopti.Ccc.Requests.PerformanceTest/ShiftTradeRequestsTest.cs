@@ -33,7 +33,7 @@ using Teleopti.Messaging.Client;
 namespace Teleopti.Ccc.Requests.PerformanceTest
 {
 	[ShiftTradeRequestPerformanceTest]
-	public class ShiftTradeRequestsTest : IConfigureToggleManager
+	public class ShiftTradeRequestsTest
 	{
 
 		public AsSystem AsSystem;
@@ -248,12 +248,6 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			PersonRequestRepository.Add (request);
 			return request;
 		}
-
-		public void Configure (FakeToggleManager toggleManager)
-		{
-			toggleManager.Enable (Toggles.Wfm_Requests_Check_Max_Seats_39937);
-			toggleManager.Disable(Toggles.Wfm_Requests_Check_Max_Seats_NoReadModel_39937);
-		}
 	}
 
 	public class ShiftTradeRequestPerformanceTestAttribute : IoCTestAttribute
@@ -290,16 +284,4 @@ namespace Teleopti.Ccc.Requests.PerformanceTest
 			container.Resolve<HangfireClientStarter>().Start();
 		}
 	}
-
-
-	[ShiftTradeRequestPerformanceTest]
-	public class ShiftTradeRequestsNonReadModelTest : ShiftTradeRequestsTest, IConfigureToggleManager
-	{
-		public new void Configure(FakeToggleManager toggleManager)
-		{
-			toggleManager.Enable(Toggles.Wfm_Requests_Check_Max_Seats_NoReadModel_39937);
-			toggleManager.Disable(Toggles.Wfm_Requests_Check_Max_Seats_39937);
-		}
-
-	};
 }

@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 		private readonly IGlobalSettingDataRepository _globalSettingDataRepository;
 		private readonly ILoadSchedulesForRequestWithoutResourceCalculation _loadSchedulingDataForRequestWithoutResourceCalculation;
 		private readonly IShiftTradeMaxSeatValidator _shiftTradeMaxSeatReadModelValidator;
-		private readonly IShiftTradeMaxSeatValidator _shiftTradeMaxSeatValidator;
 		private IShiftTradeMaxSeatValidator _activeShiftTradeMaxSeatValidator;
 
 		public ShiftTradeTestHelper(ISchedulingResultStateHolder schedulingResultStateHolder, IScheduleStorage scheduleStorage, IPersonRepository personRepository, IBusinessRuleProvider businessRuleProvider, ICurrentScenario currentScenario, IScheduleProjectionReadOnlyActivityProvider scheduleProjectionReadOnlyActivityProvider)
@@ -68,8 +67,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			});
 
 			_shiftTradeMaxSeatReadModelValidator = new ShiftTradeMaxSeatReadModelValidator(scheduleProjectionReadOnlyActivityProvider, _currentScenario);
-			_shiftTradeMaxSeatValidator = new ShiftTradeMaxSeatValidator(_currentScenario, _scheduleStorage, _personRepository);
-			_activeShiftTradeMaxSeatValidator = _shiftTradeMaxSeatValidator;
 
 			var globalSettingDataRepository = new FakeGlobalSettingDataRepository();
 			globalSettingDataRepository.PersistSettingValue(ShiftTradeSettings.SettingsKey, new ShiftTradeSettings
@@ -101,9 +98,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			return shiftTradeSpecifications;
 		}
 
-		internal void UseMaxSeatReadModelValidator(bool useReadModelForValidation)
+		internal void UseMaxSeatReadModelValidator()
 		{
-			setValidator(useReadModelForValidation ? _shiftTradeMaxSeatReadModelValidator : _shiftTradeMaxSeatValidator);
+			setValidator(_shiftTradeMaxSeatReadModelValidator);
 		}
 
 		internal static WorkflowControlSet CreateWorkFlowControlSet(bool autoGrantShiftTrade)

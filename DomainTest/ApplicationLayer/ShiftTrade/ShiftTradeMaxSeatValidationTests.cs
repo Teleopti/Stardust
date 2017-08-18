@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ShiftTrade
 			_currentScenario = new FakeCurrentScenario();
 			_shiftTradeTestHelper = new ShiftTradeTestHelper(_schedulingResultStateHolder, _scheduleStorage, _personRepository, new FakeBusinessRuleProvider(), _currentScenario, _scheduleProjectionReadOnlyActivityProvider);
 
-			_shiftTradeTestHelper.UseMaxSeatReadModelValidator(UseReadModel());
+			_shiftTradeTestHelper.UseMaxSeatReadModelValidator();
 		}
 
 		[Test]

@@ -35,17 +35,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleProjectionReadOnlyActivityProvider>()
 			  .As<IScheduleProjectionReadOnlyActivityProvider>()
 			  .SingleInstance();
-
-			if (_configuration.Toggle (Toggles.Wfm_Requests_Check_Max_Seats_39937))
-			{
-				builder.RegisterType<ShiftTradeMaxSeatsSpecification>().As<IShiftTradeSpecification>();
-				builder.RegisterType<ShiftTradeMaxSeatReadModelValidator>().As<IShiftTradeMaxSeatValidator>().SingleInstance();
-			}
-			else if (_configuration.Toggle (Toggles.Wfm_Requests_Check_Max_Seats_NoReadModel_39937))
-			{
-				builder.RegisterType<ShiftTradeMaxSeatsSpecification>().As<IShiftTradeSpecification>();
-				builder.RegisterType<ShiftTradeMaxSeatValidator>().As<IShiftTradeMaxSeatValidator>().SingleInstance();
-			}
+			builder.RegisterType<ShiftTradeMaxSeatsSpecification>().As<IShiftTradeSpecification>();
+			builder.RegisterType<ShiftTradeMaxSeatReadModelValidator>().As<IShiftTradeMaxSeatValidator>().SingleInstance();
 
 			builder.RegisterType<SpecificationCheckerWithConfig>().As<ISpecificationChecker>();
 			builder.RegisterType<ShiftTradeValidator>().As<IShiftTradeValidator>();
