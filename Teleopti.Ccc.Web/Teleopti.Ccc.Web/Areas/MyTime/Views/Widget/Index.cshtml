@@ -14,29 +14,34 @@
 	}
 </script>
 
-<div class="cisco-widget">
-	<div class="relative pull-left" style="width: 200px; height: 68px;">
-		<div class="logo-container">
-			<div class="img-container" id="CiscoFinesse-teleopti-logo">
-				<img src="@Url.Content("~/Areas/MyTime/Content/Images/logo.png")" alt="logo" />
-			</div>
-		</div>
-	</div>
-	@if (ViewBag.HasAsmPermission)
-	{
-		<div class="relative pull-left" style="height: 68px; width: 412px; margin-right: 10px; cursor: pointer;">
-			<div class="mytime-chart-container">
-				<div class="mytime-chart" id="CiscoFinesse-asm-module" onclick="gotoMyTime()">
-					@Html.Partial("../Asm/Index")
+<div class="cisco-widget container">
+	<div class="row">
+		
+		<div class="col-lg-4 col-md-10" style="width: 200px; height: 68px;">
+			<div class="logo-container">
+				<div class="img-container" id="CiscoFinesse-teleopti-logo">
+					<img src="@Url.Content("~/Areas/MyTime/Content/Images/logo.png")" alt="logo"/>
 				</div>
 			</div>
 		</div>
-	}
-	@if (ViewBag.HasMyReportPermission)
-	{
-		<div class="teleopti-dashboard report-ciscofix pull-left" style="height: 68px; width: 500px; cursor: pointer;" id="CiscoFinesse-myReport-module" onclick="gotoMyReport()">
-			@Html.Partial("../MyReport/MyReportPartial")
+		<div class="col-lg-8 col-md-10">
+			@if (ViewBag.HasAsmPermission)
+			{
+				<div class="relative" style="height: 68px; width: 412px; margin-right: 40px; margin-top: 10px; margin-bottom: 10px; cursor: pointer;">
+					<div class="mytime-chart-container">
+						<div class="mytime-chart" id="CiscoFinesse-asm-module" onclick="gotoMyTime()">
+							@Html.Partial("../Asm/Index")
+						</div>
+					</div>
+				</div>
+			}
+			@if (ViewBag.HasMyReportPermission)
+			{
+				<div class="teleopti-dashboard report-ciscofix relative" style="height: 68px; width: 500px; cursor: pointer;" id="CiscoFinesse-myReport-module" onclick="gotoMyReport()">
+					@Html.Partial("../MyReport/MyReportPartial")
+				</div>
+			}
 		</div>
-	}
+	</div>
 
 </div>
