@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -124,13 +125,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 
 				var allSkillDays = schedulingResultStateHolder.AllSkillDays();
-				if(_teamBlockScheduler.ScheduleTeamBlockDay(new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
+				//TODO: check assignmentthingy #45540
+				if (_teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
 					rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective,
 					NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
 					continue;
 
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
-				if (_teamBlockScheduler.ScheduleTeamBlockDay(new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
+				//TODO: check assignmentthingy #45540
+				if (_teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, dateOnly, schedulingOptions,
 					rollbackService, resourceCalculateDelayer, allSkillDays, schedulingResultStateHolder.Schedules, shiftNudgeDirective,
 					NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
 					continue;

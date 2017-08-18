@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			_optimizerHelperHelper.LockDaysForIntradayOptimization(allPersonMatrixList, selectedPeriod);
 			var teamBlocks = teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
-
+			
 			while (teamBlocks.Count > 0)
 			{
 				if (_currentIntradayOptimizationCallback.Current().IsCancelled())
@@ -128,13 +128,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				_setMainShiftOptimizeActivitySpecificationForTeamBlock.Execute(optimizationPreferences, teamBlockInfo, schedulingOptions);
 
+				//if needed due to perf, only fetch members in team that Agda has choosen. Also, make a dic based on date + agent
+				var orgAssignmentsForTeamBlock = scheduleDictionary.SchedulesForPeriod(teamBlockInfo.BlockInfo.BlockPeriod, teamBlockInfo.TeamInfo.GroupMembers.ToArray())
+					.Select(x => x.PersonAssignment()).Where(x => x != null).ToArray();
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 				var firstSelectedDay = selectedPeriod.StartDate;
 				var datePoint = firstSelectedDay;
 				if (teamBlockInfo.BlockInfo.BlockPeriod.StartDate > firstSelectedDay)
 					datePoint = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 
-				var success = _teamBlockScheduler.ScheduleTeamBlockDay(new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
+				var success = _teamBlockScheduler.ScheduleTeamBlockDay(orgAssignmentsForTeamBlock, new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), scheduleDictionary, new ShiftNudgeDirective(), businessRuleCollection, _groupPersonSkillAggregator);
 

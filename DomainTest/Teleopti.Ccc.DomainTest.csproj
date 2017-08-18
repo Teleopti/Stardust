@@ -971,7 +971,6 @@
     <Compile Include="Scheduling\Assignment\PersonAssignment_MoveActivityTest.cs" />
     <Compile Include="Scheduling\Assignment\ScheduleDaySignificantPartTest.cs" />
     <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftServiceTest.cs" />
-    <Compile Include="Scheduling\BackToLegalShift\BackToLegalShiftWorkerTest.cs" />
     <Compile Include="Scheduling\BackToLegalShift\LegalShiftDeciderTest.cs" />
     <Compile Include="Scheduling\Overtime\AdjustOvertimeLengthBasedOnAvailabilityTest.cs" />
     <Compile Include="Scheduling\Overtime\MergeOvertimeSkillIntervalDataTest.cs" />

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockSingleDayScheduler
 	{
-		bool ScheduleSingleDay(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, DateOnly day,
+		bool ScheduleSingleDay(IEnumerable<IPersonAssignment> orginalPersonAssignments, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, DateOnly day,
 			ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled);
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public bool ScheduleSingleDay(IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, DateOnly day,
+		public bool ScheduleSingleDay(IEnumerable<IPersonAssignment> orginalPersonAssignments, IWorkShiftSelector workShiftSelector, ITeamBlockInfo teamBlockInfo, SchedulingOptions schedulingOptions, DateOnly day,
 			ShiftProjectionCache roleModelShift, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, IEnumerable<ISkillDay> allSkillDays, IScheduleDictionary schedules,
 			IEffectiveRestriction shiftNudgeRestriction, INewBusinessRuleCollection businessRules, Func<SchedulingServiceBaseEventArgs, bool> dayScheduled)
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (bestShiftProjectionCache == null)
 						continue;
 				}
-				cancelMe = _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache,
+				cancelMe = _teamScheduling.ExecutePerDayPerPerson(orginalPersonAssignments, person, day, teamBlockInfo, bestShiftProjectionCache,
 					schedulePartModifyAndRollbackService, resourceCalculateDelayer, false, businessRules, schedulingOptions, schedules, dayScheduled);
 			}
 

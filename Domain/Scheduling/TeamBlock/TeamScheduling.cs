@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -12,13 +13,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly AssignScheduledLayers _assignScheduledLayers;
 	    private readonly IDayOffsInPeriodCalculator _dayOffsInPeriodCalculator;
 
-	    public TeamScheduling(AssignScheduledLayers assignScheduledLayers, IDayOffsInPeriodCalculator dayOffsInPeriodCalculator)
+	    public TeamScheduling(AssignScheduledLayers assignScheduledLayers, 
+			IDayOffsInPeriodCalculator dayOffsInPeriodCalculator)
 	    {
 		    _assignScheduledLayers = assignScheduledLayers;
 		    _dayOffsInPeriodCalculator = dayOffsInPeriodCalculator;
 	    }
 
-	    public bool ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+	    public bool ExecutePerDayPerPerson(IEnumerable<IPersonAssignment> orginalPersonAssignments, IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
 		    ShiftProjectionCache shiftProjectionCache,
 		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		    IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation, INewBusinessRuleCollection businessRules, SchedulingOptions schedulingOptions,
@@ -46,13 +48,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    if (schedulingOptions.IsDayScheduled(scheduleDay))
 			    return false;
 			
-		    assignShiftProjection(shiftProjectionCache, scheduleDay,
+
+		    assignShiftProjection(orginalPersonAssignments, shiftProjectionCache, scheduleDay,
 			    schedulePartModifyAndRollbackService, businessRules, schedulingOptions, resourceCalculateDelayer, doIntraIntervalCalculation);
 
 			return dayScheduled != null && dayScheduled(new SchedulingServiceSuccessfulEventArgs(scheduleDay));
 		}
 
-		private void assignShiftProjection(ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, 
+		private void assignShiftProjection(IEnumerable<IPersonAssignment> orginalPersonAssignments, ShiftProjectionCache shiftProjectionCache, IScheduleDay destinationScheduleDay, 
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, INewBusinessRuleCollection businessRules, 
 			SchedulingOptions schedulingOptions, IResourceCalculateDelayer resourceCalculateDelayer, bool doIntraIntervalCalculation)
         {
@@ -69,14 +72,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        if (personMeetingCollection.Any())
 			{
 				var mainShiftPeriod = shiftProjectionCache.MainShiftProjection.Period().GetValueOrDefault();
-				if (personMeetingCollection.Any(personMeeting => !mainShiftPeriod.Contains(personMeeting.Period))) return;		
+				if (personMeetingCollection.Any(personMeeting => !mainShiftPeriod.Contains(personMeeting.Period))) return;
 			}
-			_assignScheduledLayers.Execute(schedulingOptions, destinationScheduleDay, shiftProjectionCache.TheMainShift);
-					
-            schedulePartModifyAndRollbackService.Modify(destinationScheduleDay, businessRules);
 
-	        resourceCalculateDelayer.CalculateIfNeeded(destinationScheduleDay.DateOnlyAsPeriod.DateOnly,
-		        shiftProjectionCache.WorkShiftProjectionPeriod, doIntraIntervalCalculation);
+			//Fix key if perf too slow to find ass
+	        var assignmentBefore = orginalPersonAssignments.FirstOrDefault(x => x.Date == destinationScheduleDay.DateOnlyAsPeriod.DateOnly && x.Person.Equals(destinationScheduleDay.Person));
+			_assignScheduledLayers.Execute(schedulingOptions, destinationScheduleDay, shiftProjectionCache.TheMainShift);
+	        if (assignmentChanged(assignmentBefore, destinationScheduleDay))
+	        {
+				schedulePartModifyAndRollbackService.Modify(destinationScheduleDay, businessRules);
+
+		        resourceCalculateDelayer.CalculateIfNeeded(destinationScheduleDay.DateOnlyAsPeriod.DateOnly,
+			        shiftProjectionCache.WorkShiftProjectionPeriod, doIntraIntervalCalculation);
+			}
 		}
-    }
+
+	    private static bool assignmentChanged(IPersonAssignment assignmentBefore, IScheduleDay destinationScheduleDay)
+	    {
+		    if (assignmentBefore == null)
+			    return true;
+		    var currentAssignment = destinationScheduleDay.PersonAssignment();
+		    return !assignmentBefore.MainActivities().SequenceEqual(currentAssignment.MainActivities(), new sameMainShifts());
+	    }
+
+		private class sameMainShifts : IEqualityComparer<MainShiftLayer>
+		{
+			public bool Equals(MainShiftLayer x, MainShiftLayer y)
+			{
+				return x.Period == y.Period && x.Payload.Equals(y.Payload);
+			}
+
+			public int GetHashCode(MainShiftLayer obj)
+			{
+				return obj.Payload.GetHashCode() ^ obj.Period.GetHashCode();
+			}
+		}
+	}
 }

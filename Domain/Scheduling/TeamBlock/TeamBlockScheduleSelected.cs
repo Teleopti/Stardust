@@ -74,7 +74,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (teamBlockInfo == null) continue;
 
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
-				if (_teamBlockScheduler.ScheduleTeamBlockDay(schedulingCallback, _workShiftSelector, teamBlockInfo, datePointer, schedulingOption,
+				//TODO: check assignmentthingy #45540
+				if (_teamBlockScheduler.ScheduleTeamBlockDay(Enumerable.Empty<IPersonAssignment>(), schedulingCallback, _workShiftSelector, teamBlockInfo, datePointer, schedulingOption,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, new ShiftNudgeDirective(), NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder), _groupPersonSkillAggregator))
 					verifyScheduledTeamBlock(schedulingCallback, selectedPersons, schedulePartModifyAndRollbackService, datePointer,

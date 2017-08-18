@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -40,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 			var date = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 			var rules = NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder);
-			var success = _teamBlockSingleDayScheduler.ScheduleSingleDay(_workShiftSelector, teamBlockInfo, schedulingOptions, date, roleModelShift,
+			//fix org assignments later if needed, see #45540 for shifts within day
+			var success = _teamBlockSingleDayScheduler.ScheduleSingleDay(Enumerable.Empty<IPersonAssignment>(), _workShiftSelector, teamBlockInfo, schedulingOptions, date, roleModelShift,
 				rollbackService, resourceCalculateDelayer, schedulingResultStateHolder.AllSkillDays(), schedulingResultStateHolder.Schedules, null, rules, null);
 			if (!success)
 			{
