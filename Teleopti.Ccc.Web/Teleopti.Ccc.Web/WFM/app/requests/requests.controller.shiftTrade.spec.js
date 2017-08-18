@@ -31,7 +31,6 @@ describe('Requests shift trade controller tests',
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
 					return {
-						Wfm_Requests_Default_Status_Filter_39472: true,
 						Wfm_Requests_Save_Grid_Columns_37976: true,
 						Wfm_Requests_Show_Pending_Reasons_39473: true,
 						togglesLoaded: {

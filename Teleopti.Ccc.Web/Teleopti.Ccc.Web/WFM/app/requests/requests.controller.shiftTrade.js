@@ -45,7 +45,7 @@
 			columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'];
 
 		vm.setDefaultStatuses = function() {
-			if (!vm.showRequestsInDefaultStatus || vm.defaultStatusesLoaded) {
+			if (vm.defaultStatusesLoaded) {
 				return;
 			}
 
@@ -140,7 +140,6 @@
 
 		vm.init = function() {
 			vm.defaultStatusesLoaded = false;
-			vm.showRequestsInDefaultStatus = toggleService.Wfm_Requests_Default_Status_Filter_39472;
 			vm.isUsingRequestSubmitterTimeZone = $stateParams.isUsingRequestSubmitterTimeZone;
 			onInitCallBack = $stateParams.onInitCallBack;
 			vm.userTimeZone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
@@ -151,11 +150,9 @@
 
 			vm.gridOptions = getGridOptions();
 			vm.saveGridColumnState = toggleService.Wfm_Requests_Save_Grid_Columns_37976;
-			if (toggleService.Wfm_Requests_Default_Status_Filter_39472) {
-				vm.filters = [{
-					'Status': '0'
-				}];
-			}
+			vm.filters = [{
+				'Status': '0'
+			}];
 			vm.initialized = true;
 			vm.filterEnabled = $stateParams.filterEnabled;
 			vm.AllRequestStatuses = requestsDataService.getAllRequestStatuses(vm.shiftTradeView);

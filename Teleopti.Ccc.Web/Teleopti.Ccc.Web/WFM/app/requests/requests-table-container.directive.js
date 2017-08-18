@@ -22,7 +22,6 @@
 		vm.thereIsRequest = thereIsRequest;
 		vm.isDayOff = isDayOff;
 		vm.shouldDisplayShiftTradeDayDetail = shouldDisplayShiftTradeDayDetail;
-		vm.showRequestsInDefaultStatus = toggleSvc.Wfm_Requests_Default_Status_Filter_39472;
 		vm.saveGridColumnState = toggleSvc.Wfm_Requests_Save_Grid_Columns_37976;
 		vm.setFilterEnabled = setFilterEnabled;
 		vm.hideShiftDetail = hideShiftDetail;
@@ -35,7 +34,7 @@
 		vm.definitionsLoadComplete = false;
 
 		vm.setDefaultStatuses = function () {
-			if (!vm.showRequestsInDefaultStatus || vm.defaultStatusesLoaded) {
+			if (vm.defaultStatusesLoaded) {
 				return;
 			}
 

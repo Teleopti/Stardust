@@ -32,9 +32,7 @@
 			vm.isPaginationEnabled = toggleService.Wfm_Requests_Performance_36295;
 			// By default, show shift trade requests in pending only;
 			// and show absence and text requests in pending and waitlisted only;
-			if (toggleService.Wfm_Requests_Default_Status_Filter_39472) {
-				vm.filters = [{ "Status": vm.shiftTradeView ? "0" : "0 5" }];
-			}
+			vm.filters = [{ "Status": vm.shiftTradeView ? "0" : "0 5" }];
 		}
 
 		toggleService.togglesLoaded.then(init);
