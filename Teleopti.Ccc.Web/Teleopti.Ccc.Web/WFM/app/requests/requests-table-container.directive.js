@@ -22,7 +22,6 @@
 		vm.thereIsRequest = thereIsRequest;
 		vm.isDayOff = isDayOff;
 		vm.shouldDisplayShiftTradeDayDetail = shouldDisplayShiftTradeDayDetail;
-		vm.saveGridColumnState = toggleSvc.Wfm_Requests_Save_Grid_Columns_37976;
 		vm.setFilterEnabled = setFilterEnabled;
 		vm.hideShiftDetail = hideShiftDetail;
 		vm.shiftDetailStyleJson = shiftDetailStyleJson;
@@ -50,10 +49,6 @@
 
 				vm.defaultStatusesLoaded = true;
 			}
-		}
-
-		if (!vm.saveGridColumnState) {
-			vm.setDefaultStatuses();
 		}
 
 		function showShiftDetail(params) {
@@ -366,11 +361,8 @@
 			vm.gridOptions.data = vm.requests;
 			vm.definitionsLoadComplete = true;
 
-			if (vm.saveGridColumnState) {
-				initialiseGridStateHandling();
-				
-				vm.setDefaultStatuses();
-			}
+			initialiseGridStateHandling();
+			vm.setDefaultStatuses();
 
 			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 

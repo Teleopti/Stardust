@@ -33,7 +33,6 @@ describe('Requests - absence and text controller tests',
 					return {
 						Wfm_Requests_People_Search_36294: true,
 						Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309: true,
-						Wfm_Requests_Save_Grid_Columns_37976: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}

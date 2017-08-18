@@ -149,7 +149,6 @@
 				vm.sortingOrders.push(sortingOrder);
 
 			vm.gridOptions = getGridOptions();
-			vm.saveGridColumnState = toggleService.Wfm_Requests_Save_Grid_Columns_37976;
 			vm.filters = [{
 				'Status': '0'
 			}];
@@ -346,10 +345,8 @@
 			vm.gridOptions.useExternalFiltering = vm.filterEnabled;
 			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 
-			if (vm.saveGridColumnState) {
-				initialiseGridStateHandling();
-				vm.setDefaultStatuses();
-			}
+			initialiseGridStateHandling();
+			vm.setDefaultStatuses();
 
 			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 			vm.gridOptions.data = vm.requests;

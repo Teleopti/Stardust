@@ -31,7 +31,6 @@ describe('Requests shift trade controller tests',
 			module(function ($provide) {
 				$provide.service('Toggle', function () {
 					return {
-						Wfm_Requests_Save_Grid_Columns_37976: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}
