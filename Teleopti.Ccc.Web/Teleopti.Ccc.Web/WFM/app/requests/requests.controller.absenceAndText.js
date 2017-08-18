@@ -7,8 +7,7 @@
 
 	requestsAbsenceAndTextCtrl.$inject = [
 		'$scope', '$filter', '$injector', '$translate', '$timeout', '$stateParams', 'requestsDataService', 'Toggle',
-		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'TextAndAbsenceGridConfiguration',
-		'UIGridUtilitiesService'
+		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'TextAndAbsenceGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES'
 	];
 
 	function requestsAbsenceAndTextCtrl($scope,
@@ -26,7 +25,8 @@
 		requestFilterSvc,
 		requestGridStateService,
 		textAndAbsenceGridConfigurationService,
-		uiGridUtilitiesService) {
+		uiGridUtilitiesService, 
+		requestsTabNames) {
 		var vm = this;
 
 		vm.requests = [];
@@ -38,7 +38,6 @@
 		vm.selectedGroupIds = [];
 		vm.paging = {};
 		vm.initialized = false;
-		vm.requestFiltersMgr = new requestFilterSvc.RequestsFilter();
 
 		var onInitCallBack = undefined,
 			columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'];
@@ -48,22 +47,22 @@
 				return;
 			}
 
-			vm.SelectedRequestStatuses = uiGridUtilitiesService.getDefaultStatus(vm.filters, vm.requestFiltersMgr);
+			vm.selectedRequestStatuses = uiGridUtilitiesService.getDefaultStatus(vm.filters, requestsTabNames.absenceAndText);
 			vm.defaultStatusesLoaded = true;
 		};
 
 		vm.subjectFilterChanged = function() {
-			vm.requestFiltersMgr.SetFilter('Subject', vm.subjectFilter);
-			vm.filters = vm.requestFiltersMgr.Filters;
+			requestFilterSvc.setFilter('Subject', vm.subjectFilter, requestsTabNames.absenceAndText);
+			vm.filters = requestFilterSvc.filters[requestsTabNames.absenceAndText];
 		};
 
 		vm.messageFilterChanged = function() {
-			vm.requestFiltersMgr.SetFilter('Message', vm.messageFilter);
-			vm.filters = vm.requestFiltersMgr.Filters;
+			requestFilterSvc.setFilter('Message', vm.messageFilter, requestsTabNames.absenceAndText);
+			vm.filters = requestFilterSvc.filters[requestsTabNames.absenceAndText];
 		};
 
 		vm.statusFilterClose = function () {
-			setFilters(vm.SelectedRequestStatuses, 'Status');
+			setFilters(vm.selectedRequestStatuses, 'Status');
 		};
 
 		vm.typeFilterClose = function() {
@@ -99,14 +98,14 @@
 				});
 			vm.SelectedTypes = [];
 
-			angular.forEach(vm.AllRequestStatuses,
+			angular.forEach(vm.allRequestStatuses,
 				function (status) {
 					status.Selected = false;
 				});
-			vm.SelectedRequestStatuses = [];
+			vm.selectedRequestStatuses = [];
 
-			vm.requestFiltersMgr.ResetFilter();
-			vm.filters = vm.requestFiltersMgr.Filters;
+			requestFilterSvc.resetFilter();
+			vm.filters = requestFilterSvc.filters[requestsTabNames.absenceAndText];
 			vm.subjectFilter = undefined;
 			vm.messageFilter = undefined;
 		}; 
@@ -125,7 +124,7 @@
 			vm.filters = [{ 'Status': '0 5' }];
 			vm.initialized = true;
 			vm.filterEnabled = $stateParams.filterEnabled;
-			vm.AllRequestStatuses = requestsDataService.getAllRequestStatuses(false);
+			vm.allRequestStatuses = requestsDataService.getAllRequestStatuses(false);
 
 			if (!$stateParams.getPeriod)
 				return;
@@ -164,8 +163,8 @@
 				function (filter) {
 					filters += filter.Id + ' ';
 				});
-			vm.requestFiltersMgr.SetFilter(displayName, filters.trim());
-			vm.filters = vm.requestFiltersMgr.Filters;
+			requestFilterSvc.setFilter(displayName, filters.trim(), requestsTabNames.absenceAndText);
+			vm.filters = requestFilterSvc.filters[requestsTabNames.absenceAndText];
 		}
 
 		function setupWatch() {
@@ -247,10 +246,10 @@
 										function(column) {
 											var term = column.filters[0].term;
 											if (term != undefined) {
-												vm.requestFiltersMgr.SetFilter(column.colDef.displayName, term.trim());
+												requestFilterSvc.setFilter(column.colDef.displayName, term.trim(), requestsTabNames.absenceAndText);
 											}
 										});
-									vm.filters = vm.requestFiltersMgr.Filters;
+									vm.filters = requestFilterSvc.filters[requestsTabNames.absenceAndText];
 								},
 								500);
 						});

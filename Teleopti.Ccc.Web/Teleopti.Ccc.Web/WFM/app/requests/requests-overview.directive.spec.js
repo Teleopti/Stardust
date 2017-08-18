@@ -459,7 +459,7 @@
 			test.scope.filters = [{ "Status": status0 + " " + status1 + " " + status2 }];
 			test.scope.$digest();
 
-			var selectedStatus = test.target.isolateScope().requestsTableContainer.SelectedRequestStatuses;
+			var selectedStatus = test.target.isolateScope().requestsTableContainer.selectedRequestStatuses;
 			expect(selectedStatus.length).toEqual(3);
 			expect(selectedStatus[0].Id).toEqual(status0.trim());
 			expect(selectedStatus[1].Id).toEqual(status1.trim());

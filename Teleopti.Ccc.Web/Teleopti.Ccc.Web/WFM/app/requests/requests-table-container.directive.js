@@ -5,13 +5,11 @@
 		.controller('requestsTableContainerCtrl', requestsTableContainerController)
 		.directive('requestsTableContainer', requestsTableContainerDirective);
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', 'Toggle', 'requestsDefinitions',
-		'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService', 'uiGridConstants', '$injector',
-		'TeamSchedule', 'GroupScheduleFactory', '$window', 'RequestGridStateService'];
+	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', 'Toggle', 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService', 'uiGridConstants', '$injector', 'TeamSchedule', 'GroupScheduleFactory', '$window', 'RequestGridStateService', 'REQUESTS_TAB_NAMES'];
 
 	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions,
 		requestCommandParamsHolder, CurrentUserInfo, requestFilterSvc, requestsDataSvc, uiGridConstants, $injector,
-		teamScheduleSvc, groupScheduleFactory, $window, requestGridStateService) {
+		teamScheduleSvc, groupScheduleFactory, $window, requestGridStateService, requestsTabNames) {
 		var vm = this;
 
 		vm.getGridOptions = getGridOptions;
@@ -25,12 +23,13 @@
 		vm.setFilterEnabled = setFilterEnabled;
 		vm.hideShiftDetail = hideShiftDetail;
 		vm.shiftDetailStyleJson = shiftDetailStyleJson;
-		vm.requestFiltersMgr = new requestFilterSvc.RequestsFilter();
 		vm.showShiftDetail = showShiftDetail;
 		vm.setupShiftTradeVisualisation = setupShiftTradeVisualisation;
 
 		vm.defaultStatusesLoaded = false;
 		vm.definitionsLoadComplete = false;
+
+		var tabName = vm.shiftTradeView ? requestsTabNames.shiftTrade : requestsTabNames.absenceAndText;
 
 		vm.setDefaultStatuses = function () {
 			if (vm.defaultStatusesLoaded) {
@@ -38,12 +37,12 @@
 			}
 
 			if (vm.filters && vm.filters.length > 0) {
-				vm.SelectedRequestStatuses = [];
+				vm.selectedRequestStatuses = [];
 				var defaultStatusFilter = vm.filters[0].Status;
-				vm.requestFiltersMgr.SetFilter('status', defaultStatusFilter);
+				requestFilterSvc.setFilter('status', defaultStatusFilter, tabName);
 				angular.forEach(defaultStatusFilter.split(' '), function (value) {
 					if (value.trim() !== '') {
-						vm.SelectedRequestStatuses.push({ Id: value.trim() });
+						vm.selectedRequestStatuses.push({ Id: value.trim() });
 					}
 				});
 
@@ -134,13 +133,13 @@
 			});
 			vm.SelectedTypes = [];
 
-			angular.forEach(vm.AllRequestStatuses, function (status) {
+			angular.forEach(vm.allRequestStatuses, function (status) {
 				status.Selected = false;
 			});
-			vm.SelectedRequestStatuses = [];
+			vm.selectedRequestStatuses = [];
 			
-			vm.requestFiltersMgr.ResetFilter();
-			vm.filters = vm.requestFiltersMgr.Filters;
+			requestFilterSvc.resetFilter();
+			vm.filters = requestFilterSvc.filters[tabName];
 			vm.subjectFilter = undefined;
 			vm.messageFilter = undefined;
 		};
@@ -156,37 +155,37 @@
 			});
 		}
 
-		vm.AllRequestStatuses = requestsDataSvc.getAllRequestStatuses(vm.shiftTradeView);
+		vm.allRequestStatuses = requestsDataSvc.getAllRequestStatuses(vm.shiftTradeView);
 
 		vm.typeFilterClose = function () {
 			var filters = '';
 			angular.forEach(vm.SelectedTypes, function (absence) {
 				filters += absence.Id + ' ';
 			});
-			vm.requestFiltersMgr.SetFilter('Type', filters.trim());
+			requestFilterSvc.setFilter('Type', filters.trim(), tabName);
 
-			vm.filters = vm.requestFiltersMgr.Filters;
+			vm.filters = requestFilterSvc.filters[tabName];
 		};
 
 		vm.statusFilterClose = function () {
 
 			var filters = '';
-			angular.forEach(vm.SelectedRequestStatuses, function (status) {
+			angular.forEach(vm.selectedRequestStatuses, function (status) {
 				filters += status.Id + ' ';
 			});
-			vm.requestFiltersMgr.SetFilter('Status', filters.trim());
+			requestFilterSvc.setFilter('Status', filters.trim(), tabName);
 
-			vm.filters = vm.requestFiltersMgr.Filters;
+			vm.filters = requestFilterSvc.filters[tabName];
 		};
 
 		vm.subjectFilterChanged = function () {
-			vm.requestFiltersMgr.SetFilter('Subject', vm.subjectFilter);
-			vm.filters = vm.requestFiltersMgr.Filters;
+			requestFilterSvc.setFilter('Subject', vm.subjectFilter, tabName);
+			vm.filters = requestFilterSvc.filters[tabName];
 		}
 
 		vm.messageFilterChanged = function () {
-			vm.requestFiltersMgr.SetFilter('Message', vm.messageFilter);
-			vm.filters = vm.requestFiltersMgr.Filters;
+			requestFilterSvc.setFilter('Message', vm.messageFilter, tabName);
+			vm.filters = requestFilterSvc.filters[tabName];
 		}
 
 		function getGridOptions() {
@@ -226,11 +225,11 @@
 							angular.forEach(grid.columns, function (column) {
 								var term = column.filters[0].term;
 								if (term != undefined) {
-									vm.requestFiltersMgr.SetFilter(column.colDef.displayName, term.trim());
+									requestFilterSvc.setFilter(column.colDef.displayName, term.trim(), tabName);
 								}
 							});
 
-							vm.filters = vm.requestFiltersMgr.Filters;
+							vm.filters = requestFilterSvc.filters[tabName];
 						}, 500);
 					});
 				}

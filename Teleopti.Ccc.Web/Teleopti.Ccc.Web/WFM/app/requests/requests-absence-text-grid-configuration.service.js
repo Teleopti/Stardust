@@ -79,8 +79,8 @@
 					headerCellClass: 'request-status-header',
 					enableSorting: false,
 					filterHeaderTemplate: '<md-select class=\"test-status-selector\" ng-model-options=\"{trackBy: \'$value.Id\'}\" ng-repeat=\"colFilter in col.filters\" md-on-close=\"grid.appScope.statusFilterClose()\"'
-					+ 'multiple ng-model=\"grid.appScope.SelectedRequestStatuses\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Status\' | translate}}\" aria-label=\"{{\'Status\' | translate}}\">'
-					+ '<md-option ng-repeat=\"item in grid.appScope.AllRequestStatuses\" ng-value=\"item\">'
+					+ 'multiple ng-model=\"grid.appScope.selectedRequestStatuses\" placeholder=\"{{\'FilterColon\' | translate}} {{\'Status\' | translate}}\" aria-label=\"{{\'Status\' | translate}}\">'
+					+ '<md-option ng-repeat=\"item in grid.appScope.allRequestStatuses\" ng-value=\"item\">'
 					+ '<span>{{item.Name | translate}}</span>'
 					+ '</md-option>'
 					+ '</md-select>'

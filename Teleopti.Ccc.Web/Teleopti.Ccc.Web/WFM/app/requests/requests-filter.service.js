@@ -1,74 +1,66 @@
 ﻿(function() {
-	"use strict";
-
+	'use strict';
 
 	angular.module('wfm.requests')
 		.filter('filterShiftTradeDetailDisplay', ['$filter', filterShiftTradeDetailDisplay]);
-	
+
 	function filterShiftTradeDetailDisplay($filter) {
 
-		return function (shiftTradeDays, day) {
+		return function(shiftTradeDays, day) {
 			if (!shiftTradeDays) {
 				return true;
 			}
 
-			return shiftTradeDays.filter(function (element) {
-
-				var date = ($filter('date')(moment(element.Date).toDate(), "shortDate"));
+			return shiftTradeDays.filter(function(element) {
+				var date = ($filter('date')(moment(element.Date).toDate(), 'shortDate'));
 				if (date === day) {
 					return true;
 				}
 			});
 		}
 	};
-	
-	angular.module('wfm.requests').factory('RequestsFilter', [
-			function () {
 
-				function RequestsFilter() {
-					
-					var vm = this;
-					vm.Filters = [];
+	angular.module('wfm.requests').service('RequestsFilter', function() {
+		var svc = this;
 
-					vm.RemoveFilter = function (filterName) {
-						for (var i = 0; i < vm.Filters.length; i++) {
-							var filter = vm.Filters[i];
-							if (filter.hasOwnProperty(filterName)) {
-								vm.Filters.splice(i, 1);
-							}
-						}
-					}
+		svc.filters = {};
+		svc.removeFilter = function(filterName, tabName) {
+			if(!svc.filters[tabName]) return;
 
-					vm.SetFilter = function (name, filter) {
-						var nameInLowerCase = name.trim().toLowerCase();
-						var expectedFilterNames = ["status", "subject", "message", "type"];
-
-						if (expectedFilterNames.indexOf(nameInLowerCase) > -1) {
-							var filterName = nameInLowerCase.charAt(0).toUpperCase()
-								+ nameInLowerCase.slice(1);
-							vm.RemoveFilter(filterName);
-							if (filter == undefined || filter.trim().length === 0) return;
-
-							var filterObj = {};
-							filterObj[filterName] = filter.trim();
-							vm.Filters.push(filterObj);
-						}
-					}
-
-					vm.ResetFilter = function () {
-						vm.Filters = [];
-					}
-
+			for (var i = 0; i < svc.filters[tabName].length; i++) {
+				var filter = svc.filters[tabName][i];
+				if (filter.hasOwnProperty(filterName)) {
+					svc.filters[tabName].splice(i, 1);
 				}
-
-				return {
-					RequestsFilter : RequestsFilter
-				}
-
-
 			}
-		]
-	);
-	
+		};
 
+		svc.setFilter = function(name, filter, tabName) {
+			var nameInLowerCase = name.trim().toLowerCase();
+			var expectedFilterNames = ['status', 'subject', 'message', 'type'];
+
+			if (expectedFilterNames.indexOf(nameInLowerCase) > -1) {
+				var filterName = nameInLowerCase.charAt(0).toUpperCase() + nameInLowerCase.slice(1);
+				svc.removeFilter(filterName, tabName);
+
+				if (filter == undefined || filter.trim().length === 0) return;
+
+				var filterObj = {};
+				filterObj[filterName] = filter.trim();
+
+				if(svc.filters[tabName] == undefined){
+					svc.filters[tabName] = [];
+				}
+
+				svc.filters[tabName].push(filterObj);
+			}
+		};
+
+		svc.resetFilter = function(tabName) {
+			if(svc.filters[tabName])
+				svc.filters[tabName].length = 0;
+		};
+
+		return svc;
+	});
 })();

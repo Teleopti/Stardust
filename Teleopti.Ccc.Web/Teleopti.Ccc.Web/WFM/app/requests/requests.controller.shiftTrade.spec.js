@@ -321,7 +321,7 @@ describe('Requests shift trade controller tests',
 			controller.filters = [{ 'Status': status0 + ' ' + status1 + ' ' + status2 }];
 			scope.$digest();
 
-			var selectedStatus = controller.SelectedRequestStatuses;
+			var selectedStatus = controller.selectedRequestStatuses;
 
 			expect(selectedStatus.length).toEqual(3);
 			expect(selectedStatus[0].Id).toEqual(status0.trim());

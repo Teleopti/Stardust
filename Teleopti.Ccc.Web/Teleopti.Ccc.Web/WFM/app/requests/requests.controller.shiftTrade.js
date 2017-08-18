@@ -7,8 +7,7 @@
 
 	requestsShiftTradeCtrl.$inject = [
 		'$scope', '$filter', '$injector', '$translate', '$timeout', '$stateParams', 'requestsDataService', 'Toggle',
-		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'ShiftTradeGridConfiguration',
-		'UIGridUtilitiesService'
+		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'ShiftTradeGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES'
 	];
 
 	function requestsShiftTradeCtrl($scope,
@@ -26,7 +25,8 @@
 		requestFilterSvc,
 		requestGridStateService,
 		shiftTradeGridConfiguration,
-		uiGridUtilitiesService) {
+		uiGridUtilitiesService, 
+		requestsTabNames) {
 		var vm = this;
 
 		vm.requests = [];
@@ -39,7 +39,6 @@
 		vm.paging = {};
 		vm.initialized = false;
 		vm.shiftTradeView = true;
-		vm.requestFiltersMgr = new requestFilterSvc.RequestsFilter();
 
 		var onInitCallBack = undefined,
 			columnsWithFilterEnabled = ['Subject', 'Message', 'Type', 'Status'];
@@ -49,22 +48,22 @@
 				return;
 			}
 
-			vm.SelectedRequestStatuses = uiGridUtilitiesService.getDefaultStatus(vm.filters, vm.requestFiltersMgr);
+			vm.selectedRequestStatuses = uiGridUtilitiesService.getDefaultStatus(vm.filters, requestsTabNames.shiftTrade);
 			vm.defaultStatusesLoaded = true;
 		};
 
 		vm.subjectFilterChanged = function() {
-			vm.requestFiltersMgr.SetFilter('Subject', vm.subjectFilter);
-			vm.filters = vm.requestFiltersMgr.Filters;
+			requestFilterSvc.setFilter('Subject', vm.subjectFilter, requestsTabNames.shiftTrade);
+			vm.filters = requestFilterSvc.filters[requestsTabNames.shiftTrade];
 		};
 
 		vm.messageFilterChanged = function() {
-			vm.requestFiltersMgr.SetFilter('Message', vm.messageFilter);
-			vm.filters = vm.requestFiltersMgr.Filters;
+			requestFilterSvc.setFilter('Message', vm.messageFilter, requestsTabNames.shiftTrade);
+			vm.filters = requestFilterSvc.filters[requestsTabNames.shiftTrade];
 		};
 
 		vm.statusFilterClose = function() {
-			setFilters(vm.SelectedRequestStatuses, 'Status');
+			setFilters(vm.selectedRequestStatuses, 'Status');
 		};
 
 		vm.typeFilterClose = function() {
@@ -95,14 +94,14 @@
 				});
 			vm.SelectedTypes = [];
 
-			angular.forEach(vm.AllRequestStatuses,
+			angular.forEach(vm.allRequestStatuses,
 				function(status) {
 					status.Selected = false;
 				});
-			vm.SelectedRequestStatuses = [];
+			vm.selectedRequestStatuses = [];
 
-			vm.requestFiltersMgr.ResetFilter();
-			vm.filters = vm.requestFiltersMgr.Filters;
+			requestFilterSvc.resetFilter();
+			vm.filters = requestFilterSvc.filters[requestsTabNames.shiftTrade];
 			vm.subjectFilter = undefined;
 			vm.messageFilter = undefined;
 		};
@@ -154,7 +153,7 @@
 			}];
 			vm.initialized = true;
 			vm.filterEnabled = $stateParams.filterEnabled;
-			vm.AllRequestStatuses = requestsDataService.getAllRequestStatuses(vm.shiftTradeView);
+			vm.allRequestStatuses = requestsDataService.getAllRequestStatuses(vm.shiftTradeView);
 
 			if (!$stateParams.getPeriod)
 				return;
@@ -192,8 +191,8 @@
 				function(filter) {
 					filters += filter.Id + ' ';
 				});
-			vm.requestFiltersMgr.SetFilter(displayName, filters.trim());
-			vm.filters = vm.requestFiltersMgr.Filters;
+			requestFilterSvc.setFilter(displayName, filters.trim(), requestsTabNames.shiftTrade);
+			vm.filters = requestFilterSvc.filters[requestsTabNames.shiftTrade];
 		}
 
 		function setupWatch() {
@@ -265,10 +264,10 @@
 									function(column) {
 										var term = column.filters[0].term;
 										if (term != undefined) {
-											vm.requestFiltersMgr.SetFilter(column.colDef.displayName, term.trim());
+											requestFilterSvc.setFilter(column.colDef.displayName, term.trim(), requestsTabNames.shiftTrade);
 										}
 									});
-								vm.filters = vm.requestFiltersMgr.Filters;
+								vm.filters = requestFilterSvc.filters[requestsTabNames.shiftTrade];
 							},
 							500);
 					});

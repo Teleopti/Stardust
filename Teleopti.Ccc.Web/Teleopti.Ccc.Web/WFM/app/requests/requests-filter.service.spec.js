@@ -2,35 +2,36 @@
 	"use strict";
 
 	describe("[Requests Filter Service Test]", function() {
-		var target;
-
-		var $rootScope;
+		var $rootScope,
+			target,
+			requestsTabNames;
 
 		beforeEach(function() {
 			module("wfm.requests");
 		});
 
-		beforeEach(inject(function(_$rootScope_, _RequestsFilter_) {
+		beforeEach(inject(function(_$rootScope_, _RequestsFilter_, REQUESTS_TAB_NAMES) {
 			$rootScope = _$rootScope_;
-			target = new _RequestsFilter_.RequestsFilter();
+			target = _RequestsFilter_;
+			requestsTabNames = REQUESTS_TAB_NAMES;
 		}));
 
 		it("Should update filters on filter changed", function() {
-			target.SetFilter("Subject", "CDEF");
-			target.SetFilter("Subject", "Abc 123");
+			target.setFilter("Subject", "CDEF", requestsTabNames.absenceAndText);
+			target.setFilter("Subject", "Abc 123", requestsTabNames.absenceAndText);
 
-			target.SetFilter("Message", "000");
-			target.SetFilter("Message", "Def 456");
+			target.setFilter("Message", "000", requestsTabNames.absenceAndText);
+			target.setFilter("Message", "Def 456", requestsTabNames.absenceAndText);
 
-			target.SetFilter("Status", "2");
-			target.SetFilter("Status", "0 3");
+			target.setFilter("Status", "2", requestsTabNames.absenceAndText);
+			target.setFilter("Status", "0 3", requestsTabNames.absenceAndText);
 
-			target.SetFilter("Type", "00 01");
-			target.SetFilter("Type", "00 02 03");
+			target.setFilter("Type", "00 01", requestsTabNames.absenceAndText);
+			target.setFilter("Type", "00 02 03", requestsTabNames.absenceAndText);
 
-			target.SetFilter("ShouldBeIgnored", "Something");
+			target.setFilter("ShouldBeIgnored", "Something", requestsTabNames.absenceAndText);
 
-			var filters = target.Filters;
+			var filters = target.filters[requestsTabNames.absenceAndText];
 			expect(filters.length).toEqual(4);
 
 			var subjectCriteriaCount = 0;
@@ -67,47 +68,59 @@
 		});
 
 		it("Should remove single filter when no keyword set", function() {
-			target.SetFilter("Subject", "Abc 123");
-			target.SetFilter("Message", "000");
-			target.SetFilter("Status", "0 3 9");
-			target.SetFilter("Type", "00 01");
+			target.setFilter("Subject", "Abc 123", requestsTabNames.absenceAndText);
+			target.setFilter("Message", "000", requestsTabNames.absenceAndText);
+			target.setFilter("Status", "0 3 9", requestsTabNames.absenceAndText);
+			target.setFilter("Type", "00 01", requestsTabNames.absenceAndText);
 
-			expect(target.Filters.length).toEqual(4);
+			expect(target.filters[requestsTabNames.absenceAndText].length).toEqual(4);
 
-			target.SetFilter("Subject", undefined);
-			target.SetFilter("Message", "");
-			target.SetFilter("Status", "");
-			target.SetFilter("Type", undefined);
+			target.setFilter("Subject", undefined, requestsTabNames.absenceAndText);
+			target.setFilter("Message", "", requestsTabNames.absenceAndText);
+			target.setFilter("Status", "", requestsTabNames.absenceAndText);
+			target.setFilter("Type", undefined, requestsTabNames.absenceAndText);
 
-			expect(target.Filters.length).toEqual(0);
+			expect(target.filters[requestsTabNames.absenceAndText].length).toEqual(0);
 		});
 
 		it("Should reset single filter", function() {
-			target.SetFilter("Subject", "Abc 123");
-			target.SetFilter("Message", "000");
-			target.SetFilter("Status", "0 3 9");
-			target.SetFilter("Type", "00 01");
+			target.setFilter("Subject", "Abc 123", requestsTabNames.absenceAndText);
+			target.setFilter("Message", "000", requestsTabNames.absenceAndText);
+			target.setFilter("Status", "0 3 9", requestsTabNames.absenceAndText);
+			target.setFilter("Type", "00 01", requestsTabNames.absenceAndText);
 
-			expect(target.Filters.length).toEqual(4);
+			expect(target.filters[requestsTabNames.absenceAndText].length).toEqual(4);
 
-			target.RemoveFilter("Subject");
-			target.RemoveFilter("Message");
-			target.RemoveFilter("Status");
-			target.RemoveFilter("Type");
+			target.removeFilter("Subject", requestsTabNames.absenceAndText);
+			target.removeFilter("Message", requestsTabNames.absenceAndText);
+			target.removeFilter("Status", requestsTabNames.absenceAndText);
+			target.removeFilter("Type", requestsTabNames.absenceAndText);
 
-			expect(target.Filters.length).toEqual(0);
+			expect(target.filters[requestsTabNames.absenceAndText].length).toEqual(0);
 		});
 
 		it("Should reset all filters", function() {
-			target.SetFilter("Subject", "Abc 123");
-			target.SetFilter("Message", "000");
-			target.SetFilter("Status", "0 3 9");
-			target.SetFilter("Type", "00 01");
+			target.setFilter("Subject", "Abc 123", requestsTabNames.absenceAndText);
+			target.setFilter("Message", "000", requestsTabNames.absenceAndText);
+			target.setFilter("Status", "0 3 9", requestsTabNames.absenceAndText);
+			target.setFilter("Type", "00 01", requestsTabNames.absenceAndText);
 
-			expect(target.Filters.length).toEqual(4);
+			expect(target.filters[requestsTabNames.absenceAndText].length).toEqual(4);
 
-			target.ResetFilter();
-			expect(target.Filters.length).toEqual(0);
+			target.resetFilter(requestsTabNames.absenceAndText);
+			expect(target.filters[requestsTabNames.absenceAndText].length).toEqual(0);
+		});
+
+		it("Should reset all filters for shiftTrade also", function() {
+			target.setFilter("Subject", "Abc 123", requestsTabNames.shiftTrade);
+			target.setFilter("Message", "000", requestsTabNames.shiftTrade);
+			target.setFilter("Status", "0 3 9", requestsTabNames.shiftTrade);
+			target.setFilter("Type", "00 01", requestsTabNames.shiftTrade);
+
+			expect(target.filters[requestsTabNames.shiftTrade].length).toEqual(4);
+
+			target.resetFilter(requestsTabNames.shiftTrade);
+			expect(target.filters[requestsTabNames.shiftTrade].length).toEqual(0);
 		});
 	});
 })();

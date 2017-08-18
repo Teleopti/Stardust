@@ -18,7 +18,10 @@
 		'wfm.organizationPicker',
 		'wfm.focusInput',
 		'wfm.ngEnter'
-	]).run(moduleRun);
+	]).constant('REQUESTS_TAB_NAMES',{
+		absenceAndText: 'absenceAndText',
+		shiftTrade: 'shiftTrade'
+	}).run(moduleRun);
 
 	moduleRun.$inject = ['$rootScope', 'FavoriteSearchDataService', 'groupPageService'];
 	function moduleRun($rootScope, FavoriteSearchDataService, GroupPageService) {

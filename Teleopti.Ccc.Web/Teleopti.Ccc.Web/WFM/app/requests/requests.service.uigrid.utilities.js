@@ -1,9 +1,9 @@
 ﻿'use strict';
 
 (function () {
-	angular.module('wfm.requests').service('UIGridUtilitiesService', ['$filter', '$translate', 'requestsDefinitions', 'requestCommandParamsHolder', uiGridUtilitiesService]);
+	angular.module('wfm.requests').service('UIGridUtilitiesService', ['$filter', '$translate', 'requestsDefinitions', 'requestCommandParamsHolder', 'RequestsFilter', uiGridUtilitiesService]);
 
-	function uiGridUtilitiesService($filter, $translate, requestsDefinitions, requestCommandParamsHolder) {
+	function uiGridUtilitiesService($filter, $translate, requestsDefinitions, requestCommandParamsHolder, requestFiltersMgr) {
 		var svc = this;
 
 		svc.formatDateTime = function (dateTime,
@@ -110,6 +110,21 @@
 			requestCommandParamsHolder.setSelectedRequestIds(setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, false), false);
 		};
 
+		svc.getDefaultStatus = function (filters, tabName) {
+			var selectedRequestStatuses = [];
+			if (filters && filters.length > 0) {
+				var defaultStatusFilter = filters[0].Status;
+				requestFiltersMgr.setFilter('status', defaultStatusFilter, tabName);
+				angular.forEach(defaultStatusFilter.split(' '),
+					function(value) {
+						if (value.trim() !== '') {
+							selectedRequestStatuses.push({ Id: value.trim() });
+						}
+					});
+			}
+			return selectedRequestStatuses;
+		};
+
 		function setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, isShiftTradeView) {
 			var visibleNotSelectedRequestsIds = visibleRequestsIds.filter(function (id) {
 				return visibleSelectedRequestsIds.indexOf(id) < 0;
@@ -129,21 +144,6 @@
 			});
 
 			return newAllSelectedRequestsIds;
-		}
-
-		svc.getDefaultStatus = function (filters, requestFiltersMgr) {
-			var selectedRequestStatuses = [];
-			if (filters && filters.length > 0) {
-				var defaultStatusFilter = filters[0].Status;
-				requestFiltersMgr.SetFilter('status', defaultStatusFilter);
-				angular.forEach(defaultStatusFilter.split(' '),
-					function(value) {
-						if (value.trim() !== '') {
-							selectedRequestStatuses.push({ Id: value.trim() });
-						}
-					});
-			}
-			return selectedRequestStatuses;
 		}
 
 		return svc;
