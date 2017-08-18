@@ -1,7 +1,9 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	[RemoveMeWithToggle("Can (probably) not be implemented in teamblock code branch", Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 	public class IntradayOptimizerLimiter : IIntradayOptimizerLimiter
 	{
 		private Percent _minPercentOfGroupLimit = new Percent(0.5);

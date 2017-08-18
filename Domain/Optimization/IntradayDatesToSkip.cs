@@ -1,8 +1,10 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	[RemoveMeWithToggle("Can (probably) not be implemented in teamblock code branch", Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 	public class IntradayDatesToSkip
 	{
 		private readonly IIntradayOptimizerLimiter _intradayOptimizerLimiter;

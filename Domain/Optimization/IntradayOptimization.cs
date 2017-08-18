@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
-		private readonly IntradayOptimizationContext _intradayOptimizationContext;
+		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContext;
 		private readonly TeamBlockIntradayOptimizationService _teamBlockIntradayOptimizationService;
 
 		public IntradayOptimization(TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
-			IntradayOptimizationContext intradayOptimizationContext)
+			CascadingResourceCalculationContextFactory resourceCalculationContext)
 		{
 			_teamBlockIntradayOptimizationService = teamBlockIntradayOptimizationService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
-			_intradayOptimizationContext = intradayOptimizationContext;
+			_resourceCalculationContext = resourceCalculationContext;
 		}
 
 		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule)
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons,_schedulerStateHolder().Schedules, new GroupPageLight("_", GroupPageType.SingleAgent));
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
 
-			using (_intradayOptimizationContext.Create(period)) //no need for virtual skill part here - if not needed, switch to _resourceCalculationContext only
+			using (_resourceCalculationContext.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true, period))
 			{
 				_teamBlockIntradayOptimizationService.Optimize(allMatrixes,
 					period,
