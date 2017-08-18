@@ -59,8 +59,7 @@
 				<i class="mdi mdi-calculator"></i>
 				<span translate>UpdateResourceCalculations</span>
 			</li>
-			<li ng-click="requestsCommandsPane.showBudgetAllowanceDetail()"
-				ng-if="requestsCommandsPane.couldViewBudgetAllowanceDetail">
+			<li ng-click="requestsCommandsPane.showBudgetAllowanceDetail()">
 				<i class="mdi mdi-calendar-today"></i>
 				<span translate>ViewAllowance</span>
 			</li>
@@ -172,7 +171,7 @@
 	</modal-dialog>
 </div>
 
-<div ng-if="requestsCommandsPane.couldViewBudgetAllowanceDetail && requestsCommandsPane.budgetAllowanceDetailIsVisible">
+<div ng-if="requestsCommandsPane.budgetAllowanceDetailIsVisible">
 	<modal-dialog class="requests-allowance" show='requestsCommandsPane.budgetAllowanceDetailIsVisible' on-close="requestsCommandsPane.onCloseDialog()" ng-cloak>
 		<h1 class="modal-title">{{"ViewAllowance"|translate}}</h1>
 		<div class="modal-inner-content">

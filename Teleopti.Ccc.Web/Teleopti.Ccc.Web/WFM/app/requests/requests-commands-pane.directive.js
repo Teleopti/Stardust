@@ -40,7 +40,6 @@
 		vm.triggerResourceCalculate = triggerResourceCalculate;
 
 		vm.budgetAllowanceDetailIsVisible = false;
-		vm.couldViewBudgetAllowanceDetail = toggleSvc.Wfm_Requests_ShowBudgetAllowanceDetail_41945;
 		vm.showBudgetAllowanceDetail = showBudgetAllowanceDetail;
 		vm.onCloseDialog = onCloseDialog;
 
