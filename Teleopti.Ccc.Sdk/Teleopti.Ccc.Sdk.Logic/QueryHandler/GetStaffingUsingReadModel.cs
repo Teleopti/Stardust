@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				var dayCollection = dateOnlyPeriod.DayCollection();
 				var skillDaysPeriod = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
 				var skills = _skillRepository.FindAllWithSkillDays(skillDaysPeriod.ToDateOnlyPeriod(timeZoneInfo)).ToArray();
-				var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, requestedScenario);
+				var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(skillDaysPeriod.ToDateOnlyPeriod(timeZoneInfo), skills, requestedScenario);
 				var skillsToFetch = skills.Any(x => x is MultisiteSkill) ? skillDaysBySkills.Keys
 										: skills;
 				var staffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skillsToFetch.ToList(),  skillDaysPeriod, false);
