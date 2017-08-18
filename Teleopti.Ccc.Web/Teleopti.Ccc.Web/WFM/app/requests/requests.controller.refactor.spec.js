@@ -53,17 +53,6 @@ describe('Requests - Refactor(remove later) controller controllers',
 			});
 		}));
 
-		it('should display approve deny command', function () {
-			var controller = setUpTarget();
-			controller.scope.$digest();
-
-			controller.controller.selectedTabIndex = 0;
-			expect(controller.controller.canApproveOrDenyRequest()).toEqual(true);
-
-			controller.controller.selectedTabIndex = 1;
-			expect(controller.controller.canApproveOrDenyRequest()).toEqual(true);
-		});
-
 		it('should keep different date range', function () {
 			var test = setUpTarget();
 			test.scope.$digest();

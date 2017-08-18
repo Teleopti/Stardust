@@ -73,17 +73,6 @@ describe('RequestsControllerTests', function () {
 		};
 	}
 
-	it('should display approve deny command', function () {
-		var test = setUpTarget();
-		test.scope.$digest();
-
-		test.target.selectedTabIndex = 0;
-		expect(test.target.canApproveOrDenyRequest()).toEqual(true);
-
-		test.target.selectedTabIndex = 1;
-		expect(test.target.canApproveOrDenyRequest()).toEqual(true);
-	});
-
 	xit('should keep different date range', function () {
 		var test = setUpTarget();
 		test.scope.$digest();
