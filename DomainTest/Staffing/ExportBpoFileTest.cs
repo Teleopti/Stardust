@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -33,11 +34,11 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public MutableNow Now;
-		//public FakeUserTimeZone UserTimeZone;
+		public FakeUserTimeZone UserTimeZone;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			
+			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 		}
 
 		[Test]
@@ -182,11 +183,11 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,0");
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldReturnStaffingWithCorrectTimeZone()
 		{
-			//UserTimeZone.Is(TimeZoneInfo.Utc);
-			var timezone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			UserTimeZone.Is(TimeZoneInfo.Utc);
+			var timezone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
 			var skillName = "Direct sales";
 			var openHours = new TimePeriod(8, 0, 8, 30);
 			var skill =
@@ -224,11 +225,11 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
 			var forecastedData = Target.ForecastData(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
-			rows.First().Should().Be.EqualTo("skill,20170815 06:00,20170815 06:15,0,0,0,0");
-			rows.Second().Should().Be.EqualTo("skill,20170815 06:15,20170815 06:30,0,0,0,0");
+			rows.First().Should().Be.EqualTo("skill,20170815 8:00,20170815 8:15,0,0,0,0");
+			rows.Second().Should().Be.EqualTo("skill,20170815 8:15,20170815 8:30,0,0,0,0");
 		}
 
-		[Test]
+		[Test, Ignore("WIP")]
 		public void ShouldReturnStaffingForMoreThanOneDay()
 		{
 			Assert.Pass();
@@ -238,7 +239,54 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldCompareActualStaffingWithForecast()
 		{
-			Assert.Pass();
+			var skill = createSkill(15, "skill", new TimePeriod(8, 0, 8, 30));
+			skill.SetId(Guid.NewGuid());
+			var scenario = SkillSetupHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository);
+			var skillDay = SkillSetupHelper.CreateSkillDayWithDemand(skill, scenario, new DateTime(2017, 8, 15), new TimePeriod(8, 0, 8, 30), 15.7);
+			SkillRepository.Add(skill);
+			SkillDayRepository.Add(skillDay);
+			SkillCombinationResourceRepository.PersistSkillCombinationResourceBpo(new List<ImportSkillCombinationResourceBpo>()
+			{
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
+					Resources = 2,
+					Source = "BPO",
+					SkillIds = new List<Guid>() {skill.Id.GetValueOrDefault()}
+				},
+				new ImportSkillCombinationResourceBpo()
+				{
+					StartDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 15, 8, 30, 0).Utc(),
+					Resources = 4,
+					Source = "BPO",
+					SkillIds = new List<Guid>() {skill.Id.GetValueOrDefault()}
+				}
+			});
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
+					Resource = 4,
+					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+				},
+				new SkillCombinationResource
+				{
+					StartDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 15, 8, 30, 0).Utc(),
+					Resource = 3,
+					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
+				}
+			});
+
+			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
+			var forecastedData = Target.ForecastData(skill, period, new CultureInfo("en-US", false));
+			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
+			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,11.7");
+			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,12.7");
 		}
 
 		//private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, int midnigthBreakOffset)
