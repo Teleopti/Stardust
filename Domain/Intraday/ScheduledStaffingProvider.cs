@@ -45,5 +45,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.OrderBy(o => o.StartDateTime)
 				.ToList();
 		}
+
+		public IList<SkillStaffingInterval> StaffingPerSkill(IList<ISkill> skills, DateTimePeriod period, bool useShrinkage = false)
+		{
+			return _skillStaffingIntervalProvider.StaffingIntervalsForSkills(skills.Select(x => (Guid?) x.Id).ToArray(), period,
+				useShrinkage);
+		}
 	}
 }

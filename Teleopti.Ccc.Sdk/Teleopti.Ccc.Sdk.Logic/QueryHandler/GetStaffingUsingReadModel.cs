@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
-using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -23,24 +23,21 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
 		private readonly IActivityRepository _activityRepository;
-		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
-		private readonly ISkillDayRepository _skillDayRepository;
+		private readonly ScheduledStaffingProvider _scheduledStaffingProvider;
 
 		public GetStaffingUsingReadModel(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,
 			ISkillRepository skillRepository,
 			ICurrentScenario scenarioRepository,
 			ISkillDayLoadHelper skillDayLoadHelper,
 			IActivityRepository activityRepository,
-			SkillStaffingIntervalProvider skillStaffingIntervalProvider,
-			ISkillDayRepository skillDayRepository)
+			ScheduledStaffingProvider scheduledStaffingProvider)
 		{
 			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
 			_skillRepository = skillRepository;
 			_scenarioRepository = scenarioRepository;
 			_skillDayLoadHelper = skillDayLoadHelper;
 			_activityRepository = activityRepository;
-			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
-			_skillDayRepository = skillDayRepository;
+			_scheduledStaffingProvider = scheduledStaffingProvider;
 		}
 
 		public ICollection<SkillDayDto> GetSkillDayDto(GetSkillDaysByPeriodQueryDto query)
@@ -63,9 +60,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				var skillDaysPeriod = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
 				var skills = _skillRepository.FindAllWithSkillDays(skillDaysPeriod.ToDateOnlyPeriod(timeZoneInfo)).ToArray();
 				var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(dateOnlyPeriod, skills, requestedScenario);
-				var skillIdList = skills.Any(x => x is MultisiteSkill) ? skillDaysBySkills.Keys.Select(x => x.Id).ToArray() 
-										: skills.Select(y => y.Id).ToArray();
-				var staffingPerSkill = _skillStaffingIntervalProvider.StaffingIntervalsForSkills(skillIdList,  skillDaysPeriod, false);
+				var skillsToFetch = skills.Any(x => x is MultisiteSkill) ? skillDaysBySkills.Keys
+										: skills;
+				var staffingPerSkill = _scheduledStaffingProvider.StaffingPerSkill(skillsToFetch.ToList(),  skillDaysPeriod, false);
 
 				SetSkillStaffPeriodWithFStaffAndEsl(staffingPerSkill.ToList(), skills, skillDaysBySkills, timeZoneInfo);
 
