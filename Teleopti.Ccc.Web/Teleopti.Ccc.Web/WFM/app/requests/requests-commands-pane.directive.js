@@ -278,7 +278,7 @@
 		}
 
 		function isRequestsReplyMessageEnabled() {
-			return toggleSvc.Wfm_Requests_Reply_Message_39629 && !vm.isShiftTradeViewActive;
+			return !vm.isShiftTradeViewActive;
 		}
 
 		function onCloseDialog() {

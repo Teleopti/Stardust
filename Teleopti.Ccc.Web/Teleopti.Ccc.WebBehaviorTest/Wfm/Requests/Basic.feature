@@ -368,7 +368,6 @@ Scenario: View request details
 	Then I should see detailed text request from 'Ashley Andeen'
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_Reply_Message_39629')
 Scenario: Can reply pending request
 	Given 'Ashley Andeen' has an existing text request with
 	| Field       | Value            |
@@ -382,7 +381,6 @@ Scenario: Can reply pending request
 	And I should see replied messge 'test' in message column
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_Reply_Message_39629')
 Scenario: Can reply and appove pending request
 	Given 'Ashley Andeen' has an existing text request with
 	| Field       | Value            |
@@ -398,7 +396,6 @@ Scenario: Can reply and appove pending request
 	And I should see request for 'Ashley Andeen' approved
 
 @ignore
-@OnlyRunIfEnabled('Wfm_Requests_Reply_Message_39629')
 Scenario: Can reply and deny pending request
 	Given 'Ashley Andeen' has an existing text request with
 	| Field       | Value            |
