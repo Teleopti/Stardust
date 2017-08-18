@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.DayOffPlanning
 {
-    public class IntradayDecisionMaker
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
+	public class IntradayDecisionMaker
     {
 	    private readonly IScheduleMatrixLockableBitArrayConverterEx _matrixConverter;
 

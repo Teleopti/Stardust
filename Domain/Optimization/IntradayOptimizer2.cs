@@ -1,18 +1,12 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.DayOffPlanning;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	/// <summary>
-	/// Intraday optimization container, which contatins a logic to try to do one move on one matrix
-	/// - Checks for old and new period value.
-	/// - Reschedule moved days.
-	/// - Checks for white spots.
-	/// - Does rollback for the moved days if move is not successful. 
-	/// - Manages temporary locks to unsuccessfull days
-	/// </summary>
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 	public class IntradayOptimizer2 : IIntradayOptimizer2
 	{
 		private readonly IScheduleResultDataExtractor _personalSkillsDataExtractor;
