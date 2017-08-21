@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerWorkShiftSelector(builder);
 			registerTeamBlockCommon(builder);
 			registerTeamBlockDayOffOptimizerService(builder);
-			registerTeamBlockIntradayOptimizerService(builder);
+			builder.RegisterType<TeamBlockIntradayDecisionMaker>().InstancePerLifetimeScope();
 			registerTeamBlockSchedulingService(builder);
 			registerMaxSeatSkillCreator(builder);
 
@@ -674,11 +674,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftFromEditableShift>().As<IWorkShiftFromEditableShift>().SingleInstance();
 			builder.RegisterType<FirstShiftInTeamBlockFinder>().As<IFirstShiftInTeamBlockFinder>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockOpenHoursValidator>().As<ITeamBlockOpenHoursValidator>().SingleInstance();
-		}
-
-		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
-		{
-			builder.RegisterType<TeamBlockIntradayDecisionMaker>().As<ITeamBlockIntradayDecisionMaker>().InstancePerLifetimeScope();
 		}
 
 		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)

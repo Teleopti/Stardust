@@ -9,13 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	public interface ITeamBlockIntradayDecisionMaker
-	{
-		IList<ITeamBlockInfo> Decide(IList<ITeamBlockInfo> originalTeamBlocks,
-		                                             SchedulingOptions schedulingOptions);
-	}
-
-	public class TeamBlockIntradayDecisionMaker : ITeamBlockIntradayDecisionMaker
+	public class TeamBlockIntradayDecisionMaker
 	{
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
