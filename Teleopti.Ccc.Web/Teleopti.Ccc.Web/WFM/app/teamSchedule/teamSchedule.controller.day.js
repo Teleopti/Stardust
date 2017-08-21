@@ -188,8 +188,8 @@
 		vm.onKeyWordInSearchInputChanged = function () {
 			if (vm.searchOptions.searchKeywordChanged) {
 				personSelectionSvc.unselectAllPerson(scheduleMgmtSvc.groupScheduleVm.Schedules);
-				personSelectionSvc.clearPersonInfo();
 			}
+			personSelectionSvc.clearPersonInfo();
 			vm.selectedFavorite = false;
 			vm.resetSchedulePage();
 		};

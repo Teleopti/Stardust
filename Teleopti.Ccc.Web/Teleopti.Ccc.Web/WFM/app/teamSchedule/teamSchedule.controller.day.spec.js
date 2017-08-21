@@ -120,6 +120,23 @@ describe("teamschedule controller tests", function() {
 		expect(Object.keys(personSelection.personInfo).length).toEqual(0);
 	});
 
+	it("should clear person selection after click search button", function() {
+		controller.scheduleDate = new Date("2015-10-26");
+
+		controller.loadSchedules();
+		controller.selectAllForAllPages();
+
+		var personSchedule1 = scheduleMgmt.groupScheduleVm.Schedules[0];
+		expect(personSchedule1.IsSelected).toEqual(true);
+
+		controller.onKeyWordInSearchInputChanged();
+
+		expect(scheduleMgmt.groupScheduleVm.Schedules[0].IsSelected).toEqual(false);
+		expect(scheduleMgmt.groupScheduleVm.Schedules[1].IsSelected).toEqual(false);
+		expect(scheduleMgmt.groupScheduleVm.Schedules[2].IsSelected).toEqual(false);
+		expect(Object.keys(personSelection.personInfo).length).toEqual(0);
+	});
+
 	it("should active search status after selected teams changed", function () {
 		controller.scheduleDate = new Date("2015-10-26");
 
