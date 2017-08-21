@@ -27,6 +27,7 @@
       Skills: [],
       Scenarios: []
     };
+    vm.noForecastedDaysFound = false;
 
     vm.forecastingModal = forecastingModal;
     vm.disableMoreThanOneYear = disableMoreThanOneYear;
@@ -39,6 +40,7 @@
     vm.getSkills = getSkills;
     vm.isForecastRunning = isForecastRunning;
     vm.getScenarios = getScenarios;
+    vm.goToModify = goToModify;
 
 
     function init() {
@@ -105,6 +107,7 @@
       forecastingService.result(
         wl,
         function(data, status, headers, config) {
+          vm.noForecastedDaysFound = (data.Days.length < 1 ? true : false);
           vm.skillMaster.isForecastRunning = false;
           vm.currentWorkload.Days = data.Days;
           vm.currentWorkload.Id = data.WorkloadId;
@@ -189,6 +192,10 @@
         } else
           return false;
       };
+
+      function goToModify(skillData) {
+        $state.go("modify", {workloadId:skillData.Workload.Id, skill:skillData, scenario:vm.selectedScenario, days:vm.currentWorkload.Days})
+      }
 
       function forecastingModal(forecast, exporting) {
         if (vm.skillMaster.isForecastRunning) {

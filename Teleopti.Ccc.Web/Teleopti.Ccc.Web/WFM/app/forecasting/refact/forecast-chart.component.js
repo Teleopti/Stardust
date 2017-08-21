@@ -37,8 +37,8 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 
 	function generateForecastChart(chartId, days) {
 		console.log('Start generate');
-		if (!chartId || days.length === 0 ) {
-			console.log('Could not generate forcast chart');
+		if (!chartId || days.length < 1 ) {
+			chart.unload();
 			return;
 		}
 

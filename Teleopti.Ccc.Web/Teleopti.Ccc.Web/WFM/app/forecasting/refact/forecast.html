@@ -45,7 +45,8 @@
             <div class="con-row"  style="align-items:baseline;">
               <div class="con-flex">
                 <!-- {{'ForecastWorkloadIntro' | translate}} -->
-                This is the current forecast for this workload.
+                <span ng-cloak ng-if="!vm.noForecastedDaysFound">This is the current forecast for this workload.</span>
+                <span ng-cloak ng-if="vm.noForecastedDaysFound">No data found, try running a forecast here.</span>
               </div>
               <div class="con-flex line-right">
                 <div tabindex=0 class="context-menu card-context" ng-click="vm.loadChart(skill.ChartId, vm.currentWorkload.Days)">
@@ -72,13 +73,15 @@
                   {{'ExportToFile'|translate}}
                 </md-tooltip>
               </button>
-              <a ui-sref="modify({workloadId:skill.Workload.Id, skill:skill, scenario:vm.selectedScenario, days:vm.currentWorkload.Days})" style="text-decoration:none;">
-                <button class="wfm-btn wfm-btn-invis-default" >
-                  {{ 'Modify' | translate }}
-                </button>
-              </a>
 
-              <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal(true, false)">
+              <button ng-click="vm.goToModify(skill)" class="wfm-btn wfm-btn-invis-default" ng-disabled="vm.noForecastedDaysFound">
+                {{ 'Modify' | translate }}
+                <md-tooltip>
+                  Modify days
+                </md-tooltip>
+              </button>
+
+              <button class="wfm-btn wfm-btn-invis-default" ng-class="{'wfm-btn-invis-primary':vm.noForecastedDaysFound}" ng-click="vm.forecastingModal(true, false)">
                 <md-tooltip>
                   {{ 'GenerateForecastTip' | translate }}
                 </md-tooltip>
