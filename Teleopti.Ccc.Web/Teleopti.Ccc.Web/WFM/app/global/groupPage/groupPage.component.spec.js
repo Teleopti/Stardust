@@ -158,9 +158,11 @@ describe('<group-page-picker>', function () {
 		expect(ctrl.selectedGroups.groupIds.length).toEqual(2);
 
 		clickTab(1);
+		toggleGroupPage(0);
+		checkGroupById('childGroup1_1');
 
 		expect(ctrl.selectedGroups.mode).toEqual('GroupPages');
-		expect(ctrl.selectedGroups.groupIds.length).toEqual(0);
+		expect(ctrl.selectedGroups.groupIds.length).toEqual(1);
 	});
 
 	it('should close panel when I click the Close button', function () {
@@ -250,6 +252,56 @@ describe('<group-page-picker>', function () {
 		toggleGroupPage(1);
 		childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
 		expect(childGroups[0].querySelector('input').checked).toEqual(true);
+	});
+
+	it('should change the selection status when given selected groups are changed outside of the component', function () {
+		scope.selectedGroups = {
+			mode: 'BusinessHierarchy',
+			groupIds: ['site1team1']
+		};
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+		openPanel(picker);
+		expectPanelOpen();
+
+		var ctrl = picker.isolateScope().$ctrl;
+		var tabs = $document[0].querySelectorAll('md-tab-item');
+		expect(ctrl.selectedGroups.mode).toEqual('BusinessHierarchy');
+		expect(angular.element(tabs[0]).hasClass('md-active')).toEqual(true);
+
+		toggleGroupPage(0);
+		var childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+		expect(childGroups[0].querySelector('input').checked).toEqual(true);
+		expect(childGroups[1].querySelector('input').checked).toEqual(false);
+		toggleGroupPage(0);
+
+		clickTab(1);
+		checkGroupPage(0);
+
+		expect(ctrl.selectedGroups.mode).toEqual('GroupPages');
+		expect(angular.element(tabs[1]).hasClass('md-active')).toEqual(true);
+
+		toggleGroupPage(0);
+		childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+		expect(childGroups[0].querySelector('input').checked).toEqual(true);
+		expect(childGroups[1].querySelector('input').checked).toEqual(true);
+
+		toggleGroupPage(0);
+		$document[0].querySelector('.group-page-picker-menu .selection-done').click();
+
+		scope.selectedGroups = {
+			mode: 'BusinessHierarchy',
+			groupIds: ['site2team1']
+		};;
+		scope.$apply();
+
+		openPanel(picker);
+		expect(ctrl.selectedGroups.mode).toEqual('BusinessHierarchy');
+		expect(angular.element(tabs[0]).hasClass('md-active')).toEqual(true);
+
+		toggleGroupPage(1);
+		childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
+		expect(childGroups[0].querySelector('input').checked).toEqual(true);
+
 	});
 
 	it('should clear all selection when click clear button on GroupPage tab', function () {
@@ -967,7 +1019,12 @@ describe('<group-page-picker>', function () {
 			'</group-page-picker>';
 
 		el = $compile(template)(scope || $rootScope);
-		$rootScope.$digest();
+		if (scope) {
+			scope.$apply();
+		} else {
+			$rootScope.$digest();
+		}
+		
 		attachedElements.push(el);
 		return el;
 	}

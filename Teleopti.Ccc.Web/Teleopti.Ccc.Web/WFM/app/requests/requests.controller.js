@@ -127,9 +127,9 @@
 		};
 
 		vm.applyFavorite = function (currentFavorite) {
+			vm.selectedGroups = { mode: 'BusinessHierarchy', groupIds: [], groupPageId: '' };
 			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
-			vm.selectedGroups.mode = 'BusinessHierarchy';
 
 			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 			$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: currentFavorite.TeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });

@@ -31,6 +31,7 @@
 				icon: 'folder-account'
 			}
 		];
+		var tabIndexMap = { 'BusinessHierarchy': 0, 'GroupPages': 1 };
 
 		function initSelectedGroups() {
 			if (!ctrl.selectedGroups) {
@@ -42,11 +43,13 @@
 		}
 		initSelectedGroups();
 
-		var selectedIndex = !!ctrl.selectedGroups ? (ctrl.selectedGroups.mode === 'GroupPages' ? 1 : 0) : 0;
+		var selectedIndex = !!ctrl.selectedGroups ? tabIndexMap[ctrl.selectedGroups.mode] : tabIndexMap[BusinessHierarchy];
 
 		Object.defineProperty(ctrl, 'selectedIndex',
 			{
-				get: function () { return selectedIndex; },
+				get: function() {
+					return selectedIndex;
+				},
 				set: function (value) {
 					selectedIndex = value;
 					ctrl.changeTab(ctrl.tabs[selectedIndex]);
@@ -75,6 +78,15 @@
 				ctrl.setPickerData();
 				updateSelectedGroupsInView();
 			}
+			if (!!changesObj.selectedGroups && !!changesObj.selectedGroups.currentValue && !!changesObj.selectedGroups.previousValue && changesObj.selectedGroups.currentValue !== changesObj.selectedGroups.previousValue) {
+				var currentValue = changesObj.selectedGroups.currentValue;
+				var previousValue = changesObj.selectedGroups.previousValue;
+				if (!!currentValue.mode && !!previousValue.mode && currentValue.mode != previousValue.mode) {
+					selectedIndex = tabIndexMap[currentValue.mode];
+					resetSelectionInGroupsInView(previousValue.mode);
+				}
+				updateSelectedGroupsInView();
+			}
 		};
 
 		ctrl.groupPagesSelectedText = function () {
@@ -100,14 +112,14 @@
 		};
 
 		function updateSelectedGroupsInView() {
-			var groupsInView = ctrl.groupsInView[ctrl.selectedGroups.mode];
+			var groupsInView = ctrl.groupsInView[ctrl.tabs[selectedIndex].title];
 			if (!angular.isArray(ctrl.selectedGroups.groupIds) || !angular.isArray(groupsInView))
-				return
+				return;
 			for (var i = 0; i < groupsInView.length; i++) {
-				var groupCopy = groupsInView[i]
+				var groupCopy = groupsInView[i];
 
 				if (!groupCopy.origin.isParent) {
-					continue
+					continue;
 				}
 
 				groupCopy.selectedChildGroupIds.splice(0);
@@ -115,13 +127,21 @@
 				for (var j = 0; j < groupCopy.children.length; j++) {
 					var childGroup = groupCopy.children[j]
 					if (ctrl.selectedGroups.groupIds.indexOf(childGroup.origin.id) > -1) {
-						groupCopy.selectedChildGroupIds.push(childGroup.origin.id)
+						groupCopy.selectedChildGroupIds.push(childGroup.origin.id);
 					}
 				}
 			}
 		};
+		function isSelectionInCurrentTab() {
+			var currentTab = ctrl.tabs[selectedIndex];
+			return currentTab.title === ctrl.selectedGroups.mode;
+		}
 
 		ctrl.toggleGroup = function (parentGroupCopy) {
+			if (!isSelectionInCurrentTab()) {
+				resetSelectedGroups();
+				ctrl.selectedGroups.mode = ctrl.tabs[selectedIndex].title;
+			}
 			parentGroupCopy.toggleAll();
 			if (ctrl.selectedGroups.mode === "GroupPages"
 				&& ctrl.selectedGroups.groupPageId !== parentGroupCopy.id) {
@@ -150,6 +170,11 @@
 		};
 
 		ctrl.toggleSubGroup = function (childGroupCopy) {
+			if (!isSelectionInCurrentTab()) {
+				resetSelectedGroups();
+				ctrl.selectedGroups.mode = ctrl.tabs[selectedIndex].title;
+			}
+
 			if (ctrl.selectedGroups.mode === 'GroupPages'
 				&& childGroupCopy.parent.id !== ctrl.selectedGroups.groupPageId) {
 				resetSelectedGroups();
@@ -167,7 +192,7 @@
 		};
 
 		ctrl.collapseGroup = function (groupCopy) {
-			var groupsInView = ctrl.groupsInView[ctrl.selectedGroups.mode];
+			var groupsInView = ctrl.groupsInView[ctrl.tabs[selectedIndex].title];
 			var index = groupsInView.indexOf(groupCopy);
 			if (groupCopy.collapsed) {
 				var args = [index + 1, 0].concat(groupCopy.children);
@@ -180,19 +205,18 @@
 		}
 
 		ctrl.setPickerData = function () {
-			populateGroupListAndNamemapAndFindLongestName(ctrl.groupPages[ctrl.selectedGroups.mode]);
-			ctrl.groupsInView[ctrl.selectedGroups.mode] = ctrl.filterGroups('');
+			populateGroupListAndNamemapAndFindLongestName(ctrl.groupPages[ctrl.tabs[selectedIndex].title]);
+			ctrl.groupsInView[ctrl.tabs[selectedIndex].title] = ctrl.filterGroups('');
 		}
 
 		ctrl.changeTab = function (tab) {
-			ctrl.selectedGroups.mode = tab.title;
-			resetSelectedGroups();
 			ctrl.setPickerData();
 			ctrl.searchText = '';
+			updateSelectedGroupsInView();
 		};
 
 		ctrl.onSearchTextChanged = function () {
-			ctrl.groupsInView[ctrl.selectedGroups.mode] = ctrl.filterGroups(ctrl.searchText);
+			ctrl.groupsInView[ctrl.tabs[selectedIndex].title] = ctrl.filterGroups(ctrl.searchText);
 			updateSelectedGroupsInView();
 		};
 
@@ -238,9 +262,8 @@
 			setDefaultFocus();
 		});
 
-		function resetSelectedGroups() {
-
-			var parentGroupCopies = ctrl.groupsInView[ctrl.selectedGroups.mode].filter(function (g) {
+		function resetSelectionInGroupsInView(mode) {
+			var parentGroupCopies = ctrl.groupsInView[mode].filter(function (g) {
 				if (!g.origin.isParent)
 					return false;
 				if (ctrl.selectedGroups.mode === 'BusinessHierarchy')
@@ -251,6 +274,10 @@
 			parentGroupCopies.forEach(function (g) {
 				g.clearAll();
 			});
+		}
+
+		function resetSelectedGroups() {
+			resetSelectionInGroupsInView(ctrl.selectedGroups.mode);
 
 			ctrl.selectedGroups.groupIds = [];
 			ctrl.selectedGroups.groupPageId = '';
