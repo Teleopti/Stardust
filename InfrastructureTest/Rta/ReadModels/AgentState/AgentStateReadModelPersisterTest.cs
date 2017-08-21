@@ -6,7 +6,6 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.UnitOfWork;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 {
@@ -15,7 +14,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 	public class AgentStateReadModelPersisterTest
 	{
 		public IAgentStateReadModelPersister Target;
-		public WithUnitOfWork UnitOfWork;
 
 		[Test]
 		public void ShouldPersistModel()
@@ -429,7 +427,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			model.IsDeleted.Should().Be(true);
 			model.ExpiresAt.Should().Be("2017-02-14 08:00".Utc());
 		}
-
+		
 		[Test]
 		public void ShouldUpdateFirstAndLastName()
 		{

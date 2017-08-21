@@ -99,10 +99,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CurrentScheduleReadModelUpdater>().SingleInstance().ApplyAspects();
 			builder.RegisterType<ActivityChangeChecker>().AsSelf().As<IActivityChangeCheckerFromScheduleChangeProcessor>().SingleInstance();
 
-			if (_config.Toggle(Toggles.RTA_FasterAgentsView_42039))
-				builder.RegisterType<RtaToolViewModelBuilderFromAgentState>().As<IRtaToolViewModelBuilder>().SingleInstance();
-			else
-				builder.RegisterType<RtaToolViewModelBuilderFromRepositories>().As<IRtaToolViewModelBuilder>().SingleInstance();
+			builder.RegisterType<RtaToolViewModelBuilderFromAgentState>().As<IRtaToolViewModelBuilder>().SingleInstance();
 		}
 
 	}

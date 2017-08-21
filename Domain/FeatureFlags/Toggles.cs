@@ -21,7 +21,6 @@
 
 		RTA_SeeAllOutOfAdherencesToday_39146,
 		RTA_SpreadTransactionLocksStrategy_41823,
-		RTA_FasterAgentsView_42039,
 		RTA_SolidProofWhenManagingAgentAdherence_39351,
 		RTA_EventPackagesOptimization_43924,
 		RTA_AsyncOptimization_43924,

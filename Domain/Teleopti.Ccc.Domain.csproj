@@ -447,7 +447,6 @@
     <Compile Include="ApplicationLayer\Rta\RtaTool\IRtaToolViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaTool\RtaToolViewModel.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaTool\RtaToolViewModelBuilderFromAgentState.cs" />
-    <Compile Include="ApplicationLayer\Rta\RtaTool\RtaToolViewModelBuilderFromRepositories.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\AgentStateMaintainer.cs" />
     <Compile Include="ApplicationLayer\Events\InitialLoadScheduleProjectionEvent.cs" />
     <Compile Include="ApplicationLayer\ReadModelInitializeHandler.cs" />

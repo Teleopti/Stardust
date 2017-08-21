@@ -51,28 +51,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[UnitOfWork]
-		[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
 		public virtual void Handle(PersonNameChangedEvent @event)
 		{
 			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName, expirationFor(@event));
 		}
 
 		[UnitOfWork]
-		[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
 		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
 		{
 			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber, expirationFor(@event));
 		}
 
 		[UnitOfWork]
-		[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
 		public virtual void Handle(TeamNameChangedEvent @event)
 		{
 			_persister.UpdateTeamName(@event.TeamId, @event.Name);
 		}
 
 		[UnitOfWork]
-		[EnabledBy(Toggles.RTA_FasterAgentsView_42039)]
 		public virtual void Handle(SiteNameChangedEvent @event)
 		{
 			_persister.UpdateSiteName(@event.SiteId, @event.Name);

@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 {
 	[TestFixture]
 	[DomainTest]
-	[Toggle(Toggles.RTA_FasterAgentsView_42039)]
 	public class UnorderedEventsTest
 	{
 		public AgentStateReadModelMaintainer Target;
