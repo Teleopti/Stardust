@@ -148,3 +148,11 @@ md-tooltip{
 		text-align: center;
 		box-shadow: 0 0 0 0 transparent!important;
 }
+
+//C3 fix
+body > .c3 > svg {
+    position: absolute;
+    z-index: -10;
+    top: 0;
+		height:0px !important
+}
