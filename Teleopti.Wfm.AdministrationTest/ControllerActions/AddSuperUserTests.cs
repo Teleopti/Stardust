@@ -55,5 +55,39 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 			result.Content.Success.Should().Be.True();
 			
 		}
+
+		[Test]
+		public void ShouldReturnFalseWhenFirstNameMissing()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			var result =
+				Target.AddSystemUserToTenant(new AddSuperUserToTenantModel
+				{
+					Tenant = "TestData",
+					FirstName = "",
+					LastName = "Adamsson",
+					UserName = "Kilroy",
+					Password = "WasHere"
+				});
+			result.Content.Message.Should().Be.EqualTo("The first name can not be empty.");
+			result.Content.Success.Should().Be.False();
+		}
+		[Test]
+		public void ShouldReturnFalseWhenLastNameMissing()
+		{
+			DataSourceHelper.CreateDatabasesAndDataSource(new NoTransactionHooks(), "TestData");
+			var result =
+				Target.AddSystemUserToTenant(new AddSuperUserToTenantModel
+				{
+					Tenant = "TestData",
+					FirstName = "Adam",
+					LastName = "",
+					UserName = "Kilroy",
+					Password = "WasHere"
+				});
+			result.Content.Message.Should().Be.EqualTo("The last name can not be empty.");
+			result.Content.Success.Should().Be.False();
+
+		}
 	}
 }

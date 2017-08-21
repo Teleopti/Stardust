@@ -7,32 +7,36 @@
 				Here you can add a new user that has permissions to everything in the Tenant.
 			</p>
 		</div>
-		<div class="col-md-12">
+		<div class="col-md-12" >
 			<div class="col-md-4" title="{{addVm.NewUserOkMessage}}">
 				<fieldset>
-					<legend >Enter data for new user</legend>
+					<legend>Enter data for new user</legend>
 					<div>
 						<div class="importCaption">First name</div>
 						<div>
-							<input class=" form-control" type="text" ng-model="addVm.FirstName" placeholder="First name">
+							<input  class=" form-control" type="text" ng-model="addVm.FirstName" ng-blur="addVm.CheckUser()" placeholder="First name">
 						</div>
 						<div class="importCaption">Last name</div>
 						<div>
-							<input class=" form-control" type="text" ng-model="addVm.LastName" placeholder="Last name">
+							<input class=" form-control" type="text" ng-model="addVm.LastName" ng-blur="addVm.CheckUser()" placeholder="Last name">
 						</div>
 						<div class="importCaption">New user logon (must have an unique logon name)</div>
 						<div>
 							<input class=" form-control" type="text" ng-model="addVm.UserName" ng-blur="addVm.CheckUser()" placeholder="Logon name">
 						</div>
 						<div class="importCaption">Password</div>
-						<input class="form-control" type="password" ng-model="addVm.Password" ng-blur="addVm.CheckUser()" placeholder="Password">
+						<div class="password" style="max-width: 280px">
+							<input class="form-control" id="passwordfield"  type="password" ng-model="addVm.Password" ng-blur="addVm.CheckUser()" placeholder="Password">
+							<span class="glyphicon glyphicon-eye-open"></span>
+						</div>
+						<div class="importCaption">Confirm Password</div>
+						<input class="form-control" type="password" ng-model="addVm.ConfirmPassword" ng-blur="addVm.CheckUser()" placeholder="Password">
 						<label ng-class="(addVm.NewUserOk==true) ? 'dataIsOk' : 'dataIsNotOk'">{{addVm.NewUserOkMessage}}</label>
-
 					</div>
 				</fieldset>
 			</div>
 
-			<div style="margin-top: 30px" class="col-md-12"><button class="btn btn-primary btn-default" ng-click="addVm.save()">Add user</button></div>
+			<div style="margin-top: 30px" class="col-md-12"><button class="btn btn-primary btn-default" ng-disabled="!addVm.NewUserOk" ng-click="addVm.save()">Add user</button></div>
 
 			<div style="margin-top: 30px" class="col-md-12">
 				<label class="ErrorLabel">{{addVm.Message}}</label>
@@ -44,3 +48,4 @@
 	</div>
 
 </div>
+

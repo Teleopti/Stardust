@@ -170,3 +170,18 @@ table tr td a:hover {
 	background-color: #09F!important;
 	border-color: transparent!important;
 }
+.password{
+	position: relative;
+}
+
+.password input[type="password"]{
+	padding-right: 30px;
+}
+
+.password .glyphicon,#password .glyphicon {
+	display:none;
+	right: 5px;
+	position: absolute;
+	top: 12px;
+	cursor:pointer;
+}

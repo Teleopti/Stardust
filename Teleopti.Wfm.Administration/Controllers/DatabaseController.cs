@@ -367,6 +367,12 @@ namespace Teleopti.Wfm.Administration.Controllers
 
 		private TenantResultModel addSystemUserToTenant(Tenant tenant, string firstName, string lastName, string userName, string password)
 		{
+			if (string.IsNullOrEmpty(firstName))
+				return new TenantResultModel { Success = false, Message = "The first name can not be empty." };
+
+			if (string.IsNullOrEmpty(lastName))
+				return new TenantResultModel { Success = false, Message = "The last name can not be empty." };
+
 			var checkUser = checkFirstUserInternal(userName, password);
 			if (!checkUser.Success)
 				return checkUser;
