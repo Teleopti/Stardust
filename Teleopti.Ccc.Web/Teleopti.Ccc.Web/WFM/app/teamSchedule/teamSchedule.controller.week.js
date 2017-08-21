@@ -267,4 +267,4 @@
 		to.splice(0);
 		from.forEach(function (x) { to.push(x); });
 	}
-})()
+})();

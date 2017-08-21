@@ -894,4 +894,4 @@
 			expect(invalidPeople.length).toEqual(1);
 		});
 	});
-})()
+})();

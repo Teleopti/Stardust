@@ -311,7 +311,7 @@ describe('component: permissionsTree', function () {
 				IsAnyBuiltIn: false,
 				IsMyRole: false,
 				Name: 'Agent'
-			});;
+			});
 		$httpBackend.flush();
 		ctrl = $componentController('permissionsTree', null, {
 			functions: vm.applicationFunctions,

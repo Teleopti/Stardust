@@ -291,7 +291,7 @@ describe('<group-page-picker>', function () {
 		scope.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: ['site2team1']
-		};;
+		};
 		scope.$apply();
 
 		openPanel(picker);

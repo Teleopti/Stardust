@@ -95,4 +95,4 @@
 			Create: createGroupWeeks
 		};
 	}
-})()
+})();

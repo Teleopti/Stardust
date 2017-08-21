@@ -342,7 +342,7 @@ describe('RtaFilterController', function () {
 				}, {
 					Id: 'ParisTeam2',
 				}]
-			});;
+			});
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
@@ -380,7 +380,7 @@ describe('RtaFilterController', function () {
 				}, {
 					Id: 'ParisTeam2',
 				}]
-			});;
+			});
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
@@ -418,7 +418,7 @@ describe('RtaFilterController', function () {
 				}, {
 					Id: 'ParisTeam2',
 				}]
-			});;
+			});
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
@@ -453,7 +453,7 @@ describe('RtaFilterController', function () {
 				Teams: [{
 					Id: 'ParisTeam1',
 				}]
-			});;
+			});
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
@@ -486,7 +486,7 @@ describe('RtaFilterController', function () {
 				}, {
 					Id: 'ParisTeam2',
 				}]
-			});;
+			});
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
@@ -506,7 +506,7 @@ describe('RtaFilterController', function () {
 				}, {
 					Id: 'ParisTeam2',
 				}]
-			});;
+			});
 
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
@@ -712,7 +712,7 @@ describe('RtaFilterController', function () {
 				}, {
 					Id: 'ParisTeam2',
 				}]
-			});;
+			});
 
 		vm = $controllerBuilder.createController().vm;
 
@@ -952,7 +952,7 @@ describe('RtaFilterController', function () {
 			vm.selectedSkillChange({
 				Id: "phoneSkillGuid"
 			});
-		});;
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.agents', {
 			skillIds: 'phoneSkillGuid',
@@ -977,7 +977,7 @@ describe('RtaFilterController', function () {
 			vm.selectedSkillChange({
 				Id: "phoneSkillGuid"
 			});
-		});;
+		});
 
 		expect($state.go).toHaveBeenCalledWith('rta.sites', {
 			skillIds: 'phoneSkillGuid',

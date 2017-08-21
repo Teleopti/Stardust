@@ -73,7 +73,7 @@
 							var blob = new Blob([response.data], {
 								type: response.headers()['content-type']
 							});
-							var processResult = response.headers()['message'].match(/[0-9]+/g);;
+							var processResult = response.headers()['message'].match(/[0-9]+/g);
 							vm.successCount = processResult[0];
 							vm.failedCount = processResult[1];
 							
@@ -103,7 +103,7 @@
 							var blob = new Blob([response.data], {
 								type: response.headers()['content-type']
 							});
-							var processResult = response.headers()['message'].match(/[0-9]+/g);;
+							var processResult = response.headers()['message'].match(/[0-9]+/g);
 							vm.successCount = processResult[0];
 							vm.failedCount = processResult[1];
 							if (processResult[2] !== undefined) {

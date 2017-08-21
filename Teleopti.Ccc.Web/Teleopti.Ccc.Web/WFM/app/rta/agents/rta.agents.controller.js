@@ -65,7 +65,7 @@
 		var pollingInterval = angular.isDefined($stateParams.pollingInterval) ? $stateParams.pollingInterval : 5000;
 		var pollingLock = true;
 
-		var selectedPersonId, lastUpdate, notice, selectedSiteId;;
+		var selectedPersonId, lastUpdate, notice, selectedSiteId;
 		var siteIds = $stateParams.siteIds || [];
 		var teamIds = $stateParams.teamIds || [];
 		var skillIds = $stateParams.skillIds || [];
