@@ -903,7 +903,6 @@
     <Compile Include="Optimization\TeamBlock\MoveTimeOptimization\TeamBlockMoveTimeDescisionMakerTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockDaysOffMoveFinderTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockGeneratorTest.cs" />
-    <Compile Include="Optimization\TeamBlock\TeamBlockIntradayDecisionMakerTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockRestrictionOverLimitValidatorTest.cs" />
     <Compile Include="Optimization\TeamBlock\TeamBlockScheduleClonerTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
@@ -924,7 +923,6 @@
     <Compile Include="Optimization\ScheduleMatrixPersonalSkillExtractorTest.cs" />
     <Compile Include="Optimization\DailySkillForecastAndScheduledValueCalculatorTest.cs" />
     <Compile Include="Optimization\MatrixNoMainShiftLockerTest.cs" />
-    <Compile Include="Optimization\RelativeDailyStandardDeviationsByAllSkillsExtractorTest.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\MatrixOvertimeLockerTest.cs" />

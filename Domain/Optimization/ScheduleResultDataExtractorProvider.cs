@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		IScheduleResultDataExtractor CreatePrimarySkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences, IEnumerable<IScheduleMatrixPro> allScheduleMatrixPros );
 
-		IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder);
+		IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IEnumerable<DateOnly> dates, SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder);
     }
 
     public class ScheduleResultDataExtractorProvider : IScheduleResultDataExtractorProvider
@@ -84,9 +84,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 				primarySkillExtractor);
 		}
 
-		public IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder)
+		public IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IEnumerable<DateOnly> dates, SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			return new RelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrix, schedulingOptions, schedulingResultStateHolder, _userTimeZone.TimeZone());
+			return new RelativeDailyStandardDeviationsByAllSkillsExtractor(dates, schedulingOptions, schedulingResultStateHolder, _userTimeZone.TimeZone());
 		}
     }
 }

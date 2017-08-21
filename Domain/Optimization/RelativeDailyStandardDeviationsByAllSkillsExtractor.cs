@@ -13,15 +13,15 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// </summary>
     public class RelativeDailyStandardDeviationsByAllSkillsExtractor : IScheduleResultDataExtractor
     {
-        private readonly SchedulingOptions _schedulingOptions;
+	    private readonly IEnumerable<DateOnly> _dates;
+	    private readonly SchedulingOptions _schedulingOptions;
 	    private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 	    private readonly TimeZoneInfo _userTimeZoneInfo;
-	    private readonly IScheduleMatrixPro _scheduleMatrix;
 
-        public RelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo userTimeZoneInfo)
+        public RelativeDailyStandardDeviationsByAllSkillsExtractor(IEnumerable<DateOnly> dates, SchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder, TimeZoneInfo userTimeZoneInfo)
         {
-            _scheduleMatrix = scheduleMatrix;
-            _schedulingOptions = schedulingOptions;
+	        _dates = dates;
+	        _schedulingOptions = schedulingOptions;
 	        _schedulingResultStateHolder = schedulingResultStateHolder;
 	        _userTimeZoneInfo = userTimeZoneInfo;
         }
@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             IList<double?> ret = new List<double?>();
 
-            foreach (IScheduleDayPro scheduleDayPro in _scheduleMatrix.EffectivePeriodDays)
+            foreach (var date in _dates)
             {
-                double? value = DayValue(scheduleDayPro.Day);
+                double? value = DayValue(date);
                 ret.Add(value);
             }
 

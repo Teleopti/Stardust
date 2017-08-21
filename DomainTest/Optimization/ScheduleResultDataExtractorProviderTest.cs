@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -6,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldReturnRelativeDailyStandardDeviationsByAllSkillsExtractor()
 		{
 			var schedulingOptions = new SchedulingOptions();
-			var result = _target.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(_scheduleMatrix, schedulingOptions, null);
+			var result = _target.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(Enumerable.Empty<DateOnly>(), schedulingOptions, null);
 			Assert.That(result, Is.TypeOf(typeof (RelativeDailyStandardDeviationsByAllSkillsExtractor)));
 		}
     }

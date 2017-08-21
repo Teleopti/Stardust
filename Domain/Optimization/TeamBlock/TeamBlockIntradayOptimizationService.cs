@@ -100,8 +100,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
 			var callback = _currentIntradayOptimizationCallback.Current();
 
-			var sortedTeamBlockInfos = _teamBlockIntradayDecisionMaker.Decide(allTeamBlockInfos, optimizationPreferences,
-				schedulingOptions);
+			var sortedTeamBlockInfos = _teamBlockIntradayDecisionMaker.Decide(allTeamBlockInfos, schedulingOptions);
 
 			int totalTeamBlockInfos = sortedTeamBlockInfos.Count;
 			int runningTeamBlockCounter = 0;

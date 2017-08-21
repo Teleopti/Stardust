@@ -5,13 +5,13 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockIntradayDecisionMaker
 	{
 		IList<ITeamBlockInfo> Decide(IList<ITeamBlockInfo> originalTeamBlocks,
-		                                             IOptimizationPreferences optimizationPreferences,
 		                                             SchedulingOptions schedulingOptions);
 	}
 
@@ -27,13 +27,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		public IList<ITeamBlockInfo> Decide(IList<ITeamBlockInfo> originalTeamBlocks,
-		                                    IOptimizationPreferences optimizationPreferences,
 		                                    SchedulingOptions schedulingOptions)
 		{
 			var sortedTeamBlocks = new List<ITeamBlockInfo>();
+			var valueState = new Dictionary<IEnumerable<DateOnly>, IList<double?>>(new sameDates());
 			sortedTeamBlocks.AddRange(
 				originalTeamBlocks.OrderByDescending(
-					x => RecalculateTeamBlock(x, optimizationPreferences, schedulingOptions).BlockInfo.AverageOfStandardDeviations));
+					x => recalculateTeamBlock(valueState, x, schedulingOptions).BlockInfo.AverageOfStandardDeviations));
 			sortedTeamBlocks = shuffle(sortedTeamBlocks);
 			return sortedTeamBlocks;
 		}
@@ -63,18 +63,21 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return shuffledList;
 		}
 		
-		public ITeamBlockInfo RecalculateTeamBlock(ITeamBlockInfo teamBlock,
-		                                           IOptimizationPreferences optimizationPreferences,
+		private ITeamBlockInfo recalculateTeamBlock(IDictionary<IEnumerable<DateOnly>, IList<double?>> valueState, ITeamBlockInfo teamBlock,
 		                                           SchedulingOptions schedulingOptions)
 		{
             var standardDeviationData = new StandardDeviationData();
 
 			foreach (var matrix in teamBlock.TeamInfo.MatrixesForGroup())
 			{
-				var scheduleResultDataExtractor =
-					_scheduleResultDataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(matrix,
-					                                                                                               schedulingOptions, _schedulingResultStateHolder());
-				var values = scheduleResultDataExtractor.Values();
+				var dates = matrix.EffectivePeriodDays.Select(x => x.Day).ToArray();
+				if (!valueState.TryGetValue(dates, out IList<double?> values))
+				{
+					var scheduleResultDataExtractor = _scheduleResultDataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(dates, schedulingOptions, _schedulingResultStateHolder());
+					values = scheduleResultDataExtractor.Values();
+					valueState.Add(dates, values);
+				}
+
 				var periodDays = matrix.EffectivePeriodDays;
 				for (var i = 0; i < periodDays.Length; i++)
 				{
@@ -92,6 +95,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 			teamBlock.BlockInfo.StandardDeviations = valuesOfOneBlock;
 			return teamBlock;
+		}
+
+		private class sameDates : IEqualityComparer<IEnumerable<DateOnly>>
+		{
+			public bool Equals(IEnumerable<DateOnly> x, IEnumerable<DateOnly> y)
+			{
+				return new HashSet<DateOnly>(x).SetEquals(y);
+			}
+
+			public int GetHashCode(IEnumerable<DateOnly> obj)
+			{
+				return obj.Count();
+			}
 		}
 	}
 }
