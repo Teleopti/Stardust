@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Overview
             Expect.Call(_exportView.ExportInfoText = string.Empty);
             Expect.Call(() => _exportCommand.Execute()).Throw(exception);
             Expect.Call(_exportView.ProgressBarVisible = false);
-            Expect.Call(_exportView.ExportInfoText = errMess);
+            Expect.Call(_exportView.ExportInfoText = exception.Message);
             Expect.Call(() => _exportView.ShowDataSourceException(exception));
             _mocks.ReplayAll();
             _eventAggregator.GetEvent<ExportMeetingClicked>().Publish("");

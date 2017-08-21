@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             Guid id = Guid.NewGuid();
             StaleObjectStateException inner = new StaleObjectStateException(entityName, id);
             OptimisticLockException ex = new OptimisticLockException(message, inner);
-            Assert.AreEqual(message, ex.Message);
+            StringAssert.Contains(message, ex.Message);
             Assert.AreSame(inner, ex.InnerException);
             Assert.AreEqual(entityName, ex.EntityName);
             Assert.AreEqual(id, ex.RootId);
@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             Exception inner = mocks.StrictMock<StaleStateException>("hejhej");
             const string message = "for test";
             OptimisticLockException ex = new OptimisticLockException(message, inner);
-            Assert.AreEqual(message, ex.Message);
-            Assert.AreSame(inner, ex.InnerException);
+			StringAssert.Contains(message, ex.Message);
+			Assert.AreSame(inner, ex.InnerException);
             Assert.AreEqual(string.Empty, ex.EntityName);
             Assert.AreEqual(Guid.Empty, ex.RootId);
             Assert.IsFalse(ex.HasEntityInformation);
@@ -63,8 +63,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             var result = SerializationHelper.SerializeAsBinary(exOrg);
             OptimisticLockException serialized = SerializationHelper.Deserialize<OptimisticLockException>(result);
             Assert.IsNotNull(serialized);
-            Assert.AreEqual(message, serialized.Message);
-            Assert.AreEqual(inner.Message, serialized.InnerException.Message);
+			StringAssert.Contains(message, serialized.Message);
+			Assert.AreEqual(inner.Message, serialized.InnerException.Message);
             Assert.AreEqual(entityName, serialized.EntityName);
             Assert.AreEqual(id, serialized.RootId);
         }
