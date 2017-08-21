@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -20,14 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public IList<double?> Values()
         {
-            IList<double?> ret = new List<double?>();
-            foreach (DateOnly day in _period.DayCollection())
-            {
-                double? value = DayValue(day);
-                ret.Add(value);
-            }
-
-            return ret;
+	        return _period.DayCollection().Select(DayValue).ToArray();
         }
 
     	public double? DayValue(DateOnly scheduleDay)

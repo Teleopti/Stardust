@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -22,17 +23,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public IList<double?> Values()
         {
-            IList<double?> ret = new List<double?>();
+            var skillList = _personalSkillExtractor.ExtractSkills();
 
-            IEnumerable<ISkill> skillList = _personalSkillExtractor.ExtractSkills();
-
-            foreach (IScheduleDayPro scheduleDayPro in _matrix.EffectivePeriodDays)
-            {
-                double? value = DayValue(skillList, scheduleDayPro.Day);
-                ret.Add(value);
-            }
-
-            return ret;
+	        return _matrix.EffectivePeriodDays.Select(scheduleDayPro => DayValue(skillList, scheduleDayPro.Day)).ToArray();
         }
 
         private double? DayValue(IEnumerable<ISkill> skillList, DateOnly scheduleDay)

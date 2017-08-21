@@ -28,15 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public IList<double?> Values()
         {
-            IList<double?> ret = new List<double?>();
-
-            foreach (var date in _dates)
-            {
-                double? value = DayValue(date);
-                ret.Add(value);
-            }
-
-            return ret;
+            return _dates.Select(DayValue).ToArray();
         }
 
         public double? DayValue(DateOnly scheduleDay)
@@ -55,17 +47,12 @@ namespace Teleopti.Ccc.Domain.Optimization
         // todo: move to extractor methods
         private IList<double> GetIntradayRelativePersonnelDeficits(DateOnly scheduleDay)
         {
+	        var dateTimePeriod = scheduleDay.ToDateTimePeriod(_userTimeZoneInfo);
 
-	        DateTimePeriod dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
-		        scheduleDay.Date, scheduleDay.Date.AddDays(1), _userTimeZoneInfo);
-
-            IList<ISkill> allSkills = new List<ISkill>();
-            foreach (var skill in _schedulingResultStateHolder.Skills)
-            {
-                if(skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
-                    allSkills.Add(skill);
-            }
-            IList<ISkillStaffPeriod> skillStaffPeriods =
+	        var allSkills =
+		        _schedulingResultStateHolder.Skills.Where(
+			        skill => skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill).ToArray();
+            var skillStaffPeriods =
 								_schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(allSkills, dateTimePeriod);
            
             bool useMinPersonnel = _schedulingOptions.UseMinimumStaffing;
