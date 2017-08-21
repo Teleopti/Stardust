@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Threading;
@@ -16,6 +17,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
@@ -895,5 +897,77 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			loadedCombinationResources.Count().Should().Be.EqualTo(2);
 		}
 
+		[Test]
+		public void ShouldNotAddSameBpoTwiceInSourceBpo()
+		{
+			Now.Is("2016-12-19 08:00");
+			var startDate = new DateTime(2016, 12, 20, 0, 0, 0);
+			var endDate = new DateTime(2016, 12, 20, 0, 15, 0);
+
+			var combinationResources = new List<ImportSkillCombinationResourceBpo>
+			{
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate,
+					EndDateTime = endDate,
+					Resources = 1,
+					SkillIds = new List<Guid>{persistSkill()},
+					Source = "TPBrazil"
+				},
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate.AddMinutes(15),
+					EndDateTime = endDate.AddMinutes(15),
+					Resources = 3.5,
+					SkillIds = new List<Guid>{persistSkill()},
+					Source = "TPBrazil"
+				}
+			};
+
+			Target.PersistSkillCombinationResourceBpo(combinationResources);
+
+			var bpoList = new Dictionary<Guid, string>();
+			using (var connection = new SqlConnection(InfraTestConfigReader.ConnectionString))
+			{
+				connection.Open();
+				bpoList = Target.LoadSourceBpo(connection);
+			}
+			bpoList.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldPersistDifferentBposSkillCombinationResource()
+		{
+			Now.Is("2016-12-19 08:00");
+			var startDate = new DateTime(2016, 12, 20, 0, 0, 0);
+			var endDate = new DateTime(2016, 12, 20, 0, 15, 0);
+
+			var combinationResources = new List<ImportSkillCombinationResourceBpo>
+			{
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate,
+					EndDateTime = endDate,
+					Resources = 1,
+					SkillIds = new List<Guid>{persistSkill()},
+					Source = "TPBrazil"
+				},
+				new ImportSkillCombinationResourceBpo
+				{
+					StartDateTime = startDate,
+					EndDateTime = endDate,
+					Resources = 1,
+					SkillIds = new List<Guid>{persistSkill()},
+					Source = "TPParis"
+				}
+			};
+
+			Target.PersistSkillCombinationResourceBpo(combinationResources);
+			CurrentUnitOfWork.Current().PersistAll();
+
+			var loadedBpoCombinationResources = Target.LoadSkillCombinationResources(new DateTimePeriod(2016, 12, 20, 2016, 12, 21)).ToList();
+			loadedBpoCombinationResources.Count.Should().Be.EqualTo(2);
+			CurrentUnitOfWork.Current().PersistAll();
+		}
 	}
 }
