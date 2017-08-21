@@ -1,20 +1,18 @@
 ﻿<div class="tree">
     <div ui-tree data-drag-enabled="false">
-        <ol ui-tree-nodes="" ng-model="$ctrl.isolatedData.nodes" class="tree-line">
-            <li ng-repeat="node in $ctrl.isolatedData.nodes" class="perm-tree" ui-tree-node>
-
-
+        <ol ui-tree-nodes="" ng-model="$ctrl.treeCollection.nodes" class="tree-line">
+            <li ng-repeat="node in $ctrl.treeCollection.nodes" class="perm-tree" ui-tree-node>
                 <div class="tree-toggle-group">
                     <div class="toggle-handle" ng-class="{open: node.isOpenInUI, 'non-pointer':node.nodes.length===0 } " ng-click="node.openNode(node)">
                         <i ng-hide="node.nodes.length===0 " class="mdi mdi-chevron-right perm-expander"></i>
                     </div>
-                    <div class="tree-handle-wrapper" ng-click="node.selectNode(node)">
+                    <div class="tree-handle-wrapper" ng-click="node.clickedNode(node)">
                         <div ui-tree-handle ng-class="{selected: node.isSelectedInUI}">
-                            {{node.name}}
+                            {{node.label}}
                         </div>
                     </div>
                 </div>
-                <tree-picker ng-show="node.isOpenInUI" class="animate-show" data="node"></tree-picker>
+                <tree-picker ng-show="node.isOpenInUI" node="node" output-data="$ctrl.outputData"></tree-picker>
             </li>
         </ol>
     </div>

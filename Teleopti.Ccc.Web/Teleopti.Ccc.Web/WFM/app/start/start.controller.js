@@ -5,9 +5,7 @@
     start.controller("FeedCtrl", [
         '$scope',
         function ($scope) {
-           
         }
     ]);
 
 })();
-
