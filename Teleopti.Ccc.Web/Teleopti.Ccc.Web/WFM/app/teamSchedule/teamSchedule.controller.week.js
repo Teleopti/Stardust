@@ -171,6 +171,7 @@
 			var endDateStr = moment(vm.startOfWeek).add(6, 'days').format('YYYY-MM-DD');
 			groupPageService.fetchAvailableGroupPages(startDateStr, endDateStr).then(function (data) {
 				vm.availableGroups = data;
+				loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
 			});
 		};
 		if (vm.toggles.Wfm_GroupPages_45057)
