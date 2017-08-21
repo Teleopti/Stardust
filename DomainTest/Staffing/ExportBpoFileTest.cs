@@ -182,11 +182,12 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,0");
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldReturnStaffingWithCorrectTimeZone()
 		{
-			UserTimeZone.Is(TimeZoneInfo.Utc);
-			var timezone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+			var timezone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			UserTimeZone.Is(timezone);
+			timezone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
 			var skillName = "Direct sales";
 			var openHours = new TimePeriod(8, 0, 8, 30);
 			var skill =
@@ -207,15 +208,15 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			{
 				new SkillCombinationResource
 				{
-					StartDateTime = new DateTime(2017, 08, 15, 8, 0, 0).Utc(),
-					EndDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
+					StartDateTime = new DateTime(2017, 08, 15, 11, 0, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 15, 11, 15, 0).Utc(),
 					Resource = 4,
 					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
 				},
 				new SkillCombinationResource
 				{
-					StartDateTime = new DateTime(2017, 08, 15, 8, 15, 0).Utc(),
-					EndDateTime = new DateTime(2017, 08, 15, 8, 30, 0).Utc(),
+					StartDateTime = new DateTime(2017, 08, 15, 11, 15, 0).Utc(),
+					EndDateTime = new DateTime(2017, 08, 15, 11, 30, 0).Utc(),
 					Resource = 10,
 					SkillCombination = new[] { skill.Id.GetValueOrDefault()}
 				}
@@ -224,14 +225,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
 			var forecastedData = Target.ForecastData(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
-			rows.First().Should().Be.EqualTo("Direct sales,20170815 08:00,20170815 08:15,0,0,0,11.7");
-			rows.Second().Should().Be.EqualTo("Direct sales,20170815 08:15,20170815 08:30,0,0,0,5.7");
-		}
-
-		[Test, Ignore("WIP")]
-		public void ShouldReturnStaffingForMoreThanOneDay()
-		{
-			Assert.Pass();
+			rows.First().Should().Be.EqualTo("Direct sales,20170815 13:00,20170815 13:15,0,0,0,11.7");
+			rows.Second().Should().Be.EqualTo("Direct sales,20170815 13:15,20170815 13:30,0,0,0,5.7");
 		}
 
 		//if we have data in bpo then dont consider it
@@ -288,7 +283,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,12.7");
 		}
 
-		//private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours, bool isClosedOnWeekends, int midnigthBreakOffset)
 		private ISkill createSkill(int intervalLength, string skillName, TimePeriod openHours)
 		{
 			var skill =
@@ -297,13 +291,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 					TimeZone = TimeZoneInfo.Utc,
 					Activity = new Activity("activity_" + skillName).WithId()
 				}.WithId();
-			//if (midnigthBreakOffset != 0)
-			//{
-			//	skill.MidnightBreakOffset = TimeSpan.FromHours(midnigthBreakOffset);
-			//}
-
-			//var workload = isClosedOnWeekends
-			//	? WorkloadFactory.CreateWorkloadClosedOnWeekendsWithOpenHours(skill, openHours)
 			 var workload =  WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours);
 			workload.SetId(Guid.NewGuid());
 

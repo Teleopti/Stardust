@@ -37,12 +37,6 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var forecastedData = new StringBuilder();
 			var allIntervals = new List<SkillStaffingInterval>();
 			allIntervals.AddRange(_scheduledStaffingProvider.StaffingPerSkill(new List<ISkill>{skill},period.ToDateTimePeriod(TimeZoneInfo.Utc),false,false));
-			//var allIntervals = new List<SkillStaffingIntervalLightModel>();
-			//foreach (var dateOnly in period.DayCollection())
-			//{
-			//	allIntervals.AddRange(_scheduledStaffingProvider.StaffingPerSkill(new List<ISkill> { skill },skill.DefaultResolution,dateOnly));
-			//}
-			
 			
 			if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out skillStaffPeriods))
 			{
@@ -59,10 +53,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 						staffing = staffingInterval.First().StaffingLevel;
 					}
 
-					//var startDateTime = ssiStartDate.ToString(dateTimeFormat, formatProvider);
-					//var endDateTime = ssiEndDate.ToString(dateTimeFormat, formatProvider);
-					var startDateTime = skillStaffPeriod.Period.StartDateTimeLocal(skill.TimeZone).ToString(dateTimeFormat, formatProvider);
-					var endDateTime = skillStaffPeriod.Period.EndDateTimeLocal(skill.TimeZone).ToString(dateTimeFormat, formatProvider);
+					var startDateTime = skillStaffPeriod.Period.StartDateTimeLocal(_userTimeZone.TimeZone()).ToString(dateTimeFormat, formatProvider);
+					var endDateTime = skillStaffPeriod.Period.EndDateTimeLocal(_userTimeZone.TimeZone()).ToString(dateTimeFormat, formatProvider);
 					var newDemand = skillStaffPeriod.FStaff - staffing;
 					if (newDemand < 0) newDemand = 0;
 					var row = $"{skill.Name}{seperator}{startDateTime}{seperator}{endDateTime}{seperator}" +
