@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		ITeamInfo TeamInfo { get; }
 		IBlockInfo BlockInfo { get; }
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndBlock();
+		bool AllIsLocked();
 	}
 
 	public class TeamBlockInfo : ITeamBlockInfo
@@ -37,7 +39,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return TeamInfo.MatrixesForGroupAndPeriod(BlockInfo.BlockPeriod);
 		}
 
-        public override int GetHashCode()
+		public bool AllIsLocked()
+		{
+			foreach (var scheduleMatrixPro in MatrixesForGroupAndBlock())
+			{
+				if (scheduleMatrixPro.EffectivePeriodDays.Any(scheduleDayPro => !scheduleMatrixPro.IsDayLocked(scheduleDayPro.Day)))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+
+		public override int GetHashCode()
         {
             return _teamInfo.GetHashCode() ^ _blockInfo.GetHashCode();
         }

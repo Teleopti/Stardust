@@ -109,13 +109,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (callback.IsCancelled())
 					return Enumerable.Empty<ITeamBlockInfo>();
 
-				if (!_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
+				runningTeamBlockCounter++;
+
+				if (teamBlockInfo.AllIsLocked() || !_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
 					continue;
 				}
-
-				runningTeamBlockCounter++;
 				
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 
