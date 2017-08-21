@@ -9,10 +9,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-
-	/// <summary>
-	/// Class for UnitCollection
-	/// </summary>
 	public class Site : VersionedAggregateRootWithBusinessUnit, ISite, IDeleteTag
 	{
 		private readonly IList<ITeam> _teamCollection;
@@ -21,47 +17,30 @@ namespace Teleopti.Ccc.Domain.Common
 		private int? _maxSeats;
 		private IList<ISiteOpenHour> _openHourCollection;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Site"/> class.
-		/// </summary>
 		protected Site()
 		{
 			_teamCollection = new List<ITeam>();
 			_openHourCollection = new List<ISiteOpenHour>();
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Site"/> class.
-		/// </summary>
-		/// <param name="name">The name.</param>
 		public Site(string name)
 			: this()
 		{
 			_description = new Description(name);
 		}
 
-		/// <summary>
-		/// Gets or sets the descrition of the site.
-		/// </summary>
-		/// <value>The site.</value>
 		public virtual Description Description => _description;
 
 		public virtual void SetDescription(Description value)
 		{
-			if (_description != value)
-				AddEvent(() => new SiteNameChangedEvent
-				{
-					SiteId = Id.GetValueOrDefault(),
-					Name = value.Name
-				});
+			ReplaceEvent("SiteNameChangedEvent", () => new SiteNameChangedEvent
+			{
+				SiteId = Id.GetValueOrDefault(),
+				Name = value.Name
+			});
 			_description = value;
 		}
 
-		/// <summary>
-		/// Gets the teams.
-		/// Read only wrapper around the actual list.
-		/// </summary>
-		/// <value>The teams.</value>
 		public virtual ReadOnlyCollection<ITeam> TeamCollection => new ReadOnlyCollection<ITeam>(_teamCollection);
 
 		public virtual ReadOnlyCollection<ITeam> SortedTeamCollection
@@ -75,22 +54,8 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public virtual bool IsDeleted => _isDeleted;
 
-		public virtual int? MaxSeats
-		{
-			get
-			{
-				return _maxSeats;
-			}
-			set
-			{
-				_maxSeats = value;
-			}
-		}
+		public virtual int? MaxSeats { get { return _maxSeats; } set { _maxSeats = value; } }
 
-		/// <summary>
-		/// Adds a Team.
-		/// </summary>
-		/// <param name="team">The team.</param>
 		public virtual void AddTeam(ITeam team)
 		{
 			InParameter.NotNull(nameof(team), team);
@@ -101,10 +66,6 @@ namespace Teleopti.Ccc.Domain.Common
 			}
 		}
 
-		/// <summary>
-		/// Removes the team.
-		/// </summary>
-		/// <param name="team">The team.</param>
 		public virtual void RemoveTeam(ITeam team)
 		{
 			InParameter.NotNull(nameof(team), team);

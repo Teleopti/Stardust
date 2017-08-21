@@ -6,67 +6,56 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.AgentInfo
 {
-    public class Team : VersionedAggregateRoot, ITeam, IAggregateRootWithEvents, IDeleteTag
-    {
-        private Description _description;
-        private ISite _site;
-        private bool _isDeleted;
-        private IScorecard _scorecard;
+	public class Team : VersionedAggregateRoot, ITeam, IAggregateRootWithEvents, IDeleteTag
+	{
+		private Description _description;
+		private ISite _site;
+		private bool _isDeleted;
+		private IScorecard _scorecard;
 
-        public virtual bool IsChoosable => !IsDeleted;
+		public virtual bool IsChoosable => !IsDeleted;
 
-	    public virtual Description Description => _description;
+		public virtual Description Description => _description;
 
-	    public virtual void SetDescription(Description value)
-	    {
-		    if (_description != value)
-			    AddEvent(() => new TeamNameChangedEvent
-			    {
-				    TeamId = Id.GetValueOrDefault(),
-				    Name = value.Name
-			    });
-		    _description = value;
-	    }
+		public virtual void SetDescription(Description value)
+		{
+			ReplaceEvent("TeamNameChangedEvent", () => new TeamNameChangedEvent
+			{
+				TeamId = Id.GetValueOrDefault(),
+				Name = value.Name
+			});
+			_description = value;
+		}
 
-	    public virtual ISite Site
-        {
-            get { return _site; }
-            set
-            {
+		public virtual ISite Site
+		{
+			get { return _site; }
+			set
+			{
 				value.AddTeam(this);
-	            _site = value;
-            }
-        }
+				_site = value;
+			}
+		}
 
-        public virtual string SiteAndTeam
-        {
-            get{ return string.Concat(_site.Description.Name, "/", _description.Name);}
-        }
+		public virtual string SiteAndTeam => string.Concat(_site.Description.Name, "/", _description.Name);
 
-        public virtual bool IsDeleted
-        {
-            get { return _isDeleted; }
-        }
+		public virtual bool IsDeleted => _isDeleted;
 
-        public virtual void SetDeleted()
-        {
-            _isDeleted = true;
-        }
+		public virtual void SetDeleted()
+		{
+			_isDeleted = true;
+		}
 
-        public virtual IBusinessUnit BusinessUnitExplicit
-        {
-            get
-            {
-                if (_site == null)
-                    return ServiceLocatorForEntity.CurrentBusinessUnit.Current();
-                return _site.BusinessUnit;
-            }
-        }
+		public virtual IBusinessUnit BusinessUnitExplicit
+		{
+			get
+			{
+				if (_site == null)
+					return ServiceLocatorForEntity.CurrentBusinessUnit.Current();
+				return _site.BusinessUnit;
+			}
+		}
 
-        public virtual IScorecard Scorecard
-        {
-            get { return _scorecard; }
-            set { _scorecard = value; }
-        }
-    }
+		public virtual IScorecard Scorecard { get { return _scorecard; } set { _scorecard = value; } }
+	}
 }

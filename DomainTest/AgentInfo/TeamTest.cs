@@ -51,17 +51,5 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			@event.TeamId.Should().Be(target.Id);
 			@event.Name.Should().Be("Set Name");
 		}
-
-		[Test]
-		public void ShouldNotPublishTeamNameChangedEventWhenNotChanged()
-		{
-			var target = new Team().WithId();
-			target.SetDescription(new Description("Team Preferences"));
-			target.PopAllEvents();
-
-			target.SetDescription(new Description("Team Preferences"));
-
-			target.PopAllEvents().OfType<TeamNameChangedEvent>().Should().Be.Empty();	
-		}
 	}
 }

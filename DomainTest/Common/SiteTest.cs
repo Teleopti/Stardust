@@ -46,18 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 		[Test]
-		public void ShouldNotPublishSiteNameChangedEventWhenNotChanged()
-		{
-			var target = new Site("name");
-			target.SetDescription(new Description("london"));
-			target.PopAllEvents();
-
-			target.SetDescription(new Description("london"));
-
-			target.PopAllEvents().OfType<SiteNameChangedEvent>().Should().Be.Empty();
-		}
-
-		[Test]
         public void TeamsPropertyShouldBeLocked()
         {
             ICollection<ITeam> temp = UnitWithOneTeam.TeamCollection;
