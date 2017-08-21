@@ -5,17 +5,17 @@ using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
-    [TestFixture]
+	[TestFixture]
     [Category("BucketB")]
     public class ConstraintViolationExceptionTest : ExceptionTest<ConstraintViolationException>
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes"), Test]
+        [Test]
         public void VerifyConstructor()
         {
-            const string mess = "sdfsdf"; 
-            Exception inner = new Exception();
-            string sql = "sdf";
-            ConstraintViolationException ex = new ConstraintViolationException(mess, inner, sql);
+            const string mess = "sdfsdf";
+			const string sql = "sdf";
+            var inner = new Exception();
+            var ex = new ConstraintViolationException(mess, inner, sql);
             StringAssert.StartsWith(mess, ex.Message);
             Assert.AreSame(inner, ex.InnerException);
             Assert.AreEqual(sql, ex.Sql);
@@ -31,5 +31,4 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             return new ConstraintViolationException(message);
         }
     }
-
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.Serialization;
+using System.Security;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
@@ -15,7 +16,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         /// </summary>
         public DataSourceException()
         {
-        }
+	        DataSource = dataSourceName();
+		}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataSourceException"/> class.
@@ -24,7 +26,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         public DataSourceException(string message)
             : base(message)
         {
-        }
+	        DataSource = dataSourceName();
+		}
 
 
         /// <summary>
@@ -35,6 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         public DataSourceException(string message, Exception innerException)
             : base(message, innerException)
         {
+	        DataSource = dataSourceName();
         }
 
         /// <summary>
@@ -47,27 +51,32 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         protected DataSourceException(SerializationInfo info,
                                       StreamingContext context) : base(info, context)
         {
+	        DataSource = info.GetString("DataSource");
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-        public string DataSource
-        {
-            get
-            {
-                var principal = GetCurrentPrincipal();
-                if (principal == null)
-                    return "[unknown datasource]";
-                var identity = principal.Identity as ITeleoptiIdentity;
-                if (identity == null)
-                    return "[unknown datasource]";
-                return identity.DataSource.DataSourceName;
-            }
-        }
+	    public override string Message => $"{base.Message} - [{DataSource}]";
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+	    public string DataSource { get; }
+
+	    private string dataSourceName()
+	    {
+		    var principal = GetCurrentPrincipal();
+		    var identity = principal?.Identity as ITeleoptiIdentity;
+		    if (identity == null)
+			    return "[unknown datasource]";
+		    return identity.DataSource.DataSourceName;
+	    }
+		
         protected virtual ITeleoptiPrincipal GetCurrentPrincipal()
         {
             return TeleoptiPrincipal.CurrentPrincipal;
         }
+
+	    [SecurityCritical]
+	    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+	    {
+		    info.AddValue("DataSource", DataSource);
+		    base.GetObjectData(info, context);
+	    }
     }
 }

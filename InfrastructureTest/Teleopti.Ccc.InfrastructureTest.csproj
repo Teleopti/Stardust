@@ -192,6 +192,7 @@
     <Compile Include="Foundation\BulkWriterTest.cs" />
     <Compile Include="Foundation\CouldNotCreateTransactionExceptionTest.cs" />
     <Compile Include="Foundation\DatabaseVersionTest.cs" />
+    <Compile Include="Foundation\DataSourceExceptionTest.cs" />
     <Compile Include="Foundation\InitializeMessageBrokerTest.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactoryTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDifferenceSaverTest.cs" />
@@ -459,7 +460,6 @@
     <Compile Include="Foundation\ApplicationDataTest.cs" />
     <Compile Include="Foundation\ConstraintViolationExceptionTest.cs" />
     <Compile Include="Foundation\PurgeApplicationDataTest.cs" />
-    <Compile Include="Foundation\ExplicitlySetGenericPrincipalDataSourceException.cs" />
     <Compile Include="Foundation\ForeignKeyExceptionTest.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalInternalsFactoryTest.cs" />
     <Compile Include="Foundation\GeneralPersistTest.cs">

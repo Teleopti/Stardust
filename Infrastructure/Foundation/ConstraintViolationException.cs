@@ -7,12 +7,10 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
     [Serializable]
     public class ConstraintViolationException : DataSourceException
     {
-        private readonly string _sql;
-
-        public ConstraintViolationException(string message, Exception inner, string sql)
+	    public ConstraintViolationException(string message, Exception inner, string sql)
                                         : base(message, inner)
         {
-            _sql = sql;
+            Sql = sql;
         }
 
         public ConstraintViolationException()
@@ -31,18 +29,15 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
                                       StreamingContext context)
             : base(info, context)
         {
-            _sql = info.GetString("Sql");
+            Sql = info.GetString("Sql");
         }
 
-        public string Sql
-        {
-            get { return _sql; }
-        }
+        public string Sql { get; }
 
-		[SecurityCritical]
+	    [SecurityCritical]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            info.AddValue("Sql", _sql);
+            info.AddValue("Sql", Sql);
             base.GetObjectData(info, context);
         }
     }
