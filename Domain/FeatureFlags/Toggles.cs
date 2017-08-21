@@ -186,6 +186,8 @@
 		WFM_TrainingPlanner_44780,
 		Report_Realtime_Scheduled_Time_Per_Activity_45560,
 		Wfm_Staffing_45411 //this is to enable staffing
+
+		Stardust_Priority_BelowNormal_44320
 		// ReSharper restore InconsistentNaming
 	}
 }

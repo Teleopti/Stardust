@@ -202,4 +202,5 @@ WFM_RedirectPermissionToWeb_44562 = true
 WFM_TrainingPlanner_44780 = RC
 Wfm_Staffing_45411 = RC #Enables the entire Staffing page!
 
+Stardust_Priority_BelowNormal_44320 = DEV
 Report_Realtime_Scheduled_Time_Per_Activity_45560 = RC

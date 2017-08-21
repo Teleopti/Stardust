@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,6 +17,7 @@ using Stardust.Node;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -144,16 +146,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				Assembly.Load(_configReader.ReadValue("handlerAssembly", "Teleopti.Ccc.Domain")),
 				port,
 				nodeName,
-				_configReader.ReadValue("pingToManagerSeconds", 120),  // if changing this, also change in StardustServerStarter AllowedNodeDownTimeSeconds = 360
+				_configReader.ReadValue("pingToManagerSeconds", 120),
+				// if changing this, also change in StardustServerStarter AllowedNodeDownTimeSeconds = 360
 				_configReader.ReadValue("sendDetailsToManagerMilliSeconds", 2000)
-				);
+			);
 
 			var iocArgs = new IocArgs(new ConfigReader())
 			{
 				OptimizeScheduleChangedEvents_DontUseFromWeb = true
 			};
-			
-			var configuration = new IocConfiguration(iocArgs, CommonModule.ToggleManagerForIoc(iocArgs));
+
+			var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
+			var configuration = new IocConfiguration(iocArgs, toggleManager);
 			var builder = new ContainerBuilder();
 			builder.RegisterModule(new CommonModule(configuration));
 			builder.RegisterModule(new TenantServerModule(configuration));
@@ -167,6 +171,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			new InitializeMessageBroker(messageBroker).Start(ConfigurationManager.AppSettings.ToDictionary());
+
+			//set process priority class to BelowNormal
+			if (toggleManager.IsEnabled(Toggles.Stardust_Priority_BelowNormal_44320))
+			{
+				Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
+			}
 
 			var nodeStarter = new NodeStarter();
 			Nodes.Add(nodeStarter);
