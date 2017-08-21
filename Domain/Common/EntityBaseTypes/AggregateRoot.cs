@@ -40,6 +40,11 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			_events.AddEvent(@event);
 		}
 
+		protected void ReplaceEvent(string key, Func<IEvent> @event)
+		{
+			_events.ReplaceEvent(key, @event);
+		}
+
 		public virtual IEnumerable<IEvent> PopAllEvents()
 		{
 			return _events.PopAllEvents();
@@ -147,6 +152,11 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			_events.AddEvent(@event);
 		}
 
+		protected void ReplaceEvent(string key, Func<IEvent> @event)
+		{
+			_events.ReplaceEvent(key, @event);
+		}
+
 		public virtual IEnumerable<IEvent> PopAllEvents()
 		{
 			return _events.PopAllEvents();
@@ -182,7 +192,13 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 	public class Events
 	{
-		private IList<Func<IEvent>> _events = new List<Func<IEvent>>();
+		private class EventRegistration
+		{
+			public string Key;
+			public Func<IEvent> Event;
+		}
+
+		private IList<EventRegistration> _events = new List<EventRegistration>();
 		private Guid? _commandId;
 
 		public void NotifyCommandId(Guid commandId)
@@ -192,17 +208,25 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public void AddEvent(Func<IEvent> @event)
 		{
-			_events.Add(@event.Invoke);
+			_events.Add(new EventRegistration {Event = @event});
 		}
 
 		public void AddEvent(IEvent @event)
 		{
-			_events.Add(() => @event);
+			_events.Add(new EventRegistration {Event = () => @event});
+		}
+
+		public void ReplaceEvent(string key, Func<IEvent> @event)
+		{
+			var toReplace = _events.SingleOrDefault(x => x.Key == key);
+			if (toReplace != null)
+				_events.Remove(toReplace);
+			_events.Add(new EventRegistration { Key = key, Event = @event });
 		}
 
 		public IEnumerable<IEvent> PopAllEvents()
 		{
-			var allEvents = _events.Select(e => e.Invoke()).ToArray();
+			var allEvents = _events.Select(e => e.Event()).ToArray();
 			_events.Clear();
 			if (_commandId.HasValue)
 				allEvents.ForEach(e =>
@@ -218,7 +242,10 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 
 		public Events Clone()
 		{
-			return new Events {_events = new List<Func<IEvent>>(_events)};
+			return new Events
+			{
+				_events = _events.ToList()
+			};
 		}
 
 		public bool HasEvents()

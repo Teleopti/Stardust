@@ -33,8 +33,6 @@ namespace Teleopti.Ccc.Domain.Common
 		private readonly IList<IOptionalColumnValue> _optionalColumnValueCollection = new List<IOptionalColumnValue>();
 		public static readonly DateOnly DefaultTerminalDate = new DateOnly(2059, 12, 31);
 
-	    private Func<PersonNameChangedEvent> _personNameChangedEvent;
-
 	    public Person()
         {
             _permissionInformation = new PermissionInformation(this);
@@ -46,8 +44,6 @@ namespace Teleopti.Ccc.Domain.Common
             _terminalDate = null;
             _personWriteProtection = new PersonWriteProtectionInfo(this);
             _firstDayOfWeek = DayOfWeek.Monday; //1
-			_personNameChangedEvent = null;
-
         }
 
         public virtual ITeam MyTeam(DateOnly theDate)
@@ -283,25 +279,14 @@ namespace Teleopti.Ccc.Domain.Common
             get { return _name; }
         }
 
-
-		public override IEnumerable<IEvent> PopAllEvents()
-		{
-			if (_personNameChangedEvent != null)
-				AddEvent(_personNameChangedEvent);
-			return base.PopAllEvents();
-		}
-
 		public virtual void SetName(Name value)
 		{
-			if (_name == value)
-				_personNameChangedEvent = null;
-			else
-				_personNameChangedEvent = () => new PersonNameChangedEvent()
-				{
-					PersonId = Id.GetValueOrDefault(),
-					FirstName = value.FirstName,
-					LastName = value.LastName
-				};
+			ReplaceEvent("PersonNameChangedEvent", () => new PersonNameChangedEvent
+			{
+				PersonId = Id.GetValueOrDefault(),
+				FirstName = value.FirstName,
+				LastName = value.LastName
+			});
 
 			_name = value;
 		}
@@ -342,12 +327,12 @@ namespace Teleopti.Ccc.Domain.Common
 
 	    public virtual void SetEmploymentNumber(string value)
 	    {
-		    if (_employmentNumber != value)
-			    AddEvent(() => new PersonEmploymentNumberChangedEvent()
-			    {
-				    PersonId = Id.GetValueOrDefault(),
-				    EmploymentNumber = _employmentNumber
-			    });
+		    ReplaceEvent("PersonEmploymentNumberChangedEvent", () => new PersonEmploymentNumberChangedEvent
+		    {
+			    PersonId = Id.GetValueOrDefault(),
+			    EmploymentNumber = _employmentNumber
+		    });
+
 		    _employmentNumber = value;
 	    }
 

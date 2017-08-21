@@ -42,19 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Common
 		}
 
 		[Test]
-		public void ShouldNotPublishIfNotChanged()
-		{
-			var person = PersonFactory.CreatePerson();
-			((Person)person).PopAllEvents();
-			person.SetName(new Name("bill", "gates"));
-
-			((Person)person).PopAllEvents();
-			person.SetName(new Name("bill", "gates"));
-			var x = ((Person) person).PopAllEvents().OfType<PersonNameChangedEvent>();
-			x.Should().Be.Empty();
-		}
-
-		[Test]
 		public void ShouldPublishOnceForCumulativeChangesWithProperties()
 		{
 			var personId = Guid.NewGuid();

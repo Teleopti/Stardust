@@ -38,17 +38,5 @@ namespace Teleopti.Ccc.DomainTest.Common
 			@event.PersonId.Should().Be(personId);
 			@event.EmploymentNumber.Should().Be("123");
 		}
-
-		[Test]
-		public void ShouldNotPublishIfNotChanged()
-		{
-			var person = PersonFactory.CreatePerson();
-			person.SetEmploymentNumber("123");
-			((Person)person).PopAllEvents();
-
-			person.SetEmploymentNumber("123");
-
-			((Person)person).PopAllEvents().OfType<PersonEmploymentNumberChangedEvent>().Should().Be.Empty();
-		}
 	}
 }
