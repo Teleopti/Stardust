@@ -32,10 +32,8 @@
 </div>
 <div class="wfm-grid">
 	<div class="grid-card planingperiod-container" ng-repeat="p in vm.planningPeriods track by p.Id | filter: vm.filterTime ">
-		<div class="list-content plan-group-pp" ng-click="vm.selectPp(p)">
+		<div class="list-content plan-group-pp" >
 			<div class="list-header" ng-class="{'pp-scheduled':p.State == 'Scheduled', 'pp-scheduled-failed':p.State == 'ScheduleFailed'|| p.State == 'IntradayOptimizationFailed'}">
-				<!--<i title="Scheduled" ng-if="p.State == 'Scheduled'" class="mdi mdi-calendar-check"></i>
-				<i title="Scheduled" ng-if="p.State !== 'Scheduled'" class="mdi mdi-calendar-remove"></i>-->
 				<h1>{{p.StartDate | amDateFormat:"LL"}} - {{p.EndDate | amDateFormat:"LL"}}</h1>
 				<div class="subtext">{{p.Number}} {{p.Type | translate}}</div>
 			</div>
@@ -48,7 +46,7 @@
 					<i class="mdi mdi-delete"></i>
 					<md-tooltip>{{'DeletePlanningPeriod' | translate}}</md-tooltip>
 				</div>
-				<button class="wfm-btn wfm-btn-invis-primary pull-right">{{'Schedule' | translate}}</button>
+				<button class="wfm-btn wfm-btn-invis-primary pull-right" ng-click="vm.selectPp(p)">{{'Schedule' | translate}}</button>
 			</div>
 		</div>
 	</div>
