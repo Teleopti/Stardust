@@ -1,0 +1,1 @@
+DELETE FROM ChildSkill WHERE ParentSkill IS NULL
