@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.List<Guid>();
 				result.AddRange(batchResult);
 			}
-			return result;
+			return result.Distinct().ToList();
 		}
 	}
 	public class PeoplePersonFinderSearchCriteria : IPeoplePersonFinderSearchCriteria
