@@ -541,7 +541,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			getSimpleRequestListViewModel().Requests.Count().Should().Be.EqualTo(1);
 		}
 
-		private RequestListViewModel getSimpleRequestListViewModel()
+		private RequestListViewModel<ShiftTradeRequestViewModel> getSimpleRequestListViewModel()
 		{
 			createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 1),
 				PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));

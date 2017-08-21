@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 	public class RequestsViewModelFactory : IRequestsViewModelFactory
 	{
 		private readonly IRequestsProvider _requestsProvider;
-		private readonly IRequestViewModelMapper _requestViewModelMapper;
+		private readonly IRequestViewModelMapper<AbsenceAndTextRequestViewModel> _requestViewModelMapper;
 		private readonly IRequestFilterCreator _requestFilterCreator;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
 
 		public RequestsViewModelFactory(IRequestsProvider requestsProvider,
-			IRequestViewModelMapper requestViewModelMapper,
+			IRequestViewModelMapper<AbsenceAndTextRequestViewModel> requestViewModelMapper,
 			IRequestFilterCreator requestFilterCreator, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
 		{
 			_requestsProvider = requestsProvider;
@@ -27,13 +27,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			_nameFormatSettings = nameFormatSettings;
 		}
 
-		public RequestListViewModel CreateRequestListViewModel(AllRequestsFormData input)
+		public RequestListViewModel<AbsenceAndTextRequestViewModel> CreateAbsenceAndTextRequestListViewModel(AllRequestsFormData input)
 		{
 			if (input == null || input.SelectedGroupIds.Length == 0)
 			{
-				return new RequestListViewModel
+				return new RequestListViewModel<AbsenceAndTextRequestViewModel>
 				{
-					Requests = new RequestViewModel[] { }
+					Requests = new AbsenceAndTextRequestViewModel[] { }
 				};
 			}
 
@@ -42,18 +42,18 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			var requests = _requestsProvider.RetrieveRequests(requestFilter, out totalCount);
 			var nameFormatSettings = _nameFormatSettings.Get();
 
-			return new RequestListViewModel
+			return new RequestListViewModel<AbsenceAndTextRequestViewModel>
 			{
-				Requests = requests.Select(s => toViewModel(s, nameFormatSettings)).ToList(),
+				Requests = requests.Select(s => toAbsenceAndTextRequestViewModel(s, nameFormatSettings)).ToList(),
 				TotalCount = totalCount,
 				Skip = input.Paging.Skip,
 				Take = input.Paging.Take
 			};
 		}
 
-		private RequestViewModel toViewModel(IPersonRequest request, NameFormatSettings nameFormatSetting)
+		private AbsenceAndTextRequestViewModel toAbsenceAndTextRequestViewModel(IPersonRequest request, NameFormatSettings nameFormatSetting)
 		{
-			return _requestViewModelMapper.Map(new RequestViewModel(), request, nameFormatSetting);
+			return _requestViewModelMapper.Map(new AbsenceAndTextRequestViewModel(), request, nameFormatSetting);
 		}
 	}
 }

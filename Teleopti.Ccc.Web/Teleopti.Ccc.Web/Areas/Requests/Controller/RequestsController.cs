@@ -40,13 +40,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 		}
 
 		[HttpPost, Route("api/Requests/requests"), UnitOfWork]
-		public virtual RequestListViewModel GetRequests([FromBody]AllRequestsFormData input)
+		public virtual RequestListViewModel<AbsenceAndTextRequestViewModel> GetRequests([FromBody]AllRequestsFormData input)
 		{
-			return _requestsViewModelFactory.CreateRequestListViewModel(input);
+			return _requestsViewModelFactory.CreateAbsenceAndTextRequestListViewModel(input);
 		}
 
 		[HttpPost, Route("api/Requests/shiftTradeRequests"), UnitOfWork]
-		public virtual RequestListViewModel GetShiftTradeRequests([FromBody]AllRequestsFormData input)
+		public virtual RequestListViewModel<ShiftTradeRequestViewModel> GetShiftTradeRequests([FromBody]AllRequestsFormData input)
 		{
 			return _shiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 		}

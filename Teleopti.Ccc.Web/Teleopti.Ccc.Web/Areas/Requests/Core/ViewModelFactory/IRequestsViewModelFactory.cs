@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 {
 	public interface IRequestsViewModelFactory
 	{
-		RequestListViewModel CreateRequestListViewModel(AllRequestsFormData input);
+		RequestListViewModel<AbsenceAndTextRequestViewModel> CreateAbsenceAndTextRequestListViewModel(AllRequestsFormData input);
 	}
 }

@@ -698,8 +698,10 @@
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestsViewModelFactory.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\RequestViewModelMapper.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\ShiftTradeRequestViewModelFactory.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModel\AbsenceAndTextRequestViewModel.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestAllowanceViewModel.cs" />
     <Compile Include="Areas\Requests\Core\ViewModel\RequestViewModel.cs" />
+    <Compile Include="Areas\Requests\Core\ViewModel\ShiftTradeRequestViewModel.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningGroupController.cs" />
     <Compile Include="Areas\ResourcePlanner\IslandController.cs" />
     <Compile Include="Areas\ResourcePlanner\ManageScheduleController.cs" />

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 	public class ShiftTradeRequestViewModelFactory : IShiftTradeRequestViewModelFactory
 	{
 		private readonly IRequestsProvider _requestsProvider;
-		private readonly IRequestViewModelMapper _requestViewModelMapper;
+		private readonly IRequestViewModelMapper<ShiftTradeRequestViewModel> _requestViewModelMapper;
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IScheduleProvider _scheduleProvider;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		private const int maxSearchPersonCount = 5000;
 
-		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IScheduleProvider scheduleProvider, IUserCulture userCulture
+		public ShiftTradeRequestViewModelFactory(IRequestsProvider requestsProvider, IRequestViewModelMapper<ShiftTradeRequestViewModel> requestViewModelMapper, IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IScheduleProvider scheduleProvider, IUserCulture userCulture
 			, IRequestFilterCreator requestFilterCreator, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
 		{
 			_requestsProvider = requestsProvider;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			var requestListModel = new ShiftTradeRequestListViewModel()
 			{
 				FirstDayOfWeek = toIso8601DayNumber(_userCulture.GetCulture().DateTimeFormat.FirstDayOfWeek),
-				Requests = new RequestViewModel[] { }
+				Requests = new ShiftTradeRequestViewModel[] { }
 			};
 
 			if (input == null || input.SelectedGroupIds.Length == 0)
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			{
 				return new ShiftTradeRequestListViewModel
 				{
-					Requests = new RequestViewModel[] {},
+					Requests = new ShiftTradeRequestViewModel[] {},
 					IsSearchPersonCountExceeded = true,
 					MaxSearchPersonCount = maxSearchPersonCount
 				};

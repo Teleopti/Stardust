@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Core;
@@ -16,32 +14,52 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 {
-	public class RequestViewModelMapper : IRequestViewModelMapper
+	public class RequestViewModelMapper 
+		: IRequestViewModelMapper<AbsenceAndTextRequestViewModel>, IRequestViewModelMapper<ShiftTradeRequestViewModel>
 	{
 
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
-		private readonly IToggleManager _toggleManager;
 
-		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IPersonAbsenceAccountProvider personAbsenceAccountProvider, IToggleManager toggleManager)
+		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IPersonAbsenceAccountProvider personAbsenceAccountProvider)
 		{
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
-			_toggleManager = toggleManager;
 		}
 
-		public RequestViewModel Map(RequestViewModel requestViewModel, IPersonRequest request, NameFormatSettings nameFormatSettings)
+		public AbsenceAndTextRequestViewModel Map(AbsenceAndTextRequestViewModel requestViewModel, IPersonRequest request, NameFormatSettings nameFormatSettings)
+		{
+			mapRequestViewModel(requestViewModel, request, nameFormatSettings);
+
+			mapAbsenceRequestSpecificFields(requestViewModel, request);
+
+			return requestViewModel;
+		}
+
+		public ShiftTradeRequestViewModel Map(ShiftTradeRequestViewModel requestViewModel, IPersonRequest request,
+	NameFormatSettings nameFormatSettings)
+		{
+			mapRequestViewModel(requestViewModel, request, nameFormatSettings);
+
+			return requestViewModel;
+		}
+
+		private void mapRequestViewModel(RequestViewModel requestViewModel, IPersonRequest request,
+	NameFormatSettings nameFormatSettings)
 		{
 			var team = request.Person.MyTeam(new DateOnly(request.Request.Period.StartDateTime));
 			requestViewModel.Id = request.Id.GetValueOrDefault();
 			requestViewModel.Subject = request.GetSubject(new NoFormatting());
 			requestViewModel.Message = request.GetMessage(new NoFormatting());
 			requestViewModel.DenyReason = request.DenyReason;
-			requestViewModel.TimeZone = _ianaTimeZoneProvider.WindowsToIana(request.Person.PermissionInformation.DefaultTimeZone().Id);
-			requestViewModel.PeriodStartTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.StartDateTime, request.Person.PermissionInformation.DefaultTimeZone());
-			requestViewModel.PeriodEndTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.EndDateTime, request.Person.PermissionInformation.DefaultTimeZone());
+			requestViewModel.TimeZone =
+				_ianaTimeZoneProvider.WindowsToIana(request.Person.PermissionInformation.DefaultTimeZone().Id);
+			requestViewModel.PeriodStartTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.StartDateTime,
+				request.Person.PermissionInformation.DefaultTimeZone());
+			requestViewModel.PeriodEndTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.EndDateTime,
+				request.Person.PermissionInformation.DefaultTimeZone());
 			requestViewModel.CreatedTime = request.CreatedOn.HasValue
 				? TimeZoneHelper.ConvertFromUtc(request.CreatedOn.Value, request.Person.PermissionInformation.DefaultTimeZone())
 				: (DateTime?)null;
@@ -57,21 +75,17 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			requestViewModel.Status = getRequestStatus(request);
 			requestViewModel.Payload = request.Request.RequestPayloadDescription;
 			requestViewModel.Team = team?.SiteAndTeam;
-			requestViewModel.IsFullDay = isFullDay(request);
-
-			mapAbsenceRequestSpecificFields(requestViewModel, request);
-
-
-			return requestViewModel;
 		}
 
-		private void mapAbsenceRequestSpecificFields (RequestViewModel requestViewModel, IPersonRequest request)
+		private void mapAbsenceRequestSpecificFields (AbsenceAndTextRequestViewModel requestViewModel, IPersonRequest request)
 		{
 			var absenceRequest = request.Request as IAbsenceRequest;
 
 			if (absenceRequest != null)
 			{
 				requestViewModel.PersonAccountSummaryViewModel = getPersonalAccountApprovalSummary(absenceRequest);
+
+				requestViewModel.IsFullDay = isFullDay(request);
 			}
 		}
 
@@ -169,6 +183,5 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			if (endTime.Hour != 23 || endTime.Minute != 59 || endTime.Second != 0) return false;
 			return true;
 		}
-
 	}
 }

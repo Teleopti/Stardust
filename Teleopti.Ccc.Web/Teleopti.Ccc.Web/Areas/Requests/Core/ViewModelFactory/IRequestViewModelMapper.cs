@@ -4,8 +4,8 @@ using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 {
-	public interface IRequestViewModelMapper
+	public interface IRequestViewModelMapper<T> where T : RequestViewModel
 	{
-		RequestViewModel Map (RequestViewModel requestViewModel, IPersonRequest request, NameFormatSettings nameFormatSettings);
+		T Map (T requestViewModel, IPersonRequest request, NameFormatSettings nameFormatSettings);
 	}
 }

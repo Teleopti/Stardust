@@ -3,6 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Web.Areas.Requests.Core.Provider;
+using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModel;
 using Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.IOC
@@ -16,7 +17,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.IOC
 			builder.RegisterType<RequestsViewModelFactory>().As<IRequestsViewModelFactory>().SingleInstance();
 			builder.RegisterType<ShiftTradeRequestViewModelFactory>().As<IShiftTradeRequestViewModelFactory>().SingleInstance();
 			builder.RegisterType<RequestCommandHandlingProvider>().As<IRequestCommandHandlingProvider>().InstancePerLifetimeScope();
-			builder.RegisterType<RequestViewModelMapper>().As<IRequestViewModelMapper>().InstancePerLifetimeScope();
+			builder.RegisterType<RequestViewModelMapper>().As<IRequestViewModelMapper<AbsenceAndTextRequestViewModel>>().InstancePerLifetimeScope();
+			builder.RegisterType<RequestViewModelMapper>().As<IRequestViewModelMapper<ShiftTradeRequestViewModel>>().InstancePerLifetimeScope();
 			builder.RegisterType<SwapAndModifyService>().As<ISwapAndModifyService>().InstancePerDependency();
 			builder.RegisterType<SwapService>().As<ISwapService>().InstancePerDependency();
 			builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>().InstancePerDependency();
