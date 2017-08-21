@@ -249,11 +249,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 		private RequestViewModel doPersonalAccountSummaryTest(params AccountDay[] accountDays)
 		{
-
 			setupStateHolderProxy();
-
-			((FakeToggleManager)ToggleManager).Enable(Toggles.Wfm_Requests_Show_Personal_Account_39628);
-
 			setUpRequests();
 
 			var personAbsenceAccount = createPersonAbsenceAccount(people[1], absence);
@@ -262,7 +258,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		   {
 			   personAbsenceAccount.Add(accountDay);
 		   });
-
 
 			var input = new AllRequestsFormData
 			{

@@ -61,7 +61,6 @@ WebByPassDefaultPermissionCheck_37984 = true
 
 Report_UseOpenXmlFormat_35797 = true
 Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 = RC # can not use it until function 'Approve based on business rules' is ready
-Wfm_Requests_Show_Personal_Account_39628 = true
 Wfm_Requests_Approve_Based_On_Intraday_39868 = RC # can not use it until function 'Approve based on business rules' is ready
 Wfm_Requests_Check_Expired_Requests_40274 = true
 Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274 = RC # can not use it until function 'Approve based on business rules' is ready
@@ -103,7 +102,7 @@ MyTimeWeb_DayScheduleForStartPage_43446 = true
 MyTimeWeb_DayScheduleForStartPage_Command_44209 = true
 MyTimeWeb_ViewWFMAppGuide_43848 = true
 MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686 = true
-MyTimeWeb_OvertimeRequest_44558 = RC
+MyTimeWeb_OvertimeRequest_44558 = true
 MyTimeWeb_SortRequestList_40711 = true #Please note the feature for this one is 40771!
 QRCodeForMobileApps_42695 = true
 ConfigQRCodeURLForMobileApps_43224 = true

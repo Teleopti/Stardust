@@ -88,18 +88,16 @@
 				{ displayName: 'CreatedOn', field: 'FormatedCreatedTime()', headerCellFilter: 'translate', cellClass: 'request-created-time', headerCellClass: 'request-created-time-header' },
 				{ displayName: 'UpdatedOn', field: 'FormatedUpdatedTime()', headerCellFilter: 'translate', cellClass: 'request-updated-time', visible: false, headerCellClass: 'request-updated-time-header' }
 				];
+				
+				var accountColumn = {
+					displayName: 'Account',
+					field: 'PersonAccountSummaryViewModel',
+					headerCellFilter: 'translate',
+					cellTemplate: 'requests-absence-person-account-overview.html',
+					enableSorting: false
+				};
 
-				if (toggleSvc.Wfm_Requests_Show_Personal_Account_39628) {
-					var accountColumn = {
-						displayName: 'Account',
-						field: 'PersonAccountSummaryViewModel',
-						headerCellFilter: 'translate',
-						cellTemplate: 'requests-absence-person-account-overview.html',
-						enableSorting: false
-					};
-
-					columns.splice(12, 0, accountColumn);
-				}
+				columns.splice(12, 0, accountColumn);
 			}
 
 			function columnDefinitions() {

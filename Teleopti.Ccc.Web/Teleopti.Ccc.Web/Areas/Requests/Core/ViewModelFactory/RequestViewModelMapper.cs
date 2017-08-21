@@ -71,10 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 			if (absenceRequest != null)
 			{
-				if (_toggleManager.IsEnabled (Toggles.Wfm_Requests_Show_Personal_Account_39628))
-				{
-					requestViewModel.PersonAccountSummaryViewModel = getPersonalAccountApprovalSummary(absenceRequest);
-				}
+				requestViewModel.PersonAccountSummaryViewModel = getPersonalAccountApprovalSummary(absenceRequest);
 			}
 		}
 

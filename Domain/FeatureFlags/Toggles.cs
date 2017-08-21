@@ -76,7 +76,6 @@
 		WfmReportPortal_LeaderBoard_39440,
 
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
-		Wfm_Requests_Show_Personal_Account_39628,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
 		Wfm_Requests_Check_Expired_Requests_40274,
 		Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274,
