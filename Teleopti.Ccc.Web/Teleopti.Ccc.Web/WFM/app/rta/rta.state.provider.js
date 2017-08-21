@@ -98,7 +98,7 @@ angular
                     controller: 'RtaHistoricalController as vm',
                 })
                 .state('refact-rta', {
-                    url: '/refact-rta/?skillIds?skillAreaId?open',
+                    url: '/rta-overview/?skillIds?skillAreaId?open',
                     templateUrl: 'app/rta/refact/rta.html',
                     controller: 'RtaMainController as vm',
                     params: {
