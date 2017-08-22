@@ -54,33 +54,22 @@
         <wfm-card>
             <card-header tabindex="-1">
                 <div tabindex="0">
-                    <span><i class="mdi" ng-class="item.title"></i></span>
                     <b>Export</b>
                     <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
                 </div>
             </card-header>
             <card-body class="panel">
                 <div class="con-row demo-outline">
-                    <div class="con-flex">Content</div>
+                    <!-- <div class="con-flex">
+                            <button class="wfm-btn wfm-btn-invis-primary">Export File</button>
+                    </div> -->
+
                 </div>
                 <div class="con-footer">
-                    <button class="wfm-btn wfm-btn-invis-default">Advanced</button>
-                    <button class="wfm-btn wfm-btn-invis-primary">Options</button>
+                    <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.exportFile()">Export File</button>
+                    
                 </div>
             </card-body>
         </wfm-card>
     </wfm-card-list>
-</div>
-<div class="modal-box" ng-if="vm.openImportData">
-    <div class="modalbg import-people">
-        <div class="dialog">
-            <h1 class="modal-title">
-                {{'ImportStaffing'|translate}}
-            </h1>
-            <staffing-import-data></staffing-import-data>
-            <div class="modal-actions">
-                <button ng-click="vm.openImportData = false" class="wfm-btn wfm-btn-invis-default pull-right">{{'Back'|translate}}</button>
-            </div>
-        </div>
-    </div>
 </div>

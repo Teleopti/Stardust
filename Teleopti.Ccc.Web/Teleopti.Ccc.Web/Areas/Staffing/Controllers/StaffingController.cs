@@ -123,15 +123,14 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			return Ok(result);
 		}
 
-		[UnitOfWork, HttpPost, Route("api/staffing/exportStaffingDemand")]
-		public virtual IHttpActionResult ExportBpo([FromBody]Guid skillId)
+		[UnitOfWork, HttpGet, Route("api/staffing/exportStaffingDemand")]
+		public virtual IHttpActionResult ExportBpo(Guid skillId)
 		{
-
 			var exportedContent = _exportBpoFile.ExportDemand(_skillRepository.Get(skillId),
 				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today.AddDays(14)), CultureInfo.InvariantCulture);
-			dynamic returnVal = new System.Dynamic.ExpandoObject();
+			exportReturnObject returnVal = new exportReturnObject();
 			returnVal.Content = exportedContent;
-			return Ok(exportedContent);
+			return Ok(returnVal);
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/GetLicense")]
@@ -210,6 +209,11 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		class returnObj
 		{
 			public bool isLicenseAvailable { get; set; }
+		}
+
+		internal class exportReturnObject
+		{
+			public string Content { get; set; }
 		}
 
 	}

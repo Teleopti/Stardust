@@ -16,6 +16,7 @@
         var compensations = $resource('../api/staffing/GetCompensations');
         var savebpo = $resource('../api/staffing/importBpo');
         var fileImportLicense = $resource('../api/staffing/GetLicense');
+        var fileExport = $resource('../api/staffing/exportStaffingDemand');
         ////////////////
 
         var service = {
@@ -27,7 +28,8 @@
             getSuggestion: suggestion,
             getCompensations: compensations,
             importbpo: savebpo,
-            fileImportLicense: fileImportLicense
+            fileImportLicense: fileImportLicense,
+            postFileExport: fileExport
         };
 
         return service;

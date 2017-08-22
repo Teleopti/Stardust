@@ -10,7 +10,8 @@
         var service = {
             prepareStaffingData: prepareStaffingData,
             prepareSettings: prepareSettings,
-            prepareSuggestedStaffingData: prepareSuggestedStaffingData
+            prepareSuggestedStaffingData: prepareSuggestedStaffingData,
+            saveToFs: saveToFs
         };
 
         return service;
@@ -26,6 +27,21 @@
 
         function convertOvertimeHoursToMinutes(dateTime) {
             return (dateTime.getMinutes() + dateTime.getHours() * 60);
+        }
+
+        function saveToFs(data, filename, filetype) {
+            var blob = new Blob([data], { type: filetype });
+            if (window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveBlob(blob, filename);
+            }
+            else {
+                var elem = window.document.createElement('a');
+                elem.href = window.URL.createObjectURL(blob);
+                elem.download = filename;
+                document.body.appendChild(elem);
+                elem.click();
+                document.body.removeChild(elem);
+            }
         }
 
         function prepareStaffingData(data) {

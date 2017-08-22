@@ -7,15 +7,17 @@
 
     ImportexportController.inject = [
         '$state',
-        'staffingService'
+        'staffingService',
+        'UtilService'
     ];
-    function ImportexportController($state, staffingService) {
+    function ImportexportController($state, staffingService, UtilService) {
         var vm = this;
         vm.selected;
         vm.openImportData;
         vm.selectedSkill;
         vm.selectedSkillChange = selectedSkillChange;
         vm.querySearchSkills = querySearchSkills;
+        vm.exportFile = exportFile;
 
         var skills;
         getSkills()
@@ -37,12 +39,21 @@
         function selectSkill(skill) {
             vm.selectedSkill = skill;
         }
-        
-		function querySearchSkills(query) {
-			var results = query ? skills.filter(createFilterFor(query)) : skills,
-				deferred;
-			return results;
-		};
+
+        function querySearchSkills(query) {
+            var results = query ? skills.filter(createFilterFor(query)) : skills, 
+                deferred;
+            return results;
+        };
+
+        function exportFile() {
+            var request = staffingService.postFileExport.get({skillId:vm.selectedSkill.Id})
+            request.$promise.then(function (response) {
+                console.log(response.Content);
+                var data = angular.toJson(response.Content);
+                UtilService.saveToFs(response.Content, vm.selectedSkill.Name +".csv", 'text/csv');
+            })
+        }
 
 
     }

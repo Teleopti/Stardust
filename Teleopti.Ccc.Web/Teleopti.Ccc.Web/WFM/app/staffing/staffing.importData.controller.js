@@ -3,7 +3,7 @@
 
     angular.module('wfm.staffing')
         .directive('staffingImportData', ImportDataDirective)
-        .controller('ImportDataController', ['$timeout', 'Toggle', '$translate', 'staffingService', ImportDataController]);
+        .controller('ImportDataController', ['$timeout', 'Toggle', '$translate', 'staffingService', 'UtilService', ImportDataController]);
 
     function ImportDataDirective() {
         return {
@@ -17,7 +17,7 @@
         };
     };
 
-    function ImportDataController($timeout, toggles, $translate, staffingService) {
+    function ImportDataController($timeout, toggles, $translate, staffingService, utilService) {
         var vm = this;
         vm.getFileTemplate = getFileTemplate;
         vm.checkValid = checkValid;
@@ -35,23 +35,8 @@
                 'Generic,Email,2017-08-01 11:00,2017-08-01 11:15,8.75\n' +
                 'Generic,Channel Sales|Directsales,2017-08-01 10:00,2017-08-01 10:15,12.5\n' +
                 'Generic,Channel Sales,2017-08-01 10:00,2017-08-01 10:15,8.75'
-            saveToFs(templateFile, "template.csv")
+            utilService.saveToFs(templateFile, "template.csv", 'text/csv')
 
-        }
-
-        function saveToFs(data, filename) {
-            var blob = new Blob([data], { type: 'text/csv' });
-            if (window.navigator.msSaveOrOpenBlob) {
-                window.navigator.msSaveBlob(blob, filename);
-            }
-            else {
-                var elem = window.document.createElement('a');
-                elem.href = window.URL.createObjectURL(blob);
-                elem.download = filename;
-                document.body.appendChild(elem);
-                elem.click();
-                document.body.removeChild(elem);
-            }
         }
 
         function readFile(input) {
