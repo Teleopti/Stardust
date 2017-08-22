@@ -53,9 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         {
 	        DataSource = info.GetString("DataSource");
         }
-
-	    public override string Message => $"{base.Message} - [{DataSource}]";
-
+		
 	    public string DataSource { get; }
 
 	    private string dataSourceName()

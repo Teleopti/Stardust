@@ -756,6 +756,7 @@
     <Compile Include="Util\DeployedHostTelemetryInitializer.cs" />
     <Compile Include="Util\MemoryCounter.cs" />
     <Compile Include="Util\SqlTransientErrorChecker.cs" />
+    <Compile Include="Util\UserAndTenantTelemetryInitializer.cs" />
     <Compile Include="WebReports\DailyMetricsForDayQuery.cs" />
     <Compile Include="WebReports\QueueMetricsForDayResult.cs" />
     <Compile Include="WebReports\DailyMetricsForDayResult.cs" />
