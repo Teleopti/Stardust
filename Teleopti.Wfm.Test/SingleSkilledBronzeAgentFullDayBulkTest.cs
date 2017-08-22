@@ -54,6 +54,7 @@ namespace Teleopti.Wfm.Test
 
 				var absence = AbsenceRepository.LoadRequestableAbsence().Single(x => x.Name == "Holiday");
 				var person = PersonRepository.LoadAll().Single(x => x.Name.FirstName == "PersonBronze1");
+				person.WorkflowControlSet.AbsenceRequestExpiredThreshold = null;
 
 				var requestStart = now.Date;
 				var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(requestStart, requestStart.AddDays(1).AddMinutes(-1)));
