@@ -133,6 +133,19 @@
 		<div class="con-flex">
 			<div class="panel material-depth-1">
 				<div class="wfm-slide-tabs tabbed-panel">
+					<div class="head-actions panel-menu" ng-show="toggles.exportToExcel">
+						<div tabindex=0 class="context-menu card-context">
+							<i class="mdi mdi-dots-vertical"></i>
+							<span class="context-menu-left">
+								<ul class="wfm-list">
+									<li ng-show="toggles.exportToExcel" ng-click="exportIntradayData()">
+										<i class="mdi mdi-file-excel"></i>
+										<md-tooltip>Export to excel</md-tooltip>
+									</li>
+								</ul>
+							</span>
+						</div>
+					</div>
 					<md-content class="md-padding">
 						<div class="con-row full-padding" ng-if="toggles.showOtherDay">
 							<div>
@@ -145,52 +158,45 @@
 							<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
 								<md-content ng-cloak class="md-padding">
 									<div class="con-row">
-										<div class="con-flex" style="height:15px">
+										<div class="con-flex" style="height: 15px">
 											<md-progress-linear ng-if="viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
-										</div>
+										</div> 
 									</div>
 								</md-content>
 								<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
-									<div class="con-row" ng-show="toggles.exportToExcel">
-										<div class="con-flex">
-											<button class="wfm-fab  material-depth-1" ng-click="exportIntradayData()">
-												<i class="mdi mdi-file-excel"></i>
-												<md-tooltip>Export to excel</md-tooltip>
-											</button>
-										</div>
-									</div>
 									<div class="con-row">
 										<div class="con-flex">
-											<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
+											<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
+											</p>
 											<div class="wfm-chart intraday-chart" id="trafficChart"></div>
 										</div>
-									</div> 
+									</div>
 									<div class="con-row full-padding">
 										<div class="con-flex"></div>
 										<div class="con-flex">
 											<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
 											<table class="wfm-table wfm-filter-options">
 												<thead>
-													<tr>
-														<th></th>
-														<th>{{'Forecasted'|translate}}</th>
-														<th>{{'Actual'|translate}}</th>
-														<th>{{'Difference'|translate}}</th>
-													</tr>
+												<tr>
+													<th></th>
+													<th>{{'Forecasted'|translate}}</th>
+													<th>{{'Actual'|translate}}</th>
+													<th>{{'Difference'|translate}}</th>
+												</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>{{'Volume'|translate}}</td>
-														<td class="number-cell forecasted-calls ">{{viewObj.summary.summaryForecastedCalls}}</td>
-														<td class="number-cell calculated-calls">{{viewObj.summary.summaryCalculatedCalls}}</td>
-														<td class="number-cell calls-difference">{{viewObj.summary.forecastActualCallsDifference}}%</td>
-													</tr>
-													<tr>
-														<td>{{'AverageHandlingTime'|translate}}</td>
-														<td class="number-cell forecasted-aht">{{viewObj.summary.summaryForecastedAverageHandleTime}}</td>
-														<td class="number-cell aht">{{viewObj.summary.summaryAverageHandleTime}}</td>
-														<td class="number-cell aht-difference">{{viewObj.summary.forecastActualAverageHandleTimeDifference}}%</td>
-													</tr>
+												<tr>
+													<td>{{'Volume'|translate}}</td>
+													<td class="number-cell forecasted-calls ">{{viewObj.summary.summaryForecastedCalls}}</td>
+													<td class="number-cell calculated-calls">{{viewObj.summary.summaryCalculatedCalls}}</td>
+													<td class="number-cell calls-difference">{{viewObj.summary.forecastActualCallsDifference}}%</td>
+												</tr>
+												<tr>
+													<td>{{'AverageHandlingTime'|translate}}</td>
+													<td class="number-cell forecasted-aht">{{viewObj.summary.summaryForecastedAverageHandleTime}}</td>
+													<td class="number-cell aht">{{viewObj.summary.summaryAverageHandleTime}}</td>
+													<td class="number-cell aht-difference">{{viewObj.summary.forecastActualAverageHandleTimeDifference}}%</td>
+												</tr>
 												</tbody>
 											</table>
 										</div>
@@ -206,7 +212,7 @@
 							<md-tab label="{{'Performance'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
 								<md-content ng-cloak class="md-padding">
 									<div class="con-row">
-										<div class="con-flex" style="height:15px">
+										<div class="con-flex" style="height: 15px">
 											<md-progress-linear ng-if="viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
 										</div>
 									</div>
@@ -214,7 +220,8 @@
 								<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
 									<div class="con-row">
 										<div class="con-flex">
-											<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
+											<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
+											</p>
 											<div class="wfm-chart intraday-chart" id="performanceChart"></div>
 										</div>
 									</div>
@@ -225,28 +232,28 @@
 											<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
 											<table class="wfm-table wfm-filter-options">
 												<thead>
-													<tr>
-														<th></th>
-														<th>{{'Average'|translate}}</th>
-													</tr>
+												<tr>
+													<th></th>
+													<th>{{'Average'|translate}}</th>
+												</tr>
 												</thead>
 												<tbody>
-													<tr>
-														<td>{{'ServiceLevel'|translate}}</td>
-														<td class="number-cell service-level">{{viewObj.summary.summaryServiceLevel}} %</td>
-													</tr>
-													<tr ng-if="toggles.showEsl">
-														<td>{{'ESL'|translate}}</td>
-														<td class="number-cell esl">{{viewObj.summary.summaryEstimatedServiceLevel}} %</td>
-													</tr>
-													<tr ng-if="!viewObj.hasEmailSkill">
-														<td>{{'AbandonedRate'|translate}}</td>
-														<td class="number-cell abandoned-rate">{{viewObj.summary.summaryAbandonedRate}} %</td>
-													</tr>
-													<tr>
-														<td>{{'AverageSpeedOfAnswer'|translate}}</td>
-														<td class="number-cell average-speed-of-answer">{{viewObj.summary.summaryAverageSpeedOfAnswer}} {{'SecondShort'|translate}}</td>
-													</tr>
+												<tr>
+													<td>{{'ServiceLevel'|translate}}</td>
+													<td class="number-cell service-level">{{viewObj.summary.summaryServiceLevel}} %</td>
+												</tr>
+												<tr ng-if="toggles.showEsl">
+													<td>{{'ESL'|translate}}</td>
+													<td class="number-cell esl">{{viewObj.summary.summaryEstimatedServiceLevel}} %</td>
+												</tr>
+												<tr ng-if="!viewObj.hasEmailSkill">
+													<td>{{'AbandonedRate'|translate}}</td>
+													<td class="number-cell abandoned-rate">{{viewObj.summary.summaryAbandonedRate}} %</td>
+												</tr>
+												<tr>
+													<td>{{'AverageSpeedOfAnswer'|translate}}</td>
+													<td class="number-cell average-speed-of-answer">{{viewObj.summary.summaryAverageSpeedOfAnswer}} {{'SecondShort'|translate}}</td>
+												</tr>
 												</tbody>
 											</table>
 										</div>
@@ -262,7 +269,7 @@
 							<md-tab label="{{'Staffing'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
 								<md-content ng-cloak class="md-padding">
 									<div class="con-row">
-										<div class="con-flex" style="height:15px">
+										<div class="con-flex" style="height: 15px">
 											<md-progress-linear ng-if="viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
 										</div>
 									</div>
@@ -271,7 +278,8 @@
 								<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
 									<div class="con-row">
 										<div class="con-flex">
-											<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
+											<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
+											</p>
 											<div class="wfm-chart intraday-chart" id="staffingChart" ng-show="viewObj.hasMonitorData"></div>
 										</div>
 									</div>

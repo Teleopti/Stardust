@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				DifferenceVolume = intradayExcelExport.IncomingViewModel.Summary.ForecastedActualCallsDiff / 100,
 				ForecastedAht = intradayExcelExport.IncomingViewModel.Summary.ForecastedAverageHandleTime,
 				ActualAht = intradayExcelExport.IncomingViewModel.Summary.AverageHandleTime,
-				DifferenceAht = intradayExcelExport.IncomingViewModel.Summary.ForecastedActualHandleTimeDiff,
+				DifferenceAht = intradayExcelExport.IncomingViewModel.Summary.ForecastedActualHandleTimeDiff / 100,
 				ServiceLevel = intradayExcelExport.PerformanceViewModel.Summary.ServiceLevel,
 				Esl = intradayExcelExport.PerformanceViewModel.Summary.EstimatedServiceLevel / 100,
 				AbandonedRate = intradayExcelExport.PerformanceViewModel.Summary.AbandonRate,

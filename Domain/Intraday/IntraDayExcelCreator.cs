@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_cellStyleDate.DataFormat = HSSFDataFormat.GetBuiltinFormat("m/d/yy");
 
 			_cellStylePercentage = workbook.CreateCellStyle();
-			_cellStylePercentage.DataFormat = HSSFDataFormat.GetBuiltinFormat("0%");
+			_cellStylePercentage.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.00%");
 
 			_cellStyleTwoDecimals = workbook.CreateCellStyle();
 			_cellStyleTwoDecimals.DataFormat = HSSFDataFormat.GetBuiltinFormat("0.00");

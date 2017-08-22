@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Intraday
 			dataRowSummary.Cells[3].NumericCellValue.ToString("#.##").Should().Be.EqualTo((dataToExport.IncomingViewModel.Summary.ForecastedActualCallsDiff / 100).ToString("#.##"));
 			dataRowSummary.Cells[4].NumericCellValue.Should().Be.EqualTo(dataToExport.IncomingViewModel.Summary.ForecastedAverageHandleTime);
 			dataRowSummary.Cells[5].NumericCellValue.Should().Be.EqualTo(dataToExport.IncomingViewModel.Summary.AverageHandleTime);
-			dataRowSummary.Cells[6].NumericCellValue.ToString("#.##").Should().Be.EqualTo(dataToExport.IncomingViewModel.Summary.ForecastedActualHandleTimeDiff.ToString("#.##"));
+			dataRowSummary.Cells[6].NumericCellValue.ToString("#.##").Should().Be.EqualTo((dataToExport.IncomingViewModel.Summary.ForecastedActualHandleTimeDiff / 100).ToString("#.##"));
 			dataRowSummary.Cells[7].NumericCellValue.Should().Be.EqualTo(dataToExport.PerformanceViewModel.Summary.ServiceLevel);
 
 			dataRowSummary.Cells[8].NumericCellValue.Should().Be.EqualTo(dataToExport.PerformanceViewModel.Summary.EstimatedServiceLevel / 100);
