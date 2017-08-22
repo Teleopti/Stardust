@@ -8,8 +8,7 @@
 <div class="wfm-requests panel wfm-block material-depth-1">
 	<div class="operation-container">
 		<div class="left-part">
-			<favorite-search ng-if="vm.businessHierarchyToggleEnabled"
-							 apply-favorite="vm.applyFavorite(currentFavorite)"
+			<favorite-search apply-favorite="vm.applyFavorite(currentFavorite)"
 							 get-search="vm.getSearch()"
 							 current-favorite="vm.selectedFavorite"
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
@@ -19,7 +18,7 @@
 				class="group-picker-container inline-block"
 				selected-groups="vm.selectedGroups"></group-page-picker>
 
-			<organization-picker ng-if="vm.businessHierarchyToggleEnabled && !vm.Wfm_GroupPages_45057"
+			<organization-picker ng-if="!vm.Wfm_GroupPages_45057"
 				sites-and-teams="vm.sitesAndTeams"
 				on-open="vm.agentSearchOptions.focusingSearch = false"
 				on-close="vm.changeSelectedTeams()"

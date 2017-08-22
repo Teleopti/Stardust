@@ -38,14 +38,10 @@
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 			]
 		};
-		vm.businessHierarchyToggleEnabled = toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309;
 		vm.hasFavoriteSearchPermission = false;
 		vm.onFavoriteSearchInitDefer = $q.defer();
 
 		var loggedonUsersTeamId = $q.defer();
-		if (!toggleService.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309) {
-			loggedonUsersTeamId.resolve(null);
-		}
 
 		vm.orgPickerSelectedText = function () {
 			var text = '';

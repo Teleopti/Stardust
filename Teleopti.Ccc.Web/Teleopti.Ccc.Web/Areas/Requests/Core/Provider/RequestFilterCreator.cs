@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 		{
 			var dateTimePeriod = new DateOnlyPeriod(input.StartDate, input.EndDate).ToDateTimePeriod(_userTimeZone.TimeZone());
 			var queryDateTimePeriod = dateTimePeriod.ChangeEndTime(TimeSpan.FromSeconds(-1));
-			var businessHierachyToggle = _toggleManager.IsEnabled(Toggles.Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309);
 			var searchAgentBasedOnCorrectPeriodToggle = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552);
 			var groupPageToggle = _toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057);
 			var filter = new RequestFilter
@@ -54,71 +53,38 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				SortingOrders = input.SortingOrders
 			};
 
-			if (businessHierachyToggle || groupPageToggle)
+			List<Guid> targetIds;
+			if (groupPageToggle)
 			{
-				List<Guid> targetIds;
-				if (groupPageToggle)
-				{
-					targetIds = _peopleSearchProvider.FindPersonIdsInPeriodWithGroup(
-						new DateOnlyPeriod(input.StartDate, input.EndDate),
-						input.SelectedGroupIds, input.AgentSearchTerm);
-				}
-				else if (searchAgentBasedOnCorrectPeriodToggle)
-				{
-					targetIds = _peopleSearchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(input.StartDate, input.EndDate),
-						input.SelectedGroupIds, input.AgentSearchTerm);
-				}
-				else
-				{
-					targetIds = _peopleSearchProvider.FindPersonIds(input.StartDate, input.SelectedGroupIds, input.AgentSearchTerm);
-				}
-
-				if (targetIds.Count == 0)
-					filter.Persons = new List<IPerson>();
-				else
-				{
-					var matchedPersons = _groupingReadOnlyRepository.DetailsForPeople(targetIds);
-					filter.Persons = matchedPersons.Where(p => _permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.WebRequests, input.StartDate, p)).Select(
-						p =>
-						{
-							var person = new Person();
-							person.SetId(p.PersonId);
-							return person;
-						}).ToList();
-				}
+				targetIds = _peopleSearchProvider.FindPersonIdsInPeriodWithGroup(
+					new DateOnlyPeriod(input.StartDate, input.EndDate),
+					input.SelectedGroupIds, input.AgentSearchTerm);
 			}
-			else if (input.AgentSearchTerm.Any())
+			else if (searchAgentBasedOnCorrectPeriodToggle)
 			{
-				adjustRoleFieldValue(input.AgentSearchTerm);
-				filter.Persons = _peopleSearchProvider.SearchPermittedPeople(input.AgentSearchTerm,
-					input.StartDate, DefinedRaptorApplicationFunctionPaths.WebRequests);
+				targetIds = _peopleSearchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(input.StartDate, input.EndDate),
+					input.SelectedGroupIds, input.AgentSearchTerm);
+			}
+			else
+			{
+				targetIds = _peopleSearchProvider.FindPersonIds(input.StartDate, input.SelectedGroupIds, input.AgentSearchTerm);
+			}
+
+			if (targetIds.Count == 0)
+				filter.Persons = new List<IPerson>();
+			else
+			{
+				var matchedPersons = _groupingReadOnlyRepository.DetailsForPeople(targetIds);
+				filter.Persons = matchedPersons.Where(p => _permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.WebRequests, input.StartDate, p)).Select(
+					p =>
+					{
+						var person = new Person();
+						person.SetId(p.PersonId);
+						return person;
+					}).ToList();
 			}
 
 			return filter;
 		}
-
-		private void adjustRoleFieldValue(IDictionary<PersonFinderField, string> agentSearchTerm)
-		{
-			if (!agentSearchTerm.ContainsKey(PersonFinderField.Role))
-				return;
-
-			var roleNameValues = agentSearchTerm[PersonFinderField.Role];
-			if (string.IsNullOrWhiteSpace(roleNameValues))
-				return;
-
-			var separator = ";";
-			var roleNames = roleNameValues.Split(separator[0]);
-			var adjustedRoleNames = new List<string>(roleNames.Length);
-			foreach (var roleName in roleNames)
-			{
-				if (string.IsNullOrWhiteSpace(roleName))
-					continue;
-
-				adjustedRoleNames.Add(_applicationRoleRepository.ExistsRoleWithDescription(roleName) ? $"\"{roleName}\"" : roleName);
-			}
-
-			agentSearchTerm[PersonFinderField.Role] = string.Join(separator, adjustedRoleNames);
-		}
-
 	}
 }

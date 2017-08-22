@@ -17,7 +17,6 @@
 				$provide.service('Toggle', function () {
 					return {
 						Wfm_Requests_People_Search_36294: true,
-						Wfm_Requests_DisplayRequestsOnBusinessHierachy_42309: true,
 						togglesLoaded: {
 							then: function (cb) { cb(); }
 						}

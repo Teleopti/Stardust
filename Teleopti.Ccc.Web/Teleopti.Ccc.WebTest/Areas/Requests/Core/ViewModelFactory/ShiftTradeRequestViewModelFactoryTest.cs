@@ -4,8 +4,10 @@ using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -41,11 +43,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IScheduleStorage ScheduleStorage;
 		public IShiftTradeRequestStatusChecker ShiftTradeRequestStatusChecker;
 		public IUserCulture UserCulture;
+		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			setupStateHolderProxy();
 			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
+			system.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
 		}
 		
 		[Test]
@@ -429,6 +433,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		{
 			var personTo = PersonFactory.CreatePerson("Person", "To");
 			var personFrom = PersonFactory.CreatePerson("Person", "From");
+			var site = new Site("site").WithId(Guid.NewGuid());
+			var team = new Team().WithDescription(new Description("from team")).WithId(Guid.NewGuid());
+			team.Site = site;
 			var personrequest = createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3), personFrom,
 				personTo);
 			((ShiftTradeRequest)personrequest.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts,
@@ -447,13 +454,32 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				{
 					{ PersonFinderField.Organization, "test" }
 				},
-				SelectedGroupIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { team.Id.Value }
 			};
 
+			var groupDetail = new List<ReadOnlyGroupDetail>();
 			for (var i = 0; i < 5001; i++)
 			{
-				PeopleSearchProvider.Add(PersonFactory.CreatePerson());
+				var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 3, 1)).WithId();
+				person.PersonPeriodCollection.FirstOrDefault().Team = team;
+				PeopleSearchProvider.Add(person);
+				groupDetail.Add(new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					PersonId = person.Id.Value,
+					SiteId = site.Id.Value,
+					TeamId = team.Id.Value,
+					GroupName = team.SiteAndTeam
+				});
 			}
+
+			GroupingReadOnlyRepository.Has(new[]
+			{
+				new ReadOnlyGroupPage
+				{
+					PageId = Group.PageMainId
+				}
+			}, groupDetail);
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 			requestListViewModel.Requests.Count().Should().Be(0);
