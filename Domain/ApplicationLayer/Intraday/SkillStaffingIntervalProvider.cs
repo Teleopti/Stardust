@@ -47,10 +47,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 		public IList<SkillStaffingInterval> StaffingIntervalsForSkills(Guid[] skillIdList, DateTimePeriod period, bool useShrinkage, bool useBpoStaffing=true)
 		{
 			var combinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(period, useBpoStaffing).ToList();
-			if (!combinationResources.Any())
-			{
-				return new List<SkillStaffingInterval>();
-			}
 
 			var allSkillStaffingIntervals = GetSkillStaffIntervalsAllSkills(period, combinationResources, useShrinkage);
 			var relevantSkillStaffingIntervals = allSkillStaffingIntervals.Where(x => x.StartDateTime >= period.StartDateTime && x.EndDateTime <= period.EndDateTime && skillIdList.Contains(x.SkillId)).ToList();
