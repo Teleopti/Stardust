@@ -14504,6 +14504,10 @@ Check your internet connection or contact your administrator.</value>
     <value>A request that is {0} cannot be {1}.</value>
     <comment>Used to display error messages within the Angel project when an action is attempted to be taken on a request where the status of the request prohibits this (an example is trying to deny an approved request).  Parameters: {0} = the current state of the request (e.g Approved), {1} is the state of the request if the desired action succeeded (e.g Denied)</comment>
   </data>
+  <data name="OnlyAbsenceRequestCanBeCancelled" xml:space="preserve">
+    <value>Only absence request can be cancelled</value>
+    <comment>Error message for cancelling a non absence request</comment>
+  </data>
   <data name="PersonAssignmentIsNotValid" xml:space="preserve">
     <value>Person assignment is not valid</value>
     <comment>Person assignment is not valid  (differ with PersonAssignmentIsNotValidDot by a dot...)</comment>

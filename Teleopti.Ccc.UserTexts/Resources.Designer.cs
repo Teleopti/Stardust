@@ -21014,6 +21014,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Only absence request can be cancelled.
+        /// </summary>
+        public static string OnlyAbsenceRequestCanBeCancelled {
+            get {
+                return ResourceManager.GetString("OnlyAbsenceRequestCanBeCancelled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only show result from last batch.
         /// </summary>
         public static string OnlyShowResultFromLastBatch {

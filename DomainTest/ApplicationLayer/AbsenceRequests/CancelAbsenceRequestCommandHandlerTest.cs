@@ -324,6 +324,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(3, accountDay2.Remaining.TotalDays);
 		}
 
+		[Test]
+		public void ShouldGetErrorMessageWhenCancellingTextRequest()
+		{
+			commonSetup();
+
+			var period = new DateTimePeriod(2016, 08, 17, 00, 2016, 08, 19, 23);
+			var textRequest = new TextRequest(period);
+			var personRequest = new PersonRequest(person, textRequest).WithId();
+			RequestRepository.Add(personRequest);
+
+			var cancelRequestCommand = new CancelAbsenceRequestCommand {PersonRequestId = personRequest.Id.GetValueOrDefault()};
+
+			Target.Handle(cancelRequestCommand);
+
+			Assert.AreEqual(null, cancelRequestCommand.AffectedRequestId);
+			Assert.AreEqual(1, cancelRequestCommand.ErrorMessages.Count);
+			Assert.AreEqual(Resources.OnlyAbsenceRequestCanBeCancelled, cancelRequestCommand.ErrorMessages[0]);
+		}
+
 		private AccountDay createAccountDay(DateOnly startDate, TimeSpan balanceIn, TimeSpan accrued, TimeSpan balance)
 		{
 			return new AccountDay(startDate)
