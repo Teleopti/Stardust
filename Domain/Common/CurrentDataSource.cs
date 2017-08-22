@@ -20,17 +20,18 @@ namespace Teleopti.Ccc.Domain.Common
 
 		public IDataSource Current()
 		{
-			if (_state.Get() != null)
-				return _state.Get();
+			var current = _state.Get();
+			if (current != null)
+				return current;
+
 			var identity = _currentIdentity.Current();
-			if (identity != null)
-				return identity.DataSource;
-			return null;
+			return identity?.DataSource;
 		}
 		
 		public string CurrentName()
 		{
-			return Current() == null ? null : Current().DataSourceName;
+			var dataSource = Current();
+			return dataSource?.DataSourceName;
 		}
 	}
 }

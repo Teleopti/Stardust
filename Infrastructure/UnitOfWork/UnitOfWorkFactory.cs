@@ -1,6 +1,5 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				{
 					return null;
 				}
-				var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity);
+				var identity = (ITeleoptiIdentity)TeleoptiPrincipal.CurrentPrincipal.Identity;
 				return identity.DataSource.Application;
 			}
 		}

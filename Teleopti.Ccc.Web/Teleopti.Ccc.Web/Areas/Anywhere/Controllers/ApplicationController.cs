@@ -5,12 +5,10 @@ using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.Extensions;
 using Teleopti.Ccc.Web.Core.Startup;
@@ -26,10 +24,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly INow _now;
 		private readonly ICurrentDataSource _currentDataSource;
+		private readonly IGlobalSettingDataRepository _settingDataRepository;
 
 		public ApplicationController(IAuthorization authorization, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal,
 			IIanaTimeZoneProvider ianaTimeZoneProvider, IUserTimeZone userTimeZone, INow now,
-			ICurrentDataSource currentDataSource)
+			ICurrentDataSource currentDataSource, IGlobalSettingDataRepository settingDataRepository)
 		{
 			_authorization = authorization;
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
@@ -37,6 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			_userTimeZone = userTimeZone;
 			_now = now;
 			_currentDataSource = currentDataSource;
+			_settingDataRepository = settingDataRepository;
 		}
 
 		public ViewResult Index()
@@ -218,18 +218,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 			return new ContentResult { Content = template, ContentType = "text/javascript" };
 		}
 
-		[HttpGet]
-		public JsonResult FullDayAbsenceRequestTimeSetting()
+		[HttpGet, UnitOfWork]
+		public virtual JsonResult FullDayAbsenceRequestTimeSetting()
 		{
-			TimeSpanSetting fullDayAbsenceRequestStartTimeSetting;
-			TimeSpanSetting fullDayAbsenceRequestEndTimeSetting;
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-			{
-				fullDayAbsenceRequestStartTimeSetting = new GlobalSettingDataRepository(uow)
-					.FindValueByKey("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0)));
-				fullDayAbsenceRequestEndTimeSetting = new GlobalSettingDataRepository(uow)
-					.FindValueByKey("FullDayAbsenceRequestEndTime", new TimeSpanSetting(new TimeSpan(23, 59, 0)));
-			}
+			TimeSpanSetting fullDayAbsenceRequestStartTimeSetting =
+				_settingDataRepository.FindValueByKey("FullDayAbsenceRequestStartTime", new TimeSpanSetting(new TimeSpan(0, 0, 0)));
+			TimeSpanSetting fullDayAbsenceRequestEndTimeSetting =
+				_settingDataRepository.FindValueByKey("FullDayAbsenceRequestEndTime", new TimeSpanSetting(new TimeSpan(23, 59, 0)));
 			return Json(new
 			{
 				Start = fullDayAbsenceRequestStartTimeSetting,

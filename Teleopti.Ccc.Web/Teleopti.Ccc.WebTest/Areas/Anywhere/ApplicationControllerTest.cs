@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
 using Teleopti.Ccc.Web.Core;
@@ -21,19 +22,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 	public class ApplicationControllerTest
 	{
 		private ApplicationController target;
-		private IAuthorization authorization;
-		private ICurrentTeleoptiPrincipal currentTeleoptiPrincipal;
+		private FakePermissions authorization;
+		private FakeCurrentTeleoptiPrincipal currentTeleoptiPrincipal;
 		private IIanaTimeZoneProvider ianaTimeZoneProvider;
 		private ICurrentDataSource currentDataSource;
 
 		[SetUp]
 		public void Setup()
 		{
-			authorization = MockRepository.GenerateMock<IAuthorization>();
-			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			ianaTimeZoneProvider = MockRepository.GenerateMock<IIanaTimeZoneProvider>();
+			authorization = new FakePermissions();
+			currentTeleoptiPrincipal = new FakeCurrentTeleoptiPrincipal();
+			ianaTimeZoneProvider = new IanaTimeZoneProvider();
 			currentDataSource = new FakeCurrentDatasource("ds1");
-			target = new ApplicationController(authorization, currentTeleoptiPrincipal, ianaTimeZoneProvider, new UtcTimeZone(), new Now(), currentDataSource);
+			target = new ApplicationController(authorization, currentTeleoptiPrincipal, ianaTimeZoneProvider, new UtcTimeZone(), new Now(), currentDataSource, new FakeGlobalSettingDataRepository());
 		}
 
 		[TearDown]
@@ -56,9 +57,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			var identity = MockRepository.GenerateMock<ITeleoptiIdentity>();
 			var regional = MockRepository.GenerateMock<IRegional>();
 
-			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MyTimeWeb)).Return(true);
-			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)).Return(false);
-			currentTeleoptiPrincipal.Stub(x => x.Current()).Return(principal);
+			authorization.HasPermission(DefinedRaptorApplicationFunctionPaths.MyTimeWeb);
+
+			currentTeleoptiPrincipal.Fake(principal);
 			principal.Stub(x => x.Identity).Return(identity);
 			identity.Stub(x => x.Name).Return("fake");
 			principal.Stub(x => x.Regional).Return(regional);
@@ -66,7 +67,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 			((IUnsafePerson)principal).Stub(x => x.Person).Return(person);
 
 			regional.Stub(x => x.TimeZone).Return(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
-			ianaTimeZoneProvider.Stub(x => x.WindowsToIana("W. Europe Standard Time")).Return("Europe/Berlin");
 
 			var result = target.NavigationContent();
 			dynamic content = result.Data;
@@ -81,16 +81,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere
 		[Test]
 		public void ShouldReturnPermissionsIHave()
 		{
-			var principal = MockRepository.GenerateMock<ITeleoptiPrincipal>();
-
-			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence)).Return(true);
-			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence)).Return(true);
-			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.RemoveAbsence)).Return(true);
-			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.AddActivity)).Return(true);
-			authorization.Stub(x => x.IsPermitted(DefinedRaptorApplicationFunctionPaths.MoveActivity)).Return(true);
-
-			currentTeleoptiPrincipal.Stub(x => x.Current()).Return(principal);
-
+			authorization.HasPermission(DefinedRaptorApplicationFunctionPaths.AddFullDayAbsence);
+			authorization.HasPermission(DefinedRaptorApplicationFunctionPaths.AddIntradayAbsence);
+			authorization.HasPermission(DefinedRaptorApplicationFunctionPaths.RemoveAbsence);
+			authorization.HasPermission(DefinedRaptorApplicationFunctionPaths.AddActivity);
+			authorization.HasPermission(DefinedRaptorApplicationFunctionPaths.MoveActivity);
+			
 			var result = target.Permissions();
 			dynamic content = result.Data;
 
