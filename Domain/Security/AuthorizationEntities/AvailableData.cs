@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
         private readonly ICollection<ISite> _availableSites;
         private readonly ICollection<ITeam> _availableTeams;
         private AvailableDataRangeOption _availableDataRange;
-        private bool? _permissionToPersonNotPartOfOrganization;
         private bool _isDeleted;
 
 	    /// <summary>               
@@ -198,25 +197,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationEntities
             get { return _availableDataRange; }
             set { _availableDataRange = value; }
         }
-
-        /// <summary>
-        /// Gets a value indicating whether the user has permission to persons who are not part of the organization.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if has permission to person who not part of organization; otherwise, <c>false</c>.
-        /// </value>
-        public virtual bool? PermissionToPersonNotPartOfOrganization
-        {
-            get
-            {
-                return _permissionToPersonNotPartOfOrganization;
-            }
-            set
-            {
-                _permissionToPersonNotPartOfOrganization = value;
-            }
-        }
-
+		
         public virtual bool IsDeleted => _isDeleted;
 
 	    public virtual void SetDeleted()

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
@@ -8,15 +7,15 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 {
 	public class AuthorizeExternalAvailableData : IAuthorizeAvailableData
     {
-        private readonly IEnumerable<Guid> _availableTeams;
-		private readonly IEnumerable<Guid> _availableSites;
-		private readonly IEnumerable<Guid> _availableBusinessUnits;
+        private readonly Guid[] _availableTeams;
+		private readonly Guid[] _availableSites;
+		private readonly Guid[] _availableBusinessUnits;
 
         private AuthorizeExternalAvailableData(IAvailableData availableData)
         {
-            _availableTeams = availableData.AvailableTeams.Select(t => t.Id.GetValueOrDefault()).ToList();
-            _availableSites = availableData.AvailableSites.Select(s => s.Id.GetValueOrDefault()).ToList();
-            _availableBusinessUnits = availableData.AvailableBusinessUnits.Select(b => b.Id.GetValueOrDefault()).ToList();
+            _availableTeams = availableData.AvailableTeams.Select(t => t.Id.GetValueOrDefault()).ToArray();
+            _availableSites = availableData.AvailableSites.Select(s => s.Id.GetValueOrDefault()).ToArray();
+            _availableBusinessUnits = availableData.AvailableBusinessUnits.Select(b => b.Id.GetValueOrDefault()).ToArray();
         }
 
 	    public static IAuthorizeAvailableData Create(IAvailableData availableData)
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
         public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ITeam team)
         {
-            var result = CheckTeam(team);
+            var result = checkTeam(team);
             if (result.HasValue)
             {
                 return result.Value;
@@ -52,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
         public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, ISite site)
         {
-            var result = CheckSite(site);
+            var result = checkSite(site);
             if (result.HasValue)
             {
                 return result.Value;
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 
         public bool Check(IOrganisationMembership queryingPerson, DateOnly dateOnly, IBusinessUnit businessUnit)
         {
-            var result = CheckBusinessUnit(businessUnit);
+            var result = checkBusinessUnit(businessUnit);
 
             return result.GetValueOrDefault(false);
         }
@@ -89,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
 				   _availableBusinessUnits.Contains(authorization.BusinessUnitId);
 		}
 
-		private bool? CheckTeam(ITeam team)
+		private bool? checkTeam(ITeam team)
         {
             if (team == null)
             {
@@ -103,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return null;
         }
 
-        private bool? CheckSite(ISite site)
+        private bool? checkSite(ISite site)
         {
             if (site == null)
             {
@@ -117,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return null;
         }
 
-        private bool? CheckBusinessUnit(IBusinessUnit businessUnit)
+        private bool? checkBusinessUnit(IBusinessUnit businessUnit)
         {
             if (businessUnit == null)
             {

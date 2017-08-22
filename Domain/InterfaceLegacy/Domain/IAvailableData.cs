@@ -37,15 +37,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         /// </summary>
         /// <value>The available data range.</value>
         AvailableDataRangeOption AvailableDataRange { get; set; }
-
-        /// <summary>
-        /// Gets a value indicating whether the user has permission to persons who are not part of the organization.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if has permission to person who not part of organization; otherwise, <c>false</c>.
-        /// </value>
-        bool? PermissionToPersonNotPartOfOrganization { get; set; }
-
+		
         /// <summary>
         /// Adds an available business unit.
         /// </summary>
