@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			SkillDayRepository.Add(skillDay);
 			
 			var period = new DateOnlyPeriod(new DateOnly(2017,8,15), new DateOnly(2017, 8, 16));
-			var forecastedData =  Target.ForecastData(skill, period, new CultureInfo("en-US", false));
+			var forecastedData =  Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			Assert.False(forecastedData.Equals(""));
 		}
 
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			SkillDayRepository.Add(skillDay);
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
-			var forecastedData = Target.ForecastData(skill, period, new CultureInfo("en-US", false));
+			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split( new[]{"\r\n"},StringSplitOptions.None);
 			rows.Length.Should().Be.EqualTo(2);
 			rows.First().Split(',').Length.Should().Be.EqualTo(7);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			});
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
-			var forecastedData = Target.ForecastData(skill, period, new CultureInfo("en-US", false));
+			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,7.7");
 			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,9.7");
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			SkillRepository.Add(skill);
 			SkillDayRepository.Add(skillDay);
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
-			var forecastedData = Target.ForecastData(skill, period, new CultureInfo("en-US", false));
+			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,15.7");
 			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,15.7");
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			});
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
-			var forecastedData = Target.ForecastData(skill, period, new CultureInfo("en-US", false));
+			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,7.7");
 			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,15.7");
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			});
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
-			var forecastedData = Target.ForecastData(skill, period, new CultureInfo("en-US", false));
+			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,0");
 			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,0");
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			});
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
-			var forecastedData = Target.ForecastData(skill, period, new CultureInfo("en-US", false));
+			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.First().Should().Be.EqualTo("Direct sales,20170815 13:00,20170815 13:15,0,0,0,11.7");
 			rows.Second().Should().Be.EqualTo("Direct sales,20170815 13:15,20170815 13:30,0,0,0,5.7");
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			});
 
 			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 15), new DateOnly(2017, 8, 16));
-			var forecastedData = Target.ForecastData(skill, period, new CultureInfo("en-US", false));
+			var forecastedData = Target.ExportDemand(skill, period, new CultureInfo("en-US", false));
 			var rows = forecastedData.Split(new[] { "\r\n" }, StringSplitOptions.None);
 			rows.First().Should().Be.EqualTo("skill,20170815 08:00,20170815 08:15,0,0,0,11.7");
 			rows.Second().Should().Be.EqualTo("skill,20170815 08:15,20170815 08:30,0,0,0,12.7");

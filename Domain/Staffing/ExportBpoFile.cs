@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			_userTimeZone = userTimeZone;
 		}
 
-		public string ForecastData(ISkill skill, DateOnlyPeriod period, IFormatProvider formatProvider, string seperator=",", string dateTimeFormat = "yyyyMMdd HH:mm")
+		public string ExportDemand(ISkill skill, DateOnlyPeriod period, IFormatProvider formatProvider, string seperator=",", string dateTimeFormat = "yyyyMMdd HH:mm")
 		{
 			var skillDays = _skillDayRepository.FindRange(period,skill, _currentScenario.Current());
 			var loadSkillSchedule = new Dictionary<ISkill, IEnumerable<ISkillDay>> { { skill, skillDays.ToList() } };
