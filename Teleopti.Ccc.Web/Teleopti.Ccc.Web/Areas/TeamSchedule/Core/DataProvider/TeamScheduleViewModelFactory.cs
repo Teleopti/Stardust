@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		public GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input)
 		{
-			if (!input.GroupIds.Any() && !input.DynamicOptionalValues.Any())
+			if (!(input.GroupIds != null && input.GroupIds.Any() || input.DynamicOptionalValues != null && input.DynamicOptionalValues.Any()))
 				return new GroupScheduleViewModel
 				{
 					Schedules = new List<GroupScheduleShiftViewModel>(),
