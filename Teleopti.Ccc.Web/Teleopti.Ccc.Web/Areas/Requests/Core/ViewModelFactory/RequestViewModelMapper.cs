@@ -14,23 +14,24 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 {
-	public class RequestViewModelMapper 
-		: IRequestViewModelMapper<AbsenceAndTextRequestViewModel>, IRequestViewModelMapper<ShiftTradeRequestViewModel>,
-			IRequestViewModelMapper<OvertimeRequestViewModel>
+	public class RequestViewModelMapper : IRequestViewModelMapper<AbsenceAndTextRequestViewModel>,
+		IRequestViewModelMapper<ShiftTradeRequestViewModel>,
+		IRequestViewModelMapper<OvertimeRequestViewModel>
 	{
-
 		private readonly IPersonNameProvider _personNameProvider;
 		private readonly IIanaTimeZoneProvider _ianaTimeZoneProvider;
 		private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
 
-		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider, IPersonAbsenceAccountProvider personAbsenceAccountProvider)
+		public RequestViewModelMapper(IPersonNameProvider personNameProvider, IIanaTimeZoneProvider ianaTimeZoneProvider,
+			IPersonAbsenceAccountProvider personAbsenceAccountProvider)
 		{
 			_personNameProvider = personNameProvider;
 			_ianaTimeZoneProvider = ianaTimeZoneProvider;
 			_personAbsenceAccountProvider = personAbsenceAccountProvider;
 		}
 
-		public AbsenceAndTextRequestViewModel Map(AbsenceAndTextRequestViewModel requestViewModel, IPersonRequest request, NameFormatSettings nameFormatSettings)
+		public AbsenceAndTextRequestViewModel Map(AbsenceAndTextRequestViewModel requestViewModel, IPersonRequest request,
+			NameFormatSettings nameFormatSettings)
 		{
 			mapRequestViewModel(requestViewModel, request, nameFormatSettings);
 
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		}
 
 		public ShiftTradeRequestViewModel Map(ShiftTradeRequestViewModel requestViewModel, IPersonRequest request,
-	NameFormatSettings nameFormatSettings)
+			NameFormatSettings nameFormatSettings)
 		{
 			mapRequestViewModel(requestViewModel, request, nameFormatSettings);
 
@@ -58,13 +59,13 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 		}
 
 		private void mapRequestViewModel(RequestViewModel requestViewModel, IPersonRequest request,
-	NameFormatSettings nameFormatSettings)
+			NameFormatSettings nameFormatSettings)
 		{
 			var team = request.Person.MyTeam(new DateOnly(request.Request.Period.StartDateTime));
 			requestViewModel.Id = request.Id.GetValueOrDefault();
 			requestViewModel.Subject = request.GetSubject(new NoFormatting());
 			requestViewModel.Message = request.GetMessage(new NoFormatting());
-			requestViewModel.DenyReason = request.DenyReason;
+			requestViewModel.DenyReason = Resources.ResourceManager.GetString(request.DenyReason) ?? request.DenyReason;
 			requestViewModel.TimeZone =
 				_ianaTimeZoneProvider.WindowsToIana(request.Person.PermissionInformation.DefaultTimeZone().Id);
 			requestViewModel.PeriodStartTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.StartDateTime,
@@ -108,7 +109,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			if (personAbsenceAccount != null)
 			{
 				var accountForPersonAbsence = personAbsenceAccount.Find (absenceRequest.Absence);
-				var affectedAccounts = accountForPersonAbsence?.Find (absenceRequest.Period.ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone));
+				var affectedAccounts =
+					accountForPersonAbsence?.Find(absenceRequest.Period.ToDateOnlyPeriod(TimeZoneHelper.CurrentSessionTimeZone));
 
 				if (affectedAccounts != null)
 				{
@@ -123,25 +125,25 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			{
 				PersonAccountSummaryDetails =  personAccountSummaryDetails
 			};
-
 		}
 
-		private static PersonAccountSummaryDetailViewModel getPersonalAccountPeriodViewModelsForRequest (IAbsenceRequest absenceRequest, IAccount account)
+		private static PersonAccountSummaryDetailViewModel getPersonalAccountPeriodViewModelsForRequest(
+			IAbsenceRequest absenceRequest, IAccount account)
 		{
-			return  new PersonAccountSummaryDetailViewModel()
+			return new PersonAccountSummaryDetailViewModel()
 			{
-				StartDate = TimeZoneHelper.ConvertFromUtc(account.StartDate.Date, absenceRequest.Person.PermissionInformation.DefaultTimeZone()),
-				EndDate = TimeZoneHelper.ConvertFromUtc(account.Period().EndDate.Date, absenceRequest.Person.PermissionInformation.DefaultTimeZone()),
+				StartDate = TimeZoneHelper.ConvertFromUtc(account.StartDate.Date,
+					absenceRequest.Person.PermissionInformation.DefaultTimeZone()),
+				EndDate = TimeZoneHelper.ConvertFromUtc(account.Period().EndDate.Date,
+					absenceRequest.Person.PermissionInformation.DefaultTimeZone()),
 				RemainingDescription = convertTimeSpanToString(account.Remaining, absenceRequest.Absence.Tracker),
 				TrackingTypeDescription = getDescriptionOfTrackerTimeSpan(absenceRequest.Absence.Tracker.GetType())
 			};
 		}
 
-
 		private static string convertTimeSpanToString(TimeSpan ts, ITracker tracker)
 		{
 			var result = string.Empty;
-
 			
 			var classTypeOfTracker = tracker.GetType();
 			if (classTypeOfTracker == Tracker.CreateDayTracker().GetType())
@@ -174,7 +176,6 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 
 		private static RequestStatus getRequestStatus(IPersonRequest request)
 		{
-
 			//ROBTODO: review status - should we include waitlisted and cancelled in this ?
 			return request.IsApproved
 				? RequestStatus.Approved
@@ -184,13 +185,15 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 						? RequestStatus.Denied
 						: RequestStatus.New;
 		}
-		
+
 		private static bool isFullDay(IPersonRequest request)
 		{
 			// ref: Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping.TextRequestFormMappingProfile
-			var startTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.StartDateTime, request.Person.PermissionInformation.DefaultTimeZone());
+			var startTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.StartDateTime,
+				request.Person.PermissionInformation.DefaultTimeZone());
 			if (startTime.Hour != 0 || startTime.Minute != 0 || startTime.Second != 0) return false;
-			var endTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.EndDateTime, request.Person.PermissionInformation.DefaultTimeZone());
+			var endTime = TimeZoneHelper.ConvertFromUtc(request.Request.Period.EndDateTime,
+				request.Person.PermissionInformation.DefaultTimeZone());
 			if (endTime.Hour != 23 || endTime.Minute != 59 || endTime.Second != 0) return false;
 			return true;
 		}
