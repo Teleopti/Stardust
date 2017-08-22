@@ -20717,7 +20717,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to There is no critical underStaffing skill for overtime request.
+        ///   Looks up a localized string similar to There are no skills critically understaffed for the entire request period..
         /// </summary>
         public static string NoUnderStaffingSkill {
             get {
@@ -21014,7 +21014,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Only absence request can be cancelled.
+        ///   Looks up a localized string similar to Only absence requests can be cancelled.
         /// </summary>
         public static string OnlyAbsenceRequestCanBeCancelled {
             get {
