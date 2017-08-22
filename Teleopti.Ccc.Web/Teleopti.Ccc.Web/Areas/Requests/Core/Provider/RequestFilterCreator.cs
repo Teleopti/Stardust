@@ -53,6 +53,11 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				SortingOrders = input.SortingOrders
 			};
 
+			if (input.AgentSearchTerm.Any())
+			{
+				adjustRoleFieldValue(input.AgentSearchTerm);
+			}
+
 			List<Guid> targetIds;
 			if (groupPageToggle)
 			{
@@ -86,5 +91,29 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 			return filter;
 		}
+
+		private void adjustRoleFieldValue(IDictionary<PersonFinderField, string> agentSearchTerm)
+		{
+			if (!agentSearchTerm.ContainsKey(PersonFinderField.Role))
+				return;
+
+			var roleNameValues = agentSearchTerm[PersonFinderField.Role];
+			if (string.IsNullOrWhiteSpace(roleNameValues))
+				return;
+
+			var separator = ";";
+			var roleNames = roleNameValues.Split(separator[0]);
+			var adjustedRoleNames = new List<string>(roleNames.Length);
+			foreach (var roleName in roleNames)
+			{
+				if (string.IsNullOrWhiteSpace(roleName))
+					continue;
+
+				adjustedRoleNames.Add(_applicationRoleRepository.ExistsRoleWithDescription(roleName) ? $"\"{roleName}\"" : roleName);
+			}
+
+			agentSearchTerm[PersonFinderField.Role] = string.Join(separator, adjustedRoleNames);
+		}
+
 	}
 }

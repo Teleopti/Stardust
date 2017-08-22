@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
 			};
-			input.AgentSearchTerm.Add(PersonFinderField.Role, $"\"{roleDescription}\"");
+			input.AgentSearchTerm.Add(PersonFinderField.Role, roleDescription);
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
 			result.Requests.Count().Should().Be.EqualTo(1);
