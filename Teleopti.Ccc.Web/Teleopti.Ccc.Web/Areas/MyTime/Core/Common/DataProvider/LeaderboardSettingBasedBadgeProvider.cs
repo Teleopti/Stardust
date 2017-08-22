@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		private IEnumerable<AgentBadgeOverview> getPermittedAgentOverviews(IEnumerable<agentWithBadge> permittedAgentBadgeList)
 		{
-			var permittedPersons = permittedPersonList.ToList();
+			var permittedPersons = permittedPersonList.ToLookup(p => p.PersonId);
 			var dic = new Dictionary<Guid, AgentBadgeOverview>();
 			var nameSetting = _nameFormatSettings.Get();
 
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				AgentBadgeOverview overview;
 				if (!dic.TryGetValue(personId, out overview))
 				{
-					var detail = permittedPersons.First(p => p.PersonId == personId);
+					var detail = permittedPersons[personId].First();
 					overview = new AgentBadgeOverview
 					{
 						AgentName = _personNameProvider.BuildNameFromSetting(detail.FirstName, detail.LastName, nameSetting)

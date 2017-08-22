@@ -59,8 +59,9 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 				CheckSum = 234
 			});
 
-			Persister.Get().Single(x => x.PersonId == person1).CheckSum.Should().Be(123);
-			Persister.Get().Single(x => x.PersonId == person2).CheckSum.Should().Be(234);
+			var checkSums = Persister.Get().ToLookup(p => p.PersonId);
+			checkSums[person1].Single().CheckSum.Should().Be(123);
+			checkSums[person2].Single().CheckSum.Should().Be(234);
 		}
 
 		[Test]

@@ -14,34 +14,31 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public IEnumerable<GroupScheduleShiftViewModel> Map(GroupScheduleData data)
 		{
-			var canSeePersons = data.CanSeePersons.ToArray();
+			var canSeePersons = data.CanSeePersons.ToLookup(p => p.Id.GetValueOrDefault());
+			var schedulesForPersons = data.Schedules.ToLookup(s => s.PersonId);
 
-			var schedulesWithPersons = from s in data.Schedules
-						   let person = (from p in canSeePersons
-								 where p.Id.Value == s.PersonId
-								 select p).SingleOrDefault()
+			var schedulesWithPersons = from s in schedulesForPersons
+						   let person = canSeePersons[s.Key].SingleOrDefault()
 						   where person != null
 						   select new
 						   {
 							   person,
-							   schedule = s
+							   schedule = s.FirstOrDefault()
 						   };
 
 			var personsWithoutSchedules = from p in canSeePersons
-						      let schedules = from s in data.Schedules
-								      where s.PersonId == p.Id.Value
-								      select s
+						      let schedules = schedulesForPersons[p.Key]
 						      where !schedules.Any()
 						      select new
 						      {
-							      person = p,
+							      person = p.FirstOrDefault(),
 							      schedule = (PersonScheduleDayReadModel)null
 						      };
 
 			var personsAndSchedules = schedulesWithPersons.Concat(personsWithoutSchedules).ToArray();
 
 			var canSeeConfidentialAbsencesFor = data.CanSeeConfidentialAbsencesFor ?? new IPerson[] { };
-			var published = new PublishedScheduleSpecification(canSeePersons,
+			var published = new PublishedScheduleSpecification(data.CanSeePersons,
 			                                                   new DateOnly(TimeZoneHelper.ConvertFromUtc(data.Date, data.UserTimeZone)));
 
 			return (from item in personsAndSchedules
@@ -50,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 							      item.schedule != null && published.IsSatisfiedBy(item.schedule)
 						      )
 				let schedule = displaySchedule ? item.schedule : null
-				let model = JsonConvert.DeserializeObject<Model>((schedule == null ? null : schedule.Model) ?? "{}")
+				let model = JsonConvert.DeserializeObject<Model>(schedule?.Model ?? "{}")
 				let shift = model.Shift ?? new Shift()
 				let canSeeConfidentialAbsence = canSeeConfidentialAbsencesFor.Any(x => schedule != null && x.Id == schedule.PersonId)
 				let layers = mapLayers(data.UserTimeZone, shift, canSeeConfidentialAbsence)

@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Web.Areas.People.Controllers;
 using Teleopti.Ccc.Web.Areas.People.Core.Models;
 using Teleopti.Interfaces.Domain;
 
@@ -37,11 +36,12 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		{
 			var personIdList = model.People.Select(p => p.PersonId);
 			var persons = _personRepository.FindPeople(personIdList);
+			var peopleLookup = model.People.ToLookup(p => p.PersonId);
 			var startDate = new DateOnly(model.Date);
 			var updatedCount = 0;
 			foreach (var person in persons)
 			{
-				var inputPerson = model.People.Single(x => x.PersonId == person.Id);
+				var inputPerson = peopleLookup[person.Id.GetValueOrDefault()].Single();
 				var inputSkills = inputPerson.SkillIdList ?? new List<Guid>();
 
 				var currentPeriod = person.Period(startDate);
@@ -91,12 +91,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		public int UpdatePersonShiftBag(PeopleShiftBagCommandInput model)
 		{
 			var personIdList = model.People.Select(p => p.PersonId);
+			var peopleLookup = model.People.ToLookup(p => p.PersonId);
 			var persons = _personRepository.FindPeople(personIdList);
 			var startDate = new DateOnly(model.Date);
 			var updatedCount = 0;
 			foreach (var person in persons)
 			{
-				var inputPerson = model.People.Single(x => x.PersonId == person.Id);
+				var inputPerson = peopleLookup[person.Id.GetValueOrDefault()].Single();
 
 				var inputShiftBag = _shiftBagRepository.Get(inputPerson.ShiftBagId.GetValueOrDefault());
 				var currentPeriod = person.Period(startDate);

@@ -16,7 +16,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Commands;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin.Models;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Interfaces.Domain;
 
@@ -46,14 +45,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 				UpdateButtonOkStatus();
 		  }
 
-		  public IList<Guid> SelectedPersonGuids
-		  {
-				get {return (from ListViewItem item in listView1.SelectedItems where item.Tag != null select (Guid) item.Tag).ToList();}
-		  }
+		  public IList<Guid> SelectedPersonGuids => (from ListViewItem item in listView1.SelectedItems where item.Tag != null select (Guid) item.Tag).ToList();
 
-		  public void AddRows(IList<IPersonFinderDisplayRow> rows)
+		 public void AddRows(IList<IPersonFinderDisplayRow> rows)
 		  {
-				if(rows == null) throw new ArgumentNullException("rows");
+				if(rows == null) throw new ArgumentNullException(nameof(rows));
 
 				listView1.Items.Clear();
 				
@@ -63,9 +59,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 					 string dateString = string.Empty;
 					 if (row.TerminalDate != DateTime.MinValue)
 						  dateString = row.TerminalDate.ToShortDateString();
-					 var item = new ListViewItem(new[] { row.FirstName, row.LastName, row.EmploymentNumber, row.Note, dateString });
-					 item.Tag = row.PersonId;
-					 if (row.Grayed)
+					var item =
+						new ListViewItem(new[]
+							{row.FirstName, row.LastName, row.EmploymentNumber, row.Note, dateString}) {Tag = row.PersonId};
+					if (row.Grayed)
 					 {
 						  item.ForeColor = Color.Gray;
 						  item.Tag = null;
@@ -120,15 +117,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 				buttonOk.Enabled = SelectedPersonGuids.Count > 0;   
 		  }
 
-		  public IPeoplePersonFinderSearchCriteria PersonFinderSearchCriteria
-		  {
-				get 
-				{
-					 return new PeoplePersonFinderSearchCriteria((PersonFinderField)comboBox1.SelectedValue, textBox1.Text, (int)comboBox2.SelectedValue, new DateOnly(dateTimePickerAdv1.Value), _presenter.SortColumn, (int)_presenter.SortOrder);
-				}
-		  }
+		  public IPeoplePersonFinderSearchCriteria PersonFinderSearchCriteria => new PeoplePersonFinderSearchCriteria((PersonFinderField)comboBox1.SelectedValue, textBox1.Text, (int)comboBox2.SelectedValue, new DateOnly(dateTimePickerAdv1.Value), _presenter.SortColumn, (int)_presenter.SortOrder);
 
-		  public IPeoplePersonFinderSearchCriteria PersonFinderSearchCriteriaNextPrevious
+		 public IPeoplePersonFinderSearchCriteria PersonFinderSearchCriteriaNextPrevious
 		  {
 				get
 				{
@@ -261,9 +252,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Views
 
 		  public void OnDoubleClickSelectedPeople(EventArgs e)
 		  {
-				var handler = DoubleClickSelectedPeople;
-				if (handler != null) handler(this, e);
-		  }
+			DoubleClickSelectedPeople?.Invoke(this, e);
+		}
 
 		private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
 		{

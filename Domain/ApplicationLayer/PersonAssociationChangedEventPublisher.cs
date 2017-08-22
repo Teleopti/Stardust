@@ -89,13 +89,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		private void publishForAllPersons()
 		{
 			var now = _now.UtcDateTime();
-			var checkSums = _checkSums.Get();
+			var checkSums = _checkSums.Get().ToLookup(c => c.PersonId);
 
 			_persons
 				.LoadAll()
 				.ForEach(person =>
 				{
-					publishForPerson(person.Id.Value, person, now, checkSums.SingleOrDefault(c => c.PersonId == person.Id.Value)?.CheckSum ?? 0);
+					var personId = person.Id.Value;
+					publishForPerson(personId, person, now, checkSums[personId].SingleOrDefault()?.CheckSum ?? 0);
 				});
 		}
 
@@ -114,11 +115,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var timeZone = person?.PermissionInformation.DefaultTimeZone();
 			var agentDate = person != null ? new DateOnly(TimeZoneInfo.ConvertTimeFromUtc(now, timeZone)) : (DateOnly?) null;
 			var currentPeriod = person?.Period(agentDate.Value);
-			var teamId = currentPeriod?.Team.Id;
-			var siteId = currentPeriod?.Team.Site.Id;
-			var siteName = currentPeriod?.Team.Site.Description.Name;
-			var teamName = currentPeriod?.Team.Description.Name;
-			var businessUnitId = currentPeriod?.Team.Site.BusinessUnit.Id;
+			var team = currentPeriod?.Team;
+			var teamId = team?.Id;
+			var siteId = team?.Site.Id;
+			var siteName = team?.Site.Description.Name;
+			var teamName = team?.Description.Name;
+			var businessUnitId = team?.Site.BusinessUnit.Id;
 
 			publishIfChanged(new PersonAssociationChangedEvent
 			{
