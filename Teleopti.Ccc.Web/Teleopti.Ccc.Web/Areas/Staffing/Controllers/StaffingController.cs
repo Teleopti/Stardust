@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/staffing/exportStaffingDemand")]
-		public virtual IHttpActionResult ImportBpo([FromBody]Guid skillId)
+		public virtual IHttpActionResult ExportBpo([FromBody]Guid skillId)
 		{
 
 			var exportedContent = _exportBpoFile.ExportDemand(_skillRepository.Get(skillId),
