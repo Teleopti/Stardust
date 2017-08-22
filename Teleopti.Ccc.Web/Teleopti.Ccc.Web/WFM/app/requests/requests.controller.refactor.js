@@ -38,7 +38,6 @@
 				'PartTimePercentage', 'Skill', 'BudgetGroup', 'Note'
 			]
 		};
-		vm.hasFavoriteSearchPermission = false;
 		vm.onFavoriteSearchInitDefer = $q.defer();
 
 		var loggedonUsersTeamId = $q.defer();
@@ -75,6 +74,7 @@
 			};
 
 			vm.selectedTabIndex = 0;
+
 			vm.period = vm.absencePeriod;
 			$state.go("requestsRefactor-absenceAndText", params);
 		};
@@ -134,7 +134,7 @@
 
 		vm.changeSelectedTeams = function () {
 			vm.agentSearchOptions.focusingSearch = true;
-			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
+			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
 		};
 
 		vm.applyFavorite = function (currentFavorite) {
@@ -142,7 +142,7 @@
 			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
 
-			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
+			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
 			$scope.$broadcast('reload.requests.with.selection', { selectedGroupIds: currentFavorite.TeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 			vm.agentSearchOptions.focusingSearch = false;
 		};
@@ -157,7 +157,7 @@
 		vm.onSearchTermChangedCallback = function () {
 			vm.agentSearchOptions.focusingSearch = false;
 
-			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
+			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
 			$scope.$broadcast('reload.requests.with.selection',
 				{
 					selectedGroupIds: vm.selectedGroups.groupIds,
@@ -182,8 +182,62 @@
 			return 'hidden';
 		};
 
+		vm.onBeforeCommand = function() {
+			vm.disableInteraction = true;
+			return true;
+		};
+
+		vm.onCommandSuccess = function(commandType, changedRequestsCount, requestsCount, waitlistPeriod) {
+			vm.disableInteraction = false;
+			forceRequestsReloadWithoutSelection();
+			if (commandType === requestsDefinitions.REQUEST_COMMANDS.Approve) {
+				requestsNotificationService.notifyApproveRequestsSuccess(changedRequestsCount, requestsCount);
+			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Deny) {
+				requestsNotificationService.notifyDenyRequestsSuccess(changedRequestsCount, requestsCount);
+			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Cancel) {
+				requestsNotificationService.notifyCancelledRequestsSuccess(changedRequestsCount, requestsCount);
+			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist) {
+				var period = moment(waitlistPeriod.startDate).format("L") + "-" + moment(waitlistPeriod.endDate).format("L");
+				requestsNotificationService.notifySubmitProcessWaitlistedRequestsSuccess(period);
+			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBusinessRules) {
+				requestsNotificationService.notifySubmitApproveBasedOnBusinessRulesSuccess();
+			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Reply) {
+				requestsNotificationService.notifyReplySuccess(changedRequestsCount);
+			}
+		};
+
+		//Todo: submit command failure doesn't give an error info, this parameter will be undefined.
+		vm.onCommandError = function(error) {
+			vm.disableInteraction = false;
+			forceRequestsReloadWithoutSelection();
+			requestsNotificationService.notifyCommandError(error);
+		};
+
+		vm.onProcessWaitlistFinished = function(message) {
+			var period = formatDatePeriod(message);
+			requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
+		};
+
+		vm.onApproveBasedOnBusinessRulesFinished = function(message) {
+			forceRequestsReloadWithoutSelection();
+			requestsNotificationService.notifyApproveBasedOnBusinessRulesFinished();
+		};
+
+		vm.onErrorMessages = function(errorMessages) {
+			vm.disableInteraction = false;
+			forceRequestsReloadWithoutSelection();
+
+			errorMessages.forEach(function (errorMessage) {
+				requestsNotificationService.notifyCommandError(errorMessage);
+			});
+		};
+
+		vm.isShiftTradeViewActive = function() {
+			return $state.current.name.indexOf('requestsRefactor-shiftTrade') > -1;
+		};
+
 		vm.init = function() {
-			initToggles();
+			vm.filterEnabled = true;
 			vm.forceRequestsReloadWithoutSelection = forceRequestsReloadWithoutSelection;
 			vm.dateRangeTemplateType = 'popup';
 			var defaultDateRange = {
@@ -193,14 +247,6 @@
 			vm.absencePeriod = defaultDateRange;
 			vm.shiftTradePeriod = defaultDateRange;
 			vm.period = defaultDateRange;
-
-			vm.onBeforeCommand = onBeforeCommand;
-			vm.onCommandSuccess = onCommandSuccess;
-			vm.onCommandError = onCommandError;
-			vm.onErrorMessages = onErrorMessages;
-			vm.disableInteraction = false;
-			vm.onProcessWaitlistFinished = onProcessWaitlistFinished;
-			vm.onApproveBasedOnBusinessRulesFinished = onApproveBasedOnBusinessRulesFinished;
 
 			if (vm.Wfm_GroupPages_45057)
 				vm.getGroupPagesAsync();
@@ -213,7 +259,7 @@
 					replaceArrayValues(defaultSearch.TeamIds, vm.selectedGroups.groupIds);
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 				}
-				if (isShiftTradeViewActive()) {
+				if (vm.isShiftTradeViewActive()) {
 					vm.activeShiftTradeTab();
 				} else {
 					vm.activeAbsenceAndTextTab();
@@ -232,11 +278,6 @@
 			}))
 			.then(vm.init);
 
-		function initToggles() {
-			vm.isShiftTradeViewActive = isShiftTradeViewActive;
-			vm.filterEnabled = true;
-		}
-
 		function setReleaseNotification() {
 			var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
 				.replace('{0}', $translate.instant('Requests'))
@@ -245,55 +286,8 @@
 			noticeSvc.info(message, null, true);
 		}
 
-		function isShiftTradeViewActive() {
-			return $state.current.name.indexOf('requestsRefactor-shiftTrade') > -1;
-		}
-
 		function forceRequestsReloadWithoutSelection() {
 			$scope.$broadcast('reload.requests.without.selection');
-		}
-
-		function onBeforeCommand() {
-			vm.disableInteraction = true;
-			return true;
-		}
-
-		function onCommandSuccess(commandType, changedRequestsCount, requestsCount, waitlistPeriod) {
-			vm.disableInteraction = false;
-			forceRequestsReloadWithoutSelection();
-			if (commandType === requestsDefinitions.REQUEST_COMMANDS.Approve) {
-				requestsNotificationService.notifyApproveRequestsSuccess(changedRequestsCount, requestsCount);
-			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Deny) {
-				requestsNotificationService.notifyDenyRequestsSuccess(changedRequestsCount, requestsCount);
-			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Cancel) {
-				requestsNotificationService.notifyCancelledRequestsSuccess(changedRequestsCount, requestsCount);
-			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist) {
-				var period = moment(waitlistPeriod.startDate).format("L") + "-" + moment(waitlistPeriod.endDate).format("L");
-				requestsNotificationService.notifySubmitProcessWaitlistedRequestsSuccess(period);
-			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBusinessRules) {
-				requestsNotificationService.notifySubmitApproveBasedOnBusinessRulesSuccess();
-			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Reply) {
-				requestsNotificationService.notifyReplySuccess(changedRequestsCount);
-			}
-		}
-
-		function onProcessWaitlistFinished(message) {
-			var period = formatDatePeriod(message);
-			requestsNotificationService.notifyProcessWaitlistedRequestsFinished(period);
-		}
-
-		function onApproveBasedOnBusinessRulesFinished(message) {
-			forceRequestsReloadWithoutSelection();
-			requestsNotificationService.notifyApproveBasedOnBusinessRulesFinished();
-		}
-
-		function onErrorMessages(errorMessages) {
-			vm.disableInteraction = false;
-			forceRequestsReloadWithoutSelection();
-
-			errorMessages.forEach(function (errorMessage) {
-				requestsNotificationService.notifyCommandError(errorMessage);
-			});
 		}
 
 		function formatDatePeriod(message) {
@@ -303,24 +297,17 @@
 			return startDate + "-" + endDate;
 		}
 
-		//Todo: submit command failure doesn't give an error info, this parameter will be undefined.
-		function onCommandError(error) {
-			vm.disableInteraction = false;
-			forceRequestsReloadWithoutSelection();
-			requestsNotificationService.notifyCommandError(error);
-		}
-
 		function setupWatches() {
 			$scope.$watch(function() {
 				return vm.period;
 			}, function(newValue, oldValue) {
 				$scope.$evalAsync(function() {
-					if (isShiftTradeViewActive()) {
+					if (vm.isShiftTradeViewActive()) {
 						vm.shiftTradePeriod = newValue;
 					} else {
 						vm.absencePeriod = newValue;
 					}
-					requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
+					requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
 					vm.agentSearchOptions.focusingSearch = false;
 
 					if (newValue && JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
