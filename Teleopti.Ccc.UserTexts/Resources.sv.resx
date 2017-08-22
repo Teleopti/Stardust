@@ -3385,11 +3385,11 @@ Ersätt</value>
     <comment>Handling time</comment>
   </data>
   <data name="HoursInc" xml:space="preserve">
-    <value>Timmar inklusive</value>
+    <value>Timmar inkommande</value>
     <comment>Forecasted hours inc</comment>
   </data>
   <data name="HoursIncShrinkage" xml:space="preserve">
-    <value>Timmar inkl shrinkage</value>
+    <value>Timmar inkommande shrinkage</value>
     <comment>Forecasted hours inc shrinkage</comment>
   </data>
   <data name="TotalAEW" xml:space="preserve">
@@ -14948,5 +14948,26 @@ Vill du registrera dig?</value>
   </data>
   <data name="OvertimeRequestDateExceeds14Days" xml:space="preserve">
     <value>Datumet för förfrågan är mer än 14 dagar fram i tiden</value>
+  </data>
+  <data name="NoUnderStaffingSkill" xml:space="preserve">
+    <value>Det finns inga kritiskt underbemannade kompetenser under förfrågningsperioden. </value>
+  </data>
+  <data name="ImportBpoDuplicateRecord" xml:space="preserve">
+    <value>Dubblett hittad. Samma information är angiven på mer än en rad i importfilen, och det är inte tillåtet. </value>
+  </data>
+  <data name="AbandonedRateParenthesisPercentSign" xml:space="preserve">
+    <value>Andel tappade (%)</value>
+  </data>
+  <data name="AverageSpeedOfAnswersParenthesisSeconds" xml:space="preserve">
+    <value>Genomsnittlig svarstid (s)</value>
+  </data>
+  <data name="ESLParenthesisPercentSign" xml:space="preserve">
+    <value>ESL (%)</value>
+  </data>
+  <data name="Interval" xml:space="preserve">
+    <value>Intervall</value>
+  </data>
+  <data name="SkillsParenthesisS" xml:space="preserve">
+    <value>Kompetens(er)</value>
   </data>
 </root>
