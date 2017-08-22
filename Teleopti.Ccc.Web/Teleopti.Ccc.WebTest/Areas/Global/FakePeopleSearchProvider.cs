@@ -238,7 +238,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			_peopleWithConfidentialAbsencePermission.Add(person);
 		}
 
-		public List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria)
+		public List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria, string[] dynamicValues)
 		{
 			IEnumerable<IPerson> people = _permittedPeople;
 

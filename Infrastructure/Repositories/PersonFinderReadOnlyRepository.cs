@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 				var searchString = createSearchString(searchCriteria);
 				var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
-					"exec [ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeriod] @business_unit_id=:business_unit_id, @search_criterias=:search_criterias, @start_date=:start_date, @end_date=:end_date, @group_ids=:group_ids")
+					"exec [ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeriod] @business_unit_id=:business_unit_id, @search_criterias=:search_criterias, @start_date=:start_date, @end_date=:end_date, @group_ids=:group_ids, @dynamic_values=''")
 					.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 					.SetString("search_criterias", searchString)
 					.SetDateOnly("start_date", period.StartDate)
@@ -354,6 +354,36 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				result.AddRange(batchResult);
 			}
 			return result.Distinct().ToList();
+		}
+
+		public List<Guid> FindPersonIdsInDynamicOptionalGroupPages(DateOnlyPeriod period,
+			string[] dynamicValues, IDictionary<PersonFinderField, string> searchCriteria)
+		{
+			var result = new List<Guid>();
+
+			if (dynamicValues.Length == 0)
+			{
+				return result;
+			}
+
+			foreach (var dynamicValueBatch in dynamicValues.Batch(100))
+			{
+				var valuesString = string.Join(",", dynamicValueBatch.Select(x => x.ToString()));
+
+				var searchString = createSearchString(searchCriteria);
+				var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
+						"exec [ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeriod] @business_unit_id=:business_unit_id, @search_criterias=:search_criterias, @start_date=:start_date, @end_date=:end_date, @group_ids=:group_ids, @dynamic_values=:dynamic_values")
+					.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+					.SetString("search_criterias", searchString)
+					.SetDateOnly("start_date", period.StartDate)
+					.SetDateOnly("end_date", period.EndDate)
+					.SetString("group_ids", "")
+					.SetString("dynamic_values", valuesString)
+					.SetReadOnly(true)
+					.List<Guid>();
+				result.AddRange(batchResult);
+			}
+			return result;
 		}
 	}
 	public class PeoplePersonFinderSearchCriteria : IPeoplePersonFinderSearchCriteria

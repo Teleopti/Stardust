@@ -61,10 +61,13 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		}
 
 		public List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds,
-			IDictionary<PersonFinderField, string> searchCriteria)
+			IDictionary<PersonFinderField, string> searchCriteria, string[] dynamicValues)
 		{
-			return _searchRepository.FindPersonIdsInGroupsBasedOnPersonPeriod(period, groupIds, searchCriteria);
-
+			if (groupIds.Any())
+			{
+				return _searchRepository.FindPersonIdsInGroupsBasedOnPersonPeriod(period, groupIds, searchCriteria);
+			}
+			return _searchRepository.FindPersonIdsInDynamicOptionalGroupPages(period, dynamicValues, searchCriteria);
 		}
 
 		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,

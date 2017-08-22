@@ -1,20 +1,18 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
+namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 {
-	public class AllRequestsFormData
+	public class SearchSchedulesFormData
 	{
-		public DateOnly StartDate { get; set; }
-		public DateOnly EndDate { get; set; }
-		public IList<RequestsSortingOrder> SortingOrders { get; set; }
-		public IDictionary<PersonFinderField, string> AgentSearchTerm { get; set; }
-		public IDictionary<RequestFilterField, string> Filters { get; set; }
-		public Paging Paging { get; set; }
+		public string Keyword { get; set; }
+		public DateOnly Date { get; set; }
+		public int PageSize { get; set; }
+		public int CurrentPageIndex { get; set; }
 		public string[] SelectedGroupIds { get; set; }
+
 		public string[] DynamicOptionalValues
 		{
 			get
@@ -45,5 +43,20 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.FormData
 				return Guid.TryParse(id, out value);
 			});
 		}
+		//public T ToModel<T>() where T :  SearchSchedulesInput
+		//{
+		//	var model = Activator.CreateInstance<T>();
+		//	model.key
+		//	var isIds = SelectedGroupIds.All(id =>
+		//	{
+		//		Guid value;
+		//		return Guid.TryParse(id, out value);
+		//	});
+		//	if (isIds)
+		//	{
+
+		//	}
+		//}
 	}
+
 }

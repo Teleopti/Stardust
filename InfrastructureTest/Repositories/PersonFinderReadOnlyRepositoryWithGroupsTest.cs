@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.UnitOfWork;
@@ -29,6 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public IContractRepository ContractRepository;
 		public IContractScheduleRepository ContractScheduleRepository;
 		public IPartTimePercentageRepository PartTimePercentageRepository;
+		public IOptionalColumnRepository OptionalColumnRepository;
 
 		[Test]
 		public void ShouldMatchAllValuesInGivenGroupsWithGivenCriteria()
@@ -100,6 +102,61 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		}
 
+		[Test]
+		public void ShouldMatchAllValuesInGivenDynamicGroupWithGivenCriteria()
+		{
+			var scheduleDate = new DateOnly(2000, 1, 1);
+			var optionColumn = new OptionalColumn("Test")
+			{
+				TableName = "Person",
+				AvailableAsGroupPage = true
+			};
+
+			var personToTest = PersonFactory.CreatePerson(new Name("dummyAgent1", "dummy"));
+			personToTest.AddOptionalColumnValue(new OptionalColumnValue("test value"), optionColumn);
+
+			var team = TeamFactory.CreateTeam("Dummy Site", "Dummy Team");
+
+			var personContract = PersonContractFactory.CreatePersonContract();
+			var personPeriod = new PersonPeriod(scheduleDate,
+				personContract,
+				team);
+			personToTest.AddPersonPeriod(personPeriod);
+			
+			WithUnitOfWork.Do(() =>
+			{
+				OptionalColumnRepository.Add(optionColumn);
+			});
+			WithUnitOfWork.Do(() =>
+			{
+				
+				SiteRepository.Add(team.Site);
+				TeamRepository.Add(team);
+				ContractRepository.Add(personContract.Contract);
+				ContractScheduleRepository.Add(personContract.ContractSchedule);
+				PartTimePercentageRepository.Add(personContract.PartTimePercentage);
+				PersonRepository.Add(personToTest);
+				
+			});
+			WithUnitOfWork.Do(() =>
+			{
+				GroupingReadonly.UpdateGroupingReadModel(new List<Guid> { Guid.Empty });
+			});
+
+			createAndSaveReadModel(PersonFinderField.FirstName, personToTest.Id.Value, personToTest.Name.FirstName, team.Id.Value, team.Site.Id.Value, team.Site.BusinessUnit.Id.Value, scheduleDate.Date);
+
+			WithUnitOfWork.Do(() =>
+			{
+				var result = Target.FindPersonIdsInDynamicOptionalGroupPages(new DateOnlyPeriod(scheduleDate, scheduleDate), new[] { "test value" },
+					new Dictionary<PersonFinderField, string> {
+						{ PersonFinderField.FirstName, "dummyAgent1"}
+					});
+
+				result.Count.Should().Be.EqualTo(1);
+				result.Single().Should().Be.EqualTo(personToTest.Id.Value);
+			});
+		}
+
 		private void createAndSaveReadModel(PersonFinderField searchType, Guid personId, string searchValue,
 			 Guid teamId, Guid siteId, Guid businessUnitId, DateTime startDateTime)
 		{
@@ -118,6 +175,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			  .ExecuteUpdate();
 			});
 		}
+
+
 	}
 
 }

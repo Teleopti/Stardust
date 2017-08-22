@@ -18,13 +18,14 @@ CREATE PROCEDURE [ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeri
 @search_criterias nvarchar(max),
 @start_date datetime,
 @end_date datetime,
-@group_ids nvarchar(max)
+@group_ids nvarchar(max),
+@dynamic_values nvarchar(max)
 AS
 BEGIN
 SET NOCOUNT ON
 
 --if empty input, then RETURN
-IF @group_ids = '' AND @search_criterias = '' RETURN
+IF @group_ids = '' AND @dynamic_values = '' RETURN
 SELECT @search_criterias = REPLACE(@search_criterias, '%', '[%]') --make '%' valuable search value
 
 --declare
@@ -47,7 +48,7 @@ DECLARE @SearchCriteria TABLE(
 	SearchValue nvarchar(max) NULL
 )
 
-CREATE TABLE #AllGroupId (Id uniqueidentifier NOT NULL)
+
 CREATE TABLE #IntermediatePersonId (PersonId uniqueidentifier)
 
 SELECT @dynamicSQL=''
@@ -56,9 +57,7 @@ SELECT @dynamicSQL=''
 INSERT INTO @SearchStrings
 SELECT * FROM dbo.SplitStringString(@search_criterias)
 
---Get teamIds to tempt table #AllGroupId
-INSERT INTO #AllGroupId
-SELECT * FROM dbo.SplitStringString(@group_ids)
+
 
 
 --select * from #SearchStrings
@@ -136,6 +135,13 @@ SELECT @criteriaCount = COUNT(SearchType) FROM @SearchCriteria
 SELECT @start_date_ISO = CONVERT(NVARCHAR(10), @start_date,120)
 SELECT @end_date_ISO = CONVERT(NVARCHAR(10), @end_date,120)
 
+IF(@group_ids <> '')
+BEGIN
+	CREATE TABLE #AllGroupId (Id uniqueidentifier NOT NULL)
+	--Get teamIds to tempt table #AllGroupId
+	INSERT INTO #AllGroupId
+	SELECT * FROM dbo.SplitStringString(@group_ids)
+
    INSERT INTO #IntermediatePersonId
    SELECT PersonId
    FROM ReadModel.groupingreadonly
@@ -149,8 +155,21 @@ SELECT @end_date_ISO = CONVERT(NVARCHAR(10), @end_date,120)
        )
    ORDER BY groupname
 
+END
+ELSE
+BEGIN
+	CREATE TABLE #AllDynamicOptionalValues (Value nvarchar(max) NOT NULL)
+	--Get teamIds to tempt table #AllGroupId
+	INSERT INTO #AllDynamicOptionalValues
+	SELECT * FROM dbo.SplitStringString(@dynamic_values)
 
-IF @criteriaCount = 0 AND @group_ids <> ''
+	INSERT INTO #IntermediatePersonId
+   SELECT ReferenceId
+   FROM dbo.OptionalColumnValue AS ocv
+   WHERE EXISTS (SELECT Value FROM #AllDynamicOptionalValues WHERE ocv.[Description] = Value COLLATE DATABASE_DEFAULT)
+END
+
+IF @criteriaCount = 0 AND (@group_ids <> '' OR @dynamic_values <> '')
 BEGIN
 	SELECT @dynamicSQL = 'SELECT PersonId FROM #IntermediatePersonId '
 END

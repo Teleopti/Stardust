@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new List<Guid>().ToArray()
+				SelectedGroupIds = new List<string>().ToArray()
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new []{Guid.NewGuid()}
+				SelectedGroupIds = new []{Guid.NewGuid().ToString()}
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
 			};
 			input.AgentSearchTerm.Add(PersonFinderField.Role, $"\"{roleDescription}\"");
 
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 1),
 				EndDate = new DateOnly(2015, 10, 31),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string> { { PersonFinderField.FirstName, "test1" } },
-				SelectedGroupIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2015, 10, 3),
 				EndDate = new DateOnly(2015, 10, 9),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
 			};
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);

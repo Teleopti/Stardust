@@ -751,7 +751,7 @@
     <Compile Include="Areas\TeamSchedule\Models\PersonWeekScheduleViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\RemoveActivityFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Models\SearchDaySchedulesFormData.cs" />
-    <Compile Include="Areas\TeamSchedule\Models\SearchWeekSchedulesFormData.cs" />
+    <Compile Include="Areas\TeamSchedule\Models\SearchSchedulesFormData.cs" />
     <Compile Include="Core\Data\IMultiplicatorDefinitionSetProvider.cs" />
     <Compile Include="Core\Data\IShiftCategoryProvider.cs" />
     <Compile Include="Core\Data\MultiplicatorDefinitionSetProvider.cs" />

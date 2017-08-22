@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		public GroupScheduleViewModel CreateViewModel(SearchDaySchedulesInput input)
 		{
-			if (!input.GroupIds.Any())
+			if (!input.GroupIds.Any() && !input.DynamicOptionalValues.Any())
 				return new GroupScheduleViewModel
 				{
 					Schedules = new List<GroupScheduleShiftViewModel>(),
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 			var personIds = _toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552) ||
 							_toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057)
-							? _searchProvider.FindPersonIdsInPeriodWithGroup(new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone), input.GroupIds, input.CriteriaDictionary)
+							? _searchProvider.FindPersonIdsInPeriodWithGroup(new DateOnlyPeriod(input.DateInUserTimeZone, input.DateInUserTimeZone), input.GroupIds, input.CriteriaDictionary, input.DynamicOptionalValues)
 							: _searchProvider.FindPersonIds(input.DateInUserTimeZone, input.GroupIds, input.CriteriaDictionary);
 
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 
 		public GroupWeekScheduleViewModel CreateWeekScheduleViewModel(SearchSchedulesInput input)
 		{
-			if (!input.GroupIds.Any())
+			if (!input.GroupIds.Any() && !input.DynamicOptionalValues.Any())
 				return new GroupWeekScheduleViewModel
 				{
 					PersonWeekSchedules = new List<PersonWeekScheduleViewModel>(),
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 			if (_toggleManager.IsEnabled(Toggles.Wfm_SearchAgentBasedOnCorrectPeriod_44552) ||
 				_toggleManager.IsEnabled(Toggles.Wfm_GroupPages_45057))
 			{
-				personIds = _searchProvider.FindPersonIdsInPeriodWithGroup(week, input.GroupIds, input.CriteriaDictionary);
+				personIds = _searchProvider.FindPersonIdsInPeriodWithGroup(week, input.GroupIds, input.CriteriaDictionary, input.DynamicOptionalValues);
 			}
 			else
 			{

@@ -78,11 +78,11 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		public virtual JsonResult<GroupScheduleViewModel> SearchSchedules(SearchDaySchedulesFormData input)
 		{
 			var currentDate = input.Date;
-
 			var result =
 				_teamScheduleViewModelFactory.CreateViewModel(new SearchDaySchedulesInput
 				{
-					GroupIds = input.SelectedGroupIds ?? new Guid[0],
+					GroupIds = input.GroupIds,
+					DynamicOptionalValues = input.DynamicOptionalValues,
 					CriteriaDictionary = SearchTermParser.Parse(input.Keyword),
 					DateInUserTimeZone = currentDate,
 					PageSize = input.PageSize,
@@ -96,16 +96,17 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		}
 
 		[UnitOfWork, HttpPost, Route("api/TeamSchedule/SearchWeekSchedules")]
-		public virtual JsonResult<GroupWeekScheduleViewModel> SearchWeekSchedules(SearchWeekSchedulesFormData input)
+		public virtual JsonResult<GroupWeekScheduleViewModel> SearchWeekSchedules(SearchSchedulesFormData input)
 		{
-			var currentDate = new DateOnly(input.Date);
+			var currentDate = input.Date;
 
 			var criteriaDictionary = SearchTermParser.Parse(input.Keyword);
 
 			var result =
 				_teamScheduleViewModelFactory.CreateWeekScheduleViewModel(new SearchSchedulesInput
 				{
-					GroupIds = input.SelectedGroupIds ?? new Guid[0],
+					GroupIds = input.GroupIds,
+					DynamicOptionalValues = input.DynamicOptionalValues,
 					CriteriaDictionary = criteriaDictionary,
 					DateInUserTimeZone = currentDate,
 					PageSize = input.PageSize,

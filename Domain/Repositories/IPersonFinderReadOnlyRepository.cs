@@ -19,5 +19,8 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		List<Guid> FindPersonIdsInGroupsBasedOnPersonPeriod(DateOnlyPeriod period, Guid[] groupIds,
 			IDictionary<PersonFinderField, string> searchCriteria);
+
+		List<Guid> FindPersonIdsInDynamicOptionalGroupPages(DateOnlyPeriod period,
+			string[] dynamicValues, IDictionary<PersonFinderField, string> searchCriteria);
 	}
 }
