@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IPermissionProvider PermissionProvider;
 		public IPeopleSearchProvider PeopleSearchProvider;
 		public IPersonAbsenceAccountRepository PersonAbsenceAccountRepository;
-		public IToggleManager ToggleManager;
+		public FakeToggleManager ToggleManager;
 		public IUserCulture UserCulture;
 		public IApplicationRoleRepository ApplicationRoleRepository;
 		public FakePersonRepository PersonRepository;
@@ -93,12 +93,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetRequestsByRoleDescription()
 		{
+			ToggleManager.Enable(Toggles.Wfm_GroupPages_45057);
 			var roleDescription = "my role";
 			var requests = setUpRequests().ToList();
+
 			var fakePeopleSearchProvider = (FakePeopleSearchProvider) PeopleSearchProvider;
 			fakePeopleSearchProvider.Add(requests[0].Person, roleDescription);
 			fakePeopleSearchProvider.Add(requests[1].Person);
 			fakePeopleSearchProvider.Add(requests[2].Person);
+
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = requests[0].Person.Id.Value });
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = requests[1].Person.Id.Value });
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = requests[2].Person.Id.Value });
+
 
 			ApplicationRoleRepository.Add(new ApplicationRole { DescriptionText = roleDescription });
 
@@ -109,7 +116,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
 				SelectedGroupIds = new[] { Guid.NewGuid() }
 			};
-			input.AgentSearchTerm.Add(PersonFinderField.Role, roleDescription);
+			input.AgentSearchTerm.Add(PersonFinderField.Role, $"\"{roleDescription}\"");
 
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
 			result.Requests.Count().Should().Be.EqualTo(1);

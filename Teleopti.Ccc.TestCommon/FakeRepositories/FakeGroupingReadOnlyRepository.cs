@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForPeople(IEnumerable<Guid> peopleIdCollection)
 		{
-			return _details;
+			return _details.Where(d => peopleIdCollection.Contains(d.PersonId));
 		}
 
 		public IEnumerable<ReadOnlyGroupPage> AvailableGroupsBasedOnPeriod(DateOnlyPeriod period)
