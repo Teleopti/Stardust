@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			, o => true);
 
 			PermissionProvider.Enable();
-			ToggleManager.Enable(Toggles.WfmStaffing_AllowActions_42524);
+			ToggleManager.Enable(Toggles.WfmStaffing_AddOvertime_42524);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebStaffing);
 
 			var areas = Target.GetWfmAreasWithPermissions();
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldNotHaveStaffingAreaWhenFeatureIsDisabled()
 		{
 			PermissionProvider.Enable();
-			ToggleManager.Disable(Toggles.WfmStaffing_AllowActions_42524);
+			ToggleManager.Disable(Toggles.WfmStaffing_AddOvertime_42524);
 			PermissionProvider.Permit(DefinedRaptorApplicationFunctionPaths.WebIntraday);
 
 			var areas = Target.GetWfmAreasWithPermissions();
@@ -178,7 +178,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public void ShouldNotHaveStaffingAreaWhenItIsNotPermitted()
 		{
 			PermissionProvider.Enable();
-			ToggleManager.Enable(Toggles.WfmStaffing_AllowActions_42524);
+			ToggleManager.Enable(Toggles.WfmStaffing_AddOvertime_42524);
 
 			var areas = Target.GetWfmAreasWithPermissions();
 
