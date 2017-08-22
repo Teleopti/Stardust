@@ -51,8 +51,15 @@
                     <team-schedule-datepicker selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay(vm.selectedDate)"
                         class="inline-block"></team-schedule-datepicker>
                 </div>
-                <div class="con-flex" ng-show="vm.showBpoInterface">
-                    <button class="wfm-btn wfm-btn-primary" ng-click="vm.openImportData = true">{{'FileImport'|translate}}</button>
+                <div class="con-flex panel-menu">
+                    <div tabindex=0 class="context-menu card-context">
+                        <i class="mdi mdi-dots-vertical"></i>
+                        <span class="context-menu-left">
+                            <ul class="wfm-list">
+                                <li ng-click="vm.goToImportExports()"><i class="mdi mdi-file-import" ></i>Go to Import Export</li>
+                            </ul>
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -107,20 +114,19 @@
             <div class="con-flex">
                 <h3>{{'Duration' | translate}}</h3>
                 <div class="con-row">
-                    <div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)" ng-model="vm.overtimeForm.MinMinutesToAdd"
-                        show-meridian="false"></div>
+                    <div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)" ng-model="vm.overtimeForm.MinMinutesToAdd" show-meridian="false"></div>
                     -
                     <div uib-timepicker required ng-change="vm.validSettings(vm.overtimeForm)" ng-model="vm.overtimeForm.MaxMinutesToAdd" show-meridian="false"></div>
                 </div>
                 <div class="con-row">
-                   
+
                 </div>
             </div>
             <div class="con-flex x3"></div>
         </div>
         <div class="con-footer">
             <button class="wfm-btn" ng-class="!vm.overtimeForm.$valid||!vm.validSettings(vm.overtimeForm) ? 'wfm-btn-primary-disabled' : 'wfm-btn-primary'"
-            ng-disabled="!vm.overtimeForm.$valid || !vm.validSettings(vm.overtimeForm)" type="submit">{{'GetSuggestionsForOvertime' | translate}}</button>
+                ng-disabled="!vm.overtimeForm.$valid || !vm.validSettings(vm.overtimeForm)" type="submit">{{'GetSuggestionsForOvertime' | translate}}</button>
             <button class="wfm-btn" ng-class="vm.hasSuggestionData ? 'wfm-btn-invis-primary' : 'wfm-btn-invis-disabled'" ng-disabled="!vm.hasSuggestionData"
                 ng-click="vm.addOvertime()">{{'ApplySuggestion' | translate}}</button>
         </div>
@@ -130,18 +136,5 @@
     <div class="con-flex line-center">
         <i class="mdi mdi-information-outline huge-icon line-center"></i>
         <h1>{{'NoDataAvailable' | translate}}</h1>
-    </div>
-</div>
-<div class="modal-box" ng-if="vm.openImportData">
-    <div class="modalbg import-people">
-        <div class="dialog">
-            <h1 class="modal-title">
-                {{'ImportStaffing'|translate}}
-            </h1>
-            <staffing-import-data></staffing-import-data>
-            <div class="modal-actions">
-                <button ng-click="vm.openImportData = false" class="wfm-btn wfm-btn-invis-default pull-right">{{'Back'|translate}}</button>
-            </div>
-        </div>
     </div>
 </div>

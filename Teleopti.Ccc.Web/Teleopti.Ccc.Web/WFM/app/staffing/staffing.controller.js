@@ -5,8 +5,8 @@
 		.module('wfm.staffing')
 		.controller('StaffingController', StaffingController);
 
-	StaffingController.$inject = ['staffingService', 'Toggle', 'UtilService', 'ChartService', '$filter', 'NoticeService', '$translate'];
-	function StaffingController(staffingService, toggleService, utilService, chartService, $filter, NoticeService, $translate) {
+	StaffingController.$inject = ['staffingService', '$state', 'Toggle', 'UtilService', 'ChartService', '$filter', 'NoticeService', '$translate'];
+	function StaffingController(staffingService, $state, toggleService, utilService, chartService, $filter, NoticeService, $translate) {
 		var vm = this;
 
 		vm.selectedSkill;
@@ -25,6 +25,7 @@
 		vm.validSettings = validSettings;
 		vm.isRunning = isRunning;
 		vm.isNoSuggestion = isNoSuggestion;
+		vm.goToImportExports = goToImportView;
 
 		vm.showOverstaffSettings = false;
 		vm.openImportData = false;
@@ -53,7 +54,7 @@
 			status: 'full'
 		}
 
-		getSkills();
+		getSkills(); 
 		getSkillAreas();
 		getCompensations();
 		getLicenseForBpo();
@@ -62,10 +63,13 @@
 			return vm.showOverstaffSettings = !vm.showOverstaffSettings;
 		}
 
+		function goToImportView() {
+			$state.transitionTo('staffing-import-export')
+		}
+
 		function selectFirstCompensation(compensations) {
 			vm.overtimeForm.Compensation = compensations[0].Id;
 			setDefaultValueForOvertimeRange();
-
 		}
 
 		function setDefaultValueForOvertimeRange() {
@@ -262,7 +266,6 @@
 			});
 		}
 		function validSettings(input) {
-			console.log(input)
 			if (input.MinMinutesToAdd > input.MaxMinutesToAdd) {
 				return false;
 			}

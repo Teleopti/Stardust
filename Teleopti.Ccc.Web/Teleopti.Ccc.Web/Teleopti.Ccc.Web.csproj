@@ -1550,6 +1550,11 @@
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
     <Content Include="WFM\app\rta\refact\main.controller.redirects.spec.js" />
+    <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.js" />
+    <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.spec.js" />
+    <Content Include="WFM\app\staffing\import_export\importexport.overview.html" />
+    <Content Include="WFM\app\staffing\import_export\importexport.overview.service.js" />
+    <Content Include="WFM\app\staffing\import_export\importexport.service.js" />
     <Content Include="WFM\app\staffing\staffing.importData.controller.js" />
     <Content Include="WFM\app\staffing\staffing.importData.template.html" />
     <Content Include="WFM\css\_staffing.scss" />

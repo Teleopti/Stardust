@@ -1,0 +1,86 @@
+﻿<div>
+    <div class="con-row">
+        <div class="con-flex panel material-depth-1">
+            <div class="con-row ">
+                <div class="con-flex">
+                    <md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="vm.selectedSkill" md-search-text="searchSkillText"
+                        md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)"
+                        md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+                        <md-item-template>
+                            <i ng-class="vm.dynamicIcon(skill)"></i>
+                            <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
+                            <md-tooltip>
+                                <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
+                                <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
+                                <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+                            </md-tooltip>
+                        </md-item-template>
+                        <md-not-found>
+                            {{'RepViewerNoMoreMatches'|translate}}
+                        </md-not-found>
+                    </md-autocomplete>
+                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
+						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
+					</i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <wfm-card-list ng-if="vm.selectedSkill">
+        <wfm-card>
+            <card-header tabindex="-1">
+                <div tabindex="0">
+                    <span><i class="mdi" ng-class="item.title"></i></span>
+                    <b>  {{'ImportStaffing'|translate}}</b>
+                    <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
+                </div>
+            </card-header>
+            <card-body class="panel">
+                <div class="con-row demo-outline">
+                    <div class="con-flex">
+                        <div class="import-people">
+                            <div class="dialog">
+                                <staffing-import-data></staffing-import-data>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="con-footer">
+                    <button class="wfm-btn wfm-btn-invis-default">Advanced</button>
+                    <button class="wfm-btn wfm-btn-invis-primary">Options</button>
+                </div>
+            </card-body>
+        </wfm-card>
+        <wfm-card>
+            <card-header tabindex="-1">
+                <div tabindex="0">
+                    <span><i class="mdi" ng-class="item.title"></i></span>
+                    <b>Export</b>
+                    <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
+                </div>
+            </card-header>
+            <card-body class="panel">
+                <div class="con-row demo-outline">
+                    <div class="con-flex">Content</div>
+                </div>
+                <div class="con-footer">
+                    <button class="wfm-btn wfm-btn-invis-default">Advanced</button>
+                    <button class="wfm-btn wfm-btn-invis-primary">Options</button>
+                </div>
+            </card-body>
+        </wfm-card>
+    </wfm-card-list>
+</div>
+<div class="modal-box" ng-if="vm.openImportData">
+    <div class="modalbg import-people">
+        <div class="dialog">
+            <h1 class="modal-title">
+                {{'ImportStaffing'|translate}}
+            </h1>
+            <staffing-import-data></staffing-import-data>
+            <div class="modal-actions">
+                <button ng-click="vm.openImportData = false" class="wfm-btn wfm-btn-invis-default pull-right">{{'Back'|translate}}</button>
+            </div>
+        </div>
+    </div>
+</div>
