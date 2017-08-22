@@ -1,20 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Toggle;
 
 namespace Teleopti.Ccc.Infrastructure.Absence
 {
 	public class AbsenceRequestValidatorProvider : IAbsenceRequestValidatorProvider
 	{
-		private readonly IToggleManager _toggleManager;
 		private readonly IExpiredRequestValidator _expiredRequestValidator;
 
-		public AbsenceRequestValidatorProvider(IToggleManager toggleManager, IExpiredRequestValidator expiredRequestValidator)
+		public AbsenceRequestValidatorProvider(IExpiredRequestValidator expiredRequestValidator)
 		{
-			_toggleManager = toggleManager;
 			_expiredRequestValidator = expiredRequestValidator;
 		}
 
@@ -22,11 +18,10 @@ namespace Teleopti.Ccc.Infrastructure.Absence
 		{
 			var validators = absenceRequestOpenPeriod.GetSelectedValidatorList().ToList();
 
-			if (_toggleManager.IsEnabled(Toggles.Wfm_Requests_Check_Expired_Requests_40274))
+			var requestExpirationValidator = new RequestExpirationValidator(_expiredRequestValidator);
+			if (!validators.Contains(requestExpirationValidator))
 			{
-				var requestExpirationValidator = new RequestExpirationValidator(_expiredRequestValidator);
-				if (!validators.Contains(requestExpirationValidator))
-					validators.Insert(0, requestExpirationValidator);
+				validators.Insert(0, requestExpirationValidator);
 			}
 
 			return validators;

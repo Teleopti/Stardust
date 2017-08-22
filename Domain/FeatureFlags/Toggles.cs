@@ -76,7 +76,6 @@
 
 		Wfm_Requests_Approve_Based_On_Budget_Allotment_39626,
 		Wfm_Requests_Approve_Based_On_Intraday_39868,
-		Wfm_Requests_Check_Expired_Requests_40274,
 		Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274,
 		Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770,
 		Wfm_Requests_ApprovingModifyRequests_41930,

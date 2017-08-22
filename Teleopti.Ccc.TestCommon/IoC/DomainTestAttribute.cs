@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using Autofac;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -43,7 +42,6 @@ using Teleopti.Ccc.TestCommon.Services;
 namespace Teleopti.Ccc.TestCommon.IoC
 {
 	[Toggle(Domain.FeatureFlags.Toggles.RTA_SpreadTransactionLocksStrategy_41823)]
-	[Toggle(Domain.FeatureFlags.Toggles.Wfm_Requests_Check_Expired_Requests_40274)]
 	public class DomainTestAttribute : IoCTestAttribute
 	{
 		public static string DefaultTenantName = "default";

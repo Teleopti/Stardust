@@ -75,41 +75,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void setAbsenceRequestVisibilityOptions(IToggleManager toggleManager)
 		{
-			if (!toggleManager.IsEnabled(Toggles.Wfm_Requests_Check_Expired_Requests_40274))
-			{
-				hideAbsenceRequestExpirationOptions();
-			}
-
 			if (!toggleManager.IsEnabled(Toggles.Staffing_Info_Configuration_44687))
 			{
 				hideAbsenceProbabilityCheckBox();
 			}
 		}
-
-		private void hideAbsenceRequestExpirationOptions()
-		{
-			hideControl(tableLayoutPanelAbsenceRequestExpiration);
-		}
-
-		private void hideAbsenceRequestWaitlistingOptions()
-		{
-			hideControl(checkBoxEnableAbsenceRequestWaitlisting);
-		}
-
+		
 		private void hideAbsenceProbabilityCheckBox()
 		{
 			hideControl(tableLayoutPanelAbsenceProbability);
-		}
-
-		private void hideAbsenceCancellationOptions()
-		{
-			labelAbsenceRequestCancellationThreshold.Hide();
-			hideControl(txtAbsenceRequestCancellationThreshold);
-		}
-
-		private void hideMiscAbsenceRequestOptions()
-		{
-			hideControl(tableLayoutPanelAbsenceRequestMiscellaneous);
 		}
 
 		private void hideControl(Control control)
@@ -540,8 +514,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 		private void configureProjectionGrid()
 		{
 			gridControlVisualisation.CellModels.Add("ProjectionHeader",
-													new MonthlyProjectionColumnHeaderCellModel(
-														gridControlVisualisation.Model));
+				new MonthlyProjectionColumnHeaderCellModel(gridControlVisualisation.Model));
 
 			gridControlVisualisation.Cols.HeaderCount = 1;
 			gridControlVisualisation.QueryCellInfo += gridControlVisualisation_QueryCellInfo;
@@ -613,7 +586,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			extractor.ViewpointDate = new DateOnly(dateTimePickerAdvViewpoint.Value);
 			e.Style.CellType = "Control";
 
-			var layers = extractor.Projection.GetProjectedPeriods(_presenter.ProjectionPeriod, CultureInfo.InvariantCulture, CultureInfo.InvariantCulture).OfType<AbsenceRequestOpenDatePeriod>();
+			var layers = extractor.Projection.GetProjectedPeriods(_presenter.ProjectionPeriod, CultureInfo.InvariantCulture,
+				CultureInfo.InvariantCulture).OfType<AbsenceRequestOpenDatePeriod>();
 			MonthlyProjectionVisualiser visualiser;
 			if (!_projectionCache.TryGetValue(absence, out visualiser))
 			{
@@ -626,13 +600,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			{
 				DisplayColor = p.Absence == null ? Color.Empty : p.Absence.DisplayColor,
 				Period = new DateOnlyPeriod(p.Period.StartDate, p.Period.EndDate.AddDays(1)),
-				ToolTipText =
-																		string.Format(CultureInfo.CurrentUICulture,
-																					  Resources.WorkflowControlSetToolTip,
-																					  p.PersonAccountValidator.DisplayText,
-																					  p.StaffingThresholdValidator.DisplayText,
-																					  p.AbsenceRequestProcess.DisplayText,
-																					  p.Period.DateString)
+				ToolTipText = string.Format(CultureInfo.CurrentUICulture,
+					Resources.WorkflowControlSetToolTip,
+					p.PersonAccountValidator.DisplayText,
+					p.StaffingThresholdValidator.DisplayText,
+					p.AbsenceRequestProcess.DisplayText,
+					p.Period.DateString)
 			}).ToList());
 			e.Style.Control = visualiser;
 		}
@@ -708,29 +681,36 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		public void SetAllowedDayOffs(IWorkflowControlSetModel selectedModel)
 		{
-			twoListSelectorDayOffs.Initiate(_presenter.DayOffCollection(), selectedModel.AllowedPreferenceDayOffs, "Description", Resources.NotAvailable, Resources.Available);
+			twoListSelectorDayOffs.Initiate(_presenter.DayOffCollection(), selectedModel.AllowedPreferenceDayOffs, "Description",
+				Resources.NotAvailable, Resources.Available);
 		}
 
 		public void SetAllowedShiftCategories(IWorkflowControlSetModel selectedModel)
 		{
-			twoListSelectorCategories.Initiate(_presenter.ShiftCategoriesCollection(), selectedModel.AllowedPreferenceShiftCategories, "Description", Resources.NotAvailable, Resources.Available);
+			twoListSelectorCategories.Initiate(_presenter.ShiftCategoriesCollection(),
+				selectedModel.AllowedPreferenceShiftCategories, "Description", Resources.NotAvailable, Resources.Available);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+			MessageId = "0")]
 		public void SetAllowedAbsences(IWorkflowControlSetModel selectedModel)
 		{
-			twoListSelectorAbsences.Initiate(_presenter.AbsencesCollection(), selectedModel.AllowedPreferenceAbsences, "Description", Resources.NotAvailable, Resources.Available);
+			twoListSelectorAbsences.Initiate(_presenter.AbsencesCollection(), selectedModel.AllowedPreferenceAbsences,
+				"Description", Resources.NotAvailable, Resources.Available);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+			MessageId = "0")]
 		public void SetAllowedAbsencesForReport(IWorkflowControlSetModel selectedModel)
 		{
-			twoListSelectorAbsencesForReport.Initiate(_presenter.AbsencesCollection(), selectedModel.AllowedAbsencesForReport, "Description", Resources.NotAvailable, Resources.Available);
+			twoListSelectorAbsencesForReport.Initiate(_presenter.AbsencesCollection(), selectedModel.AllowedAbsencesForReport,
+				"Description", Resources.NotAvailable, Resources.Available);
 		}
 
 		public void SetMatchingSkills(IWorkflowControlSetModel selectedModel)
 		{
-			twoListSelectorMatchingSkills.Initiate(_presenter.SkillCollection(), selectedModel.MustMatchSkills, "Name", Resources.Skills, Resources.MatchingSkills);
+			twoListSelectorMatchingSkills.Initiate(_presenter.SkillCollection(), selectedModel.MustMatchSkills, "Name",
+				Resources.Skills, Resources.MatchingSkills);
 		}
 
 		public void SetShiftTradeTargetTimeFlexibility(TimeSpan flexibility)
@@ -880,7 +860,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 			_projectionCache.Clear();
 			gridControlVisualisation.RowCount = 0;
-			gridControlVisualisation.RowCount = _presenter.DoRequestableAbsencesExist ? _presenter.RequestableAbsenceCollection.Count : 0;
+			gridControlVisualisation.RowCount = _presenter.DoRequestableAbsencesExist
+				? _presenter.RequestableAbsenceCollection.Count
+				: 0;
 
 			gridControlVisualisation.Invalidate();
 		}
@@ -929,7 +911,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void deleteSelected()
 		{
-			ReadOnlyCollection<AbsenceRequestPeriodModel> selectedPeriodModels = _gridHelper.FindSelectedItems(gridControlAbsenceRequestOpenPeriods.Rows.HeaderCount + 1);
+			ReadOnlyCollection<AbsenceRequestPeriodModel> selectedPeriodModels =
+				_gridHelper.FindSelectedItems(gridControlAbsenceRequestOpenPeriods.Rows.HeaderCount + 1);
 
 			_presenter.DeleteAbsenceRequestPeriod(new List<AbsenceRequestPeriodModel>(selectedPeriodModels));
 		}
@@ -999,7 +982,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 			if (selectedItems.Contains(rightClickedItem)) return;
 			gridControlAbsenceRequestOpenPeriods.Selections.Clear();
 			gridControlAbsenceRequestOpenPeriods.CurrentCell.Deactivate(false);
-			gridControlAbsenceRequestOpenPeriods.Selections.SelectRange(gridControlAbsenceRequestOpenPeriods.PointToRangeInfo(_gridPoint), true);
+			gridControlAbsenceRequestOpenPeriods.Selections.SelectRange(
+				gridControlAbsenceRequestOpenPeriods.PointToRangeInfo(_gridPoint), true);
 		}
 
 		private void enableContextMenu(bool value)
@@ -1052,13 +1036,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void dateSelectionFromToPreferencePeriod_Validated(object sender, EventArgs e)
 		{
-			var preferencePeriod = new DateOnlyPeriod(dateSelectionFromToPreferencePeriod.WorkPeriodStart, dateSelectionFromToPreferencePeriod.WorkPeriodEnd);
+			var preferencePeriod = new DateOnlyPeriod(dateSelectionFromToPreferencePeriod.WorkPeriodStart,
+				dateSelectionFromToPreferencePeriod.WorkPeriodEnd);
 			_presenter.SetPreferencePeriod(preferencePeriod);
 		}
 
 		private void dateSelectionFromToIsOpen_Validated(object sender, EventArgs e)
 		{
-			var preferenceInputPeriod = new DateOnlyPeriod(dateSelectionFromToIsOpen.WorkPeriodStart, dateSelectionFromToIsOpen.WorkPeriodEnd);
+			var preferenceInputPeriod = new DateOnlyPeriod(dateSelectionFromToIsOpen.WorkPeriodStart,
+				dateSelectionFromToIsOpen.WorkPeriodEnd);
 			_presenter.SetPreferenceInputPeriod(preferenceInputPeriod);
 		}
 
@@ -1069,7 +1055,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void minMaxIntegerTextBoxControl1_Validated(object sender, EventArgs e)
 		{
-			_presenter.SetOpenShiftTradePeriod(new MinMax<int>(minMaxIntegerTextBoxControl1.MinTextBoxValue, minMaxIntegerTextBoxControl1.MaxTextBoxValue));
+			_presenter.SetOpenShiftTradePeriod(new MinMax<int>(minMaxIntegerTextBoxControl1.MinTextBoxValue,
+				minMaxIntegerTextBoxControl1.MaxTextBoxValue));
 		}
 
 		private void validateFromToPeriods(CancelEventArgs e, object sender)
@@ -1173,7 +1160,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void dateSelectionFromToStudentAvailability_Validated(object sender, EventArgs e)
 		{
-			var studentAvailabilityPeriod = new DateOnlyPeriod(dateSelectionFromToStudentAvailability.WorkPeriodStart, dateSelectionFromToStudentAvailability.WorkPeriodEnd);
+			var studentAvailabilityPeriod = new DateOnlyPeriod(dateSelectionFromToStudentAvailability.WorkPeriodStart,
+				dateSelectionFromToStudentAvailability.WorkPeriodEnd);
 			_presenter.SetStudentAvailabilityPeriod(studentAvailabilityPeriod);
 		}
 
@@ -1184,7 +1172,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Configuration
 
 		private void dateSelectionFromToIsOpenStudentAvailability_Validated(object sender, EventArgs e)
 		{
-			var studentAvailabilityInputPeriod = new DateOnlyPeriod(dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart, dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd);
+			var studentAvailabilityInputPeriod = new DateOnlyPeriod(dateSelectionFromToIsOpenStudentAvailability.WorkPeriodStart,
+				dateSelectionFromToIsOpenStudentAvailability.WorkPeriodEnd);
 			_presenter.SetStudentAvailabilityInputPeriod(studentAvailabilityInputPeriod);
 		}
 

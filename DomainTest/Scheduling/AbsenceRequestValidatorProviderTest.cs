@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			IWorkflowControlSet workflowControlSet = null)
 		{
 			var toggleManager = new FakeToggleManager();
-			var absenceRequestValidatorProvider = new AbsenceRequestValidatorProvider(toggleManager, null);
+			var absenceRequestValidatorProvider = new AbsenceRequestValidatorProvider(null);
 
 			var person = createPerson();
 			person.WorkflowControlSet = workflowControlSet ?? createWorkflowControlSet(_absence, useShrinkage);
