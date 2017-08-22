@@ -7,6 +7,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Config;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
@@ -152,12 +153,12 @@ namespace Teleopti.Ccc.Web.MyTimeTrafficSimulator
 			currentDatasource.FakeName(data.DataSource);
 
 			var businessUnit = new BusinessUnit("..");
-			businessUnit.SetId(data.BusinessUnit);
+			businessUnit.WithId(data.BusinessUnit);
 			var currentBusinessUnit = new FakeCurrentBusinessUnit();
 			currentBusinessUnit.FakeBusinessUnit(businessUnit);
 
 			var scenario = new Scenario("..");
-			scenario.SetId(data.Scenario);
+			scenario.WithId(data.Scenario);
 			var currentScenario = new FakeCurrentScenario();
 			currentScenario.FakeScenario(scenario);
 
