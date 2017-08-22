@@ -58,16 +58,16 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			{
 				targetIds = _peopleSearchProvider.FindPersonIdsInPeriodWithGroup(
 					new DateOnlyPeriod(input.StartDate, input.EndDate),
-					input.SelectedGroupIds, input.AgentSearchTerm);
+					input.GroupIds, input.AgentSearchTerm,input.DynamicOptionalValues);
 			}
 			else if (searchAgentBasedOnCorrectPeriodToggle)
 			{
 				targetIds = _peopleSearchProvider.FindPersonIdsInPeriod(new DateOnlyPeriod(input.StartDate, input.EndDate),
-					input.SelectedGroupIds, input.AgentSearchTerm);
+					input.GroupIds, input.AgentSearchTerm);
 			}
 			else
 			{
-				targetIds = _peopleSearchProvider.FindPersonIds(input.StartDate, input.SelectedGroupIds, input.AgentSearchTerm);
+				targetIds = _peopleSearchProvider.FindPersonIds(input.StartDate, input.GroupIds, input.AgentSearchTerm);
 			}
 
 			if (targetIds.Count == 0)

@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 1),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new List<Guid>().ToArray()
+				SelectedGroupIds = new List<string>().ToArray()
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 10),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 10),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { Guid.NewGuid() }
+				SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 10),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new []{Guid.NewGuid()}
+				SelectedGroupIds = new []{Guid.NewGuid().ToString()}
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -454,7 +454,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				{
 					{ PersonFinderField.Organization, "test" }
 				},
-				SelectedGroupIds = new[] { team.Id.Value }
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var groupDetail = new List<ReadOnlyGroupDetail>();
@@ -551,7 +551,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 1),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new [] {Guid.NewGuid()}
+				SelectedGroupIds = new [] {Guid.NewGuid().ToString()}
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -624,7 +624,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = startDate,
 				EndDate = endDate,
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new []{Guid.NewGuid()}
+				SelectedGroupIds = new []{Guid.NewGuid().ToString()}
 			};
 			return ShiftTradeRequestViewModelFactory.CreateRequestListViewModel (input);
 		}
