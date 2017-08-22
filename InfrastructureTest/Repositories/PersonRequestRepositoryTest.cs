@@ -1109,7 +1109,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
-			result.Length.Should().Be(3);
+			result.Length.Should().Be(4);
 		}
 
 		[Test]
