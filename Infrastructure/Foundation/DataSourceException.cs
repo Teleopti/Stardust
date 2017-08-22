@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 using System.Security;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
@@ -53,12 +54,20 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
         {
 	        DataSource = info.GetString("DataSource");
         }
-		
-	    public string DataSource { get; }
+
+		public override string Message => $"{base.Message} - ({DataSource})";
+
+		public string DataSource { get; }
 
 	    private string dataSourceName()
 	    {
-		    var principal = GetCurrentPrincipal();
+		    var dataSource = new DataSourceState().Get();
+		    if (dataSource != null)
+		    {
+			    return dataSource.DataSourceName;
+		    }
+
+			var principal = GetCurrentPrincipal();
 		    var identity = principal?.Identity as ITeleoptiIdentity;
 		    if (identity == null)
 			    return "[unknown datasource]";
