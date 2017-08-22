@@ -94,6 +94,7 @@
 							$scope.$watch(function () { return siteCard.isOpen }, pollNow);
 							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
 								if (newValue != oldValue) {
+									toggleOpenButton();
 									if (newValue) {
 										siteCard.teams.forEach(function (t) {
 											t.isSelected = true;
@@ -108,18 +109,16 @@
 					});
 					vm.totalAgentsInAlarm = sites.TotalAgentsInAlarm;
 					vm.noSiteCards = !vm.siteCards.length;
-
-					var selected = 0;
-					vm.siteCards.forEach(function (siteCard) {
-						if (siteCard.isSelected) selected += 1;
-						siteCard.teams.forEach(function (team) {
-							if (team.isSelected) selected += 1;
-						})
-					});
-					vm.organizationSelection = selected > 0;
 				});
 		}
 
+		function toggleOpenButton(){
+			var match = vm.siteCards.find(function(s){
+				return s.isSelected || s.teams.find(function(t){ return t.isSelected;});
+			});
+			vm.organizationSelection = !!match;
+		}
+		
 		function getTeamsForSites() {
 			return $q.all(
 				vm.siteCards
@@ -142,6 +141,7 @@
 							teamVm = team;
 							teamVm.isSelected = false;
 							$scope.$watch(function () { return teamVm.isSelected }, function (newValue, oldValue) {
+								toggleOpenButton();
 								if (newValue) {
 									var areAllTeamsSelected = s.teams.every(function (t) { return t.isSelected });
 									if (areAllTeamsSelected) s.isSelected = true;

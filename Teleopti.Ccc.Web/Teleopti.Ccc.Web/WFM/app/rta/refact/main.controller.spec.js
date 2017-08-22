@@ -646,5 +646,24 @@ describe('RtaMainController', function () {
       expect(vm.totalAgentsInAlarm).toEqual(2);
     });
 
+    it('should display go button when site is selected', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'parisId',
+          Name: 'Paris',
+          AgentsCount: 11,
+          InAlarmCount: 2,
+          Color: 'good'
+        });
+      var c = $controllerBuilder.createController();
+      vm = c.vm;
+
+      c.apply(function () {
+       vm.siteCards[0].isSelected = true;
+      });
+
+      expect(vm.organizationSelection).toEqual(true);
+    });
+
   });
 });
