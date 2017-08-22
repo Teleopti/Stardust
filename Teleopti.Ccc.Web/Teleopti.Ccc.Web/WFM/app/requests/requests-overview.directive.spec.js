@@ -68,6 +68,9 @@
 			scope.requestsOverview.selectedTeamIds = ["team"];
 			scope.requestsOverview.init();
 			targetScope.$digest();
+
+			targetScope.$broadcast('reload.requests.with.selection', { selectedGroupIds: ['team'], agentSearchTerm: ''});
+
 			expect(scope.requestsOverview.requests.length).toEqual(1);
 			expect(scope.requestsOverview.requests[0]).toEqual(request);
 		});
@@ -137,14 +140,17 @@
 			scope.requestsOverview.isActive = true;
 			scope.requestsOverview.selectedTeamIds = ["team"];
 
+			targetScope.$broadcast('reload.requests.with.selection', { selectedGroupIds: ['team'], agentSearchTerm: ''});
+
 			requestsDataService.reset();
 
 			targetScope.period = {
 				startDate: new Date(),
 				endDate: moment().add(2, 'day').toDate()
-			}
+			};
 
 			targetScope.$digest();
+
 			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
 		});
 
@@ -160,10 +166,13 @@
 			var scope = getInnerScope(targetElement);
 			scope.requestsOverview.isActive = true;
 			scope.requestsOverview.selectedTeamIds = ["team"];
+			targetScope.$broadcast('reload.requests.with.selection', { selectedGroupIds: ['team'], agentSearchTerm: ''});
+			targetScope.$digest();
 			requestsDataService.reset();
 
-			targetScope.agentSearchTerm = "search term";
-			targetScope.$digest();
+			targetScope.agentSearchTerm = 'search term';
+			targetScope.$broadcast('reload.requests.with.selection', { selectedGroupIds: ['team'], agentSearchTerm: "search term"});
+
 			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
 			expect(requestsDataService.getLastRequestParameters()[0].agentSearchTerm).toEqual("search term");
 		});
@@ -181,11 +190,11 @@
 			scope.requestsOverview.isActive = true;
 			scope.requestsOverview.selectedTeamIds = ["team"];
 
-			targetScope.agentSearchTerm = "search term";
-			
 			expect(scope.requestsOverview.isLoading).toBeTruthy();
 
-			targetScope.$digest();
+			targetScope.agentSearchTerm = 'search term';
+			targetScope.$broadcast('reload.requests.with.selection', { selectedGroupIds: ['team'], agentSearchTerm: 'search term'});
+
 			expect(scope.requestsOverview.isLoading).toBeFalsy();
 		});
 
@@ -244,7 +253,7 @@
 				startDate: moment().add(-1, 'd')._d,
 				endDate: moment().add(1, 'd')._d
 			};
-			targetScope.$digest();
+			targetScope.$broadcast('reload.requests.with.selection', { selectedGroupIds: ['team'], agentSearchTerm: 'search term'});
 
 			expect(requestsDataService.getCallCounts()).toEqual(1);
 		});
@@ -269,6 +278,8 @@
 
 			requestsDataService.reset();
 			targetScope.selectedTabIndex = 1;
+			targetScope.agentSearchTerm = 'search term';
+			targetScope.$broadcast('reload.requests.with.selection', { selectedGroupIds: ['team'], agentSearchTerm: 'search term'});
 			targetScope.$digest();
 
 			expect(requestsDataService.getCallCounts()).toEqual(1);
@@ -291,6 +302,7 @@
 			scope.requestsOverview.init();
 			targetScope.$digest();
 			scope.requestsOverview.isActive = true;
+			targetScope.$broadcast('reload.requests.with.selection', { selectedGroupIds: ['team'], agentSearchTerm: 'search term'});
 			scope.$apply();
 			expect(scope.requestsOverview.requests.length).toEqual(0);
 			expect(requestsNotificationService.getNotificationResult()).toEqual(5000);

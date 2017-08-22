@@ -103,9 +103,6 @@
 			.then(loggedonUsersTeamId.promise.then(function (defaultTeam) {
 				if (angular.isString(defaultTeam) && defaultTeam.length > 0)
 					replaceArrayValues([defaultTeam], vm.selectedGroups.groupIds);
-				if (!vm.hasFavoriteSearchPermission) {
-					$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: vm.selectedGroups.groupIds, agentSearchTerm: vm.agentSearchOptions.keyword });
-				}
 			}))
 			.then(init);
 
@@ -175,10 +172,7 @@
 					replaceArrayValues(defaultSearch.TeamIds, vm.selectedGroups.groupIds);
 					vm.agentSearchOptions.keyword = defaultSearch.SearchTerm;
 				}
-				if (vm.hasFavoriteSearchPermission) {
-					$scope.$broadcast('reload.requests.with.selection', { selectedGroupIds: vm.selectedGroups.groupIds, agentSearchTerm: vm.agentSearchOptions.keyword });
-				}
-
+				$scope.$broadcast('reload.requests.with.selection', { selectedGroupIds: vm.selectedGroups.groupIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 			});
 
 			var defaultDateRange = {
@@ -318,7 +312,6 @@
 					} else {
 						vm.getGroupPagesAsync();
 					}
-
 				}
 			});
 		});

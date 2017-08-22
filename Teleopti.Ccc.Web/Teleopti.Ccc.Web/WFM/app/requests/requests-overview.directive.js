@@ -21,13 +21,12 @@
 
 		vm.filters = [];
 		vm.reload = reload;
+		vm.firstLoadedInitialized = false;
 		vm.isLoading = false;
 		vm.sortingOrders = [];
-
-		vm.init = init;
 		vm.shiftTradeView = $attrs.shiftTradeView != undefined;
 
-		function init() {
+		vm.init = function() {
 			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAllRequestsPromise;
 			// By default, show shift trade requests in pending only;
 			// and show absence and text requests in pending and waitlisted only;
@@ -40,7 +39,7 @@
 			}
 		}
 
-		toggleService.togglesLoaded.then(init);
+		toggleService.togglesLoaded.then(vm.init);
 
 		function getRequests(requestsFilter, sortingOrders, paging) {
 			vm.requestsPromise(requestsFilter, sortingOrders, paging).then(function (requests) {
@@ -66,6 +65,7 @@
 				vm.onInitCallBack({ count: requests.data.TotalCount });
 
 				vm.isLoading = false;
+				vm.firstLoadedInitialized = true;
 			});
 		}
 
@@ -85,6 +85,8 @@
 				selectedGroupIds: vm.selectedGroupIds,
 				filters: vm.filters
 			};
+
+			if(requestsFilter.selectedGroupIds.length == 0) return;
 
 			vm.isLoading = true;
 			getRequests(requestsFilter, vm.sortingOrders, vm.paging);
@@ -131,7 +133,9 @@
 				if (!newValue || !validateDateParameters(newValue.startDate, newValue.endDate)) {
 					return;
 				}
-				scope.$broadcast('reload.requests.without.selection');
+
+				if(vm.firstLoadedInitialized || vm.shiftTradeView)
+					scope.$broadcast('reload.requests.without.selection');
 
 				if (!ctrl.loadRequestWatchersInitialized) {
 					listenToReload();
@@ -143,11 +147,10 @@
 					if((!angular.isArray(vm.selectedGroupIds) || vm.selectedGroupIds.length == 0) && angular.isUndefined(data)){
 						return;
 					}
-
 					ctrl.reload(data);
 				});
 
-				scope.$on('reload.requests.without.selection', function (event) {
+				scope.$on('reload.requests.without.selection', function (event, data) {
 					ctrl.reload();
 				});
 
