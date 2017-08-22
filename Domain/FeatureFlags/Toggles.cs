@@ -182,7 +182,8 @@
 		WFM_Export_Forecast_44716,
 		WFM_RedirectPermissionToWeb_44562,
 		Staffing_BPOExchangeImport_45202,
-		WFM_TrainingPlanner_44780
+		WFM_TrainingPlanner_44780,
+		Report_Realtime_Scheduled_Time_Per_Activity_45560
 		// ReSharper restore InconsistentNaming
 	}
 }
