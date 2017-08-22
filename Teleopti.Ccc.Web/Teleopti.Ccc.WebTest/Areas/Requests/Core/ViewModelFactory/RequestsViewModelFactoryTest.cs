@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
@@ -13,7 +16,6 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Tracking;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -172,13 +174,38 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			result.TotalCount.Should().Be.EqualTo(0);
 		}
 
-		[Ignore("temp ignore"), Test]
+		[Test]
 		public void ShouldReturnRequestsBelongToQueriedAgentsInRequestListViewModel()
 		{
 			var personSearchProvider = PeopleSearchProvider as FakePeopleSearchProvider;
-			var requests = setUpRequests();
+			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
+			var site = new Site("site").WithId(Guid.NewGuid());
+			var team = new Team().WithDescription(new Description("my team")).WithId(Guid.NewGuid());
+			team.Site = site;
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2015, 10, 3)).WithId();
+			person.PersonPeriodCollection.FirstOrDefault().Team = team;
+			person.SetName(new Name("Ashely", "Ashely"));
+			var request = new PersonRequest(person, absenceRequest).WithId();
+			PersonRequestRepository.Add(request);
+			personSearchProvider.Add(person);
 
-			personSearchProvider.Add(requests.First().Person);
+			GroupingReadOnlyRepository.Has(new[]
+			{
+				new ReadOnlyGroupPage
+				{
+					PageId = Group.PageMainId
+				}
+			}, new[]
+			{
+				new ReadOnlyGroupDetail
+				{
+					PageId = Group.PageMainId,
+					PersonId = person.Id.Value,
+					SiteId = site.Id.Value,
+					TeamId = team.Id.Value,
+					GroupName = team.SiteAndTeam
+				}
+			});
 
 			var input = new AllRequestsFormData
 			{
@@ -191,8 +218,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
 			result.TotalCount.Should().Be.EqualTo(1);
 
-			Assert.IsTrue(referencesPerson(result.Requests.First(), people[0]));
-
+			Assert.IsTrue(referencesPerson(result.Requests.First(), person));
 		}
 
 		[Test]
