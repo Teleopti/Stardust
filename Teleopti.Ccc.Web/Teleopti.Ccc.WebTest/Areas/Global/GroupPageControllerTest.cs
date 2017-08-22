@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 						new UserTextTranslator(),
 						new FakeUserUiCulture(),
 						new FakeLoggedOnUser(),
-						new FakePermissionProvider()));
+						new FakePermissionProvider(),
+						null));
 
 			dynamic result = ((dynamic)(target).AvailableGroupPages(DateTime.Now)).Content;
 
@@ -74,7 +75,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 						new UserTextTranslator(),
 						new FakeUserUiCulture(),
 						loggedOnUser,
-						new FakePermissionProvider()));
+						new FakePermissionProvider(),
+						null));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
@@ -92,7 +94,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					new UserTextTranslator(),
 						new FakeUserUiCulture(),
 						new FakeLoggedOnUser(),
-						new FakePermissionProvider()));
+						new FakePermissionProvider(),
+						null));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
@@ -116,7 +119,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					new UserTextTranslator(),
 						new FakeUserUiCulture(),
 						new FakeLoggedOnUser(),
-						new FakePermissionProvider()));
+						new FakePermissionProvider(),
+						null));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
 
@@ -147,6 +151,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 				new UserTextTranslator(),
 						new FakeUserUiCulture(),
 						new FakeLoggedOnUser(),
+						null,
 						null));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
@@ -177,6 +182,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					new UserTextTranslator(),
 					new FakeUserUiCulture(),
 					new FakeLoggedOnUser(),
+					null,
 					null));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
@@ -207,6 +213,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					new UserTextTranslator(),
 					new FakeUserUiCulture(),
 					new FakeLoggedOnUser(),
+					null,
 					null));
 
 			var result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
@@ -235,6 +242,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					new UserTextTranslator(),
 					new FakeUserUiCulture(),
 					new FakeLoggedOnUser(),
+					null,
 					null));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;
@@ -262,6 +270,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 					new UserTextTranslator(),
 					new FakeUserUiCulture(),
 					new FakeLoggedOnUser(),
+					null,
 					null));
 
 			dynamic result = ((dynamic)target.AvailableGroupPages(DateTime.Now)).Content;

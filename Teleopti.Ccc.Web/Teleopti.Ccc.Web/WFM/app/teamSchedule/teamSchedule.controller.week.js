@@ -218,7 +218,7 @@
 					replaceArrayValues([loggedonUsersTeamId], vm.selectedGroups.groupIds);
 				}
 			}
-
+			console.log("in week", vm.selectedGroups);
 			vm.resetSchedulePage();
 			monitorScheduleChanged();
 		});

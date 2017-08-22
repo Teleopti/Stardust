@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -40,12 +41,17 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IList<IOptionalColumn> GetOptionalColumns<T>()
 		{
-			throw new NotImplementedException();
+			return _optionalColumnList;
 		}
 
 		public IList<IColumnUniqueValues> UniqueValuesOnColumn(Guid column)
 		{
-			throw new NotImplementedException();
+			return _personValueList.Where(x => x.Parent.Id.Value == column).Distinct()
+				.Select(v => new ColumnUniqueValues
+				{
+					Description = v.Description
+				} as IColumnUniqueValues)
+				.ToList();
 		}
 
 		public void AddPersonValues(IOptionalColumnValue personValue)

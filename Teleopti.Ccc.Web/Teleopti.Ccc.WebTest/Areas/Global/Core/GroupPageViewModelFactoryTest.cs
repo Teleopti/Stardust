@@ -28,6 +28,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 		public FakeUserUiCulture UserCulture;
 		public FakePermissionProvider PermissionProvider;
 		public FakeLoggedOnUser LoggedOnUser;
+		public FakeOptionalColumnRepository OptionalColumnRepository;
+		public FakePersonRepository PersonRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -36,6 +38,59 @@ namespace Teleopti.Ccc.WebTest.Areas.Global.Core
 			system.AddService<GroupPageViewModelFactory>();
 			system.UseTestDouble<FakePermissionProvider>().For<IPermissionProvider>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			system.UseTestDouble<FakeOptionalColumnRepository>().For<IOptionalColumnRepository>();
+		}
+
+
+		[Test]
+		public void ShouldReturnAvailableDynamicOptionalColumnGroupPage()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var optionalColumnWithGroup = new OptionalColumn("test").WithId();
+			optionalColumnWithGroup.AvailableAsGroupPage = true;
+			var optionalColumnNoGroup = new OptionalColumn("no group").WithId();
+			OptionalColumnRepository.Add(optionalColumnWithGroup);
+			OptionalColumnRepository.Add(optionalColumnNoGroup);
+
+			var valueForTest = new OptionalColumnValue("my value").WithId();
+			var valueForNoGroup = new OptionalColumnValue("another").WithId();
+			person.AddOptionalColumnValue(valueForTest, optionalColumnWithGroup);
+			person.AddOptionalColumnValue(valueForNoGroup, optionalColumnNoGroup);
+
+			PersonRepository.Add(person);
+			OptionalColumnRepository.AddPersonValues(valueForTest);
+			OptionalColumnRepository.AddPersonValues(valueForNoGroup);
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			var gps = result.GroupPages;
+
+			gps.Single().Name.Should().Be.EqualTo(optionalColumnWithGroup.Name);
+			gps.Single().Children.Single().Name.Should().Be.EqualTo(valueForTest.Description);
+		}
+
+
+		[Test]
+		public void ShouldReturnAvailableDynamicOptionalColumnGroupPageWithValues()
+		{
+			var person = PersonFactory.CreatePerson().WithId();
+			var optionalColumnNoValue = new OptionalColumn("test").WithId();
+			optionalColumnNoValue.AvailableAsGroupPage = true;
+			var optionalColumnWithValue = new OptionalColumn("another").WithId();
+			optionalColumnWithValue.AvailableAsGroupPage = true;
+			OptionalColumnRepository.Add(optionalColumnNoValue);
+			OptionalColumnRepository.Add(optionalColumnWithValue);
+
+			var valueForAnother = new OptionalColumnValue("another").WithId();
+			person.AddOptionalColumnValue(valueForAnother, optionalColumnWithValue);
+			OptionalColumnRepository.AddPersonValues(valueForAnother);
+
+			PersonRepository.Add(person);
+			var result = Target.CreateViewModel(new DateOnlyPeriod(DateOnly.Today, DateOnly.Today), DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+
+			var gps = result.GroupPages;
+
+			gps.Single().Name.Should().Be.EqualTo(optionalColumnWithValue.Name);
+			gps.Single().Children.Single().Name.Should().Be.EqualTo(valueForAnother.Description);
 		}
 
 		[Test]

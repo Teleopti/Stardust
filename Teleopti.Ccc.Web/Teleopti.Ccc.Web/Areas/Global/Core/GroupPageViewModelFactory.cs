@@ -17,25 +17,27 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 		private readonly IUserUiCulture _uiCulture;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPermissionProvider _permissionProvider;
+		private readonly IOptionalColumnRepository _optionalColumnRepository;
 
 		public GroupPageViewModelFactory(
 			IGroupingReadOnlyRepository groupingReadOnlyRepository,
 			IUserTextTranslator userTextTranslator,
 			IUserUiCulture uiCulture, ILoggedOnUser loggedOnUser,
-			IPermissionProvider permissionProvider)
+			IPermissionProvider permissionProvider, IOptionalColumnRepository optionalColumnRepository)
 		{
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_userTextTranslator = userTextTranslator;
 			_uiCulture = uiCulture;
 			_loggedOnUser = loggedOnUser;
 			_permissionProvider = permissionProvider;
+			_optionalColumnRepository = optionalColumnRepository;
 		}
 
 		public GroupPagesViewModel CreateViewModel(DateOnlyPeriod period, string functionPath)
 		{
 			var stringComparer = StringComparer.Create(_uiCulture.GetUiCulture(), false);
 			var allGroupPages = _groupingReadOnlyRepository.AvailableGroupsBasedOnPeriod(period);
-
+			var allDynamicOptionalColumns = _optionalColumnRepository.GetOptionalColumns<Person>().Where(o=> o.AvailableAsGroupPage).ToList();
 			var allAvailableGroups =
 				_groupingReadOnlyRepository.AvailableGroups(period, allGroupPages.Select(gp=>gp.PageId).ToArray())
 					.ToLookup(t => t.PageId);
@@ -73,10 +75,33 @@ namespace Teleopti.Ccc.Web.Areas.Global.Core
 					Children = childGroups.Select(g => new GroupViewModel
 					{
 						Name = g.First().GroupName,
-						Id = g.First().GroupId
+						Id = g.First().GroupId.ToString()
 					}).OrderBy(c => c.Name, stringComparer).ToList()
 				});
 			}
+
+			foreach (var optionalColumn in allDynamicOptionalColumns)
+			{
+				var children = _optionalColumnRepository.UniqueValuesOnColumn(optionalColumn.Id.GetValueOrDefault())
+					.Select(value => new GroupViewModel
+					{
+						Id = value.Description,
+						Name = value.Description
+					})
+					.OrderBy(c => c.Name, stringComparer)
+					.ToList();
+				if (!children.Any())
+				{
+					continue;
+				}
+				actualGroupPages.Add(new GroupPageViewModel
+				{
+					Id = optionalColumn.Id.Value,
+					Name = optionalColumn.Name,
+					Children = children
+				});
+			}
+
 			return new GroupPagesViewModel
 			{
 				BusinessHierarchy = actualOrgs.OrderBy(o => o.Name, stringComparer).ToArray(),

@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Models
 
 	public class GroupViewModel
 	{
-		public Guid Id { get; set; }
+		public String Id { get; set; }
 		public String Name { get; set; }
 	}
 }
