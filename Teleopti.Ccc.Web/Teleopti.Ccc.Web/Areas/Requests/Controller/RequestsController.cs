@@ -51,6 +51,12 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Controller
 			return _shiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 		}
 
+		[HttpPost, Route("api/Requests/overtimeRequests"), UnitOfWork]
+		public virtual RequestListViewModel<OvertimeRequestViewModel> GetOvertimeRequests([FromBody]AllRequestsFormData input)
+		{
+			return _requestsViewModelFactory.CreateOvertimeRequestListViewModel(input);
+		}
+
 		[HttpPost, Route("api/Requests/approveRequests"), UnitOfWork]
 		public virtual RequestCommandHandlingResult ApproveRequests(RequestsCommandInput input)
 		{

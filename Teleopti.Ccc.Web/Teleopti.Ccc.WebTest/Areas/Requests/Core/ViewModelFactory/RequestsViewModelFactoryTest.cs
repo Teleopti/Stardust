@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -276,6 +277,41 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			Assert.AreEqual(accountDay.StartDate.Date, firstSummaryDetail.StartDate);
 		}
 
+		[Test]
+		public void ShouldGetOvertimeRequests()
+		{
+			setUpRequests();
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 1),
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedGroupIds = new[] { Guid.NewGuid() }
+			};
+
+			var result = Target.CreateOvertimeRequestListViewModel(input);
+			result.Requests.Count().Should().Be.EqualTo(1);
+			result.TotalCount.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldGetOvertimeTypeFromOvertimeRequest()
+		{
+			setUpRequests();
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 1),
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedGroupIds = new[] {Guid.NewGuid()}
+			};
+
+			var result = Target.CreateOvertimeRequestListViewModel(input);
+			result.Requests.ElementAt(0).OvertimeTypeDescription.Should().Be("test");
+		}
+
 		private AbsenceAndTextRequestViewModel doPersonalAccountSummaryTest(params AccountDay[] accountDays)
 		{
 			setupStateHolderProxy();
@@ -322,6 +358,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var textRequest1 = new TextRequest(new DateTimePeriod(2015, 10, 1, 2015, 10, 6));
 			var absenceRequest = new AbsenceRequest(absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			var textRequest2 = new TextRequest(new DateTimePeriod(2015, 10, 2, 2015, 10, 7));
+			var overtimeRequest = new OvertimeRequest(new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime),
+				new DateTimePeriod(2015, 10, 1, 2015, 10, 6));
 
 			people = new[]
 			{
@@ -335,7 +373,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				 new PersonRequest(people[0], textRequest1).WithId(),
 				 new PersonRequest(people[1], absenceRequest).WithId(),
-				 new PersonRequest (people[2], textRequest2).WithId()
+				 new PersonRequest(people[2], textRequest2).WithId(),
+				 new PersonRequest(people[0], overtimeRequest).WithId()
 			};
 
 			PersonRequestRepository.AddRange(personRequests);

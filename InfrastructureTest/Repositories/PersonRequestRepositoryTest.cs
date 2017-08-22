@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -177,10 +178,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new AbsenceRequest(absence, new DateTimePeriod(startDateTime, startDateTime)));
 			var offerRequest = createShiftExchangeOffer(new DateTime(2008, 4, 1, 0, 0, 0, DateTimeKind.Utc));
 
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime);
+			PersistAndRemoveFromUnitOfWork(multiplicatorDefinitionSet);
+			var overtimeRequest = new PersonRequest(_person,
+				new OvertimeRequest(multiplicatorDefinitionSet, new DateTimePeriod(startDateTime, startDateTime)));
+
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 			PersistAndRemoveFromUnitOfWork(textRequest);
 			PersistAndRemoveFromUnitOfWork(absenceRequest);
 			PersistAndRemoveFromUnitOfWork(offerRequest);
+			PersistAndRemoveFromUnitOfWork(overtimeRequest);
 
 			personRequests.AddRange(new[] {shiftTradePersonRequest, textRequest, absenceRequest, offerRequest});
 			return personRequests;
@@ -1019,6 +1026,23 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgentByType(_person, paging, null,
 				RequestType.AbsenceRequest);
 			result.Single().Request.RequestType.Should().Be(RequestType.AbsenceRequest);
+		}
+
+		[Test]
+		public void ShouldOnlyGetOvertimeRequests()
+		{
+			setUpGetRequestsByTypeTests();
+
+			var filter = new RequestFilter
+			{
+				Paging = new Paging {Skip = 0, Take = 5},
+				RequestTypes = new[] {RequestType.OvertimeRequest},
+				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
+				Persons = new[] { _person }
+			};
+
+			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter);
+			result.Single().Request.RequestType.Should().Be(RequestType.OvertimeRequest);
 		}
 
 		[Test]

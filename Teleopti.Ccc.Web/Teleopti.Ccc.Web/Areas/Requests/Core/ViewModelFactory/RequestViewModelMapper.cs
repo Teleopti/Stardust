@@ -15,7 +15,8 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 {
 	public class RequestViewModelMapper 
-		: IRequestViewModelMapper<AbsenceAndTextRequestViewModel>, IRequestViewModelMapper<ShiftTradeRequestViewModel>
+		: IRequestViewModelMapper<AbsenceAndTextRequestViewModel>, IRequestViewModelMapper<ShiftTradeRequestViewModel>,
+			IRequestViewModelMapper<OvertimeRequestViewModel>
 	{
 
 		private readonly IPersonNameProvider _personNameProvider;
@@ -42,6 +43,16 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 	NameFormatSettings nameFormatSettings)
 		{
 			mapRequestViewModel(requestViewModel, request, nameFormatSettings);
+
+			return requestViewModel;
+		}
+
+		public OvertimeRequestViewModel Map(OvertimeRequestViewModel requestViewModel, IPersonRequest request,
+			NameFormatSettings nameFormatSettings)
+		{
+			mapRequestViewModel(requestViewModel, request, nameFormatSettings);
+
+			requestViewModel.OvertimeTypeDescription = (request.Request as IOvertimeRequest)?.MultiplicatorDefinitionSet.Name;
 
 			return requestViewModel;
 		}

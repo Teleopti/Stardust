@@ -13,18 +13,20 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 	public class RequestsViewModelFactory : IRequestsViewModelFactory
 	{
 		private readonly IRequestsProvider _requestsProvider;
-		private readonly IRequestViewModelMapper<AbsenceAndTextRequestViewModel> _requestViewModelMapper;
+		private readonly IRequestViewModelMapper<AbsenceAndTextRequestViewModel> _absenceAndTextRequestViewModelMapper;
+		private readonly IRequestViewModelMapper<OvertimeRequestViewModel> _overtimeRequestViewModelMapper;
 		private readonly IRequestFilterCreator _requestFilterCreator;
 		private readonly ISettingsPersisterAndProvider<NameFormatSettings> _nameFormatSettings;
 
 		public RequestsViewModelFactory(IRequestsProvider requestsProvider,
-			IRequestViewModelMapper<AbsenceAndTextRequestViewModel> requestViewModelMapper,
-			IRequestFilterCreator requestFilterCreator, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings)
+			IRequestViewModelMapper<AbsenceAndTextRequestViewModel> absenceAndTextRequestViewModelMapper,
+			IRequestFilterCreator requestFilterCreator, ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettings, IRequestViewModelMapper<OvertimeRequestViewModel> overtimeRequestViewModelMapper)
 		{
 			_requestsProvider = requestsProvider;
-			_requestViewModelMapper = requestViewModelMapper;
+			_absenceAndTextRequestViewModelMapper = absenceAndTextRequestViewModelMapper;
 			_requestFilterCreator = requestFilterCreator;
 			_nameFormatSettings = nameFormatSettings;
+			_overtimeRequestViewModelMapper = overtimeRequestViewModelMapper;
 		}
 
 		public RequestListViewModel<AbsenceAndTextRequestViewModel> CreateAbsenceAndTextRequestListViewModel(AllRequestsFormData input)
@@ -37,9 +39,8 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 				};
 			}
 
-			int totalCount;
 			var requestFilter = _requestFilterCreator.Create(input, new[] { RequestType.AbsenceRequest, RequestType.TextRequest });
-			var requests = _requestsProvider.RetrieveRequests(requestFilter, out totalCount);
+			var requests = _requestsProvider.RetrieveRequests(requestFilter, out int totalCount);
 			var nameFormatSettings = _nameFormatSettings.Get();
 
 			return new RequestListViewModel<AbsenceAndTextRequestViewModel>
@@ -51,9 +52,38 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			};
 		}
 
-		private AbsenceAndTextRequestViewModel toAbsenceAndTextRequestViewModel(IPersonRequest request, NameFormatSettings nameFormatSetting)
+		public RequestListViewModel<OvertimeRequestViewModel> CreateOvertimeRequestListViewModel(AllRequestsFormData input)
 		{
-			return _requestViewModelMapper.Map(new AbsenceAndTextRequestViewModel(), request, nameFormatSetting);
+			if (input == null || input.SelectedGroupIds.Length == 0)
+			{
+				return new RequestListViewModel<OvertimeRequestViewModel>
+				{
+					Requests = new OvertimeRequestViewModel[] { }
+				};
+			}
+
+			var requestFilter = _requestFilterCreator.Create(input, new[] { RequestType.OvertimeRequest });
+			var requests = _requestsProvider.RetrieveRequests(requestFilter, out int totalCount);
+			var nameFormatSettings = _nameFormatSettings.Get();
+
+			return new RequestListViewModel<OvertimeRequestViewModel>
+			{
+				Requests = requests.Select(s => toOvertimeRequestViewModel(s, nameFormatSettings)).ToList(),
+				TotalCount = totalCount,
+				Skip = input.Paging.Skip,
+				Take = input.Paging.Take
+			};
+		}
+
+		private AbsenceAndTextRequestViewModel toAbsenceAndTextRequestViewModel(IPersonRequest request,
+			NameFormatSettings nameFormatSetting)
+		{
+			return _absenceAndTextRequestViewModelMapper.Map(new AbsenceAndTextRequestViewModel(), request, nameFormatSetting);
+		}
+
+		private OvertimeRequestViewModel toOvertimeRequestViewModel(IPersonRequest request, NameFormatSettings nameFormatSetting)
+		{
+			return _overtimeRequestViewModelMapper.Map(new OvertimeRequestViewModel(), request, nameFormatSetting);
 		}
 	}
 }

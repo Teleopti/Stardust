@@ -398,6 +398,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					type = typeof(ShiftTradeRequest);
 					break;
 
+				case RequestType.OvertimeRequest:
+					type = typeof(OvertimeRequest);
+					break;
+
 				default:
 					return null;
 			}
