@@ -105,54 +105,8 @@ md-progress-circular{
 }
 
 //Temp move us to styleguide
-.wfm-form input, .wfm-form select{
-	margin:0!important;
-}
-
-md-tooltip{
-	z-index: 1010;
-}
-.md-tooltip {
-  height: auto  !important;
-}
-
-.align-bottom-flex {
-	align-self: flex-end;
-}
-
-.non-pointer{
-	pointer-events: none;
-
-	&:focus{
-		display: none;
-	}
-}
-
 .locked {
 	color: $text-color-muted!important;
 	cursor: not-allowed;
 	pointer-events:none;
-}
-
-.tree-handle-wrapper{
-	width:100%;
-}
-
-.margin-center{
-	margin: 0 auto;
-}
-
-.list-dot {
-    float: none!important;
-		width: 25px;
-		text-align: center;
-		box-shadow: 0 0 0 0 transparent!important;
-}
-
-//C3 fix
-body > .c3 > svg {
-    position: absolute;
-    z-index: -10;
-    top: 0;
-		height:0px !important
 }

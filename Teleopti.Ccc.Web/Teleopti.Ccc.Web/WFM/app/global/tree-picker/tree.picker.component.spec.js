@@ -1,6 +1,6 @@
 'use strict';
 
-fdescribe('treePickerComponent', function () {
+describe('treePickerComponent', function () {
   var
   $componentController,
   ctrl,
