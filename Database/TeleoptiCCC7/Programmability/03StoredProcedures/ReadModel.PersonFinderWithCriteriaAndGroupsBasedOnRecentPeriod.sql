@@ -48,7 +48,6 @@ DECLARE @SearchCriteria TABLE(
 	SearchValue nvarchar(max) NULL
 )
 
-
 CREATE TABLE #IntermediatePersonId (PersonId uniqueidentifier)
 
 SELECT @dynamicSQL=''
@@ -56,9 +55,6 @@ SELECT @dynamicSQL=''
 -- Get searchString into temptable
 INSERT INTO @SearchStrings
 SELECT * FROM dbo.SplitStringString(@search_criterias)
-
-
-
 
 --select * from #SearchStrings
 
@@ -136,38 +132,38 @@ SELECT @start_date_ISO = CONVERT(NVARCHAR(10), @start_date,120)
 SELECT @end_date_ISO = CONVERT(NVARCHAR(10), @end_date,120)
 
 IF(@group_ids <> '')
-BEGIN
-	CREATE TABLE #AllGroupId (Id uniqueidentifier NOT NULL)
-	--Get teamIds to tempt table #AllGroupId
-	INSERT INTO #AllGroupId
-	SELECT * FROM dbo.SplitStringString(@group_ids)
+	BEGIN
+		CREATE TABLE #AllGroupId (Id uniqueidentifier NOT NULL)
+		--Get teamIds to tempt table #AllGroupId
+		INSERT INTO #AllGroupId
+		SELECT * FROM dbo.SplitStringString(@group_ids)
 
-   INSERT INTO #IntermediatePersonId
-   SELECT PersonId
-   FROM ReadModel.groupingreadonly
-   Join #AllGroupId on ReadModel.groupingreadonly.GroupId = #AllGroupId.Id
-   WHERE businessunitid = @business_unit_id
-      AND @start_date_ISO <= isnull(EndDate, '2059-12-31')
-	  AND @end_date_ISO >= isnull(StartDate, '1900-01-01')
-      AND (
-        LeavingDate >= @start_date
-        OR LeavingDate IS NULL
-       )
-   ORDER BY groupname
+		INSERT INTO #IntermediatePersonId
+		SELECT PersonId
+		FROM ReadModel.groupingreadonly
+		Join #AllGroupId on ReadModel.groupingreadonly.GroupId = #AllGroupId.Id
+		WHERE businessunitid = @business_unit_id
+			AND @start_date_ISO <= isnull(EndDate, '2059-12-31')
+			AND @end_date_ISO >= isnull(StartDate, '1900-01-01')
+			AND (
+			LeavingDate >= @start_date
+			OR LeavingDate IS NULL
+			)
+		ORDER BY groupname
 
-END
+	END
 ELSE
-BEGIN
-	CREATE TABLE #AllDynamicOptionalValues (Value nvarchar(max) NOT NULL)
-	--Get teamIds to tempt table #AllGroupId
-	INSERT INTO #AllDynamicOptionalValues
-	SELECT * FROM dbo.SplitStringString(@dynamic_values)
+	BEGIN
+		CREATE TABLE #AllDynamicOptionalValues (Value nvarchar(max) NOT NULL)
+	
+		INSERT INTO #AllDynamicOptionalValues
+		SELECT * FROM dbo.SplitStringString(@dynamic_values)
 
-	INSERT INTO #IntermediatePersonId
-   SELECT ReferenceId
-   FROM dbo.OptionalColumnValue AS ocv
-   WHERE EXISTS (SELECT Value FROM #AllDynamicOptionalValues WHERE ocv.[Description] = Value COLLATE DATABASE_DEFAULT)
-END
+		INSERT INTO #IntermediatePersonId
+		SELECT ReferenceId
+		FROM dbo.OptionalColumnValue AS ocv
+		WHERE EXISTS (SELECT Value FROM #AllDynamicOptionalValues WHERE ocv.[Description] = Value COLLATE DATABASE_DEFAULT)
+	END
 
 IF @criteriaCount = 0 AND (@group_ids <> '' OR @dynamic_values <> '')
 BEGIN
