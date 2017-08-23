@@ -178,12 +178,8 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 		public void ShouldReturnInformationOnDuplicateSkill()
 		{
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
-TPBRZIL,ChannelSales|Directsales,2017-07-24 10:00,2017-07-24 10:15,12.5
-TPBRZIL,ChannelSales|Directsales,2017-07-24 10:15,2017-07-24 10:30,2.5
-TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,8.75
-TPBRZIL,ChannelSales,2017-07-24 10:15,2017-07-24 10:30,3.5
-TPBRZIL,Directsales,2017-07-24 10:00,2017-07-24 10:15,1.5
-TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
+TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0
+TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,8.75";
 
 			SkillRepository.Has("ChannelSales", new Activity());
 			SkillRepository.Has("ChannelSales", new Activity());
@@ -194,7 +190,7 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 		}
 
 		[Test]
-		public void ShouldReturnInformationIfAnSourceIsMissing()
+		public void ShouldReturnInformationIfSourceIsMissing()
 		{
 			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
 								Directsales,2017-07-24 10:15,2017-07-24 10:30, 6.0";
@@ -279,15 +275,17 @@ TPBRZIL,Directsales,2017-07-24 10:15,2017-07-24 10:30,6.0";
 		}
 
 		[Test]
-		public void ShouldNotSaveIfSkillIsMissing()
+		public void ShouldReturnFalseIfSkillIsMissing()
 		{
 			var fileContents = @"source, skillgroup, startdatetime, enddatetime, resources
 								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0
 								TPBRZIL, KLINGON, 2017-07-24 10:15, 2017-07-24 10:30, 6.0";
 
 			SkillRepository.Has("Directsales", new Activity());
-			Target.ImportFile(fileContents, new CultureInfo("en-US", false));
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 
+			result.Success.Should().Be.False();
+			result.ErrorInformation.SingleOrDefault(e => e.Contains("KLINGON")).Should().Not.Be.Null();
 			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(0);
 		}
 
@@ -300,6 +298,23 @@ TPBRZIL,ChannelSales,2017-07-24 1000,2017-07-24 10:15,10.5";
 			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
 			result.Success.Should().Be.False();
 			result.ErrorInformation.SingleOrDefault(e => e.Contains("date")).Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnTrueIfImportingSameFileTwice()
+		{
+			var fileContents = @"source,skillgroup,startdatetime,enddatetime,resources
+TPBRZIL,ChannelSales,2017-07-24 10:00,2017-07-24 10:15,10.5";
+
+			SkillRepository.Has("ChannelSales", new Activity());
+
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
+			result.Success.Should().Be.True();
+			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(1);
+
+			var result2 = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
+			result2.Success.Should().Be.True();
+			SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo().Count.Should().Be.EqualTo(1);
 		}
 
 		[Test]
