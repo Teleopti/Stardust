@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.WebStaffing))
 			{
-				return _toggleManager.IsEnabled(Toggles.WfmStaffing_AddOvertime_42524);
+				return _toggleManager.IsEnabled(Toggles.Wfm_Staffing_45411);
 			}
 			if (path.Equals(DefinedRaptorApplicationFunctionPaths.MyTimeWeb))
 			{

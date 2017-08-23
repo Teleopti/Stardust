@@ -57,14 +57,12 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			var skillArea = _skillAreaRepository.Get(SkillAreaId);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
 			return Ok(_staffingViewModelCreator.Load(skillIdList, new DateOnly(DateTime), UseShrinkage));
-			//return Ok(_staffingViewModelCreator.Load(skillIdList));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillstaffing")]
 		public virtual IHttpActionResult MonitorSkillStaffingByDate(Guid SkillId, DateTime DateTime, bool UseShrinkage)
 		{
 			return Ok(_staffingViewModelCreator.Load(new[] { SkillId }, new DateOnly(DateTime), UseShrinkage));
-			//return Ok(_staffingViewModelCreator.Load(new[] { SkillId }));
 		}
 
 		[UnitOfWork, HttpPost, Route("api/staffing/overtime/suggestion")]
