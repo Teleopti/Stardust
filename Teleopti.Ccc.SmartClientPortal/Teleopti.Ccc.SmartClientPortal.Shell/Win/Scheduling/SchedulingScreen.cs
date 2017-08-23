@@ -1850,6 +1850,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				toolStripMenuItemViewHistory.Enabled = _isAuditingSchedules;
 
 			toolStripMenuItemSwitchToViewPointOfSelectedAgent.Enabled = _scheduleView.SelectedSchedules().Any();
+
+			toolStripMenuItemViewReport.Visible = !_container.Resolve<IToggleManager>()
+				.IsEnabled(Toggles.Report_Realtime_Scheduled_Time_Per_Activity_45560);
 		}
 
 		#region Virtual skill handling
