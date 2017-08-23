@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds,
 			IDictionary<PersonFinderField, string> searchCriteria);
 
-		List<Guid> FindPersonIdsInPeriodWithDynamicGroup(DateOnlyPeriod period, string[] dynamicValues,
+		List<Guid> FindPersonIdsInPeriodWithDynamicGroup(DateOnlyPeriod period, Guid groupPageId, string[] dynamicValues,
 			IDictionary<PersonFinderField, string> searchCriteria);
 	}
 }

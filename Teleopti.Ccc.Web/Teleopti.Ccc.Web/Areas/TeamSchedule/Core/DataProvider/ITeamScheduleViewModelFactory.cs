@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider
 		public int PageSize { get; set; }
 		public int CurrentPageIndex { get; set; }
 		public Guid[] GroupIds { get; set; }
+		public Guid? GroupPageId { get; set; }
 		public string[] DynamicOptionalValues { get; set; }
 
 		public bool IsDynamic => DynamicOptionalValues != null && DynamicOptionalValues.Any();

@@ -82,6 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 				_teamScheduleViewModelFactory.CreateViewModel(new SearchDaySchedulesInput
 				{
 					GroupIds = input.GroupIds,
+					GroupPageId = input.SelectedGroupPageId,
 					DynamicOptionalValues = input.DynamicOptionalValues,
 					CriteriaDictionary = SearchTermParser.Parse(input.Keyword),
 					DateInUserTimeZone = currentDate,
@@ -105,6 +106,7 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 			var result =
 				_teamScheduleViewModelFactory.CreateWeekScheduleViewModel(new SearchSchedulesInput
 				{
+					GroupPageId = input.SelectedGroupPageId,
 					GroupIds = input.GroupIds,
 					DynamicOptionalValues = input.DynamicOptionalValues,
 					CriteriaDictionary = criteriaDictionary,

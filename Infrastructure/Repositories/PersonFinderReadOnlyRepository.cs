@@ -330,39 +330,55 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public List<Guid> FindPersonIdsInGroupsBasedOnPersonPeriod(DateOnlyPeriod period,
 			Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
-			return findPersonIdsInGroups(period, groupIds, searchCriteria);
-		}
-
-		public List<Guid> FindPersonIdsInDynamicOptionalGroupPages(DateOnlyPeriod period,
-			string[] dynamicValues, IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			return findPersonIdsInGroups(period, dynamicValues, searchCriteria);
-		}
-
-		private List<Guid> findPersonIdsInGroups<T>(DateOnlyPeriod period,
-			T[] groups, IDictionary<PersonFinderField, string> searchCriteria)
-		{
 			var result = new List<Guid>();
-			var isDynamic = groups is string[];
 
-			if (groups.Length == 0)
+			if (groupIds.Length == 0)
 			{
 				return result;
 			}
 
-			foreach (var groupBatch in groups.Batch(100))
+			foreach (var groupBatch in groupIds.Batch(100))
 			{
 				var valuesString = string.Join(",", groupBatch.Select(x => x.ToString()));
 
 				var searchString = createSearchString(searchCriteria);
 				var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
-						"exec [ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeriod] @business_unit_id=:business_unit_id, @search_criterias=:search_criterias, @start_date=:start_date, @end_date=:end_date, @group_ids=:group_ids, @dynamic_values=:dynamic_values")
+						"exec [ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeriod] @business_unit_id=:business_unit_id, @search_criterias=:search_criterias, @start_date=:start_date, @end_date=:end_date, @group_ids=:group_ids")
 					.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
 					.SetString("search_criterias", searchString)
 					.SetDateOnly("start_date", period.StartDate)
 					.SetDateOnly("end_date", period.EndDate)
-					.SetString("group_ids", isDynamic ? "" : valuesString)
-					.SetString("dynamic_values", isDynamic ? valuesString : "")
+					.SetString("group_ids", valuesString)
+					.SetReadOnly(true)
+					.List<Guid>();
+				result.AddRange(batchResult);
+			}
+			return result;
+		}
+
+		public List<Guid> FindPersonIdsInDynamicOptionalGroupPages(DateOnlyPeriod period, Guid groupPageId,
+			string[] dynamicValues, IDictionary<PersonFinderField, string> searchCriteria)
+		{
+			var result = new List<Guid>();
+
+			if (dynamicValues.Length == 0)
+			{
+				return result;
+			}
+
+			foreach (var groupBatch in dynamicValues.Batch(100))
+			{
+				var valuesString = string.Join(",", groupBatch.Select(x => x.ToString()));
+
+				var searchString = createSearchString(searchCriteria);
+				var batchResult = _currentUnitOfWork.Session().CreateSQLQuery(
+						"exec [ReadModel].[PersonFinderWithCriteriaAndDynamicOptionalGroupsBasedOnRecentPeriod] @business_unit_id=:business_unit_id, @search_criterias=:search_criterias, @start_date=:start_date, @end_date=:end_date, @group_page_id=:group_page_id, @dynamic_values=:dynamic_values")
+					.SetGuid("business_unit_id", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+					.SetString("search_criterias", searchString)
+					.SetDateOnly("start_date", period.StartDate)
+					.SetDateOnly("end_date", period.EndDate)
+					.SetGuid("group_page_id", groupPageId)
+					.SetString("dynamic_values", valuesString)
 					.SetReadOnly(true)
 					.List<Guid>();
 				result.AddRange(batchResult);

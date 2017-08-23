@@ -1,30 +1,31 @@
-IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeriod]')
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[ReadModel].[PersonFinderWithCriteriaAndDynamicOptionalGroupsBasedOnRecentPeriod]')
    AND type in (N'P', N'PC'))
-DROP PROCEDURE [ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeriod]
+DROP PROCEDURE [ReadModel].[PersonFinderWithCriteriaAndDynamicOptionalGroupsBasedOnRecentPeriod]
 GO
 
--- exec [ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeriod] N'FirstName:Ash,LastName:an', '2017-02-14 00:00:00', N'0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495,e5f968d7-6f6d-407c-81d5-9b5e015ab495,d7a9c243-8cd8-406e-9889-9b5e015ab495,7f38bb91-d33b-4f5b-8161-9b5e015ab495,34590a63-6331-4921-bc9f-9b5e015ab495,e7ce8892-4db3-49c8-bdf6-9b5e015ab495'
+-- exec [ReadModel].[PersonFinderWithCriteriaAndDynamicOptionalGroupsBasedOnRecentPeriod] N'FirstName:Ash,LastName:an', '2017-02-14 00:00:00', N'0a1cdb27-bc01-4bb9-b0b3-9b5e015ab495,e5f968d7-6f6d-407c-81d5-9b5e015ab495,d7a9c243-8cd8-406e-9889-9b5e015ab495,7f38bb91-d33b-4f5b-8161-9b5e015ab495,34590a63-6331-4921-bc9f-9b5e015ab495,e7ce8892-4db3-49c8-bdf6-9b5e015ab495'
 -- =============================================
 -- Author:      Chundan
--- Create date: 2017-07-03
--- Description: Gets the person(s) match search criteria and groups specified in the ReadModel (AND-search) in the most recent period, Based on ReadModel.PersonFinder 
+-- Create date: 2017-08-23
+-- Description: Gets the person(s) match search criteria and dynaic optional groups specified in the ReadModel (AND-search) in the most recent period, Based on ReadModel.PersonFinder 
 -- Change Log
 ------------------------------------------------
 -- When         Who       What
--- 2017-07-03   Chundan   create
+-- 2017-08-23   Chundan   create
 -- =============================================
-CREATE PROCEDURE [ReadModel].[PersonFinderWithCriteriaAndGroupsBasedOnRecentPeriod]
+CREATE PROCEDURE [ReadModel].[PersonFinderWithCriteriaAndDynamicOptionalGroupsBasedOnRecentPeriod]
 @business_unit_id uniqueidentifier,
 @search_criterias nvarchar(max),
 @start_date datetime,
 @end_date datetime,
-@group_ids nvarchar(max)
+@group_page_id uniqueidentifier,
+@dynamic_values nvarchar(max)
 AS
 BEGIN
 SET NOCOUNT ON
 
 --if empty input, then RETURN
-IF @group_ids = '' RETURN
+IF @dynamic_values = '' RETURN
 SELECT @search_criterias = REPLACE(@search_criterias, '%', '[%]') --make '%' valuable search value
 
 --declare
@@ -131,24 +132,22 @@ SELECT @start_date_ISO = CONVERT(NVARCHAR(10), @start_date,120)
 SELECT @end_date_ISO = CONVERT(NVARCHAR(10), @end_date,120)
 
 
-CREATE TABLE #AllGroupId (Id uniqueidentifier NOT NULL)
---Get teamIds to tempt table #AllGroupId
-INSERT INTO #AllGroupId
-SELECT * FROM dbo.SplitStringString(@group_ids)
+CREATE TABLE #AllDynamicOptionalValues (Value nvarchar(max) NOT NULL)
+	
+INSERT INTO #AllDynamicOptionalValues
+SELECT * FROM dbo.SplitStringString(@dynamic_values)
 
 INSERT INTO #IntermediatePersonId
-SELECT PersonId
-FROM ReadModel.groupingreadonly
-Join #AllGroupId on ReadModel.groupingreadonly.GroupId = #AllGroupId.Id
-WHERE businessunitid = @business_unit_id
-	AND @start_date_ISO <= isnull(EndDate, '2059-12-31')
-	AND @end_date_ISO >= isnull(StartDate, '1900-01-01')
-	AND (
-	LeavingDate >= @start_date
-	OR LeavingDate IS NULL
-	)
+SELECT ReferenceId
+FROM dbo.OptionalColumnValue AS ocv
+WHERE
+ EXISTS
+	(SELECT Value 
+		FROM #AllDynamicOptionalValues 
+		WHERE ocv.Parent = @group_page_id
+		AND ocv.[Description] = Value COLLATE DATABASE_DEFAULT)
 
-IF @criteriaCount = 0 AND @group_ids <> ''
+IF @criteriaCount = 0 AND @dynamic_values <> ''
 BEGIN
 	SELECT @dynamicSQL = 'SELECT PersonId FROM #IntermediatePersonId '
 END

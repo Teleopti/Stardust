@@ -109,6 +109,7 @@
 				SortingOrders: sortingOrders,
 				AgentSearchTerm: terms, 
 				SelectedGroupIds: filter.selectedGroupIds,
+				SelectedGroupPageId: filter.selectedGroupPageId,
 				Filters: filters
 			};
 

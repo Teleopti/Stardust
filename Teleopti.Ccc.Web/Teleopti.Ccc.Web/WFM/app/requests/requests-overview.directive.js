@@ -83,6 +83,7 @@
 				period: vm.period,
 				agentSearchTerm: vm.agentSearchTerm,
 				selectedGroupIds: vm.selectedGroupIds,
+				selectedGroupPageId: vm.selectedGroupPageId,
 				filters: vm.filters
 			};
 
@@ -107,6 +108,7 @@
 				period: '=?',
 				agentSearchTerm: '=?',
 				selectedGroupIds: '=?',
+				selectedGroupPageId: '=?',
 				filterEnabled: '=?',
 				isActive: '=?',
 				onInitCallBack: '&?',

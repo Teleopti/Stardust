@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			{
 				var period = new DateOnlyPeriod(input.StartDate, input.EndDate);
 				targetIds = !input.IsDynamic ? _peopleSearchProvider.FindPersonIdsInPeriodWithGroup(period, input.GroupIds, input.AgentSearchTerm)
-											: _peopleSearchProvider.FindPersonIdsInPeriodWithDynamicGroup(period, input.DynamicOptionalValues, input.AgentSearchTerm);
+											: _peopleSearchProvider.FindPersonIdsInPeriodWithDynamicGroup(period,input.SelectedGroupPageId, input.DynamicOptionalValues, input.AgentSearchTerm);
 
 			}
 			else if (searchAgentBasedOnCorrectPeriodToggle)

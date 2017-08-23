@@ -250,8 +250,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			return people.Select(p => p.Id.Value).ToList();
 		}
-		
-		public List<Guid> FindPersonIdsInPeriodWithDynamicGroup(DateOnlyPeriod period, string[] dynamicValues, IDictionary<PersonFinderField, string> searchCriteria)
+
+		public List<Guid> FindPersonIdsInPeriodWithDynamicGroup(DateOnlyPeriod period, Guid groupPageId, string[] dynamicValues, IDictionary<PersonFinderField, string> searchCriteria)
 		{
 			IEnumerable<IPerson> people = _permittedPeople;
 

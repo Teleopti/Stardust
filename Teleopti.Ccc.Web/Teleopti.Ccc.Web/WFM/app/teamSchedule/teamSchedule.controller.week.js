@@ -235,7 +235,8 @@
 				Date: options.date || moment(vm.startOfWeek).format('YYYY-MM-DD'),
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,
 				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
-				SelectedGroupIds: vm.selectedGroups.groupIds
+				SelectedGroupIds: vm.selectedGroups.groupIds,
+				SelectedGroupPageId: vm.selectedGroups.groupPageId
 			};
 			return params;
 		}

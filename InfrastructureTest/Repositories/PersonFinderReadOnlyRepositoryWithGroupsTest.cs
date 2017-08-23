@@ -147,7 +147,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			WithUnitOfWork.Do(() =>
 			{
-				var result = Target.FindPersonIdsInDynamicOptionalGroupPages(new DateOnlyPeriod(scheduleDate, scheduleDate), new[] { "test value" },
+				var result = Target.FindPersonIdsInDynamicOptionalGroupPages(new DateOnlyPeriod(scheduleDate, scheduleDate),optionColumn.Id.Value, new[] { "test value" },
 					new Dictionary<PersonFinderField, string> {
 						{ PersonFinderField.FirstName, "dummyAgent1"}
 					});

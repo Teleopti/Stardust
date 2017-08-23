@@ -215,7 +215,8 @@
 				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
 				IsOnlyAbsences: vm.onlyLoadScheduleWithAbsence,
 				SortOption: vm.sortOption,
-				SelectedGroupIds: vm.selectedGroups.groupIds
+				SelectedGroupIds: vm.selectedGroups.groupIds,
+				SelectedGroupPageId: vm.selectedGroups.groupPageId
 			};
 			return params;
 		}
