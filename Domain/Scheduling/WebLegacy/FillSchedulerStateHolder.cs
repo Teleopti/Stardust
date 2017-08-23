@@ -105,11 +105,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WebLegacy
 			{
 				schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(skillDay.Key);
 			}
-
 			foreach (var emptySkillday in schedulerStateHolderTo.SchedulingResultState.SkillDays.ToList().Where(skillDay => !skillDay.Value.Any()))
 			{
 				schedulerStateHolderTo.SchedulingResultState.SkillDays.Remove(emptySkillday.Key);
 				schedulerStateHolderTo.SchedulingResultState.RemoveSkill(emptySkillday.Key);
+			}
+			foreach (var skillWithMissingSkillDay in schedulerStateHolderTo.SchedulingResultState.Skills.ToList().Where(skill => !schedulerStateHolderTo.SchedulingResultState.SkillDays.Keys.Contains(skill)))
+			{
+				schedulerStateHolderTo.SchedulingResultState.RemoveSkill(skillWithMissingSkillDay);
 			}
 		}
 
