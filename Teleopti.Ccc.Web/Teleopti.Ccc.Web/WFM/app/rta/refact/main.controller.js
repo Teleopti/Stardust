@@ -44,7 +44,7 @@
 			}
 
 		})();
-
+ 
 		function pollInitiate() {
 			vm.siteCards = [];
 			pollNow();
