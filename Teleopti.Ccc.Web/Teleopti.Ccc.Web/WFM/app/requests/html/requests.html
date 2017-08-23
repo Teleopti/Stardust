@@ -28,7 +28,7 @@
 
 			<div class="people-search-container"
 			     ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
-				<wfm-multiple-search-input class="request-filter inline-block" search-title="vm.searchPlaceholder" search-options="vm.agentSearchOptions" search-callback="vm.onSearchTermChangedCallback" focus-input="vm.agentSearchOptions.focusingSearch" ></wfm-multiple-search-input>
+				<wfm-multiple-search-input class="request-filter inline-block" search-title="vm.searchPlaceholder" search-options="vm.agentSearchOptions" search-callback="vm.onSearchTermChangedCallback" ></wfm-multiple-search-input>
 			</div>
 
 			<date-range-picker id="Request-period" class="request-date-range-picker" ng-model="vm.period"
