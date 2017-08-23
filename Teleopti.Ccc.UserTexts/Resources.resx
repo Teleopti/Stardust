@@ -16418,4 +16418,16 @@ Do you want to participate?</value>
   <data name="SkillsParenthesisS" xml:space="preserve">
     <value>Skill(s)</value>
   </data>
+  <data name="OverstaffingAfterOT" xml:space="preserve">
+    <value>Overstaffing after OT</value>
+    <comment>label for the staffingchart to show the overstaffing  after overtime suggestion has been requested</comment>
+  </data>
+  <data name="ScheduledAgentsAfterOT" xml:space="preserve">
+    <value>Scheduled agents after OT</value>
+    <comment>label for the staffingchart to show the scheduled agents after overtime suggestion has been requested</comment>
+  </data>
+  <data name="UnderstaffingAfterOT" xml:space="preserve">
+    <value>Understafing after OT</value>
+    <comment>label for the staffingchart to show the understaffing after overtime suggestion has been requested</comment>
+  </data>
 </root>

@@ -80,7 +80,7 @@
             staffingData.suggested.forcastedStaffing = data.DataSeries.ForecastedStaffing;
             staffingData.suggested.absoluteDifference = data.DataSeries.AbsoluteDifference;
             staffingData.suggested.forcastedStaffing.unshift($translate.instant('ForecastedStaff'));
-            staffingData.suggested.scheduledStaffing.unshift($translate.instant('Suggested scheduled agents'));
+            staffingData.suggested.scheduledStaffing.unshift($translate.instant('ScheduledAgentsAfterOT'));
 
             return staffingData;
         }

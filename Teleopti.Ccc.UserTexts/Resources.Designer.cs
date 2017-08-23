@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -21996,6 +21996,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overstaffing after OT.
+        /// </summary>
+        public static string OverstaffingAfterOT {
+            get {
+                return ResourceManager.GetString("OverstaffingAfterOT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Overstaffing:.
         /// </summary>
         public static string OverstaffingColon {
@@ -27494,6 +27503,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Scheduled {
             get {
                 return ResourceManager.GetString("Scheduled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scheduled agents after OT.
+        /// </summary>
+        public static string ScheduledAgentsAfterOT {
+            get {
+                return ResourceManager.GetString("ScheduledAgentsAfterOT", resourceCulture);
             }
         }
         
@@ -34338,6 +34356,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Understaffing {
             get {
                 return ResourceManager.GetString("Understaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Understafing after OT.
+        /// </summary>
+        public static string UnderstaffingAfterOT {
+            get {
+                return ResourceManager.GetString("UnderstaffingAfterOT", resourceCulture);
             }
         }
         

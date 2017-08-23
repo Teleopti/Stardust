@@ -140,8 +140,8 @@
             }
 
             if (isSuggestedData) {
-                staffing.over.unshift($translate.instant('Suggested overstaffing'));
-                staffing.under.unshift($translate.instant('Suggested understaffing'));
+                staffing.over.unshift($translate.instant('OverstaffingAfterOT'));
+                staffing.under.unshift($translate.instant('UnderstaffingAfterOT'));
             } else {
                 staffing.over.unshift($translate.instant('Overstaffing'));
                 staffing.under.unshift($translate.instant('Understaffing'));
