@@ -47,7 +47,7 @@
       } else if (ctrl.options.topSelectOnly) {
         node.clickedNode = clickedNodeForTopSelect;
       } else {
-
+        node.clickedNode = clickedNodeForSingleSelect;
       }
       node.isSelectedInUI = false;
       if (nodeHasChildren(node)) {
@@ -56,12 +56,67 @@
       }
     }
 
+    var root;
+
+    function clickedNodeForSingleSelect(node) {
+      if (node.parent == null) {
+        if (root != null) {
+          removeNode(root);
+          traverseNodes(root.nodes, removeNode);
+          addNode(node);
+          traverseNodes(node.nodes, addNode);
+          root = node;
+        } else {
+          clickedNode(node)
+          root = node;
+        }
+      } else {
+        if (root == null) {
+          root = findMyRoot(node);
+          clickedNode(node);
+        } else {
+          var tempRoot = findMyRoot(node);
+
+          if (tempRoot === root) {
+            if (node.nodes.length){
+              toggleNode(node)
+              traverseNodes(node.nodes, toggleNode)
+            } else {
+              toggleEverythingInMyBranchApartFromRoot(node)
+            }
+          } else {
+            traverseNodes(root.nodes, removeNode);
+            removeNode(root);
+            clickedNode(node);
+            root = findMyRoot(node);
+          }
+        }
+      }
+    }
+
+    function findMyRoot(node) {
+      if (node.parent == null){
+        return node;
+      } else{
+        return findMyRoot(node.parent);
+      }
+    }
+
+    function toggleEverythingInMyBranchApartFromRoot(node) {
+      if ( node.parent == null) {
+        return;
+      } else {
+        toggleNode(node);
+        return toggleEverythingInMyBranchApartFromRoot(node.parent);
+      }
+    }
+
     function clickedNodeForTopSelect(node) {
       toggleNode(node);
       if (node.parent == null || node.isSelectedInUI)
-        toggleParentForTopSelect(node);
-        else
-        traverseNodes(node.nodes, removeNode);
+      toggleParentForTopSelect(node);
+      else
+      traverseNodes(node.nodes, removeNode);
     }
 
     function toggleParentForTopSelect(node) {
