@@ -199,5 +199,6 @@ Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 WFM_Export_Forecast_44716 = true
 WFM_RedirectPermissionToWeb_44562 = true
 WFM_TrainingPlanner_44780 = RC
+Wfm_Staffing_45411 = RC
 
 Report_Realtime_Scheduled_Time_Per_Activity_45560 = false
