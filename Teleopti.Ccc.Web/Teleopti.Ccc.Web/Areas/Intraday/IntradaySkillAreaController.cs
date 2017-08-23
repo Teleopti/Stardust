@@ -9,7 +9,7 @@ using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
-	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
+	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday,DefinedRaptorApplicationFunctionPaths.WebStaffing)]
 	public class IntradaySkillAreaController : ApiController
 	{
 		private readonly CreateSkillArea _createSkillArea;

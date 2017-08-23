@@ -15,7 +15,7 @@
         var suggestion = $resource('../api/staffing/overtime/suggestion');
         var compensations = $resource('../api/staffing/GetCompensations');
         var savebpo = $resource('../api/staffing/importBpo');
-        var fileImportLicense = $resource('../api/staffing/GetLicense');
+        var staffingSettings = $resource('../api/staffing/staffingSettings');
         var fileExport = $resource('../api/staffing/exportStaffingDemand');
         ////////////////
 
@@ -28,7 +28,7 @@
             getSuggestion: suggestion,
             getCompensations: compensations,
             importbpo: savebpo,
-            fileImportLicense: fileImportLicense,
+            staffingSettings: staffingSettings,
             postFileExport: fileExport
         };
 

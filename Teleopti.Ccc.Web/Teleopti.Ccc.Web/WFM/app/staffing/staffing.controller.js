@@ -33,7 +33,8 @@
 		vm.useShrinkage = false;
 		vm.staffingDataAvailable = false;
 		vm.hasSuggestionData = false;
-		vm.showBpoInterface = false;
+        vm.showBpoInterface = false;
+	    vm.hasPermissionForBpoExchange = false;
 		vm.overtimeForm = {};
 
 		vm.compensations = [];
@@ -58,7 +59,7 @@
 		getSkills(); 
 		getSkillAreas();
 		getCompensations();
-        getLicenseForBpo();
+        getStaffingSettings();
 
         function isOvertimeSuggestionEnabled() {
             return toggleService.WfmStaffing_AddOvertime_42524;
@@ -97,12 +98,12 @@
 			suggestedStaffingData = {};
 			hasRequestedSuggestions = false;
 		}
-		//Staffing_BPOExchangeImport_45202 
-		function getLicenseForBpo() {
-			var data = staffingService.fileImportLicense.get()
-			data.$promise.then(function (response) {
-				vm.showBpoInterface = response.isLicenseAvailable;
-			})
+		function getStaffingSettings() {
+		    var data = staffingService.staffingSettings.get();
+		    data.$promise.then(function(response) {
+                vm.showBpoInterface = response.isLicenseAvailable;
+		        vm.hasPermissionForBpoExchange = response.HasPermissionForBpoExchange;
+		    });
 		}
 
 		function getSkillStaffingByDate(skillId, date, shrinkage) {

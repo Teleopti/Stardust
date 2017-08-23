@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Overtime;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Interfaces.Domain;
 
@@ -32,11 +33,12 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ExportBpoFile _exportBpoFile;
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly ISkillRepository _skillRepository;
+		private readonly IAuthorization _authorization;
 
 		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
 								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillAreaRepository skillAreaRepository,
-								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, ExportBpoFile exportBpoFile, ISkillRepository skillRepository)
+								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, ExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization)
 		{
 			_addOverTime = addOverTime;
 			_scheduledStaffingToDataSeries = scheduledStaffingToDataSeries;
@@ -49,6 +51,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_currentDataSource = currentDataSource;
 			_exportBpoFile = exportBpoFile;
 			_skillRepository = skillRepository;
+			_authorization = authorization;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillareastaffing")]
@@ -131,8 +134,8 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			return Ok(returnVal);
 		}
 
-		[UnitOfWork, HttpGet, Route("api/staffing/GetLicense")]
-		public virtual IHttpActionResult GetLicense()
+		[UnitOfWork, HttpGet, Route("api/staffing/staffingSettings")]
+		public virtual IHttpActionResult StaffingSettingInfo()
 		{
 			var currentName = _currentDataSource.CurrentName();
 			var isLicenseAvailible = DefinedLicenseDataFactory.HasLicense(currentName) &&
@@ -140,7 +143,8 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 										 DefinedLicenseOptionPaths.TeleoptiCccPilotCustomersBpoExchange);
 			var returnVal = new returnObj
 			{
-				isLicenseAvailable = isLicenseAvailible
+				isLicenseAvailable = isLicenseAvailible,
+				HasPermissionForBpoExchange = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.BpoExchange)
 			};
 			return Ok(returnVal);
 		}
@@ -207,6 +211,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		class returnObj
 		{
 			public bool isLicenseAvailable { get; set; }
+			public bool HasPermissionForBpoExchange { get; set; }
 		}
 
 		internal class exportReturnObject
