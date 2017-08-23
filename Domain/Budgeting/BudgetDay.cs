@@ -41,15 +41,9 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			_day = day;
 		}
 
-		public virtual DateOnly Day
-		{
-			get { return _day; }
-		}
+		public virtual DateOnly Day => _day;
 
-		public virtual IScenario Scenario
-		{
-			get { return _scenario; }
-		}
+		public virtual IScenario Scenario => _scenario;
 
 		public virtual IBudgetGroup BudgetGroup
 		{
@@ -113,15 +107,9 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			set { _forecastedHours = value; }
 		}
 
-		public virtual ICustomShrinkageWrapper CustomShrinkages
-		{
-			get { return new CustomShrinkageWrapper(_budgetGroup, _customShrinkages); }
-		}
+		public virtual ICustomShrinkageWrapper CustomShrinkages => new CustomShrinkageWrapper(_budgetGroup, _customShrinkages);
 
-		public virtual ICustomEfficiencyShrinkageWrapper CustomEfficiencyShrinkages
-		{
-			get { return new CustomEfficiencyShrinkageWrapper(_budgetGroup, _customEfficiencyShrinkages); }
-		}
+		public virtual ICustomEfficiencyShrinkageWrapper CustomEfficiencyShrinkages => new CustomEfficiencyShrinkageWrapper(_budgetGroup, _customEfficiencyShrinkages);
 
 		public virtual bool IsClosed
 		{
@@ -166,8 +154,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 		}
 
 		// ReSharper restore ConvertToAutoProperty
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		
 		public virtual BudgetCalculationResult Calculate(IBudgetCalculator calculator)
 		{
 			return calculator.Calculate(this);

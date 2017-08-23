@@ -101,11 +101,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models
 
 		private void TriggerInvalidate()
 		{
-			var recalculation = Invalidate;
-			if (recalculation != null)
-			{
-				recalculation.Invoke(this, new CustomEventArgs<IBudgetGroupDayDetailModel>(this));
-			}
+			Invalidate?.Invoke(this, new CustomEventArgs<IBudgetGroupDayDetailModel>(this));
 		}
 
 		public double? StaffEmployed

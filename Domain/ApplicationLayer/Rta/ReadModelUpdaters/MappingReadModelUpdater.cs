@@ -48,13 +48,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 		[AllBusinessUnitsUnitOfWork]
 		public virtual void Handle(UnknownStateCodeReceviedEvent @event)
 		{
-			var stateGroups = _stateGroups.LoadAll();
+			var stateGroups = _stateGroups.LoadAll().ToLookup(g => g.BusinessUnit.Id.Value);
 
 			var existingStateGroup = (
-				from g in stateGroups
+				from g in stateGroups[@event.BusinessUnitId]
 				from s in g.StateCollection
-				where g.BusinessUnit.Id.Value == @event.BusinessUnitId &&
-					  s.StateCode == @event.StateCode
+				where s.StateCode == @event.StateCode
 				select g
 			).SingleOrDefault();
 
@@ -62,9 +61,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				return;
 
 			var defaultStateGroup = (
-				from g in stateGroups
-				where g.BusinessUnit.Id.Value == @event.BusinessUnitId &&
-					  g.DefaultStateGroup
+				from g in stateGroups[@event.BusinessUnitId]
+				where g.DefaultStateGroup
 				select g
 				).SingleOrDefault();
 
@@ -190,7 +188,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				};
 
 			var configuredMappings =
-				from m in maps.Cast<RtaMap>()
+				(from m in maps.Cast<RtaMap>()
 				let legalStateCodes =
 					from c in (m.StateGroup?.StateCollection).EmptyIfNull()
 					let legal = c.StateCode != null
@@ -209,24 +207,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters
 				from c in codes
 				select new
 				{
-					BusinessUnitId = m.BusinessUnit.Id.Value,
-					ActivityId = m.Activity?.Id,
-					StateCode = c.StateCode,
+					Key = new Tuple<Guid,Guid?,String>(m.BusinessUnit.Id.Value,m.Activity?.Id,c.StateCode),
 					Rule = m.RtaRule
-				};
+				}).ToLookup(m => m.Key);
 
 			var mappings =
 				from a in activities
 				from s in stateCodes
-				let mapping = (
-					from m in configuredMappings
-					where
-						m.BusinessUnitId == s.BusinessUnitId &&
-						m.ActivityId == a &&
-						m.StateCode == s.StateCode
-					select m
-					).SingleOrDefault()
-				let businessUnitId = mapping?.BusinessUnitId ?? s.BusinessUnitId
+				let mapping = configuredMappings[new Tuple<Guid, Guid?, string>(s.BusinessUnitId,a,s.StateCode)].SingleOrDefault()
+				let businessUnitId = mapping?.Key.Item1 ?? s.BusinessUnitId
 				let ruleId = mapping?.Rule?.Id
 				let ruleName = mapping?.Rule?.Description.Name
 				let staffingEffect = mapping?.Rule?.StaffingEffect
