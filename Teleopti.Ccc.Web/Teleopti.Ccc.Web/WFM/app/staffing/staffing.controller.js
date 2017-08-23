@@ -21,7 +21,8 @@
 		vm.useShrinkageForStaffing = useShrinkageForStaffing;
 		vm.generateChart = generateChart;
 		vm.dynamicIcon = dynamicIcon;
-		vm.toggleOverstaffSettings = toggleOverstaffSettings;
+        vm.toggleOverstaffSettings = toggleOverstaffSettings;
+	    vm.isOvertimeSuggestionEnabled = isOvertimeSuggestionEnabled;
 		vm.validSettings = validSettings;
 		vm.isRunning = isRunning;
 		vm.isNoSuggestion = isNoSuggestion;
@@ -57,7 +58,11 @@
 		getSkills(); 
 		getSkillAreas();
 		getCompensations();
-		getLicenseForBpo();
+        getLicenseForBpo();
+
+        function isOvertimeSuggestionEnabled() {
+            return toggleService.WfmStaffing_AddOvertime_42524;
+        }
 
 		function toggleOverstaffSettings() {
 			return vm.showOverstaffSettings = !vm.showOverstaffSettings;
