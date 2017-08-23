@@ -16324,8 +16324,8 @@ Do you want to participate?</value>
     <value>The overtime request {0}-{1} has been approved.</value>
   </data>
   <data name="BpoExchange" xml:space="preserve">
-    <value>Bpo Exchange</value>
-    <comment>bpo exchange permission</comment>
+    <value>BPO Exchange</value>
+    <comment>BPO exchange permission</comment>
   </data>
   <data name="DragAndDropCSVFilesHereOrClickToUpload" xml:space="preserve">
     <value>Drag and drop .CSV files here or click to upload</value>

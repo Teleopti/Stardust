@@ -14875,7 +14875,7 @@ Vill du registrera dig?</value>
     <value>Totalt antal agenter med larm</value>
   </data>
   <data name="AnywhereMigrated" xml:space="preserve">
-    <value>Anywhere har flyttats till {0}WFM{1}!</value>
+    <value>Anywhere har flyttats till {0}Teleopti WFM{1}!</value>
   </data>
   <data name="PageWillBeRedirected" xml:space="preserve">
     <value>Den här sidan kommer automatiskt att omdirigeras till WFM om {0} sekunder...</value>
@@ -14969,5 +14969,14 @@ Vill du registrera dig?</value>
   </data>
   <data name="SkillsParenthesisS" xml:space="preserve">
     <value>Kompetens(er)</value>
+  </data>
+  <data name="ChooseDayOffset" xml:space="preserve">
+    <value>Välj dag</value>
+  </data>
+  <data name="OpenSite" xml:space="preserve">
+    <value>Öppna enhet</value>
+  </data>
+  <data name="ImportBpoWrongResourceFormat" xml:space="preserve">
+    <value>Parametern Resources (parameter nummer {0} med värde: {1}) är ogiltig. Parametern måste anges som ett decimaltal, t ex 14.2. </value>
   </data>
 </root>
