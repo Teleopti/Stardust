@@ -44,7 +44,7 @@
 			}
 
 		})();
- 
+
 		function pollInitiate() {
 			vm.siteCards = [];
 			pollNow();
@@ -91,7 +91,7 @@
 								isSelected: false,
 								teams: []
 							};
-							$scope.$watch(function () { return siteCard.isOpen }, pollNow);
+							$scope.$watch(function () { return siteCard.isOpen }, function (newValue) { if (newValue) pollNow(); });
 							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
 								if (newValue != oldValue) {
 									toggleOpenButton();
@@ -112,13 +112,13 @@
 				});
 		}
 
-		function toggleOpenButton(){
-			var match = vm.siteCards.find(function(s){
-				return s.isSelected || s.teams.find(function(t){ return t.isSelected;});
+		function toggleOpenButton() {
+			var match = vm.siteCards.find(function (s) {
+				return s.isSelected || s.teams.find(function (t) { return t.isSelected; });
 			});
 			vm.organizationSelection = !!match;
 		}
-		
+
 		function getTeamsForSites() {
 			return $q.all(
 				vm.siteCards
@@ -231,7 +231,7 @@
 					if (team.isSelected) teamIds.push(team.Id);
 				});
 			});
-			$state.go('rta.agents', {siteIds: siteIds, teamIds: teamIds, skillIds: skillIds, skillAreaId: vm.urlParams.skillAreaId});
+			$state.go('rta.agents', { siteIds: siteIds, teamIds: teamIds, skillIds: skillIds, skillAreaId: vm.urlParams.skillAreaId });
 		}
 	}
 })();
