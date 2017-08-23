@@ -155,6 +155,7 @@
     <Compile Include="Configuration\PeopleAreaModule.cs" />
     <Compile Include="Configuration\ReadModelUnitOfWorkModule.cs" />
     <Compile Include="Configuration\EventPublisherModule.cs" />
+    <Compile Include="Configuration\ReportModule.cs" />
     <Compile Include="Configuration\RequestModule.cs" />
     <Compile Include="Configuration\RtaModule.cs" />
     <Compile Include="Configuration\ScheduleOvertimeModule.cs" />

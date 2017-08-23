@@ -5,13 +5,18 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.Reports
 {
-	public class ReportNavigationModel : IReportNavigationModel
+	public partial class ReportNavigationModel : IReportNavigationModel
 	{
+		private readonly IEnumerable<IReportVisible> _reportVisibleList;
+
+		public ReportNavigationModel(IEnumerable<IReportVisible> reportVisibleList)
+		{
+			_reportVisibleList = reportVisibleList;
+		}
 		public IEnumerable<IApplicationFunction> PermittedReportFunctions
 		{
 			get
@@ -29,9 +34,9 @@ namespace Teleopti.Ccc.Domain.Reports
 			{
 				IEnumerable<IApplicationFunction> onlineReportFunctions =
 					PrincipalAuthorization.Current()
-						.GrantedFunctions().FilterBySpecification(
-							new IsOnlineReportFunctionSpecification()
-						);
+						.GrantedFunctions()
+						.Where(af => _reportVisibleList.Any(v => v.ForeignId() == af.ForeignId))
+						.ToArray();
 
 				return onlineReportFunctions;
 			}
@@ -119,21 +124,6 @@ namespace Teleopti.Ccc.Domain.Reports
 				return from f in PermittedReportFunctions
 					   where groupedMatrixFunctionForeignIds.Contains(f.ForeignId) == false
 					   select f;
-			}
-		}
-
-		private class IsOnlineReportFunctionSpecification : Specification<IApplicationFunction>
-		{
-			private readonly string[] _onlineReportForeignIdList;
-
-			public IsOnlineReportFunctionSpecification()
-			{
-				_onlineReportForeignIdList = new[] { "0055", "0059", "0064" };
-			}
-
-			public override bool IsSatisfiedBy(IApplicationFunction obj)
-			{
-				return _onlineReportForeignIdList.Contains(obj.ForeignId);
 			}
 		}
 		private static IEnumerable<string> analysisReports()

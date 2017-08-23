@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Reports.Core
 			_reportUrl = new FakeReportUrl();
 			_reportProvider = new FakeReportProvider();
 			_authorizor = new FakePermissions();
-			_reportNavigationModel = new ReportNavigationModel();
+			_reportNavigationModel = new ReportNavigationModel(new List<IReportVisible>());
 			_mocks = new MockRepository();
 
 			target = new ReportNavigationProvider(_reportProvider, _reportUrl, _authorizor, new TrueToggleManager(), _reportNavigationModel);
