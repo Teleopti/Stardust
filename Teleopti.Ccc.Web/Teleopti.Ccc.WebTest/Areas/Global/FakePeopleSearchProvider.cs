@@ -187,10 +187,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return people.Select(p => p.Id.Value).ToList();
 		}
 
-		public List<Guid> FindPersonIdsInPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
-		{
-			throw new NotImplementedException();
-		}
+	
 
 		private PersonFinderDisplayRow toPersonFinderDisplayRow(IPerson p, DateOnly date, int rowNumber)
 		{
@@ -238,7 +235,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			_peopleWithConfidentialAbsencePermission.Add(person);
 		}
 
-		public List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria, string[] dynamicValues)
+		public List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
 			IEnumerable<IPerson> people = _permittedPeople;
 
@@ -251,7 +248,28 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 						p => _personApplicationRoleDictionary.ContainsKey(p) && _personApplicationRoleDictionary[p] == roleName);
 			}
 
-			return people.Select(p => p.Id.Value).ToList();;
+			return people.Select(p => p.Id.Value).ToList();
+		}
+		
+		public List<Guid> FindPersonIdsInPeriodWithDynamicGroup(DateOnlyPeriod period, string[] dynamicValues, IDictionary<PersonFinderField, string> searchCriteria)
+		{
+			IEnumerable<IPerson> people = _permittedPeople;
+
+			if (searchCriteria.ContainsKey(PersonFinderField.Role))
+			{
+				var roleName = searchCriteria[PersonFinderField.Role];
+				roleName = Regex.Match(roleName, quotePattern).Value;
+				people =
+					people.Where(
+						p => _personApplicationRoleDictionary.ContainsKey(p) && _personApplicationRoleDictionary[p] == roleName);
+			}
+
+			return people.Select(p => p.Id.Value).ToList();
+		}
+
+		public List<Guid> FindPersonIdsInPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
+		{
+			throw new NotImplementedException();
 		}
 	}
 }

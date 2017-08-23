@@ -61,14 +61,18 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 		}
 
 		public List<Guid> FindPersonIdsInPeriodWithGroup(DateOnlyPeriod period, Guid[] groupIds,
-			IDictionary<PersonFinderField, string> searchCriteria, string[] dynamicValues)
+			IDictionary<PersonFinderField, string> searchCriteria)
 		{
-			if (groupIds.Any())
-			{
-				return _searchRepository.FindPersonIdsInGroupsBasedOnPersonPeriod(period, groupIds, searchCriteria);
-			}
+
+			return _searchRepository.FindPersonIdsInGroupsBasedOnPersonPeriod(period, groupIds, searchCriteria);
+		}
+
+
+		public List<Guid> FindPersonIdsInPeriodWithDynamicGroup(DateOnlyPeriod period, string[] dynamicValues, IDictionary<PersonFinderField, string> searchCriteria)
+		{
 			return _searchRepository.FindPersonIdsInDynamicOptionalGroupPages(period, dynamicValues, searchCriteria);
 		}
+
 
 		public IEnumerable<IPerson> SearchPermittedPeople(IDictionary<PersonFinderField, string> criteriaDictionary,
 			DateOnly dateInUserTimeZone, string function)
@@ -180,5 +184,6 @@ namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 				OptionalColumns = optionalColumnCollection
 			};
 		}
+
 	}
 }

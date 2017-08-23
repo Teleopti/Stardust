@@ -433,6 +433,7 @@
     <Compile Include="Areas\Forecasting\Core\OverridePersister.cs" />
     <Compile Include="Areas\Global\DataProtectionController.cs" />
     <Compile Include="Areas\Global\Core\GroupPageViewModelFactory.cs" />
+    <Compile Include="Areas\Global\Models\SearchGroupIdsData.cs" />
     <Compile Include="Areas\Global\ScenarioController.cs" />
     <Compile Include="Areas\Global\ScenarioViewModel.cs" />
     <Compile Include="Areas\Global\ThemeController.cs" />
