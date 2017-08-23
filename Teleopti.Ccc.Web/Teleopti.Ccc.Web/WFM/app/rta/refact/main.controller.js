@@ -5,9 +5,9 @@
 		.module('wfm.rta')
 		.controller('RtaMainController', RtaMainController);
 
-	RtaMainController.$inject = ['rtaService', 'rtaRouteService', 'skills', 'skillAreas', '$state', '$stateParams', '$interval', '$scope', '$q', '$timeout'];
+	RtaMainController.$inject = ['rtaService', 'rtaRouteService', 'rtaStateStorageService', 'skills', 'skillAreas', '$state', '$stateParams', '$interval', '$scope', '$q', '$timeout'];
 
-	function RtaMainController(rtaService, rtaRouteService, skills, skillAreas, $state, $stateParams, $interval, $scope, $q, $timeout) {
+	function RtaMainController(rtaService, rtaRouteService, rtaStateStorageService, skills, skillAreas, $state, $stateParams, $interval, $scope, $q, $timeout) {
 		var vm = this;
 		vm.skillIds = $stateParams.skillIds || [];
 		vm.skillAreaId = $stateParams.skillAreaId;
@@ -27,7 +27,7 @@
 
 		(function () {
 			if (angular.isDefined(vm.urlParams.skillAreaId)) {
-				vm.agentsState = 'rta.agents({siteId	s: card.site.Id, skillAreaId: "' + vm.urlParams.skillAreaId + '"})';
+				vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + vm.urlParams.skillAreaId + '"})';
 				vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id, skillAreaId: "' + vm.urlParams.skillAreaId + '"})';
 			}
 			else if (angular.isDefined(vm.urlParams.skillIds)) {
@@ -199,6 +199,7 @@
 			vm.skillIds = [];
 			vm.urlParams.skillIds = undefined;
 			vm.urlParams.skillAreaId = undefined;
+			rtaStateStorageService.removeState();		
 			vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 			vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id})';
 			$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
@@ -207,6 +208,7 @@
 		function setUpForSkillArea(selectedItem) {
 			vm.urlParams.skillAreaId = selectedItem.Id;
 			vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
+			rtaStateStorageService.setState($state.current.name, {skillAreaId: selectedItem});		
 			vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + selectedItem.Id + '"})';
 			vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id, skillAreaId: "' + selectedItem.Id + '"})';
 			$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
@@ -215,6 +217,7 @@
 		function setUpForSkill(selectedItem) {
 			vm.urlParams.skillIds = [selectedItem.Id];
 			vm.skillIds = [selectedItem.Id];
+			rtaStateStorageService.setState($state.current.name, {skillIds: [selectedItem]});					
 			vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + selectedItem.Id + '"]})';
 			vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id, skillIds: ["' + selectedItem.Id + '"]})';
 			$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
@@ -231,7 +234,10 @@
 					if (team.isSelected) teamIds.push(team.Id);
 				});
 			});
-			$state.go('rta.agents', { siteIds: siteIds, teamIds: teamIds, skillIds: skillIds, skillAreaId: vm.urlParams.skillAreaId });
+
+			var params = { siteIds: siteIds, teamIds: teamIds, skillIds: skillIds, skillAreaId: vm.urlParams.skillAreaId };
+			rtaStateStorageService.setState('rta.agents', params);								
+			$state.go('rta.agents', params);
 		}
 	}
 })();

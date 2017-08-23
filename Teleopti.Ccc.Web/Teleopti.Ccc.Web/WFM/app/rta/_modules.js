@@ -17,9 +17,9 @@
 		])
 		.run(runRtaModule);
 
-	runRtaModule.$inject = ['$rootScope', '$state', '$location', 'Toggle'];
+	runRtaModule.$inject = ['$rootScope', '$state', '$location', 'Toggle', 'rtaStateStorageService'];
 
-	function runRtaModule($rootScope, $state, $location, Toggle) {
+	function runRtaModule($rootScope, $state, $location, Toggle, rtaStateStorageService) {
 		var toggles = {};
 
 		Toggle.togglesLoaded.then(function () {
@@ -31,7 +31,10 @@
 				var location = $location.url();
 				if (location == $state.current.url && toState.name == 'rta') {
 					if (toggles.RTA_FrontEndRefactor_44772) {
-						$state.go('refact-rta')
+						var state = rtaStateStorageService.getState();
+						if(!!state.state && !!state.params)
+							$state.go(state.state, state.params);
+						else $state.go('refact-rta');
 					} else {
 						$state.go('rta.sites')
 					}
