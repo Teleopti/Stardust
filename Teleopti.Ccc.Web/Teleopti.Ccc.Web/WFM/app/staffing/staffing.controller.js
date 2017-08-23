@@ -94,8 +94,6 @@
 		}
 		//Staffing_BPOExchangeImport_45202 
 		function getLicenseForBpo() {
-			if (!toggleService.Staffing_BPOExchangeImport_45202) return;
-
 			var data = staffingService.fileImportLicense.get()
 			data.$promise.then(function (response) {
 				vm.showBpoInterface = response.isLicenseAvailable;
