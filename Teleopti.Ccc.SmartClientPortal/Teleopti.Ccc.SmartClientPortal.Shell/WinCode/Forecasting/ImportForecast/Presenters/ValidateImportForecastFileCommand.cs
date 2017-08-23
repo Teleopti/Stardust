@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ImportForecas
                 catch (ValidationException exception)
                 {
                     _model.HasValidationError = true;
-                    _model.ValidationMessage = string.Format("Line {0}, Error:{1}", rowNumber, exception.Message);
+                    _model.ValidationMessage = $"Line {rowNumber}, Error:{exception.Message}";
                     return;
                 }
                 var fileContent = new byte[streamReader.BaseStream.Length];

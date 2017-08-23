@@ -15,14 +15,8 @@ namespace Teleopti.Ccc.Domain.Forecasting.Import
             _fileName = fileName;
         }
 
-        public virtual byte[] FileContent
-        {
-            get { return _fileContent; }
-        }
+        public virtual byte[] FileContent => _fileContent;
 
-        public virtual string FileName
-        {
-            get { return _fileName; }
-        }
+	    public virtual string FileName => _fileName;
     }
 }

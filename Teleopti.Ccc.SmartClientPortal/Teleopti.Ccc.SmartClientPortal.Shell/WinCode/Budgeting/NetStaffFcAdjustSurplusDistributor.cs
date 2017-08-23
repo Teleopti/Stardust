@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 			// ErikS: For any non-LINQ lovers: Loop through distinct 
 			// weeks that have one or more days with a FcAdj surplus
 			foreach (var week in from surplusDay in daysThatHaveSurplus
-			                     let week = getWeekWithoutClosedDays(surplusDay, models)
 			                     where daysThatHaveSurplus.Contains(surplusDay)
+								 let week = getWeekWithoutClosedDays(surplusDay, models)
 			                     select week)
 			{
 				distributeSurplus(week, grossStaffCalculator,
@@ -47,10 +47,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 			                                                                          budgetDayList)
 		{
 			var week = DateHelper.GetWeekPeriod(budgetDay.BudgetDay.Day, CultureInfo.CurrentCulture);
-			var budgetDaysWithinWeek = new List<IBudgetGroupDayDetailModel>(7);
-			budgetDaysWithinWeek.AddRange(
-				budgetDayList.TakeWhile(day => day.BudgetDay.Day <= week.EndDate)
-				             .Where(day => day.BudgetDay.Day >= week.StartDate && !day.BudgetDay.IsClosed));
+			var budgetDaysWithinWeek = budgetDayList.TakeWhile(day => day.BudgetDay.Day <= week.EndDate)
+				             .Where(day => day.BudgetDay.Day >= week.StartDate && !day.BudgetDay.IsClosed).ToList();
 			return budgetDaysWithinWeek;
 		}
 
@@ -59,26 +57,26 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 		                                      int availableDaysPrevious,
 		                                      double surplus)
 		{
-			var avaiableDays = week.Where(d => d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)).ToList();
-			var surplusDays = week.Except(avaiableDays).ToList();
+			var availableDays = week.Where(d => d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)).ToList();
+			var surplusDays = week.Except(availableDays).ToList();
 			var surplusToDistribute = surplusDays.Sum(d => d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault()) + surplus;
 
-			foreach (var day in avaiableDays)
+			foreach (var day in availableDays)
 			{
 				var closedToInt = day.BudgetDay.IsClosed ? 1 : 0;
 				var maxStaff = (1 - closedToInt)*
 				               (grossStaffCalculator.CalculatedResult(day.BudgetDay).GrossStaff + day.Contractors)*
 				               (1 - day.BudgetDay.CustomShrinkages.GetTotal().Value);
 				day.NetStaffFcAdj = recalculateNetStaffFcAdj(day.BudgetDay, day.NetStaffFcAdj,
-				                                             surplusToDistribute/avaiableDays.Count(),
+				                                             surplusToDistribute/availableDays.Count,
 				                                             maxStaff);
 			}
 			
-			avaiableDays = week.Where(d => d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)).ToList();
+			availableDays = week.Where(d => d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)).ToList();
 
-			if (avaiableDays.Count == availableDaysPrevious)
+			if (availableDays.Count == availableDaysPrevious)
 				return;
-			distributeSurplus(avaiableDays, grossStaffCalculator, avaiableDays.Count,
+			distributeSurplus(availableDays, grossStaffCalculator, availableDays.Count,
 			                  week.Except(surplusDays).Sum(d => d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault()));
 		}
 
