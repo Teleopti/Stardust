@@ -44,14 +44,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public IShiftTradeRequestStatusChecker ShiftTradeRequestStatusChecker;
 		public IUserCulture UserCulture;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
+		public FakePersonRepository PersonRepository;
+
+		private ITeam team;
+		private IPersonPeriod personPeriod;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			setupStateHolderProxy();
+			system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 			system.UseTestDouble<FakePersonalSettingDataRepository>().For<IPersonalSettingDataRepository>();
 			system.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
+
+			team = createTeam();
+			personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2015, 10, 1), team);
 		}
-		
+
 		[Test]
 		public void ShouldGetNothingWhenSelectNoTeam()
 		{
@@ -84,10 +92,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public void ShouldGetMutipleShiftTradeRequests()
 		{
 			createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 1),
-					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
+					PersonFactory.CreatePerson("Person", "From").WithId(), PersonFactory.CreatePerson("Person", "To").WithId());
 
 			createShiftTradeRequest(new DateOnly(2016, 3, 5), new DateOnly(2016, 3, 5),
-				PersonFactory.CreatePerson("Person2", "From2"), PersonFactory.CreatePerson("Person2", "To2"));
+				PersonFactory.CreatePerson("Person2", "From2").WithId(), PersonFactory.CreatePerson("Person2", "To2").WithId());
 
 			var requestListViewModel = createRequestListViewModel(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 5));
 			requestListViewModel.Requests.Count().Should().Be.EqualTo(2);
@@ -97,10 +105,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public void ShouldReturnMinimumAndMaximumDateOfInputWhenAllRequestsAreInsidePeriod()
 		{
 			createShiftTradeRequest(new DateOnly(2016, 3, 2), new DateOnly(2016, 3, 2),
-					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
+					PersonFactory.CreatePerson("Person", "From").WithId(), PersonFactory.CreatePerson("Person", "To").WithId());
 
 			createShiftTradeRequest(new DateOnly(2016, 3, 5), new DateOnly(2016, 3, 8),
-				PersonFactory.CreatePerson("Person2", "From2"), PersonFactory.CreatePerson("Person2", "To2"));
+				PersonFactory.CreatePerson("Person2", "From2").WithId(), PersonFactory.CreatePerson("Person2", "To2").WithId());
 
 			var input = new AllRequestsFormData
 			{
@@ -115,27 +123,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			requestListViewModel.MinimumDateTime.Should().Be.EqualTo(input.StartDate.Date);
 			requestListViewModel.MaximumDateTime.Should().Be.EqualTo(input.EndDate.Date);
 		}
-		
+
 
 
 		[Test]
 		public void ShouldReturnMaximumDateOfRequestWhenOutsideOfInputPeriod()
 		{
 			createShiftTradeRequest(new DateOnly(2016, 3, 2), new DateOnly(2016, 3, 2),
-					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
+					PersonFactory.CreatePerson("Person", "From").WithId(), PersonFactory.CreatePerson("Person", "To").WithId());
 
 			createShiftTradeRequest(new DateOnly(2016, 3, 5), new DateOnly(2016, 3, 8),
-				PersonFactory.CreatePerson("Person2", "From2"), PersonFactory.CreatePerson("Person2", "To2"));
+				PersonFactory.CreatePerson("Person2", "From2").WithId(), PersonFactory.CreatePerson("Person2", "To2").WithId());
 
-			var shiftTradeWithLaterEndDate  = createShiftTradeRequest(new DateOnly(2016, 3, 9), new DateOnly(2016, 3, 11),
-				PersonFactory.CreatePerson("Person2", "From2"), PersonFactory.CreatePerson("Person2", "To2"));
+			var shiftTradeWithLaterEndDate = createShiftTradeRequest(new DateOnly(2016, 3, 9), new DateOnly(2016, 3, 11),
+				PersonFactory.CreatePerson("Person2", "From2").WithId(), PersonFactory.CreatePerson("Person2", "To2").WithId());
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 10),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new[] { Guid.NewGuid().ToString() }
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -148,22 +156,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public void ShouldOnlyRequestStartingInsidePeriod()
 		{
 			createShiftTradeRequest(new DateOnly(2016, 2, 27), new DateOnly(2016, 3, 2),
-					PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
+					PersonFactory.CreatePerson("Person", "From").WithId(), PersonFactory.CreatePerson("Person", "To").WithId());
 
 			createShiftTradeRequest(new DateOnly(2016, 3, 5), new DateOnly(2016, 3, 8),
-				PersonFactory.CreatePerson("Person2", "From2"), PersonFactory.CreatePerson("Person2", "To2"));
-			
+				PersonFactory.CreatePerson("Person2", "From2").WithId(), PersonFactory.CreatePerson("Person2", "To2").WithId());
+
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 10),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new []{Guid.NewGuid().ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 
-			requestListViewModel.Requests.Count().Should().Be.EqualTo (1);
+			requestListViewModel.Requests.Count().Should().Be.EqualTo(1);
 			requestListViewModel.MinimumDateTime.Should().Be.EqualTo(input.StartDate.Date);
 		}
 
@@ -178,10 +186,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			personTo.PermissionInformation.SetDefaultTimeZone(timeZone);
 
 			createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 1),
-					PersonFactory.CreatePerson("Person", "From"), personTo);
+					PersonFactory.CreatePerson("Person", "From").WithId(), personTo);
 
 			var requestListViewModel = createRequestListViewModel(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 5));
-			var requestViewModel = (ShiftTradeRequestViewModel)requestListViewModel.Requests.First();
+			var requestViewModel = requestListViewModel.Requests.First();
 
 			requestViewModel.PersonTo.Should().Not.Be.NullOrEmpty();
 			requestViewModel.PersonIdTo.Should().Be.EqualTo(personTo.Id);
@@ -192,8 +200,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetShiftTradeDay()
 		{
-			var personTo = PersonFactory.CreatePerson("Person", "To");
-			var personFrom = PersonFactory.CreatePerson("Person", "From");
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
+			setUpPeople(personTo, personFrom);
 
 			var personrequest = createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 1), personFrom, personTo);
 			var shiftTradeRequest = (ShiftTradeRequest)personrequest.Request;
@@ -230,7 +239,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var shiftTradeRequest = (ShiftTradeRequest)personrequest.Request;
 
 			var personToAssignment = addPersonAssignment(personTo, "sdfTo", "shiftCategory", Color.PaleVioletRed, new DateOnly(2016, 3, 1));
-			var personFromAbsence = addPersonAbsence (personFrom, "Holiday", "HO", Color.Aqua, new DateOnly (2016, 3, 1));
+			var personFromAbsence = addPersonAbsence(personFrom, "Holiday", "HO", Color.Aqua, new DateOnly(2016, 3, 1));
 
 			var schedule = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom }, new ScheduleDictionaryLoadOptions(false, false),
 				new DateOnlyPeriod(2016, 03, 01, 2016, 03, 02), Scenario.Current());
@@ -255,8 +264,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetMultiDayShiftTradeWithDayOff()
 		{
-			var personTo = PersonFactory.CreatePerson("Person", "To");
-			var personFrom = PersonFactory.CreatePerson("Person", "From");
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
+			setUpPeople(personTo, personFrom);
 
 			var personrequest = createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3), personFrom, personTo);
 			var shiftTradeRequest = (ShiftTradeRequest)personrequest.Request;
@@ -288,59 +298,60 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldUpdateShiftTradeStatusIfScheduleHasBeenUpdated()
 		{
-			var theDate = new DateOnly (2016, 3, 1);
+			var theDate = new DateOnly(2016, 3, 1);
 			// shift trade request was created and then someone has updated the schedule, changing the status in
 			// this scenario can happen lazily when we fetch the requests 
 
-			var personTo = PersonFactory.CreatePerson ("Person", "To");
-			var personFrom = PersonFactory.CreatePerson ("Person", "From");
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
 
-			var personRequest = createShiftTradeRequest (theDate, theDate, personFrom, personTo);
-			var shiftTradeRequest = (ShiftTradeRequest) personRequest.Request;
+			var personRequest = createShiftTradeRequest(theDate, theDate, personFrom, personTo);
+			var shiftTradeRequest = (ShiftTradeRequest)personRequest.Request;
 			personRequest.Pending();
 
-			var personAssignmentTo = createShiftTradeDetails (personTo, personFrom, shiftTradeRequest, theDate)[personTo];
+			var personAssignmentTo = createShiftTradeDetails(personTo, personFrom, shiftTradeRequest, theDate)[personTo];
 
 			//change schedule so that the request will be (hopefully) set to referred
-			personAssignmentTo.MoveActivityAndKeepOriginalPriority (personAssignmentTo.ShiftLayers.First(),
-				new DateTime (theDate.Year, theDate.Month, theDate.Day, 2, 0, 0, DateTimeKind.Utc), new TrackedCommandInfo());
+			personAssignmentTo.MoveActivityAndKeepOriginalPriority(personAssignmentTo.ShiftLayers.First(),
+				new DateTime(theDate.Year, theDate.Month, theDate.Day, 2, 0, 0, DateTimeKind.Utc), new TrackedCommandInfo());
 
-			createRequestListViewModel (theDate, theDate);
+			createRequestListViewModel(theDate, theDate);
 
-			var status = shiftTradeRequest.GetShiftTradeStatus (new ShiftTradeRequestStatusCheckerForTestDoesNothing());
-			status.Should().Be (ShiftTradeStatus.Referred);
+			var status = shiftTradeRequest.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing());
+			status.Should().Be(ShiftTradeStatus.Referred);
 
 		}
 
 		[Test]
 		public void ShouldFilterReferredRequestWhenStatusUpdateChangesRequestToReferred()
 		{
-			var theDate = new DateOnly (2016, 3, 1);
+			var theDate = new DateOnly(2016, 3, 1);
 			// shift trade request was created and then someone has updated the schedule, as the 'referred' status is 
 			// set lazily when we fetch the requests, this will mean we need to filter it seperately.
 
-			var personTo = PersonFactory.CreatePerson ("Person", "To");
-			var personFrom = PersonFactory.CreatePerson ("Person", "From");
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
+			setUpPeople(personTo, personFrom);
 
-			var personRequest = createShiftTradeRequest (theDate, theDate, personFrom, personTo);
-			var shiftTradeRequest = (ShiftTradeRequest) personRequest.Request;
+			var personRequest = createShiftTradeRequest(theDate, theDate, personFrom, personTo);
+			var shiftTradeRequest = (ShiftTradeRequest)personRequest.Request;
 			var shiftTradeRequest1PersonAssignmentTo =
-				createShiftTradeDetails (personTo, personFrom, shiftTradeRequest, theDate)[personTo];
+				createShiftTradeDetails(personTo, personFrom, shiftTradeRequest, theDate)[personTo];
 			personRequest.Pending();
 
-			shiftTradeRequest1PersonAssignmentTo.MoveActivityAndKeepOriginalPriority (
+			shiftTradeRequest1PersonAssignmentTo.MoveActivityAndKeepOriginalPriority(
 				shiftTradeRequest1PersonAssignmentTo.ShiftLayers.First(),
-				new DateTime (theDate.Year, theDate.Month, theDate.Day, 2, 0, 0, DateTimeKind.Utc), new TrackedCommandInfo());
+				new DateTime(theDate.Year, theDate.Month, theDate.Day, 2, 0, 0, DateTimeKind.Utc), new TrackedCommandInfo());
 
-			var personRequest2 = createShiftTradeRequest (theDate, theDate, personFrom, personTo);
-			var shiftTradeRequest2 = (ShiftTradeRequest) personRequest2.Request;
-			createShiftTradeDetails (personTo, personFrom, shiftTradeRequest2, theDate);
+			var personRequest2 = createShiftTradeRequest(theDate, theDate, personFrom, personTo);
+			var shiftTradeRequest2 = (ShiftTradeRequest)personRequest2.Request;
+			createShiftTradeDetails(personTo, personFrom, shiftTradeRequest2, theDate);
 			personRequest2.Pending();
 
-			var requestListViewModel = createRequestListViewModel (theDate, theDate);
+			var requestListViewModel = createRequestListViewModel(theDate, theDate);
 
-			Assert.AreEqual (1, requestListViewModel.Requests.Count());
-			Assert.AreEqual (personRequest2.Id, requestListViewModel.Requests.First().Id);
+			Assert.AreEqual(1, requestListViewModel.Requests.Count());
+			Assert.AreEqual(personRequest2.Id, requestListViewModel.Requests.First().Id);
 
 		}
 
@@ -348,8 +359,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetNoRequestsWithUnmatchedDate()
 		{
-			var personTo = PersonFactory.CreatePerson("Person", "To");
-			var personFrom = PersonFactory.CreatePerson("Person", "From");
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
+			setUpPeople(personTo, personFrom);
 
 			createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3), personFrom, personTo);
 
@@ -372,8 +384,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldNotReturnRequestsInOkByMeStatus()
 		{
-			var personTo = PersonFactory.CreatePerson("Person", "To");
-			var personFrom = PersonFactory.CreatePerson("Person", "From");
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
 
 			var personrequest = createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3), personFrom, personTo);
 			((ShiftTradeRequest)personrequest.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByMe, new PersonRequestAuthorizationCheckerConfigurable());
@@ -385,8 +397,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldNotReturnRequestsInReferredStatus()
 		{
-			var personTo = PersonFactory.CreatePerson("Person", "To");
-			var personFrom = PersonFactory.CreatePerson("Person", "From");
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
 
 			var personrequest = createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3), personFrom, personTo);
 			((ShiftTradeRequest)personrequest.Request).SetShiftTradeStatus(ShiftTradeStatus.Referred, new PersonRequestAuthorizationCheckerConfigurable());
@@ -398,26 +410,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldGetBrokenRules()
 		{
-			var personTo = PersonFactory.CreatePerson ("Person", "To");
-			var personFrom = PersonFactory.CreatePerson ("Person", "From");
+			var personTo = PersonFactory.CreatePerson("Person", "To").WithId();
+			var personFrom = PersonFactory.CreatePerson("Person", "From").WithId();
+			setUpPeople(personTo, personFrom);
 
-			var personrequest = createShiftTradeRequest (new DateOnly (2016, 3, 1), new DateOnly (2016, 3, 3), personFrom,
+			var personrequest = createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3), personFrom,
 				personTo);
-			((ShiftTradeRequest) personrequest.Request).SetShiftTradeStatus (ShiftTradeStatus.OkByBothParts,
+			((ShiftTradeRequest)personrequest.Request).SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts,
 				new PersonRequestAuthorizationCheckerConfigurable());
-			var schedule = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod (new[] {personTo, personFrom},
-				new ScheduleDictionaryLoadOptions (false, false),
-				new DateOnlyPeriod (2016, 03, 01, 2016, 03, 03), Scenario.Current());
-			setShiftTradeSwapDetailsToAndFrom ((IShiftTradeRequest) personrequest.Request, schedule, personTo, personFrom);
+			var schedule = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
+				new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(2016, 03, 01, 2016, 03, 03), Scenario.Current());
+			setShiftTradeSwapDetailsToAndFrom((IShiftTradeRequest)personrequest.Request, schedule, personTo, personFrom);
 			personrequest.Pending();
 
-			personrequest.TrySetBrokenBusinessRule (BusinessRuleFlags.DataPartOfAgentDay | BusinessRuleFlags.MinWeeklyRestRule);
+			personrequest.TrySetBrokenBusinessRule(BusinessRuleFlags.DataPartOfAgentDay | BusinessRuleFlags.MinWeeklyRestRule);
 
-			var requestListViewModel = createRequestListViewModel (new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3));
-			var brokenRules = ((ShiftTradeRequestViewModel) requestListViewModel.Requests.FirstOrDefault()).BrokenRules;
-			brokenRules.Count().Should().Be (2);
-			brokenRules.Contains ("NotAllowedChange").Should().Be (true);
-			brokenRules.Contains ("WeeklyRestTime").Should().Be (true);
+			var requestListViewModel = createRequestListViewModel(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3));
+			var brokenRules = requestListViewModel.Requests.FirstOrDefault().BrokenRules;
+			brokenRules.Count().Should().Be(2);
+			brokenRules.Contains("NotAllowedChange").Should().Be(true);
+			brokenRules.Contains("WeeklyRestTime").Should().Be(true);
 		}
 
 
@@ -425,7 +438,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public void ShouldGetISO8601FirstDayOfWeek()
 		{
 			var requestListViewModel = createRequestListViewModel(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 3));
-			requestListViewModel.FirstDayOfWeek.Should().Be (7);
+			requestListViewModel.FirstDayOfWeek.Should().Be(7);
 		}
 
 		[Test]
@@ -495,7 +508,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				var scheduleDayFrom = schedule[personFrom].ScheduledDay(shiftTradeSwapDetail.DateFrom);
 				shiftTradeSwapDetail.SchedulePartFrom = scheduleDayFrom;
 				shiftTradeSwapDetail.SchedulePartTo = scheduleDayTo;
-				shiftTradeSwapDetail.ChecksumFrom = new ShiftTradeChecksumCalculator (scheduleDayFrom).CalculateChecksum();
+				shiftTradeSwapDetail.ChecksumFrom = new ShiftTradeChecksumCalculator(scheduleDayFrom).CalculateChecksum();
 				shiftTradeSwapDetail.ChecksumTo = new ShiftTradeChecksumCalculator(scheduleDayTo).CalculateChecksum();
 			}
 		}
@@ -504,7 +517,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		{
 			var personAssignment = new PersonAssignment(person, Scenario.Current(), date);
 			//personAssignment.AddActivity(new Activity(activityName), date.ToDateTimePeriod(TimeZoneInfo.Utc));
-			personAssignment.AddActivity(new Activity(activityName), new DateTimePeriod(date.Date.Utc(), date.Date.AddHours (8).Utc()));
+			personAssignment.AddActivity(new Activity(activityName), new DateTimePeriod(date.Date.Utc(), date.Date.AddHours(8).Utc()));
 			personAssignment.SetShiftCategory(new ShiftCategory(categoryName)
 			{
 				DisplayColor = displayColor
@@ -519,7 +532,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var personfromAssignment = addPersonAssignment(person, "sdfTo", "shiftCategory", Color.PaleVioletRed, date);
 			ScheduleStorage.Add(personfromAssignment);
 
-			var personAbsence = new PersonAbsence(person, Scenario.Current(), new AbsenceLayer (AbsenceFactory.CreateAbsence (name, shortName, displayColor), date.ToDateTimePeriod (TimeZoneInfo.Utc)));
+			var personAbsence = new PersonAbsence(person, Scenario.Current(), new AbsenceLayer(AbsenceFactory.CreateAbsence(name, shortName, displayColor), date.ToDateTimePeriod(TimeZoneInfo.Utc)));
 			ScheduleStorage.Add(personAbsence);
 
 			return personAbsence;
@@ -544,14 +557,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		private RequestListViewModel<ShiftTradeRequestViewModel> getSimpleRequestListViewModel()
 		{
 			createShiftTradeRequest(new DateOnly(2016, 3, 1), new DateOnly(2016, 3, 1),
-				PersonFactory.CreatePerson("Person", "From"), PersonFactory.CreatePerson("Person", "To"));
+				PersonFactory.CreatePerson("Person", "From").WithId(), PersonFactory.CreatePerson("Person", "To").WithId());
 
 			var input = new AllRequestsFormData
 			{
 				StartDate = new DateOnly(2016, 3, 1),
 				EndDate = new DateOnly(2016, 3, 1),
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new [] {Guid.NewGuid().ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
 
 			var requestListViewModel = ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
@@ -560,6 +573,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 		private PersonRequest createShiftTradeRequest(DateOnly dateFrom, DateOnly dateTo, IPerson personFrom, IPerson personTo)
 		{
+			setUpPeople(personTo, personFrom);
+
 			var shiftTradeSwapDetailList = new List<IShiftTradeSwapDetail>();
 
 			var dateOnlyPeriod = new DateOnlyPeriod(dateFrom, dateTo);
@@ -574,7 +589,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.OkByBothParts,
 				new PersonRequestAuthorizationCheckerConfigurable());
 
-			var personRequest = new PersonRequest (personFrom, shiftTradeRequest).WithId();
+			var personRequest = new PersonRequest(personFrom, shiftTradeRequest).WithId();
 
 			((FakePersonRequestRepository)PersonRequestRepository).Add(personRequest);
 
@@ -597,17 +612,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			StateHolderProxyHelper.ClearAndSetStateHolder(stateMock);
 		}
 
-		private IDictionary<IPerson, PersonAssignment> createShiftTradeDetails (IPerson personTo, IPerson personFrom,
+		private IDictionary<IPerson, PersonAssignment> createShiftTradeDetails(IPerson personTo, IPerson personFrom,
 			ShiftTradeRequest shiftTradeRequest, DateOnly dateOnly)
 		{
-			var personToAssignment = addPersonAssignment (personTo, "sdfTo", "shiftCategory", Color.PaleVioletRed, dateOnly);
-			var personFromAssignment = addPersonAssignment (personFrom, "sdfFrom", "shiftCategoryFrom", Color.AliceBlue, dateOnly);
+			var personToAssignment = addPersonAssignment(personTo, "sdfTo", "shiftCategory", Color.PaleVioletRed, dateOnly);
+			var personFromAssignment = addPersonAssignment(personFrom, "sdfFrom", "shiftCategoryFrom", Color.AliceBlue, dateOnly);
 
-			var schedule = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod (new[] {personTo, personFrom},
-				new ScheduleDictionaryLoadOptions (false, false),
-				new DateOnlyPeriod (dateOnly, dateOnly.AddDays (1)), Scenario.Current());
+			var schedule = ScheduleStorage.FindSchedulesForPersonsOnlyInGivenPeriod(new[] { personTo, personFrom },
+				new ScheduleDictionaryLoadOptions(false, false),
+				new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)), Scenario.Current());
 
-			setShiftTradeSwapDetailsToAndFrom (shiftTradeRequest, schedule, personTo, personFrom);
+			setShiftTradeSwapDetailsToAndFrom(shiftTradeRequest, schedule, personTo, personFrom);
 
 			return new Dictionary<IPerson, PersonAssignment>
 			{
@@ -624,10 +639,34 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				StartDate = startDate,
 				EndDate = endDate,
 				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SelectedGroupIds = new []{Guid.NewGuid().ToString()}
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
 			};
-			return ShiftTradeRequestViewModelFactory.CreateRequestListViewModel (input);
+			return ShiftTradeRequestViewModelFactory.CreateRequestListViewModel(input);
 		}
 
+		private void setUpPeople(params IPerson[] people)
+		{
+			foreach (var person in people)
+			{
+				person.AddPersonPeriod(personPeriod);
+				PeopleSearchProvider.Add(person);
+				PersonRepository.Add(person);
+
+				GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail
+				{
+					BusinessUnitId = Guid.Empty,
+					PersonId = person.Id.GetValueOrDefault(),
+					TeamId = team.Id.GetValueOrDefault(),
+					SiteId = team.Site.Id.GetValueOrDefault()
+				});
+			}
+		}
+
+		private static Team createTeam()
+		{
+			var team = TeamFactory.CreateSimpleTeam("_").WithId();
+			team.Site = SiteFactory.CreateSimpleSite("site");
+			return team;
+		}
 	}
 }

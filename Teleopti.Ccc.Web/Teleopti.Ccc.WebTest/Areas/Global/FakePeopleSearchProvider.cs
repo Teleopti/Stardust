@@ -241,11 +241,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			if (searchCriteria.ContainsKey(PersonFinderField.Role))
 			{
-				var roleName = searchCriteria[PersonFinderField.Role];
-				roleName = Regex.Match(roleName, quotePattern).Value;
-				people =
-					people.Where(
-						p => _personApplicationRoleDictionary.ContainsKey(p) && _personApplicationRoleDictionary[p] == roleName);
+				people = filterByRole(searchCriteria, people);
 			}
 
 			return people.Select(p => p.Id.Value).ToList();
@@ -257,11 +253,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 			if (searchCriteria.ContainsKey(PersonFinderField.Role))
 			{
-				var roleName = searchCriteria[PersonFinderField.Role];
-				roleName = Regex.Match(roleName, quotePattern).Value;
-				people =
-					people.Where(
-						p => _personApplicationRoleDictionary.ContainsKey(p) && _personApplicationRoleDictionary[p] == roleName);
+				people = filterByRole(searchCriteria, people);
+			}
+
+			if (searchCriteria.ContainsKey(PersonFinderField.FirstName))
+			{
+				people = filterByFirstName(searchCriteria, people);
 			}
 
 			return people.Select(p => p.Id.Value).ToList();
@@ -270,6 +267,23 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public List<Guid> FindPersonIdsInPeriod(DateOnlyPeriod period, Guid[] teamIds, IDictionary<PersonFinderField, string> searchCriteria)
 		{
 			throw new NotImplementedException();
+		}
+
+		private IEnumerable<IPerson> filterByRole(IDictionary<PersonFinderField, string> searchCriteria, IEnumerable<IPerson> people)
+		{
+			var roleName = searchCriteria[PersonFinderField.Role];
+			roleName = Regex.Match(roleName, quotePattern).Value;
+			people =
+				people.Where(
+					p => _personApplicationRoleDictionary.ContainsKey(p) && _personApplicationRoleDictionary[p] == roleName);
+			return people;
+		}
+
+		private static IEnumerable<IPerson> filterByFirstName(IDictionary<PersonFinderField, string> searchCriteria, IEnumerable<IPerson> people)
+		{
+			var firstName = searchCriteria[PersonFinderField.FirstName];
+			people = people.Where(p => p.Name.FirstName.IndexOf(firstName, StringComparison.OrdinalIgnoreCase) > -1);
+			return people;
 		}
 	}
 }

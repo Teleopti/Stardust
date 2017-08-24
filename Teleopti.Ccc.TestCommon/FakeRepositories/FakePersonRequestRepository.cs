@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				requests = requests.Where(request => filter.RequestTypes.Contains(request.Request.RequestType));
 			}
 
-			if (filter.Persons != null && filter.Persons.Any())
+			if (filter.Persons != null)
 			{
 				requests = requests.Where(request => filter.Persons.Contains(request.Person));
 			}
