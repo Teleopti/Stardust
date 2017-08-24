@@ -22,7 +22,7 @@ angular
                 })
                 .state('refact-rta', {
                     url: '/rta-overview/?skillIds?skillAreaId?open',
-                    templateUrl: 'app/rta/refact/rta.html',
+                    templateUrl: 'app/rta/overview/rta.html',
                     controller: 'RtaMainController as vm',
                     params: {
                         skillIds: {

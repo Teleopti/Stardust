@@ -4,7 +4,7 @@
   angular
     .module('wfm.rta')
     .component('rtaOverviewComponent', {
-      templateUrl: 'app/rta/refact/overview/overview-component.html',
+      templateUrl: 'app/rta/overview/overview-component.html',
       controller: RtaOverviewComponentController,
       bindings: {
         siteCards: '=',
