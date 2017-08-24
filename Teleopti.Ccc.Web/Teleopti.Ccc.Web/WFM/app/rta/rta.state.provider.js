@@ -20,43 +20,23 @@ angular
                     url: '/rta',
                     templateUrl: 'app/rta/rta.html'
                 })
-                .state('rta.sites', {
-                    url: '/?skillIds&skillAreaId',
-                    templateUrl: 'app/rta/overview/rta-sites.html',
-                    controller: 'RtaOverviewController as vm',
+                .state('refact-rta', {
+                    url: '/rta-overview/?skillIds?skillAreaId?open',
+                    templateUrl: 'app/rta/refact/rta.html',
+                    controller: 'RtaMainController as vm',
                     params: {
                         skillIds: {
-                            array: false
-                        },
-                        skillAreaId: {
-                            array: false
-                        }
-                    }
-                })
-                .state('rta.teams', {
-                    url: '/teams/?siteIds&skillIds&skillAreaId',
-                    resolve: {
-                        toggles: function (Toggle) {
-                            return Toggle;
+                            array: true
                         }
                     },
-                    controller: function ($state) {
-                            $state.go('refact-rta', { open: 'true' })              
-                    }
-                })
-                .state('rta.teams2', {
-                    url: '/teams2/?siteIds&skillIds&skillAreaId',
-                    templateUrl: 'app/rta/overview/rta-teams.html',
-                    controller: 'RtaOverviewController as vm',
-                    params: {
-                        siteIds: {
-                            array: true
+                    resolve: {
+                        skills: function (rtaService) {
+                            return rtaService.getSkills();
                         },
-                        skillIds: {
-                            array: false
-                        },
-                        skillAreaId: {
-                            array: false
+                        skillAreas: function (rtaService) {
+                            return rtaService.getSkillAreas().then(function (result) {
+                                return result.SkillAreas;
+                            });
                         }
                     }
                 })
@@ -89,25 +69,5 @@ angular
                     },
                     controller: 'RtaHistoricalController as vm',
                 })
-                .state('refact-rta', {
-                    url: '/rta-overview/?skillIds?skillAreaId?open',
-                    templateUrl: 'app/rta/refact/rta.html',
-                    controller: 'RtaMainController as vm',
-                    params: {
-                        skillIds: {
-                            array: true
-                        }
-                    },
-                    resolve: {
-                        skills: function (rtaService) {
-                            return rtaService.getSkills();
-                        },
-                        skillAreas: function (rtaService) {
-                            return rtaService.getSkillAreas().then(function (result) {
-                                return result.SkillAreas;
-                            });
-                        }
-                    }
-                });
         };
     });
