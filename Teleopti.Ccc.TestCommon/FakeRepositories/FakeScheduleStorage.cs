@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			ScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions,
 			IEnumerable<IPerson> visiblePersons)
 		{
-			var dateTimePeriod = period.VisiblePeriod;
+			var dateTimePeriod = period.LongLoadedDateOnlyPeriod().ToDateTimePeriod(TimeZoneInfo.Utc);
 			var schedules = new ScheduleDictionaryForTest(scenario, dateTimePeriod);
 			if (_data == null || !_data.Any())
 			{
@@ -115,16 +115,18 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 			foreach (var visiblePerson in visiblePersons)
 			{
-				var range = new FakeScheduleRange(schedules, new ScheduleParameters(scenario, visiblePerson, dateTimePeriod));
+				var range = new ScheduleRange(schedules, new ScheduleParameters(scenario, visiblePerson, dateTimePeriod),new ByPassPersistableScheduleDataPermissionChecker());
 				foreach (var scheduleData in _data)
 				{
 					if (scheduleData.Person == null || !scheduleData.Person.Equals(range.Person))
 						continue;
-					range.Add(scheduleData);
+					if(scheduleData.Period.Intersect(dateTimePeriod))
+						range.Add(scheduleData);
 				}
-				var updatedRange = range.UpdateCalcValues(0, new TimeSpan());
-				schedules.AddTestItem(visiblePerson, updatedRange);
+				//var updatedRange = range.UpdateCalcValues(0, new TimeSpan());
+				schedules.AddTestItem(visiblePerson, range);
 			}
+			schedules.TakeSnapshot();
 			return schedules;
 		}
 

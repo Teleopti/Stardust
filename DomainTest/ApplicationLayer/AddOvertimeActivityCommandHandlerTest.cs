@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<AddOvertimeActivityCommandHandlerPersistDeltas>().For<IHandleCommand<AddOvertimeActivityCommand>>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeWriteSideRepository<IMultiplicatorDefinitionSet>>().For<IProxyForId<IMultiplicatorDefinitionSet>>();
@@ -82,9 +84,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scenario = CurrentScenario.Current();
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
-			var activity = ActivityFactory.CreateActivity("Phone");
-			activity.WithId();
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var  mainActivity = ActivityFactory.CreateActivity("Phone").WithId();
 			ActivityRepository.Add(activity);
+			ActivityRepository.Add(mainActivity);
+
+			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, CurrentScenario.Current(), new DateOnly(2013, 11, 14));
+			personAssignment.AddActivity(mainActivity, new DateTimePeriod(2013, 11, 14, 6, 2013, 11, 14, 9));
+			ScheduleStorage.Add(personAssignment);
 
 			var mds = MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("double pay", MultiplicatorType.Overtime);
 			mds.WithId();
@@ -105,7 +112,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			};
 			Target.Handle(command);
 
-			var addOvertimeEvent = ((PersonAssignment)ScheduleStorage.LoadAll().Single()).PopAllEvents().OfType<ActivityAddedEvent>()
+			var ass = (PersonAssignment) ScheduleStorage.LoadAll().Single();
+
+			var addOvertimeEvent = ass.PopAllEvents().OfType<ActivityAddedEvent>()
 				.Single(e => e.ActivityId == command.ActivityId);
 		
 			addOvertimeEvent.Date.Should().Be.EqualTo(new DateTime(2013, 11, 14));

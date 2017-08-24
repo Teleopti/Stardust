@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
@@ -149,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 				new RequestFactory(new SwapAndModifyService(new SwapService(), new DoNothingScheduleDayChangeCallBack()),
 					new PersonRequestAuthorizationCheckerForTest(), new FakeGlobalSettingDataRepository(), new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new DoNothingScheduleDayChangeCallBack());
 
-			var scheduleDictionarySaver = new FakeScheduleDifferenceSaver(_scheduleRepository);
+			var scheduleDictionarySaver = new FakeScheduleDifferenceSaver(_scheduleRepository, new EmptyScheduleDayDifferenceSaver());
 
 			var businessRules = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository,
 				_schedulingResultStateHolder);

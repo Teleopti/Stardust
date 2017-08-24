@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -44,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_personAbsenceAccountRepository = new FakePersonAbsenceAccountRepository();
 
 			_fakeScheduleStorage = new FakeScheduleStorage();
-			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_fakeScheduleStorage);
+			_scheduleDifferenceSaver = new FakeScheduleDifferenceSaver(_fakeScheduleStorage, new EmptyScheduleDayDifferenceSaver());
 
 			var businessRules = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository, new SchedulingResultStateHolder());
 

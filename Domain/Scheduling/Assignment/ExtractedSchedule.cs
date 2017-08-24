@@ -720,10 +720,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			SplitAbsences(Period);
 		}
 
-		public void CreateAndAddPersonalActivity(IActivity activity, DateTimePeriod period)
+		public void CreateAndAddPersonalActivity(IActivity activity, DateTimePeriod period, bool muteEvent = true)
 		{
 			var ass = PersonAssignment(true);
-			ass.AddPersonalActivity(activity, period);
+			ass.AddPersonalActivity(activity, period, muteEvent);
 		}
 
 			//will be removed
