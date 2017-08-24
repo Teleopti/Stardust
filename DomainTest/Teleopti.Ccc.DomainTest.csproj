@@ -332,7 +332,7 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AcdLoginPersonMapTests.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonGroupsHandlerTest.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\Analytics\AnalyticsPersonPeriodUpdaterTests.cs" />
-    <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\RemoveActivityCommandHandlerWithoutDeltasTest.cs" />
     <Compile Include="ApplicationLayer\RunWaitlistCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\Absences\AnalyticsAbsenceUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\ScenarioTests\Analytics\ScenarioChangedHandlerTests.cs" />

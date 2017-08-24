@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
@@ -377,6 +378,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		IScheduleDay ReFetch();
 		void AddMainShift(IPersonAssignment mainShiftSource);
 		bool HasProjection();
+		void RemoveActivity(ShiftLayer shiftLayer, bool b, TrackedCommandInfo commandTrackedCommandInfo);
 	}
 
 }

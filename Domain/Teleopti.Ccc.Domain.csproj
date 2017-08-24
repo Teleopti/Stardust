@@ -1311,7 +1311,7 @@
     <Compile Include="ApplicationLayer\Commands\MyTeamRemovePersonAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\PersonAbsenceRemover.cs" />
     <Compile Include="ApplicationLayer\Commands\RemoveActivityCommand.cs" />
-    <Compile Include="ApplicationLayer\Commands\RemoveActivityCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\RemoveActivityCommandHandlerWithoutDeltas.cs" />
     <Compile Include="ApplicationLayer\CommonEventProcessor.cs" />
     <Compile Include="ApplicationLayer\CurrentInitiatorIdentifier.cs" />
     <Compile Include="ApplicationLayer\Events\AcceptShiftTradeEvent.cs" />

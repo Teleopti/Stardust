@@ -793,5 +793,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if(options.OvertimeAvailability)
 				DeleteOvertimeAvailability();
 		}
+
+		public void RemoveActivity(ShiftLayer shiftLayer, bool b, TrackedCommandInfo commandTrackedCommandInfo)
+		{
+			var ass = PersonAssignment();
+			ass.RemoveActivity(shiftLayer,b,commandTrackedCommandInfo);
+		}
 	}
 }
