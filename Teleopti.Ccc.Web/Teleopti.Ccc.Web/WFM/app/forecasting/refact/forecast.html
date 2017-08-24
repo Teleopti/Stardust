@@ -1,29 +1,22 @@
-<div class="developerTools" aria-label="This is only visible for dev toggles" md-labeled-by-tooltip="md-tooltip-106" aria-hidden="false">
-  <div class="con-flex">
-    <h1>Refact ongoing </h1>
-  </div>
-</div>
-
 <div class="view-header with-fab with-desc">
   <div class="view-title">
     <h1><i class="mdi mdi-chart-line"></i> {{'Forecasts' | translate}}</h1>
-    <p>
-      {{'OverView' | translate}}
-    </p>
   </div>
-  <!-- <div class="fab-wrapper">
-  <button class="wfm-fab grow-out material-depth-1" ng-click="displayForecastingModal()" ng-class="{'shrink-in':vm.skillMaster.IsForecastRunning}" ng-disabled="vm.skillMaster.IsForecastRunning" ng-class="{'wfm-btn-invis-disabled': vm.skillMaster.IsForecastRunning}">
-  <i class="mdi mdi-arrow-right"></i>
-  <md-tooltip>
-  {{'ForecastAll' | translate}}
-</md-tooltip>
-</button>
-</div> -->
+  <div class="fab-wrapper">
+    <a ui-sref="create-skill" ng-if="vm.skillMaster.IsPermittedToModify">
+      <button class="wfm-fab grow-out material-depth-1">
+        <i class="mdi mdi-plus"></i>
+        <md-tooltip>
+          {{'NewSkill' | translate}}
+        </md-tooltip>
+      </button>
+    </a>
+  </div>
 </div>
 
-<div class="con-row">
+<div class="con-row" ng-if="vm.skillMaster.Skills.length < 1" ng-cloak>
   <div class="con-flex">
-    <div class="line-center" ng-if="vm.skillMaster.Skills.length < 1">
+    <div class="line-center">
       <i class="mdi mdi-information-outline huge-icon line-center"></i>
       <h2>No skills or workloads found</h2>
       <button class="wfm-btn wfm-btn-primary">Create a skill</button>
@@ -69,6 +62,13 @@
           </div>
         </div>
         <div class="con-footer">
+          <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.goStatistics(skill.Workload.Id)">
+  					{{ 'Statistics' | translate }}
+  					<md-tooltip>
+  						{{ 'ViewChartTip' | translate }}
+  					</md-tooltip>
+  				</button>
+
           <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.forecastingModal(false, true)">
             {{ 'Export' | translate }}
             <md-tooltip>

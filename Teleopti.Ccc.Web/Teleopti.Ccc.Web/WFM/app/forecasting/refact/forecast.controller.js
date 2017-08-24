@@ -1,9 +1,8 @@
 (function() {
   'use strict';
 
-  angular
-  .module('wfm.forecasting')
-  .controller('ForecastRefactCtrl', ForecastCtrl);
+  angular.module('wfm.forecasting')
+  .controller('ForecastRefactController', ForecastCtrl);
 
   ForecastCtrl.$inject = ['forecastingService', '$interval', '$state', '$stateParams'];
 
@@ -40,7 +39,9 @@
     vm.getSkills = getSkills;
     vm.isForecastRunning = isForecastRunning;
     vm.getScenarios = getScenarios;
+
     vm.goToModify = goToModify;
+    vm.goStatistics = goStatistics;
 
 
     function init() {
@@ -90,7 +91,6 @@
     }
 
     function loadChart() {
-      console.log('FAILED GEN1');
       return;
     }
 
@@ -131,7 +131,7 @@
       }
 
       vm.forecastModal = false;
-      forecastingService.forecast(JSON.stringify(
+      forecastingService.forecast(angular.toJson(
         {
           ForecastStart: vm.forecastPeriod.startDate,
           ForecastEnd: vm.forecastPeriod.endDate,
@@ -162,7 +162,7 @@
 
       function exportToFile() {
         vm.skillMaster.isForecastRunning = true;
-        forecastingService.exportForecast(JSON.stringify(
+        forecastingService.exportForecast(angular.toJson(
           {
             ForecastStart: vm.forecastPeriod.startDate,
             ForecastEnd: vm.forecastPeriod.endDate,
@@ -196,6 +196,10 @@
       function goToModify(skillData) {
         $state.go("modify", {workloadId:skillData.Workload.Id, skill:skillData, scenario:vm.selectedScenario, days:vm.currentWorkload.Days})
       }
+
+      function goStatistics(workload) {
+        $state.go('statistics', { workloadId: workload });
+      };
 
       function forecastingModal(forecast, exporting) {
         if (vm.skillMaster.isForecastRunning) {

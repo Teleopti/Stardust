@@ -5,7 +5,7 @@
   .module('wfm.forecasting')
   .config(stateConfig);
 
-  function stateConfig($stateProvider) {
+  function stateConfig($stateProvider, $urlRouterProvider) {
     $stateProvider.state('forecasting', {
       url: '/forecasting',
       templateUrl: 'app/forecasting/html/forecasting.html',
@@ -22,21 +22,6 @@
         }
       }
     })
-    .state('forecast', {
-      templateUrl: 'app/forecasting/refact/forecast.html',
-      controller: 'ForecastRefactCtrl as vm'
-    })
-    .state('modify', {
-      url: '/forecast/:workloadId',
-      templateUrl: 'app/forecasting/refact/forecast-modify.html',
-      controller: 'ForecastModCtrl as vm',
-      params: {
-        workloadId: undefined,
-        skill: undefined,
-        days: undefined,
-        scenario: undefined
-      },
-    })
     .state('forecasting.start', {
       params: {
         workloadId: undefined
@@ -51,6 +36,33 @@
     })
     .state('forecasting.skillcreate', {
       url: '/skill/create',
+      templateUrl: 'app/forecasting/html/skill-create.html',
+      controller: 'ForecastingSkillCreateCtrl'
+    })
+
+    $stateProvider.state('forecast', {
+      url: '/forecast',
+      templateUrl: 'app/forecasting/refact/forecast.html',
+      controller: 'ForecastRefactController as vm'
+    })
+    .state('modify', {
+      url: '/forecast/modify/:workloadId',
+      templateUrl: 'app/forecasting/refact/forecast-modify.html',
+      controller: 'ForecastModController as vm',
+      params: {
+        workloadId: undefined,
+        skill: undefined,
+        days: undefined,
+        scenario: undefined
+      },
+    })
+    .state('statistics', {
+      url: '/forecast/statistics/:workloadId',
+      templateUrl: 'app/forecasting/html/forecasting-advanced.html',
+      controller: 'ForecastingAdvancedCtrl'
+    })
+    .state('create-skill', {
+      url: '/forecast/create',
       templateUrl: 'app/forecasting/html/skill-create.html',
       controller: 'ForecastingSkillCreateCtrl'
     })

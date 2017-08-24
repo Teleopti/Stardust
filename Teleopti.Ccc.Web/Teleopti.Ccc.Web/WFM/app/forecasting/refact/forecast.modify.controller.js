@@ -3,7 +3,7 @@
 
   angular
   .module('wfm.forecasting')
-  .controller('ForecastModCtrl', ForecastModCtrl);
+  .controller('ForecastModController', ForecastModCtrl);
 
   ForecastModCtrl.$inject = ['forecastingService', '$stateParams', '$window', 'NoticeService', '$translate'];
 
@@ -35,7 +35,7 @@
     }
 
     function modifyPanelHelper(state) {
-      if (vm.selectedDayCount === undefined || vm.selectedDayCount.length<1) {
+      if (vm.selectedDayCount === null || vm.selectedDayCount.length<1) {
         return;
       }
       if (state == true) {
@@ -62,7 +62,7 @@
 
     function applyCampaign() {
       forecastingService.campaign(
-        JSON.stringify(
+        angular.toJson(
           {
             Days: vm.selectedDayCount,
             WorkloadId: vm.selectedWorkload.Id,
@@ -89,7 +89,7 @@
       }
 
       function applyOverride(form) {
-        forecastingService.override(JSON.stringify(
+        forecastingService.override(angular.toJson(
           {
             Days: vm.selectedDayCount,
             WorkloadId: vm.selectedWorkload.Id,
@@ -112,7 +112,7 @@
         };
 
         function clearOverride() {
-          forecastingService.override(JSON.stringify(
+          forecastingService.override(angular.toJson(
             {
               Days: vm.selectedDayCount,
               WorkloadId: vm.selectedWorkload.Id,
@@ -133,7 +133,6 @@
           };
 
           function loadChart() {
-            console.log('FAILED GEN2');
             return;
           }
 
@@ -169,8 +168,6 @@
               Name: $stateParams.skill.Workload.Name,
               Scenario: $stateParams.scenario
             }
-            console.log('selected', vm.selectedWorkload);
-            console.log('stateparams: ',$stateParams)
           };
         }
 

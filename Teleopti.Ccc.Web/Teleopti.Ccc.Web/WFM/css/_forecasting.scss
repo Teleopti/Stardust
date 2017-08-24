@@ -79,6 +79,17 @@
 	color: $orange-400;
 }
 
+.modify-modal-footer{
+	padding-top: $full-padding*2;
+}
+
+.queue-list{
+	.ui-grid-viewport{
+		height: 317px!important;
+	}
+}
+
+//chart
 .c3-legend-item-vcombo,
 .c3-legend-item-vcampaign,
 .c3-legend-item-voverride{
@@ -138,15 +149,3 @@
 forecast-result-chart >.c3 > svg{
 	max-width: 100%;
 }
-
-.modify-modal-footer{
-	padding-top: $full-padding*2;
-}
-
-.queue-list{
-	.ui-grid-viewport{
-		height: 317px!important;
-	}
-}
-
-
