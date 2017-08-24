@@ -60,8 +60,17 @@
       toggleNode(node);
       toggleParent(node);
 
-      if (node.nodes != null)
-      traverseNodes(node.nodes, toggleNode)
+      if (ctrl.options.orgPicker) {
+        if (node.nodes.some(isAnySiblingsSelected)) {
+          traverseNodes(node.nodes, removeNode)
+        } else {
+          toggleParent(node);
+          traverseNodes(node.nodes, addNode)
+        }
+      } else {
+        if (node.nodes != null)
+        traverseNodes(node.nodes, toggleNode)
+      }
     }
 
     function clickedNodeForTopSelect(node) {

@@ -283,6 +283,21 @@ describe('treePickerComponent', function () {
       expect(ctrl.outputData[2]).toEqual(ctrl.treeCollection.nodes[0].id);
       expect(ctrl.outputData[0]).toEqual(ctrl.treeCollection.nodes[0].nodes[0].nodes[0].id);
     });
+
+    it('should toggle all children when clicking a child parent', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+      ctrl.data.nodes[1].nodes[1].nodes.push({name: 'grandchildX', id: '9', nodes: []})
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+      ctrl.treeCollection.nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1]);
+
+      expect(ctrl.outputData.length).toEqual(0);
+    });
   });
 
   describe('TopSelectOnly Tree', function () {
