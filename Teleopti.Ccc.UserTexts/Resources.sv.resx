@@ -14871,9 +14871,6 @@ Vill du registrera dig?</value>
   <data name="SuccessfullyImported" xml:space="preserve">
     <value>Importen lyckades</value>
   </data>
-  <data name="TotalAgentsInAlarm" xml:space="preserve">
-    <value>Totalt antal agenter med larm</value>
-  </data>
   <data name="AnywhereMigrated" xml:space="preserve">
     <value>Anywhere har flyttats till {0}Teleopti WFM{1}!</value>
   </data>
