@@ -64,6 +64,26 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			command.IsReplySuccess.Should().Be(true);
 		}
 
+		[Test]
+		[Culture("en-US")]
+		public void ShouldReturnErrorWhenDenyADeniedRequest()
+		{
+			var personRequest = createPersonRequest();
+			personRequest.Deny(string.Empty, Authorization);
+
+			var command = new DenyRequestCommand
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				DenyReason = "RequestDenyReasonSupervisor"
+			};
+			var commandHandler = new DenyRequestCommandHandler(PersonRequestRepository, Authorization);
+			commandHandler.Handle(command);
+
+			personRequest.IsDenied.Should().Be(true);
+			command.ErrorMessages.Count.Should().Be(1);
+			command.ErrorMessages[0].Should().Be("A request that is Denied cannot be Denied.");
+;		}
+
 		private IPersonRequest createPersonRequest()
 		{
 			var person = PersonFactory.CreatePersonWithId();

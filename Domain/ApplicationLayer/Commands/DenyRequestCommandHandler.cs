@@ -31,6 +31,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		}
 		private bool denyRequest(IPersonRequest personRequest, DenyRequestCommand command)
 		{
+			if (personRequest.IsDenied)
+			{
+				return invalidRequestState(personRequest, command);
+			}
+
 			try
 			{
 				var denyOption = !command.IsManualDeny ? PersonRequestDenyOption.AutoDeny : PersonRequestDenyOption.None;
@@ -40,6 +45,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				return true;
 			}
 			catch (InvalidRequestStateTransitionException)
+			{
+				invalidRequestState(personRequest, command);
+			}
+
+			return false;
+		}
+
+		private static bool invalidRequestState(IPersonRequest personRequest, IRequestCommand command)
+		{
+			if (personRequest.IsDeleted)
+			{
+				command.ErrorMessages.Add(UserTexts.Resources.RequestHasBeenDeleted);
+			}
+			else
 			{
 				command.ErrorMessages.Add(string.Format(UserTexts.Resources.RequestInvalidStateTransition, personRequest.StatusText,
 					UserTexts.Resources.RequestStatusDenied));
