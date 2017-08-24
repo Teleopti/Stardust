@@ -3,6 +3,7 @@ describe('rtaRouteService', function () {
 	var target, $state, curDate;
 
 	beforeEach(module('wfm.rta'));
+	beforeEach(module('wfm.teamSchedule'));
 
 	beforeEach(inject(function (_$state_, rtaRouteService) {
 		target = rtaRouteService;
@@ -27,15 +28,4 @@ describe('rtaRouteService', function () {
 			.toEqual("#/teams/?personId=11610fe4-0130-4568-97de-9b5e015b2564");
 	});
 
-	it('should get sites overview url', function () {
-		expect(target.urlForSites()).toEqual('#/rta');
-	});
-
-	it('should get sites by skill overview url', function () {
-		expect(target.urlForSites('f08d75b3-fdb4-484a-ae4c-9f0800e2f753', undefined)).toEqual('#/rta/?skillIds=f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
-	});
-
-	it('should get sites by skill area overview url', function () {
-		expect(target.urlForSites(undefined, 'f08d75b3-fdb4-484a-ae4c-9f0800e2f753')).toEqual('#/rta/?skillAreaId=f08d75b3-fdb4-484a-ae4c-9f0800e2f753');
-	});
 });
