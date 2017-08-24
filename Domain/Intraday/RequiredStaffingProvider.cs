@@ -94,12 +94,13 @@ namespace Teleopti.Ccc.Domain.Intraday
                     taskPeriod.CampaignTaskTime = new Percent(0);
                     taskPeriod.CampaignAfterTaskTime = new Percent(0);
 
-                    if (statInterval == null)
+                    if (statInterval == null || double.IsNaN(statInterval.AverageHandleTime))
 					{
 						taskPeriod.SetTasks(0);
 						taskPeriod.AverageTaskTime = TimeSpan.Zero;
 						continue;
 					}
+
 					taskPeriod.SetTasks(statInterval.Calls);
 					taskPeriod.AverageTaskTime = TimeSpan.FromSeconds(statInterval.AverageHandleTime);
 					taskPeriod.AverageAfterTaskTime = TimeSpan.Zero;
