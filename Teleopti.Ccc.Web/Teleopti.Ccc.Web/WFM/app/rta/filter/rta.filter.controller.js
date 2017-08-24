@@ -159,7 +159,6 @@
 		};
 
 		function selectedSkillChange(skill) {
-
 			if (!skill && vm.showOrganization)
 				stateGoToAgents({
 					skillIds: skill ? skill.Id : undefined,
@@ -167,7 +166,6 @@
 					siteIds: siteIds,
 					teamIds: teamIds
 				});
-			else if (!skill) { rtaRouteService.goToSites(); }
 			else if ((skill.Id != skillIds || $stateParams.skillAreaId) && vm.showOrganization) {
 				stateGoToAgents({
 					skillIds: skill ? skill.Id : undefined,
@@ -175,16 +173,6 @@
 					siteIds: [],
 					teamIds: []
 				});
-			}
-			else {
-				if (skill.Id == skillIds) return;
-				vm.selectedSkill = skill;
-				vm.selectedSkillArea = undefined;
-				if ($state.current.name !== "rta.teams" && angular.isDefined($stateParams.siteId))
-					rtaRouteService.goToTeams(vm.siteIds, skill.Id, vm.selectedSkillArea);
-				else {
-					rtaRouteService.goToSites(skill.Id, vm.selectedSkillArea);
-				}
 			}
 		}
 
@@ -197,7 +185,6 @@
 					teamIds: teamIds
 				});
 			}
-			else if (!skillArea) { rtaRouteService.goToSites(); }
 			else if (!(skillArea.Id == $stateParams.skillAreaId) && vm.showOrganization) {
 				stateGoToAgents({
 					skillIds: skillArea ? [] : $stateParams.skillIds,
@@ -205,16 +192,6 @@
 					siteIds: [],
 					teamIds: []
 				});
-			}
-			else {
-				if (skillArea.Id === $stateParams.skillAreaId) return;
-				vm.selectedSkillArea = skillArea;
-				vm.selectedSkill = undefined;
-				if ($state.current.name !== "rta.teams" && $stateParams.siteId)
-					rtaRouteService.goToTeams(vm.siteIds, vm.selectedSkill, skillArea.Id);
-				else {
-					rtaRouteService.goToSites(vm.selectedSkill, skillArea.Id);
-				}
 			}
 		}
 
@@ -232,17 +209,17 @@
 		}
 
 		function goToAgents() {
-			if(!vm.openPicker) return;
+			if (!vm.openPicker) return;
 			shrinkSites();
 			var selection = vm.sites.reduce(function (acc, site) {
 				if (site.isChecked && site.FullPermission) {
 					acc.siteIds.push(site.Id);
-				} 
-				else if(site.isChecked) {
-					site.Teams.forEach(function(team){
+				}
+				else if (site.isChecked) {
+					site.Teams.forEach(function (team) {
 						acc.teamIds.push(team.Id);
 					})
-				}		
+				}
 				else if (site.isMarked) {
 					acc.teamIds = acc.teamIds.concat(
 						site.Teams

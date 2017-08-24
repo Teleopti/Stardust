@@ -177,13 +177,14 @@ describe('RtaAgentsController', function () {
 			PersonId: "11610fe4-0130-4568-97de-9b5e015b2564",
 			TeamId: "34590a63-6331-4921-bc9f-9b5e015ab495",
 		});
+		var c = $controllerBuilder.createController();
+		$state.go.calls.reset();
 
-		$controllerBuilder.createController()
-			.apply(function () {
-				$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
-			});
+		c.apply(function () {
+			$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+		});
 
-		expect($state.go).toHaveBeenCalledWith('rta');
+		expect($state.go).toHaveBeenCalledWith('refact-rta');
 	});
 
 	it('should get adherence percentage for agent when clicked', function () {

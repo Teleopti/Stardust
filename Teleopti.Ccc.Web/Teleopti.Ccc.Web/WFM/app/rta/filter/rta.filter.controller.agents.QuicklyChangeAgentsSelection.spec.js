@@ -965,27 +965,6 @@ describe('RtaFilterController', function () {
 			});
 	});
 
-	it('should go to sites with skill when on sites view', function () {
-		$state.current.name = "rta.sites";
-		$fakeBackend.withSkill({
-			Id: "phoneSkillGuid"
-		})
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(function () {
-			vm.selectedSkillChange({
-				Id: "phoneSkillGuid"
-			});
-		});
-
-		expect($state.go).toHaveBeenCalledWith('rta.sites', {
-			skillIds: 'phoneSkillGuid',
-			skillAreaId: undefined
-		});
-	});
-
-
 	it('should go to agents with skillArea when on agents view', function () {
 		$state.current.name = "rta.agents";
 		$fakeBackend.withSkillAreas([{
@@ -1009,27 +988,6 @@ describe('RtaFilterController', function () {
 				reload: true,
 				notify: true
 			});
-	});
-
-	it('should go to sites with skillArea when on sites view', function () {
-		$state.current.name = "rta.sites";
-		$fakeBackend.withSkillAreas([{
-			Id: "phoneAndEmailGuid"
-		}]);
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(function () {
-			vm.selectedSkillAreaChange({
-				Id: "phoneAndEmailGuid"
-			});
-		});
-
-		expect($state.go).toHaveBeenCalledWith('rta.sites', {
-			skillAreaId: 'phoneAndEmailGuid',
-			skillIds: undefined,
-
-		});
 	});
 
 	it('should go to agents by skillArea and clear skill from stateParams when on agents view', function () {
@@ -1067,36 +1025,6 @@ describe('RtaFilterController', function () {
 			});
 	});
 
-	it('should go to sites by skillArea and clear skill from stateParams when on sites view', function () {
-		$state.current.name = "rta.sites";
-		stateParams.skillIds = ["phoneSkillGuid"];
-		$fakeBackend
-			.withSkill({
-				Id: "phoneSkillGuid"
-			})
-			.withSkillAreas([{
-				Id: "phoneAndEmailGuid",
-				Skills: [{
-					Id: "phoneSkillGuid"
-				}, {
-					Id: "emailSkillGuid"
-				},]
-			}])
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(function () {
-			vm.selectedSkillAreaChange({
-				Id: "phoneAndEmailGuid"
-			});
-		});
-
-		expect($state.go).toHaveBeenCalledWith('rta.sites', {
-			skillAreaId: 'phoneAndEmailGuid',
-			skillIds: undefined
-		});
-	});
-
 	it('should go to agents by skill and clear skillArea from stateParams when on agents view', function () {
 		$state.current.name = "rta.agents";
 		stateParams.skillAreaId = "phoneAndEmailGuid";
@@ -1130,36 +1058,6 @@ describe('RtaFilterController', function () {
 				reload: true,
 				notify: true
 			});
-	});
-
-	it('should go to sites by skillArea and clear skill from stateParams when on sites view', function () {
-		$state.current.name = "rta.sites";
-		stateParams.skillIds = "phoneAndEmailGuid";
-		$fakeBackend
-			.withSkill({
-				Id: "phoneSkillGuid"
-			})
-			.withSkillAreas([{
-				Id: "phoneAndEmailGuid",
-				Skills: [{
-					Id: "phoneSkillGuid"
-				}, {
-					Id: "emailSkillGuid"
-				},]
-			}])
-
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-		c.apply(function () {
-			vm.selectedSkillChange({
-				Id: "phoneSkillGuid"
-			});
-		});
-
-		expect($state.go).toHaveBeenCalledWith('rta.sites', {
-			skillAreaId: undefined,
-			skillIds: "phoneSkillGuid"
-		});
 	});
 
 	it('should go to agents by skill and clear site from stateParams when on agents view', function () {

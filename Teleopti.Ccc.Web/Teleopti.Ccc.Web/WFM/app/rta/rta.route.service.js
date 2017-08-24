@@ -10,9 +10,7 @@
 	function rtaRouteService($state, Toggle) {
 
 		var service = {
-			goToSites: goToSites,
-			goToSitesRefact: goToSitesRefact,
-			goToTeams: goToTeams,
+			goToOverview: function() { $state.go('refact-rta'); },
 			goToAgents: goToAgents,
 			goToSelectSkill: goToSelectSkill,
 			urlForChangingSchedule: urlForChangingSchedule,
@@ -25,22 +23,6 @@
 
 		return service;
 		///////////////////////
-
-		function goToSites(skillId, skillAreaId) {
-			if (angular.isDefined(skillId)) $state.go('rta.sites', { skillIds: skillId, skillAreaId: undefined });
-			else if (angular.isDefined(skillAreaId)) $state.go('rta.sites', { skillIds: undefined, skillAreaId: skillAreaId });
-			else $state.go('rta');
-		}
-
-		function goToSitesRefact() {
-			$state.go('refact-rta');
-		}
-
-		function goToTeams(siteIds, skillId, skillAreaId) {
-			if (angular.isDefined(skillId)) $state.go('rta.teams', { siteIds: siteIds, skillIds: skillId, skillAreaId: undefined });
-			else if (angular.isDefined(skillAreaId)) $state.go('rta.teams', { siteIds: siteIds, skillIds: undefined, skillAreaId: skillAreaId });
-			else $state.go('rta.teams', { siteIds: siteIds });
-		}
 
 		function goToAgents(ids) { $state.go('rta.agents', ids); };
 

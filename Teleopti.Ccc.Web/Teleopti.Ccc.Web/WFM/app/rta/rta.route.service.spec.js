@@ -14,31 +14,12 @@ describe('rtaRouteService', function () {
 		jasmine.clock().mockDate(curDate);
 	});
 
-	it('should go back to sites overview', function () {
+	it('should go back to overview', function () {
 		spyOn($state, 'go');
 
-		target.goToSites();
-
-		expect($state.go).toHaveBeenCalledWith('rta');
-	});
-
-	it('should go back to refactored overview', function () {
-		spyOn($state, 'go');
-
-		target.goToSitesRefact();
+		target.goToOverview();
 
 		expect($state.go).toHaveBeenCalledWith('refact-rta');
-	});
-
-
-	it('should go back to teams view', function () {
-		spyOn($state, 'go');
-
-		target.goToTeams('d970a45a-90ff-4111-bfe1-9b5e015ab45c');
-
-		expect($state.go).toHaveBeenCalledWith('rta.teams', {
-			siteIds: 'd970a45a-90ff-4111-bfe1-9b5e015ab45c'
-		});
 	});
 
 	it('should get change schedule url for an agent', function () {

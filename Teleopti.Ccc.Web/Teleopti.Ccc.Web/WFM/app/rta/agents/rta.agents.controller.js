@@ -127,7 +127,7 @@
 		vm.showAdherenceUpdates = function() { return vm.adherencePercent !== null; };
 		vm.changeScheduleUrl = function(personId) { return rtaRouteService.urlForChangingSchedule(personId); };
 		vm.historicalAdherenceUrl = function(personId) { return rtaRouteService.urlForHistoricalAdherence(personId); };
-		vm.goToOverview = function () { rtaRouteService.goToSitesRefact(); }
+		vm.goToOverview = rtaRouteService.goToOverview;
 		vm.goToSelectItem = function () { rtaRouteService.goToSelectSkill(); }
 		
 		vm.rightPanelOptions = {
@@ -323,7 +323,7 @@
 			function () { return $sessionStorage.buid; },
 			function (newValue, oldValue) {
 				if (angular.isDefined(oldValue) && newValue !== oldValue) {
-					rtaRouteService.goToSites();
+					rtaRouteService.goToOverview();
 				}
 			}
 		);

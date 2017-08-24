@@ -47,7 +47,7 @@ describe('RtaAgentsController', function () {
 				TimeInAlarm: timeInAlarm
 			}
 		},
-		createAgent2: function (obj,siteId) {
+		createAgent2: function (obj, siteId) {
 			obj.SiteId = siteId;
 			return obj;
 		}
@@ -63,7 +63,7 @@ describe('RtaAgentsController', function () {
 				TimeInAlarm: timeInAlarm
 			}
 		},
-		createAgent2: function (obj,teamId) {
+		createAgent2: function (obj, teamId) {
 			obj.TeamId = teamId;
 			return obj;
 		}
@@ -127,7 +127,7 @@ describe('RtaAgentsController', function () {
 					Rule: "In Adherence",
 					Color: "#00FF00",
 					TimeInState: 15473
-				},selection.ids[0]))
+				}, selection.ids[0]))
 				.withAgentState(selection.createAgent2({
 					PersonId: "JohnGuid",
 					State: "In Call",
@@ -137,7 +137,7 @@ describe('RtaAgentsController', function () {
 					Rule: "Out of Adherence",
 					Color: "#FF0000",
 					TimeInState: 15473
-				},selection.ids[1]));
+				}, selection.ids[1]));
 
 			var c = $controllerBuilder.createController();
 			vm = c.vm;
@@ -164,10 +164,10 @@ describe('RtaAgentsController', function () {
 			stateParams[selection.type] = selection.ids
 			$fakeBackend
 				.withAgentState(
-				selection.createAgent("11610fe4-0130-4568-97de-9b5e015b2564", selection.ids[0],"Ready", 30)
+				selection.createAgent("11610fe4-0130-4568-97de-9b5e015b2564", selection.ids[0], "Ready", 30)
 				)
 				.withAgentState(
-				selection.createAgent("6b693b41-e2ca-4ef0-af0b-9e06008d969b", selection.ids[1],"Ready", 30)
+				selection.createAgent("6b693b41-e2ca-4ef0-af0b-9e06008d969b", selection.ids[1], "Ready", 30)
 				);
 
 			vm = $controllerBuilder.createController().vm;
@@ -181,7 +181,7 @@ describe('RtaAgentsController', function () {
 			stateParams[selection.type] = selection.ids[0];
 			$fakeBackend
 				.withAgentState(
-				selection.createAgent("6b693b41-e2ca-4ef0-af0b-9e06008d969b", selection.ids[0],"Ready", 30)
+				selection.createAgent("6b693b41-e2ca-4ef0-af0b-9e06008d969b", selection.ids[0], "Ready", 30)
 				);
 
 			vm = $controllerBuilder.createController().vm;
@@ -192,13 +192,14 @@ describe('RtaAgentsController', function () {
 		it('should go back to sites when business unit is changed', function () {
 			stateParams[selection.type] = selection.ids
 			$sessionStorage.buid = "928dd0bc-bf40-412e-b970-9b5e015aadea";
+			var c = $controllerBuilder.createController();
+			$state.go.calls.reset();
 
-			$controllerBuilder.createController()
-				.apply(function () {
-					$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
-				});
+			c.apply(function () {
+				$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
+			});
 
-			expect($state.go).toHaveBeenCalledWith('rta');
+			expect($state.go).toHaveBeenCalledWith('refact-rta');
 		});
 
 		it('should not go back to sites overview when business unit is not initialized yet', function () {
