@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleOvertime>();
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
 			builder.RegisterType<MatrixListFactory>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockOptimization>();
+			builder.RegisterType<TeamBlockDesktopOptimization>();
 			builder.RegisterType<TeamBlockIntradayOptimizationService>();
 			builder.RegisterType<TeamBlockDaysOffSameDaysOffLockSyncronizer>().SingleInstance();
 			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects();

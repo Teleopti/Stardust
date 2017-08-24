@@ -19,7 +19,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class TeamBlockOptimization
+	//legacy class - to be used from fat client only
+	public class TeamBlockDesktopOptimization
 	{
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly TeamBlockIntradayOptimizationService _teamBlockIntradayOptimizationService;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly MaxSeatOptimization _maxSeatOptimization;
 		private readonly DesktopOptimizationContext _desktopOptimizationContext;
 
-		public TeamBlockOptimization(TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
+		public TeamBlockDesktopOptimization(TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ITeamBlockInfoFactory teamBlockInfoFactory,

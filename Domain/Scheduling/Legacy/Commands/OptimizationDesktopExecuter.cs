@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
-		private readonly TeamBlockOptimization _teamBlockOptimization;
+		private readonly TeamBlockDesktopOptimization _teamBlockOptimization;
 		private readonly Func<IResourceOptimizationHelperExtended> _resourceOptimizationHelperExtended;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
 			IResourceCalculation resourceOptimizationHelper,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
-			TeamBlockOptimization teamBlockOptimization,
+			TeamBlockDesktopOptimization teamBlockOptimization,
 			Func<IResourceOptimizationHelperExtended> resourceOptimizationHelperExtended,
 			IUserTimeZone userTimeZone,
 			IGroupPagePerDateHolder groupPagePerDateHolder,
