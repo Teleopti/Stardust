@@ -53,10 +53,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 				SortingOrders = input.SortingOrders
 			};
 
-			if (input.AgentSearchTerm.Any())
-			{
-				adjustRoleFieldValue(input.AgentSearchTerm);
-			}
+			adjustRoleFieldValue(input.AgentSearchTerm);
 
 			List<Guid> targetIds;
 			if (groupPageToggle)
@@ -95,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 		private void adjustRoleFieldValue(IDictionary<PersonFinderField, string> agentSearchTerm)
 		{
-			if (!agentSearchTerm.ContainsKey(PersonFinderField.Role))
+			if (!agentSearchTerm.Any() || !agentSearchTerm.ContainsKey(PersonFinderField.Role))
 				return;
 
 			var roleNameValues = agentSearchTerm[PersonFinderField.Role];
