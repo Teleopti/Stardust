@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 					AlarmStartTime = "2016-10-17 08:00".Utc()
 				});
 			});
-			WithUnitOfWork.Do(() => StatePersister.UpsertDeleted(ashleyId, "2016-10-17 08:30".Utc()));
+			WithUnitOfWork.Do(() => StatePersister.UpsertDeleted(ashleyId));
 
 			WithUnitOfWork.Get(() => Target.Read(siteId, new[] { phoneSkillId }))
 				.Single().InAlarmCount.Should().Be(1);

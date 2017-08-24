@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				TeamId = team,
 				SiteId = site,
 			});
-			Persister.UpsertDeleted(person, DateTime.UtcNow);
+			Persister.UpsertDeleted(person);
 
 			var result = Target.Read();
 

@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				TeamId = teamId,
 				AlarmStartTime = "2016-08-18 08:05".Utc()
 			});
-			Persister.UpsertDeleted(personId, "2016-08-18 08:05".Utc());
+			Persister.UpsertDeleted(personId);
 
 			Target.Read(siteId).Single().InAlarmCount.Should().Be(1);
 		}

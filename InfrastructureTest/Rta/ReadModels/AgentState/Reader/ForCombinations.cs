@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 					TeamId = teamId
 				});
 
-				StatePersister.UpsertDeleted(personId1, DateTime.Now);
+				StatePersister.UpsertDeleted(personId1);
 			});
 
 			WithUnitOfWork.Get(() =>
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 					TeamId = teamId
 
 				});
-				StatePersister.UpsertDeleted(personId1, DateTime.Now);
+				StatePersister.UpsertDeleted(personId1);
 			});
 
 			WithUnitOfWork.Get(() =>

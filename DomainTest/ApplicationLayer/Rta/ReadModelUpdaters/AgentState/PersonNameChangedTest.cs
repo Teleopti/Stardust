@@ -71,7 +71,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 			model.IsDeleted.Should().Be(true);
 			model.FirstName.Should().Be("bill");
 			model.LastName.Should().Be("gates");
-			model.ExpiresAt.Should().Be("2017-02-21 08:00".Utc());
 		}
 	}
 }

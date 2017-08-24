@@ -199,7 +199,7 @@
 			vm.skillIds = [];
 			vm.urlParams.skillIds = undefined;
 			vm.urlParams.skillAreaId = undefined;
-			rtaStateStorageService.removeState();		
+			rtaStateStorageService.removeState();
 			vm.agentsState = 'rta.agents({siteIds: card.site.Id})';
 			vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id})';
 			$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
@@ -208,7 +208,7 @@
 		function setUpForSkillArea(selectedItem) {
 			vm.urlParams.skillAreaId = selectedItem.Id;
 			vm.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
-			rtaStateStorageService.setState($state.current.name, {skillAreaId: selectedItem});		
+			rtaStateStorageService.setState($state.current.name, { skillAreaId: selectedItem });
 			vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillAreaId: "' + selectedItem.Id + '"})';
 			vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id, skillAreaId: "' + selectedItem.Id + '"})';
 			$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
@@ -217,7 +217,7 @@
 		function setUpForSkill(selectedItem) {
 			vm.urlParams.skillIds = [selectedItem.Id];
 			vm.skillIds = [selectedItem.Id];
-			rtaStateStorageService.setState($state.current.name, {skillIds: [selectedItem]});					
+			rtaStateStorageService.setState($state.current.name, { skillIds: [selectedItem] });
 			vm.agentsState = 'rta.agents({siteIds: card.site.Id, skillIds: ["' + selectedItem.Id + '"]})';
 			vm.agentsStateForTeam = 'rta.agents({teamIds: team.Id, skillIds: ["' + selectedItem.Id + '"]})';
 			$state.go($state.current.name, { skillAreaId: undefined, skillIds: vm.skillIds }, { notify: false });
@@ -236,7 +236,7 @@
 			});
 
 			var params = { siteIds: siteIds, teamIds: teamIds, skillIds: skillIds, skillAreaId: vm.urlParams.skillAreaId };
-			rtaStateStorageService.setState('rta.agents', params);								
+			rtaStateStorageService.setState('rta.agents', params);
 			$state.go('rta.agents', params);
 		}
 	}

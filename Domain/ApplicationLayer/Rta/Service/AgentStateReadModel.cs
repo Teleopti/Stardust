@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		public IEnumerable<AgentStateOutOfAdherenceReadModel> OutOfAdherences { get; set; }
 		public bool IsDeleted { get; set; }
-		public DateTime? ExpiresAt { get; set; }
 		public string EmploymentNumber { get; set; }
 
 		public override string ToString()

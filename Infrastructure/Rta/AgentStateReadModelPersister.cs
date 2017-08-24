@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			}
 		}
 
-		public virtual void UpsertDeleted(Guid personId, DateTime expiresAt)
+		public virtual void UpsertDeleted(Guid personId)
 		{
 			_unitOfWork.Current().Session()
 				.CreateSQLQuery(@"
@@ -156,12 +156,10 @@ MERGE INTO [ReadModel].[AgentState] AS T
 	USING (
 		VALUES
 		(
-			:PersonId,
-			:ExpiresAt
+			:PersonId
 		)
 	) AS S (
-			PersonId,
-			ExpiresAt
+			PersonId
 		)
 	ON 
 		T.PersonId = S.PersonId
@@ -169,32 +167,17 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		INSERT
 		(
 			PersonId,
-			ExpiresAt,
 			IsDeleted
 		) VALUES (
 			S.PersonId,
-			S.ExpiresAt,
 			1
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
-			ExpiresAt = S.ExpiresAt,
 			IsDeleted = 1
 		;")
 				.SetParameter("PersonId", personId)
-				.SetParameter("ExpiresAt", expiresAt)
 				.ExecuteUpdate();
-		}
-
-		public void DeleteOldRows(DateTime now)
-		{
-			var query = _unitOfWork.Current().Session()
-				.CreateSQLQuery("DELETE TOP (100) FROM [ReadModel].[AgentState] WHERE ExpiresAt <= :now")
-				.SetParameter("now", now);
-			while (query.ExecuteUpdate() > 0)
-			{
-				Thread.Sleep(100);
-			}
 		}
 
 		public AgentStateReadModel Load(Guid personId)
@@ -258,8 +241,7 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			SiteName = S.SiteName,
 			TeamId = S.TeamId,
 			TeamName = S.TeamName,
-			IsDeleted = 0,
-			ExpiresAt = null
+			IsDeleted = 0
 		;")
 				.SetParameter("PersonId", info.PersonId)
 				.SetParameter("BusinessUnitId", info.BusinessUnitId)
@@ -270,7 +252,7 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.ExecuteUpdate();
 		}
 
-		public void UpsertEmploymentNumber(Guid personId, string employmentNumber, DateTime? expiresAt)
+		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
 		{
 			_unitOfWork.Current()
 				.Session().CreateSQLQuery(@"
@@ -279,13 +261,11 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		VALUES
 		(
 			:PersonId,
-			:EmploymentNumber,
-			:ExpiresAt
+			:EmploymentNumber
 		)
 	) AS S (
 			PersonId,
-			EmploymentNumber,
-			ExpiresAt
+			EmploymentNumber
 		)
 	ON 
 		T.PersonId = S.PersonId
@@ -294,13 +274,11 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		(
 			PersonId,
 			EmploymentNumber,
-			IsDeleted,
-			ExpiresAt
+			IsDeleted
 		) VALUES (
 			S.PersonId,
 			S.EmploymentNumber,
-			1,
-			S.ExpiresAt
+			1
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
@@ -309,12 +287,11 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		;")
 				.SetParameter("PersonId", personId)
 				.SetParameter("EmploymentNumber", employmentNumber)
-				.SetParameter("ExpiresAt", expiresAt)
 				.ExecuteUpdate();
 
 		}
 
-		public void UpsertName(Guid personId, string firstName, string lastName, DateTime? expiresAt)
+		public void UpsertName(Guid personId, string firstName, string lastName)
 		{
 			_unitOfWork.Current()
 				.Session().CreateSQLQuery(@"
@@ -324,14 +301,12 @@ MERGE INTO [ReadModel].[AgentState] AS T
 		(
 			:PersonId,
 			:FirstName,
-			:LastName,
-			:ExpiresAt
+			:LastName
 		)
 	) AS S (
 			PersonId,
 			FirstName,
-			LastName,
-			ExpiresAt
+			LastName
 		)
 	ON 
 		T.PersonId = S.PersonId
@@ -341,14 +316,12 @@ MERGE INTO [ReadModel].[AgentState] AS T
 			PersonId,
 			FirstName,
 			LastName,
-			IsDeleted,
-			ExpiresAt
+			IsDeleted
 		) VALUES (
 			S.PersonId,
 			S.FirstName,
 			S.LastName,
-			1,
-			S.ExpiresAt
+			1
 		)
 	WHEN MATCHED THEN
 		UPDATE SET
@@ -359,7 +332,6 @@ MERGE INTO [ReadModel].[AgentState] AS T
 				.SetParameter("PersonId", personId)
 				.SetParameter("FirstName", firstName)
 				.SetParameter("LastName", lastName)
-				.SetParameter("ExpiresAt", expiresAt)
 				.ExecuteUpdate();
 		}
 
@@ -396,5 +368,6 @@ WHERE SiteId = :SiteId")
 				set { base.OutOfAdherences = value != null ? JsonConvert.DeserializeObject<IEnumerable<AgentStateOutOfAdherenceReadModel>>(value) : null; }
 			}
 		}
+
 	}
 }

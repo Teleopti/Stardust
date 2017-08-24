@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 			Target.PersistWithAssociation(new AgentStateReadModelForTest { PersonId = personId });
-			Target.UpsertDeleted(personId, "2016-10-05 08:00".Utc());
+			Target.UpsertDeleted(personId);
 
 			Target.UpsertAssociation(new AssociationInfo()
 			{
@@ -358,7 +358,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 
 			var result = Target.Load(personId);
 			result.IsDeleted.Should().Be.False();
-			result.ExpiresAt.Should().Be(null);
 		}
 
 		[Test]
@@ -368,11 +367,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var model = new AgentStateReadModelForTest { PersonId = personId };
 			Target.PersistWithAssociation(model);
 
-			Target.UpsertDeleted(personId, "2016-10-04 08:00".Utc());
+			Target.UpsertDeleted(personId);
 
 			var result = Target.Load(personId);
 			result.IsDeleted.Should().Be(true);
-			result.ExpiresAt.Should().Be("2016-10-04 08:00".Utc());
 		}
 
 		[Test]
@@ -380,11 +378,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 
-			Target.UpsertDeleted(personId, "2016-10-04 08:00".Utc());
+			Target.UpsertDeleted(personId);
 
 			var result = Target.Load(personId);
 			result.IsDeleted.Should().Be(true);
-			result.ExpiresAt.Should().Be("2016-10-04 08:00".Utc());
 		}
 
 
@@ -394,11 +391,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 			var personId = Guid.NewGuid();
 			Target.PersistWithAssociation(new AgentStateReadModelForTest() { PersonId = personId, IsDeleted = false });
 
-			Target.UpsertEmploymentNumber(personId, "abc", "2017-02-14 08:00".Utc());
+			Target.UpsertEmploymentNumber(personId, "abc");
 
 			Target.Load(personId).EmploymentNumber.Should().Be("abc");
 			Target.Load(personId).IsDeleted.Should().Be(false);
-			Target.Load(personId).ExpiresAt.Should().Be(null);
 		}
 
 		[Test]
@@ -406,12 +402,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 
-			Target.UpsertEmploymentNumber(personId, "123", "2017-02-14 08:00".Utc());
+			Target.UpsertEmploymentNumber(personId, "123");
 
 			var model = Target.Load(personId);
 			model.EmploymentNumber.Should().Be("123");
 			model.IsDeleted.Should().Be(true);
-			model.ExpiresAt.Should().Be("2017-02-14 08:00".Utc());
 		}
 
 		[Test]
@@ -419,13 +414,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 		{
 			var personId = Guid.NewGuid();
 
-			Target.UpsertName(personId, "bill", "gates", "2017-02-14 08:00".Utc());
+			Target.UpsertName(personId, "bill", "gates");
 
 			var model = Target.Load(personId);
 			model.FirstName.Should().Be("bill");
 			model.LastName.Should().Be("gates");
 			model.IsDeleted.Should().Be(true);
-			model.ExpiresAt.Should().Be("2017-02-14 08:00".Utc());
 		}
 		
 		[Test]
@@ -440,13 +434,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 				IsDeleted = false
 			});
 
-			Target.UpsertName(personId, "bill", "gates", "2017-02-14 0:00".Utc());
+			Target.UpsertName(personId, "bill", "gates");
 
 			var model = Target.Load(personId);
 			model.FirstName.Should().Be("bill");
 			model.LastName.Should().Be("gates");
 			model.IsDeleted.Should().Be(false);
-			model.ExpiresAt.Should().Be(null);
 		}
 
 
@@ -483,55 +476,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState
 
 			Target.Load(personId).SiteName.Should().Be("paris");
 		}
-
-		[Test]
-		public void ShouldRemoveOldRows()
-		{
-			var personId = Guid.NewGuid();
-			var model = new AgentStateReadModelForTest { PersonId = personId };
-			Target.PersistWithAssociation(model);
-			Target.UpsertDeleted(personId, "2016-10-04 08:30".Utc());
-			
-			Target.DeleteOldRows("2016-10-04 08:30".Utc());
-
-			Target.Load(personId).Should().Be.Null();
-		}
-
-		[Test]
-		public void ShouldRemoveOlderRows()
-		{
-			var personId = Guid.NewGuid();
-			var model = new AgentStateReadModelForTest { PersonId = personId };
-			Target.PersistWithAssociation(model);
-			Target.UpsertDeleted(personId, "2016-10-04 08:30".Utc());
-
-			Target.DeleteOldRows("2016-10-04 09:00".Utc());
-
-			Target.Load(personId).Should().Be.Null();
-		}
-		
-		[Test]
-		public void ShouldRemoveLotsOfRowsAtATime()
-		{
-			var personIds = Enumerable
-				.Range(1, 110)
-				.Select(x => Guid.NewGuid())
-				.Select(personId =>
-				{
-					var model = new AgentStateReadModelForTest { PersonId = personId };
-					Target.PersistWithAssociation(model);
-					Target.UpsertDeleted(personId, "2016-10-04 08:29".Utc());
-					return personId;
-				})
-				.ToArray();
-
-			Target.DeleteOldRows("2016-10-04 09:00".Utc());
-
-			personIds
-				.ForEach(personId =>
-				Target.Load(personId).Should().Be.Null());
-		}
-
-
 	}
 }

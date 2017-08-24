@@ -48,7 +48,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.AgentSt
 
 			Persister.Models.Single().EmploymentNumber.Should().Be("123");
 			Persister.Models.Single().IsDeleted.Should().Be(true);
-			Persister.Models.Single().ExpiresAt.Should().Be("2017-02-21 08:00".Utc());
 		}
 	}
 }

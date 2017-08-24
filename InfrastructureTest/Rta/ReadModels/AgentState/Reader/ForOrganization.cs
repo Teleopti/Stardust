@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 				TeamId = teamId,
 				PersonId = personId2
 			});
-			Persister.UpsertDeleted(personId2, DateTime.MaxValue);
+			Persister.UpsertDeleted(personId2);
 
 			var result = Target.Read(new AgentStateFilter {TeamIds = teamId.AsArray()});
 

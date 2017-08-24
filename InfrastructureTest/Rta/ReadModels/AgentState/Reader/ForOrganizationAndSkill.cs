@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 					SiteId = Guid.NewGuid()
 				});
 
-				StatePersister.UpsertDeleted(unexpected, DateTime.Now);
+				StatePersister.UpsertDeleted(unexpected);
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.AgentState.Reader
 					SiteId = Guid.NewGuid()
 				});
 
-				StatePersister.UpsertDeleted(unexpected, DateTime.Now);
+				StatePersister.UpsertDeleted(unexpected);
 			});
 
 			WithUnitOfWork.Get(() => Target.Read(new AgentStateFilter

@@ -10,7 +10,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class AgentStateReadModelMaintainer :
 		IHandleEvent<PersonDeletedEvent>,
 		IHandleEvent<PersonAssociationChangedEvent>,
-		IHandleEvent<TenantHourTickEvent>,
 		IHandleEvent<PersonNameChangedEvent>,
 		IHandleEvent<PersonEmploymentNumberChangedEvent>,
 		IHandleEvent<SiteNameChangedEvent>,
@@ -18,12 +17,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		IRunOnHangfire
 	{
 		private readonly IAgentStateReadModelPersister _persister;
-		private readonly INow _now;
 
-		public AgentStateReadModelMaintainer(IAgentStateReadModelPersister persister, INow now)
+		public AgentStateReadModelMaintainer(IAgentStateReadModelPersister persister)
 		{
 			_persister = persister;
-			_now = now;
 		}
 		
 		[UnitOfWork]
@@ -31,12 +28,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			if (!@event.TeamId.HasValue)
 			{
-				_persister.UpsertDeleted(@event.PersonId, expirationFor(@event));
+				_persister.UpsertDeleted(@event.PersonId);
 				return;
 			}
 			if (@event.ExternalLogons.IsNullOrEmpty())
 			{
-				_persister.UpsertDeleted(@event.PersonId, expirationFor(@event));
+				_persister.UpsertDeleted(@event.PersonId);
 				return;
 			}
 			_persister.UpsertAssociation(new AssociationInfo
@@ -53,13 +50,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(PersonNameChangedEvent @event)
 		{
-			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName, expirationFor(@event));
+			_persister.UpsertName(@event.PersonId, @event.FirstName, @event.LastName);
 		}
 
 		[UnitOfWork]
 		public virtual void Handle(PersonEmploymentNumberChangedEvent @event)
 		{
-			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber, expirationFor(@event));
+			_persister.UpsertEmploymentNumber(@event.PersonId, @event.EmploymentNumber);
 		}
 
 		[UnitOfWork]
@@ -77,18 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[UnitOfWork]
 		public virtual void Handle(PersonDeletedEvent @event)
 		{
-			_persister.UpsertDeleted(@event.PersonId, expirationFor(@event));
-		}
-		
-		[UnitOfWork]
-		public virtual void Handle(TenantHourTickEvent @event)
-		{
-			_persister.DeleteOldRows(_now.UtcDateTime());
-		}
-
-		private static DateTime expirationFor(IEvent @event)
-		{
-			return ((dynamic)@event).Timestamp.AddDays(7);
+			_persister.UpsertDeleted(@event.PersonId);
 		}
 	}
 

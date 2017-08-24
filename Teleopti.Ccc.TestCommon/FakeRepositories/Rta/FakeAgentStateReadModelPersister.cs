@@ -52,22 +52,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			_data.TryRemove(model.PersonId, out removed);
 			_data.AddOrUpdate(model.PersonId, model.CopyBySerialization(), (g, m) => model);
 		}
-
-		public void DeleteOldRows(DateTime now)
-		{
-			var toRemove =
-				_data.Values
-					.Where(x => x.IsDeleted && now >= x.ExpiresAt)
-					.Select(x => x.PersonId)
-					.ToList();
-
-			foreach (var personId in toRemove)
-			{
-				AgentStateReadModel model;
-				_data.TryRemove(personId, out model);
-			}
-		}
-
+		
 		public AgentStateReadModel Load(Guid personId)
 		{
 			return _data.ContainsKey(personId) ? _data[personId].CopyBySerialization() : null;
@@ -94,12 +79,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					model.TeamName = info.TeamName;
 					model.BusinessUnitId = info.BusinessUnitId.GetValueOrDefault();
 					model.IsDeleted = false;
-					model.ExpiresAt = null;
 					return model;
 				});
 		}
 
-		public void UpsertEmploymentNumber(Guid personId, string employmentNumber, DateTime? expiresAt)
+		public void UpsertEmploymentNumber(Guid personId, string employmentNumber)
 		{
 			_data.AddOrUpdate(
 				personId,
@@ -107,7 +91,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				{
 					PersonId = personId,
 					EmploymentNumber = employmentNumber,
-					ExpiresAt = expiresAt,
 					IsDeleted = true
 				},
 				(id, model) =>
@@ -117,7 +100,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				});
 		}
 
-		public void UpsertName(Guid personId, string firstName, string lastName, DateTime? expiresAt)
+		public void UpsertName(Guid personId, string firstName, string lastName)
 		{
 			_data.AddOrUpdate(
 				personId,
@@ -126,7 +109,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 					PersonId = personId,
 					FirstName = firstName,
 					LastName = lastName,
-					ExpiresAt = expiresAt,
 					IsDeleted = true
 				},
 				(id, model) =>
@@ -137,7 +119,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				});
 		}
 
-		public void UpsertDeleted(Guid personId, DateTime expiresAt)
+		public void UpsertDeleted(Guid personId)
 		{
 			_data.AddOrUpdate(
 				personId,
@@ -149,7 +131,6 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				(id, model) =>
 				{
 					model.IsDeleted = true;
-					model.ExpiresAt = expiresAt;
 					return model;
 				});
 		}
