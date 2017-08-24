@@ -56,7 +56,6 @@
 		Wfm_MinimumScaffolding_32659,
 		Wfm_ResourcePlanner_32892,
 		Wfm_ChangePlanningPeriod_33043,
-		WfmPermission_ReplaceOldPermission_34671,
 		WfmIntraday_MonitorActualvsForecasted_35176,
 		Wfm_HideUnusedTeamsAndSites_42690,
 		Wfm_SearchAgentBasedOnCorrectPeriod_44552,

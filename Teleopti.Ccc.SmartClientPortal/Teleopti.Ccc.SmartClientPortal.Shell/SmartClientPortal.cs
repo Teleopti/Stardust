@@ -47,7 +47,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Payroll;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.Controls;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.PeopleAdmin.GuiHelpers;
-using Teleopti.Ccc.SmartClientPortal.Shell.Win.Permissions;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Shifts;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Sikuli;
@@ -79,9 +78,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private readonly IToggleManager _toggleManager;
 		readonly int homeCommand = CommandIds.RegisterUserCommand("StartPage");
 		private bool showCustomerWebMenu = true;
-		private const string _permissionModule = "/permissions";
-		private WebUrlHolder _webUrlHolder;
-		private List<string> validUrls;
+		private const string permissionModule = "/permissions";
+		private readonly WebUrlHolder _webUrlHolder;
+		private readonly List<string> validUrls;
 		private bool showDataProtectionWebPage;
 
 		protected SmartClientShellForm()
@@ -98,10 +97,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				}
 			}
 			KeyPreview = true;
-			KeyDown += Form_KeyDown;
+			KeyDown += formKeyDown;
 			KeyPress += Form_KeyPress;
 
-			wfmWebView.RegisterJSExtensionFunction("errorStayingAlive",wfmWebView_JSerrorStayingAlive);
+			wfmWebView.RegisterJSExtensionFunction("errorStayingAlive",wfmWebViewJSerrorStayingAlive);
 			webViewDataProtection.RegisterJSExtensionFunction("yesResponseCallback", yesResponse);
 			webViewDataProtection.RegisterJSExtensionFunction("noOrNotNowResponseCallback", noResponse);
 			EO.Base.Runtime.Exception += handlingEoRuntimeErrors;
@@ -130,15 +129,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_customLogger.Info("SmartClientPortal: EoBrowser: " + message);
 		}
 
-		private void wfmWebView_JSerrorStayingAlive(object sender, JSExtInvokeArgs e)
+		private void wfmWebViewJSerrorStayingAlive(object sender, JSExtInvokeArgs e)
 		{
 			notifyIcon.Icon = Resources.NotifyWarning;
 			notifyIcon.Text = UserTexts.Resources.CheckSystemWarning;
 			notifyIcon.BalloonTipIcon = ToolTipIcon.Warning;
 			notifyIcon.BalloonTipTitle = UserTexts.Resources.CheckSystemWarning;
-			notifyIcon.BalloonTipText = "The web channel is disconnected." +
+			notifyIcon.BalloonTipText = @"The web channel is disconnected." +
 										Environment.NewLine + 
-										"You may require to relogon to use permissions.";
+										@"You may require to relogon to use permissions.";
 			showBalloon();
 			logInfo("Session dropped in StayingAlive EO:URL " + wfmWebView.Url);
 			wfmWebView.LoadUrl(webServer + "start/Url/RedirectToWebLogin");
@@ -159,11 +158,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		private void wfmWebViewOnLoadCompletedSetBusinessUnit(object sender, LoadCompletedEventArgs loadCompletedEventArgs)
 		{
 			wfmWebView.LoadCompleted -= wfmWebViewOnLoadCompletedSetBusinessUnit;
-			if (_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
-			{
-				logInfo(" Setting the permissions url current URL is " + wfmWebView.Url );
-				setWfmWebUrl();
-			}
+			logInfo(" Setting the permissions url current URL is " + wfmWebView.Url);
+			setWfmWebUrl();
 		}
 
 		private void setBusinessUnitInDataProtectionWebView()
@@ -218,7 +214,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
-		void Form_KeyDown(object sender, KeyEventArgs e)
+		void formKeyDown(object sender, KeyEventArgs e)
 		{
 			// key shortcuts
 			if (e.Modifiers == Keys.Control)
@@ -275,14 +271,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_toggleManager = _container.Resolve<IToggleManager>();
 			_webUrlHolder = _container.Resolve<WebUrlHolder>();
 			
-			if (!_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
-			{
-				wfmWebControl.Enabled = false;
-				wfmWebControl.Visible = false;
-			}
 			validUrls = new List<string>()
 			{
-				"WFM/index_desktop_client.html#" + _permissionModule,
+				"WFM/index_desktop_client.html#" + permissionModule,
 				"start/Url/RedirectToWebLogin",
 				"SSO/",
 				"Authentication",
@@ -299,12 +290,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			wfmWebView.BeforeContextMenu += wfmWebView_BeforeContextMenu;
 		}
 
-		void toolStripButtonHelp_Click(object sender, EventArgs e)
+		void toolStripButtonHelpClick(object sender, EventArgs e)
 		{
 			ViewBase.ShowHelp(this,false);
 		}
 
-		private void toolStripButtonAbout_Click(object sender, EventArgs e)
+		private void toolStripButtonAboutClick(object sender, EventArgs e)
 		{
 			var about = new About();
 			about.ShowDialog();
@@ -314,12 +305,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
-		private void toolStripButtonSystemOptions_Click(object sender, EventArgs e)
+		private void toolStripButtonSystemOptionsClick(object sender, EventArgs e)
 		{
 			openOptionsDialog();
 		}
 
-		private void toolStripButtonSystemExit_Click(object sender, EventArgs e)
+		private void toolStripButtonSystemExitClick(object sender, EventArgs e)
 		{
 			Close();
 		}
@@ -377,7 +368,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization",
 			"CA1303:Do not pass literals as localized parameters",
 			MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
-		private void SmartClientShellForm_Load(object sender, EventArgs e)
+		private void smartClientShellFormLoad(object sender, EventArgs e)
 		{
 			Enabled = false;
 			Cursor = Cursors.WaitCursor;
@@ -394,12 +385,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
 			setNotifyData(_systemChecker.IsOk());
 
-			LoadOutLookBar();
+			loadOutLookBar();
 
-			InitializeSmartPartInvoker();
+			initializeSmartPartInvoker();
 
-			Roger65(string.Empty);
-			SetPermissionOnToolStripButtonControls();
+			roger65(string.Empty);
+			setPermissionOnToolStripButtonControls();
 
 			var showMemConfig = ConfigurationManager.AppSettings.Get("ShowMem");
 			bool showMemBool;
@@ -416,17 +407,17 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			_container.Resolve<HangfireClientStarter>().Start();
 		}
 
-		public void setWfmWebUrl()
+		private void setWfmWebUrl()
 		{
 			logInfo(" URL before setting the permissions EO:URL " + wfmWebView.Url);
 			if (!wfmWebView.IsCreated)
 			{
 				logInfo(" wfmWebView is not created EO:URL " + wfmWebView.Url);
 				wfmWebView = new WebView();
-				wfmWebView.UrlChanged += wfmWebView_UrlChanged;
+				wfmWebView.UrlChanged += wfmWebViewUrlChanged;
 				wfmWebControl.WebView = wfmWebView;
 			}
-			wfmWebView.LoadUrl(string.Format("{0}WFM/index_desktop_client.html#{1}", webServer, _permissionModule));
+			wfmWebView.LoadUrl(string.Format("{0}WFM/index_desktop_client.html#{1}", webServer, permissionModule));
 			logInfo(" Loaded permissions via load method EO:URL " + wfmWebView.Url);
 		}
 
@@ -447,10 +438,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 		
 		private void updateMem(object sender, EventArgs e)
 		{
-			Roger65(MemoryCounter.DefaultInstance().CurrentMemoryConsumptionString());
+			roger65(MemoryCounter.DefaultInstance().CurrentMemoryConsumptionString());
 		}
 
-		private void SmartClientShellForm_FormClosing(object sender, FormClosingEventArgs e)
+		private void smartClientShellFormFormClosing(object sender, FormClosingEventArgs e)
 		{
 			if (!CloseAllOtherForms(this))
 			{
@@ -470,36 +461,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			StateHolder.Instance.Terminate();
 		}
 
-		private void toolStripButtonPermissons_Click(object sender, EventArgs e)
+		private void toolStripButtonPermissonsClick(object sender, EventArgs e)
 		{
 			if (PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPermissionPage))
 			{
-				if (!_toggleManager.IsEnabled(Toggles.WfmPermission_ReplaceOldPermission_34671))
-				{
-					toggleWebControls(true);
-					PermissionsExplorer permissionForm = null;
-					try
-					{
-						permissionForm = new PermissionsExplorer(_container);
-						permissionForm.LoadDatabaseData();
-						permissionForm.Saved += permissionForm_Saved;
-						permissionForm.Show();
-					}
-					catch (DataSourceException dataSourceException)
-					{
-						using (
-							var view = new SimpleExceptionHandlerView(dataSourceException, UserTexts.Resources.OpenTeleoptiCCC,
-								UserTexts.Resources.ServerUnavailable))
-						{
-							view.ShowDialog(this);
-						}
-						if (permissionForm != null)
-						{
-							permissionForm.Close();
-						}
-					}
-				}
-				else if (_toggleManager.IsEnabled(Toggles.WFM_RedirectPermissionToWeb_44562))
+				if (_toggleManager.IsEnabled(Toggles.WFM_RedirectPermissionToWeb_44562))
 				{
 					Process.Start(buildWfmUri("WFM/#/permissions").ToString());				
 				}
@@ -513,12 +479,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			
 		}
 
-		private void permissionForm_Saved(object sender, EventArgs e)
-		{
-			SetPermissionOnToolStripButtonControls();
-		   // SetPermissionOnOutlookBarSmartButtonControls();
-		}
-
 		private void persistSetting()
 		{
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -528,13 +488,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
-		private void Roger65(string message)
+		private void roger65(string message)
 		{
 			toolStripStatusLabelRoger65.Text = message;
 			toolStripStatusLabelRoger65.ForeColor = Color.Red;
 		}
 		
-		private void GridWorkspace_WorkspaceGridSizeChanged(object sender, EventArgs e)
+		private void gridWorkspaceWorkspaceGridSizeChanged(object sender, EventArgs e)
 		{
 			gridWorkspace.RemoveAllSmartPart();
 			if (gridWorkspace.GridSize == GridSizeType.TwoByOne)
@@ -542,12 +502,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				//Show Default smart parts
 				string url1 = ConfigurationManager.AppSettings.Get("SmartPartUrl1");
 				string url2 = ConfigurationManager.AppSettings.Get("SmartPartUrl2");
-				SetSmartParts(url1, 1, 0, 0);
-				SetSmartParts(url2, 2, 0, 1);
+				setSmartParts(url1, 1, 0, 0);
+				setSmartParts(url2, 2, 0, 1);
 			}
 		}
 
-		private void SetPermissionOnToolStripButtonControls()
+		private void setPermissionOnToolStripButtonControls()
 		{
 			var authorization = PrincipalAuthorization.Current();
 			backStageButtonPermissions.Enabled =
@@ -558,7 +518,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			backStageButtonMyProfile.Enabled = type.Equals(AuthenticationTypeOption.Application);
 		}
 
-		private void LoadOutLookBar()
+		private void loadOutLookBar()
 		{
 			var authorization = PrincipalAuthorization.Current();
 			IEnumerable<IApplicationFunction> modules = authorization.GrantedFunctions().FilterBySpecification(new ModuleSpecification());
@@ -659,7 +619,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			outlookBar1.AddItems(modulePanelItems.ToArray());
 		}
 
-		private void InitializeSmartPartInvoker()
+		private void initializeSmartPartInvoker()
 		{
 			string smartPartPath = ConfigurationManager.AppSettings["smartPartPath"];
 
@@ -670,7 +630,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			SmartPartEnvironment.SmartPartWorkspace = gridWorkspace;
 		}
 
-		private void SetSmartParts(string url, int smartPartId,int gridColumn, int gridRow)
+		private void setSmartParts(string url, int smartPartId,int gridColumn, int gridRow)
 		{
 			var smartPartInfo = new SmartPartInformation
 									{
@@ -703,7 +663,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
-		private void notifyTimer_Tick(object sender, EventArgs e)
+		private void notifyTimerTick(object sender, EventArgs e)
 		{
 			bool isOk = _systemChecker.IsOk();
 			if (_lastSystemCheck != isOk)
@@ -750,12 +710,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			return ret;
 		}
 
-		private void notifyIcon_MouseClick(object sender, MouseEventArgs e)
+		private void notifyIconMouseClick(object sender, MouseEventArgs e)
 		{
 			showBalloon();
 		}
 
-		private void toolStripButtonMyProfile_Click(object sender, EventArgs e)
+		private void toolStripButtonMyProfileClick(object sender, EventArgs e)
 		{
 			try
 			{
@@ -844,7 +804,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			//we can't goto static page in this event, for some reason
 		}
 
-		private void webView1_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
+		private void webView1BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
 		{
 			if (!showCustomerWebMenu)
 			{
@@ -862,12 +822,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			e.Menu.Items.Add(menuItem);
 		}
 
-		private void webViewDataProtection_BeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
+		private void webViewDataProtectionBeforeContextMenu(object sender, BeforeContextMenuEventArgs e)
 		{
 			e.Menu.Items.Clear();
 		}
 
-		private void toolStripButtonCustomerWeb_Click(object sender, EventArgs e)
+		private void toolStripButtonCustomerWebClick(object sender, EventArgs e)
 		{
 			try
 			{
@@ -886,7 +846,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			}
 		}
 
-		private void outlookBar1_SelectedItemChanged(object sender, SelectedItemChangedEventArgs e)
+		private void outlookBar1SelectedItemChanged(object sender, SelectedItemChangedEventArgs e)
 		{
 			outlookBarWorkSpace1.SetHeader(e.SelectedItem);
 			ModuleSelected(e.SelectedItem);
@@ -920,7 +880,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			TopMost = false;
 		}
 
-		private void webView1_Command(object sender, CommandEventArgs e)
+		private void webView1Command(object sender, CommandEventArgs e)
 		{
 			if (e.CommandId == homeCommand)
 				goToPublicPage(true);
@@ -997,7 +957,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			{
 				using (var client = new WebClient())
 				{
-					using (var stream = client.OpenRead("http://www.teleopti.com"))
+					using (client.OpenRead("http://www.teleopti.com"))
 					{
 						return true;
 					}
@@ -1170,7 +1130,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			return new Uri($"{wfmPath}{relativePath}");
 		}
 
-		private void wfmWebView_UrlChanged(object sender, EventArgs e)
+		private void wfmWebViewUrlChanged(object sender, EventArgs e)
 		{
 			if (!((wfmWebView.Url == "" || wfmWebView.Url == webServer) ||
 				validUrls.Any(x => wfmWebView.Url.Contains(x))))

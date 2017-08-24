@@ -481,16 +481,6 @@
     <Compile Include="PeopleAdmin\SendInstantMessageCommandTest.cs" />
     <Compile Include="PeopleAdmin\SendInstantMessageEnableCommandTest.cs" />
     <Compile Include="PeopleAdmin\ShiftCategoryLimitationCombinationTest.cs" />
-    <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataRangeLightCommandTest.cs" />
-    <Compile Include="Permissions\Commands\LoadDataOnPersonLightCommandTest.cs" />
-    <Compile Include="Permissions\Commands\LoadRolesAndPersonsOnDataLightCommandTest.cs" />
-    <Compile Include="Permissions\Commands\LoadRolesWithFunctionLightCommandTest.cs" />
-    <Compile Include="Permissions\Commands\LoadPersonsWithFunctionLightCommandTest.cs" />
-    <Compile Include="Permissions\Commands\LoadFunctionsLightCommandTest.cs" />
-    <Compile Include="Permissions\Commands\LoadFunctionsOnPersonLightCommandTest.cs" />
-    <Compile Include="Permissions\Commands\LoadPersonsLightCommandTest.cs" />
-    <Compile Include="Permissions\Commands\LoadRolesOnPersonLightCommandTest.cs" />
-    <Compile Include="Permissions\PermissionViewerRolesPresenterTest.cs" />
     <Compile Include="Presentation\ReportDetailTest.cs" />
     <Compile Include="Presentation\ReportSettingsHostPresenterTest.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleAuditingModelTest.cs" />

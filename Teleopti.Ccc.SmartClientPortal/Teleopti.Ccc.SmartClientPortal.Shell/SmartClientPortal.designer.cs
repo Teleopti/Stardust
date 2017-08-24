@@ -246,8 +246,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			// webView1
 			// 
-			this.webView1.BeforeContextMenu += new EO.WebBrowser.BeforeContextMenuHandler(this.webView1_BeforeContextMenu);
-			this.webView1.Command += new EO.WebBrowser.CommandHandler(this.webView1_Command);
+			this.webView1.BeforeContextMenu += new EO.WebBrowser.BeforeContextMenuHandler(this.webView1BeforeContextMenu);
+			this.webView1.Command += new EO.WebBrowser.CommandHandler(this.webView1Command);
 			this.webView1.NewWindow += new EO.WebBrowser.NewWindowHandler(this.webView1NewWindow);
 			this.webView1.CertificateError += new EO.WebBrowser.CertificateErrorHandler(this.handlingCertificateErrorsWebView1);
 			this.webView1.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.webView1LoadFailed);
@@ -266,13 +266,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			// wfmWebView
 			// 
-			this.wfmWebView.UrlChanged += new System.EventHandler(this.wfmWebView_UrlChanged);
+			this.wfmWebView.UrlChanged += new System.EventHandler(this.wfmWebViewUrlChanged);
 			this.wfmWebView.CertificateError += new EO.WebBrowser.CertificateErrorHandler(this.handlingCertificateErrorsWfmWebView);
 			this.wfmWebView.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.handlingLoadFailedError);
 			// 
 			// webViewDataProtection
 			// 
-			this.webViewDataProtection.BeforeContextMenu += new EO.WebBrowser.BeforeContextMenuHandler(webViewDataProtection_BeforeContextMenu);
+			this.webViewDataProtection.BeforeContextMenu += new EO.WebBrowser.BeforeContextMenuHandler(webViewDataProtectionBeforeContextMenu);
 			this.webViewDataProtection.LoadFailed += new EO.WebBrowser.LoadFailedEventHandler(this.handlingLoadFailedError);
 			this.webViewDataProtection.CertificateError += new EO.WebBrowser.CertificateErrorHandler(this.handlingCertificateErrorswebViewDataProtection);
 			// 
@@ -300,7 +300,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.gridWorkspace.Size = new System.Drawing.Size(669, 630);
 			this.gridWorkspace.TabIndex = 0;
 			this.gridWorkspace.Tag = "0";
-			this.gridWorkspace.WorkspaceGridSizeChanged += new System.EventHandler<System.EventArgs>(this.GridWorkspace_WorkspaceGridSizeChanged);
+			this.gridWorkspace.WorkspaceGridSizeChanged += new System.EventHandler<System.EventArgs>(this.gridWorkspaceWorkspaceGridSizeChanged);
 			// 
 			// ribbonControlAdv1
 			// 
@@ -394,7 +394,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonOptions.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonOptions.TabIndex = 16;
 			this.backStageButtonOptions.Text = "xxOptions";
-			this.backStageButtonOptions.Click += new System.EventHandler(this.toolStripButtonSystemOptions_Click);
+			this.backStageButtonOptions.Click += new System.EventHandler(this.toolStripButtonSystemOptionsClick);
 			// 
 			// backStageButtonPermissions
 			// 
@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonPermissions.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonPermissions.TabIndex = 11;
 			this.backStageButtonPermissions.Text = "xxPermissions";
-			this.backStageButtonPermissions.Click += new System.EventHandler(this.toolStripButtonPermissons_Click);
+			this.backStageButtonPermissions.Click += new System.EventHandler(this.toolStripButtonPermissonsClick);
 			// 
 			// backStageButtonMyProfile
 			// 
@@ -420,7 +420,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonMyProfile.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonMyProfile.TabIndex = 12;
 			this.backStageButtonMyProfile.Text = "xxMyProfile";
-			this.backStageButtonMyProfile.Click += new System.EventHandler(this.toolStripButtonMyProfile_Click);
+			this.backStageButtonMyProfile.Click += new System.EventHandler(this.toolStripButtonMyProfileClick);
 			// 
 			// backStageButtonHelp
 			// 
@@ -433,7 +433,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonHelp.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonHelp.TabIndex = 13;
 			this.backStageButtonHelp.Text = "xxHelp";
-			this.backStageButtonHelp.Click += new System.EventHandler(this.toolStripButtonHelp_Click);
+			this.backStageButtonHelp.Click += new System.EventHandler(this.toolStripButtonHelpClick);
 			// 
 			// backStageButtonSignCustomerWeb
 			// 
@@ -447,7 +447,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonSignCustomerWeb.Size = new System.Drawing.Size(156, 30);
 			this.backStageButtonSignCustomerWeb.TabIndex = 14;
 			this.backStageButtonSignCustomerWeb.Text = "xxSignCustomerWeb";
-			this.backStageButtonSignCustomerWeb.Click += new System.EventHandler(this.toolStripButtonCustomerWeb_Click);
+			this.backStageButtonSignCustomerWeb.Click += new System.EventHandler(this.toolStripButtonCustomerWebClick);
 			// 
 			// backStageSeparator1
 			// 
@@ -469,7 +469,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonAbout.Size = new System.Drawing.Size(110, 25);
 			this.backStageButtonAbout.TabIndex = 17;
 			this.backStageButtonAbout.Text = "xxAbout";
-			this.backStageButtonAbout.Click += new System.EventHandler(this.toolStripButtonAbout_Click);
+			this.backStageButtonAbout.Click += new System.EventHandler(this.toolStripButtonAboutClick);
 			// 
 			// backStageButtonExitTELEOPTICCC
 			// 
@@ -483,7 +483,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.backStageButtonExitTELEOPTICCC.Size = new System.Drawing.Size(146, 30);
 			this.backStageButtonExitTELEOPTICCC.TabIndex = 18;
 			this.backStageButtonExitTELEOPTICCC.Text = "xxExitTELEOPTICCC";
-			this.backStageButtonExitTELEOPTICCC.Click += new System.EventHandler(this.toolStripButtonSystemExit_Click);
+			this.backStageButtonExitTELEOPTICCC.Click += new System.EventHandler(this.toolStripButtonSystemExitClick);
 			// 
 			// tabPageAdv1
 			// 
@@ -523,13 +523,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			// 
 			this.notifyIcon.Text = "notifyIcon1";
 			this.notifyIcon.Visible = true;
-			this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
+			this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIconMouseClick);
 			// 
 			// notifyTimer
 			// 
 			this.notifyTimer.Enabled = true;
 			this.notifyTimer.Interval = 1000;
-			this.notifyTimer.Tick += new System.EventHandler(this.notifyTimer_Tick);
+			this.notifyTimer.Tick += new System.EventHandler(this.notifyTimerTick);
 			// 
 			// panel1
 			// 
@@ -553,7 +553,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.outlookBar1.Padding = new System.Windows.Forms.Padding(12, 0, 12, 0);
 			this.outlookBar1.Size = new System.Drawing.Size(1024, 40);
 			this.outlookBar1.TabIndex = 7;
-			this.outlookBar1.SelectedItemChanged += new System.EventHandler<Teleopti.Ccc.SmartClientPortal.Shell.Controls.SelectedItemChangedEventArgs>(this.outlookBar1_SelectedItemChanged);
+			this.outlookBar1.SelectedItemChanged += new System.EventHandler<Teleopti.Ccc.SmartClientPortal.Shell.Controls.SelectedItemChangedEventArgs>(this.outlookBar1SelectedItemChanged);
 			// 
 			// SmartClientShellForm
 			// 
@@ -575,8 +575,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "xxTeleoptiRaptorColonMainNavigation";
 			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SmartClientShellForm_FormClosing);
-			this.Load += new System.EventHandler(this.SmartClientShellForm_Load);
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.smartClientShellFormFormClosing);
+			this.Load += new System.EventHandler(this.smartClientShellFormLoad);
 			this.Shown += new System.EventHandler(this.smartClientShellFormShown);
 			this._mainStatusStrip.ResumeLayout(false);
 			this._mainStatusStrip.PerformLayout();
