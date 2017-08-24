@@ -16,11 +16,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IOvertimeRequestUnderStaffingSkillProvider _overtimeRequestUnderStaffingSkillProvider;
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
 		private readonly ISkillOpenHourFilter _skillOpenHourFilter;
-		private readonly ICommandDispatcher _commandDispatcher;
+		private readonly IRequestAddOverTimeActivityHandler _addOverTimeActivityHandler;
 
-		public RequestApprovalServiceFactory(ISwapAndModifyService swapAndModifyService, IGlobalSettingDataRepository globalSettingDataRepository, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate, ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider, IScheduleDayChangeCallback scheduleDayChangeCallback, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
-		IOvertimeRequestSkillProvider overtimeRequestSkillProvider,
-		ISkillOpenHourFilter skillOpenHourFilter, ICommandDispatcher commandDispatcher)
+		public RequestApprovalServiceFactory(ISwapAndModifyService swapAndModifyService,
+			IGlobalSettingDataRepository globalSettingDataRepository, 
+			IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate,
+			ICheckingPersonalAccountDaysProvider checkingPersonalAccountDaysProvider,
+			IScheduleDayChangeCallback scheduleDayChangeCallback,
+			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
+			IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
+			IOvertimeRequestSkillProvider overtimeRequestSkillProvider,
+			ISkillOpenHourFilter skillOpenHourFilter, IRequestAddOverTimeActivityHandler addOverTimeActivityHandler)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
@@ -29,7 +35,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_overtimeRequestUnderStaffingSkillProvider = overtimeRequestUnderStaffingSkillProvider;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 			_skillOpenHourFilter = skillOpenHourFilter;
-			_commandDispatcher = commandDispatcher;
+			_addOverTimeActivityHandler = addOverTimeActivityHandler;
 			_swapAndModifyService = swapAndModifyService;
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
@@ -57,8 +63,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						businessRules,
 						_personRequestCheckAuthorization);
 				case RequestType.OvertimeRequest:
-					return new OvertimeRequestApprovalService(_overtimeRequestUnderStaffingSkillProvider, _overtimeRequestSkillProvider, _skillOpenHourFilter,
-						_commandDispatcher);
+					return new OvertimeRequestApprovalService(_overtimeRequestUnderStaffingSkillProvider, _overtimeRequestSkillProvider, _skillOpenHourFilter, _addOverTimeActivityHandler);
 			}
 
 			return null;

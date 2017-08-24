@@ -20,13 +20,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_overtimeRequestValidators = overtimeRequestValidators;
 		}
 
-		public void Process(IPersonRequest personRequest)
+		public void Process(IPersonRequest personRequest, bool isAutoGrant)
 		{
 			foreach (var overtimeRequestValidator in _overtimeRequestValidators)
 			{
 				var result = overtimeRequestValidator.Validate(personRequest);
 				if (result.IsValid) continue;
-				var denyCommand = new DenyRequestCommand()
+				var denyCommand = new DenyRequestCommand
 				{
 					PersonRequestId = personRequest.Id.GetValueOrDefault(),
 					DenyReason = result.InvalidReason,
@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			}
 
 			personRequest.Pending();
+			if (!isAutoGrant) return;
 
 			var command = new ApproveRequestCommand
 			{

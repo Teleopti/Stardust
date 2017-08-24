@@ -137,8 +137,11 @@
     <Compile Include="AgentInfo\IPlanningGroupStaffLoader.cs" />
     <Compile Include="AgentInfo\IFixedStaffLoader.cs" />
     <Compile Include="AgentInfo\PrimaryPersonSkillFilter.cs" />
+    <Compile Include="AgentInfo\Requests\IRequestAddOverTimeActivityHandler.cs" />
     <Compile Include="AgentInfo\Requests\IOvertimeRequestSkillProvider.cs" />
     <Compile Include="AgentInfo\Requests\ISkillOpenHourFilter.cs" />
+    <Compile Include="AgentInfo\Requests\OvertimeRequestAddOverTimeActivityHandlerToggle45177Off.cs" />
+    <Compile Include="AgentInfo\Requests\OvertimeRequestAddOverTimeActivityHandler.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequestApprovalService.cs" />
     <Compile Include="AgentInfo\Requests\AbsenceRequestApprovalService.cs" />
     <Compile Include="AgentInfo\Requests\OvertimeRequest.cs" />
@@ -244,6 +247,7 @@
     <Compile Include="ApplicationLayer\IPersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestValidator.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAvailableSkillsValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestSiteOpenHourValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAlreadyHasScheduleValidator.cs" />

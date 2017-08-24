@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				new SwapAndModifyService(null, null),
 				new FakeGlobalSettingDataRepository(),
 				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new DoNothingScheduleDayChangeCallBack()
-				, null, null, overtimeRequestSkillProvider, null, new FakeCommandDispatcher()
+				, null, null, overtimeRequestSkillProvider, null, null
 			);
 
 			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator(
@@ -265,7 +265,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Assert.IsTrue(personRequest.IsApproved);
 		}
-
 
 		[Test]
 		public void ShouldLoadScheduleForOvertimeRequest()

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
@@ -15,18 +13,17 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IOvertimeRequestUnderStaffingSkillProvider _overtimeRequestUnderStaffingSkillProvider;
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
 		private readonly ISkillOpenHourFilter _skillOpenHourFilter;
-		private readonly ICommandDispatcher _commandDispatcher;
-
+		private readonly IRequestAddOverTimeActivityHandler _addOverTimeActivityHandler;
 
 		public OvertimeRequestApprovalService(
 			IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
 			IOvertimeRequestSkillProvider overtimeRequestSkillProvider,
-			ISkillOpenHourFilter skillOpenHourFilter, ICommandDispatcher commandDispatcher)
+			ISkillOpenHourFilter skillOpenHourFilter, IRequestAddOverTimeActivityHandler addOverTimeActivityHandler)
 		{
 			_overtimeRequestUnderStaffingSkillProvider = overtimeRequestUnderStaffingSkillProvider;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 			_skillOpenHourFilter = skillOpenHourFilter;
-			_commandDispatcher = commandDispatcher;
+			_addOverTimeActivityHandler = addOverTimeActivityHandler;
 		}
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
@@ -57,23 +54,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 				return getBusinessRuleResponses(Resources.NoUnderStaffingSkill, period, person);
 			}
 
-			// todo only return the first activity of skill now
-			addOvertimeActivity(seriousUnderstaffingSkills.First().Activity.Id.GetValueOrDefault(), overtimeRequest);
+			_addOverTimeActivityHandler.Handle(seriousUnderstaffingSkills.First().Activity.Id.GetValueOrDefault(), overtimeRequest);
 
 			return new List<IBusinessRuleResponse>();
-		}
-
-		private void addOvertimeActivity(Guid activityId, IOvertimeRequest overtimeRequest)
-		{
-			var agentDateTime = TimeZoneHelper.ConvertFromUtc(overtimeRequest.Period.StartDateTime, overtimeRequest.Person.PermissionInformation.DefaultTimeZone());
-			_commandDispatcher.Execute(new AddOvertimeActivityCommand
-			{
-				ActivityId = activityId,
-				Date = new DateOnly(agentDateTime),
-				MultiplicatorDefinitionSetId = overtimeRequest.MultiplicatorDefinitionSet.Id.GetValueOrDefault(),
-				Period = overtimeRequest.Period,
-				PersonId = overtimeRequest.Person.Id.GetValueOrDefault()
-			});
 		}
 
 		private static IEnumerable<IBusinessRuleResponse> getBusinessRuleResponses(string message, DateTimePeriod period, IPerson person)
