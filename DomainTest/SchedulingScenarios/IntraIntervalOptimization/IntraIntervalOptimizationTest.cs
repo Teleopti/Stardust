@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntraIntervalOptimization
 	[UseIocForFatClient]
 	public class IntraIntervalOptimizationTest
 	{
-		public OptimizationExecuter Target;
+		public OptimizationDesktopExecuter Target;
 		public Func<ISchedulerStateHolder> StateHolder;
 
 		[Test]

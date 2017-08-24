@@ -10,7 +10,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public class OptimizationExecuter
+	//legacy class - to be used from fat client only
+	public class OptimizationDesktopExecuter
 	{
 		private readonly IGroupPageCreator _groupPageCreator;
 		private readonly IGroupScheduleGroupPageDataProvider _groupScheduleGroupPageDataProvider;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly ScheduleOptimizerHelper _scheduleOptimizerHelper;
 		private readonly DoFullResourceOptimizationOneTime _doFullResourceOptimizationOneTime;
 
-		public OptimizationExecuter(IGroupPageCreator groupPageCreator,
+		public OptimizationDesktopExecuter(IGroupPageCreator groupPageCreator,
 			IGroupScheduleGroupPageDataProvider groupScheduleGroupPageDataProvider,
 			IResourceCalculation resourceOptimizationHelper,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,

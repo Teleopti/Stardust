@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DesktopSchedulingOLD>().As<DesktopScheduling>().InstancePerLifetimeScope();
 			}
 
-			builder.RegisterType<OptimizationExecuter>().InstancePerLifetimeScope();
+			builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
 			builder.RegisterType<CorrectAlteredBetween>().SingleInstance();
 			builder.RegisterType<BackToLegalStateExecuter>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleOptimizerHelper>().InstancePerLifetimeScope();

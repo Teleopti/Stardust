@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 	[UseIocForFatClient]
 	public class IntradayOptimizationTeamBlockForSingleAgentTeamAndSingleDayTest : IntradayOptimizationScenarioTest
 	{
-		public OptimizationExecuter Target;
+		public OptimizationDesktopExecuter Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderOrg;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 

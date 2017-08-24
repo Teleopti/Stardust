@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	[DomainTest, UseIocForFatClient]
 	public class OptimizationBug37126Test
 	{
-		public OptimizationExecuter Target;
+		public OptimizationDesktopExecuter Target;
 		public ISchedulerStateHolder StateHolder;
 		public IOptimizationPreferences OptimizationPreferences;
 		public IResourceOptimizationHelperExtended ResourceCalculator;

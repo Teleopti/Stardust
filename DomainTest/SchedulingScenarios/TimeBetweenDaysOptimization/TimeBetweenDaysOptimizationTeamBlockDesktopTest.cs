@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.TimeBetweenDaysOptimizatio
 	public class TimeBetweenDaysOptimizationTeamBlockDesktopTest
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public OptimizationExecuter Target;
+		public OptimizationDesktopExecuter Target;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
 
 		[Test]
