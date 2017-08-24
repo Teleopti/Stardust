@@ -313,6 +313,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 		{
 			//Consumer Support
 			var wfcs = WorkflowControlSetRepository.Get(workflowControlsetId);
+			wfcs.AbsenceRequestExpiredThreshold = null;
 			setAbsenceRequestOpenPeriods(wfcs);
 
 			// load some persons
@@ -441,6 +442,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTest.AbsenceRequests
 			string expectedDenyReason = null)
 		{
 			var wfcs = WorkflowControlSetRepository.Get(workflowControlsetId);
+			wfcs.AbsenceRequestExpiredThreshold = null;
 			foreach (var period in wfcs.AbsenceRequestOpenPeriods)
 			{
 				if (!period.Absence.Equals(absence)) continue;
