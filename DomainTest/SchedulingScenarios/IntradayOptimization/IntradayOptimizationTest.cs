@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public IScheduleStorage ScheduleStorage;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
 		public Func<IGridlockManager> LockManager;
+		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
 		[Test]
 		public void ShouldUseShiftThatCoverHigherDemand()
@@ -61,6 +63,41 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonAssignmentRepository.GetSingle(dateOnly).Period
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8).AddMinutes(15), dateTime.AddHours(17).AddMinutes(15)));
 		}
+
+		[Test]
+		[Repeat(10)] //to possible avoid green on teamblock due to random(shuffle)
+		[Ignore("45541")]
+		public void ShouldOptimizeWorstDayFirst()
+		{
+			var optimizationPreferences = OptimizationPreferencesProvider.Fetch();
+			optimizationPreferences.General.UseShiftCategoryLimitations = true;
+			OptimizationPreferencesProvider.SetFromTestsOnly(optimizationPreferences);
+			var phoneActivity = ActivityFactory.CreateActivity("phone");
+			var skill = SkillRepository.Has("skill", phoneActivity);
+			var dateOnly = new DateOnly(2015, 10, 12);
+			var scenario = ScenarioRepository.Has("some name");
+			var shiftCategoryBefore = new ShiftCategory("_").WithId();
+			var shiftCategoryAfter = new ShiftCategory("_").WithId();
+			var schedulePeriod = new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1);
+			schedulePeriod.AddShiftCategoryLimitation(new ShiftCategoryLimitation(shiftCategoryAfter){MaxNumberOf = 1});
+			var contract = new ContractWithMaximumTolerance();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(9, 0, 9, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategoryAfter));
+			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
+			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(0), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(60))));				
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(1), TimeSpan.FromMinutes(0), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(60))));	
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(2), TimeSpan.FromMinutes(0), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(60))));
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly.AddDays(3), TimeSpan.FromMinutes(0), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(60))));
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategoryBefore, dateOnly, new TimePeriod(8, 45, 17, 45));				//4
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategoryBefore, dateOnly.AddDays(1), new TimePeriod(8, 30, 17, 30));	//3
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategoryBefore, dateOnly.AddDays(2), new TimePeriod(8, 0, 17, 0));		//1
+			PersonAssignmentRepository.Has(agent, scenario, phoneActivity, shiftCategoryBefore, dateOnly.AddDays(3), new TimePeriod(8, 15, 17, 15));	//2
+	
+			Target.Execute(planningPeriod.Id.Value, false);
+
+			PersonAssignmentRepository.GetSingle(dateOnly.AddDays(2)).ShiftCategory.Should().Be.EqualTo(shiftCategoryAfter);
+		}
+
 
 		[Test]
 		public void ShouldNotOptimizeUnactiveSkill()
