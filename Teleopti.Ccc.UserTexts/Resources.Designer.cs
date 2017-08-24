@@ -4296,7 +4296,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bpo Exchange.
+        ///   Looks up a localized string similar to BPO Exchange.
         /// </summary>
         public static string BpoExchange {
             get {
@@ -14066,6 +14066,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InAlarm {
             get {
                 return ResourceManager.GetString("InAlarm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to In alarm in site.
+        /// </summary>
+        public static string InAlarmInSite {
+            get {
+                return ResourceManager.GetString("InAlarmInSite", resourceCulture);
             }
         }
         
@@ -34000,11 +34009,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total Agents In Alarm.
+        ///   Looks up a localized string similar to Total agents in alarm in business unit.
         /// </summary>
-        public static string TotalAgentsInAlarm {
+        public static string TotalAgentsInAlarmInBusinessUnit {
             get {
-                return ResourceManager.GetString("TotalAgentsInAlarm", resourceCulture);
+                return ResourceManager.GetString("TotalAgentsInAlarmInBusinessUnit", resourceCulture);
             }
         }
         

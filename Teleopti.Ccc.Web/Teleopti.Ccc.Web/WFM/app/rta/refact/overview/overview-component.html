@@ -2,7 +2,7 @@
     <rta-card-header ng-attr-styles="border-left-color: {{card.site.Color}};">
         <div class="rta-card-content-wrapper flex">
             <div class = "rta-site-name-container"><b ng-attr-data-max="{{card.site.AgentsCount}}" ng-attr-data-value="{{card.site.InAlarmCount}}">{{card.site.Name}}</b></div>
-            <div class="rta-alarm-values-container">{{'InAlarm'|translate}}:
+            <div class="rta-alarm-values-container">{{'InAlarmInSite'|translate}}:
                 <b>{{card.site.InAlarmCount}}</b>
             </div>
             <div ng-click="$event.stopPropagation(); $ctrl.selectItem(card);" class="rta-icons-container"><i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>

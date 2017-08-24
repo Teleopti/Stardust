@@ -16335,10 +16335,6 @@ Do you want to participate?</value>
     <value>Import successfull</value>
     <comment>An import has been processed successfully</comment>
   </data>
-  <data name="TotalAgentsInAlarm" xml:space="preserve">
-    <value>Total Agents In Alarm</value>
-    <comment>Total Agents In Alarm</comment>
-  </data>
   <data name="AnywhereMigrated" xml:space="preserve">
     <value>Anywhere has been migrated to {0}Teleopti WFM{1}!</value>
     <comment>Message displayed for users on access Anywhere; "{0}" and "{1}" will be replaced with HTML code, so please do not change text "{0}Teleopti WFM{1}" on localization.</comment>
@@ -16385,7 +16381,7 @@ Do you want to participate?</value>
   </data>
   <data name="OpenSite" xml:space="preserve">
     <value>Open site</value>
-    <comment>Open site</comment>
+    <comment>Text to be displayed when hovering icon on RTA card. Clicking the icon will open one site</comment>
   </data>
   <data name="NoSuggestionsFound" xml:space="preserve">
     <value>There are no suggestions according to the extra overtime settings</value>
@@ -16429,5 +16425,13 @@ Do you want to participate?</value>
   <data name="UnderstaffingAfterOT" xml:space="preserve">
     <value>Understafing after OT</value>
     <comment>label for the staffingchart to show the understaffing after overtime suggestion has been requested</comment>
+  </data>
+  <data name="TotalAgentsInAlarmInBusinessUnit" xml:space="preserve">
+    <value>Total agents in alarm in business unit</value>
+    <comment>Total agents in alarm in business unit</comment>
+  </data>
+  <data name="InAlarmInSite" xml:space="preserve">
+    <value>In alarm in site</value>
+    <comment>Text to be displayed before number of agents in alarm on site card in RTA</comment>
   </data>
 </root>
