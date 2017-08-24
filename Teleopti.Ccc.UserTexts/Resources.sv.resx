@@ -14865,9 +14865,6 @@ Vill du registrera dig?</value>
   <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
     <value>Övertidsförfrågan {0}-{1} har godkänts. </value>
   </data>
-  <data name="DragAndDropCSVFilesHereOrClickToUpload" xml:space="preserve">
-    <value>Dra och släpp .csv-filer här, eller klicka för att ladda upp</value>
-  </data>
   <data name="SuccessfullyImported" xml:space="preserve">
     <value>Importen lyckades</value>
   </data>
@@ -14970,6 +14967,10 @@ Vill du registrera dig?</value>
   <data name="ChooseDayOffset" xml:space="preserve">
     <value>Välj dag</value>
   </data>
+  <data name="SelectionTooLarge" xml:space="preserve">
+    <value>För stort urval</value>
+    <comment>Selection too large</comment>
+  </data>   
   <data name="OpenSite" xml:space="preserve">
     <value>Öppna enhet</value>
   </data>

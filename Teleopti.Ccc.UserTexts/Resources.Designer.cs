@@ -28946,6 +28946,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selection is too large.
+        /// </summary>
+        public static string SelectionTooLarge {
+            get {
+                return ResourceManager.GetString("SelectionTooLarge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select KPI to handle:.
         /// </summary>
         public static string SelectKPIToHandleColon {

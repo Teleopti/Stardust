@@ -16434,4 +16434,8 @@ Do you want to participate?</value>
     <value>In alarm in site</value>
     <comment>Text to be displayed before number of agents in alarm on site card in RTA</comment>
   </data>
+  <data name="SelectionTooLarge" xml:space="preserve">
+    <value>Selection is too large</value>
+    <comment>Selection is too large</comment>
+  </data>
 </root>
