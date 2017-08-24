@@ -7,19 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface ITeamBlockClearer
-	{
-		void ClearTeamBlock(SchedulingOptions schedulingOptions,
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			ITeamBlockInfo teamBlock);
-
-		void ClearTeamBlockWithNoResourceCalculation(
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ITeamBlockInfo teamBlock, INewBusinessRuleCollection businessRuleCollection);
-	}
-
-	
-
-	public class TeamBlockClearer : ITeamBlockClearer
+	public class TeamBlockClearer
 	{
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;

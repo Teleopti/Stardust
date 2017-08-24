@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 {
 	public class ShiftNudgeEarlier
 	{
-		private readonly ITeamBlockClearer _teamBlockClearer;
+		private readonly TeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockRestrictionAggregator _teamBlockRestrictionAggregator;
 		private readonly TeamBlockScheduler _teamBlockScheduler;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
-		public ShiftNudgeEarlier(ITeamBlockClearer teamBlockClearer,
+		public ShiftNudgeEarlier(TeamBlockClearer teamBlockClearer,
 			ITeamBlockRestrictionAggregator teamBlockRestrictionAggregator, TeamBlockScheduler teamBlockScheduler, 
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			IWorkShiftSelector workShiftSelector, IGroupPersonSkillAggregator groupPersonSkillAggregator)

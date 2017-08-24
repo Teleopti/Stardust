@@ -625,7 +625,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>().SingleInstance();
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockClearer>().As<ITeamBlockClearer>().InstancePerLifetimeScope();
+			builder.RegisterType<TeamBlockClearer>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSteadyStateValidator>().As<ITeamBlockSteadyStateValidator>().InstancePerLifetimeScope();
 			builder.RegisterType<ValidatedTeamBlockInfoExtractor>().InstancePerLifetimeScope();
 			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>().SingleInstance();

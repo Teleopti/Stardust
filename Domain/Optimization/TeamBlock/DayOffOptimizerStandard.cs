@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamDayOffModifier _teamDayOffModifier;
 		private readonly ITeamBlockSteadyStateValidator _teamBlockSteadyStateValidator;
-		private readonly ITeamBlockClearer _teamBlockClearer;
+		private readonly TeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockOptimizationLimits _teamBlockOptimizationLimits;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly ITeamBlockDayOffsInPeriodValidator _teamBlockDayOffsInPeriodValidator;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamDayOffModifier teamDayOffModifier,
 			ITeamBlockSteadyStateValidator teamBlockSteadyStateValidator,
-			ITeamBlockClearer teamBlockClearer,
+			TeamBlockClearer teamBlockClearer,
 			ITeamBlockOptimizationLimits teamBlockOptimizationLimits,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			ITeamBlockDayOffsInPeriodValidator teamBlockDayOffsInPeriodValidator,

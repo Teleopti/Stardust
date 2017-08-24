@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 
 	public class BackToLegalShiftWorker : IBackToLegalShiftWorker
 	{
-		private readonly ITeamBlockClearer _teamBlockClearer;
+		private readonly TeamBlockClearer _teamBlockClearer;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamBlockSingleDayScheduler _teamBlockSingleDayScheduler;
 		private readonly IWorkShiftSelector _workShiftSelector;
 
-		public BackToLegalShiftWorker(ITeamBlockClearer teamBlockClearer,
+		public BackToLegalShiftWorker(TeamBlockClearer teamBlockClearer,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamBlockSingleDayScheduler teamBlockSingleDayScheduler,
 			IWorkShiftSelector workShiftSelector)

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly TeamBlockScheduler _teamBlockScheduler;
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
-		private readonly ITeamBlockClearer _teamBlockClearer;
+		private readonly TeamBlockClearer _teamBlockClearer;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly IShiftCategoryLimitCounter _shiftCategoryLimitCounter;
 		private readonly IWorkShiftSelector _workShiftSelector;
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public TeamBlockRetryRemoveShiftCategoryBackToLegalService(TeamBlockScheduler teamBlockScheduler, 
 			ITeamInfoFactory teamInfoFactory, 
-			ITeamBlockInfoFactory teamBlockInfoFactory, 
-			ITeamBlockClearer teamBlockClearer, 
+			ITeamBlockInfoFactory teamBlockInfoFactory,
+			TeamBlockClearer teamBlockClearer, 
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, 
 			IShiftCategoryLimitCounter shiftCategoryLimitCounter, 
 			IWorkShiftSelector workShiftSelector, 

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly TeamBlockScheduler _teamBlockScheduler;
-		private readonly ITeamBlockClearer _teamBlockClearer;
+		private readonly TeamBlockClearer _teamBlockClearer;
 		private readonly WorkShiftSelectorForMaxSeat _workShiftSelectorForMaxSeat;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
 		private readonly RestrictionOverLimitValidator _restrictionOverLimitValidator;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			TeamBlockScheduler teamBlockScheduler,
-			ITeamBlockClearer teamBlockClearer,
+			TeamBlockClearer teamBlockClearer,
 			WorkShiftSelectorForMaxSeat workShiftSelectorForMaxSeat,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
 			RestrictionOverLimitValidator restrictionOverLimitValidator,

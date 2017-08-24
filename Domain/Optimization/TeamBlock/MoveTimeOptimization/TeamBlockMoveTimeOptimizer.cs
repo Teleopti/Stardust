@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 	{
 		private readonly ISchedulingOptionsCreator  _schedulingOptionsCreator;
 		private readonly ITeamBlockMoveTimeDescisionMaker _decisionMaker;
-		private readonly ITeamBlockClearer _teamBlockClearer;
+		private readonly TeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly TeamBlockScheduler _teamBlockScheduler;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 
 		public TeamBlockMoveTimeOptimizer(ISchedulingOptionsCreator schedulingOptionsCreator,
-			ITeamBlockMoveTimeDescisionMaker decisionMaker, ITeamBlockClearer teamBlockClearer,
+			ITeamBlockMoveTimeDescisionMaker decisionMaker, TeamBlockClearer teamBlockClearer,
 			ITeamBlockInfoFactory teamBlockInfoFactory, TeamBlockScheduler teamBlockScheduler,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
