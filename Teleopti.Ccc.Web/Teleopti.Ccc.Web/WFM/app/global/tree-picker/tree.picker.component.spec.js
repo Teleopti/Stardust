@@ -607,6 +607,81 @@ describe('treePickerComponent', function () {
       expect(ctrl.outputData[2]).toEqual(ctrl.treeCollection.nodes[1].nodes[1].nodes[0].id);
     });
 
+    it('should select leaf siblings', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+
+
+      ctrl.data.nodes[1].nodes[1].nodes.push({name: 'grandchildX', id: '9', nodes: []})
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[0].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[0]);
+
+      expect(ctrl.outputData.length).toEqual(4);
+
+      expect(ctrl.outputData[0]).toEqual(ctrl.treeCollection.nodes[1].nodes[1].nodes[1].id);
+      expect(ctrl.outputData[1]).toEqual(ctrl.treeCollection.nodes[1].nodes[1].id);
+      expect(ctrl.outputData[2]).toEqual(ctrl.treeCollection.nodes[1].id);
+      expect(ctrl.outputData[3]).toEqual(ctrl.treeCollection.nodes[1].nodes[1].nodes[0].id);
+    });
+
+    it('should unselect leaf sibling', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+
+      ctrl.data.nodes[1].nodes[1].nodes.push({name: 'grandchildX', id: '9', nodes: []})
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+
+      expect(ctrl.outputData.length).toEqual(0);
+    });
+
+    it('should select leaves when clicking parent child', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+
+      ctrl.data.nodes[1].nodes[1].nodes.push({name: 'grandchildX', id: '9', nodes: []})
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+      ctrl.treeCollection.nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1]);
+
+      expect(ctrl.outputData.length).toEqual(0);
+    });
+
+    it('should deselect leaves when clicking parent child', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+
+      ctrl.data.nodes[1].nodes[1].nodes.push({name: 'grandchildX', id: '9', nodes: []})
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+      ctrl.treeCollection.nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1]);
+
+      expect(ctrl.outputData.length).toEqual(4);
+      expect(ctrl.outputData[0]).toEqual(ctrl.treeCollection.nodes[1].nodes[1].id);
+      expect(ctrl.outputData[1]).toEqual(ctrl.treeCollection.nodes[1].id);
+      expect(ctrl.outputData[2]).toEqual(ctrl.treeCollection.nodes[1].nodes[1].nodes[0].id);
+      expect(ctrl.outputData[3]).toEqual(ctrl.treeCollection.nodes[1].nodes[1].nodes[1].id);
+    });
+
   });
 
 });

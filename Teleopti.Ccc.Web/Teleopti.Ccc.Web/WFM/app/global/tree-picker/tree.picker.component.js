@@ -56,35 +56,40 @@
       }
     }
 
-    var root;
+    function clickedNode(node) {
+      toggleNode(node);
+      toggleParent(node);
 
+      if (node.nodes != null)
+      traverseNodes(node.nodes, toggleNode)
+    }
+
+    function clickedNodeForTopSelect(node) {
+      toggleNode(node);
+      if (node.parent == null || node.isSelectedInUI)
+      toggleParentForTopSelect(node);
+      else
+      traverseNodes(node.nodes, removeNode);
+    }
+
+    var root;
     function clickedNodeForSingleSelect(node) {
-      if (node.parent == null) {
-        if (root != null) {
-          removeNode(root);
-          traverseNodes(root.nodes, removeNode);
-          addNode(node);
-          traverseNodes(node.nodes, addNode);
-          root = node;
-        } else {
+      if (node.parent == null) { // we are clicking on a root
+        if (root != null) { //swap root when clicking new root
+          swapRootWhenClickingNew(node);
+        } else { //select first root
           clickedNode(node)
           root = node;
         }
-      } else {
-        if (root == null) {
+      } else { // we are not clicking on a root
+        if (root == null) { //find root on first time click
           root = findMyRoot(node);
           clickedNode(node);
-        } else {
+        } else { //we have clicked something else before this
           var tempRoot = findMyRoot(node);
-
-          if (tempRoot === root) {
-            if (node.nodes.length){
-              toggleNode(node)
-              traverseNodes(node.nodes, toggleNode)
-            } else {
-              toggleEverythingInMyBranchApartFromRoot(node)
-            }
-          } else {
+          if (tempRoot === root) { //we clicked something else in this branch before this
+            clickedNodeIsInSameBranch(node);
+          } else { //Its not the same branch as last click
             traverseNodes(root.nodes, removeNode);
             removeNode(root);
             clickedNode(node);
@@ -94,29 +99,30 @@
       }
     }
 
-    function findMyRoot(node) {
-      if (node.parent == null){
-        return node;
-      } else{
-        return findMyRoot(node.parent);
-      }
+    function swapRootWhenClickingNew(node) {
+      removeNode(root);
+      traverseNodes(root.nodes, removeNode);
+      addNode(node);
+      traverseNodes(node.nodes, addNode);
+      root = node;
     }
 
-    function toggleEverythingInMyBranchApartFromRoot(node) {
-      if ( node.parent == null) {
-        return;
-      } else {
-        toggleNode(node);
-        return toggleEverythingInMyBranchApartFromRoot(node.parent);
+    function clickedNodeIsInSameBranch(node) {
+      if (node.nodes.length){ //its not a leaf
+        toggleNode(node)
+        if (node.nodes.some(isAnySiblingsSelected)) {
+          traverseNodes(node.nodes, removeNode)
+        } else {
+          addNode(root);
+          traverseNodes(node.nodes, addNode)
+        }
+      } else { //it is a leaf
+        if (node.parent.nodes.some(isAnySiblingsSelected)) {
+          clickedNode(node)
+        } else {
+          reverseTraverseNodes(node, addNode);
+        }
       }
-    }
-
-    function clickedNodeForTopSelect(node) {
-      toggleNode(node);
-      if (node.parent == null || node.isSelectedInUI)
-      toggleParentForTopSelect(node);
-      else
-      traverseNodes(node.nodes, removeNode);
     }
 
     function toggleParentForTopSelect(node) {
@@ -153,12 +159,23 @@
       }
     }
 
-    function clickedNode(node) {
-      toggleNode(node);
-      toggleParent(node);
+    //goes down from node
+    function traverseNodes(nodes, callback) {
+      nodes.forEach(function (node) {
+        callback(node);
+        if (nodeHasChildren(node))
+        traverseNodes(node.nodes, callback);
+      });
+    }
 
-      if (node.nodes != null)
-      traverseNodes(node.nodes, toggleNode)
+    //goes up from node, skips root
+    function reverseTraverseNodes(node, callback) {
+      if ( node.parent == null) {
+        return;
+      } else {
+        callback(node);
+        return reverseTraverseNodes(node.parent, callback);
+      }
     }
 
     function addNode(node) {
@@ -166,14 +183,6 @@
         node.isSelectedInUI = true;
         ctrl.outputData.push(node.id);
       }
-    }
-
-    function traverseNodes(nodes, callback) {
-      nodes.forEach(function (node) {
-        callback(node);
-        if (nodeHasChildren(node))
-        traverseNodes(node.nodes, callback);
-      });
     }
 
     function removeNode(node) {
@@ -188,6 +197,18 @@
 
     function isNodeSelected(id) {
       return ctrl.outputData.indexOf(id) > -1;
+    }
+
+    function isAnySiblingsSelected(node) {
+      return node.isSelectedInUI === true;
+    }
+
+    function findMyRoot(node) {
+      if (node.parent == null){
+        return node;
+      } else{
+        return findMyRoot(node.parent);
+      }
     }
 
     function nodeHasChildren(node) {
