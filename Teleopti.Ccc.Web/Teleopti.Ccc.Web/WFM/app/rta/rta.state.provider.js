@@ -69,5 +69,13 @@ angular
                     },
                     controller: 'RtaHistoricalController as vm',
                 })
+
+
+                .state('rta-teams-legacy', {
+                    url: '/rta/teams/?siteIds&skillIds&skillAreaId&open',
+                    controller: function ($state, $stateParams) {
+                        $state.go('refact-rta', $stateParams)
+                    }
+                })
         };
     });
