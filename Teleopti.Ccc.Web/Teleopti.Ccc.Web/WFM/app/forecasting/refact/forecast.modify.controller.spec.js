@@ -12,7 +12,7 @@ describe('ForecastCtrl', function() {
       scope = $rootScope.$new();
       $controller = _$controller_;
 
-      vm = $controller('ForecastModCtrl', {
+      vm = $controller('ForecastModController', {
         $scope: scope,
         $stateParams: $stateParams
       });

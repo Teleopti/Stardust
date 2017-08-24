@@ -22,7 +22,7 @@ describe('ForecastCtrl', function () {
     fakeBackend = _fakeForecastingBackend_;
 
     // fakeBackend.clear();
-    vm = $controller('ForecastRefactCtrl');
+    vm = $controller('ForecastRefactController');
     skill = {
       IsPermittedToModifySkill: true,
       Skills: [
