@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -12,6 +13,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 	public interface IDeleteAndResourceCalculateService
 	{
 		void DeleteWithResourceCalculation(IEnumerable<IScheduleDay> daysToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation);
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
+		void DeleteWithResourceCalculationCheckDeleteDecider(IScheduleDay dayToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation);
 		void DeleteWithResourceCalculation(IScheduleDay dayToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation);
 	}
 
@@ -20,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private readonly Func<ISchedulingResultStateHolder> _schedulingResultStateHolder;
 		private readonly IDeleteSchedulePartService _deleteSchedulePartService;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 		private readonly IResourceCalculateAfterDeleteDecider _resourceCalculateAfterDeleteDecider;
 		private readonly AffectedDates _affectedDates;
 
@@ -45,7 +49,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public void DeleteWithResourceCalculation(IScheduleDay dayToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
+		public void DeleteWithResourceCalculationCheckDeleteDecider(IScheduleDay dayToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
 		{
 			_deleteSchedulePartService.Delete(new []{ dayToDelete}, rollbackService);
 
@@ -56,6 +61,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				{
 					_resourceOptimizationHelper.ResourceCalculate(date, resCalcData);
 				}
+			}
+		}
+
+		public void DeleteWithResourceCalculation(IScheduleDay dayToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation)
+		{
+			_deleteSchedulePartService.Delete(new[] { dayToDelete }, rollbackService);
+
+			var resCalcData = _schedulingResultStateHolder().ToResourceOptimizationData(considerShortBreaks, doIntraIntervalCalculation);
+			foreach (var date in _affectedDates.For(dayToDelete))
+			{
+				_resourceOptimizationHelper.ResourceCalculate(date, resCalcData);
 			}
 		}
 

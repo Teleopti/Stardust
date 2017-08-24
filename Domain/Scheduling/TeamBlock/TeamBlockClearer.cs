@@ -43,9 +43,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				addDaysToRemove(teamBlock, unlockedDate, toRemove);
 			}
 
-			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(toRemove,
-			                                                                 schedulePartModifyAndRollbackService,
-			                                                                 schedulingOptions.ConsiderShortBreaks, false);
+			foreach (var scheduleDay in toRemove)
+			{
+				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(scheduleDay,
+					schedulePartModifyAndRollbackService,
+					schedulingOptions.ConsiderShortBreaks, false);
+			}
+
 		}
 
 		public void ClearTeamBlockWithNoResourceCalculation(

@@ -65,6 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			using (_resourceCalculationContext.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true, period))
 			{
+				_resourceCalculation.ResourceCalculate(period, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 				_teamBlockIntradayOptimizationService.Optimize(allMatrixes,
 					period,
 					agents,

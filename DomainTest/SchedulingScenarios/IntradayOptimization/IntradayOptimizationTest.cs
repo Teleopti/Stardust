@@ -66,7 +66,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 		[Test]
 		[Repeat(10)] //to possible avoid green on teamblock due to random(shuffle)
-		[Ignore("45541")]
 		public void ShouldOptimizeWorstDayFirst()
 		{
 			var optimizationPreferences = OptimizationPreferencesProvider.Fetch();
