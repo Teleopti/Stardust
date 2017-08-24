@@ -76,7 +76,7 @@
 			vm.selectedTabIndex = 0;
 
 			vm.period = vm.absencePeriod;
-			$state.go("requestsRefactor-absenceAndText", params);
+			$state.go("requestsRefactor.absenceAndText", params);
 		};
 
 		vm.activeShiftTradeTab = function () {
@@ -94,7 +94,7 @@
 
 			vm.selectedTabIndex = 1;
 			vm.period = vm.shiftTradePeriod;
-			$state.go("requestsRefactor-shiftTrade", params);
+			$state.go("requestsRefactor.shiftTrade", params);
 		};
 
 		vm.getSitesAndTeamsAsync = function () {
