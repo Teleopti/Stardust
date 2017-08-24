@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                           ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		                           ITeamBlockInfo teamBlock)
 		{
-			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
+			var toRemove = new HashSet<IScheduleDay>();
 
 			var unlockedDates = teamBlock.BlockInfo.UnLockedDates();
 			
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public void ClearTeamBlockWithNoResourceCalculation(
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ITeamBlockInfo teamBlock, INewBusinessRuleCollection businessRuleCollection)
 		{
-			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
+			var toRemove = new HashSet<IScheduleDay>();
 			var unlockedDates = teamBlock.BlockInfo.UnLockedDates();
 
 			foreach (var unlockedDate in unlockedDates)
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_deleteSchedulePartService.Delete(toRemove, schedulePartModifyAndRollbackService, businessRuleCollection);
 		}
 
-		private static void addDaysToRemove(ITeamBlockInfo teamBlock, DateOnly dateOnly, IList<IScheduleDay> toRemove)
+		private static void addDaysToRemove(ITeamBlockInfo teamBlock, DateOnly dateOnly, ISet<IScheduleDay> toRemove)
 		{
 			var unlockedPersons = teamBlock.TeamInfo.UnLockedMembers(dateOnly);
 
