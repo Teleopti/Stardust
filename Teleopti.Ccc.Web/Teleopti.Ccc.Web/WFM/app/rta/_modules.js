@@ -30,11 +30,7 @@
 			function (event, toState) {
 				var location = $location.url();
 				if (location == $state.current.url && toState.name == 'rta') {
-					if (toggles.RTA_FrontEndRefactor_44772) {
 						$state.go('refact-rta')
-					} else {
-						$state.go('rta.sites')
-					}
 				}
 
 			});

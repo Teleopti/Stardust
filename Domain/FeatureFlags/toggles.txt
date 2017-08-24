@@ -45,7 +45,6 @@ RTA_SpreadTransactionLocksStrategy_41823 = true
 RTA_EventPackagesOptimization_43924 = true
 RTA_AsyncOptimization_43924 = true
 RTA_SolidProofWhenManagingAgentAdherence_39351 = true
-RTA_FrontEndRefactor_44772 = true
 
 WfmPermission_ReplaceOldPermission_34671 = true
 

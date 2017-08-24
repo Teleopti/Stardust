@@ -127,7 +127,7 @@
 		vm.showAdherenceUpdates = function() { return vm.adherencePercent !== null; };
 		vm.changeScheduleUrl = function(personId) { return rtaRouteService.urlForChangingSchedule(personId); };
 		vm.historicalAdherenceUrl = function(personId) { return rtaRouteService.urlForHistoricalAdherence(personId); };
-		vm.goToOverview = function () { toggles.RTA_FrontEndRefactor_44772 ? rtaRouteService.goToSitesRefact() : rtaRouteService.goToSites(); }
+		vm.goToOverview = function () { rtaRouteService.goToSitesRefact(); }
 		vm.goToSelectItem = function () { rtaRouteService.goToSelectSkill(); }
 		
 		vm.rightPanelOptions = {

@@ -24,7 +24,6 @@
 		RTA_SolidProofWhenManagingAgentAdherence_39351,
 		RTA_EventPackagesOptimization_43924,
 		RTA_AsyncOptimization_43924,
-		RTA_FrontEndRefactor_44772,
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,

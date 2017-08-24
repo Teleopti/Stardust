@@ -40,16 +40,8 @@ angular
                             return Toggle;
                         }
                     },
-                    controller: function ($state, $stateParams, toggles) {
-                        if (toggles.RTA_FrontEndRefactor_44772) {
-                            $state.go('refact-rta', { open: 'true' })
-                        } else {
-                            $state.go('rta.teams2', {
-                                siteIds: $stateParams.siteIds,
-                                skillIds: $stateParams.skillIds,
-                                skillAreaId: $stateParams.skillAreaId
-                            })
-                        }
+                    controller: function ($state) {
+                            $state.go('refact-rta', { open: 'true' })              
                     }
                 })
                 .state('rta.teams2', {
