@@ -177,7 +177,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleOvertime>();
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
 			builder.RegisterType<MatrixListFactory>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockDesktopOptimization>();
 			builder.RegisterType<TeamBlockIntradayOptimizationService>();
 			builder.RegisterType<TeamBlockDaysOffSameDaysOffLockSyncronizer>().SingleInstance();
 			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects();
@@ -424,9 +423,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508))
 			{
 				builder.RegisterType<IntradayOptimization>().As<IIntradayOptimization>().InstancePerLifetimeScope();
+				//remove As<xxxOLD> when toggle is gone
+				builder.RegisterType<TeamBlockDesktopOptimization>().As<TeamBlockDesktopOptimizationOLD>(); //set scope? Just keep old behavior for now...
 			}
 			else
 			{
+				builder.RegisterType<TeamBlockDesktopOptimizationOLD>();
 				builder.RegisterType<IntradayOptimizationClassic>().As<IIntradayOptimization>().InstancePerLifetimeScope();
 			}
 			builder.RegisterType<OptimizationResult>().InstancePerLifetimeScope().ApplyAspects();
