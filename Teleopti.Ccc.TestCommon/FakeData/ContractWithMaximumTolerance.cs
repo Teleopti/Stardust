@@ -2,7 +2,7 @@
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
-namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
+namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public class ContractWithMaximumTolerance : Contract
 	{
@@ -16,14 +16,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios
 
 		public override TimeSpan NegativePeriodWorkTimeTolerance
 		{
-			get { return TimeSpan.FromDays(20); }
-			set { base.NegativePeriodWorkTimeTolerance = value; }
+			get => TimeSpan.FromDays(20);
+			set => base.NegativePeriodWorkTimeTolerance = value;
 		}
 
 		public override TimeSpan PositivePeriodWorkTimeTolerance
 		{
-			get { return TimeSpan.FromDays(20); }
-			set { base.NegativePeriodWorkTimeTolerance = value; }
+			get => TimeSpan.FromDays(20);
+			set => base.NegativePeriodWorkTimeTolerance = value;
 		}
 	}
 }

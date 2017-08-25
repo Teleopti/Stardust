@@ -382,7 +382,6 @@
     <Compile Include="ResourcePlanner\Validation\PersonSkillValidatorTest.cs" />
     <Compile Include="SchedulingScenarios\BusinessRules\MinWeeklyRestRuleTest.cs" />
     <Compile Include="SchedulingScenarios\CancelSchedulingCallback.cs" />
-    <Compile Include="SchedulingScenarios\ContractWithMaximumTolerance.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationPlanningGroupTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationFakeDecisionMakerTest.cs" />
