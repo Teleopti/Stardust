@@ -79,8 +79,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			foreach (var stardustEvent in stardustEvents)
 			{
 				stardustEvent.TotalEvents = numberOfEvents;
-				stardustEvent.JobResultId = command.JobResultId.Value;
-				stardustEvent.PlanningPeriodId = command.PlanningPeriodId.Value;
+				if (command.JobResultId.HasValue)
+					stardustEvent.JobResultId = command.JobResultId.Value;
+				if (command.PlanningPeriodId.HasValue)
+					stardustEvent.PlanningPeriodId = command.PlanningPeriodId.Value;
 			}
 			return stardustEvents;
 		}
