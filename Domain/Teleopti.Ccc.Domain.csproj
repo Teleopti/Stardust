@@ -1633,7 +1633,7 @@
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddFullDayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\CannotSendDelayedMessages.cs" />
-    <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandlerWithoutDeltas.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\Commands\AddIntradayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Commands\ApproveRequestCommand.cs" />

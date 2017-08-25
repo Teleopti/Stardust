@@ -2,14 +2,22 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -20,11 +28,87 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
+	//[TestFixture]
+	//[DomainTest]
+	//[EnabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step4_43389)]
+	//public class AddctivityCommandHandlerTest : ISetup
+	//{
+	//	public AddActivityCommandHandler Target;
+	//	public FakeScheduleStorage ScheduleStorage;
+	//	public FakePersonRepository PersonRepository;
+	//	public FakeActivityRepository ActivityRepository;
+	//	public FakeWriteSideRepository<IPerson> PersonRepository2;
+	//	private IActivity _mainActivity;
+	//	public FakeCurrentScenario CurrentScenario;
+	//	public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
+	//	public FakeIntervalLengthFetcher IntervalLengthFetcher;
+	//	public FakePersonSkillProvider PersonSkillProvider;
+	//	public MutableNow Now;
+
+	//	public void Setup(ISystem system, IIocConfiguration configuration)
+	//	{
+	//		system.UseTestDouble<RemoveActivityCommandHandler>().For<IHandleCommand<RemoveActivityCommand>>();
+	//		system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+	//		system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+	//		system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+	//		system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
+	//		system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
+	//		system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
+	//		system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
+	//		_mainActivity = ActivityFactory.CreateActivity("mainActivity");
+	//	}
+
+	//	//[Test]
+	//	//public void ShouldRaiseEventWhenActivityAdded()
+	//	//{
+	//	//	var person = PersonFactory.CreatePersonWithId();
+	//	//	PersonRepository.Add(person);
+	//	//	PersonRepository2.Add(person);
+	//	//	var activity = ActivityFactory.CreateActivity("Phone").WithId();
+	//	//	ActivityRepository.Add(activity);
+	//	//	ActivityRepository.Add(_mainActivity);
+	//	//	var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
+
+	//	//	personAssignment.AddActivity(activity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 14));
+	//	//	personAssignment.ShiftLayers.ForEach(sl => EntityExtensions.WithId<ShiftLayer>(sl));
+	//	//	var shiftLayer = personAssignment.ShiftLayers.First(sl => sl.Payload == activity);
+	//	//	var command = new AddActivityCommand
+	//	//	{
+	//	//		PersonId = person.Id.GetValueOrDefault(),
+	//	//		ShiftLayerId = shiftLayer.Id.GetValueOrDefault(),
+	//	//		Date = new DateOnly(2013, 11, 14),
+	//	//		TrackedCommandInfo = new TrackedCommandInfo
+	//	//		{
+	//	//			OperatedPersonId = Guid.NewGuid(),
+	//	//			TrackId = Guid.NewGuid()
+	//	//		}
+	//	//	};
+
+	//	//	CurrentScenario.FakeScenario(personAssignment.Scenario);
+	//	//	ScheduleStorage.Add(personAssignment);
+
+	//	//	Target.Handle(command);
+
+	//	//	var dic = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc())), personAssignment.Scenario, new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), new[] { person });
+	//	//	var scheduleRange = dic[person];
+	//	//	var scheduleDay = scheduleRange.ScheduledDay(command.Date);
+	//	//	personAssignment = scheduleDay.PersonAssignment();
+
+	//	//	var @event = personAssignment.PopAllEvents().OfType<PersonAssignmentLayerRemovedEvent>().Single();
+	//	//	@event.PersonId.Should().Be(person.Id.GetValueOrDefault());
+	//	//	@event.Date.Should().Be(new DateTime(2013, 11, 14));
+	//	//	@event.StartDateTime.Should().Be(shiftLayer.Period.StartDateTime);
+	//	//	@event.EndDateTime.Should().Be(shiftLayer.Period.EndDateTime);
+	//	//}
+
+
+	//}
+
 	[TestFixture]
 	[DomainTest]
 	public class AddActivityCommandHandlerTest:ISetup
 	{
-		public AddActivityCommandHandler Target;
+		public AddActivityCommandHandlerWithoutDeltas Target;
 		public FakeWriteSideRepository<IPerson> PersonRepository;
 		public FakeWriteSideRepository<IActivity> ActivityRepository;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
@@ -41,7 +125,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
-			system.UseTestDouble<AddActivityCommandHandler>().For<IHandleCommand<AddActivityCommand>>();
+			system.UseTestDouble<AddActivityCommandHandlerWithoutDeltas>().For<IHandleCommand<AddActivityCommand>>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 			system.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
