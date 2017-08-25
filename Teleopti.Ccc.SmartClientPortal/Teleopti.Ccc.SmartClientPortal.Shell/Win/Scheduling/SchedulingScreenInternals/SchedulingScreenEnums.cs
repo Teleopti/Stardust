@@ -22,8 +22,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 
 	internal enum OptimizationMethod
 	{
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
-		BackToLegalState,
 		Optimize,
 		BackToLegalShift
 	}

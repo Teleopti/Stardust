@@ -40,16 +40,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			this.buttonCancel = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.tabControlTopLevel = new Syncfusion.Windows.Forms.Tools.TabControlAdv();
 			this.tabPageSchedulingOptions = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.schedulingSessionPreferencesTabPanel1 = new SchedulingSessionPreferencesPanel();
-			this.tabPageDayOffPlanningOptions = new Syncfusion.Windows.Forms.Tools.TabPageAdv();
-			this.dayOffPreferencesPanel1 = new ResourceOptimizerDayOffPreferencesPanel();
+			this.schedulingSessionPreferencesTabPanel1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionPreferences.SchedulingSessionPreferencesTabPanel();
 			this.imageList1 = new System.Windows.Forms.ImageList(this.components);
 			this.tableLayoutPanel1.SuspendLayout();
 			this.tableLayoutPanel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.tabControlTopLevel)).BeginInit();
 			this.tabControlTopLevel.SuspendLayout();
 			this.tabPageSchedulingOptions.SuspendLayout();
-			this.tabPageDayOffPlanningOptions.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tableLayoutPanel1
@@ -129,7 +126,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			this.tabControlTopLevel.BorderStyle = System.Windows.Forms.BorderStyle.None;
 			this.tabControlTopLevel.BorderWidth = 0;
 			this.tabControlTopLevel.Controls.Add(this.tabPageSchedulingOptions);
-			this.tabControlTopLevel.Controls.Add(this.tabPageDayOffPlanningOptions);
 			this.tabControlTopLevel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tabControlTopLevel.ImageList = this.imageList1;
 			this.tabControlTopLevel.InactiveTabColor = System.Drawing.Color.White;
@@ -175,35 +171,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			this.schedulingSessionPreferencesTabPanel1.UseGroupSchedulingCommonStart = false;
 			this.schedulingSessionPreferencesTabPanel1.Load += new System.EventHandler(this.schedulingSessionPreferencesTabPanel1_Load);
 			// 
-			// tabPageDayOffPlanningOptions
-			// 
-			this.tabPageDayOffPlanningOptions.Controls.Add(this.dayOffPreferencesPanel1);
-			this.tabPageDayOffPlanningOptions.Image = null;
-			this.tabPageDayOffPlanningOptions.ImageIndex = 1;
-			this.tabPageDayOffPlanningOptions.ImageSize = new System.Drawing.Size(16, 16);
-			this.tabPageDayOffPlanningOptions.Location = new System.Drawing.Point(0, 21);
-			this.tabPageDayOffPlanningOptions.Name = "tabPageDayOffPlanningOptions";
-			this.tabPageDayOffPlanningOptions.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPageDayOffPlanningOptions.ShowCloseButton = true;
-			this.tabPageDayOffPlanningOptions.Size = new System.Drawing.Size(540, 615);
-			this.tabPageDayOffPlanningOptions.TabIndex = 1;
-			this.tabPageDayOffPlanningOptions.Text = "xxDayOffPlannerOptions";
-			this.tabPageDayOffPlanningOptions.ThemesEnabled = false;
-			// 
-			// dayOffPreferencesPanel1
-			// 
-			this.dayOffPreferencesPanel1.BackColor = System.Drawing.Color.Transparent;
-			this.dayOffPreferencesPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dayOffPreferencesPanel1.Font = new System.Drawing.Font("Segoe UI", 9F);
-			this.dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
-			this.dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
-			this.dayOffPreferencesPanel1.Location = new System.Drawing.Point(3, 3);
-			this.dayOffPreferencesPanel1.Margin = new System.Windows.Forms.Padding(5);
-			this.dayOffPreferencesPanel1.Name = "dayOffPreferencesPanel1";
-			this.dayOffPreferencesPanel1.Size = new System.Drawing.Size(534, 609);
-			this.dayOffPreferencesPanel1.TabIndex = 5;
-			this.dayOffPreferencesPanel1.StatusChanged += new System.EventHandler<System.EventArgs>(this.dayOffPreferencesPanel1_StatusChanged);
-			// 
 			// imageList1
 			// 
 			this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
@@ -237,7 +204,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			((System.ComponentModel.ISupportInitialize)(this.tabControlTopLevel)).EndInit();
 			this.tabControlTopLevel.ResumeLayout(false);
 			this.tabPageSchedulingOptions.ResumeLayout(false);
-			this.tabPageDayOffPlanningOptions.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -250,9 +216,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private Syncfusion.Windows.Forms.ButtonAdv buttonCancel;
 		  private Syncfusion.Windows.Forms.Tools.TabControlAdv tabControlTopLevel;
 		  private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageSchedulingOptions;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
-		private Syncfusion.Windows.Forms.Tools.TabPageAdv tabPageDayOffPlanningOptions;
-		private ResourceOptimizerDayOffPreferencesPanel dayOffPreferencesPanel1;
 		private System.Windows.Forms.ImageList imageList1;
 		private SchedulingSessionPreferencesTabPanel schedulingSessionPreferencesTabPanel1;
 	}

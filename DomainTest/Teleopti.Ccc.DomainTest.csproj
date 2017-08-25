@@ -836,7 +836,6 @@
     <Compile Include="Optimization\ScheduleDayEquatorTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsAdvancePersonalSettingTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsCreatorTest.cs" />
-    <Compile Include="Optimization\SchedulingOptionsDayOffPlannerPersonalSettingsTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSettingTest.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSettingTest.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettingsTest.cs" />

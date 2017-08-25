@@ -30,27 +30,15 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			if (!DesignMode) SetTexts();
 		}
 
-		[RemoveMeWithToggle("Remove backToLegalState",Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
 		[RemoveMeWithToggle("Remove hideScheduleFrequency param and win controls only visible when false",Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-		public void Initialize(SchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories, bool backToLegalStateDialog, bool hideScheduleFrequency, ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
+		public void Initialize(SchedulingOptions schedulingOptions, IEnumerable<IShiftCategory> shiftCategories,  bool hideScheduleFrequency, ISchedulerGroupPagesProvider groupPagesProvider, IEnumerable<IScheduleTag> scheduleTags, IEnumerable<IActivity> availableActivity)
 		{
 			_groupPagesProvider = groupPagesProvider;
 			_availableActivity = availableActivity;
 
-			if (backToLegalStateDialog)
-			{
-				pnlBlockTeamScheduling.Visible = false;
-			}
-
-			if (backToLegalStateDialog)
-			{
-				tabPageExtra.Hide();
-			}
-			else
-			{
-				tableLayoutPanel2.RowStyles[2].Height = 0;
-				tableLayoutPanel2.RowStyles[1].Height = 0;
-			}
+			tableLayoutPanel2.RowStyles[2].Height = 0;
+			tableLayoutPanel2.RowStyles[1].Height = 0;
+			
 
 			//REMOVE THESE CONTROLS WITH TOGGLE 
 			labelResourceCalculateEveryColon.Visible = true;

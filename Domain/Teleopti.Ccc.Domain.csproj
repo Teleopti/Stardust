@@ -1465,7 +1465,6 @@
     <Compile Include="Scheduling\ExtendReduceTimeHelper.cs" />
     <Compile Include="Scheduling\FindSchedulesForPersons.cs" />
     <Compile Include="Scheduling\IFindSchedulesForPersons.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\BackToLegalStateExecuter.cs" />
     <Compile Include="Scheduling\Legacy\Commands\DoFullResourceOptimizationOneTime.cs" />
     <Compile Include="Scheduling\Legacy\Commands\MoveTimeOptimizerCreator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleOptimizerHelper.cs" />
@@ -2161,7 +2160,6 @@
     <Compile Include="Scheduling\Legacy\Commands\IDisableBusinessUnitFilter.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleDayForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\IScheduleRangeForPerson.cs" />
-    <Compile Include="Scheduling\Legacy\Commands\ScheduleMatrixOriginalStateContainerCreator.cs" />
     <Compile Include="Scheduling\Legacy\Commands\SchedulingProgress.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleDayForPerson.cs" />
     <Compile Include="Scheduling\Legacy\Commands\ScheduleRangeForPerson.cs" />
@@ -2429,7 +2427,6 @@
     <Compile Include="Optimization\ScheduleDayEquator.cs" />
     <Compile Include="Optimization\SchedulingOptionsAdvancedPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsCreator.cs" />
-    <Compile Include="Optimization\SchedulingOptionsDayOffPlannerPersonalSettings.cs" />
     <Compile Include="Optimization\SchedulingOptionsExtraPersonalSetting.cs" />
     <Compile Include="Optimization\SchedulingOptionsGeneralPersonalSetting.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictor.cs" />

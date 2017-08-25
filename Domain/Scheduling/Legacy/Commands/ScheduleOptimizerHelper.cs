@@ -131,21 +131,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_allResults().Clear();
 		}
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
-		public void DaysOffBackToLegalState(IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainers,
-			ISchedulingProgress backgroundWorker,
-			IDayOffTemplate dayOffTemplate,
-			SchedulingOptions schedulingOptions,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
-			IOptimizationPreferences optimizationPreferences)
-		{
-			if (schedulingOptions == null) throw new ArgumentNullException(nameof(schedulingOptions));
-
-			_allResults = () => new WorkShiftFinderResultHolder();
-			_backgroundWorker = backgroundWorker;
-			_daysOffBackToLegalState.Execute(matrixOriginalStateContainers, _backgroundWorker, dayOffTemplate,schedulingOptions, dayOffOptimizationPreferenceProvider, optimizationPreferences, _allResults, resourceOptimizerPersonOptimized);
-		}
-
 		public void ReOptimize(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
 			SchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
 			IOptimizationPreferences optimizationPreferences, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService)

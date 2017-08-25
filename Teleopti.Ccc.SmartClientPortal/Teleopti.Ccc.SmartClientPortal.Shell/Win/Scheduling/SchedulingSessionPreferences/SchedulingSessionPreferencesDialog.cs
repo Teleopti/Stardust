@@ -21,10 +21,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 	public partial class SchedulingSessionPreferencesDialog : BaseDialogForm
 	{
 		private readonly SchedulingOptions _schedulingOptions;
-		private readonly IDaysOffPreferences _daysOffPreferences;
 		private readonly IEnumerable<IShiftCategory> _shiftCategories;
-		[RemoveMeWithToggle("Should be replaced with false", Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
-		private readonly bool _backToLegalStateDialog;
 		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		private readonly bool _hideScheduleFrequency;
 		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
@@ -36,14 +33,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private SchedulingOptionsGeneralPersonalSetting _defaultGeneralSettings;
 		private SchedulingOptionsAdvancedPersonalSetting _defaultAdvancedSettings;
 		private SchedulingOptionsExtraPersonalSetting _defaultExtraSettings;
-		private SchedulingOptionsDayOffPlannerPersonalSettings _defaultDayOffPlannerSettings;
 
-		[RemoveMeWithToggle("Remove daysOffPreferences, backToLegalStateDialog", Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
 		public SchedulingSessionPreferencesDialog(
 			SchedulingOptions schedulingOptions, 
-			IDaysOffPreferences daysOffPreferences, 
-			IEnumerable<IShiftCategory> shiftCategories,
-			bool backToLegalStateDialog, 
+			IEnumerable<IShiftCategory> shiftCategories, 
 			bool hideScheduleFrequency,
 			ISchedulerGroupPagesProvider groupPagesProvider,
 			IEnumerable<IScheduleTag> scheduleTags, 
@@ -52,10 +45,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			: this()
 		{
 			_schedulingOptions = schedulingOptions;
-			_daysOffPreferences = daysOffPreferences;
 			_shiftCategories = shiftCategories;
-			
-			_backToLegalStateDialog = backToLegalStateDialog;
 			_hideScheduleFrequency = hideScheduleFrequency;
 			_groupPagesProvider = groupPagesProvider;
 			_groupPages = groupPagesProvider.GetGroups(true);
@@ -92,8 +82,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 					_defaultGeneralSettings = settingRepository.FindValueByKey(_settingValue + "GeneralSettings", new SchedulingOptionsGeneralPersonalSetting());
 					_defaultAdvancedSettings = settingRepository.FindValueByKey(_settingValue + "AdvancedSettings", new SchedulingOptionsAdvancedPersonalSetting());
 					_defaultExtraSettings = settingRepository.FindValueByKey(_settingValue + "ExtraSetting", new SchedulingOptionsExtraPersonalSetting());
-					if (_backToLegalStateDialog)
-						_defaultDayOffPlannerSettings = settingRepository.FindValueByKey(_settingValue + "DayOffPlannerSettings", new SchedulingOptionsDayOffPlannerPersonalSettings());
 				}
 			}
 			catch (DataSourceException)
@@ -103,8 +91,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags);
 			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories);
 			_defaultExtraSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages,_groupPagesForTeamBlockPer, _availableActivity);
-			if (_backToLegalStateDialog && _defaultDayOffPlannerSettings != null)
-				_defaultDayOffPlannerSettings.MapTo(_daysOffPreferences);
 		}
 
 		private bool hasMissedloadingSettings()
@@ -118,8 +104,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 			_defaultGeneralSettings.MapFrom(_schedulingOptions);
 			_defaultAdvancedSettings.MapFrom(_schedulingOptions);
 			_defaultExtraSettings.MapFrom(_schedulingOptions );
-			if (_backToLegalStateDialog && _defaultDayOffPlannerSettings != null)
-				_defaultDayOffPlannerSettings.MapFrom(_daysOffPreferences);
 
 			try
 			{
@@ -131,11 +115,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 					uow.PersistAll();
 					new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "ExtraSetting",_defaultExtraSettings );
 					uow.PersistAll();
-					if (_backToLegalStateDialog && _defaultDayOffPlannerSettings != null)
-					{
-						new PersonalSettingDataRepository(uow).PersistSettingValue(_settingValue + "DayOffPlannerSettings", _defaultDayOffPlannerSettings);
-						uow.PersistAll();
-					}
 				}
 			}
 			catch (DataSourceException)
@@ -145,20 +124,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 
 		private void Form_Load(object sender, EventArgs e)
 		{
-			if (!_backToLegalStateDialog)
-				tabControlTopLevel.TabPages.Remove(tabPageDayOffPlanningOptions);
-
+			
 			loadPersonalSettings();
 
 			schedulingSessionPreferencesTabPanel1.Initialize(_schedulingOptions, _shiftCategories,
-				_backToLegalStateDialog, _hideScheduleFrequency, _groupPagesProvider, _scheduleTags, _availableActivity);
+				 _hideScheduleFrequency, _groupPagesProvider, _scheduleTags, _availableActivity);
 
-			dayOffPreferencesPanel1.KeepFreeWeekendsVisible = false;
-			dayOffPreferencesPanel1.KeepFreeWeekendDaysVisible = false;
-			dayOffPreferencesPanel1.Initialize(_daysOffPreferences);
 			addToHelpContext();
 			setColor();
-			setOnOff(dayOffPreferencesPanel1);
 			// don not use for now in scheduling
 			
 			schedulingSessionPreferencesTabPanel1.ShiftCategoryVisible = true;
@@ -189,7 +162,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private void setColor()
 		{
 			BackColor = ColorHelper.DialogBackColor();
-			dayOffPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
 			schedulingSessionPreferencesTabPanel1.BackColor = ColorHelper.DialogBackColor();
 		}
 
@@ -202,39 +174,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingSessionP
 		private void buttonOK_Click(object sender, EventArgs e)
 		{
 			schedulingSessionPreferencesTabPanel1.ExchangeData(ExchangeDataOption.ControlsToDataSource);
-
-			if (dayOffPreferencesPanel1.ValidateData(ExchangeDataOption.ClientToServer))
-			{
-				dayOffPreferencesPanel1.ExchangeData(ExchangeDataOption.ClientToServer);
-				DialogResult = DialogResult.OK;
-				savePersonalSettings();
-			}
-
-			Close();
-			
+			DialogResult = DialogResult.OK;
+			savePersonalSettings();
+			Close();	
 		}
 
 		private void tabControlTopLevel_Click(object sender, EventArgs e)
 		{
 			ActiveControl = tabControlTopLevel.SelectedTab;
-		}
-
-		private void dayOffPreferencesPanel1_StatusChanged(object sender, EventArgs e)
-		{
-			var panel = (ResourceOptimizerDayOffPreferencesPanel) sender;
-			setOnOff(panel);
-		}
-
-		private void setOnOff(ResourceOptimizerDayOffPreferencesPanel panel)
-		{
-			if(panel.StatusIsOn())
-			{
-				tabPageDayOffPlanningOptions.ImageIndex  = 1; 
-			}
-			else
-			{
-					tabPageDayOffPlanningOptions.ImageIndex = 0;
-			}
 		}
 
 		private void schedulingSessionPreferencesTabPanel1_Load(object sender, EventArgs e)

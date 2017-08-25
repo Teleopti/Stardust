@@ -69,9 +69,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup3 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchedulingScreen));
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-			this.toolStripSpinningProgressControl1 = new ToolStripSpinningProgressControl();
+			this.toolStripSpinningProgressControl1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
 			this.toolStripStatusLabelStatus = new System.Windows.Forms.ToolStripStatusLabel();
-			this.toolStripProgressBar1 = new MetroToolStripProgressBar();
+			this.toolStripProgressBar1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls.MetroToolStripProgressBar();
 			this.toolStripStatusLabelNumberOfAgents = new System.Windows.Forms.ToolStripStatusLabel();
 			this.toolStripSplitButtonTimeZone = new System.Windows.Forms.ToolStripSplitButton();
 			this.toolStripStatusLabelScheduleTag = new System.Windows.Forms.ToolStripStatusLabel();
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.ToolStripMenuItemOccupancyAdjustment = new System.Windows.Forms.ToolStripMenuItem();
 			this.agentSkillAnalyzerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.backgroundWorkerLoadData = new System.ComponentModel.BackgroundWorker();
-			this.ribbonControlAdv1 = new RibbonControlAdvFixed();
+			this.ribbonControlAdv1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.RibbonControlAdvFixed();
 			this.backStageView = new Syncfusion.Windows.Forms.BackStageView(this.components);
 			this.backStage1 = new Syncfusion.Windows.Forms.BackStage();
 			this.backStageButtonMainMenuSave = new Syncfusion.Windows.Forms.BackStageButton();
@@ -208,7 +208,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.ToolStripMenuItemScheduleOvertime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemOptimize = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripMenuItemBackToLegalState = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemShiftBackToLegal = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripDropDownButtonSwap = new System.Windows.Forms.ToolStripSplitButton();
 			this.toolStripMenuItemSwap = new System.Windows.Forms.ToolStripMenuItem();
@@ -325,7 +324,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.toolStripMenuItemRestrictionCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemRestrictionPaste = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemRestrictionDelete = new System.Windows.Forms.ToolStripMenuItem();
-			this.schedulerSplitters1 = new SchedulerSplitters();
+			this.schedulerSplitters1 = new Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulerSplitters();
 			this.contextMenuStripRequests = new System.Windows.Forms.ContextMenuStrip(this.components);
 			this.ToolStripMenuItemViewDetails = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemFindMatching2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -391,7 +390,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(25, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 1;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 10;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.SkyBlue;
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -401,7 +400,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.toolStripStatusLabelStatus.Name = "toolStripStatusLabelStatus";
 			this.toolStripStatusLabelStatus.Padding = new System.Windows.Forms.Padding(5, 0, 0, 0);
 			this.SetShortcut(this.toolStripStatusLabelStatus, System.Windows.Forms.Keys.None);
-			this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(952, 21);
+			this.toolStripStatusLabelStatus.Size = new System.Drawing.Size(1064, 21);
 			this.toolStripStatusLabelStatus.Spring = true;
 			this.toolStripStatusLabelStatus.Text = "READY";
 			this.toolStripStatusLabelStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -1833,7 +1832,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             this.ToolStripMenuItemScheduleOvertime,
             this.toolStripMenuItemOptimize,
             this.toolStripSeparator2,
-            this.toolStripMenuItemBackToLegalState,
             this.toolStripMenuItemShiftBackToLegal});
 			this.toolStripSplitButtonSchedule.Image = global::Teleopti.Ccc.SmartClientPortal.Shell.Properties.Resources.ccc_SchedulerSchedule;
 			this.toolStripSplitButtonSchedule.ImageTransparentColor = System.Drawing.Color.Magenta;
@@ -1885,14 +1883,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
 			this.SetShortcut(this.toolStripSeparator2, System.Windows.Forms.Keys.None);
 			this.toolStripSeparator2.Size = new System.Drawing.Size(207, 6);
-			// 
-			// toolStripMenuItemBackToLegalState
-			// 
-			this.toolStripMenuItemBackToLegalState.Name = "toolStripMenuItemBackToLegalState";
-			this.SetShortcut(this.toolStripMenuItemBackToLegalState, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemBackToLegalState.Size = new System.Drawing.Size(210, 22);
-			this.toolStripMenuItemBackToLegalState.Text = "xxBackToLegalState";
-			this.toolStripMenuItemBackToLegalState.Click += new System.EventHandler(this.toolStripMenuItemBackToLegalStateClick);
 			// 
 			// toolStripMenuItemShiftBackToLegal
 			// 
@@ -3570,8 +3560,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         private System.ComponentModel.BackgroundWorker backgroundWorkerLoadData;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExGridRowInChartButtons;
         private System.Windows.Forms.ToolStripButton toolStripButtonGridInChart;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemBackToLegalState;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExEdit2;
 		private Syncfusion.Windows.Forms.Tools.ToolStripTabItem toolStripTabItemChart;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemMeetingOrganizer;

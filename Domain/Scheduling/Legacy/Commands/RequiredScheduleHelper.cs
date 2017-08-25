@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
 		}
 
-		[RemoveMeWithToggle("remove when both toggles are deleted", Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333, Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
+		[RemoveMeWithToggle("remove when both toggles are deleted, (Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 		public void RemoveShiftCategoryBackToLegalState(
 			IEnumerable<IScheduleMatrixPro> matrixList,
 			ISchedulingProgress backgroundWorker,

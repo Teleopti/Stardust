@@ -1114,40 +1114,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		#region Toolstrip events
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
-		private void toolStripMenuItemBackToLegalStateClick(object sender, EventArgs e)
-		{
-			if (_backgroundWorkerRunning)
-				return;
-
-			if (_scheduleView == null)
-				return;
-
-			var selectedSchedules = _scheduleView.SelectedSchedules();
-			if (!selectedSchedules.Any())
-				return;
-
-			IDaysOffPreferences daysOffPreferences = new DaysOffPreferences();
-			using (var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
-					daysOffPreferences, _schedulerState.CommonStateHolder.ActiveShiftCategories,
-					true, _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289), 
-					_groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptions",
-					_schedulerState.CommonStateHolder.ActiveActivities))
-			{
-				if (options.ShowDialog(this) == DialogResult.OK)
-				{
-					Cursor = Cursors.WaitCursor;
-					disableAllExceptCancelInRibbon();
-					_backgroundWorkerRunning = true;
-					_backgroundWorkerOptimization.RunWorkerAsync(new SchedulingAndOptimizeArgument(selectedSchedules)
-					{
-						OptimizationMethod = OptimizationMethod.BackToLegalState,
-						DaysOffPreferences = daysOffPreferences
-					});
-				}
-			}
-		}
-
 		private void toolStripMenuItemOptimizeClick(object sender, EventArgs e)
 		{
 			if (_backgroundWorkerRunning) return;
@@ -3059,9 +3025,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					}
 
 					using (var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
-							daysOffPreferences,
 							_schedulerState.CommonStateHolder.ActiveShiftCategories,
-							false, _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289), _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags,
+							_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289), _groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags,
 							"SchedulingOptions", _schedulerState.CommonStateHolder.ActiveActivities))
 					{
 						if (options.ShowDialog(this) == DialogResult.OK)
@@ -3099,8 +3064,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 				_schedulingOptions.WorkShiftLengthHintOption = WorkShiftLengthHintOption.Free;
 				using (
 					var options = new SchedulingSessionPreferencesDialog(_schedulingOptions,
-						new DaysOffPreferences(), _schedulerState.CommonStateHolder.ActiveShiftCategories,
-						false, _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289), 
+						_schedulerState.CommonStateHolder.ActiveShiftCategories,
+						_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289), 
 						_groupPagesProvider, _schedulerState.CommonStateHolder.ActiveScheduleTags, "SchedulingOptionsActivities",
 						_schedulerState.CommonStateHolder.ActiveActivities))
 				{
@@ -3549,33 +3514,20 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_undoRedo.CommitBatch();
 		}
 
-		[RemoveMeWithToggle("Remove argument.OptimizationMethod == OptimizationMethod.BackToLegalState", Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333)]
 		private void runBackgroupWorkerOptimization(DoWorkEventArgs e)
 		{
 			var argument = (SchedulingAndOptimizeArgument) e.Argument;
 			var dayOffOptimizationPreferenceProvider = new FixedDayOffOptimizationPreferenceProvider(argument.DaysOffPreferences);
-			if (argument.OptimizationMethod == OptimizationMethod.BackToLegalState)
-			{
-				_container.Resolve<BackToLegalStateExecuter>().Execute(
-					_schedulingOptions,
-					new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
-					_schedulerState,
-					argument.SelectedScheduleDays,
-					_optimizationPreferences,
-					dayOffOptimizationPreferenceProvider);
-			}
-			else
-			{
-				var selectedPeriod = new PeriodExtractorFromScheduleParts().ExtractPeriod(argument.SelectedScheduleDays).Value;
-				var selectedAgents = argument.SelectedScheduleDays.Select(x => x.Person).Distinct();
-				_container.Resolve<OptimizationDesktopExecuter>().Execute(
-					new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
-					_schedulerState,
-					selectedAgents,
-					selectedPeriod,
-					_optimizationPreferences, 
-					dayOffOptimizationPreferenceProvider);
-			}
+			var selectedPeriod = new PeriodExtractorFromScheduleParts().ExtractPeriod(argument.SelectedScheduleDays).Value;
+			var selectedAgents = argument.SelectedScheduleDays.Select(x => x.Person).Distinct();
+			_container.Resolve<OptimizationDesktopExecuter>().Execute(
+				new BackgroundWorkerWrapper(_backgroundWorkerOptimization),
+				_schedulerState,
+				selectedAgents,
+				selectedPeriod,
+				_optimizationPreferences, 
+				dayOffOptimizationPreferenceProvider);
+			
 		}
 
 		private void checkPastePermissions()
@@ -4432,10 +4384,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 			_gridChartManager.Create();
 			ColorHelper.SetRibbonQuickAccessTexts(ribbonControlAdv1);
 			ribbonControlAdv1.MenuButtonText = Resources.File;
-
-
-			if(_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_RemoveBackToLegalStateGui_44333))
-				toolStripMenuItemBackToLegalState.Visible = false;
 		}
 
 		private void ribbonTemplatePanelsClose()
