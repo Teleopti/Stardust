@@ -235,14 +235,14 @@ describe('Requests - Refactor(remove later) controller controllers',
 			var controller = setUpTarget().controller;
 			controller.activeAbsenceAndTextTab();
 			expect(fakeStateParams != undefined).toEqual(true);
-			expect(fakeState.current.name).toEqual('requestsRefactor.absenceAndText');
+			expect(fakeState.current.name).toEqual('requests.absenceAndText');
 		});
 
 		it('should get correct url when go to shift trade requests tab', function () {
 			var controller = setUpTarget().controller;
 			controller.activeShiftTradeTab();
 			expect(fakeStateParams != undefined).toEqual(true);
-			expect(fakeState.current.name).toEqual('requestsRefactor.shiftTrade');
+			expect(fakeState.current.name).toEqual('requests.shiftTrade');
 		});
 
 		it('should pass correct params to absence and text requests', function () {

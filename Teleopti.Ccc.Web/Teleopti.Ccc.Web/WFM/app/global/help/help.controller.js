@@ -18,15 +18,7 @@
 		});
 
 		$rootScope.$on('$stateChangeSuccess', function(event, next, toParams) {
-			//This 'requestsRefactor' string refer to toggle Wfm_Requests_Refactoring_45470 which
-			//will be replaced with 'requests' after the refactor version is tested and confirmed to be stable
-			if($state.current.name.indexOf('requestsRefactor') > -1)
-				vm.helpUrl = 'https://wiki.teleopti.com/TeleoptiWFM/' + 'Requests' + '.' + $state.current.name.split('.')[1];
-			else if($state.current.name.indexOf('requestsOrigin') > -1)
-				vm.helpUrl = 'https://wiki.teleopti.com/TeleoptiWFM/' + 'Requests';
-			else
-				vm.helpUrl = 'https://wiki.teleopti.com/TeleoptiWFM/' + $state.current.name;
-
+			vm.helpUrl = 'https://wiki.teleopti.com/TeleoptiWFM/' + $state.current.name;
 		});
 	}
 })();

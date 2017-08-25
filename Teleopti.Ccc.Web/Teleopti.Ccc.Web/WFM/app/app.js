@@ -58,8 +58,8 @@ var wfm = angular.module('wfm', [
 ]);
 
 wfm.config([
-	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', 'RtaStateProvider',
-	function ($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, RtaStateProvider) {
+	'$stateProvider', '$urlRouterProvider', '$translateProvider', '$httpProvider', 'RtaStateProvider', 'RequestsStateProvider', 
+	function ($stateProvider, $urlRouterProvider, $translateProvider, $httpProvider, RtaStateProvider, RequestsStateProvider) {
 
 		$urlRouterProvider.otherwise("/#");
 
@@ -69,6 +69,7 @@ wfm.config([
 		});
 
 		RtaStateProvider.config($stateProvider);
+		RequestsStateProvider.config($stateProvider);
 
 		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
 		$translateProvider.useUrlLoader('../api/Global/Language');
@@ -77,8 +78,8 @@ wfm.config([
 		$httpProvider.interceptors.push('httpInterceptor');
 	}
 ]).run([
-	'$rootScope', '$state', '$translate', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState', 'WfmShortcuts', '$locale',
-	function ($rootScope, $state, $translate, $timeout, currentUserInfo, toggleService, $q, RtaState, WfmShortcuts, $locale) {
+	'$rootScope', '$state', '$translate', '$timeout', 'CurrentUserInfo', 'Toggle', '$q', 'RtaState', 'RequestsState', 'WfmShortcuts', '$locale',
+	function ($rootScope, $state, $translate, $timeout, currentUserInfo, toggleService, $q, RtaState, RequestsState, WfmShortcuts, $locale) {
 		$rootScope.isAuthenticated = false;
 
 		(function broadcastEventOnToggle() {
@@ -121,6 +122,7 @@ wfm.config([
 		});
 
 		RtaState(toggleService);
+		RequestsState(toggleService);
 	}
 
 ]);
