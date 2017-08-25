@@ -36,13 +36,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			var islands = CreateIslands(command.Period, command);
 			var events = command.RunAsynchronously
-				? CreateWebIntradayOptimizationStardustEvents(command, islands, _gridLockManager.LockInfos())
-				: CreateOptimizationWasOrderedEvents(command, islands, _gridLockManager.LockInfos());
+				? createWebIntradayOptimizationStardustEvents(command, islands, _gridLockManager.LockInfos())
+				: createOptimizationWasOrderedEvents(command, islands, _gridLockManager.LockInfos());
 			_eventPublisher.Publish(events.ToArray());
 		}
 
 
-		private IEnumerable<IEvent> CreateOptimizationWasOrderedEvents(IntradayOptimizationCommand command, IEnumerable<Island> islands, IEnumerable<LockInfo> lockInfos)
+		private static IEnumerable<IEvent> createOptimizationWasOrderedEvents(IntradayOptimizationCommand command, IEnumerable<Island> islands, IEnumerable<LockInfo> lockInfos)
 		{
 			var events = new List<IntradayOptimizationWasOrdered>();
 
@@ -54,53 +54,35 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 
 				if (agentsToOptimize.Any())
 				{
-					var optimizationWasOrdered = createOptimizationWasOrderedEvent(command, lockInfos, agentsInIsland, agentsToOptimize, island);
+					var optimizationWasOrdered = new IntradayOptimizationWasOrdered
+					{
+						StartDate = command.Period.StartDate,
+						EndDate = command.Period.EndDate,
+						RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
+						AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
+						AgentsToOptimize = agentsToOptimize.Select(x => x.Id.Value),
+						CommandId = command.CommandId,
+						UserLocks = lockInfos,
+						Skills = island.SkillIds()
+					};
 					events.Add(optimizationWasOrdered);
 				}
 			}
 			return events;
 		}
 
-		private IEnumerable<IEvent> CreateWebIntradayOptimizationStardustEvents(IntradayOptimizationCommand command, IEnumerable<Island> islands, IEnumerable<LockInfo> lockInfos)
+		private static IEnumerable<IEvent> createWebIntradayOptimizationStardustEvents(IntradayOptimizationCommand command, IEnumerable<Island> islands, IEnumerable<LockInfo> lockInfos)
 		{
-			var events = new List<WebIntradayOptimizationStardustEvent>();
-
-			foreach (var island in islands)
+			var orgEvents = createOptimizationWasOrderedEvents(command, islands, lockInfos);
+			var stardustEvents = orgEvents.Select(x => new WebIntradayOptimizationStardustEvent {IntradayOptimizationWasOrdered = (IntradayOptimizationWasOrdered)x}).ToArray();
+			var numberOfEvents = stardustEvents.Length;
+			foreach (var stardustEvent in stardustEvents)
 			{
-				var agentsInIsland = island.AgentsInIsland();
-				var agentsToOptimize = command.AgentsToOptimize?.Where(x => agentsInIsland.Contains(x)).ToArray()
-									   ?? agentsInIsland;
-
-				if (agentsToOptimize.Any())
-				{
-					var optimizationWasOrdered = createOptimizationWasOrderedEvent(command, lockInfos, agentsInIsland, agentsToOptimize, island);
-					events.Add(new WebIntradayOptimizationStardustEvent
-					{
-						IntradayOptimizationWasOrdered = optimizationWasOrdered
-					});
-				}
+				stardustEvent.TotalEvents = numberOfEvents;
+				stardustEvent.JobResultId = command.JobResultId.Value;
+				stardustEvent.PlanningPeriodId = command.PlanningPeriodId.Value;
 			}
-			events.ForEach(e => e.TotalEvents = events.Count);
-			if (command.JobResultId != null)
-				events.ForEach(e => e.JobResultId = command.JobResultId.Value);
-			if (command.PlanningPeriodId != null)
-				events.ForEach(e => e.PlanningPeriodId = command.PlanningPeriodId.Value);
-			return events;
-		}
-
-		private static IntradayOptimizationWasOrdered createOptimizationWasOrderedEvent(IntradayOptimizationCommand command, IEnumerable<LockInfo> lockInfos, IEnumerable<IPerson> agentsInIsland, IEnumerable<IPerson> agentsToOptimize, Island island)
-		{
-			return new IntradayOptimizationWasOrdered
-			{
-				StartDate = command.Period.StartDate,
-				EndDate = command.Period.EndDate,
-				RunResolveWeeklyRestRule = command.RunResolveWeeklyRestRule,
-				AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
-				AgentsToOptimize = agentsToOptimize.Select(x => x.Id.Value),
-				CommandId = command.CommandId,
-				UserLocks = lockInfos,
-				Skills = island.SkillIds()
-			};
+			return stardustEvents;
 		}
 
 		[UnitOfWork]
