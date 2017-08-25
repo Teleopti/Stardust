@@ -182,6 +182,29 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.False();
 		}
 
+		[Test]
+		[Ignore("Failing test for #45614")]
+		public void ShouldRespectAccessibility([Values(true, false)]bool blockedByAccessibility)
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var monday = new DateOnly(2017, 8, 21);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("_");
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet8 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var ruleSet10 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(10, 0, 10, 0, 15), new TimePeriodWithSegment(18, 0, 18, 0, 15), shiftCategory));
+			var bag = new RuleSetBag(ruleSet8, ruleSet10);
+			ruleSet8.AddAccessibilityDayOfWeek(blockedByAccessibility ? DayOfWeek.Monday : DayOfWeek.Tuesday);
+			var agent = PersonRepository.Has(new SchedulePeriod(monday, SchedulePeriodType.Day, 1), bag, skill);
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(scenario, monday, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2)));
+
+			Target.DoScheduling(monday.ToDateOnlyPeriod());
+
+			AssignmentRepository.GetSingle(monday, agent).Period.StartDateTime.Hour
+				.Should().Be.EqualTo(blockedByAccessibility ? 10 : 8);
+		}
+
 		public FullSchedulingTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
 		{
 		}
