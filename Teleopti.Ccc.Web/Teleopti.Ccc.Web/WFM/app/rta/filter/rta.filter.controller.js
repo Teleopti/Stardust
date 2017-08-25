@@ -36,7 +36,7 @@
 		var teamIds = $stateParams.teamIds || [];
 		var skillIds = angular.isArray($stateParams.skillIds) ? $stateParams.skillIds[0] || null : $stateParams.skillIds;
 		var skillAreaId = $stateParams.skillAreaId || undefined;
-		var agentsState = "rta.agents";
+		var agentsState = "rta-agents";
 		// scoped variables
 		vm.teamsSelected = [];
 		vm.selectFieldText;
@@ -249,7 +249,7 @@
 		}
 
 		function stateGoToAgents(selection) {
-			var stateName = 'rta.agents';
+			var stateName = 'rta-agents';
 			var options = {
 				reload: true,
 				notify: true

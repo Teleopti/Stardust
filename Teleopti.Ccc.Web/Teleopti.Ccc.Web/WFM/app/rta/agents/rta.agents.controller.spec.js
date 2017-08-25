@@ -184,7 +184,7 @@ describe('RtaAgentsController', function () {
 			$sessionStorage.buid = "99a4b091-eb7a-4c2f-b5a6-a54100d88e8e";
 		});
 
-		expect($state.go).toHaveBeenCalledWith('refact-rta');
+		expect($state.go).toHaveBeenCalledWith('rta');
 	});
 
 	it('should get adherence percentage for agent when clicked', function () {

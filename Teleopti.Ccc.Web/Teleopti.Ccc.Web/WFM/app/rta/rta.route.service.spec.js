@@ -20,7 +20,7 @@ describe('rtaRouteService', function () {
 
 		target.goToOverview();
 
-		expect($state.go).toHaveBeenCalledWith('refact-rta');
+		expect($state.go).toHaveBeenCalledWith('rta');
 	});
 
 	it('should get change schedule url for an agent', function () {

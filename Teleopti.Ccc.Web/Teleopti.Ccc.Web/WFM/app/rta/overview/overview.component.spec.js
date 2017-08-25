@@ -468,7 +468,7 @@ describe('rtaOverviewComponent', function () {
       agentsState: vm.agentsState
     });
 
-    expect(ctrl.agentsState).toEqual('rta.agents({siteIds: card.site.Id})');
+    expect(ctrl.agentsState).toEqual('rta-agents({siteIds: card.site.Id})');
   });
 
   it('should set agents state for site with skill', function () {
@@ -484,7 +484,7 @@ describe('rtaOverviewComponent', function () {
       agentsState: vm.agentsState
     });
 
-    expect(ctrl.agentsState).toEqual('rta.agents({siteIds: card.site.Id, skillIds: ["channelSalesId"]})');
+    expect(ctrl.agentsState).toEqual('rta-agents({siteIds: card.site.Id, skillIds: ["channelSalesId"]})');
   });
 
   it('should set agents state for site with skill area', function () {
@@ -499,7 +499,7 @@ describe('rtaOverviewComponent', function () {
       agentsState: vm.agentsState
     });
 
-    expect(ctrl.agentsState).toEqual('rta.agents({siteIds: card.site.Id, skillAreaId: "skillArea1Id"})');
+    expect(ctrl.agentsState).toEqual('rta-agents({siteIds: card.site.Id, skillAreaId: "skillArea1Id"})');
   });
 
   it('should set agents state for site when clearing filter selection', function () {
@@ -518,7 +518,7 @@ describe('rtaOverviewComponent', function () {
       agentsState: vm.agentsState
     });
 
-    expect(ctrl.agentsState).toEqual('rta.agents({siteIds: card.site.Id})');
+    expect(ctrl.agentsState).toEqual('rta-agents({siteIds: card.site.Id})');
   });
 
   it('should select site', function () {

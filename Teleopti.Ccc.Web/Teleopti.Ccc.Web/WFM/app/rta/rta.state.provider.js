@@ -16,11 +16,13 @@ angular
 
         this.config = function ($stateProvider) {
             $stateProvider
-                .state('rta', {
+                .state('rta-without-slash', {
                     url: '/rta',
-                    templateUrl: 'app/rta/rta.html'
+                    controller: function ($state) {
+                        $state.go('rta')
+                    }
                 })
-                .state('refact-rta', {
+                .state('rta', {
                     url: '/rta/?skillIds?skillAreaId?open',
                     templateUrl: 'app/rta/overview/rta.html',
                     controller: 'RtaMainController as vm',
@@ -40,8 +42,8 @@ angular
                         }
                     }
                 })
-                .state('rta.agents', {
-                    url: '/agents/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',
+                .state('rta-agents', {
+                    url: '/rta/agents/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',
                     templateUrl: 'app/rta/agents/rta-agents.html',
                     controller: 'RtaAgentsController as vm',
                     params: {
@@ -59,8 +61,8 @@ angular
                         }
                     }
                 })
-                .state('rta.historical', {
-                    url: '/agent-historical/:personId?open',
+                .state('rta-historical', {
+                    url: '/rta/agent-historical/:personId?open',
                     templateUrl: function () {
                         if (toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)
                             return 'app/rta/historical/rta-historical-RTA_SolidProofWhenManagingAgentAdherence_39351.html'
@@ -74,7 +76,7 @@ angular
                 .state('rta-teams-legacy', {
                     url: '/rta/teams/?siteIds&skillIds&skillAreaId&open',
                     controller: function ($state, $stateParams) {
-                        $state.go('refact-rta', $stateParams)
+                        $state.go('rta', $stateParams)
                     }
                 })
         };

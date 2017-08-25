@@ -253,7 +253,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: ['LondonGuid'],
 			teamIds: []
 		}, {
@@ -287,7 +287,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: ['LondonGuid', 'ParisGuid'],
 			teamIds: []
 		}, {
@@ -315,7 +315,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: [],
 			teamIds: ['LondonTeam1']
 		}, {
@@ -353,7 +353,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: [],
 			teamIds: ['LondonTeam1', 'ParisTeam1']
 		}, {
@@ -391,7 +391,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: ['LondonGuid'],
 			teamIds: ['ParisTeam1']
 		}, {
@@ -430,7 +430,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: [],
 			teamIds: ['ParisTeam1']
 		}, {
@@ -467,7 +467,7 @@ describe('RtaFilterController', function () {
 				vm.goToAgents();
 			});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: ['ParisGuid'],
 			teamIds: []
 		}, {
@@ -633,7 +633,7 @@ describe('RtaFilterController', function () {
 			vm.sites[0].toggle();
 			vm.goToAgents();
 		})
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: ['LondonGuid', 'ParisGuid'],
 			teamIds: []
 		}, {
@@ -750,7 +750,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		})
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: ['LondonGuid'],
 			teamIds: ['ParisTeam2']
 		}, {
@@ -845,7 +845,7 @@ describe('RtaFilterController', function () {
 
 		})
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: ['ParisGuid'],
 			teamIds: []
 		}, {
@@ -875,7 +875,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		})
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: [],
 			teamIds: ['ParisTeam1']
 		}, {
@@ -913,7 +913,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		})
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: [],
 			teamIds: []
 		}, {
@@ -941,7 +941,7 @@ describe('RtaFilterController', function () {
 	});
 
 	it('should go to agents with skill when on agents view', function () {
-		$state.current.name = "rta.agents";
+		$state.current.name = "rta-agents";
 		$fakeBackend.withSkill({
 			Id: "phoneSkillGuid"
 		})
@@ -954,7 +954,7 @@ describe('RtaFilterController', function () {
 			});
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			skillIds: 'phoneSkillGuid',
 			skillAreaId: undefined,
 			siteIds: [],
@@ -966,7 +966,7 @@ describe('RtaFilterController', function () {
 	});
 
 	it('should go to agents with skillArea when on agents view', function () {
-		$state.current.name = "rta.agents";
+		$state.current.name = "rta-agents";
 		$fakeBackend.withSkillAreas([{
 			Id: "phoneAndEmailGuid"
 		}]);
@@ -979,7 +979,7 @@ describe('RtaFilterController', function () {
 			});
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			skillAreaId: 'phoneAndEmailGuid',
 			skillIds: [],
 			siteIds: [],
@@ -991,7 +991,7 @@ describe('RtaFilterController', function () {
 	});
 
 	it('should go to agents by skillArea and clear skill from stateParams when on agents view', function () {
-		$state.current.name = "rta.agents";
+		$state.current.name = "rta-agents";
 		stateParams.skillIds = ["phoneSkillGuid"];
 		$fakeBackend
 			.withSkill({
@@ -1014,7 +1014,7 @@ describe('RtaFilterController', function () {
 			});
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			skillAreaId: 'phoneAndEmailGuid',
 			skillIds: [],
 			siteIds: [],
@@ -1026,7 +1026,7 @@ describe('RtaFilterController', function () {
 	});
 
 	it('should go to agents by skill and clear skillArea from stateParams when on agents view', function () {
-		$state.current.name = "rta.agents";
+		$state.current.name = "rta-agents";
 		stateParams.skillAreaId = "phoneAndEmailGuid";
 		$fakeBackend
 			.withSkill({
@@ -1049,7 +1049,7 @@ describe('RtaFilterController', function () {
 			});
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			skillAreaId: undefined,
 			skillIds: "phoneSkillGuid",
 			siteIds: [],
@@ -1061,7 +1061,7 @@ describe('RtaFilterController', function () {
 	});
 
 	it('should go to agents by skill and clear site from stateParams when on agents view', function () {
-		$state.current.name = "rta.agents";
+		$state.current.name = "rta-agents";
 		stateParams.skillAreaId = "phoneAndEmailGuid";
 		stateParams.siteIds = ['londonGuid'];
 		$fakeBackend
@@ -1097,7 +1097,7 @@ describe('RtaFilterController', function () {
 			});
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			skillAreaId: undefined,
 			skillIds: "phoneGuid",
 			siteIds: [],
@@ -1109,7 +1109,7 @@ describe('RtaFilterController', function () {
 	});
 
 	it('should go to agents by skill area and clear site from stateParams when on agents view', function () {
-		$state.current.name = "rta.agents";
+		$state.current.name = "rta-agents";
 		stateParams.skillIds = "phoneGuid";
 		stateParams.siteIds = ['londonGuid'];
 		$fakeBackend
@@ -1145,7 +1145,7 @@ describe('RtaFilterController', function () {
 			});
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			skillAreaId: "phoneAndEmailGuid",
 			skillIds: [],
 			siteIds: [],
@@ -1173,7 +1173,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: [],
 			teamIds: ['TeamGuid']
 		}, {
@@ -1207,7 +1207,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: ['LondonGuid'],
 			teamIds: ['TeamParisGuid']
 		}, {
@@ -1241,7 +1241,7 @@ describe('RtaFilterController', function () {
 			vm.goToAgents();
 		});
 
-		expect($state.go).toHaveBeenCalledWith('rta.agents', {
+		expect($state.go).toHaveBeenCalledWith('rta-agents', {
 			siteIds: ['LondonGuid'],
 			teamIds: ['TeamParisGuid']
 		}, {
