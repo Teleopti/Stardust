@@ -133,17 +133,10 @@
 		<div class="con-flex">
 			<div class="panel material-depth-1">
 				<div class="wfm-slide-tabs tabbed-panel">
-					<div class="head-actions panel-menu" ng-show="toggles.exportToExcel">
+					<div class="head-actions panel-menu" ng-show="toggles.exportToExcel" >
 						<div tabindex=0 class="context-menu card-context">
-							<i class="mdi mdi-dots-vertical"></i>
-							<span class="context-menu-left">
-								<ul class="wfm-list">
-									<li ng-show="toggles.exportToExcel" ng-click="exportIntradayData()">
-										<i class="mdi mdi-file-excel"></i>
-										<md-tooltip>Export to excel</md-tooltip>
-									</li>
-								</ul>
-							</span>
+							<i class="mdi mdi-file-excel" ng-click="exportIntradayData()"></i>
+							<md-tooltip>{{'ExportToExcel'|translate}}</md-tooltip> 
 						</div>
 					</div>
 					<md-content class="md-padding">
@@ -154,13 +147,14 @@
 								</h2>
 							</div>
 						</div>
+
 						<md-tabs md-dynamic-height md-selected="activeTab">
 							<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
 								<md-content ng-cloak class="md-padding">
 									<div class="con-row">
 										<div class="con-flex" style="height: 15px">
 											<md-progress-linear ng-if="viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
-										</div> 
+										</div>
 									</div>
 								</md-content>
 								<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">

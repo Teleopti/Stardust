@@ -16438,6 +16438,9 @@ Do you want to participate?</value>
     <value>Selection is too large</value>
     <comment>Selection is too large</comment>
   </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>Export to Excel</value>
+  </data>
   <data name="SkillAreaNoSkillSelected" xml:space="preserve">
     <value>You need to select at least one skill.</value>
     <comment>Error messeage shown when creating skillarea</comment>
