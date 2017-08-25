@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public Person Has(params ISkill[] skills)
 		{
-			return Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, new SchedulePeriod(DateOnly.MinValue, SchedulePeriodType.Day, 1), skills);
+			return Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("_") }, new SchedulePeriod(DateOnly.MinValue, SchedulePeriodType.Day, 1), skills);
 		}
 
 		public Person Has(IContract contract, ISchedulePeriod schedulePeriod, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
