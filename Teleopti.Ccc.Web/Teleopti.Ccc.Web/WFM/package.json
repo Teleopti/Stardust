@@ -7,9 +7,6 @@
   "dependencies": {
     "angular-i18n": "1.4.5"
   },
-  "engines": {
-    "node": ">=4.0.0"
-  },
   "devDependencies": {
     "angular": "1.5.9",
     "angular-animate": "1.5.9",
@@ -78,21 +75,19 @@
     "pretest": "npm run concat:html",
     "test": "karma start karma.conf.js",
     "devTest": "npm test -- --reporters dots --no-single-run --autoWatchBatchDelay 1000",
-    "minify:css": ".\\node_modules\\.bin\\cleancss.cmd --source-map './css/style_classic.css' -o ./dist/dist.min.css",
-    "prestart": "..\\.node\\grunt devDist && start http://localhost:52858/TeleoptiWFM/Web/",
-    "start": ".\\node_modules\\.bin\\run-p.cmd iis watch:* ",
+    "minify:css": ".\\node_modules\\.bin\\cleancss --source-map './css/style_classic.css' -o ./dist/dist.min.css",
+    "prestart": "..\\.node\\grunt.cmd devDist && start http://localhost:52858/TeleoptiWFM/Web/",
+    "start": ".\\node_modules\\.bin\\run-p iis watch:* ",
     "iis": "c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site",
     "sass": "npm run sass:classic && npm run sass:dark",
-    "sass:classic": ".\\node_modules\\.bin\\node-sass.cmd  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/style.scss > ./dist/style_classic.min.css",
-    "sass:dark": ".\\node_modules\\.bin\\node-sass.cmd  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/darkstyle.scss > ./dist/style_dark.min.css",
-    "concat:js": ".\\node_modules\\.bin\\ncat.cmd  \"./app/**/!(*.spec|*.fake|*.fortest|app_desktop_client).js\" -o ./dist/main.js ",
-    "concat:html": ".\\node_modules\\.bin\\nghtml2js.cmd -m wfm.templates -f app/**/*.html -o ./dist/templates.js",
-    "watch:js": ".\\node_modules\\.bin\\onchange.cmd ./app/**/*.js -v -- npm run eslint:js {{changed}}",
-    "watch:sass": ".\\node_modules\\.bin\\onchange.cmd ./css/*.scss  -v -- npm run sass",
-    "watch:html": ".\\node_modules\\.bin\\onchange.cmd ./app/**/*.html  -v -- npm run concat:html",
-    "eslint:js": ".\\node_modules\\.bin\\eslint.cmd",
-    "preeslint:js": "npm run concat:js",
-    "//":" ## use this npm run scripts by install node locally ------> [ npm run 'task_name' ]
-           ## or use this npm run scrips by using the node in project -------> [..\.node\npm.cmd run 'task_name' ]"
+    "sass:classic": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/style.scss > ./dist/style_classic.min.css",
+    "sass:dark": ".\\node_modules\\.bin\\node-sass  --output-style compressed  --include-path node_modules/teleopti-styleguide/styleguide/sass ./css/darkstyle.scss > ./dist/style_dark.min.css",
+    "concat:js": ".\\node_modules\\.bin\\ncat  \"./app/**/!(*.spec|*.fake|*.fortest|app_desktop_client).js\" --map -o ./dist/main.js ",
+    "concat:html": "nghtml2js -m wfm.templates -f app/**/*.html -o ./dist/templates.js",
+    "watch:js": ".\\node_modules\\.bin\\onchange ./app/**/*.js -v -- npm run eslintJS {{changed}}",
+    "watch:sass": ".\\node_modules\\.bin\\onchange ./css/*.scss  -v -- npm run sass",
+    "watch:html": ".\\node_modules\\.bin\\onchange ./app/**/*.html  -v -- npm run concat:html",
+    "eslintJS":".\\node_modules\\.bin\\eslint",
+    "preeslintJS":"npm run concat:js"
   }
 }
