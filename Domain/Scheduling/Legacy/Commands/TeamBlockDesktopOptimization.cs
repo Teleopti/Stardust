@@ -35,10 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IResourceCalculateDelayer resourceCalculateDelayer, ITeamBlockGenerator teamBlockGenerator)
 		{
-			//remove this...
-			base.optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, allMatrixes, schedulePartModifyAndRollbackService, resourceCalculateDelayer, teamBlockGenerator);
-			//and run this instead to fix #45542 (currently red tests though)
-			//_optimizeIntradayIslandsDesktop.Optimize(selectedPersons, selectedPeriod, optimizationPreferences, new IntradayOptimizationCallback(_backgroundWorker));
+			_optimizeIntradayIslandsDesktop.Optimize(selectedPersons, selectedPeriod, optimizationPreferences, new IntradayOptimizationCallback(_backgroundWorker));
 		}
 	}
 

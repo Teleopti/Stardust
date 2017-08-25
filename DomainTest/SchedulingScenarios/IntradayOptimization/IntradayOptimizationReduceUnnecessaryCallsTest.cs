@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -24,6 +25,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 {
 	[DomainTest]
 	[UseIocForFatClient]
+	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
+	[LoggedOnAppDomain]
 	public class IntradayOptimizationReduceUnnecessaryCallsTest : IntradayOptimizationScenarioTest, ISetup
 	{
 		public OptimizationDesktopExecuter Target;
