@@ -757,7 +757,7 @@
     <value>Credenciales no válidas. Por favor inténtelo de nuevo.</value>
   </data>
   <data name="IsFullDayAbsence" xml:space="preserve">
-    <value>Día Completo de Ausencia</value>
+    <value>Ausencia de día completo</value>
   </data>
   <data name="IsIn" xml:space="preserve">
     <value>Tiene</value>
@@ -1291,10 +1291,10 @@
     <value>Planificación Seleccionada</value>
   </data>
   <data name="ScheduleViews" xml:space="preserve">
-    <value>Vistas de la Planificación</value>
+    <value>Vistas del Horario</value>
   </data>
   <data name="Scheduling" xml:space="preserve">
-    <value>Planificando</value>
+    <value>Planificiones</value>
   </data>
   <data name="SchedulingScreen" xml:space="preserve">
     <value>Pantalla de Planificación</value>
@@ -1528,7 +1528,7 @@
     <value>Teleopti WFM: Portal Principal</value>
   </data>
   <data name="TeleoptiRaptorColonScheduler" xml:space="preserve">
-    <value>Teleopti WFM: Schedules</value>
+    <value>Teleopti WFM: Horarios</value>
   </data>
   <data name="Template" xml:space="preserve">
     <value>Plantilla</value>
@@ -1765,10 +1765,10 @@
     <value>La fecha de finalización debe ser posterior a la fecha de inicio.</value>
   </data>
   <data name="EmptyRequest" xml:space="preserve">
-    <value>Petición vacía</value>
+    <value>Solicitud vacía</value>
   </data>
   <data name="RequestsSummary" xml:space="preserve">
-    <value>Resumen de Peticiones</value>
+    <value>Resumen de Solicitudes</value>
   </data>
   <data name="EmploymentTypeFixedStaff" xml:space="preserve">
     <value>Personal Fijo</value>
@@ -1810,10 +1810,10 @@
     <value>Personal disponible</value>
   </data>
   <data name="RequestDate" xml:space="preserve">
-    <value>Fecha de petición</value>
+    <value>Fecha de solicitud</value>
   </data>
   <data name="RequestStatus" xml:space="preserve">
-    <value>Estado de la petición</value>
+    <value>Estado de la solicitud</value>
   </data>
   <data name="RolesAvailable" xml:space="preserve">
     <value>Roles disponibles</value>
@@ -1831,7 +1831,7 @@
     <value>Bolsa de turnos</value>
   </data>
   <data name="AbsenceRequest" xml:space="preserve">
-    <value>Petición de Ausencia</value>
+    <value>Solicitud de Ausencia</value>
   </data>
   <data name="AgentName" xml:space="preserve">
     <value>Nombre del Agente</value>
@@ -1843,10 +1843,10 @@
     <value>Hasta</value>
   </data>
   <data name="NewAbsenceRequest" xml:space="preserve">
-    <value>Nueva Petición de Ausencia</value>
+    <value>Nueva Solicitud de Ausencia</value>
   </data>
   <data name="Requests" xml:space="preserve">
-    <value>Peticiones</value>
+    <value>Solicitudes</value>
   </data>
   <data name="PrintSchedule" xml:space="preserve">
     <value>Imprimir Planificación</value>
@@ -2446,7 +2446,7 @@
     <value>Duración</value>
   </data>
   <data name="InvalidRequest" xml:space="preserve">
-    <value>Petición no válida</value>
+    <value>Solicitud no válida</value>
   </data>
   <data name="MeetingLocationRequired" xml:space="preserve">
     <value>Rellene su ubicación!</value>
@@ -2726,7 +2726,7 @@ Opcionales</value>
     <value>Promedio e-mails</value>
   </data>
   <data name="AverageHandlingTime" xml:space="preserve">
-    <value>Promedio tiempo de gestión</value>
+    <value>Tiempo de gestión promedio</value>
   </data>
   <data name="OriginalAEW" xml:space="preserve">
     <value>AEW Original</value>
@@ -2783,7 +2783,7 @@ Opcionales</value>
     <value>Tiempo de gestión promedio validado</value>
   </data>
   <data name="NewRequest" xml:space="preserve">
-    <value>Nueva petición</value>
+    <value>Nueva solicitud</value>
   </data>
   <data name="DefineOrganization" xml:space="preserve">
     <value>Definir Organización</value>
@@ -2792,7 +2792,7 @@ Opcionales</value>
     <value>Definir Jerarquía</value>
   </data>
   <data name="ShowRequests" xml:space="preserve">
-    <value>Mostrar Peticiones</value>
+    <value>Mostrar Solicitudes</value>
   </data>
   <data name="LoadingThreeDots" xml:space="preserve">
     <value>Cargando...</value>
@@ -3089,7 +3089,7 @@ Opcionales</value>
     <value>Sobredimens.</value>
   </data>
   <data name="SeriousUnderstaffing" xml:space="preserve">
-    <value>Infradim.Crítico</value>
+    <value>Infradim. crítico</value>
   </data>
   <data name="Thresholds" xml:space="preserve">
     <value>Umbrales</value>
@@ -3098,7 +3098,7 @@ Opcionales</value>
     <value>Infradimens.</value>
   </data>
   <data name="BallonTipScheduleChange" xml:space="preserve">
-    <value>Su Planificación ha cambiado. Haga click aquí para ver la Planificación actualizada.</value>
+    <value>Tu horario ha cambiado. Haga click aquí para ver el horario actualizado.</value>
   </data>
   <data name="Agent" xml:space="preserve">
     <value>Agente</value>
@@ -3134,7 +3134,7 @@ Opcionales</value>
     <value>Pendiente</value>
   </data>
   <data name="RequestType" xml:space="preserve">
-    <value>Tipo de Petición</value>
+    <value>Tipo de Solicitud</value>
   </data>
   <data name="RequestTypeAbsence" xml:space="preserve">
     <value>Ausencia</value>
@@ -3194,10 +3194,10 @@ Opcionales</value>
     <value>Fin</value>
   </data>
   <data name="Request" xml:space="preserve">
-    <value>Petición</value>
+    <value>Solicitud</value>
   </data>
   <data name="RequestScreen" xml:space="preserve">
-    <value>Pantalla de peticiones</value>
+    <value>Pantalla de Solicitudes</value>
   </data>
   <data name="SaveClose" xml:space="preserve">
     <value>Guardar &amp;&amp; Cerrar</value>
@@ -3218,7 +3218,7 @@ Opcionales</value>
     <value>Denegar</value>
   </data>
   <data name="HandleRequests" xml:space="preserve">
-    <value>Gestionar Peticiones</value>
+    <value>Gestionar Solicitudes</value>
   </data>
   <data name="SortOn" xml:space="preserve">
     <value>Ordenar</value>
@@ -3227,7 +3227,7 @@ Opcionales</value>
     <value>Orden de Clasificación</value>
   </data>
   <data name="SortRequests" xml:space="preserve">
-    <value>Ordenar Peticiones</value>
+    <value>Ordenar Solicitudes</value>
   </data>
   <data name="AtoZ" xml:space="preserve">
     <value>de A a Z</value>
@@ -3268,6 +3268,9 @@ Opcionales</value>
   <data name="EnterPublishingDates" xml:space="preserve">
     <value>Introducir Fechas de Publicación para cada Equipo</value>
   </data>
+  <data name="FilterTeams" xml:space="preserve">
+    <value>Filtro Equipos</value>
+  </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
     <value>Fechas de Publicación de la Planificación</value>
   </data>
@@ -3299,7 +3302,7 @@ Opcionales</value>
     <value>Error de tiempo</value>
   </data>
   <data name="UseForRequests" xml:space="preserve">
-    <value>Uso de las peticiones</value>
+    <value>Uso de las solicitudes</value>
   </data>
   <data name="DefaultRuleSetBagName" xml:space="preserve">
     <value>&lt;Nombre de la bolsa de conjunto de reglas&gt;</value>
@@ -3385,10 +3388,10 @@ rechazar</value>
     <value>El asunto no puede estar vacío</value>
   </data>
   <data name="RequestDateColon" xml:space="preserve">
-    <value>Fecha de la petición:</value>
+    <value>Fecha de la solicitud:</value>
   </data>
   <data name="RequestStatusColon" xml:space="preserve">
-    <value>Estado de la petición:</value>
+    <value>Estado de la solicitud:</value>
   </data>
   <data name="Site" xml:space="preserve">
     <value>Site</value>
@@ -3400,13 +3403,13 @@ rechazar</value>
     <value>Añadir Actividad de tiempo</value>
   </data>
   <data name="ShiftTradeRequest" xml:space="preserve">
-    <value>Petición de Cambio de Turno</value>
+    <value>Solicitud de Cambio de Turno</value>
   </data>
   <data name="Respond" xml:space="preserve">
     <value>Responder</value>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>Nueva Petición de Cambio de Turno</value>
+    <value>Nueva Solicitud de Cambio de Turno</value>
   </data>
   <data name="EarlyStart" xml:space="preserve">
     <value>Hora inicio temprana</value>
@@ -3522,10 +3525,10 @@ Workload</value>
 Estándar</value>
   </data>
   <data name="NewTextRequest" xml:space="preserve">
-    <value>Siguiente Petición de Texto</value>
+    <value>Nueva Solicitud de Texto</value>
   </data>
   <data name="TextRequest" xml:space="preserve">
-    <value>Petición de Texto</value>
+    <value>Solicitud de Texto</value>
   </data>
   <data name="ChangeYourOrganizationTree" xml:space="preserve">
     <value>Cambie la estructura de su organización</value>
@@ -3871,13 +3874,13 @@ Recargando...</value>
     <value>Borrar Escenario</value>
   </data>
   <data name="CreateAbsenceRequest" xml:space="preserve">
-    <value>Petición de Ausencia</value>
+    <value>Solicitud de Ausencia</value>
   </data>
   <data name="CreateShiftTradeRequest" xml:space="preserve">
-    <value>Petición de cambio de turno</value>
+    <value>Solicitud de cambio de turno</value>
   </data>
   <data name="CreateTextRequest" xml:space="preserve">
-    <value>Crear peticiones de texto</value>
+    <value>Crear solicitudes de texto</value>
   </data>
   <data name="OpenScorecard" xml:space="preserve">
     <value>Scorecards</value>
@@ -4093,7 +4096,7 @@ Recargando...</value>
     <value>Por favor añada Contratos, Contrato Planificado, Porcentajes de Tiempo Parcial, Equipos desde la Página de Configuración para cargar la Vista del Período Personal</value>
   </data>
   <data name="People" xml:space="preserve">
-    <value>personas</value>
+    <value>Personas</value>
   </data>
   <data name="SwapCannotBePerformed" xml:space="preserve">
     <value>El intercambio no puede llevarse a cabo</value>
@@ -5190,7 +5193,7 @@ Actualizado en: {1}</value>
     <value>Pegar</value>
   </data>
   <data name="UndoRedoPersonRequest" xml:space="preserve">
-    <value>Finalizando petición por {0}</value>
+    <value>Finalizando solicitud para el {0}</value>
   </data>
   <data name="UndoRedoReOptimize" xml:space="preserve">
     <value>Optimizar</value>
@@ -5319,7 +5322,7 @@ Actualizado en: {1}</value>
     <value>Solicitado por:</value>
   </data>
   <data name="RequestForm" xml:space="preserve">
-    <value>Petición</value>
+    <value>Solicitud</value>
   </data>
   <data name="RequestResponseAction" xml:space="preserve">
     <value>Acción de responder</value>
@@ -5454,7 +5457,7 @@ Actualizado en: {1}</value>
     <value>La generación de exportaciones de nóminas comenzará ahora en el servidor. Puede continuar trabajando con otras tareas en el sistema.</value>
   </data>
   <data name="SystemIsBusyWithBackgroundRequest" xml:space="preserve">
-    <value>El sistema está ocupado trabajando en otra petición interna. Por favor inténtelo de nuevo más tarde.</value>
+    <value>El sistema está ocupado trabajando en otra solicitud interna. Por favor inténtelo de nuevo más tarde.</value>
   </data>
   <data name="ReportLevel" xml:space="preserve">
     <value>Reportar como</value>
@@ -5511,7 +5514,7 @@ Actualizado en: {1}</value>
     <value>Referido</value>
   </data>
   <data name="TheScheduleHasChanged" xml:space="preserve">
-    <value>La planificación se ha cambiado. Esta petición deberá ser aceptada de nuevo.</value>
+    <value>La planificación se ha cambiado. Esta solicitud deberá ser aceptada de nuevo.</value>
   </data>
   <data name="SelectMultipleDates" xml:space="preserve">
     <value>Seleccionar múltiples fechas</value>
@@ -5759,31 +5762,31 @@ Teleopti R&amp;D</value>
     <value>Está seguro de que quiere borrar la rotación?</value>
   </data>
   <data name="AbsenceRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>Una petición de ausencia ha sido aprobada.</value>
+    <value>Una solicitud de ausencia {0} - {1} ha sido aprobada.</value>
   </data>
   <data name="AbsenceRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>Una petición de ausencia ha sido rechazada desde {0} hasta {1}.</value>
+    <value>Una solicitud de ausencia ha sido rechazada desde {0} hasta {1}.</value>
   </data>
   <data name="Details" xml:space="preserve">
     <value>Detalles</value>
   </data>
   <data name="ShiftTradeRequestHasBeenAcceptedDot" xml:space="preserve">
-    <value>Una petición de cambio de turno ha sido aceptada por otra persona.</value>
+    <value>Una solicitud de cambio de turno {0} - {1}  ha sido aceptada por otra persona.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>Una petición de cambio de turno ha sido aprobada.</value>
+    <value>Una solicitud de cambio de turno {0} - {1} ha sido aprobada.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>Una petición de cambio de turno ha sido denegada.</value>
+    <value>Una solicitud de cambio de turno {0} - {1} ha sido denegada.</value>
   </data>
   <data name="ShiftTradeRequestHasBeenReferredDot" xml:space="preserve">
     <value>Un cambio de turno debe ser aceptado de nuevo debido al cambio en la planificación.</value>
   </data>
   <data name="TextRequestHasBeenApprovedDot" xml:space="preserve">
-    <value>Una petición de texto ha sido aprobada.</value>
+    <value>Una solicitud de texto ha sido aprobada.</value>
   </data>
   <data name="TextRequestHasBeenDeniedDot" xml:space="preserve">
-    <value>Una petición de texto ha sido denegada.</value>
+    <value>Una solicitud de texto ha sido denegada.</value>
   </data>
   <data name="AreYouSureYouWantToDeleteDefinitionSet" xml:space="preserve">
     <value>Está seguro de que quiere borrar '{0}'?</value>
@@ -5795,7 +5798,7 @@ Teleopti R&amp;D</value>
     <value>Está seguro de que quiere borrar la reunión {0}?</value>
   </data>
   <data name="ANewShiftTradeHasBeenCreatedDot" xml:space="preserve">
-    <value>Una nueva petición de cambio de turno ha sido creada.</value>
+    <value>Nueva solicitud de cambio de turno {0} - {1}  ha sido creada. Aceptar o denegar en su lista de solicitudes.</value>
   </data>
   <data name="RequestStatusApproved" xml:space="preserve">
     <value>Aprobada</value>
@@ -5840,7 +5843,7 @@ Teleopti R&amp;D</value>
     <value>Borrar Días</value>
   </data>
   <data name="YouMustHaveAtLeastOneDateInShiftTradeRequest" xml:space="preserve">
-    <value>Usted tiene al menos una fecha en su petición de cambio de turno.</value>
+    <value>Necesita al menos una fecha en su solicitud de cambio de turno.</value>
   </data>
   <data name="FilterDays" xml:space="preserve">
     <value>Filtrar días</value>
@@ -5950,7 +5953,7 @@ Anterior</value>
     <value>El archivo PDF adjunto contiene su planificación de {0} a {1}.</value>
   </data>
   <data name="YourScheduleForDateParameters" xml:space="preserve">
-    <value>Su planificación de {0} a {1}</value>
+    <value>Tu horario del {0} al {1}</value>
   </data>
   <data name="CheckMessageBrokerWarning" xml:space="preserve">
     <value>No hay conexión con el intermediario de mensajes</value>
@@ -6176,7 +6179,7 @@ de Preferencias</value>
     <value>Confidencial</value>
   </data>
   <data name="ModifyRequest" xml:space="preserve">
-    <value>Modificar petición</value>
+    <value>Modificar solicitud</value>
   </data>
   <data name="Remaining" xml:space="preserve">
     <value>Restante</value>
@@ -6188,16 +6191,16 @@ de Preferencias</value>
     <value>Ver confidencial</value>
   </data>
   <data name="RequestDenyReasonOtherPart" xml:space="preserve">
-    <value>Su petición de cambio de turno ha sido denegada por el destinatario</value>
+    <value>Su solicitud de cambio de turno ha sido denegada por el destinatario</value>
   </data>
   <data name="RequestDenyReasonPersonAccount" xml:space="preserve">
-    <value>Su petición de ausencia ha sido denegada automáticamente. No tiene suficiente tiempo en el balance de su cuenta personal.</value>
+    <value>Su solicitud de ausencia ha sido denegada automáticamente. No tienes suficiente tiempo en el balance de su cuenta personal.</value>
   </data>
   <data name="RequestDenyReasonSkillThreshold" xml:space="preserve">
-    <value>Su petición de ausencia ha sido denegada automáticamente, ya que el no. de recursos estaría por debajo del umbral requerido.</value>
+    <value>Su soslicitud de ausencia ha sido denegada automáticamente, ya que resultaría en una falta de personal.</value>
   </data>
   <data name="RequestDenyReasonSupervisor" xml:space="preserve">
-    <value>Su petición ha sido denegada por el administrador.</value>
+    <value>Su solicitudd ha sido denegada por el administrador.</value>
   </data>
   <data name="RequestStatusDtoNew" xml:space="preserve">
     <value>Nuevo</value>
@@ -6350,16 +6353,16 @@ de Preferencias</value>
     <value>Desviación estándar modificada</value>
   </data>
   <data name="AbsenceRequests" xml:space="preserve">
-    <value>Peticiones de Ausencias</value>
+    <value>Solicitudes de Ausencia</value>
   </data>
   <data name="AutoGrant" xml:space="preserve">
     <value>Auto-aprobar</value>
   </data>
   <data name="CheckPersonAccount" xml:space="preserve">
-    <value>Compruebe cuenta personal</value>
+    <value>Comprobar cuenta personal</value>
   </data>
   <data name="CheckStaffing" xml:space="preserve">
-    <value>Compruebe personal</value>
+    <value>Comprobar personal</value>
   </data>
   <data name="ChooseWorkflowControlSetToEdit" xml:space="preserve">
     <value>Elegir Workflow Control Set a editar</value>
@@ -6368,7 +6371,7 @@ de Preferencias</value>
     <value>Gestionar Workflow Control Sets</value>
   </data>
   <data name="OpenForAbsenceRequests" xml:space="preserve">
-    <value>Abrir para peticiones de ausencias</value>
+    <value>Abrir para solicitudes de ausencia</value>
   </data>
   <data name="Rolling" xml:space="preserve">
     <value>Rotando</value>
@@ -6461,13 +6464,13 @@ Período: {3}</value>
     <value>Fecha:</value>
   </data>
   <data name="RequestDenyReasonAutodeny" xml:space="preserve">
-    <value>Su petición de ausencia ha sido denegada automáticamente, debido a regla aplicada por el administrador.</value>
+    <value>Su solicitud de ausencia ha sido denegada automáticamente, debido a regla aplicada por el administrador.</value>
   </data>
   <data name="RequestDenyReasonClosedPeriod" xml:space="preserve">
-    <value>Su petición de ausencia no ha sido aprobada. Algunas fechas no están abiertas a peticiones en este momento.</value>
+    <value>Su soslicitud de ausencia no puede ser aprobada. Algunas fechas no están abiertas para solicitudes en este momento.</value>
   </data>
   <data name="RequestDenyReasonNoWorkflow" xml:space="preserve">
-    <value>Su petición de ausencia no ha sido aprobada. No hay Workflow Control Set conectado a su cuenta.</value>
+    <value>Su solicitud de ausencia no ha sido aprobada. No hay Workflow Control Set conectado a su cuenta.</value>
   </data>
   <data name="ActivityAvailableForExtendedPreference" xml:space="preserve">
     <value>Actividad disponible para preferencia extendida</value>
@@ -6506,7 +6509,7 @@ Período: {3}</value>
     <value>La fecha de inicio debe ser menor que la de fin</value>
   </data>
   <data name="OpenShiftTradePeriodDenyReason" xml:space="preserve">
-    <value>Cambio de turno denegado, las fechas seleccionadas no están abiertas para peticiones.</value>
+    <value>Cambio de turno denegado, las fechas seleccionadas no están abiertas para solicitudes.</value>
   </data>
   <data name="ShiftTradeSkillDenyReason" xml:space="preserve">
     <value>Cambio de turno denegado, sus skills no corresponden a los de otra persona.</value>
@@ -6521,7 +6524,7 @@ Período: {3}</value>
     <value>Cambio de turno denegado, no hay Workflow Control Set definido.</value>
   </data>
   <data name="ShiftTradeRequests" xml:space="preserve">
-    <value>Peticiones de Cambio de Turnos</value>
+    <value>Solicitudes de Cambio de Turnos</value>
   </data>
   <data name="ShiftCategoriesAvailableForExtendedPreference" xml:space="preserve">
     <value>Categoría de Turnos Disponible para Preferencias</value>
@@ -6539,7 +6542,7 @@ Período: {3}</value>
     <value>h:mm</value>
   </data>
   <data name="OpenForShiftTradeRequests" xml:space="preserve">
-    <value>Abra su petición de cambio de turno</value>
+    <value>Abra su solicitud de cambio de turno</value>
   </data>
   <data name="ToleranceForMatchingContractTime" xml:space="preserve">
     <value>Tolerancia para correspondencia con tiempo de contrato</value>
@@ -6656,10 +6659,10 @@ Período: {3}</value>
     <value>Ofrecidas</value>
   </data>
   <data name="OverflowIn" xml:space="preserve">
-    <value>Desbordam. entrante</value>
+    <value>Overflow entrante</value>
   </data>
   <data name="OverflowOut" xml:space="preserve">
-    <value>Desbordam. saliente</value>
+    <value>Overflow saliente</value>
   </data>
   <data name="SelectScorecardForTeams" xml:space="preserve">
     <value>Seleccionar Scorecard a usar en los equipos</value>
@@ -6769,7 +6772,7 @@ Si este error de validación persiste, deberá verificar que su contraseña sigu
     <value>Optimizando duración de turnos</value>
   </data>
   <data name="ShiftTradeRequestCouldNotBeAcceptedParameter0" xml:space="preserve">
-    <value>La petición de cambio de turno no ha sido acceptada, debido a un error.
+    <value>La solicitud de cambio de turno no ha sido acceptada debido a un error.
 Mensaje de error: {0}</value>
   </data>
   <data name="SaveOrCancel" xml:space="preserve">
@@ -6834,7 +6837,7 @@ Largo Plazo</value>
     <value>Está seguro de que desea borrar la actividad maestra '{0}'?</value>
   </data>
   <data name="RequestHasBeenDeleted" xml:space="preserve">
-    <value>Esta petición ha sido borrada por quién la ha iniciado, por lo que ya no puede ser cambiada.</value>
+    <value>Esta solicitud ha sido borrada por quién la ha iniciado, por lo que ya no puede ser cambiada.</value>
   </data>
   <data name="CreatedPageOf" xml:space="preserve">
     <value>Creada {0}. Página {1} de {2}</value>
@@ -7141,7 +7144,7 @@ Fechas</value>
     <value>Nota Pública:</value>
   </data>
   <data name="RequestDetails" xml:space="preserve">
-    <value>Vista de Detalles de Peticiones</value>
+    <value>Vista de Detalles de Solicitudes</value>
   </data>
   <data name="ViewDetails" xml:space="preserve">
     <value>Ver detalles</value>
@@ -7616,7 +7619,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Restaurar</value>
   </data>
   <data name="NoRequestsFound" xml:space="preserve">
-    <value>No hay peticiones</value>
+    <value>No se encontraron solicitudes</value>
   </data>
   <data name="AbsenceExtra" xml:space="preserve">
     <value>Extra</value>
@@ -7646,7 +7649,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Ver historial de la planificación</value>
   </data>
   <data name="IncludedInRequestAllowance" xml:space="preserve">
-    <value>Incluir en autorización de petición</value>
+    <value>Incluir en autorización de solicitud</value>
   </data>
   <data name="MoveColon" xml:space="preserve">
     <value>Mover:</value>
@@ -7724,7 +7727,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Planificación por equipo</value>
   </data>
   <data name="XRequests" xml:space="preserve">
-    <value>{0} Peticion(es)</value>
+    <value>{0} Solicitud(es)</value>
   </data>
   <data name="PersonFinderFieldAll" xml:space="preserve">
     <value>Todos</value>
@@ -7784,7 +7787,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Ajustar flexibilidad de tiempo de trab.</value>
   </data>
   <data name="RequestDenyReasonBudgetGroupAllowance" xml:space="preserve">
-    <value>Su petición de ausencia a sido denegada automáticamente. No hay suficiente tiempo autorizado en presupuestos para esta petición.</value>
+    <value>Su solicitud de ausencia ha sido denegada automáticamente. No hay suficiente tiempo autorizado en presupuestos para esta solicitud,</value>
   </data>
   <data name="MeetingActivityRequired" xml:space="preserve">
     <value>Seleccionar una actividad!</value>
@@ -7811,7 +7814,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Ejecutando tarea de fondo</value>
   </data>
   <data name="ResReportRequestsPerAgent" xml:space="preserve">
-    <value>Peticiones por Agentes</value>
+    <value>Solicitudes por Agentes</value>
   </data>
   <data name="TargetValue" xml:space="preserve">
     <value>Valor del Objetivo</value>
@@ -7961,7 +7964,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Eliminar Protección contra Escritura</value>
   </data>
   <data name="IncludeTroubleshootingInformation" xml:space="preserve">
-    <value>Incluir información de depuración</value>
+    <value>Incluir detalles sobre eventuales problemas</value>
   </data>
   <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
     <value>{0} días no han podido ser planificados.</value>
@@ -8015,31 +8018,31 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Cumplimiento de preferencias</value>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
-    <value>Petición de ausencia {0} ha sido aprobada.</value>
+    <value>Solicitud de ausencia {0} ha sido aprobada.</value>
   </data>
   <data name="RotationFulfillment" xml:space="preserve">
     <value>Cumplimiento de Rotación:</value>
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
-    <value>Petición de ausencia {0} ha sido denegada.</value>
+    <value>Ssolicitud de ausencia {0} ha sido denegada.</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
-    <value>Nueva petición de cambio {0}, apruebe o deniegue en lista de peticiones.</value>
+    <value>Nueva solicitud de cambio de turno {0}, apruebe o deniegue en lista de solicitudes.</value>
   </data>
   <data name="ResourceCalculateEveryColon" xml:space="preserve">
     <value>Calcular recursos cada:</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
-    <value>Petición de cambio de turno {0} ha sido aprobada por otra persona.</value>
+    <value>Solicitud de cambio de turno {0} ha sido aprobada por otra persona.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
-    <value>Petición de cambio de turno {0} ha sido aprobada.</value>
+    <value>Solicitud de cambio de turno {0} ha sido aprobada.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
-    <value>Petición de cambio de turno {0} ha sido denegada.</value>
+    <value>Solicitud de cambio de turno {0} ha sido denegada.</value>
   </data>
   <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
-    <value>Petición de cambio de turno {0} debe ser aceptada nuevamente, debido a cambio de planificación.</value>
+    <value>Solicitud de cambio de turno {0} debe ser aceptada nuevamente, debido a cambio en el horario.</value>
   </data>
   <data name="ExternalResourceInUse" xml:space="preserve">
     <value>Recurso externo en uso</value>
@@ -8075,13 +8078,16 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Tipo de ausencia:</value>
   </data>
   <data name="AbsenceRequestsWeb" xml:space="preserve">
-    <value>Peticiones de Ausencia</value>
+    <value>Solicitud de Ausencia</value>
   </data>
   <data name="FullDay" xml:space="preserve">
     <value>Día completo</value>
   </data>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Debe tener {0} días libres.</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>En cualquier dispositivo</value>
   </data>
   <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
     <value>Debe tener entre {0} y {1} días libres.</value>
@@ -8282,7 +8288,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Adherencia por Agente</value>
   </data>
   <data name="RequestCannotUpdateDelete" xml:space="preserve">
-    <value>Su estado de petición ha cambiado. No puede ni modificarlo ni borrarlo. </value>
+    <value>Su solicitud ha sido cambiada. No puede actualizarla ni borrarla. </value>
   </data>
   <data name="ResReportAdherencePerDay" xml:space="preserve">
     <value>Adherencia por Día</value>
@@ -8447,7 +8453,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Después de controlar "Mantener actividad"</value>
   </data>
   <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
-    <value>Su planifiación para el {0} ha sido modificada!</value>
+    <value>Tu horario para el {0} ha sido modificado!</value>
   </data>
   <data name="UseAverageShiftLengths" xml:space="preserve">
     <value>Respetar promedio de turno por día</value>
@@ -8555,7 +8561,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Abrir disponibilidad por hora</value>
   </data>
   <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Bloquear Disponibilidad opr hora</value>
+    <value>Bloquear Disponibilidad por hora</value>
   </data>
   <data name="StudentAvailabilities" xml:space="preserve">
     <value>Disponibilidades por hora</value>
@@ -8570,7 +8576,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Tiempo no disponible</value>
   </data>
   <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>No es posible mostrar planificación cuando el estado de la petición de cambio de turno es nueva, denegada o aprobada.</value>
+    <value>El horario sólo se muestra cuando el status de la solictud de cambio de turno es Pendiente o en espera de aprobación.</value>
   </data>
   <data name="NewTemplateName" xml:space="preserve">
     <value>Nombre de la nueva plantilla</value>
@@ -8588,7 +8594,7 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>Dotación insuficiente para: {0} en</value>
   </data>
   <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
-    <value>Uno o más días dentro del período de petición {0} carece de autorizaciones por presupuestos.</value>
+    <value>No hay tiempo autorizado suficiente para uno o más días dentro del período solicitado {0}.</value>
   </data>
   <data name="NoBudgetForThisPeriod" xml:space="preserve">
     <value>Este período {0} carece de presupuesto</value>
@@ -8597,13 +8603,13 @@ La longitud actual de la asignación es {1} hrs.</value>
     <value>La persona {0} carece de grupo de presupuesto</value>
   </data>
   <data name="NotEnoughBudgetAllowanceForTheDay" xml:space="preserve">
-    <value>Insuficiente tiempo de autorización de presupuesto para la fecha {0}.</value>
+    <value>Insuficiente tiempo autorizado en el presupuesto para la fecha {0}.</value>
   </data>
   <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
-    <value>Su petición ha sido denegada. El período no está abierto para realizar peticiones.</value>
+    <value>Su solicitud ha sido denegada. El período no está abierto para realizar solicitudes.</value>
   </data>
   <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
-    <value>su petición ha sido denegada. Este día no está abierto para realizar peticiones. El siguiente día abierto es {0}.</value>
+    <value>Su solicitud ha sido denegada. Este día no está abierto para realizar solicitudes. El siguiente día abierto es {0}.</value>
   </data>
   <data name="SeriousUnderStaffingHours" xml:space="preserve">
     <value>Infradimens. crítico en: {0} en</value>
@@ -8646,7 +8652,7 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
     <value>Contador de Personal</value>
   </data>
   <data name="NotEnoughAllowance" xml:space="preserve">
-    <value>Insuficiente tiempo de autorización para la fecha:</value>
+    <value>Insuficiente tiempo autorizado para la fecha:</value>
   </data>
   <data name="AddFullDayAbsence" xml:space="preserve">
     <value>Añadir ausencia de día completo</value>
@@ -8673,7 +8679,7 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
     <value>No está permitido mover un turno a otro día dentro del Editor de turnos. Use cortar/pegar.</value>
   </data>
   <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
-    <value>Concedida la posibilidad de aprobación de petición de ausencia:</value>
+    <value>Probabilidad de aprobación de solictud de ausencia:</value>
   </data>
   <data name="AddPreferenceThreeDots" xml:space="preserve">
     <value>Añadir Preferencia...</value>
@@ -8682,7 +8688,7 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
     <value>Añadir Disponibilidad por hora...</value>
   </data>
   <data name="Fair" xml:space="preserve">
-    <value>Equitativo</value>
+    <value>Regular</value>
   </data>
   <data name="Good" xml:space="preserve">
     <value>Bueno</value>
@@ -8709,7 +8715,7 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
     <value>Por favor, seleccione al menos una de las opciones "Igual categoría de turno", "Igual hora de inicio" o "Igual turno" en Planificación por Bloques.</value>
   </data>
   <data name="RequestDenyReasonNoPeriod" xml:space="preserve">
-    <value>Su petición de ausencia ha sido denegada. Hay fechas en este período que no están abiertos para realizar peticiones. Puede realizar peticiones en el siguiente período: {0}.</value>
+    <value>Su solicitud de ausencia ha sido denegada. Hay fechas en este período que no están abiertos para realizar solicitudes. Puede realizar solicitudes en el siguiente período: {0}.</value>
   </data>
   <data name="MaxParallelTasks" xml:space="preserve">
     <value>Max número de tareas paralelas:</value>
@@ -8928,7 +8934,7 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
     <value>Enviar nuevamente</value>
   </data>
   <data name="OvertimeAvailabilityWeb" xml:space="preserve">
-    <value>Disponibilidad de Tiempo extra</value>
+    <value>Disponibilidad de Tiempo Extra</value>
   </data>
   <data name="PaidTimeHeader" xml:space="preserve">
     <value>Tiempo pagado</value>
@@ -8970,7 +8976,7 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
     <value>Por Fecha</value>
   </data>
   <data name="ShiftCategoryDistribution" xml:space="preserve">
-    <value>Distribución de Categorías de Turnos</value>
+    <value>Distribución de Turnos</value>
   </data>
   <data name="PerAgent" xml:space="preserve">
     <value>Por Agente</value>
@@ -9231,7 +9237,7 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
     <value>Vista compacta</value>
   </data>
   <data name="RequestsMenu" xml:space="preserve">
-    <value>Peticiones</value>
+    <value>Solicitudes</value>
   </data>
   <data name="AllPermittedTeamsToMakeShiftTradeWith" xml:space="preserve">
     <value>Todos los equipos</value>
@@ -9504,7 +9510,7 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
     <value>Quiero un turno que cumpla las siguientes condiciones:</value>
   </data>
   <data name="ConfirmDeleteRequest" xml:space="preserve">
-    <value>Está seguro que desea borrar esta petición?</value>
+    <value>Está seguro que desea borrar esta solicitud?</value>
   </data>
   <data name="Everyone" xml:space="preserve">
     <value>Todos</value>
@@ -9566,6 +9572,9 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
   <data name="CreateNewRole" xml:space="preserve">
     <value>Crear un nuevo rol</value>
   </data>
+  <data name="DataFilterThreeDots" xml:space="preserve">
+    <value>Filtro de datos...</value>
+  </data>
   <data name="Duplicate" xml:space="preserve">
     <value>Duplicar</value>
   </data>
@@ -9574,6 +9583,12 @@ Los turnos generados por esta regla no estarán disponibles para planificación 
   </data>
   <data name="ManagePermissionsIntro" xml:space="preserve">
     <value>Aquí puedes definir quiénes tienen acceso a partes específicas de la aplicación</value>
+  </data>
+  <data name="PermissionsFilterThreeDots" xml:space="preserve">
+    <value>Filtro de permisos...</value>
+  </data>
+  <data name="RoleFilterThreeDots" xml:space="preserve">
+    <value>Filtro de roles...</value>
   </data>
   <data name="AdherenceCannotBeEmpty" xml:space="preserve">
     <value>Adherencia no puede estar vacía</value>
@@ -9851,6 +9866,9 @@ Detalles del error:
   </data>
   <data name="AgentCountTitle" xml:space="preserve">
     <value>agentes</value>
+  </data>
+  <data name="FilterLocations" xml:space="preserve">
+    <value>Filtrar ubicaciones</value>
   </data>
   <data name="LoadingSeatPlanStatus" xml:space="preserve">
     <value>Cargar Status del Plan de Puestos</value>
@@ -10397,5 +10415,1040 @@ Estas opciones están activadas:
   </data>
   <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
     <value>Está usando {0} agentes activos y su licencia habilita {1}. Tienes {2} días para reducir el número de agentes o aplicar una clave de activación de producto que cubra ese número de agentes.</value>
+  </data>
+  <data name="MultipleTeams" xml:space="preserve">
+    <value>Múltiples equipos</value>
+  </data>
+  <data name="RevertToLastSave" xml:space="preserve">
+    <value>Volver al último punto guardado</value>
+  </data>
+  <data name="MultipleSites" xml:space="preserve">
+    <value>Múltiples sites</value>
+  </data>
+  <data name="SpaceVertically" xml:space="preserve">
+    <value>Espacio Items Seleccionados Vertical</value>
+  </data>
+  <data name="SpaceHorizontally" xml:space="preserve">
+    <value>Espacio Items Seleccionados Horizontal</value>
+  </data>
+  <data name="ForecastMethodIDColon" xml:space="preserve">
+    <value>Método de previsión id:</value>
+  </data>
+  <data name="NoSkillFound" xml:space="preserve">
+    <value>No se encontraron skills</value>
+  </data>
+  <data name="BestForecastMethod" xml:space="preserve">
+    <value>Mejor método</value>
+  </data>
+  <data name="CouldNotCancelRequestNoAbsence" xml:space="preserve">
+    <value>La pteición de ausencia {0} para el {1} no se pudo cancelar ya que ese tipo de ausencia no pudo ser encontrada o fue modificada.</value>
+  </data>
+  <data name="SeatBookingSummary" xml:space="preserve">
+    <value>Resumen de reservas de puestos</value>
+  </data>
+  <data name="PlanningPeriods" xml:space="preserve">
+    <value>Periodos de Planificación</value>
+  </data>
+  <data name="RunningForecast" xml:space="preserve">
+    <value>La previsión está operando</value>
+  </data>
+  <data name="ForecastWorkloadIntro" xml:space="preserve">
+    <value>Esta es tu previsión existente. Para poder modificar las llamadas seleccione algún(os) día(s)</value>
+  </data>
+  <data name="NoSkillAreasFound" xml:space="preserve">
+    <value>No se encontraron áreas de skills</value>
+  </data>
+  <data name="ConfigureSkillPriorities" xml:space="preserve">
+    <value>Configurar Priorización de Skills</value>
+  </data>
+  <data name="ClearForecastChart" xml:space="preserve">
+    <value>Quitar selección del gráfico</value>
+  </data>
+  <data name="SuccessTip" xml:space="preserve">
+    <value>Éxito</value>
+  </data>
+  <data name="SelectedFiltersColon" xml:space="preserve">
+    <value>Filtros Seleccionados:</value>
+  </data>
+  <data name="ForecastOverrideMsg" xml:space="preserve">
+    <value>Sobrescribir valores previstos.</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourErrorMessage" xml:space="preserve">
+    <value>No hay horarios de apertura para {0} en el sitio {1} entre {2} - {3}</value>
+  </data>
+  <data name="SaveSiteOpenHoursSuccess" xml:space="preserve">
+    <value>Los horarios de apertura han sido actualizados</value>
+  </data>
+  <data name="NoPermissionAddFullDayAbsenceForAgent" xml:space="preserve">
+    <value>No tienes permiso para agregar ausencias de día completo para {0}</value>
+  </data>
+  <data name="FavoriteSearch" xml:space="preserve">
+    <value>Búsqueda favorita</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Quitar Todo</value>
+  </data>
+  <data name="TimeOOA" xml:space="preserve">
+    <value>Tiempo FdA</value>
+  </data>
+  <data name="SelectOrganization" xml:space="preserve">
+    <value>Seleccione organización</value>
+  </data>
+  <data name="Enable" xml:space="preserve">
+    <value>Activar</value>
+  </data>
+  <data name="WarningNoHistorícalData" xml:space="preserve">
+    <value>Atención! No hay data histórica disponible</value>
+  </data>
+  <data name="SignInWithNoColon" xml:space="preserve">
+    <value>Iniciar sesión con</value>
+  </data>
+  <data name="CallsSlashDay" xml:space="preserve">
+    <value>Llamadas/día</value>
+  </data>
+  <data name="PleaseInputEndTime" xml:space="preserve">
+    <value>Por favor defina hora de fin</value>
+  </data>
+  <data name="PleaseInputStartTime" xml:space="preserve">
+    <value>Por favor defina hora de inicio</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Desactivar</value>
+  </data>
+  <data name="PleaseChooseADate" xml:space="preserve">
+    <value>Por favor seleccione una fecha</value>
+  </data>
+  <data name="DailyTotal" xml:space="preserve">
+    <value>Total diario</value>
+  </data>
+  <data name="NoPermissionRemoveOvertimeActivity" xml:space="preserve">
+    <value>No tienes permiso para borrar tiempo extra.</value>
+  </data>
+  <data name="ForecastDo" xml:space="preserve">
+    <value>Previsión</value>
+  </data>
+  <data name="SaveFavoriteSearch" xml:space="preserve">
+    <value>Guardar búsqueda favorita</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>Notificaciones</value>
+  </data>
+  <data name="RemoveOvertime" xml:space="preserve">
+    <value>Borrar tiempo extra</value>
+  </data>
+  <data name="NeedToSelectARoleFirst" xml:space="preserve">
+    <value>Seleccione un rol primero</value>
+  </data>
+  <data name="MySite" xml:space="preserve">
+    <value>MiSitio</value>
+  </data>
+  <data name="MyOwn" xml:space="preserve">
+    <value>MiPropio</value>
+  </data>
+  <data name="MyBusinessUnit" xml:space="preserve">
+    <value>MiBusinessUnit</value>
+  </data>
+  <data name="SelectToModify" xml:space="preserve">
+    <value>Seleccione días en el gráfico antes de modificar</value>
+  </data>
+  <data name="SetAsDefault" xml:space="preserve">
+    <value>Seleccionar como default</value>
+  </data>
+  <data name="Statistics" xml:space="preserve">
+    <value>Estadísticas</value>
+  </data>
+  <data name="RemoveDefault" xml:space="preserve">
+    <value>Quitar default</value>
+  </data>
+  <data name="LogonUserTimeZone" xml:space="preserve">
+    <value>Mostrar hora en Zona Horaria</value>
+  </data>
+  <data name="Outliers" xml:space="preserve">
+    <value>Outliers</value>
+  </data>
+  <data name="CampaignAdded" xml:space="preserve">
+    <value>Campaña agregada</value>
+  </data>
+  <data name="ForecastValueOverride" xml:space="preserve">
+    <value>Valores previstos fueron sobrescritos</value>
+  </data>
+  <data name="UsedBy" xml:space="preserve">
+    <value>Usado por {0}</value>
+  </data>
+  <data name="Modify" xml:space="preserve">
+    <value>Modificar</value>
+  </data>
+  <data name="UsedTotal" xml:space="preserve">
+    <value>Total usado</value>
+  </data>
+  <data name="Performance" xml:space="preserve">
+    <value>Desempeño</value>
+  </data>
+  <data name="AcwCaret" xml:space="preserve">
+    <value>ACW &lt;</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>Mostrar filtro</value>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>Ocultar filtro</value>
+  </data>
+  <data name="FilterThreeDots" xml:space="preserve">
+    <value>Filtrar,,,</value>
+  </data>
+  <data name="CallsCaret" xml:space="preserve">
+    <value>Llamadas &lt;</value>
+  </data>
+  <data name="Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="AgentsInAlarm" xml:space="preserve">
+    <value>Agentes en alarma</value>
+  </data>
+  <data name="UseSkillsColon" xml:space="preserve">
+    <value>Usar skills:</value>
+  </data>
+  <data name="ServiceLevel" xml:space="preserve">
+    <value>Nivel de Servicio</value>
+  </data>
+  <data name="TotalCallsCaret" xml:space="preserve">
+    <value>Total Llamadas &lt;</value>
+  </data>
+  <data name="AccessAllFunctions" xml:space="preserve">
+    <value>Acceder a todas las funciones:</value>
+  </data>
+  <data name="ChangesAreDisabled" xml:space="preserve">
+    <value>Cambios desactivados para roles predefinidos.</value>
+  </data>
+  <data name="SeveralTeamsSelected" xml:space="preserve">
+    <value>{0} equipos seleccionados</value>
+  </data>
+  <data name="SearchASiteOrTeam" xml:space="preserve">
+    <value>Busar un site o un equipo</value>
+  </data>
+  <data name="SearchAnOrganization" xml:space="preserve">
+    <value>Buscar por organización</value>
+  </data>
+  <data name="FilterRoles" xml:space="preserve">
+    <value>Filtrar Roles</value>
+  </data>
+  <data name="FinishedRemoveAbsence" xml:space="preserve">
+    <value>Ausencia borrada satisfactoriamente</value>
+  </data>
+  <data name="UnselectedItems" xml:space="preserve">
+    <value>Elementos no seleccionados</value>
+  </data>
+  <data name="DescriptionOfOpenHoursRule" xml:space="preserve">
+    <value>Horarios de apertura del skill</value>
+  </data>
+  <data name="InvalidDimensionsExpectingAnImageSmallerThan2000x4000" xml:space="preserve">
+    <value>Dimensiones inválidas! Seleccione una imagen menor a 2000x4000.</value>
+  </data>
+  <data name="FlipItemHorizontally" xml:space="preserve">
+    <value>Ivertir Elementos Seleccionados Horizontalmente</value>
+  </data>
+  <data name="DescriptionOfSiteOpenHoursRule" xml:space="preserve">
+    <value>Horarios de apertura del site</value>
+  </data>
+  <data name="LoadImage" xml:space="preserve">
+    <value>Cargar imagen</value>
+  </data>
+  <data name="CreateSkill" xml:space="preserve">
+    <value>Crear skill</value>
+  </data>
+  <data name="ValidationforFilter" xml:space="preserve">
+    <value>Agregue un filtro</value>
+  </data>
+  <data name="BothOverrideAndCampaignAdded" xml:space="preserve">
+    <value>Se agregó sobrescritura y campaña</value>
+  </data>
+  <data name="NotAJPEGSVGOrAPNG" xml:space="preserve">
+    <value>No es JPEG, SVG ni PNG!</value>
+  </data>
+  <data name="NameRequired" xml:space="preserve">
+    <value>Nombre es requerido</value>
+  </data>
+  <data name="DescriptionOfNewPersonAccountRule" xml:space="preserve">
+    <value>Cuenta Personal</value>
+  </data>
+  <data name="DescriptionOfNonMainShiftActivityRule" xml:space="preserve">
+    <value>Reunión, actividad o actividad en tiempo extra en el turno</value>
+  </data>
+  <data name="DescriptionOfNewDayOffRule" xml:space="preserve">
+    <value>Día libre en conflicto con la actividad</value>
+  </data>
+  <data name="DescriptionOfMinWeekWorkTimeRule" xml:space="preserve">
+    <value>Tiempo de trabajo semanal mínimo</value>
+  </data>
+  <data name="DescriptionOfMinWeeklyRestRule" xml:space="preserve">
+    <value>Mínimo tiempo de descanso semanal</value>
+  </data>
+  <data name="DescriptionOfNewMaxWeekWorkTimeRule" xml:space="preserve">
+    <value>Máximo tiempo de trabajo semanal</value>
+  </data>
+  <data name="DescriptionOfNewNightlyRestRule" xml:space="preserve">
+    <value>Tiempo de Descanso Nocturno</value>
+  </data>
+  <data name="ShiftTradeRequestValidatingRules" xml:space="preserve">
+    <value>Reglad de validación</value>
+  </data>
+  <data name="ResetRules" xml:space="preserve">
+    <value>Resetar Reglas</value>
+  </data>
+  <data name="TotalAcwCaret" xml:space="preserve">
+    <value>ACW Total &gt;</value>
+  </data>
+  <data name="WhenValidationFails" xml:space="preserve">
+    <value>Cuando la Validación Falla</value>
+  </data>
+  <data name="SendToAdministrator" xml:space="preserve">
+    <value>Mandar a Administrador</value>
+  </data>
+  <data name="TotalTalkTimeCaret" xml:space="preserve">
+    <value>Tiempo de Conversación Total &gt;</value>
+  </data>
+  <data name="ChangePlanningPeriod" xml:space="preserve">
+    <value>Cambiar periodo de planificación</value>
+  </data>
+  <data name="AddCampaignIntro" xml:space="preserve">
+    <value>Defina un portentaje del incremento o reducción prevista</value>
+  </data>
+  <data name="EditFilter" xml:space="preserve">
+    <value>Editar filtro</value>
+  </data>
+  <data name="YouNeedToPickAScenarioToImportFromDot" xml:space="preserve">
+    <value>Necesitas seleccionar un escenario desde el cual deseas importar.</value>
+  </data>
+  <data name="RunImporting" xml:space="preserve">
+    <value>Importar</value>
+  </data>
+  <data name="DoneImportingForXPeopleDot" xml:space="preserve">
+    <value>Importación de {0} agentes lista.</value>
+  </data>
+  <data name="Primary" xml:space="preserve">
+    <value>Primario</value>
+  </data>
+  <data name="YouNeedToSelectADateInTheFutureDot" xml:space="preserve">
+    <value>Tienes que seleccionar una fecha futura</value>
+  </data>
+  <data name="Level" xml:space="preserve">
+    <value>Nivel</value>
+  </data>
+  <data name="NoPermissionAddOvertimeActivity" xml:space="preserve">
+    <value>No tienes permiso para agregar actividad en tiempo extra para {0}.</value>
+  </data>
+  <data name="DeleteFilter" xml:space="preserve">
+    <value>Borrar filtro</value>
+  </data>
+  <data name="PickAnAbsence" xml:space="preserve">
+    <value>Seleccione una ausencia</value>
+  </data>
+  <data name="RequestedPeriodIsTooLong" xml:space="preserve">
+    <value>El periodo solicitado es demasiado largo</value>
+  </data>
+  <data name="AddOvertimeActivity" xml:space="preserve">
+    <value>Agregar Acividad en Tiempo Extra</value>
+  </data>
+  <data name="NotAllowed" xml:space="preserve">
+    <value>No permitido!</value>
+  </data>
+  <data name="UngroupItems" xml:space="preserve">
+    <value>Desagrupar elementos</value>
+  </data>
+  <data name="LoadingRequestsTreeDots" xml:space="preserve">
+    <value>Cargando Solicitudes...</value>
+  </data>
+  <data name="YourSelectionResultedInZeroPeopleDot" xml:space="preserve">
+    <value>Tu selección resultó en 0 personas.</value>
+  </data>
+  <data name="ToScenarioColon" xml:space="preserve">
+    <value>Al escenario:</value>
+  </data>
+  <data name="Run" xml:space="preserve">
+    <value>Ejecutar</value>
+  </data>
+  <data name="PickAtleastOneTeamDot" xml:space="preserve">
+    <value>Seleccione al menos un equipo</value>
+  </data>
+  <data name="PickASmallerDatePeriodDot" xml:space="preserve">
+    <value>Seleccione un periodo más corto.</value>
+  </data>
+  <data name="FromScenarioColon" xml:space="preserve">
+    <value>Del escenario:</value>
+  </data>
+  <data name="AreYouSure" xml:space="preserve">
+    <value>Estás seguro?</value>
+  </data>
+  <data name="MoveShift" xml:space="preserve">
+    <value>Mover Turno</value>
+  </data>
+  <data name="Continue" xml:space="preserve">
+    <value>Continuar</value>
+  </data>
+  <data name="ValidatingPersons2" xml:space="preserve">
+    <value>Validando {0} personas de {1}</value>
+  </data>
+  <data name="RequestsHaveNotBeenDenied" xml:space="preserve">
+    <value>{0} solicitudes has sido denegadas</value>
+  </data>
+  <data name="ImportSchedule" xml:space="preserve">
+    <value>Importar horario</value>
+  </data>
+  <data name="TheAbsenceCanNotBeAddedTo" xml:space="preserve">
+    <value>La ausencia no puede ser añadida para</value>
+  </data>
+  <data name="NoPermissionRemoveAgentAbsence" xml:space="preserve">
+    <value>No tienes permiso para eliminar ausencias.</value>
+  </data>
+  <data name="TheActivityCanNotBeAddedTo" xml:space="preserve">
+    <value>La actividad no puede ser añadida para</value>
+  </data>
+  <data name="ArchiveSchedule" xml:space="preserve">
+    <value>Archivar horario</value>
+  </data>
+  <data name="AddLocation" xml:space="preserve">
+    <value>Agregar Ubicación</value>
+  </data>
+  <data name="CannotApplyChangeToAgentsInDifferentTimezone" xml:space="preserve">
+    <value>No se pueden aplicar cambio para agentes en otras zonas horarias</value>
+  </data>
+  <data name="SkillAreaColon" xml:space="preserve">
+    <value>Area de skill</value>
+  </data>
+  <data name="SortByUpdateDate" xml:space="preserve">
+    <value>Actualizar Fecha</value>
+  </data>
+  <data name="SortByStartDate" xml:space="preserve">
+    <value>Fecha de inicio</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="Organization" xml:space="preserve">
+    <value>Organización</value>
+  </data>
+  <data name="EmploymentNumber" xml:space="preserve">
+    <value>Número de Empleado</value>
+  </data>
+  <data name="CurrentRequests" xml:space="preserve">
+    <value>Solicitudes actuales</value>
+  </data>
+  <data name="AllRequests" xml:space="preserve">
+    <value>Todas mis solicitudes</value>
+  </data>
+  <data name="UnsupportedSkills" xml:space="preserve">
+    <value>{0} skills incompatible(s=</value>
+  </data>
+  <data name="UnsupportedSkillMsg" xml:space="preserve">
+    <value>Esta skill no es compatible.</value>
+  </data>
+  <data name="UnsupportedSkill" xml:space="preserve">
+    <value>Skill incompatible</value>
+  </data>
+  <data name="TooManySelectedAgents" xml:space="preserve">
+    <value>Has seleccionado demasiados agentes. Por favor, selecciona no más de 55.</value>
+  </data>
+  <data name="PresentTenseSchedule" xml:space="preserve">
+    <value>Planificando</value>
+  </data>
+  <data name="SelectedRequestsInfo" xml:space="preserve">
+    <value>{0} de {1} solicitudes seleccionadas</value>
+  </data>
+  <data name="AgentHistoricalAdherence" xml:space="preserve">
+    <value>Adherencia Histórica</value>
+  </data>
+  <data name="RequestWaitlistedReasonPersonAccount" xml:space="preserve">
+    <value>No tienes suficiente tiempo en el balance de tu cuenta personal.</value>
+  </data>
+  <data name="RecipientHasNoShiftTradePermission" xml:space="preserve">
+    <value>El destinatario no tiene permiso para hacer cambios de turno</value>
+  </data>
+  <data name="Threshold" xml:space="preserve">
+    <value>Umbral</value>
+  </data>
+  <data name="RequiredStaff" xml:space="preserve">
+    <value>Agentes requeridos</value>
+  </data>
+  <data name="TeamsModule" xml:space="preserve">
+    <value>Equipos</value>
+  </data>
+  <data name="IntradayWithShrinkage" xml:space="preserve">
+    <value>Intraday con absentismo</value>
+  </data>
+  <data name="SendToBack" xml:space="preserve">
+    <value>Mandar al Fondo</value>
+  </data>
+  <data name="NoPermissionToViewErrorMessage" xml:space="preserve">
+    <value>No tienes permiso para ver esta página</value>
+  </data>
+  <data name="Rotate" xml:space="preserve">
+    <value>Rotar</value>
+  </data>
+  <data name="FullOrPartial" xml:space="preserve">
+    <value>Completo o parcial</value>
+  </data>
+  <data name="Full" xml:space="preserve">
+    <value>Completo</value>
+  </data>
+  <data name="DayOffRules" xml:space="preserve">
+    <value>Reglas para Dás Libres</value>
+  </data>
+  <data name="InternalNote" xml:space="preserve">
+    <value>Nota interna</value>
+  </data>
+  <data name="IsAlarm" xml:space="preserve">
+    <value>Alarma</value>
+  </data>
+  <data name="Method" xml:space="preserve">
+    <value>Método</value>
+  </data>
+  <data name="ForecastPeriod" xml:space="preserve">
+    <value>Periodo futuro</value>
+  </data>
+  <data name="noSearchResults" xml:space="preserve">
+    <value>No se encontraron resultados</value>
+  </data>
+  <data name="AlarmColor" xml:space="preserve">
+    <value>Color de alarma</value>
+  </data>
+  <data name="SecondsSlashCalls" xml:space="preserve">
+    <value>Segundos/Llamada</value>
+  </data>
+  <data name="Dismiss" xml:space="preserve">
+    <value>Descartar</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Validación de max. nr. Puestos </value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatValidationInterval" xml:space="preserve">
+    <value>Intervalo a usar en la validación de uso de puestos</value>
+  </data>
+  <data name="EnableShiftTradeRequestMaxSeatsValidation" xml:space="preserve">
+    <value>Activar validación max. nr. puestos</value>
+  </data>
+  <data name="AllPermittedSitesToMakeShiftTradeWith" xml:space="preserve">
+    <value>Todos los Sitios</value>
+  </data>
+  <data name="ValidationAlerts" xml:space="preserve">
+    <value>Alertas de validación</value>
+  </data>
+  <data name="Overwritable" xml:space="preserve">
+    <value>Sobrescribible</value>
+  </data>
+  <data name="BusinessRuleWeeklyRestFriendlyName" xml:space="preserve">
+    <value>La semana no contiene el tiempo de descanso semanal estipulado</value>
+  </data>
+  <data name="BusinessRuleNoSkillsOpenFriendlyName" xml:space="preserve">
+    <value>Actividad fuera de horarios de apertura de este skill</value>
+  </data>
+  <data name="BusinessRuleNoSiteOpenHourFriendlyName" xml:space="preserve">
+    <value>Actividad fuera de horarios de apertura de este site</value>
+  </data>
+  <data name="BusinessRuleNightlyRestRuleFriendlyName" xml:space="preserve">
+    <value>No respeta descanso nocturno</value>
+  </data>
+  <data name="BusinessRuleDayOffFriendlyName" xml:space="preserve">
+    <value>Conflicto con Días Libres</value>
+  </data>
+  <data name="Alert" xml:space="preserve">
+    <value>Alerta</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Crear</value>
+  </data>
+  <data name="ShowErrors" xml:space="preserve">
+    <value>Mostrar errores</value>
+  </data>
+  <data name="NotOverwriteLayerRuleName" xml:space="preserve">
+    <value>Actividad sobrescrita</value>
+  </data>
+  <data name="NewNightlyRestRuleName" xml:space="preserve">
+    <value>Tiempo de descanso nocturno:</value>
+  </data>
+  <data name="NewMaxWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Tiempo de trabajo semanal máximo</value>
+  </data>
+  <data name="NewDayOffRuleName" xml:space="preserve">
+    <value>Turno se superpone con día libre</value>
+  </data>
+  <data name="MinWeekWorkTimeRuleName" xml:space="preserve">
+    <value>Tiempo de trabajo semanal mínimo</value>
+  </data>
+  <data name="MinWeeklyRestRuleName" xml:space="preserve">
+    <value>Tiempo de descanso semanal</value>
+  </data>
+  <data name="ConfigureValidationWarnings" xml:space="preserve">
+    <value>Configurar alertas de validación</value>
+  </data>
+  <data name="NoChangeHasBeenMade" xml:space="preserve">
+    <value>No se realizó ningún cambio</value>
+  </data>
+  <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
+    <value>Los agentes fueron planificados con éxito</value>
+  </data>
+  <data name="FirstComeFirstServed" xml:space="preserve">
+    <value>Por orden de llegada</value>
+  </data>
+  <data name="BySeniority" xml:space="preserve">
+    <value>Por antigüedad</value>
+  </data>
+  <data name="NewSkill" xml:space="preserve">
+    <value>Nueva skill</value>
+  </data>
+  <data name="SiteOpeningHours" xml:space="preserve">
+    <value>Horarios de apertura del site</value>
+  </data>
+  <data name="InvalidInput" xml:space="preserve">
+    <value>Input inválido</value>
+  </data>
+  <data name="ManageOpenHours" xml:space="preserve">
+    <value>Horarios de apertura del site</value>
+  </data>
+  <data name="OverrideForTheseAgents" xml:space="preserve">
+    <value>Sobrescribir para estos agentes</value>
+  </data>
+  <data name="DoNotModifyForTheseAgents" xml:space="preserve">
+    <value>No hacer cambios para estos agentes</value>
+  </data>
+  <data name="ValidateRequestsBasedOnBudgetAllotment" xml:space="preserve">
+    <value>Validar solicitudes en base a tiempo autorizado</value>
+  </data>
+  <data name="ReplyAndCancel" xml:space="preserve">
+    <value>Responder y Cancelar</value>
+  </data>
+  <data name="WeekendColon" xml:space="preserve">
+    <value>Fin de Semana:</value>
+  </data>
+  <data name="Account" xml:space="preserve">
+    <value>Cuenta</value>
+  </data>
+  <data name="OverrideCallsForCampaign" xml:space="preserve">
+    <value>Sobrescribir llamadas o campañas para este escenario</value>
+  </data>
+  <data name="SelectACategory" xml:space="preserve">
+    <value>Seleccione categoría</value>
+  </data>
+  <data name="AgentsWithoutBookings" xml:space="preserve">
+    <value>Agentes sin reservaciones</value>
+  </data>
+  <data name="AgentsDoNotRequireSeats" xml:space="preserve">
+    <value>Agentes no requieren un puesto</value>
+  </data>
+  <data name="ShrinkageSpan" xml:space="preserve">
+    <value>Absentismo debe ser entre 1 y 99</value>
+  </data>
+  <data name="SeatNumber" xml:space="preserve">
+    <value>Número de Puesto</value>
+  </data>
+  <data name="ShowWarnings" xml:space="preserve">
+    <value>Mostrar alertas</value>
+  </data>
+  <data name="MinWeeklyWorkTime" xml:space="preserve">
+    <value>Tiempo de trabajo semanal mínimo</value>
+  </data>
+  <data name="SkillOpeningHours" xml:space="preserve">
+    <value>Horarios de apertura del skill</value>
+  </data>
+  <data name="PersonAccount" xml:space="preserve">
+    <value>Cuenta Personal</value>
+  </data>
+  <data name="WeeklyRestTime" xml:space="preserve">
+    <value>Tiempo de Descanso Semanal</value>
+  </data>
+  <data name="NightRest" xml:space="preserve">
+    <value>Descanso nocturno</value>
+  </data>
+  <data name="Suffix" xml:space="preserve">
+    <value>Sufijo</value>
+  </data>
+  <data name="Prefix" xml:space="preserve">
+    <value>Prefijo</value>
+  </data>
+  <data name="AllDaysAreClosed" xml:space="preserve">
+    <value>Todos los días están cerrados</value>
+  </data>
+  <data name="ClearCampaign" xml:space="preserve">
+    <value>Quitar campaña</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Recuérdame</value>
+  </data>
+  <data name="DateRangeIsAMaximumOfSixtyDays" xml:space="preserve">
+    <value>El rango de fechas no puede ser mayor a 60 días</value>
+  </data>
+  <data name="DeletePerson" xml:space="preserve">
+    <value>Borrar personas</value>
+  </data>
+  <data name="UnselectAllPeopleInEveryPage" xml:space="preserve">
+    <value>Deseleccione personas en cada página</value>
+  </data>
+  <data name="SelectAllPeopleInEveryPage" xml:space="preserve">
+    <value>Seleccione personas en cada página</value>
+  </data>
+  <data name="Play" xml:space="preserve">
+    <value>Play</value>
+  </data>
+  <data name="PausedAt" xml:space="preserve">
+    <value>Pausar en</value>
+  </data>
+  <data name="Pause" xml:space="preserve">
+    <value>Pausa</value>
+  </data>
+  <data name="MyTeam" xml:space="preserve">
+    <value>MiEquipo</value>
+  </data>
+  <data name="PageSize" xml:space="preserve">
+    <value>Tamaño página</value>
+  </data>
+  <data name="TotalRequestsCount" xml:space="preserve">
+    <value>Total nr. de solicitudes</value>
+  </data>
+  <data name="Accuracy" xml:space="preserve">
+    <value>Precisión</value>
+  </data>
+  <data name="ClearOverride" xml:space="preserve">
+    <value>Quitar sobrescritura</value>
+  </data>
+  <data name="ShowOnlyAgentsWithNoSeat" xml:space="preserve">
+    <value>Mostrar sólo agentes sin puesto</value>
+  </data>
+  <data name="ReportOptions" xml:space="preserve">
+    <value>Opciones Reportes</value>
+  </data>
+  <data name="DateRange" xml:space="preserve">
+    <value>Rango de Fechas</value>
+  </data>
+  <data name="PreviewTheNewPeopleModule" xml:space="preserve">
+    <value>Mira un anticipo del nuevo módulo People!</value>
+  </data>
+  <data name="PreviewTheNewRequestsModule" xml:space="preserve">
+    <value>Mira un anticipo del nuevo módulo Solicitudes!</value>
+  </data>
+  <data name="CannotUndoScheduleChange" xml:space="preserve">
+    <value>No se puede deshacer el cambio en el horario</value>
+  </data>
+  <data name="ShiftLengthExceed36Hours" xml:space="preserve">
+    <value>El turno excede las 36 horas</value>
+  </data>
+  <data name="FilterReports" xml:space="preserve">
+    <value>Filtrar reportes</value>
+  </data>
+  <data name="AddAbsenceSuccessedResult" xml:space="preserve">
+    <value>Se agregó con éxito la/las ausencia(s) en los agentes seleccionados</value>
+  </data>
+  <data name="SwapShifts" xml:space="preserve">
+    <value>Intercambio de turnos</value>
+  </data>
+  <data name="ShiftTrade" xml:space="preserve">
+    <value>Intercambio de turnos</value>
+  </data>
+  <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
+    <value>El procesamiento de la lista de espera será hecho en el fondo y podría tomar cierto tiempo en finalizar.</value>
+  </data>
+  <data name="ProcessWaitlist" xml:space="preserve">
+    <value>Procesar Lista de Espera</value>
+  </data>
+  <data name="ProcessWaitlistedRequestsFinished" xml:space="preserve">
+    <value>El procesamiento de solicitudes en lista de espera para el periodo {0} ha finalizado.</value>
+  </data>
+  <data name="WaitlistPeriod" xml:space="preserve">
+    <value>Todas las solicitudes en lista de espera serán procesadas para el periodo seleccionado</value>
+  </data>
+  <data name="ConfirmDeleteCampaign" xml:space="preserve">
+    <value>Estás seguro que quieres borrar esta campaña?</value>
+  </data>
+  <data name="SubmitProcessWaitlistedRequestsSuccess" xml:space="preserve">
+    <value>Las solicitudes en lista de espera para el periodo {0} han empezado a procesarse.</value>
+  </data>
+  <data name="HelpLabel" xml:space="preserve">
+    <value>Ayuda</value>
+  </data>
+  <data name="ConfirmCancelRequest" xml:space="preserve">
+    <value>Si cancelas esta solicitud aprobada se eliminarán todas las ausencias relacionadas de ´tu horario. Estás seguro que quieres continuar?</value>
+  </data>
+  <data name="Unselect" xml:space="preserve">
+    <value>Deseleccionar</value>
+  </data>
+  <data name="RequestInvalidStateTransition" xml:space="preserve">
+    <value>Una solicitud que es {0} no puede ser {1}.</value>
+  </data>
+  <data name="LoadRequests" xml:space="preserve">
+    <value>Cargar Solicitudes</value>
+  </data>
+  <data name="TheNewTimeIsNotAllowedFor" xml:space="preserve">
+    <value>El nuevo tiempo no será aplicado para</value>
+  </data>
+  <data name="CannotDeleteBaseActivity" xml:space="preserve">
+    <value>No se puede eliminar la actividad base.</value>
+  </data>
+  <data name="TryOutTheNewImprovedTeams" xml:space="preserve">
+    <value>Prueba el nuevo y mejorado Equipos!</value>
+  </data>
+  <data name="CancelAbsenceRequest" xml:space="preserve">
+    <value>Cancelar Solicitud de Ausencia Aprobada</value>
+  </data>
+  <data name="CancelRequest" xml:space="preserve">
+    <value>Cancelar Solicitud</value>
+  </data>
+  <data name="AddAbsenceFailed" xml:space="preserve">
+    <value>Error al agregar ausencia(s)</value>
+  </data>
+  <data name="ModifySkill" xml:space="preserve">
+    <value>Modificar Skill</value>
+  </data>
+  <data name="FailedToSwapShifts" xml:space="preserve">
+    <value>Error al intercambiar turnos.</value>
+  </data>
+  <data name="Seasonality" xml:space="preserve">
+    <value>Estacionalidad</value>
+  </data>
+  <data name="FailedMessageForRemovingActivity" xml:space="preserve">
+    <value>Error al eliminar actividades en los agentes seleccionados</value>
+  </data>
+  <data name="ClearBackgroundImage" xml:space="preserve">
+    <value>Quitar Imagen de Fondo.</value>
+  </data>
+  <data name="SuccessfulMessageForRemovingActivity" xml:space="preserve">
+    <value>Se eliminó con éxito las actividades de los agentes seleccionados </value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedActivity" xml:space="preserve">
+    <value>Estás seguro que quieres eliminar {0} actividades para {1} agentes?</value>
+  </data>
+  <data name="IncludedSkills" xml:space="preserve">
+    <value>Skills incluidas</value>
+  </data>
+  <data name="SelectSkillArea" xml:space="preserve">
+    <value>Seleccionar area de skill</value>
+  </data>
+  <data name="OfferedAverageHandleTime" xml:space="preserve">
+    <value>Tiempo promedio de gestión ofrecido</value>
+  </data>
+  <data name="FinishedSwapShifts" xml:space="preserve">
+    <value>Intercambio de trunos exitoso</value>
+  </data>
+  <data name="IncomingTraffic" xml:space="preserve">
+    <value>Tráfico entrante</value>
+  </data>
+  <data name="CreateSkillArea" xml:space="preserve">
+    <value>Crear un area de skill</value>
+  </data>
+  <data name="NoPermissionRemoveAgentActivity" xml:space="preserve">
+    <value>No tienes permiso para eliminar actividades</value>
+  </data>
+  <data name="Cancelled" xml:space="preserve">
+    <value>Cancelado</value>
+  </data>
+  <data name="AbsenceRequestWasCancelled" xml:space="preserve">
+    <value>La solicitud de ausencia para {0} - {1} fue cancelada y la ausencia borrada de tu horario.</value>
+  </data>
+  <data name="AbsenceRequestForOneDayWasCancelled" xml:space="preserve">
+    <value>La solicitud de ausencia para el {0} fue cancelada y la ausencia borrada de tu horario.</value>
+  </data>
+  <data name="WaitlistPosition" xml:space="preserve">
+    <value>Puesto en lista de espera:</value>
+  </data>
+  <data name="NoPermissionAddAgentActivity" xml:space="preserve">
+    <value>No tienes permiso para agregar actividades para este(os) agente(s)</value>
+  </data>
+  <data name="MustSelectTwoAgentsToSwap" xml:space="preserve">
+    <value>Debes seleccionar dos agentes para hacer el intercambio.</value>
+  </data>
+  <data name="MustSelectAtLeastOneAgent" xml:space="preserve">
+    <value>Debes seleccionar al menos un agente.</value>
+  </data>
+  <data name="PersonsAreWriteProtected" xml:space="preserve">
+    <value>Este horario esta protegido contra escritura para {0} agente(s). Use el botón Deseleccionar para poder actualizar el horario de el/los agente(s) que se pueden editar. </value>
+  </data>
+  <data name="RemoveActivity" xml:space="preserve">
+    <value>Borrar Actividad</value>
+  </data>
+  <data name="YouHaveSelectedXAgent" xml:space="preserve">
+    <value>Has seleccionado {0} agente(s).</value>
+  </data>
+  <data name="DenyReason" xml:space="preserve">
+    <value>Razón para denegar</value>
+  </data>
+  <data name="SeatBookingsList" xml:space="preserve">
+    <value>Lista de reservas de puestos</value>
+  </data>
+  <data name="CouldNotRemoveAbsenceFromProtectedSchedule" xml:space="preserve">
+    <value>No se puede borrar ausencia de un horario protegido.</value>
+  </data>
+  <data name="SelectAnActivity" xml:space="preserve">
+    <value>Seleccionar una actividad</value>
+  </data>
+  <data name="SuccessfulMessageForAddingActivity" xml:space="preserve">
+    <value>Se agregó satisfactoriamente actividades para los agentes seleccionados</value>
+  </data>
+  <data name="FailedMessageForAddingActivity" xml:space="preserve">
+    <value>No se pudo agregar actividades para los agentes seleccionados</value>
+  </data>
+  <data name="SameDay" xml:space="preserve">
+    <value>Mismo día</value>
+  </data>
+  <data name="ConfirmToggleChildPermissions" xml:space="preserve">
+    <value>Esto desactivará esta función y todas sus sub-funciones. Estás seguro que quieres proceder?</value>
+  </data>
+  <data name="ConfirmToggleAllPermissions" xml:space="preserve">
+    <value>Esto activará todas las funciones. Estás seguro que quieres proceder?</value>
+  </data>
+  <data name="Replan" xml:space="preserve">
+    <value>Re-Planificar</value>
+  </data>
+  <data name="ProductActivationKeyMajorVersionWrong" xml:space="preserve">
+    <value>Una Llave de Activación de Producto (PAK) para Teleopti WFM versión 8 se necesita para ejecutar el programa. Por favor contacte a Service Desk o su Account Manager solicitando un nuevo PAK.</value>
+  </data>
+  <data name="CanNotModifyMyRole" xml:space="preserve">
+    <value>No puedes modificar tu propio rol</value>
+  </data>
+  <data name="RemoveAbsence" xml:space="preserve">
+    <value>Borrar Ausencia</value>
+  </data>
+  <data name="ToggleDarkTheme" xml:space="preserve">
+    <value>Activar tema oscuro</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Imagen</value>
+  </data>
+  <data name="AreYouSureToRemoveSelectedAbsence" xml:space="preserve">
+    <value>Estás seguro que quieres eliminar {0} ausencias para {1} agentes?</value>
+  </data>
+  <data name="SeatProperties" xml:space="preserve">
+    <value>Propiedades de puesto</value>
+  </data>
+  <data name="Seat" xml:space="preserve">
+    <value>Puesto</value>
+  </data>
+  <data name="RemoveEntireAbsenceForMultiDayPersonAbsence" xml:space="preserve">
+    <value>Borrar ausencia para todo el periodo</value>
+  </data>
+  <data name="LoadedColon" xml:space="preserve">
+    <value>Cargado:</value>
+  </data>
+  <data name="ToggleAll" xml:space="preserve">
+    <value>Activar todo</value>
+  </data>
+  <data name="SetBackgroundImage" xml:space="preserve">
+    <value>Seleccionar  imagen de fondo</value>
+  </data>
+  <data name="EnableWaitlisting" xml:space="preserve">
+    <value>Activar lista de espera</value>
+  </data>
+  <data name="NoHierarchiesExist" xml:space="preserve">
+    <value>No se encontraron jerarquías para esta business unit</value>
+  </data>
+  <data name="Text" xml:space="preserve">
+    <value>Texto</value>
+  </data>
+  <data name="ToggleLowLightFilter" xml:space="preserve">
+    <value>Activar filtro de luz clara</value>
+  </data>
+  <data name="Personalize" xml:space="preserve">
+    <value>Personalizar</value>
+  </data>
+  <data name="SelectTeams" xml:space="preserve">
+    <value>Seleccionar equipos</value>
+  </data>
+  <data name="SelectSites" xml:space="preserve">
+    <value>Seleccionar sites</value>
+  </data>
+  <data name="InAlarm" xml:space="preserve">
+    <value>En alarma</value>
+  </data>
+  <data name="AgentDetails" xml:space="preserve">
+    <value>Detalles del agente</value>
+  </data>
+  <data name="DeletePeriod" xml:space="preserve">
+    <value>Borrar periodo</value>
+  </data>
+  <data name="AddEmptyPeriod" xml:space="preserve">
+    <value>Agregar horarios de apertura</value>
+  </data>
+  <data name="Waitlisted" xml:space="preserve">
+    <value>En lista de espera</value>
+  </data>
+  <data name="AbsenceRequestHasBeenWaitlisted" xml:space="preserve">
+    <value>La solicitud de ausencia entre el {0} y el {1} no pudo ser aprobada en este momento y se puso en lista de espera.</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenWaitlisted" xml:space="preserve">
+    <value>La solicitud de ausencia para el {0} no pudo ser aprobada en este momento y se puso en lista de espera.</value>
+  </data>
+  <data name="DoubleClickHereToEditText" xml:space="preserve">
+    <value>Doble-click aquí para editar texto</value>
+  </data>
+  <data name="ShowOnlyAbsence" xml:space="preserve">
+    <value>Mostrar sólo ausencias</value>
+  </data>
+  <data name="AlignBottom" xml:space="preserve">
+    <value>Alinear abajo</value>
+  </data>
+  <data name="MoveBack" xml:space="preserve">
+    <value>Retroceder</value>
+  </data>
+  <data name="AlignLeft" xml:space="preserve">
+    <value>Alinear Izquierda</value>
+  </data>
+  <data name="IntraOptimize" xml:space="preserve">
+    <value>Optimizar Intraday</value>
+  </data>
+  <data name="AlignRight" xml:space="preserve">
+    <value>Alinear Derecha</value>
+  </data>
+  <data name="HidePanel" xml:space="preserve">
+    <value>Ocultar Panel</value>
+  </data>
+  <data name="Anonymous" xml:space="preserve">
+    <value>Anónimo</value>
+  </data>
+  <data name="FailedToRemoveAbsence" xml:space="preserve">
+    <value>Error al intentar eliminar la ausencia seleccionada.</value>
+  </data>
+  <data name="ShowRightPanel" xml:space="preserve">
+    <value>Mostrar panel derecho</value>
+  </data>
+  <data name="InvalidNumber" xml:space="preserve">
+    <value>Número inválido</value>
+  </data>
+  <data name="AlignTop" xml:space="preserve">
+    <value>Alinear arriba</value>
+  </data>
+  <data name="BringToFront" xml:space="preserve">
+    <value>Traer al frente</value>
+  </data>
+  <data name="TheFollowingAgentsHaveAffectedActivities" xml:space="preserve">
+    <value>Las actividades de los siguientes agentes fueron afectadas:</value>
+  </data>
+  <data name="NewDayOffRule" xml:space="preserve">
+    <value>Nueva Regla - Días Libres</value>
+  </data>
+  <data name="ManageRules" xml:space="preserve">
+    <value>Administrar Reglas</value>
+  </data>
+  <data name="MoveForwards" xml:space="preserve">
+    <value>Mover Hacia Adelante</value>
+  </data>
+  <data name="GroupSelectedItems" xml:space="preserve">
+    <value>Agrupar Elementos Seleccionados</value>
+  </data>
+  <data name="SuccessfulMessageForEditingShiftCategory" xml:space="preserve">
+    <value>Se cambió con éxito la categoría de turno para los agentes seleccionadosp</value>
+  </data>
+  <data name="MultipleSeatsSelected" xml:space="preserve">
+    <value>(Múltiples Puestos Seleccionados)</value>
+  </data>
+  <data name="SuccessfulBookings" xml:space="preserve">
+    <value>Reservas Realizadas con Èxito</value>
+  </data>
+  <data name="EditShiftCategory" xml:space="preserve">
+    <value>Editar Categoría de Turno</value>
+  </data>
+  <data name="LoadingSkills" xml:space="preserve">
+    <value>Cargando skills....</value>
+  </data>
+  <data name="CanOnlyCancelApprovedAbsenceRequestMultiDay" xml:space="preserve">
+    <value>No se puede cancelar la solicitud de ausencia para {0} del {1} al {2} ya que no ha sido aprobada.</value>
+  </data>
+  <data name="AreYouSureYouWishToCancelAbsence" xml:space="preserve">
+    <value>Estás seguro que quieres cancelar esta solicitud de ausencia?</value>
   </data>
 </root>
