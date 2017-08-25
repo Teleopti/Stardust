@@ -125,13 +125,23 @@
 				groupCopy.selectedChildGroupIds.splice(0);
 
 				for (var j = 0; j < groupCopy.children.length; j++) {
-					var childGroup = groupCopy.children[j]
-					if (ctrl.selectedGroups.groupIds.indexOf(childGroup.origin.id) > -1) {
+					var childGroup = groupCopy.children[j];
+					if (isChildGroupSelected(childGroup)) {
 						groupCopy.selectedChildGroupIds.push(childGroup.origin.id);
 					}
 				}
 			}
 		};
+		function isChildGroupSelected(childGroupCopy) {
+			var currentTab = ctrl.tabs[selectedIndex];
+			if (currentTab.title === 'BusinessHierarchy' && ctrl.selectedGroups.groupIds.indexOf(childGroupCopy.origin.id) > -1)
+				return true;
+			if (currentTab.title === 'GroupPages' &&
+				ctrl.selectedGroups.groupIds.indexOf(childGroupCopy.origin.id) > -1 &&
+				ctrl.selectedGroups.groupPageId === childGroupCopy.origin.parent.id)
+				return true;
+			return false;
+		}
 		function isSelectionInCurrentTab() {
 			var currentTab = ctrl.tabs[selectedIndex];
 			return currentTab.title === ctrl.selectedGroups.mode;

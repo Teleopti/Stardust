@@ -232,7 +232,8 @@ describe('<group-page-picker>', function () {
 		 
 		scope.selectedGroups = {
 			mode: 'GroupPages',
-			groupIds: ['childGroup1_1', 'childGroup2_1']
+			groupPageId: 'groupPage1',
+			groupIds: ['childGroup1_1']
 		};
 		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 		openPanel(picker);
@@ -248,10 +249,6 @@ describe('<group-page-picker>', function () {
 		expect(childGroups[0].querySelector('input').checked).toEqual(true);
 		expect(childGroups[1].querySelector('input').checked).toEqual(false);
 		toggleGroupPage(0);
-
-		toggleGroupPage(1);
-		childGroups = $document[0].querySelectorAll('md-tab-content.md-active .child');
-		expect(childGroups[0].querySelector('input').checked).toEqual(true);
 	});
 
 	it('should change the selection status when given selected groups are changed outside of the component', function () {
@@ -335,8 +332,6 @@ describe('<group-page-picker>', function () {
 			expectPanelOpen();
 			clickTab(1);
 		});
-
-
 
 		it('should reset selected groups when switching to another group page and current group page is selected', function () {
 			checkGroupPage(0);
@@ -1097,9 +1092,4 @@ describe('<group-page-picker>', function () {
 		};
 		return scope;
 	}
-
-	function FakeGroupPages() {
-
-	}
-
 });
