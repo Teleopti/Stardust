@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
@@ -32,6 +33,9 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpPost, Route("api/intraday/skillarea")]
 		public virtual IHttpActionResult CreateSkillArea([FromBody]SkillAreaInput input)
 		{
+			if (!input.Skills.Any())
+				return BadRequest("No skill selected");
+
 			_createSkillArea.Create(input.Name, input.Skills);
 			return Ok();
 		}
