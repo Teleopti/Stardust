@@ -115,6 +115,9 @@
         },
         function(data, status, headers, config) {
           vm.skillMaster.isForecastRunning = false;
+        },
+        function(data, status, headers, config) {
+          vm.skillMaster.isForecastRunning = false;
         }
       )
     }
@@ -145,7 +148,7 @@
           blockToken = data.BlockToken;
           getWorkloadForecastData(vm.forecastModalObj);
         }, function(data, status, headers, config) {
-
+          vm.skillMaster.IsForecastRunning = false;
         });
       }
 
