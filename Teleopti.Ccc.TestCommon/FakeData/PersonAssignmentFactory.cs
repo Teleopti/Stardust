@@ -111,8 +111,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static IPersonAssignment CreateAssignmentWithMainShift(IPerson person, IScenario scenario, DateTimePeriod period, IShiftCategory shiftCategory)
 		{
-			return CreateAssignmentWithMainShift(person,
-																					 scenario, new Activity("ass activity"), period, shiftCategory);
+			return CreateAssignmentWithMainShift(person, scenario, new Activity("ass activity"), period, shiftCategory);
 		}
 
 		public static IPersonAssignment CreateAssignmentWithPersonalShift(IPerson person, IScenario scenario, IActivity activity, DateTimePeriod period)

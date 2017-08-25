@@ -2,24 +2,113 @@
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
+using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
+	[TestFixture]
+	[DomainTest]
+	public class MoveShiftCommandHandlerTest : ISetup
+	{
+		public MoveShiftCommandHandler Target;
+		public FakeScheduleStorage ScheduleStorage;
+		public FakeCurrentScenario CurrentScenario;
+		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
+		public FakeWriteSideRepository<IPerson> PersonRepository;
+
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
+			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<MoveShiftCommandHandler>().For<IHandleCommand<MoveShiftCommand>>();
+		}
+
+		[Test]
+		public void ShouldReturnPersonAssignmentIsNotValidDotErrorIfPersonAssignmentNotExists()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+			
+			var cmd = new MoveShiftCommand
+			{
+				PersonId = person.Id.Value,
+				ScheduleDate = DateOnly.Today,
+				NewStartTimeInUtc = new DateTime(2000, 1, 1, 4, 0, 0),
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid() }
+			};
+
+			Target.Handle(cmd);
+			cmd.ErrorMessages.Should().Contain(Resources.PersonAssignmentIsNotValid);
+		}
+
+		[Test]
+		public void ShouldMoveShift()
+		{
+			var agent = new Person().WithId();
+			PersonRepository.Add(agent);
+			var activity = new Activity("act").WithId();
+			var orgStart = createDateTimeUtc(6);
+			var orgEnd = createDateTimeUtc(11);
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			var personAss = createPersonAssignmentWithOneLayer(activity, agent, CurrentScenario.Current(),  orgStart, orgEnd, TimeZoneInfo.Utc);
+			ScheduleStorage.Add(personAss);
+
+			var shiftLayer = personAss.ShiftLayers.Single();
+			shiftLayer.WithId();
+			
+			var cmd = new MoveShiftCommand
+			{
+				PersonId = agent.Id.Value,
+				ScheduleDate = new DateOnly(2013, 11, 14),
+				NewStartTimeInUtc = createDateTimeUtc(2),
+				TrackedCommandInfo = new TrackedCommandInfo { TrackId = Guid.NewGuid() }
+			};
+
+			Target.Handle(cmd);
+
+			var expectedStart = cmd.NewStartTimeInUtc;
+			var personAssignment = ScheduleStorage.LoadAll().Single() as PersonAssignment;
+			var modifiedLayer = personAssignment.ShiftLayers.Single();
+			modifiedLayer.Payload.Should().Be(activity);
+			modifiedLayer.Period.StartDateTime.Should().Be(expectedStart);
+			modifiedLayer.Period.EndDateTime.Should().Be(expectedStart + (orgEnd - orgStart));
+		}
+
+		private static DateTime createDateTimeUtc(int hourOnDay)
+		{
+			return new DateTime(2013, 11, 14, hourOnDay, 0, 0, 0, DateTimeKind.Utc);
+		}
+
+		private static IPersonAssignment createPersonAssignmentWithOneLayer(IActivity activity, IPerson agent, IScenario current, DateTime orgStart, DateTime orgEnd, TimeZoneInfo timeZone)
+		{
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, current,
+				activity, new DateTimePeriod(TimeZoneHelper.ConvertToUtc(orgStart, timeZone),
+					TimeZoneHelper.ConvertToUtc(orgEnd, timeZone)), new ShiftCategory("katt"));
+			return assignment;
+		}
+	}
+
 	[TestWithStaticDependenciesAvoidUse]
-	public class MoveShiftCommandHandlerTest
+	public class MoveShiftCommandHandlerNoDeltasTest
 	{
 		[Test]
 		public void ShouldReturnPersonAssignmentIsNotValidDotErrorIfPersonAssignmentNotExists()
@@ -28,7 +117,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository();
 			var scenario = new ThisCurrentScenario(new Scenario("scenario"));
 			var personRepository = new FakeWriteSideRepository<IPerson> { agent };
-			var target = new MoveShiftCommandHandler( personRepository, personAssignmentRepository, scenario);
+			var target = new MoveShiftCommandHandlerNoDeltas(personRepository, personAssignmentRepository, scenario);
 
 			var cmd = new MoveShiftCommand
 			{
@@ -62,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayer = personAssignment.ShiftLayers.Single();
 			shiftLayer.WithId();
-			var target = new MoveShiftCommandHandler(personRepository, personAssignmentRepository, scenario);
+			var target = new MoveShiftCommandHandlerNoDeltas(personRepository, personAssignmentRepository, scenario);
 
 			var cmd = new MoveShiftCommand
 			{
@@ -92,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var userTimeZone = new UtcTimeZone();
 			agent.PermissionInformation.SetDefaultTimeZone(userTimeZone.TimeZone());
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
-			personAss.AddOvertimeActivity(overtimeAct, new DateTimePeriod(createDateTimeUtc(11),createDateTimeUtc(12)), new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime) );
+			personAss.AddOvertimeActivity(overtimeAct, new DateTimePeriod(createDateTimeUtc(11), createDateTimeUtc(12)), new MultiplicatorDefinitionSet("_", MultiplicatorType.Overtime));
 
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 			{
@@ -103,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayers = personAssignment.ShiftLayers.ToList();
 			shiftLayers.ForEach(l => l.WithId());
-			var target = new MoveShiftCommandHandler(personRepository, personAssignmentRepository, scenario);
+			var target = new MoveShiftCommandHandlerNoDeltas(personRepository, personAssignmentRepository, scenario);
 
 			var cmd = new MoveShiftCommand
 			{
@@ -117,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var expectedStart = cmd.NewStartTimeInUtc;
 			var modifiedLayers = personAssignmentRepository.Single().ShiftLayers.ToList();
-			
+
 			modifiedLayers[0].Payload.Should().Be(activity);
 			modifiedLayers[0].Should().Be.OfType<MainShiftLayer>();
 			modifiedLayers[0].Period.StartDateTime.Should().Be(expectedStart);
@@ -139,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var userTimeZone = new UtcTimeZone();
 			agent.PermissionInformation.SetDefaultTimeZone(userTimeZone.TimeZone());
 			var personAss = createPersonAssignmentWithOneLayer(activity, agent, orgStart, orgEnd, userTimeZone);
-			personAss.AddPersonalActivity(personalActivity, new DateTimePeriod(createDateTimeUtc(11),createDateTimeUtc(12)));
+			personAss.AddPersonalActivity(personalActivity, new DateTimePeriod(createDateTimeUtc(11), createDateTimeUtc(12)));
 
 			var personAssignmentRepository = new FakePersonAssignmentWriteSideRepository
 			{
@@ -150,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayers = personAssignment.ShiftLayers.ToList();
 			shiftLayers.ForEach(l => l.WithId());
-			var target = new MoveShiftCommandHandler(personRepository, personAssignmentRepository, scenario);
+			var target = new MoveShiftCommandHandlerNoDeltas(personRepository, personAssignmentRepository, scenario);
 
 			var cmd = new MoveShiftCommand
 			{
@@ -194,7 +283,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayers = personAssignment.ShiftLayers.ToList();
 			shiftLayers.ForEach(l => l.WithId());
-			var target = new MoveShiftCommandHandler(personRepository, personAssignmentRepository, scenario);
+			var target = new MoveShiftCommandHandlerNoDeltas(personRepository, personAssignmentRepository, scenario);
 
 			var cmd = new MoveShiftCommand
 			{
@@ -233,7 +322,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personAssignment = personAssignmentRepository.Single();
 			var shiftLayers = personAssignment.ShiftLayers.ToList();
 			shiftLayers.ForEach(l => l.WithId());
-			var target = new MoveShiftCommandHandler(personRepository, personAssignmentRepository, scenario);
+			var target = new MoveShiftCommandHandlerNoDeltas(personRepository, personAssignmentRepository, scenario);
 
 			var cmd = new MoveShiftCommand
 			{
