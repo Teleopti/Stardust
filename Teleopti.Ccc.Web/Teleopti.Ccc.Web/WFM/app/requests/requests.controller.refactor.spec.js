@@ -245,6 +245,16 @@ describe('Requests - Refactor(remove later) controller controllers',
 			expect(fakeState.current.name).toEqual('requests.shiftTrade');
 		});
 
+		it('should get isShiftTradeViewActive according to current state name', function () {
+			var controller = setUpTarget().controller;
+
+			fakeState.current.name = 'requests';
+			expect(controller.isShiftTradeViewActive()).toBeFalsy();
+			controller.activeShiftTradeTab();
+
+			expect(controller.isShiftTradeViewActive()).toBeTruthy();
+		});
+
 		it('should pass correct params to absence and text requests', function () {
 			var controller = setUpTarget().controller;
 

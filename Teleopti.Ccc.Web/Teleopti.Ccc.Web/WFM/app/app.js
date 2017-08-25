@@ -69,6 +69,9 @@ wfm.config([
 		});
 
 		RtaStateProvider.config($stateProvider);
+
+		//For fixing the routings in Requests when having different controllers with same url.
+		//This will be removed after Wfm_Requests_Refactoring_45470 is stable.
 		RequestsStateProvider.config($stateProvider);
 
 		$translateProvider.useSanitizeValueStrategy('sanitizeParameters');
@@ -122,6 +125,9 @@ wfm.config([
 		});
 
 		RtaState(toggleService);
+
+		//For fixing the routings in Requests when having different controllers with same url.
+		//This will be removed after Wfm_Requests_Refactoring_45470 is stable.
 		RequestsState(toggleService);
 	}
 

@@ -233,7 +233,7 @@
 		};
 
 		vm.isShiftTradeViewActive = function() {
-			return $state.current.name.indexOf('requestsRefactor-shiftTrade') > -1;
+			return $state.current.name.indexOf('requests.shiftTrade') > -1;
 		};
 
 		vm.init = function() {
