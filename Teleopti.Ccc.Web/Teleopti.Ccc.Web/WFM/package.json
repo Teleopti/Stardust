@@ -79,7 +79,7 @@
     "test": "karma start karma.conf.js",
     "devTest": "npm test -- --reporters dots --no-single-run --autoWatchBatchDelay 1000",
     "minify:css": ".\\node_modules\\.bin\\cleancss.cmd --source-map './css/style_classic.css' -o ./dist/dist.min.css",
-    "prestart": "..\\.node\\grunt.cmd devDist && start http://localhost:52858/TeleoptiWFM/Web/",
+    "prestart": "..\\.node\\grunt devDist && start http://localhost:52858/TeleoptiWFM/Web/",
     "start": ".\\node_modules\\.bin\\run-p.cmd iis watch:* ",
     "iis": "c:\\\"program files\\iis express\"\\iisexpress.exe /config:../../../.vs/config/applicationhost.config /site:Teleopti.Ccc.Web-Site",
     "sass": "npm run sass:classic && npm run sass:dark",
