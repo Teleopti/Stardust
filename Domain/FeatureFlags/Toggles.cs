@@ -183,6 +183,7 @@
 		Staffing_BPOExchangeImport_45202,
 		WFM_TrainingPlanner_44780,
 		Report_Realtime_Scheduled_Time_Per_Activity_45560,
+		Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640,
 		Wfm_Staffing_45411, //this is to enable staffing
 
 		Stardust_Priority_BelowNormal_44320
