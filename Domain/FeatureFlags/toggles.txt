@@ -133,7 +133,6 @@ ResourcePlanner_SchedulingIslands_44757 = true
 ResourcePlanner_MergeTeamblockClassicIntraday_45508 = RC
 
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
-
 Wfm_DisplayOnlineHelp_39402 = true
 
 ETL_SpeedUpPersonPeriodNightly_38097 = true
