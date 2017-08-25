@@ -50,9 +50,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 	    		skillDayList.AddRange(skillDaysForSkills[skill]);
 	    	}
 
-			return from s in skillDayList
-			       from p in s.SkillStaffPeriodCollection
-			       select p;
+		    return skillDayList.SelectMany(s => s.SkillStaffPeriodCollection);
 		}
 
 		private static DateOnlyPeriod GetPeriodFromBudgetDays(IEnumerable<IBudgetGroupDayDetailModel> selectedBudgetDays)

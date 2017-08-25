@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 
 	    public BudgetDaysUpdater(IBudgetDayProvider budgetDayProvider)
 		{
-			if (budgetDayProvider == null) throw new ArgumentNullException("budgetDayProvider");
+			if (budgetDayProvider == null) throw new ArgumentNullException(nameof(budgetDayProvider));
             if (budgetDayProvider.IsInBatch)
             {
                 _outerBatchRunning = true;

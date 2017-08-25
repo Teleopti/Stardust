@@ -8,31 +8,18 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 {
     public class ClosedBudgetDayResolver
     {
-        private IList<ISkillDay> _closedDays;
+        private List<DateOnly> _closedDays;
         private Dictionary<DateOnly, IBudgetGroupDayDetailModel> _selectedDsysdic;
 
         public ClosedBudgetDayResolver(IEnumerable<IBudgetGroupDayDetailModel> selectedBudgetDays, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysForSkills)
         {
-
-            _closedDays = new List<ISkillDay>();
-
-            //***
-            //What this does is to find skilldays that are closed on all skills
-            //This is tested and working... but if anyone has a faster or smarter way... please...
-            //My vacation starts now, need to go...
-
             var days = from s in skillDaysForSkills.Values
                           from d in s
                           group d by d.CurrentDate into g
-                          select new { Date = g.Key, SkillDays = g };
-            
-            
-            foreach (var g in days.Where(g => g.SkillDays.All(d => !d.OpenForWork.IsOpen)))
-            {
-                _closedDays.Add(g.SkillDays.First());
-            }
-            //***
+                          select new { Date = g.Key, Closed = g.All(d => !d.OpenForWork.IsOpen) };
 
+	        _closedDays = days.Where(d => d.Closed).Select(d => d.Date).ToList();
+            
             _selectedDsysdic = selectedBudgetDays.ToDictionary(t => t.Date.Date);
 
         }
@@ -41,11 +28,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
         {
             foreach (var closedDay in _closedDays)
             {
-                var key = closedDay.CurrentDate; //The timezone of the skill
-                
-                if (_selectedDsysdic.ContainsKey(key))
+                if (_selectedDsysdic.ContainsKey(closedDay))
                 {
-                     _selectedDsysdic[key].IsClosed = true; 
+                     _selectedDsysdic[closedDay].IsClosed = true; 
                 }
             }
         }

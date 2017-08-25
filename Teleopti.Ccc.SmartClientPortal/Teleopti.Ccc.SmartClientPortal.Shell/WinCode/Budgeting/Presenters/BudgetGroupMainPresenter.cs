@@ -9,7 +9,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
 using Teleopti.Ccc.WinCode;
-using Teleopti.Ccc.WinCode.Budgeting;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 {
@@ -26,12 +25,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 			_model = model;
 		}
 
-	    public IBudgetGroup LoadedBudgetGroup
-	    {
-            get { return _model.BudgetGroup; }
-	    }
+	    public IBudgetGroup LoadedBudgetGroup => _model.BudgetGroup;
 
-	    public void Initialize()
+		public void Initialize()
 		{
 			_view.SetText(string.Format(CultureInfo.CurrentCulture,
 			                            UserTexts.Resources.TeleoptiCCCColonModuleColonFromToDateScenarioColon,
@@ -46,8 +42,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 		{
 			_view.OnAddShrinkageRow(customShrinkage);
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		
 		public void AddEfficiencyShrinkageRow(ICustomEfficiencyShrinkage customEfficiencyShrinkage, IUnitOfWork unitOfWork)
 		{
 			try
@@ -63,8 +58,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 				_model.BudgetGroup.RemoveCustomEfficiencyShrinkage(customEfficiencyShrinkage);	
 			}
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		
 		public void DeleteShrinkageRows(IEnumerable<ICustomShrinkage> customShrinkages, IUnitOfWork unitOfWork)
 		{
 			try

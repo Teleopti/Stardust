@@ -32,22 +32,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
             _model.Save(customShrinkage);
         }
 
-        public string ShrinkageName
-        {
-            get { return _model.ShrinakgeName; }
-        }
+        public string ShrinkageName => _model.ShrinakgeName;
 
-        public bool IncludedInAllowance
-        {
-            get { return _model.IncludedInAllowance; }
-        }
+	    public bool IncludedInAllowance => _model.IncludedInAllowance;
 
-        public Guid ShrinkageId
-        {
-            get { return _model.ShrinkageId; }
-        }
+	    public Guid ShrinkageId => _model.ShrinkageId;
 
-        public void RemoveAllAbsences()
+	    public void RemoveAllAbsences()
         {
             _view.RemoveSelectedAbsences();
         }

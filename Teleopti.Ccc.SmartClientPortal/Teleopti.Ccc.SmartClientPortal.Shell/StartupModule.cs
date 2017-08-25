@@ -1,7 +1,6 @@
 ﻿using System.Runtime;
 using System.Windows.Forms;
 using Autofac;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Licensing;

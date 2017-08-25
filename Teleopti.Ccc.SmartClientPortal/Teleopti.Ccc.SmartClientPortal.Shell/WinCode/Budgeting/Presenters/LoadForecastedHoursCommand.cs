@@ -1,6 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Models;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 {
@@ -25,9 +24,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 			var forecastedHoursExtractor = new ForecastedHoursExtractor(container);
 			foreach (BudgetGroupDayDetailModel budgetGroupDayDetailModel in container.SelectedBudgetDays)
 			{
-				var budgetDayPeriod =
-					new DateOnlyPeriod(budgetGroupDayDetailModel.BudgetDay.Day, budgetGroupDayDetailModel.BudgetDay.Day).
-						ToDateTimePeriod(_mainModel.BudgetGroup.TimeZone);
+				var budgetDayPeriod = budgetGroupDayDetailModel.BudgetDay.Day.ToDateTimePeriod(_mainModel.BudgetGroup.TimeZone);
 				budgetGroupDayDetailModel.ForecastedHours = forecastedHoursExtractor.ForecastedHoursForPeriod(budgetDayPeriod);
 			}
 		}

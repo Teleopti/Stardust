@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
 
 		public IBudgetGroup LoadBudgetGroup(IBudgetGroup budgetGroup)
 		{
-			if (budgetGroup == null) throw new ArgumentNullException("budgetGroup");
+			if (budgetGroup == null) throw new ArgumentNullException(nameof(budgetGroup));
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
                 var bg = _budgetGroupRepository.Get(budgetGroup.Id.GetValueOrDefault(Guid.Empty));

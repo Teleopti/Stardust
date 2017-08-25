@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 				{
 					dayDetailModel.UpdateBudgetDay();
 					return dayDetailModel.BudgetDay;
-				}).ToList(); //One loop
+				}).ToArray(); //One loop
 
 			var grossStaffCalculator = new GrossStaffCalculator();
 			var netStaffCalculator = new NetStaffCalculator(grossStaffCalculator);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void UpdateBudgetDays(IBudgetDayProvider budgetDayProvider)
         {
-            if (budgetDayProvider == null) throw new ArgumentNullException("budgetDayProvider");
+            if (budgetDayProvider == null) throw new ArgumentNullException(nameof(budgetDayProvider));
             foreach (var budgetGroupDayDetailModel in budgetDayProvider.VisibleDayModels())
     		{
     			budgetGroupDayDetailModel.UpdateBudgetDay();
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 
         private void SaveUpdatedBudgetDays(IBudgetDayProvider budgetDayProvider)
     	{
-            if (budgetDayProvider == null) throw new ArgumentNullException("budgetDayProvider");
+            if (budgetDayProvider == null) throw new ArgumentNullException(nameof(budgetDayProvider));
             foreach (var budgetGroupDayDetailModel in budgetDayProvider.VisibleDayModels().Where(b => b.BudgetDay.Id.HasValue))
             {
                 budgetGroupDayDetailModel.BudgetDay =
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 
         private void SaveNewBudgetDays(IBudgetDayProvider budgetDayProvider)
         {
-            var newBudgetDays = budgetDayProvider.VisibleDayModels().Where(b => !b.BudgetDay.Id.HasValue).ToList();
+            var newBudgetDays = budgetDayProvider.VisibleDayModels().Where(b => !b.BudgetDay.Id.HasValue).ToArray();
             foreach (var budgetGroupDayDetailModel in newBudgetDays)
             {
                 _budgetDayRepository.Add(budgetGroupDayDetailModel.BudgetDay);

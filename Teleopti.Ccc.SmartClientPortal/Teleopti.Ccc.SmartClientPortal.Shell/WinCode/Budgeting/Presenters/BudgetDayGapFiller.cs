@@ -18,13 +18,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 
         public IList<IBudgetDay> AddMissingDays(IEnumerable<IBudgetDay> existingBudgetDays, DateOnlyPeriod period)
         {
+	        var lookup = existingBudgetDays.ToDictionary(b => b.Day);
             var dayCollection = period.DayCollection();
             var allBudgetDaysForPeriod = new List<IBudgetDay>(dayCollection.Count);
 
             foreach (DateOnly date in dayCollection)
             {
-                var budgetDay = existingBudgetDays.FirstOrDefault(d => d.Day == date);
-                if (budgetDay == null)
+                IBudgetDay budgetDay;
+                if (!lookup.TryGetValue(date, out budgetDay))
                 {
                     budgetDay = new BudgetDay(_budgetGroupMainModel.BudgetGroup, _budgetGroupMainModel.Scenario, date);
                     initiateBudgetDayWithDefaultValue(budgetDay);

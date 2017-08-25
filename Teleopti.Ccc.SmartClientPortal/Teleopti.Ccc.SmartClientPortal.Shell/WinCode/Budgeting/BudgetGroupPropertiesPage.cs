@@ -25,18 +25,10 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting
                 return budgetGroupWzardPage.CreateNewRoot();
             }
         }
-        public override string Name
-        {
-            get { return String.Empty; }
-        }
-        public override string WindowText
-        {
-            get { return UserTexts.Resources.Properties; }
-        }
+        public override string Name => String.Empty;
 
-        public override IRepository<IBudgetGroup> RepositoryObject
-        {
-            get { return RepositoryFactory.CreateBudgetGroupRepository(UnitOfWork); }
-        }
+	    public override string WindowText => UserTexts.Resources.Properties;
+
+	    public override IRepository<IBudgetGroup> RepositoryObject => RepositoryFactory.CreateBudgetGroupRepository(UnitOfWork);
     }
 }

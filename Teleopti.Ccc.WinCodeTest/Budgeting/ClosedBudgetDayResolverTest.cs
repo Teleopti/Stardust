@@ -23,16 +23,19 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
         public void Setup()
         {
             IBudgetGroup group = new BudgetGroup();
-            IBudgetDay day1 = new BudgetDay(group, new Scenario("Default"), new DateOnly(2010,12,1));
-            IBudgetDay day2 = new BudgetDay(group, new Scenario("Default"), new DateOnly(2010,12,2));
-            IBudgetDay day3 = new BudgetDay(group, new Scenario("Default"), new DateOnly(2010,12,3));
+	        var scenario = new Scenario("Default");
+	        IBudgetDay day1 = new BudgetDay(group, scenario, new DateOnly(2010,12,1));
+            IBudgetDay day2 = new BudgetDay(group, scenario, new DateOnly(2010,12,2));
+            IBudgetDay day3 = new BudgetDay(group, scenario, new DateOnly(2010,12,3));
 
-            selectedBudgetDays = new List<IBudgetGroupDayDetailModel>();
-            selectedBudgetDays.Add(new BudgetGroupDayDetailModel(day1));
-            selectedBudgetDays.Add(new BudgetGroupDayDetailModel(day2));
-            selectedBudgetDays.Add(new BudgetGroupDayDetailModel(day3));
+	        selectedBudgetDays = new List<IBudgetGroupDayDetailModel>
+	        {
+		        new BudgetGroupDayDetailModel(day1),
+		        new BudgetGroupDayDetailModel(day2),
+		        new BudgetGroupDayDetailModel(day3)
+	        };
 
-            IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysForSkills = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
+	        IDictionary<ISkill, IEnumerable<ISkillDay>> skillDaysForSkills = new Dictionary<ISkill, IEnumerable<ISkillDay>>();
             
             ISkill skill = new Skill("skill","",Color.Blue,15, new SkillTypePhone(new Description("d"), ForecastSource.InboundTelephony));
             ISkill skill2 = new Skill("anotherSkill","",Color.Blue,15, new SkillTypePhone(new Description("d"), ForecastSource.InboundTelephony));

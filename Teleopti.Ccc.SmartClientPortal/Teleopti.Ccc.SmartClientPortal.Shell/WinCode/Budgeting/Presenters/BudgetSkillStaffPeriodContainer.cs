@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
 	{
 		private readonly IEnumerable<ISkillStaffPeriod> _skillStaffPeriods;
 
-		public IEnumerable<IBudgetGroupDayDetailModel> SelectedBudgetDays { get; private set; }
+		public IEnumerable<IBudgetGroupDayDetailModel> SelectedBudgetDays { get; }
 		
 		public BudgetSkillStaffPeriodContainer(IEnumerable<ISkillStaffPeriod> skillStaffPeriods, IEnumerable<IBudgetGroupDayDetailModel> selectedBudgetDays)
 		{

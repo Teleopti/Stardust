@@ -35,12 +35,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Presenters
         
         public IEnumerable<IAbsence> Absences { get; private set; }
 
-        public ICustomShrinkage CustomShrinkageAdded
-        {
-            get { return _model.CustomShrinkageAdded; }
-        }
+        public ICustomShrinkage CustomShrinkageAdded => _model.CustomShrinkageAdded;
 
-        public void Save(ICustomShrinkage customShrinkage)
+	    public void Save(ICustomShrinkage customShrinkage)
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
