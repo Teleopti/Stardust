@@ -1668,6 +1668,7 @@
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShouldShiftTradeBeAutoGrantedSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\SpecificationCheckerTest.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\SpecificationCheckerWithConfigTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\TargetTimeFlexibilitySpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\SpecificationsForTest.cs" />
     <Compile Include="WorkflowControl\StaffingThresholdWithShrinkageValidatorTest.cs" />
