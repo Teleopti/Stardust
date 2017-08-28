@@ -402,7 +402,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<WorkShiftCalculator>().As<IWorkShiftCalculator>().SingleInstance();
 			builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>().SingleInstance();
 
-			if (_configuration.Toggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)))
+			if (_configuration.Toggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998))
 			{
 				builder.RegisterType<ScheduleOptimizationTeamBlock>().As<IScheduleOptimization>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DayOffOptimizationDesktopTeamBlock>().AsSelf().As<IDayOffOptimizationDesktop>().InstancePerLifetimeScope(); 
