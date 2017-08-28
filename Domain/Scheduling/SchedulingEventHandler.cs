@@ -53,12 +53,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[UnitOfWork]
 		protected virtual void DoScheduling(SchedulingWasOrdered @event, ISchedulerStateHolder schedulerStateHolder, DateOnlyPeriod selectedPeriod)
 		{
-			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland,
-				new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
-
+			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
 			var schedulingCallback = _currentSchedulingCallback.Current();
-			var converter = schedulingCallback as IConvertSchedulingCallbackToSchedulingProgress;
-			var schedulingProgress = converter == null ? new NoSchedulingProgress() : converter.Convert();
+			var schedulingProgress = schedulingCallback is IConvertSchedulingCallbackToSchedulingProgress converter ? converter.Convert() : new NoSchedulingProgress();
 
 			_scheduleExecutor.Execute(schedulingCallback,
 				_schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate), schedulingProgress,
