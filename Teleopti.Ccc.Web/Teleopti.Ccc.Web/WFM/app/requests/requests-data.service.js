@@ -4,7 +4,8 @@
 	angular.module('wfm.requests').service('requestsDataService', ['$q', '$http', '$translate', 'requestsDefinitions', 'Toggle', requestsDataService]);
 
 	function requestsDataService($q, $http, $translate, requestsDefinitions, toggleSvc) {
-		var listRequestsUrl = '../api/Requests/requests';
+		var listAbsenceAndTextRequestsUrl = '../api/Requests/requests';
+		var listOvertimeRequestsUrl = '../api/Requests/overtimeRequests';
 		var listShiftTradeRequestsUrl = '../api/Requests/shiftTradeRequests';
 		var approveRequestsUrl = '../api/Requests/approveRequests';
 		var denyRequestsUrl = '../api/Requests/denyRequests';
@@ -19,6 +20,7 @@
 		var resourceCalculateUrl = '../TriggerResourceCalculate';
 		var getBudgetGroupsUrl = "../api/RequestAllowance/budgetGroups";
 		var getBudgetAllowanceUrl = "../api/RequestAllowance/allowances";
+		var overtimeTypesUrl = "../api/MultiplicatorDefinitionSet/Overtime";
 		var hierarchyUrl;
 
 		if (toggleSvc.Wfm_HideUnusedTeamsAndSites_42690) {
@@ -30,7 +32,7 @@
 		this.getAllRequestsPromise = function (filter, sortingOrders, paging) {
 			return $q(function (resolve, reject) {
 				var requestFilter = requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging);
-				resolve($http.post(listRequestsUrl, requestFilter));
+				resolve($http.post(listAbsenceAndTextRequestsUrl, requestFilter));
 			});
 		};
 
@@ -44,6 +46,10 @@
 
 		this.getShiftTradeRequestsPromise = function (filter, sortingOrders, paging) {
 			return $http.post(listShiftTradeRequestsUrl, requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging));
+		};
+
+		this.getOvertimeRequestsPromise = function (filter, sortingOrders, paging) {
+			return $http.post(listOvertimeRequestsUrl, requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging));
 		};
 
 		this.getBudgetGroupsPromise = function () {
@@ -86,23 +92,30 @@
 			return $http.post(approveWithValidatorsUrl, parameters);
 		};
 
-		this.denyRequestsPromise = function (selectedRequestIdsAndMessage) {
+		this.denyRequestsPromise = function(selectedRequestIdsAndMessage) {
 			return $http.post(denyRequestsUrl, selectedRequestIdsAndMessage);
-		}
+		};
 
-		this.getRequestTypes = function () {
-			return $http.get(requestableAbsenceUrl).then(function (result) {
+		this.getRequestTypes = function() {
+			return $http.get(requestableAbsenceUrl).then(function(result) {
 				result.data.unshift({ Id: '0', Name: 'Text', ShortName: '' });
 				return result;
 			});
-		}
+		};
 
-		this.getLastCaluclatedDateTime = function () {
+		this.getOvertimeTypes  = function () {
+			return $http.get(overtimeTypesUrl).then(function (result) {
+				return result;
+			});
+		};
+
+		this.getLastCaluclatedDateTime = function() {
 			return $http.get(getLastCaluclatedDateUrl);
-		}
-		this.triggerResourceCalculate = function () {
+		};
+
+		this.triggerResourceCalculate = function() {
 			return $http.get(resourceCalculateUrl);
-		}
+		};
 
 		this.getAllRequestStatuses = function (isShiftTradeView) {
 			// TODO: Should get this list in a better way

@@ -68,6 +68,8 @@
 					</md-tab>
 					<md-tab label="{{'ShiftTrade' | translate}}" ng-click="vm.activeShiftTradeTab()">
 					</md-tab>
+					<md-tab ng-if="vm.isOvertimeEnabled" label="{{'Overtime' | translate}}" ng-click="vm.activeOvertimeTab()">
+					</md-tab>
 				</md-tabs>
 			</md-content>
 			<md-content class="md-padding" ng-class="{'text-absence-view': !vm.isShiftTradeViewActive(), 'shift-trade-view': vm.isShiftTradeViewActive()}">

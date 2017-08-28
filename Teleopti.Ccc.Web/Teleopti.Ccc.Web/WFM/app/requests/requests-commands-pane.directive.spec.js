@@ -12,7 +12,16 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		mockSignalRBackendServer = {},
 		signalRService,
 		currentUserInfo,
-		replyMessage;
+		replyMessage,
+		fakeState = {
+			current: {
+				name: ''
+			}
+		},
+		toggles = {
+			Wfm_Requests_People_Search_36294: true,
+			Wfm_Requests_Approve_Based_On_Budget_Allotment_39626: true,
+		};
 
 	beforeEach(function () {
 		module('wfm.templates');
@@ -24,13 +33,10 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		currentUserInfo = new FakeCurrentUserInfo();
 		module(function ($provide) {
 			$provide.service('Toggle', function () {
-				return {
-					Wfm_Requests_People_Search_36294: true,
-					Wfm_Requests_Approve_Based_On_Budget_Allotment_39626: true,
-					togglesLoaded: $q(function (resolve, reject) {
-						resolve();
-					})
-				}
+				toggles.togglesLoaded = $q(function(resolve, reject) {
+					resolve();
+				});
+				return toggles;
 			});
 			$provide.service('requestsDataService', function () {
 				return requestsDataService;
@@ -53,7 +59,11 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 			$provide.service('requestsPermissions', function () {
 				return new FakeRequestsPermissions();
 			});
+			$provide.service('$state', function() {
+				return fakeState;
+			});
 		});
+		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = false;
 	});
 
 	beforeEach(inject(function (_$rootScope_, _$controller_, _$compile_, _requestCommandParamsHolder_, _$q_) {
@@ -63,30 +73,6 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		requestCommandParamsHolder = _requestCommandParamsHolder_;
 		$q = _$q_;
 	}));
-
-	it('processWaitlistedRequests command submit scucess, should notify the result', function () {
-		var test = setUpTarget();
-		var handleResult = {
-			Success: true,
-			AffectedRequestIds: [{ id: 1 }],
-			CommandTrackId: "12"
-		}
-		requestsDataService.submitCommandIsASucess(true);
-		requestsDataService.setRequestCommandHandlingResult(handleResult);
-
-		test.requestCommandPaneScope.processWaitlistRequests();
-
-		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
-		expect(_notificationResult[0]).toEqual('Submit process waitlisted requests command success');
-	});
-
-	it('should notify the result when processWaitlistedRequests command is finished', function () {
-		var test = setUpTarget();
-		test.requestCommandPaneScope.commandTrackId = "12";
-		mockSignalRBackendServer.notifyClients('IRunRequestWaitlistEventMessage'
-			, { TrackId: test.requestCommandPaneScope.commandTrackId, StartDate: "D2016-07-15T12:00:44.357", EndDate: "D2016-07-15T12:00:44.357" });
-		expect(_notificationResult[0]).toEqual('ProcessWaitlistedRequestsFinished');
-	});
 
 	it('approve requests success, should notify the result', function () {
 		var test = setUpTarget();
@@ -122,6 +108,67 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		expect(replyMessage).toEqual(message);
 	});
 
+	it('approve requests fail, should notify the result', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }, { id: 2 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		var handleResult = {
+			Success: false,
+			ErrorMessages: ['A request that is New cannot be Approved.']
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+
+		test.requestCommandPaneScope.approveRequests();
+
+		expect(_notificationResult[0]).toEqual("A request that is New cannot be Approved.");
+	});
+
+	it('should approve base on budget command enabled in absence tab', function () {
+		var test = setUpTarget(false);
+		expect(test.requestCommandPaneScope.isApproveBasedOnBusinessRulesEnabled()).toEqual(true);
+	});
+
+	it('should hide approve base on budget command in shift trade tab', function () {
+		var test = setUpTarget(true);
+		expect(test.requestCommandPaneScope.isApproveBasedOnBusinessRulesEnabled()).toEqual(false);
+	});
+
+	it('should hide approve base on budget command in overtime tab', function () {
+		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
+		fakeState.current.name = 'requests.overtime';
+
+		var test = setUpTarget();
+		expect(test.requestCommandPaneScope.isApproveBasedOnBusinessRulesEnabled()).toEqual(false);
+	});
+
+	it('approveBasedOnBusinessRules command submit scucess, should notify the result', function () {
+		var test = setUpTarget();
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }],
+			CommandTrackId: "13"
+		}
+		var requestIds = [{ id: 1 }, { id: 2 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestsDataService.submitCommandIsASucess(true);
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+
+		test.requestCommandPaneScope.approveBasedOnBusinessRules();
+
+		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
+		expect(_notificationResult[0]).toEqual('SubmitApproveBasedOnBusinessRulesSuccess');
+	});
+
+	it('should notify the result when approveBasedOnBusinessRules command is finished', function () {
+		var test = setUpTarget();
+		test.requestCommandPaneScope.commandTrackId = "13";
+		mockSignalRBackendServer.notifyClients('IApproveRequestsWithValidatorsEventMessage'
+			, { TrackId: test.requestCommandPaneScope.commandTrackId });
+		expect(_notificationResult[0]).toEqual('ApproveBasedOnBusinessRulesFinished');
+		expect(requestCommandParamsHolder.getSelectedRequestsIds(false).length).toEqual(0);
+	});
+
 	it('deny requests, should handle message if there is one', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
@@ -137,80 +184,6 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		test.requestCommandPaneScope.denyRequests(message);
 
 		expect(replyMessage).toEqual(message);
-	});
-
-	it('cancel requests, should handle message if there is one', function () {
-		var test = setUpTarget();
-		requestsDataService.submitCommandIsASucess(true);
-		var requestIds = [{ id: 1 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
-		var handleResult = {
-			Success: true,
-			AffectedRequestIds: [{ id: 1 }]
-		}
-		requestsDataService.setRequestCommandHandlingResult(handleResult);
-		var message = 'message for cancel';
-
-		test.requestCommandPaneScope.cancelRequests(message);
-
-		expect(replyMessage).toEqual(message);
-	});
-
-	it('reply requests, should handle message', function () {
-		var test = setUpTarget();
-		requestsDataService.submitCommandIsASucess(true);
-		var requestIds = [{ id: 1 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
-		var handleResult = {
-			Success: true,
-			AffectedRequestIds: [{ id: 1 }]
-		}
-		requestsDataService.setRequestCommandHandlingResult(handleResult);
-		var message = 'message for reply';
-
-		test.requestCommandPaneScope.replyRequests(message);
-
-		expect(replyMessage).toEqual(message);
-	});
-
-	it('should not get message when there is more than one request selected', function () {
-		var test = setUpTarget();
-		var selectedRequestId = '1';
-		var message = ['message for id 1'];
-		var requestIds = ['1', '2'];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
-		requestCommandParamsHolder.setSelectedIdAndMessage(selectedRequestId, message);
-
-		test.requestCommandPaneScope.displayReplyDialog();
-		expect(test.requestCommandPaneScope.selectedRequestMessage).toEqual('');
-	});
-
-	it('should get message for selected request when there is only one request selected', function () {
-		var test = setUpTarget();
-		var selectedRequestId = ['1'];
-		var message = '  message for id 1';
-		requestCommandParamsHolder.setSelectedRequestIds(selectedRequestId);
-		requestCommandParamsHolder.setSelectedIdAndMessage(selectedRequestId, [message]);
-
-		test.requestCommandPaneScope.displayReplyDialog();
-
-		expect(test.requestCommandPaneScope.selectedRequestMessage).toEqual(message.substr(2));
-	});
-
-	it('approve requests fail, should notify the result', function () {
-		var test = setUpTarget();
-		requestsDataService.submitCommandIsASucess(true);
-		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
-		var handleResult = {
-			Success: false,
-			ErrorMessages: ['A request that is New cannot be Approved.']
-		}
-		requestsDataService.setRequestCommandHandlingResult(handleResult);
-
-		test.requestCommandPaneScope.approveRequests();
-
-		expect(_notificationResult[0]).toEqual("A request that is New cannot be Approved.");
 	});
 
 	it('deny requests success, should notify the result', function () {
@@ -246,6 +219,23 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		expect(_notificationResult[0]).toEqual("something is wrong with this deny");
 	});
 
+	it('cancel requests, should handle message if there is one', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }]
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+		var message = 'message for cancel';
+
+		test.requestCommandPaneScope.cancelRequests(message);
+
+		expect(replyMessage).toEqual(message);
+	});
+
 	it('cancel requests success, should notify the result', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
@@ -279,15 +269,96 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		expect(_notificationResult[0]).toEqual("something is wrong with this cancel");
 	});
 
-	it('submit any command is a fail, should notify the result', function () {
+	it('should hide cancel command in shift trade tab', function () {
+		var test = setUpTarget(true);
+		expect(test.requestCommandPaneScope.isCommandEnabledWithoutShiftTradeView('cancel')).toEqual(false);
+	});
+
+	it('should hide cancel command in overtime tab', function () {
+		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
+		fakeState.current.name = 'requests.overtime';
+
 		var test = setUpTarget();
-		var requestIds = [{ id: 1 }, { id: 2 }];
+		expect(test.requestCommandPaneScope.isCommandEnabledWithoutShiftTradeView('cancel')).toEqual(false);
+	});
+
+	it('should hide processWaitlistedRequests command in shift trade tab', function () {
+		var test = setUpTarget(true);
+		expect(test.requestCommandPaneScope.isCommandEnabledWithoutShiftTradeView('processWaitlist')).toEqual(false);
+	});
+
+	it('should hide processWaitlistedRequests command in overtime tab', function () {
+		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
+		fakeState.current.name = 'requests.overtime';
+
+		var test = setUpTarget();
+		expect(test.requestCommandPaneScope.isCommandEnabledWithoutShiftTradeView('processWaitlist')).toEqual(false);
+	});
+
+	it('processWaitlistedRequests command submit scucess, should notify the result', function () {
+		var test = setUpTarget();
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }],
+			CommandTrackId: "12"
+		};
+
+		requestsDataService.submitCommandIsASucess(true);
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+
+		test.requestCommandPaneScope.processWaitlistRequests();
+
+		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
+		expect(_notificationResult[0]).toEqual('Submit process waitlisted requests command success');
+	});
+
+	it('should notify the result when processWaitlistedRequests command is finished', function () {
+		var test = setUpTarget();
+		test.requestCommandPaneScope.commandTrackId = "12";
+		mockSignalRBackendServer.notifyClients('IRunRequestWaitlistEventMessage'
+			, { TrackId: test.requestCommandPaneScope.commandTrackId, StartDate: "D2016-07-15T12:00:44.357", EndDate: "D2016-07-15T12:00:44.357" });
+		expect(_notificationResult[0]).toEqual('ProcessWaitlistedRequestsFinished');
+	});
+
+	it('reply requests, should handle message', function () {
+		var test = setUpTarget();
+		requestsDataService.submitCommandIsASucess(true);
+		var requestIds = [{ id: 1 }];
 		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
-		requestsDataService.submitCommandIsASucess(false);
+		var handleResult = {
+			Success: true,
+			AffectedRequestIds: [{ id: 1 }]
+		}
+		requestsDataService.setRequestCommandHandlingResult(handleResult);
+		var message = 'message for reply';
 
-		test.requestCommandPaneScope.denyRequests();
+		test.requestCommandPaneScope.replyRequests(message);
 
-		expect(_notificationResult[0]).toEqual('submit error');
+		expect(replyMessage).toEqual(message);
+	});
+
+	it('should not get message for reply when there is more than one request selected', function () {
+		var test = setUpTarget();
+		var selectedRequestId = '1';
+		var message = ['message for id 1'];
+		var requestIds = ['1', '2'];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedIdAndMessage(selectedRequestId, message);
+
+		test.requestCommandPaneScope.displayReplyDialog();
+		expect(test.requestCommandPaneScope.selectedRequestMessage).toEqual('');
+	});
+
+	it('should get message for reply when there is only one request selected', function () {
+		var test = setUpTarget();
+		var selectedRequestId = ['1'];
+		var message = '  message for id 1';
+		requestCommandParamsHolder.setSelectedRequestIds(selectedRequestId);
+		requestCommandParamsHolder.setSelectedIdAndMessage(selectedRequestId, [message]);
+
+		test.requestCommandPaneScope.displayReplyDialog();
+
+		expect(test.requestCommandPaneScope.selectedRequestMessage).toEqual(message.substr(2));
 	});
 
 	it('should command enabled in shift trade tab', function () {
@@ -297,41 +368,17 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		expect(test.requestCommandPaneScope.disableCommands()).toEqual(false);
 	});
 
-	it('should approve base on budget command enabled in absence tab', function () {
-		var test = setUpTarget(false);
-		expect(test.requestCommandPaneScope.isApproveBasedOnBusinessRulesEnabled()).toEqual(true);
-	});
-
-	it('should approve base on budget command disabled in shift trade tab', function () {
+	it('should hide reply command in shift trade tab', function () {
 		var test = setUpTarget(true);
-		expect(test.requestCommandPaneScope.isApproveBasedOnBusinessRulesEnabled()).toEqual(false);
+		expect(test.requestCommandPaneScope.isCommandEnabledWithoutShiftTradeView('reply')).toEqual(false);
 	});
 
-	it('approveBasedOnBusinessRules command submit scucess, should notify the result', function () {
+	it('should hide reply command in overtime tab', function () {
+		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
+		fakeState.current.name = 'requests.overtime';
+
 		var test = setUpTarget();
-		var handleResult = {
-			Success: true,
-			AffectedRequestIds: [{ id: 1 }],
-			CommandTrackId: "13"
-		}
-		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
-		requestsDataService.submitCommandIsASucess(true);
-		requestsDataService.setRequestCommandHandlingResult(handleResult);
-
-		test.requestCommandPaneScope.approveBasedOnBusinessRules();
-
-		expect(handleResult.CommandTrackId).toEqual(test.requestCommandPaneScope.commandTrackId);
-		expect(_notificationResult[0]).toEqual('SubmitApproveBasedOnBusinessRulesSuccess');
-	});
-
-	it('should notify the result when approveBasedOnBusinessRules command is finished', function () {
-		var test = setUpTarget();
-		test.requestCommandPaneScope.commandTrackId = "13";
-		mockSignalRBackendServer.notifyClients('IApproveRequestsWithValidatorsEventMessage'
-			, { TrackId: test.requestCommandPaneScope.commandTrackId });
-		expect(_notificationResult[0]).toEqual('ApproveBasedOnBusinessRulesFinished');
-		expect(requestCommandParamsHolder.getSelectedRequestsIds(false).length).toEqual(0);
+		expect(test.requestCommandPaneScope.isCommandEnabledWithoutShiftTradeView('reply')).toEqual(false);
 	});
 
 	it('reply requests success, should notify the result', function () {
@@ -427,6 +474,53 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		expect(_notificationResult[1]).toEqual('ReplySuccess');
 	});
 
+	it('should show siteopenhour command in absence and text tab', function () {
+		var test = setUpTarget();
+		expect(test.requestCommandPaneScope.isCommandEnabled('siteOpenHour')).toEqual(true);
+	});
+
+	it('should show siteopenhour command in shift trade tab', function () {
+		var test = setUpTarget(true);
+		expect(test.requestCommandPaneScope.isCommandEnabled('siteOpenHour')).toEqual(true);
+	});
+
+	it('should hide siteopenhour command in overtime tab', function () {
+		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
+		fakeState.current.name = 'requests.overtime';
+
+		var test = setUpTarget();
+		expect(test.requestCommandPaneScope.isCommandEnabled('siteOpenHour')).toEqual(false);
+	});
+
+	it('should show viewAllowance command in absence and text tab', function () {
+		var test = setUpTarget();
+		expect(test.requestCommandPaneScope.isCommandEnabled('viewAllowance')).toEqual(true);
+	});
+
+	it('should show viewAllowance command in shift trade tab', function () {
+		var test = setUpTarget(true);
+		expect(test.requestCommandPaneScope.isCommandEnabled('viewAllowance')).toEqual(true);
+	});
+
+	it('should hide viewAllowance command in overtime tab', function () {
+		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
+		fakeState.current.name = 'requests.overtime';
+
+		var test = setUpTarget();
+		expect(test.requestCommandPaneScope.isCommandEnabled('viewAllowance')).toEqual(false);
+	});
+
+	it('submit any command is a fail, should notify the result', function () {
+		var test = setUpTarget();
+		var requestIds = [{ id: 1 }, { id: 2 }];
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestsDataService.submitCommandIsASucess(false);
+
+		test.requestCommandPaneScope.denyRequests();
+
+		expect(_notificationResult[0]).toEqual('submit error');
+	});
+
 	function FakeRequestsNotificationService() {
 		this.notifySubmitProcessWaitlistedRequestsSuccess = function () {
 			_notificationResult.push("Submit process waitlisted requests command success");
@@ -475,39 +569,39 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 
 		var getMessageCallback = function (selectedRequestIdsAndMessage) {
 			replyMessage = selectedRequestIdsAndMessage.ReplyMessage;
-		}
+		};
 		var errorCallback = function (callback) {
 			if (!_commandIsASucess)
 				callback(_handleResult);
-		}
+		};
 		this.approveWithValidatorsPromise = function () {
-			return { success: successCallback, error: errorCallback }
-		}
+			return { success: successCallback, error: errorCallback };
+		};
 		this.processWaitlistRequestsPromise = function () {
-			return { success: successCallback, error: errorCallback }
-		}
+			return { success: successCallback, error: errorCallback };
+		};
 		this.approveRequestsPromise = function (selectedRequestIdsAndMessage) {
 			getMessageCallback(selectedRequestIdsAndMessage);
-			return { success: successCallback, error: errorCallback }
-		}
+			return { success: successCallback, error: errorCallback };
+		};
 		this.denyRequestsPromise = function (selectedRequestIdsAndMessage) {
 			getMessageCallback(selectedRequestIdsAndMessage);
-			return { success: successCallback, error: errorCallback }
-		}
+			return { success: successCallback, error: errorCallback };
+		};
 		this.cancelRequestsPromise = function (selectedRequestIdsAndMessage) {
 			getMessageCallback(selectedRequestIdsAndMessage);
-			return { success: successCallback, error: errorCallback }
-		}
+			return { success: successCallback, error: errorCallback };
+		};
 		this.replyRequestsPromise = function (selectedRequestIdsAndMessage) {
 			getMessageCallback(selectedRequestIdsAndMessage);
-			return { success: successCallback, error: errorCallback }
-		}
+			return { success: successCallback, error: errorCallback };
+		};
 		this.submitCommandIsASucess = function (result) {
 			_commandIsASucess = result;
-		}
+		};
 		this.setRequestCommandHandlingResult = function (handleResult) {
 			_handleResult = handleResult;
-		}
+		};
 		this.getAllBusinessRulesForApproving = function () {
 			return [
 				{
@@ -524,8 +618,8 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 					Enabled: true
 				}
 			];
-		}
-		this.getBudgetGroupsPromise = function () { return []; }
+		};
+		this.getBudgetGroupsPromise = function () { return []; };
 		this.hierarchy = function () { return $q(function (resolve) { resolve({ Children: [] }) }); };
 	}
 
@@ -534,18 +628,18 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		mockSignalRBackendServer.notifyClients = function (domainType, message) {
 			var eventHandler = this.subscriptions[domainType];
 			eventHandler(message);
-		}
+		};
 		this.subscribe = function (options, eventHandler) {
 			mockSignalRBackendServer.subscriptions[options.DomainType] = eventHandler;
-		}
+		};
 	}
 
 	function FakeCurrentUserInfo() {
 		this.CurrentUserInfo = function () {
 			return {
 				DefaultTimeZone: "Europe/Berlin"
-			}
-		}
+			};
+		};
 	}
 
 	function setUpTarget(isShiftTradeViewActived) {

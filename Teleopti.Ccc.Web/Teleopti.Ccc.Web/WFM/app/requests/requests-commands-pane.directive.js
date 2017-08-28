@@ -6,17 +6,15 @@
 		.directive('requestsCommandsPane', requestsCommandsPaneDirective);
 
 	requestsCommandsPaneCtrl.$inject = [
-		'requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle',
-		'signalRSVC', 'NoticeService'
+		'$state', 'requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle',
+		'signalRSVC', 'NoticeService', 'RequestsCommandsConfigurationsService'
 	];
 
-	function requestsCommandsPaneCtrl(requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc,
-		signalRSVC, NoticeService) {
+	function requestsCommandsPaneCtrl($state, requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc, signalRSVC, NoticeService, requestsCommandsConfigurationsSvc) {
 		var vm = this;
 		vm.approveRequests = approveRequests;
 		vm.replyRequests = replyRequests;
 		vm.displayReplyDialog = displayReplyDialog;
-		vm.isRequestsReplyMessageEnabled = isRequestsReplyMessageEnabled;
 		vm.denyRequests = denyRequests;
 		vm.disableCommands = disableCommands;
 		vm.canCancelRequests = canCancelRequests;
@@ -41,6 +39,8 @@
 		vm.budgetAllowanceDetailIsVisible = false;
 		vm.showBudgetAllowanceDetail = showBudgetAllowanceDetail;
 		vm.onCloseDialog = onCloseDialog;
+		vm.isCommandEnabledWithoutShiftTradeView = isCommandEnabledWithoutShiftTradeView;
+		vm.isCommandEnabled = isCommandEnabled;
 
 		initWaitlistProcessPeriod();
 
@@ -49,9 +49,12 @@
 
 		function handleErrorMessages(errorMessages) {
 			if (vm.onErrorMessages) {
-				vm.onErrorMessages({ errorMessages: errorMessages });
+				vm.onErrorMessages({
+					errorMessages: errorMessages
+				});
 			}
 		}
+
 		function showSiteOpenHour() {
 			vm.shouldShowSiteOpenHour = true;
 		}
@@ -76,7 +79,10 @@
 		}
 
 		function initWaitlistProcessPeriod() {
-			vm.waitlistPeriod = { startDate: new Date(), endDate: new Date() };
+			vm.waitlistPeriod = {
+				startDate: new Date(),
+				endDate: new Date()
+			};
 		}
 
 		function getSelectedRequestMessage() {
@@ -89,9 +95,9 @@
 		}
 
 		function getSelectedRequestIds() {
-			return requestCommandParamsHolder
-				? requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive)
-				: null;
+			return requestCommandParamsHolder ?
+				requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive) :
+				null;
 		}
 
 		function doProcessWaitlistCommandHandling(waitlistPeriod) {
@@ -101,8 +107,8 @@
 
 			if (vm.afterCommandSuccess) {
 				commandInProgress.success(function (requestCommandHandlingResult) {
-					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds
-						&& requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
+					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds &&
+						requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
 						vm.commandTrackId = requestCommandHandlingResult.CommandTrackId;
 						vm.afterCommandSuccess({
 							commandType: requestType,
@@ -123,9 +129,9 @@
 
 		function doStandardCommandHandlingWithParameters(requestType, dataServicePromise, parameters) {
 			if (vm.beforeCommand && !vm.beforeCommand()) return;
-			var commandInProgress = parameters === undefined
-				? dataServicePromise()
-				: dataServicePromise(parameters);
+			var commandInProgress = parameters === undefined ?
+				dataServicePromise() :
+				dataServicePromise(parameters);
 
 			if (vm.afterCommandSuccess) {
 				var requestCount = 0;
@@ -138,8 +144,8 @@
 				}
 
 				commandInProgress.success(function (requestCommandHandlingResult) {
-					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds
-						&& requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
+					if (requestCommandHandlingResult.Success || (requestCommandHandlingResult.AffectedRequestIds &&
+						requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
 						vm.commandTrackId = requestCommandHandlingResult.CommandTrackId;
 						vm.afterCommandSuccess({
 							commandType: requestType,
@@ -174,9 +180,13 @@
 		}
 
 		function subscribeSignalRMessage(domainType, eventHandler) {
-			signalRSVC.subscribe({ DomainType: domainType }, function (message) {
+			signalRSVC.subscribe({
+				DomainType: domainType
+			}, function (message) {
 				if (message.TrackId === vm.commandTrackId) {
-					eventHandler({ message: message });
+					eventHandler({
+						message: message
+					});
 				}
 			});
 		}
@@ -270,14 +280,10 @@
 		}
 
 		function isApproveBasedOnBusinessRulesEnabled() {
-			return (toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626
-				|| toggleSvc.Wfm_Requests_Approve_Based_On_Intraday_39868
-				|| toggleSvc.Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274)
-				&& !vm.isShiftTradeViewActive;
-		}
-
-		function isRequestsReplyMessageEnabled() {
-			return !vm.isShiftTradeViewActive;
+			return (toggleSvc.Wfm_Requests_Approve_Based_On_Budget_Allotment_39626 ||
+				toggleSvc.Wfm_Requests_Approve_Based_On_Intraday_39868 ||
+				toggleSvc.Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274) &&
+				isCommandEnabledWithoutShiftTradeView('approveBasedOnBusinessRules');
 		}
 
 		function onCloseDialog() {
@@ -285,6 +291,22 @@
 			if (backdrops.length) {
 				backdrops[0].click();
 			}
+		}
+
+		function isCommandEnabledWithoutShiftTradeView(commandName) {
+			if (toggleSvc.Wfm_Requests_OvertimeRequestHandling_45177 && $state.current.name.split('.').length == 2) {
+				return requestsCommandsConfigurationsSvc.configurations[$state.current.name.split('.')[1]][commandName];
+			}
+
+			return !vm.isShiftTradeViewActive;
+		}
+
+		function isCommandEnabled(commandName) {
+			if (toggleSvc.Wfm_Requests_OvertimeRequestHandling_45177 && $state.current.name.split('.').length == 2) {
+				return requestsCommandsConfigurationsSvc.configurations[$state.current.name.split('.')[1]][commandName];
+			}
+
+			return true;
 		}
 	}
 

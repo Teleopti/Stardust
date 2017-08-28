@@ -8,7 +8,8 @@
 
 		this.REQUEST_TYPES = {
 			TEXT: 0,
-			ABSENCE: 1
+			ABSENCE: 1,
+			OVERTIME: 2
 		};
 
 		this.SHIFTTRADE_COLUMN_WIDTH = 40;

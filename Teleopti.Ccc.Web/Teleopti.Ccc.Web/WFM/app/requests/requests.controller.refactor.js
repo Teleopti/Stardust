@@ -15,6 +15,7 @@
 		vm.pageSizeOptions = [20, 50, 100, 200];
 		vm.sitesAndTeams = [];
 		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
+		vm.isOvertimeEnabled = toggleService.Wfm_Requests_OvertimeRequestHandling_45177;
 
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
@@ -61,40 +62,21 @@
 		};
 
 		vm.activeAbsenceAndTextTab = function () {
-			var params = {
-				agentSearchTerm: vm.agentSearchOptions.keyword,
-				selectedGroupIds: vm.selectedGroups.groupIds,
-				filterEnabled: vm.filterEnabled,
-				onInitCallBack: vm.initFooter,
-				paging: vm.paging,
-				isUsingRequestSubmitterTimeZone: vm.isUsingRequestSubmitterTimeZone,
-				getPeriod: function () {
-					return vm.period;
-				}
-			};
-
 			vm.selectedTabIndex = 0;
-
-			vm.period = vm.absencePeriod;
-			$state.go("requests.absenceAndText", params);
+			vm.period = vm.absenceAndOvertimePeriod;
+			$state.go("requests.absenceAndText", getParams());
 		};
 
 		vm.activeShiftTradeTab = function () {
-			var params = {
-				agentSearchTerm: '',
-				selectedGroupIds: vm.selectedGroups.groupIds,
-				filterEnabled: vm.filterEnabled,
-				onInitCallBack: vm.initFooter,
-				paging: vm.paging,
-				isUsingRequestSubmitterTimeZone: vm.isUsingRequestSubmitterTimeZone,
-				getPeriod: function () {
-					return vm.period;
-				}
-			};
-
 			vm.selectedTabIndex = 1;
 			vm.period = vm.shiftTradePeriod;
-			$state.go("requests.shiftTrade", params);
+			$state.go("requests.shiftTrade", getParams());
+		};
+
+		vm.activeOvertimeTab = function () {
+			vm.selectedTabIndex = 2;
+			vm.period = vm.absenceAndOvertimePeriod;
+			$state.go("requests.overtime", getParams());
 		};
 
 		vm.getSitesAndTeamsAsync = function () {
@@ -244,7 +226,7 @@
 				startDate: moment().startOf('week')._d,
 				endDate: moment().endOf('week')._d
 			};
-			vm.absencePeriod = defaultDateRange;
+			vm.absenceAndOvertimePeriod = defaultDateRange;
 			vm.shiftTradePeriod = defaultDateRange;
 			vm.period = defaultDateRange;
 
@@ -261,6 +243,8 @@
 				}
 				if (vm.isShiftTradeViewActive()) {
 					vm.activeShiftTradeTab();
+				} else if($state.current.name.indexOf('requests.overtime') > -1){
+					vm.activeOvertimeTab();
 				} else {
 					vm.activeAbsenceAndTextTab();
 				}
@@ -297,6 +281,21 @@
 			return startDate + "-" + endDate;
 		}
 
+		function getParams(){
+			return {
+				agentSearchTerm: '',
+				selectedGroupIds: vm.selectedGroups.groupIds,
+				filterEnabled: vm.filterEnabled,
+				onInitCallBack: vm.initFooter,
+				paging: vm.paging,
+				isUsingRequestSubmitterTimeZone: vm.isUsingRequestSubmitterTimeZone,
+				getPeriod: function () {
+					return vm.period;
+				}
+			};
+		}
+
+
 		function setupWatches() {
 			$scope.$watch(function() {
 				return vm.period;
@@ -305,7 +304,7 @@
 					if (vm.isShiftTradeViewActive()) {
 						vm.shiftTradePeriod = newValue;
 					} else {
-						vm.absencePeriod = newValue;
+						vm.absenceAndOvertimePeriod = newValue;
 					}
 					requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
 					vm.agentSearchOptions.focusingSearch = false;

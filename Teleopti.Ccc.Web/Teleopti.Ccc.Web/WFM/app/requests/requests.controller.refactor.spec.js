@@ -67,7 +67,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 			};
 
 			var controller = test.controller;
-			controller.absencePeriod = periodForAbsenceRequest;
+			controller.absenceAndOvertimePeriod = periodForAbsenceRequest;
 			controller.activeAbsenceAndTextTab();
 
 			controller.shiftTradePeriod = periodForShiftTradeRequest;

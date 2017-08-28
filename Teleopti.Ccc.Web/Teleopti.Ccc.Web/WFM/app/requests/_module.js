@@ -20,7 +20,8 @@
 		'wfm.ngEnter'
 	]).constant('REQUESTS_TAB_NAMES',{
 		absenceAndText: 'absenceAndText',
-		shiftTrade: 'shiftTrade'
+		shiftTrade: 'shiftTrade',
+		overtime: 'overtime'
 	}).run(moduleRun);
 
 	moduleRun.$inject = ['$rootScope', 'FavoriteSearchDataService', 'groupPageService'];
