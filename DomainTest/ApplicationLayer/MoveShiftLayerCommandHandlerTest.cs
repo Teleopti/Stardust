@@ -167,7 +167,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.LogOnBusinessUnitId.Should().Be(CurrentScenario.Current().BusinessUnit.Id.GetValueOrDefault());
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldPersistDeltas()
 		{
 			var agent = new Person().WithId();
@@ -181,6 +181,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var activity = new Activity("act").WithId();
 			activity.RequiresSkill = true;
 			skill.Activity = activity;
+
+			ActivityRepository.Add(activity);
 
 			var orgStart = createDateTimeUtc(6);
 			var orgEnd = createDateTimeUtc(11);
@@ -203,9 +205,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			Target.Handle(cmd);
 
-			//var expectedStart = cmd.NewStartTimeInUtc;
+			var expectedStart = cmd.NewStartTimeInUtc;
+
 			var combs = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2013, 11, 14, 2013, 11, 15), false).ToList();
 			combs.Count.Should().Be.EqualTo(32);
+			combs.Count(x => x.StartDateTime < expectedStart).Should().Be.EqualTo(0);
+			combs.Count(x => x.EndDateTime > orgEnd).Should().Be.EqualTo(0);
 		}
 
 		private static DateTime createDateTimeUtc(int hourOnDay)
