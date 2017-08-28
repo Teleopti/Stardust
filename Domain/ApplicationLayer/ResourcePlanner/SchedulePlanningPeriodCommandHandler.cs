@@ -31,31 +31,31 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			_eventPopulatingPublisher = eventPopulatingPublisher;
 		}
 
-		public object Execute(SchedulePlanningPeriodCommand command)
+		public object Execute(Guid planningPeriodId, bool runAsynchronously)
 		{
-			if (command.RunAsynchronously)
-				return ExecuteAsync(command);
-			return ExecuteSync(command);
+			if(runAsynchronously)
+				return ExecuteAsync(planningPeriodId);
+			return ExecuteSync(planningPeriodId);
 		}
 
 		[UnitOfWork]
-		protected virtual Guid ExecuteAsync(SchedulePlanningPeriodCommand command)
+		protected virtual Guid ExecuteAsync(Guid planningPeriodId)
 		{
-			var planningPeriod = _planningPeriodRepository.Load(command.PlanningPeriodId);
+			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var jobResult = new JobResult(JobCategory.WebSchedule, planningPeriod.Range, _loggedOnUser.CurrentUser(), DateTime.UtcNow);
 			_jobResultRepository.Add(jobResult);
 			planningPeriod.JobResults.Add(jobResult);
 			_eventPopulatingPublisher.Publish(new WebScheduleStardustEvent
 			{
-				PlanningPeriodId = command.PlanningPeriodId,
+				PlanningPeriodId = planningPeriodId,
 				JobResultId = jobResult.Id.Value
 			});
 			return jobResult.Id.Value;
 		}
 
-		protected SchedulingResultModel ExecuteSync(SchedulePlanningPeriodCommand command)
+		protected SchedulingResultModel ExecuteSync(Guid planningPeriodId)
 		{
-			var schedulingData = GetInfoFromPlanningPeriod(command.PlanningPeriodId);
+			var schedulingData = GetInfoFromPlanningPeriod(planningPeriodId);
 			return _fullScheduling.DoScheduling(schedulingData.Period, schedulingData.PersonIds);
 		}
 

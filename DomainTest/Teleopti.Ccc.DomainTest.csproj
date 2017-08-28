@@ -550,6 +550,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduleCommandTest.cs" />
     <Compile Include="Scheduling\WebDayoffOptimizationStardustHandlerTest.cs" />
     <Compile Include="Scheduling\WebScheduleStardustHandlerTest.cs" />
+    <Compile Include="Scheduling\WebScheduleStardustHandlerEventPublishTest.cs" />
     <Compile Include="SeatPlanning\CommonSeatAllocatorTests.cs" />
     <Compile Include="SeatPlanning\SeatMapPersisterTests.cs" />
     <Compile Include="SeatPlanning\SeatPlannerTests.cs" />

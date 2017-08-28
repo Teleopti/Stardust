@@ -27,12 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[HttpPost, Route("api/resourceplanner/planningperiod/{planningPeriodId}/schedule")]
 		public virtual IHttpActionResult ScheduleForPlanningPeriod(Guid planningPeriodId, bool runAsynchronously)
 		{
-			var schedulePlanningPeriodCommand = new SchedulePlanningPeriodCommand
-			{
-				PlanningPeriodId = planningPeriodId,
-				RunAsynchronously = runAsynchronously
-			};
-			return Ok(_schedulePlanningPeriodCommandHandler.Execute(schedulePlanningPeriodCommand));
+			return Ok(_schedulePlanningPeriodCommandHandler.Execute(planningPeriodId, runAsynchronously));
 		}
 
 		[HttpDelete, Route("api/resourceplanner/planningperiod/{planningPeriodId}/schedule")]

@@ -27,20 +27,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ResourcePlanner
 		{
 			var planningPeriod = new PlanningPeriod(new PlanningPeriodSuggestions(new MutableNow(new DateTime(2015, 4, 1)), new List<AggregatedSchedulePeriod>()));
 			PlanningPeriodRepository.Add(planningPeriod);
-			var schedulePlanningPeriodCommand = new SchedulePlanningPeriodCommand
-			{
-				PlanningPeriodId = planningPeriod.Id.GetValueOrDefault(),
-				RunAsynchronously = true
-			};
 			planningPeriod.JobResults.Count.Should().Be.EqualTo(0);
-			Target.Execute(schedulePlanningPeriodCommand);
+			Target.Execute(planningPeriod.Id.GetValueOrDefault(), true);
 
 			JobResultRepository.LoadAll()
 				.Single(x => x.JobCategory == JobCategory.WebSchedule)
 				.Period.Should()
 				.Be.EqualTo(planningPeriod.Range);
 			planningPeriod.JobResults.Count.Should().Be.EqualTo(1);
-			(EventPublisher.PublishedEvents.Single() as WebScheduleStardustEvent).PlanningPeriodId.Should().Be.EqualTo(schedulePlanningPeriodCommand.PlanningPeriodId);
+			(EventPublisher.PublishedEvents.Single() as WebScheduleStardustEvent).PlanningPeriodId.Should().Be.EqualTo(planningPeriod.Id.GetValueOrDefault());
 		}
 	}
 }

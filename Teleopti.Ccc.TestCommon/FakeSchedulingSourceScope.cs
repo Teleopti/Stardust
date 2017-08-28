@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.TestCommon
 		public IDisposable OnThisThreadUse(string schedulingScope)
 		{
 			SchedulingSource = schedulingScope;
-			return new GenericDisposable(() => {});
+			return new GenericDisposable(() => { SchedulingSource = null; });
 		}
 	}
 }

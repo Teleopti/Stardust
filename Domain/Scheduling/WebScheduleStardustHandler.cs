@@ -21,16 +21,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IFullScheduling _fullScheduling;
 		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IJobResultRepository _jobResultRepository;
-		private readonly ISchedulingSourceScope _schedulingSourceScope;
 
-		public WebScheduleStardustHandler(IPlanningPeriodRepository planningPeriodRepository, IPlanningGroupStaffLoader planningGroupStaffLoader, IFullScheduling fullScheduling, IEventPopulatingPublisher eventPublisher, IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope)
+		public WebScheduleStardustHandler(IPlanningPeriodRepository planningPeriodRepository, IPlanningGroupStaffLoader planningGroupStaffLoader, IFullScheduling fullScheduling, IEventPopulatingPublisher eventPublisher, IJobResultRepository jobResultRepository)
 		{
 			_planningPeriodRepository = planningPeriodRepository;
 			_planningGroupStaffLoader = planningGroupStaffLoader;
 			_fullScheduling = fullScheduling;
 			_eventPublisher = eventPublisher;
 			_jobResultRepository = jobResultRepository;
-			_schedulingSourceScope = schedulingSourceScope;
 		}
 
 		[AsSystem]
@@ -38,16 +36,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			try
 			{
-				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
+				var schedulingInformation = GetInfoFromPlanningPeriod(@event.PlanningPeriodId);
+				var result = _fullScheduling.DoScheduling(schedulingInformation.Period, schedulingInformation.PersonIds);
+				SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
+				_eventPublisher.Publish(new WebDayoffOptimizationStardustEvent(@event)
 				{
-					var schedulingInformation = GetInfoFromPlanningPeriod(@event.PlanningPeriodId);
-					var result = _fullScheduling.DoScheduling(schedulingInformation.Period, schedulingInformation.PersonIds);
-					SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
-					_eventPublisher.Publish(new WebDayoffOptimizationStardustEvent(@event)
-					{
-						JobResultId = @event.JobResultId
-					});
-				}
+					JobResultId = @event.JobResultId
+				});
 			}
 			catch (Exception e)
 			{

@@ -28,8 +28,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISchedulingProgress _schedulingProgress;
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 		private readonly FullSchedulingResult _fullSchedulingResult;
+		private readonly ISchedulingSourceScope _schedulingSourceScope;
 
-		public FullSchedulingOLD(IScheduleExecutor scheduleExecutor, IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult) 
+		public FullSchedulingOLD(IScheduleExecutor scheduleExecutor, IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult, ISchedulingSourceScope schedulingSourceScope) 
 		{
 			_scheduleExecutor = scheduleExecutor;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -38,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingProgress = schedulingProgress;
 			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_fullSchedulingResult = fullSchedulingResult;
+			_schedulingSourceScope = schedulingSourceScope;
 		}
 
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
@@ -47,10 +49,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
-			var stateHolder = _schedulerStateHolder();
-			SetupAndSchedule(period, people);
-			_persister.Persist(stateHolder.Schedules);
-			return CreateResult(period);
+			using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
+			{
+				var stateHolder = _schedulerStateHolder();
+				SetupAndSchedule(period, people);
+				_persister.Persist(stateHolder.Schedules);
+				return CreateResult(period);
+			}
 		}
 
 		[TestLog]

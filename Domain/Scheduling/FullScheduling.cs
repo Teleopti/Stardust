@@ -41,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingCommandHandler.Execute(new SchedulingCommand
 			{
 				Period = period,
-				RunWeeklyRestSolver = false
+				RunWeeklyRestSolver = false,
+				FromWeb = true
 			});
 			_persister.Persist(stateHolder.Schedules);
 			return CreateResult(period);

@@ -447,7 +447,6 @@
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsRequestMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\PersonCollectionChangedHandlers\AnalyticsScheduleMatchingPerson.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\IntradayOptimizationFromWeb.cs" />
-    <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommand.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulePlanningPeriodCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\IHistoricalChangeReadModelPersister.cs" />
     <Compile Include="ApplicationLayer\Rta\RtaTool\IRtaToolViewModelBuilder.cs" />

@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ICurrentSchedulingCallback _currentSchedulingCallback;
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
 		private readonly IGridlockManager _gridlockManager;
+		private readonly ISchedulingSourceScope _schedulingSourceScope;
 
 		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						IFillSchedulerStateHolder fillSchedulerStateHolder,
@@ -27,7 +28,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						ISchedulingOptionsProvider schedulingOptionsProvider,
 						ICurrentSchedulingCallback currentSchedulingCallback,
 						ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
-						IGridlockManager gridlockManager)
+						IGridlockManager gridlockManager, 
+						ISchedulingSourceScope schedulingSourceScope)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -36,10 +38,26 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_currentSchedulingCallback = currentSchedulingCallback;
 			_synchronizeSchedulesAfterIsland = synchronizeSchedulesAfterIsland;
 			_gridlockManager = gridlockManager;
+			_schedulingSourceScope = schedulingSourceScope;
 		}
 
 		[TestLog]
 		public virtual void Handle(SchedulingWasOrdered @event)
+		{
+			if (@event.FromWeb)
+			{
+				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
+				{
+					Run(@event);
+				}
+			}
+			else
+			{
+				Run(@event);
+			}
+		}
+
+		private void Run(SchedulingWasOrdered @event)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);

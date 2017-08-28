@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public virtual void Execute(SchedulingCommand command)
 		{
 			var userLocks = _gridLockManager.LockInfos();
-			var events = new List<IEvent>();
+			var events = new List<SchedulingWasOrdered>();
 			if (teamScheduling(command))
 			{
 				var agentsToSchedule = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command);
@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					EndDate = command.Period.EndDate,
 					RunWeeklyRestSolver = command.RunWeeklyRestSolver,
 					CommandId = command.CommandId,
-					UserLocks = userLocks
+					UserLocks = userLocks,
+					FromWeb= command.FromWeb
 				});
 			}
 			else
@@ -78,7 +79,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 							RunWeeklyRestSolver = command.RunWeeklyRestSolver,
 							CommandId = command.CommandId,
 							UserLocks = userLocks,
-							Skills = island.SkillIds()
+							Skills = island.SkillIds(),
+							FromWeb = command.FromWeb
 						};
 						events.Add(@event);
 					}
