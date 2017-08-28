@@ -14,8 +14,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -38,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeCurrentScenario CurrentScenario;
 		public FakeScheduleStorage ScheduleStorage;
 		public FakeWriteSideRepository<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetRepository;
-		public FakeLoggedOnUser LoggedOnUser;
+		//public FakeLoggedOnUser LoggedOnUser;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakePersonSkillProvider PersonSkillProvider;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
@@ -48,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		private DateTime _endTime;
 		private IActivity _mainActivity;
 		private DateTimePeriod _mainActivityDateTimePeriod;
-		private DateTimePeriod _personalActivityDateTimePeriod;
 		private ISkill _skill;
 		private ISkill _skill2;
 
@@ -62,17 +59,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<AddPersonalActivityCommandHandler>().For<IHandleCommand<AddPersonalActivityCommand>>();
-			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
+			//system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeWriteSideRepository<IMultiplicatorDefinitionSet>>().For<IProxyForId<IMultiplicatorDefinitionSet>>();
 			system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
-			//system.UseTestDouble<MutableNow>();
 			
 			_date = new DateOnly(2016, 05, 17);
 			_startTime = new DateTime(2016, 05, 17, 10, 0, 0, DateTimeKind.Utc);
 			_endTime = new DateTime(2016, 05, 17, 12, 0, 0, DateTimeKind.Utc);
 			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
 			_mainActivityDateTimePeriod = new DateTimePeriod(new DateTime(2016, 05, 17, 09, 0, 0, DateTimeKind.Utc), new DateTime(2016, 05, 17, 17, 0, 0, DateTimeKind.Utc));
-			_personalActivityDateTimePeriod = new DateTimePeriod(_startTime, _endTime);
 			_skill = SkillFactory.CreateSkillWithId("skill", 15);
 			_skill2 = SkillFactory.CreateSkillWithId("skill2", 15);
 			_mainActivity.RequiresSkill = true;
