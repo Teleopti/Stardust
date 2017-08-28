@@ -92,11 +92,6 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 			data: {
 				x: 'date',
 				columns: [
-					preparedData.dateSeries,
-					preparedData.vcamSeries,
-					preparedData.voverrideSeries,
-					preparedData.vcomboSeries,
-
 					preparedData.vtcSeries,
 					preparedData.vcSeries,
 
@@ -104,18 +99,23 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					preparedData.vacwSeries,
 
 					preparedData.vtttSeries,
-					preparedData.vttSeries
+					preparedData.vttSeries,
+
+					preparedData.dateSeries,
+					preparedData.vcamSeries,
+					preparedData.voverrideSeries,
+					preparedData.vcomboSeries
 				],
 				names: {
-					vtc: $translate.instant('TotalCallsCaret'),
+					vtc: $translate.instant('TotalCalls' + ' ←'),
 					vcampaign: $translate.instant('Campaign'),
 					voverride: $translate.instant('Override'),
 					vcombo: $translate.instant('BothOverrideAndCampaignAdded'),
-					vc: $translate.instant('CallsCaret'),
-					vttt: $translate.instant('TotalTalkTimeCaret'),
-					vtt: $translate.instant('TalkTimeCaret'),
-					vtacw: $translate.instant('TotalAcwCaret'),
-					vacw: $translate.instant('AcwCaret'),
+					vc: $translate.instant('Calls' + ' ←'),
+					vttt: $translate.instant('TotalTalkTime' + ' ←'),
+					vtt: $translate.instant('TalkTime' + ' ←'),
+					vtacw: $translate.instant('TotalACW' + ' ←'),
+					vacw: $translate.instant('ACW' + ' ←'),
 				},
 				colors: {
 					vtc: '#0099FF',
