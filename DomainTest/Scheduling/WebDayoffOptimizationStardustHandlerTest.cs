@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -18,9 +19,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
-	[TestFixture]
+	[TestFixture(false)]
+	[TestFixture(true)]
 	[DomainTest]
-	public class WebDayoffOptimizationStardustHandlerTest
+	public class WebDayOffOptimizationStardustHandlerTest : DayOffOptimizationScenario
 	{
 		public WebDayoffOptimizationStardustHandler Target;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
@@ -35,6 +37,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public FakeSchedulingSourceScope FakeSchedulingSourceScope;
 
 		private IBusinessUnit businessUnit;
+
+		public WebDayOffOptimizationStardustHandlerTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
+		{
+		}
 
 		public void SetUp()
 		{

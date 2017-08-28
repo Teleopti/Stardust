@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security;
+using Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -18,10 +19,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
-	[TestFixture]
 	[DomainTest]
 	[Toggle(Toggles.Wfm_ResourcePlanner_SchedulingOnStardust_42874)]
-	public class WebIntradayOptimizationStardustHandlerTest
+	public class WebIntradayOptimizationStardustHandlerTest: IntradayOptimizationScenarioTest
 	{
 		public WebIntradayOptimizationStardustHandler Target;
 		public FakeJobResultRepository JobResultRepository;
@@ -32,6 +32,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public FakeSchedulingSourceScope FakeSchedulingSourceScope;
 
 		private IBusinessUnit businessUnit;
+
+		public WebIntradayOptimizationStardustHandlerTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		{
+		}
 
 		public void SetUp()
 		{
