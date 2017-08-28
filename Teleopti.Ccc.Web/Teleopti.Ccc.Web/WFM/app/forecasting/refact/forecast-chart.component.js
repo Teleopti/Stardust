@@ -177,7 +177,7 @@ function ForecastChartCtrl($translate, $filter, $timeout) {
 					type: 'category',
 					tick: {
 						culling: {
-							max: preparedData.dateSeries.length/4
+							max: preparedData.dateSeries.length/28
 						},
 						multiline: false
 					}

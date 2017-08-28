@@ -97,9 +97,13 @@
     function getWorkloadForecastData(skill) {
       vm.forecastModalObj = skill;
       vm.skillMaster.isForecastRunning = true;
+
+      var resultStartDate = moment().utc().add(1, 'days');
+      var resultEndDate = moment(resultStartDate).add(6, 'months');
+
       var wl = {
-        ForecastStart: vm.forecastPeriod.startDate,
-        ForecastEnd: vm.forecastPeriod.endDate,
+        ForecastStart: resultStartDate.toDate(),
+        ForecastEnd: resultEndDate.toDate(),
         WorkloadId: skill.Workload.Id,
         ScenarioId: vm.selectedScenario.Id
       };
