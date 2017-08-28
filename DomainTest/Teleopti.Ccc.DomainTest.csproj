@@ -156,6 +156,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IntrdayRequestFilterWithNoValidatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandlerBug45331Test.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
+    <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplateTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentPersisterTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\FileProcessorTest.cs" />
@@ -298,7 +299,7 @@
     <Compile Include="ApplicationLayer\SettingsForPersonPeriodChangedEventHandlers\SettingsForPersonPeriodChangedEventTest.cs" />
     <Compile Include="ApplicationLayer\ShiftCategoryTests\AnalyticsShiftCategoryUpdaterTests.cs" />
     <Compile Include="ApplicationLayer\Activities\ActivityChangedHandlerTests.cs" />
-    <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\AddActivityCommandHandlerWithoutDeltasTest.cs" />
     <Compile Include="ApplicationLayer\AddIntradayAbsenceCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddPersonalActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AddSeatMapCommandHandlerTest.cs" />
