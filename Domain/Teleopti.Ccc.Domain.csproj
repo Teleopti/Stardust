@@ -3497,11 +3497,6 @@
       <Link>Teleopti.Ccc.snk</Link>
     </None>
     <None Include="AgentInfo\Requests\PersonRequest.cd" />
-    <None Include="Forecasting\Forecast.cd" />
-    <None Include="Forecasting\SkillDayDiagram.cd" />
-    <None Include="Forecasting\SkillStaffStuff.cd" />
-    <None Include="Forecasting\TemplateOwners.cd" />
-    <None Include="Forecasting\WorkloadDayTemplates.cd" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -3801,9 +3796,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Scheduling\Assignment\OvertimeShiftLayer.hbm.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Common\Groupings.cd" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Payroll\PayrollExport.hbm.xml">
