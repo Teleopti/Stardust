@@ -14,7 +14,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 {
 	[TestFixture]
 	[DatabaseTest]
-	[Toggle(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 	public class HistoricalAdherenceReadModelReaderTest
 	{
 		public Database Database;

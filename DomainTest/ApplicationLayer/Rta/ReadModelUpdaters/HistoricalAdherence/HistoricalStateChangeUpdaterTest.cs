@@ -17,8 +17,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
-
 	public class HistoricalStateChangeUpdaterTest
 	{
 		public HistoricalAdherenceWithProofUpdater Target;

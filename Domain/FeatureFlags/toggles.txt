@@ -40,7 +40,6 @@ Wfm_MinimumScaffolding_32659 = RC
 Wfm_ResourcePlanner_32892 = true
 Wfm_ChangePlanningPeriod_33043 = true
 
-RTA_SeeAllOutOfAdherencesToday_39146 = true
 RTA_SpreadTransactionLocksStrategy_41823 = true
 RTA_EventPackagesOptimization_43924 = true
 RTA_AsyncOptimization_43924 = true

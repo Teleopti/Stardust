@@ -44,7 +44,7 @@ Background:
 	| Activity    |          |
 	| Phone state | Ready    |
 	
-@OnlyRunIfEnabled('RTA_SeeAllOutOfAdherencesToday_39146')
+
 Scenario: See out of adherences
 	Given the time is '2016-10-11 08:30:00'
 	And 'Pierre Baldi' sets his phone state to 'Ready'

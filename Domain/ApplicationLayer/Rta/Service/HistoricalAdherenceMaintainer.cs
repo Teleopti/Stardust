@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		}
 
 		[ReadModelUnitOfWork]
-		[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 		public virtual void Handle(TenantDayTickEvent tenantDayTickEvent)
 		{
 			_adherencePersister.Remove(_now.UtcDateTime().Date.AddDays(-5));

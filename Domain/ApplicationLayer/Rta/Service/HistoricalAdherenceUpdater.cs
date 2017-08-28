@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	}
 
 	[DisabledBy(Toggles.RTA_EventPackagesOptimization_43924)]
-	[EnabledBy(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 	public class HistoricalAdherenceUpdater : HistoricalAdherenceUpdaterImpl, 
 		IHandleEvent<PersonOutOfAdherenceEvent>,
 		IHandleEvent<PersonInAdherenceEvent>,

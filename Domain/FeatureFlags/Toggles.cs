@@ -19,7 +19,6 @@
 		Settings_SetAgentDescription_23257,
 		Settings_AlertViaEmailFromSMSLink_30444,
 
-		RTA_SeeAllOutOfAdherencesToday_39146,
 		RTA_SpreadTransactionLocksStrategy_41823,
 		RTA_SolidProofWhenManagingAgentAdherence_39351,
 		RTA_EventPackagesOptimization_43924,

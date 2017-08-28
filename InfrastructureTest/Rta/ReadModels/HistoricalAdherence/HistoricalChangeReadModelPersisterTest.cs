@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 {
 	[TestFixture]
 	[ReadModelUnitOfWorkTest]
-	[Toggle(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 	public class HistoricalChangeReadModelPersisterTest
 	{
 		public IHistoricalChangeReadModelPersister Target;

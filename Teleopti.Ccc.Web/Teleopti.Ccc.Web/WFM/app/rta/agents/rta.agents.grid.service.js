@@ -26,9 +26,7 @@
 		};
 
 		function makeGridOptions(alarmOnly) {
-			var rowTemplate = 'app/rta/agents/rta-agents-rowtemplate.html';
-			if (toggleService.RTA_SeeAllOutOfAdherencesToday_39146)
-				rowTemplate = 'app/rta/agents/rta-agents-rowtemplate-AllOutOfAdherences_39146.html';
+			var rowTemplate = 'app/rta/agents/rta-agents-rowtemplate-AllOutOfAdherences_39146.html';
 			var coloredCellTemplate = '<div class="ui-grid-cell-contents">{{COL_FIELD}}</div>';
 			var alarmCellTemplate = '<div class="ui-grid-cell-contents"><div class="label rta-label" ng-attr-style="font-size: 14px; color: white; background-color: {{grid.appScope.vm.hexToRgb(row.entity.Color)}}">{{COL_FIELD}}</div></div>';
 

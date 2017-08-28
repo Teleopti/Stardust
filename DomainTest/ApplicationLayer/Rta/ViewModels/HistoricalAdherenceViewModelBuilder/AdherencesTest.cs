@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 	public class AdherencesTest
 	{
 		public Domain.ApplicationLayer.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;

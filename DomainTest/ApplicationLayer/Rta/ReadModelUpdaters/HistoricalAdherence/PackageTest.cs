@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ReadModelUpdaters.Histori
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_SeeAllOutOfAdherencesToday_39146)]
 	[Toggle(Toggles.RTA_EventPackagesOptimization_43924)]
 	public class PackageTest
 	{
