@@ -148,6 +148,7 @@
     <Compile Include="AgentInfo\SkillStaffingData.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\SkillStaffingReadModelDataLoader.cs" />
+    <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Dates\AnalyticsPersonLocalDateUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\ReloadSchedules.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentDataModel.cs" />

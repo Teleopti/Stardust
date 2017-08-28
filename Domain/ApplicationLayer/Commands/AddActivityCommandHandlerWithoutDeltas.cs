@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -12,7 +13,7 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
-	//[DisabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step4_43389)]
+	[DisabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step4_43389)]
 	public class AddActivityCommandHandlerWithoutDeltas : IHandleCommand<AddActivityCommand>
 	{
 		private readonly IProxyForId<IActivity> _activityForId;
