@@ -124,7 +124,7 @@
 	margin-top: 10px;
 }
 seatmap-editor {
-	z-index: 100;
+	z-index: 40;
 	background: $white;
 	border-bottom: 1px solid #e1e2e3;
 }
@@ -171,19 +171,25 @@ seatmap-editor {
 		top: 10px;
 		left: 24px;
 	}
+
 	.group-icon {
 		position: relative;
-		top: -1px;
+		display: inline-block;
+		top: 5px;
 		width: 18px;
 		height: 19px;
 		background: url(../app/seatManagement/images/group.svg);
+		background-repeat: no-repeat;
 	}
+
 	.ungroup-icon {
 		position: relative;
-		top: -1px;
+		display: inline-block;
+		top: 5px;
 		width: 18px;
 		height: 19px;
 		background: url(../app/seatManagement/images/ungroup.svg);
+		background-repeat: no-repeat;
 	}
 }
 .quick-access-toolbar > button {

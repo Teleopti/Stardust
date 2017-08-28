@@ -17,8 +17,8 @@
 		vm.parentId = null;
 		vm.roles = [];
 		vm.seats = [];
-		vm.locationPrefix = [];
-		vm.locationSuffix = [];
+		vm.locationPrefix = null;
+		vm.locationSuffix = null;
 		vm.prefixOrSuffixChanged = false;
 		vm.activeSeats = [];
 		vm.otherActiveObjects = [];

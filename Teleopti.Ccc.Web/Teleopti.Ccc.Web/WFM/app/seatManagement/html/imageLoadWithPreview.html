@@ -3,13 +3,14 @@
 		<div class="modalbg">
 			<div class="dialog">
 				<h1 class="modal-title">
-					{{"Add" | translate}}{{"Image" | translate}}
+					{{'Add' | translate}} {{'Image' | translate}}
 				</h1>
 				<div class="modal-inner-content">
 					<form name="myForm">
-						<a href="javascript:;" class="load-image-file">{{"Select" | translate}}{{"Image" | translate}}
-						<input type="file" name="myImage" image-with-preview ng-model="image" accept="image/*"
-							   dimensions="height < 2000 && width < 4000">
+						<a href="javascript:;" class="load-image-file">
+							{{"Choose" | translate}} {{'Image' | translate}}
+							<input type="file" name="myImage" image-with-preview ng-model="image" accept="image/*"
+								   dimensions="height < 2000 && width < 4000">
 						</a>
 						<span class="error" ng-show="myForm.myImage.$error.image">
 							{{"NotAJPEGSVGOrAPNG" | translate}}
@@ -22,8 +23,12 @@
 				</div>
 				<div class="modal-actions">
 					<aside>
-						<button ng-click="vm.showFileDialog = false" class="wfm-btn wfm-btn-invis-default">{{"Cancel" | translate}}</button>
-						<button ng-click="vm.fileCallbackFunction(image)" class="wfm-btn wfm-btn-invis-primary">{{"Select" | translate}}</button>
+						<button ng-click="vm.showFileDialog = false" class="wfm-btn wfm-btn-invis-default">
+							{{"Cancel" | translate}}
+						</button>
+						<button ng-click="vm.fileCallbackFunction(image)" class="wfm-btn wfm-btn-invis-primary">
+							{{'OK' | translate}}
+						</button>
 					</aside>
 				</div>
 			</div>
