@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta.ReadModels.HistoricalAdherence
 {
 	[TestFixture]
 	[ReadModelUnitOfWorkTest]
-	[Toggle(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
 	public class HistoricalChangeReadModelReaderTest
 	{
 		public IHistoricalChangeReadModelReader Target;

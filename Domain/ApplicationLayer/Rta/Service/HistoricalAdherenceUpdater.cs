@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 
-	[EnabledBy(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
 	public class HistoricalAdherenceWithProofUpdater : HistoricalAdherenceUpdaterImpl,
 		IHandleEvents,
 		IRunInSync
@@ -32,31 +31,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		public virtual void Handle(IEnumerable<IEvent> events)
 		{
 			events.ForEach(e => handle((dynamic)e));
-		}
-	}
-
-	[DisabledBy(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
-	[EnabledBy(Toggles.RTA_AsyncOptimization_43924)]
-	public class HistoricalAdherenceUpdaterInSync : HistoricalAdherenceUpdaterImpl,
-		IHandleEvents,
-		IRunInSync
-	{
-		public HistoricalAdherenceUpdaterInSync(IHistoricalAdherenceReadModelPersister adherencePersister,
-			IHistoricalChangeReadModelPersister historicalChangePersister) : base(adherencePersister, historicalChangePersister)
-		{
-		}
-
-		public void Subscribe(SubscriptionRegistrator registrator)
-		{
-			registrator.SubscribeTo<PersonOutOfAdherenceEvent>();
-			registrator.SubscribeTo<PersonInAdherenceEvent>();
-			registrator.SubscribeTo<PersonNeutralAdherenceEvent>();
-		}
-
-		[ReadModelUnitOfWork]
-		public virtual void Handle(IEnumerable<IEvent> events)
-		{
-			events.ForEach(e => handle((dynamic) e));
 		}
 	}
 

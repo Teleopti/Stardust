@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels.HistoricalAdhe
 {
 	[DomainTest]
 	[TestFixture]
-	[Toggle(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
 	public class ChangesTest : ISetup
 	{
 		public Domain.ApplicationLayer.Rta.ViewModels.HistoricalAdherenceViewModelBuilder Target;

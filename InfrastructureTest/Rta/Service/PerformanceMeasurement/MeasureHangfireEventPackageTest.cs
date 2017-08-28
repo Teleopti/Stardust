@@ -13,7 +13,6 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.InfrastructureTest.Rta.Service.PerformanceMeasurement
 {
 	[Toggle(Toggles.RTA_SpreadTransactionLocksStrategy_41823)]
-	[Toggle(Toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)]
 	[Toggle(Toggles.RTA_EventPackagesOptimization_43924)]
 	[RealHangfire]
 	[TestFixture]

@@ -46,7 +46,6 @@ Background:
 	| Phone state | LoggedOff |
 	| Adherence   | In        |
 	
-@OnlyRunIfEnabled('RTA_SolidProofWhenManagingAgentAdherence_39351')
 Scenario: See rule changes
 	Given Mikkey Dee has a shift with
 	| Field                    | Value            |
@@ -65,7 +64,6 @@ Scenario: See rule changes
 	| 09:00:00 | Phone    | LoggedOff | Not adhering | Out       |
 	| 11:00:00 | Lunch    | LoggedOff | Adhering     | In        |
 
-@OnlyRunIfEnabled('RTA_SolidProofWhenManagingAgentAdherence_39351')
 Scenario: See state changes
 	Given Mikkey Dee has a shift with
 	| Field                    | Value            |

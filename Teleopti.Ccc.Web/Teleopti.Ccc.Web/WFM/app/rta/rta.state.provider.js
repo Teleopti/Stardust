@@ -64,10 +64,7 @@ angular
                 .state('rta-historical', {
                     url: '/rta/agent-historical/:personId?open',
                     templateUrl: function () {
-                        if (toggles.RTA_SolidProofWhenManagingAgentAdherence_39351)
-                            return 'app/rta/historical/rta-historical-RTA_SolidProofWhenManagingAgentAdherence_39351.html'
-                        else
-                            return 'app/rta/historical/rta-historical-SeeAllOutOfAdherences_39146.html'
+                        return 'app/rta/historical/rta-historical-RTA_SolidProofWhenManagingAgentAdherence_39351.html';
                     },
                     controller: 'RtaHistoricalController as vm',
                 })
