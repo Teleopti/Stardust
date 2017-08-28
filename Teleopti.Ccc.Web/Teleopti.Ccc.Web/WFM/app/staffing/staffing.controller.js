@@ -70,7 +70,7 @@
 		}
 
 		function goToImportView() {
-			$state.transitionTo('staffing-import-export')
+			$state.transitionTo('bpo-gatekeeper')
 		}
 
 		function selectFirstCompensation(compensations) {
