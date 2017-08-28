@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
@@ -17,7 +15,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public FakePersonAssignmentRepositoryLegacy(IPersonAssignment assignment) : base(new FakeStorage(), new FakeSchedulingSourceScope())
 		{
-			Add(assignment);
+			Has(assignment);
 		}
 	}
 
@@ -36,7 +34,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		
 		public void Has(IPersonAssignment personAssignment)
 		{
-			Add(personAssignment);
+			_storage.Add(personAssignment);
 		}
 
 		public void Has(IPerson agent, IScenario scenario, IActivity activity, IShiftCategory shiftCategory, DateOnlyPeriod period, TimePeriod timePeriod, string source=null)
@@ -47,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 				ass.AddActivity(activity, timePeriod);
 				ass.SetShiftCategory(shiftCategory);
 				ass.Source = source;
-				Add(ass);
+				_storage.Add(ass);
 			}
 		}
 
@@ -60,7 +58,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			var ass = new PersonAssignment(agent, scenario, date);
 			ass.SetDayOff(dayOffTemplate);
-			Add(ass);
+			_storage.Add(ass);
 		}
 
 		public void Add(IPersonAssignment entity)
