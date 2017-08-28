@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakePersonAssignmentRepositoryLegacy : FakePersonAssignmentRepository
 	{
-		public FakePersonAssignmentRepositoryLegacy() : base(new FakeStorage(), new FakeSchedulingSourceScope())
+		public FakePersonAssignmentRepositoryLegacy() : base(new FakeStorage())
 		{
 		}
 
-		public FakePersonAssignmentRepositoryLegacy(IPersonAssignment assignment) : base(new FakeStorage(), new FakeSchedulingSourceScope())
+		public FakePersonAssignmentRepositoryLegacy(IPersonAssignment assignment) : base(new FakeStorage())
 		{
 			Has(assignment);
 		}
@@ -24,12 +24,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePersonAssignmentRepository : IPersonAssignmentRepository
 	{
 		private readonly FakeStorage _storage;
-		private readonly FakeSchedulingSourceScope _fakeSchedulingSourceScope;
+		public FakeSchedulingSourceScope SchedulingSourceScope { get; set; }
 
-		public FakePersonAssignmentRepository(FakeStorage storage, FakeSchedulingSourceScope fakeSchedulingSourceScope)
+		public FakePersonAssignmentRepository(FakeStorage storage)
 		{
 			_storage = storage;
-			_fakeSchedulingSourceScope = fakeSchedulingSourceScope;
 		}
 		
 		public void Has(IPersonAssignment personAssignment)
@@ -63,9 +62,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IPersonAssignment entity)
 		{
-			if (_fakeSchedulingSourceScope != null)
+			if (SchedulingSourceScope != null)
 			{
-				entity.Source = _fakeSchedulingSourceScope.Current();
+				entity.Source = SchedulingSourceScope.Current();
 			}
 			_storage.Add(entity);
 		}

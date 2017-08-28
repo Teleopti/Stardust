@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			PersonRepository.Add(person);
 			businessUnit = BusinessUnitFactory.CreateWithId("something");
 			BusinessUnitRepository.Add(businessUnit);
+			PersonAssignmentRepository.SchedulingSourceScope = SchedulingSourceScope;
 		}
 
 		private void prepareSchedule()
