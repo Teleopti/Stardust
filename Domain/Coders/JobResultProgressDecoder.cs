@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.Domain.Coders
 	{
 		private readonly Encoding _encoding;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(JobResultProgressDecoder));
-
+		private readonly IFramerUtility framer = new FramerUtility();
+		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="JobResultProgressDecoder"/> class.
 		/// </summary>
@@ -40,8 +41,6 @@ namespace Teleopti.Ccc.Domain.Coders
 		public IJobResultProgress Decode(Stream source)
 		{
 			byte[] newline = _encoding.GetBytes(new[] { Consts.Separator });
-
-			IFramerUtility framer = new FramerUtility();
 
 			var payrollResultId = _encoding.GetString(framer.NextToken(source, newline));
 			var percentage = _encoding.GetString(framer.NextToken(source, newline));
