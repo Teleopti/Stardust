@@ -74,7 +74,7 @@ Wfm_People_MoveImportJobToBackgroundService_43582 = true
 
 Wfm_HideUnusedTeamsAndSites_42690 = true
 Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
-Wfm_AddMyTimeLink_45088 = RC
+Wfm_AddMyTimeLink_45088 = true
 Wfm_GroupPages_45057 = RC
 Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
 
@@ -198,5 +198,5 @@ WFM_TrainingPlanner_44780 = RC
 Wfm_Staffing_45411 = RC #Enables the entire Staffing page!
 
 Stardust_Priority_BelowNormal_44320 = DEV
-Report_Realtime_Scheduled_Time_Per_Activity_45560 = RC
+Report_Realtime_Scheduled_Time_Per_Activity_45560 = true
 Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = RC
