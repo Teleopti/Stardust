@@ -20,7 +20,6 @@
 		Settings_AlertViaEmailFromSMSLink_30444,
 
 		RTA_SpreadTransactionLocksStrategy_41823,
-		RTA_SolidProofWhenManagingAgentAdherence_39351,
 		RTA_EventPackagesOptimization_43924,
 		RTA_AsyncOptimization_43924,
 
