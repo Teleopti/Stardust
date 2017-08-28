@@ -232,7 +232,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test]
-		[Ignore("To be fixed #45542")]
 		public void ShouldNotCreateEventsForIslandsIfTeamOptimizationIsUsed()
 		{
 			OptimizationPreferencesProvider.SetFromTestsOnly(new OptimizationPreferences
@@ -247,6 +246,23 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod() });
 
 			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().AgentsToOptimize.Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldNotCreateEventsForIslandsIfTeamOptimizationIsUsed_OnlySelectedAgents()
+		{
+			OptimizationPreferencesProvider.SetFromTestsOnly(new OptimizationPreferences
+			{
+				Extra = new ExtraPreferences { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag) }
+			});
+			var agent1 = new Person().WithId().WithPersonPeriod(new Skill().WithId());
+			var agent2 = new Person().WithId().WithPersonPeriod(new Skill().WithId());
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new IntradayOptimizationCommand { Period = DateOnly.Today.ToDateOnlyPeriod(), AgentsToOptimize = new[]{agent1}});
+
+			EventPublisher.PublishedEvents.OfType<IntradayOptimizationWasOrdered>().Single().AgentsToOptimize.Count().Should().Be.EqualTo(1);
 		}
 	}
 }

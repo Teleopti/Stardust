@@ -69,9 +69,28 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			PersonRepository.Has(agent1);
 			PersonRepository.Has(agent2);
 
-			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1, agent2 } });
+			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10) });
 
 			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().AgentsToSchedule.Count().Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldNotCreateEventsForIslandsIfTeamSchedulingIsUsed_OnlySelectedAgents()
+		{
+			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+			{
+				UseTeam = true,
+				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag)
+			});
+
+			var agent1 = new Person().WithId().WithPersonPeriod(new Skill().WithId());
+			var agent2 = new Person().WithId().WithPersonPeriod(new Skill().WithId());
+			PersonRepository.Has(agent1);
+			PersonRepository.Has(agent2);
+
+			Target.Execute(new SchedulingCommand { Period = new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10), AgentsToSchedule = new[] { agent1 } });
+
+			EventPublisher.PublishedEvents.OfType<SchedulingWasOrdered>().Single().AgentsToSchedule.Count().Should().Be.EqualTo(1);
 		}
 	}
 }
