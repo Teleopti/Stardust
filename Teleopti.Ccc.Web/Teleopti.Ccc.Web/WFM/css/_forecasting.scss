@@ -149,3 +149,8 @@
 forecast-result-chart >.c3 > svg{
 	max-width: 100%;
 }
+
+.forecst-chart{
+	margin-left: -$full-padding;
+	background-color: transparent!important;
+}
