@@ -311,8 +311,10 @@
 					vm.agentSearchOptions.focusingSearch = false;
 
 					if (newValue && JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
-						if (toggleService.Wfm_HideUnusedTeamsAndSites_42690) {
+						if (toggleService.Wfm_HideUnusedTeamsAndSites_42690 && !toggleService.Wfm_GroupPages_45057) {
 							vm.getSitesAndTeamsAsync();
+						} else {
+							vm.getGroupPagesAsync();
 						}
 					}
 				});
