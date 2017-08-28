@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Teleopti.Ccc.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -6,17 +7,24 @@ namespace Teleopti.Ccc.TestCommon
 {
 	public class FakeSchedulingSourceScope : ICurrentSchedulingSource, ISchedulingSourceScope
 	{
-		public string SchedulingSource { get; set; }
+		private readonly ThreadLocal<string> _threadSchedulingScope = new ThreadLocal<string>();
+		private readonly ThreadLocal<string> _threadSchedulingScopeUsedToBe = new ThreadLocal<string>();
+
+		public string UsedToBe()
+		{
+			return _threadSchedulingScopeUsedToBe.Value;
+		}
 
 		public string Current()
 		{
-			return SchedulingSource;
+			return _threadSchedulingScope.Value;
 		}
 
 		public IDisposable OnThisThreadUse(string schedulingScope)
 		{
-			SchedulingSource = schedulingScope;
-			return new GenericDisposable(() => { SchedulingSource = null; });
+			_threadSchedulingScope.Value = schedulingScope;
+			_threadSchedulingScopeUsedToBe.Value = schedulingScope;
+			return new GenericDisposable(() => { _threadSchedulingScope.Value = null; });
 		}
 	}
 }

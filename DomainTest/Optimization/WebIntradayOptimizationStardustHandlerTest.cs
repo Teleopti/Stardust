@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			jobResult.Details.Count().Should().Be.EqualTo(1);
 			jobResult.FinishedOk.Should().Be.False();
 
-			FakeSchedulingSourceScope.SchedulingSource.Should().Be.EqualTo(ScheduleSource.WebScheduling);
+			FakeSchedulingSourceScope.UsedToBe().Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 
 		[Test]
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			jobResult.Details.Count().Should().Be.EqualTo(1);
 			jobResult.FinishedOk.Should().Be.True();
 
-			FakeSchedulingSourceScope.SchedulingSource.Should().Be.EqualTo(ScheduleSource.WebScheduling);
+			FakeSchedulingSourceScope.UsedToBe().Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 	}
 }

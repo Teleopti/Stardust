@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			jobResultDetail.ExceptionMessage.Should().Be.Null();
 			jobResultDetail.Message.Should().Not.Be.Null();
 
-			FakeSchedulingSourceScope.SchedulingSource.Should().Be.EqualTo(ScheduleSource.WebScheduling);
+			FakeSchedulingSourceScope.UsedToBe().Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			jobResultDetail.ExceptionMessage.Should().Not.Be.Null();
 			jobResultDetail.Message.Should().Be.Empty();
 
-			FakeSchedulingSourceScope.SchedulingSource.Should().Be.EqualTo(ScheduleSource.WebScheduling);
+			FakeSchedulingSourceScope.UsedToBe().Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 	}
 }
