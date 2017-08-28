@@ -110,3 +110,7 @@ md-progress-circular{
 	cursor: not-allowed;
 	pointer-events:none;
 }
+
+wfm-card > md-card{
+	background-color: $white!important;
+}
