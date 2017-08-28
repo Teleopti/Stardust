@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Staffing
 {
@@ -13,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 	{
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
+		private readonly IUserTimeZone _userTimeZone;
 
 		private const string lineSeparator = "\r\n";
 	
@@ -26,10 +28,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 		private readonly IReadOnlyCollection<string> validFieldNames =
 			new List<string> { source, skillgroup, startdatetime, enddatetime, resources };
 
-		public ImportBpoFile(ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository)
+		public ImportBpoFile(ISkillRepository skillRepository, ISkillCombinationResourceRepository skillCombinationResourceRepository, IUserTimeZone userTimeZone)
 		{
 			_skillRepository = skillRepository;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
+			_userTimeZone = userTimeZone;
 		}
 
 		public ImportBpoFileResult ImportFile(string fileContents, IFormatProvider importFormatProvider,char tokenSeparator = ',', char skillSeparator = '|')
@@ -129,11 +132,13 @@ namespace Teleopti.Ccc.Domain.Staffing
 				}
 				if (result.Success)
 				{
+					var startDateTime = TimeZoneHelper.ConvertToUtc(DateTime.Parse(bpoLineTokens[startdatetime], importFormatProvider),_userTimeZone.TimeZone());
+					var endDateTime = TimeZoneHelper.ConvertToUtc(DateTime.Parse(bpoLineTokens[enddatetime], importFormatProvider),_userTimeZone.TimeZone());
 					resourceBpo = new ImportSkillCombinationResourceBpo
 					{
 						Source = bpoLineTokens[source],
-						StartDateTime = DateTime.Parse(bpoLineTokens[startdatetime], importFormatProvider),
-						EndDateTime = DateTime.Parse(bpoLineTokens[enddatetime], importFormatProvider),
+						StartDateTime = startDateTime,
+						EndDateTime = endDateTime,
 						Resources = double.Parse(bpoLineTokens[resources], importFormatProvider),
 						SkillIds = lookupSkillIds(lineWithNumber, bpoLineTokens[skillgroup], skillSeparator, allSkills, result)
 					};

@@ -4,10 +4,12 @@ using System.Globalization;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.IoC;
 
@@ -19,11 +21,13 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public ImportBpoFile Target;
 		public FakeSkillRepository SkillRepository;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
+		public FakeUserTimeZone UserTimeZone;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakeSkillRepository>().For<ISkillRepository>();
 			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
+			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 		}
 
 		[Test]
@@ -429,6 +433,24 @@ TPBRZIL,Channel Sales|Direct Sales,2017-07-24 10:00,2017-07-24 10:15,10.5";
 			};
 
 			Assert.False(scr1.Equals(scr2));
+		}
+
+		[Test]
+		public void ShouldConvertUserTimezoneToUtc()
+		{
+			var timezone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			UserTimeZone.Is(timezone);
+			var fileContents = @"source, skillgroup, startdatetime, enddatetime, resources
+								TPBRZIL, Directsales, 2017-07-24 10:15, 2017-07-24 10:30, 6.0";
+
+			SkillRepository.Has("Directsales", new Activity());
+			SkillRepository.Has("Channel", new Activity());
+			var result = Target.ImportFile(fileContents, new CultureInfo("en-US", false));
+			result.Success.Should().Be.True();
+			
+			var skillCombResources = SkillCombinationResourceRepository.LoadSkillCombinationResourcesBpo();
+			skillCombResources.First().StartDateTime.Should().Be.EqualTo(new DateTime(2017, 7, 24, 8, 15, 0));
+			skillCombResources.First().EndDateTime.Should().Be.EqualTo(new DateTime(2017, 7, 24, 8, 30, 0));
 		}
 	}
 }
