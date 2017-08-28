@@ -38,8 +38,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		protected virtual IntradayOptimizationCommand IntradayOptimizationCommand(Guid planningPeriodId, bool runAsynchronously)
 		{
 			var planningPeriod = _planningPeriodRepository.Get(planningPeriodId);
-			
-			
 			var intradayOptimizationCommand = new IntradayOptimizationCommand
 			{
 				Period = planningPeriod.Range,
