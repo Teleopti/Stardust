@@ -77,7 +77,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 							EndDate = command.Period.EndDate,
 							RunWeeklyRestSolver = command.RunWeeklyRestSolver,
 							CommandId = command.CommandId,
-							UserLocks = userLocks
+							UserLocks = userLocks,
+							Skills = island.SkillIds()
 						};
 						events.Add(@event);
 					}

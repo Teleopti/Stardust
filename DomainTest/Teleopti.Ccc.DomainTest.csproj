@@ -447,6 +447,7 @@
     <Compile Include="SchedulingScenarios\Scheduling\ScheduleCommandHandlerTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingCallbackDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingDesktopTest.cs" />
+    <Compile Include="SchedulingScenarios\Scheduling\SchedulingIslandTests.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingPersistTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingRestrictionsDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\SchedulingScenario.cs" />

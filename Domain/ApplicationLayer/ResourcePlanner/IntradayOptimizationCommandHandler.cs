@@ -61,8 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					AgentsInIsland = agentIds,
 					AgentsToOptimize = agentIds,
 					CommandId = command.CommandId,
-					UserLocks = lockInfos,
-					Skills = null
+					UserLocks = lockInfos
 				});
 			}
 			else
