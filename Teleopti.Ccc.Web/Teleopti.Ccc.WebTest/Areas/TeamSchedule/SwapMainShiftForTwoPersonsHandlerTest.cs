@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 	[TestFixture]
 	internal class SwapMainShiftForTwoPersonsCommandHandlerTest
 	{
-		private ICommonNameDescriptionSetting _commonNameDescriptionSetting;
 		private IPersonRepository _personRepository;
 		private IScheduleStorage _scheduleStorage;
 		private IScenarioRepository _scenarioRepository;
@@ -51,8 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 
 			personTo = PersonFactory.CreatePerson();
 			personTo.SetId(personIdTo);
-
-			_commonNameDescriptionSetting = new CommonNameDescriptionSetting();
+			
 			_personRepository = new FakePersonRepositoryLegacy(personFrom, personTo);
 
 			var defaultScenario = new Scenario("Test Scenario")
@@ -76,8 +74,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 				.Return(new List<BusinessRuleResponse>())
 				.IgnoreArguments();
 
-			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository,
-				_scheduleStorage, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver);
+			_target = new SwapMainShiftForTwoPersonsCommandHandler(_personRepository, _scheduleStorage, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver, new FakeUserTimeZone());
 
 			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
 			{
@@ -109,8 +106,7 @@ namespace Teleopti.Ccc.WebTest.Areas.TeamSchedule
 						new DateOnlyPeriod(), "tjillevippen")
 				}).IgnoreArguments();
 
-			_target = new SwapMainShiftForTwoPersonsCommandHandler(_commonNameDescriptionSetting, _personRepository,
-				_scheduleStorage, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver);
+			_target = new SwapMainShiftForTwoPersonsCommandHandler(_personRepository, _scheduleStorage, _scenarioRepository, _swapAndModifyServiceNew, _differenceService, _scheduleDifferenceSaver, new FakeUserTimeZone());
 
 			var result = _target.SwapShifts(new SwapMainShiftForTwoPersonsCommand
 			{

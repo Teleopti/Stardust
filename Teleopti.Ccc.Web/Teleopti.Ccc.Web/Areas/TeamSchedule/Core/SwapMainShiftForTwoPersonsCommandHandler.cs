@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 {
@@ -24,30 +22,29 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 
 	public class SwapMainShiftForTwoPersonsCommandHandler : ISwapMainShiftForTwoPersonsCommandHandler
 	{
-		private readonly ICommonNameDescriptionSetting _commonNameDescriptionSetting;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly ISwapAndModifyServiceNew _swapAndModifyServiceNew;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
+		private readonly IUserTimeZone _timeZone;
 		private readonly IDifferenceCollectionService<IPersistableScheduleData> _differenceService;
 		
-
-		public SwapMainShiftForTwoPersonsCommandHandler(ICommonNameDescriptionSetting commonNameDescriptionSetting,
-			IPersonRepository personRepository,
+		public SwapMainShiftForTwoPersonsCommandHandler(IPersonRepository personRepository,
 			IScheduleStorage scheduleStorage,
 			IScenarioRepository scenarioRepository,
 			ISwapAndModifyServiceNew swapAndModifyServiceNew,
 			IDifferenceCollectionService<IPersistableScheduleData> differenceService, 
-			IScheduleDifferenceSaver scheduleDifferenceSaver)
+			IScheduleDifferenceSaver scheduleDifferenceSaver,
+			IUserTimeZone timeZone)
 		{
-			_commonNameDescriptionSetting = commonNameDescriptionSetting;
 			_personRepository = personRepository;
 			_scheduleStorage = scheduleStorage;
 			_scenarioRepository = scenarioRepository;
 			_swapAndModifyServiceNew = swapAndModifyServiceNew;
 			_differenceService = differenceService;
 			_scheduleDifferenceSaver = scheduleDifferenceSaver;
+			_timeZone = timeZone;
 		}
 
 		public IEnumerable<ActionResult> SwapShifts(SwapMainShiftForTwoPersonsCommand command)
@@ -55,9 +52,8 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 			var personIds = new[] {command.PersonIdFrom, command.PersonIdTo};
 			var people = _personRepository.FindPeople(personIds).ToArray();
-			var scheduleDate = command.ScheduleDate;
-			var scheduleDateOnly = new DateOnly(scheduleDate);
-			var scheduleDictionary = getScheduleDictionary(defaultScenario, scheduleDate, people);
+			var scheduleDateOnly = new DateOnly(command.ScheduleDate);
+			var scheduleDictionary = getScheduleDictionary(defaultScenario, scheduleDateOnly, people);
 			var errorResponses = swapShifts(scheduleDateOnly, people, scheduleDictionary, command.TrackedCommandInfo);
 
 			if (errorResponses.Length > 0)
@@ -71,9 +67,9 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core
 			return new List<ActionResult>();
 		}
 
-		private IScheduleDictionary getScheduleDictionary(IScenario scenario, DateTime date, IPerson[] people)
+		private IScheduleDictionary getScheduleDictionary(IScenario scenario, DateOnly date, IPerson[] people)
 		{
-			var period = new DateTimePeriod(date.ToUniversalTime(), date.AddDays(1).ToUniversalTime());
+			var period = date.ToDateTimePeriod(_timeZone.TimeZone());
 			var options = new ScheduleDictionaryLoadOptions(true, true);
 			var schedulePeriod = new ScheduleDateTimePeriod(period);
 			var personProvider = new PersonProvider(people)
