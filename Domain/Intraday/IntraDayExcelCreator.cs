@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private ICellStyle _cellStyleTime;
 		private ICellStyle _cellStyleLongDate;
 		private ICellStyle _cellStyleGeneral;
-	
+		private IFont _boldFont;
+
 		public byte[] CreateExcel(IntradayExcelExportData data)
 		{
 			var workbook = new XSSFWorkbook();
@@ -64,13 +65,16 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			_cellStyleGeneral = workbook.CreateCellStyle();
 			_cellStyleGeneral.DataFormat = HSSFDataFormat.GetBuiltinFormat("General");
+
+			_boldFont = workbook.CreateFont();
+			_boldFont.Boldweight = (short)FontBoldWeight.Bold;
 		}
 
 		private void createHeaderInfo(ISheet sheet, IntradayExcelExportData exportData)
 		{
 			addRow(sheet, new []
 			{
-				new CellData(Resources.DateColon),
+				new CellData(Resources.DateColon, _cellStyleGeneral, true),
 				new CellData(exportData.Date, _cellStyleDate), 
 				new CellData(""), 
 				new CellData(""), 
@@ -85,12 +89,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 			});
 			addRow(sheet, new[]
 			{
-				new CellData(Resources.SkillAreaColon),
+				new CellData(Resources.SkillAreaColon, _cellStyleGeneral, true),
 				new CellData(exportData.SkillAreaName),
 			});
 			addRow(sheet, new[]
 			{
-				new CellData(Resources.SkillsParenthesisS),
+				new CellData(Resources.SkillsParenthesisS, _cellStyleGeneral, true),
 				new CellData(string.Join("; ", exportData.Skills)),
 			});
 
@@ -104,21 +108,21 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			addRow(sheet, new[]
 			{
-				new CellData(Resources.Interval),
-				new CellData(Resources.ForecastedVolume),
-				new CellData(Resources.ActualVolume),
-				new CellData(Resources.DifferencePercent),
-				new CellData(Resources.ForecastedAverageHandleTime),
-				new CellData(Resources.ActualAverageHandlingTime),
-				new CellData(Resources.DifferencePercent),
-				new CellData(Resources.ServiceLevelParenthesisPercentSign),
-				new CellData(Resources.ESLParenthesisPercentSign),
-				new CellData(Resources.AbandonedRateParenthesisPercentSign),
-				new CellData(Resources.AverageSpeedOfAnswersParenthesisSeconds),
-				new CellData(Resources.ForecastedAgents),
-				new CellData(Resources.RequiredStaff),
-				new CellData(Resources.ScheduledStaff),
-				new CellData(Resources.ReforecastedStaff)
+				new CellData(Resources.Interval, _cellStyleGeneral, true),
+				new CellData(Resources.ForecastedVolume, _cellStyleGeneral, true),
+				new CellData(Resources.ActualVolume, _cellStyleGeneral, true),
+				new CellData(Resources.DifferencePercent, _cellStyleGeneral, true),
+				new CellData(Resources.ForecastedAverageHandleTime, _cellStyleGeneral, true),
+				new CellData(Resources.ActualAverageHandlingTime, _cellStyleGeneral, true),
+				new CellData(Resources.DifferencePercent, _cellStyleGeneral, true),
+				new CellData(Resources.ServiceLevelParenthesisPercentSign, _cellStyleGeneral, true),
+				new CellData(Resources.ESLParenthesisPercentSign, _cellStyleGeneral, true),
+				new CellData(Resources.AbandonedRateParenthesisPercentSign, _cellStyleGeneral, true),
+				new CellData(Resources.AverageSpeedOfAnswersParenthesisSeconds, _cellStyleGeneral, true),
+				new CellData(Resources.ForecastedAgents, _cellStyleGeneral, true),
+				new CellData(Resources.RequiredStaff, _cellStyleGeneral, true),
+				new CellData(Resources.ScheduledStaff, _cellStyleGeneral, true),
+				new CellData(Resources.ReforecastedStaff, _cellStyleGeneral, true)
 			});
 		}
 
@@ -145,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			{
 				new CellData(data.Interval, _cellStyleTime),
 				new CellData(data.ForecastedVolume, _cellStyleTwoDecimals),
-				new CellData(data.ActualVolume),
+				new CellData(data.ActualVolume, _cellStyleGeneral),
 				new CellData(data.DifferenceVolume, _cellStylePercentage),
 				new CellData(data.ForecastedAht, _cellStyleTwoDecimals),
 				new CellData(data.ActualAht, _cellStyleTwoDecimals),
@@ -183,7 +187,14 @@ namespace Teleopti.Ccc.Domain.Intraday
 				}
 
 				if (cellData.SetCellStyle)
+				{
 					newCell.CellStyle = cellData.CellStyle;
+				}
+
+				if (cellData.Bold)
+				{
+					newCell.CellStyle.SetFont(_boldFont);
+				}
 			}
 		}
 
@@ -192,6 +203,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			public object CellValue { get; }
 			public ICellStyle CellStyle { get; }
 			public bool SetCellStyle { get; private set; }
+			public bool Bold { get; }
 
 			public CellData(object cellValue)
 			{
@@ -204,6 +216,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 				CellValue = cellValue;
 				SetCellStyle = true;
 				CellStyle = cellStyle;
+			}
+
+			public CellData(object cellValue, ICellStyle cellStyle, bool bold) : this(cellValue, cellStyle)
+			{
+				Bold = bold;
 			}
 		}
 	}
