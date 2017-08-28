@@ -25,84 +25,94 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
+using EntityExtensions = Teleopti.Ccc.TestCommon.EntityExtensions;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
-	//[TestFixture]
-	//[DomainTest]
-	//[EnabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step4_43389)]
-	//public class AddctivityCommandHandlerTest : ISetup
-	//{
-	//	public AddActivityCommandHandler Target;
-	//	public FakeScheduleStorage ScheduleStorage;
-	//	public FakePersonRepository PersonRepository;
-	//	public FakeActivityRepository ActivityRepository;
-	//	public FakeWriteSideRepository<IPerson> PersonRepository2;
-	//	private IActivity _mainActivity;
-	//	public FakeCurrentScenario CurrentScenario;
-	//	public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
-	//	public FakeIntervalLengthFetcher IntervalLengthFetcher;
-	//	public FakePersonSkillProvider PersonSkillProvider;
-	//	public MutableNow Now;
+	[TestFixture]
+	[DomainTest]
+	[EnabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step4_43389)]
+	public class AddctivityCommandHandlerTest : ISetup
+	{
+		public AddActivityCommandHandler Target;
+		public FakeScheduleStorage ScheduleStorage;
+		public FakePersonRepository PersonRepository;
+		public FakeActivityRepository ActivityRepository;
+		public FakeWriteSideRepository<IPerson> PersonRepository2;
+		private IActivity _mainActivity;
+		public FakeCurrentScenario CurrentScenario;
+		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
+		public FakeIntervalLengthFetcher IntervalLengthFetcher;
+		public FakePersonSkillProvider PersonSkillProvider;
+		public MutableNow Now;
+		public FakeWriteSideRepository<IActivity> ActivityRepository2;
 
-	//	public void Setup(ISystem system, IIocConfiguration configuration)
-	//	{
-	//		system.UseTestDouble<RemoveActivityCommandHandler>().For<IHandleCommand<RemoveActivityCommand>>();
-	//		system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
-	//		system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
-	//		system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-	//		system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
-	//		system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
-	//		system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
-	//		system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
-	//		_mainActivity = ActivityFactory.CreateActivity("mainActivity");
-	//	}
+		public void Setup(ISystem system, IIocConfiguration configuration)
+		{
+			system.UseTestDouble<AddActivityCommandHandler>().For<IHandleCommand<AddActivityCommand>>();
+			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
+			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
+			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
+			system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
+			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
+			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
+			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
+		}
 
-	//	//[Test]
-	//	//public void ShouldRaiseEventWhenActivityAdded()
-	//	//{
-	//	//	var person = PersonFactory.CreatePersonWithId();
-	//	//	PersonRepository.Add(person);
-	//	//	PersonRepository2.Add(person);
-	//	//	var activity = ActivityFactory.CreateActivity("Phone").WithId();
-	//	//	ActivityRepository.Add(activity);
-	//	//	ActivityRepository.Add(_mainActivity);
-	//	//	var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
+		[Test, Ignore("WIP")]
+		public void ShouldRaiseEventWhenActivityAdded()
+		{
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+			PersonRepository2.Add(person);
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			ActivityRepository.Add(activity);
+			ActivityRepository.Add(_mainActivity);
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
+			ActivityRepository2.Add(activity);
+			ActivityRepository2.Add(_mainActivity);
+			personAssignment.ShiftLayers.ForEach(sl => EntityExtensions.WithId<ShiftLayer>(sl));
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			var command = new AddActivityCommand
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				ActivityId = activity.Id.GetValueOrDefault(),
+				StartTime = new DateTime(2013,11,14,9,0,0),
+				EndTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				Date = new DateOnly(2013, 11, 14),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = operatedPersonId,
+					TrackId = trackId
+				}
+			};
 
-	//	//	personAssignment.AddActivity(activity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 14));
-	//	//	personAssignment.ShiftLayers.ForEach(sl => EntityExtensions.WithId<ShiftLayer>(sl));
-	//	//	var shiftLayer = personAssignment.ShiftLayers.First(sl => sl.Payload == activity);
-	//	//	var command = new AddActivityCommand
-	//	//	{
-	//	//		PersonId = person.Id.GetValueOrDefault(),
-	//	//		ShiftLayerId = shiftLayer.Id.GetValueOrDefault(),
-	//	//		Date = new DateOnly(2013, 11, 14),
-	//	//		TrackedCommandInfo = new TrackedCommandInfo
-	//	//		{
-	//	//			OperatedPersonId = Guid.NewGuid(),
-	//	//			TrackId = Guid.NewGuid()
-	//	//		}
-	//	//	};
+			CurrentScenario.FakeScenario(personAssignment.Scenario);
+			ScheduleStorage.Add(personAssignment);
 
-	//	//	CurrentScenario.FakeScenario(personAssignment.Scenario);
-	//	//	ScheduleStorage.Add(personAssignment);
+			Target.Handle(command);
 
-	//	//	Target.Handle(command);
+			var dic = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc())), personAssignment.Scenario, new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), new[] { person });
+			var scheduleRange = dic[person];
+			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
+			personAssignment = scheduleDay.PersonAssignment();
 
-	//	//	var dic = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc())), personAssignment.Scenario, new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), new[] { person });
-	//	//	var scheduleRange = dic[person];
-	//	//	var scheduleDay = scheduleRange.ScheduledDay(command.Date);
-	//	//	personAssignment = scheduleDay.PersonAssignment();
-
-	//	//	var @event = personAssignment.PopAllEvents().OfType<PersonAssignmentLayerRemovedEvent>().Single();
-	//	//	@event.PersonId.Should().Be(person.Id.GetValueOrDefault());
-	//	//	@event.Date.Should().Be(new DateTime(2013, 11, 14));
-	//	//	@event.StartDateTime.Should().Be(shiftLayer.Period.StartDateTime);
-	//	//	@event.EndDateTime.Should().Be(shiftLayer.Period.EndDateTime);
-	//	//}
+			var @event = personAssignment.PopAllEvents().OfType<ActivityAddedEvent>().Single();
+			@event.PersonId.Should().Be(person.Id.GetValueOrDefault());
+			@event.Date.Should().Be(new DateTime(2013, 11, 14));
+			@event.StartDateTime.Should().Be(command.StartTime.AddHours(-1));
+			@event.EndDateTime.Should().Be(command.EndTime.AddHours(-1));
+			@event.ScenarioId.Should().Be(personAssignment.Scenario);
+			@event.InitiatorId.Should().Be(operatedPersonId);
+			@event.CommandId.Should().Be(trackId);
+			@event.LogOnBusinessUnitId.Should().Be(personAssignment.Scenario.BusinessUnit.Id.GetValueOrDefault());
+		}
 
 
-	//}
+	}
 
 	[TestFixture]
 	[DomainTest]
