@@ -387,7 +387,6 @@
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationCascadingTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationFakeDecisionMakerTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationNoPeriodValueCalculatorTest.cs" />
-    <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationPerfomanceHackTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationRestrictionTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationResultTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationSameBitArrayTest.cs" />
