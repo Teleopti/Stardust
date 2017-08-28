@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			return filteredList.Where(x => x.OnlyForRestrictions == useShiftsForRestrictions);
 		}
 
-		public RuleSetAccordingToAccessabilityFilter(RuleSetBagExtractorProvider ruleSetBagExtractorProvider, ITeamBlockIncludedWorkShiftRuleFilter teamBlockIncludedWorkShiftRuleFilter, IRuleSetSkillActivityChecker ruleSetSkillActivityChecker) : base(ruleSetBagExtractorProvider, teamBlockIncludedWorkShiftRuleFilter, ruleSetSkillActivityChecker)
+		public RuleSetAccordingToAccessabilityFilter(RuleSetBagExtractorProvider ruleSetBagExtractorProvider, TeamBlockIncludedWorkShiftRuleFilter teamBlockIncludedWorkShiftRuleFilter, IRuleSetSkillActivityChecker ruleSetSkillActivityChecker) : base(ruleSetBagExtractorProvider, teamBlockIncludedWorkShiftRuleFilter, ruleSetSkillActivityChecker)
 		{
 		}
 	}
@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	public class RuleSetAccordingToAccessabilityFilterOLD : IRuleSetAccordingToAccessabilityFilter
     {
         private readonly RuleSetBagExtractorProvider _ruleSetBagExtractorProvider;
-        private readonly ITeamBlockIncludedWorkShiftRuleFilter _teamBlockIncludedWorkShiftRuleFilter;
+        private readonly TeamBlockIncludedWorkShiftRuleFilter _teamBlockIncludedWorkShiftRuleFilter;
 	    private readonly IRuleSetSkillActivityChecker _ruleSetSkillActivityChecker;
 
 	    public RuleSetAccordingToAccessabilityFilterOLD(RuleSetBagExtractorProvider ruleSetBagExtractorProvider,
-		    ITeamBlockIncludedWorkShiftRuleFilter teamBlockIncludedWorkShiftRuleFilter,
+		    TeamBlockIncludedWorkShiftRuleFilter teamBlockIncludedWorkShiftRuleFilter,
 		    IRuleSetSkillActivityChecker ruleSetSkillActivityChecker)
 	    {
 			_ruleSetBagExtractorProvider = ruleSetBagExtractorProvider;

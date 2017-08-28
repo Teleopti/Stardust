@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
     [TestFixture]
     public class TeamBlockIncludedWorkShiftRuleFilterTest
     {
-        private ITeamBlockIncludedWorkShiftRuleFilter _target;
+        private TeamBlockIncludedWorkShiftRuleFilter _target;
 		private IWorkShiftTemplateGenerator _generator;
 
         [SetUp]

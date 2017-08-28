@@ -4,12 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
-    public interface ITeamBlockIncludedWorkShiftRuleFilter
-    {
-        IEnumerable<IWorkShiftRuleSet> Filter(DateOnlyPeriod periodToAggregate, IList<IRuleSetBag> ruleSetBags, bool optionsIsSameShift);
-    }
-
-    public class TeamBlockIncludedWorkShiftRuleFilter : ITeamBlockIncludedWorkShiftRuleFilter
+    public class TeamBlockIncludedWorkShiftRuleFilter
     {
         public IEnumerable<IWorkShiftRuleSet> Filter(DateOnlyPeriod periodToAggregate, IList<IRuleSetBag> ruleSetBags, bool optionsIsSameShift)
         {
