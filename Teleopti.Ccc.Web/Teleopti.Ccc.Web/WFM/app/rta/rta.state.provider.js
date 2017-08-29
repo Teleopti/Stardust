@@ -24,7 +24,7 @@ angular
                 })
                 .state('rta', {
                     url: '/rta/?siteIds&teamIds&skillIds&skillAreaId&open',
-                    params: { siteIds: { array: true }, teamIds: { array: true }, skillIds: { array: true } },
+                    params: { siteIds: { array: true }, teamIds: { array: true }, skillIds: { array: true }, es: {array: true} },
                     templateUrl: function () {
                         if (toggles.RTA_RememberMyPartOfTheBusiness_39082)
                             return 'app/rta/overview/view.RTA_RememberMyPartOfTheBusiness_39082.html';
@@ -50,7 +50,7 @@ angular
                 })
                 .state('rta-agents', {
                     url: '/rta/agents/?siteIds&teamIds&skillIds&skillAreaId&es&showAllAgents',
-                    params: { siteIds: { array: true }, teamIds: { array: true }, skillIds: { array: true } },
+                    params: { siteIds: { array: true }, teamIds: { array: true }, skillIds: { array: true }, es: {array: true} },
                     templateUrl: 'app/rta/agents/rta-agents.html',
                     controller: 'RtaAgentsController as vm'
                 })
