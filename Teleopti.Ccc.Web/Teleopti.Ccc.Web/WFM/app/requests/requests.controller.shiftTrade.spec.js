@@ -741,7 +741,7 @@ describe('Requests shift trade controller tests',
 				}
 			};
 
-			this.getAllRequestStatuses = function () {
+			this.getShiftTradeRequestsStatuses = function () {
 				return [
 					{ Id: 0, Name: 'Status0' },
 					{ Id: 1, Name: 'Status1' }

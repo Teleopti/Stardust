@@ -507,7 +507,7 @@ describe('Requests - absence and text controller tests',
 				}
 			};
 
-			this.getAllRequestStatuses = function () {
+			this.getAbsenceAndTextRequestsStatuses = function () {
 				return [
 					{ Id: 0, Name: 'Status0' },
 					{ Id: 1, Name: 'Status1' }

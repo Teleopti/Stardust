@@ -14,7 +14,7 @@ describe('requestsDataService tests ', function() {
 	}));
 
 	it('should get statues list for absenceAndText', function() {
-		var results = targetSvc.getAllRequestStatuses('requests.absenceAndText');
+		var results = targetSvc.getAbsenceAndTextRequestsStatuses();
 
 		expect(results.length).toEqual(5);
 		expect(results[0].Name).toEqual($translate.instant("Pending"));
@@ -25,7 +25,7 @@ describe('requestsDataService tests ', function() {
 	});
 
 	it('should get statues list for shiftTrade', function() {
-		var results = targetSvc.getAllRequestStatuses('requests.shiftTrade');
+		var results = targetSvc.getShiftTradeRequestsStatuses();
 
 		expect(results.length).toEqual(3);
 		expect(results[0].Name).toEqual($translate.instant("Pending"));
@@ -34,7 +34,7 @@ describe('requestsDataService tests ', function() {
 	});
 
 	it('should get statues list for overtime', function() {
-		var results = targetSvc.getAllRequestStatuses('requests.overtime');
+		var results = targetSvc.getOvertimeRequestsStatuses();
 
 		expect(results.length).toEqual(3);
 		expect(results[0].Name).toEqual($translate.instant("Pending"));

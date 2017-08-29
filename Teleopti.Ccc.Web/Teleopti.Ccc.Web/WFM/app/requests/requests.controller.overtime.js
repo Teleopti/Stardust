@@ -111,7 +111,7 @@
 			vm.gridOptions = getGridOptions();
 			vm.initialized = true;
 			vm.filterEnabled = $stateParams.filterEnabled;
-			vm.allRequestStatuses = requestsDataService.getAllRequestStatuses(requestsTabNames.overtime);
+			vm.allRequestStatuses = requestsDataService.getOvertimeRequestsStatuses();
 
 			if (!$stateParams.getPeriod)
 				return;

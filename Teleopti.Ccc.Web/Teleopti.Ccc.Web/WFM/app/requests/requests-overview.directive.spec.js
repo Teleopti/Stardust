@@ -795,7 +795,7 @@
 		var _getAllRequetsCallbackData = {
 			Requests: _requests,
 			TotalCount: _requests.length
-		}
+		};
 
 		this.reset = function () {
 			_requests = [];
@@ -818,7 +818,7 @@
 
 		this.setGetAllRequetsCallbackData = function(data) {
 			_getAllRequetsCallbackData = data;
-		}
+		};
 
 		this.getHasSentRequests = function () { return _hasSentRequests; }
 		this.getLastRequestParameters = function () { return _lastRequestParameters; }
@@ -833,8 +833,8 @@
 						data: _getAllRequetsCallbackData
 					});
 				}
-			}
-		}
+			};
+		};
 
 		this.getShiftTradeRequestsPromise = function () {
 			_hasSentRequests = true;
@@ -846,8 +846,8 @@
 						data: _getAllRequetsCallbackData
 					});
 				}
-			}
-		}
+			};
+		};
 
 		this.getRequestTypes = function () {
 			return {
@@ -861,17 +861,31 @@
 					});
 				}
 			}
-		}
-
-		this.getAllRequestStatuses = function () {
-			return [
-				{ Id: 0, Name: "Status0" },
-				{ Id: 1, Name: "Status1" }
-			];
-		}
+		};
 
 		this.getCallCounts = function() {
 			return _callCounts;
+		};
+
+		this.getAbsenceAndTextRequestsStatuses = function () {
+			var statues = [];
+
+			return getBasicStatues().concat(statues);
+		};
+
+		this.getShiftTradeRequestsStatuses = function () {
+			return getBasicStatues();
+		};
+
+		function getBasicStatues(){
+			// TODO: Should get this list in a better way
+			// Refer to definition Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest.personRequestState.CreateFromId()
+			var basicStatues = [
+				{ Id: 0, Name: "Status0" },
+				{ Id: 1, Name: "Status1" }
+			];
+
+			return basicStatues;
 		}
 	}
 

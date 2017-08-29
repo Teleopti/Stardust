@@ -537,7 +537,7 @@ describe('Requests - overtime controller tests',
 				}
 			}
 
-			this.getAllRequestStatuses = function () {
+			this.getOvertimeRequestsStatuses = function () {
 				return [
 					{ Id: 0, Name: 'Status0' },
 					{ Id: 1, Name: 'Status1' }

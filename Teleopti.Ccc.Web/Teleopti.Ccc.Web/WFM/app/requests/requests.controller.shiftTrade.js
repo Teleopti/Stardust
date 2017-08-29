@@ -167,7 +167,7 @@
 
 			vm.initialized = true;
 			vm.filterEnabled = $stateParams.filterEnabled;
-			vm.allRequestStatuses = requestsDataService.getAllRequestStatuses(requestsTabNames.shiftTrade);
+			vm.allRequestStatuses = requestsDataService.getShiftTradeRequestsStatuses();
 
 			if (!$stateParams.getPeriod)
 				return;

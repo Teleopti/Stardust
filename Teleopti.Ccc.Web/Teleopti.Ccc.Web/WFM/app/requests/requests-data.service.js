@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.requests').service('requestsDataService', ['$q', '$http', '$translate', 'requestsDefinitions', 'Toggle', 'REQUESTS_TAB_NAMES', requestsDataService]);
+	angular.module('wfm.requests').service('requestsDataService', ['$q', '$http', '$translate', 'requestsDefinitions', 'Toggle', requestsDataService]);
 
-	function requestsDataService($q, $http, $translate, requestsDefinitions, toggleSvc, REQUESTS_TAB_NAMES) {
+	function requestsDataService($q, $http, $translate, requestsDefinitions, toggleSvc) {
 		var listAbsenceAndTextRequestsUrl = '../api/Requests/requests';
 		var listOvertimeRequestsUrl = '../api/Requests/overtimeRequests';
 		var listShiftTradeRequestsUrl = '../api/Requests/shiftTradeRequests';
@@ -117,33 +117,6 @@
 			return $http.get(resourceCalculateUrl);
 		};
 
-		this.getAllRequestStatuses = function (tabName) {
-			// TODO: Should get this list in a better way
-			// Refer to definition of Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest.personRequestState.CreateFromId()
-			var basicStatues = [
-				{ Id: 0, Name: $translate.instant("Pending") },
-				{ Id: 1, Name: $translate.instant("Denied") },
-				{ Id: 2, Name: $translate.instant("Approved") }
-			];
-
-			if(tabName.indexOf(REQUESTS_TAB_NAMES.absenceAndText) > -1){
-				var statues = [
-					{ Id: 5, Name: $translate.instant("Waitlisted") },
-					{ Id: 6, Name: $translate.instant("Cancelled") }
-				];
-
-				return basicStatues.concat(statues);
-			}
-
-			if (tabName.indexOf(REQUESTS_TAB_NAMES.shiftTrade) > -1) {
-				return basicStatues;
-			}
-
-			if (tabName.indexOf(REQUESTS_TAB_NAMES.overtime) > -1) {
-				return basicStatues;
-			}
-		};
-
 		this.getAllBusinessRulesForApproving = function () {
 			return [
 				{
@@ -183,5 +156,34 @@
 					});
 			});
 		};
+
+		this.getAbsenceAndTextRequestsStatuses = function () {
+			var statues = [
+				{ Id: 5, Name: $translate.instant("Waitlisted") },
+				{ Id: 6, Name: $translate.instant("Cancelled") }
+			];
+
+			return getBasicStatues().concat(statues);
+		};
+
+		this.getShiftTradeRequestsStatuses = function () {
+			return getBasicStatues();
+		};
+
+		this.getOvertimeRequestsStatuses = function () {
+			return getBasicStatues();
+		};
+
+		function getBasicStatues(){
+			// TODO: Should get this list in a better way
+			// Refer to definition Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest.personRequestState.CreateFromId()
+			var basicStatues = [
+				{ Id: 0, Name: $translate.instant("Pending") },
+				{ Id: 1, Name: $translate.instant("Denied") },
+				{ Id: 2, Name: $translate.instant("Approved") }
+			];
+
+			return basicStatues;
+		}
 	}
 })();

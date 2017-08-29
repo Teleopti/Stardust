@@ -126,7 +126,7 @@
 			vm.gridOptions = getGridOptions();
 			vm.initialized = true;
 			vm.filterEnabled = $stateParams.filterEnabled;
-			vm.allRequestStatuses = requestsDataService.getAllRequestStatuses(requestsTabNames.absenceAndText);
+			vm.allRequestStatuses = requestsDataService.getAbsenceAndTextRequestsStatuses();
 
 			if (!$stateParams.getPeriod)
 				return;
