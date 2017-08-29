@@ -155,7 +155,7 @@
 			});
 		}
 
-		vm.allRequestStatuses = requestsDataSvc.getAllRequestStatuses(vm.shiftTradeView);
+		vm.allRequestStatuses = requestsDataSvc.getAllRequestStatuses(vm.shiftTradeView ? requestsTabNames.shiftTrade : requestsTabNames.absenceAndText);
 
 		vm.typeFilterClose = function () {
 			var filters = '';

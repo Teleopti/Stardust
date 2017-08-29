@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.requests').service('requestsDataService', ['$q', '$http', '$translate', 'requestsDefinitions', 'Toggle', requestsDataService]);
+	angular.module('wfm.requests').service('requestsDataService', ['$q', '$http', '$translate', 'requestsDefinitions', 'Toggle', 'REQUESTS_TAB_NAMES', requestsDataService]);
 
-	function requestsDataService($q, $http, $translate, requestsDefinitions, toggleSvc) {
+	function requestsDataService($q, $http, $translate, requestsDefinitions, toggleSvc, REQUESTS_TAB_NAMES) {
 		var listAbsenceAndTextRequestsUrl = '../api/Requests/requests';
 		var listOvertimeRequestsUrl = '../api/Requests/overtimeRequests';
 		var listShiftTradeRequestsUrl = '../api/Requests/shiftTradeRequests';
@@ -36,7 +36,7 @@
 			});
 		};
 
-		this.getSitesPromise = function () {
+		this.getSitesPromise = function () {s
 			return $http.get(getSitesUrl);
 		};
 
@@ -54,7 +54,7 @@
 
 		this.getBudgetGroupsPromise = function () {
 			return $http.get(getBudgetGroupsUrl);
-		}
+		};
 
 		this.getBudgetAllowancePromise = function (date, budgetGroupId) {
 			return $http.get(getBudgetAllowanceUrl,
@@ -64,11 +64,11 @@
 						budgetGroupId: budgetGroupId
 					}
 				});
-		}
+		};
 
 		this.replyRequestsPromise = function (selectedRequestIdsAndMessage) {
 			return $http.post(replyRequestsUrl, selectedRequestIdsAndMessage);
-		}
+		};
 
 		this.approveRequestsPromise = function (selectedRequestIdsAndMessage) {
 			return $http.post(approveRequestsUrl, selectedRequestIdsAndMessage);
@@ -84,7 +84,7 @@
 				startTime: waitlistPeriod.startDate,
 				endTime: waitlistPeriod.endDate,
 				commandId: commandId
-			}
+			};
 			return $http.get(processWaitlistRequests, { params: waitlistPeriodGet });
 		};
 
@@ -117,23 +117,32 @@
 			return $http.get(resourceCalculateUrl);
 		};
 
-		this.getAllRequestStatuses = function (isShiftTradeView) {
+		this.getAllRequestStatuses = function (tabName) {
 			// TODO: Should get this list in a better way
 			// Refer to definition of Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest.personRequestState.CreateFromId()
-			var statuses = [
+			var basicStatues = [
 				{ Id: 0, Name: $translate.instant("Pending") },
 				{ Id: 1, Name: $translate.instant("Denied") },
 				{ Id: 2, Name: $translate.instant("Approved") }
 			];
-			if (!isShiftTradeView) {
-				statuses.push(
+
+			if(tabName.indexOf(REQUESTS_TAB_NAMES.absenceAndText) > -1){
+				var statues = [
 					{ Id: 5, Name: $translate.instant("Waitlisted") },
 					{ Id: 6, Name: $translate.instant("Cancelled") }
-				);
+				];
+
+				return basicStatues.concat(statues);
 			}
 
-			return statuses;
-		}
+			if (tabName.indexOf(REQUESTS_TAB_NAMES.shiftTrade) > -1) {
+				return basicStatues;
+			}
+
+			if (tabName.indexOf(REQUESTS_TAB_NAMES.overtime) > -1) {
+				return basicStatues;
+			}
+		};
 
 		this.getAllBusinessRulesForApproving = function () {
 			return [
