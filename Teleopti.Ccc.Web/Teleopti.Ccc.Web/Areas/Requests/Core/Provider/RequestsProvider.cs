@@ -25,11 +25,26 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			_shiftTradeSwapScheduleDetailsMapper = shiftTradeSwapScheduleDetailsMapper;
 		}
 
-		public IEnumerable<IPersonRequest> RetrieveRequests(RequestFilter filter, out int totalCount)
+		public IEnumerable<IPersonRequest> RetrieveAbsenceAndTextRequests(RequestFilter filter, out int totalCount)
 		{
-			var requests = _repository.FindAllRequests(filter, out totalCount).Where(permissionCheckPredicate).ToList();
+			var requests = _repository.FindAbsenceAndTextRequests(filter, out totalCount).Where(permissionCheckPredicate).ToList();
+
+			return requests;
+		}
+
+
+		public IEnumerable<IPersonRequest> RetrieveShiftTradeRequests(RequestFilter filter, out int totalCount)
+		{
+			var requests = _repository.FindAbsenceAndTextRequests(filter, out totalCount).Where(permissionCheckPredicate).ToList();
 
 			return setupShiftTradeRequestStatus(requests);
+		}
+
+		public IEnumerable<IPersonRequest> RetrieveOvertimeRequests(RequestFilter filter, out int totalCount)
+		{
+			var requests = _repository.FindOvertimeRequests(filter, out totalCount).Where(permissionCheckPredicate).ToList();
+
+			return requests;
 		}
 
 		private IEnumerable<IPersonRequest> setupShiftTradeRequestStatus (IEnumerable<IPersonRequest> requests)

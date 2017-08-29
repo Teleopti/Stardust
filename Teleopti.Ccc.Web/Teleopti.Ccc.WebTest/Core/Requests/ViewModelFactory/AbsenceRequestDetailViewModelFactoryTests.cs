@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var absenceRequestWaitlistProvider = new AbsenceRequestWaitlistProvider(personRequestRepository);
 
 			var personRequestList = new List<IPersonRequest>();
-			personRequestRepository.Stub(x => x.FindAllRequests(null)).Return(personRequestList).IgnoreArguments();
+			personRequestRepository.Stub(x => x.FindAbsenceAndTextRequests(null, out int count, true)).Return(personRequestList).IgnoreArguments();
 
 			var workflowControlSet = createWorkFlowControlSet(new DateTime(2015, 01, 01, 00, 00, 00, DateTimeKind.Utc), new DateTime(2018, 01, 01, 00, 00, 00, DateTimeKind.Utc), absence);
 

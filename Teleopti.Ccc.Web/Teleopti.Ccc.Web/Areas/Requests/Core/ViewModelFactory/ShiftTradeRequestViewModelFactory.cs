@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			requestFilter.OnlyIncludeRequestsStartingWithinPeriod = true;
 			requestFilter.ExcludeInvalidShiftTradeRequest = true;
 
-			var requests = _requestsProvider.RetrieveRequests(requestFilter, out totalCount).ToArray();
+			var requests = _requestsProvider.RetrieveShiftTradeRequests(requestFilter, out totalCount).ToArray();
 
 			requestListModel.TotalCount = totalCount;
 			requestListModel.Skip = input.Paging.Skip;

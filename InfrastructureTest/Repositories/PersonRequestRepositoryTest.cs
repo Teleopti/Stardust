@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		private Contract _contract;
 		private PartTimePercentage _partTimePercentage;
 		private IContractSchedule _contractSchedule;
-		
+
 
 		protected override void ConcreteSetup()
 		{
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return request;
 		}
 
-	
+
 		private IPersonRequest createShiftExchangeOffer(DateTime startDate, DateTime? shiftDate = null,
 			DateTime? validTo = null)
 		{
@@ -141,8 +141,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			IPersonRequest org = CreateAggregateWithCorrectBusinessUnit();
 			Assert.AreEqual(org.Person, loadedAggregateFromDatabase.Person);
-			Assert.AreEqual(((IAbsenceRequest) org.Request).Absence,
-				((IAbsenceRequest) loadedAggregateFromDatabase.Request).Absence);
+			Assert.AreEqual(((IAbsenceRequest)org.Request).Absence,
+				((IAbsenceRequest)loadedAggregateFromDatabase.Request).Absence);
 			Assert.AreEqual((org.Request).Period,
 				(loadedAggregateFromDatabase.Request).Period);
 		}
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				new ShiftTradeSwapDetail(personFrom, _person, requestDate, requestDate)
 			});
-			var shiftTradePersonRequest = new PersonRequest(personFrom) {Request = shiftTradeRequest};
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			var startDateTime = DateTime.UtcNow;
 			var textRequest = new PersonRequest(_person, new TextRequest(new DateTimePeriod(startDateTime.AddMinutes(-1), startDateTime.AddMinutes(-1))));
 			var absenceRequest = new PersonRequest(_person,
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(offerRequest);
 			PersistAndRemoveFromUnitOfWork(overtimeRequest);
 
-			personRequests.AddRange(new[] {shiftTradePersonRequest, textRequest, absenceRequest, offerRequest});
+			personRequests.AddRange(new[] { shiftTradePersonRequest, textRequest, absenceRequest, offerRequest });
 			return personRequests;
 		}
 
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsNotNull(requestAccepted.Id);
 			Guid? savedGuid = requestAccepted.Id;
 
-			IPersonRequest loadedPersonRequest = new PersonRequestRepository(UnitOfWork).Find((Guid) savedGuid);
+			IPersonRequest loadedPersonRequest = new PersonRequestRepository(UnitOfWork).Find((Guid)savedGuid);
 
 			Assert.IsNotNull(loadedPersonRequest);
 		}
@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Guid acceptedId = requestAccepted.Id.GetValueOrDefault();
 			Guid absenceId = requestAbsence.Id.GetValueOrDefault();
 
-			var requestIds = new List<Guid> {acceptedId, absenceId};
+			var requestIds = new List<Guid> { acceptedId, absenceId };
 
 			var loadedPersonRequest = new PersonRequestRepository(UnitOfWork).Find(requestIds);
 
@@ -357,7 +357,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest);
 			PersistAndRemoveFromUnitOfWork(personRequestWithShiftTrade);
 
-			var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person, new Paging {Take = 10});
+			var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person, new Paging { Take = 10 });
 
 			int actualValue = foundRequests.Count();
 			Assert.AreEqual(1, actualValue);
@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest1);
 			PersistAndRemoveFromUnitOfWork(personRequestWithAbsenceRequest2);
 
-			var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person, new Paging {Take = 1});
+			var foundRequests = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgent(_person, new Paging { Take = 1 });
 
 			foundRequests.Should().Have.Count.EqualTo(1);
 		}
@@ -492,8 +492,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			pendingShiftTradePersonRequest.Pending();
 			pendingPersonRequest.Pending();
 			//Set the status:
-			shiftTradePersonRequest.Deny( null, new PersonRequestAuthorizationCheckerForTest(), personTo);
-			personRequest.Deny( null, new PersonRequestAuthorizationCheckerForTest(), personTo);
+			shiftTradePersonRequest.Deny(null, new PersonRequestAuthorizationCheckerForTest(), personTo);
+			personRequest.Deny(null, new PersonRequestAuthorizationCheckerForTest(), personTo);
 			Assert.IsTrue(pendingPersonRequest.IsPending);
 			Assert.IsTrue(pendingShiftTradePersonRequest.IsPending);
 
@@ -668,8 +668,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				new PersonRequestRepository(UnitOfWork).FindPersonRequestWithinPeriod(shiftTradePersonRequest.Request.Period);
 			var firstResult = requestWithinOutsidePeriod.Single();
 			LazyLoadingManager.IsInitialized(firstResult.Request).Should().Be.True();
-			LazyLoadingManager.IsInitialized(((IShiftTradeRequest) firstResult.Request).ShiftTradeSwapDetails).Should().Be.True();
-			LazyLoadingManager.IsInitialized(((IShiftTradeRequest) firstResult.Request).ShiftTradeSwapDetails[0])
+			LazyLoadingManager.IsInitialized(((IShiftTradeRequest)firstResult.Request).ShiftTradeSwapDetails).Should().Be.True();
+			LazyLoadingManager.IsInitialized(((IShiftTradeRequest)firstResult.Request).ShiftTradeSwapDetails[0])
 				.Should().Be.True();
 		}
 
@@ -691,7 +691,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			anotherPerson2.WithName(new Name("Kirk", "Douglas"));
 			PersistAndRemoveFromUnitOfWork(anotherPerson2);
 
-			var persons = new List<IPerson> {_person, anotherPerson, anotherPerson2, personTo};
+			var persons = new List<IPerson> { _person, anotherPerson, anotherPerson2, personTo };
 
 			var shiftTradeRequest = new ShiftTradeRequest(
 				new List<IShiftTradeSwapDetail>
@@ -715,7 +715,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			textRequestDenied.Request =
 				new TextRequest(new DateTimePeriod(new DateTime(2008, 7, 17, 0, 0, 0, DateTimeKind.Utc),
 					new DateTime(2008, 7, 18, 0, 0, 0, DateTimeKind.Utc)));
-			textRequestDenied.Deny( null, new PersonRequestAuthorizationCheckerForTest());
+			textRequestDenied.Deny(null, new PersonRequestAuthorizationCheckerForTest());
 
 			IPersonRequest pendingShiftTradePersonRequest = new PersonRequest(personTo);
 
@@ -727,7 +727,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			pendingShiftTradePersonRequest.Pending();
 			//Set the status:
 			shiftTradePersonRequest.Deny(null, new PersonRequestAuthorizationCheckerForTest());
-			personRequest.Deny( null, new PersonRequestAuthorizationCheckerForTest());
+			personRequest.Deny(null, new PersonRequestAuthorizationCheckerForTest());
 			Assert.IsTrue(pendingPersonRequest.IsPending, "Must be pending");
 			Assert.IsTrue(pendingShiftTradePersonRequest.IsPending, "Must be pending");
 
@@ -775,7 +775,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			personTo.SetName(new Name("mala", "mala"));
 			PersistAndRemoveFromUnitOfWork(personTo);
 
-			IList<IPerson> persons = new List<IPerson> {_person, personTo};
+			IList<IPerson> persons = new List<IPerson> { _person, personTo };
 
 			IShiftTradeRequest shiftTradeRequest = new ShiftTradeRequest(
 				new List<IShiftTradeSwapDetail>
@@ -790,7 +790,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			IList<IPersonRequest> foundRequests =
 				new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(persons, periodToLookFor);
-			Assert.IsTrue(LazyLoadingManager.IsInitialized(((IShiftTradeRequest) foundRequests[0].Request).ShiftTradeSwapDetails));
+			Assert.IsTrue(LazyLoadingManager.IsInitialized(((IShiftTradeRequest)foundRequests[0].Request).ShiftTradeSwapDetails));
 		}
 
 		[Test]
@@ -842,7 +842,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.Update(request1);
 			UnitOfWork.PersistAll();
 
-			IList list = Session.CreateCriteria(typeof (PushMessageDialogue)).List();
+			IList list = Session.CreateCriteria(typeof(PushMessageDialogue)).List();
 			Assert.AreEqual(1, list.Count);
 
 			Session.Delete("from PersonRequest");
@@ -850,9 +850,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.Delete("from Absence");
 			Session.Delete("from PushMessageDialogue");
 			Session.Delete("from PushMessage");
-			((IDeleteTag) _person).SetDeleted();
+			((IDeleteTag)_person).SetDeleted();
 			Session.Update(_person);
-			((IDeleteTag) _defaultScenario).SetDeleted();
+			((IDeleteTag)_defaultScenario).SetDeleted();
 			Session.Update(_defaultScenario);
 			Session.Flush();
 		}
@@ -863,7 +863,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var rep = new PersonRequestRepository(UnitOfWork);
 			var request = CreateAggregateWithCorrectBusinessUnit();
 			PersistAndRemoveFromUnitOfWork(request);
-			request.Deny( "something", new PersonRequestAuthorizationCheckerForTest(), _person);
+			request.Deny("something", new PersonRequestAuthorizationCheckerForTest(), _person);
 
 			Assert.Throws<DataSourceException>(() =>
 				rep.Remove(request));
@@ -884,18 +884,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldNotIncludeShiftTradeOfDeletedPersonTo()
 		{
 			var personTo = PersonFactory.CreatePerson("person to");
-			((IDeleteTag) personTo).SetDeleted();
+			((IDeleteTag)personTo).SetDeleted();
 			var personFrom = PersonFactory.CreatePerson("person from");
 			PersistAndRemoveFromUnitOfWork(personTo);
 			PersistAndRemoveFromUnitOfWork(personFrom);
 
-			var persons = new List<IPerson> {personFrom, personTo};
+			var persons = new List<IPerson> { personFrom, personTo };
 
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
 			{
 				new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16))
 			});
-			var shiftTradePersonRequest = new PersonRequest(personFrom) {Request = shiftTradeRequest};
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			shiftTradePersonRequest.Pending();
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
@@ -913,13 +913,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personTo);
 			PersistAndRemoveFromUnitOfWork(personFrom);
 
-			var persons = new List<IPerson> {personFrom, personTo};
+			var persons = new List<IPerson> { personFrom, personTo };
 
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
 			{
 				new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16))
 			});
-			var shiftTradePersonRequest = new PersonRequest(personFrom) {Request = shiftTradeRequest};
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			shiftTradePersonRequest.Pending();
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
@@ -940,11 +940,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				{
 					new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16))
 				});
-			var shiftTradePersonRequest = new PersonRequest(personFrom) {Request = shiftTradeRequest};
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			shiftTradePersonRequest.Pending();
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
-			new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(new[] {personTo},
+			new PersonRequestRepository(UnitOfWork).FindAllRequestModifiedWithinPeriodOrPending(new[] { personTo },
 				new DateTimePeriod(2000, 1, 1, 2010, 1, 1)).Should().Be.Empty();
 		}
 
@@ -953,17 +953,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var personTo = PersonFactory.CreatePerson("person to");
 			var personFrom = PersonFactory.CreatePerson("person from");
-			((IDeleteTag) personFrom).SetDeleted();
+			((IDeleteTag)personFrom).SetDeleted();
 			PersistAndRemoveFromUnitOfWork(personTo);
 			PersistAndRemoveFromUnitOfWork(personFrom);
 
-			var persons = new List<IPerson> {personFrom, personTo};
+			var persons = new List<IPerson> { personFrom, personTo };
 
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
 			{
 				new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16))
 			});
-			var shiftTradePersonRequest = new PersonRequest(personFrom) {Request = shiftTradeRequest};
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			shiftTradePersonRequest.Pending();
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
@@ -980,13 +980,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personTo);
 			PersistAndRemoveFromUnitOfWork(personFrom);
 
-			var persons = new List<IPerson> {personFrom, personTo};
+			var persons = new List<IPerson> { personFrom, personTo };
 
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
 			{
 				new ShiftTradeSwapDetail(personFrom, personTo, new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16))
 			});
-			var shiftTradePersonRequest = new PersonRequest(personFrom) {Request = shiftTradeRequest};
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
 			shiftTradePersonRequest.Pending();
 			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
 
@@ -998,7 +998,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldOnlyGetShiftTradeRequests()
 		{
-			var paging = new Paging {Skip = 0, Take = 5};
+			var paging = new Paging { Skip = 0, Take = 5 };
 			setUpGetRequestsByTypeTests();
 
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgentByType(_person, paging, null,
@@ -1009,7 +1009,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldOnlyGetTextRequests()
 		{
-			var paging = new Paging {Skip = 0, Take = 5};
+			var paging = new Paging { Skip = 0, Take = 5 };
 			setUpGetRequestsByTypeTests();
 
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgentByType(_person, paging, null,
@@ -1020,7 +1020,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldOnlyGetAbsenceRequests()
 		{
-			var paging = new Paging {Skip = 0, Take = 5};
+			var paging = new Paging { Skip = 0, Take = 5 };
 			setUpGetRequestsByTypeTests();
 
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgentByType(_person, paging, null,
@@ -1035,20 +1035,20 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var filter = new RequestFilter
 			{
-				Paging = new Paging {Skip = 0, Take = 5},
-				RequestTypes = new[] {RequestType.OvertimeRequest},
+				Paging = new Paging { Skip = 0, Take = 5 },
+				RequestTypes = new[] { RequestType.OvertimeRequest },
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
 				Persons = new[] { _person }
 			};
 
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter);
+			var result = new PersonRequestRepository(UnitOfWork).FindOvertimeRequests(filter, out int count, true);
 			result.Single().Request.RequestType.Should().Be(RequestType.OvertimeRequest);
 		}
 
 		[Test]
 		public void ShouldOnlyGetExchangeOfferRequests()
 		{
-			var paging = new Paging {Skip = 0, Take = 5};
+			var paging = new Paging { Skip = 0, Take = 5 };
 			setUpGetRequestsByTypeTests();
 
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgentByType(_person, paging, null,
@@ -1059,7 +1059,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetShiftTradeAndShiftExchangeOfferRequests()
 		{
-			var paging = new Paging {Skip = 0, Take = 5};
+			var paging = new Paging { Skip = 0, Take = 5 };
 			setUpGetRequestsByTypeTests();
 
 			var requestTypes = new[] { RequestType.ShiftExchangeOffer, RequestType.ShiftTradeRequest };
@@ -1077,7 +1077,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			setUpGetRequestsByTypeTests();
 
 			var earliestDate = DateTime.UtcNow.AddDays(-10);
-			var requestTypes = new[] {RequestType.ShiftExchangeOffer, RequestType.ShiftTradeRequest};
+			var requestTypes = new[] { RequestType.ShiftExchangeOffer, RequestType.ShiftTradeRequest };
 			var result = new PersonRequestRepository(UnitOfWork).FindAllRequestsForAgentByType(_person, paging,
 				earliestDate, requestTypes).ToArray();
 			result.Length.Should().Be(1);
@@ -1108,7 +1108,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1))
 			};
 
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+			var result = new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter).ToArray();
 			result.Length.Should().Be(4);
 		}
 
@@ -1120,10 +1120,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
-				RequestTypes = new List<RequestType> {RequestType.TextRequest, RequestType.AbsenceRequest}
+				RequestTypes = new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest }
 			};
 
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+			var result = new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter).ToArray();
 			result.Length.Should().Be(2);
 		}
 
@@ -1145,11 +1145,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter()
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
-				Persons = new List<IPerson> {person1},
-				RequestTypes = new List<RequestType> {RequestType.TextRequest, RequestType.AbsenceRequest}
+				Persons = new List<IPerson> { person1 },
+				RequestTypes = new List<RequestType> { RequestType.TextRequest, RequestType.AbsenceRequest }
 			};
 
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+			var result = new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter).ToArray();
 			result.Length.Should().Be(1);
 		}
 
@@ -1171,11 +1171,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(new DateTime(2016, 10, 2).Utc(), new DateTime(2016, 10, 4).Utc()),
-				Persons = new List<IPerson> {person1, person2, person3},
-				RequestTypes = new List<RequestType> {RequestType.ShiftTradeRequest}
+				Persons = new List<IPerson> { person1, person2, person3 },
+				RequestTypes = new List<RequestType> { RequestType.ShiftTradeRequest }
 			};
 
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+			var result = new PersonRequestRepository(UnitOfWork).FindShiftTradeRequests(filter, out int count, true).ToArray();
 			result.Length.Should().Be(3);
 		}
 
@@ -1197,11 +1197,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(new DateTime(2016, 10, 2).Utc(), new DateTime(2016, 10, 4).Utc()),
-				Persons = new List<IPerson> {person2},
-				RequestTypes = new List<RequestType> {RequestType.ShiftTradeRequest}
+				Persons = new List<IPerson> { person2 },
+				RequestTypes = new List<RequestType> { RequestType.ShiftTradeRequest }
 			};
 
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+			var result = new PersonRequestRepository(UnitOfWork).FindShiftTradeRequests(filter, out int count, true).ToArray();
 
 			result.Length.Should().Be(2);
 		}
@@ -1222,7 +1222,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			int count;
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter, out count);
+			var result = new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter, out count);
 			result.Single().Request.RequestType.Should().Be(RequestType.TextRequest);
 		}
 
@@ -1244,7 +1244,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			int count;
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter, out count);
+			var result = new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter, out count);
 			count.Should().Be(2);
 
 			result.Count(r => r.Request.RequestType == RequestType.TextRequest).Should().Be(1);
@@ -1293,18 +1293,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.AgentNameDesc}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameDesc }
 			};
 
-			var resultDesc = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+			var resultDesc = new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter).ToArray();
 
-			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> {textRequest3, textRequest2, textRequest1});
+			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest2, textRequest1 });
 
-			filter.SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.AgentNameAsc};
+			filter.SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameAsc };
 
-			var resultAsc = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+			var resultAsc = new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter).ToArray();
 
-			resultAsc.Should().Have.SameSequenceAs(new List<IPersonRequest> {textRequest1, textRequest2, textRequest3});
+			resultAsc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest1, textRequest2, textRequest3 });
 		}
 
 		[Test]
@@ -1332,13 +1332,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(6)),
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.PeriodStartDesc}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
 			var resultDesc = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter).ToArray();
+				.FindAbsenceAndTextRequests(filter).ToArray();
 
-			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> {textRequest3, textRequest2, textRequest1});
+			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest2, textRequest1 });
 		}
 
 		[Test]
@@ -1386,11 +1386,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(6)),
-				SortingOrders = new List<RequestsSortingOrder> {order}
+				SortingOrders = new List<RequestsSortingOrder> { order }
 			};
 
 			var resultDesc = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter).ToArray();
+				.FindAbsenceAndTextRequests(filter).ToArray();
 			return resultDesc;
 		}
 
@@ -1416,13 +1416,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(6)),
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.SubjectDesc}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.SubjectDesc }
 			};
 
 			var resultDesc = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter).ToArray();
+				.FindAbsenceAndTextRequests(filter).ToArray();
 
-			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> {textRequest2, textRequest1});
+			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest2, textRequest1 });
 		}
 
 		[Test]
@@ -1462,7 +1462,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 
 			return new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter).ToArray();
+				.FindAbsenceAndTextRequests(filter).ToArray();
 		}
 
 		[Test]
@@ -1507,13 +1507,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(6)),
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.TeamDesc}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.TeamDesc }
 			};
 
 			var resultDesc = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter).ToArray();
+				.FindAbsenceAndTextRequests(filter).ToArray();
 
-			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> {textRequest2, textRequest1});
+			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest2, textRequest1 });
 		}
 
 		[Test]
@@ -1542,13 +1542,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.SubjectDesc, RequestsSortingOrder.AgentNameAsc}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.SubjectDesc, RequestsSortingOrder.AgentNameAsc }
 			};
 
 			var resultDesc = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter).ToArray();
+				.FindAbsenceAndTextRequests(filter).ToArray();
 
-			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> {textRequest3, textRequest1, textRequest2});
+			resultDesc.Should().Have.SameSequenceAs(new List<IPersonRequest> { textRequest3, textRequest1, textRequest2 });
 		}
 
 		[Test]
@@ -1571,11 +1571,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.AgentNameDesc},
-				Paging = new Paging {Skip = 10, Take = 5}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameDesc },
+				Paging = new Paging { Skip = 10, Take = 5 }
 			};
 
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+			var result = new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter).ToArray();
 
 			result.Length.Should().Be.EqualTo(5);
 			result.Any(request => request.Person.Name.FirstName != "A").Should().Be.EqualTo(false);
@@ -1601,12 +1601,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(1)),
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.AgentNameDesc},
-				Paging = new Paging {Skip = 10, Take = 5}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.AgentNameDesc },
+				Paging = new Paging { Skip = 10, Take = 5 }
 			};
 
 			int count;
-			var result = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter, out count).ToArray();
+			var result = new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter, out count).ToArray();
 
 			result.Length.Should().Be.EqualTo(5);
 			count.Should().Be.EqualTo(20);
@@ -1627,12 +1627,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var request2 = createAbsenceRequestAndBusinessUnit(secondAbsence);
 			var request3 = createAbsenceRequestAndBusinessUnit(thirdAbsence);
 
-			request1.Deny( "Work harder", authChecker);
+			request1.Deny("Work harder", authChecker);
 			request2.Approve(new ApprovalServiceForTest(), authChecker);
 
 			request3.SetNew();
 
-			request3.Deny( "Work harder", authChecker, null, PersonRequestDenyOption.AutoDeny);
+			request3.Deny("Work harder", authChecker, null, PersonRequestDenyOption.AutoDeny);
 
 			PersistAndRemoveFromUnitOfWork(request1);
 			PersistAndRemoveFromUnitOfWork(request2);
@@ -1648,7 +1648,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			int count;
 			var foundRequests = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter, out count).ToList();
+				.FindAbsenceAndTextRequests(filter, out count).ToList();
 
 			Assert.AreEqual(2, foundRequests.Count);
 			Assert.IsTrue(!foundRequests.Contains(request2));
@@ -1660,7 +1660,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow),
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.PeriodStartDesc}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
 			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), filter);
@@ -1674,7 +1674,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var filter = new RequestFilter
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)),
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.PeriodStartDesc}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
 			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow), filter);
@@ -1689,7 +1689,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow),
 				ExcludeRequestsOnFilterPeriodEdge = true,
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.PeriodStartDesc}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
 			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)), filter);
@@ -1704,7 +1704,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(1)),
 				ExcludeRequestsOnFilterPeriodEdge = true,
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.PeriodStartDesc}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
 			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow), filter);
@@ -1719,7 +1719,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			{
 				Period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(7)),
 				OnlyIncludeRequestsStartingWithinPeriod = true,
-				SortingOrders = new List<RequestsSortingOrder> {RequestsSortingOrder.PeriodStartDesc}
+				SortingOrders = new List<RequestsSortingOrder> { RequestsSortingOrder.PeriodStartDesc }
 			};
 
 			var resultDesc = simpleRequestFilter(new DateTimePeriod(DateTime.UtcNow.AddDays(-1), DateTime.UtcNow.AddDays(7)),
@@ -1735,7 +1735,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var shiftExchangeOfferReq = createShiftExchangeOffer(startDate, startDate, startDate.AddDays(1));
 			var shiftExchangeOfferReq2 = createShiftExchangeOffer(startDate, startDate, startDate.AddDays(1));
-			((IDeleteTag) shiftExchangeOfferReq2).SetDeleted();
+			((IDeleteTag)shiftExchangeOfferReq2).SetDeleted();
 
 			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferReq);
 			PersistAndRemoveFromUnitOfWork(shiftExchangeOfferReq2);
@@ -1748,7 +1748,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.IsTrue(foundShiftExchangeRequests.Contains(shiftExchangeOfferReq.Request));
 		}
 
-		
+
 
 		#region Request filtering test cases
 
@@ -1776,7 +1776,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			int count;
 			var foundRequests = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter, out count).ToList();
+				.FindAbsenceAndTextRequests(filter, out count).ToList();
 
 			Assert.AreEqual(1, foundRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
@@ -1807,7 +1807,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			int count;
 			var foundRequests = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter, out count).ToList();
+				.FindAbsenceAndTextRequests(filter, out count).ToList();
 
 			Assert.AreEqual(1, foundRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
@@ -1820,7 +1820,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var personTo = PersonFactory.CreatePerson("person to");
 			personTo.TerminatePerson(new DateOnly(1900, 1, 1), new PersonAccountUpdaterDummy());
 			var personFrom = PersonFactory.CreatePerson("person from");
-			((Person) personFrom).SetDeleted();
+			((Person)personFrom).SetDeleted();
 			PersistAndRemoveFromUnitOfWork(personTo);
 			PersistAndRemoveFromUnitOfWork(personFrom);
 
@@ -1855,7 +1855,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Period = new DateTimePeriod(2008, 07, 09, 2008, 07, 20),
 			};
 			var foundRequests = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter, out count).ToList();
+				.FindShiftTradeRequests(filter, out count).ToList();
 
 			Assert.AreEqual(1, foundRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
@@ -1874,7 +1874,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			int count;
 			var foundRequests = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter, out count).ToList();
+				.FindShiftTradeRequests(filter, out count).ToList();
 			Assert.AreEqual(1, foundRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
 			Assert.IsTrue(foundRequests.Contains(shiftTradeRequest1));
@@ -1907,7 +1907,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			int count;
 			var foundRequests = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter, out count).ToList();
+				.FindShiftTradeRequests(filter, out count).ToList();
 
 			Assert.AreEqual(1, foundRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
@@ -1946,7 +1946,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			int count;
 			var foundRequests = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter, out count).ToList();
+				.FindAbsenceAndTextRequests(filter, out count).ToList();
 
 			Assert.AreEqual(2, foundRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
@@ -1997,7 +1997,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 			int count;
 			var foundRequests = new PersonRequestRepository(UnitOfWork)
-				.FindAllRequests(filter, out count).ToList();
+				.FindAbsenceAndTextRequests(filter, out count).ToList();
 
 			Assert.AreEqual(1, foundRequests.Count);
 			Assert.IsTrue(LazyLoadingManager.IsInitialized(foundRequests[0].Request));
@@ -2006,11 +2006,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		#endregion Request filtering test cases
 
-		private IPersonRequest createAndPersistTextRequest(IPerson person, DateTimePeriod period)
+		private void createAndPersistTextRequest(IPerson person, DateTimePeriod period)
 		{
 			var textRequest = new PersonRequest(person, new TextRequest(period));
 			PersistAndRemoveFromUnitOfWork(textRequest);
-			return textRequest;
 		}
 
 		private IPerson createAndPersistPerson(string name, DateOnly personPeriodStartDate)
@@ -2033,7 +2032,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(textRequest1);
 
-			return new PersonRequestRepository(UnitOfWork).FindAllRequests(filter).ToArray();
+			return new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter).ToArray();
 		}
 
 
@@ -2048,16 +2047,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				Name = "dd",
 				AbsenceRequestWaitlistEnabled = true,
 				AbsenceRequestWaitlistProcessOrder = WaitlistProcessOrder.BySeniority
-			}; 
+			};
 			waitlistedWCS.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
 			{
 				Absence = absence,
 				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
 				Period = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
-				StaffingThresholdValidator = new AbsenceRequestNoneValidator() ,
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
 				PersonAccountValidator = new AbsenceRequestNoneValidator(),
 				AbsenceRequestProcess = new GrantAbsenceRequest()
-			
+
 			});
 			var wcs = new WorkflowControlSet()
 			{
@@ -2075,59 +2074,59 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			});
 
 			PersistAndRemoveFromUnitOfWork(new[] { waitlistedWCS, wcs });
-			
+
 			var waitlistedPerson = PersonFactory.CreatePerson("Asad");
 			waitlistedPerson.WorkflowControlSet = waitlistedWCS;
 			var person2 = PersonFactory.CreatePerson("Ali");
 			person2.WorkflowControlSet = wcs;
 
-			PersistAndRemoveFromUnitOfWork(new [] {waitlistedPerson, person2});
+			PersistAndRemoveFromUnitOfWork(new[] { waitlistedPerson, person2 });
 
-			
-			IAbsenceRequest absenceRequest1 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016,03,02,10,0,0,DateTimeKind.Utc), new DateTime(2016, 03, 05, 12, 0, 0, DateTimeKind.Utc)));
-			IAbsenceRequest absenceRequest2 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016,03,02,10,0,0,DateTimeKind.Utc), new DateTime(2016, 03, 03, 12, 0, 0, DateTimeKind.Utc)));
-			IAbsenceRequest absenceRequest3 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016,02,28,10,0,0,DateTimeKind.Utc), new DateTime(2016, 03, 03, 12, 0, 0, DateTimeKind.Utc)));
-			IAbsenceRequest absenceRequest4 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016,03,2,11,0,0,DateTimeKind.Utc), new DateTime(2016, 03, 2, 18, 0, 0, DateTimeKind.Utc)));
-			IAbsenceRequest absenceRequest5 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016,03,5,11,0,0,DateTimeKind.Utc), new DateTime(2016, 03, 6, 18, 0, 0, DateTimeKind.Utc)));
-			IAbsenceRequest absenceRequest6 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016,02,28,11,0,0,DateTimeKind.Utc), new DateTime(2016, 03, 8, 18, 0, 0, DateTimeKind.Utc)));
+
+			IAbsenceRequest absenceRequest1 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 03, 02, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 05, 12, 0, 0, DateTimeKind.Utc)));
+			IAbsenceRequest absenceRequest2 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 03, 02, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 03, 12, 0, 0, DateTimeKind.Utc)));
+			IAbsenceRequest absenceRequest3 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 02, 28, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 03, 12, 0, 0, DateTimeKind.Utc)));
+			IAbsenceRequest absenceRequest4 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 03, 2, 11, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 2, 18, 0, 0, DateTimeKind.Utc)));
+			IAbsenceRequest absenceRequest5 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 03, 5, 11, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 6, 18, 0, 0, DateTimeKind.Utc)));
+			IAbsenceRequest absenceRequest6 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 02, 28, 11, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 8, 18, 0, 0, DateTimeKind.Utc)));
 
 			IPersonRequest request1 = new PersonRequest(waitlistedPerson, absenceRequest1);
 			request1.Pending();
-			request1.Deny( "waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			request1.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request1);
 
 
 			IPersonRequest request2 = new PersonRequest(waitlistedPerson, absenceRequest2);
 			request2.Pending();
-			request2.Deny( "waitlisted",  new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			request2.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request2);
 
 			IPersonRequest request3 = new PersonRequest(waitlistedPerson, absenceRequest3);
 			request3.Pending();
-			request3.Deny( "waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			request3.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request3);
 
 			IPersonRequest request4 = new PersonRequest(person2, absenceRequest4);
 			request4.Pending();
-			request4.Deny( "Not waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			request4.Deny("Not waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request4);
 
 			IPersonRequest request5 = new PersonRequest(waitlistedPerson, absenceRequest5);
 			request5.Pending();
-			request5.Deny( "waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			request5.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request5);
 
 			IPersonRequest request6 = new PersonRequest(waitlistedPerson, absenceRequest6);
 			request6.Pending();
-			request6.Deny( "waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			request6.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
 			PersistAndRemoveFromUnitOfWork(request6);
 
-			
 
-			var waitlistRequestsIds = new PersonRequestRepository(UnitOfWork).GetWaitlistRequests(new DateTimePeriod(new DateTime(2016,03,01,0,0,0,DateTimeKind.Utc), new DateTime(2016, 03, 04, 0, 0, 0, DateTimeKind.Utc))).ToArray();
+
+			var waitlistRequestsIds = new PersonRequestRepository(UnitOfWork).GetWaitlistRequests(new DateTimePeriod(new DateTime(2016, 03, 01, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 04, 0, 0, 0, DateTimeKind.Utc))).ToArray();
 			waitlistRequestsIds.Count().Should().Be.EqualTo(4);
 			CollectionAssert.AreEquivalent(waitlistRequestsIds,
-				new List<Guid>() {request1.Id.GetValueOrDefault(), request2.Id.GetValueOrDefault(), request3.Id.GetValueOrDefault(), request6.Id.GetValueOrDefault()});
+				new List<Guid>() { request1.Id.GetValueOrDefault(), request2.Id.GetValueOrDefault(), request3.Id.GetValueOrDefault(), request6.Id.GetValueOrDefault() });
 		}
 
 		[Test]
@@ -2151,13 +2150,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var filter = new RequestFilter
 			{
-				Paging = new Paging {Skip = 0, Take = 20},
+				Paging = new Paging { Skip = 0, Take = 20 },
 				Period = new DateTimePeriod(new DateTime(2016, 10, 28, 0, 0, 0, DateTimeKind.Utc), new DateTime(2016, 10, 29, 0, 0, 0, DateTimeKind.Utc)),
-				RequestTypes = new[] {RequestType.AbsenceRequest, RequestType.ShiftTradeRequest},
+				RequestTypes = new[] { RequestType.AbsenceRequest },
 				Persons = persons
 			};
 
-			var requests = new PersonRequestRepository(UnitOfWork).FindAllRequests(filter);
+			var requests = new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter);
 			requests.Count().Should().Be(1);
 			requests.FirstOrDefault().Person.Id.Should().Be(persons[0].Id);
 		}

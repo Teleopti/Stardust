@@ -5,6 +5,10 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 {
 	public interface IRequestsProvider
 	{
-		IEnumerable<IPersonRequest> RetrieveRequests (RequestFilter filter, out int totalCount);
+		IEnumerable<IPersonRequest> RetrieveAbsenceAndTextRequests(RequestFilter filter, out int totalCount);
+
+		IEnumerable<IPersonRequest> RetrieveShiftTradeRequests(RequestFilter filter, out int totalCount);
+
+		IEnumerable<IPersonRequest> RetrieveOvertimeRequests(RequestFilter filter, out int totalCount);
 	}
 }

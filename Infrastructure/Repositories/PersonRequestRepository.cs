@@ -146,13 +146,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return personRequests.List<IPersonRequest>();
 		}
 
-		public IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter)
+		public IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter)
 		{
 			int count;
-			return FindAllRequests(filter, out count, true);
+			return FindAbsenceAndTextRequests(filter, out count, true);
 		}
 
-		public IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter, out int count, bool ignoreCount = false)
+		public IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter, out int count, bool ignoreCount = false)
 		{
 			var criteria = Session.CreateCriteria<IPersonRequest>("personRequests");
 			criteria.SetFetchMode("requests", FetchMode.Join);
@@ -163,8 +163,66 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			filterRequestByPersons(criteria, filter.Persons);
 			filterRequestBelongsToUndeleted(criteria);
 			filterRequestByRequestType(criteria, filter.RequestTypes);
-			filterRequestByRequestFilters(criteria, filter.RequestFilters);
+			filterRequestByRequestFilters(criteria, filter.RequestFilters, addAbsenceAndTextTypeCriterion);
+			if (ignoreCount)
+			{
+				count = -1;
+			}
+			else
+			{
+				var criteriaCount = (ICriteria)criteria.Clone();
+				criteriaCount.SetProjection(Projections.RowCount());
+				count = Convert.ToInt32(criteriaCount.UniqueResult());
+			}
+
+			sortPersonRequests(criteria, filter.SortingOrders);
+			pagePersonRequests(criteria, filter.Paging);
+
+			return criteria.List<IPersonRequest>();
+		}
+
+		public IEnumerable<IPersonRequest> FindShiftTradeRequests(RequestFilter filter, out int count, bool ignoreCount = false)
+		{
+			var criteria = Session.CreateCriteria<IPersonRequest>("personRequests");
+			criteria.SetFetchMode("requests", FetchMode.Join);
+			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
+			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
+
+			filterRequestByPeriod(criteria, filter);
+			filterRequestByShiftTradePersons(criteria, filter.Persons);
+			filterRequestBelongsToUndeleted(criteria);
+			filterRequestByRequestType(criteria, filter.RequestTypes);
+			filterRequestByRequestFilters(criteria, filter.RequestFilters, null);
 			filterRequestByShiftTradeStatus(criteria, filter);
+			if (ignoreCount)
+			{
+				count = -1;
+			}
+			else
+			{
+				var criteriaCount = (ICriteria)criteria.Clone();
+				criteriaCount.SetProjection(Projections.RowCount());
+				count = Convert.ToInt32(criteriaCount.UniqueResult());
+			}
+
+			sortPersonRequests(criteria, filter.SortingOrders);
+			pagePersonRequests(criteria, filter.Paging);
+
+			return criteria.List<IPersonRequest>();
+		}
+
+		public IEnumerable<IPersonRequest> FindOvertimeRequests(RequestFilter filter, out int count, bool ignoreCount = false)
+		{
+			var criteria = Session.CreateCriteria<IPersonRequest>("personRequests");
+			criteria.SetFetchMode("requests", FetchMode.Join);
+			criteria.CreateCriteria("Person", "p", JoinType.InnerJoin);
+			criteria.CreateCriteria("requests", "req", JoinType.InnerJoin);
+
+			filterRequestByPeriod(criteria, filter);
+			filterRequestByPersons(criteria, filter.Persons);
+			filterRequestBelongsToUndeleted(criteria);
+			filterRequestByRequestType(criteria, filter.RequestTypes);
+			filterRequestByRequestFilters(criteria, filter.RequestFilters, addOvertimeTypeCriterion);
 			if (ignoreCount)
 			{
 				count = -1;
@@ -215,7 +273,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			criteria.Add(Restrictions.Eq("p.IsDeleted", false));
 		}
 
-		private void filterRequestByPersons(ICriteria criteria, IEnumerable<IPerson> persons)
+		private void filterRequestByShiftTradePersons(ICriteria criteria, IEnumerable<IPerson> persons)
 		{
 			if (persons == null) return;
 
@@ -225,6 +283,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var personInShiftTradeTo = includeRequestsWithShiftTradePersonTo(people);
 
 			criteria.Add(Restrictions.Or(personInShiftTradeTo, personIn));
+		}
+
+		private void filterRequestByPersons(ICriteria criteria, IEnumerable<IPerson> persons)
+		{
+			if (persons == null) return;
+
+			var people = persons.ToArray();
+
+			var personIn = createPersonInCriterion("Person", people);
+
+			criteria.Add(personIn);
 		}
 
 		private static AbstractCriterion includeRequestsWithShiftTradePersonTo(IPerson[] people)
@@ -249,7 +318,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		private void filterRequestByRequestFilters(ICriteria criteria,
-			IDictionary<RequestFilterField, string> requestFilters)
+			IDictionary<RequestFilterField, string> requestFilters, Action<ICriteria, KeyValuePair<RequestFilterField, string>> typeFilter)
 		{
 			if (requestFilters == null || !requestFilters.Any()) return;
 
@@ -272,7 +341,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 						break;
 
 					case RequestFilterField.Type:
-						addTypeCriterion(criteria, filter);
+						typeFilter(criteria, filter);
 						break;
 
 					default:
@@ -281,7 +350,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
-		private void addTypeCriterion(ICriteria criteria, KeyValuePair<RequestFilterField, string> filter)
+		private void addAbsenceAndTextTypeCriterion(ICriteria criteria, KeyValuePair<RequestFilterField, string> filter)
 		{
 			var filterTextRequest = false;
 
@@ -330,6 +399,18 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 				criteria.Add(Restrictions.Or(absenceRequestCriterion, textRequestTypeCriterion));
 			}
+		}
+
+		private void addOvertimeTypeCriterion(ICriteria criteria, KeyValuePair<RequestFilterField, string> filter)
+		{
+			var ids =
+				filter.Value.Split(new[] {splitter}, StringSplitOptions.RemoveEmptyEntries)
+					.Select(x => Guid.TryParse(x, out Guid result) ? result : Guid.Empty)
+					.Where(x => x != Guid.Empty);
+			var overtimeTypeCriterion = ids
+				.Select(x => (ICriterion) Restrictions.Eq("req.MultiplicatorDefinitionSet.Id", x))
+				.Aggregate(Restrictions.Or);
+			criteria.Add(overtimeTypeCriterion);
 		}
 
 		private void filterRequestByShiftTradeStatus(ICriteria criteria, RequestFilter filter)

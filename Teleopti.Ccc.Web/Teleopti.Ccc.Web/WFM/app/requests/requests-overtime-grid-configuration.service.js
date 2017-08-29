@@ -65,7 +65,7 @@
 					},
 					{
 						displayName: 'Type',
-						field: 'GetType()',
+						field: 'OvertimeTypeDescription',
 						headerCellFilter: 'translate',
 						cellClass: 'request-type',
 						headerCellClass: 'request-type-header',

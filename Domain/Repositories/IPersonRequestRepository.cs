@@ -55,9 +55,13 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// </remarks>
 		IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period);
 
-		IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter);
+		//IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter);
 
-		IEnumerable<IPersonRequest> FindAllRequests(RequestFilter filter, out int count, bool ignoreCount = false);
+		IEnumerable<IPersonRequest> FindAbsenceAndTextRequests(RequestFilter filter, out int count, bool ignoreCount = false);
+
+		IEnumerable<IPersonRequest> FindShiftTradeRequests(RequestFilter filter, out int count, bool ignoreCount = false);
+
+		IEnumerable<IPersonRequest> FindOvertimeRequests(RequestFilter filter, out int count, bool ignoreCount = false);
 
 		/// <summary>
 		/// Finds all specific types requests from and to a person for given page.

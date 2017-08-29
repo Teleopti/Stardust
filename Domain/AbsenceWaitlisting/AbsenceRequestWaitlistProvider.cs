@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 		public IEnumerable<IPersonRequest> GetWaitlistedRequests(DateTimePeriod period,
 			IWorkflowControlSet workflowControlSet)
 		{
-			var requestTypes = new[] { RequestType.AbsenceRequest };
+			var requestTypes = new[] {RequestType.AbsenceRequest};
 			var requestFilter = new RequestFilter
 			{
 				Period = period,
@@ -41,7 +41,9 @@ namespace Teleopti.Ccc.Domain.AbsenceWaitlisting
 				ExcludeRequestsOnFilterPeriodEdge = true
 			};
 
-			var waitlistedRequests = from request in _personRequestRepository.FindAllRequests(requestFilter)
+			int count;
+			var waitlistedRequests =
+				from request in _personRequestRepository.FindAbsenceAndTextRequests(requestFilter, out count, true)
 				where requestShouldBeProcessed(request, workflowControlSet)
 				select request;
 

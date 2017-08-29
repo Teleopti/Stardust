@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			}
 
 			var requestFilter = _requestFilterCreator.Create(input, new[] { RequestType.AbsenceRequest, RequestType.TextRequest });
-			var requests = _requestsProvider.RetrieveRequests(requestFilter, out int totalCount);
+			var requests = _requestsProvider.RetrieveAbsenceAndTextRequests(requestFilter, out int totalCount);
 			var nameFormatSettings = _nameFormatSettings.Get();
 
 			return new RequestListViewModel<AbsenceAndTextRequestViewModel>
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.ViewModelFactory
 			}
 
 			var requestFilter = _requestFilterCreator.Create(input, new[] { RequestType.OvertimeRequest });
-			var requests = _requestsProvider.RetrieveRequests(requestFilter, out int totalCount);
+			var requests = _requestsProvider.RetrieveOvertimeRequests(requestFilter, out int totalCount);
 			var nameFormatSettings = _nameFormatSettings.Get();
 
 			return new RequestListViewModel<OvertimeRequestViewModel>

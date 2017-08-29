@@ -72,7 +72,7 @@
 
 					row.GetType = function () {
 						var typeText = row.TypeText;
-						if (row.Type == requestsDefinitions.REQUEST_TYPES.ABSENCE || row.Type == requestsDefinitions.REQUEST_TYPES.OVERTIME) {
+						if (row.Type == requestsDefinitions.REQUEST_TYPES.ABSENCE) {
 							typeText += ' (' + row.Payload.Name + ')';
 						}
 						return typeText;
