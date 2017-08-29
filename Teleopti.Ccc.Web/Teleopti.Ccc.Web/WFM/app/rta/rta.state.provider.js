@@ -23,14 +23,10 @@ angular
                     }
                 })
                 .state('rta', {
-                    url: '/rta/?skillIds?skillAreaId?open',
+                    url: '/rta/?siteIds&teamIds&skillIds&skillAreaId&open',
+                    params: { siteIds: { array: true }, teamIds: { array: true }, skillIds: { array: true } },
                     templateUrl: 'app/rta/overview/rta.html',
                     controller: 'RtaMainController as vm',
-                    params: {
-                        skillIds: {
-                            array: true
-                        }
-                    },
                     resolve: {
                         skills: function (rtaService) {
                             return rtaService.getSkills();
@@ -43,23 +39,10 @@ angular
                     }
                 })
                 .state('rta-agents', {
-                    url: '/rta/agents/?siteIds&teamIds&skillIds&skillAreaId&showAllAgents&es',
+                    url: '/rta/agents/?siteIds&teamIds&skillIds&skillAreaId&es&showAllAgents',
+                    params: { siteIds: { array: true }, teamIds: { array: true }, skillIds: { array: true } },
                     templateUrl: 'app/rta/agents/rta-agents.html',
-                    controller: 'RtaAgentsController as vm',
-                    params: {
-                        siteIds: {
-                            array: true
-                        },
-                        teamIds: {
-                            array: true
-                        },
-                        skillIds: {
-                            array: true
-                        },
-                        es: {
-                            array: true
-                        }
-                    }
+                    controller: 'RtaAgentsController as vm'
                 })
                 .state('rta-historical', {
                     url: '/rta/agent-historical/:personId?open',
