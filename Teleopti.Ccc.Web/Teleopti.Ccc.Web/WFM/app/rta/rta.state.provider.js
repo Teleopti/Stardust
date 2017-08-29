@@ -56,9 +56,7 @@ angular
                 })
                 .state('rta-historical', {
                     url: '/rta/agent-historical/:personId?open',
-                    templateUrl: function () {
-                        return 'app/rta/historical/rta-historical-RTA_SolidProofWhenManagingAgentAdherence_39351.html';
-                    },
+                    templateUrl: 'app/rta/historical/rta-historical.html',
                     controller: 'RtaHistoricalController as vm',
                 })
 

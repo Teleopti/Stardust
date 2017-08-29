@@ -1553,8 +1553,17 @@
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
+    <Content Include="WFM\app\rta\historical\rta-card-body-component.html" />
+    <Content Include="WFM\app\rta\historical\rta-card-component.html" />
+    <Content Include="WFM\app\rta\historical\rta-card-header-component.html" />
+    <Content Include="WFM\app\rta\historical\rta-historical.html" />
+    <Content Include="WFM\app\rta\historical\rta.card.body.component.js" />
+    <Content Include="WFM\app\rta\historical\rta.card.component.js" />
+    <Content Include="WFM\app\rta\historical\rta.card.header.component.js" />
+    <Content Include="WFM\app\rta\overview\controller.RTA_RememberMyPartOfTheBusiness_39082.js" />
     <Content Include="WFM\app\rta\overview\controller.redirects.spec.js" />
     <Content Include="WFM\app\rta\overview\controller.selection.spec.js" />
+    <Content Include="WFM\app\rta\overview\view.RTA_RememberMyPartOfTheBusiness_39082.html" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.spec.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.html" />
@@ -1632,7 +1641,6 @@
     <Content Include="WFM\app\rta\agents\rta.agents.filters.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.filters.spec.js" />
     <Content Include="WFM\app\rta\agents\rta.agents.grid.service.js" />
-    <Content Include="WFM\app\rta\historical\rta-historical-SeeAllOutOfAdherences_39146.html" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.js" />
     <Content Include="WFM\app\rta\historical\rta.historical.controller.spec.js" />
     <Content Include="WFM\app\rta\filter\filter-template.html" />
