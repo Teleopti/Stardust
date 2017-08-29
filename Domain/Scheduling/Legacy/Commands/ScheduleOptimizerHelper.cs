@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.ClassicLegacy;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.EqualNumberOfCategory;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.Seniority;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization.SeniorityDaysOff;
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IOptimizerHelperHelper _optimizerHelperHelper;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly IDayOffOptimizationDesktop _dayOffOptimizationDesktop;
-		private readonly DaysOffBackToLegalState _daysOffBackToLegalState;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ITeamBlockDayOffFairnessOptimizationServiceFacade _teamBlockDayOffFairnessOptimizationServiceFacade;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
@@ -59,7 +57,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				IOptimizerHelperHelper optimizerHelperHelper,
 				CascadingResourceCalculationContextFactory cascadingResourceCalculationContextFactory,
 				IDayOffOptimizationDesktop dayOffOptimizationDesktop,
-				DaysOffBackToLegalState daysOffBackToLegalState,
 				IUserTimeZone userTimeZone,
 				ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationServiceFacade,
 				IScheduleDayEquator scheduleDayEquator,
@@ -82,7 +79,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_optimizerHelperHelper = optimizerHelperHelper;
 			_resourceCalculationContextFactory = cascadingResourceCalculationContextFactory;
 			_dayOffOptimizationDesktop = dayOffOptimizationDesktop;
-			_daysOffBackToLegalState = daysOffBackToLegalState;
 			_userTimeZone = userTimeZone;
 			_teamBlockDayOffFairnessOptimizationServiceFacade = teamBlockDayOffFairnessOptimizationServiceFacade;
 			_scheduleDayEquator = scheduleDayEquator;
