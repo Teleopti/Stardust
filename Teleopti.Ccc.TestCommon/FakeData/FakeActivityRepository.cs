@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public IActivity Load(Guid id)
 		{
-			throw new NotImplementedException();
+			return _activities.First(x => x.Id.GetValueOrDefault() == id);
 		}
 
 		public IList<IActivity> LoadAllSortByName()
