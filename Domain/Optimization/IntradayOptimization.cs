@@ -59,8 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1, stateHolder.ConsiderShortBreaks, stateHolder.SchedulingResultState, _userTimeZone);
 			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag));
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(stateHolder.Schedules, stateHolder.SchedulingResultState.PersonsInOrganization, period);
-			//TODO: fel! not hard coded hierarchy schedulingOptions.GroupOnGroupPageForTeamBlockPer, behöver fixas när även "teamblockspåret" går in hit (just nu bara classic)
-			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons,_schedulerStateHolder().Schedules, new GroupPageLight("_", GroupPageType.SingleAgent));
+			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons,_schedulerStateHolder().Schedules, optimizationPreferences.Extra.TeamGroupPage);
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
 
 			using (_resourceCalculationContext.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true, period))
