@@ -127,5 +127,20 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			return _skills.Where(x => x.Name.Contains(searchString)).Take(maxHits);
 		}
+
+		public IMultisiteSkill HasMultisiteSkill(string skillName, IActivity activity)
+		{
+			var skill = SkillFactory.CreateMultisiteSkill(skillName).WithId();
+			var childSkill1 = SkillFactory.CreateChildSkill(skillName + " child1", skill).WithId();
+			var childSkill2 = SkillFactory.CreateChildSkill(skillName + " child2", skill).WithId();
+			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+			skill.Activity = activity;
+			childSkill1.Activity = activity;
+			childSkill2.Activity = activity;
+			_skills.Add(skill);
+			_skills.Add(childSkill1);
+			_skills.Add(childSkill2);
+			return skill;
+		}
 	}
 }

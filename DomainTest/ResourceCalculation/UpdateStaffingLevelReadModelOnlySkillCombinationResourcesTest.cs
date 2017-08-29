@@ -288,5 +288,33 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				.Resource.Should()
 				.Be.EqualTo(1);
 		}
+
+		[Test]
+		public void ShouldSpecifyResourceSkillCombinationForMultisiteSkill()
+		{
+			Now.Is("2016-12-19 00:00");
+			var period = new DateTimePeriod(2016, 12, 19, 0, 2016, 12, 19, 1);
+			var scenario = ScenarioRepository.Has("default");
+
+			var activity = ActivityFactory.CreateActivity("phone");
+
+			var multiSkill = SkillRepository.HasMultisiteSkill("MultiSkillen", activity);
+			multiSkill.DefaultResolution = 15;
+			var childSkill = multiSkill.ChildSkills[0];
+			childSkill.DefaultResolution = 15;
+
+			var person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 12, 19), new[] { childSkill }).WithId();
+
+			person.PermissionInformation.SetDefaultTimeZone(childSkill.TimeZone);
+			var ass = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, period, ShiftCategoryFactory.CreateShiftCategory());
+			PersonAssignmentRepository.Has(ass);
+
+			SkillDayRepository.Has(multiSkill.CreateSkillDayWithDemand(scenario, new DateOnly(2016, 12, 19), 1));
+
+			PersonRepository.Has(person);
+			Target.Update(period);
+			var persistedCombinationResources = SkillCombinationResourceRepository.LoadSkillCombinationResources(period).ToList();
+			persistedCombinationResources.Count().Should().Be.EqualTo(4);
+		}
 	}
 }
