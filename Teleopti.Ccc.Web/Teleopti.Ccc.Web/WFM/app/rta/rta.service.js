@@ -77,13 +77,14 @@
         };
 
         function getOverviewModelFor(data) {
+            if (angular.isArray(data))
+                data = { skillIds: data };
+
             return $resource('../api/Overview/SiteCards', {}, {
                 query: {
                     method: 'GET'
                 }
-            }).query({
-                skillIds: data
-            }).$promise;
+            }).query(data).$promise;
         }
 
         function getSkillArea(data) {

@@ -199,19 +199,41 @@
         fake(/\.\.\/api\/Overview\/SiteCards(.*)/,
             function (params) {
                 var sites = siteAdherences;
+
                 if (params.skillIds)
-                    sites = siteAdherences.filter(function (sa) {
+                    sites = sites.filter(function (sa) {
                         return params.skillIds.indexOf(sa.SkillId) > -1;
                     });
-                var totalAgentsInAlarm = sites.length > 0 ?
-                    sites
-                        .map(function (s) { return s.InAlarmCount })
-                        .reduce(function (s, v) { return s + v })
-                    : 0;
+
+                var siteIds = [];
+                if (params.siteIds)
+                    siteIds = siteIds.concat(params.siteIds)
+                if (params.teamIds) {
+                    siteIds = siteIds.concat(
+                        teamAdherences.filter(function (team) {
+                            return params.teamIds.indexOf(team.Id) > -1;
+                        }).map(function (team) {
+                            return team.SiteId
+                        })
+                    );
+                }
+
+                var teams = [];
+                if (siteIds.length > 0)
+                    teams = teamAdherences.filter(function (team) {
+                        return siteIds.indexOf(team.SiteId) > -1;
+                    })
+                if (params.skillIds)
+                    teams = teams.filter(function (team) {
+                        return params.skillIds.indexOf(team.SkillId) > -1;
+                    });
 
                 return [200, {
                     Sites: sites,
-                    TotalAgentsInAlarm: totalAgentsInAlarm
+                    Teams: teams,
+                    TotalAgentsInAlarm: sites
+                        .map(function (s) { return s.InAlarmCount })
+                        .reduce(function (s, v) { return s + v }, 0)
                 }];
             });
 

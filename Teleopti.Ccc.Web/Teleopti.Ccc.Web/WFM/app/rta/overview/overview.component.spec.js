@@ -259,6 +259,7 @@ describe('rtaOverviewComponent', function () {
         Color: 'warning'
       })
       .withTeamAdherence({
+        Id: 'greenId',
         SiteId: 'londonId',
         SkillId: 'channelSalesId',
         Name: 'Green',
@@ -267,6 +268,7 @@ describe('rtaOverviewComponent', function () {
         Color: 'warning'
       })
       .withTeamAdherence({
+        Id: 'redId',
         SiteId: 'londonId',
         SkillId: 'invoiceId',
         Name: 'Red',
