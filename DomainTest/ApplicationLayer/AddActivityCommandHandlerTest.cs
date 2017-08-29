@@ -18,6 +18,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Staffing;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -433,5 +434,106 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			command.WarningMessages.Count.Should().Be.EqualTo(1);
 			command.WarningMessages.First().Should().Be(Resources.NewActivityOverlapsNonoverwritableActivities);
 		}
+
+		[Test]
+		public void ShouldAddResourcesWhenActivityIsAdded()
+		{
+			Now.Is(new DateTime(2013, 11, 14, 0, 0, 0, DateTimeKind.Utc));
+			IntervalLengthFetcher.Has(15);
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var mainActivity = ActivityFactory.CreateActivity("mainActivity");
+			ActivityRepository.Add(activity);
+			ActivityRepository.Add(mainActivity);
+			var skill1 = SkillFactory.CreateSkillWithId("skill1", 15);
+			var skill2 = SkillFactory.CreateSkillWithId("skill2", 15);
+			skill1.Activity = activity;
+			skill2.Activity = mainActivity;
+			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill1,skill2 }, new DateOnlyPeriod(), null, new[] { skill1,skill2 });
+			activity.RequiresSkill = true;
+			mainActivity.RequiresSkill = true;
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
+			personAssignment.ShiftLayers.ForEach(sl => EntityExtensions.WithId<ShiftLayer>(sl));
+			personAssignment.SetId(Guid.NewGuid());
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			var command = new AddActivityCommand
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				ActivityId = activity.Id.GetValueOrDefault(),
+				StartTime = new DateTime(2013, 11, 14, 9, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				Date = new DateOnly(2013, 11, 14),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = operatedPersonId,
+					TrackId = trackId
+				}
+			};
+			CurrentScenario.FakeScenario(personAssignment.Scenario);
+			ScheduleStorage.Add(personAssignment);
+
+			Target.Handle(command);
+
+			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16),false);
+			resources.Count().Should().Be.EqualTo(8);
+			resources.Count(x => x.Resource == -1).Should().Be.EqualTo(4);
+			resources.Count(x => x.Resource == 1).Should().Be.EqualTo(4);
+
+			
+		}
+
+		[Test]
+		public void ShouldAddResourcesOnlyForActivityThatRequiresSkill()
+		{
+			Now.Is(new DateTime(2013, 11, 14, 0, 0, 0, DateTimeKind.Utc));
+			IntervalLengthFetcher.Has(15);
+			var person = PersonFactory.CreatePersonWithId();
+			PersonRepository.Add(person);
+			var activity = ActivityFactory.CreateActivity("Phone").WithId();
+			var mainActivity = ActivityFactory.CreateActivity("mainActivity");
+			ActivityRepository.Add(activity);
+			ActivityRepository.Add(mainActivity);
+			var skill1 = SkillFactory.CreateSkillWithId("skill1", 15);
+			var skill2 = SkillFactory.CreateSkillWithId("skill2", 15);
+			skill1.Activity = activity;
+			skill2.Activity = mainActivity;
+			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill1, skill2 }, new DateOnlyPeriod(), null, new[] { skill1, skill2 });
+			activity.RequiresSkill = true;
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
+			personAssignment.ShiftLayers.ForEach(sl => EntityExtensions.WithId<ShiftLayer>(sl));
+			personAssignment.SetId(Guid.NewGuid());
+			var operatedPersonId = Guid.NewGuid();
+			var trackId = Guid.NewGuid();
+			var command = new AddActivityCommand
+			{
+				PersonId = person.Id.GetValueOrDefault(),
+				ActivityId = activity.Id.GetValueOrDefault(),
+				StartTime = new DateTime(2013, 11, 14, 9, 0, 0),
+				EndTime = new DateTime(2013, 11, 14, 10, 0, 0),
+				Date = new DateOnly(2013, 11, 14),
+				TrackedCommandInfo = new TrackedCommandInfo
+				{
+					OperatedPersonId = operatedPersonId,
+					TrackId = trackId
+				}
+			};
+			CurrentScenario.FakeScenario(personAssignment.Scenario);
+			ScheduleStorage.Add(personAssignment);
+
+			Target.Handle(command);
+
+			var resources = SkillCombinationResourceRepository.LoadSkillCombinationResources(new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16), false);
+			resources.Count().Should().Be.EqualTo(4);
+			resources.Count(x => x.Resource == 1).Should().Be.EqualTo(4);
+			resources.Any(x => x.StartDateTime == new DateTime(2013, 11, 14, 9, 0, 0)).Should().Be.True();
+			resources.Any(x => x.StartDateTime == new DateTime(2013, 11, 14, 9, 15, 0)).Should().Be.True();
+			resources.Any(x => x.StartDateTime == new DateTime(2013, 11, 14, 9, 30, 0)).Should().Be.True();
+			resources.Any(x => x.StartDateTime == new DateTime(2013, 11, 14, 9, 45, 0)).Should().Be.True();
+		}
+
 	}
+
+
 }
