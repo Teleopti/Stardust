@@ -1,0 +1,61 @@
+<div class="view-header with-fab with-desc">
+	<div class="view-title">
+		<div class="pull-left">
+			<h1>
+				<i class="mdi mdi-alarm"></i> {{'RTA'|translate}}
+			</h1>
+		</div>
+		<div class="rta-top-buttons-wrapper pull-left">
+			<span>
+					<button class="wfm-btn wfm-btn-primary rta-default-cursor">{{'Dashboard'|translate}}</button>
+					<button class="wfm-btn wfm-btn-default select-skill" ng-click="vm.goToAgentsView()">{{'Agents'|translate}}</button>
+				</span>
+		</div>
+	</div>
+	<div class="fab-wrapper">
+		<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'invisible': !vm.organizationSelection, 'grow-out': vm.organizationSelection}" ng-click="vm.goToAgents()">
+				<i class="mdi mdi-arrow-right"></i>
+				<md-tooltip>{{'Open'|translate}}</md-tooltip>
+			</button>
+	</div>
+</div>
+
+<div class="con-row">
+	<div class="con-flex">
+		<div class="panel material-depth-1 rta-filter-panel">
+			<skill-picker skills="vm.skills" skill-areas="vm.skillAreas" item-to-return="vm.filterOutput" preselected-item="vm.urlParams"></skill-picker>
+		</div>
+	</div>
+</div>
+
+
+
+<div class="con-row" ng-if="vm.noSiteCards">
+	<div class="con-flex">
+		<div class="panel material-depth-1">
+			<div class="con-row">
+				<div class="con-flex">
+					{{vm.skillSelected ? 'NoSitesFound' : 'NoAccessToSites' | translate}}
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="con-row demo-outline">
+	<div class="con-flex">
+		<div class="wfm-chip-wrap">
+			<span class="wfm-chip" style="cursor:default;">
+				<span class="chip-handle">
+				<i class="mdi mdi-alert-circle"></i>
+				</span>
+			<span class="chip-text">{{'TotalAgentsInAlarmInBusinessUnit'|translate}}: <b>{{vm.totalAgentsInAlarm}}</b></span>
+			</span>
+		</div>
+		<rta-overview-component site-cards="vm.siteCards" agents-state="vm.agentsState" agents-state-for-team="vm.agentsStateForTeam"
+		 ></rta-overview-component>
+	</div>
+</div>
+<div class="con-footer">
+
+</div>

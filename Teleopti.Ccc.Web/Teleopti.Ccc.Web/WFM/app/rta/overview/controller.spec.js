@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe('RtaMainController', function () {
+describe('RtaOverviewController', function () {
   var
     $controllerBuilder,
     $fakeBackend,
@@ -68,7 +68,7 @@ describe('RtaMainController', function () {
     $interval = _$interval_;
     $state = _$state_;
 
-    scope = $controllerBuilder.setup('RtaMainController');
+    scope = $controllerBuilder.setup('RtaOverviewController39082');
 
     channelSales = {
       Name: 'Channel Sales',

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-describe('RtaMainController', function () {
+describe('RtaOverviewController selection', function () {
 
   return;
 
@@ -25,7 +25,7 @@ describe('RtaMainController', function () {
     $controllerBuilder = _ControllerBuilder_;
     $fakeBackend = _FakeRtaBackend_;
     $state = _$state_;
-    $scope = $controllerBuilder.setup('RtaMainController');
+    $scope = $controllerBuilder.setup('RtaOverviewController39082');
   }));
 
   it('should select site', function () {

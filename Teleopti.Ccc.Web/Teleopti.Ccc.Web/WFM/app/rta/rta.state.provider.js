@@ -25,8 +25,18 @@ angular
                 .state('rta', {
                     url: '/rta/?siteIds&teamIds&skillIds&skillAreaId&open',
                     params: { siteIds: { array: true }, teamIds: { array: true }, skillIds: { array: true } },
-                    templateUrl: 'app/rta/overview/rta.html',
-                    controller: 'RtaMainController as vm',
+                    templateUrl: function () {
+                        if (toggles.RTA_RememberMyPartOfTheBusiness_39082)
+                            return 'app/rta/overview/view.RTA_RememberMyPartOfTheBusiness_39082.html';
+                        else
+                            return 'app/rta/overview/view.html';
+                    },
+                    controllerProvider: function () {
+                        if (toggles.RTA_RememberMyPartOfTheBusiness_39082)
+                            return 'RtaOverviewController39082 as vm';
+                        else
+                            return 'RtaOverviewController as vm';
+                    },
                     resolve: {
                         skills: function (rtaService) {
                             return rtaService.getSkills();

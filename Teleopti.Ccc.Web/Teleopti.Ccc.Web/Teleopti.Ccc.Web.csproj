@@ -1553,8 +1553,8 @@
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
-    <Content Include="WFM\app\rta\overview\main.controller.redirects.spec.js" />
-    <Content Include="WFM\app\rta\overview\main.controller.selection.spec.js" />
+    <Content Include="WFM\app\rta\overview\controller.redirects.spec.js" />
+    <Content Include="WFM\app\rta\overview\controller.selection.spec.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.spec.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.html" />
@@ -1638,12 +1638,12 @@
     <Content Include="WFM\app\rta\filter\filter-template.html" />
     <Content Include="WFM\app\rta\filter\rta.filter.controller.js" />
     <Content Include="WFM\app\rta\filter\rta.filter.controller.overview.spec.js" />
-    <Content Include="WFM\app\rta\overview\main.controller.spec.js" />
+    <Content Include="WFM\app\rta\overview\controller.spec.js" />
     <Content Include="WFM\app\rta\overview\overview-component.html" />
     <Content Include="WFM\app\rta\overview\overview.component.js" />
     <Content Include="WFM\app\rta\overview\overview.component.spec.js" />
-    <Content Include="WFM\app\rta\overview\rta.html" />
-    <Content Include="WFM\app\rta\overview\main.controller.js" />
+    <Content Include="WFM\app\rta\overview\view.html" />
+    <Content Include="WFM\app\rta\overview\controller.js" />
     <Content Include="WFM\app\rta\rta.adherence.service.js" />
     <Content Include="WFM\app\rta\rta.backend.fake.js" />
     <Content Include="WFM\app\rta\rta.controller.fortest.js" />
