@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<RequestFactory>().As<IRequestFactory>();
 			builder.RegisterType<PersonRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
 			registerType<IBusinessRuleProvider, ConfigurableBusinessRuleProvider, BusinessRuleProvider>(builder,Toggles.Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770);
-			registerType<IRequestAddOverTimeActivityHandler, OvertimeRequestAddOverTimeActivityHandler, OvertimeRequestAddOverTimeActivityHandlerToggle45177Off>(builder,Toggles.Wfm_Requests_OvertimeRequestHandling_45177);
 			builder.RegisterType<BudgetGroupAllowanceSpecification>().As<IBudgetGroupAllowanceSpecification>();
 			builder.RegisterType<AlreadyAbsentSpecification>().As<IAlreadyAbsentSpecification>();
 			builder.RegisterType<AbsenceRequestUpdater>().As<IAbsenceRequestUpdater>().SingleInstance();

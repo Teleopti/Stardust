@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var businessRules = new BusinessRulesForPersonalAccountUpdate(_personAbsenceAccountRepository, new SchedulingResultStateHolder());
 
 			var overtimeRequestSkillProvider = MockRepository.GenerateMock<IOvertimeRequestSkillProvider>();
-			overtimeRequestSkillProvider.Stub(s => s.GetAvailableSkills(new DateTimePeriod()))
+			overtimeRequestSkillProvider.Stub(s => s.GetAvailableSkills(null, new DateTimePeriod()))
 				.IgnoreArguments()
 				.Return(new ISkill[] {});
 			_requestApprovalServiceFactory = new RequestApprovalServiceFactory(

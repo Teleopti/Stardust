@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		public OvertimeRequestValidationResult Validate(IPersonRequest personRequest)
 		{
 			var period = personRequest.Request.Period;
-			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(period).ToList();
+			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(personRequest.Person, period).ToList();
 			if (!skills.Any())
 			{
 				return new OvertimeRequestValidationResult

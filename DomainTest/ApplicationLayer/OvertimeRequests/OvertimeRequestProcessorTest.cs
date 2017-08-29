@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
@@ -34,64 +36,70 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public FakeCurrentScenario CurrentScenario;
 		public FakeLoggedOnUser LoggedOnUser;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
-		public FakeOvertimeRequestUnderStaffingSkillProvider OvertimeRequestUnderStaffingSkillProvider;
 		public const int MinimumApprovalThresholdTimeInMinutes = 15;
 		public INow Now;
 		public FakeRequestApprovalServiceFactory RequestApprovalServiceFactory;
 		public IScheduleStorage ScheduleStorage;
-		private readonly TimePeriod _defaultOpenPeriod = new TimePeriod(8, 00, 21, 00);
 		public FakeSkillRepository SkillRepository;
+		public FakeSkillCombinationResourceRepository CombinationRepository;
+		public FakeSkillDayRepository SkillDayRepository;
+		public ICurrentScenario Scenario;
+
+		private readonly TimePeriod _defaultOpenPeriod = new TimePeriod(8, 00, 21, 00);
 		private readonly DateOnly _periodStartDate = new DateOnly(2016, 1, 1);
+		private TimeSpan[] _intervals;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<OvertimeRequestProcessor>().For<IOvertimeRequestProcessor>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeOvertimeRequestUnderStaffingSkillProvider>().For<IOvertimeRequestUnderStaffingSkillProvider>();
 			system.UseTestDouble<DoNothingScheduleDayChangeCallBack>().For<IScheduleDayChangeCallback>();
 			system.UseTestDouble<SiteOpenHoursSpecification>().For<ISiteOpenHoursSpecification>();
 			system.UseTestDouble<FakeRequestApprovalServiceFactory>().For<IRequestApprovalServiceFactory>();
 			system.UseTestDouble<ScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble(new ThisIsNow(new DateTime(2017, 07, 12, 10, 00, 00, DateTimeKind.Utc))).For<INow>();
+			_intervals = createIntervals();
 		}
 
 		[Test]
-		public void ShouldApproveOvertimeRequests()
+		public void ShouldApprove()
 		{
 			setupPerson(8,21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
-			setupStaffingSkill();
-
-			var requestStartTime = new DateTime(2017, 7, 17, 0, 0, 0, DateTimeKind.Utc);
-			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime.AddHours(18), requestStartTime.AddHours(19)));
-			mockRequestApprovalServiceApproved(personRequest);
-
+			var personRequest = createOvertimeRequest(18, 1);
 			Target.Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.True();
 		}
 
-		private void setupPerson(int siteOpenStartHour = 8, int siteOpenEndHour = 17,bool isOpenHoursClosed=false)
+		[Test]
+		public void ShouldApprovedWhenScheduleIsNotInContractTime()
 		{
-			var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
-			var person = createPersonWithSiteOpenHours(siteOpenStartHour, siteOpenEndHour,isOpenHoursClosed);
-			LoggedOnUser.SetFakeLoggedOnUser(person);
-			LoggedOnUser.SetDefaultTimeZone(timeZoneInfo);
-			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });
+			setupPerson(8, 20);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
+			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
+			var pa = createMainPersonAssignment(LoggedOnUser.CurrentUser(), period);
+			var lunch = ActivityFactory.CreateActivity("lunch").WithId();
+			lunch.InContractTime = false;
+			pa.AddActivity(lunch, new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 12));
+			ScheduleStorage.Add(pa);
+
+			var personRequest = createOvertimeRequest(11, 1);
+			Target.Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
 		}
 
 		[Test]
-		public void ShouldNotApproveOvertimeRequestsWhenAutoGrantoIsff()
+		public void ShouldNotApproveWhenAutoGrantoIsOff()
 		{
 			setupPerson();
-			setupStaffingSkill();
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
-			var requestStartTime = new DateTime(2017, 7, 17, 0, 0, 0, DateTimeKind.Utc);
-			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime.AddHours(8), requestStartTime.AddHours(9)));
-			mockRequestApprovalServiceApproved(personRequest);
-
+			var personRequest = createOvertimeRequest(8, 1);
 			Target.Process(personRequest, false);
 
 			personRequest.IsApproved.Should().Be.False();
@@ -99,15 +107,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
-		public void ShouldDenyOvertimeRequestWhenItsStartTimeIsWithinUpcoming15Mins()
+		public void ShouldDenyWhenItsStartTimeIsWithinUpcoming15Mins()
 		{
 			setupPerson();
-			setupStaffingSkill();
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var requestStartTime = Now.UtcDateTime().AddMinutes(MinimumApprovalThresholdTimeInMinutes - 1);
-
 			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
-
 			Target.Process(personRequest, true);
 
 			var timeZoneInfo = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
@@ -118,15 +124,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		[Test]
 		[SetCulture("en-US")]
-		public void ShouldDenyOvertimeRequestWhenOutofSiteOpenHour()
+		public void ShouldDenyWhenOutofSiteOpenHour()
 		{
 			setupPerson();
-			setupStaffingSkill();
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
-			var requestStartTime = new DateTime(2017, 7, 17, 0, 0, 0, DateTimeKind.Utc);
-
-			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime.AddHours(18), requestStartTime.AddHours(19)));
-
+			var personRequest = createOvertimeRequest(18, 1);
 			Target.Process(personRequest, true);
 
 			var timeZoneInfo = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
@@ -141,15 +144,12 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		[Test]
 		[SetCulture("en-US")]
-		public void ShouldDenyOvertimeRequestWhenSiteOpenHourIsClosed()
+		public void ShouldDenyWhenSiteOpenHourIsClosed()
 		{
 			setupPerson(8,17,true);
-			setupStaffingSkill();
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
-			var requestStartTime = new DateTime(2017, 7, 17, 0, 0, 0, DateTimeKind.Utc);
-
-			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime.AddHours(8), requestStartTime.AddHours(9)));
-
+			var personRequest = createOvertimeRequest(8, 1);
 			Target.Process(personRequest, true);
 
 			var timeZoneInfo = LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone();
@@ -163,17 +163,55 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		[Test]
 		[SetCulture("en-US")]
-		public void ShouldDenyOvertimeRequestWhenThereIsNoUnderStaffingSkill()
+		public void ShouldDenyWhenThereIsNoUnderStaffingSkill()
 		{
 			setupPerson(8,21);
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 11d);
+
+			var personRequest = createOvertimeRequest(18, 1);
+			Target.Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should()
+				.Be.EqualTo(Resources.NoUnderStaffingSkill);
+		}
+
+		[Test]
+		public void ShouldDenyWhenAnySkillIsNotCriticalUnderStaffing()
+		{
+			setupPerson();
 
 			var activity1 = createActivity("activity1");
-			var skill1 = createSkill("skill1");
-			var personSkill1 = createPersonSkill(activity1, skill1);
-			addPersonSkillsToPersonPeriod(personSkill1);
+			var activity2 = createActivity("activity2");
 
-			var requestStartTime = new DateTime(2017, 7, 17, 0, 0, 0, DateTimeKind.Utc);
-			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime.AddHours(18), requestStartTime.AddHours(19)));
+			var notUnderStaffingSkill = createSkill("notUnderStaffingSkill");
+			var criticalUnderStaffingSkill = createSkill("criticalUnderStaffingSkill");
+
+			var personSkill1 = createPersonSkill(activity1, notUnderStaffingSkill);
+			var personSkill2 = createPersonSkill(activity2, criticalUnderStaffingSkill);
+
+			setupIntradayStaffingForSkill(notUnderStaffingSkill, 10d, 10d);
+			setupIntradayStaffingForSkill(criticalUnderStaffingSkill, 10d, 6d);
+
+			addPersonSkillsToPersonPeriod(personSkill1, personSkill2);
+
+			var personRequest = createOvertimeRequest(11, 1);
+			Target.Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should()
+				.Be.EqualTo(Resources.NoUnderStaffingSkill);
+		}
+
+		[Test]
+		public void ShouldDenyWhenOnlyUnderStaffingButNoCriticalSkill()
+		{
+			setupPerson();
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 9d);
+
+			var personRequest = createOvertimeRequest(11, 1);
 			mockRequestApprovalServiceApproved(personRequest);
 
 			Target.Process(personRequest, true);
@@ -185,15 +223,29 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		}
 
 		[Test]
+		public void ShouldDenyWhenSkillOpenHourIsNotAvailable()
+		{
+			setupPerson();
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 6d);
+
+			var personRequest = createOvertimeRequest(21, 1);
+			mockRequestApprovalServiceApproved(personRequest);
+
+			Target.Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.False();
+			personRequest.IsDenied.Should().Be.True();
+			personRequest.DenyReason.Should()
+				.Be.EqualTo(Resources.PeriodIsOutOfSkillOpenHours);
+		}
+
+		[Test]
 		[SetCulture("en-US")]
 		public void ShouldDenyOvertimeRequestWhenUserHasNoSkill()
 		{
 			setupPerson(8,21);
 
-			var requestStartTime = new DateTime(2017, 7, 17, 0, 0, 0, DateTimeKind.Utc);
-			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime.AddHours(18), requestStartTime.AddHours(19)));
-			mockRequestApprovalServiceApproved(personRequest);
-
+			var personRequest = createOvertimeRequest(18, 1);
 			Target.Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.False();
@@ -207,12 +259,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		public void ShouldDenyOvertimeRequestWhenOutOfSkillOpenHour()
 		{
 			setupPerson(8, 21);
-			setupStaffingSkill();
+			setupPersonSkill();
 
-			var requestStartTime = new DateTime(2017, 7, 17, 0, 0, 0, DateTimeKind.Utc);
-			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime.AddHours(22), requestStartTime.AddHours(23)));
-			mockRequestApprovalServiceApproved(personRequest);
-
+			var personRequest = createOvertimeRequest(22, 1);
 			Target.Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.False();
@@ -245,10 +294,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			var person = createPersonWithSiteOpenHours(8, 20);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
 			LoggedOnUser.SetDefaultTimeZone(timeZoneInfo);
-			setupStaffingSkill();
+			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
-			var requestStartTime = new DateTime(2017, 7, 17, 17, 0, 0, DateTimeKind.Utc);
-			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
+			var personRequest = createOvertimeRequest(17, 1);
 
 			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
 			var pa = createMainPersonAssignment(person, period);
@@ -261,32 +309,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 				.Be.EqualTo(string.Format(Resources.OvertimeRequestAlreadyHasScheduleInPeriod,
 					personRequest.Request.Period.StartDateTimeLocal(timeZoneInfo),
 					personRequest.Request.Period.EndDateTimeLocal(timeZoneInfo)));
-		}
-
-		[Test]
-		public void ShouldApprovedWhenScheduleIsNotInContractTime()
-		{
-			var timeZoneInfo = TimeZoneInfo.Utc;
-			var person = createPersonWithSiteOpenHours(8, 20);
-			LoggedOnUser.SetFakeLoggedOnUser(person);
-			LoggedOnUser.SetDefaultTimeZone(timeZoneInfo);
-			setupStaffingSkill();
-
-			var requestStartTime = new DateTime(2017, 7, 17, 11, 0, 0, DateTimeKind.Utc);
-			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddHours(1)));
-
-			var period = new DateTimePeriod(2017, 7, 17, 8, 2017, 7, 17, 18);
-			var pa = createMainPersonAssignment(person, period);
-			var lunch = ActivityFactory.CreateActivity("lunch").WithId();
-			lunch.InContractTime = false;
-			pa.AddActivity(lunch, new DateTimePeriod(2017, 7, 17, 11, 2017, 7, 17, 12));
-			ScheduleStorage.Add(pa);
-
-			mockRequestApprovalServiceApproved(personRequest);
-
-			Target.Process(personRequest, true);
-
-			personRequest.IsApproved.Should().Be.True();
 		}
 
 		private void mockRequestApprovalServiceApproved(IPersonRequest personRequest)
@@ -380,13 +402,84 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			return skill;
 		}
 
-		private void setupStaffingSkill()
+		private ISkill setupPersonSkill()
 		{
 			var activity1 = createActivity("activity1");
 			var skill1 = createSkill("skill1");
 			var personSkill1 = createPersonSkill(activity1, skill1);
 			addPersonSkillsToPersonPeriod(personSkill1);
-			OvertimeRequestUnderStaffingSkillProvider.AddSeriousUnderstaffingSkill(skill1);
+			return skill1;
+		}
+
+		private void setupIntradayStaffingForSkill(ISkill skill, double forecastedStaffing,
+	double scheduledStaffing)
+		{
+			var period = getAvailablePeriod();
+			period.DayCollection().ToList().ForEach(day =>
+			{
+				var utcDate = TimeZoneHelper.ConvertToUtc(day.Date,
+					LoggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
+
+				for (var i = 0; i < _intervals.Length; i++)
+				{
+					CombinationRepository.AddSkillCombinationResource(new DateTime(),
+						new[]
+						{
+							new SkillCombinationResource
+							{
+								StartDateTime = utcDate.Add(_intervals[i]),
+								EndDateTime = utcDate.Add(_intervals[i]).AddMinutes(15),
+								Resource = scheduledStaffing,
+								SkillCombination = new[] {skill.Id.Value}
+							}
+						});
+				}
+
+				var timePeriodTuples = new List<Tuple<TimePeriod, double>>();
+				for (var i = 0; i < _intervals.Length; i++)
+				{
+					timePeriodTuples.Add(new Tuple<TimePeriod, double>(
+						new TimePeriod(_intervals[i], _intervals[i].Add(TimeSpan.FromMinutes(15))),
+						forecastedStaffing));
+				}
+				SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(Scenario.Current(), day, 0,
+					timePeriodTuples.ToArray()));
+			});
+		}
+
+		private DateOnlyPeriod getAvailablePeriod()
+		{
+			var today = Now.ServerDate_DontUse();
+			var period = new DateOnlyPeriod(today, today.AddDays(13)).Inflate(1);
+			return period;
+		}
+
+		private TimeSpan[] createIntervals()
+		{
+			var intervals = new List<TimeSpan>();
+			for (var i = 00; i < 1440; i += 15)
+			{
+				intervals.Add(TimeSpan.FromMinutes(i));
+			}
+			return intervals.ToArray();
+		}
+
+		private void setupPerson(int siteOpenStartHour = 8, int siteOpenEndHour = 17, bool isOpenHoursClosed = false)
+		{
+			var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			var person = createPersonWithSiteOpenHours(siteOpenStartHour, siteOpenEndHour, isOpenHoursClosed);
+			LoggedOnUser.SetFakeLoggedOnUser(person);
+			LoggedOnUser.SetDefaultTimeZone(timeZoneInfo);
+			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });
+
+		}
+
+		private IPersonRequest createOvertimeRequest(int startHour, int duration)
+		{
+			var requestStartTime = new DateTime(2017, 7, 17, startHour, 0, 0, DateTimeKind.Utc);
+			var personRequest = createOvertimeRequest(new DateTimePeriod(requestStartTime, requestStartTime.AddHours(duration)));
+			mockRequestApprovalServiceApproved(personRequest);
+			return personRequest;
 		}
 	}
 }

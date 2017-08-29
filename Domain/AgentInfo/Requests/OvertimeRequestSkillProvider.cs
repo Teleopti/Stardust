@@ -9,27 +9,24 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public class OvertimeRequestSkillProvider : IOvertimeRequestSkillProvider
 	{
-		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IPrimaryPersonSkillFilter _primaryPersonSkillFilter;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly PersonalSkills _personalSkills = new PersonalSkills();
 
-		public OvertimeRequestSkillProvider(ILoggedOnUser loggedOnUser, IPrimaryPersonSkillFilter primaryPersonSkillFilter, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
+		public OvertimeRequestSkillProvider(IPrimaryPersonSkillFilter primaryPersonSkillFilter, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
 		{
-			_loggedOnUser = loggedOnUser;
 			_primaryPersonSkillFilter = primaryPersonSkillFilter;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 		}
 
-		public IEnumerable<ISkill> GetAvailableSkills(DateTimePeriod requestPeriod)
+		public IEnumerable<ISkill> GetAvailableSkills(IPerson person, DateTimePeriod requestPeriod)
 		{
-			var period = requestPeriod.ToDateOnlyPeriod(_loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
-			return _primaryPersonSkillFilter.Filter(getSupportedPersonSkills(period)).Select(s => s.Skill).ToList();
+			var period = requestPeriod.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone());
+			return _primaryPersonSkillFilter.Filter(getSupportedPersonSkills(person, period)).Select(s => s.Skill).ToList();
 		}
 
-		private IEnumerable<IPersonSkill> getSupportedPersonSkills(DateOnlyPeriod period)
+		private IEnumerable<IPersonSkill> getSupportedPersonSkills(IPerson person, DateOnlyPeriod period)
 		{
-			var person = _loggedOnUser.CurrentUser();
 			var personPeriod = person.PersonPeriods(period).ToArray();
 			if (!personPeriod.Any())
 				return new IPersonSkill[] { };
