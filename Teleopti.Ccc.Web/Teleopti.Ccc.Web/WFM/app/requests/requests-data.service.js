@@ -163,18 +163,18 @@
 				{ Id: 6, Name: $translate.instant("Cancelled") }
 			];
 
-			return getBasicStatues().concat(statues);
+			return getBasicStatuses().concat(statues);
 		};
 
 		this.getShiftTradeRequestsStatuses = function () {
-			return getBasicStatues();
+			return getBasicStatuses();
 		};
 
 		this.getOvertimeRequestsStatuses = function () {
-			return getBasicStatues();
+			return getBasicStatuses();
 		};
 
-		function getBasicStatues(){
+		function getBasicStatuses(){
 			// TODO: Should get this list in a better way
 			// Refer to definition Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest.personRequestState.CreateFromId()
 			var basicStatues = [
