@@ -1,6 +1,5 @@
 using Teleopti.Ccc.Domain.Analytics;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {

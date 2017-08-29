@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;

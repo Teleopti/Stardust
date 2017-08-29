@@ -7,7 +7,6 @@ using Google.Apis.Services;
 using Google.Apis.Sheets.v4;
 using Google.Apis.Sheets.v4.Data;
 using Newtonsoft.Json;
-using Teleopti.Ccc.Domain;
 
 namespace Teleopti.Ccc.TestCommon.PerformanceTest
 {

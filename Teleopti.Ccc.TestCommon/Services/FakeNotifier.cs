@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using NHibernate.Util;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Notification;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.Services
 {
