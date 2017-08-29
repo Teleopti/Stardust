@@ -32,8 +32,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public void Handle(FixNotOverwriteLayerCommand command)
 		{
 			var person = _personForId.Load(command.PersonId);
-
-
 			var dict = _scheduleDayProvider.GetScheduleDictionary(command.Date, person);
 			var rule = new NotOverwriteLayerRule();
 			var scheduleRange = dict[person];

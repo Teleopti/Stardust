@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -32,7 +31,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	{
 		public FixNotOverwriteLayerCommandHandler Target;
 		public FakeWriteSideRepository<IPerson> PersonRepository;
-		public FakeWriteSideRepository<IActivity> ActivityRepository;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeScheduleStorage ScheduleStorage;
 		public FakeUserTimeZone UserTimeZone;
@@ -42,11 +40,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public MutableNow Now;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
-		public FakeActivityRepository ActivityRepository2;
+		public FakeActivityRepository ActivityRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
@@ -55,9 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
-			system.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
-			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
 			system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
 		}
 
@@ -426,10 +421,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(mainActivity);
 			ActivityRepository.Add(lunchActivity);
 			ActivityRepository.Add(shortBreakActivity);
-			ActivityRepository2.Add(meetingActivity);
-			ActivityRepository2.Add(mainActivity);
-			ActivityRepository2.Add(lunchActivity);
-			ActivityRepository2.Add(shortBreakActivity);
+
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(
 				PersonRepository.Single(), scenario, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 18), shiftCategory);
 			pa.AddActivity(lunchActivity, new DateTimePeriod(2013, 11, 14, 10, 2013, 11, 14, 12));
