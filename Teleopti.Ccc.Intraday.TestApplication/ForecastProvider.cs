@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			_connectionString = connectionString;
 		}
 
-		public IList<ForecastInterval> Provide(int workloadId, int intervalId, DateTime date)
+		public IList<ForecastInterval> Provide(int workloadId, DateTime fromDate, int fromIntervalId, DateTime toDate, int toIntervalId)
 		{
 			var forecastIntervals = new List<ForecastInterval>();
 			var dbCommand = new DatabaseCommand(CommandType.StoredProcedure, "mart.web_intraday_simulator_get_forecast", _connectionString);
@@ -23,8 +23,10 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			var parameterList = new[]
 												{
 													 new SqlParameter("@workload_id", workloadId),	
-													 new SqlParameter("@today", date.Date),
-													 new SqlParameter("@interval_id", intervalId)
+													 new SqlParameter("@from_date", fromDate),
+													 new SqlParameter("@from_interval_id", fromIntervalId),
+													new SqlParameter("@to_date", toDate),
+													new SqlParameter("@to_interval_id", toIntervalId)
 												};
 
 			DataSet resultSet = dbCommand.ExecuteDataSet(parameterList);

@@ -68,9 +68,17 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.WriteLine("");
 			foreach (var t in times)
 			{
-				var time = t;
-				Console.WriteLine("Stats will be generated up until {0}. Enter other time if needed.",
-					$"{time.ToShortDateString()} {time.ToShortTimeString()}");
+				DateTime fromTimeLocal = t.Date;
+				DateTime toTimeLocal = t;
+				if (times.IndexOf(t) == 0)
+				{
+					Console.WriteLine($"Stats will be generated for {toTimeLocal.ToShortDateString()} up until {toTimeLocal.ToShortTimeString()}. Enter other time if needed.");
+				}
+				else
+				{
+					Console.WriteLine($"Stats will be generated for complete {toTimeLocal.ToShortDateString()}. Enter an up until time if needed.");
+					toTimeLocal = fromTimeLocal.AddDays(1);
+				}
 				var timeText = Console.ReadLine();
 				if (!string.IsNullOrEmpty(timeText))
 				{
@@ -81,19 +89,29 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 						Console.ReadKey();
 						return;
 					}
-					time = time.Date.Add(temp.TimeOfDay);
-					time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, time);
+					var timeToAdd = temp.TimeOfDay == TimeSpan.Zero 
+						? temp.TimeOfDay.Add(TimeSpan.FromDays(1)) 
+						: temp.TimeOfDay;
+					toTimeLocal = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, fromTimeLocal.Add(timeToAdd));
 				}
 
 				Console.WriteLine("We're doing stuff. Please hang around...");
-				var timeUtc = TimeZoneInfo.Local.SafeConvertTimeToUtc(DateTime.SpecifyKind(time, DateTimeKind.Unspecified));
-				var currentIntervalUtc = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, timeUtc);
+
+				var fromDateUtc = TimeZoneInfo.FindSystemTimeZoneById(userTimezone.TimeZoneId)
+					.SafeConvertTimeToUtc(DateTime.SpecifyKind(fromTimeLocal, DateTimeKind.Unspecified));
+				var fromIntervalIdUtc = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, fromDateUtc);
+				var toDateUtc = TimeZoneInfo.FindSystemTimeZoneById(userTimezone.TimeZoneId)
+					.SafeConvertTimeToUtc(DateTime.SpecifyKind(toTimeLocal, DateTimeKind.Unspecified));
+				var toIntervalIdUtc = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, toDateUtc);
+				var deleteToDateUtc = TimeZoneInfo.FindSystemTimeZoneById(userTimezone.TimeZoneId)
+					.SafeConvertTimeToUtc(DateTime.SpecifyKind(fromTimeLocal.AddDays(1), DateTimeKind.Unspecified));
+				var deleteToIntervalIdUtc = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, deleteToDateUtc);
 
 				var workloads = workloadQueuesProvider.Provide();
 
 				foreach (var workloadInfo in workloads)
 				{
-					var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId, currentIntervalUtc, timeUtc);
+					var forecastIntervals = forecastProvider.Provide(workloadInfo.WorkloadId, fromDateUtc.Date, fromIntervalIdUtc, toDateUtc.Date, toIntervalIdUtc);
 
 					if (forecastIntervals.Count == 0 || Math.Abs(forecastIntervals.Sum(x => x.Calls)) < 0.001)
 						continue;
@@ -103,7 +121,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 					queueDataDictionary.Add(targetQueue.QueueId, generateQueueDataIntervals(forecastIntervals, targetQueue));
 				}
 
-				queueDataPersister.Persist(queueDataDictionary, timeZoneIntervalLength.TimeZoneId, time);
+				queueDataPersister.Persist(queueDataDictionary, fromDateUtc.Date, fromIntervalIdUtc, deleteToDateUtc.Date, deleteToIntervalIdUtc);
 
 				var skillsContainingQueue = new List<string>();
 
@@ -144,9 +162,9 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				}
 
 				queueDataDictionary = new Dictionary<int, IList<QueueInterval>>();
+				Console.WriteLine("");
 			}
 
-			Console.WriteLine("");
 			Console.WriteLine("");
 			Console.WriteLine("We're done! Press any key to exit.");
 			Console.ReadKey();

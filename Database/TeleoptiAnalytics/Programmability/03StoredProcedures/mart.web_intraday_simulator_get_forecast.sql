@@ -7,11 +7,13 @@ GO
 -- Create date: 2016-03-31
 -- Description:	Load forecast data for given workload. Used by  for web intraday
 -- =============================================
--- EXEC [mart].[web_intraday_simulator_get_forecast] 8, '2016-10-12', 40
+-- EXEC [mart].[web_intraday_simulator_get_forecast] 27, '2017-08-28', 16, '2017-08-28', 56
 CREATE PROCEDURE [mart].[web_intraday_simulator_get_forecast]
 @workload_id int,
-@today smalldatetime,
-@interval_id int
+@from_date smalldatetime,
+@from_interval_id int,
+@to_date smalldatetime,
+@to_interval_id int
 
 AS
 BEGIN
@@ -40,8 +42,23 @@ BEGIN
 	WHERE
 		fw.workload_id = @workload_id
 		AND fw.scenario_id = @default_scenario_id
-		AND d.date_date = @today
-		AND fw.interval_id < @interval_id
+		AND 
+			(
+				(@from_date <> @to_date)
+				AND
+				(
+					(d.date_date = @from_date AND fw.interval_id >= @from_interval_id)
+					OR
+					(d.date_date = @to_date AND fw.interval_id < @to_interval_id)
+				)
+			)
+			OR
+			(
+				(@from_date = @to_date)
+				AND
+				(d.date_date = @from_date AND (fw.interval_id >= @from_interval_id AND fw.interval_id < @to_interval_id))
+			)
+
 	ORDER BY
 		fw.date_id, fw.interval_id
 END
