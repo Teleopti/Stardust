@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePersonAssignmentRepository : IPersonAssignmentRepository
 	{
 		private readonly FakeStorage _storage;
-		public FakeSchedulingSourceScope SchedulingSourceScope { get; set; }
+		public ICurrentSchedulingSource CurrentSchedulingSource { get; set; }
 
 		public FakePersonAssignmentRepository(FakeStorage storage)
 		{
@@ -62,9 +62,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public void Add(IPersonAssignment entity)
 		{
-			if (SchedulingSourceScope != null)
+			if (CurrentSchedulingSource != null)
 			{
-				entity.Source = SchedulingSourceScope.Current();
+				entity.Source = CurrentSchedulingSource.Current();
 			}
 			_storage.Add(entity);
 		}

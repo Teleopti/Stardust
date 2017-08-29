@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public FakePersonRepository PersonRepository;
 		public FakeJobResultRepository JobResultRepository;
 		public FakeTenants Tenants;
-		public FakeSchedulingSourceScope SchedulingSourceScope;
+		public ICurrentSchedulingSource CurrentSchedulingSource;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			PersonRepository.Add(person);
 			businessUnit = BusinessUnitFactory.CreateWithId("something");
 			BusinessUnitRepository.Add(businessUnit);
-			PersonAssignmentRepository.SchedulingSourceScope = SchedulingSourceScope;
+			PersonAssignmentRepository.CurrentSchedulingSource = CurrentSchedulingSource;
 		}
 
 		private void prepareSchedule()
