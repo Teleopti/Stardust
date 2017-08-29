@@ -72,9 +72,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			}
 			foreach (var delta in deltas)
 			{
-				foreach (var combinationResource in _combinationResources.Where(x => x.StartDateTime == delta.StartDateTime && x.SkillCombination.NonSequenceEquals(delta.SkillCombination)))
+				var combinationResource = _combinationResources.SingleOrDefault(
+					x => x.StartDateTime == delta.StartDateTime && x.SkillCombination.NonSequenceEquals(delta.SkillCombination));
+
+				if (combinationResource != null)
 				{
 					combinationResource.Resource += delta.Resource;
+				}
+				else
+				{
+					_combinationResources.Add(delta);
 				}
 			}
 			

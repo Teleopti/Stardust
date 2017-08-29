@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var scheduleDay = _scheduleDayProvider.GetScheduleDay(date, person);
 			return GetMovingDistance(scheduleDay, avoidPeriod, shiftLayerId);
 		}
+
 		public bool IsDestinationValidForMovedShiftLayer(IScheduleDay scheduleDay, ShiftLayer layer,TimeSpan distance)
 		{			
 			var periodAtDestination = layer.Period.MovePeriod(distance);
