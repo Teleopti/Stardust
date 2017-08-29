@@ -32,10 +32,9 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 			return requests;
 		}
 
-
 		public IEnumerable<IPersonRequest> RetrieveShiftTradeRequests(RequestFilter filter, out int totalCount)
 		{
-			var requests = _repository.FindAbsenceAndTextRequests(filter, out totalCount).Where(permissionCheckPredicate).ToList();
+			var requests = _repository.FindShiftTradeRequests(filter, out totalCount).Where(permissionCheckPredicate).ToList();
 
 			return setupShiftTradeRequestStatus(requests);
 		}
