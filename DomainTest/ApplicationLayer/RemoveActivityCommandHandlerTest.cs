@@ -38,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeScheduleStorage ScheduleStorage;
 		public FakePersonRepository PersonRepository;
 		public FakeActivityRepository ActivityRepository;
-		public FakeWriteSideRepository<IPerson> PersonRepository2;
 		private IActivity _mainActivity;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
 			system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
-			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
 		}
 
@@ -64,7 +62,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
-			PersonRepository2.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(_mainActivity);
@@ -107,7 +104,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
-			PersonRepository2.Add(person);
 			ActivityRepository.Add(_mainActivity);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
 
@@ -144,7 +140,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
-			PersonRepository2.Add(person);
 			ActivityRepository.Add(_mainActivity);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
 
@@ -183,7 +178,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			IntervalLengthFetcher.Has(15);
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
-			PersonRepository2.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
 			activity.RequiresSkill = true;
 			ActivityRepository.Add(activity);
@@ -228,7 +222,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			IntervalLengthFetcher.Has(15);
 			var person = PersonFactory.CreatePersonWithId();
 			PersonRepository.Add(person);
-			PersonRepository2.Add(person);
 			var activity = ActivityFactory.CreateActivity("Phone").WithId();
 			activity.RequiresSkill = true;
 			_mainActivity.RequiresSkill = true;
