@@ -137,8 +137,22 @@
           }
 
           function pointClick(days) {
-            vm.selectedDayCount = days;
+            vm.selectedDayCount = UniqueArraybyId(days ,"date");
           }
+
+          function UniqueArraybyId(collection, keyname) {
+            var output = [],
+            keys = [];
+
+            angular.forEach(collection, function(item) {
+              var key = item[keyname];
+              if(keys.indexOf(key) === -1) {
+                keys.push(key);
+                output.push(item);
+              }
+            });
+            return output;
+          };
 
           function refreshOnModify() {
             vm.isForecastRunning = true;
