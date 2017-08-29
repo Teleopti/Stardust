@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -50,8 +49,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date)
 		{
 			if (!enabled) return true;
-			return _applicationFunctions.ContainsKey(applicationFunctionPath)
-				&& (!_applicationFunctions[applicationFunctionPath].HasValue || _applicationFunctions[applicationFunctionPath] <= date);
+			return _applicationFunctions.TryGetValue(applicationFunctionPath, out DateOnly? value)
+				&& (!value.HasValue || value.Value <= date);
 		}
 
 		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IPersonAuthorization personAuthorizationInfo)
@@ -60,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 			return
 				_groupPermissionData.Any(
 					x => x.ApplicationFunctionPath == applicationFunctionPath &&
-					x.Date == date && x.PersonAuthorization.SiteId == personAuthorizationInfo.SiteId
+					x.Date >= date && x.PersonAuthorization.SiteId == personAuthorizationInfo.SiteId
 					&& x.PersonAuthorization.TeamId == personAuthorizationInfo.TeamId);
 		}
 
@@ -94,8 +93,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Global
 
 		public void Reject(string applicationFunction)
 		{
-			if (_applicationFunctions.ContainsKey(applicationFunction))
-				_applicationFunctions.Remove(applicationFunction);
+			_applicationFunctions.Remove(applicationFunction);
 		}
 
 		public void PermitPerson(string applicationFunction,  IPerson person, DateOnly date)

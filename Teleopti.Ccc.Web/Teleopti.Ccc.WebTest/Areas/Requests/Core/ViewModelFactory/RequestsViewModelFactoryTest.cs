@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		public FakePersonRepository PersonRepository;
 		public FakeGroupingReadOnlyRepository GroupingReadOnlyRepository;
 
-		private List<IPerson> people;
+		private IPerson[] people;
 		private readonly IAbsence absence = AbsenceFactory.CreateAbsence("absence1").WithId();
 		private ITeam team;
 		private IPersonPeriod personPeriod;
@@ -215,27 +215,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldNotSeeRequestBeforePermissionDate()
 		{
-			var requests = setUpRequests().ToArray();
+			setUpRequests();
 			var date = new DateOnly(2015, 10, 3);
 			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
 			permissionProvider.Enable();
 			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
 			{
-				PersonId = requests[0].Person.Id.GetValueOrDefault(),
-				TeamId = requests[0].Person.MyTeam(date)?.Id.GetValueOrDefault(),
-				SiteId = requests[0].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
-			});
-			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
-			{
-				PersonId = requests[1].Person.Id.GetValueOrDefault(),
-				TeamId = requests[1].Person.MyTeam(date)?.Id.GetValueOrDefault(),
-				SiteId = requests[1].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
-			});
-			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
-			{
-				PersonId = requests[2].Person.Id.GetValueOrDefault(),
-				TeamId = requests[2].Person.MyTeam(date)?.Id.GetValueOrDefault(),
-				SiteId = requests[2].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
+				TeamId = team.Id.GetValueOrDefault(),
+				SiteId = team.Site?.Id.GetValueOrDefault(),
 			});
 
 			var input = new AllRequestsFormData
@@ -252,15 +239,49 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldNotSeeRequestBeforePermissionDateWithTimeZone()
+		{
+			var agentTimeZone = TimeZoneInfoFactory.ChinaTimeZoneInfo();
+			var absenceRequest = new AbsenceRequest(absence, new DateOnly(2015, 10, 2).ToDateTimePeriod(agentTimeZone));
+
+			people = new[]{PersonFactory.CreatePerson ("test1").WithId()};
+			people.ForEach(setUpPerson);
+			people.ForEach(p => { p.PermissionInformation.SetDefaultTimeZone(agentTimeZone); });
+
+			PersonRequestRepository.Add(new PersonRequest(people[0], absenceRequest).WithId());
+
+			var date = new DateOnly(2015, 10, 2);
+			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
+			permissionProvider.Enable();
+			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
+			{
+				TeamId = team.Id.GetValueOrDefault(),
+				SiteId = team.Site?.Id
+			});
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 2),
+				EndDate = new DateOnly(2015, 10, 2),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = new[] { team.Id.Value.ToString() }
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input).Requests;
+			result.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
 		public void ShouldReturnRequestsBelongToQueriedAgents()
 		{
 			ToggleManager.Enable(Toggles.Wfm_GroupPages_45057);
 
-			var requests = setUpRequests();
+			setUpRequests();
 
-			PeopleSearchProvider.Add(requests.First().Person);
+			PeopleSearchProvider.Add(people.First());
 
-			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = requests.First().Person.Id.Value });
+			GroupingReadOnlyRepository.Has(new ReadOnlyGroupDetail { PersonId = people.First().Id.Value });
 
 			var input = new AllRequestsFormData
 			{
@@ -302,7 +323,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var roleDescription = "my role";
 			var requests = setUpRequests().ToList();
 
-			var fakePeopleSearchProvider = (FakePeopleSearchProvider)PeopleSearchProvider;
+			var fakePeopleSearchProvider = PeopleSearchProvider;
 			fakePeopleSearchProvider.Add(requests[0].Person, roleDescription);
 			fakePeopleSearchProvider.Add(requests[1].Person);
 			fakePeopleSearchProvider.Add(requests[2].Person);
@@ -331,7 +352,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		[Test]
 		public void ShouldNotSeeRequestBeforePermissionDateInRequestListViewModel()
 		{
-			var requests = setUpRequests().ToArray();
+			setUpRequests().ToArray();
 			var date = new DateOnly(2015, 10, 3);
 
 			var permissionProvider = PermissionProvider as Global.FakePermissionProvider;
@@ -339,21 +360,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 
 			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
 			{
-				PersonId = requests[0].Person.Id.GetValueOrDefault(),
-				TeamId = requests[0].Person.MyTeam(date)?.Id.GetValueOrDefault(),
-				SiteId = requests[0].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
-			});
-			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
-			{
-				PersonId = requests[1].Person.Id.GetValueOrDefault(),
-				TeamId = requests[1].Person.MyTeam(date)?.Id.GetValueOrDefault(),
-				SiteId = requests[1].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
-			});
-			permissionProvider.PermitGroup(DefinedRaptorApplicationFunctionPaths.WebRequests, date, new PersonAuthorization
-			{
-				PersonId = requests[2].Person.Id.GetValueOrDefault(),
-				TeamId = requests[2].Person.MyTeam(date)?.Id.GetValueOrDefault(),
-				SiteId = requests[2].Person.MyTeam(date)?.Site?.Id.GetValueOrDefault(),
+				TeamId = team.Id.GetValueOrDefault(),
+				SiteId = team.Site?.Id.GetValueOrDefault(),
 			});
 
 			var input = new AllRequestsFormData
@@ -568,12 +576,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 				PersonFactory.CreatePerson ("test2").WithId(),
 				PersonFactory.CreatePerson ("test3").WithId(),
 				PersonFactory.CreatePerson ("test4").WithId()
-			}
-			.ToList();
-			people.ForEach(p =>
-			{
-				setUpPerson(p);
-			});
+			};
+			people.ForEach(setUpPerson);
 
 			var personRequests = new[]
 			{
@@ -598,8 +602,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			{
 				BusinessUnitId = Guid.Empty,
 				PersonId = p.Id.GetValueOrDefault(),
-				TeamId = team.Id.GetValueOrDefault(),
-				SiteId = team.Site.Id.GetValueOrDefault()
+				TeamId = team.Id,
+				SiteId = team.Site.Id
 			});
 		}
 

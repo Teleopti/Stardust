@@ -76,28 +76,26 @@ namespace Teleopti.Ccc.Web.Areas.Requests.Core.Provider
 
 			return requests.Where (request => !referredRequests.Contains (request));
 		}
-
-
+		
 		private bool permissionCheckPredicate(IPersonRequest request)
 		{
-			var checkDate = new DateOnly(request.Request.Period.StartDateTime);
-			ITeam team = request.Person.MyTeam(checkDate);
-			ISite site = team == null ? null : team.Site;
-			IBusinessUnit bu = site == null ? null : site.BusinessUnit;
-
-
+			var requestPerson = request.Person;
+			var checkDate = new DateOnly(request.Request.Period.StartDateTimeLocal(requestPerson.PermissionInformation.DefaultTimeZone()));
+			ITeam team = requestPerson.MyTeam(checkDate);
+			ISite site = team?.Site;
+			IBusinessUnit bu = site?.BusinessUnit;
+			
 			var authorizeOrganisationDetail = new PersonAuthorization
 			{
-				PersonId = request.Person.Id ?? Guid.Empty,
-				TeamId = team == null? null : team.Id,
-				SiteId = site == null? null : site.Id,
-				BusinessUnitId = (bu == null || !bu.Id.HasValue) ? Guid.Empty : bu.Id.Value					
+				PersonId = requestPerson.Id ?? Guid.Empty,
+				TeamId = team?.Id,
+				SiteId = site?.Id,
+				BusinessUnitId = bu?.Id ?? Guid.Empty
 			};
 
 			return _permissionProvider.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.WebRequests,
-				new DateOnly(request.Request.Period.StartDateTime),
+				checkDate,
 				authorizeOrganisationDetail);
 		}
-		
 	}
 }
