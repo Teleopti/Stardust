@@ -38,6 +38,7 @@
 		vm.sortingOrders = [];
 		vm.agentSearchTerm = '';
 		vm.selectedGroupIds = [];
+		vm.selectedGroupPageId = undefined;
 		vm.paging = {};
 		vm.initialized = false;
 
@@ -75,6 +76,7 @@
 			if (params) {
 				vm.agentSearchTerm = params.agentSearchTerm || vm.agentSearchTerm;
 				vm.selectedGroupIds = params.selectedGroupIds || vm.selectedGroupIds;
+				vm.selectedGroupPageId = params.selectedGroupPageId || vm.selectedGroupPageId;
 				vm.paging = params.paging || vm.paging;
 			}
 
@@ -82,6 +84,7 @@
 				period: vm.period,
 				agentSearchTerm: vm.agentSearchTerm,
 				selectedGroupIds: vm.selectedGroupIds,
+				selectedGroupPageId: vm.selectedGroupPageId,
 				filters: vm.filters
 			};
 

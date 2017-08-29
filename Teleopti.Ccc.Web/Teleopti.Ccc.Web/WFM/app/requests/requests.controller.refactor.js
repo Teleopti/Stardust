@@ -143,6 +143,7 @@
 			$scope.$broadcast('reload.requests.with.selection',
 				{
 					selectedGroupIds: vm.selectedGroups.groupIds,
+					selectedGroupPageId: vm.selectedGroups.groupPageId,
 					agentSearchTerm: vm.agentSearchOptions.keyword
 				});
 		};
