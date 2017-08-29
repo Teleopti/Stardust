@@ -13,7 +13,7 @@ describe('requestsDataService tests ', function() {
 		targetSvc = requestsDataService;
 	}));
 
-	it('should get statues list for absenceAndText', function() {
+	it('should get statuses list for absenceAndText', function() {
 		var results = targetSvc.getAbsenceAndTextRequestsStatuses();
 
 		expect(results.length).toEqual(5);
@@ -24,7 +24,7 @@ describe('requestsDataService tests ', function() {
 		expect(results[4].Name).toEqual($translate.instant("Cancelled"));
 	});
 
-	it('should get statues list for shiftTrade', function() {
+	it('should get statuses list for shiftTrade', function() {
 		var results = targetSvc.getShiftTradeRequestsStatuses();
 
 		expect(results.length).toEqual(3);
@@ -33,7 +33,7 @@ describe('requestsDataService tests ', function() {
 		expect(results[2].Name).toEqual($translate.instant("Approved"));
 	});
 
-	it('should get statues list for overtime', function() {
+	it('should get statuses list for overtime', function() {
 		var results = targetSvc.getOvertimeRequestsStatuses();
 
 		expect(results.length).toEqual(3);

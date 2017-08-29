@@ -868,9 +868,9 @@
 		};
 
 		this.getAbsenceAndTextRequestsStatuses = function () {
-			var statues = [];
+			var statuses = [];
 
-			return getBasicStatuses().concat(statues);
+			return getBasicStatuses().concat(statuses);
 		};
 
 		this.getShiftTradeRequestsStatuses = function () {
@@ -880,12 +880,12 @@
 		function getBasicStatuses(){
 			// TODO: Should get this list in a better way
 			// Refer to definition Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest.personRequestState.CreateFromId()
-			var basicStatues = [
+			var basicStatuses = [
 				{ Id: 0, Name: "Status0" },
 				{ Id: 1, Name: "Status1" }
 			];
 
-			return basicStatues;
+			return basicStatuses;
 		}
 	}
 

@@ -158,12 +158,12 @@
 		};
 
 		this.getAbsenceAndTextRequestsStatuses = function () {
-			var statues = [
+			var statuses = [
 				{ Id: 5, Name: $translate.instant("Waitlisted") },
 				{ Id: 6, Name: $translate.instant("Cancelled") }
 			];
 
-			return getBasicStatuses().concat(statues);
+			return getBasicStatuses().concat(statuses);
 		};
 
 		this.getShiftTradeRequestsStatuses = function () {
@@ -177,13 +177,13 @@
 		function getBasicStatuses(){
 			// TODO: Should get this list in a better way
 			// Refer to definition Teleopti.Ccc.Domain.AgentInfo.Requests.PersonRequest.personRequestState.CreateFromId()
-			var basicStatues = [
+			var basicStatuses = [
 				{ Id: 0, Name: $translate.instant("Pending") },
 				{ Id: 1, Name: $translate.instant("Denied") },
 				{ Id: 2, Name: $translate.instant("Approved") }
 			];
 
-			return basicStatues;
+			return basicStatuses;
 		}
 	}
 })();
