@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 
-				//should probably be deleted
+				//should probably be deleted, if so IDailyTargetValueCalculatorForTeamBlock can be deleted as well
 				var previousTargetValue = 1d;
 				if (teamBlockInfo.TeamInfo.GroupMembers.Count() > 1 || teamBlockInfo.BlockInfo.BlockPeriod.DayCount() > 1)
 					previousTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				}
 
-				//should probably be deleted
+				//should probably be deleted, if so IDailyTargetValueCalculatorForTeamBlock can be deleted as well
 				var newTargetValue = -1d;
 				if (teamBlockInfo.TeamInfo.GroupMembers.Count() > 1 || teamBlockInfo.BlockInfo.BlockPeriod.DayCount() > 1)
 					newTargetValue = _dailyTargetValueCalculatorForTeamBlock.TargetValue(teamBlockInfo, optimizationPreferences.Advanced);
