@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test]
-		//[Ignore("embryo teamScheduling one big island, 45542")]
+		[Ignore("embryo teamScheduling one big island, 45542")]
 		public void ShouldPoo()
 		{
 			//kolla toggle if classic hoppa
