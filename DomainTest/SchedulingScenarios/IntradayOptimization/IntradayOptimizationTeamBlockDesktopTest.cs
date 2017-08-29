@@ -224,6 +224,53 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test]
+		//[Ignore("embryo teamScheduling one big island, 45542")]
+		public void ShouldPoo()
+		{
+			//kolla toggle if classic hoppa
+			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
+			var scenario = new Scenario("_");
+			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var dateOnly = new DateOnly(2010, 1, 1);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet1 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(3, 0, 3, 0, 15), new TimePeriodWithSegment(11, 0, 11, 0, 15), shiftCategory));
+			var ruleSet2 = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(11, 0, 11, 0, 15), new TimePeriodWithSegment(19, 0, 19, 0, 15), shiftCategory));
+			var ruleSetBag1 = new RuleSetBag(ruleSet1).WithId();
+			ruleSetBag1.AddRuleSet(ruleSet2);
+			var ruleSetBag2 = new RuleSetBag(ruleSet1).WithId();
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(36), TimeSpan.FromHours(63), TimeSpan.FromHours(11), TimeSpan.FromHours(36)),
+				PositivePeriodWorkTimeTolerance = TimeSpan.FromHours(9)
+			};
+			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var agent1 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSetBag1, contract, skill).WithSchedulePeriodOneWeek(dateOnly);
+			var agent2 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSetBag1, contract, skill).WithSchedulePeriodOneWeek(dateOnly);
+			var agent3 = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSetBag2, contract, skill).WithSchedulePeriodOneWeek(dateOnly);
+			var ass1 = new PersonAssignment(agent1, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(7, 16));
+			var ass2 = new PersonAssignment(agent2, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(8, 17));
+			var ass3 = new PersonAssignment(agent3, scenario, dateOnly).ShiftCategory(shiftCategory).WithLayer(phoneActivity, new TimePeriod(7, 16));
+			var schedulerStateHolderFrom = SchedulerStateHolderFrom.Fill(scenario, dateOnly, new[] { agent1, agent2, agent3}, new[] { ass1, ass2, ass3}, skillDay);
+			var optPreferences = new OptimizationPreferences
+			{
+				General = { ScheduleTag = new ScheduleTag(), OptimizationStepShiftsWithinDay = true },
+				Extra = { UseTeams = true, TeamGroupPage = new GroupPageLight("_", GroupPageType.RuleSetBag), UseTeamSameStartTime = true }
+			};
+
+			Target.Execute(new NoSchedulingProgress(), schedulerStateHolderFrom, new[] { agent1, agent2 }, dateOnly.ToDateOnlyPeriod(), optPreferences, null);
+
+			var newAss1 = schedulerStateHolderFrom.Schedules[agent1].ScheduledDay(dateOnly).PersonAssignment();
+			var newAss2 = schedulerStateHolderFrom.Schedules[agent2].ScheduledDay(dateOnly).PersonAssignment();
+
+			newAss1.Period.Should().Be.EqualTo(newAss2.Period);
+			//var newAss3 = schedulerStateHolderFrom.Schedules[agent3].ScheduledDay(dateOnly).PersonAssignment();
+			//Console.WriteLine(newAss1.Period);
+			//Console.WriteLine(newAss2.Period);
+			//Console.WriteLine(newAss3.Period);
+		}
+
+		[Test]
 		public void ShouldNotCrashOnSchedulePeriodSameShiftCategoryAndKeepActivityLength()
 		{
 			BusinessUnitRepository.Has(ServiceLocatorForEntity.CurrentBusinessUnit.Current());
