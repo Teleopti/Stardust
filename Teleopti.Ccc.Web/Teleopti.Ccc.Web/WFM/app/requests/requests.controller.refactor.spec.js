@@ -193,6 +193,20 @@ describe('Requests - Refactor(remove later) controller controllers',
 			expect(eventData.agentSearchTerm).toEqual('FirstName:aaa');
 		});
 
+		it('should broadcast reload.requests.without.selection onCommandSuccess', function () {
+			var target = setUpTarget();
+			var controller = target.controller;
+			var hasSentReloadBroadcast;
+
+			target.scope.$on('reload.requests.without.selection', function (event, data) {
+				hasSentReloadBroadcast = true;
+			});
+
+			controller.onCommandSuccess();
+
+			expect(hasSentReloadBroadcast).toBeTruthy();
+		});
+
 		it('should clear the selection after selected teams changed', function () {
 			var controller = setUpTarget().controller;
 

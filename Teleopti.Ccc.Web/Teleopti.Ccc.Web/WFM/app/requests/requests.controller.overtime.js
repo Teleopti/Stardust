@@ -136,10 +136,13 @@
 
 		toggleService.togglesLoaded.then(vm.init);
 
-		$scope.$on('reload.requests.with.selection',
-			function (event, data) {
-				vm.initialized && vm.reload(data);
-			});
+		$scope.$on('reload.requests.with.selection', function (event, data) {
+			vm.initialized && vm.reload(data);
+		});
+
+		$scope.$on('reload.requests.without.selection', function () {
+			vm.initialized && vm.reload();
+		});
 
 		$scope.$on('requests.filterEnabled.changed',
 			function (event, data) {
