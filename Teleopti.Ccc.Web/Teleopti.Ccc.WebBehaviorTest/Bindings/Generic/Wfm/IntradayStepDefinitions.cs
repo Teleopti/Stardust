@@ -84,11 +84,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I pick the skill '(.*)'")]
 		public void GivenIPickTheSkill(string skillName)
 		{
-			Browser.Interactions.Javascript("var scope = angular.element(document.querySelector('.c3')).scope();" +
+			Browser.Interactions.Javascript("document.addEventListener(\"DOMContentLoaded\", function(event) {" +
+											"var scope = angular.element(document.querySelector('.c3')).scope();" +
 											"var skillet = scope.skills.find(function(e){{return e.Name === \"{skillName}\"}});" +
 											"scope.selectedSkill = skillet;scope.selectedSkillChange(skillet);" +
 											"scope.changeChosenOffset(scope.chosenOffset.value);" +
-											"setTimeout(function(){console.log('delay')}, 500);");
+											"});");
 		}
 
 		[Given(@"I select the skill '(.*)'")]
