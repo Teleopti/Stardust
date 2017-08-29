@@ -48,12 +48,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<RemoveActivityCommandHandler>().For<IHandleCommand<RemoveActivityCommand>>();
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
-			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
-			system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
 			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
 		}
 
@@ -66,6 +61,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(_mainActivity);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person,_mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
+			personAssignment.SetId(Guid.NewGuid());
 			
 			personAssignment.AddActivity(activity, new DateTimePeriod(2013, 11, 14, 12, 2013, 11, 14, 14));
 			personAssignment.ShiftLayers.ForEach(sl => EntityExtensions.WithId<ShiftLayer>(sl));
@@ -84,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			CurrentScenario.FakeScenario(personAssignment.Scenario);
 			ScheduleStorage.Add(personAssignment);
-
+			personAssignment.PopAllEvents();
 			Target.Handle(command);
 
 			var dic = ScheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(new DateTimePeriod(command.Date.Date.Utc(), command.Date.Date.Utc())), personAssignment.Scenario, new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), new[] { person });
@@ -92,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			personAssignment = scheduleDay.PersonAssignment();
 
-			var @event = personAssignment.PopAllEvents().OfType<PersonAssignmentLayerRemovedEvent>().Single();
+		var @event = personAssignment.PopAllEvents().OfType<PersonAssignmentLayerRemovedEvent>().Single();
 			@event.PersonId.Should().Be(person.Id.GetValueOrDefault());
 			@event.Date.Should().Be(new DateTime(2013, 11, 14));
 			@event.StartDateTime.Should().Be(shiftLayer.Period.StartDateTime);

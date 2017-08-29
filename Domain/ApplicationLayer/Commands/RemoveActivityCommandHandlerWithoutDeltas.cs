@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -20,12 +19,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	public class RemoveActivityCommandHandler : IHandleCommand<RemoveActivityCommand>
 	{
 		private readonly ICurrentScenario _currentScenario;
-		//private readonly IProxyForId<IPerson> _personForId;
-		private readonly IPersonRepository _personForId;
+		private readonly IProxyForId<IPerson> _personForId;
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 
-		public RemoveActivityCommandHandler( ICurrentScenario currentScenario, IPersonRepository personForId, IScheduleStorage scheduleStorage, IScheduleDifferenceSaver scheduleDifferenceSaver)
+		public RemoveActivityCommandHandler( ICurrentScenario currentScenario, IProxyForId<IPerson> personForId, IScheduleStorage scheduleStorage, IScheduleDifferenceSaver scheduleDifferenceSaver)
 		{
 			_currentScenario = currentScenario;
 			_personForId = personForId;
@@ -73,7 +71,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				command.ErrorMessages.Add(Resources.CannotDeleteBaseActivity);
 				return;
 			}
-			scheduleDay.RemoveActivity(shiftLayer, false, command.TrackedCommandInfo);
+			//scheduleDay.RemoveActivity(shiftLayer, false, command.TrackedCommandInfo);
+			personAssignment.RemoveActivity(shiftLayer, false, command.TrackedCommandInfo);
 			dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 			_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);
 		}

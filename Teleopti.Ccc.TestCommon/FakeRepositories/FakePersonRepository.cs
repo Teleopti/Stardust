@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>
+	public class FakePersonRepository : IPersonRepository, IEnumerable<IPerson>, IWriteSideRepository<IPerson>, IProxyForId<IPerson>
 	{
 		private readonly FakeStorage _storage;
 
@@ -291,6 +291,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			var allAgents = _storage.LoadAll<IPerson>();
 			allAgents.ForEach(x => _storage.Remove(x));
 			allAgents.Reverse().ForEach(x => _storage.Add(x));
+		}
+
+		public IPerson LoadAggregate(Guid id)
+		{
+			return Get(id);
 		}
 	}
 }

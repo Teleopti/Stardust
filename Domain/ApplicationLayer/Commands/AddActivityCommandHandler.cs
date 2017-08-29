@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	[EnabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step4_43389)]
 	public class AddActivityCommandHandler : IHandleCommand<AddActivityCommand>
 	{
-		private readonly IActivityRepository _activityForId;
+		private readonly IProxyForId<IActivity> _activityForId;
 		private readonly ICurrentScenario _currentScenario;
-		private readonly IPersonRepository _personForId;
+		private readonly IProxyForId<IPerson> _personForId;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
 		private readonly INonoverwritableLayerMovabilityChecker _movabilityChecker;
@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 
 		public AddActivityCommandHandler(ICurrentScenario currentScenario,
-			IActivityRepository activityForId,
-			IPersonRepository personForId,
+			IProxyForId<IActivity> activityForId,
+			IProxyForId<IPerson> personForId,
 			IUserTimeZone timeZone,
 			IShiftCategoryRepository shiftCategoryRepository,
 			INonoverwritableLayerMovabilityChecker movabilityChecker,
@@ -61,12 +61,25 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			var scheduleRange = dic[person];
 			var scheduleDay = scheduleRange.ScheduledDay(command.Date);
 			var personAssignment = scheduleDay.PersonAssignment();
+			//var personAssignment = _personAssignmentRepository.LoadAggregate(new PersonAssignmentKey
+			//{
+			//	Date = command.Date,
+			//	Scenario = scenario,
+			//	Person = person
+			//});
+
 			command.ErrorMessages = new List<string>();
 
 			var period = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(command.StartTime, timeZone), TimeZoneHelper.ConvertToUtc(command.EndTime, timeZone));
 
 			var previousScheduleDay = scheduleRange.ScheduledDay(command.Date.AddDays(-1));
 			var personAssignmentOfPreviousDay = previousScheduleDay.PersonAssignment();
+			//var personAssignmentOfPreviousDay = _personAssignmentRepository.LoadAggregate(new PersonAssignmentKey
+			//{
+			//	Date = command.Date.AddDays(-1),
+			//	Scenario = scenario,
+			//	Person = person
+			//});
 
 			if (personAssignmentOfPreviousDay != null && personAssignmentOfPreviousDay.Period.EndDateTime >= period.StartDateTime)
 			{
@@ -76,12 +89,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			if (personAssignment == null)
 			{
-
+				//var newPersonAssignment = new PersonAssignment(person, scenario, command.Date);
+				//newPersonAssignment.AddActivity(activity, period, command.TrackedCommandInfo);
 				var shiftCategories = _shiftCategoryRepository.FindAll().ToList();
 				shiftCategories.Sort(new ShiftCategorySorter());
 				var shiftCategory = shiftCategories.FirstOrDefault();
 				if (shiftCategory != null)
 				{
+					//newPersonAssignment.SetShiftCategory(shiftCategory);
 					scheduleDay.CreateAndAddActivity(activity, period, shiftCategory);
 					dic.Modify(scheduleDay, NewBusinessRuleCollection.Minimum());
 					_scheduleDifferenceSaver.SaveChanges(scheduleRange.DifferenceSinceSnapshot(new DifferenceEntityCollectionService<IPersistableScheduleData>()), (ScheduleRange)scheduleRange);
