@@ -34,39 +34,21 @@
 				$stateProvider.state('requests.absenceAndText', {
 					url: '/absenceAndText',
 					params: {
-						agentSearchTerm: '',
-						selectedGroupIds: [],
-						filterEnabled: undefined,
-						onInitCallBack: undefined,
-						paging: {},
-						isUsingRequestSubmitterTimeZone: undefined,
-						getPeriod: undefined
+						getParams: undefined
 					},
 					templateUrl: 'app/requests/html/requests-absenceAndText.html',
 					controller: 'requestsAbsenceAndTextCtrl as vm'
 				}).state('requests.shiftTrade', {
 					url: '/shiftTrade',
 					params: {
-						agentSearchTerm: '',
-						selectedGroupIds: [],
-						filterEnabled: undefined,
-						onInitCallBack: undefined,
-						paging: {},
-						isUsingRequestSubmitterTimeZone: undefined,
-						getPeriod: undefined
+						getParams: undefined
 					},
 					templateUrl: 'app/requests/html/requests-shiftTrade.html',
 					controller: 'requestsShiftTradeCtrl as vm'
 				}).state('requests.overtime', {
 					url: '/overtime',
 					params: {
-						agentSearchTerm: '',
-						selectedGroupIds: [],
-						filterEnabled: undefined,
-						onInitCallBack: undefined,
-						paging: {},
-						isUsingRequestSubmitterTimeZone: undefined,
-						getPeriod: undefined
+						getParams: undefined
 					},
 					templateUrl: 'app/requests/html/requests-overtime.html',
 					controller: 'requestsOvertimeCtrl as vm'

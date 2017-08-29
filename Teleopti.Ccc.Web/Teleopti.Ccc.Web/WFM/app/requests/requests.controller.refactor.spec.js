@@ -8,14 +8,14 @@ describe('Requests - Refactor(remove later) controller controllers',
 			$httpBackend,
 			requestsDataService,
 			requestCommandParamsHolder,
-			fakeStateParams,
+			getParamsFn,
 			fakeState = {
 				current: {
 					name: ''
 				},
-				go: function (name, params) {
+				go: function (name, getParams) {
 					this.current.name = name;
-					fakeStateParams = params;
+					getParamsFn = getParams.getParams;
 				}
 			};
 
@@ -248,14 +248,16 @@ describe('Requests - Refactor(remove later) controller controllers',
 		it('should get correct url when go to absence and text requests tab', function () {
 			var controller = setUpTarget().controller;
 			controller.activeAbsenceAndTextTab();
-			expect(fakeStateParams != undefined).toEqual(true);
+
+			expect(getParamsFn != undefined).toEqual(true);
+			expect(getParamsFn() != undefined).toEqual(true);
 			expect(fakeState.current.name).toEqual('requests.absenceAndText');
 		});
 
 		it('should get correct url when go to shift trade requests tab', function () {
 			var controller = setUpTarget().controller;
 			controller.activeShiftTradeTab();
-			expect(fakeStateParams != undefined).toEqual(true);
+			expect(getParamsFn() != undefined).toEqual(true);
 			expect(fakeState.current.name).toEqual('requests.shiftTrade');
 		});
 
@@ -282,14 +284,14 @@ describe('Requests - Refactor(remove later) controller controllers',
 
 			controller.activeAbsenceAndTextTab();
 
-			expect(fakeStateParams != undefined).toEqual(true);
-			expect(fakeStateParams.selectedGroupIds[0]).toEqual('123');
-			expect(fakeStateParams.selectedGroupIds[1]).toEqual('456');
-			expect(fakeStateParams.filterEnabled).toEqual(true);
-			expect(fakeStateParams.paging.pageSize).toEqual(100);
-			expect(fakeStateParams.isUsingRequestSubmitterTimeZone).toEqual(true);
-			expect(fakeStateParams.getPeriod().startDate).toEqual(moment().startOf('week')._d);
-			expect(fakeStateParams.getPeriod().endDate).toEqual(moment().endOf('week')._d);
+			expect(getParamsFn() != undefined).toEqual(true);
+			expect(getParamsFn().selectedGroupIds[0]).toEqual('123');
+			expect(getParamsFn().selectedGroupIds[1]).toEqual('456');
+			expect(getParamsFn().filterEnabled).toEqual(true);
+			expect(getParamsFn().paging.pageSize).toEqual(100);
+			expect(getParamsFn().isUsingRequestSubmitterTimeZone).toEqual(true);
+			expect(getParamsFn().getPeriod().startDate).toEqual(moment().startOf('week')._d);
+			expect(getParamsFn().getPeriod().endDate).toEqual(moment().endOf('week')._d);
 		});
 
 		it('should pass correct params to shift trade requests', function () {
@@ -305,14 +307,14 @@ describe('Requests - Refactor(remove later) controller controllers',
 
 			controller.activeShiftTradeTab();
 
-			expect(fakeStateParams != undefined).toEqual(true);
-			expect(fakeStateParams.selectedGroupIds[0]).toEqual('123');
-			expect(fakeStateParams.selectedGroupIds[1]).toEqual('456');
-			expect(fakeStateParams.filterEnabled).toEqual(true);
-			expect(fakeStateParams.paging.pageSize).toEqual(100);
-			expect(fakeStateParams.isUsingRequestSubmitterTimeZone).toEqual(true);
-			expect(fakeStateParams.getPeriod().startDate).toEqual(moment().startOf('week')._d);
-			expect(fakeStateParams.getPeriod().endDate).toEqual(moment().endOf('week')._d);
+			expect(getParamsFn() != undefined).toEqual(true);
+			expect(getParamsFn().selectedGroupIds[0]).toEqual('123');
+			expect(getParamsFn().selectedGroupIds[1]).toEqual('456');
+			expect(getParamsFn().filterEnabled).toEqual(true);
+			expect(getParamsFn().paging.pageSize).toEqual(100);
+			expect(getParamsFn().isUsingRequestSubmitterTimeZone).toEqual(true);
+			expect(getParamsFn().getPeriod().startDate).toEqual(moment().startOf('week')._d);
+			expect(getParamsFn().getPeriod().endDate).toEqual(moment().endOf('week')._d);
 		});
 
 		it('should broadcast filterEnabled changed event', function () {

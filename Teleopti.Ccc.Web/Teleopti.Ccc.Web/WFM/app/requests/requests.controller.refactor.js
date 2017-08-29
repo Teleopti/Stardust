@@ -64,19 +64,19 @@
 		vm.activeAbsenceAndTextTab = function () {
 			vm.selectedTabIndex = 0;
 			vm.period = vm.absenceAndOvertimePeriod;
-			$state.go("requests.absenceAndText", getParams());
+			$state.go("requests.absenceAndText", {getParams: getParams});
 		};
 
 		vm.activeShiftTradeTab = function () {
 			vm.selectedTabIndex = 1;
 			vm.period = vm.shiftTradePeriod;
-			$state.go("requests.shiftTrade", getParams());
+			$state.go("requests.shiftTrade", {getParams: getParams});
 		};
 
 		vm.activeOvertimeTab = function () {
 			vm.selectedTabIndex = 2;
 			vm.period = vm.absenceAndOvertimePeriod;
-			$state.go("requests.overtime", getParams());
+			$state.go("requests.overtime", {getParams: getParams});
 		};
 
 		vm.getSitesAndTeamsAsync = function () {
@@ -295,7 +295,6 @@
 				}
 			};
 		}
-
 
 		function setupWatches() {
 			$scope.$watch(function() {

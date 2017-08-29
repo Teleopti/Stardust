@@ -141,8 +141,6 @@
 
 		vm.init = function() {
 			vm.defaultStatusesLoaded = false;
-			vm.isUsingRequestSubmitterTimeZone = $stateParams.isUsingRequestSubmitterTimeZone;
-			onInitCallBack = $stateParams.onInitCallBack;
 			vm.userTimeZone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
 
 			var sortingOrder = requestsDefinitions.translateSingleSortingOrder(requestGridStateService.getShiftTradeSorting());
@@ -166,11 +164,15 @@
 			}
 
 			vm.initialized = true;
-			vm.filterEnabled = $stateParams.filterEnabled;
 			vm.allRequestStatuses = requestsDataService.getShiftTradeRequestsStatuses();
 
-			if (!$stateParams.getPeriod)
+			var params = $stateParams.getParams && $stateParams.getParams();
+			if (!params)
 				return;
+
+			vm.filterEnabled = params.filterEnabled;
+			vm.isUsingRequestSubmitterTimeZone = params.isUsingRequestSubmitterTimeZone;
+			onInitCallBack = params.onInitCallBack;
 
 			setupWatch();
 		};
@@ -215,7 +217,7 @@
 		function setupWatch() {
 			$scope.$watch(function() {
 					return {
-						period: $stateParams.getPeriod(),
+						period: $stateParams.getParams().getPeriod(),
 						filters: vm.filters,
 						sortingOrder: vm.sortingOrders
 					};
@@ -225,7 +227,7 @@
 						return;
 					if (validateDateParameters(newVal.period.startDate, newVal.period.endDate)) {
 						vm.period = newVal.period;
-						vm.reload($stateParams);
+						vm.reload($stateParams.getParams());
 					}
 				}, true);
 		}
