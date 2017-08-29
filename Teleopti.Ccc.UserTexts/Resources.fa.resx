@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Absence" xml:space="preserve">
     <value>مرخصی</value>
@@ -11000,5 +11000,326 @@ Teleopti R&amp;D</value>
   </data>
   <data name="CancelAbsenceRequestDescription" xml:space="preserve">
     <value>اگر این درخواست مرخصی تایید شده را لغو کنید آنگاه هر مرخصی ناشی از این درخواست نیز از زمانبندی پاسخگو حذف میشود</value>
+  </data>
+  <data name="TryOutTheNewImprovedTeams" xml:space="preserve">
+    <value>ماژول جدید تیمها را امتحان کنید</value>
+  </data>
+  <data name="WFMReleaseNotification" xml:space="preserve">
+    <value> ماژول {0} بهتر شده است. منتظر نظرات شما از طریق {1} هستیم.{2} ماژول قدیمی {3} برای مدتی محدود قابل دسترسی است</value>
+  </data>
+  <data name="CanNotAddActivityToAgentWithoutShift" xml:space="preserve">
+    <value>شما نمیتوانید بدون وجود شیفت فعالیت را به {0} برای روز بعد اضافه کنید</value>
+  </data>
+  <data name="PreviewTheNewIntradayTool" xml:space="preserve">
+    <value>نمایش ابزار جدید روزانه </value>
+  </data>
+  <data name="ExtendExistingShift" xml:space="preserve">
+    <value>شیفت موجود را طولانی تر کنید</value>
+  </data>
+  <data name="NonWorkingDays" xml:space="preserve">
+    <value>روزهای غیرکاری</value>
+  </data>
+  <data name="UseShiftsFromColon" xml:space="preserve">
+    <value>از فرم شیفت استفاده کنید</value>
+  </data>
+  <data name="AbsenceRequestCancellationThreshold" xml:space="preserve">
+    <value>شمار روزهای قبل از تاریخ مرخصی که درخواستها ممکن است لغو شود</value>
+  </data>
+  <data name="AbsenceRequestExpiredThreshold" xml:space="preserve">
+    <value>حداقل زمان لازم برای تایید  (دقیقه قبل از شروع درخواست)</value>
+  </data>
+  <data name="NoPermissionMoveAgentActivity" xml:space="preserve">
+    <value>اجازه جابجایی فعالیت پاسخگوها را ندارید</value>
+  </data>
+  <data name="SelectedAgentsColon" xml:space="preserve">
+    <value>پاسخگوی انتخاب شده</value>
+  </data>
+  <data name="CanNotMoveMultipleAcivitiesForAgent" xml:space="preserve">
+    <value>بیش از یک فعالیت را نمیتوانید برای پاسخگوی {0} جابجا کنید</value>
+  </data>
+  <data name="CannotDeleteBaseActivity" xml:space="preserve">
+    <value>فعالیت پایه را نمیتوانید حذف کنید</value>
+  </data>
+  <data name="LatestActualInterval" xml:space="preserve">
+    <value>آخرین بازه زمانی</value>
+  </data>
+  <data name="PartialSuccessMessageForMovingActivity" xml:space="preserve">
+    <value>جابجایی فعالیت ها برای {0} پاسخگو. برای {1} نفر موفقیت آمیز و برای {2} نفر ناموفق بود</value>
+  </data>
+  <data name="SuccessfulMessageForMovingActivity" xml:space="preserve">
+    <value>تمام فعالیتها برای پاسخگویهای انتخاب شده باموفقیت جابجا شد</value>
+  </data>
+  <data name="TheNewTimeIsNotAllowedFor" xml:space="preserve">
+    <value>زمان جدید قابل استفاده نیست</value>
+  </data>
+  <data name="ScheduleIsWriteProtected" xml:space="preserve">
+    <value>زمانبندی را نمیتوان برای {0} در {1} تغییر داد زیرا غیر قابل تغییر است</value>
+  </data>
+  <data name="ConfirmCancelRequest" xml:space="preserve">
+    <value>لغو درخواست تایید شده منجر به حذف مرخصیهای مربوطه برای زمانبندی شما میشوند. ایا مایل به ادامه هستید؟</value>
+  </data>
+  <data name="AbsenceRequestCancellationThresholdExceeded" xml:space="preserve">
+    <value>برای لغو درخواست دیر شده. این درخواست میبایست تا {0} روز قبل از تاریخ شروع اش لغو شود</value>
+  </data>
+  <data name="ActivityConflictsWithOvernightShiftsFromPreviousDay" xml:space="preserve">
+    <value>نمیتوان فعالیت را به شیفتی اضافه کرد که متعلق به روز قبل است</value>
+  </data>
+  <data name="LoadRequests" xml:space="preserve">
+    <value>نمایش درخواستها</value>
+  </data>
+  <data name="RequestInvalidStateTransition" xml:space="preserve">
+    <value>درخواستی که {0} است نمیتواند {1} باشد</value>
+  </data>
+  <data name="PersonAssignmentIsNotValid" xml:space="preserve">
+    <value>تخصیص فرد معتبر نیست</value>
+  </data>
+  <data name="Unselect" xml:space="preserve">
+    <value>انتخاب نشده</value>
+  </data>
+  <data name="NoPermissionAddPersonalActivity" xml:space="preserve">
+    <value>اجازه اضافه کردن فعالیت به پاسخگو {0} وجود ندارد</value>
+  </data>
+  <data name="CanNotAddPersonalActivityToAgentWithoutShift" xml:space="preserve">
+    <value>زمانیکه شیفتی وجود ندارد نمیتوان فعالیت شخصی اضافه کرد</value>
+  </data>
+  <data name="HelpLabel" xml:space="preserve">
+    <value>راهنما</value>
+  </data>
+  <data name="SubmitProcessWaitlistedRequestsSuccess" xml:space="preserve">
+    <value>درخواستهای فهرست انتظار برای دوره {0} شروع به پردازش شده اند</value>
+  </data>
+  <data name="WaitlistPeriod" xml:space="preserve">
+    <value>تمامی درخواستهای در فهرست انتظار برای دوره انتخاب شده پردازش خواهد شد</value>
+  </data>
+  <data name="ProcessWaitlistedRequestsFinished" xml:space="preserve">
+    <value>درخواستهای فهرست انتظار برای دوره {0} با موفقیت پردازش شد</value>
+  </data>
+  <data name="ProcessWaitlist" xml:space="preserve">
+    <value>پردازش فهرست انتظار</value>
+  </data>
+  <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
+    <value>پردازش فهرست انتظار در پس زمینه انجام خواهد شد</value>
+  </data>
+  <data name="ShiftTrade" xml:space="preserve">
+    <value>تبادل شیفت</value>
+  </data>
+  <data name="CanNotMoveMultipleActivitiesForSelectedAgents" xml:space="preserve">
+    <value>بیش از یک فعالیت را نمیتوان برای پاسخگوهای انتخاب شده جابجا کرد</value>
+  </data>
+  <data name="AbandonedRate" xml:space="preserve">
+    <value>نرخ تماس بی پاسخ</value>
+  </data>
+  <data name="SummaryUpToLatestActualInterval" xml:space="preserve">
+    <value>خلاصه آمار تا آخرین بازه زمانی واقعی</value>
+  </data>
+  <data name="CannotUndoScheduleChange" xml:space="preserve">
+    <value>زمانبدی تغییر داده شده</value>
+  </data>
+  <data name="AreYouSureToUndoSelectedSchedule" xml:space="preserve">
+    <value>مطمئن هستید که میتواهید آخرین زمانبندی تغییر داده شده را برای پاسخگو انتخاب شده لغو کنید؟</value>
+  </data>
+  <data name="FailedMessageForUndoSchedule" xml:space="preserve">
+    <value>تغییر زمانبدی برای پاسخگوی انتخاب شده ناموفق بود</value>
+  </data>
+  <data name="PartialSuccessMessageForUndoSchedule" xml:space="preserve">
+    <value>اقدام برای لغو تغییر زمانبدی را برای {0} پاسخگو . {1} موفقیت آمیز و {2} ناموفق</value>
+  </data>
+  <data name="SuccessfulMessageForUndoSchedule" xml:space="preserve">
+    <value>آخرین تغییر زمانبدی برای پاسخگوی انتخاب شده با موفقیت لغو شد</value>
+  </data>
+  <data name="Backout" xml:space="preserve">
+    <value>پنهان کردن</value>
+  </data>
+  <data name="ShiftTradeRequestScheduleChanged" xml:space="preserve">
+    <value>درخواست تبادل شیفت برای {0} نیاز دارد دوباره تایید شود. شیفت پاسخگوی مقابل تغییر کرده است</value>
+  </data>
+  <data name="SelectAllPeopleInEveryPage" xml:space="preserve">
+    <value>تمام پاسخگوهای همه صفحات را انتخاب کن</value>
+  </data>
+  <data name="UnselectAllPeopleInEveryPage" xml:space="preserve">
+    <value>تمام پاسخگوهای همه صفحات را از حالت انتخاب شده خارج کنید</value>
+  </data>
+  <data name="ShowWarnings" xml:space="preserve">
+    <value>نمایش هشدار</value>
+  </data>
+  <data name="SuccessfulMessageForEditingShiftCategory" xml:space="preserve">
+    <value>تغییر دسته بندی زمانبدی برای پاسخگوهای انتخاب شده انجام شد</value>
+  </data>
+  <data name="EditShiftCategory" xml:space="preserve">
+    <value>دسته بندی زمانبندی را ویرایش کنید</value>
+  </data>
+  <data name="ThisActivityWillIntersectExistingActivitiesThatDoNotAllowOverlapping" xml:space="preserve">
+    <value>این فعالیت با فعالیتهایی همپوشانی دارد که اجازه این کار را نمیدهند</value>
+  </data>
+  <data name="DoNotModifyForTheseAgents" xml:space="preserve">
+    <value>تغییرات مورد نظر را برای این پاسخگوها اعمال نکنید</value>
+  </data>
+  <data name="TheFollowingAgentsHaveAffectedActivities" xml:space="preserve">
+    <value>پاسخگوهای زیر تحت تاثیر فعالیتیهای مربوطه قرار دارند</value>
+  </data>
+  <data name="BusinessRuleOverlappingErrorMessage3" xml:space="preserve">
+    <value>فعالیت غیر قابل تغییر {0} در بازه زمانی {1} توسط {2} در بازه {3} تغییر یافته است</value>
+  </data>
+  <data name="MinWeeklyRestRuleName" xml:space="preserve">
+    <value>زمان استراحت هفتگی</value>
+  </data>
+  <data name="MinWeekWorkTimeRuleName" xml:space="preserve">
+    <value>حداقل زمان کار هفتگی</value>
+  </data>
+  <data name="NewDayOffRuleName" xml:space="preserve">
+    <value>شیفت با روز تعطیل همپوشانی دارد</value>
+  </data>
+  <data name="NewMaxWeekWorkTimeRuleName" xml:space="preserve">
+    <value>حداکثر زمان کار هفتگی</value>
+  </data>
+  <data name="NewNightlyRestRuleName" xml:space="preserve">
+    <value>زمان استراحت شبانه </value>
+  </data>
+  <data name="NotOverwriteLayerRuleName" xml:space="preserve">
+    <value>بازنویسی فعالیت</value>
+  </data>
+  <data name="MoveNonoverwritableActivityForTheseAgents" xml:space="preserve">
+    <value>فغالیتهای غیرقابل تغییر را برای این پاسخگوها جابجا کنید</value>
+  </data>
+  <data name="NewActivityOverlapsNonoverwritableActivities" xml:space="preserve">
+    <value>فعالیت تازه اضافه شده با فعالیتهای غیرقابل تغییر همپوشانی دارد</value>
+  </data>
+  <data name="ShiftTradeRequestMaxSeatValidationInterval" xml:space="preserve">
+    <value>بازه زمانی مورد نظر برای تایید تعداد صندلیهای لازم </value>
+  </data>
+  <data name="StaffingInformationMissing" xml:space="preserve">
+    <value>اطلاعات نیروی کاری برای مهارت {0} موجود نیست</value>
+  </data>
+  <data name="ArchiveSchedule" xml:space="preserve">
+    <value>آرشیو زمانبندی</value>
+  </data>
+  <data name="ImportSchedule" xml:space="preserve">
+    <value>وارد کردن زمانبندی</value>
+  </data>
+  <data name="ArchiveScheduleDescription" xml:space="preserve">
+    <value>آرشیو زمانبندی را از سناریو پیش فرض به سناریو دیگر، تمامی زمانبدیهای قبلی در سناریو مقصد را در بازه مربوطه بازنویسی میکند</value>
+  </data>
+  <data name="ArchivingConfirmationWithParameters" xml:space="preserve">
+    <value>شما دارید تمامی زمانبندیهای موجود برای سناریو {0}  در بازه {1} تا {2} برای پاسخگوهای انتخاب شده را بانویسی میکنید</value>
+  </data>
+  <data name="LoadingRequestsTreeDots" xml:space="preserve">
+    <value>در حال بارگذاری درخواستها</value>
+  </data>
+  <data name="ImportingConfirmationWithParameters" xml:space="preserve">
+    <value>شما دارید تمامی زمانبندیهای موجود برای سناریو {0}  در بازه {1} تا {2} برای پاسخگوهای انتخاب شده را ادغام میکنید</value>
+  </data>
+  <data name="ImportScheduleDescription" xml:space="preserve">
+    <value>وارد کردن زمانبندی از سناریو دیگر به سناریو پیش فرض و ادغام با زمانبندی های موجود در سناریو پیش فرض در بازه زمانی مربوطه</value>
+  </data>
+  <data name="UseSkillsColon" xml:space="preserve">
+    <value>مهارتهای مورد استفاده</value>
+  </data>
+  <data name="ShiftTradeTargetTimePendingReason" xml:space="preserve">
+    <value> آستانه زمان قرارداد زمانبدی </value>
+  </data>
+  <data name="OptimizingMaxSeats" xml:space="preserve">
+    <value>بهینه سازی با توجه به حداکثر صندلیهای موجود</value>
+  </data>
+  <data name="LatestScheduleResult" xml:space="preserve">
+    <value>آخرین نتیجه زمانبندی</value>
+  </data>
+  <data name="SchedulePeriodType" xml:space="preserve">
+    <value>نوع دوره زمانبندی</value>
+  </data>
+  <data name="FailedToScheduleForSelectedPlanningPeriodDueToTechnicalError" xml:space="preserve">
+    <value>زمانبندی دوره برنامه ریزی بین {0} و {1} بخاطر خطاهای فنی موفقیت آمیز نبود. لطفاً دوباره تلاش کنید</value>
+  </data>
+  <data name="OnlySupport" xml:space="preserve">
+    <value>فقط پشتیبانی {0}</value>
+  </data>
+  <data name="StaffingInfo" xml:space="preserve">
+    <value>اطلاعات نیروی کار</value>
+  </data>
+  <data name="DeletedContractScheduleAssigned" xml:space="preserve">
+    <value>قرارداد زمانبندی {0} این پاسخگو حذف شده است</value>
+  </data>
+  <data name="MissingSchedulePeriodForPeriod" xml:space="preserve">
+    <value>پاسخگو فاقد دوره زمانبدی برای دوره برنامه ریزی شده است</value>
+  </data>
+  <data name="NoMatchingSchedulePeriod" xml:space="preserve">
+    <value>دوره زمانبندی با دوره انتخاب شده همخوانی ندارد</value>
+  </data>
+  <data name="AgentHasDaysWithoutAnySchedule" xml:space="preserve">
+    <value>پاسخگو {0} روز زمانبندی نشده دارد</value>
+  </data>
+  <data name="TargetScheduleTimeNotFullfilled" xml:space="preserve">
+    <value>زمان هدف در قرارداد {0} تامین نشده است</value>
+  </data>
+  <data name="AgentsHaveScheduled" xml:space="preserve">
+    <value>پاسخگوها زمانبندی نشده اند</value>
+  </data>
+  <data name="HelpCreatePlanningGroup" xml:space="preserve">
+    <value>برای زمانبندی پاسخگوها نیاز به گروه برنامه ریزی است. تمایل به ایجاد آن دارید؟</value>
+  </data>
+  <data name="NoAgentsWithinPlanningGroup" xml:space="preserve">
+    <value>هیچ پاسخگویی را نمیتوان برای این گروه برنامه ریزی زمانبندی کرد</value>
+  </data>
+  <data name="NoPreviousScheduleResult" xml:space="preserve">
+    <value>این دوره برنامه ریزی فاقد نتیجه ای از زمانبندی قبلی است</value>
+  </data>
+  <data name="NoValidScheduleResult" xml:space="preserve">
+    <value>این دوره برنامه ریزی فاقد هیچگونه نتیجه ای  زمانبندی معتبراست</value>
+  </data>
+  <data name="SchedulePlanningGroup" xml:space="preserve">
+    <value>گروه برنامه ریزی زمانبندی</value>
+  </data>
+  <data name="SchedulingFailed" xml:space="preserve">
+    <value>زمانبندی ناموفق بود</value>
+  </data>
+  <data name="ScheduledIssues" xml:space="preserve">
+    <value>مشکلات آخرین زمانبندی</value>
+  </data>
+  <data name="SchedulingSucceeded" xml:space="preserve">
+    <value>زمانبندی موفق بود</value>
+  </data>
+  <data name="PlansPageSelectPlanningGroup" xml:space="preserve">
+    <value>برای زمانبندی پاسخگوها گروه برنامه ریزی مورد نظر را انتخاب کنید</value>
+  </data>
+  <data name="SelectPpToSchedulePlanningGroup" xml:space="preserve">
+    <value>دوره برنامه ریزی برای برای زمانبندی گروه برنامه ریزی انتخاب کنید</value>
+  </data>
+  <data name="ClearScheduleResultAndHistoryData" xml:space="preserve">
+    <value>شیفتهای زمانبندی شده و روزهای غیرکاری را پاک کنید</value>
+  </data>
+  <data name="SuccessfullyScheduledPlanningPeriodFromTo" xml:space="preserve">
+    <value>دوره های {0} تا {1} با موفقیت زمانبندی شده اند</value>
+  </data>
+  <data name="YouNeedAPlanningPeriodToScheduleYourAgentsDoYouWantToCreateAPlanningPeriodQuestion" xml:space="preserve">
+    <value>شما برای زمانبندی پاسخگوها نیاز به دوره برنامه ریزی دارید. ایا میخواهید یکی همین الان ایجاد کنید؟</value>
+  </data>
+  <data name="AreYouSureYouWantToClearPlanningPeriodData" xml:space="preserve">
+    <value>مطمئنید که میخواهید شیفتهای زمانبندی شده و روزهای غیرکاری  را برای دوره زمانبندی {0} و {1} پاک کنید؟</value>
+  </data>
+  <data name="ClearPlanningPeriod" xml:space="preserve">
+    <value>شیفتهای زمانبندی شده و روزهای غیرکاری را برای دوره برنامه ریزی پاک کنید</value>
+  </data>
+  <data name="PublishingSchedule" xml:space="preserve">
+    <value>انتشار زمانبندی </value>
+  </data>
+  <data name="PublishScheduleSuccess" xml:space="preserve">
+    <value>زمانبندی با موفقیت منتشر شد</value>
+  </data>
+  <data name="SuccessClearPlanningPeriodData" xml:space="preserve">
+    <value>شیفتهای برنامه ریزی شده و روزهای غیرکاری برای دوره های برنامه ریزی {0} تا {1} با موفقیت پاک شد</value>
+  </data>
+  <data name="PublishingScheduleSuccess" xml:space="preserve">
+    <value>انتشار زمانبندی برای دوره برنامه ریزی {0} تا {1} انجام میشود</value>
+  </data>
+  <data name="PublishScheduleSucessForSelectedPlanningPeriod" xml:space="preserve">
+    <value>زمانبندی برای دوره {0} تا {1} با موفقیت منتشر شد</value>
+  </data>
+  <data name="IgnoreSchedules" xml:space="preserve">
+    <value>پنهان کردن برنامه ریزی ها</value>
+  </data>
+  <data name="ShowAllSchedules" xml:space="preserve">
+    <value>نمایش همه زمانبندیها</value>
+  </data>
+  <data name="IgnoredScheduleHint" xml:space="preserve">
+    <value>زمانبندی پنهان شده</value>
   </data>
 </root>
