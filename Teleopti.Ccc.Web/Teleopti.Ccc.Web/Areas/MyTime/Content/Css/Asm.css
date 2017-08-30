@@ -23,11 +23,13 @@
 	height: 65px;
 	display: none; /*hide when loaded, before moved to correct place*/
 	margin: 1px 1px 1px 1px;
-	/*margin-top: -50px;*/
+	margin-top: -50px;
+}
+.mytime-chart .asm-outer-canvas {
+	margin-top: 0;
 }
 
-.asm-layer
-{
+.asm-layer {
 	position: absolute;
 	zoom: 1;
 	filter: alpha(opacity=80);
