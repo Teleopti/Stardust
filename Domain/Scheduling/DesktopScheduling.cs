@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var command = new SchedulingCommand
 			{
-				AgentsToSchedule = selectedAgents,
+				AgentsToSchedule = selectedAgents.FixedStaffPeople(selectedPeriod).Select(x=>x.Id.Value),
 				Period = selectedPeriod,
 				RunWeeklyRestSolver = true
 			};

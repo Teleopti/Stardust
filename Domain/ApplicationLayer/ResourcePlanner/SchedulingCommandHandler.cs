@@ -45,8 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			var events = new List<SchedulingWasOrdered>();
 			if (teamScheduling(command))
 			{
-				var agentsToSchedule = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command);
-				var agentIds = agentsToSchedule.Select(x => x.Id.Value);
+				var agentIds = command.AgentsToSchedule ?? AllAgents_DeleteThisLater(command).Select(x=>x.Id.Value);
 				events.Add(new SchedulingWasOrdered
 				{
 					AgentsToSchedule = agentIds,
@@ -64,16 +63,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 				var islands = CreateIslands(command.Period, command);
 				foreach (var island in islands)
 				{
-					var agentsInIsland = island.AgentsInIsland();
-					var agentsToSchedule = (command.AgentsToSchedule?.Where(x => agentsInIsland.Contains(x)).ToArray() ?? agentsInIsland)
-						.FixedStaffPeople(command.Period);
+					var agentsInIsland = island.AgentsInIsland().Select(x => x.Id.Value).ToArray();
+					var agentsToSchedule = command.AgentsToSchedule?.Where(x => agentsInIsland.Contains(x)).ToArray() ?? agentsInIsland;
 
 					if (agentsToSchedule.Any())
 					{
 						var @event = new SchedulingWasOrdered
 						{
-							AgentsToSchedule = agentsToSchedule.Select(x => x.Id.Value),
-							AgentsInIsland = agentsInIsland.Select(x => x.Id.Value),
+							AgentsToSchedule = agentsToSchedule,
+							AgentsInIsland = agentsInIsland,
 							StartDate = command.Period.StartDate,
 							EndDate = command.Period.EndDate,
 							RunWeeklyRestSolver = command.RunWeeklyRestSolver,

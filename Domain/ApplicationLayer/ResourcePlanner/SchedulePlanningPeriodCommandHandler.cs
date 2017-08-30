@@ -64,12 +64,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			var planningPeriod = _planningPeriodRepository.Load(planningPeriodId);
 			var period = planningPeriod.Range;
-			if (planningPeriod.PlanningGroup != null)
-			{
-				return new SchedulingInformation(period,
-					_planningGroupStaffLoader.LoadPersonIds(period, planningPeriod.PlanningGroup));
-			}
-			var people = _planningGroupStaffLoader.Load(period, null);
+			var people = planningPeriod.PlanningGroup != null
+				? _planningGroupStaffLoader.Load(period, planningPeriod.PlanningGroup)
+				: _planningGroupStaffLoader.Load(period, null);
 			return new SchedulingInformation(period, people.AllPeople.Select(x => x.Id.Value).ToList());
 		}
 

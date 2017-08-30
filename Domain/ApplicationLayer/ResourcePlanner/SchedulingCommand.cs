@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 			CommandId = Guid.NewGuid();
 		}
 		public Guid CommandId { get; set; }
-		public IEnumerable<IPerson> AgentsToSchedule { get; set; }
+		public IEnumerable<Guid> AgentsToSchedule { get; set; }
 		public DateOnlyPeriod Period { get; set; }
 		public bool RunWeeklyRestSolver { get; set; }
 		public bool FromWeb { get; set; }

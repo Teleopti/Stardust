@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				Period = period,
 				RunWeeklyRestSolver = false,
-				FromWeb = true
+				FromWeb = true,
+				AgentsToSchedule = people
 			});
 			_persister.Persist(stateHolder.Schedules);
 			return CreateResult(period);
