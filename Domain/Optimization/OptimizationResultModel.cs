@@ -11,6 +11,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class OptimizationResultModel
 	{
 		private readonly IList<OptimizationResultSkill> _skillResultList = new List<OptimizationResultSkill>();
+		public int ScheduledAgentsCount { get; set; }
+		public IEnumerable<BusinessRulesValidationResult> BusinessRulesValidationResults { get; set; }
 
 		public IEnumerable<OptimizationResultSkill> SkillResultList
 		{
@@ -84,6 +86,29 @@ namespace Teleopti.Ccc.Domain.Optimization
 			public double RelativeDifference { get; set; }
 			public int ColorId { get; set; }
 		}
+
+	}
+	public struct BusinessRulesValidationResult : IEquatable<BusinessRulesValidationResult>
+	{
+		public string Name { get; set; }
+		public string Message { get; set; }
+		public BusinessRuleCategory BusinessRuleCategory { get; set; }
+		public string BusinessRuleCategoryText { get; set; }
+
+		public bool Equals(BusinessRulesValidationResult other)
+		{
+			return Name.Equals(other.Name) && BusinessRuleCategory.Equals(other.BusinessRuleCategory);
+		}
+
+		public override int GetHashCode()
+		{
+			return Name.GetHashCode() ^ BusinessRuleCategory.GetHashCode();
+		}
 	}
 
+	public enum BusinessRuleCategory
+	{
+		DayOff,
+		SchedulePeriod
+	}
 }

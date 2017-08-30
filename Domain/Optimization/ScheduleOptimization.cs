@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var period = SetupAndOptimize(planningPeriodId);
 			_persister.Persist(_schedulerStateHolder().Schedules);
-			return _optimizationResult.Create(period);
+			return _optimizationResult.Create(period, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period).ToList());
 		}
 
 		[UnitOfWork]
