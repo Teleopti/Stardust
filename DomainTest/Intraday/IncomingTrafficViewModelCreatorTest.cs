@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
@@ -468,7 +469,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			var phoneSkill = SkillFactory.CreateSkill("phone", new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony), 15).WithId();
 			var multisiteSkill = SkillFactory.CreateMultisiteSkill("multisite", new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.MaxSeatSkill), 15).WithId();
 			var emailSkill = SkillFactory.CreateSkill("email", new SkillTypeEmail(new Description("Email"), ForecastSource.Email), 60).WithId();
-
+			
 			SkillRepository.Has(phoneSkill);
 			SkillRepository.Has(multisiteSkill);
 			SkillRepository.Has(emailSkill);
@@ -479,6 +480,39 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			IntradayMonitorDataLoader.Skills.Count.Should().Be.EqualTo(1);
 			IntradayMonitorDataLoader.Skills.Should().Contain(phoneSkill.Id.Value);
+		}
+
+		[Test]
+		[Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026)]
+		public void ShouldLoadDataForSkillTypesLikeEmail()
+		{
+			var backOfficeSkill = SkillFactory.CreateSkill("backOffice",
+					new SkillTypeEmail(new Description("SkillTypeBackoffice"), ForecastSource.Backoffice), 60)
+				.WithId();
+			var projectSkill = SkillFactory.CreateSkill("projectSkill",
+					new SkillTypeEmail(new Description("SkillTypeProject"), ForecastSource.Email), 60)
+				.WithId();
+			var faxSkill = SkillFactory.CreateSkill("faxSkill",
+					new SkillTypeEmail(new Description("SkillTypeFax"), ForecastSource.Email), 60)
+				.WithId();
+			var timeSkill = SkillFactory.CreateSkill("timeSkill",
+					new SkillTypeEmail(new Description("SkillTypeTime"), ForecastSource.Time), 60)
+				.WithId();
+
+			SkillRepository.Has(backOfficeSkill);
+			SkillRepository.Has(projectSkill);
+			SkillRepository.Has(faxSkill);
+			SkillRepository.Has(timeSkill);
+			IntradayMonitorDataLoader.AddInterval(_firstInterval);
+			IntervalLengthFetcher.Has(minutesPerInterval);
+
+			Target.Load(new[] {backOfficeSkill.Id.Value, projectSkill.Id.Value, faxSkill.Id.Value, timeSkill.Id.Value});
+
+			IntradayMonitorDataLoader.Skills.Count.Should().Be.EqualTo(4);
+			IntradayMonitorDataLoader.Skills.Should().Contain(backOfficeSkill.Id.Value);
+			IntradayMonitorDataLoader.Skills.Should().Contain(projectSkill.Id.Value);
+			IntradayMonitorDataLoader.Skills.Should().Contain(faxSkill.Id.Value);
+			IntradayMonitorDataLoader.Skills.Should().Contain(timeSkill.Id.Value);
 		}
 
 		[Test]

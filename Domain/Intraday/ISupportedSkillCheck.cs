@@ -32,4 +32,16 @@ namespace Teleopti.Ccc.Domain.Intraday
 				   || skill.SkillType.Description.Name.Equals("SkillTypeRetail", StringComparison.InvariantCulture);
 		}
 	}
+
+	public class OtherSkillsLikeEmailSupported : ISupportedSkillCheck
+	{
+		public bool IsSupported(ISkill skill)
+		{
+			return skill.SkillType.Description.Name.Equals("SkillTypeBackoffice", StringComparison.InvariantCulture)
+				   || skill.SkillType.Description.Name.Equals("SkillTypeProject", StringComparison.InvariantCulture)
+				   || skill.SkillType.Description.Name.Equals("SkillTypeFax", StringComparison.InvariantCulture)
+				   || skill.SkillType.Description.Name.Equals("SkillTypeTime", StringComparison.InvariantCulture);
+
+		}
+	}
 }

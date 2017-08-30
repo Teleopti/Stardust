@@ -135,11 +135,20 @@ namespace Teleopti.Ccc.Domain.Intraday
 			};
 		}
 
+		private readonly HashSet<string> _emailLikeSkillTypes = new HashSet<string>()
+		{
+			"SkillTypeBackoffice",
+			"SkillTypeProject",
+			"SkillTypeFax",
+			"SkillTypeTime",
+			"SkillTypeEmail",
+		};
+
 		private void calculateForecastedAgentsForEmailSkills(bool useShrinkage, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, TimeZoneInfo timeZone)
 		{
 			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
 			var skillGroupsByResuolution = skillDays.Keys
-				.Where(y => y.SkillType.Description.Name == "SkillTypeEmail")
+				.Where(y => _emailLikeSkillTypes.Contains(y.SkillType.Description.Name))
 				.GroupBy(x => x.DefaultResolution);
 			foreach (var group in skillGroupsByResuolution)
 			{
