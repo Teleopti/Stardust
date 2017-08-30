@@ -14,8 +14,6 @@
 		vm.siteCards = [];
 		vm.totalAgentsInAlarm = 0;
 
-		vm.goToAgentsView = function () { rtaRouteService.goToSelectSkill(); };
-
 		$stateParams.open = ($stateParams.open || "false");
 		if ($stateParams.skillAreaId)
 			$stateParams.skillIds = getSkillIdsFromSkillAreaId($stateParams.skillAreaId);
@@ -26,7 +24,8 @@
 
 		vm.skillPickerPreselectedItem = { skillIds: $stateParams.skillIds, skillAreaId: $stateParams.skillAreaId };
 
-		vm.skillSelected = $stateParams.skillIds.length;
+		vm.displayNoSitesMessage = function () { return vm.siteCards.length == 0; };
+		vm.displayNoSitesForSkillMessage = function () { return $stateParams.skillIds.length > 0; };
 
 		var pollPromise;
 
@@ -121,7 +120,7 @@
 				});
 
 				if (!teamCard) {
-					
+
 					teamCard = {
 						Id: team.Id,
 						Name: team.Name,
@@ -207,6 +206,10 @@
 			vm.agentsStateForTeam = 'rta-agents({teamIds: team.Id, skillIds: ["' + selectedItem.Id + '"]})';
 			$state.go($state.current.name, { skillAreaId: undefined, skillIds: $stateParams.skillIds }, { notify: false });
 		}
+
+		vm.goToAgentsView = function () {
+			$state.go('rta-agents');
+		};
 
 		vm.displayGoToAgents = function () {
 			var match = vm.siteCards.find(function (s) {

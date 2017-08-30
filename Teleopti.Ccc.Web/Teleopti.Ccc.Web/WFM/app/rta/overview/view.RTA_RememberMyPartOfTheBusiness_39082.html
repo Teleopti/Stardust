@@ -28,14 +28,12 @@
 	</div>
 </div>
 
-
-
-<div class="con-row" ng-if="vm.noSiteCards">
+<div class="con-row" ng-if="vm.displayNoSitesMessage()">
 	<div class="con-flex">
 		<div class="panel material-depth-1">
 			<div class="con-row">
 				<div class="con-flex">
-					{{vm.skillSelected ? 'NoSitesFound' : 'NoAccessToSites' | translate}}
+					{{vm.displayNoSitesForSkillMessage() ? 'NoSitesFound' : 'NoAccessToSites' | translate}}
 				</div>
 			</div>
 		</div>
