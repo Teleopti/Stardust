@@ -13,7 +13,7 @@
 		vm.skillAreas = skillAreas || [];
 		vm.siteCards = [];
 		vm.totalAgentsInAlarm = 0;
-		vm.organizationSelection = false;
+
 		vm.goToAgentsView = function () { rtaRouteService.goToSelectSkill(); };
 
 		$stateParams.open = ($stateParams.open || "false");
@@ -93,7 +93,6 @@
 							$scope.$watch(function () { return siteCard.isOpen }, function (newValue) { if (newValue) pollNow(); });
 							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
 								if (newValue != oldValue) {
-									toggleOpenButton();
 									if (newValue) {
 										siteCard.teams.forEach(function (t) {
 											t.isSelected = true;
@@ -115,13 +114,6 @@
 				});
 		}
 
-		function toggleOpenButton() {
-			var match = vm.siteCards.find(function (s) {
-				return s.isSelected || s.teams.find(function (t) { return t.isSelected; });
-			});
-			vm.organizationSelection = !!match;
-		}
-
 		function updateTeams(siteCard, teams) {
 			teams.forEach(function (team) {
 				var teamCard = siteCard.teams.find(function (t) {
@@ -129,6 +121,7 @@
 				});
 
 				if (!teamCard) {
+					
 					teamCard = {
 						Id: team.Id,
 						Name: team.Name,
@@ -137,9 +130,8 @@
 						AgentsCount: team.AgentsCount,
 						href: $state.href('rta-agents', { teamIds: team.Id, skillIds: $stateParams.skillIds, skillAreaId: $stateParams.skillAreaId })
 					};
-					
+
 					$scope.$watch(function () { return teamCard.isSelected }, function (newValue, oldValue) {
-						toggleOpenButton();
 						if (newValue) {
 							var areAllTeamsSelected = siteCard.teams.every(function (t) { return t.isSelected });
 							if (areAllTeamsSelected) siteCard.isSelected = true;
@@ -148,6 +140,7 @@
 							siteCard.isSelected = false;
 						}
 					});
+
 					siteCard.teams.push(teamCard);
 				};
 				teamCard.Color = team.Color;
@@ -214,6 +207,16 @@
 			vm.agentsStateForTeam = 'rta-agents({teamIds: team.Id, skillIds: ["' + selectedItem.Id + '"]})';
 			$state.go($state.current.name, { skillAreaId: undefined, skillIds: $stateParams.skillIds }, { notify: false });
 		}
+
+		vm.displayGoToAgents = function () {
+			var match = vm.siteCards.find(function (s) {
+				return s.isSelected ||
+					s.teams.find(function (t) {
+						return t.isSelected;
+					});
+			});
+			return !!match;
+		};
 
 		vm.goToAgents = function () {
 			var teamIds = [];

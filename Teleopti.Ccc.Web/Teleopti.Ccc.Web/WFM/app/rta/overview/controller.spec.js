@@ -609,20 +609,27 @@ describe('RtaOverviewController', function () {
     it('should display go button when site is selected', function () {
       $fakeBackend
         .withSiteAdherence({
-          Id: 'parisId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
+          Id: 'parisId'
         });
       var c = $controllerBuilder.createController();
-      vm = c.vm;
+      var vm = c.vm;
 
       c.apply(function () {
        vm.siteCards[0].isSelected = true;
       });
 
-      expect(vm.organizationSelection).toEqual(true);
+      expect(vm.displayGoToAgents()).toEqual(true);
+    });
+
+    it('should not display go button when site is selected', function () {
+      $fakeBackend
+        .withSiteAdherence({
+          Id: 'parisId'
+        });
+      var c = $controllerBuilder.createController();
+      var vm = c.vm;
+
+      expect(vm.displayGoToAgents()).toEqual(false);
     });
 
   });

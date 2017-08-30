@@ -86,7 +86,6 @@
                 }
             }).query(data)
                 .$promise
-                ;
                 // .then(function (result) {
                 //     result.Teams = [{
                 //         Id: "34590A63-6331-4921-BC9F-9B5E015AB495",
@@ -97,7 +96,7 @@
                 //         Color: "danger"
                 //     }]
                 //     return result;
-                // });
+                // })
         }
 
         function getSkillArea(data) {
