@@ -133,7 +133,7 @@ Wfm_DisplayOnlineHelp_39402 = true
 ETL_SpeedUpPersonPeriodNightly_38097 = true
 ETL_SpeedUpNightlyReloadDatamart_38131 = true
 ETL_SpeedUpFactScheduleNightly_38019 = RC # not to be released until pbi 38304 and 41393 is done 
-ETL_SpeedUpScenarioNightly_38300 = RC
+ETL_SpeedUpScenarioNightly_38300 = true
 ETL_SpeedUpNightlyActivity_38303 = true
 ETL_SpeedUpNightlySkill_37543 = true
 ETL_SpeedUpNightlyOvertime_38304 = true
@@ -195,5 +195,5 @@ Wfm_Staffing_45411 = RC #Enables the entire Staffing page!
 
 Stardust_Priority_BelowNormal_44320 = DEV
 Report_Realtime_Scheduled_Time_Per_Activity_45560 = true
-Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = RC
+Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
 WFM_Intraday_SupportOtherSkillsLikeEmail_44026 = DEV
