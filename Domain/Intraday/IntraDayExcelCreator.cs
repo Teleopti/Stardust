@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private ICellStyle _cellStyleTime;
 		private ICellStyle _cellStyleLongDate;
 		private ICellStyle _cellStyleGeneral;
-		private IFont _boldFont;
+		private ICellStyle _cellStyleGeneralBold;
 
 		public byte[] CreateExcel(IntradayExcelExportData data)
 		{
@@ -66,15 +66,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_cellStyleGeneral = workbook.CreateCellStyle();
 			_cellStyleGeneral.DataFormat = HSSFDataFormat.GetBuiltinFormat("General");
 
-			_boldFont = workbook.CreateFont();
-			_boldFont.Boldweight = (short)FontBoldWeight.Bold;
+			_cellStyleGeneralBold = workbook.CreateCellStyle();
+			_cellStyleGeneralBold.DataFormat = HSSFDataFormat.GetBuiltinFormat("General");
+			var bold = workbook.CreateFont();
+			bold.Boldweight = (short)FontBoldWeight.Bold;
+			_cellStyleGeneralBold.SetFont(bold);
 		}
 
 		private void createHeaderInfo(ISheet sheet, IntradayExcelExportData exportData)
 		{
 			addRow(sheet, new []
 			{
-				new CellData(Resources.DateColon, _cellStyleGeneral, true),
+				new CellData(Resources.DateColon, _cellStyleGeneralBold),
 				new CellData(exportData.Date, _cellStyleDate), 
 				new CellData(""), 
 				new CellData(""), 
@@ -89,12 +92,12 @@ namespace Teleopti.Ccc.Domain.Intraday
 			});
 			addRow(sheet, new[]
 			{
-				new CellData(Resources.SkillAreaColon, _cellStyleGeneral, true),
+				new CellData(Resources.SkillAreaColon, _cellStyleGeneralBold),
 				new CellData(exportData.SkillAreaName),
 			});
 			addRow(sheet, new[]
 			{
-				new CellData(Resources.SkillsParenthesisS, _cellStyleGeneral, true),
+				new CellData(Resources.SkillsParenthesisS, _cellStyleGeneralBold),
 				new CellData(string.Join("; ", exportData.Skills)),
 			});
 
@@ -108,28 +111,28 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			addRow(sheet, new[]
 			{
-				new CellData(Resources.Interval, _cellStyleGeneral, true),
-				new CellData(Resources.ForecastedVolume, _cellStyleGeneral, true),
-				new CellData(Resources.ActualVolume, _cellStyleGeneral, true),
-				new CellData(Resources.DifferencePercent, _cellStyleGeneral, true),
-				new CellData(Resources.ForecastedAverageHandleTime, _cellStyleGeneral, true),
-				new CellData(Resources.ActualAverageHandlingTime, _cellStyleGeneral, true),
-				new CellData(Resources.DifferencePercent, _cellStyleGeneral, true),
-				new CellData(Resources.ServiceLevelParenthesisPercentSign, _cellStyleGeneral, true),
-				new CellData(Resources.ESLParenthesisPercentSign, _cellStyleGeneral, true),
-				new CellData(Resources.AbandonedRateParenthesisPercentSign, _cellStyleGeneral, true),
-				new CellData(Resources.AverageSpeedOfAnswersParenthesisSeconds, _cellStyleGeneral, true),
-				new CellData(Resources.ForecastedAgents, _cellStyleGeneral, true),
-				new CellData(Resources.RequiredStaff, _cellStyleGeneral, true),
-				new CellData(Resources.ScheduledStaff, _cellStyleGeneral, true),
-				new CellData(Resources.ReforecastedStaff, _cellStyleGeneral, true)
+				new CellData(Resources.Interval, _cellStyleGeneralBold),
+				new CellData(Resources.ForecastedVolume, _cellStyleGeneralBold),
+				new CellData(Resources.ActualVolume, _cellStyleGeneralBold),
+				new CellData(Resources.DifferencePercent, _cellStyleGeneralBold),
+				new CellData(Resources.ForecastedAverageHandleTime, _cellStyleGeneralBold),
+				new CellData(Resources.ActualAverageHandlingTime, _cellStyleGeneralBold),
+				new CellData(Resources.DifferencePercent, _cellStyleGeneralBold),
+				new CellData(Resources.ServiceLevelParenthesisPercentSign, _cellStyleGeneralBold),
+				new CellData(Resources.ESLParenthesisPercentSign, _cellStyleGeneralBold),
+				new CellData(Resources.AbandonedRateParenthesisPercentSign, _cellStyleGeneralBold),
+				new CellData(Resources.AverageSpeedOfAnswersParenthesisSeconds, _cellStyleGeneralBold),
+				new CellData(Resources.ForecastedAgents, _cellStyleGeneralBold),
+				new CellData(Resources.RequiredStaff, _cellStyleGeneralBold),
+				new CellData(Resources.ScheduledStaff, _cellStyleGeneralBold),
+				new CellData(Resources.ReforecastedStaff, _cellStyleGeneralBold)
 			});
 		}
 
 		private void createSummaryRow(ISheet sheet, IntradayExcelExportData data)
 		{
 			var rows = createDataRow(data.DataTotal);
-			rows[0] = new CellData(Resources.Total, _cellStyleGeneral);
+			rows[0] = new CellData(Resources.Total, _cellStyleGeneralBold);
 
 			addRow(sheet, rows);
 		}
@@ -149,7 +152,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			{
 				new CellData(data.Interval, _cellStyleTime),
 				new CellData(data.ForecastedVolume, _cellStyleTwoDecimals),
-				new CellData(data.ActualVolume, _cellStyleGeneral),
+				new CellData(data.ActualVolume),
 				new CellData(data.DifferenceVolume, _cellStylePercentage),
 				new CellData(data.ForecastedAht, _cellStyleTwoDecimals),
 				new CellData(data.ActualAht, _cellStyleTwoDecimals),
@@ -190,11 +193,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 				{
 					newCell.CellStyle = cellData.CellStyle;
 				}
-
-				if (cellData.Bold)
-				{
-					newCell.CellStyle.SetFont(_boldFont);
-				}
 			}
 		}
 
@@ -203,7 +201,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 			public object CellValue { get; }
 			public ICellStyle CellStyle { get; }
 			public bool SetCellStyle { get; private set; }
-			public bool Bold { get; }
 
 			public CellData(object cellValue)
 			{
@@ -216,11 +213,6 @@ namespace Teleopti.Ccc.Domain.Intraday
 				CellValue = cellValue;
 				SetCellStyle = true;
 				CellStyle = cellStyle;
-			}
-
-			public CellData(object cellValue, ICellStyle cellStyle, bool bold) : this(cellValue, cellStyle)
-			{
-				Bold = bold;
 			}
 		}
 	}
