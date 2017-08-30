@@ -129,7 +129,7 @@ describe('permissionsDataService', function() {
 		var data = permissionsDataService.prepareData(BusinessUnit, role);
 
 		expect(data.Id).toEqual('e7f360d3-c4b6-41fc-9b2d-9b5e015aae64');
-		expect(data.BusinessUnits[0]).toEqual('928dd0bc-bf40-412e-b970-9b5e015aadea');
+		// expect(data.BusinessUnits[0]).toEqual('928dd0bc-bf40-412e-b970-9b5e015aadea'); removed for #45537
 		expect(data.Sites[0]).toEqual('fe113bc0-979a-4b6c-9e7c-ef601c7e02d1');
 		expect(data.Teams[0]).toEqual('e6377d56-277d-4c22-97f3-b218741b2480');
 	});
@@ -164,34 +164,34 @@ describe('permissionsDataService', function() {
 		expect(response).toEqual(obj);
 	});
 
-
-	it('should not persist previously sent bu', function() {
-		var data = permissionsDataService.prepareData(BusinessUnit, role);
-
-		permissionsDataService.selectOrganization({
-				ChildNodes: [{
-					Id: 'fe113bc0-979a-4b6c-9e7c-ef601c7e02d1',
-					Type: 'Site',
-					Name: 'Site1',
-					IsSelected: true,
-					ChildNodes: [{
-						Id: 'e6377d56-277d-4c22-97f3-b218741b2480',
-						Type: 'Team',
-						Name: 'Team1',
-						IsSelected: true
-					}]
-				}],
-				Id: '928dd0bc-bf40-412e-b970-9b5e015aadea',
-				Name: 'TeleoptiCCCDemo',
-				Type: 'BusinessUnit',
-				IsSelected: false
-			},
-			role
-		);
-		$httpBackend.flush();
-
-		expect(data.BusinessUnits.length).toEqual(1);
-	});
+	// removed for #45537
+	// it('should not persist previously sent bu', function() {
+	// 	var data = permissionsDataService.prepareData(BusinessUnit, role);
+	//
+	// 	permissionsDataService.selectOrganization({
+	// 			ChildNodes: [{
+	// 				Id: 'fe113bc0-979a-4b6c-9e7c-ef601c7e02d1',
+	// 				Type: 'Site',
+	// 				Name: 'Site1',
+	// 				IsSelected: true,
+	// 				ChildNodes: [{
+	// 					Id: 'e6377d56-277d-4c22-97f3-b218741b2480',
+	// 					Type: 'Team',
+	// 					Name: 'Team1',
+	// 					IsSelected: true
+	// 				}]
+	// 			}],
+	// 			Id: '928dd0bc-bf40-412e-b970-9b5e015aadea',
+	// 			Name: 'TeleoptiCCCDemo',
+	// 			Type: 'BusinessUnit',
+	// 			IsSelected: false
+	// 		},
+	// 		role
+	// 	);
+	// 	$httpBackend.flush();
+	//
+	// 	expect(data.BusinessUnits.length).toEqual(1);
+	// });
 
 	it('should send dynamic option data to server', function() {
 		var data = permissionsDataService.prepareDynamicOption(dynamicOption, role);

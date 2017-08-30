@@ -201,10 +201,11 @@
 		function arrayCreator(orgData) {
 			var map = {};
 			if (orgData.Type == "BusinessUnit") {
-				if (map.BusinessUnits == null) {
-					map.BusinessUnits = [];
-				}
-				map.BusinessUnits = map.BusinessUnits.concat(orgData.Id);
+				// if (map.BusinessUnits == null) {
+				// 	map.BusinessUnits = [];
+				// }
+				// map.BusinessUnits = map.BusinessUnits.concat(orgData.Id);
+				map.BusinessUnits = [];
 
 				if (map.Sites == null) {
 					map.Sites = [];
