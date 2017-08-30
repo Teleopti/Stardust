@@ -222,7 +222,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
-		[Ignore("Failing test for #45614")]
 		public void ShouldRespectAccessibility([Values(true, false)]bool blockedByAccessibility)
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
