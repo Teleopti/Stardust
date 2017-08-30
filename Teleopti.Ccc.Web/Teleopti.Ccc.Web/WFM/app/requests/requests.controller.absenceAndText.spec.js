@@ -434,6 +434,14 @@ describe('Requests - absence and text controller tests',
 			});
 		});
 
+		it('should reset filters in the first time', function () {
+			requestsFilterSvc.setFilter('Status', '0 4 5', 'absenceAndText');
+			compileUIGridHtml(scope, controller.gridOptions);
+
+			scope.$apply();
+			expect(requestsFilterSvc.filters['absenceAndText'][0]['Status']).toEqual("0 5");
+		});
+
 		function setUpTarget() {
 			scope = $rootScope.$new();
 			controller = $controller('requestsAbsenceAndTextCtrl', {

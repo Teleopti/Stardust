@@ -3,9 +3,9 @@
 
 	angular.module('wfm.requests').controller('RequestsRefactorCtrl', requestsController);
 
-	requestsController.$inject = ["$scope", "$state", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo", "groupPageService"];
+	requestsController.$inject = ["$scope", "$state", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo", "groupPageService", "RequestsFilter"];
 
-	function requestsController($scope, $state, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService) {
+	function requestsController($scope, $state, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService, requestFilterSvc) {
 		var vm = this;
 
 		vm.searchPlaceholder = $translate.instant('Search');
@@ -251,6 +251,8 @@
 				}
 				setupWatches();
 			});
+
+			requestFilterSvc.resetAllFilters();
 		};
 
 		$q.all([toggleService.togglesLoaded])

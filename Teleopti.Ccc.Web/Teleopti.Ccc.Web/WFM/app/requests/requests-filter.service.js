@@ -70,6 +70,10 @@
 				svc.filters[tabName].length = 0;
 		};
 
+		svc.resetAllFilters = function() {
+			svc.filters = {};
+		};
+
 		return svc;
 	});
 })();
