@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -37,8 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			return possibleOvertimePeriods;
 		}
 
-		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_OvertimeNightShifts_44311)]
-		protected void possiblePeriodsOvertimeAvailability(IEnumerable<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleRange scheduleRange, DateOnly firstDate, DateTimePeriod period, ICollection<IOvertimePeriodValue> possibleOvertimePeriods)
+		private void possiblePeriodsOvertimeAvailability(IEnumerable<OvertimePeriodValue> overtimePeriodValueMappedData, IScheduleRange scheduleRange, DateOnly firstDate, DateTimePeriod period, ICollection<IOvertimePeriodValue> possibleOvertimePeriods)
 		{
 			var scheduleDay = scheduleRange.ScheduledDay(firstDate);
 			var adjustedPeriod = _analyzePersonAccordingToAvailability.AdjustOvertimeAvailability(scheduleDay, period);
@@ -48,8 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			}
 		}
 
-		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_OvertimeNightShifts_44311)]
-		protected void calculateAndAddToPossiblePeriods(ICollection<IOvertimePeriodValue> possibleOvertimePeriods, IEnumerable<OvertimePeriodValue> overtimePeriodValueMappedData, DateTimePeriod period)
+		private void calculateAndAddToPossiblePeriods(ICollection<IOvertimePeriodValue> possibleOvertimePeriods, IEnumerable<OvertimePeriodValue> overtimePeriodValueMappedData, DateTimePeriod period)
 		{
 			period = adjustedToMappedData(period, overtimePeriodValueMappedData);
 			var sumOfRelativeDifference = overtimePeriodValueMappedData.Where(x => period.Contains(x.Period)).Sum(x => x.Value);
@@ -73,35 +70,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Overtime
 			}
 
 			return period;
-		}
-	}
-
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_OvertimeNightShifts_44311)]
-	public class OvertimeRelativeDifferenceCalculatorOLD : OvertimeRelativeDifferenceCalculator
-	{
-		public OvertimeRelativeDifferenceCalculatorOLD(AnalyzePersonAccordingToAvailability analyzePersonAccordingToAvailability) : base(analyzePersonAccordingToAvailability)
-		{
-		}
-
-		public override IEnumerable<IOvertimePeriodValue> Calculate(IEnumerable<DateTimePeriod> periods, IEnumerable<OvertimePeriodValue> overtimePeriodValueMappedData, bool onlyOvertimeAvailability, IScheduleRange scheduleRange, DateOnly date)
-		{
-			var possibleOvertimePeriods = new List<IOvertimePeriodValue>();
-
-			foreach (var period in periods)
-			{
-				if (!overtimePeriodValueMappedData.Any(overtimePeriodValue => period.EndDateTime <= overtimePeriodValue.Period.EndDateTime)) break;
-
-				if (onlyOvertimeAvailability)
-				{
-					possiblePeriodsOvertimeAvailability(overtimePeriodValueMappedData, scheduleRange, date, period, possibleOvertimePeriods);
-				}
-				else
-				{
-					calculateAndAddToPossiblePeriods(possibleOvertimePeriods, overtimePeriodValueMappedData, period);
-				}
-			}
-
-			return possibleOvertimePeriods;
 		}
 	}
 }

@@ -104,7 +104,6 @@
 		ResourcePlanner_MergeTeamblockClassicIntraday_45508,
 		ResourcePlanner_CalculateShiftValuesInParallel_44681,
 		ResourcePlanner_RespectSkillGroupShoveling_44156,
-		ResourcePlanner_OvertimeNightShifts_44311,
 		ResourcePlanner_RetireKeepPercentageOfShifts_45688,
 
 		Wfm_DisplayOnlineHelp_39402,

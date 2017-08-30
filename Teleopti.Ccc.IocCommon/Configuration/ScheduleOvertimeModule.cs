@@ -23,14 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<CalculateBestOvertimeBeforeOrAfter>().InstancePerLifetimeScope();
 			builder.RegisterType<OvertimePeriodValueMapper>().As<IOvertimePeriodValueMapper>();
 			builder.RegisterType<OvertimeDateTimePeriodExtractor>().As<IOvertimeDateTimePeriodExtractor>();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_OvertimeNightShifts_44311))
-			{
-				builder.RegisterType<OvertimeRelativeDifferenceCalculator>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<OvertimeRelativeDifferenceCalculatorOLD>().As<OvertimeRelativeDifferenceCalculator>().SingleInstance();
-			}
+			builder.RegisterType<OvertimeRelativeDifferenceCalculator>().SingleInstance();
 			builder.RegisterType<AddOverTime>().InstancePerLifetimeScope();
 			builder.RegisterType<PersonForOvertimeProvider>().As<IPersonForOvertimeProvider>().SingleInstance();
 			builder.RegisterType<PersonSkillsUsePrimaryOrAllForScheduleDaysOvertimeProvider>().SingleInstance();
