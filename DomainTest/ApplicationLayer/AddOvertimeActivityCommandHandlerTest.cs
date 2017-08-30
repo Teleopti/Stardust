@@ -130,9 +130,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 	[TestFixture]
 	[DomainTest]
-	public class AddOvertimeActivityCommandHandlerTest : ISetup
+	public class AddOvertimeActivityCommandHandlerNoDeltasTest : ISetup
 	{
-		public AddOvertimeActivityCommandHandler Target;
+		public AddOvertimeActivityCommandHandlerNoDeltas Target;
 		public FakeWriteSideRepository<IPerson> PersonRepository;
 		public FakeWriteSideRepository<IActivity> ActivityRepository;
 		public FakePersonAssignmentWriteSideRepository PersonAssignmentRepo;
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
-			system.UseTestDouble<AddOvertimeActivityCommandHandler>().For<IHandleCommand<AddOvertimeActivityCommand>>();
+			system.UseTestDouble<AddOvertimeActivityCommandHandlerNoDeltas>().For<IHandleCommand<AddOvertimeActivityCommand>>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeWriteSideRepository<IMultiplicatorDefinitionSet>>().For<IProxyForId<IMultiplicatorDefinitionSet>>();
 		}

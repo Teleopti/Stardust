@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 	}
 
 	[DisabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step3_44331)]
-	public class AddOvertimeActivityCommandHandler:IHandleCommand<AddOvertimeActivityCommand>
+	public class AddOvertimeActivityCommandHandlerNoDeltas:IHandleCommand<AddOvertimeActivityCommand>
 	{
 		private readonly IProxyForId<IActivity> _activityForId;
 		private readonly IWriteSideRepositoryTypedId<IPersonAssignment,PersonAssignmentKey> _personAssignmentRepository;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IProxyForId<IPerson> _personForId;
 		private readonly IProxyForId<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSetForId;
 
-		public AddOvertimeActivityCommandHandler(IProxyForId<IActivity> activityForId, IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepository, ICurrentScenario currentScenario, IProxyForId<IPerson> personForId, IProxyForId<IMultiplicatorDefinitionSet> multiplicatorDefinitionSetForId)
+		public AddOvertimeActivityCommandHandlerNoDeltas(IProxyForId<IActivity> activityForId, IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey> personAssignmentRepository, ICurrentScenario currentScenario, IProxyForId<IPerson> personForId, IProxyForId<IMultiplicatorDefinitionSet> multiplicatorDefinitionSetForId)
 		{
 			_activityForId = activityForId;
 			_personAssignmentRepository = personAssignmentRepository;
