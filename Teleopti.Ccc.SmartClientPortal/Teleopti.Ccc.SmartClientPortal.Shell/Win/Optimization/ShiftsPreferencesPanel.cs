@@ -25,13 +25,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 		public void Initialize(
             IShiftPreferences extraPreferences, IEnumerable<IActivity> availableActivity , int resolution, bool hideKeepShifts45688)
 		{
-			if (hideKeepShifts45688)
-			{
-				checkBoxKeepShifts.Visible = false;
-				numericUpDownKeepShifts.Visible = false;
-				label1.Visible = false;
-			}
-
 		    _availableActivity = availableActivity;
 		    _resolution = resolution;
 			comboBoxAdvActivity.DisplayMember = "Name";
@@ -40,7 +33,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 		    SetDefaultTimePeriod();
             ExchangeData(ExchangeDataOption.DataSourceToControls);
 		    SetInitialValues();
-        }
+			if (hideKeepShifts45688)
+			{
+				checkBoxKeepShifts.Checked = false;
+				checkBoxKeepShifts.Visible = false;
+				numericUpDownKeepShifts.Visible = false;
+				label1.Visible = false;
+			}
+		}
 
         private void SetDefaultTimePeriod()
         {
