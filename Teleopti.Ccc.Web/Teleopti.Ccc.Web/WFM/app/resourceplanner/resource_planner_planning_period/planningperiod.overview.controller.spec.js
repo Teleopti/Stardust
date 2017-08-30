@@ -243,6 +243,7 @@ describe('planningPeriodOverviewController', function () {
         spyOn(planningPeriodServiceNew, 'clearSchedules').and.callThrough();
         fakeBackend.withScheduleResult({
             OptimizationResult: {
+                BusinessRulesValidationResults: {},
                 SkillResultList: []
             },
             PlanningPeriod: {

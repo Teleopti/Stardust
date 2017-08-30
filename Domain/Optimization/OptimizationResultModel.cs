@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -87,28 +88,5 @@ namespace Teleopti.Ccc.Domain.Optimization
 			public int ColorId { get; set; }
 		}
 
-	}
-	public struct BusinessRulesValidationResult : IEquatable<BusinessRulesValidationResult>
-	{
-		public string Name { get; set; }
-		public string Message { get; set; }
-		public BusinessRuleCategory BusinessRuleCategory { get; set; }
-		public string BusinessRuleCategoryText { get; set; }
-
-		public bool Equals(BusinessRulesValidationResult other)
-		{
-			return Name.Equals(other.Name) && BusinessRuleCategory.Equals(other.BusinessRuleCategory);
-		}
-
-		public override int GetHashCode()
-		{
-			return Name.GetHashCode() ^ BusinessRuleCategory.GetHashCode();
-		}
-	}
-
-	public enum BusinessRuleCategory
-	{
-		DayOff,
-		SchedulePeriod
 	}
 }

@@ -250,10 +250,10 @@
         return;
       return planningPeriodServiceNew.lastJobResult({ id: selectedPpId })
         .$promise.then(function (data) {
-          if (data.ScheduleResult) {
+          if (data.OptimizationResult) {
             vm.isScheduled = true;
-            vm.scheduledAgents = data.ScheduleResult.ScheduledAgentsCount;
-            vm.valData.scheduleIssues = data.ScheduleResult.BusinessRulesValidationResults;
+            vm.scheduledAgents = data.OptimizationResult.ScheduledAgentsCount;
+            vm.valData.scheduleIssues = data.OptimizationResult.BusinessRulesValidationResults;
             getTotalValidationErrorsNumber();
             initResult(data.OptimizationResult);
             return data;
