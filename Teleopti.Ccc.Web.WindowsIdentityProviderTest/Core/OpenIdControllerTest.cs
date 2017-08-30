@@ -107,7 +107,6 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			var request = MockRepository.GenerateMock<IAuthenticationRequest>();
 			var httpRequest = MockRepository.GenerateStub<HttpRequestBase>();
 			var httpContext = MockRepository.GenerateStub<HttpContextBase>();
-			var outgoingWebResponse = MockRepository.GenerateMock<OutgoingWebResponse>();
 			var windowsAccountProvider = MockRepository.GenerateMock<IWindowsAccountProvider>();
 
 			httpContext.Stub(x => x.Request).Return(httpRequest);
@@ -115,7 +114,7 @@ namespace Teleopti.Ccc.Web.WindowsIdentityProviderTest.Core
 			httpRequest.Stub(x => x.HttpMethod).Return("GET");
 			request.Stub(x => x.IsResponseReady).Return(true);
 			openIdProviderWapper.Stub(x => x.GetRequest()).Return(request);
-			openIdProviderWapper.Stub(x => x.PrepareResponse(request)).Return(outgoingWebResponse);
+			openIdProviderWapper.Stub(x => x.PrepareResponse(request)).Return(new OutgoingWebResponse());
 			
 			var target = new OpenIdController(openIdProviderWapper, windowsAccountProvider, currentHttpContext);
 			target.Provider();

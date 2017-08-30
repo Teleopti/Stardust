@@ -41,7 +41,7 @@ namespace DotNetOpenAuth.Messaging {
 		/// <summary>
 		/// Initializes a new instance of the <see cref="OutgoingWebResponse"/> class.
 		/// </summary>
-		internal OutgoingWebResponse() {
+		public OutgoingWebResponse() {
 			this.Status = HttpStatusCode.OK;
 			this.Headers = new WebHeaderCollection();
 			this.Cookies = new HttpCookieCollection();

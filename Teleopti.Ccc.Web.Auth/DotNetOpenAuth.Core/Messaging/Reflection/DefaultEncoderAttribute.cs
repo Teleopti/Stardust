@@ -6,9 +6,6 @@
 
 namespace DotNetOpenAuth.Messaging.Reflection {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
 
 	/// <summary>
 	/// Allows a custom class or struct to be serializable between itself and a string representation.

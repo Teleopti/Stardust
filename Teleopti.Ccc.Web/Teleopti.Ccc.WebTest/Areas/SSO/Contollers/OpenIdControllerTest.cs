@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 				IsDirectedIdentity = true
 			};
 
-			var outgoingWebResponse = MockRepository.GenerateMock<OutgoingWebResponse>();
+			var outgoingWebResponse = new OutgoingWebResponse();
 			openIdProviderWapper.Stub(
 				x =>
 					x.PrepareResponse(
