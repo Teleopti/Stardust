@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
         {
             var ruleSetBags = new List<IRuleSetBag>();
             var blockPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 10);
-            Assert.AreEqual(0, _target.Filter(blockPeriod, ruleSetBags, true).Count());
+            Assert.AreEqual(0, _target.Filter(blockPeriod, ruleSetBags).Count());
 
         }
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var ruleSetBags = new List<IRuleSetBag> { ruleSetBag };
             var blockPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 11);
 
-	        var result = _target.Filter(blockPeriod, ruleSetBags, false);
+	        var result = _target.Filter(blockPeriod, ruleSetBags);
 			Assert.Contains(workShiftRuleSet, result.ToList());
         }
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var ruleSetBags = new List<IRuleSetBag> { ruleSetBag };
 			var blockPeriod = new DateOnlyPeriod(2014, 03, 10, 2014, 03, 11);
 
-			var result = _target.Filter(blockPeriod, ruleSetBags, true);
+			var result = _target.Filter(blockPeriod, ruleSetBags);
 			Assert.IsTrue(!result.ToList().Contains(workShiftRuleSet));
 		}
     }

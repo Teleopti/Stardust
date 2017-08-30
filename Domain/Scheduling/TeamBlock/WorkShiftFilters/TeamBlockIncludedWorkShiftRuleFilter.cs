@@ -6,18 +6,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
     public class TeamBlockIncludedWorkShiftRuleFilter
     {
-        public IEnumerable<IWorkShiftRuleSet> Filter(DateOnlyPeriod periodToAggregate, IList<IRuleSetBag> ruleSetBags, bool optionsIsSameShift)
+        public IEnumerable<IWorkShiftRuleSet> Filter(DateOnlyPeriod periodToAggregate, IList<IRuleSetBag> ruleSetBags)
         {
             var filteredList = new List<IWorkShiftRuleSet>();
-            foreach (var bag in ruleSetBags)
+            foreach (var ruleSet in ruleSetBags)
             {
-				if(bag == null) continue;
-	            foreach (var workShiftRuleSet in bag.RuleSetCollection)
+				if(ruleSet == null) continue;
+	            foreach (var workShiftRuleSet in ruleSet.RuleSetCollection)
 	            {
 					var ruleSetValidForAllDates = true;
 		            foreach (var dateOnly in periodToAggregate.DayCollection())
 		            {
-			            if (optionsIsSameShift && !workShiftRuleSet.IsValidDate(dateOnly))
+			            if (!workShiftRuleSet.IsValidDate(dateOnly))
 			            {
 				            ruleSetValidForAllDates = false;
 							break;
