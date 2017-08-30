@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			{
 				_resourceCalculation.ResourceCalculate(periodDateOnly, resCalcData);
 			}
-
+			_stardustJobFeedback.SendProgress($"Filtering combinations resources between {period.StartDateTime} and {period.EndDateTime}");
 			var filteredCombinations =
 				resCalcData.SkillCombinationHolder?.SkillCombinationResources.Where(
 					x =>

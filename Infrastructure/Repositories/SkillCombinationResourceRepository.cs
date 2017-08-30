@@ -264,6 +264,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		private void tryPersistSkillCombinationResource(DateTime dataLoaded,
 			IEnumerable<SkillCombinationResource> skillCombinationResources)
 		{
+			_stardustJobFeedback.SendProgress($"Data loaded on {dataLoaded}");
 			var bu = _currentBusinessUnit.Current().Id.GetValueOrDefault();
 			_stardustJobFeedback.SendProgress(
 				$"Start persist {skillCombinationResources.Count()} skillCombinationResources for bu {bu}.");
@@ -312,6 +313,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 					using (var transaction = connection.BeginTransaction())
 					{
+						
 						using (var deleteCommand = new SqlCommand(@"DELETE d FROM ReadModel.SkillCombinationResourceDelta d
 							INNER JOIN ReadModel.SkillCombination c ON d.SkillCombinationId = c.Id 
 							INNER JOIN dbo.Skill s ON c.SkillId = s.Id
@@ -324,7 +326,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 							deleteCommand.Parameters.AddWithValue("@8DaysAgo", dataLoaded.AddDays(-8));
 							deleteCommand.ExecuteNonQuery();
 						}
-
+						_stardustJobFeedback.SendProgress($"Removing historical resources that is older than {dataLoaded.AddDays(-8)} or later than {minStartDateTime}");
 						using (var deleteCommand = new SqlCommand(@"DELETE FROM [ReadModel].[SkillCombinationResource] 
 						WHERE businessunit = @buid AND (StartDateTime >= @minNewResourceStartDateTime OR StartDateTime <= @8DaysAgo)", connection, transaction))
 						{
