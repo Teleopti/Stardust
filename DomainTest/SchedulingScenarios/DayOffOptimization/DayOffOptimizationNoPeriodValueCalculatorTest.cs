@@ -16,12 +16,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	public class DayOffOptimizationNoPeriodValueCalculatorTest : DayOffOptimizationScenario
 	{
-		public IScheduleOptimization Target;
+		public ScheduleOptimizationTeamBlock Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -29,10 +27,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-
-		public DayOffOptimizationNoPeriodValueCalculatorTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
-		{
-		}
 
 		[Test]
 		public void ShouldMoveDayOffToDayWithLessDemand_NoPeriodValueCalculatorShouldBeUsed()

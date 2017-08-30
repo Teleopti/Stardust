@@ -96,7 +96,6 @@
 
 		WfmGlobalLayout_personalOptions_37114,
 
-		ResourcePlanner_TeamBlockDayOffForIndividuals_37998,
 		ResourcePlanner_CascadingSkillsGUI_40018,
 		ResourcePlanner_HideSkillPrioSliders_41312,
 		ResourcePlanner_CategorizeShiftSelection_xx,

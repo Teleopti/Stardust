@@ -21,17 +21,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	public class DayOffOptimizationRestrictionTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public IDayOffOptimizationDesktop Target;
-
-		public DayOffOptimizationRestrictionTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
-		{
-		}
+		public DayOffOptimizationDesktopTeamBlock Target;
 
 		[Test]
 		public void ShouldMoveDaysOffWhenUsingHundredPercentAvailabilityRestrictionAndShortBreakBug44956()

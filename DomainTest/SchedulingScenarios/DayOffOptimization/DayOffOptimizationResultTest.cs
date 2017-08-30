@@ -18,11 +18,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
-	[TestFixture(true)]
-	[TestFixture(false)]
 	public class DayOffOptimizationResultTest : DayOffOptimizationScenario
 	{
-		public IScheduleOptimization Target;
+		public ScheduleOptimizationTeamBlock Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -64,10 +62,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var dayCount = skillResult.First().SkillDetails.ToList();
 			dayCount.Count.Should().Be.EqualTo(1);
 			dayCount.First().RelativeDifference.Should().Be.EqualTo(0);
-		}
-
-		public DayOffOptimizationResultTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
-		{
 		}
 	}
 }

@@ -925,7 +925,6 @@
     <Compile Include="Optimization\DailySkillForecastAndScheduledValueCalculatorTest.cs" />
     <Compile Include="Optimization\MatrixNoMainShiftLockerTest.cs" />
     <Compile Include="Optimization\RelativeDailyStandardDeviationsByPersonalSkillsExtractorTest.cs" />
-    <Compile Include="Optimization\DayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\MatrixOvertimeLockerTest.cs" />
     <Compile Include="Optimization\StdDevPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\MoveTimeOptimizerContainerTest.cs" />
@@ -938,7 +937,6 @@
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByAllSkillsExtractorTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitiesSpecificationTest.cs" />
     <Compile Include="Optimization\RelativeBoostedDailyDifferencesByPersonalSkillsExtractorTest.cs" />
-    <Compile Include="Optimization\DayOffOptimizationServiceTest.cs" />
     <Compile Include="Optimization\TimePeriodCanHaveShortBreakTest.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateServiceProTest.cs" />
     <Compile Include="Optimization\WorkShiftBackToLegalStateStepTest.cs" />
@@ -1147,7 +1145,6 @@
     <Compile Include="Common\TemplateReferenceTest.cs" />
     <Compile Include="Common\UserTextTranslatorTest.cs" />
     <Compile Include="Common\WriteProtectionInfoTest.cs" />
-    <Compile Include="Optimization\DayOffOptimizerTest.cs" />
     <Compile Include="Optimization\RmsPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByPersonalSkillsExtractorTest.cs" />
     <Compile Include="Forecasting\ActiveAgentCountTest.cs" />

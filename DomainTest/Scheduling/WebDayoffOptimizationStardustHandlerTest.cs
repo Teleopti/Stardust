@@ -19,8 +19,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	public class WebDayOffOptimizationStardustHandlerTest : DayOffOptimizationScenario
 	{
@@ -37,10 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 		public FakeSchedulingSourceScope FakeSchedulingSourceScope;
 
 		private IBusinessUnit businessUnit;
-
-		public WebDayOffOptimizationStardustHandlerTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
-		{
-		}
 
 		public void SetUp()
 		{

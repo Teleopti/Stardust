@@ -15,11 +15,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		IHandleEvent<WebDayoffOptimizationStardustEvent>,
 		IRunOnStardust
 	{
-		private readonly IScheduleOptimization _scheduleOptimization;
+		private readonly ScheduleOptimizationTeamBlock _scheduleOptimization;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
 
-		public WebDayoffOptimizationStardustHandler(IScheduleOptimization scheduleOptimization, IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope)
+		public WebDayoffOptimizationStardustHandler(ScheduleOptimizationTeamBlock scheduleOptimization, IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope)
 		{
 			_scheduleOptimization = scheduleOptimization;
 			_jobResultRepository = jobResultRepository;

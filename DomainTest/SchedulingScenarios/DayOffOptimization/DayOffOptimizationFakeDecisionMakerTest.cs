@@ -22,17 +22,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
-	[TestFixture(false)]
-	[TestFixture(true)]
 	public class DayOffOptimizationFakeDecisionMakerTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public IDayOffOptimizationDesktop Target;
-
-		public DayOffOptimizationFakeDecisionMakerTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
-		{
-		}
-
+		public DayOffOptimizationDesktopTeamBlock Target;
 
 		[Test]
 		[Timeout(3000)]

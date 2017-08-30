@@ -22,19 +22,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	public class DayOffOptimizationDesktopTest : DayOffOptimizationScenario
 	{
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public IDayOffOptimizationDesktop Target;
-		private readonly bool _teamBlockDayOffForIndividuals;
-
-		public DayOffOptimizationDesktopTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
-		{
-			_teamBlockDayOffForIndividuals = teamBlockDayOffForIndividuals;
-		}
+		public DayOffOptimizationDesktopTeamBlock Target;
 
 		[Test]
 		public void ShouldMoveDayOffToDayWithLessDemand()
@@ -189,7 +181,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			{
 				wasModified.Should().Be.False();
 			}
-			else if(_teamBlockDayOffForIndividuals)
+			else
 			{
 				wasModified.Should().Be.True();
 			}
@@ -258,7 +250,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				wasModified1.Should().Be.False();
 				wasModified2.Should().Be.True();
 			}
-			else if (_teamBlockDayOffForIndividuals)
+			else
 			{
 				wasModified1.Should().Be.True();
 				wasModified2.Should().Be.True();
@@ -330,7 +322,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				wasModified1.Should().Be.True();
 				wasModified2.Should().Be.True();
 			}
-			else if (_teamBlockDayOffForIndividuals)
+			else
 			{
 				wasModified1.Should().Be.False();
 				wasModified2.Should().Be.False();

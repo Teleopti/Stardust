@@ -3,7 +3,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
@@ -15,7 +14,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IOptimizationPreferences optimizerPreferences,
 			IDaysOffPreferences daysOffPreferences)
 		{
-			//var daysOffPreferences = optimizerPreferences.DaysOff;
 			IList<IDayOffLegalStateValidator> legalStateValidators =
 				 createLegalStateValidators(scheduleMatrixArray, daysOffPreferences);
 
@@ -23,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				createLegalStateValidatorsToKeepWeekendNumbers(scheduleMatrixArray, daysOffPreferences);
 
 			IOfficialWeekendDays officialWeekendDays = new OfficialWeekendDays();
-			ILogWriter logWriter = new LogWriter<DayOffOptimizationService>();
+			ILogWriter logWriter = new LogWriter<FlexibelDayOffOptimizationDecisionMakerFactory>();
 
 			IDayOffDecisionMaker moveDayOffDecisionMaker = new MoveOneDayOffDecisionMaker(legalStateValidators, logWriter);
 			IDayOffDecisionMaker moveWeekEndDecisionMaker = new MoveWeekendDayOffDecisionMaker(legalStateValidatorsToKeepWeekEnds, officialWeekendDays, true, logWriter);

@@ -18,10 +18,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_TeamBlockDayOffForIndividuals_37998)]
 	public class DayOffOptimizationSameBitArrayTest : ISetup
 	{
-		public IScheduleOptimization Target;
+		public ScheduleOptimizationTeamBlock Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;

@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffOptimizationDesktopTeamBlock : IDayOffOptimizationDesktop
+	public class DayOffOptimizationDesktopTeamBlock
 	{
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly TeamBlockDayOffOptimizer _teamBlockDayOffOptimizer;

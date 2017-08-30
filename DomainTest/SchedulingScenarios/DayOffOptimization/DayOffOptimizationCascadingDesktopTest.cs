@@ -20,19 +20,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(false, false)]
-	[TestFixture(true, false)]
-	[TestFixture(false, true)]
-	[TestFixture(true, true)]
+	[TestFixture(false)]
+	[TestFixture(true)]
 	[DomainTest]
 	public class DayOffOptimizationCascadingDesktopTest : DayOffOptimizationScenario
 	{
 		private readonly bool _beInResourceCalculatedStateAtStartup;
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
-		public IDayOffOptimizationDesktop Target;
+		public DayOffOptimizationDesktopTeamBlock Target;
 		public IResourceOptimizationHelperExtended ResourceCalculation;
 
-		public DayOffOptimizationCascadingDesktopTest(bool teamBlockDayOffForIndividuals, bool beInResourceCalculatedStateAtStartup) : base(teamBlockDayOffForIndividuals)
+		public DayOffOptimizationCascadingDesktopTest(bool beInResourceCalculatedStateAtStartup)
 		{
 			_beInResourceCalculatedStateAtStartup = beInResourceCalculatedStateAtStartup;
 		}

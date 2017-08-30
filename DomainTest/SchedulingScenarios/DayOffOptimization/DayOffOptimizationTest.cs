@@ -20,12 +20,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 {
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	public class DayOffOptimizationTest : DayOffOptimizationScenario
 	{
-		public IScheduleOptimization Target;
+		public ScheduleOptimizationTeamBlock Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -38,10 +36,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public IPersonWeekViolatingWeeklyRestSpecification CheckWeeklyRestRule;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
-
-		public DayOffOptimizationTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
-		{
-		}
 
 		[Test]
 		public void ShouldMoveDayOffToDayWithLessDemand()

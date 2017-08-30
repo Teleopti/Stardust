@@ -20,12 +20,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 	 * doesn't really make much sense here because web doesn't currently support teamblock-DO.
 	 * However, the test works also with toggle true (for wrong reason) so let's leave it for now.
 	 */
-	[TestFixture(false)]
-	[TestFixture(true)]
 	[DomainTest]
 	public class DayOffOptimizationTeamBlockTest : DayOffOptimizationScenario
 	{
-		public IScheduleOptimization Target;
+		public ScheduleOptimizationTeamBlock Target;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeSkillRepository SkillRepository;
@@ -83,10 +81,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			Assert.Fail(
 				$"Tried optimize {numberOfAttempts} number of times but always moving DOs from same agent. Giving up...");
-		}
-
-		public DayOffOptimizationTeamBlockTest(bool teamBlockDayOffForIndividuals) : base(teamBlockDayOffForIndividuals)
-		{
 		}
 	}
 }
