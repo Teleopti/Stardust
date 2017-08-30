@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
@@ -39,6 +40,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 		private readonly int _resolution;
 		private readonly IScheduleDictionary _scheduleDictionary;
 		private readonly IEnumerable<IPerson> _selectedPersons;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
+		private readonly bool _hideKeepShifts45688;
 		private readonly IList<GroupPageLight> _groupPagesForTeamBlockPer;
 
 		public OptimizationPreferencesDialog(
@@ -49,7 +52,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			int resolution,
 			IScheduleDictionary scheduleDictionary,
 			IEnumerable<IPerson> selectedPersons, 
-			IDaysOffPreferences daysOffPreferences)
+			IDaysOffPreferences daysOffPreferences,
+			bool hideKeepShifts45688)
 			: this()
 		{
 			Preferences = preferences;
@@ -64,6 +68,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			_resolution = resolution;
 			_scheduleDictionary = scheduleDictionary;
 			_selectedPersons = selectedPersons;
+			_hideKeepShifts45688 = hideKeepShifts45688;
 			_eventAggregator = new EventAggregator();
 		}
 
@@ -80,7 +85,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 			dayOffPreferencesPanel1.Initialize(DaysOffPreferences);
 			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
 			advancedPreferencesPanel1.Initialize(Preferences.Advanced);
-			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
+			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution, _hideKeepShifts45688);
 			Panels = new List<IDataExchange> { generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1 };
 
 			ActiveControl = tabControlTopLevel;

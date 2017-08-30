@@ -1114,6 +1114,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		#region Toolstrip events
 
+		[RemoveMeWithToggle(".IsEnabled(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688", Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
 		private void toolStripMenuItemOptimizeClick(object sender, EventArgs e)
 		{
 			if (_backgroundWorkerRunning) return;
@@ -1129,7 +1130,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						_schedulerState.CommonStateHolder.ActiveScheduleTags,
 						_schedulerState.CommonStateHolder.ActiveActivities,
 						SchedulerState.DefaultSegmentLength, _schedulerState.Schedules,
-						_scheduleView.AllSelectedPersons(selectedSchedules), _daysOffPreferences))
+						_scheduleView.AllSelectedPersons(selectedSchedules), _daysOffPreferences,
+						_container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)))
 				{
 					if (optimizationPreferencesDialog.ShowDialog(this) == DialogResult.OK)
 					{
