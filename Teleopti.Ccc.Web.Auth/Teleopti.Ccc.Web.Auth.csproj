@@ -32,14 +32,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DotNetOpenAuth.Core">
-      <HintPath>..\packages\DotNetOpenAuth.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.Core.dll</HintPath>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId">
-      <HintPath>..\packages\DotNetOpenAuth.OpenId.Core.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OpenId.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId.Provider">
-      <HintPath>..\packages\DotNetOpenAuth.OpenId.Provider.4.3.4.13329\lib\net45-full\DotNetOpenAuth.OpenId.Provider.dll</HintPath>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -53,6 +50,29 @@
       <HintPath>..\packages\Microsoft.Net.Http.2.2.29\lib\net45\System.Net.Http.Primitives.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -60,11 +80,327 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DotNetOpenAuth.Core\Assumes.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Configuration\DotNetOpenAuthSection.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Configuration\HostNameElement.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Configuration\HostNameOrRegexCollection.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Configuration\MessagingElement.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Configuration\ReportingElement.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Configuration\TrustedProviderConfigurationCollection.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Configuration\TrustedProviderEndpointConfigurationElement.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Configuration\TypeConfigurationCollection.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Configuration\TypeConfigurationElement.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Configuration\UntrustedWebRequestElement.cs" />
+    <Compile Include="DotNetOpenAuth.Core\IEmbeddedResourceRetrieval.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Logger.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Loggers\ILog.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Loggers\Log4NetLogger.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Loggers\NoOpLogger.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Loggers\TraceLogger.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Base64WebEncoder.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\BinaryDataBagFormatter.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\AsymmetricCryptoKeyStoreWrapper.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\CryptoKey.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\CryptoKeyCollisionException.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\ExpiredMessageException.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\ICryptoKeyStore.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\IExpiringProtocolMessage.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\INonceStore.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\InvalidSignatureException.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\IReplayProtectedProtocolMessage.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\MemoryCryptoKeyStore.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\NonceMemoryStore.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\ReplayedMessageException.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\StandardExpirationBindingElement.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Bindings\StandardReplayProtectionBindingElement.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\CachedDirectWebResponse.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Channel.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\ChannelContract.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\ChannelEventArgs.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\DataBag.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\DataBagFormatterBase.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\DirectWebRequestOptions.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\EmptyDictionary.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\EmptyEnumerator.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\EmptyList.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\EnumerableCacheExtensions.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\ErrorUtilities.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\HmacAlgorithms.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\HostErrorException.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\HttpDeliveryMethods.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\HttpRequestHeaders.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\HttpRequestInfo.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IChannelBindingElement.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IDataBagFormatter.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IDirectedProtocolMessage.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IDirectResponseProtocolMessage.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IDirectWebRequestHandler.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IExtensionMessage.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IHttpDirectRequest.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IHttpDirectRequestContract.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IHttpDirectResponse.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IHttpDirectResponseContract.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IHttpIndirectResponse.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IMessage.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IMessageFactory.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IMessageOriginalPayload.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IMessageWithBinaryData.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IMessageWithEvents.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IncomingWebResponse.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IncomingWebResponseContract.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\InternalErrorException.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IProtocolMessage.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IProtocolMessageWithExtensions.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\IStreamSerializingDataBag.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\ITamperResistantProtocolMessage.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\KeyedCollectionDelegate.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\MessagePartAttribute.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\MessageProtections.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\MessageReceivingEndpoint.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\MessageSerializer.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\MessageTransport.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\MessagingStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MessagingStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DotNetOpenAuth.Core\Messaging\MessagingUtilities.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\MultipartPostPart.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\NetworkDirectWebResponse.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\OutgoingWebResponse.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\OutgoingWebResponseActionResult.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\ProtocolException.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\ProtocolFaultResponseException.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\ReadOnlyDictionary.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Reflection\DefaultEncoderAttribute.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Reflection\IMessagePartEncoder.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Reflection\IMessagePartFormattingEncoder.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Reflection\IMessagePartNullEncoder.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Reflection\IMessagePartOriginalEncoder.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Reflection\MessageDescription.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Reflection\MessageDescriptionCollection.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Reflection\MessageDictionary.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Reflection\MessagePart.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\Reflection\ValueMapping.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\StandardMessageFactory.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\StandardMessageFactoryChannel.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\StandardWebRequestHandler.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\TimespanSecondsEncoder.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\TimestampEncoder.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\UnprotectedMessageException.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\UntrustedWebRequestHandler.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Messaging\UriStyleMessageFormatter.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Requires.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DotNetOpenAuth.Core\UriUtil.cs" />
+    <Compile Include="DotNetOpenAuth.Core\Util.cs" />
+    <Compile Include="DotNetOpenAuth.Mvc5\MvcExtensions.cs" />
+    <Compile Include="DotNetOpenAuth.Mvc5\OutgoingWebResponseActionResult5.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider.UI\OpenId\Provider\AnonymousRequestEventArgs.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider.UI\OpenId\Provider\AuthenticationChallengeEventArgs.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider.UI\OpenId\Provider\IdentityEndpointNormalizationEventArgs.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider.UI\OpenId\Provider\ProviderEndpoint.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\ChannelElements\AssociateUnencryptedProviderRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\ChannelElements\OpenIdProviderChannel.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\ChannelElements\OpenIdProviderMessageFactory.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\ChannelElements\ProviderSigningBindingElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Messages\AssociateDiffieHellmanProviderRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Messages\AssociateDiffieHellmanProviderResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Messages\AssociateRequestProviderTools.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Messages\AssociateUnencryptedResponseProvider.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Messages\CheckAuthenticationResponseProvider.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Messages\IAssociateRequestProvider.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Messages\IAssociateSuccessfulResponseProvider.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Messages\IAssociateSuccessfulResponseProviderContract.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\AnonymousRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\AssociationDataBag.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\AssociationRelyingPartyType.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\AuthenticationRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\AutoResponsiveRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\Behaviors\AXFetchAsSregTransform.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\Behaviors\GsaIcamProfile.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\Behaviors\PpidGeneration.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\Extensions\ExtensionsInteropHelper.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\Extensions\UI\UIRequestTools.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\HmacShaAssociationProvider.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\HostProcessedRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\IAnonymousRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\IDirectedIdentityIdentifierProvider.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\IErrorReporting.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\IProviderAssociationStore.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\OpenIdProvider.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\OpenIdProviderUtilities.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\PrivatePersonalIdentifierProviderBase.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\ProviderAssociationHandleEncoder.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\ProviderAssociationKeyStorage.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\Request.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\RequestContract.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId.Provider\OpenId\Provider\StandardProviderApplicationStore.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Configuration\AssociationTypeCollection.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Configuration\AssociationTypeElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Configuration\HostMetaDiscoveryElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Configuration\OpenIdElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Configuration\OpenIdProviderElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Configuration\OpenIdProviderSecuritySettingsElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Configuration\OpenIdRelyingPartyElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Configuration\OpenIdRelyingPartySecuritySettingsElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Configuration\XriResolverElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenIdXrdsHelperRelyingParty.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Association.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\AssociationContract.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\AuthenticationRequestMode.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Behaviors\AXFetchAsSregTransformBase.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Behaviors\BehaviorStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BehaviorStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Behaviors\GsaIcamProfileBase.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ChannelElements\BackwardCompatibilityBindingElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ChannelElements\ExtensionsBindingElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ChannelElements\IOpenIdExtensionFactory.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ChannelElements\ITamperResistantOpenIdMessage.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ChannelElements\KeyValueFormEncoding.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ChannelElements\OpenIdChannel.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ChannelElements\OriginalStringUriEncoder.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ChannelElements\ReturnToSignatureBindingElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ChannelElements\SigningBindingElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ChannelElements\SigningBindingElementContract.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ChannelElements\SkipSecurityBindingElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\DiffieHellmanUtilities.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\AliasManager.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\AttributeExchange\AttributeRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\AttributeExchange\AttributeValues.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\AttributeExchange\AXAttributeFormats.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\AttributeExchange\AXUtilities.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\AttributeExchange\Constants.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\AttributeExchange\FetchRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\AttributeExchange\FetchResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\AttributeExchange\StoreRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\AttributeExchange\StoreResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\AttributeExchange\WellKnownAttributes.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\ExtensionArgumentsManager.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\ExtensionBase.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\IClientScriptExtensionResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\OAuth\AuthorizationApprovedResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\OAuth\AuthorizationDeclinedResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\OAuth\AuthorizationRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\OAuth\Constants.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\OpenIdExtensionFactoryAggregator.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\OpenIdExtensionsInteropHelper.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\ProviderAuthenticationPolicy\AuthenticationPolicies.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\ProviderAuthenticationPolicy\Constants.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\ProviderAuthenticationPolicy\DateTimeEncoder.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\ProviderAuthenticationPolicy\NistAssuranceLevel.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\ProviderAuthenticationPolicy\PapeUtilities.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\ProviderAuthenticationPolicy\PolicyRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\ProviderAuthenticationPolicy\PolicyResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\SimpleRegistration\ClaimsRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\SimpleRegistration\ClaimsResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\SimpleRegistration\Constants.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\SimpleRegistration\DemandLevel.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\SimpleRegistration\Gender.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\SimpleRegistration\GenderEncoder.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\StandardOpenIdExtensionFactory.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\UI\UIConstants.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\UI\UIModes.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\UI\UIRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Extensions\UI\UIUtilities.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\HmacShaAssociation.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Identifier.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\IdentifierContract.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\IdentifierDiscoveryResult.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\IdentifierDiscoveryServices.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\IIdentifierDiscoveryService.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\IOpenIdApplicationStore.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\IOpenIdHost.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\IProviderEndpoint.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\AssociateDiffieHellmanRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\AssociateDiffieHellmanResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\AssociateRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\AssociateSuccessfulResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\AssociateSuccessfulResponseContract.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\AssociateUnencryptedRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\AssociateUnencryptedResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\AssociateUnsuccessfulResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\CheckAuthenticationRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\CheckAuthenticationResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\CheckIdRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\DirectErrorResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\DirectResponseBase.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\IErrorMessage.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\IndirectErrorResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\IndirectResponseBase.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\IndirectSignedResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\IOpenIdMessageExtension.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\NegativeAssertionResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\PositiveAssertionResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\RequestBase.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Messages\SignedResponseRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\NoDiscoveryIdentifier.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\OpenIdStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>OpenIdStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\OpenIdUtilities.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\OpenIdXrdsHelper.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Protocol.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\ProviderEndpointDescription.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Provider\IAuthenticationRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Provider\IHostProcessedRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Provider\IProviderBehavior.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Provider\IRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Provider\ProviderSecuritySettings.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Provider\RelyingPartyDiscoveryResult.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\Realm.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\RelyingPartyEndpointDescription.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\RelyingParty\AuthenticationStatus.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\RelyingParty\IAuthenticationRequest.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\RelyingParty\IAuthenticationRequestContract.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\RelyingParty\IAuthenticationResponse.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\RelyingParty\IRelyingPartyBehavior.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\RelyingParty\RelyingPartySecuritySettings.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\SecuritySettings.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\UriDiscoveryService.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\UriIdentifier.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\XriDiscoveryProxyService.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\OpenId\XriIdentifier.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Xrds\ServiceElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Xrds\TypeElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Xrds\UriElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Xrds\XrdElement.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Xrds\XrdsDocument.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Xrds\XrdsNode.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Xrds\XrdsStrings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>XrdsStrings.resx</DependentUpon>
+    </Compile>
+    <Compile Include="DotNetOpenAuth.OpenId\Yadis\ContentTypes.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Yadis\DiscoveryResult.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Yadis\HtmlParser.cs" />
+    <Compile Include="DotNetOpenAuth.OpenId\Yadis\Yadis.cs" />
+    <Compile Include="Mono.Math\BigInteger.cs" />
+    <Compile Include="Mono.Math\ConfidenceFactor.cs" />
+    <Compile Include="Mono.Math\NextPrimeFinder.cs" />
+    <Compile Include="Mono.Math\PrimalityTests.cs" />
+    <Compile Include="Mono.Math\PrimeGeneratorBase.cs" />
+    <Compile Include="Mono.Math\SequentialSearchPrimeGeneratorBase.cs" />
     <Compile Include="OpenIdApplicationStore\SqlProviderApplicationStore.cs" />
+    <Compile Include="Org.Mentalis.Security.Cryptography\DHKeyGeneration.cs" />
+    <Compile Include="Org.Mentalis.Security.Cryptography\DHParameters.cs" />
+    <Compile Include="Org.Mentalis.Security.Cryptography\DiffieHellman.cs" />
+    <Compile Include="Org.Mentalis.Security.Cryptography\DiffieHellmanManaged.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WSFederationConstants.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
@@ -80,6 +416,36 @@
       <Project>{8D2565F2-7C44-45B7-96AD-2CD900E033A1}</Project>
       <Name>Teleopti.Interfaces</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="DotNetOpenAuth.Core\Messaging\MessagingStrings.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>MessagingStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DotNetOpenAuth.Core\Strings.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DotNetOpenAuth.OpenId\OpenId\Behaviors\BehaviorStrings.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>BehaviorStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DotNetOpenAuth.OpenId\OpenId\OpenIdStrings.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>OpenIdStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DotNetOpenAuth.OpenId\Xrds\XrdsStrings.resx">
+      <SubType>Designer</SubType>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>XrdsStrings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="DOTNETOPENAUTH_LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

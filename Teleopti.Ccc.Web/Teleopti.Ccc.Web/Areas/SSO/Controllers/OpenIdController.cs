@@ -261,7 +261,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 		{
 			if (authReq == null)
 			{
-				throw new ArgumentNullException("authReq");
+				throw new ArgumentNullException(nameof(authReq));
 			}
 
 			string userName;
