@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 5);
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
-			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().WithPersonPeriod(skillA));
-			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().WithPersonPeriod(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().WithPersonPeriod(skillA).WithId());
+			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			executeTarget();
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(7, 4);
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
-			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().WithPersonPeriod(skillA));
-			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().WithPersonPeriod(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, agentsSkillA).Select(x => new Person().WithPersonPeriod(skillA).WithId());
+			var skillABagents = Enumerable.Range(0, agentsSkillAB).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			executeTarget();
@@ -77,9 +77,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
 			var skillC = new Skill("C");
-			var skillAagents21 = Enumerable.Range(0, 11).Select(x => new Person().WithPersonPeriod(skillA));
-			var skillABagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB));
-			var skillACagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillC));
+			var skillAagents21 = Enumerable.Range(0, 11).Select(x => new Person().WithPersonPeriod(skillA).WithId());
+			var skillABagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
+			var skillACagents5 = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillC).WithId());
 			skillAagents21.Union(skillABagents5).Union(skillACagents5).ForEach(x => PersonRepository.Has(x));
 
 			executeTarget();
@@ -113,8 +113,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
 			var skillA = new Skill("A").For(new Activity("A"));
 			var skillB = new Skill("B").For(new Activity("B"));
-			var skillAagents = Enumerable.Range(0, 16).Select(x => new Person().WithPersonPeriod(skillA));
-			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, 16).Select(x => new Person().WithPersonPeriod(skillA).WithId());
+			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			executeTarget();
@@ -128,8 +128,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
 			var skillA = new Skill("A").CascadingIndex(1);
 			var skillB = new Skill("B").CascadingIndex(2);
-			var skillAagents = Enumerable.Range(0, 16).Select(x => new Person().WithPersonPeriod(skillA));
-			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, 16).Select(x => new Person().WithPersonPeriod(skillA).WithId());
+			var skillABagents = Enumerable.Range(0, 5).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			executeTarget();
@@ -173,10 +173,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		public void ShouldNotCauseStackOverflowExceptionDueToTooManyRecursiveCalls()
 		{
 			var skill = new Skill("shared");
-			PersonRepository.Has(new Person().WithPersonPeriod(skill));
+			PersonRepository.Has(new Person().WithPersonPeriod(skill).WithId());
 			for (var i = 0; i < 200; i++)
 			{
-				PersonRepository.Has(new Person().WithPersonPeriod(skill, new Skill(i.ToString())));
+				PersonRepository.Has(new Person().WithPersonPeriod(skill, new Skill(i.ToString())).WithId());
 			}
 			Assert.DoesNotThrow(executeTarget);
 		}
@@ -214,8 +214,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
-			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().WithPersonPeriod(skillA));
-			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().WithPersonPeriod(skillA).WithId());
+			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			executeTarget();
@@ -231,8 +231,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
-			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().WithPersonPeriod(skillA));
-			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().WithPersonPeriod(skillA).WithId());
+			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			executeTarget();
@@ -248,8 +248,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var skillA = new Skill("A");
 			var skillB = new Skill("B");
-			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().WithPersonPeriod(skillA));
-			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB));
+			var skillAagents = Enumerable.Range(0, 4).Select(x => new Person().WithPersonPeriod(skillA).WithId());
+			var skillABagents = Enumerable.Range(0, 1).Select(x => new Person().WithPersonPeriod(skillA, skillB).WithId());
 			skillAagents.Union(skillABagents).ForEach(x => PersonRepository.Has(x));
 
 			executeTarget();
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			for (var i = 0; i < numberOfAgents; i++)
 			{
 				var skillB = new Skill("B" + i);
-				allAgents.Add(new Person().WithPersonPeriod(skillA, skillB));
+				allAgents.Add(new Person().WithPersonPeriod(skillA, skillB).WithId());
 			}
 			allAgents.ForEach(x => PersonRepository.Has(x));
 
