@@ -28,10 +28,10 @@ namespace DotNetOpenAuth.Yadis {
 		/// <summary>
 		/// Gets or sets the cache that can be used for HTTP requests made during identifier discovery.
 		/// </summary>
-#if DEBUG
+#if false
 		internal static readonly RequestCachePolicy IdentifierDiscoveryCachePolicy = new HttpRequestCachePolicy(HttpRequestCacheLevel.BypassCache);
 #else
-		internal static readonly RequestCachePolicy IdentifierDiscoveryCachePolicy = new HttpRequestCachePolicy(OpenIdElement.Configuration.CacheDiscovery ? HttpRequestCacheLevel.CacheIfAvailable : HttpRequestCacheLevel.BypassCache);
+		internal static readonly RequestCachePolicy IdentifierDiscoveryCachePolicy = new HttpRequestCachePolicy(DotNetOpenAuth.Configuration.OpenIdElement.Configuration.CacheDiscovery ? HttpRequestCacheLevel.CacheIfAvailable : HttpRequestCacheLevel.BypassCache);
 #endif
 
 		/// <summary>
