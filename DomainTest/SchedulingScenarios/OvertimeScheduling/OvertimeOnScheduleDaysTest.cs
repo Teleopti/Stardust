@@ -21,7 +21,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 {
 	[DomainTest]
-	public class OvertimeOnScheduleDaysTest : OvertimeSchedulingScenario
+	public class OvertimeOnScheduleDaysTest
 	{
 		public ScheduleOvertime Target;
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
@@ -490,8 +490,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 		[Test]
 		public void ShouldHandleOvertimeAvailableForNextDay()
 		{
-			if(!_resourcePlannerOvertimeNightShifts44311)
-				Assert.Ignore("Only green when toggle is on");
 			var definitionSet = new MultiplicatorDefinitionSet("overtime", MultiplicatorType.Overtime);
 			var activity = new Activity("_");
 			var skill = new Skill("_").DefaultResolution(60).For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
@@ -519,10 +517,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.OvertimeScheduling
 
 			stateHolder.Schedules[agent].ScheduledDay(date).PersonAssignment().OvertimeActivities().Single().Period.StartDateTime.Date
 				.Should().Be.EqualTo(date.Date.AddDays(1));
-		}
-
-		public OvertimeOnScheduleDaysTest(bool resourcePlannerOvertimeNightShifts44311) : base(resourcePlannerOvertimeNightShifts44311)
-		{
 		}
 	}
 }
