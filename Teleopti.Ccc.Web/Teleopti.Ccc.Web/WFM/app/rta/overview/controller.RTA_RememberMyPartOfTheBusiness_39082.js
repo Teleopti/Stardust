@@ -13,8 +13,6 @@
 		vm.skillAreas = skillAreas || [];
 		vm.siteCards = [];
 		vm.totalAgentsInAlarm = 0;
-		vm.agentsState = 'rta-agents({siteIds: card.Id})';
-		vm.agentsStateForTeam = 'rta-agents({teamIds: team.Id})';
 		vm.organizationSelection = false;
 		vm.goToAgentsView = function () { rtaRouteService.goToSelectSkill(); };
 
@@ -35,21 +33,6 @@
 		vm.selectTeamOrSite = function (selectable) {
 			selectable.isSelected = !selectable.isSelected;
 		};
-
-		(function () {
-			if (angular.isDefined($stateParams.skillAreaId)) {
-				vm.agentsState = 'rta-agents({siteIds: card.Id, skillAreaId: "' + $stateParams.skillAreaId + '"})';
-				vm.agentsStateForTeam = 'rta-agents({teamIds: team.Id, skillAreaId: "' + $stateParams.skillAreaId + '"})';
-			}
-			else if ($stateParams.skillIds.length > 0) {
-				vm.agentsState = 'rta-agents({siteIds: card.Id, skillIds: ["' + $stateParams.skillIds[0] + '"]})';
-				vm.agentsStateForTeam = 'rta-agents({teamIds: team.Id, skillIds: ["' + $stateParams.skillIds[0] + '"]})';
-			}
-			else {
-				vm.agentsState = 'rta-agents({siteIds: card.Id})';
-				vm.agentsStateForTeam = 'rta-agents({teamIds: team.Id})';
-			}
-		})();
 
 		function pollInitiate() {
 			vm.siteCards = [];
@@ -105,6 +88,7 @@
 								isSelected: $stateParams.siteIds.indexOf(site.Id) > -1,
 								teams: [],
 								AgentsCount: site.AgentsCount,
+								href: $state.href('rta-agents', { siteIds: site.Id, skillIds: $stateParams.skillIds, skillAreaId: $stateParams.skillAreaId })
 							};
 							$scope.$watch(function () { return siteCard.isOpen }, function (newValue) { if (newValue) pollNow(); });
 							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
@@ -150,8 +134,10 @@
 						Name: team.Name,
 						SiteId: siteCard.Id,
 						isSelected: $stateParams.teamIds.indexOf(team.Id) > -1,
-						AgentsCount: team.AgentsCount
+						AgentsCount: team.AgentsCount,
+						href: $state.href('rta-agents', { teamIds: team.Id, skillIds: $stateParams.skillIds, skillAreaId: $stateParams.skillAreaId })
 					};
+					
 					$scope.$watch(function () { return teamCard.isSelected }, function (newValue, oldValue) {
 						toggleOpenButton();
 						if (newValue) {

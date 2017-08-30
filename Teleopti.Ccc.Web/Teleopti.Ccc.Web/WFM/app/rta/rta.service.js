@@ -85,12 +85,13 @@
                     method: 'GET'
                 }
             }).query(data)
-                .$promise;
+                .$promise
+                ;
                 // .then(function (result) {
                 //     result.Teams = [{
                 //         Id: "34590A63-6331-4921-BC9F-9B5E015AB495",
                 //         SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-                //         Name: "Fajk",
+                //         Name: "Fajker",
                 //         AgentsCount: 183897,
                 //         InAlarmCount: 13,
                 //         Color: "danger"

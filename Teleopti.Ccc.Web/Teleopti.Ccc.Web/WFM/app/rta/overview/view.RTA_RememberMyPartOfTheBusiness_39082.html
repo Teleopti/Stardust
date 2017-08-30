@@ -57,14 +57,14 @@
 		<rta-card class="site" ng-repeat="card in vm.siteCards" ng-open="card.isOpen">
 			<rta-card-header ng-attr-styles="border-left-color: {{card.Color}};">
 				<div class="rta-card-content-wrapper flex">
-					<div class = "rta-site-name-container"><b ng-attr-data-max="{{card.AgentsCount}}" ng-attr-data-value="{{card.InAlarmCount}}">{{card.Name}}</b></div>
+					<div class="rta-site-name-container"><b ng-attr-data-max="{{card.AgentsCount}}" ng-attr-data-value="{{card.InAlarmCount}}">{{card.Name}}</b></div>
 					<div class="rta-alarm-values-container">{{'InAlarmInSite'|translate}}:
 						<b>{{card.InAlarmCount}}</b>
 					</div>
 					<div ng-click="$event.stopPropagation(); vm.selectTeamOrSite(card);" class="rta-icons-container"><i class="mdi" ng-class="{'mdi-check': card.isSelected, 'mdi-plus':!card.isSelected}"></i>
 						<md-tooltip>{{card.isSelected ? "Unselect site" : "Select site"}}</md-tooltip>
 					</div>
-					<a ui-sref="{{vm.agentsState}}" class="rta-icons-container" style="text-decoration: none;">
+					<a href="{{card.href}}" class="rta-icons-container" style="text-decoration: none;">
 						<div><i class="mdi mdi-arrow-right"></i>
 							<md-tooltip>{{'OpenSite'|translate}}</md-tooltip>
 						</div>
@@ -88,7 +88,7 @@
 									</span></div>
 									</div>
 									<div class="list-header-content">
-										<a type="button" class="wfm-btn wfm-btn-invis-primary pull-right" ui-sref="{{vm.agentsStateForTeam}}" style="text-decoration: none;">Open</a>
+										<a type="button" class="wfm-btn wfm-btn-invis-primary pull-right" href="{{team.href}}" style="text-decoration: none;">Open</a>
 									</div>
 								</div>
 							</div>
