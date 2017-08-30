@@ -99,6 +99,45 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
+		public void ShouldOnlySchedulePeoplePassedIn()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var firstDay = new DateOnly(2015, 10, 12);
+			var period = new DateOnlyPeriod(firstDay, firstDay.AddDays(7));
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(10), TimeSpan.FromHours(168), TimeSpan.FromHours(1), TimeSpan.FromHours(1))
+			};
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var contractSchedule = new ContractSchedule("_");
+			var partTimePercentage = new PartTimePercentage("_");
+			var site = new Site("site");
+			var team = new Team { Site = site };
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, ruleSet, skill);
+			var agent2 = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, ruleSet, skill);
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1,
+				1)
+				);
+
+			Target.DoScheduling(period, new[] { agent.Id.Value });
+
+			AssignmentRepository.Find(new[] { agent }, period, scenario).Should().Not.Be.Empty();
+			AssignmentRepository.Find(new[] { agent2 }, period, scenario).Should().Be.Empty();
+		}
+
+		[Test]
 		public void ShouldResolveNightlyRest()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
