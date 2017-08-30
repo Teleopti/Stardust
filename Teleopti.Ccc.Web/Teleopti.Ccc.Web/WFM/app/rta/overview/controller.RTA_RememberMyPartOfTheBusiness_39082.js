@@ -45,7 +45,9 @@
 		}
 
 		function pollNext() {
-			pollPromise = $timeout(getData, 5000);
+			pollPromise = $timeout(function () {
+				getSites().then(pollNext)
+			}, 5000);
 		}
 
 		function pollStop() {
@@ -56,12 +58,6 @@
 		pollInitiate();
 
 		$scope.$on('$destroy', pollStop);
-
-		function getData() {
-			$q.all([
-				getSites(),
-			]).then(pollNext);
-		};
 
 		function getSites() {
 			var siteIds = [];
@@ -75,34 +71,28 @@
 						var siteCard = vm.siteCards.find(function (siteCard) {
 							return siteCard.Id === site.Id;
 						});
-						var teams = data.Teams
-							.filter(function (team) {
-								return team.SiteId == site.Id;
-							});
+
+						site.Teams = site.Teams || [];
+
 						if (!siteCard) {
 							siteCard = {
 								Id: site.Id,
 								Name: site.Name,
-								isOpen: $stateParams.open != "false" || teams.length > 0,
+								isOpen: $stateParams.open != "false" || site.Teams.length > 0,
 								isSelected: $stateParams.siteIds.indexOf(site.Id) > -1,
 								teams: [],
 								AgentsCount: site.AgentsCount,
 								href: $state.href('rta-agents', { siteIds: site.Id, skillIds: $stateParams.skillIds, skillAreaId: $stateParams.skillAreaId })
 							};
+
 							$scope.$watch(function () { return siteCard.isOpen }, function (newValue) { if (newValue) pollNow(); });
 							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
-								if (newValue != oldValue) {
-									if (newValue) {
-										siteCard.teams.forEach(function (t) {
-											t.isSelected = true;
-										});
-									}
-								}
+								if (newValue) siteCard.teams.forEach(function (t) { t.isSelected = true; });
 							});
+
 							vm.siteCards.push(siteCard);
 						};
-
-						updateTeams(siteCard, teams);
+						updateTeams(siteCard, site.Teams);
 						siteCard.Color = translateSiteColors(site);
 						siteCard.InAlarmCount = site.InAlarmCount;
 
@@ -124,7 +114,7 @@
 					teamCard = {
 						Id: team.Id,
 						Name: team.Name,
-						SiteId: siteCard.Id,
+						SiteId: team.SiteId,
 						isSelected: $stateParams.teamIds.indexOf(team.Id) > -1,
 						AgentsCount: team.AgentsCount,
 						href: $state.href('rta-agents', { teamIds: team.Id, skillIds: $stateParams.skillIds, skillAreaId: $stateParams.skillAreaId })
@@ -145,12 +135,8 @@
 				teamCard.Color = team.Color;
 				teamCard.InAlarmCount = team.InAlarmCount;
 			})
-			setTeamToSelected(siteCard);
-		}
-
-		function setTeamToSelected(card) {
-			if (card.isSelected) {
-				card.teams.forEach(function (team) {
+			if (siteCard.isSelected) {
+				siteCard.teams.forEach(function (team) {
 					team.isSelected = true;
 				});
 			}

@@ -198,7 +198,7 @@
 
         fake(/\.\.\/api\/Overview\/SiteCards(.*)/,
             function (params) {
-                var sites = siteAdherences;
+                var sites = JSON.parse(JSON.stringify(siteAdherences));
 
                 if (params.skillIds)
                     sites = sites.filter(function (sa) {
@@ -218,19 +218,27 @@
                     );
                 }
 
-                var teams = [];
-                if (siteIds.length > 0)
-                    teams = teamAdherences.filter(function (team) {
-                        return siteIds.indexOf(team.SiteId) > -1;
+                if (siteIds.length > 0) {
+                    sites.forEach(function (site) {
+                        site.Teams = [];
+
+                        if (siteIds.indexOf(site.Id) > -1) {
+
+                            var teams = teamAdherences.filter(function (team) {
+                                return team.SiteId == site.Id;
+                            })
+
+                            if (params.skillIds)
+                                teams = teams.filter(function (team) {
+                                    return params.skillIds.indexOf(team.SkillId) > -1;
+                                });
+                            site.Teams = teams
+                        }
                     })
-                if (params.skillIds)
-                    teams = teams.filter(function (team) {
-                        return params.skillIds.indexOf(team.SkillId) > -1;
-                    });
+                }
 
                 return [200, {
                     Sites: sites,
-                    Teams: teams,
                     TotalAgentsInAlarm: sites
                         .map(function (s) { return s.InAlarmCount })
                         .reduce(function (s, v) { return s + v }, 0)

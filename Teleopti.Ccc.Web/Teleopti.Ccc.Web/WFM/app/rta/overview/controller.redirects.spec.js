@@ -446,7 +446,7 @@ describe('RtaOverviewController', function () {
         });
       var c = $controllerBuilder.createController();
       vm = c.vm;
-
+      
       c.apply(function () {
         vm.siteCards[0].isOpen = true;
       });
