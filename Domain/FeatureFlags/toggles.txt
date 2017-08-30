@@ -43,7 +43,7 @@ Wfm_ChangePlanningPeriod_33043 = true
 RTA_SpreadTransactionLocksStrategy_41823 = true
 RTA_EventPackagesOptimization_43924 = true
 RTA_AsyncOptimization_43924 = true
-RTA_RememberMyPartOfTheBusiness_39082 = RC
+RTA_RememberMyPartOfTheBusiness_39082 = false
 
 WfmTeamSchedule_MoveOvertimeActivity_44888 = true
 WfmTeamSchedule_SortRows_45056 = true
