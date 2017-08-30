@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -131,15 +132,16 @@ namespace Teleopti.Ccc.Domain.Optimization
         public bool KeepShiftCategories { get; set; }
         public bool KeepEndTimes { get; set; }
         public bool KeepStartTimes { get; set; }
-        public bool KeepShifts { get; set; }
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
+		public bool KeepShifts { get; set; }
         public bool AlterBetween { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public IList<IActivity> SelectedActivities { get; set; }
 
 	    public bool KeepActivityLength { get; set; }
 		public IActivity ActivityToKeepLengthOn { get; set; }
 
 	    public TimePeriod SelectedTimePeriod { get; set; }
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
         public double KeepShiftsValue { get; set; }
 
 		public ShiftPreferences()

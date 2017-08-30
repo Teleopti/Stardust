@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -12,7 +13,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IScheduleDayEquator _scheduleDayEquator;
         private readonly IDictionary<DateOnly, IScheduleDay> _oldPeriodDaysState;
         private int _originalNumberOfDaysOff;
-        private int _originalNumberOfWorkShifts;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
+		private int _originalNumberOfWorkShifts;
     	private TimeSpan? _originalWorkTime;
         public bool StillAlive { get; set; }
 
@@ -72,7 +74,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             return (double)changedDaysOff/_originalNumberOfDaysOff;
         }
 
-        public double ChangedWorkShiftsPercent()
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
+		public double ChangedWorkShiftsPercent()
         {
             int changedWorkShifts = 0;
             foreach (IScheduleDayPro day in _matrix.EffectivePeriodDays)

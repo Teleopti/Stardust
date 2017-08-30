@@ -1,4 +1,5 @@
 ﻿using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
+using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 {
@@ -367,11 +368,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Optimization
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBox1;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBox2;
 		private System.Windows.Forms.Label label6;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepShifts;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepShiftCategories;
 		private System.Windows.Forms.Label label1;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_RetireKeepPercentageOfShifts_45688)]
 		private Syncfusion.Windows.Forms.Tools.NumericUpDownExt numericUpDownKeepShifts;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepStartTimes;
 		private Syncfusion.Windows.Forms.Tools.CheckBoxAdv checkBoxKeepEndTimes;
