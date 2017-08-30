@@ -129,6 +129,7 @@ ResourcePlanner_RespectSkillGroupShoveling_44156 = true
 ResourcePlanner_OvertimeNightShifts_44311 = true
 ResourcePlanner_SchedulingIslands_44757 = true
 ResourcePlanner_MergeTeamblockClassicIntraday_45508 = RC
+ResourcePlanner_RetireKeepPercentageOfShifts_45688 = RC
 
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
 Wfm_DisplayOnlineHelp_39402 = true
