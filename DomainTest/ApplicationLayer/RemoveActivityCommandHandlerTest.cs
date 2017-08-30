@@ -50,6 +50,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			system.UseTestDouble<RemoveActivityCommandHandler>().For<IHandleCommand<RemoveActivityCommand>>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
 			_mainActivity = ActivityFactory.CreateActivity("mainActivity");
+			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 		}
 
 		[Test]

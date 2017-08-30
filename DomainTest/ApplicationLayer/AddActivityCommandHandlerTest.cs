@@ -18,7 +18,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Staffing;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -39,7 +38,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeScheduleStorage ScheduleStorage;
 		public FakePersonRepository PersonRepository;
 		public FakeActivityRepository ActivityRepository;
-		public FakeWriteSideRepository<IActivity> ActivityRepository2;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
@@ -51,17 +49,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<AddActivityCommandHandler>().For<IHandleCommand<AddActivityCommand>>();
-			//system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
-			//system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
 			system.UseTestDouble<ScheduleDayDifferenceSaver>().For<IScheduleDayDifferenceSaver>();
-			//system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
-			//system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
-			//system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
-			//system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
-			//system.UseTestDouble<FakeShiftCategoryRepository>().For<IShiftCategoryRepository>();
-			//system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
-
-			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
+			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
+			system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
+			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 		}
 
 		[Test]
@@ -73,8 +65,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var mainActivity = ActivityFactory.CreateActivity("mainActivity");
 			ActivityRepository.Add(activity);
 			ActivityRepository.Add(mainActivity);
-			ActivityRepository2.Add(activity);
-			ActivityRepository2.Add(mainActivity);
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
 			personAssignment.ShiftLayers.ForEach(sl => EntityExtensions.WithId<ShiftLayer>(sl));
 			personAssignment.SetId(Guid.NewGuid());
@@ -199,9 +189,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(addedActivity);
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");
 			ShiftCategoryRepository.Add(shiftCategory);
-
-
-
+			
 			var dayOff = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, date, new DayOffTemplate());
 			ScheduleStorage.Add(dayOff);
 			
@@ -242,8 +230,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personalActivity = ActivityFactory.CreateActivity("a personal activity");
 			dayOffWithPersonalActivity.AddPersonalActivity(personalActivity, new DateTimePeriod(), true, null);
 			ScheduleStorage.Add(dayOffWithPersonalActivity);
-
-
+			
 			
 			var command = new AddActivityCommand
 			{
@@ -343,6 +330,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var movedLunchLayer = personAssignment.ShiftLayers.First(l => l.Payload == lunchActivity);
 			movedLunchLayer.Period.Should().Be(new DateTimePeriod(2013, 11, 14, 11, 2013, 11, 14, 12));
 		}
+
 		[Test]
 		public void ShouldRaiseOneActivityAddedEventWithFixableConflictNonoverwritableLayer()
 		{
@@ -387,6 +375,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var @events = allEves.OfType<ActivityAddedEvent>().Where(e => e.ActivityId == addedActivity.Id.Value);
 			@events.Count().Should().Be(1);
 		}
+
 		[Test]
 		public void ShouldReturnWarningForConflictNonoverwritableLayerWhenItsNotFixable()
 		{

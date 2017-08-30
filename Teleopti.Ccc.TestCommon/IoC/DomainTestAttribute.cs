@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.TestCommon.IoC
 
 			system.UseTestDouble<FakeTimeZoneGuard>().For<ITimeZoneGuard>();
 			system.UseTestDouble<PersonRequestAuthorizationCheckerForTest>().For<IPersonRequestCheckAuthorization>();
-			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeUserTimeZone>().For<IUserTimeZone>();
 
 			// Tenant (and datasource) stuff
@@ -117,9 +116,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			//
 
 			system.UseTestDouble<FakeScheduleRangePersister>().For<IScheduleRangePersister>();
-			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
-			system.UseTestDouble<FakePersonSkillProvider>().For<IPersonSkillProvider>();
-			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
+			
 
 			// readmodels
 			system.UseTestDouble<FakeScheduleProjectionReadOnlyPersister>().For<IScheduleProjectionReadOnlyPersister>();
@@ -141,7 +138,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 			}
 			else
 			{
-				system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
+				system.UseTestDouble<FakePersonRepository>().For<IPersonRepository, IProxyForId<IPerson>>();
+				//system.UseTestDouble<FakePersonRepository>().For<IPersonRepository>();
 				system.UseTestDouble<FakeMultisiteDayRepository>().For<IMultisiteDayRepository>();
 				system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 				system.UseTestDouble<FakeApplicationRoleRepository>().For<IApplicationRoleRepository>();
@@ -151,7 +149,8 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeGroupPageRepository>().For<IGroupPageRepository>();
 				system.UseTestDouble<FakeExternalLogOnRepository>().For<IExternalLogOnRepository>();
 				system.UseTestDouble<FakeScenarioRepository>().For<IScenarioRepository>();
-				system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
+				system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository, IProxyForId<IActivity>>();
+				//system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 				system.UseTestDouble<FakePlanningPeriodRepository>().For<IPlanningPeriodRepository>();
 				system.UseTestDouble<FakeExistingForecastRepository>().For<IExistingForecastRepository>();
 				system.UseTestDouble<FakeDayOffTemplateRepository>().For<IDayOffTemplateRepository>();

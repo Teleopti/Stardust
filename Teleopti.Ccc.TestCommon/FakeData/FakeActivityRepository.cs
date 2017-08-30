@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
-	public class FakeActivityRepository : IActivityRepository
+	public class FakeActivityRepository : IActivityRepository, IProxyForId<IActivity>
 	{
 		private readonly IList<IActivity> _activities;
 
