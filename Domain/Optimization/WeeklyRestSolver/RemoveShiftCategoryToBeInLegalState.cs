@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 	public class RemoveShiftCategoryToBeInLegalState
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
+		private readonly RequiredScheduleHelper _requiredScheduleOptimizerHelper;
 		private readonly Func<IScheduleDayChangeCallback> _scheduleDayChangeCallback;
 		private readonly MatrixListFactory _matrixListFactory;
 		private readonly IWeeklyRestSolverCommand _weeklyRestSolverCommand;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 		private readonly IResourceCalculation _resourceCalculation;
 
 		public RemoveShiftCategoryToBeInLegalState(Func<ISchedulerStateHolder> schedulerStateHolder,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
+			RequiredScheduleHelper requiredScheduleOptimizerHelper,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			MatrixListFactory matrixListFactory,
 			IWeeklyRestSolverCommand weeklyRestSolverCommand,

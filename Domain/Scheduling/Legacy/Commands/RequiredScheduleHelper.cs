@@ -15,22 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 {
-	public interface IRequiredScheduleHelper
-	{
-		void ScheduleSelectedStudents(IEnumerable<IScheduleDay> allSelectedSchedules, ISchedulingProgress backgroundWorker,
-			SchedulingOptions schedulingOptions);
-
-		void RemoveShiftCategoryBackToLegalState(
-			IEnumerable<IScheduleMatrixPro> matrixList,
-			ISchedulingProgress backgroundWorker,
-			SchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
-
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-		void ScheduleSelectedPersonDays(IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IEnumerable<IScheduleMatrixPro> matrixList,
-			ISchedulingProgress backgroundWorker, SchedulingOptions schedulingOptions);
-	}
-
-	public class RequiredScheduleHelper : IRequiredScheduleHelper
+	public class RequiredScheduleHelper
 	{
 		private readonly ISchedulePeriodListShiftCategoryBackToLegalStateService _shiftCategoryBackToLegalState;
 		private readonly RuleSetBagsOfGroupOfPeopleCanHaveShortBreak _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak;

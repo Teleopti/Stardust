@@ -19,14 +19,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<IResourceCalculation> _resourceOptimizationHelper;
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IUserTimeZone _userTimeZone;
-		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
+		private readonly RequiredScheduleHelper _requiredScheduleOptimizerHelper;
 
 		public ClassicScheduleCommand(MatrixListFactory matrixListFactory, IWeeklyRestSolverCommand weeklyRestSolverCommand,
 			Func<IScheduleDayChangeCallback> scheduleDayChangeCallback,
 			Func<IResourceCalculation> resourceOptimizationHelper,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			IUserTimeZone userTimeZone,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper)
+			RequiredScheduleHelper requiredScheduleOptimizerHelper)
 		{
 			_matrixListFactory = matrixListFactory;
 			_weeklyRestSolverCommand = weeklyRestSolverCommand;

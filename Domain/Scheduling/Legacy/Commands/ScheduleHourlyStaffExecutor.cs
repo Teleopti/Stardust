@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	public class ScheduleHourlyStaffExecutor
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
-		private readonly IRequiredScheduleHelper _requiredScheduleOptimizerHelper;
+		private readonly RequiredScheduleHelper _requiredScheduleOptimizerHelper;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly RemoveShiftCategoryToBeInLegalState _removeShiftCategoryToBeInLegalState;
 
 		public ScheduleHourlyStaffExecutor(Func<ISchedulerStateHolder> schedulerStateHolder,
-			IRequiredScheduleHelper requiredScheduleOptimizerHelper,
+			RequiredScheduleHelper requiredScheduleOptimizerHelper,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
 			RemoveShiftCategoryToBeInLegalState removeShiftCategoryToBeInLegalState)
 		{
