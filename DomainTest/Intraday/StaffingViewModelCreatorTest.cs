@@ -328,7 +328,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 
-			var skill = StaffingViewModelCreatorTestHelper.CreateBackOfficeSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
+			var skill = StaffingViewModelCreatorTestHelper.CreateOutboundSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 30));
 			SkillRepository.Has(skill);
 
 			var vm = Target.Load(new[] { skill.Id.Value });
@@ -934,10 +934,10 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 
 			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
 			var phoneSkill = createSkill(minutesPerInterval, "skill1", new TimePeriod(8, 0, 8, 30), false, 0);
-			var backOfficeSkill = StaffingViewModelCreatorTestHelper.CreateBackOfficeSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30));
+			var outboundSkill = StaffingViewModelCreatorTestHelper.CreateOutboundSkill(minutesPerInterval, "skill2", new TimePeriod(8, 0, 8, 30));
 
 			var skillDayPhone = StaffingViewModelCreatorTestHelper.CreateSkillDay(phoneSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues(), false);
-			var skillDayEmail = StaffingViewModelCreatorTestHelper.CreateSkillDay(backOfficeSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues());
+			var skillDayEmail = StaffingViewModelCreatorTestHelper.CreateSkillDay(outboundSkill, scenario, Now.UtcDateTime(), new TimePeriod(8, 0, 8, 30), false, ServiceAgreement.DefaultValues());
 
 			var actualPhoneStats = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDayPhone, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
 			var actualBackofficeStats = StaffingViewModelCreatorTestHelper.CreateStatistics(skillDayEmail, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
@@ -946,13 +946,13 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			actualStatsTotal.AddRange(actualPhoneStats);
 			actualStatsTotal.AddRange(actualBackofficeStats);
 
-			SkillRepository.Has(phoneSkill, backOfficeSkill);
+			SkillRepository.Has(phoneSkill, outboundSkill);
 			SkillDayRepository.Has(skillDayPhone, skillDayEmail);
 			IntradayQueueStatisticsLoader.HasStatistics(actualStatsTotal);
 
 			var actualStaffingSkill1 = getActualStaffing(skillDayPhone, actualPhoneStats, phoneSkill.DefaultResolution);
 
-			var vm = Target.Load(new[] { phoneSkill.Id.Value, backOfficeSkill.Id.Value });
+			var vm = Target.Load(new[] { phoneSkill.Id.Value, outboundSkill.Id.Value });
 
 			var deviationWithReforecast = calculateAverageDeviation(actualPhoneStats, skillDayPhone);
 

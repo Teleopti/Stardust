@@ -52,6 +52,20 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			return skill;
 		}
 
+		public static ISkill CreateOutboundSkill(int intervalLength, string skillName, TimePeriod openHours)
+		{
+			var activity = new Activity("activity_" + skillName).WithId();
+			var skill =
+				new Skill(skillName, skillName, Color.Empty, intervalLength, new SkillTypeEmail(new Description("SkillTypeOutbound"), ForecastSource.Email))
+				{
+					Activity = activity,
+					TimeZone = TimeZoneInfo.Utc
+				}.WithId();
+			WorkloadFactory.CreateWorkloadWithOpenHours(skill, openHours).WithId();
+
+			return skill;
+		}
+
 		public static ISkillDay CreateSkillDay(ISkill skill, IScenario scenario, DateTime userNow, TimePeriod openHours, 
 			bool addSkillDataPeriodDuplicate, ServiceAgreement serviceAgreement, bool giveDemand = true)
 		{
