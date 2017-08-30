@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 	[TestFixture(SUT.IntradayOptimization)]
 	[TestFixture(SUT.Scheduling)]
 	[DomainTest]
-	[Toggle(Toggles.ResourcePlanner_SchedulingIslands_44757)]
+	[Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class CommandHandlerIncreaseIslandsTest
 	{
 		private readonly SUT _sut;

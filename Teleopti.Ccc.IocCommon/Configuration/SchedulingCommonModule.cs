@@ -135,6 +135,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<TeamBlockScheduleSelected>().InstancePerLifetimeScope();
 				builder.RegisterType<WorkShiftMinMaxCalculator>().As<IWorkShiftMinMaxCalculator>().InstancePerDependency();
 				builder.RegisterType<NullWorkShiftFinderResultHolder>().As<IWorkShiftFinderResultHolder>().SingleInstance();
+				builder.RegisterType<SchedulingCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<FullScheduling>().As<IFullScheduling>().InstancePerLifetimeScope().ApplyAspects();
+				builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
 			}
 			else
 			{
@@ -148,17 +151,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<TeamBlockSchedulingService>().InstancePerLifetimeScope();
 				builder.RegisterType<WorkShiftMinMaxCalculatorOLD>().As<IWorkShiftMinMaxCalculator>().InstancePerDependency();
 				builder.RegisterType<WorkShiftFinderResultHolder>().As<IWorkShiftFinderResultHolder>().InstancePerLifetimeScope();
-			}
-
-			//check scopes here when we get further! might be singleinstances everywhere....
-			if (_configuration.Toggle(Toggles.ResourcePlanner_SchedulingIslands_44757))
-			{
-				builder.RegisterType<SchedulingCommandHandler>().InstancePerLifetimeScope().ApplyAspects();
-				builder.RegisterType<FullScheduling>().As<IFullScheduling>().InstancePerLifetimeScope().ApplyAspects();
-				builder.RegisterType<DesktopScheduling>().InstancePerLifetimeScope();
-			}
-			else
-			{
 				builder.RegisterType<FullSchedulingOLD>().As<IFullScheduling>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DesktopSchedulingOLD>().As<DesktopScheduling>().InstancePerLifetimeScope();
 			}

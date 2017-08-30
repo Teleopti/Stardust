@@ -127,7 +127,6 @@ ResourcePlanner_MergeTeamblockClassicScheduling_44289 = true
 ResourcePlanner_CalculateShiftValuesInParallel_44681 = DEV
 ResourcePlanner_RespectSkillGroupShoveling_44156 = true
 ResourcePlanner_OvertimeNightShifts_44311 = true
-ResourcePlanner_SchedulingIslands_44757 = true
 ResourcePlanner_MergeTeamblockClassicIntraday_45508 = RC
 ResourcePlanner_RetireKeepPercentageOfShifts_45688 = RC
 

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
 		private IBusinessUnit businessUnit;
 
-		public WebScheduleStardustHandlerTest(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
+		public WebScheduleStardustHandlerTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
 		{
 		}
 

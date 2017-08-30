@@ -3172,7 +3172,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 					}
 
 					//hack - to be fixed
-					if (progress != null && _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_SchedulingIslands_44757))
+					if (progress != null && _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289))
 					{
 						var part = progress.SchedulePart;
 						if (part != null)

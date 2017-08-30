@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		[Test]
 		public void ShouldNotUseSkillsThatWereRemovedDuringIslandCreation()
 		{
-			if(!_resourcePlannerSchedulingIslands44757)
+			if(!ResourcePlannerMergeTeamblockClassicScheduling44289)
 				Assert.Ignore("Not valid when islands aren't created");
 
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 1);
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.Should().Be.EqualTo(activityC);
 		}
 
-		public SchedulingIslandTests(bool resourcePlannerMergeTeamblockClassicScheduling44289, bool resourcePlannerSchedulingIslands44757) : base(resourcePlannerMergeTeamblockClassicScheduling44289, resourcePlannerSchedulingIslands44757)
+		public SchedulingIslandTests(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
 		{
 		}
 	}

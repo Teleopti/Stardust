@@ -11,14 +11,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 { 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SchedulingIslands_44757)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public interface IFullScheduling
 	{
 		SchedulingResultModel DoScheduling(DateOnlyPeriod period);
 		SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people);
 	}
 
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_SchedulingIslands_44757)]
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public class FullSchedulingOLD : IFullScheduling
 	{
 		private readonly IScheduleExecutor _scheduleExecutor;

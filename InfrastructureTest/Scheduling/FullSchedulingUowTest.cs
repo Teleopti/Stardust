@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 	[TestFixture(false)]
 	public class FullSchedulingUowTest : IConfigureToggleManager
 	{
-		private readonly bool _resourcePlannerSchedulingIslands44757;
+		private readonly bool _resourcePlannerMergeTeamblockClassicScheduling44289;
 		public IFullScheduling Target;
 		public IScenarioRepository ScenarioRepository;
 		public IDayOffTemplateRepository DayOffTemplateRepository;
@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 
 		private readonly DateOnly date = new DateOnly(2017, 6, 1);
 
-		public FullSchedulingUowTest(bool resourcePlannerSchedulingIslands44757)
+		public FullSchedulingUowTest(bool resourcePlannerMergeTeamblockClassicScheduling44289)
 		{
-			_resourcePlannerSchedulingIslands44757 = resourcePlannerSchedulingIslands44757;
+			_resourcePlannerMergeTeamblockClassicScheduling44289 = resourcePlannerMergeTeamblockClassicScheduling44289;
 		}
 
 		[TestCase(true)]
@@ -97,8 +97,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 
 		public void Configure(FakeToggleManager toggleManager)
 		{
-			if(_resourcePlannerSchedulingIslands44757)
-				toggleManager.Enable(Toggles.ResourcePlanner_SchedulingIslands_44757);
+			if(_resourcePlannerMergeTeamblockClassicScheduling44289)
+				toggleManager.Enable(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289);
 		}
 	}
 }
