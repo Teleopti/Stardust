@@ -55,7 +55,8 @@ describe('rtaOverviewComponent', function () {
 
     $fakeBackend.clear();
     spyOn($state, 'go');
-    scope = $controllerBuilder.setup('RtaOverviewController39082');
+    // remove with RTA_RememberMyPartOfTheBusiness_39082
+    scope = $controllerBuilder.setup('RtaOverviewController');
 
 
     channelSales = {

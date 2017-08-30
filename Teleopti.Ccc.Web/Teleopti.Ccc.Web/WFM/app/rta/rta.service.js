@@ -77,14 +77,26 @@
         };
 
         function getOverviewModelFor(data) {
-            if (angular.isArray(data))
+            if (angular.isArray(data)) // remove with RTA_RememberMyPartOfTheBusiness_39082
                 data = { skillIds: data };
 
             return $resource('../api/Overview/SiteCards', {}, {
                 query: {
                     method: 'GET'
                 }
-            }).query(data).$promise;
+            }).query(data)
+                .$promise;
+                // .then(function (result) {
+                //     result.Teams = [{
+                //         Id: "34590A63-6331-4921-BC9F-9B5E015AB495",
+                //         SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+                //         Name: "Fajk",
+                //         AgentsCount: 183897,
+                //         InAlarmCount: 13,
+                //         Color: "danger"
+                //     }]
+                //     return result;
+                // });
         }
 
         function getSkillArea(data) {

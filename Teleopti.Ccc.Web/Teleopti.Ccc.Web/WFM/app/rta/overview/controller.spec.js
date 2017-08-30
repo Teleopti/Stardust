@@ -159,11 +159,11 @@ describe('RtaOverviewController', function () {
 
       vm = $controllerBuilder.createController().vm;
 
-      expect(vm.siteCards[0].site.Id).toEqual('londonId');
-      expect(vm.siteCards[0].site.Name).toEqual('London');
-      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
-      expect(vm.siteCards[0].site.InAlarmCount).toEqual(5);
-      expect(vm.siteCards[0].site.Color).toEqual(warningColor);
+      expect(vm.siteCards[0].Id).toEqual('londonId');
+      expect(vm.siteCards[0].Name).toEqual('London');
+      expect(vm.siteCards[0].AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].InAlarmCount).toEqual(5);
+      expect(vm.siteCards[0].Color).toEqual(warningColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
     });
 
@@ -295,11 +295,11 @@ describe('RtaOverviewController', function () {
       vm = $controllerBuilder.createController().vm;
 
       expect(vm.siteCards.length).toEqual(1);
-      expect(vm.siteCards[0].site.Id).toEqual('londonId');
-      expect(vm.siteCards[0].site.Name).toEqual('London');
-      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
-      expect(vm.siteCards[0].site.InAlarmCount).toEqual(5);
-      expect(vm.siteCards[0].site.Color).toEqual(warningColor);
+      expect(vm.siteCards[0].Id).toEqual('londonId');
+      expect(vm.siteCards[0].Name).toEqual('London');
+      expect(vm.siteCards[0].AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].InAlarmCount).toEqual(5);
+      expect(vm.siteCards[0].Color).toEqual(warningColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
     });
 
@@ -317,11 +317,11 @@ describe('RtaOverviewController', function () {
 
       vm = $controllerBuilder.createController(undefined, skillAreas).vm;
 
-      expect(vm.siteCards[0].site.Id).toEqual('londonId');
-      expect(vm.siteCards[0].site.Name).toEqual('London');
-      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
-      expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
-      expect(vm.siteCards[0].site.Color).toEqual(goodColor);
+      expect(vm.siteCards[0].Id).toEqual('londonId');
+      expect(vm.siteCards[0].Name).toEqual('London');
+      expect(vm.siteCards[0].AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].InAlarmCount).toEqual(2);
+      expect(vm.siteCards[0].Color).toEqual(goodColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
     });
 
@@ -348,11 +348,11 @@ describe('RtaOverviewController', function () {
       })
         .wait(5000);
 
-      expect(vm.siteCards[0].site.Id).toEqual('londonId');
-      expect(vm.siteCards[0].site.Name).toEqual('London');
-      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
-      expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
-      expect(vm.siteCards[0].site.Color).toEqual(goodColor);
+      expect(vm.siteCards[0].Id).toEqual('londonId');
+      expect(vm.siteCards[0].Name).toEqual('London');
+      expect(vm.siteCards[0].AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].InAlarmCount).toEqual(2);
+      expect(vm.siteCards[0].Color).toEqual(goodColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
     });
 
@@ -379,8 +379,8 @@ describe('RtaOverviewController', function () {
       })
         .wait(5000);
 
-      expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
-      expect(vm.siteCards[0].site.Color).toEqual(goodColor);
+      expect(vm.siteCards[0].InAlarmCount).toEqual(2);
+      expect(vm.siteCards[0].Color).toEqual(goodColor);
     });
 
     it('should update adherence for site with skill area', function () {
@@ -413,8 +413,8 @@ describe('RtaOverviewController', function () {
       })
         .wait(5000);
 
-      expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
-      expect(vm.siteCards[0].site.Color).toEqual(goodColor);
+      expect(vm.siteCards[0].InAlarmCount).toEqual(2);
+      expect(vm.siteCards[0].Color).toEqual(goodColor);
     });
 
     it('should update adherence for site with preselected skill', function () {
@@ -440,8 +440,8 @@ describe('RtaOverviewController', function () {
       })
         .wait(5000);
 
-      expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
-      expect(vm.siteCards[0].site.Color).toEqual(goodColor);
+      expect(vm.siteCards[0].InAlarmCount).toEqual(2);
+      expect(vm.siteCards[0].Color).toEqual(goodColor);
     });
 
     it('should update adherence for site with preselected skill area', function () {
@@ -474,8 +474,8 @@ describe('RtaOverviewController', function () {
       })
         .wait(5000);
 
-      expect(vm.siteCards[0].site.InAlarmCount).toEqual(2);
-      expect(vm.siteCards[0].site.Color).toEqual(goodColor);
+      expect(vm.siteCards[0].InAlarmCount).toEqual(2);
+      expect(vm.siteCards[0].Color).toEqual(goodColor);
     });
 
     it('should update adherence for site when clearing selection', function () {
@@ -518,11 +518,11 @@ describe('RtaOverviewController', function () {
       })
         .wait(5000);
 
-      expect(vm.siteCards[0].site.Id).toEqual('londonId');
-      expect(vm.siteCards[0].site.Name).toEqual('London');
-      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
-      expect(vm.siteCards[0].site.InAlarmCount).toEqual(9);
-      expect(vm.siteCards[0].site.Color).toEqual(dangerColor);
+      expect(vm.siteCards[0].Id).toEqual('londonId');
+      expect(vm.siteCards[0].Name).toEqual('London');
+      expect(vm.siteCards[0].AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].InAlarmCount).toEqual(9);
+      expect(vm.siteCards[0].Color).toEqual(dangerColor);
       expect(vm.siteCards[0].isOpen).toEqual(false);
     });
 
@@ -533,46 +533,6 @@ describe('RtaOverviewController', function () {
       scope.$emit('$destroy');
       $interval.flush(5000);
       $httpBackend.verifyNoOutstandingRequest();
-    });
-
-    it('should get site cards with skill id', function () {
-      $fakeBackend
-        .withSiteAdherence({
-          Id: 'parisId',
-          SkillId: 'channelSalesId',
-          Name: 'London',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
-        })
-      vm = $controllerBuilder.createController().vm;
-
-      vm.filterOutput(vm.skills[0]);
-      $httpBackend.flush();
-
-      expect(vm.siteCards.length).toEqual(1);
-      expect(vm.siteCards[0].site.Id).toEqual('parisId');
-      expect(vm.siteCards[0].site.SkillId).toEqual('channelSalesId');
-    });
-
-    it('should get site cards with skill area id', function () {
-      $fakeBackend
-        .withSiteAdherence({
-          Id: 'parisId',
-          SkillId: 'channelSalesId',
-          Name: 'Paris',
-          AgentsCount: 11,
-          InAlarmCount: 2,
-          Color: 'good'
-        });
-      vm = $controllerBuilder.createController(undefined, skillAreas).vm;
-
-      vm.filterOutput(vm.skillAreas[0]);
-      $httpBackend.flush();
-
-      expect(vm.siteCards.length).toEqual(1);
-      expect(vm.siteCards[0].site.Id).toEqual('parisId');
-      expect(vm.siteCards[0].site.SkillId).toEqual('channelSalesId');
     });
 
     it('should get site cards after clearing filter input', function () {
@@ -608,16 +568,16 @@ describe('RtaOverviewController', function () {
       $httpBackend.flush();
 
       expect(vm.siteCards.length).toEqual(2);
-      expect(vm.siteCards[0].site.Id).toEqual('parisId');
-      expect(vm.siteCards[0].site.Name).toEqual('Paris');
-      expect(vm.siteCards[0].site.AgentsCount).toEqual(11);
-      expect(vm.siteCards[0].site.InAlarmCount).toEqual(5);
-      expect(vm.siteCards[0].site.Color).toEqual(goodColor);
-      expect(vm.siteCards[1].site.Id).toEqual('londonId');
-      expect(vm.siteCards[1].site.Name).toEqual('London');
-      expect(vm.siteCards[1].site.AgentsCount).toEqual(10);
-      expect(vm.siteCards[1].site.InAlarmCount).toEqual(8);
-      expect(vm.siteCards[1].site.Color).toEqual(dangerColor);
+      expect(vm.siteCards[0].Id).toEqual('parisId');
+      expect(vm.siteCards[0].Name).toEqual('Paris');
+      expect(vm.siteCards[0].AgentsCount).toEqual(11);
+      expect(vm.siteCards[0].InAlarmCount).toEqual(5);
+      expect(vm.siteCards[0].Color).toEqual(goodColor);
+      expect(vm.siteCards[1].Id).toEqual('londonId');
+      expect(vm.siteCards[1].Name).toEqual('London');
+      expect(vm.siteCards[1].AgentsCount).toEqual(10);
+      expect(vm.siteCards[1].InAlarmCount).toEqual(8);
+      expect(vm.siteCards[1].Color).toEqual(dangerColor);
     });
 
     it('should update total agents in alarm', function () {

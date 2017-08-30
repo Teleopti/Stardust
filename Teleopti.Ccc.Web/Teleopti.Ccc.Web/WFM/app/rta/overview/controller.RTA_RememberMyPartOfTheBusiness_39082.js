@@ -16,7 +16,7 @@
 		vm.siteCards = [];
 		vm.totalAgentsInAlarm = 0;
 		vm.urlParams = $stateParams;
-		vm.agentsState = 'rta-agents({siteIds: card.site.Id})';
+		vm.agentsState = 'rta-agents({siteIds: card.Id})';
 		vm.agentsStateForTeam = 'rta-agents({teamIds: team.Id})';
 		vm.organizationSelection = false;
 		vm.skillSelected = vm.skillIds.length;
@@ -27,17 +27,21 @@
 		$stateParams.teamIds = $stateParams.teamIds || [];
 		var pollPromise;
 
+		vm.selectTeamOrSite = function (selectable) {
+			selectable.isSelected = !selectable.isSelected;
+		};
+
 		(function () {
 			if (angular.isDefined(vm.urlParams.skillAreaId)) {
-				vm.agentsState = 'rta-agents({siteId	s: card.site.Id, skillAreaId: "' + vm.urlParams.skillAreaId + '"})';
+				vm.agentsState = 'rta-agents({siteIds: card.Id, skillAreaId: "' + vm.urlParams.skillAreaId + '"})';
 				vm.agentsStateForTeam = 'rta-agents({teamIds: team.Id, skillAreaId: "' + vm.urlParams.skillAreaId + '"})';
 			}
 			else if (angular.isDefined(vm.urlParams.skillIds)) {
-				vm.agentsState = 'rta-agents({siteIds: card.site.Id, skillIds: ["' + vm.urlParams.skillIds[0] + '"]})';
+				vm.agentsState = 'rta-agents({siteIds: card.Id, skillIds: ["' + vm.urlParams.skillIds[0] + '"]})';
 				vm.agentsStateForTeam = 'rta-agents({teamIds: team.Id, skillIds: ["' + vm.urlParams.skillIds[0] + '"]})';
 			}
 			else {
-				vm.agentsState = 'rta-agents({siteIds: card.site.Id})';
+				vm.agentsState = 'rta-agents({siteIds: card.Id})';
 				vm.agentsStateForTeam = 'rta-agents({teamIds: team.Id})';
 			}
 
@@ -80,14 +84,14 @@
 		function getSites() {
 			var siteIds = [];
 			vm.siteCards.forEach(function (siteCard) {
-				if (siteCard.isOpen) siteIds.push(siteCard.site.Id);
+				if (siteCard.isOpen) siteIds.push(siteCard.Id);
 			});
 
 			return rtaService.getOverviewModelFor({ skillIds: vm.skillIds, teamIds: $stateParams.teamIds, siteIds: siteIds })
 				.then(function (data) {
 					data.Sites.forEach(function (site) {
 						var siteCard = vm.siteCards.find(function (siteCard) {
-							return siteCard.site.Id === site.Id;
+							return siteCard.Id === site.Id;
 						});
 						var teams = data.Teams
 							.filter(function (team) {
@@ -95,10 +99,12 @@
 							});
 						if (!siteCard) {
 							siteCard = {
-								site: site,
+								Id: site.Id,
+								Name: site.Name,
 								isOpen: $stateParams.open != "false" || teams.length > 0,
 								isSelected: $stateParams.siteIds.indexOf(site.Id) > -1,
-								teams: []
+								teams: [],
+								AgentsCount: site.AgentsCount,
 							};
 							$scope.$watch(function () { return siteCard.isOpen }, function (newValue) { if (newValue) pollNow(); });
 							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
@@ -113,12 +119,11 @@
 							});
 							vm.siteCards.push(siteCard);
 						};
-						
-						
-						getTeamsForSite(siteCard, teams);
 
-						siteCard.site.Color = translateSiteColors(site);
-						siteCard.site.InAlarmCount = site.InAlarmCount;
+						updateTeams(siteCard, teams);
+						siteCard.Color = translateSiteColors(site);
+						siteCard.InAlarmCount = site.InAlarmCount;
+
 					});
 
 					vm.totalAgentsInAlarm = data.TotalAgentsInAlarm;
@@ -133,7 +138,7 @@
 			vm.organizationSelection = !!match;
 		}
 
-		function getTeamsForSite(siteCard, teams) {
+		function updateTeams(siteCard, teams) {
 			teams.forEach(function (team) {
 				var teamCard = siteCard.teams.find(function (t) {
 					return team.Id === t.Id;
@@ -143,7 +148,7 @@
 					teamCard = {
 						Id: team.Id,
 						Name: team.Name,
-						SiteId: siteCard.site.Id,
+						SiteId: siteCard.Id,
 						isSelected: $stateParams.teamIds.indexOf(team.Id) > -1,
 						AgentsCount: team.AgentsCount
 					};
@@ -232,7 +237,7 @@
 			var skillIds = angular.isDefined(vm.urlParams.skillIds) ? vm.urlParams.skillIds : [];
 
 			vm.siteCards.forEach(function (siteCard) {
-				if (siteCard.isSelected) siteIds.push(siteCard.site.Id);
+				if (siteCard.isSelected) siteIds.push(siteCard.Id);
 				else siteCard.teams.forEach(function (team) {
 					if (team.isSelected) teamIds.push(team.Id);
 				});
