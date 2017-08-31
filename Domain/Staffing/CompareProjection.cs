@@ -127,6 +127,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				Resource = activityResourceInterval.Resource,
 				SkillCombination = personSkills.Skills.Where(x => x.Activity.Id.GetValueOrDefault() == activityResourceInterval.Activity).Select(x => x.Id.GetValueOrDefault())
 			}).ToList();
+			//Test from Denver
 		}
 
 		private IEnumerable<ActivityResourceInterval> getActivityIntervals(IScheduleDay scheduleDay, int resolution)
