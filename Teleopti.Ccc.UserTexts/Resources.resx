@@ -16445,4 +16445,7 @@ Do you want to participate?</value>
     <value>Total agents in alarm</value>
     <comment>Text to be displayed in the RTA overview preceeding the number of agents in alarm</comment>
   </data>
+  <data name="ReportGeneratedTime" xml:space="preserve">
+    <value>Report generated time</value>
+  </data>
 </root>

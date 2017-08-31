@@ -25383,6 +25383,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Report generated time.
+        /// </summary>
+        public static string ReportGeneratedTime {
+            get {
+                return ResourceManager.GetString("ReportGeneratedTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Report As.
         /// </summary>
         public static string ReportLevel {
