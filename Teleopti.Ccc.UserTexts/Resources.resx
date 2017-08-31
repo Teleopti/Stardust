@@ -16423,7 +16423,7 @@ Do you want to participate?</value>
     <comment>label for the staffingchart to show the scheduled agents after overtime suggestion has been requested</comment>
   </data>
   <data name="UnderstaffingAfterOT" xml:space="preserve">
-    <value>Understafing after OT</value>
+    <value>Understaffing after OT</value>
     <comment>label for the staffingchart to show the understaffing after overtime suggestion has been requested</comment>
   </data>
   <data name="InAlarmInSite" xml:space="preserve">
@@ -16446,6 +16446,6 @@ Do you want to participate?</value>
     <comment>Text to be displayed in the RTA overview preceeding the number of agents in alarm</comment>
   </data>
   <data name="ReportGeneratedTime" xml:space="preserve">
-    <value>Report generated time</value>
+    <value>Report generated</value>
   </data>
 </root>

@@ -14968,13 +14968,46 @@ Vill du registrera dig?</value>
     <value>Välj dag</value>
   </data>
   <data name="SelectionTooLarge" xml:space="preserve">
-    <value>För stort urval</value>
+    <value>Urvalet är för stort</value>
     <comment>Selection too large</comment>
-  </data>   
+  </data>
   <data name="OpenSite" xml:space="preserve">
     <value>Öppna enhet</value>
   </data>
   <data name="ImportBpoWrongResourceFormat" xml:space="preserve">
     <value>Parametern Resources (parameter nummer {0} med värde: {1}) är ogiltig. Parametern måste anges som ett decimaltal, t ex 14.2. </value>
+  </data>
+  <data name="OnlyAbsenceRequestCanBeCancelled" xml:space="preserve">
+    <value>Endast frånvaroförfrågningar kan avbrytas</value>
+  </data>
+  <data name="BpoExchange" xml:space="preserve">
+    <value>BPO Exchange</value>
+  </data>
+  <data name="DragAndDropCSVFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Dra och släpp .CSV-filer här, eller klicka för att ladda upp</value>
+  </data>
+  <data name="OverstaffingAfterOT" xml:space="preserve">
+    <value>Överbemanning efter övertid</value>
+  </data>
+  <data name="ScheduledAgentsAfterOT" xml:space="preserve">
+    <value>Schemalagda agenter efter övertid</value>
+  </data>
+  <data name="UnderstaffingAfterOT" xml:space="preserve">
+    <value>Understaffing efter övertid</value>
+  </data>
+  <data name="InAlarmInSite" xml:space="preserve">
+    <value>I larm på enheten</value>
+  </data>
+  <data name="ExportToExcel" xml:space="preserve">
+    <value>Exportera till Excel</value>
+  </data>
+  <data name="SkillAreaNoSkillSelected" xml:space="preserve">
+    <value>Du måste välja minst en kompetens.</value>
+  </data>
+  <data name="TotalAgentsInAlarm" xml:space="preserve">
+    <value>Totalt antal agenter i larm</value>
+  </data>
+  <data name="ReportGeneratedTime" xml:space="preserve">
+    <value>Rapport genererad</value>
   </data>
 </root>
