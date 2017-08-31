@@ -220,14 +220,10 @@
 
                 if (siteIds.length > 0) {
                     sites.forEach(function (site) {
-                        site.Teams = [];
-
                         if (siteIds.indexOf(site.Id) > -1) {
-
                             var teams = teamAdherences.filter(function (team) {
                                 return team.SiteId == site.Id;
                             })
-
                             if (params.skillIds)
                                 teams = teams.filter(function (team) {
                                     return params.skillIds.indexOf(team.SkillId) > -1;

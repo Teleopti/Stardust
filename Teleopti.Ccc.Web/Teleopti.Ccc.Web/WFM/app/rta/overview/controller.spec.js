@@ -548,7 +548,7 @@ describe('RtaOverviewController', function () {
         });
       vm = $controllerBuilder.createController().vm;
 
-      vm.filterOutput(undefined);
+      vm.selectSkillOrSkillArea(undefined);
       $fakeBackend
         .clearSiteAdherences()
         .withSiteAdherence({
