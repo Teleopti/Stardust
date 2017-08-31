@@ -78,55 +78,5 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftCalculation
 
 			result.WorkShiftStartTime.Hours.Should().Be.EqualTo(9);
 		}
-
-		[Test]
-		[Toggle(Toggles.ResourcePlanner_CalculateShiftValuesInParallel_44681)]
-		public void ShouldReThrowFlattenedException()
-		{
-			var date = new DateOnly(2017, 6, 9);
-			var scenario = new Scenario("_");
-			var skill = SkillFactory.CreateSkill("skill", new SkillTypePhone(new Description(), ForecastSource.InboundTelephony), 60);
-			WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
-			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, date, TimeSpan.FromHours(1),
-				new Tuple<int, TimeSpan>(9, TimeSpan.FromMinutes(90)));
-			foreach (var skillStaffPeriod in skillDay.SkillStaffPeriodCollection)
-			{
-				skillStaffPeriod.SetCalculatedResource65(0.5);
-			}
-			var workShift1 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(8), TimeSpan.FromHours(9), skill.Activity);
-			var cache1 = new ShiftProjectionCache(workShift1, PersonalShiftMeetingTimeChecker);
-			//cache1.SetDate(new DateOnlyAsDateTimePeriod(date, TimeZoneGuard.Instance.TimeZone)); By not doinf this exception will be thrown
-			var caches = new List<ShiftProjectionCache>() { cache1 };
-
-			var businessUnit = ServiceLocatorForEntity.CurrentBusinessUnit.Current();
-			BusinessUnitRepository.Add(businessUnit);
-			var sameSite = SiteFactory.CreateSiteWithOneTeam("team");
-			businessUnit.AddSite(sameSite);
-			var sameTeam = businessUnit.SiteCollection[0].TeamCollection[0];
-			var agent1 = PersonFactory.CreatePersonWithPersonPeriodFromTeam(date, sameTeam).WithId();
-			agent1.PermissionInformation.SetDefaultTimeZone(TimeZoneGuard.Instance.TimeZone);
-			((IPersonPeriodModifySkills)agent1.Period(date)).AddPersonSkill(new PersonSkill(skill, new Percent(1)));
-			var selectedPeriod = new DateOnlyPeriod(date, date.AddDays(2));
-			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateOnlyPeriodAsDateTimePeriod(selectedPeriod, TimeZoneGuard.Instance.TimeZone).Period(), new[] { agent1 }).VisiblePeriod);
-			var allPersonMatrixList = MatrixListFactory.CreateMatrixListAllForLoadedPeriod(scheduleDictionary, new[] { agent1 }, selectedPeriod);
-			GroupPersonBuilderForOptimizationFactory.Create(new[] { agent1 }, scheduleDictionary, new GroupPageLight("_", GroupPageType.SingleAgent));
-
-			var teamInfoFactory = new TeamInfoFactory(GroupPersonBuilderWrapper);
-			var teamInfo = teamInfoFactory.CreateTeamInfo(new[] { agent1 }, agent1, selectedPeriod, allPersonMatrixList);
-			var teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(new DateOnlyPeriod(date, date)));
-
-			try
-			{
-				Target.SelectShiftProjectionCache(GroupPersonSkillAggregator, date, caches,
-				new List<ISkillDay> { skillDay }, teamBlockInfo, new SchedulingOptions(), TimeZoneGuard.Instance.TimeZone, true,
-				agent1);
-			}
-			catch (Exception e)
-			{
-				var ae = e as System.AggregateException;
-				ae.InnerExceptions.Count.Should().Be.EqualTo(1);
-			}
-			
-		}
 	}
 }

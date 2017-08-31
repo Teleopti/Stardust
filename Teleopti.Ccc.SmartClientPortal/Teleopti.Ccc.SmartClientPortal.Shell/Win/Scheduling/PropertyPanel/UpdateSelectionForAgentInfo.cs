@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.PropertyPanel
 				timeLabel = setTimeLabelHeader(scheduleTimeType);
 				foreach (IScheduleDay scheduleDay in selectedSchedules)
 				{
-					totalTime = getTotalTime(scheduleTimeType, scheduleDay);
+					totalTime += getTotalTime(scheduleTimeType, scheduleDay);
 					dateList.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
 					selectedTags.Add(scheduleDay.ScheduleTag());
 					if (!personDic.ContainsKey(scheduleDay.Person))
