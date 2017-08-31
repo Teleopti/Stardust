@@ -21,6 +21,7 @@
     vm.applyCampaign = applyCampaign;
     vm.clearCampaign = clearCampaign;
     vm.clearOverride = clearOverride;
+    vm.updateCampaignPreview = updateCampaignPreview;
     vm.isForecastRunning = false;
     vm.overrideStatus = {
       tasks: false,
@@ -58,6 +59,10 @@
     function clearCampaign() {
       vm.campaignPercentage = 0;
       applyCampaign();
+    }
+
+    function updateCampaignPreview() {
+        vm.sumOfCallsForSelectedDays = (vm.selectedDayCount[0].value * (vm.campaignPercentage + 100) / 100).toFixed(1);
     }
 
     function applyCampaign() {

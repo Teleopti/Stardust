@@ -23,15 +23,21 @@
         </div>
         <div class="con-row">
           <div class="con-flex">
+            <span>Preview - Original: {{vm.selectedDayCount[0].value | number}}</span>
+            <span ng-show="vm.sumOfCallsForSelectedDays">New: {{vm.sumOfCallsForSelectedDays | number}}</span>
+          </div>
+        </div>
+        <div class="con-row">
+          <div class="con-flex">
             <label for="filter" class="input-icon">
               <i class="mdi mdi-percent">
-                <input type="number" required autofocus autocomplete="off" min="1" ng-model="vm.campaignPercentage" placeholder="{{'CampaignCallsPercentSign'|translate}}" >
+                <input type="number" ng-change="vm.updateCampaignPreview()" required autofocus autocomplete="off" min="1" ng-model="vm.campaignPercentage" placeholder="{{'CampaignCallsPercentSign'|translate}}" >
               </i>
             </label>
           </div>
         </div>
         <div class="con-footer">
-          <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.modifyPanelHelper()">{{'Cancel'|translate}}</button>
+          <button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="vm.modifyPanelHelper()">{{'Cancel'|translate}}</button>
           <button type="submit" class="wfm-btn wfm-btn-invis-primary">{{'Apply'|translate}}</button>
         </div>
       </div>
@@ -65,7 +71,7 @@
           </div>
         </div>
         <div class="con-footer">
-          <button class="wfm-btn wfm-btn-invis-default" ng-click="vm.modifyPanelHelper()">{{'Cancel'|translate}}</button>
+          <button type="button" class="wfm-btn wfm-btn-invis-default" ng-click="vm.modifyPanelHelper()">{{'Cancel'|translate}}</button>
           <button type="submit" class="wfm-btn wfm-btn-invis-primary">{{'Apply'|translate}}</button>
         </div>
       </div>
