@@ -36,7 +36,7 @@
 			});
 		};
 
-		this.getSitesPromise = function () {s
+		this.getSitesPromise = function () {
 			return $http.get(getSitesUrl);
 		};
 
