@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 	[Binding]
 	public class IntradayStepDefinitions
 	{
-		[Given(@"There is a skill to monitor called '(.*)' with queue id '(.*)' and queue name '(.*)' and activity '(.*)'")]
+		[Given(@"There is a skill to monitor called '([^']*)' with queue id '([^']*)' and queue name '([^']*)' and activity '([^']*)'")]
 		public void GivenThereIsASkillToMonitorCalled(string skill, int queueId, string queueName, string activity)
 		{
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
@@ -35,6 +35,41 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 				Activity = activity
 			});
 			
+			DataMaker.Data().Analytics().Apply(new AQueue(datasourceData) { QueueId = queueId });
+
+			DataMaker.Data().Apply(new QueueSourceConfigurable
+			{
+				Name = queueName,
+				QueueId = queueId
+			});
+
+			DataMaker.Data().Apply(new WorkloadConfigurable
+			{
+				WorkloadName = skill,
+				SkillName = skill,
+				QueueSourceName = queueName,
+				Open24Hours = true
+			});
+		}
+
+		
+		[Given(@"There is a skill to monitor called '([^']*)' with queue id '([^']*)' and queue name '([^']*)' and activity '([^']*)' and skilltype '([^']*)'")]
+		public void GivenThereIsASkillToMonitorCalled(string skill, int queueId, string queueName, string activity, string skilltype)
+		{
+			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
+
+			DataMaker.Data().Apply(new ActivityConfigurable
+			{
+				Name = activity
+			});
+
+			DataMaker.Data().Apply(new SkillConfigurable
+			{
+				Name = skill,
+				Activity = activity,
+				SkillType = skilltype
+			});
+
 			DataMaker.Data().Analytics().Apply(new AQueue(datasourceData) { QueueId = queueId });
 
 			DataMaker.Data().Apply(new QueueSourceConfigurable
@@ -84,12 +119,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[When(@"I pick the skill '(.*)'")]
 		public void GivenIPickTheSkill(string skillName)
 		{
-			Browser.Interactions.Javascript("document.addEventListener(\"DOMContentLoaded\", function(event) {" +
-											"var scope = angular.element(document.querySelector('.c3')).scope();" +
-											"var skillet = scope.skills.find(function(e){{return e.Name === \"{skillName}\"}});" +
-											"scope.selectedSkill = skillet;scope.selectedSkillChange(skillet);" +
-											"scope.changeChosenOffset(scope.chosenOffset.value);" +
-											"});");
+			Browser.Interactions.AssertExists(".c3");
+			var javascript = "var scope = angular.element(document.querySelector('.c3')).scope();" +
+							 "var skillet = scope.skills.find(function(e){{return e.Name === '" + skillName + "'}});" +
+							 "scope.selectedSkill = skillet;" +
+							 "scope.selectedSkillChange(skillet);" +
+							 "scope.changeChosenOffset(scope.chosenOffset.value);";
+			Browser.Interactions.Javascript(javascript);
 		}
 
 		[Given(@"I select the skill '(.*)'")]

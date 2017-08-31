@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public int Resolution { get; set; }
 		public int? CascadingIndex { get; set; }
 		public double? SeriousUnderstaffingThreshold { get; set; }
+		public string SkillType { get; set; } = "SkillTypeInboundTelephony";
 
 		public SkillConfigurable()
 		{
@@ -30,10 +31,10 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public void Apply(ICurrentUnitOfWork currentUnitOfWork)
 		{
 			var skillTypeRepository = new SkillTypeRepository(currentUnitOfWork);
-			var skillType = skillTypeRepository.LoadAll().FirstOrDefault(x => x.Description.Name == "SkillTypeInboundTelephony");
+			var skillType = skillTypeRepository.LoadAll().FirstOrDefault(x => x.Description.Name == SkillType);
 			if (skillType == null)
 			{
-				skillType = new SkillTypePhone(new Description("SkillTypeInboundTelephony"), ForecastSource.InboundTelephony);
+				skillType = new SkillTypePhone(new Description(SkillType), ForecastSource.InboundTelephony);
 				skillTypeRepository.Add(skillType);
 			}
 			

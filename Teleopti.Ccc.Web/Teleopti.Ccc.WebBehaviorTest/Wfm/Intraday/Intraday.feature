@@ -10,6 +10,8 @@ Background:
     | Access to Intraday | True  |
     And There is a skill to monitor called 'Skill A' with queue id '9' and queue name 'queue1' and activity 'activity1'
     And There is a skill to monitor called 'Skill B' with queue id '7' and queue name 'queue2' and activity 'activity2'
+	And There is a skill to monitor called 'Skill BackOffice' with queue id '3' and queue name 'queue3' and activity 'activity3'
+
 
 Scenario: Create Skill Area
   Given I am viewing intraday page
@@ -108,3 +110,13 @@ Scenario: If toggled we should see export to excel button
 	And there is forecast data for skill 'Skill A' for date '2016-12-21'
 	And I am viewing intraday page
 	Then I should see the export to excel button
+
+@OnlyRunIfEnabled('WFM_Intraday_SupportOtherSkillsLikeEmail_44026')
+Scenario: If toggled we should be able to select skill of type backoffice
+	Given the time is '2016-12-21 14:00'
+	And I am viewing intraday page
+	And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
+	And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
+	When I pick the skill 'Skill BackOffice'
+	Then I should see incoming traffic data in the chart
+	
