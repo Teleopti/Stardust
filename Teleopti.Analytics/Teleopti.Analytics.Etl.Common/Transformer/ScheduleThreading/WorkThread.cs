@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading;
 using Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
@@ -41,8 +42,19 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.ScheduleThreading
 
 						if (significantPart == SchedulePartView.DayOff)
 						{
+							var isFullDayAbsence = false;
 							bool hasNoOvertime = scheduleProjectionService.SchedulePartProjection.Overtime().Equals(TimeSpan.Zero);
-							if (hasNoOvertime)
+							var period = scheduleProjectionService.SchedulePartProjection.Period();
+							if (period.HasValue && scheduleProjectionService.SchedulePartProjection.HasLayers)
+							{
+								var layers = scheduleProjectionService.SchedulePartProjection.FilterLayers(period.Value);
+								isFullDayAbsence = layers.All(x => x.PersonAbsenceId.HasValue);
+							}
+							if(isFullDayAbsence)
+								absenceDayCountDataTable.Rows.Add(
+									DayAbsenceDataRowFactory.CreateDayAbsenceDataRow(absenceDayCountDataTable,
+										scheduleProjectionService));
+							if (hasNoOvertime && !isFullDayAbsence)
 								continue;
 						}
 

@@ -17,7 +17,7 @@ GO
 --				2010-01-19 Adding Day Off Name as PK
 --				2012-11-21 Adding new columns for display_color_html and day_off_shortname
 -- =============================================
---exec mart.etl_fact_schedule_day_count_load '2013-02-04','2013-03-03','928DD0BC-BF40-412E-B970-9B5E015AADEA'
+--exec mart.etl_fact_schedule_day_count_load '2017-08-01','2017-08-02','928DD0BC-BF40-412E-B970-9B5E015AADEA'
 
 CREATE PROCEDURE [mart].[etl_fact_schedule_day_count_load] 
 @start_date smalldatetime,
@@ -146,7 +146,6 @@ INSERT INTO mart.fact_schedule_day_count
 	datasource_id, 
 	datasource_update_date
 	)
-
 SELECT
 	shift_startdate_local_id= dsd.date_id, 
 	person_id				= dp.person_id, 
@@ -175,4 +174,37 @@ LEFT JOIN mart.dim_date dsd
 	ON stg.schedule_date_local = dsd.date_date
 LEFT JOIN mart.dim_scenario	ds
 	ON stg.scenario_code = ds.scenario_code
+WHERE
+	NOT EXISTS (SELECT 1 FROM mart.fact_schedule_day_count WHERE shift_startdate_local_id = dsd.date_id AND person_id = dp.person_id AND scenario_id = ds.scenario_id)
+
+-- Absence already exists, update with potential day off
+UPDATE 
+	mart.fact_schedule_day_count
+SET
+	day_off_id = dd.day_off_id
+FROM (
+	SELECT * FROM Stage.stg_schedule_day_off_count
+	WHERE schedule_date_local between @start_date and @end_date
+	AND business_unit_code=@business_unit_code
+	) stg
+JOIN mart.dim_person dp WITH (NOLOCK)
+	ON stg.person_code = dp.person_code
+	AND stg.schedule_date_local BETWEEN dp.valid_from_date_local AND dp.valid_to_date_local  --Is person valid in this range	
+JOIN mart.dim_day_off dd
+	ON stg.day_off_code		= dd.day_off_code
+	AND dd.business_unit_id = dp.business_unit_id
+	AND dd.business_unit_id = @business_unit_id
+LEFT JOIN mart.dim_date dsd
+	ON stg.schedule_date_local = dsd.date_date
+LEFT JOIN mart.dim_scenario	ds
+	ON stg.scenario_code = ds.scenario_code
+INNER JOIN mart.fact_schedule_day_count sdc
+	ON sdc.shift_startdate_local_id = dsd.date_id
+		AND sdc.person_id = dp.person_id
+		AND sdc.scenario_id = ds.scenario_id
+WHERE
+	shift_startdate_local_id = dsd.date_id 
+	AND sdc.person_id = dp.person_id 
+	AND sdc.scenario_id = ds.scenario_id
+
 GO
