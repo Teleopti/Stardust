@@ -87,14 +87,15 @@
             }).query(data)
                 .$promise
                 // .then(function (result) {
-                //     result.Teams = [{
-                //         Id: "34590A63-6331-4921-BC9F-9B5E015AB495",
-                //         SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
-                //         Name: "Fajker",
-                //         AgentsCount: 183897,
-                //         InAlarmCount: 13,
-                //         Color: "danger"
-                //     }]
+                //     if (result.Sites.length > 0)
+                //         result.Sites[0].Teams = [{
+                //             Id: "34590A63-6331-4921-BC9F-9B5E015AB495",
+                //             SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+                //             Name: "Fajker",
+                //             AgentsCount: 183897,
+                //             InAlarmCount: 13,
+                //             Color: "danger"
+                //         }]
                 //     return result;
                 // })
         }

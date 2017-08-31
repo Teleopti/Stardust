@@ -22,7 +22,10 @@
 		$stateParams.siteIds = $stateParams.siteIds || [];
 		$stateParams.teamIds = $stateParams.teamIds || [];
 
-		vm.skillPickerPreselectedItem = { skillIds: $stateParams.skillIds, skillAreaId: $stateParams.skillAreaId };
+		if ($stateParams.skillAreaId)
+			vm.skillPickerPreselectedItem = { skillAreaId: $stateParams.skillAreaId };
+		else
+			vm.skillPickerPreselectedItem = { skillIds: $stateParams.skillIds };
 
 		vm.displayNoSitesMessage = function () { return vm.siteCards.length == 0; };
 		vm.displayNoSitesForSkillMessage = function () { return $stateParams.skillIds.length > 0; };
@@ -169,23 +172,36 @@
 		}
 
 		function resetOnNoSkills() {
-			$stateParams.skillIds = undefined;
-			$stateParams.skillAreaId = undefined;
-			$state.go($state.current.name, { skillAreaId: undefined, skillIds: undefined }, { notify: false });
-			pollInitiate();
+			var params = {
+				open: $stateParams.open,
+				siteIds: $stateParams.siteIds,
+				teamIds: $stateParams.teamIds,
+				skillIds: undefined,
+				skillAreaId: undefined
+			}
+			$state.go($state.current.name, params, { reload: true });
 		}
 
 		function setUpForSkillArea(selectedItem) {
-			$stateParams.skillAreaId = selectedItem.Id;
-			$stateParams.skillIds = getSkillIdsFromSkillAreaId(selectedItem.Id);
-			$state.go($state.current.name, { skillAreaId: selectedItem.Id, skillIds: undefined }, { notify: false });
-			pollInitiate();
+			var params = {
+				open: $stateParams.open,
+				siteIds: $stateParams.siteIds,
+				teamIds: $stateParams.teamIds,
+				skillIds: undefined,
+				skillAreaId: selectedItem.Id
+			}
+			$state.go($state.current.name, params, { reload: true });
 		}
 
 		function setUpForSkill(selectedItem) {
-			$stateParams.skillIds = [selectedItem.Id];
-			$state.go($state.current.name, { skillAreaId: undefined, skillIds: $stateParams.skillIds }, { notify: false });
-			pollInitiate();
+			var params = {
+				open: $stateParams.open,
+				siteIds: $stateParams.siteIds,
+				teamIds: $stateParams.teamIds,
+				skillIds: selectedItem.Id,
+				skillAreaId: undefined
+			}
+			$state.go($state.current.name, params, { reload: true });
 		}
 
 		vm.goToAgentsView = function () {

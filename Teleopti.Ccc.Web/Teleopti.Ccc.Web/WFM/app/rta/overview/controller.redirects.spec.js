@@ -35,6 +35,8 @@ describe('RtaOverviewController redirects', function () {
 	var warningColor = '#FFC285';
 	var dangerColor = '#EE8F7D';
 
+	var lastGoParams = {};
+
 	beforeEach(module('wfm.rta'));
 
 	beforeEach(function () {
@@ -108,8 +110,9 @@ describe('RtaOverviewController redirects', function () {
 		skillAreas = [skillArea1, skillArea2];
 
 		$fakeBackend.clear();
-		spyOn($state, 'go');
-		$state.current.name = 'rta-refact';
+		spyOn($state, 'go').and.callFake(function(_, params){
+			lastGoParams = params;
+		});
 	}));
 
 	it('should go to sites by skill state', function () {
@@ -119,17 +122,16 @@ describe('RtaOverviewController redirects', function () {
 		c.apply(function () {
 			vm.selectSkillOrSkillArea(vm.skills[0]);
 		});
-
-		expect($state.go).toHaveBeenCalledWith($state.current.name, { skillIds: ['channelSalesId'], skillAreaId: undefined }, { notify: false });
+		
+		expect(lastGoParams.skillIds).toEqual('channelSalesId');
 	});
 
 	it('should go to sites by skill area state', function () {
 		vm = $controllerBuilder.createController(undefined, skillAreas).vm;
 
 		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
-		$httpBackend.flush();
 
-		expect($state.go).toHaveBeenCalledWith($state.current.name, { skillAreaId: 'skillArea1Id', skillIds: undefined }, { notify: false });
+		expect(lastGoParams.skillAreaId).toEqual('skillArea1Id');
 	});
 
 	it('should go to sites with skill when changing selection from skill area to skill', function () {
@@ -141,11 +143,8 @@ describe('RtaOverviewController redirects', function () {
 			vm.selectSkillOrSkillArea(vm.skills[0]);
 		});
 
-		expect($state.go).toHaveBeenCalledWith($state.current.name, {
-			skillAreaId: undefined,
-			skillIds: ['channelSalesId']
-		},
-			{ notify: false });
+		expect(lastGoParams.skillAreaId).toEqual(undefined);
+		expect(lastGoParams.skillIds).toEqual('channelSalesId');
 	});
 
 	it('should go to sites with skill area when changing selection from skill to skill area', function () {
@@ -157,11 +156,8 @@ describe('RtaOverviewController redirects', function () {
 			vm.selectSkillOrSkillArea(skillArea1);
 		});
 
-		expect($state.go).toHaveBeenCalledWith($state.current.name, {
-			skillAreaId: 'skillArea1Id',
-			skillIds: undefined
-		},
-			{ notify: false });
+		expect(lastGoParams.skillAreaId).toEqual('skillArea1Id');
+		expect(lastGoParams.skillIds).toEqual(undefined);
 	});
 
 	it('should clear url when sending in empty input in filter', function () {
@@ -173,11 +169,8 @@ describe('RtaOverviewController redirects', function () {
 			vm.selectSkillOrSkillArea(undefined);
 		});
 
-		expect($state.go).toHaveBeenCalledWith($state.current.name, {
-			skillAreaId: undefined,
-			skillIds: undefined
-		},
-			{ notify: false });
+		expect(lastGoParams.skillAreaId).toEqual(undefined);
+		expect(lastGoParams.skillIds).toEqual(undefined);
 	});
 
 	it('should go to agents for selected site', function () {
@@ -233,34 +226,6 @@ describe('RtaOverviewController redirects', function () {
 		expect($state.go).toHaveBeenCalledWith('rta-agents', { siteIds: ['parisId'], teamIds: [], skillIds: [], skillAreaId: undefined });
 	});
 
-	it('should go to agents for selected site with selected skill', function () {
-		$fakeBackend
-			.withSiteAdherence({
-				Id: 'parisId',
-				SkillId: 'channelSalesId'
-			})
-			.withTeamAdherence({
-				SiteId: 'parisId',
-				Id: 'redId',
-				SkillId: 'channelSalesId'
-			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-
-		c.apply(function () {
-			vm.selectSkillOrSkillArea(channelSales);
-		});
-		c.apply(function () {
-			vm.siteCards[0].isSelected = true;
-		});
-		$state.go.calls.reset();
-		c.apply(function () {
-			vm.goToAgents();
-		});
-
-		expect($state.go).toHaveBeenCalledWith('rta-agents', { siteIds: ['parisId'], teamIds: [], skillIds: ['channelSalesId'], skillAreaId: undefined });
-	});
-
 	it('should go to agents for selected site with preselected skill', function () {
 		stateParams.skillIds = ['channelSalesId'];
 		$fakeBackend
@@ -286,84 +251,7 @@ describe('RtaOverviewController redirects', function () {
 		expect($state.go).toHaveBeenCalledWith('rta-agents', { siteIds: ['parisId'], teamIds: [], skillIds: ['channelSalesId'], skillAreaId: undefined });
 	});
 
-
-	it('should go to agents for selected site after clearing skill selection', function () {
-		$fakeBackend
-			.withSiteAdherence({
-				Id: 'parisId',
-				SkillId: 'channelSalesId'
-			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-
-		c.apply(function () {
-			vm.selectSkillOrSkillArea(channelSales);
-		});
-		c.apply(function () {
-			vm.siteCards[0].isSelected = true;
-		});
-		c.apply(function () {
-			vm.selectSkillOrSkillArea();
-		});
-		$state.go.calls.reset();
-		c.apply(function () {
-			vm.goToAgents();
-		});
-
-		expect($state.go).toHaveBeenCalledWith('rta-agents', { siteIds: [], teamIds: [], skillIds: [], skillAreaId: undefined });
-	});
-
-	it('should go to agents for selected site after clearing skill selection when skill was preselected', function () {
-		stateParams.skillIds = ['channelSalesId'];
-		$fakeBackend
-			.withSiteAdherence({
-				Id: 'parisId'
-			});
-		var c = $controllerBuilder.createController();
-		vm = c.vm;
-
-		c.apply(function () {
-			vm.selectSkillOrSkillArea();
-		});
-		c.apply(function () {
-			vm.siteCards[0].isSelected = true;
-		});
-		$state.go.calls.reset();
-		c.apply(function () {
-			vm.goToAgents();
-		});
-
-		expect($state.go).toHaveBeenCalledWith('rta-agents', { siteIds: ['parisId'], teamIds: [], skillIds: [], skillAreaId: undefined });
-	});
-
-	it('should go to agents for selected site with selected skill area', function () {
-		$fakeBackend
-			.withSiteAdherence({
-				Id: 'parisId',
-				SkillId: 'channelSalesId'
-			})
-			.withSiteAdherence({
-				Id: 'parisId',
-				SkillId: 'phoneId'
-			});
-		var c = $controllerBuilder.createController(undefined, skillAreas);
-		vm = c.vm;
-
-		c.apply(function () {
-			vm.selectSkillOrSkillArea(skillArea1);
-		})
-		c.apply(function () {
-			vm.siteCards[0].isSelected = true;
-		});
-		$state.go.calls.reset();
-		c.apply(function () {
-			vm.goToAgents();
-		});
-
-		expect($state.go).toHaveBeenCalledWith('rta-agents', { siteIds: ['parisId'], teamIds: [], skillIds: [], skillAreaId: 'skillArea1Id' });
-	});
-
-	it('should go to agents for selected site with   skill area', function () {
+	it('should go to agents for selected site with  skill area', function () {
 		stateParams.skillAreaId = 'skillArea1Id';
 		$fakeBackend
 			.withSiteAdherence({
@@ -385,50 +273,6 @@ describe('RtaOverviewController redirects', function () {
 		});
 
 		expect($state.go).toHaveBeenCalledWith('rta-agents', { siteIds: ['parisId'], teamIds: [], skillIds: [], skillAreaId: 'skillArea1Id' });
-	});
-
-	it('should reset selected sites when changing skill', function () {
-		$fakeBackend
-			.withSiteAdherence({
-				Id: 'parisId',
-				SkillId: 'channelSalesId'
-			})
-			.withTeamAdherence({
-				SiteId: 'parisId',
-				SkillId: 'channelSalesId',
-				Id: 'redId'
-			})
-			.withSiteAdherence({
-				Id: 'londonId',
-				SkillId: 'phoneId'
-			})
-			.withTeamAdherence({
-				SiteId: 'londonId',
-				Id: 'greenId',
-				SkillId: 'phoneId'
-			});
-
-		var c = $controllerBuilder.createController(skills1);
-		vm = c.vm;
-
-		c.apply(function () {
-			vm.selectSkillOrSkillArea(skills1[0]);
-		});
-		c.apply(function () {
-			vm.siteCards[0].isSelected = true;
-		});
-		c.apply(function () {
-			vm.selectSkillOrSkillArea(skills1[1]);
-		});
-		c.apply(function () {
-			vm.siteCards[0].isSelected = true;
-		});
-		$state.go.calls.reset();
-		c.apply(function () {
-			vm.goToAgents();
-		});
-
-		expect($state.go).toHaveBeenCalledWith('rta-agents', { siteIds: ['londonId'], teamIds: [], skillIds: ['phoneId'], skillAreaId: undefined });
 	});
 
 	it('should go to agents for selected team', function () {
@@ -463,6 +307,7 @@ describe('RtaOverviewController redirects', function () {
 	});
 
 	it('should go to agents for selected team with selected skill', function () {
+		stateParams.skillIds = ['channelSalesId'];
 		$fakeBackend
 			.withSiteAdherence({
 				Id: 'londonId',
@@ -481,9 +326,6 @@ describe('RtaOverviewController redirects', function () {
 		var c = $controllerBuilder.createController();
 		vm = c.vm;
 
-		c.apply(function () {
-			vm.selectSkillOrSkillArea(channelSales);
-		});
 		c.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
@@ -532,6 +374,7 @@ describe('RtaOverviewController redirects', function () {
 	});
 
 	it('should go to agents for selected team with selected skill area', function () {
+		stateParams.skillAreaId = 'skillArea1Id';
 		$fakeBackend
 			.withSiteAdherence({
 				Id: 'parisId',
@@ -559,9 +402,7 @@ describe('RtaOverviewController redirects', function () {
 			;
 		var c = $controllerBuilder.createController(undefined, skillAreas);
 		vm = c.vm;
-		c.apply(function () {
-			vm.selectSkillOrSkillArea(skillArea1);
-		});
+
 		c.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
@@ -572,6 +413,7 @@ describe('RtaOverviewController redirects', function () {
 		c.apply(function () {
 			vm.goToAgents();
 		});
+
 		expect($state.go).toHaveBeenCalledWith('rta-agents', { siteIds: [], teamIds: ['greenId'], skillIds: [], skillAreaId: 'skillArea1Id' });
 	});
 
@@ -615,66 +457,6 @@ describe('RtaOverviewController redirects', function () {
 		});
 
 		expect($state.go).toHaveBeenCalledWith('rta-agents', { siteIds: [], teamIds: ['greenId'], skillIds: [], skillAreaId: 'skillArea1Id' });
-	});
-
-	it('should reset selected teams when changing skill', function () {
-		$fakeBackend
-			.withSiteAdherence({
-				Id: 'parisId',
-				SkillId: 'channelSalesId'
-			})
-			.withTeamAdherence({
-				SiteId: 'parisId',
-				SkillId: 'channelSalesId',
-				Id: 'greenId'
-			})
-			.withTeamAdherence({
-				SiteId: 'parisId',
-				SkillId: 'channelSalesId',
-				Id: 'redId'
-			})
-			.withSiteAdherence({
-				Id: 'parisId',
-				SkillId: 'phoneId'
-			})
-			.withTeamAdherence({
-				SiteId: 'parisId',
-				SkillId: 'phoneId',
-				Id: 'redId'
-			})
-			.withTeamAdherence({
-				SiteId: 'parisId',
-				SkillId: 'phoneId',
-				Id: 'pinkId'
-			});
-
-		var c = $controllerBuilder.createController(skills1);
-		vm = c.vm;
-
-		c.apply(function () {
-			vm.selectSkillOrSkillArea(skills1[0]);
-		});
-		c.apply(function () {
-			vm.siteCards[0].isOpen = true;
-		});
-		c.apply(function () {
-			vm.siteCards[0].teams[0].isSelected = true;
-		});
-		c.apply(function () {
-			vm.selectSkillOrSkillArea(skills1[1]);
-		});
-		c.apply(function () {
-			vm.siteCards[0].isOpen = true;
-		});
-		c.apply(function () {
-			vm.siteCards[0].teams[0].isSelected = true;
-		});
-		$state.go.calls.reset();
-		c.apply(function () {
-			vm.goToAgents();
-		});
-
-		expect($state.go).toHaveBeenCalledWith('rta-agents', { siteIds: [], teamIds: ['redId'], skillIds: ['phoneId'], skillAreaId: undefined });
 	});
 
 	it('should go to agents for site if all teams under it are selected one by one', function () {
