@@ -219,6 +219,33 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 		[Test]
+		public void ShouldPublishWithPartTimeAbsenceOnOverTimeAndDayOff()
+		{
+			var person = Guid.NewGuid();
+			var scenario = Guid.NewGuid();
+			Database
+				.WithAgent(person, "jågej")
+				.WithScenario(scenario)
+				.WithAssignment("2016-10-08")
+				.WithAssignedOvertimeActivity("2016-10-08 08:00", "2016-10-08 11:00")
+				.WithDayOff()
+				.WithPersonAbsence("2016-10-08 08:00", "2016-10-08 09:00")
+				;
+
+			Target.Handle(new ScheduleChangedEventForTest
+			{
+				StartDateTime = "2016-10-08 00:00".Utc(),
+				EndDateTime = "2016-10-08 23:59".Utc(),
+				PersonId = person,
+				ScenarioId = scenario
+			});
+
+			var scheduleDay = Publisher.PublishedEvents.OfType<ProjectionChangedEvent>().Single()
+				.ScheduleDays.Single(x => x.Date == "2016-10-08".Utc());
+			scheduleDay.IsFullDayAbsence.Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldIncludeTheDayBeforeBecauseOfNightShift()
 		{
 			var person = Guid.NewGuid();

@@ -137,7 +137,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 			FakeAgentStateReadModelPersister agentStateReadModels,
 			FakeTeamCardReader teamCardReader,
 			FakeMeetingRepository meetings,
-			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId
+			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId,
+			FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository
 			) : base(
 				tenants, 
 				persons, 
@@ -168,7 +169,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories.Rta
 				teamCardReader,
 				meetings,
 				agentStateReadModels,
-				hardcodedSkillGroupingPageId)
+				hardcodedSkillGroupingPageId,
+				multiplicatorDefinitionSetRepository)
 		{
 			_agentStates = agentStates;
 			_agentStateReadModels = agentStateReadModels;

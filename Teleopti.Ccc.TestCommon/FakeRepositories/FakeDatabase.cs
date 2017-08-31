@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
+using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -339,6 +340,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private readonly FakeMeetingRepository _meetings;
 		private readonly FakeAgentStateReadModelPersister _agentStates;
 		private readonly HardcodedSkillGroupingPageId _hardcodedSkillGroupingPageId;
+		private readonly FakeMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSets;
 
 
 		private BusinessUnit _businessUnit;
@@ -359,6 +361,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		private RtaStateGroup _stateGroup;
 		private RtaRule _rule;
 		private Meeting _meeting;
+		private MultiplicatorDefinitionSet _multiplicatorDefinitionSet;
 
 		public static string DefaultTenantName => DomainTestAttribute.DefaultTenantName;
 		public static Guid DefaultBusinessUnitId = Guid.NewGuid();
@@ -393,8 +396,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			FakeTeamCardReader teamCardReader,
 			FakeMeetingRepository meetings,
 			FakeAgentStateReadModelPersister agentStates,
-			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId
-			)
+			HardcodedSkillGroupingPageId hardcodedSkillGroupingPageId, FakeMultiplicatorDefinitionSetRepository multiplicatorDefinitionSets)
 		{
 			_tenants = tenants;
 			_persons = persons;
@@ -425,6 +427,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_meetings = meetings;
 			_agentStates = agentStates;
 			_hardcodedSkillGroupingPageId = hardcodedSkillGroupingPageId;
+			_multiplicatorDefinitionSets = multiplicatorDefinitionSets;
 
 			createDefaultData();
 		}
@@ -842,10 +845,38 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		}
 
 		[UnitOfWork]
+		public virtual FakeDatabase WithMultiplicatorDefinitionSet(Guid? id)
+		{
+			var existing = _multiplicatorDefinitionSets.LoadAll().SingleOrDefault(x => x.Id == id);
+			if (existing != null)
+			{
+				_multiplicatorDefinitionSet = existing as MultiplicatorDefinitionSet;
+				return this;
+			}
+
+			string name = RandomName.Make();
+			_multiplicatorDefinitionSet = new MultiplicatorDefinitionSet(name, MultiplicatorType.Overtime);
+			_multiplicatorDefinitionSet.SetId(id ?? Guid.NewGuid());
+			_multiplicatorDefinitionSet.SetBusinessUnit(_businessUnit);
+			_multiplicatorDefinitionSets.Has(_multiplicatorDefinitionSet);
+
+			return this;
+		}
+
+		[UnitOfWork]
 		public virtual FakeDatabase WithAssignedActivity(string startTime, string endTime)
 		{
 			ensureExists(_activities, null, () => this.WithActivity(null));
 			_personAssignment.AddActivity(_activity, new DateTimePeriod(startTime.Utc(), endTime.Utc()));
+			return this;
+		}
+
+		public virtual FakeDatabase WithAssignedOvertimeActivity(string startTime, string endTime)
+		{
+			ensureExists(_activities, null, () => this.WithActivity(null));
+			ensureExists(_multiplicatorDefinitionSets, null, () => this.WithMultiplicatorDefinitionSet(null));
+			_activity.InWorkTime = true;
+			_personAssignment.AddOvertimeActivity(_activity, new DateTimePeriod(startTime.Utc(), endTime.Utc()), _multiplicatorDefinitionSet);
 			return this;
 		}
 
@@ -1043,5 +1074,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			if (all.IsEmpty())
 				createAction();
 		}
+
+
 	}
 }

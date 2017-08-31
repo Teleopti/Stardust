@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 						EndDateTime = scheduleDay.DateOnlyAsPeriod.Period().EndDateTime,
 						Anchor = dayOff.Anchor
 					};
-					if (projection.HasLayers)
+					if (projection.HasLayers && projection.Overtime().Equals(TimeSpan.Zero))
 						eventScheduleDay.IsFullDayAbsence = true;
 					break;
 				default:
