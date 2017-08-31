@@ -46,17 +46,17 @@
 		<div class="con-flex split-3-1"></div>
 		<div class="con-flex">
 			<div class="view-changer-wrapper">
-				<div class="view-changer" style="white-space:nowrap; margin-right: 4px;">
+				<div class="view-changer" style="white-space:nowrap;">
 					<div class="view-option">
 						<label ng-click="vm.showInAlarm = true;">
 				<input type="radio" name="alarm-view" class="view-option-radio"  ng-value="vm.showAll" ng-model="vm.showInAlarm" tabindex="0"/>
-				<div class="view-name"><div translate>{{'InAlarm'|translate}}</div></div>        
+				<div class="view-name" style="padding-right: 6px;"><div>{{'InAlarm'|translate}}</div></div>        
 			</label>
 					</div>
 					<div class="view-option">
 						<label ng-click="vm.showInAlarm = false; vm.showAll = true" class="rta-agents-in-alarm-switch">
 				<input type="radio" name="all-view" class="view-option-radio" ng-value="!vm.showInAlarm" ng-model="vm.showAll" tabindex="0"/>
-				<div class="view-name"><div translate>All</div></div>
+				<div class="view-name" style="padding-right: 6px;"><div>{{'All'|translate}}</div></div>
 			</label>
 					</div>
 				</div>
