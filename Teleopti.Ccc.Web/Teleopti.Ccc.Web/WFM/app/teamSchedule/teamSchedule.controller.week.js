@@ -28,7 +28,7 @@
 		vm.enableClickableCell = true;
 		vm.onCellClick = openSelectedAgentDayInNewWindow;
 		vm.sortOption = $stateParams.selectedSortOption;
-	
+
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],
@@ -79,10 +79,7 @@
 			vm.weekDays = Util.getWeekdays(vm.startOfWeek);
 			vm.loadSchedules();
 			if (toggles.Wfm_HideUnusedTeamsAndSites_42690){
-				vm.getSitesAndTeamsAsync();
-			}
-			if (toggles.Wfm_GroupPages_45057) {
-				vm.getGroupPagesAsync();
+				loadGroupings();
 			}
 		};
 
@@ -261,6 +258,13 @@
 		}
 
 		vm.searchPlaceholder = $translate.instant('Search');
+
+		function loadGroupings() {
+			if (toggles.Wfm_GroupPages_45057)
+				vm.getGroupPagesAsync();
+			else
+				vm.getSitesAndTeamsAsync();
+		}
 	}
 
 	function replaceArrayValues(from, to) {

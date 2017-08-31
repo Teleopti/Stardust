@@ -181,7 +181,7 @@
 			vm.resetSchedulePage();
 			updateShiftStatusForSelectedPerson();
 			if (vm.toggles.Wfm_HideUnusedTeamsAndSites_42690) {
-				vm.toggles.Wfm_GroupPages_45057 ? vm.getGroupPagesAsync() : vm.getSitesAndTeamsAsync();
+				loadGroupings();
 			}
 		};
 
@@ -503,6 +503,13 @@
 		vm.searchPlaceholder = $translate.instant('Search');
 
 		personSelectionSvc.clearPersonInfo();
+		
+		function loadGroupings() {
+			if (vm.toggles.Wfm_GroupPages_45057)
+				vm.getGroupPagesAsync();
+			else
+				vm.getSitesAndTeamsAsync();
+		}
 	}
 
 	function replaceArrayValues(from, to) {
