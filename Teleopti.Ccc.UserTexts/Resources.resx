@@ -16426,10 +16426,6 @@ Do you want to participate?</value>
     <value>Understafing after OT</value>
     <comment>label for the staffingchart to show the understaffing after overtime suggestion has been requested</comment>
   </data>
-  <data name="TotalAgentsInAlarmInBusinessUnit" xml:space="preserve">
-    <value>Total agents in alarm in business unit</value>
-    <comment>Total agents in alarm in business unit</comment>
-  </data>
   <data name="InAlarmInSite" xml:space="preserve">
     <value>In alarm in site</value>
     <comment>Text to be displayed before number of agents in alarm on site card in RTA</comment>
@@ -16444,5 +16440,9 @@ Do you want to participate?</value>
   <data name="SkillAreaNoSkillSelected" xml:space="preserve">
     <value>You need to select at least one skill.</value>
     <comment>Error messeage shown when creating skillarea</comment>
+  </data>
+  <data name="TotalAgentsInAlarm" xml:space="preserve">
+    <value>Total agents in alarm</value>
+    <comment>Text to be displayed in the RTA overview preceeding the number of agents in alarm</comment>
   </data>
 </root>

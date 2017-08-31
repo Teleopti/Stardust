@@ -28,8 +28,6 @@
 	</div>
 </div>
 
-
-
 <div class="con-row" ng-if="vm.noSiteCards">
 	<div class="con-flex">
 		<div class="panel material-depth-1">
@@ -49,7 +47,7 @@
 				<span class="chip-handle">
 				<i class="mdi mdi-alert-circle"></i>
 				</span>
-			<span class="chip-text">{{'TotalAgentsInAlarmInBusinessUnit'|translate}}: <b>{{vm.totalAgentsInAlarm}}</b></span>
+			<span class="chip-text">{{'TotalAgentsInAlarm'|translate}}: <b>{{vm.totalAgentsInAlarm}}</b></span>
 			</span>
 		</div>
 		<rta-overview-component site-cards="vm.siteCards" agents-state="vm.agentsState" agents-state-for-team="vm.agentsStateForTeam"
