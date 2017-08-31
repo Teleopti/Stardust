@@ -102,7 +102,6 @@
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_MergeTeamblockClassicScheduling_44289,
 		ResourcePlanner_MergeTeamblockClassicIntraday_45508,
-		ResourcePlanner_CalculateShiftValuesInParallel_44681,
 		ResourcePlanner_RespectSkillGroupShoveling_44156,
 		ResourcePlanner_RetireKeepPercentageOfShifts_45688,
 
