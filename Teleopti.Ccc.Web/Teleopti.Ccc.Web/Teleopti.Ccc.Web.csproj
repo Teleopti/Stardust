@@ -1923,6 +1923,7 @@
     <Content Include="WFM\app\outbound\angular-gantt.ext.js" />
     <Content Include="WFM\app\outbound\outbound.directive.scroll-fix.js" />
     <Content Include="WFM\app\outbound\outbound.controller.campaign-list-gantt.js" />
+    <Content Include="WFM\karma.rta.conf.js" />
     <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\persian-datepicker-tpls.js" />
     <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\persiandate.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />

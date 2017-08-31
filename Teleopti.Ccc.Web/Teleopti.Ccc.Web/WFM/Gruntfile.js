@@ -64,9 +64,12 @@ module.exports = function (grunt) {
             },
             continuous: {
                 reporters: 'teamcity'
+            },
+            rta: {
+                singleRun: false,
+                configFile: 'karma.rta.conf.js',
             }
         },
-
         sass: {
             options: {
                 includePaths: ['node_modules/teleopti-styleguide/styleguide/sass']
@@ -439,6 +442,7 @@ module.exports = function (grunt) {
     grunt.registerTask('default', ['devDist', 'test', 'watch:dev']); // this task run the main task and then watch for file changes
     grunt.registerTask('test', ['ngtemplates', 'karma:unit']);
     grunt.registerTask('devTest', ['ngtemplates', 'karma:dev']);
+    grunt.registerTask('rtaTest', ['ngtemplates', 'karma:rta']);
     grunt.registerTask('devDist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:devJs', 'newer:concat:distCss', 'newer:concat:distDarkCss', 'copy:devCss', 'newer:copy', 'generateIndexDev']);
     grunt.registerTask('test-continuous', ['ngtemplates', 'karma:continuous']);
     grunt.registerTask('nova', ['devDist', 'iisexpress:web', 'watch:dev']); // this task run the main task and then watch for file changes
