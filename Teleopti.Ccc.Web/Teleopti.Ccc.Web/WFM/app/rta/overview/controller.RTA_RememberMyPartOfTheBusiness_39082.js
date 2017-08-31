@@ -3,30 +3,91 @@
 
 	angular
 		.module('wfm.rta')
+		.service('rtaStateService', rtaStateService);
+
+	function rtaStateService($state) {
+
+		var state = {};
+
+		return {
+			setCurrentState: function (newState) {
+				state = foo2(newState);
+			},
+
+			deselectSkillAndSkillArea: function () {
+				$state.go($state.current.name, state = foo2({ skillIds: undefined, skillAreaId: undefined }), { reload: true });
+			},
+
+			selectSkillArea: function (skillAreaId) {
+				$state.go($state.current.name, state = foo2({ skillIds: undefined, skillAreaId: skillAreaId }), { reload: true });
+			},
+
+			selectSkill: function (skillId) {
+				$state.go($state.current.name, state = foo2({ skillIds: skillId, skillAreaId: undefined }), { reload: true });
+			},
+
+			agentsHrefForTeam: function (teamId) {
+				return $state.href('rta-agents', {
+					teamIds: teamId,
+					skillIds: state.skillIds,
+					skillAreaId: state.skillAreaId
+				});
+			},
+
+			agentsHrefForSite: function (siteId) {
+				return $state.href('rta-agents', {
+					siteIds: siteId,
+					skillIds: state.skillIds,
+					skillAreaId: state.skillAreaId
+				});
+			},
+
+			skillPickerPreselectedItem: function() {
+				return { skillIds: state.skillIds, skillAreaId: state.skillAreaId };
+			}
+		}
+
+		function foo2(mutations) {
+			var mutatedState = JSON.parse(JSON.stringify(state));
+			Object.keys(mutations).forEach(function (key) {
+				mutatedState[key] = mutations[key];
+			});
+			return mutatedState;
+		}
+	}
+
+})();
+
+
+
+(function () {
+	'use strict';
+
+	angular
+		.module('wfm.rta')
 		.controller('RtaOverviewController39082', RtaOverviewController);
 
-	RtaOverviewController.$inject = ['rtaService', 'rtaRouteService', 'skills', 'skillAreas', '$state', '$stateParams', '$interval', '$scope', '$q', '$timeout'];
+	RtaOverviewController.$inject = ['rtaService', 'rtaRouteService', 'rtaStateService', 'skills', 'skillAreas', '$state', '$stateParams', '$interval', '$scope', '$q', '$timeout'];
 
-	function RtaOverviewController(rtaService, rtaRouteService, skills, skillAreas, $state, $stateParams, $interval, $scope, $q, $timeout) {
+	function RtaOverviewController(rtaService, rtaRouteService, rtaStateService, skills, skillAreas, $state, $stateParams, $interval, $scope, $q, $timeout) {
 		var vm = this;
 		vm.skills = skills || [];
 		vm.skillAreas = skillAreas || [];
 		vm.siteCards = [];
 		vm.totalAgentsInAlarm = 0;
 
+		rtaStateService.setCurrentState($stateParams);
+
 		$stateParams.open = ($stateParams.open || "false");
-		if ($stateParams.skillAreaId)
+		if($stateParams.skillAreaId)
 			$stateParams.skillIds = getSkillIdsFromSkillAreaId($stateParams.skillAreaId);
 		else
 			$stateParams.skillIds = $stateParams.skillIds || [];
 		$stateParams.siteIds = $stateParams.siteIds || [];
 		$stateParams.teamIds = $stateParams.teamIds || [];
 
-		if ($stateParams.skillAreaId)
-			vm.skillPickerPreselectedItem = { skillAreaId: $stateParams.skillAreaId };
-		else
-			vm.skillPickerPreselectedItem = { skillIds: $stateParams.skillIds };
-
+		vm.skillPickerPreselectedItem = rtaStateService.skillPickerPreselectedItem();
+		
 		vm.displayNoSitesMessage = function () { return vm.siteCards.length == 0; };
 		vm.displayNoSitesForSkillMessage = function () { return $stateParams.skillIds.length > 0; };
 
@@ -85,7 +146,7 @@
 								isSelected: $stateParams.siteIds.indexOf(site.Id) > -1,
 								teams: [],
 								AgentsCount: site.AgentsCount,
-								href: $state.href('rta-agents', { siteIds: site.Id, skillIds: $stateParams.skillIds, skillAreaId: $stateParams.skillAreaId })
+								href: rtaStateService.agentsHrefForSite(site.Id)
 							};
 
 							$scope.$watch(function () { return siteCard.isOpen }, function (newValue) { if (newValue) pollNow(); });
@@ -120,7 +181,7 @@
 						SiteId: team.SiteId,
 						isSelected: $stateParams.teamIds.indexOf(team.Id) > -1,
 						AgentsCount: team.AgentsCount,
-						href: $state.href('rta-agents', { teamIds: team.Id, skillIds: $stateParams.skillIds, skillAreaId: $stateParams.skillAreaId })
+						href: rtaStateService.agentsHrefForTeam(team.Id)
 					};
 
 					$scope.$watch(function () { return teamCard.isSelected }, function (newValue, oldValue) {
@@ -162,46 +223,13 @@
 			}
 		}
 
-		vm.selectSkillOrSkillArea = function (selectedItem) {
-			if (!angular.isDefined(selectedItem))
-				resetOnNoSkills();
-			else if (selectedItem.hasOwnProperty('Skills'))
-				setUpForSkillArea(selectedItem);
+		vm.selectSkillOrSkillArea = function (skillOrSkillArea) {
+			if (!angular.isDefined(skillOrSkillArea))
+				rtaStateService.deselectSkillAndSkillArea();
+			else if (skillOrSkillArea.hasOwnProperty('Skills'))
+				rtaStateService.selectSkillArea(skillOrSkillArea.Id);
 			else
-				setUpForSkill(selectedItem);
-		}
-
-		function resetOnNoSkills() {
-			var params = {
-				open: $stateParams.open,
-				siteIds: $stateParams.siteIds,
-				teamIds: $stateParams.teamIds,
-				skillIds: undefined,
-				skillAreaId: undefined
-			}
-			$state.go($state.current.name, params, { reload: true });
-		}
-
-		function setUpForSkillArea(selectedItem) {
-			var params = {
-				open: $stateParams.open,
-				siteIds: $stateParams.siteIds,
-				teamIds: $stateParams.teamIds,
-				skillIds: undefined,
-				skillAreaId: selectedItem.Id
-			}
-			$state.go($state.current.name, params, { reload: true });
-		}
-
-		function setUpForSkill(selectedItem) {
-			var params = {
-				open: $stateParams.open,
-				siteIds: $stateParams.siteIds,
-				teamIds: $stateParams.teamIds,
-				skillIds: selectedItem.Id,
-				skillAreaId: undefined
-			}
-			$state.go($state.current.name, params, { reload: true });
+				rtaStateService.selectSkill(skillOrSkillArea.Id);
 		}
 
 		vm.goToAgentsView = function () {
