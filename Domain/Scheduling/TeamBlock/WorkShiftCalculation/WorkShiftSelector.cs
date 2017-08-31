@@ -23,13 +23,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 			SchedulingOptions schedulingOptions, TimeZoneInfo timeZoneInfo, bool forRoleModel, IPerson person);
 	}
 
-	public class WorkShiftSelectorOld : IWorkShiftSelector, IWorkShiftSelectorForIntraInterval
+	public class WorkShiftSelector : IWorkShiftSelector, IWorkShiftSelectorForIntraInterval
 	{
 		private readonly IWorkShiftValueCalculator _workShiftValueCalculator;
 		private readonly IEqualWorkShiftValueDecider _equalWorkShiftValueDecider;
 		private readonly IActivityIntervalDataCreator _activityIntervalDataCreator;
 
-		public WorkShiftSelectorOld(IWorkShiftValueCalculator workShiftValueCalculator,
+		public WorkShiftSelector(IWorkShiftValueCalculator workShiftValueCalculator,
 												IEqualWorkShiftValueDecider equalWorkShiftValueDecider,
 												IActivityIntervalDataCreator activityIntervalDataCreator)
 		{
