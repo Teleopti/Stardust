@@ -72,12 +72,12 @@
 			setFilters(vm.SelectedTypes, 'Type');
 		};
 
-		vm.reload = function(params) {
+		vm.reload = function (params) {
 			if (params) {
-				vm.agentSearchTerm = params.agentSearchTerm || vm.agentSearchTerm;
-				vm.selectedGroupIds = params.selectedGroupIds || vm.selectedGroupIds;
-				vm.selectedGroupPageId = params.selectedGroupPageId || vm.selectedGroupPageId;
-				vm.paging = params.paging || vm.paging;
+				if (params.agentSearchTerm !== undefined) vm.agentSearchTerm = params.agentSearchTerm;
+				if (params.selectedGroupIds !== undefined) vm.selectedGroupIds = params.selectedGroupIds;
+				if (params.selectedGroupPageId !== undefined) vm.selectedGroupPageId = params.selectedGroupPageId;
+				if (params.paging !== undefined) vm.paging = params.paging;
 			}
 
 			var requestsFilter = {
@@ -87,7 +87,6 @@
 				selectedGroupPageId: vm.selectedGroupPageId,
 				filters: vm.filters
 			};
-
 			getRequests(requestsFilter, vm.sortingOrders, vm.paging);
 		};
 

@@ -177,9 +177,12 @@ describe('Requests - absence and text controller tests',
 			compileUIGridHtml(scope, controller.gridOptions);
 
 			requestsDataService.reset();
-
-			controller.agentSearchTerm = 'search term';
 			scope.$digest();
+
+			scope.$broadcast('reload.requests.with.selection', {
+				agentSearchTerm: "search term"
+			});
+			
 			expect(requestsDataService.getHasSentRequests()).toBeTruthy();
 			expect(requestsDataService.getLastRequestParameters()[0].agentSearchTerm).toEqual('search term');
 		});
@@ -432,6 +435,117 @@ describe('Requests - absence and text controller tests',
 				if (columnsWithFilterEnabled.indexOf(col.displayName) > -1)
 					expect(col.enableFiltering).toBeFalsy();
 			});
+		});
+
+		it('should update agent search term before loading requests', function() {
+			params.selectedGroupIds = ['team'];
+			compileUIGridHtml(scope, controller.gridOptions);
+			var expectedResult = '';
+			scope.$digest();
+
+			controller.agentSearchTerm = "blabla";
+			scope.$broadcast('reload.requests.with.selection', {
+				agentSearchTerm: expectedResult
+			});
+
+			expect(controller.agentSearchTerm).toEqual(expectedResult);
+		});
+
+		it('should update selected group Ids before loading requests', function () {
+			params.selectedGroupIds = ['team'];
+			compileUIGridHtml(scope, controller.gridOptions);
+			var expectedResult = 'other team';
+			scope.$digest();
+
+			scope.$broadcast('reload.requests.with.selection', {
+				selectedGroupIds: expectedResult
+			});
+
+			expect(controller.selectedGroupIds).toEqual(expectedResult);
+		});
+
+		it('should update selected group page Id before loading requests', function () {
+			params.selectedGroupIds = ['team'];
+			compileUIGridHtml(scope, controller.gridOptions);
+			var expectedResult = '';
+			scope.$digest();
+
+			controller.selectedGroupPageId = "page id";
+			scope.$broadcast('reload.requests.with.selection', {
+				selectedGroupPageId: expectedResult
+			});
+
+			expect(controller.selectedGroupPageId).toEqual(expectedResult);
+		});
+
+		it('should update paging before loading requests', function () {
+			params.selectedGroupIds = ['team'];
+			compileUIGridHtml(scope, controller.gridOptions);
+			var expectedResult = {};
+			scope.$digest();
+
+			controller.paging = { PageCount: 1 };
+			scope.$broadcast('reload.requests.with.selection', {
+				paging: expectedResult
+			});
+
+			expect(controller.paging).toEqual(expectedResult);
+		});
+
+		it('should not selected search term if it is undefined before loading requests', function () {
+			params.selectedGroupIds = ['team'];
+			compileUIGridHtml(scope, controller.gridOptions);
+			var expectedResult = "John";
+			scope.$digest();
+
+			controller.agentSearchTerm = expectedResult;
+			scope.$broadcast('reload.requests.with.selection', {
+				selectedGroupIds: "group ids"
+			});
+
+			expect(controller.agentSearchTerm).toEqual(expectedResult);
+		});
+
+		it('should not selected group page id if it is undefined before loading requests', function () {
+			params.selectedGroupIds = ['team'];
+			compileUIGridHtml(scope, controller.gridOptions);
+			var expectedResult = "page id";
+			scope.$digest();
+
+			controller.selectedGroupPageId = expectedResult;
+			scope.$broadcast('reload.requests.with.selection', {
+				selectedGroupIds: "group ids"
+			});
+
+			expect(controller.selectedGroupPageId).toEqual(expectedResult);
+		});
+
+		it('should not selected group ids if it is undefined before loading requests', function () {
+			var expectedResult = ['team'];
+			params.selectedGroupIds = expectedResult;
+			compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			controller.paging = expectedResult;
+			scope.$broadcast('reload.requests.with.selection', {
+				selectedGroupPageId: "group ids"
+			});
+
+			expect(controller.selectedGroupIds).toEqual(expectedResult);
+		});
+
+		it('should not update paging if it is undefined before loading requests', function () {
+			params.selectedGroupIds = ['team'];
+			compileUIGridHtml(scope, controller.gridOptions);
+			var expectedResult = { PageCount: 1 };
+			scope.$digest();
+
+			controller.paging = expectedResult;
+			scope.$broadcast('reload.requests.with.selection', {
+				selectedGroupIds: "group ids"
+			});
+
+			expect(controller.paging).toEqual(expectedResult);
 		});
 
 		it('should reset filters in the first time', function () {

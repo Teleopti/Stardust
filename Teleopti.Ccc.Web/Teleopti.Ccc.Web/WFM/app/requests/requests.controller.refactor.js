@@ -16,6 +16,7 @@
 		vm.sitesAndTeams = [];
 		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
 		vm.isOvertimeEnabled = toggleService.Wfm_Requests_OvertimeRequestHandling_45177;
+		vm.teamNameMap = {};
 
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
@@ -92,6 +93,8 @@
 					resolve(data);
 					vm.sitesAndTeams = data.Children;
 					loggedonUsersTeamId.resolve(data.LogonUserTeamId || null);
+
+					angular.extend(vm.teamNameMap, extractTeamNames(data.Children));
 				});
 			});
 		};
@@ -339,6 +342,16 @@
 		function replaceArrayValues(from, to) {
 			to.splice(0);
 			from.forEach(function (x) { to.push(x); });
+		}
+
+		function extractTeamNames(sites) {
+			var teamNameMap = {};
+			sites.forEach(function (site) {
+				site.Children.forEach(function (team) {
+					teamNameMap[team.Id] = team.Name;
+				});
+			});
+			return teamNameMap;
 		}
 	}
 })();
