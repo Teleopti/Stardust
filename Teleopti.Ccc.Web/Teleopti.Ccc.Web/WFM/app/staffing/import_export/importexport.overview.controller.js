@@ -39,19 +39,26 @@
         function selectSkill(skill) {
             vm.selectedSkill = skill;
         }
+        function createFilterFor(query) {
+            var lowercaseQuery = angular.lowercase(query);
+            return function filterFn(item) {
+                var lowercaseName = angular.lowercase(item.Name);
+                return (lowercaseName.indexOf(lowercaseQuery) === 0);
+            };
+        };
 
         function querySearchSkills(query) {
-            var results = query ? skills.filter(createFilterFor(query)) : skills, 
+            var results = query ? skills.filter(createFilterFor(query)) : skills,
                 deferred;
             return results;
         };
 
         function exportFile() {
-            var request = staffingService.postFileExport.get({skillId:vm.selectedSkill.Id})
+            var request = staffingService.postFileExport.get({ skillId: vm.selectedSkill.Id })
             request.$promise.then(function (response) {
                 console.log(response.Content);
                 var data = angular.toJson(response.Content);
-                UtilService.saveToFs(response.Content, vm.selectedSkill.Name +".csv", 'text/csv');
+                UtilService.saveToFs(response.Content, vm.selectedSkill.Name + ".csv", 'text/csv');
             })
         }
 
