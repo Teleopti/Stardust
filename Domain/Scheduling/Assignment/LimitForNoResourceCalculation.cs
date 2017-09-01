@@ -1,17 +1,15 @@
-﻿namespace Teleopti.Ccc.Domain.Scheduling.Assignment
+﻿using Teleopti.Ccc.Domain.FeatureFlags;
+
+namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
+	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 	public class LimitForNoResourceCalculation : ILimitForNoResourceCalculation
 	{
-		private int _limit = 100;
-
-		public int NumberOfAgents
-		{
-			get { return _limit; }
-		}
+		public int NumberOfAgents { get; private set; } = 100;
 
 		public void SetFromTest(int limit)
 		{
-			_limit = limit;
+			NumberOfAgents = limit;
 		}
 	}
 }
