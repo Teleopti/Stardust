@@ -11,19 +11,19 @@
 
 		return {
 			setCurrentState: function (newState) {
-				state = foo2(newState);
+				state = mutateState(newState);
 			},
 
 			deselectSkillAndSkillArea: function () {
-				$state.go($state.current.name, state = foo2({ skillIds: undefined, skillAreaId: undefined }), { reload: true });
+				$state.go($state.current.name, state = mutateState({ skillIds: undefined, skillAreaId: undefined }), { reload: true });
 			},
 
 			selectSkillArea: function (skillAreaId) {
-				$state.go($state.current.name, state = foo2({ skillIds: undefined, skillAreaId: skillAreaId }), { reload: true });
+				$state.go($state.current.name, state = mutateState({ skillIds: undefined, skillAreaId: skillAreaId }), { reload: true });
 			},
 
 			selectSkill: function (skillId) {
-				$state.go($state.current.name, state = foo2({ skillIds: skillId, skillAreaId: undefined }), { reload: true });
+				$state.go($state.current.name, state = mutateState({ skillIds: skillId, skillAreaId: undefined }), { reload: true });
 			},
 
 			agentsHrefForTeam: function (teamId) {
@@ -44,10 +44,24 @@
 
 			skillPickerPreselectedItem: function() {
 				return { skillIds: state.skillIds, skillAreaId: state.skillAreaId };
+			},
+
+			hasSkillSelection: function() {
+				return state.skillIds.length > 0;
+			},
+
+			isSiteSelected: function(id) {
+				if(!state.siteIds) return false;
+				return state.siteIds.indexOf(id) > -1;
+			},
+
+			isTeamSelected: function(id) {
+				if(!state.teamIds) return false;
+				return state.teamIds.indexOf(id) > -1;
 			}
 		}
 
-		function foo2(mutations) {
+		function mutateState(mutations) {
 			var mutatedState = JSON.parse(JSON.stringify(state));
 			Object.keys(mutations).forEach(function (key) {
 				mutatedState[key] = mutations[key];
@@ -89,7 +103,7 @@
 		vm.skillPickerPreselectedItem = rtaStateService.skillPickerPreselectedItem();
 		
 		vm.displayNoSitesMessage = function () { return vm.siteCards.length == 0; };
-		vm.displayNoSitesForSkillMessage = function () { return $stateParams.skillIds.length > 0; };
+		vm.displayNoSitesForSkillMessage = rtaStateService.hasSkillSelection;
 
 		var pollPromise;
 
@@ -143,7 +157,7 @@
 								Id: site.Id,
 								Name: site.Name,
 								isOpen: $stateParams.open != "false" || site.Teams.length > 0,
-								isSelected: $stateParams.siteIds.indexOf(site.Id) > -1,
+								isSelected: rtaStateService.isSiteSelected(site.Id),
 								teams: [],
 								AgentsCount: site.AgentsCount,
 								href: rtaStateService.agentsHrefForSite(site.Id)
@@ -179,7 +193,7 @@
 						Id: team.Id,
 						Name: team.Name,
 						SiteId: team.SiteId,
-						isSelected: $stateParams.teamIds.indexOf(team.Id) > -1,
+						isSelected: rtaStateService.isTeamSelected(team.Id),
 						AgentsCount: team.AgentsCount,
 						href: rtaStateService.agentsHrefForTeam(team.Id)
 					};
