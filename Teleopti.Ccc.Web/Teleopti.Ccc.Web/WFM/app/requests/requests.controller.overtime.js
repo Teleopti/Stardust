@@ -302,6 +302,7 @@
 			}
 			onInitCallBack && onInitCallBack(requests.data.TotalCount);
 			vm.isLoading = false;
+			vm.gridApi.grid.selection.selectAll = false;
 		}
 
 		function prepareComputedColumns(requests) {

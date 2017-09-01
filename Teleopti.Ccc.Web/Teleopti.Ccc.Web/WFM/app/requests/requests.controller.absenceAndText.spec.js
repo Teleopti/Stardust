@@ -372,7 +372,6 @@ describe('Requests - absence and text controller tests',
 			expect(absenceAndTextFilters.length).toEqual(0);
 		});
 
-
 		it('should display correct time for DST', function () {
 			params.selectedGroupIds = ['team'];
 			compileUIGridHtml(scope, controller.gridOptions);
@@ -554,6 +553,18 @@ describe('Requests - absence and text controller tests',
 
 			scope.$apply();
 			expect(requestsFilterSvc.filters['absenceAndText'][0]['Status']).toEqual("0 5");
+		});
+
+		it('should uncheck selectAll checkbox after loading requests', function () {
+			compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			controller.gridApi.grid.selection.selectAll = true;
+			scope.$broadcast('reload.requests.with.selection', {
+				selectedGroupIds: "group ids"
+			});
+
+			expect(controller.gridApi.grid.selection.selectAll).toEqual(false);
 		});
 
 		function setUpTarget() {

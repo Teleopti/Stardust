@@ -631,6 +631,18 @@ describe('Requests shift trade controller tests',
 			expect(controller.messageFilter).toEqual(undefined);
 		});
 
+		it('should uncheck selectAll checkbox after loading requests', function () {
+			compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			controller.gridApi.grid.selection.selectAll = true;
+			scope.$broadcast('reload.requests.with.selection', {
+				selectedGroupIds: "group ids"
+			});
+
+			expect(controller.gridApi.grid.selection.selectAll).toEqual(false);
+		});
+
 		function setUpShiftTradeRequestData() {
 			var shiftTradeDays = [
 				{

@@ -465,6 +465,18 @@ describe('Requests - overtime controller tests',
 			})).toBeTruthy();
 		});
 
+		it('should uncheck selectAll checkbox after loading requests', function () {
+			compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			controller.gridApi.grid.selection.selectAll = true;
+			scope.$broadcast('reload.requests.with.selection', {
+				selectedGroupIds: "group ids"
+			});
+
+			expect(controller.gridApi.grid.selection.selectAll).toEqual(false);
+		});
+
 		function setUpTarget() {
 			scope = $rootScope.$new();
 			controller = $controller('requestsOvertimeCtrl', {
