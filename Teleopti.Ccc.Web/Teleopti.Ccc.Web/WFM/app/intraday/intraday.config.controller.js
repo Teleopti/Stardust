@@ -53,36 +53,6 @@
                     });
             };
 
-            //TODO: #44026 Add more skilltype icons here
-            $scope.setDynamicIcon = function(skill) {
-                if (!skill.DoDisplayData) {
-                    return 'mdi mdi-alert';
-                }
-
-                if (skill.IsMultisiteSkill) {
-                    return 'mdi mdi-hexagon-multiple';
-                }
-                if (skill.SkillType === 'SkillTypeChat') {
-                    return 'mdi mdi-message-text-outline';
-                } else if (skill.SkillType === 'SkillTypeEmail') {
-                    return 'mdi mdi-email-outline';
-                } else if (skill.SkillType === 'SkillTypeEmail') {
-                    return 'mdi mdi-email-outline';
-                } else if (skill.SkillType === 'SkillTypeInboundTelephony') {
-                    return 'mdi mdi-phone';
-                } else if (skill.SkillType === 'SkillTypeRetail') {
-                    return 'mdi mdi-credit-card';
-                } else if (skill.SkillType === 'SkillTypeBackoffice') {
-                    return 'mdi mdi-archive';
-                } else if (skill.SkillType === 'SkillTypeProject') {
-                    return 'mdi mdi-clock-fast';
-                } else if (skill.SkillType === 'SkillTypeFax') {
-                    return 'mdi mdi-fax';
-                } else if (skill.SkillType === 'SkillTypeTime') {
-                    return 'mdi mdi-clock';
-                }
-            };
-
             var notifySkillAreaCreation = function() {
                 NoticeService.success($translate.instant('Created') + ' ' + $scope.skillAreaName, 5000, false);
             };
