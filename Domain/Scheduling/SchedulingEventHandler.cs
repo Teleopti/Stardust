@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.Linq;
 using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
@@ -47,12 +48,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (@event.FromWeb)
 			{
-				Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+				var basePrio = Thread.CurrentThread.Priority;
+				var prio = ConfigurationManager.AppSettings["ThreadPriority"];
+				switch (prio)
+				{
+					case "1":
+						Thread.CurrentThread.Priority = ThreadPriority.Lowest;
+						break;
+					case "2":
+						Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
+						break;
+					default:
+						Thread.CurrentThread.Priority = basePrio;
+						break;
+				}
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
 					Run(@event);
 				}
-				Thread.CurrentThread.Priority = ThreadPriority.Normal;
+				Thread.CurrentThread.Priority = basePrio;
 			}
 			else
 			{
