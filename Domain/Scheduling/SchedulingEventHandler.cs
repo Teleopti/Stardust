@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -46,10 +47,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (@event.FromWeb)
 			{
+				Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
 					Run(@event);
 				}
+				Thread.CurrentThread.Priority = ThreadPriority.Normal;
 			}
 			else
 			{
