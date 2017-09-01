@@ -67,6 +67,7 @@ BEGIN  --Single datasource_id
 	--declare
 	CREATE TABLE #bridge_time_zone(date_id int,interval_id int,time_zone_id int,local_date_id int,local_interval_id int)
 	CREATE TABLE #agg_acdlogin_ids (acd_login_agg_id int, mart_acd_login_id int)
+	CREATE TABLE #agent_default_queues(queue_id int)
 
 	DECLARE @UtcNow as smalldatetime
 	DECLARE @time_zone_id smallint
@@ -117,6 +118,24 @@ BEGIN  --Single datasource_id
 		acd_login_id
 	FROM mart.dim_acd_login
 	WHERE datasource_id = @datasource_id
+
+	SET @sqlstring = 'INSERT INTO #agent_default_queues 
+	SELECT 
+		queue
+	FROM '
+		+ 
+		CASE @internal
+			WHEN 0 THEN '	mart.v_queues aq'
+			WHEN 1 THEN '	dbo.queues aq'
+			ELSE NULL --Fail fast
+		END
+		+ 
+	' INNER JOIN
+		mart.dim_queue_excluded qe
+	ON
+		aq.orig_queue_id = qe.queue_original_id'
+
+	EXEC sp_executesql @sqlstring
 
 
 	if (select @internal) = 0
@@ -346,20 +365,31 @@ SELECT
 		admin_time_s				= MAX(admin_dur),
 		datasource_id				= ' + cast(@datasource_id as varchar(3)) + ', 
 		insert_date					= getdate()
-	FROM (SELECT 
-			agg.* 
-			FROM '+
-		CASE @internal
-			WHEN 0 THEN '	mart.v_agent_logg agg'
-			WHEN 1 THEN '	dbo.agent_logg agg'
-			ELSE NULL --Fail fast
-		END
-		+ ' WHERE (date_from = '''+ CAST(@target_date_local as nvarchar(20))+'''
-	AND interval >= '''+ CAST(@target_interval_local as nvarchar(20))+'''
-	) OR (date_from BETWEEN '''+ CAST(DATEADD(D,1,@target_date_local) as nvarchar(20))+'''
-		 AND '''+ CAST(@source_date_local as nvarchar(20))+'''
-	)
-	) stg	
+	FROM 
+		(
+			SELECT 
+				agg.* 
+			FROM '
+				+
+				CASE @internal
+					WHEN 0 THEN '	mart.v_agent_logg agg'
+					WHEN 1 THEN '	dbo.agent_logg agg'
+					ELSE NULL --Fail fast
+				END
+				+ 
+			' INNER JOIN 
+				#agent_default_queues q
+			ON
+				agg.queue = q.queue_id
+			WHERE 
+				(date_from = '''+ CAST(@target_date_local as nvarchar(20))+'''
+					AND interval >= '''+ CAST(@target_interval_local as nvarchar(20))+'''
+				) 
+				OR 
+				(date_from BETWEEN '''+ CAST(DATEADD(D,1,@target_date_local) as nvarchar(20))+'''
+					AND '''+ CAST(@source_date_local as nvarchar(20))+'''
+				)	
+		) stg	
 	INNER JOIN
 		mart.dim_date		d
 	ON

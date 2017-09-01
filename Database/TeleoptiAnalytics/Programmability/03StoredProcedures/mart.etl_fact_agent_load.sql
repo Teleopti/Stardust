@@ -15,7 +15,7 @@ GO
 -- 2011-01-29
 -- 2011-07-20 Dual Agg DJ
 -- =============================================
---EXEC [mart].[etl_fact_agent_load] '2014-01-04','2014-01-14',-2
+--EXEC [mart].[etl_fact_agent_load] '2017-08-21','2017-08-21',-2
 CREATE PROCEDURE [mart].[etl_fact_agent_load] 
 @start_date smalldatetime,
 @end_date smalldatetime,
@@ -58,6 +58,7 @@ BEGIN
 	CREATE TABLE #bridge_time_zone(date_id int,interval_id int,time_zone_id int,local_date_id int,local_interval_id int)
 	CREATE NONCLUSTERED INDEX [#IX_bridge_timezone]ON #bridge_time_zone ([local_date_id],[local_interval_id])INCLUDE ([date_id],[interval_id])
 	CREATE TABLE #agg_acdlogin_ids (acd_login_agg_id int, mart_acd_login_id int)
+	CREATE TABLE #agent_default_queues(queue_id int)
 
 	--Create system mindate
 	DECLARE @UtcNow as smalldatetime
@@ -95,6 +96,25 @@ BEGIN
 		acd_login_id
 	FROM mart.dim_acd_login
 	WHERE datasource_id = @datasource_id
+
+	SET @sqlstring = 'INSERT INTO #agent_default_queues 
+	SELECT 
+		queue
+	FROM '
+		+ 
+		CASE @internal
+			WHEN 0 THEN '	mart.v_queues aq'
+			WHEN 1 THEN '	dbo.queues aq'
+			ELSE NULL --Fail fast
+		END
+		+ 
+	' INNER JOIN
+		mart.dim_queue_excluded qe
+	ON
+		aq.orig_queue_id = qe.queue_original_id'
+
+	EXEC sp_executesql @sqlstring
+
 
 	--prepare dates and intervals for this time_zone
 	--note: Get date and intervals grouped so that we do not get duplicates at DST clock shifts
@@ -192,15 +212,21 @@ BEGIN
 		admin_time_s				= MAX(admin_dur),
 		datasource_id				= ' + cast(@datasource_id as varchar(3)) + ', 
 		insert_date					= getdate()
-	FROM '+ 
-		CASE @internal
-			WHEN 0 THEN '	mart.v_agent_logg stg'
-			WHEN 1 THEN '	dbo.agent_logg stg'
-			ELSE NULL --Fail fast
-		END
-		+ ' INNER JOIN
-			#agg_acdlogin_ids a
-			ON a.acd_login_agg_id = stg.agent_id
+	FROM '
+	+ 
+	CASE @internal
+		WHEN 0 THEN '	mart.v_agent_logg stg'
+		WHEN 1 THEN '	dbo.agent_logg stg'
+		ELSE NULL --Fail fast
+	END
+	+ 
+	' INNER JOIN 
+		#agent_default_queues q
+	ON
+		stg.queue = q.queue_id
+	INNER JOIN
+		#agg_acdlogin_ids a
+		ON a.acd_login_agg_id = stg.agent_id
 	INNER JOIN
 		mart.dim_date		d
 	ON
@@ -212,8 +238,10 @@ BEGIN
 		stg.interval	= bridge.local_interval_id
 	WHERE bridge.time_zone_id = '+CAST(@time_zone_id as nvarchar(10))+'
 	AND date_from between '''+ CAST(@start_date as nvarchar(20))+''' and '''+ CAST(@end_date as nvarchar(20))+'''
+	
 	GROUP BY a.mart_acd_login_id,d.date_id,stg.interval'
-
+	--AND avail_dur IS NOT NULL
+	--AND tot_work_dur IS NOT NULL
 	--Exec
 	EXEC sp_executesql @sqlstring
 	SET NOCOUNT ON
