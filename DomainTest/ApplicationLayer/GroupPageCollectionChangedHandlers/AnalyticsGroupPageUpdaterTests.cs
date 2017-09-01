@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 		{
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			var groupPageId = Guid.NewGuid();
-			var groupPage = new GroupPage("Test1").WithId(groupPageId);
+			var groupPage = new GroupPage("OptimizationData").WithId(groupPageId);
 			var rootPersonGroup = new RootPersonGroup("rootPersonGroup1").WithId();
 			var personWithGuid = PersonFactory.CreatePersonWithGuid("person1", "person1Last");
 			rootPersonGroup.AddPerson(personWithGuid);
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 		{
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			var groupPageId = Guid.NewGuid();
-			var groupPage = new GroupPage("Test1").WithId(groupPageId);
+			var groupPage = new GroupPage("OptimizationData").WithId(groupPageId);
 			var rootPersonGroup = new RootPersonGroup("rootPersonGroup1").WithId();
 			var personWithGuid = PersonFactory.CreatePersonWithGuid("person1", "person1Last");
 			rootPersonGroup.AddPerson(personWithGuid);
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 		{
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			var groupPageId = Guid.NewGuid();
-			var groupPage = new GroupPage("Test1").WithId(groupPageId);
+			var groupPage = new GroupPage("OptimizationData").WithId(groupPageId);
 			var rootPersonGroup = new RootPersonGroup("rootPersonGroup1").WithId();
 			var person1 = PersonFactory.CreatePersonWithGuid("person1", "person1Last");
 			rootPersonGroup.AddPerson(person1);
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 		{
 			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
 			var groupPageId = Guid.NewGuid();
-			var groupPage = new GroupPage("Test1").WithId(groupPageId);
+			var groupPage = new GroupPage("OptimizationData").WithId(groupPageId);
 			var rootPersonGroup = new RootPersonGroup("rootPersonGroup1").WithId();
 			var person1 = PersonFactory.CreatePersonWithGuid("person1", "person1Last");
 			rootPersonGroup.AddPerson(person1);

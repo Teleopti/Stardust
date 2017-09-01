@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         public void ShouldFindShiftCategories()
         {
             var repository = _mock.StrictMock<IShiftCategoryRepository>();
-            var list = new List<IShiftCategory> { ShiftCategoryFactory.CreateShiftCategory("Test2"), ShiftCategoryFactory.CreateShiftCategory("Test1") };
+            var list = new List<IShiftCategory> { ShiftCategoryFactory.CreateShiftCategory("Test2"), ShiftCategoryFactory.CreateShiftCategory("OptimizationData") };
             using (_mock.Record())
             {
                 Expect.Call(_repositoryFactory.CreateShiftCategoryRepository(_uow)).Return(repository);
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         public void ShouldFindRuleSetBags()
         {
             var repository = _mock.StrictMock<IRuleSetBagRepository>();
-            var list = new List<IRuleSetBag> { new RuleSetBag { Description = new Description("Test2") }, new RuleSetBag { Description = new Description("Test1") } };
+            var list = new List<IRuleSetBag> { new RuleSetBag { Description = new Description("Test2") }, new RuleSetBag { Description = new Description("OptimizationData") } };
             using (_mock.Record())
             {
                 Expect.Call(_repositoryFactory.CreateRuleSetBagRepository(_uow)).Return(repository);
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             var repository = _mock.StrictMock<IWorkShiftRuleSetRepository>();
             var list = new List<IWorkShiftRuleSet> { WorkShiftRuleSetFactory.Create(), WorkShiftRuleSetFactory.Create() };
             list[0].Description = new Description("Test2");
-            list[1].Description = new Description("Test1");
+            list[1].Description = new Description("OptimizationData");
             using (_mock.Record())
             {
                 Expect.Call(_repositoryFactory.CreateWorkShiftRuleSetRepository(_uow)).Return(repository);
@@ -246,7 +246,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             var repository = _mock.StrictMock<IActivityRepository>();
             var masterRepository = _mock.StrictMock<IMasterActivityRepository>();
 
-            var list = new List<IActivity> { ActivityFactory.CreateActivity("Test1"), ActivityFactory.CreateActivity("Test2") };
+            var list = new List<IActivity> { ActivityFactory.CreateActivity("OptimizationData"), ActivityFactory.CreateActivity("Test2") };
             var masterlist = new List<IMasterActivity>
                                  {new MasterActivity {Description = new Description("Master of the universe")}};
             using (_mock.Record())

@@ -495,7 +495,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 				_shiftCategory,
 				null, null, new List<IActivityRestriction>()) {CommonMainShift = _commonMainShift};
 
-			var activity = ActivityFactory.CreateActivity("Test1");
+			var activity = ActivityFactory.CreateActivity("OptimizationData");
 			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 7, 0, 0, DateTimeKind.Utc),
 											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
 			var commonMainShift = EditableShiftFactory.CreateEditorShift(activity, period, _shiftCategory);

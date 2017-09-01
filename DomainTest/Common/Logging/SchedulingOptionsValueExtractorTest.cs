@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
         [Test]
         public void VerifyTeamOptions()
         {
-	        GroupPageLight groupPage = new GroupPageLight("Test1", GroupPageType.Hierarchy);
+	        GroupPageLight groupPage = new GroupPageLight("OptimizationData", GroupPageType.Hierarchy);
             var schedulingOptions = new SchedulingOptions
                 {
                     TeamSameShiftCategory = true,
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Common.Logging
             _target = new SchedulingOptionsValueExtractor(schedulingOptions );
 
             var result = _target.GetTeamOptions();
-            Assert.AreEqual(result, "Test1,Same shift category,Same start time,Same activity,Same end time");
+            Assert.AreEqual(result, "OptimizationData,Same shift category,Same start time,Same activity,Same end time");
         }
 
         [Test]

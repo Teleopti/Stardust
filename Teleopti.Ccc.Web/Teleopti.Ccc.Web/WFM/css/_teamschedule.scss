@@ -1050,6 +1050,10 @@ md-tooltip.layer-summary {
 	text-align: center;
 }
 
+md-tooltip ._md-content {
+    height: auto;
+}
+
 .multiline-tooltip.max-width-600 {
 	span {
 		display: inline-block;

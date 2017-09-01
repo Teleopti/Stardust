@@ -300,6 +300,7 @@
     <Compile Include="Optimization\IntradayOptimization.cs" />
     <Compile Include="Optimization\IntradayOptimizationCallbackInfo.cs" />
     <Compile Include="Optimization\NoIntradayOptimizationCallback.cs" />
+    <Compile Include="Optimization\OptimizationData.cs" />
     <Compile Include="Optimization\WeeklyRestSolver\RemoveShiftCategoryToBeInLegalState.cs" />
     <Compile Include="Reports\IReportVisible.cs" />
     <Compile Include="Reports\IsOnlineReportFunctionSpecification.cs" />

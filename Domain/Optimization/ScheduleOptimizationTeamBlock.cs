@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -77,14 +76,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public virtual OptimizationResultModel Execute(Guid planningPeriodId)
 		{
-			var period = SetupAndOptimize(planningPeriodId);
+			var OptiData = SetupAndOptimize(planningPeriodId);
 			_persister.Persist(_schedulerStateHolder().Schedules);
-			return _optimizationResult.Create(period, _schedulerStateHolder().SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period).ToList());
+			return _optimizationResult.Create(OptiData.DateOnlyPeriod, OptiData.Persons);
 		}
 
 		[UnitOfWork]
 		[TestLog]
-		protected virtual DateOnlyPeriod SetupAndOptimize(Guid planningPeriodId)
+		protected virtual OptimizationData SetupAndOptimize(Guid planningPeriodId)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
@@ -141,7 +140,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			planningPeriod.Scheduled();
 
-			return period;
+			return new  OptimizationData
+			{
+				DateOnlyPeriod = period,
+				Persons = agents
+			};
 		}
 	}
 }
