@@ -439,7 +439,6 @@
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationEvenRelativeDifferenceTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\ResourceCalculationScenario.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\DoNotRunNightRestWhiteSpotDesktopTest.cs" />
-    <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingWithCategorizedShiftSelectionResultTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\FullSchedulingResultTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\MinMaxStaffingDesktopTest.cs" />
     <Compile Include="SchedulingScenarios\Scheduling\PerformanceTestHackTest.cs" />

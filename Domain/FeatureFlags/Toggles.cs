@@ -98,7 +98,6 @@
 
 		ResourcePlanner_CascadingSkillsGUI_40018,
 		ResourcePlanner_HideSkillPrioSliders_41312,
-		ResourcePlanner_CategorizeShiftSelection_xx,
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_MergeTeamblockClassicScheduling_44289,
 		ResourcePlanner_MergeTeamblockClassicIntraday_45508,
