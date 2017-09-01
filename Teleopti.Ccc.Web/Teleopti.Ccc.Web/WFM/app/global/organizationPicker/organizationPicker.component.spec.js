@@ -165,6 +165,42 @@
 		expect($rootScope.teamIds[0]).toBe('team2');
 	});
 
+	it('should remove the not exists item from the selection when the hierachy data reloads', function () {
+		$rootScope.teamIds = [];
+	
+		$rootScope.sitesAndTeams = [
+			{
+				Id: 'site1',
+				Name: 'site1',
+				Children: [
+					{ Id: 'team1', Name: 'team1' },
+					{ Id: 'team2', Name: 'team2' },
+					{ Id: 'team3', Name: 'team3' }
+				]
+			}
+		];
+		var p = setupPicker('selected-team-ids="teamIds" sites-and-teams="sitesAndTeams"');
+		openPicker(p);
+		clickSite(0);
+
+		expect($rootScope.teamIds.length).toBe(3);
+
+		$rootScope.sitesAndTeams = [
+			{
+				Id: 'site1',
+				Name: 'site1',
+				Children: [
+					{ Id: 'team1', Name: 'team1' }
+				]
+			}
+		];
+		$rootScope.$apply();
+		
+		expect($rootScope.teamIds.length).toBe(1);
+		expect($rootScope.teamIds[0]).toBe('team1');
+
+	});
+
 	function toggleSite(index) {
 		expectPickerOpen();
 

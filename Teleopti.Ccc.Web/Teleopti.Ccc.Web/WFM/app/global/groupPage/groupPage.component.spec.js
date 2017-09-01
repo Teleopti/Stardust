@@ -940,6 +940,33 @@ describe('<group-page-picker>', function () {
 
 		});
 
+		it('should remove the not exists item from the selection when the group picker data reloads ', function () {
+			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+			openPanel(picker);
+			expectPanelOpen();
+
+			checkGroupPage(0);
+			expect(scope.selectedGroups.groupIds.length).toEqual(2);
+
+			scope.groupPages = {
+				'BusinessHierarchy': [
+					{
+						Id: 'site1',
+						Name: 'site1',
+						Children: [
+							{
+								Id: 'site1team1',
+								Name: 'site1 team1'
+							}
+						]
+					}
+				]
+			};
+			scope.$apply();
+			expect(scope.selectedGroups.groupIds.length).toEqual(1);
+
+		});
+
 	});
 
 	function increaseRepeatContainerHeight(picker) {

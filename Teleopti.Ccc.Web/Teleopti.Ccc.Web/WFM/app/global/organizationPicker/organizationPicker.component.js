@@ -32,7 +32,8 @@
 		var singleMode = checkIsSingleMode($attrs)
 		var searchText = ''
 		var searchCache = {}
-	
+		var nameMap = {}
+
 		var ctrl = this
 
 		ctrl.longestName = ''
@@ -44,19 +45,21 @@
 				searchCache = {}
 				searchText = ''
 				populateGroupListAndNamemapAndFindLongestName(changesObj.sitesAndTeams.currentValue)
+				removeNotExistTeamsFromSelection()
 				ctrl.orgsInView = ctrl.searchForOrgsByName('')
 				ctrl.updateSelectedTeamsInView()
+				
 			}
 		}
 
 		ctrl.$postLink = function () {
 			setDefaultFocus();
 		}
-		
+
 		$scope.$on("resetFocus", function (elementName) {
 			setDefaultFocus();
 		});
-		
+
 		ctrl.$onInit = function () {
 			var menuPosition = $mdPanel.newPanelPosition().relativeTo($element).addPanelPosition($mdPanel.xPosition.ALIGN_START, $mdPanel.yPosition.BELOW)
 
@@ -72,7 +75,7 @@
 				clickOutsideToClose: true,
 				escapeToClose: true,
 				zIndex: 40,
-				trapFocus:true,
+				trapFocus: true,
 				attachTo: angular.element(document.body), // must-have for text inputs on ie11
 				position: menuPosition,
 				onOpenComplete: function () {
@@ -89,8 +92,8 @@
 
 				},
 				onRemoving: (ctrl.onClose ? function () { ctrl.onClose() } : angular.noop),
-				onCloseSuccess: function(){
-							setDefaultFocus();
+				onCloseSuccess: function () {
+					setDefaultFocus();
 				},
 			})
 		}
@@ -103,7 +106,7 @@
 			ctrl.menuRef.open()
 		}
 
-		function setDefaultFocus(){
+		function setDefaultFocus() {
 			var element = $element.find("md-select-value");
 			element.focus();
 		}
@@ -120,6 +123,7 @@
 		}
 
 		function populateGroupListAndNamemapAndFindLongestName(rawSites) {
+			ctrl.nameMap = {}
 			ctrl.groupList = rawSites.map(function (rawSite) {
 				var site = new Site(rawSite.Id, rawSite.Name)
 				ctrl.nameMap[site.id] = site.name
@@ -138,8 +142,26 @@
 			});
 		}
 
+		function removeNotExistTeamsFromSelection() {
+			if (!ctrl.selectedTeamIds || !ctrl.selectedTeamIds.length) {
+				return;
+			}
+			var ids = angular.copy(ctrl.selectedTeamIds);
+			ids.forEach(function (id) {
+				if (!ctrl.nameMap[id]) {
+					ctrl.selectedTeamIds.splice(ctrl.selectedTeamIds.indexOf(id), 1);
+				}
+			});
+		}
+
+
 		Object.defineProperties(this, {
-			nameMap: { value: {} },
+			nameMap: {
+				get: function () { return nameMap },
+				set: function (value) {
+					nameMap = value;
+				}
+			},
 			searchText: {
 				get: function () { return searchText },
 				set: function (value) {
@@ -270,7 +292,7 @@
 								slaveSite.updateSelectedTeamIds()
 								if (!textIsEmpty && slaveSite.collapsed) {
 									var index = cached.indexOf(slaveSite)
-									var args = [index+1, 0].concat(slaveSite.teams)
+									var args = [index + 1, 0].concat(slaveSite.teams)
 									cached.splice.apply(cached, args)
 									slaveSite.collapsed = false
 								}
@@ -306,6 +328,7 @@
 
 	}
 
+	
 	function filterCollapsedTeams(slavesArray) {
 		var newArray = []
 		slavesArray.forEach(function (slave) {

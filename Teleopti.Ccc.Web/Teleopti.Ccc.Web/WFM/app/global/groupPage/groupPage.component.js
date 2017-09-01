@@ -216,6 +216,7 @@
 
 		ctrl.setPickerData = function () {
 			populateGroupListAndNamemapAndFindLongestName(ctrl.groupPages[ctrl.tabs[selectedIndex].title]);
+			removeNotExistTeamsFromSelection();
 			ctrl.groupsInView[ctrl.tabs[selectedIndex].title] = ctrl.filterGroups('');
 		}
 
@@ -291,6 +292,18 @@
 
 			ctrl.selectedGroups.groupIds = [];
 			ctrl.selectedGroups.groupPageId = '';
+		}
+
+		function removeNotExistTeamsFromSelection() {
+			if (!ctrl.selectedGroups.groupIds || !ctrl.selectedGroups.groupIds.length) {
+				return;
+			}
+			var ids = angular.copy(ctrl.selectedGroups.groupIds);
+			ids.forEach(function (id) {
+				if (!ctrl.nameMap[id]) {
+					ctrl.selectedGroups.groupIds.splice(ctrl.selectedGroups.groupIds.indexOf(id), 1);
+				}
+			});
 		}
 
 		function ParentGroupCopy(originalParentGroup) {

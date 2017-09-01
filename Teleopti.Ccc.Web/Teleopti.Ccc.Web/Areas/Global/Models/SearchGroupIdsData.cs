@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Global.Models
 
 		private bool isGuids()
 		{
-			return SelectedGroupIds.All(id =>
+			return SelectedGroupIds != null && SelectedGroupIds.All(id =>
 			{
 				Guid value;
 				return Guid.TryParse(id, out value);
