@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 			ISkillStaffPeriodDictionary skillStaffPeriods;
 			var forecastedData = new StringBuilder();
 			var allIntervals = new List<SkillStaffingInterval>();
-			allIntervals.AddRange(_scheduledStaffingProvider.StaffingPerSkill(new List<ISkill>{skill},period.ToDateTimePeriod(TimeZoneInfo.Utc),false,false));
+			allIntervals.AddRange(_scheduledStaffingProvider.StaffingPerSkill(new List<ISkill>{skill},period.Inflate(1).ToDateTimePeriod(TimeZoneInfo.Utc),false,false));
 			
 			if (skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary.TryGetValue(skill, out skillStaffPeriods))
 			{
