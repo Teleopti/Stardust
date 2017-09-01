@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
+		private readonly IResourceCalculateAfterDeleteDecider _resourceCalculateAfterDeleteDecider;
 
 		public IntradayOptimizerCreator(
 			IntradayDecisionMaker decisionMaker,
@@ -52,7 +53,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			MatrixListFactory matrixListFactory,
 			PersonalSkillsProvider personalSkillsProvider,
 			IUserTimeZone userTimeZone,
-			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter)
+			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
+			IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider)
 		{
 			_decisionMaker = decisionMaker;
 			_scheduleService = scheduleService;
@@ -71,6 +73,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_personalSkillsProvider = personalSkillsProvider;
 			_userTimeZone = userTimeZone;
 			_mainShiftOptimizeActivitySpecificationSetter = mainShiftOptimizeActivitySpecificationSetter;
+			_resourceCalculateAfterDeleteDecider = resourceCalculateAfterDeleteDecider;
 		}
 
 		public IEnumerable<IIntradayOptimizer2> Create(DateOnlyPeriod period, IEnumerable<IPerson> agents, IOptimizationPreferences optimizerPreferences, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
@@ -114,7 +117,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 						_resourceOptimizationHelper,
 						_effectiveRestrictionCreator, optimizationLimits, workShiftStateContainer, schedulingOptionsCreator,
 						_mainShiftOptimizeActivitySpecificationSetter, _deleteAndResourceCalculateService,
-						scheduleMatrix, _intradayOptimizeOneDayCallback, _schedulerStateHolder().SchedulingResultState, _userTimeZone));
+						scheduleMatrix, _intradayOptimizeOneDayCallback, _schedulerStateHolder().SchedulingResultState, _userTimeZone,
+						_resourceCalculateAfterDeleteDecider));
 				result.Add(optimizer);
 			}
 

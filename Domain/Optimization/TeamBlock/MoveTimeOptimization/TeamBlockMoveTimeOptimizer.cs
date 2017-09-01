@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
@@ -81,11 +82,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock.MoveTimeOptimization
 			//delete schedule on the two days
 			var firstTeamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, firstDayDate,
 				schedulingOptions.BlockFinder());
-			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, firstTeamBlock);
+			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, firstTeamBlock, new AlwaysResourceCalculateAfterDelete());
 
 			var secondTeamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, secondDayDate,
 				schedulingOptions.BlockFinder());
-			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, secondTeamBlock);
+			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, secondTeamBlock, new AlwaysResourceCalculateAfterDelete());
 																			
 			var shiftNudgeDirective = new ShiftNudgeDirective();
 			var allSkillDays = schedulingResultStateHolder.AllSkillDays();

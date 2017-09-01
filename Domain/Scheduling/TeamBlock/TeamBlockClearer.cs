@@ -19,8 +19,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		}
 
 		public void ClearTeamBlock(SchedulingOptions schedulingOptions,
-		                           ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                           ITeamBlockInfo teamBlock)
+		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		    ITeamBlockInfo teamBlock,
+			IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider)
 		{
 			var toRemove = new HashSet<IScheduleDay>();
 
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				_deleteAndResourceCalculateService.DeleteWithResourceCalculation(scheduleDay,
 					schedulePartModifyAndRollbackService,
-					schedulingOptions.ConsiderShortBreaks, false);
+					schedulingOptions.ConsiderShortBreaks, false, resourceCalculateAfterDeleteDecider);
 			}
 
 		}

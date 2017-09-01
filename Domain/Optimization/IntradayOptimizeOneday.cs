@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IIntradayOptimizeOneDayCallback _intradayOptimizeOneDayCallback;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IResourceCalculateAfterDeleteDecider _resourceCalculateAfterDeleteDecider;
 
 		public IntradayOptimizeOneday(IScheduleService scheduleService,
 			IOptimizationPreferences optimizerPreferences,
@@ -41,7 +42,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleMatrixPro matrix,
 			IIntradayOptimizeOneDayCallback intradayOptimizeOneDayCallback,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			IUserTimeZone userTimeZone)
+			IUserTimeZone userTimeZone,
+			IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider)
 		{
 			_scheduleService = scheduleService;
 			_optimizerPreferences = optimizerPreferences;
@@ -57,6 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_intradayOptimizeOneDayCallback = intradayOptimizeOneDayCallback;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_userTimeZone = userTimeZone;
+			_resourceCalculateAfterDeleteDecider = resourceCalculateAfterDeleteDecider;
 		}
 
 		public bool Execute(DateOnly dateOnly)
@@ -87,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, schedulingOptions);
 
 			//delete schedule
-			_deleteAndResourceCalculateService.DeleteWithResourceCalculationCheckDeleteDecider(scheduleDay, _rollbackService, schedulingOptions.ConsiderShortBreaks, false);
+			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(scheduleDay, _rollbackService, schedulingOptions.ConsiderShortBreaks, false, _resourceCalculateAfterDeleteDecider);
 
 			if (!tryScheduleDay(dateOnly, schedulingOptions, effectiveRestriction, WorkShiftLengthHintOption.AverageWorkTime))
 			{

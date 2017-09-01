@@ -300,6 +300,7 @@
     <Compile Include="Reports\IsOnlineReportFunctionSpecification.cs" />
     <Compile Include="Repositories\IUserDeviceRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulePartModifyAndRollbackServiceWithoutStateHolder.cs" />
+    <Compile Include="Scheduling\Assignment\AlwaysResourceCalculateAfterDelete.cs" />
     <Compile Include="Scheduling\CurrentSchedulingCallback.cs" />
     <Compile Include="Scheduling\FullSchedulingOLD.cs" />
     <Compile Include="Scheduling\FullSchedulingResult.cs" />

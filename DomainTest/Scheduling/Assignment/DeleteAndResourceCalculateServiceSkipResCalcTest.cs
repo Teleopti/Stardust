@@ -2,7 +2,6 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -13,7 +12,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 {
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 	public class DeleteAndResourceCalculateServiceSkipResCalcTest
 	{
 		[Test]
@@ -28,8 +26,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(true);
 			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 
-			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, skillGroupInfo, new AffectedDates(new FakeTimeZoneGuard()));
-			target.DeleteWithResourceCalculationCheckDeleteDecider(scheduleDay, null, false, false);
+			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, new AffectedDates(new FakeTimeZoneGuard()));
+			target.DeleteWithResourceCalculation(scheduleDay, null, false, false, skillGroupInfo);
 
 			resourceOptHelper.AssertWasCalled(x => x.ResourceCalculate(date, new ResourceCalculationData(stateHolder, false, false)), options => options.IgnoreArguments());
 		}
@@ -46,8 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			skillGroupInfo.Expect(x => x.DoCalculation(agent, date)).Return(false);
 			var stateHolder = new SchedulingResultStateHolder(new List<IPerson>(), new FakeScheduleDictionary(), new Dictionary<ISkill, IEnumerable<ISkillDay>>());
 
-			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, skillGroupInfo, new AffectedDates(new FakeTimeZoneGuard()));
-			target.DeleteWithResourceCalculationCheckDeleteDecider(scheduleDay, null, false, false);
+			var target = new DeleteAndResourceCalculateService(() => stateHolder, MockRepository.GenerateStub<IDeleteSchedulePartService>(), resourceOptHelper, new AffectedDates(new FakeTimeZoneGuard()));
+			target.DeleteWithResourceCalculation(scheduleDay, null, false, false, skillGroupInfo);
 
 			resourceOptHelper.AssertWasNotCalled(x => x.ResourceCalculate(date, new ResourceCalculationData(stateHolder, false, false)), options => options.IgnoreArguments());
 		}
