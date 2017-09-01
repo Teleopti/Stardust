@@ -131,8 +131,8 @@
         $scope.selectedSkillChange = function(item) {
             if (item) {
                 if (item.DoDisplayData) {
-					// $scope.chosenOffset.value = 0;
-					$scope.changeChosenOffset($scope.chosenOffset.value, true);
+                    // $scope.chosenOffset.value = 0;
+                    $scope.changeChosenOffset($scope.chosenOffset.value, true);
                     $scope.skillSelected(item);
                     pollActiveTabDataByDayOffset($scope.activeTab, $scope.chosenOffset.value);
                     if (prevSkill) {
@@ -173,6 +173,7 @@
             return skill.DoDisplayData === true;
         }
 
+        //TODO: #44026 Add more skilltype icons here (this code is repeated in config controller!)
         $scope.setDynamicIcon = function(skill) {
             if (!skill.DoDisplayData) {
                 return 'mdi mdi-alert';
@@ -191,6 +192,14 @@
                 return 'mdi mdi-phone';
             } else if (skill.SkillType === 'SkillTypeRetail') {
                 return 'mdi mdi-credit-card';
+            } else if (skill.SkillType === 'SkillTypeBackoffice') {
+                return 'mdi mdi-archive';
+            } else if (skill.SkillType === 'SkillTypeProject') {
+                return 'mdi mdi-clock-fast';
+            } else if (skill.SkillType === 'SkillTypeFax') {
+                return 'mdi mdi-fax';
+            } else if (skill.SkillType === 'SkillTypeTime') {
+                return 'mdi mdi-clock';
             }
         };
 
@@ -337,7 +346,6 @@
         }
 
         function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
-
             var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
 
             if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem)) {
@@ -403,7 +411,9 @@
         });
 
         $scope.getLocalDate = function(offset) {
-            var ret = moment().add(offset, 'days').format('dddd, LL');
+            var ret = moment()
+                .add(offset, 'days')
+                .format('dddd, LL');
             return ret;
         };
 
@@ -411,7 +421,10 @@
             var ret = moment.utc().toISOString();
 
             if ($scope.toggles.showOtherDay) {
-                ret = moment.utc().add(offset, 'days').toISOString();
+                ret = moment
+                    .utc()
+                    .add(offset, 'days')
+                    .toISOString();
             }
 
             return ret;
@@ -421,48 +434,49 @@
             $interval.cancel(polling);
             var d = angular.copy($scope.chosenOffset);
             d.value = value;
-			$scope.chosenOffset = d;
-			if(!dontPoll){
-	            pollActiveTabDataByDayOffset($scope.activeTab, value);
-			}
+            $scope.chosenOffset = d;
+            if (!dontPoll) {
+                pollActiveTabDataByDayOffset($scope.activeTab, value);
+            }
             if (value === 0) {
                 poll();
-			}
+            }
+        };
 
-		};
+        $scope.exportIntradayData = function() {
+            if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem) && !$scope.exporting) {
+                $scope.exporting = true;
 
-		$scope.exportIntradayData = function () {
-			if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem) && !$scope.exporting) {
-				$scope.exporting = true;
+                if ($scope.selectedItem.Skills) {
+                    intradayService.getIntradayExportForSkillArea(
+                        JSON.stringify({
+                            id: $scope.selectedItem.Id,
+                            dayOffset: $scope.chosenOffset.value
+                        }),
+                        saveData,
+                        errorSaveData
+                    );
+                } else {
+                    intradayService.getIntradayExportForSkill(
+                        JSON.stringify({
+                            id: $scope.selectedItem.Id,
+                            dayOffset: $scope.chosenOffset.value
+                        }),
+                        saveData,
+                        errorSaveData
+                    );
+                }
+            }
+        };
 
-				if ($scope.selectedItem.Skills) {
-					intradayService.getIntradayExportForSkillArea(JSON.stringify(
-							{
-								id: $scope.selectedItem.Id,
-								dayOffset: $scope.chosenOffset.value
-							}),
-						saveData,
-						errorSaveData);
-				} else {
-					intradayService.getIntradayExportForSkill(JSON.stringify(
-							{
-								id: $scope.selectedItem.Id,
-								dayOffset: $scope.chosenOffset.value
-							}),
-						saveData,
-						errorSaveData);
-				}
-			}
-		};
+        function saveData(data, status, headers, config) {
+            var blob = new Blob([data]);
+            saveAs(blob, 'IntradayExportedData ' + moment().format('YYYY-MM-DD') + '.xlsx');
+            $scope.exporting = false;
+        }
 
-		function saveData(data, status, headers, config) {
-			var blob = new Blob([data]);
-			saveAs(blob, 'IntradayExportedData ' + moment().format('YYYY-MM-DD') + '.xlsx');
-		    $scope.exporting = false;
-		};
-
-		function errorSaveData(data, status, headers, config) {
-			$scope.exporting = false;
-		}
+        function errorSaveData(data, status, headers, config) {
+            $scope.exporting = false;
+        }
     }
 })();
