@@ -7,7 +7,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	[RemoveMeWithToggle("Can (probably) not be implemented in teamblock code branch", Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 	public class IntradayOptimizationContext
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;

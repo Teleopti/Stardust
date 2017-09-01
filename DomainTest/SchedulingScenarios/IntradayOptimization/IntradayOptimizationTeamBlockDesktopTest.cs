@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			});
 		}
 
-		public IntradayOptimizationTeamBlockDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		public IntradayOptimizationTeamBlockDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, bool resourcePlannerSpeedUpShiftsWithinDay45694) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerSpeedUpShiftsWithinDay45694)
 		{
 		}
 	}

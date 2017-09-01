@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.Should().Be.EqualTo(new DateTimePeriod(dateTime.AddHours(8), dateTime.AddHours(17)));
 		}
 
-		public IntradayOptimizationPlanningGroupTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		public IntradayOptimizationPlanningGroupTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, bool resourcePlannerSpeedUpShiftsWithinDay45694) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerSpeedUpShiftsWithinDay45694)
 		{
 		}
 	}

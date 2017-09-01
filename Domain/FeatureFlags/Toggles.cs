@@ -103,6 +103,7 @@
 		ResourcePlanner_MergeTeamblockClassicIntraday_45508,
 		ResourcePlanner_RespectSkillGroupShoveling_44156,
 		ResourcePlanner_RetireKeepPercentageOfShifts_45688,
+		ResourcePlanner_SpeedUpShiftsWithinDay_45694,
 
 		Wfm_DisplayOnlineHelp_39402,
 

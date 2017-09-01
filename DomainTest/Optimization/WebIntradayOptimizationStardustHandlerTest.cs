@@ -33,9 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		private IBusinessUnit businessUnit;
 
-		public WebIntradayOptimizationStardustHandlerTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
-		{
-		}
 
 		public void SetUp()
 		{
@@ -102,6 +99,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			jobResult.FinishedOk.Should().Be.True();
 
 			FakeSchedulingSourceScope.UsedToBe().Should().Be.EqualTo(ScheduleSource.WebScheduling);
+		}
+
+		public WebIntradayOptimizationStardustHandlerTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, bool resourcePlannerSpeedUpShiftsWithinDay45694) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerSpeedUpShiftsWithinDay45694)
+		{
 		}
 	}
 }

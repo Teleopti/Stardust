@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
@@ -14,13 +15,31 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
+	[RemoveMeWithToggle("merge into base class", Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
+	public class TeamBlockIntradayOptimizationServiceFewerResCalcAtDelete : TeamBlockIntradayOptimizationService
+	{
+		private readonly IResourceCalculateAfterDeleteDecider _resouceCalculateAfterDeleteDecider;
+
+		public TeamBlockIntradayOptimizationServiceFewerResCalcAtDelete(IResourceCalculateAfterDeleteDecider resouceCalculateAfterDeleteDecider, 
+			TeamBlockScheduler teamBlockScheduler, ISchedulingOptionsCreator schedulingOptionsCreator, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, TeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker, TeamBlockClearer teamBlockClearer, IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock, ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator, ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator, IWorkShiftSelector workShiftSelector, IGroupPersonSkillAggregator groupPersonSkillAggregator, SetMainShiftOptimizeActivitySpecificationForTeamBlock setMainShiftOptimizeActivitySpecificationForTeamBlock, IOptimizerHelperHelper optimizerHelperHelper, ICurrentIntradayOptimizationCallback currentIntradayOptimizationCallback) : base(teamBlockScheduler, schedulingOptionsCreator, safeRollbackAndResourceCalculation, teamBlockIntradayDecisionMaker, teamBlockClearer, dailyTargetValueCalculatorForTeamBlock, teamTeamBlockSteadyStateValidator, teamBlockShiftCategoryLimitationValidator, workShiftSelector, groupPersonSkillAggregator, setMainShiftOptimizeActivitySpecificationForTeamBlock, optimizerHelperHelper, currentIntradayOptimizationCallback)
+		{
+			_resouceCalculateAfterDeleteDecider = resouceCalculateAfterDeleteDecider;
+		}
+
+		protected override void ClearTeamBlock(SchedulingOptions schedulingOptions,ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ITeamBlockInfo teamBlockInfo)
+		{
+			_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo, _resouceCalculateAfterDeleteDecider);
+		}
+	}
+
 	public class TeamBlockIntradayOptimizationService
 	{
 		private readonly TeamBlockScheduler _teamBlockScheduler;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly TeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
-		private readonly TeamBlockClearer _teamBlockClearer;
+		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
+		protected readonly TeamBlockClearer _teamBlockClearer;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
 		private readonly ITeamBlockSteadyStateValidator _teamTeamBlockSteadyStateValidator;
 		private readonly ITeamBlockShiftCategoryLimitationValidator _teamBlockShiftCategoryLimitationValidator;
@@ -131,7 +150,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				//if needed due to perf, only fetch members in team that Agda has choosen. Also, make a dic based on date + agent
 				var orgAssignmentsForTeamBlock = scheduleDictionary.SchedulesForPeriod(teamBlockInfo.BlockInfo.BlockPeriod, teamBlockInfo.TeamInfo.GroupMembers.ToArray())
 					.Select(x => x.PersonAssignment()).Where(x => x != null).ToArray();
-				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo, new AlwaysResourceCalculateAfterDelete());
+				ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 				var firstSelectedDay = selectedPeriod.StartDate;
 				var datePoint = firstSelectedDay;
 				if (teamBlockInfo.BlockInfo.BlockPeriod.StartDate > firstSelectedDay)
@@ -176,6 +195,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				//
 			}
 			return teamBlockToRemove;
+		}
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
+		protected virtual void ClearTeamBlock(SchedulingOptions schedulingOptions,
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ITeamBlockInfo teamBlockInfo)
+		{
+			_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo, new AlwaysResourceCalculateAfterDelete());
 		}
 	}
 }

@@ -167,7 +167,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleOvertime>();
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
 			builder.RegisterType<MatrixListFactory>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockIntradayOptimizationService>();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694) && _configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508))
+			{
+				builder.RegisterType<TeamBlockIntradayOptimizationServiceFewerResCalcAtDelete>().As<TeamBlockIntradayOptimizationService>();
+			}
+			else
+			{
+				builder.RegisterType<TeamBlockIntradayOptimizationService>();
+			}
 			builder.RegisterType<TeamBlockDaysOffSameDaysOffLockSyncronizer>().SingleInstance();
 			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects();
 			builder.RegisterType<BackToLegalShiftCommand>();
@@ -395,7 +402,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FullSchedulingResult>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508))
 			{
-				builder.RegisterType<IntradayOptimization>().As<IIntradayOptimization>().InstancePerLifetimeScope();
+				if (_configuration.Toggle(Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694))
+				{
+					builder.RegisterType<IntradayOptimization45694>().As<IIntradayOptimization>().InstancePerLifetimeScope();
+				}
+				else
+				{
+					builder.RegisterType<IntradayOptimization>().As<IIntradayOptimization>().InstancePerLifetimeScope();
+				}
 				//remove As<xxxOLD> when toggle is gone
 				builder.RegisterType<TeamBlockDesktopOptimization>().As<TeamBlockDesktopOptimizationOLD>(); //set scope? Just keep old behavior for now...
 			}

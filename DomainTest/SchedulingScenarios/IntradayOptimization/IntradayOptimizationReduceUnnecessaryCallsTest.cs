@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			system.UseTestDouble<WorkShiftSelectorTrackWhatSkillDays>().For<WorkShiftSelectorForMaxSeat>();
 		}
 
-		public IntradayOptimizationReduceUnnecessaryCallsTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		public IntradayOptimizationReduceUnnecessaryCallsTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, bool resourcePlannerSpeedUpShiftsWithinDay45694) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerSpeedUpShiftsWithinDay45694)
 		{
 		}
 	}

@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			PersonAssignmentRepository.GetSingle(dateOnly, agent1).ShiftCategory.Should().Be.EqualTo(shiftCategory);
 		}
 
-		public IntradayOptimizationStandardDeviationTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
+		public IntradayOptimizationStandardDeviationTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, bool resourcePlannerSpeedUpShiftsWithinDay45694) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerSpeedUpShiftsWithinDay45694)
 		{
 		}
 	}
