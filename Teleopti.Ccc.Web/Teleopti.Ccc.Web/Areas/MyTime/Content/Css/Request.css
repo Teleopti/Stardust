@@ -704,7 +704,7 @@ input[type=search]::-ms-clear {
 	max-height: 300px;
 	overflow-y: auto;
 	width: 100%;
-	left: initial;
+	left: auto;
 	right: 0;
 }
 
