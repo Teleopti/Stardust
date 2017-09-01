@@ -61,7 +61,7 @@ Wfm_Requests_Approve_Based_On_Minimum_Approval_Time_40274 = RC # can not use it 
 Wfm_Requests_Configurable_BusinessRules_For_ShiftTrade_40770 = true
 Wfm_Requests_ApprovingModifyRequests_41930 = true
 Wfm_Requests_TriggerResourceCalculationFromGui_43129 = false
-Wfm_Requests_OvertimeRequestHandling_45177 = DEV  # Only set to true if Wfm_Requests_Refactoring_45470 is also true.  Is dependent on the refactoring that was performed for PBI 45470
+Wfm_Requests_OvertimeRequestHandling_45177 = RC  # Only set to true if Wfm_Requests_Refactoring_45470 is also true.  Is dependent on the refactoring that was performed for PBI 45470
 Wfm_Requests_Refactoring_45470 = RC
 
 Wfm_Seatplan_UseDatePeriodForPlanning_42167 = true
