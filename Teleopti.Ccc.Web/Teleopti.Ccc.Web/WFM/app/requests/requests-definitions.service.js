@@ -95,7 +95,7 @@
 					else if (strlist[i].indexOf("Skill:") > -1) this.fillTermItem('Skill', strlist[i], formated);
 					else if (strlist[i].indexOf("BudgetGroup:") > -1) this.fillTermItem('BudgetGroup', strlist[i], formated);
 					else if (strlist[i].indexOf("Note:") > -1) this.fillTermItem('Note', strlist[i], formated);
-					else this.fillTermItem('All:', strlist[i], formated);
+					else this.fillTermItem('All', strlist[i], formated);
 				}
 			}
 			return formated;
