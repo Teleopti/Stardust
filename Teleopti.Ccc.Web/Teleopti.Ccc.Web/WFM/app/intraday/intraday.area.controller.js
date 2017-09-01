@@ -173,9 +173,6 @@
             return skill.DoDisplayData === true;
         }
 
-        //TODO: #44026 Add more skilltype icons here (this code is repeated in config controller!)
-
-
         var reloadSkillAreas = function(isNew) {
             intradayService.getSkillAreas.query().$promise.then(function(result) {
                 getAutoCompleteControls();
