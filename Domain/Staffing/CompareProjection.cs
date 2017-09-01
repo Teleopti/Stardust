@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Staffing
 				throw new Exception("ScheduleDays must be for the same person!");
 			if (scheduleDayBefore.Period != scheduleDayAfter.Period)
 				throw new Exception("ScheduleDays must be for the same date!");
-
+			var resolution = 15;
 			IEnumerable<IActivity> allActivities;
 			IEnumerable<ISkill> allSkills;
 			using (_disableDeletedFilter.Disable())
@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Staffing
 			var personSkills = _personSkillProvider.SkillsOnPersonDate(scheduleDayBefore.Person, scheduleDayAfter.DateOnlyAsPeriod.DateOnly);
 			var allNotDeletedSkill = allSkills.Where(x => !((IDeleteTag) x).IsDeleted).ToList();
 
-			var resolution = allNotDeletedSkill.Select(x => x.DefaultResolution).Min();
+			if(allNotDeletedSkill.Any())
+				resolution = allNotDeletedSkill.Select(x => x.DefaultResolution).Min();
 
 			var beforeIntervals = getActivityIntervals(scheduleDayBefore, resolution).ToList();
 			var afterIntervals = getActivityIntervals(scheduleDayAfter, resolution).ToList();
