@@ -84,7 +84,7 @@
     var root;
     function clickedNodeForSingleSelect(node) {
       if (node.parent == null) { // we are clicking on a root
-        if (root != null) { //swap root when clicking new root
+        if (root != null && root != node) { //swap root when clicking new root
           swapRootWhenClickingNew(node);
         } else { //select first root
           clickedNode(node)

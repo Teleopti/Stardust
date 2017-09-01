@@ -691,6 +691,20 @@ describe('treePickerComponent', function () {
       expect(ctrl.outputData.length).toEqual(3);
     });
 
+    it('should deselect everything when deselecting parent', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[1].clickedNode(ctrl.treeCollection.nodes[1]);
+      ctrl.treeCollection.nodes[1].clickedNode(ctrl.treeCollection.nodes[1]);
+
+      expect(ctrl.outputData.length).toEqual(0);
+    });
+
     it('should deselect leaves when clicking parent child', function () {
       ctrl = $componentController('treePicker', null, {
         data: mockedData,
