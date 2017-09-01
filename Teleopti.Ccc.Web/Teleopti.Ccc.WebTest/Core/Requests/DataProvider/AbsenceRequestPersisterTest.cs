@@ -305,6 +305,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldDenyWhenUpdateAbsenceOutOfDate()
 		{
 			_absence = createAbsence();
+			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = _absence,
+				AbsenceRequestProcess = new GrantAbsenceRequest(),
+				OpenForRequestsPeriod = new DateOnlyPeriod(_today, _today),
+				Period = new DateOnlyPeriod(_today, _today),
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+			});
+
 			var newPersonRequest = setupSimpleAbsenceRequest();
 
 			var form = createAbsenceRequestForm(new DateTimePeriodForm
@@ -432,6 +442,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			ToggleManager.Disable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
 			_absence = createAbsence();
+			setWorkflowControlSet();
 			var newPersonRequest = setupSimpleAbsenceRequest();
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest()
@@ -461,6 +472,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			ToggleManager.Enable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
 			_absence = createAbsence();
+			setWorkflowControlSet();
 			var newPersonRequest = setupSimpleAbsenceRequest();
 
 			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest()
