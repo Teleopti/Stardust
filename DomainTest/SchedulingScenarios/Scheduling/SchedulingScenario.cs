@@ -7,7 +7,7 @@ using Teleopti.Ccc.TestCommon.IoC;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 {
 	[TestFixture(true)]
-	[TestFixture(true)]
+	[TestFixture(false)]
 	[UseEventPublisher(typeof(SyncInFatClientProcessEventPublisher))]
 	[LoggedOnAppDomain]
 	public abstract class SchedulingScenario : IConfigureToggleManager
