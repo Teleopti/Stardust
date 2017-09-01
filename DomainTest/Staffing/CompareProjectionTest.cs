@@ -5,6 +5,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
@@ -24,14 +25,12 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public FakeActivityRepository ActivityRepository;
 		public FakeSkillRepository SkillRepository;
 		public FakePersonRepository PersonRepository;
-		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public MutableNow Now;
 		public IScheduleStorage ScheduleStorage;
 
 		[Test]
 		public void ShouldThrowIfScheduleDaysAreNotForSamePerson()
 		{
-			IntervalLengthFetcher.Has(15);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -40,6 +39,9 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var skill = SkillRepository.Has("skill", activity).WithId();
 			var person = PersonRepository.Has(skill);
 			var person2 = PersonRepository.Has(skill);
+
+			var minResSkill = SkillRepository.Has("minResSkill", activity).WithId();
+			minResSkill.DefaultResolution = 15;
 
 			var assignmentPeriod = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 9);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod, new ShiftCategory("category")));
@@ -54,7 +56,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldThrowIfScheduleDaysAreNotForSameDate()
 		{
-			IntervalLengthFetcher.Has(15);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -62,6 +63,9 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skill", activity).WithId();
 			var person = PersonRepository.Has(skill);
+
+			var minResSkill = SkillRepository.Has("minResSkill", activity).WithId();
+			minResSkill.DefaultResolution = 15;
 
 			var assignmentPeriod = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 9);
 			var assignmentPeriod2 = new DateTimePeriod(2017, 5, 2, 8, 2017, 5, 2, 9);
@@ -77,7 +81,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldNotGiveAnythingIfSame()
 		{
-			IntervalLengthFetcher.Has(15);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 			
@@ -85,6 +88,9 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skill", activity).WithId();
 			var person = PersonRepository.Has(skill);
+
+			var minResSkill = SkillRepository.Has("minResSkill", activity).WithId();
+			minResSkill.DefaultResolution = 15;
 
 			var assignmentPeriod = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 9);
 			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activity, assignmentPeriod, new ShiftCategory("category")));
@@ -98,7 +104,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldAddResourceWhenSameActivityButMoreResourcesAfter()
 		{
 		    const int resolution = 120;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -124,7 +129,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldRemoveResourceWhenSameActivityButLessResourcesAfter()
 		{
 			const int resolution = 120;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -149,8 +153,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldRemoveResourceWhenAddingNoSkillActivity()
 		{
-			const int resolution = 60;
-			IntervalLengthFetcher.Has(resolution);
+			const int resolution = 15;
+			
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -159,7 +163,11 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var activityNoSKill = ActivityRepository.Has("activityNoSkill");
 			activityNoSKill.RequiresSkill = false;
 			var skill = SkillRepository.Has("skill", activity).WithId();
-			skill.DefaultResolution = resolution;
+			skill.DefaultResolution = 30;
+
+			var minResSkill = SkillRepository.Has("minResSkill", activity).WithId();
+			minResSkill.DefaultResolution = resolution;
+
 			var person = PersonRepository.Has(skill);
 
 			var assignmentPeriod = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 11);
@@ -171,7 +179,7 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var after = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(now));
 
 			var activityResourceIntervals = Target.Compare(beforeCopy, after);
-			activityResourceIntervals.Count().Should().Be.EqualTo(1);
+			activityResourceIntervals.Count().Should().Be.EqualTo(2);
 			activityResourceIntervals.First(x => x.StartDateTime == noSkillPeriod.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(-1);
 		}
 
@@ -179,7 +187,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldAddResourceWhenRemovingNoSkillActivity()
 		{
 			const int resolution = 60;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -208,7 +215,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldRemoveResourceWhenAddingActivityThatDoesNotBelongToPersonSkill()
 		{
 			const int resolution = 60;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -236,7 +242,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldAddResourceWhenRemovingActivityThatDoesNotBelongToPersonSkill()
 		{
 			const int resolution = 60;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -264,7 +269,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldAddAndRemoveResourceWhenDifferentActivities()
 		{
 			const int resolution = 60;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -292,7 +296,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldAddResourceForEachActivityWhenChangedInInterval()
 		{
 			const int resolution = 120;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -322,7 +325,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldRemoveResourceForEachActivityWhenChangedInInterval()
 		{
 			const int resolution = 120;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -352,7 +354,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldAddAndRemoveResourceWhenShiftIsMovedForward()
 		{
 			const int resolution = 60;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -379,7 +380,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldAddAndRemoveResourceWhenShiftIsMovedBackward()
 		{
 			const int resolution = 60;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -406,7 +406,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		public void ShouldRemoveResourceActivityIsMovedToOnNextDay()
 		{
 			const int resolution = 60;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -431,8 +430,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 		[Test]
 		public void ShouldGiveTheIntervalLengthOfTheSkill()
 		{
-			const int resolution = 15;
-			IntervalLengthFetcher.Has(resolution);
 			var now = new DateTime(2017, 5, 1, 0, 0, 0);
 			Now.Is(now);
 
@@ -440,6 +437,8 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var activity = ActivityRepository.Has("activity");
 			var skill = SkillRepository.Has("skill", activity).WithId();
 			skill.DefaultResolution = 60;
+			var minResSkill = SkillRepository.Has("minResSkill", activity).WithId();
+			minResSkill.DefaultResolution = 15;
 			var person = PersonRepository.Has(skill);
 
 			var assignmentPeriod1 = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 9);
@@ -450,10 +449,39 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			assignment.AddActivity(activity, assignmentPeriod2);
 			var after = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod1, scenario)[person].ScheduledDay(new DateOnly(now));
 			var activityResourceIntervals = Target.Compare(beforeCopy, after);
-			activityResourceIntervals.Count().Should().Be.EqualTo(4);
-			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod2.StartDateTime).Resource.Should().Be.EqualTo(0.25);
+			activityResourceIntervals.Count().Should().Be.EqualTo(1);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod2.StartDateTime).Resource.Should().Be.EqualTo(1);
 			activityResourceIntervals.First().StartDateTime.Should().Be.EqualTo(assignmentPeriod2.StartDateTime);
 			activityResourceIntervals.First().EndDateTime.Should().Be.EqualTo(assignmentPeriod2.EndDateTime);
+		}
+
+		[Test]
+		public void ShouldNotCreateDeltasForDeletedSkills()
+		{
+			const int resolution = 60;
+			var now = new DateTime(2017, 5, 1, 0, 0, 0);
+			Now.Is(now);
+
+			var scenario = ScenarioRepository.Has("scenario");
+			var activityBefore = ActivityRepository.Has("activity");
+			var activityAfter = ActivityRepository.Has("activity2");
+			var skill = SkillRepository.Has("skill", activityBefore).WithId();
+			var skill2 = SkillRepository.Has("skill2", activityAfter).WithId();
+			skill.DefaultResolution = skill2.DefaultResolution = resolution;
+			var person = PersonRepository.Has(skill, skill2);
+
+			((IDeleteTag)skill2).SetDeleted();
+
+			var assignmentPeriod = new DateTimePeriod(2017, 5, 1, 8, 2017, 5, 1, 9);
+			var assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, activityBefore, assignmentPeriod, new ShiftCategory("category"));
+			PersonAssignmentRepository.Has(assignment);
+			var beforeCopy = (IScheduleDay)ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(now)).Clone();
+			assignment.AddActivity(activityAfter, assignmentPeriod);
+			var after = ScheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false), assignmentPeriod, scenario)[person].ScheduledDay(new DateOnly(now));
+			var activityResourceIntervals = Target.Compare(beforeCopy, after);
+			activityResourceIntervals.Count().Should().Be.EqualTo(1);
+			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(-1);
+			//activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill2.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(1);
 		}
 	}
 }

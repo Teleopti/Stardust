@@ -12,17 +12,15 @@ namespace Teleopti.Ccc.Domain.Staffing
 {
 	public class CompareProjection
 	{
-		private readonly IIntervalLengthFetcher _intervalLengthFetcher;
 		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IDisableDeletedFilter _disableDeletedFilter;
 		private readonly IPersonSkillProvider _personSkillProvider;
 
-		public CompareProjection(IIntervalLengthFetcher intervalLengthFetcher, IActivityRepository activityRepository,
+		public CompareProjection(IActivityRepository activityRepository,
 			IDisableDeletedFilter disableDeletedFilter, IPersonSkillProvider personSkillProvider,
 			ISkillRepository skillRepository)
 		{
-			_intervalLengthFetcher = intervalLengthFetcher;
 			_activityRepository = activityRepository;
 			_disableDeletedFilter = disableDeletedFilter;
 			_personSkillProvider = personSkillProvider;
@@ -44,12 +42,13 @@ namespace Teleopti.Ccc.Domain.Staffing
 				allSkills = _skillRepository.LoadAll();
 			}
 			var personSkills = _personSkillProvider.SkillsOnPersonDate(scheduleDayBefore.Person, scheduleDayAfter.DateOnlyAsPeriod.DateOnly);
+			var allNotDeletedSkill = allSkills.Where(x => !((IDeleteTag) x).IsDeleted).ToList();
 
-			var resolution = _intervalLengthFetcher.IntervalLength;
+			var resolution = allNotDeletedSkill.Select(x => x.DefaultResolution).Min();
+
 			var beforeIntervals = getActivityIntervals(scheduleDayBefore, resolution).ToList();
 			var afterIntervals = getActivityIntervals(scheduleDayAfter, resolution).ToList();
-			var skillResolution = resolution;
-
+			
 			var allIntervals = new List<ActivityResourceInterval>();
 			allIntervals.AddRange(beforeIntervals);
 			allIntervals.AddRange(afterIntervals);
@@ -72,9 +71,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 				foreach (var activityResourceInterval in before)
 				{
 					var activity = allActivities.First(x => x.Id == activityResourceInterval.Activity);
-					var aSkill = allSkills.FirstOrDefault(x => x.Activity.Equals(activity));
-					if(aSkill != null)
-						skillResolution = aSkill.DefaultResolution;
+					var aSkill = allNotDeletedSkill.FirstOrDefault(x => x.Activity.Equals(activity));
+					if(aSkill == null)
+						continue;
+					var skillResolution = aSkill.DefaultResolution;
 					var diff = skillResolution / resolution;
 					var minute =  TimeHelper.FitToDefaultResolutionRoundDown(
 						TimeSpan.FromMinutes(activityResourceInterval.Interval.StartDateTime.Minute), skillResolution).Minutes;
@@ -94,9 +94,10 @@ namespace Teleopti.Ccc.Domain.Staffing
 				foreach (var activityResourceInterval in after)
 				{
 					var activity = allActivities.First(x => x.Id == activityResourceInterval.Activity);
-					var aSkill = allSkills.FirstOrDefault(x => x.Activity.Equals(activity));
-					if (aSkill != null)
-						skillResolution = aSkill.DefaultResolution;
+					var aSkill = allNotDeletedSkill.FirstOrDefault(x => x.Activity.Equals(activity));
+					if (aSkill == null)
+						continue;
+					var skillResolution = aSkill.DefaultResolution;
 					var diff = skillResolution / resolution;
 					var minute = TimeHelper.FitToDefaultResolutionRoundDown(
 						TimeSpan.FromMinutes(activityResourceInterval.Interval.StartDateTime.Minute), skillResolution).Minutes;
@@ -120,7 +121,11 @@ namespace Teleopti.Ccc.Domain.Staffing
 				output.AddRange(intervalOutputsSum.Where(x => Math.Abs(x.Resource) >= 0.001));
 			}
 
-			return output.Select(activityResourceInterval => new SkillCombinationResource
+			var outputSum = output
+				.GroupBy(p => new { p.Interval, p.Activity })
+				.Select(g => new ActivityResourceInterval { Interval = g.Key.Interval, Activity = g.Key.Activity, Resource = g.Sum(p => p.Resource) });
+
+			return outputSum.Select(activityResourceInterval => new SkillCombinationResource
 			{
 				StartDateTime = activityResourceInterval.Interval.StartDateTime,
 				EndDateTime = activityResourceInterval.Interval.EndDateTime,
