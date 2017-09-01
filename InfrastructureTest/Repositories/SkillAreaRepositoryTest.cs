@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var skills = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null,
 					new List<ISupportedSkillCheck>() { },
-					new MultisiteSkillSupportedCheckAlwaysTrue()))
+					new MultisiteSkillSupportedCheckAlwaysTrue()), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()))
 				.Skills();
 
 			return new SkillArea

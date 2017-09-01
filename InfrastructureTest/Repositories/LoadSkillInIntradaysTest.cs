@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, 
 				new List<ISupportedSkillCheck>() { },
-				new MultisiteSkillSupportedCheck()));
+				new MultisiteSkillSupportedCheck()), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(1);
 			skills.First().Name.Should().Be.EqualTo(skillWithQueue.Name);
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			var target = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null, 
 				new List<ISupportedSkillCheck>() { },
-				new MultisiteSkillSupportedCheck()));
+				new MultisiteSkillSupportedCheck()), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(1);
 		}
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 						new OtherSkillsLikePhoneSupported()
 					},
 					new MultisiteSkillSupportedCheck()
-				));
+				), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(3);
 			skills.First().Name.Should().Be.EqualTo(chatSkill.Name);
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 						new InboundPhoneSkillSupported()
 					},
 					new MultisiteSkillSupportedCheck()
-				));
+				), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
 
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(2);
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 						new InboundPhoneSkillSupported()
 					},
 					new MultisiteSkillSupportedCheckAlwaysTrue()
-				));
+				), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
 			var skills = target.Skills().ToList();
 			skills.Count().Should().Be.EqualTo(1);
 			skills.First().Name.Should().Be.EqualTo(multiSiteSkill.Name);
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 						new InboundPhoneSkillSupported()
 					},
 					new MultisiteSkillSupportedCheckAlwaysTrue()
-				));
+				), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()));
 			var skills = target.Skills().ToList();
 			
 			skills.First().IsMultisiteSkill.Should().Be.True();

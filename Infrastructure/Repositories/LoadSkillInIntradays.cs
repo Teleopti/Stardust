@@ -11,11 +11,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
+		private readonly ISkillTypeInfoProvider _skillTypeInfoProvider;
 
-		public LoadSkillInIntradays(ICurrentUnitOfWork currentUnitOfWork, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
+		public LoadSkillInIntradays(ICurrentUnitOfWork currentUnitOfWork,
+			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider, ISkillTypeInfoProvider skillTypeInfoProvider)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
+			_skillTypeInfoProvider = skillTypeInfoProvider;
 		}
 
 		public IEnumerable<SkillInIntraday> Skills()
@@ -23,15 +26,22 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			var skillRepo = new SkillRepository(_currentUnitOfWork.Current());
 			var skills = skillRepo.FindSkillsWithAtLeastOneQueueSource();
 
-			return skills.Select(skill => new SkillInIntraday
+			return skills.Select(skill =>
 				{
-					Id = skill.Id.Value,
-					Name = skill.Name,
-					IsDeleted = ((Skill) skill).IsDeleted,
-					DoDisplayData = _supportedSkillsInIntradayProvider.CheckSupportedSkill(skill),
-					SkillType = skill.SkillType.Description.Name,
-					IsMultisiteSkill = skill is MultisiteSkill
-			})
+					var skillTypeInfo = _skillTypeInfoProvider.GetSkillTypeInfo(skill);
+					var skillInIntraday = new SkillInIntraday
+					{
+						Id = skill.Id.Value,
+						Name = skill.Name,
+						IsDeleted = ((Skill) skill).IsDeleted,
+						DoDisplayData = _supportedSkillsInIntradayProvider.CheckSupportedSkill(skill),
+						SkillType = skill.SkillType.Description.Name,
+						IsMultisiteSkill = skill is MultisiteSkill,
+						ShowAbandonRate = skillTypeInfo.SupportsAbandonRate,
+						ShowReforecastedAgents = skillTypeInfo.SupportsReforecastedAgents
+					};
+					return skillInIntraday;
+				})
 				.OrderBy(s => s.Name)
 				.ToList();
 		}

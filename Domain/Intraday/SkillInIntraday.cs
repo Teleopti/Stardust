@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private bool _doDisplayData;
 		private string _skillType;
 		private bool _isMultisiteSkill;
+		private bool _showAbandonRate;
+		private bool _showReforecastedAgents;
 
 		public virtual string Name
 		{
@@ -45,6 +47,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 		{
 			get { return _isMultisiteSkill; }
 			set { _isMultisiteSkill = value; }
+		}
+
+		public virtual bool ShowAbandonRate
+		{
+			get { return _showAbandonRate; }
+			set { _showAbandonRate = value; }
+		}
+
+		public virtual bool ShowReforecastedAgents
+		{
+			get { return _showReforecastedAgents; }
+			set { _showReforecastedAgents = value; }
 		}
 	}
 }

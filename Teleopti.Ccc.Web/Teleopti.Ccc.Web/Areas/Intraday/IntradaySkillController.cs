@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
@@ -28,7 +27,9 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 					x.Name,
 					x.DoDisplayData,
 					x.SkillType,
-					x.IsMultisiteSkill
+					x.IsMultisiteSkill,
+					x.ShowAbandonRate,
+					x.ShowReforecastedAgents
 				})
 				.ToArray());
 		}

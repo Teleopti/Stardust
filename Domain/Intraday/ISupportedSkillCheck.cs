@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		public bool IsSupported(ISkill skill)
 		{
-			return skill.SkillType.Description.Name.Equals("SkillTypeInboundTelephony", StringComparison.InvariantCulture);
+			return skill.SkillType.Description.Name.Equals(SkillTypeIdentifier.Phone, StringComparison.InvariantCulture);
 		}
 	}
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		public bool IsSupported(ISkill skill)
 		{
-			return skill.SkillType.Description.Name.Equals("SkillTypeEmail", StringComparison.InvariantCulture);
+			return skill.SkillType.Description.Name.Equals(SkillTypeIdentifier.Email, StringComparison.InvariantCulture);
 		}
 	}
 
@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		public bool IsSupported(ISkill skill)
 		{
-			return skill.SkillType.Description.Name.Equals("SkillTypeChat", StringComparison.InvariantCulture)
-				   || skill.SkillType.Description.Name.Equals("SkillTypeRetail", StringComparison.InvariantCulture);
+			return skill.SkillType.Description.Name.Equals(SkillTypeIdentifier.Chat, StringComparison.InvariantCulture)
+				   || skill.SkillType.Description.Name.Equals(SkillTypeIdentifier.Retail, StringComparison.InvariantCulture);
 		}
 	}
 
@@ -37,10 +37,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 	{
 		public bool IsSupported(ISkill skill)
 		{
-			return skill.SkillType.Description.Name.Equals("SkillTypeBackoffice", StringComparison.InvariantCulture)
-				   || skill.SkillType.Description.Name.Equals("SkillTypeProject", StringComparison.InvariantCulture)
-				   || skill.SkillType.Description.Name.Equals("SkillTypeFax", StringComparison.InvariantCulture)
-				   || skill.SkillType.Description.Name.Equals("SkillTypeTime", StringComparison.InvariantCulture);
+			return skill.SkillType.Description.Name.Equals(SkillTypeIdentifier.BackOffice, StringComparison.InvariantCulture)
+				   || skill.SkillType.Description.Name.Equals(SkillTypeIdentifier.Project, StringComparison.InvariantCulture)
+				   || skill.SkillType.Description.Name.Equals(SkillTypeIdentifier.Fax, StringComparison.InvariantCulture)
+				   || skill.SkillType.Description.Name.Equals(SkillTypeIdentifier.Time, StringComparison.InvariantCulture);
 
 		}
 	}

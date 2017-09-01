@@ -289,8 +289,13 @@
     <Compile Include="InterfaceLegacy\Infrastructure\IRequeueHangfireRepository.cs" />
     <Compile Include="Intraday\IntradayExcelCreator.cs" />
     <Compile Include="Intraday\IntradayExportCreator.cs" />
+    <Compile Include="Intraday\ISkillTypeInfo.cs" />
+    <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModelCreator.cs" />
+    <Compile Include="Intraday\SkillTypeIdentifier.cs" />
+    <Compile Include="Intraday\SkillTypeInfo.cs" />
+    <Compile Include="Intraday\SkillTypeInfoProvider.cs" />
     <Compile Include="Notification\UserDeviceService.cs" />
     <Compile Include="Optimization\IntradayOptimization.cs" />
     <Compile Include="Optimization\IntradayOptimizationCallbackInfo.cs" />
