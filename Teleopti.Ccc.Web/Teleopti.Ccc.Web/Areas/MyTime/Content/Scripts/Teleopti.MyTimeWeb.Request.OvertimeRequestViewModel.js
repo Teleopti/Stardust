@@ -23,6 +23,7 @@
 	self.MultiplicatorDefinitionSetId = ko.observable();
 	self.TimeList = undefined;
 	self.RequestDuration = ko.observable();
+	self.IsTimeListOpened = ko.observable(false);
 
 	self.IsMobile = Teleopti.MyTimeWeb.Portal.IsMobile();
 
@@ -74,6 +75,19 @@
 				self.IsPostingData(false);
 			}
 		});
+	};
+
+	self.ToggleDropdownTimeList = function () {
+		self.IsTimeListOpened(!self.IsTimeListOpened());
+	};
+
+	self.CloseDropdownTimeList = function() {
+		self.IsTimeListOpened(false);
+	};
+
+	self.AssignRequestDuration = function (data, event) {
+		self.RequestDuration(data);
+		self.CloseDropdownTimeList();
 	};
 
 	self.Initialize = function (data) {

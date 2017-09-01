@@ -282,6 +282,25 @@ $(document).ready(function() {
 		$('#duration').remove();
 	});
 
+	test('should close request duration time list when clicking outside', function() {
+		var html = 	'<div id="test-duration">' +
+						'<div id="outside-div"></div>' +
+						'<span id="duration-container" data-bind="outsideClickCallback: CloseDropdownTimeList">' +
+							'<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>' +
+						'</span>' +
+					'</div>';
+
+		$('body').append(html);
+		ko.applyBindings(vm, $('#test-duration')[0]);
+		vm.IsTimeListOpened(true);
+
+		$('#outside-div').click();
+
+		equal(vm.IsTimeListOpened(), false);
+
+		$('#test-duration').remove();
+	});
+
 	test('should contains only one : in request duration', function() {
 		var html = '<input id="duration" data-bind="value: RequestDuration, event:{change:validateDuration}"/>';
 

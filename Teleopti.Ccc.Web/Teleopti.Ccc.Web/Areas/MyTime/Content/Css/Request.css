@@ -708,6 +708,14 @@ input[type=search]::-ms-clear {
 	right: 0;
 }
 
+.overtime-request-duration span.input-group-addon{
+	padding: 0;
+}
+
+.overtime-request-duration span.input-group-addon button.btn{
+	border: none;
+}
+
 @media (max-width: 500px) {
 	.overtime-request-type, .overtime-request-date, .overtime-request-starttime, .overtime-request-duration {
 		width: 100%;

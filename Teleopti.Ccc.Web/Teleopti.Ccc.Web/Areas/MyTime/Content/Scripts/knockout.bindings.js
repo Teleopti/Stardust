@@ -192,3 +192,13 @@ ko.bindingHandlers.scrollIntoViewWhenClick = {
 		});
 	}
 };
+
+ko.bindingHandlers.outsideClickCallback = {
+	init: function(element, valueAccessor, allBindings, viewModel, bindingContext) {
+		$('body').on('click', function(event) {
+			if(!$.contains(element, event.target)) {
+				valueAccessor() && valueAccessor()();
+			}
+		});
+	}
+};

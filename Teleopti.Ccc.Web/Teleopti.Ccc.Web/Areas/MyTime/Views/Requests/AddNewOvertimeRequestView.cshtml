@@ -37,7 +37,7 @@
 				<span class="input-group">
 					<input class="input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart(), startDate: Today() }, enable: IsEditable() && !IsMobile" type="text" />
 					<span class="input-group-btn">
-						<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart(), startDate: Today() }, enable: IsEditable">
+						<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart(), startDate: Today() }, click: CloseDropdownTimeList, enable: IsEditable">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</button>
 					</span>
@@ -65,15 +65,17 @@
 				</label>
 				<div class="input-group">
 					<input type="text" class="input-sm form-control" data-bind="value: RequestDuration, event:{change:validateDuration}, enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'" maxlength="5">
-					<ul role="menu" class="dropdown-menu">
-						<!-- ko foreach: TimeList-->
-						<li class="ui-menu-item" role="presentation">
-							<a href="#" class="ui-corner-all" data-bind="click: function (data, event) { $parent.RequestDuration(data); }, text: $data" tabindex="-1"></a>
-						</li>
-						<!-- /ko-->
-					</ul>
-					<span class="input-group-addon input-sm dropdown-toggle" data-bind="enable: IsEditable" tabindex="-1" data-toggle="dropdown">
-						<span class="caret"></span>
+					<span class="input-group-addon input-group-btn" data-bind="css: {'open': IsTimeListOpened}, outsideClickCallback: CloseDropdownTimeList">
+						<ul role="menu" class="dropdown-menu" data-bind="visbile: IsTimeListOpened">
+							<!-- ko foreach: TimeList-->
+							<li class="ui-menu-item" role="presentation">
+								<a href="#" class="ui-corner-all" data-bind="click: $parent.AssignRequestDuration, text: $data" tabindex="-1"></a>
+							</li>
+							<!-- /ko-->
+						</ul>
+						<button class="btn btn-sm right-align" data-bind="click: ToggleDropdownTimeList, enable: IsEditable">
+							<i class="glyphicon glyphicon-chevron-down"></i>
+						</button>
 					</span>
 				</div>
 			</div>

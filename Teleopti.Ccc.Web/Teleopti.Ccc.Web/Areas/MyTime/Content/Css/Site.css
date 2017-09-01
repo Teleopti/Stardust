@@ -1577,6 +1577,9 @@ button.btn.absence-report-cancel{
 	border: 1px solid #cccccc;
 }
 @media(max-width: 768px){
+	#Request-add-section{
+		cursor: pointer;
+	}
 	#Request-add-section.well{
 		margin: 0;
 	}
