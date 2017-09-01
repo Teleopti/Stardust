@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeWriteSideRepository<IPerson> PersonRepository;
 		public FakeWriteSideRepository<IActivity> ActivityRepository;
 		public FakeActivityRepository ActivityRepository2;
+		public FakeSkillRepository SkillRepository;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeScheduleStorage ScheduleStorage;
 		public FakeWriteSideRepository<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetRepository;
@@ -117,6 +118,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldPersistDeltasOfChange()
 		{
+			SkillRepository.Add(_skill);
+			SkillRepository.Add(_skill2);
+
 			Now.Is(new DateTime(2016, 5, 17, 0, 0, 0, DateTimeKind.Utc));
 			IntervalLengthFetcher.Has(15);
 			var person = PersonFactory.CreatePersonWithId();

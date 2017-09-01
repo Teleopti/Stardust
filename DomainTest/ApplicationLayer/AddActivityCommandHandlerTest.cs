@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakePersonRepository PersonRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakeCurrentScenario CurrentScenario;
+		public FakeSkillRepository SkillRepository;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakePersonSkillProvider PersonSkillProvider;
@@ -440,6 +441,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(mainActivity);
 			var skill1 = SkillFactory.CreateSkillWithId("skill1", 15);
 			var skill2 = SkillFactory.CreateSkillWithId("skill2", 15);
+			SkillRepository.Add(skill1);
+			SkillRepository.Add(skill2);
 			skill1.Activity = activity;
 			skill2.Activity = mainActivity;
 			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill1,skill2 }, new DateOnlyPeriod(), null, new[] { skill1,skill2 });
@@ -489,6 +492,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			ActivityRepository.Add(mainActivity);
 			var skill1 = SkillFactory.CreateSkillWithId("skill1", 15);
 			var skill2 = SkillFactory.CreateSkillWithId("skill2", 15);
+			SkillRepository.Add(skill1);
+			SkillRepository.Add(skill2);
 			skill1.Activity = activity;
 			skill2.Activity = mainActivity;
 			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill1, skill2 }, new DateOnlyPeriod(), null, new[] { skill1, skill2 });

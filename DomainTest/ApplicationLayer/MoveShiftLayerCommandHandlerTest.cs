@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeActivityRepository ActivityRepository;
+		public FakeSkillRepository SkillRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -177,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			Now.Is(new DateTime(2013, 11, 14, 0, 0, 0, DateTimeKind.Utc));
 			var skill = SkillFactory.CreateSkillWithId("skill", 15);
 			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill }, new DateOnlyPeriod(), null, new[] { skill });
-
+			SkillRepository.Add(skill);
 			var activity = new Activity("act").WithId();
 			activity.RequiresSkill = true;
 			skill.Activity = activity;

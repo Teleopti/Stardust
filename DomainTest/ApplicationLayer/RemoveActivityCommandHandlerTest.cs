@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public FakeIntervalLengthFetcher IntervalLengthFetcher;
 		public FakePersonSkillProvider PersonSkillProvider;
 		public MutableNow Now;
+		public FakeSkillRepository SkillRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -185,7 +186,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var skill = SkillFactory.CreateSkillWithId("skill", 15);
 			skill.Activity = activity;
-
+			
+			SkillRepository.Add(skill);
 			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill }, new DateOnlyPeriod(), null, new[] { skill });
 
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
@@ -233,7 +235,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			skill.Activity = activity;
 			var skill2 = SkillFactory.CreateSkillWithId("skill2", 15);
 			skill2.Activity = _mainActivity;
-
+			SkillRepository.Add(skill2);
+			SkillRepository.Add(skill);
 			PersonSkillProvider.SkillCombination = new SkillCombination(new[] { skill,skill2 }, new DateOnlyPeriod(), null, new[] { skill,skill2 });
 
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, _mainActivity, new DateTimePeriod(2013, 11, 14, 8, 2013, 11, 14, 16));
