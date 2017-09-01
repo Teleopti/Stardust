@@ -177,9 +177,10 @@
       });
     }
 
-    //goes up from node, skips root
+    //goes up from node
     function reverseTraverseNodes(node, callback) {
       if ( node.parent == null) {
+        callback(node);
         return;
       } else {
         callback(node);

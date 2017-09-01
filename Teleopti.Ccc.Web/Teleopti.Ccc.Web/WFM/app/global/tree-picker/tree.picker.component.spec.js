@@ -676,6 +676,21 @@ describe('treePickerComponent', function () {
       expect(ctrl.outputData.length).toEqual(0);
     });
 
+    it('should be able to toggle child and lineage', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[0].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[0]);
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[0].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[0]);
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[0].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[0]);
+
+      expect(ctrl.outputData.length).toEqual(3);
+    });
+
     it('should deselect leaves when clicking parent child', function () {
       ctrl = $componentController('treePicker', null, {
         data: mockedData,
