@@ -31,7 +31,7 @@
           <div class="con-flex">
             <label for="filter" class="input-icon">
               <i class="mdi mdi-percent">
-                <input type="number" ng-change="vm.updateCampaignPreview()" required autofocus autocomplete="off" min="1" ng-model="vm.campaignPercentage" placeholder="{{'CampaignCallsPercentSign'|translate}}" >
+                <input type="number" ng-change="vm.updateCampaignPreview()" required autofocus autocomplete="off" ng-model="vm.campaignPercentage" placeholder="{{'CampaignCallsPercentSign'|translate}}" >
               </i>
             </label>
           </div>
@@ -56,17 +56,17 @@
           <div class="con-flex">
             <div class="form-input-wrap">
               <label for="nameId">{{'Calls'|translate}}:</label>
-              <input type="number" ng-model="form.overrideTasksValue" name="" value="" autocomplete="off">
+              <input type="number" ng-model="form.overrideTasksValue" name="" min="1" value="" autocomplete="off">
             </div>
 
             <div class="form-input-wrap">
               <label for="nameId">{{'TalkTime'|translate}}:</label>
-              <input type="number" ng-model="form.overrideTalkTimeValue" name="" value="" autocomplete="off">
+              <input type="number" ng-model="form.overrideTalkTimeValue" name="" min="1" value="" autocomplete="off">
             </div>
 
             <div class="form-input-wrap">
               <label for="nameId">{{'ACW'|translate}}:</label>
-              <input type="number" ng-model="form.overrideAfterCallWorkValue" name="" value="" autocomplete="off">
+              <input type="number" ng-model="form.overrideAfterCallWorkValue" name="" min="1" value="" autocomplete="off">
             </div>
           </div>
         </div>
@@ -114,7 +114,7 @@
           </div>
         </div>
       </div>
-      <div class="con-row" ng-hide="vm.isForecastRunning">
+      <div class="con-row">
         <div class="con-flex" >
           <forecast-chart  chart-id="vm.selectedWorkload.ChartId" selectable="true" refresh="vm.loadChart" on-click="vm.pointClick" days="vm.selectedWorkload.Days"> </forecast-chart>
         </div>

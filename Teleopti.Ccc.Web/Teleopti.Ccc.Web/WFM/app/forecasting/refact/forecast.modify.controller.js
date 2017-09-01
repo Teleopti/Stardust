@@ -161,9 +161,11 @@
 
           function refreshOnModify() {
             vm.isForecastRunning = true;
+            var resultStartDate = moment().utc().add(1, 'days');
+            var resultEndDate = moment(resultStartDate).add(6, 'months');
             var wl = {
-              ForecastStart: moment().utc().add(1, 'months').startOf('month').toDate(),
-              ForecastEnd: moment().utc().add(2, 'months').startOf('month').toDate(),
+              ForecastStart: resultStartDate.toDate(),
+              ForecastEnd: resultEndDate.toDate(),
               WorkloadId: vm.selectedWorkload.Id,
               ScenarioId: vm.selectedWorkload.Scenario.Id
             };
@@ -171,9 +173,11 @@
             forecastingService.result(
               wl,
               function(data, status, headers, config) {
+                console.log(data);
+                manageLocalStorage();
                 vm.selectedWorkload.Days = data.Days;
                 vm.isForecastRunning = false;
-                vm.loadChart('chart'+ vm.selectedWorkload.Id, data.Days);
+                vm.loadChart('chart'+ vm.selectedWorkload.Id, vm.selectedWorkload.Days);
               }
             )
           }
