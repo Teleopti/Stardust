@@ -11,7 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 {
 	[EnabledBy(Toggles.Staffing_ReadModel_BetterAccuracy_Step3_44331)]
-	public class AddOvertimeActivityCommandHandlerPersistDeltas : IHandleCommand<AddOvertimeActivityCommand>
+	public class AddOvertimeActivityCommandHandler : IHandleCommand<AddOvertimeActivityCommand>
 	{
 		private readonly IProxyForId<IActivity> _activityForId;
 		private readonly ICurrentScenario _currentScenario;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		private readonly IScheduleStorage _scheduleStorage;
 		private readonly IScheduleDifferenceSaver _scheduleDifferenceSaver;
 
-		public AddOvertimeActivityCommandHandlerPersistDeltas(IProxyForId<IActivity> activityForId, ICurrentScenario currentScenario, 
+		public AddOvertimeActivityCommandHandler(IProxyForId<IActivity> activityForId, ICurrentScenario currentScenario, 
 			IProxyForId<IPerson> personForId, IProxyForId<IMultiplicatorDefinitionSet> multiplicatorDefinitionSetForId, IScheduleStorage scheduleStorage, 
 			IScheduleDifferenceSaver scheduleDifferenceSaver )
 		{

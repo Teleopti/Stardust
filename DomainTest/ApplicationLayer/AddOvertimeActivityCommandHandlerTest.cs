@@ -20,11 +20,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
 	[DomainTest]
-	public class AddOvertimeActivityCommandHandlerPersistDeltasTest : ISetup
+	public class AddOvertimeActivityCommandHandlerTest : ISetup
 	{
-		public AddOvertimeActivityCommandHandlerPersistDeltas Target;
-		public FakeWriteSideRepository<IPerson> PersonRepository;
-		public FakeWriteSideRepository<IActivity> ActivityRepository;
+		public AddOvertimeActivityCommandHandler Target;
+		public FakePersonRepository PersonRepository;
+		public FakeActivityRepository ActivityRepository;
 		public FakeCurrentScenario CurrentScenario;
 		public FakeScheduleStorage ScheduleStorage;
 		public FakeWriteSideRepository<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetRepository;
@@ -34,12 +34,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble<FakePersonAssignmentWriteSideRepository>().For<IWriteSideRepositoryTypedId<IPersonAssignment, PersonAssignmentKey>>();
-			system.UseTestDouble<FakeWriteSideRepository<IActivity>>().For<IProxyForId<IActivity>>();
-			system.UseTestDouble<FakeWriteSideRepository<IPerson>>().For<IProxyForId<IPerson>>();
 			system.UseTestDouble<FakeCurrentScenario>().For<ICurrentScenario>();
 			system.UseTestDouble<FakeScheduleStorage>().For<IScheduleStorage>();
 			system.UseTestDouble<FakeScheduleDifferenceSaver>().For<IScheduleDifferenceSaver>();
-			system.UseTestDouble<AddOvertimeActivityCommandHandlerPersistDeltas>().For<IHandleCommand<AddOvertimeActivityCommand>>();
+			system.UseTestDouble<AddOvertimeActivityCommandHandler>().For<IHandleCommand<AddOvertimeActivityCommand>>();
 			system.UseTestDouble<FakeLoggedOnUser>().For<ILoggedOnUser>();
 			system.UseTestDouble<FakeWriteSideRepository<IMultiplicatorDefinitionSet>>().For<IProxyForId<IMultiplicatorDefinitionSet>>();
 		}

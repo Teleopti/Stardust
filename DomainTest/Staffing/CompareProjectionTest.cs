@@ -481,7 +481,6 @@ namespace Teleopti.Ccc.DomainTest.Staffing
 			var activityResourceIntervals = Target.Compare(beforeCopy, after);
 			activityResourceIntervals.Count().Should().Be.EqualTo(1);
 			activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(-1);
-			//activityResourceIntervals.First(x => x.StartDateTime == assignmentPeriod.StartDateTime && x.SkillCombination.ToArray().SequenceEqual(new[] { skill2.Id.GetValueOrDefault() })).Resource.Should().Be.EqualTo(1);
 		}
 	}
 }
