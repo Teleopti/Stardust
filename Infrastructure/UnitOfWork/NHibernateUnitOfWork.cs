@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public T Merge<T>(T root) where T : class, IAggregateRoot
 		{
 			if (root.Id == null)
-				throw new DataSourceException("Cannot merge transient root.");
+				throw new DataSourceException($"Cannot merge transient root (of type {root.GetType()})");
 			try
 			{
 				var merge = Session.Merge(root);

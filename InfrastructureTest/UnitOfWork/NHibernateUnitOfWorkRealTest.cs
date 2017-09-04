@@ -1,5 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
+using SharpTestsEx;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -77,5 +79,16 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             Assert.IsTrue(SetupFixtureForAssembly.loggedOnPerson.Id.HasValue);
             Assert.IsFalse(cantBePersisted.Id.HasValue);
         }
+
+		[Test]
+		public void ShouldIncludeTypeInMergingTransientRootErrorMessage()
+		{
+			using (var uow = SetupFixtureForAssembly.DataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				var person = new Person();
+				var ex = Assert.Throws<DataSourceException>(() =>uow.Merge(person));
+				ex.Message.Should().Contain(".Person");
+			}
+		}
     }
 }
