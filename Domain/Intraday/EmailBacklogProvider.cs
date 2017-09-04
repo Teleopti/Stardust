@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var workloadClosedHoursDictionary = new Dictionary<Guid, ClosedPeriodWorkload>();
 			foreach (var skillDayList in skillDays)
 			{
-				if (skillDayList.Key.SkillType.Description.Name != "SkillTypeEmail")
+				if (!SkillTypesWithBacklog.IsBacklogSkillType(skillDayList.Key))
 					continue;
 
 				var reversedSkillDayList = skillDayList.Value

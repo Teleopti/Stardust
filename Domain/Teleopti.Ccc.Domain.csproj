@@ -296,6 +296,7 @@
     <Compile Include="Intraday\SkillTypeIdentifier.cs" />
     <Compile Include="Intraday\SkillTypeInfo.cs" />
     <Compile Include="Intraday\SkillTypeInfoProvider.cs" />
+    <Compile Include="Intraday\SkillTypesWithBacklog.cs" />
     <Compile Include="Notification\UserDeviceService.cs" />
     <Compile Include="Optimization\IntradayOptimization.cs" />
     <Compile Include="Optimization\IntradayOptimizationCallbackInfo.cs" />

@@ -109,13 +109,13 @@ namespace Teleopti.Ccc.Domain.Intraday
 				dataSeries.ForecastedStaffing[index] = Math.Round((double) dataSeries.ForecastedStaffing[index], 1);
 			}
 		}
-
+		
 		private void calculateForecastedAgentsForEmailSkills(DateOnly? dateOnly, bool useShrinkage,
 															 IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays)
 		{
 			var scheduledStaffingPerSkill = new List<SkillStaffingIntervalLightModel>();
 			var skillGroupsByResuolution = skillDays.Keys
-				.Where(y => y.SkillType.Description.Name == "SkillTypeEmail")
+				.Where(SkillTypesWithBacklog.IsBacklogSkillType)
 				.GroupBy(x => x.DefaultResolution);
 			foreach (var group in skillGroupsByResuolution)
 			{
@@ -147,5 +147,4 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return dateOnlyPeriod.DayCollection().Select(day => Load(skillIdList, day, useShrinkage)).ToList();
 		}
 	}
-
 }
