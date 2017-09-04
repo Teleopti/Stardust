@@ -95,7 +95,7 @@
     }
 
     function clearSchedules() {
-      if (selectedPpId == null)
+      if (selectedPpId == null || vm.clearRunning)
         return;
       vm.clearRunning = true;
       vm.status = $translate.instant('ClearScheduleResultAndHistoryData');
@@ -115,6 +115,7 @@
       if (isDisable() || selectedPpId == null) {
         return;
       }
+      vm.schedulingPerformed = true;
       return planningPeriodServiceNew.launchScheduling({ id: selectedPpId, runAsynchronously: true }).$promise.then(function () {
         checkProgress();
       });

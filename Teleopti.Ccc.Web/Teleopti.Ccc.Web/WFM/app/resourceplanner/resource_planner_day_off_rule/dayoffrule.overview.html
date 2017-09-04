@@ -34,27 +34,9 @@
 				<div tabindex=0 class="context-menu card-context" ng-click="vm.goEditDoRule(dayOffRule)">
 					<i class="filter-header mdi mdi-pencil pointer"><md-tooltip>{{'EditFilter' | translate }}</md-tooltip></i>
 				</div>
-				<div tabindex=0 class="context-menu card-context" ng-click="vm.confirmDeleteModal = true; vm.getDoRuleInfo(dayOffRule);"
+				<div tabindex=0 class="context-menu card-context" ng-click="vm.getDoRuleInfo(dayOffRule);"
 				 ng-show="!dayOffRule.Default">
 					<i class="filter-header mdi mdi-delete pointer"><md-tooltip>{{'DeleteFilter' | translate }}</md-tooltip></i>
-				</div>
-			</div>
-			<div ng-cloak class="modal-box">
-				<div ng-cloak ng-show="vm.confirmDeleteModal">
-					<div class="modalbg">
-						<div class="dialog-mini material-depth-1">
-							<div class="modal-inner-content">
-								<h3>{{'DeleteDayOffRule' | translate }}</h3>
-								{{vm.textDeleteDoRule}}
-							</div>
-							<div class="modal-actions">
-								<aside>
-									<button ng-click="vm.confirmDeleteModal = false" class="wfm-btn wfm-btn-invis-default">{{'Cancel' | translate }}</button>
-									<button ng-click="vm.confirmDeleteModal = false; vm.deleteDoRule(dayOffRule)" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
-								</aside>
-							</div>
-						</div>
-					</div>
 				</div>
 			</div>
 		</div>
@@ -137,6 +119,24 @@
 								</div>
 							</div>
 						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div ng-cloak class="modal-box">
+		<div ng-cloak ng-show="vm.confirmDeleteModal">
+			<div class="modalbg">
+				<div class="dialog-mini material-depth-1">
+					<div class="modal-inner-content">
+						<h3>{{'DeleteDayOffRule' | translate }}</h3>
+						{{vm.textDeleteDoRule}}
+					</div>
+					<div class="modal-actions">
+						<aside>
+							<button ng-click="vm.confirmDeleteModal = false" class="wfm-btn wfm-btn-invis-default">{{'Cancel' | translate }}</button>
+							<button ng-click="vm.deleteDoRule()" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
+						</aside>
 					</div>
 				</div>
 			</div>

@@ -90,7 +90,8 @@ describe('dayoffRuleOverviewController', function () {
             dayOffRulesInfo: dayOffRulesInfo
         });
 
-        vm.deleteDoRule(vm.dayOffRules[1]);
+        vm.selectedDayOffRule = vm.dayOffRules[1];
+        vm.deleteDoRule();
         $httpBackend.flush();
 
         expect(dayOffRuleService.removeDayOffRule).toHaveBeenCalledWith({ id: 'ec4356ba-8278-48e4-b4f8-c3102b7af684' });

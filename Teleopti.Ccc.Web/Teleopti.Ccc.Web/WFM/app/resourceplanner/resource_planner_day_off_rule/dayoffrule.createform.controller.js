@@ -11,6 +11,7 @@
         var vm = this;
 
         var maxHits = 100;
+        var requestSent = false;
         vm.name = "";
         vm.isEnabled = true;
         vm.selectedItem = undefined;
@@ -201,22 +202,27 @@
         function persist() {
             if (!vm.isValid())
                 return;
-            vm.isEnabled = false;
-            dayOffRuleService.saveDayOffRule({
-                MinDayOffsPerWeek: vm.dayOffsPerWeek.MinDayOffsPerWeek,
-                MaxDayOffsPerWeek: vm.dayOffsPerWeek.MaxDayOffsPerWeek,
-                MinConsecutiveWorkdays: vm.consecWorkDays.MinConsecWorkDays,
-                MaxConsecutiveWorkdays: vm.consecWorkDays.MaxConsecWorkDays,
-                MinConsecutiveDayOffs: vm.consecDaysOff.MinConsecDaysOff,
-                MaxConsecutiveDayOffs: vm.consecDaysOff.MaxConsecDaysOff,
-                Id: vm.filterId,
-                Name: vm.name,
-                Default: vm.default,
-                Filters: vm.selectedResults,
-                PlanningGroupId: $stateParams.groupId
-            }).$promise.then(function () {
-                returnFromCreate();
-            });
+            if (!requestSent) {
+                vm.isEnabled = false;
+                requestSent = true;
+                dayOffRuleService.saveDayOffRule({
+                    MinDayOffsPerWeek: vm.dayOffsPerWeek.MinDayOffsPerWeek,
+                    MaxDayOffsPerWeek: vm.dayOffsPerWeek.MaxDayOffsPerWeek,
+                    MinConsecutiveWorkdays: vm.consecWorkDays.MinConsecWorkDays,
+                    MaxConsecutiveWorkdays: vm.consecWorkDays.MaxConsecWorkDays,
+                    MinConsecutiveDayOffs: vm.consecDaysOff.MinConsecDaysOff,
+                    MaxConsecutiveDayOffs: vm.consecDaysOff.MaxConsecDaysOff,
+                    Id: vm.filterId,
+                    Name: vm.name,
+                    Default: vm.default,
+                    Filters: vm.selectedResults,
+                    PlanningGroupId: $stateParams.groupId
+                }).$promise.then(function () {
+                    requestSent = false;
+                    returnFromCreate();
+                });
+            }
+
         }
 
         function returnFromCreate() {

@@ -12,6 +12,7 @@
 	function overviewController($state, $stateParams, $translate, dayOffRuleService, planningGroupInfo, dayOffRulesInfo, localeLanguageSortingService) {
 		var vm = this;
 
+		vm.selectedDayOffRule = {};
 		vm.dayOffRules = dayOffRulesInfo.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
 		vm.textDeleteDoRule = '';
 		vm.textManageDoRule = $translate.instant("ManageDayOffForPlanningGroup").replace("{0}", planningGroupInfo.Name);
@@ -22,15 +23,18 @@
 		vm.goCreateDoRule = goCreateDoRule;
 
 		function getDoRuleInfo(dayOffRule) {
+			vm.confirmDeleteModal = true; 
 			vm.textDeleteDoRule = $translate.instant("AreYouSureYouWantToDeleteTheDayOffRule").replace("{0}", dayOffRule.Name);
+			return vm.selectedDayOffRule = dayOffRule;
 		}
 
-		function deleteDoRule(dayOffRule) {
-			if (dayOffRule.Default == true)
+		function deleteDoRule() {
+			if (vm.selectedDayOffRule.Default == true )
 				return;
-			var deleteDayOffRule = dayOffRuleService.removeDayOffRule({ id: dayOffRule.Id });
+			vm.confirmDeleteModal = false; 
+			var deleteDayOffRule = dayOffRuleService.removeDayOffRule({ id: vm.selectedDayOffRule.Id });
 			return deleteDayOffRule.$promise.then(function () {
-				var index = vm.dayOffRules.indexOf(dayOffRule);
+				var index = vm.dayOffRules.indexOf(vm.selectedDayOffRule);
 				vm.dayOffRules.splice(index, 1);
 			});
 		}
