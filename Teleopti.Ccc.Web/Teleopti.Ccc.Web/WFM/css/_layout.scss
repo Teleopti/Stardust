@@ -61,6 +61,12 @@ wfm-notice{
 md-progress-circular{
 	transform: scale(0.4)!important;
 }
+.landingIframe{
+	position: absolute;
+	width: 99%!important;
+	margin: 0px 3px;
+	height: 99%!important;
+}
 
 /*Mobile view Query*/
 @media screen and (max-width:768px){
@@ -92,10 +98,10 @@ md-progress-circular{
 		padding-left: 1px;
 	}
 	.permission-radio-buttons > .wfm-radio {
-		    width: auto!important;
-		    overflow: hidden;
-		    text-overflow: ellipsis;
-		}
+		width: auto!important;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 }
 
 @supports (-ms-accelerator: true) {
