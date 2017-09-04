@@ -484,6 +484,20 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		expect(test.requestCommandPaneScope.isCommandEnabled('siteOpenHour')).toEqual(true);
 	});
 
+	it('should show siteopenhour dialog when click on siteopenhour command', function () {
+		var test = setUpTarget(true);
+
+		// By default the site open hour dialog should not show
+		var result = test.targetElement[0].querySelectorAll("requests-site-open-hours");
+		expect(result.length).toEqual(0);
+
+		test.requestCommandPaneScope.showSiteOpenHour();
+		test.targetElement.isolateScope().$digest();
+
+		result = test.targetElement[0].querySelectorAll("requests-site-open-hours");
+		expect(result.length).toEqual(1);
+	});
+
 	it('should hide siteopenhour command in overtime tab', function () {
 		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = true;
 		fakeState.current.name = 'requests.overtime';
@@ -596,6 +610,9 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 			getMessageCallback(selectedRequestIdsAndMessage);
 			return { success: successCallback, error: errorCallback };
 		};
+		this.getSitesPromise = function() {
+			return { success: successCallback, error: errorCallback };
+		}
 		this.submitCommandIsASucess = function (result) {
 			_commandIsASucess = result;
 		};
