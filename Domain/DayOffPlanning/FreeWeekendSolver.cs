@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Secrets.DayOffPlanning;
 
@@ -52,8 +53,8 @@ namespace Teleopti.Ccc.Domain.DayOffPlanning
 			while (ResolvableState() == MinMaxNumberOfResult.ToMany)
             {
                 int indexToMoveFrom = -1;
-                //find first full weekend
-                foreach (Point weekend in weekendList)
+                //find random full weekend
+                foreach (Point weekend in weekendList.RandomizeBetter())
                 {
 	                if (_bitArray[weekend.X] && _bitArray[weekend.Y])
 	                {
