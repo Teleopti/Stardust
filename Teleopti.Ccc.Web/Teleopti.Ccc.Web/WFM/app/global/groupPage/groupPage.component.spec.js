@@ -165,6 +165,27 @@ describe('<group-page-picker>', function () {
 		expect(ctrl.selectedGroups.groupIds.length).toEqual(1);
 	});
 
+	it('should keep the selected groups when switching tab but did not select any groups', function () {
+		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
+		openPanel(picker);
+		expectPanelOpen();
+
+		toggleGroupPage(0);
+		checkGroupById('site1team1');
+		checkGroupById('site1team2');
+		var toggle = angular.element($document[0].querySelector('.group .group-toggle'));
+		expect(toggle.find('i').hasClass('mdi-chevron-up')).toEqual(true);
+
+		var ctrl = picker.isolateScope().$ctrl;
+		expect(ctrl.selectedGroups.mode).toEqual('BusinessHierarchy');
+		expect(ctrl.selectedGroups.groupIds.length).toEqual(2);
+
+		clickTab(1);
+
+		expect(ctrl.selectedGroups.mode).toEqual('BusinessHierarchy');
+		expect(ctrl.selectedGroups.groupIds.length).toEqual(2);
+	});
+
 	it('should close panel when I click the Close button', function () {
 		 
 		var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
@@ -940,7 +961,7 @@ describe('<group-page-picker>', function () {
 
 		});
 
-		it('should remove the not exists item from the selection when the group picker data reloads ', function () {
+		it('should remove the not exists item from the selection when the group picker data reloads on same tab', function () {
 			var picker = setupComponent('group-pages="groupPages" selected-groups="selectedGroups"', scope);
 			openPanel(picker);
 			expectPanelOpen();
@@ -964,8 +985,8 @@ describe('<group-page-picker>', function () {
 			};
 			scope.$apply();
 			expect(scope.selectedGroups.groupIds.length).toEqual(1);
-
 		});
+
 
 	});
 

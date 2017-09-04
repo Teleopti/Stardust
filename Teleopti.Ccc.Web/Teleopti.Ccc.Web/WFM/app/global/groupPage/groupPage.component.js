@@ -77,6 +77,7 @@
 				rawData = changesObj.groupPages.currentValue;
 				ctrl.setPickerData();
 				updateSelectedGroupsInView();
+				removeNotExistTeamsFromSelection();
 			}
 			if (!!changesObj.selectedGroups && !!changesObj.selectedGroups.currentValue && !!changesObj.selectedGroups.previousValue && changesObj.selectedGroups.currentValue !== changesObj.selectedGroups.previousValue) {
 				var currentValue = changesObj.selectedGroups.currentValue;
@@ -216,7 +217,6 @@
 
 		ctrl.setPickerData = function () {
 			populateGroupListAndNamemapAndFindLongestName(ctrl.groupPages[ctrl.tabs[selectedIndex].title]);
-			removeNotExistTeamsFromSelection();
 			ctrl.groupsInView[ctrl.tabs[selectedIndex].title] = ctrl.filterGroups('');
 		}
 
