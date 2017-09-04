@@ -31,7 +31,7 @@
           <div class="con-flex">
             <label for="filter" class="input-icon">
               <i class="mdi mdi-percent">
-                <input type="number" ng-change="vm.updateCampaignPreview()" required autofocus autocomplete="off" ng-model="vm.campaignPercentage" placeholder="{{'CampaignCallsPercentSign'|translate}}" >
+                <input type="number" ng-change="vm.updateCampaignPreview()" min="-100" required autofocus autocomplete="off" ng-model="vm.campaignPercentage" placeholder="{{'CampaignCallsPercentSign'|translate}}" >
               </i>
             </label>
           </div>
