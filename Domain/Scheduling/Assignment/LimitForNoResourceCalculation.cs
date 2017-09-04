@@ -2,7 +2,7 @@
 {
 	public class LimitForNoResourceCalculation : ILimitForNoResourceCalculation
 	{
-		public int NumberOfAgents { get; private set; } = 100;
+		public int NumberOfAgents { get; private set; } = 75;
 
 		public void SetFromTest(int limit)
 		{
