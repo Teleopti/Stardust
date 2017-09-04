@@ -823,7 +823,7 @@
 		this.getHasSentRequests = function () { return _hasSentRequests; }
 		this.getLastRequestParameters = function () { return _lastRequestParameters; }
 
-		this.getAllRequestsPromise = function () {
+		this.getAbsenceAndTextRequestsPromise = function () {
 			_hasSentRequests = true;
 			_lastRequestParameters = arguments;
 			return {

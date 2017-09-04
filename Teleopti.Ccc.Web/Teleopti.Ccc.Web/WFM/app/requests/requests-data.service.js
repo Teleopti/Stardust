@@ -29,7 +29,7 @@
 			hierarchyUrl = '../api/Requests/FetchPermittedTeamHierachy';
 		}
 
-		this.getAllRequestsPromise = function (filter, sortingOrders, paging) {
+		this.getAbsenceAndTextRequestsPromise = function (filter, sortingOrders, paging) {
 			return $q(function (resolve, reject) {
 				var requestFilter = requestsDefinitions.normalizeRequestsFilter(filter, sortingOrders, paging);
 				resolve($http.post(listAbsenceAndTextRequestsUrl, requestFilter));

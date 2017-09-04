@@ -27,7 +27,7 @@
 		vm.shiftTradeView = $attrs.shiftTradeView != undefined;
 
 		vm.init = function() {
-			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAllRequestsPromise;
+			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAbsenceAndTextRequestsPromise;
 			// By default, show shift trade requests in pending only;
 			// and show absence and text requests in pending and waitlisted only;
 			var tabName = vm.shiftTradeView ? requestsTabNames.shiftTrade : requestsTabNames.absenceAndText;

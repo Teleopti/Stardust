@@ -298,7 +298,7 @@
 				});
 			} else {
 				vm.isLoading = true;
-				requestsDataService.getAllRequestsPromise(requestsFilter, sortingOrders, paging).then(getRequestsCallback);
+				requestsDataService.getAbsenceAndTextRequestsPromise(requestsFilter, sortingOrders, paging).then(getRequestsCallback);
 			}
 		}
 
