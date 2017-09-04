@@ -312,7 +312,21 @@ Try
     $con = New-Object System.Data.SqlClient.SqlConnection
     $con.ConnectionString = "Server=$SQLServer;Database=$CCC7DB;User ID=$PATCHUSER;Password=$PATCHPWD"
     $con.open()
-    log-info "opened " $con.ConnectionString 
+    log-info "opened " $con.ConnectionString
+
+    $cmd = New-Object System.Data.SqlClient.SqlCommand
+    $cmd.Connection = $con
+
+    $cmd.CommandText = "select count(*) from Tenant.Tenant"
+    $NumberOfTenants = $cmd.ExecuteScalar();
+    if ($NumberOfTenants -eq 1) {
+		$ApplicationConnectionString = "Data Source=$SQLServer;Initial Catalog=$CCC7DB;User Id=$SQLUser;Password=$SQLPwd;Current Language=us_english;Encrypt=True;trustServerCertificate=false"
+		$AnalyticsConnectionString = "Data Source=$SQLServer;Initial Catalog=$AnalyticsDB;User Id=$SQLUser;Password=$SQLPwd;Current Language=us_english;Encrypt=True;trustServerCertificate=false"
+
+		$cmd.CommandText = "UPDATE Tenant.Tenant SET ApplicationConnectionString = '$ApplicationConnectionString', AnalyticsConnectionString = '$AnalyticsConnectionString'"
+		$rowsAffected = $cmd.ExecuteNonQuery()
+    }
+
 
 	# Getting distributed lock to make sure no one else is updating the databases as well.
 	$lockResource = "AzurePatchDatabaseLock"
