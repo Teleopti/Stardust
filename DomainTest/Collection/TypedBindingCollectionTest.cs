@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(test);
 
             // Sets an PropertyDescriptor to the specific property.
-            PropertyDescriptor myProperty = properties.Find("OptimizationData", false);
+            PropertyDescriptor myProperty = properties.Find("Test1", false);
             PropertyDescriptor[] arr = new PropertyDescriptor[1];
             arr[0] = myProperty;
 

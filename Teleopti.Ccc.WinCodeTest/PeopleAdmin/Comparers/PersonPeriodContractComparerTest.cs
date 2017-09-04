@@ -186,9 +186,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		{
 			// Sets the current person cotnract
 			_target.PersonContract = new PersonContract(new Contract("my first contract"),
-				new PartTimePercentage("Testing"), new ContractSchedule("OptimizationData"));
+				new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
 			_personPeriodModel.PersonContract = new PersonContract(new Contract("my second contract"), 
-				new PartTimePercentage("Testing"), new ContractSchedule("OptimizationData"));
+				new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
 
 			// Calls the compares method
 			personPeriodContractComparer = new PersonPeriodContractComparer();
@@ -210,9 +210,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		{
 			// Sets the current person cotnract
 			_target.PersonContract = new PersonContract(new Contract("my second contract"),
-				new PartTimePercentage("Testing"), new ContractSchedule("OptimizationData"));
+				new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
 			_personPeriodModel.PersonContract = new PersonContract(new Contract("my first contract"),
-				new PartTimePercentage("Testing"), new ContractSchedule("OptimizationData"));
+				new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
 
 			// Calls the compares method
 			personPeriodContractComparer = new PersonPeriodContractComparer();
@@ -234,9 +234,9 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Comparers
 		{
 			// Sets the current person cotnract. contract name: my contract
 			_target.PersonContract = new PersonContract(new Contract("my first contract"),
-				new PartTimePercentage("Testing"), new ContractSchedule("OptimizationData"));
+				new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
 			_personPeriodModel.PersonContract = new PersonContract(new Contract("my first contract"),
-				new PartTimePercentage("Testing"), new ContractSchedule("OptimizationData"));
+				new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
 			// Calls the compares method
 			personPeriodContractComparer = new PersonPeriodContractComparer();
 			result = personPeriodContractComparer.Compare(_target, _personPeriodModel);

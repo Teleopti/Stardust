@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.People
 		[Test]
 		public void ShouldGetSuggestedWorkflowControlSetWhenDeletedWorkflowControlSetExists()
 		{
-			var workflowControlSet1 = new WorkflowControlSet("OptimizationData").WithId();
+			var workflowControlSet1 = new WorkflowControlSet("Test1").WithId();
 			workflowControlSet1.SetDeleted();
 			var workflowControlSet2 = new WorkflowControlSet("Test2").WithId();
 			WorkflowControlSetRepository.Add(workflowControlSet1);

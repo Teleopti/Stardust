@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.DomainTest.Helper
             _target.Identity .Should().Not.Be.EqualTo(Guid.Empty);
             _target.PersonIdCollection  .First().Should().Be.EqualTo(_tempGuid);
 
-            _target.SerializedPersonPeriod   = "OptimizationData";
-            _target.SerializedPersonPeriod.Should().Be.EqualTo("OptimizationData");
+            _target.SerializedPersonPeriod   = "Test1";
+            _target.SerializedPersonPeriod.Should().Be.EqualTo("Test1");
 
 
         }

@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var p1 = new Person
 			{
 				Email = "test1@test.se"
-			}.WithName(new Name("OptimizationData", "Testsson")).WithId();
+			}.WithName(new Name("Test1", "Testsson")).WithId();
 			p1.SetEmploymentNumber("E321");
 			var p2 = new Person
 			{

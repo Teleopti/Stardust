@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
             _target.SetAccessibilityCollection(new ReadOnlyCollection<string>(_accessibilities));
 
             _activities = new TypedBindingCollection<IActivity>();
-            _activities.Add(ActivityFactory.CreateActivity("OptimizationData", Color.Black));
+            _activities.Add(ActivityFactory.CreateActivity("Test1", Color.Black));
             _activities.Add(ActivityFactory.CreateActivity("Test2", Color.Blue));
             _activities.Add(ActivityFactory.CreateActivity("Test3", Color.Red));
             _target.SetActivityCollection(_activities);

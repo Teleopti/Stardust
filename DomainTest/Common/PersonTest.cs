@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void CanAddPersonPeriod()
 		{
 			DateOnly date = new DateOnly(2000, 1, 1);
-			IPersonContract personContract = PersonContractFactory.CreatePersonContract("my first contract", "Testing", "OptimizationData");
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract("my first contract", "Testing", "Test1");
 			ITeam team = TeamFactory.CreateSimpleTeam();
 
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void CannotAddPersonPeriod()
 		{
 			DateOnly date = new DateOnly(2000, 1, 1);
-			IPersonContract personContract = PersonContractFactory.CreatePersonContract("my first contract", "Testing", "OptimizationData");
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract("my first contract", "Testing", "Test1");
 			ITeam team = TeamFactory.CreateSimpleTeam();
 
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void CanRemovePersonPeriod()
 		{
 			DateOnly date = new DateOnly(2000, 1, 1);
-			IPersonContract personContract = PersonContractFactory.CreatePersonContract("my first contract", "Testing", "OptimizationData");
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract("my first contract", "Testing", "Test1");
 			ITeam team = TeamFactory.CreateSimpleTeam();
 
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			Assert.IsNull(target.MyTeam(DateOnly.Today));
 
 			DateOnly date = new DateOnly(2000, 1, 1);
-			IPersonContract personContract = PersonContractFactory.CreatePersonContract("my first contract", "Testing", "OptimizationData");
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract("my first contract", "Testing", "Test1");
 			ITeam team = TeamFactory.CreateSimpleTeam();
 			ISite site = SiteFactory.CreateSimpleSite("Site");
 			site.AddTeam(team);
@@ -499,7 +499,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		public void VerifyIsAgent()
 		{
 			DateOnly date = new DateOnly(2000, 1, 1);
-			IPersonContract personContract = PersonContractFactory.CreatePersonContract("my first contract", "Testing", "OptimizationData");
+			IPersonContract personContract = PersonContractFactory.CreatePersonContract("my first contract", "Testing", "Test1");
 			ITeam team = TeamFactory.CreateSimpleTeam();
 
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(date, personContract, team);
@@ -630,7 +630,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var team = TeamFactory.CreateSimpleTeam("Team");
 			var personContract =
 				new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromContract },
-					new PartTimePercentage("Testing"), new ContractSchedule("OptimizationData"));
+					new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
 			var personPeriod = new PersonPeriod(dateOnly, personContract, team);
 
 			var target = new Person();
@@ -645,7 +645,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 			var team = TeamFactory.CreateSimpleTeam("Team");
 			var personContract =
 				new PersonContract(new Contract("contract") { WorkTimeSource = WorkTimeSource.FromSchedulePeriod },
-					new PartTimePercentage("Testing"), new ContractSchedule("OptimizationData"));
+					new PartTimePercentage("Testing"), new ContractSchedule("Test1"));
 			var personPeriod = new PersonPeriod(dateOnly, personContract, team);
 
 			var target = new Person();
@@ -661,7 +661,7 @@ namespace Teleopti.Ccc.DomainTest.Common
 		{
 			var dateOnly = new DateOnly(2012, 7, 1);
 			var team = TeamFactory.CreateSimpleTeam("Team");
-			var contractSchedule = new ContractSchedule("OptimizationData");
+			var contractSchedule = new ContractSchedule("Test1");
 			var week = new ContractScheduleWeek();
 			week.Add(DayOfWeek.Monday, true);
 			week.Add(DayOfWeek.Tuesday, true);

@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.DomainTest.Helper
             _target.Identity .Should().Not.Be.EqualTo(Guid.Empty);
             _target.GroupPageIdCollection .First().Should().Be.EqualTo(_tempGuid);
 
-            _target.SerializedGroupPage  = "OptimizationData";
-            _target.SerializedGroupPage.Should().Be.EqualTo("OptimizationData");
+            _target.SerializedGroupPage  = "Test1";
+            _target.SerializedGroupPage.Should().Be.EqualTo("Test1");
 
 
         }

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             IPersonContract personContract =
                 new PersonContract(new Contract("my first contract"), new PartTimePercentage("Testing"),
-                                   new ContractSchedule("OptimizationData"));
+                                   new ContractSchedule("Test1"));
             ITeam team = new Team();
             IPersonPeriod personPeriod = new PersonPeriod(startDate, personContract, team);
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             IPersonContract personContract =
                 new PersonContract(new Contract("my contract"), new PartTimePercentage("Testing"),
-                                   new ContractSchedule("OptimizationData"));
+                                   new ContractSchedule("Test1"));
 
             ITeam team = new Team();
             IPersonPeriod personPeriod = new PersonPeriod(startDate, personContract, team);
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 		{
 			IPersonContract personContract =
 				 new PersonContract(new Contract("my contract"), new PartTimePercentage("Testing"),
-										  new ContractSchedule("OptimizationData"));
+										  new ContractSchedule("Test1"));
 
 			ITeam team = new Team();
 			team.Site = new Site("Site1");
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             IPersonContract personContract =
                 new PersonContract(new Contract("my first contract"), new PartTimePercentage("Testing"),
-                                   new ContractSchedule("OptimizationData"));
+                                   new ContractSchedule("Test1"));
 
             IPersonPeriod personPeriod = new PersonPeriod(startDate, personContract, team);
 

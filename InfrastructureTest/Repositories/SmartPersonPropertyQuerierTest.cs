@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var site = SiteFactory.CreateSimpleSite("sdf");
 			team.Site = site;
 			team.SetDescription(new Description("sdf"));
-			var wcs1 = new WorkflowControlSet("OptimizationData");
+			var wcs1 = new WorkflowControlSet("Test1");
 			var wcs2 = new WorkflowControlSet("Test2");
 
 			PersistAndRemoveFromUnitOfWork(ctrSched);
