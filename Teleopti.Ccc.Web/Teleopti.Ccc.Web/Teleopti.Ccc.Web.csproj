@@ -1773,6 +1773,7 @@
     <Content Include="WFM\app\requests\requests-site-open-hours.directive.spec.js" />
     <Content Include="WFM\app\requests\requests-table-container.directive.js" />
     <Content Include="WFM\app\requests\requests-definitions.service.js" />
+    <Content Include="WFM\app\requests\requests-definitions.service.spec.js" />
     <Content Include="WFM\app\requests\requests.controller.js" />
     <Content Include="WFM\app\requests\requests.controller.spec.js" />
     <Content Include="WFM\app\requests\requests-schedule-table.directive.js" />
