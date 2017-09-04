@@ -184,8 +184,11 @@ namespace Teleopti.Ccc.Domain.Intraday
 					.GroupBy(x => x.WorkloadId);
 				foreach (var item in statsPerWorkload)
 				{
-					var averageCalls = item.Sum(x => x.Calls) / item.Count();
-					var averageAht = item.Sum(x => x.HandleTime) / item.Sum(x => x.AnsweredCalls);
+					var itemCount = item.Count();
+					var sumAnsweredCalls = item.Sum(x => x.AnsweredCalls);
+
+					var averageCalls = (itemCount > 0 ? item.Sum(x => x.Calls) / itemCount : 0);
+					var averageAht = (sumAnsweredCalls > 0 ? item.Sum(x => x.HandleTime) / sumAnsweredCalls : 0);
 
 					foreach (var statInterval in item)
 					{

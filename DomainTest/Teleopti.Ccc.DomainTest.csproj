@@ -1592,6 +1592,7 @@
     <Compile Include="Staffing\CompareProjectionTest.cs" />
     <Compile Include="Staffing\ExportBpoFileTest.cs" />
     <Compile Include="Staffing\ImportBpoFileTest.cs" />
+    <Compile Include="Staffing\RequiredStaffingProviderTest.cs" />
     <Compile Include="Staffing\ScheduledSTaffingVIewModelCreatorTest.cs" />
     <Compile Include="SystemSetting\GlobalSetting\ShiftTradeSettingsTest.cs" />
     <Compile Include="TestWithStaticDependenciesAvoidUseAttribute.cs" />
