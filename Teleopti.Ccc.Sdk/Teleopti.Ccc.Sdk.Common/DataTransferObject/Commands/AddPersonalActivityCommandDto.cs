@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 		public Guid? ScenarioId { get; set; }
 
         /// <summary>
-        /// Gets or sets the schedule tag id. If omitted then Null schedule tag will be used.
+        /// Gets or sets the schedule tag id. If omitted then the current schedule tag will be kept.
         /// </summary>
         [DataMember(Order = 2, IsRequired = false)]
         public Guid? ScheduleTagId { get; set; }

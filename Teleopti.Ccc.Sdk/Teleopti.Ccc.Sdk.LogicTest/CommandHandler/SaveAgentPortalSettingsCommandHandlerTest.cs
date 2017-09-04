@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {

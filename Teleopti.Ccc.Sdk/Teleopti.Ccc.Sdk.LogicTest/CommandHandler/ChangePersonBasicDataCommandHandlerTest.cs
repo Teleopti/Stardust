@@ -11,8 +11,6 @@ using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {

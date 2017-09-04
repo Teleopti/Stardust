@@ -293,7 +293,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				AddEvent(() =>
 				{
-					var personalActivityAddedEvent = new PersonalActivityAddedEvent()
+					var personalActivityAddedEvent = new PersonalActivityAddedEvent
 					{
 						Date = Date.Date,
 						PersonId = Person.Id.Value,

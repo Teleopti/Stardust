@@ -52,10 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SaveSchedulePart
 		private static void openForEditsWhenReadOnlyDictionary(IScheduleDay scheduleDay)
 		{
 			var dic = scheduleDay.Owner as IReadOnlyScheduleDictionary;
-			if (dic != null)
-			{
-				dic.MakeEditable();
-			}
+			dic?.MakeEditable();
 		}
 
 		private IList<string> checkRules(IScheduleDictionary dic, IEnumerable<IScheduleDay> scheduleDays, INewBusinessRuleCollection newBusinessRuleCollection, IScheduleTag scheduleTag)

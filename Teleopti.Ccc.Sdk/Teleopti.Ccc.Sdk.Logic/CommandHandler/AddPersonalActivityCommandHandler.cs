@@ -8,7 +8,6 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.Sdk.Logic.QueryHandler;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -36,8 +35,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_scheduleTagAssembler = scheduleTagAssembler;
 			_scheduleSaveHandler = scheduleSaveHandler;
 		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		
 		public void Handle(AddPersonalActivityCommandDto command)
 		{
 			using (var uow = _unitOfWorkFactory.Current().CreateAndOpenUnitOfWork())

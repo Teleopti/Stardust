@@ -10,7 +10,6 @@ using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {

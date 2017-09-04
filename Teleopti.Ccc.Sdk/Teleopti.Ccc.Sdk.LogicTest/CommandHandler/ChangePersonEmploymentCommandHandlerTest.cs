@@ -17,7 +17,6 @@ using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 {
