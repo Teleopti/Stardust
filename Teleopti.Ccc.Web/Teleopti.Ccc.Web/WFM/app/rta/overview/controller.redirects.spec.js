@@ -110,7 +110,7 @@ describe('RtaOverviewController redirects', function () {
 		skillAreas = [skillArea1, skillArea2];
 
 		$fakeBackend.clear();
-		spyOn($state, 'go').and.callFake(function(_, params){
+		spyOn($state, 'go').and.callFake(function (_, params) {
 			lastGoParams = params;
 		});
 	}));
@@ -122,7 +122,7 @@ describe('RtaOverviewController redirects', function () {
 		c.apply(function () {
 			vm.selectSkillOrSkillArea(vm.skills[0]);
 		});
-		
+
 		expect(lastGoParams.skillIds).toEqual('channelSalesId');
 	});
 
@@ -219,6 +219,7 @@ describe('RtaOverviewController redirects', function () {
 		c.apply(function () {
 			vm.siteCards[1].isSelected = false;
 		});
+		$state.go.calls.reset();
 		c.apply(function () {
 			vm.goToAgents();
 		});
@@ -521,6 +522,7 @@ describe('RtaOverviewController redirects', function () {
 		c.apply(function () {
 			vm.siteCards[0].teams[0].isSelected = false;
 		});
+		$state.go.calls.reset();
 		c.apply(function () {
 			vm.goToAgents();
 		});
@@ -554,6 +556,7 @@ describe('RtaOverviewController redirects', function () {
 		c.apply(function () {
 			vm.siteCards[0].teams[1].isSelected = false;
 		});
+		$state.go.calls.reset();
 		c.apply(function () {
 			vm.goToAgents();
 		});
@@ -652,7 +655,7 @@ describe('RtaOverviewController redirects', function () {
 		c.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-
+		
 		expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
 	});
 

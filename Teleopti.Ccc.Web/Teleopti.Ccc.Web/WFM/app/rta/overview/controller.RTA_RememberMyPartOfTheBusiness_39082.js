@@ -19,6 +19,9 @@
 
 		var dataLoaded = rtaService.getOrganization()
 			.then(function (data) {
+				data.forEach(function (site) {
+					if (!site.Teams) site.Teams = [];
+				})
 				organization = data;
 			});
 
@@ -69,26 +72,54 @@
 			},
 
 			isTeamSelected: function (id) {
-				if (!state.teamIds) return false;
-				return state.teamIds.indexOf(id) > -1;
+				var result = state.teamIds.some(function (teamId) { return teamId == id });
+				if (result)
+					return true;
+
+				var siteId = organization.find(function (site) {
+					return site.Teams.some(function (team) { return team.Id == id });
+				}).Id;
+				
+				return state.siteIds.some(function (id) { return id == siteId });
 			},
 
 			selectSite: function (id, selected) {
 				state.siteIds = state.siteIds || [];
-				if (selected) {
-					if (!state.siteIds.find(function (s) { return s == id }))
-						state.siteIds.push(id);
-				} else
+				if (selected)
+					state.siteIds.push(id);
+				else
 					state.siteIds = state.siteIds.filter(function (s) { return s != id });
+
+				cleanState();
+
+				$state.go($state.current.name, { siteIds: state.siteIds, teamIds: state.teamIds, skillIds: state.skillIds, skillAreaId: state.skillAreaId });
 			},
 
 			selectTeam: function (id, selected) {
 				state.teamIds = state.teamIds || [];
-				if (selected) {
-					if (!state.teamIds.find(function (s) { return s == id }))
-						state.teamIds.push(id);
-				} else
+				if (selected)
+					state.teamIds.push(id);
+				else {
 					state.teamIds = state.teamIds.filter(function (s) { return s != id });
+
+					var siteOfTeam = organization.find(function (site) {
+						return site.Teams.some(function (team) { return team.Id == id });
+					})
+
+					var siteSelected = state.siteIds.some(function (siteId) { return siteId == siteOfTeam.Id });
+					if (siteSelected) {
+						var otherTeamIds = siteOfTeam.Teams
+							.filter(function (team) { return team.Id != id })
+							.map(function (team) { return team.Id });
+
+						state.teamIds = state.teamIds.concat(otherTeamIds);
+						state.siteIds = state.siteIds.filter(function (s) { return s != siteOfTeam.Id });
+					}
+				}
+
+				cleanState();
+
+				$state.go($state.current.name, { siteIds: state.siteIds, teamIds: state.teamIds, skillIds: state.skillIds, skillAreaId: state.skillAreaId });
 			},
 
 			goToAgents: function () {
@@ -97,27 +128,67 @@
 
 				if (state.skillAreaId)
 					skillIds = angular.isDefined(state.skillIds) ? state.skillIds : [];
+				$state.go('rta-agents', { siteIds: state.siteIds, teamIds: state.teamIds, skillIds: skillIds, skillAreaId: state.skillAreaId });
+			}
+		}
 
-				var teamIdsSelectedBySite = organization
-					.filter(function (site) {
-						return state.siteIds.indexOf(site.Id) > -1;
-					})
-					.map(function (site) {
-						return site.Teams || [];
-					})
-					.reduce(function (flat, toFlatten) {
-						return flat.concat(toFlatten);
-					}, [])
-					.map(function (team) {
-						return team.Id
-					});
+		function cleanState() {
+			// remove duplicate sites n teams
+			state.siteIds = state.siteIds.filter(function (item, pos) {
+				return state.siteIds.indexOf(item) == pos;
+			});
+			state.teamIds = state.teamIds.filter(function (item, pos) {
+				return state.teamIds.indexOf(item) == pos;
+			});
 
-				var teamIds = state.teamIds.filter(function (teamId) {
-					return teamIdsSelectedBySite.indexOf(teamId) == -1
+			// add sites where all teams are selected
+			organization.filter(function (site) {
+				if (site.Teams.length == 0) return false;
+				return site.Teams.every(function (team) {
+					return state.teamIds.some(function (teamId) { return teamId == team.Id });
+				});
+			}).forEach(function (site) {
+				if (!state.siteIds.some(function (siteId) { return siteId == site.Id }))
+					state.siteIds.push(site.Id);
+			});
+
+			// remove teams where site is selected
+			var teamIdsSelectedBySite = organization
+				.filter(function (site) {
+					return state.siteIds.indexOf(site.Id) > -1;
+				})
+				.map(function (site) {
+					return site.Teams || [];
+				})
+				.reduce(function (flat, toFlatten) {
+					return flat.concat(toFlatten);
+				}, [])
+				.map(function (team) {
+					return team.Id
+				});
+			state.teamIds = state.teamIds.filter(function (teamId) {
+				return teamIdsSelectedBySite.indexOf(teamId) == -1
+			});
+		}
+
+		function removeTeamIdsOfSiteId(siteId, teamIds) {
+			var teamIdsSelectedBySite = organization
+				.filter(function (site) {
+					return siteId == site.Id;
+				})
+				.map(function (site) {
+					return site.Teams || [];
+				})
+				.reduce(function (flat, toFlatten) {
+					return flat.concat(toFlatten);
+				}, [])
+				.map(function (team) {
+					return team.Id
 				});
 
-				$state.go('rta-agents', { siteIds: state.siteIds, teamIds: teamIds, skillIds: skillIds, skillAreaId: state.skillAreaId });
-			}
+			return state.teamIds.filter(function (teamId) {
+				return teamIdsSelectedBySite.indexOf(teamId) == -1
+			});
 		}
 
 		function mutateState(mutations) {
@@ -211,27 +282,19 @@
 						});
 
 						site.Teams = site.Teams || [];
-
 						if (!siteCard) {
 							siteCard = {
 								Id: site.Id,
 								Name: site.Name,
 								isOpen: $stateParams.open != "false" || site.Teams.length > 0,
-								isSelected: rtaStateService.isSiteSelected(site.Id),
+								get isSelected() { return rtaStateService.isSiteSelected(site.Id); },
+								set isSelected(newValue) { rtaStateService.selectSite(site.Id, newValue); },
 								teams: [],
 								AgentsCount: site.AgentsCount,
 								href: rtaStateService.agentsHrefForSite(site.Id)
 							};
 
 							$scope.$watch(function () { return siteCard.isOpen }, function (newValue) { if (newValue) pollNow(); });
-							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
-								if (newValue)
-									siteCard.teams.forEach(function (t) {
-										t.isSelected = true;
-									});
-								rtaStateService.selectSite(siteCard.Id, newValue);
-							});
-
 							vm.siteCards.push(siteCard);
 						};
 
@@ -253,26 +316,15 @@
 				});
 
 				if (!teamCard) {
-
 					teamCard = {
 						Id: team.Id,
 						Name: team.Name,
 						SiteId: team.SiteId,
-						isSelected: rtaStateService.isTeamSelected(team.Id),
+						get isSelected() { return rtaStateService.isTeamSelected(team.Id); },
+						set isSelected(newValue) { rtaStateService.selectTeam(team.Id, newValue); },
 						AgentsCount: team.AgentsCount,
 						href: rtaStateService.agentsHrefForTeam(team.Id)
 					};
-
-					$scope.$watch(function () { return teamCard.isSelected }, function (newValue, oldValue) {
-						if (newValue) {
-							var areAllTeamsSelected = siteCard.teams.every(function (t) { return t.isSelected });
-							if (areAllTeamsSelected) siteCard.isSelected = true;
-						}
-						else
-							siteCard.isSelected = false;
-						rtaStateService.selectTeam(teamCard.Id, newValue);
-					});
-
 					siteCard.teams.push(teamCard);
 				};
 				teamCard.Color = team.Color;

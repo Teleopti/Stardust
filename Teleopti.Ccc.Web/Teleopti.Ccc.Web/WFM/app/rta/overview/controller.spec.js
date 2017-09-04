@@ -126,7 +126,7 @@ describe('RtaOverviewController', function () {
 		});
 
 		it('should get skill areas', function () {
-			vm = $controllerBuilder.createController(undefined, skillAreas).vm;
+			var vm = $controllerBuilder.createController(undefined, skillAreas).vm;
 
 			expect(vm.skillAreas.length).toEqual(2);
 			expect(vm.skillAreas[0].Id).toEqual('skillArea1Id');
