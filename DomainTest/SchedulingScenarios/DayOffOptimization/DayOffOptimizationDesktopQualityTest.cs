@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Calculation;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -26,7 +27,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public DayOffOptimizationDesktopTeamBlock Target;
 		public IScheduleResultDataExtractorProvider ScheduleResultDataExtractorProvider;
-		//remove?
 		public IResourceCalculation ResourceCalculation;
 
 		[Test]
@@ -39,11 +39,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var team = new Team { Site = new Site("_") };
 			var agentList = new List<IPerson>();
 			var assesList = new List<IPersonAssignment>();
-			for (var n = 0; n < 30; n++)
+			for (int n = 0; n < 30; n++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 4));
 				agent.SchedulePeriod(firstDay).SetDaysOff(8);
 				var asses = Enumerable.Range(0, 28).Select(i => new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
@@ -65,12 +66,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				10, 7, 7, 7, 6, 5, 5,
 				10, 7, 7, 7, 6, 5, 5);
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agentList, assesList, skillDays);
-			//why here?
 			ResourceCalculation.ResourceCalculate(period, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
-			var allSkillDataExctractor = ScheduleResultDataExtractorProvider.CreateAllSkillsDataExtractor(period, stateHolder.SchedulingResultState,new AdvancedPreferences());
-			//
 
-			Target.Execute(period, agentList, new NoSchedulingProgress(), new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } },
+			var allSkillDataExctractor = ScheduleResultDataExtractorProvider.CreateAllSkillsDataExtractor(period, stateHolder.SchedulingResultState,
+				new AdvancedPreferences());
+
+			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } };
+
+			Target.Execute(period, agentList, new NoSchedulingProgress(), optPrefs,
 				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences
 				{
 					UseConsecutiveDaysOff = false,
@@ -82,11 +85,15 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			var standardDeviation = Variances.StandardDeviation(allSkillDataExctractor.Values().Select(v => v.GetValueOrDefault(-1)));
 			standardDeviation.Should().Be.LessThan(0.033d);
+			Console.WriteLine(standardDeviation);
 		}
 
 		[Test]
 		public void ShouldProduceGoodStandardDevBetweenDaysWhenUsingSingleAgentSingleDayAndFreeWeekEndSettings()
 		{
+			/*
+			 * Part of PBI 45724. Customer was complaining about bad STD with their combination of settings
+			 */
 			var firstDay = new DateOnly(2017, 09, 04); //mon
 			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 4);
 			var activity = new Activity("_");
@@ -94,11 +101,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var scenario = new Scenario("_");
 			var shiftCategory = new ShiftCategory("_").WithId();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var team = new Team { Site = new Site("_") };
 			var agentList = new List<IPerson>();
 			var assesList = new List<IPersonAssignment>();
-			for (var n = 0; n < 30; n++)
+			for (int n = 0; n < 30; n++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, team, skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 4));
 				agent.SchedulePeriod(firstDay).SetDaysOff(8);
 				var asses = Enumerable.Range(0, 28).Select(i => new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16))).ToArray();
@@ -113,18 +121,21 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 				agentList.Add(agent);
 				assesList.AddRange(asses);
 			}
+			
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				10, 7, 7, 7, 6, 5, 5,
 				10, 7, 7, 7, 6, 5, 5,
 				10, 7, 7, 7, 6, 5, 5,
 				10, 7, 7, 7, 6, 5, 5);
 			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agentList, assesList, skillDays);
-			//why here?
 			ResourceCalculation.ResourceCalculate(period, stateHolder.SchedulingResultState.ToResourceOptimizationData(false, false));
-			var allSkillDataExctractor = ScheduleResultDataExtractorProvider.CreateAllSkillsDataExtractor(period, stateHolder.SchedulingResultState,new AdvancedPreferences());
-			//
 
-			Target.Execute(period, agentList, new NoSchedulingProgress(), new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } },
+			var allSkillDataExctractor = ScheduleResultDataExtractorProvider.CreateAllSkillsDataExtractor(period, stateHolder.SchedulingResultState,
+				new AdvancedPreferences());
+
+			var optPrefs = new OptimizationPreferences { General = { ScheduleTag = new ScheduleTag() } };
+
+			Target.Execute(period, agentList, new NoSchedulingProgress(), optPrefs,
 				new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences
 				{
 					UseConsecutiveDaysOff = true,
@@ -137,8 +148,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 					FullWeekendsOffValue = new MinMax<int>(1, 2)
 				}), new GroupPageLight("_", GroupPageType.SingleAgent), () => new WorkShiftFinderResultHolder(), (o, args) => { });
 
+			
 			var standardDeviation = Variances.StandardDeviation(allSkillDataExctractor.Values().Select(v => v.GetValueOrDefault(-1)));
 			standardDeviation.Should().Be.LessThan(0.033d);
+			Console.WriteLine(standardDeviation);
 		}
 	}
 }
