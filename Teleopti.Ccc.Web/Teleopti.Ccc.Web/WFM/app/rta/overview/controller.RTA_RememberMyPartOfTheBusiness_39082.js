@@ -15,6 +15,9 @@
 			skillIds: []
 		};
 
+
+
+
 		var organization = [];
 
 		var dataLoaded = rtaService.getOrganization()
@@ -27,19 +30,19 @@
 
 		return {
 			setCurrentState: function (newState) {
-				state = mutateState(newState);
+				mutate(state, newState);
 			},
 
 			deselectSkillAndSkillArea: function () {
-				$state.go($state.current.name, state = mutateState({ skillIds: undefined, skillAreaId: undefined }), { reload: true });
+				$state.go($state.current.name, buildState({ skillIds: undefined, skillAreaId: undefined }), { reload: true });
 			},
 
 			selectSkillArea: function (skillAreaId) {
-				$state.go($state.current.name, state = mutateState({ skillIds: undefined, skillAreaId: skillAreaId }), { reload: true });
+				$state.go($state.current.name, buildState({ skillIds: undefined, skillAreaId: skillAreaId }), { reload: true });
 			},
 
 			selectSkill: function (skillId) {
-				$state.go($state.current.name, state = mutateState({ skillIds: skillId, skillAreaId: undefined }), { reload: true });
+				$state.go($state.current.name, buildState({ skillIds: skillId, skillAreaId: undefined }), { reload: true });
 			},
 
 			agentsHrefForTeam: function (teamId) {
@@ -79,7 +82,7 @@
 				var siteId = organization.find(function (site) {
 					return site.Teams.some(function (team) { return team.Id == id });
 				}).Id;
-				
+
 				return state.siteIds.some(function (id) { return id == siteId });
 			},
 
@@ -90,9 +93,7 @@
 				else
 					state.siteIds = state.siteIds.filter(function (s) { return s != id });
 
-				cleanState();
-
-				$state.go($state.current.name, { siteIds: state.siteIds, teamIds: state.teamIds, skillIds: state.skillIds, skillAreaId: state.skillAreaId });
+				$state.go($state.current.name, buildState());
 			},
 
 			selectTeam: function (id, selected) {
@@ -117,18 +118,11 @@
 					}
 				}
 
-				cleanState();
-
-				$state.go($state.current.name, { siteIds: state.siteIds, teamIds: state.teamIds, skillIds: state.skillIds, skillAreaId: state.skillAreaId });
+				$state.go($state.current.name, buildState());
 			},
 
 			goToAgents: function () {
-				var siteIds = state.siteIds || [];
-				var skillIds = state.skillIds || [];
-
-				if (state.skillAreaId)
-					skillIds = angular.isDefined(state.skillIds) ? state.skillIds : [];
-				$state.go('rta-agents', { siteIds: state.siteIds, teamIds: state.teamIds, skillIds: skillIds, skillAreaId: state.skillAreaId });
+				$state.go('rta-agents', buildState());
 			}
 		}
 
@@ -169,34 +163,38 @@
 			state.teamIds = state.teamIds.filter(function (teamId) {
 				return teamIdsSelectedBySite.indexOf(teamId) == -1
 			});
+
+			// skill stuff
+			state.skillIds = state.skillIds || [];
+
 		}
 
-		function removeTeamIdsOfSiteId(siteId, teamIds) {
-			var teamIdsSelectedBySite = organization
-				.filter(function (site) {
-					return siteId == site.Id;
-				})
-				.map(function (site) {
-					return site.Teams || [];
-				})
-				.reduce(function (flat, toFlatten) {
-					return flat.concat(toFlatten);
-				}, [])
-				.map(function (team) {
-					return team.Id
-				});
-
-			return state.teamIds.filter(function (teamId) {
-				return teamIdsSelectedBySite.indexOf(teamId) == -1
-			});
-		}
-
-		function mutateState(mutations) {
-			var mutatedState = JSON.parse(JSON.stringify(state));
+		function mutate(object, mutations) {
+			if (!mutations)
+				return;
 			Object.keys(mutations).forEach(function (key) {
-				mutatedState[key] = mutations[key];
+				object[key] = mutations[key];
 			});
-			return mutatedState;
+		}
+
+		function buildState(mutations) {
+
+			mutate(state, mutations);
+			cleanState();
+
+			var gotoState = {};
+			if (state.siteIds.length > 0)
+				gotoState.siteIds = state.siteIds;
+			if (state.teamIds.length > 0)
+				gotoState.teamIds = state.teamIds;
+			if (state.skillAreaId)
+				gotoState.skillAreaId = state.skillAreaId;
+			else if (state.skillIds.length > 0)
+				gotoState.skillIds = state.skillIds;
+			if (state.open)
+				gotoState.open = true;
+
+			return gotoState;
 		}
 
 	}
