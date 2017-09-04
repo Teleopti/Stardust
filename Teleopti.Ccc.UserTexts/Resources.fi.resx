@@ -14446,4 +14446,176 @@ Seuraavat ominaisuudet ovat aktivoitu:
   <data name="RequestDateExceeds14Days" xml:space="preserve">
     <value>Pyynnön päivämäärä ylittää 14 päivää</value>
   </data>
+  <data name="OvertimeRequestDateExceeds14Days" xml:space="preserve">
+    <value>Pyyntö on tehty pidemmälle, kuin 14 päivää tulevaisuuteen. </value>
+  </data>
+  <data name="OvertimeRequestDateIsPast" xml:space="preserve">
+    <value>Et voi tehdä ylityöpyyntöä menneisyyteen</value>
+  </data>
+  <data name="AllowedOvertime" xml:space="preserve">
+    <value>Sallittu ylityö</value>
+  </data>
+  <data name="CloseOvertimeSettings" xml:space="preserve">
+    <value>Sulje ylityöasetukset</value>
+  </data>
+  <data name="Compensations" xml:space="preserve">
+    <value>Kompensaatiot</value>
+  </data>
+  <data name="OvertimeSettings" xml:space="preserve">
+    <value>Ylityöasetukset</value>
+  </data>
+  <data name="PressEscToClose" xml:space="preserve">
+    <value>Klikkaa "Esc" sulkeaksesi</value>
+  </data>
+  <data name="CreateDayOffRule" xml:space="preserve">
+    <value>Luo vapaapäiväsääntö</value>
+  </data>
+  <data name="EditDayOffRule" xml:space="preserve">
+    <value>Muokkaa vapaapäivien sääntöjä</value>
+  </data>
+  <data name="FilterDayOffRules" xml:space="preserve">
+    <value>Lajittele vapaapäivien sääntöjä</value>
+  </data>
+  <data name="PlansPageEditPlanningGroup" xml:space="preserve">
+    <value>Muokkaa nimeä ja filtteriä valitulle suunnitteluryhmälle</value>
+  </data>
+  <data name="ClassicIntraday" xml:space="preserve">
+    <value>Classic: Päivänsisäinen</value>
+  </data>
+  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
+    <value>Agentilla ei ole taitoa ylityölle</value>
+  </data>
+  <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
+    <value>Pyyntö on taidon aukioloaikojen ulkopuolella.</value>
+  </data>
+  <data name="NoAccessToSites" xml:space="preserve">
+    <value>Sinulla ei ole riittävästi oikeuksia</value>
+  </data>
+  <data name="PublicNote" xml:space="preserve">
+    <value>Julkinen kommentti</value>
+  </data>
+  <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
+    <value>Ylityöpyyntö {0}-{1} on hyväksytty. </value>
+  </data>
+  <data name="DragAndDropCSVFilesHereOrClickToUpload" xml:space="preserve">
+    <value>Vedä ja tiputa .CSV tiedosto tähän tai klikkaa ladataksesi</value>
+  </data>
+  <data name="SuccessfullyImported" xml:space="preserve">
+    <value>Tuonti onnistui</value>
+  </data>
+  <data name="SeveralGroupsSelected" xml:space="preserve">
+    <value>{0} ryhmää valittu</value>
+  </data>
+  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+    <value>Parametri {0} ei voi olla tyhjä</value>
+  </data>
+  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+    <value>Tuotava tiedosto ei voi olla tyhjä.</value>
+  </data>
+  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+    <value>Ensimmäinen rivi tiedostossa (otsikko rivi) ei saa olla tyhjä.</value>
+  </data>
+  <data name="OpenSite" xml:space="preserve">
+    <value>Avaa toimipaikka</value>
+  </data>
+  <data name="ImportBpoWrongDateFormat" xml:space="preserve">
+    <value>Päuvämäärän muoto ei ole oikea</value>
+  </data>
+  <data name="AbandonedRateParenthesisPercentSign" xml:space="preserve">
+    <value>Hylkäysaste (%)</value>
+  </data>
+  <data name="AverageSpeedOfAnswersParenthesisSeconds" xml:space="preserve">
+    <value>Keskimääräinen jonotusaika (s)</value>
+  </data>
+  <data name="ESLParenthesisPercentSign" xml:space="preserve">
+    <value>ESL (%)</value>
+  </data>
+  <data name="Interval" xml:space="preserve">
+    <value>Intervalli</value>
+  </data>
+  <data name="SkillsParenthesisS" xml:space="preserve">
+    <value>Taito(t)</value>
+  </data>
+  <data name="InAlarmInSite" xml:space="preserve">
+    <value>Toimipaikassa olevat agentit, ketkä hälyttävät</value>
+  </data>
+  <data name="OpenPlansPage" xml:space="preserve">
+    <value>Suunnittelu</value>
+  </data>
+  <data name="MaxSearchPersonCountExceeded" xml:space="preserve">
+    <value>Haku antaa enemmän henkilöitä kuin {0}. Muokkaa hakukriteeriä. </value>
+  </data>
+  <data name="OvertimeRequestAlreadyHasScheduleInPeriod" xml:space="preserve">
+    <value>Työvuoro sisältää jo aktiviteetin kyseiselle ajanjaksolle. </value>
+  </data>
+  <data name="OnlyAbsenceRequestCanBeCancelled" xml:space="preserve">
+    <value>Vain poissaolopyyntöjä voi peruuttaa! </value>
+  </data>
+  <data name="OrganizeCascadingSkills" xml:space="preserve">
+    <value>Lajittele taidot tärkeysjärjestykseen</value>
+  </data>
+  <data name="DataProtectionQuestion" xml:space="preserve">
+    <value>Liity Teleoptin Asiakaskeskukseen! Lue blogia, hyödynnä vinkkejä, tutustu koulutusvideoihin ja paljon muuhun! Haluamme seuraavat tiedot sinulta:
+Sähköposti: &lt;b&gt;{0}&lt;/b&gt;&lt;br&gt;
+Etunimi: &lt;b&gt;{1}&lt;/b&gt;&lt;br&gt;
+Sukunimi: &lt;b&gt;{2}&lt;/b&gt;&lt;br&gt;
+Kieli: &lt;b&gt;{3}&lt;/b&gt;&lt;br&gt;
+Yritys: &lt;b&gt;{4}&lt;/b&gt;&lt;br&gt;
+Näillä tiedoilla pääset aina automaattisesti Teleoptin Asiakaskekukseen ja saat käyttöoikeudet tarvittaviin palveluihin, työkaluihin ja tietoihin. &lt;br&gt;&lt;br&gt;
+Haluatko rekisteröityä?</value>
+  </data>
+  <data name="DiscardSuggestionData" xml:space="preserve">
+    <value>Ehdotetut tiedot ovat aktivoitu. Jos haluat jatkaa, tiedot hylätään. </value>
+  </data>
+  <data name="NoUnderStaffingSkill" xml:space="preserve">
+    <value>Taito ei ole kriittisesti alimiehitetty koko kysytylle jaksolle.</value>
+  </data>
+  <data name="ShiftCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>Muistutus: Siirtääksesi agentin vuoron, joka on toisessa aikavyöhykkeessä, sinun on ensin valittava heidän aikavyöhyke. </value>
+  </data>
+  <data name="BpoExchange" xml:space="preserve">
+    <value>Ulkoistaminen</value>
+  </data>
+  <data name="AnywhereMigrated" xml:space="preserve">
+    <value>MyTeamiä on muutettu {0}Teleopti WFM:ään{1}!</value>
+  </data>
+  <data name="PageWillBeRedirected" xml:space="preserve">
+    <value>Tämä sivu {0}</value>
+  </data>
+  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+    <value>Taito nimeltä {0} ei ole määritelty järjestelmässä. </value>
+  </data>
+  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+    <value>Taito nimeltä {0} on määritelty {1} kertaa järjestelmässä. Se on määriteltävä vain kerran, kun käytyt tätä toimintoa. </value>
+  </data>
+  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+    <value>Rivillä on {0} parametriä mutta oletettu arvo on oltava {1}. </value>
+  </data>
+  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>Virhe rivillä {0}, joka sisältää {1} {2}</value>
+  </data>
+  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+    <value>Kelpaamaton arvo otsikossa; {0}. Käytettävissä olevat arvot ovat ({1})</value>
+  </data>
+  <data name="NoSuggestionsFound" xml:space="preserve">
+    <value>Ehdotuksia ei löytynyt kysytylle ylityöasetuksille</value>
+  </data>
+  <data name="ImportBpoWrongResourceFormat" xml:space="preserve">
+    <value>Resurssien arvo on kelpaamaton (parametri {0} arvoltaan {1}). Arvon on oltava desimaaleissa, esim 14.2. </value>
+  </data>
+  <data name="ImportBpoDuplicateRecord" xml:space="preserve">
+    <value>Sama arvo on lisätty kaksi kertaa eri riveille, tämä ei ole sallittua. </value>
+  </data>
+  <data name="OverstaffingAfterOT" xml:space="preserve">
+    <value>Ylimiehitys ylityöehdotuksen jälkeen</value>
+  </data>
+  <data name="ScheduledAgentsAfterOT" xml:space="preserve">
+    <value>Suunnitellut agentit ylityöehdotuksen jälkeen</value>
+  </data>
+  <data name="UnderstaffingAfterOT" xml:space="preserve">
+    <value>Alimiehitys ylityöehdotuksen jälkeen</value>
+  </data>
+  <data name="TotalAgentsInAlarmInBusinessUnit" xml:space="preserve">
+    <value>Liiketoimintayksikössä olevat agentit, ketkä hälyttävät</value>
+  </data>
 </root>
