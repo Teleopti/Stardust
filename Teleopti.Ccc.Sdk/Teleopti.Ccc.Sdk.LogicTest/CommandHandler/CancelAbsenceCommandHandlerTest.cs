@@ -58,8 +58,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		        new ScheduleSaveHandler(
 			        new SaveSchedulePartService(
 				        new ScheduleDifferenceSaver(_scheduleStorage, new ThisUnitOfWork(new FakeUnitOfWork()), new EmptyScheduleDayDifferenceSaver()),
-				        fakePersonAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack(),
-				        new ScheduleDayDifferenceSaveTemporaryEmpty()));
+				        fakePersonAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack()));
 
 			_target = new CancelAbsenceCommandHandler(dateTimePeriodAssembler, scheduleTagAssembler, _scheduleStorage, personRepository, _scenarioRepository, currentUnitOfWorkFactory, businessRulesForPersonalAccountUpdate, scheduleSaveHandler);
         }

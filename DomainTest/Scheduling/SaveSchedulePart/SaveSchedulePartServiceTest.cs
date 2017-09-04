@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SaveSchedulePart
 		{
 			scheduleDifferenceSaver = MockRepository.GenerateMock<IScheduleDifferenceSaver>();
 			personAbsenceAccountRepository = MockRepository.GenerateMock<IPersonAbsenceAccountRepository>();
-			target = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack(), new ScheduleDayDifferenceSaveTemporaryEmpty());
+			target = new SaveSchedulePartService(scheduleDifferenceSaver, personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack());
 		}
 
 		[Test]

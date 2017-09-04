@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scheduleTagAssembler = new ScheduleTagAssembler(scheduleTagRepository);
 			var scheduleSaveHandler =
 				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage, new EmptyScheduleDayDifferenceSaver()),
-					new FakePersonAbsenceAccountRepository(), new DoNothingScheduleDayChangeCallBack(), new ScheduleDayDifferenceSaveTemporaryEmpty()));
+					new FakePersonAbsenceAccountRepository(), new DoNothingScheduleDayChangeCallBack()));
 
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			var scheduleTagAssembler = new ScheduleTagAssembler(scheduleTagRepository);
 			var scheduleSaveHandler =
 				new ScheduleSaveHandler(new SaveSchedulePartService(new FakeScheduleDifferenceSaver(scheduleStorage, new EmptyScheduleDayDifferenceSaver()),
-					new FakePersonAbsenceAccountRepository(), new DoNothingScheduleDayChangeCallBack(), new ScheduleDayDifferenceSaveTemporaryEmpty()));
+					new FakePersonAbsenceAccountRepository(), new DoNothingScheduleDayChangeCallBack()));
 
 			var person = PersonFactory.CreatePerson().WithId();
 			personRepository.Add(person);

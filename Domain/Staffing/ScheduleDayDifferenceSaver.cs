@@ -64,49 +64,4 @@ namespace Teleopti.Ccc.Domain.Staffing
 			return new List<SkillCombinationResource>();
 		}
 	}
-
-	public interface IScheduleDayDifferenceSaveTemporary
-	{
-		void SaveDifferences(IScheduleDictionary dic, IPerson person, DateOnlyPeriod dateOnlyPeriod);
-	}
-
-	public class ScheduleDayDifferenceSaveTemporary : IScheduleDayDifferenceSaveTemporary
-	{
-
-		private readonly ISkillCombinationResourceRepository _skillCombinationResourceRepository;
-		private readonly CompareProjection _compareProjection;
-		private readonly INow _now;
-		private readonly IStaffingSettingsReader _staffingSettingsReader;
-
-		public ScheduleDayDifferenceSaveTemporary(ISkillCombinationResourceRepository skillCombinationResourceRepository, CompareProjection compareProjection,
-										  INow now, IStaffingSettingsReader staffingSettingsReader)
-		{
-			_skillCombinationResourceRepository = skillCombinationResourceRepository;
-			_compareProjection = compareProjection;
-			_now = now;
-			_staffingSettingsReader = staffingSettingsReader;
-		}
-
-		public void SaveDifferences(IScheduleDictionary dic, IPerson person, DateOnlyPeriod dateOnlyPeriod)
-		{
-			var snapshot = ((ScheduleRange)dic[person]).Snapshot;
-			var scheduleDaysAfter = dic[person];
-			var skillCombinationResourceDeltas = new List<SkillCombinationResource>();
-			var readModelPeriod = new DateTimePeriod(_now.UtcDateTime().AddDays(-1).AddHours(-1), _now.UtcDateTime().AddDays(_staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14)).AddHours(1));
-			foreach (var snapShotDay in snapshot.ScheduledDayCollection(dateOnlyPeriod.Inflate(1)).Where(x => readModelPeriod.Contains(x.DateOnlyAsPeriod.DateOnly.Date)))  //inflate to handle midnight shift
-			{
-				skillCombinationResourceDeltas.AddRange(_compareProjection.Compare(snapShotDay, scheduleDaysAfter.ScheduledDay(snapShotDay.DateOnlyAsPeriod.DateOnly)));
-			}
-			_skillCombinationResourceRepository.PersistChanges(skillCombinationResourceDeltas);
-		}
-	}
-
-	public class ScheduleDayDifferenceSaveTemporaryEmpty : IScheduleDayDifferenceSaveTemporary
-	{
-		public void SaveDifferences(IScheduleDictionary dic, IPerson person, DateOnlyPeriod dateOnlyPeriod)
-		{
-
-		}
-	}
-
 }

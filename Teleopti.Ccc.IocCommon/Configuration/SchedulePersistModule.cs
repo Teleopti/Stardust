@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<dontReassociateDataForSchedules>().As<IReassociateDataForSchedules>().SingleInstance();
 			// so we don't save Deltas from Scheduler in Fatclient
 			builder.RegisterType<EmptyScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
-			builder.RegisterType<ScheduleDayDifferenceSaveTemporaryEmpty>().As<IScheduleDayDifferenceSaveTemporary>().SingleInstance();
 		}
 
 		private class dontReassociateDataForSchedules : IReassociateDataForSchedules

@@ -27,14 +27,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 		private readonly IActivityRepository _activityRepository;
-		private readonly ISmartDeltaDoer _smartDeltaDoer;
-
+		
 		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher,
 												 ISkillCombinationResourceRepository skillCombinationResourceRepository,
 												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 												 ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, 
 												 IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, SkillStaffingIntervalProvider skillStaffingIntervalProvider, 
-												 ISmartDeltaDoer smartDeltaDoer, IActivityRepository activityRepository)
+												 IActivityRepository activityRepository)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -44,7 +43,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_skillCombinationResourceReadModelValidator = skillCombinationResourceReadModelValidator;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
-			_smartDeltaDoer = smartDeltaDoer;
 			_activityRepository = activityRepository;
 		}
 
@@ -96,7 +94,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				//this looks strange but is how it works. Pending = no autogrant, Grant = autogrant
 				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
 
-				var deltaResourcesForAgent = new List<SkillCombinationResource>();
 				var shiftPeriodList = new List<DateTimePeriod>(); 
 				foreach (var day in scheduleDays)
 				{
@@ -109,8 +106,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					}
 
 					shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.Value.StartDateTime, projection.OriginalProjectionPeriod.Value.EndDateTime));
-
-					deltaResourcesForAgent.AddRange(_smartDeltaDoer.Do(layers, personRequest.Person, dateOnlyPeriod.StartDate, combinationResources));
 				}
 
 				var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
@@ -128,11 +123,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						if (!autoGrant) return;
 						var result = sendApproveCommand(personRequest);
-						if (result)
-						{
-							_skillCombinationResourceRepository.PersistChanges(deltaResourcesForAgent);
-						}
-						else
+						if (!result)
 						{
 							sendDenyCommand(personRequest, validatedRequest.ValidationErrors);
 						}
@@ -186,60 +177,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			return !command.ErrorMessages.Any();
 		}
-	}
-
-	public class SmartDeltaDoer : ISmartDeltaDoer
-	{
-		private readonly IPersonSkillProvider _personSkillProvider;
-
-		public SmartDeltaDoer(IPersonSkillProvider personSkillProvider)
-		{
-			_personSkillProvider = personSkillProvider;
-		}
-
-		public IEnumerable<SkillCombinationResource> Do(IEnumerable<ResourceLayer> layers, IPerson person, DateOnly startDate, IEnumerable<SkillCombinationResource> combinationResources)
-		{
-			return from layer in layers
-				let skillCombination = _personSkillProvider.SkillsOnPersonDate(person, startDate)
-					.ForActivity(layer.PayloadId)
-				where skillCombination.Skills.Any()
-				select distributeSmartly(combinationResources, skillCombination, layer);
-		}
-
-		private SkillCombinationResource distributeSmartly(IEnumerable<SkillCombinationResource> combinationResources,
-													 SkillCombination skillCombination, ResourceLayer layer)
-		{
-			var skillCombinationResourceByAgentAndLayer =
-				combinationResources.Single(
-					x => x.SkillCombination.NonSequenceEquals(skillCombination.Skills.Select(y => y.Id.GetValueOrDefault()))
-						 && layer.Period.StartDateTime >= x.StartDateTime && layer.Period.EndDateTime <= x.EndDateTime);
-
-			var part = layer.Period.ElapsedTime().TotalMinutes / skillCombinationResourceByAgentAndLayer.GetTimeSpan().TotalMinutes;
-			var resource = skillCombinationResourceByAgentAndLayer.Resource - part;
-			if (resource < 0) resource = 0;
-
-			skillCombinationResourceByAgentAndLayer.Resource = resource;
-			var skillCombinationChange = new SkillCombinationResource
-			{
-				StartDateTime = skillCombinationResourceByAgentAndLayer.StartDateTime,
-				EndDateTime = skillCombinationResourceByAgentAndLayer.EndDateTime,
-				SkillCombination = skillCombinationResourceByAgentAndLayer.SkillCombination,
-				Resource = -part
-			};
-			return skillCombinationChange;
-		}
-	}
-
-	public class SmartDeltaDoerEmpty : ISmartDeltaDoer
-	{
-		public IEnumerable<SkillCombinationResource> Do(IEnumerable<ResourceLayer> layers, IPerson person, DateOnly startDate, IEnumerable<SkillCombinationResource> combinationResources)
-		{
-			return new List<SkillCombinationResource>();
-		}
-	}
-
-	public interface ISmartDeltaDoer
-	{
-		IEnumerable<SkillCombinationResource> Do(IEnumerable<ResourceLayer> layers, IPerson person, DateOnly startDate, IEnumerable<SkillCombinationResource> combinationResources);
 	}
 }

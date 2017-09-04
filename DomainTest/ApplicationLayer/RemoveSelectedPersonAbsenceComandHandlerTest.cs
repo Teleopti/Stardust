@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var scheduleDifferenceSaver = new ScheduleDifferenceSaver(_scheduleStorage,
 				new FromFactory(() => new FakeCurrentUnitOfWorkFactory().Current()), new EmptyScheduleDayDifferenceSaver());
 			_saveSchedulePartService = new SaveSchedulePartService(scheduleDifferenceSaver,personAbsenceAccountRepository,
-				new DoNothingScheduleDayChangeCallBack(), new ScheduleDayDifferenceSaveTemporaryEmpty());
+				new DoNothingScheduleDayChangeCallBack());
 
 			_personRepository = new FakePersonRepositoryLegacy2();
 

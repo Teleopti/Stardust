@@ -178,8 +178,7 @@ HealthCheck_ReinitializeReadModels_39697 = true
 Staffing_Info_Configuration_44687 = RC
 WfmStaffing_AddOvertime_42524 = RC 
 Staffing_ReadModel_Update14Days_43840 = true
-Staffing_ReadModel_BetterAccuracy_43447 = true
-Staffing_ReadModel_BetterAccuracy_Step2_44271 = true
+
 Staffing_ReadModel_BetterAccuracy_Step3_44331 = RC
 Staffing_ReadModel_BetterAccuracy_Step4_43389 = RC
 Staffing_ReadModel_Keep8DaysHistoricalData_44652 = true

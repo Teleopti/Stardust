@@ -65,14 +65,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 			builder.RegisterType<SaveSchedulePartService>().As<ISaveSchedulePartService>();	
 			builder.RegisterType<BusinessRulesForPersonalAccountUpdate>().As<IBusinessRulesForPersonalAccountUpdate>();
 			builder.RegisterType<ScheduleDifferenceSaver>().As<IScheduleDifferenceSaver>();
-			if (_config.Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_43447))
-				builder.RegisterType<ScheduleDayDifferenceSaveTemporary>().As<IScheduleDayDifferenceSaveTemporary>().SingleInstance();
-
-			if (_config.Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step2_44271))
-			{
-				builder.RegisterType<ScheduleDayDifferenceSaveTemporaryEmpty>().As<IScheduleDayDifferenceSaveTemporary>().SingleInstance();
-				builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
-			}
+			builder.RegisterType<ScheduleDayDifferenceSaver>().As<IScheduleDayDifferenceSaver>().SingleInstance();
+			
 		}
 	}
 }

@@ -73,11 +73,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				<IBusinessRuleConfigProvider, BusinessRuleConfigProvider, BusinessRuleConfigProvider25635ToggleOff>(builder,
 						Toggles.Preference_PreferenceAlertWhenMinOrMaxHoursBroken_25635);
 
-			registerType
-				<ISmartDeltaDoer, SmartDeltaDoerEmpty, SmartDeltaDoer>(builder,
-																	   Toggles.Staffing_ReadModel_BetterAccuracy_Step2_44271);
-
-
+			
 			builder.RegisterType<RequestAllowanceProvider>().As<IRequestAllowanceProvider>().SingleInstance();
 			builder.RegisterType<ShiftTradeApproveService>().As<IShiftTradeApproveService>().SingleInstance();
 

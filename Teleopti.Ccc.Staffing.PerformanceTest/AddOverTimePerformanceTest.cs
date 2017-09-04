@@ -21,8 +21,6 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Staffing.PerformanceTest
 {
 	[StaffingPerformanceTest]
-	[Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_43447)]
-	[Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step2_44271)]
 	[Toggle(Toggles.Staffing_ReadModel_BetterAccuracy_Step3_44331)]
 	public class AddOverTimePerformanceTest : PerformanceTestWithOneTimeSetup
 	{
