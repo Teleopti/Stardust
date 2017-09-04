@@ -5,7 +5,7 @@
 		.module('wfm.rta')
 		.service('rtaStateService', rtaStateService);
 
-	function rtaStateService($state) {
+	function rtaStateService($state, rtaService) {
 
 		var state = {
 			open: undefined,
@@ -14,6 +14,13 @@
 			skillAreaId: undefined,
 			skillIds: []
 		};
+
+		var organization = [];
+
+		var dataLoaded = rtaService.getOrganization()
+			.then(function (data) {
+				organization = data;
+			});
 
 		return {
 			setCurrentState: function (newState) {
@@ -75,7 +82,7 @@
 					state.siteIds = state.siteIds.filter(function (s) { return s != id });
 			},
 
-			selectTeam: function (siteCard, id, selected) {
+			selectTeam: function (id, selected) {
 				state.teamIds = state.teamIds || [];
 				if (selected) {
 					if (!state.teamIds.find(function (s) { return s == id }))
@@ -84,19 +91,19 @@
 					state.teamIds = state.teamIds.filter(function (s) { return s != id });
 			},
 
-			goToAgents: function (sites) {
+			goToAgents: function () {
 				var siteIds = state.siteIds || [];
 				var skillIds = state.skillIds || [];
 
 				if (state.skillAreaId)
 					skillIds = angular.isDefined(state.skillIds) ? state.skillIds : [];
 
-				var teamIdsSelectedBySite = sites
+				var teamIdsSelectedBySite = organization
 					.filter(function (site) {
 						return state.siteIds.indexOf(site.Id) > -1;
 					})
 					.map(function (site) {
-						return site.teams;
+						return site.Teams || [];
 					})
 					.reduce(function (flat, toFlatten) {
 						return flat.concat(toFlatten);
@@ -263,7 +270,7 @@
 						}
 						else
 							siteCard.isSelected = false;
-						rtaStateService.selectTeam(siteCard, teamCard.Id, newValue);
+						rtaStateService.selectTeam(teamCard.Id, newValue);
 					});
 
 					siteCard.teams.push(teamCard);
@@ -318,7 +325,7 @@
 			return !!match;
 		};
 
-		vm.goToAgents = function () { rtaStateService.goToAgents(vm.siteCards) };
+		vm.goToAgents = rtaStateService.goToAgents;
 
 	}
 })();

@@ -15,8 +15,10 @@
             withAgentState: withAgentState,
             clearAgentStates: clearAgentStates,
             withAdherence: withAdherence,
+            withSite: withSite,
             withSiteAdherence: withSiteAdherence,
             clearSiteAdherences: clearSiteAdherences,
+            withTeam: withTeam,
             withTeamAdherence: withTeamAdherence,
             clearTeamAdherences: clearTeamAdherences,
             withSkill: withSkill,
@@ -32,14 +34,14 @@
         var serverTime = null;
         var toggles = {};
         var agentStates = [];
-        var adherences = [];
+        var adherenceForToday = [];
+        var sitesWithTeams = [];
+        var sitesWithTeamsOnSkills = [];
         var siteAdherences = [];
         var teamAdherences = [];
         var skills = [];
         var skillAreas = [];
         var phoneStates = [];
-        var organizations = [];
-        var organizationsOnSkills = [];
         var timeline = {};
 
         var paramsOf = function (url) {
@@ -142,9 +144,9 @@
                 var returnOrg = [];
                 var skillIdsArray = angular.isArray(params.skillIds) ? params.skillIds : params.skillIds.split(",");
                 skillIdsArray.forEach(function (key) {
-                    if (uniqueSiteIds.indexOf(organizationsOnSkills[key][0].Id) < 0) {
-                        uniqueSiteIds = uniqueSiteIds.concat(organizationsOnSkills[key][0].Id);
-                        returnOrg = returnOrg.concat(organizationsOnSkills[key]);
+                    if (uniqueSiteIds.indexOf(sitesWithTeamsOnSkills[key][0].Id) < 0) {
+                        uniqueSiteIds = uniqueSiteIds.concat(sitesWithTeamsOnSkills[key][0].Id);
+                        returnOrg = returnOrg.concat(sitesWithTeamsOnSkills[key]);
                     }
                 });
 
@@ -153,12 +155,12 @@
 
         fake(/\.\.\/api\/Sites\/Organization(.*)/,
             function () {
-                return [200, organizations];
+                return [200, sitesWithTeams];
             });
 
         fake(/\.\.\/api\/Adherence\/ForToday(.*)/,
             function (params) {
-                var result = adherences.find(function (a) {
+                var result = adherenceForToday.find(function (a) {
                     return a.PersonId === params.personId;
                 });
                 return [200, result];
@@ -271,7 +273,7 @@
         function clear() {
             serverTime = null;
             toggles = {};
-            adherences = [];
+            adherenceForToday = [];
             siteAdherences = [];
             teamAdherences = [];
             skillAreas = [];
@@ -300,12 +302,13 @@
         }
 
         function withAdherence(adherence) {
-            adherences.push(adherence);
+            adherenceForToday.push(adherence);
             return this;
         }
 
         function withSiteAdherence(siteAdherence) {
             siteAdherences.push(siteAdherence);
+            withSite(siteAdherence);
             return this;
         };
 
@@ -316,6 +319,7 @@
 
         function withTeamAdherence(teamAdherence) {
             teamAdherences.push(teamAdherence);
+            withTeam(teamAdherence);
             return this;
         };
 
@@ -339,20 +343,33 @@
             return this;
         }
 
-        function withOrganization(organization) {
-            organizations.push(organization)
+        function withOrganization(siteWithTeams) {
+            withSite(siteWithTeams);
             return this;
         }
 
-        function withOrganizationOnSkills(organization, skillIds) {
+        function withSite(site) {
+            sitesWithTeams.push(site);
+            return this;
+        }
 
+        function withTeam(team) {
+            var site = sitesWithTeams.find(function (site) { return site.Id == team.SiteId; });
+            if (site) {
+                site.Teams = site.Teams || [];
+                site.Teams.push(team);
+            }
+            return this;
+        }
+
+        function withOrganizationOnSkills(siteWithTeams, skillIds) {
             skillIds.split(",").forEach(function (key) {
                 var skillIdAsAKey = key.trim();
                 //organizationsOnSkills[skillIdAsAKey] = organization;
-                if (angular.isDefined(organizationsOnSkills[skillIdAsAKey]))
-                    organizationsOnSkills[skillIdAsAKey] = organizationsOnSkills[skillIdAsAKey].concat(organization);
+                if (angular.isDefined(sitesWithTeamsOnSkills[skillIdAsAKey]))
+                    sitesWithTeamsOnSkills[skillIdAsAKey] = sitesWithTeamsOnSkills[skillIdAsAKey].concat(siteWithTeams);
                 else
-                    organizationsOnSkills[skillIdAsAKey] = [organization];
+                    sitesWithTeamsOnSkills[skillIdAsAKey] = [siteWithTeams];
             });
             return this;
         }
