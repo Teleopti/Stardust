@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
                             {
 								
                                 //Creates a root Group object & add into GroupPage
-                                string groupName = optionalColumnGroup.Description.Length > 50
-                                                       ? optionalColumnGroup.Description.Substring(0, 48) + ".."
+                                string groupName = optionalColumnGroup.Description.Length > 100
+                                                       ? optionalColumnGroup.Description.Substring(0, 98) + ".."
                                                        : optionalColumnGroup.Description;
                                 IRootPersonGroup rootGroup = new RootPersonGroup(groupName);
 

@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -50,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyCheckProperties()
         {
-            Assert.IsNotNull(_root.Description);
+            Assert.IsNotNull(_root.Name);
             Assert.IsNotNull(_root.PersonCollection);
             Assert.IsNotNull(_root.ChildGroupCollection);
             Assert.IsFalse(_root.IsTeam);
@@ -79,16 +81,34 @@ namespace Teleopti.Ccc.DomainTest.Common
         }
 
         [Test]
-        public void VerifyDescriptionCanSet()
+        public void VerifyNameCanSet()
         {
-            Description newGroup = new Description("FunGroup");
-            _root.Description = newGroup;
+            _root.Name = "FunGroup";
 
-            Assert.AreEqual(newGroup, _root.Description);
+            Assert.AreEqual("FunGroup", _root.Name);
 
         }
 
-        [Test]
+	    [Test]
+	    public void ShouldHandleNameWith100Characters()
+	    {
+		    _root.Name = new String('n', 100);
+		    _root.Name.Length.Should().Be.EqualTo(100);
+	    }
+
+		[Test]
+		public void ShouldThrowErrorWhenNameExceeds100Characters()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() => _root.Name = new String('n', 101));
+		}
+
+	    [Test]
+	    public void ShouldThrowErrorFromConstructorWhenNameExceeds100Characters()
+	    {
+		    Assert.Throws<ArgumentOutOfRangeException>(() => _root = new RootPersonGroup(new String('n', 101)));
+	    }
+
+		[Test]
         public void VerifyCanAddRemovePersonsFromGroup()
         {
             IPerson person1 = PersonFactory.CreatePerson("Person1");

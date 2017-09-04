@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
@@ -9,8 +10,9 @@ namespace Teleopti.Ccc.Domain.Common
 {
     public abstract class PersonGroupBase : AggregateEntity
     {
-        private Description _description;
-        private readonly ISet<IPerson> _personCollection = new HashSet<IPerson>();
+        private string _name;
+	    private const int nameLength = 100;
+		private readonly ISet<IPerson> _personCollection = new HashSet<IPerson>();
         private readonly IList<IChildPersonGroup> _childGroupCollection = new List<IChildPersonGroup>();
 
         /// <summary>
@@ -24,40 +26,22 @@ namespace Teleopti.Ccc.Domain.Common
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PersonGroupBase"/> class.
-        /// </summary>
-        /// <param name="description">The name to set.</param>
-        /// <remarks>
-        /// Created by: kosalanp
-        /// Created date: 2008-06-24
-        /// </remarks>
-        protected PersonGroupBase(string description)
+        protected PersonGroupBase(string name)
             : this()
         {
-            InParameter.NotStringEmptyOrNull(nameof(description), description);
-            _description = new Description(description);
+			validateName(name);
+			_name = name;
         }
 
-	    protected PersonGroupBase(string description, int increaseNameLength)
-		    : this()
-	    {
-		    InParameter.NotStringEmptyOrNull(nameof(description), description);
-		    _description = new Description(description, null, increaseNameLength);
-	    }
-
-		/// <summary>
-		/// Gets or sets the description.
-		/// </summary>
-		/// <value>The description.</value>
-		/// <remarks>
-		/// Created by: kosalanp
-		/// Created date: 2008-06-23
-		/// </remarks>
-		public virtual Description Description
+		
+		public virtual string Name
         {
-            get { return _description; }
-            set { _description = value; }
+            get => _name;
+			set
+			{
+				validateName(value);
+				_name = value;
+			}
         }
 
         /// <summary>
@@ -148,5 +132,13 @@ namespace Teleopti.Ccc.Domain.Common
 	    public virtual bool IsSite => Entity != null && typeof(ISite).IsInstanceOfType(Entity);
 
 		public virtual bool IsOptionalColumn => Entity != null && typeof(IOptionalColumn).IsInstanceOfType(Entity);
+
+	    private static void validateName(string name)
+	    {
+		    InParameter.NotStringEmptyOrWhiteSpace(nameof(name), name);
+
+		    if (name.Length > nameLength)
+			    throw new ArgumentOutOfRangeException(nameof(name), "String too long.");
+	    }
 	}
 }

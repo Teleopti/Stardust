@@ -550,7 +550,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			addedGroupPage.GroupPageCode.Should().Be.EqualTo(groupPage.Id.GetValueOrDefault());
 			addedGroupPage.GroupPageName.Should().Be.EqualTo(groupPage.Description.Name);
 			addedGroupPage.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.DescriptionKey);
-			addedGroupPage.GroupName.Should().Be.EqualTo(rootPersonGroup.Description.Name);
+			addedGroupPage.GroupName.Should().Be.EqualTo(rootPersonGroup.Name);
 			addedGroupPage.GroupIsCustom.Should().Be.True();
 
 			var bridge = AnalyticsBridgeGroupPagePersonRepository.Bridges.Single();

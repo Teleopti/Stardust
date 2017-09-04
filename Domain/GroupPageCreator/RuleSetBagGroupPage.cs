@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
                 }
 
                 //Add into GroupPage
-                rootGroup.Description = new Description(rootGroup.Description.Name);
+                rootGroup.Name = rootGroup.Name;
                 groupPage.AddRootPersonGroup(rootGroup);
             }
             return groupPage;

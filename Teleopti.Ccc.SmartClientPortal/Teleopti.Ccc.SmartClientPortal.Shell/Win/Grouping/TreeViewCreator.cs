@@ -48,10 +48,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
             {
                 foreach (IRootPersonGroup rootGroup in groupPage.RootGroupCollection)
                 {
-                    TreeNodeAdv node = new TreeNodeAdv(rootGroup.Description.ToString());
-                    node.TagObject = rootGroup;
-                    node.Tag = GroupingConstants.NodeTypeGroup;
-                    var imageIndex = 2;
+	                var node = new TreeNodeAdv(rootGroup.Name)
+	                {
+		                TagObject = rootGroup,
+		                Tag = GroupingConstants.NodeTypeGroup
+	                };
+	                var imageIndex = 2;
                     if (rootGroup.IsSite)
                     {
                         imageIndex = 1;
@@ -104,7 +106,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
         {
             foreach (IChildPersonGroup childGroup in childGroupCollection)
             {
-                string nodeName = childGroup.Description.ToString();
+                string nodeName = childGroup.Name;
                 TreeNodeAdv childNode = new TreeNodeAdv(nodeName);
                 childNode.TagObject = childGroup;
                 childNode.Tag = GroupingConstants.NodeTypeGroup;

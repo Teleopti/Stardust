@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			groupPage.RootGroupCollection.Should().Not.Be.Empty();
 			var rootGroup = groupPage.RootGroupCollection.SingleOrDefault();
 			rootGroup.Should().Not.Be.Null();
-			rootGroup.Description.Name.Should().Be.EqualTo(root.Description.Name);
+			rootGroup.Name.Should().Be.EqualTo(root.Name);
 
 	    }
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			groupPage.RootGroupCollection.Should().Not.Be.Empty();
 			var rootGroup = groupPage.RootGroupCollection.SingleOrDefault();
 			rootGroup.Should().Not.Be.Null();
-			rootGroup.Description.Name.Should().Be.EqualTo(root.Description.Name);
+			rootGroup.Name.Should().Be.EqualTo(root.Name);
 
 		}
 
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			groupPage.RootGroupCollection.Should().Not.Be.Empty();
 			var rootGroup = groupPage.RootGroupCollection.SingleOrDefault();
 			rootGroup.Should().Not.Be.Null();
-			rootGroup.Description.Name.Should().Be.EqualTo(root.Description.Name);
+			rootGroup.Name.Should().Be.EqualTo(root.Name);
 
 		}
 
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			groupPage.RootGroupCollection.Should().Not.Be.Empty();
 			var rootGroup = groupPage.RootGroupCollection.SingleOrDefault();
 			rootGroup.Should().Not.Be.Null();
-			rootGroup.Description.Name.Should().Be.EqualTo(root.Description.Name);
+			rootGroup.Name.Should().Be.EqualTo(root.Name);
 
 		}
 

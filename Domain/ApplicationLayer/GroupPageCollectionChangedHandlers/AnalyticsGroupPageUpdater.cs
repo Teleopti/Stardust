@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.GroupPageCollectionChangedHandler
 							GroupPageName = groupPage.Description.Name,
 							GroupPageNameResourceKey = groupPage.DescriptionKey,
 							GroupCode = rootGroupId,
-							GroupName = rootGroup.Description.Name,
+							GroupName = rootGroup.Name,
 							GroupIsCustom = true,
 							BusinessUnitCode = @event.LogOnBusinessUnitId
 						};

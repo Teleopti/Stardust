@@ -92,14 +92,14 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 			var group = (PersonGroupBase)e.Node.TagObject;
 			if (string.IsNullOrWhiteSpace(e.Node.Text))
 			{
-				e.Node.Text = group.Description.Name;
+				e.Node.Text = group.Name;
 				return;
 			}
 			var len = e.Node.Text.Length;
 			if (len > 50) len = 50;
 			e.Node.Text = e.Node.Text.Substring(0, len);
 
-			group.Description = new Description(e.Node.Text);
+			group.Name = e.Node.Text;
 		}
 
 		private void groupPagePreviewScreenLoad(object sender, EventArgs e)
@@ -660,7 +660,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 
 						if (childGroup != null)
 						{
-							var cPersonGroup = new ChildPersonGroup(childGroup.Description.ToString());
+							var cPersonGroup = new ChildPersonGroup(childGroup.Name);
 							childPersonGroup.AddChildGroup(cPersonGroup);
 							addChildMembersToDestinatioNodeRecursively(node, cPersonGroup);
 						}
@@ -688,7 +688,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 				if (sourceGroup != null && destinationGroup != null)
 				{
 					GroupPage.RemoveRootPersonGroup(sourceGroup);
-					var childPersonGroup = new ChildPersonGroup(sourceGroup.Description.ToString());
+					var childPersonGroup = new ChildPersonGroup(sourceGroup.Name);
 					sourceNode.TagObject = childPersonGroup;
 					//Add other sub tree recursively here
 					addChildMembersToDestinatioNodeRecursively(sourceNode, childPersonGroup);
@@ -709,7 +709,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 					parentPersonGroupBase.RemoveChildGroup(sourceRootPersonGroup);
 
 					//add to root collection
-					var rootPersonGroup = new RootPersonGroup(sourceRootPersonGroup.Description.ToString());
+					var rootPersonGroup = new RootPersonGroup(sourceRootPersonGroup.Name);
 					sourceNode.TagObject = rootPersonGroup;
 					//Add other sub tree recursively here
 					addChildMembersToDestinatioNodeRecursively(sourceNode, rootPersonGroup);
@@ -734,7 +734,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Grouping
 				if (sourceGroup != null && destinationGroup != null && parentPersonGroupBase != null)
 				{
 					parentPersonGroupBase.RemoveChildGroup(sourceGroup);
-					var childPersonGroup = new ChildPersonGroup(sourceGroup.Description.ToString());
+					var childPersonGroup = new ChildPersonGroup(sourceGroup.Name);
 					sourceNode.TagObject = childPersonGroup;
 					addChildMembersToDestinatioNodeRecursively(sourceNode, childPersonGroup);
 					destinationGroup.AddChildGroup(childPersonGroup);

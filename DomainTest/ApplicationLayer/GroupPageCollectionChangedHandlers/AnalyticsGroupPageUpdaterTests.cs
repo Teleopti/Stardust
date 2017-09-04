@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			addedGroupPage.GroupPageCode.Should().Be.EqualTo(groupPageId);
 			addedGroupPage.GroupPageName.Should().Be.EqualTo(groupPage.Description.Name);
 			addedGroupPage.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.DescriptionKey);
-			addedGroupPage.GroupName.Should().Be.EqualTo(rootPersonGroup.Description.Name);
+			addedGroupPage.GroupName.Should().Be.EqualTo(rootPersonGroup.Name);
 			addedGroupPage.GroupIsCustom.Should().Be.True();
 
 			var bridge = AnalyticsBridgeGroupPagePersonRepository.Bridges.Single();
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.GroupPageCollectionChangedHan
 			updatedGroupPage.GroupPageCode.Should().Be.EqualTo(groupPageId);
 			updatedGroupPage.GroupPageName.Should().Be.EqualTo(groupPage.Description.Name);
 			updatedGroupPage.GroupPageNameResourceKey.Should().Be.EqualTo(groupPage.DescriptionKey);
-			updatedGroupPage.GroupName.Should().Be.EqualTo(rootPersonGroup.Description.Name);
+			updatedGroupPage.GroupName.Should().Be.EqualTo(rootPersonGroup.Name);
 			updatedGroupPage.GroupIsCustom.Should().Be.True();
 
 			var bridge = AnalyticsBridgeGroupPagePersonRepository.Bridges.Single();

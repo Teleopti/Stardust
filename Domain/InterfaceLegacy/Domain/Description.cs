@@ -13,7 +13,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         private string _shortName;
         private const int _nameLength = 50;
         private const int _shortNameLength = 25;
-	    private static int _increaseNameLength = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Description"/> class.
@@ -27,14 +26,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
             _name = name;
             _shortName = shortName;
         }
-
-	    public Description(string name, string shortName, int increaseNameLength)
-	    {
-		    _name = name;
-		    _shortName = shortName;
-		    _increaseNameLength = increaseNameLength;
-			ValidateName(name, shortName);
-	    }
 
 
 
@@ -63,7 +54,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         {
             InParameter.NotStringEmptyOrWhiteSpace(nameof(name), name);
 
-            if (name.Length > _nameLength + _increaseNameLength)
+            if (name.Length > _nameLength)
                 throw new ArgumentOutOfRangeException(nameof(name), "String too long.");
             if (shortName!=null && shortName.Length > _shortNameLength)
                 throw new ArgumentOutOfRangeException(nameof(shortName), "String too long.");

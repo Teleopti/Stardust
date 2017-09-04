@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Common
             get
             {
             	return
-            		new ReadOnlyCollection<IRootPersonGroup>(_rootGroupCollection.OrderBy(r => r.Description.Name).ToList());
+            		new ReadOnlyCollection<IRootPersonGroup>(_rootGroupCollection.OrderBy(r => r.Name).ToList());
             }
         }
 

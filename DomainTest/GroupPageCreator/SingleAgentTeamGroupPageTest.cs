@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
 		   _baseLineData.GroupPageOptions.CurrentGroupPageNameKey = "SingleAgentTeam";
 	       var person = PersonFactory.CreatePerson("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 		   var gPage = _target.CreateGroupPage(new[]{person}, _baseLineData.GroupPageOptions);
-		   Assert.AreEqual(50, gPage.RootGroupCollection[0].Description.Name.Length);
-		   Assert.AreEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVW", gPage.RootGroupCollection[0].Description.Name);
+		   Assert.AreEqual(50, gPage.RootGroupCollection[0].Name.Length);
+		   Assert.AreEqual("ABCDEFGHIJKLMNOPQRSTUVWXYZ-ABCDEFGHIJKLMNOPQRSTUVW", gPage.RootGroupCollection[0].Name);
        }
     }
 }

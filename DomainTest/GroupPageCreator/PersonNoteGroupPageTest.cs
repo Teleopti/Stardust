@@ -124,8 +124,8 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
         [Test]
         public void ShouldCreateNoteGroupsBasedOnCaseSensitive()
         {
-            Assert.AreEqual(1, _groupPage.RootGroupCollection.Count(n => String.Compare(n.Description.Name, noteUpperCase, StringComparison.Ordinal) == 0));
-            Assert.AreEqual(1, _groupPage.RootGroupCollection.Count(n => String.Compare(n.Description.Name, noteLowerCase, StringComparison.Ordinal) == 0));
+            Assert.AreEqual(1, _groupPage.RootGroupCollection.Count(n => String.Compare(n.Name, noteUpperCase, StringComparison.Ordinal) == 0));
+            Assert.AreEqual(1, _groupPage.RootGroupCollection.Count(n => String.Compare(n.Name, noteLowerCase, StringComparison.Ordinal) == 0));
         }
 
 		[Test]

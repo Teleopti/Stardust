@@ -98,7 +98,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 						row["group_page_code"] = groupPage.Id.Value;
 						row["group_page_name"] = groupPage.Description.Name;
 						row["group_code"] = rootGroup.Id.Value;
-						row["group_name"] = rootGroup.Description.Name;
+						row["group_name"] = rootGroup.Name;
 						row["group_is_custom"] = isCustomGroup;
 						row["person_code"] = person.Id.Value;
 						row["business_unit_code"] = gpCasted.BusinessUnit.Id;

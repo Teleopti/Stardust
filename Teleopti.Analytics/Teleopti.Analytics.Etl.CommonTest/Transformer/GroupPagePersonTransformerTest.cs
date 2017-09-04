@@ -213,7 +213,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			Assert.AreNotEqual(DBNull.Value, row["group_page_name"]);
 			Assert.AreEqual(gp.DescriptionKey, row["group_page_name_resource_key"]);
 			Assert.AreEqual(gp.RootGroupCollection[0].Id, row["group_code"]);
-			Assert.AreEqual(gp.RootGroupCollection[0].Description.Name, row["group_name"]);
+			Assert.AreEqual(gp.RootGroupCollection[0].Name, row["group_name"]);
 			Assert.IsFalse((bool)row["group_is_custom"]);
 			Assert.AreEqual(gp.RootGroupCollection[0].PersonCollection[0].Id, row["person_code"]);
 			Assert.AreEqual(gpCasted.BusinessUnit.Id, row["business_unit_code"]);
@@ -243,7 +243,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 			Assert.AreEqual(gp.Description.Name, row["group_page_name"]);
 			Assert.AreEqual(DBNull.Value, row["group_page_name_resource_key"]);
 			Assert.AreEqual(gp.RootGroupCollection[0].Id, row["group_code"]);
-			Assert.AreEqual(gp.RootGroupCollection[0].Description.Name, row["group_name"]);
+			Assert.AreEqual(gp.RootGroupCollection[0].Name, row["group_name"]);
 			Assert.IsTrue((bool)row["group_is_custom"]);
 			Assert.AreEqual(gp.RootGroupCollection[0].PersonCollection[0].Id, row["person_code"]);
 			Assert.AreEqual(gpCasted.BusinessUnit.Id, row["business_unit_code"]);

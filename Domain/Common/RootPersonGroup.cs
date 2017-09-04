@@ -21,8 +21,7 @@ namespace Teleopti.Ccc.Domain.Common
         /// <summary>
         /// Initializes a new instance of the <see cref="RootPersonGroup"/> class.
         /// </summary>
-        /// <param name="description"></param>
-        public RootPersonGroup(string description) : base(description) { }
-	    public RootPersonGroup(string description, int increaseNameLength) : base(description, increaseNameLength) { }
+        /// <param name="name"></param>
+        public RootPersonGroup(string name) : base(name) { }
 	}
 }

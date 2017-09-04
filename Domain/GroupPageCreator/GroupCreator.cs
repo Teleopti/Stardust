@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
 			IPersonGroup personGroup = currentGroupForPerson(rootPersonGroups, person);
 			if (personGroup != null)
 			{
-				groupToReturn.SetName(personGroup.Description.Name);
+				groupToReturn.SetName(personGroup.Name);
 			}
 			else
 			{

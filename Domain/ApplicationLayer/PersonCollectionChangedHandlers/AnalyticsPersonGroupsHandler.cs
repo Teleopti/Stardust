@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.PersonCollectionChangedHandlers
 			{
 				foreach (var rootGroup in groupPage.RootGroupCollection.Where(x => x.PersonCollection.Any(y => y.Id.GetValueOrDefault() == personId)))
 				{
-					groupIds.Add(new analyticsGroupForPerson(rootGroup.Id.GetValueOrDefault(), rootGroup.Description.Name, new AnalyticsGroupPage
+					groupIds.Add(new analyticsGroupForPerson(rootGroup.Id.GetValueOrDefault(), rootGroup.Name, new AnalyticsGroupPage
 					{
 						GroupPageCode = groupPage.Id.GetValueOrDefault(),
 						GroupPageNameResourceKey = groupPage.DescriptionKey,

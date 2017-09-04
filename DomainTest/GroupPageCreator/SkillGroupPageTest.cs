@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.DomainTest.GroupPageCreator
         public void VerifySkillsAreInRightOrder()
         {
             IGroupPage groupPage = _target.CreateGroupPage(_skills, _groupPageOptions);
-            Assert.AreEqual("skill1", groupPage.RootGroupCollection[0].Description.Name);
-            Assert.AreEqual("skill2", groupPage.RootGroupCollection[1].Description.Name);
+            Assert.AreEqual("skill1", groupPage.RootGroupCollection[0].Name);
+            Assert.AreEqual("skill2", groupPage.RootGroupCollection[1].Name);
         }
 
         [Test]

@@ -7,15 +7,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 	/// </summary>
 	public interface IPersonGroup
 	{
-		/// <summary>
-		/// Gets or sets the description.
-		/// </summary>
-		/// <value>The description.</value>
-		/// <remarks>
-		/// Created by: kosalanp
-		/// Created date: 2008-06-23
-		/// </remarks>
-		Description Description { get; set; }
+		string Name { get; set; }
+
 		/// <summary>
 		/// Gets the person collection.
 		/// </summary>

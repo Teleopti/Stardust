@@ -1,32 +1,32 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <hibernate-mapping xmlns="urn:nhibernate-mapping-2.2"
-                   assembly="Teleopti.Ccc.Domain"
-                   namespace="Teleopti.Ccc.Domain.Common"
-                   default-access="field.camelcase-underscore">
+				   assembly="Teleopti.Ccc.Domain"
+				   namespace="Teleopti.Ccc.Domain.Common"
+				   default-access="field.camelcase-underscore">
 
-  <class name="PersonGroupBase">
-    <id name="Id" type="guid" unsaved-value="null" access="nosetter.camelcase-underscore">
-      <generator class="guid.comb" />
-    </id>
+	<class name="PersonGroupBase">
+		<id name="Id" type="guid" unsaved-value="null" access="nosetter.camelcase-underscore">
+			<generator class="guid.comb" />
+		</id>
 
-    <component name="Description" class="Teleopti.Ccc.Domain.InterfaceLegacy.Domain.Description">
-      <property name="Name" not-null="true" type="string" length="50"/>
-      <property name="ShortName" not-null="false" type="string" length="25"/>
-    </component>
+		<property name="Name"
+				type="string"
+				length="100"
+				not-null="true"/>
 
-    <!--Map parent in child, root nhib files.-->
-    <!--<many-to-one class="Teleopti.Ccc.Domain.Common.PersonGroupBase" name="Parent" not-null="false" access="property" />-->
+		<!--Map parent in child, root nhib files.-->
+		<!--<many-to-one class="Teleopti.Ccc.Domain.Common.PersonGroupBase" name="Parent" not-null="false" access="property" />-->
 
-    <set name="PersonCollection" table="PersonGroup" cascade="none">
-      <key column="PersonGroup" foreign-key="FK_PersonGroup_PersonGroupBase"/>
-      <many-to-many class="Teleopti.Ccc.Domain.Common.Person" column="Person" foreign-key="FK_PersonGroup_Person"/>
-    </set>
+		<set name="PersonCollection" table="PersonGroup" cascade="none">
+			<key column="PersonGroup" foreign-key="FK_PersonGroup_PersonGroupBase"/>
+			<many-to-many class="Teleopti.Ccc.Domain.Common.Person" column="Person" foreign-key="FK_PersonGroup_Person"/>
+		</set>
 
-    <bag name="ChildGroupCollection" cascade="all-delete-orphan" inverse="true">
-      <key column ="Parent" />
-      <one-to-many class="Teleopti.Ccc.Domain.Common.ChildPersonGroup"/>
-    </bag>
+		<bag name="ChildGroupCollection" cascade="all-delete-orphan" inverse="true">
+			<key column ="Parent" />
+			<one-to-many class="Teleopti.Ccc.Domain.Common.ChildPersonGroup"/>
+		</bag>
 
-  </class>
+	</class>
 
 </hibernate-mapping>
