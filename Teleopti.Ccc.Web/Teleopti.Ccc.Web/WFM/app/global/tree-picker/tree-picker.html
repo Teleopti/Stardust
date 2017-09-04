@@ -7,7 +7,7 @@
                         <i ng-hide="node.nodes.length===0 " class="mdi mdi-chevron-right perm-expander"></i>
                     </div>
                     <div class="tree-handle-wrapper" ng-click="node.clickedNode(node)">
-                        <div ui-tree-handle ng-class="{selected: node.isSelectedInUI}">
+                        <div ui-tree-handle ng-class="{selected : node.isSelectedInUI, marked : node.markPartialInUI}">
                             {{node.label}}
                         </div>
                     </div>

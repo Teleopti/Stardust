@@ -726,6 +726,97 @@ describe('treePickerComponent', function () {
       expect(ctrl.outputData[3]).toEqual(ctrl.treeCollection.nodes[1].nodes[1].nodes[1].id);
     });
 
+    it('should mark partial selected parent', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+
+      ctrl.data.nodes[1].nodes[1].nodes.push({name: 'grandchildX', id: '9', nodes: []})
+      ctrl.data.nodes[1].nodes[1].nodes.push({name: 'grandchildY', id: '10', nodes: []})
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+
+      expect(ctrl.outputData.length).toEqual(3);
+      expect(ctrl.data.nodes[1].markPartialInUI).toEqual(true);
+      expect(ctrl.data.nodes[1].nodes[1].markPartialInUI).toEqual(true);
+    });
+
+    it('should unmark partial selected parent when deselecting', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+
+      ctrl.data.nodes[1].nodes[1].nodes.push({name: 'grandchildX', id: '9', nodes: []})
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+
+      expect(ctrl.outputData.length).toEqual(0);
+      expect(ctrl.data.nodes[1].markPartialInUI).toEqual(false);
+      expect(ctrl.data.nodes[1].nodes[1].markPartialInUI).toEqual(false);
+    });
+
+    it('should unmark child parent when selecting all leaves', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+
+      ctrl.data.nodes[1].nodes[1].nodes.push({name: 'grandchildX', id: '9', nodes: []})
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[0].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[0]);
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+
+      expect(ctrl.outputData.length).toEqual(4);
+      expect(ctrl.data.nodes[1].markPartialInUI).toEqual(true);
+      expect(ctrl.data.nodes[1].nodes[1].markPartialInUI).toEqual(false);
+    });
+
+    it('should unmark everything when selecting last leave', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+
+      ctrl.data.nodes[1].nodes[1].nodes.push({name: 'grandchildX', id: '9', nodes: []})
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[0].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[0]);
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[0].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[0]);
+      ctrl.treeCollection.nodes[1].nodes[1].nodes[1].clickedNode(ctrl.treeCollection.nodes[1].nodes[1].nodes[1]);
+
+      expect(ctrl.outputData.length).toEqual(0);
+      expect(ctrl.data.nodes[1].markPartialInUI).toEqual(false);
+      expect(ctrl.data.nodes[1].nodes[1].markPartialInUI).toEqual(false);
+    });
+
+    xit('should unmark parent child when selecting last leave', function () {
+      ctrl = $componentController('treePicker', null, {
+        data: mockedData,
+        outputData: mockedOutputData,
+        options: mockedOptions
+      });
+
+      ctrl.$onInit();
+      ctrl.treeCollection.nodes[0].nodes[0].nodes[0].clickedNode(ctrl.treeCollection.nodes[0].nodes[0].nodes[0]);
+
+      expect(ctrl.outputData.length).toEqual(3);
+      expect(ctrl.data.nodes[0].markPartialInUI).toEqual(false);
+      expect(ctrl.data.nodes[0].nodes[0].markPartialInUI).toEqual(false);
+      expect(ctrl.data.nodes[0].nodes[0].nodes[0].markPartialInUI).toEqual(false);
+    });
+
+
   });
 
 });

@@ -50,6 +50,7 @@
         node.clickedNode = clickedNodeForSingleSelect;
       }
       node.isSelectedInUI = false;
+      node.markPartialInUI = false;
       if (nodeHasChildren(node)) {
         node.isOpenInUI = false;
         node.openNode = openNode;
@@ -161,6 +162,7 @@
     }
 
     function toggleNode(node) {
+      markNodeIfPartial(node);
       if (isNodeSelected(node.id)) {
         removeNode(node);
       } else {
@@ -190,15 +192,27 @@
 
     function addNode(node) {
       if (!isNodeSelected(node.id)) {
+        markNodeIfPartial(node);
+
         node.isSelectedInUI = true;
         ctrl.outputData.push(node.id);
       }
     }
 
     function removeNode(node) {
+      markNodeIfPartial(node);
+
       node.isSelectedInUI = false;
       var index = ctrl.outputData.indexOf(node.id);
       ctrl.outputData.splice(index, 1);
+    }
+
+    function markNodeIfPartial(node) {
+      if (node.nodes.length > 0) {
+        node.markPartialInUI = !node.nodes.every(areAllSiblingsSelected)
+      } else{
+        node.parent.markPartialInUI = node.parent.nodes.every(isAnySiblingsSelected)
+      }
     }
 
     function openNode(node) {
@@ -211,6 +225,10 @@
 
     function isAnySiblingsSelected(node) {
       return node.isSelectedInUI === true;
+    }
+
+    function areAllSiblingsSelected(node) {
+      return node.isSelectedInUI === false;
     }
 
     function findMyRoot(node) {
