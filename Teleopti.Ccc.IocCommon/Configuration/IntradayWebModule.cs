@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ReforecastedStaffingProvider>().SingleInstance();
 			builder.RegisterType<SupportedSkillsInIntradayProvider>().As<ISupportedSkillsInIntradayProvider>().SingleInstance();
 			builder.RegisterType<SkillTypeInfoProvider>().As<ISkillTypeInfoProvider>();
+			builder.RegisterType<SkillTypeInfoDefault>().As<ISkillTypeInfo>();
 			builder.RegisterType<InboundPhoneSkillSupported>().As<ISupportedSkillCheck>();
 			if (_configuration.Toggle(Toggles.Wfm_Intraday_SupportSkillTypeWebChat_42591))
 				builder.RegisterType<OtherSkillsLikePhoneSupported>().As<ISupportedSkillCheck>();
@@ -41,10 +42,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			else
 				builder.RegisterType<MultisiteSkillSupportedCheck>().As<IMultisiteSkillSupportedCheck>();
 			if (_configuration.Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026))
-			{
 				builder.RegisterType<OtherSkillsLikeEmailSupported>().As<ISupportedSkillCheck>();
-				builder.RegisterType<SkillTypeInfoDefault>().As<ISkillTypeInfo>();
-			}
 			builder.RegisterType<TaskPeriodsProvider>().SingleInstance();
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
 			builder.RegisterType<FetchSkillArea>().SingleInstance();
