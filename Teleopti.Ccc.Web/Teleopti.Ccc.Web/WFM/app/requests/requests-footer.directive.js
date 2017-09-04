@@ -4,9 +4,9 @@
 		.controller('requestsFooterCtrl', requestsFooterController)
 		.directive('requestsFooter', requestsFooterDirective);
 
-	requestsFooterController.$inject = ['$rootScope', '$scope', "Toggle", "requestCommandParamsHolder", "$translate"];
+	requestsFooterController.$inject = ['$rootScope', '$scope', '$translate', 'Toggle', 'requestCommandParamsHolder', 'requestsDefinitions'];
 
-	function requestsFooterController($rootScope, $scope, toggleService, requestCommandParamsHolder, $translate) {
+	function requestsFooterController($rootScope, $scope, $translate, toggleService, requestCommandParamsHolder, requestsDefinitions) {
 		var vm = this;
 		vm.onPageSizeChanges = onPageSizeChanges;
 		vm.onPageNumberChange = onPageNumberChange;
@@ -30,13 +30,18 @@
 		}
 
 		function getSelectedRequestsInfoText() {
-			$translate("SelectedRequestsInfo").then(function (text) {
+			$translate('SelectedRequestsInfo').then(function (text) {
 				vm.selectedRequestsInfoText = text;
 			});
 		}
 
 		function showSelectedRequestsInfo() {
-			vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive).length;
+			if(vm.isShiftTradeViewActive){
+				vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE).length;
+			} else {
+				vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.ABSENCE).length;
+			}
+
 			if (vm.selectedRequestsCount > 0 && vm.selectedRequestsInfoText) {
 				return vm.selectedRequestsInfoText.replace(/\{0\}|\{1\}/gi, function (target) {
 					if (target == '{0}') return vm.selectedRequestsCount;

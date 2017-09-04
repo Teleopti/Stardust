@@ -99,7 +99,7 @@
 				requestCommandParamsHolder.setSelectedIdAndMessage(visibleSelectedRequestsIds, messages);
 			}
 
-			requestCommandParamsHolder.setSelectedRequestIds(setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, true), true);
+			requestCommandParamsHolder.setSelectedRequestIds(setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE), requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
 		};
 
 		svc.setAbsenceAndTextSelectedRequestIds = function(visibleSelectedRequestsIds, visibleRequestsIds, messages) {
@@ -107,7 +107,15 @@
 				requestCommandParamsHolder.setSelectedIdAndMessage(visibleSelectedRequestsIds, messages);
 			}
 
-			requestCommandParamsHolder.setSelectedRequestIds(setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, false), false);
+			requestCommandParamsHolder.setSelectedRequestIds(setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, requestsDefinitions.REQUEST_TYPES.ABSENCE), requestsDefinitions.REQUEST_TYPES.ABSENCE);
+		};
+
+		svc.setOvertimeSelectedRequestIds = function(visibleSelectedRequestsIds, visibleRequestsIds, messages) {
+			if (visibleSelectedRequestsIds.length === 1) {
+				requestCommandParamsHolder.setSelectedIdAndMessage(visibleSelectedRequestsIds, messages);
+			}
+
+			requestCommandParamsHolder.setSelectedRequestIds(setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, requestsDefinitions.REQUEST_TYPES.OVERTIME), requestsDefinitions.REQUEST_TYPES.OVERTIME);
 		};
 
 		svc.getDefaultStatus = function (filters, tabName) {
@@ -127,12 +135,12 @@
 			return selectedRequestStatuses;
 		};
 
-		function setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, isShiftTradeView) {
+		function setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, requestType) {
 			var visibleNotSelectedRequestsIds = visibleRequestsIds.filter(function (id) {
 				return visibleSelectedRequestsIds.indexOf(id) < 0;
 			});
 
-			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(isShiftTradeView);
+			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(requestType);
 			var newAllSelectedRequestsIds = [];
 
 			angular.forEach(allSelectedRequestsIds, function (id) {

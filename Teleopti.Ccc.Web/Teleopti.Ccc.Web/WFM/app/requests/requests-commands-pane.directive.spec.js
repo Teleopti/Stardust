@@ -12,6 +12,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		mockSignalRBackendServer = {},
 		signalRService,
 		currentUserInfo,
+		requestsDefinitions,
 		replyMessage,
 		fakeState = {
 			current: {
@@ -66,19 +67,20 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		toggles.Wfm_Requests_OvertimeRequestHandling_45177 = false;
 	});
 
-	beforeEach(inject(function (_$rootScope_, _$controller_, _$compile_, _requestCommandParamsHolder_, _$q_) {
+	beforeEach(inject(function (_$rootScope_, _$controller_, _$compile_, _requestCommandParamsHolder_, _$q_, _requestsDefinitions_) {
 		$compile = _$compile_;
 		$rootScope = _$rootScope_;
 		$controller = _$controller_;
 		requestCommandParamsHolder = _requestCommandParamsHolder_;
 		$q = _$q_;
+		requestsDefinitions = _requestsDefinitions_;
 	}));
 
 	it('approve requests success, should notify the result', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }]
@@ -95,7 +97,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }]
@@ -112,7 +114,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: false,
 			ErrorMessages: ['A request that is New cannot be Approved.']
@@ -150,7 +152,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 			CommandTrackId: "13"
 		}
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		requestsDataService.submitCommandIsASucess(true);
 		requestsDataService.setRequestCommandHandlingResult(handleResult);
 
@@ -166,14 +168,14 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		mockSignalRBackendServer.notifyClients('IApproveRequestsWithValidatorsEventMessage'
 			, { TrackId: test.requestCommandPaneScope.commandTrackId });
 		expect(_notificationResult[0]).toEqual('ApproveBasedOnBusinessRulesFinished');
-		expect(requestCommandParamsHolder.getSelectedRequestsIds(false).length).toEqual(0);
+		expect(requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.ABSENCE).length).toEqual(0);
 	});
 
 	it('deny requests, should handle message if there is one', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }]
@@ -190,7 +192,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }]
@@ -207,7 +209,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: false,
 			ErrorMessages: ['something is wrong with this deny']
@@ -223,7 +225,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }]
@@ -240,7 +242,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }]
@@ -257,7 +259,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: false,
 			ErrorMessages: ['something is wrong with this cancel']
@@ -324,7 +326,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }]
@@ -342,7 +344,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var selectedRequestId = '1';
 		var message = ['message for id 1'];
 		var requestIds = ['1', '2'];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		requestCommandParamsHolder.setSelectedIdAndMessage(selectedRequestId, message);
 
 		test.requestCommandPaneScope.displayReplyDialog();
@@ -353,7 +355,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		var selectedRequestId = ['1'];
 		var message = '  message for id 1';
-		requestCommandParamsHolder.setSelectedRequestIds(selectedRequestId);
+		requestCommandParamsHolder.setSelectedRequestIds(selectedRequestId, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		requestCommandParamsHolder.setSelectedIdAndMessage(selectedRequestId, [message]);
 
 		test.requestCommandPaneScope.displayReplyDialog();
@@ -364,7 +366,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 	it('should command enabled in shift trade tab', function () {
 		var test = setUpTarget(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds, true);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
 		expect(test.requestCommandPaneScope.disableCommands()).toEqual(false);
 	});
 
@@ -385,7 +387,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }],
@@ -402,7 +404,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: false,
 			ErrorMessages: ['something is wrong with this reply']
@@ -418,7 +420,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }],
@@ -438,7 +440,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }],
@@ -458,7 +460,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 		var test = setUpTarget();
 		requestsDataService.submitCommandIsASucess(true);
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		var handleResult = {
 			Success: true,
 			AffectedRequestIds: [{ id: 1 }],
@@ -527,7 +529,7 @@ describe('[RequestsCommandPaneDirectiveTests]', function () {
 	it('submit any command is a fail, should notify the result', function () {
 		var test = setUpTarget();
 		var requestIds = [{ id: 1 }, { id: 2 }];
-		requestCommandParamsHolder.setSelectedRequestIds(requestIds);
+		requestCommandParamsHolder.setSelectedRequestIds(requestIds, requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		requestsDataService.submitCommandIsASucess(false);
 
 		test.requestCommandPaneScope.denyRequests();

@@ -254,7 +254,13 @@
 				return visibleSelectedRequestsIds.indexOf(id) < 0;
 			});
 
-			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(vm.shiftTradeView);
+			var allSelectedRequestsIds = [];
+			if(vm.shiftTradeView){
+				allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+			} else {
+				allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.ABSENCE);
+			}
+
 			var newAllSelectedRequestsId = [];
 
 			angular.forEach(allSelectedRequestsIds, function (id) {
@@ -267,7 +273,11 @@
 					newAllSelectedRequestsId.push(id);
 			});
 
-			requestCommandParamsHolder.setSelectedRequestIds(newAllSelectedRequestsId, vm.shiftTradeView);
+			if(vm.shiftTradeView) {
+				requestCommandParamsHolder.setSelectedRequestIds(newAllSelectedRequestsId, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+			} else {
+				requestCommandParamsHolder.setSelectedRequestIds(newAllSelectedRequestsId, requestsDefinitions.REQUEST_TYPES.ABSENCE);
+			}
 
 			if (vm.requests && (vm.requests.length === visibleSelectedRequestsIds.length) && vm.requests.length > 0) {
 				vm.gridApi.grid.selection.selectAll = true;
@@ -278,7 +288,14 @@
 
 		function getVisibleSelectedRequestsRows() {
 			if (!vm.gridOptions.data) return [];
-			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(vm.shiftTradeView);
+
+			var allSelectedRequestsIds = [];
+			if(vm.shiftTradeView){
+				allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+			} else {
+				allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.ABSENCE);
+			}
+
 			return vm.gridOptions.data.filter(function (row) {
 				return allSelectedRequestsIds.indexOf(row.Id) > -1;
 			});

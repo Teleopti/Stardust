@@ -7,7 +7,7 @@
 
 	requestsAbsenceAndTextCtrl.$inject = [
 		'$scope', '$filter', '$injector', '$translate', '$timeout', '$stateParams', 'requestsDataService', 'Toggle',
-		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'TextAndAbsenceGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES'
+		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'TextAndAbsenceGridConfiguration', 'UIGridUtilitiesService', 'requestCommandParamsHolder', 'REQUESTS_TAB_NAMES'
 	];
 
 	function requestsAbsenceAndTextCtrl($scope,
@@ -26,6 +26,7 @@
 		requestGridStateService,
 		textAndAbsenceGridConfigurationService,
 		uiGridUtilitiesService, 
+		requestCommandParamsHolder,
 		requestsTabNames) {
 		var vm = this;
 
@@ -123,7 +124,6 @@
 				vm.sortingOrders.push(sortingOrder);
 
 			vm.gridOptions = getGridOptions();
-			vm.initialized = true;
 			vm.allRequestStatuses = requestsDataService.getAbsenceAndTextRequestsStatuses();
 
 			var params = $stateParams.getParams && $stateParams.getParams();
@@ -148,7 +148,10 @@
 				vm.filters = [{ 'Status': '0 5' }];
 			}
 
+			applyGridColumnDefinitions();
 			getRequestTypes();
+
+			vm.initialized = true;
 			setupWatch();
 		};
 
@@ -162,22 +165,20 @@
 			vm.initialized && vm.reload();
 		});
 
-		$scope.$on('requests.filterEnabled.changed',
-			function (event, data) {
-				vm.filterEnabled = data;
-				vm.gridOptions.enableFiltering = vm.filterEnabled;
-				vm.gridOptions.useExternalFiltering = vm.filterEnabled;
-				angular.forEach(vm.gridOptions.columnDefs, function (col) {
-					col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
-				});
-				vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+		$scope.$on('requests.filterEnabled.changed', function (event, data) {
+			vm.filterEnabled = data;
+			vm.gridOptions.enableFiltering = vm.filterEnabled;
+			vm.gridOptions.useExternalFiltering = vm.filterEnabled;
+			angular.forEach(vm.gridOptions.columnDefs, function (col) {
+				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
 			});
+			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+		});
 
-		$scope.$on('requests.isUsingRequestSubmitterTimeZone.changed',
-			function (event, data) {
-				vm.isUsingRequestSubmitterTimeZone = data;
-				prepareComputedColumns(vm.requests);
-			});
+		$scope.$on('requests.isUsingRequestSubmitterTimeZone.changed', function (event, data) {
+			vm.isUsingRequestSubmitterTimeZone = data;
+			prepareComputedColumns(vm.requests);
+		});
 
 		function setFilters(filtersList, displayName) {
 			var filters = '';
@@ -281,6 +282,13 @@
 			return options;
 		}
 
+		function applyGridColumnDefinitions(){
+			vm.gridOptions.columnDefs = textAndAbsenceGridConfigurationService.columnDefinitions();
+			angular.forEach(vm.gridOptions.columnDefs, function (col) {
+				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
+			});
+		}
+
 		function onSelectionChanged() {
 			var visibleRequestsIds = vm.gridOptions.data.map(function(row) { return row.Id; });
 			var visibleSelectedRequestsIds = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Id; });
@@ -322,11 +330,6 @@
 
 		function prepareComputedColumns(requests) {
 			uiGridUtilitiesService.prepareComputedColumns(requests, vm.userTimeZone, vm.isUsingRequestSubmitterTimeZone);
-
-			vm.gridOptions.columnDefs = textAndAbsenceGridConfigurationService.columnDefinitions();
-			angular.forEach(vm.gridOptions.columnDefs, function (col) {
-				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
-			});
 
 			vm.gridOptions.enableFiltering = vm.filterEnabled;
 			vm.gridOptions.useExternalFiltering = vm.filterEnabled;

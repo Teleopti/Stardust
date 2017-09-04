@@ -7,10 +7,10 @@
 
 	requestsCommandsPaneCtrl.$inject = [
 		'$state', 'requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle',
-		'signalRSVC', 'NoticeService', 'RequestsCommandsConfigurationsService'
+		'signalRSVC', 'NoticeService', 'RequestsCommandsConfigurationsService', 'REQUESTS_TAB_NAMES'
 	];
 
-	function requestsCommandsPaneCtrl($state, requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc, signalRSVC, NoticeService, requestsCommandsConfigurationsSvc) {
+	function requestsCommandsPaneCtrl($state, requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc, signalRSVC, NoticeService, requestsCommandsConfigurationsSvc, REQUESTS_TAB_NAMES) {
 		var vm = this;
 		vm.approveRequests = approveRequests;
 		vm.replyRequests = replyRequests;
@@ -95,13 +95,28 @@
 		}
 
 		function getSelectedRequestIds() {
-			return requestCommandParamsHolder ?
-				requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive) :
-				null;
+			if (!requestCommandParamsHolder) return null;
+
+			if (toggleSvc.Wfm_Requests_OvertimeRequestHandling_45177 && toggleSvc.Wfm_Requests_Refactoring_45470) {
+				if ($state.current.name.indexOf(REQUESTS_TAB_NAMES.absenceAndText) > -1)
+					return requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.ABSENCE);
+
+				if ($state.current.name.indexOf(REQUESTS_TAB_NAMES.shiftTrade) > -1)
+					return requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+
+				if ($state.current.name.indexOf(REQUESTS_TAB_NAMES.overtime) > -1)
+					return requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.OVERTIME);
+			}
+
+			if (vm.isShiftTradeViewActive) {
+				return requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+			} else {
+				return requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.ABSENCE);
+			}
 		}
 
 		function doProcessWaitlistCommandHandling(waitlistPeriod) {
-			var requestType = requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist;
+			var commandType = requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist;
 			var dataServicePromise = requestsDataService.processWaitlistRequestsPromise;
 			var commandInProgress = dataServicePromise(waitlistPeriod);
 
@@ -111,7 +126,7 @@
 						requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
 						vm.commandTrackId = requestCommandHandlingResult.CommandTrackId;
 						vm.afterCommandSuccess({
-							commandType: requestType,
+							commandType: commandType,
 							changedRequestsCount: requestCommandHandlingResult.AffectedRequestIds.length,
 							requestsCount: null,
 							waitlistPeriod: waitlistPeriod
@@ -127,7 +142,7 @@
 			}
 		}
 
-		function doStandardCommandHandlingWithParameters(requestType, dataServicePromise, parameters) {
+		function doStandardCommandHandlingWithParameters(commandType, dataServicePromise, parameters) {
 			if (vm.beforeCommand && !vm.beforeCommand()) return;
 			var commandInProgress = parameters === undefined ?
 				dataServicePromise() :
@@ -148,7 +163,7 @@
 						requestCommandHandlingResult.AffectedRequestIds.length > 0)) {
 						vm.commandTrackId = requestCommandHandlingResult.CommandTrackId;
 						vm.afterCommandSuccess({
-							commandType: requestType,
+							commandType: commandType,
 							changedRequestsCount: requestCommandHandlingResult.AffectedRequestIds.length,
 							requestsCount: requestCount
 						});
@@ -169,14 +184,14 @@
 			}
 		}
 
-		function doStandardCommandHandling(requestType, dataServicePromise, replyMessage) {
+		function doStandardCommandHandling(commandType, dataServicePromise, replyMessage) {
 			var selectedRequestIds = getSelectedRequestIds();
 			if (!selectedRequestIds || selectedRequestIds.length === 0) return;
 			var selectedRequestIdsAndMessage = {
 				ReplyMessage: replyMessage,
 				SelectedRequestIds: selectedRequestIds
 			}
-			doStandardCommandHandlingWithParameters(requestType, dataServicePromise, selectedRequestIdsAndMessage);
+			doStandardCommandHandlingWithParameters(commandType, dataServicePromise, selectedRequestIdsAndMessage);
 		}
 
 		function subscribeSignalRMessage(domainType, eventHandler) {
