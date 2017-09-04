@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			try
 			{
+				var basePrio = ThreadPriorityManager.SetThreadPriorityFromConfiguration();
 				var schedulingInformation = GetInfoFromPlanningPeriod(@event.PlanningPeriodId);
 				var result = _fullScheduling.DoScheduling(schedulingInformation.Period, schedulingInformation.PersonIds);
 				SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				{
 					JobResultId = @event.JobResultId
 				});
+				ThreadPriorityManager.ResetThreadPriority(basePrio);
 			}
 			catch (Exception e)
 			{

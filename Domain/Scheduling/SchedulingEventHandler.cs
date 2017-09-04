@@ -49,25 +49,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (@event.FromWeb)
 			{
-				var basePrio = Thread.CurrentThread.Priority;
-				var prio = ConfigurationManager.AppSettings["ThreadPriority"];
-				switch (prio)
-				{
-					case "1":
-						Thread.CurrentThread.Priority = ThreadPriority.Lowest;
-						break;
-					case "2":
-						Thread.CurrentThread.Priority = ThreadPriority.BelowNormal;
-						break;
-					default:
-						Thread.CurrentThread.Priority = basePrio;
-						break;
-				}
+				var basePrio = ThreadPriorityManager.SetThreadPriorityFromConfiguration();
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
 					Run(@event);
 				}
-				Thread.CurrentThread.Priority = basePrio;
+				ThreadPriorityManager.ResetThreadPriority(basePrio);
 			}
 			else
 			{
