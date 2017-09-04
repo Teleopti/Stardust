@@ -5,7 +5,6 @@ using Teleopti.Ccc.Sdk.Logic.Assemblers;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 
-
 namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 {
     [TestFixture]
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 			var scheduleTagRepository = new FakeScheduleTagRepository();
 			var target = new ScheduleTagAssembler(scheduleTagRepository);
 			var result = target.DtoToDomainEntity(null);
-			Assert.That(result, Is.EqualTo(NullScheduleTag.Instance));
+			Assert.That(result, Is.EqualTo(KeepOriginalScheduleTag.Instance));
 		}
     }
 }
