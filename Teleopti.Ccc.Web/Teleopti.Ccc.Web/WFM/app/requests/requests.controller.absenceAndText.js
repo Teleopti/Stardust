@@ -7,7 +7,7 @@
 
 	requestsAbsenceAndTextCtrl.$inject = [
 		'$scope', '$filter', '$injector', '$translate', '$timeout', '$stateParams', 'requestsDataService', 'Toggle',
-		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'TextAndAbsenceGridConfiguration', 'UIGridUtilitiesService', 'requestCommandParamsHolder', 'REQUESTS_TAB_NAMES'
+		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'TextAndAbsenceGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES'
 	];
 
 	function requestsAbsenceAndTextCtrl($scope,
@@ -25,8 +25,7 @@
 		requestFilterSvc,
 		requestGridStateService,
 		textAndAbsenceGridConfigurationService,
-		uiGridUtilitiesService, 
-		requestCommandParamsHolder,
+		uiGridUtilitiesService,
 		requestsTabNames) {
 		var vm = this;
 
