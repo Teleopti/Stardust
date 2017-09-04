@@ -117,7 +117,7 @@
 								<td class="long" ng-repeat="node in subnode.SkillDetails" ng-class="{weekend: node.weekend}">
 									<div class="resourceplanner-box" ng-class="{understaffed:node.ColorId==1,critUnderstaffed:node.ColorId==2,overstaffed:node.ColorId==3, closed: node.ColorId==4}">
 										<md-tooltip>
-											{{node.Date | amDateFormat:"L"}} - {{subnode.SkillName}}<br/> {{'RelativeDifference' | translate}}: {{node.parseDif}}%
+											{{'RelativeDifference' | translate}}: {{node.parseDif}}% | {{subnode.SkillName}} | {{node.Date | amDateFormat:"L"}} 
 										</md-tooltip>
 									</div>
 								</td>
