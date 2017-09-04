@@ -182,7 +182,7 @@ Staffing_ReadModel_BetterAccuracy_43447 = true
 Staffing_ReadModel_BetterAccuracy_Step2_44271 = true
 Staffing_ReadModel_BetterAccuracy_Step3_44331 = RC
 Staffing_ReadModel_BetterAccuracy_Step4_43389 = RC
-Staffing_ReadModel_Keep8DaysHistoricalData_44652 = RC # don't enable without Staffing_ReadModel_Update14Days_43840
+Staffing_ReadModel_Keep8DaysHistoricalData_44652 = true
 Staffing_BPOExchangeImport_45202 = true
 
 
