@@ -3,27 +3,31 @@
 
 	describe('requests footer directive',
 		function() {
-			var $compile, $rootScope, requestsDefinitions, $filter, requestCommandParamsHolder;
+			var $compile, $rootScope, requestsDefinitions, $filter, requestCommandParamsHolder,
+				fakeState = {
+					current: {
+						name: ''
+					}
+				},
+				toggles = {
+							Wfm_Requests_People_Search_36294: true,
+						};
 
 			beforeEach(module('wfm.templates'));
 			beforeEach(module('wfm.requests'));
 
 			beforeEach(function () {
-				var requestCommandParamsHolder = new FakeRequestCommandParamsHolder();
-
 				module(function($provide) {
-					$provide.service('Toggle',
-						function() {
-							return {
-								Wfm_Requests_People_Search_36294: true,
-								togglesLoaded: {
-									then: function(cb) { cb(); }
-								}
-							}
-						});
+					$provide.service('Toggle', function() {
+						toggles.togglesLoaded =  {
+							then: function(cb) { cb(); }
+						};
 
-					$provide.service('requestCommandParamsHolder', function () {
-						return requestCommandParamsHolder;
+						return toggles;
+					});
+
+					$provide.service('$state', function() {
+						return fakeState;
 					});
 				});
 			});
@@ -31,10 +35,11 @@
 			beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDefinitions_, _$filter_, $templateCache, _requestCommandParamsHolder_) {
 				$compile = _$compile_;
 				$rootScope = _$rootScope_;
-				requestsDefinitions = _requestsDefinitions_;
 				$filter = _$filter_;
-				$templateCache.put('app/requests/html/requests-footer.tpl.html', 'app/requests/');
+				requestsDefinitions = _requestsDefinitions_;
 				requestCommandParamsHolder = _requestCommandParamsHolder_;
+
+				$templateCache.put('app/requests/html/requests-footer.tpl.html', 'app/requests/');
 			}));
 
 			function setUpTarget() {
@@ -63,7 +68,7 @@
 
 			it('should show selected request info', function() {
 				var test = setUpTarget();
-				requestCommandParamsHolder.setIds(['1', '2']);
+				requestCommandParamsHolder.setSelectedRequestIds(['1', '2'], requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
 				test.scope.$digest();
 
 				test.target.isolateScope().requestsFooter.selectedRequestsInfoText = "Selected {0} of {1} requests";
@@ -78,6 +83,28 @@
 
 				var ret = test.target.isolateScope().requestsFooter.showSelectedRequestsInfo();
 				expect(ret).toEqual("Selected 2 of 5 requests");
+			});
+
+			it('should correct selected request info according to selected requests ids', function() {
+				toggles.Wfm_Requests_Refactoring_45470 = true;
+				fakeState.current.name = 'requests.absenceAndText';
+
+				var test = setUpTarget();
+				requestCommandParamsHolder.setSelectedRequestIds(['a'], requestsDefinitions.REQUEST_TYPES.ABSENCE)
+				test.scope.$digest();
+
+				test.target.isolateScope().requestsFooter.selectedRequestsInfoText = "Selected {0} of {1} requests";
+				var paging = {
+					pageSize: 20,
+					pageNumber: 1,
+					totalPages: 1,
+					totalRequestsCount: 5
+				};
+				test.target.isolateScope().requestsFooter.paging = paging;
+				test.scope.$digest();
+
+				var ret = test.target.isolateScope().requestsFooter.showSelectedRequestsInfo();
+				expect(ret).toEqual("Selected 1 of 5 requests");
 			});
 
 			it('should show none request info', function () {
@@ -144,17 +171,5 @@
 				footer.onPageNumberChange(2);
 				expect(footer.paging.pageNumber).toEqual(2);
 			});
-		});
-
-	function FakeRequestCommandParamsHolder() {
-		var _selectedRequestIds = [];
-
-		this.setIds = function(ids) {
-			_selectedRequestIds = ids;
-		}
-
-		this.getSelectedRequestsIds = function(isShiftTrade) {
-			return _selectedRequestIds;
-		}
-	}
+	});
 })();
