@@ -219,10 +219,10 @@
 
 		function initialiseGridStateHandling() {
 			vm.shiftTradeView = false;
-			requestGridStateService.restoreState(vm, requestsDefinitions.REQUEST_TYPES.ABSENCE);
+			requestGridStateService.restoreState(vm);
 			// delay the setup of these handlers a little to let the table load
 			$timeout(function() {
-				requestGridStateService.setupGridEventHandlers($scope, vm, requestsDefinitions.REQUEST_TYPES.ABSENCE);
+				requestGridStateService.setupGridEventHandlers($scope, vm);
 			}, 500);
 		}
 

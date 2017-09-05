@@ -3,12 +3,11 @@
 (function () {
 
 	angular.module('wfm.requests')
-		.factory('RequestGridStateService', ['$timeout','$window', 'requestsDefinitions', function ($timeout, $window, requestsDefinitions) {
+		.factory('RequestGridStateService', ['$timeout','$window', function ($timeout, $window) {
 			var svc = this,
 				columnsToExcludeFromSave = ['AgentName2'],
 				shiftTradeViewGridStateName = 'shiftTradeViewGridState',
-				absenceAndTextViewGridStateName = 'absenceRequestViewGridState',
-				overtimeViewGridStateName = 'overtimeViewGridState';
+				absenceAndTextViewGridStateName = 'absenceRequestViewGridState';
 
 			svc.hasSavedState = function(isShiftTradeView) {
 				var localStorageKeyName = getGridStateKey(isShiftTradeView);
@@ -16,29 +15,25 @@
 				return state != null;
 			};
 
-			svc.restoreState = function(vm, requestType) {
-				var localStorageKeyName = getGridStateKey(requestType);
+			svc.restoreState = function(vm) {
+				var localStorageKeyName = getGridStateKey(vm.shiftTradeView);
 				var state = $window.localStorage.getItem(localStorageKeyName);
 				if (state) vm.gridApi.saveState.restore(vm, JSON.parse(state));
 			};
 
-			svc.setupGridEventHandlers = function($scope, vm, requestType) {
-				vm.gridApi.core.on.columnVisibilityChanged($scope, function() { saveState(vm, requestType) });
+			svc.setupGridEventHandlers = function($scope, vm) {
+				vm.gridApi.core.on.columnVisibilityChanged($scope, function() { saveState(vm) });
 				vm.gridApi.core.on.sortChanged($scope, function() {
-					saveState(vm, requestType);
+					saveState(vm);
 				});
 
 				if (vm.gridApi.colResizable) {
-					vm.gridApi.colResizable.on.columnSizeChanged($scope, function() { saveState(vm, requestType) });
+					vm.gridApi.colResizable.on.columnSizeChanged($scope, function() { saveState(vm) });
 				};
 			};
 
 			svc.getAbsenceAndTextSorting = function() {
 				return getSortingColumn(absenceAndTextViewGridStateName);
-			};
-
-			svc.getOvertimeSorting = function() {
-				return getSortingColumn(overtimeViewGridStateName);
 			};
 
 			svc.getShiftTradeSorting = function() {
@@ -61,19 +56,8 @@
 				return sortingColumn;
 			}
 
-			function getGridStateKey(requestType) {
-				switch (requestType) {
-					case requestsDefinitions.REQUEST_TYPES.TEXT:
-						return absenceAndTextViewGridStateName;
-					case requestsDefinitions.REQUEST_TYPES.ABSENCE:
-						return absenceAndTextViewGridStateName;
-
-					case requestsDefinitions.REQUEST_TYPES.SHIFTTRADE:
-						return shiftTradeViewGridStateName;
-
-					case requestsDefinitions.REQUEST_TYPES.OVERTIME:
-						return overtimeViewGridStateName;
-				}
+			function getGridStateKey(isShiftTradeView) {
+				return isShiftTradeView ? shiftTradeViewGridStateName: absenceAndTextViewGridStateName;
 			}
 
 			function excludeColumns(vm, state) {
@@ -88,11 +72,11 @@
 				state.columns = columnsToInclude;
 			}
 
-			function saveState(vm, requestType) {
+			function saveState(vm) {
 				if (vm.definitionsLoadComplete === false) {
 					return;
 				}
-				var localStorageKeyName = getGridStateKey(requestType);
+				var localStorageKeyName = getGridStateKey(vm.shiftTradeView);
 				var state = vm.gridApi.saveState.save();
 
 				excludeColumns(vm, state);
