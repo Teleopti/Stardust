@@ -11,7 +11,7 @@
         var vm = this;
 
         var maxHits = 100;
-        var requestSent = false;
+        vm.requestSent = false;
         vm.name = "";
         vm.isEnabled = true;
         vm.selectedItem = undefined;
@@ -202,9 +202,9 @@
         function persist() {
             if (!vm.isValid())
                 return;
-            if (!requestSent) {
+            if (!vm.requestSent) {
                 vm.isEnabled = false;
-                requestSent = true;
+                vm.requestSent = true;
                 dayOffRuleService.saveDayOffRule({
                     MinDayOffsPerWeek: vm.dayOffsPerWeek.MinDayOffsPerWeek,
                     MaxDayOffsPerWeek: vm.dayOffsPerWeek.MaxDayOffsPerWeek,
@@ -218,11 +218,9 @@
                     Filters: vm.selectedResults,
                     PlanningGroupId: $stateParams.groupId
                 }).$promise.then(function () {
-                    requestSent = false;
                     returnFromCreate();
                 });
             }
-
         }
 
         function returnFromCreate() {

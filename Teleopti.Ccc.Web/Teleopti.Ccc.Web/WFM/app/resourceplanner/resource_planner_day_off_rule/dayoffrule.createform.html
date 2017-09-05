@@ -112,7 +112,7 @@
 			</div>
 			<div class="con-footer">
 				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancelCreate()" translate>Cancel</button>
-				<button class="wfm-btn" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
+				<button class="wfm-btn" ng-disabled="!vm.isValid || vm.requestSent" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
 				 ng-click="vm.persist()" translate>Save</button>
 			</div>
 		</div>

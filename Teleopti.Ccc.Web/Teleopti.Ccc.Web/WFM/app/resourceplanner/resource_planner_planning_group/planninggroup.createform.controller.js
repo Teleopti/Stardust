@@ -10,12 +10,12 @@
 	function Controller($state, $timeout, $stateParams, planningGroupService, NoticeService, $translate, debounceService, localeLanguageSortingService, editPlanningGroup) {
 		var vm = this;
 		
-		var requestSent = false;
+		vm.requestSent = false;
 		vm.searchString = '';
 		vm.selectedResults = [];
 		vm.filterResults = [];
 		vm.name = '';
-		vm.cancel = cancel;
+		vm.cancel = returnToOverview;
 		vm.deletePlanningGroupText = '';
 		vm.editPlanningGroup = editPlanningGroup;
 		vm.isEditGroup = editPlanningGroup ? true : false;
@@ -106,35 +106,32 @@
 			return vm.name.length > 0 && vm.name.length <= 100;
 		}
 
+		function returnToOverview() {
+			$state.go('resourceplanner.newoverview');
+		}
+
 		function persist() {
 			if (!isValid()) {
 				NoticeService.warning($translate.instant('CouldNotApply'), 5000, true);
 				return;
-			} else if (!requestSent) {
-				requestSent = true;
+			} else if (!vm.requestSent) {
+				vm.requestSent = true;
 				return planningGroupService.savePlanningGroup({
 					Id: editPlanningGroup ? editPlanningGroup.Id : null,
 					Name: vm.name,
 					Filters: vm.selectedResults
 				}).$promise.then(function () {
-					requestSent = false;
-					$state.go('resourceplanner.newoverview');
+					returnToOverview();
 				});
 			}
 		}
 
-		function cancel() {
-			$state.go('resourceplanner.newoverview');
-		}
-
 		function removePlanningGroup() {
 			if (!editPlanningGroup) return;
-			if (!requestSent) {
-				requestSent = true;
-				return planningGroupService.removePlanningGroup({ id: editPlanningGroup.Id }).$promise.then(function () {
-					requestSent = false;
-					$state.go('resourceplanner.newoverview');
-				});
+			if (!vm.requestSent) {
+				vm.requestSent = true;
+				returnToOverview();
+				return planningGroupService.removePlanningGroup({ id: editPlanningGroup.Id });
 			}
 		}
 	}

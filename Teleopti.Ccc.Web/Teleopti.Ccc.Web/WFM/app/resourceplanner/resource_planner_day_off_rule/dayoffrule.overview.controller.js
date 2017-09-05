@@ -12,6 +12,7 @@
 	function overviewController($state, $stateParams, $translate, dayOffRuleService, planningGroupInfo, dayOffRulesInfo, localeLanguageSortingService) {
 		var vm = this;
 
+		vm.requestSent = false;
 		vm.selectedDayOffRule = {};
 		vm.dayOffRules = dayOffRulesInfo.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
 		vm.textDeleteDoRule = '';
@@ -23,20 +24,24 @@
 		vm.goCreateDoRule = goCreateDoRule;
 
 		function getDoRuleInfo(dayOffRule) {
-			vm.confirmDeleteModal = true; 
+			vm.confirmDeleteModal = true;
 			vm.textDeleteDoRule = $translate.instant("AreYouSureYouWantToDeleteTheDayOffRule").replace("{0}", dayOffRule.Name);
 			return vm.selectedDayOffRule = dayOffRule;
 		}
 
 		function deleteDoRule() {
-			if (vm.selectedDayOffRule.Default == true )
+			if (vm.selectedDayOffRule.Default == true || vm.requestSent)
 				return;
-			vm.confirmDeleteModal = false; 
-			var deleteDayOffRule = dayOffRuleService.removeDayOffRule({ id: vm.selectedDayOffRule.Id });
-			return deleteDayOffRule.$promise.then(function () {
-				var index = vm.dayOffRules.indexOf(vm.selectedDayOffRule);
-				vm.dayOffRules.splice(index, 1);
-			});
+			if (!vm.requestSent) {
+				vm.requestSent = true;
+				var deleteDayOffRule = dayOffRuleService.removeDayOffRule({ id: vm.selectedDayOffRule.Id });
+				return deleteDayOffRule.$promise.then(function () {
+					var index = vm.dayOffRules.indexOf(vm.selectedDayOffRule);
+					vm.dayOffRules.splice(index, 1);
+					vm.confirmDeleteModal = false;
+					vm.requestSent = false;
+				});
+			}
 		}
 
 		function goEditDoRule(dayOffRule) {

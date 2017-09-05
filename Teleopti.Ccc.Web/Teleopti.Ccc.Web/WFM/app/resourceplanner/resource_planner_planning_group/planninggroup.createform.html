@@ -63,7 +63,7 @@
 			<div class="con-footer">
 				<button class="wfm-btn wfm-btn-invis-default" ng-click="vm.cancel()">{{'Cancel'|translate}}</button>
 				<button ng-if="vm.isEditGroup" class="wfm-btn wfm-btn-invis-default delete-plan-group" ng-click='vm.confirmDeleteModal=true;'>{{'Delete'|translate}}</button>
-				<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
+				<button class="wfm-btn save-plan-group" ng-disabled="!vm.isValid || vm.requestSent" ng-class="{'wfm-btn-invis-primary':vm.isValid(),'wfm-btn-primary-disabled':!vm.isValid()}"
 				 ng-click="vm.persist()">
 					{{'Save'|translate}}
 	 			</button>
@@ -78,7 +78,7 @@
 								<div class="modal-actions">
 									<aside>
 										<button ng-click="vm.confirmDeleteModal=false" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-										<button ng-click="vm.confirmDeleteModal=false; vm.removePlanningGroup()" class="wfm-btn wfm-btn-invis-primary confirm-delete-plan-group">{{'Delete'|translate}}</button>
+										<button ng-click="vm.removePlanningGroup()" ng-disabled="vm.requestSent" class="wfm-btn wfm-btn-invis-primary confirm-delete-plan-group">{{'Delete'|translate}}</button>
 									</aside>
 								</div>
 							</div>

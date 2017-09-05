@@ -135,7 +135,7 @@
 					<div class="modal-actions">
 						<aside>
 							<button ng-click="vm.confirmDeleteModal = false" class="wfm-btn wfm-btn-invis-default">{{'Cancel' | translate }}</button>
-							<button ng-click="vm.deleteDoRule()" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
+							<button ng-disabled="vm.requestSent" ng-click="vm.deleteDoRule()" class="wfm-btn wfm-btn-invis-primary">{{'Delete' | translate }}</button>
 						</aside>
 					</div>
 				</div>
