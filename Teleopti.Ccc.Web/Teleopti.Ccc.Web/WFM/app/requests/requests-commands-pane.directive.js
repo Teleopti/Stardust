@@ -7,10 +7,10 @@
 
 	requestsCommandsPaneCtrl.$inject = [
 		'$state', 'requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle',
-		'signalRSVC', 'NoticeService', 'RequestsCommandsConfigurationsService'
+		'signalRSVC', 'NoticeService', 'RequestsCommandsConfigurationsService', 'REQUESTS_TAB_NAMES'
 	];
 
-	function requestsCommandsPaneCtrl($state, requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc, signalRSVC, NoticeService, requestsCommandsConfigurationsSvc) {
+	function requestsCommandsPaneCtrl($state, requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc, signalRSVC, NoticeService, requestsCommandsConfigurationsSvc, REQUESTS_TAB_NAMES) {
 		var vm = this;
 		vm.approveRequests = approveRequests;
 		vm.replyRequests = replyRequests;
@@ -95,6 +95,12 @@
 		}
 
 		function getSelectedRequestIds() {
+			if (toggleSvc.Wfm_Requests_OvertimeRequestHandling_45177 && toggleSvc.Wfm_Requests_Refactoring_45470) {
+				if($state.current.name.indexOf(REQUESTS_TAB_NAMES.overtime) > -1){
+					return requestCommandParamsHolder.getOvertimeSelectedRequestIds();
+				}
+			}
+
 			return requestCommandParamsHolder ?
 				requestCommandParamsHolder.getSelectedRequestsIds(vm.isShiftTradeViewActive) :
 				null;

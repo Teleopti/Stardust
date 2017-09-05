@@ -10,6 +10,7 @@
 		self._state = {
 			selectedTextAndAbsenceRequestIds: [],
 			selectedShiftTradeRequestIds: [],
+			selectedOvertimeRequestIds: [],
 			selectedIdAndMessage: {}
 		};
 
@@ -28,6 +29,14 @@
 			} else {
 				self._state.selectedTextAndAbsenceRequestIds = selectedRequestIds;
 			};
+		};
+
+		self.setOvertimeSelectedRequestIds = function (selectedRequestIds) {
+			self._state.selectedOvertimeRequestIds = selectedRequestIds;
+		};
+
+		self.getOvertimeSelectedRequestIds = function () {
+			return self._state.selectedOvertimeRequestIds;
 		};
 
 		self.resetSelectedRequestIds = function (isShiftTrade) {

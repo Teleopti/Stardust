@@ -270,7 +270,7 @@
 			var visibleRequestsIds = vm.gridOptions.data.map(function(row) { return row.Id; });
 			var visibleSelectedRequestsIds = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Id; });
 			var messages = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Message; });
-			uiGridUtilitiesService.setAbsenceAndTextSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, messages);
+			uiGridUtilitiesService.setOvertimeSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, messages);
 			vm.gridApi.grid.selection.selectAll = vm.requests && (vm.requests.length === visibleSelectedRequestsIds.length) && vm.requests.length > 0;
 		}
 

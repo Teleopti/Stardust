@@ -110,6 +110,32 @@
 			requestCommandParamsHolder.setSelectedRequestIds(setAllSelectedRequestIds(visibleSelectedRequestsIds, visibleRequestsIds, false), false);
 		};
 
+		svc.setOvertimeSelectedRequestIds = function(visibleSelectedRequestsIds, visibleRequestsIds, messages) {
+			if (visibleSelectedRequestsIds.length === 1) {
+				requestCommandParamsHolder.setSelectedIdAndMessage(visibleSelectedRequestsIds, messages);
+			}
+
+			//Jianfeng TODO: refactor this and setAllSelectedRequestIds()
+			var visibleNotSelectedRequestsIds = visibleRequestsIds.filter(function (id) {
+				return visibleSelectedRequestsIds.indexOf(id) < 0;
+			});
+
+			var allSelectedRequestsIds = requestCommandParamsHolder.getOvertimeSelectedRequestIds();
+			var newAllSelectedRequestsIds = [];
+
+			angular.forEach(allSelectedRequestsIds, function (id) {
+				if (visibleNotSelectedRequestsIds.indexOf(id) < 0)
+					newAllSelectedRequestsIds.push(id);
+			});
+
+			angular.forEach(visibleSelectedRequestsIds, function (id) {
+				if (newAllSelectedRequestsIds.indexOf(id) < 0)
+					newAllSelectedRequestsIds.push(id);
+			});
+
+			requestCommandParamsHolder.setOvertimeSelectedRequestIds(newAllSelectedRequestsIds);
+		};
+
 		svc.getDefaultStatus = function (filters, tabName) {
 			var selectedRequestStatuses = [];
 			if (filters && filters.length > 0) {
