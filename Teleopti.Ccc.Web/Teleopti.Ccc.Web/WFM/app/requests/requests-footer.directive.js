@@ -4,9 +4,9 @@
 		.controller('requestsFooterCtrl', requestsFooterController)
 		.directive('requestsFooter', requestsFooterDirective);
 
-	requestsFooterController.$inject = ['$rootScope', '$scope', '$translate', '$state', 'Toggle', 'requestCommandParamsHolder', 'requestsDefinitions', 'REQUESTS_TAB_NAMES'];
+	requestsFooterController.$inject = ['$rootScope', '$scope', '$translate', 'Toggle', 'requestCommandParamsHolder', 'requestsDefinitions'];
 
-	function requestsFooterController($rootScope, $scope, $translate, $state, toggleService, requestCommandParamsHolder, requestsDefinitions, REQUESTS_TAB_NAMES) {
+	function requestsFooterController($rootScope, $scope, $translate, toggleService, requestCommandParamsHolder, requestsDefinitions) {
 		var vm = this;
 		vm.onPageSizeChanges = onPageSizeChanges;
 		vm.onPageNumberChange = onPageNumberChange;
@@ -36,21 +36,10 @@
 		}
 
 		function showSelectedRequestsInfo() {
-			if (toggleService.Wfm_Requests_Refactoring_45470) {
-				if ($state.current.name.indexOf(REQUESTS_TAB_NAMES.absenceAndText) > -1)
-					vm.selectedRequestsCount =  requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.ABSENCE).length;
-
-				if ($state.current.name.indexOf(REQUESTS_TAB_NAMES.shiftTrade) > -1)
-					vm.selectedRequestsCount =  requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE).length;
-
-				if ($state.current.name.indexOf(REQUESTS_TAB_NAMES.overtime) > -1)
-					vm.selectedRequestsCount =  requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.OVERTIME).length;
+			if(vm.isShiftTradeViewActive){
+				vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE).length;
 			} else {
-				if(vm.isShiftTradeViewActive){
-					vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE).length;
-				} else {
-					vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.ABSENCE).length;
-				}
+				vm.selectedRequestsCount = requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.ABSENCE).length;
 			}
 
 			if (vm.selectedRequestsCount > 0 && vm.selectedRequestsInfoText) {
