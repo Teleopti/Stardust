@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		bool SupportsReforecastedAgents(ISkill skill);
 	}
 
-	public class SkillTypeInfoSupportAll
+	public class SkillTypeInfoSupportAll : ISkillTypeInfo
 	{
 		public bool SupportsAbandonRate(ISkill skill)
 		{
