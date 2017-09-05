@@ -138,6 +138,37 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		}
 
 		[Test]
+		public void ShouldBePossibleToScheduleOneMonthWithoutManuallyExtendingThePeriod()
+		{
+			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
+			var firstDay = new DateOnly(2017, 08, 01);
+			var lastDay = new DateOnly(2017, 08, 31);
+			var period = new DateOnlyPeriod(firstDay, lastDay);
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("skill", activity);
+			var scenario = ScenarioRepository.Has("some name");
+			var contract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(50), TimeSpan.FromHours(11), TimeSpan.FromHours(36))
+			};
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var contractSchedule = ContractScheduleFactory.CreateWorkingWeekContractSchedule();
+			var partTimePercentage = new PartTimePercentage("_");
+			var site = new Site("site");
+			var team = new Team { Site = site };
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Month, 1);
+			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, ruleSet, skill);
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1));
+
+			Target.DoScheduling(period, new[] { agent.Id.Value });
+
+			AssignmentRepository.Find(new[] { agent }, period, scenario)
+				.Count.Should().Be.EqualTo(31);
+		}
+
+		[Test]
 		public void ShouldResolveNightlyRest()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());

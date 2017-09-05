@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using System.Threading;
@@ -91,6 +92,33 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, @event.AgentsInIsland, new LockInfoForStateHolder(_gridlockManager, @event.UserLocks), selectedPeriod, @event.Skills);
 			var schedulingCallback = _currentSchedulingCallback.Current();
 			var schedulingProgress = schedulingCallback is IConvertSchedulingCallbackToSchedulingProgress converter ? converter.Convert() : new NoSchedulingProgress();
+
+			if (@event.FromWeb && selectedPeriod.StartDate.Day == 1 && selectedPeriod.EndDate.AddDays(1).Day == 1)
+			{
+				var firstDaysOfWeek = new List<DayOfWeek>();
+				foreach (var person in schedulerStateHolder.AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)))
+				{
+					if (!firstDaysOfWeek.Contains(person.FirstDayOfWeek))
+					{
+						firstDaysOfWeek.Add(person.FirstDayOfWeek);
+					}
+				}
+
+				var firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(selectedPeriod.StartDate, firstDaysOfWeek[0]);
+				var lastDateInPeriodLocal = DateHelper.GetLastDateInWeek(selectedPeriod.EndDate, firstDaysOfWeek[0]);
+				foreach (var firstDayOfWeek in firstDaysOfWeek)
+				{
+					if (DateHelper.GetFirstDateInWeek(selectedPeriod.StartDate, firstDayOfWeek).CompareTo(firstDateInPeriodLocal) != 1)
+					{
+						firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(selectedPeriod.StartDate, firstDayOfWeek);
+					}
+					if (DateHelper.GetLastDateInWeek(selectedPeriod.EndDate, firstDayOfWeek).CompareTo(lastDateInPeriodLocal) == 1)
+					{
+						lastDateInPeriodLocal = DateHelper.GetLastDateInWeek(selectedPeriod.EndDate, firstDayOfWeek);
+					}
+				}
+				selectedPeriod = new DateOnlyPeriod(firstDateInPeriodLocal, lastDateInPeriodLocal);
+			}
 
 			_scheduleExecutor.Execute(schedulingCallback,
 				_schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate), schedulingProgress,

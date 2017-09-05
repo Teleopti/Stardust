@@ -71,13 +71,36 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var stateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(stateHolder, people, null, period);
-			var extendedPeriod = period;
-			if (period.StartDate.Day == 1 && period.EndDate.AddDays(1).Day == 1)
+
+			if (period.StartDate.Day == 1 && period.EndDate.AddDays(1).Day == 1 && stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period).Any())
 			{
-				extendedPeriod = new DateOnlyPeriod(period.StartDate.AddDays(-6), period.EndDate.AddDays(6));
+				var firstDaysOfWeek = new List<DayOfWeek>();
+				foreach (var person in stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period))
+				{
+					if (!firstDaysOfWeek.Contains(person.FirstDayOfWeek))
+					{
+						firstDaysOfWeek.Add(person.FirstDayOfWeek);
+					}
+				}
+
+				var firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(period.StartDate, firstDaysOfWeek[0]);
+				var lastDateInPeriodLocal = DateHelper.GetLastDateInWeek(period.EndDate, firstDaysOfWeek[0]);
+				foreach (var firstDayOfWeek in firstDaysOfWeek)
+				{
+					if (DateHelper.GetFirstDateInWeek(period.StartDate, firstDayOfWeek).CompareTo(firstDateInPeriodLocal) != 1)
+					{
+						firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(period.StartDate, firstDayOfWeek);
+					}
+					if (DateHelper.GetLastDateInWeek(period.EndDate, firstDayOfWeek).CompareTo(lastDateInPeriodLocal) == 1)
+					{
+						lastDateInPeriodLocal = DateHelper.GetLastDateInWeek(period.EndDate, firstDayOfWeek);
+					}
+				}
+				period = new DateOnlyPeriod(firstDateInPeriodLocal, lastDateInPeriodLocal);
 			}
+
 			_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate), _schedulingProgress,
-				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(extendedPeriod), extendedPeriod, false);
+				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false);
 		}
 	}
 }
