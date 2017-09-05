@@ -350,4 +350,8 @@ End personal drop down menu
 		text-align: left;
 		overflow-y: auto;
 	}
+
+	.navbar-offcanvas.canvas-slid.in .navbar-nav .open .dropdown-menu > li > a {
+		color: white;
+	}
 }
