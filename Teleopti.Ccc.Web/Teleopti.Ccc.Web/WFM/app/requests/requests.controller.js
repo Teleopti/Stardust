@@ -12,7 +12,7 @@
 		vm.translations = {};
 		vm.translations.From = $translate.instant('DateFrom');
 		vm.translations.To = $translate.instant('DateTo');
-		vm.pageSizeOptions = [20, 50, 100, 200];
+		vm.pageSizeOptions = [5, 50, 100, 200];
 		vm.sitesAndTeams = [];
 
 		vm.selectedGroups = {
@@ -22,7 +22,7 @@
 		};
 
 		vm.paging = {
-			pageSize: 20,
+			pageSize: 5,
 			pageNumber: 1,
 			totalPages: 1,
 			totalRequestsCount: 0
@@ -116,7 +116,7 @@
 
 		vm.changeSelectedTeams = function () {
 			vm.agentSearchOptions.focusingSearch = true;
-			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
+			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive() ? requestsDefinitions.REQUEST_TYPES.SHIFTTRADE : requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		};
 
 		vm.applyFavorite = function (currentFavorite) {
@@ -124,7 +124,7 @@
 			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
 
-			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
+			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive() ? requestsDefinitions.REQUEST_TYPES.SHIFTTRADE : requestsDefinitions.REQUEST_TYPES.ABSENCE);
 			$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: currentFavorite.TeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 			vm.agentSearchOptions.focusingSearch = false;
 		};
@@ -139,7 +139,7 @@
 		vm.onSearchTermChangedCallback = function () {
 			vm.agentSearchOptions.focusingSearch = false;
 
-			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
+			requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive() ? requestsDefinitions.REQUEST_TYPES.SHIFTTRADE : requestsDefinitions.REQUEST_TYPES.ABSENCE);
 			$scope.$broadcast('reload.requests.with.selection', { selectedTeamIds: vm.selectedGroups.groupIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 		};
 
@@ -303,7 +303,7 @@
 				} else {
 					vm.absencePeriod = newValue;
 				}
-				requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
+				requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive() ? requestsDefinitions.REQUEST_TYPES.SHIFTTRADE : requestsDefinitions.REQUEST_TYPES.ABSENCE);
 				vm.agentSearchOptions.focusingSearch = false;
 
 				if (newValue && JSON.stringify(newValue) !== JSON.stringify(oldValue)) {

@@ -296,6 +296,7 @@
 				allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(requestsDefinitions.REQUEST_TYPES.ABSENCE);
 			}
 
+
 			return vm.gridOptions.data.filter(function (row) {
 				return allSelectedRequestsIds.indexOf(row.Id) > -1;
 			});
@@ -313,11 +314,19 @@
 		}
 
 		function initialiseGridStateHandling() {
-			requestGridStateService.restoreState(vm);
-			
+			if(vm.shiftTradeView){
+				requestGridStateService.restoreState(vm, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+			} else {
+				requestGridStateService.restoreState(vm, requestsDefinitions.REQUEST_TYPES.ABSENCE);
+			}
+
 			// delay the setup of these handlers a little to let the table load
 			$timeout(function () {
-				requestGridStateService.setupGridEventHandlers($scope,vm);
+				if(vm.shiftTradeView){
+					requestGridStateService.setupGridEventHandlers($scope, vm, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+				} else {
+					requestGridStateService.setupGridEventHandlers($scope, vm, requestsDefinitions.REQUEST_TYPES.ABSENCE);
+				}
 			}, 500);
 		}
 
@@ -403,7 +412,7 @@
 				vm.gridApi.selection.clearSelectedRows();
 			}
 
-			requestCommandParamsHolder.resetSelectedRequestIds(vm.shiftTradeView);
+			requestCommandParamsHolder.resetSelectedRequestIds(vm.shiftTradeView ? requestsDefinitions.REQUEST_TYPES.SHIFTTRADE: requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		}
 
 		function reselectRequests() {

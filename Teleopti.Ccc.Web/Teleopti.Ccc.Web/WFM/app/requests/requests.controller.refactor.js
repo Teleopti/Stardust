@@ -119,7 +119,7 @@
 
 		vm.changeSelectedTeams = function () {
 			vm.agentSearchOptions.focusingSearch = true;
-			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
+			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive() ? requestsDefinitions.REQUEST_TYPES.SHIFTTRADE : requestsDefinitions.REQUEST_TYPES.ABSENCE);
 		};
 
 		vm.applyFavorite = function (currentFavorite) {
@@ -127,7 +127,7 @@
 			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
 			vm.agentSearchOptions.keyword = currentFavorite.SearchTerm;
 
-			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
+			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive() ? requestsDefinitions.REQUEST_TYPES.SHIFTTRADE : requestsDefinitions.REQUEST_TYPES.ABSENCE);
 			$scope.$broadcast('reload.requests.with.selection', { selectedGroupIds: currentFavorite.TeamIds, agentSearchTerm: vm.agentSearchOptions.keyword });
 			vm.agentSearchOptions.focusingSearch = false;
 		};
@@ -142,7 +142,7 @@
 		vm.onSearchTermChangedCallback = function () {
 			vm.agentSearchOptions.focusingSearch = false;
 
-			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
+			requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive() ? requestsDefinitions.REQUEST_TYPES.SHIFTTRADE : requestsDefinitions.REQUEST_TYPES.ABSENCE);
 			$scope.$broadcast('reload.requests.with.selection',
 				{
 					selectedGroupIds: vm.selectedGroups.groupIds,
@@ -311,7 +311,7 @@
 					} else {
 						vm.absenceAndOvertimePeriod = newValue;
 					}
-					requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
+					requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive() ? requestsDefinitions.REQUEST_TYPES.SHIFTTRADE : requestsDefinitions.REQUEST_TYPES.ABSENCE);
 					vm.agentSearchOptions.focusingSearch = false;
 
 					if (newValue && JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
