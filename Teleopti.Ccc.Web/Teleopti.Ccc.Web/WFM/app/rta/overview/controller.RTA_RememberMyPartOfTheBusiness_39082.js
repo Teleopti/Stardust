@@ -98,6 +98,10 @@
 				return { skillIds: skillIds, teamIds: state.teamIds, siteIds: state.openedSiteIds }
 			},
 
+			hasSelection: function(){
+				return state.siteIds.length > 0 || state.teamIds.length > 0;
+			},
+
 			goToAgents: function () {
 				$state.go('rta-agents', buildState());
 			}
@@ -385,15 +389,7 @@
 			$state.go('rta-agents');
 		};
 
-		vm.displayGoToAgents = function () {
-			var match = vm.siteCards.find(function (s) {
-				return s.isSelected ||
-					s.teams.find(function (t) {
-						return t.isSelected;
-					});
-			});
-			return !!match;
-		};
+		vm.displayGoToAgents = rtaStateService.hasSelection;
 
 		vm.goToAgents = rtaStateService.goToAgents;
 
