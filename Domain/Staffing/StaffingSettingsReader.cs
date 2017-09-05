@@ -32,19 +32,4 @@
 		}
 	}
 
-	public class StaffingSettingsReader1Day : IStaffingSettingsReader
-	{
-		public int GetIntSetting(string setting, int defaultValue)
-		{
-			switch (setting)
-			{
-				case "StaffingReadModelNumberOfDays":
-					return 1;
-				case "StaffingReadModelHistoricalHours":
-					return 25;
-			}
-
-			return defaultValue;
-		}
-	}
 }

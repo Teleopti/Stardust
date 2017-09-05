@@ -29,14 +29,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<StaffingSettingsReader>().As<IStaffingSettingsReader>().SingleInstance();
 			}
-			else if (_configuration.Toggle(Toggles.Staffing_ReadModel_Update14Days_43840))
+			else
 			{
 				builder.RegisterType<StaffingSettingsReaderNoHistorical>().As<IStaffingSettingsReader>().SingleInstance();
 			}
-			else
-			{
-				builder.RegisterType<StaffingSettingsReader1Day>().As<IStaffingSettingsReader>().SingleInstance();
-			}
+			
 			builder.RegisterType<ScheduleStaffingPossibilityCalculator>().As<IScheduleStaffingPossibilityCalculator>().SingleInstance();
 			builder.RegisterType<SkillStaffingDataLoader>().As<ISkillStaffingDataLoader>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingViewModelCreator>().SingleInstance();
