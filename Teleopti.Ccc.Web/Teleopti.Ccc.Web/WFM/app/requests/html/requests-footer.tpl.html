@@ -1,6 +1,6 @@
 ﻿<div class="clearfix request-footer">
 	<div class="pull-left m-t-5">
-		<form ng-if="!requestsFooter.isShiftTradeViewActive">
+		<form>
 			<span class="wfm-radio">
 				<input type="radio" name="groupTimezoneSetting" id="radioUserTimezone"
 						 checked="!requestsFooter.isUsingRequestSubmitterTimeZone"
@@ -20,29 +20,7 @@
 				</label>
 			</span>
 		</form>
-
-		<form ng-if="requestsFooter.isShiftTradeViewActive">
-			<span class="wfm-radio">
-				<input type="radio" name="groupTimezoneSetting1" id="radioUserTimezone1"
-						 checked="!requestsFooter.isUsingRequestSubmitterTimeZone"
-						 ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = false" />
-				<label for="radioUserTimezone1">
-					<span class="wfm-radio-toggle"></span>
-					<span class="wfm-radio-label" translate>LogonUserTimeZone</span>
-				</label>
-			</span>
-			<span class="wfm-radio">
-				<input type="radio" name="groupTimezoneSetting1" id="radioRequestTimezone1"
-						 checked="requestsFooter.isUsingRequestSubmitterTimeZone"
-						 ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = true" />
-				<label for="radioRequestTimezone1">
-					<span class="wfm-radio-toggle"></span>
-					<span class="wfm-radio-label" translate>RequestSubmitterTimeZone</span>
-				</label>
-			</span>
-		</form>
 	</div>
-
 
 	<div class="pull-right">
 		<wfm-pagination pagination-options="requestsFooter.paging" get-data-for-page-callback="requestsFooter.onPageNumberChange"></wfm-pagination>
@@ -50,9 +28,9 @@
 			<span>{{requestsFooter.showSelectedRequestsInfo()}}</span>
 		</div>
 		<md-select aria-label="page size" ng-if="requestsFooter.paging.totalRequestsCount > 0"
-					  class="page-size-selector pull-left"
-					  ng-model="requestsFooter.paging.pageSize"
-					  ng-change="requestsFooter.onPageSizeChanges()">
+				   class="page-size-selector pull-left"
+				   ng-model="requestsFooter.paging.pageSize"
+				   ng-change="requestsFooter.onPageSizeChanges()">
 			<md-option ng-repeat="option in requestsFooter.pageSizeOptions" ng-value="option"><span ng-bind="option"></span></md-option>
 		</md-select>
 	</div>
