@@ -161,7 +161,7 @@
 
           function refreshOnModify() {
             vm.isForecastRunning = true;
-            var resultStartDate = moment().utc().add(1, 'days');
+            var resultStartDate = moment().utc();
             var resultEndDate = moment(resultStartDate).add(6, 'months');
             var wl = {
               ForecastStart: resultStartDate.toDate(),

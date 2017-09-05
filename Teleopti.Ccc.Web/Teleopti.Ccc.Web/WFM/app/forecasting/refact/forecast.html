@@ -24,7 +24,7 @@
   </div>
 </div>
 <wfm-card-list ng-if="vm.skillMaster.Skills.length > 0">
-  <wfm-card ng-repeat="skill in vm.skillMaster.Skills">
+  <wfm-card ng-repeat="skill in vm.skillMaster.Skills | orderBy: 'Workload.Name'">
     <card-header tabindex="-1">
       <div tabindex="0" ng-click="vm.getWorkloadForecastData(skill)">
         <b>{{skill.Workload.Name}}</b>
