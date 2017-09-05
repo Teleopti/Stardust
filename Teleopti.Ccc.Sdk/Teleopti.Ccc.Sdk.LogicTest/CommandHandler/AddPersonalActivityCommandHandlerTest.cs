@@ -66,8 +66,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_scheduleTagAssembler = new ScheduleTagAssembler(scheduleTagRepository);
 			_scheduleSaveHandler = new ScheduleSaveHandler(new SaveSchedulePartService(
 				new FakeScheduleDifferenceSaver(_scheduleStorage, new EmptyScheduleDayDifferenceSaver()),
-				personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack(),
-				new ScheduleDayDifferenceSaveTemporaryEmpty()));
+				personAbsenceAccountRepository, new DoNothingScheduleDayChangeCallBack()));
 			_businessRulesForPersonalAccountUpdate = new BusinessRulesForPersonalAccountUpdate(personAbsenceAccountRepository, new FakeSchedulingResultStateHolder());
 			scheduleTagRepository.Add(_scheduleTag);
 
