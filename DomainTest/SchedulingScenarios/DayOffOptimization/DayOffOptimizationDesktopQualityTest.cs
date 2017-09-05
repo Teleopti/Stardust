@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			var allSkillDataExctractor = ScheduleResultDataExtractorProvider.CreateAllSkillsDataExtractor(period, stateHolder.SchedulingResultState, new AdvancedPreferences());
 			var standardDeviation = Variances.StandardDeviation(allSkillDataExctractor.Values().Select(v => v.GetValueOrDefault(-1)));
-			standardDeviation.Should().Be.LessThan(0.033d);
+			standardDeviation.Should().Be.LessThan(0.034d);
 		}
 
 		[Test]
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			var allSkillDataExctractor = ScheduleResultDataExtractorProvider.CreateAllSkillsDataExtractor(period, stateHolder.SchedulingResultState, new AdvancedPreferences());
 			var standardDeviation = Variances.StandardDeviation(allSkillDataExctractor.Values().Select(v => v.GetValueOrDefault(-1)));
-			standardDeviation.Should().Be.LessThan(0.033d);
+			standardDeviation.Should().Be.LessThan(0.034d);
 		}
 	}
 }
