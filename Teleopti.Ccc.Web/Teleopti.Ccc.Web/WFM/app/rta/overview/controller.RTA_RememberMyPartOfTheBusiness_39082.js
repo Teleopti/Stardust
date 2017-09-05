@@ -15,9 +15,6 @@
 			skillIds: []
 		};
 
-
-
-
 		var organization = [];
 
 		var dataLoaded = rtaService.getOrganization()
@@ -121,6 +118,12 @@
 				$state.go($state.current.name, buildState());
 			},
 
+			isSiteOpen: function (id) {
+				var site = organization.find(function (site) { return site.Id === id; });
+				var anyTeamInSiteInState = site.Teams.some(function(team){return state.teamIds.indexOf(team.Id) > -1;});
+				return state.open === "true" || anyTeamInSiteInState;
+			},
+
 			goToAgents: function () {
 				$state.go('rta-agents', buildState());
 			}
@@ -221,13 +224,10 @@
 
 		rtaStateService.setCurrentState($stateParams);
 
-		$stateParams.open = ($stateParams.open || "false");
 		if ($stateParams.skillAreaId)
 			$stateParams.skillIds = getSkillIdsFromSkillAreaId($stateParams.skillAreaId);
 		else
 			$stateParams.skillIds = $stateParams.skillIds || [];
-		$stateParams.siteIds = $stateParams.siteIds || [];
-		$stateParams.teamIds = $stateParams.teamIds || [];
 
 		vm.skillPickerPreselectedItem = rtaStateService.skillPickerPreselectedItem();
 
@@ -271,7 +271,6 @@
 			vm.siteCards.forEach(function (siteCard) {
 				if (siteCard.isOpen) siteIds.push(siteCard.Id);
 			});
-
 			return rtaService.getOverviewModelFor({ skillIds: $stateParams.skillIds, teamIds: $stateParams.teamIds, siteIds: siteIds })
 				.then(function (data) {
 					data.Sites.forEach(function (site) {
@@ -284,7 +283,7 @@
 							siteCard = {
 								Id: site.Id,
 								Name: site.Name,
-								isOpen: $stateParams.open != "false" || site.Teams.length > 0,
+								isOpen: rtaStateService.isSiteOpen(site.Id),
 								get isSelected() { return rtaStateService.isSiteSelected(site.Id); },
 								set isSelected(newValue) { rtaStateService.selectSite(site.Id, newValue); },
 								teams: [],
