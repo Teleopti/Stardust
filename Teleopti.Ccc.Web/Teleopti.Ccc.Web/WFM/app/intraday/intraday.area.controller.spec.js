@@ -1,5 +1,5 @@
 'use strict';
-describe('IntradayAreaCtrl', function () {
+fdescribe('IntradayAreaCtrl', function () {
 	var $httpBackend,
 	$controller,
 	$filter,
@@ -47,8 +47,18 @@ describe('IntradayAreaCtrl', function () {
 			{
 				Id: "5f15b334-22d1-4bc1-8e41-72359805d30f",
 				Name: "skill x",
-				DoDisplayData: true
-			}];
+				DoDisplayData: true,
+				ShowAbandonRate: true,
+				ShowReforecastedAgents: true
+			},
+			{
+				Id: "502632DC-7A0C-434D-8A75-3153D5160787",
+				Name: "skill y",
+				DoDisplayData: true,
+				ShowAbandonRate: false,
+				ShowReforecastedAgents: false
+			}
+		];
 
 		skillsWithFirstUnsupported = [
 			{
@@ -269,6 +279,16 @@ describe('IntradayAreaCtrl', function () {
 			return [200, trafficAndPerformanceDataTomorrow];
 		});
 
+		$httpBackend.whenGET("../api/intraday/monitorskillstatistics/" + skills[1].Id + "/0")
+		.respond(function () {
+			return [200, trafficAndPerformanceData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillstatistics/" + skills[1].Id + "/1")
+		.respond(function () {
+			return [200, trafficAndPerformanceDataTomorrow];
+		});
+
 		$httpBackend.whenGET("../api/intraday/monitorskillareastatistics/" + skillAreas[0].Id + "/0")
 		.respond(function () {
 			return [200, trafficAndPerformanceData];
@@ -319,6 +339,16 @@ describe('IntradayAreaCtrl', function () {
 			return [200, performanceDataTomorrow];
 		});
 
+		$httpBackend.whenGET("../api/intraday/monitorskillperformance/" + skills[1].Id + "/0")
+		.respond(function () {
+			return [200, performanceData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillperformance/" + skills[1].Id + "/1")
+		.respond(function () {
+			return [200, performanceDataTomorrow];
+		});
+
 		$httpBackend.whenGET("../api/intraday/monitorskillstaffing/5f15b334-22d1-4bc1-8e41-72359805d30f")
 		.respond(function () {
 			return [200, staffingData];
@@ -330,6 +360,16 @@ describe('IntradayAreaCtrl', function () {
 		});
 
 		$httpBackend.whenGET("../api/intraday/monitorskillstaffing/" + skills[0].Id + "/1")
+		.respond(function () {
+			return [200, staffingDataTomorrow];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillstaffing/" + skills[1].Id + "/0")
+		.respond(function () {
+			return [200, staffingData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/monitorskillstaffing/" + skills[1].Id + "/1")
 		.respond(function () {
 			return [200, staffingDataTomorrow];
 		});
@@ -370,6 +410,11 @@ describe('IntradayAreaCtrl', function () {
 		});
 
 		$httpBackend.whenGET("../api/intraday/lateststatisticstimeforskill/5f15b334-22d1-4bc1-8e41-72359805d30f")
+		.respond(function () {
+			return [200, timeData];
+		});
+
+		$httpBackend.whenGET("../api/intraday/lateststatisticstimeforskill/502632DC-7A0C-434D-8A75-3153D5160787")
 		.respond(function () {
 			return [200, timeData];
 		});
@@ -773,5 +818,27 @@ describe('IntradayAreaCtrl', function () {
 		expect(scope.viewObj.forecastedStaffing.series[1]).toEqual(3);
 		jasmine.clock().uninstall();
 
+	});
+	
+	it('should not show abandon rate data when toggle is enabled and email-like skill chosen', function () {
+		createController(false);
+		scope.activeTab = 1;
+		scope.toggles.otherSkillsLikeEmail = true;
+
+		scope.selectedSkillChange(skills[1]);
+
+		$httpBackend.flush();
+
+		expect(scope.viewObj.abandonedRateObj.series.length).toEqual(1);
+		expect(scope.viewObj.summary.summaryAbandonedRate).toEqual(undefined);
+	});
+
+	it('should not show reforcasted agents data when toggle is enabled and email-like skill chosen', function () {
+		createController(false);
+		scope.activeTab = 2;
+		scope.toggles.otherSkillsLikeEmail = true;
+		scope.selectedSkillChange(skills[1]);
+		$httpBackend.flush();
+		expect(scope.viewObj.forecastedStaffing.updatedSeries.length).toEqual(1);
 	});
 });

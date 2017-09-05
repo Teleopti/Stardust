@@ -28,7 +28,8 @@
                 },
                 summary: {},
                 hasMonitorData: false,
-                hasEmailSkill: false,
+				hasEmailSkill: false,
+				showAbandonRate: true,
                 waitingForData: false,
                 timeSeries: [],
                 currentInterval: []
@@ -37,11 +38,13 @@
             var hiddenArray = [];
             var intervalStart;
             var mixedArea = false;
-            service.setPerformanceData = function(result, showEsl, showEmailSkill, isToday) {
+            service.setPerformanceData = function(result, showEsl, showEmailSkill, isToday, showAbandonRate) {
                 clearData();
-
-                performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
-                performanceData.abandonedRateObj.series = result.DataSeries.AbandonedRate;
+				performanceData.averageSpeedOfAnswerObj.series = result.DataSeries.AverageSpeedOfAnswer;
+				performanceData.showAbandonRate = showAbandonRate;
+				if(showAbandonRate !== false){
+					performanceData.abandonedRateObj.series = result.DataSeries.AbandonedRate;
+				}
                 performanceData.serviceLevelObj.series = result.DataSeries.ServiceLevel;
                 if (showEsl) performanceData.estimatedServiceLevelObj.series = result.DataSeries.EstimatedServiceLevels;
 
@@ -68,7 +71,7 @@
                 performanceData.estimatedServiceLevelObj.series.splice(0, 0, 'ESL');
 
                 performanceData.summary = {
-                    summaryAbandonedRate: $filter('number')(result.Summary.AbandonRate * 100, 1),
+                    summaryAbandonedRate: showAbandonRate!=false ? $filter('number')(result.Summary.AbandonRate * 100, 1) : undefined,
                     summaryServiceLevel: $filter('number')(result.Summary.ServiceLevel * 100, 1),
                     summaryAverageSpeedOfAnswer: $filter('number')(result.Summary.AverageSpeedOfAnswer, 1)
                 };
@@ -140,7 +143,12 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, true);
+                            service.setPerformanceData(
+								result, 
+								toggles.showEsl, 
+								toggles.showEmailSkill, 
+								true,
+								selectedItem.ShowAbandonRate);
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;
@@ -163,7 +171,8 @@
                                 result,
                                 toggles.showEsl,
                                 toggles.showEmailSkill,
-                                dayOffset === 0
+								dayOffset === 0,
+								selectedItem.ShowAbandonRate
                             );
                         },
                         function(error) {
@@ -182,7 +191,7 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, true);
+                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, true, selectedItem.ShowAbandonedRate);
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;
@@ -201,7 +210,7 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, dayOffset === 0);
+                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, dayOffset === 0, selectedItem.ShowAbandonRate);
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;

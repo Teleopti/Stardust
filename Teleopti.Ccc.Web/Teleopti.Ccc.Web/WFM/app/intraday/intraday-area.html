@@ -214,8 +214,8 @@
 								<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
 									<div class="con-row">
 										<div class="con-flex">
-											<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
-											</p>
+											<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
+											<p ng-if="!viewObj.showAbandonRate"><i class="mdi mdi-alert"></i> {{'NotShowingAbandonRate'|translate}}</p>
 											<div class="wfm-chart intraday-chart" id="performanceChart"></div>
 										</div>
 									</div>
@@ -273,6 +273,8 @@
 									<div class="con-row">
 										<div class="con-flex">
 											<p ng-if="viewObj.hasEmailSkill"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
+											</p>
+											<p ng-if="!viewObj.showReforecastedAgents"><i class="mdi mdi-alert"></i> {{'NotShowingReforcastedAgents'|translate}}
 											</p>
 											<div class="wfm-chart intraday-chart" id="staffingChart" ng-show="viewObj.hasMonitorData"></div>
 										</div>

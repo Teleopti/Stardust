@@ -17,7 +17,8 @@
                 },
                 hasMonitorData: false,
                 waitingForData: false,
-                hasEmailSkill: false,
+				hasEmailSkill: false,
+				showReforecastedAgents: true,
                 timeSeries: [],
                 actualStaffingSeries: [],
                 currentInterval: [],
@@ -27,7 +28,7 @@
             var hiddenArray = [];
             var mixedArea = false;
 
-            service.setStaffingData = function (result, showOptimalStaffing, showScheduledStaffing, showEmailSkill) {
+            service.setStaffingData = function (result, showOptimalStaffing, showScheduledStaffing, showEmailSkill, showReforecastedAgents) {
                 clearData();
 
                 staffingData.timeSeries = [];
@@ -39,12 +40,12 @@
                 if (result.DataSeries == null) return staffingData;
                 staffingData.forecastedStaffing.series = result.DataSeries.ForecastedStaffing;
 
-	            staffingData.hasEmailSkill = (showEmailSkill && mixedArea);
-
-				if(!showEmailSkill || !mixedArea)
+				staffingData.hasEmailSkill = (showEmailSkill && mixedArea);
+				staffingData.showReforecastedAgents = showReforecastedAgents !== false;
+				if(showReforecastedAgents !== false && (!showEmailSkill || !mixedArea)) 
 					staffingData.forecastedStaffing.updatedSeries = result.DataSeries.UpdatedForecastedStaffing;
 
-                if (showOptimalStaffing) staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
+				if (showOptimalStaffing) staffingData.actualStaffingSeries = result.DataSeries.ActualStaffing;
 
                 if (showScheduledStaffing) staffingData.scheduledStaffing = result.DataSeries.ScheduledStaffing;
 
@@ -106,7 +107,8 @@
                             result,
                             toggles.showOptimalStaffing,
                             toggles.showScheduledStaffing,
-                            toggles.showEmailSkill
+                            toggles.showEmailSkill,
+							selectedItem.ShowReforecastedAgents
                         );
                     },
                     function (error) {
@@ -129,7 +131,8 @@
                             result,
                             toggles.showOptimalStaffing,
                             toggles.showScheduledStaffing,
-                            toggles.showEmailSkill
+                            toggles.showEmailSkill,
+							selectedItem.ShowReforecastedAgents
                         );
                     },
                     function (error) {
@@ -153,7 +156,8 @@
                             result,
                             toggles.showOptimalStaffing && dayOffset <= 0,
                             toggles.showScheduledStaffing,
-                            toggles.showEmailSkill
+							toggles.showEmailSkill,
+							selectedItem.ShowReforecastedAgents
                         );
                     },
                     function (error) {
@@ -177,7 +181,8 @@
                             result,
 							toggles.showOptimalStaffing && dayOffset <= 0,
                             toggles.showScheduledStaffing,
-                            toggles.showEmailSkill
+                            toggles.showEmailSkill,
+							selectedItem.ShowReforecastedAgents
                         );
                     },
                     function (error) {

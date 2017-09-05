@@ -50,7 +50,8 @@
             showEsl: [],
             showEmailSkill: [],
             showOtherDay: [],
-            exportToExcel: []
+			exportToExcel: [],
+			otherSkillsLikeEmail: []
         };
         var message = $translate
             .instant('WFMReleaseNotificationWithoutOldModuleLink')
@@ -69,7 +70,8 @@
             $scope.toggles.showEsl = toggleSvc.Wfm_Intraday_ESL_41827;
             $scope.toggles.showEmailSkill = toggleSvc.Wfm_Intraday_SupportSkillTypeEmail_44002;
             $scope.toggles.showOtherDay = toggleSvc.WFM_Intraday_Show_For_Other_Days_43504;
-            $scope.toggles.exportToExcel = toggleSvc.WFM_Intraday_Export_To_Excel_44892;
+			$scope.toggles.exportToExcel = toggleSvc.WFM_Intraday_Export_To_Excel_44892;
+			$scope.toggles.otherSkillsLikeEmail = toggleSvc.WFM_Intraday_SupportOtherSkillsLikeEmail_44026;
         });
 
         var getAutoCompleteControls = function() {
@@ -133,7 +135,8 @@
                 if (item.DoDisplayData) {
                     // $scope.chosenOffset.value = 0;
                     $scope.changeChosenOffset($scope.chosenOffset.value, true);
-                    $scope.skillSelected(item);
+					$scope.skillSelected(item);
+					
                     pollActiveTabDataByDayOffset($scope.activeTab, $scope.chosenOffset.value);
                     if (prevSkill) {
                         if (!(prevSkill === autocompleteSkill.selectedSkill)) {
@@ -151,9 +154,9 @@
         function UnsupportedSkillNotice() {
             var notPhoneMessage = $translate.instant('UnsupportedSkillMsg');
             NoticeService.warning(notPhoneMessage, 5000, true);
-        }
+		}
 
-        $scope.selectedSkillAreaChange = function(item) {
+		$scope.selectedSkillAreaChange = function(item) {
             if (item) {
                 // $scope.chosenOffset.value = 0;
                 $scope.skillAreaSelected(item);

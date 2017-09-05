@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -20708,6 +20708,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abandoned rate cannot be shown for current selection..
+        /// </summary>
+        public static string NotShowingAbandonRate {
+            get {
+                return ResourceManager.GetString("NotShowingAbandonRate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reforecasted agents cannot be shown for current selection..
+        /// </summary>
+        public static string NotShowingReforcastedAgents {
+            get {
+                return ResourceManager.GetString("NotShowingReforcastedAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not validated.
         /// </summary>
         public static string NotValidated {
@@ -25383,7 +25401,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Report generated time.
+        ///   Looks up a localized string similar to Report generated.
         /// </summary>
         public static string ReportGeneratedTime {
             get {
@@ -34405,7 +34423,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Understafing after OT.
+        ///   Looks up a localized string similar to Understaffing after OT.
         /// </summary>
         public static string UnderstaffingAfterOT {
             get {
