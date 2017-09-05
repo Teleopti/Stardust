@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -62,6 +63,38 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var dayCount = skillResult.First().SkillDetails.ToList();
 			dayCount.Count.Should().Be.EqualTo(1);
 			dayCount.First().RelativeDifference.Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldShowAgentWithMissingShiftAsNotScheduled()
+		{
+			var firstDay = new DateOnly(2015, 10, 12); //mon
+			var activity = ActivityRepository.Has("_");
+			var skill = SkillRepository.Has("relevant skill", activity, new TimePeriod(8, 16));
+
+			var scenario = ScenarioRepository.Has("some name");
+			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
+			var shiftCategory = new ShiftCategory("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
+				new TimePeriodWithSegment(8, 0, 8, 0, 15), new TimePeriodWithSegment(16, 0, 16, 0, 15), shiftCategory));
+			var filterContract = new Contract("_")
+			{
+				WorkTimeDirective = new WorkTimeDirective(TimeSpan.FromHours(0), TimeSpan.FromHours(90), TimeSpan.FromHours(8), TimeSpan.FromHours(0))
+			};
+			var agent = PersonRepository.Has(filterContract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
+			
+			var planningGroup = new PlanningGroup("_").AddFilter(new ContractFilter(filterContract));
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2, SchedulePeriodType.Week, planningGroup);
+			PlanningGroupRepository.Has(planningGroup);
+
+			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0));
+			
+			PersonAssignmentRepository.Has(agent, scenario, activity, shiftCategory, new DateOnlyPeriod(firstDay, firstDay), new TimePeriod(8, 0, 16, 0));
+			
+			var result = Target.Execute(planningPeriod.Id.Value);
+			result.ScheduledAgentsCount.Should().Be.EqualTo(0);
+			result.BusinessRulesValidationResults.Count().Should().Be.EqualTo(1);
+			result.BusinessRulesValidationResults.FirstOrDefault().BusinessRuleCategory.Should().Be(BusinessRuleCategory.DayOff);
 		}
 	}
 }
