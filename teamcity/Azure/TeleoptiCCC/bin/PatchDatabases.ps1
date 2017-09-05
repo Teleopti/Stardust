@@ -389,7 +389,29 @@ Try
                 $cat = ($array[$i] -split "=")
                 $appDb = $cat[1]
             }
+            if ($array[$i] -like '*User ID*') { 
+                $cat = ($array[$i] -split "=")
+                $SQLUser = $cat[1]
+            }
+            if ($array[$i] -like '*Password*') { 
+                $cat = ($array[$i] -split "=")
+                $SQLPwd = $cat[1]
+            }
+           if ($array[$i] -like '*Data Source*') { 
+                $cat = ($array[$i] -split "=")
+                $SQLServerTenant = $cat[1]
+            }
+
+
         }
+
+        #make sure all connection string have a valid (same) server as master tenant
+        if (!$SQLServer.Contains($SQLServerTenant))
+        {
+            log-info "$SQLServerTenant not equal to the main server $SQLServer!!!"
+            continue
+        }
+
         $array = ($dr["AnalyticsConnectionString"] -split ";")
         for ($i=0; $i -lt $array.length; $i++) {
 	        if ($array[$i] -like '*Initial Catalog*') { 
@@ -397,9 +419,11 @@ Try
                 $analDb = $cat[1]
             }
         }
+
         $SECappDb = "-AP"+$appDb
         $SECanalDb =  "-AN"+$analDb
         $SECloggDb =  "-CD"+$analDb
+        $SQLUserPwd = "-L$SQLUser$colon$SQLPwd"
 
         log-info "Patch databases: $appDb $analDb."
 
