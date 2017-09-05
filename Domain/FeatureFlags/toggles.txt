@@ -165,7 +165,7 @@ Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
 Wfm_Intraday_ESL_41827 = true
 Wfm_Intraday_SupportSkillTypeWebChat_42591 = true
 Wfm_Intraday_SupportSkillTypeEmail_44002 = true
-WFM_Intraday_Show_For_Other_Days_43504 = RC
+WFM_Intraday_Show_For_Other_Days_43504 = false
 WFM_Intraday_SupportMultisiteSkill_43874 = true
 WFM_Intraday_Export_To_Excel_44892 = RC
 

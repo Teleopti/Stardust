@@ -183,7 +183,12 @@
 
             service.pollSkillAreaData = function(selectedItem, toggles) {
                 performanceData.waitingForData = true;
-                service.checkMixedArea(selectedItem);
+				service.checkMixedArea(selectedItem);
+				
+				var showAbandonRate = selectedItem.Skills.every(function(element, index, array){
+					return element.ShowAbandonRate === true
+				}) || !toggles.otherSkillsLikeEmail;
+
                 intradayService.getSkillAreaMonitorPerformance
                     .query({
                         id: selectedItem.Id
@@ -191,7 +196,7 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, true, selectedItem.ShowAbandonedRate);
+                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill && !toggles.otherSkillsLikeEmail, true, showAbandonRate);
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;
@@ -201,7 +206,12 @@
 
             service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
                 performanceData.waitingForData = true;
-                service.checkMixedArea(selectedItem);
+				service.checkMixedArea(selectedItem);
+
+				var showAbandonRate = selectedItem.Skills.every(function(element, index, array){
+					return element.ShowAbandonRate === true
+				}) || !toggles.otherSkillsLikeEmail;
+				
                 intradayService.getSkillAreaMonitorPerformanceByDayOffset
                     .query({
                         id: selectedItem.Id,
@@ -210,7 +220,7 @@
                     .$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
-                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill, dayOffset === 0, selectedItem.ShowAbandonRate);
+                            service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill && !toggles.otherSkillsLikeEmail, dayOffset === 0, showAbandonRate);
                         },
                         function(error) {
                             performanceData.hasMonitorData = false;

@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly ISkillAreaRepository _skillAreaRepository;
 		private readonly ILoadAllSkillInIntradays _loadAllSkillInIntradays;
 		private readonly IUserUiCulture _uiCulture;
+
 		public FetchSkillArea(ISkillAreaRepository skillAreaRepository, ILoadAllSkillInIntradays loadAllSkillInIntradays, IUserUiCulture uiCulture)
 		{
 			_skillAreaRepository = skillAreaRepository;
@@ -40,6 +41,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 									SkillType = skillInIntraday?.SkillType,
 									DoDisplayData = skillInIntraday != null && skillInIntraday.DoDisplayData,
 									IsMultisiteSkill = skillInIntraday != null && skillInIntraday.IsMultisiteSkill,
+									ShowAbandonRate = skillInIntraday?.ShowAbandonRate ?? true, 
+									ShowReforecastedAgents = skillInIntraday?.ShowReforecastedAgents ?? true
 								};
 							})
 							.ToArray()

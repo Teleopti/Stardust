@@ -30,7 +30,8 @@
 
             service.setStaffingData = function (result, showOptimalStaffing, showScheduledStaffing, showEmailSkill, showReforecastedAgents) {
                 clearData();
-
+				console.log('showEmailSkill', showEmailSkill)
+				
                 staffingData.timeSeries = [];
                 staffingData.forecastedStaffing.series = [];
                 staffingData.forecastedStaffing.updatedSeries = [];
@@ -95,6 +96,9 @@
 
             service.pollSkillData = function (selectedItem, toggles) {
                 staffingData.waitingForData = true;
+				console.log('pollSkillData toggles.otherSkillsLikeEmail', toggles.otherSkillsLikeEmail)
+				console.log('selectedItem.ShowReforecastedAgents && toggles.otherSkillsLikeEmail', selectedItem.ShowReforecastedAgents && toggles.otherSkillsLikeEmail)
+				
 	            service.checkMixedArea(selectedItem);
                 intradayService.getSkillStaffingData
                     .query({
@@ -118,8 +122,11 @@
             };
 
             service.pollSkillAreaData = function (selectedItem, toggles) {
-                staffingData.waitingForData = true;
+				staffingData.waitingForData = true;
 				service.checkMixedArea(selectedItem);
+				var showReforecastedAgents = selectedItem.Skills.every(function(element, index, array){
+					return element.ShowReforecastedAgents === true
+				}) || !toggles.otherSkillsLikeEmail;
                 intradayService.getSkillAreaStaffingData
                     .query({
                         id: selectedItem.Id
@@ -132,7 +139,7 @@
                             toggles.showOptimalStaffing,
                             toggles.showScheduledStaffing,
                             toggles.showEmailSkill,
-							selectedItem.ShowReforecastedAgents
+							showReforecastedAgents
                         );
                     },
                     function (error) {
@@ -167,8 +174,13 @@
             };
 
             service.pollSkillAreaDataByDayOffset = function (selectedItem, toggles, dayOffset) {
-                staffingData.waitingForData = true;
-	            service.checkMixedArea(selectedItem);
+                staffingData.waitingForData = true; 
+				service.checkMixedArea(selectedItem);
+
+				var showReforecastedAgents = selectedItem.Skills.every(function(element, index, array){
+					return element.ShowReforecastedAgents === true
+				}) || !toggles.otherSkillsLikeEmail;
+
                 intradayService.getSkillAreaStaffingDataByDayOffset
                     .query({
                         id: selectedItem.Id,
@@ -182,7 +194,7 @@
 							toggles.showOptimalStaffing && dayOffset <= 0,
                             toggles.showScheduledStaffing,
                             toggles.showEmailSkill,
-							selectedItem.ShowReforecastedAgents
+							showReforecastedAgents
                         );
                     },
                     function (error) {
