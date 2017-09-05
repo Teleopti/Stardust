@@ -366,10 +366,10 @@ Try
     $cmd.CommandText = "UPDATE Tenant.Tenant SET AnalyticsConnectionString = REPLACE(AnalyticsConnectionString, 'Data Source=', 'Data Source=tcp:') WHERE AnalyticsConnectionString NOT LIKE 'Data Source=tcp:%'"
     $rowsAffected = $cmd.ExecuteNonQuery()
 
-    $cmd.CommandText = "UPDATE Tenant.Tenant SET ApplicationConnectionString = ApplicationConnectionString + 'Encrypt=True;trustServerCertificate=false' WHERE ApplicationConnectionString NOT LIKE '%Encrypt=True;trustServerCertificate=false'"
+    $cmd.CommandText = "UPDATE Tenant.Tenant SET ApplicationConnectionString = ApplicationConnectionString + 'Encrypt=True;trustServerCertificate=false' WHERE ApplicationConnectionString NOT LIKE '%Encrypt=True;trustServerCertificate=false%'"
     $rowsAffected = $cmd.ExecuteNonQuery()
 
-    $cmd.CommandText = "UPDATE Tenant.Tenant SET AnalyticsConnectionString = AnalyticsConnectionString + 'Encrypt=True;trustServerCertificate=false' WHERE AnalyticsConnectionString NOT LIKE '%Encrypt=True;trustServerCertificate=false'"
+    $cmd.CommandText = "UPDATE Tenant.Tenant SET AnalyticsConnectionString = AnalyticsConnectionString + 'Encrypt=True;trustServerCertificate=false' WHERE AnalyticsConnectionString NOT LIKE '%Encrypt=True;trustServerCertificate=false%'"
     $rowsAffected = $cmd.ExecuteNonQuery()
 
     $cmd.CommandText = "SELECT ApplicationConnectionString, AnalyticsConnectionString FROM Tenant.Tenant"
