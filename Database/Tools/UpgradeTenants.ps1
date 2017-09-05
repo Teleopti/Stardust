@@ -87,7 +87,10 @@ $CCC7DB=$args[2]
         #make sure all connection string have a valid (same) server as master tenant
         if (!$SQLServer.Contains($SQLServerTenant))
         {
-            log-info "$SQLServerTenant not equal to the main server $SQLServer!!!"
+            write-host "========="
+            write-host "WARNING!!"
+            write-host "$SQLServerTenant not equal to the main server $SQLServer!!!"
+            write-host "========="
             continue
         }
 		
