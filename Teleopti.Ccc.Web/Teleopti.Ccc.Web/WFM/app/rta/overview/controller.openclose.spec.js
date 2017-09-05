@@ -5,23 +5,31 @@ describe('RtaOverviewController open/close site', function () {
   beforeEach(module('wfm.rta'));
 
   var $stateParams;
+  var $fakeBackend;
+  
   beforeEach(function () {
     module(function ($provide) {
       $provide.factory('$stateParams', function () {
         $stateParams = {};
         return $stateParams;
       });
+      $provide.factory('skills', function () {
+        return $fakeBackend.skills;
+      });
+      $provide.factory('skillAreas', function () {
+        return $fakeBackend.skillAreas;
+      });
     });
   });
-
+  
   var
     $controllerBuilder,
-    $fakeBackend,
     $scope,
     $state;
   beforeEach(inject(function (_FakeRtaBackend_, _ControllerBuilder_, _$state_) {
     $controllerBuilder = _ControllerBuilder_;
     $fakeBackend = _FakeRtaBackend_;
+		$fakeBackend.clear();
     $state = _$state_;
     $state.current.name = 'rta-refact';
     $scope = $controllerBuilder.setup('RtaOverviewController39082');

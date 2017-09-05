@@ -11,6 +11,12 @@ describe('RtaOverviewController selection', function () {
         $stateParams = {};
         return $stateParams;
       });
+      $provide.factory('skills', function () {
+        return $fakeBackend.skills;
+      });
+      $provide.factory('skillAreas', function () {
+        return $fakeBackend.skillAreas;
+      });
     });
   });
 
@@ -24,9 +30,8 @@ describe('RtaOverviewController selection', function () {
     $fakeBackend = _FakeRtaBackend_;
     $state = _$state_;
     $scope = $controllerBuilder.setup('RtaOverviewController39082');
-
     spyOn($state, 'go');
-		$state.current.name = 'rta-refact';
+    $state.current.name = 'rta-refact';
   }));
 
   it('should select site', function () {

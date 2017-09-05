@@ -43,6 +43,12 @@ describe('rtaOverviewComponent', function () {
         stateParams = {};
         return stateParams;
       });
+      $provide.factory('skills', function () {
+        return $fakeBackend.skills;
+      });
+      $provide.factory('skillAreas', function () {
+        return $fakeBackend.skillAreas;
+      });
     });
   });
 
@@ -53,7 +59,6 @@ describe('rtaOverviewComponent', function () {
     $httpBackend = _$httpBackend_;
     $state = _$state_;
 
-    $fakeBackend.clear();
     spyOn($state, 'go');
     // remove with RTA_RememberMyPartOfTheBusiness_39082
     scope = $controllerBuilder.setup('RtaOverviewController');
@@ -94,6 +99,10 @@ describe('rtaOverviewComponent', function () {
       Skills: skills2
     };
     skillAreas = [skillArea1, skillArea2];
+
+    $fakeBackend.clear();
+    allSkills.forEach(function (skill) { $fakeBackend.withSkill(skill); });
+    $fakeBackend.withSkillAreas(skillAreas);
 
   }));
 

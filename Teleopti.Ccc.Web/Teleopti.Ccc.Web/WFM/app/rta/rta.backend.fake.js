@@ -8,6 +8,19 @@
 
     function fakeRtaBackend($httpBackend) {
 
+        var serverTime = null;
+        var toggles = {};
+        var agentStates = [];
+        var adherenceForToday = [];
+        var sitesWithTeams = [];
+        var sitesWithTeamsOnSkills = [];
+        var siteAdherences = [];
+        var teamAdherences = [];
+        var skills = [];
+        var skillAreas = [];
+        var phoneStates = [];
+        var timeline = {};
+
         var service = {
             clear: clear,
             withToggle: withToggle,
@@ -26,23 +39,12 @@
             withPhoneState: withPhoneState,
             withOrganization: withOrganization,
             withOrganizationOnSkills: withOrganizationOnSkills,
-            withTimeline: withTimeline
+            withTimeline: withTimeline,
+
+            get skills() { return skills; },
+            get skillAreas() { return skillAreas; }
+
         };
-
-        ///////////////////////////////
-
-        var serverTime = null;
-        var toggles = {};
-        var agentStates = [];
-        var adherenceForToday = [];
-        var sitesWithTeams = [];
-        var sitesWithTeamsOnSkills = [];
-        var siteAdherences = [];
-        var teamAdherences = [];
-        var skills = [];
-        var skillAreas = [];
-        var phoneStates = [];
-        var timeline = {};
 
         var paramsOf = function (url) {
             var result = {};
@@ -334,7 +336,7 @@
         }
 
         function withSkillAreas(newSkillAreas) {
-            skillAreas = newSkillAreas;
+            newSkillAreas.forEach(function (e) { skillAreas.push(e) })
             return this;
         }
 

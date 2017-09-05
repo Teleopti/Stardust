@@ -42,21 +42,11 @@ describe('RtaOverviewController', function () {
 				stateParams = {};
 				return stateParams;
 			});
-		});
-	});
-
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.value('skills', function () {
-				return allSkills;
+			$provide.factory('skills', function () {
+				return $fakeBackend.skills;
 			});
-		});
-	});
-
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.value('skillAreas', function () {
-				return skillAreas;
+			$provide.factory('skillAreas', function () {
+				return $fakeBackend.skillAreas;
 			});
 		});
 	});
@@ -105,8 +95,10 @@ describe('RtaOverviewController', function () {
 			Skills: skills2
 		};
 		skillAreas = [skillArea1, skillArea2];
-
+		
 		$fakeBackend.clear();
+		allSkills.forEach(function (skill) { $fakeBackend.withSkill(skill); });
+		$fakeBackend.withSkillAreas(skillAreas);
 		spyOn($state, 'go');
 		$state.current.name = 'rta-refact';
 	}));

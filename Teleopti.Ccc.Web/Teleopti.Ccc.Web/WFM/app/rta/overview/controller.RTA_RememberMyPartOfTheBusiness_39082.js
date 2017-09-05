@@ -5,7 +5,7 @@
 		.module('wfm.rta')
 		.service('rtaStateService', rtaStateService);
 
-	function rtaStateService($state, rtaService) {
+	function rtaStateService($state, rtaService, $q) {
 
 		var state = {
 			open: undefined,
@@ -17,20 +17,33 @@
 		};
 
 		var organization = [];
+		var skills = [];
+		var skillAreas = [];
 
-		var dataLoaded = rtaService.getOrganization()
-			.then(function (data) {
-				organization = data;
-				organization.forEach(function (site) {
-					if (!site.Teams) site.Teams = [];
-				});
-				updateOpenedSites();
-			});
+		var dataLoaded = [
+			rtaService.getOrganization()
+				.then(function (data) {
+					organization = data;
+					organization.forEach(function (site) {
+						if (!site.Teams) site.Teams = [];
+					});
+					updateOpenedSites();
+				}),
+			rtaService.getSkills()
+				.then(function (data) {
+					skills = data;
+				}),
+			rtaService.getSkillAreas()
+				.then(function (data) {
+					skillAreas = data.SkillAreas;
+				})
+		];
 
 		return {
 			setCurrentState: function (newState) {
 				mutate(state, newState);
 				cleanState();
+				return $q.all(dataLoaded);
 			},
 
 			deselectSkillAndSkillArea: function () {
@@ -94,11 +107,17 @@
 					state.openedSiteIds = state.openedSiteIds.filter(function (siteId) { return siteId != id; });
 			},
 
-			pollParams: function (skillIds) {
+			pollParams: function () {
+				var skillIds = state.skillIds;
+				if (state.skillAreaId)
+					skillIds = skillAreas
+						.find(function (skillArea) { return skillArea.Id === state.skillAreaId; })
+						.Skills.map(function (skill) { return skill.Id; });
+
 				return { skillIds: skillIds, teamIds: state.teamIds, siteIds: state.openedSiteIds }
 			},
 
-			hasSelection: function(){
+			hasSelection: function () {
 				return state.siteIds.length > 0 || state.teamIds.length > 0;
 			},
 
@@ -253,12 +272,8 @@
 		vm.siteCards = [];
 		vm.totalAgentsInAlarm = 0;
 
-		rtaStateService.setCurrentState($stateParams);
-
-		if ($stateParams.skillAreaId)
-			$stateParams.skillIds = getSkillIdsFromSkillAreaId($stateParams.skillAreaId);
-		else
-			$stateParams.skillIds = $stateParams.skillIds || [];
+		rtaStateService.setCurrentState($stateParams)
+			.then(pollInitiate);
 
 		vm.skillPickerPreselectedItem = rtaStateService.skillPickerPreselectedItem();
 
@@ -293,12 +308,10 @@
 				$timeout.cancel(pollPromise);
 		}
 
-		pollInitiate();
-
 		$scope.$on('$destroy', pollStop);
 
 		function getSites() {
-			return rtaService.getOverviewModelFor(rtaStateService.pollParams($stateParams.skillIds))
+			return rtaService.getOverviewModelFor(rtaStateService.pollParams())
 				.then(function (data) {
 					data.Sites.forEach(function (site) {
 						var siteCard = vm.siteCards.find(function (siteCard) {
@@ -359,11 +372,6 @@
 			})
 		}
 
-		function getSkillIdsFromSkillAreaId(id) {
-			return vm.skillAreas.find(function (sa) { return sa.Id === id; })
-				.Skills.map(function (skill) { return skill.Id; });
-		}
-
 		function translateSiteColors(site) {
 			if (site.Color === 'good') {
 				return '#C2E085';
@@ -385,9 +393,7 @@
 				rtaStateService.selectSkill(skillOrSkillArea.Id);
 		}
 
-		vm.goToAgentsView = function () {
-			$state.go('rta-agents');
-		};
+		vm.goToAgentsView = function () { $state.go('rta-agents'); };
 
 		vm.displayGoToAgents = rtaStateService.hasSelection;
 

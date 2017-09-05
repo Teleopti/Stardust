@@ -1,5 +1,5 @@
 'use strict';
-(function() {
+(function () {
 	angular
 		.module('wfm.rta')
 		.factory('ControllerBuilder', controllerBuilder);
@@ -24,19 +24,15 @@
 			return scope;
 		};
 
-		function createController(skills, skillAreas) {
+		function createController() {
 
-			var vm = $controller(controllerName, {
-				$scope: scope,
-				skills: skills,
-				skillAreas: skillAreas
-			});
+			var vm = $controller(controllerName, { $scope: scope });
 
 			scope.$digest();
 			safeBackendFlush();
 
 			var callbacks = {
-				apply: function(apply) {
+				apply: function (apply) {
 					if (angular.isFunction(apply)) {
 						apply();
 						scope.$digest();
@@ -47,7 +43,7 @@
 					return callbacks;
 				},
 
-				wait: function(milliseconds) {
+				wait: function (milliseconds) {
 					$interval.flush(milliseconds);
 					$timeout.flush(milliseconds);
 					safeBackendFlush();

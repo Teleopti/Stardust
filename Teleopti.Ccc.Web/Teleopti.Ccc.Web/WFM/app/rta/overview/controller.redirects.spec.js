@@ -45,21 +45,11 @@ describe('RtaOverviewController redirects', function () {
 				stateParams = {};
 				return stateParams;
 			});
-		});
-	});
-
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.value('skills', function () {
-				return allSkills;
+			$provide.factory('skills', function () {
+				return $fakeBackend.skills;
 			});
-		});
-	});
-
-	beforeEach(function () {
-		module(function ($provide) {
-			$provide.value('skillAreas', function () {
-				return skillAreas;
+			$provide.factory('skillAreas', function () {
+				return $fakeBackend.skillAreas;
 			});
 		});
 	});
@@ -110,6 +100,9 @@ describe('RtaOverviewController redirects', function () {
 		skillAreas = [skillArea1, skillArea2];
 
 		$fakeBackend.clear();
+		allSkills.forEach(function (skill) { $fakeBackend.withSkill(skill); });
+		$fakeBackend.withSkillAreas(skillAreas);
+
 		spyOn($state, 'go').and.callFake(function (_, params) {
 			lastGoParams = params;
 		});
@@ -127,7 +120,7 @@ describe('RtaOverviewController redirects', function () {
 	});
 
 	it('should go to sites by skill area state', function () {
-		vm = $controllerBuilder.createController(undefined, skillAreas).vm;
+		vm = $controllerBuilder.createController().vm;
 
 		vm.selectSkillOrSkillArea(vm.skillAreas[0]);
 
@@ -136,7 +129,7 @@ describe('RtaOverviewController redirects', function () {
 
 	it('should go to sites with skill when changing selection from skill area to skill', function () {
 		stateParams.skillAreaId = 'skillArea1Id';
-		var c = $controllerBuilder.createController(allSkills, skillAreas);
+		var c = $controllerBuilder.createController();
 		vm = c.vm;
 
 		c.apply(function () {
@@ -660,7 +653,7 @@ describe('RtaOverviewController redirects', function () {
 		c.apply(function () {
 			vm.siteCards[0].isOpen = true;
 		});
-		
+
 		expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
 	});
 
@@ -706,7 +699,7 @@ describe('RtaOverviewController redirects', function () {
 		});
 
 		expect(lastGoParams.siteIds).toEqual(['parisId']);
-		expect(lastGoParams.teamIds).toEqual(['greenId']);		
+		expect(lastGoParams.teamIds).toEqual(['greenId']);
 	});
 
 });
