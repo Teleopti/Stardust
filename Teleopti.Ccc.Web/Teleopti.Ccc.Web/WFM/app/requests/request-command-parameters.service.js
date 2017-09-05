@@ -1,80 +1,49 @@
-﻿(function() {
+﻿(function () {
 	'use strict';
 
 	angular.module('wfm.requests')
-		.service('requestCommandParamsHolder', ['requestsDefinitions', requestCommandParamsHolderService]);
+		.service('requestCommandParamsHolder', requestCommandParamsHolderService);
 
-	function requestCommandParamsHolderService(requestsDefinitions) {
+	function requestCommandParamsHolderService() {
+
 		var self = this;
 
-		self._state = {
+		this._state = {
 			selectedTextAndAbsenceRequestIds: [],
 			selectedShiftTradeRequestIds: [],
-			selectedOvertimeRequestIds: [],
 			selectedIdAndMessage: {}
 		};
 
-		self.setSelectedIdAndMessage = function(selectedRequestId, message) {
+		this.setSelectedIdAndMessage = function (selectedRequestId, message) {
 			message[0] = message[0].trim();
 			self._state.selectedIdAndMessage[selectedRequestId] = message[0];
-		};
+		}
 
-		self.getSelectedIdAndMessage = function(selectedRequestId) {
+		this.getSelectedIdAndMessage = function (selectedRequestId) {
 			return self._state.selectedIdAndMessage[selectedRequestId];
+		}
+
+		this.setSelectedRequestIds = function (selectedRequestIds, isShiftTrade) {
+			if (isShiftTrade) {
+				self._state.selectedShiftTradeRequestIds = selectedRequestIds;
+			} else {
+				self._state.selectedTextAndAbsenceRequestIds = selectedRequestIds;
+			};
 		};
 
-		self.setSelectedRequestIds = function(selectedRequestIds, requestType) {
-			switch (requestType) {
-				case requestsDefinitions.REQUEST_TYPES.TEXT:
-					self._state.selectedTextAndAbsenceRequestIds = selectedRequestIds;
-
-				case requestsDefinitions.REQUEST_TYPES.ABSENCE:
-					self._state.selectedTextAndAbsenceRequestIds = selectedRequestIds;
-					break;
-
-				case requestsDefinitions.REQUEST_TYPES.SHIFTTRADE:
-					self._state.selectedShiftTradeRequestIds = selectedRequestIds;
-					break;
-
-				case requestsDefinitions.REQUEST_TYPES.OVERTIME:
-					self._state.selectedOvertimeRequestIds = selectedRequestIds;
-					break;
+		this.resetSelectedRequestIds = function (isShiftTrade) {
+			if (isShiftTrade) {
+				self._state.selectedShiftTradeRequestIds = [];
+			} else {
+				self._state.selectedTextAndAbsenceRequestIds = [];
 			}
 		};
 
-		self.resetSelectedRequestIds = function(requestType) {
-			switch (requestType) {
-				case requestsDefinitions.REQUEST_TYPES.TEXT:
-					self._state.selectedTextAndAbsenceRequestIds = [];
-					break;
-
-				case requestsDefinitions.REQUEST_TYPES.ABSENCE:
-					self._state.selectedTextAndAbsenceRequestIds = [];
-					break;
-
-				case requestsDefinitions.REQUEST_TYPES.SHIFTTRADE:
-					self._state.selectedShiftTradeRequestIds = [];
-					break;
-
-				case requestsDefinitions.REQUEST_TYPES.OVERTIME:
-					self._state.selectedOvertimeRequestIds = [];
-					break;
-			}
-		};
-
-		self.getSelectedRequestsIds = function(requestType) {
-			switch (requestType) {
-				case requestsDefinitions.REQUEST_TYPES.TEXT:
-					return self._state.selectedTextAndAbsenceRequestIds;
-
-				case requestsDefinitions.REQUEST_TYPES.ABSENCE:
-					return self._state.selectedTextAndAbsenceRequestIds;
-
-				case requestsDefinitions.REQUEST_TYPES.SHIFTTRADE:
-					return self._state.selectedShiftTradeRequestIds;
-
-				case requestsDefinitions.REQUEST_TYPES.OVERTIME:
-					return self._state.selectedOvertimeRequestIds;
+		this.getSelectedRequestsIds = function(isShiftTrade) {
+			if (isShiftTrade) {
+				return self._state.selectedShiftTradeRequestIds;
+			} else {
+				return self._state.selectedTextAndAbsenceRequestIds;
 			}
 		};
 	}

@@ -243,10 +243,6 @@
 		.ui-grid-column-menu-button-last-col {
 			margin-right: 0;
 		}
-
-		.ui-grid-row{
-			overflow-y: hidden;
-		}
 	}
 
 	.request-header-full-height {
@@ -480,7 +476,6 @@
 			position: absolute;
 			background-color: $orange-400;
 			opacity: 0.8;
-			overflow-y: hidden;
 		}
 
 		.is-day-off {
