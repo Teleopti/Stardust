@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.DayOffPlanning;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
@@ -139,6 +140,33 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
             bool result = _target.SetToFewBackToLegalState();
             Assert.IsTrue(result);
         }
+
+	    [Test]
+	    public void ShouldRandomizeWorkingWeekEnd()
+	    {
+		    LockableBitArray ret = array1();
+		    _target = new FreeWeekendSolver(ret, _functions, _daysOffPreferences, 20);
+			_daysOffPreferences.UseFullWeekendsOff = true;
+		    _daysOffPreferences.FullWeekendsOffValue = new MinMax<int>(1, 1);
+		    var first = false;
+		    var second = false;
+		    for (int i = 0; i < 10; i++)
+		    {
+			    ret.SetAll(false);
+			    ret.Set(12, true);
+			    ret.Set(13, true);
+			    ret.Set(19, true);
+			    ret.Set(20, true);
+			    _target.SetToManyBackToLegalState();
+			    if (!ret[12] || !ret[13])
+				    first = true;
+
+			    if (!ret[19] || !ret[20])
+				    second = true;
+			}
+
+			(first && second).Should().Be.True();
+		}
 
         [Test]
         public void VerifySolvableStateOnlyLooksInsidePeriodArea()
