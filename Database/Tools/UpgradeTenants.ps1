@@ -78,7 +78,19 @@ $CCC7DB=$args[2]
                 $cat = ($array[$i] -split "=")
                 $SQLPwd = $cat[1]
             }
+           if ($array[$i] -like '*Data Source*') { 
+                $cat = ($array[$i] -split "=")
+                $SQLServerTenant = $cat[1]
+            }			
         }
+		
+        #make sure all connection string have a valid (same) server as master tenant
+        if (!$SQLServer.Contains($SQLServerTenant))
+        {
+            log-info "$SQLServerTenant not equal to the main server $SQLServer!!!"
+            continue
+        }
+		
         $array = ($dr["AnalyticsConnectionString"] -split ";")
         for ($i=0; $i -lt $array.length; $i++) {
 	        if ($array[$i] -like '*Initial Catalog*') { 
