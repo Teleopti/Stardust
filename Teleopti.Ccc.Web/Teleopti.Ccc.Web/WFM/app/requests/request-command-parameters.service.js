@@ -5,25 +5,24 @@
 		.service('requestCommandParamsHolder', requestCommandParamsHolderService);
 
 	function requestCommandParamsHolderService() {
-
 		var self = this;
 
-		this._state = {
+		self._state = {
 			selectedTextAndAbsenceRequestIds: [],
 			selectedShiftTradeRequestIds: [],
 			selectedIdAndMessage: {}
 		};
 
-		this.setSelectedIdAndMessage = function (selectedRequestId, message) {
+		self.setSelectedIdAndMessage = function (selectedRequestId, message) {
 			message[0] = message[0].trim();
 			self._state.selectedIdAndMessage[selectedRequestId] = message[0];
-		}
+		};
 
-		this.getSelectedIdAndMessage = function (selectedRequestId) {
+		self.getSelectedIdAndMessage = function (selectedRequestId) {
 			return self._state.selectedIdAndMessage[selectedRequestId];
-		}
+		};
 
-		this.setSelectedRequestIds = function (selectedRequestIds, isShiftTrade) {
+		self.setSelectedRequestIds = function (selectedRequestIds, isShiftTrade) {
 			if (isShiftTrade) {
 				self._state.selectedShiftTradeRequestIds = selectedRequestIds;
 			} else {
@@ -31,7 +30,7 @@
 			};
 		};
 
-		this.resetSelectedRequestIds = function (isShiftTrade) {
+		self.resetSelectedRequestIds = function (isShiftTrade) {
 			if (isShiftTrade) {
 				self._state.selectedShiftTradeRequestIds = [];
 			} else {
@@ -39,7 +38,7 @@
 			}
 		};
 
-		this.getSelectedRequestsIds = function(isShiftTrade) {
+		self.getSelectedRequestsIds = function(isShiftTrade) {
 			if (isShiftTrade) {
 				return self._state.selectedShiftTradeRequestIds;
 			} else {
