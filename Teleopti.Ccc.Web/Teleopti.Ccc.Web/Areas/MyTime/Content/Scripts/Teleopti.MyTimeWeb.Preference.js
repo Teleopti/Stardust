@@ -188,6 +188,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		} else {
 			$('#Preference-body-inner .ui-selected').each(function(index, cell) {
 				var date = $(cell).data('mytime-date');
+				updateMustHaveInMenu(date);
 				var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
 				promises.push(promise);
 			});
@@ -216,7 +217,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			contentType: 'application/json; charset=utf-8',
 			type: 'POST',
 			data: JSON.stringify(preference),
-			success: function(data) {
+			success: function (data) {
+				postDates.forEach(function (date) {
+					updateMustHaveInMenu(date);
+				});
 				data.forEach(function(d) {
 					preferencesAndScheduleViewModel.DayViewModels[d.Date].ReadPreference(d.Value);
 				});
@@ -229,6 +233,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				validationErrorCallback(errorMessage);
 			}
 		});
+	}
+
+	function updateMustHaveInMenu(date) {
+		var oldMustHave = preferencesAndScheduleViewModel.DayViewModels[date].MustHave();
+		selectionViewModel.updateMustHave(false, oldMustHave);
 	}
 
 	function updateSelectedDatesAndNeighbors(postDates, cb){

@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		}
 
 		[When(@"I change standard preference to shift category '(.*)'")]
+		[Then(@"I select shift category '(.*)' as standard preference")]
 		[When(@"I select shift category '(.*)' as standard preference")]
 		[When(@"I try to select shift category '(.*)' standard preference")]
 		public void WhenIChangeStandardPreference(string shiftCategory)
@@ -42,6 +43,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void WhenISelectAnEditableDayWithStandardPreference()
 		{
 			PreferencesPageStepDefinitions.SelectCalendarCellByClass(new DateTime(2014, 5, 3));
+		}
+
+		[When(@"I click add must have button")]
+		public void WhenIClickAddMustHaveButton()
+		{
+			Browser.Interactions.Click(".dropdown-toggle .glyphicon-heart");
+			Browser.Interactions.Click(".dropdown-menu .add-musthave");
 		}
 
 		[When(@"I also select an editable day without standard preference")]
@@ -252,6 +260,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.MyTime
 		public void WhenIClickTheDeletePreferenceButton()
 		{
 			Browser.Interactions.ClickUsingJQuery("a:has(i.glyphicon-remove)");
+		}
+
+		[Then(@"I should see must have number be updated to '(.*)'")]
+		public void ThenIShouldSeeMustHaveNumberBeUpdatedTo(int mustHave)
+		{ 
+			Browser.Interactions.AssertFirstContains(".submenu .musthave-current", mustHave.ToString());
 		}
 
 		private static string GetExpectedContractTimesString(string earliest, string latest, CultureInfo culture)

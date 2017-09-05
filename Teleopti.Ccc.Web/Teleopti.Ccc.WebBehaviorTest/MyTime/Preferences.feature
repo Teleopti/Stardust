@@ -175,6 +175,41 @@ Scenario: Replace standard preference
 	Then I should see the standard preference 'Night' in the calendar
 	And I should not see the former standard preference in the calendar
 
+Scenario: Should update Must have when replace new preference
+	Given I have a role with
+         | Field                          | Value |
+         | Access To Extended Preferences | false |
+	And I have schedule and person period 
+	And the time is '2014-05-02 08:00'
+	And there is a shift category named 'Night'
+	And I have a shift bag with category 'Night' and start times 8 to 9 and end times 4 to 5
+	And there is a day off named 'Day off'
+	And I have a workflow control set with
+	| Field                   | Value      |
+	| Name                    | Open       |
+	| SchedulePublishedToDate | 2014-06-05 |
+	| PreferencePeriodStart   | 2014-05-03 |
+	| PreferencePeriodEnd     | 2014-05-05 |
+	| AvailableShiftCategory  | Night      |
+	| AvailableDayOff         | Day off    |
+	And I have existing standard preference with
+	| Field      | Value      |
+	| Date       | 2014-05-03 |
+	| Preference | Day off    |
+	And I have a schedule period with 
+	| Field                | Value      |
+	| Start date           | 2012-08-20 |
+	| Type                 | Week       |
+	| Length               | 1          |
+	| Must have preference | 1          |
+	And I am viewing preferences for date '2014-05-02'
+	When I select an editable day with standard preference
+	And I select shift category 'Night' as standard preference
+	And I click add must have button
+	Then I should see must have number be updated to '1'
+	And I select shift category 'Day off' as standard preference
+	And I should see must have number be updated to '0'
+
 Scenario: Delete multiple standard preference
 	Given I have a role with
          | Field                          | Value |
