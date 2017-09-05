@@ -9,7 +9,20 @@ namespace Teleopti.Ccc.Domain.Intraday
 		bool SupportsReforecastedAgents(ISkill skill);
 	}
 
-	public class SkillTypeInfoDefault : ISkillTypeInfo
+	public class SkillTypeInfoSupportAll
+	{
+		public bool SupportsAbandonRate(ISkill skill)
+		{
+			return true;
+		}
+
+		public bool SupportsReforecastedAgents(ISkill skill)
+		{
+			return true;
+		}
+	}
+
+	public class SkillTypeInfoTypesLikePhone : ISkillTypeInfo
 	{
 		private readonly string[] _skillTypesSupportAbandonRate = {
 			SkillTypeIdentifier.Phone,
