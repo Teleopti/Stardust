@@ -163,7 +163,6 @@
 				vm.filters = [{ 'Status': '0' }];
 			}
 
-			vm.initialized = true;
 			vm.allRequestStatuses = requestsDataService.getShiftTradeRequestsStatuses();
 
 			var params = $stateParams.getParams && $stateParams.getParams();
@@ -173,6 +172,9 @@
 			vm.filterEnabled = params.filterEnabled;
 			vm.isUsingRequestSubmitterTimeZone = params.isUsingRequestSubmitterTimeZone;
 			onInitCallBack = params.onInitCallBack;
+
+			applyGridColumns();
+			vm.initialized = true;
 
 			setupWatch();
 		};
@@ -187,22 +189,20 @@
 			vm.initialized && vm.reload();
 		});
 
-		$scope.$on('requests.filterEnabled.changed',
-			function(event, data) {
-				vm.filterEnabled = data;
-				vm.gridOptions.enableFiltering = vm.filterEnabled;
-				vm.gridOptions.useExternalFiltering = vm.filterEnabled;
-				angular.forEach(vm.gridOptions.columnDefs, function(col) {
-					col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
-				});
-				vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+		$scope.$on('requests.filterEnabled.changed', function(event, data) {
+			vm.filterEnabled = data;
+			vm.gridOptions.enableFiltering = vm.filterEnabled;
+			vm.gridOptions.useExternalFiltering = vm.filterEnabled;
+			angular.forEach(vm.gridOptions.columnDefs, function(col) {
+				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
 			});
+			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+		});
 
-		$scope.$on('requests.isUsingRequestSubmitterTimeZone.changed',
-			function(event, data) {
-				vm.isUsingRequestSubmitterTimeZone = data;
-				prepareComputedColumns(vm.requests);
-			});
+		$scope.$on('requests.isUsingRequestSubmitterTimeZone.changed', function(event, data) {
+			vm.isUsingRequestSubmitterTimeZone = data;
+			prepareComputedColumns(vm.requests);
+		});
 
 		function setFilters(filtersList, displayName) {
 			var filters = '';
@@ -263,8 +263,8 @@
 					vm.gridApi = gridApi;
 					gridApi.core.on.sortChanged($scope, function(grid, sortColumns) {
 						vm.sortingOrders = sortColumns.map(requestsDefinitions.translateSingleSortingOrder).filter(function(x) {
-								return x !== null;
-							});
+							return x !== null;
+						});
 					});
 					gridApi.grid.clearAllFilters = vm.clearAllFilters;
 					gridApi.selection.on.rowSelectionChanged($scope, onSelectionChanged);
@@ -294,6 +294,13 @@
 			};
 
 			return options;
+		}
+
+		function applyGridColumns(){
+			vm.gridOptions.columnDefs = shiftTradeGridConfiguration.columnDefinitions(vm.shiftTradeRequestDateSummary);
+			angular.forEach(vm.gridOptions.columnDefs, function(col) {
+				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
+			});
 		}
 
 		function onSelectionChanged() {
@@ -353,11 +360,6 @@
 			uiGridUtilitiesService.prepareComputedColumns(requests, vm.userTimeZone, vm.isUsingRequestSubmitterTimeZone);
 
 			setupShiftTradeVisualisation(requests);
-
-			vm.gridOptions.columnDefs = shiftTradeGridConfiguration.columnDefinitions(vm.shiftTradeRequestDateSummary);
-			angular.forEach(vm.gridOptions.columnDefs, function(col) {
-				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
-			});
 
 			vm.gridOptions.enableFiltering = vm.filterEnabled;
 			vm.gridOptions.enablePinning = true;
