@@ -103,6 +103,19 @@ describe('RtaOverviewController', function () {
 		$state.current.name = 'rta-refact';
 	}));
 
+	it('should create controller with empty state', function () {
+		stateParams.siteIds = undefined;
+		stateParams.teamIds = undefined;
+		stateParams.skillIds = undefined;
+		stateParams.skillAreaId = undefined;
+		stateParams.open = undefined;
+		stateParams.es = undefined;
+
+		expect(function () {
+			$controllerBuilder.createController()
+		}).not.toThrow();
+	});
+
 	describe('RtaFilterComponent handling', function () {
 		it('should get skills', function () {
 			vm = $controllerBuilder.createController(allSkills).vm;

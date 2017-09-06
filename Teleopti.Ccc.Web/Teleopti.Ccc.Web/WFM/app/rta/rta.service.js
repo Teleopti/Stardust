@@ -95,6 +95,14 @@
                 //             AgentsCount: 183897,
                 //             InAlarmCount: 13,
                 //             Color: "danger"
+                //         },
+                //         {
+                //             Id: "34590A63-6331-4921-BC9F-9B5E015AB496",
+                //             SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+                //             Name: "Fajker 2",
+                //             AgentsCount: 2312,
+                //             InAlarmCount: 8,
+                //             Color: "warning"
                 //         }]
                 //     return result;
                 // })
