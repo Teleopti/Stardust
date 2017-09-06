@@ -1,17 +1,19 @@
-﻿
-
-
-.cisco-widget > .row > div {
-	margin: 10px 0;
+﻿.cisco-widget {
+	margin-top: 50px;
 }
 
-	.cisco-widget > .row > div.pointer {
-		cursor: pointer;
+	.cisco-widget > .row > div {
+		margin: 10px 0;
 	}
 
+@media (min-width: 1200px) {
 	.cisco-widget > .row > div > div {
-		height: 68px;
+		position: absolute;
+		top: 0;
+		transform: translateY(-50%);
 	}
+}
+
 
 .cisco-widget .inline-block {
 	display: inline-block;
@@ -27,7 +29,7 @@
 }
 
 .cisco-widget .img-container {
-	height: 60px;
+	height: 68px;
 }
 
 	.cisco-widget .img-container img {
@@ -35,34 +37,41 @@
 		width: auto;
 	}
 
-.cisco-widget .report-ciscofix .navbar-teleopti {
-	display: none;
+.cisco-widget .report-ciscofix {
+	width: 100%;
 }
 
-.cisco-widget .report-ciscofix p {
-	margin-bottom: 0;
-	font-size: 10px;
-}
+	.cisco-widget .report-ciscofix .navbar-teleopti {
+		display: none;
+	}
 
-.cisco-widget .report-ciscofix .dashboard {
-	min-height: 40px;
-	margin-bottom: 5px;
-	white-space: nowrap;
-}
+	.cisco-widget .report-ciscofix p {
+		margin-bottom: 0;
+		font-size: 10px;
+	}
 
-.cisco-widget .report-ciscofix h1 {
-	font-size: 14px;
-	margin-top: 5px;
-	margin-bottom: 0;
-}
+	.cisco-widget .report-ciscofix .dashboard {
+		min-height: 40px;
+		margin: 2px 0;
+		white-space: nowrap;
+	}
 
-.cisco-widget .report-ciscofix .container {
-	margin-top: 0;
-	padding: 0 10px;
-	max-width: 100%;
-}
+	.cisco-widget .report-ciscofix h1 {
+		font-size: 14px;
+		margin-top: 5px;
+		margin-bottom: 0;
+	}
+
+	.cisco-widget .report-ciscofix .container {
+		margin-top: 0;
+		padding: 0 10px;
+		max-width: 100%;
+	}
+
+	.cisco-widget .report-ciscofix .alert {
+		margin: 0;
+	}
 
 .cisco-widget .col-md-4, .cisco-widget .col-sm-6, .cisco-widget .col-xs-12 {
-	padding-left: 5px;
-	padding-right: 5px;
+	padding: 0 2px;
 }

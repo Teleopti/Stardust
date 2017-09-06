@@ -16,7 +16,7 @@
 
 <div class="cisco-widget container">
 	<div class="row">
-		<div class="col-lg-2 col-md-3 col-sm-12 col-xs-12">
+		<div class="col-lg-2 col-md-3 col-sm-12 col-xs-12 relative">
 			<div class="logo-container" >
 				<div class="img-container" id="CiscoFinesse-teleopti-logo">
 					<img src="@Url.Content("~/Areas/MyTime/Content/Images/logo.png")" alt="logo" />
@@ -26,7 +26,7 @@
 
 		@if (ViewBag.HasAsmPermission)
 		{
-			<div class="col-lg-5 col-md-9 col-sm-12 col-xs-12 pointer">
+			<div class="col-lg-5 col-md-9 col-sm-12 col-xs-12 cursorpointer relative">
 				<div class="mytime-chart" id="CiscoFinesse-asm-module" onclick="gotoMyTime()">
 					@Html.Partial("../Asm/Index")
 				</div>
@@ -34,7 +34,7 @@
 		}
 		@if (ViewBag.HasMyReportPermission)
 		{
-			<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 pointer">
+			<div class="col-lg-5 col-md-12 col-sm-12 col-xs-12 cursorpointer relative">
 				<div class="teleopti-dashboard report-ciscofix" id="CiscoFinesse-myReport-module" onclick="gotoMyReport()">
 					@Html.Partial("../MyReport/MyReportPartial")
 				</div>
