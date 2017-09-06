@@ -13,7 +13,7 @@
       <Setting name="TeleoptiDriveMap.AccountKey" value="IqugZC5poDWLu9wwWocT42TAy5pael77JtbcZtnPcm37QRThCkdrnzOh3HEu8rDD1S8E6dU5D0aqS4sJA1BTxQ==" />
       <Setting name="TeleoptiDriveMap.ContainerName" value="teleopticcc/Payroll" />
       <Setting name="TeleoptiDriveMap.DataSourceName" value="teleoptirnd" />
-	  <Setting name="TeleoptiSetting.VmSize" value="Medium" />
+	  <Setting name="TeleoptiSetting.VmSize" value="Standard_A1_v2" />
     </ConfigurationSettings>
     <Certificates>
 	  <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="3206E29CF2B81CF830CE6E026A4148849EA06F27" thumbprintAlgorithm="sha1" />
