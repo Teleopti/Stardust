@@ -2,27 +2,27 @@
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
-	public class IntradayMonitorStaffingController : IntradayControllerBase
+	public class IntradayMonitorStaffingController : ApiController
 	{
+		private readonly IIntradaySkillProvider _intradaySkillProvider;
 		private readonly IStaffingViewModelCreator _staffingViewModelCreator;
 
-		public IntradayMonitorStaffingController(ISkillAreaRepository skillAreaRepository,
-			IStaffingViewModelCreator staffingViewModelCreator) : base(skillAreaRepository)
+		public IntradayMonitorStaffingController(IIntradaySkillProvider intradaySkillProvider, IStaffingViewModelCreator staffingViewModelCreator)
 		{
+			_intradaySkillProvider = intradaySkillProvider;
 			_staffingViewModelCreator = staffingViewModelCreator;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing/{id}")]
 		public virtual IHttpActionResult MonitorSkillAreaStaffing(Guid id)
 		{
-			var skillIdList = GetSkillsFromSkillArea(id);
+			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillArea(id);
 			return Ok(_staffingViewModelCreator.Load(skillIdList));
 		}
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastaffing/{skillAreaId}/{dayOffset}")]
 		public virtual IHttpActionResult MonitorSkillAreaStaffingByDayOffset(Guid skillAreaId, int dayOffset)
 		{
-			var skillIdList = GetSkillsFromSkillArea(skillAreaId);
+			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillArea(skillAreaId);
 			return Ok(_staffingViewModelCreator.Load(skillIdList, dayOffset));
 		}
 

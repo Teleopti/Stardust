@@ -2,27 +2,27 @@
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
-	public class IntradayMonitorStatisticsController : IntradayControllerBase
+	public class IntradayMonitorStatisticsController : ApiController
 	{
+		private readonly IIntradaySkillProvider _intradaySkillProvider;
 		private readonly IncomingTrafficViewModelCreator _incomingTrafficViewModelCreator;
 
-		public IntradayMonitorStatisticsController(ISkillAreaRepository skillAreaRepository,
-			IncomingTrafficViewModelCreator incomingTrafficViewModelCreator) : base(skillAreaRepository)
+		public IntradayMonitorStatisticsController(IIntradaySkillProvider intradaySkillProvider, IncomingTrafficViewModelCreator incomingTrafficViewModelCreator)
 		{
+			_intradaySkillProvider = intradaySkillProvider;
 			_incomingTrafficViewModelCreator = incomingTrafficViewModelCreator;
 		}
 
 		[UnitOfWorkAttribute, HttpGetAttribute, Route("api/intraday/monitorskillareastatistics/{id}")]
 		public virtual IHttpActionResult MonitorSkillAreaStatistics(Guid id)
 		{
-			var skillIdList = GetSkillsFromSkillArea(id);
+			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillArea(id);
 			return Ok(_incomingTrafficViewModelCreator.Load(skillIdList));
 		}
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareastatistics/{id}/{dayOffset}")]
 		public virtual IHttpActionResult MonitorSkillAreaStatisticsByDayOffset(Guid id, int dayOffset)
 		{
-			var skillIdList = GetSkillsFromSkillArea(id);
+			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillArea(id);
 			return Ok(_incomingTrafficViewModelCreator.Load(skillIdList, dayOffset));
 		}
 

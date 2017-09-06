@@ -2,26 +2,27 @@
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
-	public class IntradayController : IntradayControllerBase
+	public class IntradayController : ApiController
 	{
 		private readonly LatestStatisticsTimeProvider _latestStatisticsTimeProvider;
+		private readonly IIntradaySkillProvider _intradaySkillProvider;
 
-		public IntradayController(LatestStatisticsTimeProvider latestStatisticsTimeProvider,ISkillAreaRepository skillAreaRepository) : base(skillAreaRepository)
+		public IntradayController(LatestStatisticsTimeProvider latestStatisticsTimeProvider, IIntradaySkillProvider intradaySkillProvider)
 		{
 			_latestStatisticsTimeProvider = latestStatisticsTimeProvider;
+			_intradaySkillProvider = intradaySkillProvider;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/lateststatisticstimeforskillarea/{id}")]
 		public virtual IHttpActionResult GetLatestStatisticsTimeForSkillArea(Guid id)
 		{
-			var skillIdList = GetSkillsFromSkillArea(id);
+			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillArea(id);
 			return Ok(new { latestIntervalTime = _latestStatisticsTimeProvider.Get(skillIdList) });
 		}
 
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpGet, Route("api/intraday/lateststatisticstimeforskillarea/{id}/{dayOffset}")]
 		public virtual IHttpActionResult GetLatestStatisticsTimeForSkillAreaAndDate(Guid id, int dayOffset)
 		{
-			var skillIdList = GetSkillsFromSkillArea(id);
+			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillArea(id);
 			return Ok(new { latestIntervalTime = _latestStatisticsTimeProvider.Get(skillIdList, dayOffset) });
 		}
 

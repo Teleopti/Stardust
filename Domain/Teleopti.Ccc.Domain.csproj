@@ -288,8 +288,10 @@
     <Compile Include="InterfaceLegacy\Domain\IOvertimeRequestProcessor.cs" />
     <Compile Include="InterfaceLegacy\Domain\IUserDevice.cs" />
     <Compile Include="InterfaceLegacy\Infrastructure\IRequeueHangfireRepository.cs" />
+    <Compile Include="Intraday\IIntradaySkillProvider.cs" />
     <Compile Include="Intraday\IntradayExcelCreator.cs" />
     <Compile Include="Intraday\IntradayExportCreator.cs" />
+    <Compile Include="Intraday\IntradaySkillProvider.cs" />
     <Compile Include="Intraday\ISkillTypeInfo.cs" />
     <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />

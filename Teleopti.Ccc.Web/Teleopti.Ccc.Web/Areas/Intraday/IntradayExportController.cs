@@ -5,7 +5,6 @@ using System.Net.Http.Headers;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
@@ -14,30 +13,27 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
 	public class IntradayExportController : ApiController
 	{
-		private readonly ISkillAreaRepository _skillAreaRepository;
 		private readonly PerformanceViewModelCreator _performanceViewModelCreator;
 		private readonly IStaffingViewModelCreator _staffingViewModelCreator;
 		private readonly IncomingTrafficViewModelCreator _incomingTrafficViewModelCreator;
-		private readonly ISkillRepository _skillRepository;
+		private readonly IIntradaySkillProvider _intradaySkillProvider;
 
 		public IntradayExportController(
-			ISkillAreaRepository skillAreaRepository,
 			PerformanceViewModelCreator performanceViewModelCreator,
 			IStaffingViewModelCreator staffingViewModelCreator,
 			IncomingTrafficViewModelCreator incomingTrafficViewModelCreator,
-			ISkillRepository skillRepository)
+			IIntradaySkillProvider intradaySkillProvider)
 		{
-			_skillAreaRepository = skillAreaRepository;
 			_performanceViewModelCreator = performanceViewModelCreator;
 			_staffingViewModelCreator = staffingViewModelCreator;
 			_incomingTrafficViewModelCreator = incomingTrafficViewModelCreator;
-			_skillRepository = skillRepository;
+			_intradaySkillProvider = intradaySkillProvider;
 		}
 
 		[UnitOfWork, HttpPost, Route("api/intraday/exportskillareadatatoexcel")]
 		public virtual HttpResponseMessage GetIntradayDataAsExcelFileFromSkillArea(IndradayExportInput input)
 		{
-			var skillArea = _skillAreaRepository.Get(input.id);
+			var skillArea = _intradaySkillProvider.GetSkillAreaById(input.id);
 			var skillIdList = skillArea?.Skills.Select(skill => skill.Id).ToArray() ?? new Guid[0];
 			var intradayExportDataToExcel = new IntradayExportCreator();
 
@@ -59,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpPost, Route("api/intraday/exportskilldatatoexcel")]
 		public virtual HttpResponseMessage GetIntradayDataAsExcelFileFromSkill(IndradayExportInput input)
 		{
-			var skill = _skillRepository.Get(input.id);
+			var skill = _intradaySkillProvider.GetSkillById(input.id);
 			var intradayExportDataToExcel = new IntradayExportCreator();
 
 			var data = intradayExportDataToExcel.ExportDataToExcel(
