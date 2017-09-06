@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
@@ -15,9 +14,9 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 {
-	public class IntradayRequestProcessor
+	public class RequestProcessor : IRequestProcessor
 	{
-		private static readonly ILog logger = LogManager.GetLogger(typeof(IntradayRequestProcessor));
+		private static readonly ILog logger = LogManager.GetLogger(typeof(RequestProcessor));
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly ICurrentScenario _currentScenario;
 		private readonly IScheduleStorage _scheduleStorage;
@@ -27,13 +26,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 		private readonly IActivityRepository _activityRepository;
-		
-		public IntradayRequestProcessor(ICommandDispatcher commandDispatcher,
-												 ISkillCombinationResourceRepository skillCombinationResourceRepository,
-												 IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
-												 ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator, 
-												 IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, SkillStaffingIntervalProvider skillStaffingIntervalProvider, 
-												 IActivityRepository activityRepository)
+
+		public RequestProcessor(ICommandDispatcher commandDispatcher,
+			ISkillCombinationResourceRepository skillCombinationResourceRepository,
+			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
+			ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator,
+			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, SkillStaffingIntervalProvider skillStaffingIntervalProvider,
+			IActivityRepository activityRepository)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -76,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone());
 
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
-				
+
 
 				var skillIds = new HashSet<Guid>();
 				foreach (var skillCombinationResource in combinationResources)
@@ -94,11 +93,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				//this looks strange but is how it works. Pending = no autogrant, Grant = autogrant
 				var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
 
-				var shiftPeriodList = new List<DateTimePeriod>(); 
+				var shiftPeriodList = new List<DateTimePeriod>();
 				foreach (var day in scheduleDays)
 				{
 					var projection = day.ProjectionService().CreateProjection().FilterLayers(personRequest.Request.Period);
-					
+
 					var layers = projection.ToResourceLayers(skillInterval).ToList();
 					if (!layers.Any())
 					{
@@ -118,7 +117,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						skillStaffingIntervalsToValidate.AddRange(skillStaffingIntervals.Where(x => x.StartDateTime >= projectionPeriod.StartDateTime && x.StartDateTime < projectionPeriod.EndDateTime));
 					}
-					var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest) personRequest.Request, skillStaffingIntervalsToValidate);
+					var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest)personRequest.Request, skillStaffingIntervalsToValidate);
 					if (validatedRequest.IsValid)
 					{
 						if (!autoGrant) return;
@@ -177,5 +176,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 			return !command.ErrorMessages.Any();
 		}
+	}
+
+	public interface IRequestProcessor
+	{
+		void Process(IPersonRequest personRequest, DateTime startTime);
 	}
 }

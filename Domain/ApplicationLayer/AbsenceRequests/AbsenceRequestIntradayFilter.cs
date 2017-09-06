@@ -15,15 +15,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 	{
 		private readonly IQueuedAbsenceRequestRepository _queuedAbsenceRequestRepository;
 		private readonly INow _now;
-		private readonly IntradayRequestProcessor _intradayRequestProcessor;
+		private readonly IRequestProcessor _requestProcessor;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 		private readonly ICommandDispatcher _commandDispatcher;
 
-		public AbsenceRequestIntradayFilter(IntradayRequestProcessor intradayRequestProcessor,
+		public AbsenceRequestIntradayFilter(IRequestProcessor requestProcessor,
 											IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, INow now,
 											IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ICommandDispatcher commandDispatcher)
 		{
-			_intradayRequestProcessor = intradayRequestProcessor;
+			_requestProcessor = requestProcessor;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_now = now;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				var isIntradayRequest = personRequest.Request.Period.ElapsedTime() <= TimeSpan.FromDays(1) && intradayPeriod.Contains(personRequest.Request.Period.EndDateTime);
 				if (isIntradayRequest && validators.Any(v => v is StaffingThresholdValidator))
 				{
-					_intradayRequestProcessor.Process(personRequest, startDateTime);
+					_requestProcessor.Process(personRequest, startDateTime);
 				}
 				else
 				{

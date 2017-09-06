@@ -148,6 +148,7 @@
     <Compile Include="AgentInfo\SkillStaffingData.cs" />
     <Compile Include="AgentInfo\SkillStaffingDataLoader.cs" />
     <Compile Include="AgentInfo\SkillStaffingReadModelDataLoader.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\RequestProcessor.cs" />
     <Compile Include="ApplicationLayer\Commands\AddActivityCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Dates\AnalyticsPersonLocalDateUpdater.cs" />
     <Compile Include="ApplicationLayer\Events\ReloadSchedules.cs" />
@@ -239,7 +240,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\DenyLongQueuedAbsenceRequests.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\FilterRequestsWithDifferentVersion.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IApproveRequestsWithValidatorsEventMessage.cs" />
-    <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessor.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestProcessorOld.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\IntradayRequestWithinOpenHourValidator.cs" />
     <Compile Include="ApplicationLayer\Intraday\ExtractSkillForecastIntervals.cs" />
     <Compile Include="ApplicationLayer\IPersonAssociationPublisherCheckSumPersister.cs" />

@@ -76,7 +76,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShiftTradeApproveService>().As<IShiftTradeApproveService>().SingleInstance();
 
 			builder.RegisterType<RequestStrategySettingsReader>().As<IRequestStrategySettingsReader>().SingleInstance();
-			builder.RegisterType<IntradayRequestProcessor>().SingleInstance();
+			registerType
+				<IRequestProcessor, RequestProcessor, IntradayRequestProcessorOld>(builder,
+						Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767);
 			builder.RegisterType<OvertimeRequestUnderStaffingSkillProvider>().As<IOvertimeRequestUnderStaffingSkillProvider>();
 			builder.RegisterType<SkillStaffingReadModelDataLoader>().As<ISkillStaffingReadModelDataLoader>();
 			builder.RegisterType<OvertimeRequestSkillProvider>().As<IOvertimeRequestSkillProvider>();

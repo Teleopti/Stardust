@@ -78,6 +78,7 @@
 		Wfm_Requests_TriggerResourceCalculationFromGui_43129,
 		Wfm_Requests_OvertimeRequestHandling_45177,
 		Wfm_Requests_Refactoring_45470,
+		Wfm_Requests_ProcessWaitlistBefore24hRequests_45767,
 
 		Wfm_Outbound_IgnoreScheduleForReplan_43752,
 		Wfm_Seatplan_UseDatePeriodForPlanning_42167,
@@ -179,6 +180,7 @@
 
 		Stardust_Priority_BelowNormal_44320,
 		WFM_Intraday_SupportOtherSkillsLikeEmail_44026
+
 		// ReSharper restore InconsistentNaming
 	}
 }
