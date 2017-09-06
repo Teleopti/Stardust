@@ -10,6 +10,8 @@ describe('Requests - overtime controller tests',
 			requestsNotificationService,
 			currentUserInfo,
 			requestsFilterSvc,
+			requestGridStateSvc,
+			uiGridConstants,
 			requestsTabNames;
 
 		var period = {
@@ -63,13 +65,15 @@ describe('Requests - overtime controller tests',
 			});
 		});
 
-		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestsFilter_, REQUESTS_TAB_NAMES) {
+		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestsFilter_, _RequestGridStateService_, _uiGridConstants_, REQUESTS_TAB_NAMES) {
 			$filter = _$filter_;
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			$controller = _$controller_;
 			requestsDefinitions = _requestsDefinitions_;
 			requestsFilterSvc = _RequestsFilter_;
+			requestGridStateSvc = _RequestGridStateService_;
+			uiGridConstants = _uiGridConstants_;
 			requestsTabNames = REQUESTS_TAB_NAMES;
 
 			setUpTarget();
@@ -111,6 +115,31 @@ describe('Requests - overtime controller tests',
 			var targets = element[0].querySelectorAll('.ui-grid-render-container-body .ui-grid-row');
 
 			expect(targets.length).toEqual(2);
+		});
+
+		it('should save ui-grid state', function() {
+			var request = {
+				Id: 1,
+				Type: requestsDefinitions.REQUEST_TYPES.OVERTIME,
+				Payload: {
+					Name: 'overtime paid'
+				}
+			};
+			requestsDataService.setRequests([request, request]);
+
+			params.selectedGroupIds = ['team'];
+			var element = compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			requestGridStateSvc.setupGridEventHandlers(scope, controller, requestsDefinitions.REQUEST_TYPES.OVERTIME);
+
+			var gridScope = angular.element(element[0].querySelectorAll('.ui-grid-contents-wrapper')).scope();
+			gridScope.grid.api.core.raise.columnVisibilityChanged(gridScope.grid.columns[0]);
+			controller.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+
+			scope.$digest();
+
+			expect(requestGridStateSvc.hasSavedState(requestsDefinitions.REQUEST_TYPES.OVERTIME)).toBeTruthy();
 		});
 
 		it('populate requests data from requests data service', function () {

@@ -296,11 +296,19 @@
 		}
 
 		function initialiseGridStateHandling() {
-			requestGridStateService.restoreState(vm);
-			
+			if (vm.shiftTradeView) {
+				requestGridStateService.restoreState(vm, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+			} else {
+				requestGridStateService.restoreState(vm, requestsDefinitions.REQUEST_TYPES.ABSENCE);
+			}
+
 			// delay the setup of these handlers a little to let the table load
-			$timeout(function () {
-				requestGridStateService.setupGridEventHandlers($scope,vm);
+			$timeout(function() {
+				if (vm.shiftTradeView) {
+					requestGridStateService.setupGridEventHandlers($scope, vm, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+				} else {
+					requestGridStateService.setupGridEventHandlers($scope, vm, requestsDefinitions.REQUEST_TYPES.ABSENCE);
+				}
 			}, 500);
 		}
 

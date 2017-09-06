@@ -100,10 +100,10 @@
 
 		vm.init = function () {
 			vm.defaultStatusesLoaded = false;
-			
 			vm.userTimeZone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;
 
-			var sortingOrder = requestsDefinitions.translateSingleSortingOrder(requestGridStateService.getAbsenceAndTextSorting());
+			var sortingOrder = requestsDefinitions.translateSingleSortingOrder(requestGridStateService.getOvertimeSorting());
+
 			if(sortingOrder)
 				vm.sortingOrders.push(sortingOrder);
 
@@ -204,10 +204,10 @@
 
 		function initialiseGridStateHandling() {
 			vm.shiftTradeView = false;
-			requestGridStateService.restoreState(vm);
+			requestGridStateService.restoreState(vm, requestsDefinitions.REQUEST_TYPES.OVERTIME);
 			// delay the setup of these handlers a little to let the table load
 			$timeout(function() {
-				requestGridStateService.setupGridEventHandlers($scope, vm);
+				requestGridStateService.setupGridEventHandlers($scope, vm, requestsDefinitions.REQUEST_TYPES.OVERTIME);
 			}, 500);
 		}
 

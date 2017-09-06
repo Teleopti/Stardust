@@ -11,7 +11,9 @@ describe('Requests shift trade controller tests',
 			requestsDefinitions,
 			requestsNotificationService,
 			currentUserInfo,
+			requestGridStateSvc,
 			requestsFilterSvc,
+			uiGridConstants,
 			requestsTabNames;
 
 		var period = {
@@ -63,13 +65,15 @@ describe('Requests shift trade controller tests',
 			});
 		});
 
-		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestsFilter_, REQUESTS_TAB_NAMES) {
+		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestGridStateService_, _RequestsFilter_, _uiGridConstants_, REQUESTS_TAB_NAMES) {
 			$filter = _$filter_;
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			$controller = _$controller_;
 			requestsDefinitions = _requestsDefinitions_;
+			requestGridStateSvc = _RequestGridStateService_;
 			requestsFilterSvc = _RequestsFilter_;
+			uiGridConstants = _uiGridConstants_;
 			requestsTabNames = REQUESTS_TAB_NAMES;
 			setUpTarget();
 		}));
@@ -101,6 +105,28 @@ describe('Requests shift trade controller tests',
 
 			expect(requestsDataService.getHasSentRequests()).toBeFalsy();
 			expect(controller.requests.length).toEqual(0);
+		});
+
+		it('should save ui-grid state', function() {
+			var request = {
+				Id: 1,
+				Type: requestsDefinitions.REQUEST_TYPES.SHIFTTRADE,
+			};
+			requestsDataService.setRequests([request, request]);
+
+			params.selectedGroupIds = ['team'];
+			var element = compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			requestGridStateSvc.setupGridEventHandlers(scope, controller, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+
+			var gridScope = angular.element(element[0].querySelectorAll('.ui-grid-contents-wrapper')).scope();
+			gridScope.grid.api.core.raise.columnVisibilityChanged(gridScope.grid.columns[0]);
+			controller.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+
+			scope.$digest();
+
+			expect(requestGridStateSvc.hasSavedState(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE)).toBeTruthy();
 		});
 
 		it('should not request data when period is invalid', function () {

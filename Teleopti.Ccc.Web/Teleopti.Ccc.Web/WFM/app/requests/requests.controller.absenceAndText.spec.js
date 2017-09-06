@@ -9,7 +9,9 @@ describe('Requests - absence and text controller tests',
 			requestsDefinitions,
 			requestsNotificationService,
 			currentUserInfo,
+			requestGridStateSvc,
 			requestsFilterSvc,
+			uiGridConstants,
 			requestsTabNames;
 
 		var period = {
@@ -63,13 +65,15 @@ describe('Requests - absence and text controller tests',
 			});
 		});
 
-		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestsFilter_, REQUESTS_TAB_NAMES) {
+		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestGridStateService_, _RequestsFilter_, _uiGridConstants_, REQUESTS_TAB_NAMES) {
 			$filter = _$filter_;
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			$controller = _$controller_;
 			requestsDefinitions = _requestsDefinitions_;
+			requestGridStateSvc = _RequestGridStateService_;
 			requestsFilterSvc = _RequestsFilter_;
+			uiGridConstants = _uiGridConstants_;
 			requestsTabNames = REQUESTS_TAB_NAMES;
 
 			setUpTarget();
@@ -110,6 +114,31 @@ describe('Requests - absence and text controller tests',
 			var targets = element[0].querySelectorAll('.ui-grid-render-container-body .ui-grid-row');
 
 			expect(targets.length).toEqual(2);
+		});
+
+		it('should save ui-grid state', function() {
+			var request = {
+				Id: 1,
+				Type: requestsDefinitions.REQUEST_TYPES.ABSENCE,
+				Payload: {
+					Name: 'holiday'
+				}
+			};
+			requestsDataService.setRequests([request, request]);
+
+			params.selectedGroupIds = ['team'];
+			var element = compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			requestGridStateSvc.setupGridEventHandlers(scope, controller, requestsDefinitions.REQUEST_TYPES.ABSENCE);
+
+			var gridScope = angular.element(element[0].querySelectorAll('.ui-grid-contents-wrapper')).scope();
+			gridScope.grid.api.core.raise.columnVisibilityChanged(gridScope.grid.columns[0]);
+			controller.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+
+			scope.$digest();
+
+			expect(requestGridStateSvc.hasSavedState(requestsDefinitions.REQUEST_TYPES.ABSENCE)).toBeTruthy();
 		});
 
 		it('populate requests data from requests data service', function () {
