@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -40,19 +39,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			ITeam team = TeamFactory.CreateTeamWithId("team1");
 			team.Site = site;
 			TeamRepository.Add(team);
-
-			person1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			person1.WorkflowControlSet = new WorkflowControlSet("valid workflow");
-			person1.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
-			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			person2.WorkflowControlSet = new WorkflowControlSet("valid workflow");
-			person2.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
-			person3.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			person3.WorkflowControlSet = new WorkflowControlSet("valid workflow");
-			person3.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
-			person4.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			person4.WorkflowControlSet = new WorkflowControlSet("valid workflow");
-			person4.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 
 			person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 			person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
