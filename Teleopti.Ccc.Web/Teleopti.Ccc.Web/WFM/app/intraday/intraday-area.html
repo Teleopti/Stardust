@@ -135,8 +135,10 @@
 				<div class="wfm-slide-tabs tabbed-panel">
 					<div class="head-actions panel-menu" ng-show="toggles.exportToExcel" >
 						<div tabindex=0 class="context-menu card-context">
-							<i class="mdi mdi-file-excel" ng-click="exportIntradayData()"></i>
-							<md-tooltip>{{'ExportToExcel'|translate}}</md-tooltip> 
+							<i class="mdi mdi-file-excel" ng-click="exportIntradayData()" ng-show="!exporting"></i>
+							<md-progress-circular md-mode="indeterminate" md-diameter="24" ng-show="exporting"></md-progress-circular>
+							<md-tooltip ng-if="!exporting">{{'ExportToExcel'|translate}}</md-tooltip>
+							<md-tooltip ng-if="exporting">{{'WorkingThreeDots'|translate}}</md-tooltip> 
 						</div>
 					</div>
 					<md-content class="md-padding">

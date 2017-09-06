@@ -443,9 +443,9 @@
         };
 
         function saveData(data, status, headers, config) {
-            var blob = new Blob([data]);
-            saveAs(blob, 'IntradayExportedData ' + moment().format('YYYY-MM-DD') + '.xlsx');
-            $scope.exporting = false;
+			var blob = new Blob([data]);
+	        $scope.exporting = false;
+			saveAs(blob, 'IntradayExportedData ' + moment().format('YYYY-MM-DD') + '.xlsx');
         }
 
         function errorSaveData(data, status, headers, config) {
