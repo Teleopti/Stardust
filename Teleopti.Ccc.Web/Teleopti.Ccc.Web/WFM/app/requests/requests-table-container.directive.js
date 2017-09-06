@@ -16,7 +16,6 @@
 		vm.prepareComputedColumns = prepareComputedColumns;
 		vm.clearSelection = clearSelection;
 		vm.reselectRequests = reselectRequests;
-		vm.getShiftTradeHeaderClass = getShiftTradeHeaderClass;
 		vm.thereIsRequest = thereIsRequest;
 		vm.isDayOff = isDayOff;
 		vm.shouldDisplayShiftTradeDayDetail = shouldDisplayShiftTradeDayDetail;
@@ -75,10 +74,6 @@
 
 		function shouldDisplayShiftTradeDayDetail(shiftTradeDayDetail) {
 			return (shiftTradeDayDetail && (shiftTradeDayDetail.ShortName != null && shiftTradeDayDetail.ShortName.length !== 0));
-		}
-
-		function getShiftTradeHeaderClass() {
-			return vm.shiftTradeView || vm.filterEnabled ? 'request-header-full-height' : '';
 		}
 
 		function applyColumnFilters(columnDefs) {

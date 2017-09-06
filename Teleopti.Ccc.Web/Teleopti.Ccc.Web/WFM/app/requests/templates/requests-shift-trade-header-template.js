@@ -10,7 +10,7 @@
 					"	<div class=\"ui-grid-header-viewport\">" +
 					"		<div class=\"ui-grid-header-canvas\">" +
 					"			<div class=\"ui-grid-header-cell-wrapper\" ng-style=\"colContainer.headerCellWrapperStyle()\">" +
-					"				<div role=\"row\" class=\"ui-grid-header-cell-row\" ng-class=\"grid.appScope.shiftTradeView ? \'request-header-full-height\' : \'\' \"  >" +
+					"				<div role=\"row\" class=\"ui-grid-header-cell-row\" ng-class=\"grid.appScope.filterEnabled ? \'request-header-full-height\' : \'\' \"  >" +
 					"					<div class=\"ui-grid-header-cell ui-grid-clearfix\" " +
 					"						ng-if=\"!col.colDef.isShiftTradeDayColumn\"" +
 					"						ng-repeat=\"col in colContainer.renderedColumns track by col.uid\" " +

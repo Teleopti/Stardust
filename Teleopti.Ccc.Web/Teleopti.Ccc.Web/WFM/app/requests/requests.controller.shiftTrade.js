@@ -135,10 +135,6 @@
 			return (shiftTradeDayDetail && (shiftTradeDayDetail.ShortName != null && shiftTradeDayDetail.ShortName.length !== 0));
 		};
 
-		vm.getShiftTradeHeaderClass = function() {
-			return vm.shiftTradeView || vm.filterEnabled ? 'request-header-full-height' : '';
-		};
-
 		vm.init = function() {
 			vm.defaultStatusesLoaded = false;
 			vm.userTimeZone = currentUserInfo.CurrentUserInfo().DefaultTimeZone;

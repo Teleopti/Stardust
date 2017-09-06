@@ -1,14 +1,19 @@
-﻿
-.account-tooltip .md-content {
-    height: auto;
+﻿.account-tooltip .md-content {
+	height: auto;
 }
 
 .wfm-requests {
+	padding: 0;
+
 	.request-footer {
-		height: 35px;
+		min-height: 40px;
+
+		.time-zone-switch{
+			padding: 5px 0;
+		}
 
 		.pagination {
-			margin: inherit !important;
+			margin: 0 5px;
 		}
 	}
 
@@ -17,13 +22,8 @@
 		margin-top: 5px;
 	}
 
-	.m-t-5 {
-		margin-top: 5px;
-	}
-
 	.request-body {
 		border-bottom: 1px solid rgba(0,0,0,.26);
-		margin-bottom: 10px;
 	}
 
 	.requests-uigrid-table {
@@ -151,10 +151,6 @@
 		}
 	}
 
-	[id="time-zone-switch"] {
-		position: relative;
-	}
-
 	.filter-switch {
 		display: inline-block;
 		padding-left: 3px;
@@ -164,15 +160,13 @@
 		display: flex;
 		justify-content: space-between;
 		background-color: $white;
-		padding: 0;
-		padding-left: 12px;
 
 		.left-part {
-			padding: .4em 0;
 			flex: 1 1 80%;
 			display: flex;
 			flex-wrap: wrap;
 			justify-content: flex-start;
+			padding-top: 5px;
 
 			& > .people-search-container, & > .wfm-switch {
 				margin: 10px 10px 10px 0;
@@ -222,8 +216,7 @@
 	}
 
 	.ui-grid {
-		/*height: 68vh;*/
-		margin: 15px 0;
+		margin-top: 10px;
 		/*align filter input to the left*/
 		div[ui-grid-filter] {
 			text-align: left !important;
@@ -237,6 +230,7 @@
 		.ui-grid-cell-contents.ui-grid-cell-contents {
 			width: 85%;
 			text-align: left;
+			height: 30px;
 			text-overflow: ellipsis;
 		}
 
@@ -250,7 +244,7 @@
 	}
 
 	.request-header-full-height {
-		height: 60px;
+		min-height: 60px;
 	}
 
 	requests-overview[shift-trade-view] .paging {
@@ -340,6 +334,8 @@
 
 
 	.text-absence-view {
+		overflow: hidden;
+
 		.ui-grid-top-panel {
 			overflow: visible;
 		}
@@ -408,8 +404,6 @@
 		div.ui-grid-viewport.ng-isolate-scope {
 			overflow-x: hidden !important
 		}
-
-		overflow-x: hidden
 	}
 
 	.text-absence-view{
@@ -602,9 +596,8 @@
 	}
 
 	.clear-all-filters {
-		cursor: pointer;
 		position: absolute;
-		top: 5rem;
+		top: 4rem;
 		left: .8rem;
 	}
 }
