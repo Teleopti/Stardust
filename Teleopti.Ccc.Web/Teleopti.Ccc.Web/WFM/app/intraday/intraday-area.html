@@ -287,6 +287,24 @@
 									</md-content>
 								</md-tab>
 							</md-tabs>
+					</md-content>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div ng-cloak class="modal-box">
+		<div ng-cloak ng-show="DeleteSkillAreaModal">
+			<div class="modalbg">
+				<div class="dialog-mini">
+					<div class="modal-inner-content">
+						<h3>{{selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
+					</div>
+					<div class="modal-actions">
+						<aside>
+							<button ng-click="toggleModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
+							<button ng-click='deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">{{'Delete'|translate}}</button>
+						</aside>
 						</div>
 					</div>
 				</div>
