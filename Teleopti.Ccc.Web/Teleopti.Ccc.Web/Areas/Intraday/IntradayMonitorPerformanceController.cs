@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
@@ -10,31 +9,27 @@ using Teleopti.Ccc.Web.Filters;
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
-	public class IntradayMonitorPerformanceController : ApiController
+	public class IntradayMonitorPerformanceController : IntradayControllerBase
 	{
-		private readonly ISkillAreaRepository _skillAreaRepository;
 		private readonly PerformanceViewModelCreator _performanceViewModelCreator;
 
 		public IntradayMonitorPerformanceController(ISkillAreaRepository skillAreaRepository,
-			PerformanceViewModelCreator performanceViewModelCreator)
+			PerformanceViewModelCreator performanceViewModelCreator) : base(skillAreaRepository)
 		{
-			_skillAreaRepository = skillAreaRepository;
 			_performanceViewModelCreator = performanceViewModelCreator;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareaperformance/{id}")]
 		public virtual IHttpActionResult MonitorSkillAreaPerformance(Guid id)
 		{
-			var skillArea = _skillAreaRepository.Get(id);
-			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
+			var skillIdList = GetSkillsFromSkillArea(id);
 			return Ok(_performanceViewModelCreator.Load(skillIdList));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareaperformance/{id}/{dayOffset}")]
 		public virtual IHttpActionResult MonitorSkillAreaPerformanceByDayOffset(Guid id, int dayOffset)
 		{
-			var skillArea = _skillAreaRepository.Get(id);
-			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
+			var skillIdList = GetSkillsFromSkillArea(id);
 			return Ok(_performanceViewModelCreator.Load(skillIdList, dayOffset));
 		}
 

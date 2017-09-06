@@ -38,26 +38,22 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		public virtual HttpResponseMessage GetIntradayDataAsExcelFileFromSkillArea(IndradayExportInput input)
 		{
 			var skillArea = _skillAreaRepository.Get(input.id);
-			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
+			var skillIdList = skillArea?.Skills.Select(skill => skill.Id).ToArray() ?? new Guid[0];
 			var intradayExportDataToExcel = new IntradayExportCreator();
 
 			var data = intradayExportDataToExcel.ExportDataToExcel(
 				new IntradayExcelExport()
 				{
 					Date = DateTime.Now.AddDays(input.dayOffset),
-					SkillAreaName = skillArea.Name,
-					Skills = skillArea.Skills.Select(skill => skill.Name).ToArray(),
+					SkillAreaName = skillArea?.Name ?? string.Empty,
+					Skills = skillArea?.Skills.Select(skill => skill.Name).ToArray() ?? new string[0],
 					PerformanceViewModel = _performanceViewModelCreator.Load(skillIdList, input.dayOffset),
 					StaffingViewModel = _staffingViewModelCreator.Load(skillIdList, input.dayOffset),
 					IncomingViewModel = _incomingTrafficViewModelCreator.Load(skillIdList, input.dayOffset)
 				}
 			);
 
-			var response = new HttpResponseMessage();
-			response.Content = new ByteArrayContent(data);
-			response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-			response.Content.Headers.Add("Content-Disposition", "attachment; filename=IntradayExportData.xlsx");
-			return response;
+			return CreateResponse(data, "IntradayExportData.xlsx");
 		}
 
 		[UnitOfWork, HttpPost, Route("api/intraday/exportskilldatatoexcel")]
@@ -71,17 +67,22 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 				{
 					Date = DateTime.Now.AddDays(input.dayOffset),
 					SkillAreaName = string.Empty,
-					Skills = new[] { skill.Name },
+					Skills = new[] { skill?.Name ?? string.Empty },
 					PerformanceViewModel = _performanceViewModelCreator.Load(new[] { input.id }, input.dayOffset),
 					StaffingViewModel = _staffingViewModelCreator.Load(new[] { input.id }, input.dayOffset),
 					IncomingViewModel = _incomingTrafficViewModelCreator.Load(new[] { input.id }, input.dayOffset)
 				}
 			);
 
+			return CreateResponse(data, "IntradayExportData.xlsx");
+		}
+
+		private HttpResponseMessage CreateResponse(byte[] data, string fileName)
+		{
 			var response = new HttpResponseMessage();
 			response.Content = new ByteArrayContent(data);
 			response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-			response.Content.Headers.Add("Content-Disposition", "attachment; filename=IntradayExportData.xlsx");
+			response.Content.Headers.Add("Content-Disposition", $"attachment; filename={fileName}");
 			return response;
 		}
 	}

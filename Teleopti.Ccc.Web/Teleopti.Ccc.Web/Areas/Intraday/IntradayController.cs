@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
@@ -10,27 +9,19 @@ using Teleopti.Ccc.Web.Filters;
 namespace Teleopti.Ccc.Web.Areas.Intraday
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday)]
-	public class IntradayController : ApiController
+	public class IntradayController : IntradayControllerBase
 	{
 		private readonly LatestStatisticsTimeProvider _latestStatisticsTimeProvider;
-		private readonly ISkillAreaRepository _skillAreaRepository;
-		private readonly FetchSkillInIntraday _fetchSkillInIntraday;
 
-		public IntradayController(
-			LatestStatisticsTimeProvider latestStatisticsTimeProvider,
-			ISkillAreaRepository skillAreaRepository,
-			FetchSkillInIntraday fetchSkillInIntraday)
+		public IntradayController(LatestStatisticsTimeProvider latestStatisticsTimeProvider,ISkillAreaRepository skillAreaRepository) : base(skillAreaRepository)
 		{
 			_latestStatisticsTimeProvider = latestStatisticsTimeProvider;
-			_skillAreaRepository = skillAreaRepository;
-			_fetchSkillInIntraday = fetchSkillInIntraday;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/lateststatisticstimeforskillarea/{id}")]
 		public virtual IHttpActionResult GetLatestStatisticsTimeForSkillArea(Guid id)
 		{
-			var skillArea = _skillAreaRepository.Get(id);
-			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
+			var skillIdList = GetSkillsFromSkillArea(id);
 			return Ok(new { latestIntervalTime = _latestStatisticsTimeProvider.Get(skillIdList) });
 		}
 
@@ -43,8 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpGet, Route("api/intraday/lateststatisticstimeforskillarea/{id}/{dayOffset}")]
 		public virtual IHttpActionResult GetLatestStatisticsTimeForSkillAreaAndDate(Guid id, int dayOffset)
 		{
-			var skillArea = _skillAreaRepository.Get(id);
-			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
+			var skillIdList = GetSkillsFromSkillArea(id);
 			return Ok(new { latestIntervalTime = _latestStatisticsTimeProvider.Get(skillIdList, dayOffset) });
 		}
 
