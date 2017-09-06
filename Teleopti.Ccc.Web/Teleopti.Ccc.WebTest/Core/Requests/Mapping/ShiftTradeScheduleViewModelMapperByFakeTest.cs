@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -40,10 +41,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			team.Site = site;
 			TeamRepository.Add(team);
 
-			person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
-			person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
-			person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
-			person4.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			person1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			person1.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			person1.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			person2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			person2.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			person2.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			person3.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			person3.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			person3.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			person4.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			person4.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			person4.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+
+			person1.AddPersonPeriod(new PersonPeriod(new DateOnly(2091, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			person2.AddPersonPeriod(new PersonPeriod(new DateOnly(2091, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			person3.AddPersonPeriod(new PersonPeriod(new DateOnly(2091, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			person4.AddPersonPeriod(new PersonPeriod(new DateOnly(2091, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 
 			PersonRepository.Add(person1);
 			PersonRepository.Add(person2);
@@ -51,29 +65,29 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			PersonRepository.Add(person4);
 
 			var currentUser = LoggedOnUser.CurrentUser();
-			currentUser.AddPersonPeriod(new PersonPeriod(new DateOnly(2011, 1, 1), PersonContractFactory.CreatePersonContract(), team));
+			currentUser.AddPersonPeriod(new PersonPeriod(new DateOnly(2091, 1, 1), PersonContractFactory.CreatePersonContract(), team));
 			PersonRepository.Add(currentUser);
 
 
-			var person1Assignment_1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person1, new DateOnly(2015, 5, 19));
-			person1Assignment_1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 8, 2015, 5, 19, 14));
-			var person1Assignment_2 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person1, new DateOnly(2015, 5, 21));
-			person1Assignment_2.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21, 16));
+			var person1Assignment_1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person1, new DateOnly(2095, 5, 19));
+			person1Assignment_1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 19, 8, 2095, 5, 19, 14));
+			var person1Assignment_2 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person1, new DateOnly(2095, 5, 21));
+			person1Assignment_2.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 21, 10, 2095, 5, 21, 16));
 
 
-			var person2Assignment_1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person2, new DateOnly(2015, 5, 19));
-			person2Assignment_1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 11, 2015, 5, 19, 20));
-			var person2Assignment_2 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person2, new DateOnly(2015, 5, 23));
+			var person2Assignment_1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person2, new DateOnly(2095, 5, 19));
+			person2Assignment_1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 19, 11, 2095, 5, 19, 20));
+			var person2Assignment_2 = PersonAssignmentFactory.CreatePersonAssignmentWithId(person2, new DateOnly(2095, 5, 23));
 			person2Assignment_2.SetDayOff(new DayOffTemplate(new Description("Day Off", "DO")));
 
-			var person3Assignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person3, new DateOnly(2015, 5, 19));
-			person3Assignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 12, 2015, 5, 19, 15));
+			var person3Assignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person3, new DateOnly(2095, 5, 19));
+			person3Assignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 19, 12, 2095, 5, 19, 15));
 			
-			var person4Assignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person4, new DateOnly(2015, 5, 19));
-			person4Assignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 12, 2015, 5, 19, 15));
+			var person4Assignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(person4, new DateOnly(2095, 5, 19));
+			person4Assignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 19, 12, 2095, 5, 19, 15));
 
-			var currentUserAssignment1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(currentUser, new DateOnly(2015, 5, 19));
-			currentUserAssignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 19, 8, 2015, 5, 19, 14));
+			var currentUserAssignment1 = PersonAssignmentFactory.CreatePersonAssignmentWithId(currentUser, new DateOnly(2095, 5, 19));
+			currentUserAssignment1.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 19, 8, 2095, 5, 19, 14));
 
 			PersonAssignmentRepository.Add(person1Assignment_1);
 			PersonAssignmentRepository.Add(person1Assignment_2);
@@ -96,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				Paging = new Paging { Skip = 0, Take = 10,},
-				ShiftTradeDate = new DateOnly(2015, 5, 19),
+				ShiftTradeDate = new DateOnly(2095, 5, 19),
 				TeamIdList = TeamRepository.LoadAll().Select(t => t.Id.Value).ToList(),
 				SearchNameText = "",
 			};
@@ -115,7 +129,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
-				ShiftTradeDate = new DateOnly(2015, 5, 19),
+				ShiftTradeDate = new DateOnly(2095, 5, 19),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = "1"
@@ -129,22 +143,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			SetUp();
 
-			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2015, 5, 21));
-			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 21, 10, 2015, 5, 21, 16));
+			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2095, 5, 21));
+			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 21, 10, 2095, 5, 21, 16));
 			PersonAssignmentRepository.Add(currentUserAssignment);
 
 			var person1 = PersonRepository.LoadAll().First(p => p.Name.LastName == "1");
 
 			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
-				ShiftTradeDate = new DateOnly(2015, 5, 21),
+				ShiftTradeDate = new DateOnly(2095, 5, 21),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = ""
 			});
 
 			var agentSchedule = result.PossibleTradeSchedules.Single(s => s.PersonId == person1.Id.Value);
-			agentSchedule.MinStart.Should().Be.EqualTo(new DateTime(2015, 5, 21, 10, 0, 0));
+			agentSchedule.MinStart.Should().Be.EqualTo(new DateTime(2095, 5, 21, 10, 0, 0));
 		}
 
 		[Test]
@@ -154,14 +168,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
-				ShiftTradeDate = new DateOnly(2015, 5, 19),
+				ShiftTradeDate = new DateOnly(2095, 5, 19),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				SearchNameText = ""
 			});
 
-			result.TimeLineHours.Max(t => t.EndTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 20, 15, 0));
-			result.TimeLineHours.Min(t => t.StartTime).Should().Be.EqualTo(new DateTime(2015, 5, 19, 7, 45, 0));
+			result.TimeLineHours.Max(t => t.EndTime).Should().Be.EqualTo(new DateTime(2095, 5, 19, 20, 15, 0));
+			result.TimeLineHours.Min(t => t.StartTime).Should().Be.EqualTo(new DateTime(2095, 5, 19, 7, 45, 0));
 		}
 
 
@@ -172,13 +186,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			SetUp();
 			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
-				ShiftTradeDate = new DateOnly(2015, 5, 19),
+				ShiftTradeDate = new DateOnly(2095, 5, 19),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				TimeFilter = new TimeFilterInfo
 				{
-					StartTimes = new List<DateTimePeriod> { new DateTimePeriod(2015, 5, 19, 7, 2015, 5, 19, 9) },
-					EndTimes = new List<DateTimePeriod> { new DateTimePeriod(2015, 5, 19, 13, 2015, 5, 19, 15) },
+					StartTimes = new List<DateTimePeriod> { new DateTimePeriod(2095, 5, 19, 7, 2095, 5, 19, 9) },
+					EndTimes = new List<DateTimePeriod> { new DateTimePeriod(2095, 5, 19, 13, 2095, 5, 19, 15) },
 					IsDayOff = false,
 					IsWorkingDay = true,
 					IsEmptyDay = false
@@ -195,13 +209,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			SetUp();
 
-			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2015, 5, 23));
-			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
+			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2095, 5, 23));
+			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 23, 10, 2095, 5, 23, 16));
 			PersonAssignmentRepository.Add(currentUserAssignment);
 
 			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
-				ShiftTradeDate = new DateOnly(2015, 5, 23),
+				ShiftTradeDate = new DateOnly(2095, 5, 23),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				TimeFilter = new TimeFilterInfo
@@ -224,13 +238,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		{
 			SetUp();
 
-			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2015, 5, 23));
-			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2015, 5, 23, 10, 2015, 5, 23, 16));
+			var currentUserAssignment = PersonAssignmentFactory.CreatePersonAssignmentWithId(LoggedOnUser.CurrentUser(), new DateOnly(2095, 5, 23));
+			currentUserAssignment.AddActivity(ActivityFactory.CreateActivity("Phone"), new DateTimePeriod(2095, 5, 23, 10, 2095, 5, 23, 16));
 			PersonAssignmentRepository.Add(currentUserAssignment);
 
 			var result = Mapper.Map(new ShiftTradeScheduleViewModelData
 			{
-				ShiftTradeDate = new DateOnly(2015, 5, 23),
+				ShiftTradeDate = new DateOnly(2095, 5, 23),
 				TeamIdList = TeamRepository.LoadAll().Select(x => x.Id.Value).ToList(),
 				Paging = new Paging { Take = 20, Skip = 0 },
 				TimeFilter = new TimeFilterInfo
