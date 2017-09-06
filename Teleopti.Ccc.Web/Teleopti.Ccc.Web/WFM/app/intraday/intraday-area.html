@@ -129,187 +129,167 @@
 		</div>
 	</div>
 
-<div class="con-row" ng-show="selectedSkill.Name || selectedSkillArea.Name">
+	<div class="con-row" ng-show="selectedSkill.Name || selectedSkillArea.Name">
 		<div class="con-flex">
 			<div class="panel material-depth-1">
-				<div class="wfm-slide-tabs tabbed-panel">
+				<div class="sub-header" ng-if="toggles.showOtherDay">
+					<h2 id="viewingDate">
+						{{getLocalDate(chosenOffset.value)}}
+					</h2>
 					<div class="head-actions panel-menu" ng-show="toggles.exportToExcel" >
 						<div tabindex=0 class="context-menu card-context">
 							<i class="mdi mdi-file-excel" ng-click="exportIntradayData()" ng-show="!exporting"></i>
-							<md-progress-circular md-mode="indeterminate" md-diameter="24" ng-show="exporting"></md-progress-circular>
+							<md-progress-circular md-mode="indeterminate" md-diameter="18" ng-show="exporting"></md-progress-circular>
 							<md-tooltip ng-if="!exporting">{{'ExportToExcel'|translate}}</md-tooltip>
 							<md-tooltip ng-if="exporting">{{'WorkingThreeDots'|translate}}</md-tooltip> 
 						</div>
 					</div>
-					<md-content class="md-padding">
-						<div class="con-row full-padding" ng-if="toggles.showOtherDay">
-							<div>
-								<h2 style="font-weight: 700" id="viewingDate">
-									{{getLocalDate(chosenOffset.value)}}
-								</h2>
-							</div>
+				</div>
+				<div class="wfm-slide-tabs tabbed-panel">
+					<div class="con-row">
+						<div class="con-flex">
+							<md-tabs md-dynamic-height md-selected="activeTab">
+								<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
+									<md-content ng-cloak class="md-padding">
+										<div class="con-row">
+											<div class="con-flex" style="height: 15px">
+												<md-progress-linear ng-if="viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
+											</div>
+										</div>
+									</md-content>
+									<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
+										<div class="con-row">
+											<div class="con-flex">
+												<p ng-if="viewObj.hasEmailSkill && !toggles.otherSkillsLikeEmail"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
+												</p>
+												<div class="wfm-chart intraday-chart" id="trafficChart"></div>
+											</div>
+										</div>
+										<div class="con-row full-padding">
+											<div class="con-flex"></div>
+											<div class="con-flex">
+												<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
+												<table class="wfm-table wfm-filter-options">
+													<thead>
+													<tr>
+														<th></th>
+														<th>{{'Forecasted'|translate}}</th>
+														<th>{{'Actual'|translate}}</th>
+														<th>{{'Difference'|translate}}</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr>
+														<td>{{'Volume'|translate}}</td>
+														<td class="number-cell forecasted-calls ">{{viewObj.summary.summaryForecastedCalls}}</td>
+														<td class="number-cell calculated-calls">{{viewObj.summary.summaryCalculatedCalls}}</td>
+														<td class="number-cell calls-difference">{{viewObj.summary.forecastActualCallsDifference}}%</td>
+													</tr>
+													<tr>
+														<td>{{'AverageHandlingTime'|translate}}</td>
+														<td class="number-cell forecasted-aht">{{viewObj.summary.summaryForecastedAverageHandleTime}}</td>
+														<td class="number-cell aht">{{viewObj.summary.summaryAverageHandleTime}}</td>
+														<td class="number-cell aht-difference">{{viewObj.summary.forecastActualAverageHandleTimeDifference}}%</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+											<div class="con-flex"></div>
+										</div>
+									</md-content>
+									<md-content ng-cloak class="md-padding" ng-show="!viewObj.hasMonitorData">
+										<span class="con-flex no-data-available" ng-show="!viewObj.waitingForData && !viewObj.hasMonitorData">
+											{{'NoDataAvailable'|translate}}
+										</span>
+									</md-content>
+								</md-tab>
+								<md-tab label="{{'Performance'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
+									<md-content ng-cloak class="md-padding">
+										<div class="con-row">
+											<div class="con-flex" style="height: 15px">
+												<md-progress-linear ng-if="viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
+											</div>
+										</div>
+									</md-content>
+									<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
+										<div class="con-row">
+											<div class="con-flex">
+												<p ng-if="viewObj.hasEmailSkill && !toggles.otherSkillsLikeEmail"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
+												<p ng-if="!viewObj.showAbandonRate" id="noAbandonRate" ><i class="mdi mdi-alert"></i> {{'NotShowingAbandonRate'|translate}}</p>
+												<div class="wfm-chart intraday-chart" id="performanceChart"></div>
+											</div>
+										</div>
+
+										<div class="con-row full-padding">
+											<div class="con-flex"></div>
+											<div class="con-flex">
+												<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
+												<table class="wfm-table wfm-filter-options">
+													<thead>
+													<tr>
+														<th></th>
+														<th>{{'Average'|translate}}</th>
+													</tr>
+													</thead>
+													<tbody>
+													<tr>
+														<td>{{'ServiceLevel'|translate}}</td>
+														<td class="number-cell service-level">{{viewObj.summary.summaryServiceLevel}} %</td>
+													</tr>
+													<tr ng-if="toggles.showEsl">
+														<td>{{'ESL'|translate}}</td>
+														<td class="number-cell esl">{{viewObj.summary.summaryEstimatedServiceLevel}} %</td>
+													</tr>
+													<tr ng-if="!viewObj.hasEmailSkill">
+														<td>{{'AbandonedRate'|translate}}</td>
+														<td class="number-cell abandoned-rate">{{viewObj.summary.summaryAbandonedRate}} %</td>
+													</tr>
+													<tr>
+														<td>{{'AverageSpeedOfAnswer'|translate}}</td>
+														<td class="number-cell average-speed-of-answer">{{viewObj.summary.summaryAverageSpeedOfAnswer}} {{'SecondShort'|translate}}</td>
+													</tr>
+													</tbody>
+												</table>
+											</div>
+											<div class="con-flex"></div>
+										</div>
+									</md-content>
+									<md-content ng-cloak class="md-padding" ng-show="!viewObj.hasMonitorData">
+										<span class="con-flex no-data-available" ng-show="!viewObj.waitingForData && !viewObj.hasMonitorData">
+											{{'NoDataAvailable'|translate}}
+										</span>
+									</md-content>
+								</md-tab>
+								<md-tab label="{{'Staffing'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
+									<md-content ng-cloak class="md-padding">
+										<div class="con-row">
+											<div class="con-flex" style="height: 15px">
+												<md-progress-linear ng-if="viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
+											</div>
+										</div>
+
+									</md-content>
+									<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
+										<div class="con-row">
+											<div class="con-flex">
+												<p ng-if="viewObj.hasEmailSkill && !toggles.otherSkillsLikeEmail"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
+												</p>
+												<p ng-if="!viewObj.showReforecastedAgents" id="noReforcastedAgents" ><i class="mdi mdi-alert"></i> {{'NotShowingReforcastedAgents'|translate}}
+												</p>
+												<div class="wfm-chart intraday-chart" id="staffingChart" ng-show="viewObj.hasMonitorData"></div>
+											</div>
+										</div>
+									</md-content>
+									<md-content ng-cloak class="md-padding" ng-show="!viewObj.hasMonitorData">
+										<span class="con-flex no-data-available" ng-show="!viewObj.waitingForData && !viewObj.hasMonitorData">
+											{{'NoDataAvailable'|translate}}
+										</span>
+									</md-content>
+								</md-tab>
+							</md-tabs>
 						</div>
-
-						<md-tabs md-dynamic-height md-selected="activeTab">
-							<md-tab label="{{'IncomingTraffic'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
-								<md-content ng-cloak class="md-padding">
-									<div class="con-row">
-										<div class="con-flex" style="height: 15px">
-											<md-progress-linear ng-if="viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
-										</div>
-									</div>
-								</md-content>
-								<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
-									<div class="con-row">
-										<div class="con-flex">
-											<p ng-if="viewObj.hasEmailSkill && !toggles.otherSkillsLikeEmail"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
-											</p>
-											<div class="wfm-chart intraday-chart" id="trafficChart"></div>
-										</div>
-									</div>
-									<div class="con-row full-padding">
-										<div class="con-flex"></div>
-										<div class="con-flex">
-											<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
-											<table class="wfm-table wfm-filter-options">
-												<thead>
-												<tr>
-													<th></th>
-													<th>{{'Forecasted'|translate}}</th>
-													<th>{{'Actual'|translate}}</th>
-													<th>{{'Difference'|translate}}</th>
-												</tr>
-												</thead>
-												<tbody>
-												<tr>
-													<td>{{'Volume'|translate}}</td>
-													<td class="number-cell forecasted-calls ">{{viewObj.summary.summaryForecastedCalls}}</td>
-													<td class="number-cell calculated-calls">{{viewObj.summary.summaryCalculatedCalls}}</td>
-													<td class="number-cell calls-difference">{{viewObj.summary.forecastActualCallsDifference}}%</td>
-												</tr>
-												<tr>
-													<td>{{'AverageHandlingTime'|translate}}</td>
-													<td class="number-cell forecasted-aht">{{viewObj.summary.summaryForecastedAverageHandleTime}}</td>
-													<td class="number-cell aht">{{viewObj.summary.summaryAverageHandleTime}}</td>
-													<td class="number-cell aht-difference">{{viewObj.summary.forecastActualAverageHandleTimeDifference}}%</td>
-												</tr>
-												</tbody>
-											</table>
-										</div>
-										<div class="con-flex"></div>
-									</div>
-								</md-content>
-								<md-content ng-cloak class="md-padding" ng-show="!viewObj.hasMonitorData">
-									<span class="con-flex no-data-available" ng-show="!viewObj.waitingForData && !viewObj.hasMonitorData">
-										{{'NoDataAvailable'|translate}}
-									</span>
-								</md-content>
-							</md-tab>
-							<md-tab label="{{'Performance'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
-								<md-content ng-cloak class="md-padding">
-									<div class="con-row">
-										<div class="con-flex" style="height: 15px">
-											<md-progress-linear ng-if="viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
-										</div>
-									</div>
-								</md-content>
-								<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
-									<div class="con-row">
-										<div class="con-flex">
-											<p ng-if="viewObj.hasEmailSkill && !toggles.otherSkillsLikeEmail"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}</p>
-											<p ng-if="!viewObj.showAbandonRate" id="noAbandonRate" ><i class="mdi mdi-alert"></i> {{'NotShowingAbandonRate'|translate}}</p>
-											<div class="wfm-chart intraday-chart" id="performanceChart"></div>
-										</div>
-									</div>
-
-									<div class="con-row full-padding">
-										<div class="con-flex"></div>
-										<div class="con-flex">
-											<b>{{'SummaryUpToLatestActualInterval'|translate}}</b>
-											<table class="wfm-table wfm-filter-options">
-												<thead>
-												<tr>
-													<th></th>
-													<th>{{'Average'|translate}}</th>
-												</tr>
-												</thead>
-												<tbody>
-												<tr>
-													<td>{{'ServiceLevel'|translate}}</td>
-													<td class="number-cell service-level">{{viewObj.summary.summaryServiceLevel}} %</td>
-												</tr>
-												<tr ng-if="toggles.showEsl">
-													<td>{{'ESL'|translate}}</td>
-													<td class="number-cell esl">{{viewObj.summary.summaryEstimatedServiceLevel}} %</td>
-												</tr>
-												<tr ng-if="!viewObj.hasEmailSkill">
-													<td>{{'AbandonedRate'|translate}}</td>
-													<td class="number-cell abandoned-rate">{{viewObj.summary.summaryAbandonedRate}} %</td>
-												</tr>
-												<tr>
-													<td>{{'AverageSpeedOfAnswer'|translate}}</td>
-													<td class="number-cell average-speed-of-answer">{{viewObj.summary.summaryAverageSpeedOfAnswer}} {{'SecondShort'|translate}}</td>
-												</tr>
-												</tbody>
-											</table>
-										</div>
-										<div class="con-flex"></div>
-									</div>
-								</md-content>
-								<md-content ng-cloak class="md-padding" ng-show="!viewObj.hasMonitorData">
-									<span class="con-flex no-data-available" ng-show="!viewObj.waitingForData && !viewObj.hasMonitorData">
-										{{'NoDataAvailable'|translate}}
-									</span>
-								</md-content>
-							</md-tab>
-							<md-tab label="{{'Staffing'|translate}}" ng-click="pollActiveTabDataHelper(activeTab)">
-								<md-content ng-cloak class="md-padding">
-									<div class="con-row">
-										<div class="con-flex" style="height: 15px">
-											<md-progress-linear ng-if="viewObj.waitingForData" md-mode="indeterminate"></md-progress-linear>
-										</div>
-									</div>
-
-								</md-content>
-								<md-content ng-cloak class="md-padding" ng-show="viewObj.hasMonitorData">
-									<div class="con-row">
-										<div class="con-flex">
-											<p ng-if="viewObj.hasEmailSkill && !toggles.otherSkillsLikeEmail"><i class="mdi mdi-alert"></i> {{'UnavailableSeries'|translate}}
-											</p>
-											<p ng-if="!viewObj.showReforecastedAgents" id="noReforcastedAgents" ><i class="mdi mdi-alert"></i> {{'NotShowingReforcastedAgents'|translate}}
-											</p>
-											<div class="wfm-chart intraday-chart" id="staffingChart" ng-show="viewObj.hasMonitorData"></div>
-										</div>
-									</div>
-								</md-content>
-								<md-content ng-cloak class="md-padding" ng-show="!viewObj.hasMonitorData">
-									<span class="con-flex no-data-available" ng-show="!viewObj.waitingForData && !viewObj.hasMonitorData">
-										{{'NoDataAvailable'|translate}}
-									</span>
-								</md-content>
-							</md-tab>
-						</md-tabs>
-					</md-content>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<div ng-cloak class="modal-box">
-		<div ng-cloak ng-show="DeleteSkillAreaModal">
-			<div class="modalbg">
-				<div class="dialog-mini">
-					<div class="modal-inner-content">
-						<h3>{{selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
-					</div>
-					<div class="modal-actions">
-						<aside>
-							<button ng-click="toggleModal()" class="wfm-btn wfm-btn-invis-default">{{'Cancel'|translate}}</button>
-							<button ng-click='deleteSkillArea(selectedSkillArea)' class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">{{'Delete'|translate}}</button>
-						</aside>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
-</div>
