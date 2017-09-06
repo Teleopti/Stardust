@@ -29,12 +29,14 @@ describe('RtaAgentsController', function () {
 		$httpBackend = _$httpBackend_;
 		$fakeBackend = _FakeRtaBackend_;
 		$controllerBuilder = _ControllerBuilder_;
-
 		scope = $controllerBuilder.setup('RtaAgentsController');
-
-		$fakeBackend.clear();
 		spyOn($state, 'go');
 	}));
+
+	afterEach(function () {
+		$fakeBackend.clear();
+		$sessionStorage.$reset();
+	});
 
 	it('should get agent states', function () {
 		stateParams.teamIds = ["34590a63-6331-4921-bc9f-9b5e015ab495"];

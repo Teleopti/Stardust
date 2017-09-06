@@ -1,6 +1,6 @@
 ﻿'use strict';
 describe('rtaRouteService', function () {
-	var target, $state, curDate;
+	var target, $state;
 
 	beforeEach(module('wfm.rta'));
 	beforeEach(module('wfm.teamSchedule'));
@@ -8,12 +8,7 @@ describe('rtaRouteService', function () {
 	beforeEach(inject(function (_$state_, rtaRouteService) {
 		target = rtaRouteService;
 		$state = _$state_;
-		curDate = new Date();
 	}));
-
-	afterEach(function () {
-		jasmine.clock().mockDate(curDate);
-	});
 
 	it('should go back to overview', function () {
 		spyOn($state, 'go');

@@ -3,7 +3,6 @@ describe('RtaHistoricalController', function() {
     var $interval,
         $httpBackend,
         $state,
-        $sessionStorage,
         $fakeBackend,
         $controllerBuilder,
         $translate,
@@ -22,10 +21,9 @@ describe('RtaHistoricalController', function() {
         });
     });
 
-    beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _$sessionStorage_, _FakeRtaBackend_, _ControllerBuilder_, _$translate_) {
+    beforeEach(inject(function(_$httpBackend_, _$interval_, _$state_, _FakeRtaBackend_, _ControllerBuilder_, _$translate_) {
         $interval = _$interval_;
         $state = _$state_;
-        $sessionStorage = _$sessionStorage_;
         $httpBackend = _$httpBackend_;
         $fakeBackend = _FakeRtaBackend_;
         $controllerBuilder = _ControllerBuilder_;

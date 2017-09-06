@@ -29,12 +29,15 @@ describe('RtaAgentsController', function () {
 		$httpBackend = _$httpBackend_;
 		$fakeBackend = _FakeRtaBackend_;
 		$controllerBuilder = _ControllerBuilder_;
-
 		scope = $controllerBuilder.setup('RtaAgentsController');
-
-		$fakeBackend.clear();
 		spyOn($state, 'go');
 	}));
+
+	afterEach(function () {
+		$fakeBackend.clear();
+		$sessionStorage.$reset();
+	});
+
 	[{
 		name: "multiple sites",
 		type: 'siteIds',
