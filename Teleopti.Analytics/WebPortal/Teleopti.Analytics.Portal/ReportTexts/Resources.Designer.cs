@@ -19,7 +19,7 @@ namespace Teleopti.Analytics.ReportTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -1246,6 +1246,15 @@ namespace Teleopti.Analytics.ReportTexts {
         public static string ResDirectOutboundCallsTalkTime {
             get {
                 return ResourceManager.GetString("ResDirectOutboundCallsTalkTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ESL.
+        /// </summary>
+        public static string ResESL {
+            get {
+                return ResourceManager.GetString("ResESL", resourceCulture);
             }
         }
         

@@ -830,7 +830,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>ESL</Value>
+                                  <Value>=Parameters!ResESL.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -3014,6 +3014,11 @@
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
+	<ReportParameter Name="ResESL">
+		<DataType>String</DataType>
+		<AllowBlank>true</AllowBlank>
+		<Prompt>ResESL</Prompt>
+	</ReportParameter>
   </ReportParameters>
   <Code>Public Function TimeString(i as integer)as string
 	return Math.Floor(i / 60) &amp; ":"  &amp; Format(i Mod 60, "00")
