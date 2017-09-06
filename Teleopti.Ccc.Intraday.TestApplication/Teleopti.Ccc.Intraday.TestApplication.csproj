@@ -66,6 +66,8 @@
     <Compile Include="IForecastProvider.cs" />
     <Compile Include="Infrastructure\fact_queue.cs" />
     <Compile Include="IntervalHelper.cs" />
+    <Compile Include="IntradayTestApplicationInput.cs" />
+    <Compile Include="IntradayTestDateTimePeriod.cs" />
     <Compile Include="IQueueDataPersister.cs" />
     <Compile Include="IWorkloadQueuesProvider.cs" />
     <Compile Include="Program.cs" />

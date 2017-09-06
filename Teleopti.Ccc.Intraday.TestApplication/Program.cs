@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 	{
 		private static readonly object syncLock = new object();
 		private static readonly Random random = new Random();
+
 		static void Main(string[] args)
 		{
 			string analyticsConnectionString = ConfigurationManager.AppSettings["analyticsConnectionString"];
@@ -38,74 +39,56 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.WriteLine("");
 			Console.WriteLine("");
 
+			Console.WriteLine("Go with the flow? y/n?");
+			var goWithFlow = Console.ReadLine()?.ToUpper() == "Y";
 
-			var userTimezone = userTimeZoneProvider.GetTimeZoneForCurrentUser();
-			var useCurrentUser = false;
-			if (userTimezone != null)
+			IntradayTestApplicationInput input;
+
+			if (goWithFlow)
 			{
-				Console.WriteLine($"Use  user '{userTimezone.Username}' with timezone '{userTimezone.TimeZoneId}'. Y/N?");
-				useCurrentUser = Console.ReadLine()?.ToUpper() == "Y";
+				input = new IntradayTestApplicationInput();
+				input.Date = DateTime.Today;
+				input.UserTimeZoneInfo = userTimeZoneProvider.GetTimeZoneForCurrentUser();
+				input.TimeZoneInterval = timeZoneprovider.Provide(input.UserTimeZoneInfo.TimeZoneId);
+				input.TimePeriods = new List<IntradayTestDateTimePeriod>()
+				{
+					new IntradayTestDateTimePeriod(DateTime.Today, DateTime.Now),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-1), DateTime.Today),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-2), DateTime.Today.AddDays(-1)),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(-2)),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-4), DateTime.Today.AddDays(-3)),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-5), DateTime.Today.AddDays(-4)),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-6), DateTime.Today.AddDays(-5)),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-7), DateTime.Today.AddDays(-6)),
+				};
 			}
-			if (!useCurrentUser)
+			else
 			{
-				userTimezone = getTimeZoneForUser(userTimeZoneProvider);
+				try
+				{
+					input = CollectInput(userTimeZoneProvider, timeZoneprovider);
+				}
+				catch (Exception)
+				{
+					return;
+				}
 			}
-
-			var timeZoneIntervalLength = timeZoneprovider.Provide(userTimezone.TimeZoneId);
-			var date = getDateInput();
-			var numberOfDaysBack = getNumberOfDaysInput();
-
-			Console.WriteLine($"Using timezone '{timeZoneIntervalLength.TimeZoneId}' and date '{date.ToShortDateString()}'");
-
-			var times = new List<DateTime>();
-			for (int backDay = 0; backDay >= numberOfDaysBack * -1; backDay--)
-			{
-				var time = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, date.AddDays(backDay));
-				times.Add(time);
-			}
-
+			
+			Console.WriteLine($"Using timezone '{input.TimeZoneInterval.TimeZoneId}' and date '{input.Date.ToShortDateString()}'");
 			Console.WriteLine("");
 			Console.WriteLine("");
-			foreach (var t in times)
+			Console.WriteLine("We're doing stuff. Please hang around...");
+			foreach (var period in input.TimePeriods)
 			{
-				DateTime fromTimeLocal = t.Date;
-				DateTime toTimeLocal = t;
-				if (times.IndexOf(t) == 0)
-				{
-					Console.WriteLine($"Stats will be generated for {toTimeLocal.ToShortDateString()} up until {toTimeLocal.ToShortTimeString()}. Enter other time if needed.");
-				}
-				else
-				{
-					Console.WriteLine($"Stats will be generated for complete {toTimeLocal.ToShortDateString()}. Enter an up until time if needed.");
-					toTimeLocal = fromTimeLocal.AddDays(1);
-				}
-				var timeText = Console.ReadLine();
-				if (!string.IsNullOrEmpty(timeText))
-				{
-					DateTime temp;
-					if (!DateTime.TryParse(timeText, Thread.CurrentThread.CurrentCulture, DateTimeStyles.None, out temp))
-					{
-						Console.WriteLine("{0} is not a valid time. Press any key to exit.", timeText);
-						Console.ReadKey();
-						return;
-					}
-					var timeToAdd = temp.TimeOfDay == TimeSpan.Zero 
-						? temp.TimeOfDay.Add(TimeSpan.FromDays(1)) 
-						: temp.TimeOfDay;
-					toTimeLocal = IntervalHelper.GetValidIntervalTime(timeZoneIntervalLength.IntervalLength, fromTimeLocal.Add(timeToAdd));
-				}
-
-				Console.WriteLine("We're doing stuff. Please hang around...");
-
-				var fromDateUtc = TimeZoneInfo.FindSystemTimeZoneById(userTimezone.TimeZoneId)
-					.SafeConvertTimeToUtc(DateTime.SpecifyKind(fromTimeLocal, DateTimeKind.Unspecified));
-				var fromIntervalIdUtc = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, fromDateUtc);
-				var toDateUtc = TimeZoneInfo.FindSystemTimeZoneById(userTimezone.TimeZoneId)
-					.SafeConvertTimeToUtc(DateTime.SpecifyKind(toTimeLocal, DateTimeKind.Unspecified));
-				var toIntervalIdUtc = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, toDateUtc);
-				var deleteToDateUtc = TimeZoneInfo.FindSystemTimeZoneById(userTimezone.TimeZoneId)
-					.SafeConvertTimeToUtc(DateTime.SpecifyKind(fromTimeLocal.AddDays(1), DateTimeKind.Unspecified));
-				var deleteToIntervalIdUtc = IntervalHelper.GetIntervalId(timeZoneIntervalLength.IntervalLength, deleteToDateUtc);
+				var fromDateUtc = TimeZoneInfo.FindSystemTimeZoneById(input.UserTimeZoneInfo.TimeZoneId)
+					.SafeConvertTimeToUtc(DateTime.SpecifyKind(period.From, DateTimeKind.Unspecified));
+				var fromIntervalIdUtc = IntervalHelper.GetIntervalId(input.TimeZoneInterval.IntervalLength, fromDateUtc);
+				var toDateUtc = TimeZoneInfo.FindSystemTimeZoneById(input.UserTimeZoneInfo.TimeZoneId)
+					.SafeConvertTimeToUtc(DateTime.SpecifyKind(period.To, DateTimeKind.Unspecified));
+				var toIntervalIdUtc = IntervalHelper.GetIntervalId(input.TimeZoneInterval.IntervalLength, toDateUtc);
+				var deleteToDateUtc = TimeZoneInfo.FindSystemTimeZoneById(input.UserTimeZoneInfo.TimeZoneId)
+					.SafeConvertTimeToUtc(DateTime.SpecifyKind(period.From.AddDays(1), DateTimeKind.Unspecified));
+				var deleteToIntervalIdUtc = IntervalHelper.GetIntervalId(input.TimeZoneInterval.IntervalLength, deleteToDateUtc);
 
 				var workloads = workloadQueuesProvider.Provide();
 
@@ -168,6 +151,77 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.WriteLine("");
 			Console.WriteLine("We're done! Press any key to exit.");
 			Console.ReadKey();
+		}
+
+		private static IntradayTestApplicationInput CollectInput(UserTimeZoneProvider userTimeZoneProvider, TimeZoneprovider timeZoneProvider)
+		{
+			var input = new IntradayTestApplicationInput();
+			var userTimezone = userTimeZoneProvider.GetTimeZoneForCurrentUser();
+			var useCurrentUser = false;
+			if (userTimezone != null)
+			{
+				Console.WriteLine($"Use  user '{userTimezone.Username}' with timezone '{userTimezone.TimeZoneId}'. Y/N?");
+				useCurrentUser = Console.ReadLine()?.ToUpper() == "Y";
+			}
+			if (!useCurrentUser)
+			{
+				userTimezone = getTimeZoneForUser(userTimeZoneProvider);
+			}
+
+			var timeZoneInterval = timeZoneProvider.Provide(userTimezone.TimeZoneId);
+
+			var date = getDateInput();
+			var numberOfDaysBack = getNumberOfDaysInput();
+			
+			var times = new List<DateTime>();
+			for (int backDay = 0; backDay >= numberOfDaysBack * -1; backDay--)
+			{
+				var time = IntervalHelper.GetValidIntervalTime(timeZoneInterval.IntervalLength, date.AddDays(backDay));
+				times.Add(time);
+			}
+
+			var timePeriods = new List<IntradayTestDateTimePeriod>();
+
+			foreach (var t in times)
+			{
+				DateTime fromTimeLocal = t.Date;
+				DateTime toTimeLocal = t;
+				if (times.IndexOf(t) == 0)
+				{
+					Console.WriteLine(
+						$"Stats will be generated for {toTimeLocal.ToShortDateString()} up until {toTimeLocal.ToShortTimeString()}. Enter other time if needed.");
+				}
+				else
+				{
+					Console.WriteLine(
+						$"Stats will be generated for complete {toTimeLocal.ToShortDateString()}. Enter an up until time if needed.");
+					toTimeLocal = fromTimeLocal.AddDays(1);
+				}
+				var timeText = Console.ReadLine();
+				if (!string.IsNullOrEmpty(timeText))
+				{
+					DateTime temp;
+					if (!DateTime.TryParse(timeText, Thread.CurrentThread.CurrentCulture, DateTimeStyles.None, out temp))
+					{
+						Console.WriteLine("{0} is not a valid time. Press any key to exit.", timeText);
+						throw new ArgumentException();
+					}
+					var timeToAdd = temp.TimeOfDay == TimeSpan.Zero
+						? temp.TimeOfDay.Add(TimeSpan.FromDays(1))
+						: temp.TimeOfDay;
+					toTimeLocal = IntervalHelper.GetValidIntervalTime(timeZoneInterval.IntervalLength,
+						fromTimeLocal.Add(timeToAdd));
+				}
+
+				timePeriods.Add(new IntradayTestDateTimePeriod(fromTimeLocal, toTimeLocal));
+			}
+
+			input.UserTimeZoneInfo = userTimezone;
+			input.Date = date;
+			input.TimeZoneInterval = timeZoneInterval;
+			input.TimePeriods = timePeriods;
+
+			return input;
 		}
 
 		private static int getNumberOfDaysInput()
