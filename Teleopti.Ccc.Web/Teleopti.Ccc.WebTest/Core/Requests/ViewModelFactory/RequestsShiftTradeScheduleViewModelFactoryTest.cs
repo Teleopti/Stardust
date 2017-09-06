@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -56,6 +57,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			var scenario = CurrentScenario.Current();
 			var me = PersonFactory.CreatePerson("me");
+			me.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			me.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			me.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			var team = TeamFactory.CreateSimpleTeam("team");
 			SiteFactory.CreateSimpleSite().AddTeam(team);
 			TeamRepository.Add(team);
@@ -161,6 +165,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var scenario = CurrentScenario.Current();
 			var agent = PersonFactory.CreatePersonWithGuid("agent", "Unpublish");
 			var me = PersonFactory.CreatePersonWithGuid("me", "me");
+			agent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			agent.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			agent.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			me.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			me.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			me.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			var team = TeamFactory.CreateTeamWithId("team");
 			SiteFactory.CreateSimpleSite("site").AddTeam(team);
 			TeamRepository.Add(team);
@@ -226,6 +236,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
+			personPublished.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personPublished.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personPublished.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
@@ -263,6 +276,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
+			personPublished.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personPublished.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personPublished.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			var team = TeamFactory.CreateTeam("team", "site").WithId();
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
@@ -315,6 +331,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
 			var team = TeamFactory.CreateTeam("team", "site").WithId();
+			personPublished.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personPublished.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personPublished.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 13), team);
 			personPublished.AddPersonPeriod(personPeriod);
@@ -363,6 +382,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
 			var personWithAbsenceOnDayOff = PersonFactory.CreatePersonWithGuid("p2", "p2");
 			var personWithAbsenceOnly = PersonFactory.CreatePersonWithGuid("_", "_");
+			personPublished.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personPublished.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personPublished.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithAbsenceOnDayOff.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithAbsenceOnDayOff.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithAbsenceOnDayOff.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithAbsenceOnly.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithAbsenceOnly.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithAbsenceOnly.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
@@ -415,6 +443,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
+			personPublished.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personPublished.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personPublished.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 16), team);
@@ -446,6 +477,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		{
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
+			personPublished.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personPublished.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personPublished.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
 			var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(2016, 1, 16), team);
@@ -478,6 +512,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
 			var personWithAbsenceOnContractDayOff = PersonFactory.CreatePersonWithGuid("_", "_");
+			personPublished.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personPublished.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personPublished.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithAbsenceOnContractDayOff.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithAbsenceOnContractDayOff.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithAbsenceOnContractDayOff.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
@@ -518,6 +558,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
 			var personWithEmptySchedule = PersonFactory.CreatePersonWithGuid("_", "_");
+			personPublished.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personPublished.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personPublished.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithEmptySchedule.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithEmptySchedule.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithEmptySchedule.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
@@ -555,6 +601,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personWithDayoff = PersonFactory.CreatePersonWithGuid("person3", "dayoff");
 			var personWithEmptySchedule = PersonFactory.CreatePersonWithGuid("person4", "empty");
 			var person2WithEmptySchedule = PersonFactory.CreatePersonWithGuid("person5", "anotherEmpty");
+			personWithMainShift1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithMainShift1.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithMainShift1.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithMainShift2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithMainShift2.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithMainShift2.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithOvertimeShift.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithOvertimeShift.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithOvertimeShift.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithAbsenceOnContractDayOff.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithAbsenceOnContractDayOff.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithAbsenceOnContractDayOff.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithDayoff.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithDayoff.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithDayoff.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithEmptySchedule.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithEmptySchedule.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithEmptySchedule.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			person2WithEmptySchedule.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			person2WithEmptySchedule.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			person2WithEmptySchedule.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
@@ -632,6 +699,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personWithDayoff = PersonFactory.CreatePersonWithGuid("person3", "dayoff");
 			var personWithEmptySchedule = PersonFactory.CreatePersonWithGuid("person4", "empty");
 			var person2WithEmptySchedule = PersonFactory.CreatePersonWithGuid("person5", "anotherEmpty");
+			personWithMainShift1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithMainShift1.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithMainShift1.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithMainShift2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithMainShift2.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithMainShift2.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithOvertimeShift.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithOvertimeShift.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithOvertimeShift.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithAbsenceOnContractDayOff.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithAbsenceOnContractDayOff.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithAbsenceOnContractDayOff.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithDayoff.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithDayoff.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithDayoff.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithEmptySchedule.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithEmptySchedule.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithEmptySchedule.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			person2WithEmptySchedule.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			person2WithEmptySchedule.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			person2WithEmptySchedule.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
@@ -710,6 +798,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var scenario = CurrentScenario.Current();
 			var personPublished = PersonFactory.CreatePersonWithGuid("person", "published");
 			var me = PersonFactory.CreatePersonWithGuid("me", "publised");
+			personPublished.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personPublished.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personPublished.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
@@ -755,6 +846,24 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personWithAbsenceOnContractDayOff = PersonFactory.CreatePersonWithGuid("_", "_");
 			var personWithDayoff = PersonFactory.CreatePersonWithGuid("person3", "dayoff");
 			var personWithEmptySchedule = PersonFactory.CreatePersonWithGuid("person4", "empty");
+			personWithMainShift1.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithMainShift1.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithMainShift1.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithMainShift2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithMainShift2.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithMainShift2.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithAbsenceOnContractDayOff.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithAbsenceOnContractDayOff.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithAbsenceOnContractDayOff.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithAbsenceOnContractDayOff.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithAbsenceOnContractDayOff.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithAbsenceOnContractDayOff.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithDayoff.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithDayoff.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithDayoff.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
+			personWithEmptySchedule.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			personWithEmptySchedule.WorkflowControlSet = new WorkflowControlSet("valid workflow");
+			personWithEmptySchedule.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 
 			var team = TeamFactory.CreateTeamWithId("team");
 			TeamRepository.Add(team);
