@@ -10,7 +10,7 @@
 		var vm = this;
 		vm.onPageSizeChanges = onPageSizeChanges;
 		vm.onPageNumberChange = onPageNumberChange;
-		vm.isUsingRequestSubmitterTimeZone = true;
+		vm.isUsingRequestSubmitterTimeZone = false;
 		vm.showSelectedRequestsInfo = showSelectedRequestsInfo;
 		getSelectedRequestsInfoText();
 		

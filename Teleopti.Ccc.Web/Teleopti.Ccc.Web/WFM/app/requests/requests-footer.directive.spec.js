@@ -38,14 +38,12 @@
 				});
 			});
 
-			beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDefinitions_, _$filter_, $templateCache, _REQUESTS_TAB_NAMES_) {
+			beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDefinitions_, _$filter_, _REQUESTS_TAB_NAMES_) {
 				$compile = _$compile_;
 				$rootScope = _$rootScope_;
 				$filter = _$filter_;
 				requestsDefinitions = _requestsDefinitions_;
 				REQUESTS_TAB_NAMES = _REQUESTS_TAB_NAMES_;
-
-				$templateCache.put('app/requests/html/requests-footer.tpl.html', 'app/requests/');
 			}));
 
 			function setUpTarget(isShiftTradeViewActive) {
@@ -56,8 +54,7 @@
 					var element = angular.element('<requests-footer' +
 						' paging="paging"' +
 						' page-size-options="pageSizeOptions"' +
-						' is-shift-trade-view-active="'+ isShiftTradeViewActive +'"' +
-						' is-using-request-submitter-time-zone="true"' +
+						' is-shift-trade-view-active="' + isShiftTradeViewActive +'"' +
 						' ></requests-footer>');
 					var compiledElement = $compile(element)(scope);
 					return compiledElement;
@@ -122,6 +119,17 @@
 
 				var ret = test.target.isolateScope().requestsFooter.showSelectedRequestsInfo();
 				expect(ret).toEqual('');
+			});
+
+			it("should show time in user timezone by default", function() {
+				var test = setUpTarget(true);
+				test.scope.$digest();
+
+				var footer = test.target.isolateScope().requestsFooter;
+				expect(footer.isUsingRequestSubmitterTimeZone).toEqual(false);
+
+				var selectedRadioButtons = test.target[0].querySelectorAll("#radioUserTimezone[checked='checked']");
+				expect(selectedRadioButtons.length).toEqual(1);
 			});
 
 			it('should set page number to 1 when page size changed', function() {

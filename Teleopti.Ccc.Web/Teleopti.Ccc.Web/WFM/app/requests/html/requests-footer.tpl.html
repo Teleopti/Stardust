@@ -3,8 +3,8 @@
 		<form>
 			<span class="wfm-radio">
 				<input type="radio" name="groupTimezoneSetting" id="radioUserTimezone"
-						 checked="!requestsFooter.isUsingRequestSubmitterTimeZone"
-						 ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = false" />
+					   ng-checked="!requestsFooter.isUsingRequestSubmitterTimeZone"
+					   ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = false"/>
 				<label for="radioUserTimezone">
 					<span class="wfm-radio-toggle"></span>
 					<span class="wfm-radio-label" translate>LogonUserTimeZone</span>
@@ -12,8 +12,8 @@
 			</span>
 			<span class="wfm-radio">
 				<input type="radio" name="groupTimezoneSetting" id="radioRequestTimezone"
-						 checked="requestsFooter.isUsingRequestSubmitterTimeZone"
-						 ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = true" />
+					   ng-checked="requestsFooter.isUsingRequestSubmitterTimeZone"
+					   ng-click="requestsFooter.isUsingRequestSubmitterTimeZone = true"/>
 				<label for="radioRequestTimezone">
 					<span class="wfm-radio-toggle"></span>
 					<span class="wfm-radio-label" translate>RequestSubmitterTimeZone</span>
