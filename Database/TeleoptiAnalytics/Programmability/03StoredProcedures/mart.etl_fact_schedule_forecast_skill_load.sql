@@ -95,7 +95,9 @@ INSERT INTO mart.fact_schedule_forecast_skill
 	intraday_deviation_m, 
 	business_unit_id, 
 	datasource_id, 
-	update_date
+	update_date,
+	forecasted_tasks,
+	estimated_tasks_answered_within_sl
 	)
 SELECT
 	date_id									= dsd.date_id, 
@@ -113,7 +115,9 @@ SELECT
 	intraday_deviation_m					= isnull(f.scheduled_resources_m,0) - isnull(f.forecasted_resources_m,0), --2013-03-01 Removed ABS() calculation KJ
 	business_unit_id						= dsk.business_unit_id,
 	datasource_id							= f.datasource_id, 
-	update_date								= f.update_date
+	update_date								= f.update_date,
+	forecasted_tasks						= f.forecasted_tasks,
+	estimated_tasks_answered_within_sl		= f.estimated_tasks_answered_within_sl
 FROM (SELECT * FROM Stage.stg_schedule_forecast_skill WHERE date between @start_date and @end_date)f -- ADDED BY JONAS 2008-10-15
 INNER JOIN
 	mart.dim_skill		dsk

@@ -281,6 +281,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		            Period = newPeriod,
 		            CalculatedResource = CalculatedResource,
 		            ForecastedIncomingDemand = Payload.ForecastedIncomingDemand,
+		            ForecastedTasks = Payload.TaskData.Tasks,
+					EstimatedServiceLevel = EstimatedServiceLevel,
 		            FStaff = FStaff
 	            };
             	newViews.Add(newView);

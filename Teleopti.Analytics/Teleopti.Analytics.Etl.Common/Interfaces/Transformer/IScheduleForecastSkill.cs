@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
 {
@@ -21,5 +22,7 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
         int DataSourceId { get; set; }
         DateTime InsertDate { get; set; }
         DateTime UpdateDate { get; set; }
+	    double ForecastedTasks { get; set; }
+		double EstimatedTasksAnsweredWithinSL { get; set; }
     }
 }

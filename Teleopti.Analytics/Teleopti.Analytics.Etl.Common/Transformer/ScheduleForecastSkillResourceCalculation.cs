@@ -135,6 +135,9 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				scheduleForecastSkill.ScheduledResourcesMinutes = skillStaffPeriodView.CalculatedResource * minutesPerInterval;
 				scheduleForecastSkill.ScheduledResources = skillStaffPeriodView.CalculatedResource;
 
+				scheduleForecastSkill.EstimatedTasksAnsweredWithinSL = skillStaffPeriodView.EstimatedServiceLevel.Value * skillStaffPeriodView.ForecastedTasks;
+				scheduleForecastSkill.ForecastedTasks = skillStaffPeriodView.ForecastedTasks;
+
 				scheduleForecastSkill.BusinessUnitCode = (Guid)businessUnit.Id;
 				scheduleForecastSkill.BusinessUnitName = businessUnit.Name;
 				scheduleForecastSkill.DataSourceId = 1;

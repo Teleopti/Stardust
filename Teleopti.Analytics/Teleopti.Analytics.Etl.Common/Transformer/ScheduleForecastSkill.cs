@@ -30,5 +30,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		public int DataSourceId { get; set; }
 		public DateTime InsertDate { get; set; }
 		public DateTime UpdateDate { get; set; }
+		public double ForecastedTasks { get; set; }
+		public double EstimatedTasksAnsweredWithinSL { get; set; }
 	}
 }

@@ -56,5 +56,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
         ///  Created date: 2009-09-09    
         /// /// </remarks>
         double FStaff { get; set; }
+
+	    double ForecastedTasks { get; set; }
+	    Percent EstimatedServiceLevel { get; set; }
     }
 }

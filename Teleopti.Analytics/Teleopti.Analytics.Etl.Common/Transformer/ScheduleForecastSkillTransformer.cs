@@ -31,7 +31,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			Dictionary<IScheduleForecastSkillKey, IScheduleForecastSkill> scheduleForecastSkillDictionary =
 				 scheduleForecastSkillResourceCalculation.GetResourceDataIncludingShrinkage(_insertDateTime);
 
-			foreach (ScheduleForecastSkill forecastSkill in scheduleForecastSkillDictionary.Values)
+			foreach (var forecastSkill in scheduleForecastSkillDictionary.Values)
 			{
 				AddRowToDataTable(table, forecastSkill);
 			}
@@ -53,6 +53,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			dataRow["scheduled_resources"] = forecastSkill.ScheduledResources;
 			dataRow["scheduled_resources_incl_shrinkage_m"] = forecastSkill.ScheduledResourcesIncludingShrinkageMinutes;     // new
 			dataRow["scheduled_resources_incl_shrinkage"] = forecastSkill.ScheduledResourcesIncludingShrinkage;                            // new
+			dataRow["forecasted_tasks"] = forecastSkill.ForecastedTasks;
+			dataRow["estimated_tasks_answered_within_sl"] = forecastSkill.EstimatedTasksAnsweredWithinSL;
 
 			dataRow["business_unit_code"] = forecastSkill.BusinessUnitCode;
 			dataRow["business_unit_name"] = forecastSkill.BusinessUnitName;

@@ -27,6 +27,9 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition
 			table.Columns.Add("datasource_id", typeof(int));
 			table.Columns.Add("insert_date", typeof(DateTime));
 			table.Columns.Add("update_date", typeof(DateTime));
+
+			table.Columns.Add("forecasted_tasks", typeof(double));
+			table.Columns.Add("estimated_tasks_answered_within_sl", typeof(double));
 		}
 	}
 }
