@@ -13,7 +13,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
-using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Toggle;
@@ -23,6 +22,7 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.WebTest.Core.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
@@ -123,9 +123,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var personInMyTeam = new Person();
 			personInMyTeam.SetId(Guid.NewGuid());
-			personInMyTeam.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			personInMyTeam.WorkflowControlSet = new WorkflowControlSet("valid workflow");
-			personInMyTeam.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			var personInMyTeamGuids = new PersonSelectorShiftTrade { PersonId = personInMyTeam.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
 			var date = DateOnly.Today;
 			var data = new ShiftTradeScheduleViewModelData
@@ -157,9 +154,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var personInMyTeam = new Person();
 			personInMyTeam.SetId(Guid.NewGuid());
-			personInMyTeam.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			personInMyTeam.WorkflowControlSet = new WorkflowControlSet("valid workflow");
-			personInMyTeam.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			var personInMyTeamGuids = new PersonSelectorShiftTrade { PersonId = personInMyTeam.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
 			var date = DateOnly.Today;
 			var teamIds = new List<Guid>();
@@ -189,9 +183,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		{
 			var validAgent = new Person();
 			validAgent.SetId(Guid.NewGuid());
-			validAgent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			validAgent.WorkflowControlSet = new WorkflowControlSet("valid workflow");
-			validAgent.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			var invalidAgent = new Person();
 			invalidAgent.SetId(Guid.NewGuid());
 
@@ -224,47 +215,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		}
 
 		[Test]
-		public void ShouldFilterPersonsOpenPeriodForwardLongerToViewSchedules()
-		{
-			var validAgent = new Person();
-			validAgent.SetId(Guid.NewGuid());
-			validAgent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			validAgent.WorkflowControlSet = new WorkflowControlSet("valid workflow");
-			validAgent.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
-			var invalidAgent = new Person();
-			invalidAgent.SetId(Guid.NewGuid());
-			invalidAgent.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			invalidAgent.WorkflowControlSet = new WorkflowControlSet("valid workflow");
-			invalidAgent.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(3, 99);
-
-			var validAgentGuids = new PersonSelectorShiftTrade { PersonId = validAgent.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
-			var invalidAgentGuids = new PersonSelectorShiftTrade { PersonId = invalidAgent.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
-			var date = DateOnly.Today;
-			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = new List<Guid>(){myTeam.Id.GetValueOrDefault()}};
-
-			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate,data.TeamIdList,data.SearchNameText))
-											.Return(new List<IPersonAuthorization> { validAgentGuids, invalidAgentGuids });
-			permissionProvider.Expect(perm => perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,
-													 validAgentGuids)).Return(true);
-			permissionProvider.Expect(perm => perm.IsPersonSchedulePublished(data.ShiftTradeDate, validAgent)).Return(true);
-
-			permissionProvider.Expect(perm => perm.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, data.ShiftTradeDate,
-													 invalidAgentGuids)).Return(true);
-			permissionProvider.Expect(perm => perm.IsPersonSchedulePublished(data.ShiftTradeDate, invalidAgent)).Return(true);
-			personRepository.Expect(rep => rep.FindPeople(new[] { validAgentGuids.PersonId, invalidAgentGuids.PersonId }))
-							.Return(new Collection<IPerson>(new List<IPerson> { validAgent, invalidAgent }));
-			shiftTradeValidator.Expect(val => val.Validate(new ShiftTradeAvailableCheckItem(data.ShiftTradeDate, currentUser, validAgent)))
-							   .Return(new ShiftTradeRequestValidationResult(true));
-			shiftTradeValidator.Expect(val => val.Validate(new ShiftTradeAvailableCheckItem(data.ShiftTradeDate, currentUser, invalidAgent)))
-							   .Return(new ShiftTradeRequestValidationResult(true));
-
-			var result = target.RetrievePersons(data);
-
-			result.Persons.Should().Contain(validAgent);
-			result.Persons.Should().Not.Contain(invalidAgent);
-		}
-
-		[Test]
 		public void ShouldReturnPossiblePersonsToTradeShiftWhenSearchNameText()
 		{
 			var person1InMyTeam = new Person();
@@ -275,10 +225,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			person2InMyTeam.WithName(new Name("2","person"));
 			person2InMyTeam.SetId(Guid.NewGuid());
 			var person2InMyTeamGuids = new PersonSelectorShiftTrade { PersonId = person2InMyTeam.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
-			person2InMyTeam.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
-			person2InMyTeam.WorkflowControlSet = new WorkflowControlSet("valid workflow");
-			person2InMyTeam.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
-
+			
 			var date = DateOnly.Today;
 			var data = new ShiftTradeScheduleViewModelData
 			{
