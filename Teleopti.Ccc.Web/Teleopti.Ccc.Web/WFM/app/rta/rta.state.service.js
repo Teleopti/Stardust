@@ -47,15 +47,15 @@
 			},
 
 			deselectSkillAndSkillArea: function () {
-				$state.go($state.current.name, buildState({ skillIds: undefined, skillAreaId: undefined }), { reload: true });
+				$state.go($state.current.name, buildState({ skillIds: undefined, skillAreaId: undefined }));
 			},
 
 			selectSkillArea: function (skillAreaId) {
-				$state.go($state.current.name, buildState({ skillIds: undefined, skillAreaId: skillAreaId }), { reload: true });
+				$state.go($state.current.name, buildState({ skillIds: undefined, skillAreaId: skillAreaId }));
 			},
 
 			selectSkill: function (skillId) {
-				$state.go($state.current.name, buildState({ skillIds: skillId, skillAreaId: undefined }), { reload: true });
+				$state.go($state.current.name, buildState({ skillIds: skillId, skillAreaId: undefined }));
 			},
 
 			agentsHrefForTeam: function (teamId) {
