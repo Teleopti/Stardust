@@ -5,6 +5,10 @@
 	margin: 10px 0;
 }
 
+	.cisco-widget > .row > div.pointer {
+		cursor: pointer;
+	}
+
 	.cisco-widget > .row > div > div {
 		height: 68px;
 	}
