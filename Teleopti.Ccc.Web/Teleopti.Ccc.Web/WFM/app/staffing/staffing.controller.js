@@ -21,8 +21,8 @@
 		vm.useShrinkageForStaffing = useShrinkageForStaffing;
 		vm.generateChart = generateChart;
 		vm.dynamicIcon = dynamicIcon;
-        vm.toggleOverstaffSettings = toggleOverstaffSettings;
-	    vm.isOvertimeSuggestionEnabled = isOvertimeSuggestionEnabled;
+		vm.toggleOverstaffSettings = toggleOverstaffSettings;
+		vm.isOvertimeSuggestionEnabled = isOvertimeSuggestionEnabled;
 		vm.validSettings = validSettings;
 		vm.isRunning = isRunning;
 		vm.isNoSuggestion = isNoSuggestion;
@@ -33,8 +33,8 @@
 		vm.useShrinkage = false;
 		vm.staffingDataAvailable = false;
 		vm.hasSuggestionData = false;
-        vm.showBpoInterface = false;
-	    vm.hasPermissionForBpoExchange = false;
+		vm.showBpoInterface = false;
+		vm.hasPermissionForBpoExchange = false;
 		vm.overtimeForm = {};
 
 		vm.compensations = [];
@@ -56,14 +56,14 @@
 			status: 'full'
 		}
 
-		getSkills(); 
+		getSkills();
 		getSkillAreas();
 		getCompensations();
-        getStaffingSettings();
+		getStaffingSettings();
 
-        function isOvertimeSuggestionEnabled() {
-            return toggleService.WfmStaffing_AddOvertime_42524;
-        }
+		function isOvertimeSuggestionEnabled() {
+			return toggleService.WfmStaffing_AddOvertime_42524;
+		}
 
 		function toggleOverstaffSettings() {
 			return vm.showOverstaffSettings = !vm.showOverstaffSettings;
@@ -99,11 +99,11 @@
 			hasRequestedSuggestions = false;
 		}
 		function getStaffingSettings() {
-		    var data = staffingService.staffingSettings.get();
-		    data.$promise.then(function(response) {
-                vm.showBpoInterface = response.isLicenseAvailable;
-		        vm.hasPermissionForBpoExchange = response.HasPermissionForBpoExchange;
-		    });
+			var data = staffingService.staffingSettings.get();
+			data.$promise.then(function (response) {
+				vm.showBpoInterface = response.isLicenseAvailable;
+				vm.hasPermissionForBpoExchange = response.HasPermissionForBpoExchange;
+			});
 		}
 
 		function getSkillStaffingByDate(skillId, date, shrinkage) {
@@ -298,6 +298,7 @@
 				if (staffingPrecheck(response.DataSeries)) {
 					if (response.StaffingHasData) {
 						vm.hasSuggestionData = true;
+						//compare data and set to 0 if equal
 						suggestedStaffingData = utilService.prepareSuggestedStaffingData(staffingData, response);
 					} else {
 						vm.hasSuggestionData = false;

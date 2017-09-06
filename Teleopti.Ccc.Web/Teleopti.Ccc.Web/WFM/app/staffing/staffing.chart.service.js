@@ -10,11 +10,13 @@
         this.staffingChartConfig = staffingChartConfig;
 
         ////////////////
+
         function staffingChartConfig(staffingData, isSuggestedData) {
             var staffing = generateOverUnderStaffing(staffingData.absoluteDifference);
             var scaffold = generateScaffold(staffingData);
             var groups = [[scaffold.over[0], staffing.over[0], scaffold.under[0], staffing.under[0]]];
             var hide = [scaffold.under[0], scaffold.over[0]];
+            var hideSuggestionLegend = [];
             var columns = [
                 staffingData.time,
                 staffingData.scheduledStaffing,
@@ -29,7 +31,9 @@
                 var types = generateTypeObject(staffingData);
                 columns.unshift(staffingData.forcastedStaffing);
             } else if (isSuggestedData) {
+                var hideSuggestionLegend = [staffingData.scheduledStaffing[0]]
                 var suggestedStaffing = generateOverUnderStaffing(staffingData.suggested.absoluteDifference, isSuggestedData);
+                suggestedStaffing = compareAndFilterArr(suggestedStaffing, staffing)
                 var suggestedScaffold = generateScaffold(staffingData.suggested, isSuggestedData);
                 var chartColors = generateColorObject(staffing, scaffold, suggestedStaffing, suggestedScaffold);
                 var types = generateTypeObject(staffingData, isSuggestedData);
@@ -54,6 +58,7 @@
                     hide: hide
                 },
                 data: {
+                    hide: hideSuggestionLegend,
                     colors: chartColors,
                     order: 'null',
                     type: 'bar',
@@ -122,6 +127,19 @@
 
             return text + "</table>";
         };
+
+        function compareAndFilterArr(arr1, arr2) {
+            Object.getOwnPropertyNames(arr1).forEach(function (prop) {
+                for (var index = 0; index < arr1[prop].length; index++) {
+                    console.log(arr1[prop][index], arr2[prop][index])
+                    if (arr1[prop][index] === arr2[prop][index]) {
+                        arr1[prop][index] = 0;
+                    }
+                }
+
+            });
+            return arr1;
+        }
 
         function generateOverUnderStaffing(absoluteDifference, isSuggestedData) {
             var staffing = {};
@@ -208,7 +226,7 @@
                 var suggestedOverstaffColorKey = suggestedStaffing.over[0];
                 var suggestedUnderstaffColorKey = suggestedStaffing.under[0];
                 var suggestedOverScaffoldKey = suggestedScaffold.over[0];
-                var suggestedUnderScaffoldKey = suggestedScaffold.under[0]; 
+                var suggestedUnderScaffoldKey = suggestedScaffold.under[0];
 
                 colors[suggestedOverstaffColorKey] = '#99D6FF';
                 colors[suggestedUnderstaffColorKey] = '#EE8F7D';

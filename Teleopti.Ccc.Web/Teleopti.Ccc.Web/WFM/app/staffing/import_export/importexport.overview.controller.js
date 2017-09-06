@@ -56,7 +56,6 @@
         function exportFile() {
             var request = staffingService.postFileExport.get({ skillId: vm.selectedSkill.Id })
             request.$promise.then(function (response) {
-                console.log(response.Content);
                 var data = angular.toJson(response.Content);
                 UtilService.saveToFs(response.Content, vm.selectedSkill.Name + ".csv", 'text/csv');
             })
