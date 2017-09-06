@@ -165,7 +165,7 @@ Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
 Wfm_Intraday_ESL_41827 = true
 Wfm_Intraday_SupportSkillTypeWebChat_42591 = true
 Wfm_Intraday_SupportSkillTypeEmail_44002 = true
-WFM_Intraday_Show_For_Other_Days_43504 = false
+WFM_Intraday_Show_For_Other_Days_43504 = RC
 WFM_Intraday_SupportMultisiteSkill_43874 = true
 WFM_Intraday_Export_To_Excel_44892 = RC
 
@@ -193,4 +193,4 @@ Wfm_Staffing_45411 = RC #Enables the entire Staffing page!
 Stardust_Priority_BelowNormal_44320 = DEV
 Report_Realtime_Scheduled_Time_Per_Activity_45560 = true
 Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
-WFM_Intraday_SupportOtherSkillsLikeEmail_44026 = DEV
+WFM_Intraday_SupportOtherSkillsLikeEmail_44026 = RC

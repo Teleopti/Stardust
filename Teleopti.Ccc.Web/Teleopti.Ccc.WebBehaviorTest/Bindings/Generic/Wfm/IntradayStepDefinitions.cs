@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		}
 
 		
-		[Given(@"There is a skill to monitor called '([^']*)' with queue id '([^']*)' and queue name '([^']*)' and activity '([^']*)' and skilltype '([^']*)'")]
-		public void GivenThereIsASkillToMonitorCalled(string skill, int queueId, string queueName, string activity, string skilltype)
+		[Given(@"There is an email-like skill to monitor called '([^']*)' with queue id '([^']*)' and queue name '([^']*)' and activity '([^']*)'")]
+		public void GivenThereIsAnEmailSkillToMonitorCalled(string skill, int queueId, string queueName, string activity)
 		{
 			var datasourceData = DefaultAnalyticsDataCreator.GetDataSources();
 
@@ -67,7 +67,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			{
 				Name = skill,
 				Activity = activity,
-				SkillType = skilltype
+				SkillType = "SkillTypeBackoffice",
+				ShowAbandonRate = false,
+				ShowReforecastedAgents = false
 			});
 
 			DataMaker.Data().Analytics().Apply(new AQueue(datasourceData) { QueueId = queueId });
@@ -373,6 +375,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.IsVisible(".mdi-file-excel");
 		}
+
+		[Then(@"I should see the no abandonrate warning")]
+		public void ThenIShouldSeeTheAbandon_RateWarning()
+		{
+			Browser.Interactions.IsVisible("#noAbandonRate");
+		}
+		[Then(@"I should see the no reforcasted warning")]
+		public void ThenIShouldSeeTheNoReforcastedWarning()
+		{
+			Browser.Interactions.IsVisible("#noReforcastedAgents");
+		}
+
 
 	}
 }

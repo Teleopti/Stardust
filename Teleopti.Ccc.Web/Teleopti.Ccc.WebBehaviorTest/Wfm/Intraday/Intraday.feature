@@ -10,23 +10,23 @@ Background:
     | Access to Intraday | True  |
     And There is a skill to monitor called 'Skill A' with queue id '9' and queue name 'queue1' and activity 'activity1'
     And There is a skill to monitor called 'Skill B' with queue id '7' and queue name 'queue2' and activity 'activity2'
-	And There is a skill to monitor called 'Skill BackOffice' with queue id '3' and queue name 'queue3' and activity 'activity3'
+	And There is an email-like skill to monitor called 'Skill BackOffice' with queue id '3' and queue name 'queue3' and activity 'activity3'
 
 
 Scenario: Create Skill Area
-  Given I am viewing intraday page
-  And I select to create a new Skill Area
-  And I name the Skill Area 'my Area'
-  And I select the skill 'Skill A'
-  When I am done creating Skill Area 
+	Given I am viewing intraday page
+	And I select to create a new Skill Area
+	And I name the Skill Area 'my Area'
+	And I select the skill 'Skill A'
+	When I am done creating Skill Area 
 	Then I select to monitor skill area 'my Area'
-  And I should monitor 'my Area'
+	And I should monitor 'my Area'
 
 
 Scenario: Remove Skill Area
 	Given there is a Skill Area called 'Area A' that monitors skill 'Skill A'
-  And I am viewing intraday page
-  When I select to remove 'Area A'
+	And I am viewing intraday page
+	When I select to remove 'Area A'
 	Then I should no longer be able to monitor 'Area A'
 
 Scenario: View incoming traffic for one skill
@@ -119,4 +119,23 @@ Scenario: If toggled we should be able to select skill of type backoffice
 	And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
 	When I pick the skill 'Skill BackOffice'
 	Then I should see incoming traffic data in the chart
-	
+
+@OnlyRunIfEnabled('WFM_Intraday_SupportOtherSkillsLikeEmail_44026')
+Scenario: If an email like skill is chosen a warning for no visible abandonrate should appear
+	Given the time is '2016-12-21 14:00'
+	And I am viewing intraday page
+	And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
+	And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
+	When I pick the skill 'Skill BackOffice'
+	And I am navigating to intraday performance view
+	Then I should see the no abandonrate warning
+
+@OnlyRunIfEnabled('WFM_Intraday_SupportOtherSkillsLikeEmail_44026')
+Scenario: If an email like skill is chosen a warning for no visible reforcasted should appear
+	Given the time is '2016-12-21 14:00'
+	And I am viewing intraday page
+	And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
+	And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
+	When I pick the skill 'Skill BackOffice'
+	And I am navigating to intraday staffing view
+	Then I should see the no reforcasted warning

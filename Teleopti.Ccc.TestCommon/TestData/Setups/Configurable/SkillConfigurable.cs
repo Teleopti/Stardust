@@ -20,6 +20,8 @@ namespace Teleopti.Ccc.TestCommon.TestData.Setups.Configurable
 		public int? CascadingIndex { get; set; }
 		public double? SeriousUnderstaffingThreshold { get; set; }
 		public string SkillType { get; set; } = "SkillTypeInboundTelephony";
+		public bool ShowAbandonRate { get; set; } = true;
+		public bool ShowReforecastedAgents { get; set; } = true;
 
 		public SkillConfigurable()
 		{
