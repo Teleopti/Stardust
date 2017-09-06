@@ -20,16 +20,19 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static ISkill CreateSkill(string name, ISkillType skillType, int defaultResolution)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
             string description = "Description of the Skill";
             Color displayColor = Color.FromArgb(123);
 
-            Skill skill = new Skill(name, description, displayColor,defaultResolution, skillType);
-            skill.TimeZone = TimeZoneInfo.Utc;
-            skill.Activity = ActivityFactory.CreateActivity("activity");
+			Skill skill =
+				new Skill(name, description, displayColor, defaultResolution, skillType)
+				{
+					TimeZone = TimeZoneInfo.Utc,
+					Activity = ActivityFactory.CreateActivity("activity")
+				};
 
-            return skill;
+			return skill;
         }
 
 
@@ -55,25 +58,25 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static IMultisiteSkill CreateMultisiteSkill(string name, ISkillType skillType, int defaultSolution)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
+                throw new ArgumentNullException(nameof(name));
 
             string description = "Description of the Skill";
             Color displayColor = Color.FromArgb(123);
 
-            MultisiteSkill skill = new MultisiteSkill(name, description, displayColor, defaultSolution, skillType);
-            skill.TimeZone = TimeZoneInfo.Utc;
-            skill.Activity = ActivityFactory.CreateActivity("activity");
+			MultisiteSkill skill =
+				new MultisiteSkill(name, description, displayColor, defaultSolution, skillType)
+				{
+					TimeZone = TimeZoneInfo.Utc,
+					Activity = ActivityFactory.CreateActivity("activity")
+				};
 
-            return skill;
+			return skill;
         }
 
 		public static ISkill CreateSkillWithId(string name, int defaultSolution)
 		{
 			var skillType = SkillTypeFactory.CreateSkillType();
-			var skill = CreateSkill(name, skillType, defaultSolution);
-			skill.SetId(Guid.NewGuid());
-
-			return skill;
+			return CreateSkill(name, skillType, defaultSolution).WithId();
 		}
 
 		/// <summary>
@@ -103,8 +106,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public static ISkill CreateSkillWithId(string skillName)
 		{
-			var skill = CreateSkill(skillName);
-			skill.SetId(Guid.NewGuid());
+			var skill = CreateSkill(skillName).WithId();
 			return skill;
 		}
 

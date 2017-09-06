@@ -40,10 +40,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             _culture = culture;
         	_preferenceNightRestChecker = preferenceNightRestChecker;
         }
-
-	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"),
-	     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")
-	    ]
+		
 	    public IList<ValidatedSchedulePartDto> ValidateSchedulePeriod(DateOnlyPeriod loadedPeriod,
 	                                                                  DateOnlyPeriod schedulePeriod,
 	                                                                  ISchedulingResultStateHolder stateHolder,
@@ -57,10 +54,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 	                                                                  double seasonality, bool useStudentAvailability)
 	    {
 		    if (stateHolder == null)
-			    throw new ArgumentNullException("stateHolder");
+			    throw new ArgumentNullException(nameof(stateHolder));
 
 		    if (person == null)
-			    throw new ArgumentNullException("person");
+			    throw new ArgumentNullException(nameof(person));
 
 		    IList<ValidatedSchedulePartDto> result = new List<ValidatedSchedulePartDto>();
 
@@ -253,7 +250,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 
         private static void checkPersonAssignmentCollection(IPersonAssignment personAssignment, ValidatedSchedulePartDto resultSoFar)
         {
-            if (personAssignment==null || personAssignment.ShiftCategory==null)
+            if (personAssignment?.ShiftCategory == null)
                 return;
 
             IShiftCategory cat = personAssignment.ShiftCategory;

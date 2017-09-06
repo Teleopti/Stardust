@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
 
         protected ClientHandler(ILog loggingSvc, IRtaDataHandlerClient dataHandler, IDictionary clientSettings)
         {
-			if (dataHandler==null) throw new ArgumentNullException("dataHandler");
+			if (dataHandler==null) throw new ArgumentNullException(nameof(dataHandler));
 
             _loggingSvc = loggingSvc;
             _dataHandler = dataHandler;

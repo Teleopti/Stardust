@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     	public override PersonPeriodDetailDto DomainEntityToDto(IPersonPeriod entity)
 		{
 			if(entity == null)
-				throw new ArgumentNullException("entity");
+				throw new ArgumentNullException(nameof(entity));
     		var team = entity.Team;
 			var personPeriodDto = new PersonPeriodDetailDto();
 			

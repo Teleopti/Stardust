@@ -19,17 +19,17 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
     	public MinMaxWorkTimeChecker(IWorkShiftWorkTime workShiftWorkTime)
         {
         	if (workShiftWorkTime == null)
-				  throw new ArgumentNullException("workShiftWorkTime");
+				  throw new ArgumentNullException(nameof(workShiftWorkTime));
 			_workShiftWorkTime = workShiftWorkTime;
         }
 
 		public IWorkTimeMinMax MinMaxWorkTime(IScheduleDay scheduleDay, IRuleSetBag ruleSetBag, IEffectiveRestriction effectiveRestriction, bool useContractTimeOnMainShift)
         {
             if (scheduleDay == null)
-                throw new ArgumentNullException("scheduleDay");
+                throw new ArgumentNullException(nameof(scheduleDay));
 
             if (ruleSetBag == null)
-                throw new ArgumentNullException("ruleSetBag");
+                throw new ArgumentNullException(nameof(ruleSetBag));
 
             var significant = scheduleDay.SignificantPart();
 
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 				return GetContractTime(scheduleDay);
 			}
 
-            if (effectiveRestriction != null && effectiveRestriction.Absence != null)
+            if (effectiveRestriction?.Absence != null)
             {
                 return GetWorkTimeAbsencePreference(scheduleDay, effectiveRestriction);
             }
@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
         public static IWorkTimeMinMax GetWorkTimeAbsencePreference(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
         {
             if (scheduleDay == null)
-                throw new ArgumentNullException("scheduleDay");
+                throw new ArgumentNullException(nameof(scheduleDay));
 
             if(effectiveRestriction == null)
-                throw new ArgumentNullException("effectiveRestriction");
+                throw new ArgumentNullException(nameof(effectiveRestriction));
 
             var person = scheduleDay.Person;
             var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
         public static IWorkTimeMinMax GetWorkTime(IScheduleDay scheduleDay)
         {
             if (scheduleDay == null)
-                throw new ArgumentNullException("scheduleDay");
+                throw new ArgumentNullException(nameof(scheduleDay));
 
             TimeZoneInfo timeZoneInfo = scheduleDay.TimeZone;
             IWorkTimeMinMax minMaxLength = new WorkTimeMinMax();
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
 		public static IWorkTimeMinMax GetContractTime(IScheduleDay scheduleDay)
         {
             if (scheduleDay == null)
-                throw new ArgumentNullException("scheduleDay");
+                throw new ArgumentNullException(nameof(scheduleDay));
 
             TimeZoneInfo timeZoneInfo = scheduleDay.TimeZone;
             IWorkTimeMinMax minMaxLength = new WorkTimeMinMax();

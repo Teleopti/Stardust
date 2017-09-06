@@ -5,13 +5,10 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition
 {
 	public static class PersonSkillInfrastructure
 	{
-		//public static string TableName { get{return ""}}
-
 		public static void AddColumnsToDataTable(DataTable table)
 		{
-			if (table == null) throw new ArgumentNullException("table");
-			//table.TableName = "xxx";
-
+			if (table == null) throw new ArgumentNullException(nameof(table));
+			
 			table.Columns.Add("skill_date", typeof(DateTime));
 			table.Columns.Add("interval_id", typeof(int));
 			table.Columns.Add("person_code", typeof(Guid));

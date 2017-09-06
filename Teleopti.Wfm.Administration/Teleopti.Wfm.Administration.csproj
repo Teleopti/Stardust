@@ -22,6 +22,7 @@
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
     <UseGlobalApplicationHostFile />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -352,7 +353,6 @@
     <Compile Include="Core\DbPathProvider.cs" />
     <Compile Include="Core\DbPathProviderFake.cs" />
     <Compile Include="Core\IDatabaseHelperWrapper.cs" />
-    <Compile Include="Core\LogHelper.cs" />
     <Compile Include="Core\Stardust\StardustRepository.cs" />
     <Compile Include="Core\TenantLogger.cs" />
     <Compile Include="Core\TenantUpgrader.cs" />

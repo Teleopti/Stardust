@@ -28,11 +28,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         public static ShiftCategory CreateShiftCategory(string name, string displayColor)
         {
             if (name == null)
-                throw new ArgumentNullException("name");
-            ShiftCategory myShiftCategory = new ShiftCategory(name);
-            myShiftCategory.Description = new Description(name, name.Substring(0, 2));
-            myShiftCategory.DisplayColor = Color.FromName(displayColor);
-            return myShiftCategory;
+                throw new ArgumentNullException(nameof(name));
+			ShiftCategory myShiftCategory =
+				new ShiftCategory(name)
+				{
+					Description = new Description(name, name.Substring(0, 2)),
+					DisplayColor = Color.FromName(displayColor)
+				};
+			return myShiftCategory;
         }
     }
 }

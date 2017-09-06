@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Web.Filters
 		{
 			if (context == null)
 			{
-				throw new ArgumentNullException("context");
+				throw new ArgumentNullException(nameof(context));
 			}
 
 			context.Result = new AddChallengeOnUnauthorizedResult(challenge, context.Result);

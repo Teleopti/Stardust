@@ -469,7 +469,7 @@ namespace Teleopti.Interfaces.Domain
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#")]
         public static bool TryParseLongHourStringDefaultInterpretation(string timeAsText, TimeSpan maximumValue, out TimeSpan timeValue, TimeFormatsType timeFormatsType, bool defaultInterpretAsMinutes)
         {
-            if (timeAsText == null) throw new ArgumentNullException("timeAsText");
+            if (timeAsText == null) throw new ArgumentNullException(nameof(timeAsText));
 
             CultureInfo ci = CultureInfo.CurrentCulture;
 

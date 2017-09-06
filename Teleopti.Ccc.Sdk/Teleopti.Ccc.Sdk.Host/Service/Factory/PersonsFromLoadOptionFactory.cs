@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Service.Factory
 
 	    private ICollection<PersonDto> GetPersonsOnTeam(TeamDto teamDto, DateOnlyDto startDate, DateOnlyDto endDate)
 	    {
-	        if (teamDto == null) throw new ArgumentNullException("teamDto");
+	        if (teamDto == null) throw new ArgumentNullException(nameof(teamDto));
 
 	        using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 	        {

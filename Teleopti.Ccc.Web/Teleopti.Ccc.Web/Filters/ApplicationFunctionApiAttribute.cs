@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Filters
 		{
 			if (actionContext == null)
 			{
-				throw new ArgumentNullException("actionContext");
+				throw new ArgumentNullException(nameof(actionContext));
 			}
 			actionContext.Response = actionContext.ControllerContext.Request.CreateErrorResponse(HttpStatusCode.Forbidden, UserTexts.Resources.NotAllowed);
 		}
