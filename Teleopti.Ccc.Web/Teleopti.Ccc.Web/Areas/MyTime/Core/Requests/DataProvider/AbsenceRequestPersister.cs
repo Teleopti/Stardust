@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly RequestsViewModelMapper _requestsMapper;
 
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository,
-									   IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator, 
-									   IPersonRequestCheckAuthorization personRequestCheckAuthorization, 
-									   IAbsenceRequestIntradayFilter absenceRequestIntradayFilter, 
-									   IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, 
-									   IToggleManager toggleManager, AbsenceRequestFormMapper mapper, 
-									   RequestsViewModelMapper requestsMapper, IActivityRepository activityRepository, 
+									   IAbsenceRequestSynchronousValidator absenceRequestSynchronousValidator,
+									   IPersonRequestCheckAuthorization personRequestCheckAuthorization,
+									   IAbsenceRequestIntradayFilter absenceRequestIntradayFilter,
+									   IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository,
+									   IToggleManager toggleManager, AbsenceRequestFormMapper mapper,
+									   RequestsViewModelMapper requestsMapper, IActivityRepository activityRepository,
 									   ISkillTypeRepository skillTypeRepository, IDisableDeletedFilter disableDeletedFilter)
 		{
 			_personRequestRepository = personRequestRepository;
@@ -59,16 +59,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				_mapper.Map(form, personRequest);
 
 				checkAndProcessDeny(personRequest);
-				
-				if (_toggleManager.IsEnabled(Toggles.Wfm_Requests_ApprovingModifyRequests_41930))
+
+				if (personRequest.Request.Period != existingPeriod && !personRequest.IsDenied)
 				{
-					if (personRequest.Request.Period != existingPeriod && !personRequest.IsDenied)
-					{
-						var updatedRows = _queuedAbsenceRequestRepository.UpdateRequestPeriod(personRequest.Id.GetValueOrDefault(), personRequest.Request.Period);
-						if (updatedRows == 0)
-							throw new InvalidOperationException();
-					}
+					var updatedRows = _queuedAbsenceRequestRepository.UpdateRequestPeriod(personRequest.Id.GetValueOrDefault(), personRequest.Request.Period);
+					if (updatedRows == 0)
+						throw new InvalidOperationException();
 				}
+
 			}
 			else
 			{
@@ -78,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 					_skillTypeRepository.LoadAll();
 					_activityRepository.LoadAll();
 				}
-				
+
 				_personRequestRepository.Add(personRequest);
 				checkAndProcessDeny(personRequest);
 

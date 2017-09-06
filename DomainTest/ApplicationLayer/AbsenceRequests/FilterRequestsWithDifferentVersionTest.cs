@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 {
-	[DomainTest, Toggle(Toggles.Wfm_Requests_ApprovingModifyRequests_41930)]
+	[DomainTest]
 	[TestFixture]
 	public class FilterRequestsWithDifferentVersionTest 
 	{

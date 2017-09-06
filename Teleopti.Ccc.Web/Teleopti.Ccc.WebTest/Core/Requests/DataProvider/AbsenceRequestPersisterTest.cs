@@ -45,8 +45,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public AbsenceRequestFormMapper AbsenceRequestFormToPersonRequest;
 		public RequestsViewModelMapper RequestsViewModelMappingProfile;
 		public FakeCommandDispatcher CommandDispatcher;
-		public FakeToggleManager ToggleManager;
-
+		
 		private static readonly DateTime nowTime = new DateTime(2016, 10, 18, 8, 0, 0, DateTimeKind.Utc);
 		private DateOnly _today = new DateOnly(nowTime);
 		private IWorkflowControlSet _workflowControlSet;
@@ -409,7 +408,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		[Test]
 		public void ShouldUpdatePeriodForQueuedRequest()
 		{
-			ToggleManager.Enable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
 			_absence = createAbsence();
 			setWorkflowControlSet();
 
@@ -437,40 +435,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.AddDays(1).Add(TimeSpan.FromMinutes(21)));
 		}
 
-		[Test]
-		public void ShouldNotUpdatePeriodForQueuedRequestIfToggleIsDisabled()
-		{
-			ToggleManager.Disable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
-			_absence = createAbsence();
-			setWorkflowControlSet();
-			var newPersonRequest = setupSimpleAbsenceRequest();
-
-			QueuedAbsenceRequestRepository.Add(new QueuedAbsenceRequest()
-			{
-				PersonRequest = newPersonRequest.Id.GetValueOrDefault(),
-				StartDateTime = newPersonRequest.Request.Period.StartDateTime,
-				EndDateTime = newPersonRequest.Request.Period.EndDateTime
-			});
-
-			var form = createAbsenceRequestForm(new DateTimePeriodForm
-			{
-				StartDate = _today,
-				EndDate = _today.AddDays(1),
-				StartTime = new TimeOfDay(TimeSpan.FromHours(23)),
-				EndTime = new TimeOfDay(TimeSpan.FromMinutes(21))
-			});
-			form.EntityId = newPersonRequest.Id.GetValueOrDefault();
-			Persister.Persist(form);
-
-			var queuedRequest = QueuedAbsenceRequestRepository.LoadAll().FirstOrDefault();
-			queuedRequest.StartDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(8)));
-			queuedRequest.EndDateTime.Should().Be.EqualTo(_today.Date.Add(TimeSpan.FromHours(17)));
-		}
+		
 
 		[Test]
 		public void ShouldNotUpdateQueuedRequestPeriodIfItsSameAsRequest()
 		{
-			ToggleManager.Enable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
 			_absence = createAbsence();
 			setWorkflowControlSet();
 			var newPersonRequest = setupSimpleAbsenceRequest();
@@ -541,7 +510,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 		private void tryPersist()
 		{
-			ToggleManager.Enable(Toggles.Wfm_Requests_ApprovingModifyRequests_41930);
 			_absence = createAbsence();
 			setWorkflowControlSet();
 			var newPersonRequest = setupSimpleAbsenceRequest();
