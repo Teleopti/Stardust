@@ -73,12 +73,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 
 			var personList = _personRepository.FindPeople(personGuidList);
 
-			return personList.Where(
+			var permitedPeople = personList.Where(
+			//return personList.Where(
 				person =>
 					_shiftTradeValidator.Validate(new ShiftTradeAvailableCheckItem(shiftTradeDate, me, person))
 						.IsOk && (_permissionProvider.IsPersonSchedulePublished(shiftTradeDate, person) ||
 								   _permissionProvider.HasApplicationFunctionPermission(
 									   DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)));
+
+			return (from person in permitedPeople
+					let otherAgentToday = TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, person.PermissionInformation.DefaultTimeZone()).Date
+					let openPeriodForward = person.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum
+					where (shiftTradeDate.Day - otherAgentToday.Day) >= openPeriodForward
+					select person).ToList();
 		}
 	}
 
