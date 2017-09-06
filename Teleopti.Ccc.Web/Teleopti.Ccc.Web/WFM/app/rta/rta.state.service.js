@@ -5,7 +5,7 @@
 		.module('wfm.rta')
 		.service('rtaStateService', rtaStateService);
 
-	function rtaStateService($state, rtaService, $q) {
+	function rtaStateService($state, rtaService, $q, $sessionStorage) {
 
 		var state = {
 			open: undefined,
@@ -43,6 +43,7 @@
 			setCurrentState: function (newState) {
 				mutate(state, newState);
 				cleanState();
+				storeState();
 				return $q.all(dataLoaded);
 			},
 
@@ -190,6 +191,10 @@
 
 		}
 
+		function storeState() {
+			$sessionStorage.rtaState = state;
+		}
+
 		function selectOtherTeamsIfSiteIsSelected(teamId) {
 			var siteOfTeam = organization.find(function (site) {
 				return site.Teams.some(function (team) { return team.Id == teamId });
@@ -238,6 +243,7 @@
 
 			mutate(state, mutations);
 			cleanState();
+			storeState();
 
 			var gotoState = {
 				skillAreaId: undefined,
@@ -255,7 +261,6 @@
 				gotoState.skillIds = state.skillIds;
 			if (state.open)
 				gotoState.open = true;
-
 			return gotoState;
 		}
 

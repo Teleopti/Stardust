@@ -1532,6 +1532,7 @@
     <Content Include="WFM\app\rta\overview\controller.RTA_RememberMyPartOfTheBusiness_39082.js" />
     <Content Include="WFM\app\rta\overview\controller.redirects.spec.js" />
     <Content Include="WFM\app\rta\overview\controller.selection.spec.js" />
+    <Content Include="WFM\app\rta\overview\controller.storeState.spec.js" />
     <Content Include="WFM\app\rta\overview\view.RTA_RememberMyPartOfTheBusiness_39082.html" />
     <Content Include="WFM\app\rta\rta.state.service.js" />
     <Content Include="WFM\app\staffing\import_export\importexport.overview.controller.js" />
