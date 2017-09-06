@@ -85,7 +85,9 @@ SELECT	convert(varchar(10),left(d.year_week,4) + '-' + right(d.year_week,2))'yea
 		CASE WHEN sum(forecasted_resources_incl_shrinkage_m)= 0 THEN 0
 		ELSE
 			(sum(scheduled_resources_m)-sum(forecasted_resources_incl_shrinkage_m)) /sum(forecasted_resources_incl_shrinkage_m)
-		END AS 'relative_difference_incl_shrinkage'
+		END AS 'relative_difference_incl_shrinkage',
+		sum(forecasted_tasks) AS 'forecasted_tasks',
+		sum(estimated_tasks_answered_within_sl) AS 'estimated_tasks_answered_within_sl'
 FROM mart.fact_schedule_forecast_skill f 
 INNER JOIN mart.bridge_time_zone b
 	ON	f.interval_id= b.interval_id
