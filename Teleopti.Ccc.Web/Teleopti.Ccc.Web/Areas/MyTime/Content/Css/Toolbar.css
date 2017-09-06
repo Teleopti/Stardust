@@ -124,6 +124,27 @@ End personal drop down menu
 	max-height: none !important;
 }
 
+/*
+override dropdown-menu style on mobile
+*/
+.in .dropdown-menu {
+	background-color: transparent !important;
+	border: 0 !important;
+	box-shadow: none !important;
+}
+
+.in .dropdown-menu .divider {
+	background-color: #0066cc !important;
+}
+
+.in .dropdown-menu > li > a {
+	color: white !important;
+}
+
+/*
+End override dropdown-menu style on mobile
+*/
+
 @media (min-width: 768px) {
 	.navbar-nav > li > a {
 		padding-left: 12px;
