@@ -241,7 +241,9 @@
 
 			var gotoState = {
 				skillAreaId: undefined,
-				skillIds: undefined
+				skillIds: undefined,
+				siteIds: undefined,
+				teamIds: undefined
 			};
 			if (state.siteIds.length > 0)
 				gotoState.siteIds = state.siteIds;

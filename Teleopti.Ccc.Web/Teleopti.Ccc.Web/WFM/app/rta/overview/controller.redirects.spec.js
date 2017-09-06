@@ -491,6 +491,8 @@ describe('RtaOverviewController redirects', function () {
 		});
 
 		expect(lastGoParams.siteIds).toEqual(['londonId']);
+		expect(lastGoParams.hasOwnProperty('teamIds')).toEqual(true);
+		expect(lastGoParams.teamIds).toEqual(undefined);
 	});
 
 	it('should go to agents for teams if all teams under a site were selected and then one was unselected', function () {
@@ -528,6 +530,8 @@ describe('RtaOverviewController redirects', function () {
 		});
 
 		expect(lastGoParams.teamIds).toEqual(['redId']);
+		expect(lastGoParams.hasOwnProperty('siteIds')).toEqual(true);
+		expect(lastGoParams.siteIds).toEqual(undefined);
 	});
 
 	it('should go to agents for teams if site were selected and then one was unselected', function () {
