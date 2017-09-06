@@ -67,7 +67,9 @@
 			},
 
 			skillPickerPreselectedItem: function () {
-				return { skillIds: state.skillIds, skillAreaId: state.skillAreaId };
+				if (state.skillAreaId)
+					return { skillAreaId: state.skillAreaId }
+				return { skillIds: state.skillIds };
 			},
 
 			hasSkillSelection: function () {
@@ -237,7 +239,10 @@
 			mutate(state, mutations);
 			cleanState();
 
-			var gotoState = {};
+			var gotoState = {
+				skillAreaId: undefined,
+				skillIds: undefined
+			};
 			if (state.siteIds.length > 0)
 				gotoState.siteIds = state.siteIds;
 			if (state.teamIds.length > 0)

@@ -162,7 +162,9 @@ describe('RtaOverviewController redirects', function () {
 			vm.selectSkillOrSkillArea(undefined);
 		});
 
+		expect(lastGoParams.hasOwnProperty('skillAreaId')).toEqual(true);
 		expect(lastGoParams.skillAreaId).toEqual(undefined);
+		expect(lastGoParams.hasOwnProperty('skillIds')).toEqual(true);
 		expect(lastGoParams.skillIds).toEqual(undefined);
 	});
 
