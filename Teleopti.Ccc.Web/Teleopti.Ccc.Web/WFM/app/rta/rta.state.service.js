@@ -38,8 +38,15 @@
 					skillAreas = data.SkillAreas;
 				})
 		];
-
+		
 		return {
+			gotoLastState: function () {
+				if ($sessionStorage.rtaState) {
+					state = $sessionStorage.rtaState;
+					$state.go($state.current.name, buildState());
+				}
+			},
+
 			setCurrentState: function (newState) {
 				mutate(state, newState);
 				cleanState();

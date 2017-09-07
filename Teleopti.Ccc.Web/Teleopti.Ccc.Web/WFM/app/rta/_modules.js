@@ -15,6 +15,14 @@
 			'localeLanguageSortingService',
 			'wfm.helpingDirectives'
 		])
-		.run(function () { });
+		.run(function ($rootScope, rtaStateService, Toggle) {
+
+			$rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams, options) {
+				if (Toggle.RTA_RememberMyPartOfTheBusiness_39082)
+					if (toState.name == 'rta' && fromState.name != 'rta')
+						rtaStateService.gotoLastState();
+			})
+
+		});
 
 })();

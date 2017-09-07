@@ -48,7 +48,22 @@
                     method: 'GET',
                     isArray: true
                 }
-            }).query().$promise;
+            }).query()
+                .$promise
+                // .then(function (sites) {
+                //     if (sites.length > 0)
+                //         sites[0].Teams = [{
+                //             Id: "34590A63-6331-4921-BC9F-9B5E015AB495",
+                //             SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+                //             Name: "Fajker",
+                //         },
+                //         {
+                //             Id: "34590A63-6331-4921-BC9F-9B5E015AB496",
+                //             SiteId: "d970a45a-90ff-4111-bfe1-9b5e015ab45c",
+                //             Name: "Fajker 2",
+                //         }]
+                //     return sites;
+                // })
         };
 
         function getOrganizationForSkills(data) {
