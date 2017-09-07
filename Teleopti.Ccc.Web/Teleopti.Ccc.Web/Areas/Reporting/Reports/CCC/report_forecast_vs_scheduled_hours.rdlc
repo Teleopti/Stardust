@@ -1093,7 +1093,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=(sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value)</Value>
+                                  <Value>=iif(sum(Fields!forecasted_agents_m.Value) = 0 , 0, (sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value))/iif(sum(Fields!forecasted_agents_m.Value)=0,1,sum(Fields!forecasted_agents_m.Value)))</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -1140,7 +1140,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=(sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value)</Value>
+                                  <Value>=iif(sum(Fields!forecasted_agents_incl_shrinkage_m.Value) = 0 , 0, (sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value))/iif(sum(Fields!forecasted_agents_incl_shrinkage_m.Value)=0,1,sum(Fields!forecasted_agents_incl_shrinkage_m.Value)))</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -1486,7 +1486,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=(sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value)</Value>
+                                  <Value>=iif(sum(Fields!forecasted_agents_m.Value) = 0 , 0, (sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value))/iif(sum(Fields!forecasted_agents_m.Value)=0,1,sum(Fields!forecasted_agents_m.Value)))</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -1527,7 +1527,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=(sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value)</Value>
+                                  <Value>=iif(sum(Fields!forecasted_agents_incl_shrinkage_m.Value) = 0 , 0, (sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value))/iif(sum(Fields!forecasted_agents_incl_shrinkage_m.Value)=0,1,sum(Fields!forecasted_agents_incl_shrinkage_m.Value)))</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -1861,7 +1861,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=(sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value)</Value>
+                                  <Value>=iif(sum(Fields!forecasted_agents_m.Value) = 0 , 0, (sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value))/iif(sum(Fields!forecasted_agents_m.Value)=0,1,sum(Fields!forecasted_agents_m.Value)))</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -1899,7 +1899,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=(sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value)</Value>
+                                  <Value>=iif(sum(Fields!forecasted_agents_incl_shrinkage_m.Value) = 0 , 0, (sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value))/iif(sum(Fields!forecasted_agents_incl_shrinkage_m.Value)=0,1,sum(Fields!forecasted_agents_incl_shrinkage_m.Value)))</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -2596,7 +2596,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=(sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value)) / sum(Fields!forecasted_agents_m.Value)</Value>
+                                  <Value>=iif(sum(Fields!forecasted_agents_m.Value) = 0 , 0, (sum(Fields!scheduled_agents_m.Value) - sum(Fields!forecasted_agents_m.Value))/iif(sum(Fields!forecasted_agents_m.Value)=0,1,sum(Fields!forecasted_agents_m.Value)))</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -2641,7 +2641,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=(sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value)) / sum(Fields!forecasted_agents_incl_shrinkage_m.Value)</Value>
+                                  <Value>=iif(sum(Fields!forecasted_agents_incl_shrinkage_m.Value) = 0 , 0, (sum(Fields!scheduled_agents_m.Value) -sum(Fields!forecasted_agents_incl_shrinkage_m.Value))/iif(sum(Fields!forecasted_agents_incl_shrinkage_m.Value)=0,1,sum(Fields!forecasted_agents_incl_shrinkage_m.Value)))</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
