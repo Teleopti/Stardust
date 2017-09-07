@@ -134,9 +134,7 @@
 			else
 				rtaStateService.selectSkill(skillOrSkillArea.Id);
 		}
-
-		vm.goToAgentsView = function () { $state.go('rta-agents'); };
-
+		
 		vm.displayGoToAgents = rtaStateService.hasSelection;
 
 		vm.goToAgents = rtaStateService.goToAgents;
