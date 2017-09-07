@@ -46,7 +46,7 @@
 				REQUESTS_TAB_NAMES = _REQUESTS_TAB_NAMES_;
 			}));
 
-			function setUpTarget(isShiftTradeViewActive) {
+			function setUpTarget(isShiftTradeViewActive, isUsingRequestSubmitterTimeZone) {
 				var scope = $rootScope.$new();
 				var directiveElem = getCompiledElement();
 
@@ -55,6 +55,7 @@
 						' paging="paging"' +
 						' page-size-options="pageSizeOptions"' +
 						' is-shift-trade-view-active="' + isShiftTradeViewActive +'"' +
+						' is-using-request-submitter-time-zone="' + !!isUsingRequestSubmitterTimeZone + '"'+
 						' ></requests-footer>');
 					var compiledElement = $compile(element)(scope);
 					return compiledElement;
@@ -122,7 +123,7 @@
 			});
 
 			it("should show time in user timezone by default", function() {
-				var test = setUpTarget(true);
+				var test = setUpTarget(true, false);
 				test.scope.$digest();
 
 				var footer = test.target.isolateScope().requestsFooter;

@@ -14,6 +14,7 @@
 		vm.translations.To = $translate.instant('DateTo');
 		vm.pageSizeOptions = [20, 50, 100, 200];
 		vm.sitesAndTeams = [];
+		vm.isUsingRequestSubmitterTimeZone = false;
 		vm.Wfm_GroupPages_45057 = toggleService.Wfm_GroupPages_45057;
 		vm.isOvertimeEnabled = toggleService.Wfm_Requests_OvertimeRequestHandling_45177 && toggleService.Wfm_Requests_Refactoring_45470;
 		vm.teamNameMap = {};
