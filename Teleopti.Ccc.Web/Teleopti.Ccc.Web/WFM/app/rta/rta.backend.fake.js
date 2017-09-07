@@ -209,19 +209,7 @@
                         return params.skillIds.indexOf(sa.SkillId) > -1;
                     });
 
-                var siteIds = [];
-                if (params.siteIds)
-                    siteIds = siteIds.concat(params.siteIds)
-                if (params.teamIds) {
-                    siteIds = siteIds.concat(
-                        teamAdherences.filter(function (team) {
-                            return params.teamIds.indexOf(team.Id) > -1;
-                        }).map(function (team) {
-                            return team.SiteId
-                        })
-                    );
-                }
-
+                var siteIds = params.siteIds || [];
                 if (siteIds.length > 0) {
                     sites.forEach(function (site) {
                         if (siteIds.indexOf(site.Id) > -1) {
