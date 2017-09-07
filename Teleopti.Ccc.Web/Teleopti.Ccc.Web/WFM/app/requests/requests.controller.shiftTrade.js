@@ -169,7 +169,6 @@
 			vm.isUsingRequestSubmitterTimeZone = params.isUsingRequestSubmitterTimeZone;
 			onInitCallBack = params.onInitCallBack;
 
-			applyGridColumns();
 			vm.initialized = true;
 
 			setupWatch();
@@ -356,6 +355,7 @@
 			uiGridUtilitiesService.prepareComputedColumns(requests, vm.userTimeZone, vm.isUsingRequestSubmitterTimeZone);
 
 			setupShiftTradeVisualisation(requests);
+			applyGridColumns();
 
 			vm.gridOptions.enableFiltering = vm.filterEnabled;
 			vm.gridOptions.enablePinning = true;

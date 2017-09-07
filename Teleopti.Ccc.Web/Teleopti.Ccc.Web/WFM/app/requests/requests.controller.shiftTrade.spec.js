@@ -129,6 +129,20 @@ describe('Requests shift trade controller tests',
 			expect(requestGridStateSvc.hasSavedState(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE)).toBeTruthy();
 		});
 
+		it('should show schedule detail column in ui-grid table', function() {
+			var request = {
+				Id: 1,
+				Type: requestsDefinitions.REQUEST_TYPES.SHIFTTRADE,
+			};
+			requestsDataService.setRequests([request, request]);
+
+			params.selectedGroupIds = ['team'];
+			var element = compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			expect(element[0].querySelectorAll('.shift-trade-header-start-of-week').length).toEqual(1);
+		});
+
 		it('should not request data when period is invalid', function () {
 			requestsDataService.setRequests([]);
 			params.selectedGroupIds = ['team'];

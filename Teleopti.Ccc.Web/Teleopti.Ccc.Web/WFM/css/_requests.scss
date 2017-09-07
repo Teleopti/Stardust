@@ -332,7 +332,6 @@
 		}
 	}
 
-
 	.text-absence-view {
 		overflow: hidden;
 
@@ -434,8 +433,10 @@
 				background-color: #99d6ff;
 			}
 
-
 			.ui-grid-canvas {
+				overflow-y: hidden;
+				padding: 0;
+				margin-top: 1px;
 				width: auto !important;
 			}
 
@@ -470,7 +471,7 @@
 
 		.isWeekend {
 			width: 40px;
-			height: 100%;
+			height: calc(100% - 1px);
 			position: absolute;
 			background-color: $orange-400;
 			opacity: 0.8;
