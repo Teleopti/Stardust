@@ -64,19 +64,15 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
-		public void ShouldGetNothingWhenSelectNoAnyTeam()
+		public void ShouldGetNoAbsenceAndTextRequestWhenNoTeamSelected()
 		{
-			var input = new AllRequestsFormData
-			{
-				StartDate = new DateOnly(2015, 10, 1),
-				EndDate = new DateOnly(2015, 10, 9),
-				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
-				SortingOrders = new List<RequestsSortingOrder>(),
-				SelectedGroupIds = new List<string>().ToArray()
-			};
+			shouldGetNoAbsenceAndTextRequestWhenNoTeamSupplied(new List<string>().ToArray());
+		}
 
-			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
-			result.TotalCount.Should().Be.EqualTo(0);
+		[Test]
+		public void ShouldGetNoAbsenceAndTextRequestWhenSelectTeamIsNull()
+		{
+			shouldGetNoAbsenceAndTextRequestWhenNoTeamSupplied(null);
 		}
 
 		[Test]
@@ -487,6 +483,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 		}
 
 		[Test]
+		public void ShouldGetNoOvertimeRequestsWhenNoTeamSelected()
+		{
+			shouldGetNoOvertimeRequestsWhenNoTeamSupplied(new string[] { });
+		}
+
+		[Test]
+		public void ShouldGetNoOvertimeRequestsWhenSelectedTeamIsNull()
+		{
+			shouldGetNoOvertimeRequestsWhenNoTeamSupplied(null);
+		}
+
+		[Test]
 		public void ShouldGetOvertimeRequests()
 		{
 			setUpRequests();
@@ -621,6 +629,37 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.ViewModelFactory
 			var team = TeamFactory.CreateSimpleTeam("_").WithId();
 			team.Site = SiteFactory.CreateSimpleSite("site");
 			return team;
+		}
+
+		private void shouldGetNoAbsenceAndTextRequestWhenNoTeamSupplied(string[] selectedTeams)
+		{
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 1),
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SortingOrders = new List<RequestsSortingOrder>(),
+				SelectedGroupIds = selectedTeams
+			};
+
+			var result = Target.CreateAbsenceAndTextRequestListViewModel(input);
+			result.TotalCount.Should().Be.EqualTo(0);
+		}
+
+		private void shouldGetNoOvertimeRequestsWhenNoTeamSupplied(string[] selectedTeams)
+		{
+			setUpRequests();
+
+			var input = new AllRequestsFormData
+			{
+				StartDate = new DateOnly(2015, 10, 1),
+				EndDate = new DateOnly(2015, 10, 9),
+				AgentSearchTerm = new Dictionary<PersonFinderField, string>(),
+				SelectedGroupIds = selectedTeams
+			};
+
+			var result = Target.CreateOvertimeRequestListViewModel(input);
+			result.Requests.Count().Should().Be.EqualTo(0);
 		}
 	}
 }
