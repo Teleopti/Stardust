@@ -25,9 +25,8 @@
 				.then(function (data) {
 					organization = data;
 					organization.forEach(function (site) {
-						if (!site.Teams) site.Teams = [];
+						site.Teams = site.Teams || [];
 					});
-					updateOpenedSites();
 				}),
 			rtaService.getSkills()
 				.then(function (data) {
@@ -38,7 +37,7 @@
 					skillAreas = data.SkillAreas;
 				})
 		];
-		
+
 		return {
 			gotoLastState: function () {
 				if ($sessionStorage.rtaState) {
@@ -51,7 +50,8 @@
 				mutate(state, newState);
 				cleanState();
 				storeState();
-				return $q.all(dataLoaded);
+				return $q.all(dataLoaded)
+					.then(updateOpenedSites);
 			},
 
 			deselectSkillAndSkillArea: function () {
@@ -124,7 +124,7 @@
 						.find(function (skillArea) { return skillArea.Id === state.skillAreaId; })
 						.Skills.map(function (skill) { return skill.Id; });
 
-				return { skillIds: skillIds, teamIds: state.teamIds, siteIds: state.openedSiteIds }
+				return { skillIds: skillIds, siteIds: state.openedSiteIds }
 			},
 
 			hasSelection: function () {
