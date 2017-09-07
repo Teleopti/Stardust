@@ -9,7 +9,6 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 {
@@ -85,7 +84,11 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
             Assert.AreEqual(row["scheduled_resources"], scheduleForecastSkill.ScheduledResources);
             Assert.AreEqual(row["scheduled_resources_incl_shrinkage_m"], scheduleForecastSkill.ScheduledResourcesIncludingShrinkageMinutes);
             Assert.AreEqual(row["scheduled_resources_incl_shrinkage"], scheduleForecastSkill.ScheduledResourcesIncludingShrinkage);
-            Assert.AreEqual(row["business_unit_code"], scheduleForecastSkill.BusinessUnitCode);
+            Assert.AreEqual(row["forecasted_tasks"], scheduleForecastSkill.ForecastedTasks);
+            Assert.AreEqual(row["estimated_tasks_answered_within_sl"], scheduleForecastSkill.EstimatedTasksAnsweredWithinSL);
+			Assert.AreEqual(row["forecasted_tasks_incl_shrinkage"], scheduleForecastSkill.ForecastedTasksIncludingShrinkage);
+			Assert.AreEqual(row["estimated_tasks_answered_within_sl_incl_shrinkage"], scheduleForecastSkill.EstimatedTasksAnsweredWithinSLIncludingShrinkage);
+			Assert.AreEqual(row["business_unit_code"], scheduleForecastSkill.BusinessUnitCode);
             Assert.AreEqual(row["business_unit_name"], scheduleForecastSkill.BusinessUnitName);
             Assert.AreEqual(row["datasource_id"], scheduleForecastSkill.DataSourceId);
             Assert.AreEqual(row["insert_date"], scheduleForecastSkill.InsertDate);
@@ -105,6 +108,10 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
             scheduleForecastSkill.ScheduledResources = 11d;
             scheduleForecastSkill.ScheduledResourcesIncludingShrinkageMinutes = 240d;
             scheduleForecastSkill.ScheduledResourcesIncludingShrinkage = 16d;
+            scheduleForecastSkill.ForecastedTasks = 201d;
+            scheduleForecastSkill.EstimatedTasksAnsweredWithinSL = 21d;
+            scheduleForecastSkill.ForecastedTasksIncludingShrinkage = 202d;
+            scheduleForecastSkill.EstimatedTasksAnsweredWithinSLIncludingShrinkage = 22d;
             scheduleForecastSkill.BusinessUnitCode = Guid.NewGuid();
             scheduleForecastSkill.BusinessUnitName = "BU name";
             scheduleForecastSkill.DataSourceId = 1;
