@@ -60,6 +60,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Secrets.WorkShiftCalculator;
 using Teleopti.Ccc.Secrets.WorkShiftPeriodValueCalculator;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -155,6 +156,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<DesktopSchedulingOLD>().As<DesktopScheduling>().InstancePerLifetimeScope();
 			}
 
+			builder.RegisterType<LowThreadPriorityScope>().As<ILowThreadPriorityScope>().SingleInstance();
 			builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
 			builder.RegisterType<CorrectAlteredBetween>().SingleInstance();
 			builder.RegisterType<ScheduleOptimizerHelper>().InstancePerLifetimeScope();

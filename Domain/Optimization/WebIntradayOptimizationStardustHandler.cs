@@ -16,15 +16,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
+		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
 
-		public WebIntradayOptimizationStardustHandler(IIntradayOptimization intradayOptimization,
-			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
-			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager,
-			IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope)
+		public WebIntradayOptimizationStardustHandler(
+			IIntradayOptimization intradayOptimization,
+			Func<ISchedulerStateHolder> schedulerStateHolder, 
+			IFillSchedulerStateHolder fillSchedulerStateHolder,
+			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
+			IGridlockManager gridlockManager,
+			IJobResultRepository jobResultRepository,
+			ISchedulingSourceScope schedulingSourceScope, 
+			ILowThreadPriorityScope lowThreadPriorityScope)
 			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeSchedulesAfterIsland, gridlockManager)
 		{
 			_jobResultRepository = jobResultRepository;
 			_schedulingSourceScope = schedulingSourceScope;
+			_lowThreadPriorityScope = lowThreadPriorityScope;
 		}
 
 		[AsSystem]
@@ -32,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			try
 			{
+				using (_lowThreadPriorityScope.OnThisThread())
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
 					HandleEvent(@event.IntradayOptimizationWasOrdered);

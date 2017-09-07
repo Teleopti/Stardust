@@ -18,12 +18,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ScheduleOptimizationTeamBlock _scheduleOptimization;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
+		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
 
-		public WebDayoffOptimizationStardustHandler(ScheduleOptimizationTeamBlock scheduleOptimization, IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope)
+		public WebDayoffOptimizationStardustHandler(ScheduleOptimizationTeamBlock scheduleOptimization, IJobResultRepository jobResultRepository, ISchedulingSourceScope schedulingSourceScope, ILowThreadPriorityScope lowThreadPriorityScope)
 		{
 			_scheduleOptimization = scheduleOptimization;
 			_jobResultRepository = jobResultRepository;
 			_schedulingSourceScope = schedulingSourceScope;
+			_lowThreadPriorityScope = lowThreadPriorityScope;
 		}
 
 		[AsSystem]
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			try
 			{
+				using (_lowThreadPriorityScope.OnThisThread())
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
 					var result = _scheduleOptimization.Execute(@event.PlanningPeriodId);

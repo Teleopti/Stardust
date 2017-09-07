@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
-using System.Threading;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -24,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISynchronizeSchedulesAfterIsland _synchronizeSchedulesAfterIsland;
 		private readonly IGridlockManager _gridlockManager;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
+		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
 
 		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						IFillSchedulerStateHolder fillSchedulerStateHolder,
@@ -32,7 +31,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						ICurrentSchedulingCallback currentSchedulingCallback,
 						ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
 						IGridlockManager gridlockManager, 
-						ISchedulingSourceScope schedulingSourceScope)
+						ISchedulingSourceScope schedulingSourceScope, 
+						ILowThreadPriorityScope lowThreadPriorityScope)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_synchronizeSchedulesAfterIsland = synchronizeSchedulesAfterIsland;
 			_gridlockManager = gridlockManager;
 			_schedulingSourceScope = schedulingSourceScope;
+			_lowThreadPriorityScope = lowThreadPriorityScope;
 		}
 
 		[TestLog]
@@ -49,12 +50,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (@event.FromWeb)
 			{
-				var basePrio = ThreadPriorityManager.SetThreadPriorityFromConfiguration();
+				using (_lowThreadPriorityScope.OnThisThread())
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
 					Run(@event);
 				}
-				ThreadPriorityManager.ResetThreadPriority(basePrio);
 			}
 			else
 			{

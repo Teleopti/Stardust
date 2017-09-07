@@ -2,6 +2,11 @@ using System;
 
 namespace Teleopti.Interfaces.Domain
 {
+	public interface ILowThreadPriorityScope
+	{
+		IDisposable OnThisThread();
+	}
+
 	public interface ISchedulingSourceScope
 	{
 		IDisposable OnThisThreadUse(string schedulingScope);

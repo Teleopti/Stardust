@@ -609,6 +609,7 @@
     <Compile Include="UnitOfWork\IPreCommitHook.cs" />
     <Compile Include="UnitOfWork\INHibernateConfigurationCache.cs" />
     <Compile Include="UnitOfWork\KeepScheduleEvents.cs" />
+    <Compile Include="UnitOfWork\LowThreadPriorityScope.cs" />
     <Compile Include="UnitOfWork\MessageBrokerSender.cs" />
     <Compile Include="UnitOfWork\NoPreCommitHooks.cs" />
     <Compile Include="UnitOfWork\OptionalColumnCollectionChangedEventPublisher.cs" />

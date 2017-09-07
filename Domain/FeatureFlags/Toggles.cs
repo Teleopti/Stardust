@@ -178,7 +178,7 @@
 		Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640,
 		Wfm_Staffing_45411, //this is to enable staffing
 
-		Stardust_Priority_BelowNormal_44320,
+		WFM_WebScheduling_LowPriority_44320,
 		WFM_Intraday_SupportOtherSkillsLikeEmail_44026
 
 		// ReSharper restore InconsistentNaming

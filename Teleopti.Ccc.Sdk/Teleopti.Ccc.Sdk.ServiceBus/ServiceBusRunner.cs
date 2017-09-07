@@ -172,12 +172,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var messageBroker = container.Resolve<IMessageBrokerComposite>();
 			new InitializeMessageBroker(messageBroker).Start(ConfigurationManager.AppSettings.ToDictionary());
 
-			//set process priority class to BelowNormal
-			if (toggleManager.IsEnabled(Toggles.Stardust_Priority_BelowNormal_44320))
-			{
-				Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.BelowNormal;
-			}
-
 			var nodeStarter = new NodeStarter();
 			Nodes.Add(nodeStarter);
 			nodeStarter.Start(nodeConfig, container);
