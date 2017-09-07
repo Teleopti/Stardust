@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<FullSchedulingOLD>().As<IFullScheduling>().InstancePerLifetimeScope().ApplyAspects();
 				builder.RegisterType<DesktopSchedulingOLD>().As<DesktopScheduling>().InstancePerLifetimeScope();
 			}
-
+			builder.RegisterType<ExtendSelectedPeriodForMonthlyScheduling>().SingleInstance();
 			builder.RegisterType<LowThreadPriorityScope>().As<ILowThreadPriorityScope>().SingleInstance();
 			builder.RegisterType<OptimizationDesktopExecuter>().InstancePerLifetimeScope();
 			builder.RegisterType<CorrectAlteredBetween>().SingleInstance();

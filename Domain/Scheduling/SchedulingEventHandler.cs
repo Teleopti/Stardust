@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -23,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IGridlockManager _gridlockManager;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
 		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
+		private readonly ExtendSelectedPeriodForMonthlyScheduling _extendSelectedPeriodForMonthlyScheduling;
 
 		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						IFillSchedulerStateHolder fillSchedulerStateHolder,
@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland,
 						IGridlockManager gridlockManager, 
 						ISchedulingSourceScope schedulingSourceScope, 
-						ILowThreadPriorityScope lowThreadPriorityScope)
+						ILowThreadPriorityScope lowThreadPriorityScope,
+						ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_gridlockManager = gridlockManager;
 			_schedulingSourceScope = schedulingSourceScope;
 			_lowThreadPriorityScope = lowThreadPriorityScope;
+			_extendSelectedPeriodForMonthlyScheduling = extendSelectedPeriodForMonthlyScheduling;
 		}
 
 		[TestLog]
@@ -80,32 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var schedulingCallback = _currentSchedulingCallback.Current();
 			var schedulingProgress = schedulingCallback is IConvertSchedulingCallbackToSchedulingProgress converter ? converter.Convert() : new NoSchedulingProgress();
 
-			if (@event.FromWeb && selectedPeriod.StartDate.Day == 1 && selectedPeriod.EndDate.AddDays(1).Day == 1)
-			{
-				var firstDaysOfWeek = new List<DayOfWeek>();
-				foreach (var person in schedulerStateHolder.AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)))
-				{
-					if (!firstDaysOfWeek.Contains(person.FirstDayOfWeek))
-					{
-						firstDaysOfWeek.Add(person.FirstDayOfWeek);
-					}
-				}
-
-				var firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(selectedPeriod.StartDate, firstDaysOfWeek[0]);
-				var lastDateInPeriodLocal = DateHelper.GetLastDateInWeek(selectedPeriod.EndDate, firstDaysOfWeek[0]);
-				foreach (var firstDayOfWeek in firstDaysOfWeek)
-				{
-					if (DateHelper.GetFirstDateInWeek(selectedPeriod.StartDate, firstDayOfWeek).CompareTo(firstDateInPeriodLocal) != 1)
-					{
-						firstDateInPeriodLocal = DateHelper.GetFirstDateInWeek(selectedPeriod.StartDate, firstDayOfWeek);
-					}
-					if (DateHelper.GetLastDateInWeek(selectedPeriod.EndDate, firstDayOfWeek).CompareTo(lastDateInPeriodLocal) == 1)
-					{
-						lastDateInPeriodLocal = DateHelper.GetLastDateInWeek(selectedPeriod.EndDate, firstDayOfWeek);
-					}
-				}
-				selectedPeriod = new DateOnlyPeriod(firstDateInPeriodLocal, lastDateInPeriodLocal);
-			}
+			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 
 			_scheduleExecutor.Execute(schedulingCallback,
 				_schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate), schedulingProgress,
