@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 					SiteId = Guid.NewGuid(), 
 					BusinessUnitId = Guid.NewGuid()
 				};
-			var date = DateOnly.Today;
+			var date = DateOnly.Today.AddDays(2);
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = date,
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
                 SiteId = Guid.NewGuid(),
                 BusinessUnitId = Guid.NewGuid()
             };
-            var date = DateOnly.Today;
+            var date = DateOnly.Today.AddDays(2);
             var data = new ShiftTradeScheduleViewModelData
             {
                 ShiftTradeDate = date,
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			personInMyTeam.WorkflowControlSet = new WorkflowControlSet("valid workflow");
 			personInMyTeam.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			var personInMyTeamGuids = new PersonSelectorShiftTrade { PersonId = personInMyTeam.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
-			var date = DateOnly.Today;
+			var date = DateOnly.Today.AddDays(2);
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = date,
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			personInMyTeam.WorkflowControlSet = new WorkflowControlSet("valid workflow");
 			personInMyTeam.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			var personInMyTeamGuids = new PersonSelectorShiftTrade { PersonId = personInMyTeam.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
-			var date = DateOnly.Today;
+			var date = DateOnly.Today.AddDays(2);
 			var teamIds = new List<Guid>();
 			teamIds.Add(myTeam.Id.Value);
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = teamIds };
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var validAgentGuids = new PersonSelectorShiftTrade { PersonId = validAgent.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
 			var invalidAgentGuids = new PersonSelectorShiftTrade { PersonId = invalidAgent.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
-			var date = DateOnly.Today;
+			var date = DateOnly.Today.AddDays(2);
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = new List<Guid>(){myTeam.Id.GetValueOrDefault()}};
 
 			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate,data.TeamIdList,data.SearchNameText))
@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var validAgentGuids = new PersonSelectorShiftTrade { PersonId = validAgent.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
 			var invalidAgentGuids = new PersonSelectorShiftTrade { PersonId = invalidAgent.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
-			var date = DateOnly.Today;
+			var date = DateOnly.Today.AddDays(2);
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = new List<Guid>(){myTeam.Id.GetValueOrDefault()}};
 
 			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate,data.TeamIdList,data.SearchNameText))
@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			person2InMyTeam.WorkflowControlSet = new WorkflowControlSet("valid workflow");
 			person2InMyTeam.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward = new MinMax<int>(0, 99);
 			
-			var date = DateOnly.Today;
+			var date = DateOnly.Today.AddDays(2);
 			var data = new ShiftTradeScheduleViewModelData
 			{
 				ShiftTradeDate = date,
