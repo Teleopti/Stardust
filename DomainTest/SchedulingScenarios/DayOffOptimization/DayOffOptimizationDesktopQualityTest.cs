@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			standardDeviation.Should().Be.LessThan(0.034d);
 		}
 
-		[Test]
+		[Test, Culture("sv-SE")]
 		public void ShouldProduceGoodStandardDevBetweenDaysWhenUsingSingleAgentSingleDayAndFreeWeekEndSettings()
 		{
 			var firstDay = new DateOnly(2017, 09, 04); //mon
