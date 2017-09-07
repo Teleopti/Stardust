@@ -1,7 +1,7 @@
 <ServiceDefinition name="TeleoptiCCC"
 xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition">
 
-  <WebRole name="TeleoptiCCC" vmsize="Standard_DS1_v2">
+  <WebRole name="TeleoptiCCC" vmsize="Standard_D1_v2">
     <Sites>
       <Site name="TeleoptiCCC" physicalDirectory="../../StartPage">
         <VirtualApplication name="SDK" physicalDirectory="../../SDK" />
