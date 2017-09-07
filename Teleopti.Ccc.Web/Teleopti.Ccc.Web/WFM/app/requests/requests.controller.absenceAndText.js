@@ -7,7 +7,7 @@
 
 	requestsAbsenceAndTextController.$inject = [
 		'$scope', '$filter', '$injector', '$translate', '$timeout', '$stateParams', 'requestsDataService', 'Toggle',
-		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'TextAndAbsenceGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES'
+		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'TextAndAbsenceGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES','requestCommandParamsHolder'
 	];
 
 	function requestsAbsenceAndTextController($scope,
@@ -26,11 +26,12 @@
 		requestGridStateService,
 		textAndAbsenceGridConfigurationService,
 		uiGridUtilitiesService,
-		requestsTabNames) {
+		requestsTabNames,
+		requestCommandParamsHolder) {
 		var vm = this;
 
 		vm.requests = [];
-		vm.period = {};
+		vm.period = {}
 		vm.filters = [];
 		vm.subjectFilter = undefined;
 		vm.messageFilter = undefined;
@@ -327,6 +328,31 @@
 			onInitCallBack && onInitCallBack(requests.data.TotalCount);
 			vm.isLoading = false;
 			vm.gridApi.grid.selection.selectAll = false;
+			reselectRequests();
+		}
+
+		function reselectRequests() {
+			if (!vm.gridOptions.data) return;
+
+			var rows = getVisibleSelectedRequestsRows();
+
+			vm.gridApi.grid.modifyRows(vm.gridOptions.data);
+			angular.forEach(rows, function (row) {
+				vm.gridApi.selection.selectRow(row);
+			});
+
+			vm.gridApi.grid.selection.selectAll =
+				vm.requests && vm.requests.length > 0 && vm.requests.length === rows.length;
+		}
+
+		function getVisibleSelectedRequestsRows() {
+			if (!vm.gridOptions.data) return [];
+			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(false);
+
+			if(allSelectedRequestsIds == undefined) return [];
+			return vm.gridOptions.data.filter(function (row) {
+				return allSelectedRequestsIds.indexOf(row.Id) > -1;
+			});
 		}
 
 		function prepareComputedColumns(requests) {

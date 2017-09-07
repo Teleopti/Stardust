@@ -18,8 +18,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[Given(@"'(.*)' has an existing text request with")]
 		public void GivenHasAnExistingTextRequestWith(string userName, Table table)
 		{
-			var textRequest = table.CreateInstance<TextRequestConfigurable>();
-			DataMaker.Person(userName).Apply(textRequest);
+			addTextRequest(userName, table);
+		}
+
+		[Given(@"'(.*)' has '(.*)' text requests with")]
+		public void GivenHasTextRequestsWith(string userName, int count, Table table)
+		{
+			for (var i = 0; i < count; i++)
+			{
+				addTextRequest(userName, table, i);
+			}
 		}
 
 		[Given(@"'(.*)' has an existing absence request with")]
@@ -32,9 +40,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[When(@"I select to go to shift trade requests view")]
 		public void WhenISelectToGoToShiftTradeRequestsView()
 		{
-			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
-			Browser.Interactions.AssertExistsUsingJQuery("md-tab-item:contains('Shift Trade')");
 			Browser.Interactions.ClickUsingJQuery("md-tab-item:contains('Shift Trade')");
+		}
+
+		[When(@"I select to go to absence and text requests view")]
+		public void WhenISelectToGoToAbsenceAndTextRequestsView()
+		{
+			Browser.Interactions.ClickUsingJQuery("md-tab-item:contains('Absence and Text')");
+		}
+
+		[When(@"I select to go to overtime view")]
+		public void WhenISelectToGoToOvertimeView()
+		{
+			Browser.Interactions.ClickUsingJQuery("md-tab-item:contains('Overtime')");
+		}
+
+		[When(@"I click button for search requests")]
+		public void WhenIClickButtonForSearchRequests()
+		{
+			Browser.Interactions.ClickUsingJQuery("span.search-icon");
+		}
+
+		[When(@"I select all the team")]
+		public void WhenISelectAllTheTeam()
+		{
+			Browser.Interactions.ClickUsingJQuery(".group-picker-wrapper input[type='checkbox']");
 		}
 
 		[When(@"I select to load requests from '(.*)' to '(.*)'")]
@@ -42,6 +72,47 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		{
 			Browser.Interactions.FillWith(".request-date-range-picker .start-date-input", from);
 			Browser.Interactions.FillWith(".request-date-range-picker .end-date-input", to);
+		}
+
+		[When(@"I select date range from '(.*)' to '(.*)'")]
+		public void WhenISelectDateRangeFromTo(string from, string to)
+		{
+			Browser.Interactions.SetScopeValues(".wfm-requests", new Dictionary<string, string>
+			{
+				{ "vm.period", "{" + string.Format("startDate: new Date('{0}'), endDate: new Date('{1}')", from, to) + "}" }
+			});
+		}
+
+		[When(@"I select all requests in the first page")]
+		public void WhenISelectAllRequestsInTheFirstPage()
+		{
+			Browser.Interactions.WaitScopeCondition(".ui-grid", "vm.isLoading", false,
+				() =>
+				{
+					Browser.Interactions.ClickUsingJQuery(".ui-grid-icon-ok:first");
+				});
+		}
+
+		[When(@"I change to the second page")]
+		public void WhenIChangeToTheSecondPage()
+		{
+			Browser.Interactions.ClickUsingJQuery("li.pagination-item.ng-scope:last");
+		}
+
+		[When(@"I change to the first page")]
+		public void WhenIChangeToTheFirstPage()
+		{
+			Browser.Interactions.ClickUsingJQuery("li.pagination-item.ng-scope:first");
+		}
+
+		[Then(@"I should see all requests should be selected")]
+		public void ThenIShouldSeeAllRequestsShouldBeSelected()
+		{
+			Browser.Interactions.WaitScopeCondition(".ui-grid", "vm.isLoading", false,
+				() =>
+				{
+					Browser.Interactions.AssertScopeValue(".ui-grid", "vm.gridApi.grid.selection.selectAll", true);
+				});
 		}
 
 		[When(@"I select to load requests in status '(.*)'")]
@@ -54,18 +125,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.ClickUsingJQuery(".md-click-catcher");
 		}
 
-		[Then(@"I should see a request from '(.*)' in the list")]
-		public void ThenIShouldSeeARequestFromInTheList(string userName)
-		{
-			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
-			Browser.Interactions.AssertAnyContains(".request-agent-name .ui-grid-cell-contents", userName);
-		}
-
 		[Then(@"I should see a shift request from '(.*)' in the list")]
 		public void ThenIShouldSeeAShiftRequestFromInTheList(string userName)
 		{
-			Browser.Interactions.AssertScopeValue("requests-table-container", "requestsOverview.loaded", true);
-			Browser.Interactions.AssertAnyContains(".ui-grid-cell [class=\"ng-binding\"]", userName);
+			Browser.Interactions.WaitScopeCondition(".ui-grid", "vm.isLoading", false,
+					() =>
+					{
+					Browser.Interactions.AssertAnyContains("td.ng-binding", userName);
+				});
+		}
+
+		[Then(@"I should see a absence and text request from '(.*)' in the list")]
+		public void ThenIShouldSeeAAbsenceAndTextRequestFromInTheList(string userName)
+		{
+			Browser.Interactions.WaitScopeCondition(".ui-grid", "vm.isLoading", false,
+				() =>
+				{
+					Browser.Interactions.AssertAnyContains("div.ui-grid-cell-contents.ng-binding", userName);
+				});
+		}
+
+		[Then(@"I should see a overtime request from '(.*)' in the list")]
+		public void ThenIShouldSeeAOvertimeRequestFromInTheList(string userName)
+		{
+			Browser.Interactions.WaitScopeCondition(".ui-grid", "vm.isLoading", false,
+				() =>
+				{
+					Browser.Interactions.AssertAnyContains("div.ui-grid-cell-contents.ng-binding", userName);
+				});
 		}
 
 		[When(@"I sort the request list by descending agent name")]
@@ -123,7 +210,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 		[Then(@"I should see all requests approved")]
 		public void ThenIShouldSeeAllRequestsApproved()
 		{
-			Browser.Interactions.AssertExistsUsingJQuery(".request-status:contains('" + approvedStatusText+ "')");
+			Browser.Interactions.AssertExistsUsingJQuery(".request-status:contains('" + approvedStatusText + "')");
 		}
 
 		[Then(@"I should see all requests denied")]
@@ -198,6 +285,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Wfm.Requests
 			Browser.Interactions.ClickUsingJQuery(".ui-grid-row .ui-grid-selection-row-header-buttons");
 			Browser.Interactions.ClickUsingJQuery("requests-commands-pane .reply-requests");
 			Browser.Interactions.AssertExistsUsingJQuery(".request-reply-dialog:visible");
+		}
+
+		private static void addTextRequest(string userName, Table table, int index = 0)
+		{
+			var textRequest = table.CreateInstance<TextRequestConfigurable>();
+			if (index > 0) textRequest.Subject += index;
+			DataMaker.Person(userName).Apply(textRequest);
 		}
 	}
 }
