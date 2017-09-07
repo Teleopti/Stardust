@@ -5,9 +5,9 @@ timepicker.setTime = function (time) {
 		timeArray;
 
 	if (this.showMeridian) {
-		arr = time.split(' ');
-		timeArray = arr[0].split(':');
-		this.meridian = arr[1];
+		arr = /^(.*?)([^\d:]*)$/.exec(time.trim());
+		timeArray = arr[1].trim().split(':');
+		this.meridian = arr[2].trim();
 	} else {
 		timeArray = time.split(':');
 	}
@@ -30,11 +30,10 @@ timepicker.setTime = function (time) {
 			this.hour = 12;
 		}
 
-
 		if (!this.meridianMatchesAgentDateCulture()) {
-			if (this.meridian === 'am' || this.meridian === 'a') {
+			if (this.meridian === 'am' || this.meridian === 'a' || this.meridian === 'A') {
 				this.meridian = 'AM';
-			} else if (this.meridian === 'pm' || this.meridian === 'p') {
+			} else if (this.meridian === 'pm' || this.meridian === 'p' || this.meridian === 'P') {
 				this.meridian = 'PM';
 			}
 
@@ -70,11 +69,14 @@ timepicker.setTime = function (time) {
 };
 
 timepicker.meridianMatchesAgentDateCulture = function () {
-	return (this.meridian === Teleopti.MyTimeWeb.Common.Meridiem.AM || this.meridian === Teleopti.MyTimeWeb.Common.Meridiem.PM);
+	return (this.meridian === Teleopti.MyTimeWeb.Common.Meridiem.AM ||
+		this.meridian === Teleopti.MyTimeWeb.Common.Meridiem.PM);
 };
 
 timepicker.toggleMeridian = function () {
-	this.meridian = this.meridian === Teleopti.MyTimeWeb.Common.Meridiem.AM ? Teleopti.MyTimeWeb.Common.Meridiem.PM : Teleopti.MyTimeWeb.Common.Meridiem.AM;
+	this.meridian = this.meridian === Teleopti.MyTimeWeb.Common.Meridiem.AM
+		? Teleopti.MyTimeWeb.Common.Meridiem.PM
+		: Teleopti.MyTimeWeb.Common.Meridiem.AM;
 	this.update();
 };
 
@@ -118,4 +120,3 @@ timepicker.setDefaultTime = function (defaultTime) {
 		this.updateFromElementVal();
 	}
 };
-
