@@ -97,7 +97,9 @@ INSERT INTO mart.fact_schedule_forecast_skill
 	datasource_id, 
 	update_date,
 	forecasted_tasks,
-	estimated_tasks_answered_within_sl
+	estimated_tasks_answered_within_sl,
+	forecasted_tasks_incl_shrinkage,
+	estimated_tasks_answered_within_sl_incl_shrinkage
 	)
 SELECT
 	date_id									= dsd.date_id, 
@@ -117,7 +119,9 @@ SELECT
 	datasource_id							= f.datasource_id, 
 	update_date								= f.update_date,
 	forecasted_tasks						= f.forecasted_tasks,
-	estimated_tasks_answered_within_sl		= f.estimated_tasks_answered_within_sl
+	estimated_tasks_answered_within_sl		= f.estimated_tasks_answered_within_sl,
+	forecasted_tasks_incl_shrinkage			= f.forecasted_tasks_incl_shrinkage,
+	estimated_tasks_answered_within_sl_incl_shrinkage	= f.estimated_tasks_answered_within_sl_incl_shrinkage
 FROM (SELECT * FROM Stage.stg_schedule_forecast_skill WHERE date between @start_date and @end_date)f -- ADDED BY JONAS 2008-10-15
 INNER JOIN
 	mart.dim_skill		dsk

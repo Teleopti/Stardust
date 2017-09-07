@@ -55,6 +55,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			dataRow["scheduled_resources_incl_shrinkage"] = forecastSkill.ScheduledResourcesIncludingShrinkage;                            // new
 			dataRow["forecasted_tasks"] = forecastSkill.ForecastedTasks;
 			dataRow["estimated_tasks_answered_within_sl"] = forecastSkill.EstimatedTasksAnsweredWithinSL;
+			dataRow["forecasted_tasks_incl_shrinkage"] = forecastSkill.ForecastedTasksIncludingShrinkage;
+			dataRow["estimated_tasks_answered_within_sl_incl_shrinkage"] = forecastSkill.EstimatedTasksAnsweredWithinSLIncludingShrinkage;
 
 			dataRow["business_unit_code"] = forecastSkill.BusinessUnitCode;
 			dataRow["business_unit_name"] = forecastSkill.BusinessUnitName;

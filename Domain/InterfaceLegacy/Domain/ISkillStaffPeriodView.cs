@@ -59,5 +59,6 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 	    double ForecastedTasks { get; set; }
 	    Percent EstimatedServiceLevel { get; set; }
+	    Percent EstimatedServiceLevelShrinkage { get; set; }
     }
 }

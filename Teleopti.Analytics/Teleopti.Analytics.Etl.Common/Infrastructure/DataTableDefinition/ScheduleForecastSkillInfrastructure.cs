@@ -30,6 +30,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition
 
 			table.Columns.Add("forecasted_tasks", typeof(double));
 			table.Columns.Add("estimated_tasks_answered_within_sl", typeof(double));
+			table.Columns.Add("forecasted_tasks_incl_shrinkage", typeof(double));
+			table.Columns.Add("estimated_tasks_answered_within_sl_incl_shrinkage", typeof(double));
 		}
 	}
 }

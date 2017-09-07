@@ -22,7 +22,9 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
         int DataSourceId { get; set; }
         DateTime InsertDate { get; set; }
         DateTime UpdateDate { get; set; }
-	    double ForecastedTasks { get; set; }
 		double EstimatedTasksAnsweredWithinSL { get; set; }
-    }
+	    double ForecastedTasks { get; set; }
+		double EstimatedTasksAnsweredWithinSLIncludingShrinkage { get; set; }
+	    double ForecastedTasksIncludingShrinkage { get; set; }
+	}
 }

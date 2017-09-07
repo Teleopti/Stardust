@@ -283,6 +283,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		            ForecastedIncomingDemand = Payload.ForecastedIncomingDemand,
 		            ForecastedTasks = Payload.TaskData.Tasks,
 					EstimatedServiceLevel = EstimatedServiceLevel,
+					EstimatedServiceLevelShrinkage = EstimatedServiceLevelShrinkage,
 		            FStaff = FStaff
 	            };
             	newViews.Add(newView);

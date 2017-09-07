@@ -127,6 +127,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				scheduleForecastSkill.ForecastedResourcesIncludingShrinkage = skillStaffPeriodView.FStaff;
 				scheduleForecastSkill.ScheduledResourcesIncludingShrinkageMinutes = skillStaffPeriodView.CalculatedResource * minutesPerInterval;
 				scheduleForecastSkill.ScheduledResourcesIncludingShrinkage = skillStaffPeriodView.CalculatedResource;
+				scheduleForecastSkill.EstimatedTasksAnsweredWithinSLIncludingShrinkage = skillStaffPeriodView.EstimatedServiceLevelShrinkage.Value * skillStaffPeriodView.ForecastedTasks;
+				scheduleForecastSkill.ForecastedTasksIncludingShrinkage = skillStaffPeriodView.ForecastedTasks;
 			}
 			else
 			{
@@ -134,7 +136,6 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 				scheduleForecastSkill.ForecastedResources = skillStaffPeriodView.FStaff;
 				scheduleForecastSkill.ScheduledResourcesMinutes = skillStaffPeriodView.CalculatedResource * minutesPerInterval;
 				scheduleForecastSkill.ScheduledResources = skillStaffPeriodView.CalculatedResource;
-
 				scheduleForecastSkill.EstimatedTasksAnsweredWithinSL = skillStaffPeriodView.EstimatedServiceLevel.Value * skillStaffPeriodView.ForecastedTasks;
 				scheduleForecastSkill.ForecastedTasks = skillStaffPeriodView.ForecastedTasks;
 

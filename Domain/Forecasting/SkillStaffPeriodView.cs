@@ -11,5 +11,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         public double FStaff { get; set; }
 	    public double ForecastedTasks { get; set; }
 	    public Percent EstimatedServiceLevel { get; set; }
+	    public Percent EstimatedServiceLevelShrinkage { get; set; }
     }
 }
