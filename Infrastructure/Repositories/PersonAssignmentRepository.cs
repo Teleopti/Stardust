@@ -10,6 +10,7 @@ using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Infrastructure.Foundation;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -47,10 +48,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			InParameter.NotNull(nameof(scenario), scenario);
 			var crit = personAssignmentCriteriaLoader(period, scenario);
+			var retList = new List<IPersonAssignment>();
 			using (PerformanceOutput.ForOperation("Loading personassignments"))
 			{
-				return crit.List<IPersonAssignment>();
+				retList.AddRange(crit.List<IPersonAssignment>());
 			}
+
+			foreach (var personAss in retList)
+			{
+				if(!LazyLoadingManager.IsInitialized(personAss.DayOff()))
+					LazyLoadingManager.Initialize(personAss.DayOff());
+			}
+
+			return retList;
 		}
 
 		public IEnumerable<DateScenarioPersonId> FetchDatabaseVersions(DateOnlyPeriod period, IScenario scenario, IPerson person)
