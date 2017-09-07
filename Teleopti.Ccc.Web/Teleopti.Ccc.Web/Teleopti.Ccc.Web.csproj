@@ -1350,6 +1350,7 @@
       <Link>FeatureFlags\toggles.txt</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include=".node\Gruntfile.js" />
     <Content Include="appdownload.html" />
     <Content Include="Areas\Anywhere\Views\Application\redirect.aspx" />
     <Content Include="Areas\MyTime\Content\Css\MobileApp.css" />
@@ -1390,6 +1391,7 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMApp.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.AppGuide.WFMAppViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.TeamScheduleViewNew.js" />
+    <Content Include=".node\package.json" />
     <None Include="Areas\MyTime\Content\Scripts\_references.js" />
     <Content Include="Areas\SSO\Content\Css\newLogin.css" />
     <Content Include="Areas\SSO\Content\Css\main.min.css" />
@@ -1931,7 +1933,6 @@
     <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\persian-datepicker-tpls.js" />
     <Content Include="WFM\vendor\angular-bootstrap-persian-datepicker-master\persiandate.js" />
     <Content Include="WFM\vendor\ui-bootstrap-custom-build\timepicker.directive.ext.js" />
-    <Content Include=".node\Gruntfile.js" />
     <Content Include="Areas\Anywhere\Content\feature.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\fulldayabsencetimesetting.js" />
@@ -2370,7 +2371,6 @@
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
     <Content Include="Areas\Reporting\Views\Report\Adherence.cshtml" />
     <Content Include="Areas\Reporting\Views\Report\Empty.cshtml" />
-    <Content Include=".node\package.json" />
     <Content Include=".node\flatten-packages.cmd" />
     <Content Include="WFM\app\forecasting\html\forecasting-overview.html" />
     <Content Include="WFM\html\main.html" />

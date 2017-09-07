@@ -854,6 +854,7 @@
     <EmbeddedResource Include="licenses.licx" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Migrated rules for Teleopti.Ccc.WinCodeTest.ruleset" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
