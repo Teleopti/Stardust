@@ -533,28 +533,28 @@
                   <Width>2.18599cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.62688cm</Width>
+                  <Width>2.00917cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.7344cm</Width>
+                  <Width>1.8019cm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.72667cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.79146cm</Width>
+                  <Width>1.97667cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.9407cm</Width>
+                  <Width>1.96716cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.75272cm</Width>
+                  <Width>1.54105cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.75575cm</Width>
+                  <Width>1.51492cm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.73543cm</Width>
+                  <Width>1.52647cm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -841,7 +841,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Parameters!ResESL.Value</Value>
+                                  <Value>=Parameters!ResESLPercent.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -874,7 +874,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>ESL incl. Shrinkage </Value>
+                                  <Value>=Parameters!ResESLInclShrinkagePercent.Value</Value>
                                   <Style>
                                     <FontFamily>Segoe UI</FontFamily>
                                     <FontWeight>Bold</FontWeight>
@@ -2799,7 +2799,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -3255,10 +3254,15 @@
       <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
-    <ReportParameter Name="ResESL">
+    <ReportParameter Name="ResESLPercent">
       <DataType>String</DataType>
       <AllowBlank>true</AllowBlank>
-      <Prompt>ResESL</Prompt>
+      <Prompt>ResESLPercent</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResESLInclShrinkagePercent">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResESLInclShrinkagePercent</Prompt>
     </ReportParameter>
   </ReportParameters>
   <Code>Public Function TimeString(i as integer)as string

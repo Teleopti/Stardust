@@ -1250,11 +1250,20 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ESL.
+        ///   Looks up a localized string similar to ESL incl. Shrinkage (%).
         /// </summary>
-        public static string ResESL {
+        public static string ResESLInclShrinkagePercent {
             get {
-                return ResourceManager.GetString("ResESL", resourceCulture);
+                return ResourceManager.GetString("ResESLInclShrinkagePercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ESL (%).
+        /// </summary>
+        public static string ResESLPercent {
+            get {
+                return ResourceManager.GetString("ResESLPercent", resourceCulture);
             }
         }
         

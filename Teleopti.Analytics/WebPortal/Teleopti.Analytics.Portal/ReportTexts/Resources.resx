@@ -1393,8 +1393,12 @@ Schedule</value>
     <value>Multiple activities/absences</value>
     <comment>Multiple activities/absences</comment>
   </data>
-  <data name="ResESL" xml:space="preserve">
-    <value>ESL</value>
-    <comment>ESL</comment>
+  <data name="ResESLInclShrinkagePercent" xml:space="preserve">
+    <value>ESL incl. Shrinkage (%)</value>
+    <comment>ESL incl. Shrinkage (%)</comment>
+  </data>
+  <data name="ResESLPercent" xml:space="preserve">
+    <value>ESL (%)</value>
+    <comment>ESL (%)</comment>
   </data>
 </root>
