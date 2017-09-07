@@ -3,14 +3,14 @@
 	'use strict';
 
 	angular.module('wfm.requests')
-		.controller('requestsOvertimeCtrl', requestsOvertimeCtrl);
+		.controller('requestsOvertimeController', requestsOvertimeController);
 
-	requestsOvertimeCtrl.$inject = [
+	requestsOvertimeController.$inject = [
 		'$scope', '$filter', '$injector', '$translate', '$timeout', '$stateParams', 'requestsDataService', 'Toggle',
 		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'OvertimeGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES'
 	];
 
-	function requestsOvertimeCtrl($scope, $filter, $injector, $translate, $timeout, $stateParams, requestsDataService, toggleService, requestsNotificationService, uiGridConstants, requestsDefinitions, currentUserInfo, requestFilterSvc, requestGridStateService, overtimeGridConfigurationService, uiGridUtilitiesService, requestsTabNames) {
+	function requestsOvertimeController($scope, $filter, $injector, $translate, $timeout, $stateParams, requestsDataService, toggleService, requestsNotificationService, uiGridConstants, requestsDefinitions, currentUserInfo, requestFilterSvc, requestGridStateService, overtimeGridConfigurationService, uiGridUtilitiesService, requestsTabNames) {
 
 		var vm = this;
 
@@ -254,7 +254,7 @@
 								angular.forEach(grid.columns,
 									function(column) {
 										var term = column.filters[0].term;
-										if (term != undefined) {
+										if (angular.isDefind(term)) {
 											requestFilterSvc.setFilter(column.colDef.displayName, term.trim(), requestsTabNames.overtime);
 										}
 									});

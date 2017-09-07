@@ -3,11 +3,10 @@
 (function () {
 
 	angular.module('wfm.requests')
-		.factory('ShiftTradeGridConfiguration', ['$filter', '$translate', 'Toggle', 'requestsDefinitions', 'CurrentUserInfo', function (
-			$filter, $translate, toggleSvc, requestDefinitions, currentUserInfo) {
+		.factory('ShiftTradeGridConfiguration', ['$filter', '$translate', 'Toggle', 'requestsDefinitions', 'CurrentUserInfo', ShiftTradeGridConfiguration]);
 
+			function ShiftTradeGridConfiguration($filter, $translate, toggleSvc, requestDefinitions, currentUserInfo) {
 			var columns = [];
-
 			var service = {
 				columnDefinitions: columnDefinitions,
 				getDayViewModels: getDayViewModels,
@@ -19,7 +18,7 @@
 			}
 
 			function getDayViewModels(requests, shiftTradeRequestDateSummary, isUsingRequestSubmitterTimezone) {
-				if (requests === undefined || requests == null || requests.length === 0) {
+				if (angular.isUndefined(requests) || requests == null || requests.length === 0) {
 					return [];
 				}
 
@@ -347,5 +346,5 @@
 			}
 
 			return service;
-		}]);
+		}
 }());

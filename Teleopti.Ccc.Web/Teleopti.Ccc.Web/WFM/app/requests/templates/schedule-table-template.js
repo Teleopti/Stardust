@@ -1,4 +1,7 @@
-﻿angular.module('wfm.requests').run(['$templateCache', function ($templateCache) {
+﻿(function(){
+angular.module('wfm.requests').run(['$templateCache', requestsScheduleTableTemplate]);
+
+function requestsScheduleTableTemplate($templateCache) {
 	'use strict';
 
 	$templateCache.put('requests-schedule-table.html',
@@ -77,5 +80,5 @@
 	  "</table>\r" +
 	  "\n"
 	);
-
-}]);
+}
+})();

@@ -1,9 +1,9 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.requests').run([
-		'$templateCache', function ($templateCache) {
+	angular.module('wfm.requests').run(['$templateCache', requestsShiftTradeHeaderTemplate]);
 
+		function requestsShiftTradeHeaderTemplate($templateCache) {
 			var template =
 				"<div role=\"rowgroup\" class=\"ui-grid-header\"><!-- theader -->" +
 					"<div class=\"ui-grid-top-panel\">" +
@@ -36,5 +36,4 @@
 
 			$templateCache.put("shift-trade-header-template.html", template);
 		}
-	]);
 })();

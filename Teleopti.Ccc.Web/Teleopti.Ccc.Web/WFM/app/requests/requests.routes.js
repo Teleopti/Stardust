@@ -25,9 +25,9 @@
 					},
 					controllerProvider: function(){
 						if(toggles.Wfm_Requests_Refactoring_45470)
-							return 'RequestsRefactorCtrl as vm';
+							return 'requestsRefactorController as vm';
 						else
-							return 'RequestsOriginCtrl as vm';
+							return 'requestsOriginController as vm';
 					}
 				});
 
@@ -37,21 +37,21 @@
 						getParams: undefined
 					},
 					templateUrl: 'app/requests/html/requests-absenceAndText.html',
-					controller: 'requestsAbsenceAndTextCtrl as vm'
+					controller: 'requestsAbsenceAndTextController as vm'
 				}).state('requests.shiftTrade', {
 					url: '/shiftTrade',
 					params: {
 						getParams: undefined
 					},
 					templateUrl: 'app/requests/html/requests-shiftTrade.html',
-					controller: 'requestsShiftTradeCtrl as vm'
+					controller: 'requestsShiftTradeController as vm'
 				}).state('requests.overtime', {
 					url: '/overtime',
 					params: {
 						getParams: undefined
 					},
 					templateUrl: 'app/requests/html/requests-overtime.html',
-					controller: 'requestsOvertimeCtrl as vm'
+					controller: 'requestsOvertimeController as vm'
 				});
 			};
 		});

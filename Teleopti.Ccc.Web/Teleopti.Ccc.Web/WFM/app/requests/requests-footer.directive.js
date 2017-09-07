@@ -1,7 +1,7 @@
 ﻿(function () {
 	'use strict';
 	angular.module('wfm.requests')
-		.controller('requestsFooterCtrl', requestsFooterController)
+		.controller('requestsFooterController', requestsFooterController)
 		.directive('requestsFooter', requestsFooterDirective);
 
 	requestsFooterController.$inject = ['$rootScope', '$scope', "$translate", "$state", "Toggle", "requestCommandParamsHolder", "REQUESTS_TAB_NAMES"];
@@ -56,7 +56,7 @@
 
 	function requestsFooterDirective() {
 		return {
-			controller: 'requestsFooterCtrl',
+			controller: 'requestsFooterController',
 			controllerAs: 'requestsFooter',
 			bindToController: true,
 			scope: {

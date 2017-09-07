@@ -412,6 +412,7 @@ module.exports = function (grunt) {
                     'app/permissions/refact/**/*js',
                     "app/staffing/**/*.js",
                     'app/skillPrio/**/*.js',
+                    'app/requests/**/*.js',
                     'app/teamSchedule/**/*.js',
                     'app/rtaTool/**/*.js',
                     '!app/**/*.spec.js',

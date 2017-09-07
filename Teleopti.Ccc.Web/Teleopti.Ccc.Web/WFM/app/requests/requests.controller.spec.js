@@ -44,7 +44,7 @@ describe('RequestsControllerTests', function () {
 	function setUpTarget() {
 		var scope = $rootScope.$new();
 
-		var target = $controller('RequestsOriginCtrl', {
+		var target = $controller('requestsOriginController', {
 			$scope: scope
 		});
 

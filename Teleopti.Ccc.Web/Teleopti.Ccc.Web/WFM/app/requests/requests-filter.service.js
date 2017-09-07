@@ -51,12 +51,12 @@
 					else 
 						svc.removeFilter(name, tabName);
 				}else {
-					if (filter == undefined || filter.trim().length === 0) return;
+					if (angular.isUndefined(filter) || filter.trim().length === 0) return;
 
 					var filterObj = {};
 					filterObj[name] = filter.trim();
 
-					if(svc.filters[tabName] == undefined){
+					if(angular.isUndefined(svc.filters[tabName])){
 						svc.filters[tabName] = [];
 					}
 

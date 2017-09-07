@@ -1,11 +1,11 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.requests').controller('RequestsRefactorCtrl', requestsController);
+	angular.module('wfm.requests').controller('requestsRefactorController', requestsRefactorController);
 
-	requestsController.$inject = ["$scope", "$state", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo", "groupPageService", "RequestsFilter"];
+	requestsRefactorController.$inject = ["$scope", "$state", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo", "groupPageService", "RequestsFilter"];
 
-	function requestsController($scope, $state, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService, requestFilterSvc) {
+	function requestsRefactorController($scope, $state, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService, requestFilterSvc) {
 		var vm = this;
 
 		vm.searchPlaceholder = $translate.instant('Search');
@@ -314,7 +314,7 @@
 					requestCommandParamsHolder.resetSelectedRequestIds(vm.isShiftTradeViewActive());
 					vm.agentSearchOptions.focusingSearch = false;
 
-					if (newValue && JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+					if (newValue && angular.toJson(newValue) !== angular.toJson(oldValue)) {
 						if (toggleService.Wfm_HideUnusedTeamsAndSites_42690 && !toggleService.Wfm_GroupPages_45057) {
 							vm.getSitesAndTeamsAsync();
 						} else {

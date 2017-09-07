@@ -8,7 +8,7 @@
 	angular.module("ui.grid").decorator("uiGridGridMenuService", ["$delegate", "$timeout", "uiGridConstants",
 		function ($delegate, $timeout, uiGridConstants) {
 			$delegate.toggleColumnVisibility = function(gridCol) {
-				gridCol.colDef.visible = !(gridCol.colDef.visible === true || gridCol.colDef.visible === undefined);
+				gridCol.colDef.visible = !(gridCol.colDef.visible === true || angular.isUndefined(gridCol.colDef.visible));
 
 				$timeout(function() {
 					gridCol.grid.refresh();

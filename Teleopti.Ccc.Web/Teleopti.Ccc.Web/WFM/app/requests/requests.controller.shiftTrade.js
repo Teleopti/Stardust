@@ -3,14 +3,14 @@
 	'use strict';
 
 	angular.module('wfm.requests')
-		.controller('requestsShiftTradeCtrl', requestsShiftTradeCtrl);
+		.controller('requestsShiftTradeController', requestsShiftTradeController);
 
-	requestsShiftTradeCtrl.$inject = [
+	requestsShiftTradeController.$inject = [
 		'$scope', '$filter', '$injector', '$translate', '$timeout', '$stateParams', 'requestsDataService', 'Toggle',
 		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'ShiftTradeGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES'
 	];
 
-	function requestsShiftTradeCtrl($scope,
+	function requestsShiftTradeController($scope,
 		$filter,
 		$injector,
 		$translate,
@@ -277,7 +277,7 @@
 								angular.forEach(grid.columns,
 									function(column) {
 										var term = column.filters[0].term;
-										if (term != undefined) {
+										if (angular.isDefined(term)) {
 											requestFilterSvc.setFilter(column.colDef.displayName, term.trim(), requestsTabNames.shiftTrade);
 										}
 									});

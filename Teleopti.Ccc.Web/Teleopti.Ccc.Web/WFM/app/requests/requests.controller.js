@@ -1,11 +1,11 @@
 ﻿(function () {
 	'use strict';
 
-	angular.module('wfm.requests').controller('RequestsOriginCtrl', requestsController);
+	angular.module('wfm.requests').controller('requestsOriginController', requestsOriginController);
 
-	requestsController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo", "groupPageService"];
+	requestsOriginController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo", "groupPageService"];
 
-	function requestsController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService) {
+	function requestsOriginController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService) {
 		var vm = this;
 
 		vm.searchPlaceholder = $translate.instant('Search');
@@ -277,7 +277,7 @@
 		$scope.$watch(function () {
 			return vm.selectedTabIndex;
 		}, function (currentTab, previousTab) {
-			if (vm.period != undefined) {
+			if (vm.period) {
 				if (previousTab === absenceRequestTabIndex) {
 					periodForAbsenceRequest = vm.absencePeriod;
 				} else if (previousTab === shiftTradeRequestTabIndex) {
@@ -306,7 +306,7 @@
 				requestCommandParamsHolder.resetSelectedRequestIds(isShiftTradeViewActive());
 				vm.agentSearchOptions.focusingSearch = false;
 
-				if (newValue && JSON.stringify(newValue) !== JSON.stringify(oldValue)) {
+				if (newValue && angular.toJson(newValue) !== angular.toJson(oldValue)) {
 					if (toggleService.Wfm_HideUnusedTeamsAndSites_42690 && !toggleService.Wfm_GroupPages_45057) {
 						vm.getSitesAndTeamsAsync();
 					} else {

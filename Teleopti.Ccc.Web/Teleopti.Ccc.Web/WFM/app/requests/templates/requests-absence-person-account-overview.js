@@ -2,9 +2,11 @@
 	'use strict';
 
 	angular.module('wfm.requests').run([
-        '$templateCache', function ($templateCache) {
+		'$templateCache', requestsAbsencePersonAccountOverviewTemplate]);
 
-        	var template =
+		function requestsAbsencePersonAccountOverviewTemplate($templateCache) {
+
+			var template =
 						'<div>' +
 						'		<md-tooltip class=\"account-tooltip\">' +
 						'				<div ng-repeat=\"accountDetail in row.entity[\'PersonAccountSummaryViewModel\'].PersonAccountSummaryDetails\">' +
@@ -18,11 +20,10 @@
 						'			<div class=\"absence-account-cell-content arrow-box\" ng-class=\" personAccountSummaryDetails.length <= $index+1 ? \'absence-account-cell-content arrow-box arrow-box-no-border\' : \'\' \">' +
 						'					{{::accountDetail.RemainingDescription}}' +
 						'					<span ng-if=\"personAccountSummaryDetails.length <= $index+1\">{{::accountDetail.TrackingTypeDescription}}</span>' +
-        			    '			</div>' +
+						'			</div>' +
 						'		</div>' +
 						'<div>';
 
-        	$templateCache.put("requests-absence-person-account-overview.html", template);
-        }
-	]);
+			$templateCache.put("requests-absence-person-account-overview.html", template);
+		}
 })();

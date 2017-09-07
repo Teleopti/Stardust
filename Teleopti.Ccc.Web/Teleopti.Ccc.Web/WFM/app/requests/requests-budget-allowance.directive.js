@@ -53,9 +53,9 @@
 		function parseLinkedAbsences(allowance) {
 			// Get absences linked to this budget group
 			for (var absenceAllowance in allowance.UsedAbsencesDictionary) {
-				if (absenceAllowance.indexOf("$") !== 0 &&
-					allowance.UsedAbsencesDictionary.hasOwnProperty(absenceAllowance) &&
-					typeof (allowance.UsedAbsencesDictionary[absenceAllowance]) === "number") {
+				if (absenceAllowance.indexOf("$") !== 0 
+					&& allowance.UsedAbsencesDictionary.hasOwnProperty(absenceAllowance) 
+					&& angular.isNumber(allowance.UsedAbsencesDictionary[absenceAllowance])) {
 					vm.linkedAbsences.push(absenceAllowance);
 				}
 			}
@@ -113,7 +113,7 @@
 	var requestsBudgetAllowanceDirective = function () {
 		return {
 			restrict: "E",
-			controller: "requestsBudgetAllowanceCtrl",
+			controller: "requestsBudgetAllowanceController",
 			controllerAs: "vm",
 			bindToController: true,
 			templateUrl: "app/requests/html/requests-budget-allowance.tpl.html"
@@ -121,6 +121,6 @@
 	};
 
 	angular.module("wfm.requests")
-		.controller("requestsBudgetAllowanceCtrl", ["$translate", "$filter", "requestsDataService", requestsBudgetAllowanceController])
+		.controller("requestsBudgetAllowanceController", ["$translate", "$filter", "requestsDataService", requestsBudgetAllowanceController])
 		.directive("requestsBudgetAllowance", requestsBudgetAllowanceDirective);
 })();

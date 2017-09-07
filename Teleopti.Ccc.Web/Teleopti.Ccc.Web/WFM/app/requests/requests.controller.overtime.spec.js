@@ -508,7 +508,7 @@ describe('Requests - overtime controller tests',
 
 		function setUpTarget() {
 			scope = $rootScope.$new();
-			controller = $controller('requestsOvertimeCtrl', {
+			controller = $controller('requestsOvertimeController', {
 				$scope: scope,
 				$stateParams: fakeStateParams
 			});

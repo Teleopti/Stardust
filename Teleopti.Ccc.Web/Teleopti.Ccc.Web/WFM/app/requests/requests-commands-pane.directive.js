@@ -2,15 +2,15 @@
 	'use strict';
 
 	angular.module('wfm.requests')
-		.controller('requestsCommandsPaneCtrl', requestsCommandsPaneCtrl)
+		.controller('requestsCommandsPaneController', requestsCommandsPaneController)
 		.directive('requestsCommandsPane', requestsCommandsPaneDirective);
 
-	requestsCommandsPaneCtrl.$inject = [
+	requestsCommandsPaneController.$inject = [
 		'$state', 'requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle',
 		'signalRSVC', 'NoticeService', 'RequestsCommandsConfigurationsService', 'REQUESTS_TAB_NAMES'
 	];
 
-	function requestsCommandsPaneCtrl($state, requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc, signalRSVC, NoticeService, requestsCommandsConfigurationsSvc, REQUESTS_TAB_NAMES) {
+	function requestsCommandsPaneController($state, requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc, signalRSVC, NoticeService, requestsCommandsConfigurationsSvc, REQUESTS_TAB_NAMES) {
 		var vm = this;
 		vm.approveRequests = approveRequests;
 		vm.replyRequests = replyRequests;
@@ -135,16 +135,14 @@
 
 		function doStandardCommandHandlingWithParameters(requestType, dataServicePromise, parameters) {
 			if (vm.beforeCommand && !vm.beforeCommand()) return;
-			var commandInProgress = parameters === undefined ?
-				dataServicePromise() :
-				dataServicePromise(parameters);
+			var commandInProgress = angular.isUndefined(parameters) ? dataServicePromise() : dataServicePromise(parameters);
 
 			if (vm.afterCommandSuccess) {
 				var requestCount = 0;
-				if (parameters !== undefined && parameters !== null) {
-					if (Array.isArray(parameters)) {
+				if (parameters) {
+					if (angular.isArray(parameters)) {
 						requestCount = parameters.length;
-					} else if (Array.isArray(parameters.SelectedRequestIds)) {
+					} else if (angular.isArray(parameters.SelectedRequestIds)) {
 						requestCount = parameters.SelectedRequestIds.length;
 					}
 				}
@@ -318,7 +316,7 @@
 
 	function requestsCommandsPaneDirective() {
 		return {
-			controller: 'requestsCommandsPaneCtrl',
+			controller: 'requestsCommandsPaneController',
 			controllerAs: 'requestsCommandsPane',
 			bindToController: true,
 			scope: {

@@ -3,7 +3,7 @@
 	'use strict';
 
 	angular.module('wfm.requests')
-		.controller('requestsOverviewCtrl', requestsOverviewController)
+		.controller('requestsOverviewController', requestsOverviewController)
 		.directive('requestsOverview', requestsOverviewDirective);
 
 	requestsOverviewController.$inject = ['$scope', "$attrs", 'requestsDataService', "Toggle", "requestsNotificationService", "RequestsFilter", "REQUESTS_TAB_NAMES"];
@@ -24,7 +24,7 @@
 		vm.firstLoadedInitialized = false;
 		vm.isLoading = false;
 		vm.sortingOrders = [];
-		vm.shiftTradeView = $attrs.shiftTradeView != undefined;
+		vm.shiftTradeView = angular.isDefined($attrs.shiftTradeView);
 
 		vm.init = function() {
 			vm.requestsPromise = vm.shiftTradeView ? requestsDataService.getShiftTradeRequestsPromise : requestsDataService.getAbsenceAndTextRequestsPromise;
@@ -101,7 +101,7 @@
 
 	function requestsOverviewDirective() {
 		return {
-			controller: 'requestsOverviewCtrl',
+			controller: 'requestsOverviewController',
 			controllerAs: 'requestsOverview',
 			bindToController: true,
 			scope: {

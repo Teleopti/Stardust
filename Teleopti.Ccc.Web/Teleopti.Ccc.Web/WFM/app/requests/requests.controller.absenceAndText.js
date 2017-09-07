@@ -3,14 +3,14 @@
 	'use strict';
 
 	angular.module('wfm.requests')
-		.controller('requestsAbsenceAndTextCtrl', requestsAbsenceAndTextCtrl);
+		.controller('requestsAbsenceAndTextController', requestsAbsenceAndTextController);
 
-	requestsAbsenceAndTextCtrl.$inject = [
+	requestsAbsenceAndTextController.$inject = [
 		'$scope', '$filter', '$injector', '$translate', '$timeout', '$stateParams', 'requestsDataService', 'Toggle',
 		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'TextAndAbsenceGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES'
 	];
 
-	function requestsAbsenceAndTextCtrl($scope,
+	function requestsAbsenceAndTextController($scope,
 		$filter,
 		$injector,
 		$translate,
@@ -74,10 +74,10 @@
 
 		vm.reload = function (params) {
 			if (params) {
-				if (params.agentSearchTerm !== undefined) vm.agentSearchTerm = params.agentSearchTerm;
-				if (params.selectedGroupIds !== undefined) vm.selectedGroupIds = params.selectedGroupIds;
-				if (params.selectedGroupPageId !== undefined) vm.selectedGroupPageId = params.selectedGroupPageId;
-				if (params.paging !== undefined) vm.paging = params.paging;
+				if (angular.isDefined(params.agentSearchTerm)) vm.agentSearchTerm = params.agentSearchTerm;
+				if (angular.isDefined(params.selectedGroupIds)) vm.selectedGroupIds = params.selectedGroupIds;
+				if (angular.isDefined(params.selectedGroupPageId)) vm.selectedGroupPageId = params.selectedGroupPageId;
+				if (angular.isDefined(params.paging)) vm.paging = params.paging;
 			}
 
 			var requestsFilter = {
@@ -269,7 +269,7 @@
 								angular.forEach(grid.columns,
 									function(column) {
 										var term = column.filters[0].term;
-										if (term != undefined) {
+										if (angular.isDefined(term)) {
 											requestFilterSvc.setFilter(column.colDef.displayName, term.trim(), requestsTabNames.absenceAndText);
 										}
 									});

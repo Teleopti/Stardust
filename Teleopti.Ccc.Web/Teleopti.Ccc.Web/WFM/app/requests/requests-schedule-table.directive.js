@@ -3,7 +3,7 @@
 (function () {
 	angular.module('wfm.requests')
 		.directive('requestsScheduleTable', scheduleTableDirective)
-		.controller('requestsScheduleTableCtrl', [requestsScheduleTableController]);
+		.controller('requestsScheduleTableController', [requestsScheduleTableController]);
 
 	function scheduleTableDirective() {
 		return {
@@ -13,7 +13,7 @@
 			restrict: 'E',
 			controllerAs: 'vm',
 			bindToController: true,
-			controller: 'requestsScheduleTableCtrl',
+			controller: 'requestsScheduleTableController',
 			templateUrl: "requests-schedule-table.html"
 		};
 	};

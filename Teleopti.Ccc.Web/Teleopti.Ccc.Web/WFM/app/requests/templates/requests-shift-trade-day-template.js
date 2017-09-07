@@ -1,9 +1,9 @@
 ﻿(function() {
 	"use strict";
 
-	angular.module("wfm.requests").run([
-		"$templateCache", function($templateCache) {
+	angular.module("wfm.requests").run(["$templateCache", requestsShiftTradeDayTemplate]);
 
+		function requestsShiftTradeDayTemplate($templateCache) {
 			//  setup weekend display - to reduce DOM size, just render in the first column and make 100% absolute positioning
 			var template = '<div ng-repeat=\"day in grid.appScope.shiftTradeDayViewModels\" ' +
 				'ng-if="day.isWeekend && rowRenderIndex == 0" ng-style=\"{\'left\': day.leftOffset}\" class=\'isWeekend\'>' +
@@ -31,6 +31,5 @@
 
 			$templateCache.put("shift-trade-day-template.html", template);
 		}
-	]);
 })();
 

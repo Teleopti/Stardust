@@ -3,7 +3,9 @@
 (function() {
 
 	angular.module('wfm.requests')
-		.factory('OvertimeGridConfiguration', ['$translate', function($translate) {
+		.factory('OvertimeGridConfiguration', ['$translate', OvertimeGridConfiguration]);
+
+		function OvertimeGridConfiguration($translate) {
 			var svc = this,
 				columns = [];
 
@@ -166,5 +168,4 @@
 
 			return svc;
 		}
-	]);
 }());

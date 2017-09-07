@@ -1,7 +1,7 @@
 ﻿(function () {
 	"use strict";
 
-	describe("[Requests Budget Allowance Directive Controller]",
+	describe("[Requests Budget Allowance Directive Controller Tests]",
 		function () {
 			var $rootScope, $controller, $translate, $filter;
 
@@ -16,7 +16,7 @@
 			}));
 
 			function setUpTarget() {
-				return $controller('requestsBudgetAllowanceCtrl', { $translate, $filter, requestsDataService });
+				return $controller('requestsBudgetAllowanceController', { $translate, $filter, requestsDataService });
 			}
 
 			it("show convert allowance to model correctly", function () {

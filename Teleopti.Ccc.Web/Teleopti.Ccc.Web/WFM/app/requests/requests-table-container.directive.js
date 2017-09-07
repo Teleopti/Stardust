@@ -2,7 +2,7 @@
 
 (function () {
 	angular.module('wfm.requests')
-		.controller('requestsTableContainerCtrl', requestsTableContainerController)
+		.controller('requestsTableContainerController', requestsTableContainerController)
 		.directive('requestsTableContainer', requestsTableContainerDirective);
 
 	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', 'Toggle', 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService', 'uiGridConstants', '$injector', 'TeamSchedule', 'GroupScheduleFactory', '$window', 'RequestGridStateService', 'REQUESTS_TAB_NAMES'];
@@ -223,7 +223,7 @@
 						filterHandlingTimeout = $timeout(function () {
 							angular.forEach(grid.columns, function (column) {
 								var term = column.filters[0].term;
-								if (term != undefined) {
+								if (angular.isDefined(term)) {
 									requestFilterSvc.setFilter(column.colDef.displayName, term.trim(), tabName);
 								}
 							});
@@ -409,7 +409,7 @@
 
 	function requestsTableContainerDirective() {
 		return {
-			controller: 'requestsTableContainerCtrl',
+			controller: 'requestsTableContainerController',
 			controllerAs: 'requestsTableContainer',
 			bindToController: true,
 			restrict: 'E',

@@ -1,8 +1,8 @@
 ﻿'use strict';
 (function () {
 	angular.module('wfm.requests')
-        .controller('requestsReplyMessageCtrl', requestsReplyMessageController)
-        .directive('requestsReplyMessage', replyMessageDirective);
+		.controller('requestsReplyMessageController', requestsReplyMessageController)
+		.directive('requestsReplyMessage', replyMessageDirective);
 
 	function requestsReplyMessageController() {
 		var vm = this;
@@ -50,7 +50,7 @@
 			},
 			bindToController: true,
 			restrict: 'E',
-			controller: 'requestsReplyMessageCtrl',
+			controller: 'requestsReplyMessageController',
 			controllerAs: 'requestsReplyMessage',
 			templateUrl: 'app/requests/html/requests-reply-message.html',
 			link: link

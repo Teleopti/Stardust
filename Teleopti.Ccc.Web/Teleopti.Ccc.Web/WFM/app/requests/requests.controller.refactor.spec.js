@@ -362,7 +362,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 		function setUpTarget() {
 			var scope = $rootScope.$new();
 
-			var controller = $controller('RequestsRefactorCtrl', {
+			var controller = $controller('requestsRefactorController', {
 				$scope: scope,
 				$q: $q
 			});

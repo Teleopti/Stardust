@@ -1,7 +1,7 @@
 ﻿'use strict';
 (function () {
 	angular.module('wfm.requests')
-		.controller('requestsSiteOpenHoursCtrl', ['requestsDataService', 'requestsNotificationService', requestsSiteOpenHoursController])
+		.controller('requestsSiteOpenHoursController', ['requestsDataService', 'requestsNotificationService', requestsSiteOpenHoursController])
 		.directive('requestsSiteOpenHours', requestsSiteOpenHoursDirective);
 
 	function requestsSiteOpenHoursController(requestsDataService, requestsNotificationService) {
@@ -235,7 +235,7 @@
 				showSite: '='
 			},
 			restrict: 'E',
-			controller: 'requestsSiteOpenHoursCtrl',
+			controller: 'requestsSiteOpenHoursController',
 			controllerAs: 'requestsSiteOpenHours',
 			bindToController: true,
 			templateUrl: 'app/requests/html/requests-open-hours.html'

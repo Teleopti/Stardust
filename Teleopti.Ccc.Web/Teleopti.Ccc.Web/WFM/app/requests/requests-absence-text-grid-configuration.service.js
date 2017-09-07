@@ -3,7 +3,9 @@
 (function () {
 
 	angular.module('wfm.requests')
-		.factory('TextAndAbsenceGridConfiguration', ['Toggle', '$translate', function (toggleSvc, $translate) {
+		.factory('TextAndAbsenceGridConfiguration', ['Toggle', '$translate', TextAndAbsenceGridConfiguration]);
+
+		 function TextAndAbsenceGridConfiguration(toggleSvc, $translate) {
 			var columns = [];
 
 			var service = {
@@ -110,5 +112,5 @@
 			}
 
 			return service;
-		}]);
+		}
 }());

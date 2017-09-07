@@ -598,7 +598,7 @@ describe('Requests - absence and text controller tests',
 
 		function setUpTarget() {
 			scope = $rootScope.$new();
-			controller = $controller('requestsAbsenceAndTextCtrl', {
+			controller = $controller('requestsAbsenceAndTextController', {
 				$scope: scope,
 				$stateParams: fakeStateParams
 			});

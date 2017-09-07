@@ -707,7 +707,7 @@ describe('Requests shift trade controller tests',
 
 		function setUpTarget() {
 			scope = $rootScope.$new();
-			controller = $controller('requestsShiftTradeCtrl', {
+			controller = $controller('requestsShiftTradeController', {
 				$scope: scope,
 				$stateParams: fakeStateParams
 			});
