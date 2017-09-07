@@ -231,14 +231,10 @@
 	padding: 10px 1px;
 }
 
-.dropdown-menu {
-	overflow-y: scroll;
+.dropdown-menu.right-zero {
+	left: initial;
+	right: 0;
 }
-
-	.dropdown-menu.right-zero {
-		left: initial;
-		right: 0;
-	}
 
 .shift-trade-agent-name + .tooltip {
 	white-space: pre-wrap;
