@@ -56,8 +56,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			foreach (var personAss in retList)
 			{
-				if(!LazyLoadingManager.IsInitialized(personAss.DayOff()))
-					LazyLoadingManager.Initialize(personAss.DayOff());
+				LazyLoadingManager.Initialize(personAss.DayOff());
 			}
 
 			return retList;
