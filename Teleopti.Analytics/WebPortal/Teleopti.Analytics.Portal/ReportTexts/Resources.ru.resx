@@ -1049,7 +1049,7 @@
     <value>Больше совпадений не найдено.</value>
   </data>
   <data name="RepViewerOf" xml:space="preserve">
-    <value> </value>
+    <value>из</value>
   </data>
   <data name="RepViewerPageSetup" xml:space="preserve">
     <value>Настройки страницы</value>
@@ -1110,5 +1110,11 @@
   </data>
   <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
     <value>Несколько активностей/отсутствий</value>
+  </data>
+  <data name="LogInSuccessTitleText" xml:space="preserve">
+    <value>Успешный вход</value>
+  </data>
+  <data name="ResPlannedOvertimeH" xml:space="preserve">
+    <value>Запланированные сверхурочные (чч:мм)</value>
   </data>
 </root>
