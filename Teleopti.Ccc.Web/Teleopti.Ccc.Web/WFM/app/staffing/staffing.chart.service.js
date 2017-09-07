@@ -131,7 +131,6 @@
         function compareAndFilterArr(arr1, arr2) {
             Object.getOwnPropertyNames(arr1).forEach(function (prop) {
                 for (var index = 0; index < arr1[prop].length; index++) {
-                    console.log(arr1[prop][index], arr2[prop][index])
                     if (arr1[prop][index] === arr2[prop][index]) {
                         arr1[prop][index] = 0;
                     }
