@@ -102,13 +102,23 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
 			StardustJobFeedback.SendProgress($"Will process {requests.Count} requests");
 
-			WithUnitOfWork.Do(() =>
-							  {
-								  foreach (var request in requests)
-								  {
-									  AbsenceRequestIntradayFilter.Process(request);
-								  }
-							  });
+			//WithUnitOfWork.Do(() =>
+			//				  {
+			//					  foreach (var request in requests)
+			//					  {
+			//						  AbsenceRequestIntradayFilter.Process(request);
+			//					  }
+			//				  });
+
+
+			foreach (var request in requests)
+			{
+				WithUnitOfWork.Do(() =>
+				{
+					AbsenceRequestIntradayFilter.Process(request);
+				});
+			}
+
 		}
 	}
 }

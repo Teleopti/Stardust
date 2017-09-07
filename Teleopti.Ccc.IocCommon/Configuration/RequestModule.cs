@@ -79,6 +79,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			registerType
 				<IRequestProcessor, RequestProcessor, IntradayRequestProcessorOld>(builder,
 						Toggles.Wfm_Requests_ProcessWaitlistBefore24hRequests_45767);
+			builder.RegisterType<AbsenceRequestOneDaySetting>().As<IAbsenceRequestSetting>().SingleInstance();
+
 			builder.RegisterType<OvertimeRequestUnderStaffingSkillProvider>().As<IOvertimeRequestUnderStaffingSkillProvider>();
 			builder.RegisterType<SkillStaffingReadModelDataLoader>().As<ISkillStaffingReadModelDataLoader>();
 			builder.RegisterType<OvertimeRequestSkillProvider>().As<IOvertimeRequestSkillProvider>();
