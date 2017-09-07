@@ -12380,9 +12380,6 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="ManualPlan" xml:space="preserve">
     <value>Manuell planering</value>
   </data>
-  <data name="DragAndDropCsvFilesHereOrClickToUpload" xml:space="preserve">
-    <value>Klicka och dra .csv-filer hit eller klicka för att ladda upp filer</value>
-  </data>
   <data name="ImportUsers" xml:space="preserve">
     <value>Importera användare</value>
   </data>
