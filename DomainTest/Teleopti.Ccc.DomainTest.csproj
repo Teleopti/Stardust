@@ -230,6 +230,7 @@
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\AdherencesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\ChangesTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\HistoricalAdherenceViewModelBuilder\ScheduleTest.cs" />
+    <Compile Include="ApplicationLayer\Rta\ViewModels\SiteCardViewModelBuilderTeamsTest.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradeTargetTimeSpecificationTests.cs" />
     <Compile Include="Common\EnumExtensionsTest.cs" />
     <Compile Include="Common\PersonLeavingTest.cs" />

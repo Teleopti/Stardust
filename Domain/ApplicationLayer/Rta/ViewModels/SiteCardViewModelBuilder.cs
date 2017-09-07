@@ -27,23 +27,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 
 		public SiteCardViewModel Build()
 		{
-			return Build(null);
+			return Build(null, null);
 		}
 
 		public SiteCardViewModel Build(IEnumerable<Guid> skillIds)
 		{
-			var teamsInAlarm = skillIds == null ? 
-				_teamCardReader.Read() : 
-				_teamCardReader.Read(skillIds)
+			return Build(skillIds, null);
+		}
+
+		public SiteCardViewModel Build(IEnumerable<Guid> skillIds, IEnumerable<Guid> siteIds)
+		{
+			var teamsInAlarm = skillIds == null ?
+					_teamCardReader.Read() :
+					_teamCardReader.Read(skillIds)
 				;
+
+			if (siteIds == null)
+				siteIds = Enumerable.Empty<Guid>();
 
 			var auth = _authorization.Current();
 
 			var sitesInAlarm =
 				teamsInAlarm
 					.Where(x =>
-						auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _userNow.Date(), new SiteAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId }) ||
-						auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _userNow.Date(), new TeamAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId, TeamId = x.TeamId })
+						auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _userNow.Date(),
+							new SiteAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId }) ||
+						auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview, _userNow.Date(),
+							new TeamAuthorization { BusinessUnitId = x.BusinessUnitId, SiteId = x.SiteId, TeamId = x.TeamId })
 					)
 					.GroupBy(x => x.SiteId)
 					.Select(siteGroup =>
@@ -52,8 +62,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 							SiteId = siteGroup.Key,
 							InAlarmCount = siteGroup.Sum(x => x.InAlarmCount),
 							SiteName = siteGroup.FirstOrDefault()?.SiteName,
-							AgentsCount = siteGroup.Sum(x => x.AgentsCount)
-
+							AgentsCount = siteGroup.Sum(x => x.AgentsCount),
+							Teams = siteIds.Contains(siteGroup.Key) ? siteGroup.AsEnumerable() : Enumerable.Empty<TeamCardModel>()
 						})
 					.ToArray();
 
@@ -64,26 +74,36 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 					Name = s.SiteName,
 					AgentsCount = s.AgentsCount,
 					InAlarmCount = s.InAlarmCount,
-					Color = getColor(s.InAlarmCount, s.AgentsCount)
+					Color = getColor(s.InAlarmCount, s.AgentsCount),
+					Teams = s.Teams.Select(t => new TeamCardViewModel()
+					{
+						Id = t.TeamId,
+						SiteId = s.SiteId,
+						Name = t.TeamName,
+						AgentsCount = t.AgentsCount,
+						InAlarmCount = t.InAlarmCount,
+						Color = getColor(t.InAlarmCount,t.InAlarmCount)
+					})
 				}).OrderBy(x => x.Name).ToArray();
-			
+
 			return new SiteCardViewModel
 			{
 				Sites = sites,
-				TotalAgentsInAlarm = sites.Sum(s=>s.InAlarmCount)
+				TotalAgentsInAlarm = sites.Sum(s => s.InAlarmCount),
 			};
 		}
-		
+
 		private string getColor(int inAlarmCount, int agentsCount)
 		{
 			if (agentsCount == 0)
 				return null;
-			var percentInAlarm = Math.Floor(((double) inAlarmCount / (double) agentsCount) * 100);
+			var percentInAlarm = Math.Floor(((double)inAlarmCount / (double)agentsCount) * 100);
 			if (percentInAlarm >= 67)
 				return "danger";
 			if (percentInAlarm >= 34 && percentInAlarm <= 66)
 				return "warning";
 			return "good";
 		}
+
 	}
 }

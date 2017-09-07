@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
@@ -16,5 +17,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		public int AgentsCount { get; set; }
 		public int InAlarmCount { get; set; }
 		public string Color { get; set; }
+		public IEnumerable<TeamCardViewModel> Teams { get; set; }
 	}
 }

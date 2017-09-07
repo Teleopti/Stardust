@@ -22,12 +22,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		}
 
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Overview/SiteCards")]
-		public virtual IHttpActionResult SiteCards([FromUri]Guid[] skillIds = null)
+		public virtual IHttpActionResult SiteCards([FromUri]Guid[] skillIds = null, [FromUri]Guid[] siteIds = null)
 		{
-			return Ok(skillIds.EmptyIfNull().Any() ?
-					_sites.Build(skillIds) :
-					_sites.Build())
-				;
+			return Ok(_sites.Build(skillIds, siteIds));
 		}
 		
 		[ReadModelUnitOfWork, UnitOfWork, HttpGet, Route("api/Overview/TeamCards")]
