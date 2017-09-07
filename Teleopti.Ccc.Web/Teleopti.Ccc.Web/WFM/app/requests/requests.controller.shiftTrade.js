@@ -291,13 +291,6 @@
 			return options;
 		}
 
-		function applyGridColumns(){
-			vm.gridOptions.columnDefs = shiftTradeGridConfiguration.columnDefinitions(vm.shiftTradeRequestDateSummary);
-			angular.forEach(vm.gridOptions.columnDefs, function(col) {
-				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
-			});
-		}
-
 		function onSelectionChanged() {
 			var visibleRequestsIds = vm.gridOptions.data.map(function(row) {
 				return row.Id;
@@ -367,6 +360,13 @@
 
 			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 			vm.gridOptions.data = vm.requests;
+		}
+
+		function applyGridColumns(){
+			vm.gridOptions.columnDefs = shiftTradeGridConfiguration.columnDefinitions(vm.shiftTradeRequestDateSummary);
+			angular.forEach(vm.gridOptions.columnDefs, function(col) {
+				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
+			});
 		}
 
 		function setupShiftTradeVisualisation(requests) {
