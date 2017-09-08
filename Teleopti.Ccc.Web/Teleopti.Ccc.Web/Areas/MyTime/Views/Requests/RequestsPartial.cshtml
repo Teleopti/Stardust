@@ -3,7 +3,6 @@
 @model RequestsViewModel
 @{
 	Layout = null;
-
 }
 
 <script>
@@ -73,7 +72,7 @@
 				@if (Model.RequestPermission.ShiftTradeBulletinBoardPermission)
 				{
 					<li data-bind="css: { active: addShiftTradeBulletinBoardActive }" class="col-xs-12 col-sm-4">
-						<a id="addShiftTradeRequestFromBulletinBoard" href=" #" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
+						<a id="addShiftTradeRequestFromBulletinBoard" href="#" class="shifttradebulletinboard-request-add" data-bind="click: addShiftTradeBulletinBoardRequest"><i class="glyphicon glyphicon-plus"></i>&nbsp;@Resources.ShiftTradeBulletinBoard</a>
 					</li>
 
 					<li data-bind="css: { active: addPostShiftForTradeActive }" class="col-xs-12 col-sm-4">
@@ -156,76 +155,52 @@
 
 		<div id="Requests-data-binding-area" data-bind="css: { 'hide-requests-on-phone': hideRequestsOnPhone}">
 			<div class="row">
-				
-				<!-- <div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
-		        <label class="btn btn-primary">
-		            <input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="false"/> @Resources.AllRequests
-		        </label>
-		        <label class="btn btn-primary">
-		            <input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="true"/> @Resources.CurrentRequests
-		        </label>
-		    </div> -->
-
-				<!-- ko if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_SortRequestList_40711') -->
-				<!-- <div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
-					<label class="btn btn-primary">
-						<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="false" /> @Resources.SortByStartDate
-					</label>
-					<label class="btn btn-primary">
-						<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="true" /> @Resources.SortByUpdateDate
-					</label>
-				</div> -->
-				 <!--/ko -->
-
-  
-
-			<div class="row filter-row">
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
-					<div class="old-filter" data-bind="ifnot: newFilterToggle">			
-						<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_SortRequestList_40711'), 
-						if: !Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'), visible: !isLoadingRequests()">
-							<label class="btn btn-primary">
-								<input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="false"/> @Resources.AllRequests
-							</label>
-							<label class="btn btn-primary">
-								<input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="true"/> @Resources.CurrentRequests
-							</label>
-						</div> 
-					</div>
-					<div class="new-filter" data-bind="if: newFilterToggle">
-						<div class="form-group" data-bind="visible: !isLoadingRequests()">
-							<select class="form-control" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'), options: filters, optionsText: 'name',
-								optionsValue: 'show', value: hideOldRequests" id="sel1">
-							</select>
-						</div>	
-					</div>
-				</div>
-				<span data-bind="ifnot: newFilterToggle"/></span>
-				<div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
-					<div class="old-filter" data-bind="ifnot: newFilterToggle">
-						<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
+				<div class="row filter-row">
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
+						<div class="old-filter" data-bind="ifnot: newFilterToggle">
+							<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_SortRequestList_40711'), 
+							if: !Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'), visible: !isLoadingRequests()">
 								<label class="btn btn-primary">
-								<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="false" /> @Resources.SortByStartDate
-							</label>
-							<label class="btn btn-primary">
-								<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="true" /> @Resources.SortByUpdateDate
-							</label>
+									<input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="false"/> @Resources.AllRequests
+								</label>
+								<label class="btn btn-primary">
+									<input type="radio" name="hideOldRequest" data-bind="checked: hideOldRequests" value="true"/> @Resources.CurrentRequests
+								</label>
+							</div> 
+						</div>
+						<div class="new-filter" data-bind="if: newFilterToggle">
+							<div class="form-group" data-bind="visible: !isLoadingRequests()">
+								<select class="form-control" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'), options: filters, optionsText: 'name',
+									optionsValue: 'show', value: hideOldRequests" id="sel1">
+								</select>
+							</div>	
 						</div>
 					</div>
+					<span data-bind="ifnot: newFilterToggle"></span>
+					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-3">
+						<div class="old-filter" data-bind="ifnot: newFilterToggle">
+							<div class="btn-group request-list-filter col-lg-3 col-md-4 col-sm-6" data-bind="visible: !isLoadingRequests()">
+									<label class="btn btn-primary">
+									<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="false" /> @Resources.SortByStartDate
+								</label>
+								<label class="btn btn-primary">
+									<input type="radio" name="IsSortByUpdateDate" data-bind="checked: IsSortByUpdateDate" value="true" /> @Resources.SortByUpdateDate
+								</label>
+							</div>
+						</div>
 						<div class="form-group">
-					<div class="new-filter" data-bind="if: newFilterToggle">
-							<select class="form-control" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'), 
-							visible: !isLoadingRequests(), options: sorters, optionsText: 'name',
-								optionsValue: 'show', value: IsSortByUpdateDate"id="sel1">
-							</select>
+							<div class="new-filter" data-bind="if: newFilterToggle">
+								<select class="form-control" data-bind="if: Teleopti.MyTimeWeb.Common.IsToggleEnabled('MyTimeWeb_MobileResponsive_43826'), 
+								visible: !isLoadingRequests(), options: sorters, optionsText: 'name',
+									optionsValue: 'show', value: IsSortByUpdateDate"id="sel2">
+								</select>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			</div>
-
-            <div class="alert alert-info" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true" id="Requests-no-requests-found">
+			<div class="alert alert-info" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true" id="Requests-no-requests-found">
 				@Resources.NoRequestsFound
 			</div>
 
