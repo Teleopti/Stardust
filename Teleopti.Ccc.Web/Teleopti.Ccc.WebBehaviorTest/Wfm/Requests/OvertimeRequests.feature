@@ -28,6 +28,7 @@ Background:
 	| Status       | Pending                               |
 	| Subject      | Subject - Illness request from Ashley |
 
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_Refactoring_45470')
 Scenario: Should view overtime requests 
 	When I view wfm requests

@@ -40,6 +40,7 @@ Scenario: Should view absence and text requests
 	And I click button for search requests
 	Then I should see a absence and text request from 'Ashley Andeen' in the list
 
+@ignore
 @OnlyRunIfEnabled('Wfm_Requests_Refactoring_45470')
 Scenario: Should keep selected requests when navigating to different page
 	When I view wfm requests
