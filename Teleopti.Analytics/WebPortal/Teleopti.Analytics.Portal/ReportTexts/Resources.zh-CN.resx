@@ -343,7 +343,7 @@
     <value>按活动的排定时间</value>
   </data>
   <data name="ResReportTeamMetrics" xml:space="preserve">
-    <value>小组测量数据</value>
+    <value>小组测量指标</value>
   </data>
   <data name="ResTeamDate" xml:space="preserve">
     <value>小组 / 日期</value>
@@ -508,7 +508,7 @@
     <value>座席代表：</value>
   </data>
   <data name="ResReportAgentScheduleResult" xml:space="preserve">
-    <value>座席代表度量</value>
+    <value>座席代表测量指标</value>
   </data>
   <data name="ResAdherencePercent" xml:space="preserve">
     <value>遵时率 (%)</value>
@@ -895,7 +895,7 @@
     <value>平均通话时间</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
-    <value>座席代表队列度量</value>
+    <value>座席代表队列测量指标</value>
   </data>
   <data name="ResReportActivityTimePerAgent" xml:space="preserve">
     <value>每个座席代表的活动时间</value>
@@ -1112,5 +1112,8 @@
   </data>
   <data name="MultipleActivitiesOrAbsences" xml:space="preserve">
     <value>多个活动/缺勤</value>
+  </data>
+  <data name="ResPlannedOvertimeH" xml:space="preserve">
+    <value>已排定的加班 (hh:mm)</value>
   </data>
 </root>

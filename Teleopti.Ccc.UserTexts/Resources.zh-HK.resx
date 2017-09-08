@@ -483,19 +483,19 @@
     <comment>Used in column header tooltip</comment>
   </data>
   <data name="Alarm" xml:space="preserve">
-    <value>警報</value>
+    <value>告警</value>
     <comment>Used in column header</comment>
   </data>
   <data name="AlarmName" xml:space="preserve">
-    <value>警報名稱</value>
+    <value>告警名稱</value>
     <comment>Used in column header tooltip</comment>
   </data>
   <data name="AlarmTime" xml:space="preserve">
-    <value>當前警報時間</value>
+    <value>當前告警時間</value>
     <comment>Used in column header tooltip</comment>
   </data>
   <data name="AlarmTotalTime" xml:space="preserve">
-    <value>總的警報時間</value>
+    <value>總的告警時間</value>
     <comment>Used in column header tooltip</comment>
   </data>
   <data name="All" xml:space="preserve">
@@ -1757,7 +1757,7 @@
     <comment>Enter property values for grouping activities</comment>
   </data>
   <data name="EnterPublishingDates" xml:space="preserve">
-    <value>請為每個小組輸入發佈日期</value>
+    <value>請為每個小組輸入發布日期</value>
     <comment>Enter Publishing Dates for each Team</comment>
   </data>
   <data name="EnterReply" xml:space="preserve">
@@ -2636,7 +2636,7 @@
     <comment>Manage part-time percentages</comment>
   </data>
   <data name="ManageRTA" xml:space="preserve">
-    <value>管理即時遵守度</value>
+    <value>管理即時遵時度</value>
     <comment>Application function description</comment>
   </data>
   <data name="ManageScenarios" xml:space="preserve">
@@ -3876,7 +3876,7 @@ Periods</comment>
     <comment>Ready... </comment>
   </data>
   <data name="RealTimeAdherence" xml:space="preserve">
-    <value>即時遵守度</value>
+    <value>即時遵時度</value>
     <comment>Real Time Adherence</comment>
   </data>
   <data name="ReAmpersandplace" xml:space="preserve">
@@ -4196,7 +4196,7 @@ Periods</comment>
     <comment>SchedulePeriodView</comment>
   </data>
   <data name="SchedulePublishingDates" xml:space="preserve">
-    <value>班表發佈日期</value>
+    <value>班表發布日期</value>
     <comment>Schedule Publishing Dates</comment>
   </data>
   <data name="Schedules" xml:space="preserve">
@@ -4400,7 +4400,7 @@ Periods</comment>
     <comment>Set password</comment>
   </data>
   <data name="SetSchedulePublishingDates" xml:space="preserve">
-    <value>設定班表發佈日期</value>
+    <value>設定班表發布日期</value>
     <comment>Set Schedule Publishing Dates</comment>
   </data>
   <data name="Settings" xml:space="preserve">
@@ -5510,16 +5510,16 @@ Periods</comment>
     <value>員工編號</value>
   </data>
   <data name="CreateAlarmTypes" xml:space="preserve">
-    <value>創建警報類型</value>
+    <value>創建告警類型</value>
   </data>
   <data name="AlarmList" xml:space="preserve">
-    <value>現有警報類型</value>
+    <value>現有告警類型</value>
   </data>
   <data name="GiveAlarmAName" xml:space="preserve">
-    <value>給警報類型一個描述的名稱</value>
+    <value>給告警類型一個描述的名稱</value>
   </data>
   <data name="NewAlarm" xml:space="preserve">
-    <value>創建新的警報</value>
+    <value>創建新的告警</value>
   </data>
   <data name="SkillCreatedDotParameter0" xml:space="preserve">
     <value>技能已創建 {0}</value>
@@ -5549,13 +5549,13 @@ Periods</comment>
     <value>您不能有空白名稱</value>
   </data>
   <data name="ManageAlarmSituations" xml:space="preserve">
-    <value>管理警報狀況</value>
+    <value>管理告警狀況</value>
   </data>
   <data name="CannotChangeSystemAlarmType" xml:space="preserve">
-    <value>您不能改變系統警報</value>
+    <value>您不能改變系統告警</value>
   </data>
   <data name="CannotDeleteSystemAlarmType" xml:space="preserve">
-    <value>您不能刪除系統警報</value>
+    <value>您不能刪除系統告警</value>
   </data>
   <data name="SelectSuitableColor" xml:space="preserve">
     <value>選擇合適的顏色</value>
@@ -6543,16 +6543,16 @@ Periods</comment>
     <value>使用小時工可用性</value>
   </data>
   <data name="Alarms" xml:space="preserve">
-    <value>警報</value>
+    <value>告警</value>
   </data>
   <data name="AlarmTypes" xml:space="preserve">
-    <value>警報類型</value>
+    <value>告警類型</value>
   </data>
   <data name="ManageAlarms" xml:space="preserve">
-    <value>管理警報</value>
+    <value>管理告警</value>
   </data>
   <data name="ManageAlarmTypes" xml:space="preserve">
-    <value>管理警報類型</value>
+    <value>管理告警類型</value>
   </data>
   <data name="ResReportImprove" xml:space="preserve">
     <value>座席代表改進報表</value>
@@ -6648,7 +6648,7 @@ Periods</comment>
     <value>XX</value>
   </data>
   <data name="SetTresholdTime" xml:space="preserve">
-    <value>設定警報閾值(秒)</value>
+    <value>設定告警閾值(秒)</value>
   </data>
   <data name="StategroupOverview" xml:space="preserve">
     <value>狀態組流覽</value>
@@ -6900,7 +6900,7 @@ Periods</comment>
     <value>無狀態分組</value>
   </data>
   <data name="IncreaseTotalAlarmTime" xml:space="preserve">
-    <value>添加總告警時間</value>
+    <value>增加總告警時間</value>
   </data>
   <data name="DateAlreadyExists" xml:space="preserve">
     <value>日期已經存在</value>
@@ -7577,7 +7577,7 @@ Teleopti R&amp;D</value>
     <value>創建班次規則之前必須至少有一個活動及班次類別。</value>
   </data>
   <data name="PublishingDateSchedule" xml:space="preserve">
-    <value>班表發佈日期</value>
+    <value>班表發布日期</value>
   </data>
   <data name="Calculation" xml:space="preserve">
     <value>計算</value>
@@ -10542,10 +10542,10 @@ Teleopti R&amp;D</value>
     <value>桌面</value>
   </data>
   <data name="MyReportAdherenceTab" xml:space="preserve">
-    <value>遵守度詳情</value>
+    <value>遵時度詳情</value>
   </data>
   <data name="DetailedAdherence" xml:space="preserve">
-    <value>遵守度詳情</value>
+    <value>遵時度詳情</value>
   </data>
   <data name="EmployeesInc" xml:space="preserve">
     <value>員工到崗數</value>
@@ -10653,7 +10653,7 @@ Teleopti R&amp;D</value>
     <value>就緒時間/班表就緒時間</value>
   </data>
   <data name="RealTimeAdherenceOverview" xml:space="preserve">
-    <value>即時遵守度概覽</value>
+    <value>即時遵時度概覽</value>
   </data>
   <data name="RemovingAbsenceFor" xml:space="preserve">
     <value>移除缺勤為</value>
@@ -10746,7 +10746,7 @@ Teleopti R&amp;D</value>
     <value>活動變更前對座席代表的提醒時間（秒）</value>
   </data>
   <data name="TimeInAlarm" xml:space="preserve">
-    <value>警報時間</value>
+    <value>告警時間</value>
   </data>
   <data name="TimeInState" xml:space="preserve">
     <value>狀態時間</value>
@@ -10782,7 +10782,7 @@ Teleopti R&amp;D</value>
     <value>您得到了新的金色徽章！您在不同日期中已經應答了{0}或更多的電話在每天{1}</value>
   </data>
   <data name="YouGotANewGoldBadgeForAdherence" xml:space="preserve">
-    <value>您得到了新的金色徽章！您的遵守率超過{0}在{1}的不同日期</value>
+    <value>您得到了新的金色徽章！您的遵時率超過{0}在{1}的不同日期</value>
   </data>
   <data name="YouGotANewGoldBadgeForAHT" xml:space="preserve">
     <value>您得到了新的金色徽章！您的處理時間低於{0}秒在{1}的不同日期</value>
@@ -10791,7 +10791,7 @@ Teleopti R&amp;D</value>
     <value>您得到了新的銀色徽章！您在不同日期中已經應答了{0}或更多的電話在每天{1}</value>
   </data>
   <data name="YouGotANewSilverBadgeForAdherence" xml:space="preserve">
-    <value>您得到了新的銀色徽章！您的遵守率超過{0}在{1}的不同日期</value>
+    <value>您得到了新的銀色徽章！您的遵時率超過{0}在{1}的不同日期</value>
   </data>
   <data name="YouGotANewSilverBadgeForAHT" xml:space="preserve">
     <value>您得到了新的銀色徽章！您的處理時間低於{0}秒在{1}的不同日期</value>
@@ -11344,10 +11344,10 @@ Teleopti R&amp;D</value>
     <value>移除必須有</value>
   </data>
   <data name="DoubleTextBoxGoldThresholdForAdherence" xml:space="preserve">
-    <value>遵循度的金色徽章閾值應大於其他的</value>
+    <value>遵時度的金色徽章閾值應大於其他的</value>
   </data>
   <data name="DoubleTextBoxSilverThresholdForAdherence" xml:space="preserve">
-    <value>遵循度的銀色徽章閾值應大於青銅徽章閾值</value>
+    <value>遵時度的銀色徽章閾值應大於青銅徽章閾值</value>
   </data>
   <data name="GoldThresholdForAnsweredCallsValue" xml:space="preserve">
     <value>應答量的金色徽章閾值應大於其他的</value>
@@ -11461,13 +11461,13 @@ Teleopti R&amp;D</value>
     <value>更多標題欄位</value>
   </data>
   <data name="AdherenceCannotBeEmpty" xml:space="preserve">
-    <value>遵循度不能為空</value>
+    <value>遵時度不能為空</value>
   </data>
   <data name="AdherenceSilverThresholdShouldGreaterThanGoldThreshold" xml:space="preserve">
-    <value>遵循度的銀色徽章閾值必須小於金色徽章閾值</value>
+    <value>遵時度的銀色徽章閾值必須小於金色徽章閾值</value>
   </data>
   <data name="AdherenceBronzeThresholdShouldGreaterThanSilverThreshold" xml:space="preserve">
-    <value>遵循度的青銅徽章閾值必須小於銀色徽章閾值</value>
+    <value>遵時度的青銅徽章閾值必須小於銀色徽章閾值</value>
   </data>
   <data name="AHTSilverThresholdShouldLessThanGoldThreshold" xml:space="preserve">
     <value>AHT的銀色徽章閾值必須大於金色徽章閾值</value>
@@ -11545,7 +11545,7 @@ Teleopti R&amp;D</value>
     <value>金色徽章閾值：</value>
   </data>
   <data name="UseBadgeforAdherence" xml:space="preserve">
-    <value>遵循度使用徽章</value>
+    <value>遵時度使用徽章</value>
   </data>
   <data name="SetBadgeSilverThresholdForAnsweredCalls" xml:space="preserve">
     <value>銀色徽章閾值：</value>
@@ -12028,7 +12028,7 @@ Teleopti R&amp;D</value>
     <value>開始下一個</value>
   </data>
   <data name="IsAlarm" xml:space="preserve">
-    <value>是警報</value>
+    <value>是告警</value>
   </data>
   <data name="NotAllowed" xml:space="preserve">
     <value>不允許！</value>
@@ -12169,7 +12169,7 @@ Teleopti R&amp;D</value>
     <value>取消已批准的缺勤申請</value>
   </data>
   <data name="InAlarm" xml:space="preserve">
-    <value>報警</value>
+    <value>告警</value>
   </data>
   <data name="AreYouSureYouWishToCancelAbsence" xml:space="preserve">
     <value>您確定想要刪除此缺勤申請嗎？</value>
@@ -12478,7 +12478,7 @@ Teleopti R&amp;D</value>
     <value>新的休息日規則</value>
   </data>
   <data name="AgentsSuccessfullyScheduled" xml:space="preserve">
-    <value>座席代表已成功排班</value>
+    <value>已成功排班的座席代表</value>
   </data>
   <data name="AgentDetails" xml:space="preserve">
     <value>座席代表詳細資訊</value>
@@ -12727,7 +12727,7 @@ Teleopti R&amp;D</value>
     <value>幫助</value>
   </data>
   <data name="AgentHistoricalAdherence" xml:space="preserve">
-    <value>歷史遵循度</value>
+    <value>歷史遵時度</value>
   </data>
   <data name="ImportSchedule" xml:space="preserve">
     <value>導入班表</value>
@@ -12974,10 +12974,10 @@ Teleopti R&amp;D</value>
     <value>播放</value>
   </data>
   <data name="RtaPauseDisableNotice" xml:space="preserve">
-    <value>即時遵守度監控已啟動</value>
+    <value>即時遵時度監控已啟動</value>
   </data>
   <data name="RtaPauseEnabledNotice" xml:space="preserve">
-    <value>即時遵守都監控暫停於{0}！點擊播放以恢復</value>
+    <value>即時遵時都監控暫停於{0}！點擊播放以恢復</value>
   </data>
   <data name="SelectAllPeopleInEveryPage" xml:space="preserve">
     <value>選擇每頁上的所有人</value>
@@ -13412,13 +13412,13 @@ Teleopti R&amp;D</value>
     <value>選擇組織</value>
   </data>
   <data name="TimeOOA" xml:space="preserve">
-    <value>未遵循時間</value>
+    <value>未遵時時間</value>
   </data>
   <data name="ClearAll" xml:space="preserve">
     <value>清除所有</value>
   </data>
   <data name="RTAMaxNumberOfAgentsNotice" xml:space="preserve">
-    <value>只能最多查看 {0} 個座席代表。"報警" 開關僅在座席代表數不超過 {1} 時有效。</value>
+    <value>只能最多查看 {0} 個座席代表。"告警" 開關僅在座席代表數不超過 {1} 時有效。</value>
   </data>
   <data name="FavoriteSearch" xml:space="preserve">
     <value>喜愛的搜索</value>
@@ -13644,7 +13644,7 @@ Teleopti R&amp;D</value>
     <value>預測量</value>
   </data>
   <data name="Volume" xml:space="preserve">
-    <value>量</value>
+    <value>進線量</value>
   </data>
   <data name="ExceedsMaximumUploadFileSize" xml:space="preserve">
     <value>超過最大上傳文件大小</value>
@@ -13912,5 +13912,316 @@ Teleopti R&amp;D</value>
   </data>
   <data name="WFMAppGuideTitle" xml:space="preserve">
     <value>Teleopti WFM 手機應用</value>
+  </data>
+  <data name="AnywhereMigrated" xml:space="preserve">
+    <value>Anywhere 已經遷移到 {0}WFM{1}！</value>
+    <comment>Message displayed for users on access Anywhere</comment>
+  </data>
+  <data name="PageWillBeRedirected" xml:space="preserve">
+    <value>頁面將在 {0} 秒後自動跳轉至 WFM……</value>
+    <comment>Message displayed for users on access Anywhere</comment>
+  </data>
+  <data name="DeletedContractAssigned" xml:space="preserve">
+    <value>分配給此座席代表的合同 {0} 已被刪除</value>
+  </data>
+  <data name="DeletedContractScheduleAssigned" xml:space="preserve">
+    <value>分配給此座席代表的班表合同 {0} 已被刪除</value>
+  </data>
+  <data name="DeletedPartTimePercentageAssigned" xml:space="preserve">
+    <value>分配給此座席代表的兼職時間百分比 {0} 已被刪除</value>
+  </data>
+  <data name="MaxSearchPersonCountExceeded" xml:space="preserve">
+    <value>本次查詢結果返回的人數將超過 {0} , 請添加額外的條件重新查詢.</value>
+  </data>
+  <data name="OpenPlansPage" xml:space="preserve">
+    <value>計畫</value>
+  </data>
+  <data name="OnlyAbsenceRequestCanBeCancelled" xml:space="preserve">
+    <value>僅可取消缺勤申請</value>
+  </data>
+  <data name="DeletedShiftBagAssigned" xml:space="preserve">
+    <value>分配給此座席代表的班次包 {0} 已被刪除</value>
+  </data>
+  <data name="MissingPersonPeriodForPeriod" xml:space="preserve">
+    <value>座席代表在選定的週期內缺少全部或部分人員週期設定</value>
+  </data>
+  <data name="MissingSchedulePeriodForPeriod" xml:space="preserve">
+    <value>座席代表在選定的週期內缺少班表週期設定</value>
+  </data>
+  <data name="MissingShiftBagForPeriod" xml:space="preserve">
+    <value>在選定的全部或部分週期內,座席代表沒有關聯班次包</value>
+  </data>
+  <data name="MissingSkillsForPeriod" xml:space="preserve">
+    <value>在選定的全部或部分週期內,座席代表沒有關聯技能</value>
+  </data>
+  <data name="NoMatchingSchedulePeriod" xml:space="preserve">
+    <value>設置的班表週期與選定的週期不匹配</value>
+  </data>
+  <data name="OvertimeType" xml:space="preserve">
+    <value>加班類型</value>
+  </data>
+  <data name="CreatePlanningGroup" xml:space="preserve">
+    <value>創建計畫組</value>
+  </data>
+  <data name="DeletePlanningGroup" xml:space="preserve">
+    <value>刪除計畫組</value>
+  </data>
+  <data name="EditPlanningGroup" xml:space="preserve">
+    <value>編輯計畫組</value>
+  </data>
+  <data name="OvertimeRequest" xml:space="preserve">
+    <value>加班申請</value>
+  </data>
+  <data name="ManageDayOffForPlanningGroup" xml:space="preserve">
+    <value>管理計畫組 {0} 的休息日規則</value>
+  </data>
+  <data name="NoAgentsWithinPlanningGroup" xml:space="preserve">
+    <value>此計畫組中沒有可排班的座席代表</value>
+  </data>
+  <data name="SchedulePlanningGroup" xml:space="preserve">
+    <value>計畫組排班</value>
+  </data>
+  <data name="RequestTypeOvertime" xml:space="preserve">
+    <value>加班</value>
+  </data>
+  <data name="PlansPageSelectPlanningGroup" xml:space="preserve">
+    <value>選擇計畫組以為座席代表排班</value>
+  </data>
+  <data name="SearchForPlanningGroup" xml:space="preserve">
+    <value>查詢 網站 /小組/技能/合同</value>
+  </data>
+  <data name="SelectPpToSchedulePlanningGroup" xml:space="preserve">
+    <value>選擇計畫週期以為您的計畫組排班</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteThePlanningGroup" xml:space="preserve">
+    <value>Are you sure you want to delete the planning group '{0}' and its related settings?</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonSiteOpenHourClosed" xml:space="preserve">
+    <value>您的加班申請已被自動拒絕。網站在請求週期 {0} 已關閉</value>
+  </data>
+  <data name="EnableMobileNotifications" xml:space="preserve">
+    <value>啟用移動端App通知</value>
+  </data>
+  <data name="MobileNotificationSettings" xml:space="preserve">
+    <value>移動端App通知設置</value>
+  </data>
+  <data name="IgnoreSchedules" xml:space="preserve">
+    <value>忽略班表</value>
+  </data>
+  <data name="ShowAllSchedules" xml:space="preserve">
+    <value>顯示所有班表</value>
+  </data>
+  <data name="IgnoredScheduleHint" xml:space="preserve">
+    <value>被忽略的班表</value>
+  </data>
+  <data name="FilterPlanningGroups" xml:space="preserve">
+    <value>篩選計畫組</value>
+  </data>
+  <data name="PlansPageCreatePlanningGroup" xml:space="preserve">
+    <value>填入名稱並選擇適當的篩選器以創建計畫組</value>
+  </data>
+  <data name="UnsupportedDataSeriesFound" xml:space="preserve">
+    <value>包含混合的技能類型，某些特定資料可能不可用</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonOutOfSiteOpenHour" xml:space="preserve">
+    <value>您的加班申請已被自動拒絕。此申請的週期為 {0}, 但網站的開放時間為 {1}</value>
+  </data>
+  <data name="FilterPlanningPeriods" xml:space="preserve">
+    <value>篩選計畫週期</value>
+  </data>
+  <data name="ETOTRequests" xml:space="preserve">
+    <value>額外時間/加班 申請</value>
+  </data>
+  <data name="UnavailableSeries" xml:space="preserve">
+    <value>當前選擇中包含郵件技能，某些特定資料不可用</value>
+  </data>
+  <data name="EnableAbsenceProbability" xml:space="preserve">
+    <value>啟用缺勤可能性提示</value>
+  </data>
+  <data name="EnableOvertimeProbability" xml:space="preserve">
+    <value>啟用加班可能性提示</value>
+  </data>
+  <data name="Plans" xml:space="preserve">
+    <value>計畫</value>
+  </data>
+  <data name="ApplySuggestion" xml:space="preserve">
+    <value>引用建議</value>
+  </data>
+  <data name="GetSuggestionsForOvertime" xml:space="preserve">
+    <value>獲取加班建議</value>
+  </data>
+  <data name="MoveOvertime" xml:space="preserve">
+    <value>移動加班</value>
+  </data>
+  <data name="OvertimeRequestDenyReasonExpired" xml:space="preserve">
+    <value>您的加班申請已被自動拒絕。此申請的開始時間是 {0}, 其必須至少晚於當前時間時間 {1} 分鐘</value>
+  </data>
+  <data name="NoPermissionMoveAgentOvertime" xml:space="preserve">
+    <value>沒有許可權為做席代表移動加班</value>
+  </data>
+  <data name="ChooseDayOffset" xml:space="preserve">
+    <value>選擇日期</value>
+  </data>
+  <data name="CannotApplyThisToAgentsInADifferentTimeZone" xml:space="preserve">
+    <value>無法將此應用於其他時區中的座席代表</value>
+  </data>
+  <data name="MissingDuration" xml:space="preserve">
+    <value>缺少持續時間</value>
+  </data>
+  <data name="MissingStartTime" xml:space="preserve">
+    <value>缺少開始時間</value>
+  </data>
+  <data name="OvertimeRequestDateExceeds14Days" xml:space="preserve">
+    <value>申請資料已超過14天</value>
+  </data>
+  <data name="OvertimeRequestDateIsPast" xml:space="preserve">
+    <value>無法為一個過去日期添加一個加班申請</value>
+  </data>
+  <data name="AllowedOvertime" xml:space="preserve">
+    <value>允許的加班</value>
+  </data>
+  <data name="CloseOvertimeSettings" xml:space="preserve">
+    <value>關閉加班設置</value>
+  </data>
+  <data name="Compensations" xml:space="preserve">
+    <value>補償</value>
+  </data>
+  <data name="OvertimeRequestWasCancelled" xml:space="preserve">
+    <value>加班申請已被取消</value>
+  </data>
+  <data name="DiscardSuggestionData" xml:space="preserve">
+    <value>您有啟動的建議資料。如果您選擇繼續其將被忽略</value>
+  </data>
+  <data name="OvertimeSettings" xml:space="preserve">
+    <value>加班設置</value>
+  </data>
+  <data name="PressEscToClose" xml:space="preserve">
+    <value>點擊Esc以關閉</value>
+  </data>
+  <data name="CreateDayOffRule" xml:space="preserve">
+    <value>創建休息日規則</value>
+  </data>
+  <data name="EditDayOffRule" xml:space="preserve">
+    <value>編輯休息日規則</value>
+  </data>
+  <data name="FilterDayOffRules" xml:space="preserve">
+    <value>篩選休息日規則</value>
+  </data>
+  <data name="PlansPageEditPlanningGroup" xml:space="preserve">
+    <value>為選定的計畫組編輯名稱及篩選器</value>
+  </data>
+  <data name="ClassicIntraday" xml:space="preserve">
+    <value>經典當日</value>
+  </data>
+  <data name="OvertimeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>加班申請 {0} 已被拒絕。</value>
+  </data>
+  <data name="NoAvailableSkillForOvertime" xml:space="preserve">
+    <value>座席代表無可用技能以申請加班</value>
+  </data>
+  <data name="PeriodIsOutOfSkillOpenHours" xml:space="preserve">
+    <value>申請週期超出技能開放時間</value>
+  </data>
+  <data name="NoUnderStaffingSkill" xml:space="preserve">
+    <value>整個申請週期內沒有技能是嚴重人力不足</value>
+  </data>
+  <data name="HelpCreatePlanningGroup" xml:space="preserve">
+    <value>必須要有一個計畫組以為您的座席代表排班。您想要創建一個計畫組嗎？</value>
+  </data>
+  <data name="NoAccessToSites" xml:space="preserve">
+    <value>您沒有許可權訪問任何網站或小組</value>
+  </data>
+  <data name="PublicNote" xml:space="preserve">
+    <value>公開備註</value>
+  </data>
+  <data name="ShiftCannotBeAddedToAgentsInAnotherTimeZone" xml:space="preserve">
+    <value>注意：在為一個不同時區的座席代表移動班次之前，請先在時區列表中選擇他們所在的時區。</value>
+  </data>
+  <data name="OvertimeRequestHasBeenApprovedDot" xml:space="preserve">
+    <value>加班申請 {0}-{1} 已被批准。</value>
+  </data>
+  <data name="BpoExchange" xml:space="preserve">
+    <value>BPO交換</value>
+  </data>
+  <data name="DragAndDropCSVFilesHereOrClickToUpload" xml:space="preserve">
+    <value>拖拽 .CSV 文件到此處或點擊上傳</value>
+  </data>
+  <data name="SuccessfullyImported" xml:space="preserve">
+    <value>導入成功</value>
+  </data>
+  <data name="OvertimeRequestAlreadyHasScheduleInPeriod" xml:space="preserve">
+    <value>在週期 {0}-{1} 內已有排定的活動</value>
+  </data>
+  <data name="SeveralGroupsSelected" xml:space="preserve">
+    <value>已選定 {0} 個組</value>
+  </data>
+  <data name="TheSkillWithNameIsNotDefinedInTheSystem" xml:space="preserve">
+    <value>技能名稱 {0} 未在系統中定義。</value>
+  </data>
+  <data name="SkillDefinedMultipleTimesInTheSystem" xml:space="preserve">
+    <value>技能名稱 {0} 已在系統中定義了 {1} 次。當使用此功能時僅允許一次。 </value>
+  </data>
+  <data name="BpoLineHasIncorrectParameterCount" xml:space="preserve">
+    <value>一行中有 {0} 個參數，但只需要 {1} 個參數。</value>
+  </data>
+  <data name="ErrorFoundOnLineNumberXWithContentsY" xml:space="preserve">
+    <value>行數 {0} 中發現錯誤內容：{1} {2}</value>
+  </data>
+  <data name="ParameterCannotBeEmpty" xml:space="preserve">
+    <value>參數 {0} 不能為空</value>
+  </data>
+  <data name="InvalidFieldNameInHeader" xml:space="preserve">
+    <value>頁眉包含無效欄位名稱: '{0}'. 有效的欄位名稱為: ({1})</value>
+  </data>
+  <data name="TheImportFileCannotBeEmpty" xml:space="preserve">
+    <value>導入檔不能為空。</value>
+  </data>
+  <data name="FirstLineInFileHeaderLineCannotBeEmpty" xml:space="preserve">
+    <value>檔中第一行（頁面一行）不能為空。</value>
+  </data>
+  <data name="OpenSite" xml:space="preserve">
+    <value>進入網站</value>
+  </data>
+  <data name="NoSuggestionsFound" xml:space="preserve">
+    <value>根據額外的加班設置無建議</value>
+  </data>
+  <data name="ImportBpoWrongDateFormat" xml:space="preserve">
+    <value>資料格式錯誤</value>
+  </data>
+  <data name="ImportBpoWrongResourceFormat" xml:space="preserve">
+    <value>資源參數 (參數編號 {0} 數值為: {1} ) 是無效的。參數必須以小數給出，例如14.2</value>
+  </data>
+  <data name="ImportBpoDuplicateRecord" xml:space="preserve">
+    <value>發現重複記錄。導入的檔中多行具有相同資訊是不允許的。</value>
+  </data>
+  <data name="AbandonedRateParenthesisPercentSign" xml:space="preserve">
+    <value>放棄率 (%)</value>
+  </data>
+  <data name="AverageSpeedOfAnswersParenthesisSeconds" xml:space="preserve">
+    <value>平均應答速度 (s)</value>
+  </data>
+  <data name="ESLParenthesisPercentSign" xml:space="preserve">
+    <value>預估服務水準 (%)</value>
+  </data>
+  <data name="Interval" xml:space="preserve">
+    <value>時段</value>
+  </data>
+  <data name="SkillsParenthesisS" xml:space="preserve">
+    <value>技能</value>
+  </data>
+  <data name="OverstaffingAfterOT" xml:space="preserve">
+    <value>加班後的人力冗餘</value>
+  </data>
+  <data name="ScheduledAgentsAfterOT" xml:space="preserve">
+    <value>加班後的排定座席代表</value>
+  </data>
+  <data name="UnderstaffingAfterOT" xml:space="preserve">
+    <value>加班後的人力不足</value>
+  </data>
+  <data name="TotalAgentsInAlarmInBusinessUnit" xml:space="preserve">
+    <value>業務單元中所有處於告警的座席代表</value>
+  </data>
+  <data name="InAlarmInSite" xml:space="preserve">
+    <value>網站中的告警數</value>
   </data>
 </root>
