@@ -13354,7 +13354,7 @@ Dessa val är aktiverade:
     <value>Förfrågningarna på väntelistan för perioden {0} har behandlats.</value>
   </data>
   <data name="ProcessWaitlist" xml:space="preserve">
-    <value>BEHANDLA VÄNTELISTA</value>
+    <value>Behandla väntelista</value>
   </data>
   <data name="ProcessWaitlistRequestsReminder" xml:space="preserve">
     <value>Behandlingen av väntelistan kommer att göras i bakgrunden och kan ta lite tid innan den är klar</value>
@@ -15006,5 +15006,11 @@ Vill du registrera dig?</value>
   </data>
   <data name="ReportGeneratedTime" xml:space="preserve">
     <value>Rapport genererad</value>
+  </data>
+  <data name="NotShowingReforcastedAgents" xml:space="preserve">
+    <value>Omprognostiserad bemanning kan inte visas för aktuellt urval.</value>
+  </data>
+  <data name="NotShowingAbandonRate" xml:space="preserve">
+    <value>Andel tappade kan inte visas för aktuellt urval. </value>
   </data>
 </root>
