@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -32,8 +33,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 	    private readonly IScheduleStorageFactory _scheduleStorageFactory;
 	    private readonly IRepositoryFactory _repositoryFactory = new RepositoryFactory();
 	    private readonly MeetingParticipantPermittedChecker _meetingParticipantPermittedChecker = new MeetingParticipantPermittedChecker();
+	    private IList<ModifyMeetingEventArgs> _modifiedMeetingArgs;
 
-	    internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceCalculation resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, IScheduleStorageFactory scheduleStorageFactory)
+		internal SchedulerMeetingHelper(IInitiatorIdentifier initiatorIdentifier, ISchedulerStateHolder schedulerStateHolder, IResourceCalculation resourceOptimizationHelper, ISkillPriorityProvider skillPriorityProvider, IScheduleStorageFactory scheduleStorageFactory)
         {
             _initiatorIdentifier = initiatorIdentifier;
             _schedulerStateHolder = schedulerStateHolder;
@@ -139,8 +141,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
         internal void MeetingComposerStart(IMeeting meeting, IScheduleViewBase scheduleViewBase, bool editPermission, bool viewSchedulesPermission, IToggleManager toggleManager)
         {
             if(scheduleViewBase == null) return;
+	        _modifiedMeetingArgs = new List<ModifyMeetingEventArgs>();
 
-            MeetingViewModel meetingViewModel;
+			MeetingViewModel meetingViewModel;
             if (meeting == null)
             {
                 DateOnly? meetingStart = null;
@@ -193,7 +196,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
                 meetingComposerView.ModificationOccurred += meetingComposerView_ModificationOccurred;
                 meetingComposerView.ShowDialog();
                 meetingComposerView.ModificationOccurred -= meetingComposerView_ModificationOccurred;
-            }
+	            _modifiedMeetingArgs.ForEach(eventArg => NotifyModificationOccured(eventArg.ModifiedMeeting, eventArg.Delete));
+			}
         }
 
         /// <summary>
@@ -235,7 +239,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
         private void meetingComposerView_ModificationOccurred(object sender, ModifyMeetingEventArgs e)
         {
-            NotifyModificationOccured(e.ModifiedMeeting, e.Delete);
+			_modifiedMeetingArgs.Add(e);
         }
     }
 }
