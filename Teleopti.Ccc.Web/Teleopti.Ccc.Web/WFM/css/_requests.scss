@@ -237,10 +237,6 @@
 		.ui-grid-column-menu-button-last-col {
 			margin-right: 0;
 		}
-
-		.ui-grid-row{
-			overflow-y: hidden;
-		}
 	}
 
 	.request-header-full-height {
@@ -434,12 +430,10 @@
 			}
 
 			.ui-grid-canvas {
-				overflow-y: hidden;
 				padding: 0;
 				margin-top: 1px;
 				width: auto !important;
 			}
-
 
 			.ui-grid-row {
 				width: 100%;
