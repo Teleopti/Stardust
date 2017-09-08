@@ -161,7 +161,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 									{
 										var rPeriod = new DateTimePeriod(relevantCombRes.StartDateTime,relevantCombRes.EndDateTime);
 										var intersection =  requestPeriod.Intersection(rPeriod).GetValueOrDefault().ElapsedTime().TotalMinutes;
-										relevantCombRes.Resource -= intersection / rPeriod.ElapsedTime().TotalMinutes;
+										//need a test for that
+										var resource = intersection / rPeriod.ElapsedTime().TotalMinutes;
+										if (relevantCombRes.Resource - resource > 0)
+											relevantCombRes.Resource -= resource;
+										else
+											//what will happen here
+											relevantCombRes.Resource = 0;
 									}
 								});
 							}

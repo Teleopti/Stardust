@@ -58,9 +58,14 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		{
 		}
 
+		public virtual void OneTimeTearDown()
+		{
+		}
+
 		[OneTimeTearDown]
 		public void RestoreDatabases()
 		{
+			OneTimeTearDown();
 		}
 
 		//Register what's needed for OneTimeSetup here
