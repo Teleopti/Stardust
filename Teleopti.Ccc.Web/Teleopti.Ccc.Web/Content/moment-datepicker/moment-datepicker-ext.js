@@ -61,7 +61,7 @@ datepicker.show = function (e) {
         e.preventDefault();
     }
     if (!this.isInput) {
-        $(document).on('click', $.proxy(this.hide, this));
+        $(document).on('mouseup', $.proxy(this.hide, this));
     }
 
     this.element.trigger({
