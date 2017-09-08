@@ -8,10 +8,9 @@
         'wfm.autofocus',
         'toggleService',
         'angularMoment',
-		'wfm.dateOffset'
-    ]);
-
-    intraday.run([
+        'wfm.dateOffset',
+        'wfm.utilities'
+    ]).run([
         '$rootScope',
         '$state',
         '$location',

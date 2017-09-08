@@ -16,7 +16,7 @@
         'intradayPerformanceService',
         'intradayMonitorStaffingService',
         'intradayLatestTimeService',
-        'Toggle'
+		'Toggle'
     ];
 
     function intradayController(

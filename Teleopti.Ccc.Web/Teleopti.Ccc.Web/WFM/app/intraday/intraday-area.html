@@ -34,7 +34,7 @@
 						md-min-length="0"
 						placeholder="{{'SelectSkill'|translate}}">
 						<md-item-template>
-							<i ng-class="setDynamicIcon(skill)"></i>
+							<i ng-class="skillIcon.get(skill)"></i>
 							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 					<md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
 					</md-item-template>
@@ -113,7 +113,7 @@
 						<div class="wfm-chip-wrap" ng-repeat="skill in selectedSkillArea.Skills | orderBy : Name" ng-class="{'chip-disabled':!skill.DoDisplayData}">
 							<span class="wfm-chip" ng-click="openSkillFromArea(skill)">
 							<span class="chip-handle" ng-class="{'chip-warning':!skill.DoDisplayData}">
-								<i ng-class="setDynamicIcon(skill)"></i>
+								<i ng-class="skillIcon.get(skill)"></i>
 							</span>
 							<md-tooltip>
 								<span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
