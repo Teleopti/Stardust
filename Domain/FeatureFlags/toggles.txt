@@ -192,5 +192,6 @@ Wfm_Staffing_45411 = RC #Enables the entire Staffing page!
 
 WFM_WebScheduling_LowPriority_44320 = RC
 Report_Realtime_Scheduled_Time_Per_Activity_45560 = true
+Report_Realtime_Scheduled_Time_vs_Target_45559 = RC
 Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
 WFM_Intraday_SupportOtherSkillsLikeEmail_44026 = RC
