@@ -73,7 +73,7 @@ Wfm_People_MoveImportJobToBackgroundService_43582 = true
 Wfm_HideUnusedTeamsAndSites_42690 = true
 Wfm_SearchAgentBasedOnCorrectPeriod_44552 = true
 Wfm_AddMyTimeLink_45088 = true
-Wfm_GroupPages_45057 = RC
+Wfm_GroupPages_45057 = true
 Wfm_FetchBusinessHierarchyFromReadModel_45275 = RC
 
 MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211 = true
@@ -123,8 +123,8 @@ ResourcePlanner_CategorizeShiftSelection_xx = false
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_MergeTeamblockClassicScheduling_44289 = true
 ResourcePlanner_RespectSkillGroupShoveling_44156 = true
-ResourcePlanner_MergeTeamblockClassicIntraday_45508 = RC
-ResourcePlanner_RetireKeepPercentageOfShifts_45688 = RC
+ResourcePlanner_MergeTeamblockClassicIntraday_45508 = true
+ResourcePlanner_RetireKeepPercentageOfShifts_45688 = true
 ResourcePlanner_SpeedUpShiftsWithinDay_45694 = false # put on hold until we get new perf builds
 
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
@@ -165,7 +165,7 @@ Wfm_Web_Intraday_Rta_As_first_Choice_42206 = true
 Wfm_Intraday_ESL_41827 = true
 Wfm_Intraday_SupportSkillTypeWebChat_42591 = true
 Wfm_Intraday_SupportSkillTypeEmail_44002 = true
-WFM_Intraday_Show_For_Other_Days_43504 = RC
+WFM_Intraday_Show_For_Other_Days_43504 = true
 WFM_Intraday_SupportMultisiteSkill_43874 = true
 WFM_Intraday_Export_To_Excel_44892 = RC
 
@@ -178,7 +178,7 @@ HealthCheck_ReinitializeReadModels_39697 = true
 Staffing_Info_Configuration_44687 = RC
 WfmStaffing_AddOvertime_42524 = RC 
 Staffing_ReadModel_BetterAccuracy_Step3_44331 = RC
-Staffing_ReadModel_BetterAccuracy_Step4_43389 = RC
+Staffing_ReadModel_BetterAccuracy_Step4_43389 = true
 Staffing_ReadModel_Keep8DaysHistoricalData_44652 = true
 Staffing_BPOExchangeImport_45202 = true
 
