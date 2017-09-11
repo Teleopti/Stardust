@@ -62,6 +62,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			if (e) {
 				e.stopPropagation();
 			}
+			self.closeDatePickers();
 			self.resetToolbarActiveButtons();
 			self.addShiftTradeRequestActive(true);
 			Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow(date);
@@ -73,6 +74,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			if (e) {
 				e.stopPropagation();
 			}
+			self.closeDatePickers();
 			self.disableMenu();
 			self.resetToolbarActiveButtons();
 			self.addShiftTradeBulletinBoardActive(true);
@@ -103,6 +105,10 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 			self.addShiftTradeBulletinBoardActive(false);
 			self.addPostShiftForTradeActive(false);
 			self.addOvertimeRequestActive(false);
+		};
+
+		self.closeDatePickers = function(){
+			$('.datepicker').hide();
 		};
 	}
 
