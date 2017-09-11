@@ -47,6 +47,7 @@
 			},
 
 			setCurrentState: function (newState) {
+				newState.openedSiteIds = state.openedSiteIds;
 				mutate(state, newState);
 				cleanState();
 				storeState();
@@ -107,7 +108,10 @@
 			},
 
 			isSiteOpen: function (id) {
-				return state.openedSiteIds.some(function (siteId) { return siteId == id });
+				if ($sessionStorage.openedSiteIds)
+					return $sessionStorage.openedSiteIds.some(function (siteId) { return siteId == id });
+				else
+					return state.openedSiteIds.some(function (siteId) { return siteId == id });
 			},
 
 			openSite: function (id, opened) {
@@ -234,7 +238,8 @@
 				})
 					.map(function (site) {
 						return site.Id;
-					});
+					})
+					.concat($sessionStorage.rtaState.openedSiteIds);
 			}
 		}
 
@@ -247,7 +252,6 @@
 		}
 
 		function buildState(mutations) {
-
 			mutate(state, mutations);
 			cleanState();
 			storeState();
@@ -269,8 +273,9 @@
 				gotoState.skillIds = state.skillIds;
 			if (state.open)
 				gotoState.open = true;
-			if (state.openedSiteIds > 0)
+			if (state.openedSiteIds) {
 				gotoState.openedSiteIds = state.openedSiteIds;
+			}
 			return gotoState;
 		}
 
