@@ -1,65 +1,63 @@
 ﻿<div>
-    <div class="con-row">
-        <div class="con-flex panel material-depth-1">
-            <div class="con-row">
-                <div class="con-flex">
-                    <md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="vm.selectedSkill" md-search-text="searchSkillText"
-                        md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)"
-                        md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
-                        <md-item-template>
-                            <i ng-class="vm.dynamicIcon(skill)"></i>
-                            <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
-                            <md-tooltip>
-                                <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
-                                <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
-                                <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
-                            </md-tooltip>
-                        </md-item-template>
-                        <md-not-found>
-                            {{'RepViewerNoMoreMatches'|translate}}
-                        </md-not-found>
-                    </md-autocomplete>
-                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
+    <div class="view-header with-fab with-desc">
+        <div class="view-title">
+            <h1><i class="mdi mdi-account-switch"></i> Staffing</h1>
+        </div>
+        <div class="fab-wrapper" ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">
+            <button class="wfm-fab grow-out material-depth-1 info" ng-click="vm.goToImportExports()">
+                        <i class="mdi mdi-source-fork"></i>
+                        <md-tooltip>BPO Actions</md-tooltip>
+            </button>
+        </div>
+    </div>
+    <div class="panel material-depth-1">
+        <div class="con-row">
+            <div class="con-flex">
+                <md-autocomplete id="skill-id" class="autocomplete-skill" md-selected-item="vm.selectedSkill" md-search-text="searchSkillText"
+                    md-selected-item-change="vm.selectedSkillChange(vm.selectedSkill)" md-items="skill in vm.querySearchSkills(searchSkillText)"
+                    md-item-text="skill.Name" md-min-length="0" placeholder="{{'SelectSkill'|translate}}">
+                    <md-item-template>
+                        <i ng-class="vm.dynamicIcon(skill)"></i>
+                        <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
+                        <md-tooltip>
+                            <span ng-if="skill.DoDisplayData && skill.IsMultisiteSkill">{{skill.SkillType | translate}} - {{'MultisiteSkill' | translate}}</span>
+                            <span ng-if="skill.DoDisplayData && !skill.IsMultisiteSkill">{{skill.SkillType | translate}}</span>
+                            <span ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</span>
+                        </md-tooltip>
+                    </md-item-template>
+                    <md-not-found>
+                        {{'RepViewerNoMoreMatches'|translate}}
+                    </md-not-found>
+                </md-autocomplete>
+                <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
-                </div>
-                <div class="con-flex">
-                    <md-autocomplete id="area-id" class="autocomplete-skill" md-selected-item="vm.selectedArea" md-search-text="searchSkillAreaText"
-                        md-selected-item-change="vm.selectedAreaChange(area)" md-items="area in vm.querySearchAreas(searchSkillAreaText)"
-                        md-item-text="area.Name" md-min-length="0" placeholder="{{'SelectSkillArea'|translate}}">
-                        <md-item-template>
-                            <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{area.Name}}</span>
-                        </md-item-template>
-                        <md-not-found>
-                            {{'RepViewerNoMoreMatches'|translate}}
-                        </md-not-found>
-                    </md-autocomplete>
-                    <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
+            </div>
+            <div class="con-flex">
+                <md-autocomplete id="area-id" class="autocomplete-skill" md-selected-item="vm.selectedArea" md-search-text="searchSkillAreaText"
+                    md-selected-item-change="vm.selectedAreaChange(area)" md-items="area in vm.querySearchAreas(searchSkillAreaText)"
+                    md-item-text="area.Name" md-min-length="0" placeholder="{{'SelectSkillArea'|translate}}">
+                    <md-item-template>
+                        <span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{area.Name}}</span>
+                    </md-item-template>
+                    <md-not-found>
+                        {{'RepViewerNoMoreMatches'|translate}}
+                    </md-not-found>
+                </md-autocomplete>
+                <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
-                </div>
-                <div class="con-flex">
-                    <div class="wfm-checkbox" style="margin: 5px auto;">
-                        <input type="checkbox" id="check2" ng-checked="vm.useShrinkage" ng-click="vm.useShrinkageForStaffing()" />
-                        <label for="check2">
+            </div>
+            <div class="con-flex" style="margin-top: -10px;">
+                <team-schedule-datepicker selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay(vm.selectedDate)"></team-schedule-datepicker>
+            </div>
+            <div class="con-flex">
+                <div class="wfm-checkbox" style="margin: 5px auto;">
+                    <input type="checkbox" id="check2" ng-checked="vm.useShrinkage" ng-click="vm.useShrinkageForStaffing()" />
+                    <label for="check2">
                             <span class="wfm-checkbox-toggle"></span>
                             <span class="wfm-checkbox-label">{{'UseShrinkage'| translate}}</span>
                         </label>
-                    </div>
-                </div>
-                <div class="con-flex datepicker-container" style="margin-top: -10px;">
-                    <team-schedule-datepicker selected-date="vm.selectedDate" status="vm.showDatePicker" on-date-change="vm.navigateToNewDay(vm.selectedDate)"
-                        class="inline-block"></team-schedule-datepicker>
-                </div>
-                <div class="con-flex panel-menu">
-                    <div tabindex=0 class="context-menu card-context"ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">
-                        <i class="mdi mdi-dots-vertical"></i>
-                        <span class="context-menu-left">
-                            <ul class="wfm-list">
-                                <li ng-click="vm.goToImportExports()"><i class="mdi mdi-file-import" ></i>BPO Actions</li>
-                            </ul>
-                        </span>
-                    </div>
                 </div>
             </div>
         </div>
@@ -87,7 +85,8 @@
         </div>
     </div>
     <div class="con-footer">
-        <button class="wfm-btn" ng-show="vm.isOvertimeSuggestionEnabled()" ng-class="vm.showOverstaffSettings ? 'wfm-btn-invis-default' : 'wfm-btn-invis-primary'" ng-click="vm.toggleOverstaffSettings()">
+        <button class="wfm-btn" ng-show="vm.isOvertimeSuggestionEnabled()" ng-class="vm.showOverstaffSettings ? 'wfm-btn-invis-default' : 'wfm-btn-invis-primary'"
+            ng-click="vm.toggleOverstaffSettings()">
                 <span ng-if="!vm.showOverstaffSettings">{{'GetSuggestionsForOvertime' | translate}}</span>
                 <span ng-if="vm.showOverstaffSettings">{{'CloseOvertimeSettings' | translate}}</span>
                 </button>
