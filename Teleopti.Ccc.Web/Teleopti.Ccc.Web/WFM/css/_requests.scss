@@ -235,7 +235,7 @@
 		}
 
 		.ui-grid-column-menu-button-last-col {
-			margin-right: 0;
+			margin-rgiht: 20px;
 		}
 	}
 
@@ -338,9 +338,6 @@
 		.ui-grid-header-viewport {
 			overflow: visible;
 		}
-		/*.ui-grid-menu-button.ui-grid-menu-button {
-			margin-right: -15px;
-		}*/
 		.absence-account-cell {
 			float: left;
 		}
@@ -392,10 +389,6 @@
 			border: none !important;
 		}
 
-		.ui-grid-menu-button.ui-grid-menu-button {
-			right: -8px;
-		}
-
 		div.ui-grid-viewport.ng-isolate-scope {
 			overflow-x: hidden !important
 		}
@@ -407,6 +400,13 @@
 				border-left: none;
 			}
 		}
+	}
+
+	.ui-grid-menu-button {
+		top: 0px;
+		right: 0px;
+		width: 20px;
+		margin: 5px;
 	}
 
 	.shift-trade-view {
@@ -431,7 +431,7 @@
 
 			.ui-grid-canvas {
 				padding: 0;
-				margin-top: 1px;
+				padding-top: 1px;
 				width: auto !important;
 			}
 
@@ -453,10 +453,6 @@
 			box-sizing: border-box;
 			width: 100% !important;
 			height: 30px !important;
-		}
-
-		.ui-grid-menu-button.ui-grid-menu-button {
-			right: -8px;
 		}
 
 		.ui-grid-header-cell:last-child .ui-grid-column-resizer.right {
