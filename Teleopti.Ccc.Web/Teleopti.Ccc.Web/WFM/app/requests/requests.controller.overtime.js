@@ -255,7 +255,7 @@
 								angular.forEach(grid.columns,
 									function(column) {
 										var term = column.filters[0].term;
-										if (angular.isDefind(term)) {
+										if (angular.isDefined(term)) {
 											requestFilterSvc.setFilter(column.colDef.displayName, term.trim(), requestsTabNames.overtime);
 										}
 									});
