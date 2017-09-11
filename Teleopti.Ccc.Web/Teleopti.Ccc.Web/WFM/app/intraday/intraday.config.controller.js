@@ -1,16 +1,17 @@
 (function() {
     'use strict';
-    angular.module('wfm.intraday').controller('IntradayConfigCtrl', [
+    angular.module('wfm.intraday').controller('IntradayConfigController', [
         '$scope',
         '$state',
         'intradayService',
         '$filter',
         'NoticeService',
         '$translate',
-        function($scope, $state, intradayService, $filter, NoticeService, $translate) {
+        'skillIconService',
+        function($scope, $state, intradayService, $filter, NoticeService, $translate, skillIconService) {
             $scope.skills = [];
             $scope.skillAreaName = '';
-
+            $scope.getSkillIcon = skillIconService.get;
             $scope.exitConfigMode = function() {
                 $state.go('intraday', {isNewSkillArea: false});
             };

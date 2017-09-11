@@ -13,18 +13,18 @@
 			},
 			url: '/intraday',
 			templateUrl: 'app/intraday/intraday.html',
-			controller: 'IntradayCtrl'
+			controller: 'IntradayController'
 		})
 		.state('intraday.area',
 		{
 			templateUrl: 'app/intraday/intraday-area.html',
-			controller: 'IntradayAreaCtrl'
+			controller: 'IntradayAreaController'
 		})
 		.state('intraday.skill-area-config',
 		{
 			url: '/skill-area-config',
 			templateUrl: 'app/intraday/intraday-config-new.html',
-			controller: 'IntradayConfigCtrl'
+			controller: 'IntradayConfigController'
 		})
 	}
 })();

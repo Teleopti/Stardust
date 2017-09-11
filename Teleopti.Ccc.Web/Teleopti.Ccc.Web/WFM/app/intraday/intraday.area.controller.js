@@ -1,6 +1,6 @@
 (function() {
     'use strict';
-    angular.module('wfm.intraday').controller('IntradayAreaCtrl', intradayController);
+    angular.module('wfm.intraday').controller('IntradayAreaController', intradayController);
 
     intradayController.$inject = [
         '$scope',
@@ -16,7 +16,8 @@
         'intradayPerformanceService',
         'intradayMonitorStaffingService',
         'intradayLatestTimeService',
-		'Toggle'
+		'Toggle',
+		'skillIconService'
     ];
 
     function intradayController(
@@ -33,7 +34,8 @@
         intradayPerformanceService,
         intradayMonitorStaffingService,
         intradayLatestTimeService,
-        toggleSvc
+		toggleSvc,
+		skillIconService
     ) {
         var vm = this;
         var autocompleteSkill;
@@ -43,7 +45,8 @@
         var pollingTimeout = 60000;
         $scope.DeleteSkillAreaModal = false;
         $scope.prevArea;
-        $scope.drillable;
+		$scope.drillable;
+		$scope.getSkillIcon = skillIconService.get
         $scope.toggles = {
             showOptimalStaffing: [],
             showScheduledStaffing: [],

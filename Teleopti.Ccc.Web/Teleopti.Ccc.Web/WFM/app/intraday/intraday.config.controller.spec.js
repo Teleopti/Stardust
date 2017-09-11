@@ -1,5 +1,5 @@
 'use strict';
-describe('IntradayConfigCtrl', function () {
+describe('IntradayConfigController', function () {
 	var $httpBackend,
 		$controller,
 		$translate,
@@ -28,7 +28,7 @@ describe('IntradayConfigCtrl', function () {
 	}));
 
 	var createController = function () {
-		$controller('IntradayConfigCtrl', {
+		$controller('IntradayConfigController', {
 			$scope: scope,
 			$translate: $translate
 		});

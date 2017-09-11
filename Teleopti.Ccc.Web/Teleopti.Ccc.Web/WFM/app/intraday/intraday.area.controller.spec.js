@@ -1,5 +1,5 @@
 'use strict';
-describe('IntradayAreaCtrl', function () {
+describe('IntradayAreaController', function () {
 	var $httpBackend,
 	$controller,
 	$filter,
@@ -434,7 +434,7 @@ describe('IntradayAreaCtrl', function () {
 	}));
 
 	var createController = function (isNewlyCreatedSkillArea) {
-		$controller('IntradayAreaCtrl', {
+		$controller('IntradayAreaController', {
 			$scope: scope,
 			$translate: $translate
 		});

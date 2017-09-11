@@ -34,7 +34,7 @@
 						md-min-length="0"
 						placeholder="{{'SelectSkill'|translate}}">
 						<md-item-template>
-							<i ng-class="skillIcon.get(skill)"></i>
+							<i ng-class="getSkillIcon(skill)"></i>
 							<span md-highlight-text="searchSkillText" md-highlight-flags="^i">{{skill.Name}}</span>
 					<md-tooltip ng-if="!skill.DoDisplayData">{{'UnsupportedSkill' | translate}}</md-tooltip>
 					</md-item-template>
