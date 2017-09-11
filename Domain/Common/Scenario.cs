@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Common
 			_description = new Description(name);
 		}
 
-		protected Scenario()
+		public Scenario() : this("_")
 		{
 		}
 

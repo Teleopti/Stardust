@@ -24,21 +24,19 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeTimeZoneGuard TimeZoneGuard; //this shouldn't effect scheduling at all, but it does currently....
 
-		[TestCase(true)]
-		[TestCase(false)]
 		[Ignore("To be fixed #45670")]
-		public void UserTimeZoneShouldNotAffectSchedulingOutcome(bool usersTimeZoneSameAsScheduledAgentsTimeZone)
+		[Test]
+		public void UserTimeZoneShouldNotAffectSchedulingOutcome(
+			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string userTimeZone,
+			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string agentTimeZone)
 		{
-			TimeZoneGuard.SetTimeZone(usersTimeZoneSameAsScheduledAgentsTimeZone
-				? TimeZoneInfoFactory.TaipeiTimeZoneInfo()
-				: TimeZoneInfoFactory.UtcTimeZoneInfo());
+			TimeZoneGuard.SetTimeZone(TimeZoneInfo.FindSystemTimeZoneById(userTimeZone));
 			var date = new DateOnly(2017, 9, 7);
-			var activity = new Activity("_").WithId();
-			activity.RequiresSkill = true; //this was it! Claes! shouldn't it default to true!?
+			var activity = new Activity { RequiresSkill = true }.WithId();
 			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var scenario = new Scenario("_");
+			var scenario = new Scenario();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(6, 0, 6, 0, 15), new TimePeriodWithSegment(14, 0, 14, 0, 15), new ShiftCategory("_").WithId()));
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.TaipeiTimeZoneInfo()).WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneDay(date);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.FindSystemTimeZoneById(agentTimeZone)).WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), skill).WithSchedulePeriodOneDay(date);
 			var skillDays = skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, date.AddDays(-1), 1, 1, 1);
 			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(scenario, date.ToDateOnlyPeriod(), new[] { agent }, Enumerable.Empty<IPersonAssignment>(), skillDays);
 
