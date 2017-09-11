@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public Func<ISchedulerStateHolder> SchedulerStateHolderFrom;
 		public FakeTimeZoneGuard TimeZoneGuard; //this shouldn't effect scheduling at all, but it does currently....
 
-		[Ignore("To be fixed #45670")]
+		[Ignore("To be fixed #45818 - need more tests later (=choosing best shift when timezones differ)")]
 		[Test]
 		public void UserTimeZoneShouldNotAffectSchedulingOutcome(
 			[Values("Taipei Standard Time", "UTC", "Mountain Standard Time")] string userTimeZone,
