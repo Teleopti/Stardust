@@ -83,9 +83,7 @@ Scenario: Switch tab when other day than today is selected
 @OnlyRunIfEnabled('WFM_Intraday_Show_For_Other_Days_43504')
 Scenario: Switch skill when other day than today is selected
 	Given the time is '2016-12-21 14:00'
-	And there is queue statistics for the skill 'Skill A' up until '2016-12-22 17:00'
 	And there is queue statistics for the skill 'Skill B' up until '2016-12-22 17:00'
-	And there is forecast data for skill 'Skill A' for date '2016-12-22'
 	And there is forecast data for skill 'Skill B' for date '2016-12-22'
 	And I am viewing intraday page
 	And I pick the skill 'Skill A'
