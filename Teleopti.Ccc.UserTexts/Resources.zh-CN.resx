@@ -11637,9 +11637,6 @@ Teleopti R&amp;D</value>
   <data name="CampaignFailedUpdate" xml:space="preserve">
     <value>更新活动失败: {0} .</value>
   </data>
-  <data name="DragAndDropCsvFilesHereOrClickToUpload" xml:space="preserve">
-    <value>拖拽.csv到此或点击上传</value>
-  </data>
   <data name="ImportUsers" xml:space="preserve">
     <value>导入用户</value>
   </data>
