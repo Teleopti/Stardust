@@ -58,6 +58,12 @@
 				return self._state.selectedTextAndAbsenceRequestIds;
 			}
 		};
+
+		self.resetAllSelectedRequestsIds = function () {
+			self._state.selectedShiftTradeRequestIds = [];
+			self._state.selectedTextAndAbsenceRequestIds = [];
+			self._state.selectedOvertimeRequestIds = [];
+		}
 	}
 
 })();

@@ -64,18 +64,21 @@
 		};
 
 		vm.activeAbsenceAndTextTab = function () {
+			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.selectedTabIndex = 0;
 			vm.period = vm.absenceAndOvertimePeriod;
 			$state.go("requests.absenceAndText", {getParams: getParams});
 		};
 
 		vm.activeShiftTradeTab = function () {
+			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.selectedTabIndex = 1;
 			vm.period = vm.shiftTradePeriod;
 			$state.go("requests.shiftTrade", {getParams: getParams});
 		};
 
 		vm.activeOvertimeTab = function () {
+			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.selectedTabIndex = 2;
 			vm.period = vm.absenceAndOvertimePeriod;
 			$state.go("requests.overtime", {getParams: getParams});

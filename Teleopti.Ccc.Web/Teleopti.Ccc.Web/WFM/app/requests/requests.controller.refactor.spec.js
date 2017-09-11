@@ -23,7 +23,6 @@ describe('Requests - Refactor(remove later) controller controllers',
 			module('wfm.requests');
 
 			requestsDataService = new fakeRequestsDataService();
-			requestCommandParamsHolder = new fakeRequestCommandParamsHolder();
 
 			module(function ($provide) {
 				$provide.service('$state', function () { return fakeState; });
@@ -36,16 +35,16 @@ describe('Requests - Refactor(remove later) controller controllers',
 					}
 				});
 				$provide.service('requestsDataService', function () { return requestsDataService; });
-				$provide.service('requestCommandParamsHolder', function () { return requestCommandParamsHolder; });
 			});
 
 		});
 
-		beforeEach(inject(function (_$rootScope_, _$controller_, _$q_, _$httpBackend_) {
+		beforeEach(inject(function (_$rootScope_, _$controller_, _$q_, _$httpBackend_, _requestCommandParamsHolder_) {
 			$rootScope = _$rootScope_;
 			$controller = _$controller_;
 			$q = _$q_;
 			$httpBackend = _$httpBackend_;
+			requestCommandParamsHolder = _requestCommandParamsHolder_;
 
 			$httpBackend.whenGET('app/requests/html/requests.refactor.html').respond(function () {
 				return [200, true];
@@ -149,7 +148,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 			var target = setUpTarget();
 			var controller = target.controller;
 
-			requestCommandParamsHolder.setSelectedRequestsIds(['selectedIds']);
+			requestCommandParamsHolder.setSelectedRequestIds(['selectedIds']);
 			expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(1);
 			controller.onFavoriteSearchInitDefer.resolve();
 
@@ -169,11 +168,11 @@ describe('Requests - Refactor(remove later) controller controllers',
 				focusingSearch: false
 			};
 
-			requestCommandParamsHolder.setSelectedRequestsIds(['selectedIds']);
-			expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(1);
+			requestCommandParamsHolder.setSelectedRequestIds(['selectedIds'], true);
+			expect(requestCommandParamsHolder.getSelectedRequestsIds(true).length).toEqual(1);
 
 			controller.onSearchTermChangedCallback();
-			expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
+			expect(requestCommandParamsHolder.getSelectedRequestsIds(true).length).toEqual(0);
 		});
 
 		it('should broadcast reload.requests.with.selection when search term changed', function () {
@@ -214,18 +213,18 @@ describe('Requests - Refactor(remove later) controller controllers',
 				focusingSearch: false
 			};
 
-			requestCommandParamsHolder.setSelectedRequestsIds(['selectedIds']);
-			expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(1);
+			requestCommandParamsHolder.setSelectedRequestIds(['selectedIds'], true);
+			expect(requestCommandParamsHolder.getSelectedRequestsIds(true).length).toEqual(1);
 
 			controller.changeSelectedTeams(['fakeTeamId']);
-			expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
+			expect(requestCommandParamsHolder.getSelectedRequestsIds(true).length).toEqual(0);
 		});
 
 		it('should clear the selection after applying favorite', function () {
 			var controller = setUpTarget().controller;
 
-			requestCommandParamsHolder.setSelectedRequestsIds(['selectedIds']);
-			expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(1);
+			requestCommandParamsHolder.setSelectedRequestIds(['selectedIds'], true);
+			expect(requestCommandParamsHolder.getSelectedRequestsIds(true).length).toEqual(1);
 
 			controller.agentSearchOptions = {
 				keyword: "",
@@ -242,7 +241,7 @@ describe('Requests - Refactor(remove later) controller controllers',
 				SearchTerm: 'a',
 				TeamIds: ['fakeTeam1Id']
 			});
-			expect(requestCommandParamsHolder.getSelectedRequestsIds().length).toEqual(0);
+			expect(requestCommandParamsHolder.getSelectedRequestsIds(true).length).toEqual(0);
 		});
 
 		it('should get correct url when go to absence and text requests tab', function () {
@@ -359,6 +358,23 @@ describe('Requests - Refactor(remove later) controller controllers',
 			expect(isUsingRequestSubmitterTimeZoneChanged).toEqual(true);
 		});
 
+		it('should clear selected requests ids after changing tab', function () {
+
+			var target = setUpTarget();
+			var controller = target.controller;
+			controller.init();
+
+			requestCommandParamsHolder.setSelectedRequestIds([1], true);
+			requestCommandParamsHolder.setSelectedRequestIds([2], false);
+			requestCommandParamsHolder.setOvertimeSelectedRequestIds([3]);
+
+			controller.activeShiftTradeTab();
+
+			expect(requestCommandParamsHolder.getSelectedRequestsIds(true).length).toEqual(0);
+			expect(requestCommandParamsHolder.getSelectedRequestsIds(false).length).toEqual(0);
+			expect(requestCommandParamsHolder.getOvertimeSelectedRequestIds().length).toEqual(0);
+		});
+
 		function setUpTarget() {
 			var scope = $rootScope.$new();
 
@@ -375,19 +391,6 @@ describe('Requests - Refactor(remove later) controller controllers',
 				return $q(function (resolve) {
 					resolve({ Children: [] });
 				});
-			};
-		}
-
-		function fakeRequestCommandParamsHolder() {
-			var requestIds = [];
-			this.setSelectedRequestsIds = function (ids) {
-				requestIds = ids;
-			};
-			this.getSelectedRequestsIds = function () {
-				return requestIds;
-			};
-			this.resetSelectedRequestIds = function () {
-				requestIds = [];
 			};
 		}
 	});
