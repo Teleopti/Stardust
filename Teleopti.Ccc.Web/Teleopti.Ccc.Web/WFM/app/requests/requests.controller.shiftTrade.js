@@ -182,6 +182,7 @@
 		});
 
 		$scope.$on('reload.requests.without.selection', function () {
+			clearSelection();
 			vm.initialized && vm.reload();
 		});
 
@@ -403,6 +404,17 @@
 
 			vm.shiftTradeScheduleViewModels = shiftTradeGridConfiguration.getShiftTradeScheduleViewModels(requests,
 				vm.shiftTradeRequestDateSummary, vm.isUsingRequestSubmitterTimeZone);
+		}
+
+		function clearSelection() {
+			if (vm.gridApi) {
+				if (vm.gridApi.clearSelectedRows) {
+					vm.gridApi.clearSelectedRows();
+				}
+				vm.gridApi.grid.selection.selectAll = false;
+				vm.gridApi.selection.clearSelectedRows();
+			}
+			requestCommandParamsHolder.resetSelectedRequestIds(true);
 		}
 	}
 })();

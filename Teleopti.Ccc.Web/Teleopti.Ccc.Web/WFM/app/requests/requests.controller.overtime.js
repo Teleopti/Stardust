@@ -145,7 +145,8 @@
 			vm.initialized && vm.reload(data);
 		});
 
-		$scope.$on('reload.requests.without.selection', function() {
+		$scope.$on('reload.requests.without.selection', function () {
+			clearSelection();
 			vm.initialized && vm.reload();
 		});
 
@@ -350,6 +351,17 @@
 
 			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 			vm.gridOptions.data = vm.requests;
+		}
+
+		function clearSelection() {
+			if (vm.gridApi) {
+				if (vm.gridApi.clearSelectedRows) {
+					vm.gridApi.clearSelectedRows();
+				}
+				vm.gridApi.grid.selection.selectAll = false;
+				vm.gridApi.selection.clearSelectedRows();
+			}
+			requestCommandParamsHolder.resetOvertimeSelectedRequestIds();
 		}
 	}
 })();

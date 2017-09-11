@@ -14,7 +14,8 @@ describe('Requests shift trade controller tests',
 			requestGridStateSvc,
 			requestsFilterSvc,
 			uiGridConstants,
-			requestsTabNames;
+			requestsTabNames,
+			requestCommandParamsHolder;
 
 		var period = {
 				startDate: moment().startOf('week')._d,
@@ -65,7 +66,7 @@ describe('Requests shift trade controller tests',
 			});
 		});
 
-		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestGridStateService_, _RequestsFilter_, _uiGridConstants_, REQUESTS_TAB_NAMES) {
+		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestGridStateService_, _RequestsFilter_, _uiGridConstants_, REQUESTS_TAB_NAMES, _requestCommandParamsHolder_) {
 			$filter = _$filter_;
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
@@ -75,6 +76,7 @@ describe('Requests shift trade controller tests',
 			requestsFilterSvc = _RequestsFilter_;
 			uiGridConstants = _uiGridConstants_;
 			requestsTabNames = REQUESTS_TAB_NAMES;
+			requestCommandParamsHolder = _requestCommandParamsHolder_;
 			setUpTarget();
 		}));
 
@@ -681,6 +683,17 @@ describe('Requests shift trade controller tests',
 			});
 
 			expect(controller.gridApi.grid.selection.selectAll).toEqual(false);
+		});
+
+		it('should clear selection after reloading without selection', function () {
+			requestCommandParamsHolder.setSelectedRequestIds([1, 2], true);
+
+			compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			scope.$broadcast('reload.requests.without.selection');
+
+			expect(requestCommandParamsHolder.getSelectedRequestsIds(true).length).toEqual(0);
 		});
 
 		function setUpShiftTradeRequestData() {

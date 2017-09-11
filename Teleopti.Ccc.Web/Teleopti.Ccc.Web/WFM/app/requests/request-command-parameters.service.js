@@ -39,6 +39,10 @@
 			return self._state.selectedOvertimeRequestIds;
 		};
 
+		self.resetOvertimeSelectedRequestIds = function() {
+			self._state.selectedOvertimeRequestIds = [];
+		}
+
 		self.resetSelectedRequestIds = function (isShiftTrade) {
 			if (isShiftTrade) {
 				self._state.selectedShiftTradeRequestIds = [];
