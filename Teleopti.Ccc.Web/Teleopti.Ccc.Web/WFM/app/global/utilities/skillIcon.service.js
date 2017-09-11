@@ -1,11 +1,8 @@
 (function() {
     'use strict';
     angular.module('wfm.utilities').factory('skillIconService', [
-        '$log',
-        function($log) {
+        function() {
             var get = function(skill) {
-                $log.log('get: skill', skill);
-
                 if (!skill.DoDisplayData) {
                     return 'mdi mdi-alert';
                 }
