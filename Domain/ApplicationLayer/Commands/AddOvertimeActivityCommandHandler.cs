@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			_personForId = personForId;
 			_multiplicatorDefinitionSetForId = multiplicatorDefinitionSetForId;
 			_scheduleStorage = scheduleStorage;
-			this._scheduleDifferenceSaver = scheduleDifferenceSaver;
+			_scheduleDifferenceSaver = scheduleDifferenceSaver;
 		}
 
 		public void Handle(AddOvertimeActivityCommand command)
