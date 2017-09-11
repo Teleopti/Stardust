@@ -1,7 +1,7 @@
 <div class="view-header with-desc">
   <div class="view-title" ng-if="vm.selectedWorkload.Days.length > 1">
     <h1><i class="mdi mdi-chart-line"></i> {{vm.selectedWorkload.Name}} ({{vm.selectedWorkload.Scenario.Name}})</h1>
-    <p>{{'ForecastWorkloadIntro'|translate}}</p>
+    <p>This is the current forecast for this workload</p>
   </div>
   <div ng-if="vm.selectedWorkload.Days.length < 1">
     <p>No forecast data found for {{vm.selectedWorkload.Name}}, try running a forecast on the selected skill with "{{vm.selectedWorkload.Scenario.Name}}" scenario</p>
