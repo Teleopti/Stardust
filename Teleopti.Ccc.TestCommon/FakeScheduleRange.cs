@@ -188,6 +188,8 @@ namespace Teleopti.Ccc.TestCommon
 		{
 			return new DifferenceCollection<IPersistableScheduleData>();
 		}
+
+		public bool CanSeeUnpublishedSchedules { get; set; }
 	}
 }
 

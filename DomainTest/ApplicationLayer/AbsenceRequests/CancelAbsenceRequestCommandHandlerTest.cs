@@ -55,7 +55,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeScheduleDifferenceSaver ScheduleDifferenceSaver;
 		public FakeGlobalSettingDataRepository GlobalSetting;
 		public INow Now;
-	
+		public FullPermission FullPermission;
+
 		private IPerson person;
 		private IAbsence absence;
 
@@ -343,6 +344,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			Assert.AreEqual(Resources.OnlyAbsenceRequestCanBeCancelled, cancelRequestCommand.ErrorMessages[0]);
 		}
 
+		[Test]
+		public void ShouldRecoverPersonalAccountWhenAgentCancellingAnAbsenceRequestOutOfSchedulePublishedDate()
+		{
+			commonSetup();
+
+			var workflowControlSet = WorkflowControlSetFactory.CreateWorkFlowControlSet(absence, new PendingAbsenceRequest(),
+				false);
+			workflowControlSet.SchedulePublishedToDate = new DateTime(2017, 10, 15);
+			workflowControlSet.PreferenceInputPeriod = new DateOnlyPeriod(new DateOnly(2016, 1, 1), new DateOnly(2017, 10, 15));
+			workflowControlSet.PreferencePeriod = workflowControlSet.PreferenceInputPeriod;
+			person.WorkflowControlSet = workflowControlSet;
+
+			FullPermission.AddToBlackList(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+
+			var absenceDateTimePeriod = new DateTimePeriod(2018, 04, 15, 00, 2018, 04, 19, 23);
+			var absenceRequest = createApprovedAbsenceRequest(absence, absenceDateTimePeriod, person);
+			var personRequest = absenceRequest.Parent as PersonRequest;
+			createShiftsForPeriod(absenceDateTimePeriod);
+			createPersonAbsence(absence, absenceDateTimePeriod, person);
+
+			var accountDay1 = createAccountDay(new DateOnly(2017, 7, 1), TimeSpan.FromDays(0), TimeSpan.FromDays(5),
+				TimeSpan.FromDays(5));
+			createPersonAbsenceAccount(person, absence, accountDay1);
+
+			var cancelRequestCommand = new CancelAbsenceRequestCommand {PersonRequestId = personRequest.Id.GetValueOrDefault()};
+			Target.Handle(cancelRequestCommand);
+
+			Assert.AreEqual(5, accountDay1.Remaining.TotalDays);
+		}
+
 		private AccountDay createAccountDay(DateOnly startDate, TimeSpan balanceIn, TimeSpan accrued, TimeSpan balance)
 		{
 			return new AccountDay(startDate)
@@ -436,7 +467,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		private static IPersonAssignment createAssignment(IPerson person,DateTime startDate,DateTime endDate, IScenario scenario)
 		{
 			return PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(person,
-				scenario, new DateTimePeriod(startDate,endDate));
+				scenario, new DateTimePeriod(startDate,endDate)).WithId();
 		}
 
 	}

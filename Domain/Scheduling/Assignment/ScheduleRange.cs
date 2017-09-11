@@ -45,6 +45,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			get { return _snapshot ?? (_snapshot = new ScheduleRange(Owner, this, _permissionChecker)); }
 		}
 
+		public bool CanSeeUnpublishedSchedules { get; set; } = false;
+
 		public IEnumerable<DateOnlyPeriod> AvailablePeriods()
 		{
 			return _availablePeriods.Value;
@@ -227,9 +229,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
-			var canSeeUnpublished =
+			var hasViewUnpublishedSchedulesPermission =
 				PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
-			return getScheduledDayCollection(dateOnlyPeriod, canSeeUnpublished);
+			return getScheduledDayCollection(dateOnlyPeriod, hasViewUnpublishedSchedulesPermission || CanSeeUnpublishedSchedules);
 		}
 
 		/// <summary>

@@ -15,6 +15,8 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
     /// </remarks>
     public interface IScheduleRange : ISchedule
     {
+		bool CanSeeUnpublishedSchedules { get; set; }
+
 		DateTimePeriod? TotalPeriod();
 
 		/// <summary>
