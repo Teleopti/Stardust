@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyProtectedConstructorWorks()
         {
-            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(_scenario.GetType()));
+            Assert.IsTrue(ReflectionHelper.HasDefaultConstructor(_scenario.GetType(), true));
         }
 
         [Test]
