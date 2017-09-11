@@ -256,7 +256,8 @@
 				skillAreaId: undefined,
 				skillIds: undefined,
 				siteIds: undefined,
-				teamIds: undefined
+				teamIds: undefined,
+				openedSiteIds: undefined
 			};
 			if (state.siteIds.length > 0)
 				gotoState.siteIds = state.siteIds;
@@ -268,6 +269,8 @@
 				gotoState.skillIds = state.skillIds;
 			if (state.open)
 				gotoState.open = true;
+			if (state.openedSiteIds > 0)
+				gotoState.openedSiteIds = state.openedSiteIds;
 			return gotoState;
 		}
 
