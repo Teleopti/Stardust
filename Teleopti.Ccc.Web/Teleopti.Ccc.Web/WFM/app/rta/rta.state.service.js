@@ -108,9 +108,6 @@
 			},
 
 			isSiteOpen: function (id) {
-				if ($sessionStorage.openedSiteIds)
-					return $sessionStorage.openedSiteIds.some(function (siteId) { return siteId == id });
-				else
 					return state.openedSiteIds.some(function (siteId) { return siteId == id });
 			},
 
@@ -260,8 +257,7 @@
 				skillAreaId: undefined,
 				skillIds: undefined,
 				siteIds: undefined,
-				teamIds: undefined,
-				openedSiteIds: undefined
+				teamIds: undefined
 			};
 			if (state.siteIds.length > 0)
 				gotoState.siteIds = state.siteIds;
@@ -273,9 +269,7 @@
 				gotoState.skillIds = state.skillIds;
 			if (state.open)
 				gotoState.open = true;
-			if (state.openedSiteIds) {
-				gotoState.openedSiteIds = state.openedSiteIds;
-			}
+
 			return gotoState;
 		}
 
