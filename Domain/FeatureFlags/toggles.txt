@@ -102,6 +102,7 @@ MobileApps_EnableMobileNotifications_44476 = true
 MyTimeWeb_MobileResponsive_43826 = true
 MyTimeWeb_ShowSeatBookingMonthView_39068 = true
 MyTimeWeb_TeamScheduleNoReadModel_36210 = true
+Staffing_Info_Configuration_44687 = RC
 
 Scheduler_IntradayOptimization_36617 = true
 Scheduler_ShowSkillPrioLevels_41980 = true
@@ -114,6 +115,7 @@ Mailbox_Optimization_41900 = true
 No_UnitOfWork_Nesting_42175 = true
 Landing_Page_Data_Protection_Question_35721 = true
 Reporting_Optional_Columns_42066 = true
+WFM_WebScheduling_LowPriority_44320 = RC
 
 SchedulingScreen_BatchAgentValidation_41552 = true #Toggle for feature 41542
 Scheduler_LoadWithoutRequests_38567 = true
@@ -168,16 +170,16 @@ Wfm_Intraday_SupportSkillTypeEmail_44002 = true
 WFM_Intraday_Show_For_Other_Days_43504 = true
 WFM_Intraday_SupportMultisiteSkill_43874 = true
 WFM_Intraday_Export_To_Excel_44892 = RC
+WFM_Intraday_SupportOtherSkillsLikeEmail_44026 = RC
 
 HealthCheck_ValidateReadModelPersonScheduleDay_39421 = true
 HealthCheck_ValidateReadModelScheduleDay_39423 = true
 HealthCheck_EasyValidateAndFixReadModels_39696 = true
 HealthCheck_ReinitializeReadModels_39697 = true
 
-
-Staffing_Info_Configuration_44687 = RC
+Wfm_Staffing_45411 = RC #Enables the entire Staffing page!
 WfmStaffing_AddOvertime_42524 = RC 
-Staffing_ReadModel_BetterAccuracy_Step3_44331 = RC
+Staffing_ReadModel_BetterAccuracy_Step3_44331 = true
 Staffing_ReadModel_BetterAccuracy_Step4_43389 = true
 Staffing_ReadModel_Keep8DaysHistoricalData_44652 = true
 Staffing_BPOExchangeImport_45202 = true
@@ -188,10 +190,7 @@ Wfm_Outbound_IgnoreScheduleForReplan_43752 = true
 WFM_Export_Forecast_44716 = true
 WFM_RedirectPermissionToWeb_44562 = true
 WFM_TrainingPlanner_44780 = RC
-Wfm_Staffing_45411 = RC #Enables the entire Staffing page!
 
-WFM_WebScheduling_LowPriority_44320 = RC
 Report_Realtime_Scheduled_Time_Per_Activity_45560 = true
 Report_Realtime_Scheduled_Time_vs_Target_45559 = RC
 Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
-WFM_Intraday_SupportOtherSkillsLikeEmail_44026 = RC
