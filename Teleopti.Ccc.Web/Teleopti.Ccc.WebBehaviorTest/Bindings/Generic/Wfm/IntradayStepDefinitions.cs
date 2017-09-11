@@ -126,7 +126,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 							 "var skillet = scope.skills.find(function(e){{return e.Name === '" + skillName + "'}});" +
 							 "scope.selectedSkill = skillet;" +
 							 "scope.selectedSkillChange(skillet);" +
-							 "scope.changeChosenOffset(scope.chosenOffset.value);";
+							 "scope.changeChosenOffset(scope.chosenOffset.value);" +
+							 "setTimeout(function(){console.log('delay')}, 1000);"; 
 			Browser.Interactions.Javascript(javascript);
 		}
 
