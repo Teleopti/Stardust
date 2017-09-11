@@ -15,14 +15,18 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly INow _now;
 		private readonly IUserTimeZone _userTimeZone;
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
+		private readonly ISkillTypeInfoProvider _skillTypeInfoProvider;
 
-		public IncomingTrafficViewModelCreator(IIntradayMonitorDataLoader intradayMonitorDataLoader, IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone, ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider)
+		public IncomingTrafficViewModelCreator(IIntradayMonitorDataLoader intradayMonitorDataLoader,
+			IIntervalLengthFetcher intervalLengthFetcher, INow now, IUserTimeZone userTimeZone,
+			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider, ISkillTypeInfoProvider skillTypeInfoProvider)
 		{
 			_intradayMonitorDataLoader = intradayMonitorDataLoader;
 			_intervalLengthFetcher = intervalLengthFetcher;
 			_now = now;
 			_userTimeZone = userTimeZone;
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
+			_skillTypeInfoProvider = skillTypeInfoProvider;
 		}
 
 		public IntradayIncomingViewModel Load(Guid[] skillIdList)
@@ -38,6 +42,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public IntradayIncomingViewModel Load(Guid[] skillIdList, DateTime utcDate)
 		{
 			var supportedSkills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
+			var abandonRateSupported = supportedSkills.All(x => _skillTypeInfoProvider.GetSkillTypeInfo(x).SupportsAbandonRate);
 
 			var intervals = _intradayMonitorDataLoader.Load(supportedSkills.Select(x => x.Id.Value).ToArray(),
 				_userTimeZone.TimeZone(),
@@ -79,7 +84,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 				}
 					
 				averageSpeedOfAnswer.Add(interval.AnsweredCalls.HasValue ? interval.AverageSpeedOfAnswer : null);
-				abandonedRate.Add(interval.AbandonedCalls.HasValue ? interval.AbandonedRate * 100 : null);
+				abandonedRate.Add(interval.AbandonedCalls.HasValue && abandonRateSupported ? interval.AbandonedRate * 100 : null);
 
 				serviceLevel.Add(interval.AnsweredCallsWithinSL.HasValue ? (double?)Math.Min(interval.ServiceLevel.Value * 100, 100): null);
 			}
@@ -114,7 +119,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					? -99
 					: Math.Min(summary.AnsweredCallsWithinSL / summary.CalculatedCalls, 1);
 
-			summary.AbandonRate = Math.Abs(summary.CalculatedCalls) < 0.0001
+			summary.AbandonRate = Math.Abs(summary.CalculatedCalls) < 0.0001 || !abandonRateSupported
 					? -99
 					: summary.AbandonedCalls / summary.CalculatedCalls;
 

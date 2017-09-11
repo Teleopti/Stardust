@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 		private readonly ISupportedSkillsInIntradayProvider _supportedSkillsInIntradayProvider;
 		private readonly EmailBacklogProvider _emailBacklogProvider;
 		private readonly ISkillDayLoadHelper _skillDayLoadHelper;
+		private readonly ISkillTypeInfoProvider _skillTypeInfoProvider;
 
 		public StaffingViewModelCreator(
 			INow now,
@@ -45,7 +46,8 @@ namespace Teleopti.Ccc.Domain.Intraday
 			ReforecastedStaffingProvider reforecastedStaffingProvider,
 			ISupportedSkillsInIntradayProvider supportedSkillsInIntradayProvider,
 			EmailBacklogProvider emailBacklogProvider,
-			ISkillDayLoadHelper skillDayLoadHelper
+			ISkillDayLoadHelper skillDayLoadHelper,
+			ISkillTypeInfoProvider skillTypeInfoProvider
 			)
 		{
 			_now = now;
@@ -64,6 +66,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_supportedSkillsInIntradayProvider = supportedSkillsInIntradayProvider;
 			_emailBacklogProvider = emailBacklogProvider;
 			_skillDayLoadHelper = skillDayLoadHelper;
+			_skillTypeInfoProvider = skillTypeInfoProvider;
 		}
 
 		public IntradayStaffingViewModel Load(Guid[] skillIdList, int dayOffset)
@@ -83,6 +86,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			var skills = _supportedSkillsInIntradayProvider.GetSupportedSkills(skillIdList);
 			if (!skills.Any())
 				return new IntradayStaffingViewModel();
+			var supportReforecastedAgents = skills.All(x => _skillTypeInfoProvider.GetSkillTypeInfo(x).SupportsReforecastedAgents);
 
 			var skillDaysBySkills = _skillDayLoadHelper.LoadSchedulerSkillDays(new DateOnlyPeriod(userDateOnly, userDateOnly.AddDays(1)), skills, scenario);
 
@@ -102,14 +106,17 @@ namespace Teleopti.Ccc.Domain.Intraday
 
 			var workloadBacklog = _emailBacklogProvider.GetStatisticsBacklogByWorkload(skillDaysBySkills, statisticsPerWorkloadInterval, userDateOnly, minutesPerInterval, forecastedCallsModel.SkillDayStatsRange);
 
-			 var updatedForecastedSeries = _reforecastedStaffingProvider.DataSeries(
-				forecastedStaffing,
-				statisticsPerWorkloadInterval,
-				forecastedCallsModel.CallsPerSkill,
-				latestStatsTime,
-				minutesPerInterval,
-				timeSeries
-			);
+			var updatedForecastedSeries = supportReforecastedAgents
+				? _reforecastedStaffingProvider.DataSeries(
+					forecastedStaffing,
+					statisticsPerWorkloadInterval,
+					forecastedCallsModel.CallsPerSkill,
+					latestStatsTime,
+					minutesPerInterval,
+					timeSeries
+				)
+				: new double?[0];
+
 			var requiredStaffingPerSkill = _requiredStaffingProvider.Load(statisticsPerWorkloadInterval, 
 				skills,
 				skillDaysBySkills,

@@ -739,7 +739,41 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.Should().Not.Be.Null();
 			result.LatestActualIntervalStart.Should().Have.Value();
 			result.LatestActualIntervalStart.Should().Be.EqualTo(latestStatsTime);
+		}
 
+		[Test]
+		[Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026)]
+		[Toggle(Toggles.Wfm_Intraday_SupportSkillTypeEmail_44002)]
+		public void ShouldNotReturnAbandonRateForSkillNotSupportingIt()
+		{
+			var userNow = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+			var latestStatsTime = new DateTime(2016, 8, 26, 8, 0, 0, DateTimeKind.Utc);
+
+			fakeScenarioAndIntervalLength();
+			var skill = createEmailSkill(minutesPerInterval, "skill", new TimePeriod(8, 0, 8, 15));
+
+			IntradayMonitorDataLoader.AddInterval(new IncomingIntervalModel()
+			{
+				IntervalDate = latestStatsTime.Date,
+				IntervalId = new IntervalBase(latestStatsTime, (60 / minutesPerInterval) * 24).Id,
+				CalculatedCalls = 20,
+				AnsweredCalls = 16,
+				AnsweredCallsWithinSL = 16,
+				SpeedOfAnswer = 10,
+				AbandonedCalls = 4,
+				AbandonedRate = 0.2d,
+				ServiceLevel = 0.8d
+			});
+
+			SkillRepository.Has(skill);
+
+			var result = Target.Load(new Guid[] {skill.Id.Value});
+			result.DataSeries.ServiceLevel.Length.Should().Be.EqualTo(1);
+			result.DataSeries.ServiceLevel[0].Should().Not.Be.EqualTo(null);
+			result.DataSeries.AbandonedRate.Length.Should().Be.EqualTo(1);
+			result.DataSeries.AbandonedRate[0].Should().Be.EqualTo(null);
+			result.Summary.AbandonRate.Should().Be.EqualTo(-99);
 		}
 
 		private double calculateEsl(IList<SkillCombinationResource> scheduledStaffingList, ISkillDay skillDay, double forecastedCallsSkill, int intervalPosition)

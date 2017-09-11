@@ -387,5 +387,33 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			vm2.DataSeries.ForecastedStaffing.First().Should().Not.Be.EqualTo(forecastedAgentsStart);
 			vm2.DataSeries.ForecastedStaffing.Last().Should().Not.Be.EqualTo(forecastedAgentsEnd);
 		}
+
+		[Test]
+		[Toggle(Toggles.WFM_Intraday_SupportOtherSkillsLikeEmail_44026)]
+		public void ShouldNotShowReforecastedAgentsForSkillNotSupportingIt()
+		{
+			var userNow = new DateTime(2016, 8, 26, 4, 15, 0, DateTimeKind.Utc);
+			var latestStatsTime = new DateTime(2016, 8, 26, 4, 0, 0, DateTimeKind.Utc);
+			var openHours = new TimePeriod(1, 0, 5, 0);
+			Now.Is(TimeZoneHelper.ConvertToUtc(userNow, TimeZone.TimeZone()));
+
+			var scenario = StaffingViewModelCreatorTestHelper.FakeScenarioAndIntervalLength(IntervalLengthFetcher, ScenarioRepository, minutesPerInterval);
+			var skillBackOffice = StaffingViewModelCreatorTestHelper.CreateBackOfficeSkill(_skillResolution, "skill", openHours);
+			SkillRepository.Has(skillBackOffice);
+
+			var skillDay = StaffingViewModelCreatorTestHelper.CreateSkillDay(skillBackOffice, scenario, userNow, openHours, false, _slaTwoHours, false);
+			var skillDayCalculator = new SkillDayCalculator(skillBackOffice,
+				new List<ISkillDay>() { skillDay },
+				new DateOnlyPeriod(new DateOnly(userNow), new DateOnly(userNow)));
+			skillDay.SkillDayCalculator = skillDayCalculator;
+			SkillDayRepository.Has(skillDay);
+
+			var skillStats = StaffingViewModelCreatorTestHelper.CreateStatisticsBasedOnForecastedTasks(skillDay, latestStatsTime, minutesPerInterval, TimeZone.TimeZone());
+			IntradayQueueStatisticsLoader.HasStatistics(skillStats);
+			var vm2 = Target.Load(new[] { skillBackOffice.Id.Value });
+
+			vm2.DataSeries.Should().Not.Be.EqualTo(null);
+			vm2.DataSeries.UpdatedForecastedStaffing.Length.Should().Be(0);
+		}
 	}
 }
