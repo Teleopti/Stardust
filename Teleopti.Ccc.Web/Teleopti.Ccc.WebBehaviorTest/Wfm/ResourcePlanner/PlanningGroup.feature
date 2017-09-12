@@ -40,7 +40,6 @@ Scenario: Create planning group
 	And I save planning group
 	Then I should see 'PlanningGroup 1' in the planning group list
 
-@ignore
 Scenario: Delete planning group
 	Given there is a site named 'Site 1'
 	And there is a team named 'Team 1' on 'Site 1'

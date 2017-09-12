@@ -9,7 +9,7 @@
 
 	function Controller($state, $timeout, $stateParams, planningGroupService, NoticeService, $translate, debounceService, localeLanguageSortingService, editPlanningGroup) {
 		var vm = this;
-		
+
 		vm.requestSent = false;
 		vm.searchString = '';
 		vm.selectedResults = [];
@@ -130,8 +130,9 @@
 			if (!editPlanningGroup) return;
 			if (!vm.requestSent) {
 				vm.requestSent = true;
-				returnToOverview();
-				return planningGroupService.removePlanningGroup({ id: editPlanningGroup.Id });
+				return planningGroupService.removePlanningGroup({ id: editPlanningGroup.Id }).$promise.then(function () {
+					returnToOverview();
+				});
 			}
 		}
 	}
