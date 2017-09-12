@@ -16,6 +16,7 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure.DataTableDefinition
 			table.Columns.Add("datasource_id", typeof(int));
 			table.Columns.Add("insert_date", typeof(DateTime));
 			table.Columns.Add("update_date", typeof(DateTime));
+			table.Columns.Add("utc_in_use", typeof(bool));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

@@ -16,6 +16,17 @@ AS
 BEGIN
 
   INSERT INTO [mart].[dim_time_zone]
+  (
+	 time_zone_code, 
+	 time_zone_name, 
+	 default_zone, 
+	 utc_conversion, 
+	 utc_conversion_dst, 
+	 datasource_id, 
+	 insert_date, 
+	 update_date,
+	 to_be_deleted
+	 )
   SELECT 
             @time_zone_code
             ,@time_zone_name

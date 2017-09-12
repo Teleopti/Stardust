@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 		public AnalyticsTimeZoneRepository(ICurrentAnalyticsUnitOfWork analyticsUnitOfWork) : base(analyticsUnitOfWork)
 		{
 		}
+
 	}
 
 	public abstract class AnalyticsTimeZoneRepositoryBase
@@ -23,12 +24,27 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			AnalyticsUnitOfWork = analyticsUnitOfWork;
 		}
 
+		public void SetUtcInUse()
+		{
+			var query = "UPDATE mart.dim_time_zone SET utc_in_use = 1 where time_zone_code = 'UTC'";
+			AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(query).ExecuteUpdate();
+		}
+
+
+		public void SetToBeDeleted(string timeZoneCode)
+		{
+			var query = $@"UPDATE mart.dim_time_zone SET to_be_deleted = 1 where time_zone_code='{timeZoneCode}'";
+			AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(query).ExecuteUpdate();
+		}
+
 		public AnalyticsTimeZone Get(string timeZoneCode)
 		{
 			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				$@"select 
 	                time_zone_id {nameof(AnalyticsTimeZone.TimeZoneId)},
-					time_zone_code {nameof(AnalyticsTimeZone.TimeZoneCode)}
+					time_zone_code {nameof(AnalyticsTimeZone.TimeZoneCode)},
+					utc_in_use {nameof(AnalyticsTimeZone.IsUtcInUse)},
+					to_be_deleted {nameof(AnalyticsTimeZone.ToBeDeleted)}
 				from mart.dim_time_zone WITH (NOLOCK) where time_zone_code=:{nameof(timeZoneCode)}")
 				.SetString(nameof(timeZoneCode), timeZoneCode)
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsTimeZone)))
@@ -40,7 +56,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			return AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(
 				$@"select 
 	                time_zone_id {nameof(AnalyticsTimeZone.TimeZoneId)},
-					time_zone_code {nameof(AnalyticsTimeZone.TimeZoneCode)}
+					time_zone_code {nameof(AnalyticsTimeZone.TimeZoneCode)},
+					utc_in_use {nameof(AnalyticsTimeZone.IsUtcInUse)},
+					to_be_deleted {nameof(AnalyticsTimeZone.ToBeDeleted)}
 				from mart.dim_time_zone WITH (NOLOCK)")
 				.SetResultTransformer(Transformers.AliasToBean(typeof(AnalyticsTimeZone)))
 				.List<AnalyticsTimeZone>();

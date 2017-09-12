@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			table.Columns.Add("insert_date");
 			table.Columns.Add("update_date");
 			table.Columns.Add("to_be_deleted", typeof(bool));
-			//table.Columns.Add("only_one_default_zone");
+			table.Columns.Add("utc_in_use", typeof(bool));
 			return table;
 		}
 
@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.TestCommon.TestData.Analytics.Tables
 			row["insert_date"] = DateTime.Now;
 			row["update_date"] = DateTime.Now;
 			row["to_be_deleted"] = false;
+			row["utc_in_use"] = false;
 			dataTable.Rows.Add(row);
 		}
 	}

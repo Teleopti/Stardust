@@ -7,5 +7,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 	{
 		AnalyticsTimeZone Get(string timeZoneCode);
 		IList<AnalyticsTimeZone> GetAll();
+		void SetUtcInUse();
+		void SetToBeDeleted(string timeZoneCode);
 	}
 }

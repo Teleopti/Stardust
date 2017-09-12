@@ -34,6 +34,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			
 			var result = WithAnalyticsUnitOfWork.Get(() => Target.Get("W. Europe Standard Time"));
 			result.TimeZoneId.Should().Be.EqualTo(1);
+			result.IsUtcInUse.Should().Be.False();
+			result.ToBeDeleted.Should().Be.False();
 		}
 
 		[Test]
@@ -43,6 +45,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 			result.Should().Not.Be.Empty();
 			result.Where(x => x.TimeZoneCode == "W. Europe Standard Time").Should().Not.Be.Empty();
 			result.Where(x => x.TimeZoneCode == "UTC").Should().Not.Be.Empty();
+		}
+
+		[Test]
+		public void ShouldUpdateUtcInUse()
+		{
+			WithAnalyticsUnitOfWork.Do(() => Target.SetUtcInUse());
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.Get("UTC"));
+			result.IsUtcInUse.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMarkDeletedTimeZones()
+		{
+			var result = WithAnalyticsUnitOfWork.Get(() => Target.Get("W. Europe Standard Time"));
+			result.ToBeDeleted.Should().Be.False();
+			WithAnalyticsUnitOfWork.Do(() => Target.SetToBeDeleted("W. Europe Standard Time"));
+			result = WithAnalyticsUnitOfWork.Get(() => Target.Get("W. Europe Standard Time"));
+			result.ToBeDeleted.Should().Be.True();
 		}
 	}
 }

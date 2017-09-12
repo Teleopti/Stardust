@@ -32,5 +32,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		{
 			return timeZones;
 		}
+
+		public void SetUtcInUse()
+		{
+			var timeZOne = timeZones.FirstOrDefault(x => x.TimeZoneCode == "UTC");
+			timeZOne.IsUtcInUse = true;
+		}
+
+		public void SetToBeDeleted(string timeZoneCode)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }
