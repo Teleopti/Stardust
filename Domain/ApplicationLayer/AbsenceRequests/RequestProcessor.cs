@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -120,9 +121,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 								new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod,
 									s => (IResourceCalculationPeriod)s)));
 				var resCalcData = new ResourceCalculationData(skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
-				//var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
+				var persons = waitlistedRequests.Select(p => p.Person).ToList();
 				var dateOnlyPeriodOne = ExtractSkillForecastIntervals.GetLongestPeriod(skills, inflatedPeriod);
-
+				var personsSchedules =
+					_scheduleStorage.FindSchedulesForPersons(
+						new ScheduleDateTimePeriod(loadSchedulesPeriodToCoverForMidnightShifts, persons), _currentScenario.Current(),
+						new PersonProvider(persons), new ScheduleDictionaryLoadOptions(false, false), persons);
 				//using (getContext(combinationResources, skills, false))
 				{
 					
@@ -130,8 +134,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					foreach (var pRequest in allRequests)
 					{
 						var requestPeriod = pRequest.Request.Period;
-						var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(pRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[pRequest.Person];
-
+						var schedules = personsSchedules[pRequest.Person];
 						var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(pRequest.Person.PermissionInformation.DefaultTimeZone());
 						using (getContext(combinationResources, skills, false))
 						{
