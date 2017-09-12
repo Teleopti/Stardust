@@ -38,7 +38,7 @@
                 <li>{{rep.Name}}</li>
               </a>
               <a ui-sref="{{rep.Url}}" ng-if="rep.IsWeb" style="text-decoration:none;"  target="_blank">
-                <li>{{rep.Name}} {{rep.Url}} 1</li>
+                <li>{{rep.Name}}</li>
               </a>
             </div>
           </ul>
@@ -63,9 +63,8 @@
               <a href="{{rep.Url}}" ng-if="!rep.IsWeb" style="text-decoration:none;"  target="_blank">
                 <li>{{rep.Name}}</li>
               </a>
-              <a ui-sref="leaderboardreport" ng-if="rep.IsWeb" style="text-decoration:none;"  target="_blank">
-                  <li>{{rep.Name}}</li> <!-- refactor ui-sref when more web reports are added-->
-              </a>
+              <a ui-sref="{{rep.Url}}" ng-if="rep.IsWeb" style="text-decoration:none;"  target="_blank">
+                  <li>{{rep.Name}}</li>
             </div>
           </ul>
         </div>

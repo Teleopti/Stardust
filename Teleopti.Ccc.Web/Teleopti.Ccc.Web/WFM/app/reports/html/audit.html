@@ -1,0 +1,40 @@
+  <div class="view-header with-desc">
+    <div class="view-title">
+      <h1><i class="mdi mdi-account-convert"></i> Audit trail</h1>
+      <p ng-click="data = !data">Find recent changes</p>
+    </div>
+  </div>
+  <div class="con-row">
+    <div class="con-flex">
+
+      <div class="panel material-depth-1">
+        <div class="con-row" style="align-items:baseline;">
+          <div class="con-flex">
+            <label for="filter" class="input-icon">
+              <i class="mdi mdi-magnify">
+                <input type="text" id="filter" ng-model="searchText" ng-change="vm.refreshData(searchText)" placeholder="Filter grid">
+                <md-tooltip>Find person who made a change</md-tooltip>
+              </i>
+            </label>
+          </div>
+          <div class="con-flex">
+            <date-range-picker ng-model="vm.lastChangeRange" template-type="'popup'"></date-range-picker>
+            <md-tooltip>Pick a range from last change</md-tooltip>
+          </div>
+          <div class="con-flex">
+            <date-range-picker ng-model="vm.dateChangeRange" template-type="'popup'"></date-range-picker>
+            <md-tooltip>Pick a range from changed dates</md-tooltip>
+          </div>
+          <div class="con-flex x2"></div>
+        </div>
+        <div class="con-row">
+          <div class="con-flex ">
+            <div ui-i18n="{{lang}}" class="big-table-wrapper" style="max-width:100%;">
+              <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-disable-animation ui-grid-auto-resize ui-grid-resize-columns style="height: 70vh;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>

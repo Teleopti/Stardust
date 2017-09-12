@@ -196,3 +196,4 @@ Report_Realtime_Scheduled_Time_vs_Target_45559 = RC
 Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
 
 WFM_Unified_Skill_Group_Management_45417 = DEV
+WFM_AuditTrail_44006 = DEV

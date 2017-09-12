@@ -1480,6 +1480,8 @@
     <Content Include="WFM\app\permissions\permissions.data.service.spec.js" />
     <Content Include="WFM\app\permissions\permissions.filter.r.js" />
     <Content Include="WFM\app\permissions\permissions.filter.r.spec.js" />
+    <Content Include="WFM\app\reports\audit.controller.js" />
+    <Content Include="WFM\app\reports\html\audit.html" />
     <Content Include="WFM\app\reports\html\reports.overview.html" />
     <Content Include="WFM\app\reports\reports.overview.controller.js" />
     <Content Include="WFM\app\reports\reports.overview.controller.spec.js" />

@@ -181,7 +181,8 @@
 
 		WFM_WebScheduling_LowPriority_44320,
 		WFM_Intraday_SupportOtherSkillsLikeEmail_44026,
-		WFM_Unified_Skill_Group_Management_45417
+		WFM_Unified_Skill_Group_Management_45417,
+		WFM_AuditTrail_44006
 		// ReSharper restore InconsistentNaming
 	}
 }
