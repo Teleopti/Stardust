@@ -230,6 +230,7 @@
 				gridMenuTitleFilter: $translate,
 				columnVirtualizationThreshold: 200,
 				rowHeight: 35,
+				saveSelection: false,
 
 				onRegisterApi: function(gridApi) {
 					vm.gridApi = gridApi;
@@ -277,6 +278,9 @@
 		}
 
 		function onSelectionChanged() {
+			if (!(arguments[1] instanceof Event)) {
+				return;
+			}
 			var visibleRequestsIds = vm.gridOptions.data.map(function(row) { return row.Id; });
 			var visibleSelectedRequestsIds = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Id; });
 			var messages = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Message; });
