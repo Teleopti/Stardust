@@ -13,8 +13,15 @@
 
 				// this splice is a temp
 				for( var i=data.length-1; i>=0; i--) {
-				    if( data[i].Url == "reports/leaderboard")
+					if( data[i].Url == "reports/leaderboard"){
 						data.splice(i,1);
+						data.push({
+							Category:"Agent Performance",
+							IsWebReport:true,
+							Name:"Gamification Leaderboard",
+							Url:"leaderboardreport"
+						})
+					}
 				}
 
 				// push in web reports
@@ -26,12 +33,6 @@
 						Url:"auditTrail"
 					})
 				}
-				data.push({
-					Category:"Agent Performance",
-					IsWebReport:true,
-					Name:"Gamification Leaderboard",
-					Url:"leaderboardreport"
-				})
 
 				deferred.resolve(data);
 			});
