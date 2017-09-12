@@ -14321,6 +14321,10 @@ Check your internet connection or contact your administrator.</value>
     <value>Modify Skill Area</value>
     <comment>Modify skill area</comment>
   </data>
+  <data name="ModifySkillGroup" xml:space="preserve">
+    <value>Modify Skill Group</value>
+    <comment>Modify skill group</comment>
+  </data>
   <data name="CreateSkillArea" xml:space="preserve">
     <value>Create skill area</value>
   </data>

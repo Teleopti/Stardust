@@ -1,6 +1,7 @@
 ﻿<div class="view-header">
 	<div class="view-title">
-		<h1><i class="mdi mdi-compass-outline"></i> {{'CreateSkillArea'|translate}}</h1>
+		<h1 ng-if="!toggles.unifiedSkillGroupManagement"><i class="mdi mdi-compass-outline"></i> {{'CreateSkillArea'|translate}}</h1>
+		<h1 ng-if="toggles.unifiedSkillGroupManagement"><i class="mdi mdi-compass-outline"></i> {{'CreateSkillGroup'|translate}}</h1>
 	</div>
 </div>
 <form name="form" class="wfm-form" novalidate ng-submit="saveSkillArea(form)">

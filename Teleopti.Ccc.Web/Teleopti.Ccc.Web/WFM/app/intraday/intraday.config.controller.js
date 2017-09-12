@@ -7,11 +7,18 @@
         '$filter',
         'NoticeService',
         '$translate',
+		'Toggle',
         'skillIconService',
-        function($scope, $state, intradayService, $filter, NoticeService, $translate, skillIconService) {
+        function($scope, $state, intradayService, $filter, NoticeService, $translate, toggleSvc, skillIconService) {
             $scope.skills = [];
             $scope.skillAreaName = '';
             $scope.getSkillIcon = skillIconService.get;
+			$scope.toggles = {
+				unifiedSkillGroupManagement: []
+			};
+			toggleSvc.togglesLoaded.then(function () {
+				$scope.toggles.unifiedSkillGroupManagement = toggleSvc.WFM_Unified_Skill_Group_Management_45417;
+			});
             $scope.exitConfigMode = function() {
                 $state.go('intraday', {isNewSkillArea: false});
             };

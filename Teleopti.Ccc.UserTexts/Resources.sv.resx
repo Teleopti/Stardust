@@ -13173,8 +13173,14 @@ Hjälp oss förbättra upplevelsen genom att skicka in en felrapport.</value>
   <data name="ModifySkillArea" xml:space="preserve">
     <value>Ändra kompetensarea</value>
   </data>
-  <data name="CreateSkillArea" xml:space="preserve">
+  <data name="ModifySkillGroup" xml:space="preserve">
+    <value>Ändra kompetensgrupp</value>
+  </data>
+  <data name="q" xml:space="preserve">
     <value>Skapa kompetensarea</value>
+  </data>
+  <data name="CreateSkillGroup" xml:space="preserve">
+    <value>Skapa kompetensgrupp</value>
   </data>
   <data name="ForecastedAverageHandleTime" xml:space="preserve">
     <value>Prognostiserad genomsnittlig behandlingstid</value>
