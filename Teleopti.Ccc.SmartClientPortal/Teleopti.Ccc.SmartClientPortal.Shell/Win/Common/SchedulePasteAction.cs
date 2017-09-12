@@ -14,7 +14,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
-    class SchedulePasteAction : IGridPasteAction<IScheduleDay>, IDisposable
+    public class SchedulePasteAction : IGridPasteAction<IScheduleDay>, IDisposable
     {
         private readonly PasteOptions _options;
         private readonly IGridlockManager _lockManager;
@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
         #region Private
 
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
-        public IScheduleDay Paste(IScheduleDay source, IScheduleDay destination, PasteOptions options)
+
+		public IScheduleDay Paste(IScheduleDay source, IScheduleDay destination, PasteOptions options)
         {
             if (source.SignificantPart() == SchedulePartView.None)
                 return null;
