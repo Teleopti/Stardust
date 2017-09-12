@@ -8,6 +8,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -39,6 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private ITeam myTeam;
 	    private ISettingsPersisterAndProvider<NameFormatSettings> nameFormatSettingsProvider;
 		private IPeopleForShiftTradeFinder peopleForShiftTradeFinder;
+		private ThisIsNow now;
 
 		[SetUp]
 		public void Setup()
@@ -55,8 +57,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var loggedOnUser = new FakeLoggedOnUser(currentUser);
 			peopleForShiftTradeFinder = MockRepository.GenerateMock<IPeopleForShiftTradeFinder>();
 			nameFormatSettingsProvider = new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository());
+			now = new ThisIsNow(new DateTime(2017, 9, 1, 8, 8, 8, DateTimeKind.Utc));
 
-			target = new PossibleShiftTradePersonsProvider(nameFormatSettingsProvider, new ShiftTradePersonProvider (personRepository, shiftTradeValidator, permissionProvider, personForScheduleFinder, loggedOnUser, peopleForShiftTradeFinder)
+			target = new PossibleShiftTradePersonsProvider(nameFormatSettingsProvider, new ShiftTradePersonProvider (personRepository, shiftTradeValidator, permissionProvider, personForScheduleFinder, loggedOnUser, peopleForShiftTradeFinder, now)
 				,new FakeToggleManager());
 		}
 
@@ -239,7 +242,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			var validAgentGuids = new PersonSelectorShiftTrade { PersonId = validAgent.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
 			var invalidAgentGuids = new PersonSelectorShiftTrade { PersonId = invalidAgent.Id.Value, TeamId = myTeam.Id, SiteId = Guid.NewGuid(), BusinessUnitId = Guid.NewGuid() };
-			var date = DateOnly.Today.AddDays(2);
+			var date = new DateOnly(now.UtcDateTime()).AddDays(2);
 			var data = new ShiftTradeScheduleViewModelData { ShiftTradeDate = date, TeamIdList = new List<Guid>(){myTeam.Id.GetValueOrDefault()}};
 
 			personForScheduleFinder.Expect(rep => rep.GetPersonFor(data.ShiftTradeDate,data.TeamIdList,data.SearchNameText))

@@ -18,9 +18,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IPersonForScheduleFinder _personForScheduleFinder;
 		private readonly IPeopleForShiftTradeFinder _peopleForShiftTradeFinder;
+		private readonly INow _now;
 		private readonly ILoggedOnUser _loggedOnUser;
 
-		public ShiftTradePersonProvider(IPersonRepository personRepository, IShiftTradeLightValidator shiftTradeValidator, IPermissionProvider permissionProvider, IPersonForScheduleFinder personForScheduleFinder, ILoggedOnUser loggedOnUser, IPeopleForShiftTradeFinder peopleForShiftTradeFinder)
+		public ShiftTradePersonProvider(IPersonRepository personRepository, IShiftTradeLightValidator shiftTradeValidator, IPermissionProvider permissionProvider, IPersonForScheduleFinder personForScheduleFinder, ILoggedOnUser loggedOnUser, IPeopleForShiftTradeFinder peopleForShiftTradeFinder, INow now)
 		{
 			_personRepository = personRepository;
 			_shiftTradeValidator = shiftTradeValidator;
@@ -28,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 			_personForScheduleFinder = personForScheduleFinder;
 			_loggedOnUser = loggedOnUser;
 			_peopleForShiftTradeFinder = peopleForShiftTradeFinder;
+			_now = now;
 		}
 
 		public IEnumerable<IPerson> RetrievePersons(DateOnly shiftTradeDate, Guid[] teamIds, string personName,
@@ -80,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ShiftTrade
 									   DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)));
 
 			return (from person in permitedPeople
-					let otherAgentToday = TimeZoneHelper.ConvertFromUtc(DateTime.UtcNow, person.PermissionInformation.DefaultTimeZone()).Date
+					let otherAgentToday = TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), person.PermissionInformation.DefaultTimeZone()).Date
 					let openPeriodForward = person.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum
 					where (shiftTradeDate.Date - otherAgentToday.Date).TotalDays >= openPeriodForward
 					select person).ToList();
