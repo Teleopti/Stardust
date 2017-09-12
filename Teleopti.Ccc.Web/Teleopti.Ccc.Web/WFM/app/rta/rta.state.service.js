@@ -20,23 +20,25 @@
 		var skills = [];
 		var skillAreas = [];
 
-		var dataLoaded = [
-			rtaService.getOrganization()
-				.then(function (data) {
-					organization = data;
-					organization.forEach(function (site) {
-						site.Teams = site.Teams || [];
-					});
-				}),
-			rtaService.getSkills()
-				.then(function (data) {
-					skills = data;
-				}),
-			rtaService.getSkillAreas()
-				.then(function (data) {
-					skillAreas = data.SkillAreas;
-				})
-		];
+		var dataLoaded = function () {
+			return $q.all([
+				rtaService.getOrganization()
+					.then(function (data) {
+						organization = data;
+						organization.forEach(function (site) {
+							site.Teams = site.Teams || [];
+						});
+					}),
+				rtaService.getSkills()
+					.then(function (data) {
+						skills = data;
+					}),
+				rtaService.getSkillAreas()
+					.then(function (data) {
+						skillAreas = data.SkillAreas;
+					})
+			]);
+		}
 
 		return {
 			gotoLastState: function () {
@@ -47,13 +49,11 @@
 			},
 
 			setCurrentState: function (newState) {
-				return $q.all(dataLoaded)
-					.then(function () {
-						newState.openedSiteIds = state.openedSiteIds;
-						mutate(state, newState);
-						cleanState();
-						storeState();
-					})
+				newState.openedSiteIds = state.openedSiteIds;
+				mutate(state, newState);
+				cleanState();
+				storeState();
+				return dataLoaded()
 					.then(updateOpenedSites);
 			},
 
