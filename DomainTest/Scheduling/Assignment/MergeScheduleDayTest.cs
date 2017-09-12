@@ -1001,48 +1001,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyCopyPasteToAnotherTimeZoneChangesDateOnlyAsPeriod()
-		{
-			var scenario = ScenarioFactory.CreateScenarioAggregate();
-			var underlyingDictionary = new Dictionary<IPerson, IScheduleRange>();
-			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(rangePeriod), underlyingDictionary);
-
-			IPerson sourcePerson = PersonFactory.CreatePerson();
-			sourcePerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
-
-			IPerson targetPersonInSameTimezone = PersonFactory.CreatePerson();
-			targetPersonInSameTimezone.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.HawaiiTimeZoneInfo());
-
-			IPerson targetPersonInDifferentTimezone = PersonFactory.CreatePerson();
-			targetPersonInDifferentTimezone.PermissionInformation.SetDefaultTimeZone(TimeZoneInfoFactory.SingaporeTimeZoneInfo());
-
-			DateOnly day = new DateOnly(2011, 02, 10);
-			DateTime start = new DateTime(2011, 2, 10, 16, 0, 0, 0, DateTimeKind.Utc);
-			DateTime end = new DateTime(2011, 2, 10, 20, 0, 0, 0, DateTimeKind.Utc);
-
-			IScheduleDay sourceDay = ExtractedSchedule.CreateScheduleDay(dic, sourcePerson, day);
-			IActivity activity = ActivityFactory.CreateActivity("Test");
-
-			DateTimePeriod period = new DateTimePeriod(start, end);
-			ShiftCategory shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Test");
-			var mainShift = EditableShiftFactory.CreateEditorShift(activity, period, shiftCategory);
-			sourceDay.AddMainShift(mainShift);
-
-			IScheduleDay targetDaySameTimezone = ExtractedSchedule.CreateScheduleDay(dic, targetPersonInSameTimezone, day);
-			IScheduleDay targetDayDifferentTimezone = ExtractedSchedule.CreateScheduleDay(dic, targetPersonInDifferentTimezone, day);
-
-			targetDaySameTimezone.Merge(sourceDay, false, true);
-
-			targetDayDifferentTimezone.Merge(sourceDay, false, true);
-
-			DateOnly expectedDateOnly = day;
-			Assert.AreEqual(expectedDateOnly, targetDaySameTimezone.DateOnlyAsPeriod.DateOnly);
-
-			expectedDateOnly = day.AddDays(1);
-			Assert.AreEqual(expectedDateOnly, targetDayDifferentTimezone.DateOnlyAsPeriod.DateOnly);
-		}
-
-		[Test]
 		public void VerifyMergingWithAnotherTimeZoneNotChangesDateOnlyAsPeriod()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate();

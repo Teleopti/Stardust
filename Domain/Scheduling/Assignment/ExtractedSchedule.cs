@@ -544,25 +544,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			var currentAssignment = PersonAssignment(true);
 			currentAssignment.SetActivitiesAndShiftCategoryFrom(workingCopyOfAssignment);
 			if (splitAbsence) SplitAbsences(period);
-			updateDateOnlyAsPeriod(workingCopyOfAssignment);
-		}
-
-		/// <summary>
-		/// Updates the DateOnlyAsPeriod property. After the mainshift move to another timezone (only in copy paste where the UTC time
-		/// remains the same) the propery might move to one day ahead or back. We need to update the property.
-		/// Remark that most probably it only can happen with copy-paste where the ignoretimechanges param is true but for the sake of robust
-		/// we also check the property even if the ignoretimechanges is false. 
-		/// </summary>
-		/// <param name="mainShift"></param>
-		private void updateDateOnlyAsPeriod(IPersonAssignment mainShift)
-		{
-			if (mainShift.MainActivities().Any())
-			{
-				DateTimePeriod mainShiftPeriod = mainShift.Period;
-				DateTime dateTime = mainShiftPeriod.StartDateTime;
-				DateTime localDateTime = TimeZoneHelper.ConvertFromUtc(dateTime, Person.PermissionInformation.DefaultTimeZone());
-				DateOnlyAsPeriod = new DateOnlyAsDateTimePeriod(new DateOnly(localDateTime.Date), Person.PermissionInformation.DefaultTimeZone());
-			}
 		}
 
 		public void SplitAbsences(DateTimePeriod period)

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -21,7 +20,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 	public class SchedulePasteActionTest
 	{
 		[Test]
-		[Ignore("Is this test correct? #45776 For some reason I don't have to involve timezones here...")]
 		public void ShouldKeepSourceShiftWhenMergingOvertimeShiftWithMainShiftLayerOnNextDay()
 		{
 			var target = new SchedulePasteAction(null, new GridlockManager(), SchedulePartFilter.None);
