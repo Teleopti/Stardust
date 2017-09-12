@@ -375,6 +375,19 @@ describe('Requests - Refactor(remove later) controller controllers',
 			expect(requestCommandParamsHolder.getOvertimeSelectedRequestIds().length).toEqual(0);
 		});
 
+		it('should reset pageNumber after chaning tab', function() {
+			var target = setUpTarget();
+			var controller = target.controller;
+			controller.init();
+
+			controller.activeShiftTradeTab();
+			controller.paging.pageNumber = 2;
+
+			controller.activeAbsenceAndTextTab();
+
+			expect(controller.paging.pageNumber).toEqual(1);
+		});
+
 		function setUpTarget() {
 			var scope = $rootScope.$new();
 

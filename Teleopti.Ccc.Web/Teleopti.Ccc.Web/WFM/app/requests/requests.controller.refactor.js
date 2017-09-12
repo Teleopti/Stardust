@@ -64,6 +64,7 @@
 		};
 
 		vm.activeAbsenceAndTextTab = function () {
+			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.selectedTabIndex = 0;
 			vm.period = vm.absenceAndOvertimePeriod;
@@ -71,6 +72,7 @@
 		};
 
 		vm.activeShiftTradeTab = function () {
+			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.selectedTabIndex = 1;
 			vm.period = vm.shiftTradePeriod;
@@ -78,6 +80,7 @@
 		};
 
 		vm.activeOvertimeTab = function () {
+			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.selectedTabIndex = 2;
 			vm.period = vm.absenceAndOvertimePeriod;
