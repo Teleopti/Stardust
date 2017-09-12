@@ -5,7 +5,8 @@ describe('rtaOverviewComponent', function () {
     $fakeBackend,
     $componentController,
     $httpBackend,
-    $state;
+    $state,
+    $sessionStorage;
 
   var ctrl,
     scope,
@@ -52,12 +53,13 @@ describe('rtaOverviewComponent', function () {
     });
   });
 
-  beforeEach(inject(function (_ControllerBuilder_, _FakeRtaBackend_, _$componentController_, _$httpBackend_, _$state_) {
+  beforeEach(inject(function (_ControllerBuilder_, _FakeRtaBackend_, _$componentController_, _$httpBackend_, _$state_, _$sessionStorage_) {
     $controllerBuilder = _ControllerBuilder_;
     $fakeBackend = _FakeRtaBackend_;
     $componentController = _$componentController_;
     $httpBackend = _$httpBackend_;
     $state = _$state_;
+    $sessionStorage = _$sessionStorage_;
 
     spyOn($state, 'go');
     // remove with RTA_RememberMyPartOfTheBusiness_39082
@@ -105,6 +107,10 @@ describe('rtaOverviewComponent', function () {
     $fakeBackend.withSkillAreas(skillAreas);
 
   }));
+
+  afterEach(function () {
+		$sessionStorage.$reset();
+	});
 
   it('should display site card data', function () {
     $fakeBackend

@@ -105,7 +105,7 @@
 						get isSelected() { return rtaStateService.isTeamSelected(team.Id); },
 						set isSelected(newValue) { rtaStateService.selectTeam(team.Id, newValue); },
 						AgentsCount: team.AgentsCount,
-						href: rtaStateService.agentsHrefForTeam(team.Id)
+						href: rtaStateService.agentsHrefForTeam(team.SiteId, team.Id)
 					};
 					siteCard.teams.push(teamCard);
 				};

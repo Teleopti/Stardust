@@ -592,6 +592,31 @@ describe('RtaOverviewController', function () {
 			expect(vm.displayGoToAgents()).toEqual(false);
 		});
 
+		it('should siteId href if one team in site', function () {
+			var lastHrefParams;
+			spyOn($state, 'href').and.callFake(function (_, params) {
+				lastHrefParams = params;
+			});
+			
+			$fakeBackend
+			  .withSiteAdherence({
+				Id: 'londonId'
+			  })
+			  .withTeamAdherence({
+				SiteId: 'londonId',
+				Id: 'greenId'
+			  });
+		
+			var c = $controllerBuilder.createController();
+			var vm = c.vm;
+		
+			c.apply(function () {
+			  vm.siteCards[0].isOpen = true;
+			});
+		
+			expect(lastHrefParams.siteIds).toEqual('londonId');
+		  });
+
 	});
 
 });

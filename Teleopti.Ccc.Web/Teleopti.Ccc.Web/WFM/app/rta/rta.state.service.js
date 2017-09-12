@@ -47,11 +47,13 @@
 			},
 
 			setCurrentState: function (newState) {
-				newState.openedSiteIds = state.openedSiteIds;
-				mutate(state, newState);
-				cleanState();
-				storeState();
 				return $q.all(dataLoaded)
+					.then(function () {
+						newState.openedSiteIds = state.openedSiteIds;
+						mutate(state, newState);
+						cleanState();
+						storeState();
+					})
 					.then(updateOpenedSites);
 			},
 
@@ -67,7 +69,10 @@
 				$state.go($state.current.name, buildState({ skillIds: skillId, skillAreaId: undefined }));
 			},
 
-			agentsHrefForTeam: function (teamId) {
+			agentsHrefForTeam: function (siteId, teamId) {
+				var site = organization.find(function (site) { return siteId == site.Id; });
+				if (site.Teams.length == 1)
+					return $state.href('rta-agents', { siteIds: siteId, skillIds: state.skillIds, skillAreaId: state.skillAreaId });
 				return $state.href('rta-agents', { teamIds: teamId, skillIds: state.skillIds, skillAreaId: state.skillAreaId });
 			},
 
@@ -108,7 +113,7 @@
 			},
 
 			isSiteOpen: function (id) {
-					return state.openedSiteIds.some(function (siteId) { return siteId == id });
+				return state.openedSiteIds.some(function (siteId) { return siteId == id });
 			},
 
 			openSite: function (id, opened) {

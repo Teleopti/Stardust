@@ -78,7 +78,7 @@ describe('RtaOverviewController selection', function () {
     expect(vm.siteCards[0].teams[0].isSelected).toEqual(true);
   });
 
-  it('should open site of team in url', function () {
+  it('should open site when team in url', function () {
     $stateParams.teamIds = ['redId'];
     $fakeBackend
       .withSiteAdherence({
@@ -87,6 +87,10 @@ describe('RtaOverviewController selection', function () {
       .withTeamAdherence({
         SiteId: 'parisId',
         Id: 'redId'
+      })
+      .withTeamAdherence({
+        SiteId: 'parisId',
+        Id: 'greenId'
       });
 
     var c = $controllerBuilder.createController();
