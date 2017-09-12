@@ -1,12 +1,12 @@
 ﻿<div>
     <div class="view-header with-fab with-desc">
         <div class="view-title">
-            <h1><i class="mdi mdi-account-switch"></i> Staffing</h1>
+            <h1><i class="mdi mdi-account-switch"></i> {{'Staffing' | translate}}</h1>
         </div>
         <div class="fab-wrapper" ng-if="vm.showBpoInterface && vm.hasPermissionForBpoExchange">
             <button class="wfm-fab grow-out material-depth-1 info" ng-click="vm.goToImportExports()">
                         <i class="mdi mdi-source-fork"></i>
-                        <md-tooltip>BPO Actions</md-tooltip>
+                        <md-tooltip>{{'BpoExchange' | translate}}</md-tooltip>
             </button>
         </div>
     </div>

@@ -164,12 +164,16 @@
 			}
 		}
 
+		function extracted(area) {
+			currentSkills = area;
+			vm.selectedArea = area;
+			vm.selectedSkill = null;
+		}
+
 		function selectSkillOrArea(skill, area) {
 			clearSuggestions();
 			if (!skill) {
-				currentSkills = area;
-				vm.selectedArea = area;
-				vm.selectedSkill = null;
+				extracted(area);
 			} else {
 				currentSkills = skill;
 				vm.selectedSkill = currentSkills;

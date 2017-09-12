@@ -16205,7 +16205,7 @@ Do you want to participate?</value>
   <data name="NotShowingReforcastedAgents" xml:space="preserve">
     <value>Reforecasted agents cannot be shown for current selection.</value>
     <comment>message shown when some chart data series are hidden in intraday</comment>
-  </data>  
+  </data>
   <data name="NotShowingAbandonRate" xml:space="preserve">
     <value>Abandoned rate cannot be shown for current selection.</value>
     <comment>message shown when some chart data series are hidden in intraday</comment>
@@ -16455,5 +16455,9 @@ Do you want to participate?</value>
   </data>
   <data name="ReportGeneratedTime" xml:space="preserve">
     <value>Report generated</value>
+  </data>
+  <data name="ExportGap" xml:space="preserve">
+    <value>Export gap</value>
+    <comment>This action will export the gap that exists in the current intraday staffing</comment>
   </data>
 </root>

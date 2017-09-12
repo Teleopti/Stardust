@@ -2,7 +2,7 @@
     <div class="con-row">
 
     </div>
-    <wfm-card-list >
+    <wfm-card-list>
         <wfm-card>
             <card-header tabindex="-1">
                 <div tabindex="0">
@@ -30,7 +30,7 @@
         <wfm-card>
             <card-header tabindex="-1">
                 <div tabindex="0">
-                    <b>Export</b>
+                    <b>{{'ExportGap'|translate}}</b>
                     <span class="chevron"><i class="mdi mdi-chevron-right"></i></span>
                 </div>
             </card-header>
@@ -57,7 +57,7 @@
                                 </md-autocomplete>
                                 <i class="mdi mdi-close pointer ie-cross grow-out" ng-show="vm.selectedSkill" ng-click="vm.selectedSkill=null">
                                     <md-tooltip>{{'Clear'|translate}}</md-tooltip>
-                                </i> 
+                                </i>
                             </div>
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                 </div>
                 <div class="con-footer">
                     <button class="wfm-btn wfm-btn-invis-primary" ng-click="vm.exportFile()">Export File</button>
-                    
+
                 </div>
             </card-body>
         </wfm-card>
