@@ -127,19 +127,19 @@ End personal drop down menu
 /*
 override dropdown-menu style on mobile
 */
-.in .dropdown-menu {
+.custom-collapsed .in .dropdown-menu {
 	background-color: transparent !important;
 	border: 0 !important;
 	box-shadow: none !important;
-	width:100%;
+	width: 100%;
 }
 
-.in .dropdown-menu .divider {
-	background-color: #0066cc !important;
+.custom-collapsed .in .dropdown-menu .divider {
+		background-color: #0066cc !important;
 }
 
-.in .dropdown-menu > li > a {
-	color: white !important;
+.custom-collapsed .in .dropdown-menu > li > a {
+		color: white !important;
 }
 
 /*
