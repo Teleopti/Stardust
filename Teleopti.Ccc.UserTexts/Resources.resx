@@ -14324,6 +14324,9 @@ Check your internet connection or contact your administrator.</value>
   <data name="CreateSkillArea" xml:space="preserve">
     <value>Create skill area</value>
   </data>
+  <data name="CreateSkillGroup" xml:space="preserve">
+    <value>Create skill group</value>
+  </data>
   <data name="ForecastedAverageHandleTime" xml:space="preserve">
     <value>Forecasted average handle time</value>
     <comment>legend label in intraday chart</comment>

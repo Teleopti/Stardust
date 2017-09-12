@@ -7454,6 +7454,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create skill group.
+        /// </summary>
+        public static string CreateSkillGroup {
+            get {
+                return ResourceManager.GetString("CreateSkillGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create skill summary.
         /// </summary>
         public static string CreateSkillSummery {
