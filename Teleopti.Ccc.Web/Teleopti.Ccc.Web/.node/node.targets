@@ -27,7 +27,6 @@
 		<!-- NPM install command -->
 		<NpmInstallCmd>"$(NpmCmd)" install</NpmInstallCmd>
 		<NpmSetServerCmd>"$(NpmCmd)" set registry http://hestia:4873</NpmSetServerCmd>
-		<NpmSetNoProgressCmd>"$(NpmCmd)" set progress=false</NpmSetNoProgressCmd> <!-- https://github.com/npm/npm/issues/11283 -->
 		<NpmRebuildNodeSassCmd>"$(NpmCmd)" rebuild node-sass</NpmRebuildNodeSassCmd>
 
 		<!-- NPM dedupe command -->
@@ -46,27 +45,26 @@
 
 	<!-- Runs NPM command -->
 	<Target Name="RestoreNodePackages" >
-		<Exec ConsoleToMSBuild="true" WorkingDirectory="$(NodeDir)" Command="powershell -ExecutionPolicy Bypass ./CheckPackageJsonIsModified.ps1" >
+		<Exec ConsoleToMSBuild="true" WorkingDirectory="$(NodeDir)" Command="powershell -ExecutionPolicy Bypass ./CheckPackageJsonIsModifiedRefactor.ps1" >
 			<Output TaskParameter="ConsoleOutput" ItemName="DepsAreModified" />
 		</Exec>
 
-		<Exec Command="$(NpmSetServerCmd)" Condition="'@(DepsAreModified)' == 'True'"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<Exec Command="$(NpmSetNoProgressCmd)" Condition="'@(DepsAreModified)' == 'True'"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<Exec Command="$(NpmInstallKarmaCmd)" Condition="'@(DepsAreModified)' == 'True'" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		<Exec Command="$(NpmInstallKarmaCliCmd)" Condition="'@(DepsAreModified)' == 'True'" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-	
-		<Message Text="Restore or Update Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" Condition="'@(DepsAreModified)' == 'True'"  />
-		<Exec Command="PATH=&quot;$(NodeDir)&quot; &amp;&amp; $(NpmInstallCmd)" Condition="'@(DepsAreModified)' == 'True'"  ContinueOnError="WarnAndContinue" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
-		
-		<Message Text="$(NpmRebuildNodeSassCmd)" Condition="'@(DepsAreModified)' == 'True'"/>
-		<Exec Command="$(NpmRebuildNodeSassCmd)" Condition="'@(DepsAreModified)' == 'True'"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		<Exec Command="$(NpmSetServerCmd)" Condition="'@(DepsAreModified)' == 'ALL'"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		<Exec Command="$(NpmInstallKarmaCmd)" Condition="'@(DepsAreModified)' == 'ALL'" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		<Exec Command="$(NpmInstallKarmaCliCmd)" Condition="'@(DepsAreModified)' == 'ALL'" ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" Condition="'@(DepsAreModified)' == 'ALL'"  />
 
-		<Message Text="Deduplicate Node Packages Command: $(NpmDedupeCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high"  Condition="'@(DepsAreModified)' == 'True'" />
-		<Exec Command="$(NpmDedupeCmd)" Condition="'@(DepsAreModified)' == 'True'" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
-		<Message Text="Dependencies are modified and has been updated " Condition="'@(DepsAreModified)' == 'True'" Importance="high"/>
-		<Message Text="Dependencies are not modified and have been left as they are" Condition="'@(DepsAreModified)' == 'False'" Importance="high"/>
-			<Message Text="Restore Node Packages Command: $(NpmInstallGruntCliCmd) /w WorkingDirectory: $(NodeDir)" Importance="high" Condition="'@(DepsAreModified)' == 'True'" />
-		<Exec Command="$(NpmInstallGruntCliCmd)" ContinueOnError="false" WorkingDirectory="$(NodeDir)" Condition="'@(DepsAreModified)' == 'True'"  />
+		<Message Text="Restore or Update Node Packages Command: $(NpmInstallCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high" Condition="'@(DepsAreModified)' == 'True'"  />
+		<Exec Command="PATH=&quot;$(NodeDir)&quot; &amp;&amp; $(NpmInstallCmd)" Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'"  ContinueOnError="WarnAndContinue" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+		
+		<Message Text="$(NpmRebuildNodeSassCmd)" Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'"/>
+		<Exec Command="$(NpmRebuildNodeSassCmd)" Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'"  ContinueOnError="false" WorkingDirectory="$(MSBuildProjectDirectory)\WFM" />
+
+		<Message Text="Deduplicate Node Packages Command: $(NpmDedupeCmd) /w WorkingDirectory: $(MSBuildProjectDirectory)\WFM" Importance="high"  Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'" />
+		<Exec Command="$(NpmDedupeCmd)" Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'" ContinueOnError="false" WorkingDirectory="$(NodeDir)" />
+		<Message Text="Dependencies are modified and has been updated " Condition="'@(DepsAreModified)' == 'ALL' or '@(DepsAreModified)' == 'WFM'" Importance="high"/>
+		<Message Text="Dependencies are not modified and updated" Condition="'@(DepsAreModified)' == 'False'" Importance="high"/>
+
 	</Target>
 
 	<!-- Executes Build -->
