@@ -180,8 +180,8 @@
 		Wfm_Staffing_45411, //this is to enable staffing
 
 		WFM_WebScheduling_LowPriority_44320,
-		WFM_Intraday_SupportOtherSkillsLikeEmail_44026
-
+		WFM_Intraday_SupportOtherSkillsLikeEmail_44026,
+		WFM_Unified_Skill_Group_Management_45417
 		// ReSharper restore InconsistentNaming
 	}
 }
