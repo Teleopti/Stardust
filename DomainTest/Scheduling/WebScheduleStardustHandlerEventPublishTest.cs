@@ -84,6 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			var webOptimizationStardustEvent = EventPublisher.PublishedEvents.Single() as WebDayoffOptimizationStardustEvent;
 			webOptimizationStardustEvent.PlanningPeriodId.Should().Be.EqualTo(planningPeriod.Id.Value);
 			webOptimizationStardustEvent.JobResultId.Should().Be.EqualTo(jobResult.Id.Value);
+			webOptimizationStardustEvent.Policy.Should().Be.EqualTo(WebScheduleStardustBaseEvent.HalfNodesAffinity);
 		}
 
 		public void Setup(ISystem system, IIocConfiguration configuration)

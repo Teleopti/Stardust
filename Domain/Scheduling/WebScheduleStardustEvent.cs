@@ -6,9 +6,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 {
 	public abstract class WebScheduleStardustBaseEvent : StardustJobInfo
 	{
+		public static string HalfNodesAffinity = "HalfNodesAffinity";
+
 		protected WebScheduleStardustBaseEvent()
 		{
-			Policy = "HalfNodesAffinity";
+			Policy = HalfNodesAffinity;
 		}
 		protected WebScheduleStardustBaseEvent(WebScheduleStardustBaseEvent @event):this()
 		{

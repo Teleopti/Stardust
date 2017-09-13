@@ -64,6 +64,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				.All(x => x.PlanningPeriodId == planningPeriodId)
 				.Should()
 				.Be.True();
+
+			EventPublisher.PublishedEvents.OfType<WebIntradayOptimizationStardustEvent>()
+				.All(x => x.Policy == WebScheduleStardustBaseEvent.HalfNodesAffinity)
+				.Should()
+				.Be.True();
 		}
 
 		[Test]
