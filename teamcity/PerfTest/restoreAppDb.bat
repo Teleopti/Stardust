@@ -8,7 +8,7 @@ set appDb=PerfApp
 set analDb=PerfAnal
 set aggDb=PerfAgg
 set dbServer=%1
-set sourceFolder=%2
+set sourceFolder=%~2
 set securityExe=%RepoRoot%\Teleopti.Support.Security\bin\release\Teleopti.Support.Security.exe
 set dbmanagerExe=%RepoRoot%\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\release\DBManager.exe
 IF [%1]==[] goto wrongInput
