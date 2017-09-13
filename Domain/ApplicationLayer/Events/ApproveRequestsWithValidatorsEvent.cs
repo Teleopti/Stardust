@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
-	public class ApproveRequestsWithValidatorsEvent : EventWithInfrastructureContext
+	public class ApproveRequestsWithValidatorsEvent : StardustJobInfo
 	{
 		public TrackedCommandInfo TrackedCommandInfo { get; set; }
 		public IEnumerable<Guid> PersonRequestIdList { get; set; }

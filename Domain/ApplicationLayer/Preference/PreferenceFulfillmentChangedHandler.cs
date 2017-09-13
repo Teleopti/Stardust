@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Preference
 					InitiatorId = @event.InitiatorId,
 					LogOnDatasource = @event.LogOnDatasource,
 					Timestamp = @event.Timestamp,
-					UserName = @event.UserName,
 					ScenarioId = @event.ScenarioId
 				});
 			}

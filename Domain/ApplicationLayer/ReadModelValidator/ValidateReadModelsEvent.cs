@@ -1,9 +1,10 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator
 {
-	public class ValidateReadModelsEvent : EventWithInfrastructureContext
+	public class ValidateReadModelsEvent : StardustJobInfo
 	{
 		public DateTime StartDate { get; set; }
 		public DateTime EndDate { get; set; }

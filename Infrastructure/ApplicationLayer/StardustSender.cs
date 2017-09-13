@@ -9,7 +9,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
@@ -47,13 +46,18 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var jobName = @event.GetType().ToString();
 			var type = @event.GetType().ToString();
 			var job = @event as IStardustJobInfo;
-			if (job != null && job.JobName != null)
+			var policy = "";
+			if (job?.JobName != null)
 			{
 				jobName = job.JobName;
 			}
-			if (job != null && job.UserName != null)
+			if (job?.UserName != null)
 			{
 				userName = job.UserName;
+			}
+			if (job?.Policy != null)
+			{
+				policy = job.Policy;
 			}
 			var ser = JsonConvert.SerializeObject(@event);
 			var jobModel = new JobRequestModel
@@ -61,7 +65,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				Name = jobName,
 				Serialized = ser,
 				Type = type,
-				CreatedBy = userName
+				CreatedBy = userName,
+				Policy = policy
 			};
 			var mess = JsonConvert.SerializeObject(jobModel);
 			if (logger.IsDebugEnabled)
@@ -88,5 +93,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		public string Serialized { get; set; }
 		public string Type { get; set; }
 		public string CreatedBy { get; set; }
+		public string Policy { get; set; }
 	}
 }

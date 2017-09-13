@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Payroll
 {
-	public class RunPayrollExportEvent : EventWithInfrastructureContext
+	public class RunPayrollExportEvent : StardustJobInfo
 	{
 		public RunPayrollExportEvent()
 		{

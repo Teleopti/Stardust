@@ -4,5 +4,6 @@
 	{
 		string JobName { get; set; }
 		string UserName { get; set; }
+		string Policy { get; set; }
 	}
 }

@@ -1,16 +1,16 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public abstract class WebScheduleStardustBaseEvent : EventWithInfrastructureContext
+	public abstract class WebScheduleStardustBaseEvent : StardustJobInfo
 	{
 		protected WebScheduleStardustBaseEvent()
 		{
-			
+			Policy = "HalfNodesAffinity";
 		}
-		protected WebScheduleStardustBaseEvent(WebScheduleStardustBaseEvent @event)
+		protected WebScheduleStardustBaseEvent(WebScheduleStardustBaseEvent @event):this()
 		{
 			PlanningPeriodId = @event.PlanningPeriodId;
 		}

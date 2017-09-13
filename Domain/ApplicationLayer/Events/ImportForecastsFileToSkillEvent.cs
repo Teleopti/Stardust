@@ -3,8 +3,8 @@ using System;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 {
 
-    public class ImportForecastsFileToSkillEvent : EventWithInfrastructureContext
-    {
+    public class ImportForecastsFileToSkillEvent : StardustJobInfo
+	{
 
         public Guid JobId { get; set; }
 

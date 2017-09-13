@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Events
 	///<summary>
 	/// Message with details to perform an export of forecasting data from sub skills of multisite skills to a regular skill.
 	///</summary>
-	public class ExportMultisiteSkillsToSkillEvent : EventWithInfrastructureContext
+	public class ExportMultisiteSkillsToSkillEvent : StardustJobInfo
 	{
 		///<summary>
 		/// Creates a new instance of the <see cref="ExportMultisiteSkillsToSkillEvent"/>.
