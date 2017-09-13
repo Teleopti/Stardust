@@ -2,18 +2,24 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
+using log4net;
 using Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling;
 using Stardust.Manager.Extensions;
 using Stardust.Manager.Models;
+using Stardust.Manager.Policies;
 
 namespace Stardust.Manager.Helpers
 {
 	public class JobRepositoryCommandExecuter
 	{
+		private readonly HalfNodesAffinityPolicy _halfNodesAffinityPolicy;
 		private readonly RetryPolicy _retryPolicy;
+		private static readonly ILog ManagerLogger = LogManager.GetLogger("Stardust.ManagerLog");
 
-		public JobRepositoryCommandExecuter(RetryPolicyProvider retryPolicyProvider)
+		public JobRepositoryCommandExecuter(RetryPolicyProvider retryPolicyProvider, HalfNodesAffinityPolicy halfNodesAffinityPolicy)
 		{
+			_halfNodesAffinityPolicy = halfNodesAffinityPolicy;
 			_retryPolicy = retryPolicyProvider.GetPolicy();
 		}
 
@@ -56,14 +62,16 @@ namespace Stardust.Manager.Helpers
 								[Type],
 								[Serialized],
 								[CreatedBy],
-								[Created])
+								[Created],
+								[Policy])
 							VALUES 
 								(@JobId,
 								 @Name,
 								 @Type,
 								 @Serialized,
 								 @CreatedBy,
-								 @Created)";
+								 @Created,
+								 @Policy)";
 
 			using (var insertIntojobQueueCommand = new SqlCommand(insertIntoJobQueueCommandText, sqlConnection, sqlTransaction))
 			{
@@ -73,6 +81,7 @@ namespace Stardust.Manager.Helpers
 				insertIntojobQueueCommand.Parameters.AddWithValue("@Serialized", jobQueueItem.Serialized);
 				insertIntojobQueueCommand.Parameters.AddWithValue("@Created", DateTime.UtcNow);
 				insertIntojobQueueCommand.Parameters.AddWithValue("@CreatedBy", jobQueueItem.CreatedBy);
+				insertIntojobQueueCommand.Parameters.AddWithValue("@Policy", jobQueueItem.Policy);
 
 				insertIntojobQueueCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 			}
@@ -90,7 +99,8 @@ namespace Stardust.Manager.Helpers
 								   ,[Serialized]
 								   ,[Type]
 								   ,[SentToWorkerNodeUri]
-								   ,[Result])
+								   ,[Result]
+								   ,[Policy])
 							 VALUES
 								   (@JobId
 								   ,@Name
@@ -101,7 +111,8 @@ namespace Stardust.Manager.Helpers
 								   ,@Serialized
 								   ,@Type
 								   ,@SentToWorkerNodeUri
-								   ,@Result)";
+								   ,@Result
+								   ,@Policy)";
 
 			using (var insertIntoJobCommand = new SqlCommand(insertIntoJobCommandText, sqlConnection, sqlTransaction))
 			{
@@ -115,21 +126,43 @@ namespace Stardust.Manager.Helpers
 				insertIntoJobCommand.Parameters.AddWithValue("@CreatedBy", jobQueueItem.CreatedBy);
 				insertIntoJobCommand.Parameters.AddWithValue("@Created", jobQueueItem.Created);
 				insertIntoJobCommand.Parameters.AddWithValue("@Ended", DBNull.Value);
+				insertIntoJobCommand.Parameters.AddWithValue("@Policy", jobQueueItem.Policy ?? (object) DBNull.Value);
 				insertIntoJobCommand.ExecuteNonQueryWithRetry(_retryPolicy);
 			}
 		}
 
-		public List<JobQueueItem> SelectAllItemsInJobQueue(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
+		public List<JobQueueItem> SelectValidItemsInJobQueue(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
 		{
-			var listToReturn = new List<JobQueueItem>();
 			const string selectAllItemsInJobQueueCommandText = @"SELECT 
 										[JobId],
 										[Name],
 										[Type],
 										[Serialized],
 										[CreatedBy],
-										[Created]
+										[Created],
+										[Policy]
+									FROM [Stardust].[JobQueue] where locktimestamp is null or datediff(minute,GETDATE(),lockTimestamp) < 0 ORDER BY Created";
+			return JobQueueItems(sqlConnection, sqlTransaction, selectAllItemsInJobQueueCommandText);
+		}
+
+		public List<JobQueueItem> SelectAllItemsInJobQueue(SqlConnection sqlConnection, SqlTransaction sqlTransaction = null)
+		{
+			const string selectAllItemsInJobQueueCommandText = @"SELECT 
+										[JobId],
+										[Name],
+										[Type],
+										[Serialized],
+										[CreatedBy],
+										[Created],
+										[Policy]
 									FROM [Stardust].[JobQueue]";
+			return JobQueueItems(sqlConnection, sqlTransaction, selectAllItemsInJobQueueCommandText);
+		}
+
+		private List<JobQueueItem> JobQueueItems(SqlConnection sqlConnection, SqlTransaction sqlTransaction,
+			string selectAllItemsInJobQueueCommandText)
+		{
+			var listToReturn = new List<JobQueueItem>();
 			using (var sqlCommand = new SqlCommand(selectAllItemsInJobQueueCommandText, sqlConnection, sqlTransaction))
 			{
 				using (var sqlDataReader = sqlCommand.ExecuteReaderWithRetry(_retryPolicy))
@@ -195,6 +228,7 @@ namespace Stardust.Manager.Helpers
 								  ,[Type]
 								  ,[CreatedBy]
 								  ,[Created]
+								  ,[Policy]
 						  FROM [Stardust].[JobQueue]
 						  WHERE JobId = @JobId";
 			using (var sqlSelectCommand = new SqlCommand(selectJobQueueItemCommandText, sqlConnection, sqlTransaction))
@@ -223,6 +257,7 @@ namespace Stardust.Manager.Helpers
 														,[Type]
 														,[SentToWorkerNodeUri]
 														,[Result]
+														,[Policy]
 													FROM [Stardust].[Job]
 													WHERE  JobId = @JobId";
 
@@ -252,6 +287,7 @@ namespace Stardust.Manager.Helpers
 											  ,[Type]
 											  ,[SentToWorkerNodeUri]
 											  ,[Result]
+											  ,[Policy]
 										  FROM [Stardust].[Job] WITH (NOLOCK)";
 
 			using (var getAllJobsCommand = new SqlCommand(selectCommandText, sqlConnection, sqlTransaction))
@@ -282,6 +318,7 @@ namespace Stardust.Manager.Helpers
 											  ,[Type]
 											  ,[SentToWorkerNodeUri]
 											  ,[Result]
+											  ,[Policy]
 										  FROM [Stardust].[Job] WITH (NOLOCK)
 										  WHERE [Started] IS NOT NULL AND [Ended] IS NULL";
 
@@ -340,6 +377,7 @@ namespace Stardust.Manager.Helpers
 											  ,[Type]
 											  ,[SentToWorkerNodeUri]
 											  ,[Result]
+											  ,[Policy]
 										  FROM [Stardust].[Job]
 										  WHERE  SentToWorkerNodeUri = @SentToWorkerNodeUri AND
 												 Started IS NOT NULL AND 
@@ -387,28 +425,58 @@ namespace Stardust.Manager.Helpers
 			return sentToWorkerNodeUri;
 		}
 
+		public int GetNumberOfAliveNodes(SqlConnection sqlConnection, SqlTransaction sqlTransaction)
+		{
+			const string selectCommand = @"SELECT COUNT(*) 
+											FROM [Stardust].[WorkerNode]
+											WHERE Alive = 1";
+			int count;
+			using (var sqlCommand = new SqlCommand(selectCommand, sqlConnection, sqlTransaction))
+			{
+				count = Convert.ToInt32(sqlCommand.ExecuteScalarWithRetry(_retryPolicy));
+			}
+			return count;
+		}
+
 		public JobQueueItem AcquireJobQueueItem(SqlConnection sqlConnection)
 		{
 			JobQueueItem jobQueueItem;
+
 			using (var sqlTransaction = sqlConnection.BeginTransaction())
 			{
-				using (
-					var selectJobQueueItemCommand = new SqlCommand("[Stardust].[AcquireQueuedJob]", sqlConnection, sqlTransaction))
+				var validJobsInQueue = SelectValidItemsInJobQueue(sqlConnection, sqlTransaction);
+				var allExecutingJobs = SelectAllExecutingJobs(sqlConnection, sqlTransaction);
+				var numberOfAliveNodes = GetNumberOfAliveNodes(sqlConnection, sqlTransaction);
+				Guid? jobId = null;
+				foreach (var queueItem in validJobsInQueue)
 				{
+					if (_halfNodesAffinityPolicy.CheckPolicy(queueItem, allExecutingJobs, numberOfAliveNodes))
+					{
+						jobId = queueItem.JobId;
+						break;
+					}
+				}
+				if (!jobId.HasValue)
+					return null;
+
+				using (var selectJobQueueItemCommand = new SqlCommand("[Stardust].[AcquireQueuedJob]", sqlConnection, sqlTransaction))
+				{
+					ManagerLogger.Info($"Move job {jobId} from queue to running phase.");
 					selectJobQueueItemCommand.CommandType = CommandType.StoredProcedure;
 
-					var retVal = new SqlParameter("@idd", SqlDbType.UniqueIdentifier)
-						{Direction = ParameterDirection.ReturnValue};
-					selectJobQueueItemCommand.Parameters.Add(retVal);
+					var parameter = new SqlParameter("@jobId", SqlDbType.UniqueIdentifier) { Value = jobId.Value };
+					selectJobQueueItemCommand.Parameters.Add(parameter);
 
 					using (var reader = selectJobQueueItemCommand.ExecuteReaderWithRetry(_retryPolicy))
 					{
 						if (!reader.HasRows) return null;
 						reader.Read();
+
 						jobQueueItem = CreateJobQueueItemFromSqlDataReader(reader);
 					}
 				}
 				sqlTransaction.Commit();
+
 			}
 			return jobQueueItem;
 		}
@@ -447,7 +515,8 @@ namespace Stardust.Manager.Helpers
 				Serialized = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Serialized")).Replace(@"\", @""),
 				Type = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Type")),
 				CreatedBy = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("CreatedBy")),
-				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created"))
+				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created")),
+				Policy = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Policy"))
 			};
 			return jobQueueItem;
 		}
@@ -465,7 +534,8 @@ namespace Stardust.Manager.Helpers
 				Created = sqlDataReader.GetDateTime(sqlDataReader.GetOrdinal("Created")),
 				Serialized = sqlDataReader.GetString(sqlDataReader.GetOrdinal("Serialized")),
 				Started = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Started")),
-				Ended = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Ended"))
+				Ended = sqlDataReader.GetNullableDateTime(sqlDataReader.GetOrdinal("Ended")),
+				Policy = sqlDataReader.GetNullableString(sqlDataReader.GetOrdinal("Policy"))
 			};
 			return job;
 		}

@@ -10,6 +10,7 @@ using Stardust.Manager;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
 using Stardust.Manager.Models;
+using Stardust.Manager.Policies;
 
 namespace ManagerTest
 {
@@ -32,6 +33,7 @@ namespace ManagerTest
 		public TestHelper TestHelper;
 
 		private WorkerNode _workerNode;
+		private WorkerNode _workerNode2;
 		private FakeHttpSender FakeHttpSender => (FakeHttpSender) HttpSender;
 
 		[TestFixtureSetUp]
@@ -40,6 +42,10 @@ namespace ManagerTest
 			_workerNode = new WorkerNode
 			{
 				Url = new Uri("http://localhost:9050/")
+			};
+			_workerNode2 = new WorkerNode
+			{
+				Url = new Uri("http://localhost:9051/")
 			};
 		}
 
@@ -73,6 +79,88 @@ namespace ManagerTest
 			JobManager.AssignJobToWorkerNodes();
 
 			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
+			JobRepository.GetAllJobs().Count.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldBeAbleToSendAQueuedJob_WhenCheckPolicy_AndHaveEnoughWorkerNode()
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test",
+				Policy = HalfNodesAffinityPolicy.PolicyName
+			};
+
+			WorkerNodeRepository.AddWorkerNode(_workerNode);
+			WorkerNodeRepository.AddWorkerNode(_workerNode2);
+
+			JobManager.AddItemToJobQueue(jobQueueItem);
+
+			JobManager.AssignJobToWorkerNodes();
+
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(0);
+			JobRepository.GetAllJobs().Count.Should().Be(1);
+		}
+
+		[Test]
+		public void ShouldNotBeAbleToSendAQueuedJob_WhenCheckPolicy_AndHaveNotEnoughWorkerNode()
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test",
+				Policy = HalfNodesAffinityPolicy.PolicyName
+			};
+
+			WorkerNodeRepository.AddWorkerNode(_workerNode);
+
+			JobManager.AddItemToJobQueue(jobQueueItem);
+
+			JobManager.AssignJobToWorkerNodes();
+
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
+			JobRepository.GetAllJobs().Count.Should().Be(0);
+		}
+
+		[Test]
+		public void ShouldNotBeAbleToSendAnotherQueuedJob_WhenCheckPolicy_AndHaveNotEnoughWorkerNode()
+		{
+			var jobQueueItem = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test",
+				Policy = HalfNodesAffinityPolicy.PolicyName
+			};
+
+			var jobQueueItem2 = new JobQueueItem
+			{
+				JobId = Guid.NewGuid(),
+				Name = "Name Test",
+				CreatedBy = "Created By Test",
+				Serialized = "Serialized Test",
+				Type = "Type Test",
+				Policy = HalfNodesAffinityPolicy.PolicyName
+			};
+
+			WorkerNodeRepository.AddWorkerNode(_workerNode);
+			WorkerNodeRepository.AddWorkerNode(_workerNode2);
+
+			JobManager.AddItemToJobQueue(jobQueueItem);
+			JobManager.AddItemToJobQueue(jobQueueItem2);
+
+			JobManager.AssignJobToWorkerNodes();
+
+			JobRepository.GetAllItemsInJobQueue().Count.Should().Be(1);
 			JobRepository.GetAllJobs().Count.Should().Be(1);
 		}
 

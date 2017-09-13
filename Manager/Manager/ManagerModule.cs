@@ -1,8 +1,8 @@
-﻿using System.Timers;
-using Autofac;
+﻿using Autofac;
 using Autofac.Integration.WebApi;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
+using Stardust.Manager.Policies;
 using Stardust.Manager.Timers;
 using Stardust.Manager.Validations;
 
@@ -25,6 +25,7 @@ namespace Stardust.Manager
 			builder.RegisterType<Validator>().SingleInstance();
 			builder.RegisterType<JobPurgeTimer>().SingleInstance();
 			builder.RegisterType<NodePurgeTimer>().SingleInstance();
+			builder.RegisterType<HalfNodesAffinityPolicy>().SingleInstance();
 			builder.RegisterType<JobRepositoryCommandExecuter>().SingleInstance();
 			builder.RegisterType<HttpSender>().As<IHttpSender>().SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();

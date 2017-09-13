@@ -117,6 +117,7 @@
     <Compile Include="ManagerController.cs" />
     <Compile Include="ManagerConfiguration.cs" />
     <Compile Include="NodeManager.cs" />
+    <Compile Include="Policies\HalfNodesAffinityPolicy.cs" />
     <Compile Include="Timers\NodePurgeTimer.cs">
       <SubType>Component</SubType>
     </Compile>

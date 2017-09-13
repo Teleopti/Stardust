@@ -4,6 +4,7 @@ using ManagerTest.Fakes;
 using Stardust.Manager;
 using Stardust.Manager.Helpers;
 using Stardust.Manager.Interfaces;
+using Stardust.Manager.Policies;
 using Stardust.Manager.Timers;
 using Stardust.Manager.Validations;
 
@@ -21,6 +22,7 @@ namespace ManagerTest.Attributes
 
 			builder.RegisterInstance(config).SingleInstance();
 			builder.RegisterType<RetryPolicyProvider>().SingleInstance();
+			builder.RegisterType<HalfNodesAffinityPolicy>().SingleInstance();
 			builder.RegisterType<JobRepository>().As<IJobRepository>().SingleInstance();
 			builder.RegisterType<JobRepositoryCommandExecuter>().SingleInstance();
 			builder.RegisterType<WorkerNodeRepository>().As<IWorkerNodeRepository>().SingleInstance();

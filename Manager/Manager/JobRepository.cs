@@ -115,7 +115,7 @@ namespace Stardust.Manager
 				if (!allAvailableWorkerNodes.Any()) return;
 
 				//sending to the available nodes
-				ManagerLogger.Info(allAvailableWorkerNodes.Count + " nodes found that are alive");
+				ManagerLogger.Info(allAvailableWorkerNodes.Count + " nodes found that are available");
 				var shuffledNodes = allAvailableWorkerNodes.OrderBy(a => Guid.NewGuid()).ToList();
 				foreach (var nodeUri in shuffledNodes)
 				{
@@ -305,7 +305,8 @@ namespace Stardust.Manager
 								JobId = job.JobId,
 								Serialized = job.Serialized,
 								Name = job.Name,
-								Type = job.Type
+								Type = job.Type,
+								Policy = job.Policy
 							};
 
 							_jobRepositoryCommandExecuter.InsertIntoJobQueue(jobQueueItem, sqlConnection, sqlTransaction);
@@ -376,6 +377,7 @@ namespace Stardust.Manager
 						if (jobQueueItem == null)
 						{
 							sqlConnection.Close();
+							ManagerLogger.Info("no job acquired for node " + availableNode);
 							return;
 						}
 						ManagerLogger.Info("acquired job with id  " + jobQueueItem.JobId + " for node " + availableNode);

@@ -6,6 +6,11 @@ namespace Stardust.Manager.Models
 {
 	public class JobQueueItem : IValidatableObject
 	{
+		public JobQueueItem()
+		{
+			Policy = "";
+		}
+
 		public Guid JobId { get; set; }
 
 		public string Name { get; set; }
@@ -17,6 +22,8 @@ namespace Stardust.Manager.Models
 		public string CreatedBy { get; set; }
 
 		public DateTime Created { get; set; }
+
+		public string Policy { get; set; }
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
