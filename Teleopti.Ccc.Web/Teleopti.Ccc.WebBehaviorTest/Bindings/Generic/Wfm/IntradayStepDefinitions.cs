@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenIChangeDateOffsetTo(int offset)
 		{
 			Browser.Interactions.Javascript("var scope = angular.element(document.querySelector('date-offset')).scope();" +
-											$"scope.changeChosenOffset('{offset}');" +
+											$"scope.changeChosenOffset('{offset}', true);" +
 											"setTimeout(function(){console.log('delay')}, 1000);");
 		}
 
