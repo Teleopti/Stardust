@@ -63,6 +63,19 @@
 			return text;
 		};
 
+		vm.isLoadingState = false;
+
+		$scope.$on('$stateChangeStart', function () {
+			vm.isLoadingState = true;
+		});
+
+		$scope.$on('$stateChangeSuccess', function () {
+			setTimeout(function () {
+				vm.isLoadingState = false;
+				$scope.$apply();
+			}, 0);
+		});
+
 		vm.activeAbsenceAndTextTab = function () {
 			vm.paging.pageNumber = 1;
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
