@@ -62,23 +62,31 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 
 		private static IntradayTestApplicationInput GenerateInput()
 		{
-			IntradayTestApplicationInput input;
-			input = new IntradayTestApplicationInput();
-			input.Date = DateTime.Today;
-			input.UserTimeZoneInfo = userTimeZoneProvider.GetTimeZoneForCurrentUser();
-			input.TimeZoneInterval = timeZoneprovider.Provide(input.UserTimeZoneInfo.TimeZoneId);
-			input.TimePeriods = new List<IntradayTestDateTimePeriod>()
+			var input = new IntradayTestApplicationInput();
+			try
 			{
-				new IntradayTestDateTimePeriod(DateTime.Today, DateTime.Now),
-				new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-1), DateTime.Today),
-				new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-2), DateTime.Today.AddDays(-1)),
-				new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(-2)),
-				new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-4), DateTime.Today.AddDays(-3)),
-				new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-5), DateTime.Today.AddDays(-4)),
-				new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-6), DateTime.Today.AddDays(-5)),
-				new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-7), DateTime.Today.AddDays(-6)),
-			};
-			return input;
+				input.Date = DateTime.Today;
+				input.UserTimeZoneInfo = userTimeZoneProvider.GetTimeZoneForCurrentUser();
+				input.TimeZoneInterval = timeZoneprovider.Provide(input.UserTimeZoneInfo.TimeZoneId);
+				input.TimePeriods = new List<IntradayTestDateTimePeriod>()
+				{
+					new IntradayTestDateTimePeriod(DateTime.Today, DateTime.Now),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-1), DateTime.Today),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-2), DateTime.Today.AddDays(-1)),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-3), DateTime.Today.AddDays(-2)),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-4), DateTime.Today.AddDays(-3)),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-5), DateTime.Today.AddDays(-4)),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-6), DateTime.Today.AddDays(-5)),
+					new IntradayTestDateTimePeriod(DateTime.Today.AddDays(-7), DateTime.Today.AddDays(-6)),
+				};
+				return input;
+			}
+			catch (Exception)
+			{
+				Console.WriteLine("Cant autogenerate input.");
+				Console.WriteLine("");
+				return CollectInput();
+			}
 		}
 
 		private static IntradayTestApplicationInput CollectInput()
@@ -152,7 +160,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				Console.WriteLine("Invalid date format.");
 			}
 		}
-		
+
 		private static int getNumberOfDaysInput()
 		{
 			while (true)
@@ -287,7 +295,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 			Console.WriteLine("We're done! Press any key to exit.");
 			Console.ReadKey();
 		}
-		
+
 		private static int RandomNumber(int min, int max)
 		{
 			lock (syncLock)
@@ -295,7 +303,7 @@ namespace Teleopti.Ccc.Intraday.TestApplication
 				return random.Next(min, max);
 			}
 		}
-		
+
 		private static IList<QueueInterval> generateQueueDataIntervals(IList<ForecastInterval> forecastIntervals, QueueInfo targetQueue)
 		{
 			var queueDataList = new List<QueueInterval>();
