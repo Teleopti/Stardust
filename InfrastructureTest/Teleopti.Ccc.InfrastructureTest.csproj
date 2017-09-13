@@ -610,6 +610,7 @@
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\GroupPageCollectionChangedEventPublisherTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\ImplementationDetails\MeetingMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\PersonAssignmentEventPublishingTest.cs" />
+    <Compile Include="UnitOfWork\TransactionHooks\SettingsForPersonPeriodChangedEventPublisherTest.cs" />
     <Compile Include="UnitOfWork\TransactionHooks\TransactionHookInvokationScheduleTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDictionaryPersistTestAttribute.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkCommitCallbackTest.cs" />

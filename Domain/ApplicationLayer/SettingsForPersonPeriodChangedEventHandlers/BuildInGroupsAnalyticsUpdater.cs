@@ -66,15 +66,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.SettingsForPersonPeriodChangedEve
 			if (entity == null)
 				return false;
 
-			if (group.GroupName != propertyAccessor(entity))
+			var groupGroupName = propertyAccessor(entity);
+			if (group.GroupName != groupGroupName)
 			{
-				group.GroupName = propertyAccessor(entity);
+				group.GroupName = groupGroupName;
 				logger.Debug($"Updating Group: {group.GroupName}, {group.GroupCode}");
 				_analyticsGroupPageRepository.UpdateGroupPage(group);
 			}
 			return true;
 		}
 	}
-
-
 }

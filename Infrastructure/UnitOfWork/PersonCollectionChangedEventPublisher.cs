@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			// we are signed in with a transient BU and cant publish events
 			var bu = _businessUnit.Current();
-			if (bu == null || !bu.Id.HasValue)
-				return;
+			if (bu?.Id == null) return;
 
 			var affectedInterfaces = from r in modifiedRoots
 									 let t = r.Root.GetType()

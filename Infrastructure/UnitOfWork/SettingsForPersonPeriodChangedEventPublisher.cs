@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -21,8 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                        		typeof (IContractSchedule),
 		                                                        		typeof (IPartTimePercentage),
 		                                                        		typeof (IRuleSetBag),
-		                                                        		typeof (ISkill),
-		                                                        		typeof (IPerson)
+		                                                        		typeof (ISkill)
 		                                                        	};
 
 		public SettingsForPersonPeriodChangedEventPublisher(IEventPopulatingPublisher eventsPublisher)
@@ -32,21 +30,17 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void AfterCompletion(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-            var affectedInterfaces = from r in modifiedRoots
-                                     from i in r.Root.GetType().GetInterfaces()
-                                     select i;
+			var affectedRoots = from r in modifiedRoots
+				where r.Root.GetType().GetInterfaces().Any(t => _triggerInterfaces.Contains(t))
+				select r;
 
-            if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
-            {
-				var notPerson = (from p in modifiedRoots where !(p.Root is IPerson) select p.Root).ToList();
-				foreach (var notpersonList in notPerson.Batch(25))
-				{
-					var idsChanged = notpersonList.Select(p => ((IAggregateRoot) p).Id.GetValueOrDefault()).ToArray();
-                    var settingsForPersonPeriodChangedEvent = new SettingsForPersonPeriodChangedEvent();
-					settingsForPersonPeriodChangedEvent.SetIdCollection(idsChanged);
-					_eventsPublisher.Publish(settingsForPersonPeriodChangedEvent);
-				}
-            }
-        }
+			foreach (var notpersonList in affectedRoots.Batch(25))
+			{
+				var idsChanged = notpersonList.Select(p => ((IAggregateRoot) p.Root).Id.GetValueOrDefault()).ToArray();
+				var settingsForPersonPeriodChangedEvent = new SettingsForPersonPeriodChangedEvent();
+				settingsForPersonPeriodChangedEvent.SetIdCollection(idsChanged);
+				_eventsPublisher.Publish(settingsForPersonPeriodChangedEvent);
+			}
+		}
     }
 }
