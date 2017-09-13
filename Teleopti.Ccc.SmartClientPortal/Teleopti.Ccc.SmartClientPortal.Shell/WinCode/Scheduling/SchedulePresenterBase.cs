@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         private readonly Dictionary<int, int> _colWeekMap = new Dictionary<int, int>();
         private readonly DateDateTimePeriodDictionary _timelineSpan = new DateDateTimePeriodDictionary();
         private readonly Dictionary<int, TimeSpan> _timelineHourPositionDictionary = new Dictionary<int, TimeSpan>();
+
         private readonly IGridlockManager _lockManager;
         private readonly ClipHandler<IScheduleDay> _clipHandlerSchedule;
         private readonly SchedulePartFilter _schedulePartFilter;
@@ -58,26 +59,42 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             SortCommand = new NoSortCommand(_schedulerState);
         }
 
-        protected IScheduleViewBase View => _view;
+        protected IScheduleViewBase View
+        {
+            get { return _view; }
+        }
 
-	    public IScheduleTag DefaultScheduleTag { get; set; }
+        public IScheduleTag DefaultScheduleTag { get; set; }
 
-	    public IActivity DefaultActivity { get; set; }
+        /// <summary>
+        /// Column week mapping dictionary
+        /// </summary>
+        public Dictionary<int, int> ColWeekMap
+        {
+            get { return _colWeekMap; }
+        }
 
-		/// <summary>
-		/// Column week mapping dictionary
-		/// </summary>
-		public Dictionary<int, int> ColWeekMap => _colWeekMap;
+        public Dictionary<int, TimeSpan> TimelineHourPositions
+        {
+            get { return _timelineHourPositionDictionary; }
+        }
 
-	    public Dictionary<int, TimeSpan> TimelineHourPositions => _timelineHourPositionDictionary;
+        public ISchedulerStateHolder SchedulerState
+        {
+            get { return _schedulerState; }
+        }
 
-	    public ISchedulerStateHolder SchedulerState => _schedulerState;
+        public SchedulePartFilter SchedulePartFilter
+        {
+            get { return _schedulePartFilter; }
+        }
 
-	    public SchedulePartFilter SchedulePartFilter => _schedulePartFilter;
+        public DateTime Now { get; set; }
 
-	    public DateTime Now { get; set; }
-
-        private int days
+        /// <summary>
+        /// Get days
+        /// </summary>
+        private int Days
         {
             get
             {
@@ -86,16 +103,37 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             }
         }
 
-        public virtual int ColCount => days - 1 + (int)ColumnType.StartScheduleColumns;
+        /// <summary>
+        /// Number of columns
+        /// </summary>
+        public virtual int ColCount
+        {
+            get
+            {
+                return Days - 1 + (int)ColumnType.StartScheduleColumns;
+            }
+        }
 
-        public virtual int RowCount => SchedulerState.FilteredCombinedAgentsDictionary.Count + 1;
+        /// <summary>
+        /// Number of rows
+        /// </summary>
+        public virtual int RowCount
+        {
+            get
+            {
+                return SchedulerState.FilteredCombinedAgentsDictionary.Count + 1;
+            }
+        }
 
-	    /// <summary>
+        /// <summary>
         /// Get dictionary with timespans(min start to max end) for each date
         /// </summary>
-        public DateDateTimePeriodDictionary TimelineSpan => _timelineSpan;
+        public DateDateTimePeriodDictionary TimelineSpan
+        {
+            get { return _timelineSpan; }
+        }
 
-	    /// <summary>
+        /// <summary>
         /// Number of max weeks to show in a certain view
         /// </summary>
         public int VisibleWeeks { get; set; }
@@ -279,40 +317,37 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
             if (e.RowIndex > View.RowHeaders && e.ColIndex >= (int)ColumnType.StartScheduleColumns)
             {
                 e.Style.MergeCell = GridMergeCellDirection.None;
-	            if (_schedulerState.FilteredCombinedAgentsDictionary.Count <= 0)
-					return;
+                if (_schedulerState.FilteredCombinedAgentsDictionary.Count > 0)
+                {
+					var agent = View.TheGrid.Model[e.RowIndex, 1].Tag as IPerson;
+					var localDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
+                    localDate = localDate.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
 
-	            var agent = View.TheGrid.Model[e.RowIndex, 1].Tag as IPerson;
-	            var localDate = _schedulerState.RequestedPeriod.DateOnlyPeriod.StartDate;
-	            localDate = localDate.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
-
-	            if (agent == null)
-					return;
-
-	            IScheduleRange totalScheduleRange = _schedulerState.Schedules[agent];
-	            IScheduleDay daySchedule = totalScheduleRange.ScheduledDay(localDate);
+                    IScheduleRange totalScheduleRange = _schedulerState.Schedules[agent];
+                    IScheduleDay daySchedule = totalScheduleRange.ScheduledDay(localDate);
                     
-	            if (!daySchedule.FullAccess)
-		            _lockManager.AddLock(daySchedule, LockType.Authorization);
+                    if (!daySchedule.FullAccess)
+                        _lockManager.AddLock(daySchedule, LockType.Authorization);
                     
-	            if (!IsInsidePersonPeriod(daySchedule))
-		            _lockManager.AddLock(daySchedule, LockType.OutsidePersonPeriod);
+                    if (!IsInsidePersonPeriod(daySchedule))
+                        _lockManager.AddLock(daySchedule, LockType.OutsidePersonPeriod);
 
-	            if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
-		            if (!daySchedule.IsFullyPublished)
-			            _lockManager.AddLock(daySchedule, LockType.UnpublishedSchedule);
+                    if (!PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules))
+                        if (!daySchedule.IsFullyPublished)
+                            _lockManager.AddLock(daySchedule, LockType.UnpublishedSchedule);
 
-	            FilterSchedulePart(daySchedule);
+                    FilterSchedulePart(daySchedule);
 
-	            //set value to schedule day
-	            e.Style.CellValue = daySchedule;
-	            //set tag to local current date
-	            e.Style.Tag = localDate;
-	            //set tip text
-	            if (daySchedule.FullAccess)
-		            e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
-	            //set background color
-	            View.SetCellBackTextAndBackColor(e, localDate, true, false, daySchedule);
+                    //set value to schedule day
+                    e.Style.CellValue = daySchedule;
+                    //set tag to local current date
+                    e.Style.Tag = localDate;
+                    //set tip text
+                    if (daySchedule.FullAccess)
+                        e.Style.CellTipText = ViewBaseHelper.GetToolTip(daySchedule);
+                    //set background color
+                    View.SetCellBackTextAndBackColor(e, localDate, true, false, daySchedule);
+                }
             }
         }
 
@@ -370,7 +405,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
         {
             const int col = (int)ColumnType.StartScheduleColumns;
             DateTime startDate = SelectedPeriod.Period().StartDateTimeLocal(_schedulerState.TimeZoneInfo).Date;
-            for (int i = 0; i < days; i++)
+            for (int i = 0; i < Days; i++)
             {
                 ColWeekMap.Add(col + i, DateHelper.WeekNumber(startDate.AddDays(i), CultureInfo.CurrentCulture));
             }
@@ -724,7 +759,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
         public void AddActivity()
         {
-            AddActivity(null, null, DefaultActivity);
+            AddActivity(null, null, null);
         }
 
         public void AddOvertime(IList<IMultiplicatorDefinitionSet> definitionSets)
