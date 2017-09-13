@@ -1,4 +1,4 @@
-<div class="view-header with-fab with-desc">
+<div class="view-header with-fab with-desc" style="padding-top: 10px;">
 	<div class="view-title">
 		<div class="pull-left">
 			<h1>
@@ -8,16 +8,22 @@
 		<div class="rta-top-buttons-wrapper pull-left">
 			<span>
 					<button class="wfm-btn wfm-btn-primary rta-default-cursor">{{'Dashboard'|translate}}</button>
-					<button class="wfm-btn wfm-btn-default select-skill" ng-click="vm.goToAgents()">{{'Agents'|translate}}</button>
-				</span>
+					<span>
+				<span class="pulse-element" ng-if="vm.displayBlueDot"></span>
+				<span></span>
+			<button class="wfm-btn wfm-btn-default select-skill wfm-badge-wrapper" ng-click="vm.goToAgents()">{{'Agents'|translate}} <md-tooltip md-direction="bottom">Go to agents page</md-tooltip>
+			</button>
+			</span>
+			</span>
 		</div>
 	</div>
-	<div class="fab-wrapper">
-		<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'invisible': !vm.displayGoToAgents(), 'grow-out': vm.displayGoToAgents()}" ng-click="vm.goToAgents()">
+	<!-- <div class="fab-wrapper">
+		<button class="wfm-fab  material-depth-1 open" ng-cloak ng-class="{'invisible': !vm.displayGoToAgents(), 'grow-out': vm.displayGoToAgents()}"
+		 ng-click="vm.goToAgents()">
 				<i class="mdi mdi-arrow-right"></i>
 				<md-tooltip>{{'Open'|translate}}</md-tooltip>
 			</button>
-	</div>
+	</div> -->
 </div>
 
 <div class="con-row">
@@ -79,7 +85,7 @@
 										<div class="flex">
 											<h1 ng-attr-data-max="{{team.AgentsCount}}" ng-attr-data-value="{{team.InAlarmCount}}" class="rta-team-name-container">{{team.Name}}</h1>
 											<i class="mdi pull-right flex-1" ng-class="{'mdi-check': team.isSelected, 'mdi-plus': !team.isSelected}"></i>
-											 <md-tooltip>{{team.isSelected ? "Unselect team" : "Select team"}}</md-tooltip>
+											<md-tooltip>{{team.isSelected ? "Unselect team" : "Select team"}}</md-tooltip>
 										</div>
 										<div class="subtext"><span class="full-padding" ng-attr-data-value="{{team.InAlarmCount}}">{{'InAlarm'|translate}}:
 										<b>{{team.InAlarmCount}}</b>

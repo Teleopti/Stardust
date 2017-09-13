@@ -21,6 +21,7 @@
 
 		vm.displayNoSitesMessage = function () { return vm.siteCards.length == 0; };
 		vm.displayNoSitesForSkillMessage = rtaStateService.hasSkillSelection;
+		vm.displayBlueDot = rtaStateService.hasSelection2();
 
 		var pollPromise;
 

@@ -139,6 +139,10 @@
 
 			goToAgents: function () {
 				$state.go('rta-agents', buildState());
+			},
+
+			hasSelection2: function() {
+				return state.siteIds.length > 0 || state.teamIds.length > 0 || state.skillIds.length > 0 || state.skillAreaId;
 			}
 		}
 
