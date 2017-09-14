@@ -68,7 +68,7 @@ Scenario: View incoming traffic for one skill for a provided day
 	When I change date offset to '-1'
 	Then I should see incoming traffic data in the chart
 	And I should see a summary of incoming traffic
-
+ 
 @OnlyRunIfEnabled('WFM_Intraday_Show_For_Other_Days_43504')
 Scenario: Switch tab when other day than today is selected
 	Given the time is '2016-12-21 14:00'
@@ -92,15 +92,6 @@ Scenario: Switch skill when other day than today is selected
 	Then I should see incoming traffic data in the chart
 	And I should see the date
 
-@OnlyRunIfEnabled('WFM_Intraday_Show_For_Other_Days_43504')
-Scenario: View incoming traffic for one skill for a provided date
-	Given the time is '2016-12-21 14:00'
-	And there is queue statistics for the skill 'Skill A' up until '2016-12-20 17:00'
-	And there is forecast data for skill 'Skill A' for date '2016-12-20'
-	And I am viewing intraday page
-	When I change date offset to '-1'
-	Then I should see incoming traffic data in the chart
-
 @OnlyRunIfEnabled('WFM_Intraday_Export_To_Excel_44892')
 Scenario: If toggled we should see export to excel button
 	Given the time is '2016-12-21 14:00'
@@ -108,6 +99,7 @@ Scenario: If toggled we should see export to excel button
 	And there is forecast data for skill 'Skill A' for date '2016-12-21'
 	And I am viewing intraday page
 	Then I should see the export to excel button
+
 
 @OnlyRunIfEnabled('WFM_Intraday_SupportOtherSkillsLikeEmail_44026')
 Scenario: If toggled we should be able to select skill of type backoffice
