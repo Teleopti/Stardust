@@ -294,10 +294,6 @@
 		}
 
 		function onSelectionChanged() {
-			if (!(arguments[1] instanceof Event)) {
-				return;
-			}
-
 			var visibleRequestsIds = vm.gridOptions.data.map(function (row) { return row.Id; });
 			var visibleSelectedRequestsIds = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Id; });
 			var messages = vm.gridApi.selection.getSelectedRows().map(function (row) { return row.Message; });
@@ -355,9 +351,10 @@
 
 		function getVisibleSelectedRequestsRows() {
 			if (!vm.gridOptions.data) return [];
-			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(false);
 
-			if(allSelectedRequestsIds == undefined) return [];
+			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(false);
+			if(!allSelectedRequestsIds) return [];
+
 			return vm.gridOptions.data.filter(function (row) {
 				return allSelectedRequestsIds.indexOf(row.Id) > -1;
 			});

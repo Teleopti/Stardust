@@ -369,9 +369,10 @@
 
 		function getVisibleSelectedRequestsRows() {
 			if (!vm.gridOptions.data) return [];
-			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(true);
 
-			if(allSelectedRequestsIds == undefined) return [];
+			var allSelectedRequestsIds = requestCommandParamsHolder.getSelectedRequestsIds(true);
+			if(!allSelectedRequestsIds) return [];
+
 			return vm.gridOptions.data.filter(function (row) {
 				return allSelectedRequestsIds.indexOf(row.Id) > -1;
 			});

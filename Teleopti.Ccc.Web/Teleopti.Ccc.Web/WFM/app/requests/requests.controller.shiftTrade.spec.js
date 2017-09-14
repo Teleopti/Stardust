@@ -131,6 +131,29 @@ describe('Requests shift trade controller tests',
 			expect(requestGridStateSvc.hasSavedState(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE)).toBeTruthy();
 		});
 
+		it('should exclude the invalid selection object when restoring ui-grid state', function() {
+			var request = {
+				Id: 1,
+				Type: requestsDefinitions.REQUEST_TYPES.SHIFTTRADE,
+			};
+			requestsDataService.setRequests([request, request]);
+
+			params.selectedGroupIds = ['team'];
+			var element = compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			requestGridStateSvc.setupGridEventHandlers(scope, controller, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+
+			var gridScope = angular.element(element[0].querySelectorAll('.ui-grid-contents-wrapper')).scope();
+			gridScope.grid.api.core.raise.columnVisibilityChanged(gridScope.grid.columns[0]);
+			controller.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+
+			scope.$digest();
+
+			expect(requestGridStateSvc.hasSavedState(requestsDefinitions.REQUEST_TYPES.SHIFTTRADE)).toBeTruthy();
+			expect(requestGridStateSvc.restoreState(controller, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE).selection).toBeFalsy();
+		});
+
 		it('should show schedule detail column in ui-grid table', function() {
 			var request = {
 				Id: 1,

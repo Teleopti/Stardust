@@ -21,7 +21,15 @@
 		svc.restoreState = function(vm, requestType) {
 			var localStorageKeyName = getGridStateKey(requestType);
 			var state = $window.localStorage.getItem(localStorageKeyName);
-			if (state) vm.gridApi.saveState.restore(vm, angular.fromJson(state));
+
+			var stateObj = angular.fromJson(state);
+			if(stateObj && stateObj.selection)
+				stateObj.selection = undefined;
+
+			if (stateObj) {
+				vm.gridApi.saveState.restore(vm, stateObj);
+				return stateObj;
+			}
 		};
 
 		svc.setupGridEventHandlers = function($scope, vm, requestType) {
