@@ -373,20 +373,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I should see the export to excel button")]
 		public void ThenIShouldSeeTheExportToExcelButton()
 		{
-			Browser.Interactions.IsVisible(".mdi-file-excel");
+			Browser.Interactions.AssertExists(".mdi-file-excel");
 		}
 
 		[Then(@"I should see the no abandonrate warning")]
 		public void ThenIShouldSeeTheAbandon_RateWarning()
 		{
-			Browser.Interactions.IsVisible("#noAbandonRate");
+			Browser.Interactions.AssertExists("#noAbandonRate");
 		}
 		[Then(@"I should see the no reforcasted warning")]
 		public void ThenIShouldSeeTheNoReforcastedWarning()
 		{
-			Browser.Interactions.IsVisible("#noReforcastedAgents");
+			Browser.Interactions.AssertExists("#noReforcastedAgents");
 		}
 
+		[Then(@"I should not se summary for abandonrate")]
+		public void ThenIShouldNotSeSummaryForAbandonrate()
+		{
+			Browser.Interactions.AssertNotExists(".service-level", ".abandoned-rate");
+		}
 
 	}
 }

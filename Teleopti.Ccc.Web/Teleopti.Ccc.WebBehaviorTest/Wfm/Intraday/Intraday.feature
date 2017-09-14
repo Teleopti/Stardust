@@ -129,3 +129,12 @@ Scenario: If an email like skill is chosen a warning for no visible reforcasted 
 	When I pick the skill 'Skill BackOffice'
 	And I am navigating to intraday staffing view
 	Then I should see the no reforcasted warning
+
+Scenario: If and email like skill is chosen summary for abandonrate should not appear
+	Given the time is '2016-12-21 14:00'
+	And I am viewing intraday page
+	And there is queue statistics for the skill 'Skill BackOffice' up until '2016-12-21 17:00'
+	And there is forecast data for skill 'Skill BackOffice' for date '2016-12-21'
+	When I pick the skill 'Skill BackOffice'
+	And I am navigating to intraday performance view
+	Then I should not se summary for abandonrate
