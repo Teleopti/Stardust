@@ -13,9 +13,9 @@
 	self.Today = ko.observable(moment());
 	self.DateFrom = ko.observable();
 	self.StartTime = ko.observable();
-	self.DateFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
+	self.DateFormat = Teleopti.MyTimeWeb.Common.DateFormat;
 
-	self.weekStart = ko.observable(weekStart);
+	self.weekStart = weekStart;
 	self.ShowMeridian = $('div[data-culture-show-meridian]').attr('data-culture-show-meridian') === 'true';
 	self.ShowError = ko.observable();
 	self.ErrorMessage = ko.observable();
