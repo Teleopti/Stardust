@@ -1,4 +1,4 @@
-<a ng-if="!$ctrl.menuItem.isStateless"ui-sref={{$ctrl.menuItem.name}} ui-sref-opts="{reload: true}" ui-sref-active="main-menu-link-active nav-item-active">
+<a ng-if="!$ctrl.menuItem.isStateless"ui-sref={{$ctrl.menuItem.name}} ui-sref-opts="{reload: true}" class="{{$ctrl.menuItem.class()}}">
 	<div class="con-row main-menu-link">
 		<div class="con-flex">
 			<i ng-class="$ctrl.menuItem.i"></i>

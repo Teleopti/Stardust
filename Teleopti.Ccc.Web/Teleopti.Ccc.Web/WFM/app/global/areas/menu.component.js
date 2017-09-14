@@ -1,7 +1,6 @@
-function MenuController() {
+function MenuController($state) {
 	var ctrl = this;
-	
-	ctrl.$onInit = function() {
+	ctrl.$onInit = function () {
 		ctrl.menuItem = setMenuItem();
 	}
 	ctrl.closeMenuOnPhones = function () {
@@ -74,13 +73,18 @@ function MenuController() {
 			return icon.name === ctrl.data.InternalName;
 		});
 		match.displayName = ctrl.data.Name;
+		match.class = function () {
+			if ($state.current.name.indexOf(match.name) == 0)
+				return "main-menu-link-active nav-item-active";
+		};
 		return match;
 	}
-	
+
+
 }
 
 angular.module('wfm.areas').component('mainmenu', {
-	templateUrl:'app/global/areas/menu-component.html',
+	templateUrl: 'app/global/areas/menu-component.html',
 	controller: MenuController,
 	bindings: {
 		data: '=',
