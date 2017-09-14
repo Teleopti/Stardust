@@ -24,7 +24,6 @@
 	self.TimeList = undefined;
 	self.RequestDuration = ko.observable();
 	self.IsTimeListOpened = ko.observable(false);
-	self.defaultStartTime = ko.observable();
 
 	self.IsMobile = Teleopti.MyTimeWeb.Portal.IsMobile();
 
@@ -162,7 +161,8 @@
 
 	function _buildPostData() {
 		var startDate = !moment.isMoment(self.DateFrom()) ? moment(self.DateFrom()) : moment().startOf("day");
-		var periodStart = moment(startDate.format("YYYY-MM-DD") + " " + self.defaultStartTime().format('HH:mm'), "YYYY-MM-DD HH:mm");
+		var format = dateTimeFormats.dateOnly + " " + Teleopti.MyTimeWeb.Common.TimeFormat;
+		var periodStart = moment(startDate.format(dateTimeFormats.dateOnly) + " " + self.StartTime(), format);
 		var periodEnd = moment(periodStart);
 		if (self.RequestDuration()) {
 			var durationParts = self.RequestDuration().split(":");
@@ -189,8 +189,8 @@
 		var currentUserDateTime = parentViewModel.baseUtcOffsetInMinutes
 			? Teleopti.MyTimeWeb.Common.GetCurrentUserDateTime(parentViewModel.baseUtcOffsetInMinutes, parentViewModel.daylightSavingAdjustment)
 			: moment();
-		self.defaultStartTime(currentUserDateTime.add(20, 'minutes'));
-		self.StartTime(self.defaultStartTime().format(Teleopti.MyTimeWeb.Common.TimeFormat));
+		var defaultStartTime = currentUserDateTime.add(20, 'minutes');
+		self.StartTime(defaultStartTime.format(Teleopti.MyTimeWeb.Common.TimeFormat));
 		self.TimeList = _createTimeList();
 		self.RequestDuration(self.TimeList[0]);
 		self.CancelAddRequest = parentViewModel.CancelAddingNewRequest;
