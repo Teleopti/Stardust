@@ -327,6 +327,7 @@
 						field: 'GetBrokenRules()',
 						headerCellFilter: 'translate',
 						cellClass: 'request-broken-rules',
+						cellTooltip: true,
 						visible: true,
 						pinnedRight: true,
 						enablePinning: false,
