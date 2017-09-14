@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 		    _daysOffPreferences.FullWeekendsOffValue = new MinMax<int>(1, 1);
 		    var first = false;
 		    var second = false;
-		    for (int i = 0; i < 10; i++)
+		    for (int i = 0; i < 50; i++)
 		    {
 			    ret.SetAll(false);
 			    ret.Set(12, true);
@@ -163,6 +163,9 @@ namespace Teleopti.Ccc.DomainTest.DayOffPlanning
 
 			    if (!ret[19] || !ret[20])
 				    second = true;
+
+				if(first && second)
+					break;
 			}
 
 			(first && second).Should().Be.True();
