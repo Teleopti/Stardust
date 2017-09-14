@@ -8,7 +8,7 @@
 	.request-footer {
 		min-height: 40px;
 
-		.time-zone-switch{
+		.time-zone-switch {
 			padding: 5px 0;
 		}
 
@@ -26,7 +26,7 @@
 		border-bottom: 1px solid rgba(0,0,0,.26);
 	}
 
-	.requests-uigrid-table {
+	.requests-uigrid-table-container, .requests-uigrid-table {
 		height: 60vh;
 	}
 
@@ -338,6 +338,7 @@
 		.ui-grid-header-viewport {
 			overflow: visible;
 		}
+
 		.absence-account-cell {
 			float: left;
 		}
@@ -394,9 +395,9 @@
 		}
 	}
 
-	.text-absence-view{
+	.text-absence-view {
 		.ui-grid-pinned-container-right {
-				.ui-grid-header-cell:first-child, .ui-grid-cell:first-child {
+			.ui-grid-header-cell:first-child, .ui-grid-cell:first-child {
 				border-left: none;
 			}
 		}

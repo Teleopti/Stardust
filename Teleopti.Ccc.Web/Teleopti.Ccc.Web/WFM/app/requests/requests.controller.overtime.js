@@ -315,9 +315,12 @@
 				requestsNotificationService.notifyMaxSearchPersonCountExceeded(requests.data.MaxSearchPersonCount);
 			}
 			onInitCallBack && onInitCallBack(requests.data.TotalCount);
-			vm.isLoading = false;
+
 			vm.gridApi.grid.selection.selectAll = false;
-			reselectRequests();
+			vm.isLoading = false;
+			$timeout(function () {
+				reselectRequests();
+			}, 0);
 		}
 
 		function reselectRequests() {
