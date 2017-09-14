@@ -15,6 +15,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual MinMax<int> ConsecutiveWorkdays { get; set; }
 		public virtual MinMax<int> ConsecutiveDayOffs { get; set; }
 		public virtual bool Default { get; protected set; }
+		public virtual BlockFinderType BlockFinderType { get; set; }
+		public virtual bool BlockSameShiftCategory { get; set; }
+		public virtual bool BlockSameStartTime { get; set; }
+		public virtual bool BlockSameShift { get; set; }
 
 		public DayOffRules()
 		{
@@ -35,6 +39,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 				ConsecutiveWorkdays = new MinMax<int>(2, 6),
 				Default = true,
 				Name = UserTexts.Resources.Default,
+				BlockFinderType= BlockFinderType.SingleDay,
+				BlockSameShiftCategory = false,
+				BlockSameStartTime = false,
+				BlockSameShift = false
 			};
 		}
 

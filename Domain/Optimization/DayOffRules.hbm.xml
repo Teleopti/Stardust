@@ -33,7 +33,11 @@
 			<property name="Maximum" column="MaxConsecutiveDayOffs" />
 		</component>
 		<property name="Default" column="DefaultSettings" access="property"/>
-    <property name="Name" access="property"/>
+		<property name="Name" access="property"/>
+		<property name="BlockFinderType" column="BlockFinderType" access="property"/>
+		<property name="BlockSameStartTime" column="BlockSameStartTime" access="property"/>
+		<property name="BlockSameShiftCategory" column="BlockSameShiftCategory" access="property"/>
+		<property name="BlockSameShift" column="BlockSameShift" access="property"/>
 
 		<many-to-one name="PlanningGroup"
 					 class="Teleopti.Ccc.Domain.Optimization.PlanningGroup"

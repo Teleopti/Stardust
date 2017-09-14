@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.TestCommon;
@@ -39,7 +40,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MinConsecutiveDayOffs = 1,
 				MaxConsecutiveDayOffs = 1,
 				MinConsecutiveWorkdays = 2,
-				MaxConsecutiveWorkdays = 2
+				MaxConsecutiveWorkdays = 2,
+				BlockFinderType = BlockFinderType.BetweenDayOff,
+				BlockSameStartTime = true,
+				BlockSameShift = true,
+				BlockSameShiftCategory = true
 			};
 
 			Target.Persist(model);
@@ -49,6 +54,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
 			inDb.Default.Should().Be.False();
+			inDb.BlockFinderType.Should().Be.EqualTo(BlockFinderType.BetweenDayOff);
+			inDb.BlockSameStartTime.Should().Be.True();
+			inDb.BlockSameShift.Should().Be.True();
+			inDb.BlockSameShiftCategory.Should().Be.True();
 		}
 
 		[Test]
@@ -66,7 +75,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MaxConsecutiveDayOffs = 4,
 				MinConsecutiveWorkdays = 1,
 				MaxConsecutiveWorkdays = 1,
-				Default = true
+				Default = true,
+				BlockFinderType = BlockFinderType.BetweenDayOff,
+				BlockSameStartTime = true,
+				BlockSameShift = true,
+				BlockSameShiftCategory = true
 			};
 
 			Target.Persist(model);
@@ -76,6 +89,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
 			inDb.Default.Should().Be.True();
+			inDb.BlockFinderType.Should().Be.EqualTo(BlockFinderType.BetweenDayOff);
+			inDb.BlockSameStartTime.Should().Be.True();
+			inDb.BlockSameShift.Should().Be.True();
+			inDb.BlockSameShiftCategory.Should().Be.True();
 		}
 
 		[Test]
@@ -88,7 +105,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MinConsecutiveDayOffs = 3,
 				MaxConsecutiveDayOffs = 4,
 				MinConsecutiveWorkdays = 5,
-				MaxConsecutiveWorkdays = 6
+				MaxConsecutiveWorkdays = 6,
+				BlockFinderType = BlockFinderType.BetweenDayOff,
+				BlockSameStartTime = true,
+				BlockSameShift = true,
+				BlockSameShiftCategory = true
 			};
 
 			Target.Persist(model);
@@ -98,6 +119,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
 			inDb.Default.Should().Be.False();
+			inDb.BlockFinderType.Should().Be.EqualTo(BlockFinderType.BetweenDayOff);
+			inDb.BlockSameStartTime.Should().Be.True();
+			inDb.BlockSameShift.Should().Be.True();
+			inDb.BlockSameShiftCategory.Should().Be.True();
 		}
 
 		[Test]
@@ -114,7 +139,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MaxConsecutiveDayOffs = 4,
 				MinConsecutiveWorkdays = 5,
 				MaxConsecutiveWorkdays = 6,
-				PlanningGroupId = planningGroup.Id
+				PlanningGroupId = planningGroup.Id,
+				BlockFinderType = BlockFinderType.BetweenDayOff,
+				BlockSameStartTime = true,
+				BlockSameShift = true,
+				BlockSameShiftCategory = true
 			};
 
 			Target.Persist(model);
@@ -124,6 +153,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
 			inDb.Default.Should().Be.False();
+			inDb.BlockFinderType.Should().Be.EqualTo(BlockFinderType.BetweenDayOff);
+			inDb.BlockSameStartTime.Should().Be.True();
+			inDb.BlockSameShift.Should().Be.True();
+			inDb.BlockSameShiftCategory.Should().Be.True();
 		}
 
 		[Test]
@@ -137,7 +170,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MaxConsecutiveDayOffs = 2,
 				MinConsecutiveWorkdays = 3,
 				MaxConsecutiveWorkdays = 3,
-				Default = true
+				Default = true,
+				BlockFinderType = BlockFinderType.SingleDay,
+				BlockSameStartTime = false,
+				BlockSameShift = false,
+				BlockSameShiftCategory = false
 			};
 
 			Target.Persist(model);
@@ -147,6 +184,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
 			inDb.Default.Should().Be.True();
+			inDb.BlockFinderType.Should().Be.EqualTo(BlockFinderType.SingleDay);
+			inDb.BlockSameStartTime.Should().Be.False();
+			inDb.BlockSameShift.Should().Be.False();
+			inDb.BlockSameShiftCategory.Should().Be.False();
 		}
 
 		[Test]
@@ -164,7 +205,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				MinConsecutiveWorkdays = 3,
 				MaxConsecutiveWorkdays = 3,
 				Default = true,
-				PlanningGroupId = planningGroup.Id
+				PlanningGroupId = planningGroup.Id,
+				BlockFinderType = BlockFinderType.SingleDay,
+				BlockSameStartTime = false,
+				BlockSameShift = false,
+				BlockSameShiftCategory = false
 			};
 
 			Target.Persist(model);
@@ -174,6 +219,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			inDb.ConsecutiveDayOffs.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveDayOffs, model.MaxConsecutiveDayOffs));
 			inDb.ConsecutiveWorkdays.Should().Be.EqualTo(new MinMax<int>(model.MinConsecutiveWorkdays, model.MaxConsecutiveWorkdays));
 			inDb.Default.Should().Be.True();
+			inDb.BlockFinderType.Should().Be.EqualTo(BlockFinderType.SingleDay);
+			inDb.BlockSameStartTime.Should().Be.False();
+			inDb.BlockSameShift.Should().Be.False();
+			inDb.BlockSameShiftCategory.Should().Be.False();
 		}
 
 		[Test]

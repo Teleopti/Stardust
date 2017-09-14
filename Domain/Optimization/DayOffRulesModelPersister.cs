@@ -52,6 +52,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			dayOffRules.ConsecutiveDayOffs = new MinMax<int>(dayOffRulesModel.MinConsecutiveDayOffs, dayOffRulesModel.MaxConsecutiveDayOffs);
 			dayOffRules.ConsecutiveWorkdays = new MinMax<int>(dayOffRulesModel.MinConsecutiveWorkdays, dayOffRulesModel.MaxConsecutiveWorkdays);
 			dayOffRules.Name = dayOffRulesModel.Name;
+			dayOffRules.BlockFinderType = dayOffRulesModel.BlockFinderType;
+			dayOffRules.BlockSameStartTime = dayOffRulesModel.BlockSameStartTime;
+			dayOffRules.BlockSameShiftCategory = dayOffRulesModel.BlockSameShiftCategory;
+			dayOffRules.BlockSameShift = dayOffRulesModel.BlockSameShift;
 
 			dayOffRules.ClearFilters();
 			foreach (var filter in dayOffRulesModel.Filters.Select(filterModel => _filterMapper.ToEntity(filterModel)))

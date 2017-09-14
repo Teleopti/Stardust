@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -21,5 +22,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IList<FilterModel> Filters { get; set; }
 		public string Name { get; set; }
 		public Guid? PlanningGroupId { get; set; }
+		public BlockFinderType BlockFinderType { get; set; }
+		public bool BlockSameStartTime { get; set; }
+		public bool BlockSameShiftCategory { get; set; }
+		public bool BlockSameShift { get; set; }
 	}
 }
