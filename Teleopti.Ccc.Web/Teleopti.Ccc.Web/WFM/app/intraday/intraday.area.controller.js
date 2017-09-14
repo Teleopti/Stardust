@@ -136,10 +136,7 @@
         $scope.selectedSkillChange = function(item) {
             if (item) {
                 if (item.DoDisplayData) {
-                    // $scope.chosenOffset.value = 0;
-                    $scope.changeChosenOffset($scope.chosenOffset.value, true);
 					$scope.skillSelected(item);
-					
                     pollActiveTabDataByDayOffset($scope.activeTab, $scope.chosenOffset.value);
                     if (prevSkill) {
                         if (!(prevSkill === autocompleteSkill.selectedSkill)) {
@@ -161,9 +158,7 @@
 
 		$scope.selectedSkillAreaChange = function(item) {
             if (item) {
-                // $scope.chosenOffset.value = 0;
                 $scope.skillAreaSelected(item);
-
                 pollData($scope.activeTab);
 
                 $scope.prevArea = $scope.selectedItem;
@@ -271,38 +266,37 @@
             $scope.hasMonitorData = false;
         }
 
-        var cancelTimeout = function() {
+		var cancelTimeout = function () {
             if (timeoutPromise) {
                 $timeout.cancel(timeoutPromise);
                 timeoutPromise = undefined;
             }
         };
 
-        function poll() {
+		function poll() {
             polling = $interval(function() {
                 pollData($scope.activeTab);
             }, pollingTimeout);
         }
         poll();
 
-        $scope.pollActiveTabDataHelper = function(activeTab) {
-            $interval.cancel(polling);
+		$scope.pollActiveTabDataHelper = function (activeTab) {
+			$interval.cancel(polling);
             pollData(activeTab);
             if ($scope.chosenOffset.value === 0) {
                 poll();
             }
         };
-        function pollData(activeTab) {
-            if ($scope.toggles.showOtherDay) {
+		function pollData(activeTab) {
+			if ($scope.toggles.showOtherDay) {
                 pollActiveTabDataByDayOffset(activeTab, $scope.chosenOffset.value);
-            } else {
+			} else {
                 pollActiveTabData(activeTab);
             }
         }
 
         function pollActiveTabData(activeTab) {
             var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
-
             if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem)) {
                 if ($scope.selectedItem.Skills) {
                     services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.toggles);
@@ -314,16 +308,15 @@
                 $scope.viewObj = services[activeTab].getData();
                 $scope.latestActualInterval = timeData;
                 $scope.hasMonitorData = $scope.viewObj.hasMonitorData;
-            } else {
-                $timeout(function() {
-                    pollActiveTabData($scope.activeTab);
-                }, 1000);
+			} else {
+	            timeoutPromise = $timeout(function() {
+		             pollActiveTabData($scope.activeTab);
+	            }, 1000);
             }
         }
 
         function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
             var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
-
             if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem)) {
                 if ($scope.selectedItem.Skills) {
                     services[activeTab].pollSkillAreaDataByDayOffset($scope.selectedItem, $scope.toggles, dayOffset);
@@ -339,10 +332,8 @@
                 $scope.viewObj = services[activeTab].getData();
                 $scope.latestActualInterval = timeData;
                 $scope.hasMonitorData = $scope.viewObj.hasMonitorData;
-            } else {
-                $timeout(function() {
-                    pollActiveTabDataByDayOffset($scope.activeTab, dayOffset);
-                }, 1000);
+			} else {
+	            timeoutPromise = $timeout(function () { pollActiveTabDataByDayOffset($scope.activeTab, dayOffset); }, 1000);
             }
         }
 
@@ -373,8 +364,8 @@
 
         $scope.$on('$stateChangeSuccess', $scope.onStateChanged);
 
-        $scope.$on('$viewContentLoaded', function() {
-            pollActiveTabData($scope.activeTab);
+		$scope.$on('$viewContentLoaded', function () {
+	        pollData($scope.activeTab);
         });
 
         var notifySkillAreaDeletion = function() {
@@ -407,15 +398,16 @@
         };
 
         $scope.changeChosenOffset = function(value, dontPoll) {
-            $interval.cancel(polling);
-            var d = angular.copy($scope.chosenOffset);
+			$interval.cancel(polling);
+	        cancelTimeout();
+			var d = angular.copy($scope.chosenOffset);
             d.value = value;
             $scope.chosenOffset = d;
-            if (!dontPoll) {
+			if (!dontPoll) {
                 pollActiveTabDataByDayOffset($scope.activeTab, value);
             }
-            if (value === 0) {
-                poll();
+			if (value === 0) {
+				poll();
             }
         };
 
