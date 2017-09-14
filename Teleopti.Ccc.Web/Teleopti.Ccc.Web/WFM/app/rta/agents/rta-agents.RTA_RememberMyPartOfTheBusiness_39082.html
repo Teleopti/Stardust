@@ -28,13 +28,22 @@
 
 <div class="panel material-depth-1 rta-filter-panel" ng-include="'app/rta/filter/filter-template.html'" ng-controller="RtaFilterController39082 as vm"></div>
 
-<div class="panel material-depth-1">
+<div class="panel material-depth-1" ng-if="vm.displayNoAgentsMessage()">
+	<div class="con-row">
+		<div class="con-flex">
+			{{vm.displayNoAgentsForSkillMessage() ? 'NoAgentsFound' : 'NoAccessToAgents' | translate}}
+		</div>
+	</div>
+</div>
+
+<div class="panel material-depth-1" ng-if="!vm.displayNoAgentsMessage()">
 	<div class="con-row">
 		<div class="con-flex">
 			<div class="sub-header">
 			</div>
 		</div>
 	</div>
+
 	<div class="con-row" ng-class="{'rta-agents-filter-wrapper': vm.agentStates.length >= vm.maxNumberOfAgents}">
 		<div class="con-flex">
 			<label for="filter-agents" class="input-icon">
@@ -61,8 +70,6 @@
 					</div>
 				</div>
 			</div>
-
-			
 		</div>
 	</div>
 	<div class="con-row">

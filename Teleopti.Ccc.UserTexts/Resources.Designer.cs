@@ -19637,6 +19637,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You don&apos;t have access to any agents.
+        /// </summary>
+        public static string NoAccessToAgents {
+            get {
+                return ResourceManager.GetString("NoAccessToAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You don&apos;t have access to any sites or teams.
         /// </summary>
         public static string NoAccessToSites {
@@ -19678,6 +19687,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoAgentsAvailableForShiftTrade {
             get {
                 return ResourceManager.GetString("NoAgentsAvailableForShiftTrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No agents for the selected skills were found.
+        /// </summary>
+        public static string NoAgentsFound {
+            get {
+                return ResourceManager.GetString("NoAgentsFound", resourceCulture);
             }
         }
         

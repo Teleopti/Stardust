@@ -13,7 +13,6 @@
 							<span class=" pulse-element"></span>
 			<i class="mdi mdi-filter-outline filter-icon"></i>
 			</span>
-			<!-- <span class="pulse-element" ng-if="vm.highlightAgentsButton"></span> -->
 			<span></span>
 			<button class="wfm-btn wfm-btn-default select-skill wfm-badge-wrapper" ng-click="vm.goToAgents()">{{'Agents'|translate}} <md-tooltip md-direction="bottom">Go to agents page</md-tooltip>
 			</button>
@@ -45,7 +44,7 @@
 
 <div class="con-row demo-outline">
 	<div class="con-flex">
-		<div class="wfm-chip-wrap">
+		<div class="wfm-chip-wrap" ng-if="!vm.displayNoSitesMessage()">
 			<span class="wfm-chip" style="cursor:default;">
 				<span class="chip-handle">
 				<i class="mdi mdi-alert-circle"></i>

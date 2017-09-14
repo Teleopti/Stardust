@@ -22,6 +22,7 @@
 			'rtaFormatService',
 			'rtaAgentsBuildService',
 			'rtaRouteService',
+			'rtaStateService',
 			'fakeTimeService',
 			'localeLanguageSortingService',
 			'Toggle',
@@ -44,6 +45,7 @@
 		rtaFormatService,
 		rtaAgentsBuildService,
 		rtaRouteService,
+		rtaStateService,
 		fakeTimeService,
 		localeLanguageSortingService,
 		Toggle,
@@ -95,6 +97,9 @@
 		vm.openedMaxNumberOfAgents = false;
 		vm.maxNumberOfAgents = 50;
 		vm.isLoading = angular.toJson($stateParams) !== '{}';
+
+		vm.displayNoAgentsMessage = function () { return vm.agentStates.length == 0; };
+		vm.displayNoAgentsForSkillMessage = rtaStateService.hasSkillSelection;
 
 		var toggles = {};
 		Toggle.togglesLoaded.then(function () {
