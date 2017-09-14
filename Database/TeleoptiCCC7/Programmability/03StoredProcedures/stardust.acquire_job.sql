@@ -6,7 +6,9 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
 CREATE PROCEDURE [Stardust].[AcquireQueuedJob]
+@jobId uniqueidentifier
 AS
 BEGIN
 
@@ -18,14 +20,13 @@ set lockTimestamp = null
 where datediff(minute,GETDATE(),lockTimestamp  ) < 0
 
 BEGIN TRAN
-	SELECT TOP 1 @Idd = [JobId]
-				FROM [Stardust].[JobQueue] 
-				where locktimestamp is null
-				ORDER BY Created
+	SELECT @Idd = [JobId]
+			FROM [Stardust].[JobQueue] 
+			where JobId = @jobId and locktimestamp is null
 
 	update [Stardust].[JobQueue]
 	set locktimestamp = dateadd(minute,10,GETDATE())
-	where JobId = @Idd	
+	where JobId = @Idd
 
 COMMIT TRAN
 
