@@ -32,7 +32,7 @@
 			totalRequestsCount: 0
 		};
 		vm.agentSearchOptions = {
-			keyword: "",
+			keyword: '',
 			isAdvancedSearchEnabled: true,
 			searchKeywordChanged: false,
 			focusingSearch: false,
@@ -81,7 +81,7 @@
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.selectedTabIndex = 0;
 			vm.period = vm.absenceAndOvertimePeriod;
-			$state.go("requests.absenceAndText", {getParams: getParams});
+			$state.go('requests.absenceAndText', {getParams: getParams});
 		};
 
 		vm.activeShiftTradeTab = function () {
@@ -89,7 +89,7 @@
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.selectedTabIndex = 1;
 			vm.period = vm.shiftTradePeriod;
-			$state.go("requests.shiftTrade", {getParams: getParams});
+			$state.go('requests.shiftTrade', {getParams: getParams});
 		};
 
 		vm.activeOvertimeTab = function () {
@@ -97,7 +97,7 @@
 			requestCommandParamsHolder.resetAllSelectedRequestsIds();
 			vm.selectedTabIndex = 2;
 			vm.period = vm.absenceAndOvertimePeriod;
-			$state.go("requests.overtime", {getParams: getParams});
+			$state.go('requests.overtime', {getParams: getParams});
 		};
 
 		vm.getSitesAndTeamsAsync = function () {
@@ -203,7 +203,7 @@
 			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.Cancel) {
 				requestsNotificationService.notifyCancelledRequestsSuccess(changedRequestsCount, requestsCount);
 			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ProcessWaitlist) {
-				var period = moment(waitlistPeriod.startDate).format("L") + "-" + moment(waitlistPeriod.endDate).format("L");
+				var period = moment(waitlistPeriod.startDate).format('L') + '-' + moment(waitlistPeriod.endDate).format('L');
 				requestsNotificationService.notifySubmitProcessWaitlistedRequestsSuccess(period);
 			} else if (commandType === requestsDefinitions.REQUEST_COMMANDS.ApproveBasedOnBusinessRules) {
 				requestsNotificationService.notifySubmitApproveBasedOnBusinessRulesSuccess();
@@ -291,7 +291,7 @@
 		function setReleaseNotification() {
 			var message = $translate.instant('WFMReleaseNotificationWithoutOldModuleLink')
 				.replace('{0}', $translate.instant('Requests'))
-				.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
+				.replace('{1}', '<a href="http://www.teleopti.com/wfm/customer-feedback.aspx" target="_blank">')
 				.replace('{2}', '</a>');
 			noticeSvc.info(message, null, true);
 		}
@@ -302,9 +302,9 @@
 
 		function formatDatePeriod(message) {
 			var userTimeZone = CurrentUserInfo.CurrentUserInfo().DefaultTimeZone;
-			var startDate = moment(message.StartDate.substring(1, message.StartDate.length)).tz(userTimeZone).format("L");
-			var endDate = moment(message.EndDate.substring(1, message.EndDate.length)).tz(userTimeZone).format("L");
-			return startDate + "-" + endDate;
+			var startDate = moment(message.StartDate.substring(1, message.StartDate.length)).tz(userTimeZone).format('L');
+			var endDate = moment(message.EndDate.substring(1, message.EndDate.length)).tz(userTimeZone).format('L');
+			return startDate + '-' + endDate;
 		}
 
 		function getParams(){
