@@ -21,7 +21,8 @@
 
 		vm.displayNoSitesMessage = function () { return vm.siteCards.length == 0; };
 		vm.displayNoSitesForSkillMessage = rtaStateService.hasSkillSelection;
-		vm.displayBlueDot = rtaStateService.hasSelection2();
+		vm.highlightAgentsButton = rtaStateService.hasSelection2();
+		vm.goToAgents = rtaStateService.goToAgents;
 
 		var pollPromise;
 
@@ -135,10 +136,6 @@
 			else
 				rtaStateService.selectSkill(skillOrSkillArea.Id);
 		}
-		
-		vm.displayGoToAgents = rtaStateService.hasSelection;
-
-		vm.goToAgents = rtaStateService.goToAgents;
 
 	}
 })();
