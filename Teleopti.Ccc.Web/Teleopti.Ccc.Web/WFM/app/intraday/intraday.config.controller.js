@@ -1,41 +1,42 @@
 (function () {
 	'use strict';
-	angular.module('wfm.intraday').controller('IntradayConfigController', [
-		'$scope',
+	angular.module('wfm.intraday').controller('IntradayConfigController', IntradayConfigController);
+
+	IntradayConfigController.$inject = [
 		'$state',
 		'intradayService',
 		'$filter',
 		'NoticeService',
 		'$translate',
 		'Toggle',
-		'skillIconService',
-		IntradayConfigController]);
+		'skillIconService'];
 
-	function IntradayConfigController($scope, $state, intradayService, $filter, NoticeService, $translate, toggleSvc, skillIconService) {
-		$scope.skills = [];
-		$scope.skillAreaName = '';
-		$scope.getSkillIcon = skillIconService.get;
-		$scope.toggles = {
+	function IntradayConfigController($state, intradayService, $filter, NoticeService, $translate, toggleSvc, skillIconService) {
+		var vm = this;
+		vm.skills = [];
+		vm.skillAreaName = '';
+		vm.getSkillIcon = skillIconService.get;
+		vm.toggles = {
 			unifiedSkillGroupManagement: []
 		};
 
-		$scope.exitConfigMode = function () {
+		vm.exitConfigMode = function () {
 			$state.go('intraday', {isNewSkillArea: false});
 		};
 
-		$scope.skillSelected = function () {
-			var selectedSkills = $filter('filter')($scope.skills, {isSelected: true});
+		vm.skillSelected = function () {
+			var selectedSkills = $filter('filter')(vm.skills, {isSelected: true});
 			var selectedSkillIds = selectedSkills.map(function (skill) {
 				return skill.Id;
 			});
 			return selectedSkillIds.length > 0;
 		};
 
-		$scope.saveSkillArea = function (form) {
+		vm.saveSkillArea = function (form) {
 			if (form.$invalid) {
 				return;
 			}
-			var selectedSkills = $filter('filter')($scope.skills, {isSelected: true});
+			var selectedSkills = $filter('filter')(vm.skills, {isSelected: true});
 
 			var selectedSkillIds = selectedSkills.map(function (skill) {
 				return skill.Id;
@@ -48,7 +49,7 @@
 
 			intradayService.createSkillArea
 				.query({
-					Name: $scope.skillAreaName,
+					Name: vm.skillAreaName,
 					Skills: selectedSkillIds
 				})
 				.$promise.then(function (result) {
@@ -58,15 +59,17 @@
 		};
 
 		toggleSvc.togglesLoaded.then(function () {
-			$scope.toggles.unifiedSkillGroupManagement = toggleSvc.WFM_Unified_Skill_Group_Management_45417;
+			vm.toggles.unifiedSkillGroupManagement = toggleSvc.WFM_Unified_Skill_Group_Management_45417;
 		});
 
 		var notifySkillAreaCreation = function () {
-			NoticeService.success($translate.instant('Created') + ' ' + $scope.skillAreaName, 5000, false);
+			NoticeService.success($translate.instant('Created') + ' ' + vm.skillAreaName, 5000, false);
 		};
 
 		intradayService.getSkills.query().$promise.then(function (skills) {
-			$scope.skills = skills;
+			vm.skills = skills;
 		});
+
+		console.log(vm);
 	}
 })();

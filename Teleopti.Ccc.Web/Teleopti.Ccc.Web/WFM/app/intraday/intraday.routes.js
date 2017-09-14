@@ -24,7 +24,7 @@
 		{
 			url: '/skill-area-config',
 			templateUrl: 'app/intraday/intraday-config-new.html',
-			controller: 'IntradayConfigController'
+			controller: 'IntradayConfigController as vm'
 		})
 	}
 })();
