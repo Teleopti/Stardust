@@ -15,7 +15,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.WorkflowControl;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -117,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		}
 
 		[Test]
-		public void ShouldProcessWaitlistedAndApproveRequest2()
+		public void ShouldProcessWaitlistedAndApproveRequestOnSameSkill()
 		{
 			SetUp();
 			Now.Is(new DateTime(2016, 12, 1, 6, 00, 00, DateTimeKind.Utc));
@@ -331,7 +330,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			command.PersonRequestId.Should().Be.EqualTo(personRequest.Id);
 		}
 
-		[Test, Ignore("WIP")]
+		[Test]
 		public void ShouldApproveManyWaitlistedRequests()
 		{
 			SetUp();

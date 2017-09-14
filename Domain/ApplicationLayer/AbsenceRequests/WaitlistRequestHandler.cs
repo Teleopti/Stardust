@@ -47,6 +47,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly SchedulePartModifyAndRollbackServiceWithoutStateHolder _rollbackService;
 		private readonly ISkillTypeRepository _skillTypeRepository;
 		private readonly IPersonRepository _personRepository;
+		private readonly IContractRepository _contractRepository;
+		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
+		private readonly IContractScheduleRepository _contractScheduleRepository;
 
 		public WaitlistRequestHandler(ICommandDispatcher commandDispatcher,
 			ISkillCombinationResourceRepository skillCombinationResourceRepository,
@@ -62,7 +65,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			ICurrentUnitOfWork currentUnitOfWork, IScheduleDayChangeCallback scheduleDayChangeCallback,
 			INow now,
 			SchedulePartModifyAndRollbackServiceWithoutStateHolder rollbackService,
-			ISkillTypeRepository skillTypeRepository, IPersonRepository personRepository)
+			ISkillTypeRepository skillTypeRepository, IPersonRepository personRepository, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository,
+			IContractScheduleRepository contractScheduleRepository)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -85,6 +89,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_rollbackService = rollbackService;
 			_skillTypeRepository = skillTypeRepository;
 			_personRepository = personRepository;
+			_contractRepository = contractRepository;
+			_partTimePercentageRepository = partTimePercentageRepository;
+			_contractScheduleRepository = contractScheduleRepository;
 		}
 
 		[AsSystem]
@@ -127,6 +134,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 				_activityRepository.LoadAll();
 				_skillTypeRepository.LoadAll();
+				_contractRepository.LoadAll();
+				_partTimePercentageRepository.LoadAll();
+				_contractScheduleRepository.LoadAllAggregate();
+
 				var skills = _skillRepository.LoadAllSkills().ToList();
 				
 				var skillIds = new HashSet<Guid>();
@@ -158,6 +169,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						new PersonProvider(persons), new ScheduleDictionaryLoadOptions(false, false), persons);
 
 				_currentUnitOfWork.Current().Clear();
+				var approvedRequest = new List<IPersonRequest>();
 
 				using (getContext(combinationResources, skills, false))
 				{
@@ -168,10 +180,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						var requestPeriod = pRequest.Request.Period;
 						var schedules = personsSchedules[pRequest.Person];
 						var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(pRequest.Person.PermissionInformation.DefaultTimeZone());
-						//using (getContext(combinationResources, skills, false))
-						{
-
-						}
 						var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
 						var startDateTimeInPersonTimeZone = TimeZoneHelper.ConvertFromUtc(pRequest.RequestedDate, pRequest.Person.PermissionInformation.DefaultTimeZone());
 						var scheduleDay = schedules.ScheduledDay(new DateOnly(startDateTimeInPersonTimeZone));
@@ -179,7 +187,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						if (personAssignment == null) continue;
 
 						var absenceRequest = (IAbsenceRequest)pRequest.Request;
-						var personAbsence = scheduleDay.CreateAndAddAbsence(new AbsenceLayer(absenceRequest.Absence, pRequest.Request.Period));
+						scheduleDay.CreateAndAddAbsence(new AbsenceLayer(absenceRequest.Absence, pRequest.Request.Period));
 						//personsSchedules.Modify(scheduleDay, _scheduleDayChangeCallback);
 						_rollbackService.ModifyStrictly(scheduleDay, new NoScheduleTagSetter(), NewBusinessRuleCollection.Minimum());
 						_resourceCalculation.ResourceCalculate(dateOnlyPeriodOne, resCalcData, () => getContext(combinationResources, skills, true));
@@ -220,11 +228,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							if (validatedRequest.IsValid)
 							{
 								if (!autoGrant) return;
-								var result = sendApproveCommand(pRequest);
-								if (!result)
-								{
-									_rollbackService.RollbackMinimumChecks();
-								}
+								//var result = sendApproveCommand(pRequest);
+								//if (!result)
+								//{
+								//	_rollbackService.RollbackMinimumChecks();
+								//}
+								//else
+								_rollbackService.ClearModificationCollection();
+								approvedRequest.Add(pRequest);
 							}
 							else
 							{
@@ -237,6 +248,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						}
 					}
 
+				}
+				foreach (var personRequest in approvedRequest)
+				{
+					var result = sendApproveCommand(personRequest);
+					if (!result)
+					{
+						
+					}
 				}
 			}
 			catch (Exception exp)
