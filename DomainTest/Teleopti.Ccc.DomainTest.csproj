@@ -156,6 +156,7 @@
     <Compile Include="ApplicationLayer\AbsenceRequests\IntrdayRequestFilterWithNoValidatorTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\MultiAbsenceRequestsHandlerBug45331Test.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\RequestProcessorTest.cs" />
+    <Compile Include="ApplicationLayer\AbsenceRequests\WaitlistRequestHandlerTest.cs" />
     <Compile Include="ApplicationLayer\AbsenceRequests\SkillSetupHelper.cs" />
     <Compile Include="ApplicationLayer\AddActivityCommandHandlerTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\AgentFileTemplateTest.cs" />

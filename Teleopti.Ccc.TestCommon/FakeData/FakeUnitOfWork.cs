@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
 		public void Clear()
 		{
-			throw new NotImplementedException();
 		}
 
 		public T Merge<T>(T root) where T : class, IAggregateRoot

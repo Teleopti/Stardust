@@ -955,7 +955,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				  		pr.id = r.parent and 
 						pr.RequestStatus = 5 and
 				  		r.startDateTime <= :endDate and 
-						r.endDateTime >= :startDate")
+						r.endDateTime >= :startDate and 
+						pr.IsDeleted = 0")
 										  .SetDateTime("startDate", dateTimePeriod.StartDateTime)
 										  .SetDateTime("endDate", dateTimePeriod.EndDateTime)
 										  .List<Guid>();
