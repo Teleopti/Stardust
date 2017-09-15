@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			var dayOff = DayOff();
 			return dayOff == null ?
-				new DateOnlyPeriod(Date, Date).ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) :    //don't like to jump to person aggregate here... "st‰mpla" assignment with a timezone instead.
+				new DateOnlyPeriod(Date, Date).ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) :    //don't like to jump to person aggregate here... "st√§mpla" assignment with a timezone instead.
 				new DateTimePeriod(dayOff.Anchor, dayOff.Anchor.AddTicks(1));
 		}
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			var dayOff = DayOff();
 			return dayOff == null ?
-				Date.ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) : //don't like to jump to person aggregate here... "st‰mpla" assignment with a timezone instead.
+				Date.ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone()) : //don't like to jump to person aggregate here... "st√§mpla" assignment with a timezone instead.
 				new DateTimePeriod(dayOff.Anchor, dayOff.Anchor.AddTicks(1));
 		}
 
@@ -365,6 +365,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool muteEvent = false)
 		{
+			if (period.StartDateTime.Equals(period.EndDateTime)) return;
 			addActivityInternal(activity, period);
 			if (!muteEvent)
 			{
@@ -663,7 +664,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			if (_dayOffTemplate == null)
 				return null;
-			//don't like to jump to person aggregate here... "st‰mpla" assignment with a timezone instead.
+			//don't like to jump to person aggregate here... "st√§mpla" assignment with a timezone instead.
 			var anchorDateTime = TimeZoneHelper.ConvertToUtc(Date.Date.Add(_dayOffTemplate.Anchor), Person.PermissionInformation.DefaultTimeZone());
 			return new DayOff(anchorDateTime, _dayOffTemplate.TargetLength, _dayOffTemplate.Flexibility, _dayOffTemplate.Description, _dayOffTemplate.DisplayColor, _dayOffTemplate.PayrollCode, _dayOffTemplate.Id.GetValueOrDefault());
 		}

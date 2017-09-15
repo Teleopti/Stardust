@@ -108,8 +108,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldBookSeat()
 		{
 			setup();
-			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
-			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var startDate = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
+			var endDate = new DateTime(2015, 1, 20, 9, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
 			var team = addTeam("Team");
@@ -170,8 +170,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldSkipNonSelectedLocations()
 		{
 			setup();
-			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
-			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var startDate = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
+			var endDate = new DateTime(2015, 1, 20, 9, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
 			var team = addTeam("Team");
@@ -203,8 +203,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldGroupTeamBookings()
 		{
 			setup();
-			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
-			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var startDate = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
+			var endDate = new DateTime(2015, 1, 20, 9, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
 			var startDateOnly = new DateOnly(startDate);
@@ -253,8 +253,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldGroupManyTeamBookings()
 		{
 			setup();
-			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
-			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var startDate = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
+			var endDate = new DateTime(2015, 1, 20, 9, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 			var startDateOnly = new DateOnly(startDate);
 
@@ -324,8 +324,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldGroupTeamBookingsAcrossMultipleDays()
 		{
 			setup();
-			var startDateDay1 = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
-			var endDateDay1 = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var startDateDay1 = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
+			var endDateDay1 = new DateTime(2015, 1, 20, 9, 0, 0, DateTimeKind.Utc);
 
 			var startDateDay2 = startDateDay1.AddDays(1);
 			var endDateDay2 = startDateDay2.AddDays(1);
@@ -839,8 +839,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldBookSeatBySeatAndPerson()
 		{
 			setup();
-			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
-			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var startDate = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
+			var endDate = new DateTime(2015, 1, 20, 9, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
 			var team = addTeam("Team");
@@ -872,8 +872,8 @@ namespace Teleopti.Ccc.DomainTest.SeatPlanning
 		public void ShouldBookSeatBySeatsAndPeople()
 		{
 			setup();
-			var startDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
-			var endDate = new DateTime(2015, 1, 20, 0, 0, 0, DateTimeKind.Utc);
+			var startDate = new DateTime(2015, 1, 20, 8, 0, 0, DateTimeKind.Utc);
+			var endDate = new DateTime(2015, 1, 20, 9, 0, 0, DateTimeKind.Utc);
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
 
 			var team = addTeam("Team");

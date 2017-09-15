@@ -763,6 +763,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.AddOvertimeActivity(overtime,period,multiplicatorDefinitionSet);
 			Assert.AreEqual(0, target.OvertimeActivities().Count());
 		}
+		
+		[Test]
+		public void ShouldNotAddZeroLengthMainShifts()
+		{
+			var activity = new  Activity("_");
+			var dateTime = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(dateTime, dateTime);
+			target.AddActivity(activity,period);
+			Assert.AreEqual(0, target.MainActivities().Count());
+		}
 
 		[Test]
 		public void ShouldClearPersonalAndOvertimeWhenSettingActivitiesAndShiftCategoryFromSource()

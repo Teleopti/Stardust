@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		{
 			var stubs = new StubFactory();
 			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
-			personAssignment.AddActivity(new Activity("a"), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
+			personAssignment.AddActivity(new Activity("a"), new DateTimePeriod(2011, 5, 18, 8, 2011, 5, 18, 9));
 			personAssignment.SetShiftCategory(new ShiftCategory("Late"));
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		{
 			var stubs = new StubFactory();
 			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
-			personAssignment.AddActivity(new Activity("a"), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
+			personAssignment.AddActivity(new Activity("a"), new DateTimePeriod(2011, 5, 18, 8, 2011, 5, 18, 9));
 			personAssignment.SetShiftCategory(new ShiftCategory("sc") { Description = new Description("sc", "PM") });
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.WebTest.Core.MonthSchedule.Mapping
 		{
 			var stubs = new StubFactory();
 			var personAssignment = new PersonAssignment(new Person(), new Scenario("s"), new DateOnly(2011, 5, 18));
-			personAssignment.AddActivity(new Activity("a"), new DateTimePeriod(2011, 5, 18, 2011, 5, 18));
+			personAssignment.AddActivity(new Activity("a"), new DateTimePeriod(2011, 5, 18, 8, 2011, 5, 18, 9));
 			personAssignment.SetShiftCategory(new ShiftCategory("sc") { DisplayColor = Color.Green });
 			var scheduleDay = stubs.ScheduleDayStub(new DateTime(2011, 5, 18), SchedulePartView.MainShift, personAssignment);
 

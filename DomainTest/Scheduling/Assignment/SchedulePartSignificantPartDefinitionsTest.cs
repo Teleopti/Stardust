@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             //Definition: Assignment with "HighestZOrder" has Mainshift
 			IPersonAssignment personAssignmentWithMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
 			IPersonAssignment personAssignmentWithoutMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-	        var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 2000, 1, 1),
+	        var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 8, 2000, 1, 1 ,9),
 	                                                      new ShiftCategory("hej"));
 			new EditableShiftMapper().SetMainShiftLayers(personAssignmentWithMainShift, mainShift);
 
@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IPersonAssignment personAssignmentWithMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
 			IPersonAssignment personAssignmentWithoutMainShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-			var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 2000, 1, 1),
+			var mainShift = EditableShiftFactory.CreateEditorShift(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 8, 2000, 1, 1, 9),
 			                                                 new ShiftCategory("mainShiftcategory"));
 			new EditableShiftMapper().SetMainShiftLayers(personAssignmentWithMainShift, mainShift);
 			IProjectionService projectionService = _mocker.StrictMock<IProjectionService>();

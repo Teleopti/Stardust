@@ -162,7 +162,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = PersonRepository.Single().Id.Value,
 				Date = new DateOnly(2013, 11, 14),
-				ActivityId = addedActivity.Id.Value
+				ActivityId = addedActivity.Id.Value,
+				StartTime = new DateTime(2013, 11, 14, 14, 00, 00),
+				EndTime = new DateTime(2013, 11, 14, 15, 00, 00)
 			};
 			Target.Handle(command);
 
@@ -194,7 +196,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = PersonRepository.Single().Id.Value,
 				Date = date,
-				ActivityId = addedActivity.Id.Value
+				ActivityId = addedActivity.Id.Value,
+				StartTime = new DateTime(2013, 11, 14, 14, 00, 00),
+				EndTime = new DateTime(2013, 11, 14, 15, 00, 00)
 			};
 			Target.Handle(command);
 
@@ -229,7 +233,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			{
 				PersonId = PersonRepository.Single().Id.Value,
 				Date = date,
-				ActivityId = activity.Id.Value
+				ActivityId = activity.Id.Value,
+				StartTime = new DateTime(2016, 7, 26, 14, 00, 00),
+				EndTime = new DateTime(2016, 7, 26, 15, 00, 00)
 			};
 
 			Target.Handle(command);

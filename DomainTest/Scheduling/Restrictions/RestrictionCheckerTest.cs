@@ -412,7 +412,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateLegalShiftCategoryRotationsPermissionState()
         {
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
+			var period = new DateTimePeriod(2013, 09, 12, 8, 2013, 09, 12, 9);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, period, _shiftCategory);
             IRotationRestriction dayRestriction = new RotationRestriction
                                                       {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),
@@ -986,7 +987,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         [Test]
         public void VerifyCanCalculateLegalShiftCategoryPreferencePermissionState()
         {
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
+			var period = new DateTimePeriod(2013, 09, 12, 8, 2013, 09, 12, 9);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, period, _shiftCategory);
             PreferenceRestriction dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),
@@ -1284,7 +1286,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
             IList<IVisualLayer> layerCollection = new List<IVisualLayer>();
             layerCollection.Add(_layerFactory.CreateShiftSetupLayer(_activity, _dateTimePeriod, _person));
-			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, new DateTimePeriod(), _shiftCategory);
+			var period = new DateTimePeriod(2013, 09, 12, 8, 2013, 09, 12, 9);
+			IPersonAssignment assignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, _scenario, period, _shiftCategory);
             var dayRestriction = new PreferenceRestriction
             {
                 StartTimeLimitation = new StartTimeLimitation(new TimeSpan(6, 0, 0), new TimeSpan(20, 0, 0)),

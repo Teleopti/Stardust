@@ -117,9 +117,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			public void VerifyCanMoveUp()
 			{
 				var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000,1,1));
-				ass.AddOvertimeActivity(new Activity("d"), new DateTimePeriod(), null);
-				ass.AddActivity(new Activity("d"), new DateTimePeriod());
-				ass.AddActivity(new Activity("d"), new DateTimePeriod());
+				var period = new DateTimePeriod(2000, 09, 12, 8, 2000, 09, 12, 9);
+				ass.AddOvertimeActivity(new Activity("d"), period, null);
+				ass.AddActivity(new Activity("d"), period);
+				ass.AddActivity(new Activity("d"), period);
 
 				var first = new MainShiftLayerViewModel(null, ass.MainActivities().First(), ass, null);
 				var last = new MainShiftLayerViewModel(null, ass.MainActivities().Last(), ass, null);
@@ -132,9 +133,10 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 			public void VerifyCanMoveDown()
 			{
 				var ass = new PersonAssignment(new Person(), new Scenario("d"), new DateOnly(2000, 1, 1));
-				ass.AddOvertimeActivity(new Activity("d"), new DateTimePeriod(), null);
-				ass.AddActivity(new Activity("d"), new DateTimePeriod());
-				ass.AddActivity(new Activity("d"), new DateTimePeriod());
+				var period = new DateTimePeriod(2000, 09, 12, 8, 2000, 09, 12, 9);
+				ass.AddOvertimeActivity(new Activity("d"), period, null);
+				ass.AddActivity(new Activity("d"), period);
+				ass.AddActivity(new Activity("d"), period);
 
 				var first = new MainShiftLayerViewModel(null, ass.MainActivities().First(), ass, null);
 				var last = new MainShiftLayerViewModel(null, ass.MainActivities().Last(), ass, null);
