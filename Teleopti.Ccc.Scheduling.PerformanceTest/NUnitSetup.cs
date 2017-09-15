@@ -13,11 +13,5 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 			Directory.SetCurrentDirectory(TestContext.CurrentContext.TestDirectory);
 			TestSiteConfigurationSetup.Setup();
 		}
-
-		[OneTimeTearDown]
-		public void CleanUp()
-		{
-			TestSiteConfigurationSetup.TearDown();
-		}
 	}
 }
