@@ -93,7 +93,7 @@
           </div>
           <div tabindex=0 ng-show="vm.selectedDayCount.length > 0" class="grow-out context-menu card-context wfm-badge-wrapper">
             <i class="mdi mdi-dots-vertical"></i>
-            <wfm-badge badge-model="vm.selectedDayCount.length" status="'notice-success'"> </wfm-badge>
+            <wfm-badge badge-model="vm.selectedDayCount.length" pulse="true" status="'notice-success'"> </wfm-badge>
             <span class="context-menu-left">
               <ul class="wfm-list">
                 <li ng-click="vm.modifyPanelHelper(true)">{{'AbsenceOverride'|translate}}</li>
