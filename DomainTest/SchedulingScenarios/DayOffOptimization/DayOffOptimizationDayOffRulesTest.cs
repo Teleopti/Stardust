@@ -280,7 +280,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var agentWithValidDefaultFilter = PersonRepository.Has(new Contract("_"), new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
 			var agentWithExplicitFilter = PersonRepository.Has(contractInFilter, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, schedulePeriod, ruleSet, skill);
 
-			var dayOffRules = new DayOffRules(null) { DayOffsPerWeek = new MinMax<int>(5,6)};
+			var dayOffRules = new PlanningGroupSettings(null) { DayOffsPerWeek = new MinMax<int>(5,6)};
 			dayOffRules.AddFilter(new ContractFilter(contractInFilter));
 			DayOffRulesRepository.Add(dayOffRules);
 

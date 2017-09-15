@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Optimization;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class DayOffRulesRepository : Repository<DayOffRules>, IDayOffRulesRepository
+	public class DayOffRulesRepository : Repository<PlanningGroupSettings>, IDayOffRulesRepository
 	{
 		public DayOffRulesRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private static readonly object addLocker = new object();
 
-		public override void Add(DayOffRules root)
+		public override void Add(PlanningGroupSettings root)
 		{
 			if (root.Default && !root.Id.HasValue && root.PlanningGroup == null)
 			{
@@ -33,38 +33,38 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			base.Add(root);
 		}
 
-		public override void Remove(DayOffRules root)
+		public override void Remove(PlanningGroupSettings root)
 		{
 			if(root.Default)
-				throw new ArgumentException("Cannot remove default DayOffRules.");
+				throw new ArgumentException("Cannot remove default PlanningGroupSettings.");
 			base.Remove(root);
 		}
 
-		private DayOffRules Default()
+		private PlanningGroupSettings Default()
 		{
-			return Session.GetNamedQuery("loadGlobalDefault").UniqueResult<DayOffRules>();
+			return Session.GetNamedQuery("loadGlobalDefault").UniqueResult<PlanningGroupSettings>();
 		}
 
-		public IList<DayOffRules> LoadAllByPlanningGroup(IPlanningGroup planningGroup)
+		public IList<PlanningGroupSettings> LoadAllByPlanningGroup(IPlanningGroup planningGroup)
 		{
-			return Session.CreateCriteria(typeof(DayOffRules), "dayOffRules")
+			return Session.CreateCriteria(typeof(PlanningGroupSettings), "dayOffRules")
 				.Add(Restrictions.Eq("dayOffRules.PlanningGroup", planningGroup))
 				 .SetResultTransformer(Transformers.DistinctRootEntity)
-				 .List<DayOffRules>();
+				 .List<PlanningGroupSettings>();
 		}
 
-		public IList<DayOffRules> LoadAllWithoutPlanningGroup()
+		public IList<PlanningGroupSettings> LoadAllWithoutPlanningGroup()
 		{
 			if (Default() == null)
 				lock (addLocker)
 				{
-					Add(DayOffRules.CreateDefault());
+					Add(PlanningGroupSettings.CreateDefault());
 					Session.Flush();
 				}
-			return Session.CreateCriteria(typeof(DayOffRules), "dayOffRules")
+			return Session.CreateCriteria(typeof(PlanningGroupSettings), "dayOffRules")
 				.Add(Restrictions.IsNull("dayOffRules.PlanningGroup"))
 				 .SetResultTransformer(Transformers.DistinctRootEntity)
-				 .List<DayOffRules>();
+				 .List<PlanningGroupSettings>();
 		}
 
 		public void RemoveForPlanningGroup(IPlanningGroup planningGroup)

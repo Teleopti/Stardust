@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldUpdate()
 		{
-			var existing = new DayOffRules().WithId();
+			var existing = new PlanningGroupSettings().WithId();
 			DayOffRulesRepository.Add(existing);
 
 			var model = new DayOffRulesModel
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldUpdateDefault()
 		{
-			var existing = DayOffRules.CreateDefault().WithId();
+			var existing = PlanningGroupSettings.CreateDefault().WithId();
 			DayOffRulesRepository.Add(existing);
 
 			var model = new DayOffRulesModel
@@ -357,7 +357,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void ShouldClearOldFiltersWhenUpdate()
 		{
 			var contract = new Contract("_").WithId();
-			var existing = new DayOffRules().WithId();
+			var existing = new PlanningGroupSettings().WithId();
 			var team = new Team().WithId();
 			existing.AddFilter(new ContractFilter(contract));
 
@@ -398,7 +398,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldDeleteDayOffRules()
 		{
-			var dayOffRules = new DayOffRules().WithId();
+			var dayOffRules = new PlanningGroupSettings().WithId();
 			DayOffRulesRepository.Add(dayOffRules);
 
 			Target.Delete(dayOffRules.Id.Value);

@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffRules : NonversionedAggregateRootWithBusinessUnit
+	public class PlanningGroupSettings : NonversionedAggregateRootWithBusinessUnit
 	{
 		private readonly ISet<IFilter> _filters = new HashSet<IFilter>();
 		private readonly IPlanningGroup _planningGroup;
@@ -20,26 +20,26 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual bool BlockSameStartTime { get; set; }
 		public virtual bool BlockSameShift { get; set; }
 
-		public DayOffRules()
+		public PlanningGroupSettings()
 		{
 			Name = string.Empty;
 		}
 
-		public DayOffRules(IPlanningGroup planningGroup):this()
+		public PlanningGroupSettings(IPlanningGroup planningGroup):this()
 		{
 			_planningGroup = planningGroup;
 		}
 
-		public static DayOffRules CreateDefault(IPlanningGroup planningGroup=null)
+		public static PlanningGroupSettings CreateDefault(IPlanningGroup planningGroup = null)
 		{
-			return new DayOffRules(planningGroup)
+			return new PlanningGroupSettings(planningGroup)
 			{
 				DayOffsPerWeek = new MinMax<int>(1, 3),
 				ConsecutiveDayOffs = new MinMax<int>(1, 3),
 				ConsecutiveWorkdays = new MinMax<int>(2, 6),
 				Default = true,
 				Name = UserTexts.Resources.Default,
-				BlockFinderType= BlockFinderType.SingleDay,
+				BlockFinderType = BlockFinderType.SingleDay,
 				BlockSameShiftCategory = false,
 				BlockSameStartTime = false,
 				BlockSameShift = false

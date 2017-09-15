@@ -27,8 +27,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (model.Id == Guid.Empty)
 			{
 				var dayOffRules = model.Default ?
-					DayOffRules.CreateDefault(planningGroup) :
-					new DayOffRules(planningGroup);
+					PlanningGroupSettings.CreateDefault(planningGroup) :
+					new PlanningGroupSettings(planningGroup);
 				setProperies(dayOffRules, model);
 				_dayOffRulesRepository.Add(dayOffRules);
 			}
@@ -46,21 +46,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_dayOffRulesRepository.Remove(dayOffRule);
 		}
 
-		private void setProperies(DayOffRules dayOffRules, DayOffRulesModel dayOffRulesModel)
+		private void setProperies(PlanningGroupSettings planningGroupSettings, DayOffRulesModel dayOffRulesModel)
 		{
-			dayOffRules.DayOffsPerWeek = new MinMax<int>(dayOffRulesModel.MinDayOffsPerWeek, dayOffRulesModel.MaxDayOffsPerWeek);
-			dayOffRules.ConsecutiveDayOffs = new MinMax<int>(dayOffRulesModel.MinConsecutiveDayOffs, dayOffRulesModel.MaxConsecutiveDayOffs);
-			dayOffRules.ConsecutiveWorkdays = new MinMax<int>(dayOffRulesModel.MinConsecutiveWorkdays, dayOffRulesModel.MaxConsecutiveWorkdays);
-			dayOffRules.Name = dayOffRulesModel.Name;
-			dayOffRules.BlockFinderType = dayOffRulesModel.BlockFinderType;
-			dayOffRules.BlockSameStartTime = dayOffRulesModel.BlockSameStartTime;
-			dayOffRules.BlockSameShiftCategory = dayOffRulesModel.BlockSameShiftCategory;
-			dayOffRules.BlockSameShift = dayOffRulesModel.BlockSameShift;
+			planningGroupSettings.DayOffsPerWeek = new MinMax<int>(dayOffRulesModel.MinDayOffsPerWeek, dayOffRulesModel.MaxDayOffsPerWeek);
+			planningGroupSettings.ConsecutiveDayOffs = new MinMax<int>(dayOffRulesModel.MinConsecutiveDayOffs, dayOffRulesModel.MaxConsecutiveDayOffs);
+			planningGroupSettings.ConsecutiveWorkdays = new MinMax<int>(dayOffRulesModel.MinConsecutiveWorkdays, dayOffRulesModel.MaxConsecutiveWorkdays);
+			planningGroupSettings.Name = dayOffRulesModel.Name;
+			planningGroupSettings.BlockFinderType = dayOffRulesModel.BlockFinderType;
+			planningGroupSettings.BlockSameStartTime = dayOffRulesModel.BlockSameStartTime;
+			planningGroupSettings.BlockSameShiftCategory = dayOffRulesModel.BlockSameShiftCategory;
+			planningGroupSettings.BlockSameShift = dayOffRulesModel.BlockSameShift;
 
-			dayOffRules.ClearFilters();
+			planningGroupSettings.ClearFilters();
 			foreach (var filter in dayOffRulesModel.Filters.Select(filterModel => _filterMapper.ToEntity(filterModel)))
 			{
-				dayOffRules.AddFilter(filter);
+				planningGroupSettings.AddFilter(filter);
 			}
 		}
 	}

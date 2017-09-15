@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldIncludePersistedDayOffRuleWhenLoadingAll()
 		{
-			var presentInDb = new DayOffRules
+			var presentInDb = new PlanningGroupSettings
 			{
 				DayOffsPerWeek = new MinMax<int>(2, 3),
 				ConsecutiveDayOffs = new MinMax<int>(1, 5),
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldNotAddExtraDefaultRuleIfPresentInDb()
 		{
-			var presentDefaultRule = DayOffRules.CreateDefault().WithId();
+			var presentDefaultRule = PlanningGroupSettings.CreateDefault().WithId();
       DayOffRulesRepository.Add(presentDefaultRule);
 
 			var loaded = Target.FetchAllWithoutPlanningGroup().Single();
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var filterName = RandomName.Make();
 			var contract = new Contract(filterName).WithId();
 			var contractFilter = new ContractFilter(contract);
-			var dayOffRule = new DayOffRules().WithId();
+			var dayOffRule = new PlanningGroupSettings().WithId();
 			dayOffRule.AddFilter(contractFilter);
 			DayOffRulesRepository.Add(dayOffRule);
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var team = new Team().WithId().WithDescription(new Description(RandomName.Make()));
 			team.Site = new Site(RandomName.Make());
 			var teamFilter = new TeamFilter(team);
-			var dayOffRule = new DayOffRules().WithId();
+			var dayOffRule = new PlanningGroupSettings().WithId();
 			dayOffRule.AddFilter(teamFilter);
 			DayOffRulesRepository.Add(dayOffRule);
 
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var filterName = RandomName.Make();
 			var site = new Site(filterName).WithId();
 			var siteFilter = new SiteFilter(site);
-			var dayOffRule = new DayOffRules().WithId();
+			var dayOffRule = new PlanningGroupSettings().WithId();
 			dayOffRule.AddFilter(siteFilter);
 			DayOffRulesRepository.Add(dayOffRule);
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void ShouldFetchDayOffRule()
 		{
-			var curr = new DayOffRules().WithId();
+			var curr = new PlanningGroupSettings().WithId();
 			DayOffRulesRepository.Add(curr);
 			curr.ConsecutiveWorkdays = new MinMax<int>(1,1);
 			curr.ConsecutiveDayOffs = new MinMax<int>(2,2);

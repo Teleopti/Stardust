@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var all = _dayOffRulesRepository.LoadAllWithoutPlanningGroup();
 
 			if (!all.Any(x => x.Default))
-				all.Add(DayOffRules.CreateDefault());
+				all.Add(PlanningGroupSettings.CreateDefault());
 
 			var result = all.Select(dayOffRules => _dayOffRulesMapper.ToModel(dayOffRules)).ToList();
 			return result;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var dayOffRules = _dayOffRulesRepository.Get(id);
 			if (dayOffRules == null)
-				throw new ArgumentException($"Cannot find DayOffRules with Id {id}");
+				throw new ArgumentException($"Cannot find PlanningGroupSettings with Id {id}");
 
 			return _dayOffRulesMapper.ToModel(dayOffRules);
 		}

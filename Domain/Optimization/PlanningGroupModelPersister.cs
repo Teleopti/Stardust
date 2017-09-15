@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var planningGroup = new PlanningGroup();
 				setProperties(planningGroup, planningGroupModel);
 				_planningGroupRepository.Add(planningGroup);
-				_dayOffRulesRepository.Add(DayOffRules.CreateDefault(planningGroup));
+				_dayOffRulesRepository.Add(PlanningGroupSettings.CreateDefault(planningGroup));
 			}
 			else
 			{

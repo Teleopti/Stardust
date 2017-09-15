@@ -12,23 +12,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_filterMapper = filterMapper;
 		}
 
-		public DayOffRulesModel ToModel(DayOffRules dayOffRules)
+		public DayOffRulesModel ToModel(PlanningGroupSettings planningGroupSettings)
 		{
-			var filterModels = dayOffRules.Filters.Select(filter => _filterMapper.ToModel(filter)).ToList();
+			var filterModels = planningGroupSettings.Filters.Select(filter => _filterMapper.ToModel(filter)).ToList();
 			
 			return new DayOffRulesModel
 			{
-				MinConsecutiveWorkdays = dayOffRules.ConsecutiveWorkdays.Minimum,
-				MaxConsecutiveWorkdays = dayOffRules.ConsecutiveWorkdays.Maximum,
-				MinDayOffsPerWeek = dayOffRules.DayOffsPerWeek.Minimum,
-				MaxDayOffsPerWeek = dayOffRules.DayOffsPerWeek.Maximum,
-				MinConsecutiveDayOffs = dayOffRules.ConsecutiveDayOffs.Minimum,
-				MaxConsecutiveDayOffs = dayOffRules.ConsecutiveDayOffs.Maximum,
-				Id = dayOffRules.Id ?? Guid.Empty,
-				Default = dayOffRules.Default,
-				Name = dayOffRules.Name,
+				MinConsecutiveWorkdays = planningGroupSettings.ConsecutiveWorkdays.Minimum,
+				MaxConsecutiveWorkdays = planningGroupSettings.ConsecutiveWorkdays.Maximum,
+				MinDayOffsPerWeek = planningGroupSettings.DayOffsPerWeek.Minimum,
+				MaxDayOffsPerWeek = planningGroupSettings.DayOffsPerWeek.Maximum,
+				MinConsecutiveDayOffs = planningGroupSettings.ConsecutiveDayOffs.Minimum,
+				MaxConsecutiveDayOffs = planningGroupSettings.ConsecutiveDayOffs.Maximum,
+				Id = planningGroupSettings.Id ?? Guid.Empty,
+				Default = planningGroupSettings.Default,
+				Name = planningGroupSettings.Name,
 				Filters = filterModels,
-				PlanningGroupId = dayOffRules.PlanningGroup?.Id
+				PlanningGroupId = planningGroupSettings.PlanningGroup?.Id
 			};
 		}
 	}

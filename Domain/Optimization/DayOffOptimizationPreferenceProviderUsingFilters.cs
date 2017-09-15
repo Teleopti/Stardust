@@ -7,9 +7,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class DayOffOptimizationPreferenceProviderUsingFilters : IDayOffOptimizationPreferenceProvider
 	{
-		private readonly IEnumerable<DayOffRules> _dayOffRules;
+		private readonly IEnumerable<PlanningGroupSettings> _dayOffRules;
 
-		public DayOffOptimizationPreferenceProviderUsingFilters(IEnumerable<DayOffRules> dayOffRules)
+		public DayOffOptimizationPreferenceProviderUsingFilters(IEnumerable<PlanningGroupSettings> dayOffRules)
 		{
 			_dayOffRules = dayOffRules.OrderBy(x => x.Default);
 		}
@@ -21,20 +21,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 				return mapToDayOffPrefences(dayOffRule);
 			}
 
-			return mapToDayOffPrefences(DayOffRules.CreateDefault());
+			return mapToDayOffPrefences(PlanningGroupSettings.CreateDefault());
 		}
 
-		private static DaysOffPreferences mapToDayOffPrefences(DayOffRules dayOffRules)
+		private static DaysOffPreferences mapToDayOffPrefences(PlanningGroupSettings planningGroupSettings)
 		{
 			return new DaysOffPreferences
 			{
-				ConsecutiveDaysOffValue = dayOffRules.ConsecutiveDayOffs,
+				ConsecutiveDaysOffValue = planningGroupSettings.ConsecutiveDayOffs,
 				UseConsecutiveDaysOff = true,
-				ConsecutiveWorkdaysValue = dayOffRules.ConsecutiveWorkdays,
+				ConsecutiveWorkdaysValue = planningGroupSettings.ConsecutiveWorkdays,
 				UseConsecutiveWorkdays = true,
 				ConsiderWeekAfter = true,
 				ConsiderWeekBefore = true,
-				DaysOffPerWeekValue = dayOffRules.DayOffsPerWeek,
+				DaysOffPerWeekValue = planningGroupSettings.DayOffsPerWeek,
 				UseDaysOffPerWeek = true
 			};
 		}

@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 					.List<IAggregateRoot>();
 				foreach (var aggregateRoot in allDbRoots)
 				{
-					if (!(aggregateRoot is IPersonWriteProtectionInfo) && !(aggregateRoot is DayOffRules))
+					if (!(aggregateRoot is IPersonWriteProtectionInfo) && !(aggregateRoot is PlanningGroupSettings))
 					{
 						var deleteTag = aggregateRoot as IDeleteTag;
 						if(deleteTag==null)

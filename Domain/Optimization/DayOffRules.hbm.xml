@@ -4,7 +4,7 @@
                    namespace="Teleopti.Ccc.Domain.Optimization"
                    default-access="field.camelcase-underscore">
 
-	<class name="DayOffRules">
+	<class name="PlanningGroupSettings">
 		<id name="Id"
             type="guid"
 		  			access="nosetter.camelcase-underscore"
@@ -60,6 +60,6 @@
 	</class>
 
 	<query name="loadGlobalDefault">
-		select dor from DayOffRules dor where defaultsettings=1 and planningGroup is null
+		select dor from PlanningGroupSettings dor where defaultsettings=1 and planningGroup is null
 	</query>
 </hibernate-mapping>

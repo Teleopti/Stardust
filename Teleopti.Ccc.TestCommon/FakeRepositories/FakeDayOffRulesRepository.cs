@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeDayOffRulesRepository : IDayOffRulesRepository
 	{
-		private readonly List<DayOffRules> _workRuleSettings = new List<DayOffRules>();
+		private readonly List<PlanningGroupSettings> _workRuleSettings = new List<PlanningGroupSettings>();
 
-		public void Add(DayOffRules root)
+		public void Add(PlanningGroupSettings root)
 		{
 			if (root.Default && root.PlanningGroup == null)
 			{
@@ -22,49 +22,49 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			_workRuleSettings.Add(root);
 		}
 
-		public void Remove(DayOffRules root)
+		public void Remove(PlanningGroupSettings root)
 		{
 			_workRuleSettings.Remove(root);
 		}
 
-		public DayOffRules Get(Guid id)
+		public PlanningGroupSettings Get(Guid id)
 		{
 			return _workRuleSettings.SingleOrDefault(x => x.Id == id);
 		}
 
-		public IList<DayOffRules> LoadAll()
+		public IList<PlanningGroupSettings> LoadAll()
 		{
 			return _workRuleSettings.ToArray();
 		}
 
-		public DayOffRules Load(Guid id)
+		public PlanningGroupSettings Load(Guid id)
 		{
 			throw new NotImplementedException();
 		}
 
 		public IUnitOfWork UnitOfWork { get; private set; }
 
-		private DayOffRules Default()
+		private PlanningGroupSettings Default()
 		{
 			var curr = _workRuleSettings.SingleOrDefault(x => x.Default);
 			if (curr != null)
 				return curr;
-			return DayOffRules.CreateDefault();
+			return PlanningGroupSettings.CreateDefault();
 		}
 
-		public void HasDefault(Action<DayOffRules> actionOnDefaultInstance)
+		public void HasDefault(Action<PlanningGroupSettings> actionOnDefaultInstance)
 		{
-			var defaultSettings = DayOffRules.CreateDefault();
+			var defaultSettings = PlanningGroupSettings.CreateDefault();
 			actionOnDefaultInstance(defaultSettings);
 			_workRuleSettings.Add(defaultSettings);
 		}
 
-		public IList<DayOffRules> LoadAllByPlanningGroup(IPlanningGroup planningGroup)
+		public IList<PlanningGroupSettings> LoadAllByPlanningGroup(IPlanningGroup planningGroup)
 		{
 			return _workRuleSettings.Where(x => x.PlanningGroup == planningGroup).ToList();
 		}
 
-		public IList<DayOffRules> LoadAllWithoutPlanningGroup()
+		public IList<PlanningGroupSettings> LoadAllWithoutPlanningGroup()
 		{
 			return _workRuleSettings.Where(x => x.PlanningGroup == null).ToList();
 		}
