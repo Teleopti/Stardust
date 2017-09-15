@@ -16471,4 +16471,8 @@ Do you want to participate?</value>
     <value>No agents for the selected skills were found</value>
     <comment>Message to be displayed in the RTA agents view when skill selection doesn't return any agents</comment>
   </data>
+  <data name="AbsenceRequestAlreadyInWaitlist" xml:space="preserve">
+    <value>Requests are already in the waitlist, please wait.</value>
+    <comment>Message to agent when the request gets waitlisted because there already exists wailtlisted request.</comment>
+  </data>
 </root>

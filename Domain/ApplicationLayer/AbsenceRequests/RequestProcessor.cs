@@ -27,13 +27,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 		private readonly IActivityRepository _activityRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
-
+		private readonly INow _now;
 		public RequestProcessor(ICommandDispatcher commandDispatcher,
 			ISkillCombinationResourceRepository skillCombinationResourceRepository,
 			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
 			ISkillRepository skillRepository, SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator,
 			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, SkillStaffingIntervalProvider skillStaffingIntervalProvider,
-			IActivityRepository activityRepository, IPersonRequestRepository personRequestRepository)
+			IActivityRepository activityRepository, IPersonRequestRepository personRequestRepository, INow now)
 		{
 			_commandDispatcher = commandDispatcher;
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
 			_activityRepository = activityRepository;
 			_personRequestRepository = personRequestRepository;
+			_now = now;
 		}
 
 		public void Process(IPersonRequest personRequest, DateTime startTime)
@@ -55,9 +56,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				if (personRequest.Person.WorkflowControlSet.AbsenceRequestWaitlistEnabled)
 				{
 					var waitlistedRequestsIds = _personRequestRepository.GetWaitlistRequests(personRequest.Request.Period);
-					if (waitlistedRequestsIds.Any())
+					var waitlistedRequests = _personRequestRepository.Find(waitlistedRequestsIds);
+					var validStart = _now.UtcDateTime() ; // add something?
+					waitlistedRequests =
+						waitlistedRequests.Where(
+							x =>
+						x.Request.Period.StartDateTime >= validStart).ToList();
+					if (waitlistedRequests.Any())
 					{
-						sendDenyCommand(personRequest, "Requests are already in the waitlist, please wait");
+						sendDenyCommand(personRequest, Resources.AbsenceRequestAlreadyInWaitlist);
 						return;
 					}
 				}
