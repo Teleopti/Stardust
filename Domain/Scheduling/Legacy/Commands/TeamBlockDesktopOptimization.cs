@@ -248,6 +248,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 				schedulingOptions,
 				resourceCalculateDelayer,
 				dayOffOptimizationPreferenceProvider,
+				new FixedBlockPreferenceProvider(optimizationPreferences.Extra), 
 				teamInfoFactory,
 				_backgroundWorker);
 		}

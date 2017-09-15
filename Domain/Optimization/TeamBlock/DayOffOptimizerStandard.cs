@@ -82,13 +82,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IEnumerable<ITeamInfo> remainingInfoList, SchedulingOptions schedulingOptions, IEnumerable<IPerson> selectedPersons,
 			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder,
 			Action cancelAction,
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, ISchedulingProgress schedulingProgress)
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
+			IBlockPreferenceProvider blockPreferenceProvider,
+			ISchedulingProgress schedulingProgress)
 		{
 			if (optimizationPreferences.Extra.IsClassic())
 			{
 				periodValueCalculatorForAllSkills = new noExpansivePeriodValueCalculation();
 			}
 			var previousPeriodValue = periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+
 			var currentMatrixCounter = 0;
 			var allFailed = new Dictionary<ITeamInfo, bool>();
 			var matrixes = new List<Tuple<IScheduleMatrixPro, ITeamInfo>>();
@@ -100,6 +103,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			foreach (var matrix in matrixes.Randomize())
 			{
+				var blockPreference = blockPreferenceProvider.ForAgent(matrix.Item1.Person, matrix.Item1.EffectivePeriodDays.First().Day);
+				UpdateBlockPreference(optimizationPreferences, blockPreference);
+				SchedulingOptionsCreator.SetTeamBlockOptions(optimizationPreferences, schedulingOptions);
+
 				currentMatrixCounter++;
 
 				if (!(optimizationPreferences.Extra.UseTeamBlockOption && optimizationPreferences.Extra.UseTeamSameDaysOff))
@@ -174,6 +181,15 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return from allFailedKeyValue in allFailed
 				where allFailedKeyValue.Value
 				select allFailedKeyValue.Key;
+		}
+
+		private static void UpdateBlockPreference(IOptimizationPreferences optimizationPreferences, IExtraPreferences blockPreference)
+		{
+			optimizationPreferences.Extra.BlockTypeValue = blockPreference.BlockTypeValue;
+			optimizationPreferences.Extra.UseBlockSameShiftCategory = blockPreference.UseBlockSameShiftCategory;
+			optimizationPreferences.Extra.UseBlockSameShift = blockPreference.UseBlockSameShift;
+			optimizationPreferences.Extra.UseBlockSameStartTime = blockPreference.UseBlockSameStartTime;
+			optimizationPreferences.Extra.UseTeamBlockOption = blockPreference.UseTeamBlockOption;
 		}
 
 		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,

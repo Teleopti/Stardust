@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IEnumerable<IPerson> selectedAgents, 
 			ISchedulingProgress backgroundWorker,
 			IOptimizationPreferences optimizationPreferences, 
-			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			GroupPageLight groupPageLight,
 			Func<IWorkShiftFinderResultHolder> workShiftFinderResultHolder,
 			Action<object, ResourceOptimizerProgressEventArgs> resourceOptimizerPersonOptimized)
@@ -111,6 +111,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					schedulingOptions,
 					resourceCalculateDelayer,
 					dayOffOptimizationPreferenceProvider,
+					new FixedBlockPreferenceProvider(optimizationPreferences.Extra), 
 					teamInfoFactory,
 					backgroundWorker);
 			}

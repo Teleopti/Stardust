@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void ReOptimize(ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			SchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider, 
+			SchedulingOptions schedulingOptions, IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
 			IOptimizationPreferences optimizationPreferences, IResourceCalculateDelayer resourceCalculateDelayer, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			_backgroundWorker = backgroundWorker;
@@ -419,8 +419,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 		private void runDayOffOptimization(IOptimizationPreferences optimizerPreferences,
 			IEnumerable<IPerson> selectedAgents,
-											DateOnlyPeriod selectedPeriod,
-											IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
+			DateOnlyPeriod selectedPeriod,
+			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			if (_backgroundWorker.CancellationPending)
 				return;
@@ -428,7 +428,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			if (_progressEvent != null && _progressEvent.Cancel) return;
 			_allResults = () => new WorkShiftFinderResultHolder();
 
-			_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedAgents, _backgroundWorker, optimizerPreferences, dayOffOptimizationPreferenceProvider, new GroupPageLight("_", GroupPageType.SingleAgent),  _allResults, resourceOptimizerPersonOptimized);
+			_dayOffOptimizationDesktop.Execute(selectedPeriod, selectedAgents, _backgroundWorker, optimizerPreferences,
+				dayOffOptimizationPreferenceProvider, new GroupPageLight("_", GroupPageType.SingleAgent), _allResults,
+				resourceOptimizerPersonOptimized);
 		}
 
 		private void rollbackMatrixChanges(IScheduleMatrixOriginalStateContainer matrixOriginalStateContainer, ISchedulePartModifyAndRollbackService rollbackService, IOptimizationPreferences optimizationPreferences)

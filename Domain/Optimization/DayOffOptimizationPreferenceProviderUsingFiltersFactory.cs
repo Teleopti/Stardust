@@ -2,6 +2,26 @@
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	public class BlockPreferenceProviderUsingFiltersFactory
+	{
+		private readonly IDayOffRulesRepository _dayOffRulesRepository;
+
+		public BlockPreferenceProviderUsingFiltersFactory(IDayOffRulesRepository dayOffRulesRepository)
+		{
+			_dayOffRulesRepository = dayOffRulesRepository;
+		}
+
+		public IBlockPreferenceProvider Create()
+		{
+			return new BlockPreferenceProviderUsingFilters(_dayOffRulesRepository.LoadAllWithoutPlanningGroup());
+		}
+
+		public IBlockPreferenceProvider Create(IPlanningGroup planningGroup)
+		{
+			return new BlockPreferenceProviderUsingFilters(_dayOffRulesRepository.LoadAllByPlanningGroup(planningGroup));
+		}
+	}
+
 	public class DayOffOptimizationPreferenceProviderUsingFiltersFactory
 	{
 		private readonly IDayOffRulesRepository _dayOffRulesRepository;

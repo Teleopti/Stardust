@@ -369,6 +369,7 @@
     <Compile Include="Logon\Permissions\AvailableTeamTest.cs" />
     <Compile Include="Logon\Permissions\AvailablePersonAuthorizationTest.cs" />
     <Compile Include="Notification\UserDeviceServiceTest.cs" />
+    <Compile Include="Optimization\BlockPreferenceProviderTest.cs" />
     <Compile Include="Optimization\FetchPlanningGroupModelTest.cs" />
     <Compile Include="Optimization\WebIntradayOptimizationStardustHandlerTest.cs" />
     <Compile Include="Reports\ReportNavigationModelTest.cs" />

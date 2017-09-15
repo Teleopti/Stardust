@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			SchedulingOptions schedulingOptions,
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider,
+			IBlockPreferenceProvider blockPreferenceProvider,
 			ITeamInfoFactory teamInfoFactory,
 			ISchedulingProgress schedulingProgress)
 		{
@@ -96,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					{
 						cancelMe = true;
 					},
-					dayOffOptimizationPreferenceProvider, schedulingProgress);
+					dayOffOptimizationPreferenceProvider, blockPreferenceProvider, schedulingProgress);
 
 				if (cancelMe)
 					break;

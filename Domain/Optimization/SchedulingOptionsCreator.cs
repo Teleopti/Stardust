@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.ConsiderShortBreaks = optimizationPreferences.Rescheduling.ConsiderShortBreaks;
 			schedulingOptions.OnlyShiftsWhenUnderstaffed = optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
 
-			setTeamBlockOptions(optimizationPreferences, schedulingOptions);
+			SetTeamBlockOptions(optimizationPreferences, schedulingOptions);
 
 			return schedulingOptions;
 		}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.UseStudentAvailability = use && value == 1d;
 		}
 
-		private static void setTeamBlockOptions(IOptimizationPreferences optimizationPreferences,
+		public static void SetTeamBlockOptions(IOptimizationPreferences optimizationPreferences,
 			SchedulingOptions schedulingOptions)
 		{
 			schedulingOptions.UseBlock = optimizationPreferences.Extra.UseTeamBlockOption;
