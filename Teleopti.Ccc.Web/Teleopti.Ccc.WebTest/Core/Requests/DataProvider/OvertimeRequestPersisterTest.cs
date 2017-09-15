@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
@@ -27,6 +28,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public IMultiplicatorDefinitionSetRepository MultiplicatorDefinitionSetRepository;
 		public FakeScheduleDictionary ScheduleDictionary;
 		public FakeLoggedOnUser LoggedOnUser;
+		public IActivityRepository ActivityRepository;
+		public ISkillRepository SkillRepository;
+		public ISkillTypeRepository SkillTypeRepository;
 
 		private IPerson _person;
 		private ICommandDispatcher _commandDispatcher;
@@ -41,7 +45,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			system.UseTestDouble<FakeMultiplicatorDefinitionSetRepository>().For<IMultiplicatorDefinitionSetRepository>();
 			system.UseTestDouble(new FakeLinkProvider()).For<ILinkProvider>();
 			system.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();
-			system.UseTestDouble(new OvertimeRequestProcessor(_commandDispatcher, new IOvertimeRequestValidator[] {}))
+
+			system.UseTestDouble(new OvertimeRequestProcessor(_commandDispatcher, new IOvertimeRequestValidator[] {}, new FakeActivityRepository(), new FakeSkillRepository(), new FakeSkillTypeRepository()))
 				.For<IOvertimeRequestProcessor>();
 		}
 
