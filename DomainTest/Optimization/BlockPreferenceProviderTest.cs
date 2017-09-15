@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	public class BlockPreferenceProviderTest
 	{
 		public BlockPreferenceProviderUsingFiltersFactory Target;
-		public FakeDayOffRulesRepository PlanningGroupSettingsRepository;
+		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 
 		[Test]
 		public void ShouldReturnRulesForContractFilter()

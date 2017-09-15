@@ -12,11 +12,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_filterMapper = filterMapper;
 		}
 
-		public DayOffRulesModel ToModel(PlanningGroupSettings planningGroupSettings)
+		public PlanningGroupSettingsModel ToModel(PlanningGroupSettings planningGroupSettings)
 		{
 			var filterModels = planningGroupSettings.Filters.Select(filter => _filterMapper.ToModel(filter)).ToList();
 			
-			return new DayOffRulesModel
+			return new PlanningGroupSettingsModel
 			{
 				MinConsecutiveWorkdays = planningGroupSettings.ConsecutiveWorkdays.Minimum,
 				MaxConsecutiveWorkdays = planningGroupSettings.ConsecutiveWorkdays.Maximum,

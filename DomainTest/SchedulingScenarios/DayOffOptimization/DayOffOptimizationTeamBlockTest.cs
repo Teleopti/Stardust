@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeDayOffRulesRepository DayOffRulesRepository;
+		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 		public GroupScheduleGroupPageDataProvider GroupScheduleGroupPageDataProvider;
 
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				1, 2, 2, 2, 2, 2, 2,
 				1, 2, 2, 2, 2, 2, 2));
-			DayOffRulesRepository.HasDefault(x =>
+			PlanningGroupSettingsRepository.HasDefault(x =>
 			{
 				x.ConsecutiveWorkdays = new MinMax<int>(1, 20);
 			}); //just to make sure anything goes

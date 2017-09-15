@@ -11,18 +11,18 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 	public class DayOffRulesController : ApiController
 	{
 		private readonly IFetchDayOffRulesModel _fetchDayOffRulesModel;
-		private readonly IDayOffRulesModelPersister _dayOffRulesModelPersister;
+		private readonly IPlanningGroupSettingsModelPersister _planningGroupSettingsModelPersister;
 
-		public DayOffRulesController(IFetchDayOffRulesModel fetchDayOffRulesModel, IDayOffRulesModelPersister dayOffRulesModelPersister)
+		public DayOffRulesController(IFetchDayOffRulesModel fetchDayOffRulesModel, IPlanningGroupSettingsModelPersister planningGroupSettingsModelPersister)
 		{
 			_fetchDayOffRulesModel = fetchDayOffRulesModel;
-			_dayOffRulesModelPersister = dayOffRulesModelPersister;
+			_planningGroupSettingsModelPersister = planningGroupSettingsModelPersister;
 		}
 
 		[UnitOfWork, HttpPost, Route("api/resourceplanner/dayoffrules")]
-		public virtual IHttpActionResult Persist(DayOffRulesModel dayOffRulesModel)
+		public virtual IHttpActionResult Persist(PlanningGroupSettingsModel planningGroupSettingsModel)
 		{
-			_dayOffRulesModelPersister.Persist(dayOffRulesModel);
+			_planningGroupSettingsModelPersister.Persist(planningGroupSettingsModel);
 			return Ok();
 		}
 
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpDelete, Route("api/resourceplanner/dayoffrules/{id}")]
 		public virtual IHttpActionResult Delete(Guid id)
 		{
-			_dayOffRulesModelPersister.Delete(id);
+			_planningGroupSettingsModelPersister.Delete(id);
 			return Ok();
 		}
 

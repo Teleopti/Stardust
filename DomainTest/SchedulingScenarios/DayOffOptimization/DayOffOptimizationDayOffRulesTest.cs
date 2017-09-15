@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeActivityRepository ActivityRepository;
 		public FakePlanningPeriodRepository PlanningPeriodRepository;
-		public FakeDayOffRulesRepository DayOffRulesRepository;
+		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 		public OptimizationPreferencesDefaultValueProvider OptimizationPreferencesProvider;
 
 		[Test]
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = SkillRepository.Has("skill", activity);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
 			var scenario = ScenarioRepository.Has("some name");
-			DayOffRulesRepository.HasDefault(x => 
+			PlanningGroupSettingsRepository.HasDefault(x => 
 			{
 				x.DayOffsPerWeek = new MinMax<int>(1, 4);
 				x.ConsecutiveDayOffs = new MinMax<int>(1, 4);
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = SkillRepository.Has("skill", activity);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 1);
 			var scenario = ScenarioRepository.Has("some name");
-			DayOffRulesRepository.HasDefault(x => x.ConsecutiveWorkdays = new MinMax<int>(1, 6));
+			PlanningGroupSettingsRepository.HasDefault(x => x.ConsecutiveWorkdays = new MinMax<int>(1, 6));
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			schedulePeriod.SetDaysOff(1);
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = SkillRepository.Has("skill", activity);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
 			var scenario = ScenarioRepository.Has("some name");
-			DayOffRulesRepository.HasDefault(x => x.DayOffsPerWeek = new MinMax<int>(3, 4));
+			PlanningGroupSettingsRepository.HasDefault(x => x.DayOffsPerWeek = new MinMax<int>(3, 4));
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 2);
 			schedulePeriod.SetDaysOff(2);
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -161,7 +161,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var skill = SkillRepository.Has("skill", activity);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
 			var scenario = ScenarioRepository.Has("some name");
-			DayOffRulesRepository.HasDefault(x =>
+			PlanningGroupSettingsRepository.HasDefault(x =>
 			{
 				x.DayOffsPerWeek = new MinMax<int>(1, 3);
 				x.ConsecutiveWorkdays = new MinMax<int>(2, 20);
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay, 2);
 			
 			var scenario = ScenarioRepository.Has("some name");
-			DayOffRulesRepository.HasDefault(x =>
+			PlanningGroupSettingsRepository.HasDefault(x =>
 			{
 				x.DayOffsPerWeek = new MinMax<int>(1, 3);
 				x.ConsecutiveWorkdays = new MinMax<int>(2, 20);
@@ -282,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.DayOffOptimization
 
 			var dayOffRules = new PlanningGroupSettings(null) { DayOffsPerWeek = new MinMax<int>(5,6)};
 			dayOffRules.AddFilter(new ContractFilter(contractInFilter));
-			DayOffRulesRepository.Add(dayOffRules);
+			PlanningGroupSettingsRepository.Add(dayOffRules);
 
 			var skillDays = SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				20, 

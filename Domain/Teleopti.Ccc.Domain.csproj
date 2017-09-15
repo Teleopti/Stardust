@@ -2107,12 +2107,12 @@
     <Compile Include="Optimization\FixedDayOffOptimizationPreferenceProvider.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFiltersFactory.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderUsingFilters.cs" />
-    <Compile Include="Optimization\DayOffRulesModelPersister.cs" />
+    <Compile Include="Optimization\PlanningGroupSettingsModelPersister.cs" />
     <Compile Include="Optimization\DayOffRulesMapper.cs" />
-    <Compile Include="Optimization\DayOffRulesModel.cs" />
+    <Compile Include="Optimization\PlanningGroupSettingsModel.cs" />
     <Compile Include="Optimization\FetchDayOffRulesModel.cs" />
     <Compile Include="Optimization\IDayOffOptimizationPreferenceProvider.cs" />
-    <Compile Include="Optimization\IDayOffRulesModelPersister.cs" />
+    <Compile Include="Optimization\IPlanningGroupSettingsModelPersister.cs" />
     <Compile Include="Optimization\IFetchDayOffRulesModel.cs" />
     <Compile Include="Optimization\IIntradayOptimizeOneDayCallback.cs" />
     <Compile Include="Optimization\IIntradayOptimizer2.cs" />

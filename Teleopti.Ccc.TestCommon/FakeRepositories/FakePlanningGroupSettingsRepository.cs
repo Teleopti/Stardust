@@ -7,7 +7,7 @@ using Teleopti.Ccc.Domain.Optimization;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeDayOffRulesRepository : IDayOffRulesRepository
+	public class FakePlanningGroupSettingsRepository : IDayOffRulesRepository
 	{
 		private readonly List<PlanningGroupSettings> _workRuleSettings = new List<PlanningGroupSettings>();
 

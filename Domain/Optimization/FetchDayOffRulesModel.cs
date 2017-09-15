@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_planningGroupRepository = planningGroupRepository;
 		}
 
-		public IEnumerable<DayOffRulesModel> FetchAllWithoutPlanningGroup()
+		public IEnumerable<PlanningGroupSettingsModel> FetchAllWithoutPlanningGroup()
 		{
 			var all = _dayOffRulesRepository.LoadAllWithoutPlanningGroup();
 
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return result;
 		}
 
-		public DayOffRulesModel Fetch(Guid id)
+		public PlanningGroupSettingsModel Fetch(Guid id)
 		{
 			var dayOffRules = _dayOffRulesRepository.Get(id);
 			if (dayOffRules == null)
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return _dayOffRulesMapper.ToModel(dayOffRules);
 		}
 
-		public IEnumerable<DayOffRulesModel> FetchAllForPlanningGroup(Guid planningGroupId)
+		public IEnumerable<PlanningGroupSettingsModel> FetchAllForPlanningGroup(Guid planningGroupId)
 		{
 			var planningGroup = _planningGroupRepository.Get(planningGroupId);
 			var all = _dayOffRulesRepository.LoadAllByPlanningGroup(planningGroup);

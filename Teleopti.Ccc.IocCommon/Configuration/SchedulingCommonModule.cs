@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<DayOffRulesMapper>().SingleInstance();
 			builder.RegisterType<PlanningGroupMapper>().SingleInstance();
 			builder.RegisterType<FilterMapper>().SingleInstance();
-			builder.RegisterType<DayOffRulesModelPersister>().As<IDayOffRulesModelPersister>().SingleInstance();
+			builder.RegisterType<PlanningGroupSettingsModelPersister>().As<IPlanningGroupSettingsModelPersister>().SingleInstance();
 			builder.RegisterType<PlanningGroupModelPersister>().As<IPlanningGroupModelPersister>().SingleInstance();
 			builder.RegisterType<BlockPreferenceProviderUsingFiltersFactory>().AsSelf().SingleInstance();
 			builder.RegisterType<DayOffOptimizationPreferenceProviderUsingFiltersFactory>().AsSelf().SingleInstance();

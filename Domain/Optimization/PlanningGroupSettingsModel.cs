@@ -4,9 +4,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffRulesModel
+	public class PlanningGroupSettingsModel
 	{
-		public DayOffRulesModel()
+		public PlanningGroupSettingsModel()
 		{
 			Filters = new List<FilterModel>();
 		}
