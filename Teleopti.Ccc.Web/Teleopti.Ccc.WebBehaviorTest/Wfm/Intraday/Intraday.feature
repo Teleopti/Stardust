@@ -130,6 +130,7 @@ Scenario: If an email like skill is chosen a warning for no visible reforcasted 
 	And I am navigating to intraday staffing view
 	Then I should see the no reforcasted warning
 
+@OnlyRunIfEnabled('WFM_Intraday_SupportOtherSkillsLikeEmail_44026')
 Scenario: If and email like skill is chosen summary for abandonrate should not appear
 	Given the time is '2016-12-21 14:00'
 	And I am viewing intraday page
