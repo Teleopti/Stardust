@@ -10,7 +10,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: true
+						isArray: true,
+                        cancellable: true
                     }
                 }
             );
@@ -34,7 +35,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -58,7 +60,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -70,7 +73,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -85,10 +89,11 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
-                }
-            );
+				}
+				);
 
             this.getSkillAreaMonitorStatisticsByDayOffset = $resource(
                 '../api/intraday/monitorskillareastatistics/:id/:dayOffset',
@@ -100,7 +105,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -112,7 +118,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -124,7 +131,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -139,7 +147,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -154,7 +163,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -166,7 +176,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -178,7 +189,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -193,7 +205,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -208,7 +221,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -220,7 +234,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
             );
@@ -232,7 +247,8 @@
                     query: {
                         method: 'GET',
                         params: {},
-                        isArray: false
+						isArray: false,
+                        cancellable: true
                     }
                 }
 			);

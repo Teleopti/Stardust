@@ -92,19 +92,26 @@
                 staffingData.forecastedStaffing.updatedSeries = [];
                 staffingData.actualStaffingSeries = [];
                 staffingData.scheduledStaffing.series = [];
-            };
+			};
+
+			var request;
+	        function cancelPendingRequest() {
+		        if (request) {
+			        request.$cancelRequest('cancel');
+		        }
+	        }
 
             service.pollSkillData = function (selectedItem, toggles) {
                 staffingData.waitingForData = true;
-				console.log('pollSkillData toggles.otherSkillsLikeEmail', toggles.otherSkillsLikeEmail)
-				console.log('selectedItem.ShowReforecastedAgents && toggles.otherSkillsLikeEmail', selectedItem.ShowReforecastedAgents && toggles.otherSkillsLikeEmail)
-				
+	            cancelPendingRequest();
+
 	            service.checkMixedArea(selectedItem);
-                intradayService.getSkillStaffingData
-                    .query({
-                        id: selectedItem.Id
-                    })
-                    .$promise.then(
+	            request = intradayService.getSkillStaffingData
+		            .query({
+			            id: selectedItem.Id
+					});
+
+                request.$promise.then(
                     function (result) {
                         staffingData.waitingForData = false;
                         return service.setStaffingData(
@@ -127,50 +134,56 @@
 				var showReforecastedAgents = selectedItem.Skills.every(function(element, index, array){
 					return element.ShowReforecastedAgents === true
 				}) || !toggles.otherSkillsLikeEmail;
-                intradayService.getSkillAreaStaffingData
-                    .query({
-                        id: selectedItem.Id
-                    })
-                    .$promise.then(
-                    function (result) {
-                        staffingData.waitingForData = false;
-                        return service.setStaffingData(
-                            result,
-                            toggles.showOptimalStaffing,
-                            toggles.showScheduledStaffing,
-                            toggles.showEmailSkill,
-							showReforecastedAgents
-                        );
-                    },
-                    function (error) {
-                        staffingData.hasMonitorData = false;
-                    }
-                    );
+
+	            cancelPendingRequest();
+	            request = intradayService.getSkillAreaStaffingData
+		            .query({
+			            id: selectedItem.Id
+					});
+
+	            request.$promise.then(
+		            function(result) {
+			            staffingData.waitingForData = false;
+			            return service.setStaffingData(
+				            result,
+				            toggles.showOptimalStaffing,
+				            toggles.showScheduledStaffing,
+				            toggles.showEmailSkill,
+				            showReforecastedAgents
+			            );
+		            },
+		            function(error) {
+			            staffingData.hasMonitorData = false;
+		            }
+	            );
             };
 
             service.pollSkillDataByDayOffset = function (selectedItem, toggles, dayOffset) {
                 staffingData.waitingForData = true;
-	            service.checkMixedArea(selectedItem);
-                intradayService.getSkillStaffingDataByDayOffset
-                    .query({
-                        id: selectedItem.Id,
-                        dayOffset: dayOffset
-                    })
-                    .$promise.then(
-                    function (result) {
-                        staffingData.waitingForData = false;
-                        return service.setStaffingData(
-                            result,
-                            toggles.showOptimalStaffing && dayOffset <= 0,
-                            toggles.showScheduledStaffing,
-							toggles.showEmailSkill,
-							selectedItem.ShowReforecastedAgents
-                        );
-                    },
-                    function (error) {
-                        staffingData.hasMonitorData = false;
-                    }
-                    );
+				service.checkMixedArea(selectedItem);
+
+	            cancelPendingRequest();
+	            request = intradayService.getSkillStaffingDataByDayOffset
+		            .query({
+			            id: selectedItem.Id,
+			            dayOffset: dayOffset
+					});
+
+	            request.$promise.then(
+		            function(result) {
+			            staffingData.waitingForData = false;
+			            return service.setStaffingData(
+				            result,
+				            toggles.showOptimalStaffing && dayOffset <= 0,
+				            toggles.showScheduledStaffing,
+				            toggles.showEmailSkill,
+				            selectedItem.ShowReforecastedAgents
+			            );
+		            },
+		            function(error) {
+			            staffingData.hasMonitorData = false;
+		            }
+	            );
             };
 
             service.pollSkillAreaDataByDayOffset = function (selectedItem, toggles, dayOffset) {
@@ -181,26 +194,29 @@
 					return element.ShowReforecastedAgents === true
 				}) || !toggles.otherSkillsLikeEmail;
 
-                intradayService.getSkillAreaStaffingDataByDayOffset
-                    .query({
-                        id: selectedItem.Id,
-                        dayOffset: dayOffset
-                    })
-                    .$promise.then(
-                    function (result) {
-                        staffingData.waitingForData = false;
-                        return service.setStaffingData(
-                            result,
-							toggles.showOptimalStaffing && dayOffset <= 0,
-                            toggles.showScheduledStaffing,
-                            toggles.showEmailSkill,
-							showReforecastedAgents
-                        );
-                    },
-                    function (error) {
-                        staffingData.hasMonitorData = false;
-                    }
-                    );
+				cancelPendingRequest();
+
+	            request = intradayService.getSkillAreaStaffingDataByDayOffset
+		            .query({
+			            id: selectedItem.Id,
+			            dayOffset: dayOffset
+					});
+
+	            request.$promise.then(
+		            function(result) {
+			            staffingData.waitingForData = false;
+			            return service.setStaffingData(
+				            result,
+				            toggles.showOptimalStaffing && dayOffset <= 0,
+				            toggles.showScheduledStaffing,
+				            toggles.showEmailSkill,
+				            showReforecastedAgents
+			            );
+		            },
+		            function(error) {
+			            staffingData.hasMonitorData = false;
+		            }
+	            );
             };
 
 

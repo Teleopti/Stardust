@@ -3,8 +3,9 @@
     angular.module('wfm.intraday').service('intradayTrafficService', [
         '$filter',
         'intradayService',
-        '$translate',
-        function($filter, intradayService, $translate) {
+		'$translate',
+		'$log',
+        function($filter, intradayService, $translate, $log) {
             var service = {
                 trafficChart: {}
             };
@@ -134,13 +135,23 @@
                 }
             };
 
+			var request;
+			function cancelPendingRequest() {
+				if (request) {
+					request.$cancelRequest('cancel');
+				}
+			}
+
             service.pollSkillData = function(selectedItem) {
-                trafficData.waitingForData = true;
-                intradayService.getSkillMonitorStatistics
-                    .query({
-                        id: selectedItem.Id
-                    })
-                    .$promise.then(
+				trafficData.waitingForData = true;
+	            cancelPendingRequest();
+
+				request = intradayService.getSkillMonitorStatistics
+		            .query({
+			            id: selectedItem.Id
+					});
+
+	            request.$promise.then(
                         function(result) {
                             trafficData.waitingForData = false;
                             service.setTrafficData(result, true);
@@ -152,30 +163,35 @@
             };
 
             service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
-                trafficData.waitingForData = true;
-                intradayService.getSkillMonitorStatisticsByDayOffset
-                    .query({
-                        id: selectedItem.Id,
-                        dayOffset: dayOffset
-                    })
-                    .$promise.then(
+				trafficData.waitingForData = true;
+	            cancelPendingRequest();
+
+				request = intradayService.getSkillMonitorStatisticsByDayOffset
+		            .query({
+			            id: selectedItem.Id,
+			            dayOffset: dayOffset
+					});
+
+	            request.$promise.then(
                         function(result) {
                             trafficData.waitingForData = false;
                             service.setTrafficData(result, dayOffset === 0);
                         },
-                        function(error) {
-                            trafficData.hasMonitorData = false;
-                        }
+						function (error) {
+							trafficData.hasMonitorData = false;
+						}
                     );
             };
 
             service.pollSkillAreaData = function(selectedItem) {
-                trafficData.waitingForData = true;
-                intradayService.getSkillAreaMonitorStatistics
-                    .query({
-                        id: selectedItem.Id
-                    })
-                    .$promise.then(
+				trafficData.waitingForData = true;
+				cancelPendingRequest();
+
+	            request = intradayService.getSkillAreaMonitorStatistics
+		            .query({
+			            id: selectedItem.Id
+		            });
+                    request.$promise.then(
                         function(result) {
                             trafficData.waitingForData = false;
                             service.setTrafficData(result, true);
@@ -187,13 +203,15 @@
             };
 
             service.pollSkillAreaDataByDayOffset = function(selectedItem, toggles, dayOffset) {
-                trafficData.waitingForData = true;
-                intradayService.getSkillAreaMonitorStatisticsByDayOffset
-                    .query({
-                        id: selectedItem.Id,
-                        dayOffset: dayOffset
-                    })
-                    .$promise.then(
+				trafficData.waitingForData = true;
+	            cancelPendingRequest();
+
+	            request = intradayService.getSkillAreaMonitorStatisticsByDayOffset
+		            .query({
+			            id: selectedItem.Id,
+			            dayOffset: dayOffset
+		            });
+                    request.$promise.then(
                         function(result) {
                             trafficData.waitingForData = false;
                             service.setTrafficData(result, dayOffset === 0);

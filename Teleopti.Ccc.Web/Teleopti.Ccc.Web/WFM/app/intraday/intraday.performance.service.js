@@ -131,16 +131,26 @@
                 performanceData.abandonedRateObj.series = [];
                 performanceData.serviceLevelObj.series = [];
                 performanceData.estimatedServiceLevelObj.series = [];
-            };
+			};
+
+			var request;
+	        function cancelPendingRequest() {
+		        if (request) {
+			        request.$cancelRequest('cancel');
+		        }
+	        }
 
             service.pollSkillData = function(selectedItem, toggles) {
                 performanceData.waitingForData = true;
-                service.checkMixedArea(selectedItem);
-                intradayService.getSkillMonitorPerformance
-                    .query({
-                        id: selectedItem.Id
-                    })
-                    .$promise.then(
+				service.checkMixedArea(selectedItem);
+				cancelPendingRequest();
+
+	            request = intradayService.getSkillMonitorPerformance
+		            .query({
+			            id: selectedItem.Id
+					});
+
+                    request.$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
                             service.setPerformanceData(
@@ -158,13 +168,16 @@
 
             service.pollSkillDataByDayOffset = function(selectedItem, toggles, dayOffset) {
                 performanceData.waitingForData = true;
-                service.checkMixedArea(selectedItem);
-                intradayService.getSkillMonitorPerformanceByDayOffset
-                    .query({
-                        id: selectedItem.Id,
-                        dayOffset: dayOffset
-                    })
-                    .$promise.then(
+				service.checkMixedArea(selectedItem);
+	            cancelPendingRequest();
+
+	            request = intradayService.getSkillMonitorPerformanceByDayOffset
+		            .query({
+			            id: selectedItem.Id,
+			            dayOffset: dayOffset
+					});
+
+                request.$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
                             service.setPerformanceData(
@@ -188,12 +201,15 @@
 				var showAbandonRate = selectedItem.Skills.every(function(element, index, array){
 					return element.ShowAbandonRate === true
 				}) || !toggles.otherSkillsLikeEmail;
+				
+	            cancelPendingRequest();
 
-                intradayService.getSkillAreaMonitorPerformance
-                    .query({
-                        id: selectedItem.Id
-                    })
-                    .$promise.then(
+	            request = intradayService.getSkillAreaMonitorPerformance
+		            .query({
+			            id: selectedItem.Id
+					});
+
+	            request.$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
                             service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill && !toggles.otherSkillsLikeEmail, true, showAbandonRate);
@@ -211,13 +227,14 @@
 				var showAbandonRate = selectedItem.Skills.every(function(element, index, array){
 					return element.ShowAbandonRate === true
 				}) || !toggles.otherSkillsLikeEmail;
-				
-                intradayService.getSkillAreaMonitorPerformanceByDayOffset
-                    .query({
-                        id: selectedItem.Id,
-                        dayOffset: dayOffset
-                    })
-                    .$promise.then(
+
+	            cancelPendingRequest();
+	            request = intradayService.getSkillAreaMonitorPerformanceByDayOffset
+		            .query({
+			            id: selectedItem.Id,
+			            dayOffset: dayOffset
+		            });
+	            request.$promise.then(
                         function(result) {
                             performanceData.waitingForData = false;
                             service.setPerformanceData(result, toggles.showEsl, toggles.showEmailSkill && !toggles.otherSkillsLikeEmail, dayOffset === 0, showAbandonRate);
