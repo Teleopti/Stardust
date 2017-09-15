@@ -33,10 +33,16 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return timeZones;
 		}
 
-		public void SetUtcInUse()
+		public void SetUtcInUse(bool isUtcInUse)
 		{
-			var timeZOne = timeZones.FirstOrDefault(x => x.TimeZoneCode == "UTC");
-			timeZOne.IsUtcInUse = true;
+			var timeZone = timeZones.FirstOrDefault(x => x.TimeZoneCode == "UTC");
+			timeZone.IsUtcInUse = isUtcInUse;
+		}
+
+		public void SetToBeDeleted(string timeZoneCode, bool tobeDeleted)
+		{ 
+			var timeZone = timeZones.FirstOrDefault(x => x.TimeZoneCode == timeZoneCode);
+			timeZone.ToBeDeleted = tobeDeleted;
 		}
 
 		public void SetToBeDeleted(string timeZoneCode)

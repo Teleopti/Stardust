@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	{
 		private readonly IList<IBusinessUnit> _businessUnits = new List<IBusinessUnit>();
 
+		private readonly IList<TimeZoneInfo> _timeZones = new List<TimeZoneInfo>();
+
 		public void Has(IBusinessUnit businessUnit)
 		{
 			Add(businessUnit);
@@ -18,6 +20,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public void Add(IBusinessUnit entity)
 		{
 			_businessUnits.Add(entity);
+		}
+
+		public void AddTimeZone(TimeZoneInfo timeZone)
+		{
+			_timeZones.Add(timeZone);
 		}
 
 		public void Remove(IBusinessUnit entity)
@@ -57,7 +64,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 
 		public IEnumerable<TimeZoneInfo> LoadAllTimeZones()
 		{
-			throw new NotImplementedException();
+			return _timeZones;
 		}
 	}
 }

@@ -1,10 +1,12 @@
 using System;
 using log4net;
 using Teleopti.Ccc.Domain.Analytics;
+using Teleopti.Ccc.Domain.Analytics.Transformer;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Exceptions;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
@@ -19,14 +21,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 		private readonly IAnalyticsSkillRepository _analyticsSkillRepository;
 		private readonly IAnalyticsBusinessUnitRepository _analyticsBusinessUnitRepository;
 		private readonly IAnalyticsTimeZoneRepository _analyticsTimeZoneRepository;
+		private readonly AnalyticsTimeZoneUpdater _analyticsTimeZoneUpdater;
 		private static readonly ILog logger = LogManager.GetLogger(typeof(AnalyticsSkillUpdater));
 
-		public AnalyticsSkillUpdater(ISkillRepository skillRepository, IAnalyticsSkillRepository analyticsSkillRepository, IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, IAnalyticsTimeZoneRepository analyticsTimeZoneRepository)
+		public AnalyticsSkillUpdater(ISkillRepository skillRepository, 
+			IAnalyticsSkillRepository analyticsSkillRepository, 
+			IAnalyticsBusinessUnitRepository analyticsBusinessUnitRepository, 
+			IAnalyticsTimeZoneRepository analyticsTimeZoneRepository,
+			AnalyticsTimeZoneUpdater analyticsTimeZoneUpdater)
 		{
 			_skillRepository = skillRepository;
 			_analyticsSkillRepository = analyticsSkillRepository;
 			_analyticsBusinessUnitRepository = analyticsBusinessUnitRepository;
 			_analyticsTimeZoneRepository = analyticsTimeZoneRepository;
+			_analyticsTimeZoneUpdater = analyticsTimeZoneUpdater;
 		}
 		
 		public virtual void Handle(Guid skillId)
@@ -55,8 +63,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 				IsDeleted = deleteTag != null && deleteTag.IsDeleted
 			};
 			_analyticsSkillRepository.AddOrUpdateSkill(analyticsSkill);
+			_analyticsTimeZoneUpdater.SetUtcInUse();
+			_analyticsTimeZoneUpdater.SetTimeZonesTobeDeleted();
 		}
 
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
 		[Attempts(10)]
@@ -65,6 +76,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 			Handle(@event.SkillId);
 		}
 
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
 		[Attempts(10)]
@@ -73,6 +85,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Skill
 			Handle(@event.SkillId);
 		}
 
+		[ImpersonateSystem]
 		[AnalyticsUnitOfWork]
 		[UnitOfWork]
 		[Attempts(10)]

@@ -24,17 +24,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 			AnalyticsUnitOfWork = analyticsUnitOfWork;
 		}
 
-		public void SetUtcInUse()
+		public void SetUtcInUse(bool isUtcInUse)
 		{
-			var query = "UPDATE mart.dim_time_zone SET utc_in_use = 1 where time_zone_code = 'UTC'";
-			AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(query).ExecuteUpdate();
+			var query = $@"UPDATE mart.dim_time_zone SET utc_in_use=:{nameof(isUtcInUse)} where time_zone_code = 'UTC'";
+			AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(query)
+				.SetBoolean(nameof(isUtcInUse), isUtcInUse)
+				.ExecuteUpdate();
 		}
 
 
-		public void SetToBeDeleted(string timeZoneCode)
+		public void SetToBeDeleted(string timeZoneCode, bool tobeDeleted)
 		{
-			var query = $@"UPDATE mart.dim_time_zone SET to_be_deleted = 1 where time_zone_code='{timeZoneCode}'";
-			AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(query).ExecuteUpdate();
+			var query = $@"UPDATE mart.dim_time_zone SET to_be_deleted=:{nameof(tobeDeleted)} where time_zone_code='{timeZoneCode}'";
+			AnalyticsUnitOfWork.Current().Session().CreateSQLQuery(query)
+				.SetBoolean(nameof(tobeDeleted), tobeDeleted)
+				.ExecuteUpdate();
 		}
 
 		public AnalyticsTimeZone Get(string timeZoneCode)

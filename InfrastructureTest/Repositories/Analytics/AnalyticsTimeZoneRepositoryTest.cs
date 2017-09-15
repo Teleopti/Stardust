@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		[Test]
 		public void ShouldUpdateUtcInUse()
 		{
-			WithAnalyticsUnitOfWork.Do(() => Target.SetUtcInUse());
+			WithAnalyticsUnitOfWork.Do(() => Target.SetUtcInUse(true));
 			var result = WithAnalyticsUnitOfWork.Get(() => Target.Get("UTC"));
 			result.IsUtcInUse.Should().Be.True();
 		}
@@ -60,9 +60,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 		{
 			var result = WithAnalyticsUnitOfWork.Get(() => Target.Get("W. Europe Standard Time"));
 			result.ToBeDeleted.Should().Be.False();
-			WithAnalyticsUnitOfWork.Do(() => Target.SetToBeDeleted("W. Europe Standard Time"));
+			WithAnalyticsUnitOfWork.Do(() => Target.SetToBeDeleted("W. Europe Standard Time", true));
 			result = WithAnalyticsUnitOfWork.Get(() => Target.Get("W. Europe Standard Time"));
 			result.ToBeDeleted.Should().Be.True();
 		}
+		
+			
 	}
 }

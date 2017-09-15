@@ -28,8 +28,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 		public IAnalyticsPersonPeriodRepository PersonPeriodRepository;
 		public FakeAnalyticsSkillRepository AnalyticsSkillRepository;
 		public FakePersonRepository PersonRepository;
-		public IAnalyticsBusinessUnitRepository AnalyticsBusinessUnitRepository;
-		public IAnalyticsTeamRepository AnalyticsTeamRepository;
 
 		public FakeEventPublisher EventPublisher;
 		public FakeAnalyticsDateRepository AnalyticsDateRepository;
@@ -465,6 +463,84 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.PersonCollectionChangedHandle
 			var analyticsTimeZone = AnalyticsTimeZoneRepository.GetAll().FirstOrDefault(timeZone => timeZone.TimeZoneCode == easternStandardTime);
 			analyticsTimeZone.Should().Not.Be.Null();
 		}
+
+		[Test]
+		public void ShouldUpdateUtcInUse()
+		{
+			const string utc = "UTC";
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
+			var person = PersonFactory.CreatePerson(TimeZoneInfo.FindSystemTimeZoneById(utc)).WithId(testPerson1Id);
+			PersonRepository.Has(person);
+			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById(utc));
+
+			Target.Handle(new PersonCollectionChangedEvent
+			{
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
+			});
+
+			var utcTimeZone = AnalyticsTimeZoneRepository.GetAll().FirstOrDefault(timeZone => timeZone.TimeZoneCode == utc);
+			var estAnalyticsTimeZone = AnalyticsTimeZoneRepository.GetAll().FirstOrDefault(timeZone => timeZone.TimeZoneCode == "W. Europe Standard Time");
+			utcTimeZone.IsUtcInUse.Should().Be.True();
+			estAnalyticsTimeZone.IsUtcInUse.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMarkTimeZonesAsDeleted()
+		{
+			const string timeZoneInUse = "W. Europe Standard Time";
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
+			var person = PersonFactory.CreatePerson(TimeZoneInfo.FindSystemTimeZoneById(timeZoneInUse)).WithId(testPerson1Id);
+			PersonRepository.Has(person);
+
+			const string timeZoneTobeDeleted = "GTB Standard Time";
+			AnalyticsTimeZoneRepository.Get(timeZoneTobeDeleted);
+
+			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById(timeZoneInUse));
+
+			Target.Handle(new PersonCollectionChangedEvent
+			{
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
+			});
+
+			var inUse = AnalyticsTimeZoneRepository.GetAll().FirstOrDefault(timeZone => timeZone.TimeZoneCode == timeZoneInUse);
+			var deleted = AnalyticsTimeZoneRepository.GetAll().FirstOrDefault(timeZone => timeZone.TimeZoneCode == timeZoneTobeDeleted);
+			var utc = AnalyticsTimeZoneRepository.GetAll().FirstOrDefault(timeZone => timeZone.TimeZoneCode == "UTC");
+			inUse.ToBeDeleted.Should().Be.False();
+			deleted.ToBeDeleted.Should().Be.True();
+			utc.ToBeDeleted.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldMarkTimeZoneAsNotDeleted()
+		{
+			const string timeZoneInUse = "W. Europe Standard Time";
+			BusinessUnitRepository.Has(BusinessUnitFactory.CreateSimpleBusinessUnit().WithId(_businessUnitId));
+			var person = PersonFactory.CreatePerson(TimeZoneInfo.FindSystemTimeZoneById(timeZoneInUse)).WithId(testPerson1Id);
+			PersonRepository.Has(person);
+
+			const string timeZoneDeleted = "GTB Standard Time";
+			AnalyticsTimeZoneRepository.Get(timeZoneDeleted);
+			AnalyticsTimeZoneRepository.SetToBeDeleted(timeZoneDeleted, true);
+
+			var deleteTedTimeZone = AnalyticsTimeZoneRepository.Get(timeZoneDeleted);
+			deleteTedTimeZone.ToBeDeleted.Should().Be.True();
+
+			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById(timeZoneInUse));
+			BusinessUnitRepository.AddTimeZone(TimeZoneInfo.FindSystemTimeZoneById(timeZoneDeleted));
+
+			Target.Handle(new PersonCollectionChangedEvent
+			{
+				PersonIdCollection = { testPerson1Id },
+				LogOnBusinessUnitId = _businessUnitId
+			});
+
+			var readdedTimeZone = AnalyticsTimeZoneRepository.Get(timeZoneDeleted);
+			readdedTimeZone.ToBeDeleted.Should().Be.False();
+		}
+
+
 
 		private static PersonPeriod newTestPersonPeriod(DateTime startDate, Guid? id = null)
 		{

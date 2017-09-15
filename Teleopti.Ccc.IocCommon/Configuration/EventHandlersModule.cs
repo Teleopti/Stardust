@@ -179,6 +179,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<AnalyticsTimeZoneRepositoryWithCreation>().As<IAnalyticsTimeZoneRepository>().SingleInstance();
 			else
 				builder.RegisterType<AnalyticsTimeZoneRepository>().As<IAnalyticsTimeZoneRepository>().SingleInstance();
+
+			builder.RegisterType<AnalyticsTimeZoneUpdater>().SingleInstance();
 		}
 
 	}
