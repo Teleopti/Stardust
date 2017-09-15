@@ -33,16 +33,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly ISkillRepository _skillRepository;
 		private readonly SkillCombinationResourceReadModelValidator _skillCombinationResourceReadModelValidator;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
-		private readonly SkillStaffingIntervalProvider _skillStaffingIntervalProvider;
 		private readonly IActivityRepository _activityRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IAbsenceRequestSetting _absenceRequestSetting;
-		private readonly IPersonSkillProvider _personSkillProvider;
 		private readonly ArrangeRequestsByProcessOrder _arrangeRequestsByProcessOrder;
 		private readonly ExtractSkillForecastIntervals _extractSkillForecastIntervals;
 		private readonly IResourceCalculation _resourceCalculation;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
-		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly INow _now;
 		private readonly SchedulePartModifyAndRollbackServiceWithoutStateHolder _rollbackService;
 		private readonly ISkillTypeRepository _skillTypeRepository;
@@ -57,12 +54,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			ISkillRepository skillRepository,
 			SkillCombinationResourceReadModelValidator skillCombinationResourceReadModelValidator,
 			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider,
-			SkillStaffingIntervalProvider skillStaffingIntervalProvider,
 			IActivityRepository activityRepository, IPersonRequestRepository personRequestRepository,
-			IAbsenceRequestSetting absenceRequestSetting, IPersonSkillProvider personSkillProvider,
+			IAbsenceRequestSetting absenceRequestSetting,
 			ArrangeRequestsByProcessOrder arrangeRequestsByProcessOrder,
 			ExtractSkillForecastIntervals extractSkillForecastIntervals, IResourceCalculation resourceCalculation,
-			ICurrentUnitOfWork currentUnitOfWork, IScheduleDayChangeCallback scheduleDayChangeCallback,
+			ICurrentUnitOfWork currentUnitOfWork,
 			INow now,
 			SchedulePartModifyAndRollbackServiceWithoutStateHolder rollbackService,
 			ISkillTypeRepository skillTypeRepository, IPersonRepository personRepository, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository,
@@ -75,16 +71,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_skillRepository = skillRepository;
 			_skillCombinationResourceReadModelValidator = skillCombinationResourceReadModelValidator;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
-			_skillStaffingIntervalProvider = skillStaffingIntervalProvider;
 			_activityRepository = activityRepository;
 			_personRequestRepository = personRequestRepository;
 			_absenceRequestSetting = absenceRequestSetting;
-			_personSkillProvider = personSkillProvider;
 			_arrangeRequestsByProcessOrder = arrangeRequestsByProcessOrder;
 			_extractSkillForecastIntervals = extractSkillForecastIntervals;
 			_resourceCalculation = resourceCalculation;
 			_currentUnitOfWork = currentUnitOfWork;
-			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_now = now;
 			_rollbackService = rollbackService;
 			_skillTypeRepository = skillTypeRepository;
@@ -95,20 +88,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		}
 
 		[AsSystem]
-		[UnitOfWork]
 		public virtual void Handle(ProcessWaitlistedRequestsEvent @event)
+		{
+			var requestIdsToSkip = new List<Guid>();
+			var failedRequestIds = new List<Guid>();
+
+			do
+			{
+				failedRequestIds = Internal(@event, requestIdsToSkip);
+				requestIdsToSkip.AddRange(failedRequestIds);
+			}
+			while (!failedRequestIds.IsEmpty());
+		}
+
+		[UnitOfWork]
+		public virtual List<Guid> Internal(ProcessWaitlistedRequestsEvent @event, List<Guid> requestIdsToSkip)
 		{
 			try
 			{
+				var failedRequestIds = new List<Guid>();
 				if (!_skillCombinationResourceReadModelValidator.Validate())
 				{
 					logger.Error(Resources.DenyReasonTechnicalIssues + "Read model is not up to date");
-					//sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
-					return;
+					return failedRequestIds;
 				}
 				var validPeriod = new DateTimePeriod(_now.UtcDateTime(), _now.UtcDateTime().AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 				var loadSchedulesPeriodToCoverForMidnightShifts = validPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
-				var waitlistedRequestsIds = _personRequestRepository.GetWaitlistRequests(loadSchedulesPeriodToCoverForMidnightShifts);
+				var waitlistedRequestsIds = _personRequestRepository.GetWaitlistRequests(loadSchedulesPeriodToCoverForMidnightShifts).Except(requestIdsToSkip);
 				var waitlistedRequests = _personRequestRepository.Find(waitlistedRequestsIds);
 				
 				waitlistedRequests =
@@ -116,7 +122,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						x =>
 							x.Request.Period.StartDateTime >= validPeriod.StartDateTime &&
 							x.Request.Period.EndDateTime <= validPeriod.EndDateTime).ToList();
-				//waitlistedRequests.Add(personRequest);
 				var allRequests = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(waitlistedRequests).ToList();
 				allRequests.AddRange(_arrangeRequestsByProcessOrder.GetRequestsSortedByDate(waitlistedRequests));
 
@@ -128,8 +133,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				if (!combinationResources.Any())
 				{
 					logger.Error(Resources.DenyReasonTechnicalIssues + " Can not find any skillcombinations.");
-					//sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
-					return;
+					return failedRequestIds;
 				}
 
 				_activityRepository.LoadAll();
@@ -199,7 +203,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 						var shiftPeriodList = new List<DateTimePeriod>();
 
-						var scheduleDaysOnRequest = new List<IScheduleDay>();
 						foreach (var day in scheduleDays)
 						{
 
@@ -210,15 +213,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							{
 								continue;
 							}
-							scheduleDaysOnRequest.Add(day);
 							shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.Value.StartDateTime, projection.OriginalProjectionPeriod.Value.EndDateTime));
 						}
 
 						var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
 						if (staffingThresholdValidators.Any())
 						{
-							var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
-							//var skillStaffingIntervals = _skillStaffingIntervalProvider.GetSkillStaffIntervalsAllSkills(requestPeriod, combinationResources, useShrinkage);
+							//TODO: how to handle shrinkage?
+							//var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
 							var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
 							foreach (var projectionPeriod in shiftPeriodList)
 							{
@@ -227,13 +229,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest)pRequest.Request, skillStaffingIntervalsToValidate);
 							if (validatedRequest.IsValid)
 							{
-								if (!autoGrant) return;
-								//var result = sendApproveCommand(pRequest);
-								//if (!result)
-								//{
-								//	_rollbackService.RollbackMinimumChecks();
-								//}
-								//else
+								if (!autoGrant) continue;
 								_rollbackService.ClearModificationCollection();
 								approvedRequest.Add(pRequest);
 							}
@@ -254,29 +250,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var result = sendApproveCommand(personRequest);
 					if (!result)
 					{
-						
+						failedRequestIds.Add(personRequest.Id.GetValueOrDefault());
 					}
 				}
+				return failedRequestIds;
 			}
 			catch (Exception exp)
 			{
 				logger.Error(Resources.DenyReasonTechnicalIssues + exp);
 			}
-		}
-
-		private void sendDenyCommand(IPersonRequest personRequest, string denyReason)
-		{
-			var command = new DenyRequestCommand
-			{
-				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				DenyReason = denyReason
-			};
-			_commandDispatcher.Execute(command);
-
-			if (command.ErrorMessages.Any())
-			{
-				logger.Warn(command.ErrorMessages);
-			}
+			return new List<Guid>();
 		}
 
 		private bool sendApproveCommand(IPersonRequest personRequest)
