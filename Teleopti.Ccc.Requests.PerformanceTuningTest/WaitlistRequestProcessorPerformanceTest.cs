@@ -7,6 +7,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
+using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		public AsSystem AsSystem;
 		public FakeConfigReader ConfigReader;
 		public IPersonRequestRepository PersonRequestRepository;
-		public IAbsenceRequestIntradayFilter AbsenceRequestIntradayFilter;
+		public WaitlistRequestHandler WaitlistRequestHandler;
 		public IStardustJobFeedback StardustJobFeedback;
 		public IWorkflowControlSetRepository WorkflowControlSetRepository;
 		public IAbsenceRepository AbsenceRepository;
@@ -141,9 +142,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 
 			WithUnitOfWork.Do(() =>
 			{
-				IRequest request = new AbsenceRequest(_absences.First(),
-					new DateTimePeriod(new DateTime(2016, 04, 06, 7, 0, 0).Utc(), new DateTime(2016, 04, 06, 10, 0, 0).Utc()));
-				AbsenceRequestIntradayFilter.Process(new PersonRequest(_personList.First(),request));
+				WaitlistRequestHandler.Handle(new ProcessWaitlistedRequestsEvent{ LogOnBusinessUnitId = new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"), LogOnDatasource = "Teleopti WFM"});
 			});
 			
 
