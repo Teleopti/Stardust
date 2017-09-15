@@ -229,14 +229,6 @@
 				}, true);
 		}
 
-		function initialiseGridStateHandling() {
-			requestGridStateService.restoreState(vm, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
-			// delay the setup of these handlers a little to let the table load
-			$timeout(function() {
-				requestGridStateService.setupGridEventHandlers($scope, vm, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
-			}, 500);
-		}
-
 		function validateDateParameters(startDate, endDate) {
 			if (endDate === null || startDate === null) return false;
 			return !(moment(endDate).isBefore(startDate, 'day')) && moment(startDate).year() > 1969 && moment(endDate).year() > 1969;
@@ -394,6 +386,14 @@
 
 			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 			vm.gridOptions.data = vm.requests;
+		}
+
+		function initialiseGridStateHandling() {
+			requestGridStateService.restoreState(vm, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+			// delay the setup of these handlers a little to let the table load
+			$timeout(function() {
+				requestGridStateService.setupGridEventHandlers($scope, vm, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+			}, 500);
 		}
 
 		function applyGridColumns(){

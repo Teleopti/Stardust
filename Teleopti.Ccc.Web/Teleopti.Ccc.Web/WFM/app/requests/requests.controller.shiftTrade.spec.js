@@ -154,7 +154,7 @@ describe('Requests shift trade controller tests',
 			expect(requestGridStateSvc.restoreState(controller, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE).selection).toBeFalsy();
 		});
 
-		it('should show schedule detail column in ui-grid table', function() {
+		it('should show schedule detail column in ui-grid table when there is data', function() {
 			var request = {
 				Id: 1,
 				Type: requestsDefinitions.REQUEST_TYPES.SHIFTTRADE,
@@ -166,6 +166,16 @@ describe('Requests shift trade controller tests',
 			scope.$digest();
 
 			expect(element[0].querySelectorAll('.shift-trade-header-start-of-week').length).toEqual(1);
+		});
+
+		it('should not show schedule detail column in ui-grid table when there is no data', function() {
+			requestsDataService.setRequests([]);
+
+			params.selectedGroupIds = ['team'];
+			var element = compileUIGridHtml(scope, controller.gridOptions);
+			scope.$digest();
+
+			expect(element[0].querySelectorAll('.shift-trade-header-start-of-week').length).toEqual(0);
 		});
 
 		it('should not request data when period is invalid', function () {

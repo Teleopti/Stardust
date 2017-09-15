@@ -11,7 +11,7 @@
 						 render-index="$index">
 					</div>
 					<div class="ui-grid-header-cell ui-grid-clearfix shift-trade-header-container"
-						 ng-if="col.colDef.isShiftTradeDayColumn"
+						 ng-if="col.colDef.isShiftTradeDayColumn && grid.appScope.shiftTradeDayViewModels.length > 0"
 						 ng-repeat="col in colContainer.renderedColumns track by col.uid">
 						<div class="shift-trade-header" ng-repeat="day in grid.appScope.shiftTradeDayViewModels" ng-style="{'left': day.leftOffset}">
 							<div class="shift-trade-header-start-of-week" ng-show="day.isStartOfWeek && !day.isLatestDayOfPeriod">{{day.shortDate}}</div>
