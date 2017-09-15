@@ -35,9 +35,9 @@
 					@Resources.Date
 				</label>
 				<span class="input-group">
-					<input class="input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart(), startDate: Today() }, enable: IsEditable() && !IsMobile" type="text" />
+					<input class="input-sm form-control" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart, startDate: Today() }, enable: IsEditable() && !IsMobile" type="text" />
 					<span class="input-group-btn">
-						<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart(), startDate: Today() }, click: CloseDropdownTimeList, enable: IsEditable">
+						<button class="btn btn-sm" data-bind="datepicker: DateFrom, datepickerOptions: { autoHide: true, format: DateFormat(), weekStart: weekStart, startDate: Today() }, click: CloseDropdownTimeList, enable: IsEditable">
 							<i class="glyphicon glyphicon-calendar"></i>
 						</button>
 					</span>
