@@ -93,23 +93,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 		{
 			Now.Is("2017-03-30 08:30");
 			var personId = Guid.NewGuid();
+			var anotherPersonId = Guid.NewGuid();
+			var businessUnitId = Guid.NewGuid(); 
 			var siteId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 
+			
 			Database
 				.WithSite(siteId)
 				.WithTeam(teamId, "green")
 				.WithAgentState(new AgentStateReadModel
 				{
 					PersonId = personId,
-					BusinessUnitId = Guid.NewGuid(),
+					BusinessUnitId = businessUnitId,
 					SiteId = siteId,
 					TeamId = teamId,
 					TeamName = "green",
 					IsRuleAlarm = true,
 					AlarmStartTime = "2017-03-30 08:29".Utc()
 				})
-				.WithAgent(personId);
+				.WithAgent(personId)
+				.WithAgentState(new AgentStateReadModel
+				{
+					PersonId = anotherPersonId,
+					BusinessUnitId = businessUnitId,
+					SiteId = siteId,
+					TeamId = teamId,
+					TeamName = "green",
+					IsRuleAlarm = false
+				})
+				.WithAgent(anotherPersonId);
 
 			var viewModel = Target.Build(null, new[] { siteId }).Sites.Single();
 
@@ -117,9 +130,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.Rta.ViewModels
 			viewModel.Teams.Single().Id.Should().Be(teamId);
 			viewModel.Teams.Single().SiteId.Should().Be(siteId);
 			viewModel.Teams.Single().Name.Should().Be("green");
-			viewModel.Teams.Single().AgentsCount.Should().Be(1);
+			viewModel.Teams.Single().AgentsCount.Should().Be(2);
 			viewModel.Teams.Single().InAlarmCount.Should().Be(1);
-			viewModel.Teams.Single().Color.Should().Be("danger");
+			viewModel.Teams.Single().Color.Should().Be("warning");
 		}
 
 

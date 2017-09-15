@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 						Name = t.TeamName,
 						AgentsCount = t.AgentsCount,
 						InAlarmCount = t.InAlarmCount,
-						Color = getColor(t.InAlarmCount,t.InAlarmCount)
+						Color = getColor(t.InAlarmCount,t.AgentsCount)
 					})
 				}).OrderBy(x => x.Name).ToArray();
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private string getColor(int inAlarmCount, int agentsCount)
 		{
 			if (agentsCount == 0)
-				return null;
+				return "good";
 			var percentInAlarm = Math.Floor(((double)inAlarmCount / (double)agentsCount) * 100);
 			if (percentInAlarm >= 67)
 				return "danger";

@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels
 		private string getColor(int outOfAdherence, int numberOfAgents)
 		{
 			if (numberOfAgents == 0)
-				return null;
+				return "good";
 			var adherencePercent = Math.Floor(((double)outOfAdherence / (double)numberOfAgents) * 100);
 			if (adherencePercent >= 67)
 				return "danger";
