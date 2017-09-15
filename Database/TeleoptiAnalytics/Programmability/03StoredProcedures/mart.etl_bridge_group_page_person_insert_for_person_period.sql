@@ -16,7 +16,7 @@ BEGIN
 	insert into [mart].[bridge_group_page_person]
 	select gp.group_page_id, @person_id, 1, GETUTCDATE() 
 	from mart.SplitStringGuid(@group_codes) 
-	join [mart].dim_group_page gp 
+	join [mart].dim_group_page gp with (nolock) 
 		on gp.group_code = id AND gp.business_unit_code = @business_unit_code
 END
 

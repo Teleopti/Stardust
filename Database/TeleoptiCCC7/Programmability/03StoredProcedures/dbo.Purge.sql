@@ -292,7 +292,7 @@ if datediff(second,@start,getdate()) > @timeout
 
 --Messages
 select @KeepUntil = dateadd(year,-1*(select isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepMessage'),getdate())
-select @MaxDate = dateadd(day,@BatchSize,isnull(min(UpdatedOn),'19900101')) from PushMessageDialogue
+select @MaxDate = dateadd(day,@BatchSize,isnull(min(UpdatedOn),'19900101')) from PushMessageDialogue with (nolock)
 
 delete DialogueMessage
 from DialogueMessage dm

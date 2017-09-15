@@ -27,7 +27,7 @@ IF @persons = '00000000-0000-0000-0000-000000000000'  --"EveryBody"
 --Flush and re-load everybody
 BEGIN
 	TRUNCATE TABLE [ReadModel].[GroupingReadOnly]
-	INSERT INTO #ids SELECT Id FROM Person WHERE IsDeleted = 0
+	INSERT INTO #ids SELECT Id FROM Person with (nolock) WHERE IsDeleted = 0
 END
 ELSE
 --Flush and re-load only PersonIds in string
@@ -79,10 +79,10 @@ END
 			p.employmentnumber,
 			pp.EndDate,
 			p.terminaldate as leavingdate
-	from site s 
-	inner join team t on t.site=s.id
-	inner join PersonPeriod pp on pp.team=t.id 
-	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	from site s with (nolock)
+	inner join team t with (nolock) on t.site=s.id
+	inner join PersonPeriod pp with (nolock) on pp.team=t.id 
+	inner join person p with (nolock) on p.id=pp.parent and p.isdeleted=0 
 	inner join #ids i on i.person = p.Id
 	
 	--Insert people from contract
@@ -100,10 +100,10 @@ END
 	p.employmentnumber,
 	pp.EndDate,
 	p.terminaldate as leavingdate 
-	from team t 
-	inner join PersonPeriod pp on pp.team=t.id 
-	inner join contract c on pp.contract=c.id 
-	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	from team t  with (nolock)
+	inner join PersonPeriod pp with (nolock) on pp.team=t.id 
+	inner join contract c with (nolock) on pp.contract=c.id 
+	inner join person p with (nolock) on p.id=pp.parent and p.isdeleted=0 
 	inner join #ids i on i.person = p.Id
 
 	--Insert people from part time percentage
@@ -121,10 +121,10 @@ END
 	p.employmentnumber,
 	pp.EndDate,
 	p.terminaldate as leavingdate 
-	from team t 
-	inner join PersonPeriod pp on pp.team=t.id 
-	inner join parttimepercentage c on pp.parttimepercentage=c.id 
-	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	from team t with (nolock) 
+	inner join PersonPeriod pp with (nolock) on pp.team=t.id 
+	inner join parttimepercentage c with (nolock) on pp.parttimepercentage=c.id 
+	inner join person p with (nolock) on p.id=pp.parent and p.isdeleted=0 
 	inner join #ids i on i.person = p.Id
 	
 	--Insert people from contract schedule
@@ -141,10 +141,10 @@ END
 	p.employmentnumber,
 	pp.EndDate,
 	p.terminaldate as leavingdate 
-	from team t 
-	inner join PersonPeriod pp on pp.team=t.id 
-	inner join contractschedule c on pp.contractschedule=c.id 
-	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	from team t with (nolock) 
+	inner join PersonPeriod pp with (nolock) on pp.team=t.id 
+	inner join contractschedule c with (nolock) on pp.contractschedule=c.id 
+	inner join person p with (nolock) on p.id=pp.parent and p.isdeleted=0 
 	inner join #ids i on i.person = p.Id
 	
 	--Insert people from rule set bag
@@ -162,10 +162,10 @@ END
 	p.employmentnumber,
 	pp.EndDate,
 	p.terminaldate as leavingdate 
-	from team t 
-	inner join PersonPeriod pp on pp.team=t.id 
-	inner join rulesetbag c on pp.rulesetbag=c.id 
-	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	from team t with (nolock) 
+	inner join PersonPeriod pp with (nolock) on pp.team=t.id 
+	inner join rulesetbag c with (nolock) on pp.rulesetbag=c.id 
+	inner join person p with (nolock) on p.id=pp.parent and p.isdeleted=0 
 	inner join #ids i on i.person = p.Id
 	
 	--Insert people from skill
@@ -184,15 +184,15 @@ END
 		p.employmentnumber,
 		pp.EndDate,
 		p.terminaldate as leavingdate 
-	from team t 
-	inner join PersonPeriod pp
+	from team t with (nolock) 
+	inner join PersonPeriod pp with (nolock)
 		on	pp.team=t.id
-	inner join personskill c
+	inner join personskill c with (nolock)
 		on	pp.id=c.parent
 		and c.active=1 
-	inner join skill
+	inner join skill with (nolock)
 		on	skill.id=c.skill and skill.isdeleted=0
-	inner join person p on p.id=pp.parent and p.isdeleted=0 
+	inner join person p with (nolock) on p.id=pp.parent and p.isdeleted=0 
 	inner join #ids i on i.person = p.Id
 
 	CREATE TABLE #groupsForSecondCTE
@@ -271,13 +271,13 @@ END
 	FROM #tempresult tr
 	INNER JOIN persongroup pg
 		ON pg.persongroup=tr.queryid
-	INNER JOIN person p
+	INNER JOIN person p with (nolock)
 		ON p.id=pg.person AND p.isdeleted=0
 	INNER JOIN #ids i
 		ON i.person = p.Id
-	LEFT JOIN PersonPeriod pp
+	LEFT JOIN PersonPeriod pp with (nolock)
 		ON pp.parent=p.id
-	LEFT JOIN team t
+	LEFT JOIN team t with (nolock)
 		ON t.id=pp.team
 	GROUP BY pageid,pagename,businessunit,groupid,tr.name ,p.firstname,p.lastname,p.employmentnumber,p.id ,pp.team ,t.site ,isnull(pp.startdate,'1900-01-01') ,pp.EndDate ,p.terminaldate 
 END

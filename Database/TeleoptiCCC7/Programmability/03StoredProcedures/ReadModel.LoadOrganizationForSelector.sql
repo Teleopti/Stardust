@@ -77,7 +77,7 @@ BEGIN
 	INSERT INTO #TempPersonPeriodWithEndDate 
 		SELECT Person.Id, FirstName, LastName, EmploymentNumber,Team, Parent, [Contract], [ContractSchedule], 
 		PartTimePercentage, RuleSetBag, pp.Id, pp.Note
-		FROM PersonPeriod pp
+		FROM PersonPeriod pp with (nolock)
 		INNER JOIN Person with (nolock) ON pp.Parent = Person.Id AND Person.IsDeleted = 0 AND StartDate <= @enddate AND EndDate >= @ondate
 		and ISNULL(TerminalDate, '2100-01-01') >= @ondate
 
@@ -102,14 +102,14 @@ BEGIN
 		INSERT #result
 		SELECT sub.Id, Team.Id, Site.Id, BusinessUnit, Team.Name, Site.Name, FirstName, LastName, EmploymentNumber
 	from #TempPersonPeriodWithEndDate sub
-		INNER JOIN Team ON Team.Id = sub.Team AND Team.IsDeleted = 0  
-		INNER JOIN Site ON Site.id = Site AND Site.IsDeleted = 0 AND BusinessUnit = @bu	
+		INNER JOIN Team with (nolock) ON Team.Id = sub.Team AND Team.IsDeleted = 0  
+		INNER JOIN Site with (nolock) ON Site.id = Site AND Site.IsDeleted = 0 AND BusinessUnit = @bu	
 		
 		IF @users = 1
 		BEGIN
 			INSERT INTO #otherBU
-			SELECT DISTINCT Parent FROM PersonPeriod pp INNER JOIN Team ON Team.Id = pp.Team
-			INNER JOIN Site ON Site.id = Site  WHERE BusinessUnit <> @bu
+			SELECT DISTINCT Parent FROM PersonPeriod pp with (nolock) INNER JOIN Team with (nolock) ON Team.Id = pp.Team
+			INNER JOIN Site with (nolock) ON Site.id = Site  WHERE BusinessUnit <> @bu
 			
 			INSERT #result
 			SELECT Id, null, null, null, '', '',  FirstName, LastName, EmploymentNumber
@@ -139,9 +139,9 @@ BEGIN
 		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
 		FirstName, LastName, EmploymentNumber  
 		FROM  #TempPersonPeriodWithEndDate pp 
-		INNER JOIN Team ON Team.Id = pp.Team
-		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-		INNER JOIN Contract c ON pp.Contract = c.Id AND c.IsDeleted = 0
+		INNER JOIN Team with (nolock) ON Team.Id = pp.Team
+		INNER JOIN Site with (nolock) ON Site.id = Site and Site.BusinessUnit = @bu
+		INNER JOIN Contract c with (nolock) ON pp.Contract = c.Id AND c.IsDeleted = 0
 	END
 		
 	IF @type = 'ContractSchedule'
@@ -151,9 +151,9 @@ BEGIN
 		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name, 
 		FirstName, LastName, EmploymentNumber  
 		FROM #TempPersonPeriodWithEndDate pp 
-		INNER JOIN Team ON Team.Id = pp.Team
-		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-		INNER JOIN ContractSchedule c ON pp.ContractSchedule = c.Id AND c.IsDeleted = 0
+		INNER JOIN Team with (nolock) ON Team.Id = pp.Team
+		INNER JOIN Site with (nolock) ON Site.id = Site and Site.BusinessUnit = @bu
+		INNER JOIN ContractSchedule c with (nolock) ON pp.ContractSchedule = c.Id AND c.IsDeleted = 0
 
 	END
 
@@ -163,9 +163,9 @@ BEGIN
 		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,
 		FirstName, LastName, EmploymentNumber   
 		FROM #TempPersonPeriodWithEndDate pp
-		INNER JOIN Team ON Team.Id = pp.Team
-		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-		INNER JOIN PartTimePercentage c ON pp.PartTimePercentage = c.Id AND c.IsDeleted = 0
+		INNER JOIN Team with (nolock) ON Team.Id = pp.Team
+		INNER JOIN Site with (nolock) ON Site.id = Site and Site.BusinessUnit = @bu
+		INNER JOIN PartTimePercentage c with (nolock) ON pp.PartTimePercentage = c.Id AND c.IsDeleted = 0
 	END
 		
 	IF @type = 'Note'
@@ -175,8 +175,8 @@ BEGIN
 		pp.FirstName, pp.LastName, pp.EmploymentNumber  
 		FROM  #TempPersonPeriodWithEndDate pp
 		INNER JOIN Person p with (nolock) on pp.Parent = p.Id
-		INNER JOIN Team ON Team.Id = pp.Team
-		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
+		INNER JOIN Team with (nolock) ON Team.Id = pp.Team
+		INNER JOIN Site with (nolock) ON Site.id = Site and Site.BusinessUnit = @bu
 		AND p.Note <> ''
 	END
 		
@@ -187,9 +187,9 @@ BEGIN
 		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit ,c.Name,  
 		FirstName, LastName, EmploymentNumber  
 		FROM #TempPersonPeriodWithEndDate pp
-		INNER JOIN Team ON Team.Id = pp.Team
-		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-		INNER JOIN RuleSetBag c ON pp.RuleSetBag = c.Id AND c.IsDeleted = 0 
+		INNER JOIN Team with (nolock) ON Team.Id = pp.Team
+		INNER JOIN Site with (nolock) ON Site.id = Site and Site.BusinessUnit = @bu
+		INNER JOIN RuleSetBag c with (nolock) ON pp.RuleSetBag = c.Id AND c.IsDeleted = 0 
 	END
 		
 	IF @type = 'Skill'
@@ -199,10 +199,10 @@ BEGIN
 		SELECT DISTINCT pp.Id, Team.Id, Site.Id, Site.BusinessUnit ,s.Name,  
 		FirstName, LastName, EmploymentNumber  
 		FROM #TempPersonPeriodWithEndDate pp 
-		INNER JOIN Team ON Team.Id = pp.Team
-		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-		INNER JOIN PersonSkill ps ON PeriodId = ps.Parent
-		INNER JOIN Skill s ON ps.Skill = s.Id AND s.IsDeleted = 0
+		INNER JOIN Team with (nolock) ON Team.Id = pp.Team
+		INNER JOIN Site with (nolock) ON Site.id = Site and Site.BusinessUnit = @bu
+		INNER JOIN PersonSkill ps with (nolock) ON PeriodId = ps.Parent
+		INNER JOIN Skill s with (nolock) ON ps.Skill = s.Id AND s.IsDeleted = 0
 	 
 	END
 
@@ -213,9 +213,9 @@ BEGIN
 		pp.FirstName, pp.LastName, pp.EmploymentNumber  
 		FROM  #TempPersonPeriodWithEndDate pp
 		INNER JOIN Person p with (nolock) on pp.Parent = p.Id
-		INNER JOIN Team ON Team.Id = pp.Team
-		INNER JOIN Site ON Site.id = Site and Site.BusinessUnit = @bu
-		INNER JOIN OptionalColumnValue ocv ON p.Id = ocv.ReferenceId 
+		INNER JOIN Team with (nolock) ON Team.Id = pp.Team
+		INNER JOIN Site with (nolock) ON Site.id = Site and Site.BusinessUnit = @bu
+		INNER JOIN OptionalColumnValue ocv with (nolock) ON p.Id = ocv.ReferenceId 
 			AND ocv.Parent = @optionalColumnId
 			AND ocv.Description <> ''
 	END
