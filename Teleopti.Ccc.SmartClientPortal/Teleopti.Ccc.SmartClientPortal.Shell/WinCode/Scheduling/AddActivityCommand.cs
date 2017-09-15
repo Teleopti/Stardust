@@ -9,9 +9,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 {
 	public class AddActivityCommand : AddLayerCommand
 	{
+		private readonly SchedulePresenterBase _presenter;
+
 		public AddActivityCommand(ISchedulerStateHolder schedulerStateHolder, IScheduleViewBase scheduleViewBase, SchedulePresenterBase presenter, IList<IScheduleDay> scheduleParts)
 			: base(schedulerStateHolder, scheduleViewBase, presenter, scheduleParts ?? scheduleViewBase.SelectedSchedules())
 		{
+			_presenter = presenter;
 			if (ScheduleParts.Count > 0 && ScheduleParts[0] != null)
 			{
 				DefaultPeriod = GetDefaultPeriodFromPart(ScheduleParts[0]);
@@ -55,6 +58,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 															SchedulerStateHolder.TimeZoneInfo,
 															DefaultActivity);
 
+
+
 			bool result = dialog1.Result;
 
 			DateTimePeriod period;
@@ -62,6 +67,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 			if (!result) return;
 
 			IActivity activity = dialog1.SelectedItem;
+			_presenter.DefaultActivity = activity;
 			IShiftCategory shiftCategory = dialog1.SelectedShiftCategory;
 
 			period = dialog1.SelectedPeriod;

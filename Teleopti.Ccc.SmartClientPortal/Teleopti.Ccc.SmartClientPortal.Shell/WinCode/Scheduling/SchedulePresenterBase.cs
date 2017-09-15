@@ -66,10 +66,12 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
         public IScheduleTag DefaultScheduleTag { get; set; }
 
-        /// <summary>
-        /// Column week mapping dictionary
-        /// </summary>
-        public Dictionary<int, int> ColWeekMap
+		public IActivity DefaultActivity { get; set; }
+
+		/// <summary>
+		/// Column week mapping dictionary
+		/// </summary>
+		public Dictionary<int, int> ColWeekMap
         {
             get { return _colWeekMap; }
         }
@@ -759,7 +761,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling
 
         public void AddActivity()
         {
-            AddActivity(null, null, null);
+            AddActivity(null, null, DefaultActivity);
         }
 
         public void AddOvertime(IList<IMultiplicatorDefinitionSet> definitionSets)
