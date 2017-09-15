@@ -1,7 +1,6 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
@@ -19,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public IAnalyticsUnitOfWorkFactory Analytics { get; private set; }
 		public IReadModelUnitOfWorkFactory ReadModel { get; private set; }
 
-		public string DataSourceName => Application.Name;
+		public string DataSourceName => Application?.Name;
 
 		public void RemoveAnalytics()
 		{

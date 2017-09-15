@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
 		private Tuple<string,string> tenantAndUser()
 		{
 			var dataSource = state.Get();
-			if (dataSource != null)
+			if (dataSource?.DataSourceName != null)
 			{
 				return new Tuple<string, string>(dataSource.DataSourceName, "N/A");
 			}
