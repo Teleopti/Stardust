@@ -16475,4 +16475,12 @@ Do you want to participate?</value>
     <value>Requests are already in the waitlist, please wait.</value>
     <comment>Message to agent when the request gets waitlisted because there already exists wailtlisted request.</comment>
   </data>
+  <data name="SeeAgents" xml:space="preserve">
+    <value>See agents</value>
+    <comment>Tooltip to be shown on the Agents button in RTA overview when there isn't a selection in the page</comment>
+  </data>
+  <data name="SeeAgentsBySelection" xml:space="preserve">
+    <value>See agents by selection</value>
+    <comment>Tooltip to be shown on the Agents button in RTA overview when there is a selection in the page</comment>
+  </data>
 </root>
