@@ -64,6 +64,7 @@
     <Compile Include="AbsenceRequests\ProcessBulkAbsenceRequests.cs" />
     <Compile Include="AbsenceRequests\ProcessMultipleAbsenceRequests.cs" />
     <Compile Include="AbsenceRequests\RequestPerformanceTestAttribute.cs" />
+    <Compile Include="OvertimeRequests\ProcessOvertimeRequests.cs" />
     <Compile Include="ShiftTradeRequestsTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +79,10 @@
     <ProjectReference Include="..\Teleopti.Ccc.IocCommon\Teleopti.Ccc.IocCommon.csproj">
       <Project>{DB42D973-9889-4D51-9FC5-BE66AA7F117C}</Project>
       <Name>Teleopti.Ccc.IocCommon</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Teleopti.Ccc.Staffing.PerformanceTest\Teleopti.Ccc.Staffing.PerformanceTest.csproj">
+      <Project>{FBBAF5F6-5079-4CAD-BD96-7C07737238AA}</Project>
+      <Name>Teleopti.Ccc.Staffing.PerformanceTest</Name>
     </ProjectReference>
     <ProjectReference Include="..\Teleopti.Ccc.TestCommon\Teleopti.Ccc.TestCommon.csproj">
       <Project>{68A028B6-864C-4969-8830-9C3C6BD56A98}</Project>
