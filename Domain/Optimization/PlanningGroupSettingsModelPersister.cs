@@ -7,13 +7,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class PlanningGroupSettingsModelPersister : IPlanningGroupSettingsModelPersister
 	{
-		private readonly IDayOffRulesRepository _dayOffRulesRepository;
+		private readonly IPlanningGroupSettingsRepository _planningGroupSettingsRepository;
 		private readonly FilterMapper _filterMapper;
 		private readonly IPlanningGroupRepository _planningGroupRepository;
 
-		public PlanningGroupSettingsModelPersister(IDayOffRulesRepository dayOffRulesRepository, FilterMapper filterMapper, IPlanningGroupRepository planningGroupRepository)
+		public PlanningGroupSettingsModelPersister(IPlanningGroupSettingsRepository planningGroupSettingsRepository, FilterMapper filterMapper, IPlanningGroupRepository planningGroupRepository)
 		{
-			_dayOffRulesRepository = dayOffRulesRepository;
+			_planningGroupSettingsRepository = planningGroupSettingsRepository;
 			_filterMapper = filterMapper;
 			_planningGroupRepository = planningGroupRepository;
 		}
@@ -30,20 +30,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 					PlanningGroupSettings.CreateDefault(planningGroup) :
 					new PlanningGroupSettings(planningGroup);
 				setProperies(dayOffRules, model);
-				_dayOffRulesRepository.Add(dayOffRules);
+				_planningGroupSettingsRepository.Add(dayOffRules);
 			}
 			else
 			{
-				var dayOffRules = _dayOffRulesRepository.Get(model.Id);
+				var dayOffRules = _planningGroupSettingsRepository.Get(model.Id);
 				setProperies(dayOffRules, model);
 			}
 		}
 
 		public void Delete(Guid id)
 		{
-			var dayOffRule = _dayOffRulesRepository.Get(id);
+			var dayOffRule = _planningGroupSettingsRepository.Get(id);
 			if (dayOffRule != null)
-				_dayOffRulesRepository.Remove(dayOffRule);
+				_planningGroupSettingsRepository.Remove(dayOffRule);
 		}
 
 		private void setProperies(PlanningGroupSettings planningGroupSettings, PlanningGroupSettingsModel planningGroupSettingsModel)

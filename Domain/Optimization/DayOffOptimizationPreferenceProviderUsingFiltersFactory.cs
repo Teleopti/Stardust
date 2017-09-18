@@ -4,41 +4,41 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class BlockPreferenceProviderUsingFiltersFactory
 	{
-		private readonly IDayOffRulesRepository _dayOffRulesRepository;
+		private readonly IPlanningGroupSettingsRepository _planningGroupSettingsRepository;
 
-		public BlockPreferenceProviderUsingFiltersFactory(IDayOffRulesRepository dayOffRulesRepository)
+		public BlockPreferenceProviderUsingFiltersFactory(IPlanningGroupSettingsRepository planningGroupSettingsRepository)
 		{
-			_dayOffRulesRepository = dayOffRulesRepository;
+			_planningGroupSettingsRepository = planningGroupSettingsRepository;
 		}
 
 		public IBlockPreferenceProvider Create()
 		{
-			return new BlockPreferenceProviderUsingFilters(_dayOffRulesRepository.LoadAllWithoutPlanningGroup());
+			return new BlockPreferenceProviderUsingFilters(_planningGroupSettingsRepository.LoadAllWithoutPlanningGroup());
 		}
 
 		public IBlockPreferenceProvider Create(IPlanningGroup planningGroup)
 		{
-			return new BlockPreferenceProviderUsingFilters(_dayOffRulesRepository.LoadAllByPlanningGroup(planningGroup));
+			return new BlockPreferenceProviderUsingFilters(_planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup));
 		}
 	}
 
 	public class DayOffOptimizationPreferenceProviderUsingFiltersFactory
 	{
-		private readonly IDayOffRulesRepository _dayOffRulesRepository;
+		private readonly IPlanningGroupSettingsRepository _planningGroupSettingsRepository;
 
-		public DayOffOptimizationPreferenceProviderUsingFiltersFactory(IDayOffRulesRepository dayOffRulesRepository)
+		public DayOffOptimizationPreferenceProviderUsingFiltersFactory(IPlanningGroupSettingsRepository planningGroupSettingsRepository)
 		{
-			_dayOffRulesRepository = dayOffRulesRepository;
+			_planningGroupSettingsRepository = planningGroupSettingsRepository;
 		}
 
 		public IDayOffOptimizationPreferenceProvider Create()
 		{
-			return new DayOffOptimizationPreferenceProviderUsingFilters(_dayOffRulesRepository.LoadAllWithoutPlanningGroup());
+			return new DayOffOptimizationPreferenceProviderUsingFilters(_planningGroupSettingsRepository.LoadAllWithoutPlanningGroup());
 		}
 
 		public IDayOffOptimizationPreferenceProvider Create(IPlanningGroup planningGroup)
 		{
-			return new DayOffOptimizationPreferenceProviderUsingFilters(_dayOffRulesRepository.LoadAllByPlanningGroup(planningGroup));
+			return new DayOffOptimizationPreferenceProviderUsingFilters(_planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup));
 		}
 	}
 }

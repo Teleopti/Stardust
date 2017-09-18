@@ -15,7 +15,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-	public class DayOffRulesRepositoryTest : RepositoryTest<PlanningGroupSettings>
+	public class PlanningGroupSettingsRepositoryTest : RepositoryTest<PlanningGroupSettings>
 	{
 		protected override PlanningGroupSettings CreateAggregateWithCorrectBusinessUnit()
 		{
@@ -37,13 +37,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override Repository<PlanningGroupSettings> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new DayOffRulesRepository(currentUnitOfWork);
+			return new PlanningGroupSettingsRepository(currentUnitOfWork);
 		}
 
 		[Test]
 		public void CanAddMultipleNonDefaults()
 		{
-			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
 			rep.Add(new PlanningGroupSettings());
 			UnitOfWork.Flush();
 			rep.Add(new PlanningGroupSettings());
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void WhenAddingTwoDefaultSettingsLastWins()
 		{
-			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
 			var lastDefault = PlanningGroupSettings.CreateDefault();
 			rep.Add(PlanningGroupSettings.CreateDefault());
 			UnitOfWork.Flush();
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void CanUseAddWhenUpdatingAlreadyPersistedDefault()
 		{
 			var dayOffSettings = PlanningGroupSettings.CreateDefault();
-			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
 			rep.Add(dayOffSettings);
 			UnitOfWork.Flush();
 			Assert.DoesNotThrow(() => rep.Add(dayOffSettings));
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void CanNotRemoveDefaultSetting()
 		{
-			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
 			var defaultSetting = PlanningGroupSettings.CreateDefault();
 			Assert.Throws<ArgumentException>(() => rep.Remove(defaultSetting));
 		}
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void ShouldReturnDefaultValuesIfNotPresentInDb()
 		{
 			var defaultSetting = PlanningGroupSettings.CreateDefault();
-			var defaultInDb = new DayOffRulesRepository(CurrUnitOfWork).LoadAllWithoutPlanningGroup().SingleOrDefault();
+			var defaultInDb = new PlanningGroupSettingsRepository(CurrUnitOfWork).LoadAllWithoutPlanningGroup().SingleOrDefault();
 
 			defaultInDb.Should().Not.Be.Null();
 			defaultInDb.DayOffsPerWeek.Should().Be.EqualTo(defaultSetting.DayOffsPerWeek);
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(contract);
 			PersistAndRemoveFromUnitOfWork(dayOffRules);
 
-			var dayOffRulesInDb = new DayOffRulesRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
+			var dayOffRulesInDb = new PlanningGroupSettingsRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
 
 			dayOffRulesInDb.Filters.Single()
 				.Should().Be.EqualTo(contractFilter);
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(team);
 			PersistAndRemoveFromUnitOfWork(dayOffRules);
 
-			var dayOffRulesInDb = new DayOffRulesRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
+			var dayOffRulesInDb = new PlanningGroupSettingsRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
 
 			dayOffRulesInDb.Filters.Single()
 				.Should().Be.EqualTo(teamFilter);
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(site);
 			PersistAndRemoveFromUnitOfWork(dayOffRules);
 
-			var dayOffRulesInDb = new DayOffRulesRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
+			var dayOffRulesInDb = new PlanningGroupSettingsRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
 
 			dayOffRulesInDb.Filters.Single()
 				.Should().Be.EqualTo(siteFilter);
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			
 			PersistAndRemoveFromUnitOfWork(dayOffRules);
 
-			var dayOffRulesInDb = new DayOffRulesRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
+			var dayOffRulesInDb = new PlanningGroupSettingsRepository(CurrUnitOfWork).Get(dayOffRules.Id.Value);
 
 			dayOffRulesInDb.Name
 				.Should().Be.EqualTo(name);	
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			PersistAndRemoveFromUnitOfWork(site);
 			PersistAndRemoveFromUnitOfWork(dayOffRules);
-			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
 
 			rep.Remove(dayOffRules);
 
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(planningGroup);
 			PersistAndRemoveFromUnitOfWork(PlanningGroupSettings.CreateDefault());
 
-			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
 			rep.Add(PlanningGroupSettings.CreateDefault(planningGroup));
 
 			UnitOfWork.Flush();
@@ -207,7 +207,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var planningGroup = new PlanningGroup("_");
 			PersistAndRemoveFromUnitOfWork(planningGroup);
-			var rep = new DayOffRulesRepository(CurrUnitOfWork);
+			var rep = new PlanningGroupSettingsRepository(CurrUnitOfWork);
 			rep.Add(PlanningGroupSettings.CreateDefault(planningGroup));
 			UnitOfWork.Flush();
 

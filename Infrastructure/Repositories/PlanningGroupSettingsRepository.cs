@@ -8,9 +8,9 @@ using Teleopti.Ccc.Domain.Optimization;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public class DayOffRulesRepository : Repository<PlanningGroupSettings>, IDayOffRulesRepository
+	public class PlanningGroupSettingsRepository : Repository<PlanningGroupSettings>, IPlanningGroupSettingsRepository
 	{
-		public DayOffRulesRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+		public PlanningGroupSettingsRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 		{
 		}
 
@@ -69,9 +69,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void RemoveForPlanningGroup(IPlanningGroup planningGroup)
 		{
-			var dayOffRules = LoadAllByPlanningGroup(planningGroup);
-			foreach (var dayOffRule in dayOffRules)
-				base.Remove(dayOffRule);
+			var planningGroupSettingses = LoadAllByPlanningGroup(planningGroup);
+			foreach (var planningGroupSettings in planningGroupSettingses)
+				base.Remove(planningGroupSettings);
 		}
 	}
 }

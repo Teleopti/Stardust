@@ -7,14 +7,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class PlanningGroupModelPersister : IPlanningGroupModelPersister
 	{
 		private readonly IPlanningGroupRepository _planningGroupRepository;
-		private readonly IDayOffRulesRepository _dayOffRulesRepository;
+		private readonly IPlanningGroupSettingsRepository _planningGroupSettingsRepository;
 		private readonly FilterMapper _filterMapper;
 
-		public PlanningGroupModelPersister(IPlanningGroupRepository planningGroupRepository, FilterMapper filterMapper, IDayOffRulesRepository dayOffRulesRepository)
+		public PlanningGroupModelPersister(IPlanningGroupRepository planningGroupRepository, FilterMapper filterMapper, IPlanningGroupSettingsRepository planningGroupSettingsRepository)
 		{
 			_planningGroupRepository = planningGroupRepository;
 			_filterMapper = filterMapper;
-			_dayOffRulesRepository = dayOffRulesRepository;
+			_planningGroupSettingsRepository = planningGroupSettingsRepository;
 		}
 
 		public void Persist(PlanningGroupModel planningGroupModel)
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var planningGroup = new PlanningGroup();
 				setProperties(planningGroup, planningGroupModel);
 				_planningGroupRepository.Add(planningGroup);
-				_dayOffRulesRepository.Add(PlanningGroupSettings.CreateDefault(planningGroup));
+				_planningGroupSettingsRepository.Add(PlanningGroupSettings.CreateDefault(planningGroup));
 			}
 			else
 			{
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			var planningGroup = _planningGroupRepository.Get(planningGroupId);
 			if (planningGroup == null) return;
-			_dayOffRulesRepository.RemoveForPlanningGroup(planningGroup);
+			_planningGroupSettingsRepository.RemoveForPlanningGroup(planningGroup);
 			_planningGroupRepository.Remove(planningGroup);
 		}
 	}

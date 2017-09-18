@@ -6,20 +6,20 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class FetchDayOffRulesModel : IFetchDayOffRulesModel
 	{
-		private readonly IDayOffRulesRepository _dayOffRulesRepository;
+		private readonly IPlanningGroupSettingsRepository _planningGroupSettingsRepository;
 		private readonly DayOffRulesMapper _dayOffRulesMapper;
 		private readonly IPlanningGroupRepository _planningGroupRepository;
 
-		public FetchDayOffRulesModel(IDayOffRulesRepository dayOffRulesRepository, DayOffRulesMapper dayOffRulesMapper, IPlanningGroupRepository planningGroupRepository)
+		public FetchDayOffRulesModel(IPlanningGroupSettingsRepository planningGroupSettingsRepository, DayOffRulesMapper dayOffRulesMapper, IPlanningGroupRepository planningGroupRepository)
 		{
-			_dayOffRulesRepository = dayOffRulesRepository;
+			_planningGroupSettingsRepository = planningGroupSettingsRepository;
 			_dayOffRulesMapper = dayOffRulesMapper;
 			_planningGroupRepository = planningGroupRepository;
 		}
 
 		public IEnumerable<PlanningGroupSettingsModel> FetchAllWithoutPlanningGroup()
 		{
-			var all = _dayOffRulesRepository.LoadAllWithoutPlanningGroup();
+			var all = _planningGroupSettingsRepository.LoadAllWithoutPlanningGroup();
 
 			if (!all.Any(x => x.Default))
 				all.Add(PlanningGroupSettings.CreateDefault());
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public PlanningGroupSettingsModel Fetch(Guid id)
 		{
-			var dayOffRules = _dayOffRulesRepository.Get(id);
+			var dayOffRules = _planningGroupSettingsRepository.Get(id);
 			if (dayOffRules == null)
 				throw new ArgumentException($"Cannot find PlanningGroupSettings with Id {id}");
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IEnumerable<PlanningGroupSettingsModel> FetchAllForPlanningGroup(Guid planningGroupId)
 		{
 			var planningGroup = _planningGroupRepository.Get(planningGroupId);
-			var all = _dayOffRulesRepository.LoadAllByPlanningGroup(planningGroup);
+			var all = _planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup);
 
 			var result = all.Select(dayOffRules => _dayOffRulesMapper.ToModel(dayOffRules)).ToList();
 			return result;

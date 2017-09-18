@@ -42,10 +42,10 @@
 		<many-to-one name="PlanningGroup"
 					 class="Teleopti.Ccc.Domain.Optimization.PlanningGroup"
 						access="nosetter.camelcase-underscore"
-					 foreign-key="FK_DayOffRules_PlanningGroup"/>
+					 foreign-key="FK_PlanningGroupSettings_PlanningGroup"/>
 		
-		<set name="Filters" table="DayOffRulesFilters" cascade="all-delete-orphan">
-			<key column="DayOffRules" />
+		<set name="Filters" table="PlanningGroupSettingsFilters" cascade="all-delete-orphan">
+			<key column="PlanningGroupSettings" />
 			<many-to-any id-type="Guid" meta-type="System.String">
 				<meta-value value="Contract" class="Teleopti.Ccc.Domain.Optimization.Filters.ContractFilter" />
 				<meta-value value="Team" class="Teleopti.Ccc.Domain.Optimization.Filters.TeamFilter" />

@@ -42,16 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			schedulingOptions.RefreshRate = optimizationPreferences.Advanced.RefreshScreenInterval;
 
-			schedulingOptions.BlockFinderTypeForAdvanceScheduling =
-				optimizationPreferences.Extra.BlockTypeValue;
-			if (optimizationPreferences.Extra.UseTeamBlockOption)
-			{
-				schedulingOptions.UseSameDayOffs = true;
-			}
-			else
-			{
-				schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.UseTeamSameDaysOff;
-			}
+			
 
 			schedulingOptions.UseMinimumStaffing = optimizationPreferences.Advanced.UseMinimumStaffing;
 			schedulingOptions.UseMaximumStaffing = optimizationPreferences.Advanced.UseMaximumStaffing;
@@ -111,6 +102,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public static void SetTeamBlockOptions(IOptimizationPreferences optimizationPreferences,
 			SchedulingOptions schedulingOptions)
 		{
+			schedulingOptions.BlockFinderTypeForAdvanceScheduling = optimizationPreferences.Extra.BlockTypeValue;
+			schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.UseTeamBlockOption || optimizationPreferences.Extra.UseTeamSameDaysOff;
+
 			schedulingOptions.UseBlock = optimizationPreferences.Extra.UseTeamBlockOption;
 			schedulingOptions.BlockSameEndTime = optimizationPreferences.Extra.UseBlockSameEndTime;
 			schedulingOptions.BlockSameStartTime = optimizationPreferences.Extra.UseBlockSameStartTime;

@@ -86,12 +86,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IBlockPreferenceProvider blockPreferenceProvider,
 			ISchedulingProgress schedulingProgress)
 		{
-			if (optimizationPreferences.Extra.IsClassic())
-			{
-				periodValueCalculatorForAllSkills = new noExpansivePeriodValueCalculation();
-			}
-			var previousPeriodValue = periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-
 			var currentMatrixCounter = 0;
 			var allFailed = new Dictionary<ITeamInfo, bool>();
 			var matrixes = new List<Tuple<IScheduleMatrixPro, ITeamInfo>>();
@@ -106,6 +100,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var blockPreference = blockPreferenceProvider.ForAgent(matrix.Item1.Person, matrix.Item1.EffectivePeriodDays.First().Day);
 				UpdateBlockPreference(optimizationPreferences, blockPreference);
 				SchedulingOptionsCreator.SetTeamBlockOptions(optimizationPreferences, schedulingOptions);
+
+				if (optimizationPreferences.Extra.IsClassic())
+				{
+					periodValueCalculatorForAllSkills = new noExpansivePeriodValueCalculation();
+				}
+				var previousPeriodValue = periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 
 				currentMatrixCounter++;
 
