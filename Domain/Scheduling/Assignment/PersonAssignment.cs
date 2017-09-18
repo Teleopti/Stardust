@@ -316,7 +316,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void AddOvertimeActivity(IActivity activity, DateTimePeriod period, IMultiplicatorDefinitionSet multiplicatorDefinitionSet, bool muteEvent = true, TrackedCommandInfo trackedCommandInfo = null)
 		{
-			if (period.StartDateTime.Equals(period.EndDateTime)) return;
 			var layer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
 			layer.SetParent(this);
 			_shiftLayers.Add(layer);
@@ -365,7 +364,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual void AddActivity(IActivity activity, DateTimePeriod period, TrackedCommandInfo trackedCommandInfo, bool muteEvent = false)
 		{
-			if (period.StartDateTime.Equals(period.EndDateTime)) return;
 			addActivityInternal(activity, period);
 			if (!muteEvent)
 			{

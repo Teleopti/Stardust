@@ -229,7 +229,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var dayOffWithPersonalActivity = PersonAssignmentFactory.CreateAssignmentWithDayOff(person, scenario, date, new DayOffTemplate());
 
 			var personalActivity = ActivityFactory.CreateActivity("a personal activity");
-			dayOffWithPersonalActivity.AddPersonalActivity(personalActivity, new DateTimePeriod(), true, null);
+			dayOffWithPersonalActivity.AddPersonalActivity(personalActivity, new DateTimePeriod(2016, 7, 26, 8, 2016, 7, 26, 9), true, null);
 			ScheduleStorage.Add(dayOffWithPersonalActivity);
 			
 			

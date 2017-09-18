@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             //Definition: Assignment with "HighestZOrder" has PersonalShift
 					IPersonAssignment personAssignmentWithPersonalShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
 					IPersonAssignment personAssignmentWithoutPersonalShift = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
-            personAssignmentWithPersonalShift.AddPersonalActivity(new Activity("hej"), new DateTimePeriod(2000,1,1,2000,1,1));
+			personAssignmentWithPersonalShift.AddPersonalActivity(new Activity("hej"), new DateTimePeriod(2000, 1, 1, 8, 2000, 1, 1, 9));
 
             using (_mocker.Record())
             {

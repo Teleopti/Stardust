@@ -1404,7 +1404,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
         	var startDateTime = _schedulerState.RequestedPeriod.Period().StartDateTime;
             var period = new DateTimePeriod(startDateTime.AddHours(3), startDateTime.AddHours(3.5));
-	        var shiftLayer =new MainShiftLayer(new Activity("_"), new DateTimePeriod());
+	        var shiftLayer = new MainShiftLayer(new Activity("_"), new DateTimePeriod(2017, 1, 1, 8, 2017, 1, 1, 9));
 
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(ass.Period).Return(period);

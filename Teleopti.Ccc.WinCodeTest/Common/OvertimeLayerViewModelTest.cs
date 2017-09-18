@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 		public void VerifyCanGetDescriptionFromMultiplicatorSet()
 		{
 			IActivity activity = _mocks.StrictMock<IActivity>();
-			DateTimePeriod period = new DateTimePeriod();
+			var period = new DateTimePeriod(2017, 1, 1, 8, 2017, 1, 1, 9);
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet = _mocks.StrictMock<IMultiplicatorDefinitionSet>();
 			var overtimeLayer = new OvertimeShiftLayer(activity, period, multiplicatorDefinitionSet);
 

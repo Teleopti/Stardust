@@ -754,27 +754,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void ShouldNotAddZeroLengthOvertimeShifts()
-		{
-			var overtime = new  Activity("overtime");
-			var dateTime = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(dateTime, dateTime);
-			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("multiplicatorset", MultiplicatorType.Overtime);
-			target.AddOvertimeActivity(overtime,period,multiplicatorDefinitionSet);
-			Assert.AreEqual(0, target.OvertimeActivities().Count());
-		}
-		
-		[Test]
-		public void ShouldNotAddZeroLengthMainShifts()
-		{
-			var activity = new  Activity("_");
-			var dateTime = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
-			var period = new DateTimePeriod(dateTime, dateTime);
-			target.AddActivity(activity,period);
-			Assert.AreEqual(0, target.MainActivities().Count());
-		}
-
-		[Test]
 		public void ShouldClearPersonalAndOvertimeWhenSettingActivitiesAndShiftCategoryFromSource()
 		{
 			target.AddPersonalActivity(new Activity("d"), new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
@@ -871,7 +850,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 		
 		[Test]
-		[Ignore("to be fixed")]
 		public void ShouldThrowExceptionWhenAddingZeroLengthMainShift()
 		{
 			var activity = new  Activity("_");
@@ -882,7 +860,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		[Ignore("to be fixed")]
 		public void ShouldThrowExceptionWhenAddingZeroLengthOverTimeShift()
 		{
 			var activity = new  Activity("_");
@@ -894,7 +871,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		[Ignore("to be fixed")]
 		public void ShouldThrowExceptionWhenAddingZeroLengtPersonalActivity()
 		{
 			var activity = new  Activity("_");

@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected ShiftLayer(IActivity activity, DateTimePeriod period)
 		{
 			InParameter.EnsureNoSecondsInPeriod(period);
+			InParameter.EnsurePeriodHasLength(period);
 			Payload = activity;
 			Period = period;
 		}

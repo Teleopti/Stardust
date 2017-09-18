@@ -108,8 +108,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			setup();
 			var scenario = new Scenario("scenario");
 			var person = PersonFactory.CreatePerson("person");
-			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2000, 1, 3, 2000, 1, 3));
-			putScheduleDataToDic(PersonAbsenceFactory.CreatePersonAbsence(person, destination.Scenario, new DateTimePeriod(2000, 1, 4, 2000, 1, 5)));
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, scenario, new DateTimePeriod(2000, 1, 3, 8, 2000, 1, 3, 9));
+			putScheduleDataToDic(PersonAbsenceFactory.CreatePersonAbsence(person, destination.Scenario, new DateTimePeriod(2000, 1, 4, 8, 2000, 1, 5, 9)));
 			var schedulePart = createPartWithData(personAssignment, new DateOnly(2000, 1, 3));
 			target.CopySchedulePartsToAnotherDictionary(destination, new List<IScheduleDay> { schedulePart });
 			var scheduleDay = destination[person].ScheduledDay(new DateOnly(2000, 1, 3));

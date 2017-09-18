@@ -213,13 +213,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var date = new DateOnly(2016, 7, 26);
 			var scenario = CurrentScenario.Current();
 			PersonRepository.Add(PersonFactory.CreatePersonWithId());
+			var period = new DateTimePeriod(2016, 7, 26, 8, 2016, 7, 26, 9);
 
 			var activity = ActivityFactory.CreateActivity("an activity");
 			ActivityRepository.Add(activity);
 			var dayOffWithPersonalActivity = PersonAssignmentFactory.CreateAssignmentWithDayOff(PersonRepository.SingleOrDefault(), scenario, date, new DayOffTemplate());
 
 			var personalActivity = ActivityFactory.CreateActivity("a personal activity");
-			dayOffWithPersonalActivity.AddPersonalActivity(personalActivity, new DateTimePeriod(), true, null);
+			dayOffWithPersonalActivity.AddPersonalActivity(personalActivity, period, true, null);
 			PersonAssignmentRepo.Add(dayOffWithPersonalActivity);
 
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Day");

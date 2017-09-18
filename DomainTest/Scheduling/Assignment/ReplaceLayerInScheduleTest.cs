@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var target = new ReplaceLayerInSchedule();
 			var scheduleDay = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
 			var newPayload = new Activity("d");
-			var newPeriod = new DateTimePeriod();
+			var newPeriod = new DateTimePeriod(2017, 1, 1, 8, 2017, 1, 1, 9);
 			var orgLayerCollection = scheduleDay.PersonAssignment().MainActivities();
 
 			target.Replace(scheduleDay, orgLayerCollection.First(), newPayload, newPeriod);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var target = new ReplaceLayerInSchedule();
 			var scheduleDay = new SchedulePartFactoryForDomain().AddPersonalLayer().CreatePart();
 			var newPayload = new Activity("d");
-			var newPeriod = new DateTimePeriod();
+			var newPeriod = new DateTimePeriod(2017, 1, 1, 8, 2017, 1, 1, 9);
 			var orgLayerCollection = scheduleDay.PersonAssignment().PersonalActivities();
 
 			target.Replace(scheduleDay, orgLayerCollection.Single(), newPayload, newPeriod);
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var target = new ReplaceLayerInSchedule();
 			var scheduleDay = new SchedulePartFactoryForDomain().AddOvertime().CreatePart();
 			var newPayload = new Activity("d");
-			var newPeriod = new DateTimePeriod();
+			var newPeriod = new DateTimePeriod(2017, 1, 1, 8, 2017, 1, 1, 9);
 			var orgLayerCollection = scheduleDay.PersonAssignment().OvertimeActivities().ToList();
 
 			target.Replace(scheduleDay, orgLayerCollection.Single(), newPayload, newPeriod);
@@ -127,7 +127,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.AddPersonalLayer()
 											.AddMainShiftLayer()
 											.CreatePart();
-			target.Replace(scheduleDay, scheduleDay.PersonAssignment().MainActivities().First(), newActivity, new DateTimePeriod());
+			var newPeriod = new DateTimePeriod(2017, 1, 1, 8, 2017, 1, 1, 9);
+			target.Replace(scheduleDay, scheduleDay.PersonAssignment().MainActivities().First(), newActivity, newPeriod);
 			scheduleDay.PersonAssignment().MainActivities().First().Payload
 				.Should().Be.SameInstanceAs(newActivity);
 		}
@@ -143,7 +144,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.AddPersonalLayer()
 											.AddMainShiftLayer()
 											.CreatePart();
-			target.Replace(scheduleDay, scheduleDay.PersonAssignment().PersonalActivities().First(), newActivity, new DateTimePeriod());
+			var newPeriod = new DateTimePeriod(2017, 1, 1, 8, 2017, 1, 1, 9);
+			target.Replace(scheduleDay, scheduleDay.PersonAssignment().PersonalActivities().First(), newActivity, newPeriod);
 			scheduleDay.PersonAssignment().PersonalActivities().First().Payload
 				.Should().Be.SameInstanceAs(newActivity);
 		}
@@ -159,7 +161,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											.AddOvertime()
 											.AddMainShiftLayer()
 											.CreatePart();
-			target.Replace(scheduleDay, scheduleDay.PersonAssignment().OvertimeActivities().First(), newActivity, new DateTimePeriod());
+			var newPeriod = new DateTimePeriod(2017, 1, 1, 8, 2017, 1, 1, 9);
+			target.Replace(scheduleDay, scheduleDay.PersonAssignment().OvertimeActivities().First(), newActivity, newPeriod);
 			scheduleDay.PersonAssignment().OvertimeActivities().First().Payload
 				.Should().Be.SameInstanceAs(newActivity);
 		}
@@ -171,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var scheduleDay = new SchedulePartFactoryForDomain().AddMainShiftLayer().CreatePart();
 			var orgAss = scheduleDay.PersonAssignment();
 			var newPayload = new Activity("d");
-			var newPeriod = new DateTimePeriod();
+			var newPeriod = new DateTimePeriod(2017, 1, 1, 8, 2017, 1, 1, 9);
 			var orgLayerCollection = scheduleDay.PersonAssignment().MainActivities();
 
 			target.Replace(scheduleDay, orgLayerCollection.First(), newPayload, newPeriod);
@@ -203,7 +206,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var secondMainShiftLayer = scheduleDay.PersonAssignment().MainActivities().Skip(1).First();
 		
 			var newPayload = new Activity("d");
-			var newPeriod = new DateTimePeriod();
+			var newPeriod = new DateTimePeriod(2017, 1, 1, 8, 2017, 1, 1, 9);
 			
 			target.Replace(scheduleDay, secondMainShiftLayer, newPayload, newPeriod);
 

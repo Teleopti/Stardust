@@ -262,6 +262,14 @@ namespace Teleopti.Interfaces.Domain
                 throw new ArgumentException(@"The seconds part is not allowed for this period.", nameof(period));
             }
         }
+		
+		public static void EnsurePeriodHasLength(DateTimePeriod period)
+		{
+			if (period.StartDateTime >= period.EndDateTime)
+			{
+				throw new ArgumentException(@"StartDateTime have to be less than EndDateTime.", nameof(period));
+			}
+		}
 
 		/// <summary>
 		/// Ensure that the two lists has the same size

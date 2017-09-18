@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             _personAssignment = _mock.StrictMock<IPersonAssignment>();
 	        _overtimeShifts = new[]
 		        {
-			        new OvertimeShiftLayer(new Activity("d"), new DateTimePeriod(), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>())
+			        new OvertimeShiftLayer(new Activity("d"),new DateTimePeriod(2011, 1, 10, 8, 2011, 1, 10, 9), MockRepository.GenerateMock<IMultiplicatorDefinitionSet>())
 		        };
         }
 

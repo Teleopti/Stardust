@@ -188,8 +188,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.MaxSeat
 			var scenario = new Scenario("_");
 			var agentDataOneHour1 = MaxSeatDataFactory.CreateAgentWithAssignment(period.StartDate, team, new RuleSetBag(), scenario, activity, new TimePeriod(16, 0, 17, 0));
 			var agentDataOneHour2 = MaxSeatDataFactory.CreateAgentWithAssignment(period.StartDate, team, new RuleSetBag(), scenario, activity, new TimePeriod(16, 0, 17, 0));
-			var agentData1 = MaxSeatDataFactory.CreateAgentWithAssignment(period.EndDate, team, new RuleSetBag(), scenario, activity, new TimePeriod());
-			var agentData2 = MaxSeatDataFactory.CreateAgentWithAssignment(period.EndDate, team, new RuleSetBag(), scenario, activity, new TimePeriod());
+			var agentData1 = MaxSeatDataFactory.CreateAgentWithAssignment(period.EndDate, team, new RuleSetBag(), scenario, activity, new TimePeriod(16, 0, 17, 0));
+			var agentData2 = MaxSeatDataFactory.CreateAgentWithAssignment(period.EndDate, team, new RuleSetBag(), scenario, activity, new TimePeriod(16, 0, 17, 0));
+		
 			agentData1.Assignment.Clear();
 			agentData2.Assignment.SetDayOff(new DayOffTemplate());
 			var schedules = ScheduleDictionaryCreator.WithData(scenario, period, new [] {agentDataOneHour1.Assignment, agentDataOneHour2.Assignment, agentData1.Assignment, agentData2.Assignment});

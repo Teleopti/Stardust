@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 
 
     		var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,
-    		                                                                         new DateTimePeriod(2013, 1, 1, 2013, 1, 1));
+    		                                                                         new DateTimePeriod(2013, 1, 1, 8,  2013, 1, 1, 9));
 
         	_scheduleDay1 = stubs.ScheduleDayStub(DateTime.Today, _person, SchedulePartView.DayOff, PersonAssignmentFactory.CreateAssignmentWithDayOff());
 			_scheduleDay1.Stub(x => x.RestrictionCollection()).Return(restrictions);
