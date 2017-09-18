@@ -63,14 +63,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var arabicCalendar = new UmAlQuraCalendar();
 			var mapper = new ShiftTradePeriodViewModelMapper();
 			var arabicDate = new DateTime(1435, 1, 1, arabicCalendar);
-			var now = new MutableNow(arabicDate);
-			var result = mapper.Map(new WorkflowControlSet(), now, TimeZoneInfo.Utc);
+			var now = new MutableNow(new DateTime(2013, 11, 4, 0, 0, 0, DateTimeKind.Utc));
+			var result = mapper.Map(new WorkflowControlSet(), now, TimeZoneInfoFactory.IranTimeZoneInfo());
 
-			var localDateTime = arabicDate.ToLocalTime();
-
-			result.NowYear.Should().Be.EqualTo(arabicCalendar.GetYear(localDateTime));
-			result.NowMonth.Should().Be.EqualTo(arabicCalendar.GetMonth(localDateTime));
-			result.NowDay.Should().Be.EqualTo(arabicCalendar.GetDayOfMonth(localDateTime));
+			result.NowYear.Should().Be.EqualTo(arabicCalendar.GetYear(arabicDate));
+			result.NowMonth.Should().Be.EqualTo(arabicCalendar.GetMonth(arabicDate));
+			result.NowDay.Should().Be.EqualTo(arabicCalendar.GetDayOfMonth(arabicDate));
 		}
 
 		[Test]
