@@ -18,7 +18,7 @@
 		.state('intraday.area',
 		{
 			templateUrl: 'app/intraday/intraday-area.html',
-			controller: 'IntradayAreaController'
+			controller: 'IntradayAreaController as vm'
 		})
 		.state('intraday.skill-area-config',
 		{

@@ -17,7 +17,8 @@
 		'intradayMonitorStaffingService',
 		'intradayLatestTimeService',
 		'Toggle',
-		'skillIconService'
+		'skillIconService',
+		'$log'
 	];
 
 	function intradayController($scope,
@@ -34,18 +35,20 @@
 								intradayMonitorStaffingService,
 								intradayLatestTimeService,
 								toggleSvc,
-								skillIconService) {
+								skillIconService,
+								$log) {
 		var vm = this;
 		var autocompleteSkill;
 		var autocompleteSkillArea;
 		var timeoutPromise;
 		var polling;
 		var pollingTimeout = 60000;
-		$scope.DeleteSkillAreaModal = false;
-		$scope.prevArea;
-		$scope.drillable;
-		$scope.getSkillIcon = skillIconService.get;
-		$scope.toggles = {
+		vm.DeleteSkillAreaModal = false;
+		vm.prevArea;
+		vm.drillable;
+		vm.activeTab = 0;
+		vm.getSkillIcon = skillIconService.get;
+		vm.toggles = {
 			showOptimalStaffing: [],
 			showScheduledStaffing: [],
 			showEsl: [],
@@ -61,20 +64,20 @@
 			.replace('{1}', "<a href=' http://www.teleopti.com/wfm/customer-feedback.aspx' target='_blank'>")
 			.replace('{2}', '</a>');
 		var prevSkill;
-		$scope.currentInterval = [];
-		$scope.format = intradayService.formatDateTime;
-		$scope.viewObj;
-		$scope.chosenOffset = {value: 0};
+		vm.currentInterval = [];
+		vm.format = intradayService.formatDateTime;
+		vm.viewObj;
+		vm.chosenOffset = {value: 0};
 		NoticeService.info(message, null, true);
 		toggleSvc.togglesLoaded.then(function () {
-			$scope.toggles.showOptimalStaffing = toggleSvc.Wfm_Intraday_OptimalStaffing_40921;
-			$scope.toggles.showScheduledStaffing = toggleSvc.Wfm_Intraday_ScheduledStaffing_41476;
-			$scope.toggles.showEsl = toggleSvc.Wfm_Intraday_ESL_41827;
-			$scope.toggles.showEmailSkill = toggleSvc.Wfm_Intraday_SupportSkillTypeEmail_44002;
-			$scope.toggles.showOtherDay = toggleSvc.WFM_Intraday_Show_For_Other_Days_43504;
-			$scope.toggles.exportToExcel = toggleSvc.WFM_Intraday_Export_To_Excel_44892;
-			$scope.toggles.otherSkillsLikeEmail = toggleSvc.WFM_Intraday_SupportOtherSkillsLikeEmail_44026;
-			$scope.toggles.unifiedSkillGroupManagement = toggleSvc.WFM_Unified_Skill_Group_Management_45417;
+			vm.toggles.showOptimalStaffing = toggleSvc.Wfm_Intraday_OptimalStaffing_40921;
+			vm.toggles.showScheduledStaffing = toggleSvc.Wfm_Intraday_ScheduledStaffing_41476;
+			vm.toggles.showEsl = toggleSvc.Wfm_Intraday_ESL_41827;
+			vm.toggles.showEmailSkill = toggleSvc.Wfm_Intraday_SupportSkillTypeEmail_44002;
+			vm.toggles.showOtherDay = toggleSvc.WFM_Intraday_Show_For_Other_Days_43504;
+			vm.toggles.exportToExcel = toggleSvc.WFM_Intraday_Export_To_Excel_44892;
+			vm.toggles.otherSkillsLikeEmail = toggleSvc.WFM_Intraday_SupportOtherSkillsLikeEmail_44026;
+			vm.toggles.unifiedSkillGroupManagement = toggleSvc.WFM_Unified_Skill_Group_Management_45417;
 		});
 
 		var getAutoCompleteControls = function () {
@@ -85,64 +88,63 @@
 			autocompleteSkillArea = angular.element(autocompleteSkillAreaDOM).scope();
 		};
 
-		$scope.openSkillFromArea = function (item) {
+		vm.openSkillFromArea = function (item) {
 			if (item.DoDisplayData) {
 				prevSkill = item;
 				autocompleteSkill.selectedSkill = item;
-				$scope.drillable = true;
+				vm.drillable = true;
 			} else {
 				UnsupportedSkillNotice();
 			}
 		};
 
-		$scope.openSkillAreaFromSkill = function () {
-			autocompleteSkillArea.selectedSkillArea = $scope.prevArea;
-			$scope.drillable = false;
+		vm.openSkillAreaFromSkill = function () {
+			autocompleteSkillArea.selectedSkillArea = vm.prevArea;
+			vm.drillable = false;
 		};
 
-		$scope.skillSelected = function (item) {
-			$scope.selectedItem = item;
+		vm.skillSelected = function (item) {
+			vm.selectedItem = vm.selectedSkill = item;
 			clearSkillAreaSelection();
 		};
 
-		$scope.skillAreaSelected = function (item) {
-			$scope.selectedItem = item;
+		vm.skillAreaSelected = function (item) {
+			vm.selectedItem = vm.selectedSkillArea = item;
 			clearSkillSelection();
 		};
 
-		$scope.deleteSkillArea = function (skillArea) {
+		vm.deleteSkillArea = function (skillArea) {
 			cancelTimeout();
 			intradayService.deleteSkillArea
 				.remove({
 					id: skillArea.Id
 				})
 				.$promise.then(function (result) {
-				$scope.skillAreas.splice($scope.skillAreas.indexOf(skillArea), 1);
-				$scope.selectedItem = null;
-				$scope.hasMonitorData = false;
+				vm.skillAreas.splice(vm.skillAreas.indexOf(skillArea), 1);
+				vm.selectedItem = null;
+				vm.hasMonitorData = false;
 				clearSkillAreaSelection();
 				notifySkillAreaDeletion();
 			});
 
-			$scope.toggleModal();
+			vm.toggleModal();
 		};
 
 		var clearPrev = function () {
-			$scope.drillable = false;
-			$scope.prevArea = false;
+			vm.drillable = false;
+			vm.prevArea = false;
 			prevSkill = false;
 		};
 
-		$scope.selectedSkillChange = function (item) {
+		vm.selectedSkillChange = function (item) {
 			if (item) {
 				if (item.DoDisplayData) {
-					$scope.skillSelected(item);
-					pollActiveTabDataByDayOffset($scope.activeTab, $scope.chosenOffset.value);
+					vm.skillSelected(item);
+					pollActiveTabDataByDayOffset(vm.activeTab, vm.chosenOffset.value);
 					if (prevSkill) {
 						if (!(prevSkill === autocompleteSkill.selectedSkill)) {
 							clearPrev();
 						}
-						return;
 					}
 				} else {
 					clearSkillSelection();
@@ -156,17 +158,17 @@
 			NoticeService.warning(notPhoneMessage, 5000, true);
 		}
 
-		$scope.selectedSkillAreaChange = function (item) {
+		vm.selectedSkillAreaChange = function (item) {
 			if (item) {
-				$scope.skillAreaSelected(item);
-				pollData($scope.activeTab);
+				vm.skillAreaSelected(item);
+				pollData(vm.activeTab);
 
-				$scope.prevArea = $scope.selectedItem;
+				vm.prevArea = vm.selectedItem;
 				item.UnsupportedSkills = [];
 				checkUnsupported(item);
 			}
-			if ($scope.drillable === true && $scope.selectedItem.skills) {
-				$scope.drillable = false;
+			if (vm.drillable === true && vm.selectedItem.skills) {
+				vm.drillable = false;
 			}
 		};
 
@@ -177,30 +179,30 @@
 		var reloadSkillAreas = function (isNew) {
 			intradayService.getSkillAreas.query().$promise.then(function (result) {
 				getAutoCompleteControls();
-				$scope.skillAreas = $filter('orderBy')(result.SkillAreas, 'Name');
+				vm.skillAreas = $filter('orderBy')(result.SkillAreas, 'Name');
 				if (isNew) {
-					$scope.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
-					$scope.latest = $filter('orderBy')(result.SkillAreas, 'Name');
+					vm.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
+					vm.latest = $filter('orderBy')(result.SkillAreas, 'Name');
 					//TO DO: get a date to filter by
-					// $scope.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
+					// vm.latest = $filter('orderBy')(result.SkillAreas, 'created_at', true);
 				}
-				$scope.HasPermissionToModifySkillArea = result.HasPermissionToModifySkillArea;
+				vm.HasPermissionToModifySkillArea = result.HasPermissionToModifySkillArea;
 
 				intradayService.getSkills.query().$promise.then(function (result) {
-					$scope.skills = result;
-					if ($scope.skillAreas.length === 0) {
-						$scope.selectedItem = $scope.selectedItem = $scope.skills.find(isSupported);
+					vm.skills = result;
+					if (vm.skillAreas.length === 0) {
+						vm.selectedItem = vm.selectedItem = vm.skills.find(isSupported);
 						if (autocompleteSkill) {
-							autocompleteSkill.selectedSkill = $scope.selectedItem;
+							autocompleteSkill.selectedSkill = vm.selectedItem;
 						}
 					}
-					if ($scope.skillAreas.length > 0) {
+					if (vm.skillAreas.length > 0) {
 						if (isNew) {
-							$scope.selectedItem = $scope.latest[0];
-							if (autocompleteSkillArea) autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
+							vm.selectedItem = vm.latest[0];
+							if (autocompleteSkillArea) autocompleteSkillArea.selectedSkillArea = vm.selectedItem;
 						} else {
-							$scope.selectedItem = $scope.skillAreas[0];
-							if (autocompleteSkillArea) autocompleteSkillArea.selectedSkillArea = $scope.selectedItem;
+							vm.selectedItem = vm.skillAreas[0];
+							if (autocompleteSkillArea) autocompleteSkillArea.selectedSkillArea = vm.selectedItem;
 						}
 					}
 				});
@@ -209,46 +211,46 @@
 
 		var checkUnsupported = function (item) {
 			for (var i = 0; i < item.Skills.length; i++) {
-				for (var j = 0; j < $scope.skills.length; j++) {
-					if (item.Skills[i].Id === $scope.skills[j].Id && $scope.skills[j].DoDisplayData === false) {
-						item.UnsupportedSkills.push($scope.skills[j]);
+				for (var j = 0; j < vm.skills.length; j++) {
+					if (item.Skills[i].Id === vm.skills[j].Id && vm.skills[j].DoDisplayData === false) {
+						item.UnsupportedSkills.push(vm.skills[j]);
 						item.Skills[i].DoDisplayData = false;
-					} else if (item.Skills[i].Id === $scope.skills[j].Id && $scope.skills[j].DoDisplayData === true) {
+					} else if (item.Skills[i].Id === vm.skills[j].Id && vm.skills[j].DoDisplayData === true) {
 						item.Skills[i].DoDisplayData = true;
 					}
 				}
 			}
 			if (item.UnsupportedSkills.length > 0) {
-				$scope.skillAreaMessage = $translate
+				vm.skillAreaMessage = $translate
 					.instant('UnsupportedSkills')
 					.replace('{0}', item.UnsupportedSkills.length);
 			} else {
-				$scope.skillAreaMessage = '';
+				vm.skillAreaMessage = '';
 			}
 		};
 
-		$scope.clearSkillHelper = function () {
+		vm.clearSkillHelper = function () {
 			clearSkillSelection();
 		};
 
-		$scope.clearSkillAreaHelper = function () {
+		vm.clearSkillAreaHelper = function () {
 			clearSkillAreaSelection();
 		};
 
 		function clearSkillSelection() {
 			if (!autocompleteSkill) return;
-			autocompleteSkill.selectedSkill = null;
-			autocompleteSkill.searchSkillText = '';
-			$scope.drillable = false;
+			vm.selectedSkill = null;
+			vm.searchSkillText = '';
+			vm.drillable = false;
 		}
 
 		function clearSkillAreaSelection() {
 			if (!autocompleteSkillArea) return;
-			autocompleteSkillArea.selectedSkillArea = null;
-			autocompleteSkillArea.searchSkillAreaText = '';
+			vm.selectedSkillArea = null;
+			vm.searchSkillAreaText = '';
 		}
 
-		$scope.querySearch = function (query, myArray) {
+		vm.querySearch = function (query, myArray) {
 			var results = query ? myArray.filter(createFilterFor(query)) : myArray,
 				deferred;
 			return results;
@@ -262,8 +264,8 @@
 			};
 		}
 
-		if (!$scope.selectedSkillArea && !$scope.selectedSkill && $scope.latestActualInterval === '--:--') {
-			$scope.hasMonitorData = false;
+		if (!vm.selectedSkillArea && !vm.selectedSkill && vm.latestActualInterval === '--:--') {
+			vm.hasMonitorData = false;
 		}
 
 		var cancelTimeout = function () {
@@ -275,22 +277,22 @@
 
 		function poll() {
 			polling = $interval(function () {
-				pollData($scope.activeTab);
+				pollData(vm.activeTab);
 			}, pollingTimeout);
 		}
 
 		poll();
 
-		$scope.pollActiveTabDataHelper = function (activeTab) {
-			$interval.cancel(polling);
+		vm.pollActiveTabDataHelper = function (activeTab) {
 			pollData(activeTab);
-			if ($scope.chosenOffset.value === 0) {
+			if (vm.chosenOffset.value === 0) {
 				poll();
 			}
 		};
+
 		function pollData(activeTab) {
-			if ($scope.toggles.showOtherDay) {
-				pollActiveTabDataByDayOffset(activeTab, $scope.chosenOffset.value);
+			if (vm.toggles.showOtherDay) {
+				pollActiveTabDataByDayOffset(activeTab, vm.chosenOffset.value);
 			} else {
 				pollActiveTabData(activeTab);
 			}
@@ -298,43 +300,46 @@
 
 		function pollActiveTabData(activeTab) {
 			var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
-			if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem)) {
-				if ($scope.selectedItem.Skills) {
-					services[activeTab].pollSkillAreaData($scope.selectedItem, $scope.toggles);
-					var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
+			if (vm.selectedItem !== null && angular.isDefined(vm.selectedItem)) {
+				if (vm.selectedItem.Skills) {
+					services[activeTab].pollSkillAreaData(vm.selectedItem, vm.toggles);
+					var timeData = intradayLatestTimeService.getLatestTime(vm.selectedItem);
 				} else {
-					services[activeTab].pollSkillData($scope.selectedItem, $scope.toggles);
-					var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
+					services[activeTab].pollSkillData(vm.selectedItem, vm.toggles);
+					var timeData = intradayLatestTimeService.getLatestTime(vm.selectedItem);
 				}
-				$scope.viewObj = services[activeTab].getData();
-				$scope.latestActualInterval = timeData;
-				$scope.hasMonitorData = $scope.viewObj.hasMonitorData;
+				vm.viewObj = services[activeTab].getData();
+				vm.latestActualInterval = timeData;
+				vm.hasMonitorData = vm.viewObj.hasMonitorData;
 			} else {
-	            timeoutPromise = $timeout(function() {
-		             pollActiveTabData($scope.activeTab);
-	            }, 1000);
+				timeoutPromise = $timeout(function () {
+					pollActiveTabData(vm.activeTab);
+				}, 1000);
 			}
 		}
 
 		function pollActiveTabDataByDayOffset(activeTab, dayOffset) {
 			var services = [intradayTrafficService, intradayPerformanceService, intradayMonitorStaffingService];
-			if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem)) {
-				if ($scope.selectedItem.Skills) {
-					services[activeTab].pollSkillAreaDataByDayOffset($scope.selectedItem, $scope.toggles, dayOffset);
+			var timeData;
+			if (vm.selectedItem !== null && angular.isDefined(vm.selectedItem)) {
+				if (vm.selectedItem.Skills) {
+					services[activeTab].pollSkillAreaDataByDayOffset(vm.selectedItem, vm.toggles, dayOffset);
 					if (dayOffset === 0) {
-						var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
+						timeData = intradayLatestTimeService.getLatestTime(vm.selectedItem);
 					}
 				} else {
-					services[activeTab].pollSkillDataByDayOffset($scope.selectedItem, $scope.toggles, dayOffset);
+					services[activeTab].pollSkillDataByDayOffset(vm.selectedItem, vm.toggles, dayOffset);
 					if (dayOffset === 0) {
-						var timeData = intradayLatestTimeService.getLatestTime($scope.selectedItem);
+						timeData = intradayLatestTimeService.getLatestTime(vm.selectedItem);
 					}
 				}
-				$scope.viewObj = services[activeTab].getData();
-				$scope.latestActualInterval = timeData;
-				$scope.hasMonitorData = $scope.viewObj.hasMonitorData;
+				vm.viewObj = services[activeTab].getData();
+				vm.latestActualInterval = timeData;
+				vm.hasMonitorData = vm.viewObj.hasMonitorData;
 			} else {
-	            timeoutPromise = $timeout(function () { pollActiveTabDataByDayOffset($scope.activeTab, dayOffset); }, 1000);
+				timeoutPromise = $timeout(function () {
+					pollActiveTabDataByDayOffset(vm.activeTab, dayOffset);
+				}, 1000);
 			}
 		}
 
@@ -346,27 +351,27 @@
 			cancelTimeout();
 		});
 
-		$scope.configMode = function () {
+		vm.configMode = function () {
 			$state.go('intraday.skill-area-config', {
 				isNewSkillArea: false
 			});
 		};
 
-		$scope.toggleModal = function () {
-			$scope.DeleteSkillAreaModal = !$scope.DeleteSkillAreaModal;
+		vm.toggleModal = function () {
+			vm.DeleteSkillAreaModal = !vm.DeleteSkillAreaModal;
 		};
 
-		$scope.onStateChanged = function (evt, to, params, from) {
+		vm.onStateChanged = function (evt, to, params, from) {
 			if (to.name !== 'intraday.area') return;
 			if (params.isNewSkillArea === true) {
 				reloadSkillAreas(true);
 			} else reloadSkillAreas(false);
 		};
 
-		$scope.$on('$stateChangeSuccess', $scope.onStateChanged);
+		$scope.$on('$stateChangeSuccess', vm.onStateChanged);
 
 		$scope.$on('$viewContentLoaded', function () {
-	        pollData($scope.activeTab);
+			pollData(vm.activeTab);
 		});
 
 		var notifySkillAreaDeletion = function () {
@@ -378,17 +383,16 @@
 			$interval.cancel(polling);
 		});
 
-		$scope.getLocalDate = function (offset) {
-			var ret = moment()
+		vm.getLocalDate = function (offset) {
+			return moment()
 				.add(offset, 'days')
 				.format('dddd, LL');
-			return ret;
 		};
 
-		$scope.getUTCDate = function (offset) {
+		vm.getUTCDate = function (offset) {
 			var ret = moment.utc().toISOString();
 
-			if ($scope.toggles.showOtherDay) {
+			if (vm.toggles.showOtherDay) {
 				ret = moment
 					.utc()
 					.add(offset, 'days')
@@ -398,38 +402,38 @@
 			return ret;
 		};
 
-		$scope.changeChosenOffset = function (value, dontPoll) {
+		vm.changeChosenOffset = function (value, dontPoll) {
 			$interval.cancel(polling);
-	        cancelTimeout();
-			var d = angular.copy($scope.chosenOffset);
+			cancelTimeout();
+			var d = angular.copy(vm.chosenOffset);
 			d.value = value;
-			$scope.chosenOffset = d;
+			vm.chosenOffset = d;
 			if (!dontPoll) {
-				pollActiveTabDataByDayOffset($scope.activeTab, value);
+				pollActiveTabDataByDayOffset(vm.activeTab, value);
 			}
 			if (value === 0) {
 				poll();
 			}
 		};
 
-		$scope.exportIntradayData = function () {
-			if ($scope.selectedItem !== null && angular.isDefined($scope.selectedItem) && !$scope.exporting) {
-				$scope.exporting = true;
+		vm.exportIntradayData = function () {
+			if (vm.selectedItem !== null && angular.isDefined(vm.selectedItem) && !vm.exporting) {
+				vm.exporting = true;
 
-				if ($scope.selectedItem.Skills) {
+				if (vm.selectedItem.Skills) {
 					intradayService.getIntradayExportForSkillArea(
-						JSON.stringify({
-							id: $scope.selectedItem.Id,
-							dayOffset: $scope.chosenOffset.value
+						angular.toJson({
+							id: vm.selectedItem.Id,
+							dayOffset: vm.chosenOffset.value
 						}),
 						saveData,
 						errorSaveData
 					);
 				} else {
 					intradayService.getIntradayExportForSkill(
-						JSON.stringify({
-							id: $scope.selectedItem.Id,
-							dayOffset: $scope.chosenOffset.value
+						angular.toJson({
+							id: vm.selectedItem.Id,
+							dayOffset: vm.chosenOffset.value
 						}),
 						saveData,
 						errorSaveData
@@ -440,12 +444,12 @@
 
 		function saveData(data, status, headers, config) {
 			var blob = new Blob([data]);
-			$scope.exporting = false;
+			vm.exporting = false;
 			saveAs(blob, 'IntradayExportedData ' + moment().format('YYYY-MM-DD') + '.xlsx');
 		}
 
 		function errorSaveData(data, status, headers, config) {
-			$scope.exporting = false;
+			vm.exporting = false;
 		}
 	}
 })();

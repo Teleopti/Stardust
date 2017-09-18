@@ -142,7 +142,7 @@
 				}
 			}
 
-            service.pollSkillData = function(selectedItem) {
+			service.pollSkillData = function(selectedItem) {
 				trafficData.waitingForData = true;
 	            cancelPendingRequest();
 
@@ -183,6 +183,7 @@
                     );
             };
 
+            //Deprecated nothing should call this
             service.pollSkillAreaData = function(selectedItem) {
 				trafficData.waitingForData = true;
 				cancelPendingRequest();

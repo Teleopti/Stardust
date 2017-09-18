@@ -30,7 +30,6 @@
 
             service.setStaffingData = function (result, showOptimalStaffing, showScheduledStaffing, showEmailSkill, showReforecastedAgents) {
                 clearData();
-				console.log('showEmailSkill', showEmailSkill)
 				
                 staffingData.timeSeries = [];
                 staffingData.forecastedStaffing.series = [];
@@ -102,7 +101,7 @@
 	        }
 
             service.pollSkillData = function (selectedItem, toggles) {
-                staffingData.waitingForData = true;
+				staffingData.waitingForData = true;
 	            cancelPendingRequest();
 
 	            service.checkMixedArea(selectedItem);

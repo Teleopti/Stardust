@@ -8,6 +8,7 @@ describe('IntradayAreaController', function () {
 	$interval,
 	NoticeService;
 
+	var vm;
 	var skillAreas = [];
 	var skills = [];
 	var skillsWithFirstUnsupported = [];
@@ -434,12 +435,12 @@ describe('IntradayAreaController', function () {
 	}));
 
 	var createController = function (isNewlyCreatedSkillArea) {
-		$controller('IntradayAreaController', {
+		vm = $controller('IntradayAreaController', {
 			$scope: scope,
 			$translate: $translate
 		});
 
-		scope.onStateChanged(undefined, { name: 'intraday.area' }, { isNewSkillArea: isNewlyCreatedSkillArea });
+		vm.onStateChanged(undefined, { name: 'intraday.area' }, { isNewSkillArea: isNewlyCreatedSkillArea });
 		scope.$digest();
 		$httpBackend.flush();
 	};
@@ -456,226 +457,226 @@ describe('IntradayAreaController', function () {
 	it('should display list of skill areas', function () {
 		createController(false);
 
-		expect(scope.skillAreas[0].Id).toEqual("fa9b5393-ef48-40d1-b7cc-09e797589f81");
-		expect(scope.skillAreas[0].Name).toEqual("my skill area 1");
-		expect(scope.skillAreas[0].Skills[0].Id).toEqual("5f15b334-22d1-4bc1-8e41-72359805d30f");
-		expect(scope.skillAreas[0].Skills[0].Name).toEqual("skill x");
+		expect(vm.skillAreas[0].Id).toEqual("fa9b5393-ef48-40d1-b7cc-09e797589f81");
+		expect(vm.skillAreas[0].Name).toEqual("my skill area 1");
+		expect(vm.skillAreas[0].Skills[0].Id).toEqual("5f15b334-22d1-4bc1-8e41-72359805d30f");
+		expect(vm.skillAreas[0].Skills[0].Name).toEqual("skill x");
 	});
 
 	it('should display list of skills', function () {
 		createController(false);
 
-		expect(scope.skills[0].Id).toEqual("5f15b334-22d1-4bc1-8e41-72359805d30f");
-		expect(scope.skills[0].Name).toEqual("skill x");
+		expect(vm.skills[0].Id).toEqual("5f15b334-22d1-4bc1-8e41-72359805d30f");
+		expect(vm.skills[0].Name).toEqual("skill x");
 	});
 
 	it('should delete selected skill area', function () {
 		createController(false);
 
-		scope.deleteSkillArea(scope.skillAreas[1]);
+		vm.deleteSkillArea(vm.skillAreas[1]);
 
-		expect(scope.skillAreas.length).toEqual(3);
+		expect(vm.skillAreas.length).toEqual(3);
 		$httpBackend.flush();
-		expect(scope.selectedItem).toEqual(null);
-		expect(scope.skillAreas.length).toEqual(2);
+		expect(vm.selectedItem).toEqual(null);
+		expect(vm.skillAreas.length).toEqual(2);
 	});
 
 	it('should monitor first skill if no skill areas', function () {
 		skillAreaInfo.SkillAreas = [];
 		createController(false);
 
-		scope.skillSelected(scope.skills[0]);
-		expect(scope.selectedItem).toEqual(scope.skills[0]);
+		vm.skillSelected(vm.skills[0]);
+		expect(vm.selectedItem).toEqual(vm.skills[0]);
 	});
 
 
 	it('should monitor first skill area if there are any', function () {
 		createController(false);
 
-		scope.skillAreaSelected(scope.skillAreas[0]);
-
-		expect(scope.selectedItem).toEqual(scope.skillAreas[0]);
+		vm.skillAreaSelected(vm.skillAreas[0]);
+		
+		expect(vm.selectedItem).toEqual(vm.skillAreas[0]);
 	});
 
 	it('should have permission to modify skill area', function () {
 		createController(false);
 
-		expect(scope.HasPermissionToModifySkillArea).toEqual(true);
+		expect(vm.HasPermissionToModifySkillArea).toEqual(true);
 	});
 
 	it('should poll data for skill when selecting that skill', function () {
 		createController(false);
-		scope.activeTab = 0;
+		vm.activeTab = 0;
 
-		scope.selectedSkillChange(scope.skills[0]);
+		vm.selectedSkillChange(vm.skills[0]);
 		$httpBackend.flush();
-		expect(scope.viewObj.hasMonitorData).toEqual(true);
+		expect(vm.viewObj.hasMonitorData).toEqual(true);
 	});
 
 	it('should poll data for skill area when selecting that area', function () {
 		createController(false);
-		scope.activeTab = 0;
+		vm.activeTab = 0;
 
-		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		vm.selectedSkillAreaChange(vm.skillAreas[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.hasMonitorData).toEqual(true);
+		expect(vm.viewObj.hasMonitorData).toEqual(true);
 	});
 
 	it('should only poll traffic skill data when traffic tab and skill is selected', function () {
 		createController(false);
-		scope.activeTab = 0;
+		vm.activeTab = 0;
 
-		scope.selectedSkillChange(scope.skills[0]);
+		vm.selectedSkillChange(vm.skills[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.forecastedCallsObj.series.length).toBeGreaterThan(5);
+		expect(vm.viewObj.forecastedCallsObj.series.length).toBeGreaterThan(5);
 	});
 
 	it('should only poll performance skill data when performance tab and skill is selected', function () {
 		createController(false);
-		scope.activeTab = 1;
+		vm.activeTab = 1;
 
-		scope.selectedSkillChange(scope.skills[0]);
+		vm.selectedSkillChange(vm.skills[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.serviceLevelObj.series.length).toBeGreaterThan(5);
+		expect(vm.viewObj.serviceLevelObj.series.length).toBeGreaterThan(5);
 	});
 
 	it('should show estimated service level in performance tab and skill is selected', function () {
 		createController(false);
-		scope.activeTab = 1;
+		vm.activeTab = 1;
 
-		scope.selectedSkillChange(scope.skills[0]);
+		vm.selectedSkillChange(vm.skills[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.estimatedServiceLevelObj.series.length).toBeGreaterThan(0);
-		expect(scope.viewObj.summary.summaryEstimatedServiceLevel).toBeGreaterThan(0);
+		expect(vm.viewObj.estimatedServiceLevelObj.series.length).toBeGreaterThan(0);
+		expect(vm.viewObj.summary.summaryEstimatedServiceLevel).toBeGreaterThan(0);
 
 	});
 
 	it('should only poll staffing skill data when staffing tab and skill is selected', function () {
 		createController(false);
-		scope.activeTab = 2;
+		vm.activeTab = 2;
 
-		scope.selectedSkillChange(scope.skills[0]);
+		vm.selectedSkillChange(vm.skills[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.forecastedStaffing.series.length).toBeGreaterThan(3);
+		expect(vm.viewObj.forecastedStaffing.series.length).toBeGreaterThan(3);
 	});
 
 	it('should only poll traffic skill area data when traffic tab and skill area is selected', function () {
 		createController(false);
-		scope.activeTab = 0;
+		vm.activeTab = 0;
 
-		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		vm.selectedSkillAreaChange(vm.skillAreas[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.forecastedCallsObj.series.length).toBeGreaterThan(5);
+		expect(vm.viewObj.forecastedCallsObj.series.length).toBeGreaterThan(5);
 	});
 
 	it('should only poll performance skill area data when performance tab and skill area is selected', function () {
 		createController(false);
-		scope.activeTab = 1;
+		vm.activeTab = 1;
 
-		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		vm.selectedSkillAreaChange(vm.skillAreas[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.serviceLevelObj.series.length).toBeGreaterThan(5);
+		expect(vm.viewObj.serviceLevelObj.series.length).toBeGreaterThan(5);
 	});
 
 	it('should only poll staffing skill area data when staffing tab and skill area is selected', function () {
 		createController(false);
-		scope.activeTab = 2;
+		vm.activeTab = 2;
 
-		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		vm.selectedSkillAreaChange(vm.skillAreas[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.forecastedStaffing.series.length).toBeGreaterThan(3);
+		expect(vm.viewObj.forecastedStaffing.series.length).toBeGreaterThan(3);
 	});
 
 	it('should return no staffing when no supported skills in skill area', function () {
 		createController(false);
-		scope.activeTab = 2;
+		vm.activeTab = 2;
 
-		scope.selectedSkillAreaChange(scope.skillAreas[2]);
+		vm.selectedSkillAreaChange(vm.skillAreas[2]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.forecastedStaffing.series.length).toEqual(0);
+		expect(vm.viewObj.forecastedStaffing.series.length).toEqual(0);
 	});
 
 	it('should show optimal staffing when toggle is enabled', function () {
 		createController(false);
-		scope.activeTab = 2;
+		vm.activeTab = 2;
 
-		scope.toggles.showOptimalStaffing = true;
+		vm.toggles.showOptimalStaffing = true;
 
-		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		vm.selectedSkillAreaChange(vm.skillAreas[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.actualStaffingSeries.length).toBeGreaterThan(3);
+		expect(vm.viewObj.actualStaffingSeries.length).toBeGreaterThan(3);
 	});
 
 	it('should not show optimal staffing when toggle is disabled', function () {
 		createController(false);
-		scope.activeTab = 2;
+		vm.activeTab = 2;
 
-		scope.toggles.showOptimalStaffing = false;
+		vm.toggles.showOptimalStaffing = false;
 
-		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		vm.selectedSkillAreaChange(vm.skillAreas[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.actualStaffingSeries.length).toEqual(1);
+		expect(vm.viewObj.actualStaffingSeries.length).toEqual(1);
 	});
 
 	it('should show scheduled staffing when toggle is enabled', function () {
 		createController(false);
-		scope.activeTab = 2;
+		vm.activeTab = 2;
 
-		scope.toggles.showScheduledStaffing = true;
+		vm.toggles.showScheduledStaffing = true;
 
-		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		vm.selectedSkillAreaChange(vm.skillAreas[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.scheduledStaffing.length).toBeGreaterThan(3);
+		expect(vm.viewObj.scheduledStaffing.length).toBeGreaterThan(3);
 	});
 
 	it('should not show scheduled staffing when toggle is disabled', function () {
 		createController(false);
-		scope.activeTab = 2;
+		vm.activeTab = 2;
 
-		scope.toggles.showScheduledStaffing = false;
+		vm.toggles.showScheduledStaffing = false;
 
-		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		vm.selectedSkillAreaChange(vm.skillAreas[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.scheduledStaffing.length).toEqual(1);
+		expect(vm.viewObj.scheduledStaffing.length).toEqual(1);
 	});
 
 	it('should show ESL in performance view when toggle is enabled', function () {
 		createController(false);
-		scope.activeTab = 1;
+		vm.activeTab = 1;
 
-		scope.toggles.showEsl = true;
+		vm.toggles.showEsl = true;
 
-		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		vm.selectedSkillAreaChange(vm.skillAreas[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.estimatedServiceLevelObj.series.length).toBeGreaterThan(0);
-		expect(scope.viewObj.summary.summaryEstimatedServiceLevel).toBeGreaterThan(0);
+		expect(vm.viewObj.estimatedServiceLevelObj.series.length).toBeGreaterThan(0);
+		expect(vm.viewObj.summary.summaryEstimatedServiceLevel).toBeGreaterThan(0);
 	});
 
 	it('should show ESL in performance view when toggle is disabled', function () {
 		createController(false);
-		scope.activeTab = 1;
+		vm.activeTab = 1;
 
-		scope.toggles.showEsl = false;
+		vm.toggles.showEsl = false;
 
-		scope.selectedSkillAreaChange(scope.skillAreas[0]);
+		vm.selectedSkillAreaChange(vm.skillAreas[0]);
 		$httpBackend.flush();
 
-		expect(scope.viewObj.estimatedServiceLevelObj.series.length).toEqual(1);
-		expect(scope.viewObj.summary.summaryEstimatedServiceLevel).toEqual(undefined);
+		expect(vm.viewObj.estimatedServiceLevelObj.series.length).toEqual(1);
+		expect(vm.viewObj.summary.summaryEstimatedServiceLevel).toEqual(undefined);
 	});
 
 	it('should monitor first skill that is supported', function () {
@@ -683,9 +684,9 @@ describe('IntradayAreaController', function () {
 		isUnsupportedSkillTest = true;
 		createController(false);
 
-		scope.selectedSkillChange(skillsWithFirstUnsupported[0]);
+		vm.selectedSkillChange(skillsWithFirstUnsupported[0]);
 
-		expect(scope.selectedItem).toEqual(scope.skills[1]);
+		expect(vm.selectedItem).toEqual(vm.skills[1]);
 	});
 
 	it('should get traffic data corresponding to chosenOffset', function(){
@@ -693,15 +694,15 @@ describe('IntradayAreaController', function () {
 		isUnsupportedSkillTest = false;
 
 		createController(false);
-		scope.activeTab = 0;
-		scope.toggles.showOtherDay = true;
-		scope.selectedSkillChange(skills[0]);
+		vm.activeTab = 0;
+		vm.toggles.showOtherDay = true;
+		vm.selectedSkillChange(skills[0]);
 		
-		scope.changeChosenOffset(1);
+		vm.changeChosenOffset(1);
 		$httpBackend.flush();
 
-		expect(scope.chosenOffset.value).toEqual(1);
-		expect(scope.viewObj.summary.summaryCalculatedCalls).toEqual('1,337.0');
+		expect(vm.chosenOffset.value).toEqual(1);
+		expect(vm.viewObj.summary.summaryCalculatedCalls).toEqual('1,337.0');
 	});
 
 	it('should get performance data corresponding to chosenOffset', function(){
@@ -709,14 +710,14 @@ describe('IntradayAreaController', function () {
 		isUnsupportedSkillTest = false;
 		
 		createController(false);
-		scope.activeTab = 1;
-		scope.toggles.showOtherDay = true;
-		scope.selectedSkillChange(skills[0]);
-		scope.changeChosenOffset(1);
+		vm.activeTab = 1;
+		vm.toggles.showOtherDay = true;
+		vm.selectedSkillChange(skills[0]);
+		vm.changeChosenOffset(1);
 		$httpBackend.flush();
 
-		expect(scope.chosenOffset.value).toEqual(1);
-		expect(scope.viewObj.summary.summaryServiceLevel).toEqual('90.0');
+		expect(vm.chosenOffset.value).toEqual(1);
+		expect(vm.viewObj.summary.summaryServiceLevel).toEqual('90.0');
 	});
 
 	it('should get staffing data corresponding to chosenOffset', function(){
@@ -724,121 +725,121 @@ describe('IntradayAreaController', function () {
 		isUnsupportedSkillTest = false;
 
 		createController(false);
-		scope.activeTab = 2;
-		scope.toggles.showOtherDay = true;
-		scope.selectedSkillChange(skills[0]);
-		scope.changeChosenOffset(1);
+		vm.activeTab = 2;
+		vm.toggles.showOtherDay = true;
+		vm.selectedSkillChange(skills[0]);
+		vm.changeChosenOffset(1);
 		$httpBackend.flush();
 
-		expect(scope.chosenOffset.value).toEqual(1);
-		expect(scope.viewObj.forecastedStaffing.series[1]).toEqual(3);
+		expect(vm.chosenOffset.value).toEqual(1);
+		expect(vm.viewObj.forecastedStaffing.series[1]).toEqual(3);
 
 	});
 
 	it('should get traffic data for skillarea corresponding to chosenOffset', function(){
 		createController(false);
-		scope.activeTab = 0;
-		scope.toggles.showOtherDay = true;
-		scope.skillAreaSelected(skillAreas[0]);
-		scope.changeChosenOffset(1);
+		vm.activeTab = 0;
+		vm.toggles.showOtherDay = true;
+		vm.skillAreaSelected(skillAreas[0]);
+		vm.changeChosenOffset(1);
 		$httpBackend.flush();
 
-		expect(scope.chosenOffset.value).toEqual(1);
-		expect(scope.viewObj.summary.summaryCalculatedCalls).toEqual('1,337.0');
+		expect(vm.chosenOffset.value).toEqual(1);
+		expect(vm.viewObj.summary.summaryCalculatedCalls).toEqual('1,337.0');
 	});
 
 	it('should get performance data for skillarea corresponding to chosenOffset', function(){
 		createController(false);
-		scope.activeTab = 1;
-		scope.toggles.showOtherDay = true;
-		scope.skillAreaSelected(skillAreas[0]);
-		scope.changeChosenOffset(1);
+		vm.activeTab = 1;
+		vm.toggles.showOtherDay = true;
+		vm.skillAreaSelected(skillAreas[0]);
+		vm.changeChosenOffset(1);
 		$httpBackend.flush();
 
-		expect(scope.chosenOffset.value).toEqual(1);
-		expect(scope.viewObj.summary.summaryServiceLevel).toEqual('90.0');
+		expect(vm.chosenOffset.value).toEqual(1);
+		expect(vm.viewObj.summary.summaryServiceLevel).toEqual('90.0');
 	});
 
 	it('should get staffing data for skillarea corresponding to chosenOffset', function(){
 		createController(false);
-		scope.activeTab = 2;
-		scope.toggles.showOtherDay = true;
-		scope.skillAreaSelected(skillAreas[0]);
-		scope.changeChosenOffset(1);
+		vm.activeTab = 2;
+		vm.toggles.showOtherDay = true;
+		vm.skillAreaSelected(skillAreas[0]);
+		vm.changeChosenOffset(1);
 		$httpBackend.flush();
 
-		expect(scope.chosenOffset.value).toEqual(1);
-		expect(scope.viewObj.forecastedStaffing.series[1]).toEqual(3);
+		expect(vm.chosenOffset.value).toEqual(1);
+		expect(vm.viewObj.forecastedStaffing.series[1]).toEqual(3);
 		jasmine.clock().uninstall();
 	});
 
 	it('should get traffic data for skillarea corresponding to chosenOffset', function(){
 		createController(false);
-		scope.activeTab = 0;
-		scope.toggles.showOtherDay = true;
-		scope.skillAreaSelected(skillAreas[0]);
+		vm.activeTab = 0;
+		vm.toggles.showOtherDay = true;
+		vm.skillAreaSelected(skillAreas[0]);
 
 		var today = moment('0001-01-01T15:45:00').toDate();
 		jasmine.clock().mockDate(today);
-		scope.changeChosenOffset(1);
+		vm.changeChosenOffset(1);
 		$httpBackend.flush();
-		expect(scope.chosenOffset.value).toEqual(1);
-		expect(scope.viewObj.summary.summaryCalculatedCalls).toEqual('1,337.0');
+		expect(vm.chosenOffset.value).toEqual(1);
+		expect(vm.viewObj.summary.summaryCalculatedCalls).toEqual('1,337.0');
 
 		jasmine.clock().uninstall();
 	});
 
 	it('should get performance data for skillarea corresponding to chosenOffset', function(){
 		createController(false);
-		scope.activeTab = 1;
-		scope.toggles.showOtherDay = true;
-		scope.skillAreaSelected(skillAreas[0]);
+		vm.activeTab = 1;
+		vm.toggles.showOtherDay = true;
+		vm.skillAreaSelected(skillAreas[0]);
 
 		var today = moment('0001-01-01T15:45:00').toDate();
 		jasmine.clock().mockDate(today);
-		scope.changeChosenOffset(1);
+		vm.changeChosenOffset(1);
 		$httpBackend.flush();
-		expect(scope.chosenOffset.value).toEqual(1);
-		expect(scope.viewObj.summary.summaryServiceLevel).toEqual('90.0');
+		expect(vm.chosenOffset.value).toEqual(1);
+		expect(vm.viewObj.summary.summaryServiceLevel).toEqual('90.0');
 
 		jasmine.clock().uninstall();
 	});
 
 	it('should get staffing data for skillarea corresponding to chosenOffset', function(){
 		createController(false);
-		scope.activeTab = 2;
-		scope.toggles.showOtherDay = true;
-		scope.skillAreaSelected(skillAreas[0]);
+		vm.activeTab = 2;
+		vm.toggles.showOtherDay = true;
+		vm.skillAreaSelected(skillAreas[0]);
 
 		var today = moment('0001-01-01T15:45:00').toDate();
 		jasmine.clock().mockDate(today);
-		scope.changeChosenOffset(1);
+		vm.changeChosenOffset(1);
 		$httpBackend.flush();
-		expect(scope.chosenOffset.value).toEqual(1);
-		expect(scope.viewObj.forecastedStaffing.series[1]).toEqual(3);
+		expect(vm.chosenOffset.value).toEqual(1);
+		expect(vm.viewObj.forecastedStaffing.series[1]).toEqual(3);
 		jasmine.clock().uninstall();
 
 	});
 	
 	it('should not show abandon rate data when toggle is enabled and email-like skill chosen', function () {
 		createController(false);
-		scope.activeTab = 1;
-		scope.toggles.otherSkillsLikeEmail = true;
+		vm.activeTab = 1;
+		vm.toggles.otherSkillsLikeEmail = true;
 
-		scope.selectedSkillChange(skills[1]);
+		vm.selectedSkillChange(skills[1]);
 
 		$httpBackend.flush();
 
-		expect(scope.viewObj.abandonedRateObj.series.length).toEqual(1);
-		expect(scope.viewObj.summary.summaryAbandonedRate).toEqual(undefined);
+		expect(vm.viewObj.abandonedRateObj.series.length).toEqual(1);
+		expect(vm.viewObj.summary.summaryAbandonedRate).toEqual(undefined);
 	});
 
 	it('should not show reforcasted agents data when toggle is enabled and email-like skill chosen', function () {
 		createController(false);
-		scope.activeTab = 2;
-		scope.toggles.otherSkillsLikeEmail = true;
-		scope.selectedSkillChange(skills[1]);
+		vm.activeTab = 2;
+		vm.toggles.otherSkillsLikeEmail = true;
+		vm.selectedSkillChange(skills[1]);
 		$httpBackend.flush();
-		expect(scope.viewObj.forecastedStaffing.updatedSeries.length).toEqual(1);
+		expect(vm.viewObj.forecastedStaffing.updatedSeries.length).toEqual(1);
 	});
 });

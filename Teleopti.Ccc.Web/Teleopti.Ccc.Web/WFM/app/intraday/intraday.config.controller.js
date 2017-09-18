@@ -69,7 +69,5 @@
 		intradayService.getSkills.query().$promise.then(function (skills) {
 			vm.skills = skills;
 		});
-
-		console.log(vm);
 	}
 })();
