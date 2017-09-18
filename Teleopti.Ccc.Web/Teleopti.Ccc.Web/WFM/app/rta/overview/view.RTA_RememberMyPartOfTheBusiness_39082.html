@@ -9,12 +9,12 @@
 			<span>
 					<button class="wfm-btn wfm-btn-primary rta-default-cursor">{{'Dashboard'|translate}}</button>
 					<span>
-					<span ng-if="vm.highlightAgentsButton.hasSelection">
+					<span ng-if="vm.highlightAgentsButton">
 							<span class=" pulse-element"></span>
 			<i class="mdi mdi-filter-outline filter-icon"></i>
 			</span>
 			<span></span>
-			<button class="wfm-btn wfm-btn-default select-skill wfm-badge-wrapper" ng-click="vm.goToAgents()">{{'Agents'|translate}} <md-tooltip md-direction="bottom">{{vm.highlightAgentsButton.hasSelection ? 'SeeAgentsBySelection' : 'SeeAgents'|translate}}</md-tooltip>
+			<button class="wfm-btn wfm-btn-default select-skill wfm-badge-wrapper" ng-click="vm.goToAgents()">{{'Agents'|translate}} <md-tooltip md-direction="bottom">{{vm.highlightAgentsButton ? 'SeeAgentsBySelection' : 'SeeAgents'|translate}}</md-tooltip>
 			</button>
 			</span>
 			</span>
