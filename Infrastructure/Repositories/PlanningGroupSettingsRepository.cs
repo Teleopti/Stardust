@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<PlanningGroupSettings> LoadAllByPlanningGroup(IPlanningGroup planningGroup)
 		{
-			return Session.CreateCriteria(typeof(PlanningGroupSettings), "dayOffRules")
-				.Add(Restrictions.Eq("dayOffRules.PlanningGroup", planningGroup))
+			return Session.CreateCriteria(typeof(PlanningGroupSettings), "planningGroupSettings")
+				.Add(Restrictions.Eq("planningGroupSettings.PlanningGroup", planningGroup))
 				 .SetResultTransformer(Transformers.DistinctRootEntity)
 				 .List<PlanningGroupSettings>();
 		}
@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					Add(PlanningGroupSettings.CreateDefault());
 					Session.Flush();
 				}
-			return Session.CreateCriteria(typeof(PlanningGroupSettings), "dayOffRules")
-				.Add(Restrictions.IsNull("dayOffRules.PlanningGroup"))
+			return Session.CreateCriteria(typeof(PlanningGroupSettings), "planningGroupSettings")
+				.Add(Restrictions.IsNull("planningGroupSettings.PlanningGroup"))
 				 .SetResultTransformer(Transformers.DistinctRootEntity)
 				 .List<PlanningGroupSettings>();
 		}

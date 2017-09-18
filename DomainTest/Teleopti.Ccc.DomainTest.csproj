@@ -808,7 +808,7 @@
     <Compile Include="Optimization\ExtendReduceDaysOffOptimizerServiceTest.cs" />
     <Compile Include="Optimization\ExtendReduceTimeOptimizerServiceTest.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettingsTest.cs" />
-    <Compile Include="Optimization\FetchDayOffRulesModelTest.cs" />
+    <Compile Include="Optimization\PlanningGroupSettingsModelTest.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\DailyBoostedSkillForecastAndScheduledValueCalculatorTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerConflictHandlerTest.cs" />

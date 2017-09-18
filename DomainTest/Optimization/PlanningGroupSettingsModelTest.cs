@@ -16,9 +16,9 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[DomainTest]
-	public class FetchDayOffRulesModelTest
+	public class PlanningGroupSettingsModelTest
 	{
-		public IFetchDayOffRulesModel Target;
+		public IFetchPlanningGroupSettingsModel Target;
 		public FakePlanningGroupSettingsRepository PlanningGroupSettingsRepository;
 
 		[Test]

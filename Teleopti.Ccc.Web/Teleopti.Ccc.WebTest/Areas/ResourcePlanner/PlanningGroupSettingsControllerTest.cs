@@ -9,14 +9,14 @@ using Teleopti.Ccc.WebTest.TestHelper;
 
 namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 {
-	public class DayOffRulesControllerTest
+	public class PlanningGroupSettingsControllerTest
 	{
 		[Test]
 		public void ShouldCallPersister()
 		{
 			var model = new PlanningGroupSettingsModel();
 			var persister = MockRepository.GenerateMock<IPlanningGroupSettingsModelPersister>();
-			var target = new DayOffRulesController(null, persister);
+			var target = new PlanningGroupSettingsController(null, persister);
 
 			target.Persist(model);
 
@@ -27,9 +27,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		public void ShouldFetchAll()
 		{
 			var model = new List<PlanningGroupSettingsModel>();
-			var fetchModel = MockRepository.GenerateMock<IFetchDayOffRulesModel>();
+			var fetchModel = MockRepository.GenerateMock<IFetchPlanningGroupSettingsModel>();
 			fetchModel.Expect(x => x.FetchAllWithoutPlanningGroup()).Return(model);
-			var target = new DayOffRulesController(fetchModel, null);
+			var target = new PlanningGroupSettingsController(fetchModel, null);
 			target.FetchAll().Result<IEnumerable<PlanningGroupSettingsModel>>()
 				.Should().Be.SameInstanceAs(model);
 		}
@@ -40,9 +40,9 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 			var id = Guid.NewGuid();
 			var model = new PlanningGroupSettingsModel();
 
-			var fetchModel = MockRepository.GenerateMock<IFetchDayOffRulesModel>();
+			var fetchModel = MockRepository.GenerateMock<IFetchPlanningGroupSettingsModel>();
 			fetchModel.Expect(x => x.Fetch(id)).Return(model);
-			var target = new DayOffRulesController(fetchModel, null);
+			var target = new PlanningGroupSettingsController(fetchModel, null);
 			target.Fetch(id).Result<PlanningGroupSettingsModel>()
 				.Should().Be.SameInstanceAs(model);
 		}
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.ResourcePlanner
 		{
 			var id = Guid.NewGuid();
 			var persister = MockRepository.GenerateMock<IPlanningGroupSettingsModelPersister>();
-			var target = new DayOffRulesController(null, persister);
+			var target = new PlanningGroupSettingsController(null, persister);
 			target.Delete(id);
 			persister.AssertWasCalled(x => x.Delete(id));
 		}

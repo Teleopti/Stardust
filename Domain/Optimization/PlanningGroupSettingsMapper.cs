@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class DayOffRulesMapper
+	public class PlanningGroupSettingsMapper
 	{
 		private readonly FilterMapper _filterMapper;
 
-		public DayOffRulesMapper(FilterMapper filterMapper)
+		public PlanningGroupSettingsMapper(FilterMapper filterMapper)
 		{
 			_filterMapper = filterMapper;
 		}
@@ -28,7 +28,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 				Default = planningGroupSettings.Default,
 				Name = planningGroupSettings.Name,
 				Filters = filterModels,
-				PlanningGroupId = planningGroupSettings.PlanningGroup?.Id
+				PlanningGroupId = planningGroupSettings.PlanningGroup?.Id,
+				BlockFinderType = planningGroupSettings.BlockFinderType,
+				BlockSameShiftCategory = planningGroupSettings.BlockSameShiftCategory,
+				BlockSameShift = planningGroupSettings.BlockSameShift,
+				BlockSameStartTime = planningGroupSettings.BlockSameStartTime
 			};
 		}
 	}

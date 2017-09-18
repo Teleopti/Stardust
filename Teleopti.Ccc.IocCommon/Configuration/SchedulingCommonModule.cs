@@ -424,9 +424,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayDecisionMaker>().SingleInstance();
 			builder.RegisterType<FixedStaffLoader>().As<IFixedStaffLoader>().SingleInstance();
 			builder.RegisterType<PlanningGroupStaffLoader>().As<IPlanningGroupStaffLoader>().SingleInstance();
-			builder.RegisterType<FetchDayOffRulesModel>().As<IFetchDayOffRulesModel>().SingleInstance();
+			builder.RegisterType<FetchPlanningGroupSettingsModel>().As<IFetchPlanningGroupSettingsModel>().SingleInstance();
 			builder.RegisterType<FetchPlanningGroupModel>().As<IFetchPlanningGroupModel>().SingleInstance();
-			builder.RegisterType<DayOffRulesMapper>().SingleInstance();
+			builder.RegisterType<PlanningGroupSettingsMapper>().SingleInstance();
 			builder.RegisterType<PlanningGroupMapper>().SingleInstance();
 			builder.RegisterType<FilterMapper>().SingleInstance();
 			builder.RegisterType<PlanningGroupSettingsModelPersister>().As<IPlanningGroupSettingsModelPersister>().SingleInstance();

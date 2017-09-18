@@ -323,7 +323,7 @@
     <Compile Include="Areas\Permissions\RolesControllerTest.cs" />
     <Compile Include="Areas\Requests\Core\ViewModelFactory\ShiftTradeRequestViewModelFactoryTest.cs" />
     <Compile Include="Areas\ResourcePlanner\BusinessRuleValidationResultTest.cs" />
-    <Compile Include="Areas\ResourcePlanner\DayOffRulesControllerTest.cs" />
+    <Compile Include="Areas\ResourcePlanner\PlanningGroupSettingsControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\GroupPagesControllerTest.cs" />
     <Compile Include="Areas\ResourcePlanner\OptimizationResultModelTest.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningPeriodControllerTest.cs" />

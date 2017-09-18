@@ -8,14 +8,14 @@ using Teleopti.Ccc.Web.Filters;
 namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebPlans)]
-	public class DayOffRulesController : ApiController
+	public class PlanningGroupSettingsController : ApiController
 	{
-		private readonly IFetchDayOffRulesModel _fetchDayOffRulesModel;
+		private readonly IFetchPlanningGroupSettingsModel _fetchPlanningGroupSettingsModel;
 		private readonly IPlanningGroupSettingsModelPersister _planningGroupSettingsModelPersister;
 
-		public DayOffRulesController(IFetchDayOffRulesModel fetchDayOffRulesModel, IPlanningGroupSettingsModelPersister planningGroupSettingsModelPersister)
+		public PlanningGroupSettingsController(IFetchPlanningGroupSettingsModel fetchPlanningGroupSettingsModel, IPlanningGroupSettingsModelPersister planningGroupSettingsModelPersister)
 		{
-			_fetchDayOffRulesModel = fetchDayOffRulesModel;
+			_fetchPlanningGroupSettingsModel = fetchPlanningGroupSettingsModel;
 			_planningGroupSettingsModelPersister = planningGroupSettingsModelPersister;
 		}
 
@@ -29,13 +29,13 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules")]
 		public virtual IHttpActionResult FetchAll()
 		{
-			return Ok(_fetchDayOffRulesModel.FetchAllWithoutPlanningGroup());
+			return Ok(_fetchPlanningGroupSettingsModel.FetchAllWithoutPlanningGroup());
 		}
 
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/planninggroup/{planningGroupId}/dayoffrules")]
 		public virtual IHttpActionResult FetchAllForPlanningGroup(Guid planningGroupId)
 		{
-			return Ok(_fetchDayOffRulesModel.FetchAllForPlanningGroup(planningGroupId));
+			return Ok(_fetchPlanningGroupSettingsModel.FetchAllForPlanningGroup(planningGroupId));
 		}
 
 		[UnitOfWork, HttpDelete, Route("api/resourceplanner/dayoffrules/{id}")]
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/{id}")]
 		public virtual IHttpActionResult Fetch(Guid id)
 		{
-			return Ok(_fetchDayOffRulesModel.Fetch(id));
+			return Ok(_fetchPlanningGroupSettingsModel.Fetch(id));
 		}
 	}
 }

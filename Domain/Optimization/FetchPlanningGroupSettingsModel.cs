@@ -4,16 +4,16 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public class FetchDayOffRulesModel : IFetchDayOffRulesModel
+	public class FetchPlanningGroupSettingsModel : IFetchPlanningGroupSettingsModel
 	{
 		private readonly IPlanningGroupSettingsRepository _planningGroupSettingsRepository;
-		private readonly DayOffRulesMapper _dayOffRulesMapper;
+		private readonly PlanningGroupSettingsMapper _planningGroupSettingsMapper;
 		private readonly IPlanningGroupRepository _planningGroupRepository;
 
-		public FetchDayOffRulesModel(IPlanningGroupSettingsRepository planningGroupSettingsRepository, DayOffRulesMapper dayOffRulesMapper, IPlanningGroupRepository planningGroupRepository)
+		public FetchPlanningGroupSettingsModel(IPlanningGroupSettingsRepository planningGroupSettingsRepository, PlanningGroupSettingsMapper planningGroupSettingsMapper, IPlanningGroupRepository planningGroupRepository)
 		{
 			_planningGroupSettingsRepository = planningGroupSettingsRepository;
-			_dayOffRulesMapper = dayOffRulesMapper;
+			_planningGroupSettingsMapper = planningGroupSettingsMapper;
 			_planningGroupRepository = planningGroupRepository;
 		}
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (!all.Any(x => x.Default))
 				all.Add(PlanningGroupSettings.CreateDefault());
 
-			var result = all.Select(dayOffRules => _dayOffRulesMapper.ToModel(dayOffRules)).ToList();
+			var result = all.Select(planningGroupSettings => _planningGroupSettingsMapper.ToModel(planningGroupSettings)).ToList();
 			return result;
 		}
 
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			if (dayOffRules == null)
 				throw new ArgumentException($"Cannot find PlanningGroupSettings with Id {id}");
 
-			return _dayOffRulesMapper.ToModel(dayOffRules);
+			return _planningGroupSettingsMapper.ToModel(dayOffRules);
 		}
 
 		public IEnumerable<PlanningGroupSettingsModel> FetchAllForPlanningGroup(Guid planningGroupId)
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var planningGroup = _planningGroupRepository.Get(planningGroupId);
 			var all = _planningGroupSettingsRepository.LoadAllByPlanningGroup(planningGroup);
 
-			var result = all.Select(dayOffRules => _dayOffRulesMapper.ToModel(dayOffRules)).ToList();
+			var result = all.Select(planningGroupSettings => _planningGroupSettingsMapper.ToModel(planningGroupSettings)).ToList();
 			return result;
 		}
 	}
