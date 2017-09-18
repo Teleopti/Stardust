@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public class ShiftTradePeriodViewModelMapper : IShiftTradePeriodViewModelMapper
 	{
-		public ShiftTradeRequestsPeriodViewModel Map(IWorkflowControlSet workflowControlSet, INow now)
+		public ShiftTradeRequestsPeriodViewModel Map(IWorkflowControlSet workflowControlSet, INow now, TimeZoneInfo timeZone)
 		{
 			var vm = new ShiftTradeRequestsPeriodViewModel();
 
@@ -24,9 +25,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 
 			var calendar = CultureInfo.CurrentCulture.Calendar;
-			vm.NowYear = calendar.GetYear(now.ServerDateTime_DontUse());
-			vm.NowMonth = calendar.GetMonth(now.ServerDateTime_DontUse());
-			vm.NowDay = calendar.GetDayOfMonth(now.ServerDateTime_DontUse());
+			var utcTime = now.UtcDateTime();
+			var agentTime = TimeZoneHelper.ConvertFromUtc(utcTime, timeZone);
+			vm.NowYear = calendar.GetYear(agentTime);
+			vm.NowMonth = calendar.GetMonth(agentTime);
+			vm.NowDay = calendar.GetDayOfMonth(agentTime);
 
 			return vm;
 		}

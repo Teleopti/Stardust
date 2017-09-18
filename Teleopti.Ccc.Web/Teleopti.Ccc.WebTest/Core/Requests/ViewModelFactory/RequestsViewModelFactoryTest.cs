@@ -14,7 +14,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
@@ -406,12 +405,16 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldRetrieveShiftTradePeriodViewModel()
 		{
+			var user = new FakeLoggedOnUser();
+			var person = new Person();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			user.SetFakeLoggedOnUser(person);
 			var timeZone = new FakeUserTimeZone();
 			var threadCulture = new ThreadCulture();
 			var mapper = MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>();
 			var provider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
 			var now = MockRepository.GenerateMock<INow>();
-			var target = new RequestsViewModelFactory(null, null, null, provider, mapper, null, now, null, null, null, null,
+			var target = new RequestsViewModelFactory(null, null, null, provider, mapper, null, now, user, null, null, null,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
 					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
@@ -425,7 +428,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var workflowControlSet = new WorkflowControlSet();
 
 			provider.Stub(p => p.RetrieveUserWorkflowControlSet()).Return(workflowControlSet);
-			mapper.Stub(x => x.Map(workflowControlSet, now)).Return(shiftTradePeriodViewModel);
+			mapper.Stub(x => x.Map(workflowControlSet, now, user.CurrentUser().PermissionInformation.DefaultTimeZone())).Return(shiftTradePeriodViewModel);
 
 			var result = target.CreateShiftTradePeriodViewModel();
 
@@ -435,6 +438,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 		[Test]
 		public void ShouldSetMiscSettingsFalseWhenNoOfferInShiftTrade()
 		{
+			var user = new FakeLoggedOnUser();
+			var person = new Person();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			user.SetFakeLoggedOnUser(person);
 			var timeZone = new FakeUserTimeZone();
 			var threadCulture = new ThreadCulture();
 			var mapper = MockRepository.GenerateMock<IShiftTradePeriodViewModelMapper>();
@@ -443,7 +450,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var requestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var shiftTradeRequest = MockRepository.GenerateMock<IShiftTradeRequest>();
 			requestRepository.Stub(x => x.Find(new Guid())).IgnoreArguments().Return(new PersonRequest(new Person()) { Request = shiftTradeRequest });
-			var target = new RequestsViewModelFactory(null, null, null, provider, mapper, null, now, null, null, null, requestRepository,
+			var target = new RequestsViewModelFactory(null, null, null, provider, mapper, null, now, user, null, null, requestRepository,
 				new RequestsViewModelMapper(timeZone, new FakeLinkProvider(), new FakeLoggedOnUser(),
 					new EmptyShiftTradeRequestChecker(), new PersonNameProvider(new NameFormatSettingsPersisterAndProvider(new FakePersonalSettingDataRepository())), new FakeToggleManager()),
 				new ShiftTradeSwapDetailViewModelMapper(
@@ -457,7 +464,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var workflowControlSet = new WorkflowControlSet();
 
 			provider.Stub(p => p.RetrieveUserWorkflowControlSet()).Return(workflowControlSet);
-			mapper.Stub(x => x.Map(workflowControlSet, now)).Return(shiftTradePeriodViewModel);
+			mapper.Stub(x => x.Map(workflowControlSet, now, user.CurrentUser().PermissionInformation.DefaultTimeZone())).Return(shiftTradePeriodViewModel);
 
 			var result = target.CreateShiftTradePeriodViewModel(new Guid());
 

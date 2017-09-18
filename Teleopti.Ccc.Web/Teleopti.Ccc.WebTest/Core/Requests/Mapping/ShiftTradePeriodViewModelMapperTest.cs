@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.WorkflowControl;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapHasWorkflowControlSetToFalse()
 		{
 			var mapper = new ShiftTradePeriodViewModelMapper();
-			var result = mapper.Map(null, MockRepository.GenerateMock<INow>());
+			var result = mapper.Map(null, MockRepository.GenerateMock<INow>(), TimeZoneInfo.Utc);
 
 			result.HasWorkflowControlSet.Should().Be.False();
 		}
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapHasWorkflowControlSetToTrue()
 		{
 			var mapper = new ShiftTradePeriodViewModelMapper();
-			var result = mapper.Map(new WorkflowControlSet(), MockRepository.GenerateMock<INow>());
+			var result = mapper.Map(new WorkflowControlSet(), MockRepository.GenerateMock<INow>(), TimeZoneInfo.Utc);
 
 			result.HasWorkflowControlSet.Should().Be.True();
 		}
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldMapOpenPeriod()
 		{
 			var mapper = new ShiftTradePeriodViewModelMapper();
-			var result = mapper.Map(new WorkflowControlSet { ShiftTradeOpenPeriodDaysForward = new MinMax<int>(2, 8) }, MockRepository.GenerateMock<INow>());
+			var result = mapper.Map(new WorkflowControlSet { ShiftTradeOpenPeriodDaysForward = new MinMax<int>(2, 8) }, MockRepository.GenerateMock<INow>(), TimeZoneInfo.Utc);
 
 			result.OpenPeriodRelativeStart.Should().Be.EqualTo(2);
 			result.OpenPeriodRelativeEnd.Should().Be.EqualTo(8);
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var date = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Local);
 			var now = new MutableNow(date);
 
-			var result = mapper.Map(new WorkflowControlSet(), now);
+			var result = mapper.Map(new WorkflowControlSet(), now, TimeZoneInfo.Utc);
 
 			result.NowYear.Should().Be.EqualTo(date.Year);
 			result.NowMonth.Should().Be.EqualTo(date.Month);
@@ -63,13 +64,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var mapper = new ShiftTradePeriodViewModelMapper();
 			var arabicDate = new DateTime(1435, 1, 1, arabicCalendar);
 			var now = new MutableNow(arabicDate);
-			var result = mapper.Map(new WorkflowControlSet(), now);
+			var result = mapper.Map(new WorkflowControlSet(), now, TimeZoneInfo.Utc);
 
 			var localDateTime = arabicDate.ToLocalTime();
 
 			result.NowYear.Should().Be.EqualTo(arabicCalendar.GetYear(localDateTime));
 			result.NowMonth.Should().Be.EqualTo(arabicCalendar.GetMonth(localDateTime));
 			result.NowDay.Should().Be.EqualTo(arabicCalendar.GetDayOfMonth(localDateTime));
+		}
+
+		[Test]
+		public void ShouldGetLoggedOnUserDate()
+		{
+			var mapper = new ShiftTradePeriodViewModelMapper();
+			var date = new DateTime(2001, 1, 10, 0, 0, 0, DateTimeKind.Utc);
+			var now = new MutableNow(date);
+
+			var result = mapper.Map(new WorkflowControlSet(), now, TimeZoneInfoFactory.DenverTimeZoneInfo());
+
+			result.NowYear.Should().Be.EqualTo(date.Year);
+			result.NowMonth.Should().Be.EqualTo(date.Month);
+			result.NowDay.Should().Be.EqualTo(date.AddDays(-1).Day);
 		}
 	}
 }

@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 		public ShiftTradeRequestsPeriodViewModel CreateShiftTradePeriodViewModel(Guid? id = null)
 		{
-			var ret = _shiftTradeRequestsPeriodViewModelMapper.Map(_shiftTradeRequestprovider.RetrieveUserWorkflowControlSet(), _now);
+			var ret = _shiftTradeRequestsPeriodViewModelMapper.Map(_shiftTradeRequestprovider.RetrieveUserWorkflowControlSet(), _now, _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone());
 
 			if (id == null) return ret;
 
