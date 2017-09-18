@@ -11,8 +11,9 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
     {
         IList<IScenario> ScenarioCollection { get; }
         IScenario DefaultScenario { get; }
-        IList<TimeZoneInfo> TimeZoneCollection { get; }
-        IList<TimeZonePeriod> PeriodToLoadBridgeTimeZone { get; }
+        IList<TimeZoneInfo> TimeZonesUsedByClient { get; }
+		IList<TimeZoneInfo> TimeZonesUsedByDataSources { get; }
+		IList<TimeZonePeriod> PeriodToLoadBridgeTimeZone { get; }
         IScheduleDictionary GetSchedules(DateTimePeriod period, IScenario scenario);
         ICollection<ISkillDay> GetSkillDaysCollection(DateTimePeriod period, IList<ISkill> skills, IScenario scenario);
 		ICollection<ISkillDay> GetSkillDaysCollection(IScenario scenario, DateTime lastCheck);
@@ -27,8 +28,8 @@ namespace Teleopti.Analytics.Etl.Common.Interfaces.Transformer
         IList<IAvailableData> AvailableDataCollection { get; }
         IList<IScenario> ScenarioCollectionDeletedExcluded { get; }
         IList<IScheduleDay> GetSchedulePartPerPersonAndDate(IScheduleDictionary scheduleDictionary);
-    	IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection { get; }
-        IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScenario scenario);
+    	IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection { get; }		
+		IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScenario scenario);
 
 	    IDictionary<DateTimePeriod, IScheduleDictionary> GetSchedules(IList<IScheduleChangedReadModel> changed,
 																	IScenario scenario);

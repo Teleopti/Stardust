@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Analytics
 
 		private void create(string timeZoneCode, TimeZoneInfo defaultTimeZone)
 		{
-			var timeZoneDim = new TimeZoneDim(TimeZoneInfo.FindSystemTimeZoneById(timeZoneCode), defaultTimeZone);
+			var timeZoneDim = new TimeZoneDim(TimeZoneInfo.FindSystemTimeZoneById(timeZoneCode), timeZoneCode == defaultTimeZone.Id, false);
 			var query = AnalyticsUnitOfWork.Current().Session().CreateSQLQuery($@"exec mart.[etl_dim_time_zone_insert]
 						@time_zone_code=:{nameof(TimeZoneDim.TimeZoneCode)}, 
 						@time_zone_name=:{nameof(TimeZoneDim.TimeZoneName)}, 

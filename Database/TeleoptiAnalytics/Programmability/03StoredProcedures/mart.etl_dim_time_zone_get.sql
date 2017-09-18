@@ -25,7 +25,8 @@ BEGIN
 		time_zone_name,
 		default_zone,
 		utc_conversion,
-		utc_conversion_dst
+		utc_conversion_dst,
+		utc_in_use
 	FROM mart.dim_time_zone
 
 END

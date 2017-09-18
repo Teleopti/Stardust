@@ -37,7 +37,8 @@ SET
 	utc_conversion		= s.utc_conversion, 
 	utc_conversion_dst	= s.utc_conversion_dst, 
 	update_date			= getdate(),
-	to_be_deleted		= 0
+	to_be_deleted		= 0,
+	utc_in_use			= s.utc_in_use
 FROM
 	Stage.stg_time_zone s 
 WHERE
@@ -54,7 +55,8 @@ INSERT INTO mart.dim_time_zone
 	 datasource_id, 
 	 insert_date, 
 	 update_date,
-	 to_be_deleted
+	 to_be_deleted,
+	 utc_in_use
 	 )
 SELECT 
 	time_zone_code		= s.time_zone_code, 
@@ -65,7 +67,8 @@ SELECT
 	datasource_id		= -1, 
 	insert_date			= getdate(), 
 	update_date			= getdate(),
-	to_be_deleted		= 0
+	to_be_deleted		= 0,
+	utc_in_use			= s.utc_in_use
 FROM
 	Stage.stg_time_zone s
 WHERE

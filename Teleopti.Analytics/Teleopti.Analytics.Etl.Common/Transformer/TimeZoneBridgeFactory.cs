@@ -1,23 +1,11 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
-using Teleopti.Ccc.Domain.Analytics;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer
 {
-	public static class TimeZoneFactory
+	public static class TimeZoneBridgeFactory
 	{
-		public static IList<TimeZoneDim> CreateTimeZoneDimList(IEnumerable<TimeZoneInfo> timeZoneCollection, TimeZoneInfo defaultTimeZone)
-		{
-			IList<TimeZoneDim> retList = new List<TimeZoneDim>();
-
-			foreach (TimeZoneInfo timeZoneInfo in timeZoneCollection)
-			{
-				retList.Add(new TimeZoneDim(timeZoneInfo, defaultTimeZone));
-			}
-			return retList;
-		}
-
 		public static IList<TimeZoneBridge> CreateTimeZoneBridgeList(IList<TimeZonePeriod> timeZonePeriodList, int intervalsPerDay)
 		{
 			IList<TimeZoneBridge> retList = new List<TimeZoneBridge>();

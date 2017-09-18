@@ -5,52 +5,55 @@ namespace Teleopti.Ccc.Domain.Analytics
 {
     public class TimeZoneDim : ITimeZoneDim
     {
-        private readonly string _timeZoneCode;
-
-        private TimeZoneDim()
+		private TimeZoneDim()
         {
         }
 
-        public TimeZoneDim(TimeZoneInfo timeZone, TimeZoneInfo defaultTimeZone) : this()
+        public TimeZoneDim(TimeZoneInfo timeZone, bool isEtlDefaultTimeZone, bool isUtcInUse) : this()
         {
-            MartId = -1;
-            _timeZoneCode = timeZone.Id;
+			IsUtcInUse = isUtcInUse;
+			MartId = -1;
+            TimeZoneCode = timeZone.Id;
             TimeZoneName = timeZone.DisplayName;
-            if (timeZone.Id == defaultTimeZone.Id)
-                IsDefaultTimeZone = true;
-            else 
-                IsDefaultTimeZone = false;
+            IsDefaultTimeZone = isEtlDefaultTimeZone;
             UtcConversion = Convert.ToInt32(timeZone.BaseUtcOffset.TotalMinutes);
             UtcConversionDst = getUtcConversionIncludedDaylightSaving(timeZone);
         }
 
-        public TimeZoneDim(int martId, string timeZoneCode, string timeZoneName, bool isDefault, int utcConversion, int utcConversionDst)
+        public TimeZoneDim(
+			int martId, 
+			string timeZoneCode, 
+			string timeZoneName, 
+			bool isEtlDefaultTimeZone, 
+			int utcConversion, 
+			int utcConversionDst,
+			bool isUtcInUse
+		)
             : this()
         {
             MartId = martId;
-            _timeZoneCode = timeZoneCode;
+            TimeZoneCode = timeZoneCode;
             TimeZoneName = timeZoneName;
-            IsDefaultTimeZone = isDefault;
+            IsDefaultTimeZone = isEtlDefaultTimeZone;
             UtcConversion = utcConversion;
             UtcConversionDst = utcConversionDst;
-        }
+			IsUtcInUse = isUtcInUse;
+		}
 
-        public int MartId { get; private set; }
+        public int MartId { get; }
         
-        public string TimeZoneCode
-        {
-            get { return _timeZoneCode; }
-        }
+        public string TimeZoneCode { get; }
 
-        public string TimeZoneName { get; private set; }
+		public string TimeZoneName { get; }
 
-        public bool IsDefaultTimeZone { get; private set; }
+        public bool IsDefaultTimeZone { get; }
 
-        public int UtcConversion { get; private set; }
+		public int UtcConversion { get; }
 
-        public int UtcConversionDst { get; private set; }
+        public int UtcConversionDst { get; }
+		public bool IsUtcInUse { get; }
 
-        private int getUtcConversionIncludedDaylightSaving(TimeZoneInfo timeZone)
+		private int getUtcConversionIncludedDaylightSaving(TimeZoneInfo timeZone)
         {
             int retVal = 0;
 

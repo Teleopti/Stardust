@@ -54,7 +54,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			row["datasource_id"] = 1; //The Matrix internal id. Raptor = 1.
 			row["insert_date"] = _insertDateTime;
 			row["update_date"] = _insertDateTime;
-			row["utc_in_use"] = false;
+			row["utc_in_use"] = timeZoneDim.IsUtcInUse;
 
 			table.Rows.Add(row);
 		}

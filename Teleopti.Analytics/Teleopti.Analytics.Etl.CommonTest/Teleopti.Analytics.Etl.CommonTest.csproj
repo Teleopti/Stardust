@@ -197,6 +197,7 @@
     <Compile Include="Transformer\SkillTransformerTest.cs" />
     <Compile Include="Transformer\StageScheduleJobStepTest.cs" />
     <Compile Include="Transformer\TempTest.cs" />
+    <Compile Include="Transformer\TimeZoneDimFactoryTest.cs" />
     <Compile Include="Transformer\TimeZoneTransformerTest.cs" />
     <Compile Include="Transformer\WorkloadTransformerTest.cs" />
   </ItemGroup>

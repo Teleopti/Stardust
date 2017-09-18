@@ -274,7 +274,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Gui.DataSourceConfiguration
 		{
 			IDataSourceEtl etlDataSource = new DataSourceEtl(1, "name", -1, "UTC", 15, false);
 			var dataSourceRow = new DataSourceRow(etlDataSource, 0);
-			var timeZoneDim = new TimeZoneDim(1, "UTC", "UTC name", false, 0, 0);
+			var timeZoneDim = new TimeZoneDim(1, "UTC", "UTC name", false, 0, 0, false);
 
 			var initialJob = MockRepository.GenerateMock<IJob>();
 			var result = MockRepository.GenerateMock<IJobResult>();

@@ -37,7 +37,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
             IList<TimeZoneInfo> timeZoneCollection = new List<TimeZoneInfo>();
             timeZoneCollection.Add(_timeZoneWEuropeStTime);
             timeZoneCollection.Add(_defaultTimeZone);
-            _timeZoneDimList = TimeZoneFactory.CreateTimeZoneDimList(timeZoneCollection, _defaultTimeZone);
+            _timeZoneDimList = new TimeZoneDimFactory().Create(_defaultTimeZone, timeZoneCollection, new List<TimeZoneInfo>());
             
             var period =
                 new DateTimePeriod(new DateTime(2006, 3, 25, 10, 0, 0, DateTimeKind.Utc),
@@ -46,7 +46,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
             timeZonePeriodList.Add(new TimeZonePeriod { TimeZoneCode = _timeZoneWEuropeStTime.Id, PeriodToLoad = period });
             timeZonePeriodList.Add(new TimeZonePeriod { TimeZoneCode = _defaultTimeZone.Id, PeriodToLoad = period });
 
-            _timeZoneBridgeList = TimeZoneFactory.CreateTimeZoneBridgeList(timeZonePeriodList, 96);
+            _timeZoneBridgeList = TimeZoneBridgeFactory.CreateTimeZoneBridgeList(timeZonePeriodList, 96);
 
             _target = new TimeZoneTransformer(_insertDateTime);
 
@@ -143,7 +143,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
         [Test]
         public void VerifyTimeZoneDimCreation()
         {
-            TimeZoneDim tz = new TimeZoneDim(_timeZoneWEuropeStTime, _defaultTimeZone);
+            var tz = new TimeZoneDim(_timeZoneWEuropeStTime, _timeZoneWEuropeStTime.Id == _defaultTimeZone.Id, false);
 
             Assert.AreEqual(_timeZoneWEuropeStTime.Id, tz.TimeZoneCode);
             Assert.AreEqual(_timeZoneWEuropeStTime.DisplayName, tz.TimeZoneName);
@@ -161,6 +161,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
             Assert.AreEqual(_timeZoneDimList[1].IsDefaultTimeZone, _rowDim1["default_zone"]);
             Assert.AreEqual(_timeZoneDimList[1].UtcConversion, _rowDim1["utc_conversion"]);
             Assert.AreEqual(_timeZoneDimList[0].UtcConversionDst, _rowDim0["utc_conversion_dst"]);
+            Assert.AreEqual(_timeZoneDimList[0].IsUtcInUse, _rowDim0["utc_in_use"]);
             Assert.AreEqual(1, _rowDim0["datasource_id"]);
             Assert.AreEqual(_insertDateTime, _rowDim0["insert_date"]);
             Assert.AreEqual(_insertDateTime, _rowDimMax["update_date"]);

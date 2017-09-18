@@ -75,7 +75,8 @@ namespace Teleopti.Analytics.Etl.Common.Infrastructure
 														(string)dataRow["time_zone_name"],
 														handleDbNullValue<bool>(dataRow["default_zone"]),
 														handleDbNullValue<int>(dataRow["utc_conversion"]),
-														handleDbNullValue<int>(dataRow["utc_conversion_dst"])
+														handleDbNullValue<int>(dataRow["utc_conversion_dst"]),
+														handleDbNullValue<bool>(dataRow["utc_in_use"])
 														);
 					timeZoneList.Add(timeZoneDim);
 				}

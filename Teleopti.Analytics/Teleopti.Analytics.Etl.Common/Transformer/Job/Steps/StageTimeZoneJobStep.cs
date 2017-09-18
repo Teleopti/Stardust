@@ -19,8 +19,10 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
 			//Get list of time zones in use
-			IList<TimeZoneDim> rootList = TimeZoneFactory.CreateTimeZoneDimList(_jobParameters.StateHolder.TimeZoneCollection,
-																					 _jobParameters.DefaultTimeZone);
+			IList<TimeZoneDim> rootList = new TimeZoneDimFactory().Create(
+				_jobParameters.DefaultTimeZone, 
+				_jobParameters.StateHolder.TimeZonesUsedByClient, 
+				_jobParameters.StateHolder.TimeZonesUsedByDataSources);
 
 			//Transform time zone info to Matrix format
 			var transformer = new TimeZoneTransformer(DateTime.Now);

@@ -363,6 +363,7 @@
     <Compile Include="Transformer\Job\Steps\StageTimeZoneJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StageWorkloadJobStep.cs" />
     <Compile Include="Transformer\Job\Steps\StatisticsUpdateNotificationJobStep.cs" />
+    <Compile Include="Transformer\TimeZoneDimFactory.cs" />
     <Compile Include="Transformer\WindowsLogonInfo.cs" />
     <Compile Include="Transformer\KpiTargetTeamTransformer.cs" />
     <Compile Include="Transformer\KpiTransformer.cs" />
@@ -400,7 +401,7 @@
     <Compile Include="Transformer\ShiftCategoryTransformer.cs" />
     <Compile Include="Transformer\SkillTransformer.cs" />
     <Compile Include="Transformer\TimeZoneBridge.cs" />
-    <Compile Include="Transformer\TimeZoneFactory.cs" />
+    <Compile Include="Transformer\TimeZoneBridgeFactory.cs" />
     <Compile Include="Transformer\TimeZoneTransformer.cs" />
     <Compile Include="Transformer\WorkloadTransformer.cs" />
   </ItemGroup>

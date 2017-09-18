@@ -117,7 +117,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 		}
 
 		[Test]
-		public void ShouldLoadUtcAndDefaultTimeZoneAndInitiateTimeZonesUsedByDataSourcesIfNotSet()
+		public void ShouldLoadTimeZonesUsedByDataSources()
 		{
 			_jobParameters.TimeZonesUsedByDataSources = null;
 			TimeZoneInfo timeZoneUsedByDataSource = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
@@ -125,27 +125,21 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_raptorRepository.LoadTimeZonesInUse()).Return(new List<TimeZoneInfo>());
 				Expect.Call(_raptorRepository.LoadTimeZonesInUseByDataSource()).Return(new List<TimeZoneInfo> { timeZoneUsedByDataSource });
 			}
 
 			using (_mocks.Playback())
 			{
-				timeZones = new List<TimeZoneInfo>(_target.TimeZoneCollection);
+				timeZones = new List<TimeZoneInfo>(_target.TimeZonesUsedByDataSources);
 			}
 
-			Assert.AreEqual(3, timeZones.Count);
-			Assert.IsTrue(timeZones.Contains(TimeZoneInfo.FindSystemTimeZoneById("UTC")));
-			Assert.IsTrue(timeZones.Contains(_jobParameters.DefaultTimeZone));
+			Assert.AreEqual(1, timeZones.Count);
 			Assert.IsTrue(timeZones.Contains(timeZoneUsedByDataSource));
 		}
 
 		[Test]
-		public void ShouldLoadTimeZoneCollectionWithTimeZonesUsedByDataSourceAndClient()
+		public void ShouldLoadTimeZonesUsedByClient()
 		{
-			TimeZoneInfo timeZoneUsedByDataSource = TimeZoneInfo.FindSystemTimeZoneById("China Standard Time");
-			_jobParameters.TimeZonesUsedByDataSources = new List<TimeZoneInfo> { timeZoneUsedByDataSource };
-
 			TimeZoneInfo usedByClient = TimeZoneInfo.FindSystemTimeZoneById("Greenwich Standard Time");
 			IList<TimeZoneInfo> timeZonesInUseByClient = new List<TimeZoneInfo> { usedByClient };
 			IList<TimeZoneInfo> timeZones;
@@ -157,11 +151,10 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 			using (_mocks.Playback())
 			{
-				timeZones = new List<TimeZoneInfo>(_target.TimeZoneCollection);
+				timeZones = new List<TimeZoneInfo>(_target.TimeZonesUsedByClient);
 			}
 
-			Assert.AreEqual(4, timeZones.Count);
-			Assert.IsTrue(timeZones.Contains(timeZoneUsedByDataSource));
+			Assert.AreEqual(1, timeZones.Count);
 			Assert.IsTrue(timeZones.Contains(usedByClient));
 		}
 

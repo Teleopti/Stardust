@@ -32,7 +32,7 @@ namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Steps
 				return _jobParameters.Helper.Repository.PersistTimeZoneBridge(BulkInsertDataTable1, true);
 			}
 
-			IList<TimeZoneBridge> rootList = TimeZoneFactory.CreateTimeZoneBridgeList(timeZonePeriodList, _jobParameters.IntervalsPerDay);
+			IList<TimeZoneBridge> rootList = TimeZoneBridgeFactory.CreateTimeZoneBridgeList(timeZonePeriodList, _jobParameters.IntervalsPerDay);
 
 			// Loop through to transform and bulk insert a certain amount of rows
 			foreach (TimeZoneBridge timeZoneBridge in rootList)

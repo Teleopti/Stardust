@@ -27,13 +27,13 @@ namespace Teleopti.Ccc.DomainTest.Analytics
             _utcConversionDst1 = getUtcConversionIncludedDaylightSaving(_swedenTimeZone);
             _martId1 = 1;
             _isDefault = true;
-            _target1 = new TimeZoneDim(_martId1, _swedenTimeZone.Id, _swedenTimeZone.DisplayName, _isDefault, _utcConversion1, _utcConversionDst1);
+            _target1 = new TimeZoneDim(_martId1, _swedenTimeZone.Id, _swedenTimeZone.DisplayName, _isDefault, _utcConversion1, _utcConversionDst1, false);
 
             _utcTimeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
             _martId2 = -1;
             _utcConversion2 = Convert.ToInt32(_utcTimeZone.BaseUtcOffset.TotalMinutes);
             _utcConversionDst2 = getUtcConversionIncludedDaylightSaving(_utcTimeZone);
-            _target2 = new TimeZoneDim(_utcTimeZone, _swedenTimeZone);
+            _target2 = new TimeZoneDim(_utcTimeZone, false, true);
         }
 
         [Test]
@@ -59,10 +59,11 @@ namespace Teleopti.Ccc.DomainTest.Analytics
         }
 
 		[Test]
-		public void ShouldBeEqualToDefault()
+		public void ShouldBeDefaultAndUtcInUse()
 		{
-			_target1 = new TimeZoneDim(_swedenTimeZone, _swedenTimeZone);
+			_target1 = new TimeZoneDim(_swedenTimeZone, true, true);
 			Assert.That(_target1.IsDefaultTimeZone, Is.True);
+			Assert.That(_target1.IsUtcInUse, Is.True);
 		}
 
         private static int getUtcConversionIncludedDaylightSaving(TimeZoneInfo timeZone)

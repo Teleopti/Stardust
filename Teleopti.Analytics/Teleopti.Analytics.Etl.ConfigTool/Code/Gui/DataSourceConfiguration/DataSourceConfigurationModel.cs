@@ -44,14 +44,14 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration
 		{
 			IList<ITimeZoneDim> timeZoneList = new List<ITimeZoneDim>();
 
-			var timeZoneNoSelected = new TimeZoneDim(-1, "", "[No Time Zone assigned]", false, 0, 0);
+			var timeZoneNoSelected = new TimeZoneDim(-1, "", "[No Time Zone assigned]", false, 0, 0, false);
 			timeZoneList.Add(timeZoneNoSelected);
 			var defaultTimeZone = TimeZoneInfo.FindSystemTimeZoneById(_baseConfiguration.TimeZoneCode);
 
 			foreach (TimeZoneInfo timeZoneInfo in TimeZoneInfo.GetSystemTimeZones())
 			{
 
-				timeZoneList.Add(new TimeZoneDim(timeZoneInfo, defaultTimeZone));
+				timeZoneList.Add(new TimeZoneDim(timeZoneInfo, timeZoneInfo.Id == defaultTimeZone.Id, false));
 			}
 
 			return timeZoneList;

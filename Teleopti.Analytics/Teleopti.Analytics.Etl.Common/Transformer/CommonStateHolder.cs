@@ -20,7 +20,8 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 		private List<ISkillDay> _skillDaysCollection;
 		private IScenario _defaultScenario;
 		private IList<ISkill> _skillCollection;
-		private IList<TimeZoneInfo> _timeZones;
+		private IList<TimeZoneInfo> _timeZonesUsedByClient;
+		private IList<TimeZoneInfo> _timeZonesUsedByDataSources;
 		private IList<TimeZonePeriod> _bridgeTimeZonePeriodList;
 		private IList<IPerson> _userCollection;
 		private IList<IActivity> _activityCollection;
@@ -141,45 +142,36 @@ namespace Teleopti.Analytics.Etl.Common.Transformer
 			}
 		}
 
-		public IList<TimeZoneInfo> TimeZoneCollection
+		public IList<TimeZoneInfo> TimeZonesUsedByClient
 		{
 			get
 			{
-				if (_timeZones == null)
+				if (_timeZonesUsedByClient != null) return _timeZonesUsedByClient;
+
+				_timeZonesUsedByClient = (IList<TimeZoneInfo>)_jobParameters.Helper.Repository.LoadTimeZonesInUse();
+
+				return _timeZonesUsedByClient;
+			}
+		}
+
+		public IList<TimeZoneInfo> TimeZonesUsedByDataSources
+		{
+			get
+			{
+				if (_timeZonesUsedByDataSources != null) return _timeZonesUsedByDataSources;
+
+				_timeZonesUsedByDataSources = new List<TimeZoneInfo>();
+
+				if (_jobParameters.TimeZonesUsedByDataSources == null)
+					_jobParameters.TimeZonesUsedByDataSources = _jobParameters.Helper.Repository.LoadTimeZonesInUseByDataSource();
+
+				foreach (TimeZoneInfo timeZoneInfo in _jobParameters.TimeZonesUsedByDataSources)
 				{
-					_timeZones = (IList<TimeZoneInfo>)_jobParameters.Helper.Repository.LoadTimeZonesInUse();
-					
-					// Ensure that the default time zone always exist
-					if (!_timeZones.Contains(_jobParameters.DefaultTimeZone))
-					{
-						_timeZones.Add(_jobParameters.DefaultTimeZone);
-					}
-
-					// Ensure that UTC time zone always exist
-					TimeZoneInfo utc = TimeZoneInfo.Utc;
-					if (!_timeZones.Contains(utc))
-					{
-						_timeZones.Add(utc);
-					}
-
-					// Handle time zones used by data source
-					if (_jobParameters.TimeZonesUsedByDataSources == null)
-					{
-						_jobParameters.TimeZonesUsedByDataSources = _jobParameters.Helper.Repository.LoadTimeZonesInUseByDataSource();
-					}
-					if (_jobParameters.TimeZonesUsedByDataSources != null)
-					{
-						foreach (TimeZoneInfo timeZoneInfo in _jobParameters.TimeZonesUsedByDataSources)
-						{
-							if (!_timeZones.Contains(timeZoneInfo))
-							{
-								_timeZones.Add(timeZoneInfo);
-							}
-						}
-					}
+					if (!_timeZonesUsedByDataSources.Contains(timeZoneInfo))
+						_timeZonesUsedByDataSources.Add(timeZoneInfo);
 				}
 
-				return _timeZones;
+				return _timeZonesUsedByDataSources;
 			}
 		}
 

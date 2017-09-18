@@ -672,7 +672,7 @@ namespace Teleopti.Analytics.Etl.CommonTest.Transformer
 
 		public ITimeZoneDim DefaultTimeZone
 		{
-			get { return new TimeZoneDim(1, "UTC", "UTC", false, 0, 0); }
+			get { return new TimeZoneDim(1, "UTC", "UTC", false, 0, 0, false); }
 		}
 
 		public IList<IPersonRequest> LoadRequest(DateTimePeriod period)
