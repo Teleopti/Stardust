@@ -58,15 +58,15 @@
 			},
 
 			deselectSkillAndSkillArea: function () {
-				$state.go($state.current.name, buildState({ skillIds: undefined, skillAreaId: undefined }));
+				$state.go($state.current.name, buildState({ skillIds: undefined, skillAreaId: undefined }), {notify: false});
 			},
 
 			selectSkillArea: function (skillAreaId) {
-				$state.go($state.current.name, buildState({ skillIds: undefined, skillAreaId: skillAreaId }));
+				$state.go($state.current.name, buildState({ skillIds: undefined, skillAreaId: skillAreaId }), {notify: false});
 			},
 
 			selectSkill: function (skillId) {
-				$state.go($state.current.name, buildState({ skillIds: skillId, skillAreaId: undefined }));
+				$state.go($state.current.name, buildState({ skillIds: skillId, skillAreaId: undefined }), {notify: false});
 			},
 
 			agentsHrefForTeam: function (siteId, teamId) {
@@ -99,7 +99,7 @@
 					state.siteIds.push(id);
 				else
 					state.siteIds = state.siteIds.filter(function (s) { return s != id });
-				$state.go($state.current.name, buildState());
+				$state.go($state.current.name, buildState(), {notify: false});
 			},
 
 			selectTeam: function (id, selected) {
@@ -109,7 +109,7 @@
 					state.teamIds = state.teamIds.filter(function (s) { return s != id });
 					selectOtherTeamsIfSiteIsSelected(id);
 				}
-				$state.go($state.current.name, buildState());
+				$state.go($state.current.name, buildState(), {notify: false});
 			},
 
 			isSiteOpen: function (id) {
