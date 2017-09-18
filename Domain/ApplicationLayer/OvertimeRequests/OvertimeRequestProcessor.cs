@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 	{
 		private readonly ICommandDispatcher _commandDispatcher;
 		private readonly IEnumerable<IOvertimeRequestValidator> _overtimeRequestValidators;
+		private readonly IOvertimeRequestAvailableSkillsValidator _overtimeRequestAvailableSkillsValidator;
 		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillTypeRepository _skillTypeRepository;
@@ -19,13 +20,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 		public OvertimeRequestProcessor(ICommandDispatcher commandDispatcher,
 			IEnumerable<IOvertimeRequestValidator> overtimeRequestValidators, IActivityRepository activityRepository, 
-			ISkillRepository skillRepository, ISkillTypeRepository skillTypeRepository)
+			ISkillRepository skillRepository, ISkillTypeRepository skillTypeRepository, IOvertimeRequestAvailableSkillsValidator overtimeRequestAvailableSkillsValidator)
 		{
 			_commandDispatcher = commandDispatcher;
 			_overtimeRequestValidators = overtimeRequestValidators;
 			_activityRepository = activityRepository;
 			_skillRepository = skillRepository;
 			_skillTypeRepository = skillTypeRepository;
+			_overtimeRequestAvailableSkillsValidator = overtimeRequestAvailableSkillsValidator;
 		}
 
 		public void Process(IPersonRequest personRequest, bool isAutoGrant)
@@ -37,15 +39,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 
 			foreach (var overtimeRequestValidator in _overtimeRequestValidators)
 			{
-				var result = overtimeRequestValidator.Validate(personRequest);
-				if (result.IsValid) continue;
-				var denyCommand = new DenyRequestCommand
-				{
-					PersonRequestId = personRequest.Id.GetValueOrDefault(),
-					DenyReason = result.InvalidReason,
-					DenyOption = PersonRequestDenyOption.AutoDeny
-				};
-				_commandDispatcher.Execute(denyCommand);
+				var resultOfBasicValidator = overtimeRequestValidator.Validate(personRequest);
+				if (resultOfBasicValidator.IsValid) continue;
+				denyRequest(personRequest, resultOfBasicValidator.InvalidReason);
+				return;
+			}
+
+			var resultOfAvailableSkillsValidator = _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
+			if (!resultOfAvailableSkillsValidator.IsValid)
+			{
+				denyRequest(personRequest, resultOfAvailableSkillsValidator.InvalidReason);
 				return;
 			}
 
@@ -55,21 +58,30 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var command = new ApproveRequestCommand
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
-				IsAutoGrant = true
+				IsAutoGrant = true,
+				Datas = new Dictionary<string, object>
+				{
+					{"ValidatedSkills", resultOfAvailableSkillsValidator.Skills }
+				}
 			};
 			_commandDispatcher.Execute(command);
 
 			if (command.ErrorMessages.Any())
 			{
 				logger.Warn(command.ErrorMessages);
-				var denyCommand = new DenyRequestCommand
-				{
-					PersonRequestId = personRequest.Id.GetValueOrDefault(),
-					DenyReason = command.ErrorMessages.FirstOrDefault(),
-					DenyOption = PersonRequestDenyOption.AutoDeny
-				};
-				_commandDispatcher.Execute(denyCommand);
+				denyRequest(personRequest, command.ErrorMessages.FirstOrDefault());
 			}
+		}
+
+		private void denyRequest(IPersonRequest personRequest, string denyReason)
+		{
+			var denyCommand = new DenyRequestCommand
+			{
+				PersonRequestId = personRequest.Id.GetValueOrDefault(),
+				DenyReason = denyReason,
+				DenyOption = PersonRequestDenyOption.AutoDeny
+			};
+			_commandDispatcher.Execute(denyCommand);
 		}
 	}
 }

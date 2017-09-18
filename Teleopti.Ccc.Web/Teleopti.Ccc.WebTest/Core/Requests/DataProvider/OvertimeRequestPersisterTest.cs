@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			system.UseTestDouble<FakeScheduleDictionary>().For<IScheduleDictionary>();
 
 			system.UseTestDouble(new OvertimeRequestProcessor(_commandDispatcher, new IOvertimeRequestValidator[] {}, 
-				new FakeActivityRepository(), new FakeSkillRepository(), new FakeSkillTypeRepository()))
+				new FakeActivityRepository(), new FakeSkillRepository(), new FakeSkillTypeRepository(), new FakeOvertimeRequestAvailableSkillsValidator()))
 				.For<IOvertimeRequestProcessor>();
 		}
 

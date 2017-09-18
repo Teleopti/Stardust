@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests;
 using Teleopti.Ccc.Domain.ApplicationLayer.SiteOpenHours;
 using Teleopti.Ccc.Domain.Common;
@@ -69,6 +70,21 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 5d);
 
 			var personRequest = createOvertimeRequest(18, 1);
+			Target.Process(personRequest, true);
+
+			personRequest.IsApproved.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldNotLoadStaffingDataAgainWhenValidatedSkillsAreaProvided()
+		{
+			setupPerson(8, 21);
+			var skill = setupPersonSkill();
+			setupIntradayStaffingForSkill(skill, 10d, 5d);
+
+			var personRequest = createOvertimeRequest(18, 1);
+			RequestApprovalServiceFactory.SetApprovalService(new OvertimeRequestApprovalService(null, null, new FakeCommandDispatcher(), new [] { skill }));
+
 			Target.Process(personRequest, true);
 
 			personRequest.IsApproved.Should().Be.True();
@@ -225,7 +241,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[Test]
 		public void ShouldDenyWhenSkillOpenHourIsNotAvailable()
 		{
-			setupPerson();
+			setupPerson(8, 23);
 			setupIntradayStaffingForSkill(setupPersonSkill(), 10d, 6d);
 
 			var personRequest = createOvertimeRequest(21, 1);
@@ -258,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		[SetCulture("en-US")]
 		public void ShouldDenyOvertimeRequestWhenOutOfSkillOpenHour()
 		{
-			setupPerson(8, 21);
+			setupPerson(8, 23);
 			setupPersonSkill();
 
 			var personRequest = createOvertimeRequest(22, 1);
@@ -466,10 +482,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 
 		private void setupPerson(int siteOpenStartHour = 8, int siteOpenEndHour = 17, bool isOpenHoursClosed = false)
 		{
-			var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			//var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			var person = createPersonWithSiteOpenHours(siteOpenStartHour, siteOpenEndHour, isOpenHoursClosed);
 			LoggedOnUser.SetFakeLoggedOnUser(person);
-			LoggedOnUser.SetDefaultTimeZone(timeZoneInfo);
+			LoggedOnUser.SetDefaultTimeZone(TimeZoneInfo.Utc);
 			CurrentScenario.FakeScenario(new Scenario("default") { DefaultScenario = true });
 
 		}

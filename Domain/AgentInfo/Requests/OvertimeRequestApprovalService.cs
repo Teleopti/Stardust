@@ -15,14 +15,16 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IOvertimeRequestUnderStaffingSkillProvider _overtimeRequestUnderStaffingSkillProvider;
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
 		private readonly ICommandDispatcher _commandDispatcher;
+		private readonly ISkill[] _validatedSkills;
 
 		public OvertimeRequestApprovalService(
 			IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
-			IOvertimeRequestSkillProvider overtimeRequestSkillProvider, ICommandDispatcher commandDispatcher)
+			IOvertimeRequestSkillProvider overtimeRequestSkillProvider, ICommandDispatcher commandDispatcher, ISkill[] validatedSkills)
 		{
 			_overtimeRequestUnderStaffingSkillProvider = overtimeRequestUnderStaffingSkillProvider;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
 			_commandDispatcher = commandDispatcher;
+			_validatedSkills = validatedSkills;
 		}
 
 		public IEnumerable<IBusinessRuleResponse> Approve(IRequest request)
@@ -31,6 +33,13 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			if (overtimeRequest == null)
 			{
 				throw new InvalidCastException("Request type should be OvertimeRequest!");
+			}
+
+			if (_validatedSkills != null && _validatedSkills.Length > 0)
+			{
+				addOvertimeActivity(_validatedSkills.First().Activity.Id.GetValueOrDefault(), overtimeRequest);
+
+				return new List<IBusinessRuleResponse>();
 			}
 
 			var period = overtimeRequest.Period;

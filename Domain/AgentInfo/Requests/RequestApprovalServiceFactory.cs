@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -40,7 +41,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
-		public IRequestApprovalService MakeRequestApprovalService(IScheduleDictionary scheduleDictionary, IScenario scenario, IPersonRequest personRequest)
+		public IRequestApprovalService MakeRequestApprovalService(IScheduleDictionary scheduleDictionary, IScenario scenario, IPersonRequest personRequest, IDictionary<string, object> commandDatas)
 		{
 			var requestType = personRequest.Request.RequestType;
 			var scheduleRange = scheduleDictionary[personRequest.Person];
@@ -63,7 +64,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 						businessRules,
 						_personRequestCheckAuthorization);
 				case RequestType.OvertimeRequest:
-					return new OvertimeRequestApprovalService(_overtimeRequestUnderStaffingSkillProvider, _overtimeRequestSkillProvider, _commandDispatcher);
+					commandDatas.TryGetValue("ValidatedSkills", out object validatedSkills);
+					return new OvertimeRequestApprovalService(_overtimeRequestUnderStaffingSkillProvider, _overtimeRequestSkillProvider, _commandDispatcher, validatedSkills as ISkill[]);
 			}
 
 			return null;

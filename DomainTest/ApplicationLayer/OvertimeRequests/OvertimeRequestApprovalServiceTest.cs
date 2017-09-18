@@ -446,7 +446,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.OvertimeRequests
 		private OvertimeRequestApprovalService createTarget()
 		{
 			return new OvertimeRequestApprovalService(OvertimeRequestUnderStaffingSkillProvider, OvertimeRequestSkillProvider,
-				CommandDispatcher);
+				CommandDispatcher, null);
 		}
 
 		private IPersonRequest createOvertimeRequest(IPerson person, DateTimePeriod period)

@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 
 			var scheduleDictionary = getSchedules(personRequest);
 			_requestApprovalService = _requestApprovalServiceFactory.MakeRequestApprovalService(scheduleDictionary,
-				_currentScenario.Current(), personRequest);
+				_currentScenario.Current(), personRequest, command.Datas);
 
 			IList<IBusinessRuleResponse> brokenRuleResponses;
 			try

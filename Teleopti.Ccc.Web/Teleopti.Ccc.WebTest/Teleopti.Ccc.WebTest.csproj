@@ -275,6 +275,7 @@
     <Compile Include="Areas\ResourcePlanner\PlanningGroupControllerTest.cs" />
     <Compile Include="Core\BlockOtherOriginFilterTests.cs" />
     <Compile Include="Core\Common\DataProvider\MultiplicatorDefinitionSetProvider.cs" />
+    <Compile Include="Core\Requests\DataProvider\FakeOvertimeRequestAvailableSkillsValidator.cs" />
     <Compile Include="Core\Requests\DataProvider\OvertimeRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\DataProvider\AbsenceRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\DataProvider\FakeLinkProvider.cs" />

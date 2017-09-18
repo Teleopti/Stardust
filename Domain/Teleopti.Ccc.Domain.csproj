@@ -249,7 +249,9 @@
     <Compile Include="ApplicationLayer\Intraday\ExtractSkillForecastIntervals.cs" />
     <Compile Include="ApplicationLayer\IPersonAssociationPublisherCheckSumPersister.cs" />
     <Compile Include="ApplicationLayer\Events\ImportAgentEvent.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestAvailableSkillsValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\IOvertimeRequestValidator.cs" />
+    <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAvailableSkillsValidationResult.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestAvailableSkillsValidator.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestProcessor.cs" />
     <Compile Include="ApplicationLayer\OvertimeRequests\OvertimeRequestSiteOpenHourValidator.cs" />

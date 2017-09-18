@@ -6,7 +6,7 @@ using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 {
-	public class OvertimeRequestAvailableSkillsValidator : IOvertimeRequestValidator
+	public class OvertimeRequestAvailableSkillsValidator : IOvertimeRequestAvailableSkillsValidator
 	{
 		private readonly IOvertimeRequestUnderStaffingSkillProvider _overtimeRequestUnderStaffingSkillProvider;
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
@@ -19,13 +19,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_skillOpenHourFilter = skillOpenHourFilter;
 		}
 
-		public OvertimeRequestValidationResult Validate(IPersonRequest personRequest)
+		public OvertimeRequestAvailableSkillsValidationResult Validate(IPersonRequest personRequest)
 		{
 			var period = personRequest.Request.Period;
 			var skills = _overtimeRequestSkillProvider.GetAvailableSkills(personRequest.Person, period).ToList();
 			if (!skills.Any())
 			{
-				return new OvertimeRequestValidationResult
+				return new OvertimeRequestAvailableSkillsValidationResult
 				{
 					IsValid = false,
 					InvalidReason =Resources.NoAvailableSkillForOvertime
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			skills = _skillOpenHourFilter.Filter(period, skills).ToList();
 			if (!skills.Any())
 			{
-				return new OvertimeRequestValidationResult
+				return new OvertimeRequestAvailableSkillsValidationResult
 				{
 					IsValid = false,
 					InvalidReason = Resources.PeriodIsOutOfSkillOpenHours
@@ -45,16 +45,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			var seriousUnderstaffingSkills = _overtimeRequestUnderStaffingSkillProvider.GetSeriousUnderstaffingSkills(period, skills);
 			if (seriousUnderstaffingSkills.Count == 0)
 			{
-				return new OvertimeRequestValidationResult
+				return new OvertimeRequestAvailableSkillsValidationResult
 				{
 					IsValid = false,
 					InvalidReason = Resources.NoUnderStaffingSkill
 				};
 			}
 
-			return new OvertimeRequestValidationResult
+			return new OvertimeRequestAvailableSkillsValidationResult
 			{
-				IsValid = true
+				IsValid = true,
+				Skills = seriousUnderstaffingSkills.ToArray()
 			};
 		}
 	}
