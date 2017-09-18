@@ -869,5 +869,39 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			overtimeLayer = personassignment.ShiftLayers.Skip(1).First();
 			overtimeLayer.Period.StartDateTime.Should().Be.EqualTo(newStartTime);
 		}
+		
+		[Test]
+		[Ignore("to be fixed")]
+		public void ShouldThrowExceptionWhenAddingZeroLengthMainShift()
+		{
+			var activity = new  Activity("_");
+			var dateTime = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(dateTime, dateTime);
+			
+			Assert.Throws<ArgumentException>(() => target.AddActivity(activity,period));				
+		}
+
+		[Test]
+		[Ignore("to be fixed")]
+		public void ShouldThrowExceptionWhenAddingZeroLengthOverTimeShift()
+		{
+			var activity = new  Activity("_");
+			var dateTime = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(dateTime, dateTime);
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("multiplicatorset", MultiplicatorType.Overtime);
+			
+			Assert.Throws<ArgumentException>(() => target.AddOvertimeActivity(activity, period, multiplicatorDefinitionSet));	
+		}
+
+		[Test]
+		[Ignore("to be fixed")]
+		public void ShouldThrowExceptionWhenAddingZeroLengtPersonalActivity()
+		{
+			var activity = new  Activity("_");
+			var dateTime = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(dateTime, dateTime);
+
+			Assert.Throws<ArgumentException>(() => target.AddPersonalActivity(activity, period));
+		}
 	}
 }
