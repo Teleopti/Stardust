@@ -389,7 +389,10 @@
 		}
 
 		function initialiseGridStateHandling() {
-			requestGridStateService.restoreState(vm, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+			$timeout(function () {
+				requestGridStateService.restoreState(vm, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
+			}, 0);
+
 			// delay the setup of these handlers a little to let the table load
 			$timeout(function() {
 				requestGridStateService.setupGridEventHandlers($scope, vm, requestsDefinitions.REQUEST_TYPES.SHIFTTRADE);
