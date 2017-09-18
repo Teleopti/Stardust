@@ -31,7 +31,7 @@
 			var Settings = $injector.get('Settings');
 
 			switch (true) {
-				case (rejection.config.timeout.$$state.value === "cancel"):
+				case (rejection.config && rejection.config.timeout && rejection.config.timeout.$$state.value === "cancel"):
 					break;
 
 				case (rejection.status === -1):
