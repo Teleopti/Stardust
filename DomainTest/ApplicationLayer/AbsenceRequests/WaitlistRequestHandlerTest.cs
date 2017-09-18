@@ -3,9 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests;
-using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
@@ -38,7 +36,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 		public FakeScenarioRepository ScenarioRepository;
 		public FakeSkillCombinationResourceRepository SkillCombinationResourceRepository;
 		public FakeSkillDayRepository SkillDayRepository;
-		public FakeCommandDispatcher CommandDispatcher;
 		public FakeQueuedAbsenceRequestRepository QueuedAbsenceRequestRepository;
 		public IScheduleStorage ScheduleStorage;
 		public MutableNow Now;
@@ -49,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			system.UseTestDouble<FakeCommandDispatcher>().For<ICommandDispatcher>();
 			system.UseTestDouble<SchedulerStateScheduleDayChangedCallback>().For<IScheduleDayChangeCallback>();
 		}
 
@@ -60,84 +56,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRepository.Add(person);
 			businessUnit = BusinessUnitFactory.CreateWithId("something");
 			BusinessUnitRepository.Add(businessUnit);
-		}
-
-		[Test]
-		public void ShouldApproveNextRequestIfCommandFails()
-		{
-			SetUp();
-			Now.Is(new DateTime(2016, 12, 1, 6, 00, 00, DateTimeKind.Utc));
-
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("phone");
-			var skill = SkillRepository.Has("skillA", activity).WithId();
-			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			skill.DefaultResolution = 60;
-
-			var agent = PersonRepository.Has(skill);
-			var waitListedAgent1 = PersonRepository.Has(skill);
-			var waitListedAgent2 = PersonRepository.Has(skill);
-			var waitListedAgent3 = PersonRepository.Has(skill);
-			var waitListedAgent4 = PersonRepository.Has(skill);
-
-			var wfcs = new WorkflowControlSet().WithId();
-			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
-			{
-				Absence = absence,
-				PersonAccountValidator = new AbsenceRequestNoneValidator(),
-				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
-				AbsenceRequestProcess = new GrantAbsenceRequest()
-
-			});
-			wfcs.AbsenceRequestWaitlistEnabled = true;
-			wfcs.AbsenceRequestWaitlistProcessOrder = WaitlistProcessOrder.BySeniority;
-			agent.WorkflowControlSet = wfcs;
-			waitListedAgent1.WorkflowControlSet = wfcs;
-			waitListedAgent2.WorkflowControlSet = wfcs;
-			waitListedAgent3.WorkflowControlSet = wfcs;
-			waitListedAgent4.WorkflowControlSet = wfcs;
-
-			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
-
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent1, scenario, activity, period, new ShiftCategory("category")));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent2, scenario, activity, period, new ShiftCategory("category")));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent3, scenario, activity, period, new ShiftCategory("category")));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent4, scenario, activity, period, new ShiftCategory("category")));
-
-			IPersonRequest waitListedRequest1 = new PersonRequest(waitListedAgent1, new AbsenceRequest(absence, period)).WithId();
-			IPersonRequest waitListedRequest2 = new PersonRequest(waitListedAgent2, new AbsenceRequest(absence, period)).WithId();
-			IPersonRequest waitListedRequest3 = new PersonRequest(waitListedAgent3, new AbsenceRequest(absence, period)).WithId();
-			IPersonRequest waitListedRequest4 = new PersonRequest(waitListedAgent4, new AbsenceRequest(absence, period)).WithId();
-			waitListedRequest1.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
-			waitListedRequest2.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
-			waitListedRequest3.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
-			waitListedRequest4.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
-			PersonRequestRepository.Add(waitListedRequest1);
-			PersonRequestRepository.Add(waitListedRequest2);
-			PersonRequestRepository.Add(waitListedRequest3);
-			PersonRequestRepository.Add(waitListedRequest4);
-			CommandDispatcher.ErrorMessageRequests.Add(waitListedRequest2.Id.GetValueOrDefault());
-			CommandDispatcher.ErrorMessageRequests.Add(waitListedRequest3.Id.GetValueOrDefault());
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 13)
-			});
-
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 10));
-
-			IPersonRequest personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
-			personRequest.Deny("Work harder!", new PersonRequestAuthorizationCheckerForTest());
-			PersonRequestRepository.Add(personRequest);
-
-			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
-
-			CommandDispatcher.AllComands.Count(x => x.GetType() == typeof(ApproveRequestCommand)).Should().Be.EqualTo(6);
 		}
 
 		[Test]
@@ -190,60 +108,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(personRequest);
 			Target.Handle(new ProcessWaitlistedRequestsEvent{LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM"});
 
-			CommandDispatcher.AllComands.Count(x=>x.GetType()== typeof(ApproveRequestCommand)).Should().Be.EqualTo(2);
-		}
-
-		[Test]
-		public void ShouldProcessWaitlistedAndApproveRequestOnSameSkill()
-		{
-			SetUp();
-			Now.Is(new DateTime(2016, 12, 1, 6, 00, 00, DateTimeKind.Utc));
-
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("phone");
-			var skill = SkillRepository.Has("skillA", activity).WithId();
-			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			skill.DefaultResolution = 60;
-			var agent = PersonRepository.Has(skill);
-			var waitListedAgent = PersonRepository.Has(skill);
-			var wfcs = new WorkflowControlSet().WithId();
-			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
-			{
-				Absence = absence,
-				PersonAccountValidator = new AbsenceRequestNoneValidator(),
-				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
-				AbsenceRequestProcess = new GrantAbsenceRequest()
-
-			});
-			wfcs.AbsenceRequestWaitlistEnabled = true;
-			agent.WorkflowControlSet = wfcs;
-			waitListedAgent.WorkflowControlSet = wfcs;
-			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
-
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent, scenario, activity, period, new ShiftCategory("category")));
-
-			IPersonRequest waitListedRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
-			waitListedRequest.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
-			PersonRequestRepository.Add(waitListedRequest);
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 11)
-			});
-
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 10));
-
-			var personRequest = new PersonRequest(agent, new AbsenceRequest(absence, period)).WithId();
-			personRequest.Deny("Denied!", new PersonRequestAuthorizationCheckerForTest());
-			PersonRequestRepository.Add(personRequest);
-			Target.Handle(new ProcessWaitlistedRequestsEvent{LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM"});
-
-			CommandDispatcher.AllComands.Count(x => x.GetType() == typeof(ApproveRequestCommand)).Should().Be.EqualTo(1);
+			waitListedRequest.IsApproved.Should().Be.True();
+			personRequest.IsApproved.Should().Be.True();
 		}
 
 		[Test]
@@ -296,58 +162,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(personRequest);
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 
-			CommandDispatcher.AllComands.Count(x => x.GetType() == typeof(ApproveRequestCommand)).Should().Be.EqualTo(0);
-		}
-
-		[Test]
-		public void ShouldApproveWaitlistedRequest()
-		{
-			SetUp();
-			Now.Is(new DateTime(2016, 12, 1, 6, 00, 00, DateTimeKind.Utc));
-
-			var absence = AbsenceFactory.CreateAbsence("Holiday");
-			var scenario = ScenarioRepository.Has("scenario");
-			var activity = ActivityRepository.Has("phone");
-			var skill = SkillRepository.Has("skillA", activity).WithId();
-			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
-			skill.StaffingThresholds = threshold;
-			skill.DefaultResolution = 60;
-			var agent = PersonRepository.Has(skill);
-			var waitListedAgent = PersonRepository.Has(skill);
-			var wfcs = new WorkflowControlSet().WithId();
-			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
-			{
-				Absence = absence,
-				PersonAccountValidator = new AbsenceRequestNoneValidator(),
-				StaffingThresholdValidator = new StaffingThresholdValidator(),
-				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
-				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
-				AbsenceRequestProcess = new GrantAbsenceRequest()
-
-			});
-			wfcs.AbsenceRequestWaitlistEnabled = true;
-			agent.WorkflowControlSet = wfcs;
-			waitListedAgent.WorkflowControlSet = wfcs;
-			var period = new DateTimePeriod(2016, 12, 1, 8, 2016, 12, 1, 9);
-
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
-			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent, scenario, activity, period, new ShiftCategory("category")));
-
-			IPersonRequest waitListedRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
-			waitListedRequest.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
-			PersonRequestRepository.Add(waitListedRequest);
-
-			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
-			{
-				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 6)
-			});
-
-			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 5));
-			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
-
-			CommandDispatcher.AllComands.Count(x => x.GetType() == typeof(ApproveRequestCommand)).Should().Be.EqualTo(1);
-			ApproveRequestCommand command =  (ApproveRequestCommand) CommandDispatcher.AllComands.First(x => x.GetType() == typeof(ApproveRequestCommand));
-			command.PersonRequestId.Should().Be.EqualTo(waitListedRequest.Id);
+			waitListedRequest.IsApproved.Should().Be.False();
+			personRequest.IsApproved.Should().Be.False();
 		}
 
 		[Test]
@@ -403,9 +219,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(personRequest);
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 
-			CommandDispatcher.AllComands.Count(x => x.GetType() == typeof(ApproveRequestCommand)).Should().Be.EqualTo(1);
-			ApproveRequestCommand command = (ApproveRequestCommand)CommandDispatcher.AllComands.First(x => x.GetType() == typeof(ApproveRequestCommand));
-			command.PersonRequestId.Should().Be.EqualTo(personRequest.Id);
+			personRequest.IsApproved.Should().Be.True();
+			waitListedRequest.IsApproved.Should().Be.False();
 		}
 
 		[Test]
@@ -469,8 +284,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(waitListedRequest3);
 			PersonRequestRepository.Add(waitListedRequest4);
 
-
-
 			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
 			{
 				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 13)
@@ -484,7 +297,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 
-			CommandDispatcher.AllComands.Count(x => x.GetType() == typeof(ApproveRequestCommand)).Should().Be.EqualTo(3);
+			waitListedRequest1.IsApproved.Should().Be(true);
+			waitListedRequest2.IsApproved.Should().Be(true);
+			waitListedRequest3.IsApproved.Should().Be(true);
+			waitListedRequest4.IsApproved.Should().Be(false);
+			personRequest.IsApproved.Should().Be(false);
 		}
 
 		[Test]
@@ -545,9 +362,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 
-			CommandDispatcher.AllComands.Count(x => x.GetType() == typeof(ApproveRequestCommand)).Should().Be.EqualTo(1);
-			ApproveRequestCommand command = (ApproveRequestCommand)CommandDispatcher.AllComands.First(x => x.GetType() == typeof(ApproveRequestCommand));
-			command.PersonRequestId.Should().Be.EqualTo(personRequest.Id);
+			personRequest.IsApproved.Should().Be.True();
+			waitListedRequest.IsApproved.Should().Be.False();
 		}
 
 		[Test]
@@ -618,7 +434,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 
-			CommandDispatcher.AllComands.Count(x => x.GetType() == typeof(ApproveRequestCommand)).Should().Be.EqualTo(2);
+			waitListedRequest.IsApproved.Should().Be.True();
+			agentBRequest.IsApproved.Should().Be.False();
+			personRequest.IsApproved.Should().Be.True();
 		}
 
 		[Test]
@@ -674,7 +492,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 			PersonRequestRepository.Add(personRequest);
 			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
 
-			CommandDispatcher.AllComands.Count(x => x.GetType() == typeof(ApproveRequestCommand)).Should().Be.EqualTo(1);
+			waitListedRequest.IsApproved.Should().Be.False();
+			personRequest.IsApproved.Should().Be.True();
 		}
 
 		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)
