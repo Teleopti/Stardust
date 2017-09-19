@@ -16202,7 +16202,7 @@ Do you want to participate?</value>
     <comment>Filter planning periods</comment>
   </data>
   <data name="ETOTRequests" xml:space="preserve">
-    <value>ET/OT Requests</value>
+    <value>Overtime Requests</value>
     <comment>use in fat client, a tab's name in workflow control setting. it means extra time/over time requests</comment>
   </data>
   <data name="UnavailableSeries" xml:space="preserve">

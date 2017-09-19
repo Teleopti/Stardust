@@ -11000,7 +11000,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ET/OT Requests.
+        ///   Looks up a localized string similar to Overtime Requests.
         /// </summary>
         public static string ETOTRequests {
             get {
@@ -17794,6 +17794,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ModifySkillArea {
             get {
                 return ResourceManager.GetString("ModifySkillArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modify Skill Group.
+        /// </summary>
+        public static string ModifySkillGroup {
+            get {
+                return ResourceManager.GetString("ModifySkillGroup", resourceCulture);
             }
         }
         
