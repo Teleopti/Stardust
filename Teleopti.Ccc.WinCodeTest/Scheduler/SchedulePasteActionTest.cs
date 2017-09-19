@@ -59,7 +59,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldKeepStartHourWhenPastingOverDST([Values(29, 30)] int dateNumber)
 		{
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-			
 			var target = new SchedulePasteAction(null, new GridlockManager(), SchedulePartFilter.None);
 			var agent = new Person().InTimeZone(timeZone);
 			var scenario = new Scenario();
@@ -72,7 +71,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			var sourceStart = TimeZoneHelper.ConvertFromUtc(sourceDST.PersonAssignment().Period.StartDateTime, timeZone);
 			var destinationStart = TimeZoneHelper.ConvertFromUtc(destinationNonDST.PersonAssignment().Period.StartDateTime, timeZone);
-
 			sourceStart.Hour.Should().Be.EqualTo(destinationStart.Hour);
 		}
 	}
