@@ -29,8 +29,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	var weekStart = 3;
 	var baseUtcOffsetInMinutes;
 	var daylightSavingAdjustment;
-	var overtimeRequestDetailViewModel;
-
 	Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 		weekStart = data.WeekStart;
 		baseUtcOffsetInMinutes = data.BaseUtcOffsetInMinutes;
@@ -38,6 +36,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	});
 
 	var RequestDetailParentViewModel = function () {
+
 		var self = this;
 		self.requestViewModel = ko.observable();
 		self.baseUtcOffsetInMinutes = baseUtcOffsetInMinutes;
@@ -55,6 +54,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 				}
 			});
 			return vm;
+		};
+
+		self.createOvertimeRequestViewModel = function(data) {
+			var isViewingDetail = true;
+			var overtimeRequestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, _addItemAtTop, parentViewModel, weekStart, isViewingDetail);
+			self.requestViewModel(overtimeRequestViewModel);
+			self.requestViewModel().Initialize(data);
 		};
 
 		self.createShiftTradeRequestViewModel = function (id) {
@@ -185,13 +191,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		});
 	}
 
-	function createOvertimeRequestViewModel(data, parentViewModel) {
-		var isViewingDetail = true;
-		overtimeRequestDetailViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, _addItemAtTop, parentViewModel, weekStart, isViewingDetail);
-		overtimeRequestDetailViewModel.Initialize(data);
-	};
-
 	function _setRequest(data) {
+
 		if (data.TypeEnum == 2) {
 			parentViewModel.createShiftTradeRequestViewModel(data.Id);
 			parentViewModel.requestViewModel().Initialize(data);
@@ -199,7 +200,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		} else if (data.TypeEnum == 3) {
 			parentViewModel.createShiftExchangeOfferViewModel(data);
 		} else if (data.TypeEnum == 4) {
-			createOvertimeRequestViewModel(data, parentViewModel);
+			parentViewModel.createOvertimeRequestViewModel(data);
 		}else {
 			var model = parentViewModel.createRequestViewModel();
 			model.IsUpdate(true);
@@ -215,19 +216,10 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _enableDisableDetailSection(data) {
-		//TODO: for OVERTIME requests
-		if(data.TypeEnum == 4) {
-			if (data.Link.Methods.indexOf("PUT") == -1) {
-				overtimeRequestViewModel.IsEditable(false);
-			} else {
-				overtimeRequestViewModel.IsEditable(true);
-			}
+		if (data.Link.Methods.indexOf("PUT") == -1) {
+			parentViewModel.requestViewModel().IsEditable(false);
 		} else {
-			if (data.Link.Methods.indexOf("PUT") == -1) {
-				parentViewModel.requestViewModel().IsEditable(false);
-			} else {
-				parentViewModel.requestViewModel().IsEditable(true);
-			}
+			parentViewModel.requestViewModel().IsEditable(true);
 		}
 	}
 
@@ -273,16 +265,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		ShowRequest: function (data) {
 			_setRequest(data);
 			_enableDisableDetailSection(data);
-
-			//Jianfeng TODO: we dont have to assign viewmodel to parentViewModel.requestViewModel() and empty 
-			//it only for returning. This should be refactored but only handle OVERTIME requests in new way for now.
-			if(data.TypeEnum == 4){
-				return overtimeRequestViewModel;
-			} else {
-				var detailModel = parentViewModel.requestViewModel();
-				parentViewModel.requestViewModel(null);
-				return detailModel;
-			}
+			var detailModel = parentViewModel.requestViewModel();
+			parentViewModel.requestViewModel(null);
+			return detailModel;
 		},
 		AddTextRequestClick: function () {
 			_addTextRequestClick();
