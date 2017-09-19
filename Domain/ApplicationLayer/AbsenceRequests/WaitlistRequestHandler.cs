@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.AbsenceWaitlisting;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer.Commands;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
@@ -45,6 +46,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IPartTimePercentageRepository _partTimePercentageRepository;
 		private readonly IContractScheduleRepository _contractScheduleRepository;
 		private readonly IHandleCommand<ApproveRequestCommand> _approveRequestCommandHandler;
+		private readonly IAlreadyAbsentValidator _alreadyAbsentValidator;
 
 		public WaitlistRequestHandler(ISkillCombinationResourceRepository skillCombinationResourceRepository,
 			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
@@ -58,7 +60,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			INow now,
 			SchedulePartModifyAndRollbackServiceWithoutStateHolder rollbackService,
 			ISkillTypeRepository skillTypeRepository, IPersonRepository personRepository, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository,
-			IContractScheduleRepository contractScheduleRepository, IHandleCommand<ApproveRequestCommand> approveRequestCommandHandler)
+			IContractScheduleRepository contractScheduleRepository, IHandleCommand<ApproveRequestCommand> approveRequestCommandHandler,
+			IAlreadyAbsentValidator alreadyAbsentValidator)
 		{
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_scheduleStorage = scheduleStorage;
@@ -80,6 +83,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_partTimePercentageRepository = partTimePercentageRepository;
 			_contractScheduleRepository = contractScheduleRepository;
 			_approveRequestCommandHandler = approveRequestCommandHandler;
+			_alreadyAbsentValidator = alreadyAbsentValidator;
 		}
 
 		public class WaitlistHelpers
@@ -187,6 +191,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					{
 						var requestPeriod = pRequest.Request.Period;
 						var schedules = helpers.PersonsSchedules[pRequest.Person];
+						if (_alreadyAbsentValidator.Validate((IAbsenceRequest) pRequest.Request, schedules))
+						{
+							pRequest.Deny("RequestDenyReasonAlreadyAbsent", new PersonRequestCheckAuthorization(),null,PersonRequestDenyOption.AlreadyAbsence);
+							continue;
+						}
 						var dateOnlyPeriod = helpers.LoadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(pRequest.Person.PermissionInformation.DefaultTimeZone());
 						var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
 						var startDateTimeInPersonTimeZone = TimeZoneHelper.ConvertFromUtc(pRequest.RequestedDate, pRequest.Person.PermissionInformation.DefaultTimeZone());
