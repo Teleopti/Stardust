@@ -103,6 +103,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private WaitlistHelpers initializeWaitlistHandling(IEnumerable<Guid> requestIdsToSkip)
 		{
 			var helpers = new WaitlistHelpers();
+			_contractRepository.LoadAll();
+			_skillTypeRepository.LoadAll();
+			_partTimePercentageRepository.LoadAll();
+			_contractScheduleRepository.LoadAllAggregate();
+			_activityRepository.LoadAll();
+			helpers.Skills = _skillRepository.LoadAllSkills().ToList();
+
 			if (!_skillCombinationResourceReadModelValidator.Validate())
 			{
 				logger.Error(Resources.DenyReasonTechnicalIssues + "Read model is not up to date");
@@ -133,15 +140,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				helpers.InitSuccess = false;
 				return helpers;
 			}
-
-			_activityRepository.LoadAll();
-			_skillTypeRepository.LoadAll();
-			_contractRepository.LoadAll();
-			_partTimePercentageRepository.LoadAll();
-			_contractScheduleRepository.LoadAllAggregate();
-
-			helpers.Skills = _skillRepository.LoadAllSkills().ToList();
-
+			
 			var skillIds = new HashSet<Guid>();
 			foreach (var skillCombinationResource in helpers.CombinationResources)
 			{
@@ -168,7 +167,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			helpers.PersonsSchedules =
 				_scheduleStorage.FindSchedulesForPersons(
 					new ScheduleDateTimePeriod(helpers.LoadSchedulesPeriodToCoverForMidnightShifts, persons), _currentScenario.Current(),
-					new PersonProvider(persons), new ScheduleDictionaryLoadOptions(false, false), persons);
+					new PersonProvider(persons) {DoLoadByPerson = true}, new ScheduleDictionaryLoadOptions(false, false), persons);
 
 			helpers.InitSuccess = true;
 			return helpers;
