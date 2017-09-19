@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			return new SchedulingOptions
 			{
+
 				UseAvailability = false,
 				UsePreferences = false,
 				UseRotations = false,

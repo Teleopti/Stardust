@@ -308,6 +308,10 @@
     <Compile Include="Intraday\SkillTypeInfoProvider.cs" />
     <Compile Include="Intraday\SkillTypesWithBacklog.cs" />
     <Compile Include="Notification\UserDeviceService.cs" />
+    <Compile Include="Optimization\BlockPreferenceProviderUsingFilters.cs" />
+    <Compile Include="Optimization\BlockPreferenceProviderUsingFiltersFactory.cs" />
+    <Compile Include="Optimization\FixedBlockPreferenceProvider.cs" />
+    <Compile Include="Optimization\IBlockPreferenceProvider.cs" />
     <Compile Include="Optimization\IntradayOptimization.cs" />
     <Compile Include="Optimization\IntradayOptimizationCallbackInfo.cs" />
     <Compile Include="Optimization\NoIntradayOptimizationCallback.cs" />

@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class TeamBlockSchedulingOptions : ITeamBlockSchedulingOptions
 	{
+		
 		public bool IsBlockScheduling(SchedulingOptions schedulingOptions)
 		{
 			return schedulingOptions.UseBlock && !schedulingOptions.UseTeam;
