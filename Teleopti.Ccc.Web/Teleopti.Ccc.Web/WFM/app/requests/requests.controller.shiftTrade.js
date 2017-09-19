@@ -7,8 +7,6 @@
 
 	requestsShiftTradeController.$inject = [
 		'$scope',
-		'$filter',
-		'$injector',
 		'$translate',
 		'$timeout',
 		'$stateParams',
@@ -28,8 +26,6 @@
 
 	function requestsShiftTradeController(
 		$scope,
-		$filter,
-		$injector,
 		$translate,
 		$timeout,
 		$stateParams,

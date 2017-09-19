@@ -7,8 +7,6 @@
 
 	requestsOvertimeController.$inject = [
 		'$scope',
-		'$filter',
-		'$injector',
 		'$translate',
 		'$timeout',
 		'$stateParams',
@@ -28,8 +26,6 @@
 
 	function requestsOvertimeController(
 		$scope,
-		$filter,
-		$injector,
 		$translate,
 		$timeout,
 		$stateParams,

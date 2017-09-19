@@ -7,8 +7,6 @@
 
 	requestsAbsenceAndTextController.$inject = [
 		'$scope',
-		'$filter',
-		'$injector',
 		'$translate',
 		'$timeout',
 		'$stateParams',
@@ -28,8 +26,6 @@
 
 	function requestsAbsenceAndTextController(
 		$scope,
-		$filter,
-		$injector,
 		$translate,
 		$timeout,
 		$stateParams,
