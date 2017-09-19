@@ -25,6 +25,7 @@
 		vm.goToAgents = rtaStateService.goToAgents;
 
 		var pollPromise;
+		var destroyed = false;
 
 		vm.selectTeamOrSite = function (selectable) {
 			selectable.isSelected = !selectable.isSelected;
@@ -42,6 +43,8 @@
 		}
 
 		function pollNext() {
+			if (destroyed)
+				return;
 			pollPromise = $timeout(function () {
 				getSites().then(pollNext)
 			}, 5000);
@@ -52,7 +55,11 @@
 				$timeout.cancel(pollPromise);
 		}
 
-		$scope.$on('$destroy', pollStop);
+		$scope.$on('$destroy', 
+		function(){
+			destroyed = true;
+			pollStop()
+		});
 
 		function getSites() {
 			return rtaService.getOverviewModelFor(rtaStateService.pollParams())
