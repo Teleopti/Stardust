@@ -34,23 +34,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		{
 			if (isNotValid(personRequest)) return;
 
-			var resultOfAvailableSkillsValidator = _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
-			if (!resultOfAvailableSkillsValidator.IsValid)
-			{
-				denyRequest(personRequest, resultOfAvailableSkillsValidator.InvalidReason);
-			}
+			validSkills(personRequest);
 		}
 
 		public void Process(IPersonRequest personRequest, bool isAutoGrant)
 		{
 			if (isNotValid(personRequest)) return;
 
-			var resultOfAvailableSkillsValidator = _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
-			if (!resultOfAvailableSkillsValidator.IsValid)
-			{
-				denyRequest(personRequest, resultOfAvailableSkillsValidator.InvalidReason);
-				return;
-			}
+			var skills = validSkills(personRequest);
+			if(skills == null) return;
 
 			personRequest.Pending();
 			if (!isAutoGrant) return;
@@ -59,7 +51,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				IsAutoGrant = true,
-				OvertimeValidatedSkills = resultOfAvailableSkillsValidator.Skills
+				OvertimeValidatedSkills = skills
 			};
 			_commandDispatcher.Execute(command);
 
@@ -96,6 +88,18 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				return true;
 			}
 			return false;
+		}
+
+		private ISkill[] validSkills(IPersonRequest personRequest)
+		{
+			var resultOfAvailableSkillsValidator = _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
+			if (!resultOfAvailableSkillsValidator.IsValid)
+			{
+				denyRequest(personRequest, resultOfAvailableSkillsValidator.InvalidReason);
+				return null;
+			}
+
+			return resultOfAvailableSkillsValidator.Skills;
 		}
 	}
 }
