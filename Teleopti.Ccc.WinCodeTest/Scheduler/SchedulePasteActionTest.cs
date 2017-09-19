@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -51,6 +52,28 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				.Should().Be.EqualTo(2);
 			dic[agent].ScheduledDay(new DateOnly(2000, 1, 2)).PersonAssignment(true).ShiftLayers.Count()
 				.Should().Be.EqualTo(2);
+		}
+
+		[Test]
+		[Ignore("#45888 To be fixed")]
+		public void ShouldKeepStartHourWhenPastingOverDST([Values(29, 30)] int dateNumber)
+		{
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+			
+			var target = new SchedulePasteAction(null, new GridlockManager(), SchedulePartFilter.None);
+			var agent = new Person().InTimeZone(timeZone);
+			var scenario = new Scenario();
+			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2017, 1, 1, 2018, 1, 1)), new Dictionary<IPerson, IScheduleRange>());
+			var sourceDST = ExtractedSchedule.CreateScheduleDay(dic, agent, new DateOnly(2017, 10, 26));
+			sourceDST.CreateAndAddActivity(new Activity(), new DateTimePeriod(2017, 10, 26, 8, 2017, 10, 26, 17), new ShiftCategory("_"));
+			var destinationNonDST = ExtractedSchedule.CreateScheduleDay(dic, agent, new DateOnly(2017, 10, dateNumber));
+
+			target.Paste(sourceDST, destinationNonDST, new PasteOptions {Default = true});
+
+			var sourceStart = TimeZoneHelper.ConvertFromUtc(sourceDST.PersonAssignment().Period.StartDateTime, timeZone);
+			var destinationStart = TimeZoneHelper.ConvertFromUtc(destinationNonDST.PersonAssignment().Period.StartDateTime, timeZone);
+
+			sourceStart.Hour.Should().Be.EqualTo(destinationStart.Hour);
 		}
 	}
 }
