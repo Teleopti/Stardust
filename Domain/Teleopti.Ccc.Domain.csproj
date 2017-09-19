@@ -301,6 +301,7 @@
     <Compile Include="Intraday\IntradaySkillProvider.cs" />
     <Compile Include="Intraday\ISkillTypeInfo.cs" />
     <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
+    <Compile Include="Intraday\ModifySkillGroup.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModelCreator.cs" />
     <Compile Include="Intraday\SkillTypeIdentifier.cs" />

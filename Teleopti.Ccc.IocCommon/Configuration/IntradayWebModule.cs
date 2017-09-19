@@ -54,6 +54,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<FetchSkillArea>().SingleInstance();
 			builder.RegisterType<CreateSkillArea>().SingleInstance();
 			builder.RegisterType<DeleteSkillArea>().SingleInstance();
+			builder.RegisterType<ModifySkillGroup>().SingleInstance();
 			builder.RegisterType<LoadSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
 			builder.RegisterType<IntradayMonitorDataLoader>().As<IIntradayMonitorDataLoader>().SingleInstance();
 			builder.RegisterType<LatestStatisticsIntervalIdLoader>().As<ILatestStatisticsIntervalIdLoader>().SingleInstance();
