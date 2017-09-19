@@ -5,13 +5,14 @@
 	IntradayConfigController.$inject = [
 		'$state',
 		'intradayService',
+		'SkillGroupSvc',
 		'$filter',
 		'NoticeService',
 		'$translate',
 		'Toggle',
 		'skillIconService'];
 
-	function IntradayConfigController($state, intradayService, $filter, NoticeService, $translate, toggleSvc, skillIconService) {
+	function IntradayConfigController($state, intradayService, SkillGroupSvc, $filter, NoticeService, $translate, toggleSvc, skillIconService) {
 		var vm = this;
 		vm.skills = [];
 		vm.skillAreaName = '';
@@ -47,7 +48,7 @@
 				return;
 			}
 
-			intradayService.createSkillArea
+			SkillGroupSvc.createSkillGroup
 				.query({
 					Name: vm.skillAreaName,
 					Skills: selectedSkillIds

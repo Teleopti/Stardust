@@ -6,6 +6,7 @@
 		'$scope',
 		'$state',
 		'intradayService',
+		'SkillGroupSvc',
 		'$filter',
 		'NoticeService',
 		'$interval',
@@ -24,6 +25,7 @@
 	function intradayController($scope,
 								$state,
 								intradayService,
+								SkillGroupSvc,
 								$filter,
 								NoticeService,
 								$interval,
@@ -115,7 +117,7 @@
 
 		vm.deleteSkillArea = function (skillArea) {
 			cancelTimeout();
-			intradayService.deleteSkillArea
+			SkillGroupSvc.deleteSkillGroup
 				.remove({
 					id: skillArea.Id
 				})
@@ -177,7 +179,7 @@
 		}
 
 		var reloadSkillAreas = function (isNew) {
-			intradayService.getSkillAreas.query().$promise.then(function (result) {
+			SkillGroupSvc.getSkillGroups.query().$promise.then(function (result) {
 				getAutoCompleteControls();
 				vm.skillAreas = $filter('orderBy')(result.SkillAreas, 'Name');
 				if (isNew) {

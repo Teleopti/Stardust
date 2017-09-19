@@ -17,43 +17,6 @@
 				}
 			);
 
-			this.createSkillArea = $resource(
-				'../api/intraday/skillarea',
-				{},
-				{
-					query: {
-						method: 'POST',
-						params: {},
-						isArray: false
-					}
-				}
-			);
-
-			this.getSkillAreas = $resource(
-				'../api/intraday/skillarea',
-				{},
-				{
-					query: {
-						method: 'GET',
-						params: {},
-						isArray: false,
-                        cancellable: true
-					}
-				}
-			);
-
-			this.deleteSkillArea = $resource(
-				'../api/intraday/skillarea/:id',
-				{id: '@id'},
-				{
-					remove: {
-						method: 'DELETE',
-						params: {},
-						isArray: false
-					}
-				}
-			);
-
 			this.getSkillAreaMonitorStatistics = $resource(
 				'../api/intraday/monitorskillareastatistics/:id',
 				{id: '@id'},

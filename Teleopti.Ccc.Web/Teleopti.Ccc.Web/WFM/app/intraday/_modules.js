@@ -9,7 +9,8 @@
         'toggleService',
         'angularMoment',
         'wfm.dateOffset',
-        'wfm.utilities'
+        'wfm.utilities',
+		'skillGroupService'
     ]).run([
         '$rootScope',
         '$state',
