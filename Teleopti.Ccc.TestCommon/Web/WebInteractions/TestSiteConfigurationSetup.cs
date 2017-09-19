@@ -118,27 +118,27 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 				//sometimes throws "Process window not found" - don't make that exception bubble up in this teardown...
 				//https://github.com/ElemarJR/IISExpress.Automation/blob/master/src/IISExpress.Automation/ProcessEnvelope.cs
 			}
-
-			waitForIISExpressToClose();
+			
 			killAllIISExpress();
+			waitToBeKilled();
 
 			_portsConfiguration?.Dispose();
 			writeWebConfigs();
 		}
 
-		private static void waitForIISExpressToClose()
+		private static void waitToBeKilled()
 		{
-			TestLog.Static.Debug("waitForIISExpressToClose");
-			var counter = 0;
-			while (Process.GetProcessesByName("iisexpress").Any())
-			{
-				TestLog.Static.Debug("waitForIISExpressToClose/wait");
-				Thread.Sleep(100);
-				counter++;
-				if (counter == 50)
-					break;
-			}
-			TestLog.Static.Debug("/waitForIISExpressToClose");
+			TestLog.Static.Debug("waittobekilled");
+			Process.GetProcessesByName("iisexpress")
+				.ForEach(p =>
+				{
+					TestLog.Static.Debug("waittobekilled/wait");
+					if (!p.WaitForExit(2000))
+					{
+						TestLog.Static.Debug("Couldn't kill one of iisexpress processes!!");
+					}
+				});
+			TestLog.Static.Debug("/waittobekilled");
 		}
 
 		private static void killAllIISExpress()
@@ -147,8 +147,11 @@ namespace Teleopti.Ccc.TestCommon.Web.WebInteractions
 			Process.GetProcessesByName("iisexpress")
 				.ForEach(p =>
 				{
-					TestLog.Static.Debug("killAllIISExpress/kill");
-					p.Kill();
+					if (!p.HasExited)
+					{
+						TestLog.Static.Debug("killAllIISExpress/kill");
+						p.Kill();
+					}
 				});
 			TestLog.Static.Debug("/killAllIISExpress");
 		}
