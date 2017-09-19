@@ -138,7 +138,7 @@ INSERT INTO #AllDynamicOptionalValues
 SELECT * FROM dbo.SplitStringString(@dynamic_values)
 
 INSERT INTO #IntermediatePersonId
-SELECT ReferenceId
+SELECT DISTINCT ReferenceId
 FROM dbo.OptionalColumnValue AS ocv
 WHERE
  EXISTS

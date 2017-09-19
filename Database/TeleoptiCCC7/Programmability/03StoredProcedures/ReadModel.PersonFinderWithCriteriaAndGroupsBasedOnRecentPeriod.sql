@@ -137,7 +137,7 @@ INSERT INTO #AllGroupId
 SELECT * FROM dbo.SplitStringString(@group_ids)
 
 INSERT INTO #IntermediatePersonId
-SELECT PersonId
+SELECT DISTINCT PersonId
 FROM ReadModel.groupingreadonly
 Join #AllGroupId on ReadModel.groupingreadonly.GroupId = #AllGroupId.Id
 WHERE businessunitid = @business_unit_id

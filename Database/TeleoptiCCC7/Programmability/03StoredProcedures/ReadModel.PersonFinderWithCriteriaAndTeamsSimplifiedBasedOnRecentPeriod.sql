@@ -136,7 +136,7 @@ SELECT @start_date_ISO = CONVERT(NVARCHAR(10), @start_date,120)
 SELECT @end_date_ISO = CONVERT(NVARCHAR(10), @end_date,120)
 
 INSERT INTO  #IntermediatePersonId
-SELECT p.Id FROM #TeamIds t 
+SELECT DISTINCT p.Id FROM #TeamIds t 
 INNER JOIN dbo.PersonPeriod pp with (nolock)   ON t.tId = pp.Team 
 INNER JOIN dbo.Person p with (nolock) ON pp.Parent = p.Id 
 WHERE p.IsDeleted = 0

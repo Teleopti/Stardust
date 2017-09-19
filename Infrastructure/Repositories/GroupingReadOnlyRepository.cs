@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForPeople(IEnumerable<Guid> peopleIdCollection)
 		{
 			const string sql =
-				"SELECT PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId "
+				"SELECT DISTINCT PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId "
 				+ "FROM ReadModel.groupingreadonly "
 				+ "WHERE businessunitid=:businessUnitId "
 				+ "AND PageId IN (:pageId) "
