@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		private readonly IActivityRepository _activityRepository;
 		private readonly ISkillRepository _skillRepository;
 		private readonly ISkillTypeRepository _skillTypeRepository;
+		private ISkill[] _validSkills;
 
 		private static readonly ILog logger = LogManager.GetLogger(typeof(OvertimeRequestProcessor));
 
@@ -29,8 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			_skillTypeRepository = skillTypeRepository;
 			_overtimeRequestAvailableSkillsValidator = overtimeRequestAvailableSkillsValidator;
 		}
-
-		public void Process(IPersonRequest personRequest, bool isAutoGrant)
+		public bool CheckAndProcessDeny(IPersonRequest personRequest)
 		{
 			// Preload to get rid of proxies later on #45827
 			_activityRepository.LoadAll();
@@ -42,16 +42,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 				var resultOfBasicValidator = overtimeRequestValidator.Validate(personRequest);
 				if (resultOfBasicValidator.IsValid) continue;
 				denyRequest(personRequest, resultOfBasicValidator.InvalidReason);
-				return;
+				return true;
 			}
 
 			var resultOfAvailableSkillsValidator = _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
+			_validSkills = resultOfAvailableSkillsValidator.Skills;
 			if (!resultOfAvailableSkillsValidator.IsValid)
 			{
 				denyRequest(personRequest, resultOfAvailableSkillsValidator.InvalidReason);
-				return;
+				return true;
 			}
 
+			return false;
+		}
+
+		public void Process(IPersonRequest personRequest, bool isAutoGrant)
+		{
 			personRequest.Pending();
 			if (!isAutoGrant) return;
 
@@ -59,7 +65,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				IsAutoGrant = true,
-				OvertimeValidatedSkills = resultOfAvailableSkillsValidator.Skills
+				OvertimeValidatedSkills = _validSkills
 			};
 			_commandDispatcher.Execute(command);
 

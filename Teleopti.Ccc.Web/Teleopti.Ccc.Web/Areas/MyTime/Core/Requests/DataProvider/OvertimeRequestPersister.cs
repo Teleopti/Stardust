@@ -48,6 +48,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 			}
 
 			personRequest = _mapper.Map(form, personRequest);
+			var isDenied = _overtimeRequestProcessor.CheckAndProcessDeny(personRequest);
+			if (isDenied) return _requestsMapper.Map(personRequest);
+
 			if (isCreatingNew)
 			{
 				_personRequestRepository.Add(personRequest);
