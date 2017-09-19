@@ -19,9 +19,26 @@ namespace Teleopti.Ccc.TestCommon
 			_approvalService = requestApprovalService;
 		}
 
-		public IRequestApprovalService MakeRequestApprovalService(IScheduleDictionary scheduleDictionary, IScenario scenario, IPersonRequest personRequest, IDictionary<string, object> commandDatas)
+		public IRequestApprovalService MakeAbsenceRequestApprovalService(IScheduleDictionary scheduleDictionary, IScenario scenario,
+			IPerson person)
 		{
-			return _approvalService ?? (_approvalService = MockRepository.GenerateMock<AbsenceRequestApprovalService, IRequestApprovalService, IAbsenceApprovalService>(scenario, scheduleDictionary,null,null,null,null));
+			return _approvalService ?? (_approvalService = MockRepository.GenerateMock<AbsenceRequestApprovalService, IRequestApprovalService, IAbsenceApprovalService>(scenario, scheduleDictionary, null, null, null, null));
+		}
+
+		public IRequestApprovalService MakeShiftTradeRequestApprovalService(IScheduleDictionary scheduleDictionary,
+			IPerson person)
+		{
+			return _approvalService ??
+				   (_approvalService =
+					   MockRepository.GenerateMock<ShiftTradeRequestApprovalService, IRequestApprovalService>(null, null, null, null));
+		}
+
+		public IRequestApprovalService MakeOvertimeRequestApprovalService(ISkill[] validatedSkills)
+		{
+			return _approvalService ??
+				   (_approvalService =
+					   MockRepository.GenerateMock<OvertimeRequestApprovalService, IRequestApprovalService>(null, null, null,
+						   validatedSkills));
 		}
 	}
 }

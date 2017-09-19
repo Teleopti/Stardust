@@ -59,10 +59,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			{
 				PersonRequestId = personRequest.Id.GetValueOrDefault(),
 				IsAutoGrant = true,
-				Datas = new Dictionary<string, object>
-				{
-					{"ValidatedSkills", resultOfAvailableSkillsValidator.Skills }
-				}
+				OvertimeValidatedSkills = resultOfAvailableSkillsValidator.Skills
 			};
 			_commandDispatcher.Execute(command);
 

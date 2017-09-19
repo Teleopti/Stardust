@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				new SwapAndModifyService(null, null),
 				new FakeGlobalSettingDataRepository(),
 				businessRules, new CheckingPersonalAccountDaysProvider(_personAbsenceAccountRepository), new DoNothingScheduleDayChangeCallBack()
-				, null, null, overtimeRequestSkillProvider, null, null
+				, null, null, overtimeRequestSkillProvider, null
 			);
 
 			var writeProtectedScheduleCommandValidator = new WriteProtectedScheduleCommandValidator(

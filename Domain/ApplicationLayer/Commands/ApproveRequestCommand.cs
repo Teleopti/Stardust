@@ -13,6 +13,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 		public IList<string> ErrorMessages { get; set; }
 		public string ReplyMessage { get; set; }
 		public bool IsReplySuccess { get; set; }
-		public IDictionary<string, object> Datas { get; set; } = new Dictionary<string, object>();
+		public ISkill[] OvertimeValidatedSkills { get; set; }
 	}
 }

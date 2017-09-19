@@ -16,7 +16,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly IOvertimeRequestUnderStaffingSkillProvider _overtimeRequestUnderStaffingSkillProvider;
 		private readonly IOvertimeRequestSkillProvider _overtimeRequestSkillProvider;
-		private readonly ISkillOpenHourFilter _skillOpenHourFilter;
 		private readonly ICommandDispatcher _commandDispatcher;
 
 		public RequestApprovalServiceFactory(ISwapAndModifyService swapAndModifyService,
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			IPersonRequestCheckAuthorization personRequestCheckAuthorization,
 			IOvertimeRequestUnderStaffingSkillProvider overtimeRequestUnderStaffingSkillProvider,
 			IOvertimeRequestSkillProvider overtimeRequestSkillProvider,
-			ISkillOpenHourFilter skillOpenHourFilter, ICommandDispatcher commandDispatcher)
+			ICommandDispatcher commandDispatcher)
 		{
 			_businessRulesForPersonalAccountUpdate = businessRulesForPersonalAccountUpdate;
 			_checkingPersonalAccountDaysProvider = checkingPersonalAccountDaysProvider;
@@ -35,40 +34,42 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_overtimeRequestUnderStaffingSkillProvider = overtimeRequestUnderStaffingSkillProvider;
 			_overtimeRequestSkillProvider = overtimeRequestSkillProvider;
-			_skillOpenHourFilter = skillOpenHourFilter;
 			_commandDispatcher = commandDispatcher;
 			_swapAndModifyService = swapAndModifyService;
 			_globalSettingDataRepository = globalSettingDataRepository;
 		}
 
-		public IRequestApprovalService MakeRequestApprovalService(IScheduleDictionary scheduleDictionary, IScenario scenario, IPersonRequest personRequest, IDictionary<string, object> commandDatas)
+		public IRequestApprovalService MakeAbsenceRequestApprovalService(IScheduleDictionary scheduleDictionary,
+			IScenario scenario, IPerson person)
 		{
-			var requestType = personRequest.Request.RequestType;
-			var scheduleRange = scheduleDictionary[personRequest.Person];
+			var scheduleRange = scheduleDictionary[person];
 			var businessRules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
 
-			switch (requestType)
-			{
-				case RequestType.AbsenceRequest:
-					return new AbsenceRequestApprovalService(
-						scenario,
-						scheduleDictionary,
-						businessRules,
-						_scheduleDayChangeCallback,
-						_globalSettingDataRepository,
-						_checkingPersonalAccountDaysProvider);
-				case RequestType.ShiftTradeRequest:
-					return new ShiftTradeRequestApprovalService(
-						scheduleDictionary,
-						_swapAndModifyService,
-						businessRules,
-						_personRequestCheckAuthorization);
-				case RequestType.OvertimeRequest:
-					commandDatas.TryGetValue("ValidatedSkills", out object validatedSkills);
-					return new OvertimeRequestApprovalService(_overtimeRequestUnderStaffingSkillProvider, _overtimeRequestSkillProvider, _commandDispatcher, validatedSkills as ISkill[]);
-			}
+			return new AbsenceRequestApprovalService(
+				scenario,
+				scheduleDictionary,
+				businessRules,
+				_scheduleDayChangeCallback,
+				_globalSettingDataRepository,
+				_checkingPersonalAccountDaysProvider);
+		}
 
-			return null;
+		public IRequestApprovalService MakeShiftTradeRequestApprovalService(IScheduleDictionary scheduleDictionary, IPerson person)
+		{
+			var scheduleRange = scheduleDictionary[person];
+			var businessRules = _businessRulesForPersonalAccountUpdate.FromScheduleRange(scheduleRange);
+			return new ShiftTradeRequestApprovalService(
+				scheduleDictionary,
+				_swapAndModifyService,
+				businessRules,
+				_personRequestCheckAuthorization);
+		}
+
+
+		public IRequestApprovalService MakeOvertimeRequestApprovalService(ISkill[] validatedSkills)
+		{
+			return new OvertimeRequestApprovalService(_overtimeRequestUnderStaffingSkillProvider, _overtimeRequestSkillProvider,
+				_commandDispatcher, validatedSkills);
 		}
 	}
 }

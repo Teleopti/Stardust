@@ -80,8 +80,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 			}
 
 			var scheduleDictionary = getSchedules(personRequest);
-			_requestApprovalService = _requestApprovalServiceFactory.MakeRequestApprovalService(scheduleDictionary,
-				_currentScenario.Current(), personRequest, command.Datas);
+			_requestApprovalService = getRequestApprovalService(personRequest, scheduleDictionary, command);
 
 			IList<IBusinessRuleResponse> brokenRuleResponses;
 			try
@@ -190,6 +189,24 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Commands
 				_currentScenario.Current());
 			((IReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
 			return scheduleDictionary;
+		}
+
+		private IRequestApprovalService getRequestApprovalService(IPersonRequest personRequest,
+			IScheduleDictionary scheduleDictionary, ApproveRequestCommand command)
+		{
+			var requestType = personRequest.Request.RequestType;
+			switch (requestType)
+			{
+				case RequestType.AbsenceRequest:
+					return _requestApprovalServiceFactory.MakeAbsenceRequestApprovalService(scheduleDictionary,
+						_currentScenario.Current(), personRequest.Person);
+				case RequestType.ShiftTradeRequest:
+					return _requestApprovalServiceFactory.MakeShiftTradeRequestApprovalService(scheduleDictionary,
+						personRequest.Person);
+				case RequestType.OvertimeRequest:
+					return _requestApprovalServiceFactory.MakeOvertimeRequestApprovalService(command.OvertimeValidatedSkills);
+			}
+			return null;
 		}
 	}
 }

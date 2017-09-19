@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalService(
-				scheduleDictionary, Scenario.Current(), personRequest, null);
+			var requestApprovalService = RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(
+				scheduleDictionary, Scenario.Current(), person);
 
 			requestApprovalService.Stub(
 				x => x.Approve(personRequest.Request))
@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			personRequest.Pending();
 
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalService(
-				scheduleDictionary, Scenario.Current(), personRequest, new Dictionary<string, object>());
+			var requestApprovalService = RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(
+				scheduleDictionary, Scenario.Current(), person);
 
 			requestApprovalService.Stub(
 				x => x.Approve(personRequest.Request))
@@ -123,8 +123,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var personRequest = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			personRequest.Pending();
 
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalService(
-				scheduleDictionary, Scenario.Current(), personRequest, new Dictionary<string, object>());
+			var requestApprovalService = RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(
+				scheduleDictionary, Scenario.Current(), person);
 
 			requestApprovalService.Stub(
 				x => x.Approve(personRequest.Request))
@@ -149,8 +149,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var personRequest1 = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 			var personRequest2 = createNewAbsenceRequest(person, absence, new DateTimePeriod(2015, 10, 3, 2015, 10, 9));
 
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalService(
-				scheduleDictionary, Scenario.Current(), personRequest1, new Dictionary<string, object>());
+			var requestApprovalService = RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(
+				scheduleDictionary, Scenario.Current(), person);
 
 			personRequest1.Pending();
 			personRequest2.Pending();
@@ -291,8 +291,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var dateTimePeriod = new DateTimePeriod( new DateTime(2016, 3, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 3, 1, 23, 00, 00, DateTimeKind.Utc));
 
 			var waitlistedPersonRequest = createWaitlistedAbsenceRequest(person, absence, dateTimePeriod);
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalService(
-				scheduleDictionary, Scenario.Current(), waitlistedPersonRequest, new Dictionary<string, object>());
+			var requestApprovalService = RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(
+				scheduleDictionary, Scenario.Current(), person);
 
 			requestApprovalService.Stub(x => x.Approve(waitlistedPersonRequest.Request))
 				.IgnoreArguments()
@@ -489,8 +489,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, dateTimePeriod);
 			var scheduleDictionary = new FakeScheduleDictionary();
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalService(
-				scheduleDictionary, Scenario.Current(), personRequest, new Dictionary<string, object>());
+			var requestApprovalService = RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(
+				scheduleDictionary, Scenario.Current(), person);
 
 			personRequest.Pending();
 
@@ -527,8 +527,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Requests.Core.Provider
 			var scheduleDictionary = new FakeScheduleDictionary();
 			var absence = AbsenceFactory.CreateAbsence("absence");
 			var personRequest = createNewAbsenceRequest(person, absence, dateTimePeriod);
-			var requestApprovalService = RequestApprovalServiceFactory.MakeRequestApprovalService(
-				scheduleDictionary, Scenario.Current(), personRequest, new Dictionary<string, object>());
+			var requestApprovalService = RequestApprovalServiceFactory.MakeAbsenceRequestApprovalService(
+				scheduleDictionary, Scenario.Current(), person);
 
 			personRequest.Pending();
 
