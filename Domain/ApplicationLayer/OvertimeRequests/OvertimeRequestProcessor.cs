@@ -34,14 +34,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		{
 			if (isNotValid(personRequest)) return;
 
-			validSkills(personRequest);
+			validateSkills(personRequest);
 		}
 
 		public void Process(IPersonRequest personRequest, bool isAutoGrant)
 		{
 			if (isNotValid(personRequest)) return;
 
-			var skills = validSkills(personRequest);
+			var skills = validateSkills(personRequest);
 			if(skills == null) return;
 
 			personRequest.Pending();
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 			return false;
 		}
 
-		private ISkill[] validSkills(IPersonRequest personRequest)
+		private ISkill[] validateSkills(IPersonRequest personRequest)
 		{
 			var resultOfAvailableSkillsValidator = _overtimeRequestAvailableSkillsValidator.Validate(personRequest);
 			if (!resultOfAvailableSkillsValidator.IsValid)
