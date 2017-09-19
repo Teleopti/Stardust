@@ -29,11 +29,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 
 		public RequestViewModel Persist(OvertimeRequestForm form)
 		{
-			var isCreatingNew = true;
 			IPersonRequest personRequest = null;
 			if (form.Id.HasValue)
 			{
-				isCreatingNew = false;
 				personRequest = _personRequestRepository.Get(form.Id.Value);
 
 				if (personRequest == null)
@@ -45,14 +43,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider {
 				{
 					throw new ApplicationException($"Person request with Id \"{form.Id}\" is not an overtime request.");
 				}
+				personRequest = _mapper.Map(form, personRequest);
+				_overtimeRequestProcessor.CheckAndProcessDeny(personRequest);
 			}
-
-			personRequest = _mapper.Map(form, personRequest);
-			var isDenied = _overtimeRequestProcessor.CheckAndProcessDeny(personRequest);
-			if (isDenied) return _requestsMapper.Map(personRequest);
-
-			if (isCreatingNew)
+			else
 			{
+				personRequest = _mapper.Map(form, null);
 				_personRequestRepository.Add(personRequest);
 
 				var isAutoGrant= getIsAutoGrant();
