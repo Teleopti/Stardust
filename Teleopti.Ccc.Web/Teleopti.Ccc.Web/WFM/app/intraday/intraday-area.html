@@ -82,6 +82,7 @@
 					</div>
 					<div ng-if="vm.toggles.unifiedSkillGroupManagement && vm.HasPermissionToModifySkillArea">
 						<button class="wfm-fab mini mini-active"
+								id="manage_skill_group_button"
 								ng-click="vm.configMode()">
 							<i class="mdi mdi-plus" style="top: 2px; position: relative;"></i>
 							<md-tooltip>{{'CreateSkillGroup'|translate}}</md-tooltip>
@@ -117,7 +118,7 @@
 									<i ng-show="vm.showIncluded" class="mdi mdi-eye-off"></i>
 									{{'IncludedSkills'|translate}}
 								</li>
-								<li ng-click='toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
+								<li ng-click='vm.toggleModal()'><i class="skill-area-delete mdi mdi-delete"></i>{{'Delete'|translate}}</li>
 							</ul>
 						</span>
 						</div>
@@ -353,18 +354,18 @@
 			</div>
 
 			<div ng-cloak class="modal-box">
-				<div ng-cloak ng-show="DeleteSkillAreaModal">
+				<div ng-cloak ng-show="vm.DeleteSkillAreaModal">
 					<div class="modalbg">
 						<div class="dialog-mini">
 							<div class="modal-inner-content">
-								<h3>{{selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
+								<h3>{{vm.selectedSkillArea.Name}}</h3> {{'AreYouSureYouWantToDelete'|translate}}
 							</div>
 							<div class="modal-actions">
 								<aside>
-									<button ng-click="toggleModal()" class="wfm-btn wfm-btn-invis-default">
+									<button ng-click="vm.toggleModal()" class="wfm-btn wfm-btn-invis-default">
 										{{'Cancel'|translate}}
 									</button>
-									<button ng-click='deleteSkillArea(selectedSkillArea)'
+									<button ng-click='vm.deleteSkillArea(vm.selectedSkillArea)'
 											class="skill-area-delete-confirm wfm-btn wfm-btn-invis-default">
 										{{'Delete'|translate}}
 									</button>

@@ -12,7 +12,7 @@ Background:
     And There is a skill to monitor called 'Skill B' with queue id '7' and queue name 'queue2' and activity 'activity2'
 	And There is an email-like skill to monitor called 'Skill BackOffice' with queue id '3' and queue name 'queue3' and activity 'activity3'
 
-
+@OnlyRunIfDisabled('WFM_Unified_Skill_Group_Management_45417')
 Scenario: Create Skill Area
 	Given I am viewing intraday page
 	And I select to create a new Skill Area
@@ -22,6 +22,15 @@ Scenario: Create Skill Area
 	Then I select to monitor skill area 'my Area'
 	And I should monitor 'my Area'
 
+@OnlyRunIfEnabled('WFM_Unified_Skill_Group_Management_45417')
+Scenario: Create Skill Group
+	Given I am viewing intraday page
+	And I select to create a new Skill Group
+	And I name the Skill Area 'my Area'
+	And I select the skill 'Skill A'
+	When I am done creating Skill Area 
+	Then I select to monitor skill area 'my Area'
+	And I should monitor 'my Area'
 
 Scenario: Remove Skill Area
 	Given there is a Skill Area called 'Area A' that monitors skill 'Skill A'

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -111,6 +112,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.Click(".skill-area-create");
 		}
 
+		[Given(@"I select to create a new Skill Group")]
+		public void GivenISelectToCreateANewSkillGroup()
+		{
+			Browser.Interactions.Click("#manage_skill_group_button");
+		}
+
+
 		[Given(@"I name the Skill Area '(.*)'")]
 		public void GivenINameTheSkillArea(string skillAreaName)
 		{
@@ -123,9 +131,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertExists(".c3");
 			var javascript = "var scope = angular.element(document.querySelector('.c3')).scope();" +
-							 "var skillet = scope.skills.find(function(e){{return e.Name === '" + skillName + "'}});" +
-							 "scope.selectedSkill = skillet;" +
-							 "scope.selectedSkillChange(skillet);" +
+							 "var skillet = scope.vm.skills.find(function(e){{return e.Name === '" + skillName + "'}});" +
+							 "scope.vm.selectedSkill = skillet;" +
+							 "scope.vm.selectedSkillChange(skillet);" +
 							 "setTimeout(function(){console.log('delay')}, 1000);"; 
 			Browser.Interactions.Javascript(javascript);
 		}
@@ -146,6 +154,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Then(@"I select to monitor skill area '(.*)'")]
 		public void ThenISelectToMonitorSkillArea(string skillArea)
 		{
+			Thread.Sleep(1000);
 			Browser.Interactions.Javascript("document.querySelector(\"#skill-area-input\").focus();");
 			var listId = "#" + Browser.Interactions.Javascript("return $('#skill-area-id input').attr(\"aria-owns\")");
 			Browser.Interactions.Javascript($"$('{listId} li:contains(\"{skillArea}\")').click()");
@@ -199,22 +208,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var forecastedCalls = parseFloat(scope.viewObj.forecastedCallsObj.series[1]);" +
+				"var forecastedCalls = parseFloat(scope.vm.viewObj.forecastedCallsObj.series[1]);" +
 				"return (forecastedCalls >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var calls = parseFloat(scope.viewObj.actualCallsObj.series[1]);" +
+				"var calls = parseFloat(scope.vm.viewObj.actualCallsObj.series[1]);" +
 				"return (calls >= 0);" 
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 							"var scope = angular.element(document.querySelector('.c3')).scope();" +
-							"var faht = parseFloat(scope.viewObj.forecastedAverageHandleTimeObj.series[1]);" +
+							"var faht = parseFloat(scope.vm.viewObj.forecastedAverageHandleTimeObj.series[1]);" +
 							"return (faht >= 0);"
 							, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 							"var scope = angular.element(document.querySelector('.c3')).scope();" +
-							"var aaht = parseFloat(scope.viewObj.actualAverageHandleTimeObj.series[1]);" +
+							"var aaht = parseFloat(scope.vm.viewObj.actualAverageHandleTimeObj.series[1]);" +
 							"return (aaht >= 0);"
 							, "True");
 		}
@@ -254,17 +263,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var asa = parseFloat(scope.viewObj.averageSpeedOfAnswerObj.series[1]);" +
+				"var asa = parseFloat(scope.vm.viewObj.averageSpeedOfAnswerObj.series[1]);" +
 				"return (asa >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var abandonedRate = parseFloat(scope.viewObj.abandonedRateObj.series[1]);" +
+				"var abandonedRate = parseFloat(scope.vm.viewObj.abandonedRateObj.series[1]);" +
 				"return (abandonedRate >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var sl = parseFloat(scope.viewObj.serviceLevelObj.series[1]);" +
+				"var sl = parseFloat(scope.vm.viewObj.serviceLevelObj.series[1]);" +
 				"return (sl >= 0);"
 				, "True");
 			var toggleQuerier = new ToggleQuerier(TestSiteConfigurationSetup.URL.ToString());
@@ -272,8 +281,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			{
 				Browser.Interactions.AssertJavascriptResultContains(
 					"var scope = angular.element(document.querySelector('.c3')).scope();" +
-					"var esl = parseFloat(scope.viewObj.estimatedServiceLevelObj.series[1]);" +
-					"return (esl >= 0) + ' |scopeViewObjSeries: ' + scope.viewObj.estimatedServiceLevelObj.series[1] + ' |esl: ' + esl;"
+					"var esl = parseFloat(scope.vm.viewObj.estimatedServiceLevelObj.series[1]);" +
+					"return (esl >= 0) + ' |scopeViewObjSeries: ' + scope.vm.viewObj.estimatedServiceLevelObj.series[1] + ' |esl: ' + esl;"
 					, "true");
 			}
 		}
@@ -309,19 +318,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var forecastedStaffing = parseFloat(scope.viewObj.forecastedStaffing.series[1]);" +
+				"var forecastedStaffing = parseFloat(scope.vm.viewObj.forecastedStaffing.series[1]);" +
 				"return (forecastedStaffing >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var count = scope.viewObj.forecastedStaffing.updatedSeries.length;" +
-				"var forecastedStaffing = parseFloat(scope.viewObj.forecastedStaffing.updatedSeries[count-1]);" +
+				"var count = scope.vm.viewObj.forecastedStaffing.updatedSeries.length;" +
+				"var forecastedStaffing = parseFloat(scope.vm.viewObj.forecastedStaffing.updatedSeries[count-1]);" +
 				"return (forecastedStaffing >= 0);"
 				, "True");
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var scheduledStaffing = parseFloat(scope.viewObj.scheduledStaffing[1]);" +
-                "return (scheduledStaffing >= 0) + ' |sopeViewObjScheduledStaffing: ' + scope.viewObj.scheduledStaffing[1] + ' |scheduledStaffing: ' + scheduledStaffing;"
+				"var scheduledStaffing = parseFloat(scope.vm.viewObj.scheduledStaffing[1]);" +
+                "return (scheduledStaffing >= 0) + ' |sopeViewObjScheduledStaffing: ' + scope.vm.viewObj.scheduledStaffing[1] + ' |scheduledStaffing: ' + scheduledStaffing;"
                 , "true");
 		}
 
@@ -330,7 +339,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		{
 			Browser.Interactions.AssertJavascriptResultContains(
 				"var scope = angular.element(document.querySelector('.c3')).scope();" +
-				"var forecastedStaffing = parseFloat(scope.viewObj.forecastedStaffing.series[1]);" +
+				"var forecastedStaffing = parseFloat(scope.vm.viewObj.forecastedStaffing.series[1]);" +
 				"return (forecastedStaffing >= 0);"
 				, "True");
 		}
@@ -366,7 +375,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		public void WhenIChangeDateOffsetTo(int offset)
 		{
 			Browser.Interactions.Javascript("var scope = angular.element(document.querySelector('date-offset')).scope();" +
-											$"scope.changeChosenOffset('{offset}');" +
+											$"scope.vm.changeChosenOffset('{offset}');" +
 											"setTimeout(function(){console.log('delay')}, 1000);");
 		}
 

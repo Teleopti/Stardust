@@ -193,16 +193,16 @@
 					if (vm.skillAreas.length === 0) {
 						vm.selectedItem = vm.selectedItem = vm.skills.find(isSupported);
 						if (autocompleteSkill) {
-							autocompleteSkill.selectedSkill = vm.selectedItem;
+							vm.selectedSkill = vm.selectedItem;
 						}
 					}
 					if (vm.skillAreas.length > 0) {
 						if (isNew) {
 							vm.selectedItem = vm.latest[0];
-							if (autocompleteSkillArea) autocompleteSkillArea.selectedSkillArea = vm.selectedItem;
+							if (autocompleteSkillArea) vm.selectedSkillArea = vm.selectedItem;
 						} else {
 							vm.selectedItem = vm.skillAreas[0];
-							if (autocompleteSkillArea) autocompleteSkillArea.selectedSkillArea = vm.selectedItem;
+							if (autocompleteSkillArea) vm.selectedSkillArea = vm.selectedItem;
 						}
 					}
 				});
