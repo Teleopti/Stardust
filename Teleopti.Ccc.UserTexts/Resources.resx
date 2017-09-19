@@ -16487,4 +16487,8 @@ Do you want to participate?</value>
     <value>See agents by selection</value>
     <comment>Tooltip to be shown on the Agents button in RTA overview when there is a selection in the page</comment>
   </data>
+  <data name="ShiftTradeSpecification" xml:space="preserve">
+    <value>Shift trade specification</value>
+    <comment>Tip message to show in broken rules of shift trade request in WFM</comment>
+  </data>
 </root>

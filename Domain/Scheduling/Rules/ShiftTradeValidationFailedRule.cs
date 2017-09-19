@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		{
 			return new[]
 			{
-				new BusinessRuleResponse(null,
+				new BusinessRuleResponse(typeof(ShiftTradeValidationFailedRule),
 					_errorMessage, true, true, new DateTimePeriod(), rangeClones.Keys.ToList()[0],
 					_dateOnlyPeriod, string.Empty)
 			};
 		}
 
-		public string Description { get; }
+		public string Description => string.Empty;
 	}
 }

@@ -543,6 +543,7 @@
     <Compile Include="Scheduling\Rules\BusinessRuleProviderTest.cs" />
     <Compile Include="Scheduling\Rules\DummyRule.cs" />
     <Compile Include="Scheduling\Rules\NotOverwriteLayerRuleTest.cs" />
+    <Compile Include="Scheduling\Rules\ShiftTradeValidationFailedRuleTest.cs" />
     <Compile Include="Scheduling\Rules\SiteOpenHoursRuleTest.cs" />
     <Compile Include="Scheduling\Scenarios\WeeklyRestSolverTest.cs" />
     <Compile Include="Scheduling\SchedulerStateHolder_LoadSchedulesTest.cs" />

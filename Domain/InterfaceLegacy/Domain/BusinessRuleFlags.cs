@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 		OpenHoursRule = 1 << 9,
 		WeekShiftCategoryLimitationRule = 1 << 10,
 		SiteOpenHoursRule = 1 << 11,
-		NotOverwriteLayerRule = 1 << 12
+		NotOverwriteLayerRule = 1 << 12,
+		ShiftTradeValidationFailedRule = 1 << 13
 	}
 }
