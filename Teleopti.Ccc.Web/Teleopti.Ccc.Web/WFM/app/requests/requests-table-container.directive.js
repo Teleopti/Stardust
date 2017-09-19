@@ -5,11 +5,44 @@
 		.controller('requestsTableContainerController', requestsTableContainerController)
 		.directive('requestsTableContainer', requestsTableContainerDirective);
 
-	requestsTableContainerController.$inject = ['$scope', '$translate', '$filter', '$timeout', 'Toggle', 'requestsDefinitions', 'requestCommandParamsHolder', 'CurrentUserInfo', 'RequestsFilter', 'requestsDataService', 'uiGridConstants', '$injector', 'TeamSchedule', 'GroupScheduleFactory', '$window', 'RequestGridStateService', 'REQUESTS_TAB_NAMES'];
+	requestsTableContainerController.$inject = [
+		'$scope',
+		'$translate',
+		'$filter',
+		'$timeout',
+		'Toggle',
+		'requestsDefinitions',
+		'requestCommandParamsHolder',
+		'CurrentUserInfo',
+		'RequestsFilter',
+		'requestsDataService',
+		'uiGridConstants',
+		'$injector',
+		'TeamSchedule',
+		'GroupScheduleFactory',
+		'$window',
+		'RequestGridStateService',
+		'REQUESTS_TAB_NAMES'
+	];
 
-	function requestsTableContainerController($scope, $translate, $filter, $timeout, toggleSvc, requestsDefinitions,
-		requestCommandParamsHolder, CurrentUserInfo, requestFilterSvc, requestsDataSvc, uiGridConstants, $injector,
-		teamScheduleSvc, groupScheduleFactory, $window, requestGridStateService, requestsTabNames) {
+	function requestsTableContainerController(
+		$scope,
+		$translate,
+		$filter,
+		$timeout,
+		toggleSvc,
+		requestsDefinitions,
+		requestCommandParamsHolder,
+		CurrentUserInfo,
+		requestFilterSvc,
+		requestsDataSvc,
+		uiGridConstants,
+		$injector,
+		teamScheduleSvc,
+		groupScheduleFactory,
+		$window,
+		requestGridStateService,
+		requestsTabNames) {
 		var vm = this;
 
 		vm.getGridOptions = getGridOptions;

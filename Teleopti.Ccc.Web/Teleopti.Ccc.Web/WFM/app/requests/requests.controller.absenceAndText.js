@@ -6,11 +6,28 @@
 		.controller('requestsAbsenceAndTextController', requestsAbsenceAndTextController);
 
 	requestsAbsenceAndTextController.$inject = [
-		'$scope', '$filter', '$injector', '$translate', '$timeout', '$stateParams', 'requestsDataService', 'Toggle',
-		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'TextAndAbsenceGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES','requestCommandParamsHolder'
+		'$scope',
+		'$filter',
+		'$injector',
+		'$translate',
+		'$timeout',
+		'$stateParams',
+		'requestsDataService',
+		'Toggle',
+		'requestsNotificationService',
+		'uiGridConstants',
+		'requestsDefinitions',
+		'CurrentUserInfo',
+		'RequestsFilter',
+		'RequestGridStateService',
+		'TextAndAbsenceGridConfiguration',
+		'UIGridUtilitiesService',
+		'REQUESTS_TAB_NAMES',
+		'requestCommandParamsHolder'
 	];
 
-	function requestsAbsenceAndTextController($scope,
+	function requestsAbsenceAndTextController(
+		$scope,
 		$filter,
 		$injector,
 		$translate,

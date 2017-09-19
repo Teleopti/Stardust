@@ -3,9 +3,40 @@
 
 	angular.module('wfm.requests').controller('requestsRefactorController', requestsRefactorController);
 
-	requestsRefactorController.$inject = ['$scope', '$state', '$q', '$translate', '$timeout', 'Toggle', 'requestsDefinitions', 'requestsNotificationService', 'requestsDataService', 'requestCommandParamsHolder', 'NoticeService', 'FavoriteSearchDataService', 'CurrentUserInfo', 'groupPageService', 'RequestsFilter'];
+	requestsRefactorController.$inject = [
+		'$scope',
+		'$state',
+		'$q',
+		'$translate',
+		'$timeout',
+		'Toggle',
+		'requestsDefinitions',
+		'requestsNotificationService',
+		'requestsDataService',
+		'requestCommandParamsHolder',
+		'NoticeService',
+		'FavoriteSearchDataService',
+		'CurrentUserInfo',
+		'groupPageService',
+		'RequestsFilter'
+	];
 
-	function requestsRefactorController($scope, $state, $q, $translate, $timeout, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService, requestFilterSvc) {
+	function requestsRefactorController(
+		$scope,
+		$state,
+		$q,
+		$translate,
+		$timeout,
+		toggleService,
+		requestsDefinitions,
+		requestsNotificationService,
+		requestsDataService,
+		requestCommandParamsHolder,
+		noticeSvc,
+		FavoriteSearchSvc,
+		CurrentUserInfo,
+		groupPageService,
+		requestFilterSvc) {
 		var vm = this;
 
 		vm.searchPlaceholder = $translate.instant('Search');

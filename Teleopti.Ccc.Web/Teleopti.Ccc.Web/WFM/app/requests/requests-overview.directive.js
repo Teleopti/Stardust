@@ -6,9 +6,24 @@
 		.controller('requestsOverviewController', requestsOverviewController)
 		.directive('requestsOverview', requestsOverviewDirective);
 
-	requestsOverviewController.$inject = ['$scope', "$attrs", 'requestsDataService', "Toggle", "requestsNotificationService", "RequestsFilter", "REQUESTS_TAB_NAMES"];
+	requestsOverviewController.$inject = [
+		'$scope',
+		"$attrs",
+		'requestsDataService',
+		"Toggle",
+		"requestsNotificationService",
+		"RequestsFilter",
+		"REQUESTS_TAB_NAMES"
+	];
 
-	function requestsOverviewController($scope, $attrs, requestsDataService, toggleService, requestsNotificationService, requestFilterSvc, requestsTabNames) {
+	function requestsOverviewController(
+		$scope,
+		$attrs,
+		requestsDataService,
+		toggleService,
+		requestsNotificationService,
+		requestFilterSvc,
+		requestsTabNames) {
 		var vm = this;
 
 		vm.loadRequestWatchersInitialized = false;

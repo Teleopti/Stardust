@@ -66,7 +66,17 @@ describe('Requests - absence and text controller tests',
 			});
 		});
 
-		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestGridStateService_, _RequestsFilter_, _uiGridConstants_, REQUESTS_TAB_NAMES, _requestCommandParamsHolder_) {
+		beforeEach(inject(function (
+			_$filter_,
+			_$compile_,
+			_$rootScope_,
+			_$controller_,
+			_requestsDefinitions_,
+			_RequestGridStateService_,
+			_RequestsFilter_,
+			_uiGridConstants_,
+			REQUESTS_TAB_NAMES,
+			_requestCommandParamsHolder_) {
 			$filter = _$filter_;
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;

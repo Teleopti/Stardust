@@ -6,11 +6,26 @@
 		.directive('requestsCommandsPane', requestsCommandsPaneDirective);
 
 	requestsCommandsPaneController.$inject = [
-		'$state', 'requestsDefinitions', 'requestsDataService', 'requestCommandParamsHolder', 'Toggle',
-		'signalRSVC', 'NoticeService', 'RequestsCommandsConfigurationsService', 'REQUESTS_TAB_NAMES'
+		'$state',
+		'requestsDefinitions',
+		'requestsDataService',
+		'requestCommandParamsHolder',
+		'Toggle',
+		'signalRSVC',
+		'NoticeService',
+		'RequestsCommandsConfigurationsService',
+		'REQUESTS_TAB_NAMES'
 	];
 
-	function requestsCommandsPaneController($state, requestsDefinitions, requestsDataService, requestCommandParamsHolder, toggleSvc, signalRSVC, NoticeService, requestsCommandsConfigurationsSvc, REQUESTS_TAB_NAMES) {
+	function requestsCommandsPaneController($state,
+		requestsDefinitions,
+		requestsDataService,
+		requestCommandParamsHolder,
+		toggleSvc,
+		signalRSVC,
+		NoticeService,
+		requestsCommandsConfigurationsSvc,
+		REQUESTS_TAB_NAMES) {
 		var vm = this;
 		vm.approveRequests = approveRequests;
 		vm.replyRequests = replyRequests;

@@ -5,7 +5,6 @@
 		.directive('requestsSiteOpenHours', requestsSiteOpenHoursDirective);
 
 	function requestsSiteOpenHoursController(requestsDataService, requestsNotificationService) {
-
 		var vm = this;
 		var sitesBefore, sitesAfter;
 		vm.openHours = [];

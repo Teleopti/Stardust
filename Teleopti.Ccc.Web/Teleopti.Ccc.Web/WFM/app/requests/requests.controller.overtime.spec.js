@@ -66,7 +66,17 @@ describe('Requests - overtime controller tests',
 			});
 		});
 
-		beforeEach(inject(function (_$filter_, _$compile_, _$rootScope_, _$controller_, _requestsDefinitions_, _RequestsFilter_, _RequestGridStateService_, _uiGridConstants_, REQUESTS_TAB_NAMES, _requestCommandParamsHolder_) {
+		beforeEach(inject(function (
+			_$filter_,
+			_$compile_,
+			_$rootScope_,
+			_$controller_,
+			_requestsDefinitions_,
+			_RequestsFilter_,
+			_RequestGridStateService_,
+			_uiGridConstants_,
+			REQUESTS_TAB_NAMES,
+			_requestCommandParamsHolder_) {
 			$filter = _$filter_;
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
@@ -76,7 +86,7 @@ describe('Requests - overtime controller tests',
 			requestGridStateSvc = _RequestGridStateService_;
 			uiGridConstants = _uiGridConstants_;
 			requestsTabNames = REQUESTS_TAB_NAMES;
-			requestCommandParamsHolder = _requestCommandParamsHolder_
+			requestCommandParamsHolder = _requestCommandParamsHolder_;
 
 			setUpTarget();
 		}));

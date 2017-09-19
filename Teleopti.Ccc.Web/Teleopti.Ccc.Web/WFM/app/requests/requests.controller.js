@@ -3,9 +3,33 @@
 
 	angular.module('wfm.requests').controller('requestsOriginController', requestsOriginController);
 
-	requestsOriginController.$inject = ["$scope", "$q", "$translate", "Toggle", "requestsDefinitions", "requestsNotificationService", "requestsDataService", "requestCommandParamsHolder", "NoticeService", "FavoriteSearchDataService", "CurrentUserInfo", "groupPageService"];
+	requestsOriginController.$inject = [
+		"$scope",
+		"$q",
+		"$translate",
+		"Toggle",
+		"requestsDefinitions",
+		"requestsNotificationService",
+		"requestsDataService",
+		"requestCommandParamsHolder",
+		"NoticeService",
+		"FavoriteSearchDataService",
+		"CurrentUserInfo",
+		"groupPageService"];
 
-	function requestsOriginController($scope, $q, $translate, toggleService, requestsDefinitions, requestsNotificationService, requestsDataService, requestCommandParamsHolder, noticeSvc, FavoriteSearchSvc, CurrentUserInfo, groupPageService) {
+	function requestsOriginController(
+		$scope,
+		$q,
+		$translate,
+		toggleService,
+		requestsDefinitions,
+		requestsNotificationService,
+		requestsDataService,
+		requestCommandParamsHolder,
+		noticeSvc,
+		FavoriteSearchSvc,
+		CurrentUserInfo,
+		groupPageService) {
 		var vm = this;
 
 		vm.searchPlaceholder = $translate.instant('Search');

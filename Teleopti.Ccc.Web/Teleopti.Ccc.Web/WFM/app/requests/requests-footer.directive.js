@@ -1,12 +1,28 @@
 ﻿(function () {
 	'use strict';
+
 	angular.module('wfm.requests')
 		.controller('requestsFooterController', requestsFooterController)
 		.directive('requestsFooter', requestsFooterDirective);
 
-	requestsFooterController.$inject = ['$rootScope', '$scope', "$translate", "$state", "Toggle", "requestCommandParamsHolder", "REQUESTS_TAB_NAMES"];
+	requestsFooterController.$inject = [
+		'$rootScope',
+		'$scope',
+		"$translate",
+		"$state",
+		"Toggle",
+		"requestCommandParamsHolder",
+		"REQUESTS_TAB_NAMES"
+	];
 
-	function requestsFooterController($rootScope, $scope, $translate, $state, toggleSvc, requestCommandParamsHolder, REQUESTS_TAB_NAMES) {
+	function requestsFooterController(
+		$rootScope,
+		$scope,
+		$translate,
+		$state,
+		toggleSvc,
+		requestCommandParamsHolder,
+		REQUESTS_TAB_NAMES) {
 		var vm = this;
 		vm.onPageSizeChanges = onPageSizeChanges;
 		vm.onPageNumberChange = onPageNumberChange;

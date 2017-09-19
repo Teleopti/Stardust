@@ -6,11 +6,28 @@
 		.controller('requestsShiftTradeController', requestsShiftTradeController);
 
 	requestsShiftTradeController.$inject = [
-		'$scope', '$filter', '$injector', '$translate', '$timeout', '$stateParams', 'requestsDataService', 'Toggle',
-		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'ShiftTradeGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES','requestCommandParamsHolder'
+		'$scope',
+		'$filter',
+		'$injector',
+		'$translate',
+		'$timeout',
+		'$stateParams',
+		'requestsDataService',
+		'Toggle',
+		'requestsNotificationService',
+		'uiGridConstants',
+		'requestsDefinitions',
+		'CurrentUserInfo',
+		'RequestsFilter',
+		'RequestGridStateService',
+		'ShiftTradeGridConfiguration',
+		'UIGridUtilitiesService',
+		'REQUESTS_TAB_NAMES',
+		'requestCommandParamsHolder'
 	];
 
-	function requestsShiftTradeController($scope,
+	function requestsShiftTradeController(
+		$scope,
 		$filter,
 		$injector,
 		$translate,
@@ -25,7 +42,7 @@
 		requestFilterSvc,
 		requestGridStateService,
 		shiftTradeGridConfiguration,
-		uiGridUtilitiesService, 
+		uiGridUtilitiesService,
 		requestsTabNames,
 		requestCommandParamsHolder) {
 		var vm = this;

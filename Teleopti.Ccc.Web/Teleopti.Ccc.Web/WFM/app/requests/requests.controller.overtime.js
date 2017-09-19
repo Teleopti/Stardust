@@ -6,12 +6,45 @@
 		.controller('requestsOvertimeController', requestsOvertimeController);
 
 	requestsOvertimeController.$inject = [
-		'$scope', '$filter', '$injector', '$translate', '$timeout', '$stateParams', 'requestsDataService', 'Toggle',
-		'requestsNotificationService', 'uiGridConstants', 'requestsDefinitions', 'CurrentUserInfo', 'RequestsFilter', 'RequestGridStateService', 'OvertimeGridConfiguration', 'UIGridUtilitiesService', 'REQUESTS_TAB_NAMES','requestCommandParamsHolder'
+		'$scope',
+		'$filter',
+		'$injector',
+		'$translate',
+		'$timeout',
+		'$stateParams',
+		'requestsDataService',
+		'Toggle',
+		'requestsNotificationService',
+		'uiGridConstants',
+		'requestsDefinitions',
+		'CurrentUserInfo',
+		'RequestsFilter',
+		'RequestGridStateService',
+		'OvertimeGridConfiguration',
+		'UIGridUtilitiesService',
+		'REQUESTS_TAB_NAMES',
+		'requestCommandParamsHolder'
 	];
 
-	function requestsOvertimeController($scope, $filter, $injector, $translate, $timeout, $stateParams, requestsDataService, toggleService, requestsNotificationService, uiGridConstants, requestsDefinitions, currentUserInfo, requestFilterSvc, requestGridStateService, overtimeGridConfigurationService, uiGridUtilitiesService, requestsTabNames, requestCommandParamsHolder) {
-
+	function requestsOvertimeController(
+		$scope,
+		$filter,
+		$injector,
+		$translate,
+		$timeout,
+		$stateParams,
+		requestsDataService,
+		toggleService,
+		requestsNotificationService,
+		uiGridConstants,
+		requestsDefinitions,
+		currentUserInfo,
+		requestFilterSvc,
+		requestGridStateService,
+		overtimeGridConfigurationService,
+		uiGridUtilitiesService,
+		requestsTabNames,
+		requestCommandParamsHolder) {
 		var vm = this;
 
 		vm.requests = [];

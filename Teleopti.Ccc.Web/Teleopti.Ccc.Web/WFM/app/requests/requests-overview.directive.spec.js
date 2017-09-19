@@ -33,7 +33,14 @@
 			});
 		});
 
-		beforeEach(inject(function (_$compile_, _$rootScope_, _requestsDataService_, _requestsDefinitions_, _$injector_, _RequestsFilter_, _requestsNotificationService_) {
+		beforeEach(inject(function (
+			_$compile_,
+			_$rootScope_,
+			_requestsDataService_,
+			_requestsDefinitions_,
+			_$injector_,
+			_RequestsFilter_,
+			_requestsNotificationService_) {
 			$compile = _$compile_;
 			$rootScope = _$rootScope_;
 			requestsDataService = _requestsDataService_;
