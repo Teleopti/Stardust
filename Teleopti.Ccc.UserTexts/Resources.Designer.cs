@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -19655,15 +19655,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You don&apos;t have access to any agents.
-        /// </summary>
-        public static string NoAccessToAgents {
-            get {
-                return ResourceManager.GetString("NoAccessToAgents", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to You don&apos;t have access to any sites or teams.
         /// </summary>
         public static string NoAccessToSites {
@@ -19709,11 +19700,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to No agents for the selected skills were found.
+        ///   Looks up a localized string similar to No agents to be displayed.
         /// </summary>
-        public static string NoAgentsFound {
+        public static string NoAgentsToBeDisplayed {
             get {
-                return ResourceManager.GetString("NoAgentsFound", resourceCulture);
+                return ResourceManager.GetString("NoAgentsToBeDisplayed", resourceCulture);
             }
         }
         

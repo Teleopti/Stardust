@@ -16467,14 +16467,6 @@ Do you want to participate?</value>
     <value>Export gap</value>
     <comment>This action will export the gap that exists in the current intraday staffing</comment>
   </data>
-  <data name="NoAccessToAgents" xml:space="preserve">
-    <value>You don't have access to any agents</value>
-    <comment>Message to be displayed in the RTA agents view when there's no permission to view agents by selection</comment>
-  </data>
-  <data name="NoAgentsFound" xml:space="preserve">
-    <value>No agents for the selected skills were found</value>
-    <comment>Message to be displayed in the RTA agents view when skill selection doesn't return any agents</comment>
-  </data>
   <data name="AbsenceRequestAlreadyInWaitlist" xml:space="preserve">
     <value>Requests are already in the waitlist, please wait.</value>
     <comment>Message to agent when the request gets waitlisted because there already exists wailtlisted request.</comment>
@@ -16490,5 +16482,9 @@ Do you want to participate?</value>
   <data name="ShiftTradeSpecification" xml:space="preserve">
     <value>Shift trade specification</value>
     <comment>Tip message to show in broken rules of shift trade request in WFM</comment>
+  </data>
+  <data name="NoAgentsToBeDisplayed" xml:space="preserve">
+    <value>No agents to be displayed</value>
+    <comment>Message displayed in RTA agents view when there are no agents in the view</comment>
   </data>
 </root>
