@@ -38,6 +38,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Intraday
 			return returnList.Where(x => period.Contains(x.StartDateTime) || x.DateTimePeriod.Contains(period.StartDateTime));
 		}
 
+		public IEnumerable<SkillStaffingInterval> GetBySkills(IList<ISkill> skills, DateTimePeriod period)
+		{
+			var returnList = new HashSet<SkillStaffingInterval>();
+			var skillDays = _skillDayRepository.FindReadOnlyRange(GetLongestPeriod(skills, period), skills, _currentScenario.Current());
+			//var skillStaffPeriod = new List<SkillStaffingInterval>();
+			foreach (var skillDay in skillDays)
+			{
+				var skillStaffPeriods = skillDay.SkillStaffPeriodCollection;
+
+				var temp =  skillStaffPeriods.Select(skillStaffPeriod => new SkillStaffingInterval
+				{
+					SkillId = skillDay.Skill.Id.GetValueOrDefault(),
+					StartDateTime = skillStaffPeriod.Period.StartDateTime,
+					EndDateTime = skillStaffPeriod.Period.EndDateTime,
+					ForecastWithoutShrinkage = skillStaffPeriod.FStaff,
+					Shrinkage = skillStaffPeriod.Payload.Shrinkage,
+					Forecast = skillStaffPeriod.FStaff,
+					StaffingLevel = 0,
+				});
+				foreach (var skillStaffingInterval in temp)
+				{
+					returnList.Add(skillStaffingInterval);
+				}
+			}
+			return returnList.Where(x => period.Contains(x.StartDateTime) || x.DateTimePeriod.Contains(period.StartDateTime));
+		}
+
 		public static DateOnlyPeriod GetLongestPeriod(IList<ISkill> skills, DateTimePeriod period)
 		{
 			var returnPeriod = new DateOnlyPeriod(new DateOnly(period.StartDateTime.Date), new DateOnly(period.EndDateTime.Date));

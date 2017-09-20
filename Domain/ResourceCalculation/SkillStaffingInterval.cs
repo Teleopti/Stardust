@@ -12,11 +12,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public Guid SkillId { get; set; }
 		public DateTime StartDateTime { get; set; }
 		public DateTime EndDateTime { get; set; }
-
+		
 		public DateTimePeriod CalculationPeriod => new DateTimePeriod(StartDateTime, EndDateTime);
 		public double CalculatedLoggedOn { get; private set; }
 
 		public Percent EstimatedServiceLevel { get; set; }
+
+		public double StaffingLevelWithShrinkage { get; set; }
 
 		public void SetCalculatedUsedSeats(double usedSeats)
 		{
@@ -24,14 +26,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double Forecast { get; set; }
 		public double StaffingLevel { get; set; }
-		public double ForecastWithShrinkage { get; set; }
-
-		public double StaffingLevelWithShrinkage { get; set; }
-
-		public double GetStaffingLevel(bool withShrinkage)
-		{
-			return withShrinkage ? StaffingLevelWithShrinkage : StaffingLevel;
-		}
 
 		public TimeSpan GetTimeSpan()
 		{
@@ -97,5 +91,23 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 		public double IntraIntervalDeviation { get; private set; }
 		public double IntraIntervalRootMeanSquare { get; private set; }
+		public Percent Shrinkage { get; set; }
+
+		public void SetUseShrinkage(bool setValue)
+		{
+			if (setValue)
+			{
+				if (Shrinkage.Value >= 1.0)
+					FStaff = 0;
+				else
+				{
+					FStaff = ForecastWithoutShrinkage / (1 - Shrinkage.Value);
+				}
+			}
+			else
+				FStaff = ForecastWithoutShrinkage;
+		}
+
+		public double ForecastWithoutShrinkage { get; set; }
 	}
 }

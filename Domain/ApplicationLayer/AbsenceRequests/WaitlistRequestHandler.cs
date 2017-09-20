@@ -11,6 +11,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Intraday;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -47,6 +48,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IContractScheduleRepository _contractScheduleRepository;
 		private readonly IHandleCommand<ApproveRequestCommand> _approveRequestCommandHandler;
 		private readonly IAlreadyAbsentValidator _alreadyAbsentValidator;
+		private readonly IStardustJobFeedback _stardustJobFeedback;
 
 		public WaitlistRequestHandler(ISkillCombinationResourceRepository skillCombinationResourceRepository,
 			IScheduleStorage scheduleStorage, ICurrentScenario currentScenario,
@@ -61,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			SchedulePartModifyAndRollbackServiceWithoutStateHolder rollbackService,
 			ISkillTypeRepository skillTypeRepository, IPersonRepository personRepository, IContractRepository contractRepository, IPartTimePercentageRepository partTimePercentageRepository,
 			IContractScheduleRepository contractScheduleRepository, IHandleCommand<ApproveRequestCommand> approveRequestCommandHandler,
-			IAlreadyAbsentValidator alreadyAbsentValidator)
+			IAlreadyAbsentValidator alreadyAbsentValidator, IStardustJobFeedback stardustJobFeedback)
 		{
 			_skillCombinationResourceRepository = skillCombinationResourceRepository;
 			_scheduleStorage = scheduleStorage;
@@ -84,6 +86,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_contractScheduleRepository = contractScheduleRepository;
 			_approveRequestCommandHandler = approveRequestCommandHandler;
 			_alreadyAbsentValidator = alreadyAbsentValidator;
+			_stardustJobFeedback = stardustJobFeedback;
 		}
 
 		public class WaitlistHelpers
@@ -110,9 +113,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			_activityRepository.LoadAll();
 			helpers.Skills = _skillRepository.LoadAllSkills().ToList();
 
+			_stardustJobFeedback.SendProgress("Done preloading the data");
+
 			if (!_skillCombinationResourceReadModelValidator.Validate())
 			{
-				logger.Error(Resources.DenyReasonTechnicalIssues + "Read model is not up to date");
+				logger.Error("Read model is not up to date");
+				_stardustJobFeedback.SendProgress("Read model is not up to date");
 				helpers.InitSuccess = false;
 				return helpers;
 			}
@@ -122,9 +128,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			if (!waitlistedRequestsIds.Any())
 			{
 				helpers.InitSuccess = false;
-				logger.Info("No waitlisted request found within the period from " +
-								  helpers.LoadSchedulesPeriodToCoverForMidnightShifts.StartDateTime + " to " +
-								  helpers.LoadSchedulesPeriodToCoverForMidnightShifts.EndDateTime);
+				var mesg = "No waitlisted request found within the period from " +
+						   helpers.LoadSchedulesPeriodToCoverForMidnightShifts.StartDateTime + " to " +
+						   helpers.LoadSchedulesPeriodToCoverForMidnightShifts.EndDateTime;
+				logger.Info(mesg);
+				_stardustJobFeedback.SendProgress(mesg);
 				return helpers;
 			}
 			var waitlistedRequests = _personRequestRepository.Find(waitlistedRequestsIds);
@@ -144,11 +152,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			helpers.CombinationResources = _skillCombinationResourceRepository.LoadSkillCombinationResources(inflatedPeriod).ToList();
 			if (!helpers.CombinationResources.Any())
 			{
-				logger.Error(Resources.DenyReasonTechnicalIssues + " Can not find any skillcombinations.");
+				logger.Error(" Can not find any skillcombinations.");
+				_stardustJobFeedback.SendProgress("Can not find any skillcombinations.");
 				helpers.InitSuccess = false;
 				return helpers;
 			}
-			
 			var skillIds = new HashSet<Guid>();
 			foreach (var skillCombinationResource in helpers.CombinationResources)
 			{
@@ -159,7 +167,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 			helpers.SkillInterval = helpers.Skills.Where(x => skillIds.Contains(x.Id.GetValueOrDefault())).Min(x => x.DefaultResolution);
 
-			helpers.SkillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(helpers.Skills, inflatedPeriod, true).ToList();
+			helpers.SkillStaffingIntervals = _extractSkillForecastIntervals.GetBySkills(helpers.Skills, inflatedPeriod).ToList();
 			helpers.SkillStaffingIntervals.ForEach(s => s.StaffingLevel = 0);
 
 			var relevantSkillStaffPeriods =
@@ -175,7 +183,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			helpers.PersonsSchedules =
 				_scheduleStorage.FindSchedulesForPersons(
 					new ScheduleDateTimePeriod(helpers.LoadSchedulesPeriodToCoverForMidnightShifts, persons), _currentScenario.Current(),
-					new PersonProvider(persons) {DoLoadByPerson = true}, new ScheduleDictionaryLoadOptions(false, false), persons);
+					new PersonProvider(persons) { DoLoadByPerson = true }, new ScheduleDictionaryLoadOptions(false, false), persons);
 
 			helpers.InitSuccess = true;
 			return helpers;
@@ -185,42 +193,57 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		[UnitOfWork]
 		public virtual void Handle(ProcessWaitlistedRequestsEvent @event)
 		{
-			try
+			var helpers = initializeWaitlistHandling();
+			if (!helpers.InitSuccess)
 			{
-				var helpers = initializeWaitlistHandling();
-				if (!helpers.InitSuccess)
+				return;
+			}
+			_stardustJobFeedback.SendProgress($"Starting to process {helpers.AllRequests.Count} waitlisted requests.");
+			using (getContext(helpers.CombinationResources, helpers.Skills, false))
+			{
+				_resourceCalculation.ResourceCalculate(helpers.DateOnlyPeriodOne, helpers.ResCalcData,
+					() => getContext(helpers.CombinationResources, helpers.Skills, true));
+				foreach (var pRequest in helpers.AllRequests)
 				{
-					return;
-				}
-				using (getContext(helpers.CombinationResources, helpers.Skills, false))
-				{
-					_resourceCalculation.ResourceCalculate(helpers.DateOnlyPeriodOne, helpers.ResCalcData,
-						() => getContext(helpers.CombinationResources, helpers.Skills, true));
-					//consider the exception and which requests to deny
-					foreach (var pRequest in helpers.AllRequests)
+					var requestPeriod = pRequest.Request.Period;
+					var schedules = helpers.PersonsSchedules[pRequest.Person];
+					if (_alreadyAbsentValidator.Validate((IAbsenceRequest) pRequest.Request, schedules))
 					{
-						var requestPeriod = pRequest.Request.Period;
-						var schedules = helpers.PersonsSchedules[pRequest.Person];
-						if (_alreadyAbsentValidator.Validate((IAbsenceRequest) pRequest.Request, schedules))
+						pRequest.Deny("RequestDenyReasonAlreadyAbsent", new PersonRequestCheckAuthorization(), null,
+							PersonRequestDenyOption.AlreadyAbsence);
+						_stardustJobFeedback.SendProgress($"Already absent for request {pRequest.Id.GetValueOrDefault()}");
+						continue;
+					}
+					var mergedPeriod =
+						pRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)pRequest.Request);
+					var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+					var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
+					if (staffingThresholdValidators.Any())
+					{
+						var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
+						foreach (var skillStaffingInterval in helpers.SkillStaffingIntervals)
 						{
-							pRequest.Deny("RequestDenyReasonAlreadyAbsent", new PersonRequestCheckAuthorization(),null,PersonRequestDenyOption.AlreadyAbsence);
-							continue;
+							skillStaffingInterval.SetUseShrinkage(useShrinkage);
 						}
-						var dateOnlyPeriod = helpers.LoadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(pRequest.Person.PermissionInformation.DefaultTimeZone());
+
+						var dateOnlyPeriod =
+							helpers.LoadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(
+								pRequest.Person.PermissionInformation.DefaultTimeZone());
 						var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
-						var startDateTimeInPersonTimeZone = TimeZoneHelper.ConvertFromUtc(pRequest.RequestedDate, pRequest.Person.PermissionInformation.DefaultTimeZone());
+						var startDateTimeInPersonTimeZone = TimeZoneHelper.ConvertFromUtc(pRequest.RequestedDate,
+							pRequest.Person.PermissionInformation.DefaultTimeZone());
 						var scheduleDay = schedules.ScheduledDay(new DateOnly(startDateTimeInPersonTimeZone));
 						var personAssignment = scheduleDay.PersonAssignment();
 						if (personAssignment == null) continue;
 
-						var absenceRequest = (IAbsenceRequest)pRequest.Request;
+						var absenceRequest = (IAbsenceRequest) pRequest.Request;
 						scheduleDay.CreateAndAddAbsence(new AbsenceLayer(absenceRequest.Absence, pRequest.Request.Period));
 
 						_rollbackService.ModifyStrictly(scheduleDay, new NoScheduleTagSetter(), NewBusinessRuleCollection.Minimum());
-						_resourceCalculation.ResourceCalculate(helpers.DateOnlyPeriodOne, helpers.ResCalcData, () => getContext(helpers.CombinationResources, helpers.Skills, true));
+						_resourceCalculation.ResourceCalculate(helpers.DateOnlyPeriodOne, helpers.ResCalcData,
+							() => getContext(helpers.CombinationResources, helpers.Skills, true));
 
-						var mergedPeriod = pRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)pRequest.Request);
-						var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
+
 						var autoGrant = mergedPeriod.AbsenceRequestProcess.GetType() != typeof(PendingAbsenceRequest);
 						var shiftPeriodList = new List<DateTimePeriod>();
 
@@ -232,47 +255,44 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							{
 								continue;
 							}
-							shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.Value.StartDateTime, projection.OriginalProjectionPeriod.Value.EndDateTime));
+							shiftPeriodList.Add(new DateTimePeriod(projection.OriginalProjectionPeriod.Value.StartDateTime,
+								projection.OriginalProjectionPeriod.Value.EndDateTime));
 						}
 
-						var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
-						if (staffingThresholdValidators.Any())
+
+						var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
+						foreach (var projectionPeriod in shiftPeriodList)
 						{
-							//TODO: how to handle shrinkage?
-							//var useShrinkage = staffingThresholdValidators.Any(x => x.GetType() == typeof(StaffingThresholdWithShrinkageValidator));
-							var skillStaffingIntervalsToValidate = new List<SkillStaffingInterval>();
-							foreach (var projectionPeriod in shiftPeriodList)
-							{
-								skillStaffingIntervalsToValidate.AddRange(helpers.SkillStaffingIntervals.Where(x => x.StartDateTime >= projectionPeriod.StartDateTime && x.StartDateTime < projectionPeriod.EndDateTime));
-							}
-							var validatedRequest = staffingThresholdValidators.FirstOrDefault().ValidateLight((IAbsenceRequest)pRequest.Request, skillStaffingIntervalsToValidate);
-							_rollbackService.RollbackMinimumChecks();
-							if (validatedRequest.IsValid)
-							{
-								if (!autoGrant) continue;
-								var command = new ApproveRequestCommand
-								{
-									PersonRequestId = pRequest.Id.GetValueOrDefault(),
-									IsAutoGrant = true
-								};
-								_approveRequestCommandHandler.Handle(command);
-								if (!command.ErrorMessages.IsEmpty())
-								{
-									// TODO: log errors
-								}
-								_rollbackService.ClearModificationCollection();
-							}
+							skillStaffingIntervalsToValidate.AddRange(
+								helpers.SkillStaffingIntervals.Where(
+									x => x.StartDateTime >= projectionPeriod.StartDateTime && x.StartDateTime < projectionPeriod.EndDateTime));
 						}
-						else
+						var validatedRequest =
+							staffingThresholdValidators.FirstOrDefault()
+								.ValidateLight((IAbsenceRequest) pRequest.Request, skillStaffingIntervalsToValidate);
+						_rollbackService.RollbackMinimumChecks();
+						if (validatedRequest.IsValid)
 						{
-							logger.Error(Resources.DenyReasonTechnicalIssues + " Can not find any staffingThresholdValidator.");
+							if (!autoGrant) continue;
+							var command = new ApproveRequestCommand
+							{
+								PersonRequestId = pRequest.Id.GetValueOrDefault(),
+								IsAutoGrant = true
+							};
+							_approveRequestCommandHandler.Handle(command);
+							if (!command.ErrorMessages.IsEmpty())
+							{
+								_stardustJobFeedback.SendProgress($"Request {pRequest.Id.GetValueOrDefault()} not approved because of these errors. {string.Join(";", command.ErrorMessages)}");
+							}
+							_rollbackService.ClearModificationCollection();
 						}
 					}
+					else
+					{
+						_stardustJobFeedback.SendProgress(
+							$"Cannot find any staffingThresholdValidator for request {pRequest.Id.GetValueOrDefault()}");
+					}
 				}
-			}
-			catch (Exception exp)
-			{
-				logger.Error(Resources.DenyReasonTechnicalIssues + exp);
 			}
 		}
 
