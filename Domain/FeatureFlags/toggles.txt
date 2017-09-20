@@ -127,7 +127,6 @@ ResourcePlanner_MergeTeamblockClassicScheduling_44289 = true
 ResourcePlanner_RespectSkillGroupShoveling_44156 = true
 ResourcePlanner_MergeTeamblockClassicIntraday_45508 = true
 ResourcePlanner_RetireKeepPercentageOfShifts_45688 = true
-ResourcePlanner_SpeedUpShiftsWithinDay_45694 = false # put on hold until we get new perf builds
 
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
 Wfm_DisplayOnlineHelp_39402 = true
