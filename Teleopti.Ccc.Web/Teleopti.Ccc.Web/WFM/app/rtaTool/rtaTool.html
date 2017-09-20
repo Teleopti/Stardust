@@ -154,7 +154,7 @@
 										<td ng-click="$event.stopPropagation();">
 											<select ng-model="pickedStateCode" ng-change="agent.sendState(pickedStateCode)">
 												<option value="" disabled selected>Pick a state</option>
-												<option ng-repeat="state in vm.stateCodes">
+												<option value={{state.Code}} ng-repeat="state in vm.stateCodes">
 													{{state.Name}}
 												</option>	
 											</select>

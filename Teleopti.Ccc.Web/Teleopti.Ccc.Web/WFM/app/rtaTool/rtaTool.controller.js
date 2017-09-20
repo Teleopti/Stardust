@@ -93,6 +93,7 @@
 					agent.isSelected = !agent.isSelected;
 				}
 				agent.StateCodes = vm.stateCodes;
+				
 				agent.sendState = function (state) {
 					sendState(agent, state);
 				};
@@ -163,7 +164,7 @@
 				States: [
 					{
 						UserCode: agent.UserCode,
-						StateCode: state.Code
+						StateCode: state
 					}
 				]
 			});
