@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			_reduceIslandsLimits = reduceIslandsLimits;
 		}
 
-		public bool Execute(IEnumerable<IEnumerable<SkillGroup>> islands, IDictionary<ISkill, int> noAgentsKnowingSkill)
+		public bool Execute(IEnumerable<IEnumerable<SkillSet>> islands, IDictionary<ISkill, int> noAgentsKnowingSkill)
 		{
 			var success = false;
 		

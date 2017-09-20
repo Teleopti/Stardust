@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class ShovelResourcesState
 	{
 		private readonly ResourceDistributionForSkillGroupsWithSameIndex _resourceDistribution;
-		private readonly IDictionary<CascadingSkillGroup, double> _resourcesMovedOnSkillGroup;
+		private readonly IDictionary<CascadingSkillSet, double> _resourcesMovedOnSkillGroup;
 		private bool _continueShovelingBasedOnSubSkills;
 
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			ResourcesAvailableForPrimarySkill = resources;
 			RemainingOverstaffing = ResourcesAvailableForPrimarySkill.Values.Sum();
 			TotalOverstaffingAtStart = RemainingOverstaffing;
-			_resourcesMovedOnSkillGroup = new Dictionary<CascadingSkillGroup, double>();
+			_resourcesMovedOnSkillGroup = new Dictionary<CascadingSkillSet, double>();
 		}
 
 		public bool IsAnyPrimarySkillOpen { get; }
@@ -29,37 +29,37 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public double RemainingOverstaffing { get; private set; }
 		public double TotalOverstaffingAtStart { get; }
 
-		public bool ContinueShovel(CascadingSkillGroup skillGroup)
+		public bool ContinueShovel(CascadingSkillSet skillSet)
 		{
-			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out double resourcesMovedOnSkillGroup))
+			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillSet, out double resourcesMovedOnSkillGroup))
 			{
 				resourcesMovedOnSkillGroup = 0;
 			}
 			var ret =  RemainingOverstaffing > (IsAnyPrimarySkillOpen ? 0.1 : 0.001) &&
-					resourcesMovedOnSkillGroup < MaxToMoveForThisSkillGroup(skillGroup) &&
+					resourcesMovedOnSkillGroup < MaxToMoveForThisSkillGroup(skillSet) &&
 					   _continueShovelingBasedOnSubSkills;
 			_continueShovelingBasedOnSubSkills = false;
 			return ret;
 		}
 
-		public double MaxToMoveForThisSkillGroup(CascadingSkillGroup skillgroup)
+		public double MaxToMoveForThisSkillGroup(CascadingSkillSet skillgroup)
 		{
 			return TotalOverstaffingAtStart * _resourceDistribution.For(skillgroup);
 		}
 
-		public void AddResourcesTo(IShovelResourceDataForInterval shovelResourceDataForInterval, CascadingSkillGroup skillGroup, double value)
+		public void AddResourcesTo(IShovelResourceDataForInterval shovelResourceDataForInterval, CascadingSkillSet skillSet, double value)
 		{
 			shovelResourceDataForInterval.AddResources(value);
 			RemainingOverstaffing -= value;
 			ResourcesMoved += value;
-			skillGroup.RemainingResources -= value;
-			if (_resourcesMovedOnSkillGroup.TryGetValue(skillGroup, out double currentValue))
+			skillSet.RemainingResources -= value;
+			if (_resourcesMovedOnSkillGroup.TryGetValue(skillSet, out double currentValue))
 			{
-				_resourcesMovedOnSkillGroup[skillGroup] = value + currentValue;
+				_resourcesMovedOnSkillGroup[skillSet] = value + currentValue;
 			}
 			else
 			{
-				_resourcesMovedOnSkillGroup[skillGroup] = value;
+				_resourcesMovedOnSkillGroup[skillSet] = value;
 			}
 			SetContinueShovel();
 		}

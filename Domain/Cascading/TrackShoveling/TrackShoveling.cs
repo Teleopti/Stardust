@@ -22,15 +22,15 @@ namespace Teleopti.Ccc.Domain.Cascading.TrackShoveling
 			return _trackShovelingOneSkills[skill];
 		}
 
-		void IShovelingCallback.ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<CascadingSkillGroup> skillGroups, CascadingSkillGroup fromSkillGroup, double resources)
+		void IShovelingCallback.ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<CascadingSkillSet> skillGroups, CascadingSkillSet fromSkillSet, double resources)
 		{
 			foreach (IShovelingCallback trackShovelingOneSkill in _trackShovelingOneSkills.Values)
 			{
-				trackShovelingOneSkill.ResourcesWasMovedTo(skillToMoveTo, interval, skillGroups, fromSkillGroup, resources);
+				trackShovelingOneSkill.ResourcesWasMovedTo(skillToMoveTo, interval, skillGroups, fromSkillSet, resources);
 			}
 		}
 
-		void IShovelingCallback.ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, IEnumerable<CascadingSkillGroup> skillGroups, double resources)
+		void IShovelingCallback.ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, IEnumerable<CascadingSkillSet> skillGroups, double resources)
 		{
 			foreach (IShovelingCallback trackShovelingOneSkill in _trackShovelingOneSkills.Values)
 			{

@@ -6,12 +6,12 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 	public class IslandExtendedModel
 	{
 		public IEnumerable<ISkill> SkillsInIsland { get; set; }
-		public IEnumerable<SkillGroupExtendedModel> SkillGroupsInIsland { get; set; }
+		public IEnumerable<SkillSetExtendedModel> SkillSetsInIsland { get; set; }
 	}
 
-	public class SkillGroupExtendedModel
+	public class SkillSetExtendedModel
 	{
-		public IEnumerable<ISkill> SkillsInSkillGroup { get; set; }
-		public IEnumerable<IPerson> AgentsInSkillGroup { get; set; }
+		public IEnumerable<ISkill> SkillsInSkillSet { get; set; }
+		public IEnumerable<IPerson> AgentsInSkillSet { get; set; }
 	}
 }

@@ -4,21 +4,21 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class OrderedSkillGroups : IEnumerable<IEnumerable<CascadingSkillGroup>>
+	public class OrderedSkillSets : IEnumerable<IEnumerable<CascadingSkillSet>>
 	{
-		private readonly IEnumerable<IEnumerable<CascadingSkillGroup>> _orderedSkillGroups;
+		private readonly IEnumerable<IEnumerable<CascadingSkillSet>> _orderedSkillGroups;
 
-		public OrderedSkillGroups(IEnumerable<IEnumerable<CascadingSkillGroup>> orderedSkillGroups)
+		public OrderedSkillSets(IEnumerable<IEnumerable<CascadingSkillSet>> orderedSkillGroups)
 		{
 			_orderedSkillGroups = orderedSkillGroups;
 		}
 
-		public IEnumerable<CascadingSkillGroup> AllSkillGroups()
+		public IEnumerable<CascadingSkillSet> AllSkillGroups()
 		{
 			return _orderedSkillGroups.SelectMany(skillGroups => skillGroups);
 		}
 
-		public IEnumerator<IEnumerable<CascadingSkillGroup>> GetEnumerator()
+		public IEnumerator<IEnumerable<CascadingSkillSet>> GetEnumerator()
 		{
 			return _orderedSkillGroups.GetEnumerator();
 		}

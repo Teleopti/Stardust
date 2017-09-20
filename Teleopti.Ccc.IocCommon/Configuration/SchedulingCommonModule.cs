@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<ShovelResources>().SingleInstance();
 			builder.RegisterType<ReducePrimarySkillResources>().SingleInstance();
-			builder.RegisterType<SkillGroupPerActivityProvider>().SingleInstance();
+			builder.RegisterType<SkillSetPerActivityProvider>().SingleInstance();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156))
 			{
 				builder.RegisterType<PrimarySkillOverstaff>().SingleInstance();
@@ -215,8 +215,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ReduceSkillGroups>().SingleInstance();
 			builder.RegisterType<CreateIslands>().SingleInstance();
 			builder.RegisterType<MoveSkillGroupToCorrectIsland>().SingleInstance();
-			builder.RegisterType<SkillGroupInfoProvider>().SingleInstance();
-			builder.RegisterType<SkillGroupContext>().SingleInstance();
+			builder.RegisterType<SkillSetProvider>().SingleInstance();
+			builder.RegisterType<SkillSetContext>().SingleInstance();
 			builder.RegisterType<IslandModelFactory>().SingleInstance();
 			builder.RegisterType<CreateSkillGroups>().SingleInstance();
 			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();
@@ -440,7 +440,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<LimitForNoResourceCalculation>().As<ILimitForNoResourceCalculation>().AsSelf().SingleInstance();
 			builder.RegisterType<NoSchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
 			builder.RegisterType<IntradayOptimizerContainerConsiderLargeGroups>().As<IIntradayOptimizerContainer>().SingleInstance();
-			builder.RegisterType<AgentsToSkillGroups>().SingleInstance();
+			builder.RegisterType<AgentsToSkillSets>().SingleInstance();
 			builder.RegisterType<IntradayOptimizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
 			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();
 			builder.RegisterType<IntradayOptimizationCommandHandler>().InstancePerLifetimeScope().ApplyAspects(); //cannot be single due to gridlockmanager dep

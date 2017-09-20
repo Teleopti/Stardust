@@ -14,8 +14,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	[DomainTest]
 	public class VirtualSkillGroupsKeepStateTest
 	{
-		public SkillGroupInfoProvider Target;
-		public SkillGroupContext Context;
+		public SkillSetProvider Target;
+		public SkillSetContext Context;
 
 		[Test]
 		public void ShouldKeepResultInternally()
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			var period = new DateOnlyPeriod(2000, 1, 1, 2001, 1,1);
 			const int numberOfThreads = 10;
 
-			var uniqueResults = new ConcurrentDictionary<SkillGroups, byte>();
+			var uniqueResults = new ConcurrentDictionary<SkillSets, byte>();
 			Parallel.For(0, numberOfThreads, i =>
 			{
 				using (Context.Create(Enumerable.Empty<IPerson>(), period))

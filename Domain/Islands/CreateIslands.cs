@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillGroups);
 			while (true)
 			{
-				var skillGroupsInIslands = allSkillGroups.Select(skillGroup => new List<SkillGroup> { skillGroup }).ToList();
+				var skillGroupsInIslands = allSkillGroups.Select(skillGroup => new List<SkillSet> { skillGroup }).ToList();
 				while (_moveSkillGroupToCorrectIsland.Execute(allSkillGroups, skillGroupsInIslands))
 				{
 					removeEmptyIslands(skillGroupsInIslands);
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			}
 		}
 
-		private static void removeEmptyIslands(ICollection<List<SkillGroup>> skillGroupsInIslands)
+		private static void removeEmptyIslands(ICollection<List<SkillSet>> skillGroupsInIslands)
 		{
 			skillGroupsInIslands.Where(x => x.Count == 0).ToArray().ForEach(x => skillGroupsInIslands.Remove(x));
 		}

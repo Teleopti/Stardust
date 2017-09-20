@@ -12,19 +12,19 @@ namespace Teleopti.Ccc.Domain.Cascading
 	{
 		private readonly ReducePrimarySkillResources _reducePrimarySkillResources;
 		private readonly AddResourcesToSubSkills _addResourcesToSubSkills;
-		private readonly SkillGroupPerActivityProvider _skillGroupPerActivityProvider;
+		private readonly SkillSetPerActivityProvider _skillSetPerActivityProvider;
 		private readonly PrimarySkillOverstaff _primarySkillOverstaff;
 		private readonly ITimeZoneGuard _timeZoneGuard;
 
 		public ShovelResources(ReducePrimarySkillResources reducePrimarySkillResources,
 			AddResourcesToSubSkills addResourcesToSubSkills,
-			SkillGroupPerActivityProvider skillGroupPerActivityProvider,
+			SkillSetPerActivityProvider skillSetPerActivityProvider,
 			PrimarySkillOverstaff primarySkillOverstaff,
 			ITimeZoneGuard timeZoneGuard)
 		{
 			_reducePrimarySkillResources = reducePrimarySkillResources;
 			_addResourcesToSubSkills = addResourcesToSubSkills;
-			_skillGroupPerActivityProvider = skillGroupPerActivityProvider;
+			_skillSetPerActivityProvider = skillSetPerActivityProvider;
 			_primarySkillOverstaff = primarySkillOverstaff;
 			_timeZoneGuard = timeZoneGuard;
 		}
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 						{
 							foreach (var interval in date.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()).Intervals(activityAndIntervalLength.IntervalLength))
 							{
-								var orderedSkillGroups = _skillGroupPerActivityProvider.FetchOrdered(cascadingSkills, ResourceCalculationContext.Fetch(), activityAndIntervalLength.Activity, interval);
+								var orderedSkillGroups = _skillSetPerActivityProvider.FetchOrdered(cascadingSkills, ResourceCalculationContext.Fetch(), activityAndIntervalLength.Activity, interval);
 								var allSkillGroups = orderedSkillGroups.AllSkillGroups();
 								foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
 								{

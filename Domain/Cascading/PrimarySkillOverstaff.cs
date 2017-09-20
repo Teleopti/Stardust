@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class PrimarySkillOverstaff
 	{
-		public ShovelResourcesState AvailableSum(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> allSkillGroups, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
+		public ShovelResourcesState AvailableSum(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillSet> allSkillGroups, IEnumerable<CascadingSkillSet> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
 			var primarySkillsExistsButTheyAreAllClosed = true;
 			var dic = new Dictionary<ISkill, double>();
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		}
 
 		[RemoveMeWithToggle("just copy method impl above", Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156)]
-		protected virtual ShovelResourcesState CreateState(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex,
+		protected virtual ShovelResourcesState CreateState(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillSet> skillGroupsWithSameIndex,
 			DateTimePeriod interval, Dictionary<ISkill, double> dic, bool primarySkillsExistsButTheyAreAllClosed)
 		{
 			return new ShovelResourcesState(dic,
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156)]
 	public class PrimarySkillOverstaffOLD : PrimarySkillOverstaff
 	{
-		protected override ShovelResourcesState CreateState(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex,
+		protected override ShovelResourcesState CreateState(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillSet> skillGroupsWithSameIndex,
 			DateTimePeriod interval, Dictionary<ISkill, double> dic, bool primarySkillsExistsButTheyAreAllClosed)
 		{
 			return new ShovelResourcesState(dic,

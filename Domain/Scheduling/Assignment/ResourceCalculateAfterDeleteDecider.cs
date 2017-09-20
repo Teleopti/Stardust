@@ -6,20 +6,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public class ResourceCalculateAfterDeleteDecider : IResourceCalculateAfterDeleteDecider
 	{
-		private readonly SkillGroupInfoProvider _skillGroupInfoProvider;
+		private readonly SkillSetProvider _skillSetProvider;
 		private readonly ILimitForNoResourceCalculation _limitForNoResourceCalculation;
 
-		public ResourceCalculateAfterDeleteDecider(SkillGroupInfoProvider skillGroupInfoProvider, 
+		public ResourceCalculateAfterDeleteDecider(SkillSetProvider skillSetProvider, 
 							ILimitForNoResourceCalculation limitForNoResourceCalculation)
 		{
-			_skillGroupInfoProvider = skillGroupInfoProvider;
+			_skillSetProvider = skillSetProvider;
 			_limitForNoResourceCalculation = limitForNoResourceCalculation;
 		}
 
 		public bool DoCalculation(IPerson agent, DateOnly date)
 		{
-			var skillGroupResult = _skillGroupInfoProvider.Fetch();
-			return skillGroupResult.NumberOfAgentsInSameSkillGroup(agent) < _limitForNoResourceCalculation.NumberOfAgents;
+			var skillGroupResult = _skillSetProvider.Fetch();
+			return skillGroupResult.NumberOfAgentsInSameSkillSet(agent) < _limitForNoResourceCalculation.NumberOfAgents;
 		}
 	}
 }

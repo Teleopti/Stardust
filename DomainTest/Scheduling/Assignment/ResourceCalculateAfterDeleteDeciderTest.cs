@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	{
 		public IResourceCalculateAfterDeleteDecider Target;
 		public LimitForNoResourceCalculation LimitForNoResourceCalculation;
-		public SkillGroupContext Context;
+		public SkillSetContext Context;
 
 		[Test]
 		public void ShouldAlwaysDoCalculationIfNoOtherAgentHasSameSkills()

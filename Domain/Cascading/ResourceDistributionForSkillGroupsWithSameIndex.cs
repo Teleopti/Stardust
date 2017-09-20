@@ -9,24 +9,24 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ResourceDistributionForSkillGroupsWithSameIndex
 	{
-		private readonly Lazy<IDictionary<CascadingSkillGroup, double>> _distributions;
+		private readonly Lazy<IDictionary<CascadingSkillSet, double>> _distributions;
 
 		[RemoveMeWithToggle("remove params shovelResourceData and interval", Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156)]
-		public ResourceDistributionForSkillGroupsWithSameIndex(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
+		public ResourceDistributionForSkillGroupsWithSameIndex(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillSet> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
-			_distributions = new Lazy<IDictionary<CascadingSkillGroup, double>>(() => init(shovelResourceData, skillGroupsWithSameIndex, interval));
+			_distributions = new Lazy<IDictionary<CascadingSkillSet, double>>(() => init(shovelResourceData, skillGroupsWithSameIndex, interval));
 		}
 
 		[RemoveMeWithToggle("make private, remove params shovelResourceData and interval", Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156)]
-		protected virtual IDictionary<CascadingSkillGroup, double> init(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
+		protected virtual IDictionary<CascadingSkillSet, double> init(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillSet> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
 			var tottiRemainingResources = skillGroupsWithSameIndex.Sum(x => x.RemainingResources);
 			return skillGroupsWithSameIndex.ToDictionary(skillGroup => skillGroup, skillGroup => skillGroup.RemainingResources / tottiRemainingResources);
 		}
 
-		public double For(CascadingSkillGroup skillGroup)
+		public double For(CascadingSkillSet skillSet)
 		{
-			return _distributions.Value[skillGroup];
+			return _distributions.Value[skillSet];
 		}
 	}
 
@@ -34,13 +34,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156)]
 	public class ResourceDistributionForSkillGroupsWithSameIndexOLD : ResourceDistributionForSkillGroupsWithSameIndex
 	{
-		public ResourceDistributionForSkillGroupsWithSameIndexOLD(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval) : base(shovelResourceData, skillGroupsWithSameIndex, interval)
+		public ResourceDistributionForSkillGroupsWithSameIndexOLD(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillSet> skillGroupsWithSameIndex, DateTimePeriod interval) : base(shovelResourceData, skillGroupsWithSameIndex, interval)
 		{
 		}
 
-		protected override IDictionary<CascadingSkillGroup, double> init(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillGroup> skillGroupsWithSameIndex, DateTimePeriod interval)
+		protected override IDictionary<CascadingSkillSet, double> init(IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillSet> skillGroupsWithSameIndex, DateTimePeriod interval)
 		{
-			var ret = new Dictionary<CascadingSkillGroup, double>();
+			var ret = new Dictionary<CascadingSkillSet, double>();
 			var tottiRelativeDifference = skillGroupsWithSameIndex.SelectMany(skillGroupWithSameIndex => skillGroupWithSameIndex.PrimarySkills)
 				.Sum(otherPrimarySkill => shovelResourceData.GetDataForInterval(otherPrimarySkill, interval).AbsoluteDifference);
 			foreach (var skillGroup in skillGroupsWithSameIndex)

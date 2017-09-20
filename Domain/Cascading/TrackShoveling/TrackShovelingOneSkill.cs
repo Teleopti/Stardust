@@ -10,35 +10,35 @@ namespace Teleopti.Ccc.Domain.Cascading.TrackShoveling
 		private readonly ISkill _skillToTrack;
 		private readonly DateTimePeriod _intervalToTrack;
 		private readonly ICollection<AddedResource> _addedResources;
-		private readonly IDictionary<IEnumerable<CascadingSkillGroup>, RemovedResource> _removedResources;
+		private readonly IDictionary<IEnumerable<CascadingSkillSet>, RemovedResource> _removedResources;
 
 		public TrackShovelingOneSkill(ISkill skillToTrack, DateTimePeriod intervalToTrack)
 		{
 			_skillToTrack = skillToTrack;
 			_intervalToTrack = intervalToTrack;
 			_addedResources = new List<AddedResource>();
-			_removedResources = new Dictionary<IEnumerable<CascadingSkillGroup>, RemovedResource>();
+			_removedResources = new Dictionary<IEnumerable<CascadingSkillSet>, RemovedResource>();
 		}
 		public IEnumerable<AddedResource> AddedResources => _addedResources;
 		public IEnumerable<RemovedResource> RemovedResources => _removedResources.Values;
 		public double ResourcesBeforeShoveling { get; private set; }
 
-		void IShovelingCallback.ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<CascadingSkillGroup> skillGroups, CascadingSkillGroup fromSkillGroup, double resources)
+		void IShovelingCallback.ResourcesWasMovedTo(ISkill skillToMoveTo, DateTimePeriod interval, IEnumerable<CascadingSkillSet> skillGroups, CascadingSkillSet fromSkillSet, double resources)
 		{
 			if (interval == _intervalToTrack)
 			{
 				if (skillToMoveTo.Equals(_skillToTrack))
 				{
-					_addedResources.Add(new AddedResource(fromSkillGroup, resources));
+					_addedResources.Add(new AddedResource(fromSkillSet, resources));
 				}
-				if (fromSkillGroup.PrimarySkills.Contains(_skillToTrack))
+				if (fromSkillSet.PrimarySkills.Contains(_skillToTrack))
 				{
 					removedResource(skillGroups).ToSubskills.Add(skillToMoveTo);
 				}
 			}
 		}
 
-		void IShovelingCallback.ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, IEnumerable<CascadingSkillGroup> skillGroups, double resources)
+		void IShovelingCallback.ResourcesWasRemovedFrom(ISkill primarySkill, DateTimePeriod interval, IEnumerable<CascadingSkillSet> skillGroups, double resources)
 		{
 			if (primarySkill.Equals(_skillToTrack) && interval == _intervalToTrack)
 			{
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Cascading.TrackShoveling
 			ResourcesBeforeShoveling = shovelResourceData.GetDataForInterval(_skillToTrack, _intervalToTrack).CalculatedResource;
 		}
 
-		private RemovedResource removedResource(IEnumerable<CascadingSkillGroup> skillGroups)
+		private RemovedResource removedResource(IEnumerable<CascadingSkillSet> skillGroups)
 		{
 			RemovedResource removedResource;
 			if (_removedResources.TryGetValue(skillGroups, out removedResource))

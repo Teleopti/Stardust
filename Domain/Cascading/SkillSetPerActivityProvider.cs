@@ -5,13 +5,13 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class SkillGroupPerActivityProvider
+	public class SkillSetPerActivityProvider
 	{
-		public OrderedSkillGroups FetchOrdered(CascadingSkills cascadingSkills, IResourcesForShovelAndCalculation resources, IActivity activity, DateTimePeriod period)
+		public OrderedSkillSets FetchOrdered(CascadingSkills cascadingSkills, IResourcesForShovelAndCalculation resources, IActivity activity, DateTimePeriod period)
 		{
 			var affectedSkills = resources.AffectedResources(activity, period).Values;
 			var cascadingSkillsForActivity = cascadingSkills.ForActivity(activity).ToArray();
-			var cascadingSkillGroups = new List<CascadingSkillGroup>();
+			var cascadingSkillGroups = new List<CascadingSkillSet>();
 
 			foreach (var skillGroup in affectedSkills)
 			{
@@ -36,28 +36,28 @@ namespace Teleopti.Ccc.Domain.Cascading
 						last.AddSubSkill(skillInSameChainAsPrimarySkill);
 					}
 				}
-				cascadingSkillGroups.Add(new CascadingSkillGroup(primarySkills, cascadingSubSkills, skillGroup.Resource));
+				cascadingSkillGroups.Add(new CascadingSkillSet(primarySkills, cascadingSubSkills, skillGroup.Resource));
 			}
 			cascadingSkillGroups.Sort(new CascadingSkillGroupSorter());
 			return mergeSkillGroupsWithSameIndex(cascadingSkillGroups);
 		}
 
-		private OrderedSkillGroups mergeSkillGroupsWithSameIndex(IEnumerable<CascadingSkillGroup> cascadingSkillGroups)
+		private static OrderedSkillSets mergeSkillGroupsWithSameIndex(IEnumerable<CascadingSkillSet> cascadingSkillGroups)
 		{
-			var ret = new List<List<CascadingSkillGroup>>();
+			var ret = new List<List<CascadingSkillSet>>();
 			foreach (var skillGroup in cascadingSkillGroups)
 			{
 				var retLast = ret.LastOrDefault();
 				if (retLast == null || !retLast.First().HasSameSkillGroupIndexAs(skillGroup))
 				{
-					ret.Add(new List<CascadingSkillGroup> {skillGroup});
+					ret.Add(new List<CascadingSkillSet> {skillGroup});
 				}
 				else
 				{
 					ret.Last().Add(skillGroup);
 				}
 			}
-			return new OrderedSkillGroups(ret);
+			return new OrderedSkillSets(ret);
 		}
 	}
 }

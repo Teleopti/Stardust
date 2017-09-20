@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			PersonRepository.Has(new Person().WithPersonPeriod(skillB));
 
 			var model = IslandModelFactory.Create();
-			model.AfterReducing.Islands.All(x => x.SkillGroups.Count() == 1) //two islands with one skillgroup each
+			model.AfterReducing.Islands.All(x => x.SkillSets.Count() == 1) //two islands with one skillgroup each
 				.Should().Be.True();
 		}
 	}

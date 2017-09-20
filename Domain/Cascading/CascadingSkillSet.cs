@@ -5,9 +5,9 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class CascadingSkillGroup
+	public class CascadingSkillSet
 	{
-		public CascadingSkillGroup(IEnumerable<ISkill> primarySkills, IEnumerable<SubSkillsWithSameIndex> subSkillsWithSameIndex, double resources)
+		public CascadingSkillSet(IEnumerable<ISkill> primarySkills, IEnumerable<SubSkillsWithSameIndex> subSkillsWithSameIndex, double resources)
 		{
 			PrimarySkills = primarySkills;
 			SubSkillsWithSameIndex = subSkillsWithSameIndex;
@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public IEnumerable<SubSkillsWithSameIndex> SubSkillsWithSameIndex { get; }
 		public double RemainingResources { get; set; }
 
-		public bool HasSameSkillGroupIndexAs(CascadingSkillGroup otherSkillGroup)
+		public bool HasSameSkillGroupIndexAs(CascadingSkillSet otherSkillSet)
 		{
 			var thisPrimary = new HashSet<ISkill>(PrimarySkills);
-			if (!thisPrimary.SetEquals(otherSkillGroup.PrimarySkills))
+			if (!thisPrimary.SetEquals(otherSkillSet.PrimarySkills))
 				return false;
-			return subskillHash() == otherSkillGroup.subskillHash();
+			return subskillHash() == otherSkillSet.subskillHash();
 		}
 
 		private string subskillHash()

@@ -8,30 +8,30 @@ namespace Teleopti.Ccc.Domain.Islands
 {
 	public class Island
 	{
-		private readonly IEnumerable<SkillGroup> _skillGroups;
+		private readonly IEnumerable<SkillSet> _skillSets;
 		private readonly IDictionary<ISkill, int> _noAgentsKnowingSkill;
 
-		public Island(IEnumerable<SkillGroup> skillGroups, IDictionary<ISkill, int> noAgentsKnowingSkill)
+		public Island(IEnumerable<SkillSet> skillSets, IDictionary<ISkill, int> noAgentsKnowingSkill)
 		{
-			_skillGroups = skillGroups;
+			_skillSets = skillSets;
 			_noAgentsKnowingSkill = noAgentsKnowingSkill;
 		}
 
 		public IEnumerable<IPerson> AgentsInIsland()
 		{
-			return _skillGroups.SelectMany(x => x.Agents);
+			return _skillSets.SelectMany(x => x.Agents);
 		}
 
 		public IEnumerable<Guid> SkillIds()
 		{
 			var ret = new HashSet<Guid>();
-			foreach (var skillGroup in _skillGroups)
+			foreach (var skillSet in _skillSets)
 			{
-				foreach (var skillGroupSkill in skillGroup.Skills)
+				foreach (var skillSetSkill in skillSet.Skills)
 				{
-					if (skillGroupSkill.Id.HasValue)
+					if (skillSetSkill.Id.HasValue)
 					{
-						ret.Add(skillGroupSkill.Id.Value);
+						ret.Add(skillSetSkill.Id.Value);
 					}
 				}
 			}
@@ -41,10 +41,10 @@ namespace Teleopti.Ccc.Domain.Islands
 		public IslandModel CreateClientModel()
 		{
 			var ret = new IslandModel();
-			var skillGroupModels = new List<SkillGroupModel>();
-			foreach (var skillGroup in _skillGroups)
+			var skillGroupModels = new List<SkillSetModel>();
+			foreach (var skillGroup in _skillSets)
 			{
-				var skillGroupModel = new SkillGroupModel();
+				var skillGroupModel = new SkillSetModel();
 				var skillsModel = skillGroup.Skills.Select(skill => new SkillModel
 				{
 					Name = skill.Name,
@@ -53,12 +53,12 @@ namespace Teleopti.Ccc.Domain.Islands
 				}).ToList();
 				skillsModel.Sort();
 				skillGroupModel.Skills = skillsModel;
-				skillGroupModel.NumberOfAgentsOnSkillGroup = skillGroup.Agents.Count();
+				skillGroupModel.NumberOfAgentsOnSkillSet = skillGroup.Agents.Count();
 				skillGroupModels.Add(skillGroupModel);
 			}
 			skillGroupModels.Sort();
-			ret.SkillGroups = skillGroupModels;
-			ret.NumberOfAgentsOnIsland = ret.SkillGroups.Sum(x => x.NumberOfAgentsOnSkillGroup);
+			ret.SkillSets = skillGroupModels;
+			ret.NumberOfAgentsOnIsland = ret.SkillSets.Sum(x => x.NumberOfAgentsOnSkillSet);
 			return ret;
 		}
 
@@ -66,13 +66,13 @@ namespace Teleopti.Ccc.Domain.Islands
 		{
 			var ret = new IslandExtendedModel();
 			var skillsInIsland = new HashSet<ISkill>();
-			var skillGroups = new List<SkillGroupExtendedModel>();
-			foreach (var skillGroup in _skillGroups)
+			var skillGroups = new List<SkillSetExtendedModel>();
+			foreach (var skillGroup in _skillSets)
 			{
-				skillGroups.Add(new SkillGroupExtendedModel
+				skillGroups.Add(new SkillSetExtendedModel
 				{
-					AgentsInSkillGroup = skillGroup.Agents,
-					SkillsInSkillGroup = skillGroup.Skills
+					AgentsInSkillSet = skillGroup.Agents,
+					SkillsInSkillSet = skillGroup.Skills
 				});
 				foreach (var skill in skillGroup.Skills)
 				{
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Islands
 				}
 			}
 			ret.SkillsInIsland = skillsInIsland;
-			ret.SkillGroupsInIsland = skillGroups;
+			ret.SkillSetsInIsland = skillGroups;
 
 			return ret;
 		}

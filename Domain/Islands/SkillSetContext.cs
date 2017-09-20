@@ -5,26 +5,26 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class SkillGroupContext
+	public class SkillSetContext
 	{
 		private readonly CreateSkillGroups _createSkillGroups;
 
-		public SkillGroupContext(CreateSkillGroups createSkillGroups)
+		public SkillSetContext(CreateSkillGroups createSkillGroups)
 		{
 			_createSkillGroups = createSkillGroups;
 		}
 
 		[ThreadStatic]
-		private static SkillGroups _skillGroups;
+		private static SkillSets _skillSets;
 
-		public static SkillGroups SkillGroups => _skillGroups;
+		public static SkillSets SkillSets => _skillSets;
 
 		public IDisposable Create(IEnumerable<IPerson> personsInOrganization, DateOnlyPeriod period)
 		{
-			if (_skillGroups != null)
+			if (_skillSets != null)
 				throw new NotSupportedException("Nested virtualSkillGroupResult context.");
-			_skillGroups = _createSkillGroups.Create(personsInOrganization, period.StartDate);
-			return new GenericDisposable(() => { _skillGroups = null; });
+			_skillSets = _createSkillGroups.Create(personsInOrganization, period.StartDate);
+			return new GenericDisposable(() => { _skillSets = null; });
 		}
 	}
 }

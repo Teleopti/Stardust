@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ReducePrimarySkillResources
 	{
-		public void Execute(ShovelResourcesState state, IShovelResourceData shovelResourceData, DateTimePeriod interval, IEnumerable<CascadingSkillGroup> skillGroup, IShovelingCallback shovelingCallback)
+		public void Execute(ShovelResourcesState state, IShovelResourceData shovelResourceData, DateTimePeriod interval, IEnumerable<CascadingSkillSet> skillGroup, IShovelingCallback shovelingCallback)
 		{
 			if (jumpOutEarly(state))
 				return;

@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.AfterReducing.Islands.Single().SkillGroups.Count().Should().Be.EqualTo(2);
-			model.BeforeReducing.Islands.Single().SkillGroups.Count().Should().Be.EqualTo(2);
+			model.AfterReducing.Islands.Single().SkillSets.Count().Should().Be.EqualTo(2);
+			model.BeforeReducing.Islands.Single().SkillSets.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.AfterReducing.Islands.Single().SkillGroups.Single().Skills.Select(x => x.Name).Should().Have.SameValuesAs("1", "2");
-			model.BeforeReducing.Islands.Single().SkillGroups.Single().Skills.Select(x => x.Name).Should().Have.SameValuesAs("1", "2");
+			model.AfterReducing.Islands.Single().SkillSets.Single().Skills.Select(x => x.Name).Should().Have.SameValuesAs("1", "2");
+			model.BeforeReducing.Islands.Single().SkillSets.Single().Skills.Select(x => x.Name).Should().Have.SameValuesAs("1", "2");
 		}
 
 		[Test]
@@ -66,8 +66,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			PersonRepository.Has(skill);
 
 			var model = IslandModelFactory.Create();
-			model.BeforeReducing.Islands.Single().SkillGroups.Single().Skills.Single().ActivityName.Should().Be.EqualTo(activityName);
-			model.AfterReducing.Islands.Single().SkillGroups.Single().Skills.Single().ActivityName.Should().Be.EqualTo(activityName);
+			model.BeforeReducing.Islands.Single().SkillSets.Single().Skills.Single().ActivityName.Should().Be.EqualTo(activityName);
+			model.AfterReducing.Islands.Single().SkillSets.Single().Skills.Single().ActivityName.Should().Be.EqualTo(activityName);
 		}
 
 		[Test]
@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.AfterReducing.Islands.Single().SkillGroups.Single().NumberOfAgentsOnSkillGroup.Should().Be.EqualTo(3);
-			model.BeforeReducing.Islands.Single().SkillGroups.Single().NumberOfAgentsOnSkillGroup.Should().Be.EqualTo(3);
+			model.AfterReducing.Islands.Single().SkillSets.Single().NumberOfAgentsOnSkillSet.Should().Be.EqualTo(3);
+			model.BeforeReducing.Islands.Single().SkillSets.Single().NumberOfAgentsOnSkillSet.Should().Be.EqualTo(3);
 		}
 
 		[Test]
@@ -96,8 +96,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.AfterReducing.Islands.Single().SkillGroups.First().Skills.Count().Should().Be.EqualTo(2);
-			model.BeforeReducing.Islands.Single().SkillGroups.First().Skills.Count().Should().Be.EqualTo(2);
+			model.AfterReducing.Islands.Single().SkillSets.First().Skills.Count().Should().Be.EqualTo(2);
+			model.BeforeReducing.Islands.Single().SkillSets.First().Skills.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -111,8 +111,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.AfterReducing.Islands.Single().SkillGroups.Single(x => x.Skills.Count()==2).Skills.First().NumberOfAgentsOnSkill.Should().Be.EqualTo(2);
-			model.BeforeReducing.Islands.Single().SkillGroups.Single(x => x.Skills.Count()==2).Skills.First().NumberOfAgentsOnSkill.Should().Be.EqualTo(2);
+			model.AfterReducing.Islands.Single().SkillSets.Single(x => x.Skills.Count()==2).Skills.First().NumberOfAgentsOnSkill.Should().Be.EqualTo(2);
+			model.BeforeReducing.Islands.Single().SkillSets.Single(x => x.Skills.Count()==2).Skills.First().NumberOfAgentsOnSkill.Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -125,8 +125,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 			var model = IslandModelFactory.Create();
 
-			model.AfterReducing.Islands.Single().SkillGroups.Single(x => x.Skills.Count() == 2).Skills.First().Name.Should().Be.EqualTo(skill2.Name);
-			model.BeforeReducing.Islands.Single().SkillGroups.Single(x => x.Skills.Count() == 2).Skills.First().Name.Should().Be.EqualTo(skill2.Name);
+			model.AfterReducing.Islands.Single().SkillSets.Single(x => x.Skills.Count() == 2).Skills.First().Name.Should().Be.EqualTo(skill2.Name);
+			model.BeforeReducing.Islands.Single().SkillSets.Single(x => x.Skills.Count() == 2).Skills.First().Name.Should().Be.EqualTo(skill2.Name);
 		}
 
 		[Test]

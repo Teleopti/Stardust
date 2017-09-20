@@ -504,7 +504,7 @@
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePersonProvider.cs" />
     <Compile Include="Cascading\ActivityAndIntervalLength.cs" />
     <Compile Include="Cascading\EmptyShovelResourceDataForInterval.cs" />
-    <Compile Include="Cascading\OrderedSkillGroups.cs" />
+    <Compile Include="Cascading\OrderedSkillSets.cs" />
     <Compile Include="Cascading\ResourceCalculationThatThrows.cs" />
     <Compile Include="Cascading\ResourceDistributionForSkillGroupsWithSameIndex.cs" />
     <Compile Include="Cascading\ShovelResourceDataExtensions.cs" />
@@ -1384,10 +1384,10 @@
     <Compile Include="Budgeting\BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Cascading\ShovelResources.cs" />
     <Compile Include="Cascading\CascadingResourceCalculation.cs" />
-    <Compile Include="Cascading\CascadingSkillGroup.cs" />
+    <Compile Include="Cascading\CascadingSkillSet.cs" />
     <Compile Include="Cascading\CascadingSkillGroupSorter.cs" />
     <Compile Include="Cascading\DoubleExtensionsInCascadingScenarios.cs" />
-    <Compile Include="Cascading\SkillGroupPerActivityProvider.cs" />
+    <Compile Include="Cascading\SkillSetPerActivityProvider.cs" />
     <Compile Include="Common\IBusinessUnitScope.cs" />
     <Compile Include="Helper\DateRangeExtensions.cs" />
     <Compile Include="Infrastructure\CleanFailedQueueHandler.cs" />
@@ -1431,11 +1431,11 @@
     <Compile Include="Islands\ReduceNoSkillGroups.cs" />
     <Compile Include="Islands\ReduceSkillGroups.cs" />
     <Compile Include="Islands\SameSkillGroupSkillsComparer.cs" />
-    <Compile Include="Islands\SkillGroup.cs" />
-    <Compile Include="Islands\SkillGroupComparerForIslands.cs" />
-    <Compile Include="Islands\SkillGroupContext.cs" />
-    <Compile Include="Islands\SkillGroupInfoProvider.cs" />
-    <Compile Include="Islands\SkillGroups.cs" />
+    <Compile Include="Islands\SkillSet.cs" />
+    <Compile Include="Islands\SkillSetComparerForIslands.cs" />
+    <Compile Include="Islands\SkillSetContext.cs" />
+    <Compile Include="Islands\SkillSetProvider.cs" />
+    <Compile Include="Islands\SkillSets.cs" />
     <Compile Include="LogObject\LogObjectDetail.cs" />
     <Compile Include="Logon\FullPermissions.cs" />
     <Compile Include="Logon\FullPermissionsAspect.cs" />
@@ -2137,7 +2137,7 @@
     <Compile Include="Optimization\OptimizationPreferencesDefaultValueProvider.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationAndSingleAgentTeam.cs" />
     <Compile Include="Optimization\IPlanningGroupSettingsRepository.cs" />
-    <Compile Include="Optimization\AgentsToSkillGroups.cs" />
+    <Compile Include="Optimization\AgentsToSkillSets.cs" />
     <Compile Include="Optimization\OptimizationResult.cs" />
     <Compile Include="Optimization\OptimizeIntradayDesktop.cs" />
     <Compile Include="Optimization\PersistSchedulesAfterIsland.cs" />

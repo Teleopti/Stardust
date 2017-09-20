@@ -5,9 +5,9 @@ namespace Teleopti.Ccc.Domain.Islands
 {
 	public class MoveSkillGroupToCorrectIsland
 	{
-		public bool Execute(ICollection<SkillGroup> allSkillGroups, IEnumerable<ICollection<SkillGroup>> islands)
+		public bool Execute(ICollection<SkillSet> allSkillGroups, IEnumerable<ICollection<SkillSet>> islands)
 		{
-			var touchedIslands = new HashSet<ICollection<SkillGroup>>();
+			var touchedIslands = new HashSet<ICollection<SkillSet>>();
 
 			foreach (var island in islands)
 			{
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			return touchedIslands.Any();
 		}
 
-		private static void moveSkillGroupForOneIslandToCorrectIsland(ICollection<SkillGroup> allSkillGroups, IEnumerable<ICollection<SkillGroup>> islands, ICollection<SkillGroup> island, ISet<ICollection<SkillGroup>> touchedIslands)
+		private static void moveSkillGroupForOneIslandToCorrectIsland(ICollection<SkillSet> allSkillGroups, IEnumerable<ICollection<SkillSet>> islands, ICollection<SkillSet> island, ISet<ICollection<SkillSet>> touchedIslands)
 		{
 			foreach (var skillGroup in island.ToArray())
 			{

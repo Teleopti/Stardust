@@ -2,12 +2,12 @@ namespace Teleopti.Ccc.Domain.Cascading.TrackShoveling
 {
 	public class AddedResource
 	{
-		public AddedResource(CascadingSkillGroup fromSkillGroup, double resourcesMoved)
+		public AddedResource(CascadingSkillSet fromSkillSet, double resourcesMoved)
 		{
-			FromSkillGroup = fromSkillGroup;
+			FromSkillSet = fromSkillSet;
 			ResourcesMoved = resourcesMoved;
 		}
-		public CascadingSkillGroup FromSkillGroup { get; }
+		public CascadingSkillSet FromSkillSet { get; }
 		public double ResourcesMoved { get; }
 	}
 }

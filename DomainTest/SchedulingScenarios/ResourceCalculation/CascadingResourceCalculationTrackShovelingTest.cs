@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			Target.ResourceCalculate(dateOnly, ResourceCalculationDataCreator.WithData(trackShoveling, scenario, dateOnly, new[] { ass1, ass2 }, new[] { primarySkillDay, subSkillDay }, false, false));
 
 			var resourcesAdded = trackShoveling.AddedResources.Single();
-			resourcesAdded.FromSkillGroup.PrimarySkills.Should().Have.SameValuesAs(primarySkill);
-			resourcesAdded.FromSkillGroup.SubSkillsWithSameIndex.Single().Should().Have.SameValuesAs(subskill);
+			resourcesAdded.FromSkillSet.PrimarySkills.Should().Have.SameValuesAs(primarySkill);
+			resourcesAdded.FromSkillSet.SubSkillsWithSameIndex.Single().Should().Have.SameValuesAs(subskill);
 			resourcesAdded.ResourcesMoved.Should().Be.EqualTo(1);
 		}
 

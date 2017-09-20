@@ -4,12 +4,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class SkillGroup
+	public class SkillSet
 	{
 		private readonly ISet<IPerson> _agents;
 		private readonly ISet<ISkill> _skills;
 
-		public SkillGroup(ISet<ISkill> skills, ISet<IPerson> agents)
+		public SkillSet(ISet<ISkill> skills, ISet<IPerson> agents)
 		{
 			_skills = skills;
 			_agents = agents;
@@ -18,14 +18,14 @@ namespace Teleopti.Ccc.Domain.Islands
 		public IEnumerable<IPerson> Agents => _agents;
 		public IEnumerable<ISkill> Skills => _skills;
 
-		public bool HasSameSkillsAs(SkillGroup otherSkillGroup)
+		public bool HasSameSkillsAs(SkillSet otherSkillSet)
 		{
-			return _skills.SetEquals(otherSkillGroup._skills);
+			return _skills.SetEquals(otherSkillSet._skills);
 		}
 
-		public void AddAgentsFrom(SkillGroup skillGroup)
+		public void AddAgentsFrom(SkillSet skillSet)
 		{
-			skillGroup.Agents.ForEach(x => _agents.Add(x));
+			skillSet.Agents.ForEach(x => _agents.Add(x));
 		}
 
 		public void RemoveSkill(ISkill skill)
@@ -33,9 +33,9 @@ namespace Teleopti.Ccc.Domain.Islands
 			_skills.Remove(skill);
 		}
 
-		public bool HasAnySkillSameAs(SkillGroup skillGroup)
+		public bool HasAnySkillSameAs(SkillSet skillSet)
 		{
-			return _skills.Overlaps(skillGroup._skills);
+			return _skills.Overlaps(skillSet._skills);
 		}
 	}
 }

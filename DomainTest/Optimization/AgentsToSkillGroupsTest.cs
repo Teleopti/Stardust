@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	[DomainTest]
 	public class AgentsToSkillGroupsTest : ISetup
 	{
-		public AgentsToSkillGroups Target;
-		public SkillGroupContext Context;
+		public AgentsToSkillSets Target;
+		public SkillSetContext Context;
 
 		[Test]
 		public void ShouldSplitTwoAgentsWithDifferentSkillsIntoTwoGroups()

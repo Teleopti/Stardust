@@ -3,9 +3,9 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class CascadingSkillGroupSorter : IComparer<CascadingSkillGroup>
+	public class CascadingSkillGroupSorter : IComparer<CascadingSkillSet>
 	{
-		public int Compare(CascadingSkillGroup first, CascadingSkillGroup second)
+		public int Compare(CascadingSkillSet first, CascadingSkillSet second)
 		{
 			var primaryDiff = second.PrimarySkillsCascadingIndex - first.PrimarySkillsCascadingIndex;
 			if (primaryDiff != 0)

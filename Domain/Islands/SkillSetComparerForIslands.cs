@@ -3,14 +3,14 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class SkillGroupComparerForIslands : IEqualityComparer<SkillGroup>
+	public class SkillSetComparerForIslands : IEqualityComparer<SkillSet>
 	{
-		public bool Equals(SkillGroup x, SkillGroup y)
+		public bool Equals(SkillSet x, SkillSet y)
 		{
 			return x.Skills.Intersect(y.Skills).Any();
 		}
 
-		public int GetHashCode(SkillGroup obj)
+		public int GetHashCode(SkillSet obj)
 		{
 			return 1;
 		}

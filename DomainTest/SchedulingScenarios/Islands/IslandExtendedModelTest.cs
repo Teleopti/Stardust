@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		{
 			var skill1 = new Skill("1");
 			var skill2 = new Skill("2");
-			var skillgroup1 = new SkillGroup(new HashSet<ISkill> { skill1, skill2 }, new HashSet<IPerson>());
-			var skillgroup2 = new SkillGroup(new HashSet<ISkill> { skill2 }, new HashSet<IPerson>());
+			var skillgroup1 = new SkillSet(new HashSet<ISkill> { skill1, skill2 }, new HashSet<IPerson>());
+			var skillgroup2 = new SkillSet(new HashSet<ISkill> { skill2 }, new HashSet<IPerson>());
 			var model = new Island(new[] {skillgroup1, skillgroup2}, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
 
 			model.SkillsInIsland.Count().Should().Be.EqualTo(2);
@@ -31,11 +31,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		{
 			var skill1 = new Skill("1");
 			var skill2 = new Skill("2");
-			var skillgroup1 = new SkillGroup(new HashSet<ISkill> { skill1, skill2 }, new HashSet<IPerson>());
-			var skillgroup2 = new SkillGroup(new HashSet<ISkill> { skill2 }, new HashSet<IPerson>());
+			var skillgroup1 = new SkillSet(new HashSet<ISkill> { skill1, skill2 }, new HashSet<IPerson>());
+			var skillgroup2 = new SkillSet(new HashSet<ISkill> { skill2 }, new HashSet<IPerson>());
 			var model = new Island(new[] { skillgroup1, skillgroup2 }, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
 
-			model.SkillGroupsInIsland.Count().Should().Be.EqualTo(2);
+			model.SkillSetsInIsland.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
@@ -43,12 +43,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		{
 			var skill1 = new Skill("1");		
 			var agent1 = new Person();
-			var skillgroup1 = new SkillGroup(new HashSet<ISkill> { skill1 }, new HashSet<IPerson> { agent1 });
+			var skillgroup1 = new SkillSet(new HashSet<ISkill> { skill1 }, new HashSet<IPerson> { agent1 });
 
 			var model = new Island(new[] { skillgroup1 }, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
 
-			model.SkillGroupsInIsland.First().AgentsInSkillGroup.Count().Should().Be.EqualTo(1);
-			model.SkillGroupsInIsland.First().AgentsInSkillGroup.Should().Contain(agent1);
+			model.SkillSetsInIsland.First().AgentsInSkillSet.Count().Should().Be.EqualTo(1);
+			model.SkillSetsInIsland.First().AgentsInSkillSet.Should().Contain(agent1);
 		}
 	}
 }
