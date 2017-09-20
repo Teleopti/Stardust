@@ -70,6 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private static TimeSpan CalculateDaylightSavingsRecorrection(DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
 		{
+			//pretty sure this method is compeletly wrong/unnecessary... all timezones here don't make sense.
 			var loggedOnPersonsTimezone = TimeZoneGuard.Instance.CurrentTimeZone();
 			
 			var sourceIsDaylightSavingTime = loggedOnPersonsTimezone.IsDaylightSavingTime(TimeZoneHelper.ConvertFromUtc(sourceShiftPeriod.StartDateTime, TimeZoneHelper.CurrentSessionTimeZone));
