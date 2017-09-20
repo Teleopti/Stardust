@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			public IEnumerable<SkillStaffingInterval> SkillStaffingIntervals;
 		}
 
-		private WaitlistHelpers initializeWaitlistHandling(IEnumerable<Guid> requestIdsToSkip)
+		private WaitlistHelpers initializeWaitlistHandling()
 		{
 			var helpers = new WaitlistHelpers();
 			_contractRepository.LoadAll();
@@ -118,7 +118,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 			var validPeriod = new DateTimePeriod(_now.UtcDateTime(), _now.UtcDateTime().AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 			helpers.LoadSchedulesPeriodToCoverForMidnightShifts = validPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
-			var waitlistedRequestsIds = _personRequestRepository.GetWaitlistRequests(helpers.LoadSchedulesPeriodToCoverForMidnightShifts).Except(requestIdsToSkip);
+			var waitlistedRequestsIds = _personRequestRepository.GetWaitlistRequests(helpers.LoadSchedulesPeriodToCoverForMidnightShifts).ToList();
+			if (!waitlistedRequestsIds.Any())
+			{
+				helpers.InitSuccess = false;
+				logger.Info("No waitlisted request found within the period from " +
+								  helpers.LoadSchedulesPeriodToCoverForMidnightShifts.StartDateTime + " to " +
+								  helpers.LoadSchedulesPeriodToCoverForMidnightShifts.EndDateTime);
+				return helpers;
+			}
 			var waitlistedRequests = _personRequestRepository.Find(waitlistedRequestsIds);
 
 			waitlistedRequests =
@@ -179,8 +187,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			try
 			{
-				var helpers = initializeWaitlistHandling(new List<Guid>());
-				
+				var helpers = initializeWaitlistHandling();
+				if (!helpers.InitSuccess)
+				{
+					return;
+				}
 				using (getContext(helpers.CombinationResources, helpers.Skills, false))
 				{
 					_resourceCalculation.ResourceCalculate(helpers.DateOnlyPeriodOne, helpers.ResCalcData,
