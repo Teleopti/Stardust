@@ -339,7 +339,6 @@
     <Compile Include="FileImport\FileImportExceptionTest.cs" />
     <Compile Include="FileImport\FileImportDateTimeParserTest.cs" />
     <Compile Include="FileImport\ImportFileDoTest.cs" />
-    <Compile Include="Forecasting\Cascading\CascadingSkillPresenterTest.cs" />
     <Compile Include="Forecasting\CopyToSkillPresenterTest.cs" />
     <Compile Include="Forecasting\CopyToSkillCommandTest.cs" />
     <Compile Include="Forecasting\DetailedJobHistoryPresenterTest.cs" />

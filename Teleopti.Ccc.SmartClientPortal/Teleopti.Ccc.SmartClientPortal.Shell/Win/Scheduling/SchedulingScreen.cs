@@ -6932,8 +6932,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 						}
 					}
 
-					var showUseSkills = _container.Resolve<IToggleManager>().IsEnabled(Toggles.ResourcePlanner_CascadingSkillsGUI_40018)
-										&& _schedulerState.SchedulingResultState.Skills.Any(x => x.IsCascading());
+					var showUseSkills = _schedulerState.SchedulingResultState.Skills.Any(x => x.IsCascading());
 					
 					using (var options = new OvertimePreferencesDialog(_schedulerState.CommonStateHolder.ActiveScheduleTags,
 																	"OvertimePreferences", 

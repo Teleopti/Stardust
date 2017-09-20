@@ -18,23 +18,18 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.Controls;
-using Teleopti.Ccc.SmartClientPortal.Shell.Win.Forecasting.Forms;
-using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.Cascading;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings.Events;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.PeopleAdmin;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
 using Teleopti.Ccc.Win.Main;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
@@ -372,7 +367,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 		private void enableOrganizeCascadingSkills()
 		{
 			var toggleManager = _container.Resolve<IToggleManager>();
-			var toggled = toggleManager.IsEnabled(Toggles.ResourcePlanner_CascadingSkillsGUI_40018) || toggleManager.IsEnabled(Toggles.Wfm_SkillPriorityRoutingGUI_39885);
+			var toggled = toggleManager.IsEnabled(Toggles.Wfm_SkillPriorityRoutingGUI_39885);
 			var permitted = PrincipalAuthorization.Current().IsPermitted(DefinedRaptorApplicationFunctionPaths.OrganizeCascadingSkills);
 
 			toolStripButtonOrganizeCascadingSkills.Visible = toggled && permitted;
@@ -380,30 +375,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
 
 		private void toolStripButtonOrganizeCascadingSkillsClick(object sender, EventArgs e)
 		{
-			var toggleManager = _container.Resolve<IToggleManager>();
-			if(toggleManager.IsEnabled(Toggles.ResourcePlanner_CascadingSkillsGUI_40018))
-			{
-				using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-				{
-					var model = new CascadingSkillPresenter(new SkillRepository(new ThisUnitOfWork(uow)));
-					using (var view = new CascadingSkillsView(model))
-					{
-						var result = view.ShowDialog();
-						if (result.Equals(DialogResult.OK))
-						{
-							model.Confirm();
-							uow.PersistAll();
-						}
-					}
-				}
-			}
-			else if (toggleManager.IsEnabled(Toggles.Wfm_SkillPriorityRoutingGUI_39885))
-			{
-				var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
-				var url = $"{wfmPath}WFM/#/skillprio";
-				if (url.IsAnUrl())
-					Process.Start(url);
-			}
+			//TODO: won't work if feature toggle svc no longer runs on same web app as WFM
+			var wfmPath = _container.Resolve<IConfigReader>().AppConfig("FeatureToggle");
+			var url = $"{wfmPath}WFM/#/skillprio";
+			if (url.IsAnUrl())
+				Process.Start(url);
 		}
 
 		private void enableArchiveSchedule()
