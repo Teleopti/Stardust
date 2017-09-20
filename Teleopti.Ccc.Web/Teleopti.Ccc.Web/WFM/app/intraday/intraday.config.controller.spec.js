@@ -1,5 +1,5 @@
 'use strict';
-fdescribe('IntradayConfigController', function () {
+describe('IntradayConfigController', function () {
 	var $httpBackend,
 		$controller,
 		$translate,
