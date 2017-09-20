@@ -56,11 +56,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 		[Test]
 		[Ignore("#45888 To be fixed")]
-		public void ShouldKeepStartHourWhenPastingOverDST([Values(29, 30)] int dateNumber)
+		public void ShouldKeepStartHourWhenPastingOverDST(
+			[Values(29, 30)] int dateNumber, 
+			[Values("GMT Standard Time", "Mountain Standard Time", "Singapore Standard Time")] string usersTimeZoneString)
 		{
-			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+			var usersTimeZone = TimeZoneInfo.FindSystemTimeZoneById(usersTimeZoneString);
+			//var fakeTimeZoneGuard = new FakeTimeZoneGuard(usersTimeZone) -> inject and use in target to fix 
 			var target = new SchedulePasteAction(null, new GridlockManager(), SchedulePartFilter.None);
-			var agent = new Person().InTimeZone(timeZone);
+			var agent = new Person().InTimeZone(TimeZoneInfoFactory.GmtTimeZoneInfo());
 			var scenario = new Scenario();
 			var dic = new ScheduleDictionaryForTest(scenario, new ScheduleDateTimePeriod(new DateTimePeriod(2017, 1, 1, 2018, 1, 1)), new Dictionary<IPerson, IScheduleRange>());
 			var sourceDST = ExtractedSchedule.CreateScheduleDay(dic, agent, new DateOnly(2017, 10, 26));
@@ -69,8 +72,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			target.Paste(sourceDST, destinationNonDST, new PasteOptions {Default = true});
 
-			var sourceStart = TimeZoneHelper.ConvertFromUtc(sourceDST.PersonAssignment().Period.StartDateTime, timeZone);
-			var destinationStart = TimeZoneHelper.ConvertFromUtc(destinationNonDST.PersonAssignment().Period.StartDateTime, timeZone);
+			var sourceStart = TimeZoneHelper.ConvertFromUtc(sourceDST.PersonAssignment().Period.StartDateTime, usersTimeZone);
+			var destinationStart = TimeZoneHelper.ConvertFromUtc(destinationNonDST.PersonAssignment().Period.StartDateTime, usersTimeZone);
 			sourceStart.Hour.Should().Be.EqualTo(destinationStart.Hour);
 		}
 	}
