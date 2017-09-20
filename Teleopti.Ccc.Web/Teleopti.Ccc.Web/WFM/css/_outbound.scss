@@ -1,4 +1,4 @@
-﻿@charset "UTF-8";
+@charset "UTF-8";
 
 .outbound {
 	.outbound-summary {
@@ -70,10 +70,10 @@
 	}
 	.gantt-datepicker {
 		position: absolute;
-		top: 30px;
-		left: 50%;
+		top: 5rem;
+		// left: 50%;
 		z-index: 1000;
-		margin-left: -130px;
+		// margin-left: -130px;
 	}
 	.gantt-datepicker-container {
 		//one line
@@ -87,7 +87,7 @@
 	}
 	.outbound-gantt-chart {
 		position: relative;
-		border: 1px solid $gray012;
+		// border: 1px solid $gray012;
 
 		.gantt-alert-message {
 			position: absolute;
@@ -356,5 +356,11 @@
 		top: 28px;
 		left: 0;
 		width: 100%;
+	}
+	campaign-chart > .clear-button{
+		bottom: 15px;
+		position: absolute;
+		left: 1rem;
+		z-index: 10;
 	}
 }

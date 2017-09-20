@@ -8,9 +8,9 @@
 			controller: ['$scope', '$element',  campaignChartCtrl],
 			template: '<div id="Chart_{{campaign.Id}}"></div>' +
 				'<div class="chart-extra-info"><p ng-repeat="extraInfo in extraInfos"}>{{extraInfo}}</p></div>' +
-				'<div class="clear-button"><i class="mdi mdi-block-helper pull-right toggle-handle" ng-click="clearSelectedDates()"><md-tooltip>Clear chart selection</md-tooltip></i></div>',
+				'<div class="clear-button"><i class="mdi mdi-block-helper pointer" ng-click="clearSelectedDates()"><md-tooltip>Clear chart selection</md-tooltip></i></div>',
 			scope: {
-				'campaign': '=',				
+				'campaign': '=',
 				'dictionary': '='
 			},
 			require: ['campaignChart'],
@@ -27,9 +27,9 @@
 			this.getDataIndex = getDataIndex;
 			this.generateChart = generateChart;
 			this.determineOpenDay = determineOpenDay;
-			
+
 			$scope.campaign.manualPlan = {};
-			$scope.campaign.backlog = {};		
+			$scope.campaign.backlog = {};
 			$scope.campaign.selectedDates = [];
 			$scope.campaign.selectedDatesClosed = [];
 
@@ -84,7 +84,7 @@
 				if (!$scope.graph) $scope.graph = generateChart();
 			}
 
-			
+
 
 			function loadGraph(data) {
 				if (!$scope.graph) return;
@@ -98,7 +98,7 @@
 					$scope.graph.axis.max(yMax);
 					$scope.campaign.formerOptionYMax = yMax;
 				}
-				
+
 				$scope.graph.load({
 					columns: getChartData(),
 					colors: _setChartOption_color()
@@ -115,11 +115,11 @@
 					grid: _setChartOption_verticalLines(),
 					tooltip: { contents: _setChartOption_tooltip() },
 					transition: { duration: null}
-					
+
 				};
 				return c3.generate(chartOptions);
 			}
-	
+
 			function getChartData() {
 				return getChartDataKey().map(function (name) {return $scope.campaign.graphData[name];});
 			}
@@ -149,7 +149,7 @@
 					if (key == 'dates') result['dates'] = 'x';
 					else
 						result[key] = $scope.campaign.graphData[key][0];
-		}				
+		}
 				return result;
 			}
 
@@ -182,17 +182,17 @@
 			this._setChartOption_data = _setChartOption_data;
 
 			function _setChartOption_data() {
-				
+
 				var dataOption = {
 					x: 'x',
 					type: 'bar',
 					groups: [getChartLabel()],
-					order: 'null',				
+					order: 'null',
 					columns: [$scope.campaign.graphData.dates].concat(getChartData()),
 					colors: _setChartOption_color(),
 					types: {},
 					labels: {
-						format: {}													
+						format: {}
 					}
 				};
 				dataOption.labels.format[$scope.dictionary['Overstaffing']] = function(v, id, i) {
@@ -217,7 +217,7 @@
 					dataOption.selection = {
 						enabled: true,
 						grouped: true,
-						draggable: true,					
+						draggable: true,
 					};
 					dataOption.onselected = function(d) {
 						$scope.$evalAsync(graphSelectionChanged);
@@ -243,7 +243,7 @@
 					x: {
 						type: 'timeseries',
 						tick: {
-							format: function (x) { return $filter('date')(x, 'shortDate'); } 
+							format: function (x) { return $filter('date')(x, 'shortDate'); }
 						}
 					},
 					y: {
@@ -282,7 +282,7 @@
 						valueFormat = config.tooltip_format_value || defaultValueFormat,
 						text, i, title, value, name, bgcolor;
 					for (i = d.length - 1 ; i >= 0; i--) {
-						
+
 
 						if (!text) {
 							title = titleFormat ? titleFormat(d[i].x) : d[i].x;
@@ -294,7 +294,7 @@
 						name = nameFormat(d[i].name);
 						value = valueFormat(d[i].value, d[i].ratio, d[i].id, d[i].index);
 						var valueAsString = $filter('number')(value);
-						
+
 
 						bgcolor = $$.levelColor ? $$.levelColor(d[i].value) : color(d[i].id);
 

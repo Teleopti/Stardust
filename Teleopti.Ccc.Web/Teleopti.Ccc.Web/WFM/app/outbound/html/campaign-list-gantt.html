@@ -1,62 +1,70 @@
-﻿<div class="view-header">
+<div class="view-header with-fab">
 	<div class="view-title">
 		<h1>
-			<i class="mdi mdi-phone-forward"></i>
-			<span translate>OutboundCampaigns</span>
+			<i class="mdi mdi-phone-forward"></i> {{"OutboundCampaigns" | translate}}
 		</h1>
 	</div>
 	<div class="fab-wrapper">
-		<button class="wfm-fab  material-depth-1" ui-sref="outbound.create">
+		<button class="wfm-fab grow-out material-depth-1" ui-sref="outbound.create">
 			<i class="mdi mdi-plus"></i>
 			<md-tooltip>{{"CreateCampaign" | translate}}</md-tooltip>
 		</button>
 	</div>
 </div>
-
-<div class="panel material-depth-1 outbound-summary" ng-if="isInitFinished">
-	<div class="loading" ng-show="!isLoadFinished">
-		<md-progress-circular md-mode="indeterminate"></md-progress-circular>
-	</div>
-	<div class="operation-container clearfix">
-		<div class="threshold-slider relative pull-right">
-			<div>
-				{{settings.threshold}}%
+<div class="con-row">
+	<div class="con-flex">
+		<div class="panel material-depth-1" ng-if="isInitFinished">
+			<div class="loading" ng-show="!isLoadFinished">
+				<md-progress-circular md-mode="indeterminate"></md-progress-circular>
 			</div>
-			<md-slider flex md-discrete min="0" max="100" aria-label="slider"
-					   ng-model="settings.threshold"
-					   ng-disabled="isRefreshingGantt"></md-slider>
-		</div>
-		<div class="relative pull-left">
-			<button class="wfm-btn wfm-btn-invis-primary date-navigation-button" ng-click="viewOneMonthBefore()">
-				<i class="mdi mdi-chevron-double-left"></i>
-			</button>
-			<div class="gantt-datepicker-container inline-block" ng-init="showDatePicker=false">
-				<input class="pointer text-center" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart | monthview }}" readonly />
-				<i class="mdi mdi-calendar pointer" ng-click="showDatePicker=!showDatePicker"></i>
-				<div class="wfm-datepicker-wrap gantt-datepicker" ng-show="showDatePicker">
-					<div uib-datepicker ng-model="settings.periodStart" class="wfm-datepicker" datepicker-options="monthpickerOptions" ng-change="showDatePicker=false"></div>
+			<div class="con-row" style="align-items: normal;">
+				<div class="con-flex">
+
+					<div class="inline-flex" style="align-items:baseline" ng-init="showDatePicker=false">
+						<button class="wfm-btn wfm-btn-invis-primary date-navigation-button" ng-click="viewOneMonthBefore()">
+							<i class="mdi mdi-chevron-double-left"></i>
+						</button>
+						<div class="wfm-datepicker-wrap gantt-datepicker animate-show" ng-show="showDatePicker">
+							<div uib-datepicker ng-model="settings.periodStart" class="wfm-datepicker" datepicker-options="monthpickerOptions" ng-change="showDatePicker=false"></div>
+						</div>
+						<input class="pointer text-center" type="text" ng-click="showDatePicker=!showDatePicker" value="{{settings.periodStart | monthview }}" readonly />
+						<div tabindex=0 class="context-menu card-context" ng-click="showDatePicker=!showDatePicker">
+							<i class="mdi mdi-calendar pointer"></i>
+							<md-tooltip>{{"Month"|translate}}</md-tooltip>
+						</div>
+						<button class="wfm-btn wfm-btn-invis-primary date-navigation-button" ng-click="viewOneMonthAfter()">
+							<i class="mdi mdi-chevron-double-right"></i>
+						</button>
+					</div>
+
+				</div>
+				<div class="con-flex x3"></div>
+				<div class="con-flex inline-flex" style="align-items: center;">
+					<label>{{settings.threshold}}%:</label><md-slider flex min="0" max="100" aria-label="slider" ng-model="settings.threshold" ng-disabled="isRefreshingGantt"></md-slider>
 				</div>
 			</div>
-			<button class="wfm-btn wfm-btn-invis-primary date-navigation-button" ng-click="viewOneMonthAfter()">
-				<i class="mdi mdi-chevron-double-right"></i>
-			</button>
-		</div>
-	</div>
-	<div class="spacer outbound-gantt-chart"
-		 gantt
-		 data="ganttData"
-		 options="ganttOptions"
-		 from-date="ganttOptions.fromDate"
-		 to-date="ganttOptions.toDate"
-		 timespans="timespans"
-		 headers-formats="headerFormats"
-		 template-url="app/outbound/html/angular-gantt-custom.tpl.html"
-		 scrollfix="+10">
 
-		<gantt-tooltips></gantt-tooltips>
-		<gantt-table headers="tableHeaders" class="gantt-schedule-loader"></gantt-table>
-		<div ng-show="isRefreshingGantt" class="gantt-schedule-loader">
-			<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+			<div class="con-row">
+				<div class="con-flex">
+					<div class="outbound-gantt-chart"
+					gantt
+					data="ganttData"
+					options="ganttOptions"
+					from-date="ganttOptions.fromDate"
+					to-date="ganttOptions.toDate"
+					timespans="timespans"
+					headers-formats="headerFormats"
+					template-url="app/outbound/html/angular-gantt-custom.tpl.html"
+					scrollfix="+10">
+
+					<gantt-tooltips></gantt-tooltips>
+					<gantt-table headers="tableHeaders" class="gantt-schedule-loader"></gantt-table>
+					<div ng-show="isRefreshingGantt" class="gantt-schedule-loader">
+						<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
+</div>
 </div>
