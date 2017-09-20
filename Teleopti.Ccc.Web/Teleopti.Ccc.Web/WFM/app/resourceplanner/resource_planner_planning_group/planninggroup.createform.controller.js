@@ -107,7 +107,7 @@
 		}
 
 		function returnToOverview() {
-			$state.go('resourceplanner.newoverview');
+			$state.go('resourceplanner.overview');
 		}
 
 		function persist() {

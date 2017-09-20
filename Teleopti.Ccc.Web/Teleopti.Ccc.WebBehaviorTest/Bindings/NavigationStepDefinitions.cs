@@ -360,13 +360,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywherePersonScheduleAddActivityForm(buIdForTeam(@group), personId, IdForTeam(@group), date);
 		}
 
-		[When(@"I view Resource planner")]
-		public void WhenIViewResourcePlanner()
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoResourcePlanner();
-		}
-
 
 		[When(@"I view Permissions")]
 		public void WhenIViewPermissions()

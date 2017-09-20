@@ -303,11 +303,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 					date.Day.ToString("00"),
 					minutes));
 		}
-		
-		public static void GotoResourcePlanner()
-		{
-			GoToPage("wfm/#/resourceplanner/planningperiods");
-		}
 
 		public static void GotoPermissions()
 		{
@@ -582,6 +577,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
             GoToPage("wfm/#/reports/leaderboard");
         }
 
+		public static void GotoResourcePlanner()
+		{
+			GoToPage("wfm/#/resourceplanner/planningperiods");
+		}
+
 		public static void GoToWfmArchiveSchedule()
 		{
 			GoToPage("wfm/#/resourceplanner/archiveschedule");
@@ -599,8 +599,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 
 		public static void GoToWfmListPlanningGroups()
 		{
-			GoToPage("wfm/#/resourceplanner/v2");
+			GoToPage("wfm/#/resourceplanner");
 		}
+
 		public static void GoToPlanningPeriodListForPlanningGroup(Guid planningGroupId)
 		{
 			GoToPage($"wfm/#/resourceplanner/planninggroup/{planningGroupId}/selectplanningperiod");

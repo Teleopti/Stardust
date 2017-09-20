@@ -10,50 +10,7 @@
 			url: '/resourceplanner',
 			templateUrl: 'app/resourceplanner/resourceplanner.html'
 		}).state('resourceplanner.overview', {
-			templateUrl: 'app/resourceplanner/planningperiods-overview.html',
-			controller: 'ResourcePlannerCtrl',
-			url: '/planningperiods'
-		}).state('resourceplanner.filter', {
-			params: {
-				filterId: {},
-				periodId: {},
-				isDefault: {},
-				groupId: undefined
-			},
-			url: '/dayoffrules',
-			templateUrl: 'app/resourceplanner/resourceplanner-filters.html',
-			controller: 'ResourceplannerFilterCtrl'
-		}).state('resourceplanner.planningperiod', {
-			url: '/planningperiod/:id?runForTest',
-			templateUrl: 'app/resourceplanner/planningperiods.html',
-			controller: 'PlanningPeriodsCtrl'
-		}).state('resourceplanner.report', {
-			params: {
-				result: {},
-				interResult: [],
-				planningperiod: {},
-				ranSynchronously: undefined
-			},
-			url: '/report/:id',
-			templateUrl: 'app/resourceplanner/resourceplanner-report.html',
-			controller: 'ResourceplannerReportCtrl'
-		}).state('resourceplanner.temp', {
-			url: '/optimize/:id',
-			templateUrl: 'app/resourceplanner/temp.html',
-			controller: 'ResourceplannerTempCtrl'
-		}).state('resourceplanner.archiveschedule', {
-			url: '/archiveschedule',
-			templateUrl: 'app/resourceplanner/manageschedule.html',
-			controller: 'ResourceplannerManageScheduleCtrl as vm'
-		}).state('resourceplanner.importschedule', {
-			url: '/importschedule',
-			templateUrl: 'app/resourceplanner/manageschedule.html',
-			controller: 'ResourceplannerManageScheduleCtrl as vm',
-			params: {
-				isImportSchedule: true
-			}
-		}).state('resourceplanner.newoverview', {   //from here is new
-			url: '/v2',
+			url: '',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group/planninggroups.html',
 			controller: 'planningGroupsController as vm',
 			resolve: {
@@ -152,6 +109,17 @@
 			url: '/planninggroup/:groupId/dayoffrules/:filterId',
 			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.createform.html',
 			controller: 'dayoffRuleCreateController as vm'
+		}).state('resourceplanner.archiveschedule', {
+			url: '/archiveschedule',
+			templateUrl: 'app/resourceplanner/manageschedule/manageschedule.html',
+			controller: 'ResourceplannerManageScheduleCtrl as vm'
+		}).state('resourceplanner.importschedule', {
+			url: '/importschedule',
+			templateUrl: 'app/resourceplanner/manageschedule/manageschedule.html',
+			controller: 'ResourceplannerManageScheduleCtrl as vm',
+			params: {
+				isImportSchedule: true
+			}
 		});
 	}
 })();

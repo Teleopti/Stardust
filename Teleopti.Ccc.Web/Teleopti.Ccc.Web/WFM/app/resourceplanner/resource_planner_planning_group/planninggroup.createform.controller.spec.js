@@ -112,7 +112,7 @@ describe('planningGroupFormController', function () {
 		vm.persist();
 		$httpBackend.flush();
 
-		expect($state.go).not.toHaveBeenCalledWith('resourceplanner.newoverview');
+		expect($state.go).not.toHaveBeenCalledWith('resourceplanner.overview');
 	});
 
 	it('should create new planning group when submit data is valid', function () {
@@ -126,7 +126,7 @@ describe('planningGroupFormController', function () {
 		vm.persist();
 		$httpBackend.flush();
 
-		expect($state.go).toHaveBeenCalledWith('resourceplanner.newoverview');
+		expect($state.go).toHaveBeenCalledWith('resourceplanner.overview');
 	});
 
 	it('should load edit planning group', function () {
@@ -148,7 +148,7 @@ describe('planningGroupFormController', function () {
 		$httpBackend.flush();
 
 		expect(planningGroupService.savePlanningGroup).toHaveBeenCalledWith({ Id: id, Name: vm.name, Filters: filter });
-		expect($state.go).toHaveBeenCalledWith('resourceplanner.newoverview');
+		expect($state.go).toHaveBeenCalledWith('resourceplanner.overview');
 	});
 
 	it('should delete selected planning group', function () {
@@ -163,6 +163,6 @@ describe('planningGroupFormController', function () {
 		$httpBackend.flush();
 
 		expect(planningGroupService.removePlanningGroup).toHaveBeenCalledWith({ id: id });
-		expect($state.go).toHaveBeenCalledWith('resourceplanner.newoverview');
+		expect($state.go).toHaveBeenCalledWith('resourceplanner.overview');
 	});
 });
