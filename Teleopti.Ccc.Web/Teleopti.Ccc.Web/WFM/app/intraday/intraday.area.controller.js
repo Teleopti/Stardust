@@ -280,6 +280,7 @@
 		};
 
 		function poll() {
+			$interval.cancel(polling);
 			polling = $interval(function () {
 				pollData(vm.activeTab);
 			}, pollingTimeout);
