@@ -128,7 +128,7 @@
 					<div class="con-flex">
 						<div class="wfm-chip-wrap" ng-repeat="skill in vm.selectedSkillArea.Skills | orderBy : Name"
 							 ng-class="{'chip-disabled':!skill.DoDisplayData}">
-							<span class="wfm-chip" ng-click="openSkillFromArea(skill)">
+							<span class="wfm-chip" ng-click="vm.openSkillFromArea(skill)">
 							<span class="chip-handle" ng-class="{'chip-warning':!skill.DoDisplayData}">
 								<i ng-class="skillIcon.get(skill)"></i>
 							</span>

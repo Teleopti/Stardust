@@ -45,6 +45,8 @@
 		var timeoutPromise;
 		var polling;
 		var pollingTimeout = 60000;
+		vm.selectedSkillArea;
+		vm.selectedSkill;
 		vm.DeleteSkillAreaModal = false;
 		vm.prevArea;
 		vm.drillable;
@@ -93,15 +95,15 @@
 		vm.openSkillFromArea = function (item) {
 			if (item.DoDisplayData) {
 				prevSkill = item;
-				autocompleteSkill.selectedSkill = item;
+				vm.selectedSkill = item;
 				vm.drillable = true;
 			} else {
-				UnsupportedSkillNotice();
+			 	UnsupportedSkillNotice();
 			}
 		};
 
 		vm.openSkillAreaFromSkill = function () {
-			autocompleteSkillArea.selectedSkillArea = vm.prevArea;
+			vm.selectedSkillArea = vm.prevArea;
 			vm.drillable = false;
 		};
 
@@ -144,7 +146,7 @@
 					vm.skillSelected(item);
 					pollActiveTabDataByDayOffset(vm.activeTab, vm.chosenOffset.value);
 					if (prevSkill) {
-						if (!(prevSkill === autocompleteSkill.selectedSkill)) {
+						if (!(prevSkill === vm.selectedSkill)) {
 							clearPrev();
 						}
 					}
@@ -266,7 +268,7 @@
 			};
 		}
 
-		if (!vm.selectedSkillArea && !vm.selectedSkill && vm.latestActualInterval === '--:--') {
+		if (vm.latestActualInterval === '--:--') {
 			vm.hasMonitorData = false;
 		}
 
