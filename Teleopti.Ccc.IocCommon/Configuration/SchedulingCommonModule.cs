@@ -95,16 +95,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ShovelResources>().SingleInstance();
 			builder.RegisterType<ReducePrimarySkillResources>().SingleInstance();
 			builder.RegisterType<SkillSetPerActivityProvider>().SingleInstance();
-			if (_configuration.Toggle(Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156))
-			{
-				builder.RegisterType<PrimarySkillOverstaff>().SingleInstance();
-				builder.RegisterType<AddResourcesToSubSkills>().SingleInstance();
-			}
-			else
-			{
-				builder.RegisterType<PrimarySkillOverstaffOLD>().As<PrimarySkillOverstaff>().SingleInstance();
-				builder.RegisterType<AddResourcesToSubSkillsOLD>().As<AddResourcesToSubSkills>().SingleInstance();
-			}
+			builder.RegisterType<PrimarySkillOverstaff>().SingleInstance();
+			builder.RegisterType<AddResourcesToSubSkills>().SingleInstance();
+			
+			//	builder.RegisterType<PrimarySkillOverstaffOLD>().As<PrimarySkillOverstaff>().SingleInstance();
+			//	builder.RegisterType<AddResourcesToSubSkillsOLD>().As<AddResourcesToSubSkills>().SingleInstance();
+			
 			builder.RegisterType<ResourceOptimizationHelper>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculation>().As<IResourceCalculation>().SingleInstance();
 			builder.RegisterType<CascadingResourceCalculationContextFactory>().SingleInstance();

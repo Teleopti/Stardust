@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
@@ -36,8 +35,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 		}
 
-		[RemoveMeWithToggle("make private",Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156)]
-		protected virtual void shovelResourcesFromClosedPrimarySkill(ShovelResourcesState shovelResourcesState,
+		private static void shovelResourcesFromClosedPrimarySkill(ShovelResourcesState shovelResourcesState,
 			IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillSet> skillGroupsWithSameIndex, DateTimePeriod interval,
 			IShovelingCallback shovelingCallback, SubSkillsWithSameIndex subSkillsWithSameIndex, CascadingSkillSet skillSet, double maxToMoveForThisSkillGroup)
 		{
@@ -100,32 +98,12 @@ namespace Teleopti.Ccc.Domain.Cascading
 			}
 		}
 
-		[RemoveMeWithToggle("make private", Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156)]
-		protected void doActualShoveling(ShovelResourcesState shovelResourcesState, CascadingSkillSet skillSet,
+		private static void doActualShoveling(ShovelResourcesState shovelResourcesState, CascadingSkillSet skillSet,
 			DateTimePeriod interval, IEnumerable<CascadingSkillSet> skillGroupsWithSameIndex, IShovelingCallback shovelingCallback,
 			IShovelResourceDataForInterval dataForIntervalTo, double resourceToMove, ISkill skillToMoveTo)
 		{
 			shovelResourcesState.AddResourcesTo(dataForIntervalTo, skillSet, resourceToMove);
 			shovelingCallback.ResourcesWasMovedTo(skillToMoveTo, interval, skillGroupsWithSameIndex, skillSet, resourceToMove);
-		}
-	}
-
-
-
-	[RemoveMeWithToggle(Toggles.ResourcePlanner_RespectSkillGroupShoveling_44156)]
-	public class AddResourcesToSubSkillsOLD : AddResourcesToSubSkills
-	{
-		protected override void shovelResourcesFromClosedPrimarySkill(ShovelResourcesState shovelResourcesState,
-			IShovelResourceData shovelResourceData, IEnumerable<CascadingSkillSet> skillGroupsWithSameIndex, DateTimePeriod interval,
-			IShovelingCallback shovelingCallback, SubSkillsWithSameIndex subSkillsWithSameIndex, CascadingSkillSet skillSet, double maxToMoveForThisSkillGroup)
-		{
-			var remainingResourcesToShovel = shovelResourcesState.RemainingOverstaffing;
-			foreach (var skillToMoveTo in subSkillsWithSameIndex)
-			{
-				var dataForIntervalTo = shovelResourceData.GetDataForInterval(skillToMoveTo, interval);
-				var resourceToMove = remainingResourcesToShovel / subSkillsWithSameIndex.Count();
-				doActualShoveling(shovelResourcesState, skillSet, interval, skillGroupsWithSameIndex, shovelingCallback, dataForIntervalTo, resourceToMove, skillToMoveTo);
-			}
 		}
 	}
 }

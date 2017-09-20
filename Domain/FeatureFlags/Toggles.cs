@@ -100,7 +100,6 @@
 		ResourcePlanner_RunPerfTestAsTeam_43537,
 		ResourcePlanner_MergeTeamblockClassicScheduling_44289,
 		ResourcePlanner_MergeTeamblockClassicIntraday_45508,
-		ResourcePlanner_RespectSkillGroupShoveling_44156,
 		ResourcePlanner_RetireKeepPercentageOfShifts_45688,
 		ResourcePlanner_SpeedUpShiftsWithinDay_45694,
 

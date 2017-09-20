@@ -123,7 +123,6 @@ Scheduler_LoadWithoutRequests_38567 = true
 
 ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don't turn on in production
 ResourcePlanner_MergeTeamblockClassicScheduling_44289 = true
-ResourcePlanner_RespectSkillGroupShoveling_44156 = true
 ResourcePlanner_MergeTeamblockClassicIntraday_45508 = true
 ResourcePlanner_RetireKeepPercentageOfShifts_45688 = true
 

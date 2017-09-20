@@ -51,9 +51,5 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 			stateHolder.SchedulingResultState.GuessResourceCalculationHasBeenMade()
 				.Should().Be.True();
 		}
-
-		public GuessResourceCalculationHasBeenMadeTest(bool resourcePlannerRespectSkillGroupShoveling44156) : base(resourcePlannerRespectSkillGroupShoveling44156)
-		{
-		}
 	}
 }
