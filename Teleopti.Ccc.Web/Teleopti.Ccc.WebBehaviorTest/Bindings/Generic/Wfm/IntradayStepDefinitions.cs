@@ -402,5 +402,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertNotExists(".service-level", ".abandoned-rate");
 		}
 
+		[When(@"I select skill '(.*)' from included skills in skill area")]
+		public void GivenISelectSkillFromIncludedSkillsInSkillArea(string skill)
+		{
+			var elementSelector = $"$(\"span:contains('{skill}')\").parent(\"span.wfm-chip\")";
+			Browser.Interactions.AssertJavascriptResultContains($"return {elementSelector}[0] !== undefined", "True");
+			Browser.Interactions.Javascript($"{elementSelector}.click();");
+		}
+
+		[Then(@"I Should see skill '(.*)' as selected skill")]
+		public void ThenIShouldSeeSkillAsSelectedSkill(string skill)
+		{
+			Browser.Interactions.AssertJavascriptResultContains("var scope = angular.element(document.querySelector('#skill-id')).scope();" +
+																$"return scope.vm.selectedItem.Name === '{skill}';", "True");
+		}
+
+		[Then(@"I Should not see any skill group selected")]
+		public void ThenIShouldNotSeeAnySkillGroupSelected()
+		{
+			Browser.Interactions.AssertJavascriptResultContains("var scope = angular.element(document.querySelector('#skill-id')).scope();" +
+																$"return scope.vm.selectedSkillArea === null;", "True");
+		}
+
+
+
 	}
 }

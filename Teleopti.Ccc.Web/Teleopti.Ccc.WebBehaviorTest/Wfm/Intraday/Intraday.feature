@@ -148,3 +148,16 @@ Scenario: If and email like skill is chosen summary for abandonrate should not a
 	When I pick the skill 'Skill BackOffice'
 	And I am navigating to intraday performance view
 	Then I should not se summary for abandonrate
+
+Scenario: Select skill when skill group is selected
+	Given the time is '2016-12-22 14:00'
+	And there is queue statistics for the skill 'Skill B' up until '2016-12-22 17:00'
+	And there is forecast data for skill 'Skill B' for date '2016-12-22'
+	And there is a Skill Area called 'SkillArea1' that monitors skills 'Skill A, Skill B'
+	And I am viewing intraday page
+	When I select skill 'Skill B' from included skills in skill area
+	Then I should see incoming traffic data in the chart
+	And I Should see skill 'Skill B' as selected skill
+	And I Should not see any skill group selected
+
+
