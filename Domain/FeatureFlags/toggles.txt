@@ -194,6 +194,7 @@ WFM_TrainingPlanner_44780 = RC
 Report_Remove_Realtime_Scheduled_Time_Per_Activity_45560 = true
 Report_Remove_Realtime_Scheduled_Time_vs_Target_45559 = true
 Report_Remove_Scheduled_Time_Per_Activity_From_Scheduler_45640 = true
+Report_Show_Utc_In_Report_Selection_When_In_Use_45079 = RC
 
 WFM_Unified_Skill_Group_Management_45417 = DEV
 WFM_AuditTrail_44006 = DEV

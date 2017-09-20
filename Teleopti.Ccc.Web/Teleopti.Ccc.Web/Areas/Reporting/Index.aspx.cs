@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Configuration;
 using System.Data.SqlClient;
 using System.Threading;
 using System.Web;
 using System.Web.UI;
 using Teleopti.Analytics.Parameters;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 
 namespace Teleopti.Ccc.Web.Areas.Reporting
@@ -69,6 +72,10 @@ namespace Teleopti.Ccc.Web.Areas.Reporting
 			Thread.CurrentThread.CurrentUICulture = person.PermissionInformation.UICulture().FixPersianCulture();
 			Thread.CurrentThread.CurrentCulture = person.PermissionInformation.Culture().FixPersianCulture();
 
+			var toggleQuerier = new ToggleQuerier(ConfigurationManager.AppSettings["ReportServer"]);
+
+			Selector.Report_Show_Utc_In_Report_Selection_When_In_Use_45079 =
+				toggleQuerier.IsEnabled(Toggles.Report_Show_Utc_In_Report_Selection_When_In_Use_45079);
 			ParameterSelector.ConnectionString = dataSource.Analytics.ConnectionString;
 			ParameterSelector.UserCode = id.GetValueOrDefault();
 			ParameterSelector.BusinessUnitCode = bu.GetValueOrDefault();
