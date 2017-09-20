@@ -186,7 +186,8 @@
 			angular.forEach(vm.gridOptions.columnDefs, function(col) {
 				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
 			});
-			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+			if (vm.gridApi && vm.gridApi.core)
+				vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 		});
 
 		$scope.$on('requests.isUsingRequestSubmitterTimeZone.changed', function(event, data) {

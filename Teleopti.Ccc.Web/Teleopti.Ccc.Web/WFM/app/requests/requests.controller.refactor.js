@@ -8,7 +8,6 @@
 		'$state',
 		'$q',
 		'$translate',
-		'$timeout',
 		'Toggle',
 		'requestsDefinitions',
 		'requestsNotificationService',
@@ -26,7 +25,6 @@
 		$state,
 		$q,
 		$translate,
-		$timeout,
 		toggleService,
 		requestsDefinitions,
 		requestsNotificationService,
@@ -93,19 +91,6 @@
 			}
 			return text;
 		};
-
-		vm.isLoadingState = false;
-
-		$scope.$on('$stateChangeStart', function () {
-			vm.isLoadingState = true;
-		});
-
-		$scope.$on('$stateChangeSuccess', function () {
-			$timeout(function () {
-				vm.isLoadingState = false;
-				$scope.$apply();
-			}, 0);
-		});
 
 		vm.activeAbsenceAndTextTab = function () {
 			vm.paging.pageNumber = 1;

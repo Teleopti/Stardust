@@ -179,14 +179,17 @@
 			vm.initialized && vm.reload();
 		});
 
-		$scope.$on('requests.filterEnabled.changed', function(event, data) {
+		$scope.$on('requests.filterEnabled.changed', function (event, data) {
+			if (!vm.initialized) return;
+
 			vm.filterEnabled = data;
 			vm.gridOptions.enableFiltering = vm.filterEnabled;
 			vm.gridOptions.useExternalFiltering = vm.filterEnabled;
 			angular.forEach(vm.gridOptions.columnDefs, function(col) {
 				col.enableFiltering = vm.filterEnabled && columnsWithFilterEnabled.indexOf(col.displayName) > -1;
 			});
-			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+			if (vm.gridApi && vm.gridApi.core)
+				vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 		});
 
 		$scope.$on('requests.isUsingRequestSubmitterTimeZone.changed', function(event, data) {
@@ -382,12 +385,14 @@
 
 			vm.gridOptions.enableFiltering = vm.filterEnabled;
 			vm.gridOptions.useExternalFiltering = vm.filterEnabled;
-			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+
+			if (vm.gridApi && vm.gridApi.core)
+				vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 
 			initialiseGridStateHandling();
 			vm.setDefaultStatuses();
-
-			vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
+			if (vm.gridApi && vm.gridApi.core)
+				vm.gridApi.core.notifyDataChange(uiGridConstants.dataChange.ALL);
 			vm.gridOptions.data = vm.requests;
 		}
 

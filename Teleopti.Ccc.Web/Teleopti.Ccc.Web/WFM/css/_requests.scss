@@ -329,6 +329,7 @@
 	}
 
 	.text-absence-view {
+		height: 60vh;
 		overflow: hidden;
 
 		.ui-grid-top-panel {
@@ -411,7 +412,9 @@
 	}
 
 	.shift-trade-view {
-		overflow: hidden !important;
+		height: 60vh;
+		overflow: hidden;
+
 		/* show scroll bar outside of grid*/
 		.ui-grid-render-container-body .ui-grid-viewport {
 			position: absolute;
