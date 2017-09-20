@@ -1870,7 +1870,6 @@
     <Content Include="WFM\app\intraday\intraday.config.controller.js" />
     <Content Include="WFM\app\intraday\intraday.service.js" />
     <Content Include="WFM\app\intraday\intraday.html" />
-    <Content Include="WFM\app\intraday\intraday-config.html" />
     <Content Include="WFM\app\intraday\intraday.service.spec.js" />
     <Content Include="WFM\app\intraday\_modules.js" />
     <Content Include="WFM\app\outbound\html\activity-picker.tpl.html" />
