@@ -292,7 +292,8 @@ describe('RtaToolController', function () {
     expect(requestBody.SourceId).toEqual('1');
     expect(requestBody.States.length).toEqual(1);
     expect(requestBody.States[0].UserCode).toEqual('0019');
-    expect(requestBody.States[0].StateCode).toEqual('Ready');
+    expect(requestBody.States[0].StateCode.Code).toEqual('Ready');
+    expect(requestBody.States[0].StateCode.Name).toEqual('Ready');
   });
 
   it('should send batch for all agents when no agent is selcted', function () {
@@ -560,7 +561,8 @@ describe('RtaToolController', function () {
 
     expect(requestBody.States.length).toEqual(1);
     expect(requestBody.States[0].UserCode).toEqual('0019');
-    expect(requestBody.States[0].StateCode).toEqual('Ready');
+    expect(requestBody.States[0].StateCode.Code).toEqual('Ready');
+    expect(requestBody.States[0].StateCode.Name).toEqual('Ready');
   });
 
 });
