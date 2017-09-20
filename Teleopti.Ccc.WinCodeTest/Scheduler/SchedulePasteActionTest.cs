@@ -55,7 +55,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		[Ignore("#45888 To be fixed")]
 		public void ShouldKeepStartHourWhenPastingOverDST([Values(29, 30)] int dateNumber)
 		{
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");

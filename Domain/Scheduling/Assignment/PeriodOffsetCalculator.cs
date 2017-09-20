@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             TimeZoneInfo sourceTimeZone = source.TimeZone;
             TimeZoneInfo targetTimeZone = target.TimeZone;
-            return targetTimeZone.GetUtcOffset(TimeZoneHelper.ConvertFromUtc(target.Period.StartDateTime,TimeZoneHelper.CurrentSessionTimeZone))
-                    .Subtract(sourceTimeZone.GetUtcOffset(TimeZoneHelper.ConvertFromUtc(source.Period.StartDateTime, TimeZoneHelper.CurrentSessionTimeZone)));
+            return targetTimeZone.GetUtcOffset(target.Period.StartDateTime)
+                    .Subtract(sourceTimeZone.GetUtcOffset(source.Period.StartDateTime));
         }
 
 		private static TimeSpan CalculateDaylightSavingsRecorrection(DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)
