@@ -55,7 +55,7 @@
 
 
 		<rta-card class="site" ng-repeat="card in vm.siteCards" ng-open="card.isOpen">
-			<rta-card-header ng-attr-styles="border-left-color: {{card.Color}};">
+			<rta-card-header ng-attr-styles="border-left-color: {{card.Color}}; ; background-color: {{card.isSelected ? card.Color : ''}}">
 				<div class="rta-card-content-wrapper flex">
 					<div class="rta-site-name-container"><b ng-attr-data-max="{{card.AgentsCount}}" ng-attr-data-value="{{card.InAlarmCount}}">{{card.Name}}</b></div>
 					<div class="rta-alarm-values-container">{{'InAlarmInSite'|translate}}:
