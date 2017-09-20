@@ -140,8 +140,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			}
 			catch (Exception exp)
 			{
-				logger.Error(Resources.DenyReasonTechnicalIssues + exp);
-				sendDenyCommand(personRequest, Resources.DenyReasonTechnicalIssues);
+				logger.Error(exp);
+				throw;
 			}
 		}
 
