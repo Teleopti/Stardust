@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -37,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
+
 			if (schedulingOptions.ScheduleEmploymentType == ScheduleEmploymentType.FixedStaff)
 			{
 				ExecuteScheduling(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod);
@@ -51,8 +53,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		}
 
 		[RemoveMeWithToggle("move up this and remove dead params", Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
-		protected virtual void ExecuteScheduling(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
-			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
+		protected virtual void ExecuteScheduling(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
 			var command = new SchedulingCommand
 			{
@@ -78,11 +79,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_scheduleExecutor = scheduleExecutor;
 		}
 
-		protected override void ExecuteScheduling(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions,
-			ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
+		protected override void ExecuteScheduling(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
 			var fixedStaffPeople = selectedAgents.FixedStaffPeople(selectedPeriod);
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, fixedStaffPeople, selectedPeriod, true);
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, fixedStaffPeople, selectedPeriod, true, new FixedBlockPreferenceProvider(new ExtraPreferences()
+               {
+				UseBlockSameStartTime = schedulingOptions.BlockSameStartTime,
+				UseBlockSameShift = schedulingOptions.BlockSameShift,
+				UseBlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory,
+				BlockTypeValue = schedulingOptions.BlockFinderTypeForAdvanceScheduling
+               }));
 		}
 	}
 }

@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				using (_lowThreadPriorityScope.OnThisThread())
 				{
 					var schedulingInformation = GetInfoFromPlanningPeriod(@event.PlanningPeriodId);
-					var result = _fullScheduling.DoScheduling(schedulingInformation.Period, schedulingInformation.PersonIds);
+					var result = _fullScheduling.DoScheduling(schedulingInformation.Period, schedulingInformation.PersonIds, @event.PlanningPeriodId);
 					SaveDetailToJobResult(@event, DetailLevel.Info, JsonConvert.SerializeObject(result), null);
 					_eventPublisher.Publish(new WebDayoffOptimizationStardustEvent(@event)
 					{

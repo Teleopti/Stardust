@@ -16,5 +16,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public DateOnlyPeriod Period { get; set; }
 		public bool RunWeeklyRestSolver { get; set; }
 		public bool FromWeb { get; set; }
+		public Guid PlanningPeriodId { get; set; }
 	}
 }

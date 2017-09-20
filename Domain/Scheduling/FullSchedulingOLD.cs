@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
 using Teleopti.Interfaces.Domain;
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		SchedulingResultModel DoScheduling(DateOnlyPeriod period);
 		SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people);
+		SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people, Guid planningPeriodId);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
@@ -46,7 +48,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			return DoScheduling(period, null);
 		}
-
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
 			using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
@@ -56,6 +57,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				_persister.Persist(stateHolder.Schedules);
 				return CreateResult(period);
 			}
+		}
+
+		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people, Guid planningPeriodId)
+		{
+			return DoScheduling(period, people);
 		}
 
 		[TestLog]
@@ -99,8 +105,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				period = new DateOnlyPeriod(firstDateInPeriodLocal, lastDateInPeriodLocal);
 			}
 
-			_scheduleExecutor.Execute(new NoSchedulingCallback(), _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate), _schedulingProgress,
-				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false);
+			var schedulinOptions = _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate);
+			_scheduleExecutor.Execute(new NoSchedulingCallback(), schedulinOptions, _schedulingProgress,
+				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false,new FixedBlockPreferenceProvider(new ExtraPreferences()
+				{
+					UseBlockSameStartTime = schedulinOptions.BlockSameStartTime,
+					UseBlockSameShift = schedulinOptions.BlockSameShift,
+					UseBlockSameShiftCategory = schedulinOptions.BlockSameShiftCategory,
+					BlockTypeValue = schedulinOptions.BlockFinderTypeForAdvanceScheduling
+				}));
 		}
 	}
 }

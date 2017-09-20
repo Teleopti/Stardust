@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		public void Execute(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker,
-			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
+			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod, IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceCalculation, 1,
 				schedulingOptions.ConsiderShortBreaks, _schedulerStateHolder().SchedulingResultState, _userTimeZone);
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			_teamBlockScheduleSelected.ScheduleSelected(schedulingCallback, matrixes, selectedPeriod,
 				selectedAgents, rollbackService, resourceCalculateDelayer,
-				_schedulerStateHolder().SchedulingResultState, schedulingOptions, teamInfoFactory);
+				_schedulerStateHolder().SchedulingResultState, schedulingOptions, teamInfoFactory, blockPreferenceProvider);
 
 			if (schedulingCallback.IsCancelled)
 				return;

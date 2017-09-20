@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -23,6 +24,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public IExtraPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
 			return _extraPreferences;
+		}
+
+		public IEnumerable<IExtraPreferences> ForAgents(IEnumerable<IPerson> persons, DateOnly dateOnly)
+		{
+			return new List<IExtraPreferences> {_extraPreferences};
 		}
 	}
 }

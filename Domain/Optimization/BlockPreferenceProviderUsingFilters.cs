@@ -23,6 +23,25 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			return mapToBlockPreference(PlanningGroupSettings.CreateDefault());
 		}
+		
+		public IEnumerable<IExtraPreferences> ForAgents(IEnumerable<IPerson> persons, DateOnly dateOnly)
+		{
+			var result = new List<IExtraPreferences>();
+			foreach (var person in persons)
+			{
+				var anyValid = false;
+				foreach (var settings in _planningGroupSettings.Where(s => s.IsValidForAgent(person, dateOnly)))
+				{
+					result.Add(mapToBlockPreference(settings));
+					anyValid = true;
+					break;
+				}
+				if(!anyValid)
+					result.Add(mapToBlockPreference(PlanningGroupSettings.CreateDefault()));
+
+			}
+			return result;
+		}
 
 		private IExtraPreferences mapToBlockPreference(PlanningGroupSettings settings)
 		{

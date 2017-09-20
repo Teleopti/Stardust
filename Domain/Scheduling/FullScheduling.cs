@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			return DoScheduling(period, null);
 		}
-
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people)
 		{
 			var stateHolder = _schedulerStateHolder();
@@ -44,6 +43,22 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				RunWeeklyRestSolver = false,
 				FromWeb = true,
 				AgentsToSchedule = people
+			});
+			_persister.Persist(stateHolder.Schedules);
+			return CreateResult(period);
+		}
+
+		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people,Guid planningPeriodId)
+		{
+			var stateHolder = _schedulerStateHolder();
+			Setup(period, people);
+			_schedulingCommandHandler.Execute(new SchedulingCommand
+			{
+				Period = period,
+				RunWeeklyRestSolver = false,
+				FromWeb = true,
+				AgentsToSchedule = people,
+				PlanningPeriodId = planningPeriodId
 			});
 			_persister.Persist(stateHolder.Schedules);
 			return CreateResult(period);

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			SchedulingOptions schedulingOption,
-			ITeamInfoFactory teamInfoFactory)
+			ITeamInfoFactory teamInfoFactory, IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var dateOnlySkipList = new List<DateOnly>();
 
@@ -59,17 +60,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				runSchedulingForAllTeamInfoOnStartDate(schedulingCallback, allPersonMatrixList, selectedPersons, selectedPeriod,
 					schedulePartModifyAndRollbackService,
 					checkedTeams.OkList, datePointer, dateOnlySkipList,
-					resourceCalculateDelayer, schedulingResultStateHolder, schedulingOption);
+					resourceCalculateDelayer, schedulingResultStateHolder, schedulingOption,blockPreferenceProvider);
 			}
 		}
 
 		private void runSchedulingForAllTeamInfoOnStartDate(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, IEnumerable<IPerson> selectedPersons, DateOnlyPeriod selectedPeriod,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IEnumerable<ITeamInfo> allTeamInfoListOnStartDate, DateOnly datePointer, List<DateOnly> dateOnlySkipList,
-			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, SchedulingOptions schedulingOption)
+			IResourceCalculateDelayer resourceCalculateDelayer, ISchedulingResultStateHolder schedulingResultStateHolder, SchedulingOptions schedulingOption, IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count(), true))
 			{
+				var blockPreference = blockPreferenceProvider.ForAgent(teamInfo.GroupMembers.First(), selectedPeriod.StartDate);
+				schedulingOption.BlockSameShiftCategory = blockPreference.UseBlockSameShiftCategory;
+				schedulingOption.BlockFinderTypeForAdvanceScheduling = blockPreference.BlockTypeValue;
+				schedulingOption.BlockSameStartTime = blockPreference.UseBlockSameStartTime;
+				schedulingOption.BlockSameShift = blockPreference.UseBlockSameShift;
+				if (blockPreference.UseBlockSameShift || blockPreference.UseBlockSameShiftCategory || blockPreference.UseBlockSameStartTime)
+				{
+					schedulingOption.UseBlock = true;
+				}
 				var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo, datePointer, allPersonMatrixList, schedulingOption, selectedPeriod);
 				if (teamBlockInfo == null) continue;
 

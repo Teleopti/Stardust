@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.WebLegacy;
@@ -23,6 +24,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
 		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
 		private readonly ExtendSelectedPeriodForMonthlyScheduling _extendSelectedPeriodForMonthlyScheduling;
+		private readonly BlockPreferenceProviderUsingFiltersFactory _blockPreferenceProviderUsingFiltersFactory;
+		private readonly IPlanningPeriodRepository _planningPeriodRepository;
 
 		public SchedulingEventHandler(Func<ISchedulerStateHolder> schedulerStateHolder,
 						IFillSchedulerStateHolder fillSchedulerStateHolder,
@@ -33,7 +36,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 						IGridlockManager gridlockManager, 
 						ISchedulingSourceScope schedulingSourceScope, 
 						ILowThreadPriorityScope lowThreadPriorityScope,
-						ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling)
+						ExtendSelectedPeriodForMonthlyScheduling extendSelectedPeriodForMonthlyScheduling,
+						BlockPreferenceProviderUsingFiltersFactory blockPreferenceProviderUsingFiltersFactory,
+						IPlanningPeriodRepository planningPeriodRepository)
 		{
 			_schedulerStateHolder = schedulerStateHolder;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -45,6 +50,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingSourceScope = schedulingSourceScope;
 			_lowThreadPriorityScope = lowThreadPriorityScope;
 			_extendSelectedPeriodForMonthlyScheduling = extendSelectedPeriodForMonthlyScheduling;
+			_blockPreferenceProviderUsingFiltersFactory = blockPreferenceProviderUsingFiltersFactory;
+			_planningPeriodRepository = planningPeriodRepository;
 		}
 
 		[TestLog]
@@ -82,12 +89,34 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			var schedulingCallback = _currentSchedulingCallback.Current();
 			var schedulingProgress = schedulingCallback is IConvertSchedulingCallbackToSchedulingProgress converter ? converter.Convert() : new NoSchedulingProgress();
 
+			var schedulingOptions = _schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate);
+			IBlockPreferenceProvider blockPreferenceProvider;
+			if (@event.FromWeb)
+			{
+				var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
+				var planningGroup = planningPeriod.PlanningGroup;
+				blockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup);
+			}
+			else
+			{
+				blockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences()
+				{
+					UseBlockSameStartTime = schedulingOptions.BlockSameStartTime,
+					UseBlockSameShift = schedulingOptions.BlockSameShift,
+					UseBlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory,
+					BlockTypeValue = schedulingOptions.BlockFinderTypeForAdvanceScheduling
+				});
+			}
+			
+
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
+			
+
 
 			_scheduleExecutor.Execute(schedulingCallback,
-				_schedulingOptionsProvider.Fetch(schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate), schedulingProgress,
+				schedulingOptions, schedulingProgress,
 				schedulerStateHolder.AllPermittedPersons.Where(x => @event.AgentsToSchedule.Contains(x.Id.Value)).ToArray(),
-				selectedPeriod, @event.RunWeeklyRestSolver);
+				selectedPeriod, @event.RunWeeklyRestSolver, blockPreferenceProvider);
 		}
 	}
 }

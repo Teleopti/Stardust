@@ -54,7 +54,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 					RunWeeklyRestSolver = command.RunWeeklyRestSolver,
 					CommandId = command.CommandId,
 					UserLocks = userLocks,
-					FromWeb= command.FromWeb
+					FromWeb= command.FromWeb,
+					PlanningPeriodId = command.PlanningPeriodId
 				});
 			}
 			else
@@ -77,7 +78,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 							CommandId = command.CommandId,
 							UserLocks = userLocks,
 							Skills = island.SkillIds(),
-							FromWeb = command.FromWeb
+							FromWeb = command.FromWeb,
+							PlanningPeriodId = command.PlanningPeriodId
 						};
 						events.Add(@event);
 					}

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			bool runWeeklyRestSolver);
+			bool runWeeklyRestSolver, IBlockPreferenceProvider blockPrefreePreferenceProvider);
 	}
 
 	public class ScheduleExecutor : ScheduleExecutorOld
@@ -33,10 +34,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		protected override void DoScheduling(ISchedulingCallback schedulingCallback, ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			bool runWeeklyRestSolver, SchedulingOptions schedulingOptions)
+			bool runWeeklyRestSolver, SchedulingOptions schedulingOptions,IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			schedulingOptions.ConsiderShortBreaks = _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(selectedAgents, selectedPeriod);
-			TeamBlockScheduling.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod);
+			TeamBlockScheduling.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod,blockPreferenceProvider);
 		}
 	}
 
@@ -72,8 +73,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			SchedulingOptions schedulingOptions,
 			ISchedulingProgress backgroundWorker,
 			IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			bool runWeeklyRestSolver)
+			bool runWeeklyRestSolver, IBlockPreferenceProvider blockPreferenceProvider)
 		{
+			
 			var schedulerStateHolder = _schedulerStateHolder();
 			schedulingOptions.DayOffTemplate = schedulerStateHolder.CommonStateHolder.DefaultDayOffTemplate;
 			var lastCalculationState = schedulerStateHolder.SchedulingResultState.SkipResourceCalculation;
@@ -86,11 +88,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			{
 				_resourceCalculation.ResourceCalculate(selectedPeriod.Inflate(1), new ResourceCalculationData(schedulerStateHolder.SchedulingResultState, schedulerStateHolder.ConsiderShortBreaks, false));
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
-				DoScheduling(schedulingCallback, backgroundWorker, selectedAgents, selectedPeriod, runWeeklyRestSolver, schedulingOptions);
+				DoScheduling(schedulingCallback, backgroundWorker, selectedAgents, selectedPeriod, runWeeklyRestSolver, schedulingOptions, blockPreferenceProvider);
 
 				if (!backgroundWorker.CancellationPending)
 				{
-					ExecuteWeeklyRestSolverCommand(useShiftCategoryLimitations, schedulingOptions, selectedAgents,selectedPeriod, backgroundWorker);
+					ExecuteWeeklyRestSolverCommand(useShiftCategoryLimitations, schedulingOptions, selectedAgents,selectedPeriod, backgroundWorker, blockPreferenceProvider);
 				}
 			}
 
@@ -98,11 +100,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		}
 
 		protected virtual void DoScheduling(ISchedulingCallback schedulingCallback, ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod,
-			bool runWeeklyRestSolver, SchedulingOptions schedulingOptions)
+			bool runWeeklyRestSolver, SchedulingOptions schedulingOptions,IBlockPreferenceProvider blockPreferenceProvider)
 		{
+			var blockPreferences = blockPreferenceProvider.ForAgents(selectedAgents, selectedPeriod.StartDate).ToArray();
+			if (blockPreferences.Any(x=>x.UseBlockSameShift)|| blockPreferences.Any(x => x.UseBlockSameShiftCategory) || blockPreferences.Any(x => x.UseBlockSameStartTime))
+			{
+				schedulingOptions.UseBlock = true;
+			}
 			if (schedulingOptions.UseBlock || schedulingOptions.UseTeam)
 			{
-				TeamBlockScheduling.Execute(new NoSchedulingCallback(), schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod);
+				TeamBlockScheduling.Execute(new NoSchedulingCallback(), schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, blockPreferenceProvider);
 			}
 			else
 			{
@@ -115,7 +122,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		protected virtual void ExecuteWeeklyRestSolverCommand(bool useShiftCategoryLimitations, SchedulingOptions schedulingOptions,
 															IEnumerable<IPerson> selectedPersons,
 															DateOnlyPeriod selectedPeriod, 
-															ISchedulingProgress backgroundWorker)
+															ISchedulingProgress backgroundWorker, 
+															IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			_removeShiftCategoryToBeInLegalState.Execute(useShiftCategoryLimitations, schedulingOptions, selectedPersons, selectedPeriod, backgroundWorker);
 		}	

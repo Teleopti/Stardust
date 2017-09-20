@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -91,8 +92,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			};
 
-	
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new List<IPerson> { agent1 }, period);
+			var blockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences()
+			{
+				UseBlockSameStartTime = schedulingOptions.BlockSameStartTime,
+				UseBlockSameShift = schedulingOptions.BlockSameShift,
+				UseBlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory,
+				BlockTypeValue = schedulingOptions.BlockFinderTypeForAdvanceScheduling
+			});
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new List<IPerson> { agent1 }, period, blockPreferenceProvider);
 			WorkShiftFinderResultHolder().GetResults(true, true).Count.Should().Be.EqualTo(0);
 		}
 
@@ -172,7 +179,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				UseAverageShiftLengths = true
 			};
 
-			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new List<IPerson> { agent1 }, period);
+			var blockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences()
+			{
+				UseBlockSameStartTime = schedulingOptions.BlockSameStartTime,
+				UseBlockSameShift = schedulingOptions.BlockSameShift,
+				UseBlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory,
+				BlockTypeValue = schedulingOptions.BlockFinderTypeForAdvanceScheduling
+			});
+
+			Target.Execute(new NoSchedulingCallback(), schedulingOptions, new NoSchedulingProgress(), new List<IPerson> { agent1 }, period, blockPreferenceProvider);
 
 			var schedules = stateHolder.Schedules[agent1].ScheduledDayCollection(period).ToList();
 			schedules[0].PersonAssignment().AssignedWithDayOff(dayOffTemplate).Should().Be.True();
