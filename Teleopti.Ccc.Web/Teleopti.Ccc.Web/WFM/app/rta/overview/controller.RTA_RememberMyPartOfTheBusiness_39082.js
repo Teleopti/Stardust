@@ -21,7 +21,7 @@
 
 		vm.displayNoSitesMessage = function () { return vm.siteCards.length == 0; };
 		vm.displayNoSitesForSkillMessage = rtaStateService.hasSkillSelection;
-		vm.highlightAgentsButton = rtaStateService.hasSelection();
+		vm.highlightAgentsButton = rtaStateService.hasSelection;
 		vm.goToAgents = rtaStateService.goToAgents;
 
 		var pollPromise;
