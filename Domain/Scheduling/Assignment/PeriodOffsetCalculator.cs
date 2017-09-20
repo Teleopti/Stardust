@@ -59,20 +59,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
         private static TimeSpan CalculatePeriodOffsetWithoutTimeZoneChanges(IScheduleDay source, IScheduleDay target, DateTimePeriod sourceShiftPeriod)
         {
-            TimeSpan periodDifference = CalculatePeriodDifference(source.Period, target.Period);
-            TimeSpan timeZoneRecorrection = CalculateTimeZoneRecorrection(target, source);
+            var periodDifference = CalculatePeriodDifference(source.Period, target.Period);
+            var timeZoneRecorrection = target.TimeZone.GetUtcOffset(target.Period.StartDateTime)
+					.Subtract(source.TimeZone.GetUtcOffset(source.Period.StartDateTime));
             
             var targetShiftPeriod = sourceShiftPeriod.MovePeriod(periodDifference + timeZoneRecorrection);
             TimeSpan dayLightSavingsRecorrection = CalculateDaylightSavingsRecorrection(sourceShiftPeriod, targetShiftPeriod);
             return periodDifference.Add(timeZoneRecorrection).Add(dayLightSavingsRecorrection);
-        }
-
-        private static TimeSpan CalculateTimeZoneRecorrection(IScheduleDay target, IScheduleDay source)
-        {
-            TimeZoneInfo sourceTimeZone = source.TimeZone;
-            TimeZoneInfo targetTimeZone = target.TimeZone;
-            return targetTimeZone.GetUtcOffset(target.Period.StartDateTime)
-                    .Subtract(sourceTimeZone.GetUtcOffset(source.Period.StartDateTime));
         }
 
 		private static TimeSpan CalculateDaylightSavingsRecorrection(DateTimePeriod sourceShiftPeriod, DateTimePeriod targetShiftPeriod)

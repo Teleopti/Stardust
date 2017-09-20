@@ -847,43 +847,41 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling
             if (Presenter.ClipHandlerSchedule.ClipList.Count > 0)
             {
                 if (Clipboard.ContainsData("PersistableScheduleData"))
-                {
-                    using (var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter))
-                    {
+				{
+					var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter);
 
-                        undoRedo.CreateBatch(Resources.UndoRedoPaste);
-                        splitAbsences(SelectedSchedules());
-                        try
-                        {
-                            IList<IScheduleDay> pasteList =
-                                   GridHelper.HandlePasteScheduleGridFrozenColumn(_grid, Presenter.ClipHandlerSchedule, pasteAction);
+					undoRedo.CreateBatch(Resources.UndoRedoPaste);
+					splitAbsences(SelectedSchedules());
+					try
+					{
+						IList<IScheduleDay> pasteList =
+							   GridHelper.HandlePasteScheduleGridFrozenColumn(_grid, Presenter.ClipHandlerSchedule, pasteAction);
 
-	                        if (!pasteList.IsEmpty())
-	                        {
-		                        var absenceMerger = new AbsenceMerger(pasteList);
-								absenceMerger.MergeWithDayBefore();
-								absenceMerger.MergeOnDayStart();
-		                        Presenter.TryModify(pasteList);
-	                        }
-
-	                        undoRedo.CommitBatch();
-
-                            if (!Presenter.ClipHandlerSchedule.IsInCutMode)
-                                OnPasteCompleted();
-
-                            InvalidateSelectedRow(Presenter.ClipHandlerSchedule.ClipList[0].ClipValue);
-                        }
-                        catch (DayOffOutsideScheduleException dayOffOutside)
-                        {
-                            undoRedo.RollbackBatch();
-                            ShowErrorMessage(dayOffOutside.Message, Resources.DayOffOutsideScheduleException);
-                        }
-						catch (ValidationException validationException)
+						if (!pasteList.IsEmpty())
 						{
-							undoRedo.RollbackBatch();
-							ShowErrorMessage(string.Format(CultureInfo.CurrentUICulture, Resources.PersonAssignmentIsNotValidDot, validationException.Message), Resources.ValidationError);
+							var absenceMerger = new AbsenceMerger(pasteList);
+							absenceMerger.MergeWithDayBefore();
+							absenceMerger.MergeOnDayStart();
+							Presenter.TryModify(pasteList);
 						}
-                    }
+
+						undoRedo.CommitBatch();
+
+						if (!Presenter.ClipHandlerSchedule.IsInCutMode)
+							OnPasteCompleted();
+
+						InvalidateSelectedRow(Presenter.ClipHandlerSchedule.ClipList[0].ClipValue);
+					}
+					catch (DayOffOutsideScheduleException dayOffOutside)
+					{
+						undoRedo.RollbackBatch();
+						ShowErrorMessage(dayOffOutside.Message, Resources.DayOffOutsideScheduleException);
+					}
+					catch (ValidationException validationException)
+					{
+						undoRedo.RollbackBatch();
+						ShowErrorMessage(string.Format(CultureInfo.CurrentUICulture, Resources.PersonAssignmentIsNotValidDot, validationException.Message), Resources.ValidationError);
+					}
                 }
             }
         }

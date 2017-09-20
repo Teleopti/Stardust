@@ -265,25 +265,23 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.AgentRestrictions
 				return;
 
 			var options = new PasteOptions { Preference = true, StudentAvailability = true };
-			using (var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter))
-			{
-				undoRedo.CreateBatch(Resources.UndoRedoPaste);
-				IList<IScheduleDay> pasteList =
-								   GridHelper.HandlePasteScheduleGridFrozenColumn(ViewGrid, Presenter.ClipHandlerSchedule, pasteAction);
+			var pasteAction = new SchedulePasteAction(options, Presenter.LockManager, Presenter.SchedulePartFilter);
+			undoRedo.CreateBatch(Resources.UndoRedoPaste);
+			IList<IScheduleDay> pasteList =
+							   GridHelper.HandlePasteScheduleGridFrozenColumn(ViewGrid, Presenter.ClipHandlerSchedule, pasteAction);
 
-				IScheduleMatrixPro matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
+			IScheduleMatrixPro matrix = _agentRestrictionGrid.CurrentDisplayRow.Matrix;
 
-				IList<IScheduleDay> strippedList = pasteList.Where(s => matrix.UnlockedDays.Any(m => m.Day == s.DateOnlyAsPeriod.DateOnly)).ToList();
+			IList<IScheduleDay> strippedList = pasteList.Where(s => matrix.UnlockedDays.Any(m => m.Day == s.DateOnlyAsPeriod.DateOnly)).ToList();
 
-				if (!pasteList.IsEmpty())
-					Presenter.TryModify(strippedList);
+			if (!pasteList.IsEmpty())
+				Presenter.TryModify(strippedList);
 
-				undoRedo.CommitBatch();
+			undoRedo.CommitBatch();
 
-				OnPasteCompleted();
+			OnPasteCompleted();
 
-				InvalidateSelectedRow(Presenter.ClipHandlerSchedule.ClipList[0].ClipValue);
-			}
+			InvalidateSelectedRow(Presenter.ClipHandlerSchedule.ClipList[0].ClipValue);
 		}
 	}
 }

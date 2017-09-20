@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Syncfusion.Windows.Forms.Grid;
@@ -9,12 +8,11 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ClipBoard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Scheduling;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
 {
-    public class SchedulePasteAction : IGridPasteAction<IScheduleDay>, IDisposable
+    public class SchedulePasteAction : IGridPasteAction<IScheduleDay>
     {
         private readonly PasteOptions _options;
         private readonly IGridlockManager _lockManager;
@@ -37,8 +35,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
             _options = options;
         }
 
-        #region IGridPasteAction<SchedulePart> Members
-
         public IScheduleDay Paste(GridControl gridControl, Clip<IScheduleDay> clip, int rowIndex, int columnIndex)
         {
             IScheduleDay dest = gridControl[rowIndex, columnIndex].CellValue as IScheduleDay;
@@ -51,36 +47,22 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
             return Paste(source, dest, _options);
         }
 
-        #endregion
-
-        #region Private
-
-
-
 		public IScheduleDay Paste(IScheduleDay source, IScheduleDay destination, PasteOptions options)
         {
             if (source.SignificantPart() == SchedulePartView.None)
                 return null;
 
-            //check for locks
-            //if (_lockManager.Gridlocks(destination.Person, destination.Period.LocalStartDateTime).Count != 0)
-            //    return null;
-            GridlockDictionary lockDictionary = _lockManager.Gridlocks(destination);
+            var lockDictionary = _lockManager.Gridlocks(destination);
             if (lockDictionary != null && lockDictionary.Count == 1)
-            {
-                // if it only is one lock and that is WriteProtected AND the user is allowed to change those
+			{
+				// if it only is one lock and that is WriteProtected AND the user is allowed to change those
                 // Don't remove it the user can change it
-                Gridlock gridlock = new Gridlock(destination, LockType.WriteProtected);
-                if (lockDictionary.ContainsKey(gridlock.Key) && PrincipalAuthorization.Current().IsPermitted(Domain.Security.AuthorizationData.DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
-                {
-
-                }
-                else
-                {
-                    return null;
-                }
-
-            }
+                var gridlock = new Gridlock(destination, LockType.WriteProtected);
+				if (!lockDictionary.ContainsKey(gridlock.Key) || !PrincipalAuthorization.Current().IsPermitted(Domain.Security.AuthorizationData.DefinedRaptorApplicationFunctionPaths.ModifyWriteProtectedSchedule))
+				{
+					return null;
+				}
+			}
             if (lockDictionary != null && lockDictionary.Count > 1)
                 return null;
 
@@ -203,14 +185,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common
             }
 
             return destination;
-        }
-
-        #endregion
-
-
-        public void Dispose()
-        {
-            GC.SuppressFinalize(this);
         }
     }
 }
