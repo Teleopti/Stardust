@@ -18,15 +18,16 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 		{
 			if (obj.PersonFrom.WorkflowControlSet == null || obj.PersonTo.WorkflowControlSet == null)
 				return false;
-			var currentDate = _now.ServerDate_DontUse();
+			var personFromToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), obj.PersonFrom.PermissionInformation.DefaultTimeZone()).Date);
+			var personToToday = new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), obj.PersonTo.PermissionInformation.DefaultTimeZone()).Date);
 			var openPeriodFrom =
 				 new DateOnlyPeriod(
-					  currentDate.AddDays(obj.PersonFrom.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum),
-					  currentDate.AddDays(obj.PersonFrom.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum));
+					  personFromToday.AddDays(obj.PersonFrom.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum),
+					  personFromToday.AddDays(obj.PersonFrom.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum));
 			var openPeriodTo =
 				 new DateOnlyPeriod(
-					  currentDate.AddDays(obj.PersonTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum),
-					  currentDate.AddDays(obj.PersonTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum));
+					  personToToday.AddDays(obj.PersonTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum),
+					  personToToday.AddDays(obj.PersonTo.WorkflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum));
 			return openPeriodFrom.Contains(obj.DateOnly) && openPeriodTo.Contains(obj.DateOnly);
 		}
 

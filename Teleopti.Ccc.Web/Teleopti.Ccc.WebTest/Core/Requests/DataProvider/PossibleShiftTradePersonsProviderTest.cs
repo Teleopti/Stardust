@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			shiftTradeValidator.Expect(val => val.Validate(new ShiftTradeAvailableCheckItem(data.ShiftTradeDate, currentUser, validAgent)))
 							   .Return(new ShiftTradeRequestValidationResult(true));
 			shiftTradeValidator.Expect(val => val.Validate(new ShiftTradeAvailableCheckItem(data.ShiftTradeDate, currentUser, invalidAgent)))
-							   .Return(new ShiftTradeRequestValidationResult(true));
+							   .Return(new ShiftTradeRequestValidationResult(false));
 
 			var result = target.RetrievePersons(data);
 
