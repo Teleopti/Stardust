@@ -1,24 +1,24 @@
 'use strict';
-describe('ThemesPickerController', function() {
+describe('ThemesPickerController', function () {
 	var $q,
 		$rootScope,
 		$httpBackend;
 
-	beforeEach(function() {
+	beforeEach(function () {
 		module('wfm.themes');
 	});
 
-	beforeEach(inject(function(_$httpBackend_, _$q_, _$rootScope_) {
+	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
-		$rootScope.setTheme = function(){
+		$rootScope.setTheme = function () {
 			return
 		};
 	}));
 
 
-	var setUpTemplate = function(option) {
+	var setUpTemplate = function (option) {
 		if (option === "withHash") {
 			var themeModules = document.createElement("link");
 			themeModules.setAttribute("id", "themeModules");
@@ -41,14 +41,14 @@ describe('ThemesPickerController', function() {
 		}
 
 		var checkBox = document.createElement("input");
-		checkBox.setAttribute("id","darkTheme");
+		checkBox.setAttribute("id", "darkTheme");
 		document.body.appendChild(checkBox);
 		var container = document.createElement("div");
 		container.setAttribute("id", "themeMenu");
 		document.body.appendChild(container);
 
 	};
-	var teardownTemplate = function() {
+	var teardownTemplate = function () {
 		document.getElementById('themeMenu').remove();
 		document.getElementById('themeModules').remove();
 		document.getElementById('themeStyle').remove();
@@ -56,7 +56,7 @@ describe('ThemesPickerController', function() {
 
 
 
-	it('should toggle theme to dark', inject(function($controller) {
+	it('should toggle theme to dark', inject(function ($controller) {
 		var scope = $rootScope.$new();
 		setUpTemplate();
 		var vm = $controller('ThemesPickerController', {

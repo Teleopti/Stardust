@@ -92,8 +92,8 @@ module.exports = function (grunt) {
                 files: {
                     'dist/style_classic.min.css': ['dist/style_classic.css'],
                     'dist/style_dark.min.css': ['dist/style_dark.css'],
-                    'dist/modules_classic.min.css': ['dist/modules_classic.css'],
-                    'dist/modules_dark.min.css': ['dist/modules_dark.css']
+                    'dist/resources/modules_classic.min.css': ['dist/resources/modules_classic.css'],
+                    'dist/resources/modules_dark.min.css': ['dist/resources/modules_dark.css']
                 }
             }
         },
@@ -145,7 +145,7 @@ module.exports = function (grunt) {
                     '../Content/signalr/jquery.signalR-2.2.2.js',
                     '../Content/signalr/broker-hubs.js'
                 ],
-                dest: 'dist/modules.js'
+                dest: 'dist/resources/modules.js'
             },
             devJs: {
                 options: {
@@ -218,7 +218,7 @@ module.exports = function (grunt) {
                     'vendor/c3/c3.min.css',
                     'node_modules/teleopti-styleguide/styleguide/dist/main.min.css'
                 ],
-                dest: 'dist/modules_classic.css'
+                dest: 'dist/resources/modules_classic.css'
             },
             distDarkCss: {
                 src: [
@@ -234,7 +234,7 @@ module.exports = function (grunt) {
                     'vendor/c3/c3.min.css',
                     'node_modules/teleopti-styleguide/styleguide/dist/main_dark.min.css'
                 ],
-                dest: 'dist/modules_dark.css'
+                dest: 'dist/resources/modules_dark.css'
             },
         },
 
@@ -242,7 +242,7 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     'dist/main.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app_desktop_client.js'],
-                    'dist/modules.min.js': ['dist/modules.js'],
+                    'dist/modules.min.js': ['dist/resources/modules.js'],
                     'dist/templates.min.js': ['dist/templates.js']
                 },
                 options: {
@@ -302,13 +302,13 @@ module.exports = function (grunt) {
             devCss: {
                 files: [{
                     expand: true,
-                    cwd: 'dist',
-                    src: ['*.css', '!*.min.css'],
-                    dest: 'dist/',
+                    cwd: 'dist/resources',
+                    src: ['*.css','!*.min.css'],
+                    dest: 'dist/resources/',
                     rename: function (dest, src) {
                         return dest + src.replace('.css', '.min.css')
                     }
-                }, {
+                },{
                     expand: true,
                     cwd: 'css',
                     src: '*.css',
@@ -345,14 +345,14 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'node_modules/bootstrap/fonts',
                     src: ['*.ttf', '*.woff', '*.eot'],
-                    dest: 'dist/',
+                    dest: 'dist/fonts',
                     filter: 'isFile'
                 }]
             }
         },
         clean: {
             dist: {
-                src: ['dist/*.js', 'dist/*.css', '!dist/*.min.js', '!dist/*.min.css']
+                src: ['dist/**.js', 'dist/**.css', '!dist/**.min.js', '!dist/**.min.css']
             }
         },
 
@@ -453,7 +453,7 @@ module.exports = function (grunt) {
     grunt.registerTask('generateIndexDev', ['processhtml:dev']);
     grunt.registerTask('eslint-beta', ['eslint']);
     grunt.registerTask('devDistWatch', ['devDist', 'watch:dev']);
-    grunt.registerTask('dist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:extras','copy:bootstrap', 'generateIndex', 'clean:dist']); // this task should only be used by the build. It's kind of packaging for production.
+    grunt.registerTask('dist', ['ngtemplates', 'sass', 'imageEmbed', 'concat:distModules', 'concat:distCss', 'concat:distDarkCss', 'cssmin', 'uglify:dist', 'copy:extras', 'copy:bootstrap', 'generateIndex', 'clean:dist']); // this task should only be used by the build. It's kind of packaging for production.
 
     // for desktop client
     grunt.registerTask('buildForDesktop', ['copy:sourceMaps', 'processhtml:distForDesktop']);
