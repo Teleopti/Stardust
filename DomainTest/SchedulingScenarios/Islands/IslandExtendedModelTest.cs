@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 			var skill2 = new Skill("2");
 			var skillSet1 = new SkillSet(new HashSet<ISkill> { skill1, skill2 }, new HashSet<IPerson>());
 			var skillSet2 = new SkillSet(new HashSet<ISkill> { skill2 }, new HashSet<IPerson>());
-			var model = new Island(new[] {skillSet1, skillgroup2}, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
+			var model = new Island(new[] {skillSet1, skillSet2}, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
 
 			model.SkillsInIsland.Count().Should().Be.EqualTo(2);
 			model.SkillsInIsland.Should().Contain(skill1);
