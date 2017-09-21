@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    public IEnumerable<ISite> LoadAllOrderByName()
 	    {
 			return Session.CreateCriteria<Site>()
+				.SetFetchMode("OpenHourCollection", FetchMode.Join)
 				.AddOrder(Order.Asc("Description.Name"))
 				.List<ISite>();
 			
