@@ -8,41 +8,41 @@ namespace Teleopti.Ccc.Domain.Islands
 {
 	public class CreateIslands
 	{
-		private readonly CreateSkillGroups _createSkillGroups;
+		private readonly CreateSkillSets _createSkillSets;
 		private readonly NumberOfAgentsKnowingSkill _numberOfAgentsKnowingSkill;
 		private readonly MoveSkillGroupToCorrectIsland _moveSkillGroupToCorrectIsland;
 
-		public CreateIslands(CreateSkillGroups createSkillGroups, 
+		public CreateIslands(CreateSkillSets createSkillSets, 
 								NumberOfAgentsKnowingSkill numberOfAgentsKnowingSkill,
 								MoveSkillGroupToCorrectIsland moveSkillGroupToCorrectIsland)
 		{
-			_createSkillGroups = createSkillGroups;
+			_createSkillSets = createSkillSets;
 			_numberOfAgentsKnowingSkill = numberOfAgentsKnowingSkill;
 			_moveSkillGroupToCorrectIsland = moveSkillGroupToCorrectIsland;
 		}
 
 		public IEnumerable<Island> Create(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> peopleInOrganization, DateOnlyPeriod period)
 		{
-			var allSkillGroups = _createSkillGroups.Create(peopleInOrganization, period.StartDate).ToList();
-			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillGroups);
+			var allSkillSets = _createSkillSets.Create(peopleInOrganization, period.StartDate).ToList();
+			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillSets);
 			while (true)
 			{
-				var skillGroupsInIslands = allSkillGroups.Select(skillGroup => new List<SkillSet> { skillGroup }).ToList();
-				while (_moveSkillGroupToCorrectIsland.Execute(allSkillGroups, skillGroupsInIslands))
+				var skillSetsInIsland = allSkillSets.Select(skillSet => new List<SkillSet> { skillSet }).ToList();
+				while (_moveSkillGroupToCorrectIsland.Execute(allSkillSets, skillSetsInIsland))
 				{
-					removeEmptyIslands(skillGroupsInIslands);
+					removeEmptyIslands(skillSetsInIsland);
 				}
 
-				if (!reduceSkillGroups.Execute(skillGroupsInIslands, noAgentsKnowingSkill))
+				if (!reduceSkillGroups.Execute(skillSetsInIsland, noAgentsKnowingSkill))
 				{
-					return skillGroupsInIslands.Select(skillGroupInIsland => new Island(skillGroupInIsland, noAgentsKnowingSkill)).ToArray();
+					return skillSetsInIsland.Select(skillSetInIsland => new Island(skillSetInIsland, noAgentsKnowingSkill)).ToArray();
 				}
 			}
 		}
 
-		private static void removeEmptyIslands(ICollection<List<SkillSet>> skillGroupsInIslands)
+		private static void removeEmptyIslands(ICollection<List<SkillSet>> skillSetsInIsland)
 		{
-			skillGroupsInIslands.Where(x => x.Count == 0).ToArray().ForEach(x => skillGroupsInIslands.Remove(x));
+			skillSetsInIsland.Where(x => x.Count == 0).ToArray().ForEach(x => skillSetsInIsland.Remove(x));
 		}
 	}
 }

@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<SkillSetProvider>().SingleInstance();
 			builder.RegisterType<SkillSetContext>().SingleInstance();
 			builder.RegisterType<IslandModelFactory>().SingleInstance();
-			builder.RegisterType<CreateSkillGroups>().SingleInstance();
+			builder.RegisterType<CreateSkillSets>().SingleInstance();
 			builder.RegisterType<ReduceIslandsLimits>().SingleInstance();
 			builder.RegisterType<LongestPeriodForAssignmentCalculator>()
 				.As<ILongestPeriodForAssignmentCalculator>()

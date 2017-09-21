@@ -7,11 +7,11 @@ namespace Teleopti.Ccc.Domain.Islands
 {
 	public class SkillSetContext
 	{
-		private readonly CreateSkillGroups _createSkillGroups;
+		private readonly CreateSkillSets _createSkillSets;
 
-		public SkillSetContext(CreateSkillGroups createSkillGroups)
+		public SkillSetContext(CreateSkillSets createSkillSets)
 		{
-			_createSkillGroups = createSkillGroups;
+			_createSkillSets = createSkillSets;
 		}
 
 		[ThreadStatic]
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Islands
 		{
 			if (_skillSets != null)
 				throw new NotSupportedException("Nested virtualSkillGroupResult context.");
-			_skillSets = _createSkillGroups.Create(personsInOrganization, period.StartDate);
+			_skillSets = _createSkillSets.Create(personsInOrganization, period.StartDate);
 			return new GenericDisposable(() => { _skillSets = null; });
 		}
 	}

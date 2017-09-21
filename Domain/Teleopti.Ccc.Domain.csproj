@@ -1421,7 +1421,7 @@
     <Compile Include="Intraday\TimeSeriesProvider.cs" />
     <Compile Include="Islands\ClientModel\IslandModel.cs" />
     <Compile Include="Islands\ClientModel\IslandModelFactory.cs" />
-    <Compile Include="Islands\CreateSkillGroups.cs" />
+    <Compile Include="Islands\CreateSkillSets.cs" />
     <Compile Include="Islands\IReduceSkillGroups.cs" />
     <Compile Include="Islands\Island.cs" />
     <Compile Include="Islands\IslandLimits.cs" />

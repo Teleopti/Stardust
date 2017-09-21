@@ -6,11 +6,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class CreateSkillGroups
+	public class CreateSkillSets
 	{
 		private readonly PersonalSkillsProvider _personalSkillsProvider;
 
-		public CreateSkillGroups(PersonalSkillsProvider personalSkillsProvider)
+		public CreateSkillSets(PersonalSkillsProvider personalSkillsProvider)
 		{
 			_personalSkillsProvider = personalSkillsProvider;
 		}
