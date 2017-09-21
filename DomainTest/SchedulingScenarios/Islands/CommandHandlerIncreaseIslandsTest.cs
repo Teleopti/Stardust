@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 		[TestCase(5, 1, ExpectedResult = 2)]
 		[TestCase(4, 1, ExpectedResult = 1)]
-		public int ShouldRemoveSkillFromSkillGroupIfOtherSkillgroupIsBigEnough(int agentsSkillA, int agentsSkillAB)
+		public int ShouldRemoveSkillFromSkillSetIfOtherSkillSetIsBigEnough(int agentsSkillA, int agentsSkillAB)
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 5);
 			var skillA = new Skill("A");
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 
 		[TestCase(6, 1, ExpectedResult = 2)]
 		[TestCase(5, 1, ExpectedResult = 1)]
-		public int ShouldNotRemoveSkillFromSkillGroupIfIslandIsNotBigEnough(int agentsSkillA, int agentsSkillAB)
+		public int ShouldNotRemoveSkillFromSkillSetIfIslandIsNotBigEnough(int agentsSkillA, int agentsSkillAB)
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(7, 4);
 			var skillA = new Skill("A");
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		}
 
 		[Test]
-		public void ShouldConsiderAlreadyReducedSkillGroupsWhenReducingSkillGroup()
+		public void ShouldConsiderAlreadyReducedSkillSetsWhenReducingSkillSet()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
 			var skillA = new Skill("A");
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		}
 
 		[Test]
-		public void ShouldReduceBiggestSkillGroupFirst()
+		public void ShouldReduceBiggestSkillSetFirst()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 5);
 			var skillA = new Skill("A");
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		}
 
 		[Test]
-		public void ShouldNotRemoveSkillIfActivityCompositionChangesInSkillGroup()
+		public void ShouldNotRemoveSkillIfActivityCompositionChangesInSkillSet()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
 			var skillA = new Skill("A").For(new Activity("A"));
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		}
 
 		[Test]
-		public void ShouldOnlyConsiderPrimarySkillsWhenReducingSkillGroup()
+		public void ShouldOnlyConsiderPrimarySkillsWhenReducingSkillSet()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 4);
 			var skillA = new Skill("A").CascadingIndex(1);
@@ -271,7 +271,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		}
 
 		[Test, Timeout(5000)]
-		public void ShouldNotHangWhenHavingManySkillGroups_Bug42634()
+		public void ShouldNotHangWhenHavingManySkillSets_Bug42634()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(2, 2);
 
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		}
 
 		[Test]
-		public void ShouldNotReduceSkillGroupWhenPotentiallyBelowIslandLimit()
+		public void ShouldNotReduceSkillSetWhenPotentiallyBelowIslandLimit()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(5, 1);
 			var skillA = new Skill("A").WithId();

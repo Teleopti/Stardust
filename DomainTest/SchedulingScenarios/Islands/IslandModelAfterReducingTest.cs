@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		public ReduceIslandsLimits ReduceIslandsLimits;
 
 		[Test]
-		public void ShouldNotLeaveDuplicateSkillgroupsAfterReducing()
+		public void ShouldNotLeaveDuplicateSkillSetsAfterReducing()
 		{
 			ReduceIslandsLimits.SetValues_UseOnlyFromTest(0, 2);
 			var skillA = new Skill("A");

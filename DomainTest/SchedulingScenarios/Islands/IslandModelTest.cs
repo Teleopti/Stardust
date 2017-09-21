@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		}
 
 		[Test]
-		public void ShouldCreateSkillGroupsInSameIsland()
+		public void ShouldCreateSkillSetsInSameIsland()
 		{
 			var skill1 = new Skill("1");
 			var skill2 = new Skill("2");
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		}
 
 		[Test]
-		public void ShouldCreateSkillsInSkillGroup()
+		public void ShouldCreateSkillsInSkillSet()
 		{
 			var skill1 = new Skill("1");
 			var skill2 = new Skill("2");
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		}
 
 		[Test]
-		public void ShouldCountNumberOfAgentsOnSkillGroup()
+		public void ShouldCountNumberOfAgentsOnSkillSet()
 		{
 			var skill1 = new Skill("1");
 			var skill2 = new Skill("2");
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		}
 
 		[Test]
-		public void ShouldOrderByNumberOfAgentsOnSkillGroup()
+		public void ShouldOrderByNumberOfAgentsOnSkillSet()
 		{
 			var skill1 = new Skill("1");
 			var skill2 = new Skill("2");
