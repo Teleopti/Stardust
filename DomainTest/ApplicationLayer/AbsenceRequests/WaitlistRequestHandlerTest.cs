@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -628,6 +629,64 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.AbsenceRequests
 
 			withoutShrinkageReq.IsApproved.Should().Be.True();
 			withShrinkageReq.IsWaitlisted.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldDenyShortTimeAbsenseRequest()
+		{
+			SetUp();
+			Now.Is(new DateTime(2016, 12, 1, 6, 00, 00, DateTimeKind.Utc));
+
+			var absence = AbsenceFactory.CreateAbsence("Holiday");
+			var scenario = ScenarioRepository.Has("scenario");
+			var activity = ActivityRepository.Has("phone");
+			var skill = SkillRepository.Has("skillA", activity).WithId();
+			var threshold = new StaffingThresholds(new Percent(0), new Percent(0), new Percent(0));
+			skill.StaffingThresholds = threshold;
+			skill.DefaultResolution = 60;
+			var agent = PersonRepository.Has(skill);
+			var waitListedAgent = PersonRepository.Has(skill);
+			var wfcs = new WorkflowControlSet().WithId();
+			wfcs.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				StaffingThresholdValidator = new StaffingThresholdValidator(),
+				Period = new DateOnlyPeriod(2016, 11, 1, 2016, 12, 30),
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 11, 1, 2059, 12, 30),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+
+			});
+			wfcs.AbsenceRequestWaitlistEnabled = true;
+			wfcs.AbsenceRequestExpiredThreshold = 15;
+			agent.WorkflowControlSet = wfcs;
+			waitListedAgent.WorkflowControlSet = wfcs;
+			var period = new DateTimePeriod(new DateTime(2016, 12, 1, 6, 14, 0).Utc(), new DateTime(2016, 12, 1, 17, 0, 0).Utc());
+			var period2 = new DateTimePeriod(new DateTime(2016, 12, 1, 18, 0, 0).Utc(), new DateTime(2016, 12, 1, 19, 0, 0).Utc());
+
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(agent, scenario, activity, period, new ShiftCategory("category")));
+			PersonAssignmentRepository.Has(PersonAssignmentFactory.CreateAssignmentWithMainShift(waitListedAgent, scenario, activity, period, new ShiftCategory("category")));
+
+			IPersonRequest waitListedRequest = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period)).WithId();
+			waitListedRequest.Deny("Work Hard!", new PersonRequestAuthorizationCheckerForTest());
+			PersonRequestRepository.Add(waitListedRequest);
+
+			IPersonRequest waitListedRequest2 = new PersonRequest(waitListedAgent, new AbsenceRequest(absence, period2)).WithId();
+			waitListedRequest2.Deny("Work even Harder!", new PersonRequestAuthorizationCheckerForTest());
+			PersonRequestRepository.Add(waitListedRequest2);
+
+			SkillCombinationResourceRepository.PersistSkillCombinationResource(Now.UtcDateTime(), new[]
+			{
+				createSkillCombinationResource(period, new[] {skill.Id.GetValueOrDefault()}, 10),
+				createSkillCombinationResource(period2, new[] {skill.Id.GetValueOrDefault()}, 10)
+			});
+
+			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, new DateOnly(period.StartDateTime), 1));
+
+			Target.Handle(new ProcessWaitlistedRequestsEvent { LogOnBusinessUnitId = businessUnit.Id.GetValueOrDefault(), LogOnDatasource = "Teleopti WFM" });
+
+			waitListedRequest.IsWaitlisted.Should().Be.True();
+			waitListedRequest2.IsApproved.Should().Be.True();
 		}
 
 		private static SkillCombinationResource createSkillCombinationResource(DateTimePeriod period1, Guid[] skillCombinations, double resource)

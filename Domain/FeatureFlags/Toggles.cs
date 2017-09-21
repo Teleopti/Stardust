@@ -79,6 +79,7 @@
 		Wfm_Requests_OvertimeRequestHandling_45177,
 		Wfm_Requests_Refactoring_45470,
 		Wfm_Requests_ProcessWaitlistBefore24hRequests_45767,
+		Wfm_Requests_HandleFourteenDaysFast_43390,
 
 		Wfm_Outbound_IgnoreScheduleForReplan_43752,
 

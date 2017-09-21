@@ -178,7 +178,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 							new ResourceCalculationPeriodDictionary(v.ToDictionary(d => d.DateTimePeriod,
 								s => (IResourceCalculationPeriod)s)));
 			helpers.ResCalcData = new ResourceCalculationData(helpers.Skills, new SlimSkillResourceCalculationPeriodWrapper(relevantSkillStaffPeriods));
-			var persons = waitlistedRequests.Select(p => p.Person).ToList();
+			var personHashset = new HashSet<IPerson>();
+			foreach (var wr in waitlistedRequests)
+			{
+				personHashset.Add(wr.Person);
+			}
+			var persons = personHashset.ToList();
 			helpers.DateOnlyPeriodOne = ExtractSkillForecastIntervals.GetLongestPeriod(helpers.Skills, inflatedPeriod);
 			helpers.PersonsSchedules =
 				_scheduleStorage.FindSchedulesForPersons(
@@ -209,13 +214,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 					var schedules = helpers.PersonsSchedules[pRequest.Person];
 					if (_alreadyAbsentValidator.Validate((IAbsenceRequest) pRequest.Request, schedules))
 					{
-						pRequest.Deny("RequestDenyReasonAlreadyAbsent", new PersonRequestCheckAuthorization(), null,
+						pRequest.Deny(nameof(Resources.RequestDenyReasonAlreadyAbsent), new PersonRequestCheckAuthorization(), null,
 							PersonRequestDenyOption.AlreadyAbsence);
 						_stardustJobFeedback.SendProgress($"Already absent for request {pRequest.Id.GetValueOrDefault()}");
 						continue;
 					}
-					var mergedPeriod =
-						pRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)pRequest.Request);
+					var workflowControlSet = pRequest.Request.Person.WorkflowControlSet;
+					var absenceReqThresh = workflowControlSet.AbsenceRequestExpiredThreshold.GetValueOrDefault();
+
+					if (pRequest.Request.Period.StartDateTime < _now.UtcDateTime().AddMinutes(absenceReqThresh))
+					{
+						continue;
+					}
+
+					var mergedPeriod = workflowControlSet.GetMergedAbsenceRequestOpenPeriod((IAbsenceRequest)pRequest.Request);
 					var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
 					var staffingThresholdValidators = validators.OfType<StaffingThresholdValidator>().ToList();
 					if (staffingThresholdValidators.Any())

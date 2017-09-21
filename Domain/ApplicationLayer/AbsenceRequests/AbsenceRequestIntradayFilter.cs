@@ -18,16 +18,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		private readonly IRequestProcessor _requestProcessor;
 		private readonly IAbsenceRequestValidatorProvider _absenceRequestValidatorProvider;
 		private readonly ICommandDispatcher _commandDispatcher;
+		private readonly IAbsenceRequestSetting _absenceRequestSetting;
 
 		public AbsenceRequestIntradayFilter(IRequestProcessor requestProcessor,
-											IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, INow now,
-											IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ICommandDispatcher commandDispatcher)
+			IQueuedAbsenceRequestRepository queuedAbsenceRequestRepository, INow now,
+			IAbsenceRequestValidatorProvider absenceRequestValidatorProvider, ICommandDispatcher commandDispatcher,
+			IAbsenceRequestSetting absenceRequestSetting)
 		{
 			_requestProcessor = requestProcessor;
 			_queuedAbsenceRequestRepository = queuedAbsenceRequestRepository;
 			_now = now;
 			_absenceRequestValidatorProvider = absenceRequestValidatorProvider;
 			_commandDispatcher = commandDispatcher;
+			_absenceRequestSetting = absenceRequestSetting;
 		}
 
 
@@ -35,7 +38,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 		{
 			personRequest.Pending();
 			var startDateTime = _now.UtcDateTime();
-			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(24));
+			var intradayPeriod = new DateTimePeriod(startDateTime, startDateTime.AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 
 			var mergedPeriod = personRequest.Request.Person.WorkflowControlSet.GetMergedAbsenceRequestOpenPeriod((AbsenceRequest) personRequest.Request);
 			var validators = _absenceRequestValidatorProvider.GetValidatorList(mergedPeriod);
