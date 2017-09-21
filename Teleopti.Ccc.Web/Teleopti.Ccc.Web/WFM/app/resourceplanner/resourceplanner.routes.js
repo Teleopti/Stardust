@@ -120,6 +120,24 @@
 			params: {
 				isImportSchedule: true
 			}
+		}).state('resourceplanner.planningperiod', { // for full schedule performance tests - start
+			url: '/planningperiod/:id?runForTest',
+			templateUrl: 'app/resourceplanner/web_performance_tests/planningperiods.html',
+			controller: 'PlanningPeriodsCtrl'
+		}).state('resourceplanner.report', { // for full schedule performance tests - end
+			params: {
+				result: {},
+				interResult: [],
+				planningperiod: {},
+				ranSynchronously: undefined
+			},
+			url: '/report/:id',
+			templateUrl: 'app/resourceplanner/web_performance_tests/resourceplanner-report.html',
+			controller: 'ResourceplannerReportCtrl'
+		}).state('resourceplanner.temp', { // for Intraday optimization performance tests
+			url: '/optimize/:id',
+			templateUrl: 'app/resourceplanner/web_performance_tests/temp.html',
+			controller: 'ResourceplannerTempCtrl'
 		});
 	}
 })();

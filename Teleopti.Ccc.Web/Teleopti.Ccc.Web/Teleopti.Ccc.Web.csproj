@@ -1517,6 +1517,9 @@
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.hierarchy.controller.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.hierarchy.service.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\resourceplanner.manageschedule.service.js" />
+    <Content Include="WFM\app\resourceplanner\web_performance_tests\planningperiods.service.js" />
+    <Content Include="WFM\app\resourceplanner\web_performance_tests\planningperiods.controller.js" />
+    <Content Include="WFM\app\resourceplanner\web_performance_tests\planningperiods.html" />
     <Content Include="WFM\app\resourceplanner\resourceplanner.debounce.service.js" />
     <Content Include="Areas\MyTime\Views\Schedule\ProbabilityOptionsPartial.cshtml" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.ProbabilityOptionViewModel.js" />
@@ -1525,8 +1528,13 @@
     </Content>
     <Content Include="Areas\MyTime\Views\Schedule\MobileDayPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
+    <Content Include="WFM\app\resourceplanner\web_performance_tests\resourceplanner-report.html" />
+    <Content Include="WFM\app\resourceplanner\web_performance_tests\resourceplanner.report.controller.js" />
+    <Content Include="WFM\app\resourceplanner\web_performance_tests\resourceplanner.report.service.js" />
+    <Content Include="WFM\app\resourceplanner\web_performance_tests\resourceplanner.temp.controller.js" />
     <Content Include="WFM\app\resourceplanner\resource_planner_planning_group\planninggroup.createform.controller.js.orig" />
     <Content Include="Areas\MyTime\Views\Requests\AddNewRequestDetailView.cshtml" />
+    <Content Include="WFM\app\resourceplanner\web_performance_tests\temp.html" />
     <Content Include="WFM\app\rta\agents\rta-agents.RTA_RememberMyPartOfTheBusiness_39082.html" />
     <Content Include="WFM\app\rta\filter\rta.filter.controller.RTA_RememberMyPartOfTheBusiness_39082.js" />
     <Content Include="WFM\app\rta\historical\rta-card-body-component.html" />

@@ -1,0 +1,10 @@
+<h1>status: {{checkStatus()}}</h1>
+
+<button class="wfm-btn wfm-btn-primary test-btn" ng-show="checkStatus() === 'waiting'" ng-click="intraOptimize()">Start</button>
+
+<div ng-if="checkStatus() === 'running'" class="test-is-running">Nu körs intraday
+	<md-progress-linear md-mode="indeterminate"></md-progress-linear>
+	<div class="wfm-block material-depth-1">{{'OptimizingIntraday'|translate}}</div>
+</div>
+<div ng-if="checkStatus() === 'done'" class="test-is-done">done</div>
+<div ng-if="checkStatus() === 'error'" class="test-was-failing">PANG!</div>
