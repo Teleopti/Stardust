@@ -90,6 +90,7 @@
 						};
 
 						updateTeams(siteCard, site.Teams);
+						siteCard.ColorOnSelection = site.Color;
 						siteCard.Color = translateSiteColors(site);
 						siteCard.InAlarmCount = site.InAlarmCount;
 
@@ -125,10 +126,13 @@
 
 		function translateSiteColors(site) {
 			if (site.Color === 'good') {
+				if(site.isSelected) return '#627b32';
 				return '#C2E085';
 			} else if (site.Color === 'warning') {
+				if(site.isSelected) return '#c27c36';
 				return '#FFC285';
 			} else if (site.Color === 'danger') {
+				if(site.isSelected) return '#ca3333';
 				return '#EE8F7D';
 			} else {
 				return '#fff';
