@@ -373,12 +373,9 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.showAddTextRequestForm = function () {
 		var requestViewModel = new Teleopti.MyTimeWeb.Request
 			.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest,
+			addRequestCallBack,
 			weekStart,
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
-
-		requestViewModel.AddRequestCallback = function (data) {
-			addRequestCallBack(data);
-		};
 
 		requestViewModel.AddTextRequest(false);
 		setupRequestViewModel(requestViewModel);
@@ -388,12 +385,9 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.showAddAbsenceRequestForm = function () {
 		var requestViewModel = new Teleopti.MyTimeWeb.Request
 			.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest,
+			addRequestCallBack,
 			weekStart,
 			Teleopti.MyTimeWeb.Common.DateTimeDefaultValues);
-
-		requestViewModel.AddRequestCallback = function (data) {
-			addRequestCallBack(data);
-		};
 
 		requestViewModel.readPersonalAccountPermission(self.personAccountPermission());
 		requestViewModel.AddAbsenceRequest(false);
@@ -416,10 +410,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 
 	self.showAddOvertimeRequestForm = function(){
 		var requestViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(parent.Ajax(), addRequestCallBack, self, weekStart);
-
-		requestViewModel.AddRequestCallback = function (data) {
-			addRequestCallBack(data);
-		};
 
 		setupRequestViewModel(requestViewModel);
 		fillRequestFormData(requestViewModel);

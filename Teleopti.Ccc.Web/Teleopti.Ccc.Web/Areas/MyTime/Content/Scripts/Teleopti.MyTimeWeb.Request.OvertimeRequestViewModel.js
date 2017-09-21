@@ -68,7 +68,7 @@
 			type: 'POST',
 			success: function (data) {
 				self.IsPostingData(false);
-				doneCallback(data);
+				doneCallback && doneCallback(data);
 				self.CancelAddRequest();
 			},
 			error: function () {

@@ -24,9 +24,9 @@
 	</div>
 	<div class="col-xs-4 bootstrap-timepicker">
 		<div class="request-edit-timefrom input-group">
-			<input type="text" class="input-sm request-edit time-from form-control" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible, scrollIntoViewWhenClick:'#Request-add-section'" />
+			<input type="text" class="input-sm request-edit time-from form-control" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible,  enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'" />
 			<span class="input-group-btn">
-				<button class="btn btn-sm" id="timeFromButton" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible">
+				<button class="btn btn-sm" id="timeFromButton" data-bind="timepicker: TimeFrom, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible, enable: IsEditable">
 					<i class="glyphicon glyphicon-time"></i>
 				</button>
 			</span>
@@ -46,9 +46,9 @@
 	</div>
 	<div class="col-xs-4 bootstrap-timepicker">
 		<div class="request-edit-timeto input-group">
-			<input type="text" class="input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible, scrollIntoViewWhenClick:'#Request-add-section'" />
+			<input type="text" class="input-sm form-control" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible, enable: IsEditable, scrollIntoViewWhenClick:'#Request-add-section'" />
 			<span class="input-group-btn">
-				<button class="btn btn-sm" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible">
+				<button class="btn btn-sm" data-bind="timepicker: TimeTo, timepickerOptions: { showMeridian: ShowMeridian, showInputs: false}, visible: IsTimeInputVisible, enable: IsEditable">
 					<i class="glyphicon glyphicon-time"></i>
 				</button>
 			</span>

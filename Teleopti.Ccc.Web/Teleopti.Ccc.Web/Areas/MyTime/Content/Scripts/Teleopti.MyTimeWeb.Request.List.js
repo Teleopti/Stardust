@@ -92,8 +92,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 						self.IsLoading(false);
 					},
 					success: function (data) {
-						self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
-						self.DetailItem.AddRequestCallback = self.successUpdatingRequest;
+						self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, self.successUpdatingRequest);
 						self.IsSelected(true);
 					}
 				});

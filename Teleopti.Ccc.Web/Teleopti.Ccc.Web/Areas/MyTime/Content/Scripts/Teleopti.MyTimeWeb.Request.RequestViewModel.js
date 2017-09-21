@@ -5,7 +5,7 @@
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.List.js"/>
 
-Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstDayOfWeek, defaultDateTimes, mywindow) {
+Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, callback, firstDayOfWeek, defaultDateTimes, mywindow) {
 	var self = this;
 	var ajax = new Teleopti.MyTimeWeb.Ajax();
 	mywindow = mywindow || window;
@@ -203,15 +203,13 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function (addRequestMethod, firstD
 		return self.TypeEnum() === 1 ? true : false;
 	});
 
-	self.AddRequestCallback = undefined;
-
 	self.AddRequestErrorCallback = function () {
 		self.IsPostingData(false);
 	};
 
 	self.AddRequest = function () {
 		self.IsPostingData(true);
-		addRequestMethod(self, self.AddRequestCallback, self.AddRequestErrorCallback);
+		addRequestMethod(self, callback, self.AddRequestErrorCallback);
 	};
 
 	function _setDefaultDates() {

@@ -43,8 +43,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		self.baseUtcOffsetInMinutes = baseUtcOffsetInMinutes;
 		self.daylightSavingAdjustment = daylightSavingAdjustment;
 
-		self.createRequestViewModel = function () {
-			var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, weekStart, defaultDateTimes);
+		self.createRequestViewModel = function (callback) {
+			var vm = new Teleopti.MyTimeWeb.Request.RequestViewModel(_addRequest, callback, weekStart, defaultDateTimes);
 			ajax.Ajax({
 				url: 'Requests/PersonalAccountPermission',
 				dataType: "json",
@@ -66,7 +66,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 		self.addAbsenceRequestDetail = function (requestViewModel) {
 			Teleopti.MyTimeWeb.Request.AbsenceRequestDetailViewModel(requestViewModel, ajax);
-		}
+		};
 
 		self.createShiftExchangeOfferViewModel = function (data) {
 			var shiftExchangeOfferDetailViewModel = new Teleopti.MyTimeWeb.Schedule.ShiftExchangeOfferViewModelFactory(ajax, _addItemAtTop).Update(data);
@@ -79,6 +79,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			Teleopti.MyTimeWeb.Request.HideFab(false);
 
 			self.requestViewModel(null);
+			overtimeRequestDetailViewModel = null;
 			Teleopti.MyTimeWeb.Request.ResetToolbarActiveButtons();
 		};
 	};
@@ -99,11 +100,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _prepareForAddingRequest() {
 		_hideOthers();
-		var model = parentViewModel.createRequestViewModel();
-		model.AddRequestCallback = function (data) {
-			_addItemAtTop(data);
-			model.IsPostingData(false);
-		};
+		var model = parentViewModel.createRequestViewModel(_addItemAtTop);
+
 		model.DateFormat(_datePickerFormat());
 		parentViewModel.requestViewModel(model);
 	}
@@ -157,6 +155,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			success: function (data, textStatus, jqXHR) {
 				Teleopti.MyTimeWeb.Request.List.HideRequests(false);
 				Teleopti.MyTimeWeb.Request.HideFab(false);
+				model.IsPostingData(false);
 				model.IsNewInProgress(false);
 				model.Subject("");
 				model.Message("");
@@ -185,13 +184,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		});
 	}
 
-	function createOvertimeRequestViewModel(data, parentViewModel) {
+	function createOvertimeRequestViewModel(data, parentViewModel, callback) {
 		var isViewingDetail = true;
-		overtimeRequestDetailViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, _addItemAtTop, parentViewModel, weekStart, isViewingDetail);
+		overtimeRequestDetailViewModel = new Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel(ajax, callback, parentViewModel, weekStart, isViewingDetail);
 		overtimeRequestDetailViewModel.Initialize(data);
 	};
 
-	function _setRequest(data) {
+	function _setRequest(data, callback) {
 		if (data.TypeEnum == 2) {
 			parentViewModel.createShiftTradeRequestViewModel(data.Id);
 			parentViewModel.requestViewModel().Initialize(data);
@@ -199,9 +198,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		} else if (data.TypeEnum == 3) {
 			parentViewModel.createShiftExchangeOfferViewModel(data);
 		} else if (data.TypeEnum == 4) {
-			createOvertimeRequestViewModel(data, parentViewModel);
+			createOvertimeRequestViewModel(data, parentViewModel, callback);
 		}else {
-			var model = parentViewModel.createRequestViewModel();
+			var model = parentViewModel.createRequestViewModel(callback);
 			model.IsUpdate(true);
 			model.DateFormat(_datePickerFormat());
 
@@ -270,8 +269,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			parentViewModel = new RequestDetailParentViewModel();
 			_databindModel(parentViewModel);
 		},
-		ShowRequest: function (data) {
-			_setRequest(data);
+		ShowRequest: function (data, callback) {
+			_setRequest(data, callback);
 			_enableDisableDetailSection(data);
 
 			//Jianfeng TODO: we dont have to assign viewmodel to parentViewModel.requestViewModel() and empty 

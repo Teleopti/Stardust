@@ -22,9 +22,9 @@
 						<div class="row">
 							<div class="col-sm-6 announce-shift-matching-date">
 								<div class="col-xs-12 input-group">
-									<input class="form-control" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart() }" />
+									<input class="form-control" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart() }, enable: IsEditable" />
 									<span class="input-group-btn">
-										<button class="btn moment-datepicker" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart()}">
+										<button class="btn moment-datepicker" data-bind="datepicker: DateToForPublish, datepickerOptions: {autoHide: true, format: DateFormat(), weekStart: WeekStart()}, enable: IsEditable">
 											<i class="glyphicon glyphicon-calendar"></i>
 										</button>
 									</span>

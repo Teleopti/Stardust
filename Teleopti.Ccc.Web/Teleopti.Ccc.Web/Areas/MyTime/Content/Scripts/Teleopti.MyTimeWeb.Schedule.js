@@ -779,8 +779,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		SetupViewModel: function (defaultDateTimes, callback) {
 			Teleopti.MyTimeWeb.UserInfo.WhenLoaded(function (data) {
 				var addRequestViewModel = function () {
-					var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, data.WeekStart, defaultDateTimes);
-					model.AddRequestCallback = _displayRequest;
+					var model = new Teleopti.MyTimeWeb.Request.RequestViewModel(Teleopti.MyTimeWeb.Request.RequestDetail.AddTextOrAbsenceRequest, _displayRequest, data.WeekStart, defaultDateTimes);
 
 					return model;
 				};
