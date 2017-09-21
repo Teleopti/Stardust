@@ -17,21 +17,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly IEventPublisher _eventPublisher;
 		private readonly CreateIslands _createIslands;
 		private readonly IGridlockManager _gridLockManager;
-		private readonly ReduceSkillGroups _reduceSkillGroups;
+		private readonly ReduceSkillSets _reduceSkillSets;
 		private readonly IPeopleInOrganization _peopleInOrganization;
 		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
 
 		protected IntradayOptimizationCommandHandler(IEventPublisher eventPublisher,
 												CreateIslands createIslands,
 												IGridlockManager gridLockManager,
-												ReduceSkillGroups reduceSkillGroups,
+												ReduceSkillSets reduceSkillSets,
 												IPeopleInOrganization peopleInOrganization,
 												IOptimizationPreferencesProvider optimizationPreferencesProvider)
 		{
 			_eventPublisher = eventPublisher;
 			_createIslands = createIslands;
 			_gridLockManager = gridLockManager;
-			_reduceSkillGroups = reduceSkillGroups;
+			_reduceSkillSets = reduceSkillSets;
 			_peopleInOrganization = peopleInOrganization;
 			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 		}
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			using (CommandScope.Create(command))
 			{
-				return _createIslands.Create(_reduceSkillGroups, _peopleInOrganization.Agents(period), period);
+				return _createIslands.Create(_reduceSkillSets, _peopleInOrganization.Agents(period), period);
 			}
 		}
 

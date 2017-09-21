@@ -10,30 +10,30 @@ namespace Teleopti.Ccc.Domain.Islands
 	{
 		private readonly CreateSkillSets _createSkillSets;
 		private readonly NumberOfAgentsKnowingSkill _numberOfAgentsKnowingSkill;
-		private readonly MoveSkillGroupToCorrectIsland _moveSkillGroupToCorrectIsland;
+		private readonly MoveSkillSetToCorrectIsland _moveSkillSetToCorrectIsland;
 
 		public CreateIslands(CreateSkillSets createSkillSets, 
 								NumberOfAgentsKnowingSkill numberOfAgentsKnowingSkill,
-								MoveSkillGroupToCorrectIsland moveSkillGroupToCorrectIsland)
+								MoveSkillSetToCorrectIsland moveSkillSetToCorrectIsland)
 		{
 			_createSkillSets = createSkillSets;
 			_numberOfAgentsKnowingSkill = numberOfAgentsKnowingSkill;
-			_moveSkillGroupToCorrectIsland = moveSkillGroupToCorrectIsland;
+			_moveSkillSetToCorrectIsland = moveSkillSetToCorrectIsland;
 		}
 
-		public IEnumerable<Island> Create(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> peopleInOrganization, DateOnlyPeriod period)
+		public IEnumerable<Island> Create(IReduceSkillSets reduceSkillSets, IEnumerable<IPerson> peopleInOrganization, DateOnlyPeriod period)
 		{
 			var allSkillSets = _createSkillSets.Create(peopleInOrganization, period.StartDate).ToList();
 			var noAgentsKnowingSkill = _numberOfAgentsKnowingSkill.Execute(allSkillSets);
 			while (true)
 			{
 				var skillSetsInIsland = allSkillSets.Select(skillSet => new List<SkillSet> { skillSet }).ToList();
-				while (_moveSkillGroupToCorrectIsland.Execute(allSkillSets, skillSetsInIsland))
+				while (_moveSkillSetToCorrectIsland.Execute(allSkillSets, skillSetsInIsland))
 				{
 					removeEmptyIslands(skillSetsInIsland);
 				}
 
-				if (!reduceSkillGroups.Execute(skillSetsInIsland, noAgentsKnowingSkill))
+				if (!reduceSkillSets.Execute(skillSetsInIsland, noAgentsKnowingSkill))
 				{
 					return skillSetsInIsland.Select(skillSetInIsland => new Island(skillSetInIsland, noAgentsKnowingSkill)).ToArray();
 				}

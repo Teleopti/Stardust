@@ -468,7 +468,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 		{
 			_skillDayForecastForSkills = new Dictionary<ISkill, TimeSpan>();
 			_totalForecastedForDate = TimeSpan.Zero;
-			_islandListBeforeReducing = _createIslands.Create(new ReduceNoSkillGroups(), _personList, _date.ToDateOnlyPeriod()).ToList();
+			_islandListBeforeReducing = _createIslands.Create(new ReduceNoSkillSets(), _personList, _date.ToDateOnlyPeriod()).ToList();
 			createSkillDayForSkillsDic();
 		}
 

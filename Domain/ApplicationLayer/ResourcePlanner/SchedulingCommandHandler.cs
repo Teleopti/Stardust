@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		private readonly IEventPublisher _eventPublisher;
 		private readonly IGridlockManager _gridLockManager;
 		private readonly CreateIslands _createIslands;
-		private readonly ReduceSkillGroups _reduceSkillGroups;
+		private readonly ReduceSkillSets _reduceSkillSets;
 		private readonly IPeopleInOrganization _peopleInOrganization;
 		//REMOVE ME WHEN SCHEDULING + ISLANDS WORKS
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
@@ -26,14 +26,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		public SchedulingCommandHandler(IEventPublisher eventPublisher, 
 				IGridlockManager gridLockManager, 
 				CreateIslands createIslands, 
-				ReduceSkillGroups reduceSkillGroups, 
+				ReduceSkillSets reduceSkillSets, 
 				IPeopleInOrganization peopleInOrganization,
 				ISchedulingOptionsProvider schedulingOptionsProvider)
 		{
 			_eventPublisher = eventPublisher;
 			_gridLockManager = gridLockManager;
 			_createIslands = createIslands;
-			_reduceSkillGroups = reduceSkillGroups;
+			_reduceSkillSets = reduceSkillSets;
 			_peopleInOrganization = peopleInOrganization;
 			_schedulingOptionsProvider = schedulingOptionsProvider;
 		}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ResourcePlanner
 		{
 			using (CommandScope.Create(command))
 			{
-				return _createIslands.Create(_reduceSkillGroups, _peopleInOrganization.Agents(period), period);
+				return _createIslands.Create(_reduceSkillSets, _peopleInOrganization.Agents(period), period);
 			}
 		}
 	}

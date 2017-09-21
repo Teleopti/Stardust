@@ -208,9 +208,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntradayOptimizationContext>().InstancePerLifetimeScope();
 			builder.RegisterType<NightRestWhiteSpotSolverServiceFactory>().As<INightRestWhiteSpotSolverServiceFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<NumberOfAgentsKnowingSkill>().SingleInstance();
-			builder.RegisterType<ReduceSkillGroups>().SingleInstance();
+			builder.RegisterType<ReduceSkillSets>().SingleInstance();
 			builder.RegisterType<CreateIslands>().SingleInstance();
-			builder.RegisterType<MoveSkillGroupToCorrectIsland>().SingleInstance();
+			builder.RegisterType<MoveSkillSetToCorrectIsland>().SingleInstance();
 			builder.RegisterType<SkillSetProvider>().SingleInstance();
 			builder.RegisterType<SkillSetContext>().SingleInstance();
 			builder.RegisterType<IslandModelFactory>().SingleInstance();

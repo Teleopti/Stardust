@@ -11,13 +11,13 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 	public class IslandModelFactory
 	{
 		private readonly CreateIslands _createIslands;
-		private readonly ReduceSkillGroups _reduceSkillGroups;
+		private readonly ReduceSkillSets _reduceSkillSets;
 		private readonly IPeopleInOrganization _peopleInOrganization;
 
-		public IslandModelFactory(CreateIslands createIslands, ReduceSkillGroups reduceSkillGroups, IPeopleInOrganization peopleInOrganization)
+		public IslandModelFactory(CreateIslands createIslands, ReduceSkillSets reduceSkillSets, IPeopleInOrganization peopleInOrganization)
 		{
 			_createIslands = createIslands;
-			_reduceSkillGroups = reduceSkillGroups;
+			_reduceSkillSets = reduceSkillSets;
 			_peopleInOrganization = peopleInOrganization;
 		}
 
@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 			var period = DateOnly.Today.ToDateOnlyPeriod();
 			var agents = _peopleInOrganization.Agents(period);
 
-			var islandsModelBefore = createIslandsModel(new ReduceNoSkillGroups(), agents, period);
-			var islandsModelAfter = createIslandsModel(_reduceSkillGroups, agents, period);
+			var islandsModelBefore = createIslandsModel(new ReduceNoSkillSets(), agents, period);
+			var islandsModelAfter = createIslandsModel(_reduceSkillSets, agents, period);
 
 			var islandTopModel = new IslandTopModel
 			{
@@ -38,10 +38,10 @@ namespace Teleopti.Ccc.Domain.Islands.ClientModel
 			return islandTopModel;
 		}
 
-		private IslandsModel createIslandsModel(IReduceSkillGroups reduceSkillGroups, IEnumerable<IPerson> agents, DateOnlyPeriod period)
+		private IslandsModel createIslandsModel(IReduceSkillSets reduceSkillSets, IEnumerable<IPerson> agents, DateOnlyPeriod period)
 		{
 			IEnumerable<Island> islands=null;
-			var timeToGenerate = MeasureTime.Do(() => islands = _createIslands.Create(reduceSkillGroups, agents, period));
+			var timeToGenerate = MeasureTime.Do(() => islands = _createIslands.Create(reduceSkillSets, agents, period));
 			var islandModels = (from Island island in islands select island.CreateClientModel()).ToList();
 			islandModels.Sort();
 			var islandsModel = new IslandsModel
