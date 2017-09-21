@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 
 
 		[Test]
-		public void NoDuplicateSkillsInEventWhenMultipleSkillgroupsContainsSameSkill()
+		public void NoDuplicateSkillsInEventWhenMultipleSkillSetsContainsSameSkill()
 		{
 			var skillA = new Skill("A").WithId();
 			var skillB = new Skill("B").WithId();
