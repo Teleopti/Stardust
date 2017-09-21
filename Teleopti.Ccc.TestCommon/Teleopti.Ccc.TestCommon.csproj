@@ -252,6 +252,7 @@
     <Compile Include="FakeRepositories\FakeRequestStrategySettingsReader.cs" />
     <Compile Include="FakeRepositories\FakeRuleSetBagRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleDayReadModelRepository.cs" />
+    <Compile Include="FakeRepositories\FakeScheduleHistoryReport.cs" />
     <Compile Include="FakeRepositories\FakeScheduleHistoryRepository.cs" />
     <Compile Include="FakeRepositories\FakeScheduleProjectionReadOnlyActivityProvider.cs" />
     <Compile Include="FakeRepositories\FakeSiteOpenHourRepository.cs" />

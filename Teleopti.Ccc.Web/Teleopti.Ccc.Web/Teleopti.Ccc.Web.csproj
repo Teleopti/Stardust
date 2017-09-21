@@ -519,6 +519,7 @@
     <Compile Include="Areas\Options\IoC\OptionsAreaModule.cs" />
     <Compile Include="Areas\Options\MultiplicatorDefinitionSetController.cs" />
     <Compile Include="Areas\Options\SiteOpenHourController.cs" />
+    <Compile Include="Areas\Reporting\Controllers\ScheduleAuditTrailController.cs" />
     <Compile Include="Areas\Requests\Controller\SiteWithOpenHourController.cs" />
     <Compile Include="Areas\People\Controllers\ApplySmartPropertyModel.cs" />
     <Compile Include="Areas\People\Controllers\ImportAgentController.cs" />

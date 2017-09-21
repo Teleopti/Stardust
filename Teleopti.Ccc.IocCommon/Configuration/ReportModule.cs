@@ -19,6 +19,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			if (!_configuration.Toggle(Toggles.Report_Remove_Realtime_Scheduled_Time_vs_Target_45559))
 				builder.RegisterType<ReportScheduledTimeVsTargetVisible>().As<IReportVisible>().SingleInstance();
 			builder.RegisterType<ReportAuditTrailVisible>().As<IReportVisible>().SingleInstance();
+
+			builder.RegisterType<ScheduleChangedByUserViewModelProvider>().SingleInstance();
 		}
 	}
 }
