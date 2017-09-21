@@ -1,4 +1,6 @@
 ﻿using System;
+using Newtonsoft.Json;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 
 namespace Teleopti.Wfm.Administration.Models.Stardust
 {
@@ -25,5 +27,10 @@ namespace Teleopti.Wfm.Administration.Models.Stardust
 		public string Serialized { get; set; }
 
 		public string TotalDuration { get; set; }
+
+		public string DataSource()
+		{
+			return JsonConvert.DeserializeObject<EventWithInfrastructureContext>(Serialized).LogOnDatasource;
+		}
 	}
 }

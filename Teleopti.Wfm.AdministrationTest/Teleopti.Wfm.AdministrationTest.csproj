@@ -135,6 +135,7 @@
     <Compile Include="ControllerActions\GetAllTenantsTest.cs" />
     <Compile Include="ControllerActions\ImportTenantTest.cs" />
     <Compile Include="ControllerActions\GetVersionsTest.cs" />
+    <Compile Include="JobTest.cs" />
     <Compile Include="NoCacheFilterTests.cs" />
     <Compile Include="TenantTestAttribute.cs" />
     <Compile Include="TestPollutionCleaner.cs" />
