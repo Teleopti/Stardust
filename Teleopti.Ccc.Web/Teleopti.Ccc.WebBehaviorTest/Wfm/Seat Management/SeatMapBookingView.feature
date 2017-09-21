@@ -48,7 +48,7 @@ Background:
 		| EndTime        | 2015-01-01 17:00 |
 		| Shift category | Day              |
 
-
+@ignore
 Scenario: be able to open the seat map booking view
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
@@ -59,7 +59,7 @@ Scenario: be able to go back to seat plan
 	And I press seat map booking view button
 	And I press back button on seat booking view
 	Then I should go back to seat plan
-
+@ignore
 Scenario: the date is the same with I chose
 	When I view Seat plan on "2015-01-01"
 	And I press seat map booking view button
