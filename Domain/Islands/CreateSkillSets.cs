@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Islands
 
 		public SkillSets Create(IEnumerable<IPerson> agents, DateOnly date)
 		{
-			var skillGroups = new Dictionary<ISet<ISkill>, ISet<IPerson>>(new SameSkillGroupSkillsComparer());
+			var skillSets = new Dictionary<ISet<ISkill>, ISet<IPerson>>(new SameSkillSetSkillsComparer());
 
 			foreach (var agent in agents)
 			{
@@ -28,16 +28,16 @@ namespace Teleopti.Ccc.Domain.Islands
 				if(!agentsSkills.Any())
 					continue;
 
-				if (skillGroups.TryGetValue(agentsSkills, out ISet<IPerson> list))
+				if (skillSets.TryGetValue(agentsSkills, out ISet<IPerson> list))
 				{
 					list.Add(agent);
 				}
 				else
 				{
-					skillGroups.Add(agentsSkills, new HashSet<IPerson> { agent });
+					skillSets.Add(agentsSkills, new HashSet<IPerson> { agent });
 				}
 			}
-			return new SkillSets(skillGroups.Select(keyValue => new SkillSet(keyValue.Key, keyValue.Value)));
+			return new SkillSets(skillSets.Select(keyValue => new SkillSet(keyValue.Key, keyValue.Value)));
 		}
 	}
 }

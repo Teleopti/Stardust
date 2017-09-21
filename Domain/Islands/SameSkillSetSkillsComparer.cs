@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.Islands
 {
-	public class SameSkillGroupSkillsComparer : IEqualityComparer<ISet<ISkill>>
+	public class SameSkillSetSkillsComparer : IEqualityComparer<ISet<ISkill>>
 	{
 		public bool Equals(ISet<ISkill> x, ISet<ISkill> y)
 		{

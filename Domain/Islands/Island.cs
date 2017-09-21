@@ -41,23 +41,23 @@ namespace Teleopti.Ccc.Domain.Islands
 		public IslandModel CreateClientModel()
 		{
 			var ret = new IslandModel();
-			var skillGroupModels = new List<SkillSetModel>();
-			foreach (var skillGroup in _skillSets)
+			var skillSetModels = new List<SkillSetModel>();
+			foreach (var skillSet in _skillSets)
 			{
-				var skillGroupModel = new SkillSetModel();
-				var skillsModel = skillGroup.Skills.Select(skill => new SkillModel
+				var skillSetModel = new SkillSetModel();
+				var skillsModel = skillSet.Skills.Select(skill => new SkillModel
 				{
 					Name = skill.Name,
 					NumberOfAgentsOnSkill = _noAgentsKnowingSkill[skill],
 					ActivityName = skill.Activity?.Name
 				}).ToList();
 				skillsModel.Sort();
-				skillGroupModel.Skills = skillsModel;
-				skillGroupModel.NumberOfAgentsOnSkillSet = skillGroup.Agents.Count();
-				skillGroupModels.Add(skillGroupModel);
+				skillSetModel.Skills = skillsModel;
+				skillSetModel.NumberOfAgentsOnSkillSet = skillSet.Agents.Count();
+				skillSetModels.Add(skillSetModel);
 			}
-			skillGroupModels.Sort();
-			ret.SkillSets = skillGroupModels;
+			skillSetModels.Sort();
+			ret.SkillSets = skillSetModels;
 			ret.NumberOfAgentsOnIsland = ret.SkillSets.Sum(x => x.NumberOfAgentsOnSkillSet);
 			return ret;
 		}
@@ -66,21 +66,21 @@ namespace Teleopti.Ccc.Domain.Islands
 		{
 			var ret = new IslandExtendedModel();
 			var skillsInIsland = new HashSet<ISkill>();
-			var skillGroups = new List<SkillSetExtendedModel>();
-			foreach (var skillGroup in _skillSets)
+			var skillSets = new List<SkillSetExtendedModel>();
+			foreach (var skillSet in _skillSets)
 			{
-				skillGroups.Add(new SkillSetExtendedModel
+				skillSets.Add(new SkillSetExtendedModel
 				{
-					AgentsInSkillSet = skillGroup.Agents,
-					SkillsInSkillSet = skillGroup.Skills
+					AgentsInSkillSet = skillSet.Agents,
+					SkillsInSkillSet = skillSet.Skills
 				});
-				foreach (var skill in skillGroup.Skills)
+				foreach (var skill in skillSet.Skills)
 				{
 					skillsInIsland.Add(skill);
 				}
 			}
 			ret.SkillsInIsland = skillsInIsland;
-			ret.SkillSetsInIsland = skillGroups;
+			ret.SkillSetsInIsland = skillSets;
 
 			return ret;
 		}

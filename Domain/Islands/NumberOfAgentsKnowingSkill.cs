@@ -6,13 +6,13 @@ namespace Teleopti.Ccc.Domain.Islands
 {
 	public class NumberOfAgentsKnowingSkill
 	{
-		public IDictionary<ISkill, int> Execute(IEnumerable<SkillSet> skillGroups)
+		public IDictionary<ISkill, int> Execute(IEnumerable<SkillSet> skillSets)
 		{
 			var numberOfAgentsKnowingSkill = new Dictionary<ISkill, int>();
-			foreach (var skillGroup in skillGroups)
+			foreach (var skillSet in skillSets)
 			{
-				var count = skillGroup.Agents.Count();
-				foreach (var skill in skillGroup.Skills)
+				var count = skillSet.Agents.Count();
+				foreach (var skill in skillSet.Skills)
 				{
 					if (!numberOfAgentsKnowingSkill.ContainsKey(skill))
 					{

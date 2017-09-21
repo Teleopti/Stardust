@@ -23,16 +23,16 @@ namespace Teleopti.Ccc.Domain.Islands
 				var allOtherIslands = islands.Except(new[] { island });
 				foreach (var otherIsland in allOtherIslands)
 				{
-					foreach (var otherSkillGroup in otherIsland.ToArray())
+					foreach (var otherSkillSet in otherIsland.ToArray())
 					{
 						if (touchedIslands.Contains(island))
 							return;
 
-						if (otherSkillGroup.HasAnySkillSameAs(SkillSet))
+						if (otherSkillSet.HasAnySkillSameAs(SkillSet))
 						{
-							if (SkillSet.HasSameSkillsAs(otherSkillGroup))
+							if (SkillSet.HasSameSkillsAs(otherSkillSet))
 							{
-								otherSkillGroup.AddAgentsFrom(SkillSet);
+								otherSkillSet.AddAgentsFrom(SkillSet);
 								allSkillSets.Remove(SkillSet);
 							}
 							else

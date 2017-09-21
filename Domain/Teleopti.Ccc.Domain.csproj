@@ -1430,7 +1430,7 @@
     <Compile Include="Islands\ReduceIslandsLimits.cs" />
     <Compile Include="Islands\ReduceNoSkillSets.cs" />
     <Compile Include="Islands\ReduceSkillSets.cs" />
-    <Compile Include="Islands\SameSkillGroupSkillsComparer.cs" />
+    <Compile Include="Islands\SameSkillSetSkillsComparer.cs" />
     <Compile Include="Islands\SkillSet.cs" />
     <Compile Include="Islands\SkillSetComparerForIslands.cs" />
     <Compile Include="Islands\SkillSetContext.cs" />
