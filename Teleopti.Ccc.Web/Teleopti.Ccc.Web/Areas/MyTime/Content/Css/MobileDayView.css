@@ -175,10 +175,10 @@
 	max-height: 80px;
 }
 
-.mobile-start-day .form-control[disabled]{
-	background-color: #f1f1f1;
+.mobile-start-day .request-add-container{
+	cursor: pointer;
 }
 
-.datepicker.dropdown-menu{
-	z-index: 199;
+.mobile-start-day .form-control[disabled]{
+	background-color: #f1f1f1;
 }
