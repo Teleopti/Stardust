@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 {
 	public class FullSchedulingTest
 	{
-		[Test, Ignore("due to commit 6d2375b43c30")]
+		[Test]
 		[Category("ScheduleOptimization")]
 		public void MeasurePerformance()
 		{
