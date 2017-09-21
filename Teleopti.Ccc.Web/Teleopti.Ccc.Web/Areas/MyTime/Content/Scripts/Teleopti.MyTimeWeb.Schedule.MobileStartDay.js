@@ -117,7 +117,6 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDay = (function ($) {
 			completelyLoaded = completelyLoadedCallback;
 			registerUserInfoLoadedCallback();
 			registerSwipeEvent();
-			Teleopti.MyTimeWeb.Common.HideAgentScheduleMessenger();
 			mywindow = mywindow || window;
 			setUpLogoClickFn(mywindow);
 			readyForInteractionCallback();

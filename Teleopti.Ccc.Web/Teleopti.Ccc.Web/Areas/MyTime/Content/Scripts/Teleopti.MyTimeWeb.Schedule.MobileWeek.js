@@ -72,7 +72,6 @@ Teleopti.MyTimeWeb.Schedule.MobileWeek = (function ($) {
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			if ($(".weekview-mobile").length > 0) {
-				Teleopti.MyTimeWeb.Common.HideAgentScheduleMessenger();
 
 				completelyLoaded = completelyLoadedCallback;
 				vm = new Teleopti.MyTimeWeb.Schedule.MobileWeekViewModel(ajax, fetchData);

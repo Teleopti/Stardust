@@ -144,7 +144,7 @@
 							<li class="divider"></li>
 							<li><a href="#" data-mytime-action="AppGuide/WFMApp">@Resources.TeleoptiWFMApp</a></li>
 						}
-						@if (Model.HasAsmPermission)
+						@if (Model.HasAsmPermission && !Request.UserAgent.Contains("app/android") && !Request.UserAgent.Contains("app/ios"))
 						{
 							<li class="divider" id="asm-divider"></li>
 							<li><a href="#" id="asm-link">@Resources.OpenASM</a></li>
