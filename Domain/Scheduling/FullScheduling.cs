@@ -17,9 +17,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly IScheduleDictionaryPersister _persister;
 		private readonly FullSchedulingResult _fullSchedulingResult;
+		private readonly SchedulingInformationProvider _schedulingInformationProvider;
 
-		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, IFillSchedulerStateHolder fillSchedulerStateHolder,
-			Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, FullSchedulingResult fullSchedulingResult)
+		public FullScheduling(SchedulingCommandHandler schedulingCommandHandler, 
+			IFillSchedulerStateHolder fillSchedulerStateHolder,
+			Func<ISchedulerStateHolder> schedulerStateHolder, 
+			IScheduleDictionaryPersister persister,
+			FullSchedulingResult fullSchedulingResult,
+			SchedulingInformationProvider schedulingInformationProvider)
 		{
 			_schedulingCommandHandler = schedulingCommandHandler;
 			_schedulingCommandHandler = schedulingCommandHandler;
@@ -27,41 +32,38 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulerStateHolder = schedulerStateHolder;
 			_persister = persister;
 			_fullSchedulingResult = fullSchedulingResult;
+			_schedulingInformationProvider = schedulingInformationProvider;
 		}
 
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
 		{
-			return DoScheduling(period, null);
-		}
-		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people)
-		{
 			var stateHolder = _schedulerStateHolder();
-			Setup(period, people);
+			Setup(period, null);
 			_schedulingCommandHandler.Execute(new SchedulingCommand
 			{
 				Period = period,
 				RunWeeklyRestSolver = false,
-				FromWeb = true,
-				AgentsToSchedule = people
+				FromWeb = true
 			});
 			_persister.Persist(stateHolder.Schedules);
 			return CreateResult(period);
 		}
 
-		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people,Guid planningPeriodId)
+		public virtual SchedulingResultModel DoScheduling(Guid planningPeriodId)
 		{
+			var schedulingInformation = _schedulingInformationProvider.GetInfoFromPlanningPeriod(planningPeriodId);
 			var stateHolder = _schedulerStateHolder();
-			Setup(period, people);
+			Setup(schedulingInformation.Period, schedulingInformation.PersonIds);
 			_schedulingCommandHandler.Execute(new SchedulingCommand
 			{
-				Period = period,
+				Period = schedulingInformation.Period,
 				RunWeeklyRestSolver = false,
 				FromWeb = true,
-				AgentsToSchedule = people,
+				AgentsToSchedule = schedulingInformation.PersonIds,
 				PlanningPeriodId = planningPeriodId
 			});
 			_persister.Persist(stateHolder.Schedules);
-			return CreateResult(period);
+			return CreateResult(schedulingInformation.Period);
 		}
 
 		[TestLog]

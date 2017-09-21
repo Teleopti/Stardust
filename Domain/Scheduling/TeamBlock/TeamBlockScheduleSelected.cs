@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
 			SchedulingOptions schedulingOption,
-			ITeamInfoFactory teamInfoFactory, IBlockPreferenceProvider blockPreferenceProvider)
+			ITeamInfoFactory teamInfoFactory,
+			IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var dateOnlySkipList = new List<DateOnly>();
 
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				runSchedulingForAllTeamInfoOnStartDate(schedulingCallback, allPersonMatrixList, selectedPersons, selectedPeriod,
 					schedulePartModifyAndRollbackService,
 					checkedTeams.OkList, datePointer, dateOnlySkipList,
-					resourceCalculateDelayer, schedulingResultStateHolder, schedulingOption,blockPreferenceProvider);
+					resourceCalculateDelayer, schedulingResultStateHolder, schedulingOption, blockPreferenceProvider);
 			}
 		}
 

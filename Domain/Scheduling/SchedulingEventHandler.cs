@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 			else
 			{
-				blockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences()
+				blockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
 				{
 					UseBlockSameStartTime = schedulingOptions.BlockSameStartTime,
 					UseBlockSameShift = schedulingOptions.BlockSameShift,
@@ -110,8 +110,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			
 
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
-			
-
 
 			_scheduleExecutor.Execute(schedulingCallback,
 				schedulingOptions, schedulingProgress,

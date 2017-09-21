@@ -16,8 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public interface IFullScheduling
 	{
 		SchedulingResultModel DoScheduling(DateOnlyPeriod period);
-		SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people);
-		SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people, Guid planningPeriodId);
+		SchedulingResultModel DoScheduling(Guid planningPeriodId);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
@@ -31,8 +30,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly ISchedulingOptionsProvider _schedulingOptionsProvider;
 		private readonly FullSchedulingResult _fullSchedulingResult;
 		private readonly ISchedulingSourceScope _schedulingSourceScope;
+		private readonly SchedulingInformationProvider _schedulingInformationProvider;
 
-		public FullSchedulingOLD(IScheduleExecutor scheduleExecutor, IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult, ISchedulingSourceScope schedulingSourceScope) 
+		public FullSchedulingOLD(IScheduleExecutor scheduleExecutor, IFillSchedulerStateHolder fillSchedulerStateHolder, Func<ISchedulerStateHolder> schedulerStateHolder, IScheduleDictionaryPersister persister, ISchedulingProgress schedulingProgress, ISchedulingOptionsProvider schedulingOptionsProvider, FullSchedulingResult fullSchedulingResult, ISchedulingSourceScope schedulingSourceScope, SchedulingInformationProvider schedulingInformationProvider) 
 		{
 			_scheduleExecutor = scheduleExecutor;
 			_fillSchedulerStateHolder = fillSchedulerStateHolder;
@@ -42,26 +42,30 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingOptionsProvider = schedulingOptionsProvider;
 			_fullSchedulingResult = fullSchedulingResult;
 			_schedulingSourceScope = schedulingSourceScope;
+			_schedulingInformationProvider = schedulingInformationProvider;
 		}
 
 		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
 		{
-			return DoScheduling(period, null);
-		}
-		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people)
-		{
 			using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 			{
 				var stateHolder = _schedulerStateHolder();
-				SetupAndSchedule(period, people);
+				SetupAndSchedule(period, null);
 				_persister.Persist(stateHolder.Schedules);
 				return CreateResult(period);
 			}
 		}
 
-		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period, IEnumerable<Guid> people, Guid planningPeriodId)
+		public SchedulingResultModel DoScheduling(Guid planningPeriodId)
 		{
-			return DoScheduling(period, people);
+			var schedulingInformation = _schedulingInformationProvider.GetInfoFromPlanningPeriod(planningPeriodId);
+			using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
+			{
+				var stateHolder = _schedulerStateHolder();
+				SetupAndSchedule(schedulingInformation.Period, schedulingInformation.PersonIds);
+				_persister.Persist(stateHolder.Schedules);
+				return CreateResult(schedulingInformation.Period);
+			}
 		}
 
 		[TestLog]

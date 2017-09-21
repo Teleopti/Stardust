@@ -7,6 +7,8 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.Filters;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -31,6 +33,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeAgentDayScheduleTagRepository AgentDayScheduleTagRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeMultisiteDayRepository MultisiteDayRepository;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
 		public void ShouldNotCreateTags()
@@ -92,14 +95,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				1)
 				);
 
-			Target.DoScheduling(period, new[] {agent.Id.Value});
+			var planningPeriod = new PlanningPeriod(period);
+			PlanningPeriodRepository.Add(planningPeriod);
+
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Should().Not.Be.Empty();
 			AgentDayScheduleTagRepository.LoadAll().Should().Be.Empty();
 		}
 
 		[Test]
-		public void ShouldOnlySchedulePeoplePassedIn()
+		public void ShouldOnlySchedulePeopleInPlanningGroup()
 		{
 			DayOffTemplateRepository.Has(DayOffFactory.CreateDayOff());
 			var firstDay = new DateOnly(2015, 10, 12);
@@ -117,9 +123,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			var partTimePercentage = new PartTimePercentage("_");
 			var site = new Site("site");
 			var team = new Team { Site = site };
+			var team2 = new Team { Site = site };
 			var schedulePeriod = new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1);
 			var agent = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, ruleSet, skill);
-			var agent2 = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team, schedulePeriod, ruleSet, skill);
+			var agent2 = PersonRepository.Has(contract, contractSchedule, partTimePercentage, team2, schedulePeriod, ruleSet, skill);
 
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,
 				1,
@@ -131,7 +138,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				1)
 				);
 
-			Target.DoScheduling(period, new[] { agent.Id.Value });
+			var planningPeriod = new PlanningPeriod(period, new PlanningGroup().WithId().AddFilter(new TeamFilter(team)));
+			PlanningPeriodRepository.Add(planningPeriod);
+
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Should().Not.Be.Empty();
 			AssignmentRepository.Find(new[] { agent2 }, period, scenario).Should().Be.Empty();
@@ -162,7 +172,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1));
 
-			Target.DoScheduling(period, new[] { agent.Id.Value });
+			var planningPeriod = new PlanningPeriod(period);
+			PlanningPeriodRepository.Add(planningPeriod);
+
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario)
 				.Count.Should().Be.EqualTo(31);

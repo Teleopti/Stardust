@@ -339,6 +339,7 @@
     <Compile Include="Scheduling\SchedulingCallbackForDesktop.cs" />
     <Compile Include="Scheduling\SchedulingEventHandler.cs" />
     <Compile Include="ApplicationLayer\ResourcePlanner\SchedulingWasOrdered.cs" />
+    <Compile Include="Scheduling\SchedulingInformationProvider.cs" />
     <Compile Include="Scheduling\ThreadPriorityManager.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopContext.cs" />
     <Compile Include="Scheduling\WebLegacy\DesktopPeopleInOrganization.cs" />

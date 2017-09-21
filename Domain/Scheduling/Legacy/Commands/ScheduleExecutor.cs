@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			bool runWeeklyRestSolver, SchedulingOptions schedulingOptions,IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			schedulingOptions.ConsiderShortBreaks = _ruleSetBagsOfGroupOfPeopleCanHaveShortBreak.CanHaveShortBreak(selectedAgents, selectedPeriod);
-			TeamBlockScheduling.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod,blockPreferenceProvider);
+			TeamBlockScheduling.Execute(schedulingCallback, schedulingOptions, backgroundWorker, selectedAgents, selectedPeriod, blockPreferenceProvider);
 		}
 	}
 

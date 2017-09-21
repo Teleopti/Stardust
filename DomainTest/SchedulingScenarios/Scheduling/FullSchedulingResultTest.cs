@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakePersonAssignmentRepository AssignmentRepository;
 		public FakePreferenceDayRepository PreferenceDayRepository;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
 		public void ShouldShowAgentWithoutSchedulePeriodAsNotScheduled()
@@ -47,8 +48,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			};
 			var agent = PersonRepository.Has(contract, new ContractSchedule("_"), new PartTimePercentage("_"), new Team { Site = new Site("site") }, null, ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));
+			var planningPeriod = new PlanningPeriod(firstDay.ToDateOnlyPeriod());
+			PlanningPeriodRepository.Add(planningPeriod);
 
-			var result = Target.DoScheduling(firstDay.ToDateOnlyPeriod(), new[] { agent.Id.Value });
+			var result = Target.DoScheduling(planningPeriod.Id.Value);
 
 			result.ScheduledAgentsCount.Should().Be.EqualTo(0);
 		}
@@ -72,8 +75,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			};
 			var agent = PersonRepository.Has(contract, ContractScheduleFactory.CreateWorkingWeekContractSchedule(), new PartTimePercentage("_"), new Team { Site = new Site("site") }, new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSet, skill);
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));
+			var planningPeriod = new PlanningPeriod(new DateOnlyPeriod(firstDay, firstDay.AddDays(6)));
+			PlanningPeriodRepository.Add(planningPeriod);
 
-			var result = Target.DoScheduling(new DateOnlyPeriod(firstDay, firstDay.AddDays(6)), new[] { agent.Id.Value });
+			var result = Target.DoScheduling(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, firstDay.ToDateOnlyPeriod(), scenario);
 			assignments.Count.Should().Be.EqualTo(0);
@@ -101,7 +106,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));
 
 			var period = firstDay.ToDateOnlyPeriod();
-			var result = Target.DoScheduling(period, new[] { agent.Id.Value });
+			var planningPeriod = new PlanningPeriod(period);
+			PlanningPeriodRepository.Add(planningPeriod);
+
+			var result = Target.DoScheduling(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
 			assignments.Count.Should().Be.EqualTo(1);
@@ -133,7 +141,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));
 
 			var period = firstDay.ToDateOnlyPeriod();
-			var result = Target.DoScheduling(period, new[] { agent.Id.Value });
+			var planningPeriod = new PlanningPeriod(period);
+			PlanningPeriodRepository.Add(planningPeriod);
+
+			var result = Target.DoScheduling(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
 			assignments.Count.Should().Be.EqualTo(1);
@@ -162,7 +173,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1));
 
 			var period = firstDay.ToDateOnlyPeriod();
-			var result = Target.DoScheduling(period, new[] { agent.Id.Value });
+			var planningPeriod = new PlanningPeriod(period);
+			PlanningPeriodRepository.Add(planningPeriod);
+
+			var result = Target.DoScheduling(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
 			assignments.Count.Should().Be.EqualTo(1);
@@ -198,7 +212,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1));
 
 			var period = new DateOnlyPeriod(firstDay, new DateOnly(2015, 10, 18));
-			var result = Target.DoScheduling(period, new[] { agent.Id.Value });
+			var planningPeriod = new PlanningPeriod(period);
+			PlanningPeriodRepository.Add(planningPeriod);
+
+			var result = Target.DoScheduling(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent }, period, scenario);
 			assignments.Count(a => a.DayOff() != null).Should().Be.EqualTo(3);
