@@ -5,6 +5,7 @@ declare @endRequest datetime = '2016-01-16 19:00:00'
 
 -- delete existing requests
 DELETE FROM Overtimerequest WHERE Request IN (SELECT Id from Request where StartDateTime between  @start  and @end)
+DELETE FROM AbsenceRequest WHERE Request IN (SELECT Id from Request where StartDateTime between  @start  and @end)
 delete from Request where StartDateTime between  @start  and @end and Id not in (select Request from ShiftTradeRequest)
 delete from PersonRequest where id not in(select parent from Request )
 
