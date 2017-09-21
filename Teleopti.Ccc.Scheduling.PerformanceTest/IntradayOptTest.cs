@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Scheduling.PerformanceTest
 {
 	public class IntradayOptTest
 	{
-		[Test]
+		[Test, Ignore("due to commit 6d2375b43c30 removed temp.html")]
 		[Category("IntradayOptimization")]
 		public void MeasurePerformance()
 		{
