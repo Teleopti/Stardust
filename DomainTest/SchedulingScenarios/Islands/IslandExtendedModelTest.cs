@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		{
 			var skill1 = new Skill("1");
 			var skill2 = new Skill("2");
-			var skillgroup1 = new SkillSet(new HashSet<ISkill> { skill1, skill2 }, new HashSet<IPerson>());
-			var skillgroup2 = new SkillSet(new HashSet<ISkill> { skill2 }, new HashSet<IPerson>());
-			var model = new Island(new[] {skillgroup1, skillgroup2}, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
+			var skillSet1 = new SkillSet(new HashSet<ISkill> { skill1, skill2 }, new HashSet<IPerson>());
+			var skillSet2 = new SkillSet(new HashSet<ISkill> { skill2 }, new HashSet<IPerson>());
+			var model = new Island(new[] {skillSet1, skillgroup2}, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
 
 			model.SkillsInIsland.Count().Should().Be.EqualTo(2);
 			model.SkillsInIsland.Should().Contain(skill1);
@@ -27,25 +27,25 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Islands
 		}
 
 		[Test]
-		public void ShouldCollectAllSkillgroupsOnIsland()
+		public void ShouldCollectAllSkillSetsOnIsland()
 		{
 			var skill1 = new Skill("1");
 			var skill2 = new Skill("2");
-			var skillgroup1 = new SkillSet(new HashSet<ISkill> { skill1, skill2 }, new HashSet<IPerson>());
-			var skillgroup2 = new SkillSet(new HashSet<ISkill> { skill2 }, new HashSet<IPerson>());
-			var model = new Island(new[] { skillgroup1, skillgroup2 }, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
+			var skillSet1 = new SkillSet(new HashSet<ISkill> { skill1, skill2 }, new HashSet<IPerson>());
+			var skillSet2 = new SkillSet(new HashSet<ISkill> { skill2 }, new HashSet<IPerson>());
+			var model = new Island(new[] { skillSet1, skillSet2 }, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
 
 			model.SkillSetsInIsland.Count().Should().Be.EqualTo(2);
 		}
 
 		[Test]
-		public void ShouldAddAgentsToSkillGroup()
+		public void ShouldAddAgentsToSkillSet()
 		{
 			var skill1 = new Skill("1");		
 			var agent1 = new Person();
-			var skillgroup1 = new SkillSet(new HashSet<ISkill> { skill1 }, new HashSet<IPerson> { agent1 });
+			var skillSet1 = new SkillSet(new HashSet<ISkill> { skill1 }, new HashSet<IPerson> { agent1 });
 
-			var model = new Island(new[] { skillgroup1 }, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
+			var model = new Island(new[] { skillSet1 }, new Dictionary<ISkill, int>()).CreatExtendedClientModel();
 
 			model.SkillSetsInIsland.First().AgentsInSkillSet.Count().Should().Be.EqualTo(1);
 			model.SkillSetsInIsland.First().AgentsInSkillSet.Should().Contain(agent1);
