@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 		[Test]
 		public void ShouldBeRightIfInsideOfOpenPeriod()
 		{
-			var checkItem = new ShiftTradeAvailableCheckItem(DateOnly.Today.AddDays(1), _personFrom, _personTo);
+			var checkItem = new ShiftTradeAvailableCheckItem(DateOnly.Today.AddDays(2), _personFrom, _personTo);
 			Assert.That(_target.IsSatisfiedBy(checkItem), Is.True);
 		}
 
