@@ -47,6 +47,16 @@
 						<md-tooltip>{{'Clear'|translate}}</md-tooltip>
 					</i>
 			</span>
+			<!-- <div ng-if="vm.toggles.unifiedSkillGroupManagement && vm.HasPermissionToModifySkillArea"> -->
+				<pre>APA!</pre>
+			<div ng-if="vm.toggles.unifiedSkillGroupManagement">
+				<button class="wfm-fab mini mini-active"
+						id="manage_skill_group_button"
+						ng-click="vm.configMode()">
+					<i class="mdi mdi-plus" style="top: 2px; position: relative;"></i>
+					<md-tooltip>{{'CreateSkillGroup'|translate}}</md-tooltip>
+				</button>
+			</div>
 			<span class="con-flex rta-multiple-selection-panel">
 				<div  class="relative" outside-click="vm.goToAgents()">
 							<input type="text" placeholder="{{'DataFilterThreeDots'|translate}}" ng-style="vm.openPicker && {'visibility': 'hidden'}" ng-class="vm.defaultInputText ? 'rta-light-text' : ''" ng-click="vm.openPicker = !vm.openPicker" ng-value="vm.selectFieldText" ng-model="vm.searchTerm"/>

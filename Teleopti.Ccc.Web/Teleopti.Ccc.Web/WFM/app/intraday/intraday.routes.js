@@ -2,29 +2,31 @@
 	'use strict';
 
 	angular
-	.module('wfm.intraday')
-	.config(stateConfig);
+		.module('wfm.intraday')
+		.config(stateConfig);
 
 	function stateConfig($stateProvider) {
-		$stateProvider.state('intraday',
-		{
-			params: {
-				isNewSkillArea: false
-			},
-			url: '/intraday',
-			templateUrl: 'app/intraday/intraday.html',
-			controller: 'IntradayController'
-		})
-		.state('intraday.area',
-		{
-			templateUrl: 'app/intraday/intraday-area.html',
-			controller: 'IntradayAreaController as vm'
-		})
-		.state('intraday.skill-area-config',
-		{
-			url: '/skill-area-config',
-			templateUrl: 'app/intraday/intraday-config-new.html',
-			controller: 'IntradayConfigController as vm'
-		})
+		$stateProvider
+			.state('intraday',
+				{
+					params: {
+						isNewSkillArea: false,
+						returnState: 'intraday'
+					},
+					url: '/intraday',
+					templateUrl: 'app/intraday/intraday.html',
+					controller: 'IntradayController'
+				})
+			.state('intraday.area',
+				{
+					templateUrl: 'app/intraday/intraday-area.html',
+					controller: 'IntradayAreaController as vm'
+				})
+			.state('intraday.skill-area-config',
+				{
+					url: '/skill-area-config',
+					templateUrl: 'app/global/skill-group/skillgroup.html',
+					controller: 'SkillGroupController as vm'
+				})
 	}
 })();

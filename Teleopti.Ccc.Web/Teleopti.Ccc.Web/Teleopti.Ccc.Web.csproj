@@ -1467,7 +1467,10 @@
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.single.tpl.html" />
     <Content Include="WFM\app\global\organizationPicker\organizationPicker.tpl.html" />
     <Content Include="WFM\app\global\organizationPicker\_modules.js" />
+    <Content Include="WFM\app\global\skill-group\skillgroup.controller.js" />
+    <Content Include="WFM\app\global\skill-group\skillgroup.html" />
     <Content Include="WFM\app\global\skill-group\skillgroup.service.js" />
+    <Content Include="WFM\app\global\skill-group\_modules.js" />
     <Content Include="WFM\app\global\skill-picker\skill-picker.html" />
     <Content Include="WFM\app\global\skill-picker\skill.picker.component.js" />
     <Content Include="WFM\app\global\skill-picker\skill.picker.component.spec.js" />
