@@ -64,8 +64,6 @@ Wfm_Requests_OvertimeRequestHandling_45177 = RC  # Only set to true if Wfm_Reque
 Wfm_Requests_Refactoring_45470 = RC
 Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = RC
 
-Wfm_Seatplan_UseDatePeriodForPlanning_42167 = true
-
 Wfm_People_PrepareForRelease_39040 = RC #Was not ready enough
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true

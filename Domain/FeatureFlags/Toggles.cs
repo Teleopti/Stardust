@@ -81,7 +81,6 @@
 		Wfm_Requests_ProcessWaitlistBefore24hRequests_45767,
 
 		Wfm_Outbound_IgnoreScheduleForReplan_43752,
-		Wfm_Seatplan_UseDatePeriodForPlanning_42167,
 
 		Wfm_Intraday_38074,
 

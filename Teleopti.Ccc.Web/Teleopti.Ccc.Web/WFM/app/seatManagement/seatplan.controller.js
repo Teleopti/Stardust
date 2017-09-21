@@ -4,19 +4,15 @@
 
 	angular.module('wfm.seatPlan').controller('SeatPlanCtrl', seatPlanDirectiveController);
 
-	seatPlanDirectiveController.$inject = ['planningPeriodService', 'seatPlanService', '$stateParams', '$timeout', '$scope', 'Toggle'];
+	seatPlanDirectiveController.$inject = ['$scope', '$stateParams', '$timeout', 'seatPlanService'];
 
-	function seatPlanDirectiveController(planningPeriodService, seatPlanService, params, $timeout, $scope, toggleService) {
-
+	function seatPlanDirectiveController($scope, params, $timeout, seatPlanService) {
 		var vm = this;
 
 		vm.isLoadingCalendar = true;
-		vm.isLoadingPlanningPeriods = true;
-		vm.planningPeriods = [];
-		vm.usePlanningPeriods = !toggleService.Wfm_Seatplan_UseDatePeriodForPlanning_42167;
 
 		vm.isLoadingStuff = function () {
-			return vm.isLoadingCalendar || vm.isLoadingPlanningPeriods;
+			return vm.isLoadingCalendar;
 		};
 
 		vm.setupSeatPlanStatusStrings = function () {
@@ -41,16 +37,12 @@
 			return getServiceSafeDate(moment(dateMoment).add(1, 'months').endOf('month'));
 		};
 
-	//	vm.seatPlanStatusClass = ['seatplan-status-success', 'seatplan-status-inprogress', 'seatplan-status-error'];
-
 		vm.loadMonthDetails = function (date) {
 			var dateMoment = moment(date);
-			vm.isLoadingPlanningPeriods = true;
 
 			vm.currentMonth = dateMoment.month();
 
 			vm.loadCalendarDetails(dateMoment);
-			vm.loadPlanningPeriods(dateMoment);
 		};
 
 		vm.loadCalendarDetails = function (dateMoment) {
@@ -73,21 +65,6 @@
 				});
 		};
 
-		vm.loadPlanningPeriods = function (dateMoment) {
-			vm.isLoadingPlanningPeriods = true;
-
-			var planningPeriodParams = {
-				startDate: moment(dateMoment).startOf('month').format('YYYY-MM-DD'),
-				endDate: moment(dateMoment).endOf('month').format('YYYY-MM-DD')
-			};
-
-			planningPeriodService.getPlanningPeriods(planningPeriodParams)
-				.$promise.then(function (data) {
-					vm.planningPeriods = data;
-					vm.isLoadingPlanningPeriods = false;
-				});
-		};
-
 		vm.getDateString = function (date) {
 			return moment(date).format('LL');
 		};
@@ -106,7 +83,7 @@
 				vm.loadMonthDetails(moment(vm.selectedDate));
 			} else {
 				vm.loadSeatBookingInformation(moment(vm.selectedDate));
-			}		
+			}
 		};
 
 		vm.datepickerOptions = {
@@ -118,7 +95,6 @@
 		};
 
 		vm.loadSeatBookingInformation = function(date) {
-
 			vm.isLoadingCalendar = true;
 
 			var seatBookingParams = {
@@ -131,9 +107,7 @@
 			});
 		};
 
-		vm.onSeatPlanStart = function () {
-			vm.isLoadingPlanningPeriods = true;
-		};
+		vm.onSeatPlanStart = function () {};
 
 		vm.onSeatPlanComplete = function () {
 			vm.loadMonthDetails(moment(vm.selectedDate));
@@ -155,13 +129,11 @@
 			}
 		};
 
-
 		vm.getSelectedMonthName = function () {
 			return moment(vm.selectedDate).format("MMMM");
 		};
 
 		vm.getToDayInfo = function () {
-
 			if (vm.isLoadingCalendar) {
 				return 'LoadingSeatPlanStatus';
 			}
@@ -183,13 +155,9 @@
 		};
 
 		vm.getDayClass = function (date, mode) {
-
 			var dayClass = '';
-
 			if (mode === 'day') {
-
 				var dayToCheck = moment(date);
-
 				vm.seatPlanDateStatuses.forEach(function (status) {
 
 					if (dayToCheck.isSame(moment(status.Date), 'day')) {
@@ -224,18 +192,14 @@
 		vm.init();
 
 		var date = (angular.isDefined(params.viewDate) && params.viewDate != "") ? params.viewDate : null;
-
 		if (date != null) {
-
 			var paramDate = moment(params.viewDate);
 			vm.loadMonthDetails(paramDate);
-		
 		} else {
 			var paramDate = moment();
 			vm.loadMonthDetails(paramDate);
 		
 		}
-
 	}
 }());
 

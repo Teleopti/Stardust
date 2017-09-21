@@ -1,43 +1,29 @@
 ﻿'use strict';
-
-
 describe('SeatPlanCtrl', function () {
 	var $q,
 		$rootScope,
 		$httpBackend;
 
-		beforeEach(function() {
-			module('wfm.seatPlan');
-			module('externalModules');
+	beforeEach(function() {
+		module('wfm.seatPlan');
+		module('externalModules');
 
-
-			module(function ($provide) {
-				$provide.service('Toggle', function() {
-					return {
-						Wfm_Seatplan_UseDatePeriodForPlanning_42167: false,
-						togglesLoaded: {
-							then: function(cb) { cb(); }
-						}
+		module(function ($provide) {
+			$provide.service('Toggle', function() {
+				return {
+					togglesLoaded: {
+						then: function(cb) { cb(); }
 					}
-				});	
+				}
 			});
-
 		});
+	});
 
 	beforeEach(inject(function (_$httpBackend_, _$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 		$httpBackend = _$httpBackend_;
 	}));
-
-
-	var mockPlanningPeriodService = {
-		getPlanningPeriods: function(param) {
-			var queryDeferred = $q.defer();
-			queryDeferred.resolve(true);
-			return { $promise: queryDeferred.promise };
-		}
-	};
 
 	var mockSeatPlanService = {
 		seatPlans: {
@@ -61,7 +47,7 @@ describe('SeatPlanCtrl', function () {
 	it('returns the correct class for a successful seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
 
-		var controller = $controller('SeatPlanCtrl', { $scope: scope, planningPeriodService: mockPlanningPeriodService, seatPlanService: mockSeatPlanService });
+		var controller = $controller('SeatPlanCtrl', { $scope: scope, seatPlanService: mockSeatPlanService });
 		controller.loadMonthDetails(moment("2015-03-02"));
 		scope.$digest();
 		var dayClass = controller.getDayClass("2015-03-02", 'day');
@@ -72,7 +58,7 @@ describe('SeatPlanCtrl', function () {
 	it('returns the correct class for a failed seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
 
-		var controller = $controller('SeatPlanCtrl', { $scope: scope, planningPeriodService: mockPlanningPeriodService, seatPlanService: mockSeatPlanService });
+		var controller = $controller('SeatPlanCtrl', { $scope: scope, seatPlanService: mockSeatPlanService });
 		controller.loadMonthDetails(moment("2016-07-20"));
 		scope.$digest();
 		var dayClass = controller.getDayClass("2016-07-20", 'day');
@@ -83,20 +69,19 @@ describe('SeatPlanCtrl', function () {
 	it('returns the correct info for a successful seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
 
-		var controller = $controller('SeatPlanCtrl', { $scope: scope, planningPeriodService: mockPlanningPeriodService, seatPlanService: mockSeatPlanService });
+		var controller = $controller('SeatPlanCtrl', { $scope: scope, seatPlanService: mockSeatPlanService });
 
 		controller.loadMonthDetails(moment("2015-03-02"));
 		scope.$digest();
 
 		var info = controller.getToDayInfo();
 		expect(info).toEqual("SeatBookingSummary");
-
 	}));
 
 	it('returns the correct info for a failed seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
 
-		var controller = $controller('SeatPlanCtrl', { $scope: scope, planningPeriodService: mockPlanningPeriodService, seatPlanService: mockSeatPlanService });
+		var controller = $controller('SeatPlanCtrl', { $scope: scope, seatPlanService: mockSeatPlanService });
 
 		controller.loadMonthDetails(moment("2016-07-20"));
 		scope.$digest();
@@ -105,20 +90,16 @@ describe('SeatPlanCtrl', function () {
 
 		var info = controller.getToDayInfo();
 		expect(info).toEqual(expectedInfo);
-
 	}));
-
 
 	it('returns the correct month name for a seatplan status', inject(function ($controller) {
 		var scope = $rootScope.$new();
-		var controller = $controller('SeatPlanCtrl', { $scope: scope, planningPeriodService: mockPlanningPeriodService, seatPlanService: mockSeatPlanService });
+		var controller = $controller('SeatPlanCtrl', { $scope: scope, seatPlanService: mockSeatPlanService });
 
 		controller.loadMonthDetails(moment("2015-03-02"));
 		scope.$digest();
 		var info = controller.getSelectedMonthName();
 
 		expect(info).toEqual('March');
-
 	}));
-
 });
