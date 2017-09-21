@@ -65,7 +65,8 @@ namespace Teleopti.Ccc.IocCommon.Toggle
 					var toggleConfiguration =
 						new ToggleConfiguration(new FileParser(new FileReader(pathToToggle), specMappings)
 						{
-							ThrowIfFeatureIsDeclaredTwice = true
+							ThrowIfFeatureIsDeclaredTwice = true,
+							AllowedFeatures = Enum.GetNames(typeof(Toggles))
 						});
 					toggleConfiguration.SetDefaultSpecification(defaultSpecification);
 					return new toggleCheckerWrapper(toggleConfiguration.Create());
