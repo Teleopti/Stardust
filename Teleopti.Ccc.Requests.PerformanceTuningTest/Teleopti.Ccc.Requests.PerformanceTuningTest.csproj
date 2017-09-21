@@ -61,6 +61,7 @@
     <Compile Include="PerformanceTuningTest.cs" />
     <Compile Include="RequestPerformanceTestAttribute.cs" />
     <Compile Include="StaffingReadModelLocksTest.cs" />
+    <Compile Include="WaitlistRequestProcessor14DaysPerformanceTest.cs" />
     <Compile Include="WaitlistRequestProcessorPerformanceTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -101,6 +102,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Prepare200PerDayWaitlistedRequest14DaysTest.sql" />
     <Content Include="Prepare200WaitlistedRequestForIntradayTest.sql" />
     <Content Include="Prepare200RequestForIntradayTest.sql" />
     <Content Include="Prepare200RequestForTest.sql" />
