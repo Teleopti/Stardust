@@ -9,18 +9,16 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.Queries;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
@@ -58,12 +56,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IWorkflowControlSet _workflowControlSet;
 		private IAbsence _absence;
 		private IPerson _person;
-		public FakeCurrentBusinessUnit CurrentBusinessUnit;
-		public FakeTenants Tenants;
-		public FakeBusinessUnitRepository BusinessUnitRepository;
-		public FakePersonAbsenceRepository PersonAbsenceRepository;
-		private IBusinessUnit businessUnit;
-		public FakePersonRepositoryLegacy PersonRepository;
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -90,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			system.UseTestDouble<FakeActivityRepository>().For<IActivityRepository>();
 			system.UseTestDouble<FakeBusinessUnitRepository>().For<IBusinessUnitRepository>();
 			system.UseTestDouble<FakePersonAbsenceRepository>().For<IPersonAbsenceRepository>();
-
+			system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
 			var tenants = new FakeTenants();
 			var DefaultTenantName = "default";
 			tenants.Has(DefaultTenantName, LegacyAuthenticationKey.TheKey);
@@ -116,18 +108,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			personRequest.DenyReason.Should().Be.Empty();
 		}
 
-		[Test, Ignore("was already failing but we exposed it")]
+		[Test]
 		public void ShouldHandleRequestDirectlyWhenRequestShorterThan24HoursAndEndsWithin24HourWindow()
 		{
-			
-			Tenants.Has("Teleopti WFM");
-			var person = PersonFactory.CreatePerson().WithId(SystemUser.Id);
-			PersonRepository.Add(person);
-			businessUnit = BusinessUnitFactory.CreateWithId("something");
-			BusinessUnitRepository.Add(businessUnit);
-			
-			CurrentBusinessUnit.FakeBusinessUnit(businessUnit);
-
 			ScheduleStorage.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_person
 				, CurrentScenario.Current(), _today.ToDateTimePeriod(UserTimeZone.TimeZone())));
 			_absence = createAbsence();
