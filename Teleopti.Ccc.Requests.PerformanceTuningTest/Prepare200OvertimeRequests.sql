@@ -31,7 +31,7 @@ and pa.Date between @start and @end
 
 
 -- allow little understaffing so more gets approved
-update Skill set SeriousUnderstaffing = 2, Understaffing = 3
+update Skill set SeriousUnderstaffing = 200, Understaffing = 210
 
 
 declare @PersonRequestId uniqueidentifier 
