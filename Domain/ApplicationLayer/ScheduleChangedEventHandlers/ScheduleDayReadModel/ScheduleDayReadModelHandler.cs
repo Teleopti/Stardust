@@ -54,14 +54,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 				if (!message.IsInitialLoad)
 				{
-					try
-					{
-						_notificationValidationCheck.InitiateNotify(readModel, date, person);
-					}
-					catch (SendNotificationException)
-					{
-						// ignore it
-					}
+
+					_notificationValidationCheck.InitiateNotify(readModel, date, person);
+
 					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
 				}
 				_scheduleDayReadModelRepository.SaveReadModel(readModel);

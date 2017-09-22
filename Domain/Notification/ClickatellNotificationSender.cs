@@ -107,7 +107,6 @@ namespace Teleopti.Ccc.Domain.Notification
 							if (data.Contains(_notificationConfigReader.ErrorCode))
 							{
 								Logger.Error($"Error occurred sending SMS: {data}");
-								throw new SendNotificationException($"Error occurred sending SMS: {data}");
 							}
 						}
 						else
@@ -115,7 +114,6 @@ namespace Teleopti.Ccc.Domain.Notification
 							if (!data.Contains(_notificationConfigReader.SuccessCode))
 							{
 								Logger.Error($"Error occurred sending SMS: {data}");
-								throw new SendNotificationException($"Error occurred sending SMS: {data}");
 							}
 						}
 					}
@@ -123,7 +121,6 @@ namespace Teleopti.Ccc.Domain.Notification
 				catch (Exception exception)
 				{
 					Logger.Error($"Error occurred trying receiver access: {_notificationConfigReader.Url}{msgData}", exception);
-					throw new SendNotificationException($"Error occurred trying receiver access: {_notificationConfigReader.Url}{msgData}", exception);
 				}
 			}
 		}
