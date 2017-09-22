@@ -1,0 +1,309 @@
+<section ui-view>
+
+	<div class="view-header with-fab">
+		<div class="view-title">
+			<h1><i class="mdi mdi-alarm"></i> Rta Tracer
+			</h1>
+		</div>
+	</div>
+
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="con-row">
+					<div class="con-flex">
+						<label class="input-icon">
+							<input style="margin-top: 10px;" type="text" value="{{vm.usercode1}}">
+						</label>
+					</div>
+					<div class="con-flex">
+						<button class="wfm-btn wfm-btn-invis-primary">Apply</button>
+						<button class="wfm-btn wfm-btn-invis-primary">Stop</button>
+						<button class="wfm-btn wfm-btn-invis-primary">Clear</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="con-row">
+		<div class="con-flex">
+			<div class="panel material-depth-1">
+				<div class="con-row">
+					<div class="con-flex">
+						<h3>Tracers:</h3>
+						<table class="wfm-table" style="width: 800px">
+							<thead>
+							<tr>
+								<th>Process</th>
+								<th>Tracing UserCode</th>
+								<th>Recieved Data At</th>
+								<th>Activiy check at</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr>
+								<td>{{vm.process1}}</td>
+								<td>{{vm.usercode1}}</td>
+								<td></td>
+								<td>08:05:58</td>
+							</tr>
+							<tr>
+								<td>{{vm.process2}}</td>
+								<td>{{vm.usercode1}}</td>
+								<td> 07:058:56</td>
+								<td></td>
+							</tr>
+							<tr>
+								<td>{{vm.process3}}</td>
+								<td>{{vm.usercode2}}</td>
+								<td></td>
+								<td></td>
+
+							</tr>
+							<tr>
+								<td>{{vm.process4}}</td>
+								<td>nothing</td>
+								<td></td>
+								<td></td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="con-row">
+		<div class="con-flex">
+			<h3>{{vm.usercode1}}</h3>
+			<div class="panel material-depth-1">
+				<table class="wfm-table">
+					<thead>
+					<tr>
+						<th width="100px">State</th>
+						<th width="150px">Recieved</th>
+						<th width="150px">Processing</th>
+						<th width="150px">Processed</th>
+						<th>Output</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+						<td>AUX34</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" disabled/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label"></span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process1}}</span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process1}}</span>
+								</label>
+							</div>
+						</td>
+						<td>User code not found</td>
+					</tr>
+					<tr>
+						<td>AUX35</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process1}}</span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process2}}</span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process2}}</span>
+								</label>
+							</div>
+						</td>
+						<td>No change</td>
+					</tr>
+					<tr>
+						<td>AUX36</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process2}}</span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process2}}</span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process2}}</span>
+								</label>
+							</div>
+
+						</td>
+						<td>State change, Out of adherence</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox"/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label"></span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process1}}</span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process1}}</span>
+								</label>
+							</div>
+						</td>
+						<td>No change</td>
+					</tr>
+					<tr>
+						<td>AUX36</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process2}}</span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process1}}</span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox"/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label"></span>
+								</label>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="con-row">
+		<div class="con-flex">
+			<h3>{{vm.usercode2}}</h3>
+			<div class="panel material-depth-1">
+				<table class="wfm-table">
+					<thead>
+					<tr>
+						<th width="100px">Time</th>
+						<th width="100px">State</th>
+						<th width="150px">Recieved</th>
+						<th width="150px">Processing</th>
+						<th width="150px">Processed</th>
+						<th>Output</th>
+					</tr>
+					</thead>
+					<tbody>
+					<tr>
+
+						<td>AUX34</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process3}}</span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox" checked/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process1}}</span>
+								</label>
+							</div>
+						</td>
+						<td>
+							<div class="wfm-checkbox">
+								<input type="checkbox"/>
+								<label>
+									<span class="wfm-checkbox-toggle"></span>
+									<span class="wfm-checkbox-label">{{vm.process1}}</span>
+								</label>
+							</div>
+						</td>
+						<td></td>
+					</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+
+</section>

@@ -1409,6 +1409,10 @@
     <Content Include="Content\moment-datepicker\moment-datepicker-ext.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.js" />
     <Content Include="Content\signalr\jquery.signalR-2.2.2.min.js" />
+    <Content Include="WFM\app\rtaTracer\rtaTracer.controller.js" />
+    <Content Include="WFM\app\rtaTracer\rtaTracer.html" />
+    <Content Include="WFM\app\rtaTracer\rtaTracer.state.provider.js" />
+    <Content Include="WFM\app\rtaTracer\_modules.js" />
     <Content Include="WFM\app\forecasting\refact\forecast-chart.component.js" />
     <Content Include="WFM\app\forecasting\refact\forecast-chart.html" />
     <Content Include="WFM\app\forecasting\refact\forecast-chart.spec.js" />
