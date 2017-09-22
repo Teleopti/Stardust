@@ -111,13 +111,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var schedulinOptions = _schedulingOptionsProvider.Fetch(stateHolder.CommonStateHolder.DefaultDayOffTemplate);
 			_scheduleExecutor.Execute(new NoSchedulingCallback(), schedulinOptions, _schedulingProgress,
-				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false,new FixedBlockPreferenceProvider(new ExtraPreferences()
-				{
-					UseBlockSameStartTime = schedulinOptions.BlockSameStartTime,
-					UseBlockSameShift = schedulinOptions.BlockSameShift,
-					UseBlockSameShiftCategory = schedulinOptions.BlockSameShiftCategory,
-					BlockTypeValue = schedulinOptions.BlockFinderTypeForAdvanceScheduling
-				}));
+				stateHolder.SchedulingResultState.PersonsInOrganization.FixedStaffPeople(period), period, false,new FixedBlockPreferenceProvider(schedulinOptions));
 		}
 	}
 }

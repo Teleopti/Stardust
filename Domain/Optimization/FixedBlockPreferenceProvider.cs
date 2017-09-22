@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -18,6 +19,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 				UseBlockSameStartTime = extraPreferences.UseBlockSameStartTime,
 				UseBlockSameShift = extraPreferences.UseBlockSameShift,
 				UseTeamBlockOption = extraPreferences.UseTeamBlockOption
+			};
+		}
+
+		public FixedBlockPreferenceProvider(SchedulingOptions schedulingOptions)
+		{
+			_extraPreferences = new ExtraPreferences
+			{
+				BlockTypeValue = schedulingOptions.BlockFinderTypeForAdvanceScheduling,
+				UseBlockSameEndTime = schedulingOptions.BlockSameEndTime,
+				UseBlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory,
+				UseBlockSameStartTime = schedulingOptions.BlockSameStartTime,
+				UseBlockSameShift = schedulingOptions.BlockSameShift,
+				UseTeamBlockOption = schedulingOptions.UseBlock
 			};
 		}
 

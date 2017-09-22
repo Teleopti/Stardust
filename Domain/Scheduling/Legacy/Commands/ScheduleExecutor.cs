@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			bool runWeeklyRestSolver, SchedulingOptions schedulingOptions,IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var blockPreferences = blockPreferenceProvider.ForAgents(selectedAgents, selectedPeriod.StartDate).ToArray();
-			if (blockPreferences.Any(x=>x.UseBlockSameShift)|| blockPreferences.Any(x => x.UseBlockSameShiftCategory) || blockPreferences.Any(x => x.UseBlockSameStartTime))
+			if (blockPreferences.Any(x=>x.UseTeamBlockOption))
 			{
 				schedulingOptions.UseBlock = true;
 			}

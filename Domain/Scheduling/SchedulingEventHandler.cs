@@ -62,16 +62,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				using (_lowThreadPriorityScope.OnThisThread())
 				using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
 				{
-					Run(@event);
+					run(@event);
 				}
 			}
 			else
 			{
-				Run(@event);
+				run(@event);
 			}
 		}
 
-		private void Run(SchedulingWasOrdered @event)
+		private void run(SchedulingWasOrdered @event)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var selectedPeriod = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
@@ -99,13 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 			else
 			{
-				blockPreferenceProvider = new FixedBlockPreferenceProvider(new ExtraPreferences
-				{
-					UseBlockSameStartTime = schedulingOptions.BlockSameStartTime,
-					UseBlockSameShift = schedulingOptions.BlockSameShift,
-					UseBlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory,
-					BlockTypeValue = schedulingOptions.BlockFinderTypeForAdvanceScheduling
-				});
+				blockPreferenceProvider = new FixedBlockPreferenceProvider(schedulingOptions);
 			}
 			
 

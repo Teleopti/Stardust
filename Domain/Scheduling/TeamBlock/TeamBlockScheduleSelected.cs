@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				runSchedulingForAllTeamInfoOnStartDate(schedulingCallback, allPersonMatrixList, selectedPersons, selectedPeriod,
 					schedulePartModifyAndRollbackService,
 					checkedTeams.OkList, datePointer, dateOnlySkipList,
-					resourceCalculateDelayer, schedulingResultStateHolder, schedulingOption, blockPreferenceProvider);
+					resourceCalculateDelayer, schedulingResultStateHolder, schedulingOption,blockPreferenceProvider);
 			}
 		}
 
@@ -72,15 +72,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count(), true))
 			{
-				var blockPreference = blockPreferenceProvider.ForAgent(teamInfo.GroupMembers.First(), selectedPeriod.StartDate);
-				schedulingOption.BlockSameShiftCategory = blockPreference.UseBlockSameShiftCategory;
-				schedulingOption.BlockFinderTypeForAdvanceScheduling = blockPreference.BlockTypeValue;
-				schedulingOption.BlockSameStartTime = blockPreference.UseBlockSameStartTime;
-				schedulingOption.BlockSameShift = blockPreference.UseBlockSameShift;
-				if (blockPreference.UseBlockSameShift || blockPreference.UseBlockSameShiftCategory || blockPreference.UseBlockSameStartTime)
-				{
-					schedulingOption.UseBlock = true;
-				}
+				var blockPreferences = blockPreferenceProvider.ForAgents(teamInfo.GroupMembers, selectedPeriod.StartDate).ToArray();
+				schedulingOption.UseBlock = blockPreferences.Any(x => x.UseTeamBlockOption);
+				// might have a bug
+				schedulingOption.BlockFinderTypeForAdvanceScheduling = schedulingOption.UseBlock
+					? schedulingOption.BlockFinderTypeForAdvanceScheduling =
+						blockPreferences.First(x => x.BlockTypeValue != BlockFinderType.SingleDay).BlockTypeValue
+					: BlockFinderType.SingleDay;
+				
 				var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo, datePointer, allPersonMatrixList, schedulingOption, selectedPeriod);
 				if (teamBlockInfo == null) continue;
 

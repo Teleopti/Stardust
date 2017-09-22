@@ -82,13 +82,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		protected override void ExecuteScheduling(ISchedulingCallback schedulingCallback, SchedulingOptions schedulingOptions, ISchedulingProgress backgroundWorker, IEnumerable<IPerson> selectedAgents, DateOnlyPeriod selectedPeriod)
 		{
 			var fixedStaffPeople = selectedAgents.FixedStaffPeople(selectedPeriod);
-			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, fixedStaffPeople, selectedPeriod, true, new FixedBlockPreferenceProvider(new ExtraPreferences()
-               {
-				UseBlockSameStartTime = schedulingOptions.BlockSameStartTime,
-				UseBlockSameShift = schedulingOptions.BlockSameShift,
-				UseBlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory,
-				BlockTypeValue = schedulingOptions.BlockFinderTypeForAdvanceScheduling
-               }));
+			_scheduleExecutor.Execute(schedulingCallback, schedulingOptions, backgroundWorker, fixedStaffPeople, selectedPeriod,
+				true, new FixedBlockPreferenceProvider(schedulingOptions));
 		}
 	}
 }
