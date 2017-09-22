@@ -5,14 +5,16 @@
 		.module('wfm.reports')
 		.controller('AuditTrailController', AuditTrailController);
 
-	AuditTrailController.$inject = ['$state', '$filter', 'Toggle', 'uiGridConstants'];
+	AuditTrailController.$inject = ['$state', '$filter', 'Toggle', 'uiGridConstants', 'ReportsService'];
 
-	function AuditTrailController($state, $filter, ToggleSvc, uiGridConstants) {
+	function AuditTrailController($state, $filter, ToggleSvc, uiGridConstants, ReportsService) {
     var vm = this;
 
 		if(!ToggleSvc.WFM_AuditTrail_44006){
        $state.go('main')
     }
+
+		vm.chagedByPerson = ReportsService.getAuditTrailChangedByPerson();
 
     vm.refreshData = refreshData;
 

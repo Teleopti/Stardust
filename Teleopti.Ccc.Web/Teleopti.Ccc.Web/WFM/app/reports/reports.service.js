@@ -5,7 +5,10 @@
 
 	function reportsService($http, $q, ToggleSvc) {
 		var urlForGetCategorizedReports = '../api/Reports/NavigationsCategorized';
+		var urlForAuditTrailChangedByPerson = '../api/reporting/scheduleChangedByPersons';
+
 		this.getCategorizedReports = getCategorizedReports;
+		this.getAuditTrailChangedByPerson = getAuditTrailChangedByPerson;
 
 		function getCategorizedReports() {
 			var deferred = $q.defer();
@@ -39,5 +42,13 @@
 			return deferred.promise;
 		}
 
+		function getAuditTrailChangedByPerson() {
+			var deferred = $q.defer();
+			$http.get(urlForAuditTrailChangedByPerson).success(function (data) {
+				console.log(data);
+				deferred.resolve(data);
+			});
+			return deferred.promise;
+		}
 	}
 })();
