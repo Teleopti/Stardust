@@ -88,11 +88,13 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 					OvertimeRequestProcessor.Process(request, true);
 				});
 			}
-			foreach (var personRequest in requests.Where(x => !x.IsApproved))
+			WithUnitOfWork.Do(() =>
 			{
-				Console.WriteLine(personRequest.DenyReason);
-			}
-			requests.Count(x => x.IsApproved).Should().Be.GreaterThan(100); //just to have something to catch if big changes are done, locally I get 172 approved
+				var reqs = PersonRequestRepository.FindPersonRequestWithinPeriod(
+					new DateTimePeriod(new DateTime(2016, 01, 16, 16, 0, 0).Utc(), new DateTime(2016, 01, 16, 20, 0, 0).Utc()));
+				reqs.Count(x => x.IsApproved).Should().Be
+					.GreaterThan(100); //just to have something to catch if big changes are done, locally I get 172 approved
+			});
 		}
 	}
 }
