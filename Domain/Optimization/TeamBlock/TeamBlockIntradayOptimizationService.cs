@@ -1,23 +1,60 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Legacy.Commands;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
+using Teleopti.Ccc.Domain.UndoRedo;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
+	[RemoveMeWithToggle("Merge this one with base class. Also, no need to keep methods below in base class", Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
+	public class TeamBlockIntradayOptimizationServiceKeepResCalcDataState : TeamBlockIntradayOptimizationService
+	{
+		public TeamBlockIntradayOptimizationServiceKeepResCalcDataState(TeamBlockScheduler teamBlockScheduler,
+			ISchedulingOptionsCreator schedulingOptionsCreator,
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
+			TeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker, TeamBlockClearer teamBlockClearer,
+			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
+			ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator,
+			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
+			IWorkShiftSelector workShiftSelector, IGroupPersonSkillAggregator groupPersonSkillAggregator,
+			SetMainShiftOptimizeActivitySpecificationForTeamBlock setMainShiftOptimizeActivitySpecificationForTeamBlock,
+			IOptimizerHelperHelper optimizerHelperHelper,
+			ICurrentIntradayOptimizationCallback currentIntradayOptimizationCallback) : base(teamBlockScheduler,
+			schedulingOptionsCreator, safeRollbackAndResourceCalculation, teamBlockIntradayDecisionMaker, teamBlockClearer,
+			dailyTargetValueCalculatorForTeamBlock, teamTeamBlockSteadyStateValidator, teamBlockShiftCategoryLimitationValidator,
+			workShiftSelector, groupPersonSkillAggregator, setMainShiftOptimizeActivitySpecificationForTeamBlock,
+			optimizerHelperHelper, currentIntradayOptimizationCallback)
+		{
+		}
+
+		protected override UndoRedoContainer createRollbackState(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnly datePoint)
+		{
+			var undoResCalcChanges = new UndoRedoContainer();
+			undoResCalcChanges.FillWith(skillDays.FilterOnDates(new[] {datePoint.AddDays(-1), datePoint, datePoint.AddDays(1)}));
+			return undoResCalcChanges;
+		}
+
+		protected override void rollbackChanges(UndoRedoContainer undoRedoContainer, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		{
+			schedulePartModifyAndRollbackService.Rollback();
+			undoRedoContainer.UndoAll();
+		}
+	}
+
 	public class TeamBlockIntradayOptimizationService
 	{
 		private readonly TeamBlockScheduler _teamBlockScheduler;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly TeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly TeamBlockClearer _teamBlockClearer;
@@ -136,6 +173,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (teamBlockInfo.BlockInfo.BlockPeriod.StartDate > firstSelectedDay)
 					datePoint = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 
+				var undoResCalcChanges = createRollbackState(skillDays, datePoint);
+
 				var success = _teamBlockScheduler.ScheduleTeamBlockDay(orgAssignmentsForTeamBlock, new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer, skillDays.ToSkillDayEnumerable(), scheduleDictionary, new ShiftNudgeDirective(), businessRuleCollection, _groupPersonSkillAggregator);
@@ -145,14 +184,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!success)
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
-					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
+					rollbackChanges(undoResCalcChanges, schedulingOptions, schedulePartModifyAndRollbackService);
 					continue;
 				}
 
 				if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
-					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
+					rollbackChanges(undoResCalcChanges, schedulingOptions, schedulePartModifyAndRollbackService);
 					continue;
 				}
 
@@ -170,11 +209,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (isWorse)
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
-					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
+					rollbackChanges(undoResCalcChanges, schedulingOptions, schedulePartModifyAndRollbackService);
 				}
 				//
 			}
 			return teamBlockToRemove;
+		}
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
+		protected virtual UndoRedoContainer createRollbackState(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnly datePoint)
+		{
+			return null;
+		}
+
+		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
+		protected virtual void rollbackChanges(UndoRedoContainer undoRedoContainer, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		{
+			_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 		}
 	}
 }

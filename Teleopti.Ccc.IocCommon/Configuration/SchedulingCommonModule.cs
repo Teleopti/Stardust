@@ -161,11 +161,18 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<GroupPersonBuilderForOptimizationFactory>().As<IGroupPersonBuilderForOptimizationFactory>().InstancePerLifetimeScope();
 			builder.RegisterType<FlexibelDayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>().SingleInstance();
 
-			//change to scope?
+			//change to scope? 
 			builder.RegisterType<ScheduleOvertime>();
 			builder.RegisterType<TeamBlockMoveTimeBetweenDaysCommand>().As<ITeamBlockMoveTimeBetweenDaysCommand>();
 			builder.RegisterType<MatrixListFactory>().InstancePerLifetimeScope();
-			builder.RegisterType<TeamBlockIntradayOptimizationService>();
+			if (_configuration.Toggle(Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694))
+			{
+				builder.RegisterType<TeamBlockIntradayOptimizationServiceKeepResCalcDataState>().As<TeamBlockIntradayOptimizationService>();	
+			}
+			else
+			{
+				builder.RegisterType<TeamBlockIntradayOptimizationService>();				
+			}
 			builder.RegisterType<TeamBlockDaysOffSameDaysOffLockSyncronizer>().SingleInstance();
 			builder.RegisterType<WeeklyRestSolverCommand>().As<IWeeklyRestSolverCommand>().ApplyAspects();
 			builder.RegisterType<BackToLegalShiftCommand>();
