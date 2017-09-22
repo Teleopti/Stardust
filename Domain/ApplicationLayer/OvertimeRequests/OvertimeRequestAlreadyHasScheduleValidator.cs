@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.OvertimeRequests
 		{
 			var person = _loggedOnUser.CurrentUser();
 			var period = personRequest.Request.Period;
-			var dic = _scheduleStorage.FindSchedulesForPersons(new ScheduleDateTimePeriod(period), _currentScenario.Current(),
-							new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(false, false), new[] { person });
+			var dic = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(person, new ScheduleDictionaryLoadOptions(false, false),
+				period, _currentScenario.Current());
 
 			var agentDate = TimeZoneHelper.ConvertFromUtc(period.StartDateTime, person.PermissionInformation.DefaultTimeZone());
 			var scheduleDay = dic[person].ScheduledDay(new DateOnly(agentDate));
