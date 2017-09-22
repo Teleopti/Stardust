@@ -3,7 +3,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling;
-using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 {

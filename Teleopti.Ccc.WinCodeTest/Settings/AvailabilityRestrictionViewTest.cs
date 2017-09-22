@@ -3,7 +3,6 @@
 using System;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Interfaces.Domain;
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;

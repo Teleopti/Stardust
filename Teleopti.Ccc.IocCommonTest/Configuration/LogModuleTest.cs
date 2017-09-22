@@ -8,7 +8,6 @@ using log4net.Core;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 
 namespace Teleopti.Ccc.IocCommonTest.Configuration
 {

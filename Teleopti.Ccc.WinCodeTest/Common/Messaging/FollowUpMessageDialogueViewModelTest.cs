@@ -11,8 +11,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Messaging;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCodeTest.Common.Commands;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Messaging
 {

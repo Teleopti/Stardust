@@ -4,8 +4,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 //using Teleopti.Interfaces.Infrastructure;
 
@@ -16,7 +14,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
     {
         protected override IScheduleTag CreateAggregateWithCorrectBusinessUnit()
         {
-            const string text = "Detta är en tag";
+            const string text = "Detta Ã¤r en tag";
             
             var tag = new ScheduleTag {Description = text};
 

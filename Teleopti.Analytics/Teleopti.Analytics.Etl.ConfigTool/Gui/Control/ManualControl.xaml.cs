@@ -13,7 +13,6 @@ using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.MultipleDate;
 using Teleopti.Analytics.Etl.ConfigTool.Transformer;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Color = System.Drawing.Color;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control

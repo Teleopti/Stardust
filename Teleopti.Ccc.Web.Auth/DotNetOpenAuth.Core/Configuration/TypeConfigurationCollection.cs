@@ -10,8 +10,6 @@ namespace DotNetOpenAuth.Configuration {
 	using System.Configuration;
 	using System.Diagnostics.Contracts;
 	using System.Linq;
-	using System.Text;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// A collection of <see cref="TypeConfigurationElement&lt;T&gt;"/>.

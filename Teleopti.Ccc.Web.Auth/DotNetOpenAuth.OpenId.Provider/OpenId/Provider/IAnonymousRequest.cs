@@ -5,11 +5,6 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.OpenId.Provider {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-
 	/// <summary>
 	/// Instances of this interface represent incoming extension-only requests.
 	/// This interface provides the details of the request and allows setting

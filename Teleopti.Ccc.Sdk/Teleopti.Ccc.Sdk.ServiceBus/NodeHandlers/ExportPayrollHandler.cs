@@ -3,8 +3,6 @@ using System.Threading;
 using Autofac;
 using Stardust.Node.Interfaces;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.ApplicationLayer.Payroll;
 using Teleopti.Ccc.Domain.Logon;
 using Teleopti.Ccc.Domain.Security;

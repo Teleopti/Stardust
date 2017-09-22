@@ -7,7 +7,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
-using Teleopti.Interfaces.Domain;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.TestCommon.TestData;

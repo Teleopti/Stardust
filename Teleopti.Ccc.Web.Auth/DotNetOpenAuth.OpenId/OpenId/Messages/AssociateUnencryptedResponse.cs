@@ -7,7 +7,6 @@
 namespace DotNetOpenAuth.OpenId.Messages {
 	using System;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.Messaging.Reflection;
 
 	/// <summary>
 	/// The successful unencrypted association response message.

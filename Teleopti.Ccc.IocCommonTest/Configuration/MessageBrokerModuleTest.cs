@@ -1,16 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Autofac;
-using Autofac.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon;
-using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Messaging.Client.Http;
 using Teleopti.Messaging.Client.SignalR;
 

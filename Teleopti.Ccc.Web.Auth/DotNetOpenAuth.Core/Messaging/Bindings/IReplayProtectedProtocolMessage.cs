@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.Messaging.Bindings {
-	using System;
 	using DotNetOpenAuth.Messaging;
 
 	/// <summary>

@@ -6,15 +6,10 @@
 
 namespace DotNetOpenAuth.Messaging {
 	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics.Contracts;
-	using System.Linq;
 	using System.Security.Cryptography;
 	using System.Text;
 	using System.Web;
-	using DotNetOpenAuth.Messaging;
 	using DotNetOpenAuth.Messaging.Bindings;
-	using DotNetOpenAuth.Messaging.Reflection;
 
 	/// <summary>
 	/// A serializer for <see cref="DataBag"/>-derived types

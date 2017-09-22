@@ -5,12 +5,10 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.OpenId {
-	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.Contracts;
 	using System.Linq;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.RelyingParty;
 	using DotNetOpenAuth.Xrds;
 
 	/// <summary>

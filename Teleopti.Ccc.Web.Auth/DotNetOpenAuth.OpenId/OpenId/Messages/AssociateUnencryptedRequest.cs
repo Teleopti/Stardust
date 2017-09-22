@@ -7,7 +7,6 @@
 namespace DotNetOpenAuth.OpenId.Messages {
 	using System;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.Messaging.Reflection;
 
 	/// <summary>
 	/// Represents an association request that is sent using HTTPS and otherwise communicates the shared secret in plain text.

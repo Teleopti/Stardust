@@ -5,11 +5,7 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.Messaging {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
 	using System.Security.Cryptography;
-	using System.Text;
 
 	/// <summary>
 	/// HMAC-SHA algorithm names that can be passed to the <see cref="HMAC.Create(string)"/> method.

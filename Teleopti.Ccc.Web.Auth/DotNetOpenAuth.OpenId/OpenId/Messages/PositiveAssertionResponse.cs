@@ -6,15 +6,9 @@
 
 namespace DotNetOpenAuth.OpenId.Messages {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics;
-	using System.Globalization;
-	using System.Linq;
 	using System.Net.Security;
-	using System.Text;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.Messaging.Bindings;
-	using DotNetOpenAuth.OpenId.ChannelElements;
 
 	/// <summary>
 	/// An identity assertion from a Provider to a Relying Party, stating that the

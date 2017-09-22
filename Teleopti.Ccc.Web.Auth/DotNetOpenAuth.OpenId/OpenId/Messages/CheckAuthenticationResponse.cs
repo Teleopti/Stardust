@@ -6,12 +6,7 @@
 
 namespace DotNetOpenAuth.OpenId.Messages {
 	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics.Contracts;
-	using System.Linq;
-	using System.Text;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.ChannelElements;
 
 	/// <summary>
 	/// The message sent from the Provider to the Relying Party to confirm/deny

@@ -8,9 +8,7 @@ namespace DotNetOpenAuth.Messaging {
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.Contracts;
-	using System.Linq;
 	using System.Net;
-	using System.Text;
 
 	/// <summary>
 	/// Contract class for the <see cref="IHttpDirectRequest"/> interface.

@@ -5,10 +5,7 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.Messaging {
-	using System;
-	using System.Diagnostics.Contracts;
 	using System.Web.Mvc;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// An ASP.NET MVC 5 class to represent the response to send

@@ -8,8 +8,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Forecasting.ExportPages;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.ExportPages
 {

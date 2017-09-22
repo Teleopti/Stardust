@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.OpenId.RelyingParty {
-	using System;
 	using System.Diagnostics.Contracts;
 
 	/// <summary>

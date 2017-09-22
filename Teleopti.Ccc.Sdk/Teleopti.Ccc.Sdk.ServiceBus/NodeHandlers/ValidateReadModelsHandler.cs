@@ -2,7 +2,6 @@
 using System.Threading;
 using Autofac;
 using Stardust.Node.Interfaces;
-using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ReadModelValidator;
 using Teleopti.Ccc.Domain.Logon;

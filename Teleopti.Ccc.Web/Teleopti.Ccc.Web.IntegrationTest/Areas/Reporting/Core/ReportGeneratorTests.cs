@@ -11,7 +11,6 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.IntegrationTest.Areas.Reporting.Core
 {

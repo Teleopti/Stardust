@@ -8,8 +8,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Messaging.Client.Http
 {

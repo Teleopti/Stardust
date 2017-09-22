@@ -1,6 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Client
 {

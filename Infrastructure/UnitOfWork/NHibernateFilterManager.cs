@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Impl;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {

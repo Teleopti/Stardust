@@ -1,6 +1,4 @@
-﻿using Teleopti.Interfaces.Domain;
-
-namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
+﻿namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
 {
 	public class SettingsPermissionViewModel
 	{

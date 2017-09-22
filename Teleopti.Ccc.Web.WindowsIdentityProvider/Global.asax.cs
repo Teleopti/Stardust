@@ -16,7 +16,6 @@ using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.Web.Auth.OpenIdApplicationStore;
 using Teleopti.Ccc.Web.WindowsIdentityProvider.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.WindowsIdentityProvider
 {

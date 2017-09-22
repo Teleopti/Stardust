@@ -8,7 +8,6 @@ namespace DotNetOpenAuth.OpenId.Extensions.ProviderAuthenticationPolicy {
 	using System;
 	using System.Collections.Generic;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.Messages;
 
 	/// <summary>
 	/// The PAPE request part of an OpenID Authentication request message.

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 

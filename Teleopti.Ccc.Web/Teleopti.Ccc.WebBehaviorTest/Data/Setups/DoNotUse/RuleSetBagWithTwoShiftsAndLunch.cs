@@ -13,7 +13,6 @@ using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 {
@@ -83,7 +82,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 
 			ruleSet1.Description = new Description("Regeln 1");
 			ruleSet2.Description = new Description("Regeln 2");
-			TheRuleSetBag.Description = new Description("Påsen");
+			TheRuleSetBag.Description = new Description("PÃ¥sen");
 			TheRuleSetBag.AddRuleSet(ruleSet1);
 			TheRuleSetBag.AddRuleSet(ruleSet2);
 

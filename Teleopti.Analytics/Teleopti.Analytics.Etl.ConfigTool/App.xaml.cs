@@ -9,10 +9,8 @@ using log4net.Config;
 using Teleopti.Analytics.Etl.Common;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Transformer;
-using Teleopti.Analytics.Etl.Common.Transformer.Job;
 using Teleopti.Analytics.Etl.ConfigTool.Gui.StartupConfiguration;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 using Application = System.Windows.Application;
 
 namespace Teleopti.Analytics.Etl.ConfigTool

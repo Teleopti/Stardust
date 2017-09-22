@@ -1,7 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Logon;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core

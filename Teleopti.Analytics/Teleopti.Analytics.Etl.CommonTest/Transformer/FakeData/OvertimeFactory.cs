@@ -4,8 +4,6 @@ using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 {

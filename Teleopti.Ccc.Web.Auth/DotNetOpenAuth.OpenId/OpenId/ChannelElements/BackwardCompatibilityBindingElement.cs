@@ -7,7 +7,6 @@
 namespace DotNetOpenAuth.OpenId.ChannelElements {
 	using System;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.Messaging.Reflection;
 	using DotNetOpenAuth.OpenId.Messages;
 
 	/// <summary>

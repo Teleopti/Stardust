@@ -6,19 +6,11 @@
 
 namespace DotNetOpenAuth.OpenId {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
-	using System.Linq;
 	using System.Reflection;
 	using System.Security;
-	using System.Text;
-	using System.Text.RegularExpressions;
-	using System.Web.UI.HtmlControls;
-	using System.Xml;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.Xrds;
-	using DotNetOpenAuth.Yadis;
 
 	/// <summary>
 	/// A URI style of OpenID Identifier.

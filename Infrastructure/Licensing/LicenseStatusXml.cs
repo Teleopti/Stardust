@@ -4,7 +4,6 @@ using System.Xml;
 using System.Xml.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Secrets.Licensing;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {

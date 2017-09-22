@@ -9,10 +9,7 @@ namespace DotNetOpenAuth.OpenId {
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
-	using System.Linq;
-	using System.Text;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.RelyingParty;
 
 	/// <summary>
 	/// A module that provides discovery services for OpenID identifiers.

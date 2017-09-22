@@ -9,9 +9,6 @@
 // Copyright (c) 2003 Ben Maurer. All rights reserved
 //
 
-using System;
-using Mono.Math.Prime;
-
 namespace Mono.Math.Prime.Generator {
 
 	//[CLSCompliant(false)]

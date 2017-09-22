@@ -7,14 +7,10 @@
 namespace DotNetOpenAuth.OpenId.Provider.Extensions.UI {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
-	using System.Globalization;
 	using System.Linq;
 	using DotNetOpenAuth.Messaging;
 	using DotNetOpenAuth.OpenId.Extensions.UI;
-	using DotNetOpenAuth.OpenId.Messages;
-	using DotNetOpenAuth.OpenId.Provider;
 	using DotNetOpenAuth.Xrds;
 
 	/// <summary>

@@ -2,13 +2,12 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Licensing
 {
 	//shouldn't really be needed
 	//but I need some "hook" because of all these
-	// "#¤%"#¤"#¤"#¤"#¤ static data
+	// "#Â¤%"#Â¤"#Â¤"#Â¤"#Â¤ static data
 	// same goes for LicenseRepositoryForLicenseVerifier
 	public class LicenseVerifierFactory : ILicenseVerifierFactory
 	{

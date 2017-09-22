@@ -1,10 +1,8 @@
 ﻿using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Chart;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WinCode.Common.Chart;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Chart
 {

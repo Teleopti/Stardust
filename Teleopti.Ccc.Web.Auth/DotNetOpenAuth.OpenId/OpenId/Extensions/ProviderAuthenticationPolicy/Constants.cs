@@ -5,9 +5,7 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.OpenId.Extensions.ProviderAuthenticationPolicy {
-	using System;
 	using System.Collections.Generic;
-	using System.Text;
 
 	/// <summary>
 	/// OpenID Provider Authentication Policy extension constants.

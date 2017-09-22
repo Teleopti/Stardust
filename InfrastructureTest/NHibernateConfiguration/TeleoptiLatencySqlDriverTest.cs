@@ -1,5 +1,4 @@
-﻿using System.Collections.Specialized;
-using System.Data.SqlClient;
+﻿using System.Data.SqlClient;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;

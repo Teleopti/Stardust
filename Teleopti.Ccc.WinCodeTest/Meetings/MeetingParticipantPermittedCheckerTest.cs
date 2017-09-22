@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Meetings;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Meetings
@@ -28,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public void Setup()
         {
             _mocks = new MockRepository();
-            _person = new Person().WithName(new Name("ola", "håkansson"));
+            _person = new Person().WithName(new Name("ola", "hÃ¥kansson"));
             _persons = new List<IPerson>{_person};
             _dateOnly = new DateOnly(2011, 4, 3);
             _viewBase = _mocks.StrictMock<IViewBase>();

@@ -6,18 +6,8 @@
 
 namespace DotNetOpenAuth.OpenId.ChannelElements {
 	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.Diagnostics.Contracts;
-	using System.Globalization;
-	using System.Linq;
-	using System.Net.Security;
-	using System.Web;
-	using DotNetOpenAuth.Loggers;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.Messaging.Bindings;
-	using DotNetOpenAuth.Messaging.Reflection;
-	using DotNetOpenAuth.OpenId.Messages;
 
 	/// <summary>
 	/// Code contract for the <see cref="SigningBindingElement"/> class.

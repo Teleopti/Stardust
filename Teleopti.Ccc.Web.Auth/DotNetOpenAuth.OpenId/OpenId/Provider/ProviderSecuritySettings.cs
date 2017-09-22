@@ -7,11 +7,7 @@
 namespace DotNetOpenAuth.OpenId.Provider {
 	using System;
 	using System.Collections.Generic;
-	using System.Collections.ObjectModel;
-	using System.Collections.Specialized;
 	using System.Diagnostics.CodeAnalysis;
-	using System.Linq;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// Security settings that are applicable to providers.

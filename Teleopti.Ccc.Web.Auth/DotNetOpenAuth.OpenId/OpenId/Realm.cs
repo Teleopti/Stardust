@@ -11,7 +11,6 @@ namespace DotNetOpenAuth.OpenId {
 	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
 	using System.Globalization;
-	using System.Linq;
 	using System.Text.RegularExpressions;
 	using System.Web;
 	using System.Xml;

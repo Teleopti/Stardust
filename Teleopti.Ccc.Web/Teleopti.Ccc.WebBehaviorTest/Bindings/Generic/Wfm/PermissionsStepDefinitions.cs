@@ -1,4 +1,3 @@
-using System;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 

@@ -24,7 +24,6 @@
 using System;
 using System.Diagnostics;
 using System.Globalization;
-using Campari.Software;
 using Campari.Software.InteropServices;
 using Microsoft.Win32;
 

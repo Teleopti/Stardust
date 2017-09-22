@@ -6,10 +6,7 @@
 
 namespace DotNetOpenAuth.Yadis {
 	using System;
-	using System.IO;
 	using System.Net.Mime;
-	using System.Web.UI.HtmlControls;
-	using System.Xml;
 	using DotNetOpenAuth.Messaging;
 
 	/// <summary>

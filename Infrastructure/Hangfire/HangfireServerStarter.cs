@@ -1,10 +1,7 @@
-using System.Collections.Generic;
 using System.Linq;
 using Hangfire;
-using log4net;
 using Owin;
 using Teleopti.Ccc.Domain.Config;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Messages;
 using Teleopti.Ccc.Infrastructure.Rta;
 

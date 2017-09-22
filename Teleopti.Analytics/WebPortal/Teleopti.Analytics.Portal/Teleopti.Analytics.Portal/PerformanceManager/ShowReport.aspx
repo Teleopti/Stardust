@@ -1,5 +1,4 @@
 <%@ Page Title="" Language="C#" MasterPageFile="Site1.Master" AutoEventWireup="true" CodeBehind="ShowReport.aspx.cs" Inherits="Teleopti.Analytics.Portal.PerformanceManager.ShowReport" EnableViewState="true" %>
-<%@ Import Namespace="Teleopti.Analytics.Portal.PerformanceManager"%>
 <%@ Register src="View/AnalyzerReportView.ascx" tagname="AnalyzerReportView" tagprefix="uc1" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>

@@ -8,8 +8,6 @@ namespace DotNetOpenAuth.Messaging.Bindings {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Text;
-	using DotNetOpenAuth.Messaging.Bindings;
 
 	/// <summary>
 	/// An in-memory nonce store.  Useful for single-server web applications.

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
+﻿namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 {
 	public class WaitUntilLoaded : INavigationInterceptor
 	{

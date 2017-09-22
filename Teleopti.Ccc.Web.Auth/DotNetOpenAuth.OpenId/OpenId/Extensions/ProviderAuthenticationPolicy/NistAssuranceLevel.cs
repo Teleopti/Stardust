@@ -5,10 +5,7 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.OpenId.Extensions.ProviderAuthenticationPolicy {
-	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
-	using System.Text;
 
 	/// <summary>
 	/// Descriptions for NIST-defined levels of assurance that a credential

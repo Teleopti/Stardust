@@ -1,4 +1,3 @@
-<%@ Import Namespace="Teleopti.Analytics.Portal.PerformanceManager.View"%>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="AddReportView.ascx.cs"
     Inherits="Teleopti.Analytics.Portal.PerformanceManager.View.AddReportView" %>
 <table style="width: 100%;" border="0">

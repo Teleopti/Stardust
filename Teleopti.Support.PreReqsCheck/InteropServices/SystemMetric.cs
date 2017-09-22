@@ -16,8 +16,7 @@
 namespace Campari.Software.InteropServices
 {
     #region namespace references
-	using System;
-    using System.Diagnostics.CodeAnalysis;
+
 	#endregion
 
 	#region enum SystemMetric

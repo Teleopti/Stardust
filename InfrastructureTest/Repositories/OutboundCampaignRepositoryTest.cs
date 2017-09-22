@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Campaign = Teleopti.Ccc.Domain.Outbound.Campaign;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories

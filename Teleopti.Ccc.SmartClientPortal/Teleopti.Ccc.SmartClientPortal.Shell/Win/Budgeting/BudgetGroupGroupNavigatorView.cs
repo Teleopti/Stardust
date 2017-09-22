@@ -21,7 +21,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Budgeting.Views;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Events;
-using Teleopti.Ccc.WinCode.Common;
 using Wizard = Teleopti.Ccc.SmartClientPortal.Shell.Win.Common.PropertyPageAndWizard.Wizard;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Budgeting

@@ -4,7 +4,6 @@ using Teleopti.Ccc.Domain;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork

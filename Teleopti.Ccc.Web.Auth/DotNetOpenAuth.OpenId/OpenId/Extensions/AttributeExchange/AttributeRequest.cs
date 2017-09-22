@@ -7,8 +7,6 @@
 namespace DotNetOpenAuth.OpenId.Extensions.AttributeExchange {
 	using System;
 	using System.Diagnostics;
-	using System.Diagnostics.Contracts;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// An individual attribute to be requested of the OpenID Provider using

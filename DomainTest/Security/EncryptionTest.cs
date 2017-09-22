@@ -4,7 +4,6 @@ using System;
 using System.Security.Cryptography;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Security;
-using System.Collections.Generic;
 
 #endregion
 

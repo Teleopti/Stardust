@@ -8,7 +8,6 @@ namespace DotNetOpenAuth.OpenId.Provider {
 	using System;
 	using System.Diagnostics.Contracts;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.Messages;
 
 	/// <summary>
 	/// Interface exposing incoming messages to the OpenID Provider that

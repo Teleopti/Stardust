@@ -21,7 +21,6 @@ using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Setups.Default;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.ReadModel.PerformanceTest
 {

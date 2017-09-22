@@ -12,7 +12,6 @@ namespace DotNetOpenAuth.Messaging {
 	using System.Net;
 	using System.Net.Sockets;
 	using System.Reflection;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// The default handler for transmitting <see cref="HttpWebRequest"/> instances

@@ -1,5 +1,4 @@
-﻿@using System
-@{
+﻿@{
 	Layout = null;
 	Response.ContentType = "application/xrds+xml";
 	var uri = new Uri(Request.Url, Response.ApplyAppPathModifier("~/OpenId/Provider")).ToString();

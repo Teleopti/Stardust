@@ -11,7 +11,6 @@ namespace DotNetOpenAuth {
 	using System.Diagnostics.Contracts;
 	using System.Globalization;
 	using System.Linq;
-	using System.Text;
 	using DotNetOpenAuth.Messaging;
 
 	/// <summary>

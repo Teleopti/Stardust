@@ -1,4 +1,3 @@
-<%@ Import Namespace="Teleopti.Analytics.Portal.PerformanceManager"%>
 <%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site1.master.cs" Inherits="Teleopti.Analytics.Portal.PerformanceManager.Site1" EnableViewState="true" %>
 
 <%@ Register Src="View/ReportTreeView.ascx" TagName="ReportTreeView" TagPrefix="uc1" %>

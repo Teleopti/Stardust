@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Domain.FeatureFlags;
-
-namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals
+﻿namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenInternals
 {
 	internal enum ZoomLevel
 	{

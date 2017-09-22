@@ -5,9 +5,7 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.OpenId.Extensions {
-	using System.Collections.Generic;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.Messages;
 
 	/// <summary>
 	/// An interface that OpenID extensions can implement to allow authentication response

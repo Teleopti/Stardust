@@ -9,7 +9,6 @@ namespace DotNetOpenAuth.Messaging {
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
-	using System.Text;
 
 	/// <summary>
 	/// An interface that appears on messages that need to retain a description of

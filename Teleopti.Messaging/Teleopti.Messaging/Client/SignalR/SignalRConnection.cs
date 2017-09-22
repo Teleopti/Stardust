@@ -8,7 +8,6 @@ using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Transports;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Client.SignalR.Wrappers;
 using Teleopti.Messaging.Exceptions;
 

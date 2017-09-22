@@ -1,6 +1,5 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Messaging.Client.Http
 {

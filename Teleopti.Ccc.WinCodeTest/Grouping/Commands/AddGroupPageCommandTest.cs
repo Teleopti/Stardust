@@ -3,7 +3,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Grouping.Commands;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.WinCodeTest.Grouping.Commands

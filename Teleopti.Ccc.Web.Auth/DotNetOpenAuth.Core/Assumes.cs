@@ -6,14 +6,11 @@
 
 namespace DotNetOpenAuth {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
 	using System.Globalization;
-	using System.Linq;
 	using System.Runtime.Serialization;
-	using System.Text;
 
 	/// <summary>
 	/// Internal state consistency checks that throw an internal error exception when they fail.

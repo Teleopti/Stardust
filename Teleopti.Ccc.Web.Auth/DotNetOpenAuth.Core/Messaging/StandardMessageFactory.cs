@@ -10,7 +10,6 @@ namespace DotNetOpenAuth.Messaging {
 	using System.Diagnostics.Contracts;
 	using System.Linq;
 	using System.Reflection;
-	using System.Text;
 	using DotNetOpenAuth.Messaging.Reflection;
 
 	/// <summary>

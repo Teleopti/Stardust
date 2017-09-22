@@ -1,5 +1,4 @@
-﻿using System.Runtime;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using Autofac;
 using Microsoft.Practices.CompositeUI;
 using Microsoft.Practices.CompositeUI.WPF;

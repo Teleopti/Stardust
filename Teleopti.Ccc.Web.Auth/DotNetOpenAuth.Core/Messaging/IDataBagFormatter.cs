@@ -5,7 +5,6 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.Messaging {
-	using System;
 	using System.Diagnostics.Contracts;
 
 	/// <summary>

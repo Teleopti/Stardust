@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 {
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		private IEnumerable<IRevision> loadRevisions(IEnumerable<long> ids, int maxSize)
 		{
-			//flytta till revisionrepository? Gör det vid nästa sånt här historyrepository...
+			//flytta till revisionrepository? GÃ¶r det vid nÃ¤sta sÃ¥nt hÃ¤r historyrepository...
 			var cutIds = (from id in ids orderby id descending 
 								select id).Take(maxSize).ToArray();
 

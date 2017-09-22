@@ -12,7 +12,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.Reporting.Controllers;
 using Teleopti.Ccc.Web.Areas.Reporting.Core;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.WebTest.Core.Common;
 
 namespace Teleopti.Ccc.WebTest.Areas.Reporting.Controller
 {

@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
 {

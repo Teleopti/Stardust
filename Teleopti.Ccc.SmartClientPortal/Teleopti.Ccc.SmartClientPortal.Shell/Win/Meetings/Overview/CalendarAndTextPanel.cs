@@ -5,7 +5,6 @@ using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Schedule;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Meetings.Overview

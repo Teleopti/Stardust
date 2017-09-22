@@ -1,6 +1,4 @@
-﻿using System;
-using TechTalk.SpecFlow;
-using Teleopti.Ccc.Domain.ApplicationLayer.Events;
+﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.TestCommon.Web.WebInteractions;

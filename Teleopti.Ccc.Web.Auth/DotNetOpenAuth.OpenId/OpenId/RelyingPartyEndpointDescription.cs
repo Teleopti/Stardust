@@ -6,12 +6,7 @@
 
 namespace DotNetOpenAuth.OpenId {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
-	using System.Diagnostics.Contracts;
-	using System.Linq;
-	using System.Text;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// A description of some OpenID Relying Party endpoint.

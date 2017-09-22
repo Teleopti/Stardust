@@ -10,13 +10,10 @@ namespace DotNetOpenAuth.Messaging {
 	using System.Diagnostics;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
-	using System.Globalization;
 	using System.IO;
 	using System.Net;
-	using System.Net.Cache;
 	using System.Text.RegularExpressions;
 	using DotNetOpenAuth.Configuration;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// A paranoid HTTP get/post request engine.  It helps to protect against attacks from remote

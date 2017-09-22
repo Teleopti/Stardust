@@ -1,8 +1,6 @@
 using System;
 using System.Data.SqlClient;
-using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DBManager.Library
 {

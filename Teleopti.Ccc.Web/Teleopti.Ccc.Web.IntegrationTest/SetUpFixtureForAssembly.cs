@@ -25,7 +25,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Messaging.Client;
 using ConfigReader = Teleopti.Ccc.Domain.Config.ConfigReader;
 

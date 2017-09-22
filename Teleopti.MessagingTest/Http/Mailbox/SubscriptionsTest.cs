@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.Domain.MessageBroker.Legacy;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.MessagingTest.Http.Mailbox
 {

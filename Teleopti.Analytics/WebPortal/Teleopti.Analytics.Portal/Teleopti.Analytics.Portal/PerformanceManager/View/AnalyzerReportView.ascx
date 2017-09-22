@@ -1,3 +1,2 @@
-<%@ Import Namespace="Teleopti.Analytics.Portal.PerformanceManager.View"%>
 <%@ Control Language="C#" AutoEventWireup="true" CodeBehind="AnalyzerReportView.ascx.cs" Inherits="Teleopti.Analytics.Portal.PerformanceManager.View.AnalyzerReportView" EnableViewState="true" %>
 <iframe scrolling="no" frameborder="0" height="100%" width="100%" id="AnalyzerFrame" runat="server" src="Dummy.htm" onreadystatechange="return onReportFrameRSChange();"></iframe>

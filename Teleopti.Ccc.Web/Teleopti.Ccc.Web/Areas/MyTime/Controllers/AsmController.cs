@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Repositories;

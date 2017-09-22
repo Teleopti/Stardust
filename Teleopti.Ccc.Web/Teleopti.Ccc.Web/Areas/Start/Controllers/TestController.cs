@@ -25,7 +25,6 @@ using Teleopti.Ccc.Web.Areas.Start.Models.Test;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using ClaimTypes = System.IdentityModel.Claims.ClaimTypes;
 

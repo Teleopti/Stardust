@@ -6,16 +6,12 @@
 
 namespace DotNetOpenAuth.OpenId.Provider {
 	using System;
-	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Diagnostics.Contracts;
-	using System.Text;
 	using System.Web;
 	using System.Web.UI;
-	using System.Web.UI.WebControls;
 	using DotNetOpenAuth.Configuration;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.Messages;
 
 	/// <summary>
 	/// An OpenID Provider control that automatically responds to certain

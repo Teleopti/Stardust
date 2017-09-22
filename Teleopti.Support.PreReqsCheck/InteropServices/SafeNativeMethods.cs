@@ -16,12 +16,10 @@
 namespace Campari.Software.InteropServices
 {
     #region namespace references
-    using System;
-    using System.Runtime.InteropServices;
-    using Microsoft.Win32.SafeHandles;
-    using System.ComponentModel;
-    using System.IO;
-    #endregion
+
+	using System.Runtime.InteropServices;
+
+	#endregion
 
     #region class SafeNativeMethods
     internal static class SafeNativeMethods

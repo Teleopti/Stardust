@@ -6,14 +6,8 @@
 
 namespace DotNetOpenAuth.OpenId {
 	using System;
-	using System.Diagnostics;
-	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
-	using System.IO;
 	using System.Security.Cryptography;
-	using System.Text;
-	using DotNetOpenAuth.Configuration;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// Code contract for the <see cref="Association"/> class.

@@ -5,11 +5,7 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.OpenId {
-	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics.Contracts;
-	using System.Linq;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// Wraps an existing Identifier and prevents it from performing discovery.

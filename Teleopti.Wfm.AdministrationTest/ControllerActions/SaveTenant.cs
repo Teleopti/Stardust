@@ -3,14 +3,12 @@ using NHibernate.Cfg;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.MultiTenancy;
-using Teleopti.Ccc.Infrastructure.MultiTenancy;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Wfm.Administration.Controllers;
-using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Models;
 
 namespace Teleopti.Wfm.AdministrationTest.ControllerActions

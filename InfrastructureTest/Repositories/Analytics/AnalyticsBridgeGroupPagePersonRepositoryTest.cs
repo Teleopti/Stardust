@@ -13,7 +13,6 @@ using Teleopti.Interfaces.Domain;
 using BusinessUnit = Teleopti.Ccc.TestCommon.TestData.Analytics.BusinessUnit;
 using Person = Teleopti.Ccc.TestCommon.TestData.Analytics.Person;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories.Analytics
 {

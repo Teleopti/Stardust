@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Web.Areas.People.Controllers;
-using Teleopti.Ccc.Web.Areas.People.Core.Models;
+﻿using Teleopti.Ccc.Web.Areas.People.Core.Models;
 
 namespace Teleopti.Ccc.Web.Areas.People.Core.Providers
 {

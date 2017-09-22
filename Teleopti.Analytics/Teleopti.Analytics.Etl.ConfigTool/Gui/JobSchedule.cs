@@ -5,7 +5,6 @@ using System.Configuration;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
-using Autofac;
 using Teleopti.Analytics.Etl.Common.Entity;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;

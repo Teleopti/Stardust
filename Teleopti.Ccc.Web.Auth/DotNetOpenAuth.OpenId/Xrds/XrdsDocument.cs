@@ -11,7 +11,6 @@ namespace DotNetOpenAuth.Xrds {
 	using System.Linq;
 	using System.Xml;
 	using System.Xml.XPath;
-	using DotNetOpenAuth.Messaging;
 	using DotNetOpenAuth.OpenId;
 
 	/// <summary>

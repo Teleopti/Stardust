@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Windows.Forms;
 using NUnit.Framework;
-using Teleopti.Ccc.WinCode.Common;
 using Rhino.Mocks;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 

@@ -7,7 +7,6 @@ using Hangfire.SqlServer;
 using Hangfire.States;
 using Hangfire.Storage;
 using log4net;
-using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 

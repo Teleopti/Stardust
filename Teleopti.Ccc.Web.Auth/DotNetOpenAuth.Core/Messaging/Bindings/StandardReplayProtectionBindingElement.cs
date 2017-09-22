@@ -7,7 +7,6 @@
 namespace DotNetOpenAuth.Messaging.Bindings {
 	using System;
 	using System.Diagnostics;
-	using System.Diagnostics.Contracts;
 
 	/// <summary>
 	/// A binding element that checks/verifies a nonce message part.

@@ -8,7 +8,6 @@ namespace DotNetOpenAuth {
 	using System.Collections.Generic;
 	using System.Diagnostics.Contracts;
 	using System.Globalization;
-	using System.Net;
 	using System.Reflection;
 	using System.Text;
 	using System.Web;

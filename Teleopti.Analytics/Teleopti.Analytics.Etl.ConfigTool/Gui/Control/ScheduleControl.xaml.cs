@@ -8,7 +8,6 @@ using System.Windows.Forms;
 using Teleopti.Analytics.Etl.Common.Infrastructure;
 using Teleopti.Analytics.Etl.Common.Interfaces.Common;
 using Teleopti.Analytics.Etl.Common.JobSchedule;
-using IContainer = Autofac.IContainer;
 using MessageBox = System.Windows.MessageBox;
 using MessageBoxOptions = System.Windows.MessageBoxOptions;
 using UserControl = System.Windows.Controls.UserControl;

@@ -5,12 +5,6 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.OpenId.Extensions.UI {
-	using System;
-	using System.Diagnostics.Contracts;
-	using System.Globalization;
-	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.RelyingParty;
-
 	/// <summary>
 	/// Constants used in implementing support for the UI extension.
 	/// </summary>

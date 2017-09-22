@@ -5,8 +5,6 @@ using Teleopti.Ccc.Domain.MessageBroker.Client;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.IoC;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.MessagingTest
 {

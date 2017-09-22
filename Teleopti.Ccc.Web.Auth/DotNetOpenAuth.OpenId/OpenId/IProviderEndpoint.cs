@@ -6,11 +6,8 @@
 
 namespace DotNetOpenAuth.OpenId.RelyingParty {
 	using System;
-	using System.Collections.ObjectModel;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
-	using System.Globalization;
-	using DotNetOpenAuth.Messaging;
 	using DotNetOpenAuth.OpenId.Messages;
 
 	/// <summary>

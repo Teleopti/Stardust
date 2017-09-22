@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.WinCode.Common;
 using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using System.Windows.Forms;

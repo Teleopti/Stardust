@@ -11,7 +11,6 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 {
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse
 			var ruleSet = new WorkShiftRuleSet(generator);
 
 			ruleSet.Description = new Description("Regeln");
-			TheRuleSetBag.Description = new Description("Påsen");
+			TheRuleSetBag.Description = new Description("PÃ¥sen");
 			TheRuleSetBag.AddRuleSet(ruleSet);
 
 			new WorkShiftRuleSetRepository(currentUnitOfWork).Add(ruleSet);

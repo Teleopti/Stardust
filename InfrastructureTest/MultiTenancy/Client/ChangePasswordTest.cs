@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Domain.Security.MultiTenancyAuthentication;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Client;
 using Teleopti.Ccc.TestCommon.TestData;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.InfrastructureTest.MultiTenancy.Client
 {

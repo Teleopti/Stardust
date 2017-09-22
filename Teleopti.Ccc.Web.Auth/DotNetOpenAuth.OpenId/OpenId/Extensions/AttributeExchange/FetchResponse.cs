@@ -10,7 +10,6 @@ namespace DotNetOpenAuth.OpenId.Extensions.AttributeExchange {
 	using System.Diagnostics.Contracts;
 	using System.Linq;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.Messages;
 
 	/// <summary>
 	/// The Attribute Exchange Fetch message, response leg.

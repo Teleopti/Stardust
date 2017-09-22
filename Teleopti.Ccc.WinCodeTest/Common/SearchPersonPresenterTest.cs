@@ -4,8 +4,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WinCode.Common;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Common
 {
@@ -55,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifySearchFirstNameLastName()
         {
             IPerson person1 = PersonFactory.CreatePerson("Albert", "Persson");
-            IPerson person2 = PersonFactory.CreatePerson("Jöns", "Jacobs");
+            IPerson person2 = PersonFactory.CreatePerson("JÃ¶ns", "Jacobs");
 
             _persons.Add(person1);
             _persons.Add(person2);
@@ -66,7 +64,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             Assert.IsTrue(_found.Count == 1);
             Assert.IsTrue(_found.Contains(person1));
 
-            _found = _target.Search("Jöns Jacobs");
+            _found = _target.Search("JÃ¶ns Jacobs");
             Assert.IsTrue(_found.Count == 1);
             Assert.IsTrue(_found.Contains(person2));
 
@@ -78,14 +76,14 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifySearchLastNameFirstName()
         {
             IPerson person1 = PersonFactory.CreatePerson("Albert", "Persson");
-            IPerson person2 = PersonFactory.CreatePerson("Jöns", "Jacobs");
+            IPerson person2 = PersonFactory.CreatePerson("JÃ¶ns", "Jacobs");
 
             _persons.Add(person1);
             _persons.Add(person2);
 
             _target.SetSearchablePersons(_persons);
 
-            _found = _target.Search("Jacobs Jöns");
+            _found = _target.Search("Jacobs JÃ¶ns");
             Assert.IsTrue(_found.Count == 1);
             Assert.IsTrue(_found.Contains(person2));
 

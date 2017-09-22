@@ -5,7 +5,6 @@ using System.Windows.Input;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.SmartClientPortal.Shell.Win.Main;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common;
-using Teleopti.Ccc.WinCode.Common;
 using KeyEventArgs = System.Windows.Forms.KeyEventArgs;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Common

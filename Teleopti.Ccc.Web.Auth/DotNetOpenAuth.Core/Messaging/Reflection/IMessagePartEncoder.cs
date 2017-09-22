@@ -6,10 +6,7 @@
 
 namespace DotNetOpenAuth.Messaging.Reflection {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics.Contracts;
-	using System.Linq;
-	using System.Text;
 
 	/// <summary>
 	/// An interface describing how various objects can be serialized and deserialized between their object and string forms.

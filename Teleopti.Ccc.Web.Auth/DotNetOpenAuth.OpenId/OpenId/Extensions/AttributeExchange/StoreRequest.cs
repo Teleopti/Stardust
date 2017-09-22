@@ -9,7 +9,6 @@ namespace DotNetOpenAuth.OpenId.Extensions.AttributeExchange {
 	using System.Collections.ObjectModel;
 	using System.Linq;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.Messages;
 
 	/// <summary>
 	/// The Attribute Exchange Store message, request leg.

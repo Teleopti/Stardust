@@ -9,7 +9,6 @@ using log4net.Core;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server.NHibernate;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Support.Security
 {

@@ -10,7 +10,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Server;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.MessagingTest
 {

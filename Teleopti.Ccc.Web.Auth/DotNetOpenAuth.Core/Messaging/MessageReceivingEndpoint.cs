@@ -7,7 +7,6 @@
 namespace DotNetOpenAuth.Messaging {
 	using System;
 	using System.Diagnostics;
-	using System.Diagnostics.Contracts;
 
 	/// <summary>
 	/// An immutable description of a URL that receives messages.

@@ -6,11 +6,8 @@
 
 namespace DotNetOpenAuth.OpenId.Provider {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
-	using System.Diagnostics.Contracts;
 	using System.Globalization;
-	using System.Linq;
 	using System.Security.Cryptography;
 	using System.Text;
 	using DotNetOpenAuth.Messaging;

@@ -1,5 +1,3 @@
-using Teleopti.Interfaces.Domain;
-
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 {
 	public class PreferencePeriodFeedbackViewModel

@@ -6,15 +6,8 @@
 
 namespace DotNetOpenAuth.OpenId {
 	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics.CodeAnalysis;
 	using System.Diagnostics.Contracts;
-	using System.Globalization;
-	using System.Xml;
-	using DotNetOpenAuth.Configuration;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.Xrds;
-	using DotNetOpenAuth.Yadis;
 
 	/// <summary>
 	/// An XRI style of OpenID Identifier.

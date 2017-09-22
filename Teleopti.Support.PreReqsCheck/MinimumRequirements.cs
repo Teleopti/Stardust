@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace MinimumRequirements
+﻿namespace MinimumRequirements
 {
     // Dictionary Requirement 
    /// <summary>

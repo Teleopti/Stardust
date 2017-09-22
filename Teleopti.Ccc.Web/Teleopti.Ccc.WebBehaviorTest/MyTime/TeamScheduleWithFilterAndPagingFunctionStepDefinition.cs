@@ -15,7 +15,6 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.DoNotUse;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
-using Teleopti.Interfaces.Domain;
 using PersonAbsenceConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.PersonAbsenceConfigurable;
 using PersonDayOffConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.PersonDayOffConfigurable;
 using SiteConfigurable = Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable.SiteConfigurable;

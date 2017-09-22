@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Authentication;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.Web.Auth.OpenIdApplicationStore;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.AuthTest.OpenIdApplicationStore
 {

@@ -19,8 +19,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.ExceptionHandling;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
-using Teleopti.Interfaces;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.ExceptionHandler
 {

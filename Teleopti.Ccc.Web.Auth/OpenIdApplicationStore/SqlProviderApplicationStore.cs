@@ -5,7 +5,6 @@ using DotNetOpenAuth.Messaging.Bindings;
 using DotNetOpenAuth.OpenId;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Infrastructure.Authentication;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Auth.OpenIdApplicationStore
 {

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Autofac;
-using Autofac.Core;
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job;

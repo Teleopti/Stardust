@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core;

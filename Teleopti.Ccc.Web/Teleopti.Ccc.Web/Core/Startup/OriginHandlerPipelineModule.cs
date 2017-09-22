@@ -1,5 +1,4 @@
 using System;
-using System.Net;
 using log4net;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;

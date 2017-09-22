@@ -6,7 +6,6 @@
 
 namespace DotNetOpenAuth.Messaging {
 	using System;
-	using System.Diagnostics.Contracts;
 
 	/// <summary>
 	/// The data packet sent with Channel events.

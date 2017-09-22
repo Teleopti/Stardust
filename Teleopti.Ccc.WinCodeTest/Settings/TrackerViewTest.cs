@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Tracking;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Settings;
-using Teleopti.Interfaces.Domain;
 
 #endregion
 

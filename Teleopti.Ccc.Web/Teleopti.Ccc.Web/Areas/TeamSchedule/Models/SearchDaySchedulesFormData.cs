@@ -1,6 +1,4 @@
-﻿using System;
-using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Models
 {

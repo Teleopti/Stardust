@@ -5,8 +5,6 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.Xrds {
-	using System;
-	using System.Diagnostics.Contracts;
 	using System.Xml.XPath;
 
 	/// <summary>

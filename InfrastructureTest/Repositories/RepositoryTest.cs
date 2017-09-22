@@ -16,8 +16,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
@@ -97,7 +95,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Guid id = Guid.NewGuid();
             Session.Save(simpleEntity, id);
             Session.Flush();
-            Session.Evict(simpleEntity); //ändrat!
+            Session.Evict(simpleEntity); //Ã¤ndrat!
             T loadedAggregate = rep.Load(id);
             Assert.AreEqual(id, loadedAggregate.Id);
             IBelongsToBusinessUnit buRef = loadedAggregate as IBelongsToBusinessUnit;
@@ -112,7 +110,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Guid id = Guid.NewGuid();
             Session.Save(simpleEntity, id);
             Session.Flush();
-            Session.Evict(simpleEntity); //ändrat!
+            Session.Evict(simpleEntity); //Ã¤ndrat!
             T loadedAggregate = rep.Get(id);
             Assert.AreEqual(id, loadedAggregate.Id);
             IBelongsToBusinessUnit buRef = loadedAggregate as IBelongsToBusinessUnit;

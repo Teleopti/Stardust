@@ -5,11 +5,8 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.Xrds {
-	using System;
-	using System.Diagnostics.Contracts;
 	using System.Xml;
 	using System.Xml.XPath;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// A node in an XRDS document.

@@ -6,10 +6,6 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.OpenId.Extensions.SimpleRegistration {
-	using System;
-	using System.Collections.Generic;
-	using System.Text;
-
 	/// <summary>
 	/// Simple Registration constants
 	/// </summary>

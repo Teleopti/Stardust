@@ -9,7 +9,6 @@ using Microsoft.AspNet.SignalR.Client;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.MessageBroker;
 using Teleopti.Ccc.Domain.MessageBroker.Client;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Messaging.Client.SignalR.Wrappers;
 
 namespace Teleopti.Messaging.Client.SignalR

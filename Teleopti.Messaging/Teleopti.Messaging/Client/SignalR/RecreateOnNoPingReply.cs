@@ -2,7 +2,6 @@ using System;
 using log4net;
 using Microsoft.AspNet.SignalR.Client.Transports;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Messaging.Client.SignalR
 {

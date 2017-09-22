@@ -6,11 +6,7 @@
 
 namespace DotNetOpenAuth.OpenId.Messages {
 	using System;
-	using System.Diagnostics.Contracts;
-	using System.Security.Cryptography;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.Messaging.Reflection;
-	using Org.Mentalis.Security.Cryptography;
 
 	/// <summary>
 	/// The successful Diffie-Hellman association response message.

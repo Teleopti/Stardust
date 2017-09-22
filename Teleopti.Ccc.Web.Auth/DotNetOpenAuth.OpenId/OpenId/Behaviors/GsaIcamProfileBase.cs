@@ -7,13 +7,7 @@
 namespace DotNetOpenAuth.OpenId.Behaviors {
 	using System;
 	using System.Diagnostics.CodeAnalysis;
-	using System.Diagnostics.Contracts;
-	using System.Linq;
 	using DotNetOpenAuth.Configuration;
-	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
-	using DotNetOpenAuth.OpenId.Extensions.ProviderAuthenticationPolicy;
-	using DotNetOpenAuth.OpenId.Extensions.SimpleRegistration;
 
 	/// <summary>
 	/// Implements the Identity, Credential, &amp; Access Management (ICAM) OpenID 2.0 Profile

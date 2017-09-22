@@ -14,7 +14,6 @@ using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Presenters;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Shifts.Views;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Shifts
 {

@@ -1,6 +1,5 @@
 using Teleopti.Analytics.Etl.Common.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Common.Transformer.Job.Steps;
-using Teleopti.Ccc.Domain.FeatureFlags;
 
 namespace Teleopti.Analytics.Etl.Common.Transformer.Job.Jobs
 {

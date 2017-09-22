@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Engine;

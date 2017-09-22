@@ -4,7 +4,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
-using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 {

@@ -17,7 +17,6 @@ using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.IocCommon.Toggle;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using PersonFactory = Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData.PersonFactory;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer

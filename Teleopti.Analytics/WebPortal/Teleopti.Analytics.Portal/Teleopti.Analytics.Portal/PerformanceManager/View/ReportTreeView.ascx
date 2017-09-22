@@ -1,5 +1,4 @@
-﻿<%@ Import Namespace="Teleopti.Analytics.Portal.PerformanceManager.View"%>
-<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ReportTreeView.ascx.cs" Inherits="Teleopti.Analytics.Portal.PerformanceManager.View.ReportTreeView" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ReportTreeView.ascx.cs" Inherits="Teleopti.Analytics.Portal.PerformanceManager.View.ReportTreeView" %>
 
 <div style="font-size: 12px;line-height:16px;">
 

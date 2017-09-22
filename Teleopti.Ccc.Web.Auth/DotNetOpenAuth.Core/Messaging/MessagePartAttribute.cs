@@ -8,7 +8,6 @@ namespace DotNetOpenAuth.Messaging {
 	using System;
 	using System.Diagnostics;
 	using System.Net.Security;
-	using System.Reflection;
 
 	/// <summary>
 	/// Applied to fields and properties that form a key/value in a protocol message.

@@ -5,12 +5,9 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.Messaging {
-	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics.Contracts;
 	using System.IO;
 	using System.Net;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// A contract for <see cref="HttpWebRequest"/> handling.

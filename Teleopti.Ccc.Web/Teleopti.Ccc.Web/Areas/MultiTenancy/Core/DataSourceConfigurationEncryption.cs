@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Server;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Web.Areas.MultiTenancy.Core
 {

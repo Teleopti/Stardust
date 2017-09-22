@@ -13,7 +13,6 @@ namespace DotNetOpenAuth {
 	using System.Text.RegularExpressions;
 	using System.Web;
 	using System.Web.UI;
-	using DotNetOpenAuth.Messaging;
 
 	/// <summary>
 	/// Utility methods for working with URIs.

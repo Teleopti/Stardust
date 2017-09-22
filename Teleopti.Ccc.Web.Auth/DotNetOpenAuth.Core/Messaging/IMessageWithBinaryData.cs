@@ -8,8 +8,6 @@ namespace DotNetOpenAuth.Messaging {
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.Contracts;
-	using System.Linq;
-	using System.Text;
 
 	/// <summary>
 	/// The interface that classes must implement to be serialized/deserialized

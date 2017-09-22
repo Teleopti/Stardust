@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.Data.SqlClient;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -7,9 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.InfrastructureTest.Rta;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {

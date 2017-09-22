@@ -4,7 +4,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Teleopti.Ccc.Domain.InterfaceLegacy;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Interfaces;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {

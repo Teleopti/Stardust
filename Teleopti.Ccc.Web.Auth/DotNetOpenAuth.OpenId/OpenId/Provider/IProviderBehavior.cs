@@ -5,9 +5,7 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.OpenId.Provider {
-	using System;
 	using System.Diagnostics.Contracts;
-	using DotNetOpenAuth.OpenId.ChannelElements;
 
 	/// <summary>
 	/// Applies a custom security policy to certain OpenID security settings and behaviors.

@@ -1,6 +1,5 @@
 using System.Globalization;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.ConfigTool.Code.Gui.DataSourceConfiguration
 {

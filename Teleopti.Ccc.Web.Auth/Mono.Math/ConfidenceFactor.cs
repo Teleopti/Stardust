@@ -9,8 +9,6 @@
 // Copyright (c) 2003 Ben Maurer. All rights reserved
 //
 
-using System;
-
 namespace Mono.Math.Prime {
 	/// <summary>
 	/// A factor of confidence.

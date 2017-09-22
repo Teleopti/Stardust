@@ -7,15 +7,11 @@
 namespace DotNetOpenAuth.OpenId.Extensions.SimpleRegistration {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics.CodeAnalysis;
-	using System.Diagnostics.Contracts;
 	using System.Globalization;
 	using System.Net.Mail;
-	using System.Text;
 	using System.Text.RegularExpressions;
 	using System.Xml.Serialization;
 	using DotNetOpenAuth.Messaging;
-	using DotNetOpenAuth.OpenId.Messages;
 
 	/// <summary>
 	/// A struct storing Simple Registration field values describing an

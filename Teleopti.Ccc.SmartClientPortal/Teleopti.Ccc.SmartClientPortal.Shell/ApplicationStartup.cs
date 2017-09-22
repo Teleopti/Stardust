@@ -1,5 +1,4 @@
-﻿using System.Runtime;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Main;
 
 namespace Teleopti.Ccc.SmartClientPortal.Shell

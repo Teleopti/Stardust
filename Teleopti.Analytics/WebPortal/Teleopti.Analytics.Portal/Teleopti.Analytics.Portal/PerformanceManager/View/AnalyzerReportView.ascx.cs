@@ -1,5 +1,4 @@
 using System;
-using System.Web.UI;
 using Teleopti.Analytics.Portal.PerformanceManager.ViewModel;
 
 namespace Teleopti.Analytics.Portal.PerformanceManager.View

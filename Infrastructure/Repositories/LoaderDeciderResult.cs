@@ -4,7 +4,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
@@ -62,7 +61,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				}
 			}
 
-			//Lägg på alla personer som är på samma site om siten har maxseats
+			//LÃ¤gg pÃ¥ alla personer som Ã¤r pÃ¥ samma site om siten har maxseats
 			foreach (IPerson personToAdd in peopleToAdd)
 			{
 				if (people.Contains(personToAdd)) continue;

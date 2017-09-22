@@ -7,8 +7,6 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using QueueSourceFactory = Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData.QueueSourceFactory;
 
 namespace Teleopti.Analytics.Etl.CommonTest.Transformer.FakeData
 {

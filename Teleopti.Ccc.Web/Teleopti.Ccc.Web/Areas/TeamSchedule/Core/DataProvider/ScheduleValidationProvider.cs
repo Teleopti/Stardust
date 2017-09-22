@@ -14,7 +14,6 @@ using Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers;
 using Teleopti.Ccc.Web.Areas.TeamSchedule.Models;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using static Teleopti.Interfaces.Domain.DateHelper;
 
 namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Core.DataProvider

@@ -1,7 +1,6 @@
 using System.Data;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Support.Security
 {

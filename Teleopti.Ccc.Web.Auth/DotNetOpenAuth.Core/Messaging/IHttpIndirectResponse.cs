@@ -5,9 +5,6 @@
 //-----------------------------------------------------------------------
 
 namespace DotNetOpenAuth.Messaging {
-	using System.Diagnostics.Contracts;
-	using System.Net;
-
 	/// <summary>
 	/// An interface that allows indirect response messages to specify
 	/// HTTP transport specific properties.

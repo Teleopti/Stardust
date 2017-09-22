@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Input;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.SmartClientPortal.Shell.WinCode.Common.Commands;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WinCodeTest.Common.Commands
 {

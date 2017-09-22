@@ -10,7 +10,6 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.Web;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
-using Teleopti.Ccc.Web.Areas.MyTime.Models;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.AppGuide;
 using Teleopti.Ccc.WebTest.Core.IoC;
 

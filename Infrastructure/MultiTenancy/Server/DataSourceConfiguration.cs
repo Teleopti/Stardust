@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data.SqlClient;
-using NHibernate.Cfg;
-using Teleopti.Ccc.Domain.MultiTenancy;
+﻿using System.Data.SqlClient;
 
 namespace Teleopti.Ccc.Infrastructure.MultiTenancy.Server
 {
