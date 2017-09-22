@@ -32,6 +32,7 @@ $(SIGNALR_BACKPLANE_PREFIX)|
 <compilation debug="false"|<compilation debug="true"
 <compilation targetFramework="4.0"|<compilation debug="true" targetFramework="4.0"
 <compilation targetFramework="4.5"|<compilation debug="true" targetFramework="4.5"
+<compilation targetFramework="4.6.1"|<compilation debug="true" targetFramework="4.6.1"
 $(HSTS_HEADER)|
 $(CSP_PARENT_URL)|
 $(DNS_ALIAS)|http://localhost:52858/
