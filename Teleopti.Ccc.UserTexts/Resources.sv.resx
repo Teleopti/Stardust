@@ -15019,4 +15019,10 @@ Vill du registrera dig?</value>
   <data name="NotShowingAbandonRate" xml:space="preserve">
     <value>Andel tappade kan inte visas för aktuellt urval. </value>
   </data>
+  <data name="AbsenceRequestAlreadyInWaitlist" xml:space="preserve">
+    <value>Det finns redan väntelistade förfrågningar för denna period, var god vänta. </value>
+  </data>
+  <data name="NoAgentsToBeDisplayed" xml:space="preserve">
+    <value>Inga agenter att visa</value>
+  </data>
 </root>

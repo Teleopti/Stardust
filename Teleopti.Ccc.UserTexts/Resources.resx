@@ -16468,8 +16468,8 @@ Do you want to participate?</value>
     <comment>This action will export the gap that exists in the current intraday staffing</comment>
   </data>
   <data name="AbsenceRequestAlreadyInWaitlist" xml:space="preserve">
-    <value>Requests are already in the waitlist, please wait.</value>
-    <comment>Message to agent when the request gets waitlisted because there already exists wailtlisted request.</comment>
+    <value>There are waitlisted requests for this period already, please wait.</value>
+    <comment>Message to agent when the request gets waitlisted because there exists wailtlisted requests already.</comment>
   </data>
   <data name="SeeAgents" xml:space="preserve">
     <value>See agents</value>
