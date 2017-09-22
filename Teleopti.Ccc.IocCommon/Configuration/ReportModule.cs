@@ -1,6 +1,8 @@
 using Autofac;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Reports;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ReportAuditTrailVisible>().As<IReportVisible>().SingleInstance();
 
 			builder.RegisterType<ScheduleChangedByUserViewModelProvider>().SingleInstance();
+			builder.RegisterType<ScheduleAuditTrailReport>().As<IScheduleAuditTrailReport>().SingleInstance();
 		}
 	}
 }

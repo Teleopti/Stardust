@@ -4,7 +4,7 @@ using Teleopti.Ccc.Domain.Reports;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Filters;
 
-namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
+namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport)]
 	public class ScheduleAuditTrailController : ApiController
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Web.Areas.Reporting.Controllers
 			_scheduleChangedByUserViewModelProvider = scheduleChangedByUserViewModelProvider;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/reporting/scheduleChangedByPersons")]
+		[UnitOfWork, HttpGet, Route("api/Reports/ScheduleChangedByPersons")]
 		public virtual IHttpActionResult ScheduleChangedByPersonsInAuditTrail()
 		{
 			return Ok(_scheduleChangedByUserViewModelProvider.Provide());

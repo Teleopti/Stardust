@@ -5,7 +5,7 @@
 
 	function reportsService($http, $q, ToggleSvc) {
 		var urlForGetCategorizedReports = '../api/Reports/NavigationsCategorized';
-		var urlForAuditTrailChangedByPerson = '../api/reporting/scheduleChangedByPersons';
+		var urlForAuditTrailChangedByPerson = '../api/Reports/ScheduleChangedByPersons';
 
 		this.getCategorizedReports = getCategorizedReports;
 		this.getAuditTrailChangedByPerson = getAuditTrailChangedByPerson;

@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeAnalyticsWorkloadRepository>().For<IAnalyticsWorkloadRepository>();
 				system.UseTestDouble<FakeUserDeviceRepository>().For<IUserDeviceRepository>();
 				system.UseTestDouble<FakeSkillCombinationResourceRepository>().For<ISkillCombinationResourceRepository>();
-				system.UseTestDouble<FakeScheduleHistoryReport>().For<IScheduleHistoryReport>();
+				system.UseTestDouble<FakeScheduleAuditTrailReport>().For<IScheduleAuditTrailReport>();
 
 			}
 			system.UseTestDouble<ScheduleStorageRepositoryWrapper>().For<IScheduleStorageRepositoryWrapper>();

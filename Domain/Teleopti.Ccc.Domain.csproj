@@ -321,6 +321,7 @@
     <Compile Include="Reports\IReportVisible.cs" />
     <Compile Include="Reports\IsOnlineReportFunctionSpecification.cs" />
     <Compile Include="Reports\ScheduleChangedByUserViewModelProvider.cs" />
+    <Compile Include="Repositories\IScheduleAuditTrailReport.cs" />
     <Compile Include="Repositories\IUserDeviceRepository.cs" />
     <Compile Include="ResourceCalculation\SchedulePartModifyAndRollbackServiceWithoutStateHolder.cs" />
     <Compile Include="Scheduling\Assignment\AlwaysResourceCalculateAfterDelete.cs" />

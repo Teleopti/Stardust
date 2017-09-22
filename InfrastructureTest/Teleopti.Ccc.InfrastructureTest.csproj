@@ -196,6 +196,7 @@
     <Compile Include="Foundation\InitializeMessageBrokerTest.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactoryTest.cs" />
     <Compile Include="Persisters\Schedules\ScheduleDifferenceSaverTest.cs" />
+    <Compile Include="Repositories\Audit\ScheduleAuditTrailReportTest.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepositoryWithGroupsTest.cs" />
     <Compile Include="Repositories\PersonFinderReadOnlyRepositoryWithTeamsTest.cs" />
     <Compile Include="Repositories\JobStartTimeTest.cs" />

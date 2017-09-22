@@ -12,15 +12,15 @@ namespace Teleopti.Ccc.DomainTest.Reports
 	public class ScheduleChangedByUserViewModelProviderTest
 	{
 		public ScheduleChangedByUserViewModelProvider Target;
-		public FakeScheduleHistoryReport ScheduleHistoryReport;
+		public FakeScheduleAuditTrailReport ScheduleAuditTrailReport;
 
 		[Test]
 		public void ShouldReturnModelOrderedByName()
 		{
 			var personScott = PersonFactory.CreatePersonWithGuid("Scott", "scottson");
 			var personAdam = PersonFactory.CreatePersonWithGuid("Adam", "Adamsson");
-			ScheduleHistoryReport.AddModifiedByPerson(personScott);
-			ScheduleHistoryReport.AddModifiedByPerson(personAdam);
+			ScheduleAuditTrailReport.AddModifiedByPerson(personScott);
+			ScheduleAuditTrailReport.AddModifiedByPerson(personAdam);
 
 			var result = Target.Provide();
 

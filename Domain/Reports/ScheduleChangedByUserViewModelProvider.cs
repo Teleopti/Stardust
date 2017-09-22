@@ -7,15 +7,15 @@ namespace Teleopti.Ccc.Domain.Reports
 {
 	public class ScheduleChangedByUserViewModelProvider
 	{
-		private readonly IScheduleHistoryReport _scheduleHistoryReport;
+		private readonly IScheduleAuditTrailReport _scheduleAuditTrailReport;
 
-		public ScheduleChangedByUserViewModelProvider(IScheduleHistoryReport scheduleHistoryReport)
+		public ScheduleChangedByUserViewModelProvider(IScheduleAuditTrailReport scheduleAuditTrailReport)
 		{
-			_scheduleHistoryReport = scheduleHistoryReport;
+			_scheduleAuditTrailReport = scheduleAuditTrailReport;
 		}
 		public IList<ChangedBy> Provide()
 		{
-			return _scheduleHistoryReport.RevisionPeople()
+			return _scheduleAuditTrailReport.RevisionPeople()
 				.Select(x => new ChangedBy(){Id = x.Id.Value, Name = x.Name.ToString()})
 				.OrderBy(y => y.Name)
 				.ToList();
