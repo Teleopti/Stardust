@@ -155,7 +155,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 				
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
-
+				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.StartDate > selectedPeriod.StartDate ? 
+					teamBlockInfo.BlockInfo.BlockPeriod.StartDate : 
+					selectedPeriod.StartDate;
+				var undoResCalcChanges = createRollbackState(skillDays, datePoint);
+				
 				//should probably be deleted, if so IDailyTargetValueCalculatorForTeamBlock can be deleted as well
 				var previousTargetValue = 1d;
 				if (teamBlockInfo.TeamInfo.GroupMembers.Count() > 1 || teamBlockInfo.BlockInfo.BlockPeriod.DayCount() > 1)
@@ -168,12 +172,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var orgAssignmentsForTeamBlock = scheduleDictionary.SchedulesForPeriod(teamBlockInfo.BlockInfo.BlockPeriod, teamBlockInfo.TeamInfo.GroupMembers.ToArray())
 					.Select(x => x.PersonAssignment()).Where(x => x != null).ToArray();
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
-				var firstSelectedDay = selectedPeriod.StartDate;
-				var datePoint = firstSelectedDay;
-				if (teamBlockInfo.BlockInfo.BlockPeriod.StartDate > firstSelectedDay)
-					datePoint = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
-
-				var undoResCalcChanges = createRollbackState(skillDays, datePoint);
 
 				var success = _teamBlockScheduler.ScheduleTeamBlockDay(orgAssignmentsForTeamBlock, new NoSchedulingCallback(), _workShiftSelector, teamBlockInfo, datePoint, schedulingOptions,
 					schedulePartModifyAndRollbackService,
