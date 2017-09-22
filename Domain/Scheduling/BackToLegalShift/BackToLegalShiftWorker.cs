@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.BackToLegalShift
 			ISchedulePartModifyAndRollbackService rollbackService, IResourceCalculateDelayer resourceCalculateDelayer,
 			ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
-			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo, new AlwaysResourceCalculateAfterDelete());
+			_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 			var date = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 			var rules = NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder);
 			//TODO: should pass in orginal assignments here to fix same issue as #45540 for shiftswithinday

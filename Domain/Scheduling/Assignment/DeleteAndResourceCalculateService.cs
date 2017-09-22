@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -42,6 +43,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
+		[RemoveMeWithToggle("remove param resourceCalculateAfterDeleteDecider. don't just use overload above though - seems to do other stuff.", Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 		public void DeleteWithResourceCalculation(IScheduleDay dayToDelete, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks, bool doIntraIntervalCalculation, IResourceCalculateAfterDeleteDecider resourceCalculateAfterDeleteDecider)
 		{
 			_deleteSchedulePartService.Delete(new[] { dayToDelete }, rollbackService);

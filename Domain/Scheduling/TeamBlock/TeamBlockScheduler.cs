@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if(schedulingCallback.IsCancelled)
 						break;
 
-					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo, new AlwaysResourceCalculateAfterDelete());
+					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 					schedulingOptions.NotAllowedShiftCategories.Add(roleModelShift.TheMainShift.ShiftCategory);
 					roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),
 						schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _groupPersonSkillAggregator);
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			if (!success && _teamBlockSchedulingOptions.IsBlockSchedulingWithSameShift(schedulingOptions))
 			{
-				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo, new AlwaysResourceCalculateAfterDelete());
+				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 				roleModelShift = _roleModelSelector.Select(schedules, allSkillDays, workShiftSelector, teamBlockInfo, datePointer, selectedTeamMembers.First(),schedulingOptions, shiftNudgeDirective.EffectiveRestriction, _groupPersonSkillAggregator);		
 				success = tryScheduleBlock(orginalPersonAssignments, schedulingCallback, workShiftSelector, teamBlockInfo, schedulingOptions, selectedBlockDays, roleModelShift, rollbackService, resourceCalculateDelayer, allSkillDays, schedules, shiftNudgeDirective, businessRules);
 

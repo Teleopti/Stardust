@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver
 
 			rollbackService.ClearModificationCollection();
 			if (firstNudge)
-				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo, new AlwaysResourceCalculateAfterDelete());
+				_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 			else
 			{
 				_teamBlockClearer.ClearTeamBlockWithNoResourceCalculation(rollbackService, teamBlockInfo, NewBusinessRuleCollection.AllForScheduling(schedulingResultStateHolder));

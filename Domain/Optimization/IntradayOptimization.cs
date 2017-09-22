@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
@@ -14,23 +13,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	[RemoveMeWithToggle("Merge into base class", Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
-	public class IntradayOptimization45694 : IntradayOptimization
-	{
-		private readonly IntradayOptimizationContext _intradayOptimizationContext;
-
-		public IntradayOptimization45694(IntradayOptimizationContext intradayOptimizationContext,
-			TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService, Func<ISchedulerStateHolder> schedulerStateHolder, IOptimizationPreferencesProvider optimizationPreferencesProvider, MatrixListFactory matrixListFactory, IResourceCalculation resourceCalculation, IUserTimeZone userTimeZone, IScheduleDayChangeCallback scheduleDayChangeCallback, TeamInfoFactoryFactory teamInfoFactoryFactory, ITeamBlockInfoFactory teamBlockInfoFactory, WeeklyRestSolverExecuter weeklyRestSolverExecuter, CascadingResourceCalculationContextFactory resourceCalculationContext) : base(teamBlockIntradayOptimizationService, schedulerStateHolder, optimizationPreferencesProvider, matrixListFactory, resourceCalculation, userTimeZone, scheduleDayChangeCallback, teamInfoFactoryFactory, teamBlockInfoFactory, weeklyRestSolverExecuter, resourceCalculationContext)
-		{
-			_intradayOptimizationContext = intradayOptimizationContext;
-		}
-
-		protected override IDisposable CreateContext(ISchedulerStateHolder stateHolder, DateOnlyPeriod period)
-		{
-			return _intradayOptimizationContext.Create(period);
-		}
-	}
-
 	public class IntradayOptimization : IIntradayOptimization
 	{
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
@@ -42,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContext;
 		private readonly TeamBlockIntradayOptimizationService _teamBlockIntradayOptimizationService;
 
@@ -81,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons,_schedulerStateHolder().Schedules, optimizationPreferences.Extra.TeamGroupPage);
 			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
 
-			using (CreateContext(stateHolder, period))
+			using ( _resourceCalculationContext.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true, period))
 			{
 				_resourceCalculation.ResourceCalculate(period, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
 				_teamBlockIntradayOptimizationService.Optimize(allMatrixes,
@@ -101,12 +82,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 					_weeklyRestSolverExecuter.Resolve(optimizationPreferences, period, agents, new FixedDayOffOptimizationPreferenceProvider(new DaysOffPreferences()));
 				}
 			}
-		}
-
-		[RemoveMeWithToggle("no need to have seperate method for this", Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
-		protected virtual IDisposable CreateContext(ISchedulerStateHolder stateHolder, DateOnlyPeriod period)
-		{
-			return _resourceCalculationContext.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true, period);
 		}
 	}
 }
