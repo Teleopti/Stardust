@@ -14,6 +14,7 @@
 		vm.process4 = "box2:157";
 		
 		vm.usercode1 = "usercode34";
+		vm.name1 = "Ashley Andeen";
 		vm.usercode2 = "usercode2";
 
 	}
