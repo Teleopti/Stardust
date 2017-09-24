@@ -55,7 +55,7 @@
 
 
 		<rta-card class="site" ng-repeat="card in vm.siteCards" ng-open="card.isOpen">
-			<rta-card-header ng-attr-styles="border-left-color: {{card.Color}}" ng-attr-classes="{{card.isSelected ? card.ColorOnSelection : ''}}">
+			<rta-card-header ng-attr-classes="{{card.ClassesOnSelection}}">
 				<div class="rta-card-content-wrapper flex">
 					<div class="rta-site-name-container"><b ng-attr-data-max="{{card.AgentsCount}}" ng-attr-data-value="{{card.InAlarmCount}}">{{card.Name}}</b></div>
 					<div class="rta-alarm-values-container">{{'InAlarmInSite'|translate}}:
@@ -77,7 +77,7 @@
 						<div class="wfm-grid" class="animate-show">
 							<div class="grid-card-mini team" ng-repeat="team in card.teams">
 								<div class="list-content">
-									<div class="list-header" ng-click="vm.selectTeamOrSite(team)" ng-class="team.Color">
+									<div class="list-header" ng-click="vm.selectTeamOrSite(team)" ng-class="team.ClassOnSelection">
 										<div class="flex">
 											<h1 ng-attr-data-max="{{team.AgentsCount}}" ng-attr-data-value="{{team.InAlarmCount}}" class="rta-team-name-container">{{team.Name}}</h1>
 											<i class="mdi pull-right flex-1" ng-class="{'mdi-check': team.isSelected, 'mdi-plus': !team.isSelected}"></i>

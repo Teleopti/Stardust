@@ -26,6 +26,9 @@
 
 		var pollPromise;
 		var destroyed = false;
+		var classSuffixOnSelection = "-selected";
+		var classSuffixNoSelection = "-border";
+		var noBorderClass = 'rta-card-no-border';
 
 		vm.selectTeamOrSite = function (selectable) {
 			selectable.isSelected = !selectable.isSelected;
@@ -90,10 +93,8 @@
 						};
 
 						updateTeams(siteCard, site.Teams);
-						siteCard.ColorOnSelection = site.Color;
-						siteCard.Color = translateSiteColors(site);
+						siteCard.ClassesOnSelection = siteCard.isSelected ? (site.Color + classSuffixOnSelection + ' ' + noBorderClass) : (site.Color + classSuffixNoSelection);
 						siteCard.InAlarmCount = site.InAlarmCount;
-
 					});
 
 					vm.totalAgentsInAlarm = data.TotalAgentsInAlarm;
@@ -121,22 +122,8 @@
 				};
 				teamCard.Color = team.Color;
 				teamCard.InAlarmCount = team.InAlarmCount;
+				teamCard.ClassOnSelection = teamCard.isSelected ? teamCard.Color + classSuffixOnSelection : team.Color;
 			})
-		}
-
-		function translateSiteColors(site) {
-			if (site.Color === 'good') {
-				if(site.isSelected) return '#627b32';
-				return '#C2E085';
-			} else if (site.Color === 'warning') {
-				if(site.isSelected) return '#c27c36';
-				return '#FFC285';
-			} else if (site.Color === 'danger') {
-				if(site.isSelected) return '#ca3333';
-				return '#EE8F7D';
-			} else {
-				return '#fff';
-			}
 		}
 
 		vm.selectSkillOrSkillArea = function (skillOrSkillArea) {

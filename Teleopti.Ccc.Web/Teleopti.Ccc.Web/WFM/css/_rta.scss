@@ -1,7 +1,17 @@
 /////////Sites & teams///////////////
 .good {
 	background-color: $green-100 !important;
+}
 
+.good-selected {
+	background-color: $green-300 !important;
+}
+
+.good-border {
+	border-left-color: $green-100 !important;
+}
+
+.good, .good-selected {
 	&:hover {
 		transition: background 0.5s linear 0s;
 		background-color: $green-500 !important;
@@ -10,8 +20,18 @@
 
 .warning {
 	background-color: $orange-400 !important;
+}
 
-	&:hover {
+.warning-selected {
+	background-color: $orange-500 !important;	
+}
+
+.warning-border {
+	border-left-color: $orange-400 !important;
+}
+
+.warning, .warning-selected {
+    &:hover {
 		transition: background 0.5s linear 0s;
 		background-color: $orange-600 !important;
 	}
@@ -19,11 +39,25 @@
 
 .danger {
 	background-color: $red-600 !important;
+}
 
-	&:hover {
+.danger-selected {
+	background-color: $red-700 !important;
+}
+
+.danger-border {
+	border-left-color: $red-600 !important;
+}
+
+.danger, .danger-selected {
+    &:hover {
 		transition: background 0.5s linear 0s;
 		background-color: #e55539 !important;
 	}
+}
+
+.rta-card-no-border {
+    border: none !important;
 }
 
 .rta-card-link {

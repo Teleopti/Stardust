@@ -30,10 +30,6 @@ describe('RtaOverviewController', function () {
 
 	var skillAreas;
 
-	var goodColor = '#C2E085';
-	var warningColor = '#FFC285';
-	var dangerColor = '#EE8F7D';
-
 	beforeEach(module('wfm.rta'));
 
 	beforeEach(function () {
@@ -168,7 +164,7 @@ describe('RtaOverviewController', function () {
 			expect(vm.siteCards[0].Name).toEqual('London');
 			expect(vm.siteCards[0].AgentsCount).toEqual(11);
 			expect(vm.siteCards[0].InAlarmCount).toEqual(5);
-			expect(vm.siteCards[0].Color).toEqual(warningColor);
+			expect(vm.siteCards[0].ClassesOnSelection).toEqual('warning-border');			
 			expect(vm.siteCards[0].isOpen).toEqual(false);
 		});
 
@@ -304,7 +300,6 @@ describe('RtaOverviewController', function () {
 			expect(vm.siteCards[0].Name).toEqual('London');
 			expect(vm.siteCards[0].AgentsCount).toEqual(11);
 			expect(vm.siteCards[0].InAlarmCount).toEqual(5);
-			expect(vm.siteCards[0].Color).toEqual(warningColor);
 			expect(vm.siteCards[0].isOpen).toEqual(false);
 		});
 
@@ -326,7 +321,6 @@ describe('RtaOverviewController', function () {
 			expect(vm.siteCards[0].Name).toEqual('London');
 			expect(vm.siteCards[0].AgentsCount).toEqual(11);
 			expect(vm.siteCards[0].InAlarmCount).toEqual(2);
-			expect(vm.siteCards[0].Color).toEqual(goodColor);
 			expect(vm.siteCards[0].isOpen).toEqual(false);
 		});
 
@@ -357,7 +351,6 @@ describe('RtaOverviewController', function () {
 			expect(vm.siteCards[0].Name).toEqual('London');
 			expect(vm.siteCards[0].AgentsCount).toEqual(11);
 			expect(vm.siteCards[0].InAlarmCount).toEqual(2);
-			expect(vm.siteCards[0].Color).toEqual(goodColor);
 			expect(vm.siteCards[0].isOpen).toEqual(false);
 		});
 
@@ -385,7 +378,6 @@ describe('RtaOverviewController', function () {
 				.wait(5000);
 
 			expect(vm.siteCards[0].InAlarmCount).toEqual(2);
-			expect(vm.siteCards[0].Color).toEqual(goodColor);
 		});
 
 		it('should update adherence for site with skill area', function () {
@@ -419,7 +411,6 @@ describe('RtaOverviewController', function () {
 				.wait(5000);
 
 			expect(vm.siteCards[0].InAlarmCount).toEqual(2);
-			expect(vm.siteCards[0].Color).toEqual(goodColor);
 		});
 
 		it('should update adherence for site with preselected skill', function () {
@@ -446,7 +437,6 @@ describe('RtaOverviewController', function () {
 				.wait(5000);
 
 			expect(vm.siteCards[0].InAlarmCount).toEqual(2);
-			expect(vm.siteCards[0].Color).toEqual(goodColor);
 		});
 
 		it('should update adherence for site with preselected skill area', function () {
@@ -480,7 +470,6 @@ describe('RtaOverviewController', function () {
 				.wait(5000);
 
 			expect(vm.siteCards[0].InAlarmCount).toEqual(2);
-			expect(vm.siteCards[0].Color).toEqual(goodColor);
 		});
 
 		it('should update adherence for site when clearing selection', function () {
@@ -527,7 +516,7 @@ describe('RtaOverviewController', function () {
 			expect(vm.siteCards[0].Name).toEqual('London');
 			expect(vm.siteCards[0].AgentsCount).toEqual(11);
 			expect(vm.siteCards[0].InAlarmCount).toEqual(9);
-			expect(vm.siteCards[0].Color).toEqual(dangerColor);
+			expect(vm.siteCards[0].ClassesOnSelection).toEqual('danger-border');
 			expect(vm.siteCards[0].isOpen).toEqual(false);
 		});
 
