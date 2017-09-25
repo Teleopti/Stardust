@@ -239,34 +239,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 
 	}
 
-	public class FakeNotificationConfigReader : INotificationConfigReader
-	{
-		public bool HasLoadedConfig { get; }
-		public IXPathNavigable XmlDocument { get; }
-		public Uri Url { get; }
-		public string User { get; }
-		public string Password { get; }
-		public string From { get; }
-		public string ClassName { get; }
-		public string Assembly { get; }
-		public string Api { get; }
-		public string Data { get; }
-		public string FindSuccessOrError { get; }
-		public string ErrorCode { get; }
-		public string SuccessCode { get; }
-		public bool SkipSearch { get; }
-		public string SmtpHost { get; }
-		public int SmtpPort { get; }
-		public bool SmtpUseSsl { get; }
-		public string SmtpUser { get; }
-		public string SmtpPassword { get; }
-		public bool SmtpUseRelay { get; }
-
-		public INotificationClient CreateClient()
-		{
-			return null;
-		}
-	}
+	
 
 	public class FakeNotificationSender : INotificationSender
 	{

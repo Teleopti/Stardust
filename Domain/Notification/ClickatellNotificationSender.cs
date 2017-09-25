@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using log4net;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Aop;
 
 namespace Teleopti.Ccc.Domain.Notification
 {
@@ -11,8 +12,18 @@ namespace Teleopti.Ccc.Domain.Notification
 	// Then more could be added without changes in the Service Bus
 	public class ClickatellNotificationSender : INotificationSender
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ClickatellNotificationSender));
+
+		private static ILog Logger;
 		private INotificationConfigReader _notificationConfigReader;
+
+		public ClickatellNotificationSender()
+		{
+			Logger = LogManager.GetLogger(nameof(ClickatellNotificationSender));
+		}
+		public ClickatellNotificationSender(ILogManager logManager)
+		{
+			Logger = logManager.GetLogger(nameof(ClickatellNotificationSender));
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SendNotification(INotificationMessage message, NotificationHeader notificationHeader)
@@ -88,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Notification
 				var smsString = _notificationConfigReader.Data;
 
 				if (containUnicode)
-					smsMessage = smsMessage.Aggregate(@"", (current, c) => $"{current}{Convert.ToUInt32(((int) c).ToString(CultureInfo.InvariantCulture)):x4}")
+					smsMessage = smsMessage.Aggregate(@"", (current, c) => $"{current}{Convert.ToUInt32(((int)c).ToString(CultureInfo.InvariantCulture)):x4}")
 						.ToUpper();
 
 				var msgData = string.Format(CultureInfo.InvariantCulture, smsString, _notificationConfigReader.User,
@@ -102,20 +113,12 @@ namespace Teleopti.Ccc.Domain.Notification
 					if (data != null)
 					{
 						if (_notificationConfigReader.SkipSearch) return;
-						if (_notificationConfigReader.FindSuccessOrError.Equals("Error"))
-						{
-							if (data.Contains(_notificationConfigReader.ErrorCode))
-							{
-								Logger.Error($"Error occurred sending SMS: {data}");
-							}
-						}
-						else
-						{
-							if (!data.Contains(_notificationConfigReader.SuccessCode))
-							{
-								Logger.Error($"Error occurred sending SMS: {data}");
-							}
-						}
+						var hasError = (_notificationConfigReader.FindSuccessOrError.Equals("Error") && data.Contains(_notificationConfigReader.ErrorCode))
+							|| !data.Contains(_notificationConfigReader.SuccessCode);
+
+						if (hasError)
+							Logger.Error($"Error occurred sending SMS: {data}");
+
 					}
 				}
 				catch (Exception exception)

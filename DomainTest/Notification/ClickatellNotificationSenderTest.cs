@@ -1,96 +1,90 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
 using NUnit.Framework;
-using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Notification;
+using Teleopti.Ccc.TestCommon.IoC;
+using Teleopti.Ccc.IocCommon;
+using Teleopti.Ccc.TestCommon.FakeData;
 
 namespace Teleopti.Ccc.DomainTest.Notification
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"), TestFixture]
-	public class ClickatellNotificationSenderTest
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Clickatell"),
+		TestFixture,
+		DomainTest]
+	public class ClickatellNotificationSenderTest : ISetup
 	{
 		// the send will not work in thia test because of the password is wrong
 		// we don't want to send a lot of messages all the time :-) 
 		// if you want to try change to <password>cadadi01</password> (works as long as we have credits) <from>{3}</from>
-		private INotificationConfigReader _notificationConfigReader;
+		public FakeNotificationConfigReader _notificationConfigReader;
 		private ClickatellNotificationSender _target;
 		private readonly INotificationMessage smsMessage = new NotificationMessage { Subject = "Schedule has changed" };
-		private INotificationClient _notificationClient;
+		private LogSpy _log;
 
 		private const string xml = @"<?xml version='1.0' encoding='utf-8' ?>
-<Config>
-	<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
-	<url>http://api.clickatell.com/xml/xml?data=</url>
-	<user>ola.hakansson@teleopti.com</user>
-	<password>cadadi02</password>
-	<api_id>3388822</api_id>
-	<from>TeleoptiCCC</from>
-	<FindSuccessOrError>Error</FindSuccessOrError>
-	<ErrorCode>fault</ErrorCode>
-	<SuccessCode>success</SuccessCode>
-	<SkipSearch>false</SkipSearch>
-	<data>
-		<![CDATA[ <clickAPI><sendMsg>
-		<user>{0}</user>
-		<password>{1}</password>
-		<api_id>{2}</api_id>
-		<to>{3}</to>
-		<from>{4}</from>
-		<text>{5}</text>
-		<unicode>{6}</unicode>
-		</sendMsg></clickAPI>]]>
-	</data>
-</Config>";
+		<Config>
+			<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
+			<url>http://api.clickatell.com/xml/xml?data=</url>
+			<user>ola.hakansson@teleopti.com</user>
+			<password>cadadi02</password>
+			<api_id>3388822</api_id>
+			<from>TeleoptiCCC</from>
+			<FindSuccessOrError>Error</FindSuccessOrError>
+			<ErrorCode>fault</ErrorCode>
+			<SuccessCode>success</SuccessCode>
+			<SkipSearch>false</SkipSearch>
+			<data>
+				<![CDATA[ <clickAPI><sendMsg>
+				<user>{0}</user>
+				<password>{1}</password>
+				<api_id>{2}</api_id>
+				<to>{3}</to>
+				<from>{4}</from>
+				<text>{5}</text>
+				<unicode>{6}</unicode>
+				</sendMsg></clickAPI>]]>
+			</data>
+		</Config>";
 
-		[SetUp]
-		public void Setup()
+		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
-			_notificationConfigReader = MockRepository.GenerateMock<INotificationConfigReader>();
-			_notificationClient = MockRepository.GenerateMock<INotificationClient>();
-			_target = new ClickatellNotificationSender();
-			_target.SetConfigReader(_notificationConfigReader);
+			_log = new LogSpy();
+			_target = new ClickatellNotificationSender(new FakeLogManager(_log));
+
+			system.UseTestDouble<FakeNotificationConfigReader>().For<INotificationConfigReader>();
+			system.UseTestDouble<FakeNofiticationWebClient>().For<INotificationClient>();
 		}
 
 		[Test]
 		public void ShouldNotSendIfNoConfig()
 		{
+			_target.SetConfigReader(_notificationConfigReader);
 			smsMessage.Messages.Add("On a day");
-			_notificationConfigReader.Stub(x => x.HasLoadedConfig).Return(false);
-
 			_target.SendNotification(smsMessage, new NotificationHeader());
-
-			_notificationConfigReader.AssertWasCalled(x => x.HasLoadedConfig);
+			_notificationConfigReader.Client.SentMessages.Count.Should().Be(0);
 		}
 
 		[Test]
 		public void ShouldTryToSendIfConfig()
 		{
-			smsMessage.Messages.Add("test1");
-			var doc = new XmlDocument();
-			doc.LoadXml(xml);
-
-			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 			_target.SetConfigReader(_notificationConfigReader);
+			_notificationConfigReader.LoadConfig(xml);
+			smsMessage.Messages.Add("test send");
 			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
-
-			_notificationClient.AssertWasCalled(x => x.MakeRequest(_notificationConfigReader.Data), o => o.IgnoreArguments());
+			_notificationConfigReader.Client.SentMessages.Count.Should().Be(1);
 		}
 
 		[Test]
 		public void ShouldNotSendIfNoMobileNumber()
 		{
-			smsMessage.Messages.Add("test1");
-			var doc = new XmlDocument();
-			doc.LoadXml(xml);
-
-			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 			_target.SetConfigReader(_notificationConfigReader);
+			_notificationConfigReader.LoadConfig(xml);
+			smsMessage.Messages.Add("test send");
 			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "" });
-
-			_notificationClient.AssertWasNotCalled(x => x.MakeRequest(_notificationConfigReader.Data), o => o.IgnoreArguments());
+			_notificationConfigReader.Client.SentMessages.Count.Should().Be(0);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), Test]
@@ -106,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			msg.Messages.Add("Monday 2012-01-08 Not Working");
 
 			IList<string> messages = _target.GetSmsMessagesToSend(msg, false);
-			Assert.That(messages.Count, Is.EqualTo(2));
+			messages.Count.Should().Be(2);
 		}
 
 		[Test]
@@ -120,7 +114,6 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			string message = _target.GetSmsMessagesToSend(msg, false).FirstOrDefault();
 			message.Should().Not.Be.Null();
 			message.Should().EndWith("[Teleopti Test]");
-
 		}
 
 		[Test]
@@ -136,89 +129,125 @@ namespace Teleopti.Ccc.DomainTest.Notification
 			msg.Messages.Add("星期一 2012-01-08 不工作");
 
 			IList<string> messages = _target.GetSmsMessagesToSend(msg, true);
-			Assert.That(messages.Count, Is.EqualTo(3));
+			messages.Count.Should().Be.EqualTo(3);
 		}
 
 		[Test]
-		public void ShouldLogIfUrlIsIncorrect()
+		public void ShouldLogErrorIfSentFailed()
 		{
-			const string incorrectXml = @"<?xml version='1.0' encoding='utf-8' ?><Config>
-	<class>Teleopti.Ccc.Sdk.ServiceBus.SMS.ClickatellNotificationSender</class>
-	<url>http://api.sticktohell.com/xml/xml?data=</url>
-	<user>ola.hakansson@teleopti.com</user>
-	<password>cadadi02</password>
-	<api_id>3388480</api_id>
-	<from>Teleopti WFM</from>
-	<data>
-		<![CDATA[ <clickAPI><sendMsg>
-		<user>{0}</user>
-		<password>{1}</password>
-		<api_id>{2}</api_id>
-		<to>{3}</to>
-		<from>{4}</from>
-		<text>{5}</text>
-		<unicode>{6}</unicode>
-		</sendMsg></clickAPI>]]>
-	</data>
-</Config>";
-			var doc = new XmlDocument();
-			doc.LoadXml(incorrectXml);
+			const string incorrectXml = @"<?xml version='1.0' encoding='utf-8' ?>
+			<Config>
+			<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
+			<url>http://api.clickatell.com/xml/xml?data=</url>
+			<user>ola.hakansson@teleopti.com</user>
+			<password>cadadi02</password>
+			<api_id>3388822</api_id>
+			<from>TeleoptiCCC</from>
+			<FindSuccessOrError>Error</FindSuccessOrError>
+			<ErrorCode>Error</ErrorCode>
+			<SuccessCode>Success</SuccessCode>
+			<SkipSearch>false</SkipSearch>
+			<data>
+				<![CDATA[ <clickAPI><sendMsg>
+				<user>{0}</user>
+				<password>{1}</password>
+				<api_id>{2}</api_id>
+				<to>{3}</to>
+				<from>{4}</from>
+				<text>{5}</text>
+				<unicode>{6}</unicode>
+				</sendMsg></clickAPI>]]>
+			</data>
+		</Config>";
 
-			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
 			_target.SetConfigReader(_notificationConfigReader);
+			_notificationConfigReader.LoadConfig(incorrectXml);
+
+			_notificationConfigReader.Client.MakeRequestFaild();
+			smsMessage.Messages.Add("test send");
 			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
+
+			_log.ErrorMessages.Count.Should().Be.EqualTo(1);
+
 		}
 
 		[Test]
-		public void ShouldNotThrowIfSkipCheck()
+		public void ShouldNotLogErrorIfSkipCheck()
 		{
 			const string xmlWithNoCheck = @"<?xml version='1.0' encoding='utf-8' ?>
-<Config>
-	<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
-	<url>http://api.clickatell.com/xml/xml?data=</url>
-	<user>ola.hakansson@teleopti.com</user>
-	<password>cadadi02</password>
-	<api_id>3388822</api_id>
-	<from>TeleoptiCCC</from>
-	<FindSuccessOrError>Error</FindSuccessOrError>
-	<ErrorCode>fault</ErrorCode>
-	<SuccessCode>success</SuccessCode>
-	<SkipSearch>true</SkipSearch>
-	<data>
-		<![CDATA[ <clickAPI><sendMsg>
-		<user>{0}</user>
-		<password>{1}</password>
-		<api_id>{2}</api_id>
-		<to>{3}</to>
-		<from>{4}</from>
-		<text>{5}</text>
-		<unicode>{6}</unicode>
-		</sendMsg></clickAPI>]]>
-	</data>
-</Config>";
-			var doc = new XmlDocument();
-			doc.LoadXml(xmlWithNoCheck);
-
-			_notificationConfigReader = new TestNotificationConfigReader(doc, _notificationClient);
+					<Config>
+						<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
+						<url>http://api.clickatell.com/xml/xml?data=</url>
+						<user>ola.hakansson@teleopti.com</user>
+						<password>cadadi02</password>
+						<api_id>3388822</api_id>
+						<from>TeleoptiCCC</from>
+						<FindSuccessOrError>Error</FindSuccessOrError>
+						<ErrorCode>fault</ErrorCode>
+						<SuccessCode>success</SuccessCode>
+						<SkipSearch>true</SkipSearch>
+						<data>
+							<![CDATA[ <clickAPI><sendMsg>
+							<user>{0}</user>
+							<password>{1}</password>
+							<api_id>{2}</api_id>
+							<to>{3}</to>
+							<from>{4}</from>
+							<text>{5}</text>
+							<unicode>{6}</unicode>
+							</sendMsg></clickAPI>]]>
+						</data>
+					</Config>";
 			_target.SetConfigReader(_notificationConfigReader);
+			_notificationConfigReader.LoadConfig(xmlWithNoCheck);
+
+			_notificationConfigReader.Client.MakeRequestFaild();
+			smsMessage.Messages.Add("test send");
 			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
+
+			_notificationConfigReader.Client.SentMessages.Count.Should().Be.EqualTo(1);
+			_log.ErrorMessages.Count.Should().Be.EqualTo(0);
 		}
 
-		private class TestNotificationConfigReader : NotificationConfigReader
+		[Test]
+		public void ShouldSendSMSSuccess()
 		{
-			private readonly INotificationClient _client;
+			smsMessage.Messages.Add("Test success");
+			var xmlConfig = @"<?xml version='1.0' encoding='utf-8' ?>
+					<Config>
+						<class>Teleopti.Ccc.Domain.Notification.ClickatellNotificationSender</class>
+						<url>http://api.clickatell.com/xml/xml?data=</url>
+						<user>ola.hakansson@teleopti.com</user>
+						<password>cadadi02</password>
+						<api_id>3388822</api_id>
+						<from>TeleoptiCCC</from>
+						<FindSuccessOrError>Error</FindSuccessOrError>
+						<ErrorCode>fault</ErrorCode>
+						<SuccessCode>success</SuccessCode>
+						<SkipSearch>false</SkipSearch>
+						<data>
+							<![CDATA[ <clickAPI><sendMsg>
+							<user>{0}</user>
+							<password>{1}</password>
+							<api_id>{2}</api_id>
+							<to>{3}</to>
+							<from>{4}</from>
+							<text>{5}</text>
+							<unicode>{6}</unicode>
+							</sendMsg></clickAPI>]]>
+						</data>
+					</Config>";
 
-			public TestNotificationConfigReader(XmlDocument document, INotificationClient client)
-				: base(document)
-			{
-				_client = client;
-			}
+			_target.SetConfigReader(_notificationConfigReader);
+			_notificationConfigReader.LoadConfig(xmlConfig);
 
-			public override INotificationClient CreateClient()
-			{
-				return _client;
-			}
+			smsMessage.Messages.Add("test send");
+			_target.SendNotification(smsMessage, new NotificationHeader { MobileNumber = "46709218108" });
+			_notificationConfigReader.Client.SentMessages.Count.Should().Be.EqualTo(1);
+			_log.ErrorMessages.Count.Should().Be.EqualTo(0);
 		}
+
+	
 	}
 }
 
