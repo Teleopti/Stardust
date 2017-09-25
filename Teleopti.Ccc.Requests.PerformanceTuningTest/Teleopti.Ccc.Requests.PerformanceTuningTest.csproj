@@ -103,7 +103,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Prepare200PerDayWaitlistedRequest14DaysTest.sql" />
+    <Content Include="Prepare100PerDayWaitlistedRequest14DaysTest.sql" />
     <Content Include="Prepare200OvertimeRequests.sql" />
     <Content Include="Prepare200WaitlistedRequestForIntradayTest.sql" />
     <Content Include="Prepare200RequestForIntradayTest.sql" />

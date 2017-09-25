@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 						scheduleDay.CreateAndAddAbsence(new AbsenceLayer(absenceRequest.Absence, pRequest.Request.Period));
 
 						_rollbackService.ModifyStrictly(scheduleDay, new NoScheduleTagSetter(), NewBusinessRuleCollection.Minimum());
-						_resourceCalculation.ResourceCalculate(helpers.DateOnlyPeriodOne, helpers.ResCalcData,
+						_resourceCalculation.ResourceCalculate(pRequest.Request.Period.ToDateOnlyPeriod(pRequest.Person.PermissionInformation.DefaultTimeZone()), helpers.ResCalcData,
 							() => getContext(helpers.CombinationResources, helpers.Skills, true));
 
 

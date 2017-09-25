@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 			using (var connection = new SqlConnection(ConfigReader.ConnectionString("Tenancy")))
 			{
 				connection.Open();
-				var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "Prepare200PerDayWaitlistedRequest14DaysTest.sql";
+				var path = AppDomain.CurrentDomain.BaseDirectory + "/../../" + "Prepare100PerDayWaitlistedRequest14DaysTest.sql";
 				var script = File.ReadAllText(path);
 
 				using (var command = new SqlCommand(script, connection))
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 				ContractScheduleRepository.LoadAllAggregate();
 				DayOffTemplateRepository.LoadAll();
 
-				UpdateStaffingLevel.Update(period);
+				UpdateStaffingLevel.Update(period); 
 				//requests = PersonRequestRepository.FindPersonRequestWithinPeriod(new DateTimePeriod(new DateTime(2016, 04, 06, 7, 0, 0).Utc(), new DateTime(2016, 04, 06, 10, 0, 0).Utc()));
 				var reqIds =
 					PersonRequestRepository.GetWaitlistRequests(new DateTimePeriod(new DateTime(2016, 04, 06, 8, 0, 0).Utc(),
@@ -130,8 +130,7 @@ namespace Teleopti.Ccc.Requests.PerformanceTuningTest
 		//}
 
 		[Test]
-		[Ignore("Takes too long, timing out in TC")]
-		public void Run200WaitlistedRequestsPerDayFor14Days()
+		public void Run100WaitlistedRequestsPerDayFor14Days()
 		{
 			Now.Is("2016-04-06 06:59");
 
