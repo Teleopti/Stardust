@@ -123,6 +123,7 @@ ResourcePlanner_RunPerfTestAsTeam_43537 = false # Only here for perftests - don'
 ResourcePlanner_MergeTeamblockClassicScheduling_44289 = true
 ResourcePlanner_MergeTeamblockClassicIntraday_45508 = true
 ResourcePlanner_RetireKeepPercentageOfShifts_45688 = true
+ResourcePlanner_SpeedUpShiftsWithinDay_45694 = RC
 
 Wfm_ResourcePlanner_SchedulingOnStardust_42874 = true
 Wfm_DisplayOnlineHelp_39402 = true
