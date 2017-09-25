@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
@@ -50,7 +51,12 @@ namespace Teleopti.Ccc.TestCommon
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, params ISkill[] skills)
 		{
-			return agent.WithPersonPeriod(ruleSet, null, null, skills);
+			return agent.WithPersonPeriod(ruleSet, new ContractWithMaximumTolerance(), null, skills);
+		}
+		
+		public static Person WithPersonPeriod(this Person agent, IRuleSetBag ruleSetBag, params ISkill[] skills)
+		{
+			return agent.WithPersonPeriod(ruleSetBag, new ContractWithMaximumTolerance(), null, skills);
 		}
 
 		public static Person WithPersonPeriod(this Person agent, IWorkShiftRuleSet ruleSet, ITeam team, params ISkill[] skills)

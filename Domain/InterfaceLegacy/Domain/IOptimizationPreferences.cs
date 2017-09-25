@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Teleopti.Interfaces.Domain;
 
@@ -459,6 +460,7 @@ namespace Teleopti.Ccc.Domain.InterfaceLegacy.Domain
 
 		bool UseMinimumStaffing { get; set; }
 		bool UseMaximumStaffing { get; set; }
+		TimeSpan BreakPreferenceStartTimeByMax { get; set; }
 	}
 
     /// <summary>
