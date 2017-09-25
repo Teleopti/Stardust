@@ -15,7 +15,7 @@
 					},
 					url: '/intraday',
 					templateUrl: 'app/intraday/intraday.html',
-					controller: 'IntradayController'
+					controller: 'IntradayController as vm'
 				})
 			.state('intraday.area',
 				{
