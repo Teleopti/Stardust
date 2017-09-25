@@ -23,96 +23,49 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		}
 
 		[HttpPost, Route("Rta/State/Change")]
-		public IHttpActionResult Change([FromBody]ExternalUserStateWebModel input)
+		public IHttpActionResult Change([FromBody] ExternalUserStateWebModel input)
 		{
-			try
+			return handleRtaExceptions(new BatchInputModel
 			{
-				if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-					_rta.Enqueue(new BatchInputModel
+				AuthenticationKey = input.AuthenticationKey,
+				SourceId = input.SourceId,
+				States = new[]
+				{
+					new BatchStateInputModel
 					{
-						AuthenticationKey = input.AuthenticationKey,
-						SourceId = input.SourceId,
-						States = new[]
-						{
-							new BatchStateInputModel
-							{
-								StateCode = input.StateCode,
-								UserCode = input.UserCode
-							}
-						}
-					});
-				else
-					_rta.Process(new BatchInputModel
-					{
-						AuthenticationKey = input.AuthenticationKey,
-						SourceId = input.SourceId,
-						States = new[]
-						{
-							new BatchStateInputModel
-							{
-								StateCode = input.StateCode,
-								UserCode = input.UserCode
-							}
-						}
-					});
-			}
-			catch (InvalidAuthenticationKeyException e)
-			{
-				return BadRequest(e.Message);
-			}
-			catch (LegacyAuthenticationKeyException e)
-			{
-				return BadRequest(e.Message);
-			}
-			catch (InvalidSourceException e)
-			{
-				return BadRequest(e.Message);
-			}
-			catch (InvalidPlatformException e)
-			{
-				return BadRequest(e.Message);
-			}
-			catch (InvalidUserCodeException e)
-			{
-				return BadRequest(e.Message);
-			}
-
-			return Ok();
+						StateCode = input.StateCode,
+						UserCode = input.UserCode
+					}
+				}
+			});
 		}
 
 		[HttpPost, Route("Rta/State/Batch")]
-		public IHttpActionResult Batch([FromBody]ExternalUserBatchWebModel input)
+		public IHttpActionResult Batch([FromBody] ExternalUserBatchWebModel input)
+		{
+			return handleRtaExceptions(new BatchInputModel
+			{
+				AuthenticationKey = input.AuthenticationKey,
+				SourceId = input.SourceId,
+				SnapshotId = input.IsSnapshot ? _now.UtcDateTime() : null as DateTime?,
+				CloseSnapshot = input.IsSnapshot,
+				States = input.States.Select(i => new BatchStateInputModel
+					{
+						UserCode = i.UserCode,
+						StateCode = i.StateCode
+					})
+					.ToArray()
+			});
+		}
+
+		private IHttpActionResult handleRtaExceptions(BatchInputModel batchInputModel)
 		{
 			try
 			{
 				if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-					_rta.Enqueue(new BatchInputModel
-					{
-						AuthenticationKey = input.AuthenticationKey,
-						SourceId = input.SourceId,
-						SnapshotId = input.IsSnapshot ? _now.UtcDateTime() : null as DateTime?,
-						CloseSnapshot = input.IsSnapshot,
-						States = input.States.Select(i => new BatchStateInputModel
-							{
-								UserCode = i.UserCode,
-								StateCode = i.StateCode
-							})
-							.ToArray()
-					});
+					_rta.Enqueue(batchInputModel);
 				else
-					_rta.Process(new BatchInputModel
-					{
-						AuthenticationKey = input.AuthenticationKey,
-						SourceId = input.SourceId,
-						SnapshotId = input.IsSnapshot ? _now.UtcDateTime() : null as DateTime?,
-						CloseSnapshot = input.IsSnapshot,
-						States = input.States.Select(i => new BatchStateInputModel
-							{
-								UserCode = i.UserCode,
-								StateCode = i.StateCode
-							})
-							.ToArray()
-					});
+					_rta.Process(batchInputModel);
 			}
 			catch (InvalidAuthenticationKeyException e)
 			{
@@ -137,6 +90,5 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 
 			return Ok();
 		}
-		
 	}
 }

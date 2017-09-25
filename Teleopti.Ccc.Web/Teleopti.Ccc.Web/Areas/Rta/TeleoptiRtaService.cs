@@ -44,60 +44,35 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			{
 				userCode = fixUserCode(userCode);
 				stateCode = fixStateCode(stateCode, platformTypeId, isLoggedOn);
+				BatchInputModel batchInputModel = null;
 				if (isClosingSnapshot(userCode, isSnapshot))
-				{
-					if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-						_rta.Enqueue(new BatchInputModel
-						{
-							AuthenticationKey = authenticationKey,
-							SourceId = sourceId,
-							SnapshotId = batchId,
-							CloseSnapshot = true
-						});
-					else
-						_rta.Process(new BatchInputModel
-						{
-							AuthenticationKey = authenticationKey,
-							SourceId = sourceId,
-							SnapshotId = batchId,
-							CloseSnapshot = true
-						});
-				}
+					batchInputModel = new BatchInputModel
+					{
+						AuthenticationKey = authenticationKey,
+						SourceId = sourceId,
+						SnapshotId = batchId,
+						CloseSnapshot = true
+					};
 				else
-				{
-					if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-						_rta.Enqueue(new BatchInputModel
+					batchInputModel = new BatchInputModel
+					{
+						AuthenticationKey = authenticationKey,
+						SourceId = sourceId,
+						SnapshotId = fixSnapshotId(batchId, isSnapshot),
+						States = new[]
 						{
-							AuthenticationKey = authenticationKey,
-							SourceId = sourceId,
-							SnapshotId = fixSnapshotId(batchId, isSnapshot),
-							States = new[]
+							new BatchStateInputModel
 							{
-								new BatchStateInputModel
-								{
-									StateCode = stateCode,
-									StateDescription = stateDescription,
-									UserCode = userCode
-								}
+								StateCode = stateCode,
+								StateDescription = stateDescription,
+								UserCode = userCode
 							}
-						});
-					else
-						_rta.Process(new BatchInputModel
-						{
-							AuthenticationKey = authenticationKey,
-							SourceId = sourceId,
-							SnapshotId = fixSnapshotId(batchId, isSnapshot),
-							States = new[]
-							{
-								new BatchStateInputModel
-								{
-									StateCode = stateCode,
-									StateDescription = stateDescription,
-									UserCode = userCode
-								}
-							}
-						});
-				}
+						}
+					};
+				if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
+					_rta.Enqueue(batchInputModel);
+				else
+					_rta.Process(batchInputModel);
 			});
 		}
 
@@ -122,24 +97,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				if (closeSnapshot)
 					states = states.Take(externalUserStateBatch.Count - 1);
 
+				var batchInputModel = new BatchInputModel
+				{
+					AuthenticationKey = authenticationKey,
+					SourceId = sourceId,
+					SnapshotId = fixSnapshotId(externalUserStateBatch.First().BatchId, isSnapshot),
+					CloseSnapshot = closeSnapshot,
+					States = states
+				};
 				if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-					_rta.Enqueue(new BatchInputModel
-					{
-						AuthenticationKey = authenticationKey,
-						SourceId = sourceId,
-						SnapshotId = fixSnapshotId(externalUserStateBatch.First().BatchId, isSnapshot),
-						CloseSnapshot = closeSnapshot,
-						States = states
-					});
+					_rta.Enqueue(batchInputModel);
 				else
-					_rta.Process(new BatchInputModel
-					{
-						AuthenticationKey = authenticationKey,
-						SourceId = sourceId,
-						SnapshotId = fixSnapshotId(externalUserStateBatch.First().BatchId, isSnapshot),
-						CloseSnapshot = closeSnapshot,
-						States = states
-					});
+					_rta.Process(batchInputModel);
 			});
 		}
 
