@@ -1,4 +1,5 @@
 ﻿using System;
+using log4net;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -16,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IEventPopulatingPublisher _eventPublisher;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly ILowThreadPriorityScope _lowThreadPriorityScope;
+		private static readonly ILog logger = LogManager.GetLogger(typeof(WebScheduleStardustHandler));
 
 		public WebScheduleStardustHandler(IFullScheduling fullScheduling, IEventPopulatingPublisher eventPublisher, IJobResultRepository jobResultRepository, ILowThreadPriorityScope lowThreadPriorityScope)
 		{
@@ -28,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[AsSystem]
 		public virtual void Handle(WebScheduleStardustEvent @event)
 		{
+			logger.Info($"Web Scheduling started for PlanningPeriod {@event.PlanningPeriodId} and JobResultId is {@event.JobResultId}");
 			try
 			{
 				using (_lowThreadPriorityScope.OnThisThread())

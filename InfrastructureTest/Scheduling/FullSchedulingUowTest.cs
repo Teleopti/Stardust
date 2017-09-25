@@ -36,9 +36,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 		public IWorkShiftRuleSetRepository WorkShiftRuleSetRepository;
 		public IActivityRepository ActivityRepository;
 		public IShiftCategoryRepository ShiftCategoryRepository;
+		public IPlanningPeriodRepository PlanningPeriodRepository;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
+		public IJobResultRepository JobResultRepository;
 
-		private readonly DateOnly date = new DateOnly(2017, 6, 1);
+		protected PlanningPeriod PlanningPeriod;
 
 		public FullSchedulingUowTest(bool resourcePlannerMergeTeamblockClassicScheduling44289)
 		{
@@ -59,9 +61,25 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 
 			fillDatabaseWithEnoughDataToRunScheduling();
 
-			Target.DoScheduling(DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1));
+			Target.DoScheduling(DateOnlyPeriod.CreateWithNumberOfWeeks(new DateOnly(2017, 6, 1), 1));
 		}
 
+		[TestCase(true)]
+		[TestCase(false)]
+		public void ShouldDoSchedulingForPlanningPeriod(bool teamScheduling)
+		{
+			if (teamScheduling)
+			{
+				var defaultOptions = SchedulingOptionsProvider.Fetch(new DayOffTemplate());
+				defaultOptions.UseTeam = true;
+				defaultOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag);
+				SchedulingOptionsProvider.SetFromTest(defaultOptions);
+			}
+
+			fillDatabaseWithEnoughDataToRunScheduling();
+
+			Target.DoScheduling(PlanningPeriod.Id.Value);
+		}
 
 		private void fillDatabaseWithEnoughDataToRunScheduling()
 		{
@@ -73,9 +91,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 			var team = new Team();
 			team.SetDescription(new Description("_"));
 			team.Site = new Site("_");
+			var date = new DateOnly(2017, 6, 1);
 			var agent = new Person()
 				.WithPersonPeriod(ruleSetBag, null, team).InTimeZone(TimeZoneInfo.Utc)
 				.WithSchedulePeriodOneWeek(date);
+			var period = DateOnlyPeriod.CreateWithNumberOfWeeks(date, 1);
+			PlanningPeriod = new PlanningPeriod(period);
 
 			using (var uow = UnitOfWorkFactory.Current().CreateAndOpenUnitOfWork())
 			{
@@ -91,6 +112,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 				WorkShiftRuleSetRepository.Add(agent.Period(date).RuleSetBag.RuleSetCollection.Single());
 				RuleSetBagRepository.Add(agent.Period(date).RuleSetBag);
 				PersonRepository.Add(agent);
+				var jobResult = new JobResult(JobCategory.WebSchedule, period, agent, DateTime.UtcNow);
+				JobResultRepository.Add(jobResult);
+				PlanningPeriodRepository.Add(PlanningPeriod);
 				uow.PersistAll();
 			}
 		}

@@ -398,7 +398,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ScheduleBlankSpots>().InstancePerLifetimeScope();
 			builder.RegisterType<DaysOffBackToLegalState>().InstancePerLifetimeScope();
 			builder.RegisterType<FullSchedulingResult>().SingleInstance();
-			builder.RegisterType<SchedulingInformationProvider>().SingleInstance();
+			builder.RegisterType<SchedulingInformationProvider>().SingleInstance().ApplyAspects();
 			if (_configuration.Toggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508))
 			{
 				builder.RegisterType<IntradayOptimization>().As<IIntradayOptimization>().InstancePerLifetimeScope();
