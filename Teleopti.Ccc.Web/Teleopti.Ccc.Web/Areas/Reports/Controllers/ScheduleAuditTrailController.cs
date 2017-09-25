@@ -9,17 +9,26 @@ namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.ScheduleAuditTrailReport)]
 	public class ScheduleAuditTrailController : ApiController
 	{
-		private readonly ScheduleChangedByUserViewModelProvider _scheduleChangedByUserViewModelProvider;
+		private readonly PersonsWhoChangedSchedulesViewModelProvider _personsWhoChangedSchedulesViewModelProvider;
+		private readonly ScheduleAuditTrailReportViewModelProvider _scheduleAuditTrailReportViewModelProvider;
 
-		public ScheduleAuditTrailController(ScheduleChangedByUserViewModelProvider scheduleChangedByUserViewModelProvider)
+		public ScheduleAuditTrailController(PersonsWhoChangedSchedulesViewModelProvider personsWhoChangedSchedulesViewModelProvider,
+			ScheduleAuditTrailReportViewModelProvider scheduleAuditTrailReportViewModelProvider)
 		{
-			_scheduleChangedByUserViewModelProvider = scheduleChangedByUserViewModelProvider;
+			_personsWhoChangedSchedulesViewModelProvider = personsWhoChangedSchedulesViewModelProvider;
+			_scheduleAuditTrailReportViewModelProvider = scheduleAuditTrailReportViewModelProvider;
 		}
 
-		[UnitOfWork, HttpGet, Route("api/Reports/ScheduleChangedByPersons")]
-		public virtual IHttpActionResult ScheduleChangedByPersonsInAuditTrail()
+		[UnitOfWork, HttpGet, Route("api/Reports/PersonsWhoChangedSchedules")]
+		public virtual IHttpActionResult PersonsWhoChangedSchedules()
 		{
-			return Ok(_scheduleChangedByUserViewModelProvider.Provide());
+			return Ok(_personsWhoChangedSchedulesViewModelProvider.Provide());
+		}
+
+		[UnitOfWork, HttpPost, Route("api/Reports/ScheduleAuditTrailReport")]
+		public virtual IHttpActionResult ScheduleAuditTrailReport([FromBody] AuditTrailSearchParams value)
+		{
+			return Ok(_scheduleAuditTrailReportViewModelProvider.Provide(value));
 		}
 	}
 }

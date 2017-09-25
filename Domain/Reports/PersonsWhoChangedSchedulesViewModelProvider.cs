@@ -5,11 +5,11 @@ using Teleopti.Ccc.Domain.Repositories;
 
 namespace Teleopti.Ccc.Domain.Reports
 {
-	public class ScheduleChangedByUserViewModelProvider
+	public class PersonsWhoChangedSchedulesViewModelProvider
 	{
 		private readonly IScheduleAuditTrailReport _scheduleAuditTrailReport;
 
-		public ScheduleChangedByUserViewModelProvider(IScheduleAuditTrailReport scheduleAuditTrailReport)
+		public PersonsWhoChangedSchedulesViewModelProvider(IScheduleAuditTrailReport scheduleAuditTrailReport)
 		{
 			_scheduleAuditTrailReport = scheduleAuditTrailReport;
 		}

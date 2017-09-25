@@ -22,8 +22,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				builder.RegisterType<ReportScheduledTimeVsTargetVisible>().As<IReportVisible>().SingleInstance();
 			builder.RegisterType<ReportAuditTrailVisible>().As<IReportVisible>().SingleInstance();
 
-			builder.RegisterType<ScheduleChangedByUserViewModelProvider>().SingleInstance();
+			builder.RegisterType<PersonsWhoChangedSchedulesViewModelProvider>().SingleInstance();
 			builder.RegisterType<ScheduleAuditTrailReport>().As<IScheduleAuditTrailReport>().SingleInstance();
+			builder.RegisterType<ScheduleAuditTrailReportViewModelProvider>().SingleInstance();
 		}
 	}
 }

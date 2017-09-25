@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Reports
 	[DomainTest]
 	public class ScheduleChangedByUserViewModelProviderTest
 	{
-		public ScheduleChangedByUserViewModelProvider Target;
+		public PersonsWhoChangedSchedulesViewModelProvider Target;
 		public FakeScheduleAuditTrailReport ScheduleAuditTrailReport;
 
 		[Test]
