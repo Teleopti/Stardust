@@ -120,11 +120,11 @@
 			params: {
 				isImportSchedule: true
 			}
-		}).state('resourceplanner.planningperiod', { // for full schedule performance tests - start
+		}).state('resourceplanner.planningperiod', { // Bellows are for performance tests 
 			url: '/planningperiod/:id?runForTest',
 			templateUrl: 'app/resourceplanner/web_performance_tests/planningperiods.html',
 			controller: 'PlanningPeriodsCtrl'
-		}).state('resourceplanner.report', { // for full schedule performance tests - end
+		}).state('resourceplanner.report', { 
 			params: {
 				result: {},
 				interResult: [],
@@ -134,7 +134,7 @@
 			url: '/report/:id',
 			templateUrl: 'app/resourceplanner/web_performance_tests/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
-		}).state('resourceplanner.temp', { // for Intraday optimization performance tests
+		}).state('resourceplanner.temp', { 
 			url: '/optimize/:id',
 			templateUrl: 'app/resourceplanner/web_performance_tests/temp.html',
 			controller: 'ResourceplannerTempCtrl'
