@@ -9,7 +9,7 @@
         var auditTrailChangedByPerson = $resource('../api/Reports/PersonsWhoChangedSchedules');
         var service = {
             getCategorizedReports: categorizedReports,
-            getAuditTrailChangedByPerson: auditTrailChangedByPerson,
+            getAuditTrailChangedByPerson: auditTrailChangedByPerson
         };
         return service;
     }

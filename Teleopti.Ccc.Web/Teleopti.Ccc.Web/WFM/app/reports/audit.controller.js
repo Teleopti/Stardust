@@ -28,9 +28,9 @@
 		}
 
 		function getChangedBy() {
-			var data = ReportsService.getAuditTrailChangedByPerson.get();
+			var data = ReportsService.getAuditTrailChangedByPerson.query();
 			data.$promise.then(function (result) {
-				// vm.changedBy = result;
+				vm.changedBy = result;
 			});
 		}
 

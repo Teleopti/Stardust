@@ -4,7 +4,7 @@
     <p>Find recent changes</p>
   </div>
 </div>
-<!-- {{vm.changedBy}} -->
+
 <div class="con-row" ng-show="!showForm">
   <div class="con-flex">
     <div class="line-center">
@@ -35,7 +35,7 @@
               <label for="drop">{{'ChangedBy'|translate}}:</label>
               <md-select ng-model="form.drop" id="drop" required="" aria-label="changed by">
                 <md-option ng-repeat="item in vm.changedBy" ng-value="item">
-                  {{item}}
+                  {{item.Name}}
                 </md-option>
               </md-select>
               <div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Drop.$error.required.$touched">
