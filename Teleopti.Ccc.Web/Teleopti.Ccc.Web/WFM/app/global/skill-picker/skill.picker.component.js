@@ -61,9 +61,7 @@
         };
 
         ctrl.configMode = function() {
-			console.log('$state', $state)
-			
-            $state.go('rta-skill-area-config', {
+            $state.go('rta-skill-group-config', {
                 isNewSkillArea: false
             });
         };
