@@ -125,16 +125,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			var validPeriod = new DateTimePeriod(_now.UtcDateTime(), _now.UtcDateTime().AddHours(_absenceRequestSetting.ImmediatePeriodInHours));
 			helpers.LoadSchedulesPeriodToCoverForMidnightShifts = validPeriod.ChangeStartTime(TimeSpan.FromDays(-1));
 			var waitlistedRequestsIds = _personRequestRepository.GetWaitlistRequests(helpers.LoadSchedulesPeriodToCoverForMidnightShifts).ToList();
-			if (!waitlistedRequestsIds.Any())
-			{
-				helpers.InitSuccess = false;
-				var mesg = "No waitlisted request found within the period from " +
-						   helpers.LoadSchedulesPeriodToCoverForMidnightShifts.StartDateTime + " to " +
-						   helpers.LoadSchedulesPeriodToCoverForMidnightShifts.EndDateTime;
-				logger.Info(mesg);
-				_stardustJobFeedback.SendProgress(mesg);
-				return helpers;
-			}
+
 			var waitlistedRequests = _personRequestRepository.Find(waitlistedRequestsIds);
 
 			waitlistedRequests =
@@ -145,6 +136,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			helpers.AllRequests = _arrangeRequestsByProcessOrder.GetRequestsSortedBySeniority(waitlistedRequests).ToList();
 			helpers.AllRequests.AddRange(_arrangeRequestsByProcessOrder.GetRequestsSortedByDate(waitlistedRequests));
 
+			if (!helpers.AllRequests.Any())
+			{
+				helpers.InitSuccess = false;
+				var mesg = "No waitlisted request found within the period from " +
+						   helpers.LoadSchedulesPeriodToCoverForMidnightShifts.StartDateTime + " to " +
+						   helpers.LoadSchedulesPeriodToCoverForMidnightShifts.EndDateTime;
+				logger.Info(mesg);
+				_stardustJobFeedback.SendProgress(mesg);
+				return helpers;
+			}
 			_personRepository.FindPeople(helpers.AllRequests.Select(x => x.Person.Id.GetValueOrDefault()).ToList());
 
 			var inflatedPeriod = new DateTimePeriod(helpers.AllRequests.Min(x => x.Request.Period.StartDateTime), helpers.AllRequests.Max(x => x.Request.Period.EndDateTime));
