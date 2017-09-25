@@ -242,7 +242,7 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     'dist/main.min.js': ['app/**/*.js', '!app/**/*.spec.js', '!app/**/*.fake.js', '!app/**/*.fortest.js', '!app/app_desktop_client.js'],
-                    'dist/modules.min.js': ['dist/resources/modules.js'],
+                    'dist/resources/modules.min.js': ['dist/resources/modules.js'],
                     'dist/templates.min.js': ['dist/templates.js']
                 },
                 options: {
