@@ -502,7 +502,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			TestControllerMethods.Logon();
 			Navigation.GoToRtaTool();
 		}
-		
+
+		[Given(@"I view real time adherence trace for '(.*)'")]
+		public void GivenIViewRealTimeAdherenceTraceFor(string userCode)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GoToRtaTracer(userCode);
+		}
+
 		[When(@"I view agent details view for agent '(.*)'")]
 		public void WhenIViewAgentDetailsViewForAgent(string name)
 		{

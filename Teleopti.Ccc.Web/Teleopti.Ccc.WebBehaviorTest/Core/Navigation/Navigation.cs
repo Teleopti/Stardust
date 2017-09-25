@@ -407,7 +407,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Navigation
 		{
 			GoToPage("wfm/#/rtaTool");
 		}
-		
+			
+		public static void GoToRtaTracer(string userCode)
+		{
+			GoToPage($"wfm/#/rtaTracer?userCode={userCode}&trace");
+		}
+
 		public static void GoToWfmLandingPage()
 		{
 			GoToPage("wfm");

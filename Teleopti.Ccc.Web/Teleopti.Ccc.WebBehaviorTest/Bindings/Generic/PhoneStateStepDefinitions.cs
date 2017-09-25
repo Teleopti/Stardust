@@ -28,15 +28,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 
 		[When(@"at '(.*)' '(.*)' sets (?:his|her) phone state to '(.*)'")]
 		[Given(@"at '(.*)' '(.*)' sets (?:his|her) phone state to '(.*)'")]
-		public void GivenAtSetsHisPhoneStateTo(string time, string personName, string stateCode)
+		public void GivenAtSetsHisPhoneStateTo(string time, string userCode, string stateCode)
 		{
 			CurrentTime.Set(time);
-			WhenSetsHisPhoneStateToOnDatasource(personName, stateCode);
+			WhenSetsHisPhoneStateToOnDatasource(userCode, stateCode);
 		}
 
 		[When(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
 		[Given(@"'(.*)' sets (?:his|her) phone state to '(.*)'")]
-		public void WhenSetsHisPhoneStateToOnDatasource(string personName, string stateCode)
+		public void WhenSetsHisPhoneStateToOnDatasource(string userCode, string stateCode)
 		{
 			using (var h = new Http())
 				h.PostJson(
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 					new ExternalUserStateWebModel
 					{
 						AuthenticationKey = "!#¤atAbgT%",
-						UserCode = personName,
+						UserCode = userCode,
 						StateCode = stateCode,
 						SourceId = SourceId
 					});

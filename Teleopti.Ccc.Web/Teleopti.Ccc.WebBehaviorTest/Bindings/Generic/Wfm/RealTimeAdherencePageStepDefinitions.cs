@@ -5,18 +5,6 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 {
 	[Binding]
-	public class RealTimeAdherenceToolPageStepDefinitions
-	{
-		[When(@"I send '(.*)' for all agents")]
-		public void WhenIClickFor(string state)
-		{
-			Browser.Interactions.AssertExists(".for-test-agent");
-			Browser.Interactions.ClickContaining(".sendbatch", state.ToUpper());
-			Browser.Interactions.AssertExists(".notice-info", "Done!");
-		}
-	}
-
-	[Binding]
 	public class RealTimeAdherencePageStepDefinitions
 	{
 		[When(@"I click( the)? ([a-z-]*|[a-z]* [a-z]*) of '(.*)'")]

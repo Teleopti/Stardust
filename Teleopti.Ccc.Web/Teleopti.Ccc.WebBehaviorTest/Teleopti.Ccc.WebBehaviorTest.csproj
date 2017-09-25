@@ -110,6 +110,8 @@
     <Compile Include="Bindings\Generic\Wfm\GlobalStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\IntradayStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\PermissionsStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceToolPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Wfm\RealTimeAdherenceTracerPageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Wfm\ResourcePlannerStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkloadStepDefinitions.cs" />
     <Compile Include="Bindings\TestRun.cs" />
