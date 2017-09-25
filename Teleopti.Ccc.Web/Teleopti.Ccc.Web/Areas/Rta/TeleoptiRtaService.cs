@@ -19,12 +19,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 	{
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 		private readonly IToggleManager _toggles;
+		private readonly IRtaTracer _rtaTracer;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(TeleoptiRtaService));
 
-		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta, IToggleManager toggles)
+		public TeleoptiRtaService(Domain.ApplicationLayer.Rta.Service.Rta rta, IToggleManager toggles, IRtaTracer rtaTracer)
 		{
 			_rta = rta;
 			_toggles = toggles;
+			_rtaTracer = rtaTracer;
 		}
 
 		public int SaveExternalUserState(
@@ -156,6 +158,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		private int handleRtaExceptions(Action rtaCall)
 		{
+			
 			try
 			{
 				rtaCall.Invoke();

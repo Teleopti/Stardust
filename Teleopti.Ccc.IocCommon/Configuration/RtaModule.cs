@@ -100,6 +100,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ActivityChangeChecker>().AsSelf().As<IActivityChangeCheckerFromScheduleChangeProcessor>().SingleInstance();
 
 			builder.RegisterType<RtaToolViewModelBuilderFromAgentState>().As<IRtaToolViewModelBuilder>().SingleInstance();
+
+			builder.RegisterType<NoRtaTracer>().As<IRtaTracer>().SingleInstance();
 		}
 
 	}
