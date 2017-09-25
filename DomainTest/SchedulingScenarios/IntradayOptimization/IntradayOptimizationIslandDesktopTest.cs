@@ -196,13 +196,13 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldNotSetScheduleTagForNonModifiedAssignment()
 		{
-			var scenario = new Scenario("_");
-			var phoneActivity = ActivityFactory.CreateActivity("_");
+			var scenario = new Scenario();
+			var phoneActivity = new Activity();
 			var dateOnly = new DateOnly(2010, 1, 1);
-			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(9, 15, 9, 15, 15), new ShiftCategory("_").WithId()));
+			var ruleSetWithNonSelectableShiftsOnly = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(phoneActivity, new TimePeriodWithSegment(8, 15, 8, 15, 15), new TimePeriodWithSegment(9, 15, 9, 15, 15), new ShiftCategory("_").WithId()));
 			var skill = new Skill("_").For(phoneActivity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
-			var skillDay = skill.CreateSkillDayWithDemandPerHour(scenario, dateOnly, TimeSpan.FromMinutes(60), new Tuple<int, TimeSpan>(17, TimeSpan.FromMinutes(360)));
-			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill).WithSchedulePeriodOneWeek(dateOnly);
+			var skillDay = skill.CreateSkillDayWithDemand(scenario, dateOnly, 1);
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSetWithNonSelectableShiftsOnly, new Contract("_"), skill).WithSchedulePeriodOneWeek(dateOnly);
 			var ass = new PersonAssignment(agent, scenario, dateOnly).ShiftCategory(new ShiftCategory("_").WithId()).WithLayer(phoneActivity, new TimePeriod(8, 17));
 			var optPref = new OptimizationPreferencesDefaultValueProvider().Fetch();
 			optPref.General.ScheduleTag = new ScheduleTag();
