@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[TestCase(-120, ExpectedResult = true)]
 		[TestCase(-200, ExpectedResult = true)]
 		[Ignore("To be fixed for PBI #46002")]
-		public bool ShouldRespectStartTimeTolerance_BreakPreferenceStartTimeByMax(double breakPreferenceStartTimeByMaxMinutes)
+		public bool ShouldRespectStartTimeTolerance_BreakPreferenceStartTimeByMax(int breakPreferenceStartTimeByMaxMinutes)
 		{
 			var scenario = new Scenario();
 			var activity = new Activity();
