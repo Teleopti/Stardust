@@ -137,19 +137,14 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			{
 				scheduleData.Add(new PersonAssignment(agent, scenario, date.AddDays(i)).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16)));
 				skillDays.Add(skill.CreateSkillDayWithDemandPerHour(scenario, date.AddDays(i), TimeSpan.FromMinutes(1), new Tuple<int, TimeSpan>(7, TimeSpan.FromMinutes(360))));
+				scheduleData.Add(new PreferenceDay(agent, date.AddDays(i), new PreferenceRestriction { StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))}));
 			}
 			scheduleData.Add(new PersonAssignment(agent, scenario, date.AddDays(5)).WithDayOff());	
 			scheduleData.Add(new PersonAssignment(agent, scenario, date.AddDays(6)).WithDayOff());	
-			var preferenceRestriction = new PreferenceRestriction
-			{
-				StartTimeLimitation = new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8))
-			};
-			scheduleData.Add(new PreferenceDay(agent, date, preferenceRestriction));
 			var stateHolder = SchedulerStateHolderFrom.Fill(scenario, period, new[] { agent }, scheduleData, skillDays);
 			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
 			optimizationPreferences.General.UsePreferences = true;
 			optimizationPreferences.General.PreferencesValue = preferenceValue;
-			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromHours(1); //shouldn't matter
 
 			Target.Optimize(new[] { agent }, period, optimizationPreferences, new NoIntradayOptimizationCallback());
 			
