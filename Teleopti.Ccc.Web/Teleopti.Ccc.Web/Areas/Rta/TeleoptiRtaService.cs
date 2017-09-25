@@ -42,13 +42,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			DateTime batchId,
 			bool isSnapshot)
 		{
+			_rtaTracer.ProcessReceived();
 			return handleRtaExceptions(() =>
 			{
 				userCode = fixUserCode(userCode);
 				stateCode = fixStateCode(stateCode, platformTypeId, isLoggedOn);
-				BatchInputModel batchInputModel = null;
+				BatchInputModel input = null;
 				if (isClosingSnapshot(userCode, isSnapshot))
-					batchInputModel = new BatchInputModel
+					input = new BatchInputModel
 					{
 						AuthenticationKey = authenticationKey,
 						SourceId = sourceId,
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 						CloseSnapshot = true
 					};
 				else
-					batchInputModel = new BatchInputModel
+					input = new BatchInputModel
 					{
 						AuthenticationKey = authenticationKey,
 						SourceId = sourceId,
@@ -67,39 +68,45 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 							{
 								StateCode = stateCode,
 								StateDescription = stateDescription,
-								UserCode = userCode
+								UserCode = userCode,
+								TraceInfo = _rtaTracer.CreateTrace(() => userCode, () => stateCode)
 							}
 						}
 					};
 				if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-					_rta.Enqueue(batchInputModel);
+					_rta.Enqueue(input);
 				else
-					_rta.Process(batchInputModel);
+					_rta.Process(input);
 			});
 		}
 
 		public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId,
 			ICollection<ExternalUserState> externalUserStateBatch)
 		{
+			_rtaTracer.ProcessReceived();
 			return handleRtaExceptions(() =>
 			{
 				IEnumerable<BatchStateInputModel> states = (
 						from s in externalUserStateBatch
+						let stateCode = fixStateCode(s.StateCode, platformTypeId, s.IsLoggedOn)
+						let userCode = fixUserCode(s.UserCode)
 						select new BatchStateInputModel
 						{
-							UserCode = fixUserCode(s.UserCode),
-							StateCode = fixStateCode(s.StateCode, platformTypeId, s.IsLoggedOn),
+							UserCode = userCode,
+							StateCode = stateCode,
 							StateDescription = s.StateDescription,
+							TraceInfo = _rtaTracer.CreateTrace(() => userCode, () => stateCode)
 						})
 					.ToArray();
-
+				_rtaTracer.StateRecevied(() => states.Select(x => x.TraceInfo));
+				
 				var mayCloseSnapshot = externalUserStateBatch.Last();
 				var isSnapshot = mayCloseSnapshot.IsSnapshot;
 				var closeSnapshot = isClosingSnapshot(mayCloseSnapshot.UserCode, isSnapshot);
 				if (closeSnapshot)
 					states = states.Take(externalUserStateBatch.Count - 1);
 
-				var batchInputModel = new BatchInputModel
+				var input = new BatchInputModel
 				{
 					AuthenticationKey = authenticationKey,
 					SourceId = sourceId,
@@ -108,9 +115,9 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 					States = states
 				};
 				if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-					_rta.Enqueue(batchInputModel);
+					_rta.Enqueue(input);
 				else
-					_rta.Process(batchInputModel);
+					_rta.Process(input);
 			});
 		}
 
@@ -158,7 +165,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		private int handleRtaExceptions(Action rtaCall)
 		{
-			
 			try
 			{
 				rtaCall.Invoke();

@@ -15,16 +15,19 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		private readonly Domain.ApplicationLayer.Rta.Service.Rta _rta;
 		private readonly StateQueueTenants _tenants;
 		private readonly IDistributedLockAcquirer _distributedLock;
+		private readonly IRtaTracer _tracer;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(StateQueueWorker));
 
 		public StateQueueWorker(
 			Domain.ApplicationLayer.Rta.Service.Rta rta,
 			StateQueueTenants tenants,
-			IDistributedLockAcquirer distributedLock)
+			IDistributedLockAcquirer distributedLock, 
+			IRtaTracer tracer)
 		{
 			_rta = rta;
 			_tenants = tenants;
 			_distributedLock = distributedLock;
+			_tracer = tracer;
 		}
 
 		public void Execute(BackgroundProcessContext context)
@@ -36,6 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 		[TenantScope]
 		protected virtual void QueueIteration(string tenant)
 		{
+			_tracer.ProcessProcessing();
 			_distributedLock.TryLockForTypeOf(this, () =>
 			{
 				bool iterated;

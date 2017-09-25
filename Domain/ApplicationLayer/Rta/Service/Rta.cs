@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Aop;
+﻿using System.Linq;
+using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IStateQueueReader _queueReader;
 		private readonly WithAnalyticsUnitOfWork _analytics;
 		private readonly StateQueueTenants _tenants;
+		private readonly IRtaTracer _tracer;
 
 		public Rta(
 			TenantLoader tenantLoader,
@@ -23,7 +25,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			IStateQueueWriter queueWriter,
 			IStateQueueReader queueReader,
 			WithAnalyticsUnitOfWork analytics,
-			StateQueueTenants tenants)
+			StateQueueTenants tenants,
+			IRtaTracer tracer)
 		{
 			_tenantLoader = tenantLoader;
 			_checker = checker;
@@ -32,6 +35,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_queueReader = queueReader;
 			_analytics = analytics;
 			_tenants = tenants;
+			_tracer = tracer;
 		}
 
 		[LogInfo]
@@ -62,17 +66,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private void process(BatchInputModel batch)
 		{
+			_tracer.StateProcessing(() => batch.States.Select(x => x.TraceInfo));
 			validateAuthenticationKey(batch);
 			_contextLoader.ForBatch(batch);
 			if (batch.CloseSnapshot)
 				_contextLoader.ForClosingSnapshot(batch.SnapshotId.Value, batch.SourceId);
 		}
 
-		private void validateAuthenticationKey(IValidatable input)
+		private void validateAuthenticationKey(BatchInputModel input)
 		{
 			input.AuthenticationKey = LegacyAuthenticationKey.MakeEncodingSafe(input.AuthenticationKey);
 			if (!_tenantLoader.Authenticate(input.AuthenticationKey))
+			{
+				_tracer.InvalidAuthenticationKey(() => input.States.Select(x => x.TraceInfo));
 				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
+			}
 		}
 
 		[LogInfo]

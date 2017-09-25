@@ -1,17 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
-	public interface IValidatable
-	{
-		string AuthenticationKey { get; set; }
-		string SourceId { get; set; }
-	}
-	
-	public class BatchInputModel : IValidatable
+	public class BatchInputModel
 	{
 		public string AuthenticationKey { get; set; }
 		public string SourceId { get; set; }
@@ -38,6 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 		public string UserCode { get; set; }
 		public string StateCode { get; set; }
 		public string StateDescription { get; set; }
+		public StateTraceInfo TraceInfo { get; set; }
 
 		// for logging
 		public override string ToString()

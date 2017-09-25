@@ -60,15 +60,14 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			});
 		}
 
-		private IHttpActionResult handleRtaExceptions(BatchInputModel batchInputModel)
+		private IHttpActionResult handleRtaExceptions(BatchInputModel input)
 		{
-			
 			try
 			{
 				if (_toggles.IsEnabled(Toggles.RTA_AsyncOptimization_43924))
-					_rta.Enqueue(batchInputModel);
+					_rta.Enqueue(input);
 				else
-					_rta.Process(batchInputModel);
+					_rta.Process(input);
 			}
 			catch (InvalidAuthenticationKeyException e)
 			{
