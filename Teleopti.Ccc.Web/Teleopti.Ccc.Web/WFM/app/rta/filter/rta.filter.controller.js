@@ -16,7 +16,8 @@
 			'rtaRouteService',
 			'rtaNamesFormatService',
 			'localeLanguageSortingService',
-			'$q'
+			'$q',
+			'Toggle'
 		];
 
 	function RtaFilterController(
@@ -29,7 +30,8 @@
 		rtaRouteService,
 		rtaNamesFormatService,
 		localeLanguageSortingService,
-		$q
+		$q,
+		toggleSvc
 	) {
 		var vm = this;
 		var siteIds = $stateParams.siteIds || [];
@@ -270,5 +272,9 @@
 		};
 
 		function clearSearchTerm() { vm.searchTerm = ''; }
+
+		toggleSvc.togglesLoaded.then(function () {
+			vm.toggles.unifiedSkillGroupManagement = toggleSvc.WFM_Unified_Skill_Group_Management_45417;
+		});
 	};
 })();

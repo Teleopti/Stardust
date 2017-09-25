@@ -21,7 +21,12 @@
 		vm.agentsStateForTeam = 'rta-agents({teamIds: team.Id})';
 		vm.organizationSelection = false;
 		vm.skillSelected = vm.skillIds.length;
-		vm.goToAgentsView = function () { rtaRouteService.goToSelectSkill(); };
+		vm.goToAgentsView = function () {
+			rtaRouteService.goToSelectSkill();
+		};
+		vm.toggles = {
+			unifiedSkillGroupManagement: []
+		};
 		
 		(function () {
 			if (angular.isDefined(vm.urlParams.skillAreaId)) {
@@ -67,7 +72,13 @@
 								teams: []
 							};
 							$scope.$watch(function () { return siteCard.isOpen }, function (newValue) { if (newValue) poller.force(); });
-							$scope.$watch(function () { return siteCard.isSelected }, function (newValue, oldValue) {
+								return siteCard.isOpen
+							}, function (newValue) {
+								if (newValue) pollNow();
+							});
+							$scope.$watch(function () {
+								return siteCard.isSelected
+							}, function (newValue, oldValue) {
 								if (newValue != oldValue) {
 									toggleOpenButton();
 									if (newValue) {
@@ -90,7 +101,9 @@
 
 		function toggleOpenButton() {
 			var match = vm.siteCards.find(function (s) {
-				return s.isSelected || s.teams.find(function (t) { return t.isSelected; });
+				return s.isSelected || s.teams.find(function (t) {
+					return t.isSelected;
+				});
 			});
 			vm.organizationSelection = !!match;
 		}
@@ -98,7 +111,9 @@
 		function getTeamsForSites() {
 			return $q.all(
 				vm.siteCards
-					.filter(function (s) { return s.isOpen; })
+					.filter(function (s) {
+						return s.isOpen;
+					})
 					.map(function (s) {
 						return getTeamsForSite(s);
 					})
@@ -116,10 +131,14 @@
 						if (!teamVm) {
 							teamVm = team;
 							teamVm.isSelected = false;
-							$scope.$watch(function () { return teamVm.isSelected }, function (newValue, oldValue) {
+							$scope.$watch(function () {
+								return teamVm.isSelected
+							}, function (newValue, oldValue) {
 								toggleOpenButton();
 								if (newValue) {
-									var areAllTeamsSelected = s.teams.every(function (t) { return t.isSelected });
+									var areAllTeamsSelected = s.teams.every(function (t) {
+										return t.isSelected
+									});
 									if (areAllTeamsSelected) s.isSelected = true;
 								}
 								else {
@@ -145,8 +164,12 @@
 		}
 
 		function getSkillIdsFromSkillAreaId(id) {
-			return vm.skillAreas.find(function (sa) { return sa.Id === id; })
-				.Skills.map(function (skill) { return skill.Id; });
+			return vm.skillAreas.find(function (sa) {
+				return sa.Id === id;
+			})
+				.Skills.map(function (skill) {
+					return skill.Id;
+				});
 		}
 
 		function translateSiteColors(site) {
@@ -214,6 +237,11 @@
 				skillIds: skillIds,
 				skillAreaId: vm.urlParams.skillAreaId
 			});
-		}
+		};
+
+		toggleSvc.togglesLoaded.then(function () {
+			vm.toggles.unifiedSkillGroupManagement = toggleSvc.WFM_Unified_Skill_Group_Management_45417;
+		});
+
 	}
 })();
