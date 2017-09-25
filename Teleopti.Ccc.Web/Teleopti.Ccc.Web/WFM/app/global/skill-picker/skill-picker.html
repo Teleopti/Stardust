@@ -36,4 +36,12 @@
             </md-not-found>
         </md-autocomplete>
     </div>
+	<div ng-if="$ctrl.toggles.unifiedSkillGroupManagement">
+		<button class="wfm-fab mini mini-active"
+				id="manage_skill_group_button"
+				ng-click="$ctrl.configMode()">
+			<i class="mdi mdi-plus" style="top: 2px; position: relative;"></i>
+			<md-tooltip>{{'CreateSkillGroup'|translate}}</md-tooltip>
+		</button>
+	</div>
 </div>

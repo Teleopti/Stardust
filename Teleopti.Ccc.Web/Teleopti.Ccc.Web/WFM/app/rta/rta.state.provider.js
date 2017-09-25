@@ -1,3 +1,4 @@
+// @ts-check
 'use strict';
 
 angular
@@ -65,12 +66,19 @@ angular
                     controller: 'RtaHistoricalController as vm',
                 })
 
-
                 .state('rta-teams-legacy', {
                     url: '/rta/teams/?siteIds&skillIds&skillAreaId&open',
                     controller: function ($state, $stateParams) {
                         $state.go('rta', $stateParams)
                     }
-                })
+				})
+
+				.state('rta-skill-area-config',
+				{
+					url: '/rta/skill-area-config',
+					templateUrl: 'app/global/skill-group/skillgroup.html',
+					params: {returnState: 'rta'},
+					controller: 'SkillGroupController as vm'
+				})
         };
     });

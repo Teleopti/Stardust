@@ -13,7 +13,8 @@
 			'pascalprecht.translate',
 			'currentUserInfoService',
 			'localeLanguageSortingService',
-			'wfm.helpingDirectives'
+			'wfm.helpingDirectives',
+			'skillGroupService'
 		])
 		.run(function ($rootScope, rtaStateService, Toggle) {
 
