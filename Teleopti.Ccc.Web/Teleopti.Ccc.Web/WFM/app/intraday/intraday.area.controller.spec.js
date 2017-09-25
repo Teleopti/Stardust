@@ -243,7 +243,7 @@ describe('IntradayAreaController', function () {
 		$interval = _$interval_;
 		NoticeService = _NoticeService_;
 
-		$httpBackend.whenGET("../api/intraday/skillarea")
+		$httpBackend.whenGET("../api/skillgroup/skillgroups")
 		.respond(function () {
 			return [200, skillAreaInfo];
 		});
@@ -257,7 +257,7 @@ describe('IntradayAreaController', function () {
 			}
 		});
 
-		$httpBackend.whenDELETE("../api/intraday/skillarea/836cebb6-cee8-41a1-bb62-729f4b3a63f4")
+		$httpBackend.whenDELETE("../api/skillgroup/delete/836cebb6-cee8-41a1-bb62-729f4b3a63f4")
 		.respond(200, {});
 
 		$httpBackend.whenGET("../api/intraday/monitorskillareastatistics/fa9b5393-ef48-40d1-b7cc-09e797589f81")

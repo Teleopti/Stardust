@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
@@ -8,7 +7,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SkillGroup;
 using Teleopti.Ccc.Web.Filters;
 
-namespace Teleopti.Ccc.Web.Areas.Global
+namespace Teleopti.Ccc.Web.Areas.SkillGroup
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday,DefinedRaptorApplicationFunctionPaths.WebStaffing)]
 	public class SkillGroupController : ApiController
@@ -30,8 +29,8 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		}
 
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea)]
-		[UnitOfWork, HttpPost, Route("api/intraday/skillarea")]
-		public virtual IHttpActionResult CreateSkillArea([FromBody]SkillGroupInput input)
+		[UnitOfWork, HttpPost, Route("api/skillgroup/create")]
+		public virtual IHttpActionResult CreateSkillGroup([FromBody]SkillGroupInput input)
 		{
 			if (!input.Skills.Any())
 				return BadRequest("No skill selected");
@@ -40,8 +39,8 @@ namespace Teleopti.Ccc.Web.Areas.Global
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/intraday/skillarea")]
-		public virtual IHttpActionResult GetSkillAreas()
+		[UnitOfWork, HttpGet, Route("api/skillgroup/skillgroups")]
+		public virtual IHttpActionResult GetSkillGroups()
 		{
 			return Ok(new SkillGroupInfo
 			{
@@ -51,23 +50,11 @@ namespace Teleopti.Ccc.Web.Areas.Global
 		}
 
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea)]
-		[UnitOfWork, HttpDelete, Route("api/intraday/skillarea/{id}")]
-		public virtual IHttpActionResult DeleteSkillArea(Guid id)
+		[UnitOfWork, HttpDelete, Route("api/skillgroup/delete/{id}")]
+		public virtual IHttpActionResult DeleteSkillGroup(Guid id)
 		{
 			_deleteSkillGroup.Do(id);
 			return Ok();
 		}
-	}
-
-	public class SkillGroupInfo
-	{
-		public bool HasPermissionToModifySkillArea { get; set; }
-		public IEnumerable<SkillGroupViewModel> SkillAreas { get; set; }
-	}
-
-	public class SkillGroupInput
-	{
-		public string Name { get; set; }
-		public IEnumerable<Guid> Skills { get; set; }
 	}
 }

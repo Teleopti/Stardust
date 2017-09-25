@@ -8,7 +8,7 @@
 	function SkillGroupSvc($resource) {
 		return {
 			createSkillGroup: $resource(
-				'../api/intraday/skillarea',
+				'../api/skillgroup/create',
 				{},
 				{
 					query: {
@@ -20,7 +20,7 @@
 			),
 
 			getSkillGroups: $resource(
-				'../api/intraday/skillarea',
+				'../api/skillgroup/skillgroups',
 				{},
 				{
 					query: {
@@ -33,7 +33,7 @@
 			),
 
 			deleteSkillGroup: $resource(
-				'../api/intraday/skillarea/:id',
+				'../api/skillgroup/delete/:id',
 				{id: '@id'},
 				{
 					remove: {

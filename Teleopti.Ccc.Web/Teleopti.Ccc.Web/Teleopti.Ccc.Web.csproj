@@ -445,7 +445,7 @@
     <Compile Include="Areas\Intraday\IntradayMonitorStaffingController.cs" />
     <Compile Include="Areas\Intraday\IntradayMonitorStatisticsController.cs" />
     <Compile Include="Areas\Intraday\IntradayController.cs" />
-    <Compile Include="Areas\Global\SkillGroupController.cs" />
+    <Compile Include="Areas\SkillGroup\SkillGroupController.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillController.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ChangePersonPassword.cs" />
@@ -697,6 +697,8 @@
     <Compile Include="Areas\Rta\Controllers\RtaSkillAreaController.cs" />
     <Compile Include="Areas\Rta\Controllers\RtaToolController.cs" />
     <Compile Include="Areas\Rta\Log4NetWcfLogger.cs" />
+    <Compile Include="Areas\SkillGroup\SkillGroupInfo.cs" />
+    <Compile Include="Areas\SkillGroup\SkillGroupInput.cs" />
     <Compile Include="Areas\Staffing\Controllers\StaffingController.cs" />
     <Compile Include="Areas\Start\Controllers\UserTokenController.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\EditScheduleNoteFormData.cs" />
