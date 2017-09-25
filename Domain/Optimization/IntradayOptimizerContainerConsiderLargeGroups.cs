@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public void Execute(IEnumerable<IIntradayOptimizer2> optimizers)
 		{
 			var callback = _currentIntradayOptimizationCallback.Current();
-			foreach (var agents in _agentsToSkillSets.ToSkillGroups())
+			foreach (var agents in _agentsToSkillSets.ToSkillSets())
 			{
 				var optimizersToLoop = optimizers.Where(x => agents.Contains(x.ContainerOwner)).ToList();
 				var datesToSkip = new IntradayDatesToSkip(_intradayOptimizerLimiter, agents.Count());

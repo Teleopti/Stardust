@@ -504,7 +504,7 @@
     <Compile Include="Logon\DataSourceAspectAuthenticationKeyTest.cs" />
     <Compile Include="Logon\LogonLicenseActivationConcurrencyTest35909.cs" />
     <Compile Include="Logon\LogonTest.cs" />
-    <Compile Include="Optimization\AgentsToSkillGroupsTest.cs" />
+    <Compile Include="Optimization\AgentsToSkillSetsTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationOverstaffedSkillGroupsTest.cs" />

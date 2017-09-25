@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_skillSetProvider = skillSetProvider;
 		}
 
-		public IEnumerable<IEnumerable<IPerson>> ToSkillGroups()
+		public IEnumerable<IEnumerable<IPerson>> ToSkillSets()
 		{
 			return _skillSetProvider.Fetch().AgentsGroupedBySkillSet();
 		}

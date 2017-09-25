@@ -17,13 +17,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[DomainTest]
-	public class AgentsToSkillGroupsTest : ISetup
+	public class AgentsToSkillSetsTest : ISetup
 	{
 		public AgentsToSkillSets Target;
 		public SkillSetContext Context;
 
 		[Test]
-		public void ShouldSplitTwoAgentsWithDifferentSkillsIntoTwoGroups()
+		public void ShouldSplitTwoAgentsWithDifferentSkillsIntoTwoSets()
 		{
 			var date = new DateOnly(2000, 1, 1);
 			var agent1 = new Person();
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (Context.Create(new[] { agent1, agent2 }, new DateOnlyPeriod(date, date)))
 			{
-				var result = Target.ToSkillGroups();
+				var result = Target.ToSkillSets();
 				result.Count().Should().Be.EqualTo(2);
 				result.First().Count().Should().Be.EqualTo(1);
 				result.Last().Count().Should().Be.EqualTo(1);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldPlaceTwoAgentsWithSameSkillsIntoOneGroup()
+		public void ShouldPlaceTwoAgentsWithSameSkillsIntoOneSet()
 		{
 			var date = new DateOnly(2000, 1, 1);
 			var agent1 = new Person();
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			using (Context.Create(new[] { agent1, agent2 }, new DateOnlyPeriod(date, date)))
 			{
-				Target.ToSkillGroups().Single()
+				Target.ToSkillSets().Single()
 					.Should().Have.SameValuesAs(agent1, agent2);
 			}
 		}
