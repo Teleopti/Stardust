@@ -40,7 +40,7 @@
 
     function goDayOffRule(groupId) {
       if (groupId) {
-        $state.go('resourceplanner.dayoffrulesoverview', { groupId: groupId });
+        $state.go('resourceplanner.settingoverview', { groupId: groupId });
       }
     }
   }

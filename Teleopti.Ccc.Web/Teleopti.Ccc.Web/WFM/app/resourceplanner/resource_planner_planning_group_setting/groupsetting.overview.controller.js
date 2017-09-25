@@ -3,13 +3,13 @@
 
 	angular
 		.module('wfm.resourceplanner')
-		.controller('dayoffRuleOverviewController', overviewController)
+		.controller('planningGroupSettingOverviewController', overviewController)
 		.controller('dayoffRuleDirectiveOverviewController', directiveController)
 		.directive('dayoffRules', dayoffRulesDirective);
 
-	overviewController.$inject = ['$state', '$stateParams', '$translate', 'dayOffRuleService', 'planningGroupInfo', 'dayOffRulesInfo', 'localeLanguageSortingService'];
+	overviewController.$inject = ['$state', '$stateParams', '$translate', 'PlanGroupSettingService', 'planningGroupInfo', 'dayOffRulesInfo', 'localeLanguageSortingService'];
 
-	function overviewController($state, $stateParams, $translate, dayOffRuleService, planningGroupInfo, dayOffRulesInfo, localeLanguageSortingService) {
+	function overviewController($state, $stateParams, $translate, PlanGroupSettingService, planningGroupInfo, dayOffRulesInfo, localeLanguageSortingService) {
 		var vm = this;
 
 		vm.requestSent = false;
@@ -34,7 +34,7 @@
 				return;
 			if (!vm.requestSent) {
 				vm.requestSent = true;
-				var deleteDayOffRule = dayOffRuleService.removeDayOffRule({ id: vm.selectedDayOffRule.Id });
+				var deleteDayOffRule = PlanGroupSettingService.removeDayOffRule({ id: vm.selectedDayOffRule.Id });
 				return deleteDayOffRule.$promise.then(function () {
 					var index = vm.dayOffRules.indexOf(vm.selectedDayOffRule);
 					vm.dayOffRules.splice(index, 1);
@@ -45,7 +45,7 @@
 		}
 
 		function goEditDoRule(dayOffRule) {
-			$state.go('resourceplanner.dayoffrule', {
+			$state.go('resourceplanner.editsetting', {
 				filterId: dayOffRule.Id.toString(),
 				groupId: $stateParams.groupId,
 				isDefault: dayOffRule.Default,
@@ -54,14 +54,14 @@
 		}
 
 		function goCreateDoRule() {
-			$state.go('resourceplanner.dayoffrule', {
+			$state.go('resourceplanner.editsetting', {
 				groupId: $stateParams.groupId,
 				EditDoRule: false
 			});
 		}
 	}
 
-	function directiveController($state, $stateParams, $translate, dayOffRuleService, localeLanguageSortingService) {
+	function directiveController($state, $stateParams, $translate, PlanGroupSettingService, localeLanguageSortingService) {
 		var vm = this;
 
 		vm.dayOffRules = [];
@@ -71,7 +71,7 @@
 		getDayOffRules();
 
 		function getDayOffRules() {
-			return dayOffRuleService.getDayOffRulesByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
+			return PlanGroupSettingService.getDayOffRulesByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 				vm.dayOffRules = data.sort(localeLanguageSortingService.localeSort('-Default', '+Name'));
 				return vm.dayOffRules;
 			});

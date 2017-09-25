@@ -1,9 +1,9 @@
 'use strict';
-describe('dayoffRuleOverviewController', function () {
+describe('planningGroupSettingOverviewController', function () {
     var $httpBackend,
         $controller,
         $injector,
-        dayOffRuleService,
+        PlanGroupSettingService,
         planningGroupService,
         stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' },
         planningGroupInfo = {
@@ -50,10 +50,10 @@ describe('dayoffRuleOverviewController', function () {
         module('localeLanguageSortingService');
     });
 
-    beforeEach(inject(function (_$httpBackend_, _$controller_, _dayOffRuleService_, _planningGroupService_) {
+    beforeEach(inject(function (_$httpBackend_, _$controller_, _PlanGroupSettingService_, _planningGroupService_) {
         $httpBackend = _$httpBackend_;
         $controller = _$controller_;
-        dayOffRuleService = _dayOffRuleService_;
+        PlanGroupSettingService = _PlanGroupSettingService_;
         planningGroupService = _planningGroupService_;
 
         $httpBackend.whenGET('../ToggleHandler/AllToggles').respond(function (method, url, data, headers) {
@@ -71,8 +71,8 @@ describe('dayoffRuleOverviewController', function () {
     });
 
     it('should get day off rules by planning group id before controller is loaded', function () {
-        spyOn(dayOffRuleService, 'getDayOffRulesByPlanningGroupId').and.callThrough();
-        var vm = $controller('dayoffRuleOverviewController', {
+        spyOn(PlanGroupSettingService, 'getDayOffRulesByPlanningGroupId').and.callThrough();
+        var vm = $controller('planningGroupSettingOverviewController', {
             $stateParams: stateparams,
             planningGroupInfo: planningGroupInfo,
             dayOffRulesInfo: dayOffRulesInfo
@@ -83,8 +83,8 @@ describe('dayoffRuleOverviewController', function () {
     });
 
     it('should delete selected day off rule', function () {
-        spyOn(dayOffRuleService, 'removeDayOffRule').and.callThrough();
-         var vm = $controller('dayoffRuleOverviewController', {
+        spyOn(PlanGroupSettingService, 'removeDayOffRule').and.callThrough();
+         var vm = $controller('planningGroupSettingOverviewController', {
             $stateParams: stateparams,
             planningGroupInfo: planningGroupInfo,
             dayOffRulesInfo: dayOffRulesInfo
@@ -94,7 +94,7 @@ describe('dayoffRuleOverviewController', function () {
         vm.deleteDoRule();
         $httpBackend.flush();
 
-        expect(dayOffRuleService.removeDayOffRule).toHaveBeenCalledWith({ id: 'ec4356ba-8278-48e4-b4f8-c3102b7af684' });
+        expect(PlanGroupSettingService.removeDayOffRule).toHaveBeenCalledWith({ id: 'ec4356ba-8278-48e4-b4f8-c3102b7af684' });
         expect(vm.dayOffRules.length).toEqual(1);
     });
 

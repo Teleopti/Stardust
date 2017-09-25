@@ -1,10 +1,10 @@
 'use strict';
-describe('dayoffRuleCreateController', function () {
+describe('planningGroupSettingEditController', function () {
     var $httpBackend,
         $controller,
         $state,
         $injector,
-        dayOffRuleService,
+        PlanGroupSettingService,
         debounceService,
         stateparams = { groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e' },
         stateparamsForDefaultDo = {
@@ -22,16 +22,16 @@ describe('dayoffRuleCreateController', function () {
         module('wfm.resourceplanner');
     });
 
-    beforeEach(inject(function (_$httpBackend_, _$controller_, _$state_, _dayOffRuleService_, _debounceService_) {
+    beforeEach(inject(function (_$httpBackend_, _$controller_, _$state_, _PlanGroupSettingService_, _debounceService_) {
         $httpBackend = _$httpBackend_;
         $controller = _$controller_;
-        dayOffRuleService = _dayOffRuleService_;
+        PlanGroupSettingService = _PlanGroupSettingService_;
         debounceService = _debounceService_;
         $state = _$state_;
 
         spyOn($state, 'go');
         spyOn(debounceService, 'debounce').and.callFake(function (cb) { return function () { cb(); } });
-        spyOn(dayOffRuleService, 'getFilterData').and.callThrough();
+        spyOn(PlanGroupSettingService, 'getFilterData').and.callThrough();
 
         $httpBackend.whenGET(/.*?api\/filters\?.*/).respond(function (method, url, data, headers) {
             return [200, [{
@@ -91,16 +91,16 @@ describe('dayoffRuleCreateController', function () {
     });
 
     it('should call function with debounce 250', function () {
-        var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparams });
+        var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
         vm.searchString = "skill";
         vm.inputFilterData();
         $httpBackend.flush();
 
-        expect(dayOffRuleService.getFilterData).toHaveBeenCalled();
+        expect(PlanGroupSettingService.getFilterData).toHaveBeenCalled();
     });
 
     it('should get filter results', function () {
-        var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparams });
+        var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
         vm.searchString = "skill";
         vm.inputFilterData();
         $httpBackend.flush();
@@ -111,7 +111,7 @@ describe('dayoffRuleCreateController', function () {
     });
 
     it('should add one filter from filter results', function () {
-        var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparams });
+        var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
         vm.searchString = "skill";
         vm.inputFilterData();
         $httpBackend.flush();
@@ -123,7 +123,7 @@ describe('dayoffRuleCreateController', function () {
     });
 
     it('should remove one filter from filter results', function () {
-        var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparams });
+        var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
         vm.searchString = "skill";
         vm.inputFilterData();
         $httpBackend.flush();
@@ -135,14 +135,14 @@ describe('dayoffRuleCreateController', function () {
     });
 
     it('should not create day off rule when submit data is invalid', function () {
-        var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparams });
+        var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
         vm.persist();
 
-        expect($state.go).not.toHaveBeenCalledWith('resourceplanner.dayoffrulesoverview');
+        expect($state.go).not.toHaveBeenCalledWith('resourceplanner.settingoverview');
     });
 
     it('should create new day off rule when submit data is valid', function () {
-        var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparams });
+        var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparams });
         vm.searchString = "skill";
         vm.inputFilterData();
         $httpBackend.flush();
@@ -152,13 +152,13 @@ describe('dayoffRuleCreateController', function () {
         vm.persist();
         $httpBackend.flush();
 
-        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesoverview', {
+        expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
             groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
         });
     });
 
     it('should load selected undefault day off rule', function () {
-        var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparamsForUndefaultDo });
+        var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
         $httpBackend.flush();
 
         expect(vm.filterId).toEqual('8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb');
@@ -167,15 +167,15 @@ describe('dayoffRuleCreateController', function () {
     });
 
     it('should save new name for selected undefault day off rule', function () {
-        spyOn(dayOffRuleService, 'saveDayOffRule').and.callThrough();
-        var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparamsForUndefaultDo });
+        spyOn(PlanGroupSettingService, 'saveDayOffRule').and.callThrough();
+        var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
         $httpBackend.flush();
 
         vm.name = 'Day off rule 911';
         vm.persist();
         $httpBackend.flush();
 
-        expect(dayOffRuleService.saveDayOffRule).toHaveBeenCalledWith({
+        expect(PlanGroupSettingService.saveDayOffRule).toHaveBeenCalledWith({
             Id: vm.filterId,
             Name: 'Day off rule 911',
             Default: vm.default,
@@ -189,14 +189,14 @@ describe('dayoffRuleCreateController', function () {
             MaxConsecutiveDayOffs: 3
         });
 
-        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesoverview', {
+        expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
             groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
         });
     });
 
     it('should save new setting for selected undefault day off rule', function () {
-        spyOn(dayOffRuleService, 'saveDayOffRule').and.callThrough();
-        var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparamsForUndefaultDo });
+        spyOn(PlanGroupSettingService, 'saveDayOffRule').and.callThrough();
+        var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
         $httpBackend.flush();
 
         vm.dayOffsPerWeek = {
@@ -215,7 +215,7 @@ describe('dayoffRuleCreateController', function () {
         vm.persist();
         $httpBackend.flush();
 
-        expect(dayOffRuleService.saveDayOffRule).toHaveBeenCalledWith({
+        expect(PlanGroupSettingService.saveDayOffRule).toHaveBeenCalledWith({
             Id: vm.filterId,
             Name: vm.name,
             Default: vm.default,
@@ -229,14 +229,14 @@ describe('dayoffRuleCreateController', function () {
             MaxConsecutiveDayOffs: 3
         });
 
-        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesoverview', {
+        expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
             groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
         });
     });
 
 
     it('should load default day off rule', function () {
-        var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparamsForDefaultDo });
+        var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo });
         $httpBackend.flush();
 
         expect(vm.filterId).toEqual('33f52ff4-0314-4a9e-80fa-5c958c57c92f');
@@ -245,8 +245,8 @@ describe('dayoffRuleCreateController', function () {
     });
 
     it('should save new setting for default day off rule', function () {
-        spyOn(dayOffRuleService, 'saveDayOffRule').and.callThrough();
-        var vm = $controller('dayoffRuleCreateController', { $stateParams: stateparamsForDefaultDo });
+        spyOn(PlanGroupSettingService, 'saveDayOffRule').and.callThrough();
+        var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo });
         $httpBackend.flush();
 
         vm.dayOffsPerWeek = {
@@ -266,7 +266,7 @@ describe('dayoffRuleCreateController', function () {
         $httpBackend.flush();
 
         expect(vm.default).toEqual(true);
-        expect(dayOffRuleService.saveDayOffRule).toHaveBeenCalledWith({
+        expect(PlanGroupSettingService.saveDayOffRule).toHaveBeenCalledWith({
             Id: vm.filterId,
             Name: vm.name,
             Default: vm.default,
@@ -280,7 +280,7 @@ describe('dayoffRuleCreateController', function () {
             MaxConsecutiveDayOffs: 3
         });
 
-        expect($state.go).toHaveBeenCalledWith('resourceplanner.dayoffrulesoverview', {
+        expect($state.go).toHaveBeenCalledWith('resourceplanner.settingoverview', {
             groupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e'
         });
     });

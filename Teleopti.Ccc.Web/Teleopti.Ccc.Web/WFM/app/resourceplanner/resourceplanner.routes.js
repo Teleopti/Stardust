@@ -80,35 +80,35 @@
 					});
 				}]
 			}
-		}).state('resourceplanner.dayoffrulesoverview', {
+		}).state('resourceplanner.settingoverview', {
 			params: {
 				groupId: ''
 			},
-			url: '/planninggroup/:groupId/dayoffrules/overview',
-			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.overview.html',
-			controller: 'dayoffRuleOverviewController as vm',
+			url: '/planninggroup/:groupId/setting/overview',
+			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.overview.html',
+			controller: 'planningGroupSettingOverviewController as vm',
 			resolve: {
 				planningGroupInfo: ['planningPeriodServiceNew', '$stateParams', function (planningPeriodServiceNew, $stateParams) {
 					return planningPeriodServiceNew.getPlanningGroupById({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
 				}],
-				dayOffRulesInfo: ['dayOffRuleService', '$stateParams', function (dayOffRuleService, $stateParams) {
-					return dayOffRuleService.getDayOffRulesByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
+				dayOffRulesInfo: ['PlanGroupSettingService', '$stateParams', function (PlanGroupSettingService, $stateParams) {
+					return PlanGroupSettingService.getDayOffRulesByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
 				}]
 			}
-		}).state('resourceplanner.dayoffrule', {
+		}).state('resourceplanner.editsetting', {
 			params: {
 				filterId: '',
 				isDefault: undefined,
 				groupId: '',
 				EditDoRule: ''
 			},
-			url: '/planninggroup/:groupId/dayoffrules/:filterId',
-			templateUrl: 'app/resourceplanner/resource_planner_day_off_rule/dayoffrule.createform.html',
-			controller: 'dayoffRuleCreateController as vm'
+			url: '/planninggroup/:groupId/setting/:filterId',
+			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.createform.html',
+			controller: 'planningGroupSettingEditController as vm'
 		}).state('resourceplanner.archiveschedule', {
 			url: '/archiveschedule',
 			templateUrl: 'app/resourceplanner/manageschedule/manageschedule.html',
@@ -120,11 +120,11 @@
 			params: {
 				isImportSchedule: true
 			}
-		}).state('resourceplanner.planningperiod', { // Bellows are for performance tests 
+		}).state('resourceplanner.planningperiod', { // Bellows are for performance tests
 			url: '/planningperiod/:id?runForTest',
 			templateUrl: 'app/resourceplanner/web_performance_tests/planningperiods.html',
 			controller: 'PlanningPeriodsCtrl'
-		}).state('resourceplanner.report', { 
+		}).state('resourceplanner.report', {
 			params: {
 				result: {},
 				interResult: [],
@@ -134,7 +134,7 @@
 			url: '/report/:id',
 			templateUrl: 'app/resourceplanner/web_performance_tests/resourceplanner-report.html',
 			controller: 'ResourceplannerReportCtrl'
-		}).state('resourceplanner.temp', { 
+		}).state('resourceplanner.temp', {
 			url: '/optimize/:id',
 			templateUrl: 'app/resourceplanner/web_performance_tests/temp.html',
 			controller: 'ResourceplannerTempCtrl'

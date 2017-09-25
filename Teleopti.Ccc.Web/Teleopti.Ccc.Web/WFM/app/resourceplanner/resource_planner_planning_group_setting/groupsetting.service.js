@@ -3,7 +3,7 @@
 
 	angular
 		.module('wfm.resourceplanner')
-		.factory('dayOffRuleService', factory);
+		.factory('PlanGroupSettingService', factory);
 
 	factory.$inject = ['$resource'];
 

@@ -340,7 +340,7 @@
     }
 
     function goDoRulesSetting() {
-      $state.go('resourceplanner.dayoffrulesoverview', {
+      $state.go('resourceplanner.settingoverview', {
         groupId: $stateParams.groupId,
       });
     }

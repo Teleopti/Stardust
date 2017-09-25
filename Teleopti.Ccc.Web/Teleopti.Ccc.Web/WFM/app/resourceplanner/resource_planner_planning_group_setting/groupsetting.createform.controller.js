@@ -3,11 +3,11 @@
 
     angular
         .module('wfm.resourceplanner')
-        .controller('dayoffRuleCreateController', Controller);
+        .controller('planningGroupSettingEditController', Controller);
 
-    Controller.$inject = ['$state', '$stateParams', 'NoticeService', 'dayOffRuleService', 'debounceService'];
+    Controller.$inject = ['$state', '$stateParams', 'NoticeService', 'PlanGroupSettingService', 'debounceService'];
 
-    function Controller($state, $stateParams, NoticeService, dayOffRuleService, debounceService) {
+    function Controller($state, $stateParams, NoticeService, PlanGroupSettingService, debounceService) {
         var vm = this;
 
         var maxHits = 100;
@@ -57,7 +57,7 @@
                     vm.name = "Default";
                     vm.filterId = $stateParams.filterId;
                     if (vm.filterId !== '') {
-                        dayOffRuleService.getDayOffRule({ id: $stateParams.filterId })
+                        PlanGroupSettingService.getDayOffRule({ id: $stateParams.filterId })
                             .$promise.then(function (result) {
                                 vm.dayOffsPerWeek = {
                                     MinDayOffsPerWeek: result.MinDayOffsPerWeek,
@@ -74,7 +74,7 @@
                             });
                     }
                 } else {
-                    dayOffRuleService.getDayOffRule({ id: $stateParams.filterId })
+                    PlanGroupSettingService.getDayOffRule({ id: $stateParams.filterId })
                         .$promise.then(function (result) {
                             vm.name = result.Name;
                             vm.filterId = $stateParams.filterId;
@@ -100,7 +100,7 @@
         function inputFilterData() {
             if (vm.searchString == '')
                 return [];
-            var filters = dayOffRuleService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
+            var filters = PlanGroupSettingService.getFilterData({ searchString: vm.searchString }).$promise.then(function (data) {
                 removeSelectedFiltersInList(data, vm.selectedResults);
                 return vm.filterResults = data;
             });
@@ -205,7 +205,7 @@
             if (!vm.requestSent) {
                 vm.isEnabled = false;
                 vm.requestSent = true;
-                dayOffRuleService.saveDayOffRule({
+                PlanGroupSettingService.saveDayOffRule({
                     MinDayOffsPerWeek: vm.dayOffsPerWeek.MinDayOffsPerWeek,
                     MaxDayOffsPerWeek: vm.dayOffsPerWeek.MaxDayOffsPerWeek,
                     MinConsecutiveWorkdays: vm.consecWorkDays.MinConsecWorkDays,
@@ -226,7 +226,7 @@
         function returnFromCreate() {
             if (!$stateParams.groupId)
                 return;
-            $state.go('resourceplanner.dayoffrulesoverview', { groupId: $stateParams.groupId });
+            $state.go('resourceplanner.settingoverview', { groupId: $stateParams.groupId });
         }
     }
 })();
