@@ -22,7 +22,9 @@ namespace Teleopti.Ccc.Domain.Intraday
 		public IEnumerable<SkillAreaViewModel> GetAll()
 		{
 			var skillAreas = _skillAreaRepository.LoadAll()
+				.Where(x => x.Skills.Any(y => y.IsDeleted == false))
 				.OrderBy(x => x.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
+
 			var skills = _loadAllSkillInIntradays.Skills().ToDictionary(x => x.Id, x => x);
 
 			return skillAreas.Select(skillArea =>
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 					{
 						Id = skillArea.Id.Value,
 						Name = skillArea.Name,
-						Skills = skillArea.Skills.Select(skill =>
+						Skills = skillArea.Skills.Where(x => x.IsDeleted == false).Select(skill =>
 							{
 								var skillInIntraday = skills.ContainsKey(skill.Id) ? skills[skill.Id] : null;
 								return new SkillInIntradayViewModel
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 									SkillType = skillInIntraday?.SkillType,
 									DoDisplayData = skillInIntraday != null && skillInIntraday.DoDisplayData,
 									IsMultisiteSkill = skillInIntraday != null && skillInIntraday.IsMultisiteSkill,
-									ShowAbandonRate = skillInIntraday?.ShowAbandonRate ?? true, 
+									ShowAbandonRate = skillInIntraday?.ShowAbandonRate ?? true,
 									ShowReforecastedAgents = skillInIntraday?.ShowReforecastedAgents ?? true
 								};
 							})

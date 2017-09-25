@@ -21,17 +21,28 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		public FakeSkillAreaRepository SkillAreaRepository;
 		public FakeLoadAllSkillInIntradays LoadAllSkillInIntradays;
 		public FakeUserUiCulture UiCulture;
+		private List<SkillInIntraday> defaultSkills = new List<SkillInIntraday>();
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
 			system.UseTestDouble(new FakeUserUiCulture(CultureInfoFactory.CreateSwedishCulture())).For<IUserUiCulture>();
-		}
+			defaultSkills.Add(new SkillInIntraday
+			{
+				Id = Guid.NewGuid(),
+				Name = RandomName.Make()
+			});
+			defaultSkills.Add(new SkillInIntraday
+			{
+				Id = Guid.NewGuid(),
+				Name = RandomName.Make()
+			});
+		}		
 
 		[Test]
 		public void ShouldGetAll()
 		{
-			SkillAreaRepository.Has(new SkillArea { Skills = new List<SkillInIntraday>() }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Skills = defaultSkills }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Skills = defaultSkills }.WithId());
 
 			Target.GetAll().Count()
 				.Should().Be.EqualTo(2);
@@ -40,9 +51,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSortNameInSkillarea()
 		{
-			SkillAreaRepository.Has(new SkillArea { Name = "B", Skills = new List<SkillInIntraday>() }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Name = "C", Skills = new List<SkillInIntraday>() }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Name = "A", Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "B", Skills = defaultSkills }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "C", Skills = defaultSkills }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "A", Skills = defaultSkills }.WithId());
 
 			UiCulture.IsSwedish();
 			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] { "A", "B", "C" });
@@ -51,9 +62,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSortSwedishNameInSkillarea()
 		{
-			SkillAreaRepository.Has(new SkillArea { Name = "Ä", Skills = new List<SkillInIntraday>() }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Name = "A", Skills = new List<SkillInIntraday>() }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Name = "Å", Skills = new List<SkillInIntraday>() }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "Ä", Skills = defaultSkills }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "A", Skills = defaultSkills }.WithId());
+			SkillAreaRepository.Has(new SkillArea { Name = "Å", Skills = defaultSkills }.WithId());
 
 			UiCulture.IsSwedish();
 			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] { "A", "Å", "Ä" });
@@ -92,13 +103,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		}
 
 		[Test]
-		public void ShouldIncludeDeletedSkillInSkillArea()
+		public void ShouldNotIncludeDeletedSkillInSkillArea()
 		{
 			var existingSkillArea = new SkillArea
 			{
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
 				{
+					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = false },
 					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true }
 				}
 			}.WithId();
@@ -142,6 +154,26 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 			result.Skills.Single().Id.Should().Be(skillId);
 			result.Skills.Single().Name.Should().Be("Phone");
 			result.Skills.Single().IsDeleted.Should().Be(false);
+		}
+
+		[Test]
+		public void ShouldNotGetSkillAreaWithOnlyDeletedSkills()
+		{
+			var existingSkillArea = new SkillArea
+			{
+				Name = RandomName.Make(),
+				Skills = new List<SkillInIntraday>
+				{
+					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true },
+					new SkillInIntraday { Id = Guid.NewGuid(), Name = RandomName.Make(), IsDeleted = true }
+				}
+			}.WithId();
+
+			SkillAreaRepository.Has(existingSkillArea);
+
+			var result = Target.GetAll().FirstOrDefault();
+
+			result.Should().Be.Null();
 		}
 	}
 }
