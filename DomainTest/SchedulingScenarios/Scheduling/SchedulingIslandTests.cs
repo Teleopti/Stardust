@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
-		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
 		public void ShouldNotUseSkillsThatWereRemovedDuringIslandCreation()
@@ -54,10 +53,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				skillB.CreateSkillDayWithDemand(scenario, date, 1),
 				skillC.CreateSkillDayWithDemand(scenario, date, 10));
 
-			var planningPeriod = new PlanningPeriod(date.ToDateOnlyPeriod());
-			PlanningPeriodRepository.Add(planningPeriod);
-
-			Target.DoScheduling(planningPeriod.Id.Value);
+			Target.DoScheduling(date.ToDateOnlyPeriod());
 
 			PersonAssignmentRepository.GetSingle(date, agentABC).ShiftLayers.Single().Payload
 				.Should().Be.EqualTo(activityC);
