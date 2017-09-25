@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class ShovelResourcesState
 	{
 		private readonly ResourceDistributionForSkillGroupsWithSameIndex _resourceDistribution;
-		private readonly IDictionary<CascadingSkillSet, double> _resourcesMovedOnSkillGroup;
+		private readonly IDictionary<CascadingSkillSet, double> _resourcesMovedOnSkillSet;
 		private bool _continueShovelingBasedOnSubSkills;
 
 
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 			ResourcesAvailableForPrimarySkill = resources;
 			RemainingOverstaffing = ResourcesAvailableForPrimarySkill.Values.Sum();
 			TotalOverstaffingAtStart = RemainingOverstaffing;
-			_resourcesMovedOnSkillGroup = new Dictionary<CascadingSkillSet, double>();
+			_resourcesMovedOnSkillSet = new Dictionary<CascadingSkillSet, double>();
 		}
 
 		public bool IsAnyPrimarySkillOpen { get; }
@@ -31,20 +31,20 @@ namespace Teleopti.Ccc.Domain.Cascading
 
 		public bool ContinueShovel(CascadingSkillSet skillSet)
 		{
-			if (!_resourcesMovedOnSkillGroup.TryGetValue(skillSet, out double resourcesMovedOnSkillGroup))
+			if (!_resourcesMovedOnSkillSet.TryGetValue(skillSet, out double resourcesMovedOnSkillSet))
 			{
-				resourcesMovedOnSkillGroup = 0;
+				resourcesMovedOnSkillSet = 0;
 			}
 			var ret =  RemainingOverstaffing > (IsAnyPrimarySkillOpen ? 0.1 : 0.001) &&
-					resourcesMovedOnSkillGroup < MaxToMoveForThisSkillGroup(skillSet) &&
+					resourcesMovedOnSkillSet < MaxToMoveForThisSkillSet(skillSet) &&
 					   _continueShovelingBasedOnSubSkills;
 			_continueShovelingBasedOnSubSkills = false;
 			return ret;
 		}
 
-		public double MaxToMoveForThisSkillGroup(CascadingSkillSet skillgroup)
+		public double MaxToMoveForThisSkillSet(CascadingSkillSet skillSet)
 		{
-			return TotalOverstaffingAtStart * _resourceDistribution.For(skillgroup);
+			return TotalOverstaffingAtStart * _resourceDistribution.For(skillSet);
 		}
 
 		public void AddResourcesTo(IShovelResourceDataForInterval shovelResourceDataForInterval, CascadingSkillSet skillSet, double value)
@@ -53,13 +53,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 			RemainingOverstaffing -= value;
 			ResourcesMoved += value;
 			skillSet.RemainingResources -= value;
-			if (_resourcesMovedOnSkillGroup.TryGetValue(skillSet, out double currentValue))
+			if (_resourcesMovedOnSkillSet.TryGetValue(skillSet, out double currentValue))
 			{
-				_resourcesMovedOnSkillGroup[skillSet] = value + currentValue;
+				_resourcesMovedOnSkillSet[skillSet] = value + currentValue;
 			}
 			else
 			{
-				_resourcesMovedOnSkillGroup[skillSet] = value;
+				_resourcesMovedOnSkillSet[skillSet] = value;
 			}
 			SetContinueShovel();
 		}

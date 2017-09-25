@@ -1387,7 +1387,7 @@
     <Compile Include="Cascading\ShovelResources.cs" />
     <Compile Include="Cascading\CascadingResourceCalculation.cs" />
     <Compile Include="Cascading\CascadingSkillSet.cs" />
-    <Compile Include="Cascading\CascadingSkillGroupSorter.cs" />
+    <Compile Include="Cascading\CascadingSkillSetSorter.cs" />
     <Compile Include="Cascading\DoubleExtensionsInCascadingScenarios.cs" />
     <Compile Include="Cascading\SkillSetPerActivityProvider.cs" />
     <Compile Include="Common\IBusinessUnitScope.cs" />

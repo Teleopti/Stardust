@@ -6,21 +6,21 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class OrderedSkillSets : IEnumerable<IEnumerable<CascadingSkillSet>>
 	{
-		private readonly IEnumerable<IEnumerable<CascadingSkillSet>> _orderedSkillGroups;
+		private readonly IEnumerable<IEnumerable<CascadingSkillSet>> _orderedSkillSets;
 
-		public OrderedSkillSets(IEnumerable<IEnumerable<CascadingSkillSet>> orderedSkillGroups)
+		public OrderedSkillSets(IEnumerable<IEnumerable<CascadingSkillSet>> orderedSkillSets)
 		{
-			_orderedSkillGroups = orderedSkillGroups;
+			_orderedSkillSets = orderedSkillSets;
 		}
 
-		public IEnumerable<CascadingSkillSet> AllSkillGroups()
+		public IEnumerable<CascadingSkillSet> AllSkillSets()
 		{
-			return _orderedSkillGroups.SelectMany(skillGroups => skillGroups);
+			return _orderedSkillSets.SelectMany(skillGroups => skillGroups);
 		}
 
 		public IEnumerator<IEnumerable<CascadingSkillSet>> GetEnumerator()
 		{
-			return _orderedSkillGroups.GetEnumerator();
+			return _orderedSkillSets.GetEnumerator();
 		}
 
 		IEnumerator IEnumerable.GetEnumerator()

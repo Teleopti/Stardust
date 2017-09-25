@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 							foreach (var interval in date.ToDateTimePeriod(_timeZoneGuard.CurrentTimeZone()).Intervals(activityAndIntervalLength.IntervalLength))
 							{
 								var orderedSkillGroups = _skillSetPerActivityProvider.FetchOrdered(cascadingSkills, ResourceCalculationContext.Fetch(), activityAndIntervalLength.Activity, interval);
-								var allSkillGroups = orderedSkillGroups.AllSkillGroups();
+								var allSkillGroups = orderedSkillGroups.AllSkillSets();
 								foreach (var skillGroupsWithSameIndex in orderedSkillGroups)
 								{
 									var state = _primarySkillOverstaff.AvailableSum(shovelResourceData, allSkillGroups, skillGroupsWithSameIndex, interval);

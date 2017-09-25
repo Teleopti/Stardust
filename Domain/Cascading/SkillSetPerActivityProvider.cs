@@ -11,50 +11,50 @@ namespace Teleopti.Ccc.Domain.Cascading
 		{
 			var affectedSkills = resources.AffectedResources(activity, period).Values;
 			var cascadingSkillsForActivity = cascadingSkills.ForActivity(activity).ToArray();
-			var cascadingSkillGroups = new List<CascadingSkillSet>();
+			var cascadingSkillSets = new List<CascadingSkillSet>();
 
-			foreach (var skillGroup in affectedSkills)
+			foreach (var skillSet in affectedSkills)
 			{
-				var cascadingSkillsInSkillGroup = cascadingSkillsForActivity.Where(x => skillGroup.Skills.Contains(x)).ToArray();
-				if(!cascadingSkillsInSkillGroup.Any())
+				var cascadingSkillsInSkillSet = cascadingSkillsForActivity.Where(x => skillSet.Skills.Contains(x)).ToArray();
+				if(!cascadingSkillsInSkillSet.Any())
 					continue;
 
-				var lowestCascadingIndex = cascadingSkillsInSkillGroup.Min(x => x.CascadingIndex.Value);
-				var primarySkills = cascadingSkillsInSkillGroup.Where(x => x.CascadingIndex.Value==lowestCascadingIndex);
+				var lowestCascadingIndex = cascadingSkillsInSkillSet.Min(x => x.CascadingIndex.Value);
+				var primarySkills = cascadingSkillsInSkillSet.Where(x => x.CascadingIndex.Value==lowestCascadingIndex);
 				var cascadingSubSkills = new List<SubSkillsWithSameIndex>();
-				foreach (var skillInSameChainAsPrimarySkill in cascadingSkillsInSkillGroup.Where(x => !primarySkills.Contains(x)))
+				foreach (var skillInSameChainAsPrimarySkill in cascadingSkillsInSkillSet.Where(x => !primarySkills.Contains(x)))
 				{
 					var last = cascadingSubSkills.LastOrDefault();
 					if (last == null || !skillInSameChainAsPrimarySkill.CascadingIndex.Value.Equals(last.CascadingIndex))
 					{
-						var cascadingSkillGroupItem = new SubSkillsWithSameIndex();
-						cascadingSkillGroupItem.AddSubSkill(skillInSameChainAsPrimarySkill);
-						cascadingSubSkills.Add(cascadingSkillGroupItem);
+						var cascadingSkillSetItem = new SubSkillsWithSameIndex();
+						cascadingSkillSetItem.AddSubSkill(skillInSameChainAsPrimarySkill);
+						cascadingSubSkills.Add(cascadingSkillSetItem);
 					}
 					else
 					{
 						last.AddSubSkill(skillInSameChainAsPrimarySkill);
 					}
 				}
-				cascadingSkillGroups.Add(new CascadingSkillSet(primarySkills, cascadingSubSkills, skillGroup.Resource));
+				cascadingSkillSets.Add(new CascadingSkillSet(primarySkills, cascadingSubSkills, skillSet.Resource));
 			}
-			cascadingSkillGroups.Sort(new CascadingSkillGroupSorter());
-			return mergeSkillGroupsWithSameIndex(cascadingSkillGroups);
+			cascadingSkillSets.Sort(new CascadingSkillSetSorter());
+			return mergeSkillSetsWithSameIndex(cascadingSkillSets);
 		}
 
-		private static OrderedSkillSets mergeSkillGroupsWithSameIndex(IEnumerable<CascadingSkillSet> cascadingSkillGroups)
+		private static OrderedSkillSets mergeSkillSetsWithSameIndex(IEnumerable<CascadingSkillSet> cascadingSkillSets)
 		{
 			var ret = new List<List<CascadingSkillSet>>();
-			foreach (var skillGroup in cascadingSkillGroups)
+			foreach (var skillSet in cascadingSkillSets)
 			{
 				var retLast = ret.LastOrDefault();
-				if (retLast == null || !retLast.First().HasSameSkillGroupIndexAs(skillGroup))
+				if (retLast == null || !retLast.First().HasSameSkillSetIndexAs(skillSet))
 				{
-					ret.Add(new List<CascadingSkillSet> {skillGroup});
+					ret.Add(new List<CascadingSkillSet> {skillSet});
 				}
 				else
 				{
-					ret.Last().Add(skillGroup);
+					ret.Last().Add(skillSet);
 				}
 			}
 			return new OrderedSkillSets(ret);

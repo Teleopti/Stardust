@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Cascading
 		public IEnumerable<SubSkillsWithSameIndex> SubSkillsWithSameIndex { get; }
 		public double RemainingResources { get; set; }
 
-		public bool HasSameSkillGroupIndexAs(CascadingSkillSet otherSkillSet)
+		public bool HasSameSkillSetIndexAs(CascadingSkillSet otherSkillSet)
 		{
 			var thisPrimary = new HashSet<ISkill>(PrimarySkills);
 			if (!thisPrimary.SetEquals(otherSkillSet.PrimarySkills))

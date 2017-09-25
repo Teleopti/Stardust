@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Teleopti.Ccc.Domain.Cascading
 {
-	public class CascadingSkillGroupSorter : IComparer<CascadingSkillSet>
+	public class CascadingSkillSetSorter : IComparer<CascadingSkillSet>
 	{
 		public int Compare(CascadingSkillSet first, CascadingSkillSet second)
 		{
