@@ -692,6 +692,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Wfm\RealTimeAdherence\RtaTracer.feature.cs">
+      <DependentUpon>RtaTracer.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Wfm\RealTimeAdherence\RtaTool.feature.cs">
       <DependentUpon>RtaTool.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -1175,6 +1180,10 @@
     <None Include="Wfm\RealTimeAdherence\MonitorAgentsViewInPermittedOrganizaionlOnly.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>MonitorAgentsViewInPermittedOrganizaionlOnly.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Wfm\RealTimeAdherence\RtaTracer.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>RtaTracer.feature.cs</LastGenOutput>
     </None>
     <None Include="Wfm\RealTimeAdherence\RtaTool.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
