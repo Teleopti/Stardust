@@ -168,6 +168,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Ignore("To be fixed for PBI #46002")]
 		public bool ShouldRespectStartTimeTolerance_BreakPreferenceStartTimeByMax(int breakPreferenceStartTimeByMaxMinutes)
 		{
+			//this is wrong
 			var scenario = new Scenario();
 			var activity = new Activity();
 			var shiftCategory = new ShiftCategory("_").WithId();
