@@ -23,6 +23,7 @@
 		RTA_EventPackagesOptimization_43924,
 		RTA_AsyncOptimization_43924,
 		RTA_RememberMyPartOfTheBusiness_39082,
+		RTA_RtaTracer_45597,
 
 		MyTimeWeb_TeamScheduleNoReadModel_36210,
 		MyTimeWeb_ShiftTradePossibleTradedSchedulesNoReadModel_36211,
