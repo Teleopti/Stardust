@@ -6,13 +6,13 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
-	public class IntradayOptimizerContainerConsiderLargeGroups : IIntradayOptimizerContainer
+	public class IntradayOptimizerContainerConsiderLargeSkillSets : IIntradayOptimizerContainer
 	{
 		private readonly ICurrentIntradayOptimizationCallback _currentIntradayOptimizationCallback;
 		private readonly AgentsToSkillSets _agentsToSkillSets;
 		private readonly IIntradayOptimizerLimiter _intradayOptimizerLimiter;
 
-		public IntradayOptimizerContainerConsiderLargeGroups(ICurrentIntradayOptimizationCallback currentIntradayOptimizationCallback,
+		public IntradayOptimizerContainerConsiderLargeSkillSets(ICurrentIntradayOptimizationCallback currentIntradayOptimizationCallback,
 																										AgentsToSkillSets agentsToSkillSets,
 																										IIntradayOptimizerLimiter intradayOptimizerLimiter)
 		{

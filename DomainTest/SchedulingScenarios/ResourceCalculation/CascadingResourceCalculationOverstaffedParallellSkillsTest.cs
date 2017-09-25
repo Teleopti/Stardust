@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldGetResourcesFromSkillGroupWhenAllPrimarySkillsAreClosed()
+		public void ShouldGetResourcesFromSkillSetWhenAllPrimarySkillsAreClosed()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldHandleMultipleSkillgroupsContainingSamePrimarySkill()
+		public void ShouldHandleMultipleSkillSetsContainingSamePrimarySkill()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -350,7 +350,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldHandleMultipleSkillgroupsContainingSamePrimarySkill_HighUnderstaffing()
+		public void ShouldHandleMultipleSkillSetsContainingSamePrimarySkill_HighUnderstaffing()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -381,7 +381,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldHandleMultipleSkillgroupsContainingSamePrimarySkill_MultipleAgents()
+		public void ShouldHandleMultipleSkillSetsContainingSamePrimarySkill_MultipleAgents()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldValueSkillGroupsWithMoreSubSkillsHigherWhenCascadingIndexesAreEqualOnOtherSkillGroup()
+		public void ShouldValueSkillSetsWithMoreSubSkillsHigherWhenCascadingIndexesAreEqualOnOtherSkillSet()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -441,7 +441,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldValueSkillGroupsWithLowerSubSkillIndexesHigher()
+		public void ShouldValueSkillSetsWithLowerSubSkillIndexesHigher()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -470,7 +470,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void IsolatedSkillGroupsShouldNotAffectEachOther()
+		public void IsolatedSkillSetsShouldNotAffectEachOther()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");

@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			foreach (var addedResource in trackShovling.AddedResources)
 			{
 				output.AppendLine($"Adding {addedResource.ResourcesMoved} resources");
-				output.AppendLine($" -> moved from skillgroup: {skillGroupAsString(addedResource.FromSkillSet)}");
+				output.AppendLine($" -> moved from skillgroup: {skillSetAsString(addedResource.FromSkillSet)}");
 			}
 			output.AppendLine();
 			output.AppendLine("---REMOVED RESOURCES---");
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell.Win.Scheduling.SchedulingScreenIn
 			return output.ToString();
 		}
 
-		private static string skillGroupAsString(CascadingSkillSet skillSet)
+		private static string skillSetAsString(CascadingSkillSet skillSet)
 		{
 			var allSkills = skillSet.PrimarySkills.Union(skillSet.SubSkillsWithSameIndex.SelectMany(x => x));
 			return string.Join("::", allSkills.Select(x => x.Name));

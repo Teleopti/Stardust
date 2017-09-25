@@ -428,7 +428,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<ResourceCalculateAfterDeleteDecider>().As<IResourceCalculateAfterDeleteDecider>().SingleInstance();
 			builder.RegisterType<LimitForNoResourceCalculation>().As<ILimitForNoResourceCalculation>().AsSelf().SingleInstance();
 			builder.RegisterType<NoSchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
-			builder.RegisterType<IntradayOptimizerContainerConsiderLargeGroups>().As<IIntradayOptimizerContainer>().SingleInstance();
+			builder.RegisterType<IntradayOptimizerContainerConsiderLargeSkillSets>().As<IIntradayOptimizerContainer>().SingleInstance();
 			builder.RegisterType<AgentsToSkillSets>().SingleInstance();
 			builder.RegisterType<IntradayOptimizerLimiter>().As<IIntradayOptimizerLimiter>().AsSelf().SingleInstance();
 			builder.RegisterType<IntradayOptimizeOnDayCallBackDoNothing>().As<IIntradayOptimizeOneDayCallback>().SingleInstance();

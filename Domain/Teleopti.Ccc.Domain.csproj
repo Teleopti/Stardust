@@ -2131,7 +2131,7 @@
     <Compile Include="Optimization\CurrentIntradayOptimizationCallback.cs" />
     <Compile Include="Optimization\IntradayOptimizeOnDayCallBackDoNothing.cs" />
     <Compile Include="Optimization\IntradayOptimizeOneday.cs" />
-    <Compile Include="Optimization\IntradayOptimizerContainerConsiderLargeGroups.cs" />
+    <Compile Include="Optimization\IntradayOptimizerContainerConsiderLargeSkillSets.cs" />
     <Compile Include="Optimization\IntradayOptimizerCreator.cs" />
     <Compile Include="Optimization\IntradayOptimizerLimiter.cs" />
     <Compile Include="Optimization\IIntradayOptimizationCallback.cs" />

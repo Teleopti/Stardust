@@ -8,14 +8,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class IntradayDatesToSkip
 	{
 		private readonly IIntradayOptimizerLimiter _intradayOptimizerLimiter;
-		private readonly int _numberOfAgentsInGroup;
+		private readonly int _numberOfAgentsInSkillSet;
 		private readonly IList<DateOnly> _skipDates;
 		private readonly IDictionary<DateOnly, optimizeCounter> _optimizedPerDay;
 
-		public IntradayDatesToSkip(IIntradayOptimizerLimiter intradayOptimizerLimiter, int numberOfAgentsInGroup)
+		public IntradayDatesToSkip(IIntradayOptimizerLimiter intradayOptimizerLimiter, int numberOfAgentsInSkillSet)
 		{
 			_intradayOptimizerLimiter = intradayOptimizerLimiter;
-			_numberOfAgentsInGroup = numberOfAgentsInGroup;
+			_numberOfAgentsInSkillSet = numberOfAgentsInSkillSet;
 			_skipDates = new List<DateOnly>();
 			_optimizedPerDay = new Dictionary<DateOnly, optimizeCounter>();
 		}
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_optimizedPerDay[dateOnly] = optimizeCounter;
 			}
 			optimizeCounter.NumberOfOptimizations++;
-			if (_intradayOptimizerLimiter.CanJumpOutEarly(_numberOfAgentsInGroup, optimizeCounter.NumberOfOptimizations))
+			if (_intradayOptimizerLimiter.CanJumpOutEarly(_numberOfAgentsInSkillSet, optimizeCounter.NumberOfOptimizations))
 			{
 				_skipDates.Add(dateOnly);
 			}
