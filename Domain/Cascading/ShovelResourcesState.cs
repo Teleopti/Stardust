@@ -6,13 +6,13 @@ namespace Teleopti.Ccc.Domain.Cascading
 {
 	public class ShovelResourcesState
 	{
-		private readonly ResourceDistributionForSkillGroupsWithSameIndex _resourceDistribution;
+		private readonly ResourceDistributionForSkillSetsWithSameIndex _resourceDistribution;
 		private readonly IDictionary<CascadingSkillSet, double> _resourcesMovedOnSkillSet;
 		private bool _continueShovelingBasedOnSubSkills;
 
 
 		public ShovelResourcesState(IDictionary<ISkill, double> resources, 
-								ResourceDistributionForSkillGroupsWithSameIndex resourceDistribution,
+								ResourceDistributionForSkillSetsWithSameIndex resourceDistribution,
 								bool isAnyPrimarySkillOpen)
 		{
 			_resourceDistribution = resourceDistribution;

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Domain.Islands
 			{
 				if (numberOfAgentsInIsland > islandLimit.MinAgentsInIsland)
 				{
-					last = islandLimit.MinFactorOfAgentsInOtherSkillGroup;
+					last = islandLimit.MinFactorOfAgentsInOtherSkillSet;
 				}
 				else
 				{

@@ -508,7 +508,7 @@
     <Compile Include="Cascading\EmptyShovelResourceDataForInterval.cs" />
     <Compile Include="Cascading\OrderedSkillSets.cs" />
     <Compile Include="Cascading\ResourceCalculationThatThrows.cs" />
-    <Compile Include="Cascading\ResourceDistributionForSkillGroupsWithSameIndex.cs" />
+    <Compile Include="Cascading\ResourceDistributionForSkillSetsWithSameIndex.cs" />
     <Compile Include="Cascading\ShovelResourceDataExtensions.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityModel.cs" />
     <Compile Include="Cascading\SkillRoutingPriorityPersister.cs" />

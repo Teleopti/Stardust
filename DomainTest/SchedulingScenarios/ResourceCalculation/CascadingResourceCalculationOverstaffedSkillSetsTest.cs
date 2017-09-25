@@ -16,12 +16,12 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 {
 	[DomainTest]
-	public class CascadingResourceCalculationOverstaffedSkillGroupsTest : ResourceCalculationScenario
+	public class CascadingResourceCalculationOverstaffedSkillSetsTest : ResourceCalculationScenario
 	{
 		public IResourceCalculation Target;
 
 		[Test]
-		public void ShouldMoveResourceOnlyWithinSkillGroup()
+		public void ShouldMoveResourceOnlyWithinSkillSet()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldMoveResourceFromLowestSkillGroupFirst()
+		public void ShouldMoveResourceFromLowestSkillSetFirst()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldMoveResourcesFromLowestSkillGroup_DifferentLowestSkill()
+		public void ShouldMoveResourcesFromLowestSkillSet_DifferentLowestSkill()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldNotMoveMoreResourcesThanAvailableInSameSkillGroup()
+		public void ShouldNotMoveMoreResourcesThanAvailableInSameSkillSet()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldNotMoveMoreResourcesThanAvailableInSameSkillGroup_PartOfResourceNeedsToBeMoved()
+		public void ShouldNotMoveMoreResourcesThanAvailableInSameSkillSet_PartOfResourceNeedsToBeMoved()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldMoveResourcesToHighestFollowingSkillWhenSkillGroupsHavingSamePrimarySkill()
+		public void ShouldMoveResourcesToHighestFollowingSkillWhenSkillSetsHavingSamePrimarySkill()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -218,7 +218,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldMoveResourceOnlyWithinSkillGroupWhenParallellSubskillsExists()
+		public void ShouldMoveResourceOnlyWithinSkillSetWhenParallellSubskillsExists()
 		{
 			const int numberOfB1Agents = 3;
 			const int numberOfB2Agents = 5;

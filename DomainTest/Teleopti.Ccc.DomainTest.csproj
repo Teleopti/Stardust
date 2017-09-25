@@ -507,7 +507,7 @@
     <Compile Include="Optimization\AgentsToSkillSetsTest.cs" />
     <Compile Include="Optimization\DayOffOptimizationPreferenceProviderTest.cs" />
     <Compile Include="Optimization\Filter\FindFilterTest.cs" />
-    <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationOverstaffedSkillGroupsTest.cs" />
+    <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationOverstaffedSkillSetsTest.cs" />
     <Compile Include="SchedulingScenarios\ResourceCalculation\CascadingResourceCalculationOverstaffedTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationLockDaysTest.cs" />
     <Compile Include="SchedulingScenarios\DayOffOptimization\DayOffOptimizationScenario.cs" />

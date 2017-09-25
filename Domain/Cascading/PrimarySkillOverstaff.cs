@@ -9,14 +9,14 @@ namespace Teleopti.Ccc.Domain.Cascading
 	public class PrimarySkillOverstaff
 	{
 		public ShovelResourcesState AvailableSum(IShovelResourceData shovelResourceData, 
-			IEnumerable<CascadingSkillSet> allSkillGroups, 
-			IEnumerable<CascadingSkillSet> skillGroupsWithSameIndex, 
+			IEnumerable<CascadingSkillSet> allSkillSets, 
+			IEnumerable<CascadingSkillSet> skillSetsWithSameIndex, 
 			DateTimePeriod interval)
 		{
 			var primarySkillsExistsButTheyAreAllClosed = true;
 			var dic = new Dictionary<ISkill, double>();
 
-			foreach (var primarySkill in skillGroupsWithSameIndex.First().PrimarySkills)
+			foreach (var primarySkill in skillSetsWithSameIndex.First().PrimarySkills)
 			{
 				IShovelResourceDataForInterval shovelResourceDataForInterval;
 				if (!shovelResourceData.TryGetDataForInterval(primarySkill, interval, out shovelResourceDataForInterval))
@@ -26,29 +26,29 @@ namespace Teleopti.Ccc.Domain.Cascading
 				if (!primarySkillOverstaff.IsOverstaffed())
 					continue;
 
-				var resourcesOnOtherSkillGroupsContainingThisPrimarySkill = 0d;
-				foreach (var otherSkillGroup in allSkillGroups.Where(x => !skillGroupsWithSameIndex.Contains(x) && x.PrimarySkills.Contains(primarySkill)))
+				var resourcesOnOtherSkillSetsContainingThisPrimarySkill = 0d;
+				foreach (var otherSkillSet in allSkillSets.Where(x => !skillSetsWithSameIndex.Contains(x) && x.PrimarySkills.Contains(primarySkill)))
 				{
-					var resourcesOnOtherSkillGroup = otherSkillGroup.RemainingResources;
-					foreach (var otherPrimarySkill in otherSkillGroup.PrimarySkills.Where(x => !x.Equals(primarySkill)))
+					var resourcesOnOtherSkillSet = otherSkillSet.RemainingResources;
+					foreach (var otherPrimarySkill in otherSkillSet.PrimarySkills.Where(x => !x.Equals(primarySkill)))
 					{
-						resourcesOnOtherSkillGroup -= shovelResourceData.GetDataForInterval(otherPrimarySkill, interval).CalculatedResource;
+						resourcesOnOtherSkillSet -= shovelResourceData.GetDataForInterval(otherPrimarySkill, interval).CalculatedResource;
 					}
-					resourcesOnOtherSkillGroupsContainingThisPrimarySkill += resourcesOnOtherSkillGroup;
+					resourcesOnOtherSkillSetsContainingThisPrimarySkill += resourcesOnOtherSkillSet;
 				}
 
-				var otherSkillGroupOverstaff = Math.Max(resourcesOnOtherSkillGroupsContainingThisPrimarySkill - shovelResourceDataForInterval.FStaff, 0);
-				dic.Add(primarySkill, primarySkillOverstaff - otherSkillGroupOverstaff);
+				var otherSkillSetOverstaff = Math.Max(resourcesOnOtherSkillSetsContainingThisPrimarySkill - shovelResourceDataForInterval.FStaff, 0);
+				dic.Add(primarySkill, primarySkillOverstaff - otherSkillSetOverstaff);
 			}
 
 			if (primarySkillsExistsButTheyAreAllClosed)
 			{
-				var resources = skillGroupsWithSameIndex.Sum(x => x.RemainingResources);
-				dic.Add(skillGroupsWithSameIndex.First().PrimarySkills.First(), resources);
+				var resources = skillSetsWithSameIndex.Sum(x => x.RemainingResources);
+				dic.Add(skillSetsWithSameIndex.First().PrimarySkills.First(), resources);
 			}
 
 			return new ShovelResourcesState(dic,
-				new ResourceDistributionForSkillGroupsWithSameIndex(skillGroupsWithSameIndex),
+				new ResourceDistributionForSkillSetsWithSameIndex(skillSetsWithSameIndex),
 				!primarySkillsExistsButTheyAreAllClosed);
 		}
 	}
