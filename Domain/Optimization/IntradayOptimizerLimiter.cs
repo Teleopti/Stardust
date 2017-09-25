@@ -6,19 +6,19 @@ namespace Teleopti.Ccc.Domain.Optimization
 	[RemoveMeWithToggle("Can (probably) not be implemented in teamblock code branch", Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 	public class IntradayOptimizerLimiter : IIntradayOptimizerLimiter
 	{
-		private Percent _minPercentOfGroupLimit = new Percent(0.5);
+		private Percent _minPercentOfSkillSetLimit = new Percent(0.5);
 		private int _minSizeLimit = 100; 
 
-		public void SetFromTest(Percent sizeOfGroupLimit, int minSizeLimit)
+		public void SetFromTest(Percent sizeOfSkillSetLimit, int minSizeLimit)
 		{
-			_minPercentOfGroupLimit = sizeOfGroupLimit;
+			_minPercentOfSkillSetLimit = sizeOfSkillSetLimit;
 			_minSizeLimit = minSizeLimit;
 		}
 
-		public bool CanJumpOutEarly(int totalNumberOfAgentsInSkillGroup, int optimizedNumberOfAgentsInSkillGroup)
+		public bool CanJumpOutEarly(int totalNumberOfAgentsInSkillSet, int optimizedNumberOfAgentsInSkillSet)
 		{
-			return totalNumberOfAgentsInSkillGroup >= _minSizeLimit &&
-				((double)optimizedNumberOfAgentsInSkillGroup/totalNumberOfAgentsInSkillGroup) >= _minPercentOfGroupLimit.Value;
+			return totalNumberOfAgentsInSkillSet >= _minSizeLimit &&
+				((double)optimizedNumberOfAgentsInSkillSet/totalNumberOfAgentsInSkillSet) >= _minPercentOfSkillSetLimit.Value;
 		}
 	}
 }

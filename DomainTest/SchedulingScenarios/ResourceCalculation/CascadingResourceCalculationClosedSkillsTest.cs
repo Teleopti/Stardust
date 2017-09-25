@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldShovelAllResourcesWhenAgentsBelongToDifferentSkillGroups()
+		public void ShouldShovelAllResourcesWhenAgentsBelongToDifferentSkillSets()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -244,7 +244,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldConsiderSkillGroupsAlsoWhenPrimarySkillIsClosed([Values(0, 100)] int demandOnSubskill1, [Values(0, 100)] int demandOnSubskill2)
+		public void ShouldConsiderSkillSetsAlsoWhenPrimarySkillIsClosed([Values(0, 100)] int demandOnSubskill1, [Values(0, 100)] int demandOnSubskill2)
 		{
 			const int numberOfB1Agents = 3;
 			const int numberOfB2Agents = 5;

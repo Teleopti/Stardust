@@ -179,11 +179,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 
 		[Test] //one test here verifying skill groups are used. more detailed tests in AgentsToSkillGroupsTest
-		public void ShouldHaveDifferentCountersForDifferentSkillGroups()
+		public void ShouldHaveDifferentCountersForDifferentSkillSets()
 		{
 			IntradayOptimizerLimiter.SetFromTest(new Percent(0.5), 5);
-			const int numberOfAgentsInSkillGroup1 = 10;
-			const int numberOfAgentsInSkillGroup2 = 4;
+			const int numberOfAgentsInSkillSet1 = 10;
+			const int numberOfAgentsInSkillSet2 = 4;
 			var phoneActivity = ActivityFactory.CreateActivity("phone");
 			var skill1 = SkillRepository.Has("skill", phoneActivity);
 			var skill2 = SkillRepository.Has("skill", phoneActivity);
@@ -192,12 +192,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var planningPeriod = PlanningPeriodRepository.Has(dateOnly, 1);
 			SkillDayRepository.Has(skill1.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)));
 			SkillDayRepository.Has(skill2.CreateSkillDayWithDemand(scenario, dateOnly, TimeSpan.FromMinutes(60)));
-			for (var i = 0; i < numberOfAgentsInSkillGroup1; i++)
+			for (var i = 0; i < numberOfAgentsInSkillSet1; i++)
 			{
 				var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill1);
 				PersonAssignmentRepository.Has(agent, scenario, phoneActivity, new ShiftCategory("_"), dateOnly, new TimePeriod(8, 0, 17, 0));
 			}
-			for (var i = 0; i < numberOfAgentsInSkillGroup2; i++)
+			for (var i = 0; i < numberOfAgentsInSkillSet2; i++)
 			{
 				var agent = PersonRepository.Has(new Contract("_"), new SchedulePeriod(dateOnly, SchedulePeriodType.Week, 1), skill2);
 				PersonAssignmentRepository.Has(agent, scenario, phoneActivity, new ShiftCategory("_"), dateOnly, new TimePeriod(8, 0, 17, 0));

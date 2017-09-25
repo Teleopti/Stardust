@@ -11,12 +11,12 @@ namespace Teleopti.Ccc.Domain.Islands
 
 			foreach (var island in islands)
 			{
-				moveSkillGroupForOneIslandToCorrectIsland(allSkillSets, islands, island, touchedIslands);
+				moveSkillSetForOneIslandToCorrectIsland(allSkillSets, islands, island, touchedIslands);
 			}
 			return touchedIslands.Any();
 		}
 
-		private static void moveSkillGroupForOneIslandToCorrectIsland(ICollection<SkillSet> allSkillSets, IEnumerable<ICollection<SkillSet>> islands, ICollection<SkillSet> island, ISet<ICollection<SkillSet>> touchedIslands)
+		private static void moveSkillSetForOneIslandToCorrectIsland(ICollection<SkillSet> allSkillSets, IEnumerable<ICollection<SkillSet>> islands, ICollection<SkillSet> island, ISet<ICollection<SkillSet>> touchedIslands)
 		{
 			foreach (var SkillSet in island.ToArray())
 			{

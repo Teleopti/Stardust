@@ -231,7 +231,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldHandleSkillGroupOnlyContainingNoneCascadingSkills()
+		public void ShouldHandleSkillSetOnlyContainingNoneCascadingSkills()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");

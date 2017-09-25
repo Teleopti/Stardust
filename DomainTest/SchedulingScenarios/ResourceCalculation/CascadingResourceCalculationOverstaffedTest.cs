@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldNotMoveTooLittleWhenPrimarySkillExistsInOtherSkillGroup()
+		public void ShouldNotMoveTooLittleWhenPrimarySkillExistsInOtherSkillSet()
 		{
 			var scenario = new Scenario("_");
 			var activity = new Activity("_");
@@ -385,7 +385,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.ResourceCalculation
 		}
 
 		[Test]
-		public void ShouldOnlyMoveResourcesWithinSkillgroupWhereScheduledResourcesBelongToCorrectActivity()
+		public void ShouldOnlyMoveResourcesWithinSkillSetWhereScheduledResourcesBelongToCorrectActivity()
 		{
 			var scenario = new Scenario("_");
 			var activity1 = new Activity("1").WithId();
