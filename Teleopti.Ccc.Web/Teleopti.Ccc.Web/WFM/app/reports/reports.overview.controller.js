@@ -3,25 +3,48 @@
 
 	angular.module('wfm.reports').controller('ReportsOverviewController', ReportsCtrl);
 
-	ReportsCtrl.$inject = ['ReportsService', '$translate', 'localeLanguageSortingService'];
+	ReportsCtrl.$inject = ['ReportsService', '$translate', 'localeLanguageSortingService', 'Toggle'];
 
-	function ReportsCtrl(ReportsSvc, $translate, localeLanguageSortingService) {
+	function ReportsCtrl(ReportsService, $translate, localeLanguageSortingService, ToggleSvc) {
 		var vm = this;
 		vm.reports = [];
 		vm.customTypes = [];
 		init();
 
 		function init() {
-			ReportsSvc.getCategorizedReports().then(function (reports) {
-				vm.reports = groupReports(reports);		
+			var data = ReportsService.getCategorizedReports.query();
+			data.$promise.then(function (result) {
+				for( var i= result.length-1; i>=0; i--) {
+					if( result[i].Url == "reports/leaderboard"){
+						result.splice(i,1);
+						result.push({
+							Category:"Agent Performance",
+							IsWebReport:true,
+							Name:"Gamification Leaderboard",
+							Url:"leaderboardreport"
+						})
+					}
+				}
+
+				// push in web reports
+				if (ToggleSvc.WFM_AuditTrail_44006) {
+					result.push({
+						Category: "Schedule Analysis",
+						IsWebReport: true,
+						Name:"Schedule audit trail",
+						Url:"auditTrail"
+					})
+				}
+				vm.reports = result;
+				vm.reports = groupReports(result);
 				vm.reports = sortReportByType(vm.reports);
 			});
 		}
 
 		function groupReports(reports) {
 			var grouped = [],
-				types = {},
-				i, j, item;
+			types = {},
+			i, j, item;
 			for (i = 0, j = reports.length; i < j; i++) {
 				item = reports[i];
 				if (item.Category === null) {
@@ -48,14 +71,14 @@
 			var index = groupedReports.indexOf(custom);
 			vm.customTypes = groupedReports.slice(index, index + 1);
 			vm.customTypes = sortReportByType(vm.customTypes);
-			groupedReports.splice(index, 1); 
+			groupedReports.splice(index, 1);
 
 			return groupedReports;
 		}
 
 		function sortReportByType(array) {
 			if (array.length == 0)
-				return;
+			return;
 			array.sort(localeLanguageSortingService.localeSort('+Type'));
 			array.forEach(function(element) {
 				element.childNodes.sort(localeLanguageSortingService.localeSort('+Name'));

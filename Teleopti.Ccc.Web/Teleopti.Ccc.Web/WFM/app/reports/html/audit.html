@@ -1,40 +1,95 @@
-  <div class="view-header with-desc">
-    <div class="view-title">
-      <h1><i class="mdi mdi-account-convert"></i> Audit trail</h1>
-      <p ng-click="data = !data">Find recent changes</p>
+<div class="view-header with-desc">
+  <div class="view-title">
+    <h1><i class="mdi mdi-account-convert"></i> {{'ScheduleAuditTrailReport'|translate}}</h1>
+    <p>Find recent changes</p>
+  </div>
+</div>
+<!-- {{vm.changedBy}} -->
+<div class="con-row" ng-show="!showForm">
+  <div class="con-flex">
+    <div class="line-center">
+      <i class="mdi mdi-magnify huge-icon"></i>
+      <h2>Please specify what you would like to show</h2>
+      <button type="button" class="wfm-btn wfm-btn-primary" ng-click="showForm = !showForm">Ok, lets go</button>
     </div>
   </div>
-  <div class="con-row">
-    <div class="con-flex">
+</div>
 
-      <div class="panel material-depth-1">
-        <div class="con-row" style="align-items:baseline;">
-          <div class="con-flex">
-            <label for="filter" class="input-icon">
-              <i class="mdi mdi-magnify">
-                <input type="text" id="filter" ng-model="searchText" ng-change="vm.refreshData(searchText)" placeholder="Filter grid">
-                <md-tooltip>Find person who made a change</md-tooltip>
-              </i>
-            </label>
-          </div>
-          <div class="con-flex">
-            <date-range-picker ng-model="vm.lastChangeRange" template-type="'popup'"></date-range-picker>
-            <md-tooltip>Pick a range from last change</md-tooltip>
-          </div>
-          <div class="con-flex">
-            <date-range-picker ng-model="vm.dateChangeRange" template-type="'popup'"></date-range-picker>
-            <md-tooltip>Pick a range from changed dates</md-tooltip>
-          </div>
-          <div class="con-flex x2"></div>
-        </div>
+<div ng-cloak class="con-row animate-show" ng-show="showForm">
+  <div class="con-flex">
+    <div class="panel form-panel material-depth-1">
+      <div class="sub-header">
+        <h2>Panel title</h2>
+      </div>
+      <form name="form" class="wfm-form" novalidate ng-submit="vm.sendForm(form)">
         <div class="con-row">
-          <div class="con-flex ">
-            <div ui-i18n="{{lang}}" class="big-table-wrapper" style="max-width:100%;">
-              <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-disable-animation ui-grid-auto-resize ui-grid-resize-columns style="height: 70vh;"></div>
+          <div class="con-flex">
+            <div class="form-input-wrap">
+              <label for="nameId">Name:</label>
+              <input type="text" ng-model="form.input0" placeholder="Name" autocomplete="off" id="nameId" autofocus="true"/>
+              <div ng-cloak class="animate-show" ng-show ="form.$submitted || form.Name.$touched">
+                <div class="form-input-message" ng-class="{formInvalidInput:form.Name.$error.required}">Name is required</div>
+              </div>
+            </div>
+            <div class="form-input-wrap">
+              <label for="drop">{{'ChangedBy'|translate}}:</label>
+              <md-select ng-model="form.drop" id="drop" required="" aria-label="changed by">
+                <md-option ng-repeat="item in vm.changedBy" ng-value="item">
+                  {{item}}
+                </md-option>
+              </md-select>
+              <div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Drop.$error.required.$touched">
+                <div class="form-input-message" ng-class="{formInvalidInput:form.Drop.$error.required}">{{'Required'|translate}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="con-flex x3">
+            <div class="form-input-wrap">
+              <!-- <label>label for time-pickers:</label> -->
             </div>
           </div>
         </div>
-      </div>
-
+        <div class="con-footer">
+          <button class="wfm-btn wfm-btn-invis-primary" type="submit">
+            <md-tooltip>{{'Search'|translate}}</md-tooltip>
+            {{'SubmitRequest'|translate}}
+          </button>
+        </div>
+      </form>
     </div>
   </div>
+</div>
+<!-- {{'noSearchResults'|translate}} -->
+
+<!-- <div class="con-row">
+<div class="con-flex">
+<div class="panel material-depth-1">
+<div class="con-row" style="align-items:baseline;">
+<div class="con-flex">
+<label for="filter" class="input-icon">
+<i class="mdi mdi-magnify">
+<input type="text" id="filter" ng-model="searchText" ng-change="vm.refreshData(searchText)" placeholder="Filter grid">
+<md-tooltip>Find person who made a change</md-tooltip>
+</i>
+</label>
+</div>
+<div class="con-flex">
+<date-range-picker ng-model="vm.lastChangeRange" template-type="'popup'"></date-range-picker>
+<md-tooltip>Pick a range from last change</md-tooltip>
+</div>
+<div class="con-flex">
+<date-range-picker ng-model="vm.dateChangeRange" template-type="'popup'"></date-range-picker>
+<md-tooltip>Pick a range from changed dates</md-tooltip>
+</div>
+<div class="con-flex x2"></div>
+</div>
+<div class="con-row">
+<div class="con-flex ">
+<div ui-i18n="{{lang}}" class="big-table-wrapper" style="max-width:100%;">
+<div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-disable-animation ui-grid-auto-resize ui-grid-resize-columns style="height: 70vh;"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div> -->
