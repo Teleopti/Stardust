@@ -4,39 +4,40 @@ using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SkillGroup;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
-	public class FakeSkillAreaRepository : ISkillAreaRepository
+	public class FakeSkillGroupRepository : ISkillGroupRepository
 	{
-		private readonly IList<SkillArea> _skillAreas = new List<SkillArea>();
+		private readonly IList<SkillGroup> _skillAreas = new List<SkillGroup>();
 
-		public void Has(SkillArea skillArea)
+		public void Has(SkillGroup skillGroup)
 		{
-			_skillAreas.Add(skillArea);
+			_skillAreas.Add(skillGroup);
 		}
 
-		public void Add(SkillArea root)
+		public void Add(SkillGroup root)
 		{
 			_skillAreas.Add(root);
 		}
 
-		public void Remove(SkillArea root)
+		public void Remove(SkillGroup root)
 		{
 			_skillAreas.Remove(root);
 		}
 
-		public SkillArea Get(Guid id)
+		public SkillGroup Get(Guid id)
 		{
 			return _skillAreas.Single(x => x.Id == id);
 		}
 
-		public IList<SkillArea> LoadAll()
+		public IList<SkillGroup> LoadAll()
 		{
 			return _skillAreas;
 		}
 
-		public SkillArea Load(Guid id)
+		public SkillGroup Load(Guid id)
 		{
 			throw new NotImplementedException();
 		}

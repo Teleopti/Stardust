@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
+using Teleopti.Ccc.Domain.Intraday;
 
-namespace Teleopti.Ccc.Domain.Intraday
+namespace Teleopti.Ccc.Domain.SkillGroup
 {
-	public class SkillArea : VersionedAggregateRootWithBusinessUnit, IDeleteTag
+	public class SkillGroup : VersionedAggregateRootWithBusinessUnit, IDeleteTag
 	{
 		private ICollection<SkillInIntraday> _skills;
 		private string _name;

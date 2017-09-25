@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.Domain.Intraday
+namespace Teleopti.Ccc.Domain.SkillGroup
 {
 	public class ModifySkillGroup
 	{
-		private readonly ISkillAreaRepository _skillGroupRepository;
+		private readonly ISkillGroupRepository _skillGroupRepository;
 
-		public ModifySkillGroup(ISkillAreaRepository skillAreaRepository)
+		public ModifySkillGroup(ISkillGroupRepository skillGroupRepository)
 		{
-			_skillGroupRepository = skillAreaRepository;
+			_skillGroupRepository = skillGroupRepository;
 		}
 
 		public void Do(ModifySkillGroupInput input)

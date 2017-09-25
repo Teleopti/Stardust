@@ -291,7 +291,7 @@
     <Compile Include="Repositories\QueuedAbsenceRequestRepositoryTest.cs" />
     <Compile Include="Repositories\ProjectionVersionPersisterTest.cs" />
     <Compile Include="Repositories\RequestStrategySettingsReaderTest.cs" />
-    <Compile Include="Repositories\SkillAreaRepositoryTest.cs" />
+    <Compile Include="Repositories\SkillGroupRepositoryTest.cs" />
     <Compile Include="Repositories\SmartPersonPropertyQuerierTest.cs" />
     <Compile Include="Repositories\UserDevicesRepositoryTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\OrganizationReaderSkillsTest.cs" />

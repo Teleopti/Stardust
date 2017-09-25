@@ -243,7 +243,7 @@
     <Compile Include="Helper\CellExtensionTest.cs" />
     <Compile Include="Helper\RowExtensionsTest.cs" />
     <Compile Include="ApplicationLayer\ImportAgent\ImportAgentJobServiceTest.cs" />
-    <Compile Include="Intraday\ModifySkillGroupTest.cs" />
+    <Compile Include="SkillGroups\ModifySkillGroupTest.cs" />
     <Compile Include="Intraday\PerformanceViewModelCreatorTest.cs" />
     <Compile Include="Common\PublishPersoEmploymentNumberChangedEventTest.cs" />
     <Compile Include="Common\PublishPersonPeriodChangedEventTest.cs" />
@@ -498,11 +498,11 @@
     <Compile Include="Forecasting\OverrideTaskTest.cs" />
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\AdherencePercentage\DeletedTest.cs" />
     <Compile Include="Forecasting\StaffingCalculatorServiceFacadeTest.cs" />
-    <Compile Include="Intraday\CreateSkillAreaTest.cs" />
+    <Compile Include="SkillGroups\CreateSkillGroupTest.cs" />
     <Compile Include="Intraday\IncomingTrafficViewModelCreatorTest.cs" />
     <Compile Include="Logon\AsSystemAspectTest.cs" />
-    <Compile Include="Intraday\DeleteSkillAreaTest.cs" />
-    <Compile Include="Intraday\FetchSkillAreaTest.cs" />
+    <Compile Include="SkillGroups\DeleteSkillGroupTest.cs" />
+    <Compile Include="SkillGroups\FetchSkillGroupTest.cs" />
     <Compile Include="Intraday\FetchSkillInIntradayTest.cs" />
     <Compile Include="Logon\DataSourceAspectAuthenticationKeyTest.cs" />
     <Compile Include="Logon\LogonLicenseActivationConcurrencyTest35909.cs" />

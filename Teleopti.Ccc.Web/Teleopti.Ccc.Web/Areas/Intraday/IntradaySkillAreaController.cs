@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Domain.SkillGroup;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Intraday
@@ -13,19 +14,19 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday,DefinedRaptorApplicationFunctionPaths.WebStaffing)]
 	public class IntradaySkillAreaController : ApiController
 	{
-		private readonly CreateSkillArea _createSkillArea;
-		private readonly FetchSkillArea _fetchSkillArea;
-		private readonly DeleteSkillArea _deleteSkillArea;
+		private readonly CreateSkillGroup _createSkillGroup;
+		private readonly FetchSkillGroup _fetchSkillGroup;
+		private readonly DeleteSkillGroup _deleteSkillGroup;
 		private readonly IAuthorization _authorization;
 
-		public IntradaySkillAreaController(CreateSkillArea createSkillArea, 
-			FetchSkillArea fetchSkillArea, 
-			DeleteSkillArea deleteSkillArea, 
+		public IntradaySkillAreaController(CreateSkillGroup createSkillGroup, 
+			FetchSkillGroup fetchSkillGroup, 
+			DeleteSkillGroup deleteSkillGroup, 
 			IAuthorization authorization)
 		{
-			_createSkillArea = createSkillArea;
-			_fetchSkillArea = fetchSkillArea;
-			_deleteSkillArea = deleteSkillArea;
+			_createSkillGroup = createSkillGroup;
+			_fetchSkillGroup = fetchSkillGroup;
+			_deleteSkillGroup = deleteSkillGroup;
 			_authorization = authorization;
 		}
 
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			if (!input.Skills.Any())
 				return BadRequest("No skill selected");
 
-			_createSkillArea.Create(input.Name, input.Skills);
+			_createSkillGroup.Create(input.Name, input.Skills);
 			return Ok();
 		}
 
@@ -46,7 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 			return Ok(new SkillAreaInfo
 			{
 				HasPermissionToModifySkillArea = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea),
-				SkillAreas = _fetchSkillArea.GetAll()
+				SkillAreas = _fetchSkillGroup.GetAll()
 			});
 		}
 
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpDelete, Route("api/intraday/skillarea/{id}")]
 		public virtual IHttpActionResult DeleteSkillArea(Guid id)
 		{
-			_deleteSkillArea.Do(id);
+			_deleteSkillGroup.Do(id);
 			return Ok();
 		}
 	}
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 	public class SkillAreaInfo
 	{
 		public bool HasPermissionToModifySkillArea { get; set; }
-		public IEnumerable<SkillAreaViewModel> SkillAreas { get; set; }
+		public IEnumerable<SkillGroupViewModel> SkillAreas { get; set; }
 	}
 
 	public class SkillAreaInput

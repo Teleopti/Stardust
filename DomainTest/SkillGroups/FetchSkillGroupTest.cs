@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.SkillGroup;
 using Teleopti.Ccc.IocCommon;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -12,16 +13,16 @@ using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 using Teleopti.Ccc.TestCommon.TestData;
 
-namespace Teleopti.Ccc.DomainTest.Intraday
+namespace Teleopti.Ccc.DomainTest.SkillGroups
 {
 	[DomainTest]
-	public class FetchSkillAreaTest : ISetup
+	public class FetchSkillGroupTest : ISetup
 	{
-		public FetchSkillArea Target;
-		public FakeSkillAreaRepository SkillAreaRepository;
+		public FetchSkillGroup Target;
+		public FakeSkillGroupRepository SkillGroupRepository;
 		public FakeLoadAllSkillInIntradays LoadAllSkillInIntradays;
 		public FakeUserUiCulture UiCulture;
-		private List<SkillInIntraday> defaultSkills = new List<SkillInIntraday>();
+		private readonly List<SkillInIntraday> defaultSkills = new List<SkillInIntraday>();
 
 		public void Setup(ISystem system, IIocConfiguration configuration)
 		{
@@ -41,8 +42,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldGetAll()
 		{
-			SkillAreaRepository.Has(new SkillArea { Skills = defaultSkills }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Skills = defaultSkills }.WithId());
+			SkillGroupRepository.Has(new SkillGroup { Skills = defaultSkills }.WithId());
+			SkillGroupRepository.Has(new SkillGroup { Skills = defaultSkills }.WithId());
 
 			Target.GetAll().Count()
 				.Should().Be.EqualTo(2);
@@ -51,9 +52,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSortNameInSkillarea()
 		{
-			SkillAreaRepository.Has(new SkillArea { Name = "B", Skills = defaultSkills }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Name = "C", Skills = defaultSkills }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Name = "A", Skills = defaultSkills }.WithId());
+			SkillGroupRepository.Has(new SkillGroup { Name = "B", Skills = defaultSkills }.WithId());
+			SkillGroupRepository.Has(new SkillGroup { Name = "C", Skills = defaultSkills }.WithId());
+			SkillGroupRepository.Has(new SkillGroup { Name = "A", Skills = defaultSkills }.WithId());
 
 			UiCulture.IsSwedish();
 			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] { "A", "B", "C" });
@@ -62,9 +63,9 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldSortSwedishNameInSkillarea()
 		{
-			SkillAreaRepository.Has(new SkillArea { Name = "Ä", Skills = defaultSkills }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Name = "A", Skills = defaultSkills }.WithId());
-			SkillAreaRepository.Has(new SkillArea { Name = "Å", Skills = defaultSkills }.WithId());
+			SkillGroupRepository.Has(new SkillGroup { Name = "Ä", Skills = defaultSkills }.WithId());
+			SkillGroupRepository.Has(new SkillGroup { Name = "A", Skills = defaultSkills }.WithId());
+			SkillGroupRepository.Has(new SkillGroup { Name = "Å", Skills = defaultSkills }.WithId());
 
 			UiCulture.IsSwedish();
 			Target.GetAll().Select(sa => sa.Name).Should().Have.SameSequenceAs(new[] { "A", "Å", "Ä" });
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldMapViewModelCorrectly()
 		{
-			var existingSkillArea = new SkillArea
+			var existingSkillArea = new SkillGroup
 			{
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
@@ -82,14 +83,14 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				}
 			}.WithId();
 
-			SkillAreaRepository.Has(existingSkillArea);
+			SkillGroupRepository.Has(existingSkillArea);
 
 			var skillInIntraday = new SkillInIntraday() { Id = existingSkillArea.Skills.First().Id, DoDisplayData = true, SkillType = "InboundPhone" };
 			LoadAllSkillInIntradays.Has(skillInIntraday);
 
 			var result = Target.GetAll().Single();
 
-			result.Should().Be.OfType<SkillAreaViewModel>();
+			result.Should().Be.OfType<SkillGroupViewModel>();
 			result.Id.Should().Be.EqualTo(existingSkillArea.Id);
 			result.Name.Should().Be.EqualTo(existingSkillArea.Name);
 			result.Skills.Count().Should().Be.EqualTo(1);
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldNotIncludeDeletedSkillInSkillArea()
 		{
-			var existingSkillArea = new SkillArea
+			var existingSkillArea = new SkillGroup
 			{
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
@@ -115,11 +116,11 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				}
 			}.WithId();
 
-			SkillAreaRepository.Has(existingSkillArea);
+			SkillGroupRepository.Has(existingSkillArea);
 
 			var result = Target.GetAll().Single();
 
-			result.Should().Be.OfType<SkillAreaViewModel>();
+			result.Should().Be.OfType<SkillGroupViewModel>();
 			result.Id.Should().Be.EqualTo(existingSkillArea.Id);
 			result.Name.Should().Be.EqualTo(existingSkillArea.Name);
 			result.Skills.Count().Should().Be.EqualTo(1);
@@ -137,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		{
 			var skillAreaId = Guid.NewGuid();
 			var skillId = Guid.NewGuid();
-			var existingSkillArea = new SkillArea
+			var existingSkillArea = new SkillGroup
 			{
 				Name = "SkillAreaName",
 				Skills = new List<SkillInIntraday>
@@ -145,8 +146,8 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 					new SkillInIntraday { Id = skillId, Name = "Phone", IsDeleted = false }
 				}
 			}.WithId(skillAreaId);
-			SkillAreaRepository.Has(new SkillArea());
-			SkillAreaRepository.Has(existingSkillArea);
+			SkillGroupRepository.Has(new SkillGroup());
+			SkillGroupRepository.Has(existingSkillArea);
 
 			var result = Target.Get(skillAreaId);
 
@@ -159,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 		[Test]
 		public void ShouldNotGetSkillAreaWithOnlyDeletedSkills()
 		{
-			var existingSkillArea = new SkillArea
+			var existingSkillArea = new SkillGroup
 			{
 				Name = RandomName.Make(),
 				Skills = new List<SkillInIntraday>
@@ -169,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				}
 			}.WithId();
 
-			SkillAreaRepository.Has(existingSkillArea);
+			SkillGroupRepository.Has(existingSkillArea);
 
 			var result = Target.GetAll().FirstOrDefault();
 

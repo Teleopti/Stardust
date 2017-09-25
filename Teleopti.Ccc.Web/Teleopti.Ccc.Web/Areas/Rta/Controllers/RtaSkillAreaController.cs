@@ -4,6 +4,7 @@ using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.SkillGroup;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
@@ -11,11 +12,11 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.RealTimeAdherenceOverview)]
 	public class RtaSkillAreaController : ApiController
 	{
-		private readonly FetchSkillArea _fetchSkillArea;
+		private readonly FetchSkillGroup _fetchSkillGroup;
 
-		public RtaSkillAreaController(FetchSkillArea fetchSkillArea)
+		public RtaSkillAreaController(FetchSkillGroup fetchSkillGroup)
 		{
-			_fetchSkillArea = fetchSkillArea;
+			_fetchSkillGroup = fetchSkillGroup;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/SkillAreas")]
@@ -23,20 +24,20 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 		{
 			return Ok(new SkillAreaInfo
 			{
-				SkillAreas = _fetchSkillArea.GetAll()
+				SkillAreas = _fetchSkillGroup.GetAll()
 			});
 		}
 
 		[UnitOfWork, HttpGet, Route("api/SkillArea/For")]
 		public virtual IHttpActionResult NameFor(Guid skillAreaId)
 		{
-			return Ok(_fetchSkillArea.Get(skillAreaId));
+			return Ok(_fetchSkillGroup.Get(skillAreaId));
 		}
 	}
 
 	public class SkillAreaInfo
 	{
-		public IEnumerable<SkillAreaViewModel> SkillAreas { get; set; }
+		public IEnumerable<SkillGroupViewModel> SkillAreas { get; set; }
 	}
 
 	public class SkillAreaInput

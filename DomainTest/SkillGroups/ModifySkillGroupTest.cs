@@ -1,25 +1,26 @@
-﻿using NUnit.Framework;
-using SharpTestsEx;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Intraday;
+using Teleopti.Ccc.Domain.SkillGroup;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.IoC;
 
-namespace Teleopti.Ccc.DomainTest.Intraday
+namespace Teleopti.Ccc.DomainTest.SkillGroups
 {
 	[DomainTest]
 	public class ModifySkillGroupTest
 	{
 		public ModifySkillGroup Target;
-		public FakeSkillAreaRepository SkillAreaRepository;
+		public FakeSkillGroupRepository SkillGroupRepository;
 
 		[Test]
 		public void ShouldUpdate()
 		{
-			var skillGroup = new SkillArea().WithId();
+			var skillGroup = new SkillGroup().WithId();
 			skillGroup.Name = "SkillGroup1";
 			var skillToRemove = Guid.NewGuid();
 
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				}
 			};
 			skillGroup.Skills = skills;
-			SkillAreaRepository.Has(skillGroup);
+			SkillGroupRepository.Has(skillGroup);
 
 			var updateSkills = skills.Take(2).Select(x => x.Id).ToList();
 			Guid newSkillId = Guid.NewGuid();
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Intraday
 				Skills = updateSkills
 			});
 
-			var updatedSkillGroup = SkillAreaRepository.Get(skillGroup.Id.Value);
+			var updatedSkillGroup = SkillGroupRepository.Get(skillGroup.Id.Value);
 
 			updatedSkillGroup.Should().Not.Be.Null();
 			updatedSkillGroup.Skills.Count.Should().Be.EqualTo(4);

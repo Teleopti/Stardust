@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		private readonly ForecastedStaffingToDataSeries _forecastedStaffingToDataSeries;
 		private readonly IUserTimeZone _timeZone;
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
-		private readonly ISkillAreaRepository _skillAreaRepository;
+		private readonly ISkillGroupRepository _skillGroupRepository;
 		private readonly ScheduledStaffingViewModelCreator _staffingViewModelCreator;
 		private readonly ImportBpoFile _bpoFile;
 		private readonly ExportBpoFile _exportBpoFile;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 
 		public StaffingController(AddOverTime addOverTime, ScheduledStaffingToDataSeries scheduledStaffingToDataSeries,
 								  ForecastedStaffingToDataSeries forecastedStaffingToDataSeries, IUserTimeZone timeZone,
-								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillAreaRepository skillAreaRepository,
+								  IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, ISkillGroupRepository skillGroupRepository,
 								  ScheduledStaffingViewModelCreator staffingViewModelCreator, ImportBpoFile bpoFile, ICurrentDataSource currentDataSource, ExportBpoFile exportBpoFile, ISkillRepository skillRepository, IAuthorization authorization)
 		{
 			_addOverTime = addOverTime;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 			_forecastedStaffingToDataSeries = forecastedStaffingToDataSeries;
 			_timeZone = timeZone;
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
-			_skillAreaRepository = skillAreaRepository;
+			_skillGroupRepository = skillGroupRepository;
 			_staffingViewModelCreator = staffingViewModelCreator;
 			_bpoFile = bpoFile;
 			_currentDataSource = currentDataSource;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Staffing.Controllers
 		[UnitOfWork, HttpGet, Route("api/staffing/monitorskillareastaffing")]
 		public virtual IHttpActionResult MonitorSkillAreaStaffingByDate(Guid SkillAreaId, DateTime DateTime, bool UseShrinkage)
 		{
-			var skillArea = _skillAreaRepository.Get(SkillAreaId);
+			var skillArea = _skillGroupRepository.Get(SkillAreaId);
 			var skillIdList = skillArea.Skills.Select(skill => skill.Id).ToArray();
 			return Ok(_staffingViewModelCreator.Load(skillIdList, new DateOnly(DateTime), UseShrinkage));
 		}

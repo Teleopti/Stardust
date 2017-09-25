@@ -445,7 +445,7 @@
     <Compile Include="Repositories\RequestStrategySettingsReader.cs" />
     <Compile Include="Repositories\ScheduleStorageFactory.cs" />
     <Compile Include="Repositories\SiteOpenHourRepository.cs" />
-    <Compile Include="Repositories\SkillAreaRepository.cs" />
+    <Compile Include="Repositories\SkillGroupRepository.cs" />
     <Compile Include="Analytics\AnalyticsUnitOfWorkAspect.cs" />
     <Compile Include="Analytics\CurrentAnalyticsUnitOfWork.cs" />
     <Compile Include="Repositories\SmartPersonPropertyQuerier.cs" />

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Intraday;
 
-namespace Teleopti.Ccc.Domain.Intraday
+namespace Teleopti.Ccc.Domain.SkillGroup
 {
-	public class SkillAreaViewModel
+	public class SkillGroupViewModel
 	{
 		public string Name { get; set; }
 		public Guid Id { get; set; }

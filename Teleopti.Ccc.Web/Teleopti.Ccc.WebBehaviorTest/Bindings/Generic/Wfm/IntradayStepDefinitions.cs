@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Given(@"there is a Skill Area called '(.*)' that monitors skill '(.*)'")]
 		public void GivenThereIsASkillAreaCalledThatMonitorsSkill(string skillArea, string skill)
 		{
-			DataMaker.Data().Apply(new SkillAreaConfigurable()
+			DataMaker.Data().Apply(new SkillGroupConfigurable()
 			{
 				Name = skillArea,
 				Skill = skill 
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 		[Given(@"there is a Skill Area called '(.*)' that monitors skills '(.*)'")]
 		public void GivenThereIsASkillAreaCalledThatMonitorsSkills(string skillArea, string skills)
 		{
-			DataMaker.Data().Apply(new SkillAreaConfigurable()
+			DataMaker.Data().Apply(new SkillGroupConfigurable()
 			{
 				Name = skillArea,
 				Skills = skills

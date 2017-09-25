@@ -2,37 +2,38 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.Domain.Intraday
+namespace Teleopti.Ccc.Domain.SkillGroup
 {
-	public class FetchSkillArea
+	public class FetchSkillGroup
 	{
-		private readonly ISkillAreaRepository _skillAreaRepository;
+		private readonly ISkillGroupRepository _skillGroupRepository;
 		private readonly ILoadAllSkillInIntradays _loadAllSkillInIntradays;
 		private readonly IUserUiCulture _uiCulture;
 
-		public FetchSkillArea(ISkillAreaRepository skillAreaRepository, ILoadAllSkillInIntradays loadAllSkillInIntradays, IUserUiCulture uiCulture)
+		public FetchSkillGroup(ISkillGroupRepository skillGroupRepository, ILoadAllSkillInIntradays loadAllSkillInIntradays, IUserUiCulture uiCulture)
 		{
-			_skillAreaRepository = skillAreaRepository;
+			_skillGroupRepository = skillGroupRepository;
 			_loadAllSkillInIntradays = loadAllSkillInIntradays;
 			_uiCulture = uiCulture;
 		}
 
-		public IEnumerable<SkillAreaViewModel> GetAll()
+		public IEnumerable<SkillGroupViewModel> GetAll()
 		{
-			var skillAreas = _skillAreaRepository.LoadAll()
+			var skillGroups = _skillGroupRepository.LoadAll()
 				.Where(x => x.Skills.Any(y => y.IsDeleted == false))
 				.OrderBy(x => x.Name, StringComparer.Create(_uiCulture.GetUiCulture(), false));
 
 			var skills = _loadAllSkillInIntradays.Skills().ToDictionary(x => x.Id, x => x);
 
-			return skillAreas.Select(skillArea =>
-					new SkillAreaViewModel
+			return skillGroups.Select(skillGroup =>
+					new SkillGroupViewModel
 					{
-						Id = skillArea.Id.Value,
-						Name = skillArea.Name,
-						Skills = skillArea.Skills.Where(x => x.IsDeleted == false).Select(skill =>
+						Id = skillGroup.Id.Value,
+						Name = skillGroup.Name,
+						Skills = skillGroup.Skills.Where(x => x.IsDeleted == false).Select(skill =>
 							{
 								var skillInIntraday = skills.ContainsKey(skill.Id) ? skills[skill.Id] : null;
 								return new SkillInIntradayViewModel
@@ -52,15 +53,15 @@ namespace Teleopti.Ccc.Domain.Intraday
 				.ToArray();
 		}
 
-		public SkillAreaViewModel Get(Guid skillAreaId)
+		public SkillGroupViewModel Get(Guid skillGroupId)
 		{
-			var skillArea = _skillAreaRepository.Get(skillAreaId);
+			var skillGroup = _skillGroupRepository.Get(skillGroupId);
 
-			return new SkillAreaViewModel() 
+			return new SkillGroupViewModel() 
 			{
-				Id = skillArea.Id.Value,
-				Name = skillArea.Name,
-				Skills = skillArea.Skills.Select(skill => new SkillInIntradayViewModel
+				Id = skillGroup.Id.Value,
+				Name = skillGroup.Name,
+				Skills = skillGroup.Skills.Select(skill => new SkillInIntradayViewModel
 				{
 					Id = skill.Id,
 					Name = skill.Name,

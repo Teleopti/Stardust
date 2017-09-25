@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.TestCommon.IoC
 				system.UseTestDouble<FakeApplicationFunctionRepository>().For<IApplicationFunctionRepository>();
 				system.UseTestDouble<FakeAvailableDataRepository>().For<IAvailableDataRepository>();
 				system.UseTestDouble<FakeIntervalLengthFetcher>().For<IIntervalLengthFetcher>();
-				system.UseTestDouble<FakeSkillAreaRepository>().For<ISkillAreaRepository>();
+				system.UseTestDouble<FakeSkillGroupRepository>().For<ISkillGroupRepository>();
 				system.UseTestDouble<FakeLoadAllSkillInIntradays>().For<ILoadAllSkillInIntradays>();
 				system.UseTestDouble<FakeGroupingReadOnlyRepository>().For<IGroupingReadOnlyRepository>();
 				system.UseTestDouble<FakeCommonAgentNameProvider>().For<ICommonAgentNameProvider>();

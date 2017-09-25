@@ -316,9 +316,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 		private Guid IdForSkillArea(string skillArea)
 		{
-			return (from s in DataMaker.Data().UserDatasOfType<SkillAreaConfigurable>()
+			return (from s in DataMaker.Data().UserDatasOfType<SkillGroupConfigurable>()
 					where s.Name.Equals(skillArea, StringComparison.InvariantCultureIgnoreCase)
-					select s.SkillArea.Id.Value).First();
+					select s.SkillGroup.Id.Value).First();
 		}
 
 		[When(@"I view person schedule for '(.*)' in '(.*)' on '(.*)'")]

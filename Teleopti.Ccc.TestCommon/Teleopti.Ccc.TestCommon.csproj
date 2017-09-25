@@ -357,7 +357,7 @@
     <Compile Include="FakeRepositories\FakeShiftCategoryRepository.cs" />
     <Compile Include="FakeRepositories\FakeSiteRepository.cs" />
     <Compile Include="FakeRepositories\FakeSkillDayRepository.cs" />
-    <Compile Include="FakeRepositories\FakeSkillAreaRepository.cs" />
+    <Compile Include="FakeRepositories\FakeSkillGroupRepository.cs" />
     <Compile Include="FakeRepositories\FakeStatisticRepository.cs" />
     <Compile Include="FakeRepositories\FakeStudentAvailabilityDayRepository.cs" />
     <Compile Include="FakeRepositories\FakeTeamRepository.cs" />
@@ -476,7 +476,7 @@
     <Compile Include="TestData\Setups\Default\DefaultRaptorApplicationFunctions.cs" />
     <Compile Include="TestData\Setups\Default\DefaultScenario.cs" />
     <Compile Include="TestData\Setups\Default\IHashableDataSetup.cs" />
-    <Compile Include="TestData\Setups\Configurable\SkillAreaConfigurable.cs" />
+    <Compile Include="TestData\Setups\Configurable\SkillGroupConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\OutboundCampaignConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PersonEmptyDayConfigurable.cs" />
     <Compile Include="TestData\Setups\Configurable\PlanningPeriodConfigurable.cs" />

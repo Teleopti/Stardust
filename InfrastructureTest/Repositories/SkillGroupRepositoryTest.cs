@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.SkillGroup;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture]
 	[Category("BucketB")]
-	public class SkillAreaRepositoryTest : RepositoryTest<SkillArea>
+	public class SkillGroupRepositoryTest : RepositoryTest<SkillGroup>
 	{
 		private SkillType _skillType;
 		private Activity _activity;
@@ -38,16 +39,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(workload);
 		}
 
-		protected override SkillArea CreateAggregateWithCorrectBusinessUnit()
+		protected override SkillGroup CreateAggregateWithCorrectBusinessUnit()
 		{
 			var skills = new LoadSkillInIntradays(CurrUnitOfWork, new SupportedSkillsInIntradayProvider(null,
 					new List<ISupportedSkillCheck>() { },
 					new MultisiteSkillSupportedCheckAlwaysTrue()), new SkillTypeInfoProvider(new List<ISkillTypeInfo>()))
 				.Skills();
 
-			return new SkillArea
+			return new SkillGroup
 			{
-				Name = "skill area 1 name",
+				Name = "skill group 1 name",
 				Skills = new[]
 				{
 					skills.First()
@@ -55,17 +56,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			};
 		}
 
-		protected override void VerifyAggregateGraphProperties(SkillArea loadedAggregateFromDatabase)
+		protected override void VerifyAggregateGraphProperties(SkillGroup loadedAggregateFromDatabase)
 		{
-			SkillArea skillArea = CreateAggregateWithCorrectBusinessUnit();
-			Assert.AreEqual(skillArea.Name, loadedAggregateFromDatabase.Name);
-			Assert.AreEqual(skillArea.Skills.Count, loadedAggregateFromDatabase.Skills.Count);
-			Assert.AreEqual(skillArea.Skills.First().Name, loadedAggregateFromDatabase.Skills.First().Name);
+			SkillGroup skillGroup = CreateAggregateWithCorrectBusinessUnit();
+			Assert.AreEqual(skillGroup.Name, loadedAggregateFromDatabase.Name);
+			Assert.AreEqual(skillGroup.Skills.Count, loadedAggregateFromDatabase.Skills.Count);
+			Assert.AreEqual(skillGroup.Skills.First().Name, loadedAggregateFromDatabase.Skills.First().Name);
 		}
 
-		protected override Repository<SkillArea> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
+		protected override Repository<SkillGroup> TestRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			return new SkillAreaRepository(currentUnitOfWork);
+			return new SkillGroupRepository(currentUnitOfWork);
 		}
 	}
 }

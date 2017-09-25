@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.SkillGroup;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories.Analytics;
 
@@ -51,9 +52,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			builder.RegisterType<TaskPeriodsProvider>().SingleInstance();
 			builder.RegisterType<FetchSkillInIntraday>().SingleInstance();
-			builder.RegisterType<FetchSkillArea>().SingleInstance();
-			builder.RegisterType<CreateSkillArea>().SingleInstance();
-			builder.RegisterType<DeleteSkillArea>().SingleInstance();
+			builder.RegisterType<FetchSkillGroup>().SingleInstance();
+			builder.RegisterType<CreateSkillGroup>().SingleInstance();
+			builder.RegisterType<DeleteSkillGroup>().SingleInstance();
 			builder.RegisterType<ModifySkillGroup>().SingleInstance();
 			builder.RegisterType<LoadSkillInIntradays>().As<ILoadAllSkillInIntradays>().SingleInstance();
 			builder.RegisterType<IntradayMonitorDataLoader>().As<IIntradayMonitorDataLoader>().SingleInstance();
