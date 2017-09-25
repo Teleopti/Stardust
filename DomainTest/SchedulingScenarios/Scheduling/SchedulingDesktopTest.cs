@@ -104,6 +104,44 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			schedules.Count(x => x.PersonAssignment().Period.StartDateTime.Hour == 8).Should().Be.EqualTo(5);
 		}
 
+		[Test]
+		[Ignore("#45997 to be fixed")]
+		public void ShouldPlaceContractDayOffsCorrect()
+		{
+			var period = new DateOnlyPeriod(new DateOnly(2017, 8, 27), new DateOnly(2017, 9, 9));
+			var activity = new Activity("_").WithId();
+			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity, new TimePeriodWithSegment(8, 0, 8, 0, 60), new TimePeriodWithSegment(16, 0, 16, 0, 60), new ShiftCategory("_").WithId()));
+			var contract = new ContractWithMaximumTolerance();
+			var contractSchedule = new ContractSchedule("_");
+			var contractScheduleWeek1 = new ContractScheduleWeek();
+			var contractScheduleWeek2 = new ContractScheduleWeek();
+			contractScheduleWeek1.Add(DayOfWeek.Monday, true);
+			contractScheduleWeek1.Add(DayOfWeek.Tuesday, true);
+			contractScheduleWeek1.Add(DayOfWeek.Wednesday, true);
+			contractScheduleWeek1.Add(DayOfWeek.Thursday, true);
+			contractScheduleWeek1.Add(DayOfWeek.Friday, true);
+			contractScheduleWeek1.Add(DayOfWeek.Saturday, true);
+			contractScheduleWeek1.Add(DayOfWeek.Sunday, false);	//<-
+			contractScheduleWeek2.Add(DayOfWeek.Monday, true);
+			contractScheduleWeek2.Add(DayOfWeek.Tuesday, false); //<-
+			contractScheduleWeek2.Add(DayOfWeek.Wednesday, true);
+			contractScheduleWeek2.Add(DayOfWeek.Thursday, true);
+			contractScheduleWeek2.Add(DayOfWeek.Friday, true);
+			contractScheduleWeek2.Add(DayOfWeek.Saturday, true);
+			contractScheduleWeek2.Add(DayOfWeek.Sunday, true);
+			contractSchedule.AddContractScheduleWeek(contractScheduleWeek1);
+			contractSchedule.AddContractScheduleWeek(contractScheduleWeek2);	
+			var skill = new Skill("_").For(activity).InTimeZone(TimeZoneInfo.Utc).WithId().IsOpen();
+			var agent = new Person().WithId().InTimeZone(TimeZoneInfoFactory.StockholmTimeZoneInfo()).WithPersonPeriod(ruleSet, contract, skill).WithSchedulePeriodTwoWeeks(period.StartDate);
+			agent.Period(period.StartDate).PersonContract.ContractSchedule = contractSchedule;
+			var schedulerStateHolder = SchedulerStateHolderFrom.Fill(new Scenario("_"), period, new[] {agent }, Enumerable.Empty<IPersonAssignment>(), Enumerable.Empty<ISkillDay>());
+			
+			Target.Execute(new NoSchedulingCallback(), new SchedulingOptions(), new NoSchedulingProgress(), new []{agent}, period);
+
+			schedulerStateHolder.Schedules[agent].ScheduledDay(period.StartDate).PersonAssignment(true).DayOff().Should().Not.Be.Null();
+			schedulerStateHolder.Schedules[agent].ScheduledDay(period.StartDate.AddDays(9)).PersonAssignment(true).DayOff().Should().Not.Be.Null();
+		}
+
 		public SchedulingDesktopTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
 		{
 		}
