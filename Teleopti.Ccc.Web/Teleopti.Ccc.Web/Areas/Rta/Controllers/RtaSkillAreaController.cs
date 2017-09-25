@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.SkillGroup;
 using Teleopti.Ccc.Web.Filters;

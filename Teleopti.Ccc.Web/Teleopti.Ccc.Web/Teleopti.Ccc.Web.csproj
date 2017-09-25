@@ -445,7 +445,7 @@
     <Compile Include="Areas\Intraday\IntradayMonitorStaffingController.cs" />
     <Compile Include="Areas\Intraday\IntradayMonitorStatisticsController.cs" />
     <Compile Include="Areas\Intraday\IntradayController.cs" />
-    <Compile Include="Areas\Intraday\IntradaySkillAreaController.cs" />
+    <Compile Include="Areas\Global\SkillGroupController.cs" />
     <Compile Include="Areas\Intraday\IntradaySkillController.cs" />
     <Compile Include="Areas\MultiTenancy\ChangePasswordController.cs" />
     <Compile Include="Areas\MultiTenancy\Core\ChangePersonPassword.cs" />

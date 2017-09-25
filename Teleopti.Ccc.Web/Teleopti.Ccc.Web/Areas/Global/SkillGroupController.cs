@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SkillGroup;
 using Teleopti.Ccc.Web.Filters;
 
-namespace Teleopti.Ccc.Web.Areas.Intraday
+namespace Teleopti.Ccc.Web.Areas.Global
 {
 	[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebIntraday,DefinedRaptorApplicationFunctionPaths.WebStaffing)]
-	public class IntradaySkillAreaController : ApiController
+	public class SkillGroupController : ApiController
 	{
 		private readonly CreateSkillGroup _createSkillGroup;
 		private readonly FetchSkillGroup _fetchSkillGroup;
 		private readonly DeleteSkillGroup _deleteSkillGroup;
 		private readonly IAuthorization _authorization;
 
-		public IntradaySkillAreaController(CreateSkillGroup createSkillGroup, 
+		public SkillGroupController(CreateSkillGroup createSkillGroup, 
 			FetchSkillGroup fetchSkillGroup, 
 			DeleteSkillGroup deleteSkillGroup, 
 			IAuthorization authorization)
@@ -32,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 
 		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea)]
 		[UnitOfWork, HttpPost, Route("api/intraday/skillarea")]
-		public virtual IHttpActionResult CreateSkillArea([FromBody]SkillAreaInput input)
+		public virtual IHttpActionResult CreateSkillArea([FromBody]SkillGroupInput input)
 		{
 			if (!input.Skills.Any())
 				return BadRequest("No skill selected");
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpGet, Route("api/intraday/skillarea")]
 		public virtual IHttpActionResult GetSkillAreas()
 		{
-			return Ok(new SkillAreaInfo
+			return Ok(new SkillGroupInfo
 			{
 				HasPermissionToModifySkillArea = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea),
 				SkillAreas = _fetchSkillGroup.GetAll()
@@ -60,13 +59,13 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		}
 	}
 
-	public class SkillAreaInfo
+	public class SkillGroupInfo
 	{
 		public bool HasPermissionToModifySkillArea { get; set; }
 		public IEnumerable<SkillGroupViewModel> SkillAreas { get; set; }
 	}
 
-	public class SkillAreaInput
+	public class SkillGroupInput
 	{
 		public string Name { get; set; }
 		public IEnumerable<Guid> Skills { get; set; }
