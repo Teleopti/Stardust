@@ -117,11 +117,12 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		}
 		
 		[TestCase(1, ExpectedResult = 0)]
-		[TestCase(0.6, ExpectedResult = 3)]
+		[TestCase(0.6, ExpectedResult = 2)]
 		[TestCase(0, ExpectedResult = 5)]
 		[Ignore("To be fixed for PBI #46002")]
 		public int ShouldRespectStartTimeTolerance_PreferencesValue(double preferenceValue)
 		{
+			//this test should already be green!
 			var scenario = new Scenario();
 			var activity = new Activity();
 			var shiftCategory = new ShiftCategory("_").WithId();
@@ -148,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var optimizationPreferences = new OptimizationPreferencesDefaultValueProvider().Fetch();
 			optimizationPreferences.General.UsePreferences = true;
 			optimizationPreferences.General.PreferencesValue = preferenceValue;
-			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromHours(1);
+			optimizationPreferences.Advanced.BreakPreferenceStartTimeByMax = TimeSpan.FromHours(1); //shouldn't matter
 
 			Target.Optimize(new[] { agent }, period, optimizationPreferences, new NoIntradayOptimizationCallback());
 			
