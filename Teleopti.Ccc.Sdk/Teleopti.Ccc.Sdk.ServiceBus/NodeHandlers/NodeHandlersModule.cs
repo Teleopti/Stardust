@@ -27,7 +27,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterType<ApproveRequestsWithValidatorsEventStardustHandler>().As<IHandle<ApproveRequestsWithValidatorsEvent>>().SingleInstance();
 			builder.RegisterType<ExportMultisiteSkillsToSkillEventHandler>().As<IHandle<ExportMultisiteSkillsToSkillEvent>>().SingleInstance();
 			builder.RegisterType<IndexMaintenanceHandler>().As<IHandle<IndexMaintenanceEvent>>().SingleInstance();
-			builder.RegisterType<RunSchedulingHandler>().As<IHandle<ScheduleOnNode>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<PersonAbsenceRemovedHandler>().As<IHandle<PersonAbsenceRemovedEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<SchedulingProgress>().As<ISchedulingProgress>().SingleInstance();
 			builder.RegisterType<DataSourceScope>().As<IDataSourceScope>();
@@ -35,7 +34,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.NodeHandlers
 			builder.RegisterModule<PayrollContainerInstaller>();
 			builder.RegisterType<StardustJobFeedback>().As<IStardustJobFeedback>().SingleInstance();
 			builder.RegisterType<UpdateStaffingLevelReadModelHandler>().As<IHandle<UpdateStaffingLevelReadModelEvent>>().SingleInstance();
-			//builder.RegisterType<UpdateStaffingLevelReadModel2WeeksHandler>().As<IHandle<UpdateStaffingLevelReadModel2WeeksEvent>>().SingleInstance();
 			builder.RegisterType<ValidateReadModelsHandler>().As<IHandle<ValidateReadModelsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<FixReadModelsHandler>().As<IHandle<FixReadModelsEvent>>().SingleInstance().ApplyAspects();
 			builder.RegisterType<MultiAbsenceRequestsHandler>().As<IHandle<NewMultiAbsenceRequestsCreatedEvent>>().InstancePerLifetimeScope().ApplyAspects();
