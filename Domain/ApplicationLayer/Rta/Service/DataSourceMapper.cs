@@ -26,14 +26,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 			if (string.IsNullOrEmpty(sourceId))
 			{
-				_tracer.InvalidSourceId(traces);
+				_tracer.For(traces, _tracer.InvalidSourceId);
 				throw new InvalidSourceException("Source id is required");
 			}
-				
+
 			int dataSourceId;
 			if (!_cache.Value.TryGetValue(sourceId, out dataSourceId))
 			{
-				_tracer.InvalidSourceId(traces);
+				_tracer.For(traces, _tracer.InvalidSourceId);
 				throw new InvalidSourceException($"Source id \"{sourceId}\" not found");
 			}
 			return dataSourceId;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Text;
 using System.Linq;
 using System.ServiceModel;
 using System.ServiceModel.Activation;
@@ -88,17 +89,25 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			_rtaTracer.ProcessReceived();
 			return handleRtaExceptions(() =>
 			{
+				var statesWithTrace =
+					from s in externalUserStateBatch
+					select new
+					{
+						s.UserCode,
+						s.StateCode,
+						s.StateDescription,
+						s.IsLoggedOn,
+						TraceInfo = _rtaTracer.StateReceived(s.UserCode, s.StateCode)
+					};
+				
 				IEnumerable<BatchStateInputModel> states = (
-						from s in externalUserStateBatch
-						let userCode = fixUserCode(s.UserCode)
-						let traceInfo = _rtaTracer.TraceState(userCode)
-						let stateCode = fixStateCode(traceInfo, s.StateCode, platformTypeId, s.IsLoggedOn)
+						from s in statesWithTrace
 						select new BatchStateInputModel
 						{
-							UserCode = userCode,
-							StateCode = stateCode,
+							UserCode = fixUserCode(s.UserCode),
+							StateCode = fixStateCode(s.TraceInfo, s.StateCode, platformTypeId, s.IsLoggedOn),
 							StateDescription = s.StateDescription,
-							TraceInfo = traceInfo
+							TraceInfo = s.TraceInfo
 						})
 					.ToArray();
 
@@ -135,8 +144,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		private string fixStateCode(StateTraceInfo traceInfo, string stateCode, string platformTypeId, bool isLoggedOn)
 		{
-			_rtaTracer.StateReceived(traceInfo, stateCode);
-
 			if (!isLoggedOn)
 				stateCode = "LOGGED-OFF";
 
