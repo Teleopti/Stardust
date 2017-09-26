@@ -341,11 +341,11 @@ namespace Teleopti.Ccc.Domain.Collection
 
 		public bool TryGetValue(DateTimePeriod dateTimePeriod, out IResourceCalculationPeriod resourceCalculationPeriod)
 		{
-			ISkillStaffPeriod period;
-			if (_wrappedDictionary.TryGetValue(dateTimePeriod, out period))
+			if (_wrappedDictionary.ContainsKey(dateTimePeriod))
 			{
-				resourceCalculationPeriod = period;
+				resourceCalculationPeriod = _wrappedDictionary[dateTimePeriod];
 				return true;
+
 			}
 			resourceCalculationPeriod = null;
 			return false;

@@ -20,7 +20,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 
 		public bool TryGetValue(DateTimePeriod dateTimePeriod, out IResourceCalculationPeriod resourceCalculationPeriod)
 		{
-			return _relevantSkillStaffPeriods.TryGetValue(dateTimePeriod, out resourceCalculationPeriod);
+			if (_relevantSkillStaffPeriods.ContainsKey(dateTimePeriod))
+			{
+				resourceCalculationPeriod = _relevantSkillStaffPeriods[dateTimePeriod];
+				return true;
+			}
+			resourceCalculationPeriod = null;
+			return false;
 		}
 
 		public IEnumerable<IResourceCalculationPeriod> OnlyValues()
