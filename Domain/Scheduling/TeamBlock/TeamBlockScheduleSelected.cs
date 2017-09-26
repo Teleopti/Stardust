@@ -73,13 +73,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count(), true))
 			{
 				var blockPreferences = blockPreferenceProvider.ForAgents(teamInfo.GroupMembers, selectedPeriod.StartDate).ToArray();
-				var blockFinderType =
-					blockPreferences.Select(x => x.BlockTypeValue).Distinct().Count() == 1
-						? blockPreferences.Select(x => x.BlockTypeValue).Single()
-						: blockPreferences.First(x => x.BlockTypeValue != BlockFinderType.SingleDay).BlockTypeValue;
-				schedulingOption.UseBlock = blockPreferences.Any(x => x.UseTeamBlockOption);
-				schedulingOption.BlockFinderTypeForAdvanceScheduling = schedulingOption.UseBlock ? blockFinderType : BlockFinderType.SingleDay;
-				
+				updateSchedulingOptionsForBlockPreferences(schedulingOption, blockPreferences);
+
 				var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo, datePointer, allPersonMatrixList, schedulingOption, selectedPeriod);
 				if (teamBlockInfo == null) continue;
 
@@ -95,6 +90,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 				if (schedulingCallback.IsCancelled) break;
 			}
+		}
+
+		private static void updateSchedulingOptionsForBlockPreferences(SchedulingOptions schedulingOption,
+			IExtraPreferences[] blockPreferences)
+		{
+			var distinctTypes = blockPreferences.Select(x => x.BlockTypeValue).Distinct().ToArray();
+			var blockFinderType =
+				distinctTypes.Length == 1
+					? distinctTypes.Single()
+					: blockPreferences.First(x => x.BlockTypeValue != BlockFinderType.SingleDay).BlockTypeValue;
+			schedulingOption.UseBlock = blockPreferences.Any(x => x.UseTeamBlockOption);
+			schedulingOption.BlockFinderTypeForAdvanceScheduling = schedulingOption.UseBlock
+				? blockFinderType
+				: BlockFinderType.SingleDay;
+			schedulingOption.BlockSameShift = blockPreferences.Any(x => x.UseBlockSameShift);
+			schedulingOption.BlockSameShiftCategory = blockPreferences.Any(x => x.UseBlockSameShiftCategory);
+			schedulingOption.BlockSameStartTime = blockPreferences.Any(x => x.UseBlockSameStartTime);
 		}
 
 		private void verifyScheduledTeamBlock(ISchedulingCallback schedulingCallback, IEnumerable<IPerson> selectedPersons,

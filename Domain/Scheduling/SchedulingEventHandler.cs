@@ -95,13 +95,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				var planningPeriod = _planningPeriodRepository.Load(@event.PlanningPeriodId);
 				var planningGroup = planningPeriod.PlanningGroup;
-				blockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup);
+				blockPreferenceProvider = planningGroup==null ? _blockPreferenceProviderUsingFiltersFactory.Create() : _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup);
 			}
 			else
 			{
 				blockPreferenceProvider = new FixedBlockPreferenceProvider(schedulingOptions);
 			}
-			
 
 			selectedPeriod = _extendSelectedPeriodForMonthlyScheduling.Execute(@event, schedulerStateHolder, selectedPeriod);
 
