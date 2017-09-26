@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Requests are already in the waitlist, please wait..
+        ///   Looks up a localized string similar to There are waitlisted requests for this period already, please wait..
         /// </summary>
         public static string AbsenceRequestAlreadyInWaitlist {
             get {
@@ -28595,24 +28595,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to See agents.
-        /// </summary>
-        public static string SeeAgents {
-            get {
-                return ResourceManager.GetString("SeeAgents", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to See agents by selection.
-        /// </summary>
-        public static string SeeAgentsBySelection {
-            get {
-                return ResourceManager.GetString("SeeAgentsBySelection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Segment.
         /// </summary>
         public static string Segment {
@@ -35724,6 +35706,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ViewActiveAgents {
             get {
                 return ResourceManager.GetString("ViewActiveAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View agents.
+        /// </summary>
+        public static string ViewAgents {
+            get {
+                return ResourceManager.GetString("ViewAgents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View agents by selection.
+        /// </summary>
+        public static string ViewAgentsBySelection {
+            get {
+                return ResourceManager.GetString("ViewAgentsBySelection", resourceCulture);
             }
         }
         

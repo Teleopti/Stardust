@@ -16471,14 +16471,6 @@ Do you want to participate?</value>
     <value>There are waitlisted requests for this period already, please wait.</value>
     <comment>Message to agent when the request gets waitlisted because there exists wailtlisted requests already.</comment>
   </data>
-  <data name="SeeAgents" xml:space="preserve">
-    <value>See agents</value>
-    <comment>Tooltip to be shown on the Agents button in RTA overview when there isn't a selection in the page</comment>
-  </data>
-  <data name="SeeAgentsBySelection" xml:space="preserve">
-    <value>See agents by selection</value>
-    <comment>Tooltip to be shown on the Agents button in RTA overview when there is a selection in the page</comment>
-  </data>
   <data name="ShiftTradeSpecification" xml:space="preserve">
     <value>Shift trade specification</value>
     <comment>Tip message to show in broken rules of shift trade request in WFM</comment>
@@ -16486,5 +16478,13 @@ Do you want to participate?</value>
   <data name="NoAgentsToBeDisplayed" xml:space="preserve">
     <value>No agents to be displayed</value>
     <comment>Message displayed in RTA agents view when there are no agents in the view</comment>
+  </data>
+  <data name="ViewAgents" xml:space="preserve">
+    <value>View agents</value>
+    <comment>Tooltip to be displayed on the Agents button in the RTA overview when there's no selection on the page</comment>
+  </data>
+  <data name="ViewAgentsBySelection" xml:space="preserve">
+    <value>View agents by selection</value>
+    <comment>there are selections on the page</comment>
   </data>
 </root>
