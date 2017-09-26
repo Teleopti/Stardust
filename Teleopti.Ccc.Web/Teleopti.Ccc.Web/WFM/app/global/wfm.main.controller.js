@@ -43,7 +43,10 @@
     }
     function destroyElement() {
       var themeElement = document.getElementById('themeModules');
-      themeElement.remove();
+      if(themeElement.remove)
+        themeElement.remove()
+      else if(themeElement.removeNode)
+        themeElement.removeNode(true);
     }
 
     function applyThemeToModules(theme) {

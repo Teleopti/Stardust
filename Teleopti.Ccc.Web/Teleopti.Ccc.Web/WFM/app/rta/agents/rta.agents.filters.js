@@ -5,8 +5,6 @@
 		.filter('agentFilter', agentFilter);
 
 	function agentFilter() {
-		var filter = this;
-
 		function escapeRegExp(str) {
 			return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
 		}
@@ -33,6 +31,5 @@
 			});
 			return matchedItems;
 		};
-		return filter;
 	};
 })();
