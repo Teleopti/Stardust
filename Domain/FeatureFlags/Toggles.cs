@@ -65,6 +65,7 @@
 		WfmTeamSchedule_MoveOvertimeActivity_44888,
 		WfmTeamSchedule_SortRows_45056,
 		WfmTeamSchedule_DisplayAndEditPublicNote_44783,
+		WfmTeamSchedule_ShowStaffingInfo_45206,
 
 		WebByPassDefaultPermissionCheck_37984,
 
