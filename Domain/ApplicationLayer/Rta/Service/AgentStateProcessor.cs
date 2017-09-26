@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
@@ -10,6 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public bool Processed;
 		public AgentState State;
+		public IEnumerable<IEvent> Events;
 	}
 
 	public class ProcessInput
@@ -39,7 +41,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateMapper = stateMapper;
 			AppliedAlarm = appliedAlarm;
 		}
-
 	}
 
 	public class AgentStateProcessor
@@ -49,7 +50,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly StateEventPublisher _stateEventPublisher;
 		private readonly RuleEventPublisher _ruleEventPublisher;
 		private readonly AdherenceEventPublisher _adherenceEventPublisher;
-		private readonly ICurrentEventPublisher _eventPublisher;
+		private readonly IEventPublisherScope _eventPublisherScope;
+		private readonly ICurrentEventPublisher _currentEventPublisher;
+		private readonly IEventPublisher _eventPublisher;
 		private readonly IRtaTracer _tracer;
 
 		public AgentStateProcessor(
@@ -58,7 +61,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateEventPublisher stateEventPublisher,
 			RuleEventPublisher ruleEventPublisher,
 			AdherenceEventPublisher adherenceEventPublisher,
-			ICurrentEventPublisher eventPublisher,
+			IEventPublisherScope eventPublisherScope,
+			ICurrentEventPublisher currentEventPublisher,
+			IEventPublisher eventPublisher,
 			IRtaTracer tracer)
 		{
 			_shiftEventPublisher = shiftEventPublisher;
@@ -66,6 +71,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_stateEventPublisher = stateEventPublisher;
 			_ruleEventPublisher = ruleEventPublisher;
 			_adherenceEventPublisher = adherenceEventPublisher;
+			_eventPublisherScope = eventPublisherScope;
+			_currentEventPublisher = currentEventPublisher;
 			_eventPublisher = eventPublisher;
 			_tracer = tracer;
 		}
@@ -73,22 +80,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		[LogInfo]
 		public virtual ProcessResult Process(ProcessInput input)
 		{
-			var resultState = processRelevantMoments(input);
-			if (resultState == null)
+			var eventCollector = new EventCollector(_currentEventPublisher);
+			using (_eventPublisherScope.OnThisThreadPublishTo(eventCollector))
 			{
-				_tracer.NoChange(() => input.Input.TraceInfo);
-			}
+				var resultState = processRelevantMoments(input);
+				var processed = resultState != null;
 
-			return new ProcessResult
-			{
-				Processed = resultState != null,
-				State = resultState
-			};
+				if (!processed)
+					_tracer.NoChange(() => input.Input.TraceInfo);
+
+				return new ProcessResult
+				{
+					Processed = processed,
+					Events = eventCollector.Pop(),
+					State = resultState
+				};
+			}
 		}
 
 		private AgentState processRelevantMoments(ProcessInput processInput)
 		{
-			var times = new[] {processInput.CurrentTime };
+			var times = new[] {processInput.CurrentTime};
 
 			if (processInput.Stored.ReceivedTime != null)
 			{
@@ -131,7 +143,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					outState = workingState;
 				}
 			});
-			
+
 			return outState;
 		}
 
@@ -143,7 +155,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_ruleEventPublisher.Publish(context);
 			_adherenceEventPublisher.Publish(context);
 
-			_eventPublisher.Current().Publish(new AgentStateChangedEvent
+			_currentEventPublisher.Current().Publish(new AgentStateChangedEvent
 			{
 				PersonId = context.PersonId,
 				Time = context.Time,
