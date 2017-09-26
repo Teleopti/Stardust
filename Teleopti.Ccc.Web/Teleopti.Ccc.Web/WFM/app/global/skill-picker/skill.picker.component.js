@@ -1,5 +1,4 @@
-﻿// @ts-check
-(function() {
+﻿(function() {
     'use strict';
 
     angular.module('wfm.skillPicker', []).component('skillPicker', {
