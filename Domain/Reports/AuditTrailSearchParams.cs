@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Web.Areas.Reports.Controllers
+namespace Teleopti.Ccc.Domain.Reports
 {
 	public class AuditTrailSearchParams
 	{

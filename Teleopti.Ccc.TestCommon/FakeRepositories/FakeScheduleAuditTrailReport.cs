@@ -1,23 +1,50 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeRepositories
 {
 	public class FakeScheduleAuditTrailReport : IScheduleAuditTrailReport
 	{
+		private readonly IUserTimeZone _timeZone;
 		private readonly IList<IPerson> modifiedByList = new List<IPerson>();
 		private readonly IList<ScheduleAuditingReportData> auditingReportList = new List<ScheduleAuditingReportData>();
 
-		public void AddModifiedByPerson(IPerson PersonThatModified)
+		public FakeScheduleAuditTrailReport(IUserTimeZone timeZone)
 		{
-			modifiedByList.Add(PersonThatModified);
+			_timeZone = timeZone;
+		}
+
+		public void AddModifiedByPerson(IPerson personThatModified)
+		{
+			modifiedByList.Add(personThatModified);
 		}
 		
 		public IEnumerable<IPerson> RevisionPeople()
 		{
 			return modifiedByList;
+		}
+
+		public IList<ScheduleAuditingReportData> Report(Guid changedByPersonId, DateTimePeriod changeOccurredPeriod, DateTimePeriod affectedPeriod)
+		{
+			var hits = auditingReportList
+				.Where(x => new Guid(x.ModifiedBy) == changedByPersonId 
+							&& changeOccurredPeriod.Contains(x.ModifiedAt) 
+							&& affectedPeriod.Contains(x.ScheduleStart))
+				.ToList();
+
+			foreach (var auditItem in hits)
+			{
+				auditItem.ModifiedAt = TimeZoneHelper.ConvertFromUtc(auditItem.ModifiedAt, _timeZone.TimeZone());
+				auditItem.ScheduleStart = TimeZoneHelper.ConvertFromUtc(auditItem.ScheduleStart, _timeZone.TimeZone());
+				auditItem.ScheduleEnd = TimeZoneHelper.ConvertFromUtc(auditItem.ScheduleEnd, _timeZone.TimeZone());
+			}
+
+			return hits;
 		}
 
 		public void Has(ScheduleAuditingReportData scheduleAuditingReportData)
