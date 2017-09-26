@@ -301,7 +301,7 @@
     <Compile Include="Intraday\IntradaySkillProvider.cs" />
     <Compile Include="Intraday\ISkillTypeInfo.cs" />
     <Compile Include="Intraday\ISkillTypeInfoProvider.cs" />
-    <Compile Include="SkillGroup\ModifySkillGroup.cs" />
+    <Compile Include="SkillGroupManagement\ModifySkillGroup.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModel.cs" />
     <Compile Include="Intraday\ScheduledStaffingViewModelCreator.cs" />
     <Compile Include="Intraday\SkillTypeIdentifier.cs" />
@@ -349,6 +349,7 @@
     <Compile Include="Scheduling\WebLegacy\LockInfoForStateHolder.cs" />
     <Compile Include="Scheduling\WebLegacy\MoveSchedulesToOriginalStateHolderAfterIsland.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiWfmBpoExchangeLicenseOption.cs" />
+    <Compile Include="SkillGroupManagement\ModifySkillGroupInput.cs" />
     <Compile Include="Staffing\ExportBpoFile.cs" />
     <Compile Include="Staffing\ImportBpoFile.cs" />
     <Compile Include="SystemSetting\UserDevice.cs" />
@@ -2054,17 +2055,17 @@
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="Helper\DateExtensions.cs" />
     <Compile Include="Helper\ISchedulingProgress.cs" />
-    <Compile Include="SkillGroup\DeleteSkillGroup.cs" />
-    <Compile Include="SkillGroup\SkillGroupViewModel.cs" />
+    <Compile Include="SkillGroupManagement\DeleteSkillGroup.cs" />
+    <Compile Include="SkillGroupManagement\SkillGroupViewModel.cs" />
     <Compile Include="Intraday\SkillInIntradayViewModel.cs" />
     <Compile Include="IProvideCustomChangeInfo.cs" />
     <Compile Include="Logon\ApplicationFunctionsForRole.cs" />
-    <Compile Include="SkillGroup\CreateSkillGroup.cs" />
-    <Compile Include="SkillGroup\FetchSkillGroup.cs" />
+    <Compile Include="SkillGroupManagement\CreateSkillGroup.cs" />
+    <Compile Include="SkillGroupManagement\FetchSkillGroup.cs" />
     <Compile Include="Logon\Aspects\TenantFromArguments.cs" />
     <Compile Include="Logon\AsSystem.cs" />
     <Compile Include="Intraday\FetchSkillInIntraday.cs" />
-    <Compile Include="SkillGroup\SkillGroup.cs" />
+    <Compile Include="SkillGroupManagement\SkillGroup.cs" />
     <Compile Include="Intraday\SkillInIntraday.cs" />
     <Compile Include="Intraday\SkillStatusMeasure.cs" />
     <Compile Include="Intraday\SkillStatusModel.cs" />
@@ -4000,7 +4001,7 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Intraday\SkillInIntraday.hbm.xml" />
-    <EmbeddedResource Include="SkillGroup\SkillGroup.hbm.xml" />
+    <EmbeddedResource Include="SkillGroupManagement\SkillGroup.hbm.xml" />
     <EmbeddedResource Include="Optimization\Filters\TeamFilter.hbm.xml" />
     <EmbeddedResource Include="Optimization\Filters\SiteFilter.hbm.xml" />
     <EmbeddedResource Include="Optimization\Filters\ContractFilter.hbm.xml" />

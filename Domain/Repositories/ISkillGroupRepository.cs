@@ -1,9 +1,9 @@
 ﻿using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
-using Teleopti.Ccc.Domain.SkillGroup;
+using Teleopti.Ccc.Domain.SkillGroupManagement;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-	public interface ISkillGroupRepository : IRepository<SkillGroup.SkillGroup>
+	public interface ISkillGroupRepository : IRepository<SkillGroup>
 	{
 	}
 }

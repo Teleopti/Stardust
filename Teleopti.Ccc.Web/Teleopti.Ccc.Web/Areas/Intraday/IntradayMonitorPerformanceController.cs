@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareaperformance/{id}")]
 		public virtual IHttpActionResult MonitorSkillAreaPerformance(Guid id)
 		{
-			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillArea(id);
+			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillGroup(id);
 			return Ok(_performanceViewModelCreator.Load(skillIdList));
 		}
 
 		[UnitOfWork, HttpGet, Route("api/intraday/monitorskillareaperformance/{id}/{dayOffset}")]
 		public virtual IHttpActionResult MonitorSkillAreaPerformanceByDayOffset(Guid id, int dayOffset)
 		{
-			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillArea(id);
+			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillGroup(id);
 			return Ok(_performanceViewModelCreator.Load(skillIdList, dayOffset));
 		}
 

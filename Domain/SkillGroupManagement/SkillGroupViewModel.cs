@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Intraday;
 
-namespace Teleopti.Ccc.Domain.SkillGroup
+namespace Teleopti.Ccc.Domain.SkillGroupManagement
 {
 	public class SkillGroupViewModel
 	{

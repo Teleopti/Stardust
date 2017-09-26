@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.Domain.SkillGroup
+namespace Teleopti.Ccc.Domain.SkillGroupManagement
 {
 	public class DeleteSkillGroup
 	{

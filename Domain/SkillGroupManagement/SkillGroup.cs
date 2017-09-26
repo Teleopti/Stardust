@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Intraday;
 
-namespace Teleopti.Ccc.Domain.SkillGroup
+namespace Teleopti.Ccc.Domain.SkillGroupManagement
 {
 	public class SkillGroup : VersionedAggregateRootWithBusinessUnit, IDeleteTag
 	{

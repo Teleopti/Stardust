@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpPost, Route("api/intraday/exportskillareadatatoexcel")]
 		public virtual HttpResponseMessage GetIntradayDataAsExcelFileFromSkillArea(IndradayExportInput input)
 		{
-			var skillArea = _intradaySkillProvider.GetSkillAreaById(input.id);
+			var skillArea = _intradaySkillProvider.GetSkillGroupById(input.id);
 			var skillIdList = skillArea?.Skills.Select(skill => skill.Id).ToArray() ?? new Guid[0];
 			var intradayExportDataToExcel = new IntradayExportCreator();
 

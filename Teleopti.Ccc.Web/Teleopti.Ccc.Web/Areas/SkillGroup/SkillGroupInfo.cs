@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Domain.SkillGroup;
+using Teleopti.Ccc.Domain.SkillGroupManagement;
 
 namespace Teleopti.Ccc.Web.Areas.SkillGroup
 {

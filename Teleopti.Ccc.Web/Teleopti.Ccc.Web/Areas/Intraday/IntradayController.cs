@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpGet, Route("api/intraday/lateststatisticstimeforskillarea/{id}")]
 		public virtual IHttpActionResult GetLatestStatisticsTimeForSkillArea(Guid id)
 		{
-			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillArea(id);
+			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillGroup(id);
 			return Ok(new { latestIntervalTime = _latestStatisticsTimeProvider.Get(skillIdList) });
 		}
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.Intraday
 		[UnitOfWork, HttpGet, Route("api/intraday/lateststatisticstimeforskillarea/{id}/{dayOffset}")]
 		public virtual IHttpActionResult GetLatestStatisticsTimeForSkillAreaAndDate(Guid id, int dayOffset)
 		{
-			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillArea(id);
+			var skillIdList = _intradaySkillProvider.GetSkillsFromSkillGroup(id);
 			return Ok(new { latestIntervalTime = _latestStatisticsTimeProvider.Get(skillIdList, dayOffset) });
 		}
 

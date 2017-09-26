@@ -5,7 +5,7 @@ using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
 
-namespace Teleopti.Ccc.Domain.SkillGroup
+namespace Teleopti.Ccc.Domain.SkillGroupManagement
 {
 	public class FetchSkillGroup
 	{

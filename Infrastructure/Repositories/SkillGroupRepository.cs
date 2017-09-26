@@ -1,6 +1,6 @@
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.SkillGroup;
+using Teleopti.Ccc.Domain.SkillGroupManagement;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {

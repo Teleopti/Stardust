@@ -2,7 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.SkillGroup;
+using Teleopti.Ccc.Domain.SkillGroupManagement;
 
 namespace Teleopti.Ccc.Domain.Intraday
 {
@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.Domain.Intraday
 			_skillRepository = skillRepository;
 		}
 
-		public Guid[] GetSkillsFromSkillArea(Guid skillAreaId)
+		public Guid[] GetSkillsFromSkillGroup(Guid skillGroupId)
 		{
-			var skillArea = _skillGroupRepository.Get(skillAreaId);
-			return skillArea?.Skills.Select(skill => skill.Id).ToArray() ?? new Guid[0];
+			var skillGroup = _skillGroupRepository.Get(skillGroupId);
+			return skillGroup?.Skills.Select(skill => skill.Id).ToArray() ?? new Guid[0];
 		}
 
 		public ISkill GetSkillById(Guid id)
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Intraday
 			return _skillRepository.Get(id);
 		}
 
-		public SkillGroup.SkillGroup GetSkillAreaById(Guid id)
+		public SkillGroup GetSkillGroupById(Guid id)
 		{
 			return _skillGroupRepository.Get(id);
 		}
