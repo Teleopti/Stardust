@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 						})
 						.SelectMany(x =>
 						{
-							_tracer.StateProcessed(() => x.TraceInfo, () => x.Events);
+							_tracer.StateProcessed(x.TraceInfo, x.Events);
 							return x.Events;
 						})
 						.ToArray()

@@ -80,8 +80,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		}
 
 		public int SaveBatchExternalUserState(
-			string authenticationKey, 
-			string platformTypeId, 
+			string authenticationKey,
+			string platformTypeId,
 			string sourceId,
 			ICollection<ExternalUserState> externalUserStateBatch)
 		{
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				IEnumerable<BatchStateInputModel> states = (
 						from s in externalUserStateBatch
 						let userCode = fixUserCode(s.UserCode)
-						let traceInfo = _rtaTracer.TraceState(() => userCode)
+						let traceInfo = _rtaTracer.TraceState(userCode)
 						let stateCode = fixStateCode(traceInfo, s.StateCode, platformTypeId, s.IsLoggedOn)
 						select new BatchStateInputModel
 						{
@@ -135,17 +135,16 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 		private string fixStateCode(StateTraceInfo traceInfo, string stateCode, string platformTypeId, bool isLoggedOn)
 		{
-			_rtaTracer.StateReceived(() => traceInfo, ()=>stateCode);
+			_rtaTracer.StateReceived(traceInfo, stateCode);
 
 			if (!isLoggedOn)
 				stateCode = "LOGGED-OFF";
 
 			if (stateCode == null)
 			{
-				_rtaTracer.InvalidStateCode(() => traceInfo);
+				_rtaTracer.InvalidStateCode(traceInfo);
 				throw new InvalidStateCodeException("State code is required");
 			}
-
 
 			stateCode = stateCode.Trim();
 
@@ -154,7 +153,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 
 			if (stateCode.Length > 300)
 			{
-				_rtaTracer.InvalidStateCode(() => traceInfo);
+				_rtaTracer.InvalidStateCode(traceInfo);
 				throw new InvalidStateCodeException("State code can not exceed 300 characters (including platform type id)");
 			}
 

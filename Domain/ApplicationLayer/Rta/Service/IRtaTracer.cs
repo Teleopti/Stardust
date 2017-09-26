@@ -15,40 +15,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 		}
 
-		public StateTraceInfo TraceState(Func<string> userCode)
+		public StateTraceInfo TraceState(string userCode)
 		{
 			return null;
 		}
 
-		public void StateReceived(Func<StateTraceInfo> trace, Func<string> stateCode)
+		public void StateReceived(StateTraceInfo trace, string stateCode)
 		{
 		}
 
-		public void StateProcessing(Func<IEnumerable<StateTraceInfo>> traces)
+		public void StateProcessing(IEnumerable<StateTraceInfo> traces)
 		{
 		}
 		
-		public void InvalidStateCode(Func<StateTraceInfo> trace)
+		public void InvalidStateCode(StateTraceInfo trace)
 		{
 		}
 		
-		public void InvalidAuthenticationKey(Func<IEnumerable<StateTraceInfo>> traces)
+		public void InvalidAuthenticationKey(IEnumerable<StateTraceInfo> traces)
 		{
 		}
 
-		public void InvalidUserCode(Func<StateTraceInfo> trace)
+		public void InvalidUserCode(StateTraceInfo trace)
 		{
 		}
 
-		public void InvalidSourceId(Func<IEnumerable<StateTraceInfo>> traces)
+		public void InvalidSourceId(IEnumerable<StateTraceInfo> traces)
 		{
 		}
 
-		public void NoChange(Func<StateTraceInfo> trace)
+		public void NoChange(StateTraceInfo trace)
 		{
 		}
 
-		public void StateProcessed(Func<StateTraceInfo> trace, Func<IEnumerable<IEvent>> events)
+		public void StateProcessed(StateTraceInfo trace, IEnumerable<IEvent> events)
 		{
 		}
 	}
@@ -58,17 +58,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void ProcessReceived();
 		void ProcessProcessing();
 
-		StateTraceInfo TraceState(Func<string> userCode);
+		StateTraceInfo TraceState(string userCode);
+		void StateReceived(StateTraceInfo trace, string stateCode);
+		void InvalidStateCode(StateTraceInfo trace);
 		
-		void StateReceived(Func<StateTraceInfo> trace, Func<string> stateCode);
-		void StateProcessing(Func<IEnumerable<StateTraceInfo>> traces);
-		void InvalidAuthenticationKey(Func<IEnumerable<StateTraceInfo>> traces);
-		void InvalidSourceId(Func<IEnumerable<StateTraceInfo>> traces);
+		void StateProcessing(IEnumerable<StateTraceInfo> traces);
+		void InvalidAuthenticationKey(IEnumerable<StateTraceInfo> traces);
+		void InvalidSourceId(IEnumerable<StateTraceInfo> traces);
 		
-		void InvalidStateCode(Func<StateTraceInfo> trace);
-		void InvalidUserCode(Func<StateTraceInfo> trace);
-		void NoChange(Func<StateTraceInfo> trace);
-		void StateProcessed(Func<StateTraceInfo> trace, Func<IEnumerable<IEvent>> events);
+		void InvalidUserCode(StateTraceInfo trace);
+		void NoChange(StateTraceInfo trace);
+		void StateProcessed(StateTraceInfo trace, IEnumerable<IEvent> events);
 	}
 	
 //

@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_externalLogonMapper = externalLogonMapper;
 			_tracer = tracer;
 			_batch = batch;
-			_dataSourceId = dataSourceMapper.ValidateSourceId(_batch.SourceId, () => batch.States.Select(x => x.TraceInfo));
+			_dataSourceId = dataSourceMapper.ValidateSourceId(_batch.SourceId, batch.States.Select(x => x.TraceInfo));
 			ParallelTransactions = Config.ReadValue("RtaBatchParallelTransactions", 7);
 			MaxTransactionSize = Config.ReadValue("RtaBatchMaxTransactionSize", 100);
 		}
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					var personIds = _externalLogonMapper.PersonIdsFor(_dataSourceId, state.UserCode);
 					if (personIds.IsEmpty())
 					{
-						_tracer.InvalidUserCode(() => state.TraceInfo);
+						_tracer.InvalidUserCode(state.TraceInfo);
 						context.AddException(new InvalidUserCodeException(
 							$"No person found for UserCode {state.UserCode}, DataSourceId {_dataSourceId}, SourceId {_batch.SourceId}"));
 					}
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			_snapshotId = snapshotId;
 			_stateMapper = stateMapper;
-			_dataSourceId = dataSourceMapper.ValidateSourceId(sourceId, () => null);
+			_dataSourceId = dataSourceMapper.ValidateSourceId(sourceId, null);
 			ParallelTransactions = Config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
 			MaxTransactionSize = Config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
 		}

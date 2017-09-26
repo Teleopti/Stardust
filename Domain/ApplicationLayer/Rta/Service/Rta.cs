@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private void process(BatchInputModel batch)
 		{
-			_tracer.StateProcessing(() => batch.States.Select(x => x.TraceInfo));
+			_tracer.StateProcessing(batch.States.Select(x => x.TraceInfo));
 			validateAuthenticationKey(batch);
 			_contextLoader.ForBatch(batch);
 			if (batch.CloseSnapshot)
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			input.AuthenticationKey = LegacyAuthenticationKey.MakeEncodingSafe(input.AuthenticationKey);
 			if (!_tenantLoader.Authenticate(input.AuthenticationKey))
 			{
-				_tracer.InvalidAuthenticationKey(() => input.States.Select(x => x.TraceInfo));
+				_tracer.InvalidAuthenticationKey(input.States.Select(x => x.TraceInfo));
 				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 			}
 		}
