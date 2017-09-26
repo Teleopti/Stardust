@@ -172,7 +172,6 @@
     <Compile Include="NodeHandlers\MultiAbsenceRequestsHandler.cs" />
     <Compile Include="NodeHandlers\PersonAbsenceRemovedHandler.cs" />
     <Compile Include="NodeHandlers\UpdateStaffingLevelReadModelHandler.cs" />
-    <Compile Include="NodeHandlers\RunSchedulingHandler.cs" />
     <Compile Include="NodeHandlers\ImportForecastFromFileHandler.cs" />
     <Compile Include="NodeHandlers\NodeHandlersModule.cs" />
     <Compile Include="NodeHandlers\StardustHealthCheckHandler.cs" />
