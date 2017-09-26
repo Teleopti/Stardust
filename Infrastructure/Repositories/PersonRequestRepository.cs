@@ -11,6 +11,7 @@ using NHibernate;
 using System.Linq;
 using NHibernate.Dialect.Function;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Infrastructure;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -576,6 +577,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public IEnumerable<IPersonRequest> FindAllRequestsForAgent(IPerson person, DateTimePeriod period)
 		{
 			return findAllRequestsForAgent(person, period);
+		}
+
+		public IEnumerable<DateTimePeriod> GetRequestPeriodsForAgent(IPerson person, DateTimePeriod period)
+		{
+			var query = Session.CreateSQLQuery(@"
+									SELECT StartDateTime,EndDateTime
+									FROM PersonRequest AS pr
+									JOIN Request AS req on(req.Parent = pr.id)
+									WHERE req.StartDateTime <= :EndDateTime
+										AND req.EndDateTime >= :StartDateTime
+										AND pr.IsDeleted = :IsDeleted
+										AND pr.Person = :Person
+										AND pr.BusinessUnit = :BusinessUnit
+										AND NOT EXISTS
+										(SELECT 1 FROM ShiftTradeRequest sr
+										WHERE sr.Request = req.Id)");
+
+			return query.SetDateTime("StartDateTime", period.StartDateTime)
+				.SetDateTime("EndDateTime", period.EndDateTime)
+				.SetBoolean("IsDeleted", false)
+				.SetGuid("BusinessUnit", ServiceLocatorForEntity.CurrentBusinessUnit.Current().Id.GetValueOrDefault())
+				.SetGuid("Person", person.Id.GetValueOrDefault())
+				.SetResultTransformer(Transformers.AliasToBean(typeof(RequestPeriod)))
+				.SetReadOnly(true)
+				.List<RequestPeriod>()
+				.Select(p => new DateTimePeriod(TimeZoneHelper.ConvertToUtc(p.StartDateTime, TimeZoneInfo.Utc), TimeZoneHelper.ConvertToUtc(p.EndDateTime, TimeZoneInfo.Utc)));
 		}
 
 		private IEnumerable<IPersonRequest> findAllRequestsForAgent(IPerson person, DateTimePeriod? period)

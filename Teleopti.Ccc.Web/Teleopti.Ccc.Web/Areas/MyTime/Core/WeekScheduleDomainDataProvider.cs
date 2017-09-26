@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			var periodStartDate = period.StartDate;
 			var periodWithPreviousDay = new DateOnlyPeriod(periodStartDate.AddDays(-1), period.EndDate);
 			var scheduleDays = _scheduleProvider.GetScheduleForPeriod(periodWithPreviousDay).ToList();
-			var personRequests = _personRequestProvider.RetrieveRequestsForLoggedOnUser(period);
+			var personRequestPeriods = _personRequestProvider.RetrieveRequestPeriodsForLoggedOnUser(period);
 			var requestProbability = _absenceRequestProbabilityProvider.GetAbsenceRequestProbabilityForPeriod(period);
 			var seatBookings = _seatBookingProvider.GetSeatBookingsForScheduleDays(scheduleDays);
 			var scheduleDaysAndProjections = scheduleDays.ToDictionary(day => day.DateOnlyAsPeriod.DateOnly,
@@ -131,12 +131,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 						: scheduleYesterday.OvertimeAvailablityCollection().FirstOrDefault();
 				}
 
-				if (personRequests != null)
+				if (personRequestPeriods != null)
 				{
-					scheduleDayDomainData.PersonRequests = personRequests
-						.Where(r => TimeZoneInfo.ConvertTimeFromUtc(r.Request.Period.StartDateTime, _userTimeZone.TimeZone())
+					scheduleDayDomainData.PersonRequestCount = personRequestPeriods
+						.Where(r => TimeZoneInfo.ConvertTimeFromUtc(r.StartDateTime, _userTimeZone.TimeZone())
 										.Date == day.Date)
-						.ToArray();
+						.ToArray().Length;
 				}
 
 				if (requestProbability != null)

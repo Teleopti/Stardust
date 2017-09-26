@@ -220,11 +220,11 @@ namespace Teleopti.Ccc.WebTest.Core
 														DateTime.UtcNow, DateTime.UtcNow.AddHours(1))
 													));
 
-			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(week)).Return(new[] { personRequest });
+			personRequestProvider.Stub(x => x.RetrieveRequestPeriodsForLoggedOnUser(week)).Return(new[] { personRequest.Request.Period });
 
 			var result = target.GetWeekSchedule(date);
 
-			result.Days.Single(d => d.Date == date).PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
+			result.Days.Single(d => d.Date == date).PersonRequestCount.Should().Be(1);
 		}
 
 		[Test]
@@ -353,11 +353,11 @@ namespace Teleopti.Ccc.WebTest.Core
 														localMidnightInUtc, localMidnightInUtc.AddHours(1))
 													));
 
-			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(week)).Return(new[] { personRequest });
+			personRequestProvider.Stub(x => x.RetrieveRequestPeriodsForLoggedOnUser(week)).Return(new[] { personRequest.Request.Period });
 
 			var result = target.GetWeekSchedule(date);
 
-			result.Days.Single(d => d.Date == date).PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
+			result.Days.Single(d => d.Date == date).PersonRequestCount.Should().Be(1);
 		}
 
 		[Test]
@@ -888,11 +888,11 @@ namespace Teleopti.Ccc.WebTest.Core
 						DateTime.UtcNow, DateTime.UtcNow.AddHours(1))
 				));
 
-			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(period)).Return(new[] { personRequest });
+			personRequestProvider.Stub(x => x.RetrieveRequestPeriodsForLoggedOnUser(period)).Return(new[] { personRequest.Request.Period });
 
 			var result = target.GetDaySchedule(date);
 
-			result.ScheduleDay.PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
+			result.ScheduleDay.PersonRequestCount.Should().Be(1);
 		}
 
 		[Test]
@@ -1046,11 +1046,11 @@ namespace Teleopti.Ccc.WebTest.Core
 						localMidnightInUtc, localMidnightInUtc.AddHours(1))
 				));
 
-			personRequestProvider.Stub(x => x.RetrieveRequestsForLoggedOnUser(period)).Return(new[] { personRequest });
+			personRequestProvider.Stub(x => x.RetrieveRequestPeriodsForLoggedOnUser(period)).Return(new[] { personRequest.Request.Period });
 
 			var result = target.GetDaySchedule(date);
 
-			result.ScheduleDay.PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
+			result.ScheduleDay.PersonRequestCount.Should().Be(1);
 		}
 
 		[Test]

@@ -214,5 +214,10 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	    {
 	        throw new NotImplementedException();
 	    }
+
+		public IEnumerable<DateTimePeriod> GetRequestPeriodsForAgent(IPerson person, DateTimePeriod period)
+		{
+			return RequestRepository.Select(p => p.Request.Period);
+		}
 	}
 }

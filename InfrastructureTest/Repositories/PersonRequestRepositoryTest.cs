@@ -1251,6 +1251,62 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			result.Count(r => r.Request.RequestType == RequestType.AbsenceRequest).Should().Be(1);
 		}
 
+		[Test]
+		public void ShouldGetRequestPeriods()
+		{
+			var absence = new Absence
+			{
+				Description = new Description("test absence")
+			};
+			PersistAndRemoveFromUnitOfWork(absence);
+
+			var startDateTime = DateTime.UtcNow;
+			var textRequest = new PersonRequest(_person, new TextRequest(new DateTimePeriod(startDateTime.AddMinutes(-1), startDateTime.AddMinutes(-1))));
+			var absenceRequest = new PersonRequest(_person,
+				new AbsenceRequest(absence, new DateTimePeriod(startDateTime, startDateTime)));
+			var offerRequest = createShiftExchangeOffer(startDateTime);
+
+			var multiplicatorDefinitionSet = new MultiplicatorDefinitionSet("test", MultiplicatorType.Overtime);
+			PersistAndRemoveFromUnitOfWork(multiplicatorDefinitionSet);
+			var overtimeRequest = new PersonRequest(_person,
+				new OvertimeRequest(multiplicatorDefinitionSet, new DateTimePeriod(startDateTime, startDateTime)));
+
+			PersistAndRemoveFromUnitOfWork(textRequest);
+			PersistAndRemoveFromUnitOfWork(absenceRequest);
+			PersistAndRemoveFromUnitOfWork(offerRequest);
+			PersistAndRemoveFromUnitOfWork(overtimeRequest);
+
+			var period = new DateTimePeriod(startDateTime.AddMinutes(-5), startDateTime);
+			var result = new PersonRequestRepository(UnitOfWork).GetRequestPeriodsForAgent(_person, period);
+
+			result.Count().Should().Be(4);
+		}
+
+		[Test]
+		public void ShouldGetRequestPeriodsExcludingShiftTradeRequest()
+		{
+			var startDateTime = DateTime.UtcNow;
+			var personFrom = PersonFactory.CreatePerson("personFrom");
+			personFrom.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			PersistAndRemoveFromUnitOfWork(personFrom);
+
+			var requestDate = new DateOnly(startDateTime);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail>
+			{
+				new ShiftTradeSwapDetail(personFrom, _person, requestDate, requestDate)
+			});
+			var shiftTradePersonRequest = new PersonRequest(personFrom) { Request = shiftTradeRequest };
+
+			PersistAndRemoveFromUnitOfWork(shiftTradePersonRequest);
+
+			var period = new DateTimePeriod(startDateTime.AddDays(-1), startDateTime);
+			var requestPeriods = new PersonRequestRepository(UnitOfWork).GetRequestPeriodsForAgent(_person, period);
+			var requests= new PersonRequestRepository (UnitOfWork).FindAllRequestsForAgent(_person, period);
+
+			requests.Count().Should().Be(1);
+			requestPeriods.Count().Should().Be(0);
+		}
+
 		private PersonRequest createShiftTradeRequest(DateOnly dateFrom, DateOnly dateTo, IPerson personFrom, IPerson personTo)
 		{
 			var shiftTradeSwapDetailList = new List<IShiftTradeSwapDetail>();

@@ -254,6 +254,7 @@
     <Compile Include="MultiTenancy\Admin\CheckTenantUserExists.cs" />
     <Compile Include="Persisters\Schedules\ScheduleRangePersisterWithConflictSolve.cs" />
     <Compile Include="Repositories\Audit\ScheduleAuditTrailReport.cs" />
+    <Compile Include="Repositories\RequestPeriod.cs" />
     <Compile Include="Repositories\UserDeviceRepository.cs" />
     <Compile Include="Repositories\RequeueHangfireRepository.cs" />
     <Compile Include="Repositories\SkillCombinationResourceRepositoryOld.cs" />

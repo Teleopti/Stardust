@@ -138,6 +138,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IList<Guid> GetWaitlistRequests(DateTimePeriod dateTimePeriod);
 
-	    IList<IPersonRequest> FindPersonRequestWithinPeriod(DateTimePeriod period);
+		IList<IPersonRequest> FindPersonRequestWithinPeriod(DateTimePeriod period);
+		IEnumerable<DateTimePeriod> GetRequestPeriodsForAgent(IPerson person, DateTimePeriod period);
 	}
 }

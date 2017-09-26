@@ -165,9 +165,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				FixedDate = s.Date.ToFixedClientDateOnlyFormat(),
 				DayOfWeekNumber = (int)s.Date.DayOfWeek,
 				Periods = projections(s).ToArray(),
-				RequestsCount =
-					s.PersonRequests?.Count(
-						r => r.Request is TextRequest || r.Request is AbsenceRequest || r.Request is OvertimeRequest || r.Request is ShiftExchangeOffer) ?? 0,
+				RequestsCount = s.PersonRequestCount,
 				ProbabilityClass = s.ProbabilityClass,
 				ProbabilityText = s.ProbabilityText,
 				State = s.Date == new DateOnly(TimeZoneHelper.ConvertFromUtc(_now.UtcDateTime(), _loggedOnUser.CurrentUser().PermissionInformation.DefaultTimeZone())) ? SpecialDateState.Today : 0,

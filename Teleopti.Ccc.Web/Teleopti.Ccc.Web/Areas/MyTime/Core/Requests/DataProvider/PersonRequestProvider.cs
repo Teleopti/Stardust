@@ -64,6 +64,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _repository.FindAllRequestsForAgent(_loggedOnUser.CurrentUser(), period.ToDateTimePeriod(_userTimeZone.TimeZone()));
 		}
 
+		public IEnumerable<DateTimePeriod> RetrieveRequestPeriodsForLoggedOnUser(DateOnlyPeriod period)
+		{
+			return _repository.GetRequestPeriodsForAgent(_loggedOnUser.CurrentUser(), period.ToDateTimePeriod(_userTimeZone.TimeZone()));
+		}
+
 		public IPersonRequest RetrieveRequest(Guid id)
 		{
 			var personRequest = _repository.Get(id);
