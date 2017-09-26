@@ -144,7 +144,7 @@
 		public const string WebRequests = "0126";
 		public const string WebModifySkill = "0125";
 		public const string WebIntraday = "0127";
-		public const string WebModifySkillArea = "0128";
+		public const string WebModifySkillGroup = "0128";
 		public const string WebCancelRequest = "0130";
 		public const string WebStaffing = "0140";
 		public const string RemoveOvertime = "0142";

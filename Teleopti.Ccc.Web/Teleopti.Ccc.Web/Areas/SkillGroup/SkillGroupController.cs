@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 			_authorization = authorization;
 		}
 
-		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea)]
+		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup)]
 		[UnitOfWork, HttpPost, Route("api/skillgroup/create")]
 		public virtual IHttpActionResult CreateSkillGroup([FromBody]SkillGroupInput input)
 		{
@@ -44,12 +44,12 @@ namespace Teleopti.Ccc.Web.Areas.SkillGroup
 		{
 			return Ok(new SkillGroupInfo
 			{
-				HasPermissionToModifySkillArea = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea),
+				HasPermissionToModifySkillArea = _authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup),
 				SkillAreas = _fetchSkillGroup.GetAll()
 			});
 		}
 
-		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillArea)]
+		[ApplicationFunctionApi(DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup)]
 		[UnitOfWork, HttpDelete, Route("api/skillgroup/delete/{id}")]
 		public virtual IHttpActionResult DeleteSkillGroup(Guid id)
 		{

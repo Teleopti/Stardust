@@ -137,6 +137,7 @@
 		public const string MoveInvalidOverlappedActivity = "Raptor/Anywhere/Schedules/MoveInvalidOverlappedActivity";
 		public const string RemoveOvertime = "Raptor/Anywhere/Schedules/RemoveOvertime";
 		public const string MoveOvertime = "Raptor/Anywhere/Schedules/MoveOvertime";
+		public const string WebModifySkillGroup = "Raptor/Anywhere/WebModifySkillGroup";
 
 		// Angel
 		public const string WebForecasts = "Raptor/Anywhere/WebForecasts";
@@ -147,7 +148,6 @@
 		public const string WebRequests = "Raptor/Anywhere/WebRequests";
 		public const string WebCancelRequest = "Raptor/Anywhere/WebRequests/CancelRequest";
 		public const string WebModifySkill = "Raptor/Anywhere/WebForecasts/WebModifySkill";
-		public const string WebModifySkillArea = "Raptor/Anywhere/WebIntraday/WebModifySkillArea";
 		public const string WebStaffing = "Raptor/Anywhere/WebStaffing";
 		public const string BpoExchange = "Raptor/Anywhere/WebStaffing/BPOExchange";
 	}

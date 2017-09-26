@@ -356,8 +356,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Configurable
 			if (!AccessToIntraday)
 				applicationFunctions = from f in applicationFunctions
 					where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebIntraday
-						  & f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebModifySkillArea
-					select f;
+						  & f.FunctionPath != DefinedRaptorApplicationFunctionPaths.WebModifySkillGroup
+									   select f;
 
 			if (!AccessToPermissions)
 				applicationFunctions = from f in applicationFunctions
