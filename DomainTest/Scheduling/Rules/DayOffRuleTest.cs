@@ -43,6 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
         private void setup()
         {
@@ -127,8 +128,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
 			{
 				DayOffTemplate = dayOffTemplate
 			});
-
-			Target.DoScheduling(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period);
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent1 }, new DateOnlyPeriod(firstDay, firstDay), scenario);
 			assignments.Count.Should().Be.EqualTo(1);

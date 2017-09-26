@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicScheduling_44289)]
 	public interface IFullScheduling
 	{
-		SchedulingResultModel DoScheduling(DateOnlyPeriod period);
 		SchedulingResultModel DoScheduling(Guid planningPeriodId);
 	}
 
@@ -43,17 +42,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_fullSchedulingResult = fullSchedulingResult;
 			_schedulingSourceScope = schedulingSourceScope;
 			_schedulingInformationProvider = schedulingInformationProvider;
-		}
-
-		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
-		{
-			using (_schedulingSourceScope.OnThisThreadUse(ScheduleSource.WebScheduling))
-			{
-				var stateHolder = _schedulerStateHolder();
-				SetupAndSchedule(period, null);
-				_persister.Persist(stateHolder.Schedules);
-				return CreateResult(period);
-			}
 		}
 
 		public SchedulingResultModel DoScheduling(Guid planningPeriodId)

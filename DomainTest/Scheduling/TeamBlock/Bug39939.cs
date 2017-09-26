@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
 		public void ShouldHandleStrangeSchedules()
@@ -77,8 +78,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				TeamSameShiftCategory = true,
 				TagToUseOnScheduling = NullScheduleTag.Instance
 			});
-
-			Target.DoScheduling(DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1));
+			var planningPeriod = PlanningPeriodRepository.Has(period);
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			var assignments = AssignmentRepository.Find(new[] { agent1, agent2 }, period, scenario);
 			assignments.Count.Should().Be.EqualTo(12);

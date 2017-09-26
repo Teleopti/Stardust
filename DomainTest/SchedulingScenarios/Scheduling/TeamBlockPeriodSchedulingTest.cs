@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public SchedulingOptionsProvider SchedulingOptionsProvider;
 		public FakeRuleSetBagRepository RuleSetBagRepository;
-
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[TestCase(true)]
 		[TestCase(false)]
@@ -60,8 +60,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
-
-			Target.DoScheduling(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
+			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => x.MainActivities().Any())
 				.Should().Be.EqualTo(3); //schedule all selected days except one that has DO
@@ -99,8 +100,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
-
-			Target.DoScheduling(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
+			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => shiftCategory.Equals(x.ShiftCategory))
 				.Should().Be.EqualTo(3);
@@ -138,8 +140,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
-
-			Target.DoScheduling(new DateOnlyPeriod(firstDay, firstDay.AddDays(4)));
+			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay, firstDay.AddDays(4)));
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => shiftCategory.Equals(x.ShiftCategory))
 				.Should().Be.EqualTo(6);
@@ -177,8 +180,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
-
-			Target.DoScheduling(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
+			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => shiftCategory.Equals(x.ShiftCategory))
 				.Should().Be.EqualTo(3);
@@ -206,10 +210,11 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				TeamSameShiftCategory = true,
 				BlockSameShiftCategory = true
 			});
+			var planningPeriod = PlanningPeriodRepository.Has(firstDay.ToDateOnlyPeriod());
 
 			Assert.DoesNotThrow(() =>
 			{
-				Target.DoScheduling(new DateOnlyPeriod(firstDay, firstDay));
+				Target.DoScheduling(planningPeriod.Id.Value);
 			});
 		}
 

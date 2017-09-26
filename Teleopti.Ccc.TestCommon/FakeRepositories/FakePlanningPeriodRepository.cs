@@ -37,6 +37,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return Has(start, numberOfWeeks, null);
 		}
 
+		public IPlanningPeriod Has(DateOnlyPeriod period)
+		{
+			var planningPeriod = new PlanningPeriod(period).WithId();
+			_planningPeriods.Add(planningPeriod);
+			return planningPeriod;
+		}
+
 		public IPlanningPeriod Has(DateOnly start, int number, SchedulePeriodType type, IPlanningGroup planningGroup)
 		{
 			DateTime now;

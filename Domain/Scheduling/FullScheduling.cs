@@ -35,19 +35,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_schedulingInformationProvider = schedulingInformationProvider;
 		}
 
-		public virtual SchedulingResultModel DoScheduling(DateOnlyPeriod period)
-		{
-			var stateHolder = _schedulerStateHolder();
-			Setup(period, null);
-			_schedulingCommandHandler.Execute(new SchedulingCommand
-			{
-				Period = period,
-				RunWeeklyRestSolver = false
-			});
-			_persister.Persist(stateHolder.Schedules);
-			return CreateResult(period);
-		}
-
 		public virtual SchedulingResultModel DoScheduling(Guid planningPeriodId)
 		{
 			var schedulingInformation = _schedulingInformationProvider.GetInfoFromPlanningPeriod(planningPeriodId);

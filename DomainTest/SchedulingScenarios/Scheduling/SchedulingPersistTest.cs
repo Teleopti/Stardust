@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeSkillDayRepository SkillDayRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakePersonAssignmentRepository PersonAssignmentRepository;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[TestCase("UTC")]
 		[TestCase("W. Europe Standard Time")]
@@ -42,9 +43,10 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				.WithPersonPeriod(ruleSet, contract, skill)
 				.WithSchedulePeriodOneWeek(firstDay));
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemand(scenario, period.Inflate(10), TimeSpan.FromHours(1)));
-
-			Target.DoScheduling(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period);
 			
+			Target.DoScheduling(planningPeriod.Id.Value);
+						
 			PersonAssignmentRepository.LoadAll().Count
 				.Should().Be.EqualTo(30);
 		}

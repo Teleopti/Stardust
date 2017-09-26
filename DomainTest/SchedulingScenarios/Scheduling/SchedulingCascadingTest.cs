@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeBusinessUnitRepository BusinessUnitRepository;
 		public IResourceOptimizationHelperExtended ResourceCalculation;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[TestCase(true)]
 		[TestCase(false)]
@@ -59,8 +60,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(skillA.CreateSkillDayWithDemand(scenario, date, 1), skillB.CreateSkillDayWithDemandOnInterval(scenario, date, 1, new Tuple<TimePeriod, double>(lateInterval, 1000)));
 			if(resourceCalculationHasBeenMade)
 				ResourceCalculation.ResourceCalculateAllDays(new NoSchedulingProgress(), false);
-
-			Target.DoScheduling(date.ToDateOnlyPeriod());
+			var planningPeriod = PlanningPeriodRepository.Has(date.ToDateOnlyPeriod());
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			var allAssignmentsStartTime = AssignmentRepository.LoadAll().Select(x => x.Period.StartDateTime.TimeOfDay);
 			allAssignmentsStartTime.Count(x => x == new TimeSpan(7, 45, 0))

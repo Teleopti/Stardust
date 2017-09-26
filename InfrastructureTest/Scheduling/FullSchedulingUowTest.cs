@@ -49,23 +49,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Scheduling
 
 		[TestCase(true)]
 		[TestCase(false)]
-		public void ShouldNotCrashDueToLazyLoadingForShiftBagOnAgent(bool teamScheduling)
-		{
-			if (teamScheduling)
-			{
-				var defaultOptions = SchedulingOptionsProvider.Fetch(new DayOffTemplate());
-				defaultOptions.UseTeam = true;
-				defaultOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag);
-				SchedulingOptionsProvider.SetFromTest(defaultOptions);
-			}
-
-			fillDatabaseWithEnoughDataToRunScheduling();
-
-			Target.DoScheduling(DateOnlyPeriod.CreateWithNumberOfWeeks(new DateOnly(2017, 6, 1), 1));
-		}
-
-		[TestCase(true)]
-		[TestCase(false)]
 		public void ShouldDoSchedulingForPlanningPeriod(bool teamScheduling)
 		{
 			if (teamScheduling)

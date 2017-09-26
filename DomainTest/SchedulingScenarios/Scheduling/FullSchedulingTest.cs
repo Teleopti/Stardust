@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 		public FakeAgentDayScheduleTagRepository AgentDayScheduleTagRepository;
 		public FakeDayOffTemplateRepository DayOffTemplateRepository;
 		public FakeMultisiteDayRepository MultisiteDayRepository;
+		public FakePlanningPeriodRepository PlanningPeriodRepository;
 
 		[Test]
 		public void ShouldNotCreateTags()
@@ -58,8 +59,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				1,
 				1)
 				);
-
-			Target.DoScheduling(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period);
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] {agent}, period, scenario).Should().Not.Be.Empty();
 			AgentDayScheduleTagRepository.LoadAll().Should().Be.Empty();
@@ -90,8 +92,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				1,
 				1)
 				);
-
-			Target.DoScheduling(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period);
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Should().Not.Be.Empty();
 			AgentDayScheduleTagRepository.LoadAll().Should().Be.Empty();
@@ -124,8 +127,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 				skill.CreateSkillDayWithDemandOnInterval(scenario, firstDay.AddDays(4), 1, new Tuple<TimePeriod, double>(earlyInterval, 1000)), 
 				skill.CreateSkillDayWithDemandOnInterval(scenario, firstDay.AddDays(5), 1, new Tuple<TimePeriod, double>(earlyInterval, 1000)), 
 				skill.CreateSkillDayWithDemandOnInterval(scenario, firstDay.AddDays(6), 1, new Tuple<TimePeriod, double>(earlyInterval, 1000)));
-
-			Target.DoScheduling(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period);
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario)
 				.Count.Should().Be.EqualTo(7);
@@ -148,8 +152,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			SkillDayRepository.Has(multisiteSkill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 1, 1, 1, 1, 1, 1, 1));
 			SkillDayRepository.Has(childSkill.CreateChildSkillDays(scenario, firstDay, 7));
 			MultisiteDayRepository.Has(multisiteSkill.CreateMultisiteDays(scenario,firstDay,7));
+			var planningPeriod = PlanningPeriodRepository.Has(DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1));
 			
-			Target.DoScheduling(DateOnlyPeriod.CreateWithNumberOfWeeks(firstDay, 1));
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => x.MainActivities().Any())
 				.Should().Be.GreaterThanOrEqualTo(5);
@@ -174,8 +179,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			{
 				AssignmentRepository.Add(new PersonAssignment(agent, scenario, firstDay.AddDays(day)).WithDayOff());
 			}
-
-			Target.DoScheduling(period);
+			var planningPeriod = PlanningPeriodRepository.Has(period);
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.Find(new[] { agent }, period, scenario).Any(x => x.MainActivities().Any())
 				.Should().Be.False();
@@ -196,8 +202,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			ruleSet8.AddAccessibilityDayOfWeek(blockedByAccessibility ? DayOfWeek.Monday : DayOfWeek.Tuesday);
 			var agent = PersonRepository.Has(new SchedulePeriod(monday, SchedulePeriodType.Day, 1), bag, skill);
 			SkillDayRepository.Has(skill.CreateSkillDayWithDemandOnInterval(scenario, monday, 1, new Tuple<TimePeriod, double>(new TimePeriod(8, 9), 2)));
-
-			Target.DoScheduling(monday.ToDateOnlyPeriod());
+			var planningPeriod = PlanningPeriodRepository.Has(monday.ToDateOnlyPeriod());
+			
+			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.GetSingle(monday, agent).Period.StartDateTime.Hour
 				.Should().Be.EqualTo(blockedByAccessibility ? 10 : 8);
