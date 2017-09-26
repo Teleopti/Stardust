@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IDayOffTemplate _dayOffTemplate;
 		private readonly IDayOffOptimizerConflictHandler _dayOffOptimizerConflictHandler;
 		private readonly IDayOffOptimizerValidator _dayOffOptimizerValidator;
-		private readonly IOptimizationLimits _optimizationLimits;
+		private readonly OptimizationLimits _optimizationLimits;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 		private readonly IScheduleMatrixPro _matrix;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDayOffTemplate dayOffTemplate,
 			IDayOffOptimizerConflictHandler dayOffOptimizerConflictHandler,
 			IDayOffOptimizerValidator dayOffOptimizerValidator,
-			IOptimizationLimits optimizationLimits,
+			OptimizationLimits optimizationLimits,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			IScheduleMatrixPro matrix, 

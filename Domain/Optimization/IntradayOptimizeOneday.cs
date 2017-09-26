@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly IResourceCalculation _resourceOptimizationHelper;
 		private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
-		private readonly IOptimizationLimits _optimizationLimits;
+		private readonly OptimizationLimits _optimizationLimits;
 		private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISchedulePartModifyAndRollbackService rollbackService,
 			IResourceCalculation resourceOptimizationHelper,
 			IEffectiveRestrictionCreator effectiveRestrictionCreator,
-			IOptimizationLimits optimizationLimits,
+			OptimizationLimits optimizationLimits,
 			IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,

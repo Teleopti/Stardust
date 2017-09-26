@@ -5,15 +5,7 @@ using Teleopti.Ccc.Domain.Scheduling.Rules;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IOptimizationLimits
-	{
-		bool HasOverLimitExceeded(OverLimitResults lastOverLimitCounts, IScheduleMatrixPro matrix);
-		OverLimitResults OverLimitsCounts(IScheduleMatrixPro matrix);
-		bool MoveMaxDaysOverLimit();
-		bool ValidateMinWorkTimePerWeek(IScheduleMatrixPro scheduleMatrixPro);
-	}
-
-	public class OptimizationLimits : IOptimizationLimits
+	public class OptimizationLimits
 	{
 		private readonly IOptimizationOverLimitByRestrictionDecider _overLimitByRestrictionDecider;
 

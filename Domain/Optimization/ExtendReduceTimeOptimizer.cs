@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly ScheduleChangesAffectedDates _decider;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainerForTagChange;
-	    private readonly IOptimizationLimits _optimizationLimits;
+	    private readonly OptimizationLimits _optimizationLimits;
         private readonly SchedulingOptions _schedulingOptions;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 	    private readonly IScheduleMatrixPro _matrix;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             ScheduleChangesAffectedDates decider,
             IScheduleMatrixOriginalStateContainer originalStateContainerForTagChange,
- 			IOptimizationLimits optimizationLimits,
+ 			OptimizationLimits optimizationLimits,
             SchedulingOptions schedulingOptions,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			IScheduleMatrixPro matrix)

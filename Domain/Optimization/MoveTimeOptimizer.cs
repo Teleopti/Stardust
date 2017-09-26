@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     	private readonly IResourceCalculation _resourceOptimizationHelper;
         private readonly IEffectiveRestrictionCreator _effectiveRestrictionCreator;
         private readonly IScheduleMatrixOriginalStateContainer _workShiftOriginalStateContainer;
-	    private readonly IOptimizationLimits _optimizationLimits;
+	    private readonly OptimizationLimits _optimizationLimits;
         private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
     	private readonly IMainShiftOptimizeActivitySpecificationSetter _mainShiftOptimizeActivitySpecificationSetter;
 	    private readonly IScheduleMatrixPro _matrix;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             IResourceCalculation resourceOptimizationHelper,
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             IScheduleMatrixOriginalStateContainer workShiftOriginalStateContainer,
-			IOptimizationLimits optimizationLimits,
+			OptimizationLimits optimizationLimits,
             ISchedulingOptionsCreator schedulingOptionsCreator,
 			IMainShiftOptimizeActivitySpecificationSetter mainShiftOptimizeActivitySpecificationSetter,
 			IScheduleMatrixPro matrix,

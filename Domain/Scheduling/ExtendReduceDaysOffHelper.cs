@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				if (!virtualSchedulePeriod.IsValid)
 					continue;
 				IContract contract = virtualSchedulePeriod.Contract;
-				//kolla om r‰tt employment type annars hoppa till n‰sta
+				//kolla om r√§tt employment type annars hoppa till n√§sta
 				if (contract.EmploymentType == EmploymentType.HourlyStaff)
 					continue;
 				if (contract.PositivePeriodWorkTimeTolerance == TimeSpan.Zero && contract.NegativePeriodWorkTimeTolerance == TimeSpan.Zero)
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				IOptimizationOverLimitByRestrictionDecider optimizationOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(checkerRestriction, optimizerPreferences, originalStateListForScheduleTag[i], dayOffOptimizationPreferences);
 
-				IOptimizationLimits optimizationLimits = new OptimizationLimits(optimizationOverLimitDecider);
+				var optimizationLimits = new OptimizationLimits(optimizationOverLimitDecider);
 
 				IExtendReduceDaysOffOptimizer optimizer = new ExtendReduceDaysOffOptimizer(
 					personalSkillsPeriodValueCalculator,
