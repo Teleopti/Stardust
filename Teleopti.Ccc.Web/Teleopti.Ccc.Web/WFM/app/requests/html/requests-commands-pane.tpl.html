@@ -58,11 +58,6 @@
 				<i class="mdi mdi-calendar-today"></i>
 				<span translate>ViewAllowance</span>
 			</li>
-			<li ng-click="requestsCommandsPane.showResourceCalculations()"
-				ng-if="requestsCommandsPane.isUpdateResourceCalculationsEnabled">
-				<i class="mdi mdi-calculator"></i>
-				<span translate>UpdateResourceCalculations</span>
-			</li>
 		</ul>
 	</div>
 </div>
@@ -157,7 +152,7 @@
 	</modal-dialog>
 </div>
 
-<div ng-if="requestsCommandsPane.isUpdateResourceCalculationsEnabled && requestsCommandsPane.shouldShowResourceCalculations">
+<div ng-if="requestsCommandsPane.shouldShowResourceCalculations">
 	<modal-dialog show="requestsCommandsPane.shouldShowResourceCalculations" ng-cloak>
 		<h1 class="modal-title">Resource calculations</h1>
 		<div class="modal-inner-content">

@@ -33,7 +33,6 @@
 		vm.denyRequests = denyRequests;
 		vm.disableCommands = disableCommands;
 		vm.canCancelRequests = canCancelRequests;
-		vm.isUpdateResourceCalculationsEnabled = toggleSvc.Wfm_Requests_TriggerResourceCalculationFromGui_43129;
 		vm.toggleCancelConfirmationModal = toggleCancelConfirmationModal;
 		vm.toggleProcessWaitlistModal = toggleProcessWaitlistModal;
 		vm.processWaitlistRequests = processWaitlistRequests;
