@@ -159,6 +159,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					teamBlockInfo.BlockInfo.BlockPeriod.StartDate : 
 					selectedPeriod.StartDate;
 				var undoResCalcChanges = createRollbackState(skillDays, datePoint);
+				var prefLimits = new PreferenceLimits();
+				prefLimits.MeasureBefore(optimizationPreferences, teamBlockInfo, datePoint);
 				
 				//should probably be deleted, if so IDailyTargetValueCalculatorForTeamBlock can be deleted as well
 				var previousTargetValue = 1d;
@@ -187,6 +189,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 
 				if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
+				{
+					teamBlockToRemove.Add(teamBlockInfo);
+					rollbackChanges(undoResCalcChanges, schedulingOptions, schedulePartModifyAndRollbackService);
+					continue;
+				}
+				if (!prefLimits.WithinLimit())
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
 					rollbackChanges(undoResCalcChanges, schedulingOptions, schedulePartModifyAndRollbackService);
