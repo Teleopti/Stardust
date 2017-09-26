@@ -679,7 +679,6 @@
     <Compile Include="Areas\ResourcePlanner\ManageSchedulesResponse.cs" />
     <Compile Include="Areas\ResourcePlanner\OrganizationSelectionController.cs" />
     <Compile Include="Areas\ResourcePlanner\SkillRoutingPriorityController.cs" />
-    <Compile Include="Areas\ResourcePlanner\StaffingLevelController.cs" />
     <Compile Include="Areas\ResourcePlanner\PlanningGroupSettingsController.cs" />
     <Compile Include="Areas\ResourcePlanner\FilterController.cs" />
     <Compile Include="Areas\ResourcePlanner\GroupPagesController.cs" />
