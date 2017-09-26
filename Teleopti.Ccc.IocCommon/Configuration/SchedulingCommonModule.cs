@@ -628,7 +628,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<TeamBlockSchedulingOptions>().As<ITeamBlockSchedulingOptions>().SingleInstance();
 			builder.RegisterType<TeamBlockRoleModelSelector>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamBlockSchedulingCompletionChecker>().As<ITeamBlockSchedulingCompletionChecker>().SingleInstance();
-			builder.RegisterType<ProposedRestrictionAggregator>().As<IProposedRestrictionAggregator>().SingleInstance();
+			builder.RegisterType<ProposedRestrictionAggregator>().SingleInstance();
 			builder.RegisterType<TeamBlockRestrictionAggregator>().As<ITeamBlockRestrictionAggregator>().SingleInstance();
 			builder.RegisterType<TeamRestrictionAggregator>().As<ITeamRestrictionAggregator>().SingleInstance();
 			builder.RegisterType<BlockRestrictionAggregator>().As<IBlockRestrictionAggregator>().SingleInstance();

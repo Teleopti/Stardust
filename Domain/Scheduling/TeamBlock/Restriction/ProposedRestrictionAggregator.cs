@@ -4,13 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.Restriction
 {
-	public interface IProposedRestrictionAggregator
-	{
-		IEffectiveRestriction Aggregate(IScheduleDictionary schedules, SchedulingOptions schedulingOptions, ITeamBlockInfo teamBlockInfo,
-														DateOnly dateOnly, IPerson person, ShiftProjectionCache roleModel);
-	}
-
-	public class ProposedRestrictionAggregator : IProposedRestrictionAggregator
+	public class ProposedRestrictionAggregator
 	{
 		private readonly ITeamRestrictionAggregator _teamRestrictionAggregator;
 		private readonly IBlockRestrictionAggregator _blockRestrictionAggregator;

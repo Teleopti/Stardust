@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 		private readonly ITeamBlockSchedulingCompletionChecker _teamBlockSchedulingCompletionChecker;
-		private readonly IProposedRestrictionAggregator _proposedRestrictionAggregator;
+		private readonly ProposedRestrictionAggregator _proposedRestrictionAggregator;
 		private readonly IWorkShiftFilterService _workShiftFilterService;
 
 		public ShiftProjectionCachesForIntraInterval(TeamBlockRoleModelSelector roleModelSelector,
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			IWorkShiftSelector workShiftSelector,
 			IGroupPersonSkillAggregator groupPersonSkillAggregator,
 			ITeamBlockSchedulingCompletionChecker teamBlockSchedulingCompletionChecker,
-			IProposedRestrictionAggregator proposedRestrictionAggregator,
+			ProposedRestrictionAggregator proposedRestrictionAggregator,
 			IWorkShiftFilterService workShiftFilterService)
 		{
 			_roleModelSelector = roleModelSelector;
