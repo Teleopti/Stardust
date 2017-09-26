@@ -64,5 +64,35 @@ namespace Teleopti.Ccc.Staffing.PerformanceTest
 				UpdateStaffingLevel.Update(new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(14).AddHours(1)));
 			});
 		}
+
+		[Test]
+		public void UpdateReadModel4Weeks()
+		{
+			Now.Is("2016-03-26 07:00");
+			var now = Now.UtcDateTime();
+
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+
+			WithUnitOfWork.Do(() =>
+			{
+				UpdateStaffingLevel.Update(new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(28).AddHours(1)));
+			});
+		}
+
+		[Test]
+		public void UpdateReadModel7Weeks()
+		{
+			Now.Is("2016-03-26 07:00");
+			var now = Now.UtcDateTime();
+
+			using (DataSource.OnThisThreadUse("Teleopti WFM"))
+				AsSystem.Logon("Teleopti WFM", new Guid("1fa1f97c-ebff-4379-b5f9-a11c00f0f02b"));
+
+			WithUnitOfWork.Do(() =>
+			{
+				UpdateStaffingLevel.Update(new DateTimePeriod(now.AddDays(-1).AddHours(-1), now.AddDays(49).AddHours(1)));
+			});
+		}
 	}
 }

@@ -34,6 +34,7 @@ namespace Teleopti.Wfm.Administration.Core
 			var toggleManager = CommonModule.ToggleManagerForIoc(iocArgs);
 			var iocConf = new IocConfiguration(iocArgs, toggleManager);
 
+			builder.RegisterModule(new StaffingModule(iocConf));
 			builder.RegisterModule(new TenantServerModule(iocConf));
 			builder.RegisterApiControllers(typeof(HomeController).Assembly).ApplyAspects();
 			builder.RegisterModule(new CommonModule(iocConf));

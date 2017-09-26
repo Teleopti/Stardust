@@ -67,6 +67,9 @@ Wfm_Requests_Refactoring_45470 = true
 Wfm_Requests_ProcessWaitlistBefore24hRequests_45767 = RC
 Wfm_Requests_HandleFourteenDaysFast_43390 = RC
 
+Wfm_Staffing_StaffingReadModel28DaysStep1_45109 = RC
+
+
 Wfm_People_PrepareForRelease_39040 = RC #Was not ready enough
 Wfm_People_ImportAndCreateAgentFromFile_42528 = true
 Wfm_People_SetFallbackValuesForImporting_43289 = true

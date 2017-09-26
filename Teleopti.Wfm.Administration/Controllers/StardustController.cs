@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.MultiTenancy;
+using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Stardust;
@@ -18,14 +19,17 @@ namespace Teleopti.Wfm.Administration.Controllers
 		private readonly IEventPublisher _eventPublisher;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IJobStartTimeRepository _jobStartTimeRepository;
+		private readonly IStaffingSettingsReader _staffingSettingsReader;
+
 
 		public StardustController(StardustRepository stardustRepository, IEventPublisher eventPublisher, 
-			ILoadAllTenants loadAllTenants, IJobStartTimeRepository jobStartTimeRepository)
+			ILoadAllTenants loadAllTenants, IJobStartTimeRepository jobStartTimeRepository, IStaffingSettingsReader staffingSettingsReader)
 		{
 			_stardustRepository = stardustRepository;
 			_eventPublisher = eventPublisher;
 			_loadAllTenants = loadAllTenants;
 			_jobStartTimeRepository = jobStartTimeRepository;
+			_staffingSettingsReader = staffingSettingsReader;
 		}
 
 		[HttpGet, Route("Stardust/Jobs/{from}/{to}")]
@@ -117,7 +121,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 					_eventPublisher.Publish(
 						new UpdateStaffingLevelReadModelEvent
 						{
-							Days = logOnModel.Days,
+							Days = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14),
 							LogOnDatasource = logOnModel.Tenant,
 							LogOnBusinessUnitId = bu
 						});

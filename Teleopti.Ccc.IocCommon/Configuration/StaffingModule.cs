@@ -8,7 +8,7 @@ using Teleopti.Ccc.Domain.Staffing;
 
 namespace Teleopti.Ccc.IocCommon.Configuration
 {
-	internal class StaffingModule : Module
+	public class StaffingModule : Module
 	{
 		private readonly IIocConfiguration _configuration;
 
@@ -32,7 +32,15 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			{
 				builder.RegisterType<StaffingSettingsReaderNoHistorical>().As<IStaffingSettingsReader>().SingleInstance();
 			}
-			
+			if (_configuration.Toggle((Toggles.Wfm_Staffing_StaffingReadModel28DaysStep1_45109)))
+			{
+				builder.RegisterType<StaffingSettingsReader28Days>().As<IStaffingSettingsReader>().SingleInstance();
+			}
+			if (_configuration.Toggle((Toggles.Wfm_Staffing_StaffingReadModel49DaysStep2_45109)))
+			{
+				builder.RegisterType<StaffingSettingsReader49Days>().As<IStaffingSettingsReader>().SingleInstance();
+			}
+
 			builder.RegisterType<ScheduleStaffingPossibilityCalculator>().As<IScheduleStaffingPossibilityCalculator>().SingleInstance();
 			builder.RegisterType<SkillStaffingDataLoader>().As<ISkillStaffingDataLoader>().SingleInstance();
 			builder.RegisterType<ScheduledStaffingViewModelCreator>().SingleInstance();

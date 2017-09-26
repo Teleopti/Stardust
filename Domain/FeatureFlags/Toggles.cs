@@ -83,6 +83,9 @@
 		Wfm_Requests_ProcessWaitlistBefore24hRequests_45767,
 		Wfm_Requests_HandleFourteenDaysFast_43390,
 
+		Wfm_Staffing_StaffingReadModel28DaysStep1_45109,
+		Wfm_Staffing_StaffingReadModel49DaysStep2_45109,
+
 		Wfm_Outbound_IgnoreScheduleForReplan_43752,
 
 		Wfm_Intraday_38074,
