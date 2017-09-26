@@ -52,15 +52,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(2));
 			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(4));
 			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(5));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
-			{
-				UseTeam = true,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
-				UseBlock = true,
-				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
-				TeamSameShiftCategory = true,
-				BlockSameShiftCategory = true
-			});
+			setupOptions(BlockFinderType.BetweenDayOff);
 			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
 			
 			Target.DoScheduling(planningPeriod.Id.Value);
@@ -92,22 +84,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(4));
 			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(5));
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(4), new TimePeriod(8, 16));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
-			{
-				UseTeam = true,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
-				UseBlock = true,
-				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
-				TeamSameShiftCategory = true,
-				BlockSameShiftCategory = true
-			});
+			setupOptions(BlockFinderType.BetweenDayOff);
 			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
-			PlanningGroupSettingsRepository.HasDefault(x =>
-			{
-				x.BlockSameShiftCategory = true;
-				x.BlockFinderType = BlockFinderType.BetweenDayOff;
-			});
-
+			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => shiftCategory.Equals(x.ShiftCategory))
@@ -137,22 +116,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Has(agent1, scenario, activity, otherShiftCategory, firstDay.AddDays(1), new TimePeriod(8, 16));
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(1), new TimePeriod(8, 16));
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(2), new TimePeriod(8, 16));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
-			{
-				UseTeam = true,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
-				UseBlock = true,
-				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
-				TeamSameShiftCategory = true,
-				BlockSameShiftCategory = true
-			});
+			setupOptions(BlockFinderType.BetweenDayOff);
 			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay, firstDay.AddDays(4)));
-			PlanningGroupSettingsRepository.HasDefault(x =>
-			{
-				x.BlockSameShiftCategory = true;
-				x.BlockFinderType = BlockFinderType.BetweenDayOff;
-			});
-
+			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => shiftCategory.Equals(x.ShiftCategory))
@@ -182,22 +148,9 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			AssignmentRepository.Has(agent1, scenario, new DayOffTemplate(), firstDay.AddDays(4));
 			AssignmentRepository.Has(agent2, scenario, new DayOffTemplate(), firstDay.AddDays(5));
 			AssignmentRepository.Has(agent2, scenario, activity, otherShiftCategory, firstDay.AddDays(4), new TimePeriod(8, 16));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
-			{
-				UseTeam = true,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
-				UseBlock = true,
-				BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod,
-				TeamSameShiftCategory = true,
-				BlockSameShiftCategory = true
-			});
+			setupOptions(BlockFinderType.SchedulePeriod);
 			var planningPeriod = PlanningPeriodRepository.Has(new DateOnlyPeriod(firstDay.AddDays(3), firstDay.AddDays(4)));
-			PlanningGroupSettingsRepository.HasDefault(x =>
-			{
-				x.BlockSameShiftCategory = true;
-				x.BlockFinderType = BlockFinderType.SchedulePeriod;
-			});
-
+			
 			Target.DoScheduling(planningPeriod.Id.Value);
 
 			AssignmentRepository.LoadAll().Count(x => shiftCategory.Equals(x.ShiftCategory))
@@ -217,21 +170,44 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.Scheduling
 			PersonRepository.Has(new ContractWithMaximumTolerance(), new ContractSchedule("_"), new PartTimePercentage("_"), new Team(), new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1), ruleSetBag, skill);
 			DayOffTemplateRepository.Add(new DayOffTemplate());
 			SkillDayRepository.Has(skill.CreateSkillDaysWithDemandOnConsecutiveDays(scenario, firstDay, 2, 2, 2, 2, 2, 2, 2));
-			SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
-			{
-				UseTeam = true,
-				GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
-				UseBlock = true,
-				BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff,
-				TeamSameShiftCategory = true,
-				BlockSameShiftCategory = true
-			});
+			setupOptions(BlockFinderType.BetweenDayOff);
 			var planningPeriod = PlanningPeriodRepository.Has(firstDay.ToDateOnlyPeriod());
 
 			Assert.DoesNotThrow(() =>
 			{
 				Target.DoScheduling(planningPeriod.Id.Value);
 			});
+		}
+		
+		private void setupOptions(BlockFinderType blockFinderType)
+		{
+			if (ResourcePlannerMergeTeamblockClassicScheduling44289)
+			{
+				SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+				{
+					UseTeam = true,
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
+					UseBlock = true,
+					TeamSameShiftCategory = true,
+				});
+				PlanningGroupSettingsRepository.HasDefault(x =>
+				{
+					x.BlockSameShiftCategory = true;
+					x.BlockFinderType = blockFinderType;
+				});
+			}
+			else
+			{
+				SchedulingOptionsProvider.SetFromTest(new SchedulingOptions
+				{
+					UseTeam = true,
+					GroupOnGroupPageForTeamBlockPer = new GroupPageLight("_", GroupPageType.RuleSetBag),
+					UseBlock = true,
+					BlockFinderTypeForAdvanceScheduling = blockFinderType,
+					TeamSameShiftCategory = true,
+					BlockSameShiftCategory = true
+				});	
+			}
 		}
 
 		public TeamBlockPeriodSchedulingTest(bool resourcePlannerMergeTeamblockClassicScheduling44289) : base(resourcePlannerMergeTeamblockClassicScheduling44289)
