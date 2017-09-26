@@ -231,7 +231,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 							_agentStatePersister.Update(x.State);
 							return x;
 						})
-						.SelectMany(x => x.Events)
+						.SelectMany(x =>
+						{
+							_tracer.StateProcessed(() => x.TraceInfo, () => x.Events);
+							return x.Events;
+						})
 						.ToArray()
 					;
 				// have to publish events inside the transaction with the person lock
