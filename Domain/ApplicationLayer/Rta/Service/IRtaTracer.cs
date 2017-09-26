@@ -15,20 +15,40 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 		}
 
-		public StateTraceInfo CreateTrace(Func<string> userCode, Func<string> stateCode)
+		public StateTraceInfo TraceState(Func<string> userCode)
 		{
 			return null;
+		}
+
+		public void StateReceived(Func<StateTraceInfo> trace, Func<string> stateCode)
+		{
 		}
 
 		public void StateProcessing(Func<IEnumerable<StateTraceInfo>> traces)
 		{
 		}
-
-		public void StateRecevied(Func<IEnumerable<StateTraceInfo>> traces)
+		
+		public void InvalidStateCode(Func<StateTraceInfo> trace)
+		{
+		}
+		
+		public void InvalidAuthenticationKey(Func<IEnumerable<StateTraceInfo>> traces)
 		{
 		}
 
-		public void InvalidAuthenticationKey(Func<IEnumerable<StateTraceInfo>> traces)
+		public void InvalidUserCode(Func<StateTraceInfo> trace)
+		{
+		}
+
+		public void InvalidSourceId(Func<IEnumerable<StateTraceInfo>> traces)
+		{
+		}
+
+		public void NoChange(Func<StateTraceInfo> trace)
+		{
+		}
+
+		public void StateProcessed(Func<StateTraceInfo> trace, Func<IEnumerable<IEvent>> events)
 		{
 		}
 	}
@@ -38,11 +58,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void ProcessReceived();
 		void ProcessProcessing();
 
-		StateTraceInfo CreateTrace(Func<string> userCode, Func<string> stateCode);
+		StateTraceInfo TraceState(Func<string> userCode);
+		
+		void StateReceived(Func<StateTraceInfo> trace, Func<string> stateCode);
 		void StateProcessing(Func<IEnumerable<StateTraceInfo>> traces);
-		void StateRecevied(Func<IEnumerable<StateTraceInfo>> traces);
 		void InvalidAuthenticationKey(Func<IEnumerable<StateTraceInfo>> traces);
+		void InvalidSourceId(Func<IEnumerable<StateTraceInfo>> traces);
+		
+		void InvalidStateCode(Func<StateTraceInfo> trace);
+		void InvalidUserCode(Func<StateTraceInfo> trace);
+		void NoChange(Func<StateTraceInfo> trace);
+		void StateProcessed(Func<StateTraceInfo> trace, Func<IEnumerable<IEvent>> events);
 	}
+	
 //
 //	public class RtaTracer : IRtaTracer
 //	{
@@ -78,6 +106,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	{
 		public DateTime Time;
 		public Guid Id;
-
 	}
 }

@@ -81,10 +81,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta.Controllers
 			{
 				return BadRequest(e.Message);
 			}
-			catch (InvalidPlatformException e)
-			{
-				return BadRequest(e.Message);
-			}
 			catch (InvalidUserCodeException e)
 			{
 				return BadRequest(e.Message);

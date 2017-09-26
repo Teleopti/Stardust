@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly RuleEventPublisher _ruleEventPublisher;
 		private readonly AdherenceEventPublisher _adherenceEventPublisher;
 		private readonly ICurrentEventPublisher _eventPublisher;
+		private readonly IRtaTracer _tracer;
 
 		public AgentStateProcessor(
 			ShiftEventPublisher shiftEventPublisher,
@@ -57,7 +58,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			StateEventPublisher stateEventPublisher,
 			RuleEventPublisher ruleEventPublisher,
 			AdherenceEventPublisher adherenceEventPublisher,
-			ICurrentEventPublisher eventPublisher)
+			ICurrentEventPublisher eventPublisher,
+			IRtaTracer tracer)
 		{
 			_shiftEventPublisher = shiftEventPublisher;
 			_activityEventPublisher = activityEventPublisher;
@@ -65,12 +67,17 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_ruleEventPublisher = ruleEventPublisher;
 			_adherenceEventPublisher = adherenceEventPublisher;
 			_eventPublisher = eventPublisher;
+			_tracer = tracer;
 		}
 
 		[LogInfo]
 		public virtual ProcessResult Process(ProcessInput input)
 		{
 			var resultState = processRelevantMoments(input);
+			if (resultState == null)
+			{
+				_tracer.NoChange(() => input.Input.TraceInfo);
+			}
 
 			return new ProcessResult
 			{
@@ -124,7 +131,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					outState = workingState;
 				}
 			});
-
+			
 			return outState;
 		}
 

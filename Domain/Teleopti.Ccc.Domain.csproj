@@ -1754,7 +1754,6 @@
     <Compile Include="Logon\Aspects\TenantScopeAspect.cs" />
     <Compile Include="Logon\Aspects\TenantScopeAttribute.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\IAppliedAlarm.cs" />
-    <Compile Include="ApplicationLayer\Rta\Service\InvalidPlatformException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidSourceException.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InvalidUserCodeException.cs" />
     <Compile Include="ApplicationLayer\Rta\ViewModels\AgentViewModel.cs" />

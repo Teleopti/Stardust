@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Aop;
 using Teleopti.Ccc.Domain.Common;
 
@@ -7,24 +9,33 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class DataSourceMapper
 	{
 		private readonly IDataSourceReader _dataSourceReader;
+		private readonly IRtaTracer _tracer;
 		private readonly PerTenant<ConcurrentDictionary<string, int>> _cache;
 
-		public DataSourceMapper(IDataSourceReader dataSourceReader, ICurrentDataSource dataSource)
+		public DataSourceMapper(IDataSourceReader dataSourceReader, ICurrentDataSource dataSource, IRtaTracer tracer)
 		{
 			_dataSourceReader = dataSourceReader;
+			_tracer = tracer;
 			_cache = new PerTenant<ConcurrentDictionary<string, int>>(dataSource);
 		}
 
-		public int ValidateSourceId(string sourceId)
+		public int ValidateSourceId(string sourceId, Func<IEnumerable<StateTraceInfo>> traces)
 		{
 			if (_cache.Value == null)
 				_cache.Set(ReadDataSources());
 
 			if (string.IsNullOrEmpty(sourceId))
+			{
+				_tracer.InvalidSourceId(traces);
 				throw new InvalidSourceException("Source id is required");
+			}
+				
 			int dataSourceId;
 			if (!_cache.Value.TryGetValue(sourceId, out dataSourceId))
+			{
+				_tracer.InvalidSourceId(traces);
 				throw new InvalidSourceException($"Source id \"{sourceId}\" not found");
+			}
 			return dataSourceId;
 		}
 

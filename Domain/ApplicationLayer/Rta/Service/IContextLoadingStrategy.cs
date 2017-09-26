@@ -63,15 +63,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 	public class BatchStrategy : ContextLoadingStrategy
 	{
 		private readonly ExternalLogonMapper _externalLogonMapper;
+		private readonly IRtaTracer _tracer;
 		private readonly BatchInputModel _batch;
 		private readonly int _dataSourceId;
 		private IDictionary<Guid, BatchStateInputModel> _matches;
 
-		public BatchStrategy(BatchInputModel batch, DateTime time, IConfigReader config, IAgentStatePersister persister, DataSourceMapper dataSourceMapper, ExternalLogonMapper externalLogonMapper) : base(config, persister, time)
+		public BatchStrategy(BatchInputModel batch, DateTime time, IConfigReader config, IAgentStatePersister persister,
+			DataSourceMapper dataSourceMapper, ExternalLogonMapper externalLogonMapper, IRtaTracer tracer) : base(config,
+			persister, time)
 		{
 			_externalLogonMapper = externalLogonMapper;
+			_tracer = tracer;
 			_batch = batch;
-			_dataSourceId = dataSourceMapper.ValidateSourceId(_batch.SourceId);
+			_dataSourceId = dataSourceMapper.ValidateSourceId(_batch.SourceId, () => batch.States.Select(x => x.TraceInfo));
 			ParallelTransactions = Config.ReadValue("RtaBatchParallelTransactions", 7);
 			MaxTransactionSize = Config.ReadValue("RtaBatchMaxTransactionSize", 100);
 		}
@@ -85,7 +89,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					var personIds = _externalLogonMapper.PersonIdsFor(_dataSourceId, state.UserCode);
 					if (personIds.IsEmpty())
-						context.AddException(new InvalidUserCodeException($"No person found for UserCode {state.UserCode}, DataSourceId {_dataSourceId}, SourceId {_batch.SourceId}"));
+					{
+						_tracer.InvalidUserCode(() => state.TraceInfo);
+						context.AddException(new InvalidUserCodeException(
+							$"No person found for UserCode {state.UserCode}, DataSourceId {_dataSourceId}, SourceId {_batch.SourceId}"));
+					}
 					return personIds.Select(id =>
 						new
 						{
@@ -110,7 +118,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				StateCode = input.StateCode,
 				StateDescription = input.StateDescription,
 				SnapshotId = _batch.SnapshotId,
-				SnapshotDataSourceId = _dataSourceId
+				SnapshotDataSourceId = _dataSourceId,
+				TraceInfo = input.TraceInfo
 			};
 		}
 	}
@@ -121,11 +130,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly StateMapper _stateMapper;
 		private readonly int _dataSourceId;
 
-		public ClosingSnapshotStrategy(DateTime snapshotId, string sourceId, DateTime time, IConfigReader config, IAgentStatePersister persister, StateMapper stateMapper, DataSourceMapper dataSourceMapper) : base(config, persister, time)
+		public ClosingSnapshotStrategy(DateTime snapshotId, string sourceId, DateTime time, IConfigReader config,
+			IAgentStatePersister persister, StateMapper stateMapper, DataSourceMapper dataSourceMapper) : base(config, persister,
+			time)
 		{
 			_snapshotId = snapshotId;
 			_stateMapper = stateMapper;
-			_dataSourceId = dataSourceMapper.ValidateSourceId(sourceId);
+			_dataSourceId = dataSourceMapper.ValidateSourceId(sourceId, () => null);
 			ParallelTransactions = Config.ReadValue("RtaCloseSnapshotParallelTransactions", 3);
 			MaxTransactionSize = Config.ReadValue("RtaCloseSnapshotMaxTransactionSize", 1000);
 		}
@@ -162,7 +173,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly IKeyValueStorePersister _keyValues;
 		private readonly ScheduleCache _scheduleCache;
 
-		public ActivityChangesStrategy(DateTime time, IConfigReader config, IAgentStatePersister persister, IKeyValueStorePersister keyValues, ScheduleCache scheduleCache) : base(config, persister, time)
+		public ActivityChangesStrategy(DateTime time, IConfigReader config, IAgentStatePersister persister,
+			IKeyValueStorePersister keyValues, ScheduleCache scheduleCache) : base(config, persister, time)
 		{
 			_keyValues = keyValues;
 			_scheduleCache = scheduleCache;
@@ -175,15 +187,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 			IEnumerable<PersonForCheck> persons = null;
 			CurrentScheduleReadModelVersion version = null;
-			context.WithReadModelUnitOfWork(() =>
-			{
-				version = _keyValues.Get("CurrentScheduleReadModelVersion", null);
-			});
+			context.WithReadModelUnitOfWork(() => { version = _keyValues.Get("CurrentScheduleReadModelVersion", null); });
 			_scheduleCache.Refresh(version);
-			context.WithUnitOfWork(() =>
-			{
-				persons = Persister.FindForCheck();
-			});
+			context.WithUnitOfWork(() => { persons = Persister.FindForCheck(); });
 			return persons
 				.Where(x =>
 				{

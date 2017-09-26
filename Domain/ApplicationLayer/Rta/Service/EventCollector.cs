@@ -48,6 +48,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				.ToArray();
 			publisher.Publish(toPublish);
 		}
-
 	}
 }

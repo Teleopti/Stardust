@@ -30,15 +30,15 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		}
 
 		public int SaveExternalUserState(
-			string authenticationKey, 
-			string userCode, 
-			string stateCode, 
+			string authenticationKey,
+			string userCode,
+			string stateCode,
 			string stateDescription,
-			bool isLoggedOn, 
-			int secondsInState, 
-			DateTime timestamp, 
-			string platformTypeId, 
-			string sourceId, 
+			bool isLoggedOn,
+			int secondsInState,
+			DateTime timestamp,
+			string platformTypeId,
+			string sourceId,
 			DateTime batchId,
 			bool isSnapshot)
 		{
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			return handleRtaExceptions(() =>
 			{
 				userCode = fixUserCode(userCode);
-				stateCode = fixStateCode(stateCode, platformTypeId, isLoggedOn);
+				stateCode = fixStateCode(null, stateCode, platformTypeId, isLoggedOn);
 				BatchInputModel input = null;
 				if (isClosingSnapshot(userCode, isSnapshot))
 					input = new BatchInputModel
@@ -69,7 +69,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 								StateCode = stateCode,
 								StateDescription = stateDescription,
 								UserCode = userCode,
-								TraceInfo = _rtaTracer.CreateTrace(() => userCode, () => stateCode)
 							}
 						}
 					};
@@ -80,7 +79,10 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			});
 		}
 
-		public int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId,
+		public int SaveBatchExternalUserState(
+			string authenticationKey, 
+			string platformTypeId, 
+			string sourceId,
 			ICollection<ExternalUserState> externalUserStateBatch)
 		{
 			_rtaTracer.ProcessReceived();
@@ -88,18 +90,18 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			{
 				IEnumerable<BatchStateInputModel> states = (
 						from s in externalUserStateBatch
-						let stateCode = fixStateCode(s.StateCode, platformTypeId, s.IsLoggedOn)
 						let userCode = fixUserCode(s.UserCode)
+						let traceInfo = _rtaTracer.TraceState(() => userCode)
+						let stateCode = fixStateCode(traceInfo, s.StateCode, platformTypeId, s.IsLoggedOn)
 						select new BatchStateInputModel
 						{
 							UserCode = userCode,
 							StateCode = stateCode,
 							StateDescription = s.StateDescription,
-							TraceInfo = _rtaTracer.CreateTrace(() => userCode, () => stateCode)
+							TraceInfo = traceInfo
 						})
 					.ToArray();
-				_rtaTracer.StateRecevied(() => states.Select(x => x.TraceInfo));
-				
+
 				var mayCloseSnapshot = externalUserStateBatch.Last();
 				var isSnapshot = mayCloseSnapshot.IsSnapshot;
 				var closeSnapshot = isClosingSnapshot(mayCloseSnapshot.UserCode, isSnapshot);
@@ -130,22 +132,31 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 		{
 			return userCode.Trim();
 		}
-		
-		private string fixStateCode(string stateCode, string platformTypeId, bool isLoggedOn)
+
+		private string fixStateCode(StateTraceInfo traceInfo, string stateCode, string platformTypeId, bool isLoggedOn)
 		{
+			_rtaTracer.StateReceived(() => traceInfo, ()=>stateCode);
+
 			if (!isLoggedOn)
 				stateCode = "LOGGED-OFF";
 
 			if (stateCode == null)
+			{
+				_rtaTracer.InvalidStateCode(() => traceInfo);
 				throw new InvalidStateCodeException("State code is required");
+			}
+
 
 			stateCode = stateCode.Trim();
-			
+
 			if (!string.IsNullOrEmpty(platformTypeId) && platformTypeId != Guid.Empty.ToString())
 				stateCode = $"{stateCode} ({platformTypeId})";
 
 			if (stateCode.Length > 300)
+			{
+				_rtaTracer.InvalidStateCode(() => traceInfo);
 				throw new InvalidStateCodeException("State code can not exceed 300 characters (including platform type id)");
+			}
 
 			return stateCode;
 		}
@@ -177,11 +188,6 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 				Log.Error("Source id was invalid.", e);
 				return -300;
 			}
-			catch (InvalidPlatformException e)
-			{
-				Log.Error("Platform id was invalid.", e);
-				return -200;
-			}
 			catch (InvalidUserCodeException e)
 			{
 				Log.Info("User code was invalid.", e);
@@ -191,8 +197,8 @@ namespace Teleopti.Ccc.Web.Areas.Rta
 			{
 				var onlyInvalidUserCode =
 					e.AllExceptions()
-						.Where(x => x.GetType() != typeof (AggregateException))
-						.All(x => x.GetType() == typeof (InvalidUserCodeException));
+						.Where(x => x.GetType() != typeof(AggregateException))
+						.All(x => x.GetType() == typeof(InvalidUserCodeException));
 				if (onlyInvalidUserCode)
 				{
 					Log.Info("Batch contained invalid user code.", e);

@@ -60,10 +60,6 @@ namespace Teleopti.Ccc.Infrastructure.Rta
 			{
 				Log.Error("Source id was invalid.", e);
 			}
-			catch (InvalidPlatformException e)
-			{
-				Log.Error("Platform id was invalid.", e);
-			}
 			catch (InvalidUserCodeException e)
 			{
 				Log.Info("User code was invalid.", e);

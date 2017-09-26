@@ -16,13 +16,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 {
 	public class ContextLoaderWithSpreadTransactionLockStrategy : ContextLoader
 	{
-		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor, IEventPublisherScope eventPublisherScope, ICurrentEventPublisher eventPublisher) : base(dataSource, dataSourceMapper, now, stateMapper, externalLogonMapper, scheduleCache, agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor, eventPublisherScope, eventPublisher)
+		public ContextLoaderWithSpreadTransactionLockStrategy(ICurrentDataSource dataSource,
+			DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper,
+			ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm,
+			IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues,
+			AgentStateProcessor processor, IEventPublisherScope eventPublisherScope, ICurrentEventPublisher eventPublisher,
+			IRtaTracer tracer) : base(dataSource, dataSourceMapper, now, stateMapper, externalLogonMapper, scheduleCache,
+			agentStatePersister, appliedAlarm, config, deadLockRetrier, keyValues, processor, eventPublisherScope,
+			eventPublisher, tracer)
+
 		{
 		}
 
-		protected override void ProcessTransactions(string tenant, IContextLoadingStrategy strategy, IEnumerable<Func<IEnumerable<AgentState>>> transactions, ConcurrentBag<Exception> exceptions)
+		protected override void ProcessTransactions(string tenant, IContextLoadingStrategy strategy,
+			IEnumerable<Func<IEnumerable<AgentState>>> transactions, ConcurrentBag<Exception> exceptions)
 		{
-			var taskTransactionCount = Math.Max(2, transactions.Count()/strategy.ParallelTransactions);
+			var taskTransactionCount = Math.Max(2, transactions.Count() / strategy.ParallelTransactions);
 
 			var tasks = transactions
 				.Batch(taskTransactionCount)
@@ -30,21 +39,14 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				{
 					return Task.Factory.StartNew(() =>
 					{
-						transactionBatch.ForEach(transaction =>
-						{
-							ProcessTransaction(tenant, strategy, transaction, exceptions);
-						});
+						transactionBatch.ForEach(transaction => { ProcessTransaction(tenant, strategy, transaction, exceptions); });
 					});
 				})
 				.ToArray();
 
 			Task.WaitAll(tasks);
 		}
-
 	}
-
-
-
 
 
 	public class ContextLoader : IContextLoader
@@ -63,8 +65,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		private readonly AgentStateProcessor _processor;
 		private readonly IEventPublisherScope _eventPublisherScope;
 		private readonly ICurrentEventPublisher _eventPublisher;
+		private readonly IRtaTracer _tracer;
 
-		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now, StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache, IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config, DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor, IEventPublisherScope eventPublisherScope, ICurrentEventPublisher eventPublisher)
+		public ContextLoader(ICurrentDataSource dataSource, DataSourceMapper dataSourceMapper, INow now,
+			StateMapper stateMapper, ExternalLogonMapper externalLogonMapper, ScheduleCache scheduleCache,
+			IAgentStatePersister agentStatePersister, ProperAlarm appliedAlarm, IConfigReader config,
+			DeadLockRetrier deadLockRetrier, IKeyValueStorePersister keyValues, AgentStateProcessor processor,
+			IEventPublisherScope eventPublisherScope, ICurrentEventPublisher eventPublisher, IRtaTracer tracer)
 		{
 			_dataSource = dataSource;
 			_dataSourceMapper = dataSourceMapper;
@@ -80,16 +87,19 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_processor = processor;
 			_eventPublisherScope = eventPublisherScope;
 			_eventPublisher = eventPublisher;
+			_tracer = tracer;
 		}
-		
+
 		public void ForBatch(BatchInputModel batch)
 		{
-			Process(new BatchStrategy(batch, _now.UtcDateTime(), _config, _agentStatePersister, _dataSourceMapper, _externalLogonMapper));
+			Process(new BatchStrategy(batch, _now.UtcDateTime(), _config, _agentStatePersister, _dataSourceMapper,
+				_externalLogonMapper, _tracer));
 		}
 
 		public void ForClosingSnapshot(DateTime snapshotId, string sourceId)
 		{
-			Process(new ClosingSnapshotStrategy(snapshotId, sourceId, _now.UtcDateTime(), _config, _agentStatePersister, _stateMapper, _dataSourceMapper));
+			Process(new ClosingSnapshotStrategy(snapshotId, sourceId, _now.UtcDateTime(), _config, _agentStatePersister,
+				_stateMapper, _dataSourceMapper));
 		}
 
 		public void ForActivityChanges()
@@ -137,7 +147,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				});
 				refreshCaches(strategy, strategyContext, scheduleVersion, mappingVersion);
 			}
-			
+
 			if (exceptions.Count == 1)
 			{
 				var e = exceptions.First();
@@ -147,7 +157,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				throw new System.AggregateException(exceptions);
 		}
 
-		private void refreshCaches(IContextLoadingStrategy strategy, StrategyContext strategyContext, CurrentScheduleReadModelVersion scheduleVersion, string mappingVersion)
+		private void refreshCaches(IContextLoadingStrategy strategy, StrategyContext strategyContext,
+			CurrentScheduleReadModelVersion scheduleVersion, string mappingVersion)
 		{
 			_scheduleCache.Refresh(scheduleVersion);
 			_stateMapper.Refresh(mappingVersion);
@@ -156,29 +167,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private static int calculateTransactionSize(int maxTransactionSize, int parallelTransactions, int thingsCount)
 		{
-			if (thingsCount <= maxTransactionSize*parallelTransactions)
-				maxTransactionSize = (int) Math.Ceiling(thingsCount/(double) parallelTransactions);
+			if (thingsCount <= maxTransactionSize * parallelTransactions)
+				maxTransactionSize = (int) Math.Ceiling(thingsCount / (double) parallelTransactions);
 			return maxTransactionSize;
 		}
 
-		protected virtual void ProcessTransactions(string tenant, IContextLoadingStrategy strategy, IEnumerable<Func<IEnumerable<AgentState>>> transactions, ConcurrentBag<Exception> exceptions)
+		protected virtual void ProcessTransactions(string tenant, IContextLoadingStrategy strategy,
+			IEnumerable<Func<IEnumerable<AgentState>>> transactions, ConcurrentBag<Exception> exceptions)
 		{
 			Parallel.ForEach(
 				transactions,
 				new ParallelOptions {MaxDegreeOfParallelism = strategy.ParallelTransactions},
-				data =>
-				{
-					ProcessTransaction(tenant, strategy, data, exceptions);
-				}
+				data => { ProcessTransaction(tenant, strategy, data, exceptions); }
 			);
 		}
 
 		[TenantScope]
 		[LogInfo]
 		protected virtual void ProcessTransaction(
-			string tenant, 
-			IContextLoadingStrategy strategy, 
-			Func<IEnumerable<AgentState>> transaction, 
+			string tenant,
+			IContextLoadingStrategy strategy,
+			Func<IEnumerable<AgentState>> transaction,
 			ConcurrentBag<Exception> exceptions)
 		{
 			try
@@ -187,7 +196,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 					Thread.CurrentThread.Name = $"{strategy.ParentThreadName} #{Thread.CurrentThread.ManagedThreadId}";
 
 				_deadLockRetrier.RetryOnDeadlock(() => Transaction(tenant, strategy, transaction));
-
 			}
 			catch (Exception e)
 			{
@@ -199,7 +207,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			string tenant,
 			IContextLoadingStrategy strategy,
 			Func<IEnumerable<AgentState>> agentStates
-			)
+		)
 		{
 			WithUnitOfWork(() =>
 			{
@@ -228,7 +236,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				eventCollector.Publish();
 			});
 		}
-		
+
 		[ReadModelUnitOfWork]
 		protected virtual void WithReadModelUnitOfWork(Action action)
 		{
@@ -247,5 +255,4 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			return action.Invoke();
 		}
 	}
-
 }
