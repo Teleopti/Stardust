@@ -60,9 +60,15 @@ namespace Teleopti.Ccc.DBManager.Library
 					_logger.Write("DB user is missing. Creating contained DB user ...");
 					_executeSql.ExecuteTransactionlessNonQuery(createDBUser);
 				}
-				var permSql = string.Format(CultureInfo.CurrentCulture, "ALTER AUTHORIZATION ON SCHEMA::[db_owner] TO[{0}]", user);
+				//var permSql = string.Format(CultureInfo.CurrentCulture, "ALTER AUTHORIZATION ON SCHEMA::[db_owner] TO[{0}]", user);
+				//_executeSql.ExecuteTransactionlessNonQuery(permSql);
+				//permSql = string.Format(CultureInfo.CurrentCulture, "ALTER ROLE[db_owner] ADD MEMBER[{0}]", user);
+				//_executeSql.ExecuteTransactionlessNonQuery(permSql);
+
+				// fix for PBI 45977 revoke dbowner permissions wrongly added before
+				var permSql = string.Format(CultureInfo.CurrentCulture, "ALTER AUTHORIZATION ON SCHEMA::[db_owner] TO[dbo]", user);
 				_executeSql.ExecuteTransactionlessNonQuery(permSql);
-				permSql = string.Format(CultureInfo.CurrentCulture, "ALTER ROLE[db_owner] ADD MEMBER[{0}]", user);
+				permSql = string.Format(CultureInfo.CurrentCulture, "ALTER ROLE[db_owner] DROP MEMBER[{0}]", user);
 				_executeSql.ExecuteTransactionlessNonQuery(permSql);
 			}
 			//Add permission
