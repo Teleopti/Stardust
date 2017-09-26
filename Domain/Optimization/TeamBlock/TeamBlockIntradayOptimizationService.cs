@@ -136,11 +136,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
 			var callback = _currentIntradayOptimizationCallback.Current();
-
 			var sortedTeamBlockInfos = _teamBlockIntradayDecisionMaker.Decide(allTeamBlockInfos, schedulingOptions);
-
-			int totalTeamBlockInfos = sortedTeamBlockInfos.Count;
-			int runningTeamBlockCounter = 0;
+			var totalTeamBlockInfos = sortedTeamBlockInfos.Count;
+			var runningTeamBlockCounter = 0;
 			foreach (var teamBlockInfo in sortedTeamBlockInfos)
 			{
 				if (callback.IsCancelled())
@@ -181,20 +179,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				callback.Optimizing(new IntradayOptimizationCallbackInfo(teamBlockInfo, success, totalTeamBlockInfos - runningTeamBlockCounter));
 
-				if (!success)
-				{
-					teamBlockToRemove.Add(teamBlockInfo);
-					rollbackChanges(undoResCalcChanges, schedulingOptions, schedulePartModifyAndRollbackService);
-					continue;
-				}
-
-				if (!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences))
-				{
-					teamBlockToRemove.Add(teamBlockInfo);
-					rollbackChanges(undoResCalcChanges, schedulingOptions, schedulePartModifyAndRollbackService);
-					continue;
-				}
-				if (!prefLimits.WithinLimit())
+				if (!success ||
+					!_teamBlockShiftCategoryLimitationValidator.Validate(teamBlockInfo, null, optimizationPreferences) ||
+					!prefLimits.WithinLimit())
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
 					rollbackChanges(undoResCalcChanges, schedulingOptions, schedulePartModifyAndRollbackService);
