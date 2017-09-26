@@ -336,7 +336,7 @@ module.exports = function (grunt) {
                     expand: true,
                     cwd: 'node_modules/angular-ui-grid',
                     src: ['*.ttf', '*.woff', '*.eot'],
-                    dest: 'dist/',
+                    dest: 'dist/resources/',
                     filter: 'isFile'
                 }]
             },
