@@ -347,7 +347,9 @@
 			}
 			onInitCallBack && onInitCallBack(requests.data.TotalCount);
 
-			vm.gridApi.grid.selection.selectAll = false;
+			if (vm.gridApi)
+				vm.gridApi.grid.selection.selectAll = false;
+
 			vm.isLoading = false;
 			$timeout(function () {
 				reselectRequests();
