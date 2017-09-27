@@ -155,9 +155,28 @@ Scenario: Select skill when skill group is selected
 	And there is forecast data for skill 'Skill B' for date '2016-12-22'
 	And there is a Skill Area called 'SkillArea1' that monitors skills 'Skill A, Skill B'
 	And I am viewing intraday page
-	When I select skill 'Skill B' from included skills in skill area
+	When I select skill 'Skill B' from included skills in skill group
 	Then I should see incoming traffic data in the chart
 	And I Should see skill 'Skill B' as selected skill
 	And I Should not see any skill group selected
 
+Scenario: Return to skill group when viewing included skill
+	Given the time is '2016-12-22 14:00'
+	And there is queue statistics for the skill 'Skill B' up until '2016-12-22 17:00'
+	And there is forecast data for skill 'Skill B' for date '2016-12-22'
+	And there is a Skill Area called 'SkillArea1' that monitors skills 'Skill A, Skill B'
+	And I am viewing intraday page
+	And I select skill 'Skill A' from included skills in skill group
+	And There's no data available
+	When I return to skill group 'SkillArea1'
+	Then I should see incoming traffic data in the chart
+	And I should see a summary of incoming traffic
 
+Scenario: No skill or skill group is selected
+	Given the time is '2016-12-22 14:00'
+	And there is queue statistics for the skill 'Skill B' up until '2016-12-22 17:00'
+	And there is forecast data for skill 'Skill B' for date '2016-12-22'
+	And there is a Skill Area called 'SkillArea1' that monitors skills 'Skill A, Skill B'
+	And I am viewing intraday page
+	When I choose to not monitor any skill or skillgroup
+	Then I should not see the chart

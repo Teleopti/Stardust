@@ -108,8 +108,8 @@
 		};
 
 		vm.skillSelected = function (item) {
-			vm.selectedItem = vm.selectedSkill = item;
 			clearSkillAreaSelection();
+			vm.selectedItem = vm.selectedSkill = item;
 		};
 
 		vm.skillAreaSelected = function (item) {
@@ -154,6 +154,8 @@
 					clearSkillSelection();
 					UnsupportedSkillNotice();
 				}
+			} else if(vm.selectedSkillArea === null) {
+				vm.selectedItem = null;
 			}
 		};
 
@@ -170,10 +172,13 @@
 				vm.prevArea = vm.selectedItem;
 				item.UnsupportedSkills = [];
 				checkUnsupported(item);
+			} else if (vm.selectedSkill === null){
+				vm.selectedItem = null;
 			}
-			if (vm.drillable === true && vm.selectedItem.skills) {
+			if (vm.drillable === true && vm.selectedItem && vm.selectedItem.skills) {
 				vm.drillable = false;
 			}
+			
 		};
 
 		function isSupported(skill) {

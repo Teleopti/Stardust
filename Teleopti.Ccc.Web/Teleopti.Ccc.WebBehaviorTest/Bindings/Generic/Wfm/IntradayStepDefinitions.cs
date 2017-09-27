@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Infrastructure.Toggle;
@@ -397,8 +398,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 			Browser.Interactions.AssertNotExists(".service-level", ".abandoned-rate");
 		}
 
-		[When(@"I select skill '(.*)' from included skills in skill area")]
-		public void GivenISelectSkillFromIncludedSkillsInSkillArea(string skill)
+		[When(@"I select skill '(.*)' from included skills in skill group")]
+		[Given(@"I select skill '(.*)' from included skills in skill group")]
+		public void GivenISelectSkillFromIncludedSkillsInSkillGroup(string skill)
 		{
 			var elementSelector = $"$(\"span:contains('{skill}')\").parent(\"span.wfm-chip\")";
 			Browser.Interactions.AssertJavascriptResultContains($"return {elementSelector}[0] !== undefined", "True");
@@ -419,7 +421,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Wfm
 																$"return scope.vm.selectedSkillArea === null;", "True");
 		}
 
+		[When(@"I return to skill group '(.*)'")]
+		public void WhenIReturnToSkillGroup(string skillGroup)
+		{
+			Browser.Interactions.Click($"i[aria-label='{skillGroup}']");
+		}
 
+		[When(@"I choose to not monitor any skill or skillgroup")]
+		public void WhenIChooseToNotMonitorAnySkillOrSkillgroup()
+		{
+			Browser.Interactions.Click($"button[aria-label='Clear Input']");
+		}
 
+		[Then(@"I should not see the chart")]
+		public void ThenIShouldNotSeeTheChart()
+		{
+			Browser.Interactions.AssertExists("#chartPanel");
+			Assert.IsFalse(Browser.Interactions.IsVisible("#chartPanel"), "Chart panel should not be visible");
+		}
 	}
 }
