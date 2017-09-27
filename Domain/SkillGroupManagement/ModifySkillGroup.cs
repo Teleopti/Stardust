@@ -2,6 +2,7 @@
 using System.Linq;
 using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.SkillGroupManagement
 {
@@ -16,8 +17,10 @@ namespace Teleopti.Ccc.Domain.SkillGroupManagement
 
 		public void Do(ModifySkillGroupInput input)
 		{
-			var skillGroup = _skillGroupRepository.Get(input.Id);
+			InParameter.ListCannotBeEmpty("Skills", input.Skills);
+			InParameter.NotStringEmptyOrWhiteSpace("Name", input.Name);
 
+			var skillGroup = _skillGroupRepository.Get(input.Id);
 			if (skillGroup == null)
 				throw new ArgumentNullException($"skillGroup - {input.Id} don't exist in skill group repository.");
 
