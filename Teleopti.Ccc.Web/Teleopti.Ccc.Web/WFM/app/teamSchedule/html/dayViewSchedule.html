@@ -8,7 +8,7 @@
 	</div>
 </div>
 <div>
-	
+
 </div>
 <div class="team-schedule panel wfm-block material-depth-1" wait-for="vm.boostrap">
 	<div class="teamschedule-header" layout="row">
@@ -19,24 +19,24 @@
 							 apply-favorite="vm.applyFavorite(currentFavorite)"
 							 get-search="vm.getSearch()"
 							 on-init-async="vm.onFavoriteSearchInitDefer"></favorite-search>
-			
-			<group-page-picker ng-if="vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled" 
+
+			<group-page-picker ng-if="vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled"
 							   group-pages="vm.availableGroups"
 							   on-close="vm.onSelectedTeamsChanged()"
 							   class="group-picker-container inline-block"
 							   selected-groups="vm.selectedGroups"></group-page-picker>
 
 			<organization-picker ng-if="!vm.toggles.Wfm_GroupPages_45057 && vm.searchEnabled"
-				sites-and-teams="vm.sitesAndTeams"
-				class="organization-picker-container inline-block"
-				on-open="vm.searchOptions.focusingSearch = false"
-				on-close="vm.onSelectedTeamsChanged()"
-				selected-text="vm.orgPickerSelectedText()"
-				selected-team-ids="vm.selectedGroups.groupIds"></organization-picker>
+								 sites-and-teams="vm.sitesAndTeams"
+								 class="organization-picker-container inline-block"
+								 on-open="vm.searchOptions.focusingSearch = false"
+								 on-close="vm.onSelectedTeamsChanged()"
+								 selected-text="vm.orgPickerSelectedText()"
+								 selected-team-ids="vm.selectedGroups.groupIds"></organization-picker>
 
 			<div class="people-search-container inline-block"
-			     ng-if="vm.searchEnabled"
-			     ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
+				 ng-if="vm.searchEnabled"
+				 ng-style="{'visibility': vm.hideSearchIfNoSelectedTeam()}">
 				<wfm-multiple-search-input search-options="vm.searchOptions" search-title="vm.searchPlaceholder" search-callback="vm.onKeyWordInSearchInputChanged"></wfm-multiple-search-input>
 			</div>
 
@@ -45,17 +45,26 @@
 			</span>
 
 			<view-changer ng-if="vm.searchEnabled" selected-date="vm.scheduleDate" keyword="vm.searchOptions.keyword"
-				selected-groups="vm.selectedGroups"
-				team-name-map="vm.teamNameMap"
-						selected-favorite="vm.selectedFavorite"
+						  selected-groups="vm.selectedGroups"
+						  team-name-map="vm.teamNameMap"
+						  selected-favorite="vm.selectedFavorite"
 						  selected-sort-option="vm.sortOption"></view-changer>
 		</div>
 
 		<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)"></timezone-picker>
 
-		<div class="warning-container">
+		<div class="wfm-switch" ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
+			<input type="checkbox" id="switchStaffing" ng-model="vm.currentSettings.showStaffing" ng-change="vm.showStaffing()" />
+			<label for="switchStaffing">
+				<span class="wfm-switch-label" translate>ShowStaffing</span>
+				<span class="wfm-switch-toggle"></span>
+			</label>
+
+		</div>
+
+		<div class="warning-container" ng-if="!vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
 			<div id="show-warnings" class="wfm-switch inline-block">
-				<input type="checkbox" id="validateWarning" ng-model="vm.validateWarningEnabled" ng-change="vm.checkValidationWarningForCurrentPage()"/>
+				<input type="checkbox" id="validateWarning" ng-model="vm.currentSettings.validateWarningEnabled" ng-change="vm.checkValidationWarningForCurrentPage()" />
 				<label for="validateWarning">
 					<span class="wfm-switch-label" translate>ShowWarnings</span>
 					<span class="wfm-switch-toggle"></span>
@@ -64,20 +73,20 @@
 		</div>
 
 		<div class="rightside-part">
-			<div class="wfm-switch" ng-if="vm.searchEnabled">
-				<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()"/>
+			<div class="wfm-switch" ng-if="!vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206 && vm.searchEnabled">
+				<input type="checkbox" id="switchAbsence" ng-model="vm.onlyLoadScheduleWithAbsence" ng-change="vm.toggleShowAbsenceOnly()" />
 				<label for="switchAbsence">
 					<span class="wfm-switch-label" translate>ShowOnlyAbsence</span>
 					<span class="wfm-switch-toggle"></span>
+
 				</label>
 			</div>
-
 			<span class="settings-container inline-block cursor-pointer" ng-click="vm.openSettingsPanel()">
 				<i class="mdi mdi-settings"></i>
 			</span>
 
 			<teamschedule-command-menu class="teamschedule-command"
-									   validate-warning-enabled="vm.validateWarningEnabled"
+									   validate-warning-enabled="vm.currentSettings.validateWarningEnabled"
 									   trigger-command="vm.triggerCommand(label, needToOpenSidePanel)"></teamschedule-command-menu>
 		</div>
 	</div>
@@ -90,11 +99,10 @@
 			<schedule-table ng-show="vm.scheduleFullyLoaded"
 							select-mode="vm.scheduleTableSelectMode"
 							selected-date="vm.scheduleDate"
-							show-warnings="vm.validateWarningEnabled"
+							show-warnings="vm.currentSettings.validateWarningEnabled"
 							selected-timezone="vm.currentTimezone"
 							pagination-options="vm.paginationOptions"
-							selected-sort-option="vm.sortOption"
-							/>
+							selected-sort-option="vm.sortOption" />
 		</div>
 
 		<teamschedule-command-container date="vm.scheduleDate"
@@ -102,7 +110,7 @@
 										action-callback="vm.commonCommandCallback(trackId, personIds)"
 										on-ready="vm.onCommandContainerReady()"
 										get-load-all-params="vm.getLoadAllSchedulesParams()"
-										is-select-all ="vm.hasSelectedAllPeopleInEveryPage">
+										is-select-all="vm.hasSelectedAllPeopleInEveryPage">
 		</teamschedule-command-container>
 
 		<md-sidenav class="md-sidenav-right md-whiteframe-z2" md-component-id="teamschedule-settings-container">
@@ -112,8 +120,8 @@
 	</div>
 
 	<schedule-change-notifier on-notification="vm.onPersonScheduleChanged"
-		schedule-date="vm.scheduleDate"
-		last-command-track-id="vm.lastCommandTrackId"></schedule-change-notifier>
+							  schedule-date="vm.scheduleDate"
+							  last-command-track-id="vm.lastCommandTrackId"></schedule-change-notifier>
 
 	<div class="teamschedule-footer" ng-class="{'flex-end':!vm.selectAllVisible() && !vm.hasSelectedAllPeople()}">
 		<div class="select-all" ng-show="vm.selectAllVisible()" ng-click="vm.selectAllForAllPages()">

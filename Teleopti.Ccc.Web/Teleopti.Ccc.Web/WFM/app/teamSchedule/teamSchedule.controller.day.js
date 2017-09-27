@@ -29,7 +29,7 @@
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.availableTimezones = [];
 		vm.sitesAndTeams = undefined;
-		vm.onlyLoadScheduleWithAbsence = false;
+
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
 			groupIds: [],
@@ -46,6 +46,7 @@
 
 		vm.lastCommandTrackId = '';
 		vm.showDatePicker = false;
+		vm.currentSettings = {};
 
 		vm.getSearch = function () {
 			return {
@@ -100,6 +101,22 @@
 				vm.loadSchedules();
 			});
 
+		$scope.$on('teamSchedule.trigger.command', function (e, d) {
+			vm.triggerCommand(d.activeCmd, d.needToOpenSidePanel);
+		});
+
+		$scope.$on('teamSchedule.setting.changed', function (e, d) {
+			vm.currentSettings = angular.copy(d.settings);
+			switch (d.changedKey) {
+				case 'validateWarningEnabled':
+					vm.checkValidationWarningForCurrentPage();
+					break;
+				case 'onlyLoadScheduleWithAbsence':
+					vm.toggleShowAbsenceOnly();
+					break;
+			}
+		});
+
 		vm.scheduleDate = $stateParams.selectedDate || new Date();
 
 		vm.teamNameMap = $stateParams.teamNameMap || {};
@@ -124,9 +141,7 @@
 			vm.checkValidationWarningForCommandTargets(personIds);
 		};
 
-		$scope.$on('teamSchedule.trigger.command', function (e, d) {
-			vm.triggerCommand(d.activeCmd, d.needToOpenSidePanel);
-		});
+		vm.showStaffing = function () { }
 
 		function openSidePanel() {
 			if (!$mdSidenav(commandContainerId).isOpen()) {
@@ -213,7 +228,7 @@
 				Date: options.date || vm.scheduleDateMoment().format('YYYY-MM-DD'),
 				PageSize: options.pageSize || vm.paginationOptions.pageSize,
 				CurrentPageIndex: options.currentPageIndex || vm.paginationOptions.pageNumber,
-				IsOnlyAbsences: vm.onlyLoadScheduleWithAbsence,
+				IsOnlyAbsences: vm.currentSettings.onlyLoadScheduleWithAbsence,
 				SortOption: vm.sortOption,
 				SelectedGroupIds: vm.selectedGroups.groupIds,
 				SelectedGroupPageId: vm.selectedGroups.groupPageId
@@ -299,13 +314,13 @@
 			}
 		};
 
-		vm.toggleShowAbsenceOnly = function () {
+		vm.toggleShowAbsenceOnly = function() {
 			vm.paginationOptions.pageNumber = 1;
 			vm.loadSchedules();
 		};
 
 		vm.checkValidationWarningForCurrentPage = function () {
-			if (vm.validateWarningEnabled) {
+			if (vm.currentSettings.validateWarningEnabled) {
 				var currentPagePersonIds = scheduleMgmtSvc.groupScheduleVm.Schedules.map(function (schedule) {
 					return schedule.PersonId;
 				});
@@ -314,7 +329,7 @@
 		};
 
 		vm.checkValidationWarningForCommandTargets = function (personIds) {
-			if (vm.validateWarningEnabled) {
+			if (vm.currentSettings.validateWarningEnabled) {
 				ValidateRulesService.updateValidateRulesResultForPeople(vm.scheduleDateMoment(), personIds);
 			}
 		};
@@ -384,7 +399,7 @@
 
 		vm.applyFavorite = function (currentFavorite) {
 			vm.selectedFavorite = currentFavorite;
-			vm.selectedGroups = { mode: 'BusinessHierarchy', groupIds:[], groupPageId:''};
+			vm.selectedGroups = { mode: 'BusinessHierarchy', groupIds: [], groupPageId: '' };
 			replaceArrayValues(currentFavorite.TeamIds, vm.selectedGroups.groupIds);
 			vm.searchOptions.keyword = currentFavorite.SearchTerm;
 			vm.resetSchedulePage();
@@ -503,7 +518,7 @@
 		vm.searchPlaceholder = $translate.instant('Search');
 
 		personSelectionSvc.clearPersonInfo();
-		
+
 		function loadGroupings() {
 			if (vm.toggles.Wfm_GroupPages_45057)
 				vm.getGroupPagesAsync();

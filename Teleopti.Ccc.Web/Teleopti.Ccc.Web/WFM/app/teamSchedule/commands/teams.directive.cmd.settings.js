@@ -1,4 +1,4 @@
-(function() {
+(function () {
 	angular.module('wfm.teamSchedule').directive('settings', settingsDirective);
 
 	function settingsDirective() {
@@ -12,14 +12,19 @@
 		}
 	}
 
-	settingsCtrl.$inject = ['ValidateRulesService'];
+	settingsCtrl.$inject = ['$scope', '$state', 'ValidateRulesService', 'teamsToggles'];
 
-	function settingsCtrl(validateRulesService) {
+	function settingsCtrl($scope, $state, validateRulesService, teamsToggles) {
 		var vm = this;
-
+		vm.toggles = teamsToggles.all();
+		vm.settings = {
+			validateWarningEnabled: false,
+			onlyLoadScheduleWithAbsence: false
+		}
+		vm.searchEnabled = $state.current.name !== 'teams.for';
 		vm.availableValidationRules = [];
-		validateRulesService.getAvailableValidationRules().then(function(data){
-			data.data.forEach(function(rule){
+		validateRulesService.getAvailableValidationRules().then(function (data) {
+			data.data.forEach(function (rule) {
 				vm.availableValidationRules.push({
 					type: rule,
 					checked: true
@@ -28,9 +33,13 @@
 			});
 		});
 
-		vm.updateValidateRulesToggleState = function(type, checked){
+		vm.updateValidateRulesToggleState = function (type, checked) {
 			validateRulesService.updateCheckedValidationTypes(type, checked);
 		};
+
+		vm.onSettingsUpdated = function (key) {
+			$scope.$emit('teamSchedule.setting.changed', { changedKey: key, settings: vm.settings });
+		}
 
 	}
 })();
