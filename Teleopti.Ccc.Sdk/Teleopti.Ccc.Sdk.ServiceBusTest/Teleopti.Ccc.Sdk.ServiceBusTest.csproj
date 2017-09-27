@@ -206,8 +206,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBusHost.config" "$(ProjectDir)App.config"
-if not exist "$(ProjectDir)log4net.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBuslog4net.config" "$(ProjectDir)log4net.config"</PreBuildEvent>
+    <PreBuildEvent>if not exist "$(ProjectDir)App.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBusHost.config" "$(ProjectDir)App.config"</PreBuildEvent>
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>

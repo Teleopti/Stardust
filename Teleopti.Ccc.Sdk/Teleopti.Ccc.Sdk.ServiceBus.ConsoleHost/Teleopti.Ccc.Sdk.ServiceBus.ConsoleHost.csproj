@@ -131,7 +131,6 @@
     <PreBuildEvent>if not exist "$(TargetDir)Payroll" mkdir "$(TargetDir)Payroll"
 if not exist "$(TargetDir)Payroll.DeployNew" mkdir "$(TargetDir)Payroll.DeployNew"
 powershell -Command "(gc $(ProjectDir)..\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config) -replace '#VERSION#', '1.0.0.0' | set-content $(ProjectDir)..\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config" -force
-if not exist "$(ProjectDir)log4net.config" copy "$(ProjectDir)..\..\BuildArtifacts\ServiceBuslog4net.config" "$(ProjectDir)log4net.config"
 if not exist "$(ProjectDir)ApplicationInsights.config" copy "$(ProjectDir)..\..\BuildArtifacts\AppApplicationInsights.config" "$(ProjectDir)ApplicationInsights.config"</PreBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
