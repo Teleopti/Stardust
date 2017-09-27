@@ -16,31 +16,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IExtraPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
-			foreach (var settings in _planningGroupSettings.Where(s => s.IsValidForAgent(person, dateOnly)))
-			{
-				return mapToBlockPreference(settings);
-			}
-
-			return mapToBlockPreference(PlanningGroupSettings.CreateDefault());
+			return mapToBlockPreference(_planningGroupSettings.Where(planningGroupSettings => planningGroupSettings.IsValidForAgent(person, dateOnly)).OrderByDescending(x => x.Priority).FirstOrDefault() ?? PlanningGroupSettings.CreateDefault());
 		}
 		
 		public IEnumerable<IExtraPreferences> ForAgents(IEnumerable<IPerson> persons, DateOnly dateOnly)
 		{
-			var result = new List<IExtraPreferences>();
-			foreach (var person in persons)
-			{
-				var anyValid = false;
-				foreach (var settings in _planningGroupSettings.Where(s => s.IsValidForAgent(person, dateOnly)))
-				{
-					result.Add(mapToBlockPreference(settings));
-					anyValid = true;
-					break;
-				}
-				if(!anyValid)
-					result.Add(mapToBlockPreference(PlanningGroupSettings.CreateDefault()));
-
-			}
-			return result;
+			return persons.Select(person => ForAgent(person, dateOnly)).ToList();
 		}
 
 		private IExtraPreferences mapToBlockPreference(PlanningGroupSettings settings)

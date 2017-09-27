@@ -161,5 +161,23 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
 				.Should().Be.EqualTo(new MinMax<int>(1, 2));
 		}
+
+		[Test]
+		public void ShouldSelectDayOfffRuleWithHighestPriority()
+		{
+			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
+			var dayOffRules = new PlanningGroupSettings { ConsecutiveWorkdays = new MinMax<int>(1, 2) , Priority = 1};
+			var dayOffRules2 = new PlanningGroupSettings { ConsecutiveWorkdays = new MinMax<int>(1, 3), Priority = 2 };
+
+
+			dayOffRules.AddFilter(new SiteFilter(agent.Period(new DateOnly(2000, 1, 1)).Team.Site));
+			dayOffRules2.AddFilter(new SiteFilter(agent.Period(new DateOnly(2000, 1, 1)).Team.Site));
+
+			PlanningGroupSettingsRepository.Add(dayOffRules);
+			PlanningGroupSettingsRepository.Add(dayOffRules2);
+
+			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).ConsecutiveWorkdaysValue
+				.Should().Be.EqualTo(new MinMax<int>(1, 3));
+		}
 	}
 }

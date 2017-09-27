@@ -16,12 +16,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public IDaysOffPreferences ForAgent(IPerson person, DateOnly dateOnly)
 		{
-			foreach (var dayOffRule in _dayOffRules.Where(dayOffRule => dayOffRule.IsValidForAgent(person, dateOnly)))
-			{
-				return mapToDayOffPrefences(dayOffRule);
-			}
-
-			return mapToDayOffPrefences(PlanningGroupSettings.CreateDefault());
+			return mapToDayOffPrefences(_dayOffRules.Where(dayOffRule => dayOffRule.IsValidForAgent(person, dateOnly)).OrderByDescending(x=>x.Priority).FirstOrDefault() ?? PlanningGroupSettings.CreateDefault());
 		}
 
 		private static DaysOffPreferences mapToDayOffPrefences(PlanningGroupSettings planningGroupSettings)

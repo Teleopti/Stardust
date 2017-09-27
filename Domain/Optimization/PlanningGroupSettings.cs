@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public virtual bool BlockSameShiftCategory { get; set; }
 		public virtual bool BlockSameStartTime { get; set; }
 		public virtual bool BlockSameShift { get; set; }
+		public virtual int Priority { get; set; }
 
 		public PlanningGroupSettings()
 		{

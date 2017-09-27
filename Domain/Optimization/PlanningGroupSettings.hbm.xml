@@ -38,6 +38,7 @@
 		<property name="BlockSameStartTime" column="BlockSameStartTime" access="property"/>
 		<property name="BlockSameShiftCategory" column="BlockSameShiftCategory" access="property"/>
 		<property name="BlockSameShift" column="BlockSameShift" access="property"/>
+		<property name="Priority" column="Priority" access="property"/>
 
 		<many-to-one name="PlanningGroup"
 					 class="Teleopti.Ccc.Domain.Optimization.PlanningGroup"

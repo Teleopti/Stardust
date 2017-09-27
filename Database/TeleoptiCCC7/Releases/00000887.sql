@@ -1,0 +1,1 @@
+ALTER TABLE [dbo].[PlanningGroupSettings] ADD Priority int not null default 0;

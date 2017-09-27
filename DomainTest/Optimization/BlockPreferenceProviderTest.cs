@@ -162,5 +162,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
 				.Should().Be.EqualTo(BlockFinderType.BetweenDayOff);
 		}
+
+		[Test]
+		public void ShouldSelectBlockSettingsWithHighestPriority()
+		{
+			var agent = PersonFactory.CreatePersonWithPersonPeriodTeamSite(new DateOnly(1900, 1, 1));
+			var planningGroupSettings = new PlanningGroupSettings { BlockFinderType = BlockFinderType.BetweenDayOff, Priority = 2};
+			var planningGroupSettings2 = new PlanningGroupSettings { BlockFinderType = BlockFinderType.SchedulePeriod, Priority = 1 };
+			planningGroupSettings.AddFilter(new SiteFilter(agent.Period(new DateOnly(2000, 1, 1)).Team.Site));
+			planningGroupSettings2.AddFilter(new SiteFilter(agent.Period(new DateOnly(2000, 1, 1)).Team.Site));
+			PlanningGroupSettingsRepository.Add(planningGroupSettings);
+			PlanningGroupSettingsRepository.Add(planningGroupSettings2);
+
+			Target.Create().ForAgent(agent, new DateOnly(2000, 1, 1)).BlockTypeValue
+				.Should().Be.EqualTo(BlockFinderType.BetweenDayOff);
+		}
 	}
 }
