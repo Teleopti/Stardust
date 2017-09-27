@@ -1,5 +1,4 @@
-﻿using System;
-using NHibernate;
+﻿using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Envers.Configuration;
 using NHibernate.Envers.Configuration.Fluent;
@@ -20,14 +19,14 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 
 		public EnversConfiguration()
 		{
-			Func<ISession, IAuditSetting> auditSettingDel = s =>
-			                                 {
-			                                    var auditSetting = s.GetSession(EntityMode.Poco).Get<AuditSetting>(AuditSettingDefault.TheId);
-															if(auditSetting==null)
-																throw new DataSourceException(AuditSettingRepository.MissingAuditSetting);
-			                                 	return auditSetting;
-			                                 };
-			_auditSettingProvider = new AuditSetter(auditSettingDel);
+			IAuditSetting AuditSettingDel(ISession s)
+			{
+				var auditSetting = s.GetSession(EntityMode.Poco).Get<AuditSetting>(AuditSettingDefault.TheId);
+				if (auditSetting == null)
+					throw new DataSourceException(AuditSettingRepository.MissingAuditSetting);
+				return auditSetting;
+			}
+			_auditSettingProvider = new AuditSetter(AuditSettingDel);
 		}
 
 		public IAuditSetter AuditSettingProvider => _auditSettingProvider;
@@ -53,10 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				.ExcludeRelationData(pa => pa.Person)
 				.ExcludeRelationData(pa => pa.Scenario)
 				.ExcludeRelationData(pa => pa.ShiftCategory)
-				.ExcludeRelationData("_dayOffTemplate")
-				//can be removed when we upgrade Envers to 2.3 (https://nhibernate.jira.com/projects/NHE/issues/NHE-157)
-				//also, remove ICustomCollectionMapperFactory impl from ShiftLayerCollectionType
-				.SetCollectionMapper<ShiftLayerCollectionType>(x => x.ShiftLayers);
+				.ExcludeRelationData("_dayOffTemplate");
 			fluentCfg.Audit<ShiftLayer>()
 			   .ExcludeRelationData(l => l.Payload);
 			fluentCfg.Audit<MainShiftLayer>();

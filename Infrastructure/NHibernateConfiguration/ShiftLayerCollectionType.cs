@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using NHibernate.Collection;
 using NHibernate.Collection.Generic;
 using NHibernate.Engine;
-using NHibernate.Envers.Entities.Mapper;
-using NHibernate.Envers.Entities.Mapper.Relation;
 using NHibernate.Persister.Collection;
 using NHibernate.Type;
 using NHibernate.UserTypes;
@@ -15,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 	/// <summary>
 	/// Not needed when/if https://github.com/nhibernate/nhibernate-core/pull/545 is released on our nhib version
 	/// </summary>
-	public class ShiftLayerCollectionType : IUserCollectionType, ICustomCollectionMapperFactory
+	public class ShiftLayerCollectionType : IUserCollectionType
 	{
 		private const string shiftLayerCollectionRole = "Teleopti.Ccc.Domain.Scheduling.Assignment.PersonAssignment.ShiftLayers";
 
@@ -116,11 +114,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public object Instantiate(int anticipatedSize)
 		{
 			return anticipatedSize <= 0 ? new List<ShiftLayer>() : new List<ShiftLayer>(anticipatedSize + 1);
-		}
-
-		public IPropertyMapper Create(IEnversProxyFactory enversProxyFactory, CommonCollectionMapperData commonCollectionMapperData, MiddleComponentData elementComponentData, MiddleComponentData indexComponentData, bool embeddableElementType)
-		{
-			return new ListCollectionMapper<ShiftLayer>(enversProxyFactory, commonCollectionMapperData, typeof(IList<ShiftLayer>), elementComponentData, indexComponentData, embeddableElementType);
 		}
 	}
 }

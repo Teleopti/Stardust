@@ -122,9 +122,8 @@
       <HintPath>..\packages\NHibernate.4.1.1.4000\lib\net40\NHibernate.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NHibernate.Envers, Version=2.2.0.0, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8, processorArchitecture=MSIL">
-      <HintPath>..\packages\NHibernate.Envers.2.2.0\lib\Net40\NHibernate.Envers.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="NHibernate.Envers, Version=2.3.0.0, Culture=neutral, PublicKeyToken=e2c5b946037fb7f8">
+      <HintPath>..\packages\NHibernate.Envers.2.3.0\lib\Net40\NHibernate.Envers.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate.SqlAzure, Version=2.1.5.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\NHibernate4.SqlAzure.2.1.5\lib\NET45\NHibernate.SqlAzure.dll</HintPath>
