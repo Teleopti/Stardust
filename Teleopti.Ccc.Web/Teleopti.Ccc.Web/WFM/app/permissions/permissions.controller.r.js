@@ -184,6 +184,10 @@
 					}
 				}
 
+				if (vm.selectedRole.BuiltIn) {
+					vm.allFunctionsFilter()
+				}
+
 			});
 		}
 
