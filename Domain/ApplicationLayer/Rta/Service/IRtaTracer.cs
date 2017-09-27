@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		{
 		}
 
-		public void For(IEnumerable<StateTraceInfo> traces, Action<StateTraceInfo> trace)
+		public void For(Func<IEnumerable<StateTraceInfo>> traces, Action<StateTraceInfo> trace)
 		{
 		}
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void ProcessReceived();
 		void ProcessProcessing();
 
-		void For(IEnumerable<StateTraceInfo> traces, Action<StateTraceInfo> trace);
+		void For(Func<IEnumerable<StateTraceInfo>> traces, Action<StateTraceInfo> trace);
 
 		StateTraceInfo StateReceived(string userCode, string stateCode);
 		void InvalidStateCode(StateTraceInfo trace);

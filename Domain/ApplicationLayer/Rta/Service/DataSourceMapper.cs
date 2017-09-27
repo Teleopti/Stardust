@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			_cache = new PerTenant<ConcurrentDictionary<string, int>>(dataSource);
 		}
 
-		public int ValidateSourceId(string sourceId, IEnumerable<StateTraceInfo> traces)
+		public int ValidateSourceId(string sourceId, Func<IEnumerable<StateTraceInfo>> traces)
 		{
 			if (_cache.Value == null)
 				_cache.Set(ReadDataSources());

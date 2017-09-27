@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 				var processed = resultState != null;
 
 				if (!processed)
-					_tracer.NoChange(input.Input.TraceInfo);
+					_tracer.NoChange(input.Input?.TraceInfo);
 
 				return new ProcessResult
 				{
