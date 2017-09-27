@@ -217,19 +217,6 @@
 
 	.ui-grid {
 		margin-top: 10px;
-		/*align filter input to the left*/
-		div[ui-grid-filter] {
-			text-align: left !important;
-			padding-left: 3px !important;
-			max-height: 30px;
-			max-width: 100%;
-			overflow: hidden;
-
-			md-select-value span{
-				white-space: nowrap;
-			}
-		}
-
 		.ui-grid-cell-contents.ui-grid-cell-contents {
 			width: 85%;
 			text-align: left;
@@ -255,12 +242,23 @@
 		background-color: transparent;
 	}
 
-	input.ui-grid-filter-input {
-		text-overflow: ellipsis;
-	}
+	div[ui-grid-filter] {
+		text-align: left;
+		max-height: 35px;
+		max-width: 100%;
+		overflow: hidden;
 
-	.ui-grid-filter-container {
-		padding: 5px;
+		.ui-grid-filter-container {
+			padding: 5px;
+		}
+
+		md-select{
+			padding: 0 5px;
+		}
+
+		md-select-value span{
+			white-space: nowrap;
+		}
 	}
 
 	.ui-grid-filter-container > input[type="text"] {
@@ -271,6 +269,10 @@
 		padding: 5px 0;
 		height: 30px;
 		margin-top: -10px;
+	}
+
+	input.ui-grid-filter-input {
+		text-overflow: ellipsis;
 	}
 
 	.multiSelect {
