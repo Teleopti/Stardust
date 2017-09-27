@@ -15935,9 +15935,9 @@ Do you want to participate?</value>
     <value>Day Off Rule</value>
     <comment>DayOffRule</comment>
   </data>
-  <data name="DayOffRuleAppliedFilters" xml:space="preserve">
+  <data name="PlanGroupSchedulingSettingAppliedFilters" xml:space="preserve">
     <value>The following settings are applied to planning group {0}</value>
-    <comment>DayOffRuleAppliedFilters</comment>
+    <comment>show text for display all filters for web scheduling</comment>
   </data>
   <data name="DayOffRuleSetting" xml:space="preserve">
     <value>Day Off Rules Setting</value>
@@ -16479,13 +16479,81 @@ Do you want to participate?</value>
     <value>No agents to be displayed</value>
     <comment>Message displayed in RTA agents view when there are no agents in the view</comment>
   </data>
-  <data name="ViewAgents" xml:space="preserve">
-    <value>View agents</value>
-    <comment>Tooltip to be displayed on the Agents button in the RTA overview when there's no selection on the page</comment>
+  <data name="AreYouSureYouWantToDeleteSchedulingSetting" xml:space="preserve">
+    <value>Are you sure you want to delete scheduling setting {0} and its related settings?</value>
+    <comment>text for delete scheduling setting for web scheduling</comment>
   </data>
-  <data name="ViewAgentsBySelection" xml:space="preserve">
-    <value>View agents by selection</value>
-    <comment>there are selections on the page</comment>
+  <data name="BlockSameShift" xml:space="preserve">
+    <value>Same shift</value>
+    <comment>Same shift for web scheduling</comment>
+  </data>
+  <data name="BlockSameShiftCategory" xml:space="preserve">
+    <value>Same shift category</value>
+    <comment>Same shift category for web scheduling</comment>
+  </data>
+  <data name="BlockSameStartTime" xml:space="preserve">
+    <value>Same start time</value>
+    <comment>Same start time for web scheduling</comment>
+  </data>
+  <data name="CreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Create scheduling setting</value>
+    <comment>Create scheduling setting for web scheduling</comment>
+  </data>
+  <data name="DeletePlanGroupSchedullingSetting" xml:space="preserve">
+    <value>Delete scheduling setting</value>
+    <comment>Delete scheduling setting for web scheduling</comment>
+  </data>
+  <data name="EditPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Edit scheduling setting</value>
+    <comment>Edit scheduling setting for web scheduling</comment>
+  </data>
+  <data name="FilterPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Filter scheduling setting</value>
+    <comment>Filter scheduling setting for web scheduling</comment>
+  </data>
+  <data name="GeneralSettingOfPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Name and filters</value>
+    <comment>Text of general setting of scheduling setting for web scheduling</comment>
+  </data>
+  <data name="IndividualFlexible" xml:space="preserve">
+    <value>Individual Flexible</value>
+    <comment>Individual Flexible for web scheduling</comment>
+  </data>
+  <data name="InfoOfSchedulingSetting" xml:space="preserve">
+    <value>The scheduling setting are applied for the planning group</value>
+    <comment>text of The scheduling setting are applied for the planning group on web scheduling</comment>
+  </data>
+  <data name="ManagePlanningGroupSchedulingSetting" xml:space="preserve">
+    <value>Manage scheduling setting for the planning group {0}</value>
+    <comment>Manage scheduling setting for web scheduling</comment>
+  </data>
+  <data name="NewPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>New scheduling setting</value>
+    <comment>New scheduling setting for web scheduling</comment>
+  </data>
+  <data name="PlanGroupScheduling" xml:space="preserve">
+    <value>Scheduling Setting</value>
+    <comment>Scheduling Setting for web scheduling</comment>
+  </data>
+  <data name="SelectedFilters" xml:space="preserve">
+    <value>Seleted filters</value>
+    <comment>selected filters of scheduling setting for web scheduling</comment>
+  </data>
+  <data name="SelectScheduleMethod" xml:space="preserve">
+    <value>Select schedule method</value>
+    <comment>select schedule method for web scheduling</comment>
+  </data>
+  <data name="TextOFCreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Fill in information to create new scheduling setting</value>
+    <comment>Text of create scheduling setting for web scheduling</comment>
+  </data>
+  <data name="TextOfEditPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Modify information for selected scheduling setting</value>
+    <comment>Text of edit scheduling setting for web scheduling</comment>
+  </data>
+  <data name="TextOfNoBlockScheduling" xml:space="preserve">
+    <value>No Block Scheduling</value>
+    <comment>text of no block scheduling for web scheduling</comment>
   </data>
   <data name="LoadingSkillGroups" xml:space="preserve">
     <value>Loading skill groups...</value>
@@ -16502,5 +16570,13 @@ Do you want to participate?</value>
   <data name="SkillGroupColon" xml:space="preserve">
     <value>Skill group:</value>
     <comment>Part of changing name of skill area to skill group, this will replace SkillAreaColon</comment>
+  </data>
+  <data name="ViewAgents" xml:space="preserve">
+    <value>View agents</value>
+    <comment>Tooltip to be displayed on the Agents button in the RTA overview when there's no selection on the page</comment>
+  </data>
+  <data name="ViewAgentsBySelection" xml:space="preserve">
+    <value>View agents by selection</value>
+    <comment>there are selections on the page</comment>
   </data>
 </root>

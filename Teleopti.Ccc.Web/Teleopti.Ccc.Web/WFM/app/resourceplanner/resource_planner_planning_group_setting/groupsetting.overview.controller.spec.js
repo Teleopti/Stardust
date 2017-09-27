@@ -60,7 +60,7 @@ describe('planningGroupSettingOverviewController', function () {
 			return [200, true];
 		});
 
-        $httpBackend.whenDELETE('../api/resourceplanner/dayoffrules/ec4356ba-8278-48e4-b4f8-c3102b7af684').respond(function (method, url, data, headers) {
+        $httpBackend.whenDELETE('../api/resourceplanner/plangroupsetting/ec4356ba-8278-48e4-b4f8-c3102b7af684').respond(function (method, url, data, headers) {
             return [200, true];
         });
     }));
@@ -71,7 +71,7 @@ describe('planningGroupSettingOverviewController', function () {
     });
 
     it('should get day off rules by planning group id before controller is loaded', function () {
-        spyOn(PlanGroupSettingService, 'getDayOffRulesByPlanningGroupId').and.callThrough();
+        spyOn(PlanGroupSettingService, 'getSettingsByPlanningGroupId').and.callThrough();
         var vm = $controller('planningGroupSettingOverviewController', {
             $stateParams: stateparams,
             planningGroupInfo: planningGroupInfo,
@@ -83,7 +83,7 @@ describe('planningGroupSettingOverviewController', function () {
     });
 
     it('should delete selected day off rule', function () {
-        spyOn(PlanGroupSettingService, 'removeDayOffRule').and.callThrough();
+        spyOn(PlanGroupSettingService, 'removeSetting').and.callThrough();
          var vm = $controller('planningGroupSettingOverviewController', {
             $stateParams: stateparams,
             planningGroupInfo: planningGroupInfo,
@@ -94,7 +94,7 @@ describe('planningGroupSettingOverviewController', function () {
         vm.deleteDoRule();
         $httpBackend.flush();
 
-        expect(PlanGroupSettingService.removeDayOffRule).toHaveBeenCalledWith({ id: 'ec4356ba-8278-48e4-b4f8-c3102b7af684' });
+        expect(PlanGroupSettingService.removeSetting).toHaveBeenCalledWith({ id: 'ec4356ba-8278-48e4-b4f8-c3102b7af684' });
         expect(vm.dayOffRules.length).toEqual(1);
     });
 

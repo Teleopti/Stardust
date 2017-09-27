@@ -94,7 +94,7 @@
 					});
 				}],
 				dayOffRulesInfo: ['PlanGroupSettingService', '$stateParams', function (PlanGroupSettingService, $stateParams) {
-					return PlanGroupSettingService.getDayOffRulesByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
+					return PlanGroupSettingService.getSettingsByPlanningGroupId({ planningGroupId: $stateParams.groupId }).$promise.then(function (data) {
 						return data;
 					});
 				}]
@@ -104,7 +104,6 @@
 				filterId: '',
 				isDefault: undefined,
 				groupId: '',
-				EditDoRule: ''
 			},
 			url: '/planninggroup/:groupId/setting/:filterId',
 			templateUrl: 'app/resourceplanner/resource_planner_planning_group_setting/groupsetting.createform.html',

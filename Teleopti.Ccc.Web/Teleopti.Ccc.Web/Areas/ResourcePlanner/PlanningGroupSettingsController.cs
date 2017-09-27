@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			_planningGroupSettingsModelPersister = planningGroupSettingsModelPersister;
 		}
 
-		[UnitOfWork, HttpPost, Route("api/resourceplanner/dayoffrules")]
+		[UnitOfWork, HttpPost, Route("api/resourceplanner/plangroupsetting")] 
 		public virtual IHttpActionResult Persist(PlanningGroupSettingsModel planningGroupSettingsModel)
 		{
 			_planningGroupSettingsModelPersister.Persist(planningGroupSettingsModel);
@@ -32,20 +32,20 @@ namespace Teleopti.Ccc.Web.Areas.ResourcePlanner
 			return Ok(_fetchPlanningGroupSettingsModel.FetchAllWithoutPlanningGroup());
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/planninggroup/{planningGroupId}/dayoffrules")]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/planninggroup/{planningGroupId}/plangroupsetting")] 
 		public virtual IHttpActionResult FetchAllForPlanningGroup(Guid planningGroupId)
 		{
 			return Ok(_fetchPlanningGroupSettingsModel.FetchAllForPlanningGroup(planningGroupId));
 		}
 
-		[UnitOfWork, HttpDelete, Route("api/resourceplanner/dayoffrules/{id}")]
+		[UnitOfWork, HttpDelete, Route("api/resourceplanner/plangroupsetting/{id}")] 
 		public virtual IHttpActionResult Delete(Guid id)
 		{
 			_planningGroupSettingsModelPersister.Delete(id);
 			return Ok();
 		}
 
-		[UnitOfWork, HttpGet, Route("api/resourceplanner/dayoffrules/{id}")]
+		[UnitOfWork, HttpGet, Route("api/resourceplanner/plangroupsetting/{id}")] 
 		public virtual IHttpActionResult Fetch(Guid id)
 		{
 			return Ok(_fetchPlanningGroupSettingsModel.Fetch(id));

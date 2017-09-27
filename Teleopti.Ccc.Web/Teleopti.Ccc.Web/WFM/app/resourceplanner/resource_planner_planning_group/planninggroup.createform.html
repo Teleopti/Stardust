@@ -11,20 +11,17 @@
 <div class="con-row">
 	<div class="con-flex">
 		<div class="panel material-depth-1">
-			<div class="con-row">
+			<div class="con-row wfm-card-content">
 				<div class="con-flex">
-					<form name="form" class="wfm-form" novalidate>
-						<div class="form-input-wrap">
-							<label for="planningGroupName" translate>NameColon</label>
-							<input type="text" name="planningGroupName" id="planningGroupName" autofocus autocomplete="off" ng-model="vm.name" ng-model-options="{ debounce: 500 }"/>
-							<p class="text-danger" ng-show="!vm.isValidName()" translate>
-								NameRequired
-							</p>
-						</div>
-					</form>
+					<div class="form-input-wrap">
+						<label for="planningGroupName" translate>NameColon</label>
+						<input type="text" name="planningGroupName" id="planningGroupName" autofocus autocomplete="off" ng-model="vm.name" class="pg-setting-name"/>
+						<p class="text-danger" ng-show="!vm.isValidName()" translate>NameRequired</p>
+					</div>
 				</div>
-				<div class="con-flex split-1-2">
-					<div class="wfm-option form-input-wrap">
+				<div class="con-flex">
+					<div class="form-input-wrap">
+						<label for="autocomplete-form" translate>Filter:</label>
 						<form name="autocomplete-form" class="autosearch-input">
 							<md-autocomplete md-no-cache="true" md-selected-item="selectedItem" md-search-text="vm.searchString" placeholder="{{'SearchForPlanningGroup'|translate}}"
 							 md-items="item in vm.inputFilterData()" md-item-text="item.Name" md-selected-item-change="vm.selectResultItem(selectedItem)">

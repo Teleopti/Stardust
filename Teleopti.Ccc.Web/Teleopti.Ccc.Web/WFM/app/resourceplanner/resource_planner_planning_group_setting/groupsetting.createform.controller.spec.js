@@ -45,12 +45,16 @@ describe('planningGroupSettingEditController', function () {
             }], {}];
         });
 
-        $httpBackend.whenPOST('../api/resourceplanner/dayoffrules').respond(function (method, url, data, headers) {
+        $httpBackend.whenPOST('../api/resourceplanner/plangroupsetting').respond(function (method, url, data, headers) {
             return [200, true];
         });
 
-        $httpBackend.whenGET('../api/resourceplanner/dayoffrules/33f52ff4-0314-4a9e-80fa-5c958c57c92f').respond(function (method, url, data, headers) {
+        $httpBackend.whenGET('../api/resourceplanner/plangroupsetting/33f52ff4-0314-4a9e-80fa-5c958c57c92f').respond(function (method, url, data, headers) {
             return [200, {
+                BlockFinderType: 0,
+                BlockSameShift: false,
+                BlockSameShiftCategory: false,
+                BlockSameStartTime: false,
                 Id: '33f52ff4-0314-4a9e-80fa-5c958c57c92f',
                 PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 Name: "Default",
@@ -64,8 +68,12 @@ describe('planningGroupSettingEditController', function () {
             }, {}];
         });
 
-        $httpBackend.whenGET('../api/resourceplanner/dayoffrules/8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb').respond(function (method, url, data, headers) {
+        $httpBackend.whenGET('../api/resourceplanner/plangroupsetting/8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb').respond(function (method, url, data, headers) {
             return [200, {
+                BlockFinderType: 0,
+                BlockSameShift: false,
+                BlockSameShiftCategory: false,
+                BlockSameStartTime: false,
                 Id: '8c6dd6f6-37d0-4135-9fdd-491b1f8b12fb',
                 PlanningGroupId: 'aad945dd-be2c-4c6a-aa5b-30f3e74dfb5e',
                 Name: "Day off rule 101",
@@ -167,7 +175,7 @@ describe('planningGroupSettingEditController', function () {
     });
 
     it('should save new name for selected undefault day off rule', function () {
-        spyOn(PlanGroupSettingService, 'saveDayOffRule').and.callThrough();
+        spyOn(PlanGroupSettingService, 'saveSetting').and.callThrough();
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
         $httpBackend.flush();
 
@@ -175,7 +183,11 @@ describe('planningGroupSettingEditController', function () {
         vm.persist();
         $httpBackend.flush();
 
-        expect(PlanGroupSettingService.saveDayOffRule).toHaveBeenCalledWith({
+        expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith({
+            BlockFinderType: 0,
+            BlockSameShift: false,
+            BlockSameShiftCategory: false,
+            BlockSameStartTime: false,
             Id: vm.filterId,
             Name: 'Day off rule 911',
             Default: vm.default,
@@ -195,7 +207,7 @@ describe('planningGroupSettingEditController', function () {
     });
 
     it('should save new setting for selected undefault day off rule', function () {
-        spyOn(PlanGroupSettingService, 'saveDayOffRule').and.callThrough();
+        spyOn(PlanGroupSettingService, 'saveSetting').and.callThrough();
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForUndefaultDo });
         $httpBackend.flush();
 
@@ -215,7 +227,11 @@ describe('planningGroupSettingEditController', function () {
         vm.persist();
         $httpBackend.flush();
 
-        expect(PlanGroupSettingService.saveDayOffRule).toHaveBeenCalledWith({
+        expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith({
+            BlockFinderType: 0,
+            BlockSameShift: false,
+            BlockSameShiftCategory: false,
+            BlockSameStartTime: false,
             Id: vm.filterId,
             Name: vm.name,
             Default: vm.default,
@@ -245,7 +261,7 @@ describe('planningGroupSettingEditController', function () {
     });
 
     it('should save new setting for default day off rule', function () {
-        spyOn(PlanGroupSettingService, 'saveDayOffRule').and.callThrough();
+        spyOn(PlanGroupSettingService, 'saveSetting').and.callThrough();
         var vm = $controller('planningGroupSettingEditController', { $stateParams: stateparamsForDefaultDo });
         $httpBackend.flush();
 
@@ -266,7 +282,11 @@ describe('planningGroupSettingEditController', function () {
         $httpBackend.flush();
 
         expect(vm.default).toEqual(true);
-        expect(PlanGroupSettingService.saveDayOffRule).toHaveBeenCalledWith({
+        expect(PlanGroupSettingService.saveSetting).toHaveBeenCalledWith({
+            BlockFinderType: 0,
+            BlockSameShift: false,
+            BlockSameShiftCategory: false,
+            BlockSameStartTime: false,
             Id: vm.filterId,
             Name: vm.name,
             Default: vm.default,

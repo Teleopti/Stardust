@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -3241,6 +3241,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete scheduling setting {0} and its related settings?.
+        /// </summary>
+        public static string AreYouSureYouWantToDeleteSchedulingSetting {
+            get {
+                return ResourceManager.GetString("AreYouSureYouWantToDeleteSchedulingSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete day off rule {0} and its related settings?.
         /// </summary>
         public static string AreYouSureYouWantToDeleteTheDayOffRule {
@@ -4265,6 +4274,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string BlockNotValidConflictingCategories {
             get {
                 return ResourceManager.GetString("BlockNotValidConflictingCategories", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same shift.
+        /// </summary>
+        public static string BlockSameShift {
+            get {
+                return ResourceManager.GetString("BlockSameShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same shift category.
+        /// </summary>
+        public static string BlockSameShiftCategory {
+            get {
+                return ResourceManager.GetString("BlockSameShiftCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same start time.
+        /// </summary>
+        public static string BlockSameStartTime {
+            get {
+                return ResourceManager.GetString("BlockSameStartTime", resourceCulture);
             }
         }
         
@@ -7418,6 +7454,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create scheduling setting.
+        /// </summary>
+        public static string CreatePlanGroupSchedulingSetting {
+            get {
+                return ResourceManager.GetString("CreatePlanGroupSchedulingSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create Planning Group.
         /// </summary>
         public static string CreatePlanningGroup {
@@ -8174,15 +8219,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The following settings are applied to planning group {0}.
-        /// </summary>
-        public static string DayOffRuleAppliedFilters {
-            get {
-                return ResourceManager.GetString("DayOffRuleAppliedFilters", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Day Off Rules.
         /// </summary>
         public static string DayOffRules {
@@ -8908,6 +8944,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string DeletePersonFromRole {
             get {
                 return ResourceManager.GetString("DeletePersonFromRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete scheduling setting.
+        /// </summary>
+        public static string DeletePlanGroupSchedullingSetting {
+            get {
+                return ResourceManager.GetString("DeletePlanGroupSchedullingSetting", resourceCulture);
             }
         }
         
@@ -10069,6 +10114,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Editor {
             get {
                 return ResourceManager.GetString("Editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit scheduling setting.
+        /// </summary>
+        public static string EditPlanGroupSchedulingSetting {
+            get {
+                return ResourceManager.GetString("EditPlanGroupSchedulingSetting", resourceCulture);
             }
         }
         
@@ -12044,6 +12098,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Filter scheduling setting.
+        /// </summary>
+        public static string FilterPlanGroupSchedulingSetting {
+            get {
+                return ResourceManager.GetString("FilterPlanGroupSchedulingSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Filter planning groups.
         /// </summary>
         public static string FilterPlanningGroups {
@@ -13067,6 +13130,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string GeneralGrid {
             get {
                 return ResourceManager.GetString("GeneralGrid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name and filters.
+        /// </summary>
+        public static string GeneralSettingOfPlanGroupSchedulingSetting {
+            get {
+                return ResourceManager.GetString("GeneralSettingOfPlanGroupSchedulingSetting", resourceCulture);
             }
         }
         
@@ -14368,11 +14440,29 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Individual Flexible.
+        /// </summary>
+        public static string IndividualFlexible {
+            get {
+                return ResourceManager.GetString("IndividualFlexible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string Info {
             get {
                 return ResourceManager.GetString("Info", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The scheduling setting are applied for the planning group.
+        /// </summary>
+        public static string InfoOfSchedulingSetting {
+            get {
+                return ResourceManager.GetString("InfoOfSchedulingSetting", resourceCulture);
             }
         }
         
@@ -16443,6 +16533,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ManagePermissionsIntro {
             get {
                 return ResourceManager.GetString("ManagePermissionsIntro", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manage scheduling setting for the planning group {0}.
+        /// </summary>
+        public static string ManagePlanningGroupSchedulingSetting {
+            get {
+                return ResourceManager.GetString("ManagePlanningGroupSchedulingSetting", resourceCulture);
             }
         }
         
@@ -19180,6 +19279,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NewPersonRotation {
             get {
                 return ResourceManager.GetString("NewPersonRotation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New scheduling setting.
+        /// </summary>
+        public static string NewPlanGroupSchedulingSetting {
+            get {
+                return ResourceManager.GetString("NewPlanGroupSchedulingSetting", resourceCulture);
             }
         }
         
@@ -23651,6 +23759,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PlanDayOffs {
             get {
                 return ResourceManager.GetString("PlanDayOffs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scheduling Setting.
+        /// </summary>
+        public static string PlanGroupScheduling {
+            get {
+                return ResourceManager.GetString("PlanGroupScheduling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The following settings are applied to planning group {0}.
+        /// </summary>
+        public static string PlanGroupSchedulingSettingAppliedFilters {
+            get {
+                return ResourceManager.GetString("PlanGroupSchedulingSettingAppliedFilters", resourceCulture);
             }
         }
         
@@ -28955,6 +29081,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seleted filters.
+        /// </summary>
+        public static string SelectedFilters {
+            get {
+                return ResourceManager.GetString("SelectedFilters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected Filters:.
         /// </summary>
         public static string SelectedFiltersColon {
@@ -29194,6 +29329,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectScenario {
             get {
                 return ResourceManager.GetString("SelectScenario", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select schedule method.
+        /// </summary>
+        public static string SelectScheduleMethod {
+            get {
+                return ResourceManager.GetString("SelectScheduleMethod", resourceCulture);
             }
         }
         
@@ -33203,6 +33347,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TextAnswer {
             get {
                 return ResourceManager.GetString("TextAnswer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fill in information to create new scheduling setting.
+        /// </summary>
+        public static string TextOFCreatePlanGroupSchedulingSetting {
+            get {
+                return ResourceManager.GetString("TextOFCreatePlanGroupSchedulingSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modify information for selected scheduling setting.
+        /// </summary>
+        public static string TextOfEditPlanGroupSchedulingSetting {
+            get {
+                return ResourceManager.GetString("TextOfEditPlanGroupSchedulingSetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Block Scheduling.
+        /// </summary>
+        public static string TextOfNoBlockScheduling {
+            get {
+                return ResourceManager.GetString("TextOfNoBlockScheduling", resourceCulture);
             }
         }
         

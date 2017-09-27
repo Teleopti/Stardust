@@ -8,16 +8,15 @@
 	factory.$inject = ['$resource'];
 
 	function factory($resource) {
-		var dayOffRule = $resource('../api/resourceplanner/dayoffrules/:id', { id: '@id' });
-		var planningGroupDo = $resource('../api/resourceplanner/planninggroup/:planningGroupId/dayoffrules', { planningGroupId: '@planningGroupId' });
+		var setting = $resource('../api/resourceplanner/plangroupsetting/:id', { id: '@id' });
+		var planningGroupDo = $resource('../api/resourceplanner/planninggroup/:planningGroupId/plangroupsetting', { planningGroupId: '@planningGroupId' });
 		var filterResult = $resource('../api/filters', { searchString: '@searchString', maxHits: 100 });
 
 		var service = {
-			getDayOffRules: dayOffRule.query,
-			getDayOffRulesByPlanningGroupId: planningGroupDo.query,
-			removeDayOffRule: dayOffRule.remove,
-			getDayOffRule: dayOffRule.get,
-			saveDayOffRule: dayOffRule.save,
+			getSettingsByPlanningGroupId: planningGroupDo.query,
+			removeSetting: setting.remove,
+			getSetting: setting.get,
+			saveSetting: setting.save,
 			getFilterData: filterResult.query
 		};
 

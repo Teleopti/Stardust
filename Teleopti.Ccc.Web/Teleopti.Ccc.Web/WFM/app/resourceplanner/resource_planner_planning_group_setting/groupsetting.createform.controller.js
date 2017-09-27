@@ -5,9 +5,9 @@
         .module('wfm.resourceplanner')
         .controller('planningGroupSettingEditController', Controller);
 
-    Controller.$inject = ['$state', '$stateParams', 'NoticeService', 'PlanGroupSettingService', 'debounceService'];
+    Controller.$inject = ['$state', '$stateParams', '$translate', 'NoticeService', 'PlanGroupSettingService', 'debounceService'];
 
-    function Controller($state, $stateParams, NoticeService, PlanGroupSettingService, debounceService) {
+    function Controller($state, $stateParams, $translate, NoticeService, PlanGroupSettingService, debounceService) {
         var vm = this;
 
         var maxHits = 100;
@@ -18,7 +18,7 @@
         vm.searchString = '';
         vm.results = [];
         vm.default = false;
-        vm.isEdit = $stateParams.EditDoRule;
+        vm.isEdit = false;
         vm.selectedResults = [];
         vm.filterId = "";
         vm.inputFilterData = debounceService.debounce(inputFilterData, 250);
@@ -47,17 +47,44 @@
             MinConsecWorkDays: 2,
             MaxConsecWorkDays: 6
         };
+        var blockSchedulingSetting = {
+            BlockFinderType: 0,
+            BlockSameShift: false,
+            BlockSameShiftCategory: false,
+            BlockSameStartTime: false
+        };
+        vm.schedulingSettings = [
+            { Id: "IndividualFlexible", Selected: true },
+            { Id: "BlockScheduling", Selected: false }
+            // {Name:"Team Scheduling", Selected: false}
+        ];
+        vm.blockSchedulingTypes = [
+            { Id: "BlockFinderTypeBetweenDayOff", Code: 1 },
+            { Id: "BlockFinderTypeSchedulePeriod", Code: 2 }
+        ];
+        vm.blockSchedulingOptions = [
+            { Id: "BlockSameShiftCategory", Selected: false },
+            { Id: "BlockSameStartTime", Selected: false },
+            { Id: "BlockSameShift", Selected: false },
+        ];
+
+        vm.blockSchedulingName = $translate.instant("IndividualFlexible") + " (" + $translate.instant("Default") + ")";
+        vm.selectSchedulingSetting = selectSchedulingSetting;
+        vm.setBlockSchedulingType = setBlockSchedulingType;
+        vm.setBlockSchedulingOption = setBlockSchedulingOption;
+        vm.getItemName = getItemName;
 
         checkIfEditDefaultRule();
 
         function checkIfEditDefaultRule() {
             if ($stateParams.filterId) {
+                vm.isEdit = true;
                 if ($stateParams.isDefault) {
                     vm.default = $stateParams.isDefault;
                     vm.name = "Default";
                     vm.filterId = $stateParams.filterId;
                     if (vm.filterId !== '') {
-                        PlanGroupSettingService.getDayOffRule({ id: $stateParams.filterId })
+                        PlanGroupSettingService.getSetting({ id: $stateParams.filterId })
                             .$promise.then(function (result) {
                                 vm.dayOffsPerWeek = {
                                     MinDayOffsPerWeek: result.MinDayOffsPerWeek,
@@ -71,10 +98,19 @@
                                     MinConsecWorkDays: result.MinConsecutiveWorkdays,
                                     MaxConsecWorkDays: result.MaxConsecutiveWorkdays
                                 }
+                                if (result.BlockFinderType !== 0) {
+                                    blockSchedulingSetting = {
+                                        BlockFinderType: result.BlockFinderType,
+                                        BlockSameShift: result.BlockSameShift,
+                                        BlockSameShiftCategory: result.BlockSameShiftCategory,
+                                        BlockSameStartTime: result.BlockSameStartTime
+                                    }
+                                    setBlockSchedulingSetting(result.BlockFinderType);
+                                }
                             });
                     }
                 } else {
-                    PlanGroupSettingService.getDayOffRule({ id: $stateParams.filterId })
+                    PlanGroupSettingService.getSetting({ id: $stateParams.filterId })
                         .$promise.then(function (result) {
                             vm.name = result.Name;
                             vm.filterId = $stateParams.filterId;
@@ -91,6 +127,15 @@
                             vm.consecWorkDays = {
                                 MinConsecWorkDays: result.MinConsecutiveWorkdays,
                                 MaxConsecWorkDays: result.MaxConsecutiveWorkdays
+                            }
+                            if (result.BlockFinderType !== 0) {
+                                blockSchedulingSetting = {
+                                    BlockFinderType: result.BlockFinderType,
+                                    BlockSameShift: result.BlockSameShift,
+                                    BlockSameShiftCategory: result.BlockSameShiftCategory,
+                                    BlockSameStartTime: result.BlockSameStartTime
+                                }
+                                setBlockSchedulingSetting(result.BlockFinderType);
                             }
                         });
                 }
@@ -199,13 +244,66 @@
             vm.selectedResults.splice(p, 1);
         }
 
+        function selectSchedulingSetting(index) {
+            var item = vm.schedulingSettings[index];
+            item.Selected = true;
+            vm.blockSchedulingName = item.Name;
+            vm.schedulingSettings.forEach(function (item, id) {
+                if (id != index)
+                    item.Selected = false;
+            });
+        }
+
+        function setBlockSchedulingSetting(typeId) {
+            if (typeId > 0) {
+                vm.schedulingSettings[1].Selected = true;
+                vm.blockSchedulingTypes.forEach(function (item) {
+                    if (item.Code == typeId)
+                        vm.selectedType = item;
+                });
+                vm.blockSchedulingOptions.forEach(function (item) {
+                    item.Selected = blockSchedulingSetting[item.Id];
+                });
+                return setBlockSchedulingIsSelected();
+            }
+            return;
+        }
+
+        function setBlockSchedulingIsSelected() {
+            vm.blockSchedulingName = $translate.instant("BlockScheduling");
+            vm.schedulingSettings.forEach(function (item, id) {
+                if (id != 1)
+                    item.Selected = false;
+            });
+        }
+
+        function setBlockSchedulingType(type) {
+            if (type == null) {
+                return blockSchedulingSetting.BlockFinderType = 0;
+            }
+            return blockSchedulingSetting.BlockFinderType = type.Code;
+        }
+
+        function setBlockSchedulingOption(option) {
+            option.Selected = !option.Selected;
+            blockSchedulingSetting[option.Id] = option.Selected;
+        }
+
+        function getItemName(id) {
+            return $translate.instant(id);
+        }
+
         function persist() {
             if (!vm.isValid())
                 return;
             if (!vm.requestSent) {
                 vm.isEnabled = false;
                 vm.requestSent = true;
-                PlanGroupSettingService.saveDayOffRule({
+                PlanGroupSettingService.saveSetting({
+                    BlockFinderType: blockSchedulingSetting.BlockFinderType,
+                    BlockSameShift: blockSchedulingSetting.BlockSameShift,
+                    BlockSameShiftCategory: blockSchedulingSetting.BlockSameShiftCategory,
+                    BlockSameStartTime: blockSchedulingSetting.BlockSameStartTime,
                     MinDayOffsPerWeek: vm.dayOffsPerWeek.MinDayOffsPerWeek,
                     MaxDayOffsPerWeek: vm.dayOffsPerWeek.MaxDayOffsPerWeek,
                     MinConsecutiveWorkdays: vm.consecWorkDays.MinConsecWorkDays,
