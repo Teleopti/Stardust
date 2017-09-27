@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Domain.Reports
 		public DateTime ChangesOccurredEndDate { get; set; }
 		public DateTime AffectedPeriodStartDate { get; set; }
 		public DateTime AffectedPeriodEndDate { get; set; }
+		public int MaximumResults { get; set; } 
 	}
 }

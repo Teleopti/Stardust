@@ -88,6 +88,54 @@ namespace Teleopti.Ccc.DomainTest.Reports
 			vm.First().ScheduleEnd.Should().Be.EqualTo(TimeZoneHelper.ConvertFromUtc(scheduleEndUtc, TimeZone.TimeZone()));
 		}
 
+		[Test]
+		public void ShouldReturnViewModelForAllPersonsWhoChangeSchedule()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("Joe", "Doe");
+			PersonRepository.Has(person);
+			var changedAt = new DateTime(2016, 8, 1, 10, 0, 0);
+			var scheduleStart = new DateTime(2016, 8, 23, 8, 0, 0);
+			var scheduleEnd = new DateTime(2016, 8, 23, 17, 0, 0);
+			createAuditingData(person, changedAt, scheduleStart, scheduleEnd);
+
+			var searchParam = new AuditTrailSearchParams()
+			{
+				ChangedByPersonId = Guid.Empty,
+				ChangesOccurredStartDate = new DateTime(2016, 8, 1),
+				ChangesOccurredEndDate = new DateTime(2016, 8, 1),
+				AffectedPeriodStartDate = new DateTime(2016, 8, 23),
+				AffectedPeriodEndDate = new DateTime(2016, 8, 23)
+			};
+			var vm = Target.Provide(searchParam);
+
+			vm.Count.Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldReturnGivenNumberOfResults()
+		{
+			var person = PersonFactory.CreatePersonWithGuid("Joe", "Doe");
+			PersonRepository.Has(person);
+			var changedAt = new DateTime(2016, 8, 1, 10, 0, 0);
+			var scheduleStart = new DateTime(2016, 8, 23, 8, 0, 0);
+			var scheduleEnd = new DateTime(2016, 8, 23, 17, 0, 0);
+			createAuditingData(person, changedAt, scheduleStart, scheduleEnd);
+			createAuditingData(person, changedAt, scheduleStart, scheduleEnd);
+
+			var searchParam = new AuditTrailSearchParams()
+			{
+				ChangedByPersonId = Guid.Empty,
+				ChangesOccurredStartDate = new DateTime(2016, 8, 1),
+				ChangesOccurredEndDate = new DateTime(2016, 8, 1),
+				AffectedPeriodStartDate = new DateTime(2016, 8, 23),
+				AffectedPeriodEndDate = new DateTime(2016, 8, 23),
+				MaximumResults = 1
+			};
+			var vm = Target.Provide(searchParam);
+
+			vm.Count.Should().Be.EqualTo(1);
+		}
+
 		private ScheduleAuditingReportData createAuditingData(IPerson person, DateTime changedAt, DateTime scheduleStart, DateTime scheduleEnd)
 		{
 			ScheduleAuditingReportData auditTrailData = new ScheduleAuditingReportData()

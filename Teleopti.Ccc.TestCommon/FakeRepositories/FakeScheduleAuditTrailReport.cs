@@ -29,14 +29,29 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return modifiedByList;
 		}
 
-		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod)
+		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod, int maximumResults)
 		{
-
-			var hits = auditingReportList
-				.Where(x => x.ModifiedBy == changedByPerson.Id.Value.ToString() 
-							&& changedPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ModifiedAt) 
-							&& scheduledPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ScheduleStart))
-				.ToList();
+			IList<ScheduleAuditingReportData> hits;
+			if (maximumResults == 0)
+				maximumResults = 50000;
+			if (changedByPerson == null)
+			{
+				hits = auditingReportList
+					.Where(x => changedPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ModifiedAt)
+								&& scheduledPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ScheduleStart))
+					.Take(maximumResults)
+					.ToList();
+			}
+			else
+			{
+				hits = auditingReportList
+					.Where(x => x.ModifiedBy == changedByPerson.Id.Value.ToString()
+								&& changedPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ModifiedAt)
+								&& scheduledPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ScheduleStart))
+					.Take(maximumResults)
+					.ToList();
+			}
+			
 
 			foreach (var auditItem in hits)
 			{
