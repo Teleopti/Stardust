@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Logon.Aspects;
 using Teleopti.Ccc.Domain.UnitOfWork;
 
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 
 		private void process(BatchInputModel batch)
 		{
-			_tracer.For(() => batch.States.Select(x => x.TraceInfo), _tracer.StateProcessing);
+			_tracer.For(batch.States.EmptyIfNull().Select(x => x.TraceInfo), _tracer.StateProcessing);
 			validateAuthenticationKey(batch);
 			_contextLoader.ForBatch(batch);
 			if (batch.CloseSnapshot)
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 			input.AuthenticationKey = LegacyAuthenticationKey.MakeEncodingSafe(input.AuthenticationKey);
 			if (!_tenantLoader.Authenticate(input.AuthenticationKey))
 			{
-				_tracer.For(() => input.States.Select(x => x.TraceInfo), _tracer.InvalidAuthenticationKey);
+				_tracer.For(input.States.EmptyIfNull().Select(x => x.TraceInfo), _tracer.InvalidAuthenticationKey);
 				throw new InvalidAuthenticationKeyException("You supplied an invalid authentication key. Please verify the key and try again.");
 			}
 		}
