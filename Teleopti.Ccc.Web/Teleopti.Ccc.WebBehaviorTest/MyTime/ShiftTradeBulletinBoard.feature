@@ -30,14 +30,6 @@ Background:
 	| Start date | 2012-06-18 |
 	| Type       | Week       |
 	| Length     | 1          |
-	And I have a person period with 
-	| Field      | Value      |
-	| Start date | 2012-06-18 |
-	| Team		 | My team |
-	And OtherAgent has a person period with
-	| Field      | Value      |
-	| Start date | 2012-06-18 |
-	| Team       | My team    |
 	And there are shift categories
 	| Name  |
 	| Day   |
@@ -48,6 +40,14 @@ Background:
 
 Scenario: Shift trade in Bulletin board should start from tomorrow
 	Given I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And the time is '2029-10-18'
 	And I am viewing requests
@@ -56,6 +56,14 @@ Scenario: Shift trade in Bulletin board should start from tomorrow
 
 Scenario: Should show my shift and other shift in bulletin board
 	Given I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
@@ -83,6 +91,14 @@ Scenario: Should show my shift and other shift in bulletin board
 
 Scenario: Should possible make shift trade in Bulletin board
 	Given I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
@@ -112,6 +128,14 @@ Scenario: Should possible make shift trade in Bulletin board
 
 Scenario: Should possible make shift trade in Bulletin board with day off
 	Given I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a day off with
@@ -140,6 +164,14 @@ Scenario: Should possible make shift trade in Bulletin board with day off
 
 Scenario: Should possibly make my empty day trade with main shift day in Bulletin board
 	Given I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have an empty day with
@@ -167,6 +199,14 @@ Scenario: Should possibly make my empty day trade with main shift day in Bulleti
 
 Scenario: Should possible make shift trade with empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have an empty day with
@@ -192,6 +232,14 @@ Scenario: Should possible make shift trade with empty day in Bulletin board
 
 Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	Given I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Anonymous trade 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have an empty day with
@@ -212,6 +260,14 @@ Scenario: Should see the anonymous name when viewing empty day in Bulletin board
 	
 Scenario: Should list announced shift
 	Given  I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I am american
 	And I have a shift with
@@ -229,6 +285,14 @@ Scenario: Should list announced shift
 
 Scenario: Delete shift exchange offer in request list
 	Given  I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field                 | Value            |
@@ -246,6 +310,14 @@ Scenario: Delete shift exchange offer in request list
 
 Scenario: View shift trade post details
 	Given  I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field                 | Value            |
@@ -268,6 +340,14 @@ Scenario: View shift trade post details
 
 Scenario: Should modify shift trade post
 	Given  I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field                 | Value            |
@@ -296,6 +376,14 @@ Scenario: Should modify shift trade post
 
 Scenario: Should not show agent name in shift trade board list
 	Given I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Anonymous trade 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
@@ -319,6 +407,14 @@ Scenario: Should not show agent name in shift trade board list
 
 Scenario: Should not show subject and message box
 	Given I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Anonymous trade 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
@@ -343,6 +439,14 @@ Scenario: Should not show subject and message box
 
 Scenario: Should not show agent name in shift trade request detail view
 	Given I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And I have the workflow control set 'Anonymous trade 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
@@ -371,6 +475,14 @@ Scenario: Should not show agent name in shift trade request detail view
 
 Scenario: Should show my shift and other shifts filtered by site open hours in bulletin board
 	Given I have the role 'Full access to mytime'
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team		 | My team |
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	| Team       | My team    |
 	And There are open hours '08:00-17:00' for 'Monday,Tuesday,Wednesday,Thursday,Friday', in site 'The site'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
