@@ -1,0 +1,30 @@
+﻿<div class="staffing-panel">
+	<div class="con-row">
+		<div class="con-flex">
+			<skill-picker skills="vm.skills" skill-areas="vm.skillGroups" item-to-return="vm.setSkill" preselected-item="vm.preselectedSkills"></skill-picker>
+		</div>
+		<div class="con-flex">
+			<div class="wfm-checkbox">
+				<input type="checkbox" id="check2" ng-checked="vm.useShrinkage" ng-click="vm.useShrinkageForStaffing()" />
+				<label for="check2">
+					<span class="wfm-checkbox-toggle"></span>
+					<span class="wfm-checkbox-label">{{'UseShrinkage'| translate}}</span>
+				</label>
+			</div>
+		</div>
+	</div>
+	<div class="panel">
+		<md-progress-linear ng-show="vm.isLoading" md-mode="indeterminate"></md-progress-linear>
+		<div class="con-row" ng-if="vm.staffingDataAvailable">
+			<div class="con-flex">
+				<div class="wfm-chart intraday-chart" id="staffingChart"></div>
+			</div>
+		</div>
+		<div class="con-row" ng-if="!vm.staffingDataAvailable">
+			<div class="con-flex line-center nodata">
+				<i class="mdi mdi-information-outline   line-center"></i>
+				<h1 class="ng-binding">No data available</h1>
+			</div>
+		</div>
+	</div>
+</div>

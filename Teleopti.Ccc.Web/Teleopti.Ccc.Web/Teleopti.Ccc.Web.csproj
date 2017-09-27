@@ -1564,6 +1564,12 @@
     <Content Include="WFM\app\staffing\import_export\importexport.service.js" />
     <Content Include="WFM\app\staffing\staffing.importData.controller.js" />
     <Content Include="WFM\app\staffing\staffing.importData.template.html" />
+    <Content Include="WFM\app\teamSchedule\html\staffingInfo.html" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.staffing.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.component.staffing.spec.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.skill.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffing.js" />
+    <Content Include="WFM\app\teamSchedule\teamSchedule.service.staffingChart.js" />
     <Content Include="WFM\css\_staffing.scss" />
     <Content Include="WFM\css\_grouppage.scss" />
     <Content Include="WFM\css\_organizationpicker.scss" />
