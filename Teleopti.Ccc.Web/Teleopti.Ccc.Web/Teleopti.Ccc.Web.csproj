@@ -1514,7 +1514,7 @@
     <Content Include="WFM\app\requests\requests.controller.overtime.js" />
     <Content Include="WFM\app\requests\requests.service.commands.configurations.js" />
     <Content Include="WFM\app\requests\requests-synchronize-header-height.directive.js" />
-    <Content Include="WFM\app\requests\requests-fix-bug43683-for-uigrid.js" />
+    <Content Include="WFM\app\requests\requests-uigrid-fix.js" />
     <Content Include="WFM\app\requests\requests.controller.refactor.js" />
     <Content Include="WFM\app\resourceplanner\manageschedule\manageschedule.html" />
     <Content Include="WFM\app\resourceplanner\manageschedule\organization-tree-node.html" />

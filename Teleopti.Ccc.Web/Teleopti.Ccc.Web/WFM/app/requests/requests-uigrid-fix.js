@@ -25,8 +25,9 @@
 
 (function() {
 	'use strict';
+
+	//Overwriting getColumnElementPosition of uiGridColumnMenuService for fixing bug #45655 
 	angular.module('ui.grid').decorator('uiGridColumnMenuService', ['$delegate', 'i18nService', 'uiGridConstants', 'gridUtil', function($delegate, i18nService, uiGridConstants, gridUtil) {
-		console.log($delegate, '$delegate');
 		$delegate.getColumnElementPosition = function($scope, column, $columnElement) {
 			var positionData = {};
 			positionData.left = $columnElement[0].offsetLeft;
