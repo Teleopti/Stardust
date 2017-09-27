@@ -14,23 +14,22 @@ namespace Teleopti.Ccc.Domain.Reports
 	{
 		private readonly IScheduleAuditTrailReport _scheduleAuditTrailReport;
 		private readonly IUserTimeZone _timeZone;
+		private readonly IPersonRepository _personRepository;
 
-		public ScheduleAuditTrailReportViewModelProvider(IScheduleAuditTrailReport scheduleAuditTrailReport, IUserTimeZone timeZone)
+		public ScheduleAuditTrailReportViewModelProvider(IScheduleAuditTrailReport scheduleAuditTrailReport, IUserTimeZone timeZone, IPersonRepository personRepository)
 		{
 			_scheduleAuditTrailReport = scheduleAuditTrailReport;
 			_timeZone = timeZone;
+			_personRepository = personRepository;
 		}
 
 		public IList<ScheduleAuditingReportData> Provide(AuditTrailSearchParams searchParam)
 		{
-			var changeOccurredPeriod =
-				new DateTimePeriod(TimeZoneHelper.ConvertToUtc(searchParam.ChangesOccurredStartDate, _timeZone.TimeZone()),
-					TimeZoneHelper.ConvertToUtc(searchParam.ChangesOccurredEndDate.AddDays(1).AddTicks(-1), _timeZone.TimeZone()));
+			var changeOccurredPeriod = new DateOnlyPeriod(new DateOnly(searchParam.ChangesOccurredStartDate), new DateOnly(searchParam.ChangesOccurredEndDate));
+			var affectedPeriod = new DateOnlyPeriod(new DateOnly(searchParam.AffectedPeriodStartDate), new DateOnly(searchParam.AffectedPeriodEndDate));
+			var changedByPerson = _personRepository.Get(searchParam.ChangedByPersonId);
 
-			var affectedPeriod = new DateTimePeriod(TimeZoneHelper.ConvertToUtc(searchParam.AffectedPeriodStartDate, _timeZone.TimeZone()),
-				TimeZoneHelper.ConvertToUtc(searchParam.AffectedPeriodEndDate.AddDays(1).AddTicks(-1), _timeZone.TimeZone()));
-
-			 return _scheduleAuditTrailReport.Report(searchParam.ChangedByPersonId, changeOccurredPeriod, affectedPeriod);
+			return _scheduleAuditTrailReport.Report(changedByPerson, changeOccurredPeriod, affectedPeriod);
 		}
 	}
 }

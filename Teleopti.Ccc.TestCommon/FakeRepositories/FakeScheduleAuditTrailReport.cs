@@ -29,12 +29,13 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 			return modifiedByList;
 		}
 
-		public IList<ScheduleAuditingReportData> Report(Guid changedByPersonId, DateTimePeriod changeOccurredPeriod, DateTimePeriod affectedPeriod)
+		public IList<ScheduleAuditingReportData> Report(IPerson changedByPerson, DateOnlyPeriod changedPeriod, DateOnlyPeriod scheduledPeriod)
 		{
+
 			var hits = auditingReportList
-				.Where(x => new Guid(x.ModifiedBy) == changedByPersonId 
-							&& changeOccurredPeriod.Contains(x.ModifiedAt) 
-							&& affectedPeriod.Contains(x.ScheduleStart))
+				.Where(x => x.ModifiedBy == changedByPerson.Id.Value.ToString() 
+							&& changedPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ModifiedAt) 
+							&& scheduledPeriod.ToDateTimePeriod(_timeZone.TimeZone()).Contains(x.ScheduleStart))
 				.ToList();
 
 			foreach (var auditItem in hits)
