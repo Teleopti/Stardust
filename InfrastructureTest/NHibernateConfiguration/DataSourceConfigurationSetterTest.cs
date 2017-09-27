@@ -146,14 +146,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
 		}
 
 		[Test]
-		public void VerifyApplicationConfig()
-		{
-			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForApplicationConfig();
-			target.UseSecondLevelCache.Should().Be.False();
-			target.ApplicationName.Should().Be.EqualTo("Teleopti.ApplicationConfiguration");
-		}
-
-		[Test]
 		public void VerifySdkConfig()
 		{
 			var target = (DataSourceConfigurationSetter)DataSourceConfigurationSetter.ForSdk();

@@ -22,10 +22,6 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		{
 			return new DataSourceConfigurationSetter(false, "Teleopti.Wfm.Etl", new ConfigReader());
 		}
-		public static IDataSourceConfigurationSetter ForApplicationConfig()
-		{
-			return new DataSourceConfigurationSetter(false, "Teleopti.ApplicationConfiguration", new ConfigReader());
-		}
 		public static IDataSourceConfigurationSetter ForSdk()
 		{
 			return new DataSourceConfigurationSetter(false, "Teleopti.Wfm.Sdk.Host", new ConfigReader());
@@ -56,9 +52,9 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				UseLatency = true;
 		}
 
-		public bool UseSecondLevelCache { get; private set; }
-		public string ApplicationName { get; private set; }
-		private bool UseLatency { get; set; }
+		public bool UseSecondLevelCache { get; }
+		public string ApplicationName { get; }
+		private bool UseLatency { get; }
 
 		public void AddDefaultSettingsTo(Configuration nhConfiguration)
 		{
@@ -76,14 +72,10 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 			{
 				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.UseSecondLevelCache, "false");
 			}
-			if (UseLatency)
-			{
-				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionDriver, typeof(TeleoptiLatencySqlDriver).AssemblyQualifiedName);
-			}
-			else
-			{
-				nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionDriver, typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName);
-			}
+			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.ConnectionDriver,
+				UseLatency
+					? typeof(TeleoptiLatencySqlDriver).AssemblyQualifiedName
+					: typeof(SqlAzureClientDriverWithLogRetries).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.TransactionStrategy, typeof(ReliableAdoNetTransactionFactory).AssemblyQualifiedName);
 			nhConfiguration.SetPropertyIfNotAlreadySet(Environment.SessionFactoryName, NoDataSourceName);
 
