@@ -11,7 +11,6 @@
 ..\TeleoptiCCC\IntradayTools\Testapplication\Teleopti.Ccc.Intraday.TestApplication.exe.config,BuildArtifacts\AppIntradayTestApplication.config
 ..\TeleoptiCCC\SDK\LegalNotice.txt,BuildArtifacts\LegalNotice.txt
 ..\TeleoptiCCC\SDK\web.config,BuildArtifacts\SDKWeb.config
-..\TeleoptiCCC\ServiceBus\log4net.config,BuildArtifacts\ServiceBuslog4net.config
 ..\TeleoptiCCC\ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.Host.exe.config,BuildArtifacts\ServiceBusHost.config
 ..\TeleoptiCCC\Web\Areas\MyTime\Views\web.config,BuildArtifacts\Web.MyTime.Web.config
 ..\TeleoptiCCC\Web\Areas\Start\Views\web.config,BuildArtifacts\Web.Start.Web.config

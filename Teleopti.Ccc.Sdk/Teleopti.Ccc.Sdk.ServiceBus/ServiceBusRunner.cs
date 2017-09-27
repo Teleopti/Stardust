@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private void hostServiceStart()
 		{
 			_requestAdditionalTime(60000);
-			XmlConfigurator.Configure(new FileInfo("log4net.config"));
+			XmlConfigurator.Configure();
 			logger.Info($"Starting service bus {nameof(ServiceBusRunner)}");
 
 			ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true; //ignoreInvalidCertificate

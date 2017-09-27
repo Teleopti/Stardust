@@ -23,7 +23,6 @@
 ..\..\Services\ETL\Tool\NotificationConfig.xml.notinuse,BuildArtifacts\NotificationConfig.xml.notinuse
 ..\..\Services\ETL\Tool\PasswordPolicy.xml.notinuse,BuildArtifacts\PasswordPolicy.xml.notinuse
 ..\..\Services\ETL\Tool\ApplicationInsights.config,BuildArtifacts\AppApplicationInsights.config
-..\..\Services\ServiceBus\log4net.config,BuildArtifacts\ServiceBuslog4net.config
 ..\..\Services\ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.Host.exe.config,BuildArtifacts\ServiceBusHost.config
 ..\..\Services\ServiceBus\ApplicationInsights.config,BuildArtifacts\AppApplicationInsights.config
 ..\..\Tools\RTATools\Testapplication\Web\Teleopti.Ccc.Rta.TestApplication.exe.config,BuildArtifacts\AppRTATestApplication.config
