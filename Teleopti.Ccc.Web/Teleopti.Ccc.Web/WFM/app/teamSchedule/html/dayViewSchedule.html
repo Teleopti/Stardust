@@ -54,7 +54,7 @@
 		<timezone-picker available-timezones="vm.availableTimezones" on-pick="vm.changeTimezone(timezone)"></timezone-picker>
 
 		<div class="wfm-switch" ng-if="vm.toggles.WfmTeamSchedule_ShowStaffingInfo_45206">
-			<input type="checkbox" id="switchStaffing" ng-model="vm.currentSettings.showStaffing" ng-change="vm.showStaffing()" />
+			<input type="checkbox" id="switchStaffing" ng-model="vm.staffingEnabled"/>
 			<label for="switchStaffing">
 				<span class="wfm-switch-label" translate>ShowStaffing</span>
 				<span class="wfm-switch-toggle"></span>
@@ -138,4 +138,8 @@
 			<wfm-pagination pagination-options="vm.paginationOptions" get-data-for-page-callback="vm.loadSchedules"></wfm-pagination>
 		</div>
 	</div>
+
+	<staffing-info ng-if="vm.staffingEnabled" selected-date="vm.scheduleDate" ></staffing-info>
+
+	
 </div>

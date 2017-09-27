@@ -29,6 +29,7 @@
 		vm.scheduleDateMoment = function () { return moment(vm.scheduleDate); };
 		vm.availableTimezones = [];
 		vm.sitesAndTeams = undefined;
+		vm.staffingEnabled = false;
 
 		vm.selectedGroups = {
 			mode: 'BusinessHierarchy',
@@ -140,8 +141,7 @@
 			personIds && vm.updateSchedules(personIds);
 			vm.checkValidationWarningForCommandTargets(personIds);
 		};
-
-		vm.showStaffing = function () { }
+		
 
 		function openSidePanel() {
 			if (!$mdSidenav(commandContainerId).isOpen()) {
