@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.UserTexts {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -15745,6 +15745,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading skill groups....
+        /// </summary>
+        public static string LoadingSkillGroups {
+            get {
+                return ResourceManager.GetString("LoadingSkillGroups", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading skills....
         /// </summary>
         public static string LoadingSkills {
@@ -20443,6 +20452,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoSkillFound {
             get {
                 return ResourceManager.GetString("NoSkillFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No skill groups found.
+        /// </summary>
+        public static string NoSkillGroupsFound {
+            get {
+                return ResourceManager.GetString("NoSkillGroupsFound", resourceCulture);
             }
         }
         
@@ -29252,6 +29270,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select skill group.
+        /// </summary>
+        public static string SelectSkillGroup {
+            get {
+                return ResourceManager.GetString("SelectSkillGroup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select a suitable color.
         /// </summary>
         public static string SelectSuitableColor {
@@ -31195,6 +31222,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SkillDefinedMultipleTimesInTheSystem {
             get {
                 return ResourceManager.GetString("SkillDefinedMultipleTimesInTheSystem", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skill group:.
+        /// </summary>
+        public static string SkillGroupColon {
+            get {
+                return ResourceManager.GetString("SkillGroupColon", resourceCulture);
             }
         }
         

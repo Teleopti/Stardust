@@ -16487,4 +16487,20 @@ Do you want to participate?</value>
     <value>View agents by selection</value>
     <comment>there are selections on the page</comment>
   </data>
+  <data name="LoadingSkillGroups" xml:space="preserve">
+    <value>Loading skill groups...</value>
+    <comment>Part of changing name of skill area to skill group, this will replace LoadingSkillAreas</comment>
+  </data>
+  <data name="NoSkillGroupsFound" xml:space="preserve">
+    <value>No skill groups found</value>
+    <comment>Part of changing name of skill area to skill group, this will replace NoSkillAreasFound</comment>
+  </data>
+  <data name="SelectSkillGroup" xml:space="preserve">
+    <value>Select skill group</value>
+    <comment>Part of changing name of skill area to skill group, this will replace SelectSkillArea</comment>
+  </data>
+  <data name="SkillGroupColon" xml:space="preserve">
+    <value>Skill group:</value>
+    <comment>Part of changing name of skill area to skill group, this will replace SkillAreaColon</comment>
+  </data>
 </root>
