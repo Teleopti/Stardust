@@ -492,6 +492,20 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 					navbar.addClass('custom-collapsed'); // force collapse mode
 				}
 			}
+			//And touchend event to close dropdown menus when taping outside
+			$('body').on("touchend", function(e){
+				var badgePanel = $(".navbar.bdd-mytime-top-menu ul.navbar-nav li.dropdown#BadgePanel");
+				if(badgePanel[0] && !badgePanel[0].contains(e.target))
+				{
+					badgePanel.removeClass("open");
+				}
+
+				var userSettings = $(".navbar.bdd-mytime-top-menu ul.navbar-nav li.dropdown#user-settings");
+				if(userSettings[0] && !userSettings[0].contains(e.target))
+				{
+					userSettings.removeClass("open");
+				}
+			});
 
 			$(document).on('ready', autocollapse);
 			$(window).on('resize', autocollapse);

@@ -286,4 +286,42 @@ $(document).ready(function () {
 
 		equal(userDateTime.format("HH:mm"), moment().zone(-60).format("HH:mm"));
 	});
+
+	test('Should close badges dropdown menu when taping outside', function(){
+		var badgesHTML = '<div class="navbar bdd-mytime-top-menu" id="testBadgesHTML">' +
+							'<ul class="nav navbar-nav pull-left navbar-user-setting">' +
+								'<li id="BadgePanel" class="dropdown pull-left open">111111111111111111' +
+								'</li>' +
+							'</ul>' +
+						'</div>';
+
+		$('body').append(badgesHTML);
+		Teleopti.MyTimeWeb.Common.Layout.Init();
+
+		equal($('.bdd-mytime-top-menu #BadgePanel').hasClass('open'), true);
+
+		$('body').trigger('touchend');
+		equal($('.bdd-mytime-top-menu #BadgePanel').hasClass('open'), false);
+
+		$('#testBadgesHTML').remove();
+	});
+
+	test('Should close user settings dropdown menu when taping outside', function(){
+		var userSettingsHTML = '<div class="navbar bdd-mytime-top-menu" id="testUserSettingsHTML">' +
+									'<ul class="nav navbar-nav pull-left navbar-user-setting">' +
+										'<li id="user-settings" class="dropdown pull-left open">111111111111111111' +
+										'</li>' +
+									'</ul>' +
+								'</div>';
+
+		$('body').append(userSettingsHTML);
+		Teleopti.MyTimeWeb.Common.Layout.Init();
+
+		equal($('.bdd-mytime-top-menu #user-settings').hasClass('open'), true);
+
+		$('body').trigger('touchend');
+		equal($('.bdd-mytime-top-menu #user-settings').hasClass('open'), false);
+
+		$('#testUserSettingsHTML').remove();
+	});
 });
