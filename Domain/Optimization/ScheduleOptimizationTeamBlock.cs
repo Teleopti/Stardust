@@ -108,12 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				dayOffOptimizationPreferenceProvider = _dayOffOptimizationPreferenceProviderUsingFiltersFactory.Create(planningGroup);
 				blockPreferenceProvider = _blockPreferenceProviderUsingFiltersFactory.Create(planningGroup);
 				var people = _personRepository.FindPeopleInPlanningGroup(planningGroup, period);
-				var skills = new HashSet<Guid>(people
-					.SelectMany(person => person.PersonPeriods(period))
-					.SelectMany(pp => pp.PersonSkillCollection)
-					.Select(personSkill => personSkill.Skill)
-					.Select(skill => skill.Id.GetValueOrDefault()));
-				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period, skills);
+				_fillSchedulerStateHolder.Fill(schedulerStateHolder, null, null, period);
 				agents = people.FixedStaffPeople(period);
 			}
 
