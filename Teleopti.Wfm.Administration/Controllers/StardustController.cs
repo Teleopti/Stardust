@@ -150,7 +150,7 @@ namespace Teleopti.Wfm.Administration.Controllers
 				{
 					result = pingNode(node).Result;
 				}
-				catch (Exception e)
+				catch (Exception)
 				{
 					return InternalServerError(new Exception(
 						$"Node {node.Url} does not respond. Is the firewall configured so the worker server allows incoming traffic on ports 14100-14199?"));
