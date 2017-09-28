@@ -100,6 +100,16 @@
 		equal(vm.selectedDate().format(constants.serviceDateTimeFormat.dateOnly), currentUserDate.subtract('days', 1).format(constants.serviceDateTimeFormat.dateOnly));
 	});
 
+	test("should navigate to month view after clicking 'month' icon", function () {
+		var currentUserDate = moment().zone(-startDayData.BaseUtcOffsetInMinutes);
+		startDayData.Date = currentUserDate.format(constants.serviceDateTimeFormat.dateOnly);
+		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);
+		var vm = Teleopti.MyTimeWeb.Schedule.MobileStartDay.Vm(); 
+
+		vm.navigateToMonthView();
+		equal(hash, 'Schedule/MobileMonth');
+	});
+
 	test("should set timelines", function () {
 
 		Teleopti.MyTimeWeb.Schedule.MobileStartDay.PartialInit(fakeReadyForInteractionCallback, fakeCompletelyLoadedCallback, ajax);

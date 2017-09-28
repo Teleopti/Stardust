@@ -76,6 +76,10 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.openHourPeriod = null;
 	self.isLoading = ko.observable(false);
 
+	self.navigateToMonthView = function(){
+		Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/MobileMonth");
+	};
+
 	self.navigateToMessages = function () {
 		Teleopti.MyTimeWeb.Portal.NavigateTo("MessageTab");
 	};
