@@ -16516,8 +16516,8 @@ Do you want to participate?</value>
     <comment>Text of general setting of scheduling setting for web scheduling</comment>
   </data>
   <data name="IndividualFlexible" xml:space="preserve">
-    <value>Individual Flexible</value>
-    <comment>Individual Flexible for web scheduling</comment>
+    <value>Flexible</value>
+    <comment>Flexible for web scheduling</comment>
   </data>
   <data name="InfoOfSchedulingSetting" xml:space="preserve">
     <value>The scheduling setting are applied for the planning group</value>

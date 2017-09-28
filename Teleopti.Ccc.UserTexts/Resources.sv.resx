@@ -15025,4 +15025,94 @@ Vill du registrera dig?</value>
   <data name="NoAgentsToBeDisplayed" xml:space="preserve">
     <value>Inga agenter att visa</value>
   </data>
+  <data name="ExportGap" xml:space="preserve">
+    <value>Exportera skillnad</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteSchedulingSetting" xml:space="preserve">
+    <value>Är du säker på att du vill ta bort schemaläggningsinställning {0} och tillhörande inställningar?</value>
+  </data>
+  <data name="BlockSameShift" xml:space="preserve">
+    <value>Samma skift</value>
+  </data>
+  <data name="BlockSameShiftCategory" xml:space="preserve">
+    <value>Samma skiftkategori</value>
+  </data>
+  <data name="BlockSameStartTime" xml:space="preserve">
+    <value>Samma starttid</value>
+  </data>
+  <data name="CreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Skapa schemaläggningsinställning</value>
+  </data>
+  <data name="DeletePlanGroupSchedullingSetting" xml:space="preserve">
+    <value>Ta bort schemaläggningsinställning</value>
+  </data>
+  <data name="EditPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Ändra schemaläggningsinställning</value>
+  </data>
+  <data name="FilterPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Filtrera schemaläggningsinställning</value>
+  </data>
+  <data name="GeneralSettingOfPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Namn och filter</value>
+  </data>
+  <data name="IndividualFlexible" xml:space="preserve">
+    <value>Flexibelt</value>
+  </data>
+  <data name="InfoOfSchedulingSetting" xml:space="preserve">
+    <value>Schemaläggningsinställningen är angiven för planeringsgruppen </value>
+  </data>
+  <data name="ManagePlanningGroupSchedulingSetting" xml:space="preserve">
+    <value>Hantera schemaläggningsinställning för planeringsgruppen {0}</value>
+  </data>
+  <data name="NewPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Ny schemaläggningsinställning</value>
+  </data>
+  <data name="PlanGroupScheduling" xml:space="preserve">
+    <value>Schemaläggningsinställning</value>
+  </data>
+  <data name="SelectedFilters" xml:space="preserve">
+    <value>Valda filter</value>
+  </data>
+  <data name="SelectScheduleMethod" xml:space="preserve">
+    <value>Välj schemaläggningsmetod</value>
+  </data>
+  <data name="TextOFCreatePlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Fyll i information för att skapa en ny schemaläggningsinställning</value>
+  </data>
+  <data name="TextOfEditPlanGroupSchedulingSetting" xml:space="preserve">
+    <value>Ändra information för vald schemaläggningsinställning</value>
+  </data>
+  <data name="TextOfNoBlockScheduling" xml:space="preserve">
+    <value>Ingen blockschemaläggning</value>
+  </data>
+  <data name="LoadingSkillGroups" xml:space="preserve">
+    <value>Laddar kompetensgrupper... </value>
+  </data>
+  <data name="NoSkillGroupsFound" xml:space="preserve">
+    <value>Inga kompetensgrupper hittades</value>
+  </data>
+  <data name="SelectSkillGroup" xml:space="preserve">
+    <value>Välj kompetensgrupp</value>
+  </data>
+  <data name="SkillGroupColon" xml:space="preserve">
+    <value>Kompetensgrupp:</value>
+  </data>
+  <data name="ViewAgents" xml:space="preserve">
+    <value>Visa agenter</value>
+  </data>
+  <data name="ViewAgentsBySelection" xml:space="preserve">
+    <value>Visa agenter enligt urval</value>
+  </data>
+  <data name="ModifiedAt" xml:space="preserve">
+    <value>Ändrad</value>
+  </data>
+  <data name="ModifiedBy" xml:space="preserve">
+    <value>Ändrad av</value>
+  </data>
+  <data name="ScheduledAgent" xml:space="preserve">
+    <value>Schemalagd agent</value>
+  </data>
+  <data name="DeleteSchedulingSetting" xml:space="preserve">
+    <value>Ta bort schemaläggningsinställning</value>
+  </data>
 </root>
