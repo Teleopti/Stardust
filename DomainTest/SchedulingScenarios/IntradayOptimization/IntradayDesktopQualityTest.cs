@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IIntradayOptimization Target;
 		public IScheduleResultDataExtractorProvider ScheduleResultDataExtractorProvider;
+		public IResourceCalculation ResourceCalculation;
 
 		[Test]
 		public void ShouldProduceGoodResultWithNoLimitations()
@@ -32,10 +33,17 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var agentList = new List<IPerson>();
 			var stateHolder = setupStandardState(date, agentList);
 			
+			ResourceCalculation.ResourceCalculate(date, new ResourceCalculationData(stateHolder.SchedulingResultState, false, false));
+			var p = ScheduleResultDataExtractorProvider
+				.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(new[] {date}, new SchedulingOptions(),
+					stateHolder.SchedulingResultState);
+			var valueBefore = p.Values().First();
+
 			Target.Execute(date.ToDateOnlyPeriod(), agentList, false);
-			
-			ScheduleResultDataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(new[] { date }, new SchedulingOptions(), stateHolder.SchedulingResultState)
-				.Values().First().Should().Be.IncludedIn(0.01, 0.28);
+
+			var valueAfter = p.Values().First();
+			var valueImprovement = (valueBefore - valueAfter);
+			valueImprovement.Should().Be.IncludedIn(0.51, 0.52);
 		}
 
 		private ISchedulerStateHolder setupStandardState(DateOnly date, ICollection<IPerson> agentList)
