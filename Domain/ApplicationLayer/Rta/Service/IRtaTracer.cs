@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using log4net;
-using log4net.Repository.Hierarchy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service

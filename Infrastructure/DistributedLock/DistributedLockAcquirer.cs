@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 
 		private void tryLock(string name, Action action)
 		{
-			using (var connection = new SqlConnection(connectionString()))
+			using (var connection = new SqlConnection(_connectionStrings.ApplicationFor("Teleopti.DistributedLock")))
 			{
 				connection.Open();
 				if (_monitor.TryEnter(name, TimeSpan.Zero, connection))
@@ -84,13 +84,5 @@ namespace Teleopti.Ccc.Infrastructure.DistributedLock
 			}
 		}
 
-		private string connectionString()
-		{
-			return new SqlConnectionStringBuilder(_connectionStrings.Application())
-			{
-				ApplicationName = "Teleopti.DistributedLock"
-			}.ConnectionString;
-		}
-		
 	}
 }

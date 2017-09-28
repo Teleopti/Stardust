@@ -5,7 +5,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.TestCommon.IoC;
 
 namespace Teleopti.Ccc.InfrastructureTest.Rta
@@ -16,7 +15,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Rta
 	{
 		public IRtaTracer Tracer;
 		public IRtaTracerReader Target;
-		public IConnectionStrings ConnectionStrings;
 
 		[Test]
 		public void ShouldRead()

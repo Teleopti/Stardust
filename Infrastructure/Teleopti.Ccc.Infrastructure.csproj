@@ -259,6 +259,7 @@
     <Compile Include="Repositories\SkillCombinationResourceRepositoryOld.cs" />
     <Compile Include="Rta\Persisters\OrganizationReader.cs" />
     <Compile Include="Rta\RtaTracerReader.cs" />
+    <Compile Include="Rta\RtaTracerWriter.cs" />
     <Compile Include="Rta\StateQueueWorker.cs" />
     <Compile Include="MultiTenancy\IPersonInfoHelper.cs" />
     <Compile Include="MultiTenancy\IPersonInfoMapper.cs" />
