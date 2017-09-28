@@ -43,7 +43,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				BlockFinderType = BlockFinderType.SingleDay,
 				BlockSameShiftCategory = false,
 				BlockSameStartTime = false,
-				BlockSameShift = false
+				BlockSameShift = false,
+				Priority = 0
 			};
 		}
 
