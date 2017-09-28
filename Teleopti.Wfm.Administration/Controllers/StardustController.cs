@@ -15,14 +15,14 @@ namespace Teleopti.Wfm.Administration.Controllers
     [TenantTokenAuthentication]
     public class StardustController : ApiController
 	{
-		private readonly StardustRepository _stardustRepository;
+		private readonly IStardustRepository _stardustRepository;
 		private readonly IEventPublisher _eventPublisher;
 		private readonly ILoadAllTenants _loadAllTenants;
 		private readonly IJobStartTimeRepository _jobStartTimeRepository;
 		private readonly IStaffingSettingsReader _staffingSettingsReader;
 
 
-		public StardustController(StardustRepository stardustRepository, IEventPublisher eventPublisher, 
+		public StardustController(IStardustRepository stardustRepository, IEventPublisher eventPublisher, 
 			ILoadAllTenants loadAllTenants, IJobStartTimeRepository jobStartTimeRepository, IStaffingSettingsReader staffingSettingsReader)
 		{
 			_stardustRepository = stardustRepository;
@@ -139,6 +139,15 @@ namespace Teleopti.Wfm.Administration.Controllers
 			return Ok();
 		}
 
+		[HttpGet, Route("Stardust/HealthCheck")]
+		public IHttpActionResult HealthCheck()
+		{
+			var allNodes = _stardustRepository.GetAllWorkerNodes();
+			if (!allNodes.Any()) return InternalServerError(new Exception("No nodes registered! Make sure that the Teleopti Service Bus service is running."));
+			if (!allNodes.Any(x => x.Heartbeat > DateTime.UtcNow.AddMinutes(-30))) return InternalServerError(new Exception("No node has sent a heartbeat in 30 minutes. Make sure that the Teleopti Service Bus service is running."));
+
+			return Ok();
+		}
 
 	}
 

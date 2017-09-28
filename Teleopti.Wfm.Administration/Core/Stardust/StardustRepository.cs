@@ -7,7 +7,7 @@ using Teleopti.Wfm.Administration.Models.Stardust;
 
 namespace Teleopti.Wfm.Administration.Core.Stardust
 {
-	public class StardustRepository
+	public class StardustRepository : IStardustRepository
 	{
 		private const int maxRetry = 5;
 		private const int delayMs = 100;
@@ -423,7 +423,7 @@ namespace Teleopti.Wfm.Administration.Core.Stardust
 
 	
 	}
-
+	
 	public static class SqlDataReaderExtensions
 	{
 		public static DateTime? GetNullableDateTime(this SqlDataReader reader, int ordinalPosition)

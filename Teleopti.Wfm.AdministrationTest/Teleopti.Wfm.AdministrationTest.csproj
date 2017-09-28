@@ -120,11 +120,14 @@
     <Compile Include="ControllerActions\CreateTenantModelForTest.cs" />
     <Compile Include="ControllerActions\DeleteTenantTest.cs" />
     <Compile Include="ControllerActions\DeleteUserTest.cs" />
+    <Compile Include="ControllerActions\StardustHealthCheckTest.cs" />
     <Compile Include="ControllerActions\StardustControllerTest.cs" />
     <Compile Include="ControllerActions\UpgradeDatabase.cs" />
     <Compile Include="Core\CreateBusinessUnitTest.cs" />
     <Compile Include="Core\FakeRunWithUnitOfWork.cs" />
+    <Compile Include="FakeAbsenceRepository.cs" />
     <Compile Include="FakeHangfireCookie.cs" />
+    <Compile Include="FakeStardustRepository.cs" />
     <Compile Include="GetImportUsersFake.cs" />
     <Compile Include="DatabaseHelperWrapperFake.cs" />
     <Compile Include="ControllerActions\GenerateRtaKeyForTenant.cs" />

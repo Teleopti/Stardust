@@ -332,6 +332,7 @@
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Controllers\ConfigurationController.cs" />
+    <Compile Include="Core\Stardust\IStardustRepository.cs" />
     <Compile Include="Models\ConfigurationModel.cs" />
     <Compile Include="Controllers\HangfireController.cs" />
     <Compile Include="Models\UpdateConfigurationModel.cs" />
