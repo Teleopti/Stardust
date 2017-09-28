@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Schema
 		{
 			var exceptions = new[]
 			{
-				"msg.MailboxNotification"
+				"msg.MailboxNotification",
+				"dbo.RtaTracer"
 			};
 			var tables = AnalyticsDatabase.Get(uow => uow.Current().FetchSession()
 				.CreateSQLQuery(@"
