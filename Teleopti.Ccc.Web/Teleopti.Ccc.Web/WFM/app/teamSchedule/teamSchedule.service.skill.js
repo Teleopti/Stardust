@@ -7,62 +7,33 @@
 
 	function TeamScheduleSkillService($http, $q) {
 		var urlMap = {
-			skill: "../api/GroupPage/AvailableStructuredGroupPages",
-			skillGroups: "../api/GroupPage/AvailableStructuredGroupPagesForRequests"
+			skill: "../api/TeamScheduleData/skills",
+			skillGroups: "../api/skillgroup/skillgroups"
 		};
 
 		this.getAllSkills = getAllSkills;
 		this.getAllSkillGroups = getAllSkillGroups;
 
-		 var mockSkills = [
-			{
-				Id: 'XYZ',
-				Name: 'skill1'
-			},
-			{
-				Id: 'ABC',
-				Name: 'skill2'
-			}
-		];
-		var mockedSkillGroups = [
-			{
-				Name: 'SkillArea1',
-				Id: '123',
-				Skills: [
-					{
-						Id: 'XYZ',
-						Name: 'skill1'
-					}
-				]
-			},
-			{
-				Name: 'SkillArea2',
-				Id: '321',
-				Skills: [
-					{
-						Id: 'ABC',
-						Name: 'skill2'
-					}
-				]
-			}
-		];
-
 		function getAllSkills() {
-			return mockSkills;
-			//return $q(function (resolve, reject) {
-			//	$http.get(urlMap.skill, {}).then(function () {
-			//		resolve(response.data);
-			//	})
-			//});
+			return $q(function (resolve, reject) {
+				$http.get(urlMap.skill).then(function(response) {
+						resolve(response.data);
+					},
+					function(error) {
+						reject(error);
+					});
+			});
 		}
 
 		function getAllSkillGroups() {
-			return mockedSkillGroups;
-			//return $q(function (resolve, reject) {
-			//	$http.get(urlMap.skillGroups, {}).then(function () {
-			//		resolve(response.data);
-			//	})
-			//});
+			return $q(function (resolve, reject) {
+				$http.get(urlMap.skillGroups).then(function(response) {
+						resolve(response.data);
+					},
+					function(error) {
+						reject(error);
+					});
+			});
 		}
 
 	}

@@ -702,6 +702,8 @@
     <Compile Include="Areas\Start\Controllers\UserTokenController.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\EditScheduleNoteFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\FavoriteSearchProvider.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\DataProvider\SkillsProvider.cs" />
+    <Compile Include="Areas\TeamSchedule\Core\DataProvider\SkillViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Models\FavoriteSearchViewModel.cs" />
     <Compile Include="Areas\TeamSchedule\Controllers\MoveNonoverwritableLayersFormData.cs" />
     <Compile Include="Areas\TeamSchedule\Core\DataProvider\CheckingResult.cs" />

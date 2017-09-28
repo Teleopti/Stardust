@@ -1202,12 +1202,13 @@ note-editor {
 }
 
 .staffing-panel {
+	border-top: 1px solid rgba(0, 0, 0, 0.26);
 
 	.con-flex .wfm-checkbox {
 		margin-top: 10px;
 	}
 
-	.mdi-information-outline:before{
-		font-size:60px !important;
+	.mdi-information-outline:before {
+		font-size: 60px !important;
 	}
 }

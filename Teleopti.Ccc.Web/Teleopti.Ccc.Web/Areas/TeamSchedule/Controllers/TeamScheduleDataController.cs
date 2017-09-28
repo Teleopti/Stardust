@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.Aop;
+using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
+using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Toggle;
 using Teleopti.Ccc.Web.Areas.SeatPlanner.Core.ViewModels;
@@ -22,17 +24,20 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 		private readonly IShiftCategoryProvider _shiftCategoryProvider;
 		private readonly ITeamsProvider _teamProvider;
 		private readonly IToggleManager _toggleManager;
+		private readonly SkillViewModelBuilder _skillBuilder;
 
 		public TeamScheduleDataController(IActivityProvider teamScheduleDataProvider,
 			IScheduleValidationProvider validationProvider,
 			IShiftCategoryProvider shiftCategoryProvider,
-			ITeamsProvider teamProvider, IToggleManager toggleManager)
+			ITeamsProvider teamProvider, 
+			IToggleManager toggleManager, SkillViewModelBuilder skillBuilder)
 		{
 			_teamScheduleDataProvider = teamScheduleDataProvider;
 			_validationProvider = validationProvider;
 			_shiftCategoryProvider = shiftCategoryProvider;
 			_teamProvider = teamProvider;
 			_toggleManager = toggleManager;
+			_skillBuilder = skillBuilder;
 		}
 
 		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/FetchActivities")]
@@ -117,6 +122,12 @@ namespace Teleopti.Ccc.Web.Areas.TeamSchedule.Controllers
 					DefinedRaptorApplicationFunctionPaths.MyTeamSchedules)
 				: _teamProvider.GetOrganizationBasedOnRawData(new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate)),
 					DefinedRaptorApplicationFunctionPaths.MyTeamSchedules);
+		}
+
+		[UnitOfWork, HttpGet, Route("api/TeamScheduleData/skills")]
+		public virtual IHttpActionResult GetAllSkills()
+		{
+			return Ok(_skillBuilder.BuildSkillsConnectedWithQueue());
 		}
 	}
 

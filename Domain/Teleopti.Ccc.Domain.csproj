@@ -1257,7 +1257,7 @@
     <Compile Include="ApplicationLayer\Rta\ReadModelUpdaters\MappingReadModelUpdater.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\InputInfo.cs" />
     <Compile Include="ApplicationLayer\Rta\Service\ActivityChangeChecker.cs" />
-    <Compile Include="ApplicationLayer\Rta\ViewModels\SkillViewModelBuilder.cs" />
+    <Compile Include="ApplicationLayer\Skill\SkillViewModelBuilder.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\Analytics\AnalyticsScheduleChangeUpdater.cs" />
     <Compile Include="ApplicationLayer\ShiftTrade\ShiftTradePendingReasonsService.cs" />
     <Compile Include="ApplicationLayer\SkillDay\AnalyticsForecastWorkloadUpdater.cs" />
