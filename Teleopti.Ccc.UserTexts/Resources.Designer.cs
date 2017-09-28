@@ -3538,6 +3538,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Audit type.
+        /// </summary>
+        public static string AuditType {
+            get {
+                return ResourceManager.GetString("AuditType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Authentication error..
         /// </summary>
         public static string AuthenticationError {
@@ -17681,6 +17690,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modified at.
+        /// </summary>
+        public static string ModifiedAt {
+            get {
+                return ResourceManager.GetString("ModifiedAt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modified by.
+        /// </summary>
+        public static string ModifiedBy {
+            get {
+                return ResourceManager.GetString("ModifiedBy", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Modified mean value.
         /// </summary>
         public static string ModifiedMeanValue {
@@ -27741,6 +27768,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheduled agent.
+        /// </summary>
+        public static string ScheduledAgent {
+            get {
+                return ResourceManager.GetString("ScheduledAgent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scheduled agents after OT.
         /// </summary>
         public static string ScheduledAgentsAfterOT {
@@ -27944,6 +27980,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ScheduledTimeVsTarget {
             get {
                 return ResourceManager.GetString("ScheduledTimeVsTarget", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schedule end.
+        /// </summary>
+        public static string ScheduleEnd {
+            get {
+                return ResourceManager.GetString("ScheduleEnd", resourceCulture);
             }
         }
         
@@ -28206,6 +28251,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ScheduleSelected {
             get {
                 return ResourceManager.GetString("ScheduleSelected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Schedule start.
+        /// </summary>
+        public static string ScheduleStart {
+            get {
+                return ResourceManager.GetString("ScheduleStart", resourceCulture);
             }
         }
         
@@ -30637,6 +30691,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftTradeTargetTimePendingReason {
             get {
                 return ResourceManager.GetString("ShiftTradeTargetTimePendingReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shift type.
+        /// </summary>
+        public static string ShiftType {
+            get {
+                return ResourceManager.GetString("ShiftType", resourceCulture);
             }
         }
         

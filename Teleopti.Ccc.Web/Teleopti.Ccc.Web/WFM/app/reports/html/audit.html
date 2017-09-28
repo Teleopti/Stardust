@@ -1,16 +1,21 @@
-<div class="view-header with-desc">
-  <div class="view-title">
-    <h1><i class="mdi mdi-account-convert"></i> {{'ScheduleAuditTrailReport'|translate}}</h1>
-    <p>Find recent changes</p>
-  </div>
+<div class="view-header with-fab with-desc">
+	<div class="view-title">
+		<h1><i class="mdi mdi-account-convert"></i> {{'ScheduleAuditTrailReport'|translate}}</h1>
+		<p>{{'AuditingPageName'|translate}}</p>
+	</div>
+	<div class="fab-wrapper">
+		<button class="wfm-fab material-depth-1 grow-out" ng-show="vm.chartLoaded" ng-click="vm.chartLoaded = false"><i class="mdi mdi-magnify"></i>
+			<md-tooltip>{{'Search'|translate}}</md-tooltip>
+		</button>
+	</div>
 </div>
 
 <div class="con-row" ng-show="!showForm">
   <div class="con-flex">
     <div class="line-center">
       <i class="mdi mdi-magnify huge-icon"></i>
-      <h2>Please specify what you would like to show</h2>
-      <button type="button" class="wfm-btn wfm-btn-primary" ng-click="showForm = !showForm">Ok, lets go</button>
+      <h2>{{'NarrowToSeeAll'|translate}}</h2>
+      <button type="button" class="wfm-btn wfm-btn-primary" ng-click="showForm = !showForm">{{'Search'|translate}}</button>
     </div>
   </div>
 </div>
@@ -18,12 +23,13 @@
 <div ng-cloak class="con-row" ng-show="showForm && !vm.chartLoaded">
   <div class="con-flex">
     <div class="panel material-depth-1">
-      <div class="sub-header">
-        <h2>Panel title</h2>
-      </div>
       <form name="form" class="wfm-form" novalidate ng-submit="vm.sendForm(form)">
         <div class="con-row">
           <div class="con-flex">
+            <div class="form-input-wrap">
+              <label>{{'ChangeDateColon'|translate}}</label></br>
+              <date-range-picker ng-model="vm.dateChangeRange" template-type="'popup'" custom-validators=""></date-range-picker>
+            </div>
             <div class="form-input-wrap">
               <label for="drop">{{'ChangedBy'|translate}}:</label>
               <md-select ng-model="form.drop" id="drop" aria-label="changed by">
@@ -31,55 +37,53 @@
                   {{item.Name}}
                 </md-option>
               </md-select>
-              <div ng-cloak class="animate-input-message" ng-show="form.$submitted || form.Drop.$error.required.$touched">
-                <div class="form-input-message" ng-class="{formInvalidInput:form.Drop.$error.required}">{{'Required'|translate}}</div>
+            </div>
+          </div>
+          <div class="con-flex">
+            <div class="form-input-wrap">
+              <label>{{'ScheduleDateColon'|translate}}</label></br>
+                <date-range-picker ng-model="vm.dateModifyRange" template-type="'popup'" custom-validators=""></date-range-picker>
+              </div>
+              <div class="form-input-wrap">
+                <label style="padding-bottom: 10px;">{{'Limit'|translate}}:</label>
+                <input type="number" id="max" name="max" min="1" max="1000" ng-model="vm.maxResults" required>
               </div>
             </div>
+            <div class="con-flex x2"></div>
           </div>
-          <div class="con-flex x3">
-            <div class="form-input-wrap">
-              <label>Changed between:</label></br>
-              <date-range-picker ng-model="vm.dateChangeRange" template-type="'popup'" custom-validators=""></date-range-picker>
-            </div>
-            <div class="form-input-wrap">
-              <label>Modified between:</label></br>
-              <date-range-picker ng-model="vm.dateModifyRange" template-type="'popup'" custom-validators=""></date-range-picker>
-            </div>
+          <div class="con-footer">
+            <button class="wfm-btn wfm-btn-invis-primary" type="submit">
+              <md-tooltip>{{'Search'|translate}}</md-tooltip>
+              {{'SubmitRequest'|translate}}
+            </button>
           </div>
-        </div>
-        <div class="con-footer">
-          <button class="wfm-btn wfm-btn-invis-primary" type="submit">
-            <md-tooltip>{{'Search'|translate}}</md-tooltip>
-            {{'SubmitRequest'|translate}}
-          </button>
-        </div>
-      </form>
-      <md-progress-linear ng-if="vm.loading" md-mode="indeterminate"></md-progress-linear>
+        </form>
+        <md-progress-linear ng-if="vm.loading" md-mode="indeterminate"></md-progress-linear>
+      </div>
     </div>
   </div>
-</div>
 
-<div class="con-row" ng-if="vm.chartLoaded">
-  <div class="con-flex">
-    <div class="panel material-depth-1">
-      <div class="con-row">
-        <div class="con-flex full-padding">
-          <label for="filter" class="input-icon">
-            <i class="mdi mdi-magnify">
-              <input type="text" id="filter" ng-model="searchText" ng-change="vm.refreshData(searchText)" autofocus="true" placeholder="{{'Filter'|translate}}">
-              <md-tooltip>{{'Filter'|translate}}</md-tooltip>
-            </i>
-          </label>
+  <div class="con-row" ng-if="vm.chartLoaded">
+    <div class="con-flex">
+      <div class="panel material-depth-1">
+        <div class="con-row full-padding">
+          <div class="con-flex">
+            <label for="filter" class="input-icon">
+              <i class="mdi mdi-magnify">
+                <input type="text" id="filter" ng-model="searchText" ng-change="vm.refreshData(searchText)" autofocus="true" placeholder="{{'Filter'|translate}}">
+                <md-tooltip>{{'Filter'|translate}}</md-tooltip>
+              </i>
+            </label>
+          </div>
+          <div class="con-flex x3"></div>
         </div>
-        <div class="con-flex x3"></div>
-      </div>
-      <div class="con-row">
-        <div class="con-flex ">
-          <div ui-i18n="{{lang}}" class="big-table-wrapper" style="max-width:100%;">
-            <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-disable-animation style="height: 70vh;" class="myGrid"></div>
+        <div class="con-row">
+          <div class="con-flex ">
+            <div ui-i18n="{{lang}}" class="big-table-wrapper" style="max-width:100%;">
+              <div ui-grid="vm.gridOptions" ui-grid-exporter ui-grid-auto-resize ui-grid-selection ui-grid-disable-animation style="height: 70vh;" class="myGrid"></div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>

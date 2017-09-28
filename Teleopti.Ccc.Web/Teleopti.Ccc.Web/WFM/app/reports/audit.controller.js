@@ -5,9 +5,9 @@
 	.module('wfm.reports')
 	.controller('AuditTrailController', AuditTrailController);
 
-	AuditTrailController.$inject = ['$state', '$filter', 'Toggle', 'uiGridConstants', 'ReportsService', '$translate'];
+	AuditTrailController.$inject = ['$state', '$filter', 'Toggle', 'uiGridConstants', 'ReportsService', 'NoticeService', '$translate'];
 
-	function AuditTrailController($state, $filter, ToggleSvc, uiGridConstants, ReportsService, $translate) {
+	function AuditTrailController($state, $filter, ToggleSvc, uiGridConstants, ReportsService, NoticeService, $translate) {
 		var vm = this;
 
 		vm.changedBy = [];
@@ -28,6 +28,7 @@
 
 		vm.sendForm = sendForm;
 		vm.refreshData = refreshData;
+		vm.maxResults = 100;
 
 		init();
 		function init() {
@@ -54,13 +55,14 @@
 				ChangesOccurredStartDate: moment(vm.dateChangeRange.startDate).format("YYYY-MM-DD"),
 				ChangesOccurredEndDate: moment(vm.dateChangeRange.endDate).format("YYYY-MM-DD"),
 				AffectedPeriodStartDate: moment(vm.dateModifyRange.startDate).format("YYYY-MM-DD"),
-				AffectedPeriodEndDate: moment(vm.dateModifyRange.endDate).format("YYYY-MM-DD")
+				AffectedPeriodEndDate: moment(vm.dateModifyRange.endDate).format("YYYY-MM-DD"),
+				MaximumResults: vm.maxResults
 			};
 			vm.loading = true;
 			ReportsService.getAuditTrailResult.searching(postObj).$promise.then(function (response) {
 				vm.loading = false;
 				if (response.length < 1) {
-					// NoticeService.error($translate.instant('noSearchResults'), 5000, true);
+					NoticeService.error($translate.instant('noSearchResults'), 5000, true);
 					return;
 				}
 				else {
@@ -80,7 +82,17 @@
 				enableHorizontalScrollbar: uiGridConstants.scrollbars.NEVER,
 				selectionRowHeaderWidth: 35,
 				data: vm.changesData,
-				enableGridMenu: true
+				enableGridMenu: true,
+				columnDefs: [
+					{field: 'ModifiedAt', displayName: $translate.instant('ModifiedAt'), type: 'date', cellFilter: 'date:"dd-MM-yyyy HH:mm"', sort: { direction: 'desc', priority: 0 } },
+					{field: 'ModifiedBy', displayName: $translate.instant('ModifiedBy')},
+					{field: 'ScheduledAgent', displayName: $translate.instant('ScheduledAgent')},
+					{field: 'ShiftType', displayName: $translate.instant('ShiftType')},
+					{field: 'AuditType', displayName: $translate.instant('AuditType')},
+					{field: 'Detail', displayName: $translate.instant('Details')},
+					{field: 'ScheduleStart', displayName: $translate.instant('ScheduleStart'), type: 'date', cellFilter: 'date:"dd-MM-yyyy HH:mm"' },
+					{field: 'ScheduleEnd', displayName: $translate.instant('ScheduleEnd'), type: 'date', cellFilter: 'date:"dd-MM-yyyy HH:mm"' }
+				]
 			};
 			vm.chartLoaded = true;
 		}

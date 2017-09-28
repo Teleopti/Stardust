@@ -16579,4 +16579,32 @@ Do you want to participate?</value>
     <value>View agents by selection</value>
     <comment>there are selections on the page</comment>
   </data>
+  <data name="AuditType" xml:space="preserve">
+    <value>Audit type</value>
+    <comment>table header in audit trail report</comment>
+  </data>
+  <data name="ModifiedAt" xml:space="preserve">
+    <value>Modified at</value>
+    <comment>table header in audit trail report</comment>
+  </data>
+  <data name="ModifiedBy" xml:space="preserve">
+    <value>Modified by</value>
+    <comment>table header in audit trail report</comment>
+  </data>
+  <data name="ScheduledAgent" xml:space="preserve">
+    <value>Scheduled agent</value>
+    <comment>table header in audit trail report</comment>
+  </data>
+  <data name="ScheduleEnd" xml:space="preserve">
+    <value>Schedule end</value>
+    <comment>table header in audit trail report</comment>
+  </data>
+  <data name="ScheduleStart" xml:space="preserve">
+    <value>Schedule start</value>
+    <comment>table header in audit trail report</comment>
+  </data>
+  <data name="ShiftType" xml:space="preserve">
+    <value>Shift type</value>
+    <comment>table header in audit trail report</comment>
+  </data>
 </root>
