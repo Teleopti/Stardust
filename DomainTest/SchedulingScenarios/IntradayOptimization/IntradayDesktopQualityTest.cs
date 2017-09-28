@@ -28,49 +28,39 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		[Test]
 		public void ShouldProduceGoodResultWithNoLimitations()
 		{
-			var stateHolder = setupStandardState(out var period, out var agentList);
-			Target.Execute(period, agentList, false);
-			var result = ScheduleResultDataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(period.DayCollection(),
-				new SchedulingOptions(), stateHolder.SchedulingResultState);
-			result.Values().First().Should().Be.LessThan(0.28);
+			var date = new DateOnly(2017, 09, 04); //mon
+			var agentList = new List<IPerson>();
+			var stateHolder = setupStandardState(date, agentList);
+			
+			Target.Execute(date.ToDateOnlyPeriod(), agentList, false);
+			
+			ScheduleResultDataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(new[] { date }, new SchedulingOptions(), stateHolder.SchedulingResultState)
+				.Values().First().Should().Be.LessThan(0.28);
 		}
 
-		private ISchedulerStateHolder setupStandardState(out DateOnlyPeriod period, out List<IPerson> agentList)
+		private ISchedulerStateHolder setupStandardState(DateOnly date, ICollection<IPerson> agentList)
 		{
-			var firstDay = new DateOnly(2017, 09, 04); //mon
-			period = firstDay.ToDateOnlyPeriod();
-			var activity = new Activity("_"){InContractTime = true};
+			var activity = new Activity();
 			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc)
-				.IsOpen(new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(20)));
-			skill.DefaultResolution = 60;
-			var scenario = new Scenario("_");
+				.IsOpen(new TimePeriod(8, 20))
+				.DefaultResolution(60);
+			var scenario = new Scenario();
 			var shiftCategory = new ShiftCategory("_").WithId();
-			var lunchActivity = new Activity("l"){RequiresSkill = false, InContractTime = true};
+			var lunchActivity = new Activity();
 			var ruleSet = new WorkShiftRuleSet(new WorkShiftTemplateGenerator(activity,
 				new TimePeriodWithSegment(8, 0, 12, 0, 60),
 				new TimePeriodWithSegment(16, 0, 20, 0, 60), shiftCategory));
 			ruleSet.AddLimiter(new ContractTimeLimiter(new TimePeriod(8, 8), TimeSpan.FromMinutes(60)));
-			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(lunchActivity, new TimePeriodWithSegment(1, 0, 2, 0, 60),
-				new TimePeriodWithSegment(8, 0, 16, 0, 60)));
-			agentList = new List<IPerson>();
+			ruleSet.AddExtender(new ActivityAbsoluteStartExtender(lunchActivity, new TimePeriodWithSegment(1, 0, 2, 0, 60), new TimePeriodWithSegment(8, 0, 16, 0, 60)));
 			var assesList = new List<IPersonAssignment>();
-			var dayOffTemplate = new DayOffTemplate();
 			for (var n = 0; n < 30; n++)
 			{
-				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill);
-				agent.AddSchedulePeriod(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1));
-				agent.SchedulePeriod(firstDay).SetDaysOff(2);
-				//var ass = new PersonAssignment(agent, scenario, firstDay).ShiftCategory(shiftCategory)
-				//	.WithLayer(activity, new TimePeriod(8, 16));
-				var asses = Enumerable.Range(0, 7).Select(i =>
-					new PersonAssignment(agent, scenario, firstDay.AddDays(i)).ShiftCategory(shiftCategory)
-						.WithLayer(activity, new TimePeriod(8, 16))).ToArray();
-				asses[5].SetDayOff(dayOffTemplate); //saturday
-				asses[6].SetDayOff(dayOffTemplate);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc)
+					.WithPersonPeriod(ruleSet, skill)
+					.WithSchedulePeriodOneWeek(date, 1);
 				agentList.Add(agent);
-				assesList.AddRange(asses);
+				assesList.Add(new PersonAssignment(agent, scenario, date).ShiftCategory(shiftCategory).WithLayer(activity, new TimePeriod(8, 16)));
 			}
-
 			var demands = new List<Tuple<int, TimeSpan>>
 			{
 				new Tuple<int, TimeSpan>(8, TimeSpan.FromHours(12)),
@@ -86,10 +76,8 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 				new Tuple<int, TimeSpan>(18, TimeSpan.FromHours(5)),
 				new Tuple<int, TimeSpan>(19, TimeSpan.FromHours(3))
 			};
-			var skillDays = skill.CreateSkillDayWithDemandPerHour(scenario, firstDay, TimeSpan.Zero, demands);
-
-			var stateHolder = SchedulerStateHolder.Fill(scenario, period, agentList, assesList, skillDays);
-			return stateHolder;
+			var skillDays = skill.CreateSkillDayWithDemandPerHour(scenario, date, TimeSpan.Zero, demands);
+			return SchedulerStateHolder.Fill(scenario, date, agentList, assesList, skillDays);
 		}
 
 		public IntradayDesktopQualityTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
