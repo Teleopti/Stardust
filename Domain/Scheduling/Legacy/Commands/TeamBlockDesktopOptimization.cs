@@ -25,7 +25,35 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 	{
 		private readonly OptimizeIntradayIslandsDesktop _optimizeIntradayIslandsDesktop;
 
-		public TeamBlockDesktopOptimization(OptimizeIntradayIslandsDesktop optimizeIntradayIslandsDesktop, TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService, Func<ISchedulerStateHolder> schedulerStateHolder, ISchedulingOptionsCreator schedulingOptionsCreator, ITeamBlockInfoFactory teamBlockInfoFactory, MatrixListFactory matrixListFactory, IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness, ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService, ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService, IWeeklyRestSolverCommand weeklyRestSolverCommand, ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand, IntraIntervalOptimizationCommand intraIntervalOptimizationCommand, IOptimizerHelperHelper optimizerHelper, TeamBlockDayOffOptimizer teamBlockDayOffOptimizer, CascadingResourceCalculationContextFactory resourceCalculationContextFactory, TeamInfoFactoryFactory teamInfoFactoryFactory, DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock, IScheduleDayChangeCallback scheduleDayChangeCallback, MaxSeatOptimization maxSeatOptimization, DesktopOptimizationContext desktopOptimizationContext) : base(teamBlockIntradayOptimizationService, schedulerStateHolder, schedulingOptionsCreator, teamBlockInfoFactory, matrixListFactory, equalNumberOfCategoryFairness, teamBlockSeniorityFairnessOptimizationService, teamBlockDayOffFairnessOptimizationService, weeklyRestSolverCommand, teamBlockMoveTimeBetweenDaysCommand, intraIntervalOptimizationCommand, optimizerHelper, teamBlockDayOffOptimizer, resourceCalculationContextFactory, teamInfoFactoryFactory, dayOffOptimizationDesktopTeamBlock, scheduleDayChangeCallback, maxSeatOptimization, desktopOptimizationContext)
+		public TeamBlockDesktopOptimization(
+			OptimizeIntradayIslandsDesktop optimizeIntradayIslandsDesktop,
+			TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
+			Func<ISchedulerStateHolder> schedulerStateHolder,
+			ISchedulingOptionsCreator schedulingOptionsCreator,
+			ITeamBlockInfoFactory teamBlockInfoFactory,
+			MatrixListFactory matrixListFactory,
+			IEqualNumberOfCategoryFairnessService equalNumberOfCategoryFairness,
+			ITeamBlockSeniorityFairnessOptimizationService teamBlockSeniorityFairnessOptimizationService,
+			ITeamBlockDayOffFairnessOptimizationServiceFacade teamBlockDayOffFairnessOptimizationService,
+			IWeeklyRestSolverCommand weeklyRestSolverCommand,
+			ITeamBlockMoveTimeBetweenDaysCommand teamBlockMoveTimeBetweenDaysCommand,
+			IntraIntervalOptimizationCommand intraIntervalOptimizationCommand,
+			IOptimizerHelperHelper optimizerHelper,
+			TeamBlockDayOffOptimizer teamBlockDayOffOptimizer,
+			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
+			TeamInfoFactoryFactory teamInfoFactoryFactory,
+			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
+			IScheduleDayChangeCallback scheduleDayChangeCallback,
+			MaxSeatOptimization maxSeatOptimization,
+			DesktopOptimizationContext desktopOptimizationContext,
+			BlockPreferencesMapper blockPreferencesMapper) :
+			base(
+				teamBlockIntradayOptimizationService, schedulerStateHolder, schedulingOptionsCreator, teamBlockInfoFactory,
+				matrixListFactory, equalNumberOfCategoryFairness, teamBlockSeniorityFairnessOptimizationService,
+				teamBlockDayOffFairnessOptimizationService, weeklyRestSolverCommand, teamBlockMoveTimeBetweenDaysCommand,
+				intraIntervalOptimizationCommand, optimizerHelper, teamBlockDayOffOptimizer, resourceCalculationContextFactory,
+				teamInfoFactoryFactory, dayOffOptimizationDesktopTeamBlock, scheduleDayChangeCallback, maxSeatOptimization,
+				desktopOptimizationContext, blockPreferencesMapper)
 		{
 			_optimizeIntradayIslandsDesktop = optimizeIntradayIslandsDesktop;
 		}
@@ -63,6 +91,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly IScheduleDayChangeCallback _scheduleDayChangeCallback;
 		private readonly MaxSeatOptimization _maxSeatOptimization;
 		private readonly DesktopOptimizationContext _desktopOptimizationContext;
+		private readonly BlockPreferencesMapper _blockPreferencesMapper;
+		
 
 		public TeamBlockDesktopOptimizationOLD(TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -82,7 +112,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			DayOffOptimizationDesktopTeamBlock dayOffOptimizationDesktopTeamBlock,
 			IScheduleDayChangeCallback scheduleDayChangeCallback,
 			MaxSeatOptimization maxSeatOptimization,
-			DesktopOptimizationContext desktopOptimizationContext)
+			DesktopOptimizationContext desktopOptimizationContext,
+			BlockPreferencesMapper blockPreferencesMapper)
 		{
 			_teamBlockIntradayOptimizationService = teamBlockIntradayOptimizationService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -103,6 +134,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_scheduleDayChangeCallback = scheduleDayChangeCallback;
 			_maxSeatOptimization = maxSeatOptimization;
 			_desktopOptimizationContext = desktopOptimizationContext;
+			_blockPreferencesMapper = blockPreferencesMapper;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker, DateOnlyPeriod selectedPeriod, IEnumerable<IPerson> selectedPersons,
@@ -124,7 +156,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			using (_resourceCalculationContextFactory.Create(_schedulerStateHolder().Schedules, _schedulerStateHolder().SchedulingResultState.Skills, false, selectedPeriod.Inflate(1)))
 			{
 				var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-				var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
+				var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _blockPreferencesMapper);
 
 				if (optimizationPreferences.General.OptimizationStepDaysOffForFlexibleWorkTime)
 				{

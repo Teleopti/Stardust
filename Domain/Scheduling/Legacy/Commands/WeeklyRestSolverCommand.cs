@@ -19,18 +19,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly Func<ISchedulerStateHolder> _schedulerStateHolder;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContextFactory;
 		private readonly TeamInfoFactoryFactory _teamInfoFactoryFactory;
+		private readonly BlockPreferencesMapper _blockPreferencesMapper;
 
 		public WeeklyRestSolverCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			Func<WeeklyRestSolverService> weeklyRestSolverService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
 			CascadingResourceCalculationContextFactory resourceCalculationContextFactory,
-			TeamInfoFactoryFactory teamInfoFactoryFactory)
+			TeamInfoFactoryFactory teamInfoFactoryFactory, 
+			BlockPreferencesMapper blockPreferencesMapper)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_weeklyRestSolverService = weeklyRestSolverService;
 			_schedulerStateHolder = schedulerStateHolder;
 			_resourceCalculationContextFactory = resourceCalculationContextFactory;
 			_teamInfoFactoryFactory = teamInfoFactoryFactory;
+			_blockPreferencesMapper = blockPreferencesMapper;
 		}
 
 		[TestLog]
@@ -39,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						IDayOffOptimizationPreferenceProvider dayOffOptimizationPreferenceProvider)
 		{
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons, _schedulerStateHolder().Schedules, schedulingOptions.GroupOnGroupPageForTeamBlockPer);
-			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
+			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _blockPreferencesMapper);
 
 			var schedulerStateHolder = _schedulerStateHolder();
 

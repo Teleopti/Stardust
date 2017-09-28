@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly AffectedDayOffs _affectedDayOffs;
 		private readonly IShiftCategoryLimitationChecker _shiftCategoryLimitationChecker;
 		private readonly INightRestWhiteSpotSolverServiceFactory _nightRestWhiteSpotSolverServiceFactory;
+		private readonly BlockPreferencesMapper _blockPreferencesMapper;
 
 		public DayOffOptimizerStandard(
 			ILockableBitArrayFactory lockableBitArrayFactory,
@@ -56,7 +57,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamBlockDaysOffMoveFinder teamBlockDaysOffMoveFinder,
 			AffectedDayOffs affectedDayOffs,
 			IShiftCategoryLimitationChecker shiftCategoryLimitationChecker,
-			INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory)
+			INightRestWhiteSpotSolverServiceFactory nightRestWhiteSpotSolverServiceFactory,
+			BlockPreferencesMapper blockPreferencesMapper)
 		{
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_teamBlockScheduler = teamBlockScheduler;
@@ -75,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_affectedDayOffs = affectedDayOffs;
 			_shiftCategoryLimitationChecker = shiftCategoryLimitationChecker;
 			_nightRestWhiteSpotSolverServiceFactory = nightRestWhiteSpotSolverServiceFactory;
+			_blockPreferencesMapper = blockPreferencesMapper;
 		}
 
 		public IEnumerable<ITeamInfo> Execute(IPeriodValueCalculator periodValueCalculatorForAllSkills, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
@@ -97,8 +100,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (var matrix in matrixes.Randomize())
 			{
 				var blockPreference = blockPreferenceProvider.ForAgent(matrix.Item1.Person, matrix.Item1.EffectivePeriodDays.First().Day);
-				UpdateBlockPreference(optimizationPreferences, blockPreference);
-				SchedulingOptionsCreator.SetTeamBlockOptions(optimizationPreferences, schedulingOptions);
+				_blockPreferencesMapper.UpdateOptimizationPreferencesFromExtraPreferences(optimizationPreferences, blockPreference);
+				_blockPreferencesMapper.UpdateSchedulingOptionsFromOptimizationPreferences(schedulingOptions, optimizationPreferences);
 
 				if (optimizationPreferences.Extra.IsClassic())
 				{
@@ -182,14 +185,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				select allFailedKeyValue.Key;
 		}
 
-		private static void UpdateBlockPreference(IOptimizationPreferences optimizationPreferences, IExtraPreferences blockPreference)
-		{
-			optimizationPreferences.Extra.BlockTypeValue = blockPreference.BlockTypeValue;
-			optimizationPreferences.Extra.UseBlockSameShiftCategory = blockPreference.UseBlockSameShiftCategory;
-			optimizationPreferences.Extra.UseBlockSameShift = blockPreference.UseBlockSameShift;
-			optimizationPreferences.Extra.UseBlockSameStartTime = blockPreference.UseBlockSameStartTime;
-			optimizationPreferences.Extra.UseTeamBlockOption = blockPreference.UseTeamBlockOption;
-		}
+		
 
 		private bool runOneMatrixOnly(IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService, IScheduleMatrixPro matrix,

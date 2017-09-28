@@ -172,6 +172,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<IntraIntervalOptimizationCommand>().InstancePerLifetimeScope();
 			builder.RegisterType<GroupPersonBuilderWrapper>().As<IGroupPersonBuilderWrapper>().InstancePerLifetimeScope();
 			builder.RegisterType<TeamInfoFactoryFactory>().InstancePerLifetimeScope();
+			builder.RegisterType<BlockPreferencesMapper>().SingleInstance();
 
 			builder.RegisterType<DisableDeletedFilter>().As<IDisableDeletedFilter>().SingleInstance();
 			builder.RegisterType<InnerOptimizerHelperHelper>().As<IOptimizerHelperHelper>().SingleInstance();

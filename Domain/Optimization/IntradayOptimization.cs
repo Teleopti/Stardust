@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly WeeklyRestSolverExecuter _weeklyRestSolverExecuter;
 		private readonly CascadingResourceCalculationContextFactory _resourceCalculationContext;
 		private readonly TeamBlockIntradayOptimizationService _teamBlockIntradayOptimizationService;
+		private readonly BlockPreferencesMapper _blockPreferencesMapper;
 
 		public IntradayOptimization(TeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService,
 			Func<ISchedulerStateHolder> schedulerStateHolder,
@@ -37,7 +38,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			TeamInfoFactoryFactory teamInfoFactoryFactory,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			WeeklyRestSolverExecuter weeklyRestSolverExecuter,
-			CascadingResourceCalculationContextFactory resourceCalculationContext)
+			CascadingResourceCalculationContextFactory resourceCalculationContext, 
+			BlockPreferencesMapper blockPreferencesMapper)
 		{
 			_teamBlockIntradayOptimizationService = teamBlockIntradayOptimizationService;
 			_schedulerStateHolder = schedulerStateHolder;
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_weeklyRestSolverExecuter = weeklyRestSolverExecuter;
 			_resourceCalculationContext = resourceCalculationContext;
+			_blockPreferencesMapper = blockPreferencesMapper;
 		}
 
 		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule, IBlockPreferenceProvider blockPreferenceProvider)
@@ -60,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var rollbackService = new SchedulePartModifyAndRollbackService(stateHolder.SchedulingResultState, _scheduleDayChangeCallback, new ScheduleTagSetter(optimizationPreferences.General.ScheduleTag));
 			var allMatrixes = _matrixListFactory.CreateMatrixListAllForLoadedPeriod(stateHolder.Schedules, stateHolder.SchedulingResultState.PersonsInOrganization, period);
 			var teamInfoFactory = _teamInfoFactoryFactory.Create(_schedulerStateHolder().AllPermittedPersons,_schedulerStateHolder().Schedules, optimizationPreferences.Extra.TeamGroupPage);
-			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
+			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _blockPreferencesMapper);
 
 			using ( _resourceCalculationContext.Create(stateHolder.Schedules, stateHolder.SchedulingResultState.Skills, true, period))
 			{

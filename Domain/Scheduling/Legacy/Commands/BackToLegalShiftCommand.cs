@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 		private readonly PeriodExtractorFromScheduleParts _periodExtractor;
 		private readonly IUserTimeZone _userTimeZone;
 		private ISchedulingProgress _backgroundWorker;
+		private readonly BlockPreferencesMapper _blockPreferencesMapper;
 
 		public BackToLegalShiftCommand(ITeamBlockInfoFactory teamBlockInfoFactory,
 			IGroupPersonBuilderForOptimizationFactory groupPersonBuilderForOptimizationFactory,
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			IGroupPersonBuilderWrapper groupPersonBuilderWrapper,
 			IPersonListExtractorFromScheduleParts extractor,
 			PeriodExtractorFromScheduleParts periodExtractor,
-			IUserTimeZone userTimeZone)
+			IUserTimeZone userTimeZone,
+			BlockPreferencesMapper blockPreferencesMapper)
 		{
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_groupPersonBuilderForOptimizationFactory = groupPersonBuilderForOptimizationFactory;
@@ -49,6 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 			_extractor = extractor;
 			_periodExtractor = periodExtractor;
 			_userTimeZone = userTimeZone;
+			_blockPreferencesMapper = blockPreferencesMapper;
 		}
 
 		public void Execute(ISchedulingProgress backgroundWorker,
@@ -72,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 
 			var teamInfoFactory = new TeamInfoFactory(_groupPersonBuilderWrapper);
 
-			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory);
+			var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _teamBlockInfoFactory, _blockPreferencesMapper);
 			var selectedPeriod = _periodExtractor.ExtractPeriod(selectedSchedules);
 			var allMatrixes = selectedPeriod.HasValue ? _matrixListFactory.CreateMatrixListAllForLoadedPeriod(schedulingResultStateHolder.Schedules, schedulingResultStateHolder.PersonsInOrganization, selectedPeriod.Value) : new List<IScheduleMatrixPro>();
 			var selectedPersons = _extractor.ExtractPersons(selectedSchedules);

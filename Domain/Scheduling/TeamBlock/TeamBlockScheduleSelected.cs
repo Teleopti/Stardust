@@ -3,6 +3,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Optimization.WeeklyRestSolver;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly ITeamMatrixChecker _teamMatrixChecker;
 		private readonly IWorkShiftSelector _workShiftSelector;
 		private readonly IGroupPersonSkillAggregator _groupPersonSkillAggregator;
+		private readonly BlockPreferencesMapper _blockPreferencesMapper;
 
 		public TeamBlockScheduleSelected(TeamBlockScheduler teamBlockScheduler,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
@@ -27,7 +29,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ValidatedTeamBlockInfoExtractor validatedTeamBlockExtractor,
 			ITeamMatrixChecker teamMatrixChecker,
 			IWorkShiftSelector workShiftSelector,
-			IGroupPersonSkillAggregator groupPersonSkillAggregator)
+			IGroupPersonSkillAggregator groupPersonSkillAggregator,
+			BlockPreferencesMapper blockPreferencesMapper)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
@@ -36,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_teamMatrixChecker = teamMatrixChecker;
 			_workShiftSelector = workShiftSelector;
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
+			_blockPreferencesMapper = blockPreferencesMapper;
 		}
 
 		public void ScheduleSelected(ISchedulingCallback schedulingCallback, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
@@ -73,10 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count(), true))
 			{
 				var blockPreferences = blockPreferenceProvider.ForAgents(teamInfo.GroupMembers, selectedPeriod.StartDate).ToArray();
-				updateSchedulingOptionsForBlockPreferences(schedulingOption, blockPreferences);
-				schedulingOption.BlockSameShift = blockPreferences.Any(x => x.UseBlockSameShift);
-				schedulingOption.BlockSameShiftCategory = blockPreferences.Any(x => x.UseBlockSameShiftCategory);
-				schedulingOption.BlockSameStartTime = blockPreferences.Any(x => x.UseBlockSameStartTime);
+				_blockPreferencesMapper.UpdateSchedulingOptionsFromExtraPreferences(schedulingOption, blockPreferences);
 
 				var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo, datePointer, allPersonMatrixList, schedulingOption, selectedPeriod);
 				if (teamBlockInfo == null) continue;
@@ -93,23 +94,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				}
 				if (schedulingCallback.IsCancelled) break;
 			}
-		}
-
-		private static void updateSchedulingOptionsForBlockPreferences(SchedulingOptions schedulingOption,
-			IExtraPreferences[] blockPreferences)
-		{
-			var distinctTypes = blockPreferences.Select(x => x.BlockTypeValue).Distinct().ToArray();
-			var blockFinderType =
-				distinctTypes.Length == 1
-					? distinctTypes.Single()
-					: blockPreferences.First(x => x.BlockTypeValue != BlockFinderType.SingleDay).BlockTypeValue;
-			schedulingOption.UseBlock = blockPreferences.Any(x => x.UseTeamBlockOption);
-			schedulingOption.BlockFinderTypeForAdvanceScheduling = schedulingOption.UseBlock
-				? blockFinderType
-				: BlockFinderType.SingleDay;
-			schedulingOption.BlockSameShift = blockPreferences.Any(x => x.UseBlockSameShift);
-			schedulingOption.BlockSameShiftCategory = blockPreferences.Any(x => x.UseBlockSameShiftCategory);
-			schedulingOption.BlockSameStartTime = blockPreferences.Any(x => x.UseBlockSameStartTime);
 		}
 
 		private void verifyScheduledTeamBlock(ISchedulingCallback schedulingCallback, IEnumerable<IPerson> selectedPersons,

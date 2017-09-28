@@ -24,11 +24,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
+		private readonly BlockPreferencesMapper _blockPreferencesMapper;
 
-	    public TeamBlockGenerator(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory)
+
+	    public TeamBlockGenerator(ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, BlockPreferencesMapper blockPreferencesMapper)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
+			_blockPreferencesMapper = blockPreferencesMapper;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -66,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			foreach (var teamInfo in allTeamInfoListOnStartDate)
 			{
 				var blockPreferences = blockPreferenceProvider.ForAgents(teamInfo.GroupMembers, selectedPeriod.StartDate).ToArray();
-				TeamBlockIntradayOptimizationService.UpdateSchedulingOptionsForBlockPreferences(schedulingOptions, blockPreferences);
+				_blockPreferencesMapper.UpdateSchedulingOptionsFromExtraPreferences(schedulingOptions, blockPreferences);
 				foreach (var day in daysInSelectedPeriod)
 				{
 					var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
