@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 		public Func<ISchedulerStateHolder> SchedulerStateHolder;
 		public IIntradayOptimization Target;
 		public IScheduleResultDataExtractorProvider ScheduleResultDataExtractorProvider;
-		public IUserTimeZone UserTimeZone;
 
 		[Test]
 		public void ShouldProduceGoodResultWithNoLimitations()
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var firstDay = new DateOnly(2017, 09, 04); //mon
 			period = firstDay.ToDateOnlyPeriod();
 			var activity = new Activity("_"){InContractTime = true};
-			var skill = new Skill().For(activity).InTimeZone(UserTimeZone.TimeZone())
+			var skill = new Skill().For(activity).InTimeZone(TimeZoneInfo.Utc)
 				.IsOpen(new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(20)));
 			skill.DefaultResolution = 60;
 			var scenario = new Scenario("_");
@@ -58,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			var dayOffTemplate = new DayOffTemplate();
 			for (var n = 0; n < 30; n++)
 			{
-				var agent = new Person().WithId().InTimeZone(UserTimeZone.TimeZone()).WithPersonPeriod(ruleSet, skill);
+				var agent = new Person().WithId().InTimeZone(TimeZoneInfo.Utc).WithPersonPeriod(ruleSet, skill);
 				agent.AddSchedulePeriod(new SchedulePeriod(firstDay, SchedulePeriodType.Week, 1));
 				agent.SchedulePeriod(firstDay).SetDaysOff(2);
 				//var ass = new PersonAssignment(agent, scenario, firstDay).ShiftCategory(shiftCategory)
