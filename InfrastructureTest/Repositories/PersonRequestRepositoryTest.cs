@@ -2091,7 +2091,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			return new PersonRequestRepository(UnitOfWork).FindAbsenceAndTextRequests(filter).ToArray();
 		}
 
-
 		[Test]
 		public void ShouldLoadWaitlistedAbsenceRequestsOnGivenPeriod()
 		{
@@ -2183,6 +2182,198 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			waitlistRequestsIds.Count().Should().Be.EqualTo(4);
 			CollectionAssert.AreEquivalent(waitlistRequestsIds,
 				new List<Guid>() { request1.Id.GetValueOrDefault(), request2.Id.GetValueOrDefault(), request3.Id.GetValueOrDefault(), request6.Id.GetValueOrDefault() });
+		}
+
+		[Test]
+		public void ShouldCheckIfHasWaitlistedOnPeriodAndSkill()
+		{
+			var absence = AbsenceFactory.CreateAbsence("Football");
+			PersistAndRemoveFromUnitOfWork(absence);
+			var activity = new Activity("aktare");
+			PersistAndRemoveFromUnitOfWork(activity);
+			var skilltype = SkillTypeFactory.CreateSkillType();
+			PersistAndRemoveFromUnitOfWork(skilltype);
+			var skill = SkillFactory.CreateSkill("skillet");
+			var skill2 = SkillFactory.CreateSkill("skill2");
+			var skill3 = SkillFactory.CreateSkill("skill3");
+			skill.SkillType = skilltype;
+			skill2.SkillType = skilltype;
+			skill3.SkillType = skilltype;
+			skill.Activity = activity;
+			skill2.Activity = activity;
+			skill3.Activity = activity;
+			PersistAndRemoveFromUnitOfWork(skill);
+			PersistAndRemoveFromUnitOfWork(skill2);
+			PersistAndRemoveFromUnitOfWork(skill3);
+
+			var site = new Site("sajt");
+			PersistAndRemoveFromUnitOfWork(site);
+			var team = new Team(){Site = site};
+			team.SetDescription(new Description("fånigt sätt"));
+			PersistAndRemoveFromUnitOfWork(team);
+			var contract = new Contract("con");
+			PersistAndRemoveFromUnitOfWork(contract);
+			var perc = new PartTimePercentage("part");
+			PersistAndRemoveFromUnitOfWork(perc);
+			var contractSchedule = new ContractSchedule("s");
+			PersistAndRemoveFromUnitOfWork(contractSchedule);
+			var personContract = new PersonContract(contract, perc, contractSchedule);
+			var personContract2 = new PersonContract(contract, perc, contractSchedule);
+
+
+			var waitlistedWCS = new WorkflowControlSet()
+			{
+				Name = "dd",
+				AbsenceRequestWaitlistEnabled = true,
+				AbsenceRequestWaitlistProcessOrder = WaitlistProcessOrder.BySeniority
+			};
+			waitlistedWCS.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
+				Period = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+
+			});
+
+			PersistAndRemoveFromUnitOfWork(waitlistedWCS);
+			var waitlistedPerson = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016,1,1),new[]{skill,skill2});
+			waitlistedPerson.PersonPeriodCollection[0].PersonContract = personContract;
+			waitlistedPerson.PersonPeriodCollection[0].Team = team;
+			waitlistedPerson.WorkflowControlSet = waitlistedWCS;
+			waitlistedPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			PersistAndRemoveFromUnitOfWork(waitlistedPerson);
+			var waitlistedPerson2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 1, 1), new[] { skill2, skill3 });
+			waitlistedPerson2.PersonPeriodCollection[0].PersonContract = personContract2;
+			waitlistedPerson2.PersonPeriodCollection[0].Team = team;
+			waitlistedPerson2.WorkflowControlSet = waitlistedWCS;
+			waitlistedPerson2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			PersistAndRemoveFromUnitOfWork(waitlistedPerson2);
+
+			IAbsenceRequest absenceRequest1 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 03, 02, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 02, 12, 0, 0, DateTimeKind.Utc)));
+			IAbsenceRequest absenceRequest2 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 03, 02, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 02, 12, 0, 0, DateTimeKind.Utc)));
+			IAbsenceRequest absenceRequest3 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 03, 02, 11, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 02, 13, 0, 0, DateTimeKind.Utc)));
+			
+			IPersonRequest request1 = new PersonRequest(waitlistedPerson, absenceRequest1);
+			request1.Pending();
+			request1.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			PersistAndRemoveFromUnitOfWork(request1);
+
+
+			IPersonRequest request2 = new PersonRequest(waitlistedPerson, absenceRequest2);
+			request2.Pending();
+			request2.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			PersistAndRemoveFromUnitOfWork(request2);
+
+			IPersonRequest request3 = new PersonRequest(waitlistedPerson2, absenceRequest3);
+			request3.Pending();
+			request3.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			PersistAndRemoveFromUnitOfWork(request3);
+
+
+			var hasWaitlistRequests =
+				new PersonRequestRepository(UnitOfWork).HasWaitlistedRequestsOnSkill(
+					new[] {skill.Id.GetValueOrDefault(), skill2.Id.GetValueOrDefault()}, new DateTime(2016, 03, 02, 11, 0, 0),
+					new DateTime(2016, 03, 02, 12, 0, 0));
+			hasWaitlistRequests.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldCheckIfHasWaitlistedOnPeriodAndSkillNumberTwo()
+		{
+			var absence = AbsenceFactory.CreateAbsence("Football");
+			PersistAndRemoveFromUnitOfWork(absence);
+			var activity = new Activity("aktare");
+			PersistAndRemoveFromUnitOfWork(activity);
+			var skilltype = SkillTypeFactory.CreateSkillType();
+			PersistAndRemoveFromUnitOfWork(skilltype);
+			var skill = SkillFactory.CreateSkill("skillet");
+			var skill2 = SkillFactory.CreateSkill("skill2");
+			var skill3 = SkillFactory.CreateSkill("skill3");
+			skill.SkillType = skilltype;
+			skill2.SkillType = skilltype;
+			skill3.SkillType = skilltype;
+			skill.Activity = activity;
+			skill2.Activity = activity;
+			skill3.Activity = activity;
+			PersistAndRemoveFromUnitOfWork(skill);
+			PersistAndRemoveFromUnitOfWork(skill2);
+			PersistAndRemoveFromUnitOfWork(skill3);
+
+			var site = new Site("sajt");
+			PersistAndRemoveFromUnitOfWork(site);
+			var team = new Team() { Site = site };
+			team.SetDescription(new Description("fånigt sätt"));
+			PersistAndRemoveFromUnitOfWork(team);
+			var contract = new Contract("con");
+			PersistAndRemoveFromUnitOfWork(contract);
+			var perc = new PartTimePercentage("part");
+			PersistAndRemoveFromUnitOfWork(perc);
+			var contractSchedule = new ContractSchedule("s");
+			PersistAndRemoveFromUnitOfWork(contractSchedule);
+			var personContract = new PersonContract(contract, perc, contractSchedule);
+			var personContract2 = new PersonContract(contract, perc, contractSchedule);
+
+
+			var waitlistedWCS = new WorkflowControlSet()
+			{
+				Name = "dd",
+				AbsenceRequestWaitlistEnabled = true,
+				AbsenceRequestWaitlistProcessOrder = WaitlistProcessOrder.BySeniority
+			};
+			waitlistedWCS.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenDatePeriod
+			{
+				Absence = absence,
+				OpenForRequestsPeriod = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
+				Period = new DateOnlyPeriod(2016, 2, 1, 2099, 2, 28),
+				StaffingThresholdValidator = new AbsenceRequestNoneValidator(),
+				PersonAccountValidator = new AbsenceRequestNoneValidator(),
+				AbsenceRequestProcess = new GrantAbsenceRequest()
+
+			});
+
+			PersistAndRemoveFromUnitOfWork(waitlistedWCS);
+			var waitlistedPerson = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 1, 1), new[] { skill, skill2 });
+			waitlistedPerson.PersonPeriodCollection[0].PersonContract = personContract;
+			waitlistedPerson.PersonPeriodCollection[0].Team = team;
+			waitlistedPerson.WorkflowControlSet = waitlistedWCS;
+			waitlistedPerson.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			PersistAndRemoveFromUnitOfWork(waitlistedPerson);
+			var waitlistedPerson2 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(2016, 1, 1), new[] { skill, skill2 });
+			waitlistedPerson2.PersonPeriodCollection[0].PersonContract = personContract2;
+			waitlistedPerson2.PersonPeriodCollection[0].Team = team;
+			waitlistedPerson2.WorkflowControlSet = waitlistedWCS;
+			waitlistedPerson2.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.Utc);
+			PersistAndRemoveFromUnitOfWork(waitlistedPerson2);
+
+			IAbsenceRequest absenceRequest1 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 03, 02, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 02, 12, 0, 0, DateTimeKind.Utc)));
+			IAbsenceRequest absenceRequest2 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 03, 02, 10, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 02, 12, 0, 0, DateTimeKind.Utc)));
+			IAbsenceRequest absenceRequest3 = new AbsenceRequest(absence, new DateTimePeriod(new DateTime(2016, 03, 02, 11, 0, 0, DateTimeKind.Utc), new DateTime(2016, 03, 02, 13, 0, 0, DateTimeKind.Utc)));
+
+			IPersonRequest request1 = new PersonRequest(waitlistedPerson, absenceRequest1);
+			request1.Pending();
+			request1.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			PersistAndRemoveFromUnitOfWork(request1);
+
+
+			IPersonRequest request2 = new PersonRequest(waitlistedPerson, absenceRequest2);
+			request2.Pending();
+			request2.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			PersistAndRemoveFromUnitOfWork(request2);
+
+			IPersonRequest request3 = new PersonRequest(waitlistedPerson2, absenceRequest3);
+			request3.Pending();
+			request3.Deny("waitlisted", new PersonRequestCheckAuthorization(), request1.Person, PersonRequestDenyOption.AutoDeny);
+			PersistAndRemoveFromUnitOfWork(request3);
+
+
+			var hasWaitlistRequests =
+				new PersonRequestRepository(UnitOfWork).HasWaitlistedRequestsOnSkill(
+					new[] { skill3.Id.GetValueOrDefault() }, new DateTime(2016, 03, 02, 11, 0, 0),
+					new DateTime(2016, 03, 02, 12, 0, 0));
+			hasWaitlistRequests.Should().Be.False();
 		}
 
 		[Test]

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 	public class FakePersonRequestRepository : IPersonRequestRepository
 	{
 		public readonly IList<IPersonRequest> RequestRepository = new List<IPersonRequest>();
-
+		public bool HasWaitlisted;
 		public virtual void Add(IPersonRequest entity)
 		{
 			if (!entity.Id.HasValue)
@@ -218,6 +218,11 @@ namespace Teleopti.Ccc.TestCommon.FakeRepositories
 		public IEnumerable<DateTimePeriod> GetRequestPeriodsForAgent(IPerson person, DateTimePeriod period)
 		{
 			return RequestRepository.Select(p => p.Request.Period);
+		}
+
+		public bool HasWaitlistedRequestsOnSkill(IEnumerable<Guid> skills, DateTime startDateTime, DateTime endDateTime, DateTime expiredDateTime)
+		{
+			return HasWaitlisted;
 		}
 	}
 }

@@ -53,16 +53,23 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 			try
 			{
 				var loadSchedulesPeriodToCoverForMidnightShifts = personRequest.Request.Period.ChangeStartTime(TimeSpan.FromDays(-1));
+				var timeZone = personRequest.Person.PermissionInformation.DefaultTimeZone();
 				if (personRequest.Person.WorkflowControlSet.AbsenceRequestWaitlistEnabled)
 				{
-					var waitlistedRequestsIds = _personRequestRepository.GetWaitlistRequests(personRequest.Request.Period);
-					var waitlistedRequests = _personRequestRepository.Find(waitlistedRequestsIds);
-					var validStart = _now.UtcDateTime() ; // add something?
-					waitlistedRequests =
-						waitlistedRequests.Where(
-							x =>
-						x.Request.Period.StartDateTime >= validStart).ToList();
-					if (waitlistedRequests.Any())
+					//var waitlistedRequestsIds = _personRequestRepository.GetWaitlistRequests(personRequest.Request.Period);
+					var periods = personRequest.Person.PersonPeriods(personRequest.Request.Period.ToDateOnlyPeriod(timeZone));
+					var absenceReqThresh = personRequest.Person.WorkflowControlSet.AbsenceRequestExpiredThreshold.GetValueOrDefault();
+					var skills = periods.SelectMany(x => x.PersonSkillCollection.Select(y => y.Skill.Id.GetValueOrDefault())).Distinct();
+
+					//var waitlistedRequests = _personRequestRepository.Find(waitlistedRequestsIds);
+					var hasWaitlisted = _personRequestRepository.HasWaitlistedRequestsOnSkill(skills,
+						personRequest.Request.Period.StartDateTime, personRequest.Request.Period.EndDateTime, _now.UtcDateTime().AddMinutes(absenceReqThresh));
+					//var validStart = _now.UtcDateTime() ; // add something?
+					//waitlistedRequests =
+					//	waitlistedRequests.Where(
+					//		x =>
+					//	x.Request.Period.StartDateTime >= validStart).ToList();
+					if (hasWaitlisted)
 					{
 						sendDenyCommand(personRequest, Resources.AbsenceRequestAlreadyInWaitlist);
 						return;
@@ -91,7 +98,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.AbsenceRequests
 				
 				var schedules = _scheduleStorage.FindSchedulesForPersonOnlyInGivenPeriod(personRequest.Person, new ScheduleDictionaryLoadOptions(false, false), loadSchedulesPeriodToCoverForMidnightShifts, _currentScenario.Current())[personRequest.Person];
 
-				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(personRequest.Person.PermissionInformation.DefaultTimeZone());
+				var dateOnlyPeriod = loadSchedulesPeriodToCoverForMidnightShifts.ToDateOnlyPeriod(timeZone);
 
 				var scheduleDays = schedules.ScheduledDayCollection(dateOnlyPeriod);
 

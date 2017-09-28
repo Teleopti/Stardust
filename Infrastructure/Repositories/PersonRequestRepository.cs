@@ -988,6 +988,29 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 										  .List<Guid>();
 		}
 
+		public bool HasWaitlistedRequestsOnSkill(IEnumerable<Guid> skills, DateTime startDateTime, DateTime endDateTime, DateTime expiredDateTime)
+		{
+			var cnt = Session.CreateSQLQuery(
+					@"SELECT count(*) FROM PersonRequest pr
+INNER JOIN Request r ON r.Parent = pr.Id
+INNER JOIN Person p ON p.Id = pr.Person
+INNER JOIN PersonPeriod pp ON p.Id = pp.Parent
+INNER JOIN PersonSkill ps ON pp.Id = ps.Parent
+WHERE RequestStatus = 5
+AND pr.IsDeleted = 0
+AND (r.StartDateTime BETWEEN :startDate AND :endDate OR
+r.EndDateTime BETWEEN  :startDate AND :endDate)
+AND r.StartDateTime > :expired
+AND (pp.StartDate BETWEEN :startDate AND :endDate
+OR pp.EndDate > :startDate AND pp.StartDate < :endDate)
+AND ps.Skill in(:list)")
+				.SetDateTime("startDate", startDateTime)
+				.SetDateTime("endDate", endDateTime)
+				.SetDateTime("expired", expiredDateTime)
+				.SetParameterList("list", skills).UniqueResult<int>();
+
+			return cnt> 0;
+		}
 		private static AbstractCriterion createPersonInCriterion(string propertyName, IReadOnlyCollection<IPerson> people)
 		{
 			if (people.Count <= 1000)

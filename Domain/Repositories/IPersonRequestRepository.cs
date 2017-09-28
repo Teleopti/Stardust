@@ -140,5 +140,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
 		IList<IPersonRequest> FindPersonRequestWithinPeriod(DateTimePeriod period);
 		IEnumerable<DateTimePeriod> GetRequestPeriodsForAgent(IPerson person, DateTimePeriod period);
+
+		bool HasWaitlistedRequestsOnSkill(IEnumerable<Guid> skills, DateTime startDateTime, DateTime endDateTime, DateTime expiredDateTime);
 	}
 }
