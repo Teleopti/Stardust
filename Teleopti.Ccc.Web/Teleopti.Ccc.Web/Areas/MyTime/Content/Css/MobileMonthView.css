@@ -1,0 +1,81 @@
+.mobile-month-view .mobile-month-view-nav {
+	padding: 0;
+}
+
+.mobile-month-view .mobile-month-view-nav .navbar-teleopti {
+	margin: 0;
+	display: flex;
+	justify-content: space-between;
+}
+
+.mobile-month-view .mobile-month-view-nav span.input-group-btn .btn.btn-default {
+	padding: 9px 10px;
+}
+
+@media(max-width:500px) {
+	.mobile-month-view .mobile-month-view-nav .input-group {
+		max-width: 300px;
+	}
+
+	.mobile-month-view .mobile-month-view-nav span.input-group-btn .btn {
+		padding: 10px;
+	}
+
+}
+
+@media(max-width:350px) {
+	.mobile-month-view .mobile-month-view-nav input.form-control {
+		padding-left: 0;
+		padding-right: 0;
+	}
+
+	.mobile-month-view .mobile-month-view-nav span.input-group-btn .btn {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+
+}
+
+.mobile-month-view .mobile-month-view-nav .submenu li {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	white-space: nowrap;
+	min-width: 35px;
+}
+
+.mobile-month-view .mobile-month-view-nav .submenu li.mobile-datepicker {
+	padding: 0 5px;
+	max-width: 329px;
+}
+
+.mobile-month-view .mobile-month-view-nav .input-group .form-control {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.mobile-month-view .mobile-month-view-nav .submenu li a {
+	display: inline-block;
+	padding-left: 5px;
+	padding-right: 5px;
+	text-align: center;
+	min-width: 35px;
+	height: 100%;
+}
+
+.mobile-month-view .mobile-month-view-nav .submenu li a > i {
+	transform: scale(1.3);
+	top: 6px;
+}
+
+.mobile-month-view .mobile-month-view-nav .submenu li.mobile-message a {
+	position: relative;
+}
+
+.mobile-month-view .mobile-month-view-nav .submenu li.mobile-message a > span.badge {
+	position: absolute;
+	top: 5px;
+	right: -2px;
+	font-size: 12px;
+	padding: 3px;
+}

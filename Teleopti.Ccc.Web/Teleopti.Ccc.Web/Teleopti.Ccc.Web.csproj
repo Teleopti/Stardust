@@ -1361,10 +1361,14 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.OvertimeRequestViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.FakeData.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileMonth.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileMonth.Tests.js" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.MobileMonthViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Schedule.Probability.Tests.js" />
     <Content Include="Areas\MyTime\Views\Static\appdownload.html" />
     <Content Include="Areas\MyTime\Content\Css\CiscoWidget.css" />
     <Content Include="Areas\MyTime\Content\Css\MobileDayView.css" />
+    <Content Include="Areas\MyTime\Content\Css\MobileMonthView.css" />
     <Content Include="Areas\MyTime\Content\Images\logo.png" />
     <Content Include="Areas\MyTime\Content\Images\seat.svg" />
     <Content Include="Areas\MyTime\Content\Scripts\qrcode.js" />
@@ -1534,6 +1538,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Areas\MyTime\Views\Schedule\MobileDayPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Schedule\MobileMonthPartial.cshtml" />
     <Content Include="Areas\MyTime\Views\AppGuide\WFMAppPartial.cshtml" />
     <Content Include="WFM\app\resourceplanner\web_performance_tests\resourceplanner-report.html" />
     <Content Include="WFM\app\resourceplanner\web_performance_tests\resourceplanner.report.controller.js" />

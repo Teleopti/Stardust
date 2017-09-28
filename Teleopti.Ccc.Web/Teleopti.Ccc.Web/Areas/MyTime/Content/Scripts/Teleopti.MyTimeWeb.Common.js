@@ -247,6 +247,13 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 	};
 
+	function _formatMonthShort(date) {
+		if (moment.isMoment(date)) {
+			return Teleopti.MyTimeWeb.Common.UseJalaaliCalendar ? date.format('jMMM jYYYY') : date.format('MMM YYYY');
+		}
+		return Teleopti.MyTimeWeb.Common.UseJalaaliCalendar ? moment(date).format('jMMM jYYYY') : moment(date).format('MMM YYYY');
+	};
+
 	 function _datesAreSame(dateOne, dateTwo) {
 			return (dateOne.isSame(dateTwo,'day'));
 	};
@@ -416,6 +423,10 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 
 		FormatMonth: function (date) {
 			return _formatMonth(date);
+		},
+
+		FormatMonthShort: function (date) {
+			return _formatMonthShort(date);
 		},
 
 		FormatServiceDate: function (date) {

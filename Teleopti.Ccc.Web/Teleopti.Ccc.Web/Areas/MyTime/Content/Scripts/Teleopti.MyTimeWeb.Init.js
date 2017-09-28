@@ -14,10 +14,11 @@
 }
 
 $(function() {
-    Teleopti.MyTimeWeb.Schedule.Init();
-    Teleopti.MyTimeWeb.Schedule.Month.Init();
-    Teleopti.MyTimeWeb.Schedule.MobileWeek.Init();
-    Teleopti.MyTimeWeb.Schedule.MobileStartDay.Init();
+	Teleopti.MyTimeWeb.Schedule.Init();
+	Teleopti.MyTimeWeb.Schedule.Month.Init();
+	Teleopti.MyTimeWeb.Schedule.MobileWeek.Init();
+	Teleopti.MyTimeWeb.Schedule.MobileStartDay.Init();
+	Teleopti.MyTimeWeb.Schedule.MobileMonth.Init();
 	Teleopti.MyTimeWeb.StudentAvailability.Init();
 	Teleopti.MyTimeWeb.Preference.Init();
 	Teleopti.MyTimeWeb.Request.Init();
