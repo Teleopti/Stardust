@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Collections.Generic;
+using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ReadModelUpdaters;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.RtaTool;
@@ -6,6 +7,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta.ViewModels;
 using Teleopti.Ccc.Domain.ApplicationLayer.Skill;
 using Teleopti.Ccc.Domain.FeatureFlags;
+using Teleopti.Ccc.Domain.UnitOfWork;
 using Teleopti.Ccc.Infrastructure.Aop;
 using Teleopti.Ccc.Infrastructure.Rta;
 using Teleopti.Ccc.Infrastructure.Rta.Persisters;
@@ -102,8 +104,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<RtaToolViewModelBuilderFromAgentState>().As<IRtaToolViewModelBuilder>().SingleInstance();
 
-			builder.RegisterType<NoRtaTracer>().As<IRtaTracer>().SingleInstance();
+			if (_config.Toggle(Toggles.RTA_RtaTracer_45597))
+				builder.RegisterType<RtaTracer>().As<IRtaTracer>().SingleInstance();
+			else
+				builder.RegisterType<NoRtaTracer>().As<IRtaTracer>().SingleInstance();
+			builder.RegisterType<RtaTracerReader>().As<IRtaTracerReader>().SingleInstance();
+			builder.RegisterType<RtaTracerWriter>().As<IRtaTracerWriter>().SingleInstance();
 		}
 
 	}
+	
 }

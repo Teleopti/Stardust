@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using log4net;
+using log4net.Repository.Hierarchy;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
@@ -71,10 +72,91 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta.Service
 		void NoChange(StateTraceInfo trace);
 		void StateProcessed(StateTraceInfo trace, IEnumerable<IEvent> events);
 	}
+	
+	public class RtaTraceLog
+	{
+		public string Message { get; set; }
+		public DateTime Time { get;  set; }
+	}
+
+	public interface IRtaTracerReader
+	{
+		IEnumerable<RtaTraceLog> Read();
+	}
+
+	public interface IRtaTracerWriter
+	{
+		void Write(string message);
+	}
+
+	public class RtaTracer : IRtaTracer
+	{
+		private readonly IRtaTracerWriter _writer;
+
+		public RtaTracer(IRtaTracerWriter writer)
+		{
+			_writer = writer;
+		}
+		
+		public void ProcessReceived()
+		{
+			_writer.Write("ProcessReceived");
+		}
+
+		public void ProcessProcessing()
+		{
+			throw new NotImplementedException();
+		}
+
+		public void For(IEnumerable<StateTraceInfo> traces, Action<StateTraceInfo> trace)
+		{
+			throw new NotImplementedException();
+		}
+
+		public StateTraceInfo StateReceived(string userCode, string stateCode)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void InvalidStateCode(StateTraceInfo trace)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void StateProcessing(StateTraceInfo trace)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void InvalidAuthenticationKey(StateTraceInfo trace)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void InvalidSourceId(StateTraceInfo trace)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void InvalidUserCode(StateTraceInfo trace)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void NoChange(StateTraceInfo trace)
+		{
+			throw new NotImplementedException();
+		}
+
+		public void StateProcessed(StateTraceInfo trace, IEnumerable<IEvent> events)
+		{
+			throw new NotImplementedException();
+		}
+
+	}
 
 	public class StateTraceInfo
 	{
-		public DateTime Time;
 		public Guid Id;
 	}
 }

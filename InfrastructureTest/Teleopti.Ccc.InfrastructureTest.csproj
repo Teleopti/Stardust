@@ -304,6 +304,7 @@
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderSitesSkillsTest.cs" />
     <Compile Include="Rta\ReadModels\AgentState\TeamCardReaderBusinessUnitTest.cs" />
+    <Compile Include="Rta\RtaTracerReaderTest.cs" />
     <Compile Include="Rta\Service\Persisters\AgentStateForUpsert.cs" />
     <Compile Include="Rta\ReadModels\AgentState\AgentStateReadModelPersisterExtensions.cs" />
     <Compile Include="Rta\ReadModels\AgentState\Reader\ForExcludingStateGroups.cs" />
