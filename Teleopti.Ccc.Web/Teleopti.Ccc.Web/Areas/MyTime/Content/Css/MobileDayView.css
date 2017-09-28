@@ -59,6 +59,10 @@
 	padding: 3px;
 }
 
+.mobile-month-icon a img{
+	margin-top: -5px;
+}
+
 .mobile-start-day-body {
 	-webkit-overflow-scrolling: touch;
 	height: calc(100% - 53px);

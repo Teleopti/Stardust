@@ -2212,6 +2212,7 @@
     <Content Include="Areas\MyTime\Content\Images\adherenceGoldBadge.png" />
     <Content Include="Areas\MyTime\Content\Images\adherenceSilverBadge.png" />
     <Content Include="Areas\MyTime\Content\Images\AHTBronzeBadge.png" />
+    <Content Include="Areas\MyTime\Content\Images\monthViewIcon.png" />
     <Content Include="Areas\MyTime\Content\Images\AHTGoldBadge.png" />
     <Content Include="Areas\MyTime\Content\Images\AHTSilverBadge.png" />
     <Content Include="Areas\MyTime\Content\Images\answeredCallsBronzeBadge.png" />

@@ -54,6 +54,7 @@ Teleopti.MyTimeWeb.Schedule.MobileStartDayViewModel = function (weekStart, paren
 	self.menuIconIsVisible = ko.observable(true);
 	self.focusingRequestForm = ko.observable(false);
 	self.isCommandEnable = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_DayScheduleForStartPage_Command_44209");
+	self.mobileMonthEnabled = Teleopti.MyTimeWeb.Common.IsToggleEnabled("MyTimeWeb_MonthlyScheduleMobileView_45004");
 
 	self.datePickerFormat = ko.observable(Teleopti.MyTimeWeb.Common.DateFormat);
 	self.requestDay = null;
