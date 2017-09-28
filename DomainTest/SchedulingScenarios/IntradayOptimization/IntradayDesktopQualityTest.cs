@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			Target.Execute(date.ToDateOnlyPeriod(), agentList, false);
 			
 			ScheduleResultDataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(new[] { date }, new SchedulingOptions(), stateHolder.SchedulingResultState)
-				.Values().First().Should().Be.LessThan(0.28);
+				.Values().First().Should().Be.IncludedIn(0.01, 0.28);
 		}
 
 		private ISchedulerStateHolder setupStandardState(DateOnly date, ICollection<IPerson> agentList)
