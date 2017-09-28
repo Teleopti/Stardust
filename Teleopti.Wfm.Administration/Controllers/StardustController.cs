@@ -1,34 +1,37 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Events;
-using Teleopti.Ccc.Domain.Intraday;
 using Teleopti.Ccc.Domain.MultiTenancy;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.Infrastructure.MultiTenancy.Admin;
 using Teleopti.Wfm.Administration.Core;
 using Teleopti.Wfm.Administration.Core.Stardust;
+using Teleopti.Wfm.Administration.Models.Stardust;
 
 namespace Teleopti.Wfm.Administration.Controllers
 {
-    [TenantTokenAuthentication]
-    public class StardustController : ApiController
+	[TenantTokenAuthentication]
+	public class StardustController : ApiController
 	{
 		private readonly IStardustRepository _stardustRepository;
 		private readonly IEventPublisher _eventPublisher;
 		private readonly ILoadAllTenants _loadAllTenants;
-		private readonly IJobStartTimeRepository _jobStartTimeRepository;
 		private readonly IStaffingSettingsReader _staffingSettingsReader;
 
 
-		public StardustController(IStardustRepository stardustRepository, IEventPublisher eventPublisher, 
-			ILoadAllTenants loadAllTenants, IJobStartTimeRepository jobStartTimeRepository, IStaffingSettingsReader staffingSettingsReader)
+		public StardustController(IStardustRepository stardustRepository, IEventPublisher eventPublisher,
+			ILoadAllTenants loadAllTenants, IStaffingSettingsReader staffingSettingsReader)
 		{
 			_stardustRepository = stardustRepository;
 			_eventPublisher = eventPublisher;
 			_loadAllTenants = loadAllTenants;
-			_jobStartTimeRepository = jobStartTimeRepository;
 			_staffingSettingsReader = staffingSettingsReader;
 		}
 
@@ -110,30 +113,20 @@ namespace Teleopti.Wfm.Administration.Controllers
 		[TenantUnitOfWork]
 		public virtual IHttpActionResult TriggerResourceCalculation([FromBody] LogOnModel logOnModel)
 		{
-			if(logOnModel == null) return BadRequest("logOnModel is null!");
+			if (logOnModel == null) return BadRequest("logOnModel is null!");
 			var tenant = _loadAllTenants.Tenants().Single(x => x.Name.Equals(logOnModel.Tenant));
 			var appConnstring = tenant.DataSourceConfiguration.ApplicationConnectionString;
 			var bus = _stardustRepository.SelectAllBus(appConnstring);
-			
+
 			foreach (var bu in bus)
 			{
-				//if (logOnModel.Days == 1)
-					_eventPublisher.Publish(
-						new UpdateStaffingLevelReadModelEvent
-						{
-							Days = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14),
-							LogOnDatasource = logOnModel.Tenant,
-							LogOnBusinessUnitId = bu
-						});
-				//else
-					//_eventPublisher.Publish(
-					//	new UpdateStaffingLevelReadModel2WeeksEvent
-					//	{
-					//		Days = 14,
-					//		LogOnDatasource = logOnModel.Tenant,
-					//		LogOnBusinessUnitId = bu
-					//	}
-					//);
+				_eventPublisher.Publish(
+					new UpdateStaffingLevelReadModelEvent
+					{
+						Days = _staffingSettingsReader.GetIntSetting("StaffingReadModelNumberOfDays", 14),
+						LogOnDatasource = logOnModel.Tenant,
+						LogOnBusinessUnitId = bu
+					});
 			}
 
 			return Ok();
@@ -143,10 +136,47 @@ namespace Teleopti.Wfm.Administration.Controllers
 		public IHttpActionResult HealthCheck()
 		{
 			var allNodes = _stardustRepository.GetAllWorkerNodes();
-			if (!allNodes.Any()) return InternalServerError(new Exception("No nodes registered! Make sure that the Teleopti Service Bus service is running."));
-			if (!allNodes.Any(x => x.Heartbeat > DateTime.UtcNow.AddMinutes(-30))) return InternalServerError(new Exception("No node has sent a heartbeat in 30 minutes. Make sure that the Teleopti Service Bus service is running."));
+			if (!allNodes.Any())
+				return InternalServerError(
+					new Exception("No nodes registered! Make sure that the Teleopti Service Bus service is running."));
+			if (!allNodes.Any(x => x.Alive))
+				return InternalServerError(new Exception(
+					"No node is sending heartbeats. Make sure that the Teleopti Service Bus service is running."));
+
+			foreach (var node in allNodes.Where(x => x.Alive))
+			{
+				bool result;
+				try
+				{
+					result = pingNode(node).Result;
+				}
+				catch (Exception e)
+				{
+					return InternalServerError(new Exception(
+						$"Node {node.Url} does not respond. Is the firewall configured so the worker server allows incoming traffic on ports 14100-14199?"));
+				}
+				if (!result)
+					return InternalServerError(new Exception(
+						$"Node {node.Url} does not respond. Is the firewall configured so the worker server allows incoming traffic on ports 14100-14199?"));
+			}
 
 			return Ok();
+		}
+
+		private static async Task<bool> pingNode(WorkerNode node)
+		{
+			using (var client = new HttpClient())
+			{
+				client.DefaultRequestHeaders.Accept.Clear();
+				client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+				var response = await client.PostAsync(node.Url + "ping/", null).ConfigureAwait(false);
+				if (response.StatusCode != HttpStatusCode.OK)
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 
 	}

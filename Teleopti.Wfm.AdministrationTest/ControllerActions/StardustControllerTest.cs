@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Configuration;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Common.Time;
 using Teleopti.Ccc.Domain.Staffing;
 using Teleopti.Ccc.TestCommon;
-using Teleopti.Ccc.TestCommon.FakeRepositories;
 using Teleopti.Ccc.TestCommon.FakeRepositories.Tenant;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.Stardust;
@@ -21,8 +19,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		public void TestFixtureSetUp()
 		{
 			StardustRepository = new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString);
-			var fakeThisIsAnnoying = new FakeJobStartTimeRepository(new MutableNow());
-			Target = new StardustController(StardustRepository, new LegacyFakeEventPublisher(), new FakeTenants(), fakeThisIsAnnoying, new StaffingSettingsReader());
+			Target = new StardustController(StardustRepository, new LegacyFakeEventPublisher(), new FakeTenants(), new StaffingSettingsReader());
 		}
 
 		[Test]

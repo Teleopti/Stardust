@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Configuration;
+using System.Reflection;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
@@ -23,6 +24,7 @@ using Teleopti.Support.Security;
 using Teleopti.Wfm.Administration.Controllers;
 using Teleopti.Wfm.Administration.Core.Hangfire;
 using Teleopti.Wfm.Administration.Core.Stardust;
+using Module = Autofac.Module;
 
 namespace Teleopti.Wfm.Administration.Core
 {
@@ -68,8 +70,7 @@ namespace Teleopti.Wfm.Administration.Core
 			builder.RegisterType<HangfireRepository>().SingleInstance();
 
 			builder.RegisterType<HangfireUtilities>().AsSelf().As<IManageFailedHangfireEvents>().SingleInstance();
-			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).SingleInstance();
-
+			builder.Register(c => new StardustRepository(ConfigurationManager.ConnectionStrings["Tenancy"].ConnectionString)).As<IStardustRepository>().SingleInstance();
 			builder.Register<Func<ICurrentUnitOfWork, IBusinessUnitRepository>>(context => uow => new BusinessUnitRepository(uow));
 			builder.Register<Func<ICurrentUnitOfWork, IPersonRepository>>(context => uow => new PersonRepository(uow));
 			builder.Register<Func<ICurrentUnitOfWork, IScenarioRepository>>(context => uow => new ScenarioRepository(uow));

@@ -22,7 +22,7 @@ namespace Teleopti.Wfm.AdministrationTest.ControllerActions
 		{
 			StardustRepository = new FakeStardustRepository();
 			var fakeThisIsAnnoying = new FakeJobStartTimeRepository(new MutableNow());
-			Target = new StardustController(StardustRepository, new LegacyFakeEventPublisher(), new FakeTenants(), fakeThisIsAnnoying, new StaffingSettingsReader());
+			Target = new StardustController(StardustRepository, new LegacyFakeEventPublisher(), new FakeTenants(), new StaffingSettingsReader());
 		}
 
 		[SetUp]
