@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			FakeSchedulingSourceScope.UsedToBe().Should().Be.EqualTo(ScheduleSource.WebScheduling);
 		}
 
-		public WebIntradayOptimizationStardustHandlerTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, bool resourcePlannerSpeedUpShiftsWithinDay45694) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerSpeedUpShiftsWithinDay45694)
+		public WebIntradayOptimizationStardustHandlerTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
 		{
 		}
 	}

@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			callbackTracker.UnSuccessfulOptimizations().Should().Be.EqualTo(10);
 		}
 
-		public IntradayOptimizationCallbackDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, bool resourcePlannerSpeedUpShiftsWithinDay45694) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerSpeedUpShiftsWithinDay45694)
+		public IntradayOptimizationCallbackDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
 		{
 		}
 	}

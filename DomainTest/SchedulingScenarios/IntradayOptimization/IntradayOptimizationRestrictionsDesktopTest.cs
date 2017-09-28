@@ -187,8 +187,7 @@ namespace Teleopti.Ccc.DomainTest.SchedulingScenarios.IntradayOptimization
 			return stateHolder.Schedules.SchedulesForDay(date).Any(x => x.PersonAssignment().Period.StartDateTime.Hour != 8);
 		}
 
-		
-		public IntradayOptimizationRestrictionsDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508, bool resourcePlannerSpeedUpShiftsWithinDay45694) : base(resourcePlannerMergeTeamblockClassicIntraday45508, resourcePlannerSpeedUpShiftsWithinDay45694)
+		public IntradayOptimizationRestrictionsDesktopTest(OptimizationCodeBranch resourcePlannerMergeTeamblockClassicIntraday45508) : base(resourcePlannerMergeTeamblockClassicIntraday45508)
 		{
 		}
 	}

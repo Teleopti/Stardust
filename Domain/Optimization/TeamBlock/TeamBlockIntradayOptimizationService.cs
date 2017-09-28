@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.FeatureFlags;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.InterfaceLegacy.Domain;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock.FairnessOptimization;
@@ -15,47 +14,10 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
-	[RemoveMeWithToggle("Merge this one with base class. Also, no need to keep methods below in base class", Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
-	public class TeamBlockIntradayOptimizationServiceKeepResCalcDataState : TeamBlockIntradayOptimizationService
-	{
-		public TeamBlockIntradayOptimizationServiceKeepResCalcDataState(TeamBlockScheduler teamBlockScheduler,
-			ISchedulingOptionsCreator schedulingOptionsCreator,
-			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
-			TeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker, TeamBlockClearer teamBlockClearer,
-			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
-			ITeamBlockSteadyStateValidator teamTeamBlockSteadyStateValidator,
-			ITeamBlockShiftCategoryLimitationValidator teamBlockShiftCategoryLimitationValidator,
-			IWorkShiftSelector workShiftSelector, IGroupPersonSkillAggregator groupPersonSkillAggregator,
-			SetMainShiftOptimizeActivitySpecificationForTeamBlock setMainShiftOptimizeActivitySpecificationForTeamBlock,
-			IOptimizerHelperHelper optimizerHelperHelper,
-			ICurrentIntradayOptimizationCallback currentIntradayOptimizationCallback) : base(teamBlockScheduler,
-			schedulingOptionsCreator, safeRollbackAndResourceCalculation, teamBlockIntradayDecisionMaker, teamBlockClearer,
-			dailyTargetValueCalculatorForTeamBlock, teamTeamBlockSteadyStateValidator, teamBlockShiftCategoryLimitationValidator,
-			workShiftSelector, groupPersonSkillAggregator, setMainShiftOptimizeActivitySpecificationForTeamBlock,
-			optimizerHelperHelper, currentIntradayOptimizationCallback)
-		{
-		}
-
-		protected override UndoRedoContainer createRollbackState(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnly datePoint)
-		{
-			var undoResCalcChanges = new UndoRedoContainer();
-			undoResCalcChanges.FillWith(skillDays.FilterOnDates(new[] {datePoint.AddDays(-1), datePoint, datePoint.AddDays(1)}));
-			return undoResCalcChanges;
-		}
-
-		protected override void rollbackChanges(UndoRedoContainer undoRedoContainer, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
-		{
-			schedulePartModifyAndRollbackService.Rollback();
-			undoRedoContainer.UndoAll();
-		}
-	}
-
 	public class TeamBlockIntradayOptimizationService
 	{
 		private readonly TeamBlockScheduler _teamBlockScheduler;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
-		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly TeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly TeamBlockClearer _teamBlockClearer;
 		private readonly IDailyTargetValueCalculatorForTeamBlock _dailyTargetValueCalculatorForTeamBlock;
@@ -69,7 +31,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public TeamBlockIntradayOptimizationService(TeamBlockScheduler teamBlockScheduler,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
-			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			TeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
 			TeamBlockClearer teamBlockClearer,
 			IDailyTargetValueCalculatorForTeamBlock dailyTargetValueCalculatorForTeamBlock,
@@ -83,7 +44,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
-			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
 			_teamBlockClearer = teamBlockClearer;
 			_dailyTargetValueCalculatorForTeamBlock = dailyTargetValueCalculatorForTeamBlock;
@@ -184,7 +144,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					!prefLimits.WithinLimit())
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
-					rollbackChanges(undoResCalcChanges, schedulingOptions, schedulePartModifyAndRollbackService);
+					rollbackChanges(undoResCalcChanges, schedulePartModifyAndRollbackService);
 					continue;
 				}
 
@@ -202,23 +162,24 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (isWorse)
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
-					rollbackChanges(undoResCalcChanges, schedulingOptions, schedulePartModifyAndRollbackService);
+					rollbackChanges(undoResCalcChanges, schedulePartModifyAndRollbackService);
 				}
 				//
 			}
 			return teamBlockToRemove;
 		}
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
-		protected virtual UndoRedoContainer createRollbackState(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnly datePoint)
+		private static UndoRedoContainer createRollbackState(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnly datePoint)
 		{
-			return null;
+			var undoResCalcChanges = new UndoRedoContainer();
+			undoResCalcChanges.FillWith(skillDays.FilterOnDates(new[] {datePoint.AddDays(-1), datePoint, datePoint.AddDays(1)}));
+			return undoResCalcChanges;
 		}
 
-		[RemoveMeWithToggle(Toggles.ResourcePlanner_SpeedUpShiftsWithinDay_45694)]
-		protected virtual void rollbackChanges(UndoRedoContainer undoRedoContainer, SchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		private static void rollbackChanges(UndoRedoContainer undoRedoContainer, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
-			_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
+			schedulePartModifyAndRollbackService.Rollback();
+			undoRedoContainer.UndoAll();
 		}
 	}
 }
