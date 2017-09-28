@@ -46,6 +46,7 @@
 		MyTimeWeb_ViewWFMAppGuide_43848,
 		MyTimeWeb_CalculateOvertimeProbabilityByPrimarySkill_44686,
 		MyTimeWeb_OvertimeRequest_44558,
+		MyTimeWeb_MonthlySchduleMobileView_45004,
 
 		Backlog_Module_23980,
 
