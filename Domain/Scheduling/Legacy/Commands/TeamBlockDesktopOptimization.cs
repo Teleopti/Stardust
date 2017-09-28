@@ -278,7 +278,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Legacy.Commands
 						_schedulerStateHolder().Schedules,
 						_schedulerStateHolder().SchedulingResultState.PersonsInOrganization,
 						NewBusinessRuleCollection.AllForScheduling(_schedulerStateHolder().SchedulingResultState),
-						teamBlockGenerator);
+						teamBlockGenerator,
+						new FixedBlockPreferenceProvider(optimizationPreferences.Extra));
 				}
 			}
 		}

@@ -32,27 +32,42 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[TestLog]
+		protected virtual void HandleEvent(IntradayOptimizationWasOrdered @event, Guid planningPeriodId)
+		{
+			using (CommandScope.Create(@event))
+			{
+				var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
+				DoOptimization(period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule, planningPeriodId);
+				_synchronizeSchedulesAfterIsland.Synchronize(_schedulerStateHolder().Schedules, period);
+			}
+		}
+
 		protected virtual void HandleEvent(IntradayOptimizationWasOrdered @event)
 		{
 			using (CommandScope.Create(@event))
 			{
 				var period = new DateOnlyPeriod(@event.StartDate, @event.EndDate);
-				DoOptimization(period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule);
+				DoOptimization(period, @event.AgentsInIsland, @event.AgentsToOptimize, @event.UserLocks, @event.Skills, @event.RunResolveWeeklyRestRule, null);
 				_synchronizeSchedulesAfterIsland.Synchronize(_schedulerStateHolder().Schedules, period);
 			}
 		}
 
 		[UnitOfWork]
-		protected virtual void DoOptimization(DateOnlyPeriod period,
+		protected virtual void DoOptimization(
+			DateOnlyPeriod period,
 			IEnumerable<Guid> agentsInIsland,
 			IEnumerable<Guid> agentsToOptimize,
 			IEnumerable<LockInfo> locks,
 			IEnumerable<Guid> onlyUseSkills,
-			bool runResolveWeeklyRestRule)
+			bool runResolveWeeklyRestRule,
+			Guid? planningPeriodId)
 		{
+			
 			var schedulerStateHolder = _schedulerStateHolder();
 			_fillSchedulerStateHolder.Fill(schedulerStateHolder, agentsInIsland, new LockInfoForStateHolder(_gridlockManager, locks), period, onlyUseSkills);
-			_intradayOptimization.Execute(period, schedulerStateHolder.AllPermittedPersons.Filter(agentsToOptimize), runResolveWeeklyRestRule);
+			_intradayOptimization.Execute(period, schedulerStateHolder.AllPermittedPersons.Filter(agentsToOptimize), runResolveWeeklyRestRule, GetBlockPreferenceProvider(planningPeriodId));
 		}
+
+		public abstract IBlockPreferenceProvider GetBlockPreferenceProvider(Guid? planningPeriodId);
 	}
 }

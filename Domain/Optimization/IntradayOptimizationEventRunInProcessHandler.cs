@@ -9,16 +9,25 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public class IntradayOptimizationEventRunInSyncInFatClientProcessHandler: IntradayOptimizationEventBaseHandler, IRunInSyncInFatClientProcess, IHandleEvent<IntradayOptimizationWasOrdered>
 	{
+		private readonly IOptimizationPreferencesProvider _optimizationPreferencesProvider;
+
 		public IntradayOptimizationEventRunInSyncInFatClientProcessHandler(IIntradayOptimization intradayOptimization,
 			Func<ISchedulerStateHolder> schedulerStateHolder, IFillSchedulerStateHolder fillSchedulerStateHolder,
-			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager)
+			ISynchronizeSchedulesAfterIsland synchronizeSchedulesAfterIsland, IGridlockManager gridlockManager,
+			IOptimizationPreferencesProvider optimizationPreferencesProvider)
 			: base(intradayOptimization, schedulerStateHolder, fillSchedulerStateHolder, synchronizeSchedulesAfterIsland,gridlockManager)
 		{
+			_optimizationPreferencesProvider = optimizationPreferencesProvider;
 		}
 
 		public void Handle(IntradayOptimizationWasOrdered @event)
 		{
 			HandleEvent(@event);
+		}
+
+		public override IBlockPreferenceProvider GetBlockPreferenceProvider(Guid? planningPeriodId)
+		{
+			return new FixedBlockPreferenceProvider(_optimizationPreferencesProvider.Fetch().Extra);
 		}
 	}
 }

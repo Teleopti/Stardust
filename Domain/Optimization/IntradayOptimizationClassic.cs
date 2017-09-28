@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
 	public interface IIntradayOptimization
 	{
-		void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule);
+		void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule, IBlockPreferenceProvider blockPreferenceProvider);
 	}
 
 	[RemoveMeWithToggle(Toggles.ResourcePlanner_MergeTeamblockClassicIntraday_45508)]
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceOptimization = resourceOptimization;
 		}
 
-		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule)
+		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule, IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var schedulerStateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();

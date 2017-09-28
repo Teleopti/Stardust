@@ -10,9 +10,14 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	public interface ITeamBlockGenerator
 	{
 		IList<ITeamBlockInfo> Generate(IEnumerable<IPerson> personsInOrganisation,
-																		IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
-		                               DateOnlyPeriod selectedPeriod,
-		                               IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions);
+			IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
+			DateOnlyPeriod selectedPeriod,
+			IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions);
+
+		IList<ITeamBlockInfo> Generate(IEnumerable<IPerson> personsInOrganization,
+			IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+			IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions,
+			IBlockPreferenceProvider blockPreferenceProvider);
 	}
 
 	public class TeamBlockGenerator : ITeamBlockGenerator
@@ -32,11 +37,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                      DateOnlyPeriod selectedPeriod,
 																					IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions)
 		{
+			return Generate(personsInOrganisation, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions, new FixedBlockPreferenceProvider(schedulingOptions));
+		}
+
+		public IList<ITeamBlockInfo> Generate(IEnumerable<IPerson> personsInOrganization, IEnumerable<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+			IEnumerable<IPerson> selectedPersons, SchedulingOptions schedulingOptions, IBlockPreferenceProvider blockPreferenceProvider)
+		{
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)
 			{
-				var teamInfo = _teamInfoFactory.CreateTeamInfo(personsInOrganisation, selectedPerson, selectedPeriod,
-				                                               allPersonMatrixList);
+				var teamInfo = _teamInfoFactory.CreateTeamInfo(personsInOrganization, selectedPerson, selectedPeriod,
+															   allPersonMatrixList);
 				if (teamInfo != null)
 					allTeamInfoListOnStartDate.Add(teamInfo);
 			}
@@ -45,7 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				foreach (var groupMember in teamInfo.GroupMembers)
 				{
-					if(!selectedPersons.Contains(groupMember))
+					if (!selectedPersons.Contains(groupMember))
 						teamInfo.LockMember(selectedPeriod, groupMember);
 				}
 			}
@@ -54,11 +65,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var daysInSelectedPeriod = selectedPeriod.DayCollection();
 			foreach (var teamInfo in allTeamInfoListOnStartDate)
 			{
+				var blockPreferences = blockPreferenceProvider.ForAgents(teamInfo.GroupMembers, selectedPeriod.StartDate).ToArray();
+				TeamBlockIntradayOptimizationService.UpdateSchedulingOptionsForBlockPreferences(schedulingOptions, blockPreferences);
 				foreach (var day in daysInSelectedPeriod)
 				{
 					var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
 						schedulingOptions.BlockFinder());
-					
+
 					if (teamBlock == null) continue;
 					allTeamBlocksInHashSet.Add(teamBlock);
 				}

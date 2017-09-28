@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_resourceCalculationContext = resourceCalculationContext;
 		}
 
-		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule)
+		public void Execute(DateOnlyPeriod period, IEnumerable<IPerson> agents, bool runResolveWeeklyRestRule, IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var stateHolder = _schedulerStateHolder();
 			var optimizationPreferences = _optimizationPreferencesProvider.Fetch();
@@ -75,7 +75,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 					stateHolder.Schedules,
 					stateHolder.SchedulingResultState.PersonsInOrganization,
 					NewBusinessRuleCollection.AllForScheduling(stateHolder.SchedulingResultState),
-					teamBlockGenerator);
+					teamBlockGenerator,
+					blockPreferenceProvider);
 
 				if (runResolveWeeklyRestRule)
 				{

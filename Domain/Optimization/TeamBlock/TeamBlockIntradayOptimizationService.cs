@@ -56,21 +56,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_currentIntradayOptimizationCallback = currentIntradayOptimizationCallback;
 		}
 
-		public void Optimize(IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
-			DateOnlyPeriod selectedPeriod,
-			IEnumerable<IPerson> selectedPersons,
-			IOptimizationPreferences optimizationPreferences,
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		public void Optimize(
+			IEnumerable<IScheduleMatrixPro> allPersonMatrixList,
+			DateOnlyPeriod selectedPeriod, 
+			IEnumerable<IPerson> selectedPersons, 
+			IOptimizationPreferences optimizationPreferences, 
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
 			IResourceCalculateDelayer resourceCalculateDelayer,
 			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
 			IScheduleDictionary scheduleDictionary,
-			IEnumerable<IPerson> personsInOrganization,
-			INewBusinessRuleCollection businessRuleCollection,
-			ITeamBlockGenerator teamBlockGenerator)
+			IEnumerable<IPerson> personsInOrganization, 
+			INewBusinessRuleCollection businessRuleCollection, 
+			ITeamBlockGenerator teamBlockGenerator, 
+			IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			_optimizerHelperHelper.LockDaysForIntradayOptimization(allPersonMatrixList, selectedPeriod);
-			var teamBlocks = teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
+			var teamBlocks = teamBlockGenerator.Generate(personsInOrganization, allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions, blockPreferenceProvider);
 			
 			while (teamBlocks.Count > 0)
 			{
@@ -81,7 +83,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					schedulingOptions, teamBlocks,
 					schedulePartModifyAndRollbackService,
 					resourceCalculateDelayer,
-					skillDays, scheduleDictionary, businessRuleCollection);
+					skillDays, scheduleDictionary, businessRuleCollection, blockPreferenceProvider);
 				foreach (var teamBlock in teamBlocksToRemove)
 				{
 					teamBlocks.Remove(teamBlock);
@@ -89,10 +91,17 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
-		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
-			IOptimizationPreferences optimizationPreferences, SchedulingOptions schedulingOptions,
-			IList<ITeamBlockInfo> allTeamBlockInfos, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-			IResourceCalculateDelayer resourceCalculateDelayer, IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, IScheduleDictionary scheduleDictionary, INewBusinessRuleCollection businessRuleCollection)
+		private IEnumerable<ITeamBlockInfo> optimizeOneRound(
+			DateOnlyPeriod selectedPeriod, 
+			IOptimizationPreferences optimizationPreferences,
+			SchedulingOptions schedulingOptions,
+			IList<ITeamBlockInfo> allTeamBlockInfos, 
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, 
+			IResourceCalculateDelayer resourceCalculateDelayer,
+			IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays,
+			IScheduleDictionary scheduleDictionary,
+			INewBusinessRuleCollection businessRuleCollection,
+			IBlockPreferenceProvider blockPreferenceProvider)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
 			var callback = _currentIntradayOptimizationCallback.Current();
@@ -105,6 +114,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					return Enumerable.Empty<ITeamBlockInfo>();
 
 				runningTeamBlockCounter++;
+
+				var blockPreferences = blockPreferenceProvider.ForAgents(teamBlockInfo.TeamInfo.GroupMembers,
+					teamBlockInfo.BlockInfo.BlockPeriod.StartDate).ToArray();
+				UpdateSchedulingOptionsForBlockPreferences(schedulingOptions, blockPreferences);
+				updateOptimizationPreferenceForBlockPreferences(optimizationPreferences, schedulingOptions);
 
 				if (teamBlockInfo.AllIsLocked() || !_teamTeamBlockSteadyStateValidator.IsTeamBlockInSteadyState(teamBlockInfo, schedulingOptions))
 				{
@@ -167,6 +181,32 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				//
 			}
 			return teamBlockToRemove;
+		}
+
+		private static void updateOptimizationPreferenceForBlockPreferences(IOptimizationPreferences optimizationPreferences,
+			SchedulingOptions schedulingOptions)
+		{
+			optimizationPreferences.Extra.BlockTypeValue = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
+			optimizationPreferences.Extra.UseTeamBlockOption = schedulingOptions.UseBlock;
+			optimizationPreferences.Extra.UseBlockSameShift = schedulingOptions.BlockSameShift;
+			optimizationPreferences.Extra.UseBlockSameShiftCategory = schedulingOptions.BlockSameShiftCategory;
+			optimizationPreferences.Extra.UseBlockSameStartTime = schedulingOptions.BlockSameStartTime;
+		}
+
+		public static void UpdateSchedulingOptionsForBlockPreferences(SchedulingOptions schedulingOptions,
+			IExtraPreferences[] blockPreferences)
+		{
+			var blockFinderType =
+				blockPreferences.Select(x => x.BlockTypeValue).Distinct().Count() == 1
+					? blockPreferences.Select(x => x.BlockTypeValue).Single()
+					: blockPreferences.First(x => x.BlockTypeValue != BlockFinderType.SingleDay).BlockTypeValue;
+			schedulingOptions.UseBlock = blockPreferences.Any(x => x.UseTeamBlockOption);
+			schedulingOptions.BlockFinderTypeForAdvanceScheduling = schedulingOptions.UseBlock
+				? blockFinderType
+				: BlockFinderType.SingleDay;
+			schedulingOptions.BlockSameShift = blockPreferences.Any(x => x.UseBlockSameShift);
+			schedulingOptions.BlockSameShiftCategory = blockPreferences.Any(x => x.UseBlockSameShiftCategory);
+			schedulingOptions.BlockSameStartTime = blockPreferences.Any(x => x.UseBlockSameStartTime);
 		}
 
 		private static UndoRedoContainer createRollbackState(IDictionary<ISkill, IEnumerable<ISkillDay>> skillDays, DateOnly datePoint)

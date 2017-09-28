@@ -74,6 +74,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			{
 				var blockPreferences = blockPreferenceProvider.ForAgents(teamInfo.GroupMembers, selectedPeriod.StartDate).ToArray();
 				updateSchedulingOptionsForBlockPreferences(schedulingOption, blockPreferences);
+				schedulingOption.BlockSameShift = blockPreferences.Any(x => x.UseBlockSameShift);
+				schedulingOption.BlockSameShiftCategory = blockPreferences.Any(x => x.UseBlockSameShiftCategory);
+				schedulingOption.BlockSameStartTime = blockPreferences.Any(x => x.UseBlockSameStartTime);
 
 				var teamBlockInfo = _validatedTeamBlockExtractor.GetTeamBlockInfo(teamInfo, datePointer, allPersonMatrixList, schedulingOption, selectedPeriod);
 				if (teamBlockInfo == null) continue;
